@@ -1,0 +1,18 @@
+CgiUser~Nom de l'utilisateur utilisé par Nagvis pour exécuter les CGI. Cet utilisateur DOIT être 'allowed for all services' et 'allowed for all hosts'
+Base~Chemin local (complet) du répertoire de base de Nagvis.
+HTMLBase~Chemin de l'URL de base de Nagvis.
+CgiPath~Chemin local (complet) du répertoire contenant les CGI.
+RefreshTime~Intervalle de rafraichissement des cartes (en secondes).
+cfgPath~Chemin local vers le répertorie 'etc' de Nagvis.
+cfgFolder~Chemin local du répertoire contenant les définitions des cartes (fichiers .cfg)
+mapFolder~Chemin local du répertoire contenant les images de fond (fichiers .png)
+iconBaseFolder~Chemin local du répertoire contenant les jeux d'icones.
+iconHTMLBaseFolder~Chemin HTTP vers le répertoire contenant les jeux d'icones.
+indexInc~Fichier Include de la page par défaut.
+defaultIcons~Jeu d'icones par défaut. Utilisé pour la création de cartes.
+RotateMaps~Rotation automatique des cartes.
+maps~Tableau des cartes pour la rotation. Exemple : array('server','lan','wan')
+Header~Afficher l'en-tête.
+headerCount~Nombre de liens par ligne dans l'en-tête.
+headerInc~Nombre de fichiers Include d'en-tête.
+Language~Choisissez votre langue parmi les packs installés sur cette machine.

@@ -1,0 +1,18 @@
+CgiUser~The user Nagvis runs the CGI as (MUST be 'allowed for all services', 'allowed for all hosts')
+Base~Local path (full) to NagVis Base Directory.
+HTMLBase~Path to NagVis HTTP Base URL.
+CgiPath~Full local path to the directory containing the CGIs.
+RefreshTime~Map refresh time (in seconds).
+cfgPath~Local path to NagVis etc directory.
+cfgFolder~Local path to the folder holding the map config files (*.cfg)
+mapFolder~Local path to the folder holding the maps background image files (*.png)
+iconBaseFolder~Local path to NagVis iconsets directory.
+iconHTMLBaseFolder~HTTP Path to the NagVis iconsets directory.
+indexInc~Include file for default page.
+defaultIcons~Default Iconset. Used for the maps creation.
+RotateMaps~Rotate Maps automatically.
+maps~Maps to rotate. Example : array('server','lan','wan')
+Header~Display Header.
+headerCount~Number of links displayed in one header line.
+headerInc~Name of the header include file.
+Language~Choose your language from one of the installed language packs.

@@ -1,0 +1,57 @@
+1~Cliquer sur la carte pour définir la position d'un point. Nombre de point(s) manquant(s) pour définir l'objet : 
+2~Etes-vous certain de vouloir supprimer cet objet ?
+3~Modifier
+4~Effacer
+5~Position/Taille
+6~Oui
+7~Non
+8~Valider
+9~Au moins une propriété obligatoire est manquante. Vérifiez que vous avez bien rempli tous les champs marqués en rouge.
+10~La valeur de line_type que vous avez sélectionnée n'est pas valide dans ce cas de figure. Changez la ou modifiez la valeur de la propriété name.
+11~Un objet est soit une icône soit une flêche/ligne. Il ne peut donc pas avoir 'iconset' et 'line_type' définis en même temps.
+12~Il semble que vous souhaitiez créer une flêche/ligne (line_type est définie), mais il n'y a pas deux coordonnées [COORD].
+13~Il est seulement possible d'avoir une ou deux coordonnées [COORD].
+14~Vous avez défini deux coordonnées [COORD], donc vous devez aussi définir la propriété line_type.
+menu_1~Sauvegarder
+menu_2~Propriétés
+menu_3~Cartes
+menu_4~Nouvel objet
+menu_5~Paramètres de Nagvis
+menu_6~Aide
+menu_3_1~Ouvrir
+menu_3_2~Gérer
+menu_4_1~Icone
+menu_4_2~Flêche/Ligne
+15~creer une nouvelle carte
+16~renommer une carte
+17~supprimer une carte
+18~uploader une image de fond
+19~supprimer une image de fond
+20~Créer
+21~Effacer
+22~Renommer
+23~Envoyer
+24~Nom de la carte
+25~Utilisateurs autorisés
+26~Image de fond
+27~Choisissez une carte
+28~Nouveau nom
+29~Selectionnez une image png
+30~Vous devez d'abord choisir quelle image png uploader !
+31~Vous devez choisir un fichier image avec l'extension png
+32~Jeu d'icone de la carte
+33~Vous devez spécifier un nom pour la nouvelle carte
+34~Au moins un utilisateur doit avoir accès à la carte
+35~Vous devez sélectionner le jeu d'icones par défaut de cette carte
+36~Vous devez sélectionner une image de fond pour la carte. Si elle n'est pas déjà sur le serveur, vous devez d'abord l'uploader.
+37~Aucune carte à renommer. Opération annulée.
+38~Vous n'avez pas spécifié le nouveau nom de la carte
+39~Une carte portant le nom spécifié existe déjà. Vous devez en choisir un autre.
+40~Aucune carte à effacer. Opération annulée.
+41~Aucune image de fond à effacer. Opération annulée.
+42~Vous êtes sur le point de créer une nouvelle carte. Voulez-vous continuer ?
+43~Vous êtes sur le point de renommer une carte. Voulez-vous continuer ?
+44~Vous êtes sur le point d'effacer DEFINITIVEMENT cette carte. Voulez-vous vraiment continuer ?
+45~Vous êtes sur le point d'effacer DEFINITIVEMENT cette image de fond. Voulez-vous vraiment continuer ?
+46~Impossible d'effacer [IMAGENAME] car elle utilisée par la carte [MAP].
+47~Vous n'êtes pas autorisé à modifier cette carte.

@@ -1,0 +1,82 @@
+table { 
+ background-color: White; 
+ width: 400px;
+
+ 
+} 
+
+
+tr {
+	height: 20px;
+	border:none;
+	
+}
+
+td {
+	border-style:none;
+	
+}
+
+button{
+	border: 2px ridge Black;
+ font: bold 15px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+ color: Black; 
+ background-color: #DADADA; 
+ text-align: center;
+ vertical-align: middle;
+ 
+ height:25px;
+}
+
+
+.tdlabel { 
+ border: 2px ridge #A4A4A4;
+ font: bolder 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+ color: #2B5377; 
+ background-color: #F5F5F5; 
+  text-align: center;
+  width: 40%;
+  height: 30px;
+
+}
+
+.tdfield { 
+  background-color: White;
+  border-style:none;
+  padding-left: 10px;
+  
+  } 
+
+.tdfield input { 
+ font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+ background-color: #E4EEF6; 
+ border: 1px solid #284279;
+ width: 90%;
+} 
+
+
+.tdfield select { 
+ width: auto; 
+ font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+ background-color: #E4EEF6; 
+ border: 1px solid #284279;
+ margin-right: 0px; 
+} 
+
+.tdfield_linetype { 
+  background-color: White;
+  border-style:none;
+  padding-left: 10px;
+  
+  }
+
+.tdfield_linetype select { 
+ width: auto; 
+ background-color: #E4EEF6; 
+ border: 1px solid #284279;
+ margin-right: 0px; 
+} 
+
+.curseur {
+ cursor:move;
+}

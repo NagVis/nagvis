@@ -1,0 +1,18 @@
+CgiUser~Der User mit dem NagVis die CGIs aufruft (sollte 'allowed for all services', 'allowed for all hosts' sein)
+Base~Voller lokaler Pfad zum NagVis Basis Verzeichnis.
+HTMLBase~HTTP Pfad zu NagVis (/nagios/nagvis).
+CgiPath~Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).
+RefreshTime~Map refresh time (in Sekunden).
+cfgPath~Lokaler Pfad zum NagVis etc Verzeichnis.
+cfgFolder~Lokaler Pfad zu den Map Config Dateien (*.cfg)
+mapFolder~Lokaler Pfad zu den Hintergrund Bildern (*.png)
+iconBaseFolder~Lokaler Pfad zum NagVis iconsets Verzeichnis.
+iconHTMLBaseFolder~HTTP Pfad zum NagVis iconsets Verzeichnis.
+indexInc~Include Datei fuer die Standard Seite.
+defaultIcons~Standard Iconset.
+RotateMaps~Rotiere Maps automatisch.
+maps~Zu rotierende Maps. Beispiel: array('server','lan','wan')
+Header~Header anzeigen.
+headerCount~Anzahl der Links pro Zeile im Header.
+headerInc~Name der Header include Datei.
+Language~Waehle deine Sprache.

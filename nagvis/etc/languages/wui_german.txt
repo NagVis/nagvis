@@ -1,0 +1,57 @@
+1~Klicke auf die Karte um die fehlenden Punkte zu bestimmen:: 
+2~Willst du dieses Objekt wirklich loeschen ?
+3~Aendern
+4~Löschen
+5~Positionieren/Groesse
+6~Ja
+7~Nein
+8~Pruefen
+9~Ein benoetigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Plichtwerte.
+10~Der gewaehlte line_type ist ungueltig.
+11~Ein Object kann nur ein Icon oder eine Linie sein, 'iconset' und 'line_type' kann nicht gemeinsam verwendet werden.
+12~Es scheint, du willst eine Linie definieren (line_type ist gesetzt), aber es sind keine 2 [COORD] Koordinaten angegeben.
+13~es ist nur moeglich ein oder 2 Koordinaten [COORD] anzugeben.
+14~Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gewaehlt werden.
+menu_1~Speichern
+menu_2~Properties
+menu_3~Maps
+menu_4~Object hinzufuegen
+menu_5~Nagvis config
+menu_6~Hilfe
+menu_3_1~Oeffnen
+menu_3_2~Manage
+menu_4_1~Icon
+menu_4_2~Line
+15~erstelle eine Map
+16~eine Map umbenennen
+17~eine Map loeschen
+18~Hintergrund hochladen
+19~Hintergrund loeschen
+20~Erstellen
+21~Loeschen
+22~Umbenennen
+23~Hochladen
+24~Map Name
+25~Erlaubte Benutzer
+26~Hintergrund
+27~Waehle eine Map
+28~Neuer Name
+29~Waehle ein png Image
+30~Du must erst ein png Image waehlen!
+31~Du musst ein Image mit der Erweiterung .png waehlen.
+32~Map iconset
+33~Du musst einen Namen faer die neue Map angeben.
+34~Mindestens ein User muss zugriff auf die Map haben.
+35~Du musst das default iconset fuer diese Map waehlen
+36~Du musst das Hintergrund Image fuer diese Map waehlen.
+37~keine Map zum umbenennen gefunden. Operation abgebrochen.
+38~Du hast keinen neuen Namen angegeben.
+39~Diese Map existiert bereits. Waehle einen anderen Namen.
+40~Keine Map zum loeschen gefunden. Operation abgebrochen.
+41~Kein Hintergrund Image zum loeschen gefunden. Operation abgebrochen.
+42~Willst du wirklich eine neue Map erstellen?
+43~Willst du diese Map wirklich umbenennen?
+44~Willst du diese Map wirklich loeschen? Diese Aktion kann nicht rueckgaengig gemacht werden!
+45~Willst du dieses Hintergrund Image wirklich loeschen? Diese Aktion kann nicht rueckgaengig gemacht werden!
+46~Kann [IMAGENAME] nicht loeschen da es in der Map [MAP] noch verwendet wird.
+47~Du hast nicht die Rechte diese Map zu aendern.

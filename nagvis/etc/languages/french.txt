@@ -1,0 +1,16 @@
+0~img_error.png~StatusCgi introuvable~Vérifiez la valeur de la variable [STATUSCGI]-Var dans le fichier de configuration de Nagvis!
+1~img_permission.png~StatusCgi n'est pas exécutable!~Vérifiez les permissions sur les cgi!
+2~img_error.png~Fichier de configuration de la carte introuvable!~Impossible d'ouvrir <I>[MAP]</I>!
+3~img_error.png~Pas d'image pour la carte!~Impossible d'ouvrir <I>[MAPPATH]</I>!
+4~img_permission.png~Accès refusé!~L'utilisateur <I>[USER]</I> n'a pas le droit d'accéder à cette carte!
+5~img_error.png~Pas de fichier de log de Nagios~Impossible de trouver le fichier de log de Nagios : <I>[STATUSLOGPATH]</I>!
+6~img_warning.png~Problème de compatibilité!~Nagvis n'est pas compatible avec votre navigateur!
+7~img_error.png~Host introuvable!~l'hôte [HOSTNAME] n'existe pas dans Nagios!
+8~img_error.png~Service introuvable!~Le service [SERVICENAME] n'existe pas dans Nagios!
+9~img_error.png~Group vide!~Le hostgroup [HOSTGROUPNAME] n'existe pas dans Nagios!
+10~img_error.png~Servicegroup introuvable!~Le servicegroup [HOSTGROUPNAME] n'existe pas dans Nagios!
+11~img_error.png~Statut du servicegroup!~Impossible de déterminer le statut du servicegroup [SERVICEGROUPNAME]!
+12~img_error.png~Etat non défini!~Etat non défini!
+13~img_error.png~Statut du Service!~Impossible de déterminer le statut du service [SERVICENAME] pour l'hôte [HOSTNAME]!
+14~img_permission.png~Pas de nom d'utilisateur~Vous n'avez pas passé de nom d'utilisateur à Nagvis! Vérifiez votre configuration .htaccess! 
+20~img_error.png~GD Lib~GD Lib pas chargée. Vérifiez votre installation de PHP.

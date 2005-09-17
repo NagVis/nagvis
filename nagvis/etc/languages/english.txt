@@ -1,0 +1,16 @@
+0~img_error.png~StatusCgi not found~Check the path of the [STATUSCGI]-Var in the nagvis-configuration!
+1~img_permission.png~StatusCgi not executable!~Check permissions of the cgi!
+2~img_error.png~No map config available!~Can't open <I>[MAP]</I>!
+3~img_error.png~No map image!~Can't open <I>[MAPPATH]</I>!
+4~img_permission.png~No permissions!~The user <I>[USER]</I> has no permissions on this map!
+5~img_error.png~No nagios logfile~Can't find nagios logfile <I>[STATUSLOGPATH]</I>!
+6~img_warning.png~No support!~The configuration-modus doesn't work with this browser!
+7~img_error.png~Host not found!~The host [HOSTNAME] couldn't be found in the nagios-configuration!
+8~img_error.png~Service not found!~The service [SERVICENAME] couldn't be found in the nagios-configuration!
+9~img_error.png~Group is empty!~The hostgroup [HOSTGROUPNAME] doesn't include any hosts!
+10~img_error.png~Servicegroup not found!~The servicegroup [HOSTGROUPNAME] couldn't be found in the Nagios configuration!
+11~img_error.png~servicegroup-status!~Couldn't get the status-information of the servicegroup [SERVICEGROUPNAME]!
+12~img_error.png~State not defined!~State is not defined!
+13~img_error.png~Service-status!~Couldn't get the service-status [SERVICENAME] from host [HOSTNAME]!
+14~img_permission.png~No User~You passed no Username to NagVis! Check .htaccess configuration! 
+20~img_error.png~GD Lib~GD Lib not loaded. Check your PHP installation. 
