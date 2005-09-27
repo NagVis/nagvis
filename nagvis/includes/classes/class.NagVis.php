@@ -72,22 +72,22 @@ class NagVis
                 if(!file_exists($LanguageFile)) {
                         $msg[0] = "XXXX";
                         $msg[1] = "img_error.png";
-                        $msg[2] = "languagefile not found.";
-                        $msg[3] = "check if languagefile is set right in config.inc.php!";
+                        $msg[2] = "Languagefile not found!";
+                        $msg[3] = "Check if languagefile variaibale is set correct in config.inc.php!";
                 }
                 elseif(!is_readable($LanguageFile)) {
                         $msg[0] = "XXXX";
                         $msg[1] = "img_error.png";
-                        $msg[2] = "languagefile not readable.";
-                        $msg[3] = "check permissions of languagefile $LanguageFile!";
+                        $msg[2] = "Languagefile not readable!";
+                        $msg[3] = "Check permissions of languagefile $LanguageFile!";
                 }
                 else {
                         $fd=file($LanguageFile);
                         if(!explode("~", $fd[$messagenr])) {
                                 $msg[0] = "XXXX";
                                 $msg[1] = "img_error.png";
-                                $msg[2] = "wrong error number.";
-				$msg[3] = "maybe error-number is not known.";
+                                $msg[2] = "Wrong error number.";
+				$msg[3] = "Maybe error-number is not known.";
                         }
                         else {
                                 $msg=explode("~", $fd[$messagenr]);
