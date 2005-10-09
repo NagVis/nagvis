@@ -1,7 +1,7 @@
 <?
 ##########################################################################
 ##     	                           NagVis                              ##
-##             *** Klasse zum Prüfen ein eines Status ***               ##
+##             *** Klasse zum Prfen ein eines Status ***               ##
 ##                               Lizenz GPL                             ##
 ##########################################################################
 
@@ -12,13 +12,13 @@
 
 class checkState
 {
-	// Status für einen Host ermitteln.
+	// Status fr einen Host ermitteln.
         function findStateHost($Hostname,$RecognizeServices,$StatusCgi,$CgiUser) {
 	        putenv("REQUEST_METHOD=GET");
                 putenv("REMOTE_USER=$CgiUser");
                 putenv("QUERY_STRING=host=$Hostname");
                 $text = chop(`$StatusCgi`);
-                if (preg_match('/0 Matching Service Entries Displayed/', $text)) {
+                if (preg_match('/>0 Matching Service Entries Displayed/', $text)) {
 			$state['State'] = 'UNKNOWN';
 			$state['Count'] = '0';
 			$state['Output'] .= '<br>->0 Matching Service Entries Displayed';
@@ -121,7 +121,7 @@ class checkState
                 return($state);
         }
 	
-	// Status für eine Hostgroup ermitteln.
+	// Status fr eine Hostgroup ermitteln.
 	function findStateHostgroup($Hostgroupname,$RecognizeServices,$StatusCgi,$CgiUser) {
 		$rotateUrl = "";
 		putenv("REQUEST_METHOD=GET");
@@ -335,7 +335,7 @@ class checkState
 	}
 
 
-	// Höchsten Status aus einem Array ermitteln
+	// Hï¿½hsten Status aus einem Array ermitteln
 	function findStateArray($stateArray) {
 		$rotateUrl = "";
 		unset($state);
@@ -368,7 +368,7 @@ class checkState
 	{
 		$rotateUrl = "";
 		unset($state);
-		//Status vom Host oder Service Prüfen.
+		//Status vom Host oder Service Prfen.
 		if($Type == "host") {
 			$StatusCgi = $CgiPath.'status.cgi';
 			if(isset($Name)) {
@@ -388,7 +388,7 @@ class checkState
 				$state = $this->findStateHostgroup($Name,$RecognizeServices,$StatusCgi,$CgiUser);
 			}
 		}
-		//Status einer Servicegroup prüfen.
+		//Status einer Servicegroup prfen.
 		elseif($Type == "servicegroup") {
 			$StatusCgi = $CgiPath.'status.cgi';
 			if(isset($Name) && isset($CgiUser)) {
@@ -407,7 +407,7 @@ class checkState
 	}
 	
 	// ******************** Icon ********************
-	// Icon für den aktuellen Status ermitteln.
+	// Icon fr den aktuellen Status ermitteln.
 	// Position auf die Mitte des Icons verschieben
 	function fixIcon($State,$mapCfg,$Index,$IconConfigCfg) {
 		$rotateUrl = "";
