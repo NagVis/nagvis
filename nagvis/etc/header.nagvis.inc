@@ -11,10 +11,6 @@
 ##                               Lizenz GPL                             ##
 ##########################################################################
 
-# Text;URL
-Netzwerkplan;index.php?map=1
-Nagios-Cluster;index.php?map=2
-Nagios-Tests;index.php?map=4
-Config WUI;config.php?map=1
-Config WUI;config.php?map=2
-Config WUI;config.php?map=4
+# Text;MAP
+Netzwerkplan;demo
+Nagios-Cluster;demo
