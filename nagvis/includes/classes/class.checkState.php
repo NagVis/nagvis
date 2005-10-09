@@ -12,7 +12,7 @@
 
 class checkState
 {
-	// Status fr einen Host ermitteln.
+	// Status für einen Host ermitteln.
         function findStateHost($Hostname,$RecognizeServices,$StatusCgi,$CgiUser) {
 	        putenv("REQUEST_METHOD=GET");
                 putenv("REMOTE_USER=$CgiUser");
