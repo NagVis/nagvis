@@ -174,7 +174,7 @@ else {
 
 		}elseif(isset($mapCfg[$arrayPos]['line_type'])) {
 
-			if($mapCfg[$arrayPos]['line_type'] == '10'){
+			if($mapCfg[$arrayPos]['line_type'] == '10' || $mapCfg[$arrayPos]['line_type'] == '11'){
 
 			$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
                         list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
