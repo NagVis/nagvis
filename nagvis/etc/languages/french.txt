@@ -13,4 +13,4 @@
 12~img_error.png~Etat non défini!~Etat non défini!
 13~img_error.png~Statut du Service!~Impossible de déterminer le statut du service [SERVICENAME] pour l'hôte [HOSTNAME]!
 14~img_permission.png~Pas de nom d'utilisateur~Vous n'avez pas passé de nom d'utilisateur à Nagvis! Vérifiez votre configuration .htaccess! 
-20~img_error.png~GD Lib~GD Lib pas chargée. Vérifiez votre installation de PHP.
+15~img_error.png~GD Lib~GD Lib pas chargée. Vérifiez votre installation de PHP.

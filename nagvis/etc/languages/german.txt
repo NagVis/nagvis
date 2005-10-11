@@ -13,4 +13,4 @@
 12~img_error.png~Kein state gesetzt!~state wurde nicht gesetzt!
 13~img_error.png~Service-Status!~Der Service-Status vom Host [HOSTNAME] Service [SERVICENAME] konnte nicht ermittelt werden!
 14~img_permission.png~Kein Benutzer~Es wurde kein Benutzername an NagVis uebergeben! Pruefen Sie ihre .htaccess Konfiguration!
-20~img_error.png~GD Lib~GD Lib ist nicht installiert!
+15~img_error.png~GD Lib~GD Lib ist nicht installiert!

@@ -59,7 +59,7 @@ if($RotateMaps == "1") {
 // Ohne GD Lib geht nix
 if (! extension_loaded('gd')) {
         $nagvis->openSite($rotateUrl);
-        $nagvis->messageBox("20", "");
+        $nagvis->messageBox("15", "");
         $nagvis->closeSite();
         $nagvis->printSite();
         exit;
