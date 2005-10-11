@@ -12,5 +12,5 @@
 ##########################################################################
 
 # Text;MAP
-Netzwerkplan;demo
-Nagios-Cluster;demo
+Netzwerkplan;index.php?map=demo
+ConfigWUI;config.php?map=demo

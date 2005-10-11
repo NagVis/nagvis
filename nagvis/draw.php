@@ -48,11 +48,11 @@ $unknown=imagecolorallocate($im, 255, 128, 0);
 
 function GetColor($state){
 	global $unknown,$ok,$critical,$warning;
-	if($state == 'OK' || state == 'UP'){
+	if($state == 'OK' || $state == 'UP'){
 	$color = $ok;
 	}elseif($state == 'WARNING'){
 	$color = $warning;
-	}elseif($state == 'CRITICAL' state == 'DOWN'){
+	}elseif($state == 'CRITICAL' || $state == 'DOWN'){
 	$color = $critical;
 	}else{
 	$color = $unknown;
