@@ -3,7 +3,7 @@
 $CgiUser="nagiosadmin";
 $StatusCgi="/usr/local/nagios/sbin/status.cgi";
 $Language="german";
-$Base="/usr/local/nagios/share/nagvis";
+$Base=getcwd();
 $HTMLBase="http://".$_SERVER['HTTP_HOST']."/nagios/nagvis";
 $CgiPath="/usr/local/nagios/sbin/";
 $ConfigPath="/usr/local/nagios/etc/";

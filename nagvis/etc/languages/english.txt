@@ -14,3 +14,4 @@
 13~img_error.png~Service-status!~Couldn't get the service-status [SERVICENAME] from host [HOSTNAME]!
 14~img_permission.png~No User~You passed no Username to NagVis! Check .htaccess configuration! 
 15~img_error.png~GD Lib~GD Lib not loaded. Check your PHP installation. 
+16~img_error.png~wui/wui.function.inc.bash not executable~Please check permissions of wui/wui.function.inc.bash (751)!

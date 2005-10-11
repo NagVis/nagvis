@@ -117,6 +117,13 @@ elseif(!in_array($user,$allowed_users) && isset($allowed_users)) {
 	$nagvis->printSite();
 	exit;
 }
+elseif(!is_executable('wui/wui.function.inc.bash')) {
+        $nagvis->openSite($rotateUrl);
+        $nagvis->messageBox("16", "");
+        $nagvis->closeSite();
+        $nagvis->printSite();
+        exit;
+}
 //Prüfen ob das Log-File von Nagios gelesen werden kann! FIXME:Nicht mehr benoetigt 
 /*elseif(!file_exists($StatusLogPath)) {
 	$nagvis->openSite($rotateUrl);
