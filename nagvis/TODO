@@ -1,0 +1,3 @@
+0.9a6:
+- service ack's (must all services acked for becoming a ack-icon in nagvis. fix it) (martin)
+- add checkclass and ischecked for nagvis and config-tool (martin)
