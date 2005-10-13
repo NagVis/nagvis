@@ -1,3 +1,10 @@
-0.9a6:
+Todo for 0.9a6:
 - service ack's (must all services acked for becoming a ack-icon in nagvis. fix it) (martin)
 - add checkclass and ischecked for nagvis and config-tool (martin)
+- If a CRITICAL State in an hostgroup is a ACKed and a WARNING state occurs, CRITICAL gets display, but it should be only WARNING (martin ???)
+- Upload a GOOD default Config and dont break it afterwards (andreas)
+- Remove Map 1 and replace with a working demo Map wich is set as default in the main config (andreas)
+- Implement separeted read an write permissons (???)
+- Implement a little "config backup" function somewhere. (guillaume ???)
+- Implement some hint in the config tool if called without map parameter (something like "do a rightclick" or so) (guillaume)
+- Convert all variables in the config.inc.php into ONE format (not one startet with uppercase letters, other started with lowercase as it is now) (???)
