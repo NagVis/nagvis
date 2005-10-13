@@ -8,3 +8,4 @@ Todo for 0.9a6:
 - Implement a little "config backup" function somewhere. (guillaume ???)
 - Implement some hint in the config tool if called without map parameter (something like "do a rightclick" or so) (guillaume)
 - Convert all variables in the config.inc.php into ONE format (not one startet with uppercase letters, other started with lowercase as it is now) (???)
+- bug to fix (german 'umlaute') in langfiles/javascript. (martin)
