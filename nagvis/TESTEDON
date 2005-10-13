@@ -1,0 +1,21 @@
+NagVis was tested on:
+
+OS: 		SuSe Pro 9.3
+Webserer: 	Apache 2.0.53
+PHP Version:	PHP 4.3.10 
+Result:		Works Fine
+
+OS:		SuSe Pro 9.2
+Webserver	Apache 2.?
+PHP Version	PHP 4.3.?
+Result:		Works Fine
+
+OS:		Ubuntu Breezy Badger
+Webserver:	Apache 2.?
+PHP Version:	PHP 4.3.?
+Result:		Works Fine
+
+OS:		Ubuntu Hoary Hedghog
+Webserver:	Apache 1.3.?
+PHP Version:	PHP 4.3.*
+Result:		Under investigation (draw.php does not work)
