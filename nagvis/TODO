@@ -9,8 +9,7 @@ Todo for 0.9a6:
 - Convert all variables in the config.inc.php into ONE format (not one startet with uppercase letters, other started with lowercase as it is now) (???)
 - bug to fix (german 'umlaute') in langfiles/javascript. (martin)
 - create README/INSTALL-file
-- modify the config.php to first check the value of $config_checked (guillaume)
-- modify the config.php to display hosts correctly (square icons) (guillaume)
+- modify the config.php to first check the value of $check_config (guillaume)
 - In the "Nagvis config" menu, i add a button next to the validate button This button redirects the user to check_config.php (guillaume)
 - modfy the config tool to check for permissions using the allowed_for_config parameter in the map config file (keywaord for all = EVERYONE) (guillaume)
 
