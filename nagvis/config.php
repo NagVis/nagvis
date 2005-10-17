@@ -268,7 +268,7 @@ if(isset($_GET['map'])) {
 	$map = $_GET['map'];
 }
 else {
-	$map = "1";
+	$map = "";
 }
 
 # we retrieve the autosave parameter passed in the URL, if defined. if defined, the map will be saved after the next object is moved

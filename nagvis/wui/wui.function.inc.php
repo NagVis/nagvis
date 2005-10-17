@@ -200,17 +200,13 @@ else if($myaction == "update_config")
 	$val=str_replace('\"','"',$_POST['properties']);
 	$val=str_replace("\'","'",$val);
 	$param=explode("^",$val);
+	
 	if($fic=fopen($cfgPath."config.inc.php","w"))
 	{
 		fwrite($fic,"<?\n");
 		foreach ($param as $myparam)
 		{
-			if(preg_match('/\$comment="(.*)"/', $myparam, $comment)) {
-				fwrite($fic,'//'.$comment[1]."\n");
-			}
-			else {
-				fwrite($fic,$myparam."\n");
-			}
+			fwrite($fic,$myparam."\n");
 		}	
 		fwrite($fic,"?>\n");
 		fclose($fic);

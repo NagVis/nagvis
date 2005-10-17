@@ -42,7 +42,7 @@ while (!feof($handle))
 	$buffer = fgets($handle, 4096);
 		
 	# we see if it starts with a $
-	if (substr($buffer,0,1) == '$' || substr($buffer,0,2) == '//')
+	if (substr($buffer,0,1) == '$')
 	{
 		# we separate the name and the value of the parameter
 		$temp=explode("=",$buffer);
@@ -54,19 +54,12 @@ while (!feof($handle))
 		# we remove the 2 " enclosing a 'normal' value.
 		# examples : for $Language="english";       we return english
 		#                $MapFolder=$Base."/maps/"; we return $Base."/maps/"
-		if(preg_match('/\"/', $param_value) ) {
-			if(strpos($param_value,"\"")==0 && strpos($param_value,"\"",1)==strlen($param_value)-1)
-			{
-				$param_value=substr($param_value,1,strlen($param_value)-2);				
-			}
+		if(strpos($param_value,"\"")==0 && strpos($param_value,"\"",1)==strlen($param_value)-1)
+		{
+			$param_value=substr($param_value,1,strlen($param_value)-2);				
 		}
 			
 		# we add a line in the form
-		if(preg_match('/^\//', $param_name)) {
-			preg_match('/^\/(.*)$/', $param_name, $param_value);
-			$param_value = $param_value[1];
-			$param_name  = "comment";
-		}
 		print "<tr><td class=\"tdlabel\">".$param_name."</td>";
 			
 		# we retrieve the possible help message associated with this parameter
@@ -82,22 +75,8 @@ while (!feof($handle))
 			print "<img style=\"cursor:help\" src=\"".$help_context_icon."\" onclick=\"javascript:alert('".$help_context."')\">";
 			print "</td>\n";
 		}
-		
-		if($param_name=='comment') 
-		{
-			print "<td class=\"tdfield\"><input type=\"text\" name=\"conf_".$param_name."\" value='".$param_value."'></td></tr>\n";
 			
-			if($param_name=="HTMLBase")
-			{
-				print "<script>document.edit_config.elements['conf_".$param_name."'].value='".str_replace('\'',"\'",$param_value)."';</script>";
-			}
-				
-			if($param_name=='version' || $param_name=='title' || $param_name=='host_servicename')
-			{
-				print "<script>document.edit_config.elements['conf_".$param_name."'].disabled=true;</script>\n";
-			}
-		}		
-		elseif($param_name=='Language')
+		if($param_name=='Language')
 		{
 			print "<td class=\"tdfield\"><select name=\"conf_".$param_name."\">";
 			$files=array();
@@ -158,6 +137,7 @@ while (!feof($handle))
 				print "<script>document.edit_config.elements['conf_".$param_name."'].disabled=true;</script>\n";
 			}
 		}
+		
 		print "</tr>";
 						
 	}
