@@ -434,8 +434,10 @@ for($x="1";$x<=$countStates;$x++)
 			$mapCfg[$arrayPos]['service_description'] = "";
 		}
 			
-		// we mark the object in the OK STATE (we don't care of the current object state in this designer)
-		$state['State'] = 'OK';
+		// we mark the object in the OK or UP STATE (we don't care of the current object state in this designer)
+		if(($mapCfg[$arrayPos]['type'] == 'host') || ($mapCfg[$arrayPos]['type'] == 'hostgroup')) {$state['State'] = 'UP';}
+		else {$state['State'] = 'OK';}
+		
                 $state['Count'] = 0;
 	}
 	
