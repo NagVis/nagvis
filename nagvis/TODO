@@ -3,13 +3,10 @@ Todo for 0.9a6:
 - add checkclass and ischecked for nagvis and config-tool (martin)
 - If a CRITICAL State in an hostgroup is a ACKed and a WARNING state occurs, CRITICAL gets display, but it should be only WARNING (martin ???)
 - Upload a GOOD default Config and dont break it afterwards (andreas)
-- Implement separeted read an write permissons (???)
-- Implement a little "config backup" function somewhere. (guillaume ???)
-- Implement some hint in the config tool if called without map parameter (something like "do a rightclick" or so) (guillaume)
+- Implement a little "config backup" function somewhere. (guillaume ???) (we have to decide for this)
+- Implement some hint in the config tool if called without map parameter (something like "do a rightclick" or so) (not guillaume :-) )
 - Convert all variables in the config.inc.php into ONE format (not one startet with uppercase letters, other started with lowercase as it is now) (???)
 - bug to fix (german 'umlaute') in langfiles/javascript. (martin)
 - create README/INSTALL-file
-- modify the config.php to first check the value of $check_config (guillaume)
-- In the "Nagvis config" menu, i add a button next to the validate button This button redirects the user to check_config.php (guillaume)
-- modfy the config tool to check for permissions using the allowed_for_config parameter in the map config file (keywaord for all = EVERYONE) (guillaume)
+
 
