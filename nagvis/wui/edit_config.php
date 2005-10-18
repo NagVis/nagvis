@@ -1,9 +1,9 @@
 <?
 #################################################################################
-#       Nagvis Web Configurator 0.6						#
+#       Nagvis Web Configurator 0.6.1						#
 #	GPL License								#
 #										#
-#	Last modified : 24/08/05						#
+#	Last modified : 18/10/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#
@@ -115,7 +115,7 @@ while (!feof($handle))
 			print "<script>document.edit_config.elements['conf_".$param_name."'].value='".$param_value."';</script>\n";
 				
 		}
-		elseif($param_name=='RotateMaps' || $param_name=='Header')
+		elseif($param_name=='RotateMaps' || $param_name=='Header' || $param_name=='check_config')
 		{
 			print "<td class=\"tdfield\"><select name=\"conf_".$param_name."\">";
 			print "<option value=\"1\">".$langfile->get_text("6")."</option>";
