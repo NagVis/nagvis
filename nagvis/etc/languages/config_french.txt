@@ -16,3 +16,4 @@ Header~Afficher l'en-tête.
 headerCount~Nombre de liens par ligne dans l'en-tête.
 headerInc~Nombre de fichiers Include d'en-tête.
 Language~Choisissez votre langue parmi les packs installés sur cette machine.
+check_config~Si défini à 'Oui' force la vérification de la configuration actuelle, qui DOIT être exécutée après tout changement de config.
