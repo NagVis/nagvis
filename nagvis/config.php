@@ -348,6 +348,12 @@ if($map!="")
 	}
 }
 
+# we check the value of $check_config in the main config file
+if($check_config == "1")
+{
+	print "<script>window.document.location.href='check_config.php?source=config.php&map=$map';</script>\n";
+}
+
 		
 # we load the page background image :
 #	- the map_image if a map is defined in the URL
