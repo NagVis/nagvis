@@ -1,9 +1,8 @@
 <?
 #################################################################################
-#       Nagvis Web Configurator 0.6						#
+#       Nagvis Web Configurator 						#
 #	GPL License								#
 #										#
-#	Last modified : 24/08/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#
@@ -44,18 +43,23 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 		<td width="5%">&nbsp;</td>
 		<td width="30%" class="tdfield"><? echo $langfile->get_text("24"); ?></td>
 		<td width="40%" class="tdfield"><input type="text" name="map_name"></td>
-		<td width="25%" valign="middle" align="center" rowspan="4"><input type="submit" name="map_create_ok" value="<? echo $langfile->get_text("20"); ?>"></td>
+		<td width="25%" valign="middle" align="center" rowspan="5"><input type="submit" name="map_create_ok" value="<? echo $langfile->get_text("20"); ?>"></td>
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("25"); ?></td>
-		<td width="40%" class="tdfield"><input type="text" name="allowed_users" value="<? echo $user ?>"</td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("25"); ?></td>
+		<td width="35%" class="tdfield"><input type="text" name="allowed_users" value="<? echo $user ?>"</td>
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("32"); ?></td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("49"); ?></td>
+		<td width="35%" class="tdfield"><input type="text" name="allowed_for_config" value="<? echo $user ?>"</td>
+	</tr>
+	<tr>
+		<td width="5%">&nbsp;</td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("32"); ?></td>
 		
-		<td width="40%" class="tdfield" style="text-align:left"><select name="map_iconset">
+		<td width="35%" class="tdfield" style="text-align:left"><select name="map_iconset">
 		<?
 			$files=array();
 			if ($handle = opendir($iconBaseFolder)) 
@@ -75,9 +79,9 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("26"); ?></td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("26"); ?></td>
 		
-		<td width="40%" class="tdfield" style="text-align:left"><select name="map_image">
+		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
 		<?
 			$files=array();
 			if ($handle = opendir($mapFolder)) 
@@ -106,9 +110,9 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 	<caption class="tdlabel" ><? echo strtoupper($langfile->get_text("16")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("27"); ?></td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("27"); ?></td>
 		
-		<td width="40%" class="tdfield" style="text-align:left"><select name="map_name">
+		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
 		<?
 			$files=array();
 			if ($handle = opendir($cfgFolder)) 
@@ -129,8 +133,8 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("28"); ?></td>
-		<td width="40%" class="tdfield"><input type="text" name="map_new_name">
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("28"); ?></td>
+		<td width="35%" class="tdfield"><input type="text" name="map_new_name">
 		<input type="hidden" name="map">
 		<script>document.map_rename.map.value=window.opener.document.myvalues.formulaire.value</script>
 		</td>
@@ -146,9 +150,9 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 	<caption class="tdlabel" ><? echo strtoupper($langfile->get_text("17")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("27"); ?></td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("27"); ?></td>
 		
-		<td width="40%" class="tdfield" style="text-align:left"><select name="map_name">
+		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
 		<?
 			$files=array();
 			if ($handle = opendir($cfgFolder)) 
@@ -184,8 +188,8 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 	<caption class="tdlabel" ><? echo strtoupper($langfile->get_text("18")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("29"); ?></td>
-		<td width="40%" class="tdfield"><input type="file" name="fichier"></td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("29"); ?></td>
+		<td width="35%" class="tdfield"><input type="file" name="fichier"></td>
 		<td width="25%" valign="middle" align="center"><input type="submit" name="new_image_ok" value="<? echo $langfile->get_text("23"); ?>"></td>
 	</tr>
 	</form>
@@ -197,9 +201,9 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 	<caption class="tdlabel" ><? echo strtoupper($langfile->get_text("19")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $langfile->get_text("29"); ?></td>
+		<td width="35%" class="tdfield"><? echo $langfile->get_text("29"); ?></td>
 		
-		<td width="40%" class="tdfield" style="text-align:left"><select name="map_image">
+		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
 		<?
 			$files=array();
 			if ($handle = opendir($mapFolder)) 
@@ -264,6 +268,11 @@ function check_create_map()
 		alert("<? echo $langfile->get_text_silent("34") ?>");
 		return false;
 	}
+	if (document.map_create.allowed_for_config.value=='')
+	{
+		alert("<? echo $langfile->get_text_silent("48") ?>");
+		return false;
+	}
 	if (document.map_create.map_iconset.value=='')
 	{
 		alert("<? echo $langfile->get_text_silent("35") ?>");
@@ -306,7 +315,7 @@ function is_user_allowed(mapname)
 			temp3=temp2[1].split(",");
 			for(var j=0;j<temp3.length;j++)
 			{
-				if(temp3[j]==username) return true;
+				if( (temp3[j]==username) || (temp3[j]=="EVERYONE") ) return true;
 			}
 			return false;
 		}

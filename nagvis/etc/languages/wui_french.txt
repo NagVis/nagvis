@@ -32,7 +32,7 @@ menu_4_2~Flêche/Ligne
 22~Renommer
 23~Envoyer
 24~Nom de la carte
-25~Utilisateurs autorisés
+25~Util. en lecture seule
 26~Image de fond
 27~Choisissez une carte
 28~Nouveau nom
@@ -55,3 +55,5 @@ menu_4_2~Flêche/Ligne
 45~Vous êtes sur le point d'effacer DEFINITIVEMENT cette image de fond. Voulez-vous vraiment continuer ?
 46~Impossible d'effacer [IMAGENAME] car elle utilisée par la carte [MAP].
 47~Vous n'êtes pas autorisé à modifier cette carte.
+48~Au moins un utilisateur doit être autorisé à modifier la carte
+49~Util. en lecture/écriture

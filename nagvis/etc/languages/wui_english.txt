@@ -32,7 +32,7 @@ menu_4_2~Line
 22~Rename
 23~Upload
 24~Map name
-25~Allowed users
+25~Users with read access
 26~Background image
 27~Choose a map
 28~New name
@@ -55,3 +55,5 @@ menu_4_2~Line
 45~You're about to delete a background image. It won't be possible to restore it. Do you want to continue ?
 46~Impossible to delete [IMAGENAME] because it's used by the map [MAP].
 47~You're not allowed to modify this map.
+48~At least one user must be allowed to modify the new map
+49~Users with write access

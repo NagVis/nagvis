@@ -1,9 +1,8 @@
 <?
 #################################################################################
-#       Nagvis Web Configurator 0.6.1						#
+#       Nagvis Web Configurator 						#
 #	GPL License								#
 #										#
-#	Last modified : 18/10/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#

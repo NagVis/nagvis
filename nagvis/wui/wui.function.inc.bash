@@ -1,10 +1,9 @@
  #!/bin/sh
  
 #################################################################################
-#       Nagvis Web Configurator 0.6						#
+#       Nagvis Web Configurator 						#
 #	GPL License								#
 #										#
-#	Last modified : 24/08/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#
@@ -208,6 +207,7 @@ elif [ "$1" == "mgt_map_create" ];then
 	$echo_bin "allowed_user=$3" >> "$2"
 	$echo_bin "iconset=$4" >> "$2"
 	$echo_bin "map_image=$5" >> "$2"
+	$echo_bin "allowed_for_config=$6" >> "$2"
 	$echo_bin "}" >> "$2"
 	$echo_bin "" >> "$2"
 

@@ -1,9 +1,8 @@
 <?
 #################################################################################
-#       Nagvis Web Configurator 0.6						#
+#       Nagvis Web Configurator 						#
 #	GPL License								#
 #										#
-#	Last modified : 24/08/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#
@@ -47,7 +46,7 @@ $hostgroup_prop=array("hostgroup_name*","x*","y*","recognize_services","line_typ
 $servicegroup_prop=array("servicegroup_name*","x*","y*","url","line_type","iconset"); 
 $map_prop=array("map_name*","x*","y*","url","iconset"); 
 $textbox_prop=array("text*","x*","y*","w*"); 
-$global_prop=array("allowed_user*","iconset*","map_image*");
+$global_prop=array("allowed_user*","allowed_for_config*","iconset*","map_image*");
 
 $type_tab["service"]=$service_prop;
 $type_tab["host"]=$host_prop;

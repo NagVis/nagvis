@@ -1,9 +1,8 @@
 <?
 #################################################################################
-#       Nagvis Web Configurator 0.6						#
+#       Nagvis Web Configurator 						#
 #	GPL License								#
 #										#
-#	Last modified : 24/08/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#
@@ -89,8 +88,9 @@ function create_map()
 	$myallow=$_POST['allowed_users'];
 	$myicon=$_POST['map_iconset'];
 	$myimage=$_POST['map_image'];
+	$myallowconfig=$_POST['allowed_for_config'];
 	
-	exec('./wui.function.inc.bash mgt_map_create'.' "'.$cfgFolder.$mymap.'.cfg" "'.$myallow.'" "'.$myicon.'" "'.$myimage.'"');
+	exec('./wui.function.inc.bash mgt_map_create'.' "'.$cfgFolder.$mymap.'.cfg" "'.$myallow.'" "'.$myicon.'" "'.$myimage.'" "'.$myallowconfig.'"');
 	
 	return $mymap;
 }

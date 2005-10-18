@@ -1,8 +1,7 @@
-/*################################################################################
-#       Nagvis Web Configurator 0.6						#
+/*###############################################################################
+#       Nagvis Web Configurator 						#
 #	GPL License								#
 #										#
-#	Last modified : 24/08/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#
@@ -69,7 +68,7 @@ function is_allowed_user(mymapname)
 	temp=value_list_users[i].split(",");
 	for(var j=0;j<temp.length;j++)
 	{
-		if(document.forms['myvalues'].username.value==temp[j]) return true;
+		if( (document.forms['myvalues'].username.value==temp[j]) || (temp[j]=="EVERYONE") ) return true;
 	}
 	return false;
 }

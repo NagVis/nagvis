@@ -32,7 +32,7 @@ menu_4_2~Line
 22~Umbenennen
 23~Hochladen
 24~Map Name
-25~Erlaubte Benutzer
+25~Users with read access
 26~Hintergrund
 27~Waehle eine Map
 28~Neuer Name
@@ -55,3 +55,5 @@ menu_4_2~Line
 45~Willst du dieses Hintergrund Image wirklich loeschen? Diese Aktion kann nicht rueckgaengig gemacht werden!
 46~Kann [IMAGENAME] nicht loeschen da es in der Map [MAP] noch verwendet wird.
 47~Du hast nicht die Rechte diese Map zu aendern.
+48~At least one user must be allowed to modify the new map
+49~Users with write access

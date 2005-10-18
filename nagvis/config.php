@@ -1,9 +1,8 @@
 <?
 #################################################################################
-#       Nagvis Web Configurator 0.6						#
+#       Nagvis Web Configurator 						#
 #	GPL License								#
 #										#
-#	Last modified : 24/08/05						#
 #										#
 #	Web interface to configure Nagvis maps.					#
 #										#
@@ -201,7 +200,7 @@ function fenetre_management(page)
 
       {
         L=530;
-	H=540;
+	H=580;
 	nom="Nagvis";
 	
         posX = (screen.width) ? (screen.width - L)/ 2 : 0;
@@ -249,7 +248,7 @@ if ($handle2 = opendir($cfgFolder))
 	foreach ($files as $file) 
 	{ 
 		$analyse=$myreadfile->readNagVisCfg($file);
-		$all_allowed_user=$all_allowed_user."^".$file."=".trim($analyse[1]['allowed_user']);	
+		$all_allowed_user=$all_allowed_user."^".$file."=".trim($analyse[1]['allowed_for_config']);	
 		$all_map_image=$all_map_image."^".$file."=".trim($analyse[1]['map_image']);
 	}
 }
@@ -301,7 +300,7 @@ if($map!="")
 {
 	if(file_exists($cfgFolder.$map.".cfg")) {
 		$mapCfg = $readfile->readNagVisCfg($map);
-		$allowed_users = explode(",",trim($mapCfg[1]['allowed_user']));
+		$allowed_users = explode(",",trim($mapCfg[1]['allowed_for_config']));
 		$map_image_array = explode(",",trim($mapCfg[1]['map_image']));
 		$map_image=$map_image_array[0];
 	}
@@ -340,7 +339,7 @@ if($map!="")
 		exit;
 	}
 
-	elseif(!in_array($user,$allowed_users) && isset($allowed_users)) {
+	elseif(!in_array($user,$allowed_users) && !in_array("EVERYONE",$allowed_users) && isset($allowed_users)) {
 		$nagvis->openSite($rotateUrl);
 		$nagvis->messageBox("4", "USER~".$user);
 		$nagvis->closeSite();
