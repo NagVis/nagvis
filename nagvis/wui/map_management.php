@@ -31,8 +31,23 @@ if(isset($_SERVER['PHP_AUTH_USER'])) {
 elseif(isset($_SERVER['REMOTE_USER'])) {
 	$user = $_SERVER['REMOTE_USER'];
 }
+if($user == "") {exit;}
+
 
 ?>
+<script type="text/javascript" language="JavaScript"><!--
+
+// we now check that this page has been called by config.php. if it's not the case, we close it
+if (window.opener==undefined)
+{
+	window.document.location.href='about:blank';
+}
+if(window.opener.document.location.pathname.substr(window.opener.document.location.pathname.length-18,18)!="/nagvis/config.php")
+{
+	window.document.location.href='about:blank';
+}
+//--></script>
+
 
 <body>
 
@@ -361,6 +376,25 @@ function check_map_rename()
 	return true;
 }
 
+var mapname_used_by;
+function is_mapname_used(map_name)
+{
+	mapname_used_by="";
+	temp=window.opener.document.forms['myvalues'].mapname_by_map.value.split("^");
+	for(var i=0;i<temp.length;i++)
+	{
+		temp2=temp[i].split("=");
+		if(temp2[1]==map_name)
+		{
+			mapname_used_by=temp2[0];
+			return true;
+		}
+
+	}
+	
+	return false;
+}
+
 
 function check_map_delete()
 {
@@ -376,6 +410,15 @@ function check_map_delete()
 		return false;
 	}
 	
+	if(is_mapname_used(document.map_delete.map_name.value))
+	{
+		mess=new String("<? echo $langfile->get_text_silent('46') ?>");
+		mess=mess.replace("[MAP]",mapname_used_by);
+		mess=mess.replace("[IMAGENAME]",document.map_delete.map_name.value);
+		alert(mess);
+		return false;
+	}
+	
 	if (confirm("<? echo $langfile->get_text_silent("44") ?>") === false)
 	{
 		return false;
@@ -386,7 +429,6 @@ function check_map_delete()
 
 
 var image_used_by;
-
 function is_map_image_used(imagename)
 {
 	image_used_by="";

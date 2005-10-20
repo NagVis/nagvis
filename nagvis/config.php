@@ -234,6 +234,7 @@ $rotateUrl = "";
 #		- to make sure a background image is not in use by another map, before it's deleted
 $all_allowed_user="";
 $all_map_image="";
+$all_map_name="";
 $myreadfile = new readFile();
 $res="";
 $files=array();
@@ -250,12 +251,21 @@ if ($handle2 = opendir($cfgFolder))
 		$analyse=$myreadfile->readNagVisCfg($file);
 		$all_allowed_user=$all_allowed_user."^".$file."=".trim($analyse[1]['allowed_for_config']);	
 		$all_map_image=$all_map_image."^".$file."=".trim($analyse[1]['map_image']);
+		
+		for($x="2";$analyse[$x]['type'] != "";$x++)
+		{
+			if($analyse[$x]['type']=="map")
+			{
+				$all_map_name=$all_map_name."^".$file."=".trim($analyse[$x]['name']);
+			}
+		}		
 	}
 }
 closedir($handle2);
 # we remove the first ^
 $all_allowed_user=substr($all_allowed_user,1,strlen($all_allowed_user));
 $all_map_image=substr($all_map_image,1,strlen($all_map_image));
+$all_map_name=substr($all_map_name,1,strlen($all_map_name));
 ###############################################
 
 
@@ -562,6 +572,7 @@ if (strlen($movable) != 0)
 	<textarea name="menu_labels"></textarea>
 	<input type="text" name="allowed_users_by_map" value="<? echo $all_allowed_user ?>">
 	<input type="text" name="image_map_by_map" value="<? echo $all_map_image ?>">
+	<input type="text" name="mapname_by_map" value="<? echo $all_map_name ?>">
 	<input name="submit" type=submit value="Save this map">
 </form> 
 
