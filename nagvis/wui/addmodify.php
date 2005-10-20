@@ -140,7 +140,7 @@ foreach($type_tab["$mytype"] as $propname)
 		print "</select></td>\n";
 	}
 	
-	# we treat the special case of iconset, which will display a "yes/no" listbox instead of the normal textbox
+	# we treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
 	else if($propname_ok == "recognize_services")
 	{
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
@@ -156,6 +156,25 @@ foreach($type_tab["$mytype"] as $propname)
 		print "<option value=\"\"></option>";
 		print "<option value=\"0\">------><------</option>";
 		print "<option value=\"1\">--------------></option>";
+		print "</select></td>\n";
+	}
+	
+	# we treat the special case of map_name, which will display a listbox instead of the normal textbox
+	else if($propname_ok == "map_name")
+	{
+		print "<td class=\"tdfield\"><select name=\"$propname\">";
+		$files=array();
+		if ($handle = opendir($cfgFolder)) 
+		{
+ 			while (false !== ($file = readdir($handle))) 
+			{
+				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" && substr($file,0,strlen($file)-4) != $mymap ) { $files[]=substr($file,0,strlen($file)-4);}				
+			}
+			
+			if ($files) natcasesort($files); 
+			foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
+		}
+		closedir($handle);
 		print "</select></td>\n";
 	}
 	
