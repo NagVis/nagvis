@@ -283,10 +283,12 @@ else if($myaction == "add")
 	}
 }
 
-
 ?>
 
 <script type="text/javascript" language="JavaScript"><!--
+
+// we save the current username, that we'll use in javascript functions to make sure the user doesn't ban himself
+var user='<?echo $user?>';
 
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
@@ -318,7 +320,25 @@ function check_object()
 			if(document.addmodify.elements[i].name == 'y*')
 			{
 				y=document.addmodify.elements[i].value;
-			}			
+			}
+			
+			if(document.addmodify.elements[i].name == 'allowed_for_config*')
+			{
+				users_tab=document.addmodify.elements[i].value.split(',');
+				suicide=true;
+				for(k=0;k<users_tab.length;k++)
+				{
+					if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==user) ) { suicide=false; }
+				}
+				if(suicide)
+				{
+					mess="<? echo $langfile->get_text("50"); ?>";
+					alert(mess);
+					document.addmodify.properties.value='';
+					document.addmodify.elements[i].focus();
+					return false;
+				}
+			}		
 
 			if(document.addmodify.elements[i].value != '')
 			{

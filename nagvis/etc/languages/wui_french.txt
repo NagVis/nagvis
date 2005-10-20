@@ -57,3 +57,4 @@ menu_4_2~Flêche/Ligne
 47~Vous n'êtes pas autorisé à modifier cette carte.
 48~Au moins un utilisateur doit être autorisé à modifier la carte
 49~Util. en lecture/écriture
+50~Vous étiez sur le point de perdre tout controle sur cette carte ! Opération annulée.

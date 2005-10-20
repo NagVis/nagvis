@@ -57,3 +57,4 @@ menu_4_2~Line
 47~Du hast nicht die Rechte diese Map zu aendern.
 48~At least one user must be allowed to modify the new map
 49~Users with write access
+50~You were on the point to lose control on this map ! Operation canceled. 
