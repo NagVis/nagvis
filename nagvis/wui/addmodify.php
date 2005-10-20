@@ -21,6 +21,7 @@
 include("../etc/config.inc.php");
 include("./classes.wui.php");
 
+
 # we load the language file
 $langfile= new langFile($cfgPath."languages/wui_".$Language.".txt");
 
@@ -36,6 +37,20 @@ if(isset($_GET['coords'])) {
 else{
 	$mycoords = "";
 }
+
+# we check that the mapname is defined and that the file exits on the server
+if(!file_exists($cfgFolder.$mymap.".cfg")) { exit; }
+
+# we verify that the user is defined
+if(isset($_SERVER['PHP_AUTH_USER']))   { $user = $_SERVER['PHP_AUTH_USER'];}
+elseif(isset($_SERVER['REMOTE_USER'])) { $user = $_SERVER['REMOTE_USER'];  }
+if($user == "") {exit;}
+
+# we verify he's authorized to config the map
+$myreadfile = new readFile_wui();
+$analyse = $myreadfile->readNagVisCfg($mymap);
+$allowed_user = explode(",",trim($analyse[1]['allowed_for_config']));
+if((!in_array($user,$allowed_user)) && (!in_array("EVERYONE",$allowed_user))) {  exit; }
 
 # we load the arrays, containing the properties list for each type of object
 $type_tab=array("service" => 1, "host" => 2, "hostgroup" => 3, "servicegroup" => 4, "map" => 5, "textbox" => 6, "global" => 7);
