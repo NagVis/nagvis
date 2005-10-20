@@ -394,30 +394,9 @@ for($x="1";$x<=$countStates;$x++)
 	# we treat the case of an object of type "map"	
 	if($mapCfg[$arrayPos]['type'] == 'map') 
 	{
-		if(!isset($mapCfg[$arrayPos]['recognize_services'])) 
-		{
-			$mapCfg[$arrayPos]['recognize_services'] = 1;
-		}
-		if(!isset($mapCfg[$arrayPos]['service_description'])) 
-		{
-			$mapCfg[$arrayPos]['service_description'] = "";
-		}
-		if(file_exists($cfgPath.$cfgFolder.$mapCfg[$arrayPos]['name'].'.cfg')) 
-		{
-			$mapCfgState = $readfile->readNagVisCfg($mapCfg[$arrayPos]['name']);
-			$countStatesState = count($mapCfgState);
-			for($y=2;$y<=$countStatesState;$y++) 
-			{
-				$stateState = $checkstate->checkStates($mapCfgState[$arrayPos]['type'],$mapCfgState[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],$StatusCgi,$CgiUser);
-				$stateAllDefines[] = $stateState['State'];
-			}
-			$state['Map'] = $mapCfg[$arrayPos]['name'];
-			$state['State'] = $checkstate->findStateArray($stateAllDefines);
-		}
-		else 
-		{
-			$state['State'] = "error";
-		}
+		$state['Map'] = "OK";
+		$state['State'] = "OK";
+
 	}
 	
 	# we treat the case of an object of type "textbox"	
