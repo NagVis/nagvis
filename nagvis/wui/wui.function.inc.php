@@ -105,7 +105,7 @@ function rename_map()
 	$mymap_new_name=$_POST['map_new_name'];
 	$mymap=$_POST['map'];
 	
-	exec('./wui.function.inc.bash mgt_map_rename'.' "'.$cfgFolder.$mymap_name.'.cfg" "'.$cfgFolder.$mymap_new_name.'.cfg"');
+	exec('./wui.function.inc.bash mgt_map_rename'.' "'.$cfgFolder.'" "'.$mymap_name.'" "'.$mymap_new_name.'"');
 	
 	if($mymap_name==$mymap)
 	{
