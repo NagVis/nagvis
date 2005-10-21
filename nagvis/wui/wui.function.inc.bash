@@ -214,7 +214,7 @@ elif [ "$1" == "mgt_map_create" ];then
 elif [ "$1" == "mgt_map_rename" ];then
 	
 	for map in `$grep_bin -x "map_name=$3" $2/*.cfg | $awk_bin -F: '{print $1}'`; do
-		$sed_bin "s/$3/$4/g" "$map" > /tmp/$$ && mv /tmp/$$ "$map"
+		$sed_bin "s/$3/$4/g" "$map" > /tmp/$$ && $mv_bin /tmp/$$ "$map"
 	done
 	$mv_bin "$2$3.cfg" "$2$4.cfg"
 	
