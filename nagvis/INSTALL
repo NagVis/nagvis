@@ -1,1 +1,64 @@
-nothing done...
+
+NagVis 0.9 Quick Installation Instructions
+------------------------------------------
+
+
+Author: Andreas Husch
+Document Version: 0.2
+Date: 2005-10-11
+Applies to: NagVis 0.9a5
+Status: reviewed by Guillaume Rozan
+
+Some uncomplete hints to get the current NagVis alhpa running. Better Documentation
+will be available when we enter beta state.
+
+
+STEP 0
+------
+Make sure your System meets the requirements:
+- Nagios is running and authentication is configured
+- Working PHP installation (Version > 4.2.0) with "php-gd" support
+
+
+STEP 1
+------
+Get NagVis, pull it from CVS or download a nightly tar.
+
+
+STEP 2
+------
+Place the NagVis directory tree into your Nagios share Folder
+(usally /usr/local/nagios/share).
+
+
+STEP 3
+------
+DONT move any files or folders inside the NagVis directory! (In fact you can move,
+but in this case you have to change the main config file - if everything is left
+untouched it should run "out of the box" without changes to the config)
+
+
+STEP 4
+------
+Read the "NagVis 0.9 Main Config Format Description" file on www.nagvis.org and
+check your file to fit your Nagios installation.
+
+
+
+STEP 5
+------
+Make sure that the Webserver User can write to the NagVis etc directory and
+check out the Pathes to awk, cat etc. in wui/wui.function.inc.bash.
+
+
+STEP 6
+------
+Call http://[nagiosserver]/[path_to_nagvis]/config.php and do a right-click
+
+You should now be able to create new config files. (Make sure the Webserver
+can write to the etc directory!). I recommend to backup your created files, it
+is alpha so it is possible that some unplanned things happen and srew up you files ;-)
+
+You can use your maps with: http://[nagiosserver]/[path_to_nagvis]/index.php?map=[mapname]
+
+Have fun and report bugs!
