@@ -1,11 +1,11 @@
-Todo for 0.9a6:
-- service ack's (must all services acked for becoming a ack-icon in nagvis. fix it) (martin)
-- add checkclass and ischecked for nagvis and config-tool (martin)
-- If a CRITICAL State in an hostgroup is a ACKed and a WARNING state occurs, CRITICAL gets display, but it should be only WARNING (martin ???)
-- Implement a little "config backup" function somewhere. (guillaume ???) (we have to decide for this)
-- Implement some hint in the config tool if called without map parameter (something like "do a rightclick" or so) (not guillaume :-) )
-- Convert all variables in the config.inc.php into ONE format (not one startet with uppercase letters, other started with lowercase as it is now) (???)
-- bug to fix (german 'umlaute') in langfiles/javascript. (martin)
+Todo:
+- PRIO 1: service ack's (must all services acked for becoming a ack-icon in nagvis. fix it) (martin)
+- PRIO 2:  add checkclass and ischecked for nagvis and config-tool (martin)
+- PRIO 2: If a CRITICAL State in an hostgroup is a ACKed and a WARNING state occurs, CRITICAL gets display, but it should be only WARNING (martin ???)
+- PRIO 3: Implement a little "config backup" function somewhere. (guillaume ???) (we have to decide for this)
+- PRIO 3: Implement some hint in the config tool if called without map parameter (something like "do a rightclick" or so) (not guillaume :-) )
+-  PRIO 2: Convert all variables in the config.inc.php into ONE format (not one startet with uppercase letters, other started with lowercase as it is now) (???)
+- PRIO 3: bug to fix (german 'umlaute') in langfiles/javascript. (martin)
 
 
 
