@@ -47,8 +47,15 @@ check your file to fit your Nagios installation.
 
 STEP 5
 ------
-Make sure that the Webserver User can write to the NagVis etc directory and
-check out the Pathes to awk, cat etc. in wui/wui.function.inc.bash.
+
+check out the Pathes to awk, cat etc. in /usr/local/nagios/share/nagvis/wui/wui.function.inc.bash.
+
+As root, launch :
+chmod 777 -R /usr/local/nagios/share/nagvis/etc/maps/
+chmod 777 -R /usr/local/nagios/share/nagvis/maps/
+chmod +x /usr/local/nagios/share/nagvis/wui/*.bash
+chmod 666 /usr/local/nagios/share/nagvis/etc/config.inc.php
+
 
 
 STEP 6
