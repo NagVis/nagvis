@@ -58,3 +58,6 @@ menu_4_2~Flêche/Ligne
 48~Au moins un utilisateur doit être autorisé à modifier la carte
 49~Util. en lecture/écriture
 50~Vous étiez sur le point de perdre tout controle sur cette carte ! Opération annulée.
+menu_7~Restaurer
+51~Etes-vous SUR de vouloir restaurer la sauvegarde de cette carte ?
+52~Désactivé

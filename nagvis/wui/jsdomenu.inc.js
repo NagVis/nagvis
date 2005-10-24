@@ -83,6 +83,7 @@ function createjsDOMenu()
   mainMenu = new jsDOMenu(160);
   with (mainMenu) {
     addMenuItem(new menuItem(get_label('1'), "menu_save", "code:document.myvalues.submit.click();","","",""));
+    addMenuItem(new menuItem(get_label('7'), "menu_restore", "code:confirm_restore();","","",""));
     addMenuItem(new menuItem(get_label('2'), "menu_properties", "code:fenetre('./wui/addmodify.php?action=modify&map='+document.myvalues.formulaire.value+'&type=global&id=0');","","",""));
     addMenuItem(new menuItem("-"));
     addMenuItem(new menuItem(get_label('3'), "menu_maps", ""));
@@ -165,8 +166,12 @@ function createjsDOMenu()
 	mainMenu.items.menu_properties.className='jsdomenuitem_disabled';
 	mainMenu.items.menu_addobject.enabled=false;
 	mainMenu.items.menu_addobject.className='jsdomenuitem_disabled';
-
-	
+  }
+  
+  if(document.myvalues.backup_available.value!='1')
+  {
+	mainMenu.items.menu_restore.enabled=false;
+	mainMenu.items.menu_restore.className='jsdomenuitem_disabled';
   }
  
 }

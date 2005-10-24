@@ -58,3 +58,6 @@ menu_4_2~Line
 48~At least one user must be allowed to modify the new map
 49~Users with write access
 50~You were on the point to lose control on this map ! Operation canceled. 
+menu_7~Restore
+51~Are you sure you want to restore the backup og this map ?
+52~Disabled

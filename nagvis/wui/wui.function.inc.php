@@ -28,7 +28,7 @@ function savemap()
 	$val_x=$_POST['valx'];
 	$val_y=$_POST['valy'];
 
-	exec('./wui.function.inc.bash modify'.' '.$cfgFolder.$mymap.'.cfg '.$lines.' '.$val_x.' '.$val_y);
+	exec('./wui.function.inc.bash modify '.$Autoupdate_frequency.' '.$cfgFolder.' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
 	
 	return $mymap;
 }
@@ -37,13 +37,11 @@ function savemap()
 function add_element()
 {
 	include("../etc/config.inc.php");
-	$cfg_base=$cfgFolder;
-
 	$mymap=$_POST['map'];
 	$mytype=$_POST['type'];
 	$myvalues=$_POST['properties'];
 	
-	exec('./wui.function.inc.bash add_element '.' "'.$cfg_base.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'"');
+	exec('./wui.function.inc.bash add_element '.$cfgFolder.' "'.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'" '.$Autoupdate_frequency);
 	
 	return $mymap;
 }
@@ -58,7 +56,7 @@ function modify_element()
 	$myvalues=$_POST['properties'];
 	$myid=$_POST['id'];
 	
-	exec('./wui.function.inc.bash modify_element '.' "'.$cfgFolder.$mymap.'.cfg" '.$myid.' '.$mytype.' "'.$myvalues.'"');
+	exec('./wui.function.inc.bash modify_element '.$cfgFolder.' "'.$mymap.'.cfg" '.$myid.' '.$mytype.' "'.$myvalues.'" '.$Autoupdate_frequency);
 	
 	return $mymap;
 	
@@ -72,7 +70,7 @@ function delete_element()
 	$mymap=$_GET['map'];
 	$myid=$_GET['id'];
 	
-	exec('./wui.function.inc.bash delete_element '.' "'.$cfgFolder.$mymap.'.cfg" '.$myid);
+	exec('./wui.function.inc.bash delete_element '.$cfgFolder.' "'.$mymap.'.cfg" '.$myid.' '.$Autoupdate_frequency);
 	
 	return $mymap;
 	
@@ -90,7 +88,7 @@ function create_map()
 	$myimage=$_POST['map_image'];
 	$myallowconfig=$_POST['allowed_for_config'];
 	
-	exec('./wui.function.inc.bash mgt_map_create'.' "'.$cfgFolder.$mymap.'.cfg" "'.$myallow.'" "'.$myicon.'" "'.$myimage.'" "'.$myallowconfig.'"');
+	exec('./wui.function.inc.bash mgt_map_create '.$cfgFolder.' "'.$mymap.'.cfg" "'.$myallow.'" "'.$myicon.'" "'.$myimage.'" "'.$myallowconfig.'" '.$Autoupdate_frequency);
 	
 	return $mymap;
 }
@@ -126,7 +124,7 @@ function delete_map()
 	$mymap_name=$_POST['map_name'];
 	$mymap=$_POST['map'];
 	
-	exec('./wui.function.inc.bash mgt_map_delete'.' "'.$cfgFolder.$mymap_name.'.cfg"');
+	exec('./wui.function.inc.bash mgt_map_delete'.$cfgFolder.' "'.$mymap_name.'.cfg"');
 	
 	if($mymap_name==$mymap)
 	{
@@ -147,6 +145,16 @@ function delete_image()
 	
 	exec('./wui.function.inc.bash mgt_image_delete'.' "'.$mapFolder.$mymap_image.'"');
 	
+}
+
+############################################
+function restore_map()
+{
+	include("../etc/config.inc.php");
+	$mymap=$_GET['map'];
+	
+	exec('./wui.function.inc.bash map_restore '.$cfgFolder.' "'.$mymap.'.cfg" '.$Autoupdate_frequency);
+	return $mymap;
 }
 
 ############################################
@@ -276,6 +284,11 @@ else if($myaction == "mgt_image_delete")
 	
 }
 
+else if($myaction == "map_restore")
+{	
+	$mymap=restore_map();
+	print "<script>window.document.location.href='../config.php?map=$mymap';</script>\n";	
+}
 
 ?>
 

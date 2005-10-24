@@ -166,6 +166,17 @@ function confirm_object_deletion()
 	
 }
 
+// simple function to ask to confirm before we restore a map
+function confirm_restore()
+{
+	confirm_message='<? echo $langfile->get_text("51"); ?>';
+	if(confirm(confirm_message)) 
+	{
+		document.location.href='./wui/wui.function.inc.php?myaction=map_restore&map='+ document.myvalues.formulaire.value;
+	}
+	return true;
+}
+
 // functions used to open a popup window in different sizes, with or without sidebars
 var win = null;
 function fenetre(page)
@@ -185,7 +196,7 @@ function fenetre(page)
 function fenetre_big(page)
 
       {
-        L=520;
+        L=530;
 	H=580;
 	nom="Nagvis";
 	
@@ -199,7 +210,7 @@ function fenetre_big(page)
 function fenetre_management(page)
 
       {
-        L=530;
+        L=540;
 	H=580;
 	nom="Nagvis";
 	
@@ -573,6 +584,7 @@ if (strlen($movable) != 0)
 	<input type="text" name="allowed_users_by_map" value="<? echo $all_allowed_user ?>">
 	<input type="text" name="image_map_by_map" value="<? echo $all_map_image ?>">
 	<input type="text" name="mapname_by_map" value="<? echo $all_map_name ?>">
+	<input type="text" name="backup_available" value="<? echo file_exists($cfgFolder.$map.".cfg.bak") ?>">
 	<input name="submit" type=submit value="Save this map">
 </form> 
 

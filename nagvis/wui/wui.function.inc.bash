@@ -20,9 +20,10 @@ mv_bin="/bin/mv"
 cat_bin="/bin/cat"
 grep_bin="/bin/grep"
 rm_bin="/bin/rm"
-
+cp_bin="/bin/cp"
 
 modified_properties_list=""
+statusfile="autobackup.status"
 
 ###########################
 # modify_object_property host_name=toto^x=3^y=20 x 24
@@ -181,35 +182,78 @@ function modify_object_property()
 	# we replace the old file with the new one
 	$mv_bin "$1.tmp" "$1"
  }
- 
+
+ ###########################  
+ function update_backup_status()
+ {
+
+ 	# if the autobackup feature is disabled, we delete all the backup files and the statusfile
+	if [ $3 -eq 0 ]; then
+		$rm_bin $1*.bak
+		$rm_bin "$1$statusfile"
+		return
+	fi
+ 	
+	# if the statusfile doesn't exist, we simply write in it
+ 	if [ ! -w "$1$statusfile" ];then
+		$echo_bin "$2=$3" > $1$statusfile
+		return
+	fi
+	
+	# we get (or try to) the current status for this map
+	current=`$cat_bin "$1$statusfile" | $grep_bin "$2=" | $awk_bin -F= '{print $2}'`
+
+	# if the current value does not exist, we append the right line at the end of the statusfile	
+	if [ "$current" == "" ]; then
+		$echo_bin "$2=$3" >> $1$statusfile
+		return
+	fi
+	
+	# we compare the nextvalue it will take with 0
+	if [ $[current-1] -eq 0 ]; then
+		$cp_bin "$1$2" "$1$2.bak"
+		nextvalue=$3
+	elif [ $[current-1] -ge $3 ]; then
+		nextvalue=$3
+	else
+		nextvalue=$[current-1]
+	fi
+	
+	# we update the countdown for this map, in the statusfile
+	$sed_bin "s/$2=$current/$2=$nextvalue/g" "$1$statusfile" > "$1$$.tmp" && $mv_bin "$1$$.tmp" "$1$statusfile"
+	
+ }
 
 ###########################
 # MAIN SCRIPT
 ###########################
  if [ "$1" == "modify" ];then
  
- 	modify_map "$2" "$3" "$4" "$5"
+ 	modify_map "$3$4" "$5" "$6" "$7"
+	update_backup_status "$3" "$4" "$2"
 
  elif [ "$1" == "add_element" ];then
- 	add_element "$2" "$3" "$4"
+ 	add_element "$2$3" "$4" "$5"
+	update_backup_status "$2" "$3" "$6"
 
 elif [ "$1" == "modify_element" ];then
- 	modify_element "$2" "$3" "$4" "$5"
+ 	modify_element "$2$3" "$4" "$5" "$6"
+	update_backup_status "$2" "$3" "$7"
 
 elif [ "$1" == "delete_element" ];then
- 	delete_element "$2" "$3"
-	
-elif [ "$1" == "update_config" ];then
-	$echo_bin -n "$3" > "$2"
+ 	delete_element "$2$3" "$4"
+	update_backup_status "$2" "$3" "$5"
 	
 elif [ "$1" == "mgt_map_create" ];then
-	$echo_bin "define global {" > "$2"
-	$echo_bin "allowed_user=$3" >> "$2"
-	$echo_bin "iconset=$4" >> "$2"
-	$echo_bin "map_image=$5" >> "$2"
-	$echo_bin "allowed_for_config=$6" >> "$2"
-	$echo_bin "}" >> "$2"
-	$echo_bin "" >> "$2"
+	$echo_bin "define global {" > "$2$3"
+	$echo_bin "allowed_user=$4" >> "$2$3"
+	$echo_bin "iconset=$5" >> "$2$3"
+	$echo_bin "map_image=$6" >> "$2$3"
+	$echo_bin "allowed_for_config=$7" >> "$2$3"
+	$echo_bin "}" >> "$2$3"
+	$echo_bin "" >> "$2$3"
+	
+	update_backup_status "$2" "$3" "$8"
 
 elif [ "$1" == "mgt_map_rename" ];then
 	
@@ -220,10 +264,16 @@ elif [ "$1" == "mgt_map_rename" ];then
 	
 
 elif [ "$1" == "mgt_map_delete" ];then
-	$rm_bin "$2"	
+	$rm_bin "$2$3"	
 
 elif [ "$1" == "mgt_image_delete" ];then
 	$rm_bin "$2"	
+
+elif [ "$1" == "map_restore" ];then
 	
+	$mv_bin "$2$3.bak" "$2$3"
+	current=`$cat_bin "$2$statusfile" | $grep_bin "$3=" | $awk_bin -F= '{print $2}'`
+	$sed_bin "s/$3=$current/$3=$4/g" "$2$statusfile" > "$2$$.tmp" && $mv_bin "$2$$.tmp" "$2$statusfile"
+
 fi
 

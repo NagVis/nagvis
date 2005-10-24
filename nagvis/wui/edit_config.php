@@ -122,6 +122,18 @@ while (!feof($handle))
 			print "</select></td>\n";
 			print "<script>document.edit_config.elements['conf_".$param_name."'].value='".$param_value."';</script>\n";
 		}
+		elseif($param_name=='Autoupdate_frequency')
+		{
+			print "<td class=\"tdfield\"><select name=\"conf_".$param_name."\">";
+			print "<option value=\"0\">".$langfile->get_text("52")."</option>";
+			print "<option value=\"2\">2</option>";
+			print "<option value=\"5\">5</option>";
+			print "<option value=\"10\">10</option>";
+			print "<option value=\"25\">25</option>";
+			print "<option value=\"50\">50</option>";
+			print "</select></td>\n";
+			print "<script>document.edit_config.elements['conf_".$param_name."'].value='".$param_value."';</script>\n";
+		}
 		else
 		{
 			print "<td class=\"tdfield\"><input type=\"text\" name=\"conf_".$param_name."\" value='".$param_value."'></td></tr>\n";

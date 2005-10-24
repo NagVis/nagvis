@@ -17,3 +17,4 @@ headerCount~Anzahl der Links pro Zeile im Header.
 headerInc~Name der Header include Datei.
 Language~Waehle deine Sprache.
 check_config~If set to 'Yes', forces a check of the current configuration. MUST be done after any change.
+Autoupdate_frequency~For your own safety the maps are saved every X times they're saved or modify. You simply can restore the UNIQUE backup made, with the 'Restore' function. This parameter controls the X value.

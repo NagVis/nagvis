@@ -19,6 +19,7 @@ $maps=array("demo");
 $Header="1";
 $headerCount="3";
 $check_config="0";
+$Autoupdate_frequency="5";
 $headerInc="header.nagvis.inc";
 $version="0.9a5+";
 $title="NagVis - CVS MAIN ".$version;
