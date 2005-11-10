@@ -278,6 +278,11 @@ function check_create_map()
 		alert("<? echo $langfile->get_text_silent("33") ?>");
 		return false;
 	}
+	if (document.map_create.map_name.value.split(" ").length > 1)
+	{
+		alert("<? echo $langfile->get_text_silent("53") ?>");
+		return false;
+	}
 	if (document.map_create.allowed_users.value=='')
 	{
 		alert("<? echo $langfile->get_text_silent("34") ?>");
@@ -344,6 +349,12 @@ function check_map_rename()
 	if (document.map_rename.map_name.value=='')
 	{
 		alert("<? echo $langfile->get_text_silent("37") ?>");
+		return false;
+	}
+	
+	if (document.map_rename.map_new_name.value.split(" ").length > 1)
+	{
+		alert("<? echo $langfile->get_text_silent("53") ?>");
 		return false;
 	}
 	

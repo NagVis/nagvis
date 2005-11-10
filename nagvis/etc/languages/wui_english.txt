@@ -61,3 +61,4 @@ menu_4_2~Line
 menu_7~Restore
 51~Are you sure you want to restore the backup og this map ?
 52~Disabled
+53~Spaces are not allowed here

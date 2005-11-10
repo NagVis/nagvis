@@ -61,3 +61,4 @@ menu_4_2~Flêche/Ligne
 menu_7~Restaurer
 51~Etes-vous SUR de vouloir restaurer la sauvegarde de cette carte ?
 52~Désactivé
+53~Les espaces ne sont pas autorisés.
