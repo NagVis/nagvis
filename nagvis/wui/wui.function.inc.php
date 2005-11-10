@@ -123,8 +123,8 @@ function delete_map()
 
 	$mymap_name=$_POST['map_name'];
 	$mymap=$_POST['map'];
-	
-	exec('./wui.function.inc.bash mgt_map_delete'.$cfgFolder.' "'.$mymap_name.'.cfg"');
+
+	exec('./wui.function.inc.bash mgt_map_delete '.$cfgFolder.' "'.$mymap_name.'.cfg"');
 	
 	if($mymap_name==$mymap)
 	{
@@ -143,7 +143,7 @@ function delete_image()
 	include("../etc/config.inc.php");
 	$mymap_image=$_POST['map_image'];
 	
-	exec('./wui.function.inc.bash mgt_image_delete'.' "'.$mapFolder.$mymap_image.'"');
+	exec('./wui.function.inc.bash mgt_image_delete "'.$mapFolder.$mymap_image.'"');
 	
 }
 
@@ -163,8 +163,6 @@ function restore_map()
 
 
 $myaction = $_GET['myaction'];
-
-
 
 if($myaction == "save")
 {
@@ -245,14 +243,29 @@ else if($myaction == "mgt_map_rename")
 
 else if($myaction == "mgt_map_delete")
 {	
+
 	$mymap=delete_map();
 	print "<script>window.opener.document.location.href='../config.php?map=$mymap';</script>\n";
 	print "<script>window.close();</script>\n";
 	
 }
 
+else if($myaction == "mgt_image_delete")
+{	
+	
+	delete_image();
+	print "<script>window.opener.document.location.reload();</script>\n";
+	print "<script>window.close();</script>\n";
+	
+}
+
 else if($myaction == "mgt_new_image")
 {
+	if (!is_array(${'HTTP_POST_FILES'})) 
+	{
+		$HTTP_POST_FILES = $_FILES;
+	}
+	
 	# we check the file (the map) is properly uploaded
 	if (is_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name']))
 	{
@@ -274,14 +287,6 @@ else if($myaction == "mgt_new_image")
 		return;
 	}
   	
-}
-
-else if($myaction == "mgt_image_delete")
-{	
-	delete_image();
-	print "<script>window.opener.document.location.reload();</script>\n";
-	print "<script>window.close();</script>\n";
-	
 }
 
 else if($myaction == "map_restore")
