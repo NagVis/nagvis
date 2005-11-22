@@ -1,12 +1,11 @@
 <?
 $CgiUser="nagiosadmin";
-$StatusCgi="/usr/local/nagios/sbin/status.cgi";
 $Language="english";
 $Base="/usr/local/nagios/share/nagvis";
-$HTMLBase="http://".$_SERVER['HTTP_HOST']."/nagios/nagvis";
+$HTMLBase="/nagios/nagvis";
 $CgiPath="/usr/local/nagios/sbin/";
-$ConfigPath="/usr/local/nagios/etc/";
-$RefreshTime="30";
+$HTMLCgiPath="/nagios/cgi-bin";
+$RefreshTime="90";
 $cfgPath=$Base."/etc/";
 $cfgFolder=$Base."/etc/maps/";
 $mapFolder=$Base."/maps/";
@@ -19,8 +18,8 @@ $maps=array("demo");
 $Header="1";
 $headerCount="3";
 $check_config="0";
-$Autoupdate_frequency="5";
+$Autoupdate_frequency="25";
 $headerInc="header.nagvis.inc";
-$version="0.9a5+";
-$title="NagVis - CVS MAIN ".$version;
+$version="0.9b1";
+$title="NagVis ".$version;
 ?>

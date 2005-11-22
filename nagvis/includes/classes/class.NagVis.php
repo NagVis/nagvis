@@ -177,6 +177,7 @@ class NagVis
 		elseif($Type == "Map") {
 			$Info .= '<b>Map Name:</b> '.$Hostname.'<br>';
 			$Info .= '<b>Map State:</b> '.strtr(addslashes($State), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+			$Info .= '<b>Output:</b> '.strtr(addslashes($Output), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 		}
 		$Info .= '\', CAPTION, \''.$Type.'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
 		return($Info);

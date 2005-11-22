@@ -12,5 +12,6 @@
 ##########################################################################
 
 # Text;MAP
-Netzwerkplan;index.php?map=demo
-ConfigWUI;config.php?map=demo
+Server;index.php?map=demo
+Network;index.php?map=demo2
+ConfigWUI;config.php

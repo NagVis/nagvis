@@ -7,11 +7,11 @@
 6~img_warning.png~Keine Unterst&uuml;tzung!~Der Konfigurations-Modus wird in diesem Browser nicht ungerst&uuml;tzt!
 7~img_error.png~Host nicht vorhanden!~Der Host [HOSTNAME] wurde in der Nagios Konfiguration nicht gefunden!
 8~img_error.png~Service nicht vorhanden!~Der Service [SERVICENAME] konnte in der Nagios Konfiguration nicht gefunden werden!
-9~img_error.png~Gruppe leer!~Die Gruppe [HOSTGROUPNAME] enthaelt keine Hosts!
+9~img_error.png~Gruppe leer!~Die Gruppe [HOSTGROUPNAME] enth&auml;lt keine Hosts!
 10~img_error.png~Servicegroup nicht gefunden!~Die Servicegroup [HOSTGROUPNAME] wurde nicht gefunden!
 11~img_error.png~Status der ServiceGroup!~Konnte den Status der ServiceGroup [SERVICEGROUPNAME] nicht ermitteln!
 12~img_error.png~Kein state gesetzt!~state wurde nicht gesetzt!
 13~img_error.png~Service-Status!~Der Service-Status vom Host [HOSTNAME] Service [SERVICENAME] konnte nicht ermittelt werden!
-14~img_permission.png~Kein Benutzer~Es wurde kein Benutzername an NagVis uebergeben! Pruefen Sie ihre .htaccess Konfiguration!
+14~img_permission.png~Kein Benutzer~Es wurde kein Benutzername an NagVis &uuml;bergeben! Pruefen Sie ihre .htaccess Konfiguration!
 15~img_error.png~GD Lib~GD Lib ist nicht installiert!
-16~img_error.png~wui/wui.function.inc.bash nicht ausfuehrbar~Bitte die Berechtigungen von wui/wui.function.inc.bash (751) pruefen!
+16~img_error.png~wui/wui.function.inc.bash nicht ausf&uuml;hrbar~Bitte die Berechtigungen von wui/wui.function.inc.bash (751) pr&uuml;fen!

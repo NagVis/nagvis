@@ -68,8 +68,9 @@ $arrayPos="2";
 
 for($x="1";$x<=$countStates;$x++) {
 	if(isset($mapCfg[$arrayPos]['line_type'])) {
+
 		if(!isset($mapCfg[$arrayPos]['recognize_services'])) {
-			$mapCfg[$arrayPos]['recognize_services'] = 0;
+			$mapCfg[$arrayPos]['recognize_services'] = 1;
 		}
 		if(!isset($mapCfg[$arrayPos]['service_description'])) {
 			$mapCfg[$arrayPos]['service_description'] = "";
@@ -83,6 +84,7 @@ for($x="1";$x<=$countStates;$x++) {
 				$y_middle = middle($y_from,$y_to);
 				draw_arrow($x_from,$y_from,$x_middle,$y_middle,3,1,GetColor($state['State']));
 				draw_arrow($x_to,$y_to,$x_middle,$y_middle,3,1,GetColor($state['State']));
+				
 			}
 			elseif($mapCfg[$arrayPos]['line_type'] == '11'){
 				$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);	

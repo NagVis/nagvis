@@ -15,7 +15,7 @@
 menu_1~Speichern
 menu_2~Properties
 menu_3~Maps
-menu_4~Object hinzufuegen
+menu_4~Object hinzuf&auml;gen
 menu_5~Nagvis config
 menu_6~Hilfe
 menu_3_1~Oeffnen
