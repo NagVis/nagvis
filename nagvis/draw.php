@@ -25,7 +25,7 @@ if(file_exists($cfgFolder.$map.".cfg")) {
 }
 
 // Bild initalisieren
-
+$map_image=strtolower($map_image);
 $image_type = explode('.', $map_image);
 
 switch($image_type[1]) {
@@ -37,6 +37,7 @@ switch($image_type[1]) {
 	break;
 	default: 
 		// Error-Box!
+		print(“Only PNG and JPG Map-Image Extensions are allowed”);
 		exit;
 	break;
 }	
