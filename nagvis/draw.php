@@ -25,10 +25,10 @@ if(file_exists($cfgFolder.$map.".cfg")) {
 }
 
 // Bild initalisieren
-$map_image=strtolower($map_image);
+$map_image=$map_image;
 $image_type = explode('.', $map_image);
 
-switch($image_type[1]) {
+switch(strtolower($image_type[1])) {
 	case 'jpg':
 		$im = @imagecreatefromjpeg($mapFolder.$map_image);
 	break;
@@ -37,7 +37,7 @@ switch($image_type[1]) {
 	break;
 	default: 
 		// Error-Box!
-		print(“Only PNG and JPG Map-Image Extensions are allowed”);
+		print "Only PNG and JPG Map-Image Extensions are allowed";
 		exit;
 	break;
 }	
@@ -110,7 +110,7 @@ for($x="1";$x<=$countStates;$x++) {
 	$arrayPos++;
 }
 
-switch($image_type[1]) {
+switch(strtolower($image_type[1])) {
 	case 'jpg':
 		header('Content-type: image/jpeg');
 		// HTTP/1.1
