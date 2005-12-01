@@ -39,7 +39,7 @@ if(isset($_SERVER['PHP_AUTH_USER'])) {
 } elseif(isset($_SERVER['REMOTE_USER'])) {
     $user = $_SERVER['REMOTE_USER'];
 } else {
-    $nagvis->openSite($rotateUrl);
+    $nagvis->openSite("");
     $nagvis->messageBox("14", "");
     $nagvis->closeSite();
     $nagvis->printSite();
@@ -106,7 +106,7 @@ elseif(!in_array($user,$allowed_users) && !in_array("EVERYONE",$allowed_users) &
     $nagvis->printSite();
     exit;
 }
-elseif(!is_executable('wui/wui.function.inc.bash')) {
+elseif(!is_executable($Base."/wui/wui.function.inc.bash")) {
     $nagvis->openSite($rotateUrl);
     $nagvis->messageBox("16", "");
     $nagvis->closeSite();
