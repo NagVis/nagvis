@@ -43,7 +43,7 @@ class NagVis
 			for($d="1";$d<=$headerCount;$d++) {
 				if($Menu[$x]['entry'] != "") {
 					$this->site[] = '<TD WIDTH="13">';
-					$this->site[] = '<IMG SRC="./images/greendot.gif" WIDTH="13" HEIGHT="14" NAME="'.$Menu[$x]['entry'].'_'.$x.'">';
+					$this->site[] = '<IMG SRC="images/greendot.gif" WIDTH="13" HEIGHT="14" NAME="'.$Menu[$x]['entry'].'_'.$x.'">';
 					$this->site[] = '</TD>';
 					$this->site[] = '<TD NOWRAP>';
 					$this->site[] = '<A HREF='.$Menu[$x]['url'].' onMouseOver="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',1)" onMouseOut="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',0)" CLASS="NavBarItem">'.$Menu[$x]['entry'].'</A>';
@@ -73,7 +73,7 @@ class NagVis
                         $msg[0] = "XXXX";
                         $msg[1] = "img_error.png";
                         $msg[2] = "Languagefile not found!";
-                        $msg[3] = "Check if languagefile variaibale is set correct in config.inc.php!";
+                        $msg[3] = "Check if languagefile variable is set right in config.inc.php!";
                 }
                 elseif(!is_readable($LanguageFile)) {
                         $msg[0] = "XXXX";

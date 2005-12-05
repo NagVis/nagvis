@@ -1,5 +1,16 @@
-file:	etc/config.inc.php
-line:	58
-tstamp:	1133909637
+
+tstamp:	1133910247
 author:	fandel
-descr.:	$check_config="0" changed to $check_config="0";
+
+- checkit added
+  - includes/classes/class.CheckIt.php
+  - index.php
+    - $checkit = new checkit();
+  - check_permissions + EVERYONE
+- some bugfixes
+  - etc/config.inc.php
+  - icons in header.inc
+- permissions
+  - chown nagios:www-data /usr/local/nagios/share/cvs/nagvis/etc/config.inc.php
+  - chmod 665 /usr/local/nagios/share/cvs/nagvis/etc/config.inc.php
+- umlaute utf8
