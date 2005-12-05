@@ -1,0 +1,5 @@
+file:	etc/config.inc.php
+line:	58
+tstamp:	1133909637
+author:	fandel
+descr.:	$check_config="0" changed to $check_config="0";

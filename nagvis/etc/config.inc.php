@@ -53,9 +53,8 @@ $Header="1";
 #Number of links displayed in one header line.
 $headerCount="3";
 
-
 $Autoupdate_frequency="25";
-$check_config="0"
+$check_config="0";
 
 #Name of the header include file.
 $headerInc="header.nagvis.inc";
