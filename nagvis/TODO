@@ -6,3 +6,4 @@ Todo:
 - PRIO 3: Implement a little "config backup" function somewhere. (guillaume ???) (we have to decide for this)
 - PRIO 3: Implement some hint in the config tool if called without map parameter (something like "do a rightclick" or so) (not guillaume :-) )
 - PRIO 2: Convert all variables in the config.inc.php into ONE format (not one startet with uppercase letters, other started with lowercase as it is now) (???)
+- FIX: if map.cfg is not writable, print out a error-box (guillaume ???)

@@ -27,6 +27,7 @@ $browser = $_SERVER['HTTP_USER_AGENT'];
 // Map festlegen.
 if(isset($_GET['map'])) {
     $map = $_GET['map'];
+    $checkit->check_map_isreadable();
 } else {
     $map = $maps[0];
 }
@@ -40,13 +41,16 @@ $checkit->check_user();
 $checkit->check_gd();
 $checkit->check_cgipath();
 $checkit->check_wuibash();
+$checkit->check_rotate();
 
+/*
 // Prüfen ob Rotate-Modus eingeschaltet ist.
 if($RotateMaps == "1") {
     $mapNumber = $nagvis->mapCount($map);
     $map = $maps[$mapNumber];
     $rotateUrl = " URL=index.php?map=".$map;
 }  
+*/
 
 //Prüfen ob *.cfg-Datei vorhanden ist und dann einlesen.
 //FIXME sollte erst NACH den ganzen Plausis gemacht werden
@@ -58,9 +62,10 @@ if(file_exists($cfgFolder.$map.".cfg")) {
 }
 $nagvis->openSite($rotateUrl);
 
+$checkit->check_permissions();
 $checkit->check_map_isreadable();
 $checkit->check_mapimg();
-$checkit->check_permissions();
+$checkit->check_langfile();
 
 // Prüfen ob Header eingeschaltet ist und bei bedarf erzeugen.
 if ($Header == "1") {

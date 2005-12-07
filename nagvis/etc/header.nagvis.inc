@@ -13,5 +13,4 @@
 
 # Text;MAP
 Server;index.php?map=demo
-Network;index.php?map=demo2
 ConfigWUI;config.php
