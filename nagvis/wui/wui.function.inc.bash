@@ -13,14 +13,14 @@
 #################################################################################
  
 # change these paths to suit your system
-awk_bin="/bin/awk"
-sed_bin="/bin/sed"
-echo_bin="/bin/echo"
-mv_bin="/bin/mv"
-cat_bin="/bin/cat"
-grep_bin="/bin/grep"
-rm_bin="/bin/rm"
-cp_bin="/bin/cp"
+awk_bin="`which awk`"
+sed_bin="`which sed`"
+echo_bin="`which echo`"
+mv_bin="`which mv`"
+cat_bin="`which cat`"
+grep_bin="`which grep`"
+rm_bin="`which rm`"
+cp_bin="`which cp`"
 
 modified_properties_list=""
 statusfile="autobackup.status"

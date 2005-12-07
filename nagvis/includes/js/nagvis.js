@@ -1,20 +1,19 @@
-if(parseInt(navigator.appVersion.substring(0,1))>=3){
-  doton = new Image(13,14);
-  doton.src = "../../images/orangedot.gif";
-  dotoff = new Image(13,14);
-  dotoff.src = "../../images/greendot.gif";
-  }
+if(parseInt(navigator.appVersion.substring(0,1))>=3) {
+ doton = new Image(13,14);
+ doton.src = "images/orangedot.gif";
+ dotoff = new Image(13,14);
+ dotoff.src = "images/greendot.gif";
+}
 
-function switchdot(name,on){
-  if(parseInt(navigator.appVersion.substring(0,1))>=3){
-    image = eval("" + (on == 1 ? "doton.src" : "dotoff.src"));
-    document[name].src=image;
-    }
-  }
+function switchdot(name,on) {
+ if(parseInt(navigator.appVersion.substring(0,1))>=3){
+  image = eval("" + (on == 1 ? "doton.src" : "dotoff.src"));
+  document[name].src=image;
+ }
+}
   
-function printPos($offset_x,$offset_y)
-{
-	var Pos = "x: " + (event.clientX-$offset_x) + " / y:" + (event.clientY-$offset_y);
-	window.status = Pos;
-	return true;
+function printPos($offset_x,$offset_y) {
+ var Pos = "x: " + (event.clientX-$offset_x) + " / y:" + (event.clientY-$offset_y);
+ window.status = Pos;
+ return true;
 }
