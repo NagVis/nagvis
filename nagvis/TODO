@@ -1,5 +1,4 @@
 Todo:
-- PRIO 1: service ack's (must all services acked for becoming a ack-icon in nagvis. fix it) (martin)
 - PRIO 1: please give not to many permissions in the readme. instead 777 use the webserver-group together with 665.
 - PRIO 2: add checkclass for config-tool (guillaume)
 - PRIO 2: If a CRITICAL State in an hostgroup is a ACKed and a WARNING state occurs, CRITICAL gets display, but it should be only WARNING (martin ???)

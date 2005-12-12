@@ -13,12 +13,12 @@
 ##########################################################################
 
 include("./etc/config.inc.php");
-include("./includes/classes/graphic.php");
+include("./includes/classes/class.Graphic.php");
 include("./includes/classes/class.CheckIt.php");
-include("./includes/classes/class.readFiles.php");
-include("./includes/classes/class.checkState.php");
+include("./includes/classes/class.ReadFiles.php");
+include("./includes/classes/class.CheckState_".$StateClass.".php");
 
-$checkit = new checkit();
+$CheckIt = new checkit();
 
 // Browser ermitteln.
 unset($browser);
@@ -27,7 +27,7 @@ $browser = $_SERVER['HTTP_USER_AGENT'];
 // Map festlegen.
 if(isset($_GET['map'])) {
     $map = $_GET['map'];
-    $checkit->check_map_isreadable();
+    $CheckIt->check_map_isreadable();
 } else {
     $map = $maps[0];
 }
@@ -37,11 +37,11 @@ $readfile = new readFile();
 $rotateUrl = "";
 
 // check-stuff
-$checkit->check_user();
-$checkit->check_gd();
-$checkit->check_cgipath();
-$checkit->check_wuibash();
-$checkit->check_rotate();
+$CheckIt->check_user();
+$CheckIt->check_gd();
+$CheckIt->check_cgipath();
+$CheckIt->check_wuibash();
+$CheckIt->check_rotate();
 
 /*
 // Prüfen ob Rotate-Modus eingeschaltet ist.
@@ -62,10 +62,10 @@ if(file_exists($cfgFolder.$map.".cfg")) {
 }
 $nagvis->openSite($rotateUrl);
 
-$checkit->check_permissions();
-$checkit->check_map_isreadable();
-$checkit->check_mapimg();
-$checkit->check_langfile();
+$CheckIt->check_permissions();
+$CheckIt->check_map_isreadable();
+$CheckIt->check_mapimg();
+$CheckIt->check_langfile();
 
 // Prüfen ob Header eingeschaltet ist und bei bedarf erzeugen.
 if ($Header == "1") {
@@ -123,25 +123,23 @@ for($x="1";$x<=$countStates;$x++) {
 		$allowed_types = array(host,service,hostgroup,servicegroup);
 		if(in_array($mapCfgState['type'], $allowed_types)){
 		    $stateState = $checkstate->checkStates($mapCfgState['type'],$mapCfgState['name'],$mapCfgState['recognize_services'],$mapCfgState['service_description'],0,$CgiPath,$CgiUser);
-
 		    $mapState[] = $stateState['State'];
-    
 		}
 		$countStatesState++;
 	    }
 	    if(in_array("DOWN", $mapState) || in_array("CRITICAL", $mapState)){
 		$state['State'] = "CRITICAL";
 		$state['Output'] = "State of parent Map is CRITICAL or DOWN";
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons);
+		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 
 	    }elseif(in_array("WARNING", $mapState)){
 		$state['State'] = "WARNING";
 		$state['Output'] = "State of parent Map is  WARNING";
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons);
+		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 	    }else{
 		$state['State'] = "OK";
 		$state['Output'] = "State of parent map is OK or UP";
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons);
+		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 	    }
 	} else {
 	    $state['State'] = "OK";
@@ -203,14 +201,13 @@ for($x="1";$x<=$countStates;$x++) {
 		
 		$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
 
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons);
+		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 		$IconPosition = $checkstate->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
 		$nagvis->site[] = $IconPosition;
 		
 		$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
 		$nagvis->site[] = $link;
 		$nagvis->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
-		
 		$nagvis->site[] = "</DIV>";
 	    }
     $arrayPos++;

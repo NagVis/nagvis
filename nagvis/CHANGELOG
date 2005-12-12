@@ -1,7 +1,74 @@
+tstamp: 1134509183
+author: fandel
+- added empty state-classes
+  - includes/classes/class.CheckState_dbmy.php
+  - includes/classes/class.CheckState_dbpg.php
+  - includes/classes/class.CheckState_xml.php
+  - includes/classes/class.CheckState_html.php (old class.checkState.php)
+- fixed host-acks
+- fixed service-acks
+  - $this->findStateHost added for checking if the host is acked
+  - problem: parsing-performance, cgi puts different text :/
+- begin to normalizing the code: variables, classes, format PLEASE READ:
+  - 1. classes:		classes written downcase. 
+
+			Examples:
+			new checkit, new nagvis, new newclass
+
+  - 2. vars: 		vars for each word the first letter uppercase
+		
+			Examples:
+			$CheckIt = checkit->check_blabla();
+			$NagVis = nagvis->blablubb();
+
+  - 3. text-printing:	first write the text in a var, then put it out
+
+			Examples:
+			$html .= "<html>
+				  <head>
+				   <title>
+				  </head>";
+			.::CODE::.
+			$html .= "<body>
+				   <table>
+				    <tr>
+				     <td>blabla</td>
+				    </tr>
+				   </table>
+				  </body>
+				  </html>";
+			print $html;
+  - 4. code-view:	use as logical seperator <TAB> and not whitespace
+			
+			Examples:
+			for($i=0;$i<100;$i++) {
+				print $i;
+			}
+
+  - 5. conditions:	for conditions open the anchor as follows
+		
+			Examples:
+			if(isset($myvar)) {
+				echo "blabla";
+			}	
+		
+  - 6. class-file 	same as the variable
+			
+			Examples:
+			class.CheckIt.php
+			class.NagVis.php
+			class.ReadFiles.php
+
+  - 7. php-files	normal php files are written downcase.
+		
+tstamp: 1134408052
+author: fandel
+- fixed/rewritten function fixIcon()
+  - default iconset changed to std_small (fixIcon())
+  - added type-arg (host/service/servicegroup) to fixIcon()
 
 tstamp:	1133910247
 author:	fandel
-
 - checkit added
   - includes/classes/class.CheckIt.php
   - index.php

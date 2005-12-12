@@ -1,9 +1,16 @@
 <?
+#state_class defines the parsing of the status data
+# - parse	-> cgi-/html-parsing	(status.cgi)
+# - dbpg    	-> nagios-db parsing 	(postgres)
+# - dbmy        -> nagios-db parsing 	(mysql)
+# - xml         -> xml-parsing 		(xml.cgi)
+$StateClass="html";
+
 #The user Nagvis runs the CGI as (MUST be 'allowed for all services', 'allowed for all hosts')
-$CgiUser="nagiosadmin";
+$CgiUser="fandel";
 
 #Language for the error boxes (currently "english,"frensh" and "german" are available)
-$Language="english";
+$Language="german";
 
 #Local path (full) to NagVis Base Directory.
 $Base="/usr/local/nagios/share/nagvis";

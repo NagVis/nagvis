@@ -13,8 +13,8 @@
 
 include("./etc/config.inc.php");
 include("./includes/classes/class.NagVis.php");
-include("./includes/classes/class.readFiles.php");
-include("./includes/classes/class.checkState.php");
+include("./includes/classes/class.ReadFiles.php");
+include("./includes/classes/class.CheckState_".$StateClass.".php");
 include("./wui/classes.wui.php");
 
 # we load the language file
@@ -453,7 +453,7 @@ for($x="1";$x<=$countStates;$x++)
 	}
 	else
 	{
-		$Icon_name = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons);
+		$Icon_name = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 	}
 		
 	# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display
