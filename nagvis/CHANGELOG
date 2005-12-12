@@ -1,6 +1,6 @@
 tstamp: 1134509183
 author: fandel
-- added empty state-classes
+- added empty state-classes (SEE: $StateClass in config.inc.php)
   - includes/classes/class.CheckState_dbmy.php
   - includes/classes/class.CheckState_dbpg.php
   - includes/classes/class.CheckState_xml.php
@@ -9,7 +9,7 @@ author: fandel
 - fixed service-acks
   - $this->findStateHost added for checking if the host is acked
   - problem: parsing-performance, cgi puts different text :/
-- begin to normalizing the code: variables, classes, format PLEASE READ:
+- begin normalizing the code (many work!!!): variables, classes, format PLEASE READ:
   - 1. classes:		classes written downcase. 
 
 			Examples:
