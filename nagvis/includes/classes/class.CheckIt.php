@@ -27,15 +27,16 @@ class checkit extends NagVis {
                 global $map;
                 $nagvis = new NagVis;
                 if(!is_readable($cfgFolder.$map.".cfg")) {
-			$nagvis->openSite($rotateUrl);
-			$nagvis->messageBox("2", "MAP~".$cfgFolder.$map.".cfg");
-			$nagvis->closeSite();
-			$nagvis->printSite();
-			exit;
+					$nagvis->openSite($rotateUrl);
+					$nagvis->messageBox("2", "MAP~".$cfgFolder.$map.".cfg");
+					$nagvis->closeSite();
+					$nagvis->printSite();
+					exit;
                 }
         }
 
         function check_user() {
+                global $user;
                 $nagvis = new NagVis;
                 if(isset($_SERVER['PHP_AUTH_USER'])) {
                         $user = $_SERVER['PHP_AUTH_USER'];
