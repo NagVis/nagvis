@@ -67,7 +67,7 @@ class NagVis
 	
 	// Erzeugt eine Message-Box.
 	function messageBox($messagenr, $vars) {
-                include("./etc/config.inc.php");
+		include("./etc/config.inc.php");
 		$LanguageFile = $Base."/etc/languages/".$Language.".txt";
                 if(!file_exists($LanguageFile)) {
                         $msg[0] = "XXXX";
@@ -87,17 +87,17 @@ class NagVis
                                 $msg[0] = "XXXX";
                                 $msg[1] = "img_error.png";
                                 $msg[2] = "Wrong error number.";
-				$msg[3] = "Maybe error-number is not known.";
+								$msg[3] = "Maybe error-number is not known.";
                         }
                         else {
                                 $msg=explode("~", $fd[$messagenr]);
                         }
                 }
 		
-		$messageNr	= $msg[0];
-                $messageIcon 	= $msg[1];
-                $messageHead 	= $msg[2];
-		$message 	= $msg[3];
+		$messageNr = $msg[0];
+		$messageIcon = $msg[1];
+		$messageHead = $msg[2];
+		$message = $msg[3];
 			
 		//eval("\$message = \"$message\";");
 		for($i=0;$i<count(explode(' ', $vars));$i++) {
