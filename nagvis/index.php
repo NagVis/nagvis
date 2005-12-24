@@ -81,134 +81,137 @@ $countStates = count($mapCfg)-1;
 $arrayPos="2";
 for($x="1";$x<=$countStates;$x++) { 
     if(!isset($mapCfg[$arrayPos]['recognize_services'])) {
-	$mapCfg[$arrayPos]['recognize_services'] = 1;
+		$mapCfg[$arrayPos]['recognize_services'] = 1;
     }
     if(!isset($mapCfg[$arrayPos]['service_description'])) {
-	$mapCfg[$arrayPos]['service_description'] = "";
+		$mapCfg[$arrayPos]['service_description'] = "";
     }
     // Links zu Nagios CGI´s
     if(isset($mapCfg[$arrayPos]['url'])) {
-	$link = '<A HREF='.$mapCfg[$arrayPos]['url'].'>';
+		$link = '<A HREF='.$mapCfg[$arrayPos]['url'].'>';
     } elseif($mapCfg[$arrayPos]['type'] == 'host') {
-    $link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?host='.$mapCfg[$arrayPos]['name'].'">';
+		$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?host='.$mapCfg[$arrayPos]['name'].'">';
     } elseif($mapCfg[$arrayPos]['type'] == 'service') {
-	$link = '<A HREF="'.$HTMLCgiPath.'/extinfo.cgi?type=2&host='.$mapCfg[$arrayPos]['name'].'&service='.$mapCfg[$arrayPos]['service_description'].'">';
+		$link = '<A HREF="'.$HTMLCgiPath.'/extinfo.cgi?type=2&host='.$mapCfg[$arrayPos]['name'].'&service='.$mapCfg[$arrayPos]['service_description'].'">';
     } elseif($mapCfg[$arrayPos]['type'] == 'hostgroup') {
-	$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?hostgroup='.$mapCfg[$arrayPos]['name'].'&style=detail">';
+		$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?hostgroup='.$mapCfg[$arrayPos]['name'].'&style=detail">';
     } elseif($mapCfg[$arrayPos]['type'] == 'servicegroup') {
-	$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?servicegroup='.$mapCfg[$arrayPos]['name'].'&style=detail">';
+		$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?servicegroup='.$mapCfg[$arrayPos]['name'].'&style=detail">';
     }
     //Status einer Map ermitteln
     //Fixed by mluebben
     if($mapCfg[$arrayPos]['type'] == 'map') {
-	if(file_exists($cfgFolder.$mapCfg[$arrayPos]['name'].'.cfg')) {
-	    $allMapCfgState = $readfile->readNagVisCfg($mapCfg[$arrayPos]['name']);
-		
-		/*
-		    $countStatesState = count($mapCfgState);
-		    if(!isset($mapCfgState['recognize_services'])) {
-			$mapCfgState['recognize_services'] = 1;
-		    }
-		    if(!isset($mapCfgState[$arrayPos]['service_description'])) {
-			$mapCfgState[$arrayPos]['service_description'] = "";
-		    }
-		*/
+		if(file_exists($cfgFolder.$mapCfg[$arrayPos]['name'].'.cfg')) {
+			$allMapCfgState = $readfile->readNagVisCfg($mapCfg[$arrayPos]['name']);
+			
+			/*
+				$countStatesState = count($mapCfgState);
+				if(!isset($mapCfgState['recognize_services'])) {
+					$mapCfgState['recognize_services'] = 1;
+				}
+				if(!isset($mapCfgState[$arrayPos]['service_description'])) {
+					$mapCfgState[$arrayPos]['service_description'] = "";
+				}
+			*/
 
-	    foreach ($allMapCfgState as $mapCfgState) {
-
-	    if(!isset($mapCfgState['recognize_services'])) {
-		$mapCfgState['recognize_services'] = 1;
-	    }
-
-		$allowed_types = array(host,service,hostgroup,servicegroup);
-		if(in_array($mapCfgState['type'], $allowed_types)){
-		    $stateState = $checkstate->checkStates($mapCfgState['type'],$mapCfgState['name'],$mapCfgState['recognize_services'],$mapCfgState['service_description'],0,$CgiPath,$CgiUser);
-		    $mapState[] = $stateState['State'];
+			foreach ($allMapCfgState as $mapCfgState) {
+	
+				if(!isset($mapCfgState['recognize_services'])) {
+					$mapCfgState['recognize_services'] = 1;
+				}
+	
+				$allowed_types = array(host,service,hostgroup,servicegroup);
+				if(in_array($mapCfgState['type'], $allowed_types)){
+					$stateState = $checkstate->checkStates($mapCfgState['type'],$mapCfgState['name'],$mapCfgState['recognize_services'],$mapCfgState['service_description'],0,$CgiPath,$CgiUser);
+					$mapState[] = $stateState['State'];
+				}
+				$countStatesState++;
+			}
+			
+			if(in_array("DOWN", $mapState) || in_array("CRITICAL", $mapState)){
+				$state['State'] = "CRITICAL";
+				$state['Output'] = "State of parent Map is CRITICAL or DOWN";
+				$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+			}elseif(in_array("WARNING", $mapState)){
+				$state['State'] = "WARNING";
+				$state['Output'] = "State of parent Map is  WARNING";
+				$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+			}else{
+				$state['State'] = "OK";
+				$state['Output'] = "State of parent map is OK or UP";
+				$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+			}
+		} else {
+			$state['State'] = "OK";
+			$state['Output'] = "Map not readable";
 		}
-		$countStatesState++;
-	    }
-	    if(in_array("DOWN", $mapState) || in_array("CRITICAL", $mapState)){
-		$state['State'] = "CRITICAL";
-		$state['Output'] = "State of parent Map is CRITICAL or DOWN";
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
-
-	    }elseif(in_array("WARNING", $mapState)){
-		$state['State'] = "WARNING";
-		$state['Output'] = "State of parent Map is  WARNING";
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
-	    }else{
-		$state['State'] = "OK";
-		$state['Output'] = "State of parent map is OK or UP";
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
-	    }
-	} else {
-	    $state['State'] = "OK";
-	    $state['Output'] = "Map not readable";
-	}
-	$IconPosition = $checkstate->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
-	$nagvis->site[] = $IconPosition;
-	$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
-	$nagvis->site[] = '<A HREF="./index.php?map='.$mapCfg[$arrayPos]['name'].'" TARGET="_self"><IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.'; BORDER="0"></A>';
-	$nagvis->site[] = "</DIV>";
+	
+		$IconPosition = $checkstate->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
+		$nagvis->site[] = $IconPosition;
+		$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
+		$nagvis->site[] = '<A HREF="./index.php?map='.$mapCfg[$arrayPos]['name'].'" TARGET="_self"><IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.'; BORDER="0"></A>';
+		$nagvis->site[] = "</DIV>";
     
     }elseif($mapCfg[$arrayPos]['type'] == 'textbox') {
 	// Textboxen
 	$TextBox = $checkstate->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
 	$nagvis->site[] = $TextBox;		
+	
+	
 	}elseif(isset($mapCfg[$arrayPos]['line_type'])) {
 	    if($mapCfg[$arrayPos]['line_type'] == '10' || $mapCfg[$arrayPos]['line_type'] == '11'){
-		$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
-		list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
-		list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
-		$x_middle = middle($x_from,$x_to);
-		$y_middle = middle($y_from,$y_to);
-		$IconPosition = $checkstate->fixIconPosition('20x20.gif',$x_middle,$y_middle);
-		$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
-		$nagvis->site[] = $IconPosition;
-		$nagvis->site[] = $link;
-		$nagvis->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
-		$nagvis->site[] = '</div>';
+			$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
+			list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
+			list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
+			$x_middle = middle($x_from,$x_to);
+			$y_middle = middle($y_from,$y_to);
+			$IconPosition = $checkstate->fixIconPosition('20x20.gif',$x_middle,$y_middle);
+			$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
+			$nagvis->site[] = $IconPosition;
+			$nagvis->site[] = $link;
+			$nagvis->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
+			$nagvis->site[] = '</div>';
 
 	    } elseif($mapCfg[$arrayPos]['line_type'] == '20'){
-		list($host_name_from,$host_name_to) = explode(",", $mapCfg[$arrayPos]['name']);
-		list($service_description_from,$service_description_to) = explode(",", $mapCfg[$arrayPos]['service_description']);
-		$state_from = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$host_name_from,$mapCfg[$arrayPos]['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
-		$state_to = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$host_name_to,$mapCfg[$arrayPos]['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);
+			list($host_name_from,$host_name_to) = explode(",", $mapCfg[$arrayPos]['name']);
+			list($service_description_from,$service_description_to) = explode(",", $mapCfg[$arrayPos]['service_description']);
+			$state_from = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$host_name_from,$mapCfg[$arrayPos]['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
+			$state_to = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$host_name_to,$mapCfg[$arrayPos]['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);
 
-		list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
-		list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
-		// From
-		$x_middle = middle2($x_from,$x_to);
-		$y_middle = middle2($y_from,$y_to);
-		$IconPosition = $checkstate->fixIconPosition('20x20.gif',$x_middle,$y_middle);
-		$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$host_name_from,$service_description_from,$state_from);
-		$nagvis->site[] = $IconPosition;
-		$nagvis->site[] = $link;
-		$nagvis->site[] = '<img src= iconsets/20x20.gif '.$Box.';></A>';
-		$nagvis->site[] = '</div>';
-		// To
-		$x_middle = middle2($x_to,$x_from);
-		$y_middle = middle2($y_to,$y_from);
-		$IconPosition = $checkstate->fixIconPosition('20x20.gif',$x_middle,$y_middle);
-		$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$host_name_to,$service_description_to,$state_to);
-		$nagvis->site[] = $IconPosition;
-		$nagvis->site[] = $link;
-		$nagvis->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
-		$nagvis->site[] = '</div>';
+			list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
+			list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
+			// From
+			$x_middle = middle2($x_from,$x_to);
+			$y_middle = middle2($y_from,$y_to);
+			$IconPosition = $checkstate->fixIconPosition('20x20.gif',$x_middle,$y_middle);
+			$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$host_name_from,$service_description_from,$state_from);
+			$nagvis->site[] = $IconPosition;
+			$nagvis->site[] = $link;
+			$nagvis->site[] = '<img src= iconsets/20x20.gif '.$Box.';></A>';
+			$nagvis->site[] = '</div>';
+			// To
+			$x_middle = middle2($x_to,$x_from);
+			$y_middle = middle2($y_to,$y_from);
+			$IconPosition = $checkstate->fixIconPosition('20x20.gif',$x_middle,$y_middle);
+			$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$host_name_to,$service_description_to,$state_to);
+			$nagvis->site[] = $IconPosition;
+			$nagvis->site[] = $link;
+			$nagvis->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
+			$nagvis->site[] = '</div>';
 		}	
 
 	    }elseif(!isset($mapCfg[$arrayPos]['line_type'])) {
 		
-		$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
+			$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
 
-		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
-		$IconPosition = $checkstate->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
-		$nagvis->site[] = $IconPosition;
+			$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+			$IconPosition = $checkstate->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
+			$nagvis->site[] = $IconPosition;
 		
-		$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
-		$nagvis->site[] = $link;
-		$nagvis->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
-		$nagvis->site[] = "</DIV>";
+			$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
+			$nagvis->site[] = $link;
+			$nagvis->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
+			$nagvis->site[] = "</DIV>";
 	    }
     $arrayPos++;
 }
