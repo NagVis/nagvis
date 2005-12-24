@@ -48,9 +48,9 @@ class checkState
                         $state['Output'] = $hostTotalsUP[1].' Hosts UP';
                 }
                 else {
-			$state['State'] = 'UNKNOWN';
+						$state['State'] = 'UNKNOWN';
                         $state['Count'] = '0';
-                        $state['Output'] = 'No data :-(';
+                        $state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Host!';
                 }
 
                 if($RecognizeServices == 1) {
@@ -112,7 +112,7 @@ class checkState
 		else {
 			$state['State'] = 'UNKNOWN';
                         $state['Count'] = '0';
-                        $state['Output'] = 'No data :-(';
+                        $state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Hostgroup!';
 		}
 
 		if($RecognizeServices == '1') {
@@ -134,7 +134,7 @@ class checkState
 				$state['Output'] = $serviceTotalsOK[1].' services in state OK';
 			}else {
 				$state['Count'] = '0';
-				$state['Output'] = 'No data :-(';
+				$state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Hostgroups Services!';
 			}
 		}
 		return($state);
@@ -213,7 +213,7 @@ class checkState
 		else {
 			$state['State'] = 'UNKNOWN';
                         $state['Count'] = '0';
-                        $state['Output'] = 'No data :-(';
+                        $state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Servicegroup';
 		}
 
 		return ($state);
