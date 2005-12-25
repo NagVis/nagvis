@@ -1,19 +1,22 @@
 <?
 ##########################################################################
-##     	                           NagVis                              ##
-##             *** Klasse zum Prüfen ein eines Status ***               ##
-##                               Lizenz GPL                             ##
+##     	        NagVis - The Nagios Visualisation Addon                 ##
+##########################################################################
+## class.CheckState_html - Backend module to fetch the status from      ##
+##             			   the Nagios CGIs. All not special to one 		##
+##						   Backend related things should removed here!  ##
+##						   (e.g. fixIcon, this is needed for ALL        ##
+##						   Backends	)									##
+##########################################################################
+## Licenced under the terms and conditions of the GPL Licence, 			##
+## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
-#############################################################################################
-// Fehlercode Methode		Bechreibung				Ursache
-//     -1     findIndex		Ein Index wurde nicht gefunden 		Host- oder Servicename falsch 
-#############################################################################################
 
 class checkState
 {
 	// Status für einen Host ermitteln.
-        function findStateHost($Hostname,$RecognizeServices,$StatusCgi,$CgiUser) {
+	function findStateHost($Hostname,$RecognizeServices,$StatusCgi,$CgiUser) {
 	        putenv("REQUEST_METHOD=GET");
                 putenv("REMOTE_USER=$CgiUser");
                 putenv("QUERY_STRING=host=$Hostname");
@@ -140,14 +143,14 @@ class checkState
 		return($state);
 	}
 
-        function findStateService($HostName,$ServiceName,$StatusCgi,$CgiUser) {
-                $rotateUrl = "";
+	function findStateService($HostName,$ServiceName,$StatusCgi,$CgiUser) {
+		$rotateUrl = "";
 		putenv("REQUEST_METHOD=GET");
-                putenv("REMOTE_USER=$CgiUser");
-                putenv("QUERY_STRING=type=2&host=$HostName&service=$ServiceName");
-                $handle = popen($StatusCgi, 'r');
-                $text = fread($handle, 9000);
-                pclose($handle);
+        putenv("REMOTE_USER=$CgiUser");
+        putenv("QUERY_STRING=type=2&host=$HostName&service=$ServiceName");
+        $handle = popen($StatusCgi, 'r');
+        $text = fread($handle, 9000);
+        pclose($handle);
 		preg_match('/.*Current Status:<\/TD><TD CLASS=\'dataVal\'><DIV CLASS=\'(.*)\'>.*/', $text, $state);
 		preg_match('/.*Status Information:<\/TD><TD CLASS=\'dataVal\'>(.*)<\/TD>.*/', $text, $output);
 	        
@@ -220,7 +223,8 @@ class checkState
 	}
 
 
-		// Höchsten Status aus einem Array ermitteln
+	// Höchsten Status aus einem Array ermitteln
+	// FIXME: Ha: Move over to other class (not special html backend related)
 	function findStateArray($stateArray) {
 		$rotateUrl = "";
 		unset($state);
@@ -318,6 +322,7 @@ class checkState
 					case 'ack':
 						$Icon = $IconPath.'_'.$StateLow;
 					break;
+					//FIXME: Ha: This case seams to be useless because it is the same then the cases before!? 
 					case 'up':
 						$Icon = $IconPath.'_'.$StateLow;
 					break;
@@ -358,7 +363,7 @@ class checkState
 			return $Icon;
 		}
 	}
-
+	// FIXME: Ha: Move over to other class (not special html backend related)
 	// Positionierung auf den Mittelpunkt der Icons umrechen
 	// Jli
 	function fixIconPosition($Icon,$x,$y) {
