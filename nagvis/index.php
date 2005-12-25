@@ -1,15 +1,13 @@
 <?
 ##########################################################################
-##     	                           NagVis                              ##
-##                                                                      ##
-##                      *** NagVis Startseite ***                       ##
-##                                                                      ##
-##      Autor von NagVis 0.0.3: Jörg Linge <pichfork@ederdrom.de>       ##
-##                                                                      ##
-##         Umgschrieben von Perl in PHP und weiterentwickelt by         ##
-##                      Michael Lübben(MiCkEy2002)                      ##
-##                                                                      ##
-##                               Lizenz GPL                             ##
+##     	        NagVis - The Nagios Visualisation Addon                 ##
+##########################################################################
+## index.php - Main file to get called by the user. In this file there  ##
+##             should be only "output code", all calculations should    ##
+##             be done in the classes!                                  ##
+##########################################################################
+## Licenced under the terms and conditions of the GPL Licence, 			##
+## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
 include("./etc/config.inc.php");
@@ -30,6 +28,7 @@ if(isset($_GET['map'])) {
     $CheckIt->check_map_isreadable();
 } else {
     $map = $maps[0];
+	$CheckIt->check_map_isreadable();
 }
 
 $nagvis = new NagVis();
@@ -44,6 +43,8 @@ $CheckIt->check_wuibash();
 $CheckIt->check_rotate();
 
 /*
+FIXME: Ha: Can we delete this permanent???
+
 // Prüfen ob Rotate-Modus eingeschaltet ist.
 if($RotateMaps == "1") {
     $mapNumber = $nagvis->mapCount($map);
@@ -78,7 +79,12 @@ $nagvis->printMap($map);
 
 $checkstate = new checkState();
 $countStates = count($mapCfg)-1;
+
+// FIXME: HA: The following line looks "gemurkst" ;-)
 $arrayPos="2";
+
+
+// Main loop which passes through all objects on the map
 for($x="1";$x<=$countStates;$x++) { 
     if(!isset($mapCfg[$arrayPos]['recognize_services'])) {
 		$mapCfg[$arrayPos]['recognize_services'] = 1;
@@ -86,7 +92,8 @@ for($x="1";$x<=$countStates;$x++) {
     if(!isset($mapCfg[$arrayPos]['service_description'])) {
 		$mapCfg[$arrayPos]['service_description'] = "";
     }
-    // Links zu Nagios CGI´s
+    // Links to the Nagios Pages
+	// FIXME: Ha: Exclude this in a method/function in a class and then just call this method here
     if(isset($mapCfg[$arrayPos]['url'])) {
 		$link = '<A HREF='.$mapCfg[$arrayPos]['url'].'>';
     } elseif($mapCfg[$arrayPos]['type'] == 'host') {
@@ -98,13 +105,18 @@ for($x="1";$x<=$countStates;$x++) {
     } elseif($mapCfg[$arrayPos]['type'] == 'servicegroup') {
 		$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?servicegroup='.$mapCfg[$arrayPos]['name'].'&style=detail">';
     }
-    //Status einer Map ermitteln
-    //Fixed by mluebben
+
+    /* 
+       The following part handles the differnt object types (host, service, line and so on)
+	   FIXME: Ha: a switch statement would be better to unterstand than this extremley large if-construct
+ 	*/
+    // Handle all objects of type "map"
     if($mapCfg[$arrayPos]['type'] == 'map') {
 		if(file_exists($cfgFolder.$mapCfg[$arrayPos]['name'].'.cfg')) {
 			$allMapCfgState = $readfile->readNagVisCfg($mapCfg[$arrayPos]['name']);
 			
 			/*
+				FIXME: Ha: Can we delte this permanent???
 				$countStatesState = count($mapCfgState);
 				if(!isset($mapCfgState['recognize_services'])) {
 					$mapCfgState['recognize_services'] = 1;
@@ -152,12 +164,12 @@ for($x="1";$x<=$countStates;$x++) {
 		$nagvis->site[] = '<A HREF="./index.php?map='.$mapCfg[$arrayPos]['name'].'" TARGET="_self"><IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.'; BORDER="0"></A>';
 		$nagvis->site[] = "</DIV>";
     
+	// Handle objects of type "textbox"
     }elseif($mapCfg[$arrayPos]['type'] == 'textbox') {
-	// Textboxen
-	$TextBox = $checkstate->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
-	$nagvis->site[] = $TextBox;		
+		$TextBox = $checkstate->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
+		$nagvis->site[] = $TextBox;		
 	
-	
+	// Handle objects of type "line" and take care about the differnt line_types
 	}elseif(isset($mapCfg[$arrayPos]['line_type'])) {
 	    if($mapCfg[$arrayPos]['line_type'] == '10' || $mapCfg[$arrayPos]['line_type'] == '11'){
 			$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
@@ -200,20 +212,22 @@ for($x="1";$x<=$countStates;$x++) {
 			$nagvis->site[] = '</div>';
 		}	
 
-	    }elseif(!isset($mapCfg[$arrayPos]['line_type'])) {
-		
-			$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
+	// Handle all the other types (hosts, services, hostgroups, servicegroups)
+	}elseif(!isset($mapCfg[$arrayPos]['line_type'])) {
+		$state = $checkstate->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
 
-			$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
-			$IconPosition = $checkstate->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
-			$nagvis->site[] = $IconPosition;
+		$Icon = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+		$IconPosition = $checkstate->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
+		$nagvis->site[] = $IconPosition;
 		
-			$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
-			$nagvis->site[] = $link;
-			$nagvis->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
-			$nagvis->site[] = "</DIV>";
-	    }
+		$Box = $nagvis->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
+		$nagvis->site[] = $link;
+		$nagvis->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
+		$nagvis->site[] = "</DIV>";
+	}
     $arrayPos++;
+
+//~End of main loop
 }
 $nagvis->closeSite();
 $nagvis->printSite();
