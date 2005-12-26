@@ -1,3 +1,24 @@
+date: 2005-12-26
+autho: husch
+- renamed everthing to decide between FRONTEND and BACKEND
+- made shure that other backens than html will work
+- implemented an example (only simple host states) for an NDO MySql DB based Backend
+- Started normalising the code as described in Martins schema, additonally Objects
+  are written UPPERCASES and I STARTED vars with a lowercase letter
+
+	so now we have
+
+		Var:		textTextText
+		Classes:	texttexttext
+		Objects:	TEXTTEXTTEXT
+
+    I used a tabs as described by Martin and used tab "size" of 4 characters, please
+	configure your editors to do so also, so that "tab" is "tab" on every of our systems
+
+o god, so little work in more than six hours, im just to slow... its much to left...
+
+
+
 tstamp: 1134509183
 author: fandel
 - added empty state-classes (SEE: $StateClass in config.inc.php)
