@@ -24,7 +24,9 @@ class backend
 		$dbName="nagios";
 		$dbHost="localhost";
 
-		dl('mysql.so');
+		if (!extension_loaded('mysql')) {
+			dl('mysql.so');
+		}
 		$CONN = mysql_connect($dbHost,$dbUser,$dbPass);
 		$returnCode = mysql_select_db($dbName,$CONN);
 		
