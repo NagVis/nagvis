@@ -15,6 +15,12 @@
 
 class checkState
 {
+	//Initialize function, must be called before anything else of this class. Maybe we should set this as constructor.
+	function backendInitialize() {
+		//THIS backend needs no inital preparation, but the function must be present to be compatible
+		return 0;
+	}
+
 	// Status für einen Host ermitteln.
 	function findStateHost($Hostname,$RecognizeServices,$StatusCgi,$CgiUser) {
 	        putenv("REQUEST_METHOD=GET");
