@@ -13,7 +13,7 @@
 ##########################################################################
 
 
-class checkState
+class backend
 {
 	//Initialize function, must be called before anything else of this class. Maybe we should set this as constructor.
 	function backendInitialize() {
