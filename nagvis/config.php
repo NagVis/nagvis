@@ -227,7 +227,7 @@ function fenetre_management(page)
 
 <?
 
-$nagvis = new NagVis();
+$FRONTEND = new frontend();
 $readfile = new readFile();
 $rotateUrl = "";
 
@@ -309,10 +309,10 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 	$user = $_SERVER['REMOTE_USER'];
 }
 else {
-	$nagvis->openSite($rotateUrl);
-        $nagvis->messageBox("14", "");
-        $nagvis->closeSite();
-        $nagvis->printSite();
+	$FRONTEND->openSite($rotateUrl);
+        $FRONTEND->messageBox("14", "");
+        $FRONTEND->closeSite();
+        $FRONTEND->printSite();
 	exit;
 }
 
@@ -327,14 +327,14 @@ if($map!="")
 	}
 }
 
-$nagvis->site[] = '<HTML>';
-$nagvis->site[] = '<HEAD>';
-$nagvis->site[] = '<TITLE>'.$title.'</TITLE>';
-$nagvis->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/nagvis.js"></SCRIPT>';
-$nagvis->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib.js"></SCRIPT>';
-$nagvis->site[] = '<SCRIPT TYPE="text/javascript" SRC="./wui/wz_jsgraphics.js"></SCRIPT>';
-$nagvis->site[] = '</HEAD>';
-$nagvis->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE="text/css">';
+$FRONTEND->site[] = '<HTML>';
+$FRONTEND->site[] = '<HEAD>';
+$FRONTEND->site[] = '<TITLE>'.$title.'</TITLE>';
+$FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/nagvis.js"></SCRIPT>';
+$FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib.js"></SCRIPT>';
+$FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./wui/wz_jsgraphics.js"></SCRIPT>';
+$FRONTEND->site[] = '</HEAD>';
+$FRONTEND->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE="text/css">';
 
 
 # if a map name is defined in the URL, we check if :
@@ -344,27 +344,27 @@ $nagvis->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE="
 if($map!="")
 {
 	if(!file_exists($cfgFolder.$map.".cfg")) {
-		$nagvis->openSite($rotateUrl);
-		$nagvis->messageBox("2", "MAP~".$map.".cfg");
-		$nagvis->closeSite();
-		$nagvis->printSite();
+		$FRONTEND->openSite($rotateUrl);
+		$FRONTEND->messageBox("2", "MAP~".$map.".cfg");
+		$FRONTEND->closeSite();
+		$FRONTEND->printSite();
 		exit;
 	}
 
 
 	elseif(!file_exists($mapFolder.$map_image)) {
-		$nagvis->openSite($rotateUrl);
-		$nagvis->messageBox("3", "MAPPATH~".$mapFolder.$map_image);
-		$nagvis->closeSite();
-		$nagvis->printSite();
+		$FRONTEND->openSite($rotateUrl);
+		$FRONTEND->messageBox("3", "MAPPATH~".$mapFolder.$map_image);
+		$FRONTEND->closeSite();
+		$FRONTEND->printSite();
 		exit;
 	}
 
 	elseif(!in_array($user,$allowed_users) && !in_array("EVERYONE",$allowed_users) && isset($allowed_users)) {
-		$nagvis->openSite($rotateUrl);
-		$nagvis->messageBox("4", "USER~".$user);
-		$nagvis->closeSite();
-		$nagvis->printSite();
+		$FRONTEND->openSite($rotateUrl);
+		$FRONTEND->messageBox("4", "USER~".$user);
+		$FRONTEND->closeSite();
+		$FRONTEND->printSite();
 		exit;
 	}
 }
@@ -379,30 +379,30 @@ if($check_config == "1")
 # we load the page background image :
 #	- the map_image if a map is defined in the URL
 #	- a blank image (size 600x600) if not map is defined
-$nagvis->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
+$FRONTEND->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 if ($map!="")
 {
-	$nagvis->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$map_image.'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
+	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$map_image.'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
 }
 else
 {
-	$nagvis->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./wui/wuilogo.jpg" WIDTH="600px" HEIGHT="600px" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
+	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./wui/wuilogo.jpg" WIDTH="600px" HEIGHT="600px" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
 }
 
 # we write the beginning of the body with all the includes needed	
-$nagvis->site[] = "<script type=\"text/javascript\" src=\"./wui/wz_dragdrop.js\"></script>";
-$nagvis->site[] = "<script type=\"text/javascript\" src=\"./wui/jsdomenu.js\"></script>";
-$nagvis->site[] = "<script type=\"text/javascript\" src=\"./wui/jsdomenu.inc.js\"></script>";
+$FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/wz_dragdrop.js\"></script>";
+$FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/jsdomenu.js\"></script>";
+$FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/jsdomenu.inc.js\"></script>";
 # CSS file used for the right click menu	
-$nagvis->site[] = "<link rel=\"stylesheet\" type=\"text/css\" href=\"./wui/css/office_xp/office_xp.css\">";
+$FRONTEND->site[] = "<link rel=\"stylesheet\" type=\"text/css\" href=\"./wui/css/office_xp/office_xp.css\">";
 # we make the background image drawable	
-$nagvis->site[] = "<script type=\"text/javascript\">myshape_background = new jsGraphics('mycanvas');</script>";
-$nagvis->site[] = "<script type=\"text/javascript\">myshape_background.setColor('#FF0000');</script>";
-$nagvis->site[] = "<script type=\"text/javascript\">myshape_background.setStroke(1);</script>";
+$FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background = new jsGraphics('mycanvas');</script>";
+$FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setColor('#FF0000');</script>";
+$FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setStroke(1);</script>";
 
 ##############################################################################	
 # we read and display the objects, one by one	
-$checkstate = new checkState();
+$BACKEND = new BACKEND();
 $countStates = count($mapCfg)-1;
 $arrayPos="2";
 	
@@ -423,8 +423,8 @@ for($x="1";$x<=$countStates;$x++)
 	# we treat the case of an object of type "textbox"	
 	elseif($mapCfg[$arrayPos]['type'] == 'textbox') 
 	{
-		$TextBox = $checkstate->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
-		$nagvis->site[] = $TextBox;			
+		$TextBox = $BACKEND->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
+		$FRONTEND->site[] = $TextBox;			
 	}
 	
 	# we treat the case of an object of another type
@@ -453,7 +453,7 @@ for($x="1";$x<=$countStates;$x++)
 	}
 	else
 	{
-		$Icon_name = $checkstate->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+		$Icon_name = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 	}
 		
 	# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display
@@ -463,8 +463,8 @@ for($x="1";$x<=$countStates;$x++)
 	$myposy=$mapCfg[$arrayPos]['y']-($myheight/2);
 	
 	# we add the icon on the map	
-	$nagvis->site[] = "<DIV id=\"box_$x\" STYLE=\"position:absolute; left:".$myposx."px; top:".$myposy."px;\">";
-	$nagvis->site[] = "<img border=\"0\" src=\"$Icon\" onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".strtoupper($mapCfg[$arrayPos]['type'])."</b>';";
+	$FRONTEND->site[] = "<DIV id=\"box_$x\" STYLE=\"position:absolute; left:".$myposx."px; top:".$myposy."px;\">";
+	$FRONTEND->site[] = "<img border=\"0\" src=\"$Icon\" onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".strtoupper($mapCfg[$arrayPos]['type'])."</b>';";
 		
 	# we add all the object's defined properties to the tooltip body
 	$tooltip_text="";
@@ -496,15 +496,15 @@ for($x="1";$x<=$countStates;$x++)
 	}
 		
 	# we finish to define the tooltip
-	$nagvis->site[] = "return escape('$tooltip_text');\">";
-	$nagvis->site[] = "</DIV>";
+	$FRONTEND->site[] = "return escape('$tooltip_text');\">";
+	$FRONTEND->site[] = "</DIV>";
 		
 	# if the current object has its line_type property defined we add a line to the canvas (to add it on the map in the end)
 	if(isset($mapCfg[$arrayPos]['line_type']))
 	{
 		list($pointa_x,$pointb_x) = explode(",", $mapCfg[$arrayPos]['x']);
 		list($pointa_y,$pointb_y) = explode(",", $mapCfg[$arrayPos]['y']);
-		$nagvis->site[] = "<script type=\"text/javascript\">myshape_background.drawLine($pointa_x,$pointa_y,$pointb_x,$pointb_y);</script>";		
+		$FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.drawLine($pointa_x,$pointa_y,$pointb_x,$pointb_y);</script>";		
 	}
 		
 	# we add this object to the list of the components which will have to be movable, if it's not a line or a textbox
@@ -518,7 +518,7 @@ for($x="1";$x<=$countStates;$x++)
 }
 	
 # we print in the HTML page all the code we just computed
-$nagvis->printSite();
+$FRONTEND->printSite();
 
 # we make the objects in the "movable list" movable :) 
 if (strlen($movable) != 0)
