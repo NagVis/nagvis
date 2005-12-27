@@ -9,7 +9,7 @@ class checkit extends frontend {
 
         function check_config() {
                 global $rotateUrl;
-                $nagvis = new frontend;
+                $FRONTEND = new frontend;
                 if(!is_writable('etc/config.inc.php')) {
                         $FRONTEND->openSite($rotateUrl);
                         $FRONTEND->messageBox("17", "USER~".$user);
@@ -25,7 +25,7 @@ class checkit extends frontend {
         function check_map_isreadable() {
                 global $cfgFolder;
                 global $map;
-                $nagvis = new frontend;
+                $FRONTEND = new frontend;
                 if(!is_readable($cfgFolder.$map.".cfg")) {
 					$FRONTEND->openSite($rotateUrl);
 					$FRONTEND->messageBox("2", "MAP~".$cfgFolder.$map.".cfg");
@@ -37,7 +37,7 @@ class checkit extends frontend {
 
         function check_user() {
                 global $user;
-                $nagvis = new frontend;
+                $FRONTEND = new frontend;
                 if(isset($_SERVER['PHP_AUTH_USER'])) {
                         $user = $_SERVER['PHP_AUTH_USER'];
                 }
