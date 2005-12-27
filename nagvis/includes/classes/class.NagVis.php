@@ -4,7 +4,7 @@
 ##        *** Klasse zum erzeugen der grafischen Oberfläche ***         ##
 ##                               Lizenz GPL                             ##
 ##########################################################################
-class NagVis
+class frontend
 {
 	var $site;
 	
