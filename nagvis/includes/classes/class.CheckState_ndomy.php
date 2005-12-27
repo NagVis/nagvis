@@ -54,7 +54,7 @@ class backend
 		} 
 		//Host is DOWN
 		elseif ($hostState['current_state'] == '1') {
-			if($hostState['problem_has_been_acknowledged']== 1) {
+			if($hostState['problem_has_been_acknowledged'] == 1) {
 				$state['State'] = 'ACK';
 			}
 			else {
@@ -64,7 +64,7 @@ class backend
 		}
 		//Host is UNREACHABLE
 		elseif ($hostState['current_state'] == '2') {
-			if($hostState['problem_has_been_acknowledged']== 1) {
+			if($hostState['problem_has_been_acknowledged'] == 1) {
 				$state['State'] = 'ACK';
 			}
 			else {
@@ -74,7 +74,7 @@ class backend
 		}
 		//Host is UNKNOWN
 		elseif ($hostState['current_state'] == '3') {
-			if($hostState['problem_has_been_acknowledged']== 1) {
+			if($hostState['problem_has_been_acknowledged'] == 1) {
 				$state['State'] = 'ACK';
 			}
 			else {
@@ -82,7 +82,63 @@ class backend
 			}
 			$state['Output'] = $hostState['output'];
 		}
+		
+		$hostState = $state['State'];
 
+		if($recognizeServices == 1) {
+			//Get the object ids from all services of this host
+			$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='2' AND name1='$hostName'");
+			while($services = mysql_fetch_array($QUERYHANDLE)) {
+				$objectId = $services['object_id'];
+				//Query the Servicestates
+				$QUERYHANDLE_2 = mysql_query("SELECT current_state FROM ndo_servicestatus WHERE object_id = '$objectId'");
+				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
+				if($currentService['current_state'] == 0) {
+					$servicesOk++;
+				}
+				elseif($currentService['current_state'] == 1) {
+					$servicesWarning++;
+				}
+				elseif($currentService['current_state'] == 2) {
+					$servicesCritical++;
+				}
+				elseif($currentService['current_state'] == 3) {
+					$servicesUnknown++;
+				}
+			}
+			
+			//FIXME: Services Acks must also be implemented!
+			if($servicesCritical > 0) {
+				$state['Count'] = $servicesCritical;
+				$state['Output'] = "Host is ".$hostState." and ".$servicesCritical." services are CRITICAL";
+				//Make shure that we do not overwrite a DOWN or UNREACHABLE state from the host
+				if($hostState != "DOWN" || $hostState != "UNRECHABLE") {
+					$state['State'] = "CRITICAL";
+				}				
+			}
+			elseif($servicesWarning > 0) {
+				$state['Count'] = $servicesWarning;
+				$state['Output'] = "Host is ".$hostState." and ".$servicesWarning." services are WARNING";
+				//Make shure that we do not overwrite a DOWN or UNREACHABLE state from the host
+				if($hostState != "DOWN" || $hostState != "UNRECHABLE") {
+					$state['State'] = "WARNING";
+				}			
+			}
+			elseif($servicesUnknown > 0) {
+				$state['Count'] = $servicesUnknown;
+				$state['Output'] = "Host is ".$hostState." and ".$servicesUnknown." services are UNKNOWN";
+				//Make shure that we do not overwrite a DOWN or UNREACHABLE state from the host
+				if($hostState != "DOWN" || $hostState != "UNRECHABLE") {
+					$state['State'] = "UNKNOWN";
+				}			
+			}
+			elseif($servicesOk > 0) {
+				$state['Count'] = $servicesOk;
+				$state['Output'] = "Host is ".$hostState." and all ".$servicesOk." services are OK";
+				// State is autmatically UP if we reach this elseif point (set by the host before)
+				// so we must not set any state here again
+			}
+		}
         return($state);
 	}
 
@@ -287,8 +343,8 @@ class backend
 		}
 		else {
 			$state['State'] = 'UNKNOWN';
-                        $state['Count'] = '0';
-                        $state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Servicegroup';
+			$state['Count'] = '0';
+			$state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Servicegroup';
 		}
 
 		return ($state);
@@ -323,7 +379,9 @@ class backend
 		}
 		return($state);
 	}
-	
+
+	//FIXME: Can be made easiert here. Thigs like "CgiPath", "CgiUser" are special to the html backend,
+    //  	 so this should be done another way.
 	// Status ermitteln
 	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0",$CgiPath,$CgiUser)
 	{
@@ -391,10 +449,10 @@ class backend
 				switch($StateLow) {
 					case 'down':
 					case 'unknown':
+					case 'critical':
+					case 'unreachable':
+					case 'warning':
 					case 'ack':
-						$Icon = $IconPath.'_'.$StateLow;
-					break;
-					//FIXME: Ha: This case seams to be useless because it is the same then the cases before!? 
 					case 'up':
 						$Icon = $IconPath.'_'.$StateLow;
 					break;
