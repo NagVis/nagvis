@@ -47,21 +47,52 @@ class backend
 		$QUERYHANDLE = mysql_query("SELECT current_state, output FROM ndo_hoststatus  WHERE object_id = '$hostObjectId[0]'");
 		$hostState = mysql_fetch_array($QUERYHANDLE);
 
+		//Host is UP
 		if ($hostState['current_state'] == '0') {
 			$state['State'] = 'UP';
 			$state['Output'] = $hostState['output'];
 		} 
+		//Host is DOWN
 		elseif ($hostState['current_state'] == '1') {
-			$state['State'] = 'DOWN';
-			$state['Output'] = $hostState['output'];
+			//Check for ACK
+			$QUERYHANDLE = mysql_query("SELECT comment_data FROM ndo_acknowledgements WHERE object_id = '$hostObjectId[0]'");
+			if(mysql_num_rows($QUERYHANDLE) != 0) {
+				$ackComment = mysql_fetch_row($QUERYHANDLE);
+				$state['State'] = 'ACK';
+				$state['Output'] = $ackComment[0];	
+			}
+			else {
+				$state['State'] = 'DOWN';
+				$state['Output'] = $hostState['output'];
+			}
 		}
+		//Host is UNREACHABLE
 		elseif ($hostState['current_state'] == '2') {
-			$state['State'] = 'UNREACHABLE';
-			$state['Output'] = $hostState['output'];
+			//Check for ACK
+			$QUERYHANDLE = mysql_query("SELECT comment_data FROM ndo_acknowledgements WHERE object_id = '$hostObjectId[0]'");
+			if(mysql_num_rows($QUERYHANDLE) != 0) {
+				$ackComment = mysql_fetch_row($QUERYHANDLE);
+				$state['State'] = 'ACK';
+				$state['Output'] = $ackComment[0];	
+			}
+			else {
+				$state['State'] = 'UNREACHABLE';
+				$state['Output'] = $hostState['output'];
+			}
 		}
+		//Host is UNKNOWN
 		elseif ($hostState['current_state'] == '3') {
-			$state['State'] = 'UNKNOWN';
-			$state['Output'] = $hostState['output'];
+			//Check for ACK
+			$QUERYHANDLE = mysql_query("SELECT comment_data FROM ndo_acknowledgements WHERE object_id = '$hostObjectId[0]'");
+			if(mysql_num_rows($QUERYHANDLE) != 0) {
+				$ackComment = mysql_fetch_row($QUERYHANDLE);
+				$state['State'] = 'ACK';
+				$state['Output'] = $ackComment[0];	
+			}
+			else {
+				$state['State'] = 'UNKNOWN';
+				$state['Output'] = $hostState['output'];
+			}
 		}
 
         return($state);
