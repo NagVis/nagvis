@@ -69,5 +69,5 @@ $headerInc="header.nagvis.inc";
 #Internal versioning, dont change
 $version="0.9b1+";
 $title="NagVis ".$version;
-#Please make shure that there are NO whitespaces after the ">". > MUST be the last char in this file!
+#Please make shure that there are NO whitespaces after the ">". ">" MUST be the last char in this file!
 ?>
