@@ -34,7 +34,6 @@ class backend
 			echo "Error selecting Database";
 			exit;
 		}
-		
 		return 0;
 	}
 
@@ -84,17 +83,28 @@ class backend
 		}
 		
 		$hostState = $state['State'];
-
-		if($recognizeServices == 1) {
+		
+		//Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-),
+		//this also makes shure that a host ACK will automatically ACK all services.
+		if($recognizeServices == 1 && $hostState == "UP") {
+			//Initialise Vars
+			$servicesOk=0;
+			$servicesWarning=0;
+			$servicesCritical=0;
+			$servicesUnknown=0;
+			$servicesAck=0;
 			//Get the object ids from all services of this host
 			$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='2' AND name1='$hostName'");
 			while($services = mysql_fetch_array($QUERYHANDLE)) {
 				$objectId = $services['object_id'];
 				//Query the Servicestates
-				$QUERYHANDLE_2 = mysql_query("SELECT current_state FROM ndo_servicestatus WHERE object_id = '$objectId'");
+				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE object_id = '$objectId'");
 				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
 				if($currentService['current_state'] == 0) {
 					$servicesOk++;
+				}
+				elseif($currentService['problem_has_been_acknowledged'] == 1) {
+					$servicesAck++;				
 				}
 				elseif($currentService['current_state'] == 1) {
 					$servicesWarning++;
@@ -107,110 +117,40 @@ class backend
 				}
 			}
 			
-			//FIXME: Services Acks must also be implemented!
 			if($servicesCritical > 0) {
 				$state['Count'] = $servicesCritical;
-				$state['Output'] = "Host is ".$hostState." and ".$servicesCritical." services are CRITICAL";
-				//Make shure that we do not overwrite a DOWN or UNREACHABLE state from the host
-				if($hostState != "DOWN" || $hostState != "UNRECHABLE") {
-					$state['State'] = "CRITICAL";
-				}				
+				$state['Output'] = "Host is UP but there are ".$servicesCritical." CRITICAL, " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+				$state['State'] = "CRITICAL";
 			}
 			elseif($servicesWarning > 0) {
 				$state['Count'] = $servicesWarning;
-				$state['Output'] = "Host is ".$hostState." and ".$servicesWarning." services are WARNING";
-				//Make shure that we do not overwrite a DOWN or UNREACHABLE state from the host
-				if($hostState != "DOWN" || $hostState != "UNRECHABLE") {
-					$state['State'] = "WARNING";
-				}			
+				$state['Output'] = "Host is UP but there are " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+				$state['State'] = "WARNING";		
 			}
 			elseif($servicesUnknown > 0) {
 				$state['Count'] = $servicesUnknown;
-				$state['Output'] = "Host is ".$hostState." and ".$servicesUnknown." services are UNKNOWN";
-				//Make shure that we do not overwrite a DOWN or UNREACHABLE state from the host
-				if($hostState != "DOWN" || $hostState != "UNRECHABLE") {
-					$state['State'] = "UNKNOWN";
-				}			
+				$state['Output'] = "Host is UP but there are ".$servicesUnknown." Services in UNKNOWN state";
+				$state['State'] = "UNKNOWN";
+				
+			}
+			elseif($servicesAck > 0) {
+				$state['Count'] = $servicesAck;
+				$state['Output'] = "Host is UP but ".$servicesAck." services are in a NON-OK State but all are ACKNOWLEDGED";
+				$state['State'] = "ACK";
 			}
 			elseif($servicesOk > 0) {
 				$state['Count'] = $servicesOk;
-				$state['Output'] = "Host is ".$hostState." and all ".$servicesOk." services are OK";
-				// State is autmatically UP if we reach this elseif point (set by the host before)
-				// so we must not set any state here again
+				$state['Output'] = "Host is UP and all ".$servicesOk." services are OK";
+				//This must be set before by the host, but to be consitend with the other ifs i define it again here:
+				$state['State'] = "UP";		
 			}
 		}
         return($state);
 	}
 
- 	/* OLD STUFF
-
-
-	putenv("REQUEST_METHOD=GET");
-                putenv("REMOTE_USER=$CgiUser");
-                putenv("QUERY_STRING=host=$Hostname");
-                $handle = popen($StatusCgi, 'r');
-                $text = fread($handle, 9000);
-                pclose($handle);
-                
-		if (preg_match('/0 Matching Service Entries Displayed/', $text)) {
-			$state['State'] = 'UNKNOWN';
-			$state['Count'] = '0';
-			$state['Output'] = '0 Matching Service Entries Displayed';
-                }
-                else {
-                        preg_match('/<TD CLASS=\'hostTotalsPROBLEMS\'>(.*)<\/TD>/', $text, $hostTotalsPROBLEMS);
-                        preg_match('/<TD CLASS=\'hostTotalsUP\'>(.*)<\/TD>/', $text, $hostTotalsUP);
-                        preg_match('/<TD CLASS=\'status(.*)\'>/', $text, $hostTotalsACK);
-                }
-
-                if(isset($hostTotalsACK) && $hostTotalsACK[1] == 'HOSTDOWNACK') {
-                        $state['State'] = 'ACK';
-                        $state['Count'] = $hostTotalsPROBLEMS[1];
-                        $state['Output'] = $hostTotalsPROBLEMS[1].' Hosts DOWN';
-                }
-                elseif(isset($hostTotalsPROBLEMS[1]) && $hostTotalsPROBLEMS[1] != 0) {
-                        $state['State'] = 'DOWN';
-                        $state['Count'] = $hostTotalsPROBLEMS[1];
-                        $state['Output'] = $hostTotalsPROBLEMS[1].' Hosts DOWN';
-                }
-                elseif(isset($hostTotalsUP[1]) && $hostTotalsUP[1] != 0) {
-                        $state['State'] = 'UP';
-                        $state['Count'] = $hostTotalsUP[1];
-                        $state['Output'] = $hostTotalsUP[1].' Hosts UP';
-                }
-                else {
-						$state['State'] = 'UNKNOWN';
-                        $state['Count'] = '0';
-                        $state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Host!';
-                }
-
-         if($RecognizeServices == 1) {
-                        preg_match('/<TD CLASS=\'serviceTotalsOK\'>(.*)<\/TD>/', $text, $serviceTotalsOK);
-                        preg_match('/<TD CLASS=\'serviceTotalsCRITICAL\'>(.*)<\/TD>/', $text, $serviceTotalsCRITICAL);
-                        preg_match('/<TD CLASS=\'serviceTotalsWARNING\'>(.*)<\/TD>/', $text, $serviceTotalsWARNING);
-                        
-			if(isset($serviceTotalsCRITICAL[1]) && $serviceTotalsCRITICAL[1] != 0) {
-				if(!isset($hostTotalsACK)) {
-					$state['State'] = 'DOWN';
-				}
-				$state['Count'] = $serviceTotalsCRITICAL[1];
-                $state['Output'] = $serviceTotalsCRITICAL[1].' Services in state CRITICAL';
-            }
-            elseif(isset($serviceTotalsWARNING[1]) && $serviceTotalsWARNING != 0) {
-				if(!isset($hostTotalsACK)) {
-					$state['State'] = 'DOWN';
-                                }
-                                $state['Count'] = $serviceTotalsWARNING[1];
-                                $state['Output'] = $serviceTotalsWARNING[1].' Service in state WARNING';
-                        }
-                        elseif(isset($serviceTotalsOK[1]) && $serviceTotalsOK[1] != 0) {
-                                $state['Count'] = $serviceTotalsOK[1];
-                                $state['Output'] = $serviceTotalsOK[1].' Services in state OK';
-                        }
-             } */
 
        
-	
+/* THE FOLLOWING IS STILL DONE BY THE CGIs, IM CODING ON IT - Andreas */
 	// Status für eine Hostgroup ermitteln.
 	function findStateHostgroup($Hostgroupname,$RecognizeServices,$StatusCgi,$CgiUser) {
 		$rotateUrl = "";
