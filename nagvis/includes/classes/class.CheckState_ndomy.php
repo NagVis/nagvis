@@ -149,9 +149,7 @@ class backend
         return($state);
 	}
 
-
-       
-/* THE FOLLOWING IS STILL DONE BY THE CGIs, IM CODING ON IT - Andreas */
+   
 	// Status für eine Hostgroup ermitteln.
 	function findStateHostgroup($hostGroupName,$recognizeServices,$statusCgi,$cgiUser) {
 		//Because "hostgroup_name" ist missing in the NDO DB,  we have to work with the alias
@@ -226,68 +224,8 @@ class backend
 
 
 		return($state);
-
-
-/* OLD STUFF  
-
-		$rotateUrl = "";
-		putenv("REQUEST_METHOD=GET");
-		putenv("REMOTE_USER=$CgiUser");
-		putenv("QUERY_STRING=hostgroup=$Hostgroupname");
-                $handle = popen($StatusCgi, 'r');
-                $text = fread($handle, 4000);
-                pclose($handle);
-		if (preg_match('/<DIV CLASS=\'errorMessage\'>Sorry, but host group(.*)<\/DIV>/', $text)) {
-
-			$state['State'] = 'UNKNOWN';
-			$state['Count'] = '0';
-			$state['Output'] = 'Sorry, but host group '.$Hostgroupname.' not found';
-		}
-		else {
-			preg_match('/<TD CLASS=\'hostTotalsPROBLEMS\'>(.*)<\/TD>/', $text, $hostTotalsPROBLEMS);
-			preg_match('/<TD CLASS=\'hostTotalsUP\'>(.*)<\/TD>/', $text, $hostTotalsUP);
-		}
-		if(isset($hostTotalsPROBLEMS[1]) && $hostTotalsPROBLEMS[1] != 0) {
-			$state['State'] = 'DOWN';
-			$state['Count'] = $hostTotalsPROBLEMS[1];
-			$state['Output'] = $hostTotalsPROBLEMS[1].' Host down';
-		}
-		elseif(isset($hostTotalsUP[1]) && $hostTotalsUP[1] != 0) {
-			$state['State'] = 'UP';
-			$state['Count'] = $hostTotalsUP[1];
-			$state['Output'] = $hostTotalsUP[1].' Host up';
-		}
-		else {
-			$state['State'] = 'UNKNOWN';
-                        $state['Count'] = '0';
-                        $state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Hostgroup!';
-		}
-
-		if($RecognizeServices == '1') {
-			$rotateUrl = "";
-			preg_match('/<TD CLASS=\'serviceTotalsOK\'>(.*)<\/TD>/', $text, $serviceTotalsOK);
-                        preg_match('/<TD CLASS=\'serviceTotalsCRITICAL\'>(.*)<\/TD>/', $text, $serviceTotalsCRITICAL);
-                        preg_match('/<TD CLASS=\'serviceTotalsWARNING\'>(.*)<\/TD>/', $text, $serviceTotalsWARNING);
-	
-			if(isset($serviceTotalsCRITICAL[1]) && $serviceTotalsCRITICAL[1] != 0) {
-        	                $state['Count'] = $serviceTotalsCRITICAL[1];
-				$state['Output'] = $serviceTotalsCRITICAL[1].' services in state CRITICAL';
-                	}
-	                elseif(isset($serviceTotalsWARNING[1]) && $serviceTotalsWARNING != 0) {
-                	        $state['Count'] = $serviceTotalsWARNING[1];
-				$state['Output'] = $serviceTotalsWARNING[1].' services in state WARNING';
-	                }
-        	        elseif(isset($serviceTotalsOK[1]) && $serviceTotalsOK[1] != 0) {
-                        	$state['Count'] = $serviceTotalsOK[1];
-				$state['Output'] = $serviceTotalsOK[1].' services in state OK';
-			}else {
-				$state['Count'] = '0';
-				$state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Hostgroups Services!';
-			}
-		}
-		return($state); */
 	}
-
+/* THE FOLLOWING IS STILL DONE BY THE CGIs, IM CODING ON IT - Andreas */
 	function findStateService($HostName,$ServiceName,$StatusCgi,$CgiUser) {
 		$rotateUrl = "";
 		putenv("REQUEST_METHOD=GET");
