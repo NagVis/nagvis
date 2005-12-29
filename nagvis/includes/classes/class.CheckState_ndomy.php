@@ -40,6 +40,7 @@ class backend
 
 	// Get the state for a HOST
 	function findStateHost($hostName,$recognizeServices,$statusCgi,$cgiUser) {
+		
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE (objecttype_id = '1' AND name1 = '$hostName')");
 		$hostObjectId = mysql_fetch_row($QUERYHANDLE);  
 	
@@ -152,7 +153,83 @@ class backend
        
 /* THE FOLLOWING IS STILL DONE BY THE CGIs, IM CODING ON IT - Andreas */
 	// Status für eine Hostgroup ermitteln.
-	function findStateHostgroup($Hostgroupname,$RecognizeServices,$StatusCgi,$CgiUser) {
+	function findStateHostgroup($hostGroupName,$recognizeServices,$statusCgi,$cgiUser) {
+		//Because "hostgroup_name" ist missing in the NDO DB,  we have to work with the alias
+		//Ok, its not missingn its in the ndo_objects table, i will fetch this later
+		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ndo_hostgroups WHERE alias='$hostGroupName'");
+		$hostGroupId = mysql_fetch_row($QUERYHANDLE);
+
+		if (mysql_num_rows($QUERYHANDLE) == 0) {
+			//FIXME: Error Box		
+			echo "The Hostgroupalias \"" .$hostGroupName. "\" was not found in the Database. Maybe it is spelled wrong?";
+		}
+		$hostsCritical=0;
+		$hostsWarning=0;
+		$hostsUnknown=0;
+		$hostsAck=0;
+		$hostsOk=0;
+
+		//Now we have the Group Id and can get the hosts
+		$QUERYHANDLE = mysql_query("SELECT host_object_id FROM ndo_hostgroup_members WHERE hostgroup_id='$hostGroupId[0]'");	
+		while($hosts = mysql_fetch_array($QUERYHANDLE)) {
+				$objectId = $hosts['host_object_id'];
+				//Get the Host Name for the objectId Again so we can use our own host function
+				//this ist not really nice because the name gets changed back to the id there, maybe split the host funktions in to parts
+				$QUERYHANDLE_2 = mysql_query("SELECT name1 FROM ndo_objects WHERE (objecttype_id = '1' AND object_id = '$objectId')");
+				$hostName = mysql_fetch_array($QUERYHANDLE_2);  
+				
+				$currentHostState = $this->findStateHost($hostName['name1'],$recognizeServices,"","");
+				if($currentHostState['State'] == "UP") {
+					$hostsOk++;
+				}
+				elseif($currentHostState['State'] == "ACK") {
+					$hostsAck++;				
+				}
+				elseif($currentHostState['State'] == "WARNING") {
+					$hostsWarning++;
+				}
+				elseif($currentHostState['State'] == "DOWN" || $currentHostState['State'] == "UNREACHABLE" || $currentHostState['State'] == "CRITICAL") {
+					$hostsCritical++;
+				}
+				elseif($currentHostState['State'] == "UNKOWN") {
+					$hostsUnknown++;
+				}	
+		}
+	
+		if($hostsCritical > 0) {
+			$state['Count'] = $hostsCritical;
+			$state['Output'] = $hostsCritical." Hosts are CRITICAL, " .$hostsWarning. " WARNING and " .$hostsUnknown. " UNKNOWN";
+			$state['State'] = "CRITICAL";
+		}
+		elseif($hostsWarning > 0) {
+			$state['Count'] = $hostsWarning;
+			$state['Output'] = $hostWarninig. "Hosts are WARNING and " .$hostsUnknown. " UNKNOWN";
+			$state['State'] = "WARNING";		
+		}
+		elseif($hostsUnknown > 0) {
+			$state['Count'] = $hostsUnkown;
+			$state['Output'] = $hostsUnkown." are in UNKNOWN state";
+			$state['State'] = "UNKNOWN";
+			
+		}
+		elseif($hostsAck > 0) {
+			$state['Count'] = $hostsAck;
+			$state['Output'] = $hostsAck." Hosts are in a NON-OK State but all errors are ACKNOWLEDGED";
+			$state['State'] = "ACK";
+		}
+		elseif($hostsOk > 0) {
+			$state['Count'] = $hostsOk;
+			$state['Output'] = "All " .$hostsOk. " Hosts are OK";
+			//This must be set before by the host, but to be consitend with the other ifs i define it again here:
+			$state['State'] = "UP";		
+		}
+
+
+		return($state);
+
+
+/* OLD STUFF  
+
 		$rotateUrl = "";
 		putenv("REQUEST_METHOD=GET");
 		putenv("REMOTE_USER=$CgiUser");
@@ -208,7 +285,7 @@ class backend
 				$state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Hostgroups Services!';
 			}
 		}
-		return($state);
+		return($state); */
 	}
 
 	function findStateService($HostName,$ServiceName,$StatusCgi,$CgiUser) {
@@ -355,7 +432,7 @@ class backend
 			}
 		}
 		if(!isset($state)) {
-			$nagvis = new NagVis();	
+			$nagvis = new frontend();	
 			$nagvis->openSite($rotateUrl);
 			$nagvis->messageBox("12","Kein state");
 			$nagvis->closeSite();
