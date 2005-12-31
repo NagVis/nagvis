@@ -42,6 +42,9 @@ $iconBaseFolder=$Base."/iconsets/";
 #HTTP Path to the NagVis iconsets directory.
 $iconHTMLBaseFolder=$HTMLBase."/iconsets/";
 
+#HTTP Path to the Map directory.
+$mapHTMLBaseFolder=$HTMLBase."/maps/";
+
 #Include file for default page.
 $indexInc="index.nagvis.inc";
 
@@ -62,6 +65,9 @@ $headerCount="3";
 
 $Autoupdate_frequency="25";
 $check_config="0";
+
+#Use GD-Libs (0=No / 1=Yes)
+$useGDLibs="1";
 
 #Name of the header include file.
 $headerInc="header.nagvis.inc";

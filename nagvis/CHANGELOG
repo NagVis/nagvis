@@ -102,3 +102,7 @@ author:	fandel
   - chown nagios:www-data /usr/local/nagios/share/cvs/nagvis/etc/config.inc.php
   - chmod 665 /usr/local/nagios/share/cvs/nagvis/etc/config.inc.php
 - umlaute utf8
+
+tstamp: 1136039113
+author: Michael Luebben
+- added function to diactivate GD-Libs

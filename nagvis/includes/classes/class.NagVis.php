@@ -133,7 +133,11 @@ class frontend
 				$this->site[] = '<BODY CLASS="main"  MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 			}
 			$this->site[] = '  <DIV CLASS="map">';
-			$this->site[] = '   <IMG SRC="./draw.php?map='.$map_image.'">';
+			if ($useGDLibs == "1") {
+				$this->site[] = '   <IMG SRC="./draw.php?map='.$map_image.'">';
+			} else {
+				$this->site[] = '   <IMG SRC="'.$mapHTMLBaseFolder.$map_image.'">';
+			}
 	}
 	
 	// Info-Box erstellen (Java - overLib.js)

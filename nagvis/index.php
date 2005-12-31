@@ -45,7 +45,10 @@ $rotateUrl = "";
 
 // check-stuff
 $CHECKIT->check_user();
-$CHECKIT->check_gd();
+// Nur Prüfen wenn GD-Libs verwendet werden!
+if ($useGDLibs == "1") {
+	$CHECKIT->check_gd();
+}
 $CHECKIT->check_cgipath();
 $CHECKIT->check_wuibash();
 $CHECKIT->check_rotate();
@@ -83,7 +86,11 @@ if ($Header == "1") {
 }
 
 //Map als Hintergrundbild erzeugen
-$FRONTEND->printMap($map);
+if ($useGDLibs == "1") {
+	$FRONTEND->printMap($map);
+} else {
+	$FRONTEND->printMap($map_image);
+}
 
 //Load and initialise the backend
 $BACKEND = new backend();
