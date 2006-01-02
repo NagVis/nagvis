@@ -44,6 +44,13 @@ class backend
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE (objecttype_id = '1' AND name1 = '$hostName')");
 		$hostObjectId = mysql_fetch_row($QUERYHANDLE);  
 	
+		if (mysql_num_rows($QUERYHANDLE) == 0) {
+			//FIXME: All this outputs should be handled over a language file
+			$state['State'] = "ERROR";
+			$state['Output'] = "The Host <b>" .$hostName. "</b> was not found in the Database. Maybe it is spelled wrong?";
+			return($state);
+		}
+
 		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_hoststatus  WHERE object_id = '$hostObjectId[0]'");
 		$hostState = mysql_fetch_array($QUERYHANDLE);
 
@@ -158,8 +165,10 @@ class backend
 		$hostGroupId = mysql_fetch_row($QUERYHANDLE);
 
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
-			//FIXME: Error Box		
-			echo "The Hostgroupalias \"" .$hostGroupName. "\" was not found in the Database. Maybe it is spelled wrong?";
+			//FIXME: All this outputs should be handled over a language file
+			$state['State'] = "ERROR";
+			$state['Output'] = "The Hostgroup <b>" .$hostGroupName. "</b> was not found in the Database. Maybe it is spelled wrong?";
+			return($state);
 		}
 		$hostsCritical=0;
 		$hostsWarning=0;
@@ -225,8 +234,52 @@ class backend
 
 		return($state);
 	}
+
+
+	function findStateService($hostName,$serviceName,$StatusCgi,$CgiUser) {
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE (objecttype_id = '2' AND name1 = '$hostName' AND name2 ='$serviceName' )");
+		if (mysql_num_rows($QUERYHANDLE) == 0) {
+			//FIXME: All this outputs should be handled over a language file
+			$state['State'] = "ERROR";
+			$state['Output'] = "The Service <b>" .$serviceName. "</b> on Host <b>" .$hostName. "</b> was not found in the Database. Maybe it is spelled wrong?";
+			return($state);
+		}
+		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
+
+		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE object_id = '$serviceObjectId[0]'");
+		$service = mysql_fetch_array($QUERYHANDLE);				
+				
+
+		if($service['current_state'] == 0) {
+				$state['Count'] = "1";
+				$state['State'] = "OK";
+				$state['Output'] = $service['output'];
+		}
+		elseif($currentService['problem_has_been_acknowledged'] == 1) {
+				$state['Count'] = "1";
+				$state['State'] = "SACK";
+				$state['Output'] = $service['output'];			
+		}
+			elseif($currentService['current_state'] == 1) {
+				$state['Count'] = "1";
+				$state['State'] = "WARNING";
+				$state['Output'] = $service['output'];		
+		}
+			elseif($currentService['current_state'] == 2) {
+				$state['Count'] = "1";
+				$state['State'] = "CRITICAL";
+				$state['Output'] = $service['output'];		
+		}
+			elseif($currentService['current_state'] == 3) {
+				$state['Count'] = "1";
+				$state['State'] = "UNKNOWN";
+				$state['Output'] = $service['output'];	
+		}	
+		
+		return($state);
+	}
 /* THE FOLLOWING IS STILL DONE BY THE CGIs, IM CODING ON IT - Andreas */
-	function findStateService($HostName,$ServiceName,$StatusCgi,$CgiUser) {
+/*	function findStateService($HostName,$ServiceName,$StatusCgi,$CgiUser) {
 		$rotateUrl = "";
 		putenv("REQUEST_METHOD=GET");
         putenv("REMOTE_USER=$CgiUser");
@@ -234,9 +287,10 @@ class backend
         $handle = popen($StatusCgi, 'r');
         $text = fread($handle, 9000);
         pclose($handle);
-		preg_match('/.*Current Status:<\/TD><TD CLASS=\'dataVal\'><DIV CLASS=\'(.*)\'>.*/', $text, $state);
-		preg_match('/.*Status Information:<\/TD><TD CLASS=\'dataVal\'>(.*)<\/TD>.*/', $text, $output);
-	        
+	*/
+//	preg_match('/.*Current Status:<\/TD><TD CLASS=\'dataVal\'><DIV CLASS=\'(.*)\'>.*/', $text, $state);
+//		preg_match('/.*Status Information:<\/TD><TD CLASS=\'dataVal\'>(.*)<\/TD>.*/', $text, $output);
+	/*        
 		$HostAck=$this->findStateHost($HostName,'0','/usr/local/nagios/sbin/status.cgi',$CgiUser);
 		
 		if(!isset($output[1])){
@@ -260,7 +314,7 @@ class backend
 		}
                 return $state;
         }
-
+*/
 	function findStateServicegroup($ServiceGroup,$StatusCgi,$CgiUser) {
 		$rotateUrl = "";
 		putenv("REQUEST_METHOD=GET");
