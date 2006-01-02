@@ -392,13 +392,27 @@ class backend
                 );
 		$StateLow = strtolower($State['State']);
 		if(!isset($mapCfg[$Index]['iconset'])) {
-			$IconPath = "std_small";
+			$IconPath = "std_medium";
 		}
 		else {
 			$IconPath = $mapCfg[$Index]['iconset'];
 		}
-
+		
 		switch($Type) {
+			case 'map':
+				switch($StateLow) {
+					case 'ok':
+					case 'warning':
+					case 'critical':
+					case 'unknown':
+					case 'ack':		
+						$Icon = $IconPath.'_'.$StateLow;
+					break;
+					default:
+						$Icon = $IconPath."_error";
+					break;
+				}
+			break;
 			case 'host':
 			case 'hostgroup':
 				switch($StateLow) {
@@ -426,20 +440,22 @@ class backend
 					case 'ok':
 						$Icon = $IconPath.'_'.$StateLow;
 					break;
-					default:
+					default:	
 						$Icon = $IconPath."_error";
 					break;
 				}
 			break;
 			default:
+					echo "Unkown Object Type!";
 					$Icon = $mapCfg[$Index]['iconset']."_error";
 			break;
 		}
+
 		for($i=0;$i<count($valid_format);$i++) {
 			if(file_exists($Base."iconsets/".$Icon.".".$valid_format[$i])) {
                                 $Icon .= ".".$valid_format[$i];
 			}
-                }
+		}
 		if(file_exists($Base."iconsets/".$Icon)) {	
 			return $Icon;
 		}
