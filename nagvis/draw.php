@@ -25,7 +25,6 @@ if(file_exists($cfgFolder.$map.".cfg")) {
 }
 
 // Bild initalisieren
-$map_image=$map_image;
 $image_type = explode('.', $map_image);
 
 switch(strtolower($image_type[1])) {
@@ -36,7 +35,7 @@ switch(strtolower($image_type[1])) {
 		$im = @imagecreatefrompng($mapFolder.$map_image);
 	break;
 	default: 
-		// Error-Box!
+		// FIXME: Error-Box!
 		print "Only PNG and JPG Map-Image Extensions are allowed";
 		exit;
 	break;

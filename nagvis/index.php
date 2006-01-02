@@ -21,7 +21,6 @@ include("./etc/config.inc.php");
 include("./includes/classes/class.Graphic.php");
 include("./includes/classes/class.CheckIt.php");
 include("./includes/classes/class.ReadFiles.php");
-// The Backend
 include("./includes/classes/class.CheckState_".$StateClass.".php");
 
 $CHECKIT = new checkit();
@@ -46,6 +45,7 @@ $rotateUrl = "";
 // check-stuff
 $CHECKIT->check_user();
 // Nur Prüfen wenn GD-Libs verwendet werden!
+// FIXME: Move this check over to CHECKIT and call it here EVER. Ha.
 if ($useGDLibs == "1") {
 	$CHECKIT->check_gd();
 }
@@ -130,6 +130,7 @@ for($x="1";$x<=$countStates;$x++) {
     // Handle all objects of type "map"
     if($mapCfg[$arrayPos]['type'] == 'map') {
 		if(file_exists($cfgFolder.$mapCfg[$arrayPos]['name'].'.cfg')) {
+			unset($mapState); 
 			$allMapCfgState = $READFILE->readNagVisCfg($mapCfg[$arrayPos]['name']);
 			
 			/*
