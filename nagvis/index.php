@@ -160,20 +160,20 @@ for($x="1";$x<=$countStates;$x++) {
 			
 			if(in_array("DOWN", $mapState) || in_array("CRITICAL", $mapState)){
 				$state['State'] = "CRITICAL";
-				$state['Output'] = "State of parent Map is CRITICAL or DOWN";
+				$state['Output'] = "State of child Map is CRITICAL";
 				$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 			}elseif(in_array("WARNING", $mapState)){
 				$state['State'] = "WARNING";
-				$state['Output'] = "State of parent Map is  WARNING";
+				$state['Output'] = "State of child Map is  WARNING";
 				$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 			}else{
 				$state['State'] = "OK";
-				$state['Output'] = "State of parent map is OK or UP";
+				$state['Output'] = "State of child map is OK";
 				$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
 			}
 		} else {
 			$state['State'] = "OK";
-			$state['Output'] = "Map not readable";
+			$state['Output'] = "Child Map not readable";
 		}
 	
 		$IconPosition = $BACKEND->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
