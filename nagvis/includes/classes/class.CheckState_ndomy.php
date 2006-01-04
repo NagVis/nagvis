@@ -159,8 +159,7 @@ class backend
    
 	// Status für eine Hostgroup ermitteln.
 	function findStateHostgroup($hostGroupName,$recognizeServices,$statusCgi,$cgiUser) {
-		//Because "hostgroup_name" ist missing in the NDO DB,  we have to work with the alias
-		//Ok, its not missingn its in the ndo_objects table, i will fetch this later
+		//First we have to get the hostgroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='3' AND name1='$hostGroupName'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
 	
@@ -283,84 +282,81 @@ class backend
 		return($state);
 	}
 /* THE FOLLOWING IS STILL DONE BY THE CGIs, IM CODING ON IT - Andreas */
-/*	function findStateService($HostName,$ServiceName,$StatusCgi,$CgiUser) {
-		$rotateUrl = "";
-		putenv("REQUEST_METHOD=GET");
-        putenv("REMOTE_USER=$CgiUser");
-        putenv("QUERY_STRING=type=2&host=$HostName&service=$ServiceName");
-        $handle = popen($StatusCgi, 'r');
-        $text = fread($handle, 9000);
-        pclose($handle);
-	*/
-//	preg_match('/.*Current Status:<\/TD><TD CLASS=\'dataVal\'><DIV CLASS=\'(.*)\'>.*/', $text, $state);
-//		preg_match('/.*Status Information:<\/TD><TD CLASS=\'dataVal\'>(.*)<\/TD>.*/', $text, $output);
-	/*        
-		$HostAck=$this->findStateHost($HostName,'0','/usr/local/nagios/sbin/status.cgi',$CgiUser);
-		
-		if(!isset($output[1])){
-			preg_match('/<P><DIV CLASS=\'errorMessage\'>(.*)<\/DIV><\/P>/', $text, $output);
+	function findStateServicegroup($serviceGroupName,$StatusCgi,$CgiUser) {
+		//First we have to get the servicegroup_id
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='4' AND name1='$serviceGroupName'");
+		$objectId = mysql_fetch_row($QUERYHANDLE);
+	
+		if (mysql_num_rows($QUERYHANDLE) == 0) {
+			//FIXME: All this outputs should be handled over a language file
+			$state['State'] = "ERROR";
+			$state['Output'] = "The Servicegroup <b>" .$serviceGroupName. "</b> was not found in the Database. Maybe it is spelled wrong?";
+			return($state);
 		}
 		
-		if($state[1] == 'serviceOK') {
-			$state['State'] = 'OK';
-		}
-		elseif($HostAck['State'] == 'ACK') {
-			$state['State'] = 'SACK';
-		}
-		elseif($state[1] == 'serviceWARNING') {
-			$state['State'] = 'WARNING';
-		}
-		elseif($state[1] == 'serviceCRITICAL') {
-			$state['State'] = 'CRITICAL';
-                }
-		else{
-			$state['State'] = 'UNKNOWN';
-		}
-                return $state;
-        }
-*/
-	function findStateServicegroup($ServiceGroup,$StatusCgi,$CgiUser) {
-		$rotateUrl = "";
-		putenv("REQUEST_METHOD=GET");
-		putenv("REMOTE_USER=$CgiUser");
-		putenv("QUERY_STRING=servicegroup=$ServiceGroup");
-                $handle = popen($StatusCgi, 'r');
-                $text = fread($handle, 4000);
-                pclose($handle);
-		if (preg_match('/<DIV CLASS=\'errorMessage\'>Sorry, but servicegroup(.*)<\/DIV>/', $text)) {
-			$state['State'] = 'UNKNOWN';
-			$state['Count'] = '0';
-			$state['Output'] = 'Sorry, but servicegroup '.$ServiceGroup.' not found';
-		}
-		else {
-			preg_match('/<TD CLASS=\'serviceTotalsOK\'>(.*)<\/TD>/', $text, $serviceTotalsOK);
-			preg_match('/<TD CLASS=\'serviceTotalsCRITICAL\'>(.*)<\/TD>/', $text, $serviceTotalsCRITICAL);
-			preg_match('/<TD CLASS=\'serviceTotalsWARNING\'>(.*)<\/TD>/', $text, $serviceTotalsWARNING);
-		}
+		$QUERYHANDLE = mysql_query("SELECT servicegroup_id FROM ndo_servicegroups WHERE object_id='$objectId[0]'");
+		$serviceGroupId = mysql_fetch_row($QUERYHANDLE);
+		
+		$servicesCritical=0;
+		$servicesWarning=0;
+		$servicesUnknown=0;
+		$servicesAck=0;
+		$servicesOk=0;
 
-		if(isset($serviceTotalsCRITICAL[1]) && $serviceTotalsCRITICAL[1] != 0) {
-			$state['State'] = 'CRITICAL';
-			$state['Count'] = $serviceTotalsCRITICAL[1];
-			$state['Output'] = $serviceTotalsCRITICAL[1].' Services in state CRITICAL';
-		}
-		elseif(isset($serviceTotalsWARNING[1]) && $serviceTotalsWARNING != 0) {
-			$state['State'] = 'WARNING';
-			$state['Count'] = $serviceTotalsWARNING[1];
-			$state['Output'] = $serviceTotalsWARNING[1].' Services in state WARNING';
-		}
-		elseif(isset($serviceTotalsOK[1]) && $serviceTotalsOK[1] != 0) {
-			$state['State'] = 'OK';
-			$state['Count'] = $serviceTotalsOK[1];
-			$state['Output'] = $serviceTotalsOK[1].' Services in state OK';
+		//Now we have the Group Id and can get the hosts
+		$QUERYHANDLE = mysql_query("SELECT service_object_id FROM ndo_servicegroup_members WHERE servicegroup_id='$serviceGroupId[0]'");	
+		while($services = mysql_fetch_array($QUERYHANDLE)) {
+				$objectId = $services['service_object_id'];
 
+				//Query the Servicestates
+				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE object_id = '$objectId'");
+				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
+				if($currentService['current_state'] == 0) {
+					$servicesOk++;
+				}
+				elseif($currentService['problem_has_been_acknowledged'] == 1) {
+					$servicesAck++;				
+				}
+				elseif($currentService['current_state'] == 1) {
+					$servicesWarning++;
+				}
+				elseif($currentService['current_state'] == 2) {
+					$servicesCritical++;
+				}
+				elseif($currentService['current_state'] == 3) {
+					$servicesUnknown++;
+				}
+		
 		}
-		else {
-			$state['State'] = 'UNKNOWN';
-			$state['Count'] = '0';
-			$state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Servicegroup';
-		}
+	
+			if($servicesCritical > 0) {
+				$state['Count'] = $servicesCritical;
+				$state['Output'] = $servicesCritical." CRITICAL, " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+				$state['State'] = "CRITICAL";
+			}
+			elseif($servicesWarning > 0) {
+				$state['Count'] = $servicesWarning;
+				$state['Output'] = $servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+				$state['State'] = "WARNING";		
+			}
+			elseif($servicesUnknown > 0) {
+				$state['Count'] = $servicesUnknown;
+				$state['Output'] = $servicesUnknown." Services in UNKNOWN state";
+				$state['State'] = "UNKNOWN";
+				
+			}
+			elseif($servicesAck > 0) {
+				$state['Count'] = $servicesAck;
+				$state['Output'] = $servicesAck." services are in a NON-OK State but all are ACKNOWLEDGED";
+				$state['State'] = "ACK";
+			}
+			elseif($servicesOk > 0) {
+				$state['Count'] = $servicesOk;
+				$state['Output'] = "All ".$servicesOk." services are OK";
+				$state['State'] = "OK";		
+			}
 
-		return ($state);
+		return($state);
 	}
 
 
