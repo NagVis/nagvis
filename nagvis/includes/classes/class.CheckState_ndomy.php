@@ -161,15 +161,19 @@ class backend
 	function findStateHostgroup($hostGroupName,$recognizeServices,$statusCgi,$cgiUser) {
 		//Because "hostgroup_name" ist missing in the NDO DB,  we have to work with the alias
 		//Ok, its not missingn its in the ndo_objects table, i will fetch this later
-		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ndo_hostgroups WHERE alias='$hostGroupName'");
-		$hostGroupId = mysql_fetch_row($QUERYHANDLE);
-
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='3' AND name1='$hostGroupName'");
+		$objectId = mysql_fetch_row($QUERYHANDLE);
+	
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			//FIXME: All this outputs should be handled over a language file
 			$state['State'] = "ERROR";
 			$state['Output'] = "The Hostgroup <b>" .$hostGroupName. "</b> was not found in the Database. Maybe it is spelled wrong?";
 			return($state);
 		}
+		
+		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ndo_hostgroups WHERE object_id='$objectId[0]'");
+		$hostGroupId = mysql_fetch_row($QUERYHANDLE);
+		
 		$hostsCritical=0;
 		$hostsWarning=0;
 		$hostsUnknown=0;
