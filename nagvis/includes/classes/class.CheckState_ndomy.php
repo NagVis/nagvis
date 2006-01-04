@@ -38,7 +38,7 @@ class backend
 	}
 
 
-	// Get the state for a HOST
+	// Get the state for a HOST #####################################################################################################
 	function findStateHost($hostName,$recognizeServices,$statusCgi,$cgiUser) {
 		
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE (objecttype_id = '1' AND name1 = '$hostName')");
@@ -157,12 +157,12 @@ class backend
 	}
 
    
-	// Status für eine Hostgroup ermitteln.
+	// Hostgroup ###############################################################################################################
 	function findStateHostgroup($hostGroupName,$recognizeServices,$statusCgi,$cgiUser) {
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='3' AND name1='$hostGroupName'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
-	
+		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			//FIXME: All this outputs should be handled over a language file
 			$state['State'] = "ERROR";
@@ -238,7 +238,7 @@ class backend
 		return($state);
 	}
 
-
+	// Service #####################################################################################################################
 	function findStateService($hostName,$serviceName,$StatusCgi,$CgiUser) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE (objecttype_id = '2' AND name1 = '$hostName' AND name2 ='$serviceName' )");
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
@@ -251,29 +251,27 @@ class backend
 
 		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE object_id = '$serviceObjectId[0]'");
 		$service = mysql_fetch_array($QUERYHANDLE);				
-				
-
 		if($service['current_state'] == 0) {
 				$state['Count'] = "1";
 				$state['State'] = "OK";
 				$state['Output'] = $service['output'];
 		}
-		elseif($currentService['problem_has_been_acknowledged'] == 1) {
+		elseif($service['problem_has_been_acknowledged'] == 1) {
 				$state['Count'] = "1";
 				$state['State'] = "SACK";
 				$state['Output'] = $service['output'];			
 		}
-			elseif($currentService['current_state'] == 1) {
+		elseif($service['current_state'] == 1) {
 				$state['Count'] = "1";
 				$state['State'] = "WARNING";
 				$state['Output'] = $service['output'];		
 		}
-			elseif($currentService['current_state'] == 2) {
+		elseif($service['current_state'] == 2) {
 				$state['Count'] = "1";
 				$state['State'] = "CRITICAL";
 				$state['Output'] = $service['output'];		
 		}
-			elseif($currentService['current_state'] == 3) {
+		elseif($service['current_state'] == 3) {
 				$state['Count'] = "1";
 				$state['State'] = "UNKNOWN";
 				$state['Output'] = $service['output'];	
@@ -281,7 +279,8 @@ class backend
 		
 		return($state);
 	}
-/* THE FOLLOWING IS STILL DONE BY THE CGIs, IM CODING ON IT - Andreas */
+
+	// Servicegroup ############################################################################################################
 	function findStateServicegroup($serviceGroupName,$StatusCgi,$CgiUser) {
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='4' AND name1='$serviceGroupName'");
@@ -424,7 +423,8 @@ class backend
 			}
 		}
 		if(!isset($state)) {
-			$nagvis = new frontend();	
+			$nagvis = new frontend();
+			echo $Type;	
 			$nagvis->openSite($rotateUrl);
 			$nagvis->messageBox("12","Kein state");
 			$nagvis->closeSite();
