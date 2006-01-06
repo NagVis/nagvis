@@ -62,6 +62,7 @@ function GetColor($state){
 
 
 $BACKEND = new backend();
+$BACKEND->backendInitialize() ;
 $countStates = count($mapCfg)-1;
 $arrayPos="2";
 
