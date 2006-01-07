@@ -1,12 +1,28 @@
 <?php
+/**
+* This Class makes some checks
+*/
+
 
 include("./includes/classes/class.NagVis.php");
 
 class checkit extends frontend {
+	
+	/**
+	* Dummy-Check
+	*
+	* @author ML: FIXME!
+	*/
 	function check_dummy() {
 		echo "create some checks!";
 	}
-
+	
+		/**
+		* Check the Configuration-File 'etc/config.inc.php'.
+		*
+		* @author FIXME!
+		* @author Michael Luebben <michael_luebben@web.de>
+		*/
         function check_config() {
                 global $rotateUrl;
                 $FRONTEND = new frontend;
@@ -22,6 +38,11 @@ class checkit extends frontend {
                 }
         }
 
+		/**
+		* Check the Configuration-File from a map.
+		*
+		* @author FIXME!
+		*/
         function check_map_isreadable() {
                 global $cfgFolder;
                 global $map;
@@ -35,6 +56,11 @@ class checkit extends frontend {
                 }
         }
 
+		/**
+		* Check the logged in User.
+		*
+		* @author FIXME!
+		*/
         function check_user() {
                 global $user;
                 $FRONTEND = new frontend;
@@ -52,10 +78,15 @@ class checkit extends frontend {
                         exit;
                 }
         }
-
+		
+		/**
+		* Check is Rotate-Mode enable and create this
+		*
+		* @author Michael Luebben <michael_luebben@web.de>
+		*/
         function check_rotate() {
                 $FRONTEND = new frontend;
-                // Pruefen ob Rotate-Modus eingeschaltet ist.
+                global $$RotateMaps;
                 if($RotateMaps == "1") {
                         $mapNumber = $FRONTEND->mapCount($map);
                         $map = $maps[$mapNumber];
@@ -63,9 +94,14 @@ class checkit extends frontend {
                 }
         }
 
+		/**
+		* Check is Rotate-Mode enable and create this
+		*
+		* @author FIXME!
+		* @author Michael Luebben <michael_luebben@web.de>
+		*/
         function check_gd() {
                 $FRONTEND = new frontend;
-                // Ohne GD Lib geht nix
                 if (!extension_loaded('gd')) {
                         $FRONTEND->openSite($rotateUrl);
                         $FRONTEND->messageBox("15", "");
@@ -74,7 +110,13 @@ class checkit extends frontend {
                         exit;
                 }
         }
-
+		
+		/**
+		* Check is Rotate-Mode enable and create this.
+		*
+		* @author FIXME!
+		* @author Michael Luebben <michael_luebben@web.de>
+		*/
         function check_cgipath() {
                 global $CgiPath;
                 $FRONTEND = new frontend;
@@ -87,11 +129,16 @@ class checkit extends frontend {
                 }
         }
 
+		/**
+		* Check the Image for a map.
+		*
+		* @author FIXME!
+		* @author Michael Luebben <michael_luebben@web.de>
+		*/
         function check_mapimg() {
                 global $mapFolder;
                 global $map_image;
                 $FRONTEND = new frontend;
-                //Prüfen ob die Map vorhanden ist!
                 if(!file_exists($mapFolder.$map_image)) {
                         $FRONTEND->openSite($rotateUrl);
                         $FRONTEND->messageBox("3", "MAPPATH~".$mapFolder.$map_image);
@@ -100,27 +147,17 @@ class checkit extends frontend {
                         exit;
                 }
         }
-	
-	function check_validuser() {
-		global $user;
-		if(isset($_SERVER['PHP_AUTH_USER'])) {
-			$user = $_SERVER['PHP_AUTH_USER'];
-		} elseif(isset($_SERVER['REMOTE_USER'])) {
-			$user = $_SERVER['REMOTE_USER'];
-		} else {
-			$FRONTEND->openSite("");
-			$FRONTEND->messageBox("14", "");
-			$FRONTEND->closeSite();
-			$FRONTEND->printSite();
-			exit;
-		}
-	}
 
+		/**
+		* Check the permission from a loggin User (to view the Map).
+		*
+		* @author FIXME!
+		* @author Michael Luebben <michael_luebben@web.de>
+		*/
         function check_permissions() {
                 global $user;
                 global $allowed_users;
                 $FRONTEND = new frontend;
-                //Prüfen ob der User die Berechtigung besitzt die Map zu sehen!
                 if(isset($allowed_users) && !in_array('EVERYONE', $allowed_users) && !in_array($user,$allowed_users)) {
                         $FRONTEND->openSite($rotateUrl);
                         $FRONTEND->messageBox("4", "USER~".$user);
@@ -130,6 +167,11 @@ class checkit extends frontend {
                 }
         }
 
+		/**
+		* Check is the file 'wui/wui.function.inc.bash' executable
+		*
+		* @author FIXME!
+		*/
         function check_wuibash() {
                 $FRONTEND = new frontend;
                 if(!is_executable('wui/wui.function.inc.bash')) {
@@ -140,7 +182,12 @@ class checkit extends frontend {
                         exit;
                 }
         }
-
+	
+		/**
+		* Check is the Language-File readable.
+		*
+		* @author FIXME!
+		*/
         function check_langfile() {
                 global $Language;
                 $FRONTEND = new frontend;
@@ -153,6 +200,11 @@ class checkit extends frontend {
                 }
         }
 
+		/**
+		* Check is the Wui-Language-File readable.
+		*
+		* @author FIXME!
+		*/
         function check_wuilangfile() {
                 global $Language;
                 $FRONTEND = new frontend;
