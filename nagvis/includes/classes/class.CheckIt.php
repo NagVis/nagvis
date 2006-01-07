@@ -95,24 +95,27 @@ class checkit extends frontend {
         }
 
 		/**
-		* Check is Rotate-Mode enable and create this
+		* Check is GD-Libs installed, when GD-Libs are enabled.
 		*
 		* @author FIXME!
 		* @author Michael Luebben <michael_luebben@web.de>
 		*/
         function check_gd() {
-                $FRONTEND = new frontend;
-                if (!extension_loaded('gd')) {
+        		global $useGDLibs;
+        		if ($useGDLibs == "1") {
+                	$FRONTEND = new frontend;
+                	if (!extension_loaded('gd')) {
                         $FRONTEND->openSite($rotateUrl);
                         $FRONTEND->messageBox("15", "");
                         $FRONTEND->closeSite();
                         $FRONTEND->printSite();
                         exit;
+                    }
                 }
         }
 		
 		/**
-		* Check is Rotate-Mode enable and create this.
+		* Check is the CGI-Path exist.
 		*
 		* @author FIXME!
 		* @author Michael Luebben <michael_luebben@web.de>
