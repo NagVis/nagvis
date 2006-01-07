@@ -129,7 +129,7 @@ class frontend
                         $msg[2] = "Languagefile not found!";
                         $msg[3] = "Check if languagefile variable is set right in config.inc.php!";
                 }
-                elseif(!is_readable($LanguageFile)) {^
+                elseif(!is_readable($LanguageFile)) {
                         $msg[0] = "XXXX";
                         $msg[1] = "img_error.png";
                         $msg[2] = "Languagefile not readable!";
