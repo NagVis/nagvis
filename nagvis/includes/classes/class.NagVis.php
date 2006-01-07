@@ -1,16 +1,30 @@
 <?
 ##########################################################################
-##     	                           NagVis                              ##
+##     	                           NagVis                               ##
 ##        *** Klasse zum erzeugen der grafischen Oberfläche ***         ##
 ##                               Lizenz GPL                             ##
 ##########################################################################
+
+/**
+* Mit Hilfe dieser Klasse wird die NagVis-Seite zusammengebaut und erzeugt.
+*
+* @author Michael Lübben <michael_luebben@web.de>
+*/
+
 class frontend
 {
 	var $site;
 	
 	// ********************* Web-Seite *********************
 	
-	// Web-Seite öffnen.
+	/**
+	* Diese Funktion erzeugt den Anfang einer HTML-Seite
+	*
+	* @param string $RefreshTime
+	* @param string $rotateUrl
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+    */
 	function openSite($rotateUrl) {
 		include("./etc/config.inc.php");
 		$this->site[] = '<HTML>';
@@ -24,14 +38,25 @@ class frontend
 		$this->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE="text/css">';
 	}
 	
-	// Inhalt der Web-Seite erzeugen.
+	/**
+	* Gibt die erstellte Seite aus
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+	*/
 	function printSite() {
 		foreach ($this->site as $row) {
 			echo $row."\n";
 		}
 	}	
 	
-	// Erzeugt das Menu im Header, wenn es aktiviert ist.
+	/**
+	* Erstellt im Header ein Menu
+	*
+	* @param array $Menu
+	* @see function class.ReadFiles.php -> readMenu()
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+    */
 	function makeHeaderMenu($Menu) {
 		include("./etc/config.inc.php");
 		$x="0";
@@ -56,7 +81,11 @@ class frontend
 		$this->site[] = '</TABLE></DIV>';
 	}
 	
-	//Schliesst die Web-Seite
+	/**
+	* Schliesst ein voher mit openSite() geöffnete HTML-Seite wieder.
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+    */
 	function closeSite() {
 		$this->site[] = '</DIV>';
 		$this->site[] = '</BODY>';
@@ -65,7 +94,34 @@ class frontend
 
 	// ********************* Message-Box *******************
 	
-	// Erzeugt eine Message-Box.
+	/**
+	* Erzeugt eine Message-Box für Fehlerausgaben.
+	*
+	* Message-Nr.:
+	*  0 = StatusCgi nicht gefunden! Überprüfen Sie den Pfad der <variable>-Variable in der Konfigurationsdatei!
+	*  1 = StatusCgi nicht ausführbar! Rechte überprüfen!
+	*  2 = Keine Map-Konfigurations-Datei! Konnte die Konfigurations-Datei <map> nicht öffnen!
+	*  3 = Kein Map-Image! Konnte das Map-Image <map> nicht öffnen!
+	*  4 = Keine Rechte! Der Benutzer <user> hat keine Rechte zum anzeigen dieser Map!
+	*  5 = Keine Nagios-Log-Datei! Konnte Nagios-Log-Datei <log> nicht finden!
+	*  6 = Keine Unterstützung! Der Konfigurations-Modus wird in diesem Browser nicht unterstützt!
+	*  7 = Host nicht vorhanden! Der Host <hostname> wurde in der Nagios Konfiguration nicht gefunden!
+	*  8 = Service nicht vorhanden!~Der Service <servicename> konnte in der Nagios Konfiguration nicht gefunden werden!
+	*  9 = Gruppe leer! Die Gruppe <hostgroupname> enthält keine Hosts!
+	* 10 = Servicegroup nicht gefunden! Die Servicegroup <servicegroupname> wurde nicht gefunden!
+	* 11 = Status der ServiceGroup! Konnte den Status der ServiceGroup <servicegroupname> nicht ermitteln!
+	* 12 = Kein state gesetzt! State wurde nicht gesetzt!
+	* 13 = Service-Status! Der Service-Status vom Host <hostname> Service <servicename> konnte nicht ermittelt werden!
+	* 14 = Kein Benutzer! Es wurde kein Benutzername an NagVis übergeben! Prüfen Sie ihre .htaccess Konfiguration!
+	* 15 = GD Lib! GD Lib ist nicht installiert!
+	* 16 = wui/wui.function.inc.bash nicht ausführbar! Bitte die Berechtigungen von wui/wui.function.inc.bash (751) prüfen!
+	*
+	* @param string $messagnr
+	* @param string $vars
+	*
+    * @author Michael Lübben <michael_luebben@web.de>
+	* @author ...
+    */
 	function messageBox($messagenr, $vars) {
 		include("./etc/config.inc.php");
 		$LanguageFile = $Base."/etc/languages/".$Language.".txt";
@@ -75,7 +131,7 @@ class frontend
                         $msg[2] = "Languagefile not found!";
                         $msg[3] = "Check if languagefile variable is set right in config.inc.php!";
                 }
-                elseif(!is_readable($LanguageFile)) {
+                elseif(!is_readable($LanguageFile)) {^
                         $msg[0] = "XXXX";
                         $msg[1] = "img_error.png";
                         $msg[2] = "Languagefile not readable!";
@@ -125,7 +181,13 @@ class frontend
 	
 	// ******************** Map ********************
 	
-	// Map (Hintergrundbild) erstellen.
+	/**
+	* Liest die übergebene Map ein!
+	*
+	* @param string $map_image
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+	*/
 	function printMap($map_image)	{
 		include("./etc/config.inc.php");
 			$header = "";
@@ -140,7 +202,16 @@ class frontend
 			}
 	}
 	
-	// Info-Box erstellen (Java - overLib.js)
+	/**
+	* Erzeugt eine Java-Box, die beim überfahren mit dem Mauszeiger dargestellt wird.
+	*
+	* @param string $Type
+	* @param string $Hostname
+	* @param string $ServiceDesc
+	* @param array $stateArray
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+    */
 	function infoBox($Type,$Hostname,$ServiceDesc,$stateArray) {
 		include("./etc/config.inc.php");
 		$Type = ucfirst($Type);
@@ -187,7 +258,13 @@ class frontend
 		return($Info);
 	}
 	
-	//Index der Map feststellen
+	/**
+	* Wird benötigt für die Rotate Funktion, um festzustellen, wann es wieder bei der 1. Map wieder los geht.
+	*
+	* @param array $map
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+    */
 	function mapCount($map) {
 		include("./etc/config.inc.php");
 		$Index = array_search($map,$maps);
