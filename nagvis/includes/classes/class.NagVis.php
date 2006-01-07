@@ -6,9 +6,7 @@
 ##########################################################################
 
 /**
-* Mit Hilfe dieser Klasse wird die NagVis-Seite zusammengebaut und erzeugt.
-*
-* @author Michael Lübben <michael_luebben@web.de>
+* This Class creates the Web-Frontend for NagVis
 */
 
 class frontend
@@ -18,7 +16,7 @@ class frontend
 	// ********************* Web-Seite *********************
 	
 	/**
-	* Diese Funktion erzeugt den Anfang einer HTML-Seite
+	* Open a Web-Site in a Array site[].
 	*
 	* @param string $RefreshTime
 	* @param string $rotateUrl
@@ -39,7 +37,7 @@ class frontend
 	}
 	
 	/**
-	* Gibt die erstellte Seite aus
+	* Create a Web-Side from the Array site[].
 	*
 	* @author Michael Lübben <michael_luebben@web.de>
 	*/
@@ -50,7 +48,7 @@ class frontend
 	}	
 	
 	/**
-	* Erstellt im Header ein Menu
+	* Create a Header-Menu
 	*
 	* @param array $Menu
 	* @see function class.ReadFiles.php -> readMenu()
@@ -82,7 +80,7 @@ class frontend
 	}
 	
 	/**
-	* Schliesst ein voher mit openSite() geöffnete HTML-Seite wieder.
+	* Closed a Web-Site in the Array site[]
 	*
 	* @author Michael Lübben <michael_luebben@web.de>
     */
@@ -95,26 +93,26 @@ class frontend
 	// ********************* Message-Box *******************
 	
 	/**
-	* Erzeugt eine Message-Box für Fehlerausgaben.
+	* Create a Messagebox for informations and errors.
 	*
-	* Message-Nr.:
-	*  0 = StatusCgi nicht gefunden! Überprüfen Sie den Pfad der <variable>-Variable in der Konfigurationsdatei!
-	*  1 = StatusCgi nicht ausführbar! Rechte überprüfen!
-	*  2 = Keine Map-Konfigurations-Datei! Konnte die Konfigurations-Datei <map> nicht öffnen!
-	*  3 = Kein Map-Image! Konnte das Map-Image <map> nicht öffnen!
-	*  4 = Keine Rechte! Der Benutzer <user> hat keine Rechte zum anzeigen dieser Map!
-	*  5 = Keine Nagios-Log-Datei! Konnte Nagios-Log-Datei <log> nicht finden!
-	*  6 = Keine Unterstützung! Der Konfigurations-Modus wird in diesem Browser nicht unterstützt!
-	*  7 = Host nicht vorhanden! Der Host <hostname> wurde in der Nagios Konfiguration nicht gefunden!
-	*  8 = Service nicht vorhanden!~Der Service <servicename> konnte in der Nagios Konfiguration nicht gefunden werden!
-	*  9 = Gruppe leer! Die Gruppe <hostgroupname> enthält keine Hosts!
-	* 10 = Servicegroup nicht gefunden! Die Servicegroup <servicegroupname> wurde nicht gefunden!
-	* 11 = Status der ServiceGroup! Konnte den Status der ServiceGroup <servicegroupname> nicht ermitteln!
-	* 12 = Kein state gesetzt! State wurde nicht gesetzt!
-	* 13 = Service-Status! Der Service-Status vom Host <hostname> Service <servicename> konnte nicht ermittelt werden!
-	* 14 = Kein Benutzer! Es wurde kein Benutzername an NagVis übergeben! Prüfen Sie ihre .htaccess Konfiguration!
-	* 15 = GD Lib! GD Lib ist nicht installiert!
-	* 16 = wui/wui.function.inc.bash nicht ausführbar! Bitte die Berechtigungen von wui/wui.function.inc.bash (751) prüfen!
+	* Message-Numbers:
+	*  0 = StatusCgi not found!
+	*  1 = StatusCgi not executable!
+	*  2 = No map config available!
+	*  3 = No map image available!
+	*  4 = No permissions!
+	*  5 = No Nagios logfile!
+	*  6 = No support!
+	*  7 = Host not found!
+	*  8 = Service not found!
+	*  9 = Group is empty!
+	* 10 = Servicegroup not found!
+	* 11 = servicegroup-status!
+	* 12 = State not defined!
+	* 13 = Service-status!
+	* 14 = No User!
+	* 15 = GD Lib
+	* 16 = wui/wui.function.inc.bash not executable
 	*
 	* @param string $messagnr
 	* @param string $vars
@@ -182,7 +180,7 @@ class frontend
 	// ******************** Map ********************
 	
 	/**
-	* Liest die übergebene Map ein!
+	* Create a Background-Image for a Map.
 	*
 	* @param string $map_image
 	*
@@ -203,7 +201,7 @@ class frontend
 	}
 	
 	/**
-	* Erzeugt eine Java-Box, die beim überfahren mit dem Mauszeiger dargestellt wird.
+	* Creates a Java-Box with information.
 	*
 	* @param string $Type
 	* @param string $Hostname
@@ -259,7 +257,7 @@ class frontend
 	}
 	
 	/**
-	* Wird benötigt für die Rotate Funktion, um festzustellen, wann es wieder bei der 1. Map wieder los geht.
+	* A method for check the Map-Rotate state.
 	*
 	* @param array $map
 	*
@@ -268,7 +266,7 @@ class frontend
 	function mapCount($map) {
 		include("./etc/config.inc.php");
 		$Index = array_search($map,$maps);
-		//Wenn letze Map, wieder von vorne anfangen
+		//Wenn letzte Map, wieder von vorne anfangen
 		if (($Index + 1) >= sizeof($maps)) {
 			$Index = -1;
 		}
