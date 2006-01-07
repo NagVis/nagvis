@@ -1,12 +1,44 @@
 <?
 ##########################################################################
-##     	                           NagVis                              ##
+##     	                           NagVis                               ##
 ##         *** Klasse zum einlesen verschiedenener Dateien ***          ##
 ##                               Lizenz GPL                             ##
 ##########################################################################
+
+/**
+* This Class read the Configuration-Files from NagVis
+*/
+
 class readFile 
 {	
-	// <map>.cfg einlesen (neues Format).
+	/**
+	* Read the Map-Configuration files
+	*
+	* Allowed defines are:
+	*
+	* - global
+	*   For Global parameters for the map
+	*
+	* - host
+	*   This defines a Icon for a Host on the map
+	*
+	* - service
+	*   This defines a Icon for a Service on the map
+	*
+	* - hostgroup
+	*   This define a Icon for a Hostgroup on the map
+	*
+	* - servicegroup
+	*   This define a Icon for a Servicegroup on the map
+	*
+	* - map
+	*   This define a Icon fron another map form nagvis.
+	*
+	* - textbox
+	*   This define a Textbox on the map.
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+	*/
 	function readNagVisCfg($file) {
 		include("./etc/config.inc.php");
 		$NagVisCfg = file($cfgFolder.$file.".cfg");
@@ -40,7 +72,11 @@ class readFile
 		return($nagvis);
 	}
 	
-	//Menu für den Header einlesen.
+	/**
+	* Read the Configuration-File for the Header-Menu.
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+	*/
 	function readMenu() {
 		include("./etc/config.inc.php");
 		$Menu = file($cfgPath.$headerInc);

@@ -12,7 +12,9 @@
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
-
+/**
+* This Class read the States from NDO-Backend
+*/
 class backend
 {
 	//The backendInitialize function will be needed for ever, in backends wich need to do nothing here
