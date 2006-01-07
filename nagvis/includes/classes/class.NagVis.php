@@ -9,6 +9,8 @@
 * This Class creates the Web-Frontend for NagVis
 */
 
+include("./etc/config.inc.php");
+
 class frontend
 {
 	var $site;
@@ -34,6 +36,7 @@ class frontend
 		$this->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib_shadow.js"></SCRIPT>';
 		$this->site[] = '</HEAD>';
 		$this->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE="text/css">';
+		$this->site[] = '<BODY CLASS="main"  MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 	}
 	
 	/**
@@ -58,7 +61,6 @@ class frontend
 	function makeHeaderMenu($Menu) {
 		include("./etc/config.inc.php");
 		$x="0";
-		$this->site[] = '<BODY CLASS="main"  MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 		$this->site[] = '<TABLE WIDTH="100%" BORDER="0" BGCOLOR="black">';
 		$this->site[] = '<DIV CLASS="header">';
 		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != "") {
@@ -188,16 +190,12 @@ class frontend
 	*/
 	function printMap($map_image)	{
 		include("./etc/config.inc.php");
-			$header = "";
-			if($header == "0") {
-				$this->site[] = '<BODY CLASS="main"  MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
-			}
-			$this->site[] = '  <DIV CLASS="map">';
-			if ($useGDLibs == "1") {
-				$this->site[] = '   <IMG SRC="./draw.php?map='.$map_image.'">';
-			} else {
-				$this->site[] = '   <IMG SRC="'.$mapHTMLBaseFolder.$map_image.'">';
-			}
+		$this->site[] = '  <DIV CLASS="map">';
+		if ($useGDLibs == "1") {
+			$this->site[] = '   <IMG SRC="./draw.php?map='.$map_image.'">';
+		} else {
+			$this->site[] = '   <IMG SRC="'.$mapHTMLBaseFolder.$map_image.'">';
+		}
 	}
 	
 	/**
