@@ -85,13 +85,19 @@ class checkit extends frontend {
 		* @author Michael Luebben <michael_luebben@web.de>
 		*/
         function check_rotate() {
-                $FRONTEND = new frontend;
-                global $$RotateMaps;
+                global $RotateMaps;
+                global $map;
+                global $maps;
                 if($RotateMaps == "1") {
-                        $mapNumber = $FRONTEND->mapCount($map);
-                        $map = $maps[$mapNumber];
+                        $Index = array_search($map,$maps);
+						if (($Index + 1) >= sizeof($maps)) {
+							$Index = -1;
+						}
+						$Index++;
+                        $map = $maps[$Index];
                         $rotateUrl = " URL=index.php?map=".$map;
                 }
+                return($rotateUrl);
         }
 
 		/**

@@ -47,18 +47,7 @@ $CHECKIT->check_user();
 $CHECKIT->check_gd();
 $CHECKIT->check_cgipath();
 $CHECKIT->check_wuibash();
-$CHECKIT->check_rotate();
-
-/*
-FIXME: Ha: Can we delete this permanent???
-
-// Prüfen ob Rotate-Modus eingeschaltet ist.
-if($RotateMaps == "1") {
-    $mapNumber = $FRONTEND->mapCount($map);
-    $map = $maps[$mapNumber];
-    $rotateUrl = " URL=index.php?map=".$map;
-}  
-*/
+$rotateUrl = $CHECKIT->check_rotate();
 
 //Prüfen ob *.cfg-Datei vorhanden ist und dann einlesen.
 //FIXME sollte erst NACH den ganzen Plausis gemacht werden

@@ -179,6 +179,33 @@ class frontend
 		$this->site[] = '</TABLE>';
 	}
 	
+	/**
+	* Create a Debug-Output
+	*
+	* @param string $function
+	* @param string $debugOutput
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+	*/
+	function debug($function,$debugOutput)
+	{
+		$this->site[] = '<TABLE CLASS="messageBox" WIDTH="50%" ALIGN="CENTER">';
+		$this->site[] = ' <TR>';
+		$this->site[] = '  <TD CLASS="messageBoxHead" WIDTH="40">';
+		$this->site[] = '   <IMG SRC="./images/img_error.png" ALIGN="LEFT">';
+		$this->site[] = '  </TD>';
+		$this->site[] = '  <TD CLASS="messageBoxHead" ALIGN="CENTER">';
+		$this->site[] = '   Debug: function -> '.$function;
+		$this->site[] = '  </TD>';
+		$this->site[] = ' </TR>';
+		$this->site[] = ' <TR>';
+		$this->site[] = '  <TD CLASS="messageBoxMessage" ALIGN="CENTER" COLSPAN="2">';
+		$this->site[] =     $debugOutput;
+		$this->site[] = '  </TD>';
+		$this->site[] = ' </TR>';
+		$this->site[] = '</TABLE>';
+	}
+	
 	// ******************** Map ********************
 	
 	/**
@@ -252,24 +279,6 @@ class frontend
 		}
 		$Info .= '\', CAPTION, \''.$Type.'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
 		return($Info);
-	}
-	
-	/**
-	* A method for check the Map-Rotate state.
-	*
-	* @param array $map
-	*
-	* @author Michael Lübben <michael_luebben@web.de>
-    */
-	function mapCount($map) {
-		include("./etc/config.inc.php");
-		$Index = array_search($map,$maps);
-		//Wenn letzte Map, wieder von vorne anfangen
-		if (($Index + 1) >= sizeof($maps)) {
-			$Index = -1;
-		}
-		$Index++;
-		return($Index);
 	}
 
 }
