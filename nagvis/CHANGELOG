@@ -106,3 +106,13 @@ author:	fandel
 tstamp: 1136039113
 author: Michael Luebben
 - added function to diactivate GD-Libs
+
+tstamp: 1136726938
+author: Michael Luebben
+- Fix bug in Rotate-Mode
+  - delete function mapCount and integrated it in check_rotate
+- create a new function to create a links
+  - class.NagVis.php -> createLink()
+- Make a change in the function readNagVisCfg()
+  - Comma-separeted entrys in a <map>.cfg become back in a array.
+- Add Sourccode-Doku in some files
