@@ -46,6 +46,7 @@ class readFile
 		$l="0";
 		$x="0";
 		$type = array("global","host","service","hostgroup","servicegroup","map","textbox");
+		$createArray = array("allowed_user");
 		
 		while (isset($NagVisCfg[$l]) && $NagVisCfg[$l] != "") {
 			if(!ereg("^#",$NagVisCfg[$l]) && !ereg("^;",$NagVisCfg[$l])) {
@@ -57,7 +58,10 @@ class readFile
 					$nagvis[$x]['type'] = $define[1];
 					while (trim($NagVisCfg[$l]) != "}") {
 						$entry = explode("=",$NagVisCfg[$l], 2);
-						if(isset($entry[1])) {
+						if(in_array(trim($entry[0]),$createArray)) {
+							$nagvis[$x][trim($entry[0])] = explode(",",$entry[1]);
+						}
+						elseif(isset($entry[1])) {
 							if(ereg("name", $entry[0])) {
 								$entry[0] = "name";
 							}

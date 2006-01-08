@@ -64,7 +64,6 @@ if($RotateMaps == "1") {
 //FIXME sollte erst NACH den ganzen Plausis gemacht werden
 if(file_exists($cfgFolder.$map.".cfg")) {
     $mapCfg = $READFILE->readNagVisCfg($map);
-    $allowed_users = explode(",",trim($mapCfg[1]['allowed_user']));
     $map_image_array = explode(",",trim($mapCfg[1]['map_image']));
     $map_image=$map_image_array[0];
 }
