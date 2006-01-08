@@ -25,11 +25,11 @@ include("./includes/classes/class.CheckState_".$StateClass.".php");
 
 $CHECKIT = new checkit();
 
-// Browser ermitteln.
+// Get Browser Info
 unset($browser);
 $browser = $_SERVER['HTTP_USER_AGENT'];
 
-// Map festlegen.
+// Get Map from Url.
 if(isset($_GET['map'])) {
     $map = $_GET['map'];
     $CHECKIT->check_map_isreadable();
@@ -63,13 +63,13 @@ $CHECKIT->check_map_isreadable();
 $CHECKIT->check_mapimg();
 $CHECKIT->check_langfile();
 
-// Prüfen ob Header eingeschaltet ist und bei bedarf erzeugen.
+// Create Header-Menu, when enabled
 if ($Header == "1") {
 	$Menu = $READFILE->readMenu();
 	$FRONTEND->makeHeaderMenu($Menu);
 }
 
-//Map als Hintergrundbild erzeugen
+// Create Background
 if ($useGDLibs == "1") {
 	$FRONTEND->printMap($map);
 } else {
@@ -94,19 +94,8 @@ for($x="1";$x<=$countStates;$x++) {
 		$mapCfg[$arrayPos]['service_description'] = "";
     }
     // Links to the Nagios Pages
-	// FIXME: Ha: Exclude this in a method/function in a class and then just call this method here
-    if(isset($mapCfg[$arrayPos]['url'])) {
-		$link = '<A HREF='.$mapCfg[$arrayPos]['url'].'>';
-    } elseif($mapCfg[$arrayPos]['type'] == 'host') {
-		$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?host='.$mapCfg[$arrayPos]['name'].'">';
-    } elseif($mapCfg[$arrayPos]['type'] == 'service') {
-		$link = '<A HREF="'.$HTMLCgiPath.'/extinfo.cgi?type=2&host='.$mapCfg[$arrayPos]['name'].'&service='.$mapCfg[$arrayPos]['service_description'].'">';
-    } elseif($mapCfg[$arrayPos]['type'] == 'hostgroup') {
-		$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?hostgroup='.$mapCfg[$arrayPos]['name'].'&style=detail">';
-    } elseif($mapCfg[$arrayPos]['type'] == 'servicegroup') {
-		$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?servicegroup='.$mapCfg[$arrayPos]['name'].'&style=detail">';
-    }
-
+	$link = $FRONTEND->createLink($HTMLCgiPath,$mapCfg[$arrayPos]['url'],$mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description']);
+	
     /* 
        The following part handles the differnt object types (host, service, line and so on)
 	   FIXME: Ha: a switch statement would be better to unterstand than this extremley large if-construct

@@ -15,8 +15,6 @@ class frontend
 {
 	var $site;
 	
-	// ********************* Web-Seite *********************
-	
 	/**
 	* Open a Web-Site in a Array site[].
 	*
@@ -91,8 +89,6 @@ class frontend
 		$this->site[] = '</BODY>';
 		$this->site[] = '</HTML>';
 	}
-
-	// ********************* Message-Box *******************
 	
 	/**
 	* Create a Messagebox for informations and errors.
@@ -180,6 +176,32 @@ class frontend
 	}
 	
 	/**
+	* Create a link to Nagios, when this is not set in the Config-File
+	*
+	* @param string $HTMLCgiPath
+	* @param string $mapUrl
+	* @param string $type
+	* @param string $name
+	* @param string $service_description
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+	*/
+	function createLink($HTMLCgiPath,$mapUrl,$type,$name,$service_description) {
+		if(isset($mapUrl)) {
+			$link = '<A HREF='.$mapUrl.'>';
+    	} elseif($type == 'host') {
+			$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?host='.$name.'">';
+    	} elseif($type == 'service') {
+			$link = '<A HREF="'.$HTMLCgiPath.'/extinfo.cgi?type=2&host='.$name.'&service='.$service_description.'">';
+    	} elseif($type == 'hostgroup') {
+			$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?hostgroup='.$name.'&style=detail">';
+    	} elseif($type == 'servicegroup') {
+			$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?servicegroup='.$name.'&style=detail">';
+    	}
+    	return($link);
+	}
+	
+	/**
 	* Create a Debug-Output
 	*
 	* @param string $function
@@ -205,8 +227,6 @@ class frontend
 		$this->site[] = ' </TR>';
 		$this->site[] = '</TABLE>';
 	}
-	
-	// ******************** Map ********************
 	
 	/**
 	* Create a Background-Image for a Map.
