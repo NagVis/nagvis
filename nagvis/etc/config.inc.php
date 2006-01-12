@@ -1,9 +1,7 @@
 <?
 #state_class defines the parsing of the status data
-# - parse       -> cgi-/html-parsing    (status.cgi)
-# - dbpg        -> nagios-db parsing    (postgres)
-# - dbmy        -> nagios-db parsing    (mysql)
-# - xml         -> xml-parsing          (xml.cgi)
+# - html       -> Parse the Data from the cgis html output (slow and unrealiable!!)
+# - ndomy	   -> Get the Data from a Nagios NDO MySql DB (fast and stable) 
 $StateClass="html";
 
 #The user Nagvis runs the CGI as (MUST be 'allowed for all services', 'allowed for all hosts')
