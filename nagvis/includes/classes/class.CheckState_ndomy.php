@@ -12,9 +12,6 @@
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
-/**
-* This Class read the States from NDO-Backend
-*/
 class backend
 {
 	//The backendInitialize function will be needed for ever, in backends wich need to do nothing here
@@ -215,7 +212,7 @@ class backend
 		}
 		elseif($hostsWarning > 0) {
 			$state['Count'] = $hostsWarning;
-			$state['Output'] = $hostWarninig. "Hosts are WARNING and " .$hostsUnknown. " UNKNOWN";
+			$state['Output'] = $hostsWarning. " Hosts are WARNING and " .$hostsUnknown. " UNKNOWN";
 			$state['State'] = "WARNING";		
 		}
 		elseif($hostsUnknown > 0) {
