@@ -1,9 +1,41 @@
 <?
-#state_class defines the parsing of the status data
-# - html       -> Parse the Data from the cgis html output (slow and unrealiable!!)
-# - ndomy	   -> Get the Data from a Nagios NDO MySql DB (fast and stable) 
-$StateClass="html";
+########################## Global Options #############################
 
+#backed defines the data source to use to get the Nagios states
+# - html       -> Parse the Data from the Nagios cgis html output (slow and unrealiable but easy to install)
+# - ndomy	   -> Get the Data from a Nagios NDO MySql DB (fast and stable but you need NDO) 
+$backend="html";
+
+#Include file for default page.
+$indexInc="index.nagvis.inc";
+
+#Default Iconset. Used for the maps creation.
+$defaultIcons="std_medium";
+
+#Rotate Maps automatically.
+$RotateMaps="0";
+
+#Maps to rotate. Example : array('server','lan','wan')
+$maps=array("demo");
+
+#Display Header.
+$Header="1";
+
+#Number of links displayed in one header line.
+$headerCount="3";
+
+$Autoupdate_frequency="25";
+$check_config="0";
+
+#Use GD-Libs to draw backend(0=No / 1=Yes)
+#"Line" Objects are only available if set to "1", "0" can be used
+#if you have problems with GD or if you need no lines.
+$useGDLibs="1";
+
+#Name of the header include file.
+$headerInc="header.nagvis.inc";
+
+####################### Options for the html Backend ############################
 #The user Nagvis runs the CGI as (MUST be 'allowed for all services', 'allowed for all hosts')
 $CgiUser="nagiosadmin";
 
@@ -40,38 +72,19 @@ $iconBaseFolder=$Base."/iconsets/";
 #HTTP Path to the NagVis iconsets directory.
 $iconHTMLBaseFolder=$HTMLBase."/iconsets/";
 
-#HTTP Path to the Map directory.
+#HTTP Path to the Map directory.;
 $mapHTMLBaseFolder=$HTMLBase."/maps/";
 
-#Include file for default page.
-$indexInc="index.nagvis.inc";
 
-#Default Iconset. Used for the maps creation.
-$defaultIcons="std_medium";
+################## Options for the NDO My Backend ########################
 
-#Rotate Maps automatically.
-$RotateMaps="0";
 
-#Maps to rotate. Example : array('server','lan','wan')
-$maps=array("demo");
 
-#Display Header.
-$Header="1";
 
-#Number of links displayed in one header line.
-$headerCount="3";
-
-$Autoupdate_frequency="25";
-$check_config="0";
-
-#Use GD-Libs (0=No / 1=Yes)
-$useGDLibs="1";
-
-#Name of the header include file.
-$headerInc="header.nagvis.inc";
-
-#Internal versioning, dont change
+#####################Internal versioning, dont change #####################
 $version="0.9b1+";
 $title="NagVis ".$version;
+
+################################# EOF #####################################
 #Please make shure that there are NO whitespaces after the ">". ">" MUST be the last char in this file!
 ?>
