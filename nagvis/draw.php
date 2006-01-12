@@ -3,7 +3,7 @@ include("./includes/classes/class.Graphic.php");
 include("./etc/config.inc.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
-include("./includes/classes/class.CheckState_".$StateClass.".php");
+include("./includes/classes/class.CheckState_".$backend.".php");
 
 $map = $_GET['map'];
 
