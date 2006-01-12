@@ -3,12 +3,12 @@
 ##     	        NagVis - The Nagios Visualisation Addon                 ##
 ##########################################################################
 ## class.CheckState_html - Backend module to fetch the status from      ##
-##             			   the Nagios CGIs. All not special to one 		##
-##						   Backend related things should removed here!  ##
-##						   (e.g. fixIcon, this is needed for ALL        ##
-##						   Backends	)									##
+##       	   the Nagios CGIs. All not special to one 		##
+##		   Backend related things should removed here!		##
+##		   (e.g. fixIcon, this is needed for ALL        	##
+##	   	   Backends)						##
 ##########################################################################
-## Licenced under the terms and conditions of the GPL Licence, 			##
+## Licenced under the terms and conditions of the GPL Licence, 		##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
@@ -23,7 +23,7 @@ class backend
 		return 0;
 	}
 
-	// Status für einen Host ermitteln.
+	// Status fr einen Host ermitteln.
 	function findStateHost($Hostname,$RecognizeServices,$StatusCgi,$CgiUser) {
 	        putenv("REQUEST_METHOD=GET");
                 putenv("REMOTE_USER=$CgiUser");
@@ -91,14 +91,14 @@ class backend
                 return($state);
         }
 	
-	// Status für eine Hostgroup ermitteln.
+	// Status fr eine Hostgroup ermitteln.
 	function findStateHostgroup($Hostgroupname,$RecognizeServices,$StatusCgi,$CgiUser) {
 		$rotateUrl = "";
 		putenv("REQUEST_METHOD=GET");
 		putenv("REMOTE_USER=$CgiUser");
 		putenv("QUERY_STRING=hostgroup=$Hostgroupname");
                 $handle = popen($StatusCgi, 'r');
-                $text = fread($handle, 4000);
+                $text = fread($handle, 9000);
                 pclose($handle);
 		if (preg_match('/<DIV CLASS=\'errorMessage\'>Sorry, but host group(.*)<\/DIV>/', $text)) {
 
@@ -192,7 +192,7 @@ class backend
 		putenv("REMOTE_USER=$CgiUser");
 		putenv("QUERY_STRING=servicegroup=$ServiceGroup");
                 $handle = popen($StatusCgi, 'r');
-                $text = fread($handle, 4000);
+                $text = fread($handle, 9000);
                 pclose($handle);
 		if (preg_match('/<DIV CLASS=\'errorMessage\'>Sorry, but servicegroup(.*)<\/DIV>/', $text)) {
 			$state['State'] = 'UNKNOWN';
@@ -231,7 +231,7 @@ class backend
 	}
 
 
-	// Höchsten Status aus einem Array ermitteln
+	// Hï¿½hsten Status aus einem Array ermitteln
 	// FIXME: Ha: Move over to other class (not special html backend related)
 	function findStateArray($stateArray) {
 		$rotateUrl = "";
@@ -265,11 +265,11 @@ class backend
 	{
 		$rotateUrl = "";
 		unset($state);
-		//Status vom Host oder Service Prüfen.
+		//Status vom Host oder Service Prfen.
 		if($Type == "host") {
 			$StatusCgi = $CgiPath.'status.cgi';
 			if(isset($Name)) {
-				$state = $this->findStateHost($Name,$RecognizeServices,$StatusCgi,$CgiUser);
+				$state = $this->findStateHost($Name,$RecognizeServices,$StatusCgi,$CgiUser);	
 			}
 		}
 		elseif($Type == "service") {	
@@ -285,7 +285,7 @@ class backend
 				$state = $this->findStateHostgroup($Name,$RecognizeServices,$StatusCgi,$CgiUser);
 			}
 		}
-		//Status einer Servicegroup prüfen.
+		//Status einer Servicegroup prfen.
 		elseif($Type == "servicegroup") {
 			$StatusCgi = $CgiPath.'status.cgi';
 			if(isset($Name) && isset($CgiUser)) {
