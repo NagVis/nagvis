@@ -4,7 +4,7 @@
 #backed defines the data source to use to get the Nagios states
 # - html       -> Parse the Data from the Nagios cgis html output (slow and unrealiable but easy to install)
 # - ndomy	   -> Get the Data from a Nagios NDO MySql DB (fast and stable but you need NDO) 
-$backend="html";
+$backend="ndomy";
 
 #Include file for default page.
 $indexInc="index.nagvis.inc";
@@ -77,7 +77,7 @@ $mapHTMLBaseFolder=$HTMLBase."/maps/";
 
 
 ################## Options for the NDO My Backend ########################
-
+# (NDO is brand new, please edit directly in the head of class.checkstate_ndomy.php)
 
 
 
