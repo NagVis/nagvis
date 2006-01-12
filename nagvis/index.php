@@ -19,12 +19,15 @@
 
 #FIXME: Inserts Plausis to check if files are there and readable
 include("./etc/config.inc.php");
+include('./etc/debug.inc.php');
 include("./includes/classes/class.Graphic.php");
 include("./includes/classes/class.CheckIt.php");
 include("./includes/classes/class.ReadFiles.php");
+include("./includes/classes/class.Debug.php");
 include("./includes/classes/class.CheckState_".$backend.".php");
 
 $CHECKIT = new checkit();
+$DEBUG = new debug();
 
 // Get Browser Info
 unset($browser);
@@ -206,9 +209,14 @@ for($x="1";$x<=$countStates;$x++) {
 
 	// Handle all the other types (hosts, services, hostgroups, servicegroups)
 	}elseif(!isset($mapCfg[$arrayPos]['line_type'])) {
+		$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the types hosts, services, hostgroups, servicegroups:');
+		
 		$state = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
+		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$arrayPos);
 
 		$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+		$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$arrayPos);
+		
 		$IconPosition = $BACKEND->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
 		$FRONTEND->site[] = $IconPosition;
 		
@@ -216,11 +224,13 @@ for($x="1";$x<=$countStates;$x++) {
 		$FRONTEND->site[] = $link;
 		$FRONTEND->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
 		$FRONTEND->site[] = "</DIV>";
+		$debug[] = $DEBUG->debug_insertRow($debugStates);
 	}
     $arrayPos++;
 
 //~End of main loop
 }
+$FRONTEND->debug($debug);
 $FRONTEND->closeSite();
 $FRONTEND->printSite();
 

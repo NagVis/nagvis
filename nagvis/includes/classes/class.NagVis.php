@@ -202,33 +202,6 @@ class frontend
 	}
 	
 	/**
-	* Create a Debug-Output
-	*
-	* @param string $function
-	* @param string $debugOutput
-	*
-	* @author Michael Lübben <michael_luebben@web.de>
-	*/
-	function debug($function,$debugOutput)
-	{
-		$this->site[] = '<TABLE CLASS="messageBox" WIDTH="50%" ALIGN="CENTER">';
-		$this->site[] = ' <TR>';
-		$this->site[] = '  <TD CLASS="messageBoxHead" WIDTH="40">';
-		$this->site[] = '   <IMG SRC="./images/img_error.png" ALIGN="LEFT">';
-		$this->site[] = '  </TD>';
-		$this->site[] = '  <TD CLASS="messageBoxHead" ALIGN="CENTER">';
-		$this->site[] = '   Debug: function -> '.$function;
-		$this->site[] = '  </TD>';
-		$this->site[] = ' </TR>';
-		$this->site[] = ' <TR>';
-		$this->site[] = '  <TD CLASS="messageBoxMessage" ALIGN="CENTER" COLSPAN="2">';
-		$this->site[] =     $debugOutput;
-		$this->site[] = '  </TD>';
-		$this->site[] = ' </TR>';
-		$this->site[] = '</TABLE>';
-	}
-	
-	/**
 	* Create a Background-Image for a Map.
 	*
 	* @param string $map_image
@@ -299,6 +272,45 @@ class frontend
 		}
 		$Info .= '\', CAPTION, \''.$Type.'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
 		return($Info);
+	}
+	
+	/**
+	* Create a Debug-Output
+	*
+	* @param array $debug
+	*
+	* @author Michael Lbben <michael_luebben@web.de>
+	*/
+	function debug($debug)
+	{
+		global $enableDebug;
+		
+		if ($enableDebug == "1") {
+			$this->site[] = '<TABLE CLASS="debugBox" WIDTH="90%" ALIGN="CENTER">';
+			$this->site[] = ' <TR>';
+			$this->site[] = '  <TD CLASS="debugBoxHead" WIDTH="40" ALIGN="CENTER">';
+			$this->site[] = '   <IMG SRC="./images/img_debug.png">';
+			$this->site[] = '  </TD>';
+			$this->site[] = '  <TD CLASS="debugBoxHead" ALIGN="CENTER">';
+			$this->site[] = '   Debugging';
+			$this->site[] = '  </TD>';
+			$this->site[] = '  <TD CLASS="debugBoxHead" WIDTH="40" ALIGN="CENTER">';
+			$this->site[] = '   <IMG SRC="./images/img_debug.png">';
+			$this->site[] = '  </TD>';
+			$this->site[] = ' </TR>';
+			$this->site[] = ' <TR>';
+			$this->site[] = '  <TD CLASS="debugBoxMessage" ALIGN="LEFT" COLSPAN="3">';
+			foreach ($debug as $debugArray) {
+				if(is_array($debugArray)) {
+					foreach ($debugArray as $row) {
+						$this->site[] = $row."<BR>";
+					}
+				}
+			}
+			$this->site[] = '  </TD>';
+			$this->site[] = ' </TR>';
+			$this->site[] = '</TABLE>';
+		}
 	}
 
 }

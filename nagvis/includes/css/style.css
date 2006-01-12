@@ -57,16 +57,37 @@ td.messageBoxMessage
 		font-family: verdana;
 		color: #000000;
 		text-decoration: none;
-		font-weight: bold;
-	}A.NavBarItem { 
-	font-family: arial,serif; 
-	background-color : black; 
-	color: #DEE7C6; 
-	font-size: 11pt; 
-	font-weight: normal; 
-	text-decoration: none; 
+		font-weight: bold; 
 }
 
+/* ******************** Debug-Box ******************** */
+table.debugBox
+	{
+		border: 0px;
+		background-color:  #CCCCCC;
+	}
+
+td.debugBoxHead
+	{
+		height: 10px;
+		background-color: #CCCCCC;
+		font-size: 17px;
+		font-family: verdana;
+		color: #000000;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	
+td.debugBoxMessage
+	{
+		height: 200px;
+		background-color: #EEEEEE;
+		font-size: 11px;
+		font-family: verdana;
+		color: #000000;
+		text-decoration: none;
+		font-weight: normal;
+}
 
 .header {
     left : 0px;

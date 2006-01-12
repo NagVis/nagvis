@@ -85,6 +85,14 @@ $mapHTMLBaseFolder=$HTMLBase."/maps/";
 $version="0.9b1+";
 $title="NagVis ".$version;
 
+########################## Options for Debbuging ##########################
+# For set more Debug-Options, see ./etc/debug.inc.php
+# Enable Debugging (0=No / 1=Yes)
+$enableDebug="0";
+
+#Url to NagVis-Doku
+$HTMLBaseDoku="http://luebben-home.de/nagvis-doku/nav.html?nagvis/";
+
 ################################# EOF #####################################
 #Please make shure that there are NO whitespaces after the ">". ">" MUST be the last char in this file!
 ?>
