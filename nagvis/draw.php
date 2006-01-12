@@ -1,4 +1,5 @@
 <?php
+#FIXME: Insert Plausis if files are there and readable!
 include("./includes/classes/class.Graphic.php");
 include("./etc/config.inc.php");
 include("./includes/classes/class.NagVis.php");

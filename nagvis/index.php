@@ -17,6 +17,7 @@
 ## Please use TAB (Tab Size: 4 Spaces) to format the code               ##
 ##########################################################################
 
+#FIXME: Inserts Plausis to check if files are there and readable
 include("./etc/config.inc.php");
 include("./includes/classes/class.Graphic.php");
 include("./includes/classes/class.CheckIt.php");
