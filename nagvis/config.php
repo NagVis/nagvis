@@ -14,7 +14,7 @@
 include("./etc/config.inc.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
-include("./includes/classes/class.CheckState_".$StateClass.".php");
+include("./includes/classes/class.CheckState_".$backend.".php");
 include("./wui/classes.wui.php");
 
 # we load the language file
