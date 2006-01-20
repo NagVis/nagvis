@@ -50,7 +50,7 @@ class backend
 			return($state);
 		}
 
-		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_hoststatus  WHERE object_id = '$hostObjectId[0]'");
+		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_hoststatus  WHERE host_object_id = '$hostObjectId[0]'");
 		$hostState = mysql_fetch_array($QUERYHANDLE);
 
 		//Host is UP
@@ -105,7 +105,7 @@ class backend
 			while($services = mysql_fetch_array($QUERYHANDLE)) {
 				$objectId = $services['object_id'];
 				//Query the Servicestates
-				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE object_id = '$objectId'");
+				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE service_object_id = '$objectId'");
 				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
 				if($currentService['current_state'] == 0) {
 					$servicesOk++;
