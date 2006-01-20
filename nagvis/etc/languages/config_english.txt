@@ -1,4 +1,5 @@
 CgiUser~The user Nagvis runs the CGI as (MUST be 'allowed for all services', 'allowed for all hosts')
+backend~The Backend used by NagVis to get the Data from Nagios. Use can choose between the slow and unreliable but simple to configure  HTML, wich parses the Nagios CGI output, and the new fast and stable NDOMY, wich fetches the data from a Nagios NDO MySQL DB. NDOMY is more complex to configure because you have to install the Nagios NDO Utils first.
 Base~Local path (full) to NagVis Base Directory.
 HTMLBase~Path to NagVis HTTP Base URL.
 CgiPath~Full local path to the directory containing the CGIs.
