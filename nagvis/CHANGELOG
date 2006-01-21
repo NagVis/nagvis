@@ -116,3 +116,13 @@ author: Michael Luebben
 - Make a change in the function readNagVisCfg()
   - Comma-separeted entrys in a <map>.cfg become back in a array.
 - Add Sourccode-Doku in some files
+
+tstamp: 1137854890
+author: Michael Luebben
+- Make changes in the index.php
+- Make chenges in function readFileCfg() -> readFileCfgNew()
+- Move function fixIconPostion from class BACKEND (class.CheckState_<BACKEND>.php) to the class FRONTEND (class.NagVis.php)
+- Move function fixIcon from class BACKEND (class.CheckState_<BACKEND>.php) to the class FRONTEND (class.NagVis.php)
+- Delete function findStateArray from class BACKEND (class.CheckState_<BACKEND>.php)
+- Add Sourcecode-Doku in some files
+- Make some changes in HTML-Backend

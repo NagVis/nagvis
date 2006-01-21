@@ -56,10 +56,11 @@ $rotateUrl = $CHECKIT->check_rotate();
 //Prüfen ob *.cfg-Datei vorhanden ist und dann einlesen.
 //FIXME sollte erst NACH den ganzen Plausis gemacht werden
 if(file_exists($cfgFolder.$map.".cfg")) {
-    $mapCfg = $READFILE->readNagVisCfg($map);
-    $map_image_array = explode(",",trim($mapCfg[1]['map_image']));
+    $mapCfg = $READFILE->readNagVisCfgNew($map);
+    $map_image_array = explode(",",trim($mapCfg['global'][1]['map_image']));
     $map_image=$map_image_array[0];
 }
+
 $FRONTEND->openSite($rotateUrl);
 
 $CHECKIT->check_permissions();
@@ -83,153 +84,204 @@ if ($useGDLibs == "1") {
 //Load and initialise the backend
 $BACKEND = new backend();
 $BACKEND->backendInitialize();
-
-$countStates = count($mapCfg)-1;
-// FIXME: HA: The following line looks "gemurkst" ;-)
-$arrayPos="2";
-
-
-// Main loop which passes through all objects on the map
-for($x="1";$x<=$countStates;$x++) { 
-    if(!isset($mapCfg[$arrayPos]['recognize_services'])) {
-		$mapCfg[$arrayPos]['recognize_services'] = 1;
-    }
-    if(!isset($mapCfg[$arrayPos]['service_description'])) {
-		$mapCfg[$arrayPos]['service_description'] = "";
-    }
-    // Links to the Nagios Pages
-	$link = $FRONTEND->createLink($HTMLCgiPath,$mapCfg[$arrayPos]['url'],$mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description']);
-	
-    /* 
-       The following part handles the differnt object types (host, service, line and so on)
-	   FIXME: Ha: a switch statement would be better to unterstand than this extremley large if-construct
- 	*/
-    // Handle all objects of type "map"
-    if($mapCfg[$arrayPos]['type'] == 'map') {
-		if(file_exists($cfgFolder.$mapCfg[$arrayPos]['name'].'.cfg')) {
-			unset($mapState); 
-			$allMapCfgState = $READFILE->readNagVisCfg($mapCfg[$arrayPos]['name']);
+    
+// Handle all objects of type "map"
+if (is_array($mapCfg['map'])){
+	foreach ($mapCfg['map'] as $index => $map) {
+		if(file_exists($cfgFolder.$map['name'].'.cfg')) {
+			unset($mapState);
+			unset($stateState); 
+			$allMapCfgState = $READFILE->readNagVisCfgNew($map['name']);
 			
-			/*
-				FIXME: Ha: Can we delte this permanent???
-				$countStatesState = count($mapCfgState);
-				if(!isset($mapCfgState['recognize_services'])) {
-					$mapCfgState['recognize_services'] = 1;
-				}
-				if(!isset($mapCfgState[$arrayPos]['service_description'])) {
-					$mapCfgState[$arrayPos]['service_description'] = "";
-				}
-			*/
-
-			foreach ($allMapCfgState as $mapCfgState) {
-	
-				if(!isset($mapCfgState['recognize_services'])) {
-					$mapCfgState['recognize_services'] = 1;
-				}
-	
-				$allowed_types = array(host,service,hostgroup,servicegroup);
-				if(in_array($mapCfgState['type'], $allowed_types)){
-					$stateState = $BACKEND->checkStates($mapCfgState['type'],$mapCfgState['name'],$mapCfgState['recognize_services'],$mapCfgState['service_description'],0,$CgiPath,$CgiUser);
+			if (is_array($mapCfg['host'])){
+				foreach ($mapCfg['host'] as $index => $host) {
+					if(isset($host['line_type'])) {
+						list($host_name_from,$host_name_to) = explode(",", $host['name']);
+						list($service_description_from,$service_description_to) = explode(",", $host['service_description']);
+						$stateState = $BACKEND->checkStates($host['type'],$host_name_from,$host['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
+						$stateState = $BACKEND->checkStates($host['type'],$host_name_to,$host['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);				
+					} else {
+						$stateState = $BACKEND->checkStates($host['type'],$host['name'],$host['recognize_services'],$host['service_description'],0,$CgiPath,$CgiUser);
+					}
 					$mapState[] = $stateState['State'];
 				}
-				$countStatesState++;
+			}
+			if (is_array($mapCfg['hostgroup'])){
+				foreach ($mapCfg['hostgroup'] as $index => $hostgroup) {
+					$stateState = $BACKEND->checkStates($hostgroup['type'],$hostgroup['name'],$hostgroup['recognize_services'],$hostgroup['service_description'],0,$CgiPath,$CgiUser);
+					$mapState[] = $stateState['State'];
+				}
+			}
+			if (is_array($mapCfg['service'])){
+				foreach ($mapCfg['service'] as $index => $service) {
+					if(isset($service['line_type'])) {
+						list($host_name_from,$host_name_to) = explode(",", $service['name']);
+						list($service_description_from,$service_description_to) = explode(",", $service['service_description']);
+						$stateState = $BACKEND->checkStates($service['type'],$host_name_from,$service['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
+						$stateState = $BACKEND->checkStates($service['type'],$host_name_to,$service['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);				
+					} else {
+						$stateState = $BACKEND->checkStates($service['type'],$service['name'],$service['recognize_services'],$service['service_description'],0,$CgiPath,$CgiUser);
+					}
+					$mapState[] = $stateState['State'];
+				}
+			}
+			if (is_array($mapCfg['servicegroup'])){
+				foreach ($mapCfg['servicegroup'] as $index => $servicegroup) {
+					$stateState = $BACKEND->checkStates($servicegroup['type'],$servicegroup['name'],$servicegroup['recognize_services'],$servicegroup['service_description'],0,$CgiPath,$CgiUser);
+					$mapState[] = $stateState['State'];
+				}
 			}
 			
 			if(in_array("DOWN", $mapState) || in_array("CRITICAL", $mapState)){
 				$state['State'] = "CRITICAL";
 				$state['Output'] = "State of child Map is CRITICAL";
-				$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
 			}elseif(in_array("WARNING", $mapState)){
 				$state['State'] = "WARNING";
 				$state['Output'] = "State of child Map is  WARNING";
-				$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+			}elseif(in_array("UNKNOWN", $mapState)){
+				$state['State'] = "UNKNOWN";
+				$state['Output'] = "State of child Map is  UNKNOWN";
+				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
 			}else{
 				$state['State'] = "OK";
 				$state['Output'] = "State of child map is OK";
-				$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+			}
+			
+		} else {
+			$state['State'] = "UNKNOWN";
+			$state['Output'] = "Child Map not readable";
+			$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+		}
+		
+		$IconPosition = $FRONTEND->fixIconPosition($Icon,$map['x'],$map['y']);
+		$FRONTEND->site[] = $IconPosition;
+		$Box = $FRONTEND->infoBox($map['type'],$map['name'],$map['service_description'],$state);
+		$FRONTEND->site[] = '<A HREF="./index.php?map='.$map['name'].'" TARGET="_self"><IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.'; BORDER="0"></A>';
+		$FRONTEND->site[] = "</DIV>";
+	}
+}	
+   
+// Handle objects of type "textbox"
+if(is_array($mapCfg['textbox'])) {
+	foreach ($mapCfg['textbox'] as $index => $textbox) {
+		$TextBox = $FRONTEND->TextBox($textbox['x'],$textbox['y'],$textbox['w'],$textbox['text']);
+		$FRONTEND->site[] = $TextBox;
+	}	
+}	
+	
+// Handle the type host.
+if (is_array($mapCfg['host'])){
+	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type host:');
+	foreach ($mapCfg['host'] as $index => $host) {
+		if(isset($host['line_type'])) {
+			if ($host['line_type'] != "20") {
+				$state = $BACKEND->checkStates($host['type'],$host['name'],$host['recognize_services'],$host['service_description'],0,$CgiPath,$CgiUser);
+				$FRONTEND->createBoxLine($host,$state,NULL);
+			} else {
+				list($host_name_from,$host_name_to) = explode(",", $host['name']);
+				list($service_description_from,$service_description_to) = explode(",", $host['service_description']);
+				$state1 = $BACKEND->checkStates($host['type'],$host_name_from,$host['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
+				$state2 = $BACKEND->checkStates($host['type'],$host_name_to,$host['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);
+				$FRONTEND->createBoxLine($host,$state1,$state2);
 			}
 		} else {
-			$state['State'] = "OK";
-			$state['Output'] = "Child Map not readable";
+ 			$state = $BACKEND->checkStates($host['type'],$host['name'],$host['recognize_services'],$host['service_description'],0,$CgiPath,$CgiUser);
+			$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
+
+			$Icon = $FRONTEND->fixIcon($state,$host,$defaultIcons,$host['type']);
+			$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
+	
+			$IconPosition = $FRONTEND->fixIconPosition($Icon,$host['x'],$host['y']);
+			$FRONTEND->site[] = $IconPosition;
+			$Box = $FRONTEND->infoBox($host['type'],$host['name'],$host['service_description'],$state);
+			$FRONTEND->site[] = $FRONTEND->createLink($HTMLCgiPath,$host['url'],$host['type'],$host['name'],$host['service_description']);
+			$FRONTEND->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
+			$FRONTEND->site[] = "</DIV>";
+			$debug[] = $DEBUG->debug_insertRow($debugStates);
 		}
-	
-		$IconPosition = $BACKEND->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
+	}
+}
+
+
+// Handle the type hostgroup.
+if (is_array($mapCfg['hostgroup'])){
+	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type hostgroup:');
+	foreach ($mapCfg['hostgroup'] as $index => $hostgroup) {
+		$state = $BACKEND->checkStates($hostgroup['type'],$hostgroup['name'],$hostgroup['recognize_services'],$hostgroup['service_description'],0,$CgiPath,$CgiUser);
+		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
+
+		$Icon = $FRONTEND->fixIcon($state,$hostgroup,$defaultIcons,$hostgroup['type']);
+		$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
+		
+		$IconPosition = $FRONTEND->fixIconPosition($Icon,$hostgroup['x'],$hostgroup['y']);
 		$FRONTEND->site[] = $IconPosition;
-		$Box = $FRONTEND->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
-		$FRONTEND->site[] = '<A HREF="./index.php?map='.$mapCfg[$arrayPos]['name'].'" TARGET="_self"><IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.'; BORDER="0"></A>';
-		$FRONTEND->site[] = "</DIV>";
-    
-	// Handle objects of type "textbox"
-    }elseif($mapCfg[$arrayPos]['type'] == 'textbox') {
-		$TextBox = $BACKEND->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
-		$FRONTEND->site[] = $TextBox;		
 	
-	// Handle objects of type "line" and take care about the differnt line_types
-	}elseif(isset($mapCfg[$arrayPos]['line_type'])) {
-	    if($mapCfg[$arrayPos]['line_type'] == '10' || $mapCfg[$arrayPos]['line_type'] == '11'){
-			$state = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
-			list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
-			list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
-			$x_middle = middle($x_from,$x_to);
-			$y_middle = middle($y_from,$y_to);
-			$IconPosition = $BACKEND->fixIconPosition('20x20.gif',$x_middle,$y_middle);
-			$Box = $FRONTEND->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
-			$FRONTEND->site[] = $IconPosition;
-			$FRONTEND->site[] = $link;
-			$FRONTEND->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
-			$FRONTEND->site[] = '</div>';
-
-	    } elseif($mapCfg[$arrayPos]['line_type'] == '20'){
-			list($host_name_from,$host_name_to) = explode(",", $mapCfg[$arrayPos]['name']);
-			list($service_description_from,$service_description_to) = explode(",", $mapCfg[$arrayPos]['service_description']);
-			$state_from = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$host_name_from,$mapCfg[$arrayPos]['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
-			$state_to = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$host_name_to,$mapCfg[$arrayPos]['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);
-
-			list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
-			list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
-			// From
-			$x_middle = middle2($x_from,$x_to);
-			$y_middle = middle2($y_from,$y_to);
-			$IconPosition = $BACKEND->fixIconPosition('20x20.gif',$x_middle,$y_middle);
-			$Box = $FRONTEND->infoBox($mapCfg[$arrayPos]['type'],$host_name_from,$service_description_from,$state_from);
-			$FRONTEND->site[] = $IconPosition;
-			$FRONTEND->site[] = $link;
-			$FRONTEND->site[] = '<img src= iconsets/20x20.gif '.$Box.';></A>';
-			$FRONTEND->site[] = '</div>';
-			// To
-			$x_middle = middle2($x_to,$x_from);
-			$y_middle = middle2($y_to,$y_from);
-			$IconPosition = $BACKEND->fixIconPosition('20x20.gif',$x_middle,$y_middle);
-			$Box = $FRONTEND->infoBox($mapCfg[$arrayPos]['type'],$host_name_to,$service_description_to,$state_to);
-			$FRONTEND->site[] = $IconPosition;
-			$FRONTEND->site[] = $link;
-			$FRONTEND->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
-			$FRONTEND->site[] = '</div>';
-		}	
-
-	// Handle all the other types (hosts, services, hostgroups, servicegroups)
-	}elseif(!isset($mapCfg[$arrayPos]['line_type'])) {
-		$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the types hosts, services, hostgroups, servicegroups:');
-		
-		$state = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);
-		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$arrayPos);
-
-		$Icon = $BACKEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
-		$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$arrayPos);
-		
-		$IconPosition = $BACKEND->fixIconPosition($Icon,$mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y']);
-		$FRONTEND->site[] = $IconPosition;
-		
-		$Box = $FRONTEND->infoBox($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['service_description'],$state);
-		$FRONTEND->site[] = $link;
+		$Box = $FRONTEND->infoBox($hostgroup['type'],$hostgroup['name'],$hostgroup['service_description'],$state);
+		$FRONTEND->site[] = $FRONTEND->createLink($HTMLCgiPath,$hostgroup['url'],$hostgroup['type'],$hostgroup['name'],$hostgroup['service_description']);
 		$FRONTEND->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
 		$FRONTEND->site[] = "</DIV>";
 		$debug[] = $DEBUG->debug_insertRow($debugStates);
 	}
-    $arrayPos++;
-
-//~End of main loop
 }
+
+// Handle the type service.
+if (is_array($mapCfg['service'])){
+	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type service:');
+	foreach ($mapCfg['service'] as $index => $service) {
+		if(isset($service['line_type'])) {
+			if ($service['line_type'] != "20") {
+				$state = $BACKEND->checkStates($service['type'],$service['name'],$service['recognize_services'],$service['service_description'],0,$CgiPath,$CgiUser);
+				$FRONTEND->createBoxLine($service,$state,NULL);
+			} else {
+				list($host_name_from,$host_name_to) = explode(",", $service['name']);
+				list($service_description_from,$service_description_to) = explode(",", $service['service_description']);
+				$state1 = $BACKEND->checkStates($service['type'],$host_name_from,$service['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
+				$state2 = $BACKEND->checkStates($service['type'],$host_name_to,$service['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);
+				$FRONTEND->createBoxLine($service,$state1,$state2);
+			}
+		} else {
+			$state = $BACKEND->checkStates($service['type'],$service['name'],$service['recognize_services'],$service['service_description'],0,$CgiPath,$CgiUser);
+			$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
+
+			$Icon = $FRONTEND->fixIcon($state,$service,$defaultIcons,$service['type']);
+			$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
+	
+			$IconPosition = $FRONTEND->fixIconPosition($Icon,$service['x'],$service['y']);
+			$FRONTEND->site[] = $IconPosition;
+	
+			$Box = $FRONTEND->infoBox($service['type'],$service['name'],$service['service_description'],$state);
+			$FRONTEND->site[] = $FRONTEND->createLink($HTMLCgiPath,$service['url'],$service['type'],$service['name'],$service['service_description']);
+			$FRONTEND->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
+			$FRONTEND->site[] = "</DIV>";
+			$debug[] = $DEBUG->debug_insertRow($debugStates);
+		}
+	}
+}
+
+// Handle the type servicegroup.
+if (is_array($mapCfg['servicegroup'])){
+	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type servicegroup:');
+	foreach ($mapCfg['servicegroup'] as $index => $servicegroup) {
+	$state = $BACKEND->checkStates($servicegroup['type'],$servicegroup['name'],$servicegroup['recognize_services'],$servicegroup['service_description'],0,$CgiPath,$CgiUser);
+		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
+
+		$Icon = $FRONTEND->fixIcon($state,$servicegroup,$defaultIcons,$servicegroup['type']);
+		$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
+	
+		$IconPosition = $FRONTEND->fixIconPosition($Icon,$servicegroup['x'],$servicegroup['y']);
+		$FRONTEND->site[] = $IconPosition;
+	
+		$Box = $FRONTEND->infoBox($servicegroup['type'],$servicegroup['name'],$servicegroup['service_description'],$state);
+		$FRONTEND->site[] = $FRONTEND->createLink($HTMLCgiPath,$servicegroup['url'],$servicegroup['type'],$servicegroup['name'],$servicegroup['service_description']);
+		$FRONTEND->site[] = '<IMG SRC='.$iconHTMLBaseFolder.$Icon.' '.$Box.';></A>';
+		$FRONTEND->site[] = "</DIV>";
+		$debug[] = $DEBUG->debug_insertRow($debugStates);
+	}
+}
+
 $FRONTEND->debug($debug);
 $FRONTEND->closeSite();
 $FRONTEND->printSite();

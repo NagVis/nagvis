@@ -21,7 +21,7 @@ class frontend
 	* @param string $RefreshTime
 	* @param string $rotateUrl
 	*
-	* @author Michael Lübben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
     */
 	function openSite($rotateUrl) {
 		include("./etc/config.inc.php");
@@ -40,7 +40,7 @@ class frontend
 	/**
 	* Create a Web-Side from the Array site[].
 	*
-	* @author Michael Lübben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
 	*/
 	function printSite() {
 		foreach ($this->site as $row) {
@@ -54,7 +54,7 @@ class frontend
 	* @param array $Menu
 	* @see function class.ReadFiles.php -> readMenu()
 	*
-	* @author Michael Lübben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
     */
 	function makeHeaderMenu($Menu) {
 		include("./etc/config.inc.php");
@@ -82,7 +82,7 @@ class frontend
 	/**
 	* Closed a Web-Site in the Array site[]
 	*
-	* @author Michael Lübben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
     */
 	function closeSite() {
 		$this->site[] = '</DIV>';
@@ -115,8 +115,7 @@ class frontend
 	* @param string $messagnr
 	* @param string $vars
 	*
-    * @author Michael Lübben <michael_luebben@web.de>
-	* @author ...
+    * @author Michael Luebben <michael_luebben@web.de>
     */
 	function messageBox($messagenr, $vars) {
 		include("./etc/config.inc.php");
@@ -184,7 +183,7 @@ class frontend
 	* @param string $name
 	* @param string $service_description
 	*
-	* @author Michael Lübben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
 	*/
 	function createLink($HTMLCgiPath,$mapUrl,$type,$name,$service_description) {
 		if(isset($mapUrl)) {
@@ -206,7 +205,7 @@ class frontend
 	*
 	* @param string $map_image
 	*
-	* @author Michael Lübben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
 	*/
 	function printMap($map_image)	{
 		include("./etc/config.inc.php");
@@ -226,7 +225,7 @@ class frontend
 	* @param string $ServiceDesc
 	* @param array $stateArray
 	*
-	* @author Michael Lübben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
     */
 	function infoBox($Type,$Hostname,$ServiceDesc,$stateArray) {
 		include("./etc/config.inc.php");
@@ -279,7 +278,7 @@ class frontend
 	*
 	* @param array $debug
 	*
-	* @author Michael Lbben <michael_luebben@web.de>
+	* @author Michael Luebben <michael_luebben@web.de>
 	*/
 	function debug($debug)
 	{
@@ -310,6 +309,183 @@ class frontend
 			$this->site[] = '  </TD>';
 			$this->site[] = ' </TR>';
 			$this->site[] = '</TABLE>';
+		}
+	}
+	
+	/**
+	* Create a position fpr a icon aon the map
+	*
+	* @param string $Icon
+	* @param string $x
+	* @param string $y
+	*
+	* @author Michael Luebben <michael_luebben@web.de>
+	*/
+	function fixIconPosition($Icon,$x,$y) {
+		$size = getimagesize("./iconsets/$Icon");
+		$posy = $y-($size[1]/2);
+		$posx = $x-($size[0]/2);
+		$IconDIV = '<DIV CLASS="icon" STYLE="left: '.$posx.'px; top : '.$posy.'px">';
+		return($IconDIV);
+	}	
+	
+	/**
+	* Create a Link for a Line
+	*
+	* @param array $mapCfg
+	*
+	* @author FIXME
+	*/
+	function createBoxLine($mapCfg,$state1,$state2) {
+		
+		global $HTMLCgiPath;
+		
+	    if($mapCfg['line_type'] == '10' || $mapCfg['line_type'] == '11'){
+			list($x_from,$x_to) = explode(",", $mapCfg['x']);
+			list($y_from,$y_to) = explode(",", $mapCfg['y']);
+			$x_middle = middle($x_from,$x_to);
+			$y_middle = middle($y_from,$y_to);
+			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
+			$Box = $this->infoBox($mapCfg['type'],$mapCfg['name'],$mapCfg['service_description'],$state1);
+			$this->site[] = $IconPosition;
+			$this->site[] = $this->createLink($HTMLCgiPath,$mapCfg['url'],$mapCfg['type'],$mapCfg['name'],$mapCfg['service_description']);
+			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
+			$this->site[] = '</div>';
+		} elseif($mapCfg['line_type'] == '20') {
+			list($host_name_from,$host_name_to) = explode(",", $mapCfg['name']);
+			list($service_description_from,$service_description_to) = explode(",", $mapCfg['service_description']);
+			list($x_from,$x_to) = explode(",", $mapCfg['x']);
+			list($y_from,$y_to) = explode(",", $mapCfg['y']);
+			// From
+			$x_middle = middle2($x_from,$x_to);
+			$y_middle = middle2($y_from,$y_to);
+			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
+			$Box = $this->infoBox($mapCfg['type'],$host_name_from,$service_description_from,$state1);
+			$this->site[] = $IconPosition;
+			$this->site[] = $this->createLink($HTMLCgiPath,$mapCfg['url'],$mapCfg['type'],$host_name_from,$service_description_from);
+			$this->site[] = '<img src= iconsets/20x20.gif '.$Box.';></A>';
+			$this->site[] = '</div>';
+			// To
+			$x_middle = middle2($x_to,$x_from);
+			$y_middle = middle2($y_to,$y_from);
+			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
+			$Box = $this->infoBox($mapCfg['type'],$host_name_to,$service_description_to,$state2);
+			$this->site[] = $IconPosition;
+			$this->site[] = $this->createLink($HTMLCgiPath,$mapCfg['url'],$mapCfg['type'],$host_name_to,$service_description_to);
+			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
+			$this->site[] = '</div>';
+		}
+	}
+	
+	/**
+	* Create a Comment-Textbox
+	*
+	* @param string $x
+	* @param string $y
+	* @param string $width
+	* @param string $text
+	*
+	* @author Joerg Linge
+	*/
+	function TextBox($x,$y,$width,$text) {
+		$Comment = '<div class="box" style="left : '.$x.'px; top : '.$y.'px; width : '.$width.'px; overflow : visible;">';	
+		$Comment .= '<span>'.$text.'</span>';
+		$Comment .= '</div>';
+		return($Comment);	
+	}	
+	
+	/**
+	* Search Icon for a State
+	*
+	* @param string $State
+	* @param array $mapCfg
+	* @param string $IconConfigCfg
+	* @param string $type
+	*
+	* @author Michael Luebben <michael_luebben@web.de>
+	*/
+	function fixIcon($State,$mapCfg,$IconConfigCfg,$Type) {
+		$rotateUrl = "";
+		unset($Icon);
+                $valid_format = array(
+                        0=>"gif",
+                        1=>"png",
+                        2=>"bmp",
+                        3=>"jpg",
+                        4=>"jpeg"
+                );
+		$StateLow = strtolower($State['State']);
+		if(!isset($mapCfg['iconset'])) {
+			$IconPath = "std_medium";
+		}
+		else {
+			$IconPath = $mapCfg['iconset'];
+		}
+		
+		switch($Type) {
+			case 'map':
+				switch($StateLow) {
+					case 'ok':
+					case 'warning':
+					case 'critical':
+					case 'unknown':
+					case 'ack':		
+						$Icon = $IconPath.'_'.$StateLow;
+					break;
+					default:
+						$Icon = $IconPath."_error";
+					break;
+				}
+			break;
+			case 'host':
+			case 'hostgroup':
+				switch($StateLow) {
+					case 'down':
+					case 'unknown':
+					case 'critical':
+					case 'unreachable':
+					case 'warning':
+					case 'ack':
+					case 'up':
+						$Icon = $IconPath.'_'.$StateLow;
+					break;
+					default:
+						$Icon = $IconPath."_error";
+					break;
+				}
+			break;
+			case 'service':
+			case 'servicegroup':
+				switch($StateLow) {
+					case 'critical':
+					case 'warning':
+					case 'sack':
+					case 'unknown':
+					case 'ok':
+						$Icon = $IconPath.'_'.$StateLow;
+					break;
+					default:	
+						$Icon = $IconPath."_error";
+					break;
+				}
+			break;
+			default:
+					echo "Unkown Object Type!";
+					$Icon = $mapCfg['iconset']."_error";
+			break;
+		}
+
+		for($i=0;$i<count($valid_format);$i++) {
+			if(file_exists($Base."iconsets/".$Icon.".".$valid_format[$i])) {
+                                $Icon .= ".".$valid_format[$i];
+			}
+		}
+		if(file_exists($Base."iconsets/".$Icon)) {	
+			return $Icon;
+		}
+		else {
+			$Icon = $IconPath."_error.png";
+			return $Icon;
 		}
 	}
 
