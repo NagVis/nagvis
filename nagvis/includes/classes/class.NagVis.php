@@ -404,7 +404,7 @@ class frontend
 	*
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
-	function fixIcon($State,$mapCfg,$IconConfigCfg,$Type) {
+	function fixIcon($State,$mapCfg,$IconMapGlobal,$IconConfigCfg,$Type) {
 		$rotateUrl = "";
 		unset($Icon);
                 $valid_format = array(
@@ -415,11 +415,17 @@ class frontend
                         4=>"jpeg"
                 );
 		$StateLow = strtolower($State['State']);
-		if(!isset($mapCfg['iconset'])) {
-			$IconPath = "std_medium";
+		if(isset($mapCfg['iconset'])) {
+			$IconPath = $mapCfg['iconset'];
+		}
+		elseif(isset($IconMapGlobal)) {
+			$IconPath = $IconMapGlobal;
+		}
+		elseif(isset($IconConfigCfg)) {
+			$IconPath = $IconConfigCfg;
 		}
 		else {
-			$IconPath = $mapCfg['iconset'];
+			$IconPath = "std_medium";
 		}
 		
 		switch($Type) {

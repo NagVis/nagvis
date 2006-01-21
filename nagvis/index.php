@@ -57,6 +57,7 @@ $rotateUrl = $CHECKIT->check_rotate();
 //FIXME sollte erst NACH den ganzen Plausis gemacht werden
 if(file_exists($cfgFolder.$map.".cfg")) {
     $mapCfg = $READFILE->readNagVisCfgNew($map);
+    $IconMapGlobal = $mapCfg['global']['1']['iconset'];
     $map_image_array = explode(",",trim($mapCfg['global'][1]['map_image']));
     $map_image=$map_image_array[0];
 }
@@ -135,25 +136,25 @@ if (is_array($mapCfg['map'])){
 			if(in_array("DOWN", $mapState) || in_array("CRITICAL", $mapState)){
 				$state['State'] = "CRITICAL";
 				$state['Output'] = "State of child Map is CRITICAL";
-				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+				$Icon = $FRONTEND->fixIcon($state,$map,$mapCfg['global']['iconset'],$defaultIcons,$map['type']);
 			}elseif(in_array("WARNING", $mapState)){
 				$state['State'] = "WARNING";
 				$state['Output'] = "State of child Map is  WARNING";
-				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+				$Icon = $FRONTEND->fixIcon($state,$map,$mapCfg['global']['iconset'],$defaultIcons,$map['type']);
 			}elseif(in_array("UNKNOWN", $mapState)){
 				$state['State'] = "UNKNOWN";
 				$state['Output'] = "State of child Map is  UNKNOWN";
-				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+				$Icon = $FRONTEND->fixIcon($state,$map,$mapCfg['global']['iconset'],$defaultIcons,$map['type']);
 			}else{
 				$state['State'] = "OK";
 				$state['Output'] = "State of child map is OK";
-				$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+				$Icon = $FRONTEND->fixIcon($state,$map,$IconMapGlobal,$defaultIcons,$map['type']);
 			}
 			
 		} else {
 			$state['State'] = "UNKNOWN";
 			$state['Output'] = "Child Map not readable";
-			$Icon = $FRONTEND->fixIcon($state,$map,$defaultIcons,$map['type']);
+			$Icon = $FRONTEND->fixIcon($state,$map,$IconMapGlobal,$defaultIcons,$map['type']);
 		}
 		
 		$IconPosition = $FRONTEND->fixIconPosition($Icon,$map['x'],$map['y']);
@@ -191,7 +192,7 @@ if (is_array($mapCfg['host'])){
  			$state = $BACKEND->checkStates($host['type'],$host['name'],$host['recognize_services'],$host['service_description'],0,$CgiPath,$CgiUser);
 			$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
-			$Icon = $FRONTEND->fixIcon($state,$host,$defaultIcons,$host['type']);
+			$Icon = $FRONTEND->fixIcon($state,$host,$IconMapGlobal,$defaultIcons,$host['type']);
 			$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
 	
 			$IconPosition = $FRONTEND->fixIconPosition($Icon,$host['x'],$host['y']);
@@ -213,7 +214,7 @@ if (is_array($mapCfg['hostgroup'])){
 		$state = $BACKEND->checkStates($hostgroup['type'],$hostgroup['name'],$hostgroup['recognize_services'],$hostgroup['service_description'],0,$CgiPath,$CgiUser);
 		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
-		$Icon = $FRONTEND->fixIcon($state,$hostgroup,$defaultIcons,$hostgroup['type']);
+		$Icon = $FRONTEND->fixIcon($state,$hostgroup,$IconMapGlobal,$defaultIcons,$hostgroup['type']);
 		$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
 		
 		$IconPosition = $FRONTEND->fixIconPosition($Icon,$hostgroup['x'],$hostgroup['y']);
@@ -246,7 +247,7 @@ if (is_array($mapCfg['service'])){
 			$state = $BACKEND->checkStates($service['type'],$service['name'],$service['recognize_services'],$service['service_description'],0,$CgiPath,$CgiUser);
 			$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
-			$Icon = $FRONTEND->fixIcon($state,$service,$defaultIcons,$service['type']);
+			$Icon = $FRONTEND->fixIcon($state,$service,$IconMapGlobal,$defaultIcons,$service['type']);
 			$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
 	
 			$IconPosition = $FRONTEND->fixIconPosition($Icon,$service['x'],$service['y']);
@@ -268,7 +269,7 @@ if (is_array($mapCfg['servicegroup'])){
 	$state = $BACKEND->checkStates($servicegroup['type'],$servicegroup['name'],$servicegroup['recognize_services'],$servicegroup['service_description'],0,$CgiPath,$CgiUser);
 		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
-		$Icon = $FRONTEND->fixIcon($state,$servicegroup,$defaultIcons,$servicegroup['type']);
+		$Icon = $FRONTEND->fixIcon($state,$servicegroup,$IconMapGlobal,$defaultIcons,$servicegroup['type']);
 		$debug[] = $DEBUG->debug_fixIcon($debugStates,$debugFixIcon,$index);
 	
 		$IconPosition = $FRONTEND->fixIconPosition($Icon,$servicegroup['x'],$servicegroup['y']);
