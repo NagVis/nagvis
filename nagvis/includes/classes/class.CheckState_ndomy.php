@@ -169,7 +169,7 @@ class backend
 			return($state);
 		}
 		
-		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ndo_hostgroups WHERE object_id='$objectId[0]'");
+		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ndo_hostgroups WHERE hostgroup_object_id='$objectId[0]'");
 		$hostGroupId = mysql_fetch_row($QUERYHANDLE);
 		
 		$hostsCritical=0;
@@ -248,7 +248,7 @@ class backend
 		}
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
 
-		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE object_id = '$serviceObjectId[0]'");
+		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE service_object_id = '$serviceObjectId[0]'");
 		$service = mysql_fetch_array($QUERYHANDLE);				
 		if($service['current_state'] == 0) {
 				$state['Count'] = "1";
@@ -307,7 +307,7 @@ class backend
 				$objectId = $services['service_object_id'];
 
 				//Query the Servicestates
-				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE object_id = '$objectId'");
+				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE service_object_id = '$objectId'");
 				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
 				if($currentService['current_state'] == 0) {
 					$servicesOk++;
@@ -432,109 +432,5 @@ class backend
 		}	
 		return($state);
 	}
-	
-	function fixIcon($State,$mapCfg,$Index,$IconConfigCfg,$Type) {
-		$rotateUrl = "";
-		unset($Icon);
-                $valid_format = array(
-                        0=>"gif",
-                        1=>"png",
-                        2=>"bmp",
-                        3=>"jpg",
-                        4=>"jpeg"
-                );
-		$StateLow = strtolower($State['State']);
-		if(!isset($mapCfg[$Index]['iconset'])) {
-			$IconPath = "std_medium";
-		}
-		else {
-			$IconPath = $mapCfg[$Index]['iconset'];
-		}
-		
-		switch($Type) {
-			case 'map':
-				switch($StateLow) {
-					case 'ok':
-					case 'warning':
-					case 'critical':
-					case 'unknown':
-					case 'ack':		
-						$Icon = $IconPath.'_'.$StateLow;
-					break;
-					default:
-						$Icon = $IconPath."_error";
-					break;
-				}
-			break;
-			case 'host':
-			case 'hostgroup':
-				switch($StateLow) {
-					case 'down':
-					case 'unknown':
-					case 'critical':
-					case 'unreachable':
-					case 'warning':
-					case 'ack':
-					case 'up':
-						$Icon = $IconPath.'_'.$StateLow;
-					break;
-					default:
-						$Icon = $IconPath."_error";
-					break;
-				}
-			break;
-			case 'service':
-			case 'servicegroup':
-				switch($StateLow) {
-					case 'critical':
-					case 'warning':
-					case 'sack':
-					case 'unknown':
-					case 'ok':
-						$Icon = $IconPath.'_'.$StateLow;
-					break;
-					default:	
-						$Icon = $IconPath."_error";
-					break;
-				}
-			break;
-			default:
-					echo "Unkown Object Type!";
-					$Icon = $mapCfg[$Index]['iconset']."_error";
-			break;
-		}
-
-		for($i=0;$i<count($valid_format);$i++) {
-			if(file_exists($Base."iconsets/".$Icon.".".$valid_format[$i])) {
-                                $Icon .= ".".$valid_format[$i];
-			}
-		}
-		if(file_exists($Base."iconsets/".$Icon)) {	
-			return $Icon;
-		}
-		else {
-			$Icon = $IconPath."_error.png";
-			return $Icon;
-		}
-	}
-	// FIXME: Ha: Move over to other class (not special html backend related)
-	// Positionierung auf den Mittelpunkt der Icons umrechen
-	// Jli
-	function fixIconPosition($Icon,$x,$y) {
-		$size = getimagesize("./iconsets/$Icon");
-		$posy = $y-($size[1]/2);
-		$posx = $x-($size[0]/2);
-		$IconDIV = '<DIV CLASS="icon" STYLE="left: '.$posx.'px; top : '.$posy.'px">';
-		return($IconDIV);
-	}	
-	// Comment Box
-	function TextBox($x,$y,$width,$text) {
-	
-		$Comment = '<div class="box" style="left : '.$x.'px; top : '.$y.'px; width : '.$width.'px; overflow : visible;">';	
-		$Comment .= '<span>'.$text.'</span>';
-		$Comment .= '</div>';
-		return($Comment);	
-	
-	}	
 }
 ?>
