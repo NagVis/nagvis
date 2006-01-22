@@ -92,10 +92,10 @@ if (is_array($mapCfg['map'])){
 		if(file_exists($cfgFolder.$map['name'].'.cfg')) {
 			unset($mapState);
 			unset($stateState); 
-			$allMapCfgState = $READFILE->readNagVisCfgNew($map['name']);
+			$childMapCfg = $READFILE->readNagVisCfgNew($map['name']);
 			
-			if (is_array($mapCfg['host'])){
-				foreach ($mapCfg['host'] as $index => $host) {
+			if (is_array($childMapCfg['host'])){
+				foreach ($childMapCfg['host'] as $index => $host) {
 					if(isset($host['line_type'])) {
 						list($host_name_from,$host_name_to) = explode(",", $host['name']);
 						list($service_description_from,$service_description_to) = explode(",", $host['service_description']);
@@ -107,14 +107,14 @@ if (is_array($mapCfg['map'])){
 					$mapState[] = $stateState['State'];
 				}
 			}
-			if (is_array($mapCfg['hostgroup'])){
-				foreach ($mapCfg['hostgroup'] as $index => $hostgroup) {
+			if (is_array($childMapCfg['hostgroup'])){
+				foreach ($childMapCfg['hostgroup'] as $index => $hostgroup) {
 					$stateState = $BACKEND->checkStates($hostgroup['type'],$hostgroup['name'],$hostgroup['recognize_services'],$hostgroup['service_description'],0,$CgiPath,$CgiUser);
 					$mapState[] = $stateState['State'];
 				}
 			}
-			if (is_array($mapCfg['service'])){
-				foreach ($mapCfg['service'] as $index => $service) {
+			if (is_array($childMapCfg['service'])){
+				foreach ($childMapCfg['service'] as $index => $service) {
 					if(isset($service['line_type'])) {
 						list($host_name_from,$host_name_to) = explode(",", $service['name']);
 						list($service_description_from,$service_description_to) = explode(",", $service['service_description']);
@@ -126,8 +126,8 @@ if (is_array($mapCfg['map'])){
 					$mapState[] = $stateState['State'];
 				}
 			}
-			if (is_array($mapCfg['servicegroup'])){
-				foreach ($mapCfg['servicegroup'] as $index => $servicegroup) {
+			if (is_array($childMapCfg['servicegroup'])){
+				foreach ($childMapCfg['servicegroup'] as $index => $servicegroup) {
 					$stateState = $BACKEND->checkStates($servicegroup['type'],$servicegroup['name'],$servicegroup['recognize_services'],$servicegroup['service_description'],0,$CgiPath,$CgiUser);
 					$mapState[] = $stateState['State'];
 				}
