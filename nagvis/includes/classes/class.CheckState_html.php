@@ -83,6 +83,7 @@ class backend
 				}
 				$state['Count'] = $serviceTotalsCRITICAL[1];
                 $state['Output'] = $serviceTotalsCRITICAL[1].' Services in state CRITICAL';
+		$state['State'] = 'CRITICAL';
             }
             elseif(isset($serviceTotalsWARNING[1]) && $serviceTotalsWARNING != 0) {
 				if(!isset($hostTotalsACK)) {
@@ -90,6 +91,7 @@ class backend
                 }
                 $state['Count'] = $serviceTotalsWARNING[1];
                 $state['Output'] = $serviceTotalsWARNING[1].' Service in state WARNING';
+		$state['State'] = 'WARNING';
             }
             elseif(isset($serviceTotalsUNKNOWN[1]) && $serviceTotalsUNKNOWN != 0) {
 				if(!isset($hostTotalsACK)) {
@@ -97,6 +99,7 @@ class backend
                 }
                 $state['Count'] = $serviceTotalsUNKNOWN[1];
                 $state['Output'] = $serviceTotalsUNKNOWN[1].' Service in state UNKNOWN';
+		$state['State'] = 'UNKNOWN';
             }
             elseif(isset($serviceTotalsOK[1]) && $serviceTotalsOK[1] != 0) {
                 $state['Count'] = $serviceTotalsOK[1];
