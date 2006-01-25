@@ -453,7 +453,7 @@ for($x="1";$x<=$countStates;$x++)
 	}
 	else
 	{
-		$Icon_name = $FRONTEND->fixIcon($state,$mapCfg,$arrayPos,$defaultIcons,$mapCfg[$arrayPos]['type']);
+		$Icon_name = $FRONTEND->fixIcon($state,$mapCfg,$mapCfg['1']['iconset'],$defaultIcons,$mapCfg[$arrayPos]['type']);
 	}
 		
 	# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display
