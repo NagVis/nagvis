@@ -124,7 +124,10 @@ foreach($type_tab["$mytype"] as $propname)
 			}
 			
 			if ($files) natcasesort($files); 
-			foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
+			foreach ($files as $file) { 
+			$file_save=explode("(",$file);
+			$save=trim($file_save['0']);
+			print "<option value=\"$save\">$file</option>"; }
 			
 		}
 		closedir($handle);
