@@ -106,11 +106,21 @@ foreach($type_tab["$mytype"] as $propname)
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
 		if(substr($propname,strlen($propname)-1) != "*") print "<option value=\"\"></option>";
 		$files=array();
+		$valid_format = array(
+                        0=>"gif",
+                        1=>"png",
+                        2=>"bmp",
+                        3=>"jpg",
+                        4=>"jpeg"
+                );
 		if ($handle = opendir($iconBaseFolder)) 
 		{
  			while (false !== ($file = readdir($handle))) 
 			{
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-7,7) == "_ok.png" ) { $files[]=substr($file,0,strlen($file)-7);}				
+				$file_ext=explode(".",$file);
+				//if ($file != "." && $file != ".." && substr($file,strlen($file)-7,7) == "_ok.png" )
+				if ($file != "." && $file != ".." && substr($file_ext['0'],strlen($file_ext['0'])-3,3) == "_ok" && in_array($file_ext['1'],$valid_format))
+			 	{ $files[]=substr($file,0,strlen($file)-7)."(".$file_ext['1'].")";}				
 			}
 			
 			if ($files) natcasesort($files); 
@@ -130,7 +140,8 @@ foreach($type_tab["$mytype"] as $propname)
 		{
  			while (false !== ($file = readdir($handle))) 
 			{
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".png" ) { $files[]=$file;}				
+				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".png" ) { 
+				$files[]=$file;}				
 			}
 			
 			if ($files) natcasesort($files); 
