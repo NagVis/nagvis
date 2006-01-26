@@ -19,16 +19,19 @@ class backend
 	var $dbPrefix;
 	var $dbInstanceId;
 
-	//The backendInitialize function will be needed for ever, in backends wich need to do nothing here
+	//The backendInitialize function will be needed ever, in backends wich need to do nothing here
 	//a simple "return 0" function should be implemented
 	function backendInitialize() {
-		//Connection Parameters, ONLY for testing here, should be defined in the config file later
+		
+		//Connection Parameters, ONLY for testing here, will be defined in the config file later ===============
 		$dbUser="nagios";
 		$dbPass="nagios";
 		$dbName="nagios";
 		$dbHost="localhost";
 		$this->dbPrefix="ndo_";
 		$this->dbInstanceId="1";
+		//End Connection Parameters =============================================================================
+
 
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
