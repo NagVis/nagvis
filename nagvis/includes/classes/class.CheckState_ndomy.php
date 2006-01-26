@@ -3,13 +3,15 @@
 ##     	        NagVis - The Nagios Visualisation Addon                 ##
 ##########################################################################
 ## class.CheckState_ndomy- Backend module to fetch the status from      ##
-##             			   Nagios NDO Mysql DB. All not special to one	##
-##						   Backend related things should removed here!  ##
-##						   (e.g. fixIcon, this is needed for ALL        ##
-##						   Backends	)									##
+##                         Nagios NDO Mysql DB. All not special to one	##
+##                         Backend related things should removed here!  ##
+##                         (e.g. fixIcon, this is needed for ALL        ##
+##                         Backends	)									##
 ##########################################################################
 ## Licenced under the terms and conditions of the GPL Licence, 			##
 ## please see attached "LICENCE" file	                                ##
+##########################################################################
+## This Backend is maintained by Andreas Husch (dowanup@nagios-wiki.de) ##
 ##########################################################################
 
 class backend
