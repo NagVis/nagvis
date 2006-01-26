@@ -14,6 +14,9 @@
 
 class backend
 {
+	var $dbPrefix;
+	var $dbInstanceId;
+
 	//The backendInitialize function will be needed for ever, in backends wich need to do nothing here
 	//a simple "return 0" function should be implemented
 	function backendInitialize() {
@@ -22,6 +25,8 @@ class backend
 		$dbPass="nagios";
 		$dbName="nagios";
 		$dbHost="localhost";
+		$this->dbPrefix="ndo_";
+		$this->dbInstanceId="1";
 
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
@@ -40,7 +45,7 @@ class backend
 	// Get the state for a HOST #####################################################################################################
 	function findStateHost($hostName,$recognizeServices,$statusCgi,$cgiUser) {
 		
-		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE (objecttype_id = '1' AND name1 = '$hostName')");
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id = '1' AND name1 = '$hostName' AND instance_id='$this->dbInstanceId'");
 		$hostObjectId = mysql_fetch_row($QUERYHANDLE);  
 	
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
@@ -50,7 +55,7 @@ class backend
 			return($state);
 		}
 
-		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_hoststatus  WHERE host_object_id = '$hostObjectId[0]'");
+		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '$hostObjectId[0]' AND instance_id='$this->dbInstanceId'");
 		$hostState = mysql_fetch_array($QUERYHANDLE);
 
 		//Host is UP
@@ -101,11 +106,11 @@ class backend
 			$servicesUnknown=0;
 			$servicesAck=0;
 			//Get the object ids from all services of this host
-			$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='2' AND name1='$hostName'");
+			$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='2' AND name1='$hostName' AND instance_id='$this->dbInstanceId'");
 			while($services = mysql_fetch_array($QUERYHANDLE)) {
 				$objectId = $services['object_id'];
 				//Query the Servicestates
-				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE service_object_id = '$objectId'");
+				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
 				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
 				if($currentService['current_state'] == 0) {
 					$servicesOk++;
@@ -159,7 +164,7 @@ class backend
 	// Hostgroup ###############################################################################################################
 	function findStateHostgroup($hostGroupName,$recognizeServices,$statusCgi,$cgiUser) {
 		//First we have to get the hostgroup_id
-		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='3' AND name1='$hostGroupName'");
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='3' AND name1='$hostGroupName' AND instance_id='$this->dbInstanceId'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
 		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
@@ -169,7 +174,7 @@ class backend
 			return($state);
 		}
 		
-		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ndo_hostgroups WHERE hostgroup_object_id='$objectId[0]'");
+		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ".$this->dbPrefix."hostgroups WHERE hostgroup_object_id='$objectId[0]' AND instance_id='$this->dbInstanceId'");
 		$hostGroupId = mysql_fetch_row($QUERYHANDLE);
 		
 		$hostsCritical=0;
@@ -179,12 +184,12 @@ class backend
 		$hostsOk=0;
 
 		//Now we have the Group Id and can get the hosts
-		$QUERYHANDLE = mysql_query("SELECT host_object_id FROM ndo_hostgroup_members WHERE hostgroup_id='$hostGroupId[0]'");	
+		$QUERYHANDLE = mysql_query("SELECT host_object_id FROM ".$this->dbPrefix."hostgroup_members WHERE hostgroup_id='$hostGroupId[0]' AND instance_id='$this->dbInstanceId'");	
 		while($hosts = mysql_fetch_array($QUERYHANDLE)) {
 				$objectId = $hosts['host_object_id'];
 				//Get the Host Name for the objectId Again so we can use our own host function
 				//this ist not really nice because the name gets changed back to the id there, maybe split the host funktions in to parts
-				$QUERYHANDLE_2 = mysql_query("SELECT name1 FROM ndo_objects WHERE (objecttype_id = '1' AND object_id = '$objectId')");
+				$QUERYHANDLE_2 = mysql_query("SELECT name1 FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '1' AND object_id = '$objectId' AND instance_id='$this->dbInstanceId')");
 				$hostName = mysql_fetch_array($QUERYHANDLE_2);  
 				
 				$currentHostState = $this->findStateHost($hostName['name1'],$recognizeServices,"","");
@@ -239,7 +244,7 @@ class backend
 
 	// Service #####################################################################################################################
 	function findStateService($hostName,$serviceName,$StatusCgi,$CgiUser) {
-		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE (objecttype_id = '2' AND name1 = '$hostName' AND name2 ='$serviceName' )");
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '2' AND name1 = '$hostName' AND name2 ='$serviceName' AND instance_id='$this->dbInstanceId')");
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			//FIXME: All this outputs should be handled over a language file
 			$state['State'] = "ERROR";
@@ -248,7 +253,7 @@ class backend
 		}
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
 
-		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE service_object_id = '$serviceObjectId[0]'");
+		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'");
 		$service = mysql_fetch_array($QUERYHANDLE);				
 		if($service['current_state'] == 0) {
 				$state['Count'] = "1";
@@ -282,7 +287,7 @@ class backend
 	// Servicegroup ############################################################################################################
 	function findStateServicegroup($serviceGroupName,$StatusCgi,$CgiUser) {
 		//First we have to get the servicegroup_id
-		$QUERYHANDLE = mysql_query("SELECT object_id FROM ndo_objects WHERE objecttype_id='4' AND name1='$serviceGroupName'");
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='4' AND name1='$serviceGroupName' AND instance_id='$this->dbInstanceId'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
 	
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
@@ -292,7 +297,7 @@ class backend
 			return($state);
 		}
 		
-		$QUERYHANDLE = mysql_query("SELECT servicegroup_id FROM ndo_servicegroups WHERE object_id='$objectId[0]'");
+		$QUERYHANDLE = mysql_query("SELECT servicegroup_id FROM ".$this->dbPrefix."servicegroups WHERE servicegroup_object_id='$objectId[0]' AND instance_id='$this->dbInstanceId'");
 		$serviceGroupId = mysql_fetch_row($QUERYHANDLE);
 		
 		$servicesCritical=0;
@@ -302,12 +307,12 @@ class backend
 		$servicesOk=0;
 
 		//Now we have the Group Id and can get the hosts
-		$QUERYHANDLE = mysql_query("SELECT service_object_id FROM ndo_servicegroup_members WHERE servicegroup_id='$serviceGroupId[0]'");	
+		$QUERYHANDLE = mysql_query("SELECT service_object_id FROM ".$this->dbPrefix."servicegroup_members WHERE servicegroup_id='$serviceGroupId[0]' AND instance_id='$this->dbInstanceId'");	
 		while($services = mysql_fetch_array($QUERYHANDLE)) {
 				$objectId = $services['service_object_id'];
 
 				//Query the Servicestates
-				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ndo_servicestatus WHERE service_object_id = '$objectId'");
+				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
 				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
 				if($currentService['current_state'] == 0) {
 					$servicesOk++;
@@ -423,7 +428,6 @@ class backend
 		}
 		if(!isset($state)) {
 			$nagvis = new frontend();
-			echo $Type;	
 			$nagvis->openSite($rotateUrl);
 			$nagvis->messageBox("12","Kein state");
 			$nagvis->closeSite();
