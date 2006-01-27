@@ -139,11 +139,15 @@ if (is_array($mapCfg['map'])){
 				$Icon = $FRONTEND->fixIcon($state,$map,$mapCfg['global']['iconset'],$defaultIcons,$map['type']);
 			}elseif(in_array("WARNING", $mapState)){
 				$state['State'] = "WARNING";
-				$state['Output'] = "State of child Map is  WARNING";
+				$state['Output'] = "State of child Map is WARNING";
 				$Icon = $FRONTEND->fixIcon($state,$map,$mapCfg['global']['iconset'],$defaultIcons,$map['type']);
 			}elseif(in_array("UNKNOWN", $mapState)){
 				$state['State'] = "UNKNOWN";
-				$state['Output'] = "State of child Map is  UNKNOWN";
+				$state['Output'] = "State of child Map is UNKNOWN";
+				$Icon = $FRONTEND->fixIcon($state,$map,$mapCfg['global']['iconset'],$defaultIcons,$map['type']);
+			}elseif(in_array("ERROR", $mapState)){
+				$state['State'] = "ERROR";
+				$state['Output'] = "State of child Map is ERROR";
 				$Icon = $FRONTEND->fixIcon($state,$map,$mapCfg['global']['iconset'],$defaultIcons,$map['type']);
 			}else{
 				$state['State'] = "OK";
@@ -164,7 +168,7 @@ if (is_array($mapCfg['map'])){
 		$FRONTEND->site[] = "</DIV>";
 	}
 }	
-   
+ 
 // Handle objects of type "textbox"
 if(is_array($mapCfg['textbox'])) {
 	foreach ($mapCfg['textbox'] as $index => $textbox) {
