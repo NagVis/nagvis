@@ -126,3 +126,7 @@ author: Michael Luebben
 - Delete function findStateArray from class BACKEND (class.CheckState_<BACKEND>.php)
 - Add Sourcecode-Doku in some files
 - Make some changes in HTML-Backend
+
+tstamp: 1138534983
+author: Michael Luebben
+- Remove Ackknowlegde from HTML-Backend

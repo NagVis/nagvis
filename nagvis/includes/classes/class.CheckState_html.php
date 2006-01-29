@@ -38,7 +38,7 @@ class backend
         putenv("REMOTE_USER=$CgiUser");
         putenv("QUERY_STRING=host=$Hostname");
         $handle = popen($StatusCgi, 'r');
-        $text = fread($handle, 9000);
+        $text = fread($handle, 12000);
         pclose($handle);
                 
 		if (preg_match('/0 Matching Service Entries Displayed/', $text)) {
@@ -48,15 +48,9 @@ class backend
         } else {
             preg_match('/<TD CLASS=\'hostTotalsPROBLEMS\'>(.*)<\/TD>/', $text, $hostTotalsPROBLEMS);
             preg_match('/<TD CLASS=\'hostTotalsUP\'>(.*)<\/TD>/', $text, $hostTotalsUP);
-            preg_match('/<TD CLASS=\'status(.*)\'>/', $text, $hostTotalsACK);
         }
 
-        if(isset($hostTotalsACK) && $hostTotalsACK[1] == 'HOSTDOWNACK') {
-        	$state['State'] = 'ACK';
-            $state['Count'] = $hostTotalsPROBLEMS[1];
-            $state['Output'] = $hostTotalsPROBLEMS[1].' Host DOWN (Has been acknowledged)';
-        }
-        elseif(isset($hostTotalsPROBLEMS[1]) && $hostTotalsPROBLEMS[1] != 0) {
+        if(isset($hostTotalsPROBLEMS[1]) && $hostTotalsPROBLEMS[1] != 0) {
         	$state['State'] = 'DOWN';
             $state['Count'] = $hostTotalsPROBLEMS[1];
             $state['Output'] = $hostTotalsPROBLEMS[1].' Host DOWN';
@@ -70,7 +64,7 @@ class backend
            $state['Count'] = '0';
            $state['Output'] = 'HTML-Backend (CheckState_html) got NO DATA from the CGI while tring to parse a Host!';
         }
-print_r($state);
+
         if($RecognizeServices == 1) {
         	preg_match('/<TD CLASS=\'serviceTotalsOK\'>(.*)<\/TD>/', $text, $serviceTotalsOK);
             preg_match('/<TD CLASS=\'serviceTotalsCRITICAL\'>(.*)<\/TD>/', $text, $serviceTotalsCRITICAL);
@@ -353,7 +347,7 @@ print_r($state);
 		if(!isset($state)) {
 			$nagvis = new FRONTEND();	
 			$nagvis->openSite($rotateUrl);
-			$nagvis->messageBox("12","Kein state");
+			$nagvis->messageBox("12","No state found");
 			$nagvis->closeSite();
 			$nagvis->printSite();
 			exit;
