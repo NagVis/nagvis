@@ -423,7 +423,7 @@ for($x="1";$x<=$countStates;$x++)
 	# we treat the case of an object of type "textbox"	
 	elseif($mapCfg[$arrayPos]['type'] == 'textbox') 
 	{
-		$TextBox = $BACKEND->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
+		$TextBox = $FRONTEND->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
 		$FRONTEND->site[] = $TextBox;			
 	}
 	
