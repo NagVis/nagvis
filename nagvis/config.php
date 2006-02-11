@@ -403,6 +403,7 @@ $FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setStro
 ##############################################################################	
 # we read and display the objects, one by one	
 $BACKEND = new BACKEND();
+
 $countStates = count($mapCfg)-1;
 $arrayPos="2";
 	
@@ -453,7 +454,7 @@ for($x="1";$x<=$countStates;$x++)
 	}
 	else
 	{
-		$Icon_name = $FRONTEND->fixIcon($state,$mapCfg,$mapCfg['1']['iconset'],$defaultIcons,$mapCfg[$arrayPos]['type']);
+		$Icon_name = $FRONTEND->findIcon($state,$mapCfg,$mapCfg['1']['iconset'],$defaultIcons,$mapCfg[$arrayPos]['type']);
 	}
 		
 	# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display

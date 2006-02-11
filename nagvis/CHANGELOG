@@ -130,3 +130,16 @@ author: Michael Luebben
 tstamp: 1138534983
 author: Michael Luebben
 - Remove Ackknowlegde from HTML-Backend
+
+tstamp: 1139055222
+author: Michael Luebben
+- Create a new Class "class.Common.php"
+- move and change Name from method fixIcon from class NagVis to findIcon to class Common
+- move the method fixIconPostion from class NagVis to the class Common
+- move the method createLink from class NagVis to the class Common
+
+tstamp: 1139675059
+author: Michael Luebben
+- Fix little bug in class.Common.php
+- Fix little bud in class.ReadFiles.php
+

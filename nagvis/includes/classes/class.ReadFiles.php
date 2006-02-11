@@ -127,14 +127,16 @@ class readFile
 					$nagvis[$define[1]][$x]['type'] = $define[1];
 					while (trim($NagVisCfg[$l]) != "}") {
 						$entry = explode("=",$NagVisCfg[$l], 2);
-						if(in_array(trim($entry[0]),$createArray)) {
-							$nagvis[$define[1]][$x][trim($entry[0])] = explode(",",$entry[1]);
-						}
-						elseif(isset($entry[1])) {
+						
+						if(isset($entry[1])) {
 							if(ereg("name", $entry[0])) {
 								$entry[0] = "name";
 							}
-							$nagvis[$define[1]][$x][trim($entry[0])] = trim($entry[1]);
+							if(in_array(trim($entry[0]),$createArray)) {
+								$nagvis[$define[1]][$x][trim($entry[0])] = explode(",",$entry[1]);
+							} else {
+								$nagvis[$define[1]][$x][trim($entry[0])] = trim($entry[1]);
+							}
 						}
 						$l++;	
 					}
