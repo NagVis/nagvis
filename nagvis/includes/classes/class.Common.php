@@ -165,6 +165,26 @@ class common {
 			$link = '<A HREF="'.$HTMLCgiPath.'/status.cgi?servicegroup='.$name.'&style=detail">';
     	}
     	return($link);
-	}	
+	}
+	
+	/**
+	* Chick is set a Option
+	*
+	* @param string $define
+	* @param string $global
+	* @param string $default
+	*
+	* @author Michael Luebben <michael_luebben@web.de>
+	*/
+	function checkOption($define,$global,$default) {
+		if(isset($define)) {
+			$option = $define;
+		} elseif(isset($global)) {
+			$option = $global;
+		} else {
+			$option = $default;
+		}
+		return($option);	
+	}
 }
 ?>

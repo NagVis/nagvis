@@ -143,3 +143,6 @@ author: Michael Luebben
 - Fix little bug in class.Common.php
 - Fix little bud in class.ReadFiles.php
 
+tstamp: 1140461496
+author: Michael Luebben
+- Fix bug recognize_services in globals

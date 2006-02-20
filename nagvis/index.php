@@ -182,19 +182,20 @@ if(is_array($mapCfg['textbox'])) {
 if (is_array($mapCfg['host'])){
 	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type host:');
 	foreach ($mapCfg['host'] as $index => $host) {
+		$recognize_services = $FRONTEND->checkOption($host['recognize_services'],$mapCfg['global']['1']['recognize_services'],"1");
 		if(isset($host['line_type'])) {
 			if ($host['line_type'] != "20") {
-				$state = $BACKEND->checkStates($host['type'],$host['name'],$host['recognize_services'],$host['service_description'],0,$CgiPath,$CgiUser);
+				$state = $BACKEND->checkStates($host['type'],$host['name'],$recognize_services,$host['service_description'],0,$CgiPath,$CgiUser);
 				$FRONTEND->createBoxLine($host,$state,NULL);
 			} else {
 				list($host_name_from,$host_name_to) = explode(",", $host['name']);
 				list($service_description_from,$service_description_to) = explode(",", $host['service_description']);
-				$state1 = $BACKEND->checkStates($host['type'],$host_name_from,$host['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
-				$state2 = $BACKEND->checkStates($host['type'],$host_name_to,$host['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);
+				$state1 = $BACKEND->checkStates($host['type'],$host_name_from,$recognize_services,$service_description_from,1,$CgiPath,$CgiUser);
+				$state2 = $BACKEND->checkStates($host['type'],$host_name_to,$recognize_services,$service_description_to,2,$CgiPath,$CgiUser);
 				$FRONTEND->createBoxLine($host,$state1,$state2);
 			}
 		} else {
- 			$state = $BACKEND->checkStates($host['type'],$host['name'],$host['recognize_services'],$host['service_description'],0,$CgiPath,$CgiUser);
+ 			$state = $BACKEND->checkStates($host['type'],$host['name'],$recognize_services,$host['service_description'],0,$CgiPath,$CgiUser);
 			$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
 			$Icon = $FRONTEND->findIcon($state,$host,$IconMapGlobal,$defaultIcons,$host['type']);
@@ -216,7 +217,8 @@ if (is_array($mapCfg['host'])){
 if (is_array($mapCfg['hostgroup'])){
 	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type hostgroup:');
 	foreach ($mapCfg['hostgroup'] as $index => $hostgroup) {
-		$state = $BACKEND->checkStates($hostgroup['type'],$hostgroup['name'],$hostgroup['recognize_services'],$hostgroup['service_description'],0,$CgiPath,$CgiUser);
+		$recognize_services = $FRONTEND->checkOption($hostgroup['recognize_services'],$mapCfg['global']['1']['recognize_services'],"1");
+		$state = $BACKEND->checkStates($hostgroup['type'],$hostgroup['name'],$recognize_services,$hostgroup['service_description'],0,$CgiPath,$CgiUser);
 		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
 		$Icon = $FRONTEND->findIcon($state,$hostgroup,$IconMapGlobal,$defaultIcons,$hostgroup['type']);
@@ -237,19 +239,20 @@ if (is_array($mapCfg['hostgroup'])){
 if (is_array($mapCfg['service'])){
 	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type service:');
 	foreach ($mapCfg['service'] as $index => $service) {
+		$recognize_services = $FRONTEND->checkOption($service['recognize_services'],$mapCfg['global']['1']['recognize_services'],"1");
 		if(isset($service['line_type'])) {
 			if ($service['line_type'] != "20") {
-				$state = $BACKEND->checkStates($service['type'],$service['name'],$service['recognize_services'],$service['service_description'],0,$CgiPath,$CgiUser);
+				$state = $BACKEND->checkStates($service['type'],$service['name'],$recognize_services,$service['service_description'],0,$CgiPath,$CgiUser);
 				$FRONTEND->createBoxLine($service,$state,NULL);
 			} else {
 				list($host_name_from,$host_name_to) = explode(",", $service['name']);
 				list($service_description_from,$service_description_to) = explode(",", $service['service_description']);
-				$state1 = $BACKEND->checkStates($service['type'],$host_name_from,$service['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);
-				$state2 = $BACKEND->checkStates($service['type'],$host_name_to,$service['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);
+				$state1 = $BACKEND->checkStates($service['type'],$host_name_from,$recognize_services,$service_description_from,1,$CgiPath,$CgiUser);
+				$state2 = $BACKEND->checkStates($service['type'],$host_name_to,$recognize_services,$service_description_to,2,$CgiPath,$CgiUser);
 				$FRONTEND->createBoxLine($service,$state1,$state2);
 			}
 		} else {
-			$state = $BACKEND->checkStates($service['type'],$service['name'],$service['recognize_services'],$service['service_description'],0,$CgiPath,$CgiUser);
+			$state = $BACKEND->checkStates($service['type'],$service['name'],$recognize_services,$service['service_description'],0,$CgiPath,$CgiUser);
 			$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
 			$Icon = $FRONTEND->findIcon($state,$service,$IconMapGlobal,$defaultIcons,$service['type']);
@@ -271,7 +274,8 @@ if (is_array($mapCfg['service'])){
 if (is_array($mapCfg['servicegroup'])){
 	$debug[] = $DEBUG->debug_insertInfo($debugStates,'Handle the type servicegroup:');
 	foreach ($mapCfg['servicegroup'] as $index => $servicegroup) {
-	$state = $BACKEND->checkStates($servicegroup['type'],$servicegroup['name'],$servicegroup['recognize_services'],$servicegroup['service_description'],0,$CgiPath,$CgiUser);
+	$recognize_services = $FRONTEND->checkOption($servicegroup['recognize_services'],$mapCfg['global']['1']['recognize_services'],"1");
+	$state = $BACKEND->checkStates($servicegroup['type'],$servicegroup['name'],$recognize_services,$servicegroup['service_description'],0,$CgiPath,$CgiUser);
 		$debug[] = $DEBUG->debug_checkState($debugStates,$debugCheckState,$index);
 
 		$Icon = $FRONTEND->findIcon($state,$servicegroup,$IconMapGlobal,$defaultIcons,$servicegroup['type']);

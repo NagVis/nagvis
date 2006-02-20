@@ -315,10 +315,6 @@ class backend
 		$rotateUrl = "";
 		unset($state);
 		
-		if(!isset($RecognizeServices)) {
-			$RecognizeServices = "1";
-    	}
-    	
 		if($Type == "host") {
 			$StatusCgi = $CgiPath.'status.cgi';
 			if(isset($Name)) {
