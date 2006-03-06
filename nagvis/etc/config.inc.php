@@ -27,6 +27,9 @@ $headerCount="3";
 $Autoupdate_frequency="25";
 $check_config="0";
 
+#Language for the error boxes (currently "english,"frensh" and "german" are available)
+$Language="english";
+
 #Use GD-Libs to draw backend(0=No / 1=Yes)
 #"Line" Objects are only available if set to "1", "0" can be used
 #if you have problems with GD or if you need no lines.
@@ -35,18 +38,15 @@ $useGDLibs="1";
 #Name of the header include file.
 $headerInc="header.nagvis.inc";
 
-####################### Options for the html Backend ############################
-#The user Nagvis runs the CGI as (MUST be 'allowed for all services', 'allowed for all hosts')
-$CgiUser="nagiosadmin";
-
-#Language for the error boxes (currently "english,"frensh" and "german" are available)
-$Language="english";
-
 #Local path (full) to NagVis Base Directory.
 $Base="/usr/local/nagios/share/nagvis";
 
 #Path to NagVis HTTP Base URL.
 $HTMLBase="/nagios/nagvis";
+
+####################### Options for the html Backend ############################
+#The user Nagvis runs the CGI as (MUST be 'allowed for all services', 'allowed for all hosts')
+$CgiUser="nagiosadmin";
 
 #Full local path to the directory containing the CGIs.
 $CgiPath="/usr/local/nagios/sbin/";
