@@ -1,28 +1,28 @@
-
 NagVis 0.9 Quick Installation Instructions
 ------------------------------------------
 
 
 Author: Andreas Husch
-Document Version: 0.2
-Date: 2005-10-11
-Applies to: NagVis 0.9a5
-Status: reviewed by Guillaume Rozan
+Document Version: 0.3
+Date: 2006-03-06
+Applies to: NagVis 0.9b1+
+Status: not reviewd
 
-Some uncomplete hints to get the current NagVis alhpa running. Better Documentation
-will be available when we enter beta state.
-
+Some uncomplete hints to get the current NagVis test release running. Better Documentation
+will be available when we reach FINAL.
 
 STEP 0
 ------
 Make sure your System meets the requirements:
-- Nagios is running and authentication is configured
+- Nagios is running and authentication is configured (.htaccess file placed and configured properly!)
 - Working PHP installation (Version > 4.2.0) with "php-gd" support
+- php-mysql support is needed for the strongly recommended "ndomy" backend
 
 
 STEP 1
 ------
-Get NagVis, pull it from CVS or download a nightly tar.
+Get NagVis, the latest test release can be found at http://luebben-home.de/forum/thread.php?threadid=3072
+Additional hints will be post there also.
 
 
 STEP 2
@@ -47,25 +47,31 @@ check your file to fit your Nagios installation.
 
 STEP 5
 ------
+Make sure that the Webserver User can write to the NagVis etc directory and check out the Pathes to awk, cat etc. at wui/wui.function.inc.bash.
 
-check out the Pathes to awk, cat etc. in /usr/local/nagios/share/nagvis/wui/wui.function.inc.bash.
-
-As root, launch :
-chmod 777 -R /usr/local/nagios/share/nagvis/etc/maps/
-chmod 777 -R /usr/local/nagios/share/nagvis/maps/
+E.g. issue the following as root (change pathes according to your installation) :
+chmod 665 -R /usr/local/nagios/share/nagvis/etc/maps/
+chmod 665 -R /usr/local/nagios/share/nagvis/maps/
 chmod +x /usr/local/nagios/share/nagvis/wui/*.bash
 chmod 666 /usr/local/nagios/share/nagvis/etc/config.inc.php
 
-
+(You can even set less than 666 if you know what you're doing and the groups are set fine)
 
 STEP 6
 ------
-Call http://[nagiosserver]/[path_to_nagvis]/config.php and do a right-click
+If you want to use the STRONGLY EXPERIMENTAL Config Tool
+call http://[nagiosserver]/[path_to_nagvis]/config.php and do a right-click
 
 You should now be able to create new config files. (Make sure the Webserver
 can write to the etc directory!). I recommend to backup your created files, it
 is alpha so it is possible that some unplanned things happen and srew up you files ;-)
 
-You can use your maps with: http://[nagiosserver]/[path_to_nagvis]/index.php?map=[mapname]
+If this does not work: Simply edit the Map config files in the etc/maps/ directory by hand,
+see "Map Config File Format" document at www.nagvis.org for doing this.
+
+STEP 7
+------
+You can use your maps with: http://[nagiosserver]/[path_to_nagvis]/index.php?map=[map
+name]
 
 Have fun and report bugs!
