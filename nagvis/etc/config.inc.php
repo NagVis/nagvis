@@ -82,7 +82,7 @@ $mapHTMLBaseFolder=$HTMLBase."/maps/";
 
 
 #####################Internal versioning, dont change #####################
-$version="0.9b1+";
+$version="0.9b-workshop2006+";
 $title="NagVis ".$version;
 
 ########################## Options for Debbuging ##########################
