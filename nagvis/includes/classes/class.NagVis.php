@@ -9,27 +9,36 @@
 * This Class creates the Web-Frontend for NagVis
 */
 
-include("./etc/config.inc.php");
 include("./includes/classes/class.Common.php");
 
-class frontend extends common
-{
+class frontend extends common {
 	var $site;
+	var $CONFIG;
+	
+	/**
+	* Constructor
+	*
+	* @param config $CONFIG
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function frontend($CONFIG) {
+		$this->CONFIG = $CONFIG;
+		parent::common($this->CONFIG);
+	}
 	
 	/**
 	* Open a Web-Site in a Array site[].
 	*
-	* @param string $RefreshTime
 	* @param string $rotateUrl
 	*
 	* @author Michael Luebben <michael_luebben@web.de>
     */
 	function openSite($rotateUrl) {
-		include("./etc/config.inc.php");
 		$this->site[] = '<HTML>';
 		$this->site[] = '<HEAD>';
-		$this->site[] = '<TITLE>'.$title.'</TITLE>';
-		$this->site[] = '<META http-equiv="refresh" CONTENT="'.$RefreshTime.';'.$rotateUrl.'">';
+		$this->site[] = '<TITLE>'.$this->CONFIG->getValue('internal', 'title').'</TITLE>';
+		$this->site[] = '<META http-equiv="refresh" CONTENT="'.$this->CONFIG->getValue('global', 'refreshtime').';'.$rotateUrl.'">';
 		$this->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/nagvis.js"></SCRIPT>';
 		$this->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib.js"></SCRIPT>';
 		$this->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib_shadow.js"></SCRIPT>';
@@ -58,13 +67,12 @@ class frontend extends common
 	* @author Michael Luebben <michael_luebben@web.de>
     */
 	function makeHeaderMenu($Menu) {
-		include("./etc/config.inc.php");
 		$x="0";
 		$this->site[] = '<TABLE WIDTH="100%" BORDER="0" BGCOLOR="black">';
 		$this->site[] = '<DIV CLASS="header">';
 		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != "") {
 			$this->site[] = '<TR VALIGN="BOTTOM">';
-			for($d="1";$d<=$headerCount;$d++) {
+			for($d="1";$d<=$this->CONFIG->getValue('global', 'headercount');$d++) {
 				if($Menu[$x]['entry'] != "") {
 					$this->site[] = '<TD WIDTH="13">';
 					$this->site[] = '<IMG SRC="images/greendot.gif" WIDTH="13" HEIGHT="14" NAME="'.$Menu[$x]['entry'].'_'.$x.'">';
@@ -119,32 +127,31 @@ class frontend extends common
     * @author Michael Luebben <michael_luebben@web.de>
     */
 	function messageBox($messagenr, $vars) {
-		include("./etc/config.inc.php");
-		$LanguageFile = $Base."/etc/languages/".$Language.".txt";
-                if(!file_exists($LanguageFile)) {
+		$LanguageFile = $this->CONFIG->getValue('paths', 'cfg')."languages/".$this->CONFIG->getValue('global', 'language').".txt";
+        if(!file_exists($LanguageFile)) {
+                $msg[0] = "XXXX";
+                $msg[1] = "img_error.png";
+                $msg[2] = "Languagefile not found!";
+                $msg[3] = "Check if languagefile variable is set right in config.ini!";
+        }
+        elseif(!is_readable($LanguageFile)) {
+                $msg[0] = "XXXX";
+                $msg[1] = "img_error.png";
+                $msg[2] = "Languagefile not readable!";
+                $msg[3] = "Check permissions of languagefile ".$LanguageFile."!";
+        }
+        else {
+                $fd=file($LanguageFile);
+                if(!explode("~", $fd[$messagenr])) {
                         $msg[0] = "XXXX";
                         $msg[1] = "img_error.png";
-                        $msg[2] = "Languagefile not found!";
-                        $msg[3] = "Check if languagefile variable is set right in config.inc.php!";
-                }
-                elseif(!is_readable($LanguageFile)) {
-                        $msg[0] = "XXXX";
-                        $msg[1] = "img_error.png";
-                        $msg[2] = "Languagefile not readable!";
-                        $msg[3] = "Check permissions of languagefile $LanguageFile!";
+                        $msg[2] = "Wrong error number.";
+						$msg[3] = "Maybe error-number is not known.";
                 }
                 else {
-                        $fd=file($LanguageFile);
-                        if(!explode("~", $fd[$messagenr])) {
-                                $msg[0] = "XXXX";
-                                $msg[1] = "img_error.png";
-                                $msg[2] = "Wrong error number.";
-								$msg[3] = "Maybe error-number is not known.";
-                        }
-                        else {
-                                $msg=explode("~", $fd[$messagenr]);
-                        }
+                        $msg=explode("~", $fd[$messagenr]);
                 }
+        }
 		
 		$messageNr = $msg[0];
 		$messageIcon = $msg[1];
@@ -183,12 +190,11 @@ class frontend extends common
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
 	function printMap($map_image)	{
-		include("./etc/config.inc.php");
 		$this->site[] = '  <DIV CLASS="map">';
-		if ($useGDLibs == "1") {
+		if ($this->CONFIG->getValue('global', 'usegdlibs') == "1") {
 			$this->site[] = '   <IMG SRC="./draw.php?map='.$map_image.'">';
 		} else {
-			$this->site[] = '   <IMG SRC="'.$mapHTMLBaseFolder.$map_image.'">';
+			$this->site[] = '   <IMG SRC="'.$this->CONFIG->getValue('paths', 'htmlbase').$map_image.'">';
 		}
 	}
 	
@@ -203,7 +209,6 @@ class frontend extends common
 	* @author Michael Luebben <michael_luebben@web.de>
     */
 	function infoBox($Type,$Hostname,$ServiceDesc,$stateArray) {
-		include("./etc/config.inc.php");
 		$Type = ucfirst($Type);
 		$State = $stateArray['State'];
 		$Output = $stateArray['Output'];
@@ -257,9 +262,7 @@ class frontend extends common
 	*/
 	function debug($debug)
 	{
-		global $enableDebug;
-		
-		if ($enableDebug == "1") {
+		if ($this->CONFIG->getValue('global', 'debug') == "1") {
 			$this->site[] = '<TABLE CLASS="debugBox" WIDTH="90%" ALIGN="CENTER">';
 			$this->site[] = ' <TR>';
 			$this->site[] = '  <TD CLASS="debugBoxHead" WIDTH="40" ALIGN="CENTER">';
@@ -295,9 +298,6 @@ class frontend extends common
 	* @author FIXME
 	*/
 	function createBoxLine($mapCfg,$state1,$state2) {
-		
-		global $HTMLCgiPath;
-		
 	    if($mapCfg['line_type'] == '10' || $mapCfg['line_type'] == '11'){
 			list($x_from,$x_to) = explode(",", $mapCfg['x']);
 			list($y_from,$y_to) = explode(",", $mapCfg['y']);
@@ -306,7 +306,7 @@ class frontend extends common
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$mapCfg['name'],$mapCfg['service_description'],$state1);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($HTMLCgiPath,$mapCfg['url'],$mapCfg['type'],$mapCfg['name'],$mapCfg['service_description']);
+			$this->site[] = $this->createLink($this->CONFIG->getValue('paths', 'htmlcfg'),$mapCfg['url'],$mapCfg['type'],$mapCfg['name'],$mapCfg['service_description']);
 			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 		} elseif($mapCfg['line_type'] == '20') {
@@ -320,7 +320,7 @@ class frontend extends common
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$host_name_from,$service_description_from,$state1);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($HTMLCgiPath,$mapCfg['url'],$mapCfg['type'],$host_name_from,$service_description_from);
+			$this->site[] = $this->createLink($this->CONFIG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_from,$service_description_from);
 			$this->site[] = '<img src= iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 			// To
@@ -329,7 +329,7 @@ class frontend extends common
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$host_name_to,$service_description_to,$state2);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($HTMLCgiPath,$mapCfg['url'],$mapCfg['type'],$host_name_to,$service_description_to);
+			$this->site[] = $this->createLink($this->CONFIG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_to,$service_description_to);
 			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 		}

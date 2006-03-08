@@ -14,13 +14,27 @@
 /**
 * This Class read the States from Nagios-CGI'S
 */
-class backend
-{
+class backend {
+	var $CONFIG;
+	
+	/**
+	* Constructor
+	*
+	* @param config $CONFIG
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function backend($CONFIG) {
+		$this->CONFIG = $CONFIG;
+		
+		return 0;
+	}
+	/* Deprecated?!
 	//Initialize function, must be called before anything else of this class. Maybe we should set this as constructor.
 	function backendInitialize() {
 		//THIS backend needs no inital preparation, but the function must be present to be compatible
 		return 0;
-	}
+	}*/
 
 	/**
 	* Find State from a Host
@@ -310,14 +324,17 @@ class backend
 	* @author Michael Luebben <michael_luebben@web.de>
 	* @author Andreas Husch
     */
-	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0",$CgiPath,$CgiUser)
+	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0")
 	{
 		$rotateUrl = "";
 		unset($state);
 		
+		$CgiPath = $this->CONFIG->getValue('backend_html', 'cgi');
+		$CgiUser = $this->CONFIG->getValue('backend_html', 'cgiuser');
+		
 		if($Type == "host") {
 			$StatusCgi = $CgiPath.'status.cgi';
-			if(isset($Name)) {
+			if(isset($Name) && isset($CgiUser)) {
 				$state = $this->findStateHost($Name,$RecognizeServices,$StatusCgi,$CgiUser);	
 			}
 		}

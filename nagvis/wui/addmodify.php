@@ -18,12 +18,13 @@
 </head>
 
 <?
-include("../etc/config.inc.php");
+include("../includes/classes/class.NagVisConfig.php");
 include("./classes.wui.php");
 
+$CONFIG = new nagvisconfig('../etc/config.ini');
 
 # we load the language file
-$langfile= new langFile($cfgPath."languages/wui_".$Language.".txt");
+$langfile= new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
 
 # we get the parameters passed in the URL
 $myaction = $_GET['action'];    # possible values : add, delete or modify
@@ -39,7 +40,7 @@ else{
 }
 
 # we check that the mapname is defined and that the file exits on the server
-if(!file_exists($cfgFolder.$mymap.".cfg")) { exit; }
+if(!file_exists($CONFIG->getValue('paths', 'mapcfg').$mymap.".cfg")) { exit; }
 
 # we verify that the user is defined
 if(isset($_SERVER['PHP_AUTH_USER']))   { $user = $_SERVER['PHP_AUTH_USER'];}
@@ -113,7 +114,7 @@ foreach($type_tab["$mytype"] as $propname)
                         3=>"jpg",
                         4=>"jpeg"
                 );
-		if ($handle = opendir($iconBaseFolder)) 
+		if ($handle = opendir($CONFIG->getValue('paths', 'icon'))) 
 		{
  			while (false !== ($file = readdir($handle))) 
 			{
@@ -139,7 +140,7 @@ foreach($type_tab["$mytype"] as $propname)
 	{
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
 		$files=array();
-		if ($handle = opendir($mapFolder)) 
+		if ($handle = opendir($CONFIG->getValue('paths', 'map'))) 
 		{
  			while (false !== ($file = readdir($handle))) 
 			{
@@ -178,7 +179,7 @@ foreach($type_tab["$mytype"] as $propname)
 	{
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
 		$files=array();
-		if ($handle = opendir($cfgFolder)) 
+		if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
 		{
  			while (false !== ($file = readdir($handle))) 
 			{

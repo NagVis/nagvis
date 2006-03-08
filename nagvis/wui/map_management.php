@@ -18,11 +18,13 @@
 </head>
 
 <?
-include("../etc/config.inc.php");
+include("../includes/classes/class.NagVisConfig.php");
 include("./classes.wui.php");
 
+$CONFIG = new nagvisconfig('../etc/config.ini');
+
 # we load the language file
-$langfile= new langFile($cfgPath."languages/wui_".$Language.".txt");
+$langfile= new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
 
 # we set the current username
 if(isset($_SERVER['PHP_AUTH_USER'])) {
@@ -77,7 +79,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_iconset">
 		<?
 			$files=array();
-			if ($handle = opendir($iconBaseFolder)) 
+			if ($handle = opendir($CONFIG->getValue('paths', 'icon'))) 
 			{
  				while (false !== ($file = readdir($handle))) 
 				{
@@ -99,7 +101,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
 		<?
 			$files=array();
-			if ($handle = opendir($mapFolder)) 
+			if ($handle = opendir($CONFIG->getValue('paths', 'map'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{
@@ -130,7 +132,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
 		<?
 			$files=array();
-			if ($handle = opendir($cfgFolder)) 
+			if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{
@@ -170,7 +172,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
 		<?
 			$files=array();
-			if ($handle = opendir($cfgFolder)) 
+			if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{
@@ -221,7 +223,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
 		<?
 			$files=array();
-			if ($handle = opendir($mapFolder)) 
+			if ($handle = opendir($CONFIG->getValue('paths', 'map'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{

@@ -5,10 +5,20 @@
 * @author Michael Lübben <michael_luebben@web.de>
 */
 
-class debug 
-	{
-
+class debug {
+	var $CONFIG;
 	var $debug;
+	
+	/**
+	* Constructor
+	*
+	* @param config $CONFIG
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function debug($CONFIG) {
+		$this->CONFIG = $CONFIG;
+	}
 
 	/**
 	* Output Info-Text in the Debug-Mode
@@ -32,8 +42,7 @@ class debug
 	*
 	* @author Michael Lübben <michael_luebben@web.de>
 	*/
-	function debug_insertRow($enable)
-		{
+	function debug_insertRow($enable) {
 		if($enable == "1") {
 			$debug[] = '<BR>';
 			return($debug);
@@ -45,14 +54,10 @@ class debug
 	*
 	* @author Michael Lübben <michael_luebben@web.de>
 	*/
-	function debug_createLinkToDoku($type,$class)
-		{
-		global $backend;
-		global $HTMLBaseDoku;
-		
+	function debug_createLinkToDoku($type,$class) {
 		if ($type == "class") {
 			$lowerClass = strtolower($class);
-			$link = '<A HREF="'.$HTMLBaseDoku.'includes/classes/class.CheckState_'.$backend.'.php.html#'.$lowerClass.'" TARGET="_blank">'.$class.'</A>';
+			$link = '<A HREF="'.$this->CONFIG->getValue('paths', 'htmldoku').'includes/classes/class.CheckState_'.$this->CONFIG->getValue('global', 'backend').'.php.html#'.$lowerClass.'" TARGET="_blank">'.$class.'</A>';
 		}
 		return($link);
 	}
@@ -69,12 +74,10 @@ class debug
 	function debug_checkState($enDebug,$enFunc,$arrayPos)
 		{
 		global $mapCfg;
-		global $CgiPath;
-		global $CgiUser;
 		global $state;
 		
 		if($enDebug == "1" && $enFunc == "1") {
-			$debug[] = '<B>function</B> $state = '.$this->debug_createLinkToDoku('class','checkStates').'('.$mapCfg[$arrayPos]['type'].','.$mapCfg[$arrayPos]['name'].','.$mapCfg[$arrayPos]['recognize_services'].','.$mapCfg[$arrayPos]['service_description'].',0,'.$CgiPath.','.$CgiUser.')';
+			$debug[] = '<B>function</B> $state = '.$this->debug_createLinkToDoku('class','checkStates').'('.$mapCfg[$arrayPos]['type'].','.$mapCfg[$arrayPos]['name'].','.$mapCfg[$arrayPos]['recognize_services'].','.$mapCfg[$arrayPos]['service_description'].',0,'.$this->CONFIG->getValue('backend_html', 'cgi').','.$this->CONFIG->getValue('backend_html', 'cgiuser').')';
 
 			$debug[] = '--> $state[State]:'.$state[State];
 			$debug[] = '--> $state[Count]:'.$state[Count];
@@ -96,11 +99,10 @@ class debug
 		{
 		global $state;
 		global $mapCfg;
-		global $defaultIcons;
 		global $Icon;
 
 		if($enDebug == "1" && $enFunc == "1") {
-			$debug[] = '<B>function</B> $Icon =  '.$this->debug_createLinkToDoku('class','fixIcon').'('.$state[State].','.$mapCfg[$arrayPos]['iconset'].','.$arrayPos.','.$defaultIcons.','.$mapCfg[$arrayPos]['type'].')';
+			$debug[] = '<B>function</B> $Icon =  '.$this->debug_createLinkToDoku('class','fixIcon').'('.$state[State].','.$mapCfg[$arrayPos]['iconset'].','.$arrayPos.','.$this->CONFIG->getValue('global', 'defaulticons').','.$mapCfg[$arrayPos]['type'].')';
 
 			$debug[] = '--> $Icon:'.$Icon;
 			return($debug);

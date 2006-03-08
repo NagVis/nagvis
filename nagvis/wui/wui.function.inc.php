@@ -15,62 +15,58 @@
 # calls the bash script with the right arguments. It's this bash script which 
 # applies the changes on the server. 
 
-include("../etc/config.inc.php");
-
+include("../includes/classes/class.NagVisConfig.php");
+$CONFIG = new nagvisconfig('../etc/config.ini');
 
 ############################################
 # passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
-function savemap()
-{
-	include("../etc/config.inc.php");
+function savemap() {
+	global $CONFIG;
 	$mymap=$_POST['formulaire'];
 	$lines=$_POST['image'];
 	$val_x=$_POST['valx'];
 	$val_y=$_POST['valy'];
 
-	exec('./wui.function.inc.bash modify '.$Autoupdate_frequency.' '.$cfgFolder.' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
+	exec('./wui.function.inc.bash modify '.$CONFIG->getValue('global', 'autoupdatefreq').' '.$CONFIG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
 	
 	return $mymap;
 }
 
 ############################################
-function add_element()
-{
-	include("../etc/config.inc.php");
+function add_element() {
+	global $CONFIG;
+	
 	$mymap=$_POST['map'];
 	$mytype=$_POST['type'];
 	$myvalues=$_POST['properties'];
 	
-	exec('./wui.function.inc.bash add_element '.$cfgFolder.' "'.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'" '.$Autoupdate_frequency);
+	exec('./wui.function.inc.bash add_element '.$CONFIG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'" '.$CONFIG->getValue('global', 'autoupdatefreq'));
 	
 	return $mymap;
 }
 
 ############################################
-function modify_element()
-{
-	include("../etc/config.inc.php");
+function modify_element() {
+	global $CONFIG;
 	
 	$mymap=$_POST['map'];
 	$mytype=$_POST['type'];
 	$myvalues=$_POST['properties'];
 	$myid=$_POST['id'];
-	
-	exec('./wui.function.inc.bash modify_element '.$cfgFolder.' "'.$mymap.'.cfg" '.$myid.' '.$mytype.' "'.$myvalues.'" '.$Autoupdate_frequency);
+	exec('./wui.function.inc.bash modify_element '.$CONFIG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$myid.' '.$mytype.' "'.$myvalues.'" '.$CONFIG->getValue('global', 'autoupdatefreq'));
 	
 	return $mymap;
 	
 }
 
 ############################################
-function delete_element()
-{
-	include("../etc/config.inc.php");
+function delete_element() {
+	global $CONFIG;
 
 	$mymap=$_GET['map'];
 	$myid=$_GET['id'];
 	
-	exec('./wui.function.inc.bash delete_element '.$cfgFolder.' "'.$mymap.'.cfg" '.$myid.' '.$Autoupdate_frequency);
+	exec('./wui.function.inc.bash delete_element '.$CONFIG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$myid.' '.$CONFIG->getValue('global', 'autoupdatefreq'));
 	
 	return $mymap;
 	
@@ -78,9 +74,8 @@ function delete_element()
 
 
 ############################################
-function create_map()
-{
-	include("../etc/config.inc.php");
+function create_map() {
+	global $CONFIG;
 
 	$mymap=$_POST['map_name'];
 	$myallow=$_POST['allowed_users'];
@@ -88,22 +83,21 @@ function create_map()
 	$myimage=$_POST['map_image'];
 	$myallowconfig=$_POST['allowed_for_config'];
 	
-	exec('./wui.function.inc.bash mgt_map_create '.$cfgFolder.' "'.$mymap.'.cfg" "'.$myallow.'" "'.$myicon.'" "'.$myimage.'" "'.$myallowconfig.'" '.$Autoupdate_frequency);
+	exec('./wui.function.inc.bash mgt_map_create '.$CONFIG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" "'.$myallow.'" "'.$myicon.'" "'.$myimage.'" "'.$myallowconfig.'" '.$CONFIG->getValue('global', 'autoupdatefreq'));
 	
 	return $mymap;
 }
 
 
 ############################################
-function rename_map()
-{
-	include("../etc/config.inc.php");
+function rename_map() {
+	global $CONFIG;
 
 	$mymap_name=$_POST['map_name'];
 	$mymap_new_name=$_POST['map_new_name'];
 	$mymap=$_POST['map'];
 	
-	exec('./wui.function.inc.bash mgt_map_rename'.' "'.$cfgFolder.'" "'.$mymap_name.'" "'.$mymap_new_name.'"');
+	exec('./wui.function.inc.bash mgt_map_rename'.' "'.$CONFIG->getValue('paths', 'mapcfg').'" "'.$mymap_name.'" "'.$mymap_new_name.'"');
 	
 	if($mymap_name==$mymap)
 	{
@@ -117,14 +111,13 @@ function rename_map()
 
 
 ############################################
-function delete_map()
-{
-	include("../etc/config.inc.php");
+function delete_map() {
+	global $CONFIG;
 
 	$mymap_name=$_POST['map_name'];
 	$mymap=$_POST['map'];
 
-	exec('./wui.function.inc.bash mgt_map_delete '.$cfgFolder.' "'.$mymap_name.'.cfg"');
+	exec('./wui.function.inc.bash mgt_map_delete '.$CONFIG->getValue('paths', 'mapcfg').' "'.$mymap_name.'.cfg"');
 	
 	if($mymap_name==$mymap)
 	{
@@ -138,22 +131,22 @@ function delete_map()
 
 
 ############################################
-function delete_image()
-{
-	include("../etc/config.inc.php");
+function delete_image() {
+	global $CONFIG;
+	
 	$mymap_image=$_POST['map_image'];
 	
-	exec('./wui.function.inc.bash mgt_image_delete "'.$mapFolder.$mymap_image.'"');
+	exec('./wui.function.inc.bash mgt_image_delete "'.$CONFIG->getValue('paths', 'map').$mymap_image.'"');
 	
 }
 
 ############################################
-function restore_map()
-{
-	include("../etc/config.inc.php");
+function restore_map() {
+	global $CONFIG;
+	
 	$mymap=$_GET['map'];
 	
-	exec('./wui.function.inc.bash map_restore '.$cfgFolder.' "'.$mymap.'.cfg" '.$Autoupdate_frequency);
+	exec('./wui.function.inc.bash map_restore '.$CONFIG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$CONFIG->getValue('global', 'autoupdatefreq'));
 	return $mymap;
 }
 
@@ -200,30 +193,26 @@ else if($myaction == "delete")
 		$mymap= delete_element();
 		print "<script>document.location.href='../config.php?map=$mymap';</script>\n";
 }
-else if($myaction == "update_config")
-{	
+else if($myaction == "update_config") {
+	$param=explode('^',$_POST['properties']);
 	
-	$val=str_replace('\"','"',$_POST['properties']);
-	$val=str_replace("\'","'",$val);
-	$param=explode("^",$val);
-	
-	if($fic=fopen($cfgPath."config.inc.php","w"))
+	foreach($param AS $myparam)
 	{
-		fwrite($fic,"<?\n");
-		foreach ($param as $myparam)
-		{
-			fwrite($fic,$myparam."\n");
-		}	
-		fwrite($fic,"?>\n");
-		fclose($fic);
+		$arr = @explode("=",$myparam);
+		// Read the key
+		$key = @strtolower(@trim($arr[0]));
+		unset($arr[0]);
+		// Rest of the array is the value
+		$val = @trim(@implode("=", $arr));
+		
+		$CONFIG->setValue($CONFIG->findSecOfVar($key),$key,$val);
+	}
+	if($CONFIG->writeConfig()) {
 		print "<script>window.opener.document.location.reload();</script>\n";
 		print "<script>window.close();</script>\n";
+	} else {
+		print "<script>alert('error while opening the file ".$CONFIG->getValue('paths', 'cfg')."config.ini"." for writing.')</script>";
 	}
-	else
-	{
-		print "<script>alert('error while opening the file ".$cfgPath."config.inc.php"." for writing.')</script>";
-	}
-	
 }
 else if($myaction == "mgt_map_create")
 {	
@@ -267,18 +256,20 @@ else if($myaction == "mgt_new_image")
 	}
 	
 	# we check the file (the map) is properly uploaded
-	if (is_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name']))
+	if(is_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name']))
 	{
 	    $ficname = $HTTP_POST_FILES['fichier']['name'];
 	  
 	    if(substr($ficname,strlen($ficname)-4,4) == ".png")
 	    {
-	    	move_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'], $mapFolder.$ficname);
-		
+	    	if(move_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'], $CONFIG->getValue('paths', 'map').$ficname)) {
+			    print "<script>window.opener.document.location.reload();</script>\n";
+			    print "<script>window.close();</script>\n";
+			} else {
+	    		print "A problem occured !";
+				return;
+	    	}
 	    }
-
-	    print "<script>window.opener.document.location.reload();</script>\n";
-	    print "<script>window.close();</script>\n";
 	      
 	}
 	else

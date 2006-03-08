@@ -1,10 +1,13 @@
 <?php
 #FIXME: Insert Plausis if files are there and readable!
 include("./includes/classes/class.Graphic.php");
-include("./etc/config.inc.php");
+include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
-include("./includes/classes/class.CheckState_".$backend.".php");
+
+$CONFIG = new nagvisconfig('./etc/config.ini');
+
+include("./includes/classes/class.CheckState_".$CONFIG->getValue('global', 'backend').".php");
 
 $map = $_GET['map'];
 
@@ -15,10 +18,10 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
         $user = $_SERVER['REMOTE_USER'];
 }
 
-$FRONTEND = new frontend();
-$readfile = new readFile();
+$FRONTEND = new frontend($CONFIG);
+$readfile = new readFile($CONFIG);
 
-if(file_exists($cfgFolder.$map.".cfg")) {
+if(file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
         $mapCfg = $readfile->readNagVisCfg($map);
         $allowed_users = explode(",",trim($mapCfg[1]['allowed_user']));
         $map_image_array = explode(",",trim($mapCfg[1]['map_image']));
@@ -30,10 +33,10 @@ $image_type = explode('.', $map_image);
 
 switch(strtolower($image_type[1])) {
 	case 'jpg':
-		$im = @imagecreatefromjpeg($mapFolder.$map_image);
+		$im = @imagecreatefromjpeg($CONFIG->getValue('paths', 'map').$map_image);
 	break;
 	case 'png':
-		$im = @imagecreatefrompng($mapFolder.$map_image);
+		$im = @imagecreatefrompng($CONFIG->getValue('paths', 'map').$map_image);
 	break;
 	default: 
 		// FIXME: Error-Box!
@@ -62,8 +65,8 @@ function GetColor($state){
 }
 
 
-$BACKEND = new backend();
-$BACKEND->backendInitialize() ;
+$BACKEND = new backend($CONFIG);
+// Deprecated: $BACKEND->backendInitialize() ;
 $countStates = count($mapCfg)-1;
 $arrayPos="2";
 
@@ -79,7 +82,7 @@ for($x="1";$x<=$countStates;$x++) {
 		}
 		if(isset($mapCfg[$arrayPos]['line_type'])) {
 			if($mapCfg[$arrayPos]['line_type'] == '10'){
-				$state = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);	
+				$state = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0);	
 				list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
 				list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
 				$x_middle = middle($x_from,$x_to);
@@ -89,7 +92,7 @@ for($x="1";$x<=$countStates;$x++) {
 				
 			}
 			elseif($mapCfg[$arrayPos]['line_type'] == '11'){
-				$state = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0,$CgiPath,$CgiUser);	
+				$state = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$mapCfg[$arrayPos]['name'],$mapCfg[$arrayPos]['recognize_services'],$mapCfg[$arrayPos]['service_description'],0);	
 				list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
 				list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
 				draw_arrow($x_from,$y_from,$x_to,$y_to,3,1,GetColor($state['State']));
@@ -97,8 +100,8 @@ for($x="1";$x<=$countStates;$x++) {
 			elseif($mapCfg[$arrayPos]['line_type'] == '20'){
 				list($host_name_from,$host_name_to) = explode(",", $mapCfg[$arrayPos]['name']);
 				list($service_description_from,$service_description_to) = explode(",", $mapCfg[$arrayPos]['service_description']);
-				$state_from = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$host_name_from,$mapCfg[$arrayPos]['recognize_services'],$service_description_from,1,$CgiPath,$CgiUser);	
-				$state_to = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$host_name_to,$mapCfg[$arrayPos]['recognize_services'],$service_description_to,2,$CgiPath,$CgiUser);	
+				$state_from = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$host_name_from,$mapCfg[$arrayPos]['recognize_services'],$service_description_from,1);	
+				$state_to = $BACKEND->checkStates($mapCfg[$arrayPos]['type'],$host_name_to,$mapCfg[$arrayPos]['recognize_services'],$service_description_to,2);	
 				list($x_from,$x_to) = explode(",", $mapCfg[$arrayPos]['x']);
 				list($y_from,$y_to) = explode(",", $mapCfg[$arrayPos]['y']);
 				$x_middle = middle($x_from,$x_to);

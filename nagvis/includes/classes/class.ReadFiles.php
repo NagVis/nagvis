@@ -9,8 +9,20 @@
 * This Class read the Configuration-Files from NagVis
 */
 
-class readFile 
-{	
+class readFile {	
+	var $CONFIG;
+	
+	/**
+	* Constructor
+	*
+	* @param config $CONFIG
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function readFile($CONFIG) {
+		$this->CONFIG = $CONFIG;
+	}
+	
 	/**
 	* Read the Map-Configuration files
 	*
@@ -42,8 +54,7 @@ class readFile
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
 	function readNagVisCfg($file) {
-		include("./etc/config.inc.php");
-		$NagVisCfg = file($cfgFolder.$file.".cfg");
+		$NagVisCfg = file($this->CONFIG->getValue('paths', 'mapcfg').$file.".cfg");
 		
 		$l="0";
 		$x="0";
@@ -109,8 +120,7 @@ class readFile
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
 	function readNagVisCfgNew($file) {
-		include("./etc/config.inc.php");
-		$NagVisCfg = file($cfgFolder.$file.".cfg");
+		$NagVisCfg = file($this->CONFIG->getValue('paths', 'mapcfg').$file.".cfg");
 		
 		$l="0";
 		$x="0";
@@ -153,8 +163,7 @@ class readFile
 	* @author Michael Lübben <michael_luebben@web.de>
 	*/
 	function readMenu() {
-		include("./etc/config.inc.php");
-		$Menu = file($cfgPath.$headerInc);
+		$Menu = file($this->CONFIG->getValue('paths', 'cfg').$this->CONFIG->getValue('includes', 'header'));
 		$a="0";
 		$b="0";
 		while (isset($Menu[$a]) && $Menu[$a] != "")

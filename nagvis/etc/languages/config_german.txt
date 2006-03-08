@@ -1,20 +1,38 @@
-CgiUser~Der User mit dem NagVis die CGIs aufruft (sollte 'allowed for all services', 'allowed for all hosts' sein)
-Base~Voller lokaler Pfad zum NagVis Basis Verzeichnis.
-HTMLBase~HTTP Pfad zu NagVis (/nagios/nagvis).
-CgiPath~Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).
-RefreshTime~Map refresh time (in Sekunden).
-cfgPath~Lokaler Pfad zum NagVis etc Verzeichnis.
-cfgFolder~Lokaler Pfad zu den Map Config Dateien (*.cfg)
-mapFolder~Lokaler Pfad zu den Hintergrund Bildern (*.png)
-iconBaseFolder~Lokaler Pfad zum NagVis iconsets Verzeichnis.
-iconHTMLBaseFolder~HTTP Pfad zum NagVis iconsets Verzeichnis.
-indexInc~Include Datei fuer die Standard Seite.
+backend~Waehle ein Backend.
+language~Waehle deine Sprache.
 defaultIcons~Standard Iconset.
-RotateMaps~Rotiere Maps automatisch.
+rotateMaps~Rotiere Maps automatisch.
 maps~Zu rotierende Maps. Beispiel: array('server','lan','wan')
-Header~Header anzeigen.
+displayHeader~Header anzeigen.
 headerCount~Anzahl der Links pro Zeile im Header.
-headerInc~Name der Header include Datei.
-Language~Waehle deine Sprache.
-check_config~If set to 'Yes', forces a check of the current configuration. MUST be done after any change.
-Autoupdate_frequency~For your own safety the maps are saved every X times they're saved or modify. You simply can restore the UNIQUE backup made, with the 'Restore' function. This parameter controls the X value.
+autoUpdateFreq~For your own safety the maps are saved every X times they're saved or modify. You simply can restore the UNIQUE backup made, with the 'Restore' function. This parameter controls the X value.
+checkConfig~If set to 'Yes', forces a check of the current configuration. MUST be done after any change.
+useGDLibs~GDLib benutzen?
+refreshTime~Map refresh time (in Sekunden).
+debug~Debug an oder aus?
+debugStates~Debug Status?
+debugCheckState~Debug Statuscheck?
+debugFixIcon~Debug FixIcon?
+base~Voller lokaler Pfad zum NagVis Basis Verzeichnis.
+cfg~Lokaler Pfad zum NagVis etc Verzeichnis.
+icon~Lokaler Pfad zum NagVis iconsets Verzeichnis.
+map~Lokaler Pfad zu den Hintergrund Bildern (*.png)
+mapCfg~Lokaler Pfad zu den Map Config Dateien (*.cfg)
+htmlBase~HTTP Pfad zu NagVis (/nagios/nagvis).
+htmlCgi~HTTP Pfad zu den Nagios CGIs (/nagios/cgi-bin).
+htmlIcon~HTTP Pfad zum NagVis iconsets Verzeichnis.
+htmlMap~HTTP Pfad zu den NagVis Maps (/nagios/nagvis/maps/).
+htmldoku~HTTP Pfad zur NagVis Doku.
+header~Name der Header include Datei.
+index~Include Datei fuer die Standard Seite.
+dbHost~Host der Datenbank (localhost).
+dbPort~Port der Datenbank (3306).
+dbName~Name der Datenbank.
+dbUser~User für den Datenbankzugriff.
+dbPass~Passwort für den Dtaenbankzugriff.
+dbPrefix~Kürzel vor den Tabellennamen
+dbInstanceId~Instanz-ID des Nagios-Prozesses
+cgiUser~Der User mit dem NagVis die CGIs aufruft (sollte 'allowed for all services', 'allowed for all hosts' sein)
+cgi~Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).
+version~Momentan genutzte NagVis Version
+title~Titel der NagVis Seiten

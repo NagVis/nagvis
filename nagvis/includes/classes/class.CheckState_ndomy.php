@@ -16,9 +16,37 @@
 
 class backend
 {
+	var $CONFIG;
 	var $dbPrefix;
 	var $dbInstanceId;
+	
+	/**
+	* Constructor
+	*
+	* @param config $CONFIG
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function backend($CONFIG) {
+		$this->CONFIG = $CONFIG;
+		
+		$this->dbPrefix = $this->CONFIG->getValue('backend_ndo', 'dbprefix');
+		$this->dbInstanceId = $this->CONFIG->getValue('backend_ndo', 'dbinstanceid');
 
+		if (!extension_loaded('mysql')) {
+			dl('mysql.so');
+		}
+		$CONN = mysql_connect($this->CONFIG->getValue('backend_ndo', 'dbhost'),$this->CONFIG->getValue('backend_ndo', 'dbuser'),$this->CONFIG->getValue('backend_ndo', 'dbpass'));
+		$returnCode = mysql_select_db($this->CONFIG->getValue('backend_ndo', 'dbname'),$CONN);
+		
+		if( $returnCode != TRUE){
+			echo "Error selecting Database";
+			exit;
+		}
+		return 0;
+	}
+	
+	/* deprecated
 	//The backendInitialize function will be needed ever, in backends wich need to do nothing here
 	//a simple "return 0" function should be implemented
 	function backendInitialize() {
@@ -44,13 +72,13 @@ class backend
 			exit;
 		}
 		return 0;
-	}
+	}*/
 
 
 	// Get the state for a HOST #####################################################################################################
-	function findStateHost($hostName,$recognizeServices,$statusCgi,$cgiUser) {
+	function findStateHost($hostName,$recognizeServices) {
 		
-		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id = '1' AND name1 = '$hostName' AND instance_id='$this->dbInstanceId'");
+		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id = '1' AND name1 = '".$hostName."' AND instance_id='".$this->dbInstanceId."'");
 		$hostObjectId = mysql_fetch_row($QUERYHANDLE);  
 	
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
@@ -167,7 +195,7 @@ class backend
 
    
 	// Hostgroup ###############################################################################################################
-	function findStateHostgroup($hostGroupName,$recognizeServices,$statusCgi,$cgiUser) {
+	function findStateHostgroup($hostGroupName,$recognizeServices) {
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='3' AND name1='$hostGroupName' AND instance_id='$this->dbInstanceId'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
@@ -248,7 +276,7 @@ class backend
 	}
 
 	// Service #####################################################################################################################
-	function findStateService($hostName,$serviceName,$StatusCgi,$CgiUser) {
+	function findStateService($hostName,$serviceName) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '2' AND name1 = '$hostName' AND name2 ='$serviceName' AND instance_id='$this->dbInstanceId')");
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			//FIXME: All this outputs should be handled over a language file
@@ -290,7 +318,7 @@ class backend
 	}
 
 	// Servicegroup ############################################################################################################
-	function findStateServicegroup($serviceGroupName,$StatusCgi,$CgiUser) {
+	function findStateServicegroup($serviceGroupName) {
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='4' AND name1='$serviceGroupName' AND instance_id='$this->dbInstanceId'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
@@ -396,39 +424,33 @@ class backend
 		}
 		return($state);
 	}
-
-	//FIXME: Can be made easiert here. Thigs like "CgiPath", "CgiUser" are special to the html backend,
-    //  	 so this should be done another way.
+	
 	// Status ermitteln
-	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0",$CgiPath,$CgiUser)
+	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0")
 	{
 		$rotateUrl = "";
 		unset($state);
 		//Status vom Host oder Service Prüfen.
 		if($Type == "host") {
-			$StatusCgi = $CgiPath.'status.cgi';
 			if(isset($Name)) {
-				$state = $this->findStateHost($Name,$RecognizeServices,$StatusCgi,$CgiUser);
+				$state = $this->findStateHost($Name,$RecognizeServices);
 			}
 		}
-		elseif($Type == "service") {	
-			$StatusCgi = $CgiPath."extinfo.cgi";
-			if(isset($Name) && isset($CgiUser)) {
-				$state = $this->findStateService($Name,$ServiceName,$StatusCgi,$CgiUser);
-                        }
-                }
+		elseif($Type == "service") {
+			if(isset($Name)) {
+				$state = $this->findStateService($Name,$ServiceName);
+            }
+        }
 
 		elseif($Type == "hostgroup") {
-			$StatusCgi = $CgiPath.'status.cgi';
-			if(isset($Name) && isset($CgiUser)) {
-				$state = $this->findStateHostgroup($Name,$RecognizeServices,$StatusCgi,$CgiUser);
+			if(isset($Name)) {
+				$state = $this->findStateHostgroup($Name,$RecognizeServices);
 			}
 		}
 		//Status einer Servicegroup prüfen.
 		elseif($Type == "servicegroup") {
-			$StatusCgi = $CgiPath.'status.cgi';
-			if(isset($Name) && isset($CgiUser)) {
-				$state = $this->findStateServicegroup($Name,$StatusCgi,$CgiUser);
+			if(isset($Name)) {
+				$state = $this->findStateServicegroup($Name);
 			}
 		}
 		if(!isset($state)) {

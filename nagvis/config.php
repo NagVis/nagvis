@@ -11,14 +11,17 @@
 #										#
 #################################################################################
 
-include("./etc/config.inc.php");
+include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
-include("./includes/classes/class.CheckState_".$backend.".php");
+
+$CONFIG = new NagVisConfig('./etc/config.ini');
+
+include("./includes/classes/class.CheckState_".$CONFIG->getValue('global', 'backend').".php");
 include("./wui/classes.wui.php");
 
 # we load the language file
-$langfile= new langFile($cfgPath."languages/wui_".$Language.".txt");
+$langfile= new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
 
 ############################################################################################################
 # SOME JAVASCRIPTS FUNCTIONS WE WILL NEED
@@ -227,8 +230,8 @@ function fenetre_management(page)
 
 <?
 
-$FRONTEND = new frontend();
-$readfile = new readFile();
+$FRONTEND = new frontend($CONFIG);
+$readfile = new readFile($CONFIG);
 $rotateUrl = "";
 
 #############################################
@@ -246,10 +249,10 @@ $rotateUrl = "";
 $all_allowed_user="";
 $all_map_image="";
 $all_map_name="";
-$myreadfile = new readFile();
+$myreadfile = new readFile($CONFIG);
 $res="";
 $files=array();
-if ($handle2 = opendir($cfgFolder)) 
+if ($handle2 = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
 {
 	while (false !== ($file = readdir($handle2))) 
 	{
@@ -319,7 +322,7 @@ else {
 # if a map is defined in the URL we load its definition file and retrieve its allowed_user list and map_image parameter
 if($map!="")
 {
-	if(file_exists($cfgFolder.$map.".cfg")) {
+	if(file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
 		$mapCfg = $readfile->readNagVisCfg($map);
 		$allowed_users = explode(",",trim($mapCfg[1]['allowed_for_config']));
 		$map_image_array = explode(",",trim($mapCfg[1]['map_image']));
@@ -329,7 +332,7 @@ if($map!="")
 
 $FRONTEND->site[] = '<HTML>';
 $FRONTEND->site[] = '<HEAD>';
-$FRONTEND->site[] = '<TITLE>'.$title.'</TITLE>';
+$FRONTEND->site[] = '<TITLE>'.$CONFIG->getValue('internal', 'title').'</TITLE>';
 $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/nagvis.js"></SCRIPT>';
 $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib.js"></SCRIPT>';
 $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./wui/wz_jsgraphics.js"></SCRIPT>';
@@ -343,7 +346,7 @@ $FRONTEND->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE
 #	- the current user is allowed to have acees to it
 if($map!="")
 {
-	if(!file_exists($cfgFolder.$map.".cfg")) {
+	if(!file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
 		$FRONTEND->openSite($rotateUrl);
 		$FRONTEND->messageBox("2", "MAP~".$map.".cfg");
 		$FRONTEND->closeSite();
@@ -352,9 +355,9 @@ if($map!="")
 	}
 
 
-	elseif(!file_exists($mapFolder.$map_image)) {
+	elseif(!file_exists($CONFIG->getValue('paths', 'map').$map_image)) {
 		$FRONTEND->openSite($rotateUrl);
-		$FRONTEND->messageBox("3", "MAPPATH~".$mapFolder.$map_image);
+		$FRONTEND->messageBox("3", "MAPPATH~".$CONFIG->getValue('paths', 'map').$map_image);
 		$FRONTEND->closeSite();
 		$FRONTEND->printSite();
 		exit;
@@ -369,8 +372,8 @@ if($map!="")
 	}
 }
 
-# we check the value of $check_config in the main config file
-if($check_config == "1")
+# we check the value of checkconfig in the main config file
+if($CONFIG->getValue('global', 'checkconfig') == "1")
 {
 	print "<script>window.document.location.href='check_config.php?source=config.php&map=$map';</script>\n";
 }
@@ -402,7 +405,7 @@ $FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setStro
 
 ##############################################################################	
 # we read and display the objects, one by one	
-$BACKEND = new BACKEND();
+$BACKEND = new BACKEND($CONFIG);
 
 $countStates = count($mapCfg)-1;
 $arrayPos="2";
@@ -454,12 +457,12 @@ for($x="1";$x<=$countStates;$x++)
 	}
 	else
 	{
-		$Icon_name = $FRONTEND->findIcon($state,$mapCfg,$mapCfg['1']['iconset'],$defaultIcons,$mapCfg[$arrayPos]['type']);
+		$Icon_name = $FRONTEND->findIcon($state,$mapCfg,$mapCfg['1']['iconset'],$CONFIG->getValue('global', 'defaulticons'),$mapCfg[$arrayPos]['type']);
 	}
 		
 	# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display
-	$Icon=$iconHTMLBaseFolder.$Icon_name;
-	list($mywidth,$myheight,$type,$attr) = getimagesize($iconBaseFolder.$Icon_name);
+	$Icon=$CONFIG->getValue('paths', 'htmlicon').$Icon_name;
+	list($mywidth,$myheight,$type,$attr) = getimagesize($CONFIG->getValue('paths', 'icon').$Icon_name);
 	$myposx=$mapCfg[$arrayPos]['x']-($mywidth/2);
 	$myposy=$mapCfg[$arrayPos]['y']-($myheight/2);
 	
@@ -542,7 +545,7 @@ if (strlen($movable) != 0)
 		<select name="map_choice">
 		<?
 			# we build the list of .cfg files (without extension) present in the maps directory
-			if ($handle = opendir($cfgFolder)) 
+			if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
 			{
 				while (false !== ($file = readdir($handle))) 
 				{
@@ -585,7 +588,7 @@ if (strlen($movable) != 0)
 	<input type="text" name="allowed_users_by_map" value="<? echo $all_allowed_user ?>">
 	<input type="text" name="image_map_by_map" value="<? echo $all_map_image ?>">
 	<input type="text" name="mapname_by_map" value="<? echo $all_map_name ?>">
-	<input type="text" name="backup_available" value="<? echo file_exists($cfgFolder.$map.".cfg.bak") ?>">
+	<input type="text" name="backup_available" value="<? echo file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg.bak") ?>">
 	<input name="submit" type=submit value="Save this map">
 </form> 
 

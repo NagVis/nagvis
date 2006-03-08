@@ -22,6 +22,18 @@
 * @author Michael Luebben <michael_luebben@web.de>
 */
 class common {
+	var $CONFIG;
+	
+	/**
+	* Constructor
+	*
+	* @param config $CONFIG
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function common($CONFIG) {
+		$this->CONFIG = $CONFIG;
+	}
 	
 	/**
 	* Search Icon for a State
@@ -36,13 +48,13 @@ class common {
 	function findIcon($State,$mapCfg,$IconMapGlobal,$IconConfigCfg,$Type) {
 		$rotateUrl = "";
 		unset($Icon);
-                $valid_format = array(
-                        0=>"gif",
-                        1=>"png",
-                        2=>"bmp",
-                        3=>"jpg",
-                        4=>"jpeg"
-                );
+        $valid_format = array(
+                0=>"gif",
+                1=>"png",
+                2=>"bmp",
+                3=>"jpg",
+                4=>"jpeg"
+        );
 		$StateLow = strtolower($State['State']);
 		if(isset($mapCfg['iconset'])) {
 			$IconPath = $mapCfg['iconset'];
@@ -111,11 +123,12 @@ class common {
 		}
 
 		for($i=0;$i<count($valid_format);$i++) {
-			if(file_exists($Base."iconsets/".$Icon.".".$valid_format[$i])) {
-                                $Icon .= ".".$valid_format[$i];
+			if(file_exists($this->CONFIG->getValue('paths', 'base')."iconsets/".$Icon.".".$valid_format[$i])) {
+            	$Icon .= ".".$valid_format[$i];
 			}
 		}
-		if(file_exists($Base."iconsets/".$Icon)) {	
+		
+		if(file_exists($this->CONFIG->getValue('paths', 'base')."iconsets/".$Icon)) {	
 			return $Icon;
 		}
 		else {

@@ -8,7 +8,6 @@ class readFile_wui
 {	
 	// <map>.cfg einlesen (neues Format).
 	function readNagVisCfg($file) {
-		include("../etc/config.inc.php");
 		$NagVisCfg = file('../etc/maps/'.$file.".cfg");
 		
 		$l="0";
@@ -137,14 +136,15 @@ class langFile
 	
 	function get_text_silent($myid)
 	{
-		if (count($this->$indexes)==1)
+		if(count($this->indexes) == 1)
 		{
 			return "";
 		}
 		else
 		{
-			$key = array_search($myid,$this->indexes); 
-			if ($key!==null&&$key!==false) 
+			// Cause of the new config-format this has to be case insensitive
+			$key = $this->array_lsearch($myid,$this->indexes);
+			if($key !== null && $key !== false && !is_array($key)) 
 			{
 				return str_replace("'","\'",$this->values[$key]);
 			}
@@ -153,6 +153,25 @@ class langFile
 				return "";
 			}
 		}
+	}
+	
+	function array_lsearch($str,$array) {
+		$found = Array();
+		
+		foreach($array as $k => $v) {
+			if(@strtolower($v) == @strtolower($str)) {
+				$found[] = $k;
+			}
+		}
+		
+		$f = @count($found);
+		
+		if($f == 0)
+			return FALSE;
+		elseif($f == 1)
+			return $found[0];
+		else
+			return $found;
 	}
 
 }
