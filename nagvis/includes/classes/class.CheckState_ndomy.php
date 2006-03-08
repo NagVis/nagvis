@@ -6,9 +6,9 @@
 ##                         Nagios NDO Mysql DB. All not special to one	##
 ##                         Backend related things should removed here!  ##
 ##                         (e.g. fixIcon, this is needed for ALL        ##
-##                         Backends	)									##
+##                         Backends	)				##
 ##########################################################################
-## Licenced under the terms and conditions of the GPL Licence, 			##
+## Licenced under the terms and conditions of the GPL Licence, 		##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 ## This Backend is maintained by Andreas Husch (dowanup@nagios-wiki.de) ##
@@ -25,56 +25,31 @@ class backend
 	*
 	* @param config $CONFIG
 	*
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* @author Andreas Husch, Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function backend($CONFIG) {
 		$this->CONFIG = $CONFIG;
-		
+	        $this->dbName = $this->CONFIG->getValue('backend_ndo', 'dbname');
+	        $this->dbUser = $this->CONFIG->getValue('backend_ndo', 'dbuser');
+	        $this->dbPass = $this->CONFIG->getValue('backend_ndo', 'dbpass');
+	        $this->dbHost = $this->CONFIG->getValue('backend_ndo', 'dbhost');
+	        $this->dbPort = $this->CONFIG->getValue('backend_ndo', 'dbport');
 		$this->dbPrefix = $this->CONFIG->getValue('backend_ndo', 'dbprefix');
 		$this->dbInstanceId = $this->CONFIG->getValue('backend_ndo', 'dbinstanceid');
 
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
 		}
-		$CONN = mysql_connect($this->CONFIG->getValue('backend_ndo', 'dbhost'),$this->CONFIG->getValue('backend_ndo', 'dbuser'),$this->CONFIG->getValue('backend_ndo', 'dbpass'));
-		$returnCode = mysql_select_db($this->CONFIG->getValue('backend_ndo', 'dbname'),$CONN);
+		$CONN = mysql_connect($this->dbHost,$this->dbUser,$this->dbPass);
+		$returnCode = mysql_select_db($this->dbName,$CONN);
 		
 		if( $returnCode != TRUE){
-			echo "Error selecting Database";
+			echo "Error selecting Database, maybe wrong db or insufficient permissions?";
 			exit;
 		}
 		return 0;
 	}
 	
-	/* deprecated
-	//The backendInitialize function will be needed ever, in backends wich need to do nothing here
-	//a simple "return 0" function should be implemented
-	function backendInitialize() {
-		
-		//Connection Parameters, ONLY for testing here, will be defined in the config file later ===============
-		$dbUser="nagios";
-		$dbPass="nagios";
-		$dbName="nagios";
-		$dbHost="localhost";
-		$this->dbPrefix="ndo_";
-		$this->dbInstanceId="1";
-		//End Connection Parameters =============================================================================
-
-
-		if (!extension_loaded('mysql')) {
-			dl('mysql.so');
-		}
-		$CONN = mysql_connect($dbHost,$dbUser,$dbPass);
-		$returnCode = mysql_select_db($dbName,$CONN);
-		
-		if( $returnCode != TRUE){
-			echo "Error selecting Database";
-			exit;
-		}
-		return 0;
-	}*/
-
-
 	// Get the state for a HOST #####################################################################################################
 	function findStateHost($hostName,$recognizeServices) {
 		
