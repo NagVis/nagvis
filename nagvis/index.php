@@ -63,24 +63,24 @@ $rotateUrl = "";
 $CHECKIT->check_user();
 $CHECKIT->check_gd();
 //FIXME: should only be checked, if backend ist HTML/CGI
-if($CONFIG->getValue('global', 'backend') == 'html')
+if($CONFIG->getValue('global', 'backend') == 'html') {
 	$CHECKIT->check_cgipath();
+}
 $CHECKIT->check_wuibash();
 $rotateUrl = $CHECKIT->check_rotate();
 
-//Prüfen ob *.cfg-Datei vorhanden ist und dann einlesen.
-//FIXME sollte erst NACH den ganzen Plausis gemacht werden
-if(file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
-    $mapCfg = $READFILE->readNagVisCfgNew($map);
-    $IconMapGlobal = $mapCfg['global']['1']['iconset'];
-    $map_image_array = explode(",",trim($mapCfg['global'][1]['map_image']));
-    $map_image=$map_image_array[0];
-}
+
+$CHECKIT->check_map_isreadable();
+//Read *.cfg File
+$mapCfg = $READFILE->readNagVisCfgNew($map);
+$IconMapGlobal = $mapCfg['global']['1']['iconset'];
+$map_image_array = explode(",",trim($mapCfg['global'][1]['map_image']));
+$map_image=$map_image_array[0];
+
 
 $FRONTEND->openSite($rotateUrl);
 
 $CHECKIT->check_permissions();
-$CHECKIT->check_map_isreadable();
 $CHECKIT->check_mapimg();
 $CHECKIT->check_langfile();
 
