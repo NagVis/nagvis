@@ -60,14 +60,34 @@ class checkit extends frontend {
     function check_map_isreadable() {
         global $map;
         
-        if(is_readable($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
-			$this->openSite($rotateUrl);
-			$this->messageBox("2", "MAP~".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg");
-			$this->closeSite();
-			$this->printSite();
-			
+        if(file_exists($this->CONFIG->getValue('paths', 'mapcfg')) {
+        	if(is_readable($this->CONFIG->getValue('paths', 'mapcfg')) {
+        		if(file_exists($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg") {
+			        if(is_readable($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
+						return TRUE;
+		        	} else {
+		        		$this->openSite($rotateUrl);
+						$this->messageBox("2", "MAP~".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg");
+						$this->closeSite();
+						$this->printSite();
+						
+						exit;
+		        	}
+				} else {
+					//FXIME: Map-Config exitsiert nicht
+					echo "Map-Config (".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg) doesn't exists";
+					exit;
+				}
+			} else {
+				//FXIME: Verzeichniss nicht lesbar!
+				echo "Directory (".$this->CONFIG->getValue('paths', 'mapcfg').") isn't readable";
+				exit;
+			}
+		} else {
+			//FXIME: Verzeichniss existiert nicht!
+			echo "Directory (".$this->CONFIG->getValue('paths', 'mapcfg').") doesn't exists";
 			exit;
-        }
+		}
     }
 	
 	/**
