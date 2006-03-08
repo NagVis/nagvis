@@ -8,7 +8,6 @@
 /**
 * This Class handles the NagVis configuration file
 */
-
 class nagvisconfig {
 	var $config;
 	var $configFile;
@@ -32,28 +31,29 @@ class nagvisconfig {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
-	
 	function readConfig() {
 		$this->config = Array();
 		$numComments = 0;
 		$sec = '';
 		
+		// Check for config file and read permissions
 		if(@file_exists($this->configFile) && @is_readable($this->configFile)) {
-			// Datei zeilenweise in ein Array einlesen
+			// read thx config file line by line in array $file
 			$file = @file($this->configFile);
 			
-			// Zeilenweise auslesen der Datei
+			// loop trough array
 			for ($i = 0; $i < @count($file); $i++) {
-				// Leerzeichen am Anfang und Ende der Zeile abschneiden
+				// cut spaces from beginning and end
 				$line = @trim($file[$i]);
 				
-				$firstChar = @substr($line,0,1);
-				
-				// Leere Zeilen nicht auslesen
+				// don't read empty lines
 				if(isset($line) && $line != '') {
-					// Was ist das für eine Zeile?
+					// get first char of actual line
+					$firstChar = @substr($line,0,1);
+				
+					// check what's in this line
 					if($firstChar == ';') {
-						// Kommentar...
+						// comment...
 						$key = "comment_".($numComments++);
 						$val = @trim($line);
 						
@@ -62,26 +62,28 @@ class nagvisconfig {
 						else
 							$this->config[$key] = $val;
 					} elseif ((@substr($line, 0, 1) == "[") && (@substr($line, -1, 1)) == "]") {
-						// Kategorie...
+						// section
 						$sec = @strtolower(@trim(@substr($line, 1, @strlen($line)-2)));
 						
 						// In Array schreiben
 						$this->config[$sec] = Array();
 					} else {
-						// Wert...
+						// parameter...
+						
+						// seperate string in an array
 						$arr = @explode("=",$line);
-						// Key auslesen und aus Array entfernen
+						// read key from array and delete it
 						$key = @strtolower(@trim($arr[0]));
 						unset($arr[0]);
-						// Rest des Arrays zusammenfügen
+						// build string from rest of array
 						$val = @trim(@implode("=", $arr));
 						
-						// Zeilenumbruch entfernen
+						// remove " at beginign and at the end of the string
 						if ((@substr($val,0,1) == "\"") && (@substr($val,-1,1)=="\"")) {
 							$val = @substr($val,1,@strlen($val)-2);
 						}
 						
-						// In Array schreiben
+						// write in config array
 						if(isset($sec))
 							$this->config[$sec][$key] = $val;
 						else
@@ -94,7 +96,7 @@ class nagvisconfig {
 				}
 			}
 		} else {
-			// TODO: Fehlerbehandlung
+			//FIXME: Errorhandling
 		}
 	}
 	
@@ -103,10 +105,9 @@ class nagvisconfig {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
-	
 	function writeConfig() {
+		// Check for config file and read permissions
 		if(file_exists($this->configFile) && is_writeable($this->configFile)) {
-			// Config schreiben
 			foreach($this->config as $key => $item) {
 				if(is_array($item)) {
 					$content .= "[".$key."]\n";
@@ -131,20 +132,20 @@ class nagvisconfig {
 			}
 			
 			if(!$handle = fopen($this->configFile, 'w+')) {
-				// TODO: Fehlerbehandlung?
-				return false;
+				//FIXME: Errorhandling
+				return FALSE;
 			}
 			
 			if(!fwrite($handle, $content)) {
-				// TODO: Fehlerbehandlung?
-				return false;
+				//FIXME: Errorhandling
+				return FALSE;
 			}
 			
 			fclose($handle);
-			return true;
+			return TRUE;
 		} else {
-			// TODO: Fehlerbehandlung?
-			return false;
+			//FIXME: Errorhandling
+			return FALSE;
 		}
 	}
 	
@@ -155,7 +156,6 @@ class nagvisconfig {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
-	
 	function findSecOfVar($var) {
 		foreach($this->config AS $key => $item) {
 			if(is_array($item)) {
@@ -180,7 +180,6 @@ class nagvisconfig {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
-	
 	function setValue($sec, $var, $val) {
        $this->config[$sec][$var] = $val;
 	}
@@ -193,7 +192,6 @@ class nagvisconfig {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
-
 	function getValue($sec, $var) {
 		return $this->config[$sec][$var];
 	}
