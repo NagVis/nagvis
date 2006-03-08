@@ -27,7 +27,15 @@ include("./includes/classes/class.Debug.php");
 $CONFIG = new nagvisconfig('./etc/config.ini');
 
 // include the configured backend
-include("./includes/classes/class.CheckState_".$CONFIG->getValue('global', 'backend').".php");
+if($CONFIG->getValue('global', 'backend') == 'html')
+	include("./includes/classes/class.CheckState_html.php");
+elseif($CONFIG->getValue('global', 'backend') == 'ndomy')
+	include("./includes/classes/class.CheckState_ndomy.php");
+elseif($CONFIG->getValue('global', 'backend') == 'xml')
+	include("./includes/classes/class.CheckState_xml.php");
+else {
+	//FIXME: Errorhandling (no valid backend selected)	
+}
 
 $CHECKIT = new checkit($CONFIG);
 $DEBUG = new debug($CONFIG);
@@ -54,8 +62,9 @@ $rotateUrl = "";
 // check-stuff
 $CHECKIT->check_user();
 $CHECKIT->check_gd();
-//FIXME: Sollte nur geprüft werden, wenn NDO = HTML
-$CHECKIT->check_cgipath();
+//FIXME: should only be checked, if backend ist HTML/CGI
+if($CONFIG->getValue('global', 'backend') == 'html')
+	$CHECKIT->check_cgipath();
 $CHECKIT->check_wuibash();
 $rotateUrl = $CHECKIT->check_rotate();
 
@@ -90,7 +99,6 @@ if ($CONFIG->getValue('global', 'usegdlibs') == "1") {
 
 //Load and initialise the backend
 $BACKEND = new backend($CONFIG);
-// Deprecated: $BACKEND->backendInitialize();
     
 // Handle all objects of type "map"
 if (is_array($mapCfg['map'])){
