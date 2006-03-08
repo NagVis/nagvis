@@ -29,6 +29,9 @@ else {
 	//FIXME: Errorhandling (no valid backend selected)	
 }
 
+// load language
+$langfile = new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
+
 ############################################################################################################
 # SOME JAVASCRIPTS FUNCTIONS WE WILL NEED
 ############################################################################################################
