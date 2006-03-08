@@ -17,6 +17,10 @@
 class backend
 {
 	var $CONFIG;
+	var $dbName;
+	var $dbUser;
+	var $dbPass;
+	var $dbHost;
 	var $dbPrefix;
 	var $dbInstanceId;
 	
@@ -29,19 +33,20 @@ class backend
 	*/
 	function backend($CONFIG) {
 		$this->CONFIG = $CONFIG;
-	        $this->dbName = $this->CONFIG->getValue('backend_ndo', 'dbname');
-	        $this->dbUser = $this->CONFIG->getValue('backend_ndo', 'dbuser');
-	        $this->dbPass = $this->CONFIG->getValue('backend_ndo', 'dbpass');
-	        $this->dbHost = $this->CONFIG->getValue('backend_ndo', 'dbhost');
-	        $this->dbPort = $this->CONFIG->getValue('backend_ndo', 'dbport');
+        $this->dbName = $this->CONFIG->getValue('backend_ndo', 'dbname');
+        $this->dbUser = $this->CONFIG->getValue('backend_ndo', 'dbuser');
+        $this->dbPass = $this->CONFIG->getValue('backend_ndo', 'dbpass');
+        $this->dbHost = $this->CONFIG->getValue('backend_ndo', 'dbhost');
+        $this->dbPort = $this->CONFIG->getValue('backend_ndo', 'dbport');
 		$this->dbPrefix = $this->CONFIG->getValue('backend_ndo', 'dbprefix');
 		$this->dbInstanceId = $this->CONFIG->getValue('backend_ndo', 'dbinstanceid');
 
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
 		}
-		$CONN = mysql_connect($this->dbHost,$this->dbUser,$this->dbPass);
-		$returnCode = mysql_select_db($this->dbName,$CONN);
+		
+		$CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
+		$returnCode = mysql_select_db($this->dbName, $CONN);
 		
 		if( $returnCode != TRUE){
 			echo "Error selecting Database, maybe wrong db or insufficient permissions?";
