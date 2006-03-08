@@ -16,7 +16,7 @@ include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
 include("./wui/classes.wui.php");
 
-$CONFIG = new NagVisConfig('./etc/config.ini');
+$CONFIG = new MainNagVisCfg('./etc/config.ini');
 
 // include the configured backend
 if($CONFIG->getValue('global', 'backend') == 'html')

@@ -5,9 +5,18 @@ include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
 
-$CONFIG = new nagvisconfig('./etc/config.ini');
+$CONFIG = new MainNagVisCfg('./etc/config.ini');
 
-include("./includes/classes/class.CheckState_".$CONFIG->getValue('global', 'backend').".php");
+// include the configured backend
+if($CONFIG->getValue('global', 'backend') == 'html')
+	include("./includes/classes/class.CheckState_html.php");
+elseif($CONFIG->getValue('global', 'backend') == 'ndomy')
+	include("./includes/classes/class.CheckState_ndomy.php");
+elseif($CONFIG->getValue('global', 'backend') == 'xml')
+	include("./includes/classes/class.CheckState_xml.php");
+else {
+	//FIXME: Errorhandling (no valid backend selected)	
+}
 
 $map = $_GET['map'];
 

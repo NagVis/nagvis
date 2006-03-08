@@ -74,17 +74,14 @@ class checkit extends frontend {
 						exit;
 		        	}
 				} else {
-					//FXIME: Map-Config exitsiert nicht
 					echo "Map-Config (".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg) doesn't exists";
 					exit;
 				}
 			} else {
-				//FXIME: Verzeichniss nicht lesbar!
 				echo "Directory (".$this->CONFIG->getValue('paths', 'mapcfg').") isn't readable";
 				exit;
 			}
 		} else {
-			//FXIME: Verzeichniss existiert nicht!
 			echo "Directory (".$this->CONFIG->getValue('paths', 'mapcfg').") doesn't exists";
 			exit;
 		}

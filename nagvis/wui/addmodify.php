@@ -21,7 +21,7 @@
 include("../includes/classes/class.NagVisConfig.php");
 include("./classes.wui.php");
 
-$CONFIG = new nagvisconfig('../etc/config.ini');
+$CONFIG = new MainNagVisCfg('../etc/config.ini');
 
 # we load the language file
 $langfile= new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");

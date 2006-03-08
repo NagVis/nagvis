@@ -8,7 +8,7 @@
 /**
 * This Class handles the NagVis configuration file
 */
-class nagvisconfig {
+class MainNagVisCfg {
 	var $config;
 	var $configFile;
 	
@@ -19,7 +19,7 @@ class nagvisconfig {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function nagvisconfig($configFile) {
+	function MainNagVisCfg($configFile) {
 		$this->config = Array();
 		$this->configFile = $configFile;
 		

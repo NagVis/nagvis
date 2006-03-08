@@ -16,7 +16,7 @@
 # applies the changes on the server. 
 
 include("../includes/classes/class.NagVisConfig.php");
-$CONFIG = new nagvisconfig('../etc/config.ini');
+$CONFIG = new MainNagVisCfg('../etc/config.ini');
 
 ############################################
 # passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file

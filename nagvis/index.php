@@ -24,7 +24,7 @@ include("./includes/classes/class.CheckIt.php");
 include("./includes/classes/class.ReadFiles.php");
 include("./includes/classes/class.Debug.php");
 
-$CONFIG = new nagvisconfig('./etc/config.ini');
+$CONFIG = new MainNagVisCfg('./etc/config.ini');
 
 // include the configured backend
 if($CONFIG->getValue('global', 'backend') == 'html')
@@ -66,7 +66,6 @@ if($CONFIG->getValue('global', 'backend') == 'html') {
 }
 $CHECKIT->check_wuibash();
 $rotateUrl = $CHECKIT->check_rotate();
-
 
 $CHECKIT->check_map_isreadable();
 //Read *.cfg File
