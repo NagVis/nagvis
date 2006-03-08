@@ -47,11 +47,9 @@ $browser = $_SERVER['HTTP_USER_AGENT'];
 // Get Map from Url.
 if(isset($_GET['map'])) {
     $map = $_GET['map'];
-    $CHECKIT->check_map_isreadable();
 } else {
 	$arr = explode(',',$CONFIG->getValue('global', 'maps'));
     $map = $arr[0];
-	$CHECKIT->check_map_isreadable();
 }
 
 $FRONTEND = new frontend($CONFIG);

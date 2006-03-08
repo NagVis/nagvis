@@ -60,9 +60,9 @@ class checkit extends frontend {
     function check_map_isreadable() {
         global $map;
         
-        if(file_exists($this->CONFIG->getValue('paths', 'mapcfg')) {
-        	if(is_readable($this->CONFIG->getValue('paths', 'mapcfg')) {
-        		if(file_exists($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg") {
+        if(file_exists($this->CONFIG->getValue('paths', 'mapcfg'))) {
+        	if(is_readable($this->CONFIG->getValue('paths', 'mapcfg'))) {
+        		if(file_exists($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
 			        if(is_readable($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
 						return TRUE;
 		        	} else {
