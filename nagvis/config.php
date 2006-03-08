@@ -344,6 +344,7 @@ $FRONTEND->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE
 #	- its definition file exists
 #	- its background image exists
 #	- the current user is allowed to have acees to it
+#	- the map is writable
 if($map!="")
 {
 	if(!file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
@@ -370,6 +371,13 @@ if($map!="")
 		$FRONTEND->printSite();
 		exit;
 	}
+        elseif(!is_writable($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
+                        $FRONTEND->openSite($rotateUrl);
+                        $FRONTEND->messageBox("17", "MAP~".$CONFIG->getValue('paths', 'mapcfg').$map.".cfg");
+                        $FRONTEND->closeSite();
+                        $FRONTEND->printSite();
+                        exit;
+        }
 }
 
 # we check the value of checkconfig in the main config file
