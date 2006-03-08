@@ -67,6 +67,24 @@ class checkit extends frontend {
 			exit;
         }
     }
+	
+	/**
+        * Check if the Map Configuratin File wich is edited is writable
+        *
+        * @author Andreas Husch
+	* CAUTION: WUI does acually not use the method here! There is a copy of this in the WUI code!
+        */
+    function check_map_iswritable() {
+        global $map;
+        $FRONTEND = new frontend($this->CONFIG);
+        if(!is_writable($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
+                        $FRONTEND->openSite($rotateUrl);
+                        $FRONTEND->messageBox("17", "MAP~".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg");
+                        $FRONTEND->closeSite();
+                        $FRONTEND->printSite();
+                        exit;
+        }
+    }
 
 	/**
 	* Check the logged in User.
