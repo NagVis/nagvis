@@ -6,23 +6,22 @@
 ##             should be only "output code", all calculations should    ##
 ##             be done in the classes!                                  ##
 ##########################################################################
-## Licenced under the terms and conditions of the GPL Licence, 			##
+## Licenced under the terms and conditions of the GPL Licence,         	##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
 ##########################################################################
-## Code Format: Vars: wordWordWord										##
-##		   	 Classes: wordwordword                                      ##
-##		     Objects: WORDWORDWORD                                      ##
+## Code Format: Vars: wordWordWord                                      ##
+##		   	 Classes: wordwordword                          ##
+##		     Objects: WORDWORDWORD                              ##
 ## Please use TAB (Tab Size: 4 Spaces) to format the code               ##
 ##########################################################################
 
-#FIXME: Inserts Plausis to check if files are there and readable
-include("./includes/classes/class.NagVisConfig.php");
-include("./includes/classes/class.MapCfg.php");
-include("./includes/classes/class.Graphic.php");
-include("./includes/classes/class.CheckIt.php");
-include("./includes/classes/class.ReadFiles.php");
+require("./includes/classes/class.NagVisConfig.php");
+require("./includes/classes/class.MapCfg.php");
+require("./includes/classes/class.Graphic.php");
+require("./includes/classes/class.CheckIt.php");
+require("./includes/classes/class.ReadFiles.php");
 include("./includes/classes/class.Debug.php");
 
 $MAINCFG = new MainNagVisCfg('./etc/config.ini');
@@ -32,9 +31,6 @@ $CHECKIT = new checkit($MAINCFG,$MAPCFG);
 $DEBUG = new debug($MAINCFG);
 
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
-
-include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
-$BACKEND = new backend($MAINCFG);
 
 $READFILE = new readFile($MAINCFG);
 
@@ -55,6 +51,9 @@ if(!$CHECKIT->check_langfile(1)) {
 	exit;
 }
 $MAINCFG->setRuntimeValue('rotateUrl',$CHECKIT->check_rotate());
+
+require("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
+$BACKEND = new backend($MAINCFG);
 
 $FRONTEND->openSite();
 
