@@ -33,11 +33,11 @@ class backend
 	*/
 	function backend($MAINCFG) {
 		$this->MAINCFG = $MAINCFG;
-	        $this->dbName = $this->MAINCFG->getValue('backend_ndo', 'dbname');
-        	$this->dbUser = $this->MAINCFG->getValue('backend_ndo', 'dbuser');
-	        $this->dbPass = $this->MAINCFG->getValue('backend_ndo', 'dbpass');
-	        $this->dbHost = $this->MAINCFG->getValue('backend_ndo', 'dbhost');
-	        $this->dbPort = $this->MAINCFG->getValue('backend_ndo', 'dbport');
+	    $this->dbName = $this->MAINCFG->getValue('backend_ndo', 'dbname');
+        $this->dbUser = $this->MAINCFG->getValue('backend_ndo', 'dbuser');
+	    $this->dbPass = $this->MAINCFG->getValue('backend_ndo', 'dbpass');
+	    $this->dbHost = $this->MAINCFG->getValue('backend_ndo', 'dbhost');
+	    $this->dbPort = $this->MAINCFG->getValue('backend_ndo', 'dbport');
 		$this->dbPrefix = $this->MAINCFG->getValue('backend_ndo', 'dbprefix');
 		$this->dbInstanceId = $this->MAINCFG->getValue('backend_ndo', 'dbinstanceid');
 
