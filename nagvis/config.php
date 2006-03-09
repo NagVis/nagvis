@@ -50,7 +50,7 @@ if(!$CHECKIT->check_user(1)) {
 if(!$MAPCFG->checkMapImageReadable(1)) {
 	exit;
 }
-if($CHECKIT->check_permissions(1)) {
+if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_for_config'),1)) {
 	exit;
 }
 if(!$MAPCFG->checkMapConfigWriteable(1)) {
