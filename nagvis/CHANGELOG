@@ -1,4 +1,16 @@
 date: 2006-03-09
+author: husch
+- added check at the NDO Backend to make sure that Nagios is alive and data are up to date
+  (something like this should be done at the HTML backend too).
+  errorboxes for this have to be done.
+- made some security checks to the map parameter given by the user (its the only paramter 
+  wich is given directly from outside, so a path exploid or sql injection etc. is theoretically
+  possible). slashes, backslashes and php tags are filtered now. 
+  something like this should be done to all wui fields too!
+- added error message 17 (*.cfg files not writable by the webserver) in german and english
+- deleted unneeded files
+
+date: 2006-03-09
 author: michelsen
 - renamed object $CONFIG to $MAINCFG
 - wrote class.MapCfg.php for handling the map config, object will be given to all classes
