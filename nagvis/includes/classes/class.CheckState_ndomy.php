@@ -33,11 +33,11 @@ class backend
 	*/
 	function backend($MAINCFG) {
 		$this->MAINCFG = $MAINCFG;
-        $this->dbName = $this->MAINCFG->getValue('backend_ndo', 'dbname');
-        $this->dbUser = $this->MAINCFG->getValue('backend_ndo', 'dbuser');
-        $this->dbPass = $this->MAINCFG->getValue('backend_ndo', 'dbpass');
-        $this->dbHost = $this->MAINCFG->getValue('backend_ndo', 'dbhost');
-        $this->dbPort = $this->MAINCFG->getValue('backend_ndo', 'dbport');
+	        $this->dbName = $this->MAINCFG->getValue('backend_ndo', 'dbname');
+        	$this->dbUser = $this->MAINCFG->getValue('backend_ndo', 'dbuser');
+	        $this->dbPass = $this->MAINCFG->getValue('backend_ndo', 'dbpass');
+	        $this->dbHost = $this->MAINCFG->getValue('backend_ndo', 'dbhost');
+	        $this->dbPort = $this->MAINCFG->getValue('backend_ndo', 'dbport');
 		$this->dbPrefix = $this->MAINCFG->getValue('backend_ndo', 'dbprefix');
 		$this->dbInstanceId = $this->MAINCFG->getValue('backend_ndo', 'dbinstanceid');
 
@@ -49,9 +49,29 @@ class backend
 		$returnCode = mysql_select_db($this->dbName, $CONN);
 		
 		if( $returnCode != TRUE){
+			//FIXME: Error Box
 			echo "Error selecting Database, maybe wrong db or insufficient permissions?";
-			exit;
+			return 1;
 		}
+		
+		//Do some checks to make sure that Nagios is running and the Data at the DB are ok
+		$QUERYHANDLE = mysql_query("SELECT is_currently_running, status_update_time FROM ".$this->dbPrefix."programstatus WHERE instance_id = '".$this->dbInstanceId."'");
+		$nagiosState = mysql_fetch_array($QUERYHANDLE);
+	
+		//Check that Nagios reports itself as running	
+		if ($nagiosState['is_currently_running'] != 1) {
+			//FIXME: Error Box
+			echo "Caution: NDO claims that Nagios is NOT running!";
+			return 1;
+		}
+		
+		//Be suspiciosly and check that the data at the db are not older that three minutes too
+		if(time() - strtotime($nagiosState['status_update_time']) > 180) {
+			//FIXME:Error Box
+			echo "Caution: NDO claims that Nagios did no status Update for more than three minutes!";
+			return 1;
+		}
+			
 		return 0;
 	}
 	
