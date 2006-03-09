@@ -206,8 +206,10 @@ class checkit extends frontend {
 	*
 	* @author FIXME!
 	* @author Michael Luebben <michael_luebben@web.de>
+	*
+	* DEPRECATED: done in mapcfg class
 	*/
-    function check_mapimg() {
+    /*function check_mapimg() {
         if(!file_exists($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage())) {
             $this->openSite($rotateUrl);
             $this->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
@@ -216,7 +218,7 @@ class checkit extends frontend {
             
             exit;
         }
-    }
+    }*/
 
 	/**
 	* Check the permission from a loggin User (to view the Map).
