@@ -10,17 +10,17 @@
 */
 
 class readFile {	
-	var $CONFIG;
+	var $MAINCFG;
 	
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function readFile($CONFIG) {
-		$this->CONFIG = $CONFIG;
+	function readFile($MAINCFG) {
+		$this->MAINCFG = $MAINCFG;
 	}
 	
 	/**
@@ -52,9 +52,11 @@ class readFile {
 	* @param string $file
 	*
 	* @author Michael Luebben <michael_luebben@web.de>
+	*
+	* DEPRECATED: should be done in class.MapCfg in the future
 	*/
-	function readNagVisCfg($file) {
-		$NagVisCfg = file($this->CONFIG->getValue('paths', 'mapcfg').$file.".cfg");
+	/*function readNagVisCfg($file) {
+		$NagVisCfg = file($this->MAINCFG->getValue('paths', 'mapcfg').$file.".cfg");
 		
 		$l="0";
 		$x="0";
@@ -87,7 +89,7 @@ class readFile {
 			$l++;
 		}
 		return($nagvis);
-	}
+	}*/
 	
 	/**
 	* Read the Map-Configuration files in a new Array-Format
@@ -118,9 +120,11 @@ class readFile {
 	* @param string $file
 	*
 	* @author Michael Luebben <michael_luebben@web.de>
+	*
+	* DEPRECATED: should be done in class.MapCfg in the future
 	*/
-	function readNagVisCfgNew($file) {
-		$NagVisCfg = file($this->CONFIG->getValue('paths', 'mapcfg').$file.".cfg");
+	/*function readNagVisCfgNew($file) {
+		$NagVisCfg = file($this->MAINCFG->getValue('paths', 'mapcfg').$file.".cfg");
 		
 		$l="0";
 		$x="0";
@@ -155,7 +159,7 @@ class readFile {
 			$l++;
 		}
 		return($nagvis);
-	}
+	}*/
 	
 	/**
 	* Read the Configuration-File for the Header-Menu.
@@ -163,7 +167,7 @@ class readFile {
 	* @author Michael Lübben <michael_luebben@web.de>
 	*/
 	function readMenu() {
-		$Menu = file($this->CONFIG->getValue('paths', 'cfg').$this->CONFIG->getValue('includes', 'header'));
+		$Menu = file($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
 		$a="0";
 		$b="0";
 		while (isset($Menu[$a]) && $Menu[$a] != "")

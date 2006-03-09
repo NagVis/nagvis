@@ -10,17 +10,19 @@
 */
 class MainNagVisCfg {
 	var $config;
+	var $runtimeConfig;
 	var $configFile;
 	
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function MainNagVisCfg($configFile) {
 		$this->config = Array();
+		$this->runtimeConfig = Array();
 		$this->configFile = $configFile;
 		
 		$this->readConfig();
@@ -194,6 +196,31 @@ class MainNagVisCfg {
     */
 	function getValue($sec, $var) {
 		return $this->config[$sec][$var];
+	}
+	
+	/**
+	* Sets a runtime config value
+	*
+	* @param string $sec
+	* @param string $var
+	* @param string $val
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function setRuntimeValue($var, $val) {
+       $this->runtimeConfig[$var] = $val;
+	}
+	
+	/**
+	* Gets a runtime config value
+	*
+	* @param string $sec
+	* @param string $var
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function getRuntimeValue($var) {
+		return $this->runtimeConfig[$var];
 	}
 }
 ?>

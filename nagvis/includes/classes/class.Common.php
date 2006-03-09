@@ -22,30 +22,32 @@
 * @author Michael Luebben <michael_luebben@web.de>
 */
 class common {
-	var $CONFIG;
+	var $MAINCFG;
+	var $MAPCFG;
 	
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
+	* @param config $MAPCFG
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function common($CONFIG) {
-		$this->CONFIG = $CONFIG;
+	function common($MAINCFG,$MAPCFG) {
+		$this->MAINCFG = $MAINCFG;
+		$this->MAPCFG = $MAPCFG;
 	}
 	
 	/**
 	* Search Icon for a State
 	*
 	* @param string $State
-	* @param array $mapCfg
-	* @param string $IconConfigCfg
+	* @param string $mapCfg
 	* @param string $type
 	*
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
-	function findIcon($State,$mapCfg,$IconMapGlobal,$IconConfigCfg,$Type) {
+	function findIcon($State,$mapCfg,$Type) {
 		$rotateUrl = "";
 		unset($Icon);
         $valid_format = array(
@@ -58,14 +60,11 @@ class common {
 		$StateLow = strtolower($State['State']);
 		if(isset($mapCfg['iconset'])) {
 			$IconPath = $mapCfg['iconset'];
-		}
-		elseif(isset($IconMapGlobal)) {
-			$IconPath = $IconMapGlobal;
-		}
-		elseif(isset($IconConfigCfg)) {
-			$IconPath = $IconConfigCfg;
-		}
-		else {
+		} elseif($this->MAPCFG->getValue('global', '', 'iconset') != '') {
+			$IconPath = $this->MAPCFG->getValue('global', '', 'iconset');
+		} elseif($this->MAINCFG->getValue('global', 'defaulticons') != '') {
+			$IconPath = $this->MAINCFG->getValue('global', 'defaulticons');
+		} else {
 			$IconPath = "std_medium";
 		}
 		
@@ -123,12 +122,12 @@ class common {
 		}
 
 		for($i=0;$i<count($valid_format);$i++) {
-			if(file_exists($this->CONFIG->getValue('paths', 'base')."iconsets/".$Icon.".".$valid_format[$i])) {
+			if(file_exists($this->MAINCFG->getValue('paths', 'base')."iconsets/".$Icon.".".$valid_format[$i])) {
             	$Icon .= ".".$valid_format[$i];
 			}
 		}
 		
-		if(file_exists($this->CONFIG->getValue('paths', 'base')."iconsets/".$Icon)) {	
+		if(file_exists($this->MAINCFG->getValue('paths', 'base')."iconsets/".$Icon)) {	
 			return $Icon;
 		}
 		else {

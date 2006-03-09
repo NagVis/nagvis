@@ -21,21 +21,25 @@
 include("../includes/classes/class.NagVisConfig.php");
 include("./classes.wui.php");
 
-$CONFIG = new MainNagVisCfg('../etc/config.ini');
+$MAINCFG = new MainNagVisCfg('../etc/config.ini');
 
 # we load the language file
-$langfile= new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
+$langfile= new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
 
 # we set the current username
+# we verify that the user is defined
 if(isset($_SERVER['PHP_AUTH_USER'])) {
-	$user = $_SERVER['PHP_AUTH_USER'];
+	$MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
 }
 elseif(isset($_SERVER['REMOTE_USER'])) {
-	$user = $_SERVER['REMOTE_USER'];
+	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
 }
-if($user == "") {exit;}
 
-
+if($MAINCFG->getRuntimeValue('user') == "") {
+	//FIXME: Errorhandling
+	echo "Fehler1";
+	exit;
+}
 ?>
 <script type="text/javascript" language="JavaScript"><!--
 
@@ -79,7 +83,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_iconset">
 		<?
 			$files=array();
-			if ($handle = opendir($CONFIG->getValue('paths', 'icon'))) 
+			if ($handle = opendir($MAINCFG->getValue('paths', 'icon'))) 
 			{
  				while (false !== ($file = readdir($handle))) 
 				{
@@ -101,7 +105,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
 		<?
 			$files=array();
-			if ($handle = opendir($CONFIG->getValue('paths', 'map'))) 
+			if ($handle = opendir($MAINCFG->getValue('paths', 'map'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{
@@ -132,7 +136,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
 		<?
 			$files=array();
-			if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
+			if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{
@@ -172,7 +176,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
 		<?
 			$files=array();
-			if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
+			if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{
@@ -223,7 +227,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
 		<?
 			$files=array();
-			if ($handle = opendir($CONFIG->getValue('paths', 'map'))) 
+			if ($handle = opendir($MAINCFG->getValue('paths', 'map'))) 
 			{
 	 			while (false !== ($file = readdir($handle))) 
 				{

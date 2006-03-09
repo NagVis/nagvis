@@ -19,18 +19,20 @@
 
 <?
 include("../includes/classes/class.NagVisConfig.php");
+include("../includes/classes/class.MapCfg.php");
 include("./classes.wui.php");
 
-$CONFIG = new MainNagVisCfg('../etc/config.ini');
+$MAINCFG = new MainNagVisCfg('../etc/config.ini');
+$MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
+$MAPCFG->readMapConfig();
 
 # we load the language file
-$langfile= new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
+$langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
 
 # we get the parameters passed in the URL
 $myaction = $_GET['action'];    # possible values : add, delete or modify
 $mytype = $_GET['type'];	# possible values : host,service,hostgroup,etc..
 $myid = $_GET['id'];		# possible values : 1,2,3,...
-$mymap = $_GET['map'];		# possible values : demo,routers,...
 
 if(isset($_GET['coords'])) {
 	$mycoords = $_GET['coords'];
@@ -39,19 +41,26 @@ else{
 	$mycoords = "";
 }
 
-# we check that the mapname is defined and that the file exits on the server
-if(!file_exists($CONFIG->getValue('paths', 'mapcfg').$mymap.".cfg")) { exit; }
-
 # we verify that the user is defined
-if(isset($_SERVER['PHP_AUTH_USER']))   { $user = $_SERVER['PHP_AUTH_USER'];}
-elseif(isset($_SERVER['REMOTE_USER'])) { $user = $_SERVER['REMOTE_USER'];  }
-if($user == "") {exit;}
+if(isset($_SERVER['PHP_AUTH_USER'])) {
+	$MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
+}
+elseif(isset($_SERVER['REMOTE_USER'])) {
+	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
+}
+
+if($MAINCFG->getRuntimeValue('user') == "") {
+	//FIXME: Errorhandling
+	echo "Fehler1";
+	exit;
+}
 
 # we verify he's authorized to config the map
-$myreadfile = new readFile_wui();
-$analyse = $myreadfile->readNagVisCfg($mymap);
-$allowed_user = explode(",",trim($analyse[1]['allowed_for_config']));
-if((!in_array($user,$allowed_user)) && (!in_array("EVERYONE",$allowed_user))) {  exit; }
+if(!in_array($MAINCFG->getRuntimeValue('user'),$MAPCFG->getValue('global','','allowed_for_config')) && !in_array('EVERYONE',$MAPCFG->getValue('global','','allowed_for_config'))) {
+	//FIXME: Errorhandling
+	echo "Fehler2";
+	exit;
+}
 
 # we load the arrays, containing the properties list for each type of object
 $type_tab=array("service" => 1, "host" => 2, "hostgroup" => 3, "servicegroup" => 4, "map" => 5, "textbox" => 6, "global" => 7);
@@ -80,31 +89,28 @@ $type_tab["global"]=$global_prop;
 	<form method="post" action="wui.function.inc.php?myaction=<? print $myaction; ?>" name="addmodify" onsubmit="return check_object();" id="addmodify">
 		<input type="hidden" name="type" size="12" value="<? echo $mytype; ?>">
 		<input type="hidden" name="id" size="12" value="<? echo $myid; ?>">
-		<input type="hidden" name="map" size="12" value="<? echo $mymap; ?>">
+		<input type="hidden" name="map" size="12" value="<? echo $MAPCFG->getName(); ?>">
 		<input type="hidden" name="properties">
 
 <?
 
-foreach($type_tab["$mytype"] as $propname)
-{
+// loop all properties
+foreach($type_tab[$mytype] as $propname) {
 	print "<tr><td class=\"tdlabel\">";
 	# if the property name contains a * we write it in red
-	if(substr($propname,strlen($propname)-1) == "*")
-	{
-		$propname_ok=substr($propname,0,strlen($propname)-1);
+	if(substr($propname,strlen($propname)-1) == "*") {
+		$propname_ok = substr($propname,0,strlen($propname)-1);
 		print "<font color=\"red\">".$propname_ok." </font>";
-	}
-	else
-	{
-		$propname_ok=$propname;
-		print "$propname_ok ";
+	} else {
+		$propname_ok = $propname;
+		print $propname_ok." ";
 	}
 	print "</td>";
 	
 	# we treat the special case of iconset, which will display a listbox instead of the normal textbox
 	if($propname_ok == "iconset")
 	{
-		print "<td class=\"tdfield\"><select name=\"$propname\">";
+		print "<td class=\"tdfield\"><select name=\"".$propname."\">";
 		if(substr($propname,strlen($propname)-1) != "*") print "<option value=\"\"></option>";
 		$files=array();
 		$valid_format = array(
@@ -114,7 +120,7 @@ foreach($type_tab["$mytype"] as $propname)
                         3=>"jpg",
                         4=>"jpeg"
                 );
-		if ($handle = opendir($CONFIG->getValue('paths', 'icon'))) 
+		if ($handle = opendir($MAINCFG->getValue('paths', 'icon'))) 
 		{
  			while (false !== ($file = readdir($handle))) 
 			{
@@ -140,7 +146,7 @@ foreach($type_tab["$mytype"] as $propname)
 	{
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
 		$files=array();
-		if ($handle = opendir($CONFIG->getValue('paths', 'map'))) 
+		if ($handle = opendir($MAINCFG->getValue('paths', 'map'))) 
 		{
  			while (false !== ($file = readdir($handle))) 
 			{
@@ -158,7 +164,7 @@ foreach($type_tab["$mytype"] as $propname)
 	# we treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
 	else if($propname_ok == "recognize_services")
 	{
-		print "<td class=\"tdfield\"><select name=\"$propname\">";
+		print "<td class=\"tdfield\"><select name=\"".$propname."\">";
 		print "<option value=\"\">".$langfile->get_text("6")."</option>";
 		print "<option value=\"0\">".$langfile->get_text("7")."</option>";
 		print "</select></td>\n";
@@ -167,7 +173,7 @@ foreach($type_tab["$mytype"] as $propname)
 	# we treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
 	else if($propname_ok == "line_type")
 	{
-		print "<td class=\"tdfield_linetype\"><select name=\"$propname\">";
+		print "<td class=\"tdfield_linetype\"><select name=\"".$propname."\">";
 		print "<option value=\"\"></option>";
 		print "<option value=\"0\">------><------</option>";
 		print "<option value=\"1\">--------------></option>";
@@ -179,11 +185,11 @@ foreach($type_tab["$mytype"] as $propname)
 	{
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
 		$files=array();
-		if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
+		if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) 
 		{
  			while (false !== ($file = readdir($handle))) 
 			{
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" && substr($file,0,strlen($file)-4) != $mymap ) { $files[]=substr($file,0,strlen($file)-4);}				
+				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" && substr($file,0,strlen($file)-4) != $MAPCFG->getName() ) { $files[]=substr($file,0,strlen($file)-4);}				
 			}
 			
 			if ($files) natcasesort($files); 
@@ -217,35 +223,39 @@ foreach($type_tab["$mytype"] as $propname)
 if($myaction == "modify")
 {
 	$readfile = new readFile_wui();
-	$mapCfg = $readfile->readNagVisCfg($mymap);
-	$myval=$myid+1;
+	$myval = $myid++;
 	print "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
 	
-	foreach($type_tab["$mytype"] as $propname)
-	{
-		if(substr($propname,strlen($propname)-1,1) == "*" ) 
-		{ 
-			$propname_ok=substr($propname,0,strlen($propname)-1);
-		}
-		else
-		{
-			$propname_ok=$propname;
-		}
-		
-		
-		if(isset($mapCfg[$myval][$propname_ok]))
-		{
-				if($propname_ok == 'line_type')
-				{
-					print "document.addmodify.elements['$propname'].value='".substr($mapCfg[$myval][$propname_ok],strlen($mapCfg[$myval][$propname_ok])-1,1)."';\n";
+	foreach($MAPCFG->getDefinitions($mytype) AS $key => $obj) {
+		if($key == $myval) {
+			foreach($type_tab[$mytype] as $propname) {
+				if(substr($propname,strlen($propname)-1,1) == "*" ) { 
+					$propname_ok = substr($propname,0,strlen($propname)-1);
+				} else {
+					$propname_ok = $propname;
 				}
-				else
-				{
-					print "document.addmodify.elements['$propname'].value='".$mapCfg[$myval][$propname_ok]."';\n";
+				
+				if(ereg("name", $propname_ok)) {
+					$propname_ok = "name";
 				}
+				
+				if(isset($obj[$propname_ok]))
+				{
+					if($propname_ok == 'line_type') {
+						print "document.addmodify.elements['".$propname."'].value='".substr($obj[$propname_ok],strlen($obj[$propname_ok])-1,1)."';\n";
+					} else {
+						if(is_array($obj[$propname_ok])) {
+							$val = implode(',',$obj[$propname_ok]);
+						} else {
+							$val = $obj[$propname_ok];
+						}
+						print "document.addmodify.elements['".$propname."'].value='".$val."';\n";
+					}
+				}
+			}
 		}
-
 	}
+	
 	if($mycoords != "")
 	{
 		$val_coords=explode(',',$mycoords);

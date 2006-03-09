@@ -4,6 +4,7 @@
 ##         *** Klasse zum einlesen verschiedenener Dateien ***          ##
 ##                               Lizenz GPL                             ##
 ##########################################################################
+/* DEPRECATED
 class readFile_wui 
 {	
 	// <map>.cfg einlesen (neues Format).
@@ -38,7 +39,7 @@ class readFile_wui
 		}
 		return($nagvis);
 	}
-}
+}*/
 
 
 class langFile 

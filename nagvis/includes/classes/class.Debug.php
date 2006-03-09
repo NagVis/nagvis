@@ -6,18 +6,18 @@
 */
 
 class debug {
-	var $CONFIG;
+	var $MAINCFG;
 	var $debug;
 	
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function debug($CONFIG) {
-		$this->CONFIG = $CONFIG;
+	function debug($MAINCFG) {
+		$this->MAINCFG = $MAINCFG;
 	}
 
 	/**
@@ -57,7 +57,7 @@ class debug {
 	function debug_createLinkToDoku($type,$class) {
 		if ($type == "class") {
 			$lowerClass = strtolower($class);
-			$link = '<A HREF="'.$this->CONFIG->getValue('paths', 'htmldoku').'includes/classes/class.CheckState_'.$this->CONFIG->getValue('global', 'backend').'.php.html#'.$lowerClass.'" TARGET="_blank">'.$class.'</A>';
+			$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmldoku').'includes/classes/class.CheckState_'.$this->MAINCFG->getValue('global', 'backend').'.php.html#'.$lowerClass.'" TARGET="_blank">'.$class.'</A>';
 		}
 		return($link);
 	}
@@ -77,7 +77,7 @@ class debug {
 		global $state;
 		
 		if($enDebug == "1" && $enFunc == "1") {
-			$debug[] = '<B>function</B> $state = '.$this->debug_createLinkToDoku('class','checkStates').'('.$mapCfg[$arrayPos]['type'].','.$mapCfg[$arrayPos]['name'].','.$mapCfg[$arrayPos]['recognize_services'].','.$mapCfg[$arrayPos]['service_description'].',0,'.$this->CONFIG->getValue('backend_html', 'cgi').','.$this->CONFIG->getValue('backend_html', 'cgiuser').')';
+			$debug[] = '<B>function</B> $state = '.$this->debug_createLinkToDoku('class','checkStates').'('.$mapCfg[$arrayPos]['type'].','.$mapCfg[$arrayPos]['name'].','.$mapCfg[$arrayPos]['recognize_services'].','.$mapCfg[$arrayPos]['service_description'].',0,'.$this->MAINCFG->getValue('backend_html', 'cgi').','.$this->MAINCFG->getValue('backend_html', 'cgiuser').')';
 
 			$debug[] = '--> $state[State]:'.$state[State];
 			$debug[] = '--> $state[Count]:'.$state[Count];
@@ -102,7 +102,7 @@ class debug {
 		global $Icon;
 
 		if($enDebug == "1" && $enFunc == "1") {
-			$debug[] = '<B>function</B> $Icon =  '.$this->debug_createLinkToDoku('class','fixIcon').'('.$state[State].','.$mapCfg[$arrayPos]['iconset'].','.$arrayPos.','.$this->CONFIG->getValue('global', 'defaulticons').','.$mapCfg[$arrayPos]['type'].')';
+			$debug[] = '<B>function</B> $Icon =  '.$this->debug_createLinkToDoku('class','fixIcon').'('.$state[State].','.$mapCfg[$arrayPos]['iconset'].','.$arrayPos.','.$this->MAINCFG->getValue('global', 'defaulticons').','.$mapCfg[$arrayPos]['type'].')';
 
 			$debug[] = '--> $Icon:'.$Icon;
 			return($debug);

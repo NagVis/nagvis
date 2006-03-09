@@ -16,7 +16,7 @@
 
 class backend
 {
-	var $CONFIG;
+	var $MAINCFG;
 	var $dbName;
 	var $dbUser;
 	var $dbPass;
@@ -27,19 +27,19 @@ class backend
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
 	*
 	* @author Andreas Husch, Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function backend($CONFIG) {
-		$this->CONFIG = $CONFIG;
-        $this->dbName = $this->CONFIG->getValue('backend_ndo', 'dbname');
-        $this->dbUser = $this->CONFIG->getValue('backend_ndo', 'dbuser');
-        $this->dbPass = $this->CONFIG->getValue('backend_ndo', 'dbpass');
-        $this->dbHost = $this->CONFIG->getValue('backend_ndo', 'dbhost');
-        $this->dbPort = $this->CONFIG->getValue('backend_ndo', 'dbport');
-		$this->dbPrefix = $this->CONFIG->getValue('backend_ndo', 'dbprefix');
-		$this->dbInstanceId = $this->CONFIG->getValue('backend_ndo', 'dbinstanceid');
+	function backend($MAINCFG) {
+		$this->MAINCFG = $MAINCFG;
+        $this->dbName = $this->MAINCFG->getValue('backend_ndo', 'dbname');
+        $this->dbUser = $this->MAINCFG->getValue('backend_ndo', 'dbuser');
+        $this->dbPass = $this->MAINCFG->getValue('backend_ndo', 'dbpass');
+        $this->dbHost = $this->MAINCFG->getValue('backend_ndo', 'dbhost');
+        $this->dbPort = $this->MAINCFG->getValue('backend_ndo', 'dbport');
+		$this->dbPrefix = $this->MAINCFG->getValue('backend_ndo', 'dbprefix');
+		$this->dbInstanceId = $this->MAINCFG->getValue('backend_ndo', 'dbinstanceid');
 
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');

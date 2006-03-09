@@ -23,11 +23,11 @@
 include("../includes/classes/class.NagVisConfig.php");
 include("./classes.wui.php");
 
-$CONFIG = new MainNagVisCfg('../etc/config.ini');
+$MAINCFG = new MainNagVisCfg('../etc/config.ini');
 
 # we load the language file
-$langfile = new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
-$lang_config_file = new langFile($CONFIG->getValue('paths', 'cfg')."languages/config_".$CONFIG->getValue('global', 'language').".txt");
+$langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
+$lang_config_file = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/config_".$MAINCFG->getValue('global', 'language').".txt");
 $help_context_icon="help_icon.png";
 
 
@@ -38,7 +38,7 @@ print "<form name=\"edit_config\" method=\"post\" action=wui.function.inc.php?my
 print "<input type=\"hidden\" name=\"properties\">";
 
 # for each line in the main config file
-foreach($CONFIG->config AS $key => $val) 
+foreach($MAINCFG->config AS $key => $val) 
 {
 	if(is_array($val)) {
 		foreach($val AS $key2 => $val2) {
@@ -64,7 +64,7 @@ foreach($CONFIG->config AS $key => $val)
 				{
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
 					$files = array();
-					if ($handle2 = opendir($CONFIG->getValue('paths', 'cfg')."/languages")) 
+					if ($handle2 = opendir($MAINCFG->getValue('paths', 'cfg')."/languages")) 
 					{
 			 			while (false !== ($file = readdir($handle2))) 
 						{
@@ -84,7 +84,7 @@ foreach($CONFIG->config AS $key => $val)
 				{
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
 					$files=array();
-					if ($handle2 = opendir($CONFIG->getValue('paths', 'icon'))) 
+					if ($handle2 = opendir($MAINCFG->getValue('paths', 'icon'))) 
 					{
 			 			while (false !== ($file = readdir($handle2))) 
 						{

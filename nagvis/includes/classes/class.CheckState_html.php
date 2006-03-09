@@ -15,17 +15,19 @@
 * This Class read the States from Nagios-CGI'S
 */
 class backend {
-	var $CONFIG;
+	var $MAINCFG;
 	
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function backend($CONFIG) {
-		$this->CONFIG = $CONFIG;
+	function backend($MAINCFG) {
+		$this->MAINCFG = $MAINCFG;
+		
+		$this->checkCgiPath();
 		
 		return 0;
 	}
@@ -35,6 +37,17 @@ class backend {
 		//THIS backend needs no inital preparation, but the function must be present to be compatible
 		return 0;
 	}*/
+	
+	function checkCgiPath())
+		if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
+			$FRONTEND = new frontend($this->MAINCFG);
+            $FRONTEND->openSite($rotateUrl);
+            $FRONTEND->messageBox("0", "STATUSCGI~".$this->MAINCFG->getValue('backend_html', 'cgi'));
+            $FRONTEND->closeSite();
+            $FRONTEND->printSite();
+            
+            exit;
+        }
 
 	/**
 	* Find State from a Host
@@ -329,8 +342,8 @@ class backend {
 		$rotateUrl = "";
 		unset($state);
 		
-		$CgiPath = $this->CONFIG->getValue('backend_html', 'cgi');
-		$CgiUser = $this->CONFIG->getValue('backend_html', 'cgiuser');
+		$CgiPath = $this->MAINCFG->getValue('backend_html', 'cgi');
+		$CgiUser = $this->MAINCFG->getValue('backend_html', 'cgiuser');
 		
 		if($Type == "host") {
 			$StatusCgi = $CgiPath.'status.cgi';

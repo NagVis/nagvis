@@ -51,7 +51,8 @@ function modify_object_property()
 ###########################
  function modify_map()
  {
- 
+ 	# 1			 2	   3 4
+ 	# mapcfg+cfg lines x y
  	if [ "$3" == "" ];then
 		return
 	fi
@@ -227,8 +228,14 @@ function modify_object_property()
 ###########################
 # MAIN SCRIPT
 ###########################
+# 2 = autoupdatefreq
+# 3 = mapcfg
+# 4 = cfg
+# 5 = lines??
+# 6 = x
+# 7 = y
+
  if [ "$1" == "modify" ];then
- 
  	modify_map "$3$4" "$5" "$6" "$7"
 	update_backup_status "$3" "$4" "$2"
 

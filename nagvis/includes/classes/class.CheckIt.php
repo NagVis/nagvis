@@ -6,18 +6,21 @@
 include("./includes/classes/class.NagVis.php");
 
 class checkit extends frontend {
-	var $CONFIG;
+	var $MAINCFG;
+	var $MAPCFG;
 	
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
+	* @param config $MAPCFG
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function checkit($CONFIG) {
-		$this->CONFIG = $CONFIG;
-		parent::frontend($this->CONFIG);
+	function checkit($MAINCFG,$MAPCFG) {
+		$this->MAINCFG = $MAINCFG;
+		$this->MAPCFG = $MAPCFG;
+		parent::frontend($this->MAINCFG,$this->MAPCFG);
 	}
 	
 	/**
@@ -56,55 +59,59 @@ class checkit extends frontend {
 	* Check the Configuration-File from a map.
 	*
 	* @author FIXME!
+	*
+	* DEPRECATED: Check should be made in MapCfg in the future
 	*/
-    function check_map_isreadable() {
+    /*function check_map_isreadable() {
         global $map;
         
-        if(file_exists($this->CONFIG->getValue('paths', 'mapcfg'))) {
-        	if(is_readable($this->CONFIG->getValue('paths', 'mapcfg'))) {
-        		if(file_exists($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
-			        if(is_readable($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
+        if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg'))) {
+        	if(is_readable($this->MAINCFG->getValue('paths', 'mapcfg'))) {
+        		if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
+			        if(is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
 						return TRUE;
 		        	} else {
 		        		$this->openSite($rotateUrl);
-						$this->messageBox("2", "MAP~".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg");
+						$this->messageBox("2", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
 						$this->closeSite();
 						$this->printSite();
 						
 						exit;
 		        	}
 				} else {
-					echo "Map-Config (".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg) doesn't exists";
+					echo "Map-Config (".$this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg) doesn't exists";
 					exit;
 				}
 			} else {
-				echo "Directory (".$this->CONFIG->getValue('paths', 'mapcfg').") isn't readable";
+				echo "Directory (".$this->MAINCFG->getValue('paths', 'mapcfg').") isn't readable";
 				exit;
 			}
 		} else {
-			echo "Directory (".$this->CONFIG->getValue('paths', 'mapcfg').") doesn't exists";
+			echo "Directory (".$this->MAINCFG->getValue('paths', 'mapcfg').") doesn't exists";
 			exit;
 		}
-    }
+    }*/
 	
 	/**
-        * Check if the Map Configuratin File wich is edited is writable
-        *
-        * @author Andreas Husch
+    * Check if the Map Configuratin File wich is edited is writable
+    *
+    * @author Andreas Husch
 	* CAUTION: WUI does acually not use the method here! There is a copy of this in the WUI code!
-        */
-    function check_map_iswritable() {
+	*
+	* DEPRECATED: Check should be made in MapCfg in the future
+    */
+    /*function check_map_iswritable() {
         global $map;
         
-        if(!is_writable($this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
+        if(!is_writable($this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
 	        $this->openSite($rotateUrl);
-	        $this->messageBox("17", "MAP~".$this->CONFIG->getValue('paths', 'mapcfg').$map.".cfg");
+	        $this->messageBox("17", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
 	        $this->closeSite();
 	        $this->printSite();
 	        
 	        exit;
         }
-    }
+    }*/
 
 	/**
 	* Check the logged in User.
@@ -134,23 +141,22 @@ class checkit extends frontend {
 	* Check is Rotate-Mode enable and create this
 	*
 	* @author Michael Luebben <michael_luebben@web.de>
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
     function check_rotate() {
-        global $map;
-        
-        $maps = explode(",", $this->CONFIG->getValue('global', 'maps'));
-        if($this->CONFIG->getValue('global', 'rotatemaps') == "1") {
-            $Index = array_search($map,$maps);
+        $maps = explode(",", $this->MAINCFG->getValue('global', 'maps'));
+        if($this->MAINCFG->getValue('global', 'rotatemaps') == "1") {
+            $Index = array_search($this->MAPCFG->getName(),$maps);
 			if (($Index + 1) >= sizeof($maps)) {
-				$Index = -1;
+            	// if end of array reached, go to the beginning...
+				$Index = 0;
+			} else {
+				$Index++;
 			}
-			
-			$Index++;
-			
             $map = $maps[$Index];
-            $rotateUrl = " URL=index.php?map=".$map;
+            
+        	return " URL=index.php?map=".$map;
         }
-        return($rotateUrl);
     }
 
 	/**
@@ -160,7 +166,7 @@ class checkit extends frontend {
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
     function check_gd() {
-		if ($this->CONFIG->getValue('global', 'usegdlibs') == "1") {
+		if ($this->MAINCFG->getValue('global', 'usegdlibs') == "1") {
         	if(!extension_loaded('gd')) {
                 $this->openSite($rotateUrl);
                 $this->messageBox("15", "");
@@ -177,11 +183,13 @@ class checkit extends frontend {
 	*
 	* @author FIXME!
 	* @author Michael Luebben <michael_luebben@web.de>
+	*
+	* DEPRECATED: should be checked in html backend
 	*/
     function check_cgipath() {
-        if(!file_exists($this->CONFIG->getValue('backend_html', 'cgi'))) {
+        if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
             $this->openSite($rotateUrl);
-            $this->messageBox("0", "STATUSCGI~".$this->CONFIG->getValue('backend_html', 'cgi'));
+            $this->messageBox("0", "STATUSCGI~".$this->MAINCFG->getValue('backend_html', 'cgi'));
             $this->closeSite();
             $this->printSite();
             
@@ -198,9 +206,9 @@ class checkit extends frontend {
     function check_mapimg() {
         global $map_image;
         
-        if(!file_exists($this->CONFIG->getValue('paths', 'map').$map_image)) {
+        if(!file_exists($this->MAINCFG->getValue('paths', 'map').$map_image)) {
             $this->openSite($rotateUrl);
-            $this->messageBox("3", "MAPPATH~".$this->CONFIG->getValue('paths', 'map').$map_image);
+            $this->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$map_image);
             $this->closeSite();
             $this->printSite();
             
@@ -250,9 +258,9 @@ class checkit extends frontend {
 	* @author FIXME!
 	*/
     function check_langfile() {
-        if(!is_readable($this->CONFIG->getValue('paths', 'cfg').'languages/'.$this->CONFIG->getValue('global', 'language').'.txt')) {
+        if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
             $this->openSite($rotateUrl);
-            $this->messageBox("18", "LANGFILE~".$this->CONFIG->getValue('paths', 'cfg').'languages/wui_'.$this->CONFIG->getValue('global', 'language').'.txt');
+            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
             $this->closeSite();
             $this->printSite();
             
@@ -266,9 +274,9 @@ class checkit extends frontend {
 	* @author FIXME!
 	*/
 	function check_wuilangfile() {
-        if(!is_readable($this->CONFIG->getValue('paths', 'cfg').'languages/wui_'.$this->CONFIG->getValue('global', 'language').'.txt')) {
+        if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
             $this->openSite($rotateUrl);
-            $this->messageBox("18", "LANGFILE~".$this->CONFIG->getValue('paths', 'cfg').'languages/wui_'.$this->CONFIG->getValue('global', 'language').'.txt');
+            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
             $this->closeSite();
             $this->printSite();
             

@@ -1,3 +1,16 @@
+date: 2006-03-09
+author: michelsen
+- renamed object $CONFIG to $MAINCFG
+- wrote class.MapCfg.php for handling the map config, object will be given to all classes
+  which need it to handle the map configuration
+- removed methods to read map config from ReadFiles
+- moved some checks from CheckIt to MapCfg
+- moved some checks from CheckIt to cgi backend
+- object of NagVisConfig will be given to any class in NagVis to handle the configuration
+- Added $runtimeConfig to NagVisMainCfg for saving informations generated durin runtime
+  like rotateUrl or user
+- cleaned up in index.php
+
 date: 2006-03-08
 author: michelsen
 - wrote class.NagVisConfig.php for config handling of *.ini config

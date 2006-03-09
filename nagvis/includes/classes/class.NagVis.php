@@ -13,32 +13,33 @@ include("./includes/classes/class.Common.php");
 
 class frontend extends common {
 	var $site;
-	var $CONFIG;
+	var $MAINCFG;
+	var $MAPCFG;
 	
 	/**
 	* Constructor
 	*
-	* @param config $CONFIG
+	* @param config $MAINCFG
+	* @param config $MAPCFG
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function frontend($CONFIG) {
-		$this->CONFIG = $CONFIG;
-		parent::common($this->CONFIG);
+	function frontend($MAINCFG,$MAPCFG) {
+		$this->MAINCFG = $MAINCFG;
+		$this->MAPCFG = $MAPCFG;
+		//parent::common($this->MAINCFG,$this->MAPCFG);
 	}
 	
 	/**
 	* Open a Web-Site in a Array site[].
 	*
-	* @param string $rotateUrl
-	*
 	* @author Michael Luebben <michael_luebben@web.de>
     */
-	function openSite($rotateUrl) {
+	function openSite() {
 		$this->site[] = '<HTML>';
 		$this->site[] = '<HEAD>';
-		$this->site[] = '<TITLE>'.$this->CONFIG->getValue('internal', 'title').'</TITLE>';
-		$this->site[] = '<META http-equiv="refresh" CONTENT="'.$this->CONFIG->getValue('global', 'refreshtime').';'.$rotateUrl.'">';
+		$this->site[] = '<TITLE>'.$this->MAINCFG->getValue('internal', 'title').'</TITLE>';
+		$this->site[] = '<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->MAINCFG->getRuntimeValue('rotateUrl').'">';
 		$this->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/nagvis.js"></SCRIPT>';
 		$this->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib.js"></SCRIPT>';
 		$this->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib_shadow.js"></SCRIPT>';
@@ -72,7 +73,7 @@ class frontend extends common {
 		$this->site[] = '<DIV CLASS="header">';
 		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != "") {
 			$this->site[] = '<TR VALIGN="BOTTOM">';
-			for($d="1";$d<=$this->CONFIG->getValue('global', 'headercount');$d++) {
+			for($d="1";$d<=$this->MAINCFG->getValue('global', 'headercount');$d++) {
 				if($Menu[$x]['entry'] != "") {
 					$this->site[] = '<TD WIDTH="13">';
 					$this->site[] = '<IMG SRC="images/greendot.gif" WIDTH="13" HEIGHT="14" NAME="'.$Menu[$x]['entry'].'_'.$x.'">';
@@ -127,7 +128,7 @@ class frontend extends common {
     * @author Michael Luebben <michael_luebben@web.de>
     */
 	function messageBox($messagenr, $vars) {
-		$LanguageFile = $this->CONFIG->getValue('paths', 'cfg')."languages/".$this->CONFIG->getValue('global', 'language').".txt";
+		$LanguageFile = $this->MAINCFG->getValue('paths', 'cfg')."languages/".$this->MAINCFG->getValue('global', 'language').".txt";
         if(!file_exists($LanguageFile)) {
                 $msg[0] = "XXXX";
                 $msg[1] = "img_error.png";
@@ -185,16 +186,14 @@ class frontend extends common {
 	/**
 	* Create a Background-Image for a Map.
 	*
-	* @param string $map_image
-	*
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
-	function printMap($map_image)	{
+	function printMap()	{
 		$this->site[] = '  <DIV CLASS="map">';
-		if ($this->CONFIG->getValue('global', 'usegdlibs') == "1") {
-			$this->site[] = '   <IMG SRC="./draw.php?map='.$map_image.'">';
+		if ($this->MAINCFG->getValue('global', 'usegdlibs') == "1") {
+			$this->site[] = '   <IMG SRC="./draw.php?map='.$this->MAPCFG->getName().'">';
 		} else {
-			$this->site[] = '   <IMG SRC="'.$this->CONFIG->getValue('paths', 'htmlbase').$map_image.'">';
+			$this->site[] = '   <IMG SRC="'.$this->MAINCFG->getValue('paths', 'htmlbase').$this->MAPCFG->getImage().'">';
 		}
 	}
 	
@@ -262,7 +261,7 @@ class frontend extends common {
 	*/
 	function debug($debug)
 	{
-		if ($this->CONFIG->getValue('global', 'debug') == "1") {
+		if ($this->MAINCFG->getValue('global', 'debug') == "1") {
 			$this->site[] = '<TABLE CLASS="debugBox" WIDTH="90%" ALIGN="CENTER">';
 			$this->site[] = ' <TR>';
 			$this->site[] = '  <TD CLASS="debugBoxHead" WIDTH="40" ALIGN="CENTER">';
@@ -306,7 +305,7 @@ class frontend extends common {
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$mapCfg['name'],$mapCfg['service_description'],$state1);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($this->CONFIG->getValue('paths', 'htmlcfg'),$mapCfg['url'],$mapCfg['type'],$mapCfg['name'],$mapCfg['service_description']);
+			$this->site[] = $this->createLink($this->MAINCFG->getValue('paths', 'htmlcfg'),$mapCfg['url'],$mapCfg['type'],$mapCfg['name'],$mapCfg['service_description']);
 			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 		} elseif($mapCfg['line_type'] == '20') {
@@ -320,7 +319,7 @@ class frontend extends common {
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$host_name_from,$service_description_from,$state1);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($this->CONFIG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_from,$service_description_from);
+			$this->site[] = $this->createLink($this->MAINCFG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_from,$service_description_from);
 			$this->site[] = '<img src= iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 			// To
@@ -329,7 +328,7 @@ class frontend extends common {
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$host_name_to,$service_description_to,$state2);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($this->CONFIG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_to,$service_description_to);
+			$this->site[] = $this->createLink($this->MAINCFG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_to,$service_description_to);
 			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 		}

@@ -12,32 +12,50 @@
 #################################################################################
 
 include("./includes/classes/class.NagVisConfig.php");
+include("./includes/classes/class.MapCfg.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
 include("./wui/classes.wui.php");
 
-$CONFIG = new MainNagVisCfg('./etc/config.ini');
+$MAINCFG = new MainNagVisCfg('./etc/config.ini');
+$MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
+$MAPCFG->readMapConfig();
+$FRONTEND = new frontend($MAINCFG,$MAPCFG);
 
-// include the configured backend
-if($CONFIG->getValue('global', 'backend') == 'html')
-	include("./includes/classes/class.CheckState_html.php");
-elseif($CONFIG->getValue('global', 'backend') == 'ndomy')
-	include("./includes/classes/class.CheckState_ndomy.php");
-elseif($CONFIG->getValue('global', 'backend') == 'xml')
-	include("./includes/classes/class.CheckState_xml.php");
+include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
+$BACKEND = new backend($MAINCFG);
+
+$MAINCFG->setRuntimeValue('browser',$_SERVER['HTTP_USER_AGENT']);
+# we retrieve the current username used to display this page (protected by a .htaccess file)
+if(isset($_SERVER['PHP_AUTH_USER'])) {
+	$MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
+}
+elseif(isset($_SERVER['REMOTE_USER'])) {
+	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
+}
 else {
-	//FIXME: Errorhandling (no valid backend selected)	
+	$FRONTEND->openSite($rotateUrl);
+    $FRONTEND->messageBox("14", "");
+    $FRONTEND->closeSite();
+    $FRONTEND->printSite();
+    
+	exit;
+}
+
+# we retrieve the autosave parameter passed in the URL, if defined. if defined, the map will be saved after the next object is moved
+if(isset($_GET['autosave'])) {
+   $MAINCFG->setRuntimeValue('justAdded','true');
+} else {
+   $MAINCFG->setRuntimeValue('justAdded','false');
 }
 
 // load language
-$langfile = new langFile($CONFIG->getValue('paths', 'cfg')."languages/wui_".$CONFIG->getValue('global', 'language').".txt");
+$langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
 
 ############################################################################################################
 # SOME JAVASCRIPTS FUNCTIONS WE WILL NEED
 ############################################################################################################
 ?>
-
-
 <script type="text/javascript" language="JavaScript"><!--
 
 var cpt_clicks = 0;
@@ -235,14 +253,7 @@ function fenetre_management(page)
 
 
 //--></script>
-
-
 <?
-
-$FRONTEND = new frontend($CONFIG);
-$readfile = new readFile($CONFIG);
-$rotateUrl = "";
-
 #############################################
 # we read ALL the maps definition files, to build the lists of allowed users and map_images. At the end we have s.th like
 # demo=root,nagiosadmin^map2=user1
@@ -255,93 +266,47 @@ $rotateUrl = "";
 #
 # The list of map_images will be used :
 #		- to make sure a background image is not in use by another map, before it's deleted
-$all_allowed_user="";
-$all_map_image="";
-$all_map_name="";
-$myreadfile = new readFile($CONFIG);
-$res="";
-$files=array();
-if ($handle2 = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
-{
-	while (false !== ($file = readdir($handle2))) 
-	{
-		if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" ) { $files[]=substr($file,0,strlen($file)-4);}				
+if ($handle2 = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
+	$files = Array();
+	while (false !== ($file = readdir($handle2))) {
+		if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" ) {
+			if(substr($file,0,strlen($file)-4) != '') {
+				$files[] = substr($file,0,strlen($file)-4);
+			}
+		}				
 	}
 	
-	if ($files) natcasesort($files); 
-	foreach ($files as $file) 
-	{ 
-		$analyse=$myreadfile->readNagVisCfg($file);
-		$all_allowed_user=$all_allowed_user."^".$file."=".trim($analyse[1]['allowed_for_config']);	
-		$all_map_image=$all_map_image."^".$file."=".trim($analyse[1]['map_image']);
+	if(count($files) > 1) {
+		natcasesort($files);
+	}
+	
+	$all_allowed_user="";
+	$all_map_image="";
+	$all_map_name="";
+	
+	foreach($files as $file) {
+		$MAPCFG1 = new MapCfg($MAINCFG,$file);
+		$MAPCFG1->readMapConfig();
 		
-		for($x="2";$analyse[$x]['type'] != "";$x++)
-		{
-			if($analyse[$x]['type']=="map")
-			{
-				$all_map_name=$all_map_name."^".$file."=".trim($analyse[$x]['name']);
-			}
+		$all_allowed_user .= "^".$file."=".$MAPCFG1->getValue('global','','allowed_for_config');	
+		$all_map_image .= "^".$file."=".$MAPCFG1->getValue('global','','map_image');
+		
+		foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+			$all_map_name .= "^".$file."=".$obj['name'];
 		}		
 	}
 }
 closedir($handle2);
+
 # we remove the first ^
-$all_allowed_user=substr($all_allowed_user,1,strlen($all_allowed_user));
-$all_map_image=substr($all_map_image,1,strlen($all_map_image));
-$all_map_name=substr($all_map_name,1,strlen($all_map_name));
+$MAINCFG->setRuntimeValue('AllMapsAllowedUsers',substr($all_allowed_user,1,strlen($all_allowed_user)));
+$MAINCFG->setRuntimeValue('AllMapsImages',substr($all_map_image,1,strlen($all_map_image)));
+$MAINCFG->setRuntimeValue('AllMapsNames',substr($all_map_name,1,strlen($all_map_name)));
 ###############################################
-
-
-unset($browser);
-$browser = $_SERVER['HTTP_USER_AGENT'];
-
-# we retrieve the map parameter passed in the URL, if defined
-if(isset($_GET['map'])) {
-	$map = $_GET['map'];
-}
-else {
-	$map = "";
-}
-
-# we retrieve the autosave parameter passed in the URL, if defined. if defined, the map will be saved after the next object is moved
-if(isset($_GET['autosave']))
-{
-   $just_added = 'true';
-}
-else
-   {
-   $just_added = 'false';
-}
-
-# we retrieve the current username used to display this page (protected by a .htaccess file)
-if(isset($_SERVER['PHP_AUTH_USER'])) {
-	$user = $_SERVER['PHP_AUTH_USER'];
-}
-elseif(isset($_SERVER['REMOTE_USER'])) {
-	$user = $_SERVER['REMOTE_USER'];
-}
-else {
-	$FRONTEND->openSite($rotateUrl);
-        $FRONTEND->messageBox("14", "");
-        $FRONTEND->closeSite();
-        $FRONTEND->printSite();
-	exit;
-}
-
-# if a map is defined in the URL we load its definition file and retrieve its allowed_user list and map_image parameter
-if($map!="")
-{
-	if(file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
-		$mapCfg = $readfile->readNagVisCfg($map);
-		$allowed_users = explode(",",trim($mapCfg[1]['allowed_for_config']));
-		$map_image_array = explode(",",trim($mapCfg[1]['map_image']));
-		$map_image=$map_image_array[0];
-	}
-}
 
 $FRONTEND->site[] = '<HTML>';
 $FRONTEND->site[] = '<HEAD>';
-$FRONTEND->site[] = '<TITLE>'.$CONFIG->getValue('internal', 'title').'</TITLE>';
+$FRONTEND->site[] = '<TITLE>'.$MAINCFG->getValue('internal', 'title').'</TITLE>';
 $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/nagvis.js"></SCRIPT>';
 $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./includes/js/overlib.js"></SCRIPT>';
 $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./wui/wz_jsgraphics.js"></SCRIPT>';
@@ -354,58 +319,55 @@ $FRONTEND->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE
 #	- its background image exists
 #	- the current user is allowed to have acees to it
 #	- the map is writable
-if($map!="")
-{
-	if(!file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
-		$FRONTEND->openSite($rotateUrl);
-		$FRONTEND->messageBox("2", "MAP~".$map.".cfg");
-		$FRONTEND->closeSite();
-		$FRONTEND->printSite();
-		exit;
-	}
-
-
-	elseif(!file_exists($CONFIG->getValue('paths', 'map').$map_image)) {
-		$FRONTEND->openSite($rotateUrl);
-		$FRONTEND->messageBox("3", "MAPPATH~".$CONFIG->getValue('paths', 'map').$map_image);
-		$FRONTEND->closeSite();
-		$FRONTEND->printSite();
-		exit;
-	}
-
-	elseif(!in_array($user,$allowed_users) && !in_array("EVERYONE",$allowed_users) && isset($allowed_users)) {
-		$FRONTEND->openSite($rotateUrl);
-		$FRONTEND->messageBox("4", "USER~".$user);
-		$FRONTEND->closeSite();
-		$FRONTEND->printSite();
-		exit;
-	}
-        elseif(!is_writable($CONFIG->getValue('paths', 'mapcfg').$map.".cfg")) {
-                        $FRONTEND->openSite($rotateUrl);
-                        $FRONTEND->messageBox("17", "MAP~".$CONFIG->getValue('paths', 'mapcfg').$map.".cfg");
-                        $FRONTEND->closeSite();
-                        $FRONTEND->printSite();
-                        exit;
-        }
-}
+//if($map!="")
+//{
+//	if(!file_exists($MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
+//		$FRONTEND->openSite($rotateUrl);
+//		$FRONTEND->messageBox("2", "MAP~".$map.".cfg");
+//		$FRONTEND->closeSite();
+//		$FRONTEND->printSite();
+//		exit;
+//	}
+//
+//
+//	elseif(!file_exists($MAINCFG->getValue('paths', 'map').$map_image)) {
+//		$FRONTEND->openSite($rotateUrl);
+//		$FRONTEND->messageBox("3", "MAPPATH~".$MAINCFG->getValue('paths', 'map').$map_image);
+//		$FRONTEND->closeSite();
+//		$FRONTEND->printSite();
+//		exit;
+//	}
+//
+//	elseif(!in_array($user,$allowed_users) && !in_array("EVERYONE",$allowed_users) && isset($allowed_users)) {
+//		$FRONTEND->openSite($rotateUrl);
+//		$FRONTEND->messageBox("4", "USER~".$user);
+//		$FRONTEND->closeSite();
+//		$FRONTEND->printSite();
+//		exit;
+//	}
+//        elseif(!is_writable($MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
+//                        $FRONTEND->openSite($rotateUrl);
+//                        $FRONTEND->messageBox("17", "MAP~".$MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
+//                        $FRONTEND->closeSite();
+//                        $FRONTEND->printSite();
+//                        exit;
+//        }
+//}
 
 # we check the value of checkconfig in the main config file
-if($CONFIG->getValue('global', 'checkconfig') == "1")
+if($MAINCFG->getValue('global', 'checkconfig') == "1")
 {
-	print "<script>window.document.location.href='check_config.php?source=config.php&map=$map';</script>\n";
+	print "<script>window.document.location.href='check_config.php?source=config.php&map=".$MAPCFG->getName()."';</script>\n";
 }
 
-		
 # we load the page background image :
 #	- the map_image if a map is defined in the URL
 #	- a blank image (size 600x600) if not map is defined
 $FRONTEND->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
-if ($map!="")
-{
-	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$map_image.'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
+if($MAPCFG->getImage() != '') {
+	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$MAPCFG->getImage().'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
 }
-else
-{
+else {
 	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./wui/wuilogo.jpg" WIDTH="600px" HEIGHT="600px" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
 }
 
@@ -421,121 +383,104 @@ $FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setColo
 $FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setStroke(1);</script>";
 
 ##############################################################################	
-# we read and display the objects, one by one	
-$BACKEND = new BACKEND($CONFIG);
-
-$countStates = count($mapCfg)-1;
-$arrayPos="2";
+# we read and display the objects, one by one
 	
-for($x="1";$x<=$countStates;$x++) 
-{
-	# we retrieve the coordinates	
-	$mapCfg[$arrayPos]['x'] = $mapCfg[$arrayPos]['x'] ;
-	$mapCfg[$arrayPos]['y'] = $mapCfg[$arrayPos]['y'] ;
-	
-	# we treat the case of an object of type "map"	
-	if($mapCfg[$arrayPos]['type'] == 'map') 
-	{
-		$state['Map'] = "OK";
-		$state['State'] = "OK";
-
-	}
-	
-	# we treat the case of an object of type "textbox"	
-	elseif($mapCfg[$arrayPos]['type'] == 'textbox') 
-	{
-		$TextBox = $FRONTEND->TextBox($mapCfg[$arrayPos]['x'],$mapCfg[$arrayPos]['y'],$mapCfg[$arrayPos]['w'],$mapCfg[$arrayPos]['text']);
-		$FRONTEND->site[] = $TextBox;			
-	}
-	
-	# we treat the case of an object of another type
-	else 
-	{
-		if(!isset($mapCfg[$arrayPos]['recognize_services'])) 
-		{
-			$mapCfg[$arrayPos]['recognize_services'] = 0;
+$types = array("host","service","hostgroup","servicegroup","map","textbox");
+foreach($types AS $key => $type) {
+	foreach($MAPCFG->getDefinitions($type) AS $var => $obj) {
+		# we retrieve the coordinates	
+		$obj['x'] = $obj['x'] ;
+		$obj['y'] = $obj['y'] ;
+		
+		# we treat the case of an object of type "map"	
+		if($obj['type'] == 'map') {
+			$state['Map'] = "OK";
+			$state['State'] = "OK";
 		}
-		if(!isset($mapCfg[$arrayPos]['service_description'])) 
-		{
-			$mapCfg[$arrayPos]['service_description'] = "";
+		
+		# we treat the case of an object of type "textbox"	
+		elseif($obj['type'] == 'textbox') {
+			$TextBox = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text']);
+			$FRONTEND->site[] = $TextBox;			
+		}
+		
+		# we treat the case of an object of another type
+		else {
+			if(!isset($obj['recognize_services'])) {
+				$obj['recognize_services'] = 0;
+			}
+			if(!isset($obj['service_description'])) {
+				$obj['service_description'] = "";
+			}
+				
+			// we mark the object in the OK or UP STATE (we don't care of the current object state in this designer)
+			if(($obj['type'] == 'host') || ($obj['type'] == 'hostgroup')) {
+				$state['State'] = 'UP';
+			} else {
+				$state['State'] = 'OK';
+			}
+			$state['Count'] = 0;
+		}
+		
+		# we set the icon representing the object	
+		if(isset($obj['line_type']) || $obj['type']=='textbox') {
+			$Icon_name = "20x20.gif";
+		} else {
+			$Icon_name = $FRONTEND->findIcon($state,$obj,$obj['type']);
 		}
 			
-		// we mark the object in the OK or UP STATE (we don't care of the current object state in this designer)
-		if(($mapCfg[$arrayPos]['type'] == 'host') || ($mapCfg[$arrayPos]['type'] == 'hostgroup')) {$state['State'] = 'UP';}
-		else {$state['State'] = 'OK';}
+		# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display
+		$Icon=$MAINCFG->getValue('paths', 'htmlicon').$Icon_name;
+		list($mywidth,$myheight,$type,$attr) = getimagesize($MAINCFG->getValue('paths', 'icon').$Icon_name);
+		$myposx=$obj['x']-($mywidth/2);
+		$myposy=$obj['y']-($myheight/2);
 		
-                $state['Count'] = 0;
-	}
-	
-	# we set the icon representing the object	
-	if(isset($mapCfg[$arrayPos]['line_type']) || $mapCfg[$arrayPos]['type']=='textbox')
-	{
-		$Icon_name = "20x20.gif";
-	}
-	else
-	{
-		$Icon_name = $FRONTEND->findIcon($state,$mapCfg,$mapCfg['1']['iconset'],$CONFIG->getValue('global', 'defaulticons'),$mapCfg[$arrayPos]['type']);
-	}
-		
-	# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display
-	$Icon=$CONFIG->getValue('paths', 'htmlicon').$Icon_name;
-	list($mywidth,$myheight,$type,$attr) = getimagesize($CONFIG->getValue('paths', 'icon').$Icon_name);
-	$myposx=$mapCfg[$arrayPos]['x']-($mywidth/2);
-	$myposy=$mapCfg[$arrayPos]['y']-($myheight/2);
-	
-	# we add the icon on the map	
-	$FRONTEND->site[] = "<DIV id=\"box_$x\" STYLE=\"position:absolute; left:".$myposx."px; top:".$myposy."px;\">";
-	$FRONTEND->site[] = "<img border=\"0\" src=\"$Icon\" onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".strtoupper($mapCfg[$arrayPos]['type'])."</b>';";
-		
-	# we add all the object's defined properties to the tooltip body
-	$tooltip_text="";
-	$i=0;
-	$properties = array_keys($mapCfg[$arrayPos]);
-	while ($i < count($properties))
-	{
-		if( $mapCfg[$arrayPos][$properties[$i]] != ""  && $properties[$i]!="type" && $properties[$i]!="x" && $properties[$i]!="y")
-		{
-			$tooltip_text=$tooltip_text.$properties[$i]." : ".$mapCfg[$arrayPos][$properties[$i]]."<br>";
+		# we add the icon on the map	
+		$FRONTEND->site[] = "<DIV id=\"box_$var\" STYLE=\"position:absolute; left:".$myposx."px; top:".$myposy."px;\">";
+		$FRONTEND->site[] = "<img border=\"0\" src=\"$Icon\" onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".strtoupper($obj['type'])."</b>';";
+			
+		# we add all the object's defined properties to the tooltip body
+		$tooltip_text="";
+		$i=0;
+		$properties = array_keys($obj);
+		while ($i < count($properties)) {
+			if( $obj[$properties[$i]] != ""  && $properties[$i]!="type" && $properties[$i]!="x" && $properties[$i]!="y") {
+				$tooltip_text=$tooltip_text.$properties[$i]." : ".$obj[$properties[$i]]."<br>";
+			}
+			$i++;
 		}
-		$i++;
-	}
-		
-	# we add the Edit link in the tooltip
-	$val="./wui/addmodify.php?action=modify&map=".$map."&type=".$mapCfg[$arrayPos]['type']."&id=$x";
-	$tooltip_text=$tooltip_text."<br><a href=".$val." onclick=\'fenetre(href); return false\'>".$langfile->get_text("3")."</a>";
-	$tooltip_text=$tooltip_text."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	$val="./wui/wui.function.inc.php?myaction=delete&map=".$map."&type=".$mapCfg[$arrayPos]['type']."&id=$x";		
-	$actiona="\'return confirm_object_deletion();return false;\'";
-	$tooltip_text=$tooltip_text."<a href=".$val." onClick=".$actiona.">".$langfile->get_text("4")."</a>";
-	
-	# lines and textboxes have one more link in the tooltip : "size/position"	
-	if(isset($mapCfg[$arrayPos]['line_type']) || $mapCfg[$arrayPos]['type']=='textbox')
-	{
+			
+		# we add the Edit link in the tooltip
+		$val="./wui/addmodify.php?action=modify&map=".$MAPCFG->getName()."&type=".$obj['type']."&id=".$var;
+		$tooltip_text=$tooltip_text."<br><a href=".$val." onclick=\'fenetre(href); return false\'>".$langfile->get_text("3")."</a>";
 		$tooltip_text=$tooltip_text."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-		$actiona="objid=".$x.";get_click(\'".$mapCfg[$arrayPos]['type']."\',2,\'modify\');";
-		$tooltip_text=$tooltip_text."<a href=javascript:".$actiona.">".$langfile->get_text("5")."</a>";			
+		$val="./wui/wui.function.inc.php?myaction=delete&map=".$MAPCFG->getName()."&type=".$obj['type']."&id=".$var;		
+		$actiona="\'return confirm_object_deletion();return false;\'";
+		$tooltip_text=$tooltip_text."<a href=".$val." onClick=".$actiona.">".$langfile->get_text("4")."</a>";
+		
+		# lines and textboxes have one more link in the tooltip : "size/position"	
+		if(isset($obj['line_type']) || $obj['type']=='textbox') {
+			$tooltip_text=$tooltip_text."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			$actiona="objid=".$var.";get_click(\'".$obj['type']."\',2,\'modify\');";
+			$tooltip_text=$tooltip_text."<a href=javascript:".$actiona.">".$langfile->get_text("5")."</a>";			
+		}
+			
+		# we finish to define the tooltip
+		$FRONTEND->site[] = "return escape('$tooltip_text');\">";
+		$FRONTEND->site[] = "</DIV>";
+			
+		# if the current object has its line_type property defined we add a line to the canvas (to add it on the map in the end)
+		if(isset($obj['line_type'])) {
+			list($pointa_x,$pointb_x) = explode(",", $obj['x']);
+			list($pointa_y,$pointb_y) = explode(",", $obj['y']);
+			$FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.drawLine($pointa_x,$pointa_y,$pointb_x,$pointb_y);</script>";		
+		}
+			
+		# we add this object to the list of the components which will have to be movable, if it's not a line or a textbox
+		if(!isset($obj['line_type']) && $obj['type'] != 'textbox') {
+			$movable = $movable."\"box_".$var."\",";
+		}
 	}
-		
-	# we finish to define the tooltip
-	$FRONTEND->site[] = "return escape('$tooltip_text');\">";
-	$FRONTEND->site[] = "</DIV>";
-		
-	# if the current object has its line_type property defined we add a line to the canvas (to add it on the map in the end)
-	if(isset($mapCfg[$arrayPos]['line_type']))
-	{
-		list($pointa_x,$pointb_x) = explode(",", $mapCfg[$arrayPos]['x']);
-		list($pointa_y,$pointb_y) = explode(",", $mapCfg[$arrayPos]['y']);
-		$FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.drawLine($pointa_x,$pointa_y,$pointb_x,$pointb_y);</script>";		
-	}
-		
-	# we add this object to the list of the components which will have to be movable, if it's not a line or a textbox
-	if(!isset($mapCfg[$arrayPos]['line_type']) && $mapCfg[$arrayPos]['type'] != 'textbox')
-	{
-		$movable = $movable."\"box_$x\",";
-	}
-		
-	# we go to the next element	
-	$arrayPos++;
 }
 	
 # we print in the HTML page all the code we just computed
@@ -558,18 +503,14 @@ if (strlen($movable) != 0)
 ?>
     
 <form method="post" action="./wui/wui.function.inc.php?myaction=open" name="open_map">
-	<input type="hidden" name="formulaire" value="<? echo $map; ?>">
+	<input type="hidden" name="formulaire" value="<? echo $MAPCFG->getName(); ?>">
 		<select name="map_choice">
 		<?
 			# we build the list of .cfg files (without extension) present in the maps directory
-			if ($handle = opendir($CONFIG->getValue('paths', 'mapcfg'))) 
-			{
-				while (false !== ($file = readdir($handle))) 
-				{
-		  
-			       		if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" ) 
-			       		{
-		       		  		 print "<option value=\"".substr($file,0,strlen($file)-4)."\">".substr($file,0,strlen($file)-4)."</option>";
+			if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
+				while (false !== ($file = readdir($handle))) {
+		       		if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" ) {
+	       		  		 print "<option value=\"".substr($file,0,strlen($file)-4)."\">".substr($file,0,strlen($file)-4)."</option>";
 					}
 				}
 			}
@@ -596,21 +537,21 @@ if (strlen($movable) != 0)
 ?>
 <form name="myvalues" action="./wui/wui.function.inc.php?myaction=save" method="post">
 	<input type="hidden" name="image">
-	<input type="hidden" name="formulaire" value="<? echo $map; ?>">
+	<input type="hidden" name="formulaire" value="<? echo $MAPCFG->getName(); ?>">
 	<input type="hidden" name="valx">
 	<input type="hidden" name="valy">
-	<input type="hidden" name="autosave" value="<? echo $just_added; ?>">
-	<input type="hidden" name="username" value="<? echo $user; ?>">
+	<input type="hidden" name="autosave" value="<? echo $MAINCFG->getRuntimeValue('justAdded'); ?>">
+	<input type="hidden" name="username" value="<? echo $MAINCFG->getRuntimeValue('user'); ?>">
 	<textarea name="menu_labels"></textarea>
-	<input type="text" name="allowed_users_by_map" value="<? echo $all_allowed_user ?>">
-	<input type="text" name="image_map_by_map" value="<? echo $all_map_image ?>">
-	<input type="text" name="mapname_by_map" value="<? echo $all_map_name ?>">
-	<input type="text" name="backup_available" value="<? echo file_exists($CONFIG->getValue('paths', 'mapcfg').$map.".cfg.bak") ?>">
+	<input type="text" name="allowed_users_by_map" value="<? echo $MAINCFG->getRuntimeValue('AllMapsAllowedUsers'); ?>">
+	<input type="text" name="image_map_by_map" value="<? echo $MAINCFG->getRuntimeValue('AllMapsImages'); ?>">
+	<input type="text" name="mapname_by_map" value="<? echo $MAINCFG->getRuntimeValue('AllMapsNames'); ?>">
+	<input type="text" name="backup_available" value="<? echo file_exists($MAINCFG->getValue('paths', 'mapcfg').$MAPCFG->getName().".cfg.bak") ?>">
 	<input name="submit" type=submit value="Save this map">
 </form> 
 
 <form name="add_object" action="./wui/wui.function.inc.php?myaction=add_modify" method="post" onsubmit="return check_new_object();">
-	<input type="hidden" name="formulaire" value="<? echo $map; ?>">
+	<input type="hidden" name="formulaire" value="<? echo $MAPCFG->getName(); ?>">
 	<input type="hidden" name="modify_line" value="">		
 		<select name="add_type" style="width : 108px">
 			<option value="host">host</option>
