@@ -39,16 +39,21 @@ $BACKEND = new backend($MAINCFG);
 $READFILE = new readFile($MAINCFG);
 
 // check-stuff
-$CHECKIT->check_user(1);
-$CHECKIT->check_gd();
-$CHECKIT->check_wuibash();
+if(!$CHECKIT->check_user(1)) {
+	exit;
+}
+if(!$CHECKIT->check_gd(1)) {
+	exit;	
+}
 if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_user'),1)) {
 	exit;
 }
 if(!$MAPCFG->checkMapImageReadable(1)) {
 	exit;
 }
-$CHECKIT->check_langfile();
+if(!$CHECKIT->check_langfile(1)) {
+	exit;
+}
 $MAINCFG->setRuntimeValue('rotateUrl',$CHECKIT->check_rotate());
 
 $FRONTEND->openSite();
