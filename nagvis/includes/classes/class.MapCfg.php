@@ -29,7 +29,12 @@ class MapCfg {
 		if($name == '') {
 			$this->name = $this->getMap();
 		} else {
-			$this->name = $name;
+			//check the $name string for security reasons (its the ONLY value we
+			//get directly from external...)
+			//strip everything wich could be possible unwanted
+			//strip:              Slashes /,          Backslashes \          and PHP Tags
+			$strippedName = preg_replace("'/'","",preg_replace("/\\\/","",strip_tags($name)));
+			$this->name = $strippedName;
 		}
 		$this->getImage();
 	}
@@ -44,7 +49,7 @@ class MapCfg {
     */
 	function getMap() {
 		$arr = explode(',',$this->MAINCFG->getValue('global', 'maps'));
-	    return $arr[0];
+	   	return $arr[0];
 	}
 	
 	/**
