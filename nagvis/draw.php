@@ -3,12 +3,13 @@
 include("./includes/classes/class.Graphic.php");
 include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.MapCfg.php");
-include("./includes/classes/class.NagVis.php");
+include("./includes/classes/class.CheckIt.php");
 include("./includes/classes/class.ReadFiles.php");
 
 $MAINCFG = new MainNagVisCfg('./etc/config.ini');
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
+$CHECKIT = new checkit($MAINCFG,$MAPCFG);
 
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
 $readfile = new readFile($MAINCFG,$MAPCFG);
@@ -16,13 +17,15 @@ $readfile = new readFile($MAINCFG,$MAPCFG);
 include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
 $BACKEND = new backend($MAINCFG);
 
-if(isset($_SERVER['PHP_AUTH_USER'])) {
-	$MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
+if(!$CHECKIT->check_user(0)) {
+	errorBox('no user found!');
 }
-elseif(isset($_SERVER['REMOTE_USER'])) {
-	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
+if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_user'),0)) {
+	errorBox('You don\'t have permission to open this!');
 }
-
+if(!$MAPCFG->checkMapImageReadable(0)) {
+	errorBox('The defined image isn\'t readable!');
+}
 
 //DEPRECATED:
 //if(file_exists($MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
@@ -42,12 +45,10 @@ switch(strtolower($image_type[1])) {
 	case 'png':
 		$im = @imagecreatefrompng($MAINCFG->getValue('paths', 'map').$MAPCFG->getImage());
 	break;
-	default: 
-		// FIXME: Error-Box!
-		print "Only PNG and JPG Map-Image Extensions are allowed";
-		exit;
+	default:
+		errorBox('Only PNG and JPG Map-Image extensions are allowed');
 	break;
-}	
+}
 
 $ok=imagecolorallocate($im, 0,255,0);
 $warning=imagecolorallocate($im, 255, 255, 0);
@@ -135,8 +136,26 @@ switch(strtolower($image_type[1])) {
 		imagedestroy($im);
 	break;
 	default: 
-		// Error-Box!
+		// never reach this, error handling at the top
 		exit;
 	break;
+}
+
+function errorBox($msg) {
+	$image = @imagecreate(600,50);
+	$ImageFarbe = imagecolorallocate($image,243,243,243); 
+	$schriftFarbe = imagecolorallocate($image,10,36,106);
+	$schrift = imagestring($image, 5,10, 10, $msg, $schriftFarbe);
+	
+	header('Content-type: image/png');
+	// HTTP/1.1
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	// HTTP/1.0
+	header("Pragma: no-cache");
+	imagepng($image);
+	imagedestroy($image);
+	
+	exit;
 }
 ?>

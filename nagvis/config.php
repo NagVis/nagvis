@@ -13,34 +13,20 @@
 
 include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.MapCfg.php");
-include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.ReadFiles.php");
+include("./includes/classes/class.CheckIt.php");
 include("./wui/classes.wui.php");
 
 $MAINCFG = new MainNagVisCfg('./etc/config.ini');
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
+$CHECKIT = new checkit($MAINCFG,$MAPCFG);
+
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
 
 include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
 $BACKEND = new backend($MAINCFG);
 
-$MAINCFG->setRuntimeValue('browser',$_SERVER['HTTP_USER_AGENT']);
-# we retrieve the current username used to display this page (protected by a .htaccess file)
-if(isset($_SERVER['PHP_AUTH_USER'])) {
-	$MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
-}
-elseif(isset($_SERVER['REMOTE_USER'])) {
-	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
-}
-else {
-	$FRONTEND->openSite($rotateUrl);
-    $FRONTEND->messageBox("14", "");
-    $FRONTEND->closeSite();
-    $FRONTEND->printSite();
-    
-	exit;
-}
 
 # we retrieve the autosave parameter passed in the URL, if defined. if defined, the map will be saved after the next object is moved
 if(isset($_GET['autosave'])) {
@@ -51,6 +37,26 @@ if(isset($_GET['autosave'])) {
 
 // load language
 $langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
+
+# if a map name is defined in the URL, we check if :
+#	- a user is logged in
+#	- its definition file exists
+#	- its background image exists
+#	- the current user is allowed to have acees to it
+#	- the map is writable
+if(!$CHECKIT->check_user(1)) {
+	exit;
+}
+if(!$MAPCFG->checkMapImageReadable(1)) {
+	exit;
+}
+if($CHECKIT->check_permissions(1)) {
+	exit;
+}
+if(!$MAPCFG->checkMapConfigWriteable(1)) {
+	exit;
+}
+
 
 ############################################################################################################
 # SOME JAVASCRIPTS FUNCTIONS WE WILL NEED
@@ -313,50 +319,8 @@ $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./wui/wz_jsgraphics.js"
 $FRONTEND->site[] = '</HEAD>';
 $FRONTEND->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE="text/css">';
 
-
-# if a map name is defined in the URL, we check if :
-#	- its definition file exists
-#	- its background image exists
-#	- the current user is allowed to have acees to it
-#	- the map is writable
-//if($map!="")
-//{
-//	if(!file_exists($MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
-//		$FRONTEND->openSite($rotateUrl);
-//		$FRONTEND->messageBox("2", "MAP~".$map.".cfg");
-//		$FRONTEND->closeSite();
-//		$FRONTEND->printSite();
-//		exit;
-//	}
-//
-//
-//	elseif(!file_exists($MAINCFG->getValue('paths', 'map').$map_image)) {
-//		$FRONTEND->openSite($rotateUrl);
-//		$FRONTEND->messageBox("3", "MAPPATH~".$MAINCFG->getValue('paths', 'map').$map_image);
-//		$FRONTEND->closeSite();
-//		$FRONTEND->printSite();
-//		exit;
-//	}
-//
-//	elseif(!in_array($user,$allowed_users) && !in_array("EVERYONE",$allowed_users) && isset($allowed_users)) {
-//		$FRONTEND->openSite($rotateUrl);
-//		$FRONTEND->messageBox("4", "USER~".$user);
-//		$FRONTEND->closeSite();
-//		$FRONTEND->printSite();
-//		exit;
-//	}
-//        elseif(!is_writable($MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
-//                        $FRONTEND->openSite($rotateUrl);
-//                        $FRONTEND->messageBox("17", "MAP~".$MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
-//                        $FRONTEND->closeSite();
-//                        $FRONTEND->printSite();
-//                        exit;
-//        }
-//}
-
 # we check the value of checkconfig in the main config file
-if($MAINCFG->getValue('global', 'checkconfig') == "1")
-{
+if($MAINCFG->getValue('global', 'checkconfig') == "1") {
 	print "<script>window.document.location.href='check_config.php?source=config.php&map=".$MAPCFG->getName()."';</script>\n";
 }
 

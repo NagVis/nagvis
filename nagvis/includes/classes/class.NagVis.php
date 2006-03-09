@@ -8,7 +8,6 @@
 /**
 * This Class creates the Web-Frontend for NagVis
 */
-
 include("./includes/classes/class.Common.php");
 
 class frontend extends common {

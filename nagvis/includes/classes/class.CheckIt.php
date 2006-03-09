@@ -2,7 +2,6 @@
 /**
 * This Class makes some checks
 */
-
 include("./includes/classes/class.NagVis.php");
 
 class checkit extends frontend {
@@ -37,8 +36,10 @@ class checkit extends frontend {
 	*
 	* @author FIXME!
 	* @author Michael Luebben <michael_luebben@web.de>
+	*
+	* DEPRECATED: check is made in the class
 	*/
-    function check_config() {
+    /*function check_config() {
         global $rotateUrl;
         global $user;
         
@@ -53,7 +54,7 @@ class checkit extends frontend {
         else {
         	//
         }
-    }
+    }*/
 
 	/**
 	* Check the Configuration-File from a map.
@@ -118,22 +119,25 @@ class checkit extends frontend {
 	*
 	* @author FIXME!
 	*/
-    function check_user() {
-        global $user;
-        
+    function check_user($printErr) {
         if(isset($_SERVER['PHP_AUTH_USER'])) {
-        	$user = $_SERVER['PHP_AUTH_USER'];
-        }
-        elseif(isset($_SERVER['REMOTE_USER'])) {
-        	$user = $_SERVER['REMOTE_USER'];
-        }
-        else {
-            $this->openSite($rotateUrl);
-            $this->messageBox("14", "");
-            $this->closeSite();
-            $this->printSite();
-            
-            exit;
+        	$this->MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
+        	
+        	return TRUE;
+        } elseif(isset($_SERVER['REMOTE_USER'])) {
+			$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
+			
+			return TRUE;
+        } else {
+        	if($printErr) {
+	            $this->openSite($rotateUrl);
+	            $this->messageBox("14", "");
+	            $this->closeSite();
+	            $this->printSite();
+		            
+            	exit;
+            }
+            return FALSE;
         }
     }
 		
@@ -184,9 +188,9 @@ class checkit extends frontend {
 	* @author FIXME!
 	* @author Michael Luebben <michael_luebben@web.de>
 	*
-	* DEPRECATED: should be checked in html backend
+	* DEPRECATED: is done in html backend
 	*/
-    function check_cgipath() {
+    /*function check_cgipath() {
         if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
             $this->openSite($rotateUrl);
             $this->messageBox("0", "STATUSCGI~".$this->MAINCFG->getValue('backend_html', 'cgi'));
@@ -195,7 +199,7 @@ class checkit extends frontend {
             
             exit;
         }
-    }
+    }*/
 
 	/**
 	* Check the Image for a map.
@@ -204,11 +208,9 @@ class checkit extends frontend {
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
     function check_mapimg() {
-        global $map_image;
-        
-        if(!file_exists($this->MAINCFG->getValue('paths', 'map').$map_image)) {
+        if(!file_exists($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage())) {
             $this->openSite($rotateUrl);
-            $this->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$map_image);
+            $this->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
             $this->closeSite();
             $this->printSite();
             
@@ -222,18 +224,18 @@ class checkit extends frontend {
 	* @author FIXME!
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
-    function check_permissions() {
-        global $user;
-        global $allowed_users;
-        
-        if(isset($allowed_users) && !in_array('EVERYONE', $allowed_users) && !in_array($user,$allowed_users)) {
-            $this->openSite($rotateUrl);
-            $this->messageBox("4", "USER~".$user);
-            $this->closeSite();
-            $this->printSite();
-            
-            exit;
-        }
+    function check_permissions($allowed,$printErr) {
+        if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
+        	if($printErr) {
+				$this->openSite($rotateUrl);
+				$this->messageBox("4", "USER~".$this->MAINCFG->getRuntimeValue('user'));
+				$this->closeSite();
+				$this->printSite();
+			}
+			return FALSE;
+        } else {
+        	return TRUE;
+    	}
     }
 
 	/**

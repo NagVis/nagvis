@@ -38,15 +38,16 @@ $BACKEND = new backend($MAINCFG);
 
 $READFILE = new readFile($MAINCFG);
 
+//DEPRECATED: isn't used anywhere
 // Get Browser Info
-unset($browser);
-$browser = $_SERVER['HTTP_USER_AGENT'];
+//unset($browser);
+//$browser = $_SERVER['HTTP_USER_AGENT'];
 
 //DEPRECATED: now saved in $MAINCFG->runtimeConfig[rotateUrl]
 //$rotateUrl = "";
 
 // check-stuff
-$CHECKIT->check_user();
+$CHECKIT->check_user(1);
 $CHECKIT->check_gd();
 // DEPRECATED: is checked in html backend
 // if($MAINCFG->getValue('global', 'backend') == 'html') {
@@ -67,7 +68,7 @@ $MAINCFG->setRuntimeValue('rotateUrl',$CHECKIT->check_rotate());
 
 $FRONTEND->openSite();
 
-$CHECKIT->check_permissions();
+$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_users'),1);
 $CHECKIT->check_mapimg();
 $CHECKIT->check_langfile();
 

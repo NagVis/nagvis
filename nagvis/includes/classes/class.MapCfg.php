@@ -192,6 +192,32 @@ class MapCfg {
 	}
 	
 	/**
+	* Checks for readable map image file
+	*
+	* @param string $printErr
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function checkMapImageReadable($printErr) {
+		if($this->name != '') {
+			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image) && is_readable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND->closeSite();
+					$FRONTEND->printSite();
+				}
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
 	* Checks for readable config file
 	*
 	* @param string $printErr
