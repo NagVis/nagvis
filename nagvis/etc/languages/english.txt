@@ -15,3 +15,4 @@
 14~img_permission.png~No User~You passed no username to NagVis! Check .htaccess configuration! 
 15~img_error.png~GD Lib~GD Lib not loaded. Check your PHP installation. 
 16~img_error.png~wui/wui.function.inc.bash not executable~Please check permissions of wui/wui.function.inc.bash (751)!
+17~img_error.png~Can not write Map Config File~Please check the webserver permission at the *.cfg files!
