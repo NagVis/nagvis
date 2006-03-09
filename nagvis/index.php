@@ -38,39 +38,20 @@ $BACKEND = new backend($MAINCFG);
 
 $READFILE = new readFile($MAINCFG);
 
-//DEPRECATED: isn't used anywhere
-// Get Browser Info
-//unset($browser);
-//$browser = $_SERVER['HTTP_USER_AGENT'];
-
-//DEPRECATED: now saved in $MAINCFG->runtimeConfig[rotateUrl]
-//$rotateUrl = "";
-
 // check-stuff
 $CHECKIT->check_user(1);
 $CHECKIT->check_gd();
-// DEPRECATED: is checked in html backend
-// if($MAINCFG->getValue('global', 'backend') == 'html') {
-//	$CHECKIT->check_cgipath();
-//  }
 $CHECKIT->check_wuibash();
+if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_user'),1)) {
+	exit;
+}
+if(!$MAPCFG->checkMapImageReadable(1)) {
+	exit;
+}
+$CHECKIT->check_langfile();
 $MAINCFG->setRuntimeValue('rotateUrl',$CHECKIT->check_rotate());
 
-//DEPRECATED: is checked in class.MapCfg
-// $CHECKIT->check_map_isreadable();
-//Read *.cfg File
-//DEPRECATED: is done in class.MapCfg
-// $mapCfg = $READFILE->readNagVisCfgNew($map);
-//DEPRECATED: 
-// $IconMapGlobal = $MAPCFG->getValue('global', '', 'iconset');
-// $map_image_array = explode(",",trim($MAPCFG->getValue('global', '', 'map_image')));
-// $map_image = $map_image_array[0];
-
 $FRONTEND->openSite();
-
-$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_users'),1);
-$CHECKIT->check_mapimg();
-$CHECKIT->check_langfile();
 
 // Create Header-Menu, when enabled
 if ($MAINCFG->getValue('global', 'displayheader') == "1") {
@@ -78,13 +59,6 @@ if ($MAINCFG->getValue('global', 'displayheader') == "1") {
 	$FRONTEND->makeHeaderMenu($Menu);
 }
 
-// Create Background
-// DEPREACTED: desicion if gd used, or not is done only in common
-//if ($MAINCFG->getValue('global', 'usegdlibs') == "1") {
-//	$FRONTEND->printMap($map);
-//} else {
-//	$FRONTEND->printMap();
-//}
 $FRONTEND->printMap();
 
 // Handle all objects of type "map"
