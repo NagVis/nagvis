@@ -169,16 +169,19 @@ class checkit extends frontend {
 	* @author FIXME!
 	* @author Michael Luebben <michael_luebben@web.de>
 	*/
-    function check_gd() {
+    function check_gd($printErr) {
 		if ($this->MAINCFG->getValue('global', 'usegdlibs') == "1") {
         	if(!extension_loaded('gd')) {
-                $this->openSite($rotateUrl);
-                $this->messageBox("15", "");
-                $this->closeSite();
-                $this->printSite();
-                
-                exit;
-            }
+        		if($printErr) {
+	                $this->openSite($rotateUrl);
+	                $this->messageBox("15", "");
+	                $this->closeSite();
+	                $this->printSite();
+	            }
+	            return FALSE;
+            } else {
+            	return TRUE;
+        	}
         }
     }
 		
@@ -245,15 +248,18 @@ class checkit extends frontend {
 	*
 	* @author FIXME!
 	*/
-    function check_wuibash() {
+    function check_wuibash($printErr) {
         if(!is_executable('wui/wui.function.inc.bash')) {
-            $this->openSite($rotateUrl);
-            $this->messageBox("16", "");
-            $this->closeSite();
-            $this->printSite();
-            
-            exit;
-        }
+        	if($printErr) {
+	            $this->openSite($rotateUrl);
+	            $this->messageBox("16", "");
+	            $this->closeSite();
+	            $this->printSite();
+            }
+        	return FALSE;
+        } else {
+        	return TRUE;
+    	}
     }
 	
 	/**
@@ -261,14 +267,17 @@ class checkit extends frontend {
 	*
 	* @author FIXME!
 	*/
-    function check_langfile() {
+    function check_langfile($printErr) {
         if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
-            $this->openSite($rotateUrl);
-            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
-            $this->closeSite();
-            $this->printSite();
-            
-            exit;
+        	if($printErr) {
+	            $this->openSite($rotateUrl);
+	            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
+	            $this->closeSite();
+	            $this->printSite();
+	        }
+	        return FALSE;
+        } else {
+        	return TRUE;
         }
     }
 
@@ -277,14 +286,17 @@ class checkit extends frontend {
 	*
 	* @author FIXME!
 	*/
-	function check_wuilangfile() {
+	function check_wuilangfile($printErr) {
         if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
-            $this->openSite($rotateUrl);
-            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
-            $this->closeSite();
-            $this->printSite();
-            
-            exit;
+        	if($printErr) {
+	            $this->openSite($rotateUrl);
+	            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
+	            $this->closeSite();
+	            $this->printSite();
+	        }
+	        return FALSE;
+	    } else {
+	    	return TRUE;
 	    }
 	}
 }
