@@ -23,6 +23,7 @@ $MAPCFG->readMapConfig();
 $CHECKIT = new checkit($MAINCFG,$MAPCFG);
 
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
+$READFILE = new readfile($MAINCFG);
 
 include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
 $BACKEND = new backend($MAINCFG);
@@ -334,6 +335,13 @@ if($MAINCFG->getValue('global', 'checkconfig') == "1") {
 #	- the map_image if a map is defined in the URL
 #	- a blank image (size 600x600) if not map is defined
 $FRONTEND->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
+
+// Create Header-Menu, when enabled
+if ($MAINCFG->getValue('global', 'displayheader') == "1") {
+	$Menu = $READFILE->readMenu();
+	$FRONTEND->makeHeaderMenu($Menu);
+}
+
 if($MAPCFG->getImage() != '') {
 	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$MAPCFG->getImage().'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
 }
