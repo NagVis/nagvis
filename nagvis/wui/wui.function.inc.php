@@ -16,7 +16,10 @@
 # applies the changes on the server. 
 
 include("../includes/classes/class.NagVisConfig.php");
+include("../includes/classes/class.MapCfg.php");
 $MAINCFG = new MainNagVisCfg('../etc/config.ini.php');
+$MAPCFG = new MapCfg($MAINCFG,$_POST['map']);
+$MAPCFG->readMapConfig();
 
 ############################################
 # passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
@@ -43,20 +46,6 @@ function add_element() {
 	exec('./wui.function.inc.bash add_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'" '.$MAINCFG->getValue('global', 'autoupdatefreq'));
 	
 	return $mymap;
-}
-
-############################################
-function modify_element() {
-	global $MAINCFG;
-	
-	$mymap=$_POST['map'];
-	$mytype=$_POST['type'];
-	$myvalues=$_POST['properties'];
-	$myid=$_POST['id'];
-	exec('./wui.function.inc.bash modify_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$myid.' '.$mytype.' "'.$myvalues.'" '.$MAINCFG->getValue('global', 'autoupdatefreq'));
-	
-	return $mymap;
-	
 }
 
 ############################################
@@ -151,6 +140,22 @@ function restore_map() {
 }
 
 ############################################
+function getArrayFromProperties($properties) {
+	$prop = Array();
+	$properties = explode('^',$properties);
+	foreach($properties AS $var => $line) {
+		// seperate string in an array
+		$arr = @explode("=",$line);
+		// read key from array and delete it
+		$key = @strtolower(@trim($arr[0]));
+		unset($arr[0]);
+		// build string from rest of array
+		$prop[$key] = @trim(@implode("=", $arr));
+	}
+	return $prop;
+}
+
+############################################
 # MAIN SCRIPT
 ############################################
 
@@ -171,13 +176,15 @@ else if($myaction == "open")
 	print "<script>document.location.href='../config.php?map=$mymap';</script>\n";
 }
 
-else if($myaction == "modify")
-{
-		# we modify the object in the cfg file and display the map again
-		$mymap= modify_element();
-		print "<script>window.opener.document.location.href='../config.php?map=$mymap';</script>\n";
-		print "<script>window.close();</script>\n";
-		
+else if($myaction == "modify") {
+	# we modify the object in the cfg file and display the map again
+	foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
+		$MAPCFG->setValue($_POST['type'], $MAPCFG->getNameById($_POST['type'],$_POST['id']), $key, $val);
+		//FIXME: Methode müsste noch zusammengefasst werden... ...geht aber auch so!
+		$MAPCFG->writeValue($_POST['type'], $MAPCFG->getNameById($_POST['type'],$_POST['id']), $key);
+	}
+	print "<script>window.opener.document.location.href='../config.php?map=$mymap';</script>\n";
+	print "<script>window.close();</script>\n";
 }
 else if($myaction == "add")
 {
