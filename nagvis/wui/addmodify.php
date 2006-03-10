@@ -220,9 +220,7 @@ foreach($type_tab[$mytype] as $propname) {
 <?
 ##########################################
 # if the action specified in the URL is "modify", we set the different property values to the object values
-if($myaction == "modify")
-{
-	$readfile = new readFile_wui();
+if($myaction == "modify") {
 	$myval = $myid++;
 	print "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
 	
