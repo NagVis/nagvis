@@ -16,7 +16,7 @@
 # applies the changes on the server. 
 
 include("../includes/classes/class.NagVisConfig.php");
-$MAINCFG = new MainNagVisCfg('../etc/config.ini');
+$MAINCFG = new MainNagVisCfg('../etc/config.ini.php');
 
 ############################################
 # passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
@@ -211,7 +211,7 @@ else if($myaction == "update_config") {
 		print "<script>window.opener.document.location.reload();</script>\n";
 		print "<script>window.close();</script>\n";
 	} else {
-		print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini"." for writing.')</script>";
+		print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
 	}
 }
 else if($myaction == "mgt_map_create")

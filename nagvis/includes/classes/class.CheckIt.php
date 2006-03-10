@@ -43,7 +43,7 @@ class checkit extends frontend {
         global $rotateUrl;
         global $user;
         
-        if(!is_writable('etc/config.ini')) {
+        if(!is_writable('etc/config.ini.php')) {
                 $this->openSite($rotateUrl);
                 $this->messageBox("17", "USER~".$user);
                 $this->closeSite();

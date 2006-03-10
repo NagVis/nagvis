@@ -22,7 +22,7 @@ include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.MapCfg.php");
 include("./classes.wui.php");
 
-$MAINCFG = new MainNagVisCfg('../etc/config.ini');
+$MAINCFG = new MainNagVisCfg('../etc/config.ini.php');
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 

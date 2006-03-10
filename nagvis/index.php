@@ -24,7 +24,7 @@ require("./includes/classes/class.CheckIt.php");
 require("./includes/classes/class.ReadFiles.php");
 include("./includes/classes/class.Debug.php");
 
-$MAINCFG = new MainNagVisCfg('./etc/config.ini');
+$MAINCFG = new MainNagVisCfg('./etc/config.ini.php');
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 $CHECKIT = new checkit($MAINCFG,$MAPCFG);

@@ -6,7 +6,7 @@ include("./includes/classes/class.MapCfg.php");
 include("./includes/classes/class.CheckIt.php");
 include("./includes/classes/class.ReadFiles.php");
 
-$MAINCFG = new MainNagVisCfg('./etc/config.ini');
+$MAINCFG = new MainNagVisCfg('./etc/config.ini.php');
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 $CHECKIT = new checkit($MAINCFG,$MAPCFG);
