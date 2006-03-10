@@ -28,7 +28,6 @@ $READFILE = new readfile($MAINCFG);
 include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
 $BACKEND = new backend($MAINCFG);
 
-
 # we retrieve the autosave parameter passed in the URL, if defined. if defined, the map will be saved after the next object is moved
 if(isset($_GET['autosave'])) {
    $MAINCFG->setRuntimeValue('justAdded','true');
