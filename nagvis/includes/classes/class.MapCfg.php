@@ -177,7 +177,6 @@ class MapCfg {
 									$file[$i] = $tmp;
 								}
 							}
-							print_r($file);
 							
 							// open file for writing and replace it
 						 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg","w");
@@ -280,6 +279,22 @@ class MapCfg {
 			return $this->mapConfig[$type];
 		} else {
 			return Array();
+		}
+	}
+	
+	/**
+	* Gets name of an object by id in array
+	*
+	* @param string $type
+	* @param string $id
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function getNameById($type,$id) {
+		if($type == 'service') {
+			return $this->mapConfig[$type][$id]['service_description'];
+		} else {
+			return $this->mapConfig[$type][$id]['name'];
 		}
 	}
 	
