@@ -59,6 +59,7 @@ class MapCfg {
     */
 	function getImage() {
 		//FIXME: there is only one image in the value, why this?
+		//FIXME: was used for rotate-function! ML
 		$map_image_array = explode(",",trim($this->getValue('global', '', 'map_image')));
 		return $this->image = $map_image_array[0];
 	}

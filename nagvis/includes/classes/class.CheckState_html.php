@@ -38,7 +38,7 @@ class backend {
 		return 0;
 	}*/
 	
-	function checkCgiPath())
+	function checkCgiPath() {
 		if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
 			$FRONTEND = new frontend($this->MAINCFG);
             $FRONTEND->openSite($rotateUrl);
@@ -48,6 +48,7 @@ class backend {
             
             exit;
         }
+    }
 
 	/**
 	* Find State from a Host
