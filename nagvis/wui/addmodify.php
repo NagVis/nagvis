@@ -233,9 +233,10 @@ if($myaction == "modify") {
 					$propname_ok = $propname;
 				}
 				
-				if(ereg("name", $propname_ok)) {
-					$propname_ok = "name";
-				}
+				// soll "richtig" heiﬂen
+				//if(ereg("name", $propname_ok)) {
+				//	$propname_ok = "name";
+				//}
 				
 				if(isset($obj[$propname_ok]))
 				{

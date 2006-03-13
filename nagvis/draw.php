@@ -80,8 +80,13 @@ foreach($types AS $key => $type) {
 				$obj['service_description'] = "";
 			}
 			if(isset($obj['line_type'])) {
+				if($type == 'service') {
+					$name = 'host_name';
+				} else {
+					$name = $type.'_name';
+				}
 				if($obj['line_type'] == '10'){
-					$state = $BACKEND->checkStates($obj['type'],$obj['name'],$obj['recognize_services'],$obj['service_description'],0);	
+					$state = $BACKEND->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],0);	
 					list($x_from,$x_to) = explode(",", $obj['x']);
 					list($y_from,$y_to) = explode(",", $obj['y']);
 					$x_middle = middle($x_from,$x_to);
@@ -91,13 +96,13 @@ foreach($types AS $key => $type) {
 					
 				}
 				elseif($obj['line_type'] == '11'){
-					$state = $BACKEND->checkStates($obj['type'],$obj['name'],$obj['recognize_services'],$obj['service_description'],0);	
+					$state = $BACKEND->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],0);	
 					list($x_from,$x_to) = explode(",", $obj['x']);
 					list($y_from,$y_to) = explode(",", $obj['y']);
 					draw_arrow($x_from,$y_from,$x_to,$y_to,3,1,GetColor($state['State']));
 				}
 				elseif($obj['line_type'] == '20'){
-					list($host_name_from,$host_name_to) = explode(",", $obj['name']);
+					list($host_name_from,$host_name_to) = explode(",", $obj[$name]);
 					list($service_description_from,$service_description_to) = explode(",", $obj['service_description']);
 					$state_from = $BACKEND->checkStates($obj['type'],$host_name_from,$obj['recognize_services'],$service_description_from,1);	
 					$state_to = $BACKEND->checkStates($obj['type'],$host_name_to,$obj['recognize_services'],$service_description_to,2);	

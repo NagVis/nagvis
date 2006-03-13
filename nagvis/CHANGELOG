@@ -1,3 +1,9 @@
+date: 2006-03-13
+author: michelsen
+- renamed "name" to real key (host_name,hostrgroup_name,...) in config array
+- copied the "add" routine from bash to MapCfg class
+
+
 date: 2006-03-09
 author: husch
 - added check at the NDO Backend to make sure that Nagios is alive and data are up to date

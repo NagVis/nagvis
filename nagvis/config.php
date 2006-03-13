@@ -304,7 +304,7 @@ if ($handle2 = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
 		$all_map_image .= "^".$file."=".$MAPCFG1->getValue('global','','map_image');
 		
 		foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-			$all_map_name .= "^".$file."=".$obj['name'];
+			$all_map_name .= "^".$file."=".$obj['map_name'];
 		}		
 	}
 }

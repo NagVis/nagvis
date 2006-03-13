@@ -169,34 +169,34 @@ if($myaction == "save")
 	# display the same map again
 	//print "<script>document.location.href='../config.php?map=$mymap';</script>\n";
 }
-else if($myaction == "open")
-{
+else if($myaction == "open") {
 	# we retrieve the map chosen by the user and open it
-	$mymap = $_POST['map_choice'];
-	print "<script>document.location.href='../config.php?map=$mymap';</script>\n";
+	print "<script>document.location.href='../config.php?map=".$_POST['map_choice']."';</script>\n";
 }
 
 else if($myaction == "modify") {
-	# we modify the object in the cfg file and display the map again
+	// set options in the array
 	foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
 		$MAPCFG->setValue($_POST['type'], $MAPCFG->getNameById($_POST['type'],$_POST['id']), $key, $val);
-		//FIXME: Methode müsste noch zusammengefasst werden... ...geht aber auch so!
-		$MAPCFG->writeValue($_POST['type'], $MAPCFG->getNameById($_POST['type'],$_POST['id']), $key);
 	}
-	print "<script>window.opener.document.location.href='../config.php?map=$mymap';</script>\n";
+	// write element to file
+	$MAPCFG->writeElement($_POST['type'],$_POST['id']);
+	
+	// refresh the map
+	print "<script>window.opener.document.location.href='../config.php?map=".$MAPCFG->getNameById($_POST['type'],$_POST['id'])."';</script>\n";
 	print "<script>window.close();</script>\n";
 }
-else if($myaction == "add")
-{
-		# we append a new object definition line in the map cfg file
-		$mymap= add_element();
-		# we display the same map again, with the autosave value activated : the map will automatically be saved
-		# after the next drag and drop (after the user placed the new object on the map)
-		print "<script>window.opener.document.location.href='../config.php?map=$mymap&autosave=true';</script>\n";
-		print "<script>window.close();</script>\n";
+else if($myaction == "add") {
+	# we append a new object definition line in the map cfg file
+	$elementId = $MAPCFG->addElement($_POST['type'],getArrayFromProperties($_POST['properties']));
+	$MAPCFG->writeElement($_POST['type'],$elementId);
+	
+	# we display the same map again, with the autosave value activated : the map will automatically be saved
+	# after the next drag and drop (after the user placed the new object on the map)
+	print "<script>window.opener.document.location.href='../config.php?map=$mymap&autosave=true';</script>\n";
+	print "<script>window.close();</script>\n";
 }
-else if($myaction == "delete")
-{
+else if($myaction == "delete") {
 		$mymap= delete_element();
 		print "<script>document.location.href='../config.php?map=$mymap';</script>\n";
 }

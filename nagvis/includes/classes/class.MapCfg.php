@@ -94,9 +94,10 @@ class MapCfg {
 								$entry = explode("=",$file[$l], 2);
 								
 								if(isset($entry[1])) {
-									if(ereg("name", $entry[0])) {
-										$entry[0] = "name";
-									}
+									// Nicht "name", sondern richtige Bezeichnung!
+									//if(ereg("name", $entry[0])) {
+									//	$entry[0] = "name";
+									//}
 									
 									if(in_array(trim($entry[0]),$createArray)) {
 										$this->mapConfig[$define[1]][$nrOfType][trim($entry[0])] = explode(",",str_replace(' ','',trim($entry[1])));
@@ -129,8 +130,110 @@ class MapCfg {
 	}
 	
 	/**
+	* Writes the element from array to the config file
+	*
+	* @param string  $type
+	* @param integer $id
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function writeElement($type,$id) {
+		if($this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
+			// read file in array
+			$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
+			
+			$createArray = array("allowed_user","allowed_for_config");
+			// number of lines in the file
+			$l = 0;
+			// number of elements of the given type
+			$a = 0;
+			// done?!
+			$done = FALSE;
+			print_r($file);
+			while(isset($file[$l]) && $file[$l] != "" && $done == FALSE) {
+				// ignore comments
+				if(!ereg("^#",$file[$l]) && !ereg("^;",$file[$l])) {
+					$defineCln = explode("{", $file[$l]);
+					$define = explode(" ",$defineCln[0]);
+					// select only elements of the given type
+					if(isset($define[1]) && trim($define[1]) == $type) {
+						// check if element exists
+						if($a == $id) {
+							// choose first parameter line
+							$l++;
+							
+							echo "Parameter beginnen bei: $l\n";
+							// loop parameters from array
+							foreach($this->mapConfig[$type][$id] AS $key => $val) {
+								// if key is not type
+								if($key != 'type') {
+									$cfgLines = 0;
+									$cfgLine = '';
+									$cfgLineNr = '';
+									echo "Parameter $key Array mit Datei vergleichen:\n";
+									// Parameter aus Datei durchlaufen
+									while(trim($file[($l+$cfgLines)]) != '}') {
+										if(trim($file[($l+$cfgLines)]) == '}') echo "ende!!!";
+										$entry = explode("=",$file[$l+$cfgLines], 2);
+										if($key == trim($entry[0])) {
+											$cfgLineNr = $l+$cfgLines;
+											$cfgLine = $key."=".$val."\n";
+											echo "ist da, $cfgLineNr mit $cfgLine\n";
+										}
+										$cfgLines++;	
+									}
+									
+									// Wenn der Parameter gefunden wurde...
+									if($cfgLineNr != '') {
+										// ersetzen
+										$file[$cfgLineNr] = $cfgLine;
+									} else {
+										// neue Zeile am Ende der Defnition hinzufügen
+										$neu = $key."=".$val."\n";
+										for($i = $l; $i < count($file);$i++) {
+											$tmp = $file[$i];
+											$file[$i] = $neu;
+											$neu = $tmp;
+										}
+										$file[count($file)] = $neu;
+									}
+									$l++;
+								}
+							}
+							
+							$done = TRUE;
+						}
+						$a++;
+					}
+				}
+				$l++;
+				
+			}
+			
+			// reached end of file - couldn't find that element, create a new one...
+			if($done == FALSE) {
+				$file[] = "\n";
+				$file[] = "define ".$type." {\n";
+				foreach($this->mapConfig[$type][$id] AS $key => $val) {
+					$file[] = $key."=".$val."\n";
+				}
+				$file[] = "}\n";
+			}
+			
+			// open file for writing and replace it
+		 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg","w");
+		 	fwrite($fp,implode("",$file));
+		 	fclose($fp);
+		 	
+			return TRUE;
+		} else {
+			return FALSE;
+		} 
+	}
+	
+	/**
 	* Writes a value to the map config file. If this value 
-	* doesn't exists in the definition, it will be created
+	* doesn't exists in the element, it will be created
 	* at the end of it.
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
@@ -174,8 +277,9 @@ class MapCfg {
 								//FIXME: insert element at line $l+1, don't replace anything
 								$tmp = $cfgLine;
 								for($i=$l+1; $i < count($file); $i++) {
-									$tmp = $file[$i];
+									$tmp1 = $file[$i];
 									$file[$i] = $tmp;
+									$tmp = $tmp1;
 								}
 							}
 							
@@ -281,6 +385,21 @@ class MapCfg {
 		} else {
 			return Array();
 		}
+	}
+	
+	/**
+	* Adds an element of the specified type to the config array
+	*
+	* @param string $type
+	* @param array  $properties
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function addElement($type,$properties) {
+		$elementId = (count($this->getDefinitions($type))+1);
+		$this->mapConfig[$type][$elementId] = $properties;
+		
+		return $elementId;
 	}
 	
 	/**
