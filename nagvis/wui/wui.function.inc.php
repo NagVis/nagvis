@@ -18,50 +18,46 @@
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.MapCfg.php");
 $MAINCFG = new MainNagVisCfg('../etc/config.ini.php');
-$MAPCFG = new MapCfg($MAINCFG,$_POST['map']);
+$MAPCFG = new MapCfg($MAINCFG,$_REQUEST['map']);
 $MAPCFG->readMapConfig();
 
 ############################################
 # passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
-function savemap() {
-	global $MAINCFG;
-	$mymap=$_POST['formulaire'];
-	$lines=$_POST['image'];
-	$val_x=$_POST['valx'];
-	$val_y=$_POST['valy'];
-	echo './wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y;
-	exec('./wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
-	
-	return $mymap;
-}
-
+//function savemap() {
+//	global $MAINCFG;
+//	$mymap=$_POST['formulaire'];
+//	$lines=$_POST['image'];
+//	$val_x=$_POST['valx'];
+//	$val_y=$_POST['valy'];
+//	echo './wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y;
+//	exec('./wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
+//	
+//	return $mymap;
+//}
 ############################################
-function add_element() {
-	global $MAINCFG;
-	
-	$mymap=$_POST['map'];
-	$mytype=$_POST['type'];
-	$myvalues=$_POST['properties'];
-	
-	exec('./wui.function.inc.bash add_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'" '.$MAINCFG->getValue('global', 'autoupdatefreq'));
-	
-	return $mymap;
-}
-
+//function add_element() {
+//	global $MAINCFG;
+//	
+//	$mymap=$_POST['map'];
+//	$mytype=$_POST['type'];
+//	$myvalues=$_POST['properties'];
+//	
+//	exec('./wui.function.inc.bash add_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'" '.$MAINCFG->getValue('global', 'autoupdatefreq'));
+//	
+//	return $mymap;
+//}
 ############################################
-function delete_element() {
-	global $MAINCFG;
-
-	$mymap=$_GET['map'];
-	$myid=$_GET['id'];
-	
-	exec('./wui.function.inc.bash delete_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$myid.' '.$MAINCFG->getValue('global', 'autoupdatefreq'));
-	
-	return $mymap;
-	
-}
-
-
+//function delete_element() {
+//	global $MAINCFG;
+//
+//	$mymap=$_GET['map'];
+//	$myid=$_GET['id'];
+//	
+//	exec('./wui.function.inc.bash delete_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$myid.' '.$MAINCFG->getValue('global', 'autoupdatefreq'));
+//	
+//	return $mymap;
+//	
+//}
 ############################################
 function create_map() {
 	global $MAINCFG;
@@ -161,13 +157,18 @@ function getArrayFromProperties($properties) {
 
 
 $myaction = $_GET['myaction'];
-
-if($myaction == "save")
-{
+if($myaction == "save") {
+	# passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
 	# save the coordinates on the server
-	$mymap = savemap();
+	$mymap=$_POST['formulaire'];
+	$lines=$_POST['image'];
+	$val_x=$_POST['valx'];
+	$val_y=$_POST['valy'];
+	echo './wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y;
+	exec('./wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
+	
 	# display the same map again
-	//print "<script>document.location.href='../config.php?map=$mymap';</script>\n";
+	print "<script>document.location.href='../config.php?map=".$_POST['formulaire']."';</script>\n";
 }
 else if($myaction == "open") {
 	# we retrieve the map chosen by the user and open it
@@ -193,25 +194,18 @@ else if($myaction == "add") {
 	
 	# we display the same map again, with the autosave value activated : the map will automatically be saved
 	# after the next drag and drop (after the user placed the new object on the map)
-	print "<script>window.opener.document.location.href='../config.php?map=$mymap&autosave=true';</script>\n";
+	print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."&autosave=true';</script>\n";
 	print "<script>window.close();</script>\n";
 }
 else if($myaction == "delete") {
-		$mymap= delete_element();
-		print "<script>document.location.href='../config.php?map=$mymap';</script>\n";
+	// first delete element from array
+	$MAPCFG->deleteElement($_GET['type'],$_GET['id']);
+	// then write new array to file
+	$MAPCFG->writeElement($_POST['type'],$_GET['id']);
+	print "<script>document.location.href='../config.php?map=".$_GET['map']."';</script>\n";
 }
 else if($myaction == "update_config") {
-	$param=explode('^',$_POST['properties']);
-	
-	foreach($param AS $myparam)
-	{
-		$arr = @explode("=",$myparam);
-		// Read the key
-		$key = @strtolower(@trim($arr[0]));
-		unset($arr[0]);
-		// Rest of the array is the value
-		$val = @trim(@implode("=", $arr));
-		
+	foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
 		$MAINCFG->setValue($MAINCFG->findSecOfVar($key),$key,$val);
 	}
 	if($MAINCFG->writeConfig()) {
@@ -246,10 +240,11 @@ else if($myaction == "mgt_map_delete")
 	
 }
 
-else if($myaction == "mgt_image_delete")
-{	
+else if($myaction == "mgt_image_delete") {	
 	
-	delete_image();
+	#delete_image();
+	#$_POST['map_image']
+	$MAPCFG->deleteImage();
 	print "<script>window.opener.document.location.reload();</script>\n";
 	print "<script>window.close();</script>\n";
 	

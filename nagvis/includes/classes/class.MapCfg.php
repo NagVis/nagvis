@@ -65,6 +65,25 @@ class MapCfg {
 	}
 	
 	/**
+	* Deletes the map image
+	*
+	* @param string $printErr
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function deleteImage($printErr) {
+		//FIXME: there is only one image in the value, why this?
+		if($this->checkMapImageWriteable($printErr)) {
+			if(unlink($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+				return TRUE;
+			} else {
+				//FIXME: Errorhandling?
+				return FALSE;
+			}
+		}
+	}
+	
+	/**
 	* Reads the map config file (copied from readFile->readNagVisCfg())
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
@@ -159,46 +178,66 @@ class MapCfg {
 					if(isset($define[1]) && trim($define[1]) == $type) {
 						// check if element exists
 						if($a == $id) {
-							// choose first parameter line
-							$l++;
-							
-							echo "Parameter beginnen bei: $l\n";
-							// loop parameters from array
-							foreach($this->mapConfig[$type][$id] AS $key => $val) {
-								// if key is not type
-								if($key != 'type') {
-									$cfgLines = 0;
-									$cfgLine = '';
-									$cfgLineNr = '';
-									echo "Parameter $key Array mit Datei vergleichen:\n";
-									// Parameter aus Datei durchlaufen
-									while(trim($file[($l+$cfgLines)]) != '}') {
-										if(trim($file[($l+$cfgLines)]) == '}') echo "ende!!!";
-										$entry = explode("=",$file[$l+$cfgLines], 2);
-										if($key == trim($entry[0])) {
-											$cfgLineNr = $l+$cfgLines;
-											$cfgLine = $key."=".$val."\n";
-											echo "ist da, $cfgLineNr mit $cfgLine\n";
+							// check if element is an array...
+							if(is_array($this->mapConfig[$type][$id])) {
+								// ...array: update!
+								
+								// choose first parameter line
+								$l++;
+								
+								echo "Parameter beginnen bei: $l\n";
+								// loop parameters from array
+								foreach($this->mapConfig[$type][$id] AS $key => $val) {
+									// if key is not type
+									if($key != 'type') {
+										$cfgLines = 0;
+										$cfgLine = '';
+										$cfgLineNr = '';
+										echo "Parameter $key Array mit Datei vergleichen:\n";
+										// Parameter aus Datei durchlaufen
+										while(trim($file[($l+$cfgLines)]) != '}') {
+											if(trim($file[($l+$cfgLines)]) == '}') echo "ende!!!";
+											$entry = explode("=",$file[$l+$cfgLines], 2);
+											if($key == trim($entry[0])) {
+												$cfgLineNr = $l+$cfgLines;
+												$cfgLine = $key."=".$val."\n";
+												echo "ist da, $cfgLineNr mit $cfgLine\n";
+											}
+											$cfgLines++;	
 										}
-										$cfgLines++;	
-									}
-									
-									// Wenn der Parameter gefunden wurde...
-									if($cfgLineNr != '') {
-										// ersetzen
-										$file[$cfgLineNr] = $cfgLine;
-									} else {
-										// neue Zeile am Ende der Defnition hinzufügen
-										$neu = $key."=".$val."\n";
-										for($i = $l; $i < count($file);$i++) {
-											$tmp = $file[$i];
-											$file[$i] = $neu;
-											$neu = $tmp;
+										
+										// Wenn der Parameter gefunden wurde...
+										if($cfgLineNr != '') {
+											// ersetzen
+											$file[$cfgLineNr] = $cfgLine;
+										} else {
+											// neue Zeile am Ende der Defnition hinzufügen
+											$neu = $key."=".$val."\n";
+											for($i = $l; $i < count($file);$i++) {
+												$tmp = $file[$i];
+												$file[$i] = $neu;
+												$neu = $tmp;
+											}
+											$file[count($file)] = $neu;
 										}
-										$file[count($file)] = $neu;
+										$l++;
 									}
-									$l++;
 								}
+							} else {
+								// ...no array: delete!
+								
+								// start delete: $l
+								// length
+								$cfgLines = 0;
+								while(trim($file[($l+$cfgLines)]) != '}') {
+									$cfgLines++;
+								}
+								$cfgLines++;
+								
+								echo "start delete: $l\n";
+								echo "end delete: ".($l+$cfgLines):"\n";
+								// delete the element
+								$file = array_slice($file, $l, $cfgLines);
 							}
 							
 							$done = TRUE;
@@ -308,8 +347,34 @@ class MapCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
 	function checkMapImageReadable($printErr) {
-		if($this->name != '') {
+		if($this->image != '') {
 			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image) && is_readable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND->closeSite();
+					$FRONTEND->printSite();
+				}
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	* Checks for writeable map image file
+	*
+	* @param string $printErr
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function checkMapImageWriteable($printErr) {
+		if($this->image != '') {
+			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image) && is_writeable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
@@ -385,6 +450,18 @@ class MapCfg {
 		} else {
 			return Array();
 		}
+	}
+	
+	/**
+	* Deletes an element of the specified type to the config array
+	*
+	* @param string $type
+	* @param array  $id
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function deleteElement($type,$id) {
+		$this->mapConfig[$type][$id] = '';
 	}
 	
 	/**
