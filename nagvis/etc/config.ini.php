@@ -33,7 +33,7 @@ refreshTime=60
 ; options for the wui
 [wui]
 ; auto update fequency
-autoUpdateFreq=2
+autoUpdateFreq=25
 
 
 ; path options
@@ -77,7 +77,7 @@ dbName=nagios
 ; username for NDO-db
 dbUser=nagios
 ; password for NDO-db
-dbPass=hanwcnm
+dbPass=password
 ; prefix for tables in NDO-db
 dbPrefix=ndo_
 ; instace-id for tables in NDO-db
