@@ -152,6 +152,53 @@ class MainNagVisCfg {
 	}
 	
 	/**
+	* Checks for readable MapCfgFolder
+	*
+	* @param string $var
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function checkMapCfgFolderReadable($printErr) {
+		if(file_exists($this->getValue('paths', 'map')) && is_readable($this->getValue('paths', 'map'))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new frontend($this,$this->MAPCFG);
+				$FRONTEND->openSite($rotateUrl);
+				// FIXME: NEUE messageBox!!!
+				$FRONTEND->messageBox("-1", "MAPPATH~".$this->getValue('paths', 'map'));
+				$FRONTEND->closeSite();
+				$FRONTEND->printSite();
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	* Checks for writeable MapCfgFolder
+	*
+	* @param string $var
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* FIXME: FUNKTIONIRT NICHT! Wie prüfen, ob Datei in Verzeichniss erstellt werden kann?
+    */
+	function checkMapCfgFolderWriteable($printErr) {
+		if(file_exists(substr($this->getValue('paths', 'map'),0,-1)) /* FIXME */) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new frontend($this,$this->MAPCFG);
+				$FRONTEND->openSite($rotateUrl);
+				// FIXME: NEUE messageBox!!!
+				$FRONTEND->messageBox("-1", "MAPPATH~".$this->getValue('paths', 'map'));
+				$FRONTEND->closeSite();
+				$FRONTEND->printSite();
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
 	* Finds the Sections of a Var
 	*
 	* @param string $var

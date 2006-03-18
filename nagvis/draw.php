@@ -3,6 +3,8 @@
 include("./includes/classes/class.Graphic.php");
 include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.MapCfg.php");
+include("./includes/classes/class.Common.php");
+include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.CheckIt.php");
 include("./includes/classes/class.ReadFiles.php");
 

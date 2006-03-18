@@ -33,10 +33,8 @@ class MapCfg {
 			//get directly from external...)
 			//strip everything wich could be possible unwanted
 			//strip:              Slashes /,          Backslashes \          and PHP Tags
-			$strippedName = preg_replace("'/'","",preg_replace("/\\\/","",strip_tags($name)));
-			$this->name = $strippedName;
+			$this->name = preg_replace("'/'","",preg_replace("/\\\/","",strip_tags($name)));
 		}
-		$this->getImage();
 	}
 	
 	/**
@@ -72,7 +70,6 @@ class MapCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
 	function deleteImage($printErr) {
-		//FIXME: there is only one image in the value, why this?
 		if($this->checkMapImageWriteable($printErr)) {
 			if(unlink($this->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
@@ -80,6 +77,49 @@ class MapCfg {
 				//FIXME: Errorhandling?
 				return FALSE;
 			}
+		}
+	}
+	
+	/**
+	* Creates a new configfile
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function createMapConfig() {
+		// does file exists?
+		if(!$this->checkMapConfigReadable(0)) {
+			if($this->MAINCFG->checkMapCfgFolderWriteable(1)) {
+				// create empty file
+				$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg", "w");
+				fclose($fp); 
+				// set permissions
+	  			chmod($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg",0666);
+	  			
+  				return TRUE;
+  			} else {
+  				return FALSE;
+  			}
+		} else {
+			// file exists & is readable
+			return FALSE;
+		}
+	}
+	
+	/**
+	* Deletes the map configfile
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function deleteMapConfig() {
+		// is file writeable?
+		if($this->checkMapConfigWriteable(0)) {
+			if(unlink($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
 		}
 	}
 	
@@ -130,6 +170,8 @@ class MapCfg {
 					}
 					$l++;
 				}
+				$this->getImage();
+				
 				return TRUE;
 			} else {
 				return FALSE;	
@@ -161,14 +203,12 @@ class MapCfg {
 			// read file in array
 			$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
 			
-			$createArray = array("allowed_user","allowed_for_config");
 			// number of lines in the file
 			$l = 0;
 			// number of elements of the given type
 			$a = 0;
 			// done?!
 			$done = FALSE;
-			print_r($file);
 			while(isset($file[$l]) && $file[$l] != "" && $done == FALSE) {
 				// ignore comments
 				if(!ereg("^#",$file[$l]) && !ereg("^;",$file[$l])) {
@@ -179,13 +219,12 @@ class MapCfg {
 						// check if element exists
 						if($a == $id) {
 							// check if element is an array...
-							if(is_array($this->mapConfig[$type][$id])) {
+							if(is_array($this->mapConfig[$type][$a])) {
 								// ...array: update!
 								
 								// choose first parameter line
 								$l++;
 								
-								echo "Parameter beginnen bei: $l\n";
 								// loop parameters from array
 								foreach($this->mapConfig[$type][$id] AS $key => $val) {
 									// if key is not type
@@ -193,15 +232,15 @@ class MapCfg {
 										$cfgLines = 0;
 										$cfgLine = '';
 										$cfgLineNr = '';
-										echo "Parameter $key Array mit Datei vergleichen:\n";
 										// Parameter aus Datei durchlaufen
 										while(trim($file[($l+$cfgLines)]) != '}') {
-											if(trim($file[($l+$cfgLines)]) == '}') echo "ende!!!";
 											$entry = explode("=",$file[$l+$cfgLines], 2);
 											if($key == trim($entry[0])) {
 												$cfgLineNr = $l+$cfgLines;
+												if(is_array($val)) {
+													$val = implode(",",$val);
+												}
 												$cfgLine = $key."=".$val."\n";
-												echo "ist da, $cfgLineNr mit $cfgLine\n";
 											}
 											$cfgLines++;	
 										}
@@ -211,6 +250,9 @@ class MapCfg {
 											// ersetzen
 											$file[$cfgLineNr] = $cfgLine;
 										} else {
+											if(is_array($val)) {
+												$val = implode(",",$val);
+											}
 											// neue Zeile am Ende der Defnition hinzufügen
 											$neu = $key."=".$val."\n";
 											for($i = $l; $i < count($file);$i++) {
@@ -225,19 +267,15 @@ class MapCfg {
 								}
 							} else {
 								// ...no array: delete!
-								
-								// start delete: $l
-								// length
 								$cfgLines = 0;
 								while(trim($file[($l+$cfgLines)]) != '}') {
 									$cfgLines++;
 								}
 								$cfgLines++;
 								
-								echo "start delete: $l\n";
-								echo "end delete: ".($l+$cfgLines):"\n";
-								// delete the element
-								$file = array_slice($file, $l, $cfgLines);
+								for($i = $l; $i <= $l+$cfgLines;$i++) {
+									unset($file[$i]);	
+								}
 							}
 							
 							$done = TRUE;
@@ -245,18 +283,20 @@ class MapCfg {
 						$a++;
 					}
 				}
-				$l++;
-				
+				$l++;	
 			}
 			
 			// reached end of file - couldn't find that element, create a new one...
 			if($done == FALSE) {
-				$file[] = "\n";
+				if($file[count($file)-1] != "\n") {
+					$file[] = "\n";
+				}
 				$file[] = "define ".$type." {\n";
 				foreach($this->mapConfig[$type][$id] AS $key => $val) {
 					$file[] = $key."=".$val."\n";
 				}
 				$file[] = "}\n";
+				$file[] = "\n";
 			}
 			
 			// open file for writing and replace it
@@ -354,6 +394,7 @@ class MapCfg {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 					$FRONTEND->openSite($rotateUrl);
+					//FIXME: NEUE messageBox!!!
 					$FRONTEND->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
@@ -374,13 +415,15 @@ class MapCfg {
     */
 	function checkMapImageWriteable($printErr) {
 		if($this->image != '') {
-			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image) && is_writeable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+			//FIXME: is_writable doesn't check write permissions
+			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image) /*&& is_writable($this->MAINCFG->getValue('paths', 'map').$this->image)*/) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 					$FRONTEND->openSite($rotateUrl);
-					$FRONTEND->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
+					//FIXME: NEUE messageBox!!!
+					$FRONTEND->messageBox("-1", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
 				}
@@ -406,6 +449,7 @@ class MapCfg {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 					$FRONTEND->openSite($rotateUrl);
+					//FIXME: NEUE messageBox!!!
 					$FRONTEND->messageBox("2", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
@@ -429,6 +473,7 @@ class MapCfg {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 				$FRONTEND->openSite($rotateUrl);
+				//FIXME: NEUE messageBox!!!
 				$FRONTEND->messageBox("17", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
@@ -473,10 +518,10 @@ class MapCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
 	function addElement($type,$properties) {
-		$elementId = (count($this->getDefinitions($type))+1);
-		$this->mapConfig[$type][$elementId] = $properties;
+		//$elementId = (count($this->getDefinitions($type))+1);
+		$this->mapConfig[$type][] = $properties;
 		
-		return $elementId;
+		return count($this->mapConfig[$type])-1;
 	}
 	
 	/**

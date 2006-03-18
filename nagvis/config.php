@@ -14,6 +14,8 @@
 include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.MapCfg.php");
 include("./includes/classes/class.ReadFiles.php");
+include("./includes/classes/class.Common.php");
+include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.CheckIt.php");
 include("./wui/classes.wui.php");
 
@@ -300,12 +302,12 @@ if ($handle2 = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
 		$MAPCFG1 = new MapCfg($MAINCFG,$file);
 		$MAPCFG1->readMapConfig();
 		
-		$all_allowed_user .= "^".$file."=".$MAPCFG1->getValue('global','','allowed_for_config');	
+		$all_allowed_user .= "^".$file."=".implode(',',$MAPCFG1->getValue('global','','allowed_for_config'));	
 		$all_map_image .= "^".$file."=".$MAPCFG1->getValue('global','','map_image');
 		
 		foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
 			$all_map_name .= "^".$file."=".$obj['map_name'];
-		}		
+		}
 	}
 }
 closedir($handle2);
@@ -409,11 +411,11 @@ foreach($types AS $key => $type) {
 		# the coordinates in the definition file representing the center of the object, we compute the coordinates of the left up corner of the iconn to display
 		$Icon=$MAINCFG->getValue('paths', 'htmlicon').$Icon_name;
 		list($mywidth,$myheight,$type,$attr) = getimagesize($MAINCFG->getValue('paths', 'icon').$Icon_name);
-		$myposx=$obj['x']-($mywidth/2);
-		$myposy=$obj['y']-($myheight/2);
+		$myposx = $obj['x']-($mywidth/2);
+		$myposy = $obj['y']-($myheight/2);
 		
 		# we add the icon on the map	
-		$FRONTEND->site[] = "<DIV id=\"box_$var\" STYLE=\"position:absolute; left:".$myposx."px; top:".$myposy."px;\">";
+		$FRONTEND->site[] = "<DIV id=\"box_".$obj['type']."_".$var."\" STYLE=\"position:absolute; left:".$myposx."px; top:".$myposy."px;\">";
 		$FRONTEND->site[] = "<img border=\"0\" src=\"$Icon\" onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".strtoupper($obj['type'])."</b>';";
 			
 		# we add all the object's defined properties to the tooltip body
@@ -438,7 +440,7 @@ foreach($types AS $key => $type) {
 		# lines and textboxes have one more link in the tooltip : "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
 			$tooltip_text=$tooltip_text."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			$actiona="objid=".$var.";get_click(\'".$obj['type']."\',2,\'modify\');";
+			$actiona="objid=".$obj['type']."_".$var.";get_click(\'".$obj['type']."\',2,\'modify\');";
 			$tooltip_text=$tooltip_text."<a href=javascript:".$actiona.">".$langfile->get_text("5")."</a>";			
 		}
 			
@@ -455,7 +457,7 @@ foreach($types AS $key => $type) {
 			
 		# we add this object to the list of the components which will have to be movable, if it's not a line or a textbox
 		if(!isset($obj['line_type']) && $obj['type'] != 'textbox') {
-			$movable = $movable."\"box_".$var."\",";
+			$movable = $movable."\"box_".$obj['type']."_".$var."\",";
 		}
 	}
 }

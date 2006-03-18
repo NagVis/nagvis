@@ -2,7 +2,7 @@
 ; the line above is to prevent 
 ; viewing this file from web.
 ; DON'T REMOVE IT!
-;
+
 ; ----------------------------
 ; NagVis Configuration File
 ; ----------------------------
@@ -23,22 +23,18 @@ maps=demo,demo2
 displayHeader=1
 ; options per line in header
 headerCount=3
-; auto update fequency
-autoUpdateFreq=25
 ; config check on startup
 checkConfig=0
 ; use gdlibs
 useGDLibs=1
 ; refresh time of pages
 refreshTime=60
-; debug on/off (0/1)
-debug=0
-; debugStates on/off (0/1)
-debugStates=0
-; debugCheckState on/off (0/1)
-debugCheckState=0
-; debugFixIcon on/off (0/1)
-debugFixIcon=0
+
+; options for the wui
+[wui]
+; auto update fequency
+autoUpdateFreq=2
+
 
 ; path options
 [paths]
@@ -94,7 +90,18 @@ cgiUser="nagiosadmin"
 ; physical path to the CGIs
 cgi="/usr/local/nagios/sbin/"
 
-; Nur interne Infos fuer Versionierung
+; usualy not needed
+[debug]
+; debug on/off (0/1)
+debug=0
+; debugStates on/off (0/1)
+debugStates=0
+; debugCheckState on/off (0/1)
+debugCheckState=0
+; debugFixIcon on/off (0/1)
+debugFixIcon=0
+
+; Only internal informations
 [internal]
 ; version of NagVis
 version="0.9b1"

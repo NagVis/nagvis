@@ -238,7 +238,7 @@ class backend
 				elseif($currentHostState['State'] == "DOWN" || $currentHostState['State'] == "UNREACHABLE" || $currentHostState['State'] == "CRITICAL") {
 					$hostsCritical++;
 				}
-				elseif($currentHostState['State'] == "UNKOWN") {
+				elseif($currentHostState['State'] == "UNKNOWN") {
 					$hostsUnknown++;
 				}	
 		}
@@ -254,8 +254,8 @@ class backend
 			$state['State'] = "WARNING";		
 		}
 		elseif($hostsUnknown > 0) {
-			$state['Count'] = $hostsUnkown;
-			$state['Output'] = $hostsUnkown." are in UNKNOWN state";
+			$state['Count'] = $hostsUnknown;
+			$state['Output'] = $hostsUnknown." are in UNKNOWN state";
 			$state['State'] = "UNKNOWN";
 			
 		}

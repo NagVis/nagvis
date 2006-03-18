@@ -8,7 +8,6 @@
 /**
 * This Class creates the Web-Frontend for NagVis
 */
-include("./includes/classes/class.Common.php");
 
 class frontend extends common {
 	var $site;
@@ -260,7 +259,7 @@ class frontend extends common {
 	*/
 	function debug($debug)
 	{
-		if ($this->MAINCFG->getValue('global', 'debug') == "1") {
+		if ($this->MAINCFG->getValue('debug', 'debug') == "1") {
 			$this->site[] = '<TABLE CLASS="debugBox" WIDTH="90%" ALIGN="CENTER">';
 			$this->site[] = ' <TR>';
 			$this->site[] = '  <TD CLASS="debugBoxHead" WIDTH="40" ALIGN="CENTER">';

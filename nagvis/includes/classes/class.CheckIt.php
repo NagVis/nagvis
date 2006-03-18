@@ -2,7 +2,6 @@
 /**
 * This Class makes some checks
 */
-include("./includes/classes/class.NagVis.php");
 
 class checkit extends frontend {
 	var $MAINCFG;

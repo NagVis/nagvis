@@ -17,123 +17,9 @@
 
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.MapCfg.php");
+include("../includes/classes/class.Common.php");
+include("../includes/classes/class.NagVis.php");
 $MAINCFG = new MainNagVisCfg('../etc/config.ini.php');
-$MAPCFG = new MapCfg($MAINCFG,$_REQUEST['map']);
-$MAPCFG->readMapConfig();
-
-############################################
-# passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
-//function savemap() {
-//	global $MAINCFG;
-//	$mymap=$_POST['formulaire'];
-//	$lines=$_POST['image'];
-//	$val_x=$_POST['valx'];
-//	$val_y=$_POST['valy'];
-//	echo './wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y;
-//	exec('./wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
-//	
-//	return $mymap;
-//}
-############################################
-//function add_element() {
-//	global $MAINCFG;
-//	
-//	$mymap=$_POST['map'];
-//	$mytype=$_POST['type'];
-//	$myvalues=$_POST['properties'];
-//	
-//	exec('./wui.function.inc.bash add_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$mytype.' "'.$myvalues.'" '.$MAINCFG->getValue('global', 'autoupdatefreq'));
-//	
-//	return $mymap;
-//}
-############################################
-//function delete_element() {
-//	global $MAINCFG;
-//
-//	$mymap=$_GET['map'];
-//	$myid=$_GET['id'];
-//	
-//	exec('./wui.function.inc.bash delete_element '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$myid.' '.$MAINCFG->getValue('global', 'autoupdatefreq'));
-//	
-//	return $mymap;
-//	
-//}
-############################################
-function create_map() {
-	global $MAINCFG;
-
-	$mymap=$_POST['map_name'];
-	$myallow=$_POST['allowed_users'];
-	$myicon=$_POST['map_iconset'];
-	$myimage=$_POST['map_image'];
-	$myallowconfig=$_POST['allowed_for_config'];
-	
-	exec('./wui.function.inc.bash mgt_map_create '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" "'.$myallow.'" "'.$myicon.'" "'.$myimage.'" "'.$myallowconfig.'" '.$MAINCFG->getValue('global', 'autoupdatefreq'));
-	
-	return $mymap;
-}
-
-
-############################################
-function rename_map() {
-	global $MAINCFG;
-
-	$mymap_name=$_POST['map_name'];
-	$mymap_new_name=$_POST['map_new_name'];
-	$mymap=$_POST['map'];
-	
-	exec('./wui.function.inc.bash mgt_map_rename'.' "'.$MAINCFG->getValue('paths', 'mapcfg').'" "'.$mymap_name.'" "'.$mymap_new_name.'"');
-	
-	if($mymap_name==$mymap)
-	{
-		return $mymap_new_name;
-	}
-	else
-	{
-		return $mymap;
-	}
-}
-
-
-############################################
-function delete_map() {
-	global $MAINCFG;
-
-	$mymap_name=$_POST['map_name'];
-	$mymap=$_POST['map'];
-
-	exec('./wui.function.inc.bash mgt_map_delete '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap_name.'.cfg"');
-	
-	if($mymap_name==$mymap)
-	{
-		return "";
-	}
-	else
-	{
-		return $mymap;
-	}
-}
-
-
-############################################
-function delete_image() {
-	global $MAINCFG;
-	
-	$mymap_image=$_POST['map_image'];
-	
-	exec('./wui.function.inc.bash mgt_image_delete "'.$MAINCFG->getValue('paths', 'map').$mymap_image.'"');
-	
-}
-
-############################################
-function restore_map() {
-	global $MAINCFG;
-	
-	$mymap=$_GET['map'];
-	
-	exec('./wui.function.inc.bash map_restore '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$MAINCFG->getValue('global', 'autoupdatefreq'));
-	return $mymap;
-}
 
 ############################################
 function getArrayFromProperties($properties) {
@@ -151,143 +37,320 @@ function getArrayFromProperties($properties) {
 	return $prop;
 }
 
+function backup($MAINCFG,$mapname) {
+	if($MAINCFG->getValue('wui', 'autoupdatefreq') == 0) {
+		// delete all *.bak
+		foreach(getAllFiles() AS $file) {
+			unlink($MAINCFG->getValue('paths', 'mapcfg').$file.'.cfg.bak');
+		}
+		// delete statusfile
+		unlink($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status');
+		
+		return TRUE;
+	} else {
+		//no statusfile? create!
+		if(!file_exists($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status')) {
+			// create file
+			$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').'autobackup.status', "w");
+			fwrite($fp,$mapname.'='.$MAINCFG->getValue('wui', 'autoupdatefreq')."\n");
+			fclose($fp); 
+			// set permissions
+  			chmod($this->MAINCFG->getValue('paths', 'mapcfg').'autobackup.status',0666);
+  			
+  			return TRUE;
+		} else {
+			$done = FALSE;
+			
+			// is status for this map there?
+			$file = file($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status');
+			foreach($file AS $key => $val) {
+				if(ereg("^".$mapname."=",$val)) {
+					// $arr[1] is value
+					$arr = explode('=',$val);
+					
+					if($arr[1]-1 == 0) {
+						// erstelle backup
+						copy($MAINCFG->getValue('paths', 'mapcfg').$arr[0].'.cfg',$MAINCFG->getValue('paths', 'mapcfg').$arr[0].'.cfg.bak');	
+						// zurücksetzen
+						$nextval = $MAINCFG->getValue('wui', 'autoupdatefreq');
+					} elseif($arr[1]-1 >= $MAINCFG->getValue('wui', 'autoupdatefreq')) {
+						$nextval = $MAINCFG->getValue('wui', 'autoupdatefreq');
+					} else {
+						$nextval = $arr[1]-1;
+					}
+					$file[$key] = $mapname.'='.$nextval."\n";
+					
+					$done = TRUE;
+				}
+			}
+			
+			if($done == FALSE) {
+				$file[] = $mapname.'='.$MAINCFG->getValue('wui', 'autoupdatefreq')."\n";
+			}
+			
+			//write array back to file
+			$fp = fopen($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status',"w");
+		 	fwrite($fp,implode("",$file));
+		 	fclose($fp);
+		 	
+		 	return TRUE;
+		}
+	}
+}
+
+function getAllMaps() {
+	$files = Array();
+	
+	$fh = opendir($MAINCFG->getValue('paths', 'mapcfg'));
+	while(FALSE !== ($file = readdir($fh))) {
+		// only handle *.cfg files
+		if(ereg("\.cfg$",$file)) {
+			$files[] = substr($file,0,strlen($file)-4);
+		}
+	}
+	closedir($fh);
+	
+	return $files;
+}
+
 ############################################
 # MAIN SCRIPT
 ############################################
 
-
-$myaction = $_GET['myaction'];
-if($myaction == "save") {
-	# passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
-	# save the coordinates on the server
-	$mymap=$_POST['formulaire'];
-	$lines=$_POST['image'];
-	$val_x=$_POST['valx'];
-	$val_y=$_POST['valy'];
-	echo './wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y;
-	exec('./wui.function.inc.bash modify '.$MAINCFG->getValue('global', 'autoupdatefreq').' '.$MAINCFG->getValue('paths', 'mapcfg').' "'.$mymap.'.cfg" '.$lines.' '.$val_x.' '.$val_y);
+switch($_GET['myaction']) {
+	case 'save':
+		# passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
+		# save the coordinates on the server
+		$MAPCFG = new MapCfg($MAINCFG,$_POST['formulaire']);
+		$MAPCFG->readMapConfig();
+		
+		// convert lists to arrays
+		$elements = explode(',',$_POST['image']);
+		$x = explode(',',$_POST['valx']);
+		$y = explode(',',$_POST['valy']);
+			
+		// sth. modified?
+		if(is_array($elements)) {
+			$i = 0;
+			foreach($elements AS $element) {
+				$element = explode('_',$element);
+				// set coordinates ($element[0] is type, $element[1] is id)
+				$MAPCFG->setValue($element[0], $MAPCFG->getNameById($element[0],$element[1]), 'x', $x[$i]);
+				$MAPCFG->setValue($element[0], $MAPCFG->getNameById($element[0],$element[1]), 'y', $y[$i]);
+				// write element to file
+				$MAPCFG->writeElement($element[0],$element[1]);
+				$i++;
+			}
+			
+			backup($MAINCFG,$_POST['formulaire']);
+		}
+		# display the same map again
+		print "<script>document.location.href='../config.php?map=".$_POST['formulaire']."';</script>\n";
+	break;
+	case 'open':
+		# we retrieve the map chosen by the user and open it
+		print "<script>document.location.href='../config.php?map=".$_POST['map_choice']."';</script>\n";
+	break;
+	case 'modify':
+		$MAPCFG = new MapCfg($MAINCFG,$_POST['map']);
+		$MAPCFG->readMapConfig();
 	
-	# display the same map again
-	print "<script>document.location.href='../config.php?map=".$_POST['formulaire']."';</script>\n";
-}
-else if($myaction == "open") {
-	# we retrieve the map chosen by the user and open it
-	print "<script>document.location.href='../config.php?map=".$_POST['map_choice']."';</script>\n";
-}
-
-else if($myaction == "modify") {
-	// set options in the array
-	foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
-		$MAPCFG->setValue($_POST['type'], $MAPCFG->getNameById($_POST['type'],$_POST['id']), $key, $val);
-	}
-	// write element to file
-	$MAPCFG->writeElement($_POST['type'],$_POST['id']);
-	
-	// refresh the map
-	print "<script>window.opener.document.location.href='../config.php?map=".$MAPCFG->getNameById($_POST['type'],$_POST['id'])."';</script>\n";
-	print "<script>window.close();</script>\n";
-}
-else if($myaction == "add") {
-	# we append a new object definition line in the map cfg file
-	$elementId = $MAPCFG->addElement($_POST['type'],getArrayFromProperties($_POST['properties']));
-	$MAPCFG->writeElement($_POST['type'],$elementId);
-	
-	# we display the same map again, with the autosave value activated : the map will automatically be saved
-	# after the next drag and drop (after the user placed the new object on the map)
-	print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."&autosave=true';</script>\n";
-	print "<script>window.close();</script>\n";
-}
-else if($myaction == "delete") {
-	// first delete element from array
-	$MAPCFG->deleteElement($_GET['type'],$_GET['id']);
-	// then write new array to file
-	$MAPCFG->writeElement($_POST['type'],$_GET['id']);
-	print "<script>document.location.href='../config.php?map=".$_GET['map']."';</script>\n";
-}
-else if($myaction == "update_config") {
-	foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
-		$MAINCFG->setValue($MAINCFG->findSecOfVar($key),$key,$val);
-	}
-	if($MAINCFG->writeConfig()) {
+		// set options in the array
+		foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
+			$MAPCFG->setValue($_POST['type'], $MAPCFG->getNameById($_POST['type'],$_POST['id']), $key, $val);
+		}
+		// write element to file
+		$MAPCFG->writeElement($_POST['type'],$_POST['id']);
+		
+		// do the backup
+		backup($MAINCFG,$_POST['map']);
+		
+		// refresh the map
+		print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."';</script>\n";
+		print "<script>window.close();</script>\n";
+	break;
+	case 'add':
+		$MAPCFG = new MapCfg($MAINCFG,$_POST['map']);
+		$MAPCFG->readMapConfig();
+		
+		# we append a new object definition line in the map cfg file
+		$elementId = $MAPCFG->addElement($_POST['type'],getArrayFromProperties($_POST['properties']));
+		$MAPCFG->writeElement($_POST['type'],$elementId);
+		
+		// do the backup
+		backup($MAINCFG,$_POST['map']);
+		
+		# we display the same map again, with the autosave value activated : the map will automatically be saved
+		# after the next drag and drop (after the user placed the new object on the map)
+		print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."&autosave=true';</script>\n";
+		print "<script>window.close();</script>\n";
+	break;
+	case 'delete':
+		// initialize map and read map config
+		$MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
+		$MAPCFG->readMapConfig();
+		
+		// first delete element from array
+		$MAPCFG->deleteElement($_GET['type'],$_GET['id']);
+		// then write new array to file
+		$MAPCFG->writeElement($_GET['type'],$_GET['id']);
+		
+		// do the backup
+		backup($MAINCFG,$_GET['map']);
+		
+		print "<script>document.location.href='../config.php?map=".$_GET['map']."';</script>\n";
+	break;
+	case 'update_config':
+		foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
+			$MAINCFG->setValue($MAINCFG->findSecOfVar($key),$key,$val);
+		}
+		if($MAINCFG->writeConfig()) {
+			print "<script>window.opener.document.location.reload();</script>\n";
+			print "<script>window.close();</script>\n";
+		} else {
+			print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
+		}
+	break;
+	case 'mgt_map_create':
+		$MAPCFG = new MapCfg($MAINCFG,$_POST['map_name']);
+		if(!$MAPCFG->createMapConfig()) {
+			exit;
+		}
+		$MAPCFG->addElement('global',Array('allowed_user'=>$_POST['allowed_users'],'allowed_for_config'=>$_POST['allowed_for_config'],'iconset'=>$_POST['map_iconset'],'map_image'=>$_POST['map_image']));
+		$MAPCFG->writeElement('global','0');
+		
+		// do the backup
+		backup($MAINCFG,$_POST['map_name']);
+		
+		print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map_name']."';</script>\n";
+		print "<script>window.close();</script>\n";
+	break;
+	case 'mgt_map_rename':
+		$files = Array();
+		// alter name: $_POST['map_name']
+		// neuer name: $_POST['map_new_name']
+		// gerade offene map: $_POST['map']
+		
+		// read all files in map-cfg folder
+		$files = getAllMaps();
+		
+		// loop all map configs to replace mapname in all map configs
+		foreach($files as $file) {
+			$MAPCFG1 = new MapCfg($MAINCFG,$file);
+			$MAPCFG1->readMapConfig();
+			
+			$i = 0;
+			// loop definitions of type map
+			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+				// check if old map name is linked...
+				if($obj['map_name'] == $_POST['map_name']) {
+					$MAPCFG1->setValue('map', $MAPCFG1->getNameById('map',$i), 'map_name', $_POST['map_new_name']);
+					$MAPCFG1->writeElement('map',$i);
+				}
+				$i++;
+			}
+		}
+		
+		// rename config file
+		rename($MAINCFG->getValue('paths', 'mapcfg').$_POST['map_name'].'.cfg',$MAINCFG->getValue('paths', 'mapcfg').$_POST['map_new_name'].'.cfg');
+		
+		// if renamed map is open, redirect to new name
+		if($_POST['map'] == $_POST['map_name']) {
+			$map = $_POST['map_new_name'];
+		} else {
+			$map = $_POST['map'];
+		}
+		print "<script>window.opener.document.location.href='../config.php?map=".$map."';</script>\n";
+		print "<script>window.close();</script>\n";
+	break;
+	case 'mgt_map_delete':
+		// map to delete: $_POST['map_name'];
+		// aktuelle map: $_POST['map'];
+		
+		$MAPCFG = new MapCfg($MAINCFG,$_POST['map_name']);
+		$MAPCFG->readMapConfig();
+		$MAPCFG->deleteMapConfig();
+		
+		// if renamed map is open, redirect to new name
+		if($_POST['map'] == $_POST['map_name']) {
+			$map = '';
+		} else {
+			$map = $_POST['map'];
+		}
+		print "<script>window.opener.document.location.href='../config.php?map=".$map."';</script>\n";
+		print "<script>window.close();</script>\n";
+	break;
+	case 'mgt_image_delete':
+		if(file_exists($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
+			if(unlink($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
+				
+			} else {
+				print "<script>alert('error: failed to delete ".$MAINCFG->getValue('paths', 'map').$_POST['map_image'].".')</script>";
+			}
+		} else {
+			print "<script>alert('error: file ".$MAINCFG->getValue('paths', 'map').$_POST['map_image']." doesn\'t exists.')</script>";
+		}
 		print "<script>window.opener.document.location.reload();</script>\n";
 		print "<script>window.close();</script>\n";
-	} else {
-		print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
-	}
+	break;
+	case 'mgt_new_image':
+		if (!is_array(${'HTTP_POST_FILES'})) {
+			$HTTP_POST_FILES = $_FILES;
+		}
+		# we check the file (the map) is properly uploaded
+		if(is_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'])) {
+		    $ficname = $HTTP_POST_FILES['fichier']['name'];
+		    if(substr($ficname,strlen($ficname)-4,4) == ".png") {
+		    	if(move_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'], $MAINCFG->getValue('paths', 'map').$ficname)) {
+		    		chmod($MAINCFG->getValue('paths', 'map').$ficname,0666);
+				    print "<script>window.opener.document.location.reload();</script>\n";
+				    print "<script>window.close();</script>\n";
+				} else {
+		    		print "A problem occured !";
+					return;
+		    	}
+		    } 
+		} else {
+			print "A problem occured !";
+			return;
+		}
+	break;
+	case 'map_restore':
+		// delete current config
+		$MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
+		$MAPCFG->readMapConfig();
+		$MAPCFG->deleteMapConfig();
+		// restore backup
+		if(file_exists($MAINCFG->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak')) {
+			copy($MAINCFG->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak',$MAINCFG->getValue('paths', 'mapcfg').$_GET['map'].'.cfg');	
+		}
+		// reset status
+		$done = FALSE;
+		
+		// is status for this map there?
+		$file = file($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status');
+		foreach($file AS $key => $val) {
+			if(ereg("^".$mapname."=",$val)) {
+				// $arr[1] is value
+				$arr = explode('=',$val);
+				
+				$file[$key] = $mapname.'='.$MAINCFG->getValue('wui', 'autoupdatefreq')."\n";
+				$done = TRUE;
+			}
+		}
+		
+		if($done == FALSE) {
+			$file[] = $mapname.'='.$MAINCFG->getValue('wui', 'autoupdatefreq')."\n";
+		}
+		
+		//write array back to file
+		$fp = fopen($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status',"w");
+	 	fwrite($fp,implode("",$file));
+	 	fclose($fp);
+	 	
+		print "<script>window.document.location.href='../config.php?map=".$_GET['map']."';</script>\n";
+	break;
 }
-else if($myaction == "mgt_map_create")
-{	
-	$mymap=create_map();
-	print "<script>window.opener.document.location.href='../config.php?map=$mymap';</script>\n";
-	print "<script>window.close();</script>\n";
-	
-}
-
-else if($myaction == "mgt_map_rename")
-{	
-	$mymap=rename_map();
-	print "<script>window.opener.document.location.href='../config.php?map=$mymap';</script>\n";
-	print "<script>window.close();</script>\n";
-	
-}
-
-else if($myaction == "mgt_map_delete")
-{	
-
-	$mymap=delete_map();
-	print "<script>window.opener.document.location.href='../config.php?map=$mymap';</script>\n";
-	print "<script>window.close();</script>\n";
-	
-}
-
-else if($myaction == "mgt_image_delete") {	
-	
-	#delete_image();
-	#$_POST['map_image']
-	$MAPCFG->deleteImage();
-	print "<script>window.opener.document.location.reload();</script>\n";
-	print "<script>window.close();</script>\n";
-	
-}
-
-else if($myaction == "mgt_new_image")
-{
-	if (!is_array(${'HTTP_POST_FILES'})) 
-	{
-		$HTTP_POST_FILES = $_FILES;
-	}
-	
-	# we check the file (the map) is properly uploaded
-	if(is_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name']))
-	{
-	    $ficname = $HTTP_POST_FILES['fichier']['name'];
-	  
-	    if(substr($ficname,strlen($ficname)-4,4) == ".png")
-	    {
-	    	if(move_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'], $MAINCFG->getValue('paths', 'map').$ficname)) {
-			    print "<script>window.opener.document.location.reload();</script>\n";
-			    print "<script>window.close();</script>\n";
-			} else {
-	    		print "A problem occured !";
-				return;
-	    	}
-	    }
-	      
-	}
-	else
-	{
-		print "A problem occured !";
-		return;
-	}
-  	
-}
-
-else if($myaction == "map_restore")
-{	
-	$mymap=restore_map();
-	print "<script>window.document.location.href='../config.php?map=$mymap';</script>\n";	
-}
-
 ?>
 
 	
