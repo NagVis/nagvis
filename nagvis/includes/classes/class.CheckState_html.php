@@ -31,12 +31,6 @@ class backend {
 		
 		return 0;
 	}
-	/* Deprecated?!
-	//Initialize function, must be called before anything else of this class. Maybe we should set this as constructor.
-	function backendInitialize() {
-		//THIS backend needs no inital preparation, but the function must be present to be compatible
-		return 0;
-	}*/
 	
 	function checkCgiPath() {
 		if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
