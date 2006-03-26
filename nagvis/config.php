@@ -58,9 +58,6 @@ if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_for_confi
 if(!$MAPCFG->checkMapConfigWriteable(1)) {
 	exit;
 }
-if(!$CHECKIT->check_wuibash(1)) {
-	exit;	
-}
 if(!$CHECKIT->check_wuilangfile(1)) {
 	exit;	
 }
