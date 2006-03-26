@@ -56,6 +56,26 @@ class checkit extends frontend {
             return FALSE;
         }
     }
+    
+	/**
+	* Check the permission from a loggin User (to view the Map).
+	*
+	* @author FIXME!
+	* @author Michael Luebben <michael_luebben@web.de>
+	*/
+    function check_permissions($allowed,$printErr) {
+        if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
+        	if($printErr) {
+				$this->openSite($rotateUrl);
+				$this->messageBox("4", "USER~".$this->MAINCFG->getRuntimeValue('user'));
+				$this->closeSite();
+				$this->printSite();
+			}
+			return FALSE;
+        } else {
+        	return TRUE;
+    	}
+    }
 		
 	/**
 	* Check is Rotate-Mode enable and create this
