@@ -67,6 +67,8 @@ if ($MAINCFG->getValue('global', 'displayheader') == "1") {
 
 $FRONTEND->printMap();
 
+// deprecated handles...
+/*
 // Handle all objects of type "map"
 if(count($MAPCFG->getDefinitions('map')) > 0) {
 	foreach ($MAPCFG->getDefinitions('map') as $index => $map) {
@@ -166,7 +168,7 @@ if(is_array($MAPCFG->getDefinitions('textbox'))) {
 
 // Handle the type host.
 if (is_array($MAPCFG->getDefinitions('host'))){
-	$debug[] = $DEBUG->debug_insertInfo($MAINCFG->getValue('debug', 'debugstates'),'Handle the type host:');
+	//$debug[] = $DEBUG->debug_insertInfo($MAINCFG->getValue('debug', 'debugstates'),'Handle the type host:');
 	foreach ($MAPCFG->getDefinitions('host') as $index => $host) {
 		$recognize_services = $FRONTEND->checkOption($host['recognize_services'],$MAINCFG->getValue('global', 'recognize_services'),"1");
 		if(isset($host['line_type'])) {
@@ -182,10 +184,10 @@ if (is_array($MAPCFG->getDefinitions('host'))){
 			}
 		} else {
  			$state = $BACKEND->checkStates($host['type'],$host['host_name'],$recognize_services,$host['service_description'],0);
-			$debug[] = $DEBUG->debug_checkState($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugcheckstate'),$index);
+			//$debug[] = $DEBUG->debug_checkState($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugcheckstate'),$index);
 
 			$Icon = $FRONTEND->findIcon($state,$host,$host['type']);
-			$debug[] = $DEBUG->debug_fixIcon($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugfixicon'),$index);
+			//$debug[] = $DEBUG->debug_fixIcon($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugfixicon'),$index);
 	
 			$IconPosition = $FRONTEND->fixIconPosition($Icon,$host['x'],$host['y']);
 			$FRONTEND->site[] = $IconPosition;
@@ -193,22 +195,21 @@ if (is_array($MAPCFG->getDefinitions('host'))){
 			$FRONTEND->site[] = $FRONTEND->createLink($MAINCFG->getValue('paths', 'htmlcgi'),$host['url'],$host['type'],$host['host_name'],$host['service_description']);
 			$FRONTEND->site[] = '<IMG SRC='.$MAINCFG->getValue('paths', 'htmlicon').$Icon.' '.$Box.';></A>';
 			$FRONTEND->site[] = "</DIV>";
-			$debug[] = $DEBUG->debug_insertRow($MAINCFG->getValue('debug', 'debugstates'));
+			//$debug[] = $DEBUG->debug_insertRow($MAINCFG->getValue('debug', 'debugstates'));
 		}
 	}
 }
 
-
 // Handle the type hostgroup.
 if (is_array($MAPCFG->getDefinitions('hostgroup'))){
-	$debug[] = $DEBUG->debug_insertInfo($MAINCFG->getValue('debug', 'debugstates'),'Handle the type hostgroup:');
+	//$debug[] = $DEBUG->debug_insertInfo($MAINCFG->getValue('debug', 'debugstates'),'Handle the type hostgroup:');
 	foreach ($MAPCFG->getDefinitions('hostgroup') as $index => $hostgroup) {
 		$recognize_services = $FRONTEND->checkOption($hostgroup['recognize_services'],$MAINCFG->getValue('global', 'recognize_services'),"1");
 		$state = $BACKEND->checkStates($hostgroup['type'],$hostgroup['hostgroup_name'],$recognize_services,$hostgroup['service_description'],0);
-		$debug[] = $DEBUG->debug_checkState($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugcheckstate'),$index);
+		//$debug[] = $DEBUG->debug_checkState($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugcheckstate'),$index);
 
 		$Icon = $FRONTEND->findIcon($state,$hostgroup,$hostgroup['type']);
-		$debug[] = $DEBUG->debug_fixIcon($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugfixicon'),$index);
+		//$debug[] = $DEBUG->debug_fixIcon($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugfixicon'),$index);
 		
 		$IconPosition = $FRONTEND->fixIconPosition($Icon,$hostgroup['x'],$hostgroup['y']);
 		$FRONTEND->site[] = $IconPosition;
@@ -217,7 +218,7 @@ if (is_array($MAPCFG->getDefinitions('hostgroup'))){
 		$FRONTEND->site[] = $FRONTEND->createLink($MAINCFG->getValue('paths', 'htmlcgi'),$hostgroup['url'],$hostgroup['type'],$hostgroup['hostgroup_name'],$hostgroup['service_description']);
 		$FRONTEND->site[] = '<IMG SRC='.$MAINCFG->getValue('paths', 'htmlicon').$Icon.' '.$Box.';></A>';
 		$FRONTEND->site[] = "</DIV>";
-		$debug[] = $DEBUG->debug_insertRow($MAINCFG->getValue('debug', 'debugstates'));
+		//$debug[] = $DEBUG->debug_insertRow($MAINCFG->getValue('debug', 'debugstates'));
 	}
 }
 
@@ -278,8 +279,141 @@ if (is_array($MAPCFG->getDefinitions('servicegroup'))){
 	}
 }
 
+if(is_array($MAPCFG->getDefinitions('textbox'))) {
+	foreach ($MAPCFG->getDefinitions('textbox') as $index => $textbox) {
+		$TextBox = $FRONTEND->TextBox($textbox['x'],$textbox['y'],$textbox['w'],$textbox['text']);
+		$FRONTEND->site[] = $TextBox;
+	}	
+}*/
+
+// Let's get all the objects of this map and parse it to the page
+getMapObjects($MAPCFG,$FRONTEND,$DEBUG,1);
+
+/*
+ * Gets all objects from a map and print it or just return an array with states
+ */
+function getMapObjects($MAPCFG,$FRONTEND,$DEBUG,$print=1) {
+	$mapState[] = getState(getObjects($MAPCFG,$FRONTEND,$DEBUG,'map',$print));
+	$mapState[] = getState(getObjects($MAPCFG,$FRONTEND,$DEBUG,'host',$print));
+	$mapState[] = getState(getObjects($MAPCFG,$FRONTEND,$DEBUG,'service',$print));
+	$mapState[] = getState(getObjects($MAPCFG,$FRONTEND,$DEBUG,'hostgroup',$print));
+	$mapState[] = getState(getObjects($MAPCFG,$FRONTEND,$DEBUG,'servicegroup',$print));
+	$mapState[] = getState(getObjects($MAPCFG,$FRONTEND,$DEBUG,'textbox',$print));
+	
+	return $mapState;
+}
+
+/*
+ * Gets all objects of the defined type from a map and print it or just return an array with states
+ */
+function getObjects($MAPCFG,$FRONTEND,$DEBUG,$type,$print=1) {
+	$objState = Array();
+	
+	if($type == 'service') {
+		$name = 'host_name';
+	} else {
+		$name = $type . '_name';
+	}
+	
+	if(is_array($MAPCFG->getDefinitions($type))){
+		$debug[] = $DEBUG->debug_insertInfo($MAINCFG->getValue('debug', 'debugstates'),'Begin to handle the type '.$type.' in map '.$MAPCFG->getName());
+		foreach($MAPCFG->getDefinitions($type) as $index => $obj) {
+			if($type == 'map') {
+				$SUBMAPCFG = new MapCfg($MAPCFG->MAINCFG,$obj[$name]);
+				$state = getMapObjects($SUBMAPCFG,$FRONTEND,$DEBUG,0);
+				$objState[] = getState($state);
+				
+				if($print == 1) {
+					$Icon = $FRONTEND->findIcon(Array('State' => getState($state), 'Output' => 'State of child Map is '.getState($state)),$obj,$type);
+					$IconPosition = $FRONTEND->fixIconPosition($Icon,$obj['x'],$obj['y']);
+					$FRONTEND->site[] = $IconPosition;
+					$Box = $FRONTEND->infoBox($type,$obj[$name],$obj['service_description'],$state);
+					$FRONTEND->site[] = '<A HREF="./index.php?map='.$obj[$name].'" TARGET="_self"><IMG SRC='.$MAINCFG->getValue('paths', 'htmlicon').$Icon.' '.$Box.'; BORDER="0"></A>';
+					$FRONTEND->site[] = "</DIV>";
+				}
+			} elseif($type == 'textbox') {
+				// handle objects of type "textbox"
+				
+				// draw only the textbox
+				$FRONTEND->site[] = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text']);
+			} else {
+				//handle all other objects...
+				
+				// get option to recognize the services - object, main-config, default
+				$recognize_services = $FRONTEND->checkOption($obj['recognize_services'],$MAINCFG->getValue('global', 'recognize_services'),"1");
+				
+				// if object is a line...
+				if(isset($obj['line_type'])) {
+					if($obj['line_type'] != "20") {
+						// a line with one object...
+						$state = $BACKEND->checkStates($type,$obj[$name],$recognize_services,$obj['service_description'],0);
+						$objState[] = $state;
+						
+						if($print == 1) {
+							$FRONTEND->createBoxLine($obj,$state,NULL);
+						}
+					} else {
+						// a line with two objects...
+						list($obj_name_from,$obj_name_to) = explode(",", $obj[$name]);
+						list($service_description_from,$service_description_to) = explode(",", $obj['service_description']);
+						$state1 = $BACKEND->checkStates($type,$obj_name_from,$recognize_services,$service_description_from,1);
+						$state2 = $BACKEND->checkStates($type,$obj_name_to,$recognize_services,$service_description_to,2);
+						$objState[] = $state1;
+						$objState[] = $state2;
+						
+						if($print == 1) {
+							$FRONTEND->createBoxLine($service,$state1,$state2);
+						}
+					}
+				} else {
+					// get the state of the object - type, object name, recognize services - service description - state pos??
+					$state = $BACKEND->checkStates($type,$obj[$name],$recognize_services,$obj['service_description'],0);
+					$objState[] = $state;
+					$debug[] = $DEBUG->debug_checkState($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugcheckstate'),$index);
+					
+					
+					if($print == 1) {
+						$Icon = $FRONTEND->findIcon($state,$obj,$type);
+					
+						$debug[] = $DEBUG->debug_fixIcon($MAINCFG->getValue('debug', 'debugstates'),$MAINCFG->getValue('debug', 'debugfixicon'),$index);
+						$IconPosition = $FRONTEND->fixIconPosition($Icon,$obj['x'],$obj['y']);
+						
+						$FRONTEND->site[] = $IconPosition;
+						
+						$Box = $FRONTEND->infoBox($type,$obj[$name],$obj['service_description'],$state);
+						$FRONTEND->site[] = $FRONTEND->createLink($MAINCFG->getValue('paths', 'htmlcgi'),$obj['url'],$type,$obj[$name],$obj['service_description']);
+						$FRONTEND->site[] = '<IMG SRC='.$MAINCFG->getValue('paths', 'htmlicon').$Icon.' '.$Box.';></A>';
+						$FRONTEND->site[] = "</DIV>";
+						
+						$debug[] = $DEBUG->debug_insertRow($MAINCFG->getValue('debug', 'debugstates'));
+					}
+				}
+			}
+		}
+		$debug[] = $DEBUG->debug_insertInfo($MAINCFG->getValue('debug', 'debugstates'),'End of handle the type '.$type.' in map '.$MAPCFG->getName());
+		
+		return $objState;
+	}
+}
+
+/*
+ * Wraps all states in an Array to a summary state
+ */ 
+function getState($objState) {
+	if(in_array("DOWN", $objState) || in_array("CRITICAL", $objState)) {
+		return "CRITICAL";
+	} elseif(in_array("WARNING", $objState)) {
+		return "WARNING";
+	} elseif(in_array("UNKNOWN", $objState)) {
+		return "UNKNOWN";
+	} elseif(in_array("ERROR", $objState)) {
+		return "ERROR";
+	} else {
+		return "OK";
+	}
+}
+
 $FRONTEND->debug($debug);
 $FRONTEND->closeSite();
 $FRONTEND->printSite();
-
 ?>
