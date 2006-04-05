@@ -80,30 +80,33 @@ if(count($MAPCFG->getDefinitions('map')) > 0) {
 			
 			if(is_array($SUBMAPCFG->getDefinitions('host'))){
 				foreach ($SUBMAPCFG->getDefinitions('host') as $index => $host) {
+					$recognize_services = $FRONTEND->checkOption($host['recognize_services'],$MAINCFG->getValue('global', 'recognize_services'),"1");
 					if(isset($host['line_type'])) {
 						list($host_name_from,$host_name_to) = explode(",", $host['host_name']);
 						list($service_description_from,$service_description_to) = explode(",", $host['service_description']);
-						$stateState = $BACKEND->checkStates($host['type'],$host_name_from,$host['recognize_services'],$service_description_from,1);
-						$stateState = $BACKEND->checkStates($host['type'],$host_name_to,$host['recognize_services'],$service_description_to,2);				
+						$stateState = $BACKEND->checkStates($host['type'],$host_name_from,$recognize_services,$service_description_from,1);
+						$stateState = $BACKEND->checkStates($host['type'],$host_name_to,$recognize_services,$service_description_to,2);				
 					} else {
-						$stateState = $BACKEND->checkStates($host['type'],$host['host_name'],$host['recognize_services'],$host['service_description'],0);
+						$stateState = $BACKEND->checkStates($host['type'],$host['host_name'],$recognize_services,$host['service_description'],0);
 					}
 					$mapState[] = $stateState['State'];
 				}
 			}
 			if(is_array($SUBMAPCFG->getDefinitions('hostgroup'))){
 				foreach ($SUBMAPCFG->getDefinitions('hostgroup') as $index => $hostgroup) {
-					$stateState = $BACKEND->checkStates($hostgroup['type'],$hostgroup['hostgroup_name'],$hostgroup['recognize_services'],$hostgroup['service_description'],0);
+					$recognize_services = $FRONTEND->checkOption($hostgroup['recognize_services'],$MAINCFG->getValue('global', 'recognize_services'),"1");
+					$stateState = $BACKEND->checkStates($hostgroup['type'],$hostgroup['hostgroup_name'],$recognize_services,$hostgroup['service_description'],0);
 					$mapState[] = $stateState['State'];
 				}
 			}
 			if(is_array($SUBMAPCFG->getDefinitions('service'))){
 				foreach ($SUBMAPCFG->getDefinitions('service') as $index => $service) {
+					$recognize_services = $FRONTEND->checkOption($service['recognize_services'],$MAINCFG->getValue('global', 'recognize_services'),"1");
 					if(isset($service['line_type'])) {
 						list($host_name_from,$host_name_to) = explode(",", $service['host_name']);
 						list($service_description_from,$service_description_to) = explode(",", $service['service_description']);
-						$stateState = $BACKEND->checkStates($service['type'],$host_name_from,$service['recognize_services'],$service_description_from,1);
-						$stateState = $BACKEND->checkStates($service['type'],$host_name_to,$service['recognize_services'],$service_description_to,2);				
+						$stateState = $BACKEND->checkStates($service['type'],$host_name_from,$recognize_services,$service_description_from,1);
+						$stateState = $BACKEND->checkStates($service['type'],$host_name_to,$recognize_services,$service_description_to,2);				
 					} else {
 						$stateState = $BACKEND->checkStates($service['type'],$service['host_name'],$service['recognize_services'],$service['service_description'],0);
 					}
@@ -112,7 +115,8 @@ if(count($MAPCFG->getDefinitions('map')) > 0) {
 			}
 			if (is_array($SUBMAPCFG->getDefinitions('servicegroup'))){
 				foreach ($SUBMAPCFG->getDefinitions('servicegroup') as $index => $servicegroup) {
-					$stateState = $BACKEND->checkStates($servicegroup['type'],$servicegroup['servicegroup_name'],$servicegroup['recognize_services'],$servicegroup['service_description'],0);
+					$recognize_services = $FRONTEND->checkOption($service['recognize_services'],$MAINCFG->getValue('global', 'recognize_services'),"1");
+					$stateState = $BACKEND->checkStates($servicegroup['type'],$servicegroup['servicegroup_name'],$recognize_services,$servicegroup['service_description'],0);
 					$mapState[] = $stateState['State'];
 				}
 			}
