@@ -27,7 +27,7 @@ class MapCfg {
 		
 		//if no map was given with parameter, search for a map
 		if($name == '') {
-			//$this->name = $this->getMap();
+			$this->name = $this->getMap();
 		} else {
 			//check the $name string for security reasons (its the ONLY value we
 			//get directly from external...)
