@@ -22,12 +22,12 @@ class MapCfg {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function MapCfg($MAINCFG,$name='') {
+	function MapCfg(&$MAINCFG,$name='') {
 		$this->MAINCFG = $MAINCFG;
 		
 		//if no map was given with parameter, search for a map
 		if($name == '') {
-			$this->name = $this->getMap();
+			//$this->name = $this->getMap();
 		} else {
 			//check the $name string for security reasons (its the ONLY value we
 			//get directly from external...)
@@ -56,10 +56,7 @@ class MapCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
 	function getImage() {
-		//FIXME: there is only one image in the value, why this?
-		//FIXME: was used for rotate-function! ML
-		$map_image_array = explode(",",trim($this->getValue('global', '', 'map_image')));
-		return $this->image = $map_image_array[0];
+		return $this->image = $this->getValue('global', '', 'map_image');
 	}
 	
 	/**

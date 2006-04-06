@@ -22,7 +22,7 @@ class frontend extends common {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function frontend($MAINCFG,$MAPCFG) {
+	function frontend(&$MAINCFG,&$MAPCFG) {
 		$this->MAINCFG = $MAINCFG;
 		$this->MAPCFG = $MAPCFG;
 		//parent::common($this->MAINCFG,$this->MAPCFG);
@@ -347,7 +347,153 @@ class frontend extends common {
 		$Comment .= '<span>'.$text.'</span>';
 		$Comment .= '</div>';
 		return($Comment);	
-	}	
+	}
+	
+	/**
+	* Gets all objects from a map and print it or just return an array with states
+	*
+	* @param object $MAPCFG
+	* @param object $FRONTEND
+	* @param object $BACKEND
+	* @param object $DEBUG
+	* @param boolean $print
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function getMapObjects(&$MAPCFG,&$FRONTEND,&$BACKEND,&$DEBUG,$print=1) {
+		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'map',$print));
+		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'host',$print));
+		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'service',$print));
+		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'hostgroup',$print));
+		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'servicegroup',$print));
+		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'textbox',$print));
+		
+		return $mapState;
+	}
+
+
+	/**
+	* Gets all objects of the defined type from a map and print it or just return an array with states
+	*
+	* @param object $MAPCFG
+	* @param object $FRONTEND
+	* @param object $BACKEND
+	* @param object $DEBUG
+	* @param string $type
+	* @param boolean $print
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function getObjects(&$MAPCFG,&$FRONTEND,&$BACKEND,&$DEBUG,$type,$print=1) {
+		$objState = Array();
+		
+		if($type == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $type . '_name';
+		}
+		
+		if(is_array($MAPCFG->getDefinitions($type))){
+			$debug[] = $DEBUG->debug_insertInfo($this->MAINCFG->getValue('debug', 'debugstates'),'Begin to handle the type '.$type.' in map '.$MAPCFG->getName());
+			foreach($MAPCFG->getDefinitions($type) as $index => $obj) {
+				if($type == 'map') {
+					$SUBMAPCFG = new MapCfg($this->MAINCFG,$obj[$name]);
+					$state = $this->getMapObjects($SUBMAPCFG,$FRONTEND,$BACKEND,$DEBUG,0);
+					$objState[] = $this->getState($state);
+					
+					if($print == 1) {
+						$Icon = $FRONTEND->findIcon(Array('State' => $this->getState($state), 'Output' => 'State of child Map is '.$this->getState($state)),$obj,$type);
+						$IconPosition = $FRONTEND->fixIconPosition($Icon,$obj['x'],$obj['y']);
+						$FRONTEND->site[] = $IconPosition;
+						$Box = $FRONTEND->infoBox($type,$obj[$name],$obj['service_description'],$state);
+						$FRONTEND->site[] = '<A HREF="./index.php?map='.$obj[$name].'" TARGET="_self"><IMG SRC='.$this->MAINCFG->getValue('paths', 'htmlicon').$Icon.' '.$Box.'; BORDER="0"></A>';
+						$FRONTEND->site[] = "</DIV>";
+					}
+				} elseif($type == 'textbox') {
+					// handle objects of type "textbox"
+					
+					// draw only the textbox
+					$FRONTEND->site[] = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text']);
+				} else {
+					//handle all other objects...
+					
+					// get option to recognize the services - object, main-config, default
+					$recognize_services = $FRONTEND->checkOption($obj['recognize_services'],$this->MAINCFG->getValue('global', 'recognize_services'),"1");
+					
+					// if object is a line...
+					if(isset($obj['line_type'])) {
+						if($obj['line_type'] != "20") {
+							// a line with one object...
+							$state = $BACKEND->checkStates($type,$obj[$name],$recognize_services,$obj['service_description'],0);
+							$objState[] = $state;
+							
+							if($print == 1) {
+								$FRONTEND->createBoxLine($obj,$state,NULL);
+							}
+						} else {
+							// a line with two objects...
+							list($obj_name_from,$obj_name_to) = explode(",", $obj[$name]);
+							list($service_description_from,$service_description_to) = explode(",", $obj['service_description']);
+							$state1 = $BACKEND->checkStates($type,$obj_name_from,$recognize_services,$service_description_from,1);
+							$state2 = $BACKEND->checkStates($type,$obj_name_to,$recognize_services,$service_description_to,2);
+							$objState[] = $state1;
+							$objState[] = $state2;
+							
+							if($print == 1) {
+								$FRONTEND->createBoxLine($service,$state1,$state2);
+							}
+						}
+					} else {
+						// get the state of the object - type, object name, recognize services - service description - state pos??
+						$state = $BACKEND->checkStates($type,$obj[$name],$recognize_services,$obj['service_description'],0);
+						$objState[] = $state;
+						$debug[] = $DEBUG->debug_checkState($this->MAINCFG->getValue('debug', 'debugstates'),$this->MAINCFG->getValue('debug', 'debugcheckstate'),$index);
+						
+						
+						if($print == 1) {
+							$Icon = $FRONTEND->findIcon($state,$obj,$type);
+						
+							$debug[] = $DEBUG->debug_fixIcon($this->MAINCFG->getValue('debug', 'debugstates'),$this->MAINCFG->getValue('debug', 'debugfixicon'),$index);
+							$IconPosition = $FRONTEND->fixIconPosition($Icon,$obj['x'],$obj['y']);
+							
+							$FRONTEND->site[] = $IconPosition;
+							
+							$Box = $FRONTEND->infoBox($type,$obj[$name],$obj['service_description'],$state);
+							$FRONTEND->site[] = $FRONTEND->createLink($this->MAINCFG->getValue('paths', 'htmlcgi'),$obj['url'],$type,$obj[$name],$obj['service_description']);
+							$FRONTEND->site[] = '<IMG SRC='.$this->MAINCFG->getValue('paths', 'htmlicon').$Icon.' '.$Box.';></A>';
+							$FRONTEND->site[] = "</DIV>";
+							
+							$debug[] = $DEBUG->debug_insertRow($this->MAINCFG->getValue('debug', 'debugstates'));
+						}
+					}
+				}
+			}
+			$debug[] = $DEBUG->debug_insertInfo($this->MAINCFG->getValue('debug', 'debugstates'),'End of handle the type '.$type.' in map '.$MAPCFG->getName());
+			
+			return $objState;
+		}
+	}
+	
+	/**
+	* Wraps all states in an Array to a summary state
+	*
+	* @param array $objState
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/ 
+	function getState($objState) {
+		if(in_array("DOWN", $objState) || in_array("CRITICAL", $objState)) {
+			return "CRITICAL";
+		} elseif(in_array("WARNING", $objState)) {
+			return "WARNING";
+		} elseif(in_array("UNKNOWN", $objState)) {
+			return "UNKNOWN";
+		} elseif(in_array("ERROR", $objState)) {
+			return "ERROR";
+		} else {
+			return "OK";
+		}
+	}
 
 }
 ?>

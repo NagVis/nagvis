@@ -33,7 +33,7 @@ class common {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function common($MAINCFG,$MAPCFG) {
+	function common(&$MAINCFG,&$MAPCFG) {
 		$this->MAINCFG = $MAINCFG;
 		$this->MAPCFG = $MAPCFG;
 	}

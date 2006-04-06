@@ -24,7 +24,7 @@ class backend {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function backend($MAINCFG) {
+	function backend(&$MAINCFG) {
 		$this->MAINCFG = $MAINCFG;
 		
 		$this->checkCgiPath();

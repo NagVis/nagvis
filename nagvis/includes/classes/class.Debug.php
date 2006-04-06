@@ -16,7 +16,7 @@ class debug {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function debug($MAINCFG) {
+	function debug(&$MAINCFG) {
 		$this->MAINCFG = $MAINCFG;
 	}
 

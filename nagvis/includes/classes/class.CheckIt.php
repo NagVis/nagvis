@@ -15,7 +15,7 @@ class checkit extends frontend {
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function checkit($MAINCFG,$MAPCFG) {
+	function checkit(&$MAINCFG,&$MAPCFG) {
 		$this->MAINCFG = $MAINCFG;
 		$this->MAPCFG = $MAPCFG;
 		parent::frontend($this->MAINCFG,$this->MAPCFG);
