@@ -20,6 +20,8 @@ include("./includes/classes/class.CheckIt.php");
 include("./wui/classes.wui.php");
 
 $MAINCFG = new MainNagVisCfg('./etc/config.ini.php');
+// we set that this is a wui session
+$MAINCFG->setRuntimeValue('wui',1);
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 $CHECKIT = new checkit($MAINCFG,$MAPCFG);

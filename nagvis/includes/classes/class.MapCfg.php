@@ -23,7 +23,9 @@ class MapCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function MapCfg(&$MAINCFG,$name='') {
-		$this->MAINCFG = $MAINCFG;
+		// only try to get a map, if we are not in wui
+		if($this->MAINCFG->getRuntimeValue('wui') != 1)
+			$this->MAINCFG = $MAINCFG;
 		
 		//if no map was given with parameter, search for a map
 		if($name == '') {
