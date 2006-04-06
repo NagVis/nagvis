@@ -27,9 +27,6 @@ $CHECKIT = new checkit($MAINCFG,$MAPCFG);
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
 $READFILE = new readfile($MAINCFG);
 
-include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
-$BACKEND = new backend($MAINCFG);
-
 # we retrieve the autosave parameter passed in the URL, if defined. if defined, the map will be saved after the next object is moved
 if(isset($_GET['autosave'])) {
    $MAINCFG->setRuntimeValue('justAdded','true');
@@ -46,20 +43,22 @@ $langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MA
 #	- its background image exists
 #	- the current user is allowed to have acees to it
 #	- the map is writable
-if(!$CHECKIT->check_user(1)) {
-	exit;
-}
-if(!$MAPCFG->checkMapImageReadable(1)) {
-	exit;
-}
-if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_for_config'),1)) {
-	exit;
-}
-if(!$MAPCFG->checkMapConfigWriteable(1)) {
-	exit;
-}
-if(!$CHECKIT->check_wuilangfile(1)) {
-	exit;	
+if($_GET['map'] != '') {
+	if(!$CHECKIT->check_user(1)) {
+		exit;
+	}
+	if(!$MAPCFG->checkMapImageReadable(1)) {
+		exit;
+	}
+	if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_for_config'),1)) {
+		exit;
+	}
+	if(!$MAPCFG->checkMapConfigWriteable(1)) {
+		exit;
+	}
+	if(!$CHECKIT->check_wuilangfile(1)) {
+		exit;	
+	}
 }
 
 
@@ -342,8 +341,7 @@ if ($MAINCFG->getValue('global', 'displayheader') == "1") {
 
 if($MAPCFG->getImage() != '') {
 	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$MAPCFG->getImage().'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
-}
-else {
+} else {
 	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./wui/wuilogo.jpg" WIDTH="600px" HEIGHT="600px" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
 }
 
