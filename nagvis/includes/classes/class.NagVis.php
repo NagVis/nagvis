@@ -404,10 +404,12 @@ class frontend extends common {
 					$objState[] = $this->getState($state);
 					
 					if($print == 1) {
-						$Icon = $FRONTEND->findIcon(Array('State' => $this->getState($state), 'Output' => 'State of child Map is '.$this->getState($state)),$obj,$type);
+						$stateArr = Array('State' => $this->getState($state), 'Output' => 'State of child Map is '.$this->getState($state));
+						
+						$Icon = $FRONTEND->findIcon($stateArr,$obj,$type);
 						$IconPosition = $FRONTEND->fixIconPosition($Icon,$obj['x'],$obj['y']);
 						$FRONTEND->site[] = $IconPosition;
-						$Box = $FRONTEND->infoBox($type,$obj[$name],$obj['service_description'],$state);
+						$Box = $FRONTEND->infoBox($type,$obj[$name],$obj['service_description'],$stateArr);
 						$FRONTEND->site[] = '<A HREF="./index.php?map='.$obj[$name].'" TARGET="_self"><IMG SRC='.$this->MAINCFG->getValue('paths', 'htmlicon').$Icon.' '.$Box.'; BORDER="0"></A>';
 						$FRONTEND->site[] = "</DIV>";
 					}
