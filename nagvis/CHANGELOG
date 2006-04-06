@@ -1,4 +1,9 @@
 date: 2006-04-06
+author: husch
+- added additonal plausis to NDO Backend
+- deleted unneded files from repository
+
+date: 2006-04-06
 author: michelsen
 - removed BACKEND from config.php
 - moved parsing of icons from index.php to FRONTEND and packed it in an recursive mathod
