@@ -398,7 +398,9 @@ class frontend extends common {
 			foreach($MAPCFG->getDefinitions($type) as $index => $obj) {
 				if($type == 'map') {
 					$SUBMAPCFG = new MapCfg($this->MAINCFG,$obj[$name]);
+					$SUBMAPCFG->readMapConfig();
 					$state = $this->getMapObjects($SUBMAPCFG,$FRONTEND,$BACKEND,$DEBUG,0);
+					
 					$objState[] = $this->getState($state);
 					
 					if($print == 1) {
@@ -425,7 +427,7 @@ class frontend extends common {
 						if($obj['line_type'] != "20") {
 							// a line with one object...
 							$state = $BACKEND->checkStates($type,$obj[$name],$recognize_services,$obj['service_description'],0);
-							$objState[] = $state;
+							$objState[] = $state['State'];
 							
 							if($print == 1) {
 								$FRONTEND->createBoxLine($obj,$state,NULL);
@@ -436,8 +438,8 @@ class frontend extends common {
 							list($service_description_from,$service_description_to) = explode(",", $obj['service_description']);
 							$state1 = $BACKEND->checkStates($type,$obj_name_from,$recognize_services,$service_description_from,1);
 							$state2 = $BACKEND->checkStates($type,$obj_name_to,$recognize_services,$service_description_to,2);
-							$objState[] = $state1;
-							$objState[] = $state2;
+							$objState[] = $state1['State'];
+							$objState[] = $state2['State'];
 							
 							if($print == 1) {
 								$FRONTEND->createBoxLine($service,$state1,$state2);
@@ -446,7 +448,7 @@ class frontend extends common {
 					} else {
 						// get the state of the object - type, object name, recognize services - service description - state pos??
 						$state = $BACKEND->checkStates($type,$obj[$name],$recognize_services,$obj['service_description'],0);
-						$objState[] = $state;
+						$objState[] = $state['State'];
 						$debug[] = $DEBUG->debug_checkState($this->MAINCFG->getValue('debug', 'debugstates'),$this->MAINCFG->getValue('debug', 'debugcheckstate'),$index);
 						
 						
