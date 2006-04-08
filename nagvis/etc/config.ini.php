@@ -10,6 +10,10 @@
 ; global options
 [global]
 ; select backend to use (ndomy,html)
+; html -> pulls the data from the Nagios Webinterface (slow and unreliable but
+;		  easy to use)
+; ndomy -> gets the data from a Nagios NDO MySQL Database (fast an reliable 
+;          but NDO is needed)
 backend="ndomy"
 ; select language (english,german,...)
 language="english"
@@ -25,7 +29,7 @@ displayHeader=1
 headerCount=3
 ; config check on startup
 checkConfig=0
-; use gdlibs
+; use gdlibs (if set to 0 lines will not work, all other types should work fine)
 useGDLibs=1
 ; refresh time of pages
 refreshTime=60
@@ -59,13 +63,6 @@ htmlMap="/nagios/nagvis/maps/"
 ; absolute html NagVis documentation path
 htmlDoku="http://luebben-home.de/nagvis-doku/nav.html?nagvis/"
 
-; include options
-[includes]
-; header include
-header="header.nagvis.inc"
-; index include
-index="index.nagvis.inc"
-
 ; options for the NDO-Backend
 [backend_ndo]
 ; hostname for NDO-db
@@ -91,6 +88,14 @@ cgiUser="nagiosadmin"
 cgi="/usr/local/nagios/sbin/"
 
 ; usualy not needed
+; include options
+[includes]
+; header include
+header="header.nagvis.inc"
+; index include
+index="index.nagvis.inc"
+
+;debuggin options
 [debug]
 ; debug on/off (0/1)
 debug=0
