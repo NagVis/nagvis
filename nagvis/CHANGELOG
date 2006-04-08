@@ -1,3 +1,9 @@
+date: 2006-08-06
+author: husch
+- fixed PHP5 bug at wui
+- updated docs
+- prepared for 0.9 beta 2 release 
+
 date: 2006-04-06
 author: husch
 - added additonal plausis to NDO Backend
