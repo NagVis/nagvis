@@ -85,7 +85,7 @@ class langFile
 	
 	function get_text($myid)
 	{
-		if (count($this->$indexes)==1)
+		if (count($this->indexes)==1)
 		{
 			print "The language coudln't be loaded";
 			return "";
