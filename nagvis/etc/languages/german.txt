@@ -14,7 +14,9 @@
 13~img_error.png~Service-Status!~Der Service-Status vom Host [HOSTNAME] Service [SERVICENAME] konnte nicht ermittelt werden!
 14~img_permission.png~Kein Benutzer~Es wurde kein Benutzername an NagVis &uuml;bergeben! Pruefen Sie ihre .htaccess Konfiguration!
 15~img_error.png~GD Lib~GD Lib ist nicht installiert!
-16~img_error.png~wui/wui.function.inc.bash nicht ausf&uuml;hrbar~Bitte die Berechtigungen von wui/wui.function.inc.bash (751) pr&uuml;fen!
-17~img_error.png~Keine Schreibrechte auf die Map Config Dateien~Bitte die Schreibberechtigungen des Webservers auf die *.cfg Dateien pr&uuml;fen!
+16~img_error.png~Keine Leserechte auf die Map Config Datei~Bitte die Leseberechtigungen des Webservers auf die CFG-Datei (<I>[MAP]</I>) pr&uuml;fen!
+17~img_error.png~Keine Schreibrechte auf die Map Config Dateien~Bitte die Schreibberechtigungen des Webservers auf die CFG-Dateien (<I>[MAP]</I>) pr&uuml;fen!
 18~img_error.png~Keine Schreibrechte auf die NagVis Config Datei~Bitte die Schreibberechtigungen des Webservers auf die config.ini.php Datei pr&uuml;fen!
 19~img_error.png~Keine Leserechte auf die NagVis Config Datei~Bitte die Leseberechtigungen des Webservers auf die config.ini.php Datei pr&uuml;fen!
+20~img_error.png~Keine Leserechte auf die Map Bild-Datei~Bitte die Leseberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
+21~img_error.png~Keine Schreibrechte auf die Map Bild-Datei~Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
