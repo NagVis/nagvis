@@ -336,10 +336,10 @@ if($MAINCFG->getValue('global', 'checkconfig') == "1") {
 $FRONTEND->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 
 // Create Header-Menu, when enabled
-if ($MAINCFG->getValue('global', 'displayheader') == "1") {
+/*if ($MAINCFG->getValue('global', 'displayheader') == "1") {
 	$Menu = $READFILE->readMenu();
 	$FRONTEND->makeHeaderMenu($Menu);
-}
+}*/
 
 # we write the beginning of the body with all the includes needed	
 $FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/wz_dragdrop.js\"></script>";
