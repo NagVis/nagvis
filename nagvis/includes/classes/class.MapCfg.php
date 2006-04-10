@@ -538,7 +538,7 @@ class MapCfg {
 		if($type == 'service') {
 			return $this->mapConfig[$type][$id]['service_description'];
 		} else {
-			return $this->mapConfig[$type][$id]['name'];
+			return $this->mapConfig[$type][$id][$type.'_name'];
 		}
 	}
 	
@@ -558,7 +558,7 @@ class MapCfg {
 			return TRUE;
 		} else {
 			foreach($this->mapConfig[$type] AS $var => $val) {
-				if(($type == 'service' && $val['service_description'] == $name) || $val['name'] == $name) {
+				if(($type == 'service' && $val['service_description'] == $name) || $val[$type.'_name'] == $name) {
 					$this->mapConfig[$type][$var][$key] = $value;
 					return TRUE;	
 				}
@@ -581,7 +581,7 @@ class MapCfg {
 			return $this->mapConfig['global'][0][$key];
 		} else {
 			foreach($this->mapConfig[$type] AS $var => $val) {
-				if(($type == 'service' && $val['service_description'] == $name) || $val['name'] == $name) {
+				if(($type == 'service' && $val['service_description'] == $name) || $val[$type.'_name'] == $name) {
 					return $val[$key];	
 				}
 			}
