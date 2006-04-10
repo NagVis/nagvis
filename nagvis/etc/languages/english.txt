@@ -16,3 +16,5 @@
 15~img_error.png~GD Lib~GD Lib not loaded. Check your PHP installation. 
 16~img_error.png~wui/wui.function.inc.bash not executable~Please check permissions of wui/wui.function.inc.bash (751)!
 17~img_error.png~Can not write Map Config File~Please check the webserver permission at the *.cfg files!
+18~img_error.png~Can not read NagVis Config File~Please check the webserver permission at the config.ini.php file!
+19~img_error.png~Can not write NagVis Config File~Please check the webserver permission at the config.ini.php file!
