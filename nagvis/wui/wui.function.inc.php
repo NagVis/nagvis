@@ -135,8 +135,8 @@ switch($_GET['myaction']) {
 			foreach($elements AS $element) {
 				$element = explode('_',$element);
 				// set coordinates ($element[0] is type, $element[1] is id)
-				$MAPCFG->setValue($element[0], $MAPCFG->getNameById($element[0],$element[1]), 'x', $x[$i]);
-				$MAPCFG->setValue($element[0], $MAPCFG->getNameById($element[0],$element[1]), 'y', $y[$i]);
+				$MAPCFG->setValue($element[0], $element[1], 'x', $x[$i]);
+				$MAPCFG->setValue($element[0], $element[1], 'y', $y[$i]);
 				// write element to file
 				$MAPCFG->writeElement($element[0],$element[1]);
 				$i++;
@@ -157,7 +157,7 @@ switch($_GET['myaction']) {
 	
 		// set options in the array
 		foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
-			$MAPCFG->setValue($_POST['type'], $MAPCFG->getNameById($_POST['type'],$_POST['id']), $key, $val);
+			$MAPCFG->setValue($_POST['type'], $_POST['id'], $key, $val);
 		}
 		// write element to file
 		$MAPCFG->writeElement($_POST['type'],$_POST['id']);
@@ -244,7 +244,7 @@ switch($_GET['myaction']) {
 			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
 				// check if old map name is linked...
 				if($obj['map_name'] == $_POST['map_name']) {
-					$MAPCFG1->setValue('map', $MAPCFG1->getNameById('map',$i), 'map_name', $_POST['map_new_name']);
+					$MAPCFG1->setValue('map', $i, 'map_name', $_POST['map_new_name']);
 					$MAPCFG1->writeElement('map',$i);
 				}
 				$i++;

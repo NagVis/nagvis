@@ -52,7 +52,7 @@ if($_GET['map'] != '') {
 	if(!$MAPCFG->checkMapImageReadable(1)) {
 		exit;
 	}
-	if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_for_config'),1)) {
+	if(!$CHECKIT->check_permissions($MAPCFG->getValue('global', 0,'allowed_for_config'),1)) {
 		exit;
 	}
 	if(!$MAPCFG->checkMapConfigWriteable(1)) {
@@ -300,8 +300,8 @@ if ($handle2 = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
 		$MAPCFG1 = new MapCfg($MAINCFG,$file);
 		$MAPCFG1->readMapConfig();
 		
-		$all_allowed_user .= "^".$file."=".implode(',',$MAPCFG1->getValue('global','','allowed_for_config'));	
-		$all_map_image .= "^".$file."=".$MAPCFG1->getValue('global','','map_image');
+		$all_allowed_user .= "^".$file."=".implode(',',$MAPCFG1->getValue('global', 0,'allowed_for_config'));	
+		$all_map_image .= "^".$file."=".$MAPCFG1->getValue('global', 0,'map_image');
 		
 		foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
 			$all_map_name .= "^".$file."=".$obj['map_name'];

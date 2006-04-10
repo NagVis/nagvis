@@ -22,20 +22,12 @@ $BACKEND = new backend($MAINCFG);
 if(!$CHECKIT->check_user(0)) {
 	errorBox('no user found!');
 }
-if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_user'),0)) {
+if(!$CHECKIT->check_permissions($MAPCFG->getValue('global', 0,'allowed_user'),0)) {
 	errorBox('You don\'t have permission to open this!');
 }
 if(!$MAPCFG->checkMapImageReadable(0)) {
 	errorBox('The defined image isn\'t readable!');
 }
-
-//DEPRECATED:
-//if(file_exists($MAINCFG->getValue('paths', 'mapcfg').$map.".cfg")) {
-//	$mapCfg = $readfile->readNagVisCfg($map);
-//	$allowed_users = explode(",",trim($mapCfg[1]['allowed_user']));
-//	$map_image_array = explode(",",trim($mapCfg[1]['map_image']));
-//	$map_image=$map_image_array[0];
-//}
 
 // Bild initalisieren
 $image_type = explode('.', $MAPCFG->getImage());

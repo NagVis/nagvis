@@ -61,7 +61,7 @@ class MapCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
 	function getImage() {
-		return $this->image = $this->getValue('global', '', 'map_image');
+		return $this->image = $this->getValue('global', 0, 'map_image');
 	}
 	
 	/**
@@ -155,11 +155,6 @@ class MapCfg {
 								$entry = explode("=",$file[$l], 2);
 								
 								if(isset($entry[1])) {
-									// Nicht "name", sondern richtige Bezeichnung!
-									//if(ereg("name", $entry[0])) {
-									//	$entry[0] = "name";
-									//}
-									
 									if(in_array(trim($entry[0]),$createArray)) {
 										$this->mapConfig[$define[1]][$nrOfType][trim($entry[0])] = explode(",",str_replace(' ','',trim($entry[1])));
 									} else {
@@ -318,8 +313,10 @@ class MapCfg {
 	* at the end of it.
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*
+	* DEPRECATED
     */
-	function writeValue($type,$name,$key) {
+	/*function writeValue($type,$name,$key) {
 		if($this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
 			// read file in array
 			$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
@@ -379,7 +376,7 @@ class MapCfg {
 		} else {
 			return FALSE;
 		} 
-	}
+	}*/
 	
 	/**
 	* Checks for readable map image file
@@ -396,8 +393,7 @@ class MapCfg {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 					$FRONTEND->openSite($rotateUrl);
-					//FIXME: NEUE messageBox!!!
-					$FRONTEND->messageBox("3", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND->messageBox("20", "IMGPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
 				}
@@ -424,8 +420,7 @@ class MapCfg {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 					$FRONTEND->openSite($rotateUrl);
-					//FIXME: NEUE messageBox!!!
-					$FRONTEND->messageBox("-1", "MAPPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND->messageBox("21", "IMGPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
 				}
@@ -451,8 +446,7 @@ class MapCfg {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 					$FRONTEND->openSite($rotateUrl);
-					//FIXME: NEUE messageBox!!!
-					$FRONTEND->messageBox("2", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
+					$FRONTEND->messageBox("16", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
 				}
@@ -475,8 +469,7 @@ class MapCfg {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 				$FRONTEND->openSite($rotateUrl);
-				//FIXME: NEUE messageBox!!!
-				$FRONTEND->messageBox("17", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$map.".cfg");
+				$FRONTEND->messageBox("17", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
 			}
@@ -533,61 +526,43 @@ class MapCfg {
 	* @param string $id
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*
+	* DEPRECATED
     */
-	function getNameById($type,$id) {
+	/*function getNameById($type,$id) {
 		if($type == 'service') {
 			return $this->mapConfig[$type][$id]['service_description'];
 		} else {
 			return $this->mapConfig[$type][$id][$type.'_name'];
 		}
-	}
+	}*/
 	
 	/**
 	* Sets a config value in the array
 	*
 	* @param string $type
-	* @param string $name
+	* @param string $id
 	* @param string $key
 	* @param string $value
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
-	function setValue($type, $name, $key, $value) {
-       if($type == 'global') {
-			$this->mapConfig['global'][0][$key] = $value;
-			return TRUE;
-		} else {
-			foreach($this->mapConfig[$type] AS $var => $val) {
-				if(($type == 'service' && $val['service_description'] == $name) || $val[$type.'_name'] == $name) {
-					$this->mapConfig[$type][$var][$key] = $value;
-					return TRUE;	
-				}
-			}
-			return FALSE;
-		}
+	function setValue($type, $id, $key, $value) {
+       $this->mapConfig[$type][$id][$key] = $value;
+       return TRUE;
 	}
 	
 	/**
 	* Gets a config value from the array
 	*
 	* @param string $type
-	* @param string $name
+	* @param string $id
 	* @param string $key
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
-	function getValue($type, $name, $key) {
-		if($type == 'global') {
-			return $this->mapConfig['global'][0][$key];
-		} else {
-			foreach($this->mapConfig[$type] AS $var => $val) {
-				if(($type == 'service' && $val['service_description'] == $name) || $val[$type.'_name'] == $name) {
-					return $val[$key];	
-				}
-			}
-			
-			return FALSE;
-		}
+	function getValue($type, $id, $key) {
+		return $this->mapConfig[$type][$id][$key];
 	}
 	
 	/**

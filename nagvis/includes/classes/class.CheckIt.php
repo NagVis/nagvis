@@ -120,26 +120,6 @@ class checkit extends frontend {
         	}
         }
     }
-
-	/**
-	* Check is the file 'wui/wui.function.inc.bash' executable
-	*
-	* @author FIXME!
-	* DEPRECATED!
-	*/
-    /*function check_wuibash($printErr) {
-        if(!is_executable('wui/wui.function.inc.bash')) {
-        	if($printErr) {
-	            $this->openSite($rotateUrl);
-	            $this->messageBox("16", "");
-	            $this->closeSite();
-	            $this->printSite();
-            }
-        	return FALSE;
-        } else {
-        	return TRUE;
-    	}
-    }*/
 	
 	/**
 	* Check is the Language-File readable.

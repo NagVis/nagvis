@@ -43,7 +43,7 @@ if(!$CHECKIT->check_user(1)) {
 if(!$CHECKIT->check_gd(1)) {
 	exit;	
 }
-if(!$CHECKIT->check_permissions($MAPCFG->getValue('global','','allowed_user'),1)) {
+if(!$CHECKIT->check_permissions($MAPCFG->getValue('global', 0,'allowed_user'),1)) {
 	exit;
 }
 if(!$MAPCFG->checkMapImageReadable(1)) {

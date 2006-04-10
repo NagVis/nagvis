@@ -56,7 +56,7 @@ if($MAINCFG->getRuntimeValue('user') == "") {
 }
 
 # we verify he's authorized to config the map
-if(!in_array($MAINCFG->getRuntimeValue('user'),$MAPCFG->getValue('global','','allowed_for_config')) && !in_array('EVERYONE',$MAPCFG->getValue('global','','allowed_for_config'))) {
+if(!in_array($MAINCFG->getRuntimeValue('user'),$MAPCFG->getValue('global', 0, 'allowed_for_config')) && !in_array('EVERYONE',$MAPCFG->getValue('global', 0, 'allowed_for_config'))) {
 	//FIXME: Errorhandling
 	echo "Fehler2";
 	exit;

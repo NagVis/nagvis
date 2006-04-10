@@ -60,8 +60,8 @@ class common {
 		$StateLow = strtolower($State['State']);
 		if(isset($mapCfg['iconset'])) {
 			$IconPath = $mapCfg['iconset'];
-		} elseif($this->MAPCFG->getValue('global', '', 'iconset') != '') {
-			$IconPath = $this->MAPCFG->getValue('global', '', 'iconset');
+		} elseif($this->MAPCFG->getValue('global', 0, 'iconset') != '') {
+			$IconPath = $this->MAPCFG->getValue('global', 0, 'iconset');
 		} elseif($this->MAINCFG->getValue('global', 'defaulticons') != '') {
 			$IconPath = $this->MAINCFG->getValue('global', 'defaulticons');
 		} else {
