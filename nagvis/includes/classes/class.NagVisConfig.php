@@ -39,7 +39,7 @@ class MainNagVisCfg {
 		$sec = '';
 		
 		// Check for config file and read permissions
-		if(@file_exists($this->configFile) && @is_readable($this->configFile)) {
+		if($this->checkNagVisConfigReadable(1)) {
 			// read thx config file line by line in array $file
 			$file = @file($this->configFile);
 			
@@ -98,7 +98,7 @@ class MainNagVisCfg {
 				}
 			}
 		} else {
-			//FIXME: Errorhandling
+			return FALSE;
 		}
 	}
 	
@@ -109,7 +109,7 @@ class MainNagVisCfg {
     */
 	function writeConfig() {
 		// Check for config file and read permissions
-		if(file_exists($this->configFile) && is_writeable($this->configFile)) {
+		if($this->checkNagVisConfigReadable(1) && $this->checkNagVisConfigWriteable(1)) {
 			foreach($this->config as $key => $item) {
 				if(is_array($item)) {
 					$content .= "[".$key."]\n";
@@ -146,7 +146,52 @@ class MainNagVisCfg {
 			fclose($handle);
 			return TRUE;
 		} else {
-			//FIXME: Errorhandling
+			return FALSE;
+		}
+	}
+	
+	/**
+	* Checks for readable config file
+	*
+	* @param string $printErr
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function checkNagVisConfigReadable($printErr) {
+		if($this->configFile != '') {
+			if(file_exists($this->configFile) && is_readable($this->configFile)) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->messageBox("18", "");
+					$FRONTEND->closeSite();
+					$FRONTEND->printSite();
+				}
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	* Checks for writeable config file
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function checkNagVisConfigWriteable($printErr) {
+		if(file_exists($this->configFile) && is_writeable($this->configFile)) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+				$FRONTEND->openSite($rotateUrl);
+				$FRONTEND->messageBox("19", "");
+				$FRONTEND->closeSite();
+				$FRONTEND->printSite();
+			}
 			return FALSE;
 		}
 	}
