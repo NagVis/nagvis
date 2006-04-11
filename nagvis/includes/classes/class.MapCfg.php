@@ -325,7 +325,7 @@ class MapCfg {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->openSite();
 					$FRONTEND->messageBox("20", "IMGPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
@@ -352,7 +352,7 @@ class MapCfg {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->openSite();
 					$FRONTEND->messageBox("21", "IMGPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
@@ -378,7 +378,7 @@ class MapCfg {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->openSite();
 					$FRONTEND->messageBox("16", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
@@ -401,7 +401,7 @@ class MapCfg {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-				$FRONTEND->openSite($rotateUrl);
+				$FRONTEND->openSite();
 				$FRONTEND->messageBox("17", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
@@ -430,7 +430,7 @@ class MapCfg {
 							// unknown atribute
 							if($printErr == 1) {
 								$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-								$FRONTEND->openSite($rotateUrl);
+								$FRONTEND->openSite();
 								echo $key;
 								$FRONTEND->messageBox("23", "ATRIBUTE~".$key);
 								$FRONTEND->closeSite();
@@ -445,7 +445,7 @@ class MapCfg {
 				// unknown type
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->openSite();
 					$FRONTEND->messageBox("22", "TYPE~".$type);
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
