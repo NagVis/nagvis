@@ -20,3 +20,5 @@
 19~img_error.png~Can not write NagVis Config File~Please check the webserver permission at the config.ini.php file!
 20~img_error.png~Can not read Map Image File~Please check the webserver permission at the PNG-File (<I>[IMGPATH]</I>)!
 21~img_error.png~Can not write Map Image File~Please check the webserver permission at the PNG-File (<I>[IMGPATH]</I>)!
+22~img_error.png~Unknown type defined in Map Config File~The Type <I>[TYPE]</I> is not allowed!
+23~img_error.png~Unknown atribute defined in Map Config File~The Atribute <I>[ATRIBUTE]</I> is not allowed in Elements of type <I>[TYPE]</I>!

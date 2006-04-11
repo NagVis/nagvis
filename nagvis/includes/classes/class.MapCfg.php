@@ -167,9 +167,13 @@ class MapCfg {
 					}
 					$l++;
 				}
-				$this->getImage();
 				
-				return TRUE;
+				if($this->checkMapConfigIsValid(1)) {
+					$this->getImage();
+					return TRUE;
+				} else {
+					return FALSE;
+				}
 			} else {
 				return FALSE;	
 			}
@@ -308,77 +312,6 @@ class MapCfg {
 	}
 	
 	/**
-	* Writes a value to the map config file. If this value 
-	* doesn't exists in the element, it will be created
-	* at the end of it.
-	*
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	*
-	* DEPRECATED
-    */
-	/*function writeValue($type,$name,$key) {
-		if($this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
-			// read file in array
-			$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
-			
-			$createArray = array("allowed_user","allowed_for_config");
-			$l = 0;
-			$a = 0;
-					
-			while(isset($file[$l]) && $file[$l] != "") {
-				if(!ereg("^#",$file[$l]) && !ereg("^;",$file[$l])) {
-					$defineCln = explode("{", $file[$l]);
-					$define = explode(" ",$defineCln[0]);
-					if (isset($define[1]) && trim($define[1]) == $type) {
-						$l++;
-						
-						$cfgName = '';
-						$cfgLineNr = 0;
-						$cfgLine = '';
-						while (trim($file[$l]) != "}" || ($cfgName == '' && $cfgLine == '')) {
-							$entry = explode("=",$file[$l], 2);
-							
-							if(($type == 'service' && $entry[0] == 'service_description') || ereg("name", $entry[0])) {
-								$cfgName = trim($entry[1]);
-							}
-							if($key == trim($entry[0])) {
-								$cfgLineNr = $l+1;
-								$cfgLine = $key.'='.$this->getValue($type, $name, $key);
-							}
-							
-							$l++;	
-						}
-						if($cfgName == $name) {
-							if($cfgLine != '' && $cfgLineNr != 0) {
-								$file[$cfgLineNr-1] = $cfgLine."\n";
-							} else {
-								//FIXME: insert element at line $l+1, don't replace anything
-								$tmp = $cfgLine;
-								for($i=$l+1; $i < count($file); $i++) {
-									$tmp1 = $file[$i];
-									$file[$i] = $tmp;
-									$tmp = $tmp1;
-								}
-							}
-							
-							// open file for writing and replace it
-						 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg","w");
-						 	fwrite($fp,implode("",$file));
-						 	fclose($fp);
-						 	
-							return TRUE;
-						}
-					}
-				}
-				$l++;
-			}
-			return TRUE;
-		} else {
-			return FALSE;
-		} 
-	}*/
-	
-	/**
 	* Checks for readable map image file
 	*
 	* @param string $printErr
@@ -477,6 +410,51 @@ class MapCfg {
 		}
 	}
 	
+	function checkMapConfigIsValid($printErr) {
+		$validConfig = Array(
+			'global' => Array('type','allowed_for_config','allowed_user','iconset','map_image'),
+			'host' => Array('type','host_name','x','y','recognize_services','iconset','line_type','url'),
+			'hostgroup' => Array('type','hostgroup_name','x','y','recognize_services','iconset','line_type','url'),
+			'service' => Array('type','host_name','service_description','x','y','line_type','url','iconset'),
+			'servicegroup' => Array('type','servicegroup_name','x','y','iconset','line_type','url'),
+			'map' => Array('type','map_name','x','y','iconset','url'),
+			'textbox' => Array('type','text','x','y','w'));
+		foreach($this->mapConfig AS $type => $elements) {
+			if(array_key_exists($type,$validConfig)) {
+				// loop elemtents of type
+				foreach($elements AS $id => $element) {
+					// loop atributes of element
+					foreach($element AS $key => $val) {
+						// check for valid atributes - TODO: check valid values
+						if(!in_array($key,$validConfig[$type])) {
+							// unknown atribute
+							if($printErr == 1) {
+								$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+								$FRONTEND->openSite($rotateUrl);
+								echo $key;
+								$FRONTEND->messageBox("23", "ATRIBUTE~".$key);
+								$FRONTEND->closeSite();
+								$FRONTEND->printSite();
+							}
+							return FALSE;
+						}
+					}
+				}
+				return TRUE;	
+			} else {
+				// unknown type
+				if($printErr == 1) {
+					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->messageBox("22", "TYPE~".$type);
+					$FRONTEND->closeSite();
+					$FRONTEND->printSite();
+				}
+				return FALSE;
+			}
+		}
+	}
+	
 	/**
 	* Gets all definitions of type $type
 	*
@@ -518,24 +496,6 @@ class MapCfg {
 		
 		return count($this->mapConfig[$type])-1;
 	}
-	
-	/**
-	* Gets name of an object by id in array
-	*
-	* @param string $type
-	* @param string $id
-	*
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	*
-	* DEPRECATED
-    */
-	/*function getNameById($type,$id) {
-		if($type == 'service') {
-			return $this->mapConfig[$type][$id]['service_description'];
-		} else {
-			return $this->mapConfig[$type][$id][$type.'_name'];
-		}
-	}*/
 	
 	/**
 	* Sets a config value in the array

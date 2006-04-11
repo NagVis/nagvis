@@ -20,3 +20,5 @@
 19~img_error.png~Keine Leserechte auf die NagVis Config Datei~Bitte die Leseberechtigungen des Webservers auf die config.ini.php Datei pr&uuml;fen!
 20~img_error.png~Keine Leserechte auf die Map Bild-Datei~Bitte die Leseberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
 21~img_error.png~Keine Schreibrechte auf die Map Bild-Datei~Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
+22~img_error.png~Unbekannter Typ in Map Config Datei definiert~Der Objekttyp <I>[TYPE]</I> ist nicht erlaubt!
+23~img_error.png~Unbekanntes Atribut in Map Config Datei definiert~Das Atribut<I>[ATRIBUTE]</I> ist in Elementen des typs <I>[TYPE]</I> nicht erlaubt!
