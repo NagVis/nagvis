@@ -451,6 +451,7 @@ class MapCfg {
 				return FALSE;
 			}
 		}
+		return TRUE;
 	}
 	
 	/**
