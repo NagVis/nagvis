@@ -431,7 +431,6 @@ class MapCfg {
 							if($printErr == 1) {
 								$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 								$FRONTEND->openSite();
-								echo $key;
 								$FRONTEND->messageBox("23", "ATRIBUTE~".$key);
 								$FRONTEND->closeSite();
 								$FRONTEND->printSite();
@@ -439,8 +438,7 @@ class MapCfg {
 							return FALSE;
 						}
 					}
-				}
-				return TRUE;	
+				}	
 			} else {
 				// unknown type
 				if($printErr == 1) {
