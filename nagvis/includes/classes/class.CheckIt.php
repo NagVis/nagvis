@@ -46,7 +46,7 @@ class checkit extends frontend {
 			return TRUE;
         } else {
         	if($printErr) {
-	            $this->openSite($rotateUrl);
+	            $this->openSite();
 	            $this->messageBox("14", "");
 	            $this->closeSite();
 	            $this->printSite();
@@ -66,7 +66,7 @@ class checkit extends frontend {
     function check_permissions($allowed,$printErr) {
         if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
         	if($printErr) {
-				$this->openSite($rotateUrl);
+				$this->openSite();
 				$this->messageBox("4", "USER~".$this->MAINCFG->getRuntimeValue('user'));
 				$this->closeSite();
 				$this->printSite();
@@ -109,7 +109,7 @@ class checkit extends frontend {
 		if ($this->MAINCFG->getValue('global', 'usegdlibs') == "1") {
         	if(!extension_loaded('gd')) {
         		if($printErr) {
-	                $this->openSite($rotateUrl);
+	                $this->openSite();
 	                $this->messageBox("15", "");
 	                $this->closeSite();
 	                $this->printSite();
@@ -129,7 +129,7 @@ class checkit extends frontend {
     function check_langfile($printErr) {
         if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
         	if($printErr) {
-	            $this->openSite($rotateUrl);
+	            $this->openSite();
 	            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
 	            $this->closeSite();
 	            $this->printSite();
@@ -148,7 +148,7 @@ class checkit extends frontend {
 	function check_wuilangfile($printErr) {
         if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
         	if($printErr) {
-	            $this->openSite($rotateUrl);
+	            $this->openSite();
 	            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
 	            $this->closeSite();
 	            $this->printSite();
