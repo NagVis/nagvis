@@ -85,8 +85,7 @@ var objid=0;
 // functions used to track the mouse movements, when the user is adding an object. Draw a line a rectangle following the mouse
 // when the user has defined enough points we open the "add object" window
 
-function get_click(newtype,nbclicks,action)
-{
+function get_click(newtype,nbclicks,action) {
 	coords='';
 	action_click=action;
 	objtype=newtype;
@@ -101,34 +100,25 @@ function get_click(newtype,nbclicks,action)
 	
 }
 
-function track_mouse(e)
-{
+function track_mouse(e) {
 	
-	if(follow_mouse)
-	{	
-		
+	if(follow_mouse) {
 		if (!e) var e = window.event;
-	
-		if (e.pageX || e.pageY)
-		{
+		
+		if (e.pageX || e.pageY) {
 			posx = e.pageX;
 			posy = e.pageY;
-		}
-		else if (e.clientX || e.clientY)
-		{
+		} else if (e.clientX || e.clientY) {
 			posx = e.clientX;
 			posy = e.clientY;
 		}
 		
 		myshape.clear();
 		
-		if(objtype != 'textbox')
-		{
+		if(objtype != 'textbox') {
 			myshape.drawLine(myshapex, myshapey, posx, posy);
-		}
-		else
-		{
-			myshape.drawRect(myshapex, myshapey, posx-myshapex, posy-myshapey);
+		} else {
+			myshape.drawRect(myshapex, myshapey, (posx - myshapex), (posy - myshapey));
 		}
 		
 		myshape.paint();
@@ -137,28 +127,22 @@ function track_mouse(e)
 	
 }
 
-function get_click_pos(e)
-{
-	if(cpt_clicks > 0)
-	{
+function get_click_pos(e) {
+	if(cpt_clicks > 0) {
 		var posx = 0;
 		var posy = 0;
 		if (!e) var e = window.event;
 	
-		if (e.pageX || e.pageY)
-		{
+		if (e.pageX || e.pageY) {
 			posx = e.pageX;
 			posy = e.pageY;
 		}
-		else if (e.clientX || e.clientY)
-		{
+		else if (e.clientX || e.clientY) {
 			posx = e.clientX;
 			posy = e.clientY;
 		}
 		
-		if(cpt_clicks == 2) 
-		{
-						
+		if(cpt_clicks == 2) {		
 			myshape = new jsGraphics("mycanvas");
 			myshapex=posx;
 			myshapey=posy;
@@ -166,30 +150,24 @@ function get_click_pos(e)
 			myshape.setColor('#06B606');
 			myshape.setStroke(1);
 			follow_mouse=true;
-			
 		}
 		
 		coords=coords+posx+','+posy+',';
 		cpt_clicks=cpt_clicks-1;
 	}
 	
-	if(cpt_clicks > 0)
-	{
+	if(cpt_clicks > 0) {
 		window.status="<? echo $langfile->get_text("1"); ?>" + cpt_clicks;
 	}
-	else if(cpt_clicks == 0)
-	{
+	else if(cpt_clicks == 0) {
 		if (follow_mouse) myshape.clear();
 		coords=coords.substr(0,coords.length-1);
 		window.status='';
 		document.images['background'].style.cursor='default';
 		follow_mouse=false;
-		if(action_click=='add')
-		{
+		if(action_click=='add') {
 			link="./wui/addmodify.php?action=add&map="+document.myvalues.formulaire.value+"&type="+objtype+"&coords="+coords;
-		}
-		else if(action_click=='modify')
-		{
+		} else if(action_click=='modify') {
 			link="./wui/addmodify.php?action=modify&map="+document.myvalues.formulaire.value+"&type="+objtype+"&id="+objid+"&coords="+coords;
 		}
 		
@@ -200,8 +178,7 @@ function get_click_pos(e)
 
 
 // simple function to ask to confirm before we delete an object
-function confirm_object_deletion()
-{
+function confirm_object_deletion() {
 	confirm_message='<? echo $langfile->get_text("2"); ?>';
 	if(confirm(confirm_message)) return true;
 	else return false;
@@ -209,11 +186,9 @@ function confirm_object_deletion()
 }
 
 // simple function to ask to confirm before we restore a map
-function confirm_restore()
-{
+function confirm_restore() {
 	confirm_message='<? echo $langfile->get_text("51"); ?>';
-	if(confirm(confirm_message)) 
-	{
+	if(confirm(confirm_message)) {
 		document.location.href='./wui/wui.function.inc.php?myaction=map_restore&map='+ document.myvalues.formulaire.value;
 	}
 	return true;
@@ -221,49 +196,39 @@ function confirm_restore()
 
 // functions used to open a popup window in different sizes, with or without sidebars
 var win = null;
-function fenetre(page)
-
-      {
-        L=410;
+function fenetre(page) {
+	L=410;
 	H=400;
 	nom="Nagvis";
 	
-        posX = (screen.width) ? (screen.width - L)/ 2 : 0;
-        posY = (screen.height) ? (screen.height - H)/ 2 : 0;
+	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
+	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
 	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=no,resizable=yes';
-        win = window.open(page, nom, options);	
-      }
+	win = window.open(page, nom, options);	
+}
 
 
-function fenetre_big(page)
-
-      {
-        L=530;
+function fenetre_big(page) {
+	L=530;
 	H=580;
 	nom="Nagvis";
 	
-        posX = (screen.width) ? (screen.width - L)/ 2 : 0;
-        posY = (screen.height) ? (screen.height - H)/ 2 : 0;
+	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
+	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
 	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=yes,resizable=yes';
-        win = window.open(page, nom, options);
-	
-      }
+	win = window.open(page, nom, options);
+}
 
-function fenetre_management(page)
-
-      {
-        L=540;
+function fenetre_management(page) {
+	L=540;
 	H=580;
 	nom="Nagvis";
 	
-        posX = (screen.width) ? (screen.width - L)/ 2 : 0;
-        posY = (screen.height) ? (screen.height - H)/ 2 : 0;
+	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
+	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
 	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=no,resizable=yes';
-        win = window.open(page, nom, options);
-	
-      }
-
-
+	win = window.open(page, nom, options);
+}
 //--></script>
 <?
 #############################################
@@ -336,6 +301,7 @@ if($MAINCFG->getValue('global', 'checkconfig') == "1") {
 $FRONTEND->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 
 // Create Header-Menu, when enabled
+// Header Menu Removed cause of some bugs with icon positions
 /*if ($MAINCFG->getValue('global', 'displayheader') == "1") {
 	$Menu = $READFILE->readMenu();
 	$FRONTEND->makeHeaderMenu($Menu);
@@ -441,7 +407,7 @@ foreach($types AS $key => $type) {
 		# lines and textboxes have one more link in the tooltip : "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
 			$tooltip_text=$tooltip_text."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			$actiona="objid=".$obj['type']."_".$var.";get_click(\'".$obj['type']."\',2,\'modify\');";
+			$actiona="objid=box_".$obj['type']."_".$var.";get_click(\'".$obj['type']."\',2,\'modify\');";
 			$tooltip_text=$tooltip_text."<a href=javascript:".$actiona.">".$langfile->get_text("5")."</a>";			
 		}
 			
