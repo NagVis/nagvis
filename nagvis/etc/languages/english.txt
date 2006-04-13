@@ -21,4 +21,4 @@
 20~img_error.png~Can not read Map Image File~Please check the webserver permission at the PNG-File (<I>[IMGPATH]</I>)!
 21~img_error.png~Can not write Map Image File~Please check the webserver permission at the PNG-File (<I>[IMGPATH]</I>)!
 22~img_error.png~Unknown type defined in Map Config File~The Type <I>[TYPE]</I> is not allowed!
-23~img_error.png~Unknown atribute defined in Map Config File~The Atribute <I>[ATRIBUTE]</I> is not allowed in Elements of type <I>[TYPE]</I>!
+23~img_error.png~Unknown attribute defined in Map Config File~The Attribute <I>[ATTRIBUTE]</I> is not allowed in Elements of type <I>[TYPE]</I>!
