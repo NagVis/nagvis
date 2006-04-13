@@ -36,7 +36,7 @@ class checkit extends frontend {
 	* @author FIXME!
 	*/
     function check_user($printErr) {
-        if(isset($this->MAINCFG->setRuntimeValue('user'))) {
+        if(isset($this->MAINCFG->getRuntimeValue('user'))) {
         	return TRUE;
         } else {
         	if($printErr) {
