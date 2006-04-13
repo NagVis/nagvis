@@ -41,7 +41,7 @@ class checkit extends frontend {
         	
         	return TRUE;
         } elseif(isset($_SERVER['REMOTE_USER'])) {
-			$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
+			$this->MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
 			
 			return TRUE;
         } else {
