@@ -3,9 +3,9 @@ NagVis 0.9 Quick Installation Instructions
 
 
 Author: Andreas Husch
-Document Version: 0.4
-Date: 2006-04-08
-Applies to: NagVis 0.9b2
+Document Version: 0.5
+Date: 2006-04-13
+Applies to: NagVis 0.9b2+ (CVS after 0.9b2)
 
 Some uncomplete hints to get the current NagVis test release running. Better Documentation
 will be available when we reach FINAL.
@@ -20,8 +20,8 @@ Make sure your System meets the requirements:
 
 STEP 1
 ------
-Get NagVis, the latest test release can be found at http://luebben-home.de/forum/thread.php?threadid=3072
-Additional hints will be post there also.
+Get NagVis, the latest test release can be found at www.nagvis.org
+Additional hints will be posted at  http://luebben-home.de/forum/thread.php?threadid=3072
 
 
 STEP 2
@@ -39,7 +39,7 @@ untouched it should run "out of the box" without changes to the config)
 
 STEP 4
 ------
-Check the main config file (config.inc.php) to fit your system
+Check the main config file (config.iniu.php) to fit your system
 
 
 STEP 5
