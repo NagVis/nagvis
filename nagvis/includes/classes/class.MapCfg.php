@@ -431,7 +431,8 @@ class MapCfg {
 							if($printErr == 1) {
 								$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
 								$FRONTEND->openSite();
-								$FRONTEND->messageBox("23", "ATRIBUTE~".$key);
+								$FRONTEND->messageBox("23", "ATTRIBUTE~".$key);
+								//TYPE=$id should also be returned but our current MessageBox supports only one var
 								$FRONTEND->closeSite();
 								$FRONTEND->printSite();
 							}
