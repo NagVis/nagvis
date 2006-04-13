@@ -23,8 +23,8 @@ class frontend extends common {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function frontend(&$MAINCFG,&$MAPCFG) {
-		$this->MAINCFG = $MAINCFG;
-		$this->MAPCFG = $MAPCFG;
+		$this->MAINCFG = &$MAINCFG;
+		$this->MAPCFG = &$MAPCFG;
 		//parent::common($this->MAINCFG,$this->MAPCFG);
 	}
 	

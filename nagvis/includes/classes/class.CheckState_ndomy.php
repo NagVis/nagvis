@@ -32,7 +32,7 @@ class backend
 	* @author Andreas Husch, Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function backend(&$MAINCFG) {
-		$this->MAINCFG = $MAINCFG;
+		$this->MAINCFG = &$MAINCFG;
 	    $this->dbName = $this->MAINCFG->getValue('backend_ndo', 'dbname');
         $this->dbUser = $this->MAINCFG->getValue('backend_ndo', 'dbuser');
 	    $this->dbPass = $this->MAINCFG->getValue('backend_ndo', 'dbpass');

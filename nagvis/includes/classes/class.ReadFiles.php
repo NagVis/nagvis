@@ -20,7 +20,7 @@ class readFile {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function readFile(&$MAINCFG) {
-		$this->MAINCFG = $MAINCFG;
+		$this->MAINCFG = &$MAINCFG;
 	}
 	
 	/**

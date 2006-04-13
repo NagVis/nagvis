@@ -23,7 +23,7 @@ class MapCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function MapCfg(&$MAINCFG,$name='') {
-		$this->MAINCFG = $MAINCFG;
+		$this->MAINCFG = &$MAINCFG;
 		
 		//if no map was given with parameter, search for a map
 		if($name == '') {

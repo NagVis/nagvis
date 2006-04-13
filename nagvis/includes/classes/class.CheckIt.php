@@ -16,8 +16,8 @@ class checkit extends frontend {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function checkit(&$MAINCFG,&$MAPCFG) {
-		$this->MAINCFG = $MAINCFG;
-		$this->MAPCFG = $MAPCFG;
+		$this->MAINCFG = &$MAINCFG;
+		$this->MAPCFG = &$MAPCFG;
 		parent::frontend($this->MAINCFG,$this->MAPCFG);
 	}
 	
@@ -42,7 +42,6 @@ class checkit extends frontend {
         	return TRUE;
         } elseif(isset($_SERVER['REMOTE_USER'])) {
 			$this->MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
-			
 			return TRUE;
         } else {
         	if($printErr) {
