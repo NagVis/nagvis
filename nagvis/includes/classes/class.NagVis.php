@@ -25,7 +25,23 @@ class frontend extends common {
 	function frontend(&$MAINCFG,&$MAPCFG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
+		
+		$this->getUser();
 		//parent::common($this->MAINCFG,$this->MAPCFG);
+	}
+	
+	/**
+	* Gets the logged in User
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function getUser() {
+		if(isset($_SERVER['PHP_AUTH_USER'])) {
+			$this->MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
+		}
+		elseif(isset($_SERVER['REMOTE_USER'])) {
+			$this->MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
+		}
 	}
 	
 	/**

@@ -29,12 +29,12 @@ $CHECKIT = new checkit($MAINCFG,$MAPCFG);
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
 $READFILE = new readfile($MAINCFG);
 
-		
-# we retrieve the autosave parameter passed in the URL, if defined. if defined, the map will be saved after the next object is moved
-if(isset($_GET['autosave'])) {
-   $MAINCFG->setRuntimeValue('justAdded','true');
-} else {
-   $MAINCFG->setRuntimeValue('justAdded','false');
+# we verify that the user is defined
+if(isset($_SERVER['PHP_AUTH_USER'])) {
+	$MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
+}
+elseif(isset($_SERVER['REMOTE_USER'])) {
+	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
 }
 
 // load language
@@ -46,11 +46,11 @@ $langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MA
 #	- its background image exists
 #	- the current user is allowed to have acees to it
 #	- the map is writable
-if(!$CHECKIT->check_user(1)) {
-	exit;
-}
 
 if($_GET['map'] != '') {
+	if(!$CHECKIT->check_user(1)) {
+		exit;
+	}
 	if(!$MAPCFG->checkMapImageReadable(1)) {
 		exit;
 	}

@@ -36,13 +36,8 @@ class checkit extends frontend {
 	* @author FIXME!
 	*/
     function check_user($printErr) {
-        if(isset($_SERVER['PHP_AUTH_USER'])) {
-        	$this->MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
-        	
+        if(isset($this->MAINCFG->setRuntimeValue('user'))) {
         	return TRUE;
-        } elseif(isset($_SERVER['REMOTE_USER'])) {
-			$this->MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
-			return TRUE;
         } else {
         	if($printErr) {
 	            $this->openSite();
