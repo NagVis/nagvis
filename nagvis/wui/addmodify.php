@@ -312,7 +312,7 @@ else if($myaction == "add")
 <script type="text/javascript" language="JavaScript"><!--
 
 // we save the current username, that we'll use in javascript functions to make sure the user doesn't ban himself
-var user='<?echo $user?>';
+var user='<?echo $MAINCFG->getRuntimeValue('user'); ?>';
 
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
