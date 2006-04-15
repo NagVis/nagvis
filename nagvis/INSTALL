@@ -39,7 +39,7 @@ untouched it should run "out of the box" without changes to the config)
 
 STEP 4
 ------
-Check the main config file (config.iniu.php) to fit your system
+Check the main config file (config.ini.php) to fit your system
 
 
 STEP 5
@@ -49,7 +49,7 @@ Make sure that the Webserver User can write to the NagVis etc directory.
 E.g. issue the following as root (change pathes according to your installation) :
 chmod 665 -R /usr/local/nagios/share/nagvis/etc/maps/
 chmod 665 -R /usr/local/nagios/share/nagvis/maps/
-chmod 665 /usr/local/nagios/share/nagvis/etc/config.inc.php
+chmod 665 /usr/local/nagios/share/nagvis/etc/config.ini.php
 
 (You can even set less than 665 if you know what you're doing and the groups are set fine)
 
