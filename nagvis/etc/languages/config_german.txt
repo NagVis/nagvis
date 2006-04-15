@@ -1,13 +1,13 @@
-backend~Waehle ein Backend.
+backend~Waehle ein Backend. z. Zt. sind die Backends "NDOMY" (schnell und stabil, zieht die Daten aus einer vorhandenen Nagios NDO MySQL Datenbank) und HTML (langsam und eher unzuverlässig, parsed die Nagios CGIs) verfügbar.
 language~Waehle deine Sprache.
 defaultIcons~Standard Iconset.
 rotateMaps~Rotiere Maps automatisch.
-maps~Zu rotierende Maps. Beispiel: array('server','lan','wan')
+maps~Zu rotierende Maps. Beispiel: server,lan,wan
 displayHeader~Header anzeigen.
 headerCount~Anzahl der Links pro Zeile im Header.
-autoUpdateFreq~For your own safety the maps are saved every X times they're saved or modify. You simply can restore the UNIQUE backup made, with the 'Restore' function. This parameter controls the X value.
+autoUpdateFreq~WUI legt beim bearbeiten regelmäßig ein Backup der Datei an bzw. speichert automatisch ab. Der Intervall kann hier eingestellt werden.
 checkConfig~If set to 'Yes', forces a check of the current configuration. MUST be done after any change.
-useGDLibs~GDLib benutzen?
+useGDLibs~GDLib benutzen? GD wird nur zum zeichnen von "Line" typen benötigt, wenn Probleme mit GD auftreten kann GD hier mit "0" deaktiviert werden, alle anderen Typen funktionieren auch ohne GD. Lines stehen dann aber nicht mehr zur Verfügung.
 refreshTime~Map refresh time (in Sekunden).
 debug~Debug an oder aus?
 debugStates~Debug Status?
@@ -25,14 +25,14 @@ htmlMap~HTTP Pfad zu den NagVis Maps (/nagios/nagvis/maps/).
 htmldoku~HTTP Pfad zur NagVis Doku.
 header~Name der Header include Datei.
 index~Include Datei fuer die Standard Seite.
-dbHost~Host der Datenbank (localhost).
-dbPort~Port der Datenbank (3306).
-dbName~Name der Datenbank.
-dbUser~User für den Datenbankzugriff.
-dbPass~Passwort für den Dtaenbankzugriff.
-dbPrefix~Kürzel vor den Tabellennamen
-dbInstanceId~Instanz-ID des Nagios-Prozesses
-cgiUser~Der User mit dem NagVis die CGIs aufruft (sollte 'allowed for all services', 'allowed for all hosts' sein)
-cgi~Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).
-version~Momentan genutzte NagVis Version
-title~Titel der NagVis Seiten
+dbHost~NDO Backend: Host der NDO Datenbank (z.B. localhost).
+dbPort~NDO Backend: Port der NDO Datenbank (default 3306).
+dbName~NDO Backend: Name der NDO Datenbank.
+dbUser~NDO Backend: User für den NDO Datenbankzugriff, der User braucht nur read (SELECT) Rechte!.
+dbPass~NDO Backend: Passwort des Users für den Datenbankzugriff.
+dbPrefix~NDO Backend: Kürzel vor den Tabellennamen in der NDO DB (z.B. "ndo_")
+dbInstanceId~NDO Backend: Instanz-ID der NDO installation (wird nur bei mehreren NDO installationen benötigt, normalerweise "1")
+cgiUser~HTML Backend: Der User mit dem NagVis die CGIs aufruft (sollte 'allowed for all services', 'allowed for all hosts' sein)
+cgi~HTML Backend: Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).
+version~NagVis Version
+title~Titel der NagVis Seiten im Browser
