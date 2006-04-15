@@ -1,4 +1,9 @@
-date: 2006-08-06
+date: 2006-04-14
+author: michelsen, husch
+- fixed some bugs at WUI
+- added map config synatx checks (thanks lars)
+
+date: 2006-04-08
 author: husch
 - fixed PHP5 bug at wui
 - updated docs
