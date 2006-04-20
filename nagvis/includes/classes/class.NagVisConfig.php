@@ -164,7 +164,7 @@ class MainNagVisCfg {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-					$FRONTEND->openSite($rotateUrl);
+					$FRONTEND->openSite();
 					$FRONTEND->messageBox("18", "");
 					$FRONTEND->closeSite();
 					$FRONTEND->printSite();
@@ -187,7 +187,7 @@ class MainNagVisCfg {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
-				$FRONTEND->openSite($rotateUrl);
+				$FRONTEND->openSite();
 				$FRONTEND->messageBox("19", "");
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
@@ -209,7 +209,7 @@ class MainNagVisCfg {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this,$this->MAPCFG);
-				$FRONTEND->openSite($rotateUrl);
+				$FRONTEND->openSite();
 				// FIXME: NEUE messageBox!!!
 				$FRONTEND->messageBox("-1", "MAPPATH~".$this->getValue('paths', 'map'));
 				$FRONTEND->closeSite();
@@ -233,7 +233,7 @@ class MainNagVisCfg {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this,$this->MAPCFG);
-				$FRONTEND->openSite($rotateUrl);
+				$FRONTEND->openSite();
 				// FIXME: NEUE messageBox!!!
 				$FRONTEND->messageBox("-1", "MAPPATH~".$this->getValue('paths', 'map'));
 				$FRONTEND->closeSite();

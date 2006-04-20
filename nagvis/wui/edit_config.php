@@ -21,15 +21,18 @@
 
 <?
 include("../includes/classes/class.NagVisConfig.php");
-include("./classes.wui.php");
+include("../includes/classes/class.NagVisLanguage.php");
 
 $MAINCFG = new MainNagVisCfg('../etc/config.ini.php');
+// we set that this is a wui session
+$MAINCFG->setRuntimeValue('wui',1);
 
 # we load the language file
-$langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
-$lang_config_file = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/config_".$MAINCFG->getValue('global', 'language').".txt");
-$help_context_icon="help_icon.png";
+$LANG = new NagVisLanguage($MAINCFG,$MAPCFG);
+$LANG->readLanguageFile();
 
+$CFGLANG = new NagVisLanguage($MAINCFG,$MAPCFG,'config');
+$CFGLANG->readLanguageFile();
 
 print "<table name=\"mytable\">";
 print "<form name=\"edit_config\" method=\"post\" action=wui.function.inc.php?myaction=update_config onsubmit=\"return update_param();\">";
@@ -47,7 +50,7 @@ foreach($MAINCFG->config AS $key => $val)
 				print "<tr><td class=\"tdlabel\">".$key2."</td>";
 					
 				# we retrieve the possible help message associated with this parameter
-				$help_context=$lang_config_file->get_text_silent($key2);
+				$help_context=$CFGLANG->getTextSilent($key2);
 					
 				if($help_context=="")
 				{
@@ -56,7 +59,7 @@ foreach($MAINCFG->config AS $key => $val)
 				else
 				{
 					print "<td>";
-					print "<img style=\"cursor:help\" src=\"".$help_context_icon."\" onclick=\"javascript:alert('".$help_context."')\">";
+					print "<img style=\"cursor:help\" src=\"help_icon.png\" onclick=\"javascript:alert('".$help_context."')\">";
 					print "</td>\n";
 				}
 					
@@ -103,15 +106,15 @@ foreach($MAINCFG->config AS $key => $val)
 						|| $key2 == 'debug' || $key2 == 'debugstates' || $key2 == 'debugcheckstate' || $key2 == 'debugfixicon')
 				{
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
-					print "<option value=\"1\">".$langfile->get_text("6")."</option>";
-					print "<option value=\"0\">".$langfile->get_text("7")."</option>";
+					print "<option value=\"1\">".$LANG->getText("6")."</option>";
+					print "<option value=\"0\">".$LANG->getText("7")."</option>";
 					print "</select></td>\n";
 					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";
 				}
 				elseif($key2 == 'autoupdatefreq')
 				{
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
-					print "<option value=\"0\">".$langfile->get_text("52")."</option>";
+					print "<option value=\"0\">".$LANG->getText("52")."</option>";
 					print "<option value=\"2\">2</option>";
 					print "<option value=\"5\">5</option>";
 					print "<option value=\"10\">10</option>";
@@ -142,7 +145,7 @@ foreach($MAINCFG->config AS $key => $val)
 	
 # we draw the validate button
 print "<tr height=\"20px\"><td></td></tr>";
-print "<tr><td align=\"center\" colspan=\"3\" id=\"mycell\"><button name=\"button_submit\" type=submit value=\"submit\"	id=\"commit\">".$langfile->get_text("8")."</button></td></tr>";
+print "<tr><td align=\"center\" colspan=\"3\" id=\"mycell\"><button name=\"button_submit\" type=submit value=\"submit\"	id=\"commit\">".$LANG->getText("8")."</button></td></tr>";
 print "</form>";
 print "</table>";	
 

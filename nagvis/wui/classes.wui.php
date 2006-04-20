@@ -5,44 +5,7 @@
 ##                               Lizenz GPL                             ##
 ##########################################################################
 /* DEPRECATED
-class readFile_wui 
-{	
-	// <map>.cfg einlesen (neues Format).
-	function readNagVisCfg($file) {
-		$NagVisCfg = file('../etc/maps/'.$file.".cfg");
-		
-		$l="0";
-		$x="0";
-		$type = array("global","host","service","hostgroup","servicegroup","map","textbox");
-		
-		while (isset($NagVisCfg[$l]) && $NagVisCfg[$l] != "") {
-			if(!ereg("^#",$NagVisCfg[$l]) && !ereg("^;",$NagVisCfg[$l])) {
-				$defineCln = explode("{", $NagVisCfg[$l]);
-				$define = explode(" ",$defineCln[0]);
-				if (isset($define[1]) && in_array(trim($define[1]),$type)) {
-					$x++;
-					$l++;
-					$nagvis[$x]['type'] = $define[1];
-					while (trim($NagVisCfg[$l]) != "}") {
-						$entry = explode("=",$NagVisCfg[$l], 2);
-						if(isset($entry[1])) {
-							//if(ereg("name", $entry[0])) {
-							//	$entry[0] = "name";
-							//}
-							$nagvis[$x][trim($entry[0])] = trim($entry[1]);
-						}
-						$l++;	
-					}
-				}
-			}
-			$l++;
-		}
-		return($nagvis);
-	}
-}*/
-
-
-class langFile 
+ * class langFile 
 {
 	
 	var $filepath;
@@ -50,8 +13,7 @@ class langFile
 	var $values=array();
 	var $nb=0;
 
-	function langFile($fullpath)
-	{
+	function langFile($fullpath) {
 		$filepath=$fullpath;
 		
 		# we check that the language file specified exists and is readable
@@ -176,4 +138,4 @@ class langFile
 	}
 
 }
-
+*/

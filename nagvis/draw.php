@@ -6,15 +6,15 @@ include("./includes/classes/class.MapCfg.php");
 include("./includes/classes/class.Common.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.CheckIt.php");
-include("./includes/classes/class.ReadFiles.php");
 
 $MAINCFG = new MainNagVisCfg('./etc/config.ini.php');
+
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
+
 $CHECKIT = new checkit($MAINCFG,$MAPCFG);
 
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
-$readfile = new readFile($MAINCFG,$MAPCFG);
 
 include("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
 $BACKEND = new backend($MAINCFG);

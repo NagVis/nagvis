@@ -18,23 +18,23 @@
 ##########################################################################
 
 require("./includes/classes/class.NagVisConfig.php");
+include("./includes/classes/class.NagVisLanguage.php");
 require("./includes/classes/class.MapCfg.php");
 require("./includes/classes/class.Graphic.php");
-require("./includes/classes/class.ReadFiles.php");
 require("./includes/classes/class.Common.php");
 require("./includes/classes/class.NagVis.php");
 require("./includes/classes/class.CheckIt.php");
 include("./includes/classes/class.Debug.php");
 
 $MAINCFG = new MainNagVisCfg('./etc/config.ini.php');
+
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
+
 $CHECKIT = new checkit($MAINCFG,$MAPCFG);
 $DEBUG = new debug($MAINCFG);
 
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
-
-$READFILE = new readFile($MAINCFG);
 
 // check-stuff
 if(!$CHECKIT->check_user(1)) {
@@ -49,9 +49,7 @@ if(!$CHECKIT->check_permissions($MAPCFG->getValue('global', 0,'allowed_user'),1)
 if(!$MAPCFG->checkMapImageReadable(1)) {
 	exit;
 }
-if(!$CHECKIT->check_langfile(1)) {
-	exit;
-}
+
 $MAINCFG->setRuntimeValue('rotateUrl',$CHECKIT->check_rotate());
 
 require("./includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
@@ -61,7 +59,6 @@ $FRONTEND->openSite();
 
 // Create Header-Menu, when enabled
 if ($MAINCFG->getValue('global', 'displayheader') == "1") {
-	$Menu = $READFILE->readMenu();
 	$FRONTEND->makeHeaderMenu($Menu);
 }
 

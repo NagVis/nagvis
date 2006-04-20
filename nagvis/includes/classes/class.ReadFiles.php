@@ -28,7 +28,8 @@ class readFile {
 	*
 	* @author Michael Lübben <michael_luebben@web.de>
 	*/
-	function readMenu() {
+	/* DEPRECATED
+	 * function readMenu() {
 		$Menu = file($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
 		$a="0";
 		$b="0";
@@ -44,6 +45,6 @@ class readFile {
 			$a++;
 		}
 		return($link);
-	}
+	}*/
 	
 }

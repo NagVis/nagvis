@@ -35,7 +35,7 @@ class backend {
 	function checkCgiPath() {
 		if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
 			$FRONTEND = new frontend($this->MAINCFG);
-            $FRONTEND->openSite($rotateUrl);
+            $FRONTEND->openSite();
             $FRONTEND->messageBox("0", "STATUSCGI~".$this->MAINCFG->getValue('backend_html', 'cgi'));
             $FRONTEND->closeSite();
             $FRONTEND->printSite();
@@ -332,11 +332,7 @@ class backend {
 	* @author Michael Luebben <michael_luebben@web.de>
 	* @author Andreas Husch
     */
-	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0")
-	{
-		$rotateUrl = "";
-		unset($state);
-		
+	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0") {
 		$CgiPath = $this->MAINCFG->getValue('backend_html', 'cgi');
 		$CgiUser = $this->MAINCFG->getValue('backend_html', 'cgiuser');
 		
@@ -367,7 +363,7 @@ class backend {
 		}
 		if(!isset($state)) {
 			$nagvis = new FRONTEND();	
-			$nagvis->openSite($rotateUrl);
+			$nagvis->openSite();
 			$nagvis->messageBox("12","No state found");
 			$nagvis->closeSite();
 			$nagvis->printSite();

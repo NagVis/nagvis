@@ -13,21 +13,24 @@
 
 include("./includes/classes/class.NagVisConfig.php");
 include("./includes/classes/class.MapCfg.php");
-include("./includes/classes/class.ReadFiles.php");
 include("./includes/classes/class.Common.php");
 include("./includes/classes/class.NagVis.php");
 include("./includes/classes/class.CheckIt.php");
-include("./wui/classes.wui.php");
+include("./includes/classes/class.NagVisLanguage.php");
 
 $MAINCFG = new MainNagVisCfg('./etc/config.ini.php');
 // we set that this is a wui session
 $MAINCFG->setRuntimeValue('wui',1);
+
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
+
 $CHECKIT = new checkit($MAINCFG,$MAPCFG);
 
+$LANG = new NagVisLanguage($MAINCFG,$MAPCFG);
+$LANG->readLanguageFile();
+
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
-$READFILE = new readfile($MAINCFG);
 
 # we verify that the user is defined
 if(isset($_SERVER['PHP_AUTH_USER'])) {
@@ -36,9 +39,6 @@ if(isset($_SERVER['PHP_AUTH_USER'])) {
 elseif(isset($_SERVER['REMOTE_USER'])) {
 	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
 }
-
-// load language
-$langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
 
 # if a map name is defined in the URL, we check if :
 #	- a user is logged in
@@ -59,9 +59,6 @@ if($_GET['map'] != '') {
 	}
 	if(!$MAPCFG->checkMapConfigWriteable(1)) {
 		exit;
-	}
-	if(!$CHECKIT->check_wuilangfile(1)) {
-		exit;	
 	}
 }
 
@@ -97,7 +94,7 @@ function get_click(newtype,nbclicks,action) {
 	document.images['background'].style.cursor='crosshair';
 	document.body.onclick=get_click_pos;
 	document.body.onmousemove=track_mouse;
-	window.status="<? echo $langfile->get_text("1"); ?>" + cpt_clicks;
+	window.status="<? echo $LANG->getText("1"); ?>" + cpt_clicks;
 	
 }
 
@@ -158,7 +155,7 @@ function get_click_pos(e) {
 	}
 	
 	if(cpt_clicks > 0) {
-		window.status="<? echo $langfile->get_text("1"); ?>" + cpt_clicks;
+		window.status="<? echo $LANG->getText("1"); ?>" + cpt_clicks;
 	}
 	else if(cpt_clicks == 0) {
 		if (follow_mouse) myshape.clear();
@@ -180,7 +177,7 @@ function get_click_pos(e) {
 
 // simple function to ask to confirm before we delete an object
 function confirm_object_deletion() {
-	confirm_message='<? echo $langfile->get_text("2"); ?>';
+	confirm_message='<? echo $LANG->getText("2"); ?>';
 	if(confirm(confirm_message)) return true;
 	else return false;
 	
@@ -188,7 +185,7 @@ function confirm_object_deletion() {
 
 // simple function to ask to confirm before we restore a map
 function confirm_restore() {
-	confirm_message='<? echo $langfile->get_text("51"); ?>';
+	confirm_message='<? echo $LANG->getText("51"); ?>';
 	if(confirm(confirm_message)) {
 		document.location.href='./wui/wui.function.inc.php?myaction=map_restore&map='+ document.myvalues.formulaire.value;
 	}
@@ -301,13 +298,6 @@ if($MAINCFG->getValue('global', 'checkconfig') == "1") {
 #	- a blank image (size 600x600) if not map is defined
 $FRONTEND->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 
-// Create Header-Menu, when enabled
-// Header Menu Removed cause of some bugs with icon positions
-/*if ($MAINCFG->getValue('global', 'displayheader') == "1") {
-	$Menu = $READFILE->readMenu();
-	$FRONTEND->makeHeaderMenu($Menu);
-}*/
-
 # we write the beginning of the body with all the includes needed	
 $FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/wz_dragdrop.js\"></script>";
 $FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/jsdomenu.js\"></script>";
@@ -399,17 +389,17 @@ foreach($types AS $key => $type) {
 			
 		# we add the Edit link in the tooltip
 		$val="./wui/addmodify.php?action=modify&map=".$MAPCFG->getName()."&type=".$obj['type']."&id=".$var;
-		$tooltip_text=$tooltip_text."<br><a href=".$val." onclick=\'fenetre(href); return false\'>".$langfile->get_text("3")."</a>";
+		$tooltip_text=$tooltip_text."<br><a href=".$val." onclick=\'fenetre(href); return false\'>".$LANG->getText("3")."</a>";
 		$tooltip_text=$tooltip_text."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		$val="./wui/wui.function.inc.php?myaction=delete&map=".$MAPCFG->getName()."&type=".$obj['type']."&id=".$var;		
 		$actiona="\'return confirm_object_deletion();return false;\'";
-		$tooltip_text=$tooltip_text."<a href=".$val." onClick=".$actiona.">".$langfile->get_text("4")."</a>";
+		$tooltip_text=$tooltip_text."<a href=".$val." onClick=".$actiona.">".$LANG->getText("4")."</a>";
 		
 		# lines and textboxes have one more link in the tooltip : "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
 			$tooltip_text=$tooltip_text."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 			$actiona="objid=box_".$obj['type']."_".$var.";get_click(\'".$obj['type']."\',2,\'modify\');";
-			$tooltip_text=$tooltip_text."<a href=javascript:".$actiona.">".$langfile->get_text("5")."</a>";			
+			$tooltip_text=$tooltip_text."<a href=javascript:".$actiona.">".$LANG->getText("5")."</a>";			
 		}
 			
 		# we finish to define the tooltip
@@ -518,12 +508,12 @@ if (strlen($movable) != 0)
 <?
 # we load and store in an invisible field the right-click menu items text
 $menulabels='';	
-for($i=0;$i<=$langfile->nb;$i++)
+for($i=0;$i<=$LANG->nb;$i++)
 {
-	if(substr($langfile->indexes[$i],0,5) == "menu_")
+	if(substr($LANG->indexes[$i],0,5) == "menu_")
 	{
-		$ind=substr($langfile->indexes[$i],5,strlen($langfile->indexes[$i]));
-		$menulabels=$menulabels."^".$ind."=".$langfile->values[$i];	
+		$ind=substr($LANG->indexes[$i],5,strlen($LANG->indexes[$i]));
+		$menulabels=$menulabels."^".$ind."=".$LANG->values[$i];	
 	}		
 }
 $menulabels=substr($menulabels,1,strlen($menulabels));

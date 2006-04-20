@@ -114,43 +114,5 @@ class checkit extends frontend {
         	}
         }
     }
-	
-	/**
-	* Check is the Language-File readable.
-	*
-	* @author FIXME!
-	*/
-    function check_langfile($printErr) {
-        if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
-        	if($printErr) {
-	            $this->openSite();
-	            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
-	            $this->closeSite();
-	            $this->printSite();
-	        }
-	        return FALSE;
-        } else {
-        	return TRUE;
-        }
-    }
-
-	/**
-	* Check is the Wui-Language-File readable.
-	*
-	* @author FIXME!
-	*/
-	function check_wuilangfile($printErr) {
-        if(!is_readable($this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt')) {
-        	if($printErr) {
-	            $this->openSite();
-	            $this->messageBox("18", "LANGFILE~".$this->MAINCFG->getValue('paths', 'cfg').'languages/wui_'.$this->MAINCFG->getValue('global', 'language').'.txt');
-	            $this->closeSite();
-	            $this->printSite();
-	        }
-	        return FALSE;
-	    } else {
-	    	return TRUE;
-	    }
-	}
 }
 ?>

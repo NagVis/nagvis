@@ -20,14 +20,18 @@
 <?
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.MapCfg.php");
-include("./classes.wui.php");
+include("../includes/classes/class.NagVisLanguage.php");
 
 $MAINCFG = new MainNagVisCfg('../etc/config.ini.php');
+// we set that this is a wui session
+$MAINCFG->setRuntimeValue('wui',1);
+
 $MAPCFG = new MapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
 # we load the language file
-$langfile = new langFile($MAINCFG->getValue('paths', 'cfg')."languages/wui_".$MAINCFG->getValue('global', 'language').".txt");
+$LANG = new NagVisLanguage($MAINCFG,$MAPCFG);
+$LANG->readLanguageFile();
 
 # we get the parameters passed in the URL
 $myaction = $_GET['action'];    # possible values : add, delete or modify
@@ -165,8 +169,8 @@ foreach($type_tab[$mytype] as $propname) {
 	else if($propname_ok == "recognize_services")
 	{
 		print "<td class=\"tdfield\"><select name=\"".$propname."\">";
-		print "<option value=\"\">".$langfile->get_text("6")."</option>";
-		print "<option value=\"0\">".$langfile->get_text("7")."</option>";
+		print "<option value=\"\">".$LANG->getText("6")."</option>";
+		print "<option value=\"0\">".$LANG->getText("7")."</option>";
 		print "</select></td>\n";
 	}
 	
@@ -212,7 +216,7 @@ foreach($type_tab[$mytype] as $propname) {
 ?>
 
 		<tr height="20px"><td></td></tr>
-		<tr><td align="center" colspan="2" id="mycell"><button name="button_submit" type=submit value="submit" id="commit"><? echo $langfile->get_text("8") ?></button></td></tr>
+		<tr><td align="center" colspan="2" id="mycell"><button name="button_submit" type=submit value="submit" id="commit"><? echo $LANG->getText("8") ?></button></td></tr>
 	</form>
 </table>
 
@@ -356,7 +360,7 @@ function check_object()
 				}
 				if(suicide)
 				{
-					mess="<? echo $langfile->get_text("50"); ?>";
+					mess="<? echo $LANG->getText("50"); ?>";
 					alert(mess);
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
@@ -390,7 +394,7 @@ function check_object()
 			{
 				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*')
 				{
-					mess="<? echo $langfile->get_text("9"); ?>";
+					mess="<? echo $LANG->getText("9"); ?>";
 					alert(mess);
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
@@ -409,7 +413,7 @@ function check_object()
 		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
 		if(j==valid_list.length)
 		{
-			mess="<? echo $langfile->get_text("10"); ?>";
+			mess="<? echo $LANG->getText("10"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -418,7 +422,7 @@ function check_object()
 		// we verify we don't have both iconset and line_type defined
 		if(iconset != '')
 		{
-			mess="<? echo $langfile->get_text("11"); ?>";
+			mess="<? echo $LANG->getText("11"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -427,7 +431,7 @@ function check_object()
 		// we verify we have 2 x coordinates and 2 y coordinates
 		if(x.split(",").length != 2)
 		{
-			mess="<? echo $langfile->get_text_replace("12","COORD=X"); ?>";
+			mess="<? echo $LANG->getTextReplace("12","COORD=X"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -435,7 +439,7 @@ function check_object()
 		
 		if(y.split(",").length != 2)
 		{
-			mess="<? echo $langfile->get_text_replace("12","COORD=Y"); ?>";
+			mess="<? echo $LANG->getTextReplace("12","COORD=Y"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -447,7 +451,7 @@ function check_object()
 	{
 		if(x.split(",").length != 2)
 		{
-			mess="<? echo $langfile->get_text_replace("13","COORD=X"); ?>";
+			mess="<? echo $LANG->getTextReplace("13","COORD=X"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -456,7 +460,7 @@ function check_object()
 		{
 			if(line_type == '')
 			{
-				mess="<? echo $langfile->get_text_replace("14","COORD=X"); ?>";
+				mess="<? echo $LANG->getTextReplace("14","COORD=X"); ?>";
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;
@@ -469,7 +473,7 @@ function check_object()
 	{
 		if(y.split(",").length != 2)
 		{
-			mess="<? echo $langfile->get_text_replace("13","COORD=Y"); ?>";
+			mess="<? echo $LANG->getTextReplace("13","COORD=Y"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -478,7 +482,7 @@ function check_object()
 		{
 			if(line_type == '')
 			{
-				mess="<? echo $langfile->get_text_replace("14","COORD=Y"); ?>";
+				mess="<? echo $LANG->getTextReplace("14","COORD=Y"); ?>";
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;

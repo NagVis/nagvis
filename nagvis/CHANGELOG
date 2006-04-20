@@ -1,3 +1,9 @@
+date: 2006-04-20
+- added NagVisLanguage Class and moved all language handling to it
+- added replaceement of special chars ä,ö,ü ...
+- moved readMenu from ReadFiles class to frontend class
+- includes/classes/ReadFiles.php and wui/classes.wui.php can now be removed
+
 date: 2006-04-14
 author: michelsen, husch
 - fixed some bugs at WUI

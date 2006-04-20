@@ -71,17 +71,42 @@ class frontend extends common {
 		foreach ($this->site as $row) {
 			echo $row."\n";
 		}
-	}	
+	}
+	
+	/**
+	* Read the Configuration-File for the Header-Menu.
+	*
+	* @author Michael Lübben <michael_luebben@web.de>
+	*/
+	function readHeaderMenu() {
+		if($this->checkHeaderConfigReadable(1)) {
+			$Menu = file($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
+			$a = 0;
+			$b = 0;
+			
+			while (isset($Menu[$a]) && $Menu[$a] != "") {
+				if (!ereg("#",$Menu[$a]) && trim($Menu[$a]) != "") {
+					$entry = explode(";",$Menu[$a]);
+					$link[$b]['entry'] = $entry[0];
+					$link[$b]['url'] = $entry[1];
+					$b++;
+				}
+				$a++;
+			}
+			return $link;
+		} else {
+			return FALSE;
+		}
+	}
 	
 	/**
 	* Create a Header-Menu
 	*
-	* @param array $Menu
-	* @see function class.ReadFiles.php -> readMenu()
-	*
 	* @author Michael Luebben <michael_luebben@web.de>
     */
-	function makeHeaderMenu($Menu) {
+	function makeHeaderMenu() {
+		$Menu = $this->readHeaderMenu();
+		
 		$x="0";
 		$this->site[] = '<TABLE WIDTH="100%" BORDER="0" BGCOLOR="black">';
 		$this->site[] = '<DIV CLASS="header">';
@@ -101,6 +126,29 @@ class frontend extends common {
 			$this->site[] = '</TR>';
 		}
 		$this->site[] = '</TABLE></DIV>';
+	}
+	
+	/**
+	* Checks for readable header config file
+	*
+	* @param string $printErr
+	*
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+    */
+	function checkHeaderConfigReadable($printErr) {
+		if(file_exists($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header')) && is_readable($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+				$FRONTEND->openSite();
+				//FIXME: need new error-definition
+				$FRONTEND->messageBox("xxx", "");
+				$FRONTEND->closeSite();
+				$FRONTEND->printSite();
+			}
+			return FALSE;
+		}
 	}
 	
 	/**
@@ -142,7 +190,9 @@ class frontend extends common {
     * @author Michael Luebben <michael_luebben@web.de>
     */
 	function messageBox($messagenr, $vars) {
-		$LanguageFile = $this->MAINCFG->getValue('paths', 'cfg')."languages/".$this->MAINCFG->getValue('global', 'language').".txt";
+		/*
+		 * DEPRECATED
+		 $LanguageFile = $this->MAINCFG->getValue('paths', 'cfg')."languages/".$this->MAINCFG->getValue('global', 'language').".txt";
         if(!file_exists($LanguageFile)) {
                 $msg[0] = "XXXX";
                 $msg[1] = "img_error.png";
@@ -156,17 +206,23 @@ class frontend extends common {
                 $msg[3] = "Check permissions of languagefile ".$LanguageFile."!";
         }
         else {
-                $fd=file($LanguageFile);
-                if(!explode("~", $fd[$messagenr])) {
-                        $msg[0] = "XXXX";
-                        $msg[1] = "img_error.png";
-                        $msg[2] = "Wrong error number.";
-						$msg[3] = "Maybe error-number is not known.";
-                }
-                else {
-                        $msg=explode("~", $fd[$messagenr]);
-                }
-        }
+			$fd=file($LanguageFile);
+			if(!explode("~", $fd[$messagenr])) {
+			    $msg[0] = "XXXX";
+			    $msg[1] = "img_error.png";
+			    $msg[2] = "Wrong error number.";
+				$msg[3] = "Maybe error-number is not known.";
+			}
+			else {
+			        $msg=explode("~", $fd[$messagenr]);
+			}
+        }*/
+        
+		$LANG = new NagVisLanguage($this->MAINCFG,$this->MAPCFG);
+		$LANG->readLanguageFile();
+
+		$vars = str_replace('~','=',$vars);
+        $msg = $LANG->getTextReplace($messagenr,$vars);
 		
 		$messageNr = $msg[0];
 		$messageIcon = $msg[1];
@@ -174,10 +230,10 @@ class frontend extends common {
 		$message = $msg[3];
 			
 		//eval("\$message = \"$message\";");
-		for($i=0;$i<count(explode(' ', $vars));$i++) {
-			$var = explode('~', $vars);
-			$message = str_replace("[".$var[0]."]", $var[1], $message);
-		}
+		//for($i=0;$i<count(explode(' ', $vars));$i++) {
+		//	$var = explode('~', $vars);
+		//	$message = str_replace("[".$var[0]."]", $var[1], $message);
+		//}
 	
 		$this->site[] = '<BODY>';
 		$this->site[] = '<TABLE CLASS="messageBox" WIDTH="50%" ALIGN="CENTER">';
@@ -514,6 +570,6 @@ class frontend extends common {
 			return "OK";
 		}
 	}
-
+	
 }
 ?>
