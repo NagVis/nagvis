@@ -163,7 +163,7 @@ class MainNagVisCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+					$FRONTEND = new frontend($this,$this->MAPCFG);
 					$FRONTEND->openSite();
 					$FRONTEND->messageBox("18", "");
 					$FRONTEND->closeSite();
@@ -186,7 +186,7 @@ class MainNagVisCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new frontend($this->MAINCFG,$this->MAPCFG);
+				$FRONTEND = new frontend($this,$this->MAPCFG);
 				$FRONTEND->openSite();
 				$FRONTEND->messageBox("19", "");
 				$FRONTEND->closeSite();
