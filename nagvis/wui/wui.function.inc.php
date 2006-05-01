@@ -15,6 +15,7 @@
 # calls the bash script with the right arguments. It's this bash script which 
 # applies the changes on the server. 
 
+include("../includes/classes/class.NagVisLanguage.php");
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.MapCfg.php");
 include("../includes/classes/class.Common.php");
