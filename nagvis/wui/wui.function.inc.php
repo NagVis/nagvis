@@ -37,7 +37,7 @@ function getArrayFromProperties($properties) {
 	return $prop;
 }
 
-function backup($MAINCFG,$mapname) {
+function backup(&$MAINCFG,$mapname) {
 	if($MAINCFG->getValue('wui', 'autoupdatefreq') == 0) {
 		// delete all *.bak
 		foreach(getAllFiles() AS $file) {
@@ -98,7 +98,7 @@ function backup($MAINCFG,$mapname) {
 	}
 }
 
-function getAllMaps() {
+function getAllMaps(&$MAINCFG) {
 	$files = Array();
 	
 	$fh = opendir($MAINCFG->getValue('paths', 'mapcfg'));
@@ -232,7 +232,7 @@ switch($_GET['myaction']) {
 		// gerade offene map: $_POST['map']
 		
 		// read all files in map-cfg folder
-		$files = getAllMaps();
+		$files = getAllMaps($MAINCFG);
 		
 		// loop all map configs to replace mapname in all map configs
 		foreach($files as $file) {
