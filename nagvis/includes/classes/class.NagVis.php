@@ -489,7 +489,9 @@ class frontend extends common {
 					// handle objects of type "textbox"
 					
 					// draw only the textbox
-					$FRONTEND->site[] = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text']);
+					if($print == 1) {
+						$FRONTEND->site[] = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text']);
+					}
 				} else {
 					//handle all other objects...
 					
