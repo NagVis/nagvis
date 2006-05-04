@@ -366,20 +366,20 @@ class frontend extends common {
 	*
 	* @author FIXME
 	*/
-	function createBoxLine($mapCfg,$state1,$state2) {
+	function createBoxLine($mapCfg,$state1,$state2,$name) {
 	    if($mapCfg['line_type'] == '10' || $mapCfg['line_type'] == '11'){
 			list($x_from,$x_to) = explode(",", $mapCfg['x']);
 			list($y_from,$y_to) = explode(",", $mapCfg['y']);
 			$x_middle = middle($x_from,$x_to);
 			$y_middle = middle($y_from,$y_to);
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
-			$Box = $this->infoBox($mapCfg['type'],$mapCfg['name'],$mapCfg['service_description'],$state1);
+			$Box = $this->infoBox($mapCfg['type'],$mapCfg[$name],$mapCfg['service_description'],$state1);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($this->MAINCFG->getValue('paths', 'htmlcfg'),$mapCfg['url'],$mapCfg['type'],$mapCfg['name'],$mapCfg['service_description']);
+			$this->site[] = $this->createLink($this->MAINCFG->getValue('paths', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$mapCfg[$name],$mapCfg['service_description']);
 			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 		} elseif($mapCfg['line_type'] == '20') {
-			list($host_name_from,$host_name_to) = explode(",", $mapCfg['name']);
+			list($host_name_from,$host_name_to) = explode(",", $mapCfg[$name]);
 			list($service_description_from,$service_description_to) = explode(",", $mapCfg['service_description']);
 			list($x_from,$x_to) = explode(",", $mapCfg['x']);
 			list($y_from,$y_to) = explode(",", $mapCfg['y']);
@@ -506,7 +506,7 @@ class frontend extends common {
 							$objState[] = $state['State'];
 							
 							if($print == 1) {
-								$FRONTEND->createBoxLine($obj,$state,NULL);
+								$FRONTEND->createBoxLine($obj,$state,NULL,$name);
 							}
 						} else {
 							// a line with two objects...
@@ -518,7 +518,7 @@ class frontend extends common {
 							$objState[] = $state2['State'];
 							
 							if($print == 1) {
-								$FRONTEND->createBoxLine($service,$state1,$state2);
+								$FRONTEND->createBoxLine($service,$state1,$state2,$name);
 							}
 						}
 					} else {
