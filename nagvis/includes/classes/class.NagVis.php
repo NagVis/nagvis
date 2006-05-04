@@ -389,8 +389,8 @@ class frontend extends common {
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$host_name_from,$service_description_from,$state1);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($this->MAINCFG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_from,$service_description_from);
-			$this->site[] = '<img src= iconsets/20x20.gif '.$Box.';></A>';
+			$this->site[] = $this->createLink($this->MAINCFG->getValue('paths', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_from,$service_description_from);
+			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 			// To
 			$x_middle = middle2($x_to,$x_from);
@@ -398,7 +398,7 @@ class frontend extends common {
 			$IconPosition = $this->fixIconPosition('20x20.gif',$x_middle,$y_middle);
 			$Box = $this->infoBox($mapCfg['type'],$host_name_to,$service_description_to,$state2);
 			$this->site[] = $IconPosition;
-			$this->site[] = $this->createLink($this->MAINCFG->getValue('global', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_to,$service_description_to);
+			$this->site[] = $this->createLink($this->MAINCFG->getValue('paths', 'htmlcgi'),$mapCfg['url'],$mapCfg['type'],$host_name_to,$service_description_to);
 			$this->site[] = '<img src=iconsets/20x20.gif '.$Box.';></A>';
 			$this->site[] = '</div>';
 		}
@@ -518,7 +518,7 @@ class frontend extends common {
 							$objState[] = $state2['State'];
 							
 							if($print == 1) {
-								$FRONTEND->createBoxLine($service,$state1,$state2,$name);
+								$FRONTEND->createBoxLine($obj,$state1,$state2,$name);
 							}
 						}
 					} else {
