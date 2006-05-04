@@ -98,9 +98,13 @@ class backend {
 					$state['State'] = 'DOWN';
 				}
 				$state['Count'] = $serviceTotalsCRITICAL[1];
-                $state['Output'] = $serviceTotalsCRITICAL[1].' Services in state CRITICAL';
-				$state['State'] = 'CRITICAL';
-            }
+                		$state['Output'] = $serviceTotalsCRITICAL[1].' Services in state CRITICAL';
+				if(isset($hostTotalsPROBLEMS[1]) && $hostTotalsPROBLEMS[1] !=0) {
+                                        $state['State'] = 'DOWN';
+                                } else {
+                                        $state['State'] = 'CRITICAL';
+                                }
+            		}
             elseif(isset($serviceTotalsWARNING[1]) && $serviceTotalsWARNING != 0) {
 				if(!isset($hostTotalsACK)) {
 					$state['State'] = 'DOWN';
