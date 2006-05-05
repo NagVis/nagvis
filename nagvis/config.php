@@ -298,6 +298,15 @@ if($MAINCFG->getValue('global', 'checkconfig') == "1") {
 #	- a blank image (size 600x600) if not map is defined
 $FRONTEND->site[] = '<body MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0">';
 
+# map surrounding div
+$FRONTEND->site[] = "<DIV CLASS=\"map\">";
+
+if($MAPCFG->getImage() != '') {
+	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$MAPCFG->getImage().'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
+} else {
+	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./wui/wuilogo.jpg" WIDTH="600px" HEIGHT="600px" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
+}
+
 # we write the beginning of the body with all the includes needed	
 $FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/wz_dragdrop.js\"></script>";
 $FRONTEND->site[] = "<script type=\"text/javascript\" src=\"./wui/jsdomenu.js\"></script>";
@@ -308,16 +317,6 @@ $FRONTEND->site[] = "<link rel=\"stylesheet\" type=\"text/css\" href=\"./wui/css
 $FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background = new jsGraphics('mycanvas');</script>";
 $FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setColor('#FF0000');</script>";
 $FRONTEND->site[] = "<script type=\"text/javascript\">myshape_background.setStroke(1);</script>";
-
-# map surrounding div
-$FRONTEND->site[] = "<DIV CLASS=\"map\">";
-
-if($MAPCFG->getImage() != '') {
-	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./maps/'.$MAPCFG->getImage().'" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
-} else {
-	$FRONTEND->site[] = '<TABLE MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0"><div id="mycanvas" style="position:absolute" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0";"><IMG SRC="./wui/wuilogo.jpg" WIDTH="600px" HEIGHT="600px" ID="background" style="cursor:default;border-width:1" MARGINWIDTH="0" MARGINHEIGHT="0" TOPMARGIN="0" LEFTMARGIN="0" style="border-style:none solid solid none"></div></TABLE>';
-}
-
 
 ##############################################################################	
 # we read and display the objects, one by one
