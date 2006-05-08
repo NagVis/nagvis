@@ -33,12 +33,7 @@ $LANG->readLanguageFile();
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
 
 # we verify that the user is defined
-if(isset($_SERVER['PHP_AUTH_USER'])) {
-	$MAINCFG->setRuntimeValue('user',$_SERVER['PHP_AUTH_USER']);
-}
-elseif(isset($_SERVER['REMOTE_USER'])) {
-	$MAINCFG->setRuntimeValue('user',$_SERVER['REMOTE_USER']);
-}
+$FRONTEND->getUser();
 
 # if a map name is defined in the URL, we check if :
 #	- a user is logged in

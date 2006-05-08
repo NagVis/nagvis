@@ -36,6 +36,8 @@ $DEBUG = new debug($MAINCFG);
 
 $FRONTEND = new frontend($MAINCFG,$MAPCFG);
 
+$FRONTEND->getUser();
+
 // check-stuff
 if(!$CHECKIT->check_user(1)) {
 	exit;
