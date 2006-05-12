@@ -131,16 +131,19 @@ switch($_GET['myaction']) {
 		$y = explode(',',$_POST['valy']);
 			
 		// sth. modified?
-		if(is_array($elements) && $elements[0] != '') {
+		if(is_array($elements)) {
 			$i = 0;
 			foreach($elements AS $element) {
 				$element = explode('_',$element);
-				// set coordinates ($element[0] is type, $element[1] is id)
-				$MAPCFG->setValue($element[0], $element[1], 'x', $x[$i]);
-				$MAPCFG->setValue($element[0], $element[1], 'y', $y[$i]);
-				// write element to file
-				$MAPCFG->writeElement($element[0],$element[1]);
-				$i++;
+				// don't write empty elements
+				if($element[0] != '' && $element[1] != '' && $x[$i] != '' && $y[$i] != '') {
+					// set coordinates ($element[0] is type, $element[1] is id)
+					$MAPCFG->setValue($element[0], $element[1], 'x', $x[$i]);
+					$MAPCFG->setValue($element[0], $element[1], 'y', $y[$i]);
+					// write element to file
+					$MAPCFG->writeElement($element[0],$element[1]);
+					$i++;
+				}
 			}
 			
 			backup($MAINCFG,$_POST['formulaire']);
