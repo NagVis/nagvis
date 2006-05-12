@@ -149,7 +149,7 @@ switch($_GET['myaction']) {
 			backup($MAINCFG,$_POST['formulaire']);
 		}
 		# display the same map again
-		//print "<script>document.location.href='../config.php?map=".$_POST['formulaire']."';</script>\n";
+		print "<script>document.location.href='../config.php?map=".$_POST['formulaire']."';</script>\n";
 	break;
 	case 'open':
 		# we retrieve the map chosen by the user and open it
