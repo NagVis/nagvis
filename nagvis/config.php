@@ -47,11 +47,10 @@ $FRONTEND->getUser();
 if(!$CHECKIT->check_user(1)) {
 	exit;
 }
-if(!$MAPCFG->checkMapConfigWriteable(1)) {
+if($_GET['map'] != '') {
+	if(!$MAPCFG->checkMapConfigWriteable(1)) {
 		exit;
 	}
-if($_GET['map'] != '') {
-	
 	if(!$MAPCFG->checkMapImageReadable(1)) {
 		exit;
 	}
