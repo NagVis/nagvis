@@ -42,6 +42,15 @@ $FRONTEND->getUser();
 #	- the current user is allowed to have acees to it
 #	- the map is writable
 
+
+//Always Check the following
+if(!$CHECKIT->check_user(1)) {
+	exit;
+}
+if(!$MAPCFG->checkMapConfigWriteable(1)) {
+	exit;
+}
+
 if($_GET['map'] != '') {
 	
 	if(!$MAPCFG->checkMapImageReadable(1)) {
@@ -50,13 +59,6 @@ if($_GET['map'] != '') {
 	if(!$CHECKIT->check_permissions($MAPCFG->getValue('global', 0,'allowed_for_config'),1)) {
 		exit;
 	}
-}
-//Always Check the following
-if(!$CHECKIT->check_user(1)) {
-	exit;
-}
-if(!$MAPCFG->checkMapConfigWriteable(1)) {
-	exit;
 }
 
 ############################################################################################################
