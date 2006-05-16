@@ -80,13 +80,22 @@ class NagVisLanguage {
 	 * @author Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function replaceSpecial($str) {
-		// FIXME: replace with sgml-chars
-		$str = str_replace('ü','&#252;',$str);
-		$str = str_replace('ö','&#246;',$str);
-		$str = str_replace('ä','&#228;',$str);
-		$str = str_replace('Ü','&#220;',$str);
-		$str = str_replace('Ö','&#214;',$str);
-		$str = str_replace('Ä','&#196;',$str);
+		// FIXME: dirty workaround
+		$str = str_replace('&#252;','ü',$str);
+		$str = str_replace('&#246;','ö',$str);
+		$str = str_replace('&#228;','ä',$str);
+		$str = str_replace('&uuml','ü',$str);
+		$str = str_replace('&ouml','ö',$str);
+		$str = str_replace('&auml','ä',$str);
+		$str = str_replace('&#220;','Ü',$str);
+		$str = str_replace('&#214;','Ö',$str);
+		$str = str_replace('&#196;','Ä',$str);
+		$str = str_replace('&Uuml','ü',$str);
+		$str = str_replace('&Ouml','ö',$str);
+		$str = str_replace('&Auml','ä',$str);
+		$str = str_replace('Ã¤','ä',$str);
+		$str = str_replace('Ã¶','ö',$str);
+		$str = str_replace('Ã¼','ü',$str);
 		return $str;
 	}
 	

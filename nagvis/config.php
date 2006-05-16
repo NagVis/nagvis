@@ -42,11 +42,11 @@ $FRONTEND->getUser();
 #	- the current user is allowed to have acees to it
 #	- the map is writable
 
-
 //Always Check the following
 if(!$CHECKIT->check_user(1)) {
 	exit;
 }
+
 if($_GET['map'] != '') {
 	if(!$MAPCFG->checkMapConfigWriteable(1)) {
 		exit;
@@ -513,7 +513,7 @@ for($i=0;$i<=$LANG->nb;$i++)
 	}		
 }
 $menulabels=substr($menulabels,1,strlen($menulabels));
-print "<script>document.forms['myvalues'].menu_labels.text='".$menulabels."'</script>";	
+print "<script>document.forms['myvalues'].menu_labels.text=\"".$menulabels."\"</script>";	
 ?>
 
 

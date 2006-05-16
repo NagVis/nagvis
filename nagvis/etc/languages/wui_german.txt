@@ -1,34 +1,34 @@
 1~Klicke auf die Karte um die fehlenden Punkte zu bestimmen. 
 2~Willst du dieses Objekt wirklich loeschen?
-3~Ã„ndern
-4~LÃ¶schen
-5~Positionieren/GrÃ¶sse
+3~Ändern
+4~Löschen
+5~Positionieren/Grösse
 6~Ja
 7~Nein
-8~PrÃ¼fen
-9~Ein benÃ¶tigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Plichtwerte.
-10~Der gewÃ¤hlte line_type ist ungÃ¼ltig.
+8~Prüfen
+9~Ein benötigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Plichtwerte.
+10~Der gewÃ¤hlte line_type ist ungültig.
 11~Ein Object kann nur ein Icon oder eine Linie sein, 'iconset' und 'line_type' kann nicht gemeinsam verwendet werden.
 12~Es scheint, du willst eine Linie definieren (line_type ist gesetzt), aber es sind keine 2 [COORD] Koordinaten angegeben.
-13~Es ist nur mÃ¶glich ein oder 2 Koordinaten [COORD] anzugeben.
+13~Es ist nur möglich ein oder 2 Koordinaten [COORD] anzugeben.
 14~Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gewÃ¤hlt werden.
 menu_1~Speichern
 menu_2~Properties
 menu_3~Maps
-menu_4~Object hinzufÃ¼gen
+menu_4~Objekt hinzufügen
 menu_5~Nagvis config
 menu_6~Hilfe
-menu_3_1~Ã–ffnen
+menu_3_1~Öffnen
 menu_3_2~Manage
 menu_4_1~Icon
 menu_4_2~Line
 15~erstelle eine Map
 16~eine Map umbenennen
-17~eine Map lÃ¶schen
+17~eine Map löschen
 18~Hintergrund hochladen
-19~Hintergrund lÃ¶schen
+19~Hintergrund löschen
 20~Erstellen
-21~LÃ¶schen
+21~Löschen
 22~Umbenennen
 23~Hochladen
 24~Map Name
@@ -38,11 +38,11 @@ menu_4_2~Line
 28~Neuer Name
 29~WÃ¤hle ein png Image
 30~Du must erst ein png Image wÃ¤hlen!
-31~Du musst ein Image mit der Erweiterung .png wÃ¤hlen.
+31~Du musst ein Image mit der Erweiterung .png wählen.
 32~Map iconset
-33~Du musst einen Namen fÃ¼r die neue Map angeben.
+33~Du musst einen Namen für die neue Map angeben.
 34~Mindestens ein User muss Zugriff auf die Map haben.
-35~Du musst das default_iconset fuer diese Map wÃ¤hlen
+35~Du musst das default_iconset fuer diese Map wählen
 36~Du musst das Hintergrund Image fuer diese Map wÃ¤hlen.
 37~Keine Map zum umbenennen gefunden. Operation abgebrochen.
 38~Du hast keinen neuen Namen angegeben.
@@ -59,6 +59,6 @@ menu_4_2~Line
 49~Benutzer mit Schreib-Rechten.
 50~Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen.
 menu_7~Wiederherstellen
-51~Sicher das du dsa Backup wiederherstellen willst?
+51~Sicher, dass du das Backup wiederherstellen willst?
 52~Deaktiviert
 53~Leerzeichen sind hier nicht erlaubt
