@@ -81,6 +81,12 @@ class NagVisLanguage {
 	 */
 	function replaceSpecial($str) {
 		// FIXME: replace with sgml-chars
+		$str = str_replace('ü','&#252;',$str);
+		$str = str_replace('ö','&#246;',$str);
+		$str = str_replace('ä','&#228;',$str);
+		$str = str_replace('Ü','&#220;',$str);
+		$str = str_replace('Ö','&#214;',$str);
+		$str = str_replace('Ä','&#196;',$str);
 		return $str;
 	}
 	
