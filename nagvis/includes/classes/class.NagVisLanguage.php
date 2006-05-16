@@ -15,7 +15,7 @@ class NagVisLanguage {
 	
 	var $indexes = Array();
 	var $values = Array();
-	var $nb=0;
+	var $nb = 0;
 	
 	/**
 	* Constructor
@@ -29,10 +29,14 @@ class NagVisLanguage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		
-		if($this->MAINCFG->getRuntimeValue('wui')) {
+		if(isset($type) && $type != '') {
+			if($type == 'errors') {
+				$type = '';
+			} else {
+				$type .= '_';
+			}
+		} elseif($this->MAINCFG->getRuntimeValue('wui')) {
 			$type = 'wui_';
-		} elseif(isset($type) && $type != '') {
-			$type .= '_';
 		}
 		
 		$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/' . $type . $this->MAINCFG->getValue('global', 'language').'.txt';
@@ -54,7 +58,7 @@ class NagVisLanguage {
 				$myline = fgets($fic, 4096);
 				$myline = substr($myline,0,strlen($myline)-1);
 				if(strlen($myline)>0) {
-					$temp = explode("~",$myline);
+					$temp = explode("~",$myline,2);
 					array_push($this->indexes,$temp[0]);
 					array_push($this->values,$this->replaceSpecial($temp[1]));
 					$this->nb = $this->nb+1;	
@@ -121,11 +125,11 @@ class NagVisLanguage {
 	
 	
 	function getTextReplace($myid,$myvalues) {
-		if (count($this->$indexes)==1) {
-			print "The language coudln't be loaded";
-			return "";
+		if (count($this->indexes)==1) {
+			print "The language couldn't be loaded";
+			return 0;
 		} else {
-			$key = array_search($myid,$this->indexes); 
+			$key = array_search($myid,$this->indexes);
 			if ($key !== null && key !== false) {
 				$message = $this->values[$key];
 				$vars = explode(',', $myvalues);

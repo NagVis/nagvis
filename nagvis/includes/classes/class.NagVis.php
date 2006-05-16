@@ -218,16 +218,17 @@ class frontend extends common {
 			}
         }*/
         
-		$LANG = new NagVisLanguage($this->MAINCFG,$this->MAPCFG);
+		$LANG = new NagVisLanguage($this->MAINCFG,$this->MAPCFG,'errors');
 		$LANG->readLanguageFile();
 
 		$vars = str_replace('~','=',$vars);
         $msg = $LANG->getTextReplace($messagenr,$vars);
-		
-		$messageNr = $msg[0];
-		$messageIcon = $msg[1];
-		$messageHead = $msg[2];
-		$message = $msg[3];
+        $msg = explode("~",$msg);
+        
+		$messageNr = $messagenr;
+		$messageIcon = $msg[0];
+		$messageHead = $msg[1];
+		$message = $msg[2];
 			
 		//eval("\$message = \"$message\";");
 		//for($i=0;$i<count(explode(' ', $vars));$i++) {

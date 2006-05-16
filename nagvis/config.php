@@ -48,9 +48,8 @@ if(!$CHECKIT->check_user(1)) {
 	exit;
 }
 if(!$MAPCFG->checkMapConfigWriteable(1)) {
-	exit;
-}
-
+		exit;
+	}
 if($_GET['map'] != '') {
 	
 	if(!$MAPCFG->checkMapImageReadable(1)) {
