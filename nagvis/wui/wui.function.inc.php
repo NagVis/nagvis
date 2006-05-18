@@ -158,7 +158,7 @@ switch($_GET['myaction']) {
 	case 'modify':
 		$MAPCFG = new MapCfg($MAINCFG,$_POST['map']);
 		$MAPCFG->readMapConfig();
-	
+		
 		// set options in the array
 		foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
 			$MAPCFG->setValue($_POST['type'], $_POST['id'], $key, $val);
@@ -170,8 +170,8 @@ switch($_GET['myaction']) {
 		backup($MAINCFG,$_POST['map']);
 		
 		// refresh the map
-		print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."';</script>\n";
-		print "<script>window.close();</script>\n";
+		//print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."';</script>\n";
+		//print "<script>window.close();</script>\n";
 	break;
 	case 'add':
 		$MAPCFG = new MapCfg($MAINCFG,$_POST['map']);
@@ -220,6 +220,7 @@ switch($_GET['myaction']) {
 		if(!$MAPCFG->createMapConfig()) {
 			exit;
 		}
+		
 		$MAPCFG->addElement('global',Array('allowed_user'=>$_POST['allowed_users'],'allowed_for_config'=>$_POST['allowed_for_config'],'iconset'=>$_POST['map_iconset'],'map_image'=>$_POST['map_image']));
 		$MAPCFG->writeElement('global','0');
 		

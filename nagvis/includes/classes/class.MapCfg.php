@@ -232,7 +232,7 @@ class MapCfg {
 									if($key != 'type') {
 										$cfgLines = 0;
 										$cfgLine = '';
-										$cfgLineNr = '';
+										$cfgLineNr = 0;
 										// Parameter aus Datei durchlaufen
 										while(trim($file[($l+$cfgLines)]) != '}') {
 											$entry = explode("=",$file[$l+$cfgLines], 2);

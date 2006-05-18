@@ -75,7 +75,7 @@ $hostgroup_prop=array("hostgroup_name*","x*","y*","recognize_services","line_typ
 $servicegroup_prop=array("servicegroup_name*","x*","y*","url","line_type","iconset"); 
 $map_prop=array("map_name*","x*","y*","url","iconset"); 
 $textbox_prop=array("text*","x*","y*","w*"); 
-$global_prop=array("allowed_user*","allowed_for_config*","iconset*","map_image*");
+$global_prop=array("allowed_user*","allowed_for_config*","iconset","map_image*");
 
 $type_tab["service"]=$service_prop;
 $type_tab["host"]=$host_prop;
@@ -112,10 +112,11 @@ foreach($type_tab[$mytype] as $propname) {
 	print "</td>";
 	
 	# we treat the special case of iconset, which will display a listbox instead of the normal textbox
-	if($propname_ok == "iconset")
-	{
+	if($propname_ok == "iconset") {
 		print "<td class=\"tdfield\"><select name=\"".$propname."\">";
-		if(substr($propname,strlen($propname)-1) != "*") print "<option value=\"\"></option>";
+		if(substr($propname,strlen($propname)-1) != "*") { 
+			print "<option value=\"\"></option>";
+		}
 		$files=array();
 		$valid_format = array(
                         0=>"gif",
@@ -146,8 +147,7 @@ foreach($type_tab[$mytype] as $propname) {
 	}
 	
 	# we treat the special case of map_image, which will display a listbox instead of the normal textbox
-	else if($propname_ok == "map_image")
-	{
+	else if($propname_ok == "map_image") {
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
 		$files=array();
 		if ($handle = opendir($MAINCFG->getValue('paths', 'map'))) 

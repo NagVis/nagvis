@@ -81,17 +81,21 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<td width="35%" class="tdfield"><? echo $LANG->getText("32"); ?></td>
 		
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_iconset">
+		<option value=""></option>
 		<?
-			$files=array();
-			if ($handle = opendir($MAINCFG->getValue('paths', 'icon'))) 
-			{
- 				while (false !== ($file = readdir($handle))) 
-				{
-					if ($file != "." && $file != ".." && substr($file,strlen($file)-7,7) == "_ok.png" ) { $files[]=substr($file,0,strlen($file)-7);}				
-				}
-			if ($files) natcasesort($files); 
-			foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
-			
+		$files=array();
+		if ($handle = opendir($MAINCFG->getValue('paths', 'icon'))) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && substr($file,strlen($file)-7,7) == "_ok.png" ) {
+					$files[]=substr($file,0,strlen($file)-7);
+				}			
+			}
+			if ($files) { 
+				natcasesort($files); 
+			}
+			foreach ($files as $file) {
+				print "<option value=\"$file\">$file</option>";
+			}
 		}
 		closedir($handle);
 		?>
@@ -297,11 +301,6 @@ function check_create_map()
 	if (document.map_create.allowed_for_config.value=='')
 	{
 		alert("<? echo $LANG->getTextSilent("48") ?>");
-		return false;
-	}
-	if (document.map_create.map_iconset.value=='')
-	{
-		alert("<? echo $LANG->getTextSilent("35") ?>");
 		return false;
 	}
 	if (document.map_create.map_image.value=='')
