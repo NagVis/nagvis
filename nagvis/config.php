@@ -260,7 +260,12 @@ if ($handle2 = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
 		$MAPCFG1 = new MapCfg($MAINCFG,$file);
 		$MAPCFG1->readMapConfig();
 		
-		$all_allowed_user .= "^".$file."=".implode(',',$MAPCFG1->getValue('global', 0,'allowed_for_config'));	
+		if(is_array($MAPCFG1->getValue('global', 0,'allowed_for_config'))) {
+			$users = implode(',',$MAPCFG1->getValue('global', 0,'allowed_for_config'));
+		} else {
+			$users = $MAPCFG1->getValue('global', 0,'allowed_for_config');
+		}
+		$all_allowed_user .= "^".$file."=".$users;	
 		$all_map_image .= "^".$file."=".$MAPCFG1->getValue('global', 0,'map_image');
 		
 		foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
