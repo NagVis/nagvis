@@ -170,8 +170,8 @@ switch($_GET['myaction']) {
 		backup($MAINCFG,$_POST['map']);
 		
 		// refresh the map
-		//print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."';</script>\n";
-		//print "<script>window.close();</script>\n";
+		print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map']."';</script>\n";
+		print "<script>window.close();</script>\n";
 	break;
 	case 'add':
 		$MAPCFG = new MapCfg($MAINCFG,$_POST['map']);
