@@ -48,7 +48,7 @@ class backend
 			if (!extension_loaded('mysql')) {
 				//FIXME: Error Box
 				echo "NDOMy Backend: Your PHP installation has no SQL Support! You can't use the NDO Backend without!";
-				return 1;
+				exit(1);
 			}
 		}
 
@@ -57,8 +57,8 @@ class backend
 		
 		if( $returnCode != TRUE){
 			//FIXME: Error Box
-			echo "NDOMy Backend: Error selecting Database, maybe wrong db or insufficient permissions?";
-			return 1;
+			echo "<h1>NDOMy Backend: Error selecting Database, maybe wrong db or insufficient permissions?</h1>";
+			exit(1);
 		}
 		
 		//Do some checks to make sure that Nagios is running and the Data at the DB are ok
@@ -68,15 +68,15 @@ class backend
 		//Check that Nagios reports itself as running	
 		if ($nagiosState['is_currently_running'] != 1) {
 			//FIXME: Error Box
-			echo "NDOMy Backend: Caution: NDO claims that Nagios is NOT running!";
-			return 1;
+			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios is NOT running!</h1>";
+			exit(1);
 		}
 		
 		//Be suspiciosly and check that the data at the db are not older that three minutes too
 		if(time() - strtotime($nagiosState['status_update_time']) > 180) {
 			//FIXME:Error Box
-			echo "NDOMy Backend: Caution: NDO claims that Nagios did NO status Update for more than three minutes! Make sure that Nagios is running!";
-			return 1;
+			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios did NO status Update for more than three minutes! Make sure that Nagios is running!</h1>";
+			exit(1);
 		}
 			
 		return 0;
