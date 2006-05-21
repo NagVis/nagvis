@@ -109,9 +109,9 @@ debugFixIcon=0
 ; Only internal informations
 [internal]
 ; version of NagVis
-version="0.9b2"
+version="0.9b3"
 ; title of NagVis pages
-title="NagVis 0.9b2"
+title="NagVis 0.9b3"
 
 ; -------------------------
 ; EOF
