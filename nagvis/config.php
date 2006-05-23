@@ -290,11 +290,6 @@ $FRONTEND->site[] = '<SCRIPT TYPE="text/javascript" SRC="./wui/wz_jsgraphics.js"
 $FRONTEND->site[] = '</HEAD>';
 $FRONTEND->site[] = '<LINK HREF="./includes/css/style.css" REL="stylesheet" TYPE="text/css">';
 
-# we check the value of checkconfig in the main config file
-if($MAINCFG->getValue('global', 'checkconfig') == "1") {
-	print "<script>window.document.location.href='check_config.php?source=config.php&map=".$MAPCFG->getName()."';</script>\n";
-}
-
 # we load the page background image :
 #	- the map_image if a map is defined in the URL
 #	- a blank image (size 600x600) if not map is defined
