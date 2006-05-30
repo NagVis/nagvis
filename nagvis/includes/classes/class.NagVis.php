@@ -103,12 +103,13 @@ class frontend extends common {
 	* Create a Header-Menu
 	*
 	* @author Michael Luebben <michael_luebben@web.de>
+	* @author Andreas Husch <michael_luebben@web.de>
     */
 	function makeHeaderMenu() {
 		$Menu = $this->readHeaderMenu();
 		
 		$x="0";
-		$this->site[] = '<TABLE WIDTH="100%" BORDER="0" BGCOLOR="black">';
+		$this->site[] = '<TABLE WIDTH="100%" BORDER="0" CLASS="headerMenu">';
 		$this->site[] = '<DIV CLASS="header">';
 		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != "") {
 			$this->site[] = '<TR VALIGN="BOTTOM">';
