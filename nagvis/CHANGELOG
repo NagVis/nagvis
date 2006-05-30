@@ -2,6 +2,7 @@ date: 2006-05-30
 author: husch
 - style.css is now used for the header menu too
 - improved filtering of the map string passed from outside a bit
+- removed deprecated "class.readfiles.php"
 
 date: 2006-05-21
 author: husch
