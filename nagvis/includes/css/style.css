@@ -21,6 +21,11 @@
 	}
 
 /* ******************** Header-Menu ******************** */	
+table.headerMenu
+	{
+		background-color : black;
+	}
+
 a.NavBarItem 
 	{ 
 		font-family: arial,serif;
@@ -30,6 +35,7 @@ a.NavBarItem
 		font-weight: bold;
 		text-decoration: none;
 	}
+
 
 /* ******************** Message-Box ******************** */
 table.messageBox
