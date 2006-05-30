@@ -1,4 +1,14 @@
+date: 2006-05-30
+author: husch
+- style.css is now used for the header menu too
+- improved filtering of the map string passed from outside a bit
+
+date: 2006-05-21
+author: husch
+- released NagVis 0.9b3
+
 date: 2006-04-20
+author: michelsen
 - added NagVisLanguage Class and moved all language handling to it
 - added replaceement of special chars ä,ö,ü ...
 - moved readMenu from ReadFiles class to frontend class
