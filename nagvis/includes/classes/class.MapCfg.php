@@ -36,9 +36,8 @@ class MapCfg {
 		} else {
 			//check the $name string for security reasons (its the ONLY value we
 			//get directly from external...)
-			//strip everything wich could be possible unwanted
-			//strip:              Slashes /,          Backslashes \          and PHP Tags
-			$this->name = preg_replace("'/'","",preg_replace("/\\\/","",strip_tags($name)));
+			//Allow ONLY Characters and Numbers inside the Name of a Map
+			$this->name = preg_replace("/[^a-zA-Z0-9]/","",$name);
 		}
 	}
 	
