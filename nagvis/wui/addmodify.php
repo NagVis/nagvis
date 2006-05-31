@@ -131,8 +131,11 @@ foreach($type_tab[$mytype] as $propname) {
 			{
 				$file_ext=explode(".",$file);
 				//if ($file != "." && $file != ".." && substr($file,strlen($file)-7,7) == "_ok.png" )
+				//Detect available iconsets to fill the combobox, search for "*_ok.<$valid_format>" for this
 				if ($file != "." && $file != ".." && substr($file_ext['0'],strlen($file_ext['0'])-3,3) == "_ok" && in_array($file_ext['1'],$valid_format))
-			 	{ $files[]=substr($file,0,strlen($file)-7)."(".$file_ext['1'].")";}				
+			 	{ 
+					$files[]=substr($file,0,strlen($file)-7)."(".$file_ext['1'].")";
+				}				
 			}
 			
 			if ($files) natcasesort($files); 
