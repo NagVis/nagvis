@@ -43,9 +43,16 @@ print "<input type=\"hidden\" name=\"properties\">";
 # for each line in the main config file
 foreach($MAINCFG->config AS $key => $val) 
 {
+
 	if(is_array($val)) {
 		foreach($val AS $key2 => $val2) {
 			if(@substr($key2,0,8) != "comment_") {
+				//print the ini section from config.ini.php as headline for ech section (e.g. [global] [backend_ndo] and so on)
+				if(@substr($key,0,8) != "comment_" && $lastSection != $key) {	
+						print "<tr><td class=\"tdsection\" colspan=\"3\">".$key."</td>";
+						$lastSection = $key;
+				}
+
 				# we add a line in the form
 				print "<tr><td class=\"tdlabel\">".$key2."</td>";
 					
@@ -72,6 +79,29 @@ foreach($MAINCFG->config AS $key => $val)
 			 			while (false !== ($file = readdir($handle2))) 
 						{
 							if ($file != "." && $file != ".." && substr($file,0,4) == "wui_" ) { $files[]=substr($file,4,strlen($file)-8);}				
+						}
+				
+						if ($files) natcasesort($files); 
+						foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
+					}
+					closedir($handle2);
+					print "</select></td>\n";
+						
+					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";
+						
+				}
+				elseif($key2 == 'backend')
+				{
+					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
+					$files = array();
+					if ($handle2 = opendir($MAINCFG->getValue('paths', 'base')."/includes/classes")) 
+					{
+			 			while (false !== ($file = readdir($handle2))) 
+						{
+							//FIXME: Ha: I guess we should better replace all this substr sontructs in the if()s with preg_match
+							if ($file != "." && $file != ".." && substr($file,0,17) == "class.CheckState_") { 
+								$files[]=substr($file,17,strlen($file)-21);
+							}				
 						}
 				
 						if ($files) natcasesort($files); 
