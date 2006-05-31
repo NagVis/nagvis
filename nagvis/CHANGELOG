@@ -1,3 +1,8 @@
+date: 2006-05-31
+author: husch
+- ini sections (like [global], [backend_ndo] and so on) are now displayed in the wui dialog
+- the backend is now selectable by a combobox
+
 date: 2006-05-30
 author: husch
 - style.css is now used for the header menu too
