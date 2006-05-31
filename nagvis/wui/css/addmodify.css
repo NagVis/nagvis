@@ -40,6 +40,16 @@ button{
 
 }
 
+.tdsection { 
+ border: 2px ridge #A4A4A4;
+ font: bolder 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+ color: red; 
+ background-color: #F5F5F5; 
+  text-align: center;
+  width: 100%;
+  height: 30px;
+
+}
 .tdfield { 
   background-color: White;
   border-style:none;
