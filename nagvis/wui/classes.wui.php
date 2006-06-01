@@ -1,4 +1,4 @@
-<?
+<?php
 ##########################################################################
 ##     	                           NagVis                              ##
 ##         *** Klasse zum einlesen verschiedenener Dateien ***          ##

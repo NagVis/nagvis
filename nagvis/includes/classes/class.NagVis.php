@@ -1,4 +1,4 @@
-<?
+<?php
 ##########################################################################
 ##     	                           NagVis                               ##
 ##        *** Klasse zum erzeugen der grafischen Oberfläche ***         ##

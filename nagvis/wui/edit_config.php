@@ -1,4 +1,4 @@
-<?
+<?php
 #################################################################################
 #       Nagvis Web Configurator 						#
 #	GPL License								#
@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<?
+<?php
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.NagVisLanguage.php");
 

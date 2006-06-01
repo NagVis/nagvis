@@ -1,4 +1,4 @@
-<?
+<?php
 #################################################################################
 #       Nagvis Web Configurator 						#
 #	GPL License								#
@@ -17,7 +17,7 @@
 <TITLE>Nagvis configtool</TITLE>
 </head>
 
-<?
+<?php
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.NagVisLanguage.php");
 
@@ -59,30 +59,30 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 
 <table>
 	<form method="post" action="wui.function.inc.php?myaction=mgt_map_create" name="map_create" onsubmit="return check_create_map();">
-	<caption class="tdlabel" ><? echo strtoupper($LANG->getText("15")); ?></caption>
+	<caption class="tdlabel" ><?php echo strtoupper($LANG->getText("15")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="30%" class="tdfield"><? echo $LANG->getText("24"); ?></td>
+		<td width="30%" class="tdfield"><?php echo $LANG->getText("24"); ?></td>
 		<td width="40%" class="tdfield"><input type="text" name="map_name"></td>
-		<td width="25%" valign="middle" align="center" rowspan="5"><input type="submit" name="map_create_ok" value="<? echo $LANG->getText("20"); ?>"></td>
+		<td width="25%" valign="middle" align="center" rowspan="5"><input type="submit" name="map_create_ok" value="<?php echo $LANG->getText("20"); ?>"></td>
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("25"); ?></td>
-		<td width="35%" class="tdfield"><input type="text" name="allowed_users" value="<? echo $user ?>"</td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("25"); ?></td>
+		<td width="35%" class="tdfield"><input type="text" name="allowed_users" value="<?php echo $user ?>"</td>
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("49"); ?></td>
-		<td width="35%" class="tdfield"><input type="text" name="allowed_for_config" value="<? echo $user ?>"</td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("49"); ?></td>
+		<td width="35%" class="tdfield"><input type="text" name="allowed_for_config" value="<?php echo $user ?>"</td>
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("32"); ?></td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("32"); ?></td>
 		
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_iconset">
 		<option value=""></option>
-		<?
+		<?php
 		$files=array();
 		if ($handle = opendir($MAINCFG->getValue('paths', 'icon'))) {
 			while (false !== ($file = readdir($handle))) {
@@ -100,14 +100,14 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		closedir($handle);
 		?>
 		</select></td>
-		<script>document.map_create.map_iconset.value='<? echo $defaultIcons ?>';</script>	
+		<script>document.map_create.map_iconset.value='<?php echo $defaultIcons ?>';</script>	
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("26"); ?></td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("26"); ?></td>
 		
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
-		<?
+		<?php
 			$files=array();
 			if ($handle = opendir($MAINCFG->getValue('paths', 'map'))) 
 			{
@@ -132,13 +132,13 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 
 <table>
 	<form method="post" action="wui.function.inc.php?myaction=mgt_map_rename" name="map_rename" onsubmit="return check_map_rename();">
-	<caption class="tdlabel" ><? echo strtoupper($LANG->getText("16")); ?></caption>
+	<caption class="tdlabel" ><?php echo strtoupper($LANG->getText("16")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("27"); ?></td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("27"); ?></td>
 		
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
-		<?
+		<?php
 			$files=array();
 			if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) 
 			{
@@ -154,11 +154,11 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		?>
 		</select></td>
 		
-		<td width="25%" valign="middle" align="center" rowspan="2"><input type="submit" name="map_rename_ok" value="<? echo $LANG->getText("22"); ?>"></td>
+		<td width="25%" valign="middle" align="center" rowspan="2"><input type="submit" name="map_rename_ok" value="<?php echo $LANG->getText("22"); ?>"></td>
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("28"); ?></td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("28"); ?></td>
 		<td width="35%" class="tdfield"><input type="text" name="map_new_name">
 		<input type="hidden" name="map">
 		<script>document.map_rename.map.value=window.opener.document.myvalues.formulaire.value</script>
@@ -172,13 +172,13 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 
 <table>
 	<form method="post" action="wui.function.inc.php?myaction=mgt_map_delete" name="map_delete" onsubmit="return check_map_delete();">
-	<caption class="tdlabel" ><? echo strtoupper($LANG->getText("17")); ?></caption>
+	<caption class="tdlabel" ><?php echo strtoupper($LANG->getText("17")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("27"); ?></td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("27"); ?></td>
 		
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_name">
-		<?
+		<?php
 			$files=array();
 			if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) 
 			{
@@ -197,7 +197,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		<script>document.map_delete.map.value=window.opener.document.myvalues.formulaire.value</script>
 		</td>
 		
-		<td width="25%" valign="middle" align="center"><input type="submit" name="map_delete_ok" value="<? echo $LANG->getText("21"); ?>"></td>
+		<td width="25%" valign="middle" align="center"><input type="submit" name="map_delete_ok" value="<?php echo $LANG->getText("21"); ?>"></td>
 	</tr>
 	</form>
 </table>
@@ -210,12 +210,12 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 	<form name="new_image" method="POST" action="./wui.function.inc.php?myaction=mgt_new_image" enctype="multipart/form-data" onsubmit="return check_png();"
 	<input type="hidden" name="MAX_FILE_SIZE" value="1000000">
 	
-	<caption class="tdlabel" ><? echo strtoupper($LANG->getText("18")); ?></caption>
+	<caption class="tdlabel" ><?php echo strtoupper($LANG->getText("18")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("29"); ?></td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("29"); ?></td>
 		<td width="35%" class="tdfield"><input type="file" name="fichier"></td>
-		<td width="25%" valign="middle" align="center"><input type="submit" name="new_image_ok" value="<? echo $LANG->getText("23"); ?>"></td>
+		<td width="25%" valign="middle" align="center"><input type="submit" name="new_image_ok" value="<?php echo $LANG->getText("23"); ?>"></td>
 	</tr>
 	</form>
 </table>
@@ -223,13 +223,13 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 <br>
 <table>
 	<form method="post" action="wui.function.inc.php?myaction=mgt_image_delete" name="image_delete" onsubmit="return check_image_delete();">
-	<caption class="tdlabel" ><? echo strtoupper($LANG->getText("19")); ?></caption>
+	<caption class="tdlabel" ><?php echo strtoupper($LANG->getText("19")); ?></caption>
 	<tr>
 		<td width="5%">&nbsp;</td>
-		<td width="35%" class="tdfield"><? echo $LANG->getText("29"); ?></td>
+		<td width="35%" class="tdfield"><?php echo $LANG->getText("29"); ?></td>
 		
 		<td width="35%" class="tdfield" style="text-align:left"><select name="map_image">
-		<?
+		<?php
 			$files=array();
 			if ($handle = opendir($MAINCFG->getValue('paths', 'map'))) 
 			{
@@ -245,7 +245,7 @@ if(window.opener.document.location.pathname.substr(window.opener.document.locati
 		?>
 		</select></td>
 		
-		<td width="25%" valign="middle" align="center"><input type="submit" name="image_delete_ok" value="<? echo $LANG->getText("21"); ?>"></td>
+		<td width="25%" valign="middle" align="center"><input type="submit" name="image_delete_ok" value="<?php echo $LANG->getText("21"); ?>"></td>
 	</tr>
 	</form>
 </table>
@@ -263,7 +263,7 @@ function check_png()
 
   if(document.new_image.fichier.value.length == 0)
   {
-  	 alert('<? echo $LANG->getTextSilent("30"); ?>');
+  	 alert('<?php echo $LANG->getTextSilent("30"); ?>');
 	 return false;
   }
   else
@@ -273,7 +273,7 @@ function check_png()
 	  ext = ext.toLowerCase();
 	  if(ext != 'png') 
 	  {
-	    alert('<? echo $LANG->getTextSilent("31"); ?>');
+	    alert('<?php echo $LANG->getTextSilent("31"); ?>');
 	    return false; 
 	  }
 	  else return true; 
@@ -285,27 +285,27 @@ function check_create_map()
 {
 	if (document.map_create.map_name.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("33") ?>");
+		alert("<?php echo $LANG->getTextSilent("33") ?>");
 		return false;
 	}
 	if (document.map_create.map_name.value.split(" ").length > 1)
 	{
-		alert("<? echo $LANG->getTextSilent("53") ?>");
+		alert("<?php echo $LANG->getTextSilent("53") ?>");
 		return false;
 	}
 	if (document.map_create.allowed_users.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("34") ?>");
+		alert("<?php echo $LANG->getTextSilent("34") ?>");
 		return false;
 	}
 	if (document.map_create.allowed_for_config.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("48") ?>");
+		alert("<?php echo $LANG->getTextSilent("48") ?>");
 		return false;
 	}
 	if (document.map_create.map_image.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("36") ?>");
+		alert("<?php echo $LANG->getTextSilent("36") ?>");
 		return false;
 	}
 	
@@ -313,12 +313,12 @@ function check_create_map()
 	{
 		if(document.map_rename.map_name.options[i].value == document.map_create.map_name.value)
 		{
-			alert("<? echo $LANG->getTextSilent("39") ?>");
+			alert("<?php echo $LANG->getTextSilent("39") ?>");
 			return false;
 		}
 	}
 	
-	if (confirm("<? echo $LANG->getTextSilent("42") ?>") === false)
+	if (confirm("<?php echo $LANG->getTextSilent("42") ?>") === false)
 	{
 		return false;
 	}
@@ -353,19 +353,19 @@ function check_map_rename()
 {
 	if (document.map_rename.map_name.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("37") ?>");
+		alert("<?php echo $LANG->getTextSilent("37") ?>");
 		return false;
 	}
 	
 	if (document.map_rename.map_new_name.value.split(" ").length > 1)
 	{
-		alert("<? echo $LANG->getTextSilent("53") ?>");
+		alert("<?php echo $LANG->getTextSilent("53") ?>");
 		return false;
 	}
 	
 	if (document.map_rename.map_new_name.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("38") ?>");
+		alert("<?php echo $LANG->getTextSilent("38") ?>");
 		return false;
 	}
 	
@@ -373,18 +373,18 @@ function check_map_rename()
 	{
 		if(document.map_rename.map_name.options[i].value == document.map_rename.map_new_name.value)
 		{
-			alert("<? echo $LANG->getTextSilent("39") ?>");
+			alert("<?php echo $LANG->getTextSilent("39") ?>");
 			return false;
 		}
 	}
 	
 	if (is_user_allowed(document.map_rename.map_name.value)===false)
 	{
-		alert("<? echo $LANG->getTextSilent("47") ?>");
+		alert("<?php echo $LANG->getTextSilent("47") ?>");
 		return false;
 	}
 	
-	if (confirm("<? echo $LANG->getTextSilent("43") ?>") === false)
+	if (confirm("<?php echo $LANG->getTextSilent("43") ?>") === false)
 	{
 		return false;
 	}
@@ -416,26 +416,26 @@ function check_map_delete()
 {
 	if (document.map_delete.map_name.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("40") ?>");
+		alert("<?php echo $LANG->getTextSilent("40") ?>");
 		return false;
 	}
 	
 	if (is_user_allowed(document.map_delete.map_name.value)===false)
 	{
-		alert("<? echo $LANG->getTextSilent("47") ?>");
+		alert("<?php echo $LANG->getTextSilent("47") ?>");
 		return false;
 	}
 	
 	if(is_mapname_used(document.map_delete.map_name.value))
 	{
-		mess=new String("<? echo $LANG->getTextSilent('46') ?>");
+		mess=new String("<?php echo $LANG->getTextSilent('46') ?>");
 		mess=mess.replace("[MAP]",mapname_used_by);
 		mess=mess.replace("[IMAGENAME]",document.map_delete.map_name.value);
 		alert(mess);
 		return false;
 	}
 	
-	if (confirm("<? echo $LANG->getTextSilent("44") ?>") === false)
+	if (confirm("<?php echo $LANG->getTextSilent("44") ?>") === false)
 	{
 		return false;
 	}
@@ -468,20 +468,20 @@ function check_image_delete()
 {
 	if (document.image_delete.map_image.value=='')
 	{
-		alert("<? echo $LANG->getTextSilent("41") ?>");
+		alert("<?php echo $LANG->getTextSilent("41") ?>");
 		return false;
 	}
 	
 	if(is_map_image_used(document.image_delete.map_image.value))
 	{
-		mess=new String("<? echo $LANG->getTextSilent('46') ?>");
+		mess=new String("<?php echo $LANG->getTextSilent('46') ?>");
 		mess=mess.replace("[MAP]",image_used_by);
 		mess=mess.replace("[IMAGENAME]",document.image_delete.map_image.value);
 		alert(mess);
 		return false;
 	}
 	
-	if (confirm("<? echo $LANG->getTextSilent("45") ?>") === false)
+	if (confirm("<?php echo $LANG->getTextSilent("45") ?>") === false)
 	{
 		return false;
 	}

@@ -1,4 +1,4 @@
-<?
+<?php
 #################################################################################
 #       Nagvis Web Configurator 						#
 #	GPL License								#
@@ -91,7 +91,7 @@ function get_click(newtype,nbclicks,action) {
 	document.images['background'].style.cursor='crosshair';
 	document.body.onclick=get_click_pos;
 	document.body.onmousemove=track_mouse;
-	window.status="<? echo $LANG->getText("1"); ?>" + cpt_clicks;
+	window.status="<?php echo $LANG->getText("1"); ?>" + cpt_clicks;
 	
 }
 
@@ -152,7 +152,7 @@ function get_click_pos(e) {
 	}
 	
 	if(cpt_clicks > 0) {
-		window.status="<? echo $LANG->getText("1"); ?>" + cpt_clicks;
+		window.status="<?php echo $LANG->getText("1"); ?>" + cpt_clicks;
 	}
 	else if(cpt_clicks == 0) {
 		if (follow_mouse) myshape.clear();
@@ -174,7 +174,7 @@ function get_click_pos(e) {
 
 // simple function to ask to confirm before we delete an object
 function confirm_object_deletion() {
-	confirm_message='<? echo $LANG->getText("2"); ?>';
+	confirm_message='<?php echo $LANG->getText("2"); ?>';
 	if(confirm(confirm_message)) return true;
 	else return false;
 	
@@ -182,7 +182,7 @@ function confirm_object_deletion() {
 
 // simple function to ask to confirm before we restore a map
 function confirm_restore() {
-	confirm_message='<? echo $LANG->getText("51"); ?>';
+	confirm_message='<?php echo $LANG->getText("51"); ?>';
 	if(confirm(confirm_message)) {
 		document.location.href='./wui/wui.function.inc.php?myaction=map_restore&map='+ document.myvalues.formulaire.value;
 	}
@@ -225,7 +225,7 @@ function fenetre_management(page) {
 	win = window.open(page, nom, options);
 }
 //--></script>
-<?
+<?php
 #############################################
 # we read ALL the maps definition files, to build the lists of allowed users and map_images. At the end we have s.th like
 # demo=root,nagiosadmin^map2=user1
@@ -439,9 +439,9 @@ if (strlen($movable) != 0)
 ?>
     
 <form method="post" action="./wui/wui.function.inc.php?myaction=open" name="open_map">
-	<input type="hidden" name="formulaire" value="<? echo $MAPCFG->getName(); ?>">
+	<input type="hidden" name="formulaire" value="<?php echo $MAPCFG->getName(); ?>">
 		<select name="map_choice">
-		<?
+		<?php
 			# we build the list of .cfg files (without extension) present in the maps directory
 			if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
 				while (false !== ($file = readdir($handle))) {
@@ -456,7 +456,7 @@ if (strlen($movable) != 0)
 	   <input name="open" type=submit value="Open the map">
 </form>
 		
-<?
+<?php
 ##################################
 # important form. it makes possible to communicate the coordinates of all the objects to the server 
 # Idea : when one drags and drops an object, the wz_dragdrop.js which handles this has been modified to update these hidden fields.
@@ -473,21 +473,21 @@ if (strlen($movable) != 0)
 ?>
 <form name="myvalues" action="./wui/wui.function.inc.php?myaction=save" method="post">
 	<input type="hidden" name="image">
-	<input type="hidden" name="formulaire" value="<? echo $MAPCFG->getName(); ?>">
+	<input type="hidden" name="formulaire" value="<?php echo $MAPCFG->getName(); ?>">
 	<input type="hidden" name="valx">
 	<input type="hidden" name="valy">
-	<input type="hidden" name="autosave" value="<? echo $MAINCFG->getRuntimeValue('justAdded'); ?>">
-	<input type="hidden" name="username" value="<? echo $MAINCFG->getRuntimeValue('user'); ?>">
+	<input type="hidden" name="autosave" value="<?php echo $MAINCFG->getRuntimeValue('justAdded'); ?>">
+	<input type="hidden" name="username" value="<?php echo $MAINCFG->getRuntimeValue('user'); ?>">
 	<textarea name="menu_labels"></textarea>
-	<input type="text" name="allowed_users_by_map" value="<? echo $MAINCFG->getRuntimeValue('AllMapsAllowedUsers'); ?>">
-	<input type="text" name="image_map_by_map" value="<? echo $MAINCFG->getRuntimeValue('AllMapsImages'); ?>">
-	<input type="text" name="mapname_by_map" value="<? echo $MAINCFG->getRuntimeValue('AllMapsNames'); ?>">
-	<input type="text" name="backup_available" value="<? echo file_exists($MAINCFG->getValue('paths', 'mapcfg').$MAPCFG->getName().".cfg.bak") ?>">
+	<input type="text" name="allowed_users_by_map" value="<?php echo $MAINCFG->getRuntimeValue('AllMapsAllowedUsers'); ?>">
+	<input type="text" name="image_map_by_map" value="<?php echo $MAINCFG->getRuntimeValue('AllMapsImages'); ?>">
+	<input type="text" name="mapname_by_map" value="<?php echo $MAINCFG->getRuntimeValue('AllMapsNames'); ?>">
+	<input type="text" name="backup_available" value="<?php echo file_exists($MAINCFG->getValue('paths', 'mapcfg').$MAPCFG->getName().".cfg.bak") ?>">
 	<input name="submit" type=submit value="Save this map">
 </form> 
 
 <form name="add_object" action="./wui/wui.function.inc.php?myaction=add_modify" method="post" onsubmit="return check_new_object();">
-	<input type="hidden" name="formulaire" value="<? echo $MAPCFG->getName(); ?>">
+	<input type="hidden" name="formulaire" value="<?php echo $MAPCFG->getName(); ?>">
 	<input type="hidden" name="modify_line" value="">		
 		<select name="add_type" style="width : 108px">
 			<option value="host">host</option>
@@ -501,7 +501,7 @@ if (strlen($movable) != 0)
 </form> 
 
 
-<?
+<?php
 # we load and store in an invisible field the right-click menu items text
 $menulabels='';	
 for($i=0;$i<=$LANG->nb;$i++)

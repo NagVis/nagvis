@@ -1,4 +1,4 @@
-; <? return 1; ?>
+; <?php return 1; ?>
 ; the line above is to prevent
 ; viewing this file from web.
 ; DON'T REMOVE IT!

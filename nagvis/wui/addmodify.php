@@ -1,4 +1,4 @@
-<?
+<?php
 #################################################################################
 #       Nagvis Web Configurator 						#
 #	GPL License								#
@@ -17,7 +17,7 @@
 <TITLE>Nagvis configtool</TITLE>
 </head>
 
-<?
+<?php
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.MapCfg.php");
 include("../includes/classes/class.NagVisLanguage.php");
@@ -90,14 +90,13 @@ $type_tab["global"]=$global_prop;
 ?>
 
 <table id="mytable">
-	<form method="post" action="wui.function.inc.php?myaction=<? print $myaction; ?>" name="addmodify" onsubmit="return check_object();" id="addmodify">
-		<input type="hidden" name="type" size="12" value="<? echo $mytype; ?>">
-		<input type="hidden" name="id" size="12" value="<? echo $myid; ?>">
-		<input type="hidden" name="map" size="12" value="<? echo $MAPCFG->getName(); ?>">
+	<form method="post" action="wui.function.inc.php?myaction=<?php print $myaction; ?>" name="addmodify" onsubmit="return check_object();" id="addmodify">
+		<input type="hidden" name="type" size="12" value="<?php echo $mytype; ?>">
+		<input type="hidden" name="id" size="12" value="<?php echo $myid; ?>">
+		<input type="hidden" name="map" size="12" value="<?php echo $MAPCFG->getName(); ?>">
 		<input type="hidden" name="properties">
 
-<?
-
+<?php
 // loop all properties
 foreach($type_tab[$mytype] as $propname) {
 	print "<tr><td class=\"tdlabel\">";
@@ -219,12 +218,12 @@ foreach($type_tab[$mytype] as $propname) {
 ?>
 
 		<tr height="20px"><td></td></tr>
-		<tr><td align="center" colspan="2" id="mycell"><button name="button_submit" type=submit value="submit" id="commit"><? echo $LANG->getText("8") ?></button></td></tr>
+		<tr><td align="center" colspan="2" id="mycell"><button name="button_submit" type=submit value="submit" id="commit"><?php echo $LANG->getText("8") ?></button></td></tr>
 	</form>
 </table>
 
 
-<?
+<?php
 ##########################################
 # if the action specified in the URL is "modify", we set the different property values to the object values
 if($myaction == "modify") {
@@ -319,7 +318,7 @@ else if($myaction == "add")
 <script type="text/javascript" language="JavaScript"><!--
 
 // we save the current username, that we'll use in javascript functions to make sure the user doesn't ban himself
-var user='<?echo $MAINCFG->getRuntimeValue('user'); ?>';
+var user='<?php echo $MAINCFG->getRuntimeValue('user'); ?>';
 
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
@@ -363,7 +362,7 @@ function check_object()
 				}
 				if(suicide)
 				{
-					mess="<? echo $LANG->getText("50"); ?>";
+					mess="<?php echo $LANG->getText("50"); ?>";
 					alert(mess);
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
@@ -397,7 +396,7 @@ function check_object()
 			{
 				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*')
 				{
-					mess="<? echo $LANG->getText("9"); ?>";
+					mess="<?php echo $LANG->getText("9"); ?>";
 					alert(mess);
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
@@ -416,7 +415,7 @@ function check_object()
 		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
 		if(j==valid_list.length)
 		{
-			mess="<? echo $LANG->getText("10"); ?>";
+			mess="<?php echo $LANG->getText("10"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -425,7 +424,7 @@ function check_object()
 		// we verify we don't have both iconset and line_type defined
 		if(iconset != '')
 		{
-			mess="<? echo $LANG->getText("11"); ?>";
+			mess="<?php echo $LANG->getText("11"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -434,7 +433,7 @@ function check_object()
 		// we verify we have 2 x coordinates and 2 y coordinates
 		if(x.split(",").length != 2)
 		{
-			mess="<? echo $LANG->getTextReplace("12","COORD=X"); ?>";
+			mess="<?php echo $LANG->getTextReplace("12","COORD=X"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -442,7 +441,7 @@ function check_object()
 		
 		if(y.split(",").length != 2)
 		{
-			mess="<? echo $LANG->getTextReplace("12","COORD=Y"); ?>";
+			mess="<?php echo $LANG->getTextReplace("12","COORD=Y"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -454,7 +453,7 @@ function check_object()
 	{
 		if(x.split(",").length != 2)
 		{
-			mess="<? echo $LANG->getTextReplace("13","COORD=X"); ?>";
+			mess="<?php echo $LANG->getTextReplace("13","COORD=X"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -463,7 +462,7 @@ function check_object()
 		{
 			if(line_type == '')
 			{
-				mess="<? echo $LANG->getTextReplace("14","COORD=X"); ?>";
+				mess="<?php echo $LANG->getTextReplace("14","COORD=X"); ?>";
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;
@@ -476,7 +475,7 @@ function check_object()
 	{
 		if(y.split(",").length != 2)
 		{
-			mess="<? echo $LANG->getTextReplace("13","COORD=Y"); ?>";
+			mess="<?php echo $LANG->getTextReplace("13","COORD=Y"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -485,7 +484,7 @@ function check_object()
 		{
 			if(line_type == '')
 			{
-				mess="<? echo $LANG->getTextReplace("14","COORD=Y"); ?>";
+				mess="<?php echo $LANG->getTextReplace("14","COORD=Y"); ?>";
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;
@@ -500,7 +499,7 @@ function check_object()
 	
 	
 // we resize the window (depending on the number of properties displayed)	
-window.resizeTo(410,<? echo count($properties_list) ?>*40+80);
+window.resizeTo(410,<?php echo count($properties_list) ?>*40+80);
 	
 	
 
