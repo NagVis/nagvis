@@ -1,3 +1,7 @@
+date: 2006-06-14
+author: husch
+- added "maxtimewithoutupdate" option for NDO Backend in the main config file. Defaults to 180 Seconds if not set.
+
 date: 2006-05-31
 author: husch
 - ini sections (like [global], [backend_ndo] and so on) are now displayed in the wui dialog

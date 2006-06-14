@@ -72,10 +72,17 @@ class backend
 			exit(1);
 		}
 		
-		//Be suspiciosly and check that the data at the db are not older that three minutes too
-		if(time() - strtotime($nagiosState['status_update_time']) > 180) {
+		//set a default value of 180 seconds for maxTimeWithoutUpdate
+		if ($this->MAINCFG->getValue('backend_ndo', 'maxtimewithoutupdate') >= 0) {
+            $maxTimeWithOutUpdate = $this->MAINCFG->getValue('backend_ndo', 'maxtimewithoutupdate');
+        } else {
+            $maxTimeWithOutUpdate = 180;
+        }   
+        
+		//Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate"  too
+		if(time() - strtotime($nagiosState['status_update_time']) > $maxTimeWithOutUpdate) {
 			//FIXME:Error Box
-			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios did NO status Update for more than three minutes! Make sure that Nagios is running!</h1>";
+			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios did NO status Update for more than ".$maxTimeWithOutUpdate." minutes! Make sure that Nagios is running!</h1>";
 			exit(1);
 		}
 			
