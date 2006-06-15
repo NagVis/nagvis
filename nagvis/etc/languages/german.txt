@@ -21,5 +21,8 @@
 20~img_error.png~Keine Leserechte auf die Map Bild-Datei~Bitte die Leseberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
 21~img_error.png~Keine Schreibrechte auf die Map Bild-Datei~Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
 22~img_error.png~Unbekannter Typ in Map Config Datei definiert~Der Objekttyp <I>[TYPE]</I> ist nicht erlaubt!
-23~img_error.png~Unbekanntes Attribut in Map Config Datei definiert~Das Attribut<I>[ATTRIBUTE]</I> ist in Elementen des typs <I>[TYPE]</I> nicht erlaubt!
+23~img_error.png~Unbekanntes Attribut in Map Config Datei definiert~Das Attribut <I>[ATTRIBUTE]</I> ist in Elementen des typs <I>[TYPE]</I> nicht erlaubt!
 24~img_error.png~Keine Leserechte auf die Sprachdatei~Bitte die Leseberechtigungen des Webservers auf die Sprachdatei (<I>[LANGFILE]</I>) pr&uuml;fen!
+25~img_error.png~Kann die NagVis Config-Datei nicht zum schreiben &ouml;ffnen~Bitte die Schreibberechtigungen des Webservers auf die config.ini.php Datei pr&uuml;fen!
+26~img_error.png~Keine Leserechte auf das Map Config Verzeichnis~Bitte die Leseberechtigungen des Webservers auf das Verzeichnis (<I>[MAPPATH]</I>) pr&uuml;fen!
+27~img_error.png~Keine Schreibrechte auf das Map Config Verzeichnis~Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis (<I>[MAPPATH]</I>) pr&uuml;fen!

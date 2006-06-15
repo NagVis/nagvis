@@ -134,12 +134,20 @@ class MainNagVisCfg {
 			}
 			
 			if(!$handle = fopen($this->configFile, 'w+')) {
-				//FIXME: Errorhandling
+				$FRONTEND = new frontend($this,$this->MAPCFG);
+				$FRONTEND->openSite();
+				$FRONTEND->messageBox("25", "");
+				$FRONTEND->closeSite();
+				$FRONTEND->printSite();
 				return FALSE;
 			}
 			
 			if(!fwrite($handle, $content)) {
-				//FIXME: Errorhandling
+				$FRONTEND = new frontend($this,$this->MAPCFG);
+				$FRONTEND->openSite();
+				$FRONTEND->messageBox("19", "");
+				$FRONTEND->closeSite();
+				$FRONTEND->printSite();
 				return FALSE;
 			}
 			
@@ -210,8 +218,7 @@ class MainNagVisCfg {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this,$this->MAPCFG);
 				$FRONTEND->openSite();
-				// FIXME: NEUE messageBox!!!
-				$FRONTEND->messageBox("-1", "MAPPATH~".$this->getValue('paths', 'map'));
+				$FRONTEND->messageBox("26", "MAPPATH~".$this->getValue('paths', 'map'));
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
 			}
@@ -234,8 +241,7 @@ class MainNagVisCfg {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this,$this->MAPCFG);
 				$FRONTEND->openSite();
-				// FIXME: NEUE messageBox!!!
-				$FRONTEND->messageBox("-1", "MAPPATH~".$this->getValue('paths', 'map'));
+				$FRONTEND->messageBox("27", "MAPPATH~".$this->getValue('paths', 'map'));
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
 			}
