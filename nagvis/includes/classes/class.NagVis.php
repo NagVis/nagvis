@@ -166,59 +166,12 @@ class frontend extends common {
 	/**
 	* Create a Messagebox for informations and errors.
 	*
-	* Message-Numbers:
-	*  0 = StatusCgi not found!
-	*  1 = StatusCgi not executable!
-	*  2 = No map config available!
-	*  3 = No map image available!
-	*  4 = No permissions!
-	*  5 = No Nagios logfile!
-	*  6 = No support!
-	*  7 = Host not found!
-	*  8 = Service not found!
-	*  9 = Group is empty!
-	* 10 = Servicegroup not found!
-	* 11 = servicegroup-status!
-	* 12 = State not defined!
-	* 13 = Service-status!
-	* 14 = No User!
-	* 15 = GD Lib
-	* 16 = wui/wui.function.inc.bash not executable
-	*
 	* @param string $messagnr
 	* @param string $vars
 	*
     * @author Michael Luebben <michael_luebben@web.de>
     */
 	function messageBox($messagenr, $vars) {
-		/*
-		 * DEPRECATED
-		 $LanguageFile = $this->MAINCFG->getValue('paths', 'cfg')."languages/".$this->MAINCFG->getValue('global', 'language').".txt";
-        if(!file_exists($LanguageFile)) {
-                $msg[0] = "XXXX";
-                $msg[1] = "img_error.png";
-                $msg[2] = "Languagefile not found!";
-                $msg[3] = "Check if languagefile variable is set right in config.ini.php!";
-        }
-        elseif(!is_readable($LanguageFile)) {
-                $msg[0] = "XXXX";
-                $msg[1] = "img_error.png";
-                $msg[2] = "Languagefile not readable!";
-                $msg[3] = "Check permissions of languagefile ".$LanguageFile."!";
-        }
-        else {
-			$fd=file($LanguageFile);
-			if(!explode("~", $fd[$messagenr])) {
-			    $msg[0] = "XXXX";
-			    $msg[1] = "img_error.png";
-			    $msg[2] = "Wrong error number.";
-				$msg[3] = "Maybe error-number is not known.";
-			}
-			else {
-			        $msg=explode("~", $fd[$messagenr]);
-			}
-        }*/
-        
 		$LANG = new NagVisLanguage($this->MAINCFG,$this->MAPCFG,'errors');
 		$LANG->readLanguageFile();
 
@@ -230,12 +183,6 @@ class frontend extends common {
 		$messageIcon = $msg[0];
 		$messageHead = $msg[1];
 		$message = $msg[2];
-			
-		//eval("\$message = \"$message\";");
-		//for($i=0;$i<count(explode(' ', $vars));$i++) {
-		//	$var = explode('~', $vars);
-		//	$message = str_replace("[".$var[0]."]", $var[1], $message);
-		//}
 	
 		$this->site[] = '<BODY>';
 		$this->site[] = '<TABLE CLASS="messageBox" WIDTH="50%" ALIGN="CENTER">';

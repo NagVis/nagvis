@@ -1,14 +1,12 @@
 <?php
 #################################################################################
-#       Nagvis Web Configurator 						#
-#	GPL License								#
-#										#
-#										#
-#	Web interface to configure Nagvis maps.					#
-#										#
-#	Drag & drop, Tooltip and shapes javascript code taken from 		#
-#	http://www.walterzorn.com   						#
-#										#
+#       Nagvis Web Configurator 												#
+#	GPL License																	#
+#																				#
+#	Web interface to configure Nagvis maps.										#
+#																				#
+#	Drag & drop, Tooltip and shapes javascript code taken from 					#
+#	http://www.walterzorn.com   												#
 #################################################################################
 
 # script called when the user submits a form. Depending on the action value, it 

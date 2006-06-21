@@ -1,21 +1,19 @@
 <?php
 #################################################################################
-#       Nagvis Web Configurator 						#
-#	GPL License								#
-#										#
-#										#
-#	Web interface to configure Nagvis maps.					#
-#										#
-#	Drag & drop, Tooltip and shapes javascript code taken from 		#
-#	http://www.walterzorn.com   						#
-#										#
+#       Nagvis Web Configurator 												#
+#	GPL License																	#
+#																				#
+#	Web interface to configure Nagvis maps.										#
+#																				#
+#	Drag & drop, Tooltip and shapes javascript code taken from 					#
+#	http://www.walterzorn.com   												#
 #################################################################################
 ?>
 
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="./css/addmodify.css" />
-<TITLE>Nagvis config tool</TITLE>
+<TITLE>Nagvis configtool</TITLE>
 </head>
 <body>
 
@@ -41,9 +39,7 @@ print "<form name=\"edit_config\" method=\"post\" action=wui.function.inc.php?my
 print "<input type=\"hidden\" name=\"properties\">";
 
 # for each line in the main config file
-foreach($MAINCFG->config AS $key => $val) 
-{
-
+foreach($MAINCFG->config AS $key => $val) {
 	if(is_array($val)) {
 		foreach($val AS $key2 => $val2) {
 			if(@substr($key2,0,8) != "comment_") {
@@ -59,25 +55,19 @@ foreach($MAINCFG->config AS $key => $val)
 				# we retrieve the possible help message associated with this parameter
 				$help_context=$CFGLANG->getTextSilent($key2);
 					
-				if($help_context=="")
-				{
+				if($help_context=="") {
 					print "<td></td>";
-				}
-				else
-				{
+				} else {
 					print "<td>";
 					print "<img style=\"cursor:help\" src=\"help_icon.png\" onclick=\"javascript:alert('".$help_context."')\">";
 					print "</td>\n";
 				}
 					
-				if($key2 == 'language')
-				{
+				if($key2 == 'language') {
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
 					$files = array();
-					if ($handle2 = opendir($MAINCFG->getValue('paths', 'cfg')."/languages")) 
-					{
-			 			while (false !== ($file = readdir($handle2))) 
-						{
+					if ($handle2 = opendir($MAINCFG->getValue('paths', 'cfg')."/languages")) {
+			 			while (false !== ($file = readdir($handle2))) {
 							if ($file != "." && $file != ".." && substr($file,0,4) == "wui_" ) { $files[]=substr($file,4,strlen($file)-8);}				
 						}
 				
@@ -87,62 +77,55 @@ foreach($MAINCFG->config AS $key => $val)
 					closedir($handle2);
 					print "</select></td>\n";
 						
-					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";
-						
-				}
-				elseif($key2 == 'backend')
-				{
+					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";		
+				} elseif($key2 == 'backend') {
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
 					$files = array();
-					if ($handle2 = opendir($MAINCFG->getValue('paths', 'base')."/includes/classes")) 
-					{
-			 			while (false !== ($file = readdir($handle2))) 
-						{
+					if ($handle2 = opendir($MAINCFG->getValue('paths', 'base')."/includes/classes")) {
+			 			while (false !== ($file = readdir($handle2))) {
 							//FIXME: Ha: I guess we should better replace all this substr sontructs in the if()s with preg_match
 							if ($file != "." && $file != ".." && substr($file,0,17) == "class.CheckState_") { 
 								$files[]=substr($file,17,strlen($file)-21);
 							}				
 						}
 				
-						if ($files) natcasesort($files); 
-						foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
+						if ($files) {
+							natcasesort($files);
+						}
+						foreach ($files as $file) { 
+							print "<option value=\"$file\">$file</option>";
+						}
 					}
 					closedir($handle2);
 					print "</select></td>\n";
 						
-					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";
-						
-				}
-				elseif($key2 == 'defaulticons')
-				{
+					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";	
+				} elseif($key2 == 'defaulticons') {
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
 					$files=array();
-					if ($handle2 = opendir($MAINCFG->getValue('paths', 'icon'))) 
-					{
-			 			while (false !== ($file = readdir($handle2))) 
-						{
+					if ($handle2 = opendir($MAINCFG->getValue('paths', 'icon'))) {
+			 			while (false !== ($file = readdir($handle2))) {
 							if ($file != "." && $file != ".." && substr($file,strlen($file)-7,7) == "_ok.png" ) { $files[]=substr($file,0,strlen($file)-7);}
 						}
 					
-						if ($files) natcasesort($files); 
-						foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
+						if ($files) {
+							natcasesort($files); 
+						}
+						foreach ($files as $file) {
+							print "<option value=\"$file\">$file</option>";
+						}
 					}
 					closedir($handle2);
 					print "</select></td>\n";
-					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";
-						
-				}
-				elseif($key2 == 'rotatemaps' || $key2 == 'displayheader' || $key2 == 'checkconfig' || $key2 == 'usegdlibs'
-						|| $key2 == 'debug' || $key2 == 'debugstates' || $key2 == 'debugcheckstate' || $key2 == 'debugfixicon')
-				{
+					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";	
+				} elseif($key2 == 'rotatemaps' || $key2 == 'displayheader' || $key2 == 'checkconfig' || $key2 == 'usegdlibs'
+						|| $key2 == 'debug' || $key2 == 'debugstates' || $key2 == 'debugcheckstate' || $key2 == 'debugfixicon') {
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
 					print "<option value=\"1\">".$LANG->getText("6")."</option>";
 					print "<option value=\"0\">".$LANG->getText("7")."</option>";
 					print "</select></td>\n";
 					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";
-				}
-				elseif($key2 == 'autoupdatefreq')
-				{
+				} elseif($key2 == 'autoupdatefreq') {
 					print "<td class=\"tdfield\"><select name=\"conf_".$key2."\">";
 					print "<option value=\"0\">".$LANG->getText("52")."</option>";
 					print "<option value=\"2\">2</option>";
@@ -152,18 +135,14 @@ foreach($MAINCFG->config AS $key => $val)
 					print "<option value=\"50\">50</option>";
 					print "</select></td>\n";
 					print "<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>\n";
-				}
-				else
-				{
+				} else {
 					print "<td class=\"tdfield\"><input type=\"text\" name=\"conf_".$key2."\" value='".$val2."'></td></tr>\n";
 					
-					if($key2=="HTMLBase")
-					{
+					if($key2=="HTMLBase") {
 						print "<script>document.edit_config.elements['conf_".$key2."'].value='".str_replace('\'',"\'",$val2)."';</script>";
 					}
 						
-					if($key2 == 'version' || $key2 == 'title' || $key2=='host_servicename')
-					{
+					if($key2 == 'version' || $key2 == 'title' || $key2=='host_servicename') {
 						print "<script>document.edit_config.elements['conf_".$key2."'].disabled=true;</script>\n";
 					}
 				}
@@ -180,13 +159,10 @@ print "</form>";
 print "</table>";	
 
 ?>
-
 </body>
 </html>
 
-
 <script type="text/javascript" language="JavaScript"><!--
-
 // function that builds up the list of parameters/values. There are 2 kinds of parameters values :
 //	- the "normal value". example : $param="value";
 //	- the other one (value computed with other ones) . example : $param="part1".$otherparam;
@@ -203,7 +179,6 @@ function update_param()
 	document.edit_config.properties.value=document.edit_config.properties.value.substring(1,document.edit_config.properties.value.length);
 	return true;
 }
-
 //--></script>
 
 

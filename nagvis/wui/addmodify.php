@@ -1,22 +1,18 @@
 <?php
 #################################################################################
-#       Nagvis Web Configurator 						#
-#	GPL License								#
-#										#
-#										#
-#	Web interface to configure Nagvis maps.					#
-#										#
-#	Drag & drop, Tooltip and shapes javascript code taken from 		#
-#	http://www.walterzorn.com   						#
-#										#
+#       Nagvis Web Configurator 												#
+#	GPL License																	#
+#																				#
+#	Web interface to configure Nagvis maps.										#
+#																				#
+#	Drag & drop, Tooltip and shapes javascript code taken from 					#
+#	http://www.walterzorn.com   												#
 #################################################################################
 ?>
-
 <head>
 <link rel="stylesheet" type="text/css" href="./css/addmodify.css" />
 <TITLE>Nagvis configtool</TITLE>
 </head>
-
 <?php
 include("../includes/classes/class.NagVisConfig.php");
 include("../includes/classes/class.MapCfg.php");
@@ -41,7 +37,7 @@ $myid = $_GET['id'];		# possible values : 1,2,3,...
 if(isset($_GET['coords'])) {
 	$mycoords = $_GET['coords'];
 }
-else{
+else {
 	$mycoords = "";
 }
 
@@ -54,15 +50,15 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 }
 
 if($MAINCFG->getRuntimeValue('user') == "") {
-	//FIXME: Errorhandling
-	echo "Fehler1";
+	//FIXME: Add error in language files
+	print "<script>alert('X: No User is logged in');</script>";
 	exit;
 }
 
 # we verify he's authorized to config the map
 if(!in_array($MAINCFG->getRuntimeValue('user'),$MAPCFG->getValue('global', 0, 'allowed_for_config')) && !in_array('EVERYONE',$MAPCFG->getValue('global', 0, 'allowed_for_config'))) {
-	//FIXME: Errorhandling
-	echo "Fehler2";
+	//FIXME: Add error in language files
+	print "<script>alert('X: User ".$MAINCFG->getRuntimeValue('user')." has no permissions to configure this map.');</script>";
 	exit;
 }
 
@@ -137,11 +133,14 @@ foreach($type_tab[$mytype] as $propname) {
 				}				
 			}
 			
-			if ($files) natcasesort($files); 
+			if ($files) {
+				natcasesort($files);
+			} 
 			foreach ($files as $file) { 
-			$file_save=explode("(",$file);
-			$save=trim($file_save['0']);
-			print "<option value=\"$save\">$file</option>"; }
+				$file_save=explode("(",$file);
+				$save=trim($file_save['0']);
+				print "<option value=\"$save\">$file</option>";
+			}
 			
 		}
 		closedir($handle);
@@ -160,63 +159,61 @@ foreach($type_tab[$mytype] as $propname) {
 				$files[]=$file;}				
 			}
 			
-			if ($files) natcasesort($files); 
-			foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
+			if ($files) {
+				natcasesort($files);
+			} 
+			foreach ($files as $file) {
+				print "<option value=\"$file\">$file</option>";
+			}
 		}
 		closedir($handle);
 		print "</select></td>\n";
 	}
 	
 	# we treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
-	else if($propname_ok == "recognize_services")
-	{
+	else if($propname_ok == "recognize_services") {
 		print "<td class=\"tdfield\"><select name=\"".$propname."\">";
 		print "<option value=\"\">".$LANG->getText("6")."</option>";
 		print "<option value=\"0\">".$LANG->getText("7")."</option>";
 		print "</select></td>\n";
 	}
-	
 	# we treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
-	else if($propname_ok == "line_type")
-	{
+	else if($propname_ok == "line_type") {
 		print "<td class=\"tdfield_linetype\"><select name=\"".$propname."\">";
 		print "<option value=\"\"></option>";
 		print "<option value=\"0\">------><------</option>";
 		print "<option value=\"1\">--------------></option>";
 		print "</select></td>\n";
 	}
-	
 	# we treat the special case of map_name, which will display a listbox instead of the normal textbox
-	else if($propname_ok == "map_name")
-	{
+	else if($propname_ok == "map_name") {
 		print "<td class=\"tdfield\"><select name=\"$propname\">";
 		$files=array();
-		if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) 
-		{
- 			while (false !== ($file = readdir($handle))) 
-			{
+		if ($handle = opendir($MAINCFG->getValue('paths', 'mapcfg'))) {
+ 			while (false !== ($file = readdir($handle))) {
 				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" && substr($file,0,strlen($file)-4) != $MAPCFG->getName() ) { $files[]=substr($file,0,strlen($file)-4);}				
 			}
 			
-			if ($files) natcasesort($files); 
-			foreach ($files as $file) { print "<option value=\"$file\">$file</option>"; }
+			if ($files) {
+				natcasesort($files); 
+			}
+			foreach ($files as $file) {
+				print "<option value=\"$file\">$file</option>";
+			}
 		}
 		closedir($handle);
 		print "</select></td>\n";
 	}
 	
 	# we display a simple textbox
-	else
-	{
+	else {
 		print "<td class=\"tdfield\"><input type=\"text\" name=\"$propname\" value=\"\"></td></tr>\n";
 	}
 	
 	# we add this property to the arrau of the object properties
 	$properties_list[]=$propname;
 }
-
 ?>
-
 		<tr height="20px"><td></td></tr>
 		<tr><td align="center" colspan="2" id="mycell"><button name="button_submit" type=submit value="submit" id="commit"><?php echo $LANG->getText("8") ?></button></td></tr>
 	</form>
@@ -238,14 +235,7 @@ if($myaction == "modify") {
 				} else {
 					$propname_ok = $propname;
 				}
-				
-				// soll "richtig" heißen
-				//if(ereg("name", $propname_ok)) {
-				//	$propname_ok = "name";
-				//}
-				
-				if(isset($obj[$propname_ok]))
-				{
+				if(isset($obj[$propname_ok])) {
 					if($propname_ok == 'line_type') {
 						print "document.addmodify.elements['".$propname."'].value='".substr($obj[$propname_ok],strlen($obj[$propname_ok])-1,1)."';\n";
 					} else {
@@ -261,50 +251,36 @@ if($myaction == "modify") {
 		}
 	}
 	
-	if($mycoords != "")
-	{
+	if($mycoords != "") {
 		$val_coords=explode(',',$mycoords);
-		if ($mytype == "textbox")
-		{
+		if ($mytype == "textbox") {
 			$objwidth=$val_coords[2]-$val_coords[0];
 			print "document.addmodify.elements['x*'].value='".$val_coords[0]."';\n";
 			print "document.addmodify.elements['y*'].value='".$val_coords[1]."';\n";
 			print "document.addmodify.elements['w*'].value='".$objwidth."';\n";
-		}
-		else
-		{
+		} else {
 			print "document.addmodify.elements['x*'].value='".$val_coords[0].",".$val_coords[2]."';\n";
 			print "document.addmodify.elements['y*'].value='".$val_coords[1].",".$val_coords[3]."';\n";
-		}		
-	
+		}
 	}
-	
 	print "//--></script>\n";	
 }
 ##########################################
 # if the action specified in the URL is "add", we set the object coordinates (that we retrieve from the mycoords parameter)
-else if($myaction == "add")
-{
-	if($mycoords != "")
-	{
+else if($myaction == "add") {
+	if($mycoords != "") {
 		$val_coords=explode(',',$mycoords);
 		print "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
-		if(count($val_coords)==2)
-		{			
+		if(count($val_coords)==2) {			
 			print "document.addmodify.elements['x*'].value='".$val_coords[0]."';\n";
 			print "document.addmodify.elements['y*'].value='".$val_coords[1]."';\n";
-		}
-		else if(count($val_coords)==4)
-		{
-			if ($mytype == "textbox")
-			{
+		} else if(count($val_coords)==4) {
+			if ($mytype == "textbox") {
 				$objwidth=$val_coords[2]-$val_coords[0];
 				print "document.addmodify.elements['x*'].value='".$val_coords[0]."';\n";
 				print "document.addmodify.elements['y*'].value='".$val_coords[1]."';\n";
 				print "document.addmodify.elements['w*'].value='".$objwidth."';\n";
-			}
-			else
-			{
+			} else {
 				print "document.addmodify.elements['x*'].value='".$val_coords[0].",".$val_coords[2]."';\n";
 				print "document.addmodify.elements['y*'].value='".$val_coords[1].",".$val_coords[3]."';\n";
 			}		
@@ -312,9 +288,7 @@ else if($myaction == "add")
 		print "//--></script>\n";
 	}
 }
-
 ?>
-
 <script type="text/javascript" language="JavaScript"><!--
 
 // we save the current username, that we'll use in javascript functions to make sure the user doesn't ban himself
@@ -322,46 +296,36 @@ var user='<?php echo $MAINCFG->getRuntimeValue('user'); ?>';
 
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
-function check_object()
-{
+function check_object() {
 	object_name='';
 	line_type='';
 	iconset='';
 	x='';
 	y='';
 	
-	for(i=0;i<document.addmodify.elements.length;i++)
-	{
-		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden')
-		{
+	for(i=0;i<document.addmodify.elements.length;i++) {
+		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
 		
-			if(document.addmodify.elements[i].name.substring(document.addmodify.elements[i].name.length-6,document.addmodify.elements[i].name.length)=='_name*')
-			{
+			if(document.addmodify.elements[i].name.substring(document.addmodify.elements[i].name.length-6,document.addmodify.elements[i].name.length)=='_name*') {
 				object_name=document.addmodify.elements[i].value;
 			}
-			if(document.addmodify.elements[i].name == 'iconset')
-			{
+			if(document.addmodify.elements[i].name == 'iconset') {
 				iconset=document.addmodify.elements[i].value;
 			}
-			if(document.addmodify.elements[i].name == 'x*')
-			{
+			if(document.addmodify.elements[i].name == 'x*') {
 				x=document.addmodify.elements[i].value;
 			}			
-			if(document.addmodify.elements[i].name == 'y*')
-			{
+			if(document.addmodify.elements[i].name == 'y*') {
 				y=document.addmodify.elements[i].value;
 			}
 			
-			if(document.addmodify.elements[i].name == 'allowed_for_config*')
-			{
+			if(document.addmodify.elements[i].name == 'allowed_for_config*') {
 				users_tab=document.addmodify.elements[i].value.split(',');
 				suicide=true;
-				for(k=0;k<users_tab.length;k++)
-				{
+				for(k=0;k<users_tab.length;k++) {
 					if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==user) ) { suicide=false; }
 				}
-				if(suicide)
-				{
+				if(suicide) {
 					mess="<?php echo $LANG->getText("50"); ?>";
 					alert(mess);
 					document.addmodify.properties.value='';
@@ -370,32 +334,19 @@ function check_object()
 				}
 			}		
 
-			if(document.addmodify.elements[i].value != '')
-			{
-				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*')
-				{
+			if(document.addmodify.elements[i].value != '') {
+				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*') {
 					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length-1)+'='+document.addmodify.elements[i].value;
-				}
-				else
-				{
-					if(document.addmodify.elements[i].name=='line_type')
-					{
+				} else {
+					if(document.addmodify.elements[i].name=='line_type') {
 						line_type=object_name.split(",").length+document.addmodify.elements[i].value;
 						document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+line_type;
-					}
-					else
-					{
+					} else {
 						document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+document.addmodify.elements[i].value;
 					}
-					
-					
 				}
-				
-			}
-			else
-			{
-				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*')
-				{
+			} else {
+				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*') {
 					mess="<?php echo $LANG->getText("9"); ?>";
 					alert(mess);
 					document.addmodify.properties.value='';
@@ -408,13 +359,11 @@ function check_object()
 	document.addmodify.properties.value=document.addmodify.properties.value.substring(1,document.addmodify.properties.value.length);
 	
 	// we make some post tests (concerning the line_type and iconset values)
-	if(line_type != '')
-	{
+	if(line_type != '') {
 		// we verify that the current line_type is valid
 		valid_list=new Array("10","11","20");
 		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
-		if(j==valid_list.length)
-		{
+		if(j==valid_list.length) {
 			mess="<?php echo $LANG->getText("10"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
@@ -422,8 +371,7 @@ function check_object()
 		}
 		
 		// we verify we don't have both iconset and line_type defined
-		if(iconset != '')
-		{
+		if(iconset != '') {
 			mess="<?php echo $LANG->getText("11"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
@@ -431,76 +379,54 @@ function check_object()
 		}
 		
 		// we verify we have 2 x coordinates and 2 y coordinates
-		if(x.split(",").length != 2)
-		{
+		if(x.split(",").length != 2) {
 			mess="<?php echo $LANG->getTextReplace("12","COORD=X"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
 		}
 		
-		if(y.split(",").length != 2)
-		{
+		if(y.split(",").length != 2) {
 			mess="<?php echo $LANG->getTextReplace("12","COORD=Y"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
 		}
-		
 	}
 	
-	if(x.split(",").length > 1)
-	{
-		if(x.split(",").length != 2)
-		{
+	if(x.split(",").length > 1) {
+		if(x.split(",").length != 2) {
 			mess="<?php echo $LANG->getTextReplace("13","COORD=X"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
-		}
-		else
-		{
-			if(line_type == '')
-			{
+		} else {
+			if(line_type == '') {
 				mess="<?php echo $LANG->getTextReplace("14","COORD=X"); ?>";
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;
 			}
 		}
-	
 	}
 	
-	if(y.split(",").length > 1)
-	{
-		if(y.split(",").length != 2)
-		{
+	if(y.split(",").length > 1) {
+		if(y.split(",").length != 2) {
 			mess="<?php echo $LANG->getTextReplace("13","COORD=Y"); ?>";
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
-		}
-		else
-		{
-			if(line_type == '')
-			{
+		} else {
+			if(line_type == '') {
 				mess="<?php echo $LANG->getTextReplace("14","COORD=Y"); ?>";
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;
 			}
 		}
-	
 	}
-	
 	return true;
-	
 }
-	
-	
 // we resize the window (depending on the number of properties displayed)	
 window.resizeTo(410,<?php echo count($properties_list) ?>*40+80);
-	
-	
-
 //--></script>

@@ -1,14 +1,12 @@
 <?php
 #################################################################################
-#       Nagvis Web Configurator 						#
-#	GPL License								#
-#										#
-#										#
-#	Web interface to configure Nagvis maps.					#
-#										#
-#	Drag & drop, Tooltip and shapes javascript code taken from 		#
-#	http://www.walterzorn.com   						#
-#										#
+#       Nagvis Web Configurator 												#
+#	GPL License																	#
+#																				#
+#	Web interface to configure Nagvis maps.										#
+#																				#
+#	Drag & drop, Tooltip and shapes javascript code taken from 					#
+#	http://www.walterzorn.com   												#
 #################################################################################
 ?>
 
@@ -39,8 +37,8 @@ elseif(isset($_SERVER['REMOTE_USER'])) {
 }
 
 if($MAINCFG->getRuntimeValue('user') == "") {
-	//FIXME: Errorhandling
-	echo "Fehler1";
+	//FIXME: Add error in language files
+	print "<script>alert('X: No User is logged in');</script>";
 	exit;
 }
 ?>
