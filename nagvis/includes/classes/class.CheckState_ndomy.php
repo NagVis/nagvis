@@ -468,7 +468,7 @@ class backend
 			}
 		}
 		if(!isset($state)) {
-			$nagvis = new frontend();
+			$nagvis = new frontend($this->MAINCFG);
 			$nagvis->openSite($rotateUrl);
 			$nagvis->messageBox("12","Kein state");
 			$nagvis->closeSite();

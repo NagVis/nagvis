@@ -366,7 +366,7 @@ class backend {
 			}
 		}
 		if(!isset($state)) {
-			$nagvis = new FRONTEND();	
+			$nagvis = new FRONTEND($this->MAINCFG);	
 			$nagvis->openSite();
 			$nagvis->messageBox("12","No state found");
 			$nagvis->closeSite();
