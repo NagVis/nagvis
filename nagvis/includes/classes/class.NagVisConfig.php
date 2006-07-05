@@ -212,13 +212,13 @@ class MainNagVisCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
 	function checkMapCfgFolderReadable($printErr) {
-		if(file_exists($this->getValue('paths', 'map')) && is_readable($this->getValue('paths', 'map'))) {
+		if(file_exists($this->getValue('paths', 'mapcfg')) && @is_readable($this->getValue('paths', 'mapcfg'))) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this,$this->MAPCFG);
 				$FRONTEND->openSite();
-				$FRONTEND->messageBox("26", "MAPPATH~".$this->getValue('paths', 'map'));
+				$FRONTEND->messageBox("26", "MAPPATH~".$this->getValue('paths', 'mapcfg'));
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
 			}
@@ -234,13 +234,13 @@ class MainNagVisCfg {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
     */
 	function checkMapCfgFolderWriteable($printErr) {
-		if(file_exists(substr($this->getValue('paths', 'map'),0,-1)) && @is_writable(substr($this->getValue('paths', 'map'),0,-1))) {
+		if(file_exists(substr($this->getValue('paths', 'mapcfg'),0,-1)) && @is_writable(substr($this->getValue('paths', 'mapcfg'),0,-1))) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new frontend($this,$this->MAPCFG);
 				$FRONTEND->openSite();
-				$FRONTEND->messageBox("27", "MAPPATH~".$this->getValue('paths', 'map'));
+				$FRONTEND->messageBox("27", "MAPPATH~".$this->getValue('paths', 'mapcfg'));
 				$FRONTEND->closeSite();
 				$FRONTEND->printSite();
 			}

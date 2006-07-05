@@ -41,23 +41,23 @@ autoupdatefreq=25
 ; path options
 [paths]
 ; absolute physical NagVis path
-base="/usr/local/nagios/share/nagvistest/nagvis/"
+base="/usr/local/nagios/share/nagvis/"
 ; absolute physical NagVis cfg path
-cfg="/usr/local/nagios/share/nagvistest/nagvis/etc/"
+cfg="/usr/local/nagios/share/nagvis/etc/"
 ; absolute physical NagVis iconset path
-icon="/usr/local/nagios/share/nagvistest/nagvis/iconsets/"
+icon="/usr/local/nagios/share/nagvis/iconsets/"
 ; absolute physical NagVis maps path
-map="/usr/local/nagios/share/nagvistest/nagvis/maps/"
+map="/usr/local/nagios/share/nagvis/maps/"
 ; absolute physical NagVis maps cfg path
-mapcfg="/usr/local/nagios/share/nagvistest/nagvis/etc/maps/"
+mapcfg="/usr/local/nagios/share/nagvis/etc/maps/"
 ; absolute html NagVis path
-htmlbase="/org/ti-sysmon/nagios/nagvistest/nagvis"
+htmlbase="/nagios/nagvis"
 ; absolute html NagVis cgi path
-htmlcgi="/org/ti-sysmon/nagios/cgi-bin"
+htmlcgi="/nagios/cgi-bin"
 ; absolute html NagVis icon path
-htmlicon="/org/ti-sysmon/nagios/nagvistest/nagvis/iconsets/"
+htmlicon="/nagios/nagvis/iconsets/"
 ; absolute html NagVis maps path
-htmlmap="/org/ti-sysmon/nagios/nagvistest/nagvis/maps/"
+htmlmap="/nagios/nagvis/maps/"
 ; absolute html NagVis documentation path
 htmldoku="http://luebben-home.de/nagvis-doku/nav.html?nagvis/"
 
@@ -68,11 +68,11 @@ dbhost="localhost"
 ; portname for NDO-db
 dbport=3306
 ; database-name for NDO-db
-dbname="db_nagios"
+dbname="nagios"
 ; username for NDO-db
 dbuser="nagios"
 ; password for NDO-db
-dbpass="g02nd0"
+dbpass="nagios"
 ; prefix for tables in NDO-db
 dbprefix="ndo_"
 ; instace-id for tables in NDO-db
