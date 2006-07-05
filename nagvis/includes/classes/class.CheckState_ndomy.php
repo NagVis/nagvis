@@ -269,7 +269,7 @@ class backend
 				}
 				elseif($currentHostState['State'] == "UNKNOWN") {
 					$hostsUnknown++;
-				}	
+				}
 		}
 	
 		if($hostsCritical > 0) {
@@ -286,7 +286,6 @@ class backend
 			$state['Count'] = $hostsUnknown;
 			$state['Output'] = $hostsUnknown." are in UNKNOWN state";
 			$state['State'] = "UNKNOWN";
-			
 		}
 		elseif($hostsAck > 0) {
 			$state['Count'] = $hostsAck;
@@ -315,16 +314,22 @@ class backend
 		}
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
 
-		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'");
+		$QUERYHANDLE = mysql_query("SELECT has_been_checked, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'");
 		$service = mysql_fetch_array($QUERYHANDLE);				
-		if($service['current_state'] == 0) {
+		if($service['has_been_checked'] == 0) {
+			$state['Count'] = "1";
+			$state['State'] = "PENDING";
+			//FIXME: All this outputs should be handled over a language file
+			$state['Output'] = "The Service is not scheduled to be checked... ";
+		}
+		elseif($service['current_state'] == 0) {
 				$state['Count'] = "1";
 				$state['State'] = "OK";
 				$state['Output'] = $service['output'];
 		}
 		elseif($service['problem_has_been_acknowledged'] == 1) {
 				$state['Count'] = "1";
-				$state['State'] = "SACK";
+				$state['State'] = "ACK";
 				$state['Output'] = $service['output'];			
 		}
 		elseif($service['current_state'] == 1) {
