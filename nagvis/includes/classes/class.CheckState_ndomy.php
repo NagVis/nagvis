@@ -109,105 +109,114 @@ class backend
 		}
 
 		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '$hostObjectId[0]' AND instance_id='$this->dbInstanceId'");
-		$hostState = mysql_fetch_array($QUERYHANDLE);
-
-		//Host is UP
-		if ($hostState['current_state'] == '0') {
-			$state['State'] = 'UP';
-			$state['Output'] = $hostState['output'];
-		} 
-		//Host is DOWN
-		elseif ($hostState['current_state'] == '1') {
-			if($hostState['problem_has_been_acknowledged'] == 1) {
-				$state['State'] = 'ACK';
-			}
-			else {
-				$state['State'] = 'DOWN';
-			}
-			$state['Output'] = $hostState['output'];
-		}
-		//Host is UNREACHABLE
-		elseif ($hostState['current_state'] == '2') {
-			if($hostState['problem_has_been_acknowledged'] == 1) {
-				$state['State'] = 'ACK';
-			}
-			else {
-				$state['State'] = 'UNREACHABLE';
-			}
-			$state['Output'] = $hostState['output'];
-		}
-		//Host is UNKNOWN
-		elseif ($hostState['current_state'] == '3') {
-			if($hostState['problem_has_been_acknowledged'] == 1) {
-				$state['State'] = 'ACK';
-			}
-			else {
-				$state['State'] = 'UNKNOWN';
-			}
-			$state['Output'] = $hostState['output'];
-		}
 		
-		$hostState = $state['State'];
-		
-		//Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-),
-		//this also makes shure that a host ACK will automatically ACK all services.
-		if($recognizeServices == 1 && $hostState == "UP") {
-			//Initialise Vars
-			$servicesOk=0;
-			$servicesWarning=0;
-			$servicesCritical=0;
-			$servicesUnknown=0;
-			$servicesAck=0;
-			//Get the object ids from all services of this host
-			$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='2' AND name1='$hostName' AND instance_id='$this->dbInstanceId'");
-			while($services = mysql_fetch_array($QUERYHANDLE)) {
-				$objectId = $services['object_id'];
-				//Query the Servicestates
-				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
-				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
-				if($currentService['current_state'] == 0) {
-					$servicesOk++;
+		// This is the special case, that a host is definied but in pending state
+		if(mysql_num_rows($QUERYHANDLE) <= 0) {
+			$state['State'] = 'PENDING';
+			//FIXME: All this outputs should be handled over a language file
+			$state['Output'] = "The Host <b>" .$hostName. "</b> is in pending state.";
+			$hostState = $state['State'];
+		} else {
+			$hostState = mysql_fetch_array($QUERYHANDLE);
+			
+			//Host is UP
+			if ($hostState['current_state'] == '0') {
+				$state['State'] = 'UP';
+				$state['Output'] = $hostState['output'];
+			} 
+			//Host is DOWN
+			elseif ($hostState['current_state'] == '1') {
+				if($hostState['problem_has_been_acknowledged'] == 1) {
+					$state['State'] = 'ACK';
 				}
-				elseif($currentService['problem_has_been_acknowledged'] == 1) {
-					$servicesAck++;				
+				else {
+					$state['State'] = 'DOWN';
 				}
-				elseif($currentService['current_state'] == 1) {
-					$servicesWarning++;
+				$state['Output'] = $hostState['output'];
+			}
+			//Host is UNREACHABLE
+			elseif ($hostState['current_state'] == '2') {
+				if($hostState['problem_has_been_acknowledged'] == 1) {
+					$state['State'] = 'ACK';
 				}
-				elseif($currentService['current_state'] == 2) {
-					$servicesCritical++;
+				else {
+					$state['State'] = 'UNREACHABLE';
 				}
-				elseif($currentService['current_state'] == 3) {
-					$servicesUnknown++;
+				$state['Output'] = $hostState['output'];
+			}
+			//Host is UNKNOWN
+			elseif ($hostState['current_state'] == '3') {
+				if($hostState['problem_has_been_acknowledged'] == 1) {
+					$state['State'] = 'ACK';
 				}
+				else {
+					$state['State'] = 'UNKNOWN';
+				}
+				$state['Output'] = $hostState['output'];
 			}
 			
-			if($servicesCritical > 0) {
-				$state['Count'] = $servicesCritical;
-				$state['Output'] = "Host is UP but there are ".$servicesCritical." CRITICAL, " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
-				$state['State'] = "CRITICAL";
-			}
-			elseif($servicesWarning > 0) {
-				$state['Count'] = $servicesWarning;
-				$state['Output'] = "Host is UP but there are " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
-				$state['State'] = "WARNING";		
-			}
-			elseif($servicesUnknown > 0) {
-				$state['Count'] = $servicesUnknown;
-				$state['Output'] = "Host is UP but there are ".$servicesUnknown." Services in UNKNOWN state";
-				$state['State'] = "UNKNOWN";
+			$hostState = $state['State'];
+			
+			//Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-),
+			//this also makes shure that a host ACK will automatically ACK all services.
+			if($recognizeServices == 1 && $hostState == "UP") {
+				//Initialise Vars
+				$servicesOk=0;
+				$servicesWarning=0;
+				$servicesCritical=0;
+				$servicesUnknown=0;
+				$servicesAck=0;
+				//Get the object ids from all services of this host
+				$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='2' AND name1='$hostName' AND instance_id='$this->dbInstanceId'");
+				while($services = mysql_fetch_array($QUERYHANDLE)) {
+					$objectId = $services['object_id'];
+					//Query the Servicestates
+					$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
+					$currentService = mysql_fetch_array($QUERYHANDLE_2);				
+					if($currentService['current_state'] == 0) {
+						$servicesOk++;
+					}
+					elseif($currentService['problem_has_been_acknowledged'] == 1) {
+						$servicesAck++;				
+					}
+					elseif($currentService['current_state'] == 1) {
+						$servicesWarning++;
+					}
+					elseif($currentService['current_state'] == 2) {
+						$servicesCritical++;
+					}
+					elseif($currentService['current_state'] == 3) {
+						$servicesUnknown++;
+					}
+				}
 				
-			}
-			elseif($servicesAck > 0) {
-				$state['Count'] = $servicesAck;
-				$state['Output'] = "Host is UP but ".$servicesAck." services are in a NON-OK State but all are ACKNOWLEDGED";
-				$state['State'] = "ACK";
-			}
-			elseif($servicesOk > 0) {
-				$state['Count'] = $servicesOk;
-				$state['Output'] = "Host is UP and all ".$servicesOk." services are OK";
-				//This must be set before by the host, but to be consitend with the other ifs i define it again here:
-				$state['State'] = "UP";		
+				if($servicesCritical > 0) {
+					$state['Count'] = $servicesCritical;
+					$state['Output'] = "Host is UP but there are ".$servicesCritical." CRITICAL, " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+					$state['State'] = "CRITICAL";
+				}
+				elseif($servicesWarning > 0) {
+					$state['Count'] = $servicesWarning;
+					$state['Output'] = "Host is UP but there are " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+					$state['State'] = "WARNING";		
+				}
+				elseif($servicesUnknown > 0) {
+					$state['Count'] = $servicesUnknown;
+					$state['Output'] = "Host is UP but there are ".$servicesUnknown." Services in UNKNOWN state";
+					$state['State'] = "UNKNOWN";
+					
+				}
+				elseif($servicesAck > 0) {
+					$state['Count'] = $servicesAck;
+					$state['Output'] = "Host is UP but ".$servicesAck." services are in a NON-OK State but all are ACKNOWLEDGED";
+					$state['State'] = "ACK";
+				}
+				elseif($servicesOk > 0) {
+					$state['Count'] = $servicesOk;
+					$state['Output'] = "Host is UP and all ".$servicesOk." services are OK";
+					//This must be set before by the host, but to be consitend with the other ifs i define it again here:
+					$state['State'] = "UP";		
+				}
 			}
 		}
         return($state);
