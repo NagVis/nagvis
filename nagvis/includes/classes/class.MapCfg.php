@@ -36,8 +36,8 @@ class MapCfg {
 		} else {
 			//check the $name string for security reasons (its the ONLY value we
 			//get directly from external...)
-			//Allow ONLY Characters and Numbers inside the Name of a Map
-			$this->name = preg_replace("/[^a-zA-Z0-9]/","",$name);
+			//Allow ONLY Characters, Numbers, - and _ inside the Name of a Map
+			$this->name = preg_replace("/[^a-zA-Z0-9_-]/","",$name);
 		}
 	}
 	
