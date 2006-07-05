@@ -51,6 +51,9 @@ class backend
 				exit(1);
 			}
 		}
+		
+		// we don't want to see mysql errors from connecting - we only want our error messages
+		$oldLevel = error_reporting(0);
 
 		$CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		$returnCode = mysql_select_db($this->dbName, $CONN);
@@ -60,6 +63,9 @@ class backend
 			echo "<h1>NDOMy Backend: Error selecting Database, maybe wrong db or insufficient permissions?</h1>";
 			exit(1);
 		}
+		
+		// we set the old level of reporting back
+		error_reporting($oldLevel);
 		
 		//Do some checks to make sure that Nagios is running and the Data at the DB are ok
 		$QUERYHANDLE = mysql_query("SELECT is_currently_running, status_update_time FROM ".$this->dbPrefix."programstatus WHERE instance_id = '".$this->dbInstanceId."'");
