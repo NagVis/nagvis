@@ -232,10 +232,9 @@ class MainNagVisCfg {
 	* @param string $var
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	* FIXME: FUNKTIONIRT NICHT! Wie prüfen, ob Datei in Verzeichniss erstellt werden kann?
     */
 	function checkMapCfgFolderWriteable($printErr) {
-		if(file_exists(substr($this->getValue('paths', 'map'),0,-1)) /* FIXME */) {
+		if(file_exists(substr($this->getValue('paths', 'map'),0,-1)) && @is_writable(substr($this->getValue('paths', 'map'),0,-1))) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {

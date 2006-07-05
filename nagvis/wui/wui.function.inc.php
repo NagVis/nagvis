@@ -225,8 +225,8 @@ switch($_GET['myaction']) {
 		// do the backup
 		backup($MAINCFG,$_POST['map_name']);
 		
-		print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map_name']."';</script>\n";
-		print "<script>window.close();</script>\n";
+		//print "<script>window.opener.document.location.href='../config.php?map=".$_POST['map_name']."';</script>\n";
+		//print "<script>window.close();</script>\n";
 	break;
 	case 'mgt_map_rename':
 		$files = Array();
