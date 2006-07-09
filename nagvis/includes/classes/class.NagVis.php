@@ -212,10 +212,10 @@ class frontend extends common {
 	*/
 	function printMap()	{
 		$this->site[] = '  <DIV CLASS="map">';
-		if ($this->MAINCFG->getValue('global', 'usegdlibs') == "0") {
+		if ($this->MAINCFG->getValue('global', 'usegdlibs') == "1") {
 			$this->site[] = '   <IMG SRC="./draw.php?map='.$this->MAPCFG->getName().'">';
 		} else {
-			$this->site[] = '   <IMG SRC="'.$this->MAINCFG->getValue('paths', 'htmlmap')."/".$this->MAPCFG->getImage().'"> ';
+			$this->site[] = '   <IMG SRC="'.$this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->getImage().'"> ';
 		}
 	}
 	

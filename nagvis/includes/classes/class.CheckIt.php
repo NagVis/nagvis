@@ -112,6 +112,8 @@ class checkit extends frontend {
             } else {
             	return TRUE;
         	}
+        } else {
+            return TRUE;
         }
     }
 }
