@@ -333,7 +333,9 @@ foreach($types AS $key => $type) {
 		
 		# we treat the case of an object of type "textbox"	
 		elseif($obj['type'] == 'textbox') {
-			$TextBox = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text']);
+			//FIXME: Ha: This is somewhat broken... The last Parameter to TextBox() should be the bgcolor of the box
+			// but it MUST be the name of the CSS Class acualy. An this Name is "box"...
+			$TextBox = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text'],"box");
 			$FRONTEND->site[] = $TextBox;			
 		}
 		
