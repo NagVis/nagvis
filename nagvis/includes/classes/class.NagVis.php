@@ -183,23 +183,26 @@ class frontend extends common {
 		$messageIcon = $msg[0];
 		$messageHead = $msg[1];
 		$message = $msg[2];
-	
-		$this->site[] = '<BODY>';
-		$this->site[] = '<TABLE CLASS="messageBox" WIDTH="50%" ALIGN="CENTER">';
-		$this->site[] = ' <TR>';
-		$this->site[] = '  <TD CLASS="messageBoxHead" WIDTH="40">';
-		$this->site[] = '   <IMG SRC="./images/'.$messageIcon.'" ALIGN="LEFT">';
-		$this->site[] = '  </TD>';
-		$this->site[] = '  <TD CLASS="messageBoxHead" ALIGN="CENTER">';
-		$this->site[] =     $messagenr.":".$messageHead;
-		$this->site[] = '  </TD>';
-		$this->site[] = ' </TR>';
-		$this->site[] = ' <TR>';
-		$this->site[] = '  <TD CLASS="messageBoxMessage" ALIGN="CENTER" COLSPAN="2">';
-		$this->site[] =     $message;
-		$this->site[] = '  </TD>';
-		$this->site[] = ' </TR>';
-		$this->site[] = '</TABLE>';
+		
+		$this->site[] = '<style type="text/css">.main { background-color: yellow }</style>';
+		$this->site[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
+		$this->site[] = '<tr><td align="center" valign="middle">';
+		$this->site[] = '   <TABLE CLASS="messageBox" WIDTH="50%" ALIGN="CENTER">';
+		$this->site[] = '    <TR>';
+		$this->site[] = '     <TD CLASS="messageBoxHead" WIDTH="40" >';
+		$this->site[] = '      <IMG SRC="./images/'.$messageIcon.'" ALIGN="LEFT">';
+		$this->site[] = '     </TD>';
+		$this->site[] = '     <TD CLASS="messageBoxHead" ALIGN="CENTER">';
+		$this->site[] = $messagenr.":".$messageHead;
+		$this->site[] = '     </TD>';
+		$this->site[] = '    </TR>';
+		$this->site[] = '    <TR>';
+		$this->site[] = '     <TD CLASS="messageBoxMessage" ALIGN="CENTER" COLSPAN="2">';
+		$this->site[] =  $message;
+		$this->site[] = '     </TD>';
+		$this->site[] = '    </TR>';
+		$this->site[] = '   </TABLE>';
+		$this->site[] = '</td></tr></table>';
 	}
 	
 	/**
