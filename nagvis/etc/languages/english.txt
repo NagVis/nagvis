@@ -26,3 +26,7 @@
 25~img_error.png~Can not open NagVis Config File to write~Please check the permissions of the webserver user at the config.ini.php!
 26~img_error.png~Can not read Map Config Folder~Please check the permissions of the webserver user at the Folder (<I>[MAPPATH]</I>)!
 27~img_error.png~Can not write Map Config Folder~Please check the permissions of the webserver user at the Folder (<I>[MAPPATH]</I>)!
+110~img_error.png~NDOMy Backend Error~Your PHP installation lacks SQL support. You can't use the NDOMy Backend without php-mysql!
+111~img_error.png~NDOMy Backend Error~Error selecting Database. Maybe wrong dbName or insufficient permissions?
+112~img_error.png~NDOMy Backend Error~Caution: NDO reports that Nagios is NOT running!
+113~img_error.png~NDOMy Backend Error~Caution: NDO claims that Nagios did NO status Update for more than  <I>[TIMEWITHOUTUPDATE]</I> seconds! Make sure that Nagios and ndo2db are running!

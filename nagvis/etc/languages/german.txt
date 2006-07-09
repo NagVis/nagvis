@@ -25,4 +25,8 @@
 24~img_error.png~Keine Leserechte auf die Sprachdatei~Bitte die Leseberechtigungen des Webservers auf die Sprachdatei (<I>[LANGFILE]</I>) pr&uuml;fen!
 25~img_error.png~Kann die NagVis Config-Datei nicht zum schreiben &ouml;ffnen~Bitte die Schreibberechtigungen des Webservers auf die config.ini.php Datei pr&uuml;fen!
 26~img_error.png~Keine Leserechte auf das Map Config Verzeichnis~Bitte die Leseberechtigungen des Webservers auf das Verzeichnis (<I>[MAPPATH]</I>) pr&uuml;fen!
-27~img_error.png~Keine Schreibrechte auf das Map Config Verzeichnis~Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis (<I>[MAPPATH]</I>) pr&uuml;fen!
+27~img_error.png~Keine Schreibrechte auf das Map Config Verzeichnis~Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis (<I>[MAPPATH]</I>) pr&uuml;fen
+110~img_error.png~NDOMy Backend Fehler~Ihre PHP installation hat keine MySQL unterstützung. Ohne php-mysql können Sie das NDO Backend nicht nutzen!
+111~img_error.png~NDOMy Backend Fehler~Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen?
+112~img_error.png~NDOMy Backend Fehler~Achtung: Laut NDO <B>l&auml;uft der Nagios Dienst NICHT!</B>
+113~img_error.png~NDOMy Backend Fehler~Laut NDO wurden von Nagios seid mehr als <I>[TIMEWITHOUTUPDATE]</I> Sekunden keine Daten mehr verarbeitet! Laufen Nagios und ndo2db?
