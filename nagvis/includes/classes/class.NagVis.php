@@ -366,8 +366,8 @@ class frontend extends common {
 	*
 	* @author Joerg Linge
 	*/
-	function TextBox($x,$y,$width,$text) {
-		$Comment = '<div class="box" style="left : '.$x.'px; top : '.$y.'px; width : '.$width.'px; overflow : visible;">';	
+	function TextBox($x,$y,$width,$text,$bgcolor) {
+		$Comment = '<div class="'.$bgcolor.'" style="left : '.$x.'px; top : '.$y.'px; width : '.$width.'px; overflow : visible;">';	
 		$Comment .= '<span>'.$text.'</span>';
 		$Comment .= '</div>';
 		return($Comment);	
@@ -407,6 +407,7 @@ class frontend extends common {
 	* @param boolean $print
 	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* @author Michael Luebben <mickey2002@nagios-wiki.de>
 	*/
 	function getObjects(&$MAPCFG,&$FRONTEND,&$BACKEND,&$DEBUG,$type,$print=1) {
 		$objState = Array();
@@ -442,7 +443,25 @@ class frontend extends common {
 					
 					// draw only the textbox
 					if($print == 1) {
-						$FRONTEND->site[] = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text']);
+					  	$bgColor = "box";
+						
+						// Check if set a hostname
+						if (isset($obj['host_name'])) {
+					  		$state = $BACKEND->findStateHost($obj['host_name'],$obj['recognize_services'],0);
+					  		
+					  		// Output the Error-Message into the textbox.
+							if ($state['State'] == "ERROR") {
+					  			$obj['text'] = $state['Output'];
+					  		}
+					  		
+					  		$allowedStates = array("PENDING","UP","DOWN","UNREACHABLE","ERROR");
+					  		if (in_array($state['State'],$allowedStates)) {
+					  			$bgColor = "box_".$state['State'];
+					  		}
+							$FRONTEND->site[] = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text'],$bgColor);
+						} else {
+							$FRONTEND->site[] = $FRONTEND->TextBox($obj['x'],$obj['y'],$obj['w'],$obj['text'],$bgColor);
+						}
 					}
 				} else {
 					//handle all other objects...

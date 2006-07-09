@@ -144,16 +144,16 @@ IMG {
 
 
 .box {
-    background-color : #c7c7c7;
-    border-bottom-color : #717171;
+    background-color : #CCCCCC;
+    border-bottom-color : #000000;
     border-bottom-style : solid;
-    border-bottom-width : 2px;
-    border-left-color : #717171;
+    border-bottom-width : 3px;
+    border-left-color : #000000;
     border-left-style : solid;
     border-left-width : 1px;
-    border-right-color : #717171;
+    border-right-color : #000000;
     border-right-style : solid;
-    border-right-width : 2px;
+    border-right-width : 3px;
     border-top-color : #000000;
     border-top-style : solid;
     border-top-width : 1px;
@@ -169,3 +169,132 @@ IMG {
     position : absolute;
   }
 
+.box_UP {
+    background-color : #33FF00;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 3px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 3px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_DOWN {
+    background-color : #F83838;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 3px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 3px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_PENDING {
+    background-color : #ACACAC;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 3px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 3px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_UNREACHABLE {
+    background-color : #F83838;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 3px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 3px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_ERROR {
+    background-color : #557FFF;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 3px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 3px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }

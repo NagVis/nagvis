@@ -417,7 +417,7 @@ class MapCfg {
 			'service' => Array('type','host_name','service_description','x','y','line_type','url','iconset'),
 			'servicegroup' => Array('type','servicegroup_name','x','y','iconset','line_type','url'),
 			'map' => Array('type','map_name','x','y','iconset','url'),
-			'textbox' => Array('type','text','x','y','w'));
+			'textbox' => Array('type','text','x','y','w','host_name'));
 		foreach($this->mapConfig AS $type => $elements) {
 			if(array_key_exists($type,$validConfig)) {
 				// loop elemtents of type
