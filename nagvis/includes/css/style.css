@@ -46,9 +46,9 @@ table.messageBox
 
 td.messageBoxHead
 	{
-		height: 20px;
+		height: 22px;
 		background-color: #CCCCCC;
-		font-size: 17px;
+		font-size: 20px;
 		font-family: verdana;
 		color: #000000;
 		text-decoration: none;
@@ -59,7 +59,7 @@ td.messageBoxMessage
 	{
 		height: 200px;
 		background-color: #EEEEEE;
-		font-size: 11px;
+		font-size: 15px;
 		font-family: verdana;
 		color: #000000;
 		text-decoration: none;
