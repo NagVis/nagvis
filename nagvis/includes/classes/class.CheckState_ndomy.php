@@ -88,7 +88,7 @@ class backend
 		//Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate"  too
 		if(time() - strtotime($nagiosState['status_update_time']) > $maxTimeWithOutUpdate) {
 			//FIXME:Error Box
-			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios did NO status Update for more than ".$maxTimeWithOutUpdate." seconds! Make sure that Nagios is running!</h1>";
+			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios did NO status Update for more than ".$maxTimeWithOutUpdate." seconds! Make sure that Nagios and ndo2db are running!</h1>";
 			exit(1);
 		}
 			
