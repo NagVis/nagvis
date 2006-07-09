@@ -46,8 +46,12 @@ class backend
 			dl('mysql.so');
 
 			if (!extension_loaded('mysql')) {
-				//FIXME: Error Box
-				echo "NDOMy Backend: Your PHP installation has no SQL Support! You can't use the NDO Backend without!";
+				//Error Box
+				$FRONTEND = new frontend($this->MAINCFG, $dummy="");
+           		$FRONTEND->openSite();
+            	$FRONTEND->messageBox("110", "");
+            	$FRONTEND->closeSite();
+            	$FRONTEND->printSite();
 				exit(1);
 			}
 		}
@@ -59,8 +63,12 @@ class backend
 		$returnCode = mysql_select_db($this->dbName, $CONN);
 		
 		if( $returnCode != TRUE){
-			//FIXME: Error Box
-			echo "<h1>NDOMy Backend: Error selecting Database, maybe wrong db or insufficient permissions?</h1>";
+			//Error Box
+			$FRONTEND = new frontend($this->MAINCFG, $dummy="");
+            $FRONTEND->openSite();
+            $FRONTEND->messageBox("111", "");
+            $FRONTEND->closeSite();
+            $FRONTEND->printSite();
 			exit(1);
 		}
 		
@@ -73,11 +81,15 @@ class backend
 	
 		//Check that Nagios reports itself as running	
 		if ($nagiosState['is_currently_running'] != 1) {
-			//FIXME: Error Box
-			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios is NOT running!</h1>";
+			//Error Box
+			$FRONTEND = new frontend($this->MAINCFG, $dummy="");
+            $FRONTEND->openSite();
+            $FRONTEND->messageBox("112", "");
+            $FRONTEND->closeSite();
+            $FRONTEND->printSite();
 			exit(1);
 		}
-		
+
 		//set a default value of 180 seconds for maxTimeWithoutUpdate
 		if ($this->MAINCFG->getValue('backend_ndo', 'maxtimewithoutupdate') >= 0) {
             $maxTimeWithOutUpdate = $this->MAINCFG->getValue('backend_ndo', 'maxtimewithoutupdate');
@@ -87,8 +99,12 @@ class backend
         
 		//Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate"  too
 		if(time() - strtotime($nagiosState['status_update_time']) > $maxTimeWithOutUpdate) {
-			//FIXME:Error Box
-			echo "<h1>NDOMy Backend: Caution: NDO claims that Nagios did NO status Update for more than ".$maxTimeWithOutUpdate." seconds! Make sure that Nagios and ndo2db are running!</h1>";
+			//Error Box
+			$FRONTEND = new frontend($this->MAINCFG, $dummy="");
+            $FRONTEND->openSite();
+            $FRONTEND->messageBox("113", "TIMEWITHOUTUPDATE~".$maxTimeWithOutUpdate);
+            $FRONTEND->closeSite();
+            $FRONTEND->printSite();
 			exit(1);
 		}
 			
@@ -318,9 +334,9 @@ class backend
 		$service = mysql_fetch_array($QUERYHANDLE);				
 		if($service['has_been_checked'] == 0) {
 			$state['Count'] = "1";
-			$state['State'] = "PENDING";
+			$state['State'] = "UNKOWN";
 			//FIXME: All this outputs should be handled over a language file
-			$state['Output'] = "The Service is not scheduled to be checked... ";
+			$state['Output'] = "The Service has not been checked yet";
 		}
 		elseif($service['current_state'] == 0) {
 				$state['Count'] = "1";
