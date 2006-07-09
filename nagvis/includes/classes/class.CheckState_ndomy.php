@@ -112,7 +112,7 @@ class backend
 		
 		// This is the special case, that a host is definied but in pending state
 		if(mysql_num_rows($QUERYHANDLE) <= 0) {
-			$state['State'] = 'PENDING';
+			$state['State'] = 'UNKOWN';
 			//FIXME: All this outputs should be handled over a language file
 			$state['Output'] = "The Host <b>" .$hostName. "</b> is in pending state.";
 			$hostState = $state['State'];
