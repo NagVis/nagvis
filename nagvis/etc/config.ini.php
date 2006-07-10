@@ -37,7 +37,6 @@ refreshtime=60
 ; auto update fequency
 autoupdatefreq=25
 
-
 ; path options
 [paths]
 ; absolute physical NagVis path
@@ -79,7 +78,6 @@ dbprefix="ndo_"
 dbinstanceid=1
 ; maximum delay of the NDO Database in Seconds
 maxtimewithoutupdate=180
-
 
 ; options for the HTML-Backend
 [backend_html]
