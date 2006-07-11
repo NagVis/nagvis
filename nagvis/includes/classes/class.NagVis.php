@@ -13,6 +13,8 @@ class frontend extends common {
 	var $site;
 	var $MAINCFG;
 	var $MAPCFG;
+	// array to prevent loops in recursive maps
+	var $linkedMaps;
 	
 	/**
 	* Constructor
@@ -25,6 +27,7 @@ class frontend extends common {
 	function frontend(&$MAINCFG,&$MAPCFG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
+		$this->linkedMaps = Array();
 		
 		$this->getUser();
 		//parent::common($this->MAINCFG,$this->MAPCFG);
@@ -385,6 +388,9 @@ class frontend extends common {
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function getMapObjects(&$MAPCFG,&$FRONTEND,&$BACKEND,&$DEBUG,$print=1) {
+		// save mapName in linkedMaps array
+		$this->linkedMaps[] = $MAPCFG->getName();
+		
 		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'map',$print));
 		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'host',$print));
 		$mapState[] = $this->getState($this->getObjects($MAPCFG,$FRONTEND,$BACKEND,$DEBUG,'service',$print));
@@ -424,7 +430,14 @@ class frontend extends common {
 				if($type == 'map') {
 					$SUBMAPCFG = new MapCfg($this->MAINCFG,$obj[$name]);
 					$SUBMAPCFG->readMapConfig();
-					$state = $this->getMapObjects($SUBMAPCFG,$FRONTEND,$BACKEND,$DEBUG,0);
+					
+					// prevent loops in recursion
+					if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
+						// FIXME: TODO: We need an Error message, that there is a loop in the recursion
+						$state = Array('UNKNOWN');
+					} else {
+						$state = $this->getMapObjects($SUBMAPCFG,$FRONTEND,$BACKEND,$DEBUG,0);
+					}
 					
 					$objState[] = $this->getState($state);
 					
