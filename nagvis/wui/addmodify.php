@@ -29,6 +29,9 @@ $MAPCFG->readMapConfig();
 $LANG = new NagVisLanguage($MAINCFG,$MAPCFG);
 $LANG->readLanguageFile();
 
+require("../includes/classes/class.CheckState_".$MAINCFG->getValue('global', 'backend').".php");
+$BACKEND = new backend($MAINCFG);
+
 # we get the parameters passed in the URL
 $myaction = $_GET['action'];    # possible values : add, delete or modify
 $mytype = $_GET['type'];	# possible values : host,service,hostgroup,etc..
@@ -36,8 +39,7 @@ $myid = $_GET['id'];		# possible values : 1,2,3,...
 
 if(isset($_GET['coords'])) {
 	$mycoords = $_GET['coords'];
-}
-else {
+} else {
 	$mycoords = "";
 }
 
@@ -204,13 +206,21 @@ foreach($type_tab[$mytype] as $propname) {
 		closedir($handle);
 		print "</select></td>\n";
 	}
-	
+	# we treat the special case of <object-type>_name, if ndo backend is used
+	// FIXME: TODO: service_description with filtering the services of the actual host_name
+	else if(($propname_ok == 'host_name' || $propname_ok == 'hostgroup_name' || $propname_ok == 'servicegroup_name') && method_exists($BACKEND,'getObjects')) {
+		print "<td class=\"tdfield\"><select name=\"".$propname."\">";
+		foreach($BACKEND->getObjects(str_replace('_name','',$propname_ok),'','') AS $objName) {
+			echo '<option value="'.$objName.'">'.$objName.'</option>';	
+		}
+		print "</select></td>\n";
+	}	
 	# we display a simple textbox
 	else {
-		print "<td class=\"tdfield\"><input type=\"text\" name=\"$propname\" value=\"\"></td></tr>\n";
+		print '<td class="tdfield"><input type="text" name="'.$propname.'" value=""></td></tr>'."\n";
 	}
 	
-	# we add this property to the arrau of the object properties
+	# we add this property to the array of the object properties
 	$properties_list[]=$propname;
 }
 ?>

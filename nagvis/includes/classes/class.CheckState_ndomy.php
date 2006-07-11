@@ -111,6 +111,59 @@ class backend
 		return 0;
 	}
 	
+	// Returns all objects of the given type which match the pattern, if no pattern is given, all objects are selected
+	function getObjects($type,$name1Pattern='',$name2Pattern='') {
+		$ret = Array();
+		$filter = '';
+		
+		switch($type) {
+			case 'host':
+				$objectType = 1;
+				
+				if($name1Pattern != '') {
+					$filter = " name1='".$name1Pattern."' AND ";
+				}
+			break;
+			case 'service':
+				$objectType = 2;
+				
+				if($name1Pattern != '') {
+					$filter = " name1='".$name1Pattern."' AND ";
+				} elseif($name1Pattern != '' && $name2Pattern != '') {
+					$filter = " name1='".$name1Pattern."' AND name2='".$name2Pattern."' AND ";
+				}
+			break;
+			case 'hostgroup':
+				$objectType = 3;
+				
+				if($name1Pattern != '') {
+					$filter = " name1='".$name1Pattern."' AND ";
+				}
+			break;
+			case 'servicegroup':
+				$objectType = 4;
+				
+				if($name1Pattern != '') {
+					$filter = " name1='".$name1Pattern."' AND ";
+				}
+			break;
+			default:
+				return Array();
+			break;
+		}
+		
+		$QUERYHANDLE = mysql_query("SELECT object_id,name1,name2 FROM ".$this->dbPrefix."objects WHERE objecttype_id='".$objectType."' AND ".$filter." instance_id='".$this->dbInstanceId."' ORDER BY name1");
+		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			if($objectType == 2) {
+				$ret[] = $data['name2'];
+			} else {
+				$ret[] = $data['name1'];
+			}
+		}
+		
+		return $ret;
+	}
+	
 	// Get the state for a HOST #####################################################################################################
 	function findStateHost($hostName,$recognizeServices) {
 		
