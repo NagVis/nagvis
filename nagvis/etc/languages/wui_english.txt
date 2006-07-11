@@ -13,10 +13,10 @@
 13~It's only possible to have one or two [COORD] coordinates.
 14~You have defined two [COORD] coordinates, so you need to specify a line_type too.
 menu_1~Save
-menu_2~Properties
+menu_2~Map Properties
 menu_3~Maps
 menu_4~Add object
-menu_5~Nagvis config
+menu_5~NagVis Properties
 menu_6~Help
 menu_3_1~Open
 menu_3_2~Manage

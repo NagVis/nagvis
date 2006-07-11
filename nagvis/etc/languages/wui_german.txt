@@ -13,10 +13,10 @@
 13~Es ist nur möglich ein oder 2 Koordinaten [COORD] anzugeben.
 14~Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gewÃ¤hlt werden.
 menu_1~Speichern
-menu_2~Properties
+menu_2~Map Einstellungen
 menu_3~Maps
 menu_4~Objekt hinzufügen
-menu_5~Nagvis config
+menu_5~NagVis Einstellungen
 menu_6~Hilfe
 menu_3_1~Öffnen
 menu_3_2~Manage
