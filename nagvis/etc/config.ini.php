@@ -108,9 +108,9 @@ debugfixicon=0
 ; Only internal informations
 [internal]
 ; version of NagVis
-version="0.9b3+"
+version="1.0a1"
 ; title of NagVis pages
-title="NagVis 0.9b3+ (CVS Snapshot)"
+title="NagVis 1.0a1 (CVS Snapshot)"
 
 ; -------------------------
 ; EOF
