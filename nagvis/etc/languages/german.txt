@@ -1,0 +1,34 @@
+0~img_error.png~StatusCgi nicht gefunden~&Uuml;berpr&uuml;fen Sie den Pfad der [STATUSCGI]-Variable in der Konfigurationsdatei!
+1~img_permission.png~StatusCgi nicht ausf&uuml;hrbar!~Rechte &uuml;berpr&uuml;fen!
+2~img_error.png~Keine Map-Konfigurations-Datei!~Konnte die Konfigurations-Datei <I>[MAP]</I> nicht &ouml;ffnen!
+3~img_error.png~Kein Map-Image!~Konnte das Map-Image <I>[MAPPATH]</I> nicht &ouml;ffnen!
+4~img_permission.png~Keine Rechte!~Der Benutzer <I>[USER]</I> hat keine Rechte zum anzeigen dieser Map!
+5~img_error.png~Keine Nagios-Log-Datei~Konnte Nagios-Log-Datei <I>[STATUSLOGPATH]</I> nicht finden!
+6~img_warning.png~Keine Unterst&uuml;tzung!~Der Konfigurations-Modus wird in diesem Browser nicht ungerst&uuml;tzt!
+7~img_error.png~Host nicht vorhanden!~Der Host [HOSTNAME] wurde in der Nagios Konfiguration nicht gefunden!
+8~img_error.png~Service nicht vorhanden!~Der Service [SERVICENAME] konnte in der Nagios Konfiguration nicht gefunden werden!
+9~img_error.png~Gruppe leer!~Die Gruppe [HOSTGROUPNAME] enth&auml;lt keine Hosts!
+10~img_error.png~Servicegroup nicht gefunden!~Die Servicegroup [HOSTGROUPNAME] wurde nicht gefunden!
+11~img_error.png~Status der ServiceGroup!~Konnte den Status der ServiceGroup [SERVICEGROUPNAME] nicht ermitteln!
+12~img_error.png~Kein state gesetzt!~state wurde nicht gesetzt!
+13~img_error.png~Service-Status!~Der Service-Status vom Host [HOSTNAME] Service [SERVICENAME] konnte nicht ermittelt werden!
+14~img_permission.png~Kein Benutzer~Es wurde kein Benutzername an NagVis &uuml;bergeben! Pruefen Sie ihre .htaccess Konfiguration!
+15~img_error.png~GD Lib~GD Lib ist nicht installiert!
+16~img_error.png~Keine Leserechte auf die Map Config Datei~Bitte die Leseberechtigungen des Webservers auf die CFG-Datei (<I>[MAP]</I>) pr&uuml;fen!
+17~img_error.png~Keine Schreibrechte auf die Map Config Dateien~Bitte die Schreibberechtigungen des Webservers auf die CFG-Dateien (<I>[MAP]</I>) pr&uuml;fen!
+18~img_error.png~Keine Schreibrechte auf die NagVis Config Datei~Bitte die Schreibberechtigungen des Webservers auf die MainCfg-Datei (<i>[MAINCFG]</i>) pr&uuml;fen!
+19~img_error.png~Keine Leserechte auf die NagVis Config Datei~Bitte die Leseberechtigungen des Webservers auf die MainCfg-Datei (<i>[MAINCFG]</i>) pr&uuml;fen!
+20~img_error.png~Keine Leserechte auf die Map Bild-Datei~Bitte die Leseberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
+21~img_error.png~Keine Schreibrechte auf die Map Bild-Datei~Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei (<I>[IMGPATH]</I>) pr&uuml;fen!
+22~img_error.png~Unbekannter Typ in Map Config Datei definiert~Der Objekttyp <I>[TYPE]</I> ist nicht erlaubt!
+23~img_error.png~Unbekanntes Attribut in Map Config Datei definiert~Das Attribut <I>[ATTRIBUTE]</I> ist in Elementen des typs <I>[TYPE]</I> nicht erlaubt!
+24~img_error.png~Keine Leserechte auf die Sprachdatei~Bitte die Leseberechtigungen des Webservers auf die Sprachdatei (<I>[LANGFILE]</I>) pr&uuml;fen!
+25~img_error.png~Kann die NagVis Config-Datei nicht zum schreiben &ouml;ffnen~Bitte die Schreibberechtigungen des Webservers auf die config.ini.php Datei pr&uuml;fen!
+26~img_error.png~Keine Leserechte auf das Map Config Verzeichnis~Bitte die Leseberechtigungen des Webservers auf das Verzeichnis (<I>[MAPPATH]</I>) pr&uuml;fen!
+27~img_error.png~Keine Schreibrechte auf das Map Config Verzeichnis~Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis (<I>[MAPPATH]</I>) pr&uuml;fen
+28~img_error.png~Header Konfigurationsdatei nicht lesbar~Bitte die Leseberechtigungen des Webservers auf die Datei (<I>[CFGPATH]</I>) pr&uuml;fen
+29~img_error.png~Endlosschleife in Map Rekursion~Die Map Objekte von den verlinkten Maps bilden eine Endlosschleife. Bitte auflösen.
+110~img_error.png~NDOMy Backend Fehler~Ihre PHP installation hat keine MySQL unterstützung. Ohne php-mysql können Sie das NDO Backend nicht nutzen!
+111~img_error.png~NDOMy Backend Fehler~Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen?
+112~img_error.png~NDOMy Backend Fehler~Achtung: Laut NDO <B>l&auml;uft der Nagios Dienst NICHT!</B>
+113~img_error.png~NDOMy Backend Fehler~Laut NDO wurden von Nagios seid mehr als <I>[TIMEWITHOUTUPDATE]</I> Sekunden keine Daten mehr verarbeitet! Laufen Nagios und ndo2db?

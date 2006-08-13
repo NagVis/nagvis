@@ -1,0 +1,34 @@
+0~img_error.png~StatusCgi not found~Check the path of the [STATUSCGI]-Var in the nagvis-configuration!
+1~img_permission.png~StatusCgi not executable!~Check permissions of the StatusCgi!
+2~img_error.png~No map config available!~Can't open <I>[MAP]</I>!
+3~img_error.png~No map image available!~Can't open <I>[MAPPATH]</I>!
+4~img_permission.png~No permissions!~The user <I>[USER]</I> has no permissions on this map!
+5~img_error.png~No Nagios logfile~Can't find Nagios logfile <I>[STATUSLOGPATH]</I>!
+6~img_warning.png~No support!~The configuration-modus doesn't work with this browser!
+7~img_error.png~Host not found!~The host [HOSTNAME] couldn't be found in the nagios-configuration!
+8~img_error.png~Service not found!~The service [SERVICENAME] couldn't be found in the nagios-configuration!
+9~img_error.png~Group is empty!~The hostgroup [HOSTGROUPNAME] doesn't include any hosts!
+10~img_error.png~Servicegroup not found!~The servicegroup [HOSTGROUPNAME] couldn't be found in the Nagios configuration!
+11~img_error.png~servicegroup-status!~Couldn't get the status-information of the servicegroup [SERVICEGROUPNAME]!
+12~img_error.png~State not defined!~State is not defined!
+13~img_error.png~Service-status!~Couldn't get the service-status [SERVICENAME] from host [HOSTNAME]!
+14~img_permission.png~No User~You passed no username to NagVis! Check .htaccess configuration! 
+15~img_error.png~GD Lib~GD Lib not loaded. Check your PHP installation. 
+16~img_error.png~Can not read Map Config File~Please check the webservers permissions at the CFG-File (<I>[MAP]</I>)!
+17~img_error.png~Can not write Map Config File~Please check the permissions of the webserver user at the CFG-File (<I>[MAP]</I>)!
+18~img_error.png~Can not read NagVis Config File~Please check the webservers permissions at the MainCfg-file (<i>[MAINCFG]</i>)!
+19~img_error.png~Can not write NagVis Config File~Please check the webservers permissions at the MainCfg-file (<i>[MAINCFG]</i>)!
+20~img_error.png~Can not read Map Image File~Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)!
+21~img_error.png~Can not write Map Image File~Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)!
+22~img_error.png~Unknown type defined in Map Config File~The Type <I>[TYPE]</I> is not allowed!
+23~img_error.png~Unknown attribute defined in Map Config File~The Attribute <I>[ATTRIBUTE]</I> is not allowed in Elements of type <I>[TYPE]</I>!
+24~img_error.png~Can not read Language-File~Please check the webserver permission at the Language-File (<I>[LANGFILE]</I>)!
+25~img_error.png~Can not open NagVis Config File to write~Please check the permissions of the webserver user at the config.ini.php!
+26~img_error.png~Can not read Map Config Folder~Please check the permissions of the webserver user at the Folder (<I>[MAPPATH]</I>)!
+27~img_error.png~Can not write Map Config Folder~Please check the permissions of the webserver user at the Folder (<I>[MAPPATH]</I>)!
+28~img_error.png~Can not read Head Config file~Please check the permissions of the webserver user at the Headerconfig-file (<I>[CFGPATH]</I>)!
+29~img_error.png~Loop in Map recursion~The linked maps are producing a loop. Please fix this loop.
+110~img_error.png~NDOMy Backend Error~Your PHP installation lacks SQL support. You can't use the NDOMy Backend without php-mysql!
+111~img_error.png~NDOMy Backend Error~Error selecting Database. Maybe wrong dbName or insufficient permissions?
+112~img_error.png~NDOMy Backend Error~Caution: NDO reports that Nagios is NOT running!
+113~img_error.png~NDOMy Backend Error~Caution: NDO claims that Nagios did NO status Update for more than  <I>[TIMEWITHOUTUPDATE]</I> seconds! Make sure that Nagios and ndo2db are running!

@@ -1,0 +1,249 @@
+date: 2006-08-11
+author: michelsen
+- changed structure
+- many new classes
+- beginning of cleaning up comments of classes and methods - TODO: wui & backend classes
+- optimized some code
+
+date: 2006-06-14
+author: husch
+- added "maxtimewithoutupdate" option for NDO Backend in the main config file. Defaults to 180 Seconds if not set.
+
+date: 2006-05-31
+author: husch
+- ini sections (like [global], [backend_ndo] and so on) are now displayed in the wui dialog
+- the backend is now selectable by a combobox
+
+date: 2006-05-30
+author: husch
+- style.css is now used for the header menu too
+- improved filtering of the map string passed from outside a bit
+- removed deprecated "class.readfiles.php"
+
+date: 2006-05-21
+author: husch
+- released NagVis 0.9b3
+
+date: 2006-04-20
+author: michelsen
+- added NagVisLanguage Class and moved all language handling to it
+- added replaceement of special chars ä,ö,ü ...
+- moved readMenu from ReadFiles class to frontend class
+- includes/classes/ReadFiles.php and wui/classes.wui.php can now be removed
+
+date: 2006-04-14
+author: michelsen, husch
+- fixed some bugs at WUI
+- added map config synatx checks (thanks lars)
+
+date: 2006-04-08
+author: husch
+- fixed PHP5 bug at wui
+- updated docs
+- prepared for 0.9 beta 2 release 
+
+date: 2006-04-06
+author: husch
+- added additonal plausis to NDO Backend
+- deleted unneded files from repository
+
+date: 2006-04-06
+author: michelsen
+- removed BACKEND from config.php
+- moved parsing of icons from index.php to FRONTEND and packed it in an recursive mathod
+- if no map is given in url in config.php the std. image will be displayed
+
+date: 2006-03-18
+author: michelsen
+- removed functions from bash completely
+- fixed bug with movement of elemnts in wui
+- removed deprecated code
+
+date: 2006-03-15
+author: michelsen
+- moved some functions from bash to MapCfg class
+
+date: 2006-03-13
+author: michelsen
+- renamed "name" to real key (host_name,hostrgroup_name,...) in config array
+- copied the "add" routine from bash to MapCfg class
+
+date: 2006-03-09
+author: husch
+- added check at the NDO Backend to make sure that Nagios is alive and data are up to date
+  (something like this should be done at the HTML backend too).
+  errorboxes for this have to be done.
+- made some security checks to the map parameter given by the user (its the only paramter 
+  wich is given directly from outside, so a path exploid or sql injection etc. is theoretically
+  possible). slashes, backslashes and php tags are filtered now. 
+  something like this should be done to all wui fields too!
+- added error message 17 (*.cfg files not writable by the webserver) in german and english
+- deleted unneeded files
+
+date: 2006-03-09
+author: michelsen
+- renamed object $CONFIG to $MAINCFG
+- wrote class.MapCfg.php for handling the map config, object will be given to all classes
+  which need it to handle the map configuration
+- removed methods to read map config from ReadFiles
+- moved some checks from CheckIt to MapCfg
+- moved some checks from CheckIt to cgi backend
+- object of NagVisConfig will be given to any class in NagVis to handle the configuration
+- Added $runtimeConfig to NagVisMainCfg for saving informations generated durin runtime
+  like rotateUrl or user
+- cleaned up in index.php
+
+date: 2006-03-08
+author: michelsen
+- wrote class.NagVisConfig.php for config handling of *.ini config
+- object of NagVisConfig will be given to any class in NagVis to handle the configuration
+- made MANY MANY little changes
+
+date: 2005-12-26
+autho: husch
+- renamed everthing to decide between FRONTEND and BACKEND
+- made shure that other backens than html will work
+- implemented an example (only simple host states) for an NDO MySql DB based Backend
+- Started normalising the code as described in Martins schema, additonally Objects
+  are written UPPERCASES and I STARTED vars with a lowercase letter
+
+	so now we have
+
+		Var:		textTextText
+		Classes:	texttexttext
+		Objects:	TEXTTEXTTEXT
+
+    I used a tabs as described by Martin and used tab "size" of 4 characters, please
+	configure your editors to do so also, so that "tab" is "tab" on every of our systems
+
+o god, so little work in more than six hours, im just to slow... its much to left...
+
+
+
+tstamp: 1134509183
+author: fandel
+- added empty state-classes (SEE: $StateClass in config.inc.php)
+  - includes/classes/class.CheckState_dbmy.php
+  - includes/classes/class.CheckState_dbpg.php
+  - includes/classes/class.CheckState_xml.php
+  - includes/classes/class.CheckState_html.php (old class.checkState.php)
+- fixed host-acks
+- fixed service-acks
+  - $this->findStateHost added for checking if the host is acked
+  - problem: parsing-performance, cgi puts different text :/
+- begin normalizing the code (many work!!!): variables, classes, format PLEASE READ:
+  - 1. classes:		classes written downcase. 
+
+			Examples:
+			new checkit, new nagvis, new newclass
+
+  - 2. vars: 		vars for each word the first letter uppercase
+		
+			Examples:
+			$CheckIt = checkit->check_blabla();
+			$NagVis = nagvis->blablubb();
+
+  - 3. text-printing:	first write the text in a var, then put it out
+
+			Examples:
+			$html .= "<html>
+				  <head>
+				   <title>
+				  </head>";
+			.::CODE::.
+			$html .= "<body>
+				   <table>
+				    <tr>
+				     <td>blabla</td>
+				    </tr>
+				   </table>
+				  </body>
+				  </html>";
+			print $html;
+  - 4. code-view:	use as logical seperator <TAB> and not whitespace
+			
+			Examples:
+			for($i=0;$i<100;$i++) {
+				print $i;
+			}
+
+  - 5. conditions:	for conditions open the anchor as follows
+		
+			Examples:
+			if(isset($myvar)) {
+				echo "blabla";
+			}	
+		
+  - 6. class-file 	same as the variable
+			
+			Examples:
+			class.CheckIt.php
+			class.NagVis.php
+			class.ReadFiles.php
+
+  - 7. php-files	normal php files are written downcase.
+		
+tstamp: 1134408052
+author: fandel
+- fixed/rewritten function fixIcon()
+  - default iconset changed to std_small (fixIcon())
+  - added type-arg (host/service/servicegroup) to fixIcon()
+
+tstamp:	1133910247
+author:	fandel
+- checkit added
+  - includes/classes/class.CheckIt.php
+  - index.php
+    - $checkit = new checkit();
+  - check_permissions + EVERYONE
+- some bugfixes
+  - etc/config.inc.php
+  - icons in header.inc
+- permissions
+  - chown nagios:www-data /usr/local/nagios/share/cvs/nagvis/etc/config.inc.php
+  - chmod 665 /usr/local/nagios/share/cvs/nagvis/etc/config.inc.php
+- umlaute utf8
+
+tstamp: 1136039113
+author: Michael Luebben
+- added function to diactivate GD-Libs
+
+tstamp: 1136726938
+author: Michael Luebben
+- Fix bug in Rotate-Mode
+  - delete function mapCount and integrated it in check_rotate
+- create a new function to create a links
+  - class.NagVis.php -> createLink()
+- Make a change in the function readNagVisCfg()
+  - Comma-separeted entrys in a <map>.cfg become back in a array.
+- Add Sourccode-Doku in some files
+
+tstamp: 1137854890
+author: Michael Luebben
+- Make changes in the index.php
+- Make chenges in function readFileCfg() -> readFileCfgNew()
+- Move function fixIconPostion from class BACKEND (class.CheckState_<BACKEND>.php) to the class FRONTEND (class.NagVis.php)
+- Move function fixIcon from class BACKEND (class.CheckState_<BACKEND>.php) to the class FRONTEND (class.NagVis.php)
+- Delete function findStateArray from class BACKEND (class.CheckState_<BACKEND>.php)
+- Add Sourcecode-Doku in some files
+- Make some changes in HTML-Backend
+
+tstamp: 1138534983
+author: Michael Luebben
+- Remove Ackknowlegde from HTML-Backend
+
+tstamp: 1139055222
+author: Michael Luebben
+- Create a new Class "class.Common.php"
+- move and change Name from method fixIcon from class NagVis to findIcon to class Common
+- move the method fixIconPostion from class NagVis to the class Common
+- move the method createLink from class NagVis to the class Common
+
+tstamp: 1139675059
+author: Michael Luebben
+- Fix little bug in class.Common.php
+- Fix little bud in class.ReadFiles.php
+
+tstamp: 1140461496
+author: Michael Luebben
+- Fix bug recognize_services in globals

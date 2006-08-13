@@ -1,0 +1,300 @@
+/* ########################################################################## */
+/* ##     	                           NagVis                              ## */
+/* ##                                                                      ## */
+/* ##                    *** StyleSheet's für NagVis ***                   ## */
+/* ##                                                                      ## */
+/* ##      Autor von NagVis 0.0.3: Jörg Linge <pichfork@ederdrom.de>       ## */
+/* ##                                                                      ## */
+/* ##         Umgschrieben von Perl in PHP und weiterentwickelt by         ## */
+/* ##                      Michael Lübben(MiCkEy2002)                      ## */
+/* ##                                                                      ## */
+/* ##                               Lizenz GPL                             ## */
+/* ########################################################################## */
+
+/* ******************** NagVis-Startseite ******************** */
+.main 
+	{
+		font-family: arial,serif;
+		background-color : white;
+		color: black;
+		font-size: 12pt;
+	}
+
+/* ******************** Header-Menu ******************** */	
+table.headerMenu
+	{
+		background-color : black;
+	}
+
+a.NavBarItem 
+	{ 
+		font-family: arial,serif;
+		background-color : black;
+		color: #DEE7C6;
+		font-size: 10pt;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+
+/* ******************** Message-Box ******************** */
+table.messageBox
+	{
+		border: 0px;
+		background-color:  #CCCCCC;
+	}
+
+td.messageBoxHead
+	{
+		height: 22px;
+		background-color: #CCCCCC;
+		font-size: 20px;
+		font-family: verdana;
+		color: #000000;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	
+td.messageBoxMessage
+	{
+		height: 200px;
+		background-color: #EEEEEE;
+		font-size: 15px;
+		font-family: verdana;
+		color: #000000;
+		text-decoration: none;
+		font-weight: bold; 
+}
+
+/* ******************** Debug-Box ******************** */
+table.debugBox
+	{
+		border: 0px;
+		background-color:  #CCCCCC;
+	}
+
+td.debugBoxHead
+	{
+		height: 10px;
+		background-color: #CCCCCC;
+		font-size: 17px;
+		font-family: verdana;
+		color: #000000;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	
+td.debugBoxMessage
+	{
+		height: 200px;
+		background-color: #EEEEEE;
+		font-size: 11px;
+		font-family: verdana;
+		color: #000000;
+		text-decoration: none;
+		font-weight: normal;
+}
+
+.header {
+    left : 0px;
+    padding-left : 0px;
+    padding-top : 0px;
+    position : relative;
+    top : 0px;
+  }
+
+
+.footer {
+    position : relative;
+    top : 0px;
+    left : 0px;
+    border-style : solid;
+    border-width : 1px;
+    border-color : black;
+  }
+
+
+.map {
+    position : relative;
+    top : 0px;
+    left : 0px;
+  }
+
+
+.icon {
+    position : absolute;
+    border : 0;
+    z-index : 1;
+    cursor : help;
+  }
+
+.line {
+    position : absolute;
+    z-index : 1;
+    border-style : dotted;
+    border-width : 1px;
+    border-color : black;
+  
+}
+
+
+IMG {
+    border : 0
+  }
+
+
+.box {
+    background-color : #CCCCCC;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 1px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+
+.box_UP {
+    background-color : #33FF00;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 1px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_DOWN {
+    background-color : #F83838;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 1px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_PENDING {
+    background-color : #ACACAC;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 1px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_UNREACHABLE {
+    background-color : #F83838;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 1px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
+  
+  .box_ERROR {
+    background-color : #557FFF;
+    border-bottom-color : #000000;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    border-left-color : #000000;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #000000;
+    border-right-style : solid;
+    border-right-width : 1px;
+    border-top-color : #000000;
+    border-top-style : solid;
+    border-top-width : 1px;
+    font-family : arial,serif ;
+    font-size : 11px;
+    font-style : normal;
+    font-variant : normal;
+    font-weight : normal;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 3px;
+    padding-top : 1px;
+    position : absolute;
+  }
