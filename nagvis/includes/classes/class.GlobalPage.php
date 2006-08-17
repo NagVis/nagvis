@@ -168,7 +168,7 @@ class GlobalPage {
 		$ret = Array();
 		
 		$LANG = new GlobalLanguage($this->MAINCFG,'errors');
-		$LANG->readLanguageFile();
+		$LANG->getLanguage();
 
 		$vars = str_replace('~','=',$vars);
         $msg = $LANG->getTextReplace($messagenr,$vars);

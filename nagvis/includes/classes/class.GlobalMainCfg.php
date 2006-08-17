@@ -66,7 +66,7 @@ class GlobalMainCfg {
 		
 		// Read local config if exists
 		$this->configFile = $localConfigFile;
-		$this->readConfig(1);
+		$this->readConfig(0);
 	}
 	
     /**

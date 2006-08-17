@@ -15,6 +15,7 @@
 
 include("../nagvis/includes/classes/class.GlobalLanguage.php");
 include("../nagvis/includes/classes/class.GlobalMainCfg.php");
+include("../nagvis/includes/classes/class.GlobalPage.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");
 $MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php','../nagvis/etc/config.local.ini.php');
 

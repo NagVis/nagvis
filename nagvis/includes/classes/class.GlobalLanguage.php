@@ -5,10 +5,11 @@
 class GlobalLanguage {
 	var $MAINCFG;
 	var $languageFile;
+	var $lang;
 	
-	var $indexes = Array();
+	/*var $indexes = Array();
 	var $values = Array();
-	var $nb = 0;
+	var $nb = 0;*/
 	
 	/**
 	 * Class Constructor
@@ -30,38 +31,100 @@ class GlobalLanguage {
 			$type = 'wui_';
 		}
 		
-		$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/' . $type . $this->MAINCFG->getValue('global', 'language').'.txt';
+		$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/german.xml';
+		//$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.xml';
+	}
+	
+	/**
+	 * Runs all the functions needed to read the language files
+	 *
+	 * @return	Boolean	Successful?
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function getLanguage() {
+		if($strLang = $this->readLanguageFile()) {
+			$this->lang = $this->parseXML($strLang);
+			
+			print_r($this->lang);
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 	
 	/**
 	 * Reads the language file
 	 *
-	 * @return	Boolean	Is Successful?
-	 * @author	FIXME
+	 * @return	String	String with the language XML file
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function readLanguageFile() {
 		if($this->checkLanguageFileReadable(1)) {
-			# we fill the indexes and values arrays, by reading all the file lines
-			array_push($this->indexes,"");
-			array_push($this->values,"");
+			$fp = fopen($this->languageFile, "r");
+			$data = fread($fp, filesize($this->languageFile));
+			fclose($fp);
 			
-			$fic = fopen($this->languageFile,"r");
-			while (!feof($fic)) {
-				$myline = fgets($fic, 4096);
-				$myline = substr($myline,0,strlen($myline)-1);
-				if(strlen($myline)>0) {
-					$temp = explode("~",$myline,2);
-					array_push($this->indexes,$temp[0]);
-					array_push($this->values,$this->replaceSpecial($temp[1]));
-					$this->nb = $this->nb+1;	
-				}
-			}
-			fclose ($fic);
-			
-			return TRUE;
+			return $this->replaceSpecial($data);
 		} else {
 			return FALSE;
 		}
+	}
+	
+	/**
+	 * Parses the given XML-String in an array
+	 *
+	 * @param	String	String with the language XML file
+	 * @return	Array	Array with the language definitions
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function parseXML($data) {
+	    $vals = Array();
+	    $index = Array();
+	    $ret = Array();
+	    $i = 0;
+	
+	    $data = trim($data);
+	    
+	    $parser = xml_parser_create();
+	    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+	    xml_parse_into_struct($parser, $data, $vals, $index);
+	    xml_parser_free($parser);
+	    
+	    $tagname = $vals[$i]['tag'];
+	    $ret[$tagname] = $this->parseXMLObj($vals, $i);
+	    
+	    return $ret;
+	}
+	
+	/**
+	 * Parses the given XML-String in an array (don't access directly, only needed by parseXML()
+	 *
+	 * @param	Array	Array with the language definitions
+	 * @param	Integer	ID of the current object in Array
+	 * @return	Array	Array with the language definitions
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function parseXMLObj($vals, &$i) {
+	    $child = Array();
+		
+	    while($i++ < count($vals)) {
+	        switch ($vals[$i]['type']) {
+	           case 'open':
+	                $child[$vals[$i]['tag']] = $this->parseXMLObj($vals, $i);
+	            break;
+	            case 'complete':
+	                $child[$vals[$i]['tag']] = $vals[$i]['value'];
+	            break;
+	            case 'close':
+	                return $child;
+	            break;
+	            default:
+	            	// for "cdata" or anything else ... do nothing
+	            break;
+	        }
+	    }
+	    
+		return $child;
 	}
 	
 	/**
