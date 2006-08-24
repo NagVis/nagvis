@@ -159,26 +159,18 @@ class GlobalPage {
 	/**
 	 * Creates a Messagebox for informations and errors
 	 *
-	 * @param	String	$messagnr	Number of the error messages
+	 * @param	String	$id	Number of the error messages
 	 * @param	String	$vars		Strings to replace
 	 * @return 	Array	HTML Code
      * @author	Michael Luebben <michael_luebben@web.de>
      */
-	function messageBox($messagenr, $vars) {
+	function messageBox($id, $vars) {
 		$ret = Array();
 		
-		$LANG = new GlobalLanguage($this->MAINCFG,'errors');
-		$LANG->getLanguage();
-
-		$vars = str_replace('~','=',$vars);
-        $msg = $LANG->getTextReplace($messagenr,$vars);
-        $msg = explode("~",$msg);
+		$LANG = new GlobalLanguage($this->MAINCFG);
         
-		$messageNr = $messagenr;
 		// FIXME: Message Icon not in language files, better by serverity
 		$messageIcon = $msg[0];
-		$messageHead = $msg[1];
-		$message = $msg[2];
 		
 		$ret[] = '<style type="text/css">.main { background-color: yellow }</style>';
 		$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
@@ -188,10 +180,10 @@ class GlobalPage {
 		$ret[] = "\t\t<td class=\"messageBoxHead\" width=\"40\">";
 		$ret[] = "\t\t\t<img src=\"".$this->MAINCFG->getValue('paths','htmlimages')."internal/".$messageIcon."\" align=\"left\" />";
 		$ret[] = "\t\t</td>";
-		$ret[] = "\t\t<td class=\"messageBoxHead\" align=\"center\">".$messagenr.":".$messageHead."</td>";
+		$ret[] = "\t\t<td class=\"messageBoxHead\" align=\"center\">".$id.":".$LANG->getMessageTitle('global',$id,$vars)."</td>";
 		$ret[] = "\t</tr>";
 		$ret[] = "\t<tr>";
-		$ret[] = "\t\t<td class=\"messageBoxMessage\" align=\"center\" colspan=\"2\">".$message."</td>";
+		$ret[] = "\t\t<td class=\"messageBoxMessage\" align=\"center\" colspan=\"2\">".$LANG->getMessageText('global',$id,$vars)."</td>";
 		$ret[] = "\t</tr>";
 		$ret[] = "</table>";
 		$ret[] = "</td></tr></table>";

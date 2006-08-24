@@ -20,8 +20,7 @@ class WuiFrontend extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		
-		$this->LANG = new GlobalLanguage($MAINCFG);
-		$this->LANG->getLanguage();
+		$this->LANG = new GlobalLanguage($MAINCFG,'wui');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/office_xp/office_xp.css'),

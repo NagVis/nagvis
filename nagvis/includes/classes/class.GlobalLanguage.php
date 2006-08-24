@@ -6,10 +6,7 @@ class GlobalLanguage {
 	var $MAINCFG;
 	var $languageFile;
 	var $lang;
-	
-	/*var $indexes = Array();
-	var $values = Array();
-	var $nb = 0;*/
+	var $type;
 	
 	/**
 	 * Class Constructor
@@ -18,21 +15,12 @@ class GlobalLanguage {
 	 * @param	String			$type		Type of language-file
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function GlobalLanguage(&$MAINCFG,$type='') {
+	function GlobalLanguage(&$MAINCFG,$type) {
 		$this->MAINCFG = &$MAINCFG;
+		$this->type = $type;
 		
-		if(isset($type) && $type != '') {
-			if($type == 'errors') {
-				$type = '';
-			} else {
-				$type .= '_';
-			}
-		} elseif($this->MAINCFG->getRuntimeValue('wui')) {
-			$type = 'wui_';
-		}
-		
-		$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/german.xml';
-		//$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.xml';
+		$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.xml';
+		$this->getLanguage();
 	}
 	
 	/**
@@ -172,27 +160,63 @@ class GlobalLanguage {
         	return TRUE;
         }
     }
+    
+    function getMessageText($space,$id,$replace) {
+    	return $this->getText($space,'messages',$id,'text',$replace);
+    }
+    
+    function getMessageTitle($space,$id,$replace) {
+    	return $this->getText($space,'messages',$id,'title',$replace);
+    }
+    
+    function getLabel($space,$id,$replace='') {
+    	return $this->getText($space,'labels',$id,'label',$replace);
+    }
 	
 	/**
 	 * Gets the text of an id
 	 *
-	 * @param	Integer	$myid	Id in Language file
-	 * @return	String	Text of the id
-	 * @author	FIXME
-	 * @fixme	FIXME: cleanup
+	 * @param	String	$class	Class of the Language (global|nagvis|backend|wui)
+	 * @param	String	$space	
+	 * @param	String	$type	Type of Language (label|message)
+	 * @param	String	$key	Key to the Language String
+	 * @return	String	String with Language String
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getText($myid) {
-		if(count($this->indexes)==1) {
-			print "The language coudln't be loaded";
-			return "";
+	function getText($space='global',$type,$id,$key,$replace='') {
+		// search not only the array of $lang[$this->type], also search $lang['global']
+		if($this->type != 'global') {
+			$arrLang = array_merge($this->lang[$this->type],$this->lang['global']);
 		} else {
-			$key = array_search($myid,$this->indexes); 
-			if ($key!==null&&$key!==false) {
-				return $this->values[$key];
+			$arrLang = $this->lang['global'];
+		}
+		
+		// same procedure...
+		if($space != 'global') {
+			$arrLang = array_merge($arrLang[$space],$arrLang['global']);
+		} else {
+			$arrLang = $arrLang['global'];
+		}
+		
+		if($arrLang[$type][$id][$key] != '') {
+			$strLang = $arrLang[$type][$id][$key];
+			
+			if($replace != '') {
+				$arrReplace = explode(',', $replace);
+				for($i=0;$i<count($arrReplace);$i++) {
+					$var = explode('=', $arrReplace[$i]);
+					$strLang = str_replace("[".$var[0]."]", $var[1], $strLang);
+				}
+				
+				// Return string with replaced text
+				return $strLang;
 			} else {
-				print "<script>alert('Impossible to find the index ".$myid." in the language file".$this->$filepath."');</script>";
-				return FALSE;
+				// Return without replacement
+				return $strLang;
 			}
+		} else {
+			// Return Translation not Found error
+			return 'TranslationNotFound: '.$class.':'.$space.':'.$type.':'.$id.':'.$key;
 		}
 	}
 	
@@ -203,9 +227,9 @@ class GlobalLanguage {
 	 * @param	String	$myvalues	String with the replacements
 	 * @return	String	Text of the id
 	 * @author	FIXME
-	 * @fixme	FIXME: cleanup
+	 * @deprecated
      */
-	function getTextReplace($myid,$myvalues) {
+	/*function getTextReplace($myid,$myvalues) {
 		if (count($this->indexes)==1) {
 			print "The language couldn't be loaded";
 			return 0;
@@ -224,7 +248,7 @@ class GlobalLanguage {
 				return "";
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 * Gets the text silent

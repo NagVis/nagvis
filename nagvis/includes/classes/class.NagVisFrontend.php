@@ -136,6 +136,7 @@ class NagVisFrontend extends GlobalPage {
 	
 	/**
 	 * Gets the Next map to rotate to, if enabled
+	 * If Next map is in [ ], it will be an absolute url
 	 *
 	 * @return	String	URL to rotate to
 	 * @author 	Michael Luebben <michael_luebben@web.de>
@@ -144,6 +145,7 @@ class NagVisFrontend extends GlobalPage {
 	function getNextRotate() {
         $maps = explode(",", $this->MAINCFG->getValue('global', 'maps'));
         if($this->MAINCFG->getValue('global', 'rotatemaps') == "1") {
+        	// get position of actual map in the array
             $index = array_search($this->MAPCFG->getName(),$maps);
 			if (($index + 1) >= sizeof($maps)) {
             	// if end of array reached, go to the beginning...
@@ -153,7 +155,13 @@ class NagVisFrontend extends GlobalPage {
 			}
             $map = $maps[$index];
             
-        	return " URL=index.php?map=".$map;
+            if(preg_match("/^[(.?)]$/",$map)) {
+            	return " URL=".$map;
+            } else {
+            	return " URL=index.php?map=".$map;
+        	}
+            
+        	
         }
     }
 }

@@ -13,7 +13,6 @@ class WuiMapManagement extends GlobalPage {
 		
 		# we load the language file
 		$this->LANG = new GlobalLanguage($MAINCFG);
-		$this->LANG->getLanguage();
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
