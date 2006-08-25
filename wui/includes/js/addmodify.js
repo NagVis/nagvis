@@ -30,7 +30,7 @@ function check_object() {
 					if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==user) ) { suicide=false; }
 				}
 				if(suicide) {
-					mess=lang[50];
+					mess=lang['unableToWorkWithMap'];
 					alert(mess);
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
@@ -51,7 +51,7 @@ function check_object() {
 				}
 			} else {
 				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*') {
-					mess=lang[9];
+					mess=lang['mustValueNotSet'];
 					alert(mess);
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
@@ -68,7 +68,7 @@ function check_object() {
 		valid_list=new Array("10","11","20");
 		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
 		if(j==valid_list.length) {
-			mess=lang[10];
+			mess=lang['chosenLineTypeNotValid'];
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -76,7 +76,7 @@ function check_object() {
 		
 		// we verify we don't have both iconset and line_type defined
 		if(iconset != '') {
-			mess=lang[121];
+			mess=lang['onlyLineOrIcon'];
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -84,14 +84,14 @@ function check_object() {
 		
 		// we verify we have 2 x coordinates and 2 y coordinates
 		if(x.split(",").length != 2) {
-			mess=lang[121];
+			mess=lang['not2coordsX'];
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
 		}
 		
 		if(y.split(",").length != 2) {
-			mess=lang[122];
+			mess=lang['not2coordsY'];
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
@@ -100,13 +100,13 @@ function check_object() {
 	
 	if(x.split(",").length > 1) {
 		if(x.split(",").length != 2) {
-			mess=lang[131];
+			mess=lang["only1or2coordsX"];
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
 		} else {
 			if(line_type == '') {
-				mess=lang[141];
+				mess=lang["lineTypeNotSelectedX"];
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;
@@ -116,13 +116,13 @@ function check_object() {
 	
 	if(y.split(",").length > 1) {
 		if(y.split(",").length != 2) {
-			mess=lang[132];
+			mess=lang["only1or2coordsY"];
 			alert(mess);
 			document.addmodify.properties.value='';
 			return false;
 		} else {
 			if(line_type == '') {
-				mess=lang[142];
+				mess=lang["lineTypeNotSelectedX"];
 				alert(mess);
 				document.addmodify.properties.value='';
 				return false;

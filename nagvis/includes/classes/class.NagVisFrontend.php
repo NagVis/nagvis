@@ -6,6 +6,7 @@ class NagVisFrontend extends GlobalPage {
 	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
+	var $LANG;
 	
 	var $MAP;
 	
@@ -21,6 +22,8 @@ class NagVisFrontend extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
+		
+		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/style.css'),
@@ -48,7 +51,7 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function getMap() {
 		$this->addBodyLines(Array('<div class="map">'));
-		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->BACKEND);
+		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
 	}

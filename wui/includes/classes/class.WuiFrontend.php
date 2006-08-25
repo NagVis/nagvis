@@ -61,9 +61,9 @@ class WuiFrontend extends GlobalPage {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang[1] = "'.$this->LANG->getText("1").'";';
-		$ret[] = 'lang[2] = "'.$this->LANG->getText("2").'";';
-		$ret[] = 'lang[51] = "'.$this->LANG->getText("51").'";';
+		$ret[] = 'lang["clickMapToSetPoints"] = "'.$this->LANG->getMessageText('clickMapToSetPoints').'";';
+		$ret[] = 'lang["confirmDelete"] = "'.$this->LANG->getMessageText('confirmDelete').'";';
+		$ret[] = 'lang["confirmRestore"] = "'.$this->LANG->getMessageText('confirmRestore').'";';
 		$ret[] = '//--></script>';
 		
 		return $ret;	

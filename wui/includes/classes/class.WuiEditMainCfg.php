@@ -7,7 +7,6 @@
 class WuiEditMainCfg extends GlobalPage {
 	var $MAINCFG;
 	var $LANG;
-	var $CFGLANG;
 	var $FORM;
 	
 	/**
@@ -20,7 +19,7 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		
 		# we load the language file
-		$this->CFGLANG = new GlobalLanguage($MAINCFG,'wui');
+		$this->LANG = new GlobalLanguage($MAINCFG,'wui');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
@@ -70,11 +69,11 @@ class WuiEditMainCfg extends GlobalPage {
 					# we add a line in the form
 					$ret[] = "<tr>";
 					$ret[] = "\t<td class=\"tdlabel\">".$key2."</td>";
-					if($this->CFGLANG->getTextSilent($key2) == "") {
+					if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'editMainCfg','',FALSE)) > 0) {
 						$ret[] = "\t<td class=\"tdlabel\"></td>";
 					} else {
 						$ret[] = "\t<td class=\"tdlabel\">";
-						$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->CFGLANG->getTextSilent($key2)."')\" />";
+						$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'editMainCfg','',FALSE)."')\" />";
 						$ret[] = "\t</td>";
 					}
 					
@@ -110,11 +109,11 @@ class WuiEditMainCfg extends GlobalPage {
 								case 'debugstates':
 								case 'debugcheckstate':
 								case 'debugfixicon':
-									$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getText("6")),
-													 Array('value'=>'0','label'=>$this->LANG->getText("7")));
+									$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getLabel('yes')),
+													 Array('value'=>'0','label'=>$this->LANG->getLabel('no')));
 								break;
 								case 'autoupdatefreq':
-									$arrOpts = Array(Array('value'=>'0','label'=>$this->LANG->getText("52")),
+									$arrOpts = Array(Array('value'=>'0','label'=>$this->LANG->getLabel('disabled')),
 													 Array('value'=>'2','label'=>'2'),
 													 Array('value'=>'5','label'=>'5'),
 													 Array('value'=>'10','label'=>'10'),
@@ -224,7 +223,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getSubmit() {
-		return array_merge($this->FORM->getSubmitLine($this->LANG->getText("8")),$this->FORM->closeForm());
+		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
 	}
 	
 	/**

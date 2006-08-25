@@ -15,7 +15,7 @@ class WuiAddModify extends GlobalPage {
 		$this->propCount = 0;
 		
 		# we load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG);
+		$this->LANG = new GlobalLanguage($MAINCFG,'wui');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
@@ -146,7 +146,7 @@ class WuiAddModify extends GlobalPage {
 			
 			# we treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
 			else if($propname == "recognize_services") {
-				$opt = Array(Array('label' => $this->LANG->getText("6"),'value'=>'1'),Array('label' => $this->LANG->getText("7"),'value'=>'0'));
+				$opt = Array(Array('label' => $this->LANG->getLabel('yes'),'value'=>'1'),Array('label' => $this->LANG->getLabel('no'),'value'=>'0'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,'',$prop['must']));
 				$this->propCount++;
 			}
@@ -187,7 +187,7 @@ class WuiAddModify extends GlobalPage {
 	}
 	
 	function getSubmit() {
-		return array_merge($this->FORM->getSubmitLine($this->LANG->getText("8")),$this->FORM->closeForm());
+		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
 	}
 	
 	function getIconsets() {
@@ -252,16 +252,16 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'var user = "'.$this->MAINCFG->getRuntimeValue('user').'";';
-		$ret[] = 'lang[50] = "'.$this->LANG->getText("50").'";';
-		$ret[] = 'lang[9] = "'.$this->LANG->getText("9").'";';
-		$ret[] = 'lang[10] = "'.$this->LANG->getText("10").'";';
-		$ret[] = 'lang[11] = "'.$this->LANG->getText("11").'"';
-		$ret[] = 'lang[121] = "'.$this->LANG->getTextReplace("12","COORD=X").'";';
-		$ret[] = 'lang[122] = "'.$this->LANG->getTextReplace("12","COORD=Y").'";';
-		$ret[] = 'lang[131] = "'.$this->LANG->getTextReplace("13","COORD=X").'";';
-		$ret[] = 'lang[132] = "'.$this->LANG->getTextReplace("13","COORD=Y").'";';
-		$ret[] = 'lang[141] = "'.$this->LANG->getTextReplace("14","COORD=X").'";';
-		$ret[] = 'lang[142] = "'.$this->LANG->getTextReplace("14","COORD=Y").'";';
+		$ret[] = 'lang["unableToWorkWithMap"] = "'.$this->LANG->getMessageText('unableToWorkWithMap').'";';
+		$ret[] = 'lang["mustValueNotSet"] = "'.$this->LANG->getMessageText('mustValueNotSet').'";';
+		$ret[] = 'lang["chosenLineTypeNotValid"] = "'.$this->LANG->getMessageText('chosenLineTypeNotValid').'";';
+		$ret[] = 'lang["onlyLineOrIcon"] = "'.$this->LANG->getMessageText('onlyLineOrIcon').'"';
+		$ret[] = 'lang["not2coordsX"] = "'.$this->LANG->getMessageText('not2coords','','COORD=X').'";';
+		$ret[] = 'lang["not2coordsY"] = "'.$this->LANG->getMessageText('not2coords','','COORD=Y').'";';
+		$ret[] = 'lang["only1or2coordsX"] = "'.$this->LANG->getMessageText('only1or2coords','','COORD=X').'";';
+		$ret[] = 'lang["only1or2coordsY"] = "'.$this->LANG->getMessageText('only1or2coords','','COORD=Y').'";';
+		$ret[] = 'lang["lineTypeNotSelectedX"] = "'.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=X').'";';
+		$ret[] = 'lang["lineTypeNotSelectedY"] = "'.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=Y').'";';
 		$ret[] = '//--></script>';
 		
 		return $ret;	

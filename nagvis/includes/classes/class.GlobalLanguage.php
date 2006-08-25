@@ -32,8 +32,8 @@ class GlobalLanguage {
 	function getLanguage() {
 		if($strLang = $this->readLanguageFile()) {
 			$this->lang = $this->parseXML($strLang);
+			$this->lang = $this->lang['language'];
 			
-			print_r($this->lang);
 			return TRUE;
 		} else {
 			return FALSE;
@@ -127,15 +127,15 @@ class GlobalLanguage {
 		$str = str_replace('&#252;','ü',$str);
 		$str = str_replace('&#246;','ö',$str);
 		$str = str_replace('&#228;','ä',$str);
-		$str = str_replace('&uuml','ü',$str);
-		$str = str_replace('&ouml','ö',$str);
-		$str = str_replace('&auml','ä',$str);
+		$str = str_replace('&uuml;','ü',$str);
+		$str = str_replace('&ouml;','ö',$str);
+		$str = str_replace('&auml;','ä',$str);
 		$str = str_replace('&#220;','Ü',$str);
 		$str = str_replace('&#214;','Ö',$str);
 		$str = str_replace('&#196;','Ä',$str);
-		$str = str_replace('&Uuml','ü',$str);
-		$str = str_replace('&Ouml','ö',$str);
-		$str = str_replace('&Auml','ä',$str);
+		$str = str_replace('&Uuml;','Ü',$str);
+		$str = str_replace('&Ouml;','Ö',$str);
+		$str = str_replace('&Auml;','Ä',$str);
 		$str = str_replace('Ã¤','ä',$str);
 		$str = str_replace('Ã¶','ö',$str);
 		$str = str_replace('Ã¼','ü',$str);
@@ -161,39 +161,65 @@ class GlobalLanguage {
         }
     }
     
-    function getMessageText($space,$id,$replace) {
-    	return $this->getText($space,'messages',$id,'text',$replace);
+    function getMessageText($id,$space='global',$replace='',$mergeWithGlobal=TRUE) {
+    	return $this->getText($id,'text','messages',$space,$replace,$mergeWithGlobal);
     }
     
-    function getMessageTitle($space,$id,$replace) {
-    	return $this->getText($space,'messages',$id,'title',$replace);
+    function getMessageTitle($id,$space='global',$replace='',$mergeWithGlobal=TRUE) {
+    	return $this->getText($id,'title','messages',$space,$replace,$mergeWithGlobal);
     }
     
-    function getLabel($space,$id,$replace='') {
-    	return $this->getText($space,'labels',$id,'label',$replace);
+    function getLabel($id,$space='global',$replace='',$mergeWithGlobal=TRUE) {
+    	return $this->getText($id,'text','labels',$space,$replace,$mergeWithGlobal);
     }
+    
+    function mergeArrayRecursive($array1, $array2) {
+		if (is_array($array2) && count($array2)) {
+			foreach ($array2 as $k => $v) {
+				if (is_array($v) && count($v)) {
+					$array1[$k] = $this->mergeArrayRecursive($array1[$k], $v);
+				} else {
+					$array1[$k] = $v;
+				}
+			}
+		} else {
+			$array1 = $array2;
+		}
+		
+		return $array1;
+	}
 	
 	/**
 	 * Gets the text of an id
 	 *
-	 * @param	String	$class	Class of the Language (global|nagvis|backend|wui)
-	 * @param	String	$space	
-	 * @param	String	$type	Type of Language (label|message)
-	 * @param	String	$key	Key to the Language String
+	 * @param	String	$id					Name of the Language String
+	 * @param	String	$key				Key to the Language String (text|label|...)
+	 * @param	String	$type				Type of Language (label|message)
+	 * @param	String	$space				Default global
+	 * @param	String	$replace			Strings to Replace
+	 * @param	Boolean $mergeWithGlobal	Merge with Global Type
 	 * @return	String	String with Language String
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getText($space='global',$type,$id,$key,$replace='') {
+	function getText($id,$key,$type,$space='global',$replace='',$mergeWithGlobal=TRUE) {
 		// search not only the array of $lang[$this->type], also search $lang['global']
 		if($this->type != 'global') {
-			$arrLang = array_merge($this->lang[$this->type],$this->lang['global']);
+			if($mergeWithGlobal) {
+				$arrLang = $this->mergeArrayRecursive($this->lang[$this->type],$this->lang['global']);
+			} else {
+				$arrLang = $this->lang[$this->type];
+			}
 		} else {
 			$arrLang = $this->lang['global'];
 		}
 		
 		// same procedure...
 		if($space != 'global') {
-			$arrLang = array_merge($arrLang[$space],$arrLang['global']);
+			if($mergeWithGlobal) {
+				$arrLang = $this->mergeArrayRecursive($arrLang[$space],$arrLang['global']);
+			} else {
+				$arrLang = $arrLang[$space];
+			}
 		} else {
 			$arrLang = $arrLang['global'];
 		}
@@ -216,87 +242,7 @@ class GlobalLanguage {
 			}
 		} else {
 			// Return Translation not Found error
-			return 'TranslationNotFound: '.$class.':'.$space.':'.$type.':'.$id.':'.$key;
-		}
-	}
-	
-	/**
-	 * Gets the text of an id and replaces something
-	 *
-	 * @param	Integer	$myid		Id in Language file
-	 * @param	String	$myvalues	String with the replacements
-	 * @return	String	Text of the id
-	 * @author	FIXME
-	 * @deprecated
-     */
-	/*function getTextReplace($myid,$myvalues) {
-		if (count($this->indexes)==1) {
-			print "The language couldn't be loaded";
-			return 0;
-		} else {
-			$key = array_search($myid,$this->indexes);
-			if ($key !== null && key !== false) {
-				$message = $this->values[$key];
-				$vars = explode(',', $myvalues);
-				for($i=0;$i<count($vars);$i++) {
-					$var = explode('=', $vars[$i]);
-					$message = str_replace("[".$var[0]."]", $var[1], $message);
-				}
-				return $message;
-			} else {
-				print "<script>alert('Impossible to find the index ".$myid." in the language file".$this->$filepath."');</script>";
-				return "";
-			}
-		}
-	}*/
-	
-	/**
-	 * Gets the text silent
-	 *
-	 * @param	Integer	$myid		Id in Language file
-	 * @return	String	Text of the id
-	 * @author	FIXME
-	 * @fixme	FIXME: cleanup
-     */
-	function getTextSilent($myid) {
-		if(count($this->indexes) == 1) {
-			return "";
-		} else {
-			// Cause of the new config-format this has to be case insensitive
-			$key = $this->arrayLSearch($myid,$this->indexes);
-			if($key !== null && $key !== false && !is_array($key)) {
-				return str_replace("'","\'",$this->values[$key]);
-			} else {
-				return "";
-			}
-		}
-	}
-	
-	/**
-	 * Searches an array case insensitive
-	 *
-	 * @param	String	$str	String to search for
-	 * @param	Array	$array	Array to be searched in
-	 * @return	String/Array	Key(s) of the String
-	 * @author	FIXME
-     */
-	function arrayLSearch($str,$array) {
-		$found = Array();
-		
-		foreach($array as $k => $v) {
-			if(@strtolower($v) == @strtolower($str)) {
-				$found[] = $k;
-			}
-		}
-		
-		$f = @count($found);
-		
-		if($f == 0) {
-			return FALSE;
-		} elseif($f == 1) {
-			return $found[0];
-		} else {
-			return $found;
+			return 'TranslationNotFound: '.$this->type.':'.$space.':'.$type.':'.$id.':'.$key;
 		}
 	}
 }

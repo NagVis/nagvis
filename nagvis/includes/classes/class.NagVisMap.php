@@ -17,9 +17,10 @@ class NagVisMap extends GlobalMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function NagVisMap(&$MAINCFG,&$MAPCFG,&$BACKEND) {
+	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
+		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
 		
 		parent::GlobalMap($MAINCFG,$MAPCFG,$BACKEND);
@@ -231,36 +232,36 @@ class NagVisMap extends GlobalMap {
 
 		switch($obj['type']) {
 			case 'host':
-				$info .= '<b>Hostname:</b> '.$obj[$name].'<br>';
-				$info .= '<b>State:</b> '.$obj['state'].'<br>';
-				$info .= '<b>Output:</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$info .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'service':
-				$info .= '<b>Hostname:</b> '.$obj[$name].'<br>';
-				$info .= '<b>Servicename:</b> '.$obj['service_description'].'<br>';
-				$info .= '<b>State:</b> '.$obj['state'].'<br>';
-				$info .= '<b>Output:</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('servicename').':</b> '.$obj['service_description'].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>';
 			break;
 			case 'hostgroup':
-				$info .= '<b>Hostgroup Name:</b> '.$obj[$name].'<br>';
-				$info .= '<b>Hostgroup State:</b> '.$obj['state'].'<br>';
-				$info .= '<b>Output:</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$info .= '<b>'.$this->LANG->getLabel('hostgroupname').':</b> '.$obj[$name].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'servicegroup':
-				$info .= '<b>Servicegroup Name:</b> '.$obj[$name].'<br>';
-				$info .= '<b>Servicegroup State:</b> '.$obj['state'].'<br>';
-				$info .= '<b>Output:</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$info .= '<b>'.$this->LANG->getLabel('servicegroupname').':</b> '.$obj[$name].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'map':
-				$info .= '<b>Map Name:</b> '.$obj[$name].'<br>';
-				$info .= '<b>Map State:</b> '.strtr(addslashes($obj['state']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
-				$info .= '<b>Output:</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$info .= '<b>'.$this->LANG->getLabel('mapname').':</b> '.$obj[$name].'<br>';
+				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.strtr(addslashes($obj['state']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			default:
 				//FIXME Error
 			break;
 		}
-		$info .= '\', CAPTION, \''.$obj['type'].'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
+		$info .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
 		return $info;
 	}
 	

@@ -23,7 +23,7 @@ function get_click(newtype,nbclicks,action) {
 	document.images['background'].style.cursor='crosshair';
 	document.body.onclick=get_click_pos;
 	document.body.onmousemove=track_mouse;
-	window.status = lang['1'] + cpt_clicks;
+	window.status = lang['clickMapToSetPoints'] + cpt_clicks;
 	
 }
 
@@ -84,7 +84,7 @@ function get_click_pos(e) {
 	}
 	
 	if(cpt_clicks > 0) {
-		window.status = lang['1'] + cpt_clicks;
+		window.status = lang['clickMapToSetPoints'] + cpt_clicks;
 	}
 	else if(cpt_clicks == 0) {
 		if (follow_mouse) myshape.clear();
@@ -106,7 +106,7 @@ function get_click_pos(e) {
 
 // simple function to ask to confirm before we delete an object
 function confirm_object_deletion() {
-	confirm_message=lang['2'];
+	confirm_message=lang['confirmDelete'];
 	if(confirm(confirm_message)) return true;
 	else return false;
 	
@@ -114,7 +114,7 @@ function confirm_object_deletion() {
 
 // simple function to ask to confirm before we restore a map
 function confirm_restore() {
-	if(confirm(lang['51'])) {
+	if(confirm(lang['confirmRestore'])) {
 		document.location.href='./wui.function.inc.php?myaction=map_restore&map='+ document.myvalues.formulaire.value;
 	}
 	return true;

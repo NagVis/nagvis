@@ -56,7 +56,7 @@ menu_4_2~Line
 46~Kann [IMAGENAME] nicht löschen da es in der Map [MAP] noch verwendet wird.
 47~Du hast nicht die Rechte diese Map zu ändern.
 48~Mindestens ein Benutzer muss die Berechtigung haben, um diese Karte zu ändern.
-49~Benutzer mit Schreib-Rechten.
+49~Benutzer mit Schreib-Rechten
 50~Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen.
 menu_7~Wiederherstellen
 51~Sicher, dass du das Backup wiederherstellen willst?

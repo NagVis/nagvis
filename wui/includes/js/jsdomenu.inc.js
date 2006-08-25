@@ -16,40 +16,19 @@ var value_list=new Array();
 var index_list_users=new Array();
 var value_list_users=new Array();
 
-// function that loads the text of the menu items in an array
-function load_labels() {
-
-
-	temp=document.forms['myvalues'].menu_labels.text.split("^");
-	
-	for(var i=0;i<temp.length;i++)
-	{
-		temp2=temp[i].split("=");
-		index_list.push(temp2[0]);
-		value_list.push(temp2[1]);
-	}
-	
-}
-
 // function that returns the text associated with a certain index
-function get_label(myindex)
-{
-	for(var i=0;i<index_list.length && index_list[i]!=myindex;i++);
-	if(i<=index_list.length)
-	{
-		return value_list[i];
-	}
-	else
-	{
-		alert('Your language file seem to be damaged : ' + myindex + ' missing');
-		return "  ";
+function get_label(key) {
+	if(langMenu[key]!="") {
+		return langMenu[key];
+	} else {
+		alert('Your language file seem to be damaged: ' + myindex + ' missing');
+		return "";
 	}
 
 }
 
 // function that loads the list of the allowed users for all the maps in an array
 function load_allowed_users() {
-
 	temp=document.forms['myvalues'].allowed_users_by_map.value.split("^");
 	
 	for(var i=0;i<temp.length;i++)
@@ -75,56 +54,54 @@ function is_allowed_user(mymapname)
 
 //################################################################
 // function that creates the menu
-function createjsDOMenu() 
-{
-  load_labels();
+function createjsDOMenu() {
   load_allowed_users();
 
   mainMenu = new jsDOMenu(160);
   with (mainMenu) {
-    addMenuItem(new menuItem(get_label('1'), "menu_save", "code:document.myvalues.submit.click();","","",""));
-    addMenuItem(new menuItem(get_label('7'), "menu_restore", "code:confirm_restore();","","",""));
-    addMenuItem(new menuItem(get_label('2'), "menu_properties", "code:fenetre('./addmodify.php?action=modify&map='+document.myvalues.formulaire.value+'&type=global&id=0');","","",""));
+    addMenuItem(new menuItem(get_label('save'), "menu_save", "code:document.myvalues.submit.click();","","",""));
+    addMenuItem(new menuItem(get_label('restore'), "menu_restore", "code:confirm_restore();","","",""));
+    addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:fenetre('./addmodify.php?action=modify&map='+document.myvalues.formulaire.value+'&type=global&id=0');","","",""));
     addMenuItem(new menuItem("-"));
-    addMenuItem(new menuItem(get_label('3'), "menu_maps", ""));
+    addMenuItem(new menuItem(get_label('maps'), "menu_maps", ""));
 
-    addMenuItem(new menuItem(get_label('4'), "menu_addobject", "","","",""));
+    addMenuItem(new menuItem(get_label('addObject'), "menu_addobject", "","","",""));
     addMenuItem(new menuItem("-"));
-    addMenuItem(new menuItem(get_label('5'), "", "code:fenetre_big('./edit_config.php');"));
-    //addMenuItem(new menuItem(get_label('6'), "", "code:alert('will open a nice help webpage, localized in the user language');"));
+    addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:fenetre_big('./edit_config.php');"));
+    //addMenuItem(new menuItem(get_label('help'), "", "code:alert('will open a nice help webpage, localized in the user language');"));
   }
   
   submenu_maps = new jsDOMenu(140);
   with (submenu_maps) {
-    addMenuItem(new menuItem(get_label('3_1'), "menu_maps_open", ""));
-    addMenuItem(new menuItem(get_label('3_2'), "menu_maps_create", "code:fenetre_management('./map_management.php');"));
+    addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
+    addMenuItem(new menuItem(get_label('manage'), "menu_maps_create", "code:fenetre_management('./map_management.php');"));
     
 
   }
   
   submenu_addobject = new jsDOMenu(120);
   with (submenu_addobject) {
-  	addMenuItem(new menuItem(get_label('4_1'), "menu_addobject_icon", ""));
-	addMenuItem(new menuItem(get_label('4_2'), "menu_addobject_line", ""));
+  	addMenuItem(new menuItem(get_label('icon'), "menu_addobject_icon", ""));
+	addMenuItem(new menuItem(get_label('line'), "menu_addobject_line", ""));
   
   }
   
   submenu_addobject_icon = new jsDOMenu(140);
   with (submenu_addobject_icon) {
-    addMenuItem(new menuItem("Host", "", "code:get_click('host',1,'add');"));
-    addMenuItem(new menuItem("Service", "", "code:get_click('service',1,'add');"));
-    addMenuItem(new menuItem("Hostgroup", "", "code:get_click('hostgroup',1,'add');"));
-    addMenuItem(new menuItem("Servicegroup", "", "code:get_click('servicegroup',1,'add');"));
-    addMenuItem(new menuItem("Map", "", "code:get_click('map',1,'add');"));
-    addMenuItem(new menuItem("Textbox", "", "code:get_click('textbox',2,'add');"));
+    addMenuItem(new menuItem(get_label('host'), "", "code:get_click('host',1,'add');"));
+    addMenuItem(new menuItem(get_label('service'), "", "code:get_click('service',1,'add');"));
+    addMenuItem(new menuItem(get_label('hostgroup'), "", "code:get_click('hostgroup',1,'add');"));
+    addMenuItem(new menuItem(get_label('servicegroup'), "", "code:get_click('servicegroup',1,'add');"));
+    addMenuItem(new menuItem(get_label('map'), "", "code:get_click('map',1,'add');"));
+    addMenuItem(new menuItem(get_label('textbox'), "", "code:get_click('textbox',2,'add');"));
   }
   
   submenu_addobject_line = new jsDOMenu(140);
   with (submenu_addobject_line) {
-    addMenuItem(new menuItem("Host", "", "code:get_click('host',2,'add');"));
-    addMenuItem(new menuItem("Service", "", "code:get_click('service',2,'add');"));
-    addMenuItem(new menuItem("Hostgroup", "", "code:get_click('hostgroup',2,'add');"));
-    addMenuItem(new menuItem("Servicegroup", "", "code:get_click('servicegroup',2,'add');"));
+    addMenuItem(new menuItem(get_label('host'), "", "code:get_click('host',2,'add');"));
+    addMenuItem(new menuItem(get_label('service'), "", "code:get_click('service',2,'add');"));
+    addMenuItem(new menuItem(get_label('hostgroup'), "", "code:get_click('hostgroup',2,'add');"));
+    addMenuItem(new menuItem(get_label('servicegroup'), "", "code:get_click('servicegroup',2,'add');"));
   }
 
   

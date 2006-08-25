@@ -84,6 +84,7 @@ class WuiMap extends GlobalMap {
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground('img'));
 		$ret = array_merge($ret,$this->getJsGraphicObj());
+		$ret = array_merge($ret,$this->getJsLang());
 		$ret = array_merge($ret,$this->parseObjects());
 		$ret = array_merge($ret,$this->parseInvisible());
 		$ret = array_merge($ret,$this->makeObjectsMoveable());
@@ -220,17 +221,17 @@ class WuiMap extends GlobalMap {
 			}
 		}
 		
-		$tooltipText .= "<br><a href=\'./addmodify.php?action=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\' onclick=\'fenetre(href); return false;\'>".$this->LANG->getText("3")."</a>";
+		$tooltipText .= "<br><a href=\'./addmodify.php?action=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\' onclick=\'fenetre(href); return false;\'>".$this->LANG->getLabel('change')."</a>";
 		$tooltipText .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";	
-		$tooltipText .= "<a href=\'./wui.function.inc.php?myaction=delete&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getText("4")."</a>";
+		$tooltipText .= "<a href=\'./wui.function.inc.php?myaction=delete&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a>";
 		
 		# lines and textboxes have one more link in the tooltip : "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
 			$tooltipText .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			$tooltipText .= "<a href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>".$this->LANG->getText("5")."</a>";			
+			$tooltipText .= "<a href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>".$this->LANG->getLabel('positionSize')."</a>";			
 		}
 		
-		$info = "onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".strtoupper($obj['type'])."</b>';return escape('".$tooltipText."');\"";
+		$info = "onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".$this->LANG->getLabel($obj['type'])."</b>';return escape('".$tooltipText."');\"";
 		
 		return $info;
 	}
@@ -252,6 +253,40 @@ class WuiMap extends GlobalMap {
 		closedir($handle);
 		
 		return $files;
+	}
+	
+	
+		
+	/**
+	* Parses the needed language strings to javascript
+	*
+	* @return	Array Html
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	*/
+	function getJsLang() {
+		$ret = Array();
+		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
+		$ret[] = 'var langMenu = Array();';
+		$ret[] = 'langMenu["save"] = "'.$this->LANG->getLabel('save').'";';
+		$ret[] = 'langMenu["restore"] = "'.$this->LANG->getLabel('restore').'";';
+		$ret[] = 'langMenu["properties"] = "'.$this->LANG->getLabel('properties').'";';
+		$ret[] = 'langMenu["maps"] = "'.$this->LANG->getLabel('maps').'";';
+		$ret[] = 'langMenu["addObject"] = "'.$this->LANG->getLabel('addObject').'";';
+		$ret[] = 'langMenu["nagVisConfig"] = "'.$this->LANG->getLabel('nagVisConfig').'";';
+		$ret[] = 'langMenu["help"] = "'.$this->LANG->getLabel('help').'";';
+		$ret[] = 'langMenu["open"] = "'.$this->LANG->getLabel('open').'";';
+		$ret[] = 'langMenu["manage"] = "'.$this->LANG->getLabel('manage').'";';
+		$ret[] = 'langMenu["icon"] = "'.$this->LANG->getLabel('icon').'";';
+		$ret[] = 'langMenu["line"] = "'.$this->LANG->getLabel('line').'";';
+		$ret[] = 'langMenu["host"] = "'.$this->LANG->getLabel('host').'";';
+		$ret[] = 'langMenu["service"] = "'.$this->LANG->getLabel('service').'";';
+		$ret[] = 'langMenu["hostgroup"] = "'.$this->LANG->getLabel('hostgroup').'";';
+		$ret[] = 'langMenu["servicegroup"] = "'.$this->LANG->getLabel('servicegroup').'";';
+		$ret[] = 'langMenu["map"] = "'.$this->LANG->getLabel('map').'";';
+		$ret[] = 'langMenu["textbox"] = "'.$this->LANG->getLabel('textbox').'";';
+		$ret[] = '//--></script>';
+		
+		return $ret;	
 	}
 	
 	/**
@@ -305,17 +340,7 @@ class WuiMap extends GlobalMap {
 			<input name="add" type=submit value="Add object">		
 		</form>';
 		
-		# we load and store in an invisible field the right-click menu items text
-		$menulables = '';	
-		for($i=0;$i<=$this->LANG->nb;$i++) {
-			if(substr($this->LANG->indexes[$i],0,5) == "menu_") {
-				$ind = substr($this->LANG->indexes[$i],5,strlen($this->LANG->indexes[$i]));
-				$menulables .= '^'.$ind.'='.$this->LANG->values[$i];	
-			}		
-		}
-		$menuLables = 'document.forms[\'myvalues\'].menu_labels.text="'.substr($menulables,1,strlen($menulables)).'"';
-		
-		// list all maps in a java variable
+		// list all maps in a javascript variable
 		$arrMaps = "var arrMaps = Array(";
 		$i = 0;
 		foreach($this->getMaps() AS $file) {
@@ -330,9 +355,6 @@ class WuiMap extends GlobalMap {
 		$arr[] = "<script type=\"text/javascript\" language=\"JavaScript\">
 		  <!--
 		  	".$arrMaps."
-		  	
-		  	// fill the menu with lables
-		  	".$menuLables."
 		  	
 			// make the forms invisible
 			document.forms['myvalues'].style.visibility='hidden';
