@@ -64,9 +64,10 @@ class GlobalMainCfg {
 		$this->configFile = $configFile;
 		$this->readConfig(1);
 		
+		// DEACTIVATED: Have to think about it a bit
 		// Read local config if exists
-		$this->configFile = $localConfigFile;
-		$this->readConfig(0);
+		//$this->configFile = $localConfigFile;
+		//$this->readConfig(0);
 	}
 	
     /**
