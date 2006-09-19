@@ -225,6 +225,8 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		$Count=$obj['stateCount'];
+		$obj['stateCount'] = str_replace('"',"",$obj['stateCount']);
+		$obj['stateCount'] = str_replace("'","",$obj['stateCount']);
 		$ServiceHostState = $obj['stateHost'];
 		
 		// FIXME meht Output (ackComment, mehr Zahlen etc.)

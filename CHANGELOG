@@ -247,3 +247,7 @@ author: Michael Luebben
 tstamp: 1140461496
 author: Michael Luebben
 - Fix bug recognize_services in globals
+
+Date: 	2006-09-19
+By:	Michael Luebben
+Change:	Fix little bug in JavaBox Output
