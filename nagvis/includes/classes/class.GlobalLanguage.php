@@ -19,7 +19,7 @@ class GlobalLanguage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->type = $type;
 		
-		$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.xml';
+		$this->languageFile = $this->MAINCFG->getValue('paths', 'cfg').'languages/'.$this->MAINCFG->getValue('global', 'language').'.txt';
 		$this->getLanguage();
 	}
 	
