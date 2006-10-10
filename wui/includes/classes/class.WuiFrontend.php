@@ -34,7 +34,7 @@ class WuiFrontend extends GlobalPage {
 						  './includes/js/jsdomenu.inc.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'));
-		parent::GlobalPage($MAINCFG,$prop);
+		parent::GlobalPage($MAINCFG,$prop,'wui');
 	}
 	
 	/**

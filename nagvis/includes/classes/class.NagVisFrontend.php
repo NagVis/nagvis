@@ -30,7 +30,7 @@ class NagVisFrontend extends GlobalPage {
 					  'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/overlib_shadow.js'),
 					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">'),
 					  'allowedUsers'=>Array('EVERYONE'));
-		parent::GlobalPage($MAINCFG,$prop);
+		parent::GlobalPage($MAINCFG,$prop,'nagvis');
 	}
 	
 	/**

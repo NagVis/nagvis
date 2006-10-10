@@ -20,6 +20,9 @@ class GlobalPage {
 	// logged in user
 	var $user;
 	
+	// nagvis/wui page
+	var $type;
+	
 	/**
 	 * Class Constructor
 	 *
@@ -27,7 +30,7 @@ class GlobalPage {
 	 * @param 	Array			$prop		Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function GlobalPage(&$MAINCFG,$prop=Array('title'=>'NagVis Page','cssIncludes'=>Array('../nagvis/includes/css/style.css'),'jsIncludes'=>Array(),'extHeader'=>Array(),'allowedUsers'=>Array('EVERYONE'))) {
+	function GlobalPage(&$MAINCFG,$prop=Array('title'=>'NagVis Page','cssIncludes'=>Array('../nagvis/includes/css/style.css'),'jsIncludes'=>Array(),'extHeader'=>Array(),'allowedUsers'=>Array('EVERYONE')),$type) {
 		$this->body = Array();
 		
 		$this->MAINCFG = &$MAINCFG;
@@ -36,6 +39,7 @@ class GlobalPage {
 		$this->jsIncludes = $prop['jsIncludes'];
 		$this->extHeader = array_merge(Array("<title>".$prop['title']."</title>\n"),$prop['extHeader']);
 		$this->allowedUsers = $prop['allowedUsers'];
+		$this->type = $type;
 		
 		$this->user = $this->getUser();
 		$this->MAINCFG->setRuntimeValue('user',$this->user);
@@ -159,7 +163,7 @@ class GlobalPage {
 	/**
 	 * Creates a Messagebox for informations and errors
 	 *
-	 * @param	String	$id	Number of the error messages
+	 * @param	String	$id			Number of the error messages
 	 * @param	String	$vars		Strings to replace
 	 * @return 	Array	HTML Code
      * @author	Michael Luebben <michael_luebben@web.de>
@@ -167,7 +171,7 @@ class GlobalPage {
 	function messageBox($id, $vars) {
 		$ret = Array();
 		
-		$LANG = new GlobalLanguage($this->MAINCFG);
+		$LANG = new GlobalLanguage($this->MAINCFG,$this->type);
         
 		// FIXME: Message Icon not in language files, better by serverity
 		$messageIcon = $msg[0];
