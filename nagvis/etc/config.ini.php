@@ -16,11 +16,11 @@
 ;		  easy to use)
 ; ndomy -> gets the data from a Nagios NDO MySQL Database (fast an reliable
 ;          but NDO is needed)
-backend="ndomy"
+;backend="ndomy"
 ; select language (english,german,...)
 ;language="english"
 ; default icons
-defaulticons="std_medium"
+;defaulticons="std_medium"
 ; rotate maps (0/1)
 ;rotatemaps=0
 ; maps to rotate
