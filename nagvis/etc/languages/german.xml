@@ -66,10 +66,6 @@
 					<title>Status der ServiceGroup!</title>
 					<text>Konnte den Status der ServiceGroup [SERVICEGROUPNAME] nicht ermitteln!</text>
 				</servicegroupNoState>
-				<noStateSet>
-					<title>Kein state gesetzt!</title>
-					<text>state wurde nicht gesetzt!</text>
-				</noStateSet>
 				<serviceNoState>
 					<title>Service-Status!</title>
 					<text>Der Service-Status vom Host [HOSTNAME] Service [SERVICENAME] konnte nicht ermittelt werden!</text>
@@ -176,9 +172,10 @@
 		<global>
 			<messages>
 				<!-- Alle globalen Backend Meldungen //-->
-				<dummy>
-					<text>dummy - don't delete this!</text>
-				</dummy>
+				<noStateSet>
+					<title>Kein state gesetzt!</title>
+					<text>state wurde nicht gesetzt!</text>
+				</noStateSet>
 			</messages>
 		</global>
 		<ndomy>
@@ -201,7 +198,7 @@
 				</nagiosDataNotUpToDate>
 			</messages>
 		</ndomy>
-		<cgi>
+		<html>
 			<messages>
 				<!-- Alle HTML Backend Meldungen //-->
 				<statusCgiNotFound>
@@ -213,7 +210,7 @@
 					<text>Rechte &uuml;berpr&uuml;fen!</text>
 				</statusCgiNotExecutable>
 			</messages>
-		</cgi>
+		</html>
 	</backend>
 	<wui>
 		<global>
@@ -348,8 +345,6 @@
 				<disabled>
 					<text>Deaktiviert</text>
 				</disabled>
-				
-				
 			</labels>
 			<messages>
 				<!-- Alle WUI Meldungen //-->
@@ -546,6 +541,30 @@
 				</dummy>
 			</messages>
 		</editMainCfg>
+		<mapManagement>
+			<labels>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</label>
+			<messages>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</mapManagement>
+		<addModify>
+			<labels>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</label>
+			<messages>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</addModify>
 	</wui>
 </language>
 

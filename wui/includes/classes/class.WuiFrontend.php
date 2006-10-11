@@ -20,7 +20,7 @@ class WuiFrontend extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		
-		$this->LANG = new GlobalLanguage($MAINCFG,'wui');
+		$this->LANG = new GlobalLanguage($MAINCFG,'wui:global');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/office_xp/office_xp.css'),
@@ -33,8 +33,9 @@ class WuiFrontend extends GlobalPage {
 						  './includes/js/jsdomenu.js',
 						  './includes/js/jsdomenu.inc.js'),
 					  'extHeader'=>Array(''),
-					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'));
-		parent::GlobalPage($MAINCFG,$prop,'wui');
+					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'),
+					  'languageRoot' => 'wui:global');
+		parent::GlobalPage($MAINCFG,$prop);
 	}
 	
 	/**

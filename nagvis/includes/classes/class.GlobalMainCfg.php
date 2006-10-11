@@ -178,14 +178,14 @@ class GlobalMainCfg {
 			}
 			
 			if(!$handle = fopen($this->configFile, 'w+')) {
-				$FRONTEND = new GlobalPage($this);
-		        $FRONTEND->messageToUser('ERROR','25', '');
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+		        $FRONTEND->messageToUser('ERROR','mainCfgNotWriteable');
 				return FALSE;
 			}
 			
 			if(!fwrite($handle, $content)) {
-				$FRONTEND = new GlobalPage($this);
-		        $FRONTEND->messageToUser('ERROR','19', '');
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+		        $FRONTEND->messageToUser('ERROR','19');
 				return FALSE;
 			}
 			
@@ -209,8 +209,8 @@ class GlobalMainCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this);
-		            $FRONTEND->messageToUser('ERROR','18','MAINCFG~'.$this->configFile);
+					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','mainCfgNotReadable','MAINCFG~'.$this->configFile);
 				}
 				return FALSE;
 			}
@@ -231,8 +231,8 @@ class GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-	            $FRONTEND->messageToUser('ERROR','19','MAINCFG~'.$this->configFile);
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+	            $FRONTEND->messageToUser('ERROR','mainCfgNotWriteable','MAINCFG~'.$this->configFile);
 			}
 			return FALSE;
 		}
@@ -250,8 +250,8 @@ class GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-	            $FRONTEND->messageToUser('ERROR','26','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+	            $FRONTEND->messageToUser('ERROR','mapCfgDirNotReadable','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
 			}
 			return FALSE;
 		}
@@ -269,8 +269,8 @@ class GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-	            $FRONTEND->messageToUser('ERROR','27','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+	            $FRONTEND->messageToUser('ERROR','mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
 			}
 			return FALSE;
 		}

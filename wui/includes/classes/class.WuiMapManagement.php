@@ -12,13 +12,14 @@ class WuiMapManagement extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		
 		# we load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG,'wui');
+		$this->LANG = new GlobalLanguage($MAINCFG,'wui:mapManagement');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array('./includes/js/map_management.js'),
 					  'extHeader'=>Array(''),
-					  'allowedUsers' => Array('EVERYONE'));
+					  'allowedUsers' => Array('EVERYONE'),
+					  'languageRoot' => 'wui:mapManagement');
 		parent::GlobalPage($MAINCFG,$prop);
 	}
 	

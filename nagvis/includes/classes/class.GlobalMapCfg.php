@@ -369,8 +369,8 @@ class GlobalMapCfg {
 			} else {
 				if($printErr == 1) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG);
-		            $FRONTEND->messageToUser('ERROR',"20", "IMGPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				return FALSE;
 			}
@@ -394,8 +394,8 @@ class GlobalMapCfg {
 			} else {
 				if($printErr == 1) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG);
-		            $FRONTEND->messageToUser('ERROR',"21", "IMGPATH~".$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','backgroundNotWriteable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				return FALSE;
 			}
@@ -418,8 +418,8 @@ class GlobalMapCfg {
 			} else {
 				if($printErr == 1) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG);
-		            $FRONTEND->messageToUser('ERROR',"16", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','mapCfgNotReadable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				}
 				return FALSE;
 			}
@@ -441,8 +441,8 @@ class GlobalMapCfg {
 		} else {
 			if($printErr == 1) {
 				//Error Box
-				$FRONTEND = new GlobalPage($this->MAINCFG);
-	            $FRONTEND->messageToUser('ERROR',"17", "MAP~".$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+	            $FRONTEND->messageToUser('ERROR','mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 			}
 			return FALSE;
 		}
@@ -467,8 +467,8 @@ class GlobalMapCfg {
 							// unknown atribute
 							if($printErr == 1) {
 								//Error Box
-								$FRONTEND = new GlobalPage($this->MAINCFG);
-					            $FRONTEND->messageToUser('ERROR',"23", "ATTRIBUTE~".$key.",TYPE~".$type);
+								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+					            $FRONTEND->messageToUser('ERROR','unknownAttribute','ATTRIBUTE~'.$key.',TYPE~'.$type);
 							}
 							return FALSE;
 						}
@@ -478,8 +478,8 @@ class GlobalMapCfg {
 				// unknown type
 				if($printErr == 1) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG);
-		            $FRONTEND->messageToUser('ERROR',"22", "TYPE~".$type);
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
 				}
 				return FALSE;
 			}

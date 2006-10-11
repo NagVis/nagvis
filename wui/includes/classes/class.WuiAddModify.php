@@ -15,14 +15,14 @@ class WuiAddModify extends GlobalPage {
 		$this->propCount = 0;
 		
 		# we load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG,'wui');
+		$this->LANG = new GlobalLanguage($MAINCFG,'wui:addModify');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array('./includes/js/addmodify.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'));
-		parent::GlobalPage($MAINCFG,$prop);
+		parent::GlobalPage($MAINCFG,$prop,'wui:addModify');
 	}
 	
 	/**

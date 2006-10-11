@@ -34,8 +34,8 @@ class GlobalBackend {
 	
 	function checkCgiPath() {
 		if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
-            $FRONTEND = new GlobalPage($this->MAINCFG);
-		    $FRONTEND->messageToUser('ERROR','0', 'STATUSCGI~'.$this->MAINCFG->getValue('backend_html', 'cgi'));
+            $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:html'));
+		    $FRONTEND->messageToUser('ERROR','statusCgiNotFound','STATUSCGI~'.$this->MAINCFG->getValue('backend_html', 'cgi'));
             
             exit;
         }
@@ -364,8 +364,8 @@ class GlobalBackend {
 		}
 		if(!isset($state)) {
 			$nagvis = new FRONTEND($this->MAINCFG);
-			$FRONTEND = new GlobalPage($this->MAINCFG);
-		    $FRONTEND->messageToUser('WARNING','12', 'No state found'));
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:html'));
+		    $FRONTEND->messageToUser('WARNING','noStateSet'));
 			exit;
 		}	
 		return($state);

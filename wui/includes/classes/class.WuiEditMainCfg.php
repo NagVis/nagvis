@@ -19,13 +19,14 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		
 		# we load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG,'wui');
+		$this->LANG = new GlobalLanguage($MAINCFG,'wui:editMainCfg');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array(''),
 					  'extHeader'=>Array(''),
-					  'allowedUsers' => Array('EVERYONE'));
+					  'allowedUsers' => Array('EVERYONE'),
+					  'languageRoot' => 'wui:editMainCfg');
 		parent::GlobalPage($MAINCFG,$prop);
 	}
 	

@@ -46,8 +46,8 @@ class GlobalBackend {
 
 			if (!extension_loaded('mysql')) {
 				//Error Box
-				$FRONTEND = new GlobalPage($this->MAINCFG);
-            	$FRONTEND->messageToUser('ERROR',"110", "");
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+            	$FRONTEND->messageToUser('ERROR','mysqlNotSupported');
 			}
 		}
 		
@@ -59,8 +59,8 @@ class GlobalBackend {
 		
 		if( $returnCode != TRUE){
 			//Error Box
-			$FRONTEND = new GlobalPage($this->MAINCFG);
-            $FRONTEND->messageToUser('ERROR',"111", "");
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+            $FRONTEND->messageToUser('ERROR','errorSelectingDb');
 		}
 		
 		// we set the old level of reporting back
@@ -73,8 +73,8 @@ class GlobalBackend {
 		//Check that Nagios reports itself as running	
 		if ($nagiosState['is_currently_running'] != 1) {
 			//Error Box
-			$FRONTEND = new GlobalPage($this->MAINCFG);
-            $FRONTEND->messageToUser('ERROR',"112", "");
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+            $FRONTEND->messageToUser('ERROR','nagiosNotRunning');
 		}
 
 		//set a default value of 180 seconds for maxTimeWithoutUpdate
@@ -87,8 +87,8 @@ class GlobalBackend {
 		//Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate"  too
 		if(time() - strtotime($nagiosState['status_update_time']) > $maxTimeWithOutUpdate) {
 			//Error Box
-			$FRONTEND = new GlobalPage($this->MAINCFG);
-            $FRONTEND->messageToUser('ERROR',"113", "TIMEWITHOUTUPDATE~".$maxTimeWithOutUpdate);
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+            $FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
 		}
 			
 		return 0;
@@ -539,8 +539,8 @@ class GlobalBackend {
 			}
 		}
 		if(!isset($state)) {
-			$FRONTEND = new GlobalPage($this->MAINCFG);
-			$FRONTEND->messageToUser('WARNING',"12", "Kein state");
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
+			$FRONTEND->messageToUser('WARNING','noStateSet');
 			$FRONTEND->printPage();
 		}
 		return($state);

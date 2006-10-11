@@ -23,14 +23,15 @@ class NagVisFrontend extends GlobalPage {
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
 		
-		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis');
+		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis:global');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/style.css'),
 					  'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/overlib_shadow.js'),
 					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">'),
-					  'allowedUsers'=>Array('EVERYONE'));
-		parent::GlobalPage($MAINCFG,$prop,'nagvis');
+					  'allowedUsers'=>Array('EVERYONE'),
+					  'languageRoot' => 'nagvis:global');
+		parent::GlobalPage($MAINCFG,$prop);
 	}
 	
 	/**
@@ -130,8 +131,8 @@ class NagVisFrontend extends GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG);
-		    	$FRONTEND->messageToUser('WARNING','28', 'CFGPATH~'.$this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		    	$FRONTEND->messageToUser('WARNING','headerConfigNotReadable','CFGPATH~'.$this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
 			}
 			return FALSE;
 		}

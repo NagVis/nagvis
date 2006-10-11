@@ -36,8 +36,8 @@ class GlobalMap {
 		if($this->MAINCFG->getValue('global', 'usegdlibs') == "1") {
         	if(!extension_loaded('gd')) {
         		if($printErr) {
-	                $FRONTEND = new GlobalPage($this->MAINCFG);
-		            $FRONTEND->messageToUser('ERROR','15', '');
+	                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','gdLibNotFound');
 	            }
 	            return FALSE;
             } else {
@@ -173,8 +173,8 @@ class GlobalMap {
 				
 				// prevent loops in recursion
 				if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
-	                $FRONTEND = new GlobalPage($this->MAINCFG);
-		            $FRONTEND->messageToUser('WARNING','29', '');
+	                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 					
 					$state = Array('State' => 'UNKNOWN','Output' => 'Error: Loop in Recursion');
 				} else {

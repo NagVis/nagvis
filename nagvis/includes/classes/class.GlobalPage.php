@@ -20,8 +20,7 @@ class GlobalPage {
 	// logged in user
 	var $user;
 	
-	// nagvis/wui page
-	var $type;
+	var $languageRoot;
 	
 	/**
 	 * Class Constructor
@@ -30,7 +29,16 @@ class GlobalPage {
 	 * @param 	Array			$prop		Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function GlobalPage(&$MAINCFG,$prop=Array('title'=>'NagVis Page','cssIncludes'=>Array('../nagvis/includes/css/style.css'),'jsIncludes'=>Array(),'extHeader'=>Array(),'allowedUsers'=>Array('EVERYONE')),$type) {
+	function GlobalPage(&$MAINCFG,$givenProperties=Array()) {
+		// Define default Properties here
+		$defaultProperties = Array('title'=>'NagVis Page',
+									'cssIncludes'=>Array('../nagvis/includes/css/style.css'),
+									'jsIncludes'=>Array(),
+									'extHeader'=>Array(),
+									'allowedUsers'=>Array('EVERYONE'),
+									'languageRoot'=>'global:global');
+		$prop = array_merge($defaultProperties,$givenProperties);
+		
 		$this->body = Array();
 		
 		$this->MAINCFG = &$MAINCFG;
@@ -39,7 +47,7 @@ class GlobalPage {
 		$this->jsIncludes = $prop['jsIncludes'];
 		$this->extHeader = array_merge(Array("<title>".$prop['title']."</title>\n"),$prop['extHeader']);
 		$this->allowedUsers = $prop['allowedUsers'];
-		$this->type = $type;
+		$this->languageRoot = $prop['languageRoot'];
 		
 		$this->user = $this->getUser();
 		$this->MAINCFG->setRuntimeValue('user',$this->user);
@@ -118,25 +126,26 @@ class GlobalPage {
 	 * serverity: ERROR, WARNING, INFORMATION
 	 *
 	 * @param	String	$serverity	Serverity of the message (ERROR|WARNING|INFORMATION)
-	 * @param	Integer	$nr			Message Nr./Key in the language file
+	 * @param	Integer	$id			Message Key in the language file
 	 * @param	String	$vars		String to replace
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function messageToUser($serverity='WARNING', $nr, $vars) {
+	function messageToUser($serverity='WARNING', $id, $vars='') {
 		switch($serverity) {
 			case 'ERROR':
 				// print the message box and kill the script
-				$this->body = array_merge($this->body,$this->messageBox($nr,$vars));
+				$this->body = array_merge($this->body,$this->messageBox($serverity,$id,$vars));
 				$this->printPage();
 				// end of script
 			break;
 			case 'WARNING':
 			case 'INFORMATION':
 				// add the message to message Array - the printing will be done later, the message array has to be superglobal, not a class variable
+				$arrMessage = Array(Array('serverity' => $serverity, 'nr' => $id, 'vars' => $vars));
 				if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
-					$this->MAINCFG->setRuntimeValue('userMessages',array_merge($this->MAINCFG->getRuntimeValue('userMessages'),Array('serverity' => $serverity, 'nr' => $nr, 'vars' => $vars)));
+					$this->MAINCFG->setRuntimeValue('userMessages',array_merge($this->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
 				} else {
-					$this->MAINCFG->setRuntimeValue('userMessages',Array(Array('serverity' => $serverity, 'nr' => $nr, 'vars' => $vars)));
+					$this->MAINCFG->setRuntimeValue('userMessages',$arrMessage);
 				}
 			break;
 		}
@@ -153,7 +162,7 @@ class GlobalPage {
 		
 		if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
 			foreach($this->MAINCFG->getRuntimeValue('userMessages') AS $message) {
-				$ret = array_merge($ret,messageBox($message['nr'], $message['vars']));
+				$ret = array_merge($ret,$this->messageBox($message['serverity'], $message['nr'], $message['vars']));
 			}
 		}
 		
@@ -163,18 +172,30 @@ class GlobalPage {
 	/**
 	 * Creates a Messagebox for informations and errors
 	 *
+	 * @param	String	$serverity	Serverity of the message (ERROR|WARNING|INFORMATION)
 	 * @param	String	$id			Number of the error messages
 	 * @param	String	$vars		Strings to replace
 	 * @return 	Array	HTML Code
      * @author	Michael Luebben <michael_luebben@web.de>
+     * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function messageBox($id, $vars) {
+	function messageBox($serverity, $id, $vars) {
 		$ret = Array();
 		
-		$LANG = new GlobalLanguage($this->MAINCFG,$this->type);
+		$LANG = new GlobalLanguage($this->MAINCFG,$this->languageRoot);
         
-		// FIXME: Message Icon not in language files, better by serverity
-		$messageIcon = $msg[0];
+		switch($serverity) {
+			case 'ERROR':
+				$messageIcon = 'img_error.png';
+			break;
+			case 'WARNING':
+				$messageIcon = 'img_warning.png';
+			break;
+			case 'INFORMATION':
+				// still doesn't exists
+				$messageIcon = 'img_information.png';
+			break;
+		}
 		
 		$ret[] = '<style type="text/css">.main { background-color: yellow }</style>';
 		$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
@@ -184,10 +205,10 @@ class GlobalPage {
 		$ret[] = "\t\t<td class=\"messageBoxHead\" width=\"40\">";
 		$ret[] = "\t\t\t<img src=\"".$this->MAINCFG->getValue('paths','htmlimages')."internal/".$messageIcon."\" align=\"left\" />";
 		$ret[] = "\t\t</td>";
-		$ret[] = "\t\t<td class=\"messageBoxHead\" align=\"center\">".$id.":".$LANG->getMessageTitle('global',$id,$vars)."</td>";
+		$ret[] = "\t\t<td class=\"messageBoxHead\" align=\"center\">".$id.": ".$LANG->getMessageTitle($id,$vars)."</td>";
 		$ret[] = "\t</tr>";
 		$ret[] = "\t<tr>";
-		$ret[] = "\t\t<td class=\"messageBoxMessage\" align=\"center\" colspan=\"2\">".$LANG->getMessageText('global',$id,$vars)."</td>";
+		$ret[] = "\t\t<td class=\"messageBoxMessage\" align=\"center\" colspan=\"2\">".$LANG->getMessageText($id,$vars)."</td>";
 		$ret[] = "\t</tr>";
 		$ret[] = "</table>";
 		$ret[] = "</td></tr></table>";
