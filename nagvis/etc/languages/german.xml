@@ -86,6 +86,10 @@
 					<title>Keine Schreibrechte auf die Map Config Dateien</title>
 					<text>Bitte die Schreibberechtigungen des Webservers auf die CFG-Dateien ([I][MAP][/I]) pr&uuml;fen!</text>
 				</mapCfgNotWriteable>
+				<mainCfgNotExists>
+					<title>NagVis Config Datei nciht vorhanden</title>
+					<text>Die MainCfg-Datei ([I][MAINCFG][/I]) existiert nicht!</text>
+				</mainCfgNotExists>
 				<mainCfgNotReadable>
 					<title>Keine Leserechte auf die NagVis Config Datei</title>
 					<text>Bitte die Leseberechtigungen des Webservers auf die MainCfg-Datei ([I][MAINCFG][/I]) pr&uuml;fen!</text>

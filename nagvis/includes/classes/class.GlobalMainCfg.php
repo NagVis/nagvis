@@ -94,7 +94,7 @@ class GlobalMainCfg {
 		// Default - minimal - config initialisation
 		// if an error with the main-cfg-file occours and we can't get the settings 
 		// we have to set defaults here
-		$this->config['global']['language'] = 'english';
+		$this->config['global']['language'] = $this->validConfig['global']['language']['default'];
 		
 		// Read Main Config file
 		$this->configFile = $configFile;
@@ -113,7 +113,7 @@ class GlobalMainCfg {
 		$sec = '';
 		
 		// Check for config file and read permissions
-		if($this->checkNagVisConfigReadable($printErr)) {
+		if($this->checkNagVisConfigExists(0) && $this->checkNagVisConfigReadable($printErr)) {
 			// read thx config file line by line in array $file
 			$file = @file($this->configFile);
 			
@@ -222,6 +222,29 @@ class GlobalMainCfg {
 			
 			fclose($handle);
 			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for existing config file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function checkNagVisConfigExists($printErr) {
+		if($this->configFile != '') {
+			if(file_exists($this->configFile)) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','mainCfgNotReadable','MAINCFG~'.$this->configFile);
+				}
+				return FALSE;
+			}
 		} else {
 			return FALSE;
 		}
