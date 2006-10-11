@@ -35,5 +35,6 @@ $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 // Build the page
 $FRONTEND->getHeaderMenu();
 $FRONTEND->getMap();
+$FRONTEND->getMessages();
 $FRONTEND->printPage();
 ?>

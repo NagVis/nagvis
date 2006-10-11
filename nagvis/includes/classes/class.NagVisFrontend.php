@@ -58,6 +58,15 @@ class NagVisFrontend extends GlobalPage {
 	}
 	
 	/**
+	 * Adds the user messages to the page
+	 *
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function getMessages() {
+		$this->addBodyLines($this->getUserMessages());	
+	}
+	
+	/**
 	 * Reads the Configuration-File for the Header-Menu.
 	 *
 	 * @return	Array	Array of the Header Menu

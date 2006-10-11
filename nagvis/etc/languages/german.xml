@@ -131,8 +131,8 @@
 					<text>Bitte die Leseberechtigungen des Webservers auf die Datei ([I][CFGPATH][/I]) pr&uuml;fen</text>
 				</headerConfigNotReadable>
 				<loopInMapRecursion>
-					<title>Endlosschleife in Map Rekursion</title>
-					<text>Die Map Objekte von den verlinkten Maps bilden eine Endlosschleife. Bitte aufl&ouml;sen.</text>
+					<title>Endlosschleife</title>
+					<text>Die Map Objekte der verlinkten Maps bilden eine Endlosschleife. Bitte aufl&ouml;sen.</text>
 				</loopInMapRecursion>
 			</messages>
 		</global>

@@ -197,9 +197,11 @@ class GlobalPage {
 			break;
 		}
 		
-		$ret[] = '<style type="text/css">.main { background-color: yellow }</style>';
-		$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
-		$ret[] = '<tr><td align="center" valign="middle">';
+		if($serverity == 'ERROR') {
+			$ret[] = '<style type="text/css">.main { background-color: yellow }</style>';
+			$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
+			$ret[] = '<tr><td align="center" valign="middle">';
+		}
 		$ret[] = "<table class=\"messageBox\" width=\"50%\" align=\"center\">";
 		$ret[] = "\t<tr>";
 		$ret[] = "\t\t<td class=\"messageBoxHead\" width=\"40\">";
@@ -211,7 +213,9 @@ class GlobalPage {
 		$ret[] = "\t\t<td class=\"messageBoxMessage\" align=\"center\" colspan=\"2\">".$LANG->getMessageText($id,$vars)."</td>";
 		$ret[] = "\t</tr>";
 		$ret[] = "</table>";
-		$ret[] = "</td></tr></table>";
+		if($serverity == 'ERROR') {
+			$ret[] = "</td></tr></table>";
+		}
 		
 		return $ret;
 	}

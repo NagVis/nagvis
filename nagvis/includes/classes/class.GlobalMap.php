@@ -172,7 +172,6 @@ class GlobalMap {
 				$SUBMAP = new GlobalMap($this->MAINCFG,$SUBMAPCFG,$this->BACKEND);
 				$SUBMAP->linkedMaps = $this->linkedMaps;
 				
-				print_r($this->linkedMaps);
 				// prevent loops in recursion
 				if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
 	                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
