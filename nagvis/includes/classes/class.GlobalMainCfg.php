@@ -20,40 +20,76 @@ class GlobalMainCfg {
 		$this->runtimeConfig = Array();
 		
 		$this->validConfig = Array(
-			'global' => Array('backend' => Array('must' => 1),
-							'language' => Array('must' => 1),
-							'defaulticons' => Array('must' => 1),
-							'rotatemaps' => Array('must' => 1),
-							'maps' => Array('must' => 1),
-							'displayheader' => Array('must' => 1),
-							'headercount' => Array('must' => 1),
-							'usegdlibs' => Array('must' => 1),
-							'refreshtime' => Array('must' => 1)),
-			'wui' => Array('autoupdatefreq' => Array('must' => 1)),
-			'paths' => Array('base' => Array('must' => 1),
-							'cfg' => Array('must' => 1),
-							'icon' => Array('must' => 1),
-							'map' => Array('must' => 1),
-							'mapcfg' => Array('must' => 1),
-							'htmlbase' => Array('must' => 1),
-							'htmlcgi' => Array('must' => 1),
-							'htmlimages' => Array('must' => 1),
-							'htmlicon' => Array('must' => 1),
-							'htmlmap' => Array('must' => 1),
-							'htmldoku' => Array('must' => 1)),
-			'backend_ndomy' => Array('dbhost' => Array('must' => 1),
-							'dbport' => Array('must' => 1),
-							'dbname' => Array('must' => 1),
-							'dbuser' => Array('must' => 1),
-							'dbpass' => Array('must' => 1),
-							'dbprefix' => Array('must' => 1),
-							'dbinstanceid' => Array('must' => 1),
-							'maxtimewithoutupdate' => Array('must' => 1)),
-			'backend_html' => Array('cgiuser' => Array('must' => 1),
-							'cgi' => Array('must' => 1)),
-			'includes' => Array('header' => Array('must' => 1)),
-			'internal' => Array('version' => Array('must' => 1, 'locked' => 1),
-							'title' => Array('must' => 1, 'locked' => 1)));
+			'global' => Array('backend' => Array('must' => 1,
+												'default' => 'ndomy'),
+							'language' => Array('must' => 1,
+												'default' => 'english'),
+							'defaulticons' => Array('must' => 1,
+												'default' => 'std_medium'),
+							'rotatemaps' => Array('must' => 1,
+												'default' => '0'),
+							'maps' => Array('must' => 1,
+												'default' => 'demo,demo2'),
+							'displayheader' => Array('must' => 1,
+												'default' => '1'),
+							'headercount' => Array('must' => 1,
+												'default' => '4'),
+							'usegdlibs' => Array('must' => 1,
+												'default' => '1'),
+							'refreshtime' => Array('must' => 1),
+												'default' => '60'),
+			'wui' => Array('autoupdatefreq' => Array('must' => 1),
+												'default' => '25'),
+			'paths' => Array('base' => Array('must' => 1,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/'),
+							'cfg' => Array('must' => 1,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/'),
+							'icon' => Array('must' => 1,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/'),
+							'map' => Array('must' => 1,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/maps/'),
+							'mapcfg' => Array('must' => 1,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/'),
+							'htmlbase' => Array('must' => 1,
+												'default' => '/nagios/nagvis'),
+							'htmlcgi' => Array('must' => 1,
+												'default' => '/nagios/cgi-bin'),
+							'htmlimages' => Array('must' => 1,
+												'default' => '/nagios/nagvis/nagvis/images/'),
+							'htmlicon' => Array('must' => 1,
+												'default' => '/nagios/nagvis/nagvis/images/iconsets/'),
+							'htmlmap' => Array('must' => 1,
+												'default' => '/nagios/nagvis/nagvis/images/maps/'),
+							'htmldoku' => Array('must' => 1,
+												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/')),
+			'backend_ndomy' => Array('dbhost' => Array('must' => 1,
+												'default' => 'localhost'),
+							'dbport' => Array('must' => 1,
+												'default' => '3306'),
+							'dbname' => Array('must' => 1,
+												'default' => 'db_nagios'),
+							'dbuser' => Array('must' => 1,
+												'default' => 'root'),
+							'dbpass' => Array('must' => 1,
+												'default' => 'root'),
+							'dbprefix' => Array('must' => 1,
+												'default' => 'ndo_'),
+							'dbinstanceid' => Array('must' => 1,
+												'default' => '1'),
+							'maxtimewithoutupdate' => Array('must' => 1,
+												'default' => '181')),
+			'backend_html' => Array('cgiuser' => Array('must' => 1,
+												'default' => 'nagiosadmin'),
+							'cgi' => Array('must' => 1,
+												'default' => '/usr/local/nagios/sbin/')),
+			'includes' => Array('header' => Array('must' => 1,
+												'default' => 'header.nagvis.inc')),
+			'internal' => Array('version' => Array('must' => 1,
+												'default' => '1.0a1',
+												'locked' => 1),
+							'title' => Array('must' => 1,
+												'default' => 'NagVis 1.0a1 (CVS Snapshot)',
+												'locked' => 1)));
 		
 		// Default - minimal - config initialisation
 		// if an error with the main-cfg-file occours and we can't get the settings 
@@ -63,11 +99,6 @@ class GlobalMainCfg {
 		// Read Main Config file
 		$this->configFile = $configFile;
 		$this->readConfig(1);
-		
-		// DEACTIVATED: Have to think about it a bit
-		// Read local config if exists
-		//$this->configFile = $localConfigFile;
-		//$this->readConfig(0);
 	}
 	
     /**
@@ -129,11 +160,11 @@ class GlobalMainCfg {
 						}
 						
 						// write in config array
-						if(isset($sec))
+						if(isset($sec)) {
 							$this->config[$sec][$key] = $val;
-						else
+						} else {
 							$this->config[$key] = $val;
-							
+						}
 					}
 				} else {
 					$sec = '';
@@ -284,7 +315,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function findSecOfVar($var) {
-		foreach($this->config AS $key => $item) {
+		foreach($this->validConfig AS $key => $item) {
 			if(is_array($item)) {
 				foreach ($item AS $key2 => $item2) {
 					if(@substr($key2,0,8) != "comment_") {
@@ -322,7 +353,12 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getValue($sec, $var) {
-		return $this->config[$sec][$var];
+		# if nothing is set in the config file, use the default value
+		if($this->config[$sec][$var] != '') {
+			return $this->config[$sec][$var];
+		} else {
+			return $this->validConfig[$sec][$var]['default'];
+		}
 	}
 	
     /**
