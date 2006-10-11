@@ -2,18 +2,14 @@
 ##########################################################################
 ##     	        NagVis - The Nagios Visualisation Addon                 ##
 ##########################################################################
-## index.php - Main file to get called by the user. In this file there  ##
-##             should be only initialisation of the classes             ##
+## index.php - Main file to get called by the user			            ##
 ##########################################################################
 ## Licenced under the terms and conditions of the GPL Licence,         	##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
 ##########################################################################
-## Code Format: Vars: wordWordWord                                      ##
-##		   	 	Classes: WordWordWord                                   ##
-##		     	Objects: WORDWORDWORD                                   ##
-## Please use TAB (Tab Size: 4 Spaces) to format the code               ##
+## For developer guidlines have a look at http://www.nagvis.org			##
 ##########################################################################
 
 require("./includes/classes/class.GlobalMainCfg.php");

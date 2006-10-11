@@ -1,15 +1,16 @@
 <?php
-#################################################################################
-#       Nagvis Web Configurator 						#
-#	GPL License								#
-#										#
-#										#
-#	Web interface to configure Nagvis maps.					#
-#										#
-#	Drag & drop, Tooltip and shapes javascript code taken from 		#
-#	http://www.walterzorn.com   						#
-#										#
-#################################################################################
+##########################################################################
+##      NagVis WUI - Addon to edit the configuration in the browser     ##
+##########################################################################
+## index.php - Main file to get called by the user			            ##
+##########################################################################
+## Licenced under the terms and conditions of the GPL Licence,         	##
+## please see attached "LICENCE" file	                                ##
+##########################################################################
+
+##########################################################################
+## For developer guidlines have a look at http://www.nagvis.org			##
+##########################################################################
 
 include("../nagvis/includes/classes/class.GlobalMainCfg.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");

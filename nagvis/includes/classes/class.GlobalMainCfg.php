@@ -259,7 +259,7 @@ class GlobalMainCfg {
      */
 	function checkNagVisConfigReadable($printErr) {
 		if($this->configFile != '') {
-			if(file_exists($this->configFile) && is_readable($this->configFile)) {
+			if($this->checkNagVisConfigExists($printErr) && is_readable($this->configFile)) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
@@ -281,7 +281,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkNagVisConfigWriteable($printErr) {
-		if(file_exists($this->configFile) && is_writeable($this->configFile)) {
+		if($this->checkNagVisConfigExists($printErr) && is_writeable($this->configFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
