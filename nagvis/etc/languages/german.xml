@@ -338,7 +338,7 @@
 					<text>Neuer Name</text>
 				</newMapName>
 				<choosePngImage>
-					<text>WÃ¤hle ein png Image</text>
+					<text>W&auml;hle ein png Image</text>
 				</choosePngImage>
 				<mapIconset>
 					<text>Map Iconset</text>
@@ -353,7 +353,7 @@
 			<messages>
 				<!-- Alle WUI Meldungen //-->
 				<firstMustChoosePngImage>
-					<text>Du must erst ein png Image wÃ¤hlen!</text>
+					<text>Du must erst ein png Image w&auml;hlen!</text>
 				</firstMustChoosePngImage>
 				<mustChoosePngImage>
 					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
@@ -380,10 +380,10 @@
 					<text>Diese Map existiert bereits. WÃ¤hle einen anderen Namen.</text>
 				</mapAlreadyExists>
 				<foundNoMapToDelete>
-					<text>Keine Map zum lÃ¶schen gefunden. Operation abgebrochen.</text>
+					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
 				</foundNoMapToDelete>
 				<foundNoBackgroundToDelete>
-					<text>Kein Hintergrund Image zum lÃ¶schen gefunden. Operation abgebrochen.</text>
+					<text>Kein Hintergrund Image zum l&ouml;schen gefunden. Operation abgebrochen.</text>
 				</foundNoBackgroundToDelete>
 				<confirmNewMap>
 					<text>Willst du wirklich eine neue Map erstellen?</text>
@@ -392,19 +392,19 @@
 					<text>Willst du diese Map wirklich umbenennen?</text>
 				</confirmMapRename>
 				<confirmMapDeletion>
-					<text>Willst du diese Map wirklich lÃ¶schen? Diese Aktion kann nicht rÃ¼ckgaengig gemacht werden!</text>
+					<text>Willst du diese Map wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckgaengig gemacht werden!</text>
 				</confirmMapDeletion>
 				<confirmBackgroundDeletion>
-					<text>Willst du dieses Hintergrund Image wirklich lÃ¶schen? Diese Aktion kann nicht rÃ¼ckgaengig gemacht werden!</text>
+					<text>Willst du dieses Hintergrund Image wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckgaengig gemacht werden!</text>
 				</confirmBackgroundDeletion>
 				<unableToDeleteBackground>
-					<text>Kann [IMAGENAME] nicht lÃ¶schen da es in der Map [MAP] noch verwendet wird.</text>
+					<text>Kann [IMAGENAME] nicht l&ouml;schen da es in der Map [MAP] noch verwendet wird.</text>
 				</unableToDeleteBackground>
 				<noPermissions>
-					<text>Du hast nicht die Rechte diese Map zu Ã¤ndern.</text>
+					<text>Du hast nicht die Rechte diese Map zu &auml;ndern.</text>
 				</noPermissions>
 				<minOneUserWriteAccess>
-					<text>Mindestens ein Benutzer muss die Berechtigung haben, um diese Karte zu Ã¤ndern.</text>
+					<text>Mindestens ein Benutzer muss die Berechtigung haben, um diese Karte zu &auml;ndern.</text>
 				</minOneUserWriteAccess>
 				<unableToWorkWithMap>
 					<text>Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen.</text>
