@@ -81,7 +81,7 @@ class GlobalPage {
         	return TRUE;
         } else {
         	if($printErr) {
-	            $this->messageToUser('ERROR',"14", "");
+	            $this->messageToUser('ERROR','noUser');
             }
             return FALSE;
         }
@@ -98,7 +98,7 @@ class GlobalPage {
 	function checkPermissions($allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
         	if($printErr) {
-				$this->messageToUser('ERROR',"4", "USER~".$this->MAINCFG->getRuntimeValue('user'));
+				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
 			return FALSE;
         } else {

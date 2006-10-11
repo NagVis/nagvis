@@ -23,7 +23,7 @@ include("./includes/classes/class.WuiFrontend.php");
 include("./includes/classes/class.WuiMap.php");
 
 
-$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php','../nagvis/etc/config.local.ini.php');
+$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php');
 // FIXME: i don't want to set this in future - we set that this is a wui session
 $MAINCFG->setRuntimeValue('wui',1);
 

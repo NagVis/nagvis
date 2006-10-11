@@ -22,7 +22,7 @@ require("./includes/classes/class.GlobalGraphic.php");
 require("./includes/classes/class.NagVisMap.php");
 require("./includes/classes/class.NagVisFrontend.php");
 
-$MAINCFG = new GlobalMainCfg('./etc/config.ini.php','./etc/config.local.ini.php');
+$MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
 
 $MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();

@@ -6,7 +6,7 @@ include("./includes/classes/class.GlobalMapCfg.php");
 include("./includes/classes/class.GlobalPage.php");
 include("./includes/classes/class.GlobalLanguage.php");
 
-$MAINCFG = new GlobalMainCfg('./etc/config.ini.php','./etc/config.local.ini.php');
+$MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
 
 $MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();

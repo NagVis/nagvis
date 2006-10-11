@@ -9,7 +9,7 @@ class GlobalMap {
 	var $BACKEND;
 	
 	var $objects;
-	var $linkedMaps;
+	var $linkedMaps = Array();
 	
 	/**
 	 * Class Constructor
@@ -79,9 +79,6 @@ class GlobalMap {
      */
 	function getMapObjects($getState=1) {
 		$objects = Array();
-		
-		// save mapName in linkedMaps array
-		$this->linkedMaps[] = $this->MAPCFG->getName();
 		
 		$objects = array_merge($objects,$this->getObjectsOfType('map',$getState));
 		$objects = array_merge($objects,$this->getObjectsOfType('host',$getState));
@@ -167,10 +164,15 @@ class GlobalMap {
 		
 		switch($obj['type']) {
 			case 'map':
+				// save mapName in linkedMaps array
+				$this->linkedMaps[] = $this->MAPCFG->getName();
+				
 				$SUBMAPCFG = new GlobalMapCfg($this->MAINCFG,$obj[$name]);
 				$SUBMAPCFG->readMapConfig();
 				$SUBMAP = new GlobalMap($this->MAINCFG,$SUBMAPCFG,$this->BACKEND);
+				$SUBMAP->linkedMaps = $this->linkedMaps;
 				
+				print_r($this->linkedMaps);
 				// prevent loops in recursion
 				if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
 	                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));

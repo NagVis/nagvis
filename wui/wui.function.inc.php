@@ -17,7 +17,7 @@ include("../nagvis/includes/classes/class.GlobalLanguage.php");
 include("../nagvis/includes/classes/class.GlobalMainCfg.php");
 include("../nagvis/includes/classes/class.GlobalPage.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");
-$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php','../nagvis/etc/config.local.ini.php');
+$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php');
 
 ############################################
 function getArrayFromProperties($properties) {
@@ -49,7 +49,7 @@ function backup(&$MAINCFG,$mapname) {
 		//no statusfile? create!
 		if(!file_exists($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status')) {
 			// create file
-			$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').'autobackup.status', "w");
+			$fp = fopen($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status', "w");
 			fwrite($fp,$mapname.'='.$MAINCFG->getValue('wui', 'autoupdatefreq')."\n");
 			fclose($fp); 
 			// set permissions

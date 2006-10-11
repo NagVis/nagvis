@@ -15,7 +15,7 @@ class GlobalMainCfg {
 	 * @param	String	$localConfigFile	String with path to local config file
 	 * @author Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function GlobalMainCfg($configFile,$localConfigFile) {
+	function GlobalMainCfg($configFile) {
 		$this->config = Array();
 		$this->runtimeConfig = Array();
 		
@@ -36,10 +36,10 @@ class GlobalMainCfg {
 												'default' => '4'),
 							'usegdlibs' => Array('must' => 1,
 												'default' => '1'),
-							'refreshtime' => Array('must' => 1),
-												'default' => '60'),
-			'wui' => Array('autoupdatefreq' => Array('must' => 1),
-												'default' => '25'),
+							'refreshtime' => Array('must' => 1,
+												'default' => '60')),
+			'wui' => Array('autoupdatefreq' => Array('must' => 1,
+												'default' => '25')),
 			'paths' => Array('base' => Array('must' => 1,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/'),
 							'cfg' => Array('must' => 1,

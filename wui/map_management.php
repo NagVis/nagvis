@@ -16,7 +16,7 @@ require("../nagvis/includes/classes/class.GlobalForm.php");
 
 require("./includes/classes/class.WuiMapManagement.php");
 
-$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php','../nagvis/etc/config.local.ini.php');
+$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php');
 // we set that this is a wui session
 $MAINCFG->setRuntimeValue('wui',1);
 
