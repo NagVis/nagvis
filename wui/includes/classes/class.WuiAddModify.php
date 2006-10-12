@@ -133,51 +133,76 @@ class WuiAddModify extends GlobalPage {
 		
 		// loop all properties
 		foreach($this->MAPCFG->validConfig[$this->prop['type']] as $propname => $prop) {
-			# we treat the special case of iconset, which will display a listbox instead of the normal textbox
 			if($propname == "iconset") {
+				// treat the special case of iconset, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getIconsets(),'',$prop['must']));
 				$this->propCount++;
-			}
-			# we treat the special case of map_image, which will display a listbox instead of the normal textbox
-			else if($propname == "map_image") {
+			} elseif($propname == "map_image") {
+				// treat the special case of map_image, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMapImages(),'',$prop['must']));
 				$this->propCount++;
-			}
-			
-			# we treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
-			else if($propname == "recognize_services") {
+			} elseif($propname == "recognize_services") {
+				// treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
 				$opt = Array(Array('label' => $this->LANG->getLabel('yes'),'value'=>'1'),Array('label' => $this->LANG->getLabel('no'),'value'=>'0'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,'',$prop['must']));
 				$this->propCount++;
-			}
-			# we treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
-			else if($propname == "line_type") {
+			}elseif($propname == "line_type") {
+				// treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
 				$opt = Array(Array('label' => '------><------','value' => '0'),Array('label' => '-------------->','value'=>'1'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,'',$prop['must']));
 				$this->propCount++;
-			}
-			# we treat the special case of map_name, which will display a listbox instead of the normal textbox
-			else if($propname == "map_name") {
+			} elseif($propname == "map_name") {
+				// treat the special case of map_name, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMaps(),'',$prop['must']));
 				$this->propCount++;
-			}
-			# we treat the special case of <object-type>_name, if ndo backend is used
-			// FIXME: TODO: service_description with filtering the services of the actual host_name
-			else if(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
+			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
+				// treat the special case of <object-type>_name, if ndo backend is used
 				$BACKEND = new GlobalBackend($this->MAINCFG);
 				
 				if(method_exists($BACKEND,'getObjects')) {
-					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$BACKEND->getObjects(str_replace('_name','',$propname),'',''),'',$prop['must']));
+					foreach($BACKEND->getObjects(str_replace('_name','',$propname),'','') AS $arr) {
+						$objects[] = $arr['name1'];	
+					}
+					if($propname == 'host_name') {
+						$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$objects,'',$prop['must'],"getServices();"));
+					}
 				} else {
 					$ret = array_merge($ret,$this->FORM->getInputLine($propname,$propname,'',$prop['must']));
 				}
 				$this->propCount++;
-			}
-			else if($propname == 'type') {
+			} elseif($propname == 'service_description') {
+				if(method_exists($BACKEND,'getObjects')) {
+					$ret[] = "<script language=\"javascript\">";
+					$ret[] = "\tvar services = Array();";
+					foreach($BACKEND->getObjects('service','','') AS $arr) {
+						if($countArr[$arr['name1']] == '') {
+							$countArr[$arr['name1']] = 0;
+							$ret[] = "\tservices['".$arr['name1']."'] = Array();";
+						}
+						$ret[] = "\tservices['".$arr['name1']."'][".$countArr[$arr['name1']]."] = \"".$arr['name2']."\";";
+						$countArr[$arr['name1']]++;
+					}
+					$ret[] = "\tfunction getServices() {";
+					$ret[] = "\t\tvar host=document.addmodify.host_name.value;";
+					$ret[] = "\t\tvar serviceDesc=document.addmodify.service_description;";
+					$ret[] = "\t\tfor(i=serviceDesc.length; i>=0; i--){";
+					$ret[] = "\t\t\tserviceDesc.options[i] = null;";
+					$ret[] = "\t\t}";
+					$ret[] = "\t\tfor(i=0;i<services[host].length;i++) {";
+					$ret[] = "\t\t\tvar element = new Option(services[host][i], services[host][i], false, true);";
+					$ret[] = "\t\t\tserviceDesc.options[serviceDesc.options.length] = element;";
+					$ret[] = "\t\t}";
+					$ret[] = "\t}";
+					$ret[] = "</script>";
+				
+					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,Array(),'',$prop['must']));
+				} else {
+					$ret = array_merge($ret,$this->FORM->getInputLine($propname,$propname,'',$prop['must']));
+				}
+			} elseif($propname == 'type') {
 				// Do nothing, type is only internal
-			}	
-			# we display a simple textbox
-			else {
+			} else {
+				// display a simple textbox
 				$ret = array_merge($ret,$this->FORM->getInputLine($propname,$propname,'',$prop['must']));
 				$this->propCount++;
 			}

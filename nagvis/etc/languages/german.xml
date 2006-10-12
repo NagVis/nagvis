@@ -220,12 +220,6 @@
 		<global>
 			<labels>
 				<!-- Alle WUI Beschriftungen //-->
-				<clickMapToSetPoints>
-					<text>Klicke auf die Karte um die fehlenden Punkte zu bestimmen.</text>
-				</clickMapToSetPoints>
-				<confirmDelete>
-					<text>Willst du dieses Objekt wirklich loeschen?</text>
-				</confirmDelete>
 				<change>
 					<text>&Auml;ndern</text>
 				</change>
@@ -244,24 +238,6 @@
 				<check>
 					<text>Pr&uuml;fen</text>
 				</check>
-				<mustValueNotSet>
-					<text>Ein ben&ouml;tigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Plichtwerte.</text>
-				</mustValueNotSet>
-				<chosenLineTypeNotValid>
-					<text>Der gewÃ¤hlte line_type ist ung&uuml;ltig.</text>
-				</chosenLineTypeNotValid>
-				<onlyLineOrIcon>
-					<text>Ein Object kann nur ein Icon oder eine Linie sein, 'iconset' und 'line_type' kann nicht gemeinsam verwendet werden.</text>
-				</onlyLineOrIcon>
-				<not2coords>
-					<text>Es scheint, du willst eine Linie definieren (line_type ist gesetzt), aber es sind keine 2 [COORD] Koordinaten angegeben.</text>
-				</not2coords>
-				<only1or2coords>
-					<text>Es ist nur m&ouml;glich ein oder 2 Koordinaten [COORD] anzugeben.</text>
-				</only1or2coords>
-				<lineTypeNotSelected>
-					<text>Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gew&auml;hlt werden.</text>
-				</lineTypeNotSelected>
 				<save>
 					<text>Speichern</text>
 				</save>
@@ -352,6 +328,30 @@
 			</labels>
 			<messages>
 				<!-- Alle WUI Meldungen //-->
+				<mustValueNotSet>
+					<text>Ein ben&ouml;tigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Plichtwerte.</text>
+				</mustValueNotSet>
+				<chosenLineTypeNotValid>
+					<text>Der gew&auml;hlte line_type ist ung&uuml;ltig.</text>
+				</chosenLineTypeNotValid>
+				<onlyLineOrIcon>
+					<text>Ein Object kann nur ein Icon oder eine Linie sein, 'iconset' und 'line_type' kann nicht gemeinsam verwendet werden.</text>
+				</onlyLineOrIcon>
+				<not2coords>
+					<text>Es scheint, du willst eine Linie definieren (line_type ist gesetzt), aber es sind keine 2 [COORD] Koordinaten angegeben.</text>
+				</not2coords>
+				<only1or2coords>
+					<text>Es ist nur m&ouml;glich ein oder 2 Koordinaten [COORD] anzugeben.</text>
+				</only1or2coords>
+				<lineTypeNotSelected>
+					<text>Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gew&auml;hlt werden.</text>
+				</lineTypeNotSelected>
+				<clickMapToSetPoints>
+					<text>Klicke auf die Karte um die fehlenden Punkte zu bestimmen.</text>
+				</clickMapToSetPoints>
+				<confirmDelete>
+					<text>Willst du dieses Objekt wirklich loeschen?</text>
+				</confirmDelete>
 				<firstMustChoosePngImage>
 					<text>Du must erst ein png Image w&auml;hlen!</text>
 				</firstMustChoosePngImage>

@@ -137,11 +137,8 @@ class GlobalBackend {
 		
 		$QUERYHANDLE = mysql_query("SELECT object_id,name1,name2 FROM ".$this->dbPrefix."objects WHERE objecttype_id='".$objectType."' AND ".$filter." is_active='1' AND instance_id='".$this->dbInstanceId."' ORDER BY name1");
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
-			if($objectType == 2) {
-				$ret[] = $data['name2'];
-			} else {
-				$ret[] = $data['name1'];
-			}
+			$ret[] = Array('name1' => $data['name1'],
+							'name2' => $data['name2']);
 		}
 		
 		return $ret;

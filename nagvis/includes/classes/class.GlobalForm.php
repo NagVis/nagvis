@@ -140,10 +140,12 @@ class GlobalForm {
 	 * @param 	String 	$name		Name of the Field
 	 * @param 	Array	$arr 		Options of the Field
 	 * @param 	String 	$selected 	The selected option
+	 * @param 	Boolean	$must 	Is this a MUST field
+	 * @param	String	$onChange	JavaScript function to call on change
 	 * @return	Array 		Html
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function getSelectLine($label,$name,$arr,$selected) {
+	function getSelectLine($label,$name,$arr,$selected,$must,$onChange='') {
 		$ret = Array();
 		
 		// FIXME: ?!
@@ -155,7 +157,7 @@ class GlobalForm {
 		
 		$ret[] = "<tr>";
 		$ret[] = "\t<td class=\"tdlabel\" ".$must.">".$label."</td><td class=\"tdfield\">";
-		$ret = array_merge($ret,$this->getSelectField($name,$arr));
+		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange));
 		$ret[] = "\t</td>";
 		$ret[] = "</tr>";
 		$ret[] = '<script>document.'.$this->name.'.'.$name.'.value=\''.$selected.'\';</script>';
@@ -229,14 +231,15 @@ class GlobalForm {
 	/**
 	 * Gets a select field
 	 *
-	 * @param 	String 	$name 	Name of the Field
-	 * @param 	Array	$arr 	Options of the Field
+	 * @param 	String 	$name 		Name of the Field
+	 * @param 	Array	$arr 		Options of the Field
+	 * @param	String	$onChange	JavaScript function to call on change
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function getSelectField($name,$arr) {
+	function getSelectField($name,$arr,$onChange='') {
 		$ret = Array();
-		$ret[] = "\t\t<select name=\"".$name."\">";
+		$ret[] = "\t\t<select name=\"".$name."\" onChange=\"".$onChange."\">";
 		$ret[] = "\t\t\t<option value=\"\"></option>";
 		
 		foreach($arr AS $val) {
