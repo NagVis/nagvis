@@ -419,7 +419,7 @@ class GlobalMapCfg {
 				if($printErr == 1) {
 					//Error Box
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('ERROR','mapCfgNotReadable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+		            $FRONTEND->messageToUser('ERROR','mapCfgNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				}
 				return FALSE;
 			}

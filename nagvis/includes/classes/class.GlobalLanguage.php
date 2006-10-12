@@ -239,7 +239,7 @@ class GlobalLanguage {
 			if($replace != '') {
 				$arrReplace = explode(',', $replace);
 				for($i=0;$i<count($arrReplace);$i++) {
-					$var = explode('=', $arrReplace[$i]);
+					$var = explode('=', str_replace('~','=',$arrReplace[$i]));
 					$strLang = str_replace("[".$var[0]."]", $var[1], $strLang);
 				}
 				
