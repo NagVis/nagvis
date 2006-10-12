@@ -43,26 +43,10 @@
 [paths]
 ; absolute physical NagVis path
 ;base="/usr/local/nagios/share/nagvis/nagvis/"
-; absolute physical NagVis cfg path
-;cfg="/usr/local/nagios/share/nagvis/nagvis/etc/"
-; absolute physical NagVis iconset path
-;icon="/usr/local/nagios/share/nagvis/nagvis/images/iconsets/"
-; absolute physical NagVis maps path
-;map="/usr/local/nagios/share/nagvis/nagvis/images/maps/"
-; absolute physical NagVis maps cfg path
-;mapcfg="/usr/local/nagios/share/nagvis/nagvis/etc/maps/"
 ; absolute html NagVis path
 ;htmlbase="/nagios/nagvis-1.x"
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
-; absolute html NagVis images path
-;htmlimages="/nagios/nagvis/nagvis/images/"
-; absolute html NagVis icon path
-;htmlicon="/nagios/nagvis/nagvis/images/iconsets/"
-; absolute html NagVis maps path
-;htmlmap="/nagios/nagvis/nagvis/images/maps/"
-; absolute html NagVis documentation path
-;htmldoku="http://luebben-home.de/nagvis-doku/nav.html?nagvis/"
 
 ; options for the NDO-Backend
 [backend_ndomy]

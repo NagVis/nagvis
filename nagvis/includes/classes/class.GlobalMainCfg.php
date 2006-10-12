@@ -41,24 +41,24 @@ class GlobalMainCfg {
 			'wui' => Array('autoupdatefreq' => Array('must' => 1,
 												'default' => '25')),
 			'paths' => Array('base' => Array('must' => 1,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/'),
-							'cfg' => Array('must' => 1,
+												'default' => '/usr/local/nagios/share/nagvis/'),
+							'cfg' => Array('must' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/'),
-							'icon' => Array('must' => 1,
+							'icon' => Array('must' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/'),
-							'map' => Array('must' => 1,
+							'map' => Array('must' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/maps/'),
-							'mapcfg' => Array('must' => 1,
+							'mapcfg' => Array('must' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/'),
 							'htmlbase' => Array('must' => 1,
 												'default' => '/nagios/nagvis'),
 							'htmlcgi' => Array('must' => 1,
 												'default' => '/nagios/cgi-bin'),
-							'htmlimages' => Array('must' => 1,
+							'htmlimages' => Array('must' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/'),
-							'htmlicon' => Array('must' => 1,
+							'htmlicon' => Array('must' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/iconsets/'),
-							'htmlmap' => Array('must' => 1,
+							'htmlmap' => Array('must' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/maps/'),
 							'htmldoku' => Array('must' => 1,
 												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/')),
@@ -93,12 +93,20 @@ class GlobalMainCfg {
 		
 		// Default - minimal - config initialisation
 		// if an error with the main-cfg-file occours and we can't get the settings 
-		// we have to set defaults here
+		// set defaults here
 		$this->config['global']['language'] = $this->validConfig['global']['language']['default'];
 		
 		// Read Main Config file
 		$this->configFile = $configFile;
 		$this->readConfig(1);
+		
+		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
+		$this->validConfig['paths']['icon']['default'] = $this->getValue('paths','base')."nagvis/images/iconsets/";
+		$this->validConfig['paths']['map']['default'] = $this->getValue('paths','base')."nagvis/images/maps/";
+		$this->validConfig['paths']['mapcfg']['default'] = $this->getValue('paths','base')."nagvis/etc/maps/";
+		$this->validConfig['paths']['htmlimages']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/";
+		$this->validConfig['paths']['htmlicon']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/iconsets/";
+		$this->validConfig['paths']['htmlmap']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/maps/";
 	}
 	
     /**
