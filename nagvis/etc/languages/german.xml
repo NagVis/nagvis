@@ -13,13 +13,13 @@
 					<text>Host</text>
 				</host>
 				<service>
-					<text>Dienst</text>
+					<text>Service</text>
 				</service>
 				<hostgroup>
 					<text>Hostgruppe</text>
 				</hostgroup>
 				<servicegroup>
-					<text>Dienstegruppe</text>
+					<text>Servicegruppe</text>
 				</servicegroup>
 				<map>
 					<text>Karte</text>
@@ -59,12 +59,12 @@
 					<text>Die Gruppe [HOSTGROUPNAME] enth&auml;lt keine Hosts!</text>
 				</emptyGroup>
 				<servicegroupNotFround>
-					<title>Servicegroup nicht gefunden!</title>
-					<text>Die Servicegroup [HOSTGROUPNAME] wurde nicht gefunden!</text>
+					<title>Servicegruppe nicht gefunden!</title>
+					<text>Die Servicegruppe [HOSTGROUPNAME] wurde nicht gefunden!</text>
 				</servicegroupNotFround>
 				<servicegroupNoState>
-					<title>Status der ServiceGroup!</title>
-					<text>Konnte den Status der ServiceGroup [SERVICEGROUPNAME] nicht ermitteln!</text>
+					<title>Status der Servicegruppr!</title>
+					<text>Konnte den Status der Servicegruppe [SERVICEGROUPNAME] nicht ermitteln!</text>
 				</servicegroupNoState>
 				<serviceNoState>
 					<title>Service-Status!</title>
@@ -72,7 +72,7 @@
 				</serviceNoState>
 				<noUser>
 					<title>Kein Benutzer</title>
-					<text>Es wurde kein Benutzername an NagVis &uuml;bergeben! Pruefen Sie ihre .htaccess Konfiguration!</text>
+					<text>Es wurde kein Benutzername an NagVis &uuml;bergeben! Pr&uuml;fen Sie ihre .htaccess Konfiguration!</text>
 				</noUser>
 				<gdLibNotFound>
 					<title>GD Lib</title>
@@ -124,11 +124,11 @@
 				</mapCfgDirNotReadable>
 				<mapCfgDirNotWriteable>
 					<title>Keine Schreibrechte auf das Map Config Verzeichnis</title>
-					<text>Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis ([I][MAPPATH][/I]) pr&uuml;fen</text>
+					<text>Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis ([I][MAPPATH][/I]) pr&uuml;fen!</text>
 				</mapCfgDirNotWriteable>
 				<headerConfigNotReadable>
 					<title>Header Konfigurationsdatei nicht lesbar</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die Datei ([I][CFGPATH][/I]) pr&uuml;fen</text>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Datei ([I][CFGPATH][/I]) pr&uuml;fen!</text>
 				</headerConfigNotReadable>
 				<loopInMapRecursion>
 					<title>Endlosschleife</title>
@@ -151,13 +151,13 @@
 					<text>Host Name</text>
 				</hostname>
 				<servicename>
-					<text>Dienst Name</text>
+					<text>Service Name</text>
 				</servicename>
 				<hostgroupname>
 					<text>Hostgruppen Name</text>
 				</hostgroupname>
 				<servicegroupname>
-					<text>Dienstegruppen Name</text>
+					<text>Servicegruppen Name</text>
 				</servicegroupname>
 				<mapname>
 					<text>Map Name</text>
@@ -178,26 +178,26 @@
 				<!-- Alle globalen Backend Meldungen //-->
 				<noStateSet>
 					<title>Kein state gesetzt!</title>
-					<text>state wurde nicht gesetzt!</text>
+					<text>Status wurde nicht gesetzt!</text>
 				</noStateSet>
 			</messages>
 		</global>
 		<ndomy>
 			<messages>
 				<mysqlNotSupported>
-					<title>NDOMy Backend Fehler</title>
+					<title>NDOMy Backend Fehler!</title>
 					<text>Ihre PHP installation hat keine MySQL unterst&uuml;tzung. Ohne php-mysql k&ouml;nnen Sie das NDO Backend nicht nutzen!</text>
 				</mysqlNotSupported>
 				<errorSelectingDb>
-					<title>NDOMy Backend Fehler</title>
+					<title>NDOMy Backend Fehler!</title>
 					<text>Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen?</text>
 				</errorSelectingDb>
 				<nagiosNotRunning>
-					<title>NDOMy Backend Fehler</title>
+					<title>NDOMy Backend Fehler!</title>
 					<text>Achtung: Laut NDO l&auml;uft der Nagios Dienst NICHT!</text>
 				</nagiosNotRunning>
 				<nagiosDataNotUpToDate>
-					<title>NDOMy Backend Fehler</title>
+					<title>NDOMy Backend Fehler!</title>
 					<text>Laut NDO wurden von Nagios seid mehr als [I][TIMEWITHOUTUPDATE][/I] Sekunden keine Daten mehr verarbeitet! Laufen Nagios und ndo2db?</text>
 				</nagiosDataNotUpToDate>
 			</messages>
@@ -206,7 +206,7 @@
 			<messages>
 				<!-- Alle HTML Backend Meldungen //-->
 				<statusCgiNotFound>
-					<title>StatusCgi nicht gefunden</title>
+					<title>StatusCgi nicht gefunden!</title>
 					<text>&uuml;berpr&uuml;fen Sie den Pfad der [STATUSCGI]-Variable in der Konfigurationsdatei!</text>
 				</statusCgiNotFound>
 				<statusCgiNotExecutable>
@@ -269,13 +269,13 @@
 					<text>Linie</text>
 				</line>
 				<createMap>
-					<text>erstelle eine Map</text>
+					<text>Erstelle eine Map</text>
 				</createMap>
 				<renameMap>
-					<text>eine Map umbenennen</text>
+					<text>Eine Map umbenennen</text>
 				</renameMap>
 				<deleteMap>
-					<text>eine Map l&ouml;schen</text>
+					<text>Eine Map l&ouml;schen</text>
 				</deleteMap>
 				<uploadBackground>
 					<text>Hintergrund hochladen</text>
@@ -314,7 +314,7 @@
 					<text>Neuer Name</text>
 				</newMapName>
 				<choosePngImage>
-					<text>W&auml;hle ein png Image</text>
+					<text>W&auml;hle ein PNG Image</text>
 				</choosePngImage>
 				<mapIconset>
 					<text>Map Iconset</text>
@@ -329,7 +329,7 @@
 			<messages>
 				<!-- Alle WUI Meldungen //-->
 				<mustValueNotSet>
-					<text>Ein ben&ouml;tigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Plichtwerte.</text>
+					<text>Ein ben&ouml;tigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Pflichtwerte.</text>
 				</mustValueNotSet>
 				<chosenLineTypeNotValid>
 					<text>Der gew&auml;hlte line_type ist ung&uuml;ltig.</text>
@@ -353,7 +353,7 @@
 					<text>Willst du dieses Objekt wirklich loeschen?</text>
 				</confirmDelete>
 				<firstMustChoosePngImage>
-					<text>Du must erst ein png Image w&auml;hlen!</text>
+					<text>Du must erst ein PNG Image w&auml;hlen!</text>
 				</firstMustChoosePngImage>
 				<mustChoosePngImage>
 					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
@@ -365,10 +365,10 @@
 					<text>Mindestens ein User muss Zugriff auf die Map haben.</text>
 				</minOneUserAccess>
 				<mustChooseDefaultIconset>
-					<text>Du musst das default_iconset fuer diese Map w&auml;hlen</text>
+					<text>Du musst das default_iconset fuer diese Map w&auml;hlen.</text>
 				</mustChooseDefaultIconset>
 				<mustChooseBackgroundImage>
-					<text>Du musst das Hintergrund Image fuer diese Map wÃ¤hlen.</text>
+					<text>Du musst das Hintergrund Image fuer diese Map w&auml;hlen.</text>
 				</mustChooseBackgroundImage>
 				<noMapToRename>
 					<text>Keine Map zum umbenennen gefunden. Operation abgebrochen.</text>
@@ -377,7 +377,7 @@
 					<text>Du hast keinen neuen Namen angegeben.</text>
 				</noNewNameGiven>
 				<mapAlreadyExists>
-					<text>Diese Map existiert bereits. WÃ¤hle einen anderen Namen.</text>
+					<text>Diese Map existiert bereits. W�hle einen anderen Namen.</text>
 				</mapAlreadyExists>
 				<foundNoMapToDelete>
 					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
@@ -392,13 +392,13 @@
 					<text>Willst du diese Map wirklich umbenennen?</text>
 				</confirmMapRename>
 				<confirmMapDeletion>
-					<text>Willst du diese Map wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckgaengig gemacht werden!</text>
+					<text>Willst du diese Map wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
 				</confirmMapDeletion>
 				<confirmBackgroundDeletion>
-					<text>Willst du dieses Hintergrund Image wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckgaengig gemacht werden!</text>
+					<text>Willst du dieses Hintergrund Image wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
 				</confirmBackgroundDeletion>
 				<unableToDeleteBackground>
-					<text>Kann [IMAGENAME] nicht l&ouml;schen da es in der Map [MAP] noch verwendet wird.</text>
+					<text>Kann [IMAGENAME] nicht l&ouml;schen, da es in der Map [MAP] noch verwendet wird.</text>
 				</unableToDeleteBackground>
 				<noPermissions>
 					<text>Du hast nicht die Rechte diese Map zu &auml;ndern.</text>
@@ -413,7 +413,7 @@
 					<text>Sicher, dass du das Backup wiederherstellen willst?</text>
 				</confirmRestore>
 				<noSpaceAllowed>
-					<text>Leerzeichen sind hier nicht erlaubt</text>
+					<text>Leerzeichen sind hier nicht erlaubt!</text>
 				</noSpaceAllowed>
 			</messages>
 		</global>
@@ -421,7 +421,7 @@
 			<labels>
 				<!-- Main Configuration Descriptions //-->
 				<backend>
-					<text>Waehle ein Backend. z. Zt. sind die Backends NDOMY (schnell und stabil, zieht die Daten aus einer vorhandenen Nagios NDO MySQL Datenbank) und HTML (langsam und eher unzuverl&auml;ssig, parsed die Nagios CGIs) verf&uuml;gbar.</text>
+					<text>W&auml;hle ein Backend. z. Zt. sind die Backends NDOMY (schnell und stabil, zieht die Daten aus einer vorhandenen Nagios NDO MySQL Datenbank) und HTML (langsam und eher unzuverl&auml;ssig, parsed die Nagios CGIs) verf&uuml;gbar.</text>
 				</backend>
 				<language>
 					<text>Waehle deine Sprache.</text>
@@ -442,7 +442,7 @@
 					<text>Anzahl der Links pro Zeile im Header.</text>
 				</headercount>
 				<autoupdatefreq>
-					<text>WUI legt beim bearbeiten regelm&auml;ßig ein Backup der Datei an bzw. speichert automatisch ab. Der Intervall kann hier eingestellt werden.</text>
+					<text>WUI legt beim bearbeiten regelm&auml;ssig ein Backup der Datei an bzw. speichert automatisch ab. Der Intervall kann hier eingestellt werden.</text>
 				</autoupdatefreq>
 				<checkconfig>
 					<text>If set to 'Yes', forces a check of the current configuration. MUST be done after any change.</text>
@@ -454,7 +454,7 @@
 					<text>Map refresh time (in Sekunden).</text>
 				</refreshtime>
 				<debug>
-					<text>Debug an oder aus?</text>
+					<text>Debug on or off?</text>
 				</debug>
 				<debugstates>
 					<text>Debug Status?</text>
@@ -466,7 +466,7 @@
 					<text>Debug FixIcon?</text>
 				</debugfixicon>
 				<base>
-					<text>Voller lokaler Pfad zum NagVis Basis Verzeichnis</text>
+					<text>Voller lokaler Pfad zum NagVis Basis Verzeichnis.</text>
 				</base>
 				<cfg>
 					<text>Lokaler Pfad zum NagVis etc Verzeichnis.</text>
@@ -511,13 +511,13 @@
 					<text>NDO Backend: Name der NDO Datenbank.</text>
 				</dbname>
 				<dbuser>
-					<text>NDO Backend: User f&uuml;r den NDO Datenbankzugriff, der User braucht nur read (SELECT) Rechte!.</text>
+					<text>NDO Backend: Benutzer f&uuml;r den NDO Datenbankzugriff, der Benutzer braucht nur read (SELECT) Rechte!.</text>
 				</dbuser>
 				<dbpass>
-					<text>NDO Backend: Passwort des Users f&uuml;r den Datenbankzugriff.</text>
+					<text>NDO Backend: Passwort des Benutzers f&uuml;r den Datenbankzugriff.</text>
 				</dbpass>
 				<dbprefix>
-					<text>NDO Backend: K&uuml;rzel vor den Tabellennamen in der NDO DB (z.B. ndo_)</text>
+					<text>NDO Backend: Prefix vor den Tabellennamen in der NDO Datenbank (z.B. ndo_)</text>
 				</dbprefix>
 				<dbinstanceid>
 					<text>NDO Backend: Instanz-ID der NDO installation (wird nur bei mehreren NDO installationen ben&ouml;tigt, normalerweise 1)</text>
@@ -532,10 +532,10 @@
 					<text>HTML Backend: Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).</text>
 				</cgipath>
 				<version>
-					<text>NagVis Version</text>
+					<text>NagVis Version.</text>
 				</version>
 				<title>
-					<text>Titel der NagVis Seiten im Browser</text>
+					<text>Titel der NagVis Seiten im Browser.</text>
 				</title>
 			</labels>
 			<messages>

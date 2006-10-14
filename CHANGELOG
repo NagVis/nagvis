@@ -251,3 +251,8 @@ author: Michael Luebben
 Date: 	2006-09-19
 By:	Michael Luebben
 Change:	Fix little bug in JavaBox Output
+
+Date:   2006-10-14
+By:     Michael Luebben
+Change: Clean german.xml and and add english language (english.xml)
+
