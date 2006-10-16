@@ -355,6 +355,30 @@ class GlobalMapCfg {
 		} 
 	}
 	
+	/**
+	 * Checks for existing map image file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function checkMapImageExists($printErr) {
+		if($this->image != '') {
+			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					//Error Box
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+				}
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
     /**
 	 * Checks for readable map image file
 	 *
@@ -364,7 +388,7 @@ class GlobalMapCfg {
      */
 	function checkMapImageReadable($printErr) {
 		if($this->image != '') {
-			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image) && is_readable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+			if($this->checkMapImageExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
@@ -389,13 +413,36 @@ class GlobalMapCfg {
 	function checkMapImageWriteable($printErr) {
 		if($this->image != '') {
 			//FIXME: is_writable doesn't check write permissions
-			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image) /*&& is_writable($this->MAINCFG->getValue('paths', 'map').$this->image)*/) {
+			if($this->checkMapImageExists($printErr) /*&& is_writable($this->MAINCFG->getValue('paths', 'map').$this->image)*/) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					//Error Box
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('ERROR','backgroundNotWriteable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+				}
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for existing config file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function checkNagVisConfigExists($printErr) {
+		if($this->configFile != '') {
+			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('ERROR','mapCfgNotExists','MAINCFG~'.$this->configFile);
 				}
 				return FALSE;
 			}
@@ -413,7 +460,7 @@ class GlobalMapCfg {
      */
 	function checkMapConfigReadable($printErr) {
 		if($this->name != '') {
-			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg") && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
+			if($this->checkNagVisConfigExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
@@ -436,7 +483,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkMapConfigWriteable($printErr) {
-		if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg") && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
+		if($this->checkNagVisConfigExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {

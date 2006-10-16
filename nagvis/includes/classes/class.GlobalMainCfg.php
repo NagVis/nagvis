@@ -249,7 +249,7 @@ class GlobalMainCfg {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('ERROR','mainCfgNotReadable','MAINCFG~'.$this->configFile);
+		            $FRONTEND->messageToUser('ERROR','mainCfgNotExists','MAINCFG~'.$this->configFile);
 				}
 				return FALSE;
 			}

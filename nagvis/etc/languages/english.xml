@@ -78,33 +78,41 @@
 					<title>No GD-Lib</title>
 					<text>GD-Lib was not installed!</text>
 				</gdLibNotFound>
+				<mapCfgNotExists>
+					<title>Map Config File doesn't exists</title>
+					<text>The CFG-File ([I][MAP][/I]) doesn't exists!</text>
+				</mapCfgNotExists>
 				<mapCfgNotReadable>
 					<title>Can not read Map Config File</title>
-					<text>Please check the webservers permissions at the CFG-File (<I>[MAP]</I>)!</text>
+					<text>Please check the webservers permissions at the CFG-File (<I>[MAP]</I>)</text>
 				</mapCfgNotReadable>
 				<mapCfgNotWriteable>
 					<title>Can not write Map Config File</title>
-					<text>Please check the permissions of the webserver user at the CFG-File (<I>[MAP]</I>)!</text>
+					<text>Please check the permissions of the webserver user at the CFG-File (<I>[MAP]</I>)</text>
 				</mapCfgNotWriteable>
 				<mainCfgNotExists>
-					<title>NagVis Config Datei nciht vorhanden</title>
-					<text>Die MainCfg-Datei ([I][MAINCFG][/I]) existiert nicht!</text>
+					<title>NagVis Config File doesn't exists</title>
+					<text>The Main Config FIle ([I][MAINCFG][/I]) doesn't exists</text>
 				</mainCfgNotExists>
 				<mainCfgNotReadable>
 					<title>Can not read NagVis Config File</title>
-					<text>Please check the webservers permissions at the MainCfg-file (<i>[MAINCFG]</i>)!</text>
+					<text>Please check the webservers permissions at the MainCfg-file (<i>[MAINCFG]</i>)</text>
 				</mainCfgNotReadable>
 				<mainCfgNotWriteable>
 					<title>Can not write NagVis Config File</title>
 					<text>Please check the webservers permissions at the MainCfg-file (<i>[MAINCFG]</i>)</text>
 				</mainCfgNotWriteable>
+				<backgroundNotExists>
+					<title>Map Image File doesn't exists</title>
+					<text>Map Image File (<I>[IMGPATH]</I>) doesn't exists</text>
+				</backgroundNotExists>
 				<backgroundNotReadable>
 					<title>Can not read Map Image File</title>
-					<text>Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)!</text>
+					<text>Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)</text>
 				</backgroundNotReadable>
 				<backgroundNotWriteable>
 					<title>Can not write Map Image File</title>
-					<text>Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)!</text>
+					<text>Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)</text>
 				</backgroundNotWriteable>
 				<unknownObject>
 					<title>Unknown type defined in Map Config File</title>
@@ -335,7 +343,7 @@
 					<text>The selected line_type is invalid.</text>
 				</chosenLineTypeNotValid>
 				<onlyLineOrIcon>
-					<text>A Object can be only a Icon or a line, “iconset” and “line_type” can be used not together.</text>
+					<text>A Object can be only a Icon or a line, Â“iconsetÂ” and Â“line_typeÂ” can be used not together.</text>
 				</onlyLineOrIcon>
 				<not2coords>
 					<text>It seems, you wants a line to define (line_type is set), but it is no 2 [COORD] coordinates indicated.</text>

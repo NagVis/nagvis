@@ -78,6 +78,10 @@
 					<title>GD Lib</title>
 					<text>GD Lib ist nicht installiert!</text>
 				</gdLibNotFound>
+				<mapCfgNotExists>
+					<title>Map Config Datei nicht vorhanden</title>
+					<text>Die CFG-Datei ([I][MAP][/I]) existiert nicht!</text>
+				</mapCfgNotExists>
 				<mapCfgNotReadable>
 					<title>Keine Leserechte auf die Map Config Datei</title>
 					<text>Bitte die Leseberechtigungen des Webservers auf die CFG-Datei ([I][MAP][/I]) pr&uuml;fen!</text>
@@ -87,7 +91,7 @@
 					<text>Bitte die Schreibberechtigungen des Webservers auf die CFG-Dateien ([I][MAP][/I]) pr&uuml;fen!</text>
 				</mapCfgNotWriteable>
 				<mainCfgNotExists>
-					<title>NagVis Config Datei nciht vorhanden</title>
+					<title>NagVis Config Datei nicht vorhanden</title>
 					<text>Die MainCfg-Datei ([I][MAINCFG][/I]) existiert nicht!</text>
 				</mainCfgNotExists>
 				<mainCfgNotReadable>
@@ -98,6 +102,10 @@
 					<title>Keine Schreibrechte auf die NagVis Config Datei</title>
 					<text>Bitte die Schreibberechtigungen des Webservers auf die MainCfg-Datei ([I][MAINCFG][/I]) pr&uuml;fen!</text>
 				</mainCfgNotWriteable>
+				<backgroundNotExists>
+					<title>Die Map Bild-Datei existiert nicht</title>
+					<text>Die Map Bild-Datei (<I>[IMGPATH]</I>) existiert nicht</text>
+				</backgroundNotExists>
 				<backgroundNotReadable>
 					<title>Keine Leserechte auf die Map Bild-Datei</title>
 					<text>Bitte die Leseberechtigungen des Webservers auf die PNG-Datei ([I][IMGPATH][/I]) pr&uuml;fen!</text>
@@ -377,7 +385,7 @@
 					<text>Du hast keinen neuen Namen angegeben.</text>
 				</noNewNameGiven>
 				<mapAlreadyExists>
-					<text>Diese Map existiert bereits. Wähle einen anderen Namen.</text>
+					<text>Diese Map existiert bereits. Wã§¬e einen anderen Namen.</text>
 				</mapAlreadyExists>
 				<foundNoMapToDelete>
 					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
