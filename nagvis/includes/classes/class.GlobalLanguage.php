@@ -236,6 +236,16 @@ class GlobalLanguage {
 		if($arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
 			$strLang = $arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
 			
+			// replace html-codes, FIXME quick 'n dirty - could be done with regex
+			$strLang = str_replace('[i]','<i>',$strLang);
+			$strLang = str_replace('[/i]','</i>',$strLang);
+			$strLang = str_replace('[I]','<i>',$strLang);
+			$strLang = str_replace('[/I]','</i>',$strLang);
+			$strLang = str_replace('[b]','<b>',$strLang);
+			$strLang = str_replace('[/b]','</b>',$strLang);
+			$strLang = str_replace('[B]','<b>',$strLang);
+			$strLang = str_replace('[/B]','</b>',$strLang);
+			
 			if($replace != '') {
 				$arrReplace = explode(',', $replace);
 				for($i=0;$i<count($arrReplace);$i++) {
