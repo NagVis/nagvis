@@ -145,7 +145,7 @@ class GlobalForm {
 	 * @return	Array 		Html
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function getSelectLine($label,$name,$arr,$selected,$must,$onChange='') {
+	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='') {
 		$ret = Array();
 		
 		// FIXME: ?!
