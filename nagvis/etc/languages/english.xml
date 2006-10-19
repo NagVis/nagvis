@@ -84,11 +84,11 @@
 				</mapCfgNotExists>
 				<mapCfgNotReadable>
 					<title>Can not read Map Config File</title>
-					<text>Please check the webservers permissions at the CFG-File (<I>[MAP]</I>)</text>
+					<text>Please check the webservers permissions at the CFG-File ([I][MAP][/I])</text>
 				</mapCfgNotReadable>
 				<mapCfgNotWriteable>
 					<title>Can not write Map Config File</title>
-					<text>Please check the permissions of the webserver user at the CFG-File (<I>[MAP]</I>)</text>
+					<text>Please check the permissions of the webserver user at the CFG-File ([I][MAP][/I])</text>
 				</mapCfgNotWriteable>
 				<mainCfgNotExists>
 					<title>NagVis Config File doesn't exists</title>
@@ -96,47 +96,47 @@
 				</mainCfgNotExists>
 				<mainCfgNotReadable>
 					<title>Can not read NagVis Config File</title>
-					<text>Please check the webservers permissions at the MainCfg-file (<i>[MAINCFG]</i>)</text>
+					<text>Please check the webservers permissions at the MainCfg-file ([I][MAINCFG][/I])</text>
 				</mainCfgNotReadable>
 				<mainCfgNotWriteable>
 					<title>Can not write NagVis Config File</title>
-					<text>Please check the webservers permissions at the MainCfg-file (<i>[MAINCFG]</i>)</text>
+					<text>Please check the webservers permissions at the MainCfg-file ([I][MAINCFG][/I])</text>
 				</mainCfgNotWriteable>
 				<backgroundNotExists>
 					<title>Map Image File doesn't exists</title>
-					<text>Map Image File (<I>[IMGPATH]</I>) doesn't exists</text>
+					<text>Map Image File ([I][IMGPATH][/I]) doesn't exists</text>
 				</backgroundNotExists>
 				<backgroundNotReadable>
 					<title>Can not read Map Image File</title>
-					<text>Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)</text>
+					<text>Please check the webservers permissions at the PNG-File ([I][IMGPATH][/I])</text>
 				</backgroundNotReadable>
 				<backgroundNotWriteable>
 					<title>Can not write Map Image File</title>
-					<text>Please check the webservers permissions at the PNG-File (<I>[IMGPATH]</I>)</text>
+					<text>Please check the webservers permissions at the PNG-File ([I][IMGPATH][/I])</text>
 				</backgroundNotWriteable>
 				<unknownObject>
 					<title>Unknown type defined in Map Config File</title>
-					<text>The Type <I>[TYPE]</I> is not allowed!</text>
+					<text>The Type [I][TYPE][/I] is not allowed!</text>
 				</unknownObject>
 				<unknownAttribute>
 					<title>Unknown attribute defined in Map Config File</title>
-					<text>The Attribute <I>[ATTRIBUTE]</I> is not allowed in Elements of type <I>[TYPE]</I>!</text>
+					<text>The Attribute [I][ATTRIBUTE][/I] is not allowed in Elements of type [I][TYPE][/I]!</text>
 				</unknownAttribute>
 				<languageNotReadable>
 					<title>Can not read Language-File</title>
-					<text>Please check the webserver permission at the Language-File (<I>[LANGFILE]</I>)!</text>
+					<text>Please check the webserver permission at the Language-File ([I][LANGFILE][/I])!</text>
 				</languageNotReadable>
 				<mapCfgDirNotReadable>
 					<title>Can not read Map Config Folder</title>
-					<text>Please check the permissions of the webserver user at the Folder (<I>[MAPPATH]</I>)!</text>
+					<text>Please check the permissions of the webserver user at the Folder ([I][MAPPATH][/I])!</text>
 				</mapCfgDirNotReadable>
 				<mapCfgDirNotWriteable>
 					<title>Can not write Map Config Folder</title>
-					<text>Please check the permissions of the webserver user at the Folder (<I>[MAPPATH]</I>)</text>
+					<text>Please check the permissions of the webserver user at the Folder ([I][MAPPATH][/I])</text>
 				</mapCfgDirNotWriteable>
 				<headerConfigNotReadable>
 					<title>Can not read Head Config file</title>
-					<text>Please check the permissions of the webserver user at the Headerconfig-file (<I>[CFGPATH]</I>)!</text>
+					<text>Please check the permissions of the webserver user at the Headerconfig-file ([I][CFGPATH][/I])!</text>
 				</headerConfigNotReadable>
 				<loopInMapRecursion>
 					<title>Loop in Map recursion</title>
@@ -206,7 +206,7 @@
 				</nagiosNotRunning>
 				<nagiosDataNotUpToDate>
 					<title>NDOMy Backend error!</title>
-					<text>NDOMy Backend Error~Caution: NDO claims that Nagios did NO status Update for more than  <I>[TIMEWITHOUTUPDATE]</I> seconds! Make sure that Nagios and ndo2db are running!</text>
+					<text>NDOMy Backend Error~Caution: NDO claims that Nagios did NO status Update for more than  [I][TIMEWITHOUTUPDATE][/I] seconds! Make sure that Nagios and ndo2db are running!</text>
 				</nagiosDataNotUpToDate>
 			</messages>
 		</ndomy>
