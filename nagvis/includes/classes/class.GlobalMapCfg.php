@@ -249,7 +249,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function writeElement($type,$id) {
-		if($this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
+		if($this->checkMapConfigExists(1) && $this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
 			// read file in array
 			$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
 			
@@ -440,7 +440,7 @@ class GlobalMapCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function checkNagVisConfigExists($printErr) {
+	function checkMapConfigExists($printErr) {
 		if($this->configFile != '') {
 			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
 				return TRUE;

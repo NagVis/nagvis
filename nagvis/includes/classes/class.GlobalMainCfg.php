@@ -121,7 +121,7 @@ class GlobalMainCfg {
 		$sec = '';
 		
 		// Check for config file and read permissions
-		if($this->checkNagVisConfigExists(0) && $this->checkNagVisConfigReadable($printErr)) {
+		if($this->checkNagVisConfigExists($printErr) && $this->checkNagVisConfigReadable($printErr)) {
 			// read thx config file line by line in array $file
 			$file = @file($this->configFile);
 			
@@ -385,7 +385,7 @@ class GlobalMainCfg {
      */
 	function getValue($sec, $var) {
 		# if nothing is set in the config file, use the default value
-		if($this->config[$sec][$var] != '') {
+		if(array_key_exists($this->config[$sec],$var)) {
 			return $this->config[$sec][$var];
 		} else {
 			return $this->validConfig[$sec][$var]['default'];
