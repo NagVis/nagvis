@@ -6,9 +6,9 @@
 ##                         Nagios NDO Mysql DB. All not special to one	##
 ##                         Backend related things should removed here!  ##
 ##                         (e.g. fixIcon, this is needed for ALL        ##
-##                         Backends	)				##
+##                         Backends	)									##
 ##########################################################################
-## Licenced under the terms and conditions of the GPL Licence, 		##
+## Licenced under the terms and conditions of the GPL Licence, 			##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 ## This Backend is maintained by Andreas Husch (dowanup@nagios-wiki.de) ##
@@ -16,6 +16,7 @@
 
 class GlobalBackend {
 	var $MAINCFG;
+	var $LANG;
 	var $dbName;
 	var $dbUser;
 	var $dbPass;
@@ -28,7 +29,8 @@ class GlobalBackend {
 	*
 	* @param config $MAINCFG
 	*
-	* @author Andreas Husch, Lars Michelsen <larsi@nagios-wiki.de>
+	* @author Andreas Husch
+	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function GlobalBackend(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
@@ -39,6 +41,9 @@ class GlobalBackend {
 	    $this->dbPort = $this->MAINCFG->getValue('backend_ndomy', 'dbport');
 		$this->dbPrefix = $this->MAINCFG->getValue('backend_ndomy', 'dbprefix');
 		$this->dbInstanceId = $this->MAINCFG->getValue('backend_ndomy', 'dbinstanceid');
+		
+		// initialize a language object for later error messages which be given out as state output
+		$this->LANG = new GlobalLanguage($this->MAINCFG,'backend:ndomy');
 
 		//Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
@@ -94,7 +99,13 @@ class GlobalBackend {
 		return 0;
 	}
 	
-	// Returns all objects of the given type which match the pattern, if no pattern is given, all objects are selected
+	/**
+	 * <DESCRIPTION> 
+	 *
+	 * @param	FIXME
+	 * @return 	FIXME
+     * @author	FIXME
+     */
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
 		$filter = '';
@@ -144,17 +155,22 @@ class GlobalBackend {
 		return $ret;
 	}
 	
-	// Get the state for a HOST #####################################################################################################
+	/**
+	 * <DESCRIPTION> 
+	 *
+	 * @param	FIXME
+	 * @return 	FIXME
+     * @author	FIXME
+     */
 	function findStateHost($hostName,$recognizeServices) {
-		
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id = '1' AND name1 = binary '".$hostName."' AND instance_id='".$this->dbInstanceId."'");
 		$hostObjectId = mysql_fetch_row($QUERYHANDLE);  
 	
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
-			//FIXME: All this outputs should be handled over a language file
-			$state['State'] = "ERROR";
-			$state['Output'] = "The Host <b>" .$hostName. "</b> was not found in the Database. Maybe it is spelled wrong?";
-			return($state);
+			$state['State'] = 'ERROR';
+			$state['Output'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
+			
+			return $state;
 		}
 
 		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '".$hostObjectId[0]."' AND instance_id='".$this->dbInstanceId."'");
@@ -162,44 +178,31 @@ class GlobalBackend {
 		// This is the special case, that a host is definied but in pending state
 		if(mysql_num_rows($QUERYHANDLE) <= 0) {
 			$state['State'] = 'UNKOWN';
-			//FIXME: All this outputs should be handled over a language file
-			$state['Output'] = "The Host <b>" .$hostName. "</b> is in pending state.";
+			$state['Output'] = $this->LANG->getMessageText('hostIsPending','HOST~'.$hostName);
 			$hostState = $state['State'];
 		} else {
 			$hostState = mysql_fetch_array($QUERYHANDLE);
 			
-			//Host is UP
 			if ($hostState['current_state'] == '0') {
+				// Host is UP
 				$state['State'] = 'UP';
 				$state['Output'] = $hostState['output'];
-			} 
-			//Host is DOWN
-			elseif ($hostState['current_state'] == '1') {
+			} elseif ($hostState['current_state'] == '1' || $hostState['current_state'] == '2' || $hostState['current_state'] == '3') {
+				// Host is DOWN/UNREACHABLE/UNKNOWN
 				if($hostState['problem_has_been_acknowledged'] == 1) {
 					$state['State'] = 'ACK';
-				}
-				else {
-					$state['State'] = 'DOWN';
-				}
-				$state['Output'] = $hostState['output'];
-			}
-			//Host is UNREACHABLE
-			elseif ($hostState['current_state'] == '2') {
-				if($hostState['problem_has_been_acknowledged'] == 1) {
-					$state['State'] = 'ACK';
-				}
-				else {
-					$state['State'] = 'UNREACHABLE';
-				}
-				$state['Output'] = $hostState['output'];
-			}
-			//Host is UNKNOWN
-			elseif ($hostState['current_state'] == '3') {
-				if($hostState['problem_has_been_acknowledged'] == 1) {
-					$state['State'] = 'ACK';
-				}
-				else {
-					$state['State'] = 'UNKNOWN';
+				} else {
+					switch($hostState['current_state']) {
+						case '1': 
+							$state['State'] = 'DOWN';
+						break;
+						case '2':
+							$state['State'] = 'UNREACHABLE';
+						break;
+						case '3':
+							$state['State'] = 'UNKNOWN';
+						break;
+					}
 				}
 				$state['Output'] = $hostState['output'];
 			}
@@ -268,20 +271,25 @@ class GlobalBackend {
 				}
 			}
 		}
-        return($state);
+        return $state;
 	}
 
    
-	// Hostgroup ###############################################################################################################
+	/**
+	 * <DESCRIPTION> 
+	 *
+	 * @param	FIXME
+	 * @return 	FIXME
+     * @author	FIXME
+     */
 	function findStateHostgroup($hostGroupName,$recognizeServices) {
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='3' AND name1 = binary '".$hostGroupName."' AND instance_id='".$this->dbInstanceId."'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
 		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
-			//FIXME: All this outputs should be handled over a language file
 			$state['State'] = "ERROR";
-			$state['Output'] = "The Hostgroup <b>" .$hostGroupName. "</b> was not found in the Database. Maybe it is spelled wrong?";
+			$state['Output'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$hostGroupName);
 			return($state);
 		}
 		
@@ -297,68 +305,64 @@ class GlobalBackend {
 		//Now we have the Group Id and can get the hosts
 		$QUERYHANDLE = mysql_query("SELECT host_object_id FROM ".$this->dbPrefix."hostgroup_members WHERE hostgroup_id='".$hostGroupId[0]."' AND instance_id='".$this->dbInstanceId."'");	
 		while($hosts = mysql_fetch_array($QUERYHANDLE)) {
-				$objectId = $hosts['host_object_id'];
-				//Get the Host Name for the objectId Again so we can use our own host function
-				//this ist not really nice because the name gets changed back to the id there, maybe split the host funktions in to parts
-				$QUERYHANDLE_2 = mysql_query("SELECT name1 FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '1' AND object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."')");
-				$hostName = mysql_fetch_array($QUERYHANDLE_2);  
-				
-				$currentHostState = $this->findStateHost($hostName['name1'],$recognizeServices,"","");
-				if($currentHostState['State'] == "UP") {
-					$hostsOk++;
-				}
-				elseif($currentHostState['State'] == "ACK") {
-					$hostsAck++;				
-				}
-				elseif($currentHostState['State'] == "WARNING") {
-					$hostsWarning++;
-				}
-				elseif($currentHostState['State'] == "DOWN" || $currentHostState['State'] == "UNREACHABLE" || $currentHostState['State'] == "CRITICAL") {
-					$hostsCritical++;
-				}
-				elseif($currentHostState['State'] == "UNKNOWN") {
-					$hostsUnknown++;
-				}
+			$objectId = $hosts['host_object_id'];
+			//Get the Host Name for the objectId Again so we can use our own host function
+			//this ist not really nice because the name gets changed back to the id there, maybe split the host funktions in to parts
+			$QUERYHANDLE_2 = mysql_query("SELECT name1 FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '1' AND object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."')");
+			$hostName = mysql_fetch_array($QUERYHANDLE_2);  
+			
+			$currentHostState = $this->findStateHost($hostName['name1'],$recognizeServices,"","");
+			if($currentHostState['State'] == "UP") {
+				$hostsOk++;
+			} elseif($currentHostState['State'] == "ACK") {
+				$hostsAck++;				
+			} elseif($currentHostState['State'] == "WARNING") {
+				$hostsWarning++;
+			} elseif($currentHostState['State'] == "DOWN" || $currentHostState['State'] == "UNREACHABLE" || $currentHostState['State'] == "CRITICAL") {
+				$hostsCritical++;
+			} elseif($currentHostState['State'] == "UNKNOWN") {
+				$hostsUnknown++;
+			}
 		}
 	
 		if($hostsCritical > 0) {
 			$state['Count'] = $hostsCritical;
 			$state['Output'] = $hostsCritical." Hosts are CRITICAL, " .$hostsWarning. " WARNING and " .$hostsUnknown. " UNKNOWN";
 			$state['State'] = "CRITICAL";
-		}
-		elseif($hostsWarning > 0) {
+		} elseif($hostsWarning > 0) {
 			$state['Count'] = $hostsWarning;
 			$state['Output'] = $hostsWarning. " Hosts are WARNING and " .$hostsUnknown. " UNKNOWN";
 			$state['State'] = "WARNING";		
-		}
-		elseif($hostsUnknown > 0) {
+		} elseif($hostsUnknown > 0) {
 			$state['Count'] = $hostsUnknown;
 			$state['Output'] = $hostsUnknown." are in UNKNOWN state";
 			$state['State'] = "UNKNOWN";
-		}
-		elseif($hostsAck > 0) {
+		} elseif($hostsAck > 0) {
 			$state['Count'] = $hostsAck;
 			$state['Output'] = $hostsAck." Hosts are in a NON-OK State but all errors are ACKNOWLEDGED";
 			$state['State'] = "ACK";
-		}
-		elseif($hostsOk > 0) {
+		} elseif($hostsOk > 0) {
 			$state['Count'] = $hostsOk;
 			$state['Output'] = "All " .$hostsOk. " Hosts are OK";
 			//This must be set before by the host, but to be consitend with the other ifs i define it again here:
 			$state['State'] = "UP";		
 		}
 
-
-		return($state);
+		return $state;
 	}
 
-	// Service #####################################################################################################################
+	/**
+	 * <DESCRIPTION> 
+	 *
+	 * @param	FIXME
+	 * @return 	FIXME
+     * @author	FIXME
+     */
 	function findStateService($hostName,$serviceName) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '2' AND name1 = binary '".$hostName."' AND name2 = binary '".$serviceName."' AND instance_id='".$this->dbInstanceId."')");
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
-			//FIXME: All this outputs should be handled over a language file
 			$state['State'] = "ERROR";
-			$state['Output'] = "The Service <b>" .$serviceName. "</b> on Host <b>" .$hostName. "</b> was not found in the Database. Maybe it is spelled wrong?";
+			$state['Output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
 			return($state);
 		}
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
@@ -370,37 +374,38 @@ class GlobalBackend {
 			$state['State'] = "UNKOWN";
 			//FIXME: All this outputs should be handled over a language file
 			$state['Output'] = "The Service has not been checked yet";
-		}
-		elseif($service['current_state'] == 0) {
+		} elseif($service['current_state'] == 0) {
 				$state['Count'] = "1";
 				$state['State'] = "OK";
 				$state['Output'] = $service['output'];
-		}
-		elseif($service['problem_has_been_acknowledged'] == 1) {
+		} elseif($service['problem_has_been_acknowledged'] == 1) {
 				$state['Count'] = "1";
 				$state['State'] = "ACK";
 				$state['Output'] = $service['output'];			
-		}
-		elseif($service['current_state'] == 1) {
+		} elseif($service['current_state'] == 1) {
 				$state['Count'] = "1";
 				$state['State'] = "WARNING";
 				$state['Output'] = $service['output'];		
-		}
-		elseif($service['current_state'] == 2) {
+		} elseif($service['current_state'] == 2) {
 				$state['Count'] = "1";
 				$state['State'] = "CRITICAL";
 				$state['Output'] = $service['output'];		
-		}
-		elseif($service['current_state'] == 3) {
+		} elseif($service['current_state'] == 3) {
 				$state['Count'] = "1";
 				$state['State'] = "UNKNOWN";
 				$state['Output'] = $service['output'];	
 		}	
 		
-		return($state);
+		return $state;
 	}
 
-	// Servicegroup ############################################################################################################
+	/**
+	 * <DESCRIPTION> 
+	 *
+	 * @param	FIXME
+	 * @return 	FIXME
+     * @author	FIXME
+     */
 	function findStateServicegroup($serviceGroupName) {
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='4' AND name1 = binary '".$serviceGroupName."' AND instance_id='".$this->dbInstanceId."'");
@@ -409,7 +414,7 @@ class GlobalBackend {
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			//FIXME: All this outputs should be handled over a language file
 			$state['State'] = "ERROR";
-			$state['Output'] = "The Servicegroup <b>" .$serviceGroupName. "</b> was not found in the Database. Maybe it is spelled wrong?";
+			$state['Output'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$serviceGroupName);
 			return($state);
 		}
 		
@@ -425,122 +430,113 @@ class GlobalBackend {
 		//Now we have the Group Id and can get the hosts
 		$QUERYHANDLE = mysql_query("SELECT service_object_id FROM ".$this->dbPrefix."servicegroup_members WHERE servicegroup_id='$serviceGroupId[0]' AND instance_id='$this->dbInstanceId'");	
 		while($services = mysql_fetch_array($QUERYHANDLE)) {
-				$objectId = $services['service_object_id'];
+			$objectId = $services['service_object_id'];
 
-				//Query the Servicestates
-				$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
-				$currentService = mysql_fetch_array($QUERYHANDLE_2);				
-				if($currentService['current_state'] == 0) {
-					$servicesOk++;
-				}
-				elseif($currentService['problem_has_been_acknowledged'] == 1) {
-					$servicesAck++;				
-				}
-				elseif($currentService['current_state'] == 1) {
-					$servicesWarning++;
-				}
-				elseif($currentService['current_state'] == 2) {
-					$servicesCritical++;
-				}
-				elseif($currentService['current_state'] == 3) {
-					$servicesUnknown++;
-				}
-		
+			//Query the Servicestates
+			$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
+			$currentService = mysql_fetch_array($QUERYHANDLE_2);				
+			if($currentService['current_state'] == 0) {
+				$servicesOk++;
+			} elseif($currentService['problem_has_been_acknowledged'] == 1) {
+				$servicesAck++;				
+			} elseif($currentService['current_state'] == 1) {
+				$servicesWarning++;
+			} elseif($currentService['current_state'] == 2) {
+				$servicesCritical++;
+			} elseif($currentService['current_state'] == 3) {
+				$servicesUnknown++;
+			}
 		}
 	
-			if($servicesCritical > 0) {
-				$state['Count'] = $servicesCritical;
-				$state['Output'] = $servicesCritical." CRITICAL, " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
-				$state['State'] = "CRITICAL";
-			}
-			elseif($servicesWarning > 0) {
-				$state['Count'] = $servicesWarning;
-				$state['Output'] = $servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
-				$state['State'] = "WARNING";		
-			}
-			elseif($servicesUnknown > 0) {
-				$state['Count'] = $servicesUnknown;
-				$state['Output'] = $servicesUnknown." Services in UNKNOWN state";
-				$state['State'] = "UNKNOWN";
-				
-			}
-			elseif($servicesAck > 0) {
-				$state['Count'] = $servicesAck;
-				$state['Output'] = $servicesAck." services are in a NON-OK State but all are ACKNOWLEDGED";
-				$state['State'] = "ACK";
-			}
-			elseif($servicesOk > 0) {
-				$state['Count'] = $servicesOk;
-				$state['Output'] = "All ".$servicesOk." services are OK";
-				$state['State'] = "OK";		
-			}
+		if($servicesCritical > 0) {
+			$state['Count'] = $servicesCritical;
+			$state['Output'] = $servicesCritical." CRITICAL, " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+			$state['State'] = "CRITICAL";
+		} elseif($servicesWarning > 0) {
+			$state['Count'] = $servicesWarning;
+			$state['Output'] = $servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
+			$state['State'] = "WARNING";		
+		} elseif($servicesUnknown > 0) {
+			$state['Count'] = $servicesUnknown;
+			$state['Output'] = $servicesUnknown." Services in UNKNOWN state";
+			$state['State'] = "UNKNOWN";
+			
+		} elseif($servicesAck > 0) {
+			$state['Count'] = $servicesAck;
+			$state['Output'] = $servicesAck." services are in a NON-OK State but all are ACKNOWLEDGED";
+			$state['State'] = "ACK";
+		} elseif($servicesOk > 0) {
+			$state['Count'] = $servicesOk;
+			$state['Output'] = "All ".$servicesOk." services are OK";
+			$state['State'] = "OK";		
+		}
 
-		return($state);
+		return $state;
 	}
 
-
-	// Höchsten Status aus einem Array ermitteln
-	// FIXME: Ha: Move over to other class (not special html backend related)
+	/**
+	 * <DESCRIPTION> Höchsten Status aus einem Array ermitteln
+	 * FIXME: Ha: Move over to other class (not special html backend related)
+	 *
+	 * @param	FIXME
+	 * @return 	FIXME
+     * @author	FIXME
+     */
 	function findStateArray($stateArray) {
 		$rotateUrl = "";
 		unset($state);
 		if(in_array("error", $stateArray)) {
 			$state = "error";
-		}
-		elseif (in_array("UNKNOWN", $stateArray)) {
+		} elseif (in_array("UNKNOWN", $stateArray)) {
 			$state = "UNKNOWN";
-		}
-		elseif (in_array("CRITICAL", $stateArray)) {
+		} elseif (in_array("CRITICAL", $stateArray)) {
 			$state = "CRITICAL";
-		}
-		elseif (in_array("DOWN", $stateArray)) {
+		} elseif (in_array("DOWN", $stateArray)) {
 			$state = "DOWN";
-		}
-		elseif (in_array("WARNING", $stateArray)) {
+		} elseif (in_array("WARNING", $stateArray)) {
 			$state = "WARNING";
-		   }
-		elseif (in_array("OK", $stateArray)) {
+		} elseif (in_array("OK", $stateArray)) {
 			$state = "OK";
-		}
-		elseif (in_array("UP", $stateArray)) {
+		} elseif (in_array("UP", $stateArray)) {
 			$state = "UP";
 		}
-		return($state);
+		
+		return $state;
 	}
 	
-	// Status ermitteln
+	/**
+	 * <DESCRIPTION>
+	 *
+	 * @param	FIXME
+	 * @return 	FIXME
+     * @author	FIXME
+     */
 	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0") {
-		$rotateUrl = "";
-		unset($state);
-		//Status vom Host oder Service Prüfen.
 		if($Type == "host") {
 			if(isset($Name)) {
 				$state = $this->findStateHost($Name,$RecognizeServices);
 			}
-		}
-		elseif($Type == "service") {
+		} elseif($Type == "service") {
 			if(isset($Name)) {
 				$state = $this->findStateService($Name,$ServiceName);
             }
-        }
-
-		elseif($Type == "hostgroup") {
+        } elseif($Type == "hostgroup") {
 			if(isset($Name)) {
 				$state = $this->findStateHostgroup($Name,$RecognizeServices);
 			}
-		}
-		//Status einer Servicegroup prüfen.
-		elseif($Type == "servicegroup") {
+		} elseif($Type == "servicegroup") {
 			if(isset($Name)) {
 				$state = $this->findStateServicegroup($Name);
 			}
 		}
+		
 		if(!isset($state)) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
 			$FRONTEND->messageToUser('WARNING','noStateSet');
 			$FRONTEND->printPage();
 		}
-		return($state);
+		
+		return $state;
 	}
 }
 ?>

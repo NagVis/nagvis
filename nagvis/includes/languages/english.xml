@@ -212,6 +212,26 @@
 					<title>NDOMy Backend error!</title>
 					<text>NDOMy Backend Error~Caution: NDO claims that Nagios did NO status Update for more than  [I][TIMEWITHOUTUPDATE][/I] seconds! Make sure that Nagios and ndo2db are running!</text>
 				</nagiosDataNotUpToDate>
+				<hostNotFoundInDB>
+					<title>Host not found in database!</title>
+					<text>The Host [b][HOST][/b] was not found in the Database. Maybe it is spelled wrong?</text>
+				</hostNotFoundInDB>
+				<hostGroupNotFoundInDB>
+					<title>Hostgroup not found in database!</title>
+					<text>The Hostgroup [b][HOSTGROUP][/b] was not found in the Database. Maybe it is spelled wrong?</text>
+				</hostGroupNotFoundInDB>
+				<serviceNotFoundInDB>
+					<title>Service not found in database!</title>
+					<text>The Service [b][SERVICE][/b] on host [b][HOST][/b] was not found in the Database. Maybe it is spelled wrong?</text>
+				</serviceNotFoundInDB>
+				<serviceGroupNotFoundInDB>
+					<title>Servicegroup not found in database!</title>
+					<text>The Servicegroup [b][SERVICEGROUP][/b] was not found in the Database. Maybe it is spelled wrong?</text>
+				</serviceGroupNotFoundInDB>
+				<hostIsPending>
+					<title>Host is in pending state!</title>
+					<text>The Host [b][HOST][/b] is in pending state.</text>
+				</hostIsPending>
 			</messages>
 		</ndomy>
 		<html>
