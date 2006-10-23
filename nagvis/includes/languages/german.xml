@@ -1,0 +1,587 @@
+<?xml version="1.0"?>
+<language>
+	<meta>
+		<name>german</name>
+		<desc>German language file for NagVis</desc>
+		<version>1.0</version>
+	</meta>
+	<global>
+		<global>
+			<labels>
+				<!-- Alle globalen Beschriftungen //-->
+				<host>
+					<text>Host</text>
+				</host>
+				<service>
+					<text>Service</text>
+				</service>
+				<hostgroup>
+					<text>Hostgruppe</text>
+				</hostgroup>
+				<servicegroup>
+					<text>Servicegruppe</text>
+				</servicegroup>
+				<map>
+					<text>Karte</text>
+				</map>
+				<textbox>
+					<text>Textbox</text>
+				</textbox>
+			</labels>
+			<messages>
+				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten können) //-->
+				<mapCfgNotFound>
+					<title>Keine Map-Konfigurations-Datei!</title>
+					<text>Konnte die Konfigurations-Datei [I][MAP][/I] nicht &ouml;ffnen!</text>
+				</mapCfgNotFound>
+				<backgroundNotFound>
+					<title>Kein Map-Image!</title>
+					<text>Konnte das Map-Image [I][MAPPATH][/I] nicht &ouml;ffnen!</text>
+				</backgroundNotFound>
+				<permissionDenied>
+					<title>Keine Rechte!</title>
+					<text>Der Benutzer [I][USER][/I] hat keine Rechte zum anzeigen dieser Map!</text>
+				</permissionDenied>
+				<logfileNotFound>
+					<title>Keine Nagios-Log-Datei</title>
+					<text>Konnte Nagios-Log-Datei [I][STATUSLOGPATH][/I] nicht finden!</text>
+				</logfileNotFound>
+				<hostNotConfigured>
+					<title>Host nicht vorhanden!</title>
+					<text>Der Host [HOSTNAME] wurde in der Nagios Konfiguration nicht gefunden!</text>
+				</hostNotConfigured>
+				<serviceNotConfigured>
+					<title>Service nicht vorhanden!</title>
+					<text>Der Service [SERVICENAME] konnte in der Nagios Konfiguration nicht gefunden werden!</text>
+				</serviceNotConfigured>
+				<emptyGroup>
+					<title>Gruppe leer!</title>
+					<text>Die Gruppe [HOSTGROUPNAME] enth&auml;lt keine Hosts!</text>
+				</emptyGroup>
+				<servicegroupNotFround>
+					<title>Servicegruppe nicht gefunden!</title>
+					<text>Die Servicegruppe [HOSTGROUPNAME] wurde nicht gefunden!</text>
+				</servicegroupNotFround>
+				<servicegroupNoState>
+					<title>Status der Servicegruppr!</title>
+					<text>Konnte den Status der Servicegruppe [SERVICEGROUPNAME] nicht ermitteln!</text>
+				</servicegroupNoState>
+				<serviceNoState>
+					<title>Service-Status!</title>
+					<text>Der Service-Status vom Host [HOSTNAME] Service [SERVICENAME] konnte nicht ermittelt werden!</text>
+				</serviceNoState>
+				<noUser>
+					<title>Kein Benutzer</title>
+					<text>Es wurde kein Benutzername an NagVis &uuml;bergeben! Pr&uuml;fen Sie ihre .htaccess Konfiguration!</text>
+				</noUser>
+				<gdLibNotFound>
+					<title>GD Lib</title>
+					<text>GD Lib ist nicht installiert!</text>
+				</gdLibNotFound>
+				<mapCfgNotExists>
+					<title>Map Config Datei nicht vorhanden</title>
+					<text>Die CFG-Datei ([I][MAP][/I]) existiert nicht!</text>
+				</mapCfgNotExists>
+				<mapCfgNotReadable>
+					<title>Keine Leserechte auf die Map Config Datei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die CFG-Datei ([I][MAP][/I]) pr&uuml;fen!</text>
+				</mapCfgNotReadable>
+				<mapCfgNotWriteable>
+					<title>Keine Schreibrechte auf die Map Config Dateien</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf die CFG-Dateien ([I][MAP][/I]) pr&uuml;fen!</text>
+				</mapCfgNotWriteable>
+				<mainCfgNotExists>
+					<title>NagVis Config Datei nicht vorhanden</title>
+					<text>Die MainCfg-Datei ([I][MAINCFG][/I]) existiert nicht!</text>
+				</mainCfgNotExists>
+				<mainCfgNotReadable>
+					<title>Keine Leserechte auf die NagVis Config Datei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die MainCfg-Datei ([I][MAINCFG][/I]) pr&uuml;fen!</text>
+				</mainCfgNotReadable>
+				<mainCfgNotWriteable>
+					<title>Keine Schreibrechte auf die NagVis Config Datei</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf die MainCfg-Datei ([I][MAINCFG][/I]) pr&uuml;fen!</text>
+				</mainCfgNotWriteable>
+				<backgroundNotExists>
+					<title>Die Map Bild-Datei existiert nicht</title>
+					<text>Die Map Bild-Datei (<I>[IMGPATH]</I>) existiert nicht</text>
+				</backgroundNotExists>
+				<backgroundNotReadable>
+					<title>Keine Leserechte auf die Map Bild-Datei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die PNG-Datei ([I][IMGPATH][/I]) pr&uuml;fen!</text>
+				</backgroundNotReadable>
+				<backgroundNotWriteable>
+					<title>Keine Schreibrechte auf die Map Bild-Datei</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei ([I][IMGPATH][/I]) pr&uuml;fen!</text>
+				</backgroundNotWriteable>
+				<unknownObject>
+					<title>Unbekannter Typ in Map Config Datei definiert</title>
+					<text>Der Objekttyp [I][TYPE][/I] ist nicht erlaubt!</text>
+				</unknownObject>
+				<unknownAttribute>
+					<title>Unbekanntes Attribut in Map Config Datei definiert</title>
+					<text>Das Attribut [I][ATTRIBUTE][/I] ist in Elementen des typs [I][TYPE][/I] nicht erlaubt!</text>
+				</unknownAttribute>
+				<languageNotReadable>
+					<title>Keine Leserechte auf die Sprachdatei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Sprachdatei ([I][LANGFILE][/I]) pr&uuml;fen!</text>
+				</languageNotReadable>
+				<mapCfgDirNotReadable>
+					<title>Keine Leserechte auf das Map Config Verzeichnis</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf das Verzeichnis ([I][MAPPATH][/I]) pr&uuml;fen!</text>
+				</mapCfgDirNotReadable>
+				<mapCfgDirNotWriteable>
+					<title>Keine Schreibrechte auf das Map Config Verzeichnis</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis ([I][MAPPATH][/I]) pr&uuml;fen!</text>
+				</mapCfgDirNotWriteable>
+				<headerConfigNotReadable>
+					<title>Header Konfigurationsdatei nicht lesbar</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Datei ([I][CFGPATH][/I]) pr&uuml;fen!</text>
+				</headerConfigNotReadable>
+				<loopInMapRecursion>
+					<title>Endlosschleife</title>
+					<text>Die Map Objekte der verlinkten Maps bilden eine Endlosschleife. Bitte aufl&ouml;sen.</text>
+				</loopInMapRecursion>
+			</messages>
+		</global>
+	</global>
+	<nagvis>
+		<global>
+			<labels>
+				<!-- Alle NagVis Beschriftungen //-->
+				<state>
+					<text>Status</text>
+				</state>
+				<output>
+					<text>Ausgabe</text>
+				</output>
+				<hostname>
+					<text>Host Name</text>
+				</hostname>
+				<servicename>
+					<text>Service Name</text>
+				</servicename>
+				<hostgroupname>
+					<text>Hostgruppen Name</text>
+				</hostgroupname>
+				<servicegroupname>
+					<text>Servicegruppen Name</text>
+				</servicegroupname>
+				<mapname>
+					<text>Map Name</text>
+				</mapname>
+			</labels>
+			<messages>
+				<!-- Alle WUI Meldungen //-->
+				<configModeNotSupported>
+					<title>Keine Unterst&uuml;tzung!</title>
+					<text>Der Konfigurations-Modus wird in diesem Browser nicht ungerst&uuml;tzt!</text>
+				</configModeNotSupported>
+				<couldNotGetHoverUrl>
+					<title>Konnte Hover-URL nicht finden</title>
+					<text>Konnte Hover-URL ([i][URL][/i]) nicht finden. Eventuell ist die URL Paswort geschützt.</text>
+				</couldNotGetHoverUrl>
+			</messages>
+		</global>
+	</nagvis>
+	<backend>
+		<global>
+			<messages>
+				<!-- Alle globalen Backend Meldungen //-->
+				<noStateSet>
+					<title>Kein state gesetzt!</title>
+					<text>Status wurde nicht gesetzt!</text>
+				</noStateSet>
+			</messages>
+		</global>
+		<ndomy>
+			<messages>
+				<mysqlNotSupported>
+					<title>NDOMy Backend Fehler!</title>
+					<text>Ihre PHP installation hat keine MySQL unterst&uuml;tzung. Ohne php-mysql k&ouml;nnen Sie das NDO Backend nicht nutzen!</text>
+				</mysqlNotSupported>
+				<errorSelectingDb>
+					<title>NDOMy Backend Fehler!</title>
+					<text>Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen?</text>
+				</errorSelectingDb>
+				<nagiosNotRunning>
+					<title>NDOMy Backend Fehler!</title>
+					<text>Achtung: Laut NDO l&auml;uft der Nagios Dienst NICHT!</text>
+				</nagiosNotRunning>
+				<nagiosDataNotUpToDate>
+					<title>NDOMy Backend Fehler!</title>
+					<text>Laut NDO wurden von Nagios seid mehr als [I][TIMEWITHOUTUPDATE][/I] Sekunden keine Daten mehr verarbeitet! Laufen Nagios und ndo2db?</text>
+				</nagiosDataNotUpToDate>
+			</messages>
+		</ndomy>
+		<html>
+			<messages>
+				<!-- Alle HTML Backend Meldungen //-->
+				<statusCgiNotFound>
+					<title>StatusCgi nicht gefunden!</title>
+					<text>&uuml;berpr&uuml;fen Sie den Pfad der [STATUSCGI]-Variable in der Konfigurationsdatei!</text>
+				</statusCgiNotFound>
+				<statusCgiNotExecutable>
+					<title>StatusCgi nicht ausf&uuml;hrbar!</title>
+					<text>Rechte &uuml;berpr&uuml;fen!</text>
+				</statusCgiNotExecutable>
+			</messages>
+		</html>
+	</backend>
+	<wui>
+		<global>
+			<labels>
+				<!-- Alle WUI Beschriftungen //-->
+				<change>
+					<text>&Auml;ndern</text>
+				</change>
+				<delete>
+					<text>L&ouml;schen</text>
+				</delete>
+				<positionSize>
+					<text>Positionieren/Gr&ouml;sse</text>
+				</positionSize>
+				<yes>
+					<text>Ja</text>
+				</yes>
+				<no>
+					<text>Nein</text>
+				</no>
+				<check>
+					<text>Pr&uuml;fen</text>
+				</check>
+				<save>
+					<text>Speichern</text>
+				</save>
+				<properties>
+					<text>Einstellungen</text>
+				</properties>
+				<maps>
+					<text>Karten</text>
+				</maps>
+				<addObject>
+					<text>Objekt hinzuf&uuml;gen</text>
+				</addObject>
+				<nagVisConfig>
+					<text>NagVis Konfiguration</text>
+				</nagVisConfig>
+				<help>
+					<text>Hilfe</text>
+				</help>
+				<open>
+					<text>&Ouml;ffnen</text>
+				</open>
+				<manage>
+					<text>Verwalten</text>
+				</manage>
+				<icon>
+					<text>Icon</text>
+				</icon>
+				<line>
+					<text>Linie</text>
+				</line>
+				<createMap>
+					<text>Erstelle eine Map</text>
+				</createMap>
+				<renameMap>
+					<text>Eine Map umbenennen</text>
+				</renameMap>
+				<deleteMap>
+					<text>Eine Map l&ouml;schen</text>
+				</deleteMap>
+				<uploadBackground>
+					<text>Hintergrund hochladen</text>
+				</uploadBackground>
+				<deleteBackground>
+					<text>Hintergrund l&ouml;schen</text>
+				</deleteBackground>
+				<create>
+					<text>Erstellen</text>
+				</create>
+				<delete>
+					<text>L&ouml;schen</text>
+				</delete>
+				<rename>
+					<text>Umbenennen</text>
+				</rename>
+				<upload>
+					<text>Hochladen</text>
+				</upload>
+				<mapName>
+					<text>Map Name</text>
+				</mapName>
+				<readUsers>
+					<text>Benutzer mit Lese-Rechten</text>
+				</readUsers>
+				<writeUsers>
+					<text>Benutzer mit Schreib-Rechten</text>
+				</writeUsers>
+				<background>
+					<text>Hintergrund</text>
+				</background>
+				<chooseMap>
+					<text>Waehle eine Map</text>
+				</chooseMap>
+				<newMapName>
+					<text>Neuer Name</text>
+				</newMapName>
+				<choosePngImage>
+					<text>W&auml;hle ein PNG Image</text>
+				</choosePngImage>
+				<mapIconset>
+					<text>Map Iconset</text>
+				</mapIconset>
+				<restore>
+					<text>Wiederherstellen</text>
+				</restore>
+				<disabled>
+					<text>Deaktiviert</text>
+				</disabled>
+			</labels>
+			<messages>
+				<!-- Alle WUI Meldungen //-->
+				<mustValueNotSet>
+					<text>Ein ben&ouml;tigter Wert ist nicht gesetzt. Alle rot markierten Werte sind Pflichtwerte.</text>
+				</mustValueNotSet>
+				<chosenLineTypeNotValid>
+					<text>Der gew&auml;hlte line_type ist ung&uuml;ltig.</text>
+				</chosenLineTypeNotValid>
+				<onlyLineOrIcon>
+					<text>Ein Object kann nur ein Icon oder eine Linie sein, 'iconset' und 'line_type' kann nicht gemeinsam verwendet werden.</text>
+				</onlyLineOrIcon>
+				<not2coords>
+					<text>Es scheint, du willst eine Linie definieren (line_type ist gesetzt), aber es sind keine 2 [COORD] Koordinaten angegeben.</text>
+				</not2coords>
+				<only1or2coords>
+					<text>Es ist nur m&ouml;glich ein oder 2 Koordinaten [COORD] anzugeben.</text>
+				</only1or2coords>
+				<lineTypeNotSelected>
+					<text>Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gew&auml;hlt werden.</text>
+				</lineTypeNotSelected>
+				<clickMapToSetPoints>
+					<text>Klicke auf die Karte um die fehlenden Punkte zu bestimmen.</text>
+				</clickMapToSetPoints>
+				<confirmDelete>
+					<text>Willst du dieses Objekt wirklich loeschen?</text>
+				</confirmDelete>
+				<firstMustChoosePngImage>
+					<text>Du must erst ein PNG Image w&auml;hlen!</text>
+				</firstMustChoosePngImage>
+				<mustChoosePngImage>
+					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
+				</mustChoosePngImage>
+				<chooseMapName>
+					<text>Du musst einen Namen f&uuml;r die neue Map angeben.</text>
+				</chooseMapName>
+				<minOneUserAccess>
+					<text>Mindestens ein User muss Zugriff auf die Map haben.</text>
+				</minOneUserAccess>
+				<mustChooseDefaultIconset>
+					<text>Du musst das default_iconset fuer diese Map w&auml;hlen.</text>
+				</mustChooseDefaultIconset>
+				<mustChooseBackgroundImage>
+					<text>Du musst das Hintergrund Image fuer diese Map w&auml;hlen.</text>
+				</mustChooseBackgroundImage>
+				<noMapToRename>
+					<text>Keine Map zum umbenennen gefunden. Operation abgebrochen.</text>
+				</noMapToRename>
+				<noNewNameGiven>
+					<text>Du hast keinen neuen Namen angegeben.</text>
+				</noNewNameGiven>
+				<mapAlreadyExists>
+					<text>Diese Map existiert bereits. W㧬e einen anderen Namen.</text>
+				</mapAlreadyExists>
+				<foundNoMapToDelete>
+					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
+				</foundNoMapToDelete>
+				<foundNoBackgroundToDelete>
+					<text>Kein Hintergrund Image zum l&ouml;schen gefunden. Operation abgebrochen.</text>
+				</foundNoBackgroundToDelete>
+				<confirmNewMap>
+					<text>Willst du wirklich eine neue Map erstellen?</text>
+				</confirmNewMap>
+				<confirmMapRename>
+					<text>Willst du diese Map wirklich umbenennen?</text>
+				</confirmMapRename>
+				<confirmMapDeletion>
+					<text>Willst du diese Map wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
+				</confirmMapDeletion>
+				<confirmBackgroundDeletion>
+					<text>Willst du dieses Hintergrund Image wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
+				</confirmBackgroundDeletion>
+				<unableToDeleteBackground>
+					<text>Kann [IMAGENAME] nicht l&ouml;schen, da es in der Map [MAP] noch verwendet wird.</text>
+				</unableToDeleteBackground>
+				<noPermissions>
+					<text>Du hast nicht die Rechte diese Map zu &auml;ndern.</text>
+				</noPermissions>
+				<minOneUserWriteAccess>
+					<text>Mindestens ein Benutzer muss die Berechtigung haben, um diese Karte zu &auml;ndern.</text>
+				</minOneUserWriteAccess>
+				<unableToWorkWithMap>
+					<text>Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen.</text>
+				</unableToWorkWithMap>
+				<confirmRestore>
+					<text>Sicher, dass du das Backup wiederherstellen willst?</text>
+				</confirmRestore>
+				<noSpaceAllowed>
+					<text>Leerzeichen sind hier nicht erlaubt!</text>
+				</noSpaceAllowed>
+			</messages>
+		</global>
+		<editMainCfg>
+			<labels>
+				<!-- Main Configuration Descriptions //-->
+				<backend>
+					<text>W&auml;hle ein Backend. z. Zt. sind die Backends NDOMY (schnell und stabil, zieht die Daten aus einer vorhandenen Nagios NDO MySQL Datenbank) und HTML (langsam und eher unzuverl&auml;ssig, parsed die Nagios CGIs) verf&uuml;gbar.</text>
+				</backend>
+				<language>
+					<text>Waehle deine Sprache.</text>
+				</language>
+				<defaulticons>
+					<text>Standard Iconset.</text>
+				</defaulticons>
+				<rotatemaps>
+					<text>Rotiere Maps automatisch.</text>
+				</rotatemaps>
+				<maps>
+					<text>Zu rotierende Maps. Beispiel: server,lan,wan</text>
+				</maps>
+				<displayheader>
+					<text>Header anzeigen.</text>
+				</displayheader>
+				<headercount>
+					<text>Anzahl der Links pro Zeile im Header.</text>
+				</headercount>
+				<autoupdatefreq>
+					<text>WUI legt beim bearbeiten regelm&auml;ssig ein Backup der Datei an bzw. speichert automatisch ab. Der Intervall kann hier eingestellt werden.</text>
+				</autoupdatefreq>
+				<checkconfig>
+					<text>If set to 'Yes', forces a check of the current configuration. MUST be done after any change.</text>
+				</checkconfig>
+				<usegdlibs>
+					<text>GDLib benutzen? GD wird nur zum zeichnen von "Line" typen ben&ouml;tigt, wenn Probleme mit GD auftreten kann GD hier mit "0" deaktiviert werden, alle anderen Typen funktionieren auch ohne GD. Lines stehen dann aber nicht mehr zur Verf&uuml;gung.</text>
+				</usegdlibs>
+				<refreshtime>
+					<text>Map refresh time (in Sekunden).</text>
+				</refreshtime>
+				<debug>
+					<text>Debug on or off?</text>
+				</debug>
+				<debugstates>
+					<text>Debug Status?</text>
+				</debugstates>
+				<debugcheckstate>
+					<text>Debug Statuscheck?</text>
+				</debugcheckstate>
+				<debugfixicon>
+					<text>Debug FixIcon?</text>
+				</debugfixicon>
+				<base>
+					<text>Voller lokaler Pfad zum NagVis Basis Verzeichnis.</text>
+				</base>
+				<cfg>
+					<text>Lokaler Pfad zum NagVis etc Verzeichnis.</text>
+				</cfg>
+				<icon>
+					<text>Lokaler Pfad zum NagVis iconsets Verzeichnis.</text>
+				</icon>
+				<map>
+					<text>Lokaler Pfad zu den Hintergrund Bildern (*.png)</text>
+				</map>
+				<mapcfg>
+					<text>Lokaler Pfad zu den Map Config Dateien (*.cfg)</text>
+				</mapcfg>
+				<htmlbase>
+					<text>HTTP Pfad zu NagVis (/nagios/nagvis).</text>
+				</htmlbase>
+				<htmlcgi>
+					<text>HTTP Pfad zu den Nagios CGIs (/nagios/cgi-bin).</text>
+				</htmlcgi>
+				<htmlicon>
+					<text>HTTP Pfad zum NagVis iconsets Verzeichnis.</text>
+				</htmlicon>
+				<htmlmap>
+					<text>HTTP Pfad zu den NagVis Maps (/nagios/nagvis/maps/).</text>
+				</htmlmap>
+				<htmldoku>
+					<text>HTTP Pfad zur NagVis Doku.</text>
+				</htmldoku>
+				<header>
+					<text>Name der Header include Datei.</text>
+				</header>
+				<index>
+					<text>Include Datei fuer die Standard Seite.</text>
+				</index>
+				<dbhost>
+					<text>NDO Backend: Host der NDO Datenbank (z.B. localhost).</text>
+				</dbhost>
+				<dbport>
+					<text>NDO Backend: Port der NDO Datenbank (default 3306).</text>
+				</dbport>
+				<dbname>
+					<text>NDO Backend: Name der NDO Datenbank.</text>
+				</dbname>
+				<dbuser>
+					<text>NDO Backend: Benutzer f&uuml;r den NDO Datenbankzugriff, der Benutzer braucht nur read (SELECT) Rechte!.</text>
+				</dbuser>
+				<dbpass>
+					<text>NDO Backend: Passwort des Benutzers f&uuml;r den Datenbankzugriff.</text>
+				</dbpass>
+				<dbprefix>
+					<text>NDO Backend: Prefix vor den Tabellennamen in der NDO Datenbank (z.B. ndo_)</text>
+				</dbprefix>
+				<dbinstanceid>
+					<text>NDO Backend: Instanz-ID der NDO installation (wird nur bei mehreren NDO installationen ben&ouml;tigt, normalerweise 1)</text>
+				</dbinstanceid>
+				<maxtimewithoutupdate>
+					<text>NDO Backend: Maximale Zeit ohne Updates in der NDO Datenbank</text>
+				</maxtimewithoutupdate>
+				<cgiuser>
+					<text>HTML Backend: Der User mit dem NagVis die CGIs aufruft (sollte allowed for all services, allowed for all hosts sein)</text>
+				</cgiuser>
+				<cgipath>
+					<text>HTML Backend: Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).</text>
+				</cgipath>
+				<version>
+					<text>NagVis Version.</text>
+				</version>
+				<title>
+					<text>Titel der NagVis Seiten im Browser.</text>
+				</title>
+			</labels>
+			<messages>
+				<!-- Main Configuration Messages //-->
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</editMainCfg>
+		<mapManagement>
+			<labels>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</label>
+			<messages>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</mapManagement>
+		<addModify>
+			<labels>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</label>
+			<messages>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</addModify>
+	</wui>
+</language>
+
+
