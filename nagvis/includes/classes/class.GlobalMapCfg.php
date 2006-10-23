@@ -445,7 +445,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkMapConfigExists($printErr) {
-		if($this->configFile != '') {
+		if($this->name != '') {
 			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
 				return TRUE;
 			} else {
