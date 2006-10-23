@@ -192,7 +192,6 @@ class GlobalPage {
 				$messageIcon = 'img_warning.png';
 			break;
 			case 'INFORMATION':
-				// still doesn't exists
 				$messageIcon = 'img_information.png';
 			break;
 		}
