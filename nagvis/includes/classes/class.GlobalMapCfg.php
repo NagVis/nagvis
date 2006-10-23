@@ -469,7 +469,7 @@ class GlobalMapCfg {
      */
 	function checkMapConfigReadable($printErr) {
 		if($this->name != '') {
-			if($this->checkNagVisConfigExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+			if($this->checkMapConfigExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
@@ -492,7 +492,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkMapConfigWriteable($printErr) {
-		if($this->checkNagVisConfigExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
+		if($this->checkMapConfigExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg")) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {

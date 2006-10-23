@@ -385,7 +385,7 @@ class GlobalMainCfg {
      */
 	function getValue($sec, $var) {
 		# if nothing is set in the config file, use the default value
-		if(array_key_exists($this->config[$sec],$var)) {
+		if(array_key_exists($var,$this->config[$sec])) {
 			return $this->config[$sec][$var];
 		} else {
 			return $this->validConfig[$sec][$var]['default'];
