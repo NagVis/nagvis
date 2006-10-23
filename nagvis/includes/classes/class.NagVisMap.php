@@ -150,7 +150,7 @@ class NagVisMap extends GlobalMap {
 		
 		$ret[] = "<div class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;\">";
 		$ret[] = "\t".$this->createLink($obj);
-		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$this->infoBox($obj).";>";
+		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$this->getHoverMenu($obj).";>";
 		$ret[] = "\t</a>";
 		$ret[] = "</div>";
 		
@@ -205,6 +205,59 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
+	 * Creates a hover box for objects
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	String	Code for the hover box
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getHoverMenu($obj) {
+		$ret = '';
+		// FIXME: check if this is an object, where a menu should be displayed
+		if(1) {
+			$ret .= 'onmouseover="return overlib(\'';
+			if($obj['hover_url']) {
+				$ret .= $this->readHoverUrl($obj);
+			} else {
+				$ret .= $this->createInfoBox($obj);
+			}
+			$ret .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
+			
+			return $ret;
+		}
+	}
+	
+	/**
+	 * Reads the given hover url form an object and forms it to a readable format for the hover box
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	String	Code for the hover box
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function readHoverUrl($obj) {
+		/* FIXME: Context is supported in php >= 5.0
+		* $http_opts = array(
+		*      'http'=>array(
+		*      'method'=>"GET",
+		*      'header'=>"Accept-language: en\r\n" .
+		*                "Authorization: Basic ".base64_encode("user:pw"),
+		*      'request_fulluri'=>true  ,
+		*      'proxy'=>"tcp://proxy.url.de"
+		*   )
+		* );
+		* $context = stream_context_create($http_opts);
+		* $content = file_get_contents($obj['hover_url'],FALSE,$context);
+		*/
+		
+		if(!$content = @file_get_contents($obj['hover_url'])) {
+			//Error Box
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+	        $FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
+		}
+		return str_replace('\'','\\\'',$content);
+	}
+	
+	/**
 	 * Creates a Java-Box with information.
 	 *
 	 * @param	Array	$obj	Array with object informations
@@ -213,7 +266,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 * @fixme	FIXME: optimize
      */
-	function infoBox($obj) {
+	function createInfoBox($obj) {
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -224,14 +277,12 @@ class NagVisMap extends GlobalMap {
 			$obj['stateCount'] = 0;
 		}
 		
-		$Count=$obj['stateCount'];
+		$Count = $obj['stateCount'];
 		$obj['stateCount'] = str_replace('"',"",$obj['stateCount']);
 		$obj['stateCount'] = str_replace("'","",$obj['stateCount']);
 		$ServiceHostState = $obj['stateHost'];
 		
-		// FIXME meht Output (ackComment, mehr Zahlen etc.)
-		$info = 'onmouseover="return overlib(\'';
-
+		// FIXME mehr Output (ackComment, mehr Zahlen etc.)
 		switch($obj['type']) {
 			case 'host':
 				$info .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
@@ -263,7 +314,6 @@ class NagVisMap extends GlobalMap {
 				//FIXME Error
 			break;
 		}
-		$info .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
 		return $info;
 	}
 	

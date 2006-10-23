@@ -177,6 +177,10 @@
 					<title>Keine Unterst&uuml;tzung!</title>
 					<text>Der Konfigurations-Modus wird in diesem Browser nicht ungerst&uuml;tzt!</text>
 				</configModeNotSupported>
+				<couldNotGetHoverUrl>
+					<title>Konnte Hover-URL nicht finden</title>
+					<text>Konnte Hover-URL ([i][URL][/i]) nicht finden. Eventuell ist die URL Paswort geschützt.</text>
+				</couldNotGetHoverUrl>
 			</messages>
 		</global>
 	</nagvis>

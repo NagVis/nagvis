@@ -177,6 +177,10 @@
 					<title>No support</title>
 					<text>The configurations mode was not supported for your Browser!</text>
 				</configModeNotSupported>
+				<couldNotGetHoverUrl>
+					<title>Could not get hover URL</title>
+					<text>Could not get hover URL ([i][URL][/i]). Maybe the URL is password protected.</text>
+				</couldNotGetHoverUrl>
 			</messages>
 		</global>
 	</nagvis>
