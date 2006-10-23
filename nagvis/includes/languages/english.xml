@@ -232,6 +232,10 @@
 					<title>Host is in pending state!</title>
 					<text>The Host [b][HOST][/b] is in pending state.</text>
 				</hostIsPending>
+				<serviceNotChecked>
+					<title>Service not checked yet!</title>
+					<text>The Service [b][SERVICE][/b] has not been checked yet.</text>
+				</serviceNotChecked>
 			</messages>
 		</ndomy>
 		<html>

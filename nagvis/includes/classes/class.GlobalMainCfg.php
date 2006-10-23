@@ -77,7 +77,7 @@ class GlobalMainCfg {
 							'dbinstanceid' => Array('must' => 1,
 												'default' => '1'),
 							'maxtimewithoutupdate' => Array('must' => 1,
-												'default' => '181')),
+												'default' => '180')),
 			'backend_html' => Array('cgiuser' => Array('must' => 1,
 												'default' => 'nagiosadmin'),
 							'cgi' => Array('must' => 1,

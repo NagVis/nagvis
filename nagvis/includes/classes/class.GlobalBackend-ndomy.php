@@ -45,7 +45,7 @@ class GlobalBackend {
 		// initialize a language object for later error messages which be given out as state output
 		$this->LANG = new GlobalLanguage($this->MAINCFG,'backend:ndomy');
 
-		//Check availability of PHP MySQL
+		// Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
 
@@ -56,14 +56,13 @@ class GlobalBackend {
 			}
 		}
 		
-		// we don't want to see mysql errors from connecting - we only want our error messages
+		// don't want to see mysql errors from connecting - we only want our error messages
 		$oldLevel = error_reporting(0);
 
 		$CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		$returnCode = mysql_select_db($this->dbName, $CONN);
 		
-		if( $returnCode != TRUE){
-			//Error Box
+		if($returnCode != TRUE){
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
             $FRONTEND->messageToUser('ERROR','errorSelectingDb');
 		}
@@ -71,27 +70,18 @@ class GlobalBackend {
 		// we set the old level of reporting back
 		error_reporting($oldLevel);
 		
-		//Do some checks to make sure that Nagios is running and the Data at the DB are ok
+		// Do some checks to make sure that Nagios is running and the Data at the DB are ok
 		$QUERYHANDLE = mysql_query("SELECT is_currently_running, status_update_time FROM ".$this->dbPrefix."programstatus WHERE instance_id = '".$this->dbInstanceId."'");
 		$nagiosState = mysql_fetch_array($QUERYHANDLE);
 	
-		//Check that Nagios reports itself as running	
+		// Check that Nagios reports itself as running	
 		if ($nagiosState['is_currently_running'] != 1) {
-			//Error Box
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
             $FRONTEND->messageToUser('ERROR','nagiosNotRunning');
 		}
-
-		//set a default value of 180 seconds for maxTimeWithoutUpdate
-		if ($this->MAINCFG->getValue('backend_ndomy', 'maxtimewithoutupdate') >= 0) {
-            $maxTimeWithOutUpdate = $this->MAINCFG->getValue('backend_ndomy', 'maxtimewithoutupdate');
-        } else {
-            $maxTimeWithOutUpdate = 180;
-        }   
         
-		//Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate"  too
-		if(time() - strtotime($nagiosState['status_update_time']) > $maxTimeWithOutUpdate) {
-			//Error Box
+		// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
+		if(time() - strtotime($nagiosState['status_update_time']) > $this->MAINCFG->getValue('backend_ndomy', 'maxtimewithoutupdate')) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
             $FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
 		}
@@ -108,7 +98,6 @@ class GlobalBackend {
      */
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
-		$filter = '';
 		
 		switch($type) {
 			case 'host':
@@ -209,15 +198,18 @@ class GlobalBackend {
 			
 			$hostState = $state['State'];
 			
-			//Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-),
-			//this also makes shure that a host ACK will automatically ACK all services.
+			/**
+			 * Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-), 
+			 * this also makes shure that a host ACK will automatically ACK all services.
+			 */
 			if($recognizeServices == 1 && $hostState == "UP") {
 				//Initialise Vars
-				$servicesOk=0;
-				$servicesWarning=0;
-				$servicesCritical=0;
-				$servicesUnknown=0;
-				$servicesAck=0;
+				$servicesOk = 0;
+				$servicesWarning = 0;
+				$servicesCritical = 0;
+				$servicesUnknown = 0;
+				$servicesAck = 0;
+				
 				//Get the object ids from all services of this host
 				$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='2' AND name1='$hostName' AND instance_id='$this->dbInstanceId'");
 				while($services = mysql_fetch_array($QUERYHANDLE)) {
@@ -273,8 +265,7 @@ class GlobalBackend {
 		}
         return $state;
 	}
-
-   
+	
 	/**
 	 * <DESCRIPTION> 
 	 *
@@ -370,30 +361,29 @@ class GlobalBackend {
 		$QUERYHANDLE = mysql_query("SELECT has_been_checked, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'");
 		$service = mysql_fetch_array($QUERYHANDLE);				
 		if($service['has_been_checked'] == 0) {
-			$state['Count'] = "1";
-			$state['State'] = "UNKOWN";
-			//FIXME: All this outputs should be handled over a language file
-			$state['Output'] = "The Service has not been checked yet";
+			$state['Count'] = 1;
+			$state['State'] = 'UNKOWN';
+			$state['Output'] = $this->LANG->getMessageText('serviceNotChecked','SERVICE~'.$serviceName);
 		} elseif($service['current_state'] == 0) {
-				$state['Count'] = "1";
-				$state['State'] = "OK";
-				$state['Output'] = $service['output'];
+			$state['Count'] = 1;
+			$state['State'] = 'OK';
+			$state['Output'] = $service['output'];
 		} elseif($service['problem_has_been_acknowledged'] == 1) {
-				$state['Count'] = "1";
-				$state['State'] = "ACK";
-				$state['Output'] = $service['output'];			
+			$state['Count'] = 1;
+			$state['State'] = 'ACK';
+			$state['Output'] = $service['output'];			
 		} elseif($service['current_state'] == 1) {
-				$state['Count'] = "1";
-				$state['State'] = "WARNING";
-				$state['Output'] = $service['output'];		
+			$state['Count'] = 1;
+			$state['State'] = 'WARNING';
+			$state['Output'] = $service['output'];		
 		} elseif($service['current_state'] == 2) {
-				$state['Count'] = "1";
-				$state['State'] = "CRITICAL";
-				$state['Output'] = $service['output'];		
+			$state['Count'] = 1;
+			$state['State'] = 'CRITICAL';
+			$state['Output'] = $service['output'];		
 		} elseif($service['current_state'] == 3) {
-				$state['Count'] = "1";
-				$state['State'] = "UNKNOWN";
-				$state['Output'] = $service['output'];	
+			$state['Count'] = 1;
+			$state['State'] = 'UNKNOWN';
+			$state['Output'] = $service['output'];	
 		}	
 		
 		return $state;
@@ -412,7 +402,6 @@ class GlobalBackend {
 		$objectId = mysql_fetch_row($QUERYHANDLE);
 	
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
-			//FIXME: All this outputs should be handled over a language file
 			$state['State'] = "ERROR";
 			$state['Output'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$serviceGroupName);
 			return($state);
@@ -451,24 +440,24 @@ class GlobalBackend {
 		if($servicesCritical > 0) {
 			$state['Count'] = $servicesCritical;
 			$state['Output'] = $servicesCritical." CRITICAL, " .$servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
-			$state['State'] = "CRITICAL";
+			$state['State'] = 'CRITICAL';
 		} elseif($servicesWarning > 0) {
 			$state['Count'] = $servicesWarning;
 			$state['Output'] = $servicesWarning. " WARNING and " .$servicesUnknown. " UNKNOWN Services";
-			$state['State'] = "WARNING";		
+			$state['State'] = 'WARNING';		
 		} elseif($servicesUnknown > 0) {
 			$state['Count'] = $servicesUnknown;
 			$state['Output'] = $servicesUnknown." Services in UNKNOWN state";
-			$state['State'] = "UNKNOWN";
+			$state['State'] = 'UNKNOWN';
 			
 		} elseif($servicesAck > 0) {
 			$state['Count'] = $servicesAck;
 			$state['Output'] = $servicesAck." services are in a NON-OK State but all are ACKNOWLEDGED";
-			$state['State'] = "ACK";
+			$state['State'] = 'ACK';
 		} elseif($servicesOk > 0) {
 			$state['Count'] = $servicesOk;
 			$state['Output'] = "All ".$servicesOk." services are OK";
-			$state['State'] = "OK";		
+			$state['State'] = 'OK';		
 		}
 
 		return $state;
