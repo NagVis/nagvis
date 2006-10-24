@@ -152,26 +152,26 @@ class GlobalBackend {
 	/**
 	 * Check the State of an object
 	 *
-	 * @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName
+	 * @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName, boolean $onlyHardStates
 	 * @return 	array $state
      * @author	FIXME
      */
-	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0") {
+	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$onlyHardStates=0) {
 		if($Type == "host") {
 			if(isset($Name)) {
-				$state = $this->findStateHost($Name,$RecognizeServices);
+				$state = $this->findStateHost($Name,$RecognizeServices,$onlyHardStates);
 			}
 		} elseif($Type == "service") {
 			if(isset($Name)) {
-				$state = $this->findStateService($Name,$ServiceName);
+				$state = $this->findStateService($Name,$ServiceName,$onlyHardStates);
             }
         } elseif($Type == "hostgroup") {
 			if(isset($Name)) {
-				$state = $this->findStateHostgroup($Name,$RecognizeServices);
+				$state = $this->findStateHostgroup($Name,$RecognizeServices,$onlyHardStates);
 			}
 		} elseif($Type == "servicegroup") {
 			if(isset($Name)) {
-				$state = $this->findStateServicegroup($Name);
+				$state = $this->findStateServicegroup($Name,$onlyHardStates);
 			}
 		}
 		
@@ -192,10 +192,11 @@ class GlobalBackend {
 	 * @return 	array $state
      * @author	Andreas Husch (downanup@nagios-wiki.de)
      */
-	function findStateHost($hostName,$recognizeServices) {
+	function findStateHost($hostName,$recognizeServices,$onlyHardStates) {
+
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id = '1' AND name1 = binary '".$hostName."' AND instance_id='".$this->dbInstanceId."'");
 		$hostObjectId = mysql_fetch_row($QUERYHANDLE);  
-	
+
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			$state['State'] = 'ERROR';
 			$state['Output'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
@@ -203,7 +204,13 @@ class GlobalBackend {
 			return $state;
 		}
 
-		$QUERYHANDLE = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '".$hostObjectId[0]."' AND instance_id='".$this->dbInstanceId."'");
+		if($onlyHardStates == 1) {
+			$queryString="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '".$hostObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
+		} else {
+			$queryString="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '".$hostObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
+		}
+
+		$QUERYHANDLE = mysql_query($queryString);
 		
 		// This is the special case, that a host is definied but in pending state
 		if(mysql_num_rows($QUERYHANDLE) <= 0) {
