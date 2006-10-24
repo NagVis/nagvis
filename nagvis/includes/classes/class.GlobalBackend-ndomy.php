@@ -2,7 +2,7 @@
 ##########################################################################
 ##     	        NagVis - The Nagios Visualisation Addon                 ##
 ##########################################################################
-## class.CheckState_ndomy- Backend module to fetch the status from      ##
+## class.Backend_ndomy.php Backend module to fetch the status from      ##
 ##                         Nagios NDO Mysql DB. All not special to one	##
 ##                         Backend related things should removed here!  ##
 ##                         (e.g. fixIcon, this is needed for ALL        ##
@@ -29,7 +29,7 @@ class GlobalBackend {
 	*
 	* @param config $MAINCFG
 	*
-	* @author Andreas Husch
+	* @author Andreas Husch <downanup@nagios-wiki.de>
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function GlobalBackend(&$MAINCFG) {
@@ -89,12 +89,16 @@ class GlobalBackend {
 		return 0;
 	}
 	
+
+
+
 	/**
-	 * <DESCRIPTION> 
+	 * Get Objects configured in Nagios wich are matching the given pattern. This is needed for WUI, e.g. to populate drop down lists.
 	 *
-	 * @param	FIXME
-	 * @return 	FIXME
-     * @author	FIXME
+	 * @param	string $type, string $name1Pattern, string $name2Pattern
+	 * @return 	array $ret
+     * @author	Lars Michelsen
+   	 * @author Andreas Husch <downanup@nagios-wiki.de>
      */
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
@@ -144,12 +148,49 @@ class GlobalBackend {
 		return $ret;
 	}
 	
+
 	/**
-	 * <DESCRIPTION> 
+	 * Check the State of an object
 	 *
-	 * @param	FIXME
-	 * @return 	FIXME
+	 * @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName
+	 * @return 	array $state
      * @author	FIXME
+     */
+	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0") {
+		if($Type == "host") {
+			if(isset($Name)) {
+				$state = $this->findStateHost($Name,$RecognizeServices);
+			}
+		} elseif($Type == "service") {
+			if(isset($Name)) {
+				$state = $this->findStateService($Name,$ServiceName);
+            }
+        } elseif($Type == "hostgroup") {
+			if(isset($Name)) {
+				$state = $this->findStateHostgroup($Name,$RecognizeServices);
+			}
+		} elseif($Type == "servicegroup") {
+			if(isset($Name)) {
+				$state = $this->findStateServicegroup($Name);
+			}
+		}
+		
+		if(!isset($state)) {
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
+			$FRONTEND->messageToUser('WARNING','noStateSet');
+			$FRONTEND->printPage();
+		}
+		
+		return $state;
+	}
+
+
+	/**
+	 * Returns the Nagios State for a single Host
+	 *
+	 * @param	string $hostName, boolean $recognizeServices
+	 * @return 	array $state
+     * @author	Andreas Husch (downanup@nagios-wiki.de)
      */
 	function findStateHost($hostName,$recognizeServices) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id = '1' AND name1 = binary '".$hostName."' AND instance_id='".$this->dbInstanceId."'");
@@ -267,11 +308,11 @@ class GlobalBackend {
 	}
 	
 	/**
-	 * <DESCRIPTION> 
+	 * Returns the State for a single Hostgroup 
 	 *
-	 * @param	FIXME
-	 * @return 	FIXME
-     * @author	FIXME
+	 * @param	string $hostGroupName, boolean $recognzieServices
+	 * @return 	array $state
+     * @author	Andreas Husch (downanup@nagios-wiki.de
      */
 	function findStateHostgroup($hostGroupName,$recognizeServices) {
 		//First we have to get the hostgroup_id
@@ -343,11 +384,11 @@ class GlobalBackend {
 	}
 
 	/**
-	 * <DESCRIPTION> 
+	 * Returns the State for a single Service
 	 *
-	 * @param	FIXME
-	 * @return 	FIXME
-     * @author	FIXME
+	 * @param	string $hostName, string $serviceName
+	 * @return 	array $state
+     * @author	Andreas Husch (downanup@nagios-wiki.de)
      */
 	function findStateService($hostName,$serviceName) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '2' AND name1 = binary '".$hostName."' AND name2 = binary '".$serviceName."' AND instance_id='".$this->dbInstanceId."')");
@@ -390,11 +431,11 @@ class GlobalBackend {
 	}
 
 	/**
-	 * <DESCRIPTION> 
+	 * Returns the State for a Servicegroup
 	 *
-	 * @param	FIXME
-	 * @return 	FIXME
-     * @author	FIXME
+	 * @param	string $serviceGroupName
+	 * @return 	arrray $state
+     * @author	Andreas Husch (downanup@nagios-wiki.de)
      */
 	function findStateServicegroup($serviceGroupName) {
 		//First we have to get the servicegroup_id
@@ -460,71 +501,6 @@ class GlobalBackend {
 			$state['State'] = 'OK';		
 		}
 
-		return $state;
-	}
-
-	/**
-	 * <DESCRIPTION> Höchsten Status aus einem Array ermitteln
-	 * FIXME: Ha: Move over to other class (not special html backend related)
-	 *
-	 * @param	FIXME
-	 * @return 	FIXME
-     * @author	FIXME
-     */
-	function findStateArray($stateArray) {
-		$rotateUrl = "";
-		unset($state);
-		if(in_array("error", $stateArray)) {
-			$state = "error";
-		} elseif (in_array("UNKNOWN", $stateArray)) {
-			$state = "UNKNOWN";
-		} elseif (in_array("CRITICAL", $stateArray)) {
-			$state = "CRITICAL";
-		} elseif (in_array("DOWN", $stateArray)) {
-			$state = "DOWN";
-		} elseif (in_array("WARNING", $stateArray)) {
-			$state = "WARNING";
-		} elseif (in_array("OK", $stateArray)) {
-			$state = "OK";
-		} elseif (in_array("UP", $stateArray)) {
-			$state = "UP";
-		}
-		
-		return $state;
-	}
-	
-	/**
-	 * <DESCRIPTION>
-	 *
-	 * @param	FIXME
-	 * @return 	FIXME
-     * @author	FIXME
-     */
-	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0") {
-		if($Type == "host") {
-			if(isset($Name)) {
-				$state = $this->findStateHost($Name,$RecognizeServices);
-			}
-		} elseif($Type == "service") {
-			if(isset($Name)) {
-				$state = $this->findStateService($Name,$ServiceName);
-            }
-        } elseif($Type == "hostgroup") {
-			if(isset($Name)) {
-				$state = $this->findStateHostgroup($Name,$RecognizeServices);
-			}
-		} elseif($Type == "servicegroup") {
-			if(isset($Name)) {
-				$state = $this->findStateServicegroup($Name);
-			}
-		}
-		
-		if(!isset($state)) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
-			$FRONTEND->messageToUser('WARNING','noStateSet');
-			$FRONTEND->printPage();
-		}
-		
 		return $state;
 	}
 }
