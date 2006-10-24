@@ -165,6 +165,8 @@ class WuiAddModify extends GlobalPage {
 					}
 					if($propname == 'host_name') {
 						$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$objects,'',$prop['must'],"getServices();"));
+					} else {
+						$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$objects,'',$prop['must']));
 					}
 				} else {
 					$ret = array_merge($ret,$this->FORM->getInputLine($propname,$propname,'',$prop['must']));

@@ -253,7 +253,7 @@ class NagVisMap extends GlobalMap {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 	        $FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
 		}
-		return str_replace('\'','\\\'',$content);
+		return str_replace('"','\\\'',str_replace('\'','\\\'',$content));
 	}
 	
 	/**
