@@ -250,7 +250,6 @@ class NagVisMap extends GlobalMap {
 		*/
 		
 		if(!$content = @file_get_contents($obj['hover_url'])) {
-			//Error Box
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 	        $FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
 		}

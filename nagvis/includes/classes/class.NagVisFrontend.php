@@ -31,7 +31,7 @@ class NagVisFrontend extends GlobalPage {
 					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">'),
 					  'allowedUsers'=>Array('EVERYONE'),
 					  'languageRoot' => 'nagvis:global');
-		parent::GlobalPage($MAINCFG,$prop);
+		parent::GlobalPage($this->MAINCFG,$prop);
 	}
 	
 	/**

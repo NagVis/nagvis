@@ -454,7 +454,7 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('ERROR','mapCfgNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				}
 				return FALSE;

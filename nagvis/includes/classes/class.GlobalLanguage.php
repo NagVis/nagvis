@@ -19,7 +19,7 @@ class GlobalLanguage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->languageRoot = $languageRoot;
 		
-		$this->languageFile = $this->MAINCFG->getValue('paths', 'base').'includes/languages/'.$this->MAINCFG->getValue('global', 'language').'.xml';
+		$this->languageFile = $this->MAINCFG->getValue('paths', 'base').'nagvis/includes/languages/'.$this->MAINCFG->getValue('global', 'language').'.xml';
 		$this->getLanguage();
 	}
 	
