@@ -283,6 +283,7 @@ class GlobalMapCfg {
 								// choose first parameter line
 								$l++;
 								
+								print_r($this->mapConfig[$type][$id]);
 								// loop parameters from array
 								foreach($this->mapConfig[$type][$id] AS $key => $val) {
 									// if key is not type
@@ -303,15 +304,17 @@ class GlobalMapCfg {
 											$cfgLines++;	
 										}
 										
-										// Wenn der Parameter gefunden wurde...
-										if($cfgLineNr != '') {
-											// ersetzen
+										if($cfgLineNr != 0 && $val != '') {
+											// if a parameter was found in file and value is not empty, replace line
 											$file[$cfgLineNr] = $cfgLine;
-										} else {
+										} elseif($cfgLineNr != 0 && $val == '') {
+											// if a paremter is not in array or a value is empty, delete the line in the file
+											unset($file[$cfgLineNr]);
+										} elseif($cfgLineNr == 0 && $val != '') {
+											// if a parameter is was not found in array and a value is not empty, create line
 											if(is_array($val)) {
 												$val = implode(",",$val);
 											}
-											// neue Zeile am Ende der Defnition hinzufügen
 											$neu = $key."=".$val."\n";
 											for($i = $l; $i < count($file);$i++) {
 												$tmp = $file[$i];
@@ -319,6 +322,8 @@ class GlobalMapCfg {
 												$neu = $tmp;
 											}
 											$file[count($file)] = $neu;
+										} elseif($cfgLineNr == 0 && $val == '') {
+											// if a parameter is empty and a value is empty, do nothing
 										}
 										$l++;
 									}

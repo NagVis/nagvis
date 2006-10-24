@@ -163,6 +163,7 @@ class WuiAddModify extends GlobalPage {
 					foreach($BACKEND->getObjects(str_replace('_name','',$propname),'','') AS $arr) {
 						$objects[] = $arr['name1'];	
 					}
+					
 					if($propname == 'host_name') {
 						$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$objects,'',$prop['must'],"getServices();"));
 					} else {

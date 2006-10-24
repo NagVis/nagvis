@@ -55,7 +55,10 @@ function check_object() {
 					alert(mess);
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
+					
 					return false;
+				} else {
+					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+document.addmodify.elements[i].value;
 				}
 			}
 		}
