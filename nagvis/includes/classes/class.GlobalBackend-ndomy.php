@@ -1,14 +1,14 @@
 <?php
 ##########################################################################
-##     	        NagVis - The Nagios Visualisation Addon                 ##
+##     	        NagVis - The Nagios Visualisation                     ##
 ##########################################################################
 ## class.Backend_ndomy.php Backend module to fetch the status from      ##
-##                         Nagios NDO Mysql DB. All not special to one	##
+##                         Nagios NDO Mysql DB. All not special to one  ##
 ##                         Backend related things should removed here!  ##
 ##                         (e.g. fixIcon, this is needed for ALL        ##
-##                         Backends	)									##
+##                         Backends	)                               ##
 ##########################################################################
-## Licenced under the terms and conditions of the GPL Licence, 			##
+## Licenced under the terms and conditions of the GPL Licence,          ##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 ## This Backend is maintained by Andreas Husch (dowanup@nagios-wiki.de) ##
@@ -26,6 +26,8 @@ class GlobalBackend {
 	
 	/**
 	* Constructor
+	* Reads needed configuration paramters, connects to the Database
+	* and checks that Nagios is running
 	*
 	* @param config $MAINCFG
 	*
@@ -34,11 +36,11 @@ class GlobalBackend {
 	*/
 	function GlobalBackend(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
-	    $this->dbName = $this->MAINCFG->getValue('backend_ndomy', 'dbname');
-        $this->dbUser = $this->MAINCFG->getValue('backend_ndomy', 'dbuser');
-	    $this->dbPass = $this->MAINCFG->getValue('backend_ndomy', 'dbpass');
-	    $this->dbHost = $this->MAINCFG->getValue('backend_ndomy', 'dbhost');
-	    $this->dbPort = $this->MAINCFG->getValue('backend_ndomy', 'dbport');
+		$this->dbName = $this->MAINCFG->getValue('backend_ndomy', 'dbname');
+		$this->dbUser = $this->MAINCFG->getValue('backend_ndomy', 'dbuser');
+		$this->dbPass = $this->MAINCFG->getValue('backend_ndomy', 'dbpass');
+		$this->dbHost = $this->MAINCFG->getValue('backend_ndomy', 'dbhost');
+		$this->dbPort = $this->MAINCFG->getValue('backend_ndomy', 'dbport');
 		$this->dbPrefix = $this->MAINCFG->getValue('backend_ndomy', 'dbprefix');
 		$this->dbInstanceId = $this->MAINCFG->getValue('backend_ndomy', 'dbinstanceid');
 		
@@ -52,7 +54,7 @@ class GlobalBackend {
 			if (!extension_loaded('mysql')) {
 				//Error Box
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-            	$FRONTEND->messageToUser('ERROR','mysqlNotSupported');
+				$FRONTEND->messageToUser('ERROR','mysqlNotSupported');
 			}
 		}
 		
@@ -64,7 +66,7 @@ class GlobalBackend {
 		
 		if($returnCode != TRUE){
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-            $FRONTEND->messageToUser('ERROR','errorSelectingDb');
+			$FRONTEND->messageToUser('ERROR','errorSelectingDb');
 		}
 		
 		// we set the old level of reporting back
@@ -77,13 +79,13 @@ class GlobalBackend {
 		// Check that Nagios reports itself as running	
 		if ($nagiosState['is_currently_running'] != 1) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-            $FRONTEND->messageToUser('ERROR','nagiosNotRunning');
+			$FRONTEND->messageToUser('ERROR','nagiosNotRunning');
 		}
         
 		// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
 		if(time() - strtotime($nagiosState['status_update_time']) > $this->MAINCFG->getValue('backend_ndomy', 'maxtimewithoutupdate')) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-            $FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
+			$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
 		}
 			
 		return 0;
@@ -93,12 +95,15 @@ class GlobalBackend {
 
 
 	/**
-	 * Get Objects configured in Nagios wich are matching the given pattern. This is needed for WUI, e.g. to populate drop down lists.
-	 *
-	 * @param	string $type, string $name1Pattern, string $name2Pattern
-	 * @return 	array $ret
-     * @author	Lars Michelsen
-   	 * @author Andreas Husch <downanup@nagios-wiki.de>
+	* PUBLIC Method getObjects
+	* 
+	* Return the objects configured at Nagios wich are matching the given pattern. 
+	* This is needed for WUI, e.g. to populate drop down lists.
+	*
+	* @param	string $type, string $name1Pattern, string $name2Pattern
+	* @return array $ret
+	* @author	Lars Michelsen
+	* @author Andreas Husch <downanup@nagios-wiki.de>
      */
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
@@ -150,12 +155,14 @@ class GlobalBackend {
 	
 
 	/**
-	 * Check the State of an object
-	 *
-	 * @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName, boolean $onlyHardStates
-	 * @return 	array $state
-     * @author	FIXME
-     */
+	* PUBLIC Method checkStates
+	*	
+	* Returns the State of the given object
+	*
+	* @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName, boolean $onlyHardStates
+	* @return array $state
+	* @author	m.luebben, Andreas Husch <downanup@nagios-wiki.de>
+	*/
 	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$onlyHardStates=0) {
 		if($Type == "host") {
 			if(isset($Name)) {
@@ -186,12 +193,14 @@ class GlobalBackend {
 
 
 	/**
-	 * Returns the Nagios State for a single Host
-	 *
-	 * @param	string $hostName, boolean $recognizeServices
-	 * @return 	array $state
-     * @author	Andreas Husch (downanup@nagios-wiki.de)
-     */
+	* PRIVATE Method findStateHost
+	*
+	* Returns the Nagios State for a single Host
+	*
+	* @param	string $hostName, boolean $recognizeServices, boolean $onlyHardStates
+	* @return array $state
+	* @author	Andreas Husch (downanup@nagios-wiki.de)
+	*/
 	function findStateHost($hostName,$recognizeServices,$onlyHardStates) {
 
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id = '1' AND name1 = binary '".$hostName."' AND instance_id='".$this->dbInstanceId."'");
@@ -212,11 +221,16 @@ class GlobalBackend {
 
 		$QUERYHANDLE = mysql_query($queryString);
 		
-		// This is the special case, that a host is definied but in pending state
 		if(mysql_num_rows($QUERYHANDLE) <= 0) {
+	
+			/** 
+			* This is the special case, that a host is definied but in pending state or that it
+			* was deleted from Nagios but is still present at NDO DB
+			*/
 			$state['State'] = 'UNKOWN';
 			$state['Output'] = $this->LANG->getMessageText('hostIsPending','HOST~'.$hostName);
 			$hostState = $state['State'];
+
 		} else {
 			$hostState = mysql_fetch_array($QUERYHANDLE);
 			
@@ -247,9 +261,9 @@ class GlobalBackend {
 			$hostState = $state['State'];
 			
 			/**
-			 * Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-), 
-			 * this also makes shure that a host ACK will automatically ACK all services.
-			 */
+			* Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-), 
+			* this also makes shure that a host ACK will automatically ACK all services.
+			*/
 			if($recognizeServices == 1 && $hostState == "UP") {
 				//Initialise Vars
 				$servicesOk = 0;
@@ -263,7 +277,13 @@ class GlobalBackend {
 				while($services = mysql_fetch_array($QUERYHANDLE)) {
 					$objectId = $services['object_id'];
 					//Query the Servicestates
-					$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
+						if($onlyHardStates == 1) {
+							$queryString2="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+						} else {
+							$queryString2="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+						}
+
+					$QUERYHANDLE_2 = mysql_query($queryString2);
 					$currentService = mysql_fetch_array($QUERYHANDLE_2);				
 					if($currentService['current_state'] == 0) {
 						$servicesOk++;
@@ -314,13 +334,16 @@ class GlobalBackend {
         return $state;
 	}
 	
+
 	/**
-	 * Returns the State for a single Hostgroup 
-	 *
-	 * @param	string $hostGroupName, boolean $recognzieServices
-	 * @return 	array $state
+	* PRIVATE Method findStateHostgroup
+	*
+	* Returns the State for a single Hostgroup 
+	*
+	* @param	string $hostGroupName, boolean $recognzieServices
+	* @return array $state
      * @author	Andreas Husch (downanup@nagios-wiki.de
-     */
+	*/
 	function findStateHostgroup($hostGroupName,$recognizeServices) {
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='3' AND name1 = binary '".$hostGroupName."' AND instance_id='".$this->dbInstanceId."'");
@@ -390,12 +413,15 @@ class GlobalBackend {
 		return $state;
 	}
 
+
 	/**
-	 * Returns the State for a single Service
-	 *
-	 * @param	string $hostName, string $serviceName
-	 * @return 	array $state
-     * @author	Andreas Husch (downanup@nagios-wiki.de)
+	* PRIVATE Method findStateService
+	*
+	* Returns the State for a single Service
+	*
+	* @param	string $hostName, string $serviceName
+	* @return	array $state
+	* @author	Andreas Husch (downanup@nagios-wiki.de)
      */
 	function findStateService($hostName,$serviceName) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '2' AND name1 = binary '".$hostName."' AND name2 = binary '".$serviceName."' AND instance_id='".$this->dbInstanceId."')");
@@ -437,11 +463,14 @@ class GlobalBackend {
 		return $state;
 	}
 
+
 	/**
-	 * Returns the State for a Servicegroup
-	 *
-	 * @param	string $serviceGroupName
-	 * @return 	arrray $state
+	* PRIVATE Method findStateServicegroup	
+	*	
+	* Returns the State for a Servicegroup
+	*
+	* @param	string $serviceGroupName
+	* @return arrray $state
      * @author	Andreas Husch (downanup@nagios-wiki.de)
      */
 	function findStateServicegroup($serviceGroupName) {
