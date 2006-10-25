@@ -46,6 +46,8 @@ class GlobalMainCfg {
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/'),
 							'icon' => Array('must' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/'),
+							'language' => Array('must' => 0,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/includes/languages/'),
 							'map' => Array('must' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/maps/'),
 							'mapcfg' => Array('must' => 0,
@@ -102,6 +104,7 @@ class GlobalMainCfg {
 		
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
 		$this->validConfig['paths']['icon']['default'] = $this->getValue('paths','base')."nagvis/images/iconsets/";
+		$this->validConfig['paths']['language']['default'] = $this->getValue('paths','base')."nagvis/includes/languages/";
 		$this->validConfig['paths']['map']['default'] = $this->getValue('paths','base')."nagvis/images/maps/";
 		$this->validConfig['paths']['mapcfg']['default'] = $this->getValue('paths','base')."nagvis/etc/maps/";
 		$this->validConfig['paths']['htmlimages']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/";

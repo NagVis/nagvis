@@ -185,8 +185,8 @@ class GlobalMap {
 			break;
 			case 'textbox':
 				// Check if set a hostname
-				if (isset($obj['host_name'])) {
-			  		$state = $this->BACKEND->findStateHost($obj['host_name'],$obj['recognize_services'],$obj['only_hard_states']);
+				if(isset($obj['host_name'])) {
+					$state = $this->BACKEND->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
 				}
 			break;
 			default:
