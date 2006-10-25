@@ -27,10 +27,10 @@ class GlobalBackend {
 	* Reads needed configuration paramters, connects to the Database
 	* and checks that Nagios is running
 	*
-	* @param config $MAINCFG
+	* @param	config $MAINCFG
 	*
-	* @author Andreas Husch <downanup@nagios-wiki.de>
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Andreas Husch <downanup@nagios-wiki.de>
+	* @author	Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function GlobalBackend(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
@@ -99,9 +99,9 @@ class GlobalBackend {
 	* This is needed for WUI, e.g. to populate drop down lists.
 	*
 	* @param	string $type, string $name1Pattern, string $name2Pattern
-	* @return array $ret
+	* @return	array $ret
 	* @author	Lars Michelsen
-	* @author Andreas Husch <downanup@nagios-wiki.de>
+	* @author	Andreas Husch <downanup@nagios-wiki.de>
 	*/
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
@@ -158,7 +158,7 @@ class GlobalBackend {
 	* Returns the State of the given object
 	*
 	* @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName, boolean $onlyHardStates
-	* @return array $state
+	* @return	array $state
 	* @author	m.luebben, Andreas Husch <downanup@nagios-wiki.de>
 	*/
 	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$onlyHardStates=0) {
@@ -196,7 +196,7 @@ class GlobalBackend {
 	* Returns the Nagios State for a single Host
 	*
 	* @param	string $hostName, boolean $recognizeServices, boolean $onlyHardStates
-	* @return array $state
+	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	*/
 	function findStateHost($hostName,$recognizeServices,$onlyHardStates) {
@@ -339,7 +339,7 @@ class GlobalBackend {
 	* Returns the State for a single Hostgroup 
 	*
 	* @param	string $hostGroupName, boolean $recognzieServices
-	* @return array $state
+	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de
 	*/
 	function findStateHostgroup($hostGroupName,$recognizeServices) {
@@ -468,7 +468,7 @@ class GlobalBackend {
 	* Returns the State for a Servicegroup
 	*
 	* @param	string $serviceGroupName
-	* @return arrray $state
+	* @return	arrray $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	*/
 	function findStateServicegroup($serviceGroupName) {
