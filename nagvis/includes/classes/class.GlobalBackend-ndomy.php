@@ -1,12 +1,12 @@
 <?php
 ##########################################################################
-##     	        NagVis - The Nagios Visualisation                     ##
+##     	        NagVis - The Nagios Visualisation                       ##
 ##########################################################################
-## class.Backend_ndomy.php Backend module to fetch the status from      ##
+## GlobalBackend_ndomy.php Backend module to fetch the status from      ##
 ##                         Nagios NDO Mysql DB. All not special to one  ##
 ##                         Backend related things should removed here!  ##
 ##                         (e.g. fixIcon, this is needed for ALL        ##
-##                         Backends	)                               ##
+##                         Backends	)                                   ##
 ##########################################################################
 ## Licenced under the terms and conditions of the GPL Licence,          ##
 ## please see attached "LICENCE" file	                                ##
