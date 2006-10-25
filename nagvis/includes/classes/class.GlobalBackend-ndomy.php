@@ -104,7 +104,7 @@ class GlobalBackend {
 	* @return array $ret
 	* @author	Lars Michelsen
 	* @author Andreas Husch <downanup@nagios-wiki.de>
-     */
+	*/
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
 		
@@ -342,7 +342,7 @@ class GlobalBackend {
 	*
 	* @param	string $hostGroupName, boolean $recognzieServices
 	* @return array $state
-     * @author	Andreas Husch (downanup@nagios-wiki.de
+	* @author	Andreas Husch (downanup@nagios-wiki.de
 	*/
 	function findStateHostgroup($hostGroupName,$recognizeServices) {
 		//First we have to get the hostgroup_id
@@ -422,7 +422,7 @@ class GlobalBackend {
 	* @param	string $hostName, string $serviceName
 	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
-     */
+	*/
 	function findStateService($hostName,$serviceName) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '2' AND name1 = binary '".$hostName."' AND name2 = binary '".$serviceName."' AND instance_id='".$this->dbInstanceId."')");
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
