@@ -342,7 +342,7 @@ class GlobalBackend {
 	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de
 	*/
-	function findStateHostgroup($hostGroupName,$recognizeServices) {
+	function findStateHostgroup($hostGroupName,$recognizeServices,$onlyHardStates) {
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='3' AND name1 = binary '".$hostGroupName."' AND instance_id='".$this->dbInstanceId."'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
@@ -352,7 +352,7 @@ class GlobalBackend {
 			$state['Output'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$hostGroupName);
 			return($state);
 		}
-		
+
 		$QUERYHANDLE = mysql_query("SELECT hostgroup_id FROM ".$this->dbPrefix."hostgroups WHERE hostgroup_object_id='".$objectId[0]."' AND instance_id='".$this->dbInstanceId."'");
 		$hostGroupId = mysql_fetch_row($QUERYHANDLE);
 		
@@ -371,7 +371,7 @@ class GlobalBackend {
 			$QUERYHANDLE_2 = mysql_query("SELECT name1 FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '1' AND object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."')");
 			$hostName = mysql_fetch_array($QUERYHANDLE_2);  
 			
-			$currentHostState = $this->findStateHost($hostName['name1'],$recognizeServices,"","");
+			$currentHostState = $this->findStateHost($hostName['name1'],$recognizeServices,$onlyHardStates);
 			if($currentHostState['State'] == "UP") {
 				$hostsOk++;
 			} elseif($currentHostState['State'] == "ACK") {
@@ -421,7 +421,7 @@ class GlobalBackend {
 	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	*/
-	function findStateService($hostName,$serviceName) {
+	function findStateService($hostName,$serviceName,$onlyHardStates) {
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE (objecttype_id = '2' AND name1 = binary '".$hostName."' AND name2 = binary '".$serviceName."' AND instance_id='".$this->dbInstanceId."')");
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			$state['State'] = "ERROR";
@@ -429,8 +429,14 @@ class GlobalBackend {
 			return($state);
 		}
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
+		
+		if($onlyHardStates == 1) {
+			$queryString="SELECT has_been_checked, last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'";
+		} else {
+			$queryString="SELECT has_been_checked, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'";
+		}
 
-		$QUERYHANDLE = mysql_query("SELECT has_been_checked, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'");
+		$QUERYHANDLE = mysql_query($queryString);
 		$service = mysql_fetch_array($QUERYHANDLE);				
 		if($service['has_been_checked'] == 0) {
 			$state['Count'] = 1;
@@ -471,7 +477,7 @@ class GlobalBackend {
 	* @return	arrray $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	*/
-	function findStateServicegroup($serviceGroupName) {
+	function findStateServicegroup($serviceGroupName,$onlyHardStates) {
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='4' AND name1 = binary '".$serviceGroupName."' AND instance_id='".$this->dbInstanceId."'");
 		$objectId = mysql_fetch_row($QUERYHANDLE);
@@ -497,7 +503,12 @@ class GlobalBackend {
 			$objectId = $services['service_object_id'];
 
 			//Query the Servicestates
-			$QUERYHANDLE_2 = mysql_query("SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'");
+			if($onlyHardStates == 1) {
+				$queryString="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+			} else {
+				$queryString="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+			}	
+			$QUERYHANDLE_2 = mysql_query($queryString);
 			$currentService = mysql_fetch_array($QUERYHANDLE_2);				
 			if($currentService['current_state'] == 0) {
 				$servicesOk++;
