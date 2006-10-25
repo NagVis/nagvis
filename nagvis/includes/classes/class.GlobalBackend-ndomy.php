@@ -162,24 +162,29 @@ class GlobalBackend {
 	* @author	m.luebben, Andreas Husch <downanup@nagios-wiki.de>
 	*/
 	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$onlyHardStates=0) {
-		if($Type == "host") {
-			if(isset($Name)) {
-				$state = $this->findStateHost($Name,$RecognizeServices,$onlyHardStates);
-			}
-		} elseif($Type == "service") {
-			if(isset($Name)) {
-				$state = $this->findStateService($Name,$ServiceName,$onlyHardStates);
-            }
-        } elseif($Type == "hostgroup") {
-			if(isset($Name)) {
-				$state = $this->findStateHostgroup($Name,$RecognizeServices,$onlyHardStates);
-			}
-		} elseif($Type == "servicegroup") {
-			if(isset($Name)) {
-				$state = $this->findStateServicegroup($Name,$onlyHardStates);
+		if(isset($Name)) {
+			switch($Type) {
+				case 'host':
+					$state = $this->findStateHost($Name,$RecognizeServices,$onlyHardStates);
+				break;
+				case 'service':
+					$state = $this->findStateService($Name,$ServiceName,$onlyHardStates);
+				break;
+				case 'hostgroup':
+					$state = $this->findStateHostgroup($Name,$RecognizeServices,$onlyHardStates);
+				break;
+				case 'servicegroup':
+					$state = $this->findStateServicegroup($Name,$onlyHardStates);
+				break;
+				default:
+					//FIXME Error Box (should normally never happen)
+				break;
 			}
 		}
-		
+		/**
+		* Case that this Backend could not find any state for the given object
+		* This should normally never happen
+		*/
 		if(!isset($state)) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
 			$FRONTEND->messageToUser('WARNING','noStateSet');
