@@ -148,15 +148,14 @@ class GlobalForm {
 	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='') {
 		$ret = Array();
 		
-		// FIXME: ?!
 		if($must != FALSE) {
-			$must = 'style="color:red;"';	
+			$must = ' style="color:red;"';	
 		} else {
 			$must = '';
 		}
 		
 		$ret[] = "<tr>";
-		$ret[] = "\t<td class=\"tdlabel\" ".$must.">".$label."</td><td class=\"tdfield\">";
+		$ret[] = "\t<td class=\"tdlabel\"".$must.">".$label."</td><td class=\"tdfield\">";
 		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange));
 		$ret[] = "\t</td>";
 		$ret[] = "</tr>";

@@ -194,7 +194,7 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
-	* Creates a Java-Box with information.
+	* Creates a Javascript-Box with information.
 	*
 	* @param Array $obj
 	*

@@ -103,6 +103,7 @@ class GlobalMainCfg {
 		$this->readConfig(1);
 		
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
+		$this->validConfig['paths']['cfg']['default'] = $this->getValue('paths','base')."nagvis/etc/";
 		$this->validConfig['paths']['icon']['default'] = $this->getValue('paths','base')."nagvis/images/iconsets/";
 		$this->validConfig['paths']['language']['default'] = $this->getValue('paths','base')."nagvis/includes/languages/";
 		$this->validConfig['paths']['map']['default'] = $this->getValue('paths','base')."nagvis/images/maps/";
