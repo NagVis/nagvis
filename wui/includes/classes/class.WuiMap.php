@@ -112,9 +112,8 @@ class WuiMap extends GlobalMap {
 			$arr[] = "SET_DHTML(TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n";
 			$arr[] = "//-->\n";
 			$arr[] = "</script>\n";
-			
-			return $arr;
 		}
+		return $arr;
 	}
 	
 	function parseObjects() {

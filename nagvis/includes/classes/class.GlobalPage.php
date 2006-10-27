@@ -238,13 +238,18 @@ class GlobalPage {
 	 * @return 	Boolean	TRUE
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function addBodyLines($lines) {
-		if(is_string($lines)) {
-			$lines = Array($lines);	
+	function addBodyLines($lines='') {
+		if($lines == '') {
+			if(is_string($lines)) {
+				$lines = Array($lines);	
+			}
+			$this->body = array_merge($this->body,$lines);
+			
+			return TRUE;
+		} else {
+			return FALSE;
 		}
-		$this->body = array_merge($this->body,$lines);
 		
-		return TRUE;
 	}
 	
 	/**
@@ -271,17 +276,21 @@ class GlobalPage {
 	 * Gets the formated lines of an array (Body/Head)
 	 *
 	 * @param	Array	HTML Code
-	 * @return 	Array	Formated HTML Code
+	 * @return 	String	Formated HTML Code
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getLines($arr) {
-		$ret = '';
-		
-		foreach($arr AS $line) {
-			$ret .= "\t\t".$line."\n";
+	function getLines($arr=Array()) {
+		if(sizeof($arr) > 0) {
+			$ret = '';
+			
+			foreach($arr AS $line) {
+				$ret .= "\t\t".$line."\n";
+			}
+			
+			return $ret;
+		} else {
+			return FALSE;
 		}
-		
-		return $ret;
 	}
 	
 	/**
