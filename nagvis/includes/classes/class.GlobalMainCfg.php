@@ -21,75 +21,110 @@ class GlobalMainCfg {
 		
 		$this->validConfig = Array(
 			'global' => Array('backend' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'ndomy'),
 							'language' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'english'),
 							'defaulticons' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'std_medium'),
 							'rotatemaps' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '0'),
 							'maps' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'demo,demo2'),
 							'displayheader' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '1'),
 							'headercount' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '4'),
 							'usegdlibs' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '1'),
 							'refreshtime' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '60')),
 			'wui' => Array('autoupdatefreq' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '25')),
 			'paths' => Array('base' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '/usr/local/nagios/share/nagvis/'),
 							'cfg' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/'),
 							'icon' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/'),
 							'language' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/includes/languages/'),
 							'map' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/maps/'),
 							'mapcfg' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/'),
 							'htmlbase' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '/nagios/nagvis'),
 							'htmlcgi' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '/nagios/cgi-bin'),
 							'htmlimages' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/'),
 							'htmlicon' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/iconsets/'),
 							'htmlmap' => Array('must' => 0,
+												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/maps/'),
 							'htmldoku' => Array('must' => 1,
+												 'editable' => 0,
 												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/')),
 			'backend_ndomy' => Array('dbhost' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'localhost'),
 							'dbport' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '3306'),
 							'dbname' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'db_nagios'),
 							'dbuser' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'root'),
 							'dbpass' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'root'),
 							'dbprefix' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'ndo_'),
 							'dbinstanceid' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '1'),
 							'maxtimewithoutupdate' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '180')),
 			'backend_html' => Array('cgiuser' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'nagiosadmin'),
 							'cgi' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => '/usr/local/nagios/sbin/')),
 			'includes' => Array('header' => Array('must' => 1,
+												 'editable' => 1,
 												'default' => 'header.nagvis.inc')),
 			'internal' => Array('version' => Array('must' => 1,
+												 'editable' => 0,
 												'default' => '1.0a1',
 												'locked' => 1),
 							'title' => Array('must' => 1,
+												 'editable' => 0,
 												'default' => 'NagVis 1.0a1 (CVS Snapshot)',
 												'locked' => 1)));
 		
@@ -106,6 +141,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['cfg']['default'] = $this->getValue('paths','base')."nagvis/etc/";
 		$this->validConfig['paths']['icon']['default'] = $this->getValue('paths','base')."nagvis/images/iconsets/";
 		$this->validConfig['paths']['language']['default'] = $this->getValue('paths','base')."nagvis/includes/languages/";
+		$this->validConfig['paths']['class']['default'] = $this->getValue('paths', 'base')."nagvis/includes/classes/";
 		$this->validConfig['paths']['map']['default'] = $this->getValue('paths','base')."nagvis/images/maps/";
 		$this->validConfig['paths']['mapcfg']['default'] = $this->getValue('paths','base')."nagvis/etc/maps/";
 		$this->validConfig['paths']['htmlimages']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/";
@@ -384,15 +420,18 @@ class GlobalMainCfg {
 	 *
 	 * @param	String	$sec	Section
 	 * @param	String	$var	Variable
+	 * @param   Bool	$ignoreDefault Don't read default value
 	 * @return	String	$val	Value
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getValue($sec, $var) {
+	function getValue($sec, $var, $ignoreDefault=FALSE) {
 		# if nothing is set in the config file, use the default value
 		if(array_key_exists($var,$this->config[$sec])) {
 			return $this->config[$sec][$var];
-		} else {
+		} elseif(!$ignoreDefault) {
 			return $this->validConfig[$sec][$var]['default'];
+		} else {
+			return FALSE;
 		}
 	}
 	

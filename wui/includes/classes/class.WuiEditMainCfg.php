@@ -61,81 +61,84 @@ class WuiEditMainCfg extends GlobalPage {
 		
 		foreach($this->MAINCFG->validConfig AS $cat => $arr) {
 			// display only the backend options of the backend we are using
-			if((substr($cat,0,8) == "backend_" && strpos($cat,$this->MAINCFG->getValue('global','backend')) !== FALSE) || substr($cat,0,8) != "backend_") {
+			if(((substr($cat,0,8) == "backend_" && strpos($cat,$this->MAINCFG->getValue('global','backend')) !== FALSE) || substr($cat,0,8) != "backend_") && $cat != 'internal') {
 				$ret = array_merge($ret,$this->FORM->getCatLine($cat));
 				
 				foreach($arr AS $key2 => $prop) {
-					$val2 = $this->MAINCFG->getValue($cat,$key2);
-					
-					# we add a line in the form
-					$ret[] = "<tr>";
-					$ret[] = "\t<td class=\"tdlabel\">".$key2."</td>";
-					if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'editMainCfg','',FALSE)) > 0) {
-						$ret[] = "\t<td class=\"tdlabel\"></td>";
-					} else {
-						$ret[] = "\t<td class=\"tdlabel\">";
-						$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'editMainCfg','',FALSE)."')\" />";
+					// ignore some vars
+					if($this->MAINCFG->validConfig[$cat][$key2]['editable']) {
+						$val2 = $this->MAINCFG->getValue($cat,$key2,TRUE);
+						
+						# we add a line in the form
+						$ret[] = "<tr>";
+						$ret[] = "\t<td class=\"tdlabel\">".$key2."</td>";
+						if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'editMainCfg','',FALSE)) > 0) {
+							$ret[] = "\t<td class=\"tdlabel\"></td>";
+						} else {
+							$ret[] = "\t<td class=\"tdlabel\">";
+							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'editMainCfg','',FALSE)."')\" />";
+							$ret[] = "\t</td>";
+						}
+						
+						$ret[] = "\t<td class=\"tdfield\">";
+						switch($key2) {
+							case 'language':
+							case 'backend':
+							case 'defaulticons':
+							case 'rotatemaps':
+							case 'displayheader':
+							case 'checkconfig':
+							case 'usegdlibs':
+							case 'debug':
+							case 'debugstates':
+							case 'debugcheckstate':
+							case 'debugfixicon':
+							case 'autoupdatefreq':
+								switch($key2) {
+									case 'language':
+										$arrOpts = $this->getLanguages();
+									break;
+									case 'backend':
+										$arrOpts = $this->getBackends();
+									break;
+									case 'defaulticons':
+										$arrOpts = $this->getIconsets();
+									break;
+									case 'rotatemaps':
+									case 'displayheader':
+									case 'checkconfig':
+									case 'usegdlibs':
+									case 'debug':
+									case 'debugstates':
+									case 'debugcheckstate':
+									case 'debugfixicon':
+										$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getLabel('yes')),
+														 Array('value'=>'0','label'=>$this->LANG->getLabel('no')));
+									break;
+									case 'autoupdatefreq':
+										$arrOpts = Array(Array('value'=>'0','label'=>$this->LANG->getLabel('disabled')),
+														 Array('value'=>'2','label'=>'2'),
+														 Array('value'=>'5','label'=>'5'),
+														 Array('value'=>'10','label'=>'10'),
+														 Array('value'=>'25','label'=>'25'),
+														 Array('value'=>'50','label'=>'50'));
+									break;
+								}
+								
+								$ret = array_merge($ret,$this->FORM->getSelectField("conf_".$key2,$arrOpts));
+							break;
+							default:
+								$ret = array_merge($ret,$this->FORM->getInputField("conf_".$key2,$val2));
+								
+								if($prop['locked'] == 1) {
+									$ret[] = "<script>document.edit_config.elements['conf_".$key2."'].disabled=true;</script>";
+								}
+							break;
+						}
+						$ret[] = "\t\t<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>";
 						$ret[] = "\t</td>";
+						$ret[] = "</tr>";
 					}
-					
-					$ret[] = "\t<td class=\"tdfield\">";
-					switch($key2) {
-						case 'language':
-						case 'backend':
-						case 'defaulticons':
-						case 'rotatemaps':
-						case 'displayheader':
-						case 'checkconfig':
-						case 'usegdlibs':
-						case 'debug':
-						case 'debugstates':
-						case 'debugcheckstate':
-						case 'debugfixicon':
-						case 'autoupdatefreq':
-							switch($key2) {
-								case 'language':
-									$arrOpts = $this->getLanguages();
-								break;
-								case 'backend':
-									$arrOpts = $this->getBackends();
-								break;
-								case 'defaulticons':
-									$arrOpts = $this->getIconsets();
-								break;
-								case 'rotatemaps':
-								case 'displayheader':
-								case 'checkconfig':
-								case 'usegdlibs':
-								case 'debug':
-								case 'debugstates':
-								case 'debugcheckstate':
-								case 'debugfixicon':
-									$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getLabel('yes')),
-													 Array('value'=>'0','label'=>$this->LANG->getLabel('no')));
-								break;
-								case 'autoupdatefreq':
-									$arrOpts = Array(Array('value'=>'0','label'=>$this->LANG->getLabel('disabled')),
-													 Array('value'=>'2','label'=>'2'),
-													 Array('value'=>'5','label'=>'5'),
-													 Array('value'=>'10','label'=>'10'),
-													 Array('value'=>'25','label'=>'25'),
-													 Array('value'=>'50','label'=>'50'));
-								break;
-							}
-							
-							$ret = array_merge($ret,$this->FORM->getSelectField("conf_".$key2,$arrOpts));
-						break;
-						default:
-							$ret = array_merge($ret,$this->FORM->getInputField("conf_".$key2,$val2));
-							
-							if($prop['locked'] == 1) {
-								$ret[] = "<script>document.edit_config.elements['conf_".$key2."'].disabled=true;</script>";
-							}
-						break;
-					}
-					$ret[] = "\t\t<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>";
-					$ret[] = "\t</td>";
-					$ret[] = "</tr>";
 				}
 			}
 		}
@@ -151,7 +154,7 @@ class WuiEditMainCfg extends GlobalPage {
 	function getBackends() {
 		$files = Array();
 		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'base')."/includes/classes")) {
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
  			while (false !== ($file = readdir($handle))) {
  				if ($file != "." && $file != ".." && preg_match('/^class.GlobalBackend-/', $file)) {
 					$files[] = str_replace('class.GlobalBackend-','',str_replace('.php','',$file));
@@ -201,10 +204,10 @@ class WuiEditMainCfg extends GlobalPage {
 	function getLanguages() {
 		$files = Array();
 		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'cfg')."/languages")) {
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'language'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/^wui_/', $file)) {
-					$files[] = str_replace('wui_','',str_replace('.txt','',$file));
+				if ($file != "." && $file != ".." && preg_match('/.xml$/', $file)) {
+					$files[] = str_replace('wui_','',str_replace('.xml','',$file));
 				}				
 			}
 			
