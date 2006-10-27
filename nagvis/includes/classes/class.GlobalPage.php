@@ -238,18 +238,13 @@ class GlobalPage {
 	 * @return 	Boolean	TRUE
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function addBodyLines($lines='') {
-		if($lines == '') {
-			if(is_string($lines)) {
-				$lines = Array($lines);	
-			}
-			$this->body = array_merge($this->body,$lines);
-			
-			return TRUE;
-		} else {
-			return FALSE;
+	function addBodyLines($lines) {
+		if(is_string($lines)) {
+			$lines = Array($lines);	
 		}
+		$this->body = array_merge($this->body,$lines);
 		
+		return TRUE;
 	}
 	
 	/**
@@ -279,18 +274,14 @@ class GlobalPage {
 	 * @return 	String	Formated HTML Code
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getLines($arr=Array()) {
-		if(sizeof($arr) > 0) {
-			$ret = '';
-			
-			foreach($arr AS $line) {
-				$ret .= "\t\t".$line."\n";
-			}
-			
-			return $ret;
-		} else {
-			return FALSE;
+	function getLines($arr) {
+		$ret = '';
+		
+		foreach($arr AS $line) {
+			$ret .= "\t\t".$line."\n";
 		}
+		
+		return $ret;
 	}
 	
 	/**
