@@ -276,14 +276,14 @@ class GlobalBackend {
 				$servicesAck = 0;
 				
 				//Get the object ids from all services of this host
-				$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='2' AND name1='$hostName' AND instance_id='$this->dbInstanceId'");
+				$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='2' AND name1='".$hostName."' AND instance_id='".$this->dbInstanceId."'");
 				while($services = mysql_fetch_array($QUERYHANDLE)) {
 					$objectId = $services['object_id'];
 					//Query the Servicestates
 						if($onlyHardStates == 1) {
-							$queryString2="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+							$queryString2="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
 						} else {
-							$queryString2="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+							$queryString2="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
 						}
 
 					$QUERYHANDLE_2 = mysql_query($queryString2);
@@ -436,9 +436,9 @@ class GlobalBackend {
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
 		
 		if($onlyHardStates == 1) {
-			$queryString="SELECT has_been_checked, last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'";
+			$queryString="SELECT has_been_checked, last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$serviceObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
 		} else {
-			$queryString="SELECT has_been_checked, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$serviceObjectId[0]' AND instance_id='$this->dbInstanceId'";
+			$queryString="SELECT has_been_checked, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$serviceObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
 		}
 
 		$QUERYHANDLE = mysql_query($queryString);
@@ -493,7 +493,7 @@ class GlobalBackend {
 			return($state);
 		}
 		
-		$QUERYHANDLE = mysql_query("SELECT servicegroup_id FROM ".$this->dbPrefix."servicegroups WHERE servicegroup_object_id='$objectId[0]' AND instance_id='$this->dbInstanceId'");
+		$QUERYHANDLE = mysql_query("SELECT servicegroup_id FROM ".$this->dbPrefix."servicegroups WHERE servicegroup_object_id='".$objectId[0]."' AND instance_id='".$this->dbInstanceId."'");
 		$serviceGroupId = mysql_fetch_row($QUERYHANDLE);
 		
 		$servicesCritical=0;
@@ -503,15 +503,15 @@ class GlobalBackend {
 		$servicesOk=0;
 
 		//Now we have the Group Id and can get the hosts
-		$QUERYHANDLE = mysql_query("SELECT service_object_id FROM ".$this->dbPrefix."servicegroup_members WHERE servicegroup_id='$serviceGroupId[0]' AND instance_id='$this->dbInstanceId'");	
+		$QUERYHANDLE = mysql_query("SELECT service_object_id FROM ".$this->dbPrefix."servicegroup_members WHERE servicegroup_id='".$serviceGroupId[0]."' AND instance_id='".$this->dbInstanceId."'");	
 		while($services = mysql_fetch_array($QUERYHANDLE)) {
 			$objectId = $services['service_object_id'];
 
 			//Query the Servicestates
 			if($onlyHardStates == 1) {
-				$queryString="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+				$queryString="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
 			} else {
-				$queryString="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '$objectId' AND instance_id='$this->dbInstanceId'";
+				$queryString="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
 			}	
 			$QUERYHANDLE_2 = mysql_query($queryString);
 			$currentService = mysql_fetch_array($QUERYHANDLE_2);				
