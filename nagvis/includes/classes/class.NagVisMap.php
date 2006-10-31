@@ -59,7 +59,7 @@ class NagVisMap extends GlobalMap {
 					// default background color
 					if($obj['background_color'] == '') {
 						$obj['background_color'] = '#CCCCCC';
-					} elseif($obj['background_color'] == 'solid') {
+					} elseif($obj['background_color'] == 'transparent') {
 						$obj['background_color'] = '';
 					}
 					
@@ -205,7 +205,7 @@ class NagVisMap extends GlobalMap {
 	 */
 	function textBox($obj) {
 		$ret = Array();
-		$ret[] = "<div class=\"".$obj['class']."\" style=\"background-color:".$obj['background_color'].";left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."px; overflow: visible;\">";	
+		$ret[] = "<div class=\"".$obj['class']."\" style=\"background:".$obj['background_color'].";left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."px; overflow: visible;\">";	
 		$ret[] = "\t<span>".$obj['text']."</span>";
 		$ret[] = "</div>";
 		return $ret;	

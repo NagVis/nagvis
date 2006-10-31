@@ -144,19 +144,7 @@ IMG {
 
 
 .box {
-    background-color : #CCCCCC;
-    border-bottom-color : #000000;
-    border-bottom-style : solid;
-    border-bottom-width : 1px;
-    border-left-color : #000000;
-    border-left-style : solid;
-    border-left-width : 1px;
-    border-right-color : #000000;
-    border-right-style : solid;
-    border-right-width : 1px;
-    border-top-color : #000000;
-    border-top-style : solid;
-    border-top-width : 1px;
+	border: 1px #000 solid;
     font-family : arial,serif ;
     font-size : 11px;
     font-style : normal;
@@ -171,18 +159,7 @@ IMG {
 
 .box_UP {
     background-color : #33FF00;
-    border-bottom-color : #000000;
-    border-bottom-style : solid;
-    border-bottom-width : 1px;
-    border-left-color : #000000;
-    border-left-style : solid;
-    border-left-width : 1px;
-    border-right-color : #000000;
-    border-right-style : solid;
-    border-right-width : 1px;
-    border-top-color : #000000;
-    border-top-style : solid;
-    border-top-width : 1px;
+	border: 1px #000 solid;
     font-family : arial,serif ;
     font-size : 11px;
     font-style : normal;
@@ -197,18 +174,7 @@ IMG {
   
   .box_DOWN {
     background-color : #F83838;
-    border-bottom-color : #000000;
-    border-bottom-style : solid;
-    border-bottom-width : 1px;
-    border-left-color : #000000;
-    border-left-style : solid;
-    border-left-width : 1px;
-    border-right-color : #000000;
-    border-right-style : solid;
-    border-right-width : 1px;
-    border-top-color : #000000;
-    border-top-style : solid;
-    border-top-width : 1px;
+	border: 1px #000 solid;
     font-family : arial,serif ;
     font-size : 11px;
     font-style : normal;
@@ -223,18 +189,7 @@ IMG {
   
   .box_PENDING {
     background-color : #ACACAC;
-    border-bottom-color : #000000;
-    border-bottom-style : solid;
-    border-bottom-width : 1px;
-    border-left-color : #000000;
-    border-left-style : solid;
-    border-left-width : 1px;
-    border-right-color : #000000;
-    border-right-style : solid;
-    border-right-width : 1px;
-    border-top-color : #000000;
-    border-top-style : solid;
-    border-top-width : 1px;
+	border: 1px #000 solid;
     font-family : arial,serif ;
     font-size : 11px;
     font-style : normal;
@@ -249,18 +204,7 @@ IMG {
   
   .box_UNREACHABLE {
     background-color : #F83838;
-    border-bottom-color : #000000;
-    border-bottom-style : solid;
-    border-bottom-width : 1px;
-    border-left-color : #000000;
-    border-left-style : solid;
-    border-left-width : 1px;
-    border-right-color : #000000;
-    border-right-style : solid;
-    border-right-width : 1px;
-    border-top-color : #000000;
-    border-top-style : solid;
-    border-top-width : 1px;
+	border: 1px #000 solid;
     font-family : arial,serif ;
     font-size : 11px;
     font-style : normal;
@@ -275,18 +219,7 @@ IMG {
   
   .box_ERROR {
     background-color : #557FFF;
-    border-bottom-color : #000000;
-    border-bottom-style : solid;
-    border-bottom-width : 1px;
-    border-left-color : #000000;
-    border-left-style : solid;
-    border-left-width : 1px;
-    border-right-color : #000000;
-    border-right-style : solid;
-    border-right-width : 1px;
-    border-top-color : #000000;
-    border-top-style : solid;
-    border-top-width : 1px;
+	border: 1px #000 solid;
     font-family : arial,serif ;
     font-size : 11px;
     font-style : normal;
