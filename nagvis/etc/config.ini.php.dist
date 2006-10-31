@@ -46,6 +46,8 @@
 
 ; options for the NDO-Backend 1
 [backend_ndomy_1]
+; type of backend - MUST be set
+;backendtype="ndomy"
 ; hostname for NDO-db
 ;dbhost="localhost"
 ; portname for NDO-db
@@ -65,6 +67,8 @@
 
 ; options for the NDO-Backend 2
 [backend_ndomy_2]
+; type of backend - MUST be set
+;backendtype="ndomy"
 ; hostname for NDO-db
 ;dbhost="localhost"
 ; portname for NDO-db
@@ -84,6 +88,8 @@
 
 ; options for the HTML-Backend
 [backend_html_1]
+; type of backend - MUST be set
+;backendtype="html"
 ; with this user, the script reads the CGIs
 ;cgiuser="nagiosadmin"
 ; physical path to the CGIs
