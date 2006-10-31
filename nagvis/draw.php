@@ -63,8 +63,8 @@ foreach($types AS $key => $type) {
 	foreach($MAPCFG->getDefinitions($type) AS $key2 => $obj) {
 		if(isset($obj['line_type'])) {
 			if(!isset($obj['backend_id'])) {
-				if(!isset($this->MAPCFG->getValue('global', 0, 'recognize_services'))) {
-					if(!isset($this->MAINCFG->getValue('global', 'defaultbackend'))) {
+				if(!isset($MAPCFG->getValue('global', 0, 'recognize_services'))) {
+					if(!isset($MAINCFG->getValue('global', 'defaultbackend'))) {
 						// FIXME: Errorhandling	
 					} else {
 						$obj['backend_id'] = $MAINCFG->getValue('global', 'defaultbackend');
