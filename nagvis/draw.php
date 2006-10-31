@@ -62,9 +62,9 @@ $types = array("global","host","service","hostgroup","servicegroup","map","textb
 foreach($types AS $key => $type) {
 	foreach($MAPCFG->getDefinitions($type) AS $key2 => $obj) {
 		if(isset($obj['line_type'])) {
-			if(!isset($obj['backend_id'])) {
-				if(!isset($MAPCFG->getValue('global', 0, 'backend_id'))) {
-					if(!isset($MAINCFG->getValue('global', 'defaultbackend'))) {
+			if($obj['backend_id'] == '') {
+				if($MAPCFG->getValue('global', 0, 'backend_id') == '') {
+					if($MAINCFG->getValue('global', 'defaultbackend') == '') {
 						// FIXME: Errorhandling	
 					} else {
 						$obj['backend_id'] = $MAINCFG->getValue('global', 'defaultbackend');
