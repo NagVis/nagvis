@@ -184,7 +184,7 @@ class GlobalMap {
 				}
 			break;
 			case 'textbox':
-				$backendId = $this->checkOption($obj['backend_id'],$this->MAPCFG->getValue('global', 0, 'recognize_services'),$this->MAINCFG->getValue('global', 'defaultbackend'),'');
+				$backendId = $this->checkOption($obj['backend_id'],$this->MAPCFG->getValue('global', 0, 'backend_id'),$this->MAINCFG->getValue('global', 'defaultbackend'),'');
 				
 				// Check if set a hostname
 				if(isset($obj['host_name'])) {
@@ -195,7 +195,7 @@ class GlobalMap {
 				// get option to recognize the services - object-config, object-global-config, main-config, default
 				$recognizeServices = $this->checkOption($obj['recognize_services'],$this->MAPCFG->getValue('global', 0, 'recognize_services'),$this->MAINCFG->getValue('global', 'recognize_services'),"1");
 				$onlyHardStates = $this->checkOption($obj['only_hard_states'],$this->MAPCFG->getValue('global', 0, 'only_hard_states'),$this->MAINCFG->getValue('global', 'only_hard_states'),"0");				
-				$backendId = $this->checkOption($obj['backend_id'],$this->MAPCFG->getValue('global', 0, 'recognize_services'),$this->MAINCFG->getValue('global', 'defaultbackend'),'');
+				$backendId = $this->checkOption($obj['backend_id'],$this->MAPCFG->getValue('global', 0, 'backend_id'),$this->MAINCFG->getValue('global', 'defaultbackend'),'');
 				
 				if(isset($obj['line_type']) && $obj['line_type'] == "20") {
 					// line with 2 states...
