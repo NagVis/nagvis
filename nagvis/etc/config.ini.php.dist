@@ -11,12 +11,8 @@
 
 ; global options
 [global]
-; select backend to use (ndomy,html)
-; html -> pulls the data from the Nagios Webinterface (slow and unreliable but
-;		  easy to use)
-; ndomy -> gets the data from a Nagios NDO MySQL Database (fast an reliable
-;          but NDO is needed)
-;backend="ndomy"
+; default backend (id of the default backend)
+;defaultbackend="ndomy_1"
 ; select language (english,german,...)
 ;language="english"
 ; default icons
@@ -48,8 +44,27 @@
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
 
-; options for the NDO-Backend
-[backend_ndomy]
+; options for the NDO-Backend 1
+[backend_ndomy_1]
+; hostname for NDO-db
+;dbhost="localhost"
+; portname for NDO-db
+;dbport=3306
+; database-name for NDO-db
+;dbname="db_nagios"
+; username for NDO-db
+;dbuser="root"
+; password for NDO-db
+;dbpass="xxx"
+; prefix for tables in NDO-db
+;dbprefix="ndo_"
+; instace-id for tables in NDO-db
+;dbinstanceid=1
+; maximum delay of the NDO Database in Seconds
+;maxtimewithoutupdate=181
+
+; options for the NDO-Backend 2
+[backend_ndomy_2]
 ; hostname for NDO-db
 ;dbhost="localhost"
 ; portname for NDO-db
@@ -68,7 +83,7 @@
 ;maxtimewithoutupdate=181
 
 ; options for the HTML-Backend
-[backend_html]
+[backend_html_1]
 ; with this user, the script reads the CGIs
 ;cgiuser="nagiosadmin"
 ; physical path to the CGIs

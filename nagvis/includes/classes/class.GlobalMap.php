@@ -111,10 +111,14 @@ class GlobalMap {
 		
 		if(is_array($this->MAPCFG->getDefinitions($type))){
 			foreach($this->MAPCFG->getDefinitions($type) as $index => $obj) {
-				// Workaround
+				// workaround
 				$obj['id'] = $index;
+				
 				// add default state to the object
 				$obj = array_merge($obj,$objState);
+				
+				// get backend_id from the different levels
+				$obj['backend_id'] = $this->checkOption($obj['backend_id'],$this->MAPCFG->getValue('global', 0, 'recognize_services'),$this->MAINCFG->getValue('global', 'defaultbackend'),'');
 				
 				if($getState == 1) {
 					$obj = array_merge($obj,$this->getState($obj));
@@ -161,7 +165,6 @@ class GlobalMap {
 		} else {
 			$name = $obj['type'] . '_name';
 		}
-		
 		switch($obj['type']) {
 			case 'map':
 				// save mapName in linkedMaps array
@@ -186,7 +189,7 @@ class GlobalMap {
 			case 'textbox':
 				// Check if set a hostname
 				if(isset($obj['host_name'])) {
-					$state = $this->BACKEND->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
+					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
 				}
 			break;
 			default:
@@ -199,10 +202,10 @@ class GlobalMap {
 					list($objNameFrom,$objNameTo) = explode(",", $obj[$name]);
 					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(",", $obj['service_description']);
 					
-					$state1 = $this->BACKEND->checkStates($obj['type'],$objNameFrom,$recognizeServices,$serviceDescriptionFrom,$onlyHardStates);
-					$state2 = $this->BACKEND->checkStates($obj['type'],$objNameTo,$recognizeServices,$serviceDescriptionTo,$onlyHardStates);
+					$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$recognizeServices,$serviceDescriptionFrom,$onlyHardStates);
+					$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$recognizeServices,$serviceDescriptionTo,$onlyHardStates);
 				} else {
-					$state = $this->BACKEND->checkStates($obj['type'],$obj[$name],$recognizeServices,$obj['service_description'],$onlyHardStates);
+					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$recognizeServices,$obj['service_description'],$onlyHardStates);
 				}
 			break;	
 		}
@@ -328,13 +331,14 @@ class GlobalMap {
 	 * @param	String	$default	String with default definition
 	 * @return	String	
 	 * @author 	Michael Luebben <michael_luebben@web.de>
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function checkOption($define,$mapGlobal,$global,$default) {
-		if(isset($define)) {
+		if(isset($define) && $define != '') {
 			$option = $define;
-		} elseif(isset($mapGlobal)) {
+		} elseif(isset($mapGlobal) && $mapGlobal != '') {
 			$option = $mapGlobal;
-		} elseif(isset($global)) {
+		} elseif(isset($global) && $global != '') {
 			$option = $global;
 		} else {
 			$option = $default;

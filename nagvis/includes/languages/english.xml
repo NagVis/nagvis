@@ -197,43 +197,43 @@
 		<ndomy>
 			<messages>
 				<mysqlNotSupported>
-					<title>NDOMy Backend error!</title>
+					<title>NDOMy Backend error! (Backend [BACKENDID])</title>
 					<text>Your PHP installation lacks SQL support. You can't use the NDOMy Backend without php-mysql!</text>
 				</mysqlNotSupported>
 				<errorSelectingDb>
-					<title>NDOMy Backend error!</title>
+					<title>NDOMy Backend error! (Backend [BACKENDID])</title>
 					<text>Error selecting Database. Maybe wrong dbName or insufficient permissions?</text>
 				</errorSelectingDb>
 				<nagiosNotRunning>
-					<title>NDOMy Backend error!</title>
+					<title>NDOMy Backend error! (Backend [BACKENDID])</title>
 					<text>Caution: NDO reports that Nagios is NOT running!</text>
 				</nagiosNotRunning>
 				<nagiosDataNotUpToDate>
-					<title>NDOMy Backend error!</title>
+					<title>NDOMy Backend error! (Backend [BACKENDID])</title>
 					<text>NDOMy Backend Error~Caution: NDO claims that Nagios did NO status Update for more than  [I][TIMEWITHOUTUPDATE][/I] seconds! Make sure that Nagios and ndo2db are running!</text>
 				</nagiosDataNotUpToDate>
 				<hostNotFoundInDB>
-					<title>Host not found in database!</title>
+					<title>Host not found in database! (Backend [BACKENDID])</title>
 					<text>The Host [b][HOST][/b] was not found in the Database. Maybe it is spelled wrong?</text>
 				</hostNotFoundInDB>
 				<hostGroupNotFoundInDB>
-					<title>Hostgroup not found in database!</title>
+					<title>Hostgroup not found in database! (Backend [BACKENDID])</title>
 					<text>The Hostgroup [b][HOSTGROUP][/b] was not found in the Database. Maybe it is spelled wrong?</text>
 				</hostGroupNotFoundInDB>
 				<serviceNotFoundInDB>
-					<title>Service not found in database!</title>
+					<title>Service not found in database! (Backend [BACKENDID])</title>
 					<text>The Service [b][SERVICE][/b] on host [b][HOST][/b] was not found in the Database. Maybe it is spelled wrong?</text>
 				</serviceNotFoundInDB>
 				<serviceGroupNotFoundInDB>
-					<title>Servicegroup not found in database!</title>
+					<title>Servicegroup not found in database! (Backend [BACKENDID])</title>
 					<text>The Servicegroup [b][SERVICEGROUP][/b] was not found in the Database. Maybe it is spelled wrong?</text>
 				</serviceGroupNotFoundInDB>
 				<hostIsPending>
-					<title>Host is in pending state!</title>
+					<title>Host is in pending state! (Backend [BACKENDID])</title>
 					<text>The Host [b][HOST][/b] is in pending state.</text>
 				</hostIsPending>
 				<serviceNotChecked>
-					<title>Service not checked yet!</title>
+					<title>Service not checked yet! (Backend [BACKENDID])</title>
 					<text>The Service [b][SERVICE][/b] has not been checked yet.</text>
 				</serviceNotChecked>
 			</messages>
@@ -242,7 +242,7 @@
 			<messages>
 				<!-- Alle HTML Backend Meldungen //-->
 				<statusCgiNotFound>
-					<title>StatusCgi not found!</title>
+					<title>StatusCgi not found! ([BACKENDID])</title>
 					<text>Check the path of the [STATUSCGI]-Var in the nagvis-configuration!</text>
 				</statusCgiNotFound>
 				<statusCgiNotExecutable>

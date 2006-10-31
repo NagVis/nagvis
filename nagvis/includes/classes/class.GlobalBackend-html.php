@@ -16,16 +16,18 @@
 */
 class GlobalBackend {
 	var $MAINCFG;
+	var $backendId;
 	
 	/**
 	* Constructor
 	*
 	* @param config $MAINCFG
-	*
+	* @param	String $backendId
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function GlobalBackend(&$MAINCFG) {
+	function GlobalBackend(&$MAINCFG,$backendId) {
 		$this->MAINCFG = &$MAINCFG;
+		$this->backendId = $backendId;
 		
 		$this->checkCgiPath();
 		
@@ -33,9 +35,9 @@ class GlobalBackend {
 	}
 	
 	function checkCgiPath() {
-		if(!file_exists($this->MAINCFG->getValue('backend_html', 'cgi'))) {
+		if(!file_exists($this->MAINCFG->getValue('backend_'.$backendId, 'cgi'))) {
             $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:html'));
-		    $FRONTEND->messageToUser('ERROR','statusCgiNotFound','STATUSCGI~'.$this->MAINCFG->getValue('backend_html', 'cgi'));
+		    $FRONTEND->messageToUser('ERROR','statusCgiNotFound','BACKENDID~'.$this->backendId.',STATUSCGI~'.$this->MAINCFG->getValue('backend_'.$backendId, 'cgi'));
             
             exit;
         }
@@ -334,8 +336,8 @@ class GlobalBackend {
 	* @author Andreas Husch
     */
 	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0") {
-		$CgiPath = $this->MAINCFG->getValue('backend_html', 'cgi');
-		$CgiUser = $this->MAINCFG->getValue('backend_html', 'cgiuser');
+		$CgiPath = $this->MAINCFG->getValue('backend_'.$backendId, 'cgi');
+		$CgiUser = $this->MAINCFG->getValue('backend_'.$backendId, 'cgiuser');
 		
 		if($Type == "host") {
 			$StatusCgi = $CgiPath.'status.cgi';

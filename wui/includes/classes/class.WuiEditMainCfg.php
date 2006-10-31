@@ -60,8 +60,8 @@ class WuiEditMainCfg extends GlobalPage {
 		$ret = Array();
 		
 		foreach($this->MAINCFG->validConfig AS $cat => $arr) {
-			// display only the backend options of the backend we are using
-			if(((substr($cat,0,8) == "backend_" && strpos($cat,$this->MAINCFG->getValue('global','backend')) !== FALSE) || substr($cat,0,8) != "backend_") && $cat != 'internal') {
+			// don't display backend options
+			if(!preg_match("/^backend/i",$cat) && !preg_match("/^internal$/i",$cat)) {
 				$ret = array_merge($ret,$this->FORM->getCatLine($cat));
 				
 				foreach($arr AS $key2 => $prop) {

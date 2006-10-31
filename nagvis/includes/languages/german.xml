@@ -197,43 +197,43 @@
 		<ndomy>
 			<messages>
 				<mysqlNotSupported>
-					<title>NDOMy Backend Fehler!</title>
+					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
 					<text>Ihre PHP installation hat keine MySQL unterst&uuml;tzung. Ohne php-mysql k&ouml;nnen Sie das NDO Backend nicht nutzen!</text>
 				</mysqlNotSupported>
 				<errorSelectingDb>
-					<title>NDOMy Backend Fehler!</title>
+					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
 					<text>Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen?</text>
 				</errorSelectingDb>
 				<nagiosNotRunning>
-					<title>NDOMy Backend Fehler!</title>
+					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
 					<text>Achtung: Laut NDO l&auml;uft der Nagios Dienst NICHT!</text>
 				</nagiosNotRunning>
 				<nagiosDataNotUpToDate>
-					<title>NDOMy Backend Fehler!</title>
+					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
 					<text>Laut NDO wurden von Nagios seid mehr als [I][TIMEWITHOUTUPDATE][/I] Sekunden keine Daten mehr verarbeitet! Laufen Nagios und ndo2db?</text>
 				</nagiosDataNotUpToDate>
 				<hostNotFoundInDB>
-					<title>Host wurde nicht gefunden!</title>
+					<title>Host wurde nicht gefunden! (Backend [BACKENDID])</title>
 					<text>Der Host [b][HOST][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?</text>
 				</hostNotFoundInDB>
 				<hostGroupNotFoundInDB>
-					<title>Hostgruppe wurde nicht gefunden!</title>
+					<title>Hostgruppe wurde nicht gefunden! (Backend [BACKENDID])</title>
 					<text>Die Hostgruppe [b][HOSTGROUP][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?</text>
 				</hostGroupNotFoundInDB>
 				<serviceNotFoundInDB>
-					<title>Dienst wurde nicht gefunden!</title>
+					<title>Dienst wurde nicht gefunden! (Backend [BACKENDID])</title>
 					<text>Der Dienst [b][SERVICE][/b] on host [b][HOST][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?</text>
 				</serviceNotFoundInDB>
 				<serviceGroupNotFoundInDB>
-					<title>Dienstegruppe wurde nicht gefunden!</title>
+					<title>Dienstegruppe wurde nicht gefunden! (Backend [BACKENDID])</title>
 					<text>Die Dienstegruppe [b][SERVICEGROUP][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?</text>
 				</serviceGroupNotFoundInDB>
 				<hostIsPending>
-					<title>Host ist im wartenden status!</title>
+					<title>Host ist im wartenden status! (Backend [BACKENDID])</title>
 					<text>Der Host [b][HOST][/b] ist im wartenden status.</text>
 				</hostIsPending>
 				<serviceNotChecked>
-					<title>Dienst bisher nicht gepr&uuml;ft!</title>
+					<title>Dienst bisher nicht gepr&uuml;ft! (Backend [BACKENDID])</title>
 					<text>Der Dienst [b][SERVICE][/b] wurde bisher nicht gepr&uuml;ft.</text>
 				</serviceNotChecked>
 			</messages>
@@ -242,7 +242,7 @@
 			<messages>
 				<!-- Alle HTML Backend Meldungen //-->
 				<statusCgiNotFound>
-					<title>StatusCgi nicht gefunden!</title>
+					<title>StatusCgi nicht gefunden! (Backend [BACKENDID])</title>
 					<text>&uuml;berpr&uuml;fen Sie den Pfad der [STATUSCGI]-Variable in der Konfigurationsdatei!</text>
 				</statusCgiNotFound>
 				<statusCgiNotExecutable>

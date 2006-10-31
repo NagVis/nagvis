@@ -157,10 +157,11 @@ class WuiAddModify extends GlobalPage {
 				$this->propCount++;
 			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
 				// treat the special case of <object-type>_name, if ndo backend is used
-				$BACKEND = new GlobalBackend($this->MAINCFG);
+				$BACKEND = new GlobalBackendMgmt($this->MAINCFG);
 				
-				if(method_exists($BACKEND,'getObjects')) {
-					foreach($BACKEND->getObjects(str_replace('_name','',$propname),'','') AS $arr) {
+				$backendId = $this->checkOption($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id'), $this->MAPCFG->getValue('global',0,'backend_id'), $this->MAINCFG->getValue('global', 'defaultbackend'),'') ;
+				if(method_exists($BACKEND->BACKENDS[$backendId],'getObjects')) {
+					foreach($BACKEND->BACKENDS[$backendId]->getObjects(str_replace('_name','',$propname),'','') AS $arr) {
 						$objects[] = $arr['name1'];	
 					}
 					
@@ -174,10 +175,13 @@ class WuiAddModify extends GlobalPage {
 				}
 				$this->propCount++;
 			} elseif($propname == 'service_description') {
-				if(method_exists($BACKEND,'getObjects')) {
+				$BACKEND = new GlobalBackendMgmt($this->MAINCFG);
+				
+				$backendId = $this->checkOption($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id'), $this->MAPCFG->getValue('global',0,'backend_id'), $this->MAINCFG->getValue('global', 'defaultbackend'),'') ;
+				if(method_exists($BACKEND->BACKENDS[$backendId],'getObjects')) {
 					$ret[] = "<script language=\"javascript\">";
 					$ret[] = "\tvar services = Array();";
-					foreach($BACKEND->getObjects('service','','') AS $arr) {
+					foreach($BACKEND->BACKENDS[$backendId]->getObjects('service','','') AS $arr) {
 						if($countArr[$arr['name1']] == '') {
 							$countArr[$arr['name1']] = 0;
 							$ret[] = "\tservices['".$arr['name1']."'] = Array();";
@@ -293,6 +297,30 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = '//--></script>';
 		
 		return $ret;	
+	}
+	
+	/**
+	 * Merges the options to an final setting
+	 *
+	 * @param	String	$define		String with definition in object
+	 * @param	String	$mapGlobal	String with definition in map global
+	 * @param	String	$global		String with definition in nagvis global
+	 * @param	String	$default	String with default definition
+	 * @return	String	
+	 * @author 	Michael Luebben <michael_luebben@web.de>
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function checkOption($define,$mapGlobal,$global,$default) {
+		if(isset($define) && $define != '') {
+			$option = $define;
+		} elseif(isset($mapGlobal) && $mapGlobal != '') {
+			$option = $mapGlobal;
+		} elseif(isset($global) && $global != '') {
+			$option = $global;
+		} else {
+			$option = $default;
+		}
+		return $option;	
 	}
 }
 ?>

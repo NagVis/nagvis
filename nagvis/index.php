@@ -18,6 +18,7 @@ require("./includes/classes/class.GlobalLanguage.php");
 require("./includes/classes/class.GlobalPage.php");
 require("./includes/classes/class.GlobalMap.php");
 require("./includes/classes/class.GlobalGraphic.php");
+require("./includes/classes/class.GlobalBackendMgmt.php");
 
 require("./includes/classes/class.NagVisMap.php");
 require("./includes/classes/class.NagVisFrontend.php");
@@ -26,9 +27,6 @@ $MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
 
 $MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
-
-require("./includes/classes/class.GlobalBackend-".$MAINCFG->getValue('global', 'backend').".php");
-$BACKEND = new GlobalBackend($MAINCFG);
 
 $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 

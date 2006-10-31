@@ -15,6 +15,7 @@
 class GlobalBackend {
 	var $MAINCFG;
 	var $LANG;
+	var $backendId;
 	var $dbName;
 	var $dbUser;
 	var $dbPass;
@@ -28,19 +29,21 @@ class GlobalBackend {
 	* and checks that Nagios is running
 	*
 	* @param	config $MAINCFG
-	*
+	* @param	String $backendId
 	* @author	Andreas Husch <downanup@nagios-wiki.de>
 	* @author	Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function GlobalBackend(&$MAINCFG) {
+	function GlobalBackend(&$MAINCFG,$backendId) {
 		$this->MAINCFG = &$MAINCFG;
-		$this->dbName = $this->MAINCFG->getValue('backend_ndomy', 'dbname');
-		$this->dbUser = $this->MAINCFG->getValue('backend_ndomy', 'dbuser');
-		$this->dbPass = $this->MAINCFG->getValue('backend_ndomy', 'dbpass');
-		$this->dbHost = $this->MAINCFG->getValue('backend_ndomy', 'dbhost');
-		$this->dbPort = $this->MAINCFG->getValue('backend_ndomy', 'dbport');
-		$this->dbPrefix = $this->MAINCFG->getValue('backend_ndomy', 'dbprefix');
-		$this->dbInstanceId = $this->MAINCFG->getValue('backend_ndomy', 'dbinstanceid');
+		$this->backendId = $backendId;
+		
+		$this->dbName = $this->MAINCFG->getValue('backend_'.$backendId, 'dbname');
+		$this->dbUser = $this->MAINCFG->getValue('backend_'.$backendId, 'dbuser');
+		$this->dbPass = $this->MAINCFG->getValue('backend_'.$backendId, 'dbpass');
+		$this->dbHost = $this->MAINCFG->getValue('backend_'.$backendId, 'dbhost');
+		$this->dbPort = $this->MAINCFG->getValue('backend_'.$backendId, 'dbport');
+		$this->dbPrefix = $this->MAINCFG->getValue('backend_'.$backendId, 'dbprefix');
+		$this->dbInstanceId = $this->MAINCFG->getValue('backend_'.$backendId, 'dbinstanceid');
 		
 		// initialize a language object for later error messages which be given out as state output
 		$this->LANG = new GlobalLanguage($this->MAINCFG,'backend:ndomy');
@@ -52,7 +55,7 @@ class GlobalBackend {
 			if (!extension_loaded('mysql')) {
 				//Error Box
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-				$FRONTEND->messageToUser('ERROR','mysqlNotSupported');
+				$FRONTEND->messageToUser('ERROR','mysqlNotSupported','BACKENDID~'.$this->backendId);
 			}
 		}
 		
@@ -64,7 +67,7 @@ class GlobalBackend {
 		
 		if($returnCode != TRUE){
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','errorSelectingDb');
+			$FRONTEND->messageToUser('ERROR','errorSelectingDb','BACKENDID~'.$this->backendId);
 		}
 		
 		// we set the old level of reporting back
@@ -77,13 +80,13 @@ class GlobalBackend {
 		// Check that Nagios reports itself as running	
 		if ($nagiosState['is_currently_running'] != 1) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','nagiosNotRunning');
+			$FRONTEND->messageToUser('ERROR','nagiosNotRunning','BACKENDID~'.$this->backendId);
 		}
         
 		// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
-		if(time() - strtotime($nagiosState['status_update_time']) > $this->MAINCFG->getValue('backend_ndomy', 'maxtimewithoutupdate')) {
+		if(time() - strtotime($nagiosState['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
+			$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
 		}
 			
 		return 0;

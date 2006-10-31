@@ -20,7 +20,7 @@ class GlobalMainCfg {
 		$this->runtimeConfig = Array();
 		
 		$this->validConfig = Array(
-			'global' => Array('backend' => Array('must' => 1,
+			'global' => Array('defaultbackend' => Array('must' => 0,
 												 'editable' => 1,
 												'default' => 'ndomy'),
 							'language' => Array('must' => 1,
@@ -86,36 +86,39 @@ class GlobalMainCfg {
 							'htmldoku' => Array('must' => 1,
 												 'editable' => 0,
 												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/')),
-			'backend_ndomy' => Array('dbhost' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'localhost'),
-							'dbport' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => '3306'),
-							'dbname' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'db_nagios'),
-							'dbuser' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'root'),
-							'dbpass' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'root'),
-							'dbprefix' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'ndo_'),
-							'dbinstanceid' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => '1'),
-							'maxtimewithoutupdate' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => '180')),
-			'backend_html' => Array('cgiuser' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'nagiosadmin'),
-							'cgi' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => '/usr/local/nagios/sbin/')),
+			'backend' => Array(
+							'type' => Array('must' => 1,
+												'default' => 'ndomy'),
+							'options' => Array('ndomy' => Array('dbhost' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => 'localhost'),
+																'dbport' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => '3306'),
+																'dbname' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => 'db_nagios'),
+																'dbuser' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => 'root'),
+																'dbpass' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => 'root'),
+																'dbprefix' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => 'ndo_'),
+																'dbinstanceid' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => '1'),
+																'maxtimewithoutupdate' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => '180')),
+												'html' => Array('cgiuser' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => 'nagiosadmin'),
+																'cgi' => Array('must' => 1,
+																					 'editable' => 1,
+																					'default' => '/usr/local/nagios/sbin/')))),
 			'includes' => Array('header' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => 'header.nagvis.inc')),
@@ -190,7 +193,12 @@ class GlobalMainCfg {
 						$sec = @strtolower(@trim(@substr($line, 1, @strlen($line)-2)));
 						
 						// In Array schreiben
-						$this->config[$sec] = Array();
+						if(preg_match("/^backend_/i", $sec)) {
+							$this->config[$sec] = Array();
+							$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
+						} else {
+							$this->config[$sec] = Array();
+						}
 					} else {
 						// parameter...
 						
@@ -429,7 +437,16 @@ class GlobalMainCfg {
 		if(is_array($this->config[$sec]) && array_key_exists($var,$this->config[$sec])) {
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
-			return $this->validConfig[$sec][$var]['default'];
+			if(preg_match("/^backend_/i", $sec)) {
+				if($this->config[$sec]['backendtype'] != '') {
+					return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
+				} else {
+					// FIXME: Errorhandling
+					return '';
+				}
+			} else {
+				return $this->validConfig[$sec][$var]['default'];
+			}
 		} else {
 			return FALSE;
 		}

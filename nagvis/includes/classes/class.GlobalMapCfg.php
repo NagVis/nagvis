@@ -29,6 +29,7 @@ class GlobalMapCfg {
 			'global' => Array('type' => Array('must' => 0),
 							'allowed_for_config' => Array('must' => 1),
 							'allowed_user' => Array('must' => 1),
+							'backend_id' => Array('must' => 0),
 							'recognize_services' => Array('must' => 0),
 							'iconset' => Array('must' => 0),
 							'map_image' => Array('must' => 1)),
