@@ -88,6 +88,7 @@ class GlobalMapCfg {
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
 							'w' => Array('must' => 1),
+							'background_color' => Array('must' => 1),
 							'host_name' => Array('must' => 0)));
 		
 		$this->getMap();

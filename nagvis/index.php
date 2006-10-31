@@ -28,6 +28,8 @@ $MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
 $MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
+$BACKEND = new GlobalBackendMgmt($MAINCFG);
+
 $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 
 // Build the page

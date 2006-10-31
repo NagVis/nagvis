@@ -56,6 +56,13 @@ class NagVisMap extends GlobalMap {
 					// css class of the textbox
 					$obj['class'] = "box";
 					
+					// default background color
+					if($obj['background_color'] == '') {
+						$obj['background_color'] = '#CCCCCC';
+					} elseif($obj['background_color'] == 'solid') {
+						$obj['background_color'] = '';
+					}
+					
 					// Check if set a hostname
 					if(isset($obj['host_name'])) {
 				  		// Output the Error-Message into the textbox.
@@ -198,7 +205,7 @@ class NagVisMap extends GlobalMap {
 	 */
 	function textBox($obj) {
 		$ret = Array();
-		$ret[] = "<div class=\"".$obj['class']."\" style=\"left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."px; overflow: visible;\">";	
+		$ret[] = "<div class=\"".$obj['class']."\" style=\"background-color:".$obj['background_color'].";left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."px; overflow: visible;\">";	
 		$ret[] = "\t<span>".$obj['text']."</span>";
 		$ret[] = "</div>";
 		return $ret;	
