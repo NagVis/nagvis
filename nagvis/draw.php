@@ -58,21 +58,35 @@ function GetColor($state){
 	return($color);
 }
 
+/**
+ * Merges the options to an final setting
+ *
+ * @param	String	$define		String with definition in object
+ * @param	String	$mapGlobal	String with definition in map global
+ * @param	String	$global		String with definition in nagvis global
+ * @param	String	$default	String with default definition
+ * @return	String	
+ * @author 	Michael Luebben <michael_luebben@web.de>
+ * @author	Lars Michelsen <larsi@nagios-wiki.de>
+ */
+function checkOption($define,$mapGlobal,$global,$default) {
+	if(isset($define) && $define != '') {
+		$option = $define;
+	} elseif(isset($mapGlobal) && $mapGlobal != '') {
+		$option = $mapGlobal;
+	} elseif(isset($global) && $global != '') {
+		$option = $global;
+	} else {
+		$option = $default;
+	}
+	return $option;	
+}
+
 $types = array("global","host","service","hostgroup","servicegroup","map","textbox");
 foreach($types AS $key => $type) {
 	foreach($MAPCFG->getDefinitions($type) AS $key2 => $obj) {
 		if(isset($obj['line_type'])) {
-			if($obj['backend_id'] == '') {
-				if($MAPCFG->getValue('global', 0, 'backend_id') == '') {
-					if($MAINCFG->getValue('global', 'defaultbackend') == '') {
-						// FIXME: Errorhandling	
-					} else {
-						$obj['backend_id'] = $MAINCFG->getValue('global', 'defaultbackend');
-					}
-				} else {
-					$obj['backend_id'] = $MAPCFG->getValue('global', 0, 'backend_id');
-				}
-			}	
+			$obj['backend_id'] = checkOption($obj['backend_id'],$MAPCFG->getValue('global', 0, 'backend_id'),$MAINCFG->getValue('global', 'defaultbackend'),'')
 			
 			if(!isset($obj['recognize_services'])) {
 				$obj['recognize_services'] = 1;
