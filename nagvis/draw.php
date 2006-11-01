@@ -86,7 +86,7 @@ $types = array("global","host","service","hostgroup","servicegroup","map","textb
 foreach($types AS $key => $type) {
 	foreach($MAPCFG->getDefinitions($type) AS $key2 => $obj) {
 		if(isset($obj['line_type'])) {
-			$obj['backend_id'] = checkOption($obj['backend_id'],$MAPCFG->getValue('global', 0, 'backend_id'),$MAINCFG->getValue('global', 'defaultbackend'),'')
+			$obj['backend_id'] = checkOption($obj['backend_id'],$MAPCFG->getValue('global', 0, 'backend_id'),$MAINCFG->getValue('global', 'defaultbackend'),'');
 			
 			if(!isset($obj['recognize_services'])) {
 				$obj['recognize_services'] = 1;
