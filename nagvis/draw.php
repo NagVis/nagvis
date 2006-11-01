@@ -2,7 +2,7 @@
 ##########################################################################
 ##     	        NagVis - The Nagios Visualisation Addon                 ##
 ##########################################################################
-## index.php - Main file to get called by the user			            ##
+## draw.php - File to draw the background image 			            ##
 ##########################################################################
 ## Licenced under the terms and conditions of the GPL Licence,         	##
 ## please see attached "LICENCE" file	                                ##
