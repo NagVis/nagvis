@@ -192,6 +192,14 @@
 					<title>Kein state gesetzt!</title>
 					<text>Status wurde nicht gesetzt!</text>
 				</noStateSet>
+				<backendNotExists>
+					<title>Backend existiert nicht!</title>
+					<text>Das Backend mit der ID [i][BACKENDID][/i] vom Typ [i][BACKENDTYPE][/i] existiert nicht.</text>
+				</backendNotExists>
+				<noBackendDefined>
+					<title>Kien backend definiert!</title>
+					<text>Es konnte keine Backend-Definition in der NagVis konfiguration gefunden werden.</text>
+				</noBackendDefined>
 			</messages>
 		</global>
 		<ndomy>

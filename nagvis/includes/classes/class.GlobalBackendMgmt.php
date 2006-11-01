@@ -19,6 +19,12 @@ class GlobalBackendMgmt {
 		return 0;
 	}
 	
+	/**
+	 * Reads all defined Backend-IDs from the MAINCFG
+	 *
+	 * @return	Array Backend-IDs
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getBackends() {
 		$ret = Array();
 		foreach($this->MAINCFG->config AS $sec => $var) {
@@ -30,10 +36,47 @@ class GlobalBackendMgmt {
 		return $ret;
 	}
 	
+	/**
+	 * Checks for existing backend file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function checkBackendExists($backendId,$printErr) {
+		if($backendId != '') {
+			if(file_exists($this->MAINCFG->getValue('paths','class').'class.GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
+		            $FRONTEND->messageToUser('ERROR','backendNotExists','BACKENDID~'.$backendId.'BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
+				}
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Initializes all backends
+	 *
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function initBackends() {
-		foreach($this->getBackends() AS $backendId) {
-			require_once($this->MAINCFG->getValue('paths','class').'class.GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
-			$this->BACKENDS[$backendId] = new GlobalBackend($this->MAINCFG,$backendId);
+		$aBackends = $this->getBackends();
+		
+		if(!count($aBackends)) {
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
+		    $FRONTEND->messageToUser('ERROR','noBackendDefined');
+		} else {
+			foreach($aBackends AS $backendId) {
+				if($this->checkBackendExists($backendId,1)) {
+					require_once($this->MAINCFG->getValue('paths','class').'class.GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
+					$this->BACKENDS[$backendId] = new GlobalBackend($this->MAINCFG,$backendId);
+				}
+			}
 		}
 	}
 }

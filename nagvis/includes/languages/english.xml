@@ -192,6 +192,14 @@
 					<title>No state defined!</title>
 					<text>No state was defined!</text>
 				</noStateSet>
+				<backendNotExists>
+					<title>Backend doesn't exists!</title>
+					<text>The backend with ID [i][BACKENDID][/i] of type [i][BACKENDTYPE][/i] doesn't exists.</text>
+				</backendNotExists>
+				<noBackendDefined>
+					<title>Found no defined backends!</title>
+					<text>No backend could be found in NagVis configuration.</text>
+				</noBackendDefined>
 			</messages>
 		</global>
 		<ndomy>
