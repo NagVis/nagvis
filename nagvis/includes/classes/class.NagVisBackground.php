@@ -41,6 +41,33 @@ class NagVisBackground extends GlobalMap {
 		$this->objects = $this->getMapObjects(1);
 	}
 	
+	function checkMemoryLimit() {
+		$fileSize = filesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage())."<br>";
+		$memoryLimit = preg_replace('/[a-z]/i','',ini_get("memory_limit"))*1024*1024;
+		
+		$imageSize = getimagesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
+		if (is_array($imageSize)) {
+			$imageWidth = $imageSize[0];
+			$imageHeight = $imageSize[1];
+			$imageDepth = $imageSize['bits'];
+			
+			$rawSize = $imageWidth*$imageHeight*$imageDepth/8;
+		}
+		
+		
+		// is fileSize or actual used memory + rawSize + 10% puffer bigger than memory limit?
+		// there is no waranty that the calculations are correct but that could be a good basic
+		// FIXME: Should be tested before release with
+		// a) big file size
+		// b) big image size
+		// c) big color depth
+		if($fileSize > $memoryLimit || (memory_get_usage() + $rawSize)*1.10 > $memoryLimit) {
+			return FALSE;
+		} else {
+			return TRUE;
+		}
+	}
+	
 	function initImage() {
 		$imageType = explode('.', $this->MAPCFG->getImage());
 		$this->imageType = strtolower($imageType[1]);
@@ -66,13 +93,21 @@ class NagVisBackground extends GlobalMap {
 		$this->GRAPHIC->init($this->image);
 	}
 	
-	
+	/**
+	 * Do preflight checks
+	 *
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function checkPreflight() {
 		if(!$this->MAPCFG->checkMapImageExists(0)) {
 			errorBox($this->LANG->getMessageText('backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
 		if(!$this->MAPCFG->checkMapImageReadable(0)) {
 			errorBox($this->LANG->getMessageText('backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
+		}
+		if(!$this->checkMemoryLimit()) {
+			// FIXME: Language File Entry
+			errorBox('Maybe the memory_limit of PHP is to low for displaying this image');	
 		}
 		// FIXME: Check permissions?
 	}
