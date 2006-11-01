@@ -91,7 +91,7 @@ class GlobalMap {
 	}
 	
 	/**
-	 * Gets all objects of the defined type from a map and print it or just return an array with states
+	 * Gets all objects of the defined type from a map and return an array with states
 	 *
 	 * @param	String	$type		Type of objects
 	 * @param	Boolean	$getState	With state?
@@ -110,9 +110,14 @@ class GlobalMap {
 		}
 		
 		if(is_array($this->MAPCFG->getDefinitions($type))){
-			foreach($this->MAPCFG->getDefinitions($type) as $index => $obj) {
+			foreach($this->MAPCFG->getDefinitions($type) AS $index => $obj) {
 				// workaround
 				$obj['id'] = $index;
+				
+				// merge with "global" settings
+				foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+					$obj[$key] = $this->MAPCFG->getValue($type, $index, $key);
+				}
 				
 				// add default state to the object
 				$obj = array_merge($obj,$objState);
@@ -126,7 +131,7 @@ class GlobalMap {
 				}
 				
 				// add object to array of objects
-				$objects[] = $obj;	
+				$objects[] = $obj;
 			}
 			
 			return $objects;
@@ -184,28 +189,21 @@ class GlobalMap {
 				}
 			break;
 			case 'textbox':
-				$backendId = $this->checkOption($obj['backend_id'],$this->MAPCFG->getValue('global', 0, 'backend_id'),$this->MAINCFG->getValue('global', 'defaultbackend'),'');
-				
 				// Check if set a hostname
 				if(isset($obj['host_name'])) {
-					$state = $this->BACKEND->BACKENDS[$backendId]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
+					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
 				}
 			break;
 			default:
-				// get option to recognize the services - object-config, object-global-config, main-config, default
-				$recognizeServices = $this->checkOption($obj['recognize_services'],$this->MAPCFG->getValue('global', 0, 'recognize_services'),$this->MAINCFG->getValue('global', 'recognize_services'),"1");
-				$onlyHardStates = $this->checkOption($obj['only_hard_states'],$this->MAPCFG->getValue('global', 0, 'only_hard_states'),$this->MAINCFG->getValue('global', 'only_hard_states'),"0");				
-				$backendId = $this->checkOption($obj['backend_id'],$this->MAPCFG->getValue('global', 0, 'backend_id'),$this->MAINCFG->getValue('global', 'defaultbackend'),'');
-				
 				if(isset($obj['line_type']) && $obj['line_type'] == "20") {
 					// line with 2 states...
 					list($objNameFrom,$objNameTo) = explode(",", $obj[$name]);
 					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(",", $obj['service_description']);
 					
-					$state1 = $this->BACKEND->BACKENDS[$backendId]->checkStates($obj['type'],$objNameFrom,$recognizeServices,$serviceDescriptionFrom,$onlyHardStates);
-					$state2 = $this->BACKEND->BACKENDS[$backendId]->checkStates($obj['type'],$objNameTo,$recognizeServices,$serviceDescriptionTo,$onlyHardStates);
+					$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
+					$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
 				} else {
-					$state = $this->BACKEND->BACKENDS[$backendId]->checkStates($obj['type'],$obj[$name],$recognizeServices,$obj['service_description'],$onlyHardStates);
+					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
 				}
 			break;	
 		}
@@ -320,30 +318,6 @@ class GlobalMap {
 		$obj['y'] = $obj['y'] - ($size[1]/2);
 		
 		return $obj;
-	}
-	
-	/**
-	 * Merges the options to an final setting
-	 *
-	 * @param	String	$define		String with definition in object
-	 * @param	String	$mapGlobal	String with definition in map global
-	 * @param	String	$global		String with definition in nagvis global
-	 * @param	String	$default	String with default definition
-	 * @return	String	
-	 * @author 	Michael Luebben <michael_luebben@web.de>
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
-	 */
-	function checkOption($define,$mapGlobal,$global,$default) {
-		if(isset($define) && $define != '') {
-			$option = $define;
-		} elseif(isset($mapGlobal) && $mapGlobal != '') {
-			$option = $mapGlobal;
-		} elseif(isset($global) && $global != '') {
-			$option = $global;
-		} else {
-			$option = $default;
-		}
-		return $option;	
 	}
 	
 	/**

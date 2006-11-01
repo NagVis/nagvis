@@ -1,4 +1,59 @@
 <?php
+
+class GlobalGraphic {
+	var $black;
+	var $red;
+	var $white;
+	
+	function GlobalGraphic() {
+	}
+	
+	function init(&$image) {
+		$this->black = imagecolorallocate($image, 0,0,0);
+		$this->red = imagecolorallocate($image, 255, 0, 0);
+		$this->white = imagecolorallocate($image, 255, 255, 255);
+	}
+	
+	function middle($x1,$x2) {
+		return ($x1+($x2-$x1)/2);
+	}
+	
+	function drawArrow(&$im,$x1,$y1,$x2,$y2,$w,$solid,$color) {
+		$point[0]=$x1 + $this->newX($x2-$x1, $y2-$y1, 0, $w);
+		$point[1]=$y1 + $this->newY($x2-$x1, $y2-$y1, 0, $w);
+		$point[2]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, $w);
+		$point[3]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, $w);
+		$point[4]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, 2*$w);
+		$point[5]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, 2*$w);
+		$point[6]=$x2;
+		$point[7]=$y2;
+		$point[8]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, -2*$w);
+		$point[9]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, -2*$w);
+		$point[10]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, -$w);
+		$point[11]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, -$w);
+		$point[12]=$x1 + $this->newX($x2-$x1, $y2-$y1, 0, -$w);
+		$point[13]=$y1 + $this->newY($x2-$x1, $y2-$y1, 0, -$w);
+		
+		if ($solid) {
+				imagefilledPolygon($im,$point,7,$color);
+				imagepolygon($im,$point,7,$this->black);
+		} else{
+			imagepolygon($im,$point,7,$this->black);
+		}
+	}
+	
+	function newX($a,$b,$x,$y) {
+		return (cos(atan2($y,$x)+atan2($b,$a))*sqrt($x*$x+$y*$y));
+	}
+	
+	function newY($a,$b,$x,$y) {
+		return (sin( atan2($y,$x) + atan2($b,$a) ) * sqrt( $x*$x + $y*$y ));
+	}
+}
+
+
+/**
+ * old functions - only move functions to class, which are needed
 function middle($x1,$x2) {
 	return ($x1+($x2-$x1)/2);
 }
@@ -6,7 +61,6 @@ function middle($x1,$x2) {
 function middle2($x1,$x2) {
         return ($x1+($x2-$x1)/3);
 }
-
 
 function dist($x1,$x2) {
 	return (sqrt($x1*$x1+$x2*$x2));
@@ -21,13 +75,7 @@ function dist_bw_points($x1,$y1,$x2,$y2) {
 	return (sqrt(($x2-$x1)*($x2-$x1)+($y2-$y1)*($y2-$y1)));
 }
 
-function newx ($a,$b,$x,$y) {
-	return (cos(atan2($y,$x)+atan2($b,$a))*sqrt($x*$x+$y*$y));
-}
 
-function newy ($a,$b,$x,$y) {
-	return (sin( atan2($y,$x) + atan2($b,$a) ) * sqrt( $x*$x + $y*$y ));
-}
 
 function getposy_line($x,$x1,$y1,$x2,$y2) {
 	$a=($y2-$y1)/($x2-$x1);
@@ -44,17 +92,17 @@ function draw_rectangle($x1,$y1,$x2,$y2,$w,$solid,$color) {
 	global $im;
 	global $black,$red,$white;
 
-	$point[0]=$x1 + newx($x2-$x1, $y2-$y1, 0, $w);
-	$point[1]=$y1 + newy($x2-$x1, $y2-$y1, 0, $w);
+	$point[0]=$x1 + $this->newX($x2-$x1, $y2-$y1, 0, $w);
+	$point[1]=$y1 + $this->newY($x2-$x1, $y2-$y1, 0, $w);
 	
-	$point[2]=$x2 + newx($x2-$x1, $y2-$y1, 0, $w);
-	$point[3]=$y2 + newy($x2-$x1, $y2-$y1, 0, $w);
+	$point[2]=$x2 + $this->newX($x2-$x1, $y2-$y1, 0, $w);
+	$point[3]=$y2 + $this->newY($x2-$x1, $y2-$y1, 0, $w);
 
-	$point[4]=$x2 + newx($x2-$x1, $y2-$y1, 0, -$w);
-	$point[5]=$y2 + newy($x2-$x1, $y2-$y1, 0, -$w);
+	$point[4]=$x2 + $this->newX($x2-$x1, $y2-$y1, 0, -$w);
+	$point[5]=$y2 + $this->newY($x2-$x1, $y2-$y1, 0, -$w);
 
-	$point[6]=$x1 + newx($x2-$x1, $y2-$y1, 0, -$w);
-	$point[7]=$y1 + newy($x2-$x1, $y2-$y1, 0, -$w);
+	$point[6]=$x1 + $this->newX($x2-$x1, $y2-$y1, 0, -$w);
+	$point[7]=$y1 + $this->newY($x2-$x1, $y2-$y1, 0, -$w);
 	
 	if ($solid) {
 			imagefilledPolygon($im,$point,4,$color);
@@ -64,32 +112,7 @@ function draw_rectangle($x1,$y1,$x2,$y2,$w,$solid,$color) {
 	}
 }
 
-function draw_arrow($x1,$y1,$x2,$y2,$w,$solid,$color) {
-	global $im;
-	global $black,$red,$white;
 
-	$point[0]=$x1 + newx($x2-$x1, $y2-$y1, 0, $w);
-	$point[1]=$y1 + newy($x2-$x1, $y2-$y1, 0, $w);
-	$point[2]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, $w);
-	$point[3]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, $w);
-	$point[4]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, 2*$w);
-	$point[5]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, 2*$w);
-	$point[6]=$x2;
-	$point[7]=$y2;
-	$point[8]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, -2*$w);
-	$point[9]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, -2*$w);
-	$point[10]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, -$w);
-	$point[11]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, -$w);
-	$point[12]=$x1 + newx($x2-$x1, $y2-$y1, 0, -$w);
-	$point[13]=$y1 + newy($x2-$x1, $y2-$y1, 0, -$w);
-	
-	if ($solid) {
-			imagefilledPolygon($im,$point,7,$color);
-			imagepolygon($im,$point,7,$black);
-	}else{
-		imagepolygon($im,$point,7,$black);
-	}
-}
 
 function draw_circle3($x1,$y1,$x2,$y2,$w,$step,$solid,$color) {
 	global $im;
@@ -186,16 +209,16 @@ function draw_arrow_circle3($x1,$y1,$x2,$y2,$w,$step,$solid,$color) {
 		}
 	}
 
-	$point[0]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, $w);
-	$point[1]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, $w);
-	$point[2]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, 2*$w);
-	$point[3]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, 2*$w);
+	$point[0]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, $w);
+	$point[1]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, $w);
+	$point[2]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, 2*$w);
+	$point[3]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, 2*$w);
 	$point[4]=$x2;
 	$point[5]=$y2;
-	$point[6]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, -2*$w);
-	$point[7]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, -2*$w);
-	$point[8]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, -$w);
-	$point[9]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, -$w);
+	$point[6]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, -2*$w);
+	$point[7]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, -2*$w);
+	$point[8]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, -$w);
+	$point[9]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, -$w);
 
 	if ($solid) {
 		imagefilledpolygon($im,$point,5,$color);
@@ -208,20 +231,20 @@ function draw_arrow_dot($x1,$y1,$x2,$y2,$w,$solid,$color) {
 	global $im;
 	global $black,$red,$white;
 
-	$point[0]=$x1 + newx($x2-$x1, $y2-$y1, 0, $w);
-	$point[1]=$y1 + newy($x2-$x1, $y2-$y1, 0, $w);
-	$point[2]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, $w);
-	$point[3]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, $w);
-	$point[4]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, 2*$w);
-	$point[5]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, 2*$w);
+	$point[0]=$x1 + $this->newX($x2-$x1, $y2-$y1, 0, $w);
+	$point[1]=$y1 + $this->newY($x2-$x1, $y2-$y1, 0, $w);
+	$point[2]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, $w);
+	$point[3]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, $w);
+	$point[4]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, 2*$w);
+	$point[5]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, 2*$w);
 	$point[6]=$x2;
 	$point[7]=$y2;
-	$point[8]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, -2*$w);
-	$point[9]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, -2*$w);
-	$point[10]=$x2 + newx($x2-$x1, $y2-$y1, -4*$w, -$w);
-	$point[11]=$y2 + newy($x2-$x1, $y2-$y1, -4*$w, -$w);
-	$point[12]=$x1 + newx($x2-$x1, $y2-$y1, 0, -$w);
-	$point[13]=$y1 + newy($x2-$x1, $y2-$y1, 0, -$w);
+	$point[8]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, -2*$w);
+	$point[9]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, -2*$w);
+	$point[10]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, -$w);
+	$point[11]=$y2 + $this->newY($x2-$x1, $y2-$y1, -4*$w, -$w);
+	$point[12]=$x1 + $this->newX($x2-$x1, $y2-$y1, 0, -$w);
+	$point[13]=$y1 + $this->newY($x2-$x1, $y2-$y1, 0, -$w);
 	
 		#echo "point[$i]=".$point[$i]." point[".$i+1."]=".$point[$i+1]."<br>";
 		#echo "test $point[$i]<br>";
@@ -410,4 +433,5 @@ function draw_legend($label,$font,$scale_low,$scale_high,$scale_red, $scale_gree
 	imagestring($im, 1, (($strwidth*strlen($label)+10)-imagefontwidth(1)*strlen("WeatherMap4RRD $VERSION"))/2, $strheight*($i+1)+18, "WeatherMap4RRD $VERSION", $white);
 	return ($im);
 }
+*/
 ?>

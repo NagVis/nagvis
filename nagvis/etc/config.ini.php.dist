@@ -12,7 +12,7 @@
 ; global options
 [global]
 ; default backend (id of the default backend)
-;defaultbackend="ndomy_1"
+defaultbackend="ndomy_1"
 ; select language (english,german,...)
 ;language="english"
 ; default icons

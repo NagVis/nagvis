@@ -29,30 +29,43 @@ class GlobalMapCfg {
 			'global' => Array('type' => Array('must' => 0),
 							'allowed_for_config' => Array('must' => 1),
 							'allowed_user' => Array('must' => 1),
-							'backend_id' => Array('must' => 0),
-							'recognize_services' => Array('must' => 0),
-							'iconset' => Array('must' => 0),
-							'map_image' => Array('must' => 1)),
+							'map_image' => Array('must' => 1),
+							'backend_id' => Array('must' => 0,
+												'default' => $this->MAINCFG->getValue('global', 'defaultbackend')),
+							'recognize_services' => Array('must' => 0,
+												'default' => $this->MAINCFG->getValue('global', 'recognizeservices')),
+							'only_hard_states' => Array('must' => 0,
+												'default' => $this->MAINCFG->getValue('global', 'onlyhardstates')),
+							'iconset' => Array('must' => 0,
+												'default' => $this->MAINCFG->getValue('global', 'defaulticons'))),
 			'host' => Array('type' => Array('must' => 0),
 							'host_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'recognize_services' => Array('must' => 0),
-							'only_hard_states' => Array('must' => 0),
-							'backend_id' => Array('must' => 0),
+							'recognize_services' => Array('must' => 0,
+												'default' => ''),
+							'only_hard_states' => Array('must' => 0,
+												'default' => ''),
+							'backend_id' => Array('must' => 0,
+												'default' => ''),
+							'iconset' => Array('must' => 0,
+												'default' => ''),
 							'hover_url' => Array('must' => 0),
-							'iconset' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0)),
 			'hostgroup' => Array('type' => Array('must' => 0),
 							'hostgroup_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'recognize_services' => Array('must' => 0),
-							'only_hard_states' => Array('must' => 0),
-							'backend_id' => Array('must' => 0),
+							'recognize_services' => Array('must' => 0,
+												'default' => ''),
+							'only_hard_states' => Array('must' => 0,
+												'default' => ''),
+							'backend_id' => Array('must' => 0,
+												'default' => ''),
+							'iconset' => Array('must' => 0,
+												'default' => ''),
 							'hover_url' => Array('must' => 0),
-							'iconset' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0)),
 			'service' => Array('type' => Array('must' => 0),
@@ -60,28 +73,36 @@ class GlobalMapCfg {
 							'service_description' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'only_hard_states' => Array('must' => 0),
-							'backend_id' => Array('must' => 0),
+							'only_hard_states' => Array('must' => 0,
+												'default' => ''),
+							'backend_id' => Array('must' => 0,
+												'default' => ''),
+							'iconset' => Array('must' => 0,
+												'default' => $this->getValue('global', 0, 'iconset')),
 							'hover_url' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
-							'url' => Array('must' => 0),
-							'iconset' => Array('must' => 0)),
+							'url' => Array('must' => 0)),
 			'servicegroup' => Array('type' => Array('must' => 0),
 							'servicegroup_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'only_hard_states' => Array('must' => 0),
-							'backend_id' => Array('must' => 0),
+							'only_hard_states' => Array('must' => 0,
+												'default' => ''),
+							'backend_id' => Array('must' => 0,
+												'default' => ''),
+							'iconset' => Array('must' => 0,
+												'default' => ''),
 							'hover_url' => Array('must' => 0),
-							'iconset' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0)),
 			'map' => Array('type' => Array('must' => 0),
 							'map_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'only_hard_states' => Array('must' => 0),
-							'iconset' => Array('must' => 0),
+							'only_hard_states' => Array('must' => 0,
+												'default' => ''),
+							'iconset' => Array('must' => 0,
+												'default' => ''),
 							'url' => Array('must' => 0)),
 			'textbox' => Array('type' => Array('must' => 0),
 							'text' => Array('must' => 1),
@@ -90,6 +111,24 @@ class GlobalMapCfg {
 							'w' => Array('must' => 1),
 							'background_color' => Array('must' => 1),
 							'host_name' => Array('must' => 0)));
+							
+		// the default values refer to global settings in the validConfig array - so they have to be defined here
+		$this->validConfig['host']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
+		$this->validConfig['host']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
+		$this->validConfig['host']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
+		$this->validConfig['host']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['hostgroup']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
+		$this->validConfig['hostgroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
+		$this->validConfig['hostgroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
+		$this->validConfig['hostgroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['service']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
+		$this->validConfig['service']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
+		$this->validConfig['service']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['servicegroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
+		$this->validConfig['servicegroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
+		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
+		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
 		
 		$this->getMap();
 	}
@@ -484,7 +523,6 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					//Error Box
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('ERROR','mapCfgNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				}
@@ -507,7 +545,6 @@ class GlobalMapCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				//Error Box
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 	            $FRONTEND->messageToUser('ERROR','mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 			}
@@ -523,17 +560,25 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkMapConfigIsValid($printErr) {
+		// check given objects and attributes
 		foreach($this->mapConfig AS $type => $elements) {
 			if(array_key_exists($type,$this->validConfig)) {
-				// loop elemtents of type
 				foreach($elements AS $id => $element) {
-					// loop atributes of element
+					// loop validConfig for checking: => missing "must" atributes
+					foreach($this->validConfig[$type] AS $key => $val) {
+						if($this->validConfig[$type]['must'] && (!array_key_exists($key,$this->mapConfig[$type][$id]) || $this->mapConfig[$type][$id][$key] == '')) {
+							// a "must" value is missing or empty
+							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+						    $FRONTEND->messageToUser('ERROR','mustValueNotSet','ATTRIBUTE~'.$key.',TYPE~'.$type);
+						}
+					}
+					
+					// loop given elements for checking: => all given atributes valid
 					foreach($element AS $key => $val) {
 						// check for valid atributes - TODO: check valid values
 						if(!array_key_exists($key,$this->validConfig[$type])) {
 							// unknown atribute
 							if($printErr == 1) {
-								//Error Box
 								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 					            $FRONTEND->messageToUser('ERROR','unknownAttribute','ATTRIBUTE~'.$key.',TYPE~'.$type);
 							}
@@ -544,7 +589,6 @@ class GlobalMapCfg {
 			} else {
 				// unknown type
 				if($printErr == 1) {
-					//Error Box
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
 				}
@@ -614,16 +658,22 @@ class GlobalMapCfg {
 	}
 	
     /**
-	 * Sets a config value in the array
+	 * Gets a config value in the array
 	 *
 	 * @param	String	$type
 	 * @param	Integer	$id
 	 * @param	String	$key
+	 * @param	Boolean	$ignoreDefault
 	 * @return	String	Value
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getValue($type, $id, $key) {
-		return $this->mapConfig[$type][$id][$key];
+	function getValue($type, $id, $key, $ignoreDefault=FALSE) {
+		if(is_array($this->mapConfig[$type][$id]) && array_key_exists($key,$this->mapConfig[$type][$id]) && $this->mapConfig[$type][$id][$key] != '') {
+			return $this->mapConfig[$type][$id][$key];
+		} elseif(!$ignoreDefault) {
+			return $this->validConfig[$type][$key]['default'];
+		}
+		
 	}
 	
     /**

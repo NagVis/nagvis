@@ -114,6 +114,10 @@
 					<title>Keine Schreibrechte auf die Map Bild-Datei</title>
 					<text>Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei ([I][IMGPATH][/I]) pr&uuml;fen!</text>
 				</backgroundNotWriteable>
+				<mustValueNotSet>
+					<title>Pflicht-Wert nicht gesetzt</title>
+					<text>Ein Pflichtwert ([I][ATTRIBUTE][/I]) wurde in einem Objekt vom Typ [I][TYPE][/I] in der Map Config Datei nicht gesetzt!</text>
+				</mustValueNotSet>
 				<unknownObject>
 					<title>Unbekannter Typ in Map Config Datei definiert</title>
 					<text>Der Objekttyp [I][TYPE][/I] ist nicht erlaubt!</text>

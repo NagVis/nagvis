@@ -146,7 +146,10 @@ class WuiAddModify extends GlobalPage {
 				$opt = Array(Array('label' => $this->LANG->getLabel('yes'),'value'=>'1'),Array('label' => $this->LANG->getLabel('no'),'value'=>'0'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,'',$prop['must']));
 				$this->propCount++;
-			}elseif($propname == "line_type") {
+			} elseif($propname == "backend_id") {
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getBackends(),'',$prop['must']));
+				$this->propCount++;
+			} elseif($propname == "line_type") {
 				// treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
 				$opt = Array(Array('label' => '------><------','value' => '0'),Array('label' => '-------------->','value'=>'1'),Array('label' => '<--------------','value'=>'2'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,'',$prop['must']));
@@ -220,6 +223,23 @@ class WuiAddModify extends GlobalPage {
 	
 	function getSubmit() {
 		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
+	}
+	
+	/**
+	 * Reads all defined Backend-IDs from the MAINCFG
+	 *
+	 * @return	Array Backend-IDs
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getBackends() {
+		$ret = Array();
+		foreach($this->MAINCFG->config AS $sec => $var) {
+			if(preg_match("/^backend_/i", $sec)) {
+				$ret[] = $var['backendid'];
+			}
+		}
+		
+		return $ret;
 	}
 	
 	function getIconsets() {
