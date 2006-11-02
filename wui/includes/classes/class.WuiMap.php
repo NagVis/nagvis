@@ -21,7 +21,7 @@ class WuiMap extends GlobalMap {
 		parent::GlobalMap($MAINCFG,$MAPCFG,$MAPCFG);
 		
 		$this->loadPermissions();
-		$this->objects = $this->getMapObjects(0);
+		$this->objects = $this->getMapObjects(0,0);
 	}
 	
 	function loadPermissions() {

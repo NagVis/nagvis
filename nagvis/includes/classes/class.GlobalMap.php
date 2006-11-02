@@ -77,15 +77,15 @@ class GlobalMap {
 	 * @return	Array	Array of Objects of this map
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getMapObjects($getState=1) {
+	function getMapObjects($getState=1,$mergeWithGlobals=1) {
 		$objects = Array();
 		
-		$objects = array_merge($objects,$this->getObjectsOfType('map',$getState));
-		$objects = array_merge($objects,$this->getObjectsOfType('host',$getState));
-		$objects = array_merge($objects,$this->getObjectsOfType('service',$getState));
-		$objects = array_merge($objects,$this->getObjectsOfType('hostgroup',$getState));
-		$objects = array_merge($objects,$this->getObjectsOfType('servicegroup',$getState));
-		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$getState));
+		$objects = array_merge($objects,$this->getObjectsOfType('map',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('host',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('service',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('hostgroup',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('servicegroup',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$getState,$mergeWithGlobals));
 		
 		return $objects;
 	}
@@ -98,7 +98,7 @@ class GlobalMap {
 	 * @return	Array	Array of Objects of this type on the map
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getObjectsOfType($type,$getState=1) {
+	function getObjectsOfType($type,$getState=1,$mergeWithGlobals=1) {
 		// object array
 		$objects = Array();
 		
@@ -114,15 +114,17 @@ class GlobalMap {
 				// workaround
 				$obj['id'] = $index;
 				
-				// merge with "global" settings
-				foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
-					$obj[$key] = $this->MAPCFG->getValue($type, $index, $key);
+				if($mergeWithGlobals) {
+					// merge with "global" settings
+					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+						$obj[$key] = $this->MAPCFG->getValue($type, $index, $key);
+					}
 				}
 				
 				// add default state to the object
 				$obj = array_merge($obj,$objState);
 				
-				if($getState == 1) {
+				if($getState) {
 					$obj = array_merge($obj,$this->getState($obj));
 				}
 				
