@@ -42,7 +42,7 @@ class GlobalMapCfg {
 							'host_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'z' => Array('must' => 0,
+							'z' => Array('must' => 1,
 												'default' => 0),
 							'recognize_services' => Array('must' => 0,
 												'default' => ''),
@@ -59,7 +59,7 @@ class GlobalMapCfg {
 							'hostgroup_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'z' => Array('must' => 0,
+							'z' => Array('must' => 1,
 												'default' => 0),
 							'recognize_services' => Array('must' => 0,
 												'default' => ''),
@@ -77,7 +77,7 @@ class GlobalMapCfg {
 							'service_description' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'z' => Array('must' => 0,
+							'z' => Array('must' => 1,
 												'default' => 0),
 							'only_hard_states' => Array('must' => 0,
 												'default' => ''),
@@ -92,7 +92,7 @@ class GlobalMapCfg {
 							'servicegroup_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'z' => Array('must' => 0,
+							'z' => Array('must' => 1,
 												'default' => 0),
 							'only_hard_states' => Array('must' => 0,
 												'default' => ''),
@@ -107,7 +107,7 @@ class GlobalMapCfg {
 							'map_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'z' => Array('must' => 0,
+							'z' => Array('must' => 1,
 												'default' => 0),
 							'only_hard_states' => Array('must' => 0,
 												'default' => ''),
@@ -119,11 +119,19 @@ class GlobalMapCfg {
 							'text' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
-							'z' => Array('must' => 0,
+							'z' => Array('must' => 1,
 												'default' => 0),
 							'w' => Array('must' => 1),
 							'background_color' => Array('must' => 1),
-							'host_name' => Array('must' => 0)));
+							'host_name' => Array('must' => 0)),
+			'shape' => Array('type' => Array('must' => 0),
+							'icon' => Array('must' => 1),
+							'x' => Array('must' => 1),
+							'y' => Array('must' => 1),
+							'z' => Array('must' => 1,
+												'default' => 0),
+							'url' => Array('must' => 0),
+							'hover_url' => Array('must' => 0)));
 							
 		// the default values refer to global settings in the validConfig array - so they have to be defined here
 		$this->validConfig['host']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
@@ -257,8 +265,6 @@ class GlobalMapCfg {
 				
 				// read file in array
 				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
-				
-				$type = array("global","host","service","hostgroup","servicegroup","map","textbox");
 				$createArray = array("allowed_user","allowed_for_config");
 				$l = 0;
 				$a = 0;
@@ -267,7 +273,7 @@ class GlobalMapCfg {
 					if(!ereg("^#",$file[$l]) && !ereg("^;",$file[$l])) {
 						$defineCln = explode("{", $file[$l]);
 						$define = explode(" ",$defineCln[0]);
-						if (isset($define[1]) && in_array(trim($define[1]),$type)) {
+						if (isset($define[1]) && array_key_exists(trim($define[1]),$this->validConfig)) {
 							$l++;
 							$nrOfType = count($this->mapConfig[$define[1]]);
 							$this->mapConfig[$define[1]][$nrOfType]['type'] = $define[1];
@@ -337,7 +343,6 @@ class GlobalMapCfg {
 								// choose first parameter line
 								$l++;
 								
-								print_r($this->mapConfig[$type][$id]);
 								// loop parameters from array
 								foreach($this->mapConfig[$type][$id] AS $key => $val) {
 									// if key is not type

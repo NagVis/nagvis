@@ -86,6 +86,7 @@ class GlobalMap {
 		$objects = array_merge($objects,$this->getObjectsOfType('hostgroup',$getState,$mergeWithGlobals));
 		$objects = array_merge($objects,$this->getObjectsOfType('servicegroup',$getState,$mergeWithGlobals));
 		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('shape',0,$mergeWithGlobals));
 		
 		return $objects;
 	}
@@ -128,7 +129,7 @@ class GlobalMap {
 					$obj = array_merge($obj,$this->getState($obj));
 				}
 				
-				if($obj['type'] != 'textbox') {
+				if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
 					$obj['icon'] = $this->getIcon($obj);
 				}
 				

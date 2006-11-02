@@ -94,6 +94,7 @@ function createjsDOMenu() {
     addMenuItem(new menuItem(get_label('servicegroup'), "", "code:get_click('servicegroup',1,'add');"));
     addMenuItem(new menuItem(get_label('map'), "", "code:get_click('map',1,'add');"));
     addMenuItem(new menuItem(get_label('textbox'), "", "code:get_click('textbox',2,'add');"));
+    addMenuItem(new menuItem(get_label('shape'), "", "code:get_click('shape',1,'add');"));
   }
   
   submenu_addobject_line = new jsDOMenu(140);

@@ -81,6 +81,21 @@ class NagVisMap extends GlobalMap {
 						$ret = array_merge($ret,$this->textBox($obj));
 					}
 				break;
+				case 'shape':
+					if(isset($obj['url']) && $obj['url'] != '') {
+						$link = 1;
+					} else {
+						$link = 0;
+					}
+					
+					if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
+						$hoverMenu = 1;
+					} else {
+						$hoverMenu = 0;
+					}
+					
+					$ret = array_merge($ret,$this->parseIcon($obj,$link,$hoverMenu));
+				break;
 				default:
 					if(isset($obj['line_type'])) {
 						if($obj['line_type'] != "20") {
@@ -145,11 +160,13 @@ class NagVisMap extends GlobalMap {
 	/**
 	 * Parses the HTML-Code of an icon
 	 *
-	 * @param	Array	$obj	Array with object informations
+	 * @param	Array	$obj		Array with object informations
+	 * @param	Boolean	$link		Add a link to the icon
+	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
 	 * @return	Array	Array with Html Code
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function parseIcon($obj) {
+	function parseIcon($obj,$link=1,$hoverMenu=1) {
 		$ret = Array();
 		
 		if($obj['type'] == 'service') {
@@ -159,9 +176,23 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		$ret[] = "<div class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
-		$ret[] = "\t".$this->createLink($obj);
-		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$this->getHoverMenu($obj).";>";
-		$ret[] = "\t</a>";
+		
+		if($link) {
+			$ret[] = "\t".$this->createLink($obj);
+		}
+		
+		if($hoverMenu) {
+			$menu = $this->getHoverMenu($obj).";";
+		} else {
+			$menu = "";
+		}
+		
+		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$menu.">";
+		
+		if($link) {
+			$ret[] = "\t</a>";
+		}
+		
 		$ret[] = "</div>";
 		
 		return $ret;

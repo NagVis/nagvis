@@ -27,6 +27,9 @@
 				<textbox>
 					<text>Textbox</text>
 				</textbox>
+				<shape>
+					<text>Bild</text>
+				</shape>
 			</labels>
 			<messages>
 				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten können) //-->

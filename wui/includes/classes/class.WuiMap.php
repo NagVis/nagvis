@@ -283,6 +283,7 @@ class WuiMap extends GlobalMap {
 		$ret[] = 'langMenu["servicegroup"] = "'.$this->LANG->getLabel('servicegroup').'";';
 		$ret[] = 'langMenu["map"] = "'.$this->LANG->getLabel('map').'";';
 		$ret[] = 'langMenu["textbox"] = "'.$this->LANG->getLabel('textbox').'";';
+		$ret[] = 'langMenu["shape"] = "'.$this->LANG->getLabel('shape').'";';
 		$ret[] = '//--></script>';
 		
 		return $ret;	
@@ -335,6 +336,7 @@ class WuiMap extends GlobalMap {
 					<option value="servicegroup">servicegroup</option>
 					<option value="map">map</option>
 					<option value="textbox">textbox</option>
+					<option value="shape">shape</option>
 				</select>		
 			<input name="add" type=submit value="Add object">		
 		</form>';
