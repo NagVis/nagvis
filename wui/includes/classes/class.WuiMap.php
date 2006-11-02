@@ -162,7 +162,7 @@ class WuiMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
-		$ret[] = "\t<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;\">";
+		$ret[] = "\t<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z'].";\">";
 		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$this->infoBox($obj).">";
 		$ret[] = "\t</div>";
 		
