@@ -158,7 +158,7 @@ class NagVisMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
-		$ret[] = "<div class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;\">";
+		$ret[] = "<div class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
 		$ret[] = "\t".$this->createLink($obj);
 		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$this->getHoverMenu($obj).";>";
 		$ret[] = "\t</a>";
