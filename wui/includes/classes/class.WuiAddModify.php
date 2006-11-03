@@ -137,7 +137,11 @@ class WuiAddModify extends GlobalPage {
 				// treat the special case of iconset, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getIconsets(),'',$prop['must']));
 				$this->propCount++;
-			} elseif($propname == "map_image") {
+			} elseif($this->prop['type'] == 'shape' && $propname == "icon") {
+				// treat the special case of icon when type is shape, which will display a listbox instead of the normal textbox
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getShapes(),'',$prop['must']));
+				$this->propCount++;
+			}  elseif($propname == "map_image") {
 				// treat the special case of map_image, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMapImages(),'',$prop['must']));
 				$this->propCount++;
@@ -240,6 +244,25 @@ class WuiAddModify extends GlobalPage {
 		}
 		
 		return $ret;
+	}
+	
+	function getShapes() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && !preg_match("/^./i",$file)) {
+					$files[] = $file;
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
 	}
 	
 	function getIconsets() {

@@ -65,6 +65,9 @@ class GlobalMainCfg {
 							'icon' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/'),
+							'shape' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/shapes/'),
 							'language' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/includes/languages/'),
@@ -86,6 +89,9 @@ class GlobalMainCfg {
 							'htmlicon' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/iconsets/'),
+							'htmlshape' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => '/nagios/nagvis/nagvis/images/shape/'),
 							'htmlmap' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/maps/'),
@@ -149,12 +155,14 @@ class GlobalMainCfg {
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
 		$this->validConfig['paths']['cfg']['default'] = $this->getValue('paths','base')."nagvis/etc/";
 		$this->validConfig['paths']['icon']['default'] = $this->getValue('paths','base')."nagvis/images/iconsets/";
+		$this->validConfig['paths']['shape']['default'] = $this->getValue('paths','base')."nagvis/images/shapes/";
 		$this->validConfig['paths']['language']['default'] = $this->getValue('paths','base')."nagvis/includes/languages/";
 		$this->validConfig['paths']['class']['default'] = $this->getValue('paths', 'base')."nagvis/includes/classes/";
 		$this->validConfig['paths']['map']['default'] = $this->getValue('paths','base')."nagvis/images/maps/";
 		$this->validConfig['paths']['mapcfg']['default'] = $this->getValue('paths','base')."nagvis/etc/maps/";
 		$this->validConfig['paths']['htmlimages']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/";
 		$this->validConfig['paths']['htmlicon']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/iconsets/";
+		$this->validConfig['paths']['htmlshape']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/shapes/";
 		$this->validConfig['paths']['htmlmap']['default'] = $this->getValue('paths','htmlbase')."/nagvis/images/maps/";
 	}
 	

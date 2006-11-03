@@ -161,6 +161,7 @@ class NagVisMap extends GlobalMap {
 	 * Parses the HTML-Code of an icon
 	 *
 	 * @param	Array	$obj		Array with object informations
+	 * @param	String	$base		Array with object informations
 	 * @param	Boolean	$link		Add a link to the icon
 	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
 	 * @return	Array	Array with Html Code
@@ -168,6 +169,12 @@ class NagVisMap extends GlobalMap {
 	 */
 	function parseIcon($obj,$link=1,$hoverMenu=1) {
 		$ret = Array();
+		
+		if($obj['type'] == 'shape') {
+			$basePath = $this->MAINCFG->getValue('paths', 'htmlshape');
+		} else {
+			$basePath = $this->MAINCFG->getValue('paths', 'htmlicon');
+		}
 		
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
@@ -187,7 +194,7 @@ class NagVisMap extends GlobalMap {
 			$menu = "";
 		}
 		
-		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$menu.">";
+		$ret[] = "\t\t<img src=\"".$basePath.$obj['icon']."\" ".$menu.">";
 		
 		if($link) {
 			$ret[] = "\t</a>";
