@@ -97,6 +97,9 @@ class NagVisMap extends GlobalMap {
 					$ret = array_merge($ret,$this->parseIcon($obj,$link,$hoverMenu));
 				break;
 				default:
+					// replace macros in url and hover_url
+					$obj = $this->replaceMacros($obj);
+				
 					if(isset($obj['line_type'])) {
 						if($obj['line_type'] != "20") {
 							// a line with one object...
@@ -203,6 +206,32 @@ class NagVisMap extends GlobalMap {
 		$ret[] = "</div>";
 		
 		return $ret;
+	}
+	
+	/**
+	 * Replaces macros of urls and hover_urls
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	Array	$obj	Modified array
+	 * @author 	Michael Luebben <michael_luebben@web.de>
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function replaceMacros($obj) {
+		if($obj['type'] == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $obj['type'] . '_name';
+		}
+		
+		$obj['url'] = str_replace('['.$name.']',$obj[$name],$obj['url']);
+		$obj['hover_url'] = str_replace('['.$name.']',$obj[$name],$obj['hover_url']);
+		
+		if($obj['type'] == 'service') {
+			$obj['url'] = str_replace('[service_description]',$obj['service_description'],$obj['url']);
+			$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
+		}
+		
+		return $obj;
 	}
 	
 	/**
