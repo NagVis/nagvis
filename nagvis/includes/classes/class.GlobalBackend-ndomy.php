@@ -438,11 +438,8 @@ class GlobalBackend {
 		}
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
 		
-		if($onlyHardStates == 1) {
-			$queryString="SELECT has_been_checked, last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$serviceObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
-		} else {
-			$queryString="SELECT has_been_checked, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$serviceObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
-		}
+		$queryString="SELECT has_been_checked,  last_hard_state, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$serviceObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
+		
 
 		$QUERYHANDLE = mysql_query($queryString);
 		$service = mysql_fetch_array($QUERYHANDLE);				
@@ -470,7 +467,11 @@ class GlobalBackend {
 			$state['Count'] = 1;
 			$state['State'] = 'UNKNOWN';
 			$state['Output'] = $service['output'];	
-		}	
+		} elseif($service['last_hard_state'] == 0 && $onlyHardStates == 1) {
+			$state['Count'] = 1;
+			$state['State'] = 'OK';
+			$state['Output'] = $service['output'];
+		}
 		
 		return $state;
 	}
