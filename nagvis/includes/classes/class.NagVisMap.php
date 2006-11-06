@@ -249,7 +249,7 @@ class NagVisMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
-		if(isset($obj['url'])) {
+		if(isset($obj['url']) && $obj['url'] != '') {
 			$link = '<A HREF='.$obj['url'].'>';
     	} elseif($obj['type'] == 'map') {
 			$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj[$name].'">';
