@@ -99,7 +99,7 @@ class GlobalMainCfg {
 												 'editable' => 0,
 												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/')),
 			'backend' => Array(
-							'type' => Array('must' => 1,
+							'backendtype' => Array('must' => 1,
 												'default' => 'ndomy'),
 							'options' => Array('ndomy' => Array('dbhost' => Array('must' => 1,
 																					 'editable' => 1,

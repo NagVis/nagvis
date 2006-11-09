@@ -599,6 +599,24 @@
 				</dummy>
 			</messages>
 		</editMainCfg>
+		<backendManagement>
+			<labels>
+				<setDefaultBackend>
+					<text>Set Default Backend</text>
+				</setDefaultBackend>
+				<defaultBackend>
+					<text>Default Backend</text>
+				</defaultBackend>
+				<addBackend>
+					<text>Add Backend</text>
+				</addBackend>
+			</label>
+			<messages>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</backendManagement>
 		<mapManagement>
 			<labels>
 				<dummy>
@@ -623,18 +641,6 @@
 				</dummy>
 			</messages>
 		</addModify>
-		<backendManagement>
-			<labels>
-				<defaultBackend>
-					<text>Default Backend</text>
-				</defaultBackend>
-			</label>
-			<messages>
-				<dummy>
-					<text>dummy - don't delete this!</text>
-				</dummy>
-			</messages>
-		</backendManagement>
 	</wui>
 </language>
 
