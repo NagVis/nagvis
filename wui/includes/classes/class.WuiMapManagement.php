@@ -140,6 +140,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	function getCreateFields() {
+		//FIXME: Default values
 		$ret = Array();
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('mapName'),'map_name',''));
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('readUsers'),'allowed_users',$user));

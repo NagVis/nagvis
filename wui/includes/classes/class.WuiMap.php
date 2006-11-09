@@ -269,12 +269,12 @@ class WuiMap extends GlobalMap {
 		$ret[] = 'langMenu["save"] = "'.$this->LANG->getLabel('save').'";';
 		$ret[] = 'langMenu["restore"] = "'.$this->LANG->getLabel('restore').'";';
 		$ret[] = 'langMenu["properties"] = "'.$this->LANG->getLabel('properties').'";';
-		$ret[] = 'langMenu["maps"] = "'.$this->LANG->getLabel('maps').'";';
 		$ret[] = 'langMenu["addObject"] = "'.$this->LANG->getLabel('addObject').'";';
 		$ret[] = 'langMenu["nagVisConfig"] = "'.$this->LANG->getLabel('nagVisConfig').'";';
 		$ret[] = 'langMenu["help"] = "'.$this->LANG->getLabel('help').'";';
 		$ret[] = 'langMenu["open"] = "'.$this->LANG->getLabel('open').'";';
-		$ret[] = 'langMenu["manage"] = "'.$this->LANG->getLabel('manage').'";';
+		$ret[] = 'langMenu["manageMaps"] = "'.$this->LANG->getLabel('manageMaps').'";';
+		$ret[] = 'langMenu["manageBackends"] = "'.$this->LANG->getLabel('manageBackends').'";';
 		$ret[] = 'langMenu["icon"] = "'.$this->LANG->getLabel('icon').'";';
 		$ret[] = 'langMenu["line"] = "'.$this->LANG->getLabel('line').'";';
 		$ret[] = 'langMenu["host"] = "'.$this->LANG->getLabel('host').'";';

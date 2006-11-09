@@ -63,20 +63,18 @@ function createjsDOMenu() {
     addMenuItem(new menuItem(get_label('restore'), "menu_restore", "code:confirm_restore();","","",""));
     addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:fenetre('./addmodify.php?action=modify&map='+document.myvalues.formulaire.value+'&type=global&id=0');","","",""));
     addMenuItem(new menuItem("-"));
-    addMenuItem(new menuItem(get_label('maps'), "menu_maps", ""));
+    addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
 
     addMenuItem(new menuItem(get_label('addObject'), "menu_addobject", "","","",""));
     addMenuItem(new menuItem("-"));
     addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:fenetre_big('./edit_config.php');"));
-    //addMenuItem(new menuItem(get_label('help'), "", "code:alert('will open a nice help webpage, localized in the user language');"));
+    addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:fenetre_management('./map_management.php');"));
+    addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:fenetre_management('./backend_management.php');"));
   }
   
   submenu_maps = new jsDOMenu(140);
   with (submenu_maps) {
     addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
-    addMenuItem(new menuItem(get_label('manage'), "menu_maps_create", "code:fenetre_management('./map_management.php');"));
-    
-
   }
   
   submenu_addobject = new jsDOMenu(120);
@@ -120,8 +118,7 @@ function createjsDOMenu() {
 	}
   }
   
-  mainMenu.items.menu_maps.setSubMenu(submenu_maps);
-  submenu_maps.items.menu_maps_open.setSubMenu(submenu_maps_open);
+  mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);
   
   if(document.myvalues.formulaire.value!='')
   {

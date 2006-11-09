@@ -308,11 +308,14 @@
 					<text>Hilfe</text>
 				</help>
 				<open>
-					<text>&Ouml;ffnen</text>
+					<text>Map &Ouml;ffnen</text>
 				</open>
-				<manage>
-					<text>Verwalten</text>
-				</manage>
+				<manageMaps>
+					<text>Map Verwaltung</text>
+				</manageMaps>
+				<manageBackends>
+					<text>Backend Verwaltung</text>
+				</manageBackends>
 				<icon>
 					<text>Icon</text>
 				</icon>
@@ -620,6 +623,18 @@
 				</dummy>
 			</messages>
 		</addModify>
+		<backendManagement>
+			<labels>
+				<defaultBackend>
+					<text>Standard Backend</text>
+				</defaultBackend>
+			</label>
+			<messages>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</backendManagement>
 	</wui>
 </language>
 
