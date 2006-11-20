@@ -219,16 +219,10 @@ class GlobalBackend {
 			return $state;
 		}
 
-		if($onlyHardStates == 1) {
-			$queryString="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '".$hostObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
-		} else {
-			$queryString="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '".$hostObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
-		}
-
+		$queryString="SELECT last_hard_state, UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, UNIX_TIMESTAMP(last_state_change) AS last_state_change, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."hoststatus  WHERE host_object_id = '".$hostObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
 		$QUERYHANDLE = mysql_query($queryString);
 		
 		if(mysql_num_rows($QUERYHANDLE) <= 0) {
-	
 			/** 
 			* This is the special case, that a host is definied but in pending state or that it
 			* was deleted from Nagios but is still present at NDO DB
@@ -236,9 +230,16 @@ class GlobalBackend {
 			$state['State'] = 'UNKOWN';
 			$state['Output'] = $this->LANG->getMessageText('hostIsPending','HOST~'.$hostName);
 			$hostState = $state['State'];
-
 		} else {
 			$hostState = mysql_fetch_array($QUERYHANDLE);
+			
+			if($onlyHardStates == 1) {
+				if($hostState['last_hard_state'] != '0' && $hostState['last_hard_state_change'] < $hostState['last_state_change']) {
+					$hostState['current_state'] = $hostState['current_state'];
+				} else {
+					$hostState['current_state'] = $hostState['last_hard_state'];
+				}
+			}
 			
 			if ($hostState['current_state'] == '0') {
 				// Host is UP
@@ -282,12 +283,13 @@ class GlobalBackend {
 				$QUERYHANDLE = mysql_query("SELECT object_id FROM ".$this->dbPrefix."objects WHERE objecttype_id='2' AND name1='".$hostName."' AND instance_id='".$this->dbInstanceId."'");
 				while($services = mysql_fetch_array($QUERYHANDLE)) {
 					$objectId = $services['object_id'];
+					
 					//Query the Servicestates
-						if($onlyHardStates == 1) {
-							$queryString2="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
-						} else {
-							$queryString2="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
-						}
+					if($onlyHardStates == 1) {
+						$queryString2="SELECT last_hard_state AS current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
+					} else {
+						$queryString2="SELECT current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$objectId."' AND instance_id='".$this->dbInstanceId."'";
+					}
 
 					$QUERYHANDLE_2 = mysql_query($queryString2);
 					$currentService = mysql_fetch_array($QUERYHANDLE_2);				
@@ -438,7 +440,7 @@ class GlobalBackend {
 		}
 		$serviceObjectId = mysql_fetch_row($QUERYHANDLE);
 		
-		$queryString="SELECT has_been_checked,  last_hard_state, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$serviceObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
+		$queryString="SELECT has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged FROM ".$this->dbPrefix."servicestatus WHERE service_object_id = '".$serviceObjectId[0]."' AND instance_id='".$this->dbInstanceId."'";
 		
 
 		$QUERYHANDLE = mysql_query($queryString);
