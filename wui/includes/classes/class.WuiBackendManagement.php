@@ -14,7 +14,7 @@ class WuiBackendManagement extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/backend_management.js'),
+					  'jsIncludes'=>Array('./includes/js/BackendManagement.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'wui:backendManagement');
@@ -51,18 +51,95 @@ class WuiBackendManagement extends GlobalPage {
 		$this->addBodyLines($this->ADDBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('addBackend'))));
 		$this->addBodyLines($this->getAddFields());
 		$this->addBodyLines($this->getAddSubmit());
+		
+		$this->EDITBACKENDFORM = new GlobalForm(Array('name'=>'backend_edit',
+			'id'=>'backend_edit',
+			'method'=>'POST',
+			'action'=>'./wui.function.inc.php?myaction=mgt_backend_edit',
+			'onSubmit'=>'return check_backend_edit();',
+			'cols'=>'2'));
+		$this->addBodyLines($this->EDITBACKENDFORM->initForm());
+		$this->addBodyLines($this->EDITBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('editBackend'))));
+		$this->addBodyLines($this->getEditFields());
+		$this->addBodyLines($this->getEditSubmit());
+		
+		$this->DELBACKENDFORM = new GlobalForm(Array('name'=>'backend_del',
+			'id'=>'backend_del',
+			'method'=>'POST',
+			'action'=>'./wui.function.inc.php?myaction=mgt_backend_del',
+			'onSubmit'=>'return check_backend_del();',
+			'cols'=>'2'));
+		$this->addBodyLines($this->DELBACKENDFORM->initForm());
+		$this->addBodyLines($this->DELBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('delBackend'))));
+		$this->addBodyLines($this->getDelFields());
+		$this->addBodyLines($this->getDelSubmit());
 	}
 	
+	function getEditFields() {
+		$ret = Array();
+		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array('-'=>'-'),$this->getDefinedBackends()),'',TRUE,"getBackendOptions(definedBackends[this.value]['backendtype'],'".$this->EDITBACKENDFORM->id."',this.value);"));
+		$ret[] = "<script language=\"javascript\">";
+		$ret[] = "\tvar backendOptions = Array();";
+		foreach($this->MAINCFG->validConfig['backend']['options'] AS $backendtype => $arr) {
+			$ret[] = "\tbackendOptions['".$backendtype."'] = Array();";
+			foreach($arr AS $key => $opt) {
+				$ret[] = "\tbackendOptions['".$backendtype."']['".$key."'] = Array();";
+				foreach($opt AS $var => $val) {
+					$ret[] = "\tbackendOptions['".$backendtype."']['".$key."']['".$var."'] = '".$val."'";
+				}
+			}
+		}
+		$ret[] = "\tvar definedBackends = Array();";
+		$ret[] = "\tdefinedBackends['-'] = Array();";
+		foreach($this->MAINCFG->config AS $sec => $arr) {
+			if(preg_match("/^backend_/i", $sec)) {
+				$backend_id = preg_replace("/^backend_/i",'',$sec);
+				$ret[] = "\tdefinedBackends['".$backend_id."'] = Array();";
+				foreach($arr AS $key => $val) {
+					if(!preg_match("/^comment_/i", $key)) {
+						$ret[] = "\tdefinedBackends['".$backend_id."']['".$key."'] = '".$val."';";
+					}
+				}
+			}
+		}
+		$ret[] = "</script>";
+		return $ret;
+	}
+	
+	function getEditSubmit() {
+		return array_merge($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->EDITBACKENDFORM->closeForm());
+	}
+	
+	function getDelFields() {
+		$ret = Array();
+		$ret = array_merge($ret,$this->DELBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE));
+		return $ret;
+	}
+	
+	function getDelSubmit() {
+		return array_merge($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DELBACKENDFORM->closeForm());
+	}
 	
 	function getAddFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->ADDBACKENDFORM->getInputLine('backend_id','backend_id','',TRUE));
 		foreach($this->MAINCFG->validConfig['backend'] as $propname => $prop) {
 			if($propname == "backendtype") {
-				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,$this->getBackends(),'',$prop['must']));
+				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->getBackends()),'',$prop['must'],"getBackendOptions(this.value,'".$this->ADDBACKENDFORM->id."');"));
 			}
 		}
-		// FIXME: OnChange -> show options for the selected backend
+		$ret[] = "<script language=\"javascript\">";
+		$ret[] = "\tvar backendOptions = Array();";
+		foreach($this->MAINCFG->validConfig['backend']['options'] AS $backendtype => $arr) {
+			$ret[] = "\tbackendOptions['".$backendtype."'] = Array();";
+			foreach($arr AS $key => $opt) {
+				$ret[] = "\tbackendOptions['".$backendtype."']['".$key."'] = Array();";
+				foreach($opt AS $var => $val) {
+					$ret[] = "\tbackendOptions['".$backendtype."']['".$key."']['".$var."'] = '".$val."'";
+				}
+			}
+		}
+		$ret[] = "</script>";
 		return $ret;
 	}
 	

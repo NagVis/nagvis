@@ -610,6 +610,12 @@
 				<addBackend>
 					<text>Backend Hinzuf&uuml;gen</text>
 				</addBackend>
+				<editBackend>
+					<text>Backend Bearbeiten</text>
+				</editBackend>
+				<delBackend>
+					<text>Backend L&ouml;schen</text>
+				</delBackend>
 			</label>
 			<messages>
 				<dummy>

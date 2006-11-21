@@ -192,7 +192,7 @@ class GlobalForm {
 	function initForm() {
 		$ret = Array();
 		
-		$ret[] = "<table name=\"mytable\">";
+		$ret[] = "<table name=\"mytable\" id=\"table_".$this->id."\">";
 		$ret[] = "\t<form name=\"".$this->name."\" id=\"".$this->id."\" method=\"".$this->method."\" action=\"".$this->action."\" enctype=\"".$this->enctype."\" onsubmit=\"".$this->onSubmit."\">";
 		
 		return $ret;
