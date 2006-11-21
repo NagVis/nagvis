@@ -103,7 +103,7 @@ class GlobalBackend {
 	*
 	* @param	string $type, string $name1Pattern, string $name2Pattern
 	* @return	array $ret
-	* @author	Lars Michelsen
+	* @author	Lars Michelsen <larsi@nagios-wiki.de>
 	* @author	Andreas Husch <downanup@nagios-wiki.de>
 	*/
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
@@ -205,6 +205,7 @@ class GlobalBackend {
 	*
 	* @param	string $hostName, boolean $recognizeServices, boolean $onlyHardStates
 	* @return	array $state
+	* @author	Lars Michelsen <larsi@nagios-wiki.de>
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	*/
 	function findStateHost($hostName,$recognizeServices,$onlyHardStates) {
@@ -224,17 +225,25 @@ class GlobalBackend {
 		
 		if(mysql_num_rows($QUERYHANDLE) <= 0) {
 			/** 
-			* This is the special case, that a host is definied but in pending state or that it
-			* was deleted from Nagios but is still present at NDO DB
-			*/
+			 * This is the special case, that a host is definied but in pending state or that it
+			 * was deleted from Nagios but is still present at NDO DB
+			 */
 			$state['State'] = 'UNKOWN';
 			$state['Output'] = $this->LANG->getMessageText('hostIsPending','HOST~'.$hostName);
 			$hostState = $state['State'];
 		} else {
 			$hostState = mysql_fetch_array($QUERYHANDLE);
 			
+			/**
+			 * SF.net #1587073
+			 * if "last_hard_state" != OK && last_hard_state_change <= last_state_change => state = current_state
+			 *
+			 * last_hard_state in ndo_hoststatus seems not to change if a host returns from State != OK by a successfull service check.
+			 * i think it changes only if a host check returns an OK. so if there are no host checks scheduled the last_hard_state will 
+			 * always stay as it is.
+			 */
 			if($onlyHardStates == 1) {
-				if($hostState['last_hard_state'] != '0' && $hostState['last_hard_state_change'] < $hostState['last_state_change']) {
+				if($hostState['last_hard_state'] != '0' && $hostState['last_hard_state_change'] <= $hostState['last_state_change']) {
 					$hostState['current_state'] = $hostState['current_state'];
 				} else {
 					$hostState['current_state'] = $hostState['last_hard_state'];

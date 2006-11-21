@@ -174,9 +174,13 @@ class NagVisMap extends GlobalMap {
 		$ret = Array();
 		
 		if($obj['type'] == 'shape') {
-			$basePath = $this->MAINCFG->getValue('paths', 'htmlshape');
+			if(preg_match("/^\[(.*)\]$/",$obj['icon'],$match) > 0) {
+				$imgPath = $match[1];
+			} else {
+				$imgPath = $this->MAINCFG->getValue('paths', 'htmlshape').$obj['icon'];
+			}
 		} else {
-			$basePath = $this->MAINCFG->getValue('paths', 'htmlicon');
+			$imgPath = $this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon'];
 		}
 		
 		if($obj['type'] == 'service') {
@@ -197,7 +201,7 @@ class NagVisMap extends GlobalMap {
 			$menu = "";
 		}
 		
-		$ret[] = "\t\t<img src=\"".$basePath.$obj['icon']."\" ".$menu.">";
+		$ret[] = "\t\t<img src=\"".$imgPath."\" ".$menu.">";
 		
 		if($link) {
 			$ret[] = "\t</a>";
