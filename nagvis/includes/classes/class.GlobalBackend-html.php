@@ -367,7 +367,7 @@ class GlobalBackend {
 		if(!isset($state)) {
 			$nagvis = new FRONTEND($this->MAINCFG);
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:html'));
-		    $FRONTEND->messageToUser('WARNING','noStateSet'));
+		    $FRONTEND->messageToUser('WARNING','noStateSet');
 			exit;
 		}	
 		return($state);

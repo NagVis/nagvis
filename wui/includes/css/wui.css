@@ -44,7 +44,8 @@ td {
 	border: 2px ridge #A4A4A4;
   	height: 30px;
 	color: #2B5377;
-	text-align: right; 
+	text-align: right;
+	width: 50%
 } 
 
 .tdfield { 
