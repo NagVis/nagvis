@@ -12,7 +12,7 @@
 ## This Backend is maintained by Andreas Husch (dowanup@nagios-wiki.de) ##
 ##########################################################################
 
-class GlobalBackend {
+class GlobalBackendndomy {
 	var $MAINCFG;
 	var $LANG;
 	var $backendId;
@@ -33,7 +33,7 @@ class GlobalBackend {
 	* @author	Andreas Husch <downanup@nagios-wiki.de>
 	* @author	Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function GlobalBackend(&$MAINCFG,$backendId) {
+	function GlobalBackendndomy(&$MAINCFG,$backendId) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->backendId = $backendId;
 		

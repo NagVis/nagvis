@@ -14,7 +14,7 @@
 /**
 * This Class read the States from Nagios-CGI'S
 */
-class GlobalBackend {
+class GlobalBackendhtml {
 	var $MAINCFG;
 	var $backendId;
 	
@@ -25,7 +25,7 @@ class GlobalBackend {
 	* @param	String $backendId
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
-	function GlobalBackend(&$MAINCFG,$backendId) {
+	function GlobalBackendhtml(&$MAINCFG,$backendId) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->backendId = $backendId;
 		
