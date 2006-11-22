@@ -34,7 +34,7 @@ class WuiBackendManagement extends GlobalPage {
 			'id'=>'backend_default',
 			'method'=>'POST',
 			'action'=>'./wui.function.inc.php?myaction=mgt_backend_default',
-			'onSubmit'=>'return check_backend_default();',
+			'onSubmit'=>'return update_param(\'backend_default\');',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DEFBACKENDFORM->initForm());
 		$this->addBodyLines($this->DEFBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('setDefaultBackend'))));

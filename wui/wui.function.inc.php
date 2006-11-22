@@ -348,6 +348,16 @@ switch($_GET['myaction']) {
 	 	
 		print "<script>window.document.location.href='./index.php?map=".$_GET['map']."';</script>\n";
 	break;
+	
+	case 'mgt_backend_default':
+		$MAINCFG->setValue($MAINCFG->findSecOfVar('defaultbackend'),'defaultbackend',$_POST['defaultbackend']);
+		if($MAINCFG->writeConfig()) {
+			print "<script>window.opener.document.location.reload();</script>\n";
+			print "<script>window.close();</script>\n";
+		} else {
+			print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
+		}
+	break;
 }
 ?>
 
