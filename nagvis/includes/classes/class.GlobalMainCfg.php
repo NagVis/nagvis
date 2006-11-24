@@ -21,7 +21,7 @@ class GlobalMainCfg {
 		
 		$this->validConfig = Array(
 			'global' => Array('defaultbackend' => Array('must' => 0,
-												 'editable' => 1,
+												 'editable' => 0,
 												'default' => 'ndomy'),
 							'language' => Array('must' => 1,
 												 'editable' => 1,
