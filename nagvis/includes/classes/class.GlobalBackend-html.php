@@ -35,9 +35,9 @@ class GlobalBackendhtml {
 	}
 	
 	function checkCgiPath() {
-		if(!file_exists($this->MAINCFG->getValue('backend_'.$backendId, 'cgi'))) {
+		if(!file_exists($this->MAINCFG->getValue('backend_'.$this->backendId, 'cgi'))) {
             $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:html'));
-		    $FRONTEND->messageToUser('ERROR','statusCgiNotFound','BACKENDID~'.$this->backendId.',STATUSCGI~'.$this->MAINCFG->getValue('backend_'.$backendId, 'cgi'));
+		    $FRONTEND->messageToUser('ERROR','statusCgiNotFound','BACKENDID~'.$this->backendId.',STATUSCGI~'.$this->MAINCFG->getValue('backend_'.$this->backendId, 'cgi'));
             
             exit;
         }
@@ -336,8 +336,8 @@ class GlobalBackendhtml {
 	* @author Andreas Husch
     */
 	function checkStates($Type,$Name,$RecognizeServices,$ServiceName="",$StatePos="0") {
-		$CgiPath = $this->MAINCFG->getValue('backend_'.$backendId, 'cgi');
-		$CgiUser = $this->MAINCFG->getValue('backend_'.$backendId, 'cgiuser');
+		$CgiPath = $this->MAINCFG->getValue('backend_'.$this->backendId, 'cgi');
+		$CgiUser = $this->MAINCFG->getValue('backend_'.$this->backendId, 'cgiuser');
 		
 		if($Type == "host") {
 			$StatusCgi = $CgiPath.'status.cgi';
