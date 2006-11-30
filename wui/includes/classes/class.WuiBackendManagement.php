@@ -14,7 +14,8 @@ class WuiBackendManagement extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/BackendManagement.js'),
+					  'jsIncludes'=>Array('./includes/js/BackendManagement.js',
+					  						'./includes/js/ajax.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'wui:backendManagement');
@@ -77,7 +78,7 @@ class WuiBackendManagement extends GlobalPage {
 	
 	function getEditFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array('-'=>'-'),$this->getDefinedBackends()),'',TRUE,"getBackendOptions(definedBackends[this.value]['backendtype'],'".$this->EDITBACKENDFORM->id."',this.value);"));
+		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->id."');"));
 		$ret[] = "<script language=\"javascript\">";
 		$ret[] = "\tvar backendOptions = Array();";
 		foreach($this->MAINCFG->validConfig['backend']['options'] AS $backendtype => $arr) {
@@ -125,7 +126,7 @@ class WuiBackendManagement extends GlobalPage {
 		$ret = array_merge($ret,$this->ADDBACKENDFORM->getInputLine('backend_id','backend_id','',TRUE));
 		foreach($this->MAINCFG->validConfig['backend'] as $propname => $prop) {
 			if($propname == "backendtype") {
-				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->getBackends()),'',$prop['must'],"getBackendOptions(this.value,'".$this->ADDBACKENDFORM->id."');"));
+				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->getBackends()),'',$prop['must'],"getBackendOptions(this.value,'','".$this->ADDBACKENDFORM->id."');"));
 			}
 		}
 		$ret[] = "<script language=\"javascript\">";

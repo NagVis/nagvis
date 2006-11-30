@@ -66,3 +66,9 @@ function getObjects(backend_id,type,field,selected) {
 	oOpt.type = type;
 	getRequest('ajax_handler.php?action=getObjects&backend_id='+backend_id+'&type='+type,'printObjects',oOpt);
 }
+
+function getBackendOptions(backend_type,backend_id,form) {
+	var oOpt = Object();
+	oOpt.form = form;
+	getRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backend_id+'&backend_type='+backend_type,'printBackendOptions',oOpt);
+}

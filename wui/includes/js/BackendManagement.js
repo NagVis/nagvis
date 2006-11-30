@@ -1,10 +1,5 @@
-function getBackendOptions(myType,myForm,myId) {
-	var type = myType;
-	
-	if(!myId) {
-		myId = "";
-	}
-	
+function printBackendOptions(aObjects,oOpt) {
+	var myForm = oOpt.form;
 	var form = document.getElementById(myForm);
 	var tbl = document.getElementById('table_'+myForm);
 	
@@ -41,27 +36,26 @@ function getBackendOptions(myType,myForm,myId) {
 	input.innerHTML = "&nbsp;";
 	
 	lastRow++;
-	
-	for(key in backendOptions[type]) {
+	for(i=0;i < aObjects.length;i++) {
 		var row = tbl.insertRow(lastRow);
 		row.setAttribute('id', 'row_'+lastRow);
 		
 		var label = row.insertCell(0);
 		label.setAttribute('class', 'tdlabel');
-		if(backendOptions[type][key]['must'] == 1) {
+		if(aObjects[i].must == 1) {
 			label.setAttribute('style', 'color:red;');
 		}
-		label.innerHTML = key;
+		label.innerHTML = aObjects[i].key;
 		
 		var input = row.insertCell(1);
 		input.setAttribute('class', 'tdfield');
 		
 		var sValue = "";
-		if(myId != "" && definedBackends[myId][key] != null) {
-			sValue = definedBackends[myId][key];
+		if(aObjects[i].value != null) {
+			sValue = aObjects[i].value;
 		}
 		
-		input.innerHTML = "<input name='"+key+"' id='"+key+"' value='"+sValue+"' />";
+		input.innerHTML = "<input name='"+aObjects[i].key+"' id='"+aObjects[i].key+"' value='"+sValue+"' />";
 		
 		lastRow++;
 	}

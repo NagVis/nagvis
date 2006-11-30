@@ -15,7 +15,7 @@ switch($_GET['action']) {
 		// $_GET['backend_id'], $_GET['type']
 		if(method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
 			echo '[ ';
-			echo '{ "name": "" }';	
+			echo '{ "name": "" }';
 			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects($_GET['type'],'','') AS $arr) {
 				echo ' ,{ "name": "'.$arr['name1'].'"}';
 			}
@@ -62,6 +62,36 @@ switch($_GET['action']) {
 			}
 			echo ' ]';
 		}
+	break;
+	case 'getBackendOptions':
+		// $_GET['backend_type'], ($_GET['backend_id'])
+		if($_GET['backend_type'] == '' && $_GET['backend_id'] != '') {
+			$_GET['backend_type'] = $MAINCFG->getValue('backend_'.$_GET['backend_id'],'backendtype');
+		}
+		
+		echo '[ ';
+		$i = 0;
+		if($_GET['backend_type'] != '') {
+			foreach($MAINCFG->validConfig['backend']['options'][$_GET['backend_type']] AS $key => $opt) {
+				echo "\t";
+				if($i != 0) {
+					echo ', ';
+				}
+				echo '{ '."\n";
+				echo "\t\t".'"key": "'.$key.'" '."\n";
+				foreach($opt AS $var => $val) {
+					echo "\t\t".', "'.$var.'": "'.$val.'" '."\n";
+				}
+				
+				if(isset($_GET['backend_id']) && $_GET['backend_id'] != '' && $MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE) != '') {
+					echo ',  "value": "'.$MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE).'" ';
+				}
+				
+				echo "\t".' }'."\n";
+				$i++;
+			}
+		}
+		echo ' ]';
 	break;
 	default:
 	
