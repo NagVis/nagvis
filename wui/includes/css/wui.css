@@ -12,6 +12,11 @@ td {
 	border-style:none;	
 }
 
+form {
+	padding: 0;
+	margin: 0;
+}
+
 .submit {
 	border: 2px ridge Black;
 	font: bold 15px Verdana, Geneva, Arial, Helvetica, sans-serif; 

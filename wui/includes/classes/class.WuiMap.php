@@ -21,7 +21,7 @@ class WuiMap extends GlobalMap {
 		parent::GlobalMap($MAINCFG,$MAPCFG,$MAPCFG);
 		
 		$this->loadPermissions();
-		$this->objects = $this->getMapObjects(0,0);
+		$this->objects = $this->getMapObjects(0,1);
 	}
 	
 	function loadPermissions() {
@@ -317,28 +317,12 @@ class WuiMap extends GlobalMap {
 			<input type="hidden" name="valx">
 			<input type="hidden" name="valy">
 			<input type="hidden" name="autosave" value="'.$this->MAINCFG->getRuntimeValue('justAdded').'">
-			<input type="hidden" name="username" value="'.$this->MAINCFG->getRuntimeValue('user').'">
 			<textarea name="menu_labels"></textarea>
 			<input type="text" name="allowed_users_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsAllowedUsers').'">
 			<input type="text" name="image_map_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsImages').'">
 			<input type="text" name="mapname_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsNames').'">
 			<input type="text" name="backup_available" value="'.file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak").'">
 			<input name="submit" type=submit value="Save this map">
-		</form> 
-		
-		<form name="add_object" action="./wui/wui.function.inc.php?myaction=add_modify" method="post" onsubmit="return check_new_object();">
-			<input type="hidden" name="formulaire" value="'.$this->MAPCFG->getName().'">
-			<input type="hidden" name="modify_line" value="">		
-				<select name="add_type" style="width: 108px">
-					<option value="host">host</option>
-					<option value="hostgroup">hostgroup</option>
-					<option value="service">service</option>
-					<option value="servicegroup">servicegroup</option>
-					<option value="map">map</option>
-					<option value="textbox">textbox</option>
-					<option value="shape">shape</option>
-				</select>		
-			<input name="add" type=submit value="Add object">		
 		</form>';
 		
 		// list all maps in a javascript variable
@@ -359,7 +343,8 @@ class WuiMap extends GlobalMap {
 		  	
 			// make the forms invisible
 			document.forms['myvalues'].style.visibility='hidden';
-			document.forms['add_object'].style.visibility='hidden';
+			
+			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
 			
 			// build the right-click menu
 			initjsDOMenu();

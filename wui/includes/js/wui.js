@@ -24,7 +24,6 @@ function get_click(newtype,nbclicks,action) {
 	document.body.onclick=get_click_pos;
 	document.body.onmousemove=track_mouse;
 	window.status = lang['clickMapToSetPoints'] + cpt_clicks;
-	
 }
 
 function track_mouse(e) {

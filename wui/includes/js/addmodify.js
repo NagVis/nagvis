@@ -1,3 +1,44 @@
+function printObjects(aObjects,oOpt) {
+	var type = oOpt.type;
+	var field = oOpt.field;
+	var selected = oOpt.selected;
+	
+	var oField = document.addmodify.elements[field];
+		
+	// delete old options
+	for(i=oField.length; i>=0; i--){
+		oField.options[i] = null;
+	}
+	
+	if(aObjects.length > 0) {
+		// backend gives us some services
+		
+		// fill with new options
+		for(i = 0; i < aObjects.length; i++) {
+			var bSelect = false;
+			var bSelectDefault = false;
+			
+			if(aObjects[i].name == "") {
+				bSelectDefault = true;
+			}
+			
+			if(aObjects[i].name == selected) {
+				bSelect = true;
+			}
+			
+			if(type == "service") {
+				oField.options[oField.options.length] = new Option(aObjects[i].service_description, aObjects[i].service_description, bSelectDefault, bSelect);
+			} else {
+				oField.options[oField.options.length] = new Option(aObjects[i].name, aObjects[i].name, bSelectDefault, bSelect);
+			}
+		}
+	} else {
+		// FIXME: backend doesn't gives us any object, change to input field
+		oField.setAttribute('type',"input");
+		oField.setAttribute('value',"");
+	}
+}
+
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
 function check_object() {

@@ -47,7 +47,7 @@ function is_allowed_user(mymapname)
 	temp=value_list_users[i].split(",");
 	for(var j=0;j<temp.length;j++)
 	{
-		if( (document.forms['myvalues'].username.value==temp[j]) || (temp[j]=="EVERYONE") ) return true;
+		if( (username==temp[j]) || (temp[j]=="EVERYONE") ) return true;
 	}
 	return false;
 }

@@ -17,7 +17,8 @@ include("../nagvis/includes/classes/class.GlobalLanguage.php");
 include("../nagvis/includes/classes/class.GlobalMainCfg.php");
 include("../nagvis/includes/classes/class.GlobalPage.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");
-$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php');
+include("./includes/classes/class.WuiMainCfg.php");
+$MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 
 ############################################
 function getArrayFromProperties($properties) {
@@ -348,20 +349,71 @@ switch($_GET['myaction']) {
 	 	
 		print "<script>window.document.location.href='./index.php?map=".$_GET['map']."';</script>\n";
 	break;
-	
 	case 'mgt_backend_default':
 		$MAINCFG->setValue($MAINCFG->findSecOfVar('defaultbackend'),'defaultbackend',$_POST['defaultbackend']);
 		if($MAINCFG->writeConfig()) {
+			print "<script>window.history.back();</script>";
 			print "<script>window.opener.document.location.reload();</script>\n";
-			print "<script>window.close();</script>\n";
+		} else {
+			print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
+		}
+	break;
+	
+	case 'mgt_backend_add':
+		// $_POST['backend_id'], $_POST['backendtype']
+		$bFoundOption = FALSE;
+		$aOpt = Array();
+		
+		foreach($MAINCFG->validConfig['backend']['options'][$_POST['backendtype']] AS $key => $arr) {
+			if(isset($_POST[$key]) && $_POST[$key] != '') {
+				$bFoundOption = TRUE;
+				$aOpt[$key] = $_POST[$key];
+			}
+		}
+		
+		if($bFoundOption) {
+			$MAINCFG->setSection('backend_'.$_POST['backend_id']);
+			$MAINCFG->setValue('backend_'.$_POST['backend_id'],'backendid',$_POST['backend_id']);
+			$MAINCFG->setValue('backend_'.$_POST['backend_id'],'backendtype',$_POST['backendtype']);
+			
+			foreach($aOpt AS $key => $val) {
+				$MAINCFG->setValue('backend_'.$_POST['backend_id'],$key,$val);
+			}
+		}
+		
+		if($MAINCFG->writeConfig()) {
+		    print "<script>window.close();</script>\n";
+		} else {
+			print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
+		}
+	break;
+	case 'mgt_backend_edit':
+		$bFoundOption = FALSE;
+		$aOpt = Array();
+		
+		foreach($MAINCFG->validConfig['backend']['options'][$MAINCFG->getValue('backend_'.$_POST['backend_id'],'backendtype')] AS $key => $arr) {
+			if(isset($_POST[$key]) && $_POST[$key] != '') {
+				$MAINCFG->setValue('backend_'.$_POST['backend_id'],$key,$_POST[$key]);
+			}
+		}
+		
+		if($MAINCFG->writeConfig()) {
+		    print "<script>window.close();</script>\n";
+		} else {
+			print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
+		}
+	break;
+	case 'mgt_backend_del':
+		$bFoundOption = FALSE;
+		$aOpt = Array();
+		
+		$MAINCFG->delSection('backend_'.$_POST['backend_id']);
+		
+		if($MAINCFG->writeConfig()) {
+		    print "<script>window.close();</script>\n";
 		} else {
 			print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
 		}
 	break;
 }
 ?>
-
-	
-
-
-

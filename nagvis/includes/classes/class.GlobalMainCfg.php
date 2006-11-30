@@ -12,7 +12,6 @@ class GlobalMainCfg {
 	 * Class Constructor
 	 *
 	 * @param	String	$configFile			String with path to config file
-	 * @param	String	$localConfigFile	String with path to local config file
 	 * @author Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function GlobalMainCfg($configFile) {

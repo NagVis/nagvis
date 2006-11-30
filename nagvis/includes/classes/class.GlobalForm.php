@@ -192,8 +192,8 @@ class GlobalForm {
 	function initForm() {
 		$ret = Array();
 		
+		$ret[] = "<form name=\"".$this->name."\" id=\"".$this->id."\" method=\"".$this->method."\" action=\"".$this->action."\" enctype=\"".$this->enctype."\" onsubmit=\"".$this->onSubmit."\">";
 		$ret[] = "<table name=\"mytable\" id=\"table_".$this->id."\">";
-		$ret[] = "\t<form name=\"".$this->name."\" id=\"".$this->id."\" method=\"".$this->method."\" action=\"".$this->action."\" enctype=\"".$this->enctype."\" onsubmit=\"".$this->onSubmit."\">";
 		
 		return $ret;
 	}
@@ -207,8 +207,8 @@ class GlobalForm {
 	function closeForm() {
 		$ret = Array();
 		
-		$ret[] = "\t</form>";
 		$ret[] = "</table>";
+		$ret[] = "</form>";
 		
 		return $ret;
 	}
