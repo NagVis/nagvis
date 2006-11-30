@@ -12,13 +12,14 @@
 /* ########################################################################## */
 
 /* ******************** NagVis-Startseite ******************** */
-.main 
-	{
-		font-family: arial,serif;
-		background-color : white;
-		color: black;
-		font-size: 12pt;
-	}
+.main {
+	margin: 0;
+	padding: 0;
+	font-family: arial,serif;
+	background-color : white;
+	color: black;
+	font-size: 12pt;
+}
 
 /* ******************** Header-Menu ******************** */	
 table.headerMenu

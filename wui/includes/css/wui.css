@@ -17,6 +17,12 @@ form {
 	margin: 0;
 }
 
+.main {
+	margin: 0;
+	padding: 0;
+	background-color: white;
+}
+
 .submit {
 	border: 2px ridge Black;
 	font: bold 15px Verdana, Geneva, Arial, Helvetica, sans-serif; 

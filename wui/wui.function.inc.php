@@ -157,6 +157,7 @@ switch($_GET['myaction']) {
 		foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
 			$MAPCFG->setValue($_POST['type'], $_POST['id'], $key, $val);
 		}
+		
 		// write element to file
 		$MAPCFG->writeElement($_POST['type'],$_POST['id']);
 		

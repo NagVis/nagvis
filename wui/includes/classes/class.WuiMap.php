@@ -163,7 +163,7 @@ class WuiMap extends GlobalMap {
 		}
 		
 		$ret[] = "\t<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z'].";\">";
-		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" ".$this->infoBox($obj).">";
+		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
 		$ret[] = "\t</div>";
 		
 		return $ret;
@@ -220,9 +220,9 @@ class WuiMap extends GlobalMap {
 			}
 		}
 		
-		$tooltipText .= "<br><a href=\'./addmodify.php?action=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\' onclick=\'fenetre(href); return false;\'>".$this->LANG->getLabel('change')."</a>";
+		$tooltipText .= "<br><a href=\'./addmodify.php?action=modify&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onclick=\'fenetre(href); return false;\'>".$this->LANG->getLabel('change')."</a>";
 		$tooltipText .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";	
-		$tooltipText .= "<a href=\'./wui.function.inc.php?myaction=delete&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a>";
+		$tooltipText .= "<a href=\'./wui.function.inc.php?myaction=delete&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a>";
 		
 		# lines and textboxes have one more link in the tooltip : "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
@@ -317,7 +317,7 @@ class WuiMap extends GlobalMap {
 			<input type="hidden" name="valx">
 			<input type="hidden" name="valy">
 			<input type="hidden" name="autosave" value="'.$this->MAINCFG->getRuntimeValue('justAdded').'">
-			<textarea name="menu_labels"></textarea>
+			<textarea name="menu_labels" rows="5" cols="10"></textarea>
 			<input type="text" name="allowed_users_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsAllowedUsers').'">
 			<input type="text" name="image_map_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsImages').'">
 			<input type="text" name="mapname_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsNames').'">

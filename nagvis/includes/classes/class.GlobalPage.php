@@ -327,11 +327,13 @@ class GlobalPage {
 	function getCssIncludes() {
 		$ret = Array();
 		
+		$ret[] = "<style type=\"text/css\"><!--";
 		if(count($this->cssIncludes) > 0) {
 			foreach($this->cssIncludes AS $var => $val) {
-				$ret[] = "<link href=\"".$val."\" rel=\"stylesheet\" type=\"text/css\" />";
+				$ret[] = "@import url(".$val.");";
 			}
 		}
+		$ret[] = "--></style>";
 		
 		return $ret;
 	}
@@ -345,11 +347,12 @@ class GlobalPage {
 	function buildPage() {
 		$ret = '';
 		
-		$ret  = "<html>\n";
+		$ret = "<!DOCTYPE HTML SYSTEM>\n";
+		$ret .= "<html>\n";
 		$ret .= "\t<head>\n";
 		$ret .= $this->getLines($this->getHeader());
 		$ret .= "\t</head>\n";
-		$ret .= "\t<body class=\"main\" marginwidth=\"0\" marginheight=\"0\" topmargin=\"0\" leftmargin=\"0\">\n";
+		$ret .= "\t<body class=\"main\">\n";
 		$ret .= $this->getLines($this->getBody());
 		$ret .= "\t</body>\n";
 		$ret .= "</html>\n";
