@@ -59,7 +59,7 @@ function is_user_allowed(mapname) {
 	temp=window.opener.document.myvalues.allowed_users_by_map.value.split("^");
 
 	for(var i=0;i<temp.length;i++) {
-		temp2=temp[i].split("=");
+		temp2=temp[i].split("~");
 		if(temp2[0]==mapname) {
 			temp3=temp2[1].split(",");
 			for(var j=0;j<temp3.length;j++) {
@@ -112,7 +112,7 @@ function is_mapname_used(map_name) {
 	mapname_used_by="";
 	temp=window.opener.document.forms['myvalues'].mapname_by_map.value.split("^");
 	for(var i=0;i<temp.length;i++) {
-		temp2=temp[i].split("=");
+		temp2=temp[i].split("~");
 		if(temp2[1]==map_name) {
 			mapname_used_by=temp2[0];
 			return true;
@@ -149,33 +149,17 @@ function check_map_delete() {
 }
 
 
-var image_used_by;
-function is_map_image_used(imagename) {
-	image_used_by="";
-	temp=window.opener.document.forms['myvalues'].image_map_by_map.value.split("^");
-	for(var i=0;i<temp.length;i++) {
-		temp2=temp[i].split("=");
-		if(temp2[1]==imagename) {
-			image_used_by=temp2[0];
-			return true;
-		}
-
-	}
-	
-	return false;
-}
-
-
 function check_image_delete() {
-	if (document.image_delete.map_image.value=='') {
+	if(document.image_delete.map_image.value=='') {
 		alert(lang['foundNotBackgroundToDelete']);
 		return false;
 	}
-	
-	if(is_map_image_used(document.image_delete.map_image.value)) {
-		mess=new String(lang['unableToDeleteBackground']);
-		mess=mess.replace("[MAP]",image_used_by);
-		mess=mess.replace("[IMAGENAME]",document.image_delete.map_image.value);
+	getMapImageInUse(document.image_delete.map_image.value);
+	var imageUsedBy = window.opener.document.forms['myvalues'].ajax_data.value;
+	if(imageUsedBy.length > 0) {
+		mess = new String(lang['unableToDeleteBackground']);
+		mess= mess.replace("[MAP]",imageUsedBy);
+		mess = mess.replace("[IMAGE NAME]",document.image_delete.map_image.value);
 		alert(mess);
 		return false;
 	}
@@ -185,4 +169,15 @@ function check_image_delete() {
 	}
 	
 	return true;
+}
+
+function printMapImageInUse(aObjects,oOpts) {
+	dataField = window.opener.document.forms['myvalues'].ajax_data;
+	dataField.value = '';
+	for(var i=0;i<aObjects.length;i++) {
+		if(i>0) {
+			dataField.value = dataField.value+','	
+		}
+		dataField.value=dataField.value+aObjects[i];
+	}
 }

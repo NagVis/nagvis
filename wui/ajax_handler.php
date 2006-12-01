@@ -1,5 +1,6 @@
 <?php
 include("../nagvis/includes/classes/class.GlobalMainCfg.php");
+include("./includes/classes/class.WuiMainCfg.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");
 include("../nagvis/includes/classes/class.GlobalLanguage.php");
 include("../nagvis/includes/classes/class.GlobalPage.php");
@@ -7,7 +8,7 @@ include("../nagvis/includes/classes/class.GlobalBackend-ndomy.php");
 include("../nagvis/includes/classes/class.GlobalBackend-html.php");
 include("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
 
-$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php');
+$MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 $BACKEND = new GlobalBackendMgmt($MAINCFG);
 
 switch($_GET['action']) {
@@ -88,6 +89,24 @@ switch($_GET['action']) {
 				}
 				
 				echo "\t".' }'."\n";
+				$i++;
+			}
+		}
+		echo ' ]';
+	break;
+	case 'getMapImageInUse';
+		// $_GET['image']
+		echo '[ ';
+		$i = 0;
+		foreach($MAINCFG->getMaps() AS $var => $val) {
+			$MAPCFG = new GlobalMapCfg($MAINCFG,$val);
+			$MAPCFG->readMapConfig();
+			
+			if($MAPCFG->getValue('global', 0,'map_image') == $_GET['image']) {
+				if($i != 0) {
+					echo ',';	
+				}
+				echo '"'.$val.'" ';
 				$i++;
 			}
 		}

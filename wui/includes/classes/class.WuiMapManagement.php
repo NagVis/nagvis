@@ -16,7 +16,8 @@ class WuiMapManagement extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/map_management.js'),
+					  'jsIncludes'=>Array('./includes/js/map_management.js',
+					  						'./includes/js/ajax.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'wui:mapManagement');
@@ -116,7 +117,7 @@ class WuiMapManagement extends GlobalPage {
 		$ret = Array();
 		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
 		$ret = array_merge($ret,$this->RENAMEFORM->getHiddenField('map',''));
-		$ret[] = '<script>document.map_rename.map.value=window.opener.document.myvalues.formulaire.value</script>';
+		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
 		
 		return $ret;
 	}
@@ -130,7 +131,7 @@ class WuiMapManagement extends GlobalPage {
 		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
 		$ret = array_merge($ret,$this->RENAMEFORM->getInputLine($this->LANG->getLabel('newMapName'),'map_new_name',''));
 		$ret = array_merge($ret,$this->RENAMEFORM->getHiddenField('map',''));
-		$ret[] = '<script>document.map_rename.map.value=window.opener.document.myvalues.formulaire.value</script>';
+		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
 		
 		return $ret;
 	}

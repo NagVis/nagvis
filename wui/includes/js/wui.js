@@ -92,9 +92,9 @@ function get_click_pos(e) {
 		document.images['background'].style.cursor='default';
 		follow_mouse=false;
 		if(action_click=='add') {
-			link="./addmodify.php?action=add&map="+document.myvalues.formulaire.value+"&type="+objtype+"&coords="+coords;
+			link="./addmodify.php?action=add&map="+mapname+"&type="+objtype+"&coords="+coords;
 		} else if(action_click=='modify') {
-			link="./addmodify.php?action=modify&map="+document.myvalues.formulaire.value+"&type="+objtype+"&id="+objid+"&coords="+coords;
+			link="./addmodify.php?action=modify&map="+mapname+"&type="+objtype+"&id="+objid+"&coords="+coords;
 		}
 		
 		fenetre(link);
@@ -105,16 +105,17 @@ function get_click_pos(e) {
 
 // simple function to ask to confirm before we delete an object
 function confirm_object_deletion() {
-	confirm_message=lang['confirmDelete'];
-	if(confirm(confirm_message)) return true;
-	else return false;
-	
+	if(confirm(lang['confirmDelete'])) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 // simple function to ask to confirm before we restore a map
 function confirm_restore() {
 	if(confirm(lang['confirmRestore'])) {
-		document.location.href='./wui.function.inc.php?myaction=map_restore&map='+ document.myvalues.formulaire.value;
+		document.location.href='./wui.function.inc.php?myaction=map_restore&map='+mapname;
 	}
 	return true;
 }

@@ -72,3 +72,9 @@ function getBackendOptions(backend_type,backend_id,form) {
 	oOpt.form = form;
 	getRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backend_id+'&backend_type='+backend_type,'printBackendOptions',oOpt);
 }
+
+function getMapImageInUse(magImage) {
+	var oOpt = Object();
+	oOpt.mapImage = magImage;
+	getRequest('ajax_handler.php?action=getMapImageInUse&image='+magImage,'printMapImageInUse',oOpt);
+}

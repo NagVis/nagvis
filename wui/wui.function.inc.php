@@ -120,7 +120,7 @@ switch($_GET['myaction']) {
 	case 'save':
 		# passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
 		# save the coordinates on the server
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['formulaire']);
+		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['mapname']);
 		$MAPCFG->readMapConfig();
 		
 		// convert lists to arrays
@@ -144,10 +144,10 @@ switch($_GET['myaction']) {
 				}
 			}
 			
-			backup($MAINCFG,$_POST['formulaire']);
+			backup($MAINCFG,$_POST['mapname']);
 		}
 		# display the same map again
-		print "<script>document.location.href='./index.php?map=".$_POST['formulaire']."';</script>\n";
+		print "<script>document.location.href='./index.php?map=".$_POST['mapname']."';</script>\n";
 	break;
 	case 'modify':
 		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map']);

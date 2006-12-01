@@ -31,9 +31,8 @@ function get_label(key) {
 function load_allowed_users() {
 	temp=document.forms['myvalues'].allowed_users_by_map.value.split("^");
 	
-	for(var i=0;i<temp.length;i++)
-	{
-		temp2=temp[i].split("=");
+	for(var i=0;i<temp.length;i++) {
+		temp2=temp[i].split("~");
 		index_list_users.push(temp2[0]);
 		value_list_users.push(temp2[1]);
 	}
@@ -41,13 +40,13 @@ function load_allowed_users() {
 }
 
 // function that says if the current user is allowed to have access to a special map
-function is_allowed_user(mymapname)
-{
+function is_allowed_user(mymapname) {
 	for(var i=0;index_list_users[i]!=mymapname;i++) {}
 	temp=value_list_users[i].split(",");
-	for(var j=0;j<temp.length;j++)
-	{
-		if( (username==temp[j]) || (temp[j]=="EVERYONE") ) return true;
+	for(var j=0;j<temp.length;j++) {
+		if((username==temp[j]) || (temp[j]=="EVERYONE") ) {
+			return true;
+		}
 	}
 	return false;
 }
@@ -61,7 +60,7 @@ function createjsDOMenu() {
   with (mainMenu) {
     addMenuItem(new menuItem(get_label('save'), "menu_save", "code:document.myvalues.submit.click();","","",""));
     addMenuItem(new menuItem(get_label('restore'), "menu_restore", "code:confirm_restore();","","",""));
-    addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:fenetre('./addmodify.php?action=modify&map='+document.myvalues.formulaire.value+'&type=global&id=0');","","",""));
+    addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:fenetre('./addmodify.php?action=modify&map='+mapname+'&type=global&id=0');","","",""));
     addMenuItem(new menuItem("-"));
     addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
 
@@ -120,7 +119,7 @@ function createjsDOMenu() {
   
   mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);
   
-  if(document.myvalues.formulaire.value!='')
+  if(mapname != '')
   {
   	  mainMenu.items.menu_addobject.setSubMenu(submenu_addobject);
 	  submenu_addobject.items.menu_addobject_icon.setSubMenu(submenu_addobject_icon);
@@ -133,7 +132,7 @@ function createjsDOMenu() {
   filter = new Array("IMG.background");
   mainMenu.setNoneExceptFilter(filter);
  
-  if(document.myvalues.formulaire.value=='')
+  if(mapname == '')
   {
  	mainMenu.items.menu_save.enabled=false;
 	mainMenu.items.menu_save.className='jsdomenuitem_disabled';

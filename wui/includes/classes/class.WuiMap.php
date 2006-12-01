@@ -64,11 +64,11 @@ class WuiMap extends GlobalMap {
 				} else {
 					$users = $MAPCFG1->getValue('global', 0,'allowed_for_config');
 				}
-				$all_allowed_user .= "^".$file."=".$users;	
-				$all_map_image .= "^".$file."=".$MAPCFG1->getValue('global', 0,'map_image');
+				$all_allowed_user .= "^".$file."~".$users;	
+				$all_map_image .= "^".$file."~".$MAPCFG1->getValue('global', 0,'map_image');
 				
 				foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-					$all_map_name .= "^".$file."=".$obj['map_name'];
+					$all_map_name .= "^".$file."~".$obj['map_name'];
 				}
 			}
 		}
@@ -312,16 +312,16 @@ class WuiMap extends GlobalMap {
 		#
 		# the other fields of this form are used to store datas the other pages will use
 		$arr[] = '<form name="myvalues" action="./wui.function.inc.php?myaction=save" method="post">
+			<input type="hidden" name="ajax_data" value="">
 			<input type="hidden" name="image">
-			<input type="hidden" name="formulaire" value="'.$this->MAPCFG->getName().'">
+			<input type="hidden" name="mapname" value="'.$this->MAPCFG->getName().'">
 			<input type="hidden" name="valx">
 			<input type="hidden" name="valy">
 			<input type="hidden" name="autosave" value="'.$this->MAINCFG->getRuntimeValue('justAdded').'">
-			<textarea name="menu_labels" rows="5" cols="10"></textarea>
-			<input type="text" name="allowed_users_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsAllowedUsers').'">
-			<input type="text" name="image_map_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsImages').'">
-			<input type="text" name="mapname_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsNames').'">
-			<input type="text" name="backup_available" value="'.file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak").'">
+			<input type="hidden" name="allowed_users_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsAllowedUsers').'">
+			<input type="hidden" name="image_map_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsImages').'">
+			<input type="hidden" name="mapname_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsNames').'">
+			<input type="hidden" name="backup_available" value="'.file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak").'">
 			<input name="submit" type=submit value="Save this map">
 		</form>';
 		
@@ -342,8 +342,9 @@ class WuiMap extends GlobalMap {
 		  	".$arrMaps."
 		  	
 			// make the forms invisible
-			document.forms['myvalues'].style.visibility='hidden';
+			document.myvalues.style.visibility='hidden';
 			
+			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
 			
 			// build the right-click menu
