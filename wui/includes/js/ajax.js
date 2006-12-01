@@ -73,8 +73,15 @@ function getBackendOptions(backend_type,backend_id,form) {
 	getRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backend_id+'&backend_type='+backend_type,'printBackendOptions',oOpt);
 }
 
-function getMapImageInUse(magImage) {
+function getAllowedUsers(mapName,mode) {
 	var oOpt = Object();
-	oOpt.mapImage = magImage;
-	getRequest('ajax_handler.php?action=getMapImageInUse&image='+magImage,'printMapImageInUse',oOpt);
+	oOpt.mapName = mapName;
+	oOpt.mode = mode;
+	getRequest('ajax_handler.php?action=getAllowedUsers&map='+mapName+'mode='+mode,'retAllowedUsers',oOpt);
+}
+
+function getMapImageInUse(mapImage) {
+	var oOpt = Object();
+	oOpt.mapImage = mapImage;
+	getRequest('ajax_handler.php?action=getMapImageInUse&image='+mapImage,'retMapImageInUse',oOpt);
 }

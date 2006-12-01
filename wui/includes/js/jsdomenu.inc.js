@@ -27,24 +27,14 @@ function get_label(key) {
 
 }
 
-// function that loads the list of the allowed users for all the maps in an array
-function load_allowed_users() {
-	temp=document.forms['myvalues'].allowed_users_by_map.value.split("^");
-	
-	for(var i=0;i<temp.length;i++) {
-		temp2=temp[i].split("~");
-		index_list_users.push(temp2[0]);
-		value_list_users.push(temp2[1]);
-	}
-	
-}
-
 // function that says if the current user is allowed to have access to a special map
-function is_allowed_user(mymapname) {
-	for(var i=0;index_list_users[i]!=mymapname;i++) {}
-	temp=value_list_users[i].split(",");
-	for(var j=0;j<temp.length;j++) {
-		if((username==temp[j]) || (temp[j]=="EVERYONE") ) {
+function is_allowed_user(mapName) {
+	getAllowedUsers(mapName,'read');
+	var allowedUsers = document.forms['myvalues'].ajax_data.value;
+	
+	allowedUsers = allowedUsers.split(",");
+	for(var i=0;i<allowedUsers.length;i++) {
+		if((username==allowedUsers[i]) || (allowedUsers[i]=="EVERYONE") ) {
 			return true;
 		}
 	}
@@ -54,7 +44,6 @@ function is_allowed_user(mymapname) {
 //################################################################
 // function that creates the menu
 function createjsDOMenu() {
-  load_allowed_users();
 
   mainMenu = new jsDOMenu(160);
   with (mainMenu) {
@@ -104,13 +93,11 @@ function createjsDOMenu() {
 
   
   submenu_maps_open = new jsDOMenu(140);
-  for(i=0;i<arrMaps.length;i++)
-  {
+  for(i=0;i<arrMaps.length;i++) {
 	myval="link:./index.php?map="+arrMaps[i]+"";
 	submenu_maps_open.addMenuItem(new menuItem(arrMaps[i],arrMaps[i],myval,"","",""));
 	
-	if(is_allowed_user(arrMaps[i])==false)
-	{
+	if(is_allowed_user(arrMaps[i])==false) {
 		namemap=new String(arrMaps[i]);
 		submenu_maps_open.items[namemap].enabled=false;
 		submenu_maps_open.items[namemap].className='jsdomenuitem_disabled';
@@ -119,8 +106,7 @@ function createjsDOMenu() {
   
   mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);
   
-  if(mapname != '')
-  {
+  if(mapname != '') {
   	  mainMenu.items.menu_addobject.setSubMenu(submenu_addobject);
 	  submenu_addobject.items.menu_addobject_icon.setSubMenu(submenu_addobject_icon);
 	  submenu_addobject.items.menu_addobject_line.setSubMenu(submenu_addobject_line);
@@ -132,8 +118,7 @@ function createjsDOMenu() {
   filter = new Array("IMG.background");
   mainMenu.setNoneExceptFilter(filter);
  
-  if(mapname == '')
-  {
+  if(mapname == '') {
  	mainMenu.items.menu_save.enabled=false;
 	mainMenu.items.menu_save.className='jsdomenuitem_disabled';
 	mainMenu.items.menu_properties.enabled=false;
@@ -142,8 +127,7 @@ function createjsDOMenu() {
 	mainMenu.items.menu_addobject.className='jsdomenuitem_disabled';
   }
   
-  if(document.myvalues.backup_available.value!='1')
-  {
+  if(document.myvalues.backup_available.value!='1') {
 	mainMenu.items.menu_restore.enabled=false;
 	mainMenu.items.menu_restore.className='jsdomenuitem_disabled';
   }

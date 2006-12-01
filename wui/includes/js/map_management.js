@@ -53,19 +53,14 @@ function check_create_map() {
 	return true;
 }
 
-
-function is_user_allowed(mapname) {
-	username=window.opener.document.myvalues.username.value;
-	temp=window.opener.document.myvalues.allowed_users_by_map.value.split("^");
-
-	for(var i=0;i<temp.length;i++) {
-		temp2=temp[i].split("~");
-		if(temp2[0]==mapname) {
-			temp3=temp2[1].split(",");
-			for(var j=0;j<temp3.length;j++) {
-				if( (temp3[j]==username) || (temp3[j]=="EVERYONE") ) return true;
-			}
-			return false;
+function is_allowed_user(mapName) {
+	getAllowedUsers(mapName,'read');
+	var allowedUsers = window.opener.document.forms['myvalues'].ajax_data.value;
+	
+	allowedUsers = allowedUsers.split(",");
+	for(var i=0;i<allowedUsers.length;i++) {
+		if((username==allowedUsers[i]) || (allowedUsers[i]=="EVERYONE") ) {
+			return true;
 		}
 	}
 	return false;
@@ -171,12 +166,12 @@ function check_image_delete() {
 	return true;
 }
 
-function printMapImageInUse(aObjects,oOpts) {
+function retMapImageInUse(aObjects,oOpts) {
 	dataField = window.opener.document.forms['myvalues'].ajax_data;
 	dataField.value = '';
 	for(var i=0;i<aObjects.length;i++) {
 		if(i>0) {
-			dataField.value = dataField.value+','	
+			dataField.value = dataField.value+',';
 		}
 		dataField.value=dataField.value+aObjects[i];
 	}

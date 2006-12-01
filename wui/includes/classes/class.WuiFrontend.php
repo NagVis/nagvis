@@ -25,6 +25,7 @@ class WuiFrontend extends GlobalPage {
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array('./includes/js/wui.js',
+					  	  './includes/js/ajax.js',
 						  './includes/js/wz_jsgraphics.js',
 						  './includes/js/wz_dragdrop.js',
 						  './includes/js/wz_tooltip.js',

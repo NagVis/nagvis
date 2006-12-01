@@ -9,6 +9,18 @@ var myshapex=0;
 var myshapey=0;
 var objid=0;
 
+
+function retAllowedUsers(aObjects,oOpts) {
+	dataField = window.opener.document.forms['myvalues'].ajax_data;
+	dataField.value = '';
+	for(var i=0;i<aObjects.length;i++) {
+		if(i>0) {
+			dataField.value = dataField.value+',';
+		}
+		dataField.value=dataField.value+aObjects[i];
+	}
+}
+
 // functions used to track the mouse movements, when the user is adding an object. Draw a line a rectangle following the mouse
 // when the user has defined enough points we open the "add object" window
 
