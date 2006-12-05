@@ -27,20 +27,6 @@ function get_label(key) {
 
 }
 
-// function that says if the current user is allowed to have access to a special map
-function is_allowed_user(mapName) {
-	getAllowedUsers(mapName,'read');
-	var allowedUsers = document.forms['myvalues'].ajax_data.value;
-	
-	allowedUsers = allowedUsers.split(",");
-	for(var i=0;i<allowedUsers.length;i++) {
-		if((username==allowedUsers[i]) || (allowedUsers[i]=="EVERYONE") ) {
-			return true;
-		}
-	}
-	return false;
-}
-
 //################################################################
 // function that creates the menu
 function createjsDOMenu() {
@@ -97,10 +83,9 @@ function createjsDOMenu() {
 	myval="link:./index.php?map="+arrMaps[i]+"";
 	submenu_maps_open.addMenuItem(new menuItem(arrMaps[i],arrMaps[i],myval,"","",""));
 	
-	if(is_allowed_user(arrMaps[i])==false) {
-		namemap=new String(arrMaps[i]);
-		submenu_maps_open.items[namemap].enabled=false;
-		submenu_maps_open.items[namemap].className='jsdomenuitem_disabled';
+	if(!checkUserAllowed(arrMaps[i],mapOptions,username)) {
+		submenu_maps_open.items[arrMaps[i]].enabled=false;
+		submenu_maps_open.items[arrMaps[i]].className='jsdomenuitem_disabled';
 	}
   }
   
@@ -127,7 +112,7 @@ function createjsDOMenu() {
 	mainMenu.items.menu_addobject.className='jsdomenuitem_disabled';
   }
   
-  if(document.myvalues.backup_available.value!='1') {
+  if(backupAvailable != '1') {
 	mainMenu.items.menu_restore.enabled=false;
 	mainMenu.items.menu_restore.className='jsdomenuitem_disabled';
   }

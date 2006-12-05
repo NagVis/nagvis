@@ -1,21 +1,50 @@
 // checks that the file the user wants to upload has the .png extension
-function check_png() {
-  if(document.new_image.fichier.value.length == 0) {
-  	 alert(lang['firstMustChoosePngImage']);
-	 return false;
-  } else {
-  	  var ext = document.new_image.fichier.value;
-	  ext = ext.substring(ext.length-3,ext.length);
-	  ext = ext.toLowerCase();
-	  if(ext != 'png') {
-	    alert(lang['mustChoosePngImage']);
-	    return false; 
-	  } else {
-	  	return true;
-	  }
-  }
+function checkPng(imageName) {
+	if(imageName.substring(ext.length-3,ext.length).toLowerCase() != 'png') {
+		return false; 
+	} else {
+		return true;
+	}
 }
 
+function checkMapLinked(mapName,mapOptions) {
+	for(var i=0;i<mapOptions.length;i++) {
+		for(var a = 0; a < mapOptions[i].linkedMaps.length; a++) {
+			if(mapOptions[i].linkedMaps[a] == mapName) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+function checkImageUsed(imageName,mapOptions) {
+	for(var i=0;i<mapOptions.length;i++) {
+		if(mapOptions[i].mapImage == imageName) {
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+function check_image_add() {
+	if(document.new_image.fichier.value.length == 0) {
+		alert(lang['firstMustChoosePngImage']);
+		
+		return false;
+	}
+	
+	if(!checkPng(document.new_image.fichier.value)) {
+		alert(lang['mustChoosePngImage']);
+		
+		return false;
+	}
+	
+	return true;
+	
+}
 
 function check_create_map() {
 	if (document.map_create.map_name.value=='') {
@@ -53,20 +82,6 @@ function check_create_map() {
 	return true;
 }
 
-function is_allowed_user(mapName) {
-	getAllowedUsers(mapName,'read');
-	var allowedUsers = window.opener.document.forms['myvalues'].ajax_data.value;
-	
-	allowedUsers = allowedUsers.split(",");
-	for(var i=0;i<allowedUsers.length;i++) {
-		if((username==allowedUsers[i]) || (allowedUsers[i]=="EVERYONE") ) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
 function check_map_rename() {
 	if (document.map_rename.map_name.value=='') {
 		alert(lang['noMapToRename']);
@@ -102,37 +117,25 @@ function check_map_rename() {
 	return true;
 }
 
-var mapname_used_by;
-function is_mapname_used(map_name) {
-	mapname_used_by="";
-	temp=window.opener.document.forms['myvalues'].mapname_by_map.value.split("^");
-	for(var i=0;i<temp.length;i++) {
-		temp2=temp[i].split("~");
-		if(temp2[1]==map_name) {
-			mapname_used_by=temp2[0];
-			return true;
-		}
-	}
-	return false;
-}
-
-
 function check_map_delete() {
-	if (document.map_delete.map_name.value=='') {
+	if(document.map_delete.map_name.value=='') {
 		alert(lang['foundNoMapToDelete']);
 		return false;
 	}
 	
-	if (is_user_allowed(document.map_delete.map_name.value)===false) {
+	if(!checkUserAllowed(document.map_delete.map_name.value, window.opener.mapOptions, window.opener.username)) {
 		alert(lang['noPermissions']);
+		
 		return false;
 	}
 	
-	if(is_mapname_used(document.map_delete.map_name.value)) {
-		mess=new String(lang['unableToDeleteBackground']);
-		mess=mess.replace("[MAP]",mapname_used_by);
-		mess=mess.replace("[IMAGENAME]",document.map_delete.map_name.value);
+	if(checkMapLinked(document.map_delete.map_name.value, window.opener.mapOptions)) {
+		mess = new String(lang['unableToDeleteMap']);
+		//FIXME: mess = mess.replace("[MAP]",mapname_used_by);
+		//FIXME: mess = mess.replace("[IMAGENAME]",document.map_delete.map_name.value);
+		
 		alert(mess);
+		
 		return false;
 	}
 	
@@ -145,34 +148,24 @@ function check_map_delete() {
 
 
 function check_image_delete() {
-	if(document.image_delete.map_image.value=='') {
+	if(document.image_delete.map_image.value == '') {
 		alert(lang['foundNotBackgroundToDelete']);
 		return false;
 	}
-	getMapImageInUse(document.image_delete.map_image.value);
-	var imageUsedBy = window.opener.document.forms['myvalues'].ajax_data.value;
-	if(imageUsedBy.length > 0) {
+	
+	if(checkImageUsed(document.image_delete.map_image.value, window.opener.mapOptions)) {
 		mess = new String(lang['unableToDeleteBackground']);
-		mess= mess.replace("[MAP]",imageUsedBy);
+		//FIXME: mess= mess.replace("[MAP]",imageUsedBy);
 		mess = mess.replace("[IMAGE NAME]",document.image_delete.map_image.value);
+		
 		alert(mess);
+		
 		return false;
 	}
 	
-	if (confirm(lang['confirmBackgroundDeletion']) === false) {
+	if(confirm(lang['confirmBackgroundDeletion']) === false) {
 		return false;
 	}
 	
 	return true;
-}
-
-function retMapImageInUse(aObjects,oOpts) {
-	dataField = window.opener.document.forms['myvalues'].ajax_data;
-	dataField.value = '';
-	for(var i=0;i<aObjects.length;i++) {
-		if(i>0) {
-			dataField.value = dataField.value+',';
-		}
-		dataField.value=dataField.value+aObjects[i];
-	}
 }

@@ -404,10 +404,10 @@
 					<text>Click on the map around the missing points to determine.</text>
 				</clickMapToSetPoints>
 				<confirmDelete>
-					<text>Do you want to really delete this object? </text>
+					<text>Do you really want to delete this object? </text>
 				</confirmDelete>
 				<firstMustChoosePngImage>
-					<text>You must only a PNG image select! </text>
+					<text>Please choose an PNG image.</text>
 				</firstMustChoosePngImage>
 				<mustChoosePngImage>
 					<text>You must select an image with the extension .png.</text>
@@ -422,10 +422,10 @@
 					<text>You must select default_iconset for this map.</text>
 				</mustChooseDefaultIconset>
 				<mustChooseBackgroundImage>
-					<text>You must select background the image for this map.</text>
+					<text>You must select the background image for this map.</text>
 				</mustChooseBackgroundImage>
 				<noMapToRename>
-					<text>No map to rename found. Operation broken off.</text>
+					<text>No map found. Operation terminated.</text>
 				</noMapToRename>
 				<noNewNameGiven>
 					<text>You indicated no new names.</text>
@@ -434,28 +434,28 @@
 					<text>This map exists already. Select another name.</text>
 				</mapAlreadyExists>
 				<foundNoMapToDelete>
-					<text>No map to delete found. Operation broken off.</text>
+					<text>No map found. Operation terminated.</text>
 				</foundNoMapToDelete>
 				<foundNoBackgroundToDelete>
-					<text>No background image to delete found. Operation broken off.</text>
+					<text>No background image found. Operation terminated.</text>
 				</foundNoBackgroundToDelete>
 				<confirmNewMap>
-					<text>Do you want to really provide a new map?</text>
+					<text>Do you really want to provide a new map?</text>
 				</confirmNewMap>
 				<confirmMapRename>
-					<text>Do you want to really rename this map?</text>
+					<text>Do you really want to rename this map?</text>
 				</confirmMapRename>
 				<confirmMapDeletion>
-					<text>Do you want to really delete this map? This action cannot be cancelled!</text>
+					<text>Do you really want to delete this map? This action cannot be cancelled!</text>
 				</confirmMapDeletion>
 				<confirmBackgroundDeletion>
-					<text>Do you want to really delete this background image? This action cannot be cancelled!</text>
+					<text>Do you really want to delete this background image? This action cannot be cancelled!</text>
 				</confirmBackgroundDeletion>
 				<unableToDeleteBackground>
 					<text>Cannot delete [IMAGE NAME], because the map [MAP] was in use</text>
 				</unableToDeleteBackground>
 				<noPermissions>
-					<text>Do you not have the permissions to change this map.</text>
+					<text>You don not have the permissions to change this map.</text>
 				</noPermissions>
 				<minOneUserWriteAccess>
 					<text>At least one user must have the authorization, in order to change this map.</text>

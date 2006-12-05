@@ -17,7 +17,8 @@ class WuiMapManagement extends GlobalPage {
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array('./includes/js/map_management.js',
-					  						'./includes/js/ajax.js'),
+					  						'./includes/js/ajax.js',
+					  						'./includes/js/wui.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'wui:mapManagement');
@@ -70,7 +71,7 @@ class WuiMapManagement extends GlobalPage {
 			'id'=>'new_image',
 			'method'=>'POST',
 			'action'=>'./wui.function.inc.php?myaction=mgt_new_image',
-			'onSubmit'=>'return check_png();',
+			'onSubmit'=>'return check_image_add();',
 			'enctype'=>'multipart/form-data',
 			'cols'=>'2'));
 		$this->addBodyLines($this->NEWIMGFORM->initForm());
@@ -232,6 +233,7 @@ class WuiMapManagement extends GlobalPage {
 		$ret[] = 'lang["confirmMapDeletion"] = "'.$this->LANG->getMessageText('confirmMapDeletion').'";';
 		$ret[] = 'lang["confirmBackgroundDeletion"] = "'.$this->LANG->getMessageText('confirmBackgroundDeletion').'";';
 		$ret[] = 'lang["unableToDeleteBackground"] = "'.$this->LANG->getMessageText('unableToDeleteBackground').'";';
+		$ret[] = 'lang["unableToDeleteMap"] = "'.$this->LANG->getMessageText('unableToDeleteMap').'";';
 		$ret[] = 'lang["noPermissions"] = "'.$this->LANG->getMessageText('noPermissions').'";';
 		$ret[] = 'lang["minOneUserWriteAccess"] = "'.$this->LANG->getMessageText('minOneUserWriteAccess').'";';
 		$ret[] = 'lang["noSpaceAllowed"] = "'.$this->LANG->getMessageText('noSpaceAllowed').'";';

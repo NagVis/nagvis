@@ -9,16 +9,16 @@ var myshapex=0;
 var myshapey=0;
 var objid=0;
 
-
-function retAllowedUsers(aObjects,oOpts) {
-	dataField = window.opener.document.forms['myvalues'].ajax_data;
-	dataField.value = '';
-	for(var i=0;i<aObjects.length;i++) {
-		if(i>0) {
-			dataField.value = dataField.value+',';
+// function that says if the current user is allowed to have access to a special map
+function checkUserAllowed(mapName,mapOptions,username) {
+	for(var i=0;i<mapOptions.length;i++) {
+		if(mapOptions[i].mapName == mapName) {
+			if((mapOptions[i].allowedUsers == username) || (mapOptions[i].allowedUsers == "EVERYONE") ) {
+				return true;
+			}
 		}
-		dataField.value=dataField.value+aObjects[i];
 	}
+	return false;
 }
 
 // functions used to track the mouse movements, when the user is adding an object. Draw a line a rectangle following the mouse

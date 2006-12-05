@@ -37,41 +37,46 @@ class WuiMap extends GlobalMap {
 		#
 		# The list of map_images will be used :
 		#		- to make sure a background image is not in use by another map, before it's deleted
-		if ($handle2 = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
-			$files = Array();
-			while (false !== ($file = readdir($handle2))) {
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg" ) {
-					if(substr($file,0,strlen($file)-4) != '') {
-						$files[] = substr($file,0,strlen($file)-4);
-					}
-				}				
+		$mapOptions = '[ ';
+		$a = 0;
+		foreach($this->getMaps() AS $map) {
+			if($a > 0) {
+				$mapOptions .= ', ';	
 			}
+			$MAPCFG1 = new GlobalMapCfg($this->MAINCFG,$map);
+			$MAPCFG1->readMapConfig();
+			$mapOptions .= '{ mapName: "'.$map.'"';
 			
-			if(count($files) > 1) {
-				natcasesort($files);
-			}
+			// used image
+			$mapOptions .= ', mapImage:"'.$MAPCFG1->getValue('global', '0', 'map_image').'"';
 			
-			$all_map_name="";
-			
-			foreach($files as $file) {
-				$MAPCFG1 = new GlobalMapCfg($this->MAINCFG,$file);
-				$MAPCFG1->readMapConfig();
-				
-				if(is_array($MAPCFG1->getValue('global', 0,'allowed_for_config'))) {
-					$users = implode(',',$MAPCFG1->getValue('global', 0,'allowed_for_config'));
-				} else {
-					$users = $MAPCFG1->getValue('global', 0,'allowed_for_config');
+			// permited users for writing
+			$mapOptions .= ', allowedUsers:[ ';
+			$arr = $MAPCFG1->getValue('global', '0', 'allowed_for_config');
+			for($i = 0; count($arr) > $i; $i++) {
+				if($i > 0) {
+					$mapOptions .= ',';	
 				}
-				
-				foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-					$all_map_name .= "^".$file."~".$obj['map_name'];
-				}
+				$mapOptions .= '\''.$arr[$i].'\' ';
 			}
+			$mapOptions .= ' ]';
+			
+			// linked maps
+			$mapOptions .= ', linkedMaps:[ ';
+			$i = 0;
+			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+				if($i > 0) {
+					$mapOptions .= ',';
+				}
+				$mapOptions .= '\''.$obj['map_name'].'\' ';
+			}
+			$mapOptions .= ' ]';
+			
+			$mapOptions .= ' }';
+			$a++;
 		}
-		closedir($handle2);
-		
-		# we remove the first ^
-		$this->MAINCFG->setRuntimeValue('AllMapsNames',substr($all_map_name,1,strlen($all_map_name)));
+		$mapOptions .= ' ]';
+		$this->MAINCFG->setRuntimeValue('mapOptions',$mapOptions);
 	}
 	
 	function parseMap() {
@@ -313,7 +318,6 @@ class WuiMap extends GlobalMap {
 			<input type="hidden" name="valy" value="">
 			<input type="hidden" name="autosave" value="'.$this->MAINCFG->getRuntimeValue('justAdded').'">
 			<input type="hidden" name="mapname_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsNames').'">
-			<input type="hidden" name="backup_available" value="'.file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak").'">
 			<input name="submit" type=submit value="Save this map">
 		</form>';
 		
@@ -338,6 +342,8 @@ class WuiMap extends GlobalMap {
 			
 			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
+			var mapOptions = ".$this->MAINCFG->getRuntimeValue('mapOptions').";
+			var backupAvailable = '".file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak")."';
 			
 			// build the right-click menu
 			initjsDOMenu();

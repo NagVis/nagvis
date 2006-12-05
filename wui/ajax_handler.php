@@ -49,7 +49,7 @@ switch($_GET['action']) {
 			echo '[ ';
 			if(isset($_GET['mode']) && $_GET['mode'] != '') {
 				if($_GET['mode'] == 'read') {
-					$arr =  $MAPCFG->getValue('global', '0', 'allowed_user');
+					$arr = $MAPCFG->getValue('global', '0', 'allowed_user');
 				} else {
 					$arr = $MAPCFG->getValue('global', '0', 'allowed_for_config');
 				}

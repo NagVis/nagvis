@@ -33,15 +33,17 @@ function getRequest(url,myCallback,oOpt) {
 	var oRequest = initXMLHttpClient();
 	
 	if (oRequest != null) {
-		oRequest.open("GET", url, true);
+		oRequest.open("GET", url+"&timestamp="+Date.parse(new Date()), true);
+		oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
 		oRequest.onreadystatechange = function() { getAnswer(oRequest,myCallback,oOpt); };
 		oRequest.send(null);
 	}
 }
 
 function getAnswer(oRequest,myCallback,oOpt) {
-	if (oRequest.readyState == 4) {
+	if(oRequest.readyState == 4) {
 		if (oRequest.status == 200) {
+			alert(oRequest.responseText);
 			if(oRequest.responseText.replace(/\s+/g,'').length == 0) {
 				window[myCallback]('',oOpt);
 			} else {
@@ -71,17 +73,4 @@ function getBackendOptions(backend_type,backend_id,form) {
 	var oOpt = Object();
 	oOpt.form = form;
 	getRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backend_id+'&backend_type='+backend_type,'printBackendOptions',oOpt);
-}
-
-function getAllowedUsers(mapName,mode) {
-	var oOpt = Object();
-	oOpt.mapName = mapName;
-	oOpt.mode = mode;
-	getRequest('ajax_handler.php?action=getAllowedUsers&map='+mapName+'mode='+mode,'retAllowedUsers',oOpt);
-}
-
-function getMapImageInUse(mapImage) {
-	var oOpt = Object();
-	oOpt.mapImage = mapImage;
-	getRequest('ajax_handler.php?action=getMapImageInUse&image='+mapImage,'retMapImageInUse',oOpt);
 }
