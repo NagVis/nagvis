@@ -310,15 +310,12 @@ class WuiMap extends GlobalMap {
 		# This is how it works to save the maps :)
 		#
 		# the other fields of this form are used to store datas the other pages will use
-		$arr[] = '<form name="myvalues" action="./wui.function.inc.php?myaction=save" method="post">
-			<input type="hidden" name="ajax_data" value="">
-			<input type="hidden" name="image" value="">
+		$arr[] = '<form id="myvalues" name="myvalues" action="./wui.function.inc.php?myaction=save" method="post">
 			<input type="hidden" name="mapname" value="'.$this->MAPCFG->getName().'">
+			<input type="hidden" name="image" value="">
 			<input type="hidden" name="valx" value="">
 			<input type="hidden" name="valy" value="">
-			<input type="hidden" name="autosave" value="'.$this->MAINCFG->getRuntimeValue('justAdded').'">
-			<input type="hidden" name="mapname_by_map" value="'.$this->MAINCFG->getRuntimeValue('AllMapsNames').'">
-			<input name="submit" type=submit value="Save this map">
+			<input type="submit" name="submit" value="Save">
 		</form>';
 		
 		// list all maps in a javascript variable
@@ -342,6 +339,7 @@ class WuiMap extends GlobalMap {
 			
 			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
+			var autosave = '".$this->MAINCFG->getRuntimeValue('justAdded')."';
 			var mapOptions = ".$this->MAINCFG->getRuntimeValue('mapOptions').";
 			var backupAvailable = '".file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak")."';
 			

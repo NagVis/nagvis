@@ -1472,17 +1472,14 @@ For example :
 would represent 2 objects : obj1 (defined line 3 in the map.cfg file) x=12 y=41
                             obj2 (defined line 6 in the map.cfg file) x=165 y=98
 */
-function my_DropFunc()
-{
-
+function my_DropFunc() {
 	window.status = "";
 
 	var names = "";
 	var coord_x = "";
 	var coord_y = "";
 			
-	for (cpt = dd.elements.length - 1; cpt >=0  ; cpt--)
-	{
+	for (cpt = dd.elements.length - 1; cpt >=0  ; cpt--) {
 		names = names + dd.elements[cpt].name.replace("box_","") + ",";
 		myposx=dd.elements[cpt].x+dd.elements[cpt].w/2;
 		myposy=dd.elements[cpt].y+dd.elements[cpt].h/2;
@@ -1502,13 +1499,7 @@ function my_DropFunc()
 	document.myvalues.valy.value = coord_y;
 	
 	// if autosave is enabled we submit the form "Save" which will save and refresh the map
-	if(document.myvalues.autosave.value == 'true') 
-	{	
-		
+	if(autosave == true) {
 		document.myvalues.submit.click();
 	}
-	
-	
-	
-
 }
