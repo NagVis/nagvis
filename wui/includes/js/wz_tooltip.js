@@ -460,4 +460,3 @@ function tt_Init()
 	}
 	document.write(htm);
 }
-tt_Init();

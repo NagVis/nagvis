@@ -81,7 +81,7 @@ function get_click_pos(e) {
 		}
 		
 		if(cpt_clicks == 2) {		
-			myshape = new jsGraphics("mycanvas");
+			myshape = new jsGraphics("mymap");
 			myshapex=posx;
 			myshapey=posy;
 			

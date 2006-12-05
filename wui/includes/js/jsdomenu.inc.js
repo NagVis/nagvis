@@ -30,7 +30,6 @@ function get_label(key) {
 //################################################################
 // function that creates the menu
 function createjsDOMenu() {
-
   mainMenu = new jsDOMenu(160);
   with (mainMenu) {
     addMenuItem(new menuItem(get_label('save'), "menu_save", "code:document.myvalues.submit.click();","","",""));
@@ -79,13 +78,12 @@ function createjsDOMenu() {
 
   
   submenu_maps_open = new jsDOMenu(140);
-  for(i=0;i<arrMaps.length;i++) {
-	myval="link:./index.php?map="+arrMaps[i]+"";
-	submenu_maps_open.addMenuItem(new menuItem(arrMaps[i],arrMaps[i],myval,"","",""));
+  for(i=0;i<mapOptions.length;i++) {
+	submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:./index.php?map="+mapOptions[i].mapName+"","","",""));
 	
-	if(!checkUserAllowed(arrMaps[i],mapOptions,username)) {
-		submenu_maps_open.items[arrMaps[i]].enabled=false;
-		submenu_maps_open.items[arrMaps[i]].className='jsdomenuitem_disabled';
+	if(!checkUserAllowed(mapOptions[i].mapName,mapOptions,username)) {
+		submenu_maps_open.items[mapOptions[i].mapName].enabled=false;
+		submenu_maps_open.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
 	}
   }
   

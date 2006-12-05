@@ -82,8 +82,7 @@ class WuiMap extends GlobalMap {
 	function parseMap() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground('img'));
-		$ret = array_merge($ret,$this->getJsGraphicObj());
-		$ret = array_merge($ret,$this->getJsLang());
+		$ret = array_merge($ret,$this->parseJs(array_merge($this->getJsGraphicObj(),$this->getJsLang())));
 		$ret = array_merge($ret,$this->parseObjects());
 		$ret = array_merge($ret,$this->parseInvisible());
 		$ret = array_merge($ret,$this->makeObjectsMoveable());
@@ -93,26 +92,36 @@ class WuiMap extends GlobalMap {
 	
 	function getJsGraphicObj() {
 		$ret = Array();
-		$ret[] = "<script type=\"text/javascript\">";
-		$ret[] = "\t\tmyshape_background = new jsGraphics('mycanvas');";
-		$ret[] = "\t\tmyshape_background.setColor('#FF0000');";
-		$ret[] = "\t\tmyshape_background.setStroke(1);";
-		$ret[] = "</script>";
+		$ret[] = "myshape_background = new jsGraphics('mymap');";
+		$ret[] = "myshape_background.setColor('#FF0000');";
+		$ret[] = "myshape_background.setStroke(1);\n";
 		
 		return $ret;
 	}
 	
 	function makeObjectsMoveable() {
-		$arr = Array();
+		$ret = Array();
 		
 		if(strlen($this->moveable) != 0) {
-			$arr[] = "<script type='text/javascript'>";
-			$arr[] = "<!--\n";
-			$arr[] = "SET_DHTML(TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n";
-			$arr[] = "//-->\n";
-			$arr[] = "</script>\n";
+			$ret = $this->parseJs("SET_DHTML(TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
 		}
-		return $arr;
+		return $ret;
+	}
+	
+	function parseJs($js) {
+		$ret = Array();
+		
+		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\">";
+		$ret[] = "<!--";
+		if(is_array($js)) {
+			$ret = array_merge($ret,$js);
+		} else {
+			$ret[] = $js;
+		}
+		$ret[] = "//-->";
+		$ret[] = "</script>";
+		
+		return $ret;
 	}
 	
 	function parseObjects() {
@@ -263,7 +272,6 @@ class WuiMap extends GlobalMap {
 	*/
 	function getJsLang() {
 		$ret = Array();
-		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var langMenu = Array();';
 		$ret[] = 'langMenu["save"] = "'.$this->LANG->getLabel('save').'";';
 		$ret[] = 'langMenu["restore"] = "'.$this->LANG->getLabel('restore').'";';
@@ -283,7 +291,10 @@ class WuiMap extends GlobalMap {
 		$ret[] = 'langMenu["map"] = "'.$this->LANG->getLabel('map').'";';
 		$ret[] = 'langMenu["textbox"] = "'.$this->LANG->getLabel('textbox').'";';
 		$ret[] = 'langMenu["shape"] = "'.$this->LANG->getLabel('shape').'";';
-		$ret[] = '//--></script>';
+		$ret[] = 'var lang = Array();';
+		$ret[] = 'lang["clickMapToSetPoints"] = "'.$this->LANG->getMessageText('clickMapToSetPoints').'";';
+		$ret[] = 'lang["confirmDelete"] = "'.$this->LANG->getMessageText('confirmDelete').'";';
+		$ret[] = 'lang["confirmRestore"] = "'.$this->LANG->getMessageText('confirmRestore').'";';
 		
 		return $ret;	
 	}
@@ -308,35 +319,15 @@ class WuiMap extends GlobalMap {
 		#                                            obj2 (defined line 6 in the map.cfg file) x=165 y=98
 		# When the user clicks on the Save buton, these lists are passed to a bash script executed on the server, which will parse them and treat them.
 		# This is how it works to save the maps :)
-		#
-		# the other fields of this form are used to store datas the other pages will use
-		$arr[] = '<form id="myvalues" name="myvalues" action="./wui.function.inc.php?myaction=save" method="post">
-			<input type="hidden" name="mapname" value="'.$this->MAPCFG->getName().'">
-			<input type="hidden" name="image" value="">
-			<input type="hidden" name="valx" value="">
-			<input type="hidden" name="valy" value="">
-			<input type="submit" name="submit" value="Save">
+		$arr[] = '<form id="myvalues" style="display:none;" name="myvalues" action="./wui.function.inc.php?myaction=save" method="post">
+			<input type="hidden" name="mapname" value="'.$this->MAPCFG->getName().'" />
+			<input type="hidden" name="image" value="" />
+			<input type="hidden" name="valx" value="" />
+			<input type="hidden" name="valy" value="" />
+			<input type="submit" name="submit" value="Save" />
 		</form>';
 		
-		// list all maps in a javascript variable
-		$arrMaps = "var arrMaps = Array(";
-		$i = 0;
-		foreach($this->getMaps() AS $file) {
-			if($i != 0) {
-				$arrMaps .= ",";
-			}
-			$arrMaps .= "'".$file."'";
-			$i++;
-		}
-		$arrMaps .= ");";
-		
-		$arr[] = "<script type=\"text/javascript\" language=\"JavaScript\">
-		  <!--
-		  	".$arrMaps."
-		  	
-			// make the forms invisible
-			document.myvalues.style.visibility='hidden';
-			
+		$arr = array_merge($arr,$this->parseJs("
 			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
 			var autosave = '".$this->MAINCFG->getRuntimeValue('justAdded')."';
@@ -348,9 +339,10 @@ class WuiMap extends GlobalMap {
 			
 			// draw the shapes on the background
 			myshape_background.paint();
-		  //-->
-		</script>";
-		
+			
+			// init tooltips for the objects
+			tt_Init();"));
+			
 		return $arr;
 	}
 }
