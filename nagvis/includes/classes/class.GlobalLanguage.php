@@ -96,20 +96,22 @@ class GlobalLanguage {
 	    $child = Array();
 		
 	    while($i++ < count($vals)) {
-	        switch ($vals[$i]['type']) {
-	           case 'open':
-	                $child[$vals[$i]['tag']] = $this->parseXMLObj($vals, $i);
-	            break;
-	            case 'complete':
-	                $child[$vals[$i]['tag']] = $vals[$i]['value'];
-	            break;
-	            case 'close':
-	                return $child;
-	            break;
-	            default:
-	            	// for "cdata" or anything else ... do nothing
-	            break;
-	        }
+	    	if(isset($vals[$i])) {
+		        switch($vals[$i]['type']) {
+		           case 'open':
+		                $child[$vals[$i]['tag']] = $this->parseXMLObj($vals, $i);
+		            break;
+		            case 'complete':
+		                $child[$vals[$i]['tag']] = $vals[$i]['value'];
+		            break;
+		            case 'close':
+		                return $child;
+		            break;
+		            default:
+		            	// for "cdata" or anything else ... do nothing
+		            break;
+		        }
+			}
 	    }
 	    
 		return $child;
@@ -177,7 +179,10 @@ class GlobalLanguage {
     function mergeArrayRecursive($array1, $array2) {
 		if (is_array($array2) && count($array2)) {
 			foreach ($array2 as $k => $v) {
-				if (is_array($v) && count($v)) {
+				if(is_array($v) && count($v)) {
+					if(!isset($array1[$k])) {
+						$array1[$k] = Array();
+					}
 					$array1[$k] = $this->mergeArrayRecursive($array1[$k], $v);
 				} else {
 					$array1[$k] = $v;
@@ -224,6 +229,9 @@ class GlobalLanguage {
 		// same procedure with second level
 		if($arrLanguagePath[1] != 'global') {
 			if($mergeWithGlobal) {
+				if(!isset($arrLang[$arrLanguagePath[1]])) {
+					$arrLang[$arrLanguagePath[1]] = Array();
+				}
 				$arrLang = $this->mergeArrayRecursive($arrLang[$arrLanguagePath[1]],$arrLang['global']);
 			} else {
 				$arrLang = $arrLang[$arrLanguagePath[1]];
@@ -233,7 +241,7 @@ class GlobalLanguage {
 		}
 		
 		// filter type, messages/labels
-		if($arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
+		if(isset($arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) && $arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
 			$strLang = $arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
 			
 			// FIXME: Test this regex: $strLang = preg_replace("/\[(//|)(i|b)\]/i","/<$1$2>/i",$strLang);
@@ -251,9 +259,11 @@ class GlobalLanguage {
 			if($replace != '') {
 				$arrReplace = explode(',', $replace);
 				for($i=0;$i<count($arrReplace);$i++) {
-					// If = are in the text, they'l be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
-					$var = explode('~', $arrReplace[$i]);
-					$strLang = str_replace("[".$var[0]."]", $var[1], $strLang);
+					if(isset($arrReplace[$i])) {
+						// If = are in the text, they'l be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
+						$var = explode('~', $arrReplace[$i]);
+						$strLang = str_replace("[".$var[0]."]", $var[1], $strLang);
+					}
 				}
 				
 				// Return string with replaced text

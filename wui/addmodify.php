@@ -28,6 +28,13 @@ $MAINCFG->setRuntimeValue('wui',1);
 $MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
+if(!isset($_GET['coords'])) {
+	$_GET['coords'] = '';
+}
+if(!isset($_GET['id'])) {
+	$_GET['id'] = '';
+}
+
 $FRONTEND = new WuiAddModify($MAINCFG,$MAPCFG,Array('action' => $_GET['action'],
 													'type' => $_GET['type'],
 													'id' => $_GET['id'],

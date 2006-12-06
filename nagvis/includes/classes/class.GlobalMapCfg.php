@@ -276,7 +276,11 @@ class GlobalMapCfg {
 						$define = explode(" ",$defineCln[0]);
 						if (isset($define[1]) && array_key_exists(trim($define[1]),$this->validConfig)) {
 							$l++;
-							$nrOfType = count($this->mapConfig[$define[1]]);
+							if(isset($this->mapConfig[$define[1]])) {
+								$nrOfType = count($this->mapConfig[$define[1]]);
+							} else {
+								$nrOfType = 0;
+							}
 							$this->mapConfig[$define[1]][$nrOfType]['type'] = $define[1];
 							while (trim($file[$l]) != "}") {
 								$entry = explode("=",$file[$l], 2);
@@ -585,7 +589,7 @@ class GlobalMapCfg {
 				foreach($elements AS $id => $element) {
 					// loop validConfig for checking: => missing "must" atributes
 					foreach($this->validConfig[$type] AS $key => $val) {
-						if($this->validConfig[$type]['must'] && (!array_key_exists($key,$this->mapConfig[$type][$id]) || $this->mapConfig[$type][$id][$key] == '')) {
+						if(isset($this->validConfig[$type]['must']) && (!array_key_exists($key,$this->mapConfig[$type][$id]) || $this->mapConfig[$type][$id][$key] == '')) {
 							// a "must" value is missing or empty
 							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 						    $FRONTEND->messageToUser('ERROR','mustValueNotSet','ATTRIBUTE~'.$key.',TYPE~'.$type);
@@ -625,7 +629,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getDefinitions($type) {
-		if(count($this->mapConfig[$type]) > 0) {
+		if(isset($this->mapConfig[$type]) && count($this->mapConfig[$type]) > 0) {
 			return $this->mapConfig[$type];
 		} else {
 			return Array();
@@ -687,12 +691,13 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getValue($type, $id, $key, $ignoreDefault=FALSE) {
-		if(is_array($this->mapConfig[$type][$id]) && array_key_exists($key,$this->mapConfig[$type][$id]) && $this->mapConfig[$type][$id][$key] != '') {
+		if(isset($this->mapConfig[$type][$id]) && is_array($this->mapConfig[$type][$id]) && array_key_exists($key,$this->mapConfig[$type][$id]) && $this->mapConfig[$type][$id][$key] != '') {
 			return $this->mapConfig[$type][$id][$key];
 		} elseif(!$ignoreDefault) {
-			return $this->validConfig[$type][$key]['default'];
+			if(isset($this->validConfig[$type][$key]['default'])) {
+				return $this->validConfig[$type][$key]['default'];
+			}
 		}
-		
 	}
 	
     /**

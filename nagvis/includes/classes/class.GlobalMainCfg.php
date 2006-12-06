@@ -487,7 +487,11 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getRuntimeValue($var) {
-		return $this->runtimeConfig[$var];
+		if(isset($this->runtimeConfig[$var])) {
+			return $this->runtimeConfig[$var];
+		} else {
+			return '';
+		}
 	}
 }
 ?>

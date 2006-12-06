@@ -347,6 +347,8 @@ class NagVisMap extends GlobalMap {
 	 * @fixme	FIXME: optimize
      */
 	function createInfoBox($obj) {
+		$ret = '';
+		
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -357,6 +359,10 @@ class NagVisMap extends GlobalMap {
 			$obj['stateCount'] = 0;
 		}
 		
+		if(!isset($obj['stateHost'])) {
+			$obj['stateHost'] = '';
+		}
+		
 		$Count = $obj['stateCount'];
 		$obj['stateCount'] = str_replace('"',"",$obj['stateCount']);
 		$obj['stateCount'] = str_replace("'","",$obj['stateCount']);
@@ -365,35 +371,35 @@ class NagVisMap extends GlobalMap {
 		// FIXME mehr Output (ackComment, mehr Zahlen etc.)
 		switch($obj['type']) {
 			case 'host':
-				$info .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'service':
-				$info .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('servicename').':</b> '.$obj['service_description'].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('servicename').':</b> '.$obj['service_description'].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>';
 			break;
 			case 'hostgroup':
-				$info .= '<b>'.$this->LANG->getLabel('hostgroupname').':</b> '.$obj[$name].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('hostgroupname').':</b> '.$obj[$name].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'servicegroup':
-				$info .= '<b>'.$this->LANG->getLabel('servicegroupname').':</b> '.$obj[$name].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('servicegroupname').':</b> '.$obj[$name].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'map':
-				$info .= '<b>'.$this->LANG->getLabel('mapname').':</b> '.$obj[$name].'<br>';
-				$info .= '<b>'.$this->LANG->getLabel('state').':</b> '.strtr(addslashes($obj['state']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
-				$info .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('mapname').':</b> '.$obj[$name].'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.strtr(addslashes($obj['state']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			default:
 				//FIXME Error
 			break;
 		}
-		return $info;
+		return $ret;
 	}
 }

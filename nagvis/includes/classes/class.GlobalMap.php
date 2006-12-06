@@ -56,6 +56,7 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getBackground($type='gd') {
+		$style = '';
 		if($this->MAPCFG->getName() != '') {
 			if($this->MAINCFG->getValue('global', 'usegdlibs') == "1" && $type == 'gd' && $this->checkGd(0)) {
 				$src = "./draw.php?map=".$this->MAPCFG->getName();
@@ -165,11 +166,13 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getState($obj) {
+		$state = Array('State'=>'','Output'=>'');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
 			$name = $obj['type'] . '_name';
 		}
+		
 		switch($obj['type']) {
 			case 'map':
 				// save mapName in linkedMaps array
@@ -205,11 +208,20 @@ class GlobalMap {
 					
 					$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
 					$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
+					
+					$state = Array('State' => $this->wrapState(Array($state1['State'],$state2['State'])),'Output' => 'State1: '.$state1['Output'].'<br />State2:'.$state2['Output']);
 				} else {
+					if(!isset($obj['service_description'])) {
+						$obj['service_description'] = '';
+					}
+					if(!isset($obj['recognize_services'])) {
+						$obj['recognize_services'] = '';	
+					}
 					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
 				}
 			break;	
 		}
+		
 		return Array('state' => $state['State'],'stateOutput' => $state['Output']);
 	}
 	

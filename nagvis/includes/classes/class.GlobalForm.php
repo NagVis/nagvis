@@ -23,11 +23,11 @@ class GlobalForm {
 	function GlobalForm($prop=Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>'')) {
 		$this->name = $prop['name'];
 		$this->id = $prop['id'];
-		$this->method = $prop['method'];
-		$this->action = $prop['action'];
-		$this->onSubmit = $prop['onSubmit'];
-		$this->cols = $prop['cols'];
-		$this->enctype = $prop['enctype'];
+		$this->method = (isset($prop['method'])) ? $prop['method']:'';
+		$this->action = (isset($prop['action'])) ? $prop['action']:'';
+		$this->onSubmit = (isset($prop['onSubmit'])) ? $prop['onSubmit']:'';
+		$this->cols = (isset($prop['cols'])) ? $prop['cols']:'';
+		$this->enctype = (isset($prop['enctype'])) ? $prop['enctype']:'';
 	}
 	
 	/**
@@ -89,7 +89,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function getFileLine($label,$name,$value) {
+	function getFileLine($label,$name,$value,$must=FALSE) {
 		$ret = Array();
 		
 		if($must != FALSE) {

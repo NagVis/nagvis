@@ -66,17 +66,17 @@ class WuiEditMainCfg extends GlobalPage {
 				
 				foreach($arr AS $key2 => $prop) {
 					// ignore some vars
-					if($this->MAINCFG->validConfig[$cat][$key2]['editable']) {
+					if(isset($this->MAINCFG->validConfig[$cat][$key2]['editable']) && $this->MAINCFG->validConfig[$cat][$key2]['editable']) {
 						$val2 = $this->MAINCFG->getValue($cat,$key2,TRUE);
 						
 						# we add a line in the form
 						$ret[] = "<tr>";
 						$ret[] = "\t<td class=\"tdlabel\">".$key2."</td>";
-						if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'editMainCfg','',FALSE)) > 0) {
+						if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'',FALSE)) > 0) {
 							$ret[] = "\t<td class=\"tdlabel\"></td>";
 						} else {
 							$ret[] = "\t<td class=\"tdfield\">";
-							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'editMainCfg','',FALSE)."')\" />";
+							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'',FALSE)."')\" />";
 							$ret[] = "\t</td>";
 						}
 						
@@ -130,7 +130,7 @@ class WuiEditMainCfg extends GlobalPage {
 							default:
 								$ret = array_merge($ret,$this->FORM->getInputField("conf_".$key2,$val2));
 								
-								if($prop['locked'] == 1) {
+								if(isset($prop['locked']) && $prop['locked'] == 1) {
 									$ret[] = "<script>document.edit_config.elements['conf_".$key2."'].disabled=true;</script>";
 								}
 							break;
@@ -241,8 +241,8 @@ class WuiEditMainCfg extends GlobalPage {
 		$ret = Array();
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
 		$ret[] = "// function that builds up the list of parameters/values. There are 2 kinds of parameters values :";
-		$ret[] = "//	- the \"normal value\". example : $param=\"value\";";
-		$ret[] = "//	- the other one (value computed with other ones) . example : $param=\"part1\".$otherparam;";
+		$ret[] = "//	- the \"normal value\". example : \$param=\"value\";";
+		$ret[] = "//	- the other one (value computed with other ones) . example : \$param=\"part1\".\$otherparam;";
 		$ret[] = "function update_param() {";
 		$ret[] = "	document.edit_config.properties.value='';";
 		$ret[] = "	for(i=0;i<document.edit_config.elements.length;i++) {";

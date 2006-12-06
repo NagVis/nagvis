@@ -175,7 +175,7 @@ class WuiBackendManagement extends GlobalPage {
 			}
 		}
 		
-		if($files) {
+		if(isset($ret) && count($ret) > 1) {
 			natcasesort($ret);
 		}
 		
