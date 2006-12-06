@@ -139,7 +139,7 @@ class GlobalMainCfg {
 												'locked' => 1),
 							'title' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => 'NagVis 1.0a1 (CVS Snapshot)',
+												'default' => 'NagVis 1.0a1 (Subversion Snapshot)',
 												'locked' => 1)));
 		
 		// Default - minimal - config initialisation

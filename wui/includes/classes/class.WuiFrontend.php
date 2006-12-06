@@ -29,8 +29,8 @@ class WuiFrontend extends GlobalPage {
 						  './includes/js/wz_jsgraphics.js',
 						  './includes/js/wz_dragdrop.js',
 						  './includes/js/wz_tooltip.js',
-						  './includes/js/jsdomenu.js',
-						  './includes/js/jsdomenu.inc.js'),
+						  './includes/js/jsdomenu.inc.js',
+						  './includes/js/jsdomenu.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'),
 					  'languageRoot' => 'wui:global');

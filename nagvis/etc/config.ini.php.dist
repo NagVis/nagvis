@@ -86,7 +86,7 @@ defaultbackend="ndomy_1"
 ; version of NagVis
 ;version="1.0a1"
 ; title of NagVis pages
-;title="NagVis 1.0a1 (CVS Snapshot)"
+;title="NagVis 1.0a1 (Subversion Snapshot)"
 
 ; -------------------------
 ; EOF
