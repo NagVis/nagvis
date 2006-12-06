@@ -573,9 +573,9 @@
 				<dbprefix>
 					<text>NDO Backend: K&uuml;rzel vor den Tabellennamen in der NDO DB (z.B. ndo_)</text>
 				</dbprefix>
-				<dbinstanceid>
-					<text>NDO Backend: Instance ID of the NDO installation (only with several NDO installations, normally 1 is needed)</text>
-				</dbinstanceid>
+				<dbinstancename>
+					<text>NDO Backend: Instance name of the NDO installation (only with several NDO installations, normally default is set)</text>
+				</dbinstancename>
 				<maxtimewithoutupdate>
 					<text>NDO Backend: Maximum time without updates in the NDO database </text>
 				</maxtimewithoutupdate>

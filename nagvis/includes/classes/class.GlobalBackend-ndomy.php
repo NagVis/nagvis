@@ -21,6 +21,7 @@ class GlobalBackendndomy {
 	var $dbPass;
 	var $dbHost;
 	var $dbPrefix;
+	var $dbInstanceName;
 	var $dbInstanceId;
 	
 	/**
@@ -43,7 +44,7 @@ class GlobalBackendndomy {
 		$this->dbHost = $this->MAINCFG->getValue('backend_'.$backendId, 'dbhost');
 		$this->dbPort = $this->MAINCFG->getValue('backend_'.$backendId, 'dbport');
 		$this->dbPrefix = $this->MAINCFG->getValue('backend_'.$backendId, 'dbprefix');
-		$this->dbInstanceId = $this->MAINCFG->getValue('backend_'.$backendId, 'dbinstanceid');
+		$this->dbInstanceName = $this->MAINCFG->getValue('backend_'.$backendId, 'dbinstancename');
 		
 		// initialize a language object for later error messages which be given out as state output
 		$this->LANG = new GlobalLanguage($this->MAINCFG,'backend:ndomy');
@@ -73,6 +74,9 @@ class GlobalBackendndomy {
 		// we set the old level of reporting back
 		error_reporting($oldLevel);
 		
+		// Set the instanceId
+		$this->dbInstanceId = $this->getInstanceId();
+		
 		// Do some checks to make sure that Nagios is running and the Data at the DB are ok
 		$QUERYHANDLE = mysql_query("SELECT is_currently_running, status_update_time FROM ".$this->dbPrefix."programstatus WHERE instance_id = '".$this->dbInstanceId."'");
 		$nagiosState = mysql_fetch_array($QUERYHANDLE);
@@ -92,7 +96,20 @@ class GlobalBackendndomy {
 		return 0;
 	}
 	
-
+	/**
+	 * PRIVATE Method getInstanceId
+	 *
+	 * Returns the instanceId of the instanceName
+	 *
+	 * @return	String $ret
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function getInstanceId() {
+		$QUERYHANDLE = mysql_query("SELECT instance_id FROM ".$this->dbPrefix."instances WHERE instance_name='".$this->dbInstanceName."'");
+		$ret = mysql_fetch_array($QUERYHANDLE);
+		
+		return $ret['instance_id'];
+	}
 
 
 	/**

@@ -61,8 +61,8 @@ defaultbackend="ndomy_1"
 ;dbpass="xxx"
 ; prefix for tables in NDO-db
 ;dbprefix="ndo_"
-; instace-id for tables in NDO-db
-;dbinstanceid=1
+; instace-name for tables in NDO-db
+;dbinstancename="default"
 ; maximum delay of the NDO Database in Seconds
 ;maxtimewithoutupdate=181
 
