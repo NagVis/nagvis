@@ -75,7 +75,7 @@ class WuiEditMainCfg extends GlobalPage {
 						if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'editMainCfg','',FALSE)) > 0) {
 							$ret[] = "\t<td class=\"tdlabel\"></td>";
 						} else {
-							$ret[] = "\t<td class=\"tdlabel\">";
+							$ret[] = "\t<td class=\"tdfield\">";
 							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'editMainCfg','',FALSE)."')\" />";
 							$ret[] = "\t</td>";
 						}

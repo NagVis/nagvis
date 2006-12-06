@@ -9,7 +9,9 @@ tr {
 }
 
 td {
-	border-style:none;	
+	border-style: none;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
 }
 
 form {
@@ -24,76 +26,59 @@ form {
 }
 
 .submit {
-	border: 2px ridge Black;
-	font: bold 15px Verdana, Geneva, Arial, Helvetica, sans-serif; 
-	color: Black; 
-	background-color: #DADADA; 
+	font-weight: bold;
+	color: #000; 
 	text-align: center;
 	vertical-align: middle;
 	
 	height:25px;
+	
+	border: 1px solid #000;
+	background-color: #DADADA;
 }
 
-.tdtitle { 
-	font: bolder 16px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+.tdtitle {
+	font_size: 16px;
+	font-weight: bold;
 	color: #314455;
 	
 	text-align: left;
 	height: 30px;
 }
 
-.tdcat { 
-	font: bolder 16px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+.tdcat {
+	font_size: 16px;
+	font-weight: bold;
 	color: #314455;
 	
 	text-align: left;
 	height: 30px;
 }
 
-.tdlabel { 
-	font: bolder 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
-	border: 2px ridge #A4A4A4;
+.tdlabel {
+	font-weight: bold;
+	font-size: 13px;
+	
+	width: 50%;
+	
+	border: 1px solid #A4A4A4;
   	height: 30px;
 	color: #2B5377;
 	text-align: right;
 } 
 
 .tdfield { 
-	font: bolder 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
- 	border: 2px ridge #A4A4A4;
+	font-size: 11px;
+	font-weight: bold;
 	color: #2B5377;
+	
 	text-align: left; 
-} 
+	
+ 	border: 1px solid #A4A4A4;
+}
 
-.tdfield input { 
-	font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+.tdfield input,select {
 	background-color: #E4EEF6; 
 	border: 1px solid #284279;
 	width: 100%;
-} 
-
-
-.tdfield select { 
-	width: auto; 
-	font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
-	background-color: #E4EEF6; 
-	border: 1px solid #284279;
-	width: 100%;
-} 
-
-.tdfield_linetype { 
-	background-color: White;
-	border-style:none;
-	padding-left: 10px;
-}
-
-.tdfield_linetype select { 
-	width: auto; 
-	background-color: #E4EEF6; 
-	border: 1px solid #284279;
-	margin-right: 0px; 
-}
-
-.curseur {
-	cursor: move;
 }
