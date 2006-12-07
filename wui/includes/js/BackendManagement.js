@@ -62,13 +62,48 @@ function printBackendOptions(aObjects,oOpt) {
 }
 
 function check_backend_add() {
+	form = document.backend_add;
+	
+	if(form.backend_id.value == '') {
+		alert('backend_id not set. You have to set a backend_id.');
+		
+		return false;	
+	}
+	if(form.backendtype.value == '') {
+		alert('backendtype not set. You have to set a backendtype.');
+		
+		return false;	
+	}
+	
+	//FIXME: Validate options of the chosen backend
+	
 	return true;
 }
 
 function check_backend_edit() {
+	form = document.backend_edit;
+	
+	if(form.backend_id.value == '') {
+		alert('backend_id not set. You have to set a backend_id.');
+		
+		return false;	
+	}
+	
+	//FIXME: Validate options of the chosen backend
+	
 	return true;
 }
 
 function check_backend_del() {
+	form = document.backend_del;
+	
+	if(form.backend_id.value == '') {
+		alert('backend_id not set. You have to set a backend_id.');
+		
+		return false;	
+	}
+	
+	//FIXME: Check if backend is used in any maps/objects
+	
 	return true;
 }
