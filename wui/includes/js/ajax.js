@@ -43,7 +43,6 @@ function getRequest(url,myCallback,oOpt) {
 function getAnswer(oRequest,myCallback,oOpt) {
 	if(oRequest.readyState == 4) {
 		if (oRequest.status == 200) {
-			alert(oRequest.responseText);
 			if(oRequest.responseText.replace(/\s+/g,'').length == 0) {
 				window[myCallback]('',oOpt);
 			} else {
