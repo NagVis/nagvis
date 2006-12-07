@@ -29,6 +29,8 @@ defaultbackend="ndomy_1"
 ;usegdlibs=1
 ; refresh time of pages
 ;refreshtime=60
+; background color of the nagvis map
+;backgroundcolor="#fff"
 
 ; options for the wui
 [wui]
