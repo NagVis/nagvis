@@ -7,19 +7,15 @@ function printBackendOptions(aObjects,oOpt) {
 	
 	// Remove old backend options
 	for(i=0;i<tbl.tBodies[0].rows.length;i++) {
-		var str = tbl.tBodies[0].rows[i].toSting;
-		
 		if(tbl.tBodies[0].rows[i].attributes.length > 0) {
-			for(a=0;a<tbl.tBodies[0].rows[i].attributes.length;a++) {
-				var key = tbl.tBodies[0].rows[i].attributes[0].nodeName;
-				if(tbl.tBodies[0].rows[i].attributes[0].nodeName == 'id') {
-					if(tbl.tBodies[0].rows[i].attributes[0].nodeValue.search("row_") != -1) {
-						toDelete[toDelete.length] = i;
-					}
+			if(tbl.tBodies[0].rows[i].id != '') {
+				if(tbl.tBodies[0].rows[i].id.search("row_") != -1) {
+					toDelete[toDelete.length] = i;
 				}
 			}
 		}
 	}
+	
 	toDelete.reverse();
 	for(i=0;i<toDelete.length;i++) {
 		tbl.deleteRow(toDelete[i]);
@@ -29,7 +25,8 @@ function printBackendOptions(aObjects,oOpt) {
 	
 	// Add spacer row
 	var row = tbl.insertRow(lastRow);
-	row.setAttribute('id', 'row_'+lastRow);
+	//row.setAttribute('id', 'row_'+lastRow);
+	row.id = 'row_'+lastRow;
 	var label = row.insertCell(0);
 	label.innerHTML = "&nbsp;";
 	var input = row.insertCell(1);
@@ -38,17 +35,20 @@ function printBackendOptions(aObjects,oOpt) {
 	lastRow++;
 	for(i=0;i < aObjects.length;i++) {
 		var row = tbl.insertRow(lastRow);
-		row.setAttribute('id', 'row_'+lastRow);
+		//row.setAttribute('id', 'row_'+lastRow);
+		row.id = 'row_'+lastRow;
 		
 		var label = row.insertCell(0);
-		label.setAttribute('class', 'tdlabel');
+		//label.setAttribute('class', 'tdlabel');
+		label.className = "tdlabel";
 		if(aObjects[i].must == 1) {
 			label.setAttribute('style', 'color:red;');
 		}
 		label.innerHTML = aObjects[i].key;
 		
 		var input = row.insertCell(1);
-		input.setAttribute('class', 'tdfield');
+		//input.setAttribute('class', 'tdfield');
+		input.className = "tdfield";
 		
 		var sValue = "";
 		if(aObjects[i].value != null) {
