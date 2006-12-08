@@ -25,6 +25,10 @@ require("./includes/classes/class.NagVisFrontend.php");
 
 $MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
 
+if(!isset($_GET['map'])) {
+	$_GET['map'] = '';
+}
+
 $MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
