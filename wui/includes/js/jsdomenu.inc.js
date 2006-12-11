@@ -12,7 +12,7 @@
 
 // function that returns the text associated with a certain index
 function get_label(key) {
-	if(langMenu[key]!="") {
+	if(langMenu[key] && langMenu[key] != '') {
 		return langMenu[key];
 	} else {
 		alert('Your language file seem to be damaged: ' + myindex + ' missing');

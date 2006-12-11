@@ -25,18 +25,6 @@ class WuiMap extends GlobalMap {
 	}
 	
 	function loadPermissions() {
-		#############################################
-		# we read ALL the maps definition files, to build the lists of allowed users and map_images. At the end we have s.th like
-		# demo=root,nagiosadmin^map2=user1
-		# demo=back1.png^map2=mynetwork.png
-		#
-		# These lists will be stored in invisible fields, in the form 'myvalues' in this page.
-		# The list of allowed_user will be used : 
-		#		- to list, in the right click menu, only the maps the user is granted access to
-		#		- to prevent the user to rename or delete a map he's not granted access to
-		#
-		# The list of map_images will be used :
-		#		- to make sure a background image is not in use by another map, before it's deleted
 		$mapOptions = '[ ';
 		$a = 0;
 		foreach($this->getMaps() AS $map) {
