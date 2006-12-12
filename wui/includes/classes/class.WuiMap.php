@@ -170,8 +170,8 @@ class WuiMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
-		$ret[] = "<div class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
-		$ret[] = "\t<img src=\"".$imgPath."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
+		$ret[] = "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
+		$ret[] = "\t\t<img src=\"".$imgPath."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
 		$ret[] = "</div>";
 		
 		return $ret;
