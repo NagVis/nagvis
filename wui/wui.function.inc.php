@@ -150,23 +150,27 @@ switch($_GET['myaction']) {
 		print "<script>document.location.href='./index.php?map=".$_POST['mapname']."';</script>\n";
 	break;
 	case 'modify':
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map']);
-		$MAPCFG->readMapConfig();
-		
-		// set options in the array
-		foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
-			$MAPCFG->setValue($_POST['type'], $_POST['id'], $key, $val);
+		if(!isset($_POST['map'])) {
+			print "<script>alert('No Map submited');</script>\n";
+		} else {
+			$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map']);
+			$MAPCFG->readMapConfig();
+			
+			// set options in the array
+			foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
+				$MAPCFG->setValue($_POST['type'], $_POST['id'], $key, $val);
+			}
+			
+			// write element to file
+			$MAPCFG->writeElement($_POST['type'],$_POST['id']);
+			
+			// do the backup
+			backup($MAINCFG,$_POST['map']);
+			
+			// refresh the map
+			print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
+			print "<script>window.close();</script>\n";
 		}
-		
-		// write element to file
-		$MAPCFG->writeElement($_POST['type'],$_POST['id']);
-		
-		// do the backup
-		backup($MAINCFG,$_POST['map']);
-		
-		// refresh the map
-		print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
-		print "<script>window.close();</script>\n";
 	break;
 	case 'add':
 		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map']);

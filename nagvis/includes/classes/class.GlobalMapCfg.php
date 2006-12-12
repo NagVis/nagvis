@@ -37,7 +37,9 @@ class GlobalMapCfg {
 							'only_hard_states' => Array('must' => 0,
 												'default' => $this->MAINCFG->getValue('global', 'onlyhardstates')),
 							'iconset' => Array('must' => 0,
-												'default' => $this->MAINCFG->getValue('global', 'defaulticons'))),
+												'default' => $this->MAINCFG->getValue('global', 'defaulticons')),
+							'background_color' => Array('must' => 0,
+												'default' => $this->MAINCFG->getValue('global', 'defaultbackgroundcolor'))),
 			'host' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
@@ -289,7 +291,7 @@ class GlobalMapCfg {
 								$nrOfType = 0;
 							}
 							$this->mapConfig[$define[1]][$nrOfType]['type'] = $define[1];
-							while (trim($file[$l]) != "}") {
+							while (isset($file[$l]) && trim($file[$l]) != "}") {
 								$entry = explode("=",$file[$l], 2);
 								
 								if(isset($entry[1])) {
@@ -362,6 +364,7 @@ class GlobalMapCfg {
 								// choose first parameter line
 								$l++;
 								
+								
 								// loop parameters from array
 								foreach($this->mapConfig[$type][$id] AS $key => $val) {
 									// if key is not type
@@ -370,7 +373,7 @@ class GlobalMapCfg {
 										$cfgLine = '';
 										$cfgLineNr = 0;
 										// Parameter aus Datei durchlaufen
-										while(trim($file[($l+$cfgLines)]) != '}') {
+										while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
 											$entry = explode("=",$file[$l+$cfgLines], 2);
 											if($key == trim($entry[0])) {
 												$cfgLineNr = $l+$cfgLines;
@@ -394,6 +397,7 @@ class GlobalMapCfg {
 												$val = implode(",",$val);
 											}
 											$neu = $key."=".$val."\n";
+											
 											for($i = $l; $i < count($file);$i++) {
 												$tmp = $file[$i];
 												$file[$i] = $neu;
@@ -403,9 +407,9 @@ class GlobalMapCfg {
 										} elseif($cfgLineNr == 0 && $val == '') {
 											// if a parameter is empty and a value is empty, do nothing
 										}
-										$l++;
 									}
 								}
+								$l++;
 							} else {
 								// ...no array: delete!
 								$cfgLines = 0;

@@ -49,7 +49,7 @@ class GlobalMainCfg {
 							'usegdlibs' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '1'),
-							'backgroundcolor' => Array('must' => 0,
+							'defaultbackgroundcolor' => Array('must' => 0,
 												 'editable' => 1,
 												'default' => '#fff'),
 							'refreshtime' => Array('must' => 1,
