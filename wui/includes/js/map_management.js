@@ -1,6 +1,6 @@
 // checks that the file the user wants to upload has the .png extension
 function checkPng(imageName) {
-	if(imageName.substring(ext.length-3,ext.length).toLowerCase() != 'png') {
+	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'png') {
 		return false; 
 	} else {
 		return true;
