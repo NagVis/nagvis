@@ -131,9 +131,7 @@ class WuiMap extends GlobalMap {
 				$obj['icon'] = '20x20.gif';
 			}
 			
-			if($obj['type'] != 'shape') {
-				$obj = $this->fixIconPosition($obj);
-			}
+			$obj = $this->fixIconPosition($obj);
 			$ret = array_merge($ret,$this->parseIcon($obj));
 			
 			// add this object to the list of the components which will have to be movable, if it's not a line or a textbox
