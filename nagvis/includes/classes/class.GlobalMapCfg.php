@@ -85,7 +85,7 @@ class GlobalMapCfg {
 							'only_hard_states' => Array('must' => 0,
 												'default' => ''),
 							'iconset' => Array('must' => 0,
-												'default' => $this->getValue('global', 0, 'iconset')),
+												'default' => ''),
 							'hover_url' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0)),
@@ -133,8 +133,17 @@ class GlobalMapCfg {
 												'default' => 0),
 							'url' => Array('must' => 0),
 							'hover_url' => Array('must' => 0)));
-							
-		// the default values refer to global settings in the validConfig array - so they have to be defined here
+		
+		
+		$this->getMap();
+	}
+	
+	/**
+	 * Gets the default values for the objects 
+	 *
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function getObjectDefaults() {
 		$this->validConfig['host']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
 		$this->validConfig['host']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['host']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
@@ -151,8 +160,6 @@ class GlobalMapCfg {
 		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
 		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
-		
-		$this->getMap();
 	}
 	
 	/**
@@ -298,6 +305,13 @@ class GlobalMapCfg {
 					}
 					$l++;
 				}
+				
+				/**
+				 * The default values refer to global settings in the validConfig array - so they have to be 
+				 * defined here and mustn't be defined in the array at creation.
+				 * Cause of the default values should refer to the truely defined settings in global area they have to be read here.
+				 */
+				$this->getObjectDefaults();
 				
 				if($this->checkMapConfigIsValid(1)) {
 					$this->getImage();
