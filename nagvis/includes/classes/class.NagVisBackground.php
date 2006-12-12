@@ -33,16 +33,17 @@ class NagVisBackground extends GlobalMap {
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
+		$this->checkPreflight();
+		
 		$this->initImage();
 		
 		//parent::GlobalMap($MAINCFG,$MAPCFG,$BACKEND);
-		$this->checkPreflight();
 		
 		$this->objects = $this->getMapObjects(1);
 	}
 	
-	function checkMemoryLimit() {
-		$fileSize = filesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage())."<br>";
+	function checkMemoryLimit($tryToFix=TRUE) {
+		$fileSize = filesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
 		$memoryLimit = preg_replace('/[a-z]/i','',ini_get("memory_limit"))*1024*1024;
 		
 		$imageSize = getimagesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
@@ -51,7 +52,8 @@ class NagVisBackground extends GlobalMap {
 			$imageHeight = $imageSize[1];
 			$imageDepth = $imageSize['bits'];
 			
-			$rawSize = $imageWidth*$imageHeight*$imageDepth/8;
+			// i think this should be calculated /8 also to get bytes, but removed it cause it works like it is atm
+			$rawSize = $imageWidth*$imageHeight*$imageDepth;
 		}
 		
 		
@@ -61,7 +63,13 @@ class NagVisBackground extends GlobalMap {
 		// a) big file size
 		// b) big image size
 		// c) big color depth
+		// DEBUG: echo $fileSize." > ".$memoryLimit." <bR>";
+		// DEBUG: echo ((memory_get_usage() + $rawSize)*1.10)." > ".$memoryLimit;
 		if($fileSize > $memoryLimit || (memory_get_usage() + $rawSize)*1.10 > $memoryLimit) {
+			if($tryToFix) {
+				ini_set("memory_limit",round((memory_get_usage() + $rawSize)*1.15 / 1024 /1024)."M");
+				return $this->checkMemoryLimit(FALSE);
+			}
 			return FALSE;
 		} else {
 			return TRUE;
@@ -74,13 +82,13 @@ class NagVisBackground extends GlobalMap {
 		
 		switch($this->imageType) {
 			case 'jpg':
-				$this->image = @imagecreatefromjpeg($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
+				$this->image = imagecreatefromjpeg($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
 			break;
 			case 'png':
-				$this->image = @imagecreatefrompng($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
+				$this->image = imagecreatefrompng($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
 			break;
 			default:
-				errorBox('Only PNG and JPG Map-Image extensions are allowed');
+				$this->errorBox('NagVis: Only PNG and JPG Map-Image extensions are allowed');
 			break;
 		}
 		
@@ -100,14 +108,14 @@ class NagVisBackground extends GlobalMap {
 	 */
 	function checkPreflight() {
 		if(!$this->MAPCFG->checkMapImageExists(0)) {
-			errorBox($this->LANG->getMessageText('backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
+			$this->errorBox($this->LANG->getMessageText('backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
 		if(!$this->MAPCFG->checkMapImageReadable(0)) {
-			errorBox($this->LANG->getMessageText('backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
+			$this->errorBox($this->LANG->getMessageText('backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
 		if(!$this->checkMemoryLimit()) {
 			// FIXME: Language File Entry
-			errorBox('Maybe the memory_limit of PHP is to low for displaying this image');	
+			$this->errorBox('NagVis: Maybe the memory_limit of PHP is to low for displaying this image');	
 		}
 		// FIXME: Check permissions?
 	}
