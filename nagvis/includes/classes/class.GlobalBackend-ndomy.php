@@ -125,6 +125,7 @@ class GlobalBackendndomy {
 	*/
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
+		$filter = '';
 		
 		switch($type) {
 			case 'host':
