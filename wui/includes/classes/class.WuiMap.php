@@ -131,7 +131,9 @@ class WuiMap extends GlobalMap {
 				$obj['icon'] = '20x20.gif';
 			}
 			
-			$obj = $this->fixIconPosition($obj);
+			if($obj['type'] != 'shape') {
+				$obj = $this->fixIconPosition($obj);
+			}
 			$ret = array_merge($ret,$this->parseIcon($obj));
 			
 			// add this object to the list of the components which will have to be movable, if it's not a line or a textbox
@@ -152,15 +154,25 @@ class WuiMap extends GlobalMap {
 	function parseIcon($obj) {
 		$ret = Array();
 		
+		if($obj['type'] == 'shape') {
+			if(preg_match("/^\[(.*)\]$/",$obj['icon'],$match) > 0) {
+				$imgPath = $match[1];
+			} else {
+				$imgPath = $this->MAINCFG->getValue('paths', 'htmlshape').$obj['icon'];
+			}
+		} else {
+			$imgPath = $this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon'];
+		}
+		
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
 			$name = $obj['type'] . '_name';
 		}
 		
-		$ret[] = "\t<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z'].";\">";
-		$ret[] = "\t\t<img src=\"".$this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
-		$ret[] = "\t</div>";
+		$ret[] = "<div class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
+		$ret[] = "\t<img src=\"".$imgPath."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
+		$ret[] = "</div>";
 		
 		return $ret;
 	}
