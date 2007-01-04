@@ -347,7 +347,7 @@ class GlobalPage {
 	function buildPage() {
 		$ret = '';
 		
-		$ret = "<!DOCTYPE HTML SYSTEM>\n";
+		$ret .= "<!DOCTYPE HTML SYSTEM>\n";
 		$ret .= "<html>\n";
 		$ret .= "\t<head>\n";
 		$ret .= $this->getLines($this->getHeader());

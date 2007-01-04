@@ -326,7 +326,7 @@ class GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function fixIconPosition($obj) {
-		$size = getimagesize($this->MAINCFG->getValue('paths', 'icon').$obj['icon']);
+		$size = getimagesize($obj['path'].$obj['icon']);
 		$obj['x'] = $obj['x'] - ($size[0]/2);
 		$obj['y'] = $obj['y'] - ($size[1]/2);
 		

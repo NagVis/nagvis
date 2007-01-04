@@ -74,6 +74,7 @@ class WuiMap extends GlobalMap {
 		$ret = array_merge($ret,$this->parseObjects());
 		$ret = array_merge($ret,$this->parseInvisible());
 		$ret = array_merge($ret,$this->makeObjectsMoveable());
+		$ret = array_merge($ret,Array("<script type=\"text/javascript\" src=\"./includes/js/wz_tooltip.js\"></script>"));
 		
 		return $ret;
 	}
@@ -116,30 +117,52 @@ class WuiMap extends GlobalMap {
 		$ret = Array();
 		
 		foreach($this->objects AS $var => $obj) {
-			if($obj['type'] == 'textbox') {
-				$obj['class'] = "box";
-				$obj['icon'] = "20x20.gif";
-				
-				$ret = array_merge($ret,$this->textBox($obj));
-			}
-			
-			if(isset($obj['line_type'])) {
-				list($pointa_x,$pointb_x) = explode(",", $obj['x']);
-				list($pointa_y,$pointb_y) = explode(",", $obj['y']);
-				$ret[] = "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
-				
-				$obj['icon'] = '20x20.gif';
-			}
-			
-			$obj = $this->fixIconPosition($obj);
-			$ret = array_merge($ret,$this->parseIcon($obj));
-			
-			// add this object to the list of the components which will have to be movable, if it's not a line or a textbox
-			if(!isset($obj['line_type']) && $obj['type'] != 'textbox') {
-				$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
+			switch($obj['type']) {
+				case 'textbox':
+					$obj['class'] = "box";
+					$obj['icon'] = "20x20.gif";
+					
+					$ret = array_merge($ret,$this->textBox($obj));
+				break;
+				case 'shape':
+					$obj['icon'] = "20x20.gif";
+					
+					$obj = $this->fixIconPosition($obj);
+					$ret = array_merge($ret,$this->parseIcon($obj));
+				break;
+				default:
+					if(isset($obj['line_type'])) {
+						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
+						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
+						$ret[] = "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
+						
+						$obj['icon'] = '20x20.gif';
+					} else {
+						// add this object to the list of the components which will have to be movable, if it's not a line or a textbox
+						if(!isset($obj['line_type']) && $obj['type'] != 'textbox') {
+							$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
+						}
+					}
+					
+					$obj = $this->fixIconPosition($obj);
+					$ret = array_merge($ret,$this->parseIcon($obj));
+				break;	
 			}
 		}
 		return $ret;
+	}
+	
+	/**
+	 * Adds paths to the icon
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	Array	Array with object informations
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function fixIconPosition($obj) {
+		$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
+		$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
+		return parent::fixIconPosition($obj);
 	}
 	
 	/**
@@ -151,17 +174,7 @@ class WuiMap extends GlobalMap {
 	*/
 	function parseIcon($obj) {
 		$ret = Array();
-		
-		if($obj['type'] == 'shape') {
-			if(preg_match("/^\[(.*)\]$/",$obj['icon'],$match) > 0) {
-				$imgPath = $match[1];
-			} else {
-				$imgPath = $this->MAINCFG->getValue('paths', 'htmlshape').$obj['icon'];
-			}
-		} else {
-			$imgPath = $this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon'];
-		}
-		
+				
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -169,7 +182,7 @@ class WuiMap extends GlobalMap {
 		}
 		
 		$ret[] = "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
-		$ret[] = "\t\t<img src=\"".$imgPath."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
+		$ret[] = "\t\t<img src=\"".$obj['htmlPath'].$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
 		$ret[] = "</div>";
 		
 		return $ret;
@@ -221,7 +234,7 @@ class WuiMap extends GlobalMap {
 		$tooltipText="";
 		
 		foreach($obj AS $var => $val) {
-			if( $var != ""  && $var != "id" && $var != "icon" && $var != "type" && $var != "x" && $var != "y") {
+			if(!preg_match('/^(|id|icon|type|x|y|z|path|htmlPath)$/i',$var) && $val != '') {
 				$tooltipText .= $var.": ".$val."<br>";
 			}
 		}
@@ -337,9 +350,7 @@ class WuiMap extends GlobalMap {
 			
 			// draw the shapes on the background
 			myshape_background.paint();
-			
-			// init tooltips for the objects
-			tt_Init();"));
+			"));
 			
 		return $arr;
 	}

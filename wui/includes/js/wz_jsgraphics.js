@@ -1,6 +1,6 @@
 /* This notice must be untouched at all times.
 
-wz_jsgraphics.js    v. 2.32
+wz_jsgraphics.js    v. 2.36
 The latest version is available at
 http://www.walterzorn.com
 or http://www.devira.com
@@ -8,7 +8,7 @@ or http://www.walterzorn.de
 
 Copyright (c) 2002-2004 Walter Zorn. All rights reserved.
 Created 3. 11. 2002 by Walter Zorn (Web: http://www.walterzorn.com )
-Last modified: 21. 6. 2005
+Last modified: 21. 6. 2006
 
 Performance optimizations for Internet Explorer
 by Thomas Frank and John Holdsworth.
@@ -70,24 +70,24 @@ function pntDoc()
 
 function pntCnvDom()
 {
-	var x = document.createRange();
+	var x = this.wnd.document.createRange();
 	x.setStartBefore(this.cnv);
 	x = x.createContextualFragment(jg_fast? this.htmRpc() : this.htm);
-	this.cnv.appendChild(x);
+	if(this.cnv) this.cnv.appendChild(x);
 	this.htm = '';
 }
 
 
 function pntCnvIe()
 {
-	this.cnv.insertAdjacentHTML("BeforeEnd", jg_fast? this.htmRpc() : this.htm);
+	if(this.cnv) this.cnv.insertAdjacentHTML("BeforeEnd", jg_fast? this.htmRpc() : this.htm);
 	this.htm = '';
 }
 
 
 function pntCnvIhtm()
 {
-	this.cnv.innerHTML += this.htm;
+	if(this.cnv) this.cnv.innerHTML += this.htm;
 	this.htm = '';
 }
 
@@ -261,7 +261,7 @@ function mkLin2D(x1, y1, x2, y2)
 	var s = this.stroke;
 	if (dx >= dy)
 	{
-		if (s-3 > 0)
+		if (dx > 0 && s-3 > 0)
 		{
 			var _s = (s*dx*Math.sqrt(1+dy*dy/(dx*dx))-dx-(s>>1)*dy) / dx;
 			_s = (!(s-4)? Math.ceil(_s) : Math.round(_s)) + 1;
@@ -761,7 +761,7 @@ function jsGraphics(id, wnd)
 				tt += (bb<<1)*(++x) - aa2*(((y--)<<1)-3);
 				dh = oy-y;
 				this.mkDiv(pxl, cy-oy, dw, dh);
-				this.mkDiv(pxl, cy+oy-dh+hod, dw, dh);
+				this.mkDiv(pxl, cy+y+hod, dw, dh);
 				ox = x;
 				oy = y;
 			}
@@ -892,8 +892,8 @@ text both horizontally (e.g. right) and vertically within that rectangle */
 		this.htm += '<div style="position:absolute;'+
 			'left:' + x + 'px;'+
 			'top:' + y + 'px;'+
-			'width:' +  w + ';'+
-			'height:' + h + ';">'+
+			'width:' +  w + 'px;'+
+			'height:' + h + 'px;">'+
 			'<img src="' + imgSrc + '" width="' + w + '" height="' + h + '"' + (a? (' '+a) : '') + '>'+
 			'<\/div>';
 	};
@@ -940,4 +940,3 @@ function integer_compare(x,y)
 {
 	return (x < y) ? -1 : ((x > y)*1);
 }
-
