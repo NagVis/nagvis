@@ -124,13 +124,10 @@ class WuiMap extends GlobalMap {
 					
 					$ret = array_merge($ret,$this->textBox($obj));
 				break;
-				case 'shape':
-					$obj['icon'] = "20x20.gif";
-					
-					$obj = $this->fixIconPosition($obj);
-					$ret = array_merge($ret,$this->parseIcon($obj));
-				break;
 				default:
+					if($obj['type'] == 'shape') {
+						$obj['icon'] = "20x20.gif";
+					}
 					if(isset($obj['line_type'])) {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
