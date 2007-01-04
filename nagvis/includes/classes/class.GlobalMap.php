@@ -318,7 +318,13 @@ class GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function fixIconPosition($obj) {
-		$size = getimagesize($obj['path'].$obj['icon']);
+		if($obj['path'] == '') {
+			$imgPath = $obj['icon'];
+		} else {
+			$imgPath = $obj['path'].$obj['icon'];
+		}
+		
+		$size = getimagesize($imgPath);
 		$obj['x'] = $obj['x'] - ($size[0]/2);
 		$obj['y'] = $obj['y'] - ($size[1]/2);
 		
