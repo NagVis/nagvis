@@ -325,8 +325,8 @@ class GlobalMap {
 		}
 		
 		$size = getimagesize($imgPath);
-		$obj['x'] = $obj['x'] - ($size[0]/2);
-		$obj['y'] = $obj['y'] - ($size[1]/2);
+		$obj['x'] = $obj['x'] - ($size[0] / 2);
+		$obj['y'] = $obj['y'] - ($size[1] / 2);
 		
 		return $obj;
 	}
