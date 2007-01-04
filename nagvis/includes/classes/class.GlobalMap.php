@@ -243,14 +243,6 @@ class GlobalMap {
         );
 		$stateLow = strtolower($obj['state']);
 		
-		/*if(isset($obj['iconset']) && $obj['iconset'] != '') {
-			$obj['iconset'] = $obj['iconset'];
-		} elseif($this->MAPCFG->getValue('global', 0, 'iconset') != '') {
-			$obj['iconset'] = $this->MAPCFG->getValue('global', 0, 'iconset');
-		} elseif($this->MAINCFG->getValue('global', 'defaulticons') != '') {
-			$obj['iconset'] = $this->MAINCFG->getValue('global', 'defaulticons');
-		}*/
-		
 		switch($obj['type']) {
 			case 'map':
 				switch($stateLow) {

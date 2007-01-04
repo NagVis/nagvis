@@ -128,8 +128,8 @@ class NagVisMap extends GlobalMap {
 	function getIconPaths($obj) {
 		if($obj['type'] == 'shape') {
 			if(preg_match("/^\[(.*)\]$/",$obj['icon'],$match) > 0) {
-				$obj['path'] = $match[1];
-				$obj['htmlPath'] = $match[1];
+				$obj['path'] = '';
+				$obj['htmlPath'] = '';
 			} else {
 				$obj['path'] = $this->MAINCFG->getValue('paths', 'shape');
 				$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlshape');
