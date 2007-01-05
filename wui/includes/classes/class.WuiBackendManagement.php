@@ -151,7 +151,7 @@ class WuiBackendManagement extends GlobalPage {
 	function getDefaultFields() {
 		$ret = Array();
 		
-		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getLabel('defaultBackend'),'defaultbackend',$this->getDefinedBackends(),$this->MAINCFG->getValue('global','defaultbackend',TRUE),TRUE));
+		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getLabel('defaultBackend'),'defaultbackend',$this->getDefinedBackends(),$this->MAINCFG->getValue('defaults','backend',TRUE),TRUE));
 		
 		return $ret;
 	}

@@ -205,6 +205,7 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getText($languagePath,$replace='',$mergeWithGlobal=TRUE) {
+		$arrLang = Array();
 		$arrLanguagePath = explode(':',$languagePath);
 		# DEBUG: print_r($arrLanguagePath);
 	    # [0] => backend

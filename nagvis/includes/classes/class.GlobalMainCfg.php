@@ -19,21 +19,9 @@ class GlobalMainCfg {
 		$this->runtimeConfig = Array();
 		
 		$this->validConfig = Array(
-			'global' => Array('defaultbackend' => Array('must' => 0,
-												 'editable' => 0,
-												'default' => 'ndomy'),
-							'language' => Array('must' => 1,
+			'global' => Array('language' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => 'english'),
-							'defaulticons' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'std_medium'),
-							'recognizeservices' => Array('must' => 0,
-												 'editable' => 0,
-												'default' => 1),
-							'onlyhardstates' => Array('must' => 0,
-												 'editable' => 0,
-												'default' => 0),
 							'rotatemaps' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '0'),
@@ -49,12 +37,25 @@ class GlobalMainCfg {
 							'usegdlibs' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '1'),
-							'defaultbackgroundcolor' => Array('must' => 0,
-												 'editable' => 1,
-												'default' => '#fff'),
 							'refreshtime' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '60')),
+			'defaults' => Array('backend' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => 'ndomy'),
+							'icons' => Array('must' => 1,
+												 'editable' => 1,
+												'default' => 'std_medium'),
+							'backgroundcolor' => Array('must' => 0,
+												 'editable' => 1,
+												'default' => '#fff'),
+							'recognizeservices' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => 1),
+							'onlyhardstates' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => 0),
+							),
 			'wui' => Array('autoupdatefreq' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '25')),
@@ -450,7 +451,7 @@ class GlobalMainCfg {
      */
 	function getValue($sec, $var, $ignoreDefault=FALSE) {
 		# if nothing is set in the config file, use the default value
-		if(is_array($this->config[$sec]) && array_key_exists($var,$this->config[$sec])) {
+		if(isset($this->config[$sec]) && is_array($this->config[$sec]) && array_key_exists($var,$this->config[$sec])) {
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
 			if(preg_match("/^backend_/i", $sec)) {

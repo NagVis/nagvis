@@ -355,7 +355,7 @@ switch($_GET['myaction']) {
 		print "<script>window.document.location.href='./index.php?map=".$_GET['map']."';</script>\n";
 	break;
 	case 'mgt_backend_default':
-		$MAINCFG->setValue($MAINCFG->findSecOfVar('defaultbackend'),'defaultbackend',$_POST['defaultbackend']);
+		$MAINCFG->setValue($MAINCFG->findSecOfVar('backend'),'backend',$_POST['defaultbackend']);
 		if($MAINCFG->writeConfig()) {
 			print "<script>window.history.back();</script>";
 			print "<script>window.opener.document.location.reload();</script>\n";

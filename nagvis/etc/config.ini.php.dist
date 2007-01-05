@@ -11,12 +11,8 @@
 
 ; global options
 [global]
-; default backend (id of the default backend)
-defaultbackend="ndomy_1"
 ; select language (english,german,...)
 ;language="english"
-; default icons
-;defaulticons="std_medium"
 ; rotate maps (0/1)
 ;rotatemaps=0
 ; maps to rotate
@@ -29,7 +25,18 @@ defaultbackend="ndomy_1"
 ;usegdlibs=1
 ; refresh time of pages
 ;refreshtime=60
-; background color of the nagvis map
+
+; default values for the maps
+[defaults]
+; default backend (id of the default backend)
+;backend="ndomy_1"
+; default icons
+;icons="std_medium"
+; recognize service states in host/hostgroup objects
+;recognizeservices=1
+; recognize only hard states (not soft)
+;onlyhardstates=0
+; background color of maps
 ;backgroundcolor="#fff"
 
 ; options for the wui
@@ -77,19 +84,11 @@ defaultbackend="ndomy_1"
 ; physical path to the CGIs
 ;cgi="/usr/local/nagios/sbin/"
 
-; usualy not needed
 ; include options
 [includes]
 ; header include
 ;header="header.nagvis.inc"
 
-; Only internal informations
-[internal]
-; version of NagVis
-;version="1.0a1"
-; title of NagVis pages
-;title="NagVis 1.0a1 (Subversion Snapshot)"
-
 ; -------------------------
 ; EOF
-; ------------------------
+; -------------------------

@@ -84,7 +84,7 @@ class WuiEditMainCfg extends GlobalPage {
 						switch($key2) {
 							case 'language':
 							case 'backend':
-							case 'defaulticons':
+							case 'icons':
 							case 'rotatemaps':
 							case 'displayheader':
 							case 'checkconfig':
@@ -101,7 +101,7 @@ class WuiEditMainCfg extends GlobalPage {
 									case 'backend':
 										$arrOpts = $this->getBackends();
 									break;
-									case 'defaulticons':
+									case 'icons':
 										$arrOpts = $this->getIconsets();
 									break;
 									case 'rotatemaps':

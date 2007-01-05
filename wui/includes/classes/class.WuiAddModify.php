@@ -172,7 +172,7 @@ class WuiAddModify extends GlobalPage {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMaps(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
 				$this->propCount++;
 			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
-				$backendId = $this->checkOption($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id'), $this->MAPCFG->getValue('global',0,'backend_id'), $this->MAINCFG->getValue('global', 'defaultbackend'),'');
+				$backendId = $this->checkOption($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id'), $this->MAPCFG->getValue('global',0,'backend_id'), $this->MAINCFG->getValue('defaults', 'backend'),'');
 				$ret[] = "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
 				$ret[] = "<script>getServices('".$backendId."','".$this->prop['type']."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
 				if($propname == 'host_name') {
