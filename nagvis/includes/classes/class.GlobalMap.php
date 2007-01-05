@@ -197,7 +197,9 @@ class GlobalMap {
 			case 'textbox':
 				// Check if set a hostname
 				if(isset($obj['host_name'])) {
-					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
+					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
+					}
 				}
 			break;
 			default:
@@ -206,9 +208,10 @@ class GlobalMap {
 					list($objNameFrom,$objNameTo) = explode(",", $obj[$name]);
 					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(",", $obj['service_description']);
 					
-					$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
-					$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
-					
+					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+						$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
+						$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
+					}
 					$state = Array('State' => $this->wrapState(Array($state1['State'],$state2['State'])),'Output' => 'State1: '.$state1['Output'].'<br />State2:'.$state2['Output']);
 				} else {
 					if(!isset($obj['service_description'])) {
@@ -217,7 +220,10 @@ class GlobalMap {
 					if(!isset($obj['recognize_services'])) {
 						$obj['recognize_services'] = '';	
 					}
-					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
+					
+					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
+					}
 				}
 			break;	
 		}

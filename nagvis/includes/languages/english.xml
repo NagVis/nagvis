@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <language>
 	<meta>
 		<name>english</name>
@@ -207,6 +207,10 @@
 					<title>Found no defined backends!</title>
 					<text>No backend could be found in NagVis configuration.</text>
 				</noBackendDefined>
+				<backendNotInitialized>
+					<title>Backend not initialized!</title>
+					<text>The backend with the ID [i][BACKENDID][/i] of type [i][BACKENDTYPE][/i] is not initialized. Check your main configuration file.</text>
+				</backendNotInitialized>
 			</messages>
 		</global>
 		<ndomy>

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <language>
 	<meta>
 		<name>german</name>
@@ -204,9 +204,13 @@
 					<text>Das Backend mit der ID [i][BACKENDID][/i] vom Typ [i][BACKENDTYPE][/i] existiert nicht.</text>
 				</backendNotExists>
 				<noBackendDefined>
-					<title>Kien backend definiert!</title>
+					<title>Kein backend definiert!</title>
 					<text>Es konnte keine Backend-Definition in der NagVis konfiguration gefunden werden.</text>
 				</noBackendDefined>
+				<backendNotInitialized>
+					<title>Backend nicht initialisiert!</title>
+					<text>Das Backend mit der ID [i][BACKENDID][/i] vom Typ [i][BACKENDTYPE][/i] ist nicht initialisiert. Hauptkonfigurationsdatei prüfen.</text>
+				</backendNotInitialized>
 			</messages>
 		</global>
 		<ndomy>

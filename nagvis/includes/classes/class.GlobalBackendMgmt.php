@@ -60,6 +60,29 @@ class GlobalBackendMgmt {
 	}
 	
 	/**
+	 * Checks for an initialized backend
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function checkBackendInitialized($backendId,$printErr) {
+		if($backendId != '') {
+			if(isset($this->BACKENDS[$backendId]) && is_object($this->BACKENDS[$backendId])) {
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
+		            $FRONTEND->messageToUser('ERROR','backendNotInitialized','BACKENDID~'.$backendId.'BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
+				}
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
 	 * Initializes all backends
 	 *
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>

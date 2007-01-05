@@ -87,12 +87,9 @@ class WuiEditMainCfg extends GlobalPage {
 							case 'icons':
 							case 'rotatemaps':
 							case 'displayheader':
-							case 'checkconfig':
+							case 'recognizeservices':
+							case 'onlyhardstates':
 							case 'usegdlibs':
-							case 'debug':
-							case 'debugstates':
-							case 'debugcheckstate':
-							case 'debugfixicon':
 							case 'autoupdatefreq':
 								switch($key2) {
 									case 'language':
@@ -106,12 +103,9 @@ class WuiEditMainCfg extends GlobalPage {
 									break;
 									case 'rotatemaps':
 									case 'displayheader':
-									case 'checkconfig':
+									case 'recognizeservices':
+									case 'onlyhardstates':
 									case 'usegdlibs':
-									case 'debug':
-									case 'debugstates':
-									case 'debugcheckstate':
-									case 'debugfixicon':
 										$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getLabel('yes')),
 														 Array('value'=>'0','label'=>$this->LANG->getLabel('no')));
 									break;
