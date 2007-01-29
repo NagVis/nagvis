@@ -75,15 +75,6 @@
 ; maximum delay of the NDO Database in Seconds
 ;maxtimewithoutupdate=181
 
-; options for the HTML-Backend
-[backend_html_1]
-; type of backend - MUST be set
-;backendtype="html"
-; with this user, the script reads the CGIs
-;cgiuser="nagiosadmin"
-; physical path to the CGIs
-;cgi="/usr/local/nagios/sbin/"
-
 ; include options
 [includes]
 ; header include
