@@ -4,8 +4,6 @@ include("./includes/classes/class.WuiMainCfg.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");
 include("../nagvis/includes/classes/class.GlobalLanguage.php");
 include("../nagvis/includes/classes/class.GlobalPage.php");
-include("../nagvis/includes/classes/class.GlobalBackend-ndomy.php");
-include("../nagvis/includes/classes/class.GlobalBackend-html.php");
 include("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
 
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
