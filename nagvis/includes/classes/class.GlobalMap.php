@@ -183,15 +183,20 @@ class GlobalMap {
 				$SUBMAP = new GlobalMap($this->MAINCFG,$SUBMAPCFG,$this->BACKEND);
 				$SUBMAP->linkedMaps = $this->linkedMaps;
 				
-				// prevent loops in recursion
-				if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
-	                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
-					
-					$state = Array('State' => 'UNKNOWN','Output' => 'Error: Loop in Recursion');
+				if($this->checkPermissions($SUBMAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+					// prevent loops in recursion
+					if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
+		                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+			            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+						
+						// FIXME: Get from language file
+						$state = Array('State' => 'UNKNOWN','Output' => 'Error: Loop in Recursion');
+					} else {
+						$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1));
+						$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
+					}
 				} else {
-					$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1));
-					$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
+					$state = Array('State' => 'UNKNOWN','Output'=>'Error: You\'re not permited to view the state of this map.');
 				}
 			break;
 			case 'textbox':
@@ -356,5 +361,25 @@ class GlobalMap {
 		} else {
 			return "OK";
 		}
+	}
+	
+	/**
+	 * Checks for valid Permissions
+	 *
+	 * @param 	String 	$allowed	
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function checkPermissions($allowed,$printErr) {
+		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
+        	if($printErr) {
+				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
+			}
+			return FALSE;
+        } else {
+        	return TRUE;
+    	}
+		return TRUE;
 	}
 }
