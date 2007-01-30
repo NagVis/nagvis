@@ -65,28 +65,9 @@ class WuiAddModify extends GlobalPage {
 		if($this->prop['action'] == 'modify') {
 			$myval = $this->prop['id'];
 			$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
-			/*foreach($this->MAPCFG->getDefinitions($this->prop['type']) AS $key => $obj) {
-				if($key == $myval) {
-					foreach($this->MAPCFG->validConfig[$this->prop['type']] as $propname => $prop) {
-						if(isset($obj[$propname])) {
-							if($propname == 'line_type') {
-								$ret[] = "document.addmodify.elements['".$propname."'].value='".substr($obj[$propname],strlen($obj[$propname])-1,1)."';\n";
-							} else {
-								if(is_array($obj[$propname])) {
-									$val = implode(',',$obj[$propname]);
-								} else {
-									$val = $obj[$propname];
-								}
-								$ret[] = "document.addmodify.elements['".$propname."'].value='".$val."';\n";
-							}
-						}
-					}
-				}
-			}*/
-			
-			if($this->prop['coords'] != "") {
+			if($this->prop['coords'] != '') {
 				$val_coords = explode(',',$this->prop['coords']);
-				if ($mytype == "textbox") {
+				if ($this->prop['type'] == 'textbox') {
 					$objwidth = $val_coords[2] - $val_coords[0];
 					$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
 					$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
@@ -227,7 +208,7 @@ class WuiAddModify extends GlobalPage {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && !preg_match("/^./i",$file)) {
+				if ($file != "." && $file != ".." && preg_match("/.png$/i",$file)) {
 					$files[] = $file;
 				}				
 			}

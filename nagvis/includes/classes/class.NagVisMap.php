@@ -119,29 +119,6 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
-	 * Gets the paths to the icon
-	 *
-	 * @param	Array	$obj	Array with object informations
-	 * @return	Array	Array with object informations
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
-	 */
-	function getIconPaths($obj) {
-		if($obj['type'] == 'shape') {
-			if(preg_match("/^\[(.*)\]$/",$obj['icon'],$match) > 0) {
-				$obj['path'] = '';
-				$obj['htmlPath'] = '';
-			} else {
-				$obj['path'] = $this->MAINCFG->getValue('paths', 'shape');
-				$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlshape');
-			}
-		} else {
-			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
-			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
-		}
-		return $obj;
-	}
-	
-	/**
 	 * Adds paths to the icon
 	 *
 	 * @param	Array	$obj	Array with object informations

@@ -124,11 +124,10 @@ class WuiMap extends GlobalMap {
 					$obj['icon'] = "20x20.gif";
 					
 					$ret = array_merge($ret,$this->textBox($obj));
+					$obj = $this->fixIconPosition($obj);
+					$ret = array_merge($ret,$this->parseIcon($obj));
 				break;
 				default:
-					if($obj['type'] == 'shape') {
-						$obj['icon'] = "20x20.gif";
-					}
 					if(isset($obj['line_type'])) {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
@@ -158,16 +157,13 @@ class WuiMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function fixIconPosition($obj) {
-		$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
-		$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
-		return parent::fixIconPosition($obj);
+		return parent::fixIconPosition($this->getIconPaths($obj));
 	}
 	
 	/**
 	* Parses the HTML-Code of an icon
 	*
 	* @param Array $obj
-	*
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function parseIcon($obj) {
@@ -190,8 +186,6 @@ class WuiMap extends GlobalMap {
 	* Create a Comment-Textbox
 	*
 	* @param Array $obj
-	*
-	* @author Joerg Linge
 	* @author Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function textBox($obj) {
@@ -206,6 +200,7 @@ class WuiMap extends GlobalMap {
 		$ret[] = "<div class=\"".$obj['class']."\" style=\"left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."; overflow: visible;\">";	
 		$ret[] = "\t<span>".$obj['text']."</span>";
 		$ret[] = "</div>";
+		
 		return $ret;	
 	}
 	
