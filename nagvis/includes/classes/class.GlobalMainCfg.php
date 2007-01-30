@@ -42,7 +42,7 @@ class GlobalMainCfg {
 												'default' => '60')),
 			'defaults' => Array('backend' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => 'ndomy'),
+												'default' => 'ndomy_1'),
 							'icons' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => 'std_medium'),
