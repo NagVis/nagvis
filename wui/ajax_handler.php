@@ -7,10 +7,11 @@ include("../nagvis/includes/classes/class.GlobalPage.php");
 include("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
 
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
-$BACKEND = new GlobalBackendMgmt($MAINCFG);
 
 switch($_GET['action']) {
 	case 'getObjects':
+		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+		
 		// $_GET['backend_id'], $_GET['type']
 		if(method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
 			echo '[ ';
@@ -22,6 +23,8 @@ switch($_GET['action']) {
 		}
 	break;
 	case 'getServices':
+		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+		
 		// $_GET['backend_id'], $_GET['host_name']
 		if(method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
 			echo '[ ';
