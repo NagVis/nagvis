@@ -57,6 +57,7 @@ class WuiMap extends GlobalMap {
 					$mapOptions .= ',';
 				}
 				$mapOptions .= '\''.$obj['map_name'].'\' ';
+				$i++;
 			}
 			$mapOptions .= ' ]';
 			
