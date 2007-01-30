@@ -74,6 +74,13 @@ class GlobalBackendndomy {
 		// we set the old level of reporting back
 		error_reporting($oldLevel);
 		
+		// check if tables exists in database
+		$QUERYHANDLE = mysql_query("SHOW TABLES LIKE '".$this->dbPrefix."%'");
+		if(mysql_num_rows($QUERYHANDLE) == 0) {
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+			$FRONTEND->messageToUser('ERROR','noTablesExists','BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix);
+		}
+		
 		// Set the instanceId
 		$this->dbInstanceId = $this->getInstanceId();
 		

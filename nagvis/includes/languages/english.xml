@@ -255,6 +255,10 @@
 					<title>Service not checked yet! (Backend [BACKENDID])</title>
 					<text>The Service [b][SERVICE][/b] has not been checked yet.</text>
 				</serviceNotChecked>
+				<noTablesExists>
+					<title>No matching tables in Database (Backend [BACKENDID])</title>
+					<text>There are no tables in database matching given prefix [i][PREFIX]*[/i].</text>
+				</noTablesExists>
 			</messages>
 		</ndomy>
 		<html>
