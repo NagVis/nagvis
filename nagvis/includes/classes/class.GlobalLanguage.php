@@ -73,7 +73,7 @@ class GlobalLanguage {
 	
 	    $data = trim($data);
 	    
-	    $parser = xml_parser_create();
+	    $parser = xml_parser_create('');
 	    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
 	    xml_parse_into_struct($parser, $data, $vals, $index);
 	    xml_parser_free($parser);
@@ -213,7 +213,6 @@ class GlobalLanguage {
 	    # [2] => messages
 	    # [3] => errorSelectingDb
 	    # [4] => title
-		
 		
 		// merge first level with global if $mergeWithGlobal is TRUE
 		// search not only the array of $this->lang['xy'], also search $this->lang['global']
