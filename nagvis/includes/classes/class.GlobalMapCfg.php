@@ -609,7 +609,7 @@ class GlobalMapCfg {
 				foreach($elements AS $id => $element) {
 					// loop validConfig for checking: => missing "must" atributes
 					foreach($this->validConfig[$type] AS $key => $val) {
-						if(isset($this->validConfig[$type]['must']) && (!array_key_exists($key,$this->mapConfig[$type][$id]) || $this->mapConfig[$type][$id][$key] == '')) {
+						if(isset($this->validConfig[$type][$key]['must']) && $this->validConfig[$type][$key]['must'] == '1' && (!array_key_exists($key,$this->mapConfig[$type][$id]) || $this->mapConfig[$type][$id][$key] == '')) {
 							// a "must" value is missing or empty
 							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 						    $FRONTEND->messageToUser('ERROR','mustValueNotSet','ATTRIBUTE~'.$key.',TYPE~'.$type);
