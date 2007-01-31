@@ -339,7 +339,7 @@ class GlobalMap {
 			$size = getimagesize($imgPath);
 		} else {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		    $FRONTEND->messageToUser('WARNING','imageNotExists','IMGPATH~'.$imgPath);
+		    $FRONTEND->messageToUser('WARNING','iconNotExists','IMGPATH~'.$imgPath);
 		    
 			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');

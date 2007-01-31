@@ -149,6 +149,10 @@
 					<title>Endlosschleife</title>
 					<text>Die Map Objekte der verlinkten Maps bilden eine Endlosschleife. Bitte aufl&ouml;sen.</text>
 				</loopInMapRecursion>
+				<iconNotExists>
+					<title>Icon existiert nicht</title>
+					<text>Ein Icon ([i][IMGPATH][/i]) auf der Map existiert nicht.</text>
+				</iconNotExists>
 			</messages>
 		</global>
 	</global>

@@ -149,6 +149,10 @@
 					<title>Loop in Map recursion</title>
 					<text>The linked maps are producing a loop. Please fix this loop!</text>
 				</loopInMapRecursion>
+				<iconNotExists>
+					<title>Icon not exists</title>
+					<text>An icon ([i][IMGPATH][/i]) which is used on the map doesn't exists.</text>
+				</iconNotExists>
 			</messages>
 		</global>
 	</global>
