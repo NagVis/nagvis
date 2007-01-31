@@ -438,7 +438,9 @@ class GlobalMapCfg {
 				}
 				$file[] = "define ".$type." {\n";
 				foreach($this->mapConfig[$type][$id] AS $key => $val) {
-					$file[] = $key."=".$val."\n";
+					if(isset($val) && $val != '') {
+						$file[] = $key."=".$val."\n";
+					}
 				}
 				$file[] = "}\n";
 				$file[] = "\n";
