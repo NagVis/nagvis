@@ -47,5 +47,14 @@ class WuiFrontend extends GlobalPage {
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
 	}
+	
+	/**
+	 * Adds the user messages to the page
+	 *
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function getMessages() {
+		$this->addBodyLines($this->getUserMessages());	
+	}
 }
 ?>

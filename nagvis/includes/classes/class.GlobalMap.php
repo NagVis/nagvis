@@ -335,7 +335,18 @@ class GlobalMap {
 			$imgPath = $obj['path'].$obj['icon'];
 		}
 		
-		$size = getimagesize($imgPath);
+		if(file_exists($imgPath)) {
+			$size = getimagesize($imgPath);
+		} else {
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		    $FRONTEND->messageToUser('WARNING','imageNotExists','IMGPATH~'.$imgPath);
+		    
+			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
+			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
+			$obj['icon'] = '20x20.gif';
+			$size = getimagesize($obj['path'].$obj['icon']);
+		}
+			
 		$obj['x'] = $obj['x'] - ($size[0] / 2);
 		$obj['y'] = $obj['y'] - ($size[1] / 2);
 		
@@ -397,7 +408,9 @@ class GlobalMap {
 	function checkPermissions($allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
         	if($printErr) {
-				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
+        		$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		        $FRONTEND->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
+				//FIXME: $this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
 			return FALSE;
         } else {

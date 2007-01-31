@@ -36,6 +36,7 @@ $MAPCFG->readMapConfig();
 
 $FRONTEND = new WuiFrontend($MAINCFG,$MAPCFG);
 $FRONTEND->getMap();
+$FRONTEND->getMessages();
 
 if($_GET['map'] != '') {
 	if(!$MAPCFG->checkMapConfigWriteable(1)) {
