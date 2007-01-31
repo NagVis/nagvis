@@ -121,7 +121,7 @@ class GlobalMainCfg {
 																					'default' => 'root'),
 																'dbprefix' => Array('must' => 0,
 																					 'editable' => 1,
-																					'default' => 'ndo_'),
+																					'default' => 'nagios_'),
 																'dbinstancename' => Array('must' => 0,
 																					 'editable' => 1,
 																					'default' => 'default'),
