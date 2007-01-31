@@ -68,7 +68,7 @@ class GlobalMap {
 			$style = "width:600px; height:600px;";
 		}
 		
-		return Array('<img id="background" src="'.$src.'" style="'.$style.'" alt="">');
+		return Array('<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="">');
 	}
 	
 	/**
