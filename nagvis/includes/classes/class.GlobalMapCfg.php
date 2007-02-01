@@ -125,7 +125,7 @@ class GlobalMapCfg {
 							'z' => Array('must' => 0,
 												'default' => 1),
 							'w' => Array('must' => 1),
-							'background_color' => Array('must' => 1),
+							'background_color' => Array('must' => 0),
 							'host_name' => Array('must' => 0)),
 			'shape' => Array('type' => Array('must' => 0),
 							'icon' => Array('must' => 1),
