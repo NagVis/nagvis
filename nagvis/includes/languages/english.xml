@@ -119,15 +119,15 @@
 				</backgroundNotWriteable>
 				<mustValueNotSet>
 					<title>Must value not set</title>
-					<text>A must value ([I][ATTRIBUTE][/I]) is not set in an object of type [I][TYPE][/I]!</text>
+					<text>A must value ([I][ATTRIBUTE][/I]) is not set in an object of type [I][TYPE][/I] in map [I][MAPNAME][/I]</text>
 				</mustValueNotSet>
 				<unknownObject>
 					<title>Unknown type defined in Map Config File</title>
-					<text>The Type [I][TYPE][/I] is not allowed!</text>
+					<text>The Type [I][TYPE][/I] in map [I][MAPNAME][/I] is not allowed!</text>
 				</unknownObject>
 				<unknownAttribute>
 					<title>Unknown attribute defined in Map Config File</title>
-					<text>The Attribute [I][ATTRIBUTE][/I] is not allowed in Elements of type [I][TYPE][/I]!</text>
+					<text>The Attribute [I][ATTRIBUTE][/I] is not allowed in Elements of type [I][TYPE][/I] in map [I][MAPNAME][/I]</text>
 				</unknownAttribute>
 				<languageNotReadable>
 					<title>Can not read Language-File</title>

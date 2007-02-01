@@ -119,15 +119,15 @@
 				</backgroundNotWriteable>
 				<mustValueNotSet>
 					<title>Pflicht-Wert nicht gesetzt</title>
-					<text>Ein Pflichtwert ([I][ATTRIBUTE][/I]) wurde in einem Objekt vom Typ [I][TYPE][/I] in der Map Config Datei nicht gesetzt!</text>
+					<text>Ein Pflichtwert ([I][ATTRIBUTE][/I]) wurde in einem Objekt vom Typ [I][TYPE][/I] in Map [I][MAPNAME][/I] nicht gesetzt!</text>
 				</mustValueNotSet>
 				<unknownObject>
 					<title>Unbekannter Typ in Map Config Datei definiert</title>
-					<text>Der Objekttyp [I][TYPE][/I] ist nicht erlaubt!</text>
+					<text>Der Objekttyp [I][TYPE][/I] in der Map [I][MAPNAME][/I] ist nicht erlaubt!</text>
 				</unknownObject>
 				<unknownAttribute>
 					<title>Unbekanntes Attribut in Map Config Datei definiert</title>
-					<text>Das Attribut [I][ATTRIBUTE][/I] ist in Elementen des typs [I][TYPE][/I] nicht erlaubt!</text>
+					<text>Das Attribut [I][ATTRIBUTE][/I] ist in Elementen des Typs [I][TYPE][/I] in Map [I][MAPNAME][/I] nicht erlaubt!</text>
 				</unknownAttribute>
 				<languageNotReadable>
 					<title>Keine Leserechte auf die Sprachdatei</title>

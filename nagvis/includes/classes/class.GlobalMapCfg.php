@@ -609,10 +609,13 @@ class GlobalMapCfg {
 				foreach($elements AS $id => $element) {
 					// loop validConfig for checking: => missing "must" atributes
 					foreach($this->validConfig[$type] AS $key => $val) {
-						if(isset($this->validConfig[$type][$key]['must']) && $this->validConfig[$type][$key]['must'] == '1' && (!array_key_exists($key,$this->mapConfig[$type][$id]) || $this->mapConfig[$type][$id][$key] == '')) {
-							// a "must" value is missing or empty
-							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-						    $FRONTEND->messageToUser('ERROR','mustValueNotSet','ATTRIBUTE~'.$key.',TYPE~'.$type);
+						if((isset($val['must']) && $val['must'] == '1')) {
+							// value is "must"
+							if(!isset($element[$key]) || $element[$key] == '') {
+								// a "must" value is missing or empty
+								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+							    $FRONTEND->messageToUser('ERROR','mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id);
+							}
 						}
 					}
 					
@@ -623,7 +626,7 @@ class GlobalMapCfg {
 							// unknown atribute
 							if($printErr == 1) {
 								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-					            $FRONTEND->messageToUser('ERROR','unknownAttribute','ATTRIBUTE~'.$key.',TYPE~'.$type);
+					            $FRONTEND->messageToUser('ERROR','unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type);
 							}
 							return FALSE;
 						}
