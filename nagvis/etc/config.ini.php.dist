@@ -41,7 +41,7 @@
 
 ; options for the wui
 [wui]
-; auto update fequency
+; auto update frequency
 ;autoupdatefreq=25
 
 ; path options
@@ -49,12 +49,12 @@
 ; absolute physical NagVis path
 ;base="/usr/local/nagios/share/nagvis/"
 ; absolute html NagVis path
-;htmlbase="/nagios/nagvis-1.x"
+;htmlbase="/nagios/nagvis"
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
 
 ; options for the NDO-Backend
-; in this example the ID of the Backend is "ndmy_1" you can define another ID.
+; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 ;[backend_ndomy_1]
 ; type of backend - MUST be set
 ;backendtype="ndomy"
@@ -69,11 +69,11 @@
 ; password for NDO-db
 ;dbpass="xxx"
 ; prefix for tables in NDO-db
-;dbprefix="ndo_"
+;dbprefix="nagios_"
 ; instace-name for tables in NDO-db
 ;dbinstancename="default"
 ; maximum delay of the NDO Database in Seconds
-;maxtimewithoutupdate=181
+;maxtimewithoutupdate=180
 
 ; include options
 [includes]
