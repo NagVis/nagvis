@@ -268,7 +268,7 @@ class GlobalMapCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function readMapConfig() {
+	function readMapConfig($onlyGlobal=0) {
 		if($this->name != '') {
 			if($this->checkMapConfigReadable(1)) {
 				$this->mapConfig = Array();
@@ -315,6 +315,10 @@ class GlobalMapCfg {
 				 */
 				$this->getObjectDefaults();
 				
+				if($onlyGlobal == 1) {
+					$this->filterGlobal();	
+				}
+				
 				if($this->checkMapConfigIsValid(1)) {
 					$this->getImage();
 					return TRUE;
@@ -324,6 +328,28 @@ class GlobalMapCfg {
 			} else {
 				return FALSE;	
 			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Deletes all elements from the array, only global will be left
+	 * Is needed in WUI to prevent config error warnings while loading the map credentials from
+	 * global section of the map
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function filterGlobal() {
+		foreach($this->mapConfig AS $key => $val) {
+			if($key != 'global') {
+				unset($this->mapConfig[$key]);
+			}
+		}
+		
+		if(count($this->mapConfig) == 1) {
+			return TRUE;
 		} else {
 			return FALSE;
 		}
