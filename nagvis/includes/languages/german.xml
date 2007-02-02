@@ -153,6 +153,14 @@
 					<title>Icon existiert nicht</title>
 					<text>Ein Icon ([i][IMGPATH][/i]) auf der Map existiert nicht.</text>
 				</iconNotExists>
+				<couldNotDeleteMapCfg>
+					<title>Konnte Map Config nicht l&ouml;schen</title>
+					<text>Die Map Konfiguration ([i][MAPPATH][/i]) konnte nicht gel&ouml;scht werden.</text>
+				</couldNotDeleteMapCfg>
+				<couldNotDeleteMapImage>
+					<title>Konnte Map Hintergrund nicht l&ouml;schen</title>
+					<text>Der Map Hintergrund ([i][IMGPATH][/i]) konnte nicht gel&ouml;scht werden.</text>
+				</couldNotDeleteMapImage>
 			</messages>
 		</global>
 	</global>

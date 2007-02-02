@@ -153,6 +153,14 @@
 					<title>Icon not exists</title>
 					<text>An icon ([i][IMGPATH][/i]) which is used on the map doesn't exists.</text>
 				</iconNotExists>
+				<couldNotDeleteMapCfg>
+					<title>Unable to delete map config</title>
+					<text>Could not delete the map config file ([i][MAPPATH][/i]).</text>
+				</couldNotDeleteMapCfg>
+				<couldNotDeleteMapImage>
+					<title>Unable to delete map image</title>
+					<text>Could not delete the map image file ([i][IMGPATH][/i]).</text>
+				</couldNotDeleteMapImage>
 			</messages>
 		</global>
 	</global>
