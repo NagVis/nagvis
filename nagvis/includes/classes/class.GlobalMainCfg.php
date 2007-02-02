@@ -149,7 +149,7 @@ class GlobalMainCfg {
 		// Default - minimal - config initialisation
 		// if an error with the main-cfg-file occours and we can't get the settings 
 		// set defaults here
-		$this->config['global']['language'] = $this->validConfig['global']['language']['default'];
+		// DEPRECATED: $this->config['global']['language'] = $this->validConfig['global']['language']['default'];
 		
 		// Read Main Config file
 		$this->configFile = $configFile;
@@ -201,10 +201,11 @@ class GlobalMainCfg {
 						$key = "comment_".($numComments++);
 						$val = @trim($line);
 						
-						if(isset($sec) && $sec != '')
+						if(isset($sec) && $sec != '') {
 							$this->config[$sec][$key] = $val;
-						else
+						} else {
 							$this->config[$key] = $val;
+						}
 					} elseif ((@substr($line, 0, 1) == "[") && (@substr($line, -1, 1)) == "]") {
 						// section
 						$sec = @strtolower(@trim(@substr($line, 1, @strlen($line)-2)));
@@ -244,6 +245,8 @@ class GlobalMainCfg {
 					$this->config["comment_".($numComments++)] = '';
 				}
 			}
+			
+			return TRUE;
 		} else {
 			return FALSE;
 		}
