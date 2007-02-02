@@ -78,9 +78,9 @@ function check_object() {
 					return false;
 				}
 			}		
-
+			
 			if(document.addmodify.elements[i].value != '') {
-				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*') {
+				if(validConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
 					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length-1)+'='+document.addmodify.elements[i].value;
 				} else {
 					if(document.addmodify.elements[i].name=='line_type') {
@@ -91,9 +91,8 @@ function check_object() {
 					}
 				}
 			} else {
-				if(document.addmodify.elements[i].name.charAt(document.addmodify.elements[i].name.length-1) == '*') {
-					mess=lang['mustValueNotSet'];
-					alert(mess);
+				if(validConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
+					alert("ERROR: "+printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+document.addmodify.elements[i].name+',TYPE~'+document.addmodify.type.value+',MAPNAME~'+document.addmodify.map.value));
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
 					

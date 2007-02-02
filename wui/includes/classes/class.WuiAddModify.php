@@ -35,6 +35,8 @@ class WuiAddModify extends GlobalPage {
 	function getForm() {
 		// Inititalize language for JS
 		$this->addBodyLines($this->getJsLang());
+		// Write JS Array for config validation
+		$this->addBodyLines($this->getJsValidConfig());
 		
 		$this->FORM = new GlobalForm(Array('name'=>'addmodify',
 			'id'=>'addmodify',
@@ -301,6 +303,46 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = '//--></script>';
 		
 		return $ret;	
+	}
+	
+	function getJsValidConfig() {
+		$ret = Array();
+		
+		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
+		$sRet = 'var validConfig = { ';
+		$i = 0;
+		foreach($this->MAPCFG->validConfig AS $type => $arr) {
+			if($i != 0) {
+				$sRet .= ', ';	
+			}
+			$sRet .= $type.': { ';
+			$a = 0;
+			foreach($arr AS $key => $opt) {
+				if($a != 0) {
+					$sRet .= ', ';	
+				}
+				if($key != 'type') {
+					$sRet .= $key.': { ';
+						$e = 0;
+						foreach($opt AS $var => $val) {
+							if($e != 0) {
+								$sRet .= ', ';	
+							}
+							$sRet .= $var.': "'.$val.'"';
+							$e++;
+						}
+					$sRet .= ' }';
+					$a++;
+				}
+			}
+			$sRet .= ' }';
+			$i++;
+		}
+		$sRet .= ' }';
+		$ret[] = $sRet;
+		$ret[] = '//--></script>';
+		
+		return $ret;
 	}
 	
 	/**

@@ -38,6 +38,18 @@ function get_click(newtype,nbclicks,action) {
 	window.status = lang['clickMapToSetPoints'] + cpt_clicks;
 }
 
+function printLang(sLang,sReplace) {
+	sLang = sLang.replace(/<(\/|)(i|b)>/ig,'');
+	
+	aReplace = sReplace.split(",")
+	for(var i = 0; i < aReplace.length; i++) {
+		var aReplaceSplit = aReplace[i].split("~");
+		sLang = sLang.replace("["+aReplaceSplit[0]+"]",aReplaceSplit[1]);
+	}
+	
+	return sLang;
+}
+
 function track_mouse(e) {
 	
 	if(follow_mouse) {

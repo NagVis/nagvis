@@ -31,7 +31,7 @@ class WuiMap extends GlobalMap {
 			if($a > 0) {
 				$mapOptions .= ', ';	
 			}
-			// FIXME: Config check reports an error
+			
 			$MAPCFG1 = new GlobalMapCfg($this->MAINCFG,$map);
 			$MAPCFG1->readMapConfig(1);
 			$mapOptions .= '{ mapName: "'.$map.'"';
