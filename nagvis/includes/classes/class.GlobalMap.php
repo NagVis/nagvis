@@ -189,8 +189,7 @@ class GlobalMap {
 		                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 			            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 						
-						// FIXME: Get from language file
-						$state = Array('State' => 'UNKNOWN','Output' => 'Error: Loop in Recursion');
+						$state = Array('State' => 'UNKNOWN','Output' => $FRONTEND->LANG->getMessageText('loopInMapRecursion'));
 					} else {
 						$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1));
 						$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
@@ -410,7 +409,6 @@ class GlobalMap {
         	if($printErr) {
         		$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		        $FRONTEND->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
-				//FIXME: $this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
 			return FALSE;
         } else {

@@ -200,6 +200,14 @@
 					<title>Konnte Hover-URL nicht finden</title>
 					<text>Konnte Hover-URL ([i][URL][/i]) nicht finden. Eventuell ist die URL Paswort geschützt.</text>
 				</couldNotGetHoverUrl>
+				<onlyPngOrJpgImages>
+					<title>NagVis-GD: Nur PNG oder JPG Bilder erlaubg</title>
+					<text>NagVis-GD: Es sind nur PNG oder JPG Bilder als Hintergrund erlaubt.</text>
+				</onlyPngOrJpgImages>
+				<maybePhpMemoryLimitToLow>
+					<title>NagVis-GD: PHP memory_limit zu niedrig</title>
+					<text>NagVis-GD: Eventuell ist das memory_limit von PHP zu niedrig um dieses Bild darzustellen.</text>
+				</maybePhpMemoryLimitToLow>
 			</messages>
 		</global>
 	</nagvis>

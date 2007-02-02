@@ -200,6 +200,14 @@
 					<title>Could not get hover URL</title>
 					<text>Could not get hover URL ([i][URL][/i]). Maybe the URL is password protected.</text>
 				</couldNotGetHoverUrl>
+				<onlyPngOrJpgImages>
+					<title>NagVis-GD: Only PNG or JPG images allowed</title>
+					<text>NagVis-GD: Only PNG or JPG Map-Image extensions are allowed.</text>
+				</onlyPngOrJpgImages>
+				<maybePhpMemoryLimitToLow>
+					<title>NagVis-GD: Maybe PHP memory_limit to low</title>
+					<text>NagVis-GD: Maybe the memory_limit of PHP is to low for displaying this image.</text>
+				</maybePhpMemoryLimitToLow>
 			</messages>
 		</global>
 	</nagvis>

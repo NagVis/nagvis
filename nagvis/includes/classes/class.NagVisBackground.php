@@ -59,7 +59,6 @@ class NagVisBackground extends GlobalMap {
 		
 		// is fileSize or actual used memory + rawSize + 10% puffer bigger than memory limit?
 		// there is no waranty that the calculations are correct but that could be a good basic
-		// FIXME: Should be tested before release with
 		// a) big file size
 		// b) big image size
 		// c) big color depth
@@ -88,7 +87,7 @@ class NagVisBackground extends GlobalMap {
 				$this->image = imagecreatefrompng($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
 			break;
 			default:
-				$this->errorBox('NagVis: Only PNG and JPG Map-Image extensions are allowed');
+				$this->errorBox($this->LANG->getMessageText('onlyPngOrJpgImages'));
 			break;
 		}
 		
@@ -114,10 +113,9 @@ class NagVisBackground extends GlobalMap {
 			$this->errorBox($this->LANG->getMessageText('backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
 		if(!$this->checkMemoryLimit()) {
-			// FIXME: Language File Entry
-			$this->errorBox('NagVis: Maybe the memory_limit of PHP is to low for displaying this image');	
+			$this->errorBox($this->LANG->getMessageText('maybePhpMemoryLimitToLow'));	
 		}
-		// FIXME: Check permissions?
+		// FIXME: Check map permissions?
 	}
 	
 	/**

@@ -205,7 +205,7 @@ class GlobalBackendndomy {
 					$state = $this->findStateServicegroup($Name,$onlyHardStates);
 				break;
 				default:
-					//FIXME Error Box (should normally never happen)
+					// Should normally never reach this
 				break;
 			}
 		}

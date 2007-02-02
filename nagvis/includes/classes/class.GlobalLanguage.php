@@ -244,17 +244,8 @@ class GlobalLanguage {
 		if(isset($arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) && $arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
 			$strLang = $arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
 			
-			// FIXME: Test this regex: $strLang = preg_replace("/\[(//|)(i|b)\]/i","/<$1$2>/i",$strLang);
-			
-			// replace html-codes, FIXME quick 'n dirty - could be done with regex
-			$strLang = str_replace('[i]','<i>',$strLang);
-			$strLang = str_replace('[/i]','</i>',$strLang);
-			$strLang = str_replace('[I]','<i>',$strLang);
-			$strLang = str_replace('[/I]','</i>',$strLang);
-			$strLang = str_replace('[b]','<b>',$strLang);
-			$strLang = str_replace('[/b]','</b>',$strLang);
-			$strLang = str_replace('[B]','<b>',$strLang);
-			$strLang = str_replace('[/B]','</b>',$strLang);
+			// Replace [i],[b] and their ending tags with HTML code
+			$strLang = preg_replace("/\[(\/|)(i|b)\]/i","<$1$2>",$strLang);
 			
 			if($replace != '') {
 				$arrReplace = explode(',', $replace);

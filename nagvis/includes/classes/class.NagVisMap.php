@@ -349,13 +349,11 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
-	 * Creates a Java-Box with information.
+	 * Creates a JavaScript hover menu
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Code for the Hover-Box
-	 * @author	Michael Luebben <michael_luebben@web.de>
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
-	 * @fixme	FIXME: optimize
      */
 	function createInfoBox($obj) {
 		$ret = '';
@@ -379,7 +377,7 @@ class NagVisMap extends GlobalMap {
 		$obj['stateCount'] = str_replace("'","",$obj['stateCount']);
 		$ServiceHostState = $obj['stateHost'];
 		
-		// FIXME mehr Output (ackComment, mehr Zahlen etc.)
+		//FIXME: mehr Output (ackComment, mehr Zahlen etc.)
 		switch($obj['type']) {
 			case 'host':
 				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
@@ -408,7 +406,7 @@ class NagVisMap extends GlobalMap {
 				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			default:
-				//FIXME Error
+				// Unknown type, don't display anything
 			break;
 		}
 		return $ret;
