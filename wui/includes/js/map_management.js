@@ -31,13 +31,13 @@ function checkImageUsed(imageName,mapOptions) {
 
 function check_image_add() {
 	if(document.new_image.fichier.value.length == 0) {
-		alert(lang['firstMustChoosePngImage']);
+		alert(printLang(lang['firstMustChoosePngImage'],''));
 		
 		return false;
 	}
 	
 	if(!checkPng(document.new_image.fichier.value)) {
-		alert(lang['mustChoosePngImage']);
+		alert(printLang(lang['mustChoosePngImage'],''));
 		
 		return false;
 	}
@@ -48,34 +48,34 @@ function check_image_add() {
 
 function check_create_map() {
 	if (document.map_create.map_name.value=='') {
-		alert(lang['chooseMapName']);
+		alert(printLang(lang['chooseMapName'],''));
 		return false;
 	}
 	if (document.map_create.map_name.value.split(" ").length > 1) {
-		alert(lang['noSpaceAllowed']);
+		alert(printLang(lang['noSpaceAllowed'],''));
 		return false;
 	}
 	if (document.map_create.allowed_users.value=='') {
-		alert(lang['minOneUserAccess']);
+		alert(printLang(lang['minOneUserAccess'],''));
 		return false;
 	}
 	if (document.map_create.allowed_for_config.value=='') {
-		alert(lang['minOneUserWriteAccess']);
+		alert(printLang(lang['minOneUserWriteAccess'],''));
 		return false;
 	}
 	if (document.map_create.map_image.value=='') {
-		alert(lang['mustChooseBackgroundImage']);
+		alert(printLang(lang['mustChooseBackgroundImage'],''));
 		return false;
 	}
 	
 	for(var i=0;i<document.map_rename.map_name.length;i++) {
 		if(document.map_rename.map_name.options[i].value == document.map_create.map_name.value) {
-			alert(lang['mapAlreadyExists']);
+			alert(printLang(lang['mapAlreadyExists'],''));
 			return false;
 		}
 	}
 	
-	if (confirm(lang['confirmNewMap']) === false) {
+	if (confirm(printLang(lang['confirmNewMap'],'')) === false) {
 		return false;
 	}
 	
@@ -84,33 +84,33 @@ function check_create_map() {
 
 function check_map_rename() {
 	if (document.map_rename.map_name.value=='') {
-		alert(lang['noMapToRename']);
+		alert(printLang(lang['noMapToRename'],''));
 		return false;
 	}
 	
 	if (document.map_rename.map_new_name.value.split(" ").length > 1) {
-		alert(lang['noSpaceAllowed']);
+		alert(printLang(lang['noSpaceAllowed'],''));
 		return false;
 	}
 	
 	if (document.map_rename.map_new_name.value=='') {
-		alert(lang['noNewNameGiven']);
+		alert(printLang(lang['noNewNameGiven'],''));
 		return false;
 	}
 	
 	for(var i=0;i<document.map_rename.map_name.length;i++) {
 		if(document.map_rename.map_name.options[i].value == document.map_rename.map_new_name.value) {
-			alert(lang['mapAlreadyExists']);
+			alert(printLang(lang['mapAlreadyExists'],''));
 			return false;
 		}
 	}
 	
 	if (is_user_allowed(document.map_rename.map_name.value)===false) {
-		alert(lang['noPermissions']);
+		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
 	
-	if (confirm(lang['confirmMapRename']) === false) {
+	if (confirm(printLang(lang['confirmMapRename'],'')) === false) {
 		return false;
 	}
 	
@@ -119,27 +119,21 @@ function check_map_rename() {
 
 function check_map_delete() {
 	if(document.map_delete.map_name.value=='') {
-		alert(lang['foundNoMapToDelete']);
+		alert(printLang(lang['foundNoMapToDelete'],''));
 		return false;
 	}
 	
 	if(!checkUserAllowed(document.map_delete.map_name.value, window.opener.mapOptions, window.opener.username)) {
-		alert(lang['noPermissions']);
-		
+		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
 	
 	if(checkMapLinked(document.map_delete.map_name.value, window.opener.mapOptions)) {
-		mess = new String(lang['unableToDeleteMap']);
-		//FIXME: mess = mess.replace("[MAP]",mapname_used_by);
-		//FIXME: mess = mess.replace("[IMAGENAME]",document.map_delete.map_name.value);
-		
-		alert(mess);
-		
+		alert(printLang(lang['unableToDeleteMap'],'MAP~'+mapname_used_by+',IMAGENAME~'+document.map_delete.map_name.value));
 		return false;
 	}
 	
-	if (confirm(lang['confirmMapDeletion']) === false) {
+	if (confirm(printLang(lang['confirmMapDeletion'],'')) === false) {
 		return false;
 	}
 	
@@ -149,21 +143,16 @@ function check_map_delete() {
 
 function check_image_delete() {
 	if(document.image_delete.map_image.value == '') {
-		alert(lang['foundNotBackgroundToDelete']);
+		alert(printLang(lang['foundNotBackgroundToDelete'],''));
 		return false;
 	}
 	
 	if(checkImageUsed(document.image_delete.map_image.value, window.opener.mapOptions)) {
-		mess = new String(lang['unableToDeleteBackground']);
-		//FIXME: mess= mess.replace("[MAP]",imageUsedBy);
-		mess = mess.replace("[IMAGE NAME]",document.image_delete.map_image.value);
-		
-		alert(mess);
-		
+		alert(printLang(lang['unableToDeleteBackground'],'MAP~'+imageUsedBy+',IMAGENAME~'+document.image_delete.map_image.value));
 		return false;
 	}
 	
-	if(confirm(lang['confirmBackgroundDeletion']) === false) {
+	if(confirm(printLang(lang['confirmBackgroundDeletion'],'')) === false) {
 		return false;
 	}
 	

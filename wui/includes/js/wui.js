@@ -35,7 +35,7 @@ function get_click(newtype,nbclicks,action) {
 	document.images['background'].style.cursor='crosshair';
 	document.body.onclick=get_click_pos;
 	document.body.onmousemove=track_mouse;
-	window.status = lang['clickMapToSetPoints'] + cpt_clicks;
+	window.status = printLang(lang['clickMapToSetPoints'],'') + cpt_clicks;
 }
 
 function printLang(sLang,sReplace) {
@@ -107,7 +107,7 @@ function get_click_pos(e) {
 	}
 	
 	if(cpt_clicks > 0) {
-		window.status = lang['clickMapToSetPoints'] + cpt_clicks;
+		window.status = printLang(lang['clickMapToSetPoints'],'') + cpt_clicks;
 	}
 	else if(cpt_clicks == 0) {
 		if (follow_mouse) myshape.clear();
@@ -129,7 +129,7 @@ function get_click_pos(e) {
 
 // simple function to ask to confirm before we delete an object
 function confirm_object_deletion() {
-	if(confirm(lang['confirmDelete'])) {
+	if(confirm(printLang(lang['confirmDelete'],''))) {
 		return true;
 	} else {
 		return false;
@@ -138,7 +138,7 @@ function confirm_object_deletion() {
 
 // simple function to ask to confirm before we restore a map
 function confirm_restore() {
-	if(confirm(lang['confirmRestore'])) {
+	if(confirm(printLang(lang['confirmRestore'],''))) {
 		document.location.href='./wui.function.inc.php?myaction=map_restore&map='+mapname;
 	}
 	return true;
