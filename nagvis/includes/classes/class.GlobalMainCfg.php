@@ -438,7 +438,15 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function setValue($sec, $var, $val) {
-       $this->config[$sec][$var] = $val;
+		if(isset($this->config[$sec][$var]) && $val == '') {
+			// Value is empty and there is an entry in the config array
+			unset($this->config[$sec][$var]);
+		} elseif(!isset($this->config[$sec][$var]) && $val == '') {
+			// Value is empty and there is nothing in config array yet
+		} else {
+			// Value is set
+			$this->config[$sec][$var] = $val;
+		}
        
        return TRUE;
 	}
