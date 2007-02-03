@@ -139,11 +139,11 @@ class GlobalMainCfg {
 												'default' => 'header.nagvis.inc')),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => '1.0a1',
+												'default' => '1.0b1',
 												'locked' => 1),
 							'title' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => 'NagVis 1.0a1 (Subversion Snapshot)',
+												'default' => 'NagVis 1.0b1',
 												'locked' => 1)));
 		
 		// Default - minimal - config initialisation
