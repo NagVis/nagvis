@@ -33,9 +33,7 @@ function printObjects(aObjects,oOpt) {
 			}
 		}
 	} else {
-		// FIXME: backend doesn't gives us any object, change to input field
-		oField.setAttribute('type',"input");
-		oField.setAttribute('value',"");
+		oField.parentNode.innerHTML = '<input name="host_name" value="" />';
 	}
 }
 
