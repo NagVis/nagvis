@@ -80,7 +80,7 @@ function check_object() {
 			
 			if(document.addmodify.elements[i].value != '') {
 				if(validConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
-					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length-1)+'='+document.addmodify.elements[i].value;
+					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length)+'='+document.addmodify.elements[i].value;
 				} else {
 					if(document.addmodify.elements[i].name=='line_type') {
 						line_type=object_name.split(",").length+document.addmodify.elements[i].value;
