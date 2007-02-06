@@ -4,14 +4,20 @@ function printObjects(aObjects,oOpt) {
 	var selected = oOpt.selected;
 	
 	var oField = document.addmodify.elements[field];
-		
-	// delete old options
-	for(i=oField.length; i>=0; i--){
-		oField.options[i] = null;
+	
+	if(oField.nodeName == "SELECT") {
+		// delete old options
+		for(i=oField.length; i>=0; i--){
+			oField.options[i] = null;
+		}
 	}
 	
 	if(aObjects.length > 0) {
 		// backend gives us some services
+		if(oField.nodeName != "SELECT") {
+			oField.parentNode.innerHTML = '<select name="'+oField.name+'"></select>';
+			var oField = document.addmodify.elements[field];
+		}
 		
 		// fill with new options
 		for(i = 0; i < aObjects.length; i++) {
