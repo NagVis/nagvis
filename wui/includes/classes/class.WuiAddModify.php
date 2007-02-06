@@ -161,7 +161,9 @@ class WuiAddModify extends GlobalPage {
 			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
 				$backendId = $this->checkOption($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id'), $this->MAPCFG->getValue('global',0,'backend_id'), $this->MAINCFG->getValue('defaults', 'backend'),'');
 				$ret[] = "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
-				$ret[] = "<script>getServices('".$backendId."','".$this->prop['type']."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
+				if(array_key_exists('service_description',$this->MAPCFG->validConfig[$this->prop['type']])) {
+					$ret[] = "<script>getServices('".$backendId."','".$this->prop['type']."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
+				}
 				if($propname == 'host_name') {
 					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,Array(),'',$prop['must'],"getServices('".$backendId."','".$this->prop['type']."',this.value,'service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');"));
 				} else {
@@ -309,36 +311,41 @@ class WuiAddModify extends GlobalPage {
 		$ret = Array();
 		
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
-		$sRet = 'var validConfig = { ';
+		$sRet = "var validConfig = { \n";
 		$i = 0;
 		foreach($this->MAPCFG->validConfig AS $type => $arr) {
 			if($i != 0) {
-				$sRet .= ', ';	
+				$sRet .= ", \n";	
 			}
-			$sRet .= $type.': { ';
+			$sRet .= '"'.$type.'": { ';
 			$a = 0;
 			foreach($arr AS $key => $opt) {
 				if($a != 0) {
-					$sRet .= ', ';	
+					$sRet .= ", \n\t";	
 				}
 				if($key != 'type') {
-					$sRet .= $key.': { ';
+					$sRet .= '"'.$key.'": { ';
 						$e = 0;
 						foreach($opt AS $var => $val) {
 							if($e != 0) {
-								$sRet .= ', ';	
+								$sRet .= ", \n\t\t";	
 							}
-							$sRet .= $var.': "'.$val.'"';
+							$sRet .= '"'.$var.'": ';
+							if(is_numeric($val)) {
+								$sRet .= $val;
+							} else {
+								$sRet .= '"'.$val.'"';
+							}
 							$e++;
 						}
-					$sRet .= ' }';
+					$sRet .= " }";
 					$a++;
 				}
 			}
-			$sRet .= ' }';
+			$sRet .= "\n}";
 			$i++;
 		}
-		$sRet .= ' }';
+		$sRet .= ' };';
 		$ret[] = $sRet;
 		$ret[] = '//--></script>';
 		
