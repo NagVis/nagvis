@@ -73,7 +73,7 @@ class GlobalBackendMgmt {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
-		            $FRONTEND->messageToUser('ERROR','backendNotInitialized','BACKENDID~'.$backendId.'BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
+		            $FRONTEND->messageToUser('ERROR','backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
 				}
 				return FALSE;
 			}
