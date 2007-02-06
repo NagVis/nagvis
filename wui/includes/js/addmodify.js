@@ -33,7 +33,7 @@ function printObjects(aObjects,oOpt) {
 			}
 		}
 	} else {
-		oField.parentNode.innerHTML = '<input name="host_name" value="" />';
+		oField.parentNode.innerHTML = '<input name="'+oField.name+'" value="" />';
 	}
 }
 
