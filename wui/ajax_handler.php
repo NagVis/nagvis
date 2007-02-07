@@ -13,13 +13,15 @@ switch($_GET['action']) {
 		$BACKEND = new GlobalBackendMgmt($MAINCFG);
 		
 		// $_GET['backend_id'], $_GET['type']
-		if(method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			echo '[ ';
-			echo '{ "name": "" }';
-			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects($_GET['type'],'','') AS $arr) {
-				echo ' ,{ "name": "'.$arr['name1'].'"}';
+		if($_GET['backend_id']) {
+			if(method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
+				echo '[ ';
+				echo '{ "name": "" }';
+				foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects($_GET['type'],'','') AS $arr) {
+					echo ' ,{ "name": "'.$arr['name1'].'"}';
+				}
+				echo ']';
 			}
-			echo ']';
 		}
 	break;
 	case 'getServices':
