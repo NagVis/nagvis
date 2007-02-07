@@ -64,9 +64,9 @@ class NagVisBackground extends GlobalMap {
 		// c) big color depth
 		// DEBUG: echo $fileSize." > ".$memoryLimit." <bR>";
 		// DEBUG: echo ((memory_get_usage() + $rawSize)*1.10)." > ".$memoryLimit;
-		if($fileSize > $memoryLimit || (memory_get_usage() + $rawSize)*1.10 > $memoryLimit) {
+		if($fileSize > $memoryLimit || ($this->memoryGetUsage() + $rawSize)*1.10 > $memoryLimit) {
 			if($tryToFix) {
-				ini_set("memory_limit",round((memory_get_usage() + $rawSize)*1.15 / 1024 /1024)."M");
+				ini_set("memory_limit",round(($this->memoryGetUsage() + $rawSize)*1.15 / 1024 /1024)."M");
 				return $this->checkMemoryLimit(FALSE);
 			}
 			return FALSE;
@@ -74,6 +74,35 @@ class NagVisBackground extends GlobalMap {
 			return TRUE;
 		}
 	}
+	
+	/**
+	 * memoryGetUsage - php function memory_get_usage() is not present in many used php versions,
+	 * try to code an own method to replace this 
+	 *
+	 * @return	Int		memory usage of the process
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function memoryGetUsage() {
+		//If its Windows
+		//Tested on Win XP Pro SP2. Should work on Win 2003 Server too
+		//Doesn't work for 2000
+		//If you need it to work for 2000 look at http://us2.php.net/manual/en/function.memory-get-usage.php#54642
+		if(substr(PHP_OS,0,3) == 'WIN') {
+			$output = array();
+			exec( 'tasklist /FI "PID eq ' . getmypid() . '" /FO LIST', $output );
+			
+			return preg_replace( '/[\D]/', '', $output[5] ) * 1024;
+		} else {
+			//We now assume the OS is UNIX
+			//Tested on Mac OS X 10.4.6 and Linux Red Hat Enterprise 4
+			//This should work on most UNIX systems
+			$pid = getmypid();
+			exec("ps -eo%mem,rss,pid | grep $pid", $output);
+			$output = explode("  ", $output[0]);
+			//rss is given in 1024 byte units
+			return $output[1] * 1024;
+		}
+	} 
 	
 	function initImage() {
 		$imageType = explode('.', $this->MAPCFG->getImage());
