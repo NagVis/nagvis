@@ -94,6 +94,7 @@ class NagVisMap extends GlobalMap {
 						$hoverMenu = 0;
 					}
 					
+					$obj = $this->fixIconPosition($obj);
 					$ret = array_merge($ret,$this->parseIcon($obj,$link,$hoverMenu));
 				break;
 				default:
