@@ -907,7 +907,7 @@ function jsDOMenu() { // Public method
   menuElm.style.left = "0px";
   menuElm.style.top = "0px";
   if (menuElm.mode != "static") {
-    document.body.appendChild(menuElm);
+    getElmId("mymap").appendChild(menuElm);
   }
   if (!getPropVal(menuElm, blw)) {
     menuElm.style.borderWidth = menuBorderWidth + px;
