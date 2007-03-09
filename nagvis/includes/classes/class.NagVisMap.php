@@ -341,12 +341,12 @@ class NagVisMap extends GlobalMap {
 		* $context = stream_context_create($http_opts);
 		* $content = file_get_contents($obj['hover_url'],FALSE,$context);
 		*/
-		
 		if(!$content = @file_get_contents($obj['hover_url'])) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 	        $FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
 		}
-		return str_replace('"','\\\'',str_replace('\'','\\\'',$content));
+		
+		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\n",'',str_replace("\r\n",'',$content))));;
 	}
 	
 	/**
