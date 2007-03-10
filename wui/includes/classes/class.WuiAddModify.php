@@ -152,7 +152,7 @@ class WuiAddModify extends GlobalPage {
 			} elseif($propname == "line_type") {
 				// treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
 				$opt = Array(Array('label' => '------><------','value' => '0'),Array('label' => '-------------->','value'=>'1'),Array('label' => '<--------------','value'=>'2'));
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,substr($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),1,1),$prop['must']));
 				$this->propCount++;
 			} elseif($propname == "map_name") {
 				// treat the special case of map_name, which will display a listbox instead of the normal textbox
