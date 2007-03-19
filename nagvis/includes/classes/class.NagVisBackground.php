@@ -85,7 +85,7 @@ class NagVisBackground extends GlobalMap {
 	function memoryGetUsage() {
 		// If function already exists in PHP, use it!
 		if(function_exists('memory_get_usage')) {
-			return memory_get_usage();
+			$iReturn = memory_get_usage();
 		}
 
 		// If its Windows
@@ -95,17 +95,28 @@ class NagVisBackground extends GlobalMap {
 			$output = array();
 			exec( 'tasklist /FI "PID eq ' . getmypid() . '" /FO LIST', $output );
 			
-			return preg_replace( '/[\D]/', '', $output[5] ) * 1024;
+			$iReturn = preg_replace( '/[\D]/', '', $output[5] ) * 1024;
 		} else {
 			// We now assume the OS is UNIX
 			// Tested on Mac OS X 10.4.6 and Linux Red Hat Enterprise 4
 			// This should work on most UNIX systems
 			$pid = getmypid();
-			exec("ps -eo%mem,rss,pid | grep $pid", $output);
-			$output = explode("  ", $output[0]);
+
+			if($pid == 0) {
+				$iReturn = 0;
+			} else {
+				exec("ps -eo%mem,rss,pid | grep $pid", $output);
+				$output = explode("  ", $output[0]);
 			
-			// rss is given in 1024 byte units
-			return $output[1] * 1024;
+				// rss is given in 1024 byte units
+				$iReturn = $output[1] * 1024;
+			}
+		}
+		
+		if($iReturn <= 0) {
+			return 0;
+		} else {
+			return $iReturn;
 		}
 	} 
 	
@@ -149,7 +160,9 @@ class NagVisBackground extends GlobalMap {
 		if(!$this->checkMemoryLimit()) {
 			$this->errorBox($this->LANG->getMessageText('maybePhpMemoryLimitToLow'));	
 		}
-		// FIXME: Check map permissions?
+		if(!$this->checkPermissions($this->MAPCFG->getValue('global',0, 'allowed_user'),0)) {
+			$this->errorBox($this->LANG->getMessageText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
+		}
 	}
 	
 	/**

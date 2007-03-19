@@ -20,6 +20,7 @@ require("./includes/classes/class.GlobalMap.php");
 require("./includes/classes/class.GlobalGraphic.php");
 require("./includes/classes/class.GlobalBackendMgmt.php");
 
+require("./includes/classes/class.NagVisMapCfg.php");
 require("./includes/classes/class.NagVisMap.php");
 require("./includes/classes/class.NagVisFrontend.php");
 
@@ -29,7 +30,7 @@ if(!isset($_GET['map'])) {
 	$_GET['map'] = '';
 }
 
-$MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
+$MAPCFG = new NagVisMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
 $BACKEND = new GlobalBackendMgmt($MAINCFG);

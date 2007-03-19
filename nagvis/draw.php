@@ -21,9 +21,11 @@ include("./includes/classes/class.GlobalLanguage.php");
 require("./includes/classes/class.GlobalBackendMgmt.php");
 require("./includes/classes/class.NagVisBackground.php");
 
+include("./includes/classes/class.NagVisMapCfg.php");
+
 $MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
 
-$MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
+$MAPCFG = new NagVisMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
 $BACKEND = new GlobalBackendMgmt($MAINCFG);

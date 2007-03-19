@@ -136,7 +136,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @param	String	$name	Key for Objectname eg. host_name
 	 * @return	Array	Array with HTML Code
-	 * @fixme 	FIXME: optimize
+	 * @fixme 	FIXME 1.1: optimize
 	 */
 	function createBoxLine($obj,$name) {
 		$ret = Array();
@@ -306,7 +306,7 @@ class NagVisMap extends GlobalMap {
      */
 	function getHoverMenu($obj) {
 		$ret = '';
-		// FIXME: check if this is an object, where a menu should be displayed
+		// FIXME 1.1: check if this is an object, where a menu should be displayed
 		if(1) {
 			$ret .= 'onmouseover="return overlib(\'';
 			if($obj['hover_url']) {
@@ -378,7 +378,7 @@ class NagVisMap extends GlobalMap {
 		$obj['stateCount'] = str_replace("'","",$obj['stateCount']);
 		$ServiceHostState = $obj['stateHost'];
 		
-		//FIXME: mehr Output (ackComment, mehr Zahlen etc.)
+		//FIXME 1.1: mehr Output (ackComment, mehr Zahlen etc.)
 		switch($obj['type']) {
 			case 'host':
 				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';

@@ -19,7 +19,7 @@ class GlobalMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function GlobalMap(&$MAINCFG,&$MAPCFG,&$BACKEND) {
+	function GlobalMap(&$MAINCFG,&$MAPCFG,&$BACKEND='') {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
@@ -178,7 +178,7 @@ class GlobalMap {
 				// save mapName in linkedMaps array
 				$this->linkedMaps[] = $this->MAPCFG->getName();
 				
-				$SUBMAPCFG = new GlobalMapCfg($this->MAINCFG,$obj[$name]);
+				$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$obj[$name]);
 				$SUBMAPCFG->readMapConfig();
 				$SUBMAP = new GlobalMap($this->MAINCFG,$SUBMAPCFG,$this->BACKEND);
 				$SUBMAP->linkedMaps = $this->linkedMaps;

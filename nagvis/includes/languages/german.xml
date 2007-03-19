@@ -338,6 +338,9 @@
 				<open>
 					<text>Map &Ouml;ffnen</text>
 				</open>
+				<openInNagVis>
+					<text>Map in NagVis &Ouml;ffnen</text>
+				</openInNagVis>
 				<manageMaps>
 					<text>Map Verwaltung</text>
 				</manageMaps>

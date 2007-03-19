@@ -461,7 +461,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getValue($sec, $var, $ignoreDefault=FALSE) {
-		# if nothing is set in the config file, use the default value
+		// if nothing is set in the config file, use the default value
 		if(isset($this->config[$sec]) && is_array($this->config[$sec]) && array_key_exists($var,$this->config[$sec])) {
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {

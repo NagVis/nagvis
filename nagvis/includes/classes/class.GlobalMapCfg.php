@@ -166,31 +166,6 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Reads which map should be displayed, primary use
-	 * the map defined in the url, if there is no map
-	 * in url, use first entry of "maps" defined in 
-	 * the NagVis main config
-	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
-     */
-	function getMap() {
-		// if no map was given with parameter, search for a map
-		if($this->name == '') {
-			// only try to get a map, if we are not in wui
-			if($this->MAINCFG->getRuntimeValue('wui') == 1) {
-				$this->name = '';
-			} else {
-				$arr = explode(',',$this->MAINCFG->getValue('global', 'maps'));
-				$this->name = $arr[0];
-			}
-		} else {
-			// check the $this->name string for security reasons (its the ONLY value we get directly from external...)
-			// Allow ONLY Characters, Numbers, - and _ inside the Name of a Map
-			$this->name = preg_replace("/[^a-zA-Z0-9_-]/",'',$this->name);
-		}
-	}
-	
-	/**
 	 * Reads which map image should be used
 	 *
 	 * @return	String	MapImage
