@@ -197,6 +197,7 @@ class GlobalPage {
 		}
 		
 		if($serverity == 'ERROR') {
+			$ret[] = '<META http-equiv="refresh" content="60;">';
 			$ret[] = '<style type="text/css">.main { background-color: yellow }</style>';
 			$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
 			$ret[] = '<tr><td align="center" valign="middle">';
