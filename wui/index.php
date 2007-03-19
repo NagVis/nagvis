@@ -19,19 +19,19 @@ include("../nagvis/includes/classes/class.GlobalPage.php");
 include("../nagvis/includes/classes/class.GlobalMap.php");
 include("../nagvis/includes/classes/class.GlobalGraphic.php");
 
+include("./includes/classes/class.WuiMainCfg.php");
+include("./includes/classes/class.WuiMapCfg.php");
 include("./includes/classes/class.WuiFrontend.php");
 include("./includes/classes/class.WuiMap.php");
 
 
-$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php');
-// FIXME: i don't want to set this in future - we set that this is a wui session
-$MAINCFG->setRuntimeValue('wui',1);
+$MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 
 if(!isset($_GET['map'])) {
 	$_GET['map'] = '';	
 }
 
-$MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
+$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
 $FRONTEND = new WuiFrontend($MAINCFG,$MAPCFG);

@@ -17,8 +17,7 @@ class WuiMap extends GlobalMap {
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
 		
-		// FIXME 2nd MAPCFG is just a dummy
-		parent::GlobalMap($MAINCFG,$MAPCFG,$MAPCFG);
+		parent::GlobalMap($MAINCFG,$MAPCFG);
 		
 		$this->loadPermissions();
 		$this->objects = $this->getMapObjects(0,1);
@@ -32,7 +31,7 @@ class WuiMap extends GlobalMap {
 				$mapOptions .= ', ';	
 			}
 			
-			$MAPCFG1 = new GlobalMapCfg($this->MAINCFG,$map);
+			$MAPCFG1 = new WuiMapCfg($this->MAINCFG,$map);
 			$MAPCFG1->readMapConfig(1);
 			$mapOptions .= '{ mapName: "'.$map.'"';
 			
@@ -40,8 +39,19 @@ class WuiMap extends GlobalMap {
 			$mapOptions .= ', mapImage:"'.$MAPCFG1->getValue('global', '0', 'map_image').'"';
 			
 			// permited users for writing
-			$mapOptions .= ', allowedUsers:[ ';
+			$mapOptions .= ', allowedForConfig:[ ';
 			$arr = $MAPCFG1->getValue('global', '0', 'allowed_for_config');
+			for($i = 0; count($arr) > $i; $i++) {
+				if($i > 0) {
+					$mapOptions .= ',';	
+				}
+				$mapOptions .= '\''.$arr[$i].'\' ';
+			}
+			$mapOptions .= ' ]';
+			
+			// permited users for viewing the map
+			$mapOptions .= ', allowedUsers:[ ';
+			$arr = $MAPCFG1->getValue('global', '0', 'allowed_user');
 			for($i = 0; count($arr) > $i; $i++) {
 				if($i > 0) {
 					$mapOptions .= ',';	
@@ -224,8 +234,8 @@ class WuiMap extends GlobalMap {
 		unset($obj['stateOutput']);
 		unset($obj['state']);
 		
-		# we add all the object's defined properties to the tooltip body
-		$tooltipText="";
+		// add all the object's defined properties to the tooltip body
+		$tooltipText='';
 		
 		foreach($obj AS $var => $val) {
 			if(!preg_match('/^(|id|icon|type|x|y|z|path|htmlPath)$/i',$var) && $val != '') {
@@ -237,7 +247,7 @@ class WuiMap extends GlobalMap {
 		$tooltipText .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";	
 		$tooltipText .= "<a href=\'./wui.function.inc.php?myaction=delete&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a>";
 		
-		# lines and textboxes have one more link in the tooltip : "size/position"	
+		// lines and textboxes have one more link in the tooltip: "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
 			$tooltipText .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 			$tooltipText .= "<a href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>".$this->LANG->getLabel('positionSize')."</a>";			
@@ -285,6 +295,7 @@ class WuiMap extends GlobalMap {
 		$ret[] = 'langMenu["nagVisConfig"] = "'.$this->LANG->getLabel('nagVisConfig').'";';
 		$ret[] = 'langMenu["help"] = "'.$this->LANG->getLabel('help').'";';
 		$ret[] = 'langMenu["open"] = "'.$this->LANG->getLabel('open').'";';
+		$ret[] = 'langMenu["openInNagVis"] = "'.$this->LANG->getLabel('openInNagVis').'";';
 		$ret[] = 'langMenu["manageMaps"] = "'.$this->LANG->getLabel('manageMaps').'";';
 		$ret[] = 'langMenu["manageBackends"] = "'.$this->LANG->getLabel('manageBackends').'";';
 		$ret[] = 'langMenu["icon"] = "'.$this->LANG->getLabel('icon').'";';

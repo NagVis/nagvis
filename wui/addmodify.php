@@ -17,15 +17,15 @@ require("../nagvis/includes/classes/class.GlobalForm.php");
 require("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
 
 
+require("./includes/classes/class.WuiMainCfg.php");
+require("./includes/classes/class.WuiMapCfg.php");
 require("./includes/classes/class.WuiAddModify.php");
 
-$MAINCFG = new GlobalMainCfg('../nagvis/etc/config.ini.php');
-// we set that this is a wui session
-$MAINCFG->setRuntimeValue('wui',1);
+$MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 
 //$BACKEND = new GlobalBackendMgmt($MAINCFG);
 
-$MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
+$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
 if(!isset($_GET['coords'])) {

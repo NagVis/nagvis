@@ -144,7 +144,6 @@ class WuiEditMainCfg extends GlobalPage {
 	 *
 	 * @return	Array Html
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
-	 * FIXME: DEPRECATED
 	 */
 	function getBackends() {
 		$files = Array();

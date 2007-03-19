@@ -2,6 +2,7 @@
 include("../nagvis/includes/classes/class.GlobalMainCfg.php");
 include("./includes/classes/class.WuiMainCfg.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");
+include("./includes/classes/class.WuiMapCfg.php");
 include("../nagvis/includes/classes/class.GlobalLanguage.php");
 include("../nagvis/includes/classes/class.GlobalPage.php");
 include("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
@@ -46,7 +47,7 @@ switch($_GET['action']) {
 	case 'getAllowedUsers':
 		// $_GET['map'], $_GET['mode']
 		if(isset($_GET['map']) && $_GET['map'] != '') {
-			$MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
+			$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
 			$MAPCFG->readMapConfig();
 			
 			echo '[ ';
@@ -102,7 +103,7 @@ switch($_GET['action']) {
 		echo '[ ';
 		$i = 0;
 		foreach($MAINCFG->getMaps() AS $var => $val) {
-			$MAPCFG = new GlobalMapCfg($MAINCFG,$val);
+			$MAPCFG = new WuiMapCfg($MAINCFG,$val);
 			$MAPCFG->readMapConfig();
 			
 			if($MAPCFG->getValue('global', 0,'map_image') == $_GET['image']) {

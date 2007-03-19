@@ -9,13 +9,11 @@ var myshapex=0;
 var myshapey=0;
 var objid=0;
 
-// function that says if the current user is allowed to have access to a special map
-function checkUserAllowed(mapName,mapOptions,username) {
-	for(var i=0;i<mapOptions.length;i++) {
-		if(mapOptions[i].mapName == mapName) {
-			if((mapOptions[i].allowedUsers == username) || (mapOptions[i].allowedUsers == "EVERYONE") ) {
-				return true;
-			}
+// function that says if the current user is allowed to have access to the map
+function checkUserAllowed(mapName,allowedUsers,username) {
+	for(var i=0;i<allowedUsers.length;i++) {
+		if((allowedUsers[i] == username) || (allowedUsers[i] == "EVERYONE") ) {
+			return true;
 		}
 	}
 	return false;

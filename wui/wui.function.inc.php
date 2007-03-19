@@ -18,6 +18,7 @@ include("../nagvis/includes/classes/class.GlobalMainCfg.php");
 include("../nagvis/includes/classes/class.GlobalPage.php");
 include("../nagvis/includes/classes/class.GlobalMapCfg.php");
 include("./includes/classes/class.WuiMainCfg.php");
+include("./includes/classes/class.WuiMapCfg.php");
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 
 ############################################
@@ -120,7 +121,7 @@ switch($_GET['myaction']) {
 	case 'save':
 		# passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
 		# save the coordinates on the server
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['mapname']);
+		$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['mapname']);
 		$MAPCFG->readMapConfig();
 		
 		// convert lists to arrays
@@ -153,7 +154,7 @@ switch($_GET['myaction']) {
 		if(!isset($_POST['map'])) {
 			print "<script>alert('No Map submited');</script>\n";
 		} else {
-			$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map']);
+			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map']);
 			$MAPCFG->readMapConfig();
 			
 			// set options in the array
@@ -173,7 +174,7 @@ switch($_GET['myaction']) {
 		}
 	break;
 	case 'add':
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map']);
+		$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map']);
 		$MAPCFG->readMapConfig();
 		
 		# we append a new object definition line in the map cfg file
@@ -190,7 +191,7 @@ switch($_GET['myaction']) {
 	break;
 	case 'delete':
 		// initialize map and read map config
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
+		$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
 		$MAPCFG->readMapConfig();
 		
 		// first delete element from array
@@ -215,7 +216,7 @@ switch($_GET['myaction']) {
 		}
 	break;
 	case 'mgt_map_create':
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map_name']);
+		$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map_name']);
 		if(!$MAPCFG->createMapConfig()) {
 			exit;
 		}
@@ -240,7 +241,7 @@ switch($_GET['myaction']) {
 		
 		// loop all map configs to replace mapname in all map configs
 		foreach($files as $file) {
-			$MAPCFG1 = new GlobalMapCfg($MAINCFG,$file);
+			$MAPCFG1 = new WuiMapCfg($MAINCFG,$file);
 			$MAPCFG1->readMapConfig();
 			
 			$i = 0;
@@ -271,7 +272,7 @@ switch($_GET['myaction']) {
 		// map to delete: $_POST['map_name'];
 		// aktuelle map: $_POST['map'];
 		
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_POST['map_name']);
+		$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map_name']);
 		$MAPCFG->readMapConfig();
 		$MAPCFG->deleteMapConfig();
 		
@@ -321,7 +322,7 @@ switch($_GET['myaction']) {
 	break;
 	case 'map_restore':
 		// delete current config
-		$MAPCFG = new GlobalMapCfg($MAINCFG,$_GET['map']);
+		$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
 		$MAPCFG->readMapConfig();
 		$MAPCFG->deleteMapConfig();
 		// restore backup

@@ -15,7 +15,7 @@ function get_label(key) {
 	if(langMenu[key] && langMenu[key] != '') {
 		return langMenu[key];
 	} else {
-		alert('Your language file seem to be damaged: ' + myindex + ' missing');
+		alert('Your language file seem to be damaged: Key "' + key + '" is missing');
 		return "";
 	}
 
@@ -27,6 +27,7 @@ function createjsDOMenu() {
 	mainMenu = new jsDOMenu(160);
 	with (mainMenu) {
 		addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
+		addMenuItem(new menuItem(get_label('openInNagVis'), "menu_maps_open_nagvis", ""));
 		addMenuItem(new menuItem("-"));
 		addMenuItem(new menuItem(get_label('save'), "menu_save", "code:document.myvalues.submit.click();","","",""));
 		addMenuItem(new menuItem(get_label('restore'), "menu_restore", "code:confirm_restore();","","",""));
@@ -67,13 +68,25 @@ function createjsDOMenu() {
 	for(i=0;i<mapOptions.length;i++) {
 		submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:./index.php?map="+mapOptions[i].mapName,"","",""));
 		
-		if(!checkUserAllowed(mapOptions[i].mapName,mapOptions,username)) {
+		if(!checkUserAllowed(mapOptions[i].mapName,mapOptions[i].allowedForConfig,username)) {
 			submenu_maps_open.items[mapOptions[i].mapName].enabled=false;
 			submenu_maps_open.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
 		}
 	}
 	
 	mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);
+	
+	submenu_maps_open_nagvis = new jsDOMenu(140);
+	for(i=0;i<mapOptions.length;i++) {
+		submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
+		
+		if(!checkUserAllowed(mapOptions[i].mapName,mapOptions[i].allowedUsers,username)) {
+			submenu_maps_open_nagvis.items[mapOptions[i].mapName].enabled=false;
+			submenu_maps_open_nagvis.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
+		}
+	}
+	
+	mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_nagvis);
 	
 	if(mapname != '') {
 		mainMenu.items.menu_addobject.setSubMenu(submenu_addobject);
