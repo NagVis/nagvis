@@ -32,7 +32,7 @@ $BACKEND = new GlobalBackendMgmt($MAINCFG);
 
 $LANG = new GlobalLanguage($MAINCFG,'nagvis:global');
 
-$BACKGROUND = new NagVisBackground(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND);
+$BACKGROUND = new NagVisBackground($MAINCFG,$MAPCFG,$LANG,$BACKEND);
 $BACKGROUND->parseObjects();
 $BACKGROUND->parseMap();
 ?>
