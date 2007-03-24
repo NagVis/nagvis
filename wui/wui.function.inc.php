@@ -13,13 +13,13 @@
 # calls the bash script with the right arguments. It's this bash script which 
 # applies the changes on the server. 
 
-require("../nagvis/includes/classes/class.GlobalDebug.php");
-require("../nagvis/includes/classes/class.GlobalLanguage.php");
-require("../nagvis/includes/classes/class.GlobalMainCfg.php");
-require("../nagvis/includes/classes/class.GlobalPage.php");
-require("../nagvis/includes/classes/class.GlobalMapCfg.php");
-require("./includes/classes/class.WuiMainCfg.php");
-require("./includes/classes/class.WuiMapCfg.php");
+require('../nagvis/includes/classes/class.GlobalDebug.php');
+require('../nagvis/includes/classes/class.GlobalLanguage.php');
+require('../nagvis/includes/classes/class.GlobalMainCfg.php');
+require('../nagvis/includes/classes/class.GlobalPage.php');
+require('../nagvis/includes/classes/class.GlobalMapCfg.php');
+require('./includes/classes/class.WuiMainCfg.php');
+require('./includes/classes/class.WuiMapCfg.php');
 
 
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
@@ -30,12 +30,12 @@ function getArrayFromProperties($properties) {
 	$properties = explode('^',$properties);
 	foreach($properties AS $var => $line) {
 		// seperate string in an array
-		$arr = @explode("=",$line);
+		$arr = @explode('=',$line);
 		// read key from array and delete it
 		$key = @strtolower(@trim($arr[0]));
 		unset($arr[0]);
 		// build string from rest of array
-		$prop[$key] = @trim(@implode("=", $arr));
+		$prop[$key] = @trim(@implode('=', $arr));
 	}
 	return $prop;
 }
@@ -92,8 +92,8 @@ function backup(&$MAINCFG,$mapname) {
 			}
 			
 			//write array back to file
-			$fp = fopen($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status',"w");
-		 	fwrite($fp,implode("",$file));
+			$fp = fopen($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status','w');
+		 	fwrite($fp,implode('',$file));
 		 	fclose($fp);
 		 	
 		 	return TRUE;
@@ -107,7 +107,7 @@ function getAllMaps(&$MAINCFG) {
 	$fh = opendir($MAINCFG->getValue('paths', 'mapcfg'));
 	while(FALSE !== ($file = readdir($fh))) {
 		// only handle *.cfg files
-		if(ereg("\.cfg$",$file)) {
+		if(ereg('\.cfg$',$file)) {
 			$files[] = substr($file,0,strlen($file)-4);
 		}
 	}
