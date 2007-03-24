@@ -71,8 +71,8 @@ class GlobalMap {
 				$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->getImage();
 			}
 		} else {
-			$src = "./images/internal/wuilogo.jpg";
-			$style = "width:600px; height:600px;";
+			$src = "./images/internal/wuilogo.png";
+			$style = "width:800px; height:600px;";
 		}
 		
 		if (DEBUG) debug('End method GlobalMap::getBackground(): Array(...)');
