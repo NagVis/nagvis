@@ -1,5 +1,5 @@
 <?php
-define('DEBUG',TRUE);
+define('DEBUG',FALSE);
 define('DEBUGFILE','/tmp/nagvis.debug');
 
 function debug($msg) {
