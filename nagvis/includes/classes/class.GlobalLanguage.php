@@ -7,6 +7,7 @@ class GlobalLanguage {
 	var $languageFile;
 	var $lang;
 	var $languageRoot;
+	var $cachedLang;
 	
 	/**
 	 * Class Constructor
@@ -16,11 +17,14 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function GlobalLanguage(&$MAINCFG,$languageRoot) {
+		if (DEBUG) debug('Start method GlobalLanguage::GlobalLanguage($MAINCFG,'.$languageRoot.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->languageRoot = $languageRoot;
+		$this->cachedLang = Array();
 		
 		$this->languageFile = $this->MAINCFG->getValue('paths', 'language').$this->MAINCFG->getValue('global', 'language').'.xml';
 		$this->getLanguage();
+		if (DEBUG) debug('End method GlobalLanguage::GlobalLanguage()');
 	}
 	
 	/**
@@ -30,12 +34,15 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getLanguage() {
+		if (DEBUG) debug('Start method GlobalLanguage::getLanguage()');
 		if($strLang = $this->readLanguageFile()) {
 			$this->lang = $this->parseXML($strLang);
 			$this->lang = $this->lang['language'];
 			
+			if (DEBUG) debug('End method GlobalLanguage::getLanguage(): TRUE');
 			return TRUE;
 		} else {
+			if (DEBUG) debug('End method GlobalLanguage::getLanguage(): FALSE');
 			return FALSE;
 		}
 	}
@@ -47,13 +54,17 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function readLanguageFile() {
+		if (DEBUG) debug('Start method GlobalLanguage::readLanguageFile()');
 		if($this->checkLanguageFileReadable(1)) {
 			$fp = fopen($this->languageFile, "r");
 			$data = fread($fp, filesize($this->languageFile));
 			fclose($fp);
 			
-			return $this->replaceSpecial($data);
+			$data = $this->replaceSpecial($data);
+			if (DEBUG) debug('End method GlobalLanguage::readLanguageFile(): String');
+			return $data;
 		} else {
+			if (DEBUG) debug('End method GlobalLanguage::readLanguageFile(): FALSE');
 			return FALSE;
 		}
 	}
@@ -66,6 +77,7 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseXML($data) {
+		if (DEBUG) debug('Start method GlobalLanguage::parseXML(String)');
 	    $vals = Array();
 	    $index = Array();
 	    $ret = Array();
@@ -81,6 +93,7 @@ class GlobalLanguage {
 	    $tagname = $vals[$i]['tag'];
 	    $ret[$tagname] = $this->parseXMLObj($vals, $i);
 	    
+		if (DEBUG) debug('End method GlobalLanguage::parseXML(String)');
 	    return $ret;
 	}
 	
@@ -93,6 +106,7 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseXMLObj($vals, &$i) {
+		if (DEBUG) debug('Start method GlobalLanguage::parseXMLObj(Array(...),'.$i.')');
 	    $child = Array();
 		
 	    while($i++ < count($vals)) {
@@ -105,6 +119,7 @@ class GlobalLanguage {
 		                $child[$vals[$i]['tag']] = $vals[$i]['value'];
 		            break;
 		            case 'close':
+						if (DEBUG) debug('End method GlobalLanguage::parseXMLObj(): String');
 		                return $child;
 		            break;
 		            default:
@@ -114,6 +129,7 @@ class GlobalLanguage {
 			}
 	    }
 	    
+		if (DEBUG) debug('End method GlobalLanguage::parseXMLObj(): Array()');
 		return $child;
 	}
 	
@@ -125,6 +141,7 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function replaceSpecial($str) {
+		if (DEBUG) debug('Start method GlobalLanguage::replaceSpecial(String)');
 		// FIXME: dirty workaround
 		$str = str_replace('&#252;','ü',$str);
 		$str = str_replace('&#246;','ö',$str);
@@ -141,6 +158,7 @@ class GlobalLanguage {
 		$str = str_replace('Ã¤','ä',$str);
 		$str = str_replace('Ã¶','ö',$str);
 		$str = str_replace('Ã¼','ü',$str);
+		if (DEBUG) debug('End method GlobalLanguage::replaceSpecial(): String');
 		return $str;
 	}
 	
@@ -152,31 +170,66 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
     function checkLanguageFileReadable($printErr) {
+		if (DEBUG) debug('Start method GlobalLanguage::checkLanguageFileReadable('.$printErr.')');
         if(!is_readable($this->languageFile)) {
         	if($printErr == 1) {
 				// This has to be a manual error message - using an error message from language File would cause in a loop
 				print "<script>alert('Impossible to read from the language file (".$this->languageFile.")');</script>";
 			}
+			if (DEBUG) debug('End method GlobalLanguage::checkLanguageFileReadable(): FALSE');
 	        return FALSE;
         } else {
+			if (DEBUG) debug('End method GlobalLanguage::checkLanguageFileReadable(): TRUE');
         	return TRUE;
         }
     }
     
     
     function getMessageText($id,$replace='',$mergeWithGlobal=TRUE) {
-    	return $this->getText($this->languageRoot.':messages:'.$id.':text',$replace,$mergeWithGlobal);
+		if (DEBUG) debug('Start method GlobalLanguage::getMessageText('.$id.','.$replace.','.$mergeWithGlobal.')');
+		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['text']) && $this->cachedLang[$id]['text'] != '') {
+			$ret = $this->cachedLang[$id]['text'];
+		} else {
+			if(!isset($this->cachedLang[$id])) {
+				$this->cachedLang[$id] = Array();
+			}
+			$ret = $this->cachedLang[$id]['text'] = $this->getText($this->languageRoot.':messages:'.$id.':text',$replace,$mergeWithGlobal);
+		}
+		if (DEBUG) debug('End method GlobalLanguage::getMessageText(): '.$ret);
+    	return $ret;
     }
     
     function getMessageTitle($id,$replace='',$mergeWithGlobal=TRUE) {
-    	return $this->getText($this->languageRoot.':messages:'.$id.':title',$replace,$mergeWithGlobal);
+		if (DEBUG) debug('Start method GlobalLanguage::getMessageTitle('.$id.','.$replace.','.$mergeWithGlobal.')');
+		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['title']) && $this->cachedLang[$id]['title'] != '') {
+    		$ret = $this->cachedLang[$id]['title'];
+    	} else {
+    		if(!isset($this->cachedLang[$id])) {
+				$this->cachedLang[$id] = Array();
+			}
+    		$ret = $this->cachedLang[$id]['label'] = $this->getText($this->languageRoot.':messages:'.$id.':title',$replace,$mergeWithGlobal);
+    	}
+		if (DEBUG) debug('End method GlobalLanguage::getMessageTitle(): '.$ret);
+		return $ret;
     }
     
     function getLabel($id,$replace='',$mergeWithGlobal=TRUE) {
-    	return $this->getText($this->languageRoot.':labels:'.$id.':text',$replace,$mergeWithGlobal);
+		if (DEBUG) debug('Start method GlobalLanguage::getLabel('.$id.','.$replace.','.$mergeWithGlobal.')');
+		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['label']) && $this->cachedLang[$id]['label'] != '') {
+			$ret = $this->cachedLang[$id]['label'];
+		} else {
+			if(!isset($this->cachedLang[$id])) {
+				$this->cachedLang[$id] = Array();
+			}
+    		$ret = $this->cachedLang[$id]['label'] = $this->getText($this->languageRoot.':labels:'.$id.':text',$replace,$mergeWithGlobal);
+    	}
+		if (DEBUG) debug('End method GlobalLanguage::getLabel(): '.$ret);
+		return $ret;
     }
     
-    function mergeArrayRecursive($array1, $array2) {
+    /* @DEPRECATED
+    function mergeArrayRecursive(&$array1, &$array2) {
+		if (DEBUG) debug('Start method GlobalLanguage::mergeArrayRecursive(Array(...),Array(...))');
 		if (is_array($array2) && count($array2)) {
 			foreach ($array2 as $k => $v) {
 				if(is_array($v) && count($v)) {
@@ -192,8 +245,9 @@ class GlobalLanguage {
 			$array1 = $array2;
 		}
 		
+		if (DEBUG) debug('End method GlobalLanguage::mergeArrayRecursive(): Array(...)');
 		return $array1;
-	}
+	}*/
 	
 	/**
 	 * Gets the text of an id
@@ -205,7 +259,9 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getText($languagePath,$replace='',$mergeWithGlobal=TRUE) {
+		if (DEBUG) debug('Start method GlobalLanguage::getText('.$languagePath.','.$replace.','.$mergeWithGlobal.')');
 		$arrLang = Array();
+		$strLang = '';
 		$arrLanguagePath = explode(':',$languagePath);
 		# DEBUG: print_r($arrLanguagePath);
 	    # [0] => backend
@@ -214,7 +270,7 @@ class GlobalLanguage {
 	    # [3] => errorSelectingDb
 	    # [4] => title
 		
-		// merge first level with global if $mergeWithGlobal is TRUE
+		/*// merge first level with global if $mergeWithGlobal is TRUE
 		// search not only the array of $this->lang['xy'], also search $this->lang['global']
 		if($arrLanguagePath[0] != 'global') {
 			if($mergeWithGlobal) {
@@ -238,12 +294,25 @@ class GlobalLanguage {
 			}
 		} else {
 			$arrLang = $arrLang['global'];
+		}*/
+		
+		if($mergeWithGlobal && isset($this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) 
+			  && $this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
+			$strLang = $this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
+		} else {
+			if($mergeWithGlobal && isset($this->lang[$arrLanguagePath[0]]['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) 
+				  && $this->lang[$arrLanguagePath[0]]['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
+				$strLang = $this->lang[$arrLanguagePath[0]]['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
+			} else {
+				if(isset($this->lang[$arrLanguagePath[0]][$arrLanguagePath[1]][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) 
+					  && $this->lang[$arrLanguagePath[0]][$arrLanguagePath[1]][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
+					$strLang = $this->lang[$arrLanguagePath[0]][$arrLanguagePath[1]][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
+				}
+			}
 		}
 		
 		// filter type, messages/labels
-		if(isset($arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) && $arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
-			$strLang = $arrLang[$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
-			
+		if($strLang != '') {
 			// Replace [i],[b] and their ending tags with HTML code
 			$strLang = preg_replace("/\[(\/|)(i|b)\]/i","<$1$2>",$strLang);
 			
@@ -257,13 +326,16 @@ class GlobalLanguage {
 					}
 				}
 				
+				if (DEBUG) debug('End method GlobalLanguage::getText(): '.$strLang);
 				// Return string with replaced text
 				return $strLang;
 			} else {
+				if (DEBUG) debug('End method GlobalLanguage::getText(): '.$strLang);
 				// Return without replacement
 				return $strLang;
 			}
 		} else {
+			if (DEBUG) debug('End method GlobalLanguage::getText(): TranslationNotFound: '.$languagePath);
 			// Return Translation not Found error
 			return 'TranslationNotFound: '.$languagePath;
 		}

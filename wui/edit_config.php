@@ -9,6 +9,7 @@
 #	http://www.walterzorn.com   												#
 #################################################################################
 
+require("../nagvis/includes/classes/class.GlobalDebug.php");
 require("../nagvis/includes/classes/class.GlobalMainCfg.php");
 require("../nagvis/includes/classes/class.GlobalLanguage.php");
 require("../nagvis/includes/classes/class.GlobalPage.php");

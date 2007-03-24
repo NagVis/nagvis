@@ -19,6 +19,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
+		if (DEBUG) debug('Start method NagVisMap::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
@@ -29,6 +30,7 @@ class NagVisMap extends GlobalMap {
 		parent::GlobalMap($MAINCFG,$MAPCFG,$BACKEND);
 		
 		$this->objects = $this->getMapObjects(1);
+		if (DEBUG) debug('End method NagVisMap::NagVisMap()');
 	}
 	
 	/**
@@ -38,10 +40,12 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseMap() {
+		if (DEBUG) debug('Start method NagVisMap::parseMap()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground());
 		$ret = array_merge($ret,$this->parseObjects());
 		
+		if (DEBUG) debug('Start method NagVisMap::parseMap(): Array(...)');
 		return $ret;
 	}
 	
@@ -52,6 +56,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseObjects() {
+		if (DEBUG) debug('Start method NagVisMap::parseObjects()');
 		$ret = Array();
 		foreach($this->objects AS $obj) {
 			switch($obj['type']) {
@@ -116,6 +121,7 @@ class NagVisMap extends GlobalMap {
 				break;	
 			}
 		}
+		if (DEBUG) debug('End method NagVisMap::parseObjects(): Array(...)');
 		return $ret;
 	}
 	
@@ -127,7 +133,10 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function fixIconPosition($obj) {
-		return parent::fixIconPosition($this->getIconPaths($obj));
+		if (DEBUG) debug('Start method NagVisMap::fixIconPosition()');
+		$return = parent::fixIconPosition($this->getIconPaths($obj));
+		if (DEBUG) debug('End method NagVisMap::fixIconPosition(): '.$return);
+		return $return;
 	}
 	
 	/**
@@ -139,6 +148,7 @@ class NagVisMap extends GlobalMap {
 	 * @fixme 	FIXME 1.1: optimize
 	 */
 	function createBoxLine($obj,$name) {
+		if (DEBUG) debug('Start method NagVisMap::createBoxLine('.$obj.','.$name.')');
 		$ret = Array();
 	    if($obj['line_type'] == '10' || $obj['line_type'] == '11'){
 			list($x_from,$x_to) = explode(",", $obj['x']);
@@ -169,6 +179,7 @@ class NagVisMap extends GlobalMap {
 			$obj = $this->fixIconPosition($obj);
 			$ret = array_merge($ret,$this->parseIcon($obj));
 		}
+		if (DEBUG) debug('End method NagVisMap::createBoxLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -183,6 +194,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseIcon($obj,$link=1,$hoverMenu=1) {
+		if (DEBUG) debug('Start method NagVisMap::parseIcon($obj,'.$link.','.$hoverMenu.')');
 		$ret = Array();
 		
 		if($obj['type'] == 'shape') {
@@ -221,6 +233,7 @@ class NagVisMap extends GlobalMap {
 		
 		$ret[] = "</div>";
 		
+		if (DEBUG) debug('End method NagVisMap::parseIcon(): Array(...)');
 		return $ret;
 	}
 	
@@ -233,6 +246,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function replaceMacros($obj) {
+		if (DEBUG) debug('Start method NagVisMap::replaceMacros($obj)');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -247,6 +261,7 @@ class NagVisMap extends GlobalMap {
 			$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
 		}
 		
+		if (DEBUG) debug('End method NagVisMap::replaceMacros(): Array(...)');
 		return $obj;
 	}
 	
@@ -259,6 +274,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function createLink($obj) {
+		if (DEBUG) debug('Start method NagVisMap::createLink($obj)');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -278,6 +294,7 @@ class NagVisMap extends GlobalMap {
     	} elseif($obj['type'] == 'servicegroup') {
 			$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?servicegroup='.$obj[$name].'&style=detail">';
     	}
+		if (DEBUG) debug('End method NagVisMap::createLink(): Array(...)');
     	return $link;
 	}
 	
@@ -290,10 +307,12 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function textBox($obj) {
+		if (DEBUG) debug('Start method NagVisMap::textBox($obj)');
 		$ret = Array();
 		$ret[] = "<div class=\"".$obj['class']."\" style=\"background:".$obj['background_color'].";left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."px; overflow: visible;\">";	
 		$ret[] = "\t<span>".$obj['text']."</span>";
 		$ret[] = "</div>";
+		if (DEBUG) debug('End method NagVisMap::textBox(): Array(...)');
 		return $ret;	
 	}
 	
@@ -305,6 +324,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getHoverMenu($obj) {
+		if (DEBUG) debug('Start method NagVisMap::getHoverMenu($obj)');
 		$ret = '';
 		// FIXME 1.1: check if this is an object, where a menu should be displayed
 		if(1) {
@@ -314,8 +334,10 @@ class NagVisMap extends GlobalMap {
 			} else {
 				$ret .= $this->createInfoBox($obj);
 			}
+			
 			$ret .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
 			
+			if (DEBUG) debug('End method NagVisMap::getHoverMenu(): Array(...)');
 			return $ret;
 		}
 	}
@@ -328,6 +350,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function readHoverUrl($obj) {
+		if (DEBUG) debug('Start method NagVisMap::readHoverUrl($obj)');
 		/* FIXME: Context is supported in php >= 5.0
 		* $http_opts = array(
 		*      'http'=>array(
@@ -346,6 +369,7 @@ class NagVisMap extends GlobalMap {
 	        $FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
 		}
 		
+		if (DEBUG) debug('End method NagVisMap::readHoverUrl(): HTML');
 		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\n",'',str_replace("\r\n",'',$content))));;
 	}
 	
@@ -357,6 +381,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function createInfoBox($obj) {
+		if (DEBUG) debug('Start method NagVisMap::createInfoBox($obj)');
 		$ret = '';
 		
 		if($obj['type'] == 'service') {
@@ -410,6 +435,7 @@ class NagVisMap extends GlobalMap {
 				// Unknown type, don't display anything
 			break;
 		}
+		if (DEBUG) debug('End method NagVisMap::createInfoBox(): Array(...)');
 		return $ret;
 	}
 }

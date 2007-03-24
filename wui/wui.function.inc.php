@@ -13,12 +13,15 @@
 # calls the bash script with the right arguments. It's this bash script which 
 # applies the changes on the server. 
 
-include("../nagvis/includes/classes/class.GlobalLanguage.php");
-include("../nagvis/includes/classes/class.GlobalMainCfg.php");
-include("../nagvis/includes/classes/class.GlobalPage.php");
-include("../nagvis/includes/classes/class.GlobalMapCfg.php");
-include("./includes/classes/class.WuiMainCfg.php");
-include("./includes/classes/class.WuiMapCfg.php");
+require("../nagvis/includes/classes/class.GlobalDebug.php");
+require("../nagvis/includes/classes/class.GlobalLanguage.php");
+require("../nagvis/includes/classes/class.GlobalMainCfg.php");
+require("../nagvis/includes/classes/class.GlobalPage.php");
+require("../nagvis/includes/classes/class.GlobalMapCfg.php");
+require("./includes/classes/class.WuiMainCfg.php");
+require("./includes/classes/class.WuiMapCfg.php");
+
+
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 
 ############################################

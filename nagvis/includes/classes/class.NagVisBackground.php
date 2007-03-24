@@ -26,10 +26,15 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function NagVisBackground(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
+		if (DEBUG) debug('Start method NagVisBackground::NagVisBackground($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
+		
+		
+		$this->user = $this->getUser();
+		$this->MAINCFG->setRuntimeValue('user',$this->user);
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
@@ -37,12 +42,32 @@ class NagVisBackground extends GlobalMap {
 		
 		$this->initImage();
 		
+		
 		//parent::GlobalMap($MAINCFG,$MAPCFG,$BACKEND);
 		
 		$this->objects = $this->getMapObjects(1);
+		if (DEBUG) debug('End method NagVisBackground::NagVisBackground()');
+	}
+	
+	/**
+	 * Gets the User
+	 *
+	 * @return	String	String with Username
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function getUser() {
+		if (DEBUG) debug('Start method GlobalPage::getUser()');
+		if(isset($_SERVER['PHP_AUTH_USER'])) {
+			if (DEBUG) debug('End method GlobalPage::getUser(): '.$_SERVER['PHP_AUTH_USER']);
+			return $_SERVER['PHP_AUTH_USER'];
+		} elseif(isset($_SERVER['REMOTE_USER'])) {
+			if (DEBUG) debug('End method GlobalPage::getUser(): '.$_SERVER['REMOTE_USER']);
+			return $_SERVER['REMOTE_USER'];
+		}
 	}
 	
 	function checkMemoryLimit($tryToFix=TRUE) {
+		if (DEBUG) debug('Start method NagVisBackground::checkMemoryLimit('.$tryToFix.')');
 		$fileSize = filesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
 		$memoryLimit = preg_replace('/[a-z]/i','',ini_get("memory_limit"))*1024*1024;
 		
@@ -64,13 +89,18 @@ class NagVisBackground extends GlobalMap {
 		// c) big color depth
 		// DEBUG: echo $fileSize." > ".$memoryLimit." <bR>";
 		// DEBUG: echo ((memory_get_usage() + $rawSize)*1.10)." > ".$memoryLimit;
-		if($fileSize > $memoryLimit || ($this->memoryGetUsage() + $rawSize)*1.10 > $memoryLimit) {
+		$memoryUsage = $this->memoryGetUsage();
+		if($fileSize > $memoryLimit || ($memoryUsage + $rawSize)*1.10 > $memoryLimit) {
 			if($tryToFix) {
-				ini_set("memory_limit",round(($this->memoryGetUsage() + $rawSize)*1.15 / 1024 /1024)."M");
-				return $this->checkMemoryLimit(FALSE);
+				ini_set("memory_limit",round(($memoryUsage + $rawSize)*1.15 / 1024 /1024)."M");
+				$return = $this->checkMemoryLimit(FALSE);
+				if (DEBUG) debug('End method NagVisBackground::checkMemoryLimit(): '.$return);
+				return $return;
 			}
+			if (DEBUG) debug('End method NagVisBackground::checkMemoryLimit(): FALSE');
 			return FALSE;
 		} else {
+			if (DEBUG) debug('End method NagVisBackground::checkMemoryLimit(): TRUE');
 			return TRUE;
 		}
 	}
@@ -83,6 +113,7 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function memoryGetUsage() {
+		if (DEBUG) debug('Start method NagVisBackground::memoryGetUsage()');
 		// If function already exists in PHP, use it!
 		if(function_exists('memory_get_usage')) {
 			$iReturn = memory_get_usage();
@@ -114,13 +145,16 @@ class NagVisBackground extends GlobalMap {
 		}
 		
 		if($iReturn <= 0) {
+			if (DEBUG) debug('End method NagVisBackground::memoryGetUsage(): 0');
 			return 0;
 		} else {
+			if (DEBUG) debug('End method NagVisBackground::memoryGetUsage(): '.$iReturn);
 			return $iReturn;
 		}
 	} 
 	
 	function initImage() {
+		if (DEBUG) debug('Start method NagVisBackground::initImage()');
 		$imageType = explode('.', $this->MAPCFG->getImage());
 		$this->imageType = strtolower($imageType[1]);
 		
@@ -143,6 +177,7 @@ class NagVisBackground extends GlobalMap {
 		$this->intUnknown = imagecolorallocate($this->image, 255, 128, 0);
 		
 		$this->GRAPHIC->init($this->image);
+		if (DEBUG) debug('End method NagVisBackground::initImage()');
 	}
 	
 	/**
@@ -151,6 +186,7 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function checkPreflight() {
+		if (DEBUG) debug('Start method NagVisBackground::checkPreflight()');
 		if(!$this->MAPCFG->checkMapImageExists(0)) {
 			$this->errorBox($this->LANG->getMessageText('backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
@@ -163,6 +199,7 @@ class NagVisBackground extends GlobalMap {
 		if(!$this->checkPermissions($this->MAPCFG->getValue('global',0, 'allowed_user'),0)) {
 			$this->errorBox($this->LANG->getMessageText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
 		}
+		if (DEBUG) debug('End method NagVisBackground::checkPreflight()');
 	}
 	
 	/**
@@ -172,6 +209,7 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseMap() {
+		if (DEBUG) debug('Start method NagVisBackground::parseMap()');
 		switch($this->imageType) {
 			case 'jpg':
 				header('Content-type: image/jpeg');
@@ -198,6 +236,7 @@ class NagVisBackground extends GlobalMap {
 				exit;
 			break;
 		}
+		if (DEBUG) debug('End method NagVisBackground::parseMap()');
 	}
 	
 	/**
@@ -207,6 +246,7 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function errorBox($msg) {
+		if (DEBUG) debug('Start method NagVisBackground::errorBox('.$msg.')');
 		$this->image = @imagecreate(600,50);
 		$this->imageType = 'png';
 		$ImageFarbe = imagecolorallocate($this->image,243,243,243); 
@@ -214,6 +254,7 @@ class NagVisBackground extends GlobalMap {
 		$schrift = imagestring($this->image, 5,10, 10, $msg, $schriftFarbe);
 		
 		$this->parseMap();
+		if (DEBUG) debug('End method NagVisBackground::errorBox()');
 		exit;
 	}
 	
@@ -224,6 +265,7 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseObjects() {
+		if (DEBUG) debug('Start method NagVisBackground::parseObjects()');
 		$ret = Array();
 		foreach($this->objects AS $obj) {
 			switch($obj['type']) {
@@ -265,6 +307,7 @@ class NagVisBackground extends GlobalMap {
 				break;	
 			}
 		}
+		if (DEBUG) debug('End method NagVisBackground::parseObjects(): Array(...)');
 		return $ret;
 	}
 	
@@ -276,6 +319,7 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseLine($obj) {
+		if (DEBUG) debug('Start method NagVisBackground::parseLine()');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -312,7 +356,8 @@ class NagVisBackground extends GlobalMap {
 			
 			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_middle,$y_middle,3,1,$this->getColor($state_from['State']));
 			$this->GRAPHIC->drawArrow($this->image,$x_to,$y_to,$x_middle,$y_middle,3,1,$this->getColor($state_to['State']));
-		}		
+		}
+		if (DEBUG) debug('End method NagVisBackground::parseLine()');	
 	}
 	
 	/**
@@ -323,6 +368,7 @@ class NagVisBackground extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getColor($state){
+		if (DEBUG) debug('Start method NagVisBackground::getColor('.$state.')');
 		if($state == 'OK' || $state == 'UP') {
 			$color = $this->intOk;
 		} elseif($state == 'WARNING') {
@@ -332,7 +378,7 @@ class NagVisBackground extends GlobalMap {
 		} else {
 			$color = $this->intUnknown;
 		}
-		
+		if (DEBUG) debug('End method NagVisBackground::getColor(): '.$color);
 		return $color;
 	}
 }

@@ -9,13 +9,13 @@
 #	http://www.walterzorn.com   												#
 #################################################################################
 
+require("../nagvis/includes/classes/class.GlobalDebug.php");
 require("../nagvis/includes/classes/class.GlobalMainCfg.php");
 require("../nagvis/includes/classes/class.GlobalMapCfg.php");
 require("../nagvis/includes/classes/class.GlobalLanguage.php");
 require("../nagvis/includes/classes/class.GlobalPage.php");
 require("../nagvis/includes/classes/class.GlobalForm.php");
 require("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
-
 
 require("./includes/classes/class.WuiMainCfg.php");
 require("./includes/classes/class.WuiMapCfg.php");

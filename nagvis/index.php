@@ -12,6 +12,7 @@
 ## For developer guidlines have a look at http://www.nagvis.org			##
 ##########################################################################
 
+require("./includes/classes/class.GlobalDebug.php");
 require("./includes/classes/class.GlobalMainCfg.php");
 require("./includes/classes/class.GlobalMapCfg.php");
 require("./includes/classes/class.GlobalLanguage.php");
@@ -41,5 +42,6 @@ $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 $FRONTEND->getHeaderMenu();
 $FRONTEND->getMap();
 $FRONTEND->getMessages();
+
 $FRONTEND->printPage();
 ?>

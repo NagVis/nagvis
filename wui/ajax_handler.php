@@ -1,11 +1,14 @@
 <?php
-include("../nagvis/includes/classes/class.GlobalMainCfg.php");
-include("./includes/classes/class.WuiMainCfg.php");
-include("../nagvis/includes/classes/class.GlobalMapCfg.php");
-include("./includes/classes/class.WuiMapCfg.php");
-include("../nagvis/includes/classes/class.GlobalLanguage.php");
-include("../nagvis/includes/classes/class.GlobalPage.php");
-include("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
+
+require("../nagvis/includes/classes/class.GlobalDebug.php");
+require("../nagvis/includes/classes/class.GlobalMainCfg.php");
+require("../nagvis/includes/classes/class.GlobalMapCfg.php");
+require("../nagvis/includes/classes/class.GlobalLanguage.php");
+require("../nagvis/includes/classes/class.GlobalPage.php");
+require("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
+
+require("./includes/classes/class.WuiMainCfg.php");
+require("./includes/classes/class.WuiMapCfg.php");
 
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 

@@ -21,6 +21,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function GlobalForm($prop=Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>'')) {
+		if (DEBUG) debug('Start method GlobalForm::GlobalForm(Array(...))');
 		$this->name = $prop['name'];
 		$this->id = $prop['id'];
 		$this->method = (isset($prop['method'])) ? $prop['method']:'';
@@ -28,6 +29,7 @@ class GlobalForm {
 		$this->onSubmit = (isset($prop['onSubmit'])) ? $prop['onSubmit']:'';
 		$this->cols = (isset($prop['cols'])) ? $prop['cols']:'';
 		$this->enctype = (isset($prop['enctype'])) ? $prop['enctype']:'';
+		if (DEBUG) debug('End method GlobalForm::GlobalForm()');
 	}
 	
 	/**
@@ -39,10 +41,12 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getHiddenField($name,$value) {
+		if (DEBUG) debug('Start method GlobalForm::getHiddenField('.$name.','.$value.')');
 		$ret = Array();
 		
 		$ret[] = "<input type=\"hidden\" name=\"".$name."\" value=\"".$value."\" />";
 		
+		if (DEBUG) debug('End method GlobalForm::getHiddenField(): Array(...)');
 		return $ret;
 	}
 	
@@ -54,12 +58,14 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getTitleLine($title) {
+		if (DEBUG) debug('Start method GlobalForm::getTitleLine('.$title.')');
 		$ret = Array();
 		
 		$ret[] = "<tr>";
 		$ret[] = "<td class=\"tdtitle\" colspan=\"".$this->cols."\">".$title."</td>";
 		$ret[] = "</tr>";
 		
+		if (DEBUG) debug('End method GlobalForm::getTitleLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -71,12 +77,14 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getCatLine($title) {
+		if (DEBUG) debug('Start method GlobalForm::getCatLine('.$title.')');
 		$ret = Array();
 		
 		$ret[] = "<tr>";
 		$ret[] = "\t<td class=\"tdcat\" colspan=\"".$this->cols."\">".$title."</td>";
 		$ret[] = "</tr>";
 		
+		if (DEBUG) debug('End method GlobalForm::getCatLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -90,6 +98,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getFileLine($label,$name,$value,$must=FALSE) {
+		if (DEBUG) debug('Start method GlobalForm::getFileLine('.$label.','.$name.','.$value.','.$must.')');
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -102,6 +111,7 @@ class GlobalForm {
 		$ret[] = "\t<td class=\"tdlabel\" ".$must.">".$label."</td><td class=\"tdfield\"><input type=\"file\" name=\"".$name."\" value=\"".$value."\" /></td>";
 		$ret[] = "</tr>";
 		
+		if (DEBUG) debug('End method GlobalForm::getFileLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -116,6 +126,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getInputLine($label,$name,$value,$must=FALSE) {
+		if (DEBUG) debug('Start method GlobalForm::getInputLine('.$label.','.$name.','.$value.','.$must.')');
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -130,6 +141,7 @@ class GlobalForm {
 		$ret[] = "\t</td>";
 		$ret[] = "</tr>";
 		
+		if (DEBUG) debug('End method GlobalForm::getInputLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -146,6 +158,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='') {
+		if (DEBUG) debug('Start method GlobalForm::getSelectLine('.$label.','.$name.',Array(...),'.$selected.','.$must.','.$onChange.')');
 		$ret = Array();
 		
 		if($must) {
@@ -161,6 +174,7 @@ class GlobalForm {
 		$ret[] = "</tr>";
 		$ret[] = '<script>document.'.$this->name.'.'.$name.'.value=\''.$selected.'\';</script>';
 		
+		if (DEBUG) debug('End method GlobalForm::getSelectLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -172,6 +186,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getSubmitLine($label) {
+		if (DEBUG) debug('Start method GlobalForm::getSubmitLine('.$label.')');
 		$ret = Array();
 		
 		$ret[] = "<tr>";
@@ -180,6 +195,7 @@ class GlobalForm {
 		$ret[] = "\t</td>";
 		$ret[] = "</tr>";
 		
+		if (DEBUG) debug('End method GlobalForm::getSubmitLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -190,11 +206,13 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function initForm() {
+		if (DEBUG) debug('Start method GlobalForm::initForm()');
 		$ret = Array();
 		
 		$ret[] = "<form name=\"".$this->name."\" id=\"".$this->id."\" method=\"".$this->method."\" action=\"".$this->action."\" enctype=\"".$this->enctype."\" onsubmit=\"".$this->onSubmit."\">";
 		$ret[] = "<table name=\"mytable\" id=\"table_".$this->id."\">";
 		
+		if (DEBUG) debug('End method GlobalForm::initForm(): Array(...)');
 		return $ret;
 	}
 	
@@ -205,11 +223,13 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function closeForm() {
+		if (DEBUG) debug('Start method GlobalForm::closeForm()');
 		$ret = Array();
 		
 		$ret[] = "</table>";
 		$ret[] = "</form>";
 		
+		if (DEBUG) debug('End method GlobalForm::closeForm(): Array(...)');
 		return $ret;
 	}
 	
@@ -221,9 +241,11 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getSubmitField($label) {
+		if (DEBUG) debug('Start method GlobalForm::getSubmitField('.$label.')');
 		$ret = Array();
 		$ret[] = "\t\t<input class=\"submit\" type=\"submit\" name=\"submit\" id=\"commit\" value=\"".$label."\" />";
 		
+		if (DEBUG) debug('End method GlobalForm::getSubmitField(): Array(...)');
 		return $ret;
 	}
 	
@@ -238,6 +260,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getSelectField($name,$arr,$onChange='',$must=FALSE) {
+		if (DEBUG) debug('Start method GlobalForm::getSelectField('.$name.',Array(...),'.$onChange.','.$must.')');
 		$ret = Array();
 		$ret[] = "\t\t<select name=\"".$name."\" onChange=\"".$onChange."\">";
 		
@@ -254,6 +277,7 @@ class GlobalForm {
 		}
 		$ret[] = "\t\t</select>";
 		
+		if (DEBUG) debug('End method GlobalForm::getSelectField(): Array(...)');
 		return $ret;
 	}
 	
@@ -266,9 +290,11 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getInputField($name,$value) {
+		if (DEBUG) debug('Start method GlobalForm::getInputField('.$name.','.$value.')');
 		$ret = Array();
 		$ret[] = "\t\t<input type=\"text\" name=\"".$name."\" value=\"".$value."\" />";
 		
+		if (DEBUG) debug('End method GlobalForm::getInputField(): Array(...)');
 		return $ret;
 	}
 }

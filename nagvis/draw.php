@@ -12,16 +12,17 @@
 ## For developer guidlines have a look at http://www.nagvis.org			##
 ##########################################################################
 
-include("./includes/classes/class.GlobalGraphic.php");
-include("./includes/classes/class.GlobalMainCfg.php");
-include("./includes/classes/class.GlobalMapCfg.php");
-include("./includes/classes/class.GlobalMap.php");
-include("./includes/classes/class.GlobalPage.php");
-include("./includes/classes/class.GlobalLanguage.php");
+require("./includes/classes/class.GlobalDebug.php");
+require("./includes/classes/class.GlobalGraphic.php");
+require("./includes/classes/class.GlobalMainCfg.php");
+require("./includes/classes/class.GlobalMapCfg.php");
+require("./includes/classes/class.GlobalMap.php");
+require("./includes/classes/class.GlobalPage.php");
+require("./includes/classes/class.GlobalLanguage.php");
 require("./includes/classes/class.GlobalBackendMgmt.php");
-require("./includes/classes/class.NagVisBackground.php");
 
-include("./includes/classes/class.NagVisMapCfg.php");
+require("./includes/classes/class.NagVisBackground.php");
+require("./includes/classes/class.NagVisMapCfg.php");
 
 $MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
 
