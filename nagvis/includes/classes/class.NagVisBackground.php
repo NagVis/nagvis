@@ -114,6 +114,68 @@ class NagVisBackground extends GlobalMap {
 	 */
 	function memoryGetUsage() {
 		if (DEBUG) debug('Start method NagVisBackground::memoryGetUsage()');
+		$iReturn = 0;
+		
+		// If function already exists in PHP, use it!
+		$sLog = 'Check for memory_get_usage()...';
+		if(function_exists('memory_get_usage')) {
+			$sLog .= 'exists!';
+			$iReturn = memory_get_usage();
+		} else {
+			$sLog[] .= 'not exists!';
+		}
+		if (DEBUG) debug($sLog);
+		
+		
+		if($iReturn <= 0) {
+			// If its Windows
+			// Tested on Win XP Pro SP2. Should work on Win 2003 Server too
+			// If you need it to work for 2000 look at http://us2.php.net/manual/en/function.memory-get-usage.php#54642
+			$sLog = "Check if WIN/UNIX...";
+			if(substr(PHP_OS,0,3) == 'WIN') {
+				$sLog .= "WIN (PHP_OS: ".PHP_OS.")";
+				if (DEBUG) debug($sLog);
+				
+				$output = array();
+				exec( 'tasklist /FI "PID eq ' . getmypid() . '" /FO LIST', $output );
+				$sLog[] = "Exec: tasklist /FI \"PID eq ' . ".getmypid()." . '\" /FO LIST";
+				$sLog[] = "Output: ".implode(',',$output)."<br>";
+				
+				$iReturn = preg_replace( '/[\D]/', '', $output[5] ) * 1024;
+			} else {
+				$sLog .= 'UNIX (PHP_OS: '.PHP_OS.')';
+				if (DEBUG) debug($sLog);
+				// We now assume the OS is UNIX
+				// Tested on Mac OS X 10.4.6 and Linux Red Hat Enterprise 4
+				// This should work on most UNIX systems
+				$pid = getmypid();
+				if (DEBUG) debug('Process ID: '.$pid);
+	
+				if($pid == 0) {
+					$iReturn = 0;
+				} else {
+					exec('ps -eo%mem,rss,pid | grep '.$pid, $output);
+					if (DEBUG) debug('Exec: ps -eo%mem,rss,pid | grep '.$pid.': '.implode(',',$output));
+					$output = explode('  ', $output[0]);
+				
+					// rss is given in 1024 byte units
+					$iReturn = $output[1] * 1024;
+				}
+			}
+		}
+		
+		if($iReturn < 0) {
+			if (DEBUG) debug('End method NagVisBackground::memoryGetUsage(): 0');
+			return 0;
+		} else {
+			if (DEBUG) debug('End method NagVisBackground::memoryGetUsage(): '.$iReturn);
+			return $iReturn;
+		}
+	}
+	
+	/* DEPRECATED
+	function memoryGetUsage() {
+		if (DEBUG) debug('Start method NagVisBackground::memoryGetUsage()');
 		// If function already exists in PHP, use it!
 		if(function_exists('memory_get_usage')) {
 			$iReturn = memory_get_usage();
@@ -151,7 +213,7 @@ class NagVisBackground extends GlobalMap {
 			if (DEBUG) debug('End method NagVisBackground::memoryGetUsage(): '.$iReturn);
 			return $iReturn;
 		}
-	} 
+	} */
 	
 	function initImage() {
 		if (DEBUG) debug('Start method NagVisBackground::initImage()');

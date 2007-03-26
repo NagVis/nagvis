@@ -15,6 +15,7 @@
 class GlobalBackendndomy {
 	var $MAINCFG;
 	var $LANG;
+	var $CONN;
 	var $backendId;
 	var $dbName;
 	var $dbUser;
@@ -49,60 +50,116 @@ class GlobalBackendndomy {
 		
 		// initialize a language object for later error messages which be given out as state output
 		$this->LANG = new GlobalLanguage($this->MAINCFG,'backend:ndomy');
-
-		// Check availability of PHP MySQL
-		if (!extension_loaded('mysql')) {
-			dl('mysql.so');
-
-			if (!extension_loaded('mysql')) {
-				//Error Box
+		
+		if($this->checkMysqlSupport() && $this->connectDB() && $this->checkTablesExists()) {
+			// Set the instanceId
+			$this->dbInstanceId = $this->getInstanceId();
+			
+			// Do some checks to make sure that Nagios is running and the Data at the DB are ok
+			$QUERYHANDLE = mysql_query("SELECT is_currently_running, status_update_time FROM ".$this->dbPrefix."programstatus WHERE instance_id = '".$this->dbInstanceId."'");
+			$nagiosState = mysql_fetch_array($QUERYHANDLE);
+		
+			// Check that Nagios reports itself as running	
+			if ($nagiosState['is_currently_running'] != 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-				$FRONTEND->messageToUser('ERROR','mysqlNotSupported','BACKENDID~'.$this->backendId);
+				$FRONTEND->messageToUser('ERROR','nagiosNotRunning','BACKENDID~'.$this->backendId);
 			}
+	        
+			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
+			if(time() - strtotime($nagiosState['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+				$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
+			}
+		} else {
+			if (DEBUG) debug('End method GlobalBackendndomy::GlobalBackendndomy(): FALSE');
+			return FALSE;
 		}
 		
-		// don't want to see mysql errors from connecting - we only want our error messages
+		if (DEBUG) debug('End method GlobalBackendndomy::GlobalBackendndomy(): TRUE');
+		return TRUE;
+	}
+	
+	/**
+	 * PRIVATE Method checkTablesExists
+	 *
+	 * Checks if there are the wanted tables in the DB
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function checkTablesExists() {
+		if (DEBUG) debug('Start method GlobalBackendndomy::checkTablesExists()');
+		if(mysql_num_rows(mysql_query('SHOW TABLES LIKE \''.$this->dbPrefix.'%\'')) == 0) {
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+			$FRONTEND->messageToUser('ERROR','noTablesExists','BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix);
+			
+			if (DEBUG) debug('End method GlobalBackendndomy::checkTablesExists(): FALSE');
+			return FALSE;
+		} else {
+			if (DEBUG) debug('End method GlobalBackendndomy::checkTablesExists(): TRUE');
+			return TRUE;	
+		}
+	}
+	
+	/**
+	 * PRIVATE Method connectDB
+	 *
+	 * Connects to DB
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function connectDB() {
+		if (DEBUG) debug('Start method GlobalBackendndomy::connectDB()');
+		// don't want to see mysql errors from connecting - only want our error messages
 		$oldLevel = error_reporting(0);
 
-		$CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
-		$returnCode = mysql_select_db($this->dbName, $CONN);
+		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
+		$returnCode = mysql_select_db($this->dbName, $this->CONN);
 		
 		if($returnCode != TRUE){
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 			$FRONTEND->messageToUser('ERROR','errorSelectingDb','BACKENDID~'.$this->backendId);
+			
+			if (DEBUG) debug('End method GlobalBackendndomy::connectDB(): FALSE');
+			return FALSE;
+		} else {
+			if (DEBUG) debug('End method GlobalBackendndomy::connectDB(): TRUE');
+			return TRUE;
 		}
 		
-		// we set the old level of reporting back
+		// set the old level of reporting back
 		error_reporting($oldLevel);
-		
-		// check if tables exists in database
-		$QUERYHANDLE = mysql_query("SHOW TABLES LIKE '".$this->dbPrefix."%'");
-		if(mysql_num_rows($QUERYHANDLE) == 0) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','noTablesExists','BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix);
-		}
-		
-		// Set the instanceId
-		$this->dbInstanceId = $this->getInstanceId();
-		
-		// Do some checks to make sure that Nagios is running and the Data at the DB are ok
-		$QUERYHANDLE = mysql_query("SELECT is_currently_running, status_update_time FROM ".$this->dbPrefix."programstatus WHERE instance_id = '".$this->dbInstanceId."'");
-		$nagiosState = mysql_fetch_array($QUERYHANDLE);
+	}
 	
-		// Check that Nagios reports itself as running	
-		if ($nagiosState['is_currently_running'] != 1) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','nagiosNotRunning','BACKENDID~'.$this->backendId);
+	/**
+	 * PRIVATE Method checkMysqlSupport
+	 *
+	 * Checks if MySQL is supported in this PHP version
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function checkMysqlSupport() {
+		if (DEBUG) debug('Start method GlobalBackendndomy::checkMysqlSupport()');
+		// Check availability of PHP MySQL
+		if (!extension_loaded('mysql')) {
+			dl('mysql.so');
+			if (!extension_loaded('mysql')) {
+				//Error Box
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
+				$FRONTEND->messageToUser('ERROR','mysqlNotSupported','BACKENDID~'.$this->backendId);
+				
+				if (DEBUG) debug('End method GlobalBackendndomy::checkMysqlSupport(): FALSE');
+				return FALSE;
+			} else {
+				if (DEBUG) debug('End method GlobalBackendndomy::checkMysqlSupport(): TRUE');
+				return TRUE;
+			}
+		} else {
+			if (DEBUG) debug('End method GlobalBackendndomy::checkMysqlSupport(): TRUE');
+			return TRUE;	
 		}
-        
-		// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
-		if(time() - strtotime($nagiosState['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$maxTimeWithOutUpdate);
-		}
-		
-		if (DEBUG) debug('End method GlobalBackendndomy::GlobalBackendndomy(): 0');
-		return 0;
 	}
 	
 	/**
@@ -115,7 +172,7 @@ class GlobalBackendndomy {
 	 */
 	function getInstanceId() {
 		if (DEBUG) debug('Start method GlobalBackendndomy::getInstanceId()');
-		$QUERYHANDLE = mysql_query("SELECT instance_id FROM ".$this->dbPrefix."instances WHERE instance_name='".$this->dbInstanceName."'");
+		$QUERYHANDLE = mysql_query("SELECT instance_id FROM ".$this->dbPrefix."instances WHERE instance_name='".$this->dbInstanceName."' LIMIT 1");
 		$ret = mysql_fetch_array($QUERYHANDLE);
 		
 		if (DEBUG) debug('End method GlobalBackendndomy::getInstanceId(): '.$ret['instance_id']);

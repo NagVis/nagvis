@@ -66,17 +66,17 @@ class GlobalMap {
 		$style = '';
 		if($this->MAPCFG->getName() != '') {
 			if($this->MAINCFG->getValue('global', 'usegdlibs') == "1" && $type == 'gd' && $this->checkGd(0)) {
-				$src = "./draw.php?map=".$this->MAPCFG->getName();
+				$src = './draw.php?map='.$this->MAPCFG->getName();
 			} else {
 				$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->getImage();
 			}
 		} else {
-			$src = "./images/internal/wuilogo.png";
-			$style = "width:800px; height:600px;";
+			$src = './images/internal/wuilogo.png';
+			$style = 'width:800px; height:600px;';
 		}
 		
 		if (DEBUG) debug('End method GlobalMap::getBackground(): Array(...)');
-		return Array('<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="">');
+		return '<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="">';
 	}
 	
 	/**
@@ -124,13 +124,16 @@ class GlobalMap {
 		
 		if(is_array($objs = $this->MAPCFG->getDefinitions($type))){
 			foreach($objs AS $index => $obj) {
+				if (DEBUG) debug('Start object of type: '.$type);
 				// workaround
 				$obj['id'] = $index;
 				
 				if($mergeWithGlobals) {
 					// merge with "global" settings
 					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
-						$obj[$key] = $this->MAPCFG->getValue($type, $index, $key);
+						if(!isset($obj[$key]) || $obj[$key] == '') {
+							$obj[$key] = $values['default'];
+						}
 					}
 				}
 				
@@ -147,6 +150,7 @@ class GlobalMap {
 				
 				// add object to array of objects
 				$objects[] = $obj;
+				if (DEBUG) debug('End object of type: '.$type);
 			}
 			
 			if (DEBUG) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
@@ -225,7 +229,7 @@ class GlobalMap {
 			default:
 				if(isset($obj['line_type']) && $obj['line_type'] == "20") {
 					// line with 2 states...
-					list($objNameFrom,$objNameTo) = explode(",", $obj[$name]);
+					list($objNameFrom,$objNameTo) = explode(',', $obj[$name]);
 					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(",", $obj['service_description']);
 					
 					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
@@ -263,11 +267,11 @@ class GlobalMap {
 	function getIcon($obj) {
 		if (DEBUG) debug('Start method GlobalMap::getIcon(Array(...))');
         $valid_format = array(
-                0=>"gif",
-                1=>"png",
-                2=>"bmp",
-                3=>"jpg",
-                4=>"jpeg"
+                0=>'gif',
+                1=>'png',
+                2=>'bmp',
+                3=>'jpg',
+                4=>'jpeg'
         );
 		$stateLow = strtolower($obj['state']);
 		
@@ -299,7 +303,7 @@ class GlobalMap {
 						$icon = $obj['iconset'].'_'.$stateLow;
 					break;
 					default:
-						$icon = $obj['iconset']."_error";
+						$icon = $obj['iconset'].'_error';
 					break;
 				}
 			break;
@@ -314,19 +318,19 @@ class GlobalMap {
 						$icon = $obj['iconset'].'_'.$stateLow;
 					break;
 					default:	
-						$icon = $obj['iconset']."_error";
+						$icon = $obj['iconset'].'_error';
 					break;
 				}
 			break;
 			default:
 					//echo "getIcon: Unknown Object Type (".$obj['type'].")!";
-					$icon = $obj['iconset']."_error";
+					$icon = $obj['iconset'].'_error';
 			break;
 		}
 		
 		$iconPath = $this->MAINCFG->getValue('paths', 'icon');
 		for($i=0;$i<count($valid_format);$i++) {
-			if(file_exists($iconPath.$icon.".".$valid_format[$i])) {
+			if(file_exists($iconPath.$icon.'.'.$valid_format[$i])) {
             	$icon .= ".".$valid_format[$i];
 			}
 		}
@@ -412,7 +416,7 @@ class GlobalMap {
 	function getIconPaths($obj) {
 		if (DEBUG) debug('Start method GlobalMap::getIconPaths(Array(...))');
 		if($obj['type'] == 'shape') {
-			if(preg_match("/^\[(.*)\]$/",$obj['icon'],$match) > 0) {
+			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
 				$obj['path'] = '';
 				$obj['htmlPath'] = '';
 			} else {

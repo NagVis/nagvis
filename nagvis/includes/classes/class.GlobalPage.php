@@ -281,7 +281,7 @@ class GlobalPage {
      */
 	function getHeader() {
 		if (DEBUG) debug('Start method GlobalPage::getHeader()');
-		$ret = array_merge($this->getJsIncludes(),$this->getCssIncludes(),$this->getExtHeader());
+		$ret = Array($this->getJsIncludes(),$this->getCssIncludes(),$this->getExtHeader());
 		if (DEBUG) debug('End method GlobalPage::getHeader(): Array(...)');
 		return $ret;
 	}
@@ -294,8 +294,9 @@ class GlobalPage {
      */
 	function getBody() {
 		if (DEBUG) debug('Start method GlobalPage::getBody()');
+		$ret = $this->body;
 		if (DEBUG) debug('End method GlobalPage::getBody()');
-		return $this->body;
+		return $ret;
 	}
 	
 	/**
@@ -320,61 +321,61 @@ class GlobalPage {
 	/**
 	 * Gets the lines of extended header informations
 	 *
-	 * @return 	Array	HTML Code
+	 * @return  String	HTML Code
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getExtHeader() {
 		if (DEBUG) debug('Start method GlobalPage::getExtHeader()');
-		$ret = Array();
+		$sRet = '';
 		
 		foreach($this->extHeader AS $var => $val) {
-			$ret[] = $val;
+			$sRet .= $val;
 		}
 		
 		if (DEBUG) debug('End method GlobalPage::getExtHeader(): Array(...)');
-		return $ret;
+		return $sRet;
 	}
 	
 	/**
 	 * Gets the lines of javscript inclusions
 	 *
-	 * @return 	Array	HTML Code
+	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getJsIncludes() {
 		if (DEBUG) debug('Start method GlobalPage::getJsIncludes()');
-		$ret = Array();
+		$sRet = '';
 		
 		if(count($this->jsIncludes) > 0) {
 			foreach($this->jsIncludes AS $var => $val) {
-				$ret[] = "<script type=\"text/javascript\" src=\"".$val."\"></script>";
+				$sRet .= '<script type="text/javascript" src="'.$val.'"></script>';
 			}
 		}
 		
 		if (DEBUG) debug('End method GlobalPage::getJsIncludes(): Array(...)');
-		return $ret;
+		return $sRet;
 	}
 	
 	/**
 	 * Gets the lines of css file inclusions
 	 *
-	 * @return 	Array	HTML Code
+	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getCssIncludes() {
 		if (DEBUG) debug('Start method GlobalPage::getCssIncludes()');
-		$ret = Array();
+		$sRet = '';
 		
-		$ret[] = "<style type=\"text/css\"><!--";
+		$sRet .= '<style type="text/css"><!--';
 		if(count($this->cssIncludes) > 0) {
 			foreach($this->cssIncludes AS $var => $val) {
-				$ret[] = "@import url(".$val.");";
+				$sRet .= '@import url('.$val.'); ';
 			}
 		}
-		$ret[] = "--></style>";
+		$sRet .= '--></style>';
 		
 		if (DEBUG) debug('End method GlobalPage::getCssIncludes(): Array(...)');
-		return $ret;
+		return $sRet;
 	}
 	
 	/**

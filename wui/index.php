@@ -42,6 +42,9 @@ if($_GET['map'] != '') {
 	if(!$MAPCFG->checkMapConfigWriteable(1)) {
 		exit;
 	}
+	if(!$MAPCFG->checkMapImageExists(1)) {
+		exit;
+	}
 	if(!$MAPCFG->checkMapImageReadable(1)) {
 		exit;
 	}

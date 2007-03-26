@@ -271,13 +271,16 @@ class GlobalMapCfg {
 				$this->mapConfig = Array();
 				
 				// read file in array
-				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.".cfg");
-				$createArray = array("allowed_user","allowed_for_config");
+				if (DEBUG) debug('Start reading map configuration');
+				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+				if (DEBUG) debug('End reading map configuration');
+				$createArray = array('allowed_user','allowed_for_config');
 				$l = 0;
 				$a = 0;
-						
-				while (isset($file[$l]) && $file[$l] != "") {
-					if(!ereg("^#",$file[$l]) && !ereg("^;",$file[$l])) {
+				
+				if (DEBUG) debug('Start parsing map configuration');
+				while (isset($file[$l]) && $file[$l] != '') {
+					if(!ereg('^#',$file[$l]) && !ereg('^;',$file[$l])) {
 						$defineCln = explode("{", $file[$l]);
 						$define = explode(" ",$defineCln[0]);
 						if (isset($define[1]) && array_key_exists(trim($define[1]),$this->validConfig)) {
@@ -288,12 +291,12 @@ class GlobalMapCfg {
 								$nrOfType = 0;
 							}
 							$this->mapConfig[$define[1]][$nrOfType]['type'] = $define[1];
-							while (isset($file[$l]) && trim($file[$l]) != "}") {
-								$entry = explode("=",$file[$l], 2);
+							while (isset($file[$l]) && trim($file[$l]) != '}') {
+								$entry = explode('=',$file[$l], 2);
 								
 								if(isset($entry[1])) {
 									if(in_array(trim($entry[0]),$createArray)) {
-										$this->mapConfig[$define[1]][$nrOfType][trim($entry[0])] = explode(",",str_replace(' ','',trim($entry[1])));
+										$this->mapConfig[$define[1]][$nrOfType][trim($entry[0])] = explode(',',str_replace(' ','',trim($entry[1])));
 									} else {
 										$this->mapConfig[$define[1]][$nrOfType][trim($entry[0])] = trim($entry[1]);
 									}
@@ -304,6 +307,7 @@ class GlobalMapCfg {
 					}
 					$l++;
 				}
+				if (DEBUG) debug('End parsing map configuration');
 				
 				/**
 				 * The default values refer to global settings in the validConfig array - so they have to be 
@@ -499,7 +503,8 @@ class GlobalMapCfg {
 	function checkMapImageExists($printErr) {
 		if (DEBUG) debug('Start method GlobalMapCfg::checkMapImageExists('.$printErr.')');
 		if($this->image != '') {
-			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+			//if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+			if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'map').$this->image, 'r'))) {
 				if (DEBUG) debug('End method GlobalMapCfg::checkMapImageExists(): TRUE');
 				return TRUE;
 			} else {
@@ -527,7 +532,7 @@ class GlobalMapCfg {
 	function checkMapImageReadable($printErr) {
 		if (DEBUG) debug('Start method GlobalMapCfg::checkMapImageReadable('.$printErr.')');
 		if($this->image != '') {
-			if($this->checkMapImageExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+			if(is_readable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
 				if (DEBUG) debug('End method GlobalMapCfg::checkMapImageReadable(): TRUE');
 				return TRUE;
 			} else {

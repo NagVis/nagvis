@@ -1,6 +1,7 @@
 <?php
 define('DEBUG',FALSE);
 define('DEBUGFILE','/tmp/nagvis.debug');
+define('DEBUGSTART',microtime_float());
 
 function debug($msg) {
 	$fh=fopen(DEBUGFILE,'a');

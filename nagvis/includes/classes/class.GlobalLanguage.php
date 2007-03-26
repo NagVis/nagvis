@@ -56,11 +56,7 @@ class GlobalLanguage {
 	function readLanguageFile() {
 		if (DEBUG) debug('Start method GlobalLanguage::readLanguageFile()');
 		if($this->checkLanguageFileReadable(1)) {
-			$fp = fopen($this->languageFile, "r");
-			$data = fread($fp, filesize($this->languageFile));
-			fclose($fp);
-			
-			$data = $this->replaceSpecial($data);
+			$data = $this->replaceSpecial(file_get_contents($this->languageFile));
 			if (DEBUG) debug('End method GlobalLanguage::readLanguageFile(): String');
 			return $data;
 		} else {
@@ -190,10 +186,14 @@ class GlobalLanguage {
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['text']) && $this->cachedLang[$id]['text'] != '') {
 			$ret = $this->cachedLang[$id]['text'];
 		} else {
-			if(!isset($this->cachedLang[$id])) {
-				$this->cachedLang[$id] = Array();
+			$ret = $this->getText($this->languageRoot.':messages:'.$id.':text',$replace,$mergeWithGlobal);
+			if($replace == '') {
+				if(!isset($this->cachedLang[$id])) {
+					$this->cachedLang[$id] = Array();
+				}
+				$this->cachedLang[$id]['text'] = $ret;
 			}
-			$ret = $this->cachedLang[$id]['text'] = $this->getText($this->languageRoot.':messages:'.$id.':text',$replace,$mergeWithGlobal);
+			
 		}
 		if (DEBUG) debug('End method GlobalLanguage::getMessageText(): '.$ret);
     	return $ret;
@@ -204,10 +204,13 @@ class GlobalLanguage {
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['title']) && $this->cachedLang[$id]['title'] != '') {
     		$ret = $this->cachedLang[$id]['title'];
     	} else {
-    		if(!isset($this->cachedLang[$id])) {
-				$this->cachedLang[$id] = Array();
+    		$ret = $this->getText($this->languageRoot.':messages:'.$id.':title',$replace,$mergeWithGlobal);
+    		if($replace == '') {
+	    		if(!isset($this->cachedLang[$id])) {
+					$this->cachedLang[$id] = Array();
+				}
+				$this->cachedLang[$id]['label'] = $ret;
 			}
-    		$ret = $this->cachedLang[$id]['label'] = $this->getText($this->languageRoot.':messages:'.$id.':title',$replace,$mergeWithGlobal);
     	}
 		if (DEBUG) debug('End method GlobalLanguage::getMessageTitle(): '.$ret);
 		return $ret;
@@ -218,36 +221,17 @@ class GlobalLanguage {
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['label']) && $this->cachedLang[$id]['label'] != '') {
 			$ret = $this->cachedLang[$id]['label'];
 		} else {
-			if(!isset($this->cachedLang[$id])) {
-				$this->cachedLang[$id] = Array();
+    		$ret = $this->getText($this->languageRoot.':labels:'.$id.':text',$replace,$mergeWithGlobal);
+			if($replace == '') {
+				if(!isset($this->cachedLang[$id])) {
+					$this->cachedLang[$id] = Array();
+				}
+				$this->cachedLang[$id]['label'] = $ret;
 			}
-    		$ret = $this->cachedLang[$id]['label'] = $this->getText($this->languageRoot.':labels:'.$id.':text',$replace,$mergeWithGlobal);
     	}
 		if (DEBUG) debug('End method GlobalLanguage::getLabel(): '.$ret);
 		return $ret;
     }
-    
-    /* @DEPRECATED
-    function mergeArrayRecursive(&$array1, &$array2) {
-		if (DEBUG) debug('Start method GlobalLanguage::mergeArrayRecursive(Array(...),Array(...))');
-		if (is_array($array2) && count($array2)) {
-			foreach ($array2 as $k => $v) {
-				if(is_array($v) && count($v)) {
-					if(!isset($array1[$k])) {
-						$array1[$k] = Array();
-					}
-					$array1[$k] = $this->mergeArrayRecursive($array1[$k], $v);
-				} else {
-					$array1[$k] = $v;
-				}
-			}
-		} else {
-			$array1 = $array2;
-		}
-		
-		if (DEBUG) debug('End method GlobalLanguage::mergeArrayRecursive(): Array(...)');
-		return $array1;
-	}*/
 	
 	/**
 	 * Gets the text of an id
@@ -270,7 +254,8 @@ class GlobalLanguage {
 	    # [3] => errorSelectingDb
 	    # [4] => title
 		
-		/*// merge first level with global if $mergeWithGlobal is TRUE
+		/* DEPRECATED
+		// merge first level with global if $mergeWithGlobal is TRUE
 		// search not only the array of $this->lang['xy'], also search $this->lang['global']
 		if($arrLanguagePath[0] != 'global') {
 			if($mergeWithGlobal) {
