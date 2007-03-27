@@ -137,7 +137,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function fixIconPosition(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::fixIconPosition()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::fixIconPosition(&$obj)');
 		$return = parent::fixIconPosition($this->getIconPaths($obj));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::fixIconPosition(): '.$return);
 		return $return;
@@ -152,7 +152,7 @@ class NagVisMap extends GlobalMap {
 	 * @fixme 	FIXME 1.1: optimize
 	 */
 	function createBoxLine(&$obj,$name) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createBoxLine('.$obj.','.$name.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createBoxLine(&$obj,'.$name.')');
 		$ret = Array();
 	    if($obj['line_type'] == '10' || $obj['line_type'] == '11'){
 			list($x_from,$x_to) = explode(',', $obj['x']);
@@ -198,7 +198,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseIcon(&$obj,$link=1,$hoverMenu=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseIcon($obj,'.$link.','.$hoverMenu.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseIcon(&$obj,'.$link.','.$hoverMenu.')');
 		
 		if($obj['type'] == 'shape') {
 			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
@@ -249,7 +249,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function replaceMacros(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::replaceMacros($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::replaceMacros(&$obj)');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -277,7 +277,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function createLink(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink(&$obj)');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -318,7 +318,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function textBox(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::textBox($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::textBox(&$obj)');
 		$ret = Array();
 		$ret[] = '<div class="'.$obj['class'].'" style="background:'.$obj['background_color'].';left:'.$obj['x'].'px;top:'.$obj['y'].'px;width:'.$obj['w'].'px;overflow:visible;">';	
 		$ret[] = "\t".'<span>'.$obj['text'].'</span>';
@@ -335,7 +335,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getHoverMenu(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getHoverMenu($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getHoverMenu(&$obj)');
 		$ret = '';
 		// FIXME 1.1: check if this is an object, where a menu should be displayed
 		if(1) {
@@ -361,7 +361,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function readHoverUrl(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::readHoverUrl($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::readHoverUrl(&$obj)');
 		/* FIXME: Context is supported in php >= 5.0
 		* $http_opts = array(
 		*      'http'=>array(
@@ -392,7 +392,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function createInfoBox(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox(&$obj)');
 		$ret = '';
 		
 		if($obj['type'] == 'service') {

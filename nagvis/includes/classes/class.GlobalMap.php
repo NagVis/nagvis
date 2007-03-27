@@ -131,7 +131,7 @@ class GlobalMap {
 				if($mergeWithGlobals) {
 					// merge with "global" settings
 					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
-						if(!isset($obj[$key]) || $obj[$key] == '') {
+						if((!isset($obj[$key]) || $obj[$key] == '') && isset($values['default'])) {
 							$obj[$key] = $values['default'];
 						}
 					}
@@ -165,7 +165,7 @@ class GlobalMap {
 	 * @return	String	Summary state of the map
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getMapState($arr) {
+	function getMapState(&$arr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapState(Array(...))');
 		$ret = Array();
 		foreach($arr AS $obj) {
@@ -184,8 +184,8 @@ class GlobalMap {
 	 * @return	Array	Array with state of the object
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getState($obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getState(Array(...))');
+	function getState(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getState(&$obj)');
 		$state = Array('State'=>'','Output'=>'');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
@@ -264,15 +264,8 @@ class GlobalMap {
 	 * @author Michael Luebben <michael_luebben@web.de>
 	 * @author Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function getIcon($obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIcon(Array(...))');
-        $valid_format = array(
-                0=>'gif',
-                1=>'png',
-                2=>'bmp',
-                3=>'jpg',
-                4=>'jpeg'
-        );
+	function getIcon(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIcon(&$obj)');
 		$stateLow = strtolower($obj['state']);
 		
 		switch($obj['type']) {
@@ -283,10 +276,10 @@ class GlobalMap {
 					case 'critical':
 					case 'unknown':
 					case 'ack':		
-						$icon = $obj['iconset'].'_'.$stateLow;
+						$icon = $obj['iconset'].'_'.$stateLow.'.png';
 					break;
 					default:
-						$icon = $obj['iconset'].'_error';
+						$icon = $obj['iconset'].'_error.png';
 					break;
 				}
 			break;
@@ -300,10 +293,10 @@ class GlobalMap {
 					case 'warning':
 					case 'ack':
 					case 'up':
-						$icon = $obj['iconset'].'_'.$stateLow;
+						$icon = $obj['iconset'].'_'.$stateLow.'.png';
 					break;
 					default:
-						$icon = $obj['iconset'].'_error';
+						$icon = $obj['iconset'].'_error.png';
 					break;
 				}
 			break;
@@ -315,26 +308,20 @@ class GlobalMap {
 					case 'sack':
 					case 'unknown':
 					case 'ok':
-						$icon = $obj['iconset'].'_'.$stateLow;
+						$icon = $obj['iconset'].'_'.$stateLow.'.png';
 					break;
 					default:	
-						$icon = $obj['iconset'].'_error';
+						$icon = $obj['iconset'].'_error.png';
 					break;
 				}
 			break;
 			default:
-					$icon = $obj['iconset'].'_error';
+					$icon = $obj['iconset'].'_error.png';
 			break;
 		}
 		
-		$iconPath = $this->MAINCFG->getValue('paths', 'icon');
-		for($i=0;$i<count($valid_format);$i++) {
-			if(file_exists($iconPath.$icon.'.'.$valid_format[$i])) {
-            	$icon .= '.'.$valid_format[$i];
-			}
-		}
-		
-		if(file_exists($iconPath.$icon)) {
+		//replaced: if(file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
+		if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getIcon(): '.$icon);
 			return $icon;
 		} else {
@@ -351,8 +338,8 @@ class GlobalMap {
 	 * @author	Michael Luebben <michael_luebben@web.de>
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function fixIconPosition($obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIconPosition(Array(...))');
+	function fixIconPosition(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIconPosition(&$obj)');
 		if(!isset($obj['path']) | $obj['path'] == '') {
 			$imgPath = $obj['icon'];
 		} else {
@@ -385,7 +372,7 @@ class GlobalMap {
 	 * @return	String	Object state (DOWN|CRITICAL|WARNING|UNKNOWN|ERROR)
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function wrapState($objStates) {
+	function wrapState(&$objStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::wrapState(Array(...))');
 		if(in_array('DOWN', $objStates) || in_array('CRITICAL', $objStates)) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): CRITICAL');
@@ -412,8 +399,8 @@ class GlobalMap {
 	 * @return	Array	Array with object informations
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
-	function getIconPaths($obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIconPaths(Array(...))');
+	function getIconPaths(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIconPaths(&$obj)');
 		if($obj['type'] == 'shape') {
 			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
 				$obj['path'] = '';
@@ -438,7 +425,7 @@ class GlobalMap {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
-	function checkPermissions($allowed,$printErr) {
+	function checkPermissions(&$allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkPermissions(Array(...),'.$printErr.')');
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
         	if($printErr) {

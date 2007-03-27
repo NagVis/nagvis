@@ -270,40 +270,43 @@ class GlobalMapCfg {
 		if($this->name != '') {
 			if($this->checkMapConfigReadable(1)) {
 				$this->mapConfig = Array();
+				$types = Array('global'=>0,'host'=>0,'service'=>0,'hostgroup'=>0,'servicegroup'=>0,'map'=>0,'textbox'=>0,'shape'=>0);
 				
 				// read file in array
 				if (DEBUG&&DEBUGLEVEL&2) debug('Start reading map configuration');
 				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				if (DEBUG&&DEBUGLEVEL&2) debug('End reading map configuration');
-				$createArray = array('allowed_user','allowed_for_config');
+				$createArray = Array('allowed_user','allowed_for_config');
 				$l = 0;
-				$a = 0;
 				
 				if (DEBUG&&DEBUGLEVEL&2) debug('Start parsing map configuration');
-				while (isset($file[$l]) && $file[$l] != '') {
-					if(!ereg('^#',$file[$l]) && !ereg('^;',$file[$l])) {
+				while(isset($file[$l]) && $file[$l] != '') {
+					// tested all of them, seems the runtime is nearly the same
+					// preg_match('/^(#|;)/',$file[$l])
+					// (strpos($file[$l],'#') !== 0) && (strpos($file[$l],'#') !== 0)
+					// !ereg('^(#|;)',$file[$l]) && !ereg('^;',$file[$l])
+					if(!ereg('^(#|;)',$file[$l])) {
 						$defineCln = explode('{', $file[$l]);
 						$define = explode(' ',$defineCln[0]);
-						if (isset($define[1]) && array_key_exists(trim($define[1]),$this->validConfig)) {
+						if(isset($define[1]) && array_key_exists(trim($define[1]),$this->validConfig)) {
+							$type = $types[$define[1]];
 							$l++;
-							if(isset($this->mapConfig[$define[1]])) {
-								$nrOfType = count($this->mapConfig[$define[1]]);
-							} else {
-								$nrOfType = 0;
-							}
-							$this->mapConfig[$define[1]][$nrOfType]['type'] = $define[1];
+							$this->mapConfig[$define[1]][$type] = Array('type'=>$define[1]);
 							while (isset($file[$l]) && trim($file[$l]) != '}') {
 								$entry = explode('=',$file[$l], 2);
-								
+								$entry[0] = trim($entry[0]);
 								if(isset($entry[1])) {
-									if(in_array(trim($entry[0]),$createArray)) {
-										$this->mapConfig[$define[1]][$nrOfType][trim($entry[0])] = explode(',',str_replace(' ','',trim($entry[1])));
+									$entry[1] = trim($entry[1]);
+									if(in_array($entry[0],$createArray)) {
+										$this->mapConfig[$define[1]][$type][$entry[0]] = explode(',',str_replace(' ','',$entry[1]));
 									} else {
-										$this->mapConfig[$define[1]][$nrOfType][trim($entry[0])] = trim($entry[1]);
+										$this->mapConfig[$define[1]][$type][$entry[0]] = $entry[1];
 									}
 								}
 								$l++;	
 							}
+							// increase type index
+							$types[$define[1]]++;
 						}
 					}
 					$l++;

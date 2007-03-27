@@ -170,7 +170,7 @@ class GlobalLanguage {
         if(!is_readable($this->languageFile)) {
         	if($printErr == 1) {
 				// This has to be a manual error message - using an error message from language File would cause in a loop
-				print '<script>alert("Impossible to read from the language file ('.$this->languageFile.')");</script>';
+				print '<script>alert(\'Impossible to read from the language file ('.$this->languageFile.')\');</script>';
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::checkLanguageFileReadable(): FALSE');
 	        return FALSE;
@@ -253,34 +253,7 @@ class GlobalLanguage {
 	    # [2] => messages
 	    # [3] => errorSelectingDb
 	    # [4] => title
-		
-		/* DEPRECATED
-		// merge first level with global if $mergeWithGlobal is TRUE
-		// search not only the array of $this->lang['xy'], also search $this->lang['global']
-		if($arrLanguagePath[0] != 'global') {
-			if($mergeWithGlobal) {
-				$arrLang = $this->mergeArrayRecursive($this->lang[$arrLanguagePath[0]],$this->lang['global']);
-			} else {
-				$arrLang = $this->lang[$arrLanguagePath[0]];
-			}
-		} else {
-			$arrLang = $this->lang['global'];
-		}
-		
-		// same procedure with second level
-		if($arrLanguagePath[1] != 'global') {
-			if($mergeWithGlobal) {
-				if(!isset($arrLang[$arrLanguagePath[1]])) {
-					$arrLang[$arrLanguagePath[1]] = Array();
-				}
-				$arrLang = $this->mergeArrayRecursive($arrLang[$arrLanguagePath[1]],$arrLang['global']);
-			} else {
-				$arrLang = $arrLang[$arrLanguagePath[1]];
-			}
-		} else {
-			$arrLang = $arrLang['global'];
-		}*/
-		
+				
 		if($mergeWithGlobal && isset($this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) 
 			  && $this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
 			$strLang = $this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
@@ -303,7 +276,8 @@ class GlobalLanguage {
 			
 			if($replace != '') {
 				$arrReplace = explode(',', $replace);
-				for($i=0;$i<count($arrReplace);$i++) {
+				$size = count($arrReplace);
+				for($i=0;$i<$size;$i++) {
 					if(isset($arrReplace[$i])) {
 						// If = are in the text, they'l be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
 						$var = explode('~', $arrReplace[$i]);
