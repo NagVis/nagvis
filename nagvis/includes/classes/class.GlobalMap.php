@@ -346,7 +346,8 @@ class GlobalMap {
 			$imgPath = $obj['path'].$obj['icon'];
 		}
 		
-		if(file_exists($imgPath)) {
+		
+		if(@fclose(@fopen(file_exists($imgPath),'r'))) {
 			$size = getimagesize($imgPath);
 		} else {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
@@ -358,8 +359,8 @@ class GlobalMap {
 			$size = getimagesize($obj['path'].$obj['icon']);
 		}
 			
-		$obj['x'] = $obj['x'] - ($size[0] / 2);
-		$obj['y'] = $obj['y'] - ($size[1] / 2);
+		$obj['x'] -= $size[0] / 2;
+		$obj['y'] -= $size[1] / 2;
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::fixIconPosition(): Array(...)');
 		return $obj;
