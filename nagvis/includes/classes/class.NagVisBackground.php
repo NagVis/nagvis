@@ -39,14 +39,66 @@ class NagVisBackground extends GlobalMap {
 		$this->GRAPHIC = new GlobalGraphic();
 		
 		$this->checkPreflight();
-		
 		$this->initImage();
-		
-		
-		//parent::GlobalMap($MAINCFG,$MAPCFG,$BACKEND);
 		
 		$this->objects = $this->getMapObjects(1);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::NagVisBackground()');
+	}
+	
+	/**
+	 * Gets the state of an object
+	 *
+	 * @param	Array	$obj	Array with object properties
+	 * @return	Array	Array with state of the object
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getState($obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::getState(Array(...))');
+		$state = Array('State'=>'','Output'=>'');
+		if($obj['type'] == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $obj['type'] . '_name';
+		}
+		
+		switch($obj['type']) {
+			case 'map':
+			case 'textbox':
+				// do nothing for this objects in background image
+			break;
+			default:
+				if(isset($obj['line_type'])) {
+					if($obj['line_type'] == '20') {
+						// line with 2 states...
+						list($objNameFrom,$objNameTo) = explode(',', $obj[$name]);
+						list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(',', $obj['service_description']);
+						
+						if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+							$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
+							$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
+						}
+						$state = Array('State' => $this->wrapState(Array($state1['State'],$state2['State'])),'Output' => 'State1: '.$state1['Output'].'<br />State2:'.$state2['Output']);
+					} else {
+						// line with 1 state...
+						if(!isset($obj['service_description'])) {
+							$obj['service_description'] = '';
+						}
+						if(!isset($obj['recognize_services'])) {
+							$obj['recognize_services'] = '';	
+						}
+						
+						if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+							$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
+						}
+					}
+				} else {
+					// do nothing for this objects in background image
+				}
+			break;	
+		}
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method method NagVisBackground::getState(): Array()');
+		return Array('state' => $state['State'],'stateOutput' => $state['Output']);
 	}
 	
 	/**
@@ -333,40 +385,17 @@ class NagVisBackground extends GlobalMap {
 		$ret = Array();
 		foreach($this->objects AS $obj) {
 			switch($obj['type']) {
+				case 'map':
 				case 'textbox':
-					// Here is the place for NagVis 2.x parsing textboxes directly on the background
-					/*// css class of the textbox
-					$obj['class'] = "box";
-					
-					// default background color
-					if($obj['background_color'] == '') {
-						$obj['background_color'] = '#CCCCCC';
-					} elseif($obj['background_color'] == 'transparent') {
-						$obj['background_color'] = '';
-					}
-					
-					// Check if set a hostname
-					if(isset($obj['host_name'])) {
-				  		// Output the Error-Message into the textbox.
-						if ($obj['state'] == "ERROR") {
-				  			$obj['text'] = $obj['stateOutput'];
-				  		}
-				  		
-				  		if (in_array($obj['state'],Array("PENDING","UP","DOWN","UNREACHABLE","ERROR"))) {
-				  			$obj['class'] = "box_".$obj['state'];
-				  		}
-						$ret = array_merge($ret,$this->textBox($obj));
-					} else {
-						$ret = array_merge($ret,$this->textBox($obj));
-					}*/
+					// do nothing for this objects in background image
+					// should never reach this -> method NagVisBackground::getState don't read this objects
 				break;
 				default:
 					if(isset($obj['line_type'])) {
 						$this->parseLine($obj);
 					} else {
-						// Here is the place for NagVis 2.x parsing icons directly on the background
-						/*$obj = $this->fixIconPosition($obj);
-						$ret = array_merge($ret,$this->parseIcon($obj));*/
+						// do nothing for this objects in background image
+						// should never reach this -> method NagVisBackground::getState don't read this objects
 					}
 				break;	
 			}
