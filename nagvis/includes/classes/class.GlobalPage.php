@@ -30,7 +30,7 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function GlobalPage(&$MAINCFG,$givenProperties=Array()) {
-		if (DEBUG) debug('Start method GlobalPage::GlobalPage($MAINCFG,Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::GlobalPage($MAINCFG,Array(...))');
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
 									'cssIncludes'=>Array('../nagvis/includes/css/style.css'),
@@ -46,7 +46,7 @@ class GlobalPage {
 		$this->title = $prop['title'];
 		$this->cssIncludes = $prop['cssIncludes'];
 		$this->jsIncludes = $prop['jsIncludes'];
-		$this->extHeader = array_merge(Array("<title>".$prop['title']."</title>\n"),$prop['extHeader']);
+		$this->extHeader = array_merge(Array('<title>'.$prop['title'].'</title>'),$prop['extHeader']);
 		$this->allowedUsers = $prop['allowedUsers'];
 		$this->languageRoot = $prop['languageRoot'];
 		
@@ -54,7 +54,7 @@ class GlobalPage {
 		$this->MAINCFG->setRuntimeValue('user',$this->user);
 		
 		$this->checkPreflight();
-		if (DEBUG) debug('End method GlobalPage::GlobalPage()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::GlobalPage()');
 	}
 	
 	/**
@@ -64,12 +64,12 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getUser() {
-		if (DEBUG) debug('Start method GlobalPage::getUser()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUser()');
 		if(isset($_SERVER['PHP_AUTH_USER'])) {
-			if (DEBUG) debug('End method GlobalPage::getUser(): '.$_SERVER['PHP_AUTH_USER']);
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getUser(): '.$_SERVER['PHP_AUTH_USER']);
 			return $_SERVER['PHP_AUTH_USER'];
 		} elseif(isset($_SERVER['REMOTE_USER'])) {
-			if (DEBUG) debug('End method GlobalPage::getUser(): '.$_SERVER['REMOTE_USER']);
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getUser(): '.$_SERVER['REMOTE_USER']);
 			return $_SERVER['REMOTE_USER'];
 		}
 	}
@@ -82,15 +82,15 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkUser($printErr) {
-		if (DEBUG) debug('Start method GlobalPage::checkUser('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkUser('.$printErr.')');
 		if($this->user != '') {
-			if (DEBUG) debug('End method GlobalPage::checkUser(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkUser(): TRUE');
         	return TRUE;
         } else {
         	if($printErr) {
 	            $this->messageToUser('ERROR','noUser');
             }
-			if (DEBUG) debug('End method GlobalPage::checkUser(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkUser(): FALSE');
             return FALSE;
         }
 	}
@@ -104,15 +104,15 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkPermissions($allowed,$printErr) {
-		if (DEBUG) debug('Start method GlobalPage::checkPermissions(Array(),'.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkPermissions(Array(),'.$printErr.')');
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
         	if($printErr) {
 				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
-			if (DEBUG) debug('End method GlobalPage::checkPermissions(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPermissions(): FALSE');
 			return FALSE;
         } else {
-			if (DEBUG) debug('End method GlobalPage::checkPermissions(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPermissions(): TRUE');
         	return TRUE;
     	}
 		return TRUE;
@@ -125,12 +125,12 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkPreflight() {
-		if (DEBUG) debug('Start method GlobalPage::checkPreflight()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkPreflight()');
 		$ret = TRUE;
 		$ret = $ret & $this->checkUser(TRUE);
 		$ret = $ret & $this->checkPermissions($this->allowedUsers,TRUE);
 		
-		if (DEBUG) debug('End method GlobalPage::checkPreflight(): '.$ret);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPreflight(): '.$ret);
 		return $ret;
 	}
 	
@@ -144,12 +144,12 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function messageToUser($serverity='WARNING', $id, $vars='') {
-		if (DEBUG) debug('Start method GlobalPage::messageToUser('.$serverity.','.$id.','.$vars.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::messageToUser('.$serverity.','.$id.','.$vars.')');
 		switch($serverity) {
 			case 'ERROR':
 				// print the message box and kill the script
 				$this->body = array_merge($this->body,$this->messageBox($serverity,$id,$vars));
-				if (DEBUG) debug('End method GlobalPage::messageToUser()');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::messageToUser()');
 				$this->printPage();
 				// end of script
 			break;
@@ -164,7 +164,7 @@ class GlobalPage {
 				}
 			break;
 		}
-		if (DEBUG) debug('End method GlobalPage::messageToUser()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::messageToUser()');
 	}
 	
 	/**
@@ -174,7 +174,7 @@ class GlobalPage {
      * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getUserMessages() {
-		if (DEBUG) debug('Start method GlobalPage::getUserMessages()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUserMessages()');
 		$ret = Array();
 		
 		if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
@@ -183,7 +183,7 @@ class GlobalPage {
 			}
 		}
 		
-		if (DEBUG) debug('End method GlobalPage::getUserMessages(): Array()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getUserMessages(): Array()');
 		return $ret;
 	}
 	
@@ -198,7 +198,7 @@ class GlobalPage {
      * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function messageBox($serverity, $id, $vars) {
-		if (DEBUG) debug('Start method GlobalPage::messageBox('.$serverity.','.$id.','.$vars.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::messageBox('.$serverity.','.$id.','.$vars.')');
 		$ret = Array();
 		
 		$LANG = new GlobalLanguage($this->MAINCFG,$this->languageRoot);
@@ -221,22 +221,15 @@ class GlobalPage {
 			$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
 			$ret[] = '<tr><td align="center" valign="middle">';
 		}
-		$ret[] = "<table class=\"messageBox\" width=\"50%\" align=\"center\">";
-		$ret[] = "\t<tr>";
-		$ret[] = "\t\t<td class=\"messageBoxHead\" width=\"40\">";
-		$ret[] = "\t\t\t<img src=\"".$this->MAINCFG->getValue('paths','htmlimages')."internal/".$messageIcon."\" align=\"left\" />";
-		$ret[] = "\t\t</td>";
-		$ret[] = "\t\t<td class=\"messageBoxHead\" align=\"center\">".$id.": ".$LANG->getMessageTitle($id,$vars)."</td>";
-		$ret[] = "\t</tr>";
-		$ret[] = "\t<tr>";
-		$ret[] = "\t\t<td class=\"messageBoxMessage\" align=\"center\" colspan=\"2\">".$LANG->getMessageText($id,$vars)."</td>";
-		$ret[] = "\t</tr>";
-		$ret[] = "</table>";
+		$ret[] = '<table class="messageBox" width="50%" align="center">';
+		$ret[] = '<tr><td class="messageBoxHead" width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
+		$ret[] = '</td><td class="messageBoxHead" align="center">'.$id.': '.$LANG->getMessageTitle($id,$vars).'</td></tr>';
+		$ret[] = '<tr><td class="messageBoxMessage" align="center" colspan="2">'.$LANG->getMessageText($id,$vars).'</td></tr></table>';
 		if($serverity == 'ERROR') {
-			$ret[] = "</td></tr></table>";
+			$ret[] = '</td></tr></table>';
 		}
 		
-		if (DEBUG) debug('End method GlobalPage::messageBox(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::messageBox(): Array(...)');
 		return $ret;
 	}
 	
@@ -249,9 +242,9 @@ class GlobalPage {
      * @deprecated
      */
 	function addBodyLine($line) {
-		if (DEBUG) debug('Start method GlobalPage::addBodyLine('.$line.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLine('.$line.')');
 		$ret = addBodyLines($line);
-		if (DEBUG) debug('Start method GlobalPage::addBodyLine(): '.$ret);
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLine(): '.$ret);
 		return $ret;
 	}
 	
@@ -263,13 +256,13 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function addBodyLines($lines) {
-		if (DEBUG) debug('Start method GlobalPage::addBodyLines('.$lines.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLines('.$lines.')');
 		if(is_string($lines)) {
 			$lines = Array($lines);	
 		}
 		$this->body = array_merge($this->body,$lines);
 		
-		if (DEBUG) debug('End method GlobalPage::addBodyLines(): TRUE');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::addBodyLines(): TRUE');
 		return TRUE;
 	}
 	
@@ -280,9 +273,9 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getHeader() {
-		if (DEBUG) debug('Start method GlobalPage::getHeader()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getHeader()');
 		$ret = Array($this->getJsIncludes(),$this->getCssIncludes(),$this->getExtHeader());
-		if (DEBUG) debug('End method GlobalPage::getHeader(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getHeader(): Array(...)');
 		return $ret;
 	}
 	
@@ -293,9 +286,9 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getBody() {
-		if (DEBUG) debug('Start method GlobalPage::getBody()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getBody()');
 		$ret = $this->body;
-		if (DEBUG) debug('End method GlobalPage::getBody()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getBody()');
 		return $ret;
 	}
 	
@@ -307,14 +300,14 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getLines($arr) {
-		if (DEBUG) debug('Start method GlobalPage::getLines(Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getLines(Array(...))');
 		$ret = '';
 		
 		foreach($arr AS $line) {
 			$ret .= "\t\t".$line."\n";
 		}
 		
-		if (DEBUG) debug('End method GlobalPage::getLines(): HTML');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getLines(): HTML');
 		return $ret;
 	}
 	
@@ -325,14 +318,14 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getExtHeader() {
-		if (DEBUG) debug('Start method GlobalPage::getExtHeader()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getExtHeader()');
 		$sRet = '';
 		
 		foreach($this->extHeader AS $var => $val) {
 			$sRet .= $val;
 		}
 		
-		if (DEBUG) debug('End method GlobalPage::getExtHeader(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getExtHeader(): Array(...)');
 		return $sRet;
 	}
 	
@@ -343,7 +336,7 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getJsIncludes() {
-		if (DEBUG) debug('Start method GlobalPage::getJsIncludes()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getJsIncludes()');
 		$sRet = '';
 		
 		if(count($this->jsIncludes) > 0) {
@@ -352,7 +345,7 @@ class GlobalPage {
 			}
 		}
 		
-		if (DEBUG) debug('End method GlobalPage::getJsIncludes(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getJsIncludes(): Array(...)');
 		return $sRet;
 	}
 	
@@ -363,7 +356,7 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getCssIncludes() {
-		if (DEBUG) debug('Start method GlobalPage::getCssIncludes()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getCssIncludes()');
 		$sRet = '';
 		
 		$sRet .= '<style type="text/css"><!--';
@@ -374,7 +367,7 @@ class GlobalPage {
 		}
 		$sRet .= '--></style>';
 		
-		if (DEBUG) debug('End method GlobalPage::getCssIncludes(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getCssIncludes(): Array(...)');
 		return $sRet;
 	}
 	
@@ -385,20 +378,17 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function buildPage() {
-		if (DEBUG) debug('Start method GlobalPage::buildPage()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::buildPage()');
 		$ret = '';
 		
-		$ret .= "<!DOCTYPE HTML SYSTEM>\n";
-		$ret .= "<html>\n";
-		$ret .= "\t<head>\n";
+		$ret .= '<!DOCTYPE HTML SYSTEM>'."\n";
+		$ret .= '<html><head>';
 		$ret .= $this->getLines($this->getHeader());
-		$ret .= "\t</head>\n";
-		$ret .= "\t<body class=\"main\">\n";
+		$ret .= '</head><body class="main">';
 		$ret .= $this->getLines($this->getBody());
-		$ret .= "\t</body>\n";
-		$ret .= "</html>\n";
+		$ret .= '</body></html>';
 		
-		if (DEBUG) debug('End method GlobalPage::buildPage(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::buildPage(): Array(...)');
 		return $ret;
 	}
 	
@@ -408,11 +398,10 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function printPage() {
-		if (DEBUG) debug('Start method GlobalPage::printPage()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::printPage()');
 		echo $this->buildPage();
-		if (DEBUG) debug('End method GlobalPage::printPage()');
-		if (DEBUG) debug('###########################################################');
-		if (DEBUG) debug('###########################################################');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::printPage()');
+		if (DEBUG&&DEBUGLEVEL&1) debugFinalize();
 		// printing the page, is the end of everything other - good bye! ;-)
 		exit;
 	}
@@ -424,8 +413,8 @@ class GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getPage() {
-		if (DEBUG) debug('Start method GlobalPage::getPage()');
-		if (DEBUG) debug('End method GlobalPage::getPage()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getPage()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getPage()');
 		return $this->buildPage();
 	}
 }

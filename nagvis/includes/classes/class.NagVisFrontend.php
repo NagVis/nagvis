@@ -19,7 +19,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function NagVisFrontend(&$MAINCFG,&$MAPCFG,&$BACKEND) {
-		if (DEBUG) debug('Start method NagVisFrontend::NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
@@ -32,7 +32,7 @@ class NagVisFrontend extends GlobalPage {
 					  'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
 					  'languageRoot' => 'nagvis:global');
 		parent::GlobalPage($this->MAINCFG,$prop);
-		if (DEBUG) debug('End method NagVisFrontend::NagVisFrontend()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::NagVisFrontend()');
 	}
 	
 	/**
@@ -41,11 +41,11 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getHeaderMenu() {
-		if (DEBUG) debug('Start method NagVisFrontend::getHeaderMenu()');
-		if($this->MAINCFG->getValue('global', 'displayheader') == "1") {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getHeaderMenu()');
+		if($this->MAINCFG->getValue('global', 'displayheader') == '1') {
 			$this->addBodyLines($this->makeHeaderMenu());
 		}
-		if (DEBUG) debug('End method NagVisFrontend::getHeaderMenu()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getHeaderMenu()');
 	}
 	
 	/**
@@ -54,12 +54,12 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getMap() {
-		if (DEBUG) debug('Start method NagVisFrontend::getMap()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMap()');
 		$this->addBodyLines(Array('<div class="map">'));
 		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
-		if (DEBUG) debug('End method NagVisFrontend::getMap()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMap()');
 	}
 	
 	/**
@@ -68,9 +68,9 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getMessages() {
-		if (DEBUG) debug('Start method NagVisFrontend::getMessages()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMessages()');
 		$this->addBodyLines($this->getUserMessages());
-		if (DEBUG) debug('End method NagVisFrontend::getMessages()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMessages()');
 	}
 	
 	/**
@@ -80,25 +80,25 @@ class NagVisFrontend extends GlobalPage {
 	 * @author Michael Lübben <michael_luebben@web.de>
 	 */
 	function readHeaderMenu() {
-		if (DEBUG) debug('Start method NagVisFrontend::readHeaderMenu()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::readHeaderMenu()');
 		if($this->checkHeaderConfigReadable(1)) {
 			$Menu = file($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
 			$a = 0;
 			$b = 0;
 			
-			while (isset($Menu[$a]) && $Menu[$a] != "") {
-				if (!ereg("#",$Menu[$a]) && trim($Menu[$a]) != "") {
-					$entry = explode(";",$Menu[$a]);
+			while (isset($Menu[$a]) && $Menu[$a] != '') {
+				if (!ereg("#",$Menu[$a]) && trim($Menu[$a]) != '') {
+					$entry = explode(';',$Menu[$a]);
 					$link[$b]['entry'] = $entry[0];
 					$link[$b]['url'] = $entry[1];
 					$b++;
 				}
 				$a++;
 			}
-			if (DEBUG) debug('End method NagVisFrontend::readHeaderMenu(): Array(...)');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::readHeaderMenu(): Array(...)');
 			return $link;
 		} else {
-			if (DEBUG) debug('End method NagVisFrontend::readHeaderMenu(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::readHeaderMenu(): FALSE');
 			return FALSE;
 		}
 	}
@@ -111,17 +111,17 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Andreas Husch <michael_luebben@web.de>
      */
 	function makeHeaderMenu() {
-		if (DEBUG) debug('Start method NagVisFrontend::makeHeaderMenu()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::makeHeaderMenu()');
 		$ret = Array();
 		
 		$Menu = $this->readHeaderMenu();
 		
-		$x="0";
+		$x = 0;
 		$ret[] = '<div class="header">';
 		$ret[] = '<table width="100%" border="0" class="headerMenu">';
-		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != "") {
+		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
 			$this->site[] = '<tr valign="bottom">';
-			for($d="1";$d<=$this->MAINCFG->getValue('global', 'headercount');$d++) {
+			for($d = 1;$d<=$this->MAINCFG->getValue('global', 'headercount');$d++) {
 				if(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
 					$ret[] = '<td width="13">';
 					$ret[] = '<img src="'.$this->MAINCFG->getValue('paths', 'htmlimages').'internal/greendot.gif" width="13" height="14" name="'.$Menu[$x]['entry'].'_'.$x.'">';
@@ -136,7 +136,7 @@ class NagVisFrontend extends GlobalPage {
 		}
 		$ret[] = '</table></div>';
 		
-		if (DEBUG) debug('End method NagVisFrontend::makeHeaderMenu(): HTML');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::makeHeaderMenu(): HTML');
 		return $ret;
 	}
 	
@@ -148,16 +148,16 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkHeaderConfigReadable($printErr) {
-		if (DEBUG) debug('Start method NagVisFrontend::checkHeaderConfigReadable('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderConfigReadable('.$printErr.')');
 		if(file_exists($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header')) && is_readable($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'))) {
-			if (DEBUG) debug('End method NagVisFrontend::checkHeaderConfigReadable(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderConfigReadable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		    	$FRONTEND->messageToUser('WARNING','headerConfigNotReadable','CFGPATH~'.$this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
 			}
-			if (DEBUG) debug('End method NagVisFrontend::checkHeaderConfigReadable(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderConfigReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -171,9 +171,9 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getNextRotate() {
-		if (DEBUG) debug('Start method NagVisFrontend::getNextRotate()');
-        $maps = explode(",", $this->MAINCFG->getValue('global', 'maps'));
-        if($this->MAINCFG->getValue('global', 'rotatemaps') == "1") {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotate()');
+        $maps = explode(',', $this->MAINCFG->getValue('global', 'maps'));
+        if($this->MAINCFG->getValue('global', 'rotatemaps') == '1') {
         	// get position of actual map in the array
             $index = array_search($this->MAPCFG->getName(),$maps);
 			if (($index + 1) >= sizeof($maps)) {
@@ -184,11 +184,11 @@ class NagVisFrontend extends GlobalPage {
 			}
             $map = $maps[$index];
             
-            if(preg_match("/^[(.?)]$/",$map)) {
-				if (DEBUG) debug('End method NagVisFrontend::getNextRotate(): URL='.$map);
+            if(preg_match('/^[(.?)]$/',$map)) {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL='.$map);
             	return ' URL='.$map;
             } else {
-				if (DEBUG) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?map='.$map);
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?map='.$map);
             	return ' URL=index.php?map='.$map;
         	}
             

@@ -15,7 +15,7 @@ class GlobalMainCfg {
 	 * @author Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function GlobalMainCfg($configFile) {
-		if (DEBUG) debug('Start method GlobalMainCfg::GlobalMainCfg('.$configFile.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::GlobalMainCfg('.$configFile.')');
 		$this->config = Array();
 		$this->runtimeConfig = Array();
 		
@@ -159,18 +159,18 @@ class GlobalMainCfg {
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
 		$base = $this->getValue('paths','base');
 		$htmlBase = $this->getValue('paths','htmlbase');
-		$this->validConfig['paths']['cfg']['default'] = $base."nagvis/etc/";
-		$this->validConfig['paths']['icon']['default'] = $base."nagvis/images/iconsets/";
-		$this->validConfig['paths']['shape']['default'] = $base."nagvis/images/shapes/";
-		$this->validConfig['paths']['language']['default'] = $base."nagvis/includes/languages/";
-		$this->validConfig['paths']['class']['default'] = $base."nagvis/includes/classes/";
-		$this->validConfig['paths']['map']['default'] = $base."nagvis/images/maps/";
-		$this->validConfig['paths']['mapcfg']['default'] = $base."nagvis/etc/maps/";
-		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase."/nagvis/images/";
-		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase."/nagvis/images/iconsets/";
-		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase."/nagvis/images/shapes/";
-		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase."/nagvis/images/maps/";
-		if (DEBUG) debug('End method GlobalMainCfg::GlobalMainCfg()');
+		$this->validConfig['paths']['cfg']['default'] = $base.'nagvis/etc/';
+		$this->validConfig['paths']['icon']['default'] = $base.'nagvis/images/iconsets/';
+		$this->validConfig['paths']['shape']['default'] = $base.'nagvis/images/shapes/';
+		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/languages/';
+		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';
+		$this->validConfig['paths']['map']['default'] = $base.'nagvis/images/maps/';
+		$this->validConfig['paths']['mapcfg']['default'] = $base.'nagvis/etc/maps/';
+		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
+		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
+		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/nagvis/images/shapes/';
+		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/nagvis/images/maps/';
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
 	}
 	
     /**
@@ -181,7 +181,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function readConfig($printErr=1) {
-		if (DEBUG) debug('Start method GlobalMainCfg::readConfig('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::readConfig('.$printErr.')');
 		$numComments = 0;
 		$sec = '';
 		
@@ -203,7 +203,7 @@ class GlobalMainCfg {
 					// check what's in this line
 					if($firstChar == ';') {
 						// comment...
-						$key = "comment_".($numComments++);
+						$key = 'comment_'.($numComments++);
 						$val = @trim($line);
 						
 						if(isset($sec) && $sec != '') {
@@ -211,12 +211,12 @@ class GlobalMainCfg {
 						} else {
 							$this->config[$key] = $val;
 						}
-					} elseif ((@substr($line, 0, 1) == "[") && (@substr($line, -1, 1)) == "]") {
+					} elseif ((@substr($line, 0, 1) == '[') && (@substr($line, -1, 1)) == ']') {
 						// section
 						$sec = @strtolower(@trim(@substr($line, 1, @strlen($line)-2)));
 						
 						// In Array schreiben
-						if(preg_match("/^backend_/i", $sec)) {
+						if(preg_match('/^backend_/i', $sec)) {
 							$this->config[$sec] = Array();
 							$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
 						} else {
@@ -226,15 +226,15 @@ class GlobalMainCfg {
 						// parameter...
 						
 						// seperate string in an array
-						$arr = @explode("=",$line);
+						$arr = @explode('=',$line);
 						// read key from array and delete it
 						$key = @strtolower(@trim($arr[0]));
 						unset($arr[0]);
 						// build string from rest of array
-						$val = @trim(@implode("=", $arr));
+						$val = @trim(@implode('=', $arr));
 						
 						// remove " at beginign and at the end of the string
-						if ((@substr($val,0,1) == "\"") && (@substr($val,-1,1)=="\"")) {
+						if ((@substr($val,0,1) == '"') && (@substr($val,-1,1)=='"')) {
 							$val = @substr($val,1,@strlen($val)-2);
 						}
 						
@@ -247,14 +247,14 @@ class GlobalMainCfg {
 					}
 				} else {
 					$sec = '';
-					$this->config["comment_".($numComments++)] = '';
+					$this->config['comment_'.($numComments++)] = '';
 				}
 			}
 			
-			if (DEBUG) debug('End method GlobalMainCfg::readConfig(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): TRUE');
 			return TRUE;
 		} else {
-			if (DEBUG) debug('End method GlobalMainCfg::readConfig(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): FALSE');
 			return FALSE;
 		}
 	}
@@ -266,51 +266,51 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function writeConfig() {
-		if (DEBUG) debug('Start method GlobalMainCfg::writeConfig()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::writeConfig()');
 		// Check for config file and read permissions
 		if($this->checkNagVisConfigReadable(1) && $this->checkNagVisConfigWriteable(1)) {
 			foreach($this->config as $key => $item) {
 				if(is_array($item)) {
-					$content .= "[".$key."]\n";
+					$content .= '['.$key.']'."\n";
 					foreach ($item as $key2 => $item2) {
-						if(@substr($key2,0,8) == "comment_") {
+						if(@substr($key2,0,8) == 'comment_') {
 							$content .= $item2."\n";
 						} else {
 							if(is_numeric($item2) || is_bool($item2))
 								$content .= $key2."=".$item2."\n";
 							else
-							$content .= $key2."=\"".$item2."\"\n";
+							$content .= $key2.'="'.$item2.'"'."\n";
 						}
 					}       
-				} elseif(@substr($key,0,8) == "comment_") {
+				} elseif(@substr($key,0,8) == 'comment_') {
 					$content .= $item."\n";
 				} else {
 					if(is_numeric($item) || is_bool($item))
-						$content .= $key."=".$item."\n";
+						$content .= $key.'='.$item."\n";
 					else
-						$content .= $key."=\"".$item."\"\n";
+						$content .= $key.'="'.$item.'"'."\n";
 				}
 			}
 			
 			if(!$handle = fopen($this->configFile, 'w+')) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 		        $FRONTEND->messageToUser('ERROR','mainCfgNotWriteable');
-				if (DEBUG) debug('End method GlobalMainCfg::writeConfig(): FALSE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): FALSE');
 				return FALSE;
 			}
 			
 			if(!fwrite($handle, $content)) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 		        $FRONTEND->messageToUser('ERROR','19');
-				if (DEBUG) debug('End method GlobalMainCfg::writeConfig(): FALSE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): FALSE');
 				return FALSE;
 			}
 			
 			fclose($handle);
-			if (DEBUG) debug('End method GlobalMainCfg::writeConfig(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): TRUE');
 			return TRUE;
 		} else {
-			if (DEBUG) debug('End method GlobalMainCfg::writeConfig(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): FALSE');
 			return FALSE;
 		}
 	}
@@ -323,21 +323,21 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkNagVisConfigExists($printErr) {
-		if (DEBUG) debug('Start method GlobalMainCfg::checkNagVisConfigExists('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigExists('.$printErr.')');
 		if($this->configFile != '') {
 			if(file_exists($this->configFile)) {
-				if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigExists(): TRUE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigExists(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('ERROR','mainCfgNotExists','MAINCFG~'.$this->configFile);
 				}
-				if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigExists(): FALSE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigExists(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigExists(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -350,21 +350,21 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkNagVisConfigReadable($printErr) {
-		if (DEBUG) debug('Start method GlobalMainCfg::checkNagVisConfigReadable('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigReadable('.$printErr.')');
 		if($this->configFile != '') {
 			if(is_readable($this->configFile)) {
-				if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): TRUE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('ERROR','mainCfgNotReadable','MAINCFG~'.$this->configFile);
 				}
-				if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): FALSE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -377,16 +377,16 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkNagVisConfigWriteable($printErr) {
-		if (DEBUG) debug('Start method GlobalMainCfg::checkNagVisConfigWriteable('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigWriteable('.$printErr.')');
 		if($this->checkNagVisConfigExists($printErr) && is_writeable($this->configFile)) {
-			if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigWriteable(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigWriteable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 	            $FRONTEND->messageToUser('ERROR','mainCfgNotWriteable','MAINCFG~'.$this->configFile);
 			}
-			if (DEBUG) debug('End method GlobalMainCfg::checkNagVisConfigWriteable(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigWriteable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -399,16 +399,16 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkMapCfgFolderReadable($printErr) {
-		if (DEBUG) debug('Start method GlobalMainCfg::checkMapCfgFolderReadable('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderReadable('.$printErr.')');
 		if(file_exists($this->getValue('paths', 'mapcfg')) && @is_readable($this->getValue('paths', 'mapcfg'))) {
-			if (DEBUG) debug('End method GlobalMainCfg::checkMapCfgFolderReadable(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderReadable(): FALSE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 	            $FRONTEND->messageToUser('ERROR','mapCfgDirNotReadable','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
 			}
-			if (DEBUG) debug('End method GlobalMainCfg::checkMapCfgFolderReadable(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -421,16 +421,16 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkMapCfgFolderWriteable($printErr) {
-		if (DEBUG) debug('Start method GlobalMainCfg::checkMapCfgFolderWriteable('.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderWriteable('.$printErr.')');
 		if(file_exists(substr($this->getValue('paths', 'mapcfg'),0,-1)) && @is_writable(substr($this->getValue('paths', 'mapcfg'),0,-1))) {
-			if (DEBUG) debug('End method GlobalMainCfg::checkMapCfgFolderWriteable(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderWriteable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 	            $FRONTEND->messageToUser('ERROR','mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
 			}
-			if (DEBUG) debug('End method GlobalMainCfg::checkMapCfgFolderWriteable(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderWriteable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -443,20 +443,20 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function findSecOfVar($var) {
-		if (DEBUG) debug('Start method GlobalMainCfg::findSecOfVar('.$var.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::findSecOfVar('.$var.')');
 		foreach($this->validConfig AS $key => $item) {
 			if(is_array($item)) {
 				foreach ($item AS $key2 => $item2) {
-					if(@substr($key2,0,8) != "comment_") {
+					if(@substr($key2,0,8) != 'comment_') {
 						if($key2 == $var) {
-							if (DEBUG) debug('End method GlobalMainCfg::findSecOfVar(): '.$key);
+							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::findSecOfVar(): '.$key);
 							return $key;
 						}
 					}
 				}       
 			}
 		}
-		if (DEBUG) debug('End method GlobalMainCfg::findSecOfVar(): FALSE');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::findSecOfVar(): FALSE');
 		return FALSE;
 	}
 	
@@ -470,7 +470,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function setValue($sec, $var, $val) {
-		if (DEBUG) debug('Start method GlobalMainCfg::setValue('.$sec.','.$var.','.$val.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::setValue('.$sec.','.$var.','.$val.')');
 		if(isset($this->config[$sec][$var]) && $val == '') {
 			// Value is empty and there is an entry in the config array
 			unset($this->config[$sec][$var]);
@@ -480,7 +480,7 @@ class GlobalMainCfg {
 			// Value is set
 			$this->config[$sec][$var] = $val;
 		}
-		if (DEBUG) debug('End method GlobalMainCfg::setValue(): TRUE');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::setValue(): TRUE');
 		return TRUE;
 	}
 	
@@ -494,27 +494,27 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getValue($sec, $var, $ignoreDefault=FALSE) {
-		if (DEBUG) debug('Start method GlobalMainCfg::getValue('.$sec.','.$var.','.$ignoreDefault.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getValue('.$sec.','.$var.','.$ignoreDefault.')');
 		// if nothing is set in the config file, use the default value
 		if(isset($this->config[$sec]) && is_array($this->config[$sec]) && array_key_exists($var,$this->config[$sec])) {
-			if (DEBUG) debug('End method GlobalMainCfg::getValue(): '.$this->config[$sec][$var]);
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->config[$sec][$var]);
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
-			if(preg_match("/^backend_/i", $sec)) {
+			if(preg_match('/^backend_/i', $sec)) {
 				if($this->config[$sec]['backendtype'] != '') {
-					if (DEBUG) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']);
+					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']);
 					return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
 				} else {
 					// FIXME: Errorhandling
-					if (DEBUG) debug('End method GlobalMainCfg::getValue(): ""');
+					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): ""');
 					return '';
 				}
 			} else {
-				if (DEBUG) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig[$sec][$var]['default']);
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig[$sec][$var]['default']);
 				return $this->validConfig[$sec][$var]['default'];
 			}
 		} else {
-			if (DEBUG) debug('End method GlobalMainCfg::getValue(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): FALSE');
 			return FALSE;
 		}
 	}
@@ -528,9 +528,9 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function setRuntimeValue($var, $val) {
-		if (DEBUG) debug('Start method GlobalMainCfg::setRuntimeValue('.$var.','.$val.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::setRuntimeValue('.$var.','.$val.')');
 		$this->runtimeConfig[$var] = $val;
-		if (DEBUG) debug('End method GlobalMainCfg::setRuntimeValue(): TRUE');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::setRuntimeValue(): TRUE');
 		return TRUE;
 	}
 	
@@ -542,12 +542,12 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getRuntimeValue($var) {
-		if (DEBUG) debug('Start method GlobalMainCfg::getRuntimeValue('.$var.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getRuntimeValue('.$var.')');
 		if(isset($this->runtimeConfig[$var])) {
-			if (DEBUG) debug('End method GlobalMainCfg::getRuntimeValue(): '.$this->runtimeConfig[$var]);
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getRuntimeValue(): '.$this->runtimeConfig[$var]);
 			return $this->runtimeConfig[$var];
 		} else {
-			if (DEBUG) debug('End method GlobalMainCfg::getRuntimeValue(): ""');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getRuntimeValue(): ""');
 			return '';
 		}
 	}

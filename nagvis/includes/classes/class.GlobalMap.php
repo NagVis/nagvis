@@ -20,11 +20,11 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function GlobalMap(&$MAINCFG,&$MAPCFG,&$BACKEND='') {
-		if (DEBUG) debug('Start method GlobalMap::GlobalMap($MAINCFG,$MAPCFG,$BACKEND)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::GlobalMap($MAINCFG,$MAPCFG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
-		if (DEBUG) debug('End method GlobalMap::GlobalMap()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::GlobalMap()');
 	}
 	
 	/**
@@ -35,21 +35,21 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkGd($printErr) {
-		if (DEBUG) debug('Start method GlobalMap::checkGd('.$printErr.')');
-		if($this->MAINCFG->getValue('global', 'usegdlibs') == "1") {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkGd('.$printErr.')');
+		if($this->MAINCFG->getValue('global', 'usegdlibs') == '1') {
         	if(!extension_loaded('gd')) {
         		if($printErr) {
 	                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('ERROR','gdLibNotFound');
 	            }
-				if (DEBUG) debug('End method GlobalMap::checkGd(): FALSE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkGd(): FALSE');
 	            return FALSE;
             } else {
-				if (DEBUG) debug('End method GlobalMap::checkGd(): TRUE');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkGd(): TRUE');
             	return TRUE;
         	}
         } else {
-			if (DEBUG) debug('End method GlobalMap::checkGd(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkGd(): TRUE');
             return TRUE;
         }
 	}
@@ -62,10 +62,10 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getBackground($type='gd') {
-		if (DEBUG) debug('Start method GlobalMap::getBackground('.$type.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getBackground('.$type.')');
 		$style = '';
 		if($this->MAPCFG->getName() != '') {
-			if($this->MAINCFG->getValue('global', 'usegdlibs') == "1" && $type == 'gd' && $this->checkGd(0)) {
+			if($this->MAINCFG->getValue('global', 'usegdlibs') == '1' && $type == 'gd' && $this->checkGd(0)) {
 				$src = './draw.php?map='.$this->MAPCFG->getName();
 			} else {
 				$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->getImage();
@@ -75,7 +75,7 @@ class GlobalMap {
 			$style = 'width:800px; height:600px;';
 		}
 		
-		if (DEBUG) debug('End method GlobalMap::getBackground(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getBackground(): Array(...)');
 		return '<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="">';
 	}
 	
@@ -87,7 +87,7 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getMapObjects($getState=1,$mergeWithGlobals=1) {
-		if (DEBUG) debug('Start method GlobalMap::getMapObjects('.$getState.','.$mergeWithGlobals.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$getState.','.$mergeWithGlobals.')');
 		$objects = Array();
 		
 		$objects = array_merge($objects,$this->getObjectsOfType('map',$getState,$mergeWithGlobals));
@@ -98,7 +98,7 @@ class GlobalMap {
 		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$getState,$mergeWithGlobals));
 		$objects = array_merge($objects,$this->getObjectsOfType('shape',0,$mergeWithGlobals));
 		
-		if (DEBUG) debug('End method GlobalMap::getMapObjects(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getMapObjects(): Array(...)');
 		return $objects;
 	}
 	
@@ -111,7 +111,7 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getObjectsOfType($type,$getState=1,$mergeWithGlobals=1) {
-		if (DEBUG) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$getState.','.$mergeWithGlobals.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$getState.','.$mergeWithGlobals.')');
 		// object array
 		$objects = Array();
 		
@@ -124,7 +124,7 @@ class GlobalMap {
 		
 		if(is_array($objs = $this->MAPCFG->getDefinitions($type))){
 			foreach($objs AS $index => $obj) {
-				if (DEBUG) debug('Start object of type: '.$type);
+				if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
 				// workaround
 				$obj['id'] = $index;
 				
@@ -150,10 +150,10 @@ class GlobalMap {
 				
 				// add object to array of objects
 				$objects[] = $obj;
-				if (DEBUG) debug('End object of type: '.$type);
+				if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
 			}
 			
-			if (DEBUG) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
 			return $objects;
 		}
 	}
@@ -166,14 +166,14 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getMapState($arr) {
-		if (DEBUG) debug('Start method GlobalMap::getMapState(Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapState(Array(...))');
 		$ret = Array();
 		foreach($arr AS $obj) {
 			$ret[] = $obj['state'];
 		}
 		
 		$sRet = $this->wrapState($ret);
-		if (DEBUG) debug('End method GlobalMap::getMapState(): '.$sRet);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getMapState(): '.$sRet);
 		return $sRet;
 	}
 	
@@ -185,7 +185,7 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getState($obj) {
-		if (DEBUG) debug('Start method GlobalMap::getState(Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getState(Array(...))');
 		$state = Array('State'=>'','Output'=>'');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
@@ -227,10 +227,10 @@ class GlobalMap {
 				}
 			break;
 			default:
-				if(isset($obj['line_type']) && $obj['line_type'] == "20") {
+				if(isset($obj['line_type']) && $obj['line_type'] == '20') {
 					// line with 2 states...
 					list($objNameFrom,$objNameTo) = explode(',', $obj[$name]);
-					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(",", $obj['service_description']);
+					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(',', $obj['service_description']);
 					
 					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
 						$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
@@ -252,7 +252,7 @@ class GlobalMap {
 			break;	
 		}
 		
-		if (DEBUG) debug('End method GlobalMap::getState(): Array()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getState(): Array()');
 		return Array('state' => $state['State'],'stateOutput' => $state['Output']);
 	}
 	
@@ -265,7 +265,7 @@ class GlobalMap {
 	 * @author Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getIcon($obj) {
-		if (DEBUG) debug('Start method GlobalMap::getIcon(Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIcon(Array(...))');
         $valid_format = array(
                 0=>'gif',
                 1=>'png',
@@ -286,7 +286,7 @@ class GlobalMap {
 						$icon = $obj['iconset'].'_'.$stateLow;
 					break;
 					default:
-						$icon = $obj['iconset']."_error";
+						$icon = $obj['iconset'].'_error';
 					break;
 				}
 			break;
@@ -323,7 +323,6 @@ class GlobalMap {
 				}
 			break;
 			default:
-					//echo "getIcon: Unknown Object Type (".$obj['type'].")!";
 					$icon = $obj['iconset'].'_error';
 			break;
 		}
@@ -331,15 +330,15 @@ class GlobalMap {
 		$iconPath = $this->MAINCFG->getValue('paths', 'icon');
 		for($i=0;$i<count($valid_format);$i++) {
 			if(file_exists($iconPath.$icon.'.'.$valid_format[$i])) {
-            	$icon .= ".".$valid_format[$i];
+            	$icon .= '.'.$valid_format[$i];
 			}
 		}
 		
 		if(file_exists($iconPath.$icon)) {
-			if (DEBUG) debug('End method GlobalMap::getIcon(): '.$icon);
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getIcon(): '.$icon);
 			return $icon;
 		} else {
-			if (DEBUG) debug('End method GlobalMap::getIcon(): '.$obj['iconset'].'_error.png');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getIcon(): '.$obj['iconset'].'_error.png');
 			return $obj['iconset'].'_error.png';
 		}
 	}
@@ -353,7 +352,7 @@ class GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function fixIconPosition($obj) {
-		if (DEBUG) debug('Start method GlobalMap::fixIconPosition(Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIconPosition(Array(...))');
 		if(!isset($obj['path']) | $obj['path'] == '') {
 			$imgPath = $obj['icon'];
 		} else {
@@ -375,7 +374,7 @@ class GlobalMap {
 		$obj['x'] = $obj['x'] - ($size[0] / 2);
 		$obj['y'] = $obj['y'] - ($size[1] / 2);
 		
-		if (DEBUG) debug('End method GlobalMap::fixIconPosition(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::fixIconPosition(): Array(...)');
 		return $obj;
 	}
 	
@@ -387,21 +386,21 @@ class GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function wrapState($objStates) {
-		if (DEBUG) debug('Start method GlobalMap::wrapState(Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::wrapState(Array(...))');
 		if(in_array('DOWN', $objStates) || in_array('CRITICAL', $objStates)) {
-			if (DEBUG) debug('End method GlobalMap::wrapState(): CRITICAL');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): CRITICAL');
 			return 'CRITICAL';
 		} elseif(in_array('WARNING', $objStates)) {
-			if (DEBUG) debug('End method GlobalMap::wrapState(): WARNING');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): WARNING');
 			return 'WARNING';
 		} elseif(in_array('UNKNOWN', $objStates)) {
-			if (DEBUG) debug('End method GlobalMap::wrapState(): UNKNOWN');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): UNKNOWN');
 			return 'UNKNOWN';
 		} elseif(in_array('ERROR', $objStates)) {
-			if (DEBUG) debug('End method GlobalMap::wrapState(): ERROR');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ERROR');
 			return 'ERROR';
 		} else {
-			if (DEBUG) debug('End method GlobalMap::wrapState(): OK');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): OK');
 			return 'OK';
 		}
 	}
@@ -414,7 +413,7 @@ class GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function getIconPaths($obj) {
-		if (DEBUG) debug('Start method GlobalMap::getIconPaths(Array(...))');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIconPaths(Array(...))');
 		if($obj['type'] == 'shape') {
 			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
 				$obj['path'] = '';
@@ -427,7 +426,7 @@ class GlobalMap {
 			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
 		}
-		if (DEBUG) debug('End method GlobalMap::getIconPaths(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getIconPaths(): Array(...)');
 		return $obj;
 	}
 	
@@ -440,19 +439,19 @@ class GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function checkPermissions($allowed,$printErr) {
-		if (DEBUG) debug('Start method GlobalMap::checkPermissions(Array(...),'.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkPermissions(Array(...),'.$printErr.')');
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
         	if($printErr) {
         		$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		        $FRONTEND->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
-			if (DEBUG) debug('End method GlobalMap::checkPermissions(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): FALSE');
 			return FALSE;
         } else {
-			if (DEBUG) debug('End method GlobalMap::checkPermissions(): TRUE');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): TRUE');
         	return TRUE;
     	}
-		if (DEBUG) debug('End method GlobalMap::checkPermissions(): TRUE');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): TRUE');
 		return TRUE;
 	}
 }

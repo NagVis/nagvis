@@ -19,7 +19,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
-		if (DEBUG) debug('Start method NagVisMap::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
@@ -30,7 +30,7 @@ class NagVisMap extends GlobalMap {
 		parent::GlobalMap($MAINCFG,$MAPCFG,$BACKEND);
 		
 		$this->objects = $this->getMapObjects(1);
-		if (DEBUG) debug('End method NagVisMap::NagVisMap()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::NagVisMap()');
 	}
 	
 	/**
@@ -40,12 +40,12 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseMap() {
-		if (DEBUG) debug('Start method NagVisMap::parseMap()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap()');
 		$ret = Array();
 		$ret[] = $this->getBackground();
 		$ret = array_merge($ret,$this->parseObjects());
 		
-		if (DEBUG) debug('Start method NagVisMap::parseMap(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap(): Array(...)');
 		return $ret;
 	}
 	
@@ -56,7 +56,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseObjects() {
-		if (DEBUG) debug('Start method NagVisMap::parseObjects()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseObjects()');
 		$ret = Array();
 		foreach($this->objects AS $obj) {
 			switch($obj['type']) {
@@ -74,11 +74,11 @@ class NagVisMap extends GlobalMap {
 					// Check if set a hostname
 					if(isset($obj['host_name'])) {
 				  		// Output the Error-Message into the textbox.
-						if ($obj['state'] == "ERROR") {
+						if ($obj['state'] == 'ERROR') {
 				  			$obj['text'] = $obj['stateOutput'];
 				  		}
 				  		
-				  		if(in_array($obj['state'],Array("PENDING","UP","DOWN","UNREACHABLE","ERROR"))) {
+				  		if(in_array($obj['state'],Array('PENDING','UP','DOWN','UNREACHABLE','ERROR'))) {
 				  			$obj['class'] = 'box_'.$obj['state'];
 				  		}
 						$ret = array_merge($ret,$this->textBox($obj));
@@ -107,7 +107,7 @@ class NagVisMap extends GlobalMap {
 					$obj = $this->replaceMacros($obj);
 				
 					if(isset($obj['line_type'])) {
-						if($obj['line_type'] != "20") {
+						if($obj['line_type'] != '20') {
 							// a line with one object...
 							$ret = array_merge($ret,$this->createBoxLine($obj,$obj['state'],NULL,$obj[$name]));
 						} else {
@@ -117,15 +117,15 @@ class NagVisMap extends GlobalMap {
 					} else {
 						$obj = $this->fixIconPosition($obj);
 						$icon = $this->parseIcon($obj);
-						if (DEBUG) debug('Start array_merge(Array(...),Array(...))');
+						if (DEBUG&&DEBUGLEVEL&2) debug('Start array_merge(Array(...),Array(...))');
 						$ret[] = $icon;
-						if (DEBUG) debug('End array_merge(Array(...),Array(...))');
+						if (DEBUG&&DEBUGLEVEL&2) debug('End array_merge(Array(...),Array(...))');
 					}
 				break;	
 			}
 		}
 		
-		if (DEBUG) debug('End method NagVisMap::parseObjects(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseObjects(): Array(...)');
 		return $ret;
 	}
 	
@@ -137,9 +137,9 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function fixIconPosition(&$obj) {
-		if (DEBUG) debug('Start method NagVisMap::fixIconPosition()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::fixIconPosition()');
 		$return = parent::fixIconPosition($this->getIconPaths($obj));
-		if (DEBUG) debug('End method NagVisMap::fixIconPosition(): '.$return);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::fixIconPosition(): '.$return);
 		return $return;
 	}
 	
@@ -152,11 +152,11 @@ class NagVisMap extends GlobalMap {
 	 * @fixme 	FIXME 1.1: optimize
 	 */
 	function createBoxLine(&$obj,$name) {
-		if (DEBUG) debug('Start method NagVisMap::createBoxLine('.$obj.','.$name.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createBoxLine('.$obj.','.$name.')');
 		$ret = Array();
 	    if($obj['line_type'] == '10' || $obj['line_type'] == '11'){
-			list($x_from,$x_to) = explode(",", $obj['x']);
-			list($y_from,$y_to) = explode(",", $obj['y']);
+			list($x_from,$x_to) = explode(',', $obj['x']);
+			list($y_from,$y_to) = explode(',', $obj['y']);
 			$obj['x'] = $this->GRAPHIC->middle($x_from,$x_to);
 			$obj['y'] = $this->GRAPHIC->middle($y_from,$y_to);
 			$obj['icon'] = '20x20.gif';
@@ -164,10 +164,10 @@ class NagVisMap extends GlobalMap {
 			$obj = $this->fixIconPosition($obj);
 			$ret[] = $this->parseIcon($obj);
 		} elseif($mapCfg['line_type'] == '20') {
-			list($host_name_from,$host_name_to) = explode(",", $mapCfg[$name]);
-			list($service_description_from,$service_description_to) = explode(",", $mapCfg['service_description']);
-			list($x_from,$x_to) = explode(",", $mapCfg['x']);
-			list($y_from,$y_to) = explode(",", $mapCfg['y']);
+			list($host_name_from,$host_name_to) = explode(',', $mapCfg[$name]);
+			list($service_description_from,$service_description_to) = explode(',', $mapCfg['service_description']);
+			list($x_from,$x_to) = explode(',', $mapCfg['x']);
+			list($y_from,$y_to) = explode(',', $mapCfg['y']);
 			
 			// From
 			$obj['x'] = $this->GRAPHIC->middle2($x_from,$x_to);
@@ -183,7 +183,7 @@ class NagVisMap extends GlobalMap {
 			$obj = $this->fixIconPosition($obj);
 			$ret[] = $this->parseIcon($obj);
 		}
-		if (DEBUG) debug('End method NagVisMap::createBoxLine(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createBoxLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -198,7 +198,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function parseIcon(&$obj,$link=1,$hoverMenu=1) {
-		if (DEBUG) debug('Start method NagVisMap::parseIcon($obj,'.$link.','.$hoverMenu.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseIcon($obj,'.$link.','.$hoverMenu.')');
 		
 		if($obj['type'] == 'shape') {
 			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
@@ -236,7 +236,7 @@ class NagVisMap extends GlobalMap {
 		
 		$ret .= '</div>';
 		
-		if (DEBUG) debug('End method NagVisMap::parseIcon(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseIcon(): Array(...)');
 		return $ret;
 	}
 	
@@ -249,7 +249,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function replaceMacros(&$obj) {
-		if (DEBUG) debug('Start method NagVisMap::replaceMacros($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::replaceMacros($obj)');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -264,7 +264,7 @@ class NagVisMap extends GlobalMap {
 			$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
 		}
 		
-		if (DEBUG) debug('End method NagVisMap::replaceMacros(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::replaceMacros(): Array(...)');
 		return $obj;
 	}
 	
@@ -277,7 +277,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function createLink(&$obj) {
-		if (DEBUG) debug('Start method NagVisMap::createLink($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink($obj)');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -289,23 +289,23 @@ class NagVisMap extends GlobalMap {
     	} else {
     		switch($obj['type']) {
     			case 'map':
-    				$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj[$name].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj[$name].'">';
     			break;
     			case 'host':
-    				$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?host='.$obj[$name].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?host='.$obj[$name].'">';
     			break;
     			case 'service':
-    				$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/extinfo.cgi?type=2&host='.$obj[$name].'&service='.$obj['service_description'].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/extinfo.cgi?type=2&host='.$obj[$name].'&service='.$obj['service_description'].'">';
     			break;
     			case 'hostgroup':
-    				$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?hostgroup='.$obj[$name].'&style=detail">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?hostgroup='.$obj[$name].'&style=detail">';
     			break;
     			case 'servicegroup':
-    				$link = '<A HREF="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?servicegroup='.$obj[$name].'&style=detail">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?servicegroup='.$obj[$name].'&style=detail">';
     			break;
     		}
     	}
-		if (DEBUG) debug('End method NagVisMap::createLink(): '.$link);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createLink(): '.$link);
     	return $link;
 	}
 	
@@ -318,12 +318,12 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
 	 */
 	function textBox(&$obj) {
-		if (DEBUG) debug('Start method NagVisMap::textBox($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::textBox($obj)');
 		$ret = Array();
-		$ret[] = "<div class=\"".$obj['class']."\" style=\"background:".$obj['background_color'].";left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."px; overflow: visible;\">";	
-		$ret[] = "\t<span>".$obj['text']."</span>";
-		$ret[] = "</div>";
-		if (DEBUG) debug('End method NagVisMap::textBox(): Array(...)');
+		$ret[] = '<div class="'.$obj['class'].'" style="background:'.$obj['background_color'].';left:'.$obj['x'].'px;top:'.$obj['y'].'px;width:'.$obj['w'].'px;overflow:visible;">';	
+		$ret[] = "\t".'<span>'.$obj['text'].'</span>';
+		$ret[] = '</div>';
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::textBox(): Array(...)');
 		return $ret;	
 	}
 	
@@ -335,7 +335,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function getHoverMenu(&$obj) {
-		if (DEBUG) debug('Start method NagVisMap::getHoverMenu($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getHoverMenu($obj)');
 		$ret = '';
 		// FIXME 1.1: check if this is an object, where a menu should be displayed
 		if(1) {
@@ -348,7 +348,7 @@ class NagVisMap extends GlobalMap {
 			
 			$ret .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
 			
-			if (DEBUG) debug('End method NagVisMap::getHoverMenu(): Array(...)');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getHoverMenu(): Array(...)');
 			return $ret;
 		}
 	}
@@ -361,7 +361,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function readHoverUrl(&$obj) {
-		if (DEBUG) debug('Start method NagVisMap::readHoverUrl($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::readHoverUrl($obj)');
 		/* FIXME: Context is supported in php >= 5.0
 		* $http_opts = array(
 		*      'http'=>array(
@@ -380,7 +380,7 @@ class NagVisMap extends GlobalMap {
 	        $FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
 		}
 		
-		if (DEBUG) debug('End method NagVisMap::readHoverUrl(): HTML');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::readHoverUrl(): HTML');
 		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\n",'',str_replace("\r\n",'',$content))));;
 	}
 	
@@ -392,7 +392,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
      */
 	function createInfoBox(&$obj) {
-		if (DEBUG) debug('Start method NagVisMap::createInfoBox($obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox($obj)');
 		$ret = '';
 		
 		if($obj['type'] == 'service') {
@@ -410,8 +410,8 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		$Count = $obj['stateCount'];
-		$obj['stateCount'] = str_replace('"',"",$obj['stateCount']);
-		$obj['stateCount'] = str_replace("'","",$obj['stateCount']);
+		$obj['stateCount'] = str_replace('"','',$obj['stateCount']);
+		$obj['stateCount'] = str_replace("'",'',$obj['stateCount']);
 		$ServiceHostState = $obj['stateHost'];
 		
 		//FIXME 1.1: mehr Output (ackComment, mehr Zahlen etc.)
@@ -446,7 +446,7 @@ class NagVisMap extends GlobalMap {
 				// Unknown type, don't display anything
 			break;
 		}
-		if (DEBUG) debug('End method NagVisMap::createInfoBox(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createInfoBox(): Array(...)');
 		return $ret;
 	}
 }
