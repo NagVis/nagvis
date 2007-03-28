@@ -340,14 +340,13 @@ class GlobalMap {
 	 */
 	function fixIconPosition(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIconPosition(&$obj)');
-		if(!isset($obj['path']) | $obj['path'] == '') {
+		if(!isset($obj['path']) || $obj['path'] == '') {
 			$imgPath = $obj['icon'];
 		} else {
 			$imgPath = $obj['path'].$obj['icon'];
 		}
 		
-		
-		if(@fclose(@fopen(file_exists($imgPath),'r'))) {
+		if(file_exists($imgPath)) {
 			$size = getimagesize($imgPath);
 		} else {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
@@ -356,7 +355,7 @@ class GlobalMap {
 			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
 			$obj['icon'] = '20x20.gif';
-			$size = getimagesize($obj['path'].$obj['icon']);
+			$size = getimagesize($this->MAINCFG->getValue('paths', 'icon').'20x20.gif');
 		}
 			
 		$obj['x'] -= $size[0] / 2;

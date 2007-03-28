@@ -333,7 +333,8 @@ class NagVisBackground extends GlobalMap {
 				header('Pragma: no-cache');
 				imagejpeg($this->image);
 				imagedestroy($this->image);
-				if (DEBUG&&DEBUGLEVEL&1) debugFinalize();
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::parseMap()');
+				if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 			break;
 			case 'png':
 				header('Content-type: image/png');
@@ -344,15 +345,16 @@ class NagVisBackground extends GlobalMap {
 				header('Pragma: no-cache');
 				imagepng($this->image);
 				imagedestroy($this->image);
-				if (DEBUG&&DEBUGLEVEL&1) debugFinalize();
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::parseMap()');
+				if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 			break;
 			default: 
 				// never reach this, error handling at the top
-				if (DEBUG&&DEBUGLEVEL&1) debugFinalize();
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::parseMap(): Error');
+				if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 				exit;
 			break;
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::parseMap()');
 	}
 	
 	/**

@@ -401,7 +401,7 @@ class GlobalPage {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::printPage()');
 		echo $this->buildPage();
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::printPage()');
-		if (DEBUG&&DEBUGLEVEL&1) debugFinalize();
+		if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 		// printing the page, is the end of everything other - good bye! ;-)
 		exit;
 	}
