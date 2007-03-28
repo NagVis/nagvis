@@ -161,7 +161,7 @@ class GlobalForm {
 		
 		$ret[] = '<tr><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
 		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange,$must));
-		$ret[] = '/td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
+		$ret[] = '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getSelectLine(): Array(...)');
 		return $ret;
