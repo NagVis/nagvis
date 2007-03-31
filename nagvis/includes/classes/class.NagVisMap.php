@@ -381,7 +381,7 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::readHoverUrl(): HTML');
-		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\n",'',str_replace("\r\n",'',$content))));;
+		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$content)))));
 	}
 	
 	/**

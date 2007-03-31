@@ -117,18 +117,13 @@ class NagVisFrontend extends GlobalPage {
 		$Menu = $this->readHeaderMenu();
 		
 		$x = 0;
-		$ret[] = '<div class="header">';
-		$ret[] = '<table width="100%" border="0" class="headerMenu">';
+		$ret[] = '<div class="header"><table width="100%" border="0" class="headerMenu">';
 		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
 			$this->site[] = '<tr valign="bottom">';
 			for($d = 1;$d<=$this->MAINCFG->getValue('global', 'headercount');$d++) {
 				if(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
-					$ret[] = '<td width="13">';
-					$ret[] = '<img src="'.$this->MAINCFG->getValue('paths', 'htmlimages').'internal/greendot.gif" width="13" height="14" name="'.$Menu[$x]['entry'].'_'.$x.'">';
-					$ret[] = '</td>';
-					$ret[] = '<td nowrap>';
-					$ret[] = '<a href='.$Menu[$x]['url'].' onMouseOver="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',1)" onMouseOut="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',0)" class="NavBarItem">'.$Menu[$x]['entry'].'</a>';
-					$ret[] = '</td>';
+					$ret[] = '<td width="13"><img src="'.$this->MAINCFG->getValue('paths', 'htmlimages').'internal/greendot.gif" width="13" height="14" name="'.$Menu[$x]['entry'].'_'.$x.'"></td>';
+					$ret[] = '<td nowrap><a href="'.str_replace("\n",'',$Menu[$x]['url']).'" onMouseOver="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',1)" onMouseOut="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',0)" class="NavBarItem">'.$Menu[$x]['entry'].'</a></td>';
 				}
 				$x++;
 			}
