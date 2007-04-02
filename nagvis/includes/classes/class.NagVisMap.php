@@ -216,7 +216,7 @@ class NagVisMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
-		$ret = '<div class="icon" style="left:'.$obj['x'].'px; top:'.$obj['y'].'px;z-index:'.$obj['z'].'">';
+		$ret = '<div class="icon" style="left:'.$obj['x'].'px;top:'.$obj['y'].'px;z-index:'.$obj['z'].';">';
 		
 		if($link) {
 			$ret .= $this->createLink($obj);
