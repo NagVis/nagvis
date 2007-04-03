@@ -58,7 +58,7 @@ class GlobalBackendndomy {
 			// Do some checks to make sure that Nagios is running and the Data at the DB are ok
 			$QUERYHANDLE = mysql_query('SELECT is_currently_running, status_update_time FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
 			$nagiosState = mysql_fetch_array($QUERYHANDLE);
-		
+			
 			// Check that Nagios reports itself as running	
 			if ($nagiosState['is_currently_running'] != 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
@@ -89,7 +89,7 @@ class GlobalBackendndomy {
 	 */
 	function checkTablesExists() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkTablesExists()');
-		if(mysql_num_rows(mysql_query('SHOW TABLES LIKE \''.$this->dbPrefix.'%\'')) == 0) {
+		if(mysql_num_rows(mysql_query('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 			$FRONTEND->messageToUser('ERROR','noTablesExists','BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix);
 			
