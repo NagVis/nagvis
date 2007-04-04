@@ -72,6 +72,7 @@ class WuiEditMainCfg extends GlobalPage {
 						# we add a line in the form
 						$ret[] = "<tr>";
 						$ret[] = "\t<td class=\"tdlabel\">".$key2."</td>";
+						
 						if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'',FALSE)) > 0) {
 							$ret[] = "\t<td class=\"tdfield\"></td>";
 						} else {

@@ -505,7 +505,6 @@ class GlobalMainCfg {
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']);
 					return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
 				} else {
-					// FIXME: Errorhandling
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): ""');
 					return '';
 				}

@@ -686,7 +686,8 @@ class GlobalMapCfg {
 					
 					// loop given elements for checking: => all given atributes valid
 					foreach($element AS $key => $val) {
-						// check for valid atributes - TODO: check valid values
+						// check for valid atributes
+						// FIXME: check valid value format
 						if(!array_key_exists($key,$this->validConfig[$type])) {
 							// unknown atribute
 							if($printErr == 1) {
