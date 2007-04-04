@@ -277,7 +277,7 @@
 				</serviceNotChecked>
 				<noTablesExists>
 					<title>Keine g&uuml;ltigen Tabellen (Backend [BACKENDID])</title>
-					<text>In der Datenbank existieren keine Tabellen mit dem konfigurierten Prefix [i][PREFIX]*[/i].</text>
+					<text>In der Datenbank existieren keine Tabellen mit dem konfigurierten Prefix "[i][PREFIX][/i]".</text>
 				</noTablesExists>
 			</messages>
 		</ndomy>

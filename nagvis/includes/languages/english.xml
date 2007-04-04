@@ -277,7 +277,7 @@
 				</serviceNotChecked>
 				<noTablesExists>
 					<title>No matching tables in Database (Backend [BACKENDID])</title>
-					<text>There are no tables in database matching given prefix [i][PREFIX]*[/i].</text>
+					<text>There are no tables in database matching given prefix "[i][PREFIX][/i]".</text>
 				</noTablesExists>
 			</messages>
 		</ndomy>
