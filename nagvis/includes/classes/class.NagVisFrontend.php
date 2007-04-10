@@ -59,6 +59,7 @@ class NagVisFrontend extends GlobalPage {
 		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
+		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMap()');
 	}
 	
