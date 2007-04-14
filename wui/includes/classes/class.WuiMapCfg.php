@@ -5,6 +5,7 @@
  * @author 	Lars Michelsen <larsi@nagios-wiki.de>
  */
 class WuiMapCfg extends GlobalMapCfg {
+	var $name;
 	
 	/**
 	 * Class Constructor
@@ -17,7 +18,8 @@ class WuiMapCfg extends GlobalMapCfg {
 		$this->MAINCFG = &$MAINCFG;
 		$this->name	= $name;
 		
-		parent::GlobalMapCfg($MAINCFG,$name);
+		$this->getMap();
+		parent::GlobalMapCfg($MAINCFG,$this->name);
 	}
 	
 	/**

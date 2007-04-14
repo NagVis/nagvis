@@ -2,7 +2,7 @@
 /**
  * Class for printing the map in NagVis
  */
-class NagVisBackground extends GlobalMap {
+class NagVisBackground extends NagVisMap {
 	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
@@ -40,6 +40,8 @@ class NagVisBackground extends GlobalMap {
 		
 		$this->checkPreflight();
 		$this->initImage();
+		
+		parent::NagVisMap($MAINCFG,$MAPCFG,$BACKEND);
 		
 		$this->objects = $this->getMapObjects(1);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::NagVisBackground()');

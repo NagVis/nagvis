@@ -20,7 +20,7 @@ class WuiMap extends GlobalMap {
 		parent::GlobalMap($MAINCFG,$MAPCFG);
 		
 		$this->loadPermissions();
-		$this->objects = $this->getMapObjects(0,1);
+		$this->objects = $this->getMapObjects(1);
 	}
 	
 	function loadPermissions() {
@@ -191,6 +191,79 @@ class WuiMap extends GlobalMap {
 		$ret[] = "</div>";
 		
 		return $ret;
+	}
+	
+	/**
+	 * Gets all objects of the map
+	 *
+	 * @return	Array	Array of Objects of this map
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getMapObjects($mergeWithGlobals=1) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$mergeWithGlobals.')');
+		$objects = Array();
+		
+		$objects = array_merge($objects,$this->getObjectsOfType('map',$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('host',$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('service',$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('hostgroup',$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('servicegroup',$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('shape',$mergeWithGlobals));
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getMapObjects(): Array(...)');
+		return $objects;
+	}
+	
+	/**
+	 * Gets all objects of the defined type from a map and return an array with states
+	 *
+	 * @param	String	$type		Type of objects
+	 * @return	Array	Array of Objects of this type on the map
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getObjectsOfType($type,$mergeWithGlobals=1) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$mergeWithGlobals.')');
+		// object array
+		$objects = Array();
+		
+		// Default object state
+		if($type == 'host' || $type == 'hostgroup') {
+			$objState = Array('state'=>'UP','stateOutput'=>'Default State');
+		} else {
+			$objState = Array('state'=>'OK','stateOutput'=>'Default State');
+		}
+		
+		if(is_array($objs = $this->MAPCFG->getDefinitions($type))){
+			foreach($objs AS $index => $obj) {
+				if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
+				// workaround
+				$obj['id'] = $index;
+				
+				if($mergeWithGlobals) {
+					// merge with "global" settings
+					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+						if((!isset($obj[$key]) || $obj[$key] == '') && isset($values['default'])) {
+							$obj[$key] = $values['default'];
+						}
+					}
+				}
+				
+				// add default state to the object
+				$obj = array_merge($obj,$objState);
+				
+				if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
+					$obj['icon'] = $this->getIcon($obj);
+				}
+				
+				// add object to array of objects
+				$objects[] = $obj;
+				if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
+			}
+			
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
+			return $objects;
+		}
 	}
 	
 	/**

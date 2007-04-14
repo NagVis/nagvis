@@ -606,9 +606,10 @@ class GlobalBackendndomy {
 													UNIX_TIMESTAMP(s.last_hard_state_change) AS last_hard_state_change, 
 													UNIX_TIMESTAMP(s.last_state_change) AS last_state_change, 
 													s.current_state, s.output, s.problem_has_been_acknowledged 
-											FROM '.$this->dbPrefix.'hostgroup_members AS h,'.$this->dbPrefix.'objects AS o 
-											WHERE (h.hostgroup_id='.$data['servicegroup_id'].' AND h.instance_id='.$this->dbInstanceId.') 
-													AND (o.objecttype_id=1 AND h.host_object_id=o.object_id)');	
+											FROM '.$this->dbPrefix.'servicegroup_members AS h,'.$this->dbPrefix.'objects AS o 
+											WHERE (h.servicegroup_id='.$data['servicegroup_id'].' AND h.instance_id='.$this->dbInstanceId.') 
+													AND (o.objecttype_id=1 AND h.service_object_id=o.object_id)');	
+			
 			while($serviceState = mysql_fetch_array($QUERYHANDLE)) {
 				if($onlyHardStates == 1) {
 					if($serviceState['last_hard_state'] != '0' && $serviceState['last_hard_state_change'] <= $serviceState['last_state_change']) {

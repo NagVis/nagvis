@@ -5,6 +5,7 @@
  * @author 	Lars Michelsen <larsi@nagios-wiki.de>
  */
 class NagVisMapCfg extends GlobalMapCfg {
+	var $name;
 	
 	/**
 	 * Class Constructor
@@ -18,7 +19,8 @@ class NagVisMapCfg extends GlobalMapCfg {
 		$this->MAINCFG = &$MAINCFG;
 		$this->name	= $name;
 		
-		parent::GlobalMapCfg($MAINCFG,$name);
+		$this->getMap();
+		parent::GlobalMapCfg($MAINCFG,$this->name);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapCfg::NagVisMapCfg()');
 	}
 	

@@ -139,7 +139,6 @@ class GlobalMapCfg {
 							'hover_url' => Array('must' => 0)));
 		
 		
-		$this->getMap();
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::GlobalMapCfg()');
 	}
 	

@@ -27,9 +27,9 @@ class NagVisMap extends GlobalMap {
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
-		parent::GlobalMap($MAINCFG,$MAPCFG,$BACKEND);
+		parent::GlobalMap($MAINCFG,$MAPCFG);
 		
-		$this->objects = $this->getMapObjects(1);
+		$this->objects = $this->getMapObjects(1,1);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::NagVisMap()');
 	}
 	
@@ -448,5 +448,209 @@ class NagVisMap extends GlobalMap {
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createInfoBox(): Array(...)');
 		return $ret;
+	}
+	
+	/**
+	 * Gets the summary state of all objects on the map
+	 *
+	 * @param	Array	$arr	Array with states
+	 * @return	String	Summary state of the map
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getMapState(&$arr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getMapState(Array(...))');
+		$ret = Array();
+		foreach($arr AS $obj) {
+			$ret[] = $obj['state'];
+		}
+		
+		$sRet = $this->wrapState($ret);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getMapState(): '.$sRet);
+		return $sRet;
+	}
+	
+	/**
+	 * Gets the state of an object
+	 *
+	 * @param	Array	$obj	Array with object properties
+	 * @return	Array	Array with state of the object
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getState(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getState(&$obj)');
+		$state = Array('State'=>'','Output'=>'');
+		if($obj['type'] == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $obj['type'] . '_name';
+		}
+		
+		switch($obj['type']) {
+			case 'map':
+				// save mapName in linkedMaps array
+				$this->linkedMaps[] = $this->MAPCFG->getName();
+				
+				$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$obj[$name]);
+				$SUBMAPCFG->readMapConfig();
+				$SUBMAP = new NagVisMap($this->MAINCFG,$SUBMAPCFG,$this->LANG,$this->BACKEND);
+				$SUBMAP->linkedMaps = $this->linkedMaps;
+				
+				if($this->checkPermissions($SUBMAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+					// prevent loops in recursion
+					if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
+		                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+			            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+						
+						$state = Array('State' => 'UNKNOWN','Output' => $FRONTEND->LANG->getMessageText('loopInMapRecursion'));
+					} else {
+						$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1,1));
+						$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
+					}
+				} else {
+					$state = Array('State' => 'UNKNOWN','Output'=>'Error: You\'re not permited to view the state of this map.');
+				}
+			break;
+			case 'textbox':
+				// Check if set a hostname
+				if(isset($obj['host_name'])) {
+					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
+					}
+				}
+			break;
+			default:
+				if(isset($obj['line_type']) && $obj['line_type'] == '20') {
+					// line with 2 states...
+					list($objNameFrom,$objNameTo) = explode(',', $obj[$name]);
+					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(',', $obj['service_description']);
+					
+					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+						$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
+						$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
+					}
+					$state = Array('State' => $this->wrapState(Array($state1['State'],$state2['State'])),'Output' => 'State1: '.$state1['Output'].'<br />State2:'.$state2['Output']);
+				} else {
+					if(!isset($obj['service_description'])) {
+						$obj['service_description'] = '';
+					}
+					if(!isset($obj['recognize_services'])) {
+						$obj['recognize_services'] = '';	
+					}
+					
+					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
+					}
+				}
+			break;	
+		}
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getState(): Array()');
+		return Array('state' => $state['State'],'stateOutput' => $state['Output']);
+	}
+	
+	/**
+	 * Gets all objects of the map
+	 *
+	 * @param	Boolean	$getState	With state?
+	 * @return	Array	Array of Objects of this map
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getMapObjects($getState=1,$mergeWithGlobals=1) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$getState.','.$mergeWithGlobals.')');
+		$objects = Array();
+		
+		$objects = array_merge($objects,$this->getObjectsOfType('map',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('host',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('service',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('hostgroup',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('servicegroup',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$getState,$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('shape',0,$mergeWithGlobals));
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getMapObjects(): Array(...)');
+		return $objects;
+	}
+	
+	/**
+	 * Gets all objects of the defined type from a map and return an array with states
+	 *
+	 * @param	String	$type		Type of objects
+	 * @param	Boolean	$getState	With state?
+	 * @return	Array	Array of Objects of this type on the map
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
+	function getObjectsOfType($type,$getState=1,$mergeWithGlobals=1) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$getState.','.$mergeWithGlobals.')');
+		// object array
+		$objects = Array();
+		
+		// Default object state
+		if($type == 'host' || $type == 'hostgroup') {
+			$objState = Array('state'=>'UP','stateOutput'=>'Default State');
+		} else {
+			$objState = Array('state'=>'OK','stateOutput'=>'Default State');
+		}
+		
+		if(is_array($objs = $this->MAPCFG->getDefinitions($type))){
+			foreach($objs AS $index => $obj) {
+				if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
+				// workaround
+				$obj['id'] = $index;
+				
+				if($mergeWithGlobals) {
+					// merge with "global" settings
+					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+						if((!isset($obj[$key]) || $obj[$key] == '') && isset($values['default'])) {
+							$obj[$key] = $values['default'];
+						}
+					}
+				}
+				
+				// add default state to the object
+				$obj = array_merge($obj,$objState);
+				
+				if($getState) {
+					$obj = array_merge($obj,$this->getState($obj));
+				}
+				
+				if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
+					$obj['icon'] = $this->getIcon($obj);
+				}
+				
+				// add object to array of objects
+				$objects[] = $obj;
+				if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
+			}
+			
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
+			return $objects;
+		}
+	}
+	
+	/**
+	 * Wraps all states in an Array to a summary state
+	 *
+	 * @param	Array	Array with objects states
+	 * @return	String	Object state (DOWN|CRITICAL|WARNING|UNKNOWN|ERROR)
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
+	function wrapState(&$objStates) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::wrapState(Array(...))');
+		if(in_array('DOWN', $objStates) || in_array('CRITICAL', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): CRITICAL');
+			return 'CRITICAL';
+		} elseif(in_array('WARNING', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): WARNING');
+			return 'WARNING';
+		} elseif(in_array('UNKNOWN', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): UNKNOWN');
+			return 'UNKNOWN';
+		} elseif(in_array('ERROR', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ERROR');
+			return 'ERROR';
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): OK');
+			return 'OK';
+		}
 	}
 }

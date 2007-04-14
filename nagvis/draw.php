@@ -21,6 +21,7 @@ require("./includes/classes/class.GlobalPage.php");
 require("./includes/classes/class.GlobalLanguage.php");
 require("./includes/classes/class.GlobalBackendMgmt.php");
 
+require("./includes/classes/class.NagVisMap.php");
 require("./includes/classes/class.NagVisBackground.php");
 require("./includes/classes/class.NagVisMapCfg.php");
 
