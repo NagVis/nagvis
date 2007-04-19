@@ -117,6 +117,9 @@ class GlobalBackendndomy {
 		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		$returnCode = mysql_select_db($this->dbName, $this->CONN);
 		
+		// set the old level of reporting back
+		error_reporting($oldLevel);
+		
 		if($returnCode != TRUE){
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 			$FRONTEND->messageToUser('ERROR','errorSelectingDb','BACKENDID~'.$this->backendId);
@@ -127,9 +130,6 @@ class GlobalBackendndomy {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::connectDB(): TRUE');
 			return TRUE;
 		}
-		
-		// set the old level of reporting back
-		error_reporting($oldLevel);
 	}
 	
 	/**
