@@ -2,7 +2,7 @@
 /**
  * This Class handles the NagVis configuration file
  *
- * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiMapCfg extends GlobalMapCfg {
 	var $name;
@@ -12,7 +12,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 *
 	 * @param	GlobalMainCfg	$MAINCFG	
 	 * @param	String			$name		Name of the map
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiMapCfg(&$MAINCFG,$name='') {
 		$this->MAINCFG = &$MAINCFG;
@@ -28,7 +28,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * in url, use first entry of "maps" defined in 
 	 * the NagVis main config
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMap() {
 		// check the $this->name string for security reasons (its the ONLY value we get directly from external...)

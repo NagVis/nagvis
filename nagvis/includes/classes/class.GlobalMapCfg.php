@@ -2,7 +2,7 @@
 /**
  * This Class handles the NagVis configuration file
  *
- * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMapCfg {
 	var $MAINCFG;
@@ -19,7 +19,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	GlobalMainCfg	$MAINCFG	
 	 * @param	String			$name		Name of the map
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalMapCfg(&$MAINCFG,$name='') {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::GlobalMapCfg($MAINCFG,'.$name.')');
@@ -145,7 +145,7 @@ class GlobalMapCfg {
 	/**
 	 * Gets the default values for the objects 
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectDefaults() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getObjectDefaults()');
@@ -172,7 +172,7 @@ class GlobalMapCfg {
 	 * Reads which map image should be used
 	 *
 	 * @return	String	MapImage
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getImage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getImage()');
@@ -186,7 +186,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function deleteImage($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteImage('.$printErr.')');
@@ -207,7 +207,7 @@ class GlobalMapCfg {
 	 * Creates a new Configfile
 	 *
 	 * @return	Boolean	Is Successful?
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function createMapConfig() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::createMapConfig()');
@@ -237,7 +237,7 @@ class GlobalMapCfg {
 	 * Deletes the map configfile
 	 *
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function deleteMapConfig() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteMapConfig()');
@@ -262,7 +262,7 @@ class GlobalMapCfg {
 	 * Reads the map config file (copied from readFile->readNagVisCfg())
 	 *
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function readMapConfig($onlyGlobal=0) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::readMapConfig('.$onlyGlobal.')');
@@ -347,7 +347,7 @@ class GlobalMapCfg {
 	 * global section of the map
 	 *
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function filterGlobal() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::filterGlobal()');
@@ -372,7 +372,7 @@ class GlobalMapCfg {
 	 * @param	String	$type	Type of the Element
 	 * @param	Integer	$id		Id of the Element
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function writeElement($type,$id) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::writeElement('.$type.','.$id.')');
@@ -501,7 +501,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapImageExists($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageExists('.$printErr.')');
@@ -530,7 +530,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapImageReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageReadable('.$printErr.')');
@@ -558,7 +558,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapImageWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageWriteable('.$printErr.')');
@@ -587,7 +587,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapConfigExists($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigExists('.$printErr.')');
@@ -614,7 +614,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapConfigReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigReadable('.$printErr.')');
@@ -641,7 +641,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapConfigWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigWriteable('.$printErr.')');
@@ -663,7 +663,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapConfigIsValid($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigIsValid('.$printErr.')');
@@ -717,7 +717,7 @@ class GlobalMapCfg {
 	 *
 	 * @param	String	$type
 	 * @return	Array	All elements of this type
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDefinitions($type) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getDefinitions('.$type.')');
@@ -736,7 +736,7 @@ class GlobalMapCfg {
 	 * @param	String	$type
 	 * @param	Integer	$id
 	 * @return	Boolean	TRUE
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function deleteElement($type,$id) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteElement('.$type.','.$id.')');
@@ -751,7 +751,7 @@ class GlobalMapCfg {
 	 * @param	String	$type
 	 * @param	Array	$properties
 	 * @return	Integer	Id of the Element
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function addElement($type,$properties) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::addElement('.$type.',Array(...))');
@@ -769,7 +769,7 @@ class GlobalMapCfg {
 	 * @param	String	$key
 	 * @param	String	$value
 	 * @return	Boolean	TRUE
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function setValue($type, $id, $key, $value) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::setValue('.$type.','.$id.','.$key.','.$value.')');
@@ -786,7 +786,7 @@ class GlobalMapCfg {
 	 * @param	String	$key
 	 * @param	Boolean	$ignoreDefault
 	 * @return	String	Value
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getValue($type, $id, $key, $ignoreDefault=FALSE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getValue('.$type.','.$id.','.$key.','.$ignoreDefault.')');
@@ -805,7 +805,7 @@ class GlobalMapCfg {
 	 * Gets the mapName
 	 *
 	 * @return	String	MapName
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getName() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getName()');

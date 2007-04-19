@@ -16,7 +16,7 @@ class NagVisMap extends GlobalMap {
 	 * @param 	GlobalMainCfg 	$MAINCFG
 	 * @param 	GlobalMapCfg 	$MAPCFG
 	 * @param 	GlobalBackend 	$BACKEND
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
@@ -37,7 +37,7 @@ class NagVisMap extends GlobalMap {
 	 * Parses the Map and the Objects
 	 *
 	 * @return	Array 	Array with Html Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap()');
@@ -53,7 +53,7 @@ class NagVisMap extends GlobalMap {
 	 * Parses the Objects
 	 *
 	 * @return	Array 	Array with Html Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseObjects()');
@@ -134,7 +134,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	Array	Array with object informations
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixIconPosition(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::fixIconPosition(&$obj)');
@@ -195,7 +195,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Boolean	$link		Add a link to the icon
 	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
 	 * @return	String	String with Html Code
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon(&$obj,$link=1,$hoverMenu=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseIcon(&$obj,'.$link.','.$hoverMenu.')');
@@ -246,7 +246,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @return	Array	$obj	Modified array
 	 * @author 	Michael Luebben <michael_luebben@web.de>
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceMacros(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::replaceMacros(&$obj)');
@@ -282,7 +282,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	The Link
 	 * @author 	Michael Luebben <michael_luebben@web.de>
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink(&$obj)');
@@ -323,7 +323,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Array with HTML Code
 	 * @author	Joerg Linge
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function textBox(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::textBox(&$obj)');
@@ -340,7 +340,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Code for the hover box
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getHoverMenu(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getHoverMenu(&$obj)');
@@ -366,7 +366,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Code for the hover box
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function readHoverUrl(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::readHoverUrl(&$obj)');
@@ -397,7 +397,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Code for the Hover-Box
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function createInfoBox(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox(&$obj)');
@@ -463,7 +463,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Array	$arr	Array with states
 	 * @return	String	Summary state of the map
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMapState(&$arr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getMapState(Array(...))');
@@ -482,7 +482,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object properties
 	 * @return	Array	Array with state of the object
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getState(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getState(&$obj)');
@@ -561,7 +561,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Boolean	$getState	With state?
 	 * @return	Array	Array of Objects of this map
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMapObjects($getState=1,$mergeWithGlobals=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$getState.','.$mergeWithGlobals.')');
@@ -585,7 +585,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	String	$type		Type of objects
 	 * @param	Boolean	$getState	With state?
 	 * @return	Array	Array of Objects of this type on the map
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getObjectsOfType($type,$getState=1,$mergeWithGlobals=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$getState.','.$mergeWithGlobals.')');
@@ -640,7 +640,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @param	Array	Array with objects states
 	 * @return	String	Object state (DOWN|CRITICAL|WARNING|UNKNOWN|ERROR)
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function wrapState(&$objStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::wrapState(Array(...))');

@@ -7,7 +7,7 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * Class Constructor
 	 *
 	 * @param	String	$configFile			String with path to config file
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiMainCfg($configFile) {
 		parent::GlobalMainCfg($configFile);
@@ -17,7 +17,7 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * Gets all defined maps
 	 *
 	 * @return	Array maps
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMaps() {
 		$files = Array();
@@ -43,7 +43,7 @@ class WuiMainCfg extends GlobalMainCfg {
 	 *
 	 * @param	String	$sec	Section
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function setSection($sec) {
 		$this->config[$sec] = Array();
@@ -56,7 +56,7 @@ class WuiMainCfg extends GlobalMainCfg {
 	 *
 	 * @param	String	$sec	Section
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function delSection($sec) {
 		$this->config[$sec] = '';

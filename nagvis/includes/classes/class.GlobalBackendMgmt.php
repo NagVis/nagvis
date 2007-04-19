@@ -8,7 +8,7 @@ class GlobalBackendMgmt {
 	* Initializes all backends
 	*
 	* @param	config $MAINCFG
-	* @author	Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function GlobalBackendMgmt(&$MAINCFG) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::GlobalBackendMgmt($MAINCFG)');
@@ -25,7 +25,7 @@ class GlobalBackendMgmt {
 	 * Reads all defined Backend-IDs from the MAINCFG
 	 *
 	 * @return	Array Backend-IDs
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBackends() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::getBackends()');
@@ -45,7 +45,7 @@ class GlobalBackendMgmt {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkBackendExists($backendId,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::checkBackendExists('.$backendId.','.$printErr.')');
@@ -72,7 +72,7 @@ class GlobalBackendMgmt {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkBackendInitialized($backendId,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::checkBackendInitialized('.$backendId.','.$printErr.')');
@@ -97,7 +97,7 @@ class GlobalBackendMgmt {
 	/**
 	 * Initializes all backends
 	 *
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function initBackends() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::initBackends()');

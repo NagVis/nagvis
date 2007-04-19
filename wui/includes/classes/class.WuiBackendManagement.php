@@ -13,7 +13,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Class Constructor
 	 *
 	 * @param 	GlobalMainCfg 	$MAINCFG
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiBackendManagement(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
@@ -34,7 +34,7 @@ class WuiBackendManagement extends GlobalPage {
 	/**
 	* If enabled, the form is added to the page
 	*
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function getForm() {
 		// Inititalize language for JS
@@ -89,7 +89,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets edit fields of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getEditFields() {
 		$ret = Array();
@@ -126,7 +126,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets edit submit button of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getEditSubmit() {
 		return array_merge($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->EDITBACKENDFORM->closeForm());
@@ -136,7 +136,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets delete fields of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelFields() {
 		$ret = Array();
@@ -148,7 +148,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets delete submit button of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelSubmit() {
 		return array_merge($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DELBACKENDFORM->closeForm());
@@ -158,7 +158,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets add fields of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getAddFields() {
 		$ret = Array();
@@ -187,7 +187,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets add submit button of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getAddSubmit() {
 		return array_merge($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->ADDBACKENDFORM->closeForm());
@@ -197,7 +197,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets default fields of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDefaultFields() {
 		$ret = Array();
@@ -211,7 +211,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets default submit button of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDefaultSubmit() {
 		return array_merge($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DEFBACKENDFORM->closeForm());
@@ -221,7 +221,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Reads all backends which are defined in config.ini.php
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getDefinedBackends() {
 		$ret = Array();
@@ -243,7 +243,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Reads all aviable backends
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackends() {
 		$files = Array();
@@ -268,7 +268,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * Gets all needed messages
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
 		$ret = Array();

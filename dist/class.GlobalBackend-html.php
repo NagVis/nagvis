@@ -23,7 +23,7 @@ class GlobalBackendhtml {
 	*
 	* @param config $MAINCFG
 	* @param	String $backendId
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function GlobalBackendhtml(&$MAINCFG,$backendId) {
 		$this->MAINCFG = &$MAINCFG;

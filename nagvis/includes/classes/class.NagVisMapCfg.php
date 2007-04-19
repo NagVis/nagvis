@@ -2,7 +2,7 @@
 /**
  * This Class handles the NagVis configuration file
  *
- * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapCfg extends GlobalMapCfg {
 	var $name;
@@ -12,7 +12,7 @@ class NagVisMapCfg extends GlobalMapCfg {
 	 *
 	 * @param	GlobalMainCfg	$MAINCFG	
 	 * @param	String			$name		Name of the map
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisMapCfg(&$MAINCFG,$name='') {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapCfg::NagVisMapCfg($MAINCFG,'.$name.')');
@@ -30,7 +30,7 @@ class NagVisMapCfg extends GlobalMapCfg {
 	 * in url, use first entry of "maps" defined in 
 	 * the NagVis main config
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapCfg::getMap()');

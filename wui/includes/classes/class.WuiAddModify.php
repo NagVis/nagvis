@@ -16,7 +16,7 @@ class WuiAddModify extends GlobalPage {
 	 *
 	 * @param 	GlobalMainCfg 	$MAINCFG
 	 * @param 	WuiMapCfg 		$MAPCFG
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiAddModify(&$MAINCFG,&$MAPCFG,$prop) {
 		$this->MAINCFG = &$MAINCFG;
@@ -40,7 +40,7 @@ class WuiAddModify extends GlobalPage {
 	/**
 	 * If enabled, the form is added to the page
 	 *
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getForm() {
 		// Inititalize language for JS
@@ -65,7 +65,7 @@ class WuiAddModify extends GlobalPage {
 	 * Resizes the window to individual calculated size
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function resizeWindow() {
 		$ret = Array();
@@ -81,7 +81,7 @@ class WuiAddModify extends GlobalPage {
 	 * Fills the fields of the form with values
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function fillFields() {
 		$ret = Array();
@@ -136,7 +136,7 @@ class WuiAddModify extends GlobalPage {
 	 * Gets all fields of the form
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getFields() {
 		$ret = Array();
@@ -223,7 +223,7 @@ class WuiAddModify extends GlobalPage {
 	 * Gets the submit button code
 	 *
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getSubmit() {
 		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
@@ -233,7 +233,7 @@ class WuiAddModify extends GlobalPage {
 	 * Reads all defined Backend-IDs from the MAINCFG
 	 *
 	 * @return	Array Backend-IDs
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBackends() {
 		$ret = Array();
@@ -250,7 +250,7 @@ class WuiAddModify extends GlobalPage {
 	 * Reads all PNG images in shape path
 	 *
 	 * @return	Array Shapes
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getShapes() {
 		$files = Array();
@@ -275,7 +275,7 @@ class WuiAddModify extends GlobalPage {
 	 * Reads all iconsets in icon path
 	 *
 	 * @return	Array iconsets
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getIconsets() {
 		$files = Array();
@@ -300,7 +300,7 @@ class WuiAddModify extends GlobalPage {
 	 * Reads all maps in mapcfg path
 	 *
 	 * @return	Array maps
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMaps() {
 		$files = Array();
@@ -325,7 +325,7 @@ class WuiAddModify extends GlobalPage {
 	 * Reads all map images in map path
 	 *
 	 * @return	Array map images
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMapImages() {
 		$files = Array();
@@ -350,7 +350,7 @@ class WuiAddModify extends GlobalPage {
 	 * Gets all needed error messages for WUI
 	 *
 	 * @return	Array HTML
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getJsLang() {
 		$ret = Array();
@@ -376,7 +376,7 @@ class WuiAddModify extends GlobalPage {
 	 * Gets the validConfig array in javascript format
 	 *
 	 * @return	Array HTML
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getJsValidConfig() {
 		$ret = Array();

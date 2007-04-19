@@ -3,7 +3,7 @@
  * Class for managing the common page layout
  * Should be used by ALL pages of NagVis and NagVisWui
  *
- * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalPage {
 	var $MAINCFG;
@@ -27,7 +27,7 @@ class GlobalPage {
 	 *
 	 * @param 	GlobalMainCfg 	$MAINCFG
 	 * @param 	Array			$prop		Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalPage(&$MAINCFG,$givenProperties=Array()) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::GlobalPage($MAINCFG,Array(...))');
@@ -61,7 +61,7 @@ class GlobalPage {
 	 * Gets the User
 	 *
 	 * @return	String	String with Username
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUser() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUser()');
@@ -79,7 +79,7 @@ class GlobalPage {
 	 *
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkUser($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkUser('.$printErr.')');
@@ -101,7 +101,7 @@ class GlobalPage {
 	 * @param 	String 	$allowed	
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkPermissions($allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkPermissions(Array(),'.$printErr.')');
@@ -122,7 +122,7 @@ class GlobalPage {
 	 * Does the Prflight checks before building the page
 	 *
 	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkPreflight() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkPreflight()');
@@ -141,7 +141,7 @@ class GlobalPage {
 	 * @param	String	$serverity	Serverity of the message (ERROR|WARNING|INFORMATION)
 	 * @param	Integer	$id			Message Key in the language file
 	 * @param	String	$vars		String to replace
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function messageToUser($serverity='WARNING', $id, $vars='') {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::messageToUser('.$serverity.','.$id.','.$vars.')');
@@ -171,7 +171,7 @@ class GlobalPage {
 	 * Gets the messages to be printed to the user
 	 *
 	 * @return 	Array	HTML Code
-     * @author	Lars Michelsen <larsi@nagios-wiki.de>
+     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getUserMessages() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUserMessages()');
@@ -195,7 +195,7 @@ class GlobalPage {
 	 * @param	String	$vars		Strings to replace
 	 * @return 	Array	HTML Code
      * @author	Michael Luebben <michael_luebben@web.de>
-     * @author	Lars Michelsen <larsi@nagios-wiki.de>
+     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function messageBox($serverity, $id, $vars) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::messageBox('.$serverity.','.$id.','.$vars.')');
@@ -238,7 +238,7 @@ class GlobalPage {
 	 *
 	 * @param	String	$line	HTML Code
 	 * @return 	Boolean	TRUE
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      * @deprecated
      */
 	function addBodyLine($line) {
@@ -253,7 +253,7 @@ class GlobalPage {
 	 *
 	 * @param	String/Array	$lines	String or Array with HTML Code
 	 * @return 	Boolean	TRUE
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function addBodyLines($lines) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLines('.$lines.')');
@@ -270,7 +270,7 @@ class GlobalPage {
 	 * Gets the Header of the HTML Page
 	 *
 	 * @return 	Array	HTML Code of the Header
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getHeader() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getHeader()');
@@ -283,7 +283,7 @@ class GlobalPage {
 	 * Gets the Body of the HTML Page
 	 *
 	 * @return 	Array	HTML Code of the Header
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBody() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getBody()');
@@ -297,7 +297,7 @@ class GlobalPage {
 	 *
 	 * @param	Array	HTML Code
 	 * @return 	String	Formated HTML Code
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getLines($arr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getLines(Array(...))');
@@ -315,7 +315,7 @@ class GlobalPage {
 	 * Gets the lines of extended header informations
 	 *
 	 * @return  String	HTML Code
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getExtHeader() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getExtHeader()');
@@ -333,7 +333,7 @@ class GlobalPage {
 	 * Gets the lines of javscript inclusions
 	 *
 	 * @return 	String	HTML Code
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getJsIncludes() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getJsIncludes()');
@@ -353,7 +353,7 @@ class GlobalPage {
 	 * Gets the lines of css file inclusions
 	 *
 	 * @return 	String	HTML Code
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getCssIncludes() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getCssIncludes()');
@@ -375,7 +375,7 @@ class GlobalPage {
 	 * Builds the HTML Page
 	 *
 	 * @return 	String	HTML Code
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function buildPage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::buildPage()');
@@ -395,7 +395,7 @@ class GlobalPage {
 	/**
 	 * Prints the complete HTML Page
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function printPage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::printPage()');
@@ -410,7 +410,7 @@ class GlobalPage {
 	 * Gets the complete HTML Page
 	 *
 	 * @return	String	HTML Code
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getPage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getPage()');

@@ -16,7 +16,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @param 	GlobalMainCfg 	$MAINCFG
 	 * @param 	GlobalMapCfg 	$MAPCFG
 	 * @param 	GlobalBackend 	$BACKEND
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisFrontend(&$MAINCFG,&$MAPCFG,&$BACKEND) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND)');
@@ -38,7 +38,7 @@ class NagVisFrontend extends GlobalPage {
 	/**
 	 * If enabled, the header menu is added to the page
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHeaderMenu() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getHeaderMenu()');
@@ -51,7 +51,7 @@ class NagVisFrontend extends GlobalPage {
 	/**
 	 * Adds the map to the page
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMap()');
@@ -66,7 +66,7 @@ class NagVisFrontend extends GlobalPage {
 	/**
 	 * Adds the user messages to the page
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMessages() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMessages()');
@@ -141,7 +141,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkHeaderConfigReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderConfigReadable('.$printErr.')');
@@ -164,7 +164,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @return	String	URL to rotate to
 	 * @author 	Michael Luebben <michael_luebben@web.de>
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNextRotate() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotate()');

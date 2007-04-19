@@ -12,7 +12,7 @@ class GlobalMainCfg {
 	 * Class Constructor
 	 *
 	 * @param	String	$configFile			String with path to config file
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalMainCfg($configFile) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::GlobalMainCfg('.$configFile.')');
@@ -178,7 +178,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function readConfig($printErr=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::readConfig('.$printErr.')');
@@ -263,7 +263,7 @@ class GlobalMainCfg {
 	 * Writes the config file completly from array $this->configFile
 	 *
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function writeConfig() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::writeConfig()');
@@ -320,7 +320,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkNagVisConfigExists($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigExists('.$printErr.')');
@@ -347,7 +347,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkNagVisConfigReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigReadable('.$printErr.')');
@@ -374,7 +374,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkNagVisConfigWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigWriteable('.$printErr.')');
@@ -396,7 +396,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapCfgFolderReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderReadable('.$printErr.')');
@@ -418,7 +418,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapCfgFolderWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderWriteable('.$printErr.')');
@@ -440,7 +440,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	String	$var	Config variable
 	 * @return	String	Section of the var
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function findSecOfVar($var) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::findSecOfVar('.$var.')');
@@ -467,7 +467,7 @@ class GlobalMainCfg {
 	 * @param	String	$var	Variable
 	 * @param	String	$val	Value
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function setValue($sec, $var, $val) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::setValue('.$sec.','.$var.','.$val.')');
@@ -491,7 +491,7 @@ class GlobalMainCfg {
 	 * @param	String	$var	Variable
 	 * @param   Bool	$ignoreDefault Don't read default value
 	 * @return	String	$val	Value
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getValue($sec, $var, $ignoreDefault=FALSE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getValue('.$sec.','.$var.','.$ignoreDefault.')');
@@ -524,7 +524,7 @@ class GlobalMainCfg {
 	 * @param	String	$var	Variable
 	 * @param	String	$val	Value
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function setRuntimeValue($var, $val) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::setRuntimeValue('.$var.','.$val.')');
@@ -538,7 +538,7 @@ class GlobalMainCfg {
 	 *
 	 * @param	String	$var	Variable
 	 * @return	String	$val	Value
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getRuntimeValue($var) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getRuntimeValue('.$var.')');

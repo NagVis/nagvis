@@ -14,7 +14,7 @@ class GlobalMap {
 	 *
 	 * @param 	GlobalMainCfg 	$MAINCFG
 	 * @param 	GlobalMapCfg 	$MAPCFG
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalMap(&$MAINCFG,&$MAPCFG) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::GlobalMap($MAINCFG,$MAPCFG)');
@@ -28,7 +28,7 @@ class GlobalMap {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkGd($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkGd('.$printErr.')');
@@ -55,7 +55,7 @@ class GlobalMap {
 	 *
 	 * @param	String	$type	Type of Background (gd/img)
 	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBackground($type='gd') {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getBackground('.$type.')');
@@ -81,7 +81,7 @@ class GlobalMap {
 	 * @param	Array	$obj	Array with object properties
 	 * @return	String	Name of the icon
 	 * @author Michael Luebben <michael_luebben@web.de>
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function getIcon(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIcon(&$obj)');
@@ -155,7 +155,7 @@ class GlobalMap {
 	 * @param	Array	Array with object properties
 	 * @return	Array	Array with object properties
 	 * @author	Michael Luebben <michael_luebben@web.de>
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixIconPosition(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIconPosition(&$obj)');
@@ -189,7 +189,7 @@ class GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	Array	Array with object informations
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIconPaths(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIconPaths(&$obj)');
@@ -215,7 +215,7 @@ class GlobalMap {
 	 * @param 	String 	$allowed	
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkPermissions(&$allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkPermissions(Array(...),'.$printErr.')');

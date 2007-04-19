@@ -16,7 +16,7 @@ class WuiMap extends GlobalMap {
 	 *
 	 * @param 	$MAINCFG WuiMainCfg
 	 * @param 	$MAPCFG  GlobalMapCfg
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiMap(&$MAINCFG,&$MAPCFG,&$LANG) {
 		$this->MAINCFG = &$MAINCFG;
@@ -32,7 +32,7 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Loads and parses permissions of alle maps in js array
 	 *
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function loadPermissions() {
 		$mapOptions = '[ ';
@@ -94,7 +94,7 @@ class WuiMap extends GlobalMap {
 	 * Parses the map
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
 		$ret = Array();
@@ -112,7 +112,7 @@ class WuiMap extends GlobalMap {
 	 * Gets JS graphic options
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsGraphicObj() {
 		$ret = Array();
@@ -127,7 +127,7 @@ class WuiMap extends GlobalMap {
 	 * Makes defined objecs moveable
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function makeObjectsMoveable() {
 		$ret = Array();
@@ -143,7 +143,7 @@ class WuiMap extends GlobalMap {
 	 *
 	 * @param	String	$js	Javascript code to parse
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseJs($js) {
 		$ret = Array();
@@ -165,7 +165,7 @@ class WuiMap extends GlobalMap {
 	 * Parses all objects on the map
 	 *
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
 		$ret = Array();
@@ -207,7 +207,7 @@ class WuiMap extends GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	Array	Array with object informations
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixIconPosition($obj) {
 		return parent::fixIconPosition($this->getIconPaths($obj));
@@ -217,7 +217,7 @@ class WuiMap extends GlobalMap {
 	 * Parses the HTML-Code of an icon
 	 *
 	 * @param	Array	$obj	Array with object informations
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon($obj) {
 		$ret = Array();
@@ -240,7 +240,7 @@ class WuiMap extends GlobalMap {
 	 *
 	 * @param	Boolean	$mergeWithGlobals	Merge with globals
 	 * @return	Array	Array of Objects of this map
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMapObjects($mergeWithGlobals=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$mergeWithGlobals.')');
@@ -264,7 +264,7 @@ class WuiMap extends GlobalMap {
 	 * @param	String	$type				Type of objects
 	 * @param	Boolean	$mergeWithGlobals	Merge with globals
 	 * @return	Array	Array of Objects of this type on the map
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getObjectsOfType($type,$mergeWithGlobals=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$mergeWithGlobals.')');
@@ -314,7 +314,7 @@ class WuiMap extends GlobalMap {
 	 * Create a Comment-Textbox
 	 *
 	 * @param	Array	$obj	Array with object informations
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function textBox($obj) {
 		$ret = Array();
@@ -337,7 +337,7 @@ class WuiMap extends GlobalMap {
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @author Michael Luebben <michael_luebben@web.de>
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 * FIXME: optimize
      */
 	function infoBox($obj) {
@@ -378,7 +378,7 @@ class WuiMap extends GlobalMap {
 	 * Gets all defined maps
 	 *
 	 * @return	Array maps
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMaps() {
 		$files = Array();
@@ -403,7 +403,7 @@ class WuiMap extends GlobalMap {
 	 * Parses the needed language strings to javascript
 	 *
 	 * @return	Array Html
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
 		$ret = Array();
@@ -439,7 +439,7 @@ class WuiMap extends GlobalMap {
 	 * Parses the invisible forms and JS arrays needed in WUI
 	 *
 	 * @return	Array Html
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function parseInvisible() {
 		$arr = Array();

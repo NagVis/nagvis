@@ -2,7 +2,7 @@
 /**
  * Class for building the Page for editing the MainCfg
  *
- * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiEditMainCfg extends GlobalPage {
 	var $MAINCFG;
@@ -13,7 +13,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * Class Constructor
 	 *
 	 * @param 	$MAINCFG GlobalMainCfg
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiEditMainCfg(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
@@ -33,7 +33,7 @@ class WuiEditMainCfg extends GlobalPage {
 	/**
 	 * If enabled, the form is added to the page
 	 *
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getForm() {
 		$this->FORM = new GlobalForm(Array('name'=>'edit_config',
@@ -54,7 +54,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * Parses the Form fields
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFields() {
 		$ret = Array();
@@ -144,7 +144,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * Reads all aviable backends
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackends() {
 		$files = Array();
@@ -169,7 +169,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * Reads all iconsets (that habe <iconset>_ok.png)
 	 *
 	 * @return	Array Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIconsets() {
 		$files = Array();
@@ -194,7 +194,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * Reads all languages
 	 *
 	 * @return	Array Html
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLanguages() {
 		$files = Array();
@@ -219,7 +219,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * Gets the submit button
 	 *
 	 * @return	Array Html
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSubmit() {
 		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
@@ -229,7 +229,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * Gets the hidden form
 	 *
 	 * @return	Array Html
-	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHidden() {
 		$ret = Array();

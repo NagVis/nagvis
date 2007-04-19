@@ -23,7 +23,7 @@ class NagVisBackground extends NagVisMap {
 	 * @param 	GlobalMainCfg 	$MAINCFG
 	 * @param 	GlobalMapCfg 	$MAPCFG
 	 * @param 	GlobalBackend 	$BACKEND
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisBackground(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::NagVisBackground($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
@@ -51,7 +51,7 @@ class NagVisBackground extends NagVisMap {
 	 *
 	 * @param	Array	$obj	Array with object properties
 	 * @return	Array	Array with state of the object
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getState($obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::getState(Array(...))');
@@ -106,7 +106,7 @@ class NagVisBackground extends NagVisMap {
 	 * Gets the User
 	 *
 	 * @return	String	String with Username
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUser() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUser()');
@@ -163,7 +163,7 @@ class NagVisBackground extends NagVisMap {
 	 * try to code an own method to replace this 
 	 *
 	 * @return	Int		memory usage of the process
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function memoryGetUsage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::memoryGetUsage()');
@@ -297,7 +297,7 @@ class NagVisBackground extends NagVisMap {
 	/**
 	 * Do preflight checks
 	 *
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkPreflight() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::checkPreflight()');
@@ -320,7 +320,7 @@ class NagVisBackground extends NagVisMap {
 	 * Parses the Map and the Objects
 	 *
 	 * @return	Array 	Array with Html Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::parseMap()');
@@ -362,7 +362,7 @@ class NagVisBackground extends NagVisMap {
 	 * Prints out an error box
 	 *
 	 * @param	String	$msg	String with error message
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function errorBox($msg) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::errorBox('.$msg.')');
@@ -381,7 +381,7 @@ class NagVisBackground extends NagVisMap {
 	 * Parses the Objects
 	 *
 	 * @return	Array 	Array with Html Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::parseObjects()');
@@ -412,7 +412,7 @@ class NagVisBackground extends NagVisMap {
 	 *
 	 * @param	Array	$obj
 	 * @return	Array 	Array with Html Code
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseLine($obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::parseLine()');
@@ -461,7 +461,7 @@ class NagVisBackground extends NagVisMap {
 	 *
 	 * @param	String	$state
 	 * @return	Integer		Color to use
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getColor($state){
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::getColor('.$state.')');

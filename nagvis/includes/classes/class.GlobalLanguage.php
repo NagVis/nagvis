@@ -14,7 +14,7 @@ class GlobalLanguage {
 	 *
 	 * @param	GlobalMainCfg	$MAINCFG
 	 * @param	String			$type		Type of language-file
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalLanguage(&$MAINCFG,$languageRoot) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::GlobalLanguage($MAINCFG,'.$languageRoot.')');
@@ -31,7 +31,7 @@ class GlobalLanguage {
 	 * Runs all the functions needed to read the language files
 	 *
 	 * @return	Boolean	Successful?
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLanguage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getLanguage()');
@@ -51,7 +51,7 @@ class GlobalLanguage {
 	 * Reads the language file
 	 *
 	 * @return	String	String with the language XML file
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readLanguageFile() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::readLanguageFile()');
@@ -70,7 +70,7 @@ class GlobalLanguage {
 	 *
 	 * @param	String	String with the language XML file
 	 * @return	Array	Array with the language definitions
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseXML($data) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::parseXML(String)');
@@ -99,7 +99,7 @@ class GlobalLanguage {
 	 * @param	Array	Array with the language definitions
 	 * @param	Integer	ID of the current object in Array
 	 * @return	Array	Array with the language definitions
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseXMLObj($vals, &$i) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::parseXMLObj(Array(...),'.$i.')');
@@ -134,7 +134,7 @@ class GlobalLanguage {
 	 * 
 	 * @param	String	$str	Dirty String
 	 * @return	String	$str	Cleaned String
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceSpecial($str) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::replaceSpecial(String)');
@@ -163,7 +163,7 @@ class GlobalLanguage {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     function checkLanguageFileReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::checkLanguageFileReadable('.$printErr.')');
@@ -240,7 +240,7 @@ class GlobalLanguage {
 	 * @param	String	$replace			Strings to Replace
 	 * @param	Boolean $mergeWithGlobal	Merge with Global Type
 	 * @return	String	String with Language String
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getText($languagePath,$replace='',$mergeWithGlobal=TRUE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getText('.$languagePath.','.$replace.','.$mergeWithGlobal.')');

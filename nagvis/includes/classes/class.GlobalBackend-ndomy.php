@@ -33,7 +33,7 @@ class GlobalBackendndomy {
 	* @param	config $MAINCFG
 	* @param	String $backendId
 	* @author	Andreas Husch <downanup@nagios-wiki.de>
-	* @author	Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function GlobalBackendndomy(&$MAINCFG,$backendId) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::GlobalBackendndomy($MAINCFG,'.$backendId.')');
@@ -85,7 +85,7 @@ class GlobalBackendndomy {
 	 * Checks if there are the wanted tables in the DB
 	 *
 	 * @return	Boolean
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkTablesExists() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkTablesExists()');
@@ -107,7 +107,7 @@ class GlobalBackendndomy {
 	 * Connects to DB
 	 *
 	 * @return	Boolean
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function connectDB() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::connectDB()');
@@ -138,7 +138,7 @@ class GlobalBackendndomy {
 	 * Checks if MySQL is supported in this PHP version
 	 *
 	 * @return	Boolean
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMysqlSupport() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkMysqlSupport()');
@@ -168,7 +168,7 @@ class GlobalBackendndomy {
 	 * Returns the instanceId of the instanceName
 	 *
 	 * @return	String $ret
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInstanceId() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getInstanceId()');
@@ -188,7 +188,7 @@ class GlobalBackendndomy {
 	*
 	* @param	string $type, string $name1Pattern, string $name2Pattern
 	* @return	array $ret
-	* @author	Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Lars Michelsen <lars@vertical-visions.de>
 	* @author	Andreas Husch <downanup@nagios-wiki.de>
 	*/
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
@@ -295,7 +295,7 @@ class GlobalBackendndomy {
 	*
 	* @param	string $hostName, boolean $recognizeServices, boolean $onlyHardStates
 	* @return	array $state
-	* @author	Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Lars Michelsen <lars@vertical-visions.de>
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	*/
 	function findStateHost($hostName,$recognizeServices,$onlyHardStates) {
@@ -440,7 +440,7 @@ class GlobalBackendndomy {
 	* @param	string $hostGroupName, boolean $recognzieServices
 	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	* @author	Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function findStateHostgroup($hostGroupName,$recognizeServices,$onlyHardStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateHostgroup('.$hostGroupName.','.$recognizeServices.','.$onlyHardStates.')');
@@ -520,7 +520,7 @@ class GlobalBackendndomy {
 	* @param	string $hostName, string $serviceName
 	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	* @author	Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function findStateService($hostName,$serviceName,$onlyHardStates) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateService('.$hostName.','.$serviceName.','.$onlyHardStates.')');
@@ -577,7 +577,7 @@ class GlobalBackendndomy {
 	* @param	string $serviceGroupName
 	* @return	arrray $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	* @author	Lars Michelsen <larsi@nagios-wiki.de>
+	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function findStateServicegroup($serviceGroupName,$onlyHardStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateServicegroup('.$serviceGroupName.','.$onlyHardStates.')');

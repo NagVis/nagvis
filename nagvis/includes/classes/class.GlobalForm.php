@@ -3,7 +3,7 @@
  * Class for managing the common form
  * Should be used by ALL pages of NagVis and NagVisWui where forms are used
  *
- * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalForm {
 	var $name;
@@ -18,7 +18,7 @@ class GlobalForm {
 	 * Class Constructor
 	 *
 	 * @param 	Array	$prop	Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalForm($prop=Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>'')) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::GlobalForm(Array(...))');
@@ -38,7 +38,7 @@ class GlobalForm {
 	 * @param 	String 	$name 	Name of the Field
 	 * @param 	String 	$value 	Value of the Field
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHiddenField($name,$value) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getHiddenField('.$name.','.$value.')');
@@ -55,7 +55,7 @@ class GlobalForm {
 	 *
 	 * @param 	String 	$title 	Name of the title
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getTitleLine($title) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getTitleLine('.$title.')');
@@ -72,7 +72,7 @@ class GlobalForm {
 	 *
 	 * @param 	String 	$title 	Name of the Category
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getCatLine($title) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getCatLine('.$title.')');
@@ -91,7 +91,7 @@ class GlobalForm {
 	 * @param 	String 	$name 	Name of the Field
 	 * @param 	String 	$value 	Value of the Field
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFileLine($label,$name,$value,$must=FALSE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getFileLine('.$label.','.$name.','.$value.','.$must.')');
@@ -117,7 +117,7 @@ class GlobalForm {
 	 * @param 	String 	$value 	Value of the Field
 	 * @param 	Boolean	$must 	Is this a MUST field
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInputLine($label,$name,$value,$must=FALSE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getInputLine('.$label.','.$name.','.$value.','.$must.')');
@@ -147,7 +147,7 @@ class GlobalForm {
 	 * @param 	Boolean	$must 	Is this a MUST field
 	 * @param	String	$onChange	JavaScript function to call on change
 	 * @return	Array 		Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='') {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSelectLine('.$label.','.$name.',Array(...),'.$selected.','.$must.','.$onChange.')');
@@ -172,7 +172,7 @@ class GlobalForm {
 	 *
 	 * @param 	String 	$label 	Label of the button
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSubmitLine($label) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSubmitLine('.$label.')');
@@ -190,7 +190,7 @@ class GlobalForm {
 	 * Initializes the HTML-Form
 	 *
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function initForm() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::initForm()');
@@ -207,7 +207,7 @@ class GlobalForm {
 	 * Closes the HTML-Form
 	 *
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function closeForm() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::closeForm()');
@@ -221,7 +221,7 @@ class GlobalForm {
 	 *
 	 * @param 	String 	$label	Label of the button
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSubmitField($label) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSubmitField('.$label.')');
@@ -240,7 +240,7 @@ class GlobalForm {
 	 * @param	String	$onChange	JavaScript function to call on change
 	 * @param	Boolean $must 		This option has to be set
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSelectField($name,$arr,$onChange='',$must=FALSE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSelectField('.$name.',Array(...),'.$onChange.','.$must.')');
@@ -270,7 +270,7 @@ class GlobalForm {
 	 * @param 	String 	$name 	Name of the Field
 	 * @param 	Array	$value 	Value of the Field
 	 * @return	Array 	Html
-	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInputField($name,$value) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getInputField('.$name.','.$value.')');

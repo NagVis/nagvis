@@ -2,7 +2,7 @@
 /**
  * Class for building the Wui Frontend and display the map
  *
- * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiFrontend extends GlobalPage {
 	var $MAINCFG;
@@ -14,7 +14,7 @@ class WuiFrontend extends GlobalPage {
 	/**
 	* Constructor
 	*
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function WuiFrontend(&$MAINCFG,&$MAPCFG) {
 		$this->MAINCFG = &$MAINCFG;
@@ -39,7 +39,7 @@ class WuiFrontend extends GlobalPage {
 	/**
 	* If enabled, the map is added to the page
 	*
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
+	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function getMap() {
 		$this->addBodyLines('<div id="mymap" class="map">');
@@ -51,7 +51,7 @@ class WuiFrontend extends GlobalPage {
 	/**
 	 * Adds the user messages to the page
 	 *
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMessages() {
 		$this->addBodyLines($this->getUserMessages());	
