@@ -577,20 +577,17 @@ class GlobalBackendndomy {
 	* @param	string $serviceGroupName
 	* @return	arrray $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
+	* @author	Lars Michelsen <larsi@nagios-wiki.de>
 	*/
 	function findStateServicegroup($serviceGroupName,$onlyHardStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateServicegroup('.$serviceGroupName.','.$onlyHardStates.')');
-		$servicesCritical = 0;
-		$servicesWarning = 0;
-		$servicesUnknown = 0;
-		$servicesAck = 0;
-		$servicesOk = 0;
+		$objs = Array('critical'=>0,'warning'=>0,'unknown'=>0,'ack'=>0,'ok'=>0);
 		
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = mysql_query('SELECT s.servicegroup_id 
 									FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicegroups AS s 
 									WHERE (o.objecttype_id=4 AND o.name1 = binary \''.$serviceGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-											AND s.servicegroup_object_id=o.object_id');
+											AND s.config_type=1 AND s.servicegroup_object_id=o.object_id');
 		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			$state['State'] = 'ERROR';
@@ -598,59 +595,48 @@ class GlobalBackendndomy {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateServicegroup(): Array()');
 			return $state;
 		} else {
-		
-			$data = mysql_fetch_row($QUERYHANDLE);
-	
-			//Now we have the Group Id and can get the services
-			$QUERYHANDLE = mysql_query('SELECT s.last_hard_state, 
-													UNIX_TIMESTAMP(s.last_hard_state_change) AS last_hard_state_change, 
-													UNIX_TIMESTAMP(s.last_state_change) AS last_state_change, 
-													s.current_state, s.output, s.problem_has_been_acknowledged 
+			$data = mysql_fetch_array($QUERYHANDLE);
+			
+			$QUERYHANDLE = mysql_query('SELECT o.name1, o.name2
 											FROM '.$this->dbPrefix.'servicegroup_members AS h,'.$this->dbPrefix.'objects AS o 
 											WHERE (h.servicegroup_id='.$data['servicegroup_id'].' AND h.instance_id='.$this->dbInstanceId.') 
-													AND (o.objecttype_id=1 AND h.service_object_id=o.object_id)');	
+													AND (o.objecttype_id=2 AND h.service_object_id=o.object_id)');	
 			
-			while($serviceState = mysql_fetch_array($QUERYHANDLE)) {
-				if($onlyHardStates == 1) {
-					if($serviceState['last_hard_state'] != '0' && $serviceState['last_hard_state_change'] <= $serviceState['last_state_change']) {
-						// $serviceState['current_state'] = $serviceState['current_state'];
-					} else {
-						$serviceState['current_state'] = $serviceState['last_hard_state'];
-					}
-				}
+			while($data1 = mysql_fetch_array($QUERYHANDLE)) {
+				$currentState = $this->findStateService($data1['name1'],$data1['name2'],$onlyHardStates);
 				
-				if($serviceState['current_state'] == 0) {
-					$servicesOk++;
-				} elseif($serviceState['problem_has_been_acknowledged'] == 1) {
-					$servicesAck++;				
-				} elseif($serviceState['current_state'] == 1) {
-					$servicesWarning++;
-				} elseif($serviceState['current_state'] == 2) {
-					$servicesCritical++;
-				} elseif($serviceState['current_state'] == 3) {
-					$servicesUnknown++;
+				if($currentState['State'] == 'OK') {
+					$objs['ok']++;
+				} elseif($currentState['State'] == 'ACK') {
+					$objs['ack']++;			
+				} elseif($currentState['State'] == 'WARNING') {
+					$objs['warning']++;
+				} elseif($currentHostState['State'] == 'CRITICAL') {
+					$objs['critical']++;
+				} elseif($currentState['State'] == 'UNKNOWN') {
+					$objs['unknown']++;
 				}
 			}
 		
-			if($servicesCritical > 0) {
-				$state['Count'] = $servicesCritical;
-				$state['Output'] = $servicesCritical.' CRITICAL, ' .$servicesWarning. ' WARNING and ' .$servicesUnknown. ' UNKNOWN Services';
+			if($objs['critical'] > 0) {
+				$state['Count'] = $objs['critical'];
+				$state['Output'] = $objs['critical'].' CRITICAL, ' .$objs['warning']. ' WARNING and ' .$objs['unknown']. ' UNKNOWN Services';
 				$state['State'] = 'CRITICAL';
-			} elseif($servicesWarning > 0) {
-				$state['Count'] = $servicesWarning;
-				$state['Output'] = $servicesWarning. ' WARNING and ' .$servicesUnknown. ' UNKNOWN Services';
+			} elseif($objs['warning'] > 0) {
+				$state['Count'] = $objs['warning'];
+				$state['Output'] = $objs['warning']. ' WARNING and ' .$objs['unknown']. ' UNKNOWN Services';
 				$state['State'] = 'WARNING';		
-			} elseif($servicesUnknown > 0) {
-				$state['Count'] = $servicesUnknown;
-				$state['Output'] = $servicesUnknown.' Services in UNKNOWN state';
+			} elseif($objs['unknown'] > 0) {
+				$state['Count'] = $objs['unknown'];
+				$state['Output'] = $objs['unknown'].' Services in UNKNOWN state';
 				$state['State'] = 'UNKNOWN';
-			} elseif($servicesAck > 0) {
-				$state['Count'] = $servicesAck;
-				$state['Output'] = $servicesAck.' services are in a NON-OK State but all are ACKNOWLEDGED';
+			} elseif($objs['ack'] > 0) {
+				$state['Count'] = $objs['ack'];
+				$state['Output'] = $objs['ack'].' services are in a NON-OK State but all are ACKNOWLEDGED';
 				$state['State'] = 'ACK';
-			} elseif($servicesOk > 0) {
-				$state['Count'] = $servicesOk;
-				$state['Output'] = 'All '.$servicesOk.' services are OK';
+			} elseif($objs['ok'] > 0) {
+				$state['Count'] = $objs['ok'];
+				$state['Output'] = 'All '.$objs['ok'].' services are OK';
 				$state['State'] = 'OK';		
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateServicegroup(): Array(...)');
