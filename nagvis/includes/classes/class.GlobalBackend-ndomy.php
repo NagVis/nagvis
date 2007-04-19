@@ -120,9 +120,9 @@ class GlobalBackendndomy {
 		// set the old level of reporting back
 		error_reporting($oldLevel);
 		
-		if($returnCode != TRUE){
+		if(!$returnCode){
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','errorSelectingDb','BACKENDID~'.$this->backendId);
+			$FRONTEND->messageToUser('ERROR','errorSelectingDb','BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error());
 			
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::connectDB(): FALSE');
 			return FALSE;

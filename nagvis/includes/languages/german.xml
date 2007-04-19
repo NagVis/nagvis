@@ -241,7 +241,7 @@
 				</mysqlNotSupported>
 				<errorSelectingDb>
 					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
-					<text>Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen?</text>
+					<text>Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen? MySQL-Error: [MYSQLERR]</text>
 				</errorSelectingDb>
 				<nagiosNotRunning>
 					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
