@@ -256,12 +256,20 @@ class NagVisMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
-		$obj['url'] = str_replace('['.$name.']',$obj[$name],$obj['url']);
-		$obj['hover_url'] = str_replace('['.$name.']',$obj[$name],$obj['hover_url']);
+		if(isset($obj['url']) && $obj['url'] != '') {
+			$obj['url'] = str_replace('['.$name.']',$obj[$name],$obj['url']);
+		}
+		if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
+			$obj['hover_url'] = str_replace('['.$name.']',$obj[$name],$obj['hover_url']);
+		}
 		
 		if($obj['type'] == 'service') {
-			$obj['url'] = str_replace('[service_description]',$obj['service_description'],$obj['url']);
-			$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
+			if(isset($obj['url']) && $obj['url'] != '') {
+				$obj['url'] = str_replace('[service_description]',$obj['service_description'],$obj['url']);
+			}
+			if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
+				$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
+			}
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::replaceMacros(): Array(...)');
@@ -340,7 +348,7 @@ class NagVisMap extends GlobalMap {
 		// FIXME 1.1: check if this is an object, where a menu should be displayed
 		if(1) {
 			$ret .= 'onmouseover="return overlib(\'';
-			if($obj['hover_url']) {
+			if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
 				$ret .= $this->readHoverUrl($obj);
 			} else {
 				$ret .= $this->createInfoBox($obj);
