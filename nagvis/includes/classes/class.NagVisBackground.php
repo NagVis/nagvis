@@ -32,7 +32,6 @@ class NagVisBackground extends NagVisMap {
 		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
 		
-		
 		$this->user = $this->getUser();
 		$this->MAINCFG->setRuntimeValue('user',$this->user);
 		
@@ -41,7 +40,7 @@ class NagVisBackground extends NagVisMap {
 		$this->checkPreflight();
 		$this->initImage();
 		
-		parent::NagVisMap($MAINCFG,$MAPCFG,$BACKEND);
+		parent::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND);
 		
 		$this->objects = $this->getMapObjects(1);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::NagVisBackground()');
