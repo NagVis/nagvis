@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class for managing the maps in WUI
+ *
+ * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+ */
 class WuiMapManagement extends GlobalPage {
 	var $MAINCFG;
 	var $LANG;
@@ -8,6 +13,12 @@ class WuiMapManagement extends GlobalPage {
 	var $NEWIMGFORM;
 	var $DELIMGFORM;
 	
+	/**
+	 * Class Constructor
+	 *
+	 * @param	GlobalMainCfg	$MAINCFG
+	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function WuiMapManagement(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
 		
@@ -91,6 +102,12 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->getDelImgSubmit());
 	}
 	
+	/**
+	 * Gets delete image fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDelImgFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->DELIMGFORM->getSelectLine($this->LANG->getLabel('choosePngImage'),'map_image',$this->getMapImages(),''));
@@ -98,10 +115,22 @@ class WuiMapManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets default delete image button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDelImgSubmit() {
 		return array_merge($this->DELIMGFORM->getSubmitLine($this->LANG->getLabel('delete')),$this->DELIMGFORM->closeForm());
 	}
 	
+	/**
+	 * Gets new image fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getNewImgFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->NEWIMGFORM->getHiddenField('MAX_FILE_SIZE','1000000'));
@@ -110,10 +139,22 @@ class WuiMapManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets default new image button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getNewImgSubmit() {
 		return array_merge($this->NEWIMGFORM->getSubmitLine($this->LANG->getLabel('upload')),$this->NEWIMGFORM->closeForm());
 	}
 	
+	/**
+	 * Gets delete fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDeleteFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
@@ -123,10 +164,22 @@ class WuiMapManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets default delete button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDeleteSubmit() {
 		return array_merge($this->DELETEFORM->getSubmitLine($this->LANG->getLabel('delete')),$this->DELETEFORM->closeForm());
 	}
 	
+	/**
+	 * Gets rename fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getRenameFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
@@ -137,10 +190,22 @@ class WuiMapManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets rename submit button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getRenameSubmit() {
 		return array_merge($this->RENAMEFORM->getSubmitLine($this->LANG->getLabel('rename')),$this->RENAMEFORM->closeForm());
 	}
 	
+	/**
+	 * Gets create fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getCreateFields() {
 		//FIXME: Default values
 		$ret = Array();
@@ -153,10 +218,22 @@ class WuiMapManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets create submit button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getCreateSubmit() {
 		return array_merge($this->CREATEFORM->getSubmitLine($this->LANG->getLabel('create')),$this->CREATEFORM->closeForm());
 	}
 	
+	/**
+	 * Gets all iconsets
+	 *
+	 * @return	Array iconsets
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getIconsets() {
 		$files = Array();
 		
@@ -176,6 +253,12 @@ class WuiMapManagement extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Gets all defined maps
+	 *
+	 * @return	Array Maps
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getMaps() {
 		$files = Array();
 		
@@ -195,6 +278,12 @@ class WuiMapManagement extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Reads all map images in map path
+	 *
+	 * @return	Array map images
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getMapImages() {
 		$files = Array();
 		
@@ -214,6 +303,12 @@ class WuiMapManagement extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Gets all needed messages
+	 *
+	 * @return	Array Html
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getJsLang() {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';

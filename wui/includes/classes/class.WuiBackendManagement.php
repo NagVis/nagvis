@@ -1,4 +1,7 @@
 <?php
+/** 
+ * Class for managing (add,modify,delete the backends in the WUI
+ */
 class WuiBackendManagement extends GlobalPage {
 	var $MAINCFG;
 	var $LANG;
@@ -6,6 +9,12 @@ class WuiBackendManagement extends GlobalPage {
 	var $DEFBACKENDFORM;
 	var $ADDBACKENDFORM;
 	
+	/**
+	 * Class Constructor
+	 *
+	 * @param 	GlobalMainCfg 	$MAINCFG
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function WuiBackendManagement(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
 		
@@ -76,6 +85,12 @@ class WuiBackendManagement extends GlobalPage {
 		$this->addBodyLines($this->getDelSubmit());
 	}
 	
+	/**
+	 * Gets edit fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getEditFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->id."');"));
@@ -107,20 +122,44 @@ class WuiBackendManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets edit submit button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getEditSubmit() {
 		return array_merge($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->EDITBACKENDFORM->closeForm());
 	}
 	
+	/**
+	 * Gets delete fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDelFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->DELBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE));
 		return $ret;
 	}
 	
+	/**
+	 * Gets delete submit button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDelSubmit() {
 		return array_merge($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DELBACKENDFORM->closeForm());
 	}
 	
+	/**
+	 * Gets add fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getAddFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->ADDBACKENDFORM->getInputLine('backend_id','backend_id','',TRUE));
@@ -144,10 +183,22 @@ class WuiBackendManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets add submit button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getAddSubmit() {
 		return array_merge($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->ADDBACKENDFORM->closeForm());
 	}
 	
+	/**
+	 * Gets default fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDefaultFields() {
 		$ret = Array();
 		
@@ -156,6 +207,12 @@ class WuiBackendManagement extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets default submit button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getDefaultSubmit() {
 		return array_merge($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DEFBACKENDFORM->closeForm());
 	}
@@ -207,6 +264,12 @@ class WuiBackendManagement extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Gets all needed messages
+	 *
+	 * @return	Array Html
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getJsLang() {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';

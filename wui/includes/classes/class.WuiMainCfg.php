@@ -3,7 +3,6 @@
  * This Class handles the NagVis configuration file for the wui
  */
 class WuiMainCfg extends GlobalMainCfg {
-	
 	/**
 	 * Class Constructor
 	 *
@@ -14,6 +13,12 @@ class WuiMainCfg extends GlobalMainCfg {
 		parent::GlobalMainCfg($configFile);
 	}
 	
+	/**
+	 * Gets all defined maps
+	 *
+	 * @return	Array maps
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getMaps() {
 		$files = Array();
 		

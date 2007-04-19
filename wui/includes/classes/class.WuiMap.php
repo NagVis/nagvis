@@ -1,8 +1,7 @@
 <?php
 /** 
  * Class for printing the map in NagVis Wui
- **/
-
+ */
 class WuiMap extends GlobalMap {
 	var $MAINCFG;
 	var $MAPCFG;
@@ -12,6 +11,13 @@ class WuiMap extends GlobalMap {
 	var $moveable;
 	var $actId;
 	
+	/**
+	 * Class Constructor
+	 *
+	 * @param 	$MAINCFG WuiMainCfg
+	 * @param 	$MAPCFG  GlobalMapCfg
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function WuiMap(&$MAINCFG,&$MAPCFG,&$LANG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
@@ -23,6 +29,11 @@ class WuiMap extends GlobalMap {
 		$this->objects = $this->getMapObjects(1);
 	}
 	
+	/**
+	 * Loads and parses permissions of alle maps in js array
+	 *
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function loadPermissions() {
 		$mapOptions = '[ ';
 		$a = 0;
@@ -79,6 +90,12 @@ class WuiMap extends GlobalMap {
 		$this->MAINCFG->setRuntimeValue('mapOptions',$mapOptions);
 	}
 	
+	/**
+	 * Parses the map
+	 *
+	 * @return	Array Html
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function parseMap() {
 		$ret = Array();
 		$ret[] = $this->getBackground('img');
@@ -91,6 +108,12 @@ class WuiMap extends GlobalMap {
 		return $ret;
 	}
 	
+	/**
+	 * Gets JS graphic options
+	 *
+	 * @return	Array Html
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getJsGraphicObj() {
 		$ret = Array();
 		$ret[] = "myshape_background = new jsGraphics('mymap');";
@@ -100,6 +123,12 @@ class WuiMap extends GlobalMap {
 		return $ret;
 	}
 	
+	/**
+	 * Makes defined objecs moveable
+	 *
+	 * @return	Array Html
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function makeObjectsMoveable() {
 		$ret = Array();
 		
@@ -109,6 +138,13 @@ class WuiMap extends GlobalMap {
 		return $ret;
 	}
 	
+	/**
+	 * Parses given Js code
+	 *
+	 * @param	String	$js	Javascript code to parse
+	 * @return	Array 	Html
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function parseJs($js) {
 		$ret = Array();
 		
@@ -125,6 +161,12 @@ class WuiMap extends GlobalMap {
 		return $ret;
 	}
 	
+	/**
+	 * Parses all objects on the map
+	 *
+	 * @return	Array 	Html
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function parseObjects() {
 		$ret = Array();
 		
@@ -172,11 +214,11 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
-	* Parses the HTML-Code of an icon
-	*
-	* @param Array $obj
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	*/
+	 * Parses the HTML-Code of an icon
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function parseIcon($obj) {
 		$ret = Array();
 				
@@ -196,6 +238,7 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Gets all objects of the map
 	 *
+	 * @param	Boolean	$mergeWithGlobals	Merge with globals
 	 * @return	Array	Array of Objects of this map
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
@@ -218,7 +261,8 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Gets all objects of the defined type from a map and return an array with states
 	 *
-	 * @param	String	$type		Type of objects
+	 * @param	String	$type				Type of objects
+	 * @param	Boolean	$mergeWithGlobals	Merge with globals
 	 * @return	Array	Array of Objects of this type on the map
 	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
      */
@@ -267,11 +311,11 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
-	* Create a Comment-Textbox
-	*
-	* @param Array $obj
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	*/
+	 * Create a Comment-Textbox
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function textBox($obj) {
 		$ret = Array();
 		
@@ -289,14 +333,13 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
-	* Creates a Javascript-Box with information.
-	*
-	* @param Array $obj
-	*
-	* @author Michael Luebben <michael_luebben@web.de>
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	* FIXME: optimize
-    */
+	 * Creates a Javascript-Box with information.
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @author Michael Luebben <michael_luebben@web.de>
+	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 * FIXME: optimize
+     */
 	function infoBox($obj) {
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
@@ -331,6 +374,12 @@ class WuiMap extends GlobalMap {
 		return $info;
 	}
 	
+	/**
+	 * Gets all defined maps
+	 *
+	 * @return	Array maps
+	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getMaps() {
 		$files = Array();
 		
@@ -349,15 +398,13 @@ class WuiMap extends GlobalMap {
 		
 		return $files;
 	}
-	
-	
 		
 	/**
-	* Parses the needed language strings to javascript
-	*
-	* @return	Array Html
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	*/
+	 * Parses the needed language strings to javascript
+	 *
+	 * @return	Array Html
+	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getJsLang() {
 		$ret = Array();
 		$ret[] = 'var langMenu = Array();';
@@ -389,11 +436,11 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
-	* Parses the invisible forms
-	*
-	* @author FIXME
-	* FIXME: much to optimize
-    */
+	 * Parses the invisible forms and JS arrays needed in WUI
+	 *
+	 * @return	Array Html
+	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function parseInvisible() {
 		$arr = Array();
 		
