@@ -1,4 +1,7 @@
 <?php
+/** 
+ * Class for adding/modify objects on maps
+ */
 class WuiAddModify extends GlobalPage {
 	var $MAINCFG;
 	var $MAPCFG;
@@ -8,6 +11,13 @@ class WuiAddModify extends GlobalPage {
 	var $propertiesList;
 	var $propCount;
 	
+	/**
+	 * Class Constructor
+	 *
+	 * @param 	GlobalMainCfg 	$MAINCFG
+	 * @param 	WuiMapCfg 		$MAPCFG
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function WuiAddModify(&$MAINCFG,&$MAPCFG,$prop) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
@@ -28,10 +38,10 @@ class WuiAddModify extends GlobalPage {
 	}
 	
 	/**
-	* If enabled, the form is added to the page
-	*
-	* @author Lars Michelsen <larsi@nagios-wiki.de>
-	*/
+	 * If enabled, the form is added to the page
+	 *
+	 * @author Lars Michelsen <larsi@nagios-wiki.de>
+	 */
 	function getForm() {
 		// Inititalize language for JS
 		$this->addBodyLines($this->getJsLang());
@@ -51,6 +61,12 @@ class WuiAddModify extends GlobalPage {
 		$this->addBodyLines($this->resizeWindow());
 	}
 	
+	/**
+	 * Resizes the window to individual calculated size
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function resizeWindow() {
 		$ret = Array();
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
@@ -61,54 +77,67 @@ class WuiAddModify extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Fills the fields of the form with values
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function fillFields() {
 		$ret = Array();
 		
-		if($this->prop['action'] == 'modify') {
-			$myval = $this->prop['id'];
-			$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
-			if($this->prop['coords'] != '') {
-				$val_coords = explode(',',$this->prop['coords']);
-				if ($this->prop['type'] == 'textbox') {
-					$objwidth = $val_coords[2] - $val_coords[0];
-					$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
-					$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
-					$ret[] = "document.addmodify.elements['w'].value='".$objwidth."';\n";
-				} else {
-					$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0].",".$val_coords[2]."';\n";
-					$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1].",".$val_coords[3]."';\n";
-				}
-			}
-			$ret[] = "//--></script>\n";	
-		}
-		##########################################
-		# if the action specified in the URL is "add", we set the object coordinates (that we retrieve from the mycoords parameter)
-		else if($this->prop['action'] == "add") {
-			if($this->prop['coords'] != "") {
-				$val_coords = explode(',',$this->prop['coords']);
+		switch($this->prop['action']) {
+			case 'modify':
+				$myval = $this->prop['id'];
 				$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
-				if(count($val_coords) == 2) {			
-					$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
-					$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
-				} elseif(count($val_coords) == 4) {
-					if ($this->prop['type'] == "textbox") {
+				if($this->prop['coords'] != '') {
+					$val_coords = explode(',',$this->prop['coords']);
+					if ($this->prop['type'] == 'textbox') {
 						$objwidth = $val_coords[2] - $val_coords[0];
-						
 						$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
 						$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
 						$ret[] = "document.addmodify.elements['w'].value='".$objwidth."';\n";
 					} else {
 						$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0].",".$val_coords[2]."';\n";
 						$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1].",".$val_coords[3]."';\n";
-					}		
+					}
 				}
 				$ret[] = "//--></script>\n";
-			}
+			break;
+			// if the action specified in the URL is "add", we set the object coordinates (that we retrieve from the mycoords parameter)
+			case 'add':
+				if($this->prop['coords'] != '') {
+					$val_coords = explode(',',$this->prop['coords']);
+					$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
+					if(count($val_coords) == 2) {			
+						$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
+						$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
+					} elseif(count($val_coords) == 4) {
+						if ($this->prop['type'] == "textbox") {
+							$objwidth = $val_coords[2] - $val_coords[0];
+							
+							$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
+							$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
+							$ret[] = "document.addmodify.elements['w'].value='".$objwidth."';\n";
+						} else {
+							$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0].",".$val_coords[2]."';\n";
+							$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1].",".$val_coords[3]."';\n";
+						}		
+					}
+					$ret[] = "//--></script>\n";
+				}
+			break;
 		}
 		
 		return $ret;
 	}
 	
+	/**
+	 * Gets all fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->FORM->getHiddenField('type',$this->prop['type']));
@@ -159,7 +188,7 @@ class WuiAddModify extends GlobalPage {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMaps(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
 				$this->propCount++;
 			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
-				$backendId = $this->checkOption($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id'), $this->MAPCFG->getValue('global',0,'backend_id'), $this->MAINCFG->getValue('defaults', 'backend'),'');
+				$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
 				$ret[] = "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
 				if(array_key_exists('service_description',$this->MAPCFG->validConfig[$this->prop['type']])) {
 					$ret[] = "<script>getServices('".$backendId."','".$this->prop['type']."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
@@ -190,6 +219,12 @@ class WuiAddModify extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Gets the submit button code
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getSubmit() {
 		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
 	}
@@ -211,6 +246,12 @@ class WuiAddModify extends GlobalPage {
 		return $ret;
 	}
 	
+	/**
+	 * Reads all PNG images in shape path
+	 *
+	 * @return	Array Shapes
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getShapes() {
 		$files = Array();
 		
@@ -230,6 +271,12 @@ class WuiAddModify extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Reads all iconsets in icon path
+	 *
+	 * @return	Array iconsets
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getIconsets() {
 		$files = Array();
 		
@@ -249,6 +296,12 @@ class WuiAddModify extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Reads all maps in mapcfg path
+	 *
+	 * @return	Array maps
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getMaps() {
 		$files = Array();
 		
@@ -268,6 +321,12 @@ class WuiAddModify extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Reads all map images in map path
+	 *
+	 * @return	Array map images
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getMapImages() {
 		$files = Array();
 		
@@ -287,6 +346,12 @@ class WuiAddModify extends GlobalPage {
 		return $files;
 	}
 	
+	/**
+	 * Gets all needed error messages for WUI
+	 *
+	 * @return	Array HTML
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getJsLang() {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
@@ -307,6 +372,12 @@ class WuiAddModify extends GlobalPage {
 		return $ret;	
 	}
 	
+	/**
+	 * Gets the validConfig array in javascript format
+	 *
+	 * @return	Array HTML
+	 * @author 	Lars Michelsen <larsi@nagios-wiki.de>
+     */
 	function getJsValidConfig() {
 		$ret = Array();
 		
@@ -350,30 +421,6 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = '//--></script>';
 		
 		return $ret;
-	}
-	
-	/**
-	 * Merges the options to an final setting
-	 *
-	 * @param	String	$define		String with definition in object
-	 * @param	String	$mapGlobal	String with definition in map global
-	 * @param	String	$global		String with definition in nagvis global
-	 * @param	String	$default	String with default definition
-	 * @return	String	
-	 * @author 	Michael Luebben <michael_luebben@web.de>
-	 * @author	Lars Michelsen <larsi@nagios-wiki.de>
-	 */
-	function checkOption($define,$mapGlobal,$global,$default) {
-		if(isset($define) && $define != '') {
-			$option = $define;
-		} elseif(isset($mapGlobal) && $mapGlobal != '') {
-			$option = $mapGlobal;
-		} elseif(isset($global) && $global != '') {
-			$option = $global;
-		} else {
-			$option = $default;
-		}
-		return $option;	
 	}
 }
 ?>
