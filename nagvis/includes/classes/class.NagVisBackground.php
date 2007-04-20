@@ -123,6 +123,7 @@ class NagVisBackground extends NagVisMap {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::checkMemoryLimit('.$tryToFix.')');
 		$fileSize = filesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
 		$memoryLimit = preg_replace('/[a-z]/i','',ini_get('memory_limit'))*1024*1024;
+		if (DEBUG&&DEBUGLEVEL&2) debug('Memory Limit: '.$memoryLimit);
 		
 		$imageSize = getimagesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
 		if (is_array($imageSize)) {
@@ -143,16 +144,22 @@ class NagVisBackground extends NagVisMap {
 		// DEBUG: echo $fileSize." > ".$memoryLimit." <bR>";
 		// DEBUG: echo ((memory_get_usage() + $rawSize)*1.10)." > ".$memoryLimit;
 		$memoryUsage = $this->memoryGetUsage();
-		if($fileSize > $memoryLimit || ($memoryUsage + $rawSize)*1.10 > $memoryLimit) {
-			if($tryToFix) {
-				ini_set('memory_limit',round(($memoryUsage + $rawSize)*1.15 / 1024 /1024).'M');
-				$return = $this->checkMemoryLimit(FALSE);
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkMemoryLimit(): '.$return);
-				return $return;
+		if($memoryLimit > 0) {
+			if($fileSize > $memoryLimit || ($memoryUsage + $rawSize)*1.10 > $memoryLimit) {
+				if($tryToFix) {
+					ini_set('memory_limit',round(($memoryUsage + $rawSize)*1.15 / 1024 /1024).'M');
+					$return = $this->checkMemoryLimit(FALSE);
+					if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkMemoryLimit(): '.$return);
+					return $return;
+				}
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkMemoryLimit(): FALSE');
+				return FALSE;
+			} else {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkMemoryLimit(): TRUE');
+				return TRUE;
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkMemoryLimit(): FALSE');
-			return FALSE;
 		} else {
+			if (DEBUG&&DEBUGLEVEL&2) debug('Memory Limit is less or equal 0, aborting method and hope the Best...');
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkMemoryLimit(): TRUE');
 			return TRUE;
 		}
@@ -175,7 +182,7 @@ class NagVisBackground extends NagVisMap {
 			$sLog .= 'exists!';
 			$iReturn = memory_get_usage();
 		} else {
-			$sLog[] .= 'not exists!';
+			$sLog .= 'not exists!';
 		}
 		if (DEBUG&&DEBUGLEVEL&2) debug($sLog);
 		
