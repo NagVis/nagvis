@@ -249,7 +249,7 @@
 				</nagiosNotRunning>
 				<nagiosDataNotUpToDate>
 					<title>NDOMy Backend error! (Backend [BACKENDID])</title>
-					<text>NDOMy Backend Error~Caution: NDO claims that Nagios did NO status Update for more than  [I][TIMEWITHOUTUPDATE][/I] seconds! Make sure that Nagios and ndo2db are running!</text>
+					<text>Caution: NDO claims that Nagios did NO status Update for more than [I][TIMEWITHOUTUPDATE][/I] seconds! Make sure that Nagios and ndo2db are running!</text>
 				</nagiosDataNotUpToDate>
 				<hostNotFoundInDB>
 					<title>Host not found in database! (Backend [BACKENDID])</title>
