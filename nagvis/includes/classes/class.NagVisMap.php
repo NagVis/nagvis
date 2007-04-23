@@ -71,20 +71,7 @@ class NagVisMap extends GlobalMap {
 						$obj['background_color'] = '';
 					}
 					
-					// Check if set a hostname
-					if(isset($obj['host_name'])) {
-				  		// Output the Error-Message into the textbox.
-						if ($obj['state'] == 'ERROR') {
-				  			$obj['text'] = $obj['stateOutput'];
-				  		}
-				  		
-				  		if(in_array($obj['state'],Array('PENDING','UP','DOWN','UNREACHABLE','ERROR'))) {
-				  			$obj['class'] = 'box_'.$obj['state'];
-				  		}
-						$ret = array_merge($ret,$this->textBox($obj));
-					} else {
-						$ret = array_merge($ret,$this->textBox($obj));
-					}
+					$ret = array_merge($ret,$this->textBox($obj));
 				break;
 				case 'shape':
 					if(isset($obj['url']) && $obj['url'] != '') {
