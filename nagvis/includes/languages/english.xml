@@ -25,7 +25,7 @@
 					<text>Map</text>
 				</map>
 				<textbox>
-					<text>Messagebox</text>
+					<text>Textbox</text>
 				</textbox>
 				<shape>
 					<text>Shape</text>
@@ -353,6 +353,9 @@
 				<line>
 					<text>Line</text>
 				</line>
+				<special>
+					<text>Special</text>
+				</special>
 				<createMap>
 					<text>Create Map</text>
 				</createMap>

@@ -43,6 +43,7 @@ function createjsDOMenu() {
 	with (submenu_addobject) {
 		addMenuItem(new menuItem(get_label('icon'), "menu_addobject_icon", ""));
 		addMenuItem(new menuItem(get_label('line'), "menu_addobject_line", ""));
+		addMenuItem(new menuItem(get_label('special'), "menu_addobject_special", ""));
 	}
 	
 	submenu_addobject_icon = new jsDOMenu(140);
@@ -52,8 +53,6 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('hostgroup'), "", "code:get_click('hostgroup',1,'add');"));
 		addMenuItem(new menuItem(get_label('servicegroup'), "", "code:get_click('servicegroup',1,'add');"));
 		addMenuItem(new menuItem(get_label('map'), "", "code:get_click('map',1,'add');"));
-		addMenuItem(new menuItem(get_label('textbox'), "", "code:get_click('textbox',2,'add');"));
-		addMenuItem(new menuItem(get_label('shape'), "", "code:get_click('shape',1,'add');"));
 	}
 	
 	submenu_addobject_line = new jsDOMenu(140);
@@ -62,6 +61,12 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('service'), "", "code:get_click('service',2,'add');"));
 		addMenuItem(new menuItem(get_label('hostgroup'), "", "code:get_click('hostgroup',2,'add');"));
 		addMenuItem(new menuItem(get_label('servicegroup'), "", "code:get_click('servicegroup',2,'add');"));
+	}
+	
+	submenu_addobject_special = new jsDOMenu(140);
+	with (submenu_addobject_special) {
+		addMenuItem(new menuItem(get_label('textbox'), "", "code:get_click('textbox',2,'add');"));
+		addMenuItem(new menuItem(get_label('shape'), "", "code:get_click('shape',1,'add');"));
 	}
 	
 	submenu_maps_open = new jsDOMenu(140);
@@ -92,6 +97,7 @@ function createjsDOMenu() {
 		mainMenu.items.menu_addobject.setSubMenu(submenu_addobject);
 		submenu_addobject.items.menu_addobject_icon.setSubMenu(submenu_addobject_icon);
 		submenu_addobject.items.menu_addobject_line.setSubMenu(submenu_addobject_line);
+		submenu_addobject.items.menu_addobject_special.setSubMenu(submenu_addobject_special);
 	}
 	
 	filter = new Array("IMG.background");

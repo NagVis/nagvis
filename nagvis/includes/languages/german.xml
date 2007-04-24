@@ -32,7 +32,7 @@
 				</shape>
 			</labels>
 			<messages>
-				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten können) //-->
+				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten koennen) //-->
 				<mapCfgNotFound>
 					<title>Keine Map-Konfigurations-Datei!</title>
 					<text>Konnte die Konfigurations-Datei [I][MAP][/I] nicht &ouml;ffnen!</text>
@@ -198,7 +198,7 @@
 				</configModeNotSupported>
 				<couldNotGetHoverUrl>
 					<title>Konnte Hover-URL nicht finden</title>
-					<text>Konnte Hover-URL ([i][URL][/i]) nicht finden. Eventuell ist die URL Paswort geschützt.</text>
+					<text>Konnte Hover-URL ([i][URL][/i]) nicht finden. Eventuell ist die URL Paswort gesch&uuml;tzt.</text>
 				</couldNotGetHoverUrl>
 				<onlyPngOrJpgImages>
 					<title>NagVis-GD: Nur PNG oder JPG Bilder erlaubg</title>
@@ -229,7 +229,7 @@
 				</noBackendDefined>
 				<backendNotInitialized>
 					<title>Backend nicht initialisiert!</title>
-					<text>Das Backend mit der ID [i][BACKENDID][/i] vom Typ [i][BACKENDTYPE][/i] ist nicht initialisiert. Hauptkonfigurationsdatei prüfen.</text>
+					<text>Das Backend mit der ID [i][BACKENDID][/i] vom Typ [i][BACKENDTYPE][/i] ist nicht initialisiert. Hauptkonfigurationsdatei pr&uuml;fen.</text>
 				</backendNotInitialized>
 			</messages>
 		</global>
@@ -353,6 +353,9 @@
 				<line>
 					<text>Linie</text>
 				</line>
+				<special>
+					<text>Spezielle</text>
+				</special>
 				<createMap>
 					<text>Erstelle eine Map</text>
 				</createMap>
