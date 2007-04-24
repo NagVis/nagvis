@@ -219,12 +219,12 @@ class GlobalPage {
 			$ret[] = '<META http-equiv="refresh" content="60;">';
 			$ret[] = '<style type="text/css">.main { background-color: yellow; }</style>';
 			$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
-			$ret[] = '<tr><td align="center" valign="middle">';
+			$ret[] = '<tr><td align="center">';
 		}
-		$ret[] = '<table class="messageBox" width="50%" align="center">';
-		$ret[] = '<tr><td class="messageBoxHead" width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
-		$ret[] = '</td><td class="messageBoxHead" align="center">'.$id.': '.$LANG->getMessageTitle($id,$vars).'</td></tr>';
-		$ret[] = '<tr><td class="messageBoxMessage" align="center" colspan="2">'.$LANG->getMessageText($id,$vars).'</td></tr></table>';
+		$ret[] = '<table class="messageBox" cellpadding="2" cellspacing="2">';
+		$ret[] = '<tr><th width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
+		$ret[] = '</th><th>'.$id.': '.$LANG->getMessageTitle($id,$vars).'</th></tr>';
+		$ret[] = '<tr><td colspan="2">'.$LANG->getMessageText($id,$vars).'</td></tr></table>';
 		if($serverity == 'ERROR') {
 			$ret[] = '</td></tr></table>';
 		}
