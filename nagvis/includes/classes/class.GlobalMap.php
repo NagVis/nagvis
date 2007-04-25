@@ -157,30 +157,24 @@ class GlobalMap {
 	 * @author	Michael Luebben <michael_luebben@web.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fixIconPosition(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIconPosition(&$obj)');
+	function fixIcon(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIcon(&$obj)');
 		if(!isset($obj['path']) || $obj['path'] == '') {
 			$imgPath = $obj['icon'];
 		} else {
 			$imgPath = $obj['path'].$obj['icon'];
 		}
 		
-		if(file_exists($imgPath)) {
-			$size = getimagesize($imgPath);
-		} else {
+		if(!file_exists($imgPath)) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		    $FRONTEND->messageToUser('WARNING','iconNotExists','IMGPATH~'.$imgPath);
 		    
 			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
 			$obj['icon'] = '20x20.gif';
-			$size = getimagesize($this->MAINCFG->getValue('paths', 'icon').'20x20.gif');
 		}
-			
-		$obj['x'] -= $size[0] / 2;
-		$obj['y'] -= $size[1] / 2;
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::fixIconPosition(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::fixIcon(): Array(...)');
 		return $obj;
 	}
 	

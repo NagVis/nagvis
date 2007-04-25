@@ -1441,8 +1441,8 @@ function my_DropFunc() {
 			
 	for (cpt = dd.elements.length - 1; cpt >=0  ; cpt--) {
 		names = names + dd.elements[cpt].name.replace("box_","") + ",";
-		myposx=dd.elements[cpt].x+dd.elements[cpt].w/2;
-		myposy=dd.elements[cpt].y+dd.elements[cpt].h/2;
+		myposx = dd.elements[cpt].x;
+		myposy = dd.elements[cpt].y;
 		coord_x = coord_x + myposx + ",";
 		coord_y = coord_y + myposy + ",";
 

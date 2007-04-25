@@ -177,7 +177,7 @@ class WuiMap extends GlobalMap {
 					$obj['icon'] = "20x20.gif";
 					
 					$ret = array_merge($ret,$this->textBox($obj));
-					$obj = $this->fixIconPosition($obj);
+					$obj = $this->fixIcon($obj);
 					$ret = array_merge($ret,$this->parseIcon($obj));
 				break;
 				default:
@@ -194,7 +194,7 @@ class WuiMap extends GlobalMap {
 						}
 					}
 					
-					$obj = $this->fixIconPosition($obj);
+					$obj = $this->fixIcon($obj);
 					$ret = array_merge($ret,$this->parseIcon($obj));
 				break;	
 			}
@@ -209,8 +209,8 @@ class WuiMap extends GlobalMap {
 	 * @return	Array	Array with object informations
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fixIconPosition($obj) {
-		return parent::fixIconPosition($this->getIconPaths($obj));
+	function fixIcon($obj) {
+		return parent::fixIcon($this->getIconPaths($obj));
 	}
 	
 	/**

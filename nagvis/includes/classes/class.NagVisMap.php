@@ -86,7 +86,7 @@ class NagVisMap extends GlobalMap {
 						$hoverMenu = 0;
 					}
 					
-					$obj = $this->fixIconPosition($obj);
+					$obj = $this->fixIcon($obj);
 					$ret[] = $this->parseIcon($obj,$link,$hoverMenu);
 				break;
 				default:
@@ -102,7 +102,7 @@ class NagVisMap extends GlobalMap {
 							$ret = array_merge($ret,$this->createBoxLine($obj,$obj['state1'],$obj['state2'],$obj[$name]));
 						}
 					} else {
-						$obj = $this->fixIconPosition($obj);
+						$obj = $this->fixIcon($obj);
 						$icon = $this->parseIcon($obj);
 						if (DEBUG&&DEBUGLEVEL&2) debug('Start array_merge(Array(...),Array(...))');
 						$ret[] = $icon;
@@ -123,10 +123,10 @@ class NagVisMap extends GlobalMap {
 	 * @return	Array	Array with object informations
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fixIconPosition(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::fixIconPosition(&$obj)');
-		$return = parent::fixIconPosition($this->getIconPaths($obj));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::fixIconPosition(): '.$return);
+	function fixIcon(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::fixIcon(&$obj)');
+		$return = parent::fixIcon($this->getIconPaths($obj));
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::fixIcon(): '.$return);
 		return $return;
 	}
 	
@@ -148,7 +148,7 @@ class NagVisMap extends GlobalMap {
 			$obj['y'] = $this->GRAPHIC->middle($y_from,$y_to);
 			$obj['icon'] = '20x20.gif';
 			
-			$obj = $this->fixIconPosition($obj);
+			$obj = $this->fixIcon($obj);
 			$ret[] = $this->parseIcon($obj);
 		} elseif($mapCfg['line_type'] == '20') {
 			list($host_name_from,$host_name_to) = explode(',', $mapCfg[$name]);
@@ -161,13 +161,13 @@ class NagVisMap extends GlobalMap {
 			$obj['y'] = $this->GRAPHIC->middle2($y_from,$y_to);
 			$obj['icon'] = '20x20.gif';
 			
-			$obj = $this->fixIconPosition($obj);
+			$obj = $this->fixIcon($obj);
 			$ret[] = $this->parseIcon($obj);
 			
 			// To
 			$obj['x'] = $this->GRAPHIC->middle2($x_to,$x_from);
 			$obj['y'] = $this->GRAPHIC->middle2($y_to,$y_from);
-			$obj = $this->fixIconPosition($obj);
+			$obj = $this->fixIcon($obj);
 			$ret[] = $this->parseIcon($obj);
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createBoxLine(): Array(...)');
