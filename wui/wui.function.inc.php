@@ -302,7 +302,7 @@ switch($_GET['myaction']) {
 		print "<script>window.close();</script>\n";
 	break;
 	case 'mgt_new_image':
-		if (!is_array(${'HTTP_POST_FILES'})) {
+		if (!isset(${'HTTP_POST_FILES'}) || !is_array(${'HTTP_POST_FILES'})) {
 			$HTTP_POST_FILES = $_FILES;
 		}
 		# we check the file (the map) is properly uploaded
