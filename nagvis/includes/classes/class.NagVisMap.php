@@ -482,27 +482,37 @@ class NagVisMap extends GlobalMap {
 		
 		switch($obj['type']) {
 			case 'map':
-				// save mapName in linkedMaps array
-				$this->linkedMaps[] = $this->MAPCFG->getName();
-				
-				$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$obj[$name]);
-				$SUBMAPCFG->readMapConfig();
-				$SUBMAP = new NagVisMap($this->MAINCFG,$SUBMAPCFG,$this->LANG,$this->BACKEND);
-				$SUBMAP->linkedMaps = $this->linkedMaps;
-				
-				if($this->checkPermissions($SUBMAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-					// prevent loops in recursion
-					if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
-		                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-			            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
-						
-						$state = Array('State' => 'UNKNOWN','Output' => $FRONTEND->LANG->getMessageText('loopInMapRecursion'));
-					} else {
-						$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1,1));
-						$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
-					}
+				// prevent direct loops (map including itselfes as map icon)
+				if($this->MAPCFG->getName() == $obj[$name]) {
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+					
+					$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
+					$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
 				} else {
-					$state = Array('State' => 'UNKNOWN','Output'=>'Error: You\'re not permited to view the state of this map.');
+					// save mapName in linkedMaps array
+					$this->linkedMaps[] = $this->MAPCFG->getName();
+					
+					$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$obj[$name]);
+					$SUBMAPCFG->readMapConfig();
+					$SUBMAP = new NagVisMap($this->MAINCFG,$SUBMAPCFG,$this->LANG,$this->BACKEND);
+					$SUBMAP->linkedMaps = $this->linkedMaps;
+					
+					if($this->checkPermissions($SUBMAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+						// prevent loops in recursion
+						if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
+			                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+							
+							$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
+							$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
+						} else {
+							$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1,1));
+							$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
+						}
+					} else {
+						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You\'re not permited to view the state of this map.');
+					}
 				}
 			break;
 			case 'textbox':
