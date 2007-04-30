@@ -1,10 +1,11 @@
-NagVis 1.0b1 Quick Installation Instructions
+NagVis 1.0 Quick Installation Instructions
 ------------------------------------------
 
 Author: Andreas Husch, Lars Michelsen
-Document Version: 0.1
-Date: 2007-02-02
-Applies to: NagVis 1.0b2
+Document Version: 0.2
+Date: 2007-04-30
+Applies to: NagVis 1.0
+------------------------------------------
 
 STEP 0: Prepair System
 ------
@@ -45,10 +46,11 @@ Move to new NagVis directory
 
 > cd /usr/local/nagios/share/nagvis
 
-An example for the configuration files can be found in etc/config.ini.php.dist. 
-If you like to change some settings in this file copy this example to etc/config.ini.php.
+An example for the configuration files can be found in nagvis/etc/config.ini.php.dist. 
+If you like to change some settings in this file copy this example to 
+nagvis/etc/config.ini.php.
 
-> cp etc/config.ini.php.dist etc/config.ini.php
+> cp nagvis/etc/config.ini.php.dist nagvis/etc/config.ini.php
 
 Now you can edit this file with your favorite text editor - I use vi:
 
@@ -65,6 +67,13 @@ STEP 5: Permissions
 !!! This is very important for a clean working installation !!!
 
 First check which user the webserver is running with (In my case it is wwwrun).
+If you don't know which user the webserver is running on have a look at the webservers
+configuration. In case of apache you can do this by the following command:
+
+> grep -e '^User' /etc/apache2/httpd.conf
+
+If your configuration file is located in another path you should correct this in 
+the command above
 
 The set the permissions to your NagVis directory (In my case the path are like this):
 
@@ -75,7 +84,7 @@ The set the permissions to your NagVis directory (In my case the path are like t
 > chmod 775 /usr/local/nagios/share/nagvis/nagvis/etc/maps
 > chmod 664 /usr/local/nagios/share/nagvis/nagvis/etc/maps/*
 
-It’s possible to set lower permissions on the files, in my setup it’s ok like this.
+It’s possible to set lower permissions on the files, in my setup it's ok like this.
 Only change them if you know, what you are doing. 
 
 STEP 6: The WUI
@@ -93,7 +102,7 @@ now you can configure NagVis and create maps with the WUI.
 The Config Tools DOES NOT display the current Nagios States of Objects configured.
 Its only for configuring! To "use" your configured Maps afterwards see STEP 7!
 
-If this does’t work for you, or if you don’t want to use the WUI, you can simply 
+If this does't work for you, or if you don't want to use the WUI, you can simply 
 edit the map config files in the nagvis/etc/maps/ directory with your favorite text 
 editor. For valid format and values have a look at Map Config Format Description on 
 NagVis.org (http://www.nagvis.org/doku.php?id=map_config_format_description_1_0). 
