@@ -140,11 +140,11 @@ class GlobalMainCfg {
 												'default' => 'header.nagvis.inc')),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => '1.0rc2',
+												'default' => '1.0',
 												'locked' => 1),
 							'title' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => 'NagVis 1.0rc2',
+												'default' => 'NagVis 1.0',
 												'locked' => 1)));
 		
 		// Default - minimal - config initialisation
