@@ -9,10 +9,6 @@
 #	http://www.walterzorn.com   												#
 #################################################################################
 
-# script called when the user submits a form. Depending on the action value, it 
-# calls the bash script with the right arguments. It's this bash script which 
-# applies the changes on the server. 
-
 require('../nagvis/includes/classes/class.GlobalDebug.php');
 require('../nagvis/includes/classes/class.GlobalLanguage.php');
 require('../nagvis/includes/classes/class.GlobalMainCfg.php');
@@ -20,7 +16,6 @@ require('../nagvis/includes/classes/class.GlobalPage.php');
 require('../nagvis/includes/classes/class.GlobalMapCfg.php');
 require('./includes/classes/class.WuiMainCfg.php');
 require('./includes/classes/class.WuiMapCfg.php');
-
 
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 
@@ -122,8 +117,6 @@ function getAllMaps(&$MAINCFG) {
 
 switch($_GET['myaction']) {
 	case 'save':
-		# passes the lists (image, valx and valy) to the bash script which modifies the coordinates in the map cfg file
-		# save the coordinates on the server
 		$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['mapname']);
 		$MAPCFG->readMapConfig();
 		
@@ -150,7 +143,7 @@ switch($_GET['myaction']) {
 			
 			backup($MAINCFG,$_POST['mapname']);
 		}
-		# display the same map again
+		// display the same map again
 		print "<script>document.location.href='./index.php?map=".$_POST['mapname']."';</script>\n";
 	break;
 	case 'modify':
@@ -180,15 +173,15 @@ switch($_GET['myaction']) {
 		$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map']);
 		$MAPCFG->readMapConfig();
 		
-		# we append a new object definition line in the map cfg file
+		// append a new object definition line in the map cfg file
 		$elementId = $MAPCFG->addElement($_POST['type'],getArrayFromProperties($_POST['properties']));
 		$MAPCFG->writeElement($_POST['type'],$elementId);
 		
 		// do the backup
 		backup($MAINCFG,$_POST['map']);
 		
-		# we display the same map again, with the autosave value activated : the map will automatically be saved
-		# after the next drag and drop (after the user placed the new object on the map)
+		// display the same map again, with the autosave value activated: the map will automatically be saved
+		// after the next drag and drop (after the user placed the new object on the map)
 		print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."&autosave=true';</script>\n";
 		print "<script>window.close();</script>\n";
 	break;
@@ -305,7 +298,7 @@ switch($_GET['myaction']) {
 		if (!isset(${'HTTP_POST_FILES'}) || !is_array(${'HTTP_POST_FILES'})) {
 			$HTTP_POST_FILES = $_FILES;
 		}
-		# we check the file (the map) is properly uploaded
+		// check the file (the map) is properly uploaded
 		if(is_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'])) {
 		    $ficname = $HTTP_POST_FILES['fichier']['name'];
 		    if(substr($ficname,strlen($ficname)-4,4) == ".png") {

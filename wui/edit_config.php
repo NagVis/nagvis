@@ -23,7 +23,3 @@ $FRONTEND = new WuiEditMainCfg($MAINCFG);
 $FRONTEND->getForm();
 $FRONTEND->printPage();
 ?>
-
-
-
-

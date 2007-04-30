@@ -23,8 +23,6 @@ require("./includes/classes/class.WuiAddModify.php");
 
 $MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
 
-//$BACKEND = new GlobalBackendMgmt($MAINCFG);
-
 $MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
 $MAPCFG->readMapConfig();
 
