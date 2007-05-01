@@ -1,0 +1,237 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- ViewVC - http://viewvc.org/
+by Greg Stein - mailto:gstein@lyra.org -->
+<head>
+<title>SourceForge.net Repository - [nagvis] Log of /trunk/wui/includes/css/office_xp/icon2.png</title>
+<meta name="generator" content="ViewVC 1.0.3" />
+<link rel="stylesheet" href="/viewvc/*docroot*/styles.css" type="text/css" />
+</head>
+<body>
+<table style="padding:0.1em;">
+<tr>
+<td>
+<strong>
+
+<a href="/viewvc/nagvis/?pathrev=583">
+
+[nagvis]</a>
+/
+
+<a href="/viewvc/nagvis/trunk/?pathrev=583">
+
+trunk</a>
+/
+
+<a href="/viewvc/nagvis/trunk/wui/?pathrev=583">
+
+wui</a>
+/
+
+<a href="/viewvc/nagvis/trunk/wui/includes/?pathrev=583">
+
+includes</a>
+/
+
+<a href="/viewvc/nagvis/trunk/wui/includes/css/?pathrev=583">
+
+css</a>
+/
+
+<a href="/viewvc/nagvis/trunk/wui/includes/css/office_xp/?pathrev=583">
+
+office_xp</a>
+/
+
+
+
+icon2.png
+
+
+</strong>
+
+</td>
+</tr>
+</table>
+
+
+<div style="float: right; padding: 5px;"><a href="http://sourceforge.net"><img src="/viewvc/*docroot*/images/sourceforge_whitebg.gif" alt="(logo)" border=0 width=136 height=79></a></div>
+<h1>Log of /trunk/wui/includes/css/office_xp/icon2.png</h1>
+
+<p style="margin:0;">
+
+<a href="/viewvc/nagvis/trunk/wui/includes/css/office_xp/?pathrev=583"><img src="/viewvc/*docroot*/images/back_small.png" width="16" height="16" alt="Parent Directory" /> Parent Directory</a>
+
+
+
+
+</p>
+
+<hr />
+<table class="auto">
+
+
+
+
+
+<tr>
+<td>Sticky Revision:</td>
+<td><form method="get" action="/viewvc/nagvis" style="display: inline">
+<input type="hidden" name="orig_pathtype" value="FILE" /><input type="hidden" name="orig_pathrev" value="583" /><input type="hidden" name="orig_view" value="log" /><input type="hidden" name="orig_path" value="trunk/wui/includes/css/office_xp/icon2.png" /><input type="hidden" name="view" value="redirect_pathrev" />
+
+<input type="text" name="pathrev" value="583" size="6"/>
+
+<input type="submit" value="Set" />
+</form>
+
+<form method="get" action="/viewvc/nagvis/trunk/wui/includes/css/office_xp/icon2.png" style="display: inline">
+<input type="hidden" name="view" value="log" /><input type="hidden" name="pathrev" value="583" />
+
+
+(<i>Current path doesn't exist after revision <strong>583</strong></i>)
+
+</form>
+
+</td>
+</tr>
+</table>
+ 
+
+
+
+
+
+
+
+
+<div>
+<hr />
+
+<a name="rev346"></a>
+
+
+Revision <a href="/viewvc/nagvis?view=rev&amp;revision=346"><strong>346</strong></a> -
+
+(<a href="/viewvc/nagvis/trunk/wui/includes/css/office_xp/icon2.png?revision=346&amp;view=markup&amp;pathrev=583">view</a>)
+
+(<a href="/viewvc/*checkout*/nagvis/trunk/wui/includes/css/office_xp/icon2.png?revision=346&amp;pathrev=583">download</a>)
+(<a href="/viewvc/*checkout*/nagvis/trunk/wui/includes/css/office_xp/icon2.png?revision=346&amp;content-type=text%2Fplain&amp;pathrev=583">as text</a>)
+(<a href="/viewvc/nagvis/trunk/wui/includes/css/office_xp/icon2.png?annotate=346&amp;pathrev=583">annotate</a>)
+
+
+
+- <a href="/viewvc/nagvis/trunk/wui/includes/css/office_xp/icon2.png?view=log&amp;r1=346&amp;pathrev=583">[select for diffs]</a>
+
+
+
+
+<br />
+
+Added
+
+<em>Sun Aug 13 11:52:19 2006 UTC</em> (8 months, 2 weeks ago) by <em>MiCkEy2002</em>
+
+
+
+
+
+
+
+<br />File length: 1015 byte(s)
+
+
+
+
+
+
+
+
+
+
+<pre class="vc_log">Add new NagVis directory design! Older Version can be find in the SVN directory tags</pre>
+</div>
+
+ 
+
+
+
+ <hr />
+<p><a name="diff"></a>
+This form allows you to request diffs between any two revisions of this file.
+For each of the two "sides" of the diff,
+
+enter a numeric revision.
+
+</p>
+<form method="get" action="/viewvc/nagvis/trunk/wui/includes/css/office_xp/icon2.png" name="diff_select">
+<table cellpadding="2" cellspacing="0" class="auto">
+<tr>
+<td>&nbsp;</td>
+<td>
+<input type="hidden" name="view" value="diff" /><input type="hidden" name="pathrev" value="583" />
+Diffs between
+
+<input type="text" size="12" name="r1"
+value="346" />
+
+and
+
+<input type="text" size="12" name="r2" value="346" />
+
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+Type of Diff should be a
+<select name="diff_format" onchange="submit()">
+<option value="h" selected="selected">Colored Diff</option>
+<option value="l" >Long Colored Diff</option>
+<option value="u" >Unidiff</option>
+<option value="c" >Context Diff</option>
+<option value="s" >Side by Side</option>
+</select>
+<input type="submit" value=" Get Diffs " />
+</td>
+</tr>
+</table>
+</form>
+
+
+<form method="get" action="/viewvc/nagvis/trunk/wui/includes/css/office_xp/icon2.png">
+<div>
+<hr />
+<a name="logsort"></a>
+<input type="hidden" name="view" value="log" /><input type="hidden" name="pathrev" value="583" />
+Sort log by:
+<select name="logsort" onchange="submit()">
+<option value="cvs" >Not sorted</option>
+<option value="date" selected="selected">Commit date</option>
+<option value="rev" >Revision</option>
+</select>
+<input type="submit" value=" Sort " />
+</div>
+</form>
+
+
+<hr />
+<table>
+<tr>
+<td>
+<address><a href="http://sourceforge.net/">Back to SourceForge.net</a></address><br />
+Powered by <a href="http://viewvc.tigris.org/">ViewVC 1.0.3</a>
+</td>
+<td style="text-align:right;">
+<h3><a href="/viewvc/*docroot*/help_log.html">ViewVC and Help</a></h3>
+</td>
+</tr>
+</table>
+</body>
+</html>
+
+
