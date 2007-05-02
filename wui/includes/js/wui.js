@@ -10,10 +10,31 @@ var myshapey=0;
 var objid=0;
 
 // function that says if the current user is allowed to have access to the map
-function checkUserAllowed(mapName,allowedUsers,username) {
+function checkUserAllowed(allowedUsers,username) {
 	for(var i=0;i<allowedUsers.length;i++) {
 		if((allowedUsers[i] == username) || (allowedUsers[i] == "EVERYONE") ) {
 			return true;
+		}
+	}
+	return false;
+}
+
+function getMapPermissions(mapName,mapOptions,permissionLevel) {
+	if(permissionLevel == "") {
+		permissionLevel = "allowedUsers";
+	}
+	
+	for(var i=0;i<mapOptions.length;i++) {
+		if(mapOptions[i].mapName == mapName) {
+			if(permissionLevel == "allowedForConfig") {
+				return mapOptions[i].allowedForConfig;
+			} else if(permissionLevel == "allowedUsers") {
+				return mapOptions[i].allowedUsers;
+			} else if(permissionLevel == "allowedUsersOrAllowedForConfig") {
+				return mapOptions[i].allowedForConfig.concat(mapOptions[i].allowedUsers);
+			} else {
+				return false;	
+			}
 		}
 	}
 	return false;

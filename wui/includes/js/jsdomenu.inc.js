@@ -73,7 +73,7 @@ function createjsDOMenu() {
 	for(i=0;i<mapOptions.length;i++) {
 		submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:./index.php?map="+mapOptions[i].mapName,"","",""));
 		
-		if(!checkUserAllowed(mapOptions[i].mapName,mapOptions[i].allowedForConfig,username)) {
+		if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedForConfig"),username)) {
 			submenu_maps_open.items[mapOptions[i].mapName].enabled=false;
 			submenu_maps_open.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
 		}
@@ -85,7 +85,7 @@ function createjsDOMenu() {
 	for(i=0;i<mapOptions.length;i++) {
 		submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
 		
-		if(!checkUserAllowed(mapOptions[i].mapName,mapOptions[i].allowedUsers,username)) {
+		if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
 			submenu_maps_open_nagvis.items[mapOptions[i].mapName].enabled=false;
 			submenu_maps_open_nagvis.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
 		}

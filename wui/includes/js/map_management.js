@@ -105,7 +105,7 @@ function check_map_rename() {
 		}
 	}
 	
-	if (is_user_allowed(document.map_rename.map_name.value)===false) {
+	if(!checkUserAllowed(getMapPermissions(document.map_rename.map_name.value,window.opener.mapOptions,"allowedForConfig"), window.opener.username)) {
 		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
@@ -124,7 +124,7 @@ function check_map_export() {
 	}
 	
 	// read and write users are allowed to export the map
-	if(!checkUserAllowed(document.map_export.map_name.value, window.opener.mapOptions.allowedForConfig.concat(window.opener.mapOptions.allowedUsers), window.opener.username)) {
+	if(!checkUserAllowed(getMapPermissions(document.map_export.map_name.value,window.opener.mapOptions,"allowedUsersOrAllowedForConfig"), window.opener.username)) {
 		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
@@ -138,7 +138,7 @@ function check_map_delete() {
 		return false;
 	}
 	
-	if(!checkUserAllowed(document.map_delete.map_name.value, window.opener.mapOptions, window.opener.username)) {
+	if(!checkUserAllowed(getMapPermissions(document.map_delete.map_name.value,window.opener.mapOptions,"allowedForConfig"), window.opener.username)) {
 		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
