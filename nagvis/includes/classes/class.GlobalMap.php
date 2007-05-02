@@ -124,10 +124,12 @@ class GlobalMap {
 				switch($stateLow) {
 					case 'critical':
 					case 'warning':
-					case 'sack':
 					case 'unknown':
 					case 'ok':
 						$icon = $obj['iconset'].'_'.$stateLow.'.png';
+					break;
+					case 'ack':
+						$icon = $obj['iconset'].'_s'.$stateLow.'.png';
 					break;
 					default:	
 						$icon = $obj['iconset'].'_error.png';
