@@ -83,6 +83,15 @@ function check_object() {
 			}		
 			
 			if(document.addmodify.elements[i].value != '') {
+				// Prevent direct loop in map recursion
+				if(document.addmodify.type.value == "map" && document.addmodify.elements[i].name == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
+					// LOOP!
+					alert(printLang(lang['loopInMapRecursion'],''));
+					document.addmodify.properties.value='';
+					document.addmodify.elements[i].focus();
+					return false;
+				}
+				
 				if(validConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
 					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length)+'='+document.addmodify.elements[i].value;
 				} else {

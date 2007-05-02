@@ -367,6 +367,7 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = 'lang["only1or2coordsY"] = "'.$this->LANG->getMessageText('only1or2coords','','COORD=Y').'";';
 		$ret[] = 'lang["lineTypeNotSelectedX"] = "'.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=X').'";';
 		$ret[] = 'lang["lineTypeNotSelectedY"] = "'.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=Y').'";';
+		$ret[] = 'lang["loopInMapRecursion"] = "'.$this->LANG->getMessageText('loopInMapRecursion').'";';
 		$ret[] = '//--></script>';
 		
 		return $ret;	
