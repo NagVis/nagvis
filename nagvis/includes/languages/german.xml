@@ -305,6 +305,9 @@
 				<delete>
 					<text>L&ouml;schen</text>
 				</delete>
+				<export>
+					<text>Exportieren</text>
+				</export>
 				<positionSize>
 					<text>Positionieren/Gr&ouml;sse</text>
 				</positionSize>
@@ -650,7 +653,7 @@
 				<delBackend>
 					<text>Backend L&ouml;schen</text>
 				</delBackend>
-			</label>
+			</labels>
 			<messages>
 				<dummy>
 					<text>dummy - don't delete this!</text>
@@ -659,10 +662,10 @@
 		</backendManagement>
 		<mapManagement>
 			<labels>
-				<dummy>
-					<text>dummy - don't delete this!</text>
-				</dummy>
-			</label>
+				<exportMap>
+					<text>Map exportieren</text>
+				</exportMap>
+			</labels>
 			<messages>
 				<dummy>
 					<text>dummy - don't delete this!</text>
@@ -674,7 +677,7 @@
 				<dummy>
 					<text>dummy - don't delete this!</text>
 				</dummy>
-			</label>
+			</labels>
 			<messages>
 				<dummy>
 					<text>dummy - don't delete this!</text>
