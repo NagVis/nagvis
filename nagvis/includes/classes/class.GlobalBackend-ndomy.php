@@ -611,7 +611,7 @@ class GlobalBackendndomy {
 					$objs['ack']++;			
 				} elseif($currentState['State'] == 'WARNING') {
 					$objs['warning']++;
-				} elseif($currentHostState['State'] == 'CRITICAL') {
+				} elseif($currentState['State'] == 'CRITICAL') {
 					$objs['critical']++;
 				} elseif($currentState['State'] == 'UNKNOWN') {
 					$objs['unknown']++;
