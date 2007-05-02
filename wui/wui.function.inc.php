@@ -281,6 +281,20 @@ switch($_GET['myaction']) {
 		print "<script>window.opener.document.location.href='./index.php?map=".$map."';</script>\n";
 		print "<script>window.close();</script>\n";
 	break;
+	case 'mgt_map_export':
+		// map to delete: $_POST['map_name'];
+		if(!isset($_POST['map_name']) || $_POST['map_name'] != '') {
+			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map_name']);
+			
+			if(!$MAPCFG->exportMap()) {
+				// Error Handling
+				print "<script>alert('An error occured while exporting the map.')</script>";
+			}
+		} else {
+			// Error Handling
+			print "<script>alert('Can\'t export map, no map name given.')</script>";
+		}
+	break;
 	case 'mgt_image_delete':
 		if(file_exists($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
 			if(unlink($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {

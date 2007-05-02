@@ -117,6 +117,21 @@ function check_map_rename() {
 	return true;
 }
 
+function check_map_export() {
+	if(document.map_export.map_name.value=='') {
+		alert(printLang(lang['foundNoMapToExport'],''));
+		return false;
+	}
+	
+	// read and write users are allowed to export the map
+	if(!checkUserAllowed(document.map_export.map_name.value, window.opener.mapOptions.allowedForConfig.concat(window.opener.mapOptions.allowedUsers), window.opener.username)) {
+		alert(printLang(lang['noPermissions'],''));
+		return false;
+	}
+	
+	return true;
+}
+
 function check_map_delete() {
 	if(document.map_delete.map_name.value=='') {
 		alert(printLang(lang['foundNoMapToDelete'],''));

@@ -663,13 +663,13 @@
 		<mapManagement>
 			<labels>
 				<exportMap>
-					<text>Export Maps</text>
+					<text>Export Map</text>
 				</exportMap>
 			</labels>
 			<messages>
-				<dummy>
-					<text>dummy - don't delete this!</text>
-				</dummy>
+				<foundNoMapToExport>
+					<text>No map found. Operation terminated.</text>
+				</foundNoMapToExport>
 			</messages>
 		</mapManagement>
 		<addModify>

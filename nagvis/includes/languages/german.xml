@@ -468,7 +468,7 @@
 					<text>Du hast keinen neuen Namen angegeben.</text>
 				</noNewNameGiven>
 				<mapAlreadyExists>
-					<text>Diese Map existiert bereits. W㧬e einen anderen Namen.</text>
+					<text>Diese Map existiert bereits. W&auml;hle einen anderen Namen.</text>
 				</mapAlreadyExists>
 				<foundNoMapToDelete>
 					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
@@ -667,9 +667,9 @@
 				</exportMap>
 			</labels>
 			<messages>
-				<dummy>
-					<text>dummy - don't delete this!</text>
-				</dummy>
+				<foundNoMapToExport>
+					<text>Keine Map zum exportieren gefunden. Operation abgebrochen.</text>
+				</foundNoMapToExport>
 			</messages>
 		</mapManagement>
 		<addModify>

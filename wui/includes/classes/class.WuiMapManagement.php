@@ -78,6 +78,17 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->getDeleteFields());
 		$this->addBodyLines($this->getDeleteSubmit());
 		
+		$this->EXPORTFORM = new GlobalForm(Array('name'=>'map_export',
+			'id'=>'map_export',
+			'method'=>'POST',
+			'action'=>'./wui.function.inc.php?myaction=mgt_map_export',
+			'onSubmit'=>'return check_map_export();',
+			'cols'=>'2'));
+		$this->addBodyLines($this->EXPORTFORM->initForm());
+		$this->addBodyLines($this->EXPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('exportMap'))));
+		$this->addBodyLines($this->getExportFields());
+		$this->addBodyLines($this->getExportSubmit());
+		
 		$this->NEWIMGFORM = new GlobalForm(Array('name'=>'new_image',
 			'id'=>'new_image',
 			'method'=>'POST',
@@ -150,6 +161,29 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
+	 * Gets export fields of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getExportFields() {
+		$ret = Array();
+		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		
+		return $ret;
+	}
+	
+	/**
+	 * Gets default export button of the form
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getExportSubmit() {
+		return array_merge($this->EXPORTFORM->getSubmitLine($this->LANG->getLabel('export')),$this->EXPORTFORM->closeForm());
+	}
+	
+	/**
 	 * Gets delete fields of the form
 	 *
 	 * @return	Array	HTML Code
@@ -157,15 +191,15 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getDeleteFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
-		$ret = array_merge($ret,$this->RENAMEFORM->getHiddenField('map',''));
+		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		$ret = array_merge($ret,$this->DELETEFORM->getHiddenField('map',''));
 		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
 		
 		return $ret;
 	}
 	
 	/**
-	 * Gets default delete button of the form
+	 * Gets delete submit button of the form
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -323,6 +357,7 @@ class WuiMapManagement extends GlobalPage {
 		$ret[] = 'lang["mapAlreadyExists"] = "'.$this->LANG->getMessageText('mapAlreadyExists').'";';
 		$ret[] = 'lang["foundNoMapToDelete"] = "'.$this->LANG->getMessageText('foundNoMapToDelete').'";';
 		$ret[] = 'lang["foundNotBackgroundToDelete"] = "'.$this->LANG->getMessageText('foundNotBackgroundToDelete').'";';
+		$ret[] = 'lang["foundNoMapToExport"] = "'.$this->LANG->getMessageText('foundNoMapToExport').'";';
 		$ret[] = 'lang["confirmNewMap"] = "'.$this->LANG->getMessageText('confirmNewMap').'";';
 		$ret[] = 'lang["confirmMapRename"] = "'.$this->LANG->getMessageText('confirmMapRename').'";';
 		$ret[] = 'lang["confirmMapDeletion"] = "'.$this->LANG->getMessageText('confirmMapDeletion').'";';
