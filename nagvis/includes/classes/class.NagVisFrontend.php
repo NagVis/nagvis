@@ -168,7 +168,7 @@ class NagVisFrontend extends GlobalPage {
     function getNextRotate() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotate()');
 	    $maps = explode(',', $this->MAINCFG->getValue('global', 'maps'));
-	    if($this->MAINCFG->getValue('global', 'rotatemaps') == '1' || (isset($_GET['rotate']) && $_GET['rotate'] == '1')) {
+	    if(($this->MAINCFG->getValue('global', 'rotatemaps') == '1' && (!isset($_GET['rotate']) || isset($_GET['rotate']) && $_GET['rotate'] != '0')) || (isset($_GET['rotate']) && $_GET['rotate'] == '1')) {
 			if(isset($_GET['url']) && $_GET['url'] != '') {
 				$currentMap = '['.$_GET['url'].']';
 			} else {
