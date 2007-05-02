@@ -140,18 +140,13 @@ class GlobalMainCfg {
 												'default' => 'header.nagvis.inc')),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => '1.0',
+												'default' => '1.1a1',
 												'locked' => 1),
 							'title' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => 'NagVis 1.0',
+												'default' => 'NagVis 1.1a1',
 												'locked' => 1)));
-		
-		// Default - minimal - config initialisation
-		// if an error with the main-cfg-file occours and we can't get the settings 
-		// set defaults here
-		// DEPRECATED: $this->config['global']['language'] = $this->validConfig['global']['language']['default'];
-		
+				
 		// Read Main Config file
 		$this->configFile = $configFile;
 		$this->readConfig(1);

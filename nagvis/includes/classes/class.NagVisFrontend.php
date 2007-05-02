@@ -157,39 +157,43 @@ class NagVisFrontend extends GlobalPage {
 			return FALSE;
 		}
 	}
-	
-	/**
-	 * Gets the Next map to rotate to, if enabled
-	 * If Next map is in [ ], it will be an absolute url
-	 *
-	 * @return	String	URL to rotate to
-	 * @author 	Michael Luebben <michael_luebben@web.de>
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getNextRotate() {
+    
+    /**
+     * Gets the Next map to rotate to, if enabled
+     * If Next map is in [ ], it will be an absolute url
+     *
+     * @return      String  URL to rotate to
+     * @author      Lars Michelsen <lars@vertical-visions.de>
+     */
+    function getNextRotate() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotate()');
-        $maps = explode(',', $this->MAINCFG->getValue('global', 'maps'));
-        if($this->MAINCFG->getValue('global', 'rotatemaps') == '1') {
-        	// get position of actual map in the array
-            $index = array_search($this->MAPCFG->getName(),$maps);
+	    $maps = explode(',', $this->MAINCFG->getValue('global', 'maps'));
+	    if($this->MAINCFG->getValue('global', 'rotatemaps') == '1' || (isset($_GET['rotate']) && $_GET['rotate'] == '1')) {
+			if(isset($_GET['url']) && $_GET['url'] != '') {
+				$currentMap = '['.$_GET['url'].']';
+			} else {
+				$currentMap = $this->MAPCFG->getName();
+			}
+			
+			// get position of actual map in the array
+			$index = array_search($currentMap,$maps);
 			if (($index + 1) >= sizeof($maps)) {
-            	// if end of array reached, go to the beginning...
+				// if end of array reached, go to the beginning...
 				$index = 0;
 			} else {
 				$index++;
 			}
-            $map = $maps[$index];
-            
-            if(preg_match('/^[(.?)]$/',$map)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL='.$map);
-            	return ' URL='.$map;
-            } else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?map='.$map);
-            	return ' URL=index.php?map='.$map;
-        	}
-            
-        	
-        }
-    }
+			
+			$nextMap = $maps[$index];
+			
+			if(preg_match("/^\[(.+)\]$/",$nextMap,$arrRet)) {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?rotate=1&url='.$arrRet[1]);
+				return ' URL=index.php?rotate=1&url='.$arrRet[1];
+			} else {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?map='.$nextMap.'&rotate=1');
+				return ' URL=index.php?map='.$nextMap.'&rotate=1';
+			}
+		}
+    } 
 }
 ?>
