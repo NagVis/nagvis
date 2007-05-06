@@ -6,6 +6,7 @@ class WuiMap extends GlobalMap {
 	var $MAINCFG;
 	var $MAPCFG;
 	var $LANG;
+	var $GRAPHIC;
 	
 	var $objects;
 	var $moveable;
@@ -22,6 +23,8 @@ class WuiMap extends GlobalMap {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
+		
+		$this->GRAPHIC = new GlobalGraphic();
 		
 		parent::GlobalMap($MAINCFG,$MAPCFG);
 		
@@ -185,6 +188,8 @@ class WuiMap extends GlobalMap {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
 						$ret[] = "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
+						$obj['x'] = $this->GRAPHIC->middle($pointa_x,$pointb_x) - 10;
+						$obj['y'] = $this->GRAPHIC->middle($pointa_y,$pointb_y) - 10;
 						
 						$obj['icon'] = '20x20.gif';
 					} else {
