@@ -65,17 +65,24 @@ function check_backend_add() {
 	form = document.backend_add;
 	
 	if(form.backend_id.value == '') {
-		alert('backend_id not set. You have to set a backend_id.');
-		
-		return false;	
+		alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~backend_id'));
+		return false;
 	}
 	if(form.backendtype.value == '') {
-		alert('backendtype not set. You have to set a backendtype.');
-		
-		return false;	
+		alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~backendtype'));
+		return false;
 	}
 	
-	//FIXME: Validate options of the chosen backend
+	for(i=0;i<form.elements.length;i++) {
+		// backend_id und backendtype are handled before this loop
+		if(form.elements[i].name != 'backend_id' && form.elements[i].name != 'backendtype') {
+			// if this value is a "must" and emtpy, error
+			if(backendOptions[form.backendtype.value][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
+				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+form.elements[i].name));
+				return false;
+			}
+		}
+	}
 	
 	return true;
 }
@@ -84,12 +91,20 @@ function check_backend_edit() {
 	form = document.backend_edit;
 	
 	if(form.backend_id.value == '') {
-		alert('backend_id not set. You have to set a backend_id.');
-		
-		return false;	
+		alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~backend_id'));
+		return false;
 	}
 	
-	//FIXME: Validate options of the chosen backend
+	for(i=0;i<form.elements.length;i++) {
+		// backend_id und backendtype are handled before this loop
+		if(form.elements[i].name != 'backend_id' && form.elements[i].name != 'backendtype') {
+			// if this value is a "must" and emtpy, error
+			if(backendOptions[definedBackends[form.backend_id.value]['backendtype']][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
+				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+form.elements[i].name));
+				return false;
+			}
+		}
+	}
 	
 	return true;
 }

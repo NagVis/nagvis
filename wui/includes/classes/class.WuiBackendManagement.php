@@ -23,7 +23,8 @@ class WuiBackendManagement extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/BackendManagement.js',
+					  'jsIncludes'=>Array('./includes/js/wui.js',
+					  						'./includes/js/BackendManagement.js',
 					  						'./includes/js/ajax.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'),
@@ -274,7 +275,7 @@ class WuiBackendManagement extends GlobalPage {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
-		//$ret[] = 'lang["firstMustChoosePngImage"] = "'.$this->LANG->getMessageText('firstMustChoosePngImage').'";';
+		$ret[] = 'lang["mustValueNotSet"] = \''.$this->LANG->getMessageText('mustValueNotSet','',FALSE).'\';';
 		$ret[] = '//--></script>';
 		
 		return $ret;	

@@ -655,9 +655,10 @@
 				</delBackend>
 			</labels>
 			<messages>
-				<dummy>
-					<text>dummy - don't delete this!</text>
-				</dummy>
+				<mustValueNotSet>
+					<title>Must value not set</title>
+					<text>The must value "[I][ATTRIBUTE][/I]" is not set</text>
+				</mustValueNotSet>
 			</messages>
 		</backendManagement>
 		<mapManagement>
