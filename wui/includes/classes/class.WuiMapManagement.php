@@ -12,8 +12,7 @@ class WuiMapManagement extends GlobalPage {
 	var $DELETEFORM;
 	var $EXPORTFORM;
 	var $IMPORTFORM;
-	var $NEWIMGFORM;
-	var $DELIMGFORM;
+	var $propCount;
 	
 	/**
 	 * Class Constructor
@@ -23,6 +22,7 @@ class WuiMapManagement extends GlobalPage {
 	 */
 	function WuiMapManagement(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
+		$this->propCount = 0;
 		
 		// load the language file
 		$this->LANG = new GlobalLanguage($MAINCFG,'wui:mapManagement');
@@ -55,6 +55,7 @@ class WuiMapManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->CREATEFORM->initForm());
 		$this->addBodyLines($this->CREATEFORM->getCatLine(strtoupper($this->LANG->getLabel('createMap'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getCreateFields());
 		$this->addBodyLines($this->getCreateSubmit());
 		
@@ -66,6 +67,7 @@ class WuiMapManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->RENAMEFORM->initForm());
 		$this->addBodyLines($this->RENAMEFORM->getCatLine(strtoupper($this->LANG->getLabel('renameMap'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getRenameFields());
 		$this->addBodyLines($this->getRenameSubmit());
 		
@@ -77,6 +79,7 @@ class WuiMapManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->DELETEFORM->initForm());
 		$this->addBodyLines($this->DELETEFORM->getCatLine(strtoupper($this->LANG->getLabel('deleteMap'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getDeleteFields());
 		$this->addBodyLines($this->getDeleteSubmit());
 		
@@ -88,6 +91,7 @@ class WuiMapManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->EXPORTFORM->initForm());
 		$this->addBodyLines($this->EXPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('exportMap'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getExportFields());
 		$this->addBodyLines($this->getExportSubmit());
 		
@@ -100,8 +104,28 @@ class WuiMapManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->IMPORTFORM->initForm());
 		$this->addBodyLines($this->IMPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('importMap'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getImportFields($this->IMPORTFORM));
 		$this->addBodyLines($this->getImportSubmit($this->IMPORTFORM));
+		
+		// Resize the window
+		$this->addBodyLines($this->resizeWindow());
+	}
+	
+	/**
+	 * Resizes the window to individual calculated size
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function resizeWindow() {
+		$ret = Array();
+		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
+		$ret[] = "// resize the window (depending on the number of properties displayed)";
+		$ret[] = "window.resizeTo(540,".$this->propCount."*30+30)";
+		$ret[] = "//--></script>";
+		
+		return $ret;
 	}
 	
 	/**
@@ -113,6 +137,7 @@ class WuiMapManagement extends GlobalPage {
 	function getExportFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		$this->propCount++;
 		
 		return $ret;
 	}
@@ -124,6 +149,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getExportSubmit() {
+		$this->propCount++;
 		return array_merge($this->EXPORTFORM->getSubmitLine($this->LANG->getLabel('export')),$this->EXPORTFORM->closeForm());
 	}
 	
@@ -137,6 +163,7 @@ class WuiMapManagement extends GlobalPage {
 		$ret = Array();
 		$ret = array_merge($ret,$this->IMPORTFORM->getHiddenField('MAX_FILE_SIZE','1000000'));
 		$ret = array_merge($ret,$this->IMPORTFORM->getFileLine($this->LANG->getLabel('chooseMapFile'),'map_file',''));
+		$this->propCount++;
 		
 		return $ret;
 	}
@@ -148,6 +175,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getImportSubmit() {
+		$this->propCount++;
 		return array_merge($this->IMPORTFORM->getSubmitLine($this->LANG->getLabel('upload')),$this->IMPORTFORM->closeForm());
 	}
 	
@@ -160,6 +188,7 @@ class WuiMapManagement extends GlobalPage {
 	function getDeleteFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		$this->propCount++;
 		$ret = array_merge($ret,$this->DELETEFORM->getHiddenField('map',''));
 		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
 		
@@ -173,6 +202,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDeleteSubmit() {
+		$this->propCount++;
 		return array_merge($this->DELETEFORM->getSubmitLine($this->LANG->getLabel('delete')),$this->DELETEFORM->closeForm());
 	}
 	
@@ -185,7 +215,9 @@ class WuiMapManagement extends GlobalPage {
 	function getRenameFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		$this->propCount++;
 		$ret = array_merge($ret,$this->RENAMEFORM->getInputLine($this->LANG->getLabel('newMapName'),'map_new_name',''));
+		$this->propCount++;
 		$ret = array_merge($ret,$this->RENAMEFORM->getHiddenField('map',''));
 		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
 		
@@ -199,6 +231,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getRenameSubmit() {
+		$this->propCount++;
 		return array_merge($this->RENAMEFORM->getSubmitLine($this->LANG->getLabel('rename')),$this->RENAMEFORM->closeForm());
 	}
 	
@@ -212,10 +245,15 @@ class WuiMapManagement extends GlobalPage {
 		//FIXME: Default values
 		$ret = Array();
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('mapName'),'map_name',''));
+		$this->propCount++;
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('readUsers'),'allowed_users',''));
+		$this->propCount++;
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('writeUsers'),'allowed_for_config',''));
+		$this->propCount++;
 		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getLabel('mapIconset'),'map_iconset',$this->getIconsets(),$this->MAINCFG->getValue('defaults','icons')));
+		$this->propCount++;
 		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getLabel('background'),'map_image',$this->getMapImages(),''));
+		$this->propCount++;
 		
 		return $ret;
 	}
@@ -227,6 +265,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getCreateSubmit() {
+		$this->propCount++;
 		return array_merge($this->CREATEFORM->getSubmitLine($this->LANG->getLabel('create')),$this->CREATEFORM->closeForm());
 	}
 	
