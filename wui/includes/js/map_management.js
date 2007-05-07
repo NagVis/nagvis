@@ -7,6 +7,31 @@ function checkPng(imageName) {
 	}
 }
 
+function checkCfg(mapName) {
+	if(mapName.substring(mapName.length-3,mapName.length).toLowerCase() != 'cfg') {
+		return false; 
+	} else {
+		return true;
+	}
+}
+
+function getMapNameByPath(mapPath) {
+	// split path
+	mapName = mapPath.replace(/\\/g,'/').split('/');
+	// get filename with ext
+	mapName = mapName[mapName.length-1];
+	// replace ext and return
+	return mapName.substring(0,mapName.length-4);
+}
+
+function checkMapExists(mapName,mapOptions) {
+	for(var i=0;i<mapOptions.length;i++) {
+		if(mapOptions[i].mapName == mapName) {
+			return true;
+		}
+	}
+}
+
 function checkMapLinked(mapName,mapOptions) {
 	for(var i=0;i<mapOptions.length;i++) {
 		for(var a = 0; a < mapOptions[i].linkedMaps.length; a++) {
@@ -132,6 +157,28 @@ function check_map_export() {
 	return true;
 }
 
+function check_map_import() {
+	// check if a file to import is set
+	if(document.map_import.map_file.value=='') {
+		alert(printLang(lang['foundNoMapToImport'],''));
+		return false;
+	}
+	
+	// check the file extention if this is a cfg file
+	if(!checkCfg(document.map_import.map_file.value)) {
+		alert(printLang(lang['notCfgFile'],''));
+		return false;
+	}
+	
+	// check if a map with this name already exists
+	if(checkMapExists(getMapNameByPath(document.map_import.map_file.value), window.opener.mapOptions)) {
+		alert(printLang(lang['mapAlreadyExists'],'MAPNAME~'+getMapNameByPath(document.map_import.map_file.value)));
+		return false;
+	}
+	
+	return false;
+}
+
 function check_map_delete() {
 	if(document.map_delete.map_name.value=='') {
 		alert(printLang(lang['foundNoMapToDelete'],''));
@@ -158,7 +205,7 @@ function check_map_delete() {
 
 function check_image_delete() {
 	if(document.image_delete.map_image.value == '') {
-		alert(printLang(lang['foundNotBackgroundToDelete'],''));
+		alert(printLang(lang['foundNoBackgroundToDelete'],''));
 		return false;
 	}
 	

@@ -295,6 +295,31 @@ switch($_GET['myaction']) {
 			print "<script>alert('Can\'t export map, no map name given.')</script>";
 		}
 	break;
+	case 'mgt_map_import':
+		if (!isset(${'HTTP_POST_FILES'}) || !is_array(${'HTTP_POST_FILES'})) {
+			$HTTP_POST_FILES = $_FILES;
+		}
+		// check the file (the map) is properly uploaded
+		if(is_uploaded_file($HTTP_POST_FILES['map_file']['tmp_name'])) {
+		    $mapName = $HTTP_POST_FILES['map_file']['name'];
+		    if(substr($mapName,strlen($mapName)-4,4) == '.cfg') {
+		    	if(move_uploaded_file($HTTP_POST_FILES['map_file']['tmp_name'], $MAINCFG->getValue('paths', 'mapcfg').$mapName)) {
+		    		chmod($MAINCFG->getValue('paths', 'mapcfg').$mapName,0666);
+				    print "<script>window.opener.document.location.reload();</script>\n";
+				    print "<script>window.close();</script>\n";
+				} else {
+		    		print "A problem occured!";
+					return;
+		    	}
+		    } else {
+	    		print "A problem occured!";
+				return;
+	    	}
+		} else {
+			print "A problem occured!";
+			return;
+		}
+	break;
 	case 'mgt_image_delete':
 		if(file_exists($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
 			if(unlink($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {

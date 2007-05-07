@@ -461,18 +461,6 @@
 				<mustChooseBackgroundImage>
 					<text>You must select the background image for this map.</text>
 				</mustChooseBackgroundImage>
-				<noMapToRename>
-					<text>No map found. Operation terminated.</text>
-				</noMapToRename>
-				<noNewNameGiven>
-					<text>You indicated no new names.</text>
-				</noNewNameGiven>
-				<mapAlreadyExists>
-					<text>This map exists already. Select another name.</text>
-				</mapAlreadyExists>
-				<foundNoMapToDelete>
-					<text>No map found. Operation terminated.</text>
-				</foundNoMapToDelete>
 				<foundNoBackgroundToDelete>
 					<text>No background image found. Operation terminated.</text>
 				</foundNoBackgroundToDelete>
@@ -666,11 +654,38 @@
 				<exportMap>
 					<text>Export Map</text>
 				</exportMap>
+				<importMap>
+					<text>Import Map</text>
+				</importMap>
+				<chooseMapFile>
+					<text>Select a MapFile</text>
+				</chooseMapFile>
 			</labels>
 			<messages>
-				<foundNoMapToExport>
+				<noMapToRename>
 					<text>No map found. Operation terminated.</text>
+				</noMapToRename>
+				<noNewNameGiven>
+					<text>You indicated no new names.</text>
+				</noNewNameGiven>
+				<mapAlreadyExists>
+					<text>The map ([MAPNAME]) already exists. Rename the file.</text>
+				</mapAlreadyExists>
+				<foundNoMapToDelete>
+					<text>No map found. Operation terminated.</text>
+				</foundNoMapToDelete>
+				<foundNoMapToExport>
+					<title>No map choosen</title>
+					<text>No map found. Set a map to export.</text>
 				</foundNoMapToExport>
+				<foundNoMapToImport>
+					<title>No file choosen</title>
+					<text>There is no file given to import. Set a file to import.</text>
+				</foundNoMapToImport>
+				<notCfgFile>
+					<title>Wrong file format</title>
+					<text>The given file has not the extension [I].cfg[/i]. Rename the file.</text>
+				</notCfgFile>
 			</messages>
 		</mapManagement>
 		<addModify>

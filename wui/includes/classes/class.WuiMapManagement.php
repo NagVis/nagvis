@@ -10,6 +10,8 @@ class WuiMapManagement extends GlobalPage {
 	var $CREATEFORM;
 	var $RENAMEFORM;
 	var $DELETEFORM;
+	var $EXPORTFORM;
+	var $IMPORTFORM;
 	var $NEWIMGFORM;
 	var $DELIMGFORM;
 	
@@ -88,6 +90,18 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->EXPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('exportMap'))));
 		$this->addBodyLines($this->getExportFields());
 		$this->addBodyLines($this->getExportSubmit());
+		
+		$this->IMPORTFORM = new GlobalForm(Array('name'=>'map_import',
+			'id'=>'map_import',
+			'method'=>'POST',
+			'action'=>'./wui.function.inc.php?myaction=mgt_map_import',
+			'onSubmit'=>'return check_map_import();',
+			'enctype'=>'multipart/form-data',
+			'cols'=>'2'));
+		$this->addBodyLines($this->IMPORTFORM->initForm());
+		$this->addBodyLines($this->IMPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('importMap'))));
+		$this->addBodyLines($this->getImportFields($this->IMPORTFORM));
+		$this->addBodyLines($this->getImportSubmit($this->IMPORTFORM));
 		
 		$this->NEWIMGFORM = new GlobalForm(Array('name'=>'new_image',
 			'id'=>'new_image',
@@ -174,13 +188,37 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets default export button of the form
+	 * Gets export button of the form
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getExportSubmit() {
 		return array_merge($this->EXPORTFORM->getSubmitLine($this->LANG->getLabel('export')),$this->EXPORTFORM->closeForm());
+	}
+	
+	/**
+	 * Gets import fields
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getImportFields() {
+		$ret = Array();
+		$ret = array_merge($ret,$this->IMPORTFORM->getHiddenField('MAX_FILE_SIZE','1000000'));
+		$ret = array_merge($ret,$this->IMPORTFORM->getFileLine($this->LANG->getLabel('chooseMapFile'),'map_file',''));
+		
+		return $ret;
+	}
+	
+	/**
+	 * Gets import submit button
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getImportSubmit() {
+		return array_merge($this->IMPORTFORM->getSubmitLine($this->LANG->getLabel('upload')),$this->IMPORTFORM->closeForm());
 	}
 	
 	/**
@@ -356,8 +394,10 @@ class WuiMapManagement extends GlobalPage {
 		$ret[] = 'lang["noNewNameGiven"] = "'.$this->LANG->getMessageText('noNewNameGiven').'";';
 		$ret[] = 'lang["mapAlreadyExists"] = "'.$this->LANG->getMessageText('mapAlreadyExists').'";';
 		$ret[] = 'lang["foundNoMapToDelete"] = "'.$this->LANG->getMessageText('foundNoMapToDelete').'";';
-		$ret[] = 'lang["foundNotBackgroundToDelete"] = "'.$this->LANG->getMessageText('foundNotBackgroundToDelete').'";';
+		$ret[] = 'lang["foundNotBackgroundToDelete"] = "'.$this->LANG->getMessageText('foundNoBackgroundToDelete').'";';
 		$ret[] = 'lang["foundNoMapToExport"] = "'.$this->LANG->getMessageText('foundNoMapToExport').'";';
+		$ret[] = 'lang["foundNoMapToImport"] = "'.$this->LANG->getMessageText('foundNoMapToImport').'";';
+		$ret[] = 'lang["notCfgFile"] = "'.$this->LANG->getMessageText('notCfgFile').'";';
 		$ret[] = 'lang["confirmNewMap"] = "'.$this->LANG->getMessageText('confirmNewMap').'";';
 		$ret[] = 'lang["confirmMapRename"] = "'.$this->LANG->getMessageText('confirmMapRename').'";';
 		$ret[] = 'lang["confirmMapDeletion"] = "'.$this->LANG->getMessageText('confirmMapDeletion').'";';

@@ -461,18 +461,6 @@
 				<mustChooseBackgroundImage>
 					<text>Du musst das Hintergrund Image fuer diese Map w&auml;hlen.</text>
 				</mustChooseBackgroundImage>
-				<noMapToRename>
-					<text>Keine Map zum umbenennen gefunden. Operation abgebrochen.</text>
-				</noMapToRename>
-				<noNewNameGiven>
-					<text>Du hast keinen neuen Namen angegeben.</text>
-				</noNewNameGiven>
-				<mapAlreadyExists>
-					<text>Diese Map existiert bereits. W&auml;hle einen anderen Namen.</text>
-				</mapAlreadyExists>
-				<foundNoMapToDelete>
-					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
-				</foundNoMapToDelete>
 				<foundNoBackgroundToDelete>
 					<text>Kein Hintergrund Image zum l&ouml;schen gefunden. Operation abgebrochen.</text>
 				</foundNoBackgroundToDelete>
@@ -657,20 +645,51 @@
 			<messages>
 				<mustValueNotSet>
 					<title>Pflichtwert nicht gesetzt</title>
-					<text>Der Pflichtwert "[I][ATTRIBUTE][/I]" ist nicht gefüllt</text>
+					<text>Der Pflichtwert "[I][ATTRIBUTE][/I]" ist nicht gef&uuml;llt</text>
 				</mustValueNotSet>
 			</messages>
 		</backendManagement>
 		<mapManagement>
 			<labels>
+				<noMapToRename>
+					<text>Keine Map zum umbenennen gefunden. Operation abgebrochen.</text>
+				</noMapToRename>
+				<noNewNameGiven>
+					<text>Du hast keinen neuen Namen angegeben.</text>
+				</noNewNameGiven>
+				<mapAlreadyExists>
+					<text>Die Map ([MAPNAME]) existiert bereits. W&auml;hle einen anderen Namen.</text>
+				</mapAlreadyExists>
+				<foundNoMapToDelete>
+					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
+				</foundNoMapToDelete>
 				<exportMap>
 					<text>Map exportieren</text>
 				</exportMap>
+				<importMap>
+					<text>Map importieren</text>
+				</importMap>
+				<chooseMapFile>
+					<text>W&auml;hle eine Map-Datei</text>
+				</chooseMapFile>
 			</labels>
 			<messages>
 				<foundNoMapToExport>
-					<text>Keine Map zum exportieren gefunden. Operation abgebrochen.</text>
+					<title>Keine Map ausgew&auml;hlt</title>
+					<text>Keine Map zum exportieren gefunden. W&auml;hle eine Map.</text>
 				</foundNoMapToExport>
+				<foundNoMapToImport>
+					<title>Keine Datei ausgew&auml;hlt</title>
+					<text>Es ist keine Datei zum Importieren ausgew&auml;hlt. W&auml;hle eine Datei.</text>
+				</foundNoMapToImport>
+				<mapAlreadyExists>
+					<title>Map existiert bereits</title>
+					<text>Eine Map mit dem Namen [I][MAPNAME][/I] existiert bereits. Benenne die Datei um.</text>
+				</mapAlreadyExists>
+				<notCfgFile>
+					<title>Falsches Dateiformat</title>
+					<text>Die Datei hat nicht die Dateiendung [I].cfg[/i]. Benenne die Datei um.</text>
+				</notCfgFile>
 			</messages>
 		</mapManagement>
 		<addModify>
