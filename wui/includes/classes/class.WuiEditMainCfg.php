@@ -48,6 +48,25 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->addBodyLines($this->getFields());
 		$this->addBodyLines($this->getSubmit());
 		$this->addBodyLines($this->getHidden());
+		
+		// Resize the window
+		$this->addBodyLines($this->resizeWindow());
+	}
+	
+	/**
+	 * Resizes the window to individual calculated size
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function resizeWindow() {
+		$ret = Array();
+		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
+		$ret[] = "// resize the window (depending on the number of properties displayed)";
+		$ret[] = "window.resizeTo(540,758)";
+		$ret[] = "//--></script>";
+		
+		return $ret;
 	}
 	
 	/**

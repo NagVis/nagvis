@@ -505,11 +505,8 @@
 				<autoupdatefreq>
 					<text>WUI legt beim bearbeiten regelm&auml;ssig ein Backup der Datei an bzw. speichert automatisch ab. Der Intervall kann hier eingestellt werden.</text>
 				</autoupdatefreq>
-				<checkconfig>
-					<text>If set to 'Yes', forces a check of the current configuration. MUST be done after any change.</text>
-				</checkconfig>
 				<usegdlibs>
-					<text>GDLib benutzen? GD wird nur zum zeichnen von "Line" typen ben&ouml;tigt, wenn Probleme mit GD auftreten kann GD hier mit "0" deaktiviert werden, alle anderen Typen funktionieren auch ohne GD. Lines stehen dann aber nicht mehr zur Verf&uuml;gung.</text>
+					<text>Die GD-Libs werden zum zeichnen von Linien im Frontend ben&ouml;tigt. Wenn Probleme mit den GD-Libs auftreten kann die Nutzung deaktiviert werden.</text>
 				</usegdlibs>
 				<refreshtime>
 					<text>Map refresh time (in Sekunden).</text>
