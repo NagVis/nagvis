@@ -21,6 +21,10 @@ function printBackendOptions(aObjects,oOpt) {
 		tbl.deleteRow(toDelete[i]);
 	}
 	
+	if(toDelete.length > 0) {
+		window.resizeBy(0,(toDelete.length*-32)+7);	
+	}
+	
 	var lastRow = tbl.rows.length-1;
 	
 	// Add spacer row
@@ -31,6 +35,7 @@ function printBackendOptions(aObjects,oOpt) {
 	label.innerHTML = "&nbsp;";
 	var input = row.insertCell(1);
 	input.innerHTML = "&nbsp;";
+	window.resizeBy(0,25);
 	
 	lastRow++;
 	for(i=0;i < aObjects.length;i++) {
@@ -56,6 +61,7 @@ function printBackendOptions(aObjects,oOpt) {
 		}
 		
 		input.innerHTML = "<input name='"+aObjects[i].key+"' id='"+aObjects[i].key+"' value='"+sValue+"' />";
+		window.resizeBy(0,32);
 		
 		lastRow++;
 	}

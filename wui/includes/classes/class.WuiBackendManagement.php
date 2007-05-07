@@ -9,6 +9,8 @@ class WuiBackendManagement extends GlobalPage {
 	var $DEFBACKENDFORM;
 	var $ADDBACKENDFORM;
 	
+	var $propCount;
+	
 	/**
 	 * Class Constructor
 	 *
@@ -17,8 +19,9 @@ class WuiBackendManagement extends GlobalPage {
 	 */
 	function WuiBackendManagement(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
+		$this->propCount = 0;
 		
-		# we load the language file
+		// load the language file
 		$this->LANG = new GlobalLanguage($MAINCFG,'wui:backendManagement');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
@@ -49,6 +52,7 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->DEFBACKENDFORM->initForm());
 		$this->addBodyLines($this->DEFBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('setDefaultBackend'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getDefaultFields());
 		$this->addBodyLines($this->getDefaultSubmit());
 		
@@ -60,6 +64,7 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->ADDBACKENDFORM->initForm());
 		$this->addBodyLines($this->ADDBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('addBackend'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getAddFields());
 		$this->addBodyLines($this->getAddSubmit());
 		
@@ -71,6 +76,7 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->EDITBACKENDFORM->initForm());
 		$this->addBodyLines($this->EDITBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('editBackend'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getEditFields());
 		$this->addBodyLines($this->getEditSubmit());
 		
@@ -82,8 +88,28 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->DELBACKENDFORM->initForm());
 		$this->addBodyLines($this->DELBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('delBackend'))));
+		$this->propCount++;
 		$this->addBodyLines($this->getDelFields());
 		$this->addBodyLines($this->getDelSubmit());
+		
+		// Resize the window
+		$this->addBodyLines($this->resizeWindow());
+	}
+	
+	/**
+	 * Resizes the window to individual calculated size
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function resizeWindow() {
+		$ret = Array();
+		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
+		$ret[] = "// resize the window (depending on the number of properties displayed)";
+		$ret[] = "window.resizeTo(540,".$this->propCount."*35+20)";
+		$ret[] = "//--></script>";
+		
+		return $ret;
 	}
 	
 	/**
@@ -95,6 +121,7 @@ class WuiBackendManagement extends GlobalPage {
 	function getEditFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->id."');"));
+		$this->propCount++;
 		$ret[] = "<script language=\"javascript\">";
 		$ret[] = "\tvar backendOptions = Array();";
 		foreach($this->MAINCFG->validConfig['backend']['options'] AS $backendtype => $arr) {
@@ -130,6 +157,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getEditSubmit() {
+		$this->propCount++;
 		return array_merge($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->EDITBACKENDFORM->closeForm());
 	}
 	
@@ -141,6 +169,7 @@ class WuiBackendManagement extends GlobalPage {
      */
 	function getDelFields() {
 		$ret = Array();
+		$this->propCount++;
 		$ret = array_merge($ret,$this->DELBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE));
 		return $ret;
 	}
@@ -152,6 +181,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelSubmit() {
+		$this->propCount++;
 		return array_merge($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DELBACKENDFORM->closeForm());
 	}
 	
@@ -164,9 +194,11 @@ class WuiBackendManagement extends GlobalPage {
 	function getAddFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->ADDBACKENDFORM->getInputLine('backend_id','backend_id','',TRUE));
+		$this->propCount++;
 		foreach($this->MAINCFG->validConfig['backend'] as $propname => $prop) {
 			if($propname == "backendtype") {
 				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->getBackends()),'',$prop['must'],"getBackendOptions(this.value,'','".$this->ADDBACKENDFORM->id."');"));
+				$this->propCount++;
 			}
 		}
 		$ret[] = "<script language=\"javascript\">";
@@ -191,6 +223,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getAddSubmit() {
+		$this->propCount++;
 		return array_merge($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->ADDBACKENDFORM->closeForm());
 	}
 	
@@ -204,6 +237,7 @@ class WuiBackendManagement extends GlobalPage {
 		$ret = Array();
 		
 		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getLabel('defaultBackend'),'defaultbackend',$this->getDefinedBackends(),$this->MAINCFG->getValue('defaults','backend',TRUE),TRUE));
+		$this->propCount++;
 		
 		return $ret;
 	}
@@ -215,6 +249,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDefaultSubmit() {
+		$this->propCount++;
 		return array_merge($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DEFBACKENDFORM->closeForm());
 	}
 	
