@@ -140,7 +140,7 @@ function get_click_pos(e) {
 			link="./addmodify.php?action=modify&map="+mapname+"&type="+objtype+"&id="+objid+"&coords="+coords;
 		}
 		
-		fenetre(link);
+		open_window(link);
 		cpt_clicks=-1;
 	}	
 }
@@ -165,36 +165,16 @@ function confirm_restore() {
 
 // functions used to open a popup window in different sizes, with or without sidebars
 var win = null;
-function fenetre(page) {
-	L=410;
-	H=400;
-	nom="Nagvis";
-	
-	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
-	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
-	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=no,resizable=yes';
-	win = window.open(page, nom, options);	
+function open_window(page,name) {
+	open_window_management(page,name);
 }
 
-
-function fenetre_big(page) {
-	L=530;
-	H=580;
-	nom="Nagvis";
-	
-	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
-	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
-	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=yes,resizable=yes';
-	win = window.open(page, nom, options);
-}
-
-function fenetre_management(page) {
+function open_window_management(page,name) {
 	L=540;
 	H=660;
-	nom="Nagvis";
 	
 	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
 	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
 	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=no,resizable=yes';
-	win = window.open(page, nom, options);
+	win = window.open(page, name, options);
 }
