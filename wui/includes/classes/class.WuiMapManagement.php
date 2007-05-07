@@ -24,7 +24,7 @@ class WuiMapManagement extends GlobalPage {
 	function WuiMapManagement(&$MAINCFG) {
 		$this->MAINCFG = &$MAINCFG;
 		
-		# we load the language file
+		// load the language file
 		$this->LANG = new GlobalLanguage($MAINCFG,'wui:mapManagement');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
@@ -102,80 +102,10 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->IMPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('importMap'))));
 		$this->addBodyLines($this->getImportFields($this->IMPORTFORM));
 		$this->addBodyLines($this->getImportSubmit($this->IMPORTFORM));
-		
-		$this->NEWIMGFORM = new GlobalForm(Array('name'=>'new_image',
-			'id'=>'new_image',
-			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_new_image',
-			'onSubmit'=>'return check_image_add();',
-			'enctype'=>'multipart/form-data',
-			'cols'=>'2'));
-		$this->addBodyLines($this->NEWIMGFORM->initForm());
-		$this->addBodyLines($this->NEWIMGFORM->getCatLine(strtoupper($this->LANG->getLabel('uploadBackground'))));
-		$this->addBodyLines($this->getNewImgFields());
-		$this->addBodyLines($this->getNewImgSubmit());
-		
-		$this->DELIMGFORM = new GlobalForm(Array('name'=>'image_delete',
-			'id'=>'image_delete',
-			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_image_delete',
-			'onSubmit'=>'return check_image_delete();',
-			'cols'=>'2'));
-		$this->addBodyLines($this->DELIMGFORM->initForm());
-		$this->addBodyLines($this->DELIMGFORM->getCatLine(strtoupper($this->LANG->getLabel('deleteBackground'))));
-		$this->addBodyLines($this->getDelImgFields());
-		$this->addBodyLines($this->getDelImgSubmit());
 	}
 	
 	/**
-	 * Gets delete image fields of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getDelImgFields() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->DELIMGFORM->getSelectLine($this->LANG->getLabel('choosePngImage'),'map_image',$this->getMapImages(),''));
-		
-		return $ret;
-	}
-	
-	/**
-	 * Gets default delete image button of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getDelImgSubmit() {
-		return array_merge($this->DELIMGFORM->getSubmitLine($this->LANG->getLabel('delete')),$this->DELIMGFORM->closeForm());
-	}
-	
-	/**
-	 * Gets new image fields of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getNewImgFields() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->NEWIMGFORM->getHiddenField('MAX_FILE_SIZE','1000000'));
-		$ret = array_merge($ret,$this->NEWIMGFORM->getFileLine($this->LANG->getLabel('choosePngImage'),'fichier',''));
-		
-		return $ret;
-	}
-	
-	/**
-	 * Gets default new image button of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getNewImgSubmit() {
-		return array_merge($this->NEWIMGFORM->getSubmitLine($this->LANG->getLabel('upload')),$this->NEWIMGFORM->closeForm());
-	}
-	
-	/**
-	 * Gets export fields of the form
+	 * Gets export fields
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -188,7 +118,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets export button of the form
+	 * Gets export submit button
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -222,7 +152,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets delete fields of the form
+	 * Gets delete fields
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -237,7 +167,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets delete submit button of the form
+	 * Gets delete submit button
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -247,7 +177,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets rename fields of the form
+	 * Gets rename fields
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -263,7 +193,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets rename submit button of the form
+	 * Gets rename submit button
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -273,7 +203,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets create fields of the form
+	 * Gets create fields
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -291,7 +221,7 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets create submit button of the form
+	 * Gets create submit button
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -385,8 +315,6 @@ class WuiMapManagement extends GlobalPage {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang["firstMustChoosePngImage"] = "'.$this->LANG->getMessageText('firstMustChoosePngImage').'";';
-		$ret[] = 'lang["mustChoosePngImage"] = "'.$this->LANG->getMessageText('mustChoosePngImage').'";';
 		$ret[] = 'lang["chooseMapName"] = "'.$this->LANG->getMessageText('chooseMapName').'";';
 		$ret[] = 'lang["minOneUserAccess"] = "'.$this->LANG->getMessageText('minOneUserAccess').'";';
 		$ret[] = 'lang["mustChooseBackgroundImage"] = "'.$this->LANG->getMessageText('mustChooseBackgroundImage').'";';
@@ -394,15 +322,12 @@ class WuiMapManagement extends GlobalPage {
 		$ret[] = 'lang["noNewNameGiven"] = "'.$this->LANG->getMessageText('noNewNameGiven').'";';
 		$ret[] = 'lang["mapAlreadyExists"] = "'.$this->LANG->getMessageText('mapAlreadyExists').'";';
 		$ret[] = 'lang["foundNoMapToDelete"] = "'.$this->LANG->getMessageText('foundNoMapToDelete').'";';
-		$ret[] = 'lang["foundNotBackgroundToDelete"] = "'.$this->LANG->getMessageText('foundNoBackgroundToDelete').'";';
 		$ret[] = 'lang["foundNoMapToExport"] = "'.$this->LANG->getMessageText('foundNoMapToExport').'";';
 		$ret[] = 'lang["foundNoMapToImport"] = "'.$this->LANG->getMessageText('foundNoMapToImport').'";';
 		$ret[] = 'lang["notCfgFile"] = "'.$this->LANG->getMessageText('notCfgFile').'";';
 		$ret[] = 'lang["confirmNewMap"] = "'.$this->LANG->getMessageText('confirmNewMap').'";';
 		$ret[] = 'lang["confirmMapRename"] = "'.$this->LANG->getMessageText('confirmMapRename').'";';
 		$ret[] = 'lang["confirmMapDeletion"] = "'.$this->LANG->getMessageText('confirmMapDeletion').'";';
-		$ret[] = 'lang["confirmBackgroundDeletion"] = "'.$this->LANG->getMessageText('confirmBackgroundDeletion').'";';
-		$ret[] = 'lang["unableToDeleteBackground"] = "'.$this->LANG->getMessageText('unableToDeleteBackground').'";';
 		$ret[] = 'lang["unableToDeleteMap"] = "'.$this->LANG->getMessageText('unableToDeleteMap').'";';
 		$ret[] = 'lang["noPermissions"] = "'.$this->LANG->getMessageText('noPermissions').'";';
 		$ret[] = 'lang["minOneUserWriteAccess"] = "'.$this->LANG->getMessageText('minOneUserWriteAccess').'";';

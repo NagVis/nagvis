@@ -350,6 +350,9 @@
 				<manageBackends>
 					<text>Backend Verwaltung</text>
 				</manageBackends>
+				<manageBackgrounds>
+					<text>Hintergrund Verwaltung</text>
+				</manageBackgrounds>
 				<icon>
 					<text>Icon</text>
 				</icon>
@@ -368,12 +371,6 @@
 				<deleteMap>
 					<text>Eine Map l&ouml;schen</text>
 				</deleteMap>
-				<uploadBackground>
-					<text>Hintergrund hochladen</text>
-				</uploadBackground>
-				<deleteBackground>
-					<text>Hintergrund l&ouml;schen</text>
-				</deleteBackground>
 				<create>
 					<text>Erstellen</text>
 				</create>
@@ -443,12 +440,6 @@
 				<confirmDelete>
 					<text>Willst du dieses Objekt wirklich loeschen?</text>
 				</confirmDelete>
-				<firstMustChoosePngImage>
-					<text>Du must erst ein PNG Image w&auml;hlen!</text>
-				</firstMustChoosePngImage>
-				<mustChoosePngImage>
-					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
-				</mustChoosePngImage>
 				<chooseMapName>
 					<text>Du musst einen Namen f&uuml;r die neue Map angeben.</text>
 				</chooseMapName>
@@ -461,9 +452,6 @@
 				<mustChooseBackgroundImage>
 					<text>Du musst das Hintergrund Image fuer diese Map w&auml;hlen.</text>
 				</mustChooseBackgroundImage>
-				<foundNoBackgroundToDelete>
-					<text>Kein Hintergrund Image zum l&ouml;schen gefunden. Operation abgebrochen.</text>
-				</foundNoBackgroundToDelete>
 				<confirmNewMap>
 					<text>Willst du wirklich eine neue Map erstellen?</text>
 				</confirmNewMap>
@@ -473,12 +461,6 @@
 				<confirmMapDeletion>
 					<text>Willst du diese Map wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
 				</confirmMapDeletion>
-				<confirmBackgroundDeletion>
-					<text>Willst du dieses Hintergrund Image wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
-				</confirmBackgroundDeletion>
-				<unableToDeleteBackground>
-					<text>Kann [IMAGENAME] nicht l&ouml;schen, da es in der Map [MAP] noch verwendet wird.</text>
-				</unableToDeleteBackground>
 				<noPermissions>
 					<text>Du hast nicht die Rechte diese Map zu &auml;ndern.</text>
 				</noPermissions>
@@ -649,6 +631,33 @@
 				</mustValueNotSet>
 			</messages>
 		</backendManagement>
+		<backgroundManagement>
+			<labels>
+				<uploadBackground>
+					<text>Hintergrund hochladen</text>
+				</uploadBackground>
+				<deleteBackground>
+					<text>Hintergrund l&ouml;schen</text>
+				</deleteBackground>
+			</labels>
+			<messages>
+				<firstMustChoosePngImage>
+					<text>Du must erst ein PNG Image w&auml;hlen!</text>
+				</firstMustChoosePngImage>
+				<mustChoosePngImage>
+					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
+				</mustChoosePngImage>
+				<foundNoBackgroundToDelete>
+					<text>Kein Hintergrund Image zum l&ouml;schen gefunden. Operation abgebrochen.</text>
+				</foundNoBackgroundToDelete>
+				<confirmBackgroundDeletion>
+					<text>Willst du dieses Hintergrund Image wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
+				</confirmBackgroundDeletion>
+				<unableToDeleteBackground>
+					<text>Kann HIntergrund [IMAGENAME] nicht l&ouml;schen, da er in der Map [MAP] noch verwendet wird.</text>
+				</unableToDeleteBackground>
+			</messages>
+		</backgroundManagement>
 		<mapManagement>
 			<labels>
 				<noMapToRename>

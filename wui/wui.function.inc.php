@@ -338,10 +338,10 @@ switch($_GET['myaction']) {
 			$HTTP_POST_FILES = $_FILES;
 		}
 		// check the file (the map) is properly uploaded
-		if(is_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'])) {
-		    $ficname = $HTTP_POST_FILES['fichier']['name'];
+		if(is_uploaded_file($HTTP_POST_FILES['image_file']['tmp_name'])) {
+		    $ficname = $HTTP_POST_FILES['image_file']['name'];
 		    if(substr($ficname,strlen($ficname)-4,4) == ".png") {
-		    	if(move_uploaded_file($HTTP_POST_FILES['fichier']['tmp_name'], $MAINCFG->getValue('paths', 'map').$ficname)) {
+		    	if(move_uploaded_file($HTTP_POST_FILES['image_file']['tmp_name'], $MAINCFG->getValue('paths', 'map').$ficname)) {
 		    		chmod($MAINCFG->getValue('paths', 'map').$ficname,0666);
 				    print "<script>window.opener.document.location.reload();</script>\n";
 				    print "<script>window.close();</script>\n";

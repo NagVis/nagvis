@@ -36,6 +36,7 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem("-"));
 		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:fenetre_big('./edit_config.php');"));
 		addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:fenetre_management('./map_management.php');"));
+		addMenuItem(new menuItem(get_label('manageBackgrounds'), "menu_background_mgmt", "code:fenetre_management('./background_management.php');"));
 		addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:fenetre_management('./backend_management.php');"));
 	}
 	

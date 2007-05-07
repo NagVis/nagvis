@@ -350,6 +350,9 @@
 				<manageBackends>
 					<text>Backend Management</text>
 				</manageBackends>
+				<manageBackgrounds>
+					<text>Background Management</text>
+				</manageBackgrounds>
 				<icon>
 					<text>Icon</text>
 				</icon>
@@ -368,12 +371,6 @@
 				<deleteMap>
 					<text>Delete Map</text>
 				</deleteMap>
-				<uploadBackground>
-					<text>Upload background image</text>
-				</uploadBackground>
-				<deleteBackground>
-					<text>Delete background image</text>
-				</deleteBackground>
 				<create>
 					<text>Create</text>
 				</create>
@@ -443,12 +440,6 @@
 				<confirmDelete>
 					<text>Do you really want to delete this object? </text>
 				</confirmDelete>
-				<firstMustChoosePngImage>
-					<text>Please choose an PNG image.</text>
-				</firstMustChoosePngImage>
-				<mustChoosePngImage>
-					<text>You must select an image with the extension .png.</text>
-				</mustChoosePngImage>
 				<chooseMapName>
 					<text>You must indicate a name for the new map.</text>
 				</chooseMapName>
@@ -461,9 +452,6 @@
 				<mustChooseBackgroundImage>
 					<text>You must select the background image for this map.</text>
 				</mustChooseBackgroundImage>
-				<foundNoBackgroundToDelete>
-					<text>No background image found. Operation terminated.</text>
-				</foundNoBackgroundToDelete>
 				<confirmNewMap>
 					<text>Do you really want to provide a new map?</text>
 				</confirmNewMap>
@@ -473,12 +461,6 @@
 				<confirmMapDeletion>
 					<text>Do you really want to delete this map? This action cannot be cancelled!</text>
 				</confirmMapDeletion>
-				<confirmBackgroundDeletion>
-					<text>Do you really want to delete this background image? This action cannot be cancelled!</text>
-				</confirmBackgroundDeletion>
-				<unableToDeleteBackground>
-					<text>Cannot delete [IMAGE NAME], because the map [MAP] was in use</text>
-				</unableToDeleteBackground>
 				<noPermissions>
 					<text>You don not have the permissions to change this map.</text>
 				</noPermissions>
@@ -649,6 +631,33 @@
 				</mustValueNotSet>
 			</messages>
 		</backendManagement>
+		<backgroundManagement>
+			<labels>
+				<uploadBackground>
+					<text>Upload background image</text>
+				</uploadBackground>
+				<deleteBackground>
+					<text>Delete background image</text>
+				</deleteBackground>
+			</labels>
+			<messages>
+				<firstMustChoosePngImage>
+					<text>Please choose an PNG image.</text>
+				</firstMustChoosePngImage>
+				<mustChoosePngImage>
+					<text>You must select an image with the extension .png.</text>
+				</mustChoosePngImage>
+				<foundNoBackgroundToDelete>
+					<text>No background image found. Operation terminated.</text>
+				</foundNoBackgroundToDelete>
+				<confirmBackgroundDeletion>
+					<text>Do you really want to delete this background image? This action cannot be cancelled!</text>
+				</confirmBackgroundDeletion>
+				<unableToDeleteBackground>
+					<text>Cannot delete map image [IMAGENAME], because it is used by map [MAP].</text>
+				</unableToDeleteBackground>
+			</messages>
+		</backgroundManagement>
 		<mapManagement>
 			<labels>
 				<exportMap>
