@@ -83,7 +83,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$ret = Array();
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
 		$ret[] = "// resize the window (depending on the number of properties displayed)";
-		$ret[] = "window.resizeTo(window.innerWidth,".$this->propCount."*40+10)";
+		$ret[] = "window.resizeTo(540,".$this->propCount."*40+10)";
 		$ret[] = "//--></script>";
 		
 		return $ret;
