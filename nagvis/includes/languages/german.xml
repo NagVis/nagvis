@@ -34,132 +34,104 @@
 			<messages>
 				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten koennen) //-->
 				<mapCfgNotFound>
-					<title>Keine Map-Konfigurations-Datei!</title>
-					<text>Konnte die Konfigurations-Datei [I][MAP][/I] nicht &ouml;ffnen!</text>
+					<title>Keine Map Konfigurations-Datei gefunden</title>
+					<text>Konnte die Map Konfigurations-Datei &quot;[MAP]&quot; nicht &ouml;ffnen</text>
 				</mapCfgNotFound>
 				<backgroundNotFound>
-					<title>Kein Map-Image!</title>
-					<text>Konnte das Map-Image [I][MAPPATH][/I] nicht &ouml;ffnen!</text>
+					<title>Kein Map-Image gefunden</title>
+					<text>Konnte das Map-Image &quot;[MAPPATH]&quot; nicht &ouml;ffnen</text>
 				</backgroundNotFound>
 				<permissionDenied>
-					<title>Keine Rechte!</title>
-					<text>Der Benutzer [I][USER][/I] hat keine Rechte zum anzeigen dieser Map!</text>
+					<title>Keine Rechte</title>
+					<text>Der Benutzer &quot;[USER]&quot; hat keine Rechte zum anzeigen dieser Map</text>
 				</permissionDenied>
-				<logfileNotFound>
-					<title>Keine Nagios-Log-Datei</title>
-					<text>Konnte Nagios-Log-Datei [I][STATUSLOGPATH][/I] nicht finden!</text>
-				</logfileNotFound>
-				<hostNotConfigured>
-					<title>Host nicht vorhanden!</title>
-					<text>Der Host [HOSTNAME] wurde in der Nagios Konfiguration nicht gefunden!</text>
-				</hostNotConfigured>
-				<serviceNotConfigured>
-					<title>Service nicht vorhanden!</title>
-					<text>Der Service [SERVICENAME] konnte in der Nagios Konfiguration nicht gefunden werden!</text>
-				</serviceNotConfigured>
-				<emptyGroup>
-					<title>Gruppe leer!</title>
-					<text>Die Gruppe [HOSTGROUPNAME] enth&auml;lt keine Hosts!</text>
-				</emptyGroup>
-				<servicegroupNotFround>
-					<title>Servicegruppe nicht gefunden!</title>
-					<text>Die Servicegruppe [HOSTGROUPNAME] wurde nicht gefunden!</text>
-				</servicegroupNotFround>
-				<servicegroupNoState>
-					<title>Status der Servicegruppr!</title>
-					<text>Konnte den Status der Servicegruppe [SERVICEGROUPNAME] nicht ermitteln!</text>
-				</servicegroupNoState>
-				<serviceNoState>
-					<title>Service-Status!</title>
-					<text>Der Service-Status vom Host [HOSTNAME] Service [SERVICENAME] konnte nicht ermittelt werden!</text>
-				</serviceNoState>
 				<noUser>
 					<title>Kein Benutzer</title>
-					<text>Es wurde kein Benutzername an NagVis &uuml;bergeben! Pr&uuml;fen Sie ihre .htaccess Konfiguration!</text>
+					<text>Es wurde kein Benutzername an NagVis &uuml;bergeben. Mehr Informationen sind in der FAQ auf www.nagvis.org zu finden</text>
 				</noUser>
 				<gdLibNotFound>
-					<title>GD Lib</title>
-					<text>GD Lib ist nicht installiert!</text>
+					<title>GD-Libs nicht gefunden</title>
+					<text>Die GD-Libs sind nicht installiert</text>
 				</gdLibNotFound>
 				<mapCfgNotExists>
-					<title>Map Config Datei nicht vorhanden</title>
-					<text>Die CFG-Datei ([I][MAP][/I]) existiert nicht!</text>
+					<title>Map Konfigurations-Datei nicht vorhanden</title>
+					<text>Die Map Konfigurations-Datei &quot;[MAP]&quot; existiert nicht</text>
 				</mapCfgNotExists>
 				<mapCfgNotReadable>
-					<title>Keine Leserechte auf die Map Config Datei</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die CFG-Datei ([I][MAP][/I]) pr&uuml;fen!</text>
+					<title>Keine Leserechte auf die Map Konfigurations-Datei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Map Konfigurations-Datei &quot;[MAP]&quot; pr&uuml;fen</text>
 				</mapCfgNotReadable>
 				<mapCfgNotWriteable>
-					<title>Keine Schreibrechte auf die Map Config Dateien</title>
-					<text>Bitte die Schreibberechtigungen des Webservers auf die CFG-Dateien ([I][MAP][/I]) pr&uuml;fen!</text>
+					<title>Keine Schreibrechte auf die Map Konfigurations-Datei</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf die Map Konfigurations-Datei &quot;[MAP]&quot; pr&uuml;fen</text>
 				</mapCfgNotWriteable>
 				<mainCfgNotExists>
-					<title>NagVis Config Datei nicht vorhanden</title>
-					<text>Die MainCfg-Datei ([I][MAINCFG][/I]) existiert nicht!</text>
+					<title>NagVis Konfigurations-Datei nicht vorhanden</title>
+					<text>Die Haupt-Konfigurations-Datei &quot;[MAINCFG]&quot; existiert nicht</text>
 				</mainCfgNotExists>
 				<mainCfgNotReadable>
-					<title>Keine Leserechte auf die NagVis Config Datei</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die MainCfg-Datei ([I][MAINCFG][/I]) pr&uuml;fen!</text>
+					<title>Keine Leserechte auf die NagVis Konfigurations-Datei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Haupt-Konfigurations-Datei &quot;[MAINCFG]&quot; pr&uuml;fen</text>
 				</mainCfgNotReadable>
 				<mainCfgNotWriteable>
-					<title>Keine Schreibrechte auf die NagVis Config Datei</title>
-					<text>Bitte die Schreibberechtigungen des Webservers auf die MainCfg-Datei ([I][MAINCFG][/I]) pr&uuml;fen!</text>
+					<title>Keine Schreibrechte auf die NagVis Konfigurations-Datei</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf die Haupt-Konfigurations-Datei &quot;[MAINCFG]&quot; pr&uuml;fen</text>
 				</mainCfgNotWriteable>
 				<backgroundNotExists>
 					<title>Die Map Bild-Datei existiert nicht</title>
-					<text>Die Map Bild-Datei (<I>[IMGPATH]</I>) existiert nicht</text>
+					<text>Die Map Bild-Datei &quot;[IMGPATH]&quot; existiert nicht</text>
 				</backgroundNotExists>
 				<backgroundNotReadable>
 					<title>Keine Leserechte auf die Map Bild-Datei</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die PNG-Datei ([I][IMGPATH][/I]) pr&uuml;fen!</text>
+					<text>Bitte die Leseberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen</text>
 				</backgroundNotReadable>
 				<backgroundNotWriteable>
 					<title>Keine Schreibrechte auf die Map Bild-Datei</title>
-					<text>Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei ([I][IMGPATH][/I]) pr&uuml;fen!</text>
+					<text>Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen</text>
 				</backgroundNotWriteable>
 				<mustValueNotSet>
 					<title>Pflicht-Wert nicht gesetzt</title>
-					<text>Ein Pflichtwert ([I][ATTRIBUTE][/I]) wurde in einem Objekt vom Typ [I][TYPE][/I] in Map [I][MAPNAME][/I] nicht gesetzt!</text>
+					<text>Ein Pflichtwert &quot;[ATTRIBUTE]&quot; wurde in einem Objekt vom Typ &quot;[TYPE]&quot; in Map &quot;[MAPNAME]&quot; nicht gesetzt</text>
 				</mustValueNotSet>
 				<unknownObject>
-					<title>Unbekannter Typ in Map Config Datei definiert</title>
-					<text>Der Objekttyp [I][TYPE][/I] in der Map [I][MAPNAME][/I] ist nicht erlaubt!</text>
+					<title>Unbekannter Typ in Map Konfigurations-Datei definiert</title>
+					<text>Der Objekttyp &quot;[TYPE]&quot; in der Map &quot;[MAPNAME]&quot; ist nicht erlaubt</text>
 				</unknownObject>
 				<unknownAttribute>
-					<title>Unbekanntes Attribut in Map Config Datei definiert</title>
-					<text>Das Attribut [I][ATTRIBUTE][/I] ist in Elementen des Typs [I][TYPE][/I] in Map [I][MAPNAME][/I] nicht erlaubt!</text>
+					<title>Unbekanntes Attribut in Map Konfigurations-Datei definiert</title>
+					<text>Das Attribut &quot;[ATTRIBUTE]&quot; ist in Elementen des Typs &quot;[TYPE]&quot; in Map &quot;[MAPNAME]&quot; nicht erlaubt</text>
 				</unknownAttribute>
 				<languageNotReadable>
 					<title>Keine Leserechte auf die Sprachdatei</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die Sprachdatei ([I][LANGFILE][/I]) pr&uuml;fen!</text>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Sprachdatei &quot;[LANGFILE]&quot; pr&uuml;fen</text>
 				</languageNotReadable>
 				<mapCfgDirNotReadable>
 					<title>Keine Leserechte auf das Map Config Verzeichnis</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf das Verzeichnis ([I][MAPPATH][/I]) pr&uuml;fen!</text>
+					<text>Bitte die Leseberechtigungen des Webservers auf das Verzeichnis &quot;[MAPPATH]&quot; pr&uuml;fen</text>
 				</mapCfgDirNotReadable>
 				<mapCfgDirNotWriteable>
 					<title>Keine Schreibrechte auf das Map Config Verzeichnis</title>
-					<text>Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis ([I][MAPPATH][/I]) pr&uuml;fen!</text>
+					<text>Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis &quot;[MAPPATH]&quot; pr&uuml;fen</text>
 				</mapCfgDirNotWriteable>
 				<headerConfigNotReadable>
 					<title>Header Konfigurationsdatei nicht lesbar</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die Datei ([I][CFGPATH][/I]) pr&uuml;fen!</text>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Datei &quot;[CFGPATH]&quot; pr&uuml;fen</text>
 				</headerConfigNotReadable>
 				<loopInMapRecursion>
 					<title>Endlosschleife</title>
-					<text>Die Map Objekte der verlinkten Maps bilden eine Endlosschleife. Bitte aufl&ouml;sen.</text>
+					<text>Die Map Objekte der verlinkten Maps bilden eine Endlosschleife. Bitte aufl&ouml;sen</text>
 				</loopInMapRecursion>
 				<iconNotExists>
 					<title>Icon existiert nicht</title>
-					<text>Ein Icon ([i][IMGPATH][/i]) auf der Map existiert nicht.</text>
+					<text>Ein Icon &quot;[IMGPATH]&quot; auf der Map existiert nicht</text>
 				</iconNotExists>
 				<couldNotDeleteMapCfg>
-					<title>Konnte Map Config nicht l&ouml;schen</title>
-					<text>Die Map Konfiguration ([i][MAPPATH][/i]) konnte nicht gel&ouml;scht werden.</text>
+					<title>Konnte Map Konfigurations-Datei nicht l&ouml;schen</title>
+					<text>Die Map Konfigurations-Datei &quot;[MAPPATH]&quot; konnte nicht gel&ouml;scht werden</text>
 				</couldNotDeleteMapCfg>
 				<couldNotDeleteMapImage>
 					<title>Konnte Map Hintergrund nicht l&ouml;schen</title>
-					<text>Der Map Hintergrund ([i][IMGPATH][/i]) konnte nicht gel&ouml;scht werden.</text>
+					<text>Der Map Hintergrund &quot;[IMGPATH]&quot; konnte nicht gel&ouml;scht werden</text>
 				</couldNotDeleteMapImage>
 			</messages>
 		</global>
@@ -191,22 +163,18 @@
 				</mapname>
 			</labels>
 			<messages>
-				<!-- Alle WUI Meldungen //-->
-				<configModeNotSupported>
-					<title>Keine Unterst&uuml;tzung!</title>
-					<text>Der Konfigurations-Modus wird in diesem Browser nicht ungerst&uuml;tzt!</text>
-				</configModeNotSupported>
+				<!-- Alle NagVis Meldungen //-->
 				<couldNotGetHoverUrl>
 					<title>Konnte Hover-URL nicht finden</title>
-					<text>Konnte Hover-URL ([i][URL][/i]) nicht finden. Eventuell ist die URL Paswort gesch&uuml;tzt.</text>
+					<text>Konnte Hover-URL &quot;[URL]&quot; nicht finden. Eventuell ist die URL Paswort gesch&uuml;tzt.</text>
 				</couldNotGetHoverUrl>
 				<onlyPngOrJpgImages>
-					<title>NagVis-GD: Nur PNG oder JPG Bilder erlaubg</title>
-					<text>NagVis-GD: Es sind nur PNG oder JPG Bilder als Hintergrund erlaubt.</text>
+					<title>NagVis-GD: Nur PNG oder JPG Bilder erlaubt</title>
+					<text>Es sind nur PNG oder JPG Bilder als Hintergrund erlaubt.</text>
 				</onlyPngOrJpgImages>
 				<maybePhpMemoryLimitToLow>
 					<title>NagVis-GD: PHP memory_limit zu niedrig</title>
-					<text>NagVis-GD: Eventuell ist das memory_limit von PHP zu niedrig um dieses Bild darzustellen.</text>
+					<text>Eventuell ist das memory_limit von PHP zu niedrig um dieses Bild darzustellen.</text>
 				</maybePhpMemoryLimitToLow>
 			</messages>
 		</global>
@@ -216,68 +184,68 @@
 			<messages>
 				<!-- Alle globalen Backend Meldungen //-->
 				<noStateSet>
-					<title>Kein state gesetzt!</title>
-					<text>Status wurde nicht gesetzt!</text>
+					<title>Kein Status gesetzt</title>
+					<text>Status ist nicht gesetzt</text>
 				</noStateSet>
 				<backendNotExists>
-					<title>Backend existiert nicht!</title>
-					<text>Das Backend mit der ID [i][BACKENDID][/i] vom Typ [i][BACKENDTYPE][/i] existiert nicht.</text>
+					<title>Backend existiert nicht</title>
+					<text>Das Backend mit der ID &quot;[BACKENDID]&quot; vom Typ &quot;[BACKENDTYPE]&quot; existiert nicht</text>
 				</backendNotExists>
 				<noBackendDefined>
-					<title>Kein backend definiert!</title>
-					<text>Es konnte keine Backend-Definition in der NagVis konfiguration gefunden werden.</text>
+					<title>Kein backend definiert</title>
+					<text>Es konnte keine Backend-Definition in der NagVis konfiguration gefunden werden</text>
 				</noBackendDefined>
 				<backendNotInitialized>
-					<title>Backend nicht initialisiert!</title>
-					<text>Das Backend mit der ID [i][BACKENDID][/i] vom Typ [i][BACKENDTYPE][/i] ist nicht initialisiert. Hauptkonfigurationsdatei pr&uuml;fen.</text>
+					<title>Backend nicht initialisiert</title>
+					<text>Das Backend mit der ID &quot;[BACKENDID]&quot; vom Typ &quot;[BACKENDTYPE]&quot; ist nicht initialisiert. Haupt-Konfigurations-Datei pr&uuml;fen</text>
 				</backendNotInitialized>
 			</messages>
 		</global>
 		<ndomy>
 			<messages>
 				<mysqlNotSupported>
-					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
-					<text>Ihre PHP installation hat keine MySQL unterst&uuml;tzung. Ohne php-mysql k&ouml;nnen Sie das NDO Backend nicht nutzen!</text>
+					<title>NDOMy: Keine MySQL unterst&uuml;tzung (Backend [BACKENDID])</title>
+					<text>Ihre PHP installation hat keine MySQL unterst&uuml;tzung. Ohne php-mysql k&ouml;nnen Sie das NDO Backend nicht nutzen</text>
 				</mysqlNotSupported>
 				<errorSelectingDb>
-					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
+					<title>NDOMy: Datenbank konnte nicht selektiert werden (Backend [BACKENDID])</title>
 					<text>Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen? MySQL-Error: [MYSQLERR]</text>
 				</errorSelectingDb>
 				<nagiosNotRunning>
-					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
-					<text>Achtung: Laut NDO l&auml;uft der Nagios Dienst NICHT!</text>
+					<title>NDOMy: Nagios l&auml;ft nicht (Backend [BACKENDID])</title>
+					<text>Laut NDO l&auml;uft der Nagios Dienst nicht</text>
 				</nagiosNotRunning>
 				<nagiosDataNotUpToDate>
-					<title>NDOMy Backend Fehler! (Backend [BACKENDID])</title>
-					<text>Laut NDO wurden von Nagios seid mehr als [I][TIMEWITHOUTUPDATE][/I] Sekunden keine Daten mehr verarbeitet! Laufen Nagios und ndo2db?</text>
+					<title>NDOMy: NDO Daten nicht aktuell (Backend [BACKENDID])</title>
+					<text>Laut NDO wurden von Nagios seit mehr als &quot;[TIMEWITHOUTUPDATE]&quot; Sekunden keine Daten mehr verarbeitet. Laufen Nagios und ndo2db?</text>
 				</nagiosDataNotUpToDate>
 				<hostNotFoundInDB>
-					<title>Host wurde nicht gefunden! (Backend [BACKENDID])</title>
-					<text>Der Host [b][HOST][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?</text>
+					<title>NDOMy: Host wurde nicht gefunden (Backend [BACKENDID])</title>
+					<text>Der Host &quot;[HOST]&quot; konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?</text>
 				</hostNotFoundInDB>
 				<hostGroupNotFoundInDB>
-					<title>Hostgruppe wurde nicht gefunden! (Backend [BACKENDID])</title>
-					<text>Die Hostgruppe [b][HOSTGROUP][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?</text>
+					<title>NDOMy: Hostgruppe wurde nicht gefunden (Backend [BACKENDID])</title>
+					<text>Die Hostgruppe &quot;[HOSTGROUP]&quot; konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?</text>
 				</hostGroupNotFoundInDB>
 				<serviceNotFoundInDB>
-					<title>Dienst wurde nicht gefunden! (Backend [BACKENDID])</title>
-					<text>Der Dienst [b][SERVICE][/b] on host [b][HOST][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?</text>
+					<title>NDOMy: Dienst wurde nicht gefunden (Backend [BACKENDID])</title>
+					<text>Der Dienst &quot;[SERVICE]&quot; on host &quot;[HOST]&quot; konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?</text>
 				</serviceNotFoundInDB>
 				<serviceGroupNotFoundInDB>
-					<title>Dienstegruppe wurde nicht gefunden! (Backend [BACKENDID])</title>
-					<text>Die Dienstegruppe [b][SERVICEGROUP][/b] konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?</text>
+					<title>NDOMy: Dienstegruppe wurde nicht gefunden (Backend [BACKENDID])</title>
+					<text>Die Dienstegruppe &quot;[SERVICEGROUP]&quot; konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?</text>
 				</serviceGroupNotFoundInDB>
 				<hostIsPending>
-					<title>Host ist im wartenden status! (Backend [BACKENDID])</title>
-					<text>Der Host [b][HOST][/b] ist im wartenden status.</text>
+					<title>NDOMy: Host ist im wartenden status (Backend [BACKENDID])</title>
+					<text>Der Host &quot;[HOST]&quot; ist im wartenden status.</text>
 				</hostIsPending>
 				<serviceNotChecked>
-					<title>Dienst bisher nicht gepr&uuml;ft! (Backend [BACKENDID])</title>
-					<text>Der Dienst [b][SERVICE][/b] wurde bisher nicht gepr&uuml;ft.</text>
+					<title>NDOMy: Dienst bisher nicht gepr&uuml;ft (Backend [BACKENDID])</title>
+					<text>Der Dienst &quot;[SERVICE]&quot; wurde bisher nicht gepr&uuml;ft.</text>
 				</serviceNotChecked>
 				<noTablesExists>
-					<title>Keine g&uuml;ltigen Tabellen (Backend [BACKENDID])</title>
-					<text>In der Datenbank existieren keine Tabellen mit dem konfigurierten Prefix "[i][PREFIX][/i]".</text>
+					<title>NDOMy: Keine g&uuml;ltigen Tabellen (Backend [BACKENDID])</title>
+					<text>In der Datenbank existieren keine Tabellen mit dem konfigurierten Prefix &quot;&quot;[PREFIX]&quot;&quot;.</text>
 				</noTablesExists>
 			</messages>
 		</ndomy>
@@ -285,12 +253,12 @@
 			<messages>
 				<!-- Alle HTML Backend Meldungen //-->
 				<statusCgiNotFound>
-					<title>StatusCgi nicht gefunden! (Backend [BACKENDID])</title>
-					<text>&uuml;berpr&uuml;fen Sie den Pfad der [STATUSCGI]-Variable in der Konfigurationsdatei!</text>
+					<title>StatusCgi nicht gefunden (Backend [BACKENDID])</title>
+					<text>&Uuml;berpr&uuml;fen Sie den Pfad der [STATUSCGI]-Variable in der Konfigurationsdatei</text>
 				</statusCgiNotFound>
 				<statusCgiNotExecutable>
-					<title>StatusCgi nicht ausf&uuml;hrbar!</title>
-					<text>Rechte &uuml;berpr&uuml;fen!</text>
+					<title>Status.cgi nicht ausf&uuml;hrbar</title>
+					<text>Rechte &uuml;berpr&uuml;fen</text>
 				</statusCgiNotExecutable>
 			</messages>
 		</html>
@@ -429,10 +397,10 @@
 					<text>Der gew&auml;hlte line_type ist ung&uuml;ltig.</text>
 				</chosenLineTypeNotValid>
 				<onlyLineOrIcon>
-					<text>Ein Object kann nur ein Icon oder eine Linie sein, 'iconset' und 'line_type' kann nicht gemeinsam verwendet werden.</text>
+					<text>Ein Object kann nur ein Icon oder eine Linie sein, &quot;iconset&quot; und &quot;line_type&quot; kann nicht gemeinsam verwendet werden.</text>
 				</onlyLineOrIcon>
 				<not2coords>
-					<text>Es scheint, du willst eine Linie definieren (line_type ist gesetzt), aber es sind keine 2 [COORD] Koordinaten angegeben.</text>
+					<text>Es scheint, du willst eine Linie definieren (&quot;line_type&quot; ist gesetzt), aber es sind keine 2 [COORD] Koordinaten angegeben.</text>
 				</not2coords>
 				<only1or2coords>
 					<text>Es ist nur m&ouml;glich ein oder 2 Koordinaten [COORD] anzugeben.</text>
@@ -465,7 +433,7 @@
 					<text>Willst du diese Map wirklich umbenennen?</text>
 				</confirmMapRename>
 				<confirmMapDeletion>
-					<text>Willst du diese Map wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
+					<text>Willst du diese Map wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.</text>
 				</confirmMapDeletion>
 				<noPermissions>
 					<text>Du hast nicht die Rechte diese Map zu &auml;ndern.</text>
@@ -480,7 +448,7 @@
 					<text>Sicher, dass du das Backup wiederherstellen willst?</text>
 				</confirmRestore>
 				<noSpaceAllowed>
-					<text>Leerzeichen sind hier nicht erlaubt!</text>
+					<text>Leerzeichen sind hier nicht erlaubt.</text>
 				</noSpaceAllowed>
 			</messages>
 		</global>
@@ -532,75 +500,15 @@
 				<base>
 					<text>Voller lokaler Pfad zum NagVis Basis Verzeichnis.</text>
 				</base>
-				<cfg>
-					<text>Lokaler Pfad zum NagVis etc Verzeichnis.</text>
-				</cfg>
-				<icon>
-					<text>Lokaler Pfad zum NagVis iconsets Verzeichnis.</text>
-				</icon>
-				<map>
-					<text>Lokaler Pfad zu den Hintergrund Bildern (*.png)</text>
-				</map>
-				<mapcfg>
-					<text>Lokaler Pfad zu den Map Config Dateien (*.cfg)</text>
-				</mapcfg>
 				<htmlbase>
 					<text>HTTP Pfad zu NagVis (/nagios/nagvis).</text>
 				</htmlbase>
 				<htmlcgi>
 					<text>HTTP Pfad zu den Nagios CGIs (/nagios/cgi-bin).</text>
 				</htmlcgi>
-				<htmlicon>
-					<text>HTTP Pfad zum NagVis iconsets Verzeichnis.</text>
-				</htmlicon>
-				<htmlmap>
-					<text>HTTP Pfad zu den NagVis Maps (/nagios/nagvis/maps/).</text>
-				</htmlmap>
-				<htmldoku>
-					<text>HTTP Pfad zur NagVis Doku.</text>
-				</htmldoku>
 				<header>
 					<text>Name der Header include Datei.</text>
 				</header>
-				<index>
-					<text>Include Datei fuer die Standard Seite.</text>
-				</index>
-				<dbhost>
-					<text>NDO Backend: Host der NDO Datenbank (z.B. localhost).</text>
-				</dbhost>
-				<dbport>
-					<text>NDO Backend: Port der NDO Datenbank (default 3306).</text>
-				</dbport>
-				<dbname>
-					<text>NDO Backend: Name der NDO Datenbank.</text>
-				</dbname>
-				<dbuser>
-					<text>NDO Backend: Benutzer f&uuml;r den NDO Datenbankzugriff, der Benutzer braucht nur read (SELECT) Rechte!.</text>
-				</dbuser>
-				<dbpass>
-					<text>NDO Backend: Passwort des Benutzers f&uuml;r den Datenbankzugriff.</text>
-				</dbpass>
-				<dbprefix>
-					<text>NDO Backend: Prefix vor den Tabellennamen in der NDO Datenbank (z.B. ndo_)</text>
-				</dbprefix>
-				<dbinstanceid>
-					<text>NDO Backend: Instanz-ID der NDO installation (wird nur bei mehreren NDO installationen ben&ouml;tigt, normalerweise 1)</text>
-				</dbinstanceid>
-				<maxtimewithoutupdate>
-					<text>NDO Backend: Maximale Zeit ohne Updates in der NDO Datenbank</text>
-				</maxtimewithoutupdate>
-				<cgiuser>
-					<text>HTML Backend: Der User mit dem NagVis die CGIs aufruft (sollte allowed for all services, allowed for all hosts sein)</text>
-				</cgiuser>
-				<cgipath>
-					<text>HTML Backend: Voller lokaler Pfad zu den Nagios CGIs (/usr/local/nagios/sbin).</text>
-				</cgipath>
-				<version>
-					<text>NagVis Version.</text>
-				</version>
-				<title>
-					<text>Titel der NagVis Seiten im Browser.</text>
-				</title>
 			</labels>
 			<messages>
 				<!-- Main Configuration Messages //-->
@@ -630,7 +538,7 @@
 			<messages>
 				<mustValueNotSet>
 					<title>Pflichtwert nicht gesetzt</title>
-					<text>Der Pflichtwert "[I][ATTRIBUTE][/I]" ist nicht gef&uuml;llt</text>
+					<text>Der Pflichtwert &quot;&quot;[ATTRIBUTE]&quot;&quot; ist nicht gef&uuml;llt</text>
 				</mustValueNotSet>
 			</messages>
 		</backendManagement>
@@ -645,7 +553,7 @@
 			</labels>
 			<messages>
 				<firstMustChoosePngImage>
-					<text>Du must erst ein PNG Image w&auml;hlen!</text>
+					<text>Du must erst ein PNG Image w&auml;hlen</text>
 				</firstMustChoosePngImage>
 				<mustChoosePngImage>
 					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
@@ -654,7 +562,7 @@
 					<text>Kein Hintergrund Image zum l&ouml;schen gefunden. Operation abgebrochen.</text>
 				</foundNoBackgroundToDelete>
 				<confirmBackgroundDeletion>
-					<text>Willst du dieses Hintergrund Image wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden!</text>
+					<text>Willst du diesen Hintergrund wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.</text>
 				</confirmBackgroundDeletion>
 				<unableToDeleteBackground>
 					<text>Kann HIntergrund [IMAGENAME] nicht l&ouml;schen, da er in der Map [MAP] noch verwendet wird.</text>
@@ -670,7 +578,7 @@
 					<text>Du hast keinen neuen Namen angegeben.</text>
 				</noNewNameGiven>
 				<mapAlreadyExists>
-					<text>Die Map ([MAPNAME]) existiert bereits. W&auml;hle einen anderen Namen.</text>
+					<text>Die Map &quot;[MAPNAME]&quot; existiert bereits. W&auml;hle einen anderen Namen.</text>
 				</mapAlreadyExists>
 				<foundNoMapToDelete>
 					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
@@ -696,11 +604,11 @@
 				</foundNoMapToImport>
 				<mapAlreadyExists>
 					<title>Map existiert bereits</title>
-					<text>Eine Map mit dem Namen [I][MAPNAME][/I] existiert bereits. Benenne die Datei um.</text>
+					<text>Eine Map mit dem Namen &quot;[MAPNAME]&quot; existiert bereits. Benenne die Datei um.</text>
 				</mapAlreadyExists>
 				<notCfgFile>
 					<title>Falsches Dateiformat</title>
-					<text>Die Datei hat nicht die Dateiendung [I].cfg[/i]. Benenne die Datei um.</text>
+					<text>Die Datei hat nicht die Dateiendung &quot;.cfg&quot;. Benenne die Datei um.</text>
 				</notCfgFile>
 			</messages>
 		</mapManagement>
