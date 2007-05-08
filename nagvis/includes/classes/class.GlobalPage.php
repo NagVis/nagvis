@@ -46,7 +46,7 @@ class GlobalPage {
 		$this->title = $prop['title'];
 		$this->cssIncludes = $prop['cssIncludes'];
 		$this->jsIncludes = $prop['jsIncludes'];
-		$this->extHeader = array_merge(Array('<meta http-equiv="Content-Type" content="text/html" charset=utf-8">',
+		$this->extHeader = array_merge(Array('<meta http-equiv="Content-Type" content="text/html;charset=utf-8">',
 											'<title>'.$prop['title'].'</title>'),$prop['extHeader']);
 		$this->allowedUsers = $prop['allowedUsers'];
 		$this->languageRoot = $prop['languageRoot'];
