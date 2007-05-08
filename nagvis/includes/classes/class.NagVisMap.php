@@ -96,10 +96,10 @@ class NagVisMap extends GlobalMap {
 					if(isset($obj['line_type'])) {
 						if($obj['line_type'] != '20') {
 							// a line with one object...
-							$ret = array_merge($ret,$this->createBoxLine($obj,$obj['state'],NULL,$obj[$name]));
+							$ret = array_merge($ret,$this->createBoxLine($obj));
 						} else {
 							// a line with two objects...
-							$ret = array_merge($ret,$this->createBoxLine($obj,$obj['state1'],$obj['state2'],$obj[$name]));
+							$ret = array_merge($ret,$this->createBoxLine($obj));
 						}
 					} else {
 						$obj = $this->fixIcon($obj);
@@ -134,13 +134,19 @@ class NagVisMap extends GlobalMap {
 	 * Create a Link for a Line
 	 *
 	 * @param	Array	$obj	Array with object informations
-	 * @param	String	$name	Key for Objectname eg. host_name
 	 * @return	Array	Array with HTML Code
 	 * @fixme 	FIXME 1.1: optimize
 	 */
-	function createBoxLine(&$obj,$name) {
+	function createBoxLine(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createBoxLine(&$obj,'.$name.')');
 		$ret = Array();
+		
+		if($obj['type'] == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $obj['type'] . '_name';
+		}
+		
 	    if($obj['line_type'] == '10' || $obj['line_type'] == '11'){
 			list($x_from,$x_to) = explode(',', $obj['x']);
 			list($y_from,$y_to) = explode(',', $obj['y']);
@@ -150,9 +156,9 @@ class NagVisMap extends GlobalMap {
 			
 			$obj = $this->fixIcon($obj);
 			$ret[] = $this->parseIcon($obj);
-		} elseif($mapCfg['line_type'] == '20') {
-			list($host_name_from,$host_name_to) = explode(',', $mapCfg[$name]);
-			list($service_description_from,$service_description_to) = explode(',', $mapCfg['service_description']);
+		} elseif($obj['line_type'] == '20') {
+			list($host_name_from,$host_name_to) = explode(',', $obj[$name]);
+			list($service_description_from,$service_description_to) = explode(',', $obj['service_description']);
 			list($x_from,$x_to) = explode(',', $mapCfg['x']);
 			list($y_from,$y_to) = explode(',', $mapCfg['y']);
 			
