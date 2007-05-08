@@ -23,7 +23,7 @@ class WuiEditMainCfg extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array(''),
+					  'jsIncludes'=>Array('./includes/js/wui.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'wui:editMainCfg');
@@ -96,7 +96,7 @@ class WuiEditMainCfg extends GlobalPage {
 							$ret[] = "\t<td class=\"tdfield\"></td>";
 						} else {
 							$ret[] = "\t<td class=\"tdfield\">";
-							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'',FALSE)."')\" />";
+							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert(utf8_decode('".$this->LANG->getLabel($key2,'',FALSE)."'))\" />";
 							$ret[] = "\t</td>";
 						}
 						

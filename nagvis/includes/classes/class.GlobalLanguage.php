@@ -138,22 +138,7 @@ class GlobalLanguage {
 	 */
 	function replaceSpecial($str) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::replaceSpecial(String)');
-		// FIXME: dirty workaround
-		$str = str_replace('&#252;','ü',$str);
-		$str = str_replace('&#246;','ö',$str);
-		$str = str_replace('&#228;','ä',$str);
-		$str = str_replace('&uuml;','ü',$str);
-		$str = str_replace('&ouml;','ö',$str);
-		$str = str_replace('&auml;','ä',$str);
-		$str = str_replace('&#220;','Ü',$str);
-		$str = str_replace('&#214;','Ö',$str);
-		$str = str_replace('&#196;','Ä',$str);
-		$str = str_replace('&Uuml;','Ü',$str);
-		$str = str_replace('&Ouml;','Ö',$str);
-		$str = str_replace('&Auml;','Ä',$str);
-		$str = str_replace('Ã¤','ä',$str);
-		$str = str_replace('Ã¶','ö',$str);
-		$str = str_replace('Ã¼','ü',$str);
+		$str = html_entity_decode($str,ENT_NOQUOTES,'UTF-8');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::replaceSpecial(): String');
 		return $str;
 	}
