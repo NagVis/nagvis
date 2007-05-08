@@ -159,8 +159,8 @@ class NagVisMap extends GlobalMap {
 		} elseif($obj['line_type'] == '20') {
 			list($host_name_from,$host_name_to) = explode(',', $obj[$name]);
 			list($service_description_from,$service_description_to) = explode(',', $obj['service_description']);
-			list($x_from,$x_to) = explode(',', $mapCfg['x']);
-			list($y_from,$y_to) = explode(',', $mapCfg['y']);
+			list($x_from,$x_to) = explode(',', $obj['x']);
+			list($y_from,$y_to) = explode(',', $obj['y']);
 			
 			// From
 			$obj['x'] = $this->GRAPHIC->middle2($x_from,$x_to);
