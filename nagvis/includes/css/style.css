@@ -110,3 +110,26 @@ a.NavBarItem {
     padding-right: 3px;
     padding-top: 1px;
 }
+
+/* WUI INFOBOX */
+table.infobox {
+	border-collapse:collapse;
+	padding: 1px;
+	width: 100%;
+}
+
+table.infobox td, table.infobox th {
+	padding: 1px;
+	border: 1px #000 solid;
+	font-size: 11px;
+}
+
+table.infobox th {
+	text-align: center;
+	background-color: #EEEEEE;
+}
+
+/* display inherited settings in gray font */
+table.infobox tr.inherited th, table.infobox tr.inherited td {
+	color: gray;
+}

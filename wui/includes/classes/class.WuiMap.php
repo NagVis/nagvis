@@ -341,9 +341,7 @@ class WuiMap extends GlobalMap {
 	 * Creates a Javascript-Box with information.
 	 *
 	 * @param	Array	$obj	Array with object informations
-	 * @author Michael Luebben <michael_luebben@web.de>
 	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 * FIXME: optimize
      */
 	function infoBox($obj) {
 		if($obj['type'] == 'service') {
@@ -356,23 +354,36 @@ class WuiMap extends GlobalMap {
 		unset($obj['state']);
 		
 		// add all the object's defined properties to the tooltip body
-		$tooltipText='';
+		$tooltipText = '<table class=\\\'infobox\\\'>';
+		$configuredText = '';
+		$defaultText = '';
 		
-		foreach($obj AS $var => $val) {
-			if(!preg_match('/^(|id|icon|type|x|y|z|path|htmlPath)$/i',$var) && $val != '') {
-				$tooltipText .= $var.": ".$val."<br>";
+		// Get configured/inherited variables
+		foreach($this->MAPCFG->validConfig[$obj['type']] AS $key => $values) {
+			$getValue = $this->MAPCFG->getValue($obj['type'],$obj['id'],$key,TRUE);
+			if($key != 'type' && isset($getValue) && $getValue != '') {
+				$configuredText .= '<tr><td>'.$key.'</td><td>'.$getValue.'</td></tr>';
+			} elseif(isset($values['default'])) {
+				$defaultText .= '<tr class=\\\'inherited\\\'><td>'.$key.'</td><td>'.$values['default'].'</td></tr>';
 			}
 		}
 		
-		$tooltipText .= "<br><a href=\'./addmodify.php?action=modify&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onclick=\'open_window(href); return false;\'>".$this->LANG->getLabel('change')."</a>";
-		$tooltipText .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";	
-		$tooltipText .= "<a href=\'./wui.function.inc.php?myaction=delete&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a>";
+		// Print configured settings
+		$tooltipText .= '<tr><th colspan=\\\'2\\\'>'.$this->LANG->getLabel('configured').'</th></tr>'.$configuredText;
+		// Print inherited settings
+		$tooltipText .= '<tr class=\\\'inherited\\\'><th colspan=\\\'2\\\'>'.$this->LANG->getLabel('inherited').'</th></tr>'.$defaultText;
 		
 		// lines and textboxes have one more link in the tooltip: "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
-			$tooltipText .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			$tooltipText .= "<a href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>".$this->LANG->getLabel('positionSize')."</a>";			
+			$positionSizeText = "<a href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>".$this->LANG->getLabel('positionSize')."</a>";			
+		} else {
+			$positionSizeText = '';	
 		}
+		
+		$tooltipText .= "<tr><th><a href=\'./addmodify.php?action=modify&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onclick=\'open_window(href); return false;\'>".$this->LANG->getLabel('change')."</a>&nbsp;".$positionSizeText."</th>";
+		$tooltipText .= "<th><a href=\'./wui.function.inc.php?myaction=delete&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a></th></tr>";
+		
+		$tooltipText.='</table>';
 		
 		$info = "onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".$this->LANG->getLabel($obj['type'])."</b>';return escape('".$tooltipText."');\"";
 		

@@ -413,6 +413,12 @@
 				<disabled>
 					<text>Deaktiviert</text>
 				</disabled>
+				<configured>
+					<text>Konfiguriert</text>
+				</configured>
+				<inherited>
+					<text>Vererbt</text>
+				</inherited>
 			</labels>
 			<messages>
 				<!-- Alle WUI Meldungen //-->
