@@ -23,7 +23,7 @@ class WuiFrontend extends GlobalPage {
 		$this->LANG = new GlobalLanguage($this->MAINCFG,'wui:global');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
-					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/office_xp/office_xp.css'),
+					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/wui.css','./includes/css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array('./includes/js/wui.js',
 					  	  './includes/js/ajax.js',
 						  './includes/js/jsdomenu.js',

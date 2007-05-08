@@ -82,3 +82,29 @@ form {
 	border: 1px solid #284279;
 	width: 100%;
 }
+
+/* WUI INFOBOX */
+table.infobox {
+	background-color: #F5F5F5; 
+	border-collapse:collapse;
+	padding: 1px;
+	width: 100%;
+}
+
+table.infobox td, table.infobox th {
+	border: 1px #a4a4a4 solid;
+	padding: 1px;
+	
+	font-size: 11px;
+	color: #314455;
+}
+
+table.infobox th {
+	text-align: center;
+	background-color: #eee;
+}
+
+/* display inherited settings in gray font */
+table.infobox tr.inherited th, table.infobox tr.inherited td {
+	color: #a4a4a4;
+}
