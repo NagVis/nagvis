@@ -113,23 +113,26 @@ a.NavBarItem {
 
 /* WUI INFOBOX */
 table.infobox {
+	background-color: #F5F5F5; 
 	border-collapse:collapse;
 	padding: 1px;
 	width: 100%;
 }
 
 table.infobox td, table.infobox th {
+	border: 1px #a4a4a4 solid;
 	padding: 1px;
-	border: 1px #000 solid;
+	
 	font-size: 11px;
+	color: #314455;
 }
 
 table.infobox th {
 	text-align: center;
-	background-color: #EEEEEE;
+	background-color: #eee;
 }
 
 /* display inherited settings in gray font */
 table.infobox tr.inherited th, table.infobox tr.inherited td {
-	color: gray;
+	color: #a4a4a4;
 }
