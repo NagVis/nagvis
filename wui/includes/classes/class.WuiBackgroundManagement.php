@@ -175,11 +175,11 @@ class WuiBackgroundManagement extends GlobalPage {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang["firstMustChoosePngImage"] = "'.$this->LANG->getMessageText('firstMustChoosePngImage').'";';
-		$ret[] = 'lang["mustChoosePngImage"] = "'.$this->LANG->getMessageText('mustChoosePngImage').'";';
-		$ret[] = 'lang["foundNoBackgroundToDelete"] = "'.$this->LANG->getMessageText('foundNoBackgroundToDelete').'";';
-		$ret[] = 'lang["confirmBackgroundDeletion"] = "'.$this->LANG->getMessageText('confirmBackgroundDeletion').'";';
-		$ret[] = 'lang["unableToDeleteBackground"] = "'.$this->LANG->getMessageText('unableToDeleteBackground').'";';
+		$ret[] = 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getMessageText('firstMustChoosePngImage').'\';';
+		$ret[] = 'lang[\'mustChoosePngImage\'] = \''.$this->LANG->getMessageText('mustChoosePngImage').'\';';
+		$ret[] = 'lang[\'foundNoBackgroundToDelete\'] = \''.$this->LANG->getMessageText('foundNoBackgroundToDelete').'\';';
+		$ret[] = 'lang[\'confirmBackgroundDeletion\'] = \''.$this->LANG->getMessageText('confirmBackgroundDeletion').'\';';
+		$ret[] = 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getMessageText('unableToDeleteBackground').'\';';
 		$ret[] = '//--></script>';
 		
 		return $ret;	

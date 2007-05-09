@@ -420,28 +420,28 @@ class NagVisMap extends GlobalMap {
 			case 'host':
 				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
 				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'service':
 				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
 				$ret .= '<b>'.$this->LANG->getLabel('servicename').':</b> '.$obj['service_description'].'<br>';
 				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>';
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>';
 			break;
 			case 'hostgroup':
 				$ret .= '<b>'.$this->LANG->getLabel('hostgroupname').':</b> '.$obj[$name].'<br>';
 				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'servicegroup':
 				$ret .= '<b>'.$this->LANG->getLabel('servicegroupname').':</b> '.$obj[$name].'<br>';
 				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			case 'map':
 				$ret .= '<b>'.$this->LANG->getLabel('mapname').':</b> '.$obj[$name].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.strtr(addslashes($obj['state']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array("\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.strtr(addslashes($obj['state']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
+				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
 			break;
 			default:
 				// Unknown type, don't display anything

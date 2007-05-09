@@ -310,7 +310,7 @@ class WuiBackendManagement extends GlobalPage {
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang["mustValueNotSet"] = \''.$this->LANG->getMessageText('mustValueNotSet','',FALSE).'\';';
+		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getMessageText('mustValueNotSet','',FALSE).'\';';
 		$ret[] = '//--></script>';
 		
 		return $ret;	

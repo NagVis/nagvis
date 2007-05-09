@@ -47,10 +47,10 @@ class WuiMap extends GlobalMap {
 			
 			$MAPCFG1 = new WuiMapCfg($this->MAINCFG,$map);
 			$MAPCFG1->readMapConfig(1);
-			$mapOptions .= '{ mapName: "'.$map.'"';
+			$mapOptions .= '{ mapName: \''.$map.'\'';
 			
 			// used image
-			$mapOptions .= ', mapImage:"'.$MAPCFG1->getValue('global', '0', 'map_image').'"';
+			$mapOptions .= ', mapImage:\''.$MAPCFG1->getValue('global', '0', 'map_image').'\'';
 			
 			// permited users for writing
 			$mapOptions .= ', allowedForConfig:[ ';
@@ -424,31 +424,31 @@ class WuiMap extends GlobalMap {
 	function getJsLang() {
 		$ret = Array();
 		$ret[] = 'var langMenu = Array();';
-		$ret[] = 'langMenu["save"] = "'.$this->LANG->getLabel('save').'";';
-		$ret[] = 'langMenu["restore"] = "'.$this->LANG->getLabel('restore').'";';
-		$ret[] = 'langMenu["properties"] = "'.$this->LANG->getLabel('properties').'";';
-		$ret[] = 'langMenu["addObject"] = "'.$this->LANG->getLabel('addObject').'";';
-		$ret[] = 'langMenu["nagVisConfig"] = "'.$this->LANG->getLabel('nagVisConfig').'";';
-		$ret[] = 'langMenu["help"] = "'.$this->LANG->getLabel('help').'";';
-		$ret[] = 'langMenu["open"] = "'.$this->LANG->getLabel('open').'";';
-		$ret[] = 'langMenu["openInNagVis"] = "'.$this->LANG->getLabel('openInNagVis').'";';
-		$ret[] = 'langMenu["manageMaps"] = "'.$this->LANG->getLabel('manageMaps').'";';
-		$ret[] = 'langMenu["manageBackends"] = "'.$this->LANG->getLabel('manageBackends').'";';
-		$ret[] = 'langMenu["manageBackgrounds"] = "'.$this->LANG->getLabel('manageBackgrounds').'";';
-		$ret[] = 'langMenu["icon"] = "'.$this->LANG->getLabel('icon').'";';
-		$ret[] = 'langMenu["line"] = "'.$this->LANG->getLabel('line').'";';
-		$ret[] = 'langMenu["special"] = "'.$this->LANG->getLabel('special').'";';
-		$ret[] = 'langMenu["host"] = "'.$this->LANG->getLabel('host').'";';
-		$ret[] = 'langMenu["service"] = "'.$this->LANG->getLabel('service').'";';
-		$ret[] = 'langMenu["hostgroup"] = "'.$this->LANG->getLabel('hostgroup').'";';
-		$ret[] = 'langMenu["servicegroup"] = "'.$this->LANG->getLabel('servicegroup').'";';
-		$ret[] = 'langMenu["map"] = "'.$this->LANG->getLabel('map').'";';
-		$ret[] = 'langMenu["textbox"] = "'.$this->LANG->getLabel('textbox').'";';
-		$ret[] = 'langMenu["shape"] = "'.$this->LANG->getLabel('shape').'";';
+		$ret[] = 'langMenu[\'save\'] = \''.$this->LANG->getLabel('save').'\';';
+		$ret[] = 'langMenu[\'restore\'] = \''.$this->LANG->getLabel('restore').'\';';
+		$ret[] = 'langMenu[\'properties\'] = \''.$this->LANG->getLabel('properties').'\';';
+		$ret[] = 'langMenu[\'addObject\'] = \''.$this->LANG->getLabel('addObject').'\';';
+		$ret[] = 'langMenu[\'nagVisConfig\'] = \''.$this->LANG->getLabel('nagVisConfig').'\';';
+		$ret[] = 'langMenu[\'help\'] = \''.$this->LANG->getLabel('help').'\';';
+		$ret[] = 'langMenu[\'open\'] = \''.$this->LANG->getLabel('open').'\';';
+		$ret[] = 'langMenu[\'openInNagVis\'] = \''.$this->LANG->getLabel('openInNagVis').'\';';
+		$ret[] = 'langMenu[\'manageMaps\'] = \''.$this->LANG->getLabel('manageMaps').'\';';
+		$ret[] = 'langMenu[\'manageBackends\'] = \''.$this->LANG->getLabel('manageBackends').'\';';
+		$ret[] = 'langMenu[\'manageBackgrounds\'] = \''.$this->LANG->getLabel('manageBackgrounds').'\';';
+		$ret[] = 'langMenu[\'icon\'] = \''.$this->LANG->getLabel('icon').'\';';
+		$ret[] = 'langMenu[\'line\'] = \''.$this->LANG->getLabel('line').'\';';
+		$ret[] = 'langMenu[\'special\'] = \''.$this->LANG->getLabel('special').'\';';
+		$ret[] = 'langMenu[\'host\'] = \''.$this->LANG->getLabel('host').'\';';
+		$ret[] = 'langMenu[\'service\'] = \''.$this->LANG->getLabel('service').'\';';
+		$ret[] = 'langMenu[\'hostgroup\'] = \''.$this->LANG->getLabel('hostgroup').'\';';
+		$ret[] = 'langMenu[\'servicegroup\'] = \''.$this->LANG->getLabel('servicegroup').'\';';
+		$ret[] = 'langMenu[\'map\'] = \''.$this->LANG->getLabel('map').'\';';
+		$ret[] = 'langMenu[\'textbox\'] = \''.$this->LANG->getLabel('textbox').'\';';
+		$ret[] = 'langMenu[\'shape\'] = \''.$this->LANG->getLabel('shape').'\';';
 		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang["clickMapToSetPoints"] = "'.$this->LANG->getMessageText('clickMapToSetPoints').'";';
-		$ret[] = 'lang["confirmDelete"] = "'.$this->LANG->getMessageText('confirmDelete').'";';
-		$ret[] = 'lang["confirmRestore"] = "'.$this->LANG->getMessageText('confirmRestore').'";';
+		$ret[] = 'lang[\'clickMapToSetPoints\'] = \''.$this->LANG->getMessageText('clickMapToSetPoints').'\';';
+		$ret[] = 'lang[\'confirmDelete\'] = \''.$this->LANG->getMessageText('confirmDelete').'\';';
+		$ret[] = 'lang[\'confirmRestore\'] = \''.$this->LANG->getMessageText('confirmRestore').'\';';
 		
 		return $ret;	
 	}
