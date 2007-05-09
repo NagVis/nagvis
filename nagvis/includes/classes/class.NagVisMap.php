@@ -90,7 +90,7 @@ class NagVisMap extends GlobalMap {
 					$ret[] = $this->parseIcon($obj,$link,$hoverMenu);
 				break;
 				default:
-					// replace macros in url and hover_url
+					// replace macros in url/hover_url/label_text
 					$obj = $this->replaceMacros($obj);
 				
 					if(isset($obj['line_type'])) {
@@ -104,8 +104,10 @@ class NagVisMap extends GlobalMap {
 					} else {
 						$obj = $this->fixIcon($obj);
 						$icon = $this->parseIcon($obj);
+						$label = $this->parseLabel($obj);
 						if (DEBUG&&DEBUGLEVEL&2) debug('Start array_merge(Array(...),Array(...))');
 						$ret[] = $icon;
+						$ret[] = $label;
 						if (DEBUG&&DEBUGLEVEL&2) debug('End array_merge(Array(...),Array(...))');
 					}
 				break;	
@@ -234,11 +236,45 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
+	 * Parses the HTML-Code of a label
+	 *
+	 * @param	Array	$obj		Array with object informations
+	 * @param	String	$base		Array with object informations
+	 * @param	Boolean	$link		Add a link to the icon
+	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
+	 * @return	String	String with Html Code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseLabel(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseLabel(&$obj)');
+		
+		if($obj['type'] == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $obj['type'] . '_name';
+		}
+		
+		// If no x/y coords set, fallback to object x/y
+		$obj['label_x'] = $obj['x'] + $obj['label_x'];
+		$obj['label_y'] = $obj['y'] + $obj['label_y'];
+		
+		if(isset($obj['label_width']) && $obj['label_width'] != 'auto') {
+			$obj['label_width'] .= 'px';	
+		}
+		
+		$ret  = '<div class="label" style="background:'.$obj['label_background'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
+		$ret .= '<span>'.$obj['label_text'].'</span>';
+		$ret .= '</div>';
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseLabel(): HTML String');
+		return $ret;
+	}
+	
+	/**
 	 * Replaces macros of urls and hover_urls
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	Array	$obj	Modified array
-	 * @author 	Michael Luebben <michael_luebben@web.de>
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceMacros(&$obj) {
@@ -251,17 +287,22 @@ class NagVisMap extends GlobalMap {
 		
 		if(isset($obj['url']) && $obj['url'] != '') {
 			$obj['url'] = str_replace('['.$name.']',$obj[$name],$obj['url']);
-		}
-		if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
-			$obj['hover_url'] = str_replace('['.$name.']',$obj[$name],$obj['hover_url']);
-		}
-		
-		if($obj['type'] == 'service') {
-			if(isset($obj['url']) && $obj['url'] != '') {
+			if($obj['type'] == 'service') {
 				$obj['url'] = str_replace('[service_description]',$obj['service_description'],$obj['url']);
 			}
-			if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
+		}
+		
+		if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
+			$obj['hover_url'] = str_replace('['.$name.']',$obj[$name],$obj['hover_url']);
+			if($obj['type'] == 'service') {
 				$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
+			}
+		}
+		
+		if(isset($obj['label_text']) && $obj['label_text'] != '') {
+			$obj['label_text'] = str_replace('['.$name.']',$obj[$name],$obj['label_text']);
+			if($obj['type'] == 'service') {
+				$obj['label_text'] = str_replace('[service_description]',$obj['service_description'],$obj['label_text']);
 			}
 		}
 		

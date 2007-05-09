@@ -40,7 +40,17 @@ class GlobalMapCfg {
 							'iconset' => Array('must' => 0,
 												'default' => $this->MAINCFG->getValue('defaults', 'icons')),
 							'background_color' => Array('must' => 0,
-												'default' => $this->MAINCFG->getValue('defaults', 'backgroundcolor'))),
+												'default' => $this->MAINCFG->getValue('defaults', 'backgroundcolor')),
+							'label_show' => Array('must' => 0,
+												'default' => '0'),
+							'label_x' => Array('must' => 0,
+												'default' => '-20'),
+							'label_y' => Array('must' => 0,
+												'default' => '20'),
+							'label_width' => Array('must' => 0,
+												'default' => 'auto'),
+							'label_background' => Array('must' => 0,
+												'default' => 'transparent')),
 			'host' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
@@ -53,12 +63,23 @@ class GlobalMapCfg {
 												'default' => ''),
 							'only_hard_states' => Array('must' => 0,
 												'default' => ''),
-							
 							'iconset' => Array('must' => 0,
 												'default' => ''),
 							'hover_url' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
-							'url' => Array('must' => 0)),
+							'url' => Array('must' => 0),
+							'label_show' => Array('must' => 0,
+												'default' => ''),
+							'label_text' => Array('must' => 0,
+												'default' => '[host_name]'),
+							'label_x' => Array('must' => 0,
+												'default' => ''),
+							'label_y' => Array('must' => 0,
+												'default' => ''),
+							'label_width' => Array('must' => 0,
+												'default' => ''),
+							'label_background' => Array('must' => 0,
+												'default' => '')),
 			'hostgroup' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
@@ -75,7 +96,19 @@ class GlobalMapCfg {
 												'default' => ''),
 							'hover_url' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
-							'url' => Array('must' => 0)),
+							'url' => Array('must' => 0),
+							'label_show' => Array('must' => 0,
+												'default' => ''),
+							'label_text' => Array('must' => 0,
+												'default' => '[hostgroup_name]'),
+							'label_x' => Array('must' => 0,
+												'default' => ''),
+							'label_y' => Array('must' => 0,
+												'default' => ''),
+							'label_width' => Array('must' => 0,
+												'default' => ''),
+							'label_background' => Array('must' => 0,
+												'default' => '')),
 			'service' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
@@ -91,7 +124,19 @@ class GlobalMapCfg {
 												'default' => ''),
 							'hover_url' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
-							'url' => Array('must' => 0)),
+							'url' => Array('must' => 0),
+							'label_show' => Array('must' => 0,
+												'default' => ''),
+							'label_text' => Array('must' => 0,
+												'default' => '[host_name] [service_description]'),
+							'label_x' => Array('must' => 0,
+												'default' => ''),
+							'label_y' => Array('must' => 0,
+												'default' => ''),
+							'label_width' => Array('must' => 0,
+												'default' => ''),
+							'label_background' => Array('must' => 0,
+												'default' => '')),
 			'servicegroup' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
@@ -106,7 +151,19 @@ class GlobalMapCfg {
 												'default' => ''),
 							'hover_url' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
-							'url' => Array('must' => 0)),
+							'url' => Array('must' => 0),
+							'label_show' => Array('must' => 0,
+												'default' => ''),
+							'label_text' => Array('must' => 0,
+												'default' => '[servicegroup_name]'),
+							'label_x' => Array('must' => 0,
+												'default' => ''),
+							'label_y' => Array('must' => 0,
+												'default' => ''),
+							'label_width' => Array('must' => 0,
+												'default' => ''),
+							'label_background' => Array('must' => 0,
+												'default' => '')),
 			'map' => Array('type' => Array('must' => 0),
 							'map_name' => Array('must' => 1),
 							'x' => Array('must' => 1),
@@ -118,7 +175,19 @@ class GlobalMapCfg {
 							'iconset' => Array('must' => 0,
 												'default' => ''),
 							'url' => Array('must' => 0),
-							'hover_url' => Array('must' => 0)),
+							'hover_url' => Array('must' => 0),
+							'label_show' => Array('must' => 0,
+												'default' => ''),
+							'label_text' => Array('must' => 0,
+												'default' => '[map_name]'),
+							'label_x' => Array('must' => 0,
+												'default' => ''),
+							'label_y' => Array('must' => 0,
+												'default' => ''),
+							'label_width' => Array('must' => 0,
+												'default' => ''),
+							'label_background' => Array('must' => 0,
+												'default' => '')),
 			'textbox' => Array('type' => Array('must' => 0),
 							'text' => Array('must' => 1),
 							'x' => Array('must' => 1),
@@ -152,18 +221,43 @@ class GlobalMapCfg {
 		$this->validConfig['host']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['host']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['host']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['host']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
+		$this->validConfig['host']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
+		$this->validConfig['host']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
+		$this->validConfig['host']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
+		$this->validConfig['host']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['hostgroup']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
 		$this->validConfig['hostgroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['hostgroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['hostgroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['hostgroup']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
+		$this->validConfig['hostgroup']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
+		$this->validConfig['hostgroup']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
+		$this->validConfig['hostgroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
+		$this->validConfig['hostgroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['service']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['service']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['service']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['service']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
+		$this->validConfig['service']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
+		$this->validConfig['service']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
+		$this->validConfig['service']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
+		$this->validConfig['service']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['servicegroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['servicegroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['servicegroup']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
+		$this->validConfig['servicegroup']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
+		$this->validConfig['servicegroup']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
+		$this->validConfig['servicegroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
+		$this->validConfig['servicegroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['map']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
+		$this->validConfig['map']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
+		$this->validConfig['map']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
+		$this->validConfig['map']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
+		$this->validConfig['map']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getObjectDefaults()');
 	}
 	
