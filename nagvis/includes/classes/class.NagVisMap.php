@@ -103,12 +103,10 @@ class NagVisMap extends GlobalMap {
 						}
 					} else {
 						$obj = $this->fixIcon($obj);
-						$icon = $this->parseIcon($obj);
-						$label = $this->parseLabel($obj);
-						if (DEBUG&&DEBUGLEVEL&2) debug('Start array_merge(Array(...),Array(...))');
-						$ret[] = $icon;
-						$ret[] = $label;
-						if (DEBUG&&DEBUGLEVEL&2) debug('End array_merge(Array(...),Array(...))');
+						$ret[] = $this->parseIcon($obj);
+						if($obj['label_show'] == '1') {
+							$ret[] = $this->parseLabel($obj);
+						}
 					}
 				break;	
 			}
