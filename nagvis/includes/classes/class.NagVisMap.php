@@ -216,7 +216,7 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		if($hoverMenu) {
-			$menu = $this->getHoverMenu($obj).';';
+			$menu = $this->getHoverMenu($obj);
 		} else {
 			$menu = '';
 		}
@@ -386,7 +386,7 @@ class NagVisMap extends GlobalMap {
 				$ret .= $this->createInfoBox($obj);
 			}
 			
-			$ret .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();" ';
+			$ret .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();"';
 			
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getHoverMenu(): Array(...)');
 			return $ret;
