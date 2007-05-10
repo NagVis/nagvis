@@ -28,7 +28,7 @@ class NagVisFrontend extends GlobalPage {
 					  'cssIncludes'=>Array('./includes/css/style.css'),
 					  'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/overlib_shadow.js'),
 					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">'.
-					  					"<style>.main { background-color: ".$this->MAPCFG->getValue('global',0, 'background_color')."; }</style>"),
+					  					'<style type="text/css">.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
 					  'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
 					  'languageRoot' => 'nagvis:global');
 		parent::GlobalPage($this->MAINCFG,$prop);
@@ -55,11 +55,11 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function getMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMap()');
+		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
 		$this->addBodyLines(Array('<div class="map">'));
 		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
-		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMap()');
 	}
 	
@@ -120,11 +120,11 @@ class NagVisFrontend extends GlobalPage {
 		$x = 0;
 		$ret[] = '<div class="header"><table width="100%" border="0" class="headerMenu">';
 		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
-			$this->site[] = '<tr valign="bottom">';
+			$ret[] = '<tr valign="bottom">';
 			for($d = 1;$d<=$this->MAINCFG->getValue('global', 'headercount');$d++) {
 				if(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
-					$ret[] = '<td width="13"><img src="'.$this->MAINCFG->getValue('paths', 'htmlimages').'internal/greendot.gif" width="13" height="14" name="'.$Menu[$x]['entry'].'_'.$x.'"></td>';
-					$ret[] = '<td nowrap><a href="'.str_replace("\n",'',$Menu[$x]['url']).'" onMouseOver="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',1)" onMouseOut="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',0)" class="NavBarItem">'.$Menu[$x]['entry'].'</a></td>';
+					$ret[] = '<td style="width:13px;"><img src="'.$this->MAINCFG->getValue('paths', 'htmlimages').'internal/greendot.gif" width="13" height="14" name="'.$Menu[$x]['entry'].'_'.$x.'" alt="'.$Menu[$x]['entry'].'_'.$x.'"></td>';
+					$ret[] = '<td><a href="'.str_replace("\n",'',$Menu[$x]['url']).'" onMouseOver="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',1)" onMouseOut="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',0)" class="NavBarItem">'.$Menu[$x]['entry'].'</a></td>';
 				}
 				$x++;
 			}

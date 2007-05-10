@@ -382,10 +382,10 @@ class GlobalPage {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::buildPage()');
 		$ret = '';
 		
-		$ret .= '<!DOCTYPE HTML SYSTEM>'."\n";
-		$ret .= '<html><head>';
+		$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'."\n";
+		$ret .= '<html><head>'."\n";
 		$ret .= $this->getLines($this->getHeader());
-		$ret .= '</head><body class="main">';
+		$ret .= '</head><body class="main">'."\n";
 		$ret .= $this->getLines($this->getBody());
 		$ret .= '</body></html>';
 		
