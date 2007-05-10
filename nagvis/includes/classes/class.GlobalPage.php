@@ -275,7 +275,7 @@ class GlobalPage {
      */
 	function getHeader() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getHeader()');
-		$ret = Array($this->getJsIncludes(),$this->getCssIncludes(),$this->getExtHeader());
+		$ret = Array($this->getExtHeader(),$this->getJsIncludes(),$this->getCssIncludes());
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getHeader(): Array(...)');
 		return $ret;
 	}
