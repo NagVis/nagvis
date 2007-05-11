@@ -81,6 +81,9 @@ class GlobalMainCfg {
 							'mapcfg' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/'),
+							'hovertemplate' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/hover_templates/'),
 							'htmlbase' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '/nagios/nagvis'),
@@ -160,6 +163,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/languages/';
 		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';
 		$this->validConfig['paths']['map']['default'] = $base.'nagvis/images/maps/';
+		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/etc/hover_templates/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'nagvis/etc/maps/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';

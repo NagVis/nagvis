@@ -433,13 +433,12 @@ class NagVisMap extends GlobalMap {
      */
 	function createInfoBox(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox(&$obj)');
-		$ret = '';
 		
-		if($obj['type'] == 'service') {
+		/*if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
 			$name = $obj['type'] . '_name';
-		}
+		}*/
 		
 		if(!isset($obj['stateCount'])) {
 			$obj['stateCount'] = 0;
@@ -454,8 +453,10 @@ class NagVisMap extends GlobalMap {
 		$obj['stateCount'] = str_replace("'",'',$obj['stateCount']);
 		$ServiceHostState = $obj['stateHost'];
 		
+		$ret = $this->getHoverTemplate($obj);
+		
 		//FIXME 1.1: mehr Output (ackComment, mehr Zahlen etc.)
-		switch($obj['type']) {
+		/*switch($obj['type']) {
 			case 'host':
 				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
 				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
@@ -485,9 +486,51 @@ class NagVisMap extends GlobalMap {
 			default:
 				// Unknown type, don't display anything
 			break;
-		}
+		}*/
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createInfoBox(): Array(...)');
 		return $ret;
+	}
+	
+	/**
+	 * Gets the hover template
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	String	HTML	HTML Code for the hover menu
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getHoverTemplate(&$obj) {
+		$ret = '';
+		
+		if($this->checkHoverTemplateExists($obj,1) && $this->checkHoverTemplateReadable($obj,1)) {
+			//FIXME: $this->MAINCFG->getValue('paths',hovertemplate').$obj['hover_template'].'.php'
+                      
+		}
+		
+		return $ret;
+	}
+	
+	/**
+	 * Checks if the requested hover template file is readable
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	Boolean Check Result
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkHoverTemplateReadable(&$obj,$printErr) {
+		//FIXME: $this->MAINCFG->getValue('paths',hovertemplate').$obj['hover_template'].'.php'
+		return TRUE;
+	}
+	
+	/**
+	 * Checks if the requested hover template file exists
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	Boolean Check Result
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkHoverTemplateExists(&$obj,$printErr) {
+		//FIXME: $this->MAINCFG->getValue('paths',hovertemplate').$obj['hover_template'].'.php'
+		return TRUE;
 	}
 	
 	/**

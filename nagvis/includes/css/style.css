@@ -120,3 +120,33 @@ a.NavBarItem {
     font-size: 11px;
     padding: 2px;
 }
+
+/* InstInfo Tabelle (index.php?info) */
+
+
+table.instinfo {
+	margin: auto;
+	margin-top: 25px;
+	
+	width: 800px;
+	
+	background-color: #F5F5F5; 
+	border-collapse:collapse;
+}
+
+table.instinfo td, table.instinfo th {
+	border: 1px #a4a4a4 solid;
+	padding: 4px;
+	
+	font-size: 11px;
+	color: #314455;
+}
+
+table.instinfo th {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.instinfo th.head {
+	font-size: 20px;
+}
