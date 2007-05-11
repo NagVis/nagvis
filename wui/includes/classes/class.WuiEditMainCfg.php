@@ -16,6 +16,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiEditMainCfg(&$MAINCFG) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::WuiEditMainCfg(&$MAINCFG)');
 		$this->MAINCFG = &$MAINCFG;
 		
 		# we load the language file
@@ -28,6 +29,7 @@ class WuiEditMainCfg extends GlobalPage {
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'wui:editMainCfg');
 		parent::GlobalPage($MAINCFG,$prop);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::WuiEditMainCfg()');
 	}
 	
 	/**
@@ -36,6 +38,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getForm() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getForm()');
 		$this->FORM = new GlobalForm(Array('name'=>'edit_config',
 									'id'=>'edit_config',
 									'method'=>'POST',
@@ -51,6 +54,7 @@ class WuiEditMainCfg extends GlobalPage {
 		
 		// Resize the window
 		$this->addBodyLines($this->resizeWindow());
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getForm()');
 	}
 	
 	/**
@@ -60,12 +64,14 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function resizeWindow() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::resizeWindow()');
 		$ret = Array();
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
 		$ret[] = "// resize the window (depending on the number of properties displayed)";
 		$ret[] = "window.resizeTo(540,758)";
 		$ret[] = "//--></script>";
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::resizeWindow(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -76,6 +82,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getFields()');
 		$ret = Array();
 		
 		foreach($this->MAINCFG->validConfig AS $cat => $arr) {
@@ -156,6 +163,7 @@ class WuiEditMainCfg extends GlobalPage {
 				}
 			}
 		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -166,6 +174,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackends() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getBackends()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
@@ -181,6 +190,7 @@ class WuiEditMainCfg extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getBackends(): Array(...)');
 		return $files;
 	}
 	
@@ -191,6 +201,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIconsets() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getIconsets()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
@@ -206,6 +217,7 @@ class WuiEditMainCfg extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getIconsets(): Array(...)');
 		return $files;
 	}
 	
@@ -216,6 +228,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLanguages() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getLanguages()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'language'))) {
@@ -231,6 +244,7 @@ class WuiEditMainCfg extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getLanguages(): Array(...)');
 		return $files;
 	}
 	
@@ -241,6 +255,8 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSubmit() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getSubmit()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getSubmit()');
 		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
 	}
 	
@@ -251,6 +267,7 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHidden() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getHidden()');
 		$ret = Array();
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
 		$ret[] = "// function that builds up the list of parameters/values. There are 2 kinds of parameters values :";
@@ -268,6 +285,7 @@ class WuiEditMainCfg extends GlobalPage {
 		$ret[] = "}";
 		$ret[] = "//--></script>";
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getHidden(): Array(HTML)');
 		return $ret;	
 	}
 }

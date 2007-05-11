@@ -19,6 +19,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiAddModify(&$MAINCFG,&$MAPCFG,$prop) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::WuiAddModify(&$MAINCFG,&$MAPCFG,$prop)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->prop = $prop;
@@ -35,6 +36,7 @@ class WuiAddModify extends GlobalPage {
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'));
 		parent::GlobalPage($MAINCFG,$prop,'wui:addModify');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::WuiAddModify()');
 	}
 	
 	/**
@@ -43,6 +45,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getForm() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getForm()');
 		// Inititalize language for JS
 		$this->addBodyLines($this->getJsLang());
 		// Write JS Array for config validation
@@ -59,6 +62,7 @@ class WuiAddModify extends GlobalPage {
 		$this->addBodyLines($this->fillFields());
 		$this->addBodyLines($this->getSubmit());
 		$this->addBodyLines($this->resizeWindow());
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getForm()');
 	}
 	
 	/**
@@ -68,12 +72,14 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function resizeWindow() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::resizeWindow()');
 		$ret = Array();
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
 		$ret[] = "// we resize the window (depending on the number of properties displayed)";
 		$ret[] = "window.resizeTo(410,".$this->propCount."*40+60)";
 		$ret[] = "//--></script>";
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::resizeWindow(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -84,6 +90,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function fillFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::fillFields()');
 		$ret = Array();
 		
 		switch($this->prop['action']) {
@@ -129,6 +136,7 @@ class WuiAddModify extends GlobalPage {
 			break;
 		}
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::fillFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -139,6 +147,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getFields()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->FORM->getHiddenField('type',$this->prop['type']));
 		$ret = array_merge($ret,$this->FORM->getHiddenField('id',$this->prop['id']));
@@ -219,6 +228,7 @@ class WuiAddModify extends GlobalPage {
 			}
 		}
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -229,6 +239,8 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getSubmit() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getSubmit()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getSubmit(): Array(HTML)');
 		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
 	}
 	
@@ -239,6 +251,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBackends() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getBackends()');
 		$ret = Array();
 		foreach($this->MAINCFG->config AS $sec => $var) {
 			if(preg_match("/^backend_/i", $sec)) {
@@ -246,6 +259,7 @@ class WuiAddModify extends GlobalPage {
 			}
 		}
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getBackends(): Array(...)');
 		return $ret;
 	}
 	
@@ -256,6 +270,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getHoverTemplates() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getHoverTemplates()');
 		$files = Array();
 		
 		if($handle = opendir($this->MAINCFG->getValue('paths', 'hovertemplate'))) {
@@ -271,6 +286,7 @@ class WuiAddModify extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getHoverTemplates(): Array(...)');
 		return $files;
 	}
 	
@@ -281,6 +297,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getShapes() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getShapres()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
@@ -296,6 +313,7 @@ class WuiAddModify extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getShapes(): Array(...)');
 		return $files;
 	}
 	
@@ -306,6 +324,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getIconsets() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getIconsets()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
@@ -321,6 +340,7 @@ class WuiAddModify extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getIconsets(): Array(...)');
 		return $files;
 	}
 	
@@ -331,6 +351,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMaps() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getMaps()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
@@ -346,6 +367,7 @@ class WuiAddModify extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getMaps(): Array(...)');
 		return $files;
 	}
 	
@@ -356,6 +378,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMapImages() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getMapImages()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
@@ -371,6 +394,7 @@ class WuiAddModify extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getMapImages(): Array(...)');
 		return $files;
 	}
 	
@@ -381,6 +405,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getJsLang() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getJsLang()');
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
@@ -398,6 +423,7 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getMessageText('loopInMapRecursion').'\';';
 		$ret[] = '//--></script>';
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getJsLang(): Array(HTML)');
 		return $ret;	
 	}
 	
@@ -408,6 +434,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getJsValidConfig() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getJsValidConfig()');
 		$ret = Array();
 		
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
@@ -449,6 +476,7 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = $sRet;
 		$ret[] = '//--></script>';
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getJsValidConfig(): Array(HTML)');
 		return $ret;
 	}
 }

@@ -18,6 +18,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiBackendManagement(&$MAINCFG) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::WuiBackendManagement(&$MAINCFG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->propCount = 0;
 		
@@ -33,6 +34,7 @@ class WuiBackendManagement extends GlobalPage {
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'wui:backendManagement');
 		parent::GlobalPage($MAINCFG,$prop);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::WuiBackendManagement()');
 	}
 	
 	/**
@@ -41,6 +43,7 @@ class WuiBackendManagement extends GlobalPage {
 	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function getForm() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getForm()');
 		// Inititalize language for JS
 		$this->addBodyLines($this->getJsLang());
 		
@@ -94,6 +97,7 @@ class WuiBackendManagement extends GlobalPage {
 		
 		// Resize the window
 		$this->addBodyLines($this->resizeWindow());
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getForm()');
 	}
 	
 	/**
@@ -103,12 +107,14 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function resizeWindow() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::resizeWindow()');
 		$ret = Array();
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
 		$ret[] = "// resize the window (depending on the number of properties displayed)";
 		$ret[] = "window.resizeTo(540,".$this->propCount."*35+20)";
 		$ret[] = "//--></script>";
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::resizeWindow(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -119,6 +125,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getEditFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getEditFields()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->id."');"));
 		$this->propCount++;
@@ -147,6 +154,7 @@ class WuiBackendManagement extends GlobalPage {
 			}
 		}
 		$ret[] = "</script>";
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getEditFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -157,7 +165,9 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getEditSubmit() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getEditSubmit()');
 		$this->propCount++;
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getEditSubmit(): Array(HTML)');
 		return array_merge($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->EDITBACKENDFORM->closeForm());
 	}
 	
@@ -168,9 +178,12 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getDelFields()');
 		$ret = Array();
 		$this->propCount++;
 		$ret = array_merge($ret,$this->DELBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE));
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDelFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -181,7 +194,9 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelSubmit() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getDelSubmit()');
 		$this->propCount++;
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDelSubmit(): Array(HTML)');
 		return array_merge($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DELBACKENDFORM->closeForm());
 	}
 	
@@ -192,6 +207,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getAddFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getAddFields()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->ADDBACKENDFORM->getInputLine('backend_id','backend_id','',TRUE));
 		$this->propCount++;
@@ -213,6 +229,7 @@ class WuiBackendManagement extends GlobalPage {
 			}
 		}
 		$ret[] = "</script>";
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getAddFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -223,7 +240,9 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getAddSubmit() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getAddSubmit()');
 		$this->propCount++;
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getAddSubmit(): Array(HTML)');
 		return array_merge($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->ADDBACKENDFORM->closeForm());
 	}
 	
@@ -234,11 +253,13 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDefaultFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getDefaultsFields()');
 		$ret = Array();
 		
 		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getLabel('defaultBackend'),'defaultbackend',$this->getDefinedBackends(),$this->MAINCFG->getValue('defaults','backend',TRUE),TRUE));
 		$this->propCount++;
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDefaultFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -249,7 +270,9 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDefaultSubmit() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getDefaultSubmit()');
 		$this->propCount++;
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDefaultSubmit(): Array(HTML)');
 		return array_merge($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DEFBACKENDFORM->closeForm());
 	}
 	
@@ -260,6 +283,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getDefinedBackends() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getDefinedBackends()');
 		$ret = Array();
 		
 		foreach($this->MAINCFG->config AS $sec => $arr) {
@@ -272,6 +296,7 @@ class WuiBackendManagement extends GlobalPage {
 			natcasesort($ret);
 		}
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDefinedBackends(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -282,6 +307,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackends() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getBackends()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
@@ -297,6 +323,7 @@ class WuiBackendManagement extends GlobalPage {
 		}
 		closedir($handle);
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getBackends(): Array(HTML)');
 		return $files;
 	}
 	
@@ -307,12 +334,14 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getJsLang()');
 		$ret = Array();
 		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getMessageText('mustValueNotSet','',FALSE).'\';';
 		$ret[] = '//--></script>';
 		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getJsLang(): Array(HTML)');
 		return $ret;	
 	}
 }
