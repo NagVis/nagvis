@@ -92,7 +92,7 @@ class NagVisMap extends GlobalMap {
 				default:
 					// replace macros in url/hover_url/label_text
 					$obj = $this->replaceMacros($obj);
-				
+					
 					if(isset($obj['line_type'])) {
 						if($obj['line_type'] != '20') {
 							// a line with one object...
@@ -260,7 +260,7 @@ class NagVisMap extends GlobalMap {
 			$obj['label_width'] .= 'px';	
 		}
 		
-		$ret  = '<div class="label" style="background:'.$obj['label_background'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
+		$ret  = '<div class="object_label" style="background:'.$obj['label_background'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
 		$ret .= '<span>'.$obj['label_text'].'</span>';
 		$ret .= '</div>';
 		
@@ -291,14 +291,14 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
-			$obj['hover_url'] = str_replace('['.$name.']',$obj[$name],$obj['hover_url']);
+			$obj['hover_url'] = str_replace('[name]',$obj[$name],$obj['hover_url']);
 			if($obj['type'] == 'service') {
 				$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
 			}
 		}
 		
 		if(isset($obj['label_text']) && $obj['label_text'] != '') {
-			$obj['label_text'] = str_replace('['.$name.']',$obj[$name],$obj['label_text']);
+			$obj['label_text'] = str_replace('[name]',$obj[$name],$obj['label_text']);
 			if($obj['type'] == 'service') {
 				$obj['label_text'] = str_replace('[service_description]',$obj['service_description'],$obj['label_text']);
 			}
@@ -386,7 +386,7 @@ class NagVisMap extends GlobalMap {
 				$ret .= $this->createInfoBox($obj);
 			}
 			
-			$ret .= '\', CAPTION, \''.$this->LANG->getLabel($obj['type']).'\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();"';
+			$ret .= '\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();"';
 			
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getHoverMenu(): Array(...)');
 			return $ret;
@@ -434,12 +434,6 @@ class NagVisMap extends GlobalMap {
 	function createInfoBox(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox(&$obj)');
 		
-		/*if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}*/
-		
 		if(!isset($obj['stateCount'])) {
 			$obj['stateCount'] = 0;
 		}
@@ -455,38 +449,6 @@ class NagVisMap extends GlobalMap {
 		
 		$ret = $this->getHoverTemplate($obj);
 		
-		//FIXME 1.1: mehr Output (ackComment, mehr Zahlen etc.)
-		/*switch($obj['type']) {
-			case 'host':
-				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
-			break;
-			case 'service':
-				$ret .= '<b>'.$this->LANG->getLabel('hostname').':</b> '.$obj[$name].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('servicename').':</b> '.$obj['service_description'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>';
-			break;
-			case 'hostgroup':
-				$ret .= '<b>'.$this->LANG->getLabel('hostgroupname').':</b> '.$obj[$name].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
-			break;
-			case 'servicegroup':
-				$ret .= '<b>'.$this->LANG->getLabel('servicegroupname').':</b> '.$obj[$name].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.$obj['state'].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
-			break;
-			case 'map':
-				$ret .= '<b>'.$this->LANG->getLabel('mapname').':</b> '.$obj[$name].'<br>';
-				$ret .= '<b>'.$this->LANG->getLabel('state').':</b> '.strtr(addslashes($obj['state']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
-				$ret .= '<b>'.$this->LANG->getLabel('output').':</b> '.strtr(addslashes($obj['stateOutput']), array('"' => '\'', "\r" => '<br>', "\n" => '<br>')).'<br>'; 
-			break;
-			default:
-				// Unknown type, don't display anything
-			break;
-		}*/
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createInfoBox(): Array(...)');
 		return $ret;
 	}
@@ -499,11 +461,29 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHoverTemplate(&$obj) {
-		$ret = '';
-		
-		if($this->checkHoverTemplateExists($obj,1) && $this->checkHoverTemplateReadable($obj,1)) {
-			//FIXME: $this->MAINCFG->getValue('paths',hovertemplate').$obj['hover_template'].'.php'
-                      
+		if($this->checkHoverTemplateReadable($obj,1)) {
+            $ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
+            
+            if($obj['type'] == 'service') {
+				$name = 'host_name';
+			} else {
+				$name = $obj['type'] . '_name';
+			}
+			
+            // Replace the macros
+			$ret = str_replace('[obj_type]',$obj['type'],$ret);
+			$ret = str_replace('[obj_name]',$obj[$name],$ret);
+			$ret = str_replace('[obj_state]',$obj['state'],$ret);
+			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
+			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
+			$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
+			$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
+			$ret = str_replace('[lang_obj_type]',$this->LANG->getLabel($obj['type']),$ret);
+			if($obj['type'] == 'service') {
+				$ret = str_replace('[service_description]',$obj['service_description'],$ret);
+			}
+            // Escape chars which could make problems
+            $ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
 		}
 		
 		return $ret;
@@ -517,8 +497,18 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateReadable(&$obj,$printErr) {
-		//FIXME: $this->MAINCFG->getValue('paths',hovertemplate').$obj['hover_template'].'.php'
-		return TRUE;
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::checkHoverTemplateReadable(&$obj,'.$printErr.')');
+		if($this->checkHoverTemplateExists($obj,$printErr) && is_readable($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html')) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateReadable(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+	            $FRONTEND->messageToUser('ERROR','hoverTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateReadable(): FALSE');
+			return FALSE;
+		}
 	}
 	
 	/**
@@ -529,8 +519,18 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateExists(&$obj,$printErr) {
-		//FIXME: $this->MAINCFG->getValue('paths',hovertemplate').$obj['hover_template'].'.php'
-		return TRUE;
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::checkHoverTemplateExists(&$obj,'.$printErr.')');
+		if(file_exists($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html')) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateExists(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+	            $FRONTEND->messageToUser('ERROR','hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'mapcfg').'tmpl.'.$this->name.'.html');
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateExists(): FALSE');
+			return FALSE;
+		}
 	}
 	
 	/**

@@ -168,6 +168,14 @@
 					<title>Konnte Hover-URL nicht finden</title>
 					<text>Konnte Hover-URL &quot;[URL]&quot; nicht finden. Eventuell ist die URL Paswort gesch&uuml;tzt.</text>
 				</couldNotGetHoverUrl>
+				<hoverTemplateNotExists>
+					<title>Hover Template nicht vorhanden</title>
+					<text>Die Hover Template-Datei &quot;[FILE]&quot; existiert nicht</text>
+				</hoverTemplateNotExists>
+				<hoverTemplateNotReadable>
+					<title>Keine Leserechte auf die Hover Template-Datei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Hover Template-Datei &quot;[FILE]&quot; pr&uuml;fen</text>
+				</hoverTemplateNotReadable>
 				<onlyPngOrJpgImages>
 					<title>NagVis-GD: Nur PNG oder JPG Bilder erlaubt</title>
 					<text>Es sind nur PNG oder JPG Bilder als Hintergrund erlaubt.</text>

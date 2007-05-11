@@ -168,6 +168,14 @@
 					<title>Could not get hover URL</title>
 					<text>Could not get hover URL &quot;[URL]&quot;. Maybe the URL is password protected.</text>
 				</couldNotGetHoverUrl>
+				<hoverTemplateNotExists>
+					<title>Hover template file does not exists</title>
+					<text>The hover template file &quot;[FILE]&quot; does not exists</text>
+				</hoverTemplateNotExists>
+				<hoverTemplateNotReadable>
+					<title>Can not read hover template file</title>
+					<text>Please check the webservers permissions at the hover template file &quot;[FILE]&quot;</text>
+				</hoverTemplateNotReadable>
 				<onlyPngOrJpgImages>
 					<title>NagVis-GD: Only PNG or JPG images allowed</title>
 					<text>Only PNG or JPG images are allowed for map image files.</text>

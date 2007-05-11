@@ -42,7 +42,7 @@ img {
 }
 
 /* Header-Menu */	
-table.headerMenu{
+table.headerMenu {
 	background-color : black;
 }
 
@@ -111,8 +111,8 @@ a.NavBarItem {
     padding-top: 1px;
 }
 
-/* labels for the objects */
-.label {
+/* labels for the objects on the maps */
+.object_label {
     position : absolute;
     z-index : 1;
 	border: 1px #000 solid;
@@ -121,16 +121,14 @@ a.NavBarItem {
     padding: 2px;
 }
 
-/* InstInfo Tabelle (index.php?info) */
-
-
+/* InstInfo table (index.php?info) */
 table.instinfo {
 	margin: auto;
 	margin-top: 25px;
 	
 	width: 800px;
 	
-	background-color: #F5F5F5; 
+	background-color: #F5F5F5;
 	border-collapse:collapse;
 }
 
@@ -149,4 +147,33 @@ table.instinfo th {
 
 table.instinfo th.head {
 	font-size: 20px;
+}
+
+/* hover_table table (used in hover templates) */
+
+table.hover_table {
+	background-color: #F5F5F5;
+	border-collapse:collapse;
+}
+
+table.hover_table td, table.hover_table th {
+	border: 1px #a4a4a4 solid;
+	padding: 2px;
+	
+	font-size: 12px;
+	color: #314455;
+}
+
+table.hover_table th {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.hover_table td.label {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.hover_table label {
+	font-weight: bold;
 }
