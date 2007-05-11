@@ -36,6 +36,49 @@ class NagVisFrontend extends GlobalPage {
 	}
 	
 	/**
+	 * Reads informations from currently running Apache/PHP installation
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getInstInformations() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getInstInformations()');
+		$ret = Array();
+		
+		$ret[] = '<table class="instinfo">';
+		$ret[] = '<tr><th colspan="2" class="head">NagVis Debug/Support Informations</td></tr>';
+		$ret[] = '</table><br />';
+		
+		$ret[] = '<table class="instinfo">';
+		$ret[] = '<tr><th colspan="2">Version Informations</td></tr>';
+		$ret[] = '<tr><td>NagVis Version</td><td>'.$this->MAINCFG->getValue('internal','version').'</td></tr>';
+		$ret[] = '<tr><td>PHP Version</td><td>'.PHP_VERSION.'</td></tr>';
+		// FIXME: system() benutzen
+		$output = Array();
+		exec('mysql --version',$output);
+		$ret[] = '<tr><td>MySQL Version</td><td>'.implode('',$output).'</td></tr>';
+		// FIXME: system() benutzen
+		$output = Array();
+		exec('uname -a',$output);
+		$ret[] = '<tr><td>OS</td><td>'.implode('',$output).'</td></tr>';
+		$ret[] = '<t><th colspan="2">Webserver Informations</th></tr>';
+		$ret[] = '<tr><td>SERVER_SOFTWARE</td><td>'.$_SERVER['SERVER_SOFTWARE'].'</td></tr>';
+		$ret[] = '<tr><td>REMOTE_USER</td><td>'.$_SERVER['REMOTE_USER'].'</td></tr>';
+		$ret[] = '<tr><td>SCRIPT_FILENAME</td><td>'.$_SERVER['SCRIPT_FILENAME'].'</td></tr>';
+		$ret[] = '<tr><td>SCRIPT_NAME</td><td>'.$_SERVER['SCRIPT_NAME'].'</td></tr>';
+		$ret[] = '<tr><td>REQUEST_TIME</td><td>'.$_SERVER['REQUEST_TIME'].'</td></tr>';
+		$ret[] = '<t><th colspan="2">PHP Informations</th></tr>';
+		$ret[] = '<tr><td>safe_mode</td><td>'.ini_get('safe_mode').'</td></tr>';
+		$ret[] = '<tr><td>max_execution_time</td><td>'.ini_get('max_execution_time').'</td></tr>';
+		$ret[] = '<tr><td>memory_limit</td><td>'.ini_get('memory_limit').'</td></tr>';
+		//system('uname')
+		$ret[] = '<tr><td style="text-align:center;" colspan="2"><a href="">Copy to Clipboard</a></td></tr>';
+		$ret[] = '</table>';
+		
+		$this->addBodyLines($ret);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getInstInformations()');
+	}
+	
+	/**
 	 * If enabled, the header menu is added to the page
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
