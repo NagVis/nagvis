@@ -100,7 +100,7 @@ function createjsDOMenu() {
 			submenu_maps_open_nagvis[i] = new jsDOMenu(140);
 			for(a=(0+15*i);a<(15+15*i);a++) {
 				if(a >= mapOptions.length) break;
-				submenu_maps_open_nagvis[i].addMenuItem(new menuItem(mapOptions[a].mapName,mapOptions[a].mapName,"link:./index.php?map="+mapOptions[a].mapName,"","",""));
+				submenu_maps_open_nagvis[i].addMenuItem(new menuItem(mapOptions[a].mapName,mapOptions[a].mapName,"link:../nagvis/index.php?map="+mapOptions[a].mapName,"","",""));
 				
 				if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
 					submenu_maps_open_nagvis[i].items[mapOptions[a].mapName].enabled=false;
@@ -108,7 +108,7 @@ function createjsDOMenu() {
 				}
 			}
 			
-			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open[i]);
+			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open_nagvis[i]);
 		}
 		mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_sep_nagvis);
 	} else {
