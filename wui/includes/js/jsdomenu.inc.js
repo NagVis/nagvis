@@ -70,29 +70,74 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('shape'), "", "code:get_click('shape',1,'add');"));
 	}
 	
-	submenu_maps_open = new jsDOMenu(140);
-	for(i=0;i<mapOptions.length;i++) {
-		submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:./index.php?map="+mapOptions[i].mapName,"","",""));
-		
-		if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedForConfig"),username)) {
-			submenu_maps_open.items[mapOptions[i].mapName].enabled=false;
-			submenu_maps_open.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
+	if(mapOptions.length > 15) {
+		submenu_maps_open = Array();
+		submenu_maps_open_sep = new jsDOMenu(140);
+		for(i=0;i<=Math.floor(mapOptions.length/15);i++) {
+			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i, "")
+			submenu_maps_open_sep.addMenuItem(newMenuItem);
+			submenu_maps_open[i] = new jsDOMenu(140);
+			for(a=(0+15*i);a<(15+15*i);a++) {
+				if(a >= mapOptions.length) break;
+				submenu_maps_open[i].addMenuItem(new menuItem(mapOptions[a].mapName,mapOptions[a].mapName,"link:./index.php?map="+mapOptions[a].mapName,"","",""));
+				
+				if(!checkUserAllowed(getMapPermissions(mapOptions[a].mapName,mapOptions,"allowedForConfig"),username)) {
+					submenu_maps_open[i].items[mapOptions[a].mapName].enabled=false;
+					submenu_maps_open[i].items[mapOptions[a].mapName].className='jsdomenuitem_disabled';
+				}
+			}
+			
+			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open[i]);
 		}
+		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open_sep);
+		
+		// Open in NagVis
+		submenu_maps_open_nagvis = Array();
+		submenu_maps_open_sep_nagvis = new jsDOMenu(140);
+		for(i=0;i<=Math.floor(mapOptions.length/15);i++) {
+			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i+"_nagvis", "")
+			submenu_maps_open_sep_nagvis.addMenuItem(newMenuItem);
+			submenu_maps_open_nagvis[i] = new jsDOMenu(140);
+			for(a=(0+15*i);a<(15+15*i);a++) {
+				if(a >= mapOptions.length) break;
+				submenu_maps_open_nagvis[i].addMenuItem(new menuItem(mapOptions[a].mapName,mapOptions[a].mapName,"link:./index.php?map="+mapOptions[a].mapName,"","",""));
+				
+				if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
+					submenu_maps_open_nagvis[i].items[mapOptions[a].mapName].enabled=false;
+					submenu_maps_open_nagvis[i].items[mapOptions[a].mapName].className='jsdomenuitem_disabled';
+				}
+			}
+			
+			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open[i]);
+		}
+		mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_sep_nagvis);
+	} else {
+		submenu_maps_open = new jsDOMenu(140);
+		for(i=0;i<mapOptions.length;i++) {
+			submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
+			
+			if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
+				submenu_maps_open.items[mapOptions[i].mapName].enabled=false;
+				submenu_maps_open.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
+			}
+		}
+		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);
+		
+		// Open in NagVis
+		submenu_maps_open_nagvis = new jsDOMenu(140);
+		for(i=0;i<mapOptions.length;i++) {
+			submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
+			
+			if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
+				submenu_maps_open_nagvis.items[mapOptions[i].mapName].enabled=false;
+				submenu_maps_open_nagvis.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
+			}
+		}
+		mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_nagvis);
 	}
 	
-	mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);
 	
-	submenu_maps_open_nagvis = new jsDOMenu(140);
-	for(i=0;i<mapOptions.length;i++) {
-		submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
-		
-		if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
-			submenu_maps_open_nagvis.items[mapOptions[i].mapName].enabled=false;
-			submenu_maps_open_nagvis.items[mapOptions[i].mapName].className='jsdomenuitem_disabled';
-		}
-	}
 	
-	mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_nagvis);
 	
 	if(mapname != '') {
 		mainMenu.items.menu_addobject.setSubMenu(submenu_addobject);
