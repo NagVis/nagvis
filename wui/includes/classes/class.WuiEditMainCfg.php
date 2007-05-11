@@ -96,7 +96,7 @@ class WuiEditMainCfg extends GlobalPage {
 							$ret[] = "\t<td class=\"tdfield\"></td>";
 						} else {
 							$ret[] = "\t<td class=\"tdfield\">";
-							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'',FALSE)."')\" />";
+							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'',FALSE)." (".$this->LANG->getLabel('defaultValue').": ".$this->MAINCFG->validConfig[$cat][$key2]['default'].")')\" />";
 							$ret[] = "\t</td>";
 						}
 						

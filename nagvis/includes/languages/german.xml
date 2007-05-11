@@ -395,6 +395,9 @@
 				<inherited>
 					<text>Vererbt</text>
 				</inherited>
+				<defaultValue>
+					<text>Standard-Wert</text>
+				</defaultValue>
 			</labels>
 			<messages>
 				<!-- Alle WUI Meldungen //-->
@@ -463,9 +466,6 @@
 		<editMainCfg>
 			<labels>
 				<!-- Main Configuration Descriptions //-->
-				<backend>
-					<text>W&auml;hle ein Backend. z. Zt. sind die Backends NDOMY (schnell und stabil, zieht die Daten aus einer vorhandenen Nagios NDO MySQL Datenbank) und HTML (langsam und eher unzuverl&auml;ssig, parsed die Nagios CGIs) verf&uuml;gbar.</text>
-				</backend>
 				<language>
 					<text>Waehle deine Sprache.</text>
 				</language>
@@ -476,7 +476,7 @@
 					<text>Rotiere Maps automatisch.</text>
 				</rotatemaps>
 				<maps>
-					<text>Zu rotierende Maps. Beispiel: server,lan,wan</text>
+					<text>Zu rotierende Maps.</text>
 				</maps>
 				<displayheader>
 					<text>Header anzeigen.</text>
@@ -491,28 +491,28 @@
 					<text>Die GD-Libs werden zum zeichnen von Linien im Frontend ben&ouml;tigt. Wenn Probleme mit den GD-Libs auftreten kann die Nutzung deaktiviert werden.</text>
 				</usegdlibs>
 				<refreshtime>
-					<text>Map refresh time (in Sekunden).</text>
+					<text>Aktualisierungs-Intervall der Map (in Sekunden).</text>
 				</refreshtime>
-				<debug>
-					<text>Debug on or off?</text>
-				</debug>
-				<debugstates>
-					<text>Debug Status?</text>
-				</debugstates>
-				<debugcheckstate>
-					<text>Debug Statuscheck?</text>
-				</debugcheckstate>
-				<debugfixicon>
-					<text>Debug FixIcon?</text>
-				</debugfixicon>
+				<icons>
+					<text>Standard Iconset f&uuml;r die Maps.</text>
+				</icons>
+				<backgroundcolor>
+					<text>Standard Hintergrundfarbe f&uuml;r die Maps.</text>
+				</backgroundcolor>
+				<recognizeservices>
+					<text>Standard Servicestatus-Behandlung f&uuml;r die Maps.</text>
+				</recognizeservices>
+				<onlyhardstates>
+					<text>Standard Soft-Status-Behandlung f&uuml;r die Maps.</text>
+				</onlyhardstates>
 				<base>
 					<text>Voller lokaler Pfad zum NagVis Basis Verzeichnis.</text>
 				</base>
 				<htmlbase>
-					<text>HTTP Pfad zu NagVis (/nagios/nagvis).</text>
+					<text>HTTP Pfad zu NagVis.</text>
 				</htmlbase>
 				<htmlcgi>
-					<text>HTTP Pfad zu den Nagios CGIs (/nagios/cgi-bin).</text>
+					<text>HTTP Pfad zu den Nagios CGIs.</text>
 				</htmlcgi>
 				<header>
 					<text>Name der Header include Datei.</text>

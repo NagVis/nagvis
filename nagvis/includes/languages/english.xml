@@ -395,6 +395,9 @@
 				<inherited>
 					<text>Inherited</text>
 				</inherited>
+				<defaultValue>
+					<text>Default value</text>
+				</defaultValue>
 			</labels>
 			<messages>
 				<!-- Alle WUI Meldungen //-->
@@ -470,46 +473,46 @@
 					<text>Standard Iconset.</text>
 				</defaulticons>
 				<rotatemaps>
-					<text>Rotate maps.</text>
+					<text>Enable/Disable Map rotation.</text>
 				</rotatemaps>
 				<maps>
-					<text>Rotate maps example: server, lan, wan </text>
+					<text>Maps to rotate.</text>
 				</maps>
 				<displayheader>
 					<text>Use header-menu</text>
 				</displayheader>
 				<headercount>
-					<text>Number of on the links of per line in the header-menu. </text>
+					<text>Number of on the links of per line in the header-menu.</text>
 				</headercount>
 				<autoupdatefreq>
-					<text>WUI puts on with to work on regularly a Backup of the file and/or stores automatically. That interval can be adjusted here.</text>
+					<text>WUI puts on with to work on regularly a backup of the file and/or stores automatically. That interval can be adjusted here.</text>
 				</autoupdatefreq>
 				<usegdlibs>
 					<text>The GD-Lib are needed to print lines in the frontend. When there are problems with the GD-Libs the line support can be disabled here.</text>
 				</usegdlibs>
 				<refreshtime>
-					<text>Map refresh time (in Sekunden).</text>
+					<text>Map refresh time (seconds).</text>
 				</refreshtime>
-				<debug>
-					<text>Debug on or off?</text>
-				</debug>
-				<debugstates>
-					<text>Debug state?</text>
-				</debugstates>
-				<debugcheckstate>
-					<text>Debug Statuscheck?</text>
-				</debugcheckstate>
-				<debugfixicon>
-					<text>Debug FixIcon?</text>
-				</debugfixicon>
+				<icons>
+					<text>Default iconset for the maps.</text>
+				</icons>
+				<backgroundcolor>
+					<text>Default background color for the maps.</text>
+				</backgroundcolor>
+				<recognizeservices>
+					<text>Default recognizeservices in the maps.</text>
+				</recognizeservices>
+				<onlyhardstates>
+					<text>Default onlyhardstates for the maps.</text>
+				</onlyhardstates>
 				<base>
 					<text>Full local path to the NagVis basis directory.</text>
 				</base>
 				<htmlbase>
-					<text>HTTP path to NagVis (/nagios/nagvis).</text>
+					<text>HTTP path to NagVis.</text>
 				</htmlbase>
 				<htmlcgi>
-					<text>HTTP path to the Nagios CGIs (/nagios/cgi-bin).</text>
+					<text>HTTP path to the Nagios CGIs.</text>
 				</htmlcgi>
 				<header>
 					<text>Name of the header-menu file.</text>
