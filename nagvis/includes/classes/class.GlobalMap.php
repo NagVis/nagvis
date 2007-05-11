@@ -32,7 +32,7 @@ class GlobalMap {
      */
 	function checkGd($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkGd('.$printErr.')');
-		if($this->MAINCFG->getValue('global', 'usegdlibs') == '1') {
+		if($this->MAPCFG->getValue('global', 0, 'usegdlibs') == '1') {
         	if(!extension_loaded('gd')) {
         		if($printErr) {
 	                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
@@ -61,7 +61,7 @@ class GlobalMap {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getBackground('.$type.')');
 		$style = '';
 		if($this->MAPCFG->getName() != '') {
-			if($this->MAINCFG->getValue('global', 'usegdlibs') == '1' && $type == 'gd' && $this->checkGd(0)) {
+			if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $type == 'gd' && $this->checkGd(0)) {
 				$src = './draw.php?map='.$this->MAPCFG->getName();
 			} else {
 				$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->getImage();

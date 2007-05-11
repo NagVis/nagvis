@@ -31,6 +31,8 @@ class GlobalMapCfg {
 							'allowed_for_config' => Array('must' => 1),
 							'allowed_user' => Array('must' => 1),
 							'map_image' => Array('must' => 1),
+							'usegdlibs' => Array('must' => 0,
+												'default' => $this->MAINCFG->getValue('global', 'usegdlibs')),
 							'backend_id' => Array('must' => 0,
 												'default' => $this->MAINCFG->getValue('defaults', 'backend')),
 							'recognize_services' => Array('must' => 0,
