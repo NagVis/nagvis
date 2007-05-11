@@ -46,10 +46,8 @@ class WuiAddModify extends GlobalPage {
 	 */
 	function getForm() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getForm()');
-		// Inititalize language for JS
-		$this->addBodyLines($this->getJsLang());
-		// Write JS Array for config validation
-		$this->addBodyLines($this->getJsValidConfig());
+		// Inititalize language for JS, Write JS Array for config validation
+		$this->addBodyLines($this->parseJs(array_merge($this->getJsLang(),$this->getJsValidConfig())));
 		
 		$this->FORM = new GlobalForm(Array('name'=>'addmodify',
 			'id'=>'addmodify',
@@ -59,34 +57,17 @@ class WuiAddModify extends GlobalPage {
 			'cols'=>'2'));
 		$this->addBodyLines($this->FORM->initForm());
 		$this->addBodyLines($this->getFields());
-		$this->addBodyLines($this->fillFields());
-		$this->addBodyLines($this->getSubmit());
-		$this->addBodyLines($this->resizeWindow());
+		$this->addBodyLines($this->parseJs($this->fillFields()));
+		$this->addBodyLines($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->DELBACKENDFORM->closeForm());
+		$this->addBodyLines($this->parseJs($this->resizeWindow(410,$this->propCount*40+60)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getForm()');
-	}
-	
-	/**
-	 * Resizes the window to individual calculated size
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function resizeWindow() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::resizeWindow()');
-		$ret = Array();
-		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
-		$ret[] = "// we resize the window (depending on the number of properties displayed)";
-		$ret[] = "window.resizeTo(410,".$this->propCount."*40+60)";
-		$ret[] = "//--></script>";
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::resizeWindow(): Array(HTML)');
-		return $ret;
 	}
 	
 	/**
 	 * Fills the fields of the form with values
 	 *
-	 * @return	Array	HTML Code
+	 * @return	Array	JS Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function fillFields() {
@@ -95,48 +76,44 @@ class WuiAddModify extends GlobalPage {
 		
 		switch($this->prop['action']) {
 			case 'modify':
-				$myval = $this->prop['id'];
-				$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
 				if($this->prop['coords'] != '') {
+					$myval = $this->prop['id'];
 					$val_coords = explode(',',$this->prop['coords']);
 					if ($this->prop['type'] == 'textbox') {
 						$objwidth = $val_coords[2] - $val_coords[0];
-						$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
-						$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
-						$ret[] = "document.addmodify.elements['w'].value='".$objwidth."';\n";
+						$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
+						$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
+						$ret[] = 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
 					} else {
-						$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0].",".$val_coords[2]."';\n";
-						$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1].",".$val_coords[3]."';\n";
+						$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
+						$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
 					}
 				}
-				$ret[] = "//--></script>\n";
 			break;
 			// if the action specified in the URL is "add", we set the object coordinates (that we retrieve from the mycoords parameter)
 			case 'add':
 				if($this->prop['coords'] != '') {
 					$val_coords = explode(',',$this->prop['coords']);
-					$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n";
 					if(count($val_coords) == 2) {			
-						$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
-						$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
+						$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
+						$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
 					} elseif(count($val_coords) == 4) {
-						if ($this->prop['type'] == "textbox") {
+						if ($this->prop['type'] == 'textbox') {
 							$objwidth = $val_coords[2] - $val_coords[0];
 							
-							$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0]."';\n";
-							$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1]."';\n";
-							$ret[] = "document.addmodify.elements['w'].value='".$objwidth."';\n";
+							$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
+							$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
+							$ret[] = 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
 						} else {
-							$ret[] = "document.addmodify.elements['x'].value='".$val_coords[0].",".$val_coords[2]."';\n";
-							$ret[] = "document.addmodify.elements['y'].value='".$val_coords[1].",".$val_coords[3]."';\n";
+							$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
+							$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
 						}		
 					}
-					$ret[] = "//--></script>\n";
 				}
 			break;
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::fillFields(): Array(HTML)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::fillFields(): Array(JS)');
 		return $ret;
 	}
 	
@@ -230,18 +207,6 @@ class WuiAddModify extends GlobalPage {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getFields(): Array(HTML)');
 		return $ret;
-	}
-	
-	/**
-	 * Gets the submit button code
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getSubmit()');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getSubmit(): Array(HTML)');
-		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
 	}
 	
 	/**
@@ -401,13 +366,12 @@ class WuiAddModify extends GlobalPage {
 	/**
 	 * Gets all needed error messages for WUI
 	 *
-	 * @return	Array HTML
+	 * @return	Array JS
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getJsLang() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getJsLang()');
 		$ret = Array();
-		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'var user = \''.$this->MAINCFG->getRuntimeValue('user').'\';';
 		$ret[] = 'lang[\'unableToWorkWithMap\'] = \''.$this->LANG->getMessageText('unableToWorkWithMap').'\';';
@@ -421,23 +385,21 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=X').'\';';
 		$ret[] = 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=Y').'\';';
 		$ret[] = 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getMessageText('loopInMapRecursion').'\';';
-		$ret[] = '//--></script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getJsLang(): Array(HTML)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getJsLang(): Array(JS)');
 		return $ret;	
 	}
 	
 	/**
 	 * Gets the validConfig array in javascript format
 	 *
-	 * @return	Array HTML
+	 * @return	Array JS
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getJsValidConfig() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiAddModify::getJsValidConfig()');
 		$ret = Array();
 		
-		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$sRet = "var validConfig = { \n";
 		$i = 0;
 		foreach($this->MAPCFG->validConfig AS $type => $arr) {
@@ -474,9 +436,8 @@ class WuiAddModify extends GlobalPage {
 		}
 		$sRet .= ' };';
 		$ret[] = $sRet;
-		$ret[] = '//--></script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getJsValidConfig(): Array(HTML)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getJsValidConfig(): Array(JS)');
 		return $ret;
 	}
 }

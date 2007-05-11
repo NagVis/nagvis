@@ -49,30 +49,13 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->addBodyLines($this->FORM->getHiddenField('properties',''));
 		
 		$this->addBodyLines($this->getFields());
-		$this->addBodyLines($this->getSubmit());
-		$this->addBodyLines($this->getHidden());
+		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->FORM->closeForm());
+		$this->addBodyLines($this->parseJs($this->getHidden()));
 		
 		// Resize the window
-		$this->addBodyLines($this->resizeWindow());
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,758)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getForm()');
-	}
-	
-	/**
-	 * Resizes the window to individual calculated size
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function resizeWindow() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::resizeWindow()');
-		$ret = Array();
-		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
-		$ret[] = "// resize the window (depending on the number of properties displayed)";
-		$ret[] = "window.resizeTo(540,758)";
-		$ret[] = "//--></script>";
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::resizeWindow(): Array(HTML)');
-		return $ret;
 	}
 	
 	/**
@@ -249,27 +232,14 @@ class WuiEditMainCfg extends GlobalPage {
 	}
 	
 	/**
-	 * Gets the submit button
-	 *
-	 * @return	Array Html
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getSubmit()');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getSubmit()');
-		return array_merge($this->FORM->getSubmitLine($this->LANG->getLabel('check')),$this->FORM->closeForm());
-	}
-	
-	/**
 	 * Gets the hidden form
 	 *
-	 * @return	Array Html
+	 * @return	Array JS
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHidden() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getHidden()');
 		$ret = Array();
-		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
 		$ret[] = "// function that builds up the list of parameters/values. There are 2 kinds of parameters values :";
 		$ret[] = "//	- the \"normal value\". example : \$param=\"value\";";
 		$ret[] = "//	- the other one (value computed with other ones) . example : \$param=\"part1\".\$otherparam;";
@@ -283,9 +253,8 @@ class WuiEditMainCfg extends GlobalPage {
 		$ret[] = "	document.edit_config.properties.value=document.edit_config.properties.value.substring(1,document.edit_config.properties.value.length);";
 		$ret[] = "	return true;";
 		$ret[] = "}";
-		$ret[] = "//--></script>";
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getHidden(): Array(HTML)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getHidden(): Array(JS)');
 		return $ret;	
 	}
 }

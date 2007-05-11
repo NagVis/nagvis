@@ -105,7 +105,7 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkPermissions($allowed,$printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkPermissions(Array(),'.$printErr.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('StaRt method GlobalPage::checkPermissions(Array(),'.$printErr.')');
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
         	if($printErr) {
 				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
@@ -417,5 +417,46 @@ class GlobalPage {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getPage()');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getPage()');
 		return $this->buildPage();
+	}
+	
+	/**
+	 * Parses given Js code
+	 *
+	 * @param	String	$js	Javascript code to parse
+	 * @return	Array 	Html
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseJs($js) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::parseJs(Array/String $js)');
+		$ret = Array();
+		if($js != '') {
+			
+			$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\">";
+			$ret[] = "<!--";
+			if(is_array($js)) {
+				$ret = array_merge($ret,$js);
+			} else {
+				$ret[] = $js;
+			}
+			$ret[] = "//-->";
+			$ret[] = "</script>";
+		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::parseJs(): Array(HTML)');
+		return $ret;
+	}
+	
+	/**
+	 * Resizes the window to individual calculated size
+	 *
+	 * @param	Int		$x	X-Coordinates
+	 * @param	Int		$y	Y-Coordinates
+	 * @return	Array	JS Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function resizeWindow($x,$y) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::resizeWindow()');
+		$ret = Array('window.resizeTo('.$x.','.$y.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::resizeWindow(): JS');
+		return $ret;
 	}
 }

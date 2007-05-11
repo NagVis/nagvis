@@ -48,7 +48,7 @@ class WuiMapManagement extends GlobalPage {
 	function getForm() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getForm()');
 		// Inititalize language for JS
-		$this->addBodyLines($this->getJsLang());
+		$this->addBodyLines($this->parseJs($this->getJsLang()));
 		
 		$this->CREATEFORM = new GlobalForm(Array('name'=>'map_create',
 			'id'=>'map_create',
@@ -60,7 +60,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->CREATEFORM->getCatLine(strtoupper($this->LANG->getLabel('createMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getCreateFields());
-		$this->addBodyLines($this->getCreateSubmit());
+		$this->addBodyLines($this->getSubmit($this->CREATEFORM,$this->LANG->getLabel('create')));
 		
 		$this->RENAMEFORM = new GlobalForm(Array('name'=>'map_rename',
 			'id'=>'map_rename',
@@ -72,7 +72,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->RENAMEFORM->getCatLine(strtoupper($this->LANG->getLabel('renameMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getRenameFields());
-		$this->addBodyLines($this->getRenameSubmit());
+		$this->addBodyLines($this->getSubmit($this->RENAMEFORM,$this->LANG->getLabel('rename')));
 		
 		$this->DELETEFORM = new GlobalForm(Array('name'=>'map_delete',
 			'id'=>'map_delete',
@@ -84,7 +84,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->DELETEFORM->getCatLine(strtoupper($this->LANG->getLabel('deleteMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getDeleteFields());
-		$this->addBodyLines($this->getDeleteSubmit());
+		$this->addBodyLines($this->getSubmit($this->DELETEFORM,$this->LANG->getLabel('delete')));
 		
 		$this->EXPORTFORM = new GlobalForm(Array('name'=>'map_export',
 			'id'=>'map_export',
@@ -96,7 +96,8 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->EXPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('exportMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getExportFields());
-		$this->addBodyLines($this->getExportSubmit());
+		$this->addBodyLines($this->getSubmit($this->EXPORTFORM,$this->LANG->getLabel('export')));
+		
 		
 		$this->IMPORTFORM = new GlobalForm(Array('name'=>'map_import',
 			'id'=>'map_import',
@@ -109,29 +110,11 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->IMPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('importMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getImportFields($this->IMPORTFORM));
-		$this->addBodyLines($this->getImportSubmit($this->IMPORTFORM));
+		$this->addBodyLines($this->getSubmit($this->IMPORTFORM,$this->LANG->getLabel('import')));
 		
 		// Resize the window
-		$this->addBodyLines($this->resizeWindow());
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*30+30)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getForm()');
-	}
-	
-	/**
-	 * Resizes the window to individual calculated size
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function resizeWindow() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::resizeWindow()');
-		$ret = Array();
-		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
-		$ret[] = "// resize the window (depending on the number of properties displayed)";
-		$ret[] = "window.resizeTo(540,".$this->propCount."*30+30)";
-		$ret[] = "//--></script>";
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::resizeWindow(): HTML');
-		return $ret;
 	}
 	
 	/**
@@ -151,19 +134,6 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets export submit button
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getExportSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getExportSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getExportSubmit(): HTML');
-		return array_merge($this->EXPORTFORM->getSubmitLine($this->LANG->getLabel('export')),$this->EXPORTFORM->closeForm());
-	}
-	
-	/**
 	 * Gets import fields
 	 *
 	 * @return	Array	HTML Code
@@ -178,19 +148,6 @@ class WuiMapManagement extends GlobalPage {
 		$this->propCount++;
 		
 		return $ret;
-	}
-	
-	/**
-	 * Gets import submit button
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getImportSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getImportSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getImportSubmit(): HTML');
-		return array_merge($this->IMPORTFORM->getSubmitLine($this->LANG->getLabel('upload')),$this->IMPORTFORM->closeForm());
 	}
 	
 	/**
@@ -212,19 +169,6 @@ class WuiMapManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets delete submit button
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getDeleteSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getDeleteSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getDeleteSubmit()');
-		return array_merge($this->DELETEFORM->getSubmitLine($this->LANG->getLabel('delete')),$this->DELETEFORM->closeForm());
-	}
-	
-	/**
 	 * Gets rename fields
 	 *
 	 * @return	Array	HTML Code
@@ -242,19 +186,6 @@ class WuiMapManagement extends GlobalPage {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getRenameFields(): HTML');
 		return $ret;
-	}
-	
-	/**
-	 * Gets rename submit button
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getRenameSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getRenameSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getRenameSubmit(): HTML');
-		return array_merge($this->RENAMEFORM->getSubmitLine($this->LANG->getLabel('rename')),$this->RENAMEFORM->closeForm());
 	}
 	
 	/**
@@ -280,19 +211,6 @@ class WuiMapManagement extends GlobalPage {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getCreateFields(): HTML');
 		return $ret;
-	}
-	
-	/**
-	 * Gets create submit button
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getCreateSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getCreateSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getCreateSubmit(): HTML');
-		return array_merge($this->CREATEFORM->getSubmitLine($this->LANG->getLabel('create')),$this->CREATEFORM->closeForm());
 	}
 	
 	/**
@@ -385,7 +303,6 @@ class WuiMapManagement extends GlobalPage {
 	function getJsLang() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getJsLang()');
 		$ret = Array();
-		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'lang[\'chooseMapName\'] = \''.$this->LANG->getMessageText('chooseMapName').'\';';
 		$ret[] = 'lang[\'minOneUserAccess\'] = \''.$this->LANG->getMessageText('minOneUserAccess').'\';';
@@ -404,10 +321,23 @@ class WuiMapManagement extends GlobalPage {
 		$ret[] = 'lang[\'noPermissions\'] = \''.$this->LANG->getMessageText('noPermissions').'\';';
 		$ret[] = 'lang[\'minOneUserWriteAccess\'] = \''.$this->LANG->getMessageText('minOneUserWriteAccess').'\';';
 		$ret[] = 'lang[\'noSpaceAllowed\'] = \''.$this->LANG->getMessageText('noSpaceAllowed').'\';';
-		$ret[] = '//--></script>';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getJsLang(): HTML');
 		return $ret;	
+	}
+	
+	/**
+	 * Gets submit button for the given form
+	 *
+	 * @param	GlobalForm	$FORM
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getSubmit(&$FORM,$label) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getSubmit()');
+		$this->propCount++;
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getSubmit()');
+		return array_merge($FORM->getSubmitLine($label),$FORM->closeForm());
 	}
 }
 ?>

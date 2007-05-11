@@ -284,6 +284,9 @@
 				<export>
 					<text>Export</text>
 				</export>
+				<import>
+					<text>Import</text>
+				</import>
 				<positionSize>
 					<text>Position/Size</text>
 				</positionSize>

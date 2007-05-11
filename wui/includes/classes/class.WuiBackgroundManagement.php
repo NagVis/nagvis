@@ -45,7 +45,7 @@ class WuiBackgroundManagement extends GlobalPage {
 	function getForm() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getForm()');
 		// Inititalize language for JS
-		$this->addBodyLines($this->getJsLang());
+		$this->addBodyLines($this->parseJs($this->getJsLang()));
 		
 		$this->ADDFORM = new GlobalForm(Array('name'=>'new_image',
 			'id'=>'new_image',
@@ -58,7 +58,9 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->addBodyLines($this->ADDFORM->getCatLine(strtoupper($this->LANG->getLabel('uploadBackground'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getAddFields());
-		$this->addBodyLines($this->getAddSubmit());
+		$this->propCount++;
+		$this->addBodyLines($this->ADDFORM->getSubmitLine($this->LANG->getLabel('upload')));
+		$this->addBodyLines($this->ADDFORM->closeForm());
 		
 		$this->DELFORM = new GlobalForm(Array('name'=>'image_delete',
 			'id'=>'image_delete',
@@ -70,29 +72,13 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->addBodyLines($this->DELFORM->getCatLine(strtoupper($this->LANG->getLabel('deleteBackground'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getDelFields());
-		$this->addBodyLines($this->getDelSubmit());
+		$this->propCount++;
+		$this->addBodyLines($this->ADDFORM->getSubmitLine($this->LANG->getLabel('delete')));
+		$this->addBodyLines($this->ADDFORM->closeForm());
 		
 		// Resize the window
-		$this->addBodyLines($this->resizeWindow());
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*40+10)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getForm()');
-	}
-	
-	/**
-	 * Resizes the window to individual calculated size
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function resizeWindow() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::resizeWindow()');
-		$ret = Array();
-		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
-		$ret[] = "// resize the window (depending on the number of properties displayed)";
-		$ret[] = "window.resizeTo(540,".$this->propCount."*40+10)";
-		$ret[] = "//--></script>";
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::resizeWindow(): Array(HTML)');
-		return $ret;
 	}
 	
 	/**
@@ -112,19 +98,6 @@ class WuiBackgroundManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets delete submit button
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getDelSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getDelSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getDelSubmit(): Array(HTML)');
-		return array_merge($this->DELFORM->getSubmitLine($this->LANG->getLabel('delete')),$this->DELFORM->closeForm());
-	}
-	
-	/**
 	 * Gets new image fields
 	 *
 	 * @return	Array	HTML Code
@@ -139,19 +112,6 @@ class WuiBackgroundManagement extends GlobalPage {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getAddFields(): Array(HTML)');
 		return $ret;
-	}
-	
-	/**
-	 * Gets new image submit button
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getAddSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getAddSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getAddSubmit(): Array(HTML)');
-		return array_merge($this->ADDFORM->getSubmitLine($this->LANG->getLabel('upload')),$this->ADDFORM->closeForm());
 	}
 	
 	/**
@@ -184,22 +144,20 @@ class WuiBackgroundManagement extends GlobalPage {
 	/**
 	 * Gets all needed messages
 	 *
-	 * @return	Array Html
+	 * @return	Array JS
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getJsLang()');
 		$ret = Array();
-		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getMessageText('firstMustChoosePngImage').'\';';
 		$ret[] = 'lang[\'mustChoosePngImage\'] = \''.$this->LANG->getMessageText('mustChoosePngImage').'\';';
 		$ret[] = 'lang[\'foundNoBackgroundToDelete\'] = \''.$this->LANG->getMessageText('foundNoBackgroundToDelete').'\';';
 		$ret[] = 'lang[\'confirmBackgroundDeletion\'] = \''.$this->LANG->getMessageText('confirmBackgroundDeletion').'\';';
 		$ret[] = 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getMessageText('unableToDeleteBackground').'\';';
-		$ret[] = '//--></script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getJsLang(): Array(HTML)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getJsLang(): Array(JS)');
 		return $ret;	
 	}
 }

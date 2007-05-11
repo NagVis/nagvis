@@ -45,7 +45,7 @@ class WuiBackendManagement extends GlobalPage {
 	function getForm() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getForm()');
 		// Inititalize language for JS
-		$this->addBodyLines($this->getJsLang());
+		$this->addBodyLines($this->parseJs($this->getJsLang()));
 		
 		$this->DEFBACKENDFORM = new GlobalForm(Array('name'=>'backend_default',
 			'id'=>'backend_default',
@@ -57,7 +57,8 @@ class WuiBackendManagement extends GlobalPage {
 		$this->addBodyLines($this->DEFBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('setDefaultBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getDefaultFields());
-		$this->addBodyLines($this->getDefaultSubmit());
+		$this->addBodyLines($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->DEFBACKENDFORM->closeForm());
 		
 		$this->ADDBACKENDFORM = new GlobalForm(Array('name'=>'backend_add',
 			'id'=>'backend_add',
@@ -69,7 +70,8 @@ class WuiBackendManagement extends GlobalPage {
 		$this->addBodyLines($this->ADDBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('addBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getAddFields());
-		$this->addBodyLines($this->getAddSubmit());
+		$this->addBodyLines($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->ADDBACKENDFORM->closeForm());
 		
 		$this->EDITBACKENDFORM = new GlobalForm(Array('name'=>'backend_edit',
 			'id'=>'backend_edit',
@@ -81,7 +83,8 @@ class WuiBackendManagement extends GlobalPage {
 		$this->addBodyLines($this->EDITBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('editBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getEditFields());
-		$this->addBodyLines($this->getEditSubmit());
+		$this->addBodyLines($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->EDITBACKENDFORM->closeForm());
 		
 		$this->DELBACKENDFORM = new GlobalForm(Array('name'=>'backend_del',
 			'id'=>'backend_del',
@@ -93,29 +96,12 @@ class WuiBackendManagement extends GlobalPage {
 		$this->addBodyLines($this->DELBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('delBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getDelFields());
-		$this->addBodyLines($this->getDelSubmit());
+		$this->addBodyLines($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->DELBACKENDFORM->closeForm());
 		
 		// Resize the window
-		$this->addBodyLines($this->resizeWindow());
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*35+20)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getForm()');
-	}
-	
-	/**
-	 * Resizes the window to individual calculated size
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function resizeWindow() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::resizeWindow()');
-		$ret = Array();
-		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\"><!--";
-		$ret[] = "// resize the window (depending on the number of properties displayed)";
-		$ret[] = "window.resizeTo(540,".$this->propCount."*35+20)";
-		$ret[] = "//--></script>";
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::resizeWindow(): Array(HTML)');
-		return $ret;
 	}
 	
 	/**
@@ -159,19 +145,6 @@ class WuiBackendManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets edit submit button of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getEditSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getEditSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getEditSubmit(): Array(HTML)');
-		return array_merge($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->EDITBACKENDFORM->closeForm());
-	}
-	
-	/**
 	 * Gets delete fields of the form
 	 *
 	 * @return	Array	HTML Code
@@ -185,19 +158,6 @@ class WuiBackendManagement extends GlobalPage {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDelFields(): Array(HTML)');
 		return $ret;
-	}
-	
-	/**
-	 * Gets delete submit button of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getDelSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getDelSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDelSubmit(): Array(HTML)');
-		return array_merge($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DELBACKENDFORM->closeForm());
 	}
 	
 	/**
@@ -234,19 +194,6 @@ class WuiBackendManagement extends GlobalPage {
 	}
 	
 	/**
-	 * Gets add submit button of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getAddSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getAddSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getAddSubmit(): Array(HTML)');
-		return array_merge($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->ADDBACKENDFORM->closeForm());
-	}
-	
-	/**
 	 * Gets default fields of the form
 	 *
 	 * @return	Array	HTML Code
@@ -261,19 +208,6 @@ class WuiBackendManagement extends GlobalPage {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDefaultFields(): Array(HTML)');
 		return $ret;
-	}
-	
-	/**
-	 * Gets default submit button of the form
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getDefaultSubmit() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getDefaultSubmit()');
-		$this->propCount++;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getDefaultSubmit(): Array(HTML)');
-		return array_merge($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')),$this->DEFBACKENDFORM->closeForm());
 	}
 	
 	/**
@@ -330,18 +264,16 @@ class WuiBackendManagement extends GlobalPage {
 	/**
 	 * Gets all needed messages
 	 *
-	 * @return	Array Html
+	 * @return	Array JS
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackendManagement::getJsLang()');
 		$ret = Array();
-		$ret[] = '<script type="text/javascript" language="JavaScript"><!--';
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getMessageText('mustValueNotSet','',FALSE).'\';';
-		$ret[] = '//--></script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getJsLang(): Array(HTML)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getJsLang(): Array(JS)');
 		return $ret;	
 	}
 }
