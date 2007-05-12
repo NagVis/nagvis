@@ -67,8 +67,6 @@ class NagVisMap extends GlobalMap {
 					// default background color
 					if(!isset($obj['background_color']) || $obj['background_color'] == '') {
 						$obj['background_color'] = '#CCCCCC';
-					} elseif($obj['background_color'] == 'transparent') {
-						$obj['background_color'] = '';
 					}
 					
 					$ret = array_merge($ret,$this->textBox($obj));
