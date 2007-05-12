@@ -58,8 +58,8 @@ class WuiAddModify extends GlobalPage {
 		$this->addBodyLines($this->FORM->initForm());
 		$this->addBodyLines($this->getFields());
 		$this->addBodyLines($this->parseJs($this->fillFields()));
-		$this->addBodyLines($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
-		$this->addBodyLines($this->DELBACKENDFORM->closeForm());
+		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->FORM->closeForm());
 		$this->addBodyLines($this->parseJs($this->resizeWindow(410,$this->propCount*40+60)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getForm()');
 	}
