@@ -1,22 +1,21 @@
+body, table, th, td {
+	margin: 0;
+	padding: 0;
+	
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	
+	color: black;
+	font-size: 12pt;
+}
+
+img {
+    border: 0
+}
+
 table { 
 	background-color: #F5F5F5; 
 	width: 100%;
-}
-
-tr {
-	height: 20px;
-	border:none;
-}
-
-td {
-	border-style: none;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-}
-
-form {
-	padding: 0;
-	margin: 0;
 }
 
 .main {
@@ -37,47 +36,59 @@ form {
 	background-color: #DADADA;
 }
 
-.tdtitle {
+/*.tdtitle, .tdcat {
 	font-size: 16px;
 	font-weight: bold;
 	color: #314455;
 	
 	text-align: left;
 	height: 30px;
+}*/
+
+/* WUI tables/form */
+table.mytable {
+	background-color: #F5F5F5;
+	border-collapse:collapse;
+	margin-top: 10px;
+	padding: 1px;
+	width: 100%;
 }
 
-.tdcat {
-	font-size: 16px;
-	font-weight: bold;
+table.mytable td, table.mytable th {
+	border: 1px #a4a4a4 solid;
+	padding: 3px;
+	
+	font-size: 12px;
 	color: #314455;
-	
-	text-align: left;
-	height: 30px;
 }
 
-.tdlabel {
-	font-weight: bold;
-	font-size: 13px;
+/* title */
+table.mytable th {
+	background-color: #eee;
 	
-	width: 50%;
-	
-	border: 1px solid #A4A4A4;
-  	height: 30px;
+	text-align: center;
+	font-size: 14px;
+}
+
+/* cat */
+table.mytable th.cat {
+	font-size: 14px;
+}
+
+/* td common */
+table.mytable td {
+	text-align: center;
 	color: #2B5377;
-	text-align: right;
 } 
 
-.tdfield { 
-	font-size: 11px;
+/* td labels */
+table.mytable td.tdlabel {
 	font-weight: bold;
-	color: #2B5377;
-	
-	text-align: left; 
-	
- 	border: 1px solid #A4A4A4;
-}
+	background-color: #eee;
+	width: 50%;
+} 
 
-.tdfield input,select {
+table.mytable td.tdfield input,select {
 	background-color: #E4EEF6; 
 	border: 1px solid #284279;
 	width: 100%;

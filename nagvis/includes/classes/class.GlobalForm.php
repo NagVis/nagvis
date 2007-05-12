@@ -61,7 +61,7 @@ class GlobalForm {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getTitleLine('.$title.')');
 		$ret = Array();
 		
-		$ret[] = '<tr><td class="tdtitle" colspan="'.$this->cols.'">'.$title.'</td></tr>';
+		$ret[] = '<tr><th colspan="'.$this->cols.'">'.$title.'</th></tr>';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getTitleLine(): Array(...)');
 		return $ret;
@@ -78,7 +78,7 @@ class GlobalForm {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getCatLine('.$title.')');
 		$ret = Array();
 		
-		$ret[] = '<tr><td class="tdcat" colspan="'.$this->cols.'">'.$title.'</td></tr>';
+		$ret[] = '<tr><th class="cat" colspan="'.$this->cols.'">'.$title.'</th></tr>';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getCatLine(): Array(...)');
 		return $ret;
@@ -197,7 +197,7 @@ class GlobalForm {
 		$ret = Array();
 		
 		$ret[] = '<form name="'.$this->name.'" id="'.$this->id.'" method="'.$this->method.'" action="'.$this->action.'" enctype="'.$this->enctype.'" onsubmit="'.$this->onSubmit.'">';
-		$ret[] = '<table name="mytable" id="table_'.$this->id.'">';
+		$ret[] = '<table name="mytable" class="mytable" id="table_'.$this->id.'">';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::initForm(): Array(...)');
 		return $ret;
