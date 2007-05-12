@@ -135,9 +135,9 @@ function get_click_pos(e) {
 		document.images['background'].style.cursor='default';
 		follow_mouse=false;
 		if(action_click=='add') {
-			link="./addmodify.php?action=add&map="+mapname+"&type="+objtype+"&coords="+coords;
+			link="./index.php?page=addmodify&action=add&map="+mapname+"&type="+objtype+"&coords="+coords;
 		} else if(action_click=='modify') {
-			link="./addmodify.php?action=modify&map="+mapname+"&type="+objtype+"&id="+objid+"&coords="+coords;
+			link="./index.php?page=addmodify&action=modify&map="+mapname+"&type="+objtype+"&id="+objid+"&coords="+coords;
 		}
 		
 		open_window(link);

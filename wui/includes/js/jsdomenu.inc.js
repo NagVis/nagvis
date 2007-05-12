@@ -31,13 +31,13 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem("-"));
 		addMenuItem(new menuItem(get_label('save'), "menu_save", "code:document.myvalues.submit.click();","","",""));
 		addMenuItem(new menuItem(get_label('restore'), "menu_restore", "code:confirm_restore();","","",""));
-		addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:open_window('./addmodify.php?action=modify&map='+mapname+'&type=global&id=0','wui_addmodify');","","",""));
+		addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:open_window('./index.php?page=addmodify&action=modify&map='+mapname+'&type=global&id=0','wui_addmodify');","","",""));
 		addMenuItem(new menuItem(get_label('addObject'), "menu_addobject", "","","",""));
 		addMenuItem(new menuItem("-"));
-		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:open_window_management('./edit_config.php','wui_management');"));
-		addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:open_window_management('./map_management.php','wui_management');"));
-		addMenuItem(new menuItem(get_label('manageBackgrounds'), "menu_background_mgmt", "code:open_window_management('./background_management.php','wui_management');"));
-		addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:open_window_management('./backend_management.php','wui_management');"));
+		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:open_window_management('./index.php?page=edit_config','wui_management');"));
+		addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:open_window_management('./index.php?page=map_management','wui_management');"));
+		addMenuItem(new menuItem(get_label('manageBackgrounds'), "menu_background_mgmt", "code:open_window_management('./index.php?page=background_management','wui_management');"));
+		addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:open_window_management('./index.php?page=backend_management','wui_management');"));
 	}
 	
 	submenu_addobject = new jsDOMenu(120);
