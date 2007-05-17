@@ -163,7 +163,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/languages/';
 		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';
 		$this->validConfig['paths']['map']['default'] = $base.'nagvis/images/maps/';
-		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/etc/hover_templates/';
+		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/etc/templates/hover/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'nagvis/etc/maps/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
