@@ -172,6 +172,9 @@ class WuiAddModify extends GlobalPage {
 			} elseif($propname == "hover_template") {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getHoverTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
 				$this->propCount++;
+			} elseif($propname == "header_template") {
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getHeaderTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
+				$this->propCount++;
 			} elseif($propname == "map_name") {
 				// treat the special case of map_name, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMaps(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
@@ -240,7 +243,7 @@ class WuiAddModify extends GlobalPage {
 		
 		if($handle = opendir($this->MAINCFG->getValue('paths', 'hovertemplate'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' && preg_match('/tmpl.(.*).html$/', $file)) {
+				if ($file != '.' && $file != '..' && preg_match('/^tmpl\..+\.html$/', $file)) {
 					$files[] = str_replace('tmpl.','',str_replace('.html','',$file));
 				}				
 			}
@@ -252,6 +255,33 @@ class WuiAddModify extends GlobalPage {
 		closedir($handle);
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiAddModify::getHoverTemplates(): Array(...)');
+		return $files;
+	}
+	
+	/**
+	 * Reads all header templates
+	 *
+	 * @return	Array list
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getHeaderTemplates() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getHeaderTemplates()');
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'headertemplate'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != '.' && $file != '..' && preg_match('/^tmpl\..+\.html$/', $file)) {
+					$files[] = str_replace('tmpl.','',str_replace('.html','',$file));
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getHeaderTemplates(): Array(...)');
 		return $files;
 	}
 	

@@ -101,6 +101,7 @@ class WuiEditMainCfg extends GlobalPage {
 							case 'onlyhardstates':
 							case 'usegdlibs':
 							case 'autoupdatefreq':
+							case 'headertemplate':
 								switch($key2) {
 									case 'language':
 										$arrOpts = $this->getLanguages();
@@ -110,6 +111,9 @@ class WuiEditMainCfg extends GlobalPage {
 									break;
 									case 'icons':
 										$arrOpts = $this->getIconsets();
+									break;
+									case 'headertemplate':
+										$arrOpts = $this->getHeaderTemplates();
 									break;
 									case 'rotatemaps':
 									case 'displayheader':
@@ -153,7 +157,7 @@ class WuiEditMainCfg extends GlobalPage {
 	/**
 	 * Reads all aviable backends
 	 *
-	 * @return	Array Html
+	 * @return	Array list
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackends() {
@@ -180,7 +184,7 @@ class WuiEditMainCfg extends GlobalPage {
 	/**
 	 * Reads all iconsets (that habe <iconset>_ok.png)
 	 *
-	 * @return	Array Html
+	 * @return	Array list
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIconsets() {
@@ -207,7 +211,7 @@ class WuiEditMainCfg extends GlobalPage {
 	/**
 	 * Reads all languages
 	 *
-	 * @return	Array Html
+	 * @return	Array list
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLanguages() {
@@ -228,6 +232,33 @@ class WuiEditMainCfg extends GlobalPage {
 		closedir($handle);
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getLanguages(): Array(...)');
+		return $files;
+	}
+	
+	/**
+	 * Reads all header templates
+	 *
+	 * @return	Array list
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getHeaderTemplates() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiEditMainCfg::getHeaderTemplates()');
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'headertemplate'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != '.' && $file != '..' && preg_match('/^tmpl\..+\.html$/', $file)) {
+					$files[] = str_replace('tmpl.','',str_replace('.html','',$file));
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getHeaderTemplates(): Array(...)');
 		return $files;
 	}
 	
