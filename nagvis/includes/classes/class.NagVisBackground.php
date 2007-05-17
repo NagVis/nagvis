@@ -331,7 +331,7 @@ class NagVisBackground extends NagVisMap {
 	 */
 	function errorBox($msg) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::errorBox('.$msg.')');
-		$this->image = @imagecreate(600,50);
+		$this->image = @imagecreate(800,80);
 		$this->imageType = 'png';
 		$ImageFarbe = imagecolorallocate($this->image,243,243,243); 
 		$schriftFarbe = imagecolorallocate($this->image,10,36,106);
