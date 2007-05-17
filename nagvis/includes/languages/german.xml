@@ -113,10 +113,14 @@
 					<title>Keine Schreibrechte auf das Map Config Verzeichnis</title>
 					<text>Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis &quot;[MAPPATH]&quot; pr&uuml;fen</text>
 				</mapCfgDirNotWriteable>
-				<headerConfigNotReadable>
-					<title>Header Konfigurationsdatei nicht lesbar</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die Datei &quot;[CFGPATH]&quot; pr&uuml;fen</text>
-				</headerConfigNotReadable>
+				<headerTemplateNotExists>
+					<title>Header Template existiert nicht</title>
+					<text>Die Header Template-Datei &quot;[PATH]&quot; existiert nicht</text>
+				</headerTemplateNotExists>
+				<headerTemplateNotReadable>
+					<title>Header Konfigurationsdatei existiert nicht</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die Datei &quot;[PATH]&quot; pr&uuml;fen</text>
+				</headerTemplateNotReadable>
 				<loopInMapRecursion>
 					<title>Endlosschleife</title>
 					<text>Die Map Objekte der verlinkten Maps bilden eine Endlosschleife. Bitte aufl&ouml;sen</text>

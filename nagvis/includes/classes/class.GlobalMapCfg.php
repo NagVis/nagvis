@@ -45,6 +45,8 @@ class GlobalMapCfg {
 												'default' => $this->MAINCFG->getValue('defaults', 'backgroundcolor')),
 							'hover_template' => Array('must' => 0,
 												'default' => 'default'),
+							'header_template' => Array('must' => 0,
+												'default' => 'default'),
 							'label_show' => Array('must' => 0,
 												'default' => '0'),
 							'label_x' => Array('must' => 0,

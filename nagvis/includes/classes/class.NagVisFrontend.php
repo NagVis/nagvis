@@ -27,7 +27,7 @@ class NagVisFrontend extends GlobalPage {
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/style.css'),
 					  'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/overlib_shadow.js'),
-					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">'.
+					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">',
 					  					'<style type="text/css">.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
 					  'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
 					  'languageRoot' => 'nagvis:global');
@@ -86,9 +86,80 @@ class NagVisFrontend extends GlobalPage {
 	function getHeaderMenu() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getHeaderMenu()');
 		if($this->MAINCFG->getValue('global', 'displayheader') == '1') {
-			$this->addBodyLines($this->makeHeaderMenu());
+			if($this->checkHeaderTemplateReadable(1)) {
+				$ret = file_get_contents($this->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+				
+				// Replace some macros
+				$ret = str_replace('[current_map]',$this->MAPCFG->getName(),$ret);
+				// Replace lists
+				if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
+					foreach($matchReturn[1] AS $key) {
+						if($key == 'maplist') {
+							$sReplace = '';
+							preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
+							foreach($this->getMaps() AS $mapName) {
+								$sReplaceObj = str_replace('[map_name]',$mapName,$matchReturn1[1][0]);
+								// auto select current map
+								if($mapName == $this->MAPCFG->getName()) {
+									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
+								} else {
+									$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
+								}
+								$sReplace .= $sReplaceObj;
+							}
+							$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
+						}
+					}
+				}
+				
+				$this->addBodyLines('<div class="header">'.$ret.'</div>');
+			}
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getHeaderMenu()');
+	}
+	
+	/**
+	 * Checks for existing header template
+	 *
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function checkHeaderTemplateExists($printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderTemplateExists('.$printErr.')');
+		if(file_exists($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateExists(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		    	$FRONTEND->messageToUser('WARNING','headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateExists(): FALSE');
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for readable header template
+	 *
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function checkHeaderTemplateReadable($printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderTemplateReadable('.$printErr.')');
+		if($this->checkHeaderTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateReadable(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+		    	$FRONTEND->messageToUser('WARNING','headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateReadable(): FALSE');
+			return FALSE;
+		}
 	}
 	
 	/**
@@ -115,90 +186,6 @@ class NagVisFrontend extends GlobalPage {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMessages()');
 		$this->addBodyLines($this->getUserMessages());
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMessages()');
-	}
-	
-	/**
-	 * Reads the Configuration-File for the Header-Menu.
-	 *
-	 * @return	Array	Array of the Header Menu
-	 * @author Michael Lübben <michael_luebben@web.de>
-	 */
-	function readHeaderMenu() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::readHeaderMenu()');
-		if($this->checkHeaderConfigReadable(1)) {
-			$Menu = file($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
-			$a = 0;
-			$b = 0;
-			
-			while (isset($Menu[$a]) && $Menu[$a] != '') {
-				if (!ereg("#",$Menu[$a]) && trim($Menu[$a]) != '') {
-					$entry = explode(';',$Menu[$a]);
-					$link[$b]['entry'] = $entry[0];
-					$link[$b]['url'] = $entry[1];
-					$b++;
-				}
-				$a++;
-			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::readHeaderMenu(): Array(...)');
-			return $link;
-		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::readHeaderMenu(): FALSE');
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Creates the Header-Menu
-	 *
-	 * @return	Array 	Html
-	 * @author 	Michael Luebben <michael_luebben@web.de>
-	 * @author 	Andreas Husch <michael_luebben@web.de>
-     */
-	function makeHeaderMenu() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::makeHeaderMenu()');
-		$ret = Array();
-		
-		$Menu = $this->readHeaderMenu();
-		
-		$x = 0;
-		$ret[] = '<div class="header"><table width="100%" border="0" class="headerMenu">';
-		while(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
-			$ret[] = '<tr valign="bottom">';
-			for($d = 1;$d<=$this->MAINCFG->getValue('global', 'headercount');$d++) {
-				if(isset($Menu[$x]['entry']) && $Menu[$x]['entry'] != '') {
-					$ret[] = '<td style="width:13px;"><img src="'.$this->MAINCFG->getValue('paths', 'htmlimages').'internal/greendot.gif" width="13" height="14" name="'.$Menu[$x]['entry'].'_'.$x.'" alt="'.$Menu[$x]['entry'].'_'.$x.'"></td>';
-					$ret[] = '<td><a href="'.str_replace("\n",'',$Menu[$x]['url']).'" onMouseOver="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',1)" onMouseOut="switchdot(\''.$Menu[$x]['entry'].'_'.$x.'\',0)" class="NavBarItem">'.$Menu[$x]['entry'].'</a></td>';
-				}
-				$x++;
-			}
-			$ret[] = '</tr>';
-		}
-		$ret[] = '</table></div>';
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::makeHeaderMenu(): HTML');
-		return $ret;
-	}
-	
-	/**
-	 * Checks for readable header config file
-	 *
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function checkHeaderConfigReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderConfigReadable('.$printErr.')');
-		if(file_exists($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header')) && is_readable($this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'))) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderConfigReadable(): TRUE');
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		    	$FRONTEND->messageToUser('WARNING','headerConfigNotReadable','CFGPATH~'.$this->MAINCFG->getValue('paths', 'cfg').$this->MAINCFG->getValue('includes', 'header'));
-			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderConfigReadable(): FALSE');
-			return FALSE;
-		}
 	}
     
     /**
@@ -237,6 +224,33 @@ class NagVisFrontend extends GlobalPage {
 				return ' URL=index.php?map='.$nextMap.'&rotate=1';
 			}
 		}
-    } 
+    }
+    
+	/**
+	 * Gets all defined maps
+	 *
+	 * @return	Array maps
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getMaps() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMaps()');
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != '.' && $file != '..' && substr($file,strlen($file)-4,4) == '.cfg') {
+					$files[] = substr($file,0,strlen($file)-4);
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMaps(): Array(...)');
+		return $files;
+	}
 }
 ?>

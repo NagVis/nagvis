@@ -113,17 +113,21 @@
 					<title>Can not write to map configuration folder</title>
 					<text>Please check the webservers permissions at the map configuration folder &quot;[MAPPATH]&quot;</text>
 				</mapCfgDirNotWriteable>
-				<headerConfigNotReadable>
-					<title>Can not read header configuration file</title>
-					<text>Please check the webservers permissions at the header configuration file &quot;[CFGPATH]&quot;</text>
-				</headerConfigNotReadable>
+				<headerTemplateNotExists>
+					<title>Header template not exists</title>
+					<text>The requested header template file &quot;[FILE]&quot; does not exist</text>
+				</headerTemplateNotExists>
+				<headerTemplateNotReadable>
+					<title>Can not read header template file</title>
+					<text>Please check the webservers permissions at the header template file &quot;[FILE]&quot;</text>
+				</headerTemplateNotReadable>
 				<loopInMapRecursion>
 					<title>Loop in map recursion</title>
 					<text>The linked maps are producing a loop. Please fix this loop</text>
 				</loopInMapRecursion>
 				<iconNotExists>
 					<title>Icon does not exists</title>
-					<text>An icon &quot;[IMGPATH]&quot; which is used on the map does not exists</text>
+					<text>An icon &quot;[IMGPATH]&quot; which is used on the map does not exist</text>
 				</iconNotExists>
 				<couldNotDeleteMapCfg>
 					<title>Unable to delete map configuration</title>

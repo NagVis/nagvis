@@ -83,7 +83,10 @@ class GlobalMainCfg {
 												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/'),
 							'hovertemplate' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/hover_templates/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/header/'),
+							'headertemplate' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/hover/'),
 							'htmlbase' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '/nagios/nagvis'),
@@ -164,6 +167,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';
 		$this->validConfig['paths']['map']['default'] = $base.'nagvis/images/maps/';
 		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/etc/templates/hover/';
+		$this->validConfig['paths']['headertemplate']['default'] = $base.'nagvis/etc/templates/header/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'nagvis/etc/maps/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
