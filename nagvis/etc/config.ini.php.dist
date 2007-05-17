@@ -38,6 +38,8 @@
 ;onlyhardstates=0
 ; background color of maps
 ;backgroundcolor="#fff"
+; header template
+;headertemplate="default"
 
 ; options for the wui
 [wui]
@@ -74,11 +76,6 @@
 ;dbinstancename="default"
 ; maximum delay of the NDO Database in Seconds
 ;maxtimewithoutupdate=180
-
-; include options
-[includes]
-; header include
-;header="header.nagvis.inc"
 
 ; -------------------------
 ; EOF

@@ -55,7 +55,10 @@ class GlobalMainCfg {
 												'default' => 1),
 							'onlyhardstates' => Array('must' => 0,
 												 'editable' => 1,
-												'default' => 0)
+												'default' => 0),				
+							'headertemplate' => Array('must' => 0,
+												 'editable' => 1,
+												'default' => 'default')
 							),
 			'wui' => Array('autoupdatefreq' => Array('must' => 1,
 												 'editable' => 1,
@@ -141,9 +144,6 @@ class GlobalMainCfg {
 																'cgi' => Array('must' => 1,
 																					 'editable' => 1,
 																					'default' => '/usr/local/nagios/sbin/')))),
-			'includes' => Array('header' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'header.nagvis.inc')),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
 												'default' => '1.1a1',
