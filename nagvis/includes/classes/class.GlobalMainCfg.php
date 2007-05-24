@@ -22,136 +22,184 @@ class GlobalMainCfg {
 		$this->validConfig = Array(
 			'global' => Array('language' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => 'english'),
+												'default' => 'english',
+												'type' => 'string'),
 							'rotatemaps' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '0'),
+												'default' => '0',
+												'type' => 'boolean'),
 							'maps' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => 'demo,demo2'),
+												'default' => 'demo,demo2',
+												'type' => 'string'),
 							'displayheader' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '1'),
-							'headercount' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => '4'),
+												'default' => '1',
+												'type' => 'boolean'),
 							'usegdlibs' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '1'),
+												'default' => '1',
+												'type' => 'boolean'),
 							'refreshtime' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '60')),
+												'default' => '60',
+												'type' => 'integer')),
 			'defaults' => Array('backend' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => 'ndomy_1'),
+												'default' => 'ndomy_1',
+												'type' => 'string'),
 							'icons' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => 'std_medium'),
+												'default' => 'std_medium',
+												'type' => 'string'),
 							'backgroundcolor' => Array('must' => 0,
 												 'editable' => 1,
-												'default' => '#fff'),
+												'default' => '#fff',
+												'type' => 'string'),
 							'recognizeservices' => Array('must' => 0,
 												 'editable' => 1,
-												'default' => 1),
+												'default' => 1,
+												'type' => 'boolean'),
 							'onlyhardstates' => Array('must' => 0,
 												 'editable' => 1,
-												'default' => 0),				
+												'default' => 0,
+												'type' => 'boolean'),				
 							'headertemplate' => Array('must' => 0,
 												 'editable' => 1,
-												'default' => 'default')
+												'default' => 'default',
+												'type' => 'string')
 							),
 			'wui' => Array('autoupdatefreq' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '25')),
+												'default' => '25',
+												'type' => 'integer')),
 			'paths' => Array('base' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '/usr/local/nagios/share/nagvis/'),
+												'default' => '/usr/local/nagios/share/nagvis/',
+												'type' => 'string'),
 							'cfg' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/',
+												'type' => 'string'),
 							'icon' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/',
+												'type' => 'string'),
 							'shape' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/shapes/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/shapes/',
+												'type' => 'string'),
 							'language' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/includes/languages/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/includes/languages/',
+												'type' => 'string'),
 							'map' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/maps/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/maps/',
+												'type' => 'string'),
 							'mapcfg' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/',
+												'type' => 'string'),
 							'hovertemplate' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/header/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/header/',
+												'type' => 'string'),
 							'headertemplate' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/hover/'),
+												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/hover/',
+												'type' => 'string'),
 							'htmlbase' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '/nagios/nagvis'),
+												'default' => '/nagios/nagvis',
+												'type' => 'string'),
 							'htmlcgi' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '/nagios/cgi-bin'),
+												'default' => '/nagios/cgi-bin',
+												'type' => 'string'),
 							'htmlimages' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/nagios/nagvis/nagvis/images/'),
+												'default' => '/nagios/nagvis/nagvis/images/',
+												'type' => 'string'),
 							'htmlicon' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/nagios/nagvis/nagvis/images/iconsets/'),
+												'default' => '/nagios/nagvis/nagvis/images/iconsets/',
+												'type' => 'string'),
 							'htmlshape' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/nagios/nagvis/nagvis/images/shape/'),
+												'default' => '/nagios/nagvis/nagvis/images/shape/',
+												'type' => 'string'),
 							'htmlmap' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/nagios/nagvis/nagvis/images/maps/'),
+												'default' => '/nagios/nagvis/nagvis/images/maps/',
+												'type' => 'string'),
 							'htmldoku' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/')),
+												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/',
+												'type' => 'string')),
 			'backend' => Array(
 							'backendtype' => Array('must' => 1,
-												'default' => 'ndomy'),
+												'editable' => 0,
+												'default' => 'ndomy',
+												'type' => 'string'),
+							'backendid' => Array('must' => 1,
+												'editable' => 0,
+												'default' => 'ndomy_1',
+												'type' => 'string'),
 							'options' => Array('ndomy' => Array('dbhost' => Array('must' => 1,
-																					 'editable' => 1,
-																					'default' => 'localhost'),
+																					'editable' => 1,
+																					'default' => 'localhost',
+																					'type' => 'string'),
 																'dbport' => Array('must' => 0,
 																					 'editable' => 1,
-																					'default' => '3306'),
+																					'default' => '3306',
+																					'type' => 'integer'),
 																'dbname' => Array('must' => 1,
 																					 'editable' => 1,
-																					'default' => 'db_nagios'),
+																					'default' => 'db_nagios',
+																					'type' => 'string'),
 																'dbuser' => Array('must' => 1,
 																					 'editable' => 1,
-																					'default' => 'root'),
+																					'default' => 'root',
+																					'type' => 'string'),
 																'dbpass' => Array('must' => 1,
 																					 'editable' => 1,
-																					'default' => 'root'),
+																					'default' => 'root',
+																					'type' => 'string'),
 																'dbprefix' => Array('must' => 0,
 																					 'editable' => 1,
-																					'default' => 'nagios_'),
+																					'default' => 'nagios_',
+																					'type' => 'string'),
 																'dbinstancename' => Array('must' => 0,
 																					 'editable' => 1,
-																					'default' => 'default'),
+																					'default' => 'default',
+																					'type' => 'string'),
 																'maxtimewithoutupdate' => Array('must' => 0,
 																					 'editable' => 1,
-																					'default' => '180')),
-												'html' => Array('cgiuser' => Array('must' => 1,
+																					'default' => '180',
+																					'type' => 'integer')),
+												'html' => Array('backendid' => Array('must' => 1,
+																					'editable' => 0,
+																					'default' => 'html_1',
+																					'type' => 'string'),
+																'cgiuser' => Array('must' => 1,
 																					 'editable' => 1,
-																					'default' => 'nagiosadmin'),
+																					'default' => 'nagiosadmin',
+																					'type' => 'string'),
 																'cgi' => Array('must' => 1,
 																					 'editable' => 1,
-																					'default' => '/usr/local/nagios/sbin/')))),
+																					'default' => '/usr/local/nagios/sbin/',
+																					'type' => 'string')))),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
 												'default' => '1.1a1',
-												'locked' => 1),
+												'locked' => 1,
+												'type' => 'string'),
 							'title' => Array('must' => 1,
 												 'editable' => 0,
 												'default' => 'NagVis 1.1a1',
-												'locked' => 1)));
+												'locked' => 1,
+												'type' => 'string')));
 				
 		// Read Main Config file
 		$this->configFile = $configFile;
@@ -254,12 +302,85 @@ class GlobalMainCfg {
 				}
 			}
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): TRUE');
-			return TRUE;
+			if($this->checkMainConfigIsValid(1)) {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): TRUE');
+				return TRUE;
+			} else {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): FALSE');
+				return FALSE;
+			}
 		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): FALSE');
 			return FALSE;
 		}
+	}
+	
+	/**
+	 * Checks if the main config file is valid
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function checkMainConfigIsValid($printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMainConfigIsValid('.$printErr.')');
+		
+		
+		// check given objects and attributes
+		foreach($this->config AS $type => $vars) {
+			if(!ereg('^comment_',$type)) {
+				if(array_key_exists($type,$this->validConfig) || ereg('^backend_', $type)) {
+					// loop validConfig for checking: => missing "must" atributes
+					if(ereg('^backend_', $type)) {
+						$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+					} else {
+						$arrValidConfig = $this->validConfig[$type];
+					}
+					foreach($arrValidConfig AS $key => $val) {
+						if((isset($val['must']) && $val['must'] == '1')) {
+							// value is "must"
+							if($this->getValue($type,$key) == '') {
+								// a "must" value is missing or empty
+								$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+							    $FRONTEND->messageToUser('ERROR','mainMustValueNotSet','ATTRIBUTE~'.$key.',TYPE~'.$type);
+							}
+						}
+					}
+					
+					// loop given elements for checking: => all given atributes valid
+					// FIXME: check valid value format
+					foreach($vars AS $key => $val) {
+						if(!ereg('^comment_',$key)) {
+							if(ereg('^backend_', $type)) {
+								$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+							} else {
+								$arrValidConfig = $this->validConfig[$type];
+							}
+							
+							if(!array_key_exists($key,$arrValidConfig)) {
+								// unknown atribute
+								if($printErr) {
+									$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+						            $FRONTEND->messageToUser('ERROR','unknownValue','ATTRIBUTE~'.$key.',TYPE~'.$type);
+								}
+								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
+								return FALSE;
+							}
+						}
+					}	
+				} else {
+					// unknown type
+					if($printErr) {
+						$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+			            $FRONTEND->messageToUser('ERROR','unknownSection','TYPE~'.$type);
+					}
+					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMainConfigIsValid(): FALSE');
+					return FALSE;
+				}
+			}
+		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMainConfigIsValid(): TRUE');
+		return TRUE;
 	}
 	
     /**
@@ -504,12 +625,17 @@ class GlobalMainCfg {
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
 			if(preg_match('/^backend_/i', $sec)) {
-				if($this->config[$sec]['backendtype'] != '') {
+				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] != '') {
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']);
 					return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
 				} else {
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): ""');
-					return '';
+					if(isset($this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']) && $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'] != '') {
+						if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']);
+						return $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'];
+					} else {
+						if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): ""');
+						return $this->validConfig['backend']['backendtype']['default'];
+					}
 				}
 			} else {
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig[$sec][$var]['default']);

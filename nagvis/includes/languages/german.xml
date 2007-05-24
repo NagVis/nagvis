@@ -90,9 +90,13 @@
 					<text>Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen</text>
 				</backgroundNotWriteable>
 				<mustValueNotSet>
-					<title>Pflicht-Wert nicht gesetzt</title>
+					<title>Pflichtwert nicht gesetzt</title>
 					<text>Ein Pflichtwert &quot;[ATTRIBUTE]&quot; wurde in einem Objekt vom Typ &quot;[TYPE]&quot; in Map &quot;[MAPNAME]&quot; nicht gesetzt</text>
 				</mustValueNotSet>
+				<mainMustValueNotSet>
+					<title>Pflichtwert nicht gesetzt</title>
+					<text>Der Pflichtwert &quot;[ATTRIBUTE]&quot; wurde in der Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei</text>
+				</mainMustValueNotSet>
 				<unknownObject>
 					<title>Unbekannter Typ in Map Konfigurations-Datei definiert</title>
 					<text>Der Objekttyp &quot;[TYPE]&quot; in der Map &quot;[MAPNAME]&quot; ist nicht erlaubt</text>
@@ -101,6 +105,14 @@
 					<title>Unbekanntes Attribut in Map Konfigurations-Datei definiert</title>
 					<text>Das Attribut &quot;[ATTRIBUTE]&quot; ist in Elementen des Typs &quot;[TYPE]&quot; in Map &quot;[MAPNAME]&quot; nicht erlaubt</text>
 				</unknownAttribute>
+				<unknownSection>
+					<title>Unbekannte Sektion</title>
+					<text>Die Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei ist nicht erlaubt</text>
+				</unknownSection>
+				<unknownValue>
+					<title>Unbekanntes Attribut</title>
+					<text>Das Attribut &quot;[ATTRIBUTE]&quot; ist in der Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei nicht erlaubt</text>
+				</unknownValue>
 				<languageNotReadable>
 					<title>Keine Leserechte auf die Sprachdatei</title>
 					<text>Bitte die Leseberechtigungen des Webservers auf die Sprachdatei &quot;[LANGFILE]&quot; pr&uuml;fen</text>
