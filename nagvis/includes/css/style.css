@@ -44,13 +44,13 @@ img {
 /* Header-Menu */
 
 table.header_table {
-	background-image: url(/nagios/nagvis/nagvis/images/internal/background.png);
+	background-image: url(/nagios/nagvis/nagvis/images/internal/background_header.png);
 	border-collapse:collapse;
 	width: 100%;
 }
 
 table.header_table td, table.header_table th {
-	background-image: url(/nagios/nagvis/nagvis/images/internal/background.png);
+	background-image: url(/nagios/nagvis/nagvis/images/internal/background_header.png);
 	border: 0px #a4a4a4 solid;
 	padding: 2px;
 	font-size: 12px;
@@ -58,7 +58,7 @@ table.header_table td, table.header_table th {
 }
 
 table.header_table th {
-	background-image: url(/nagios/nagvis/nagvis/images/internal/background.png);
+	background-image: url(/nagios/nagvis/nagvis/images/internal/background_header.png);
 	text-align: center;
 }
 
@@ -176,14 +176,14 @@ table.hover_table {
 table.hover_table td, table.hover_table th {
 	border: 1px #a4a4a4 solid;
 	padding: 2px;
-	
-	font-size: 12px;
+	font-size: 10px;
 	color: #314455;
 }
 
 table.hover_table th {
 	text-align: center;
-	background-color: #eee;
+	background-image: url(/nagios/nagvis/nagvis/images/internal/background_hover.png);
+	color: #0066FF;
 }
 
 table.hover_table td.label {
