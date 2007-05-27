@@ -44,31 +44,31 @@ img {
 /* Header-Menu */
 
 table.header_table {
-	background-color: #F5F5F5;
+	background-image: url(/nagios/nagvis/nagvis/images/internal/background.png);
 	border-collapse:collapse;
 	width: 100%;
 }
 
 table.header_table td, table.header_table th {
-	border: 1px #a4a4a4 solid;
+	background-image: url(/nagios/nagvis/nagvis/images/internal/background.png);
+	border: 0px #a4a4a4 solid;
 	padding: 2px;
-	
 	font-size: 12px;
-	color: #314455;
+	color: #0066FF;
 }
 
 table.header_table th {
+	background-image: url(/nagios/nagvis/nagvis/images/internal/background.png);
 	text-align: center;
-	background-color: #eee;
 }
 
 table.header_table a {
-	color: #a4a4a4;
+	color: #66CC00;
 	text-decoration: none;
 }
 
 table.header_table a:hover {
-	color: #a4a4a4;
+	color: #00CC66;
 	text-decoration: underline;
 }
 

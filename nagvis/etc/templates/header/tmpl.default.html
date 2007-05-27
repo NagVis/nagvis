@@ -1,20 +1,27 @@
 <table class="header_table">
 	<tr>
-		<th style="width:150px;">Select Map: </th>
-		<td style="width:200px;">
-			<select style="width:100%;" name="chooseMap" onChange="location.href='./index.php?map='+this.options[selectedIndex].value">
-				<!-- BEGIN maplist --><option value="[map_name]" [selected]>[map_name]</option><!-- END maplist -->
-			</select>
+		<td>
+			<table class="header_table">
+				<tr style="border: 1px #a4a4a4 solid;">
+					<th style="width:150px;">Select Map: </th>
+					<td style="width:200px;">
+						<select style="width:100%;" name="chooseMap" onChange="location.href='./index.php?map='+this.options[selectedIndex].value">
+							<!-- BEGIN maplist --><option value="[map_name]" [selected]>[map_name]</option><!-- END maplist -->
+						</select>
+					</td>
+					<th style="width:300px;"><a href="../config.php?map=[current_map]">Edit Map [current_map]</a></th>
+					<th style="width:150px;">Help: </th>
+					<td style="width:200px;">
+						<select style="width:100%;" name="chooseMap" onChange="location.href=''+this.options[selectedIndex].value">
+							<option value="" [selected]>Select help</option>
+							<option value="http://nagvis.org/doc">Online Documentation</option>
+							<option value="http://www.nagios-portal.de/forum/board.php?boardid=42">Forum</option>
+						</select>
+					</td>
+					<th style="width:*;"></th>
+					</td>
+				</tr>
+			</table>
 		</td>
-		<th style="width:150px;"><a href="../config.php?map=[current_map]">Edit in WUI</a></th>
-		<th style="width:150px;">Help: </th>
-		<td style="width:200px;">
-			<select style="width:100%;" name="chooseMap" onChange="location.href=''+this.options[selectedIndex].value">
-				<option value="" [selected]>Select help</option>
-				<option value="http://nagvis.org/doc">Online Documantation</option>
-				<option value="http://www.nagios-portal.de/forum/board.php?boardid=42">Forum</option>
-			</select>
-		</td>
-		<th style="width:*"></th>
 	</tr>
 </table>
