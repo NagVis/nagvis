@@ -7,6 +7,14 @@
 			</select>
 		</td>
 		<th style="width:150px;"><a href="../config.php?map=[current_map]">Edit in WUI</a></th>
-		<td></td>
+		<th style="width:150px;">Help: </th>
+		<td style="width:200px;">
+			<select style="width:100%;" name="chooseMap" onChange="location.href=''+this.options[selectedIndex].value">
+				<option value="" [selected]>Select help</option>
+				<option value="http://nagvis.org/doc">Online Documantation</option>
+				<option value="http://www.nagios-portal.de/forum/board.php?boardid=42">Forum</option>
+			</select>
+		</td>
+		<th style="width:*"></th>
 	</tr>
 </table>
