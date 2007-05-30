@@ -348,7 +348,6 @@ class GlobalMainCfg {
 					}
 					
 					// loop given elements for checking: => all given atributes valid
-					// FIXME: check valid value format
 					foreach($vars AS $key => $val) {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
@@ -358,13 +357,16 @@ class GlobalMainCfg {
 							}
 							
 							if(!array_key_exists($key,$arrValidConfig)) {
-								// unknown atribute
+								// unknown attribute
 								if($printErr) {
 									$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 						            $FRONTEND->messageToUser('ERROR','unknownValue','ATTRIBUTE~'.$key.',TYPE~'.$type);
 								}
 								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 								return FALSE;
+							} else {
+								// known attribute
+								// FIXME: check valid value format
 							}
 						}
 					}	
