@@ -1,24 +1,25 @@
-<table class="header_table">
+<table class="header_table" style="background-image: url([html_base]/nagvis/images/internal/background_header.png);">
 	<tr>
 		<td>
-			<table class="header_table">
+			<table class="header_table" style="background-image: url([html_base]/nagvis/images/internal/background_header.png);">
 				<tr style="border: 1px #a4a4a4 solid;">
-					<th style="width:150px;">Select Map: </th>
-					<td style="width:200px;">
+					<th style="width:150px; background-image: url([html_base]/nagvis/images/internal/background_header.png);">Select Map: </th>
+					<td style="width:200px; background-image: url([html_base]/nagvis/images/internal/background_header.png);">
 						<select style="width:100%;" name="chooseMap" onChange="location.href='./index.php?map='+this.options[selectedIndex].value">
 							<!-- BEGIN maplist --><option value="[map_name]" [selected]>[map_name]</option><!-- END maplist -->
 						</select>
 					</td>
-					<th style="width:300px;"><a href="../config.php?map=[current_map]">Edit Map [current_map]</a></th>
-					<th style="width:150px;">Help: </th>
-					<td style="width:200px;">
+					<th style="width:300px; background-image: url([html_base]/nagvis/images/internal/background_header.png);"><a href="../config.php?map=[current_map]">Edit Map [current_map]</a></th>
+					<th style="width:150px; background-image: url([html_base]/nagvis/images/internal/background_header.png);">Help: </th>
+					<td style="width:200px; background-image: url([html_base]/nagvis/images/internal/background_header.png);">
 						<select style="width:100%;" name="chooseMap" onChange="location.href=''+this.options[selectedIndex].value">
 							<option value="" [selected]>Select help</option>
 							<option value="http://nagvis.org/doc">Online Documentation</option>
-							<option value="http://www.nagios-portal.de/forum/board.php?boardid=42">Forum</option>
+							<option value="http://www.nagios-portal.de/forum/board.php?boardid=42">Support Forum</option>
+							<option value="index.php?info">NagVis Info</option>
 						</select>
 					</td>
-					<th style="width:*;"></th>
+					<th style="width:*; background-image: url([html_base]/nagvis/images/internal/background_header.png);"></th>
 					</td>
 				</tr>
 			</table>

@@ -44,13 +44,11 @@ img {
 /* Header-Menu */
 
 table.header_table {
-	background-image: url(/nagios/nagvis/nagvis/images/internal/background_header.png);
 	border-collapse:collapse;
 	width: 100%;
 }
 
 table.header_table td, table.header_table th {
-	background-image: url(/nagios/nagvis/nagvis/images/internal/background_header.png);
 	border: 0px #a4a4a4 solid;
 	padding: 2px;
 	font-size: 12px;
@@ -58,7 +56,6 @@ table.header_table td, table.header_table th {
 }
 
 table.header_table th {
-	background-image: url(/nagios/nagvis/nagvis/images/internal/background_header.png);
 	text-align: center;
 }
 
