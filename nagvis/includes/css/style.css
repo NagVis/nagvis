@@ -179,7 +179,6 @@ table.hover_table td, table.hover_table th {
 
 table.hover_table th {
 	text-align: center;
-	background-image: url(/nagios/nagvis/nagvis/images/internal/background_hover.png);
 	color: #0066FF;
 }
 
