@@ -93,10 +93,6 @@
 					<title>Must value not set</title>
 					<text>The must value &quot;[ATTRIBUTE]&quot; is not set in an object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot;</text>
 				</mustValueNotSet>
-				<mainMustValueNotSet>
-					<title>Must value not set</title>
-					<text>The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file</text>
-				</mainMustValueNotSet>
 				<unknownObject>
 					<title>Unknown object type defined in map</title>
 					<text>The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed</text>
@@ -105,14 +101,6 @@
 					<title>Unknown attribute defined in map</title>
 					<text>The attribute &quot;[ATTRIBUTE]&quot; is not allowed in elements of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot;</text>
 				</unknownAttribute>
-				<unknownSection>
-					<title>Unknown section defined</title>
-					<text>The section &quot;[TYPE]&quot; in main configuration file is not allowed</text>
-				</unknownSection>
-				<unknownValue>
-					<title>Unknown attribute defined</title>
-					<text>The attribute &quot;[ATTRIBUTE]&quot; is not allowed in section &quot;[TYPE]&quot; in main configuration file</text>
-				</unknownValue>
 				<languageNotReadable>
 					<title>Can not read language file</title>
 					<text>Please check the webservers permission at the language file &quot;[LANGFILE]&quot;</text>
@@ -172,7 +160,7 @@
 					<text>Hostgroup Name</text>
 				</hostgroupname>
 				<servicegroupname>
-					<text>Servicegruppen Name</text>
+					<text>Servicegroup Name</text>
 				</servicegroupname>
 				<mapname>
 					<text>Map Name</text>
