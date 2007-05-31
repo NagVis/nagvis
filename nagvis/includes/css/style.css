@@ -44,28 +44,31 @@ img {
 /* Header-Menu */
 
 table.header_table {
+	background-color: #F5F5F5;
 	border-collapse:collapse;
 	width: 100%;
 }
 
 table.header_table td, table.header_table th {
-	border: 0px #a4a4a4 solid;
+	border: 1px #a4a4a4 solid;
 	padding: 2px;
+	
 	font-size: 12px;
-	color: #0066FF;
+	color: #314455;
 }
 
 table.header_table th {
 	text-align: center;
+	background-color: #eee;
 }
 
 table.header_table a {
-	color: #66CC00;
+	color: #a4a4a4;
 	text-decoration: none;
 }
 
 table.header_table a:hover {
-	color: #00CC66;
+	color: #a4a4a4;
 	text-decoration: underline;
 }
 
@@ -173,13 +176,14 @@ table.hover_table {
 table.hover_table td, table.hover_table th {
 	border: 1px #a4a4a4 solid;
 	padding: 2px;
-	font-size: 10px;
+	
+	font-size: 12px;
 	color: #314455;
 }
 
 table.hover_table th {
 	text-align: center;
-	color: #0066FF;
+	background-color: #eee;
 }
 
 table.hover_table td.label {
