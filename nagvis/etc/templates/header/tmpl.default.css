@@ -1,0 +1,28 @@
+table.header_table {
+	background-color: #F5F5F5;
+	border-collapse:collapse;
+	width: 100%;
+}
+
+table.header_table td, table.header_table th {
+	border: 1px #a4a4a4 solid;
+	padding: 2px;
+	
+	font-size: 12px;
+	color: #314455;
+}
+
+table.header_table th {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.header_table a {
+	color: #a4a4a4;
+	text-decoration: none;
+}
+
+table.header_table a:hover {
+	color: #a4a4a4;
+	text-decoration: underline;
+}
