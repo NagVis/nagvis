@@ -50,7 +50,10 @@ class WuiMap extends GlobalMap {
 			
 			$MAPCFG1 = new WuiMapCfg($this->MAINCFG,$map);
 			$MAPCFG1->readMapConfig(1);
-			$mapOptions .= '{ mapName: \''.$map.'\'';
+			$mapOptions .= '{ mapName:\''.$map.'\'';
+			
+			// map alias
+			$mapOptions .= ', mapAlias:\''.$MAPCFG1->getValue('global', '0', 'alias').'\'';
 			
 			// used image
 			$mapOptions .= ', mapImage:\''.$MAPCFG1->getValue('global', '0', 'map_image').'\'';

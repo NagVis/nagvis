@@ -79,7 +79,7 @@ function createjsDOMenu() {
 			submenu_maps_open[i] = new jsDOMenu(140);
 			for(a=(0+15*i);a<(15+15*i);a++) {
 				if(a >= mapOptions.length) break;
-				submenu_maps_open[i].addMenuItem(new menuItem(mapOptions[a].mapName,mapOptions[a].mapName,"link:./index.php?map="+mapOptions[a].mapName,"","",""));
+				submenu_maps_open[i].addMenuItem(new menuItem(mapOptions[a].mapAlias,mapOptions[a].mapAlias,"link:./index.php?map="+mapOptions[a].mapName,"","",""));
 				
 				if(!checkUserAllowed(getMapPermissions(mapOptions[a].mapName,mapOptions,"allowedForConfig"),username)) {
 					submenu_maps_open[i].items[mapOptions[a].mapName].enabled=false;
@@ -100,7 +100,7 @@ function createjsDOMenu() {
 			submenu_maps_open_nagvis[i] = new jsDOMenu(140);
 			for(a=(0+15*i);a<(15+15*i);a++) {
 				if(a >= mapOptions.length) break;
-				submenu_maps_open_nagvis[i].addMenuItem(new menuItem(mapOptions[a].mapName,mapOptions[a].mapName,"link:../nagvis/index.php?map="+mapOptions[a].mapName,"","",""));
+				submenu_maps_open_nagvis[i].addMenuItem(new menuItem(mapOptions[a].mapAlias,mapOptions[a].mapAlias,"link:../nagvis/index.php?map="+mapOptions[a].mapName,"","",""));
 				
 				if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
 					submenu_maps_open_nagvis[i].items[mapOptions[a].mapName].enabled=false;
@@ -114,7 +114,7 @@ function createjsDOMenu() {
 	} else {
 		submenu_maps_open = new jsDOMenu(140);
 		for(i=0;i<mapOptions.length;i++) {
-			submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
+			submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
 			
 			if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
 				submenu_maps_open.items[mapOptions[i].mapName].enabled=false;
@@ -126,7 +126,7 @@ function createjsDOMenu() {
 		// Open in NagVis
 		submenu_maps_open_nagvis = new jsDOMenu(140);
 		for(i=0;i<mapOptions.length;i++) {
-			submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapName,mapOptions[i].mapName,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
+			submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
 			
 			if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
 				submenu_maps_open_nagvis.items[mapOptions[i].mapName].enabled=false;
