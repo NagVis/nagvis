@@ -91,6 +91,7 @@ class NagVisFrontend extends GlobalPage {
 				
 				// Replace some macros
 				$ret = str_replace('[current_map]',$this->MAPCFG->getName(),$ret);
+				$ret = str_replace('[current_map_alias]',$this->MAPCFG->getValue('global', '0', 'alias'),$ret);
 				$ret = str_replace('[html_images]',$this->MAINCFG->getValue('paths','htmlimages'),$ret);
 				$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
 				// Replace lists
