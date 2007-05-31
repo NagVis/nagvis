@@ -1,13 +1,21 @@
 <style type="text/css"><!--@import url([html_base]/nagvis/etc/templates/header/tmpl.default.css); --></style>
 <table class="header_table">
 	<tr>
-		<th style="width:150px;">Select Map: </th>
+		<th style="width:150px;">[lang_select_map]: </th>
 		<td style="width:200px;">
-			<select style="width:100%;" name="chooseMap" onChange="location.href='./index.php?map='+this.options[selectedIndex].value">
+			<select style="width:100%;" name="chooseMap" onChange="location.href='[html_base]/nagvis/index.php?map='+this.options[this.selectedIndex].value">
 				<!-- BEGIN maplist --><option value="[map_name]" [selected]>[map_alias]</option><!-- END maplist -->
 			</select>
 		</td>
-		<th style="width:150px;"><a href="../config.php?map=[current_map]">Edit Current Map</a></th>
+		<th style="width:150px;"><a href="[html_base]/wui/index.php?map=[current_map]">[lang_edit_map]</a></th>
 		<td></td>
+		<td style="width:150px;">
+			<select style="width:100%;" name="chooseSupport" onChange="window.open(this.options[selectedIndex].value);this.selectedIndex=0">
+				<option value="" selected="selected">[lang_need_help]</option>
+				<option value="http://nagvis.org/doc">[lang_online_doc]</option>
+				<option value="http://www.nagios-portal.de/forum/board.php?boardid=42">[lang_forum]</option>
+				<option value="[html_base]/nagvis/index.php?info">[lang_support_info]</option>
+			</select>
+		</td>
 	</tr>
 </table>

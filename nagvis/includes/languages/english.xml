@@ -30,6 +30,25 @@
 				<shape>
 					<text>Shape</text>
 				</shape>
+				<!-- Header Template labels //-->
+				<selectMap>
+					<text>Choose map</text>
+				</selectMap>
+				<editMap>
+					<text>Edit current map</text>
+				</editMap>
+				<needHelp>
+					<text>Need Help?</text>
+				</needHelp>
+				<onlineDoc>
+					<text>Online Documentation</text>
+				</onlineDoc>
+				<forum>
+					<text>Support Forum</text>
+				</forum>
+				<supportInfo>
+					<text>NagVis Support Info</text>
+				</supportInfo>
 			</labels>
 			<messages>
 				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten können) //-->
