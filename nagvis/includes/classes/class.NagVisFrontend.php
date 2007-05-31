@@ -101,7 +101,11 @@ class NagVisFrontend extends GlobalPage {
 							$sReplace = '';
 							preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
 							foreach($this->getMaps() AS $mapName) {
-								$sReplaceObj = str_replace('[map_name]',$mapName,$matchReturn1[1][0]);
+								$MAPCFG1 = new NagVisMapCfg($this->MAINCFG,$mapName);
+								$MAPCFG1->readMapConfig(1);
+								
+								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
+								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
 								// auto select current map
 								if($mapName == $this->MAPCFG->getName()) {
 									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
