@@ -9,6 +9,10 @@
 ; You can make your changes here, it'll overwrite the default settings.
 ; ----------------------------
 
+; ----------------------------
+; !!! The Sections/Variables with a leading ";" won't be recognized by NagVis (commented out) !!!
+; ----------------------------
+
 ; global options
 [global]
 ; select language (english,german,...)
