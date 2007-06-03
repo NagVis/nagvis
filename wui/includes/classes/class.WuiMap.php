@@ -465,6 +465,7 @@ class WuiMap extends GlobalMap {
 		$ret[] = 'langMenu[\'manageMaps\'] = \''.$this->LANG->getLabel('manageMaps').'\';';
 		$ret[] = 'langMenu[\'manageBackends\'] = \''.$this->LANG->getLabel('manageBackends').'\';';
 		$ret[] = 'langMenu[\'manageBackgrounds\'] = \''.$this->LANG->getLabel('manageBackgrounds').'\';';
+		$ret[] = 'langMenu[\'manageShapes\'] = \''.$this->LANG->getLabel('manageShapes').'\';';
 		$ret[] = 'langMenu[\'icon\'] = \''.$this->LANG->getLabel('icon').'\';';
 		$ret[] = 'langMenu[\'line\'] = \''.$this->LANG->getLabel('line').'\';';
 		$ret[] = 'langMenu[\'special\'] = \''.$this->LANG->getLabel('special').'\';';

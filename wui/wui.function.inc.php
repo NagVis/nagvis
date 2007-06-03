@@ -456,5 +456,40 @@ switch($_GET['myaction']) {
 			print "<script>alert('error while opening the file ".$MAINCFG->getValue('paths', 'cfg')."config.ini.php"." for writing.')</script>";
 		}
 	break;
+	case 'mgt_shape_add':
+		if (!isset(${'HTTP_POST_FILES'}) || !is_array(${'HTTP_POST_FILES'})) {
+			$HTTP_POST_FILES = $_FILES;
+		}
+		// check the file (the map) is properly uploaded
+		if(is_uploaded_file($HTTP_POST_FILES['shape_image']['tmp_name'])) {
+		    $fileName = $HTTP_POST_FILES['shape_image']['name'];
+		    if(substr($fileName,strlen($fileName)-4,4) == ".png") {
+		    	if(move_uploaded_file($HTTP_POST_FILES['shape_image']['tmp_name'], $MAINCFG->getValue('paths', 'shape').$fileName)) {
+		    		chmod($MAINCFG->getValue('paths', 'shape').$fileName,0666);
+				    print "<script>window.opener.document.location.reload();</script>\n";
+				    print "<script>window.close();</script>\n";
+				} else {
+		    		print "A problem occured !";
+					return;
+		    	}
+		    } 
+		} else {
+			print "A problem occured !";
+			return;
+		}
+	break;
+	case 'mgt_shape_delete':
+		if(file_exists($MAINCFG->getValue('paths', 'shape').$_POST['shape_image'])) {
+			if(unlink($MAINCFG->getValue('paths', 'shape').$_POST['shape_image'])) {
+				
+			} else {
+				print "<script>alert('error: failed to delete ".$MAINCFG->getValue('paths', 'shape').$_POST['shape_image'].".')</script>";
+			}
+		} else {
+			print "<script>alert('error: file ".$MAINCFG->getValue('paths', 'shape').$_POST['shape_image']." doesn\'t exists.')</script>";
+		}
+		print "<script>window.opener.document.location.reload();</script>\n";
+		print "<script>window.close();</script>\n";
+	break;
 }
 ?>

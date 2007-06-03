@@ -37,6 +37,7 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:open_window_management('./index.php?page=edit_config','wui_management');"));
 		addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:open_window_management('./index.php?page=map_management','wui_management');"));
 		addMenuItem(new menuItem(get_label('manageBackgrounds'), "menu_background_mgmt", "code:open_window_management('./index.php?page=background_management','wui_management');"));
+		addMenuItem(new menuItem(get_label('manageShapes'), "menu_shape_mgmt", "code:open_window_management('./index.php?page=shape_management','wui_management');"));
 		addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:open_window_management('./index.php?page=backend_management','wui_management');"));
 	}
 	

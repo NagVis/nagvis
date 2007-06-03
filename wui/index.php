@@ -40,6 +40,12 @@ switch($_GET['page']) {
 		$FRONTEND->getForm();
 		$FRONTEND->printPage();
 	break;
+	case 'shape_management':
+		require("../nagvis/includes/classes/class.GlobalForm.php");
+		require("./includes/classes/class.WuiShapeManagement.php");
+		$FRONTEND = new WuiShapeManagement($MAINCFG);
+		$FRONTEND->getForm();
+	break;
 	case 'background_management':
 		require("../nagvis/includes/classes/class.GlobalForm.php");
 		require("./includes/classes/class.WuiBackgroundManagement.php");

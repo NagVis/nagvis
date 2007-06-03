@@ -367,6 +367,9 @@
 				<manageBackgrounds>
 					<text>Background Management</text>
 				</manageBackgrounds>
+				<manageShapes>
+					<text>Shape Management</text>
+				</manageShapes>
 				<icon>
 					<text>Icon</text>
 				</icon>
@@ -499,6 +502,12 @@
 				<noSpaceAllowed>
 					<text>Blanks are not allowed.</text>
 				</noSpaceAllowed>
+				<firstMustChoosePngImage>
+					<text>Please choose a PNG image.</text>
+				</firstMustChoosePngImage>
+				<mustChoosePngImage>
+					<text>You must select an image with the extension &quot;.png&quot;.</text>
+				</mustChoosePngImage>
 			</messages>
 		</global>
 		<editMainCfg>
@@ -598,12 +607,6 @@
 				</deleteBackground>
 			</labels>
 			<messages>
-				<firstMustChoosePngImage>
-					<text>Please choose a PNG image.</text>
-				</firstMustChoosePngImage>
-				<mustChoosePngImage>
-					<text>You must select an image with the extension &quot;.png&quot;.</text>
-				</mustChoosePngImage>
 				<foundNoBackgroundToDelete>
 					<text>No background image found. Operation terminated.</text>
 				</foundNoBackgroundToDelete>
@@ -611,10 +614,31 @@
 					<text>Do you really want to delete this background image? This action cannot be reverted.</text>
 				</confirmBackgroundDeletion>
 				<unableToDeleteBackground>
-					<text>Cannot delete map image &quot;[IMAGENAME]&quot; because it is used by map &quot;[MAP]&quot;.</text>
+					<text>Cannot delete background image &quot;[IMAGENAME]&quot; because it is used by map &quot;[MAP]&quot;.</text>
 				</unableToDeleteBackground>
 			</messages>
 		</backgroundManagement>
+		<shapeManagement>
+			<labels>
+				<uploadShape>
+					<text>Upload shape</text>
+				</uploadShape>
+				<deleteShape>
+					<text>Delete shape</text>
+				</deleteShape>
+			</labels>
+			<messages>
+				<foundNoShapeToDelete>
+					<text>No shape image found. Operation terminated.</text>
+				</foundNoShapeToDelete>
+				<confirmShapeDeletion>
+					<text>Do you really want to delete this shape image? This action cannot be reverted.</text>
+				</confirmShapeDeletion>
+				<unableToDeleteShape>
+					<text>Cannot delete shape &quot;[IMAGENAME]&quot; because it is used by map &quot;[MAP]&quot;.</text>
+				</unableToDeleteShape>
+			</messages>
+		</shapeManagement>
 		<mapManagement>
 			<labels>
 				<exportMap>

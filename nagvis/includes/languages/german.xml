@@ -367,6 +367,9 @@
 				<manageBackgrounds>
 					<text>Hintergrund Verwaltung</text>
 				</manageBackgrounds>
+				<manageShapes>
+					<text>Shape Verwaltung</text>
+				</manageShapes>
 				<icon>
 					<text>Icon</text>
 				</icon>
@@ -499,6 +502,12 @@
 				<noSpaceAllowed>
 					<text>Leerzeichen sind hier nicht erlaubt.</text>
 				</noSpaceAllowed>
+				<firstMustChoosePngImage>
+					<text>Du must erst ein PNG Image w&auml;hlen</text>
+				</firstMustChoosePngImage>
+				<mustChoosePngImage>
+					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
+				</mustChoosePngImage>
 			</messages>
 		</global>
 		<editMainCfg>
@@ -598,23 +607,38 @@
 				</deleteBackground>
 			</labels>
 			<messages>
-				<firstMustChoosePngImage>
-					<text>Du must erst ein PNG Image w&auml;hlen</text>
-				</firstMustChoosePngImage>
-				<mustChoosePngImage>
-					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
-				</mustChoosePngImage>
 				<foundNoBackgroundToDelete>
-					<text>Kein Hintergrund Image zum l&ouml;schen gefunden. Operation abgebrochen.</text>
+					<text>Kein Hintergrund Bild zum l&ouml;schen gefunden. Operation abgebrochen.</text>
 				</foundNoBackgroundToDelete>
 				<confirmBackgroundDeletion>
 					<text>Willst du diesen Hintergrund wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.</text>
 				</confirmBackgroundDeletion>
 				<unableToDeleteBackground>
-					<text>Kann HIntergrund [IMAGENAME] nicht l&ouml;schen, da er in der Map [MAP] noch verwendet wird.</text>
+					<text>Kann Hintergrund [IMAGENAME] nicht l&ouml;schen, da er in der Map [MAP] noch verwendet wird.</text>
 				</unableToDeleteBackground>
 			</messages>
 		</backgroundManagement>
+		<shapeManagement>
+			<labels>
+				<uploadShape>
+					<text>Shape hochladen</text>
+				</uploadShape>
+				<deleteShape>
+					<text>Shape l&ouml;schen</text>
+				</deleteShape>
+			</labels>
+			<messages>
+				<foundNoShapeToDelete>
+					<text>Kein Shape zum l&ouml;schen gefunden. Operation abgebrochen.</text>
+				</foundNoShapeToDelete>
+				<confirmShapeDeletion>
+					<text>Willst du diesen Shape wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.</text>
+				</confirmShapeDeletion>
+				<unableToDeleteShape>
+					<text>Kann Shape [IMAGENAME] nicht l&ouml;schen, da er in der Map [MAP] noch verwendet wird.</text>
+				</unableToDeleteShape>
+			</messages>
+		</shapeManagement>
 		<mapManagement>
 			<labels>
 				<noMapToRename>
