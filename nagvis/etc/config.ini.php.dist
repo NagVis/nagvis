@@ -38,6 +38,8 @@
 ;backgroundcolor="#fff"
 ; header template
 ;headertemplate="default"
+; hover template
+;hovertemplate="default"
 
 ; options for the wui
 [wui]

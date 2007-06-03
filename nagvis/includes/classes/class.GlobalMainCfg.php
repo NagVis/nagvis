@@ -63,8 +63,12 @@ class GlobalMainCfg {
 							'onlyhardstates' => Array('must' => 0,
 												 'editable' => 1,
 												'default' => 0,
-												'type' => 'boolean'),				
+												'type' => 'boolean'),
 							'headertemplate' => Array('must' => 0,
+												 'editable' => 1,
+												'default' => 'default',
+												'type' => 'string'),
+							'hovertemplate' => Array('must' => 0,
 												 'editable' => 1,
 												'default' => 'default',
 												'type' => 'string')
