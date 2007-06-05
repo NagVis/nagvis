@@ -473,6 +473,7 @@ class NagVisMap extends GlobalMap {
 			$ret = str_replace('[obj_name]',$obj[$name],$ret);
 			$ret = str_replace('[obj_state]',$obj['state'],$ret);
 			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
+			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj['$name']),$ret);
 			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
 			$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
 			$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
@@ -481,6 +482,7 @@ class NagVisMap extends GlobalMap {
 			$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
 			if($obj['type'] == 'service') {
 				$ret = str_replace('[service_description]',$obj['service_description'],$ret);
+				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$obj['service_description']),$ret);
 			}
             // Escape chars which could make problems
             $ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
