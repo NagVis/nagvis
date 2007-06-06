@@ -604,7 +604,7 @@ class NagVisMap extends GlobalMap {
 						}
 					} else {
 					    // FIXME: Language entry
-						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You&apos;re not permited to view the state of this map.');
+						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You are not permited to view the state of this map.');
 					}
 				}
 			break;
