@@ -47,7 +47,7 @@ class NagVisFrontend extends GlobalPage {
 	    
 	    $ret[] = '<div class="infopage">';
 	    $ret[] = '<table>';
-	    $ret[] = '<tr><th colspan="4">Map Index Page</td></tr><tr>';
+	    $ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</td></tr><tr>';
 	    $i = 1;
 	    $arrMaps = $this->getMaps();
 	    foreach($arrMaps AS $mapName) {
@@ -101,7 +101,7 @@ class NagVisFrontend extends GlobalPage {
 		
 	    $ret[] = '<div class="infopage">';
 		$ret[] = '<table class="instinfo">';
-		$ret[] = '<tr><th colspan="2" class="head">NagVis Debug/Support Informations</td></tr>';
+		$ret[] = '<tr><th colspan="2" class="head">'.$this->LANG->getLabel('supportInfo').'</td></tr>';
 		$ret[] = '</table><br />';
 		
 		$ret[] = '<table class="instinfo">';

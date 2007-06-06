@@ -47,8 +47,11 @@
 					<text>Support Forum</text>
 				</forum>
 				<supportInfo>
-					<text>NagVis Support Info</text>
+					<text>NagVis Support Informations</text>
 				</supportInfo>
+				<mapIndex>
+					<text>NagVis Map Index</text>
+				</mapIndex>
 			</labels>
 			<messages>
 				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten können) //-->
