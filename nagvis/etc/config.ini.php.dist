@@ -15,7 +15,7 @@
 
 ; global options
 [global]
-; select language (english,german,...)
+; select language (english,german,french,...)
 ;language="english"
 ; rotate maps (0/1)
 ;rotatemaps=0

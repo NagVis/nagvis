@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<language>
+	<meta>
+		<name>french</name>
+		<desc>French language file for NagVis</desc>
+		<version>1.0</version>
+	</meta>
+	<global>
+		<global>
+			<labels>
+				<!-- Alle globalen Beschriftungen //-->
+				<host>
+					<text>Hote</text>
+				</host>
+				<service>
+					<text>Service</text>
+				</service>
+				<hostgroup>
+					<text>Groupe d'Hotes</text>
+				</hostgroup>
+				<servicegroup>
+					<text>Groupe de services</text>
+				</servicegroup>
+				<map>
+					<text>Carte</text>
+				</map>
+				<textbox>
+					<text>Zone de texte</text>
+				</textbox>
+				<shape>
+					<text>Image</text>
+				</shape>
+				<!-- Header Template labels //-->
+				<selectMap>
+					<text>Choisissez une carte</text>
+				</selectMap>
+				<editMap>
+					<text>Modifiez la carte</text>
+				</editMap>
+				<needHelp>
+					<text>Besoin d'aide ?</text>
+				</needHelp>
+				<onlineDoc>
+					<text>Documentation en ligne</text>
+				</onlineDoc>
+				<forum>
+					<text>Support Forum</text>
+				</forum>
+				<supportInfo>
+					<text>NagVis Support Info</text>
+				</supportInfo>
+			</labels>
+			<messages>
+				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten können) //-->
+                                <mapCfgNotFound>
+                                        <title>Aucun fichier de configuration de carte trouve!</title>
+                                        <text>Ouverture de &quot;[MAP]&quot; impossible!</text>
+                                </mapCfgNotFound>
+                                <backgroundNotFound>
+                                        <title>Aucune image de carte trouvee!</title>
+                                        <text>Ouverture de &quot;[MAPPATH]&quot; impossible!</text>
+                                </backgroundNotFound>
+                                <permissionDenied>
+                                        <title>Refuse. droits insuffisants</title>
+                                        <text>L'utilisateur &quot;[USER]&quot; n'a pas les droits suffisants pour visualiser cette carte!</text>
+                                </permissionDenied>
+                                <noUser>
+                                        <title>Aucun utilisateur</title>
+                                        <text>Aucun utilisateur trouve dans la configuration de Nagvis! Corrigez votre fichier .htaccess!</text>
+                                </noUser>
+                                <gdLibNotFound>
+                                        <title>GD-Lib absente</title>
+                                        <text>La librairie GD-Lib n'est pas installee!</text>
+                                </gdLibNotFound>
+                                <mapCfgNotExists>
+                                        <title>Fichier de configuration de carte absent</title>
+                                        <text>Le fichier de configuration &quot;[MAP]&quot; n'existe pas!</text>
+                                </mapCfgNotExists>
+                                <mapCfgNotReadable>
+                                        <title>Impossible de lire le fichier de configuration de carte</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier &quot;[MAP]&quot;</text>
+                                </mapCfgNotReadable>
+                                <mapCfgNotWriteable>
+                                        <title>Impossible d'ecrire le fichier de configuration de carte</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier (&quot;[MAP]&quot;)</text>
+                                </mapCfgNotWriteable>
+                                <mainCfgNotExists>
+                                        <title>Fichier de configuration de NagVis absent</title>
+                                        <text>Le fichier de configuration de nagvis &quot;[MAINCFG]&quot; n'existe pas</text>
+                                </mainCfgNotExists>
+                                <mainCfgNotReadable>
+                                        <title>Impossible de lire le fichier de configuration de Nagvis</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier &quot;[MAINCFG]&quot;</text>
+                                </mainCfgNotReadable>
+                                <mainCfgNotWriteable>
+                                        <title>Impossible d'ecrire le fichier de configuration de Nagvis</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier &quot;[MAINCFG]&quot;</text>
+                                </mainCfgNotWriteable>
+                                <backgroundNotExists>
+                                        <title>Fichier Image de la carte absent</title>
+                                        <text>Le fichier Image de la carte &quot;[IMGPATH]&quot; n'existe pas</text>
+                                </backgroundNotExists>
+                                <backgroundNotReadable>
+                                        <title>Impossible de lire le fichier Image de la carte</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier &quot;[IMGPATH]&quot;</text>
+                                </backgroundNotReadable>
+                                <backgroundNotWriteable>
+                                        <title>Impossible d'ecrire le fichier Image de la carte</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier &quot;[IMGPATH]&quot;</text>
+                                </backgroundNotWriteable>
+                                <mustValueNotSet>
+                                        <title>Valeur obligatoire manquante</title>
+                                        <text>La valeur obligatoire &quot;[ATTRIBUTE]&quot; n'est pas definie dans un objet de type &quot;[TYPE]&quot; dans la carte &quot;[MAPNAME]&quot;</text>
+                                </mustValueNotSet>
+				<mainMustValueNotSet> 	 
+                                        <title>Valeur obligatoire manquante</title>
+                    			<text>La valeur obligatoire &quot;[ATTRIBUTE]&quot; n'est pas definie dans la section &quot;[TYPE]&quot; dans le fichier de configuration principal</text>
+                		</mainMustValueNotSet>
+                                <unknownObject>
+                                        <title>Type inconnu dans le fichier de configuration de la carte</title>
+                                        <text>Le type &quot;[TYPE]&quot; sur la carte &quot;[MAPNAME]&quot; n'est pas autorise!</text>
+                                </unknownObject>
+                                <unknownAttribute>
+                                        <title>Attribut inconnu dans le fichier de configuration de la carte</title>
+                                        <text>L'attribut &quot;[ATTRIBUTE]&quot; n'est pas autorise dans un element de type &quot;[TYPE]&quot; sur la carte &quot;[MAPNAME]&quot;</text>
+                                </unknownAttribute>
+				<unknownSection> 	 
+					<title>Section inconnue</title> 	 
+					<text>La section &quot;[TYPE]&quot; dans le fichier de configuration principal n'est pas autorisee</text> 	 
+				</unknownSection> 	 
+				<unknownValue> 	 
+					<title>Attribut inconnu</title> 	 
+					<text>L'attribut &quot;[ATTRIBUTE]&quot; n'est pas autorise dans la section &quot;[TYPE]&quot; dans le fichier de configuration</text> 	 
+				</unknownValue>
+                                <languageNotReadable>
+                                        <title>Impossible de lire le fichier de langage</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier de langage &quot;[LANGFILE]&quot;!</text>
+                                </languageNotReadable>
+                                <mapCfgDirNotReadable>
+                                        <title>Impossible de lire le repertoire de configuration des cartes</title>
+                                        <text>Verifiez les permissions du serveur web pour le repertoire &quot;[MAPPATH]&quot;!</text>
+                                </mapCfgDirNotReadable>
+                                <mapCfgDirNotWriteable>
+                                        <title>Impossible d'ecrire le repertoire de configuration des cartes</title>
+                                        <text>Verifiez les permissions du serveur web pour le repertoire &quot;[MAPPATH]&quot;!</text>
+                                </mapCfgDirNotWriteable>
+
+				<headerTemplateNotExists>
+					<title>Le modele d'entete n'existe pas</title>
+					<text>Le fichier modele d'entete demande &quot;[FILE]&quot; n'existe pas</text>
+				</headerTemplateNotExists>
+				<headerTemplateNotReadable>
+					<title>Lecture du fichier de modele d'entete impossible</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier de modele &quot;[FILE]&quot;</text>
+				</headerTemplateNotReadable>
+
+                                <loopInMapRecursion>
+                                        <title>Boucle recursive dans la carte</title>
+                                        <text>Une boucle entre des cartes a ete detectee. Corrigez la !</text>
+                                </loopInMapRecursion>
+                                <iconNotExists>
+                                        <title>Une icone n'existe pas</title>
+                                        <text>L'icone &quot;[IMGPATH]&quot; utilisee sur la carte n'existe pas.</text>
+                                </iconNotExists>
+                                <couldNotDeleteMapCfg>
+                                        <title>Impossoble d'effacer le fichier de configuration de la carte</title>
+                                        <text>Impossible d'effacer le fichier de configuration de la carte &quot;[MAPPATH]&quot;.</text>
+                                </couldNotDeleteMapCfg>
+                                <couldNotDeleteMapImage>
+                                        <title>Impossible d'effacer l'image de la carte</title>
+                                        <text>Impossible d'effacer l'image de la carte &quot;[IMGPATH]&quot;.</text>
+                                </couldNotDeleteMapImage>
+			</messages>
+		</global>
+	</global>
+	<nagvis>
+		<global>
+			<labels>
+				<!-- Alle NagVis Beschriftungen //-->
+                                <state>
+                                        <text>Etat</text>
+                                </state>
+                                <output>
+                                        <text>Output</text>
+                                </output>
+                                <hostname>
+                                        <text>Nom de l\'hote</text>
+                                </hostname>
+                                <servicename>
+                                        <text>Nom du service</text>
+                                </servicename>
+                                <hostgroupname>
+                                        <text>Nom du Hostgroup</text>
+                                </hostgroupname>
+                                <servicegroupname>
+                                        <text>Nom du Servicegroup</text>
+                                </servicegroupname>
+                                <mapname>
+                                        <text>Nom de la carte</text>
+                                </mapname>
+			</labels>
+			<messages>
+				<!-- Alle NagVis Meldungen //-->
+				<couldNotGetHoverUrl>
+                                        <title>Impossible de recuperer l'URL Hover</title>
+                                        <text>Impossible de recuperer l'URL hover &quot;[URL]&quot;. URL protegee par un mot de passe ?</text>
+				</couldNotGetHoverUrl>
+				<hoverTemplateNotExists>
+					<title>Le fichier de template Hover n'existe pas</title>
+					<text>Le fichier de template Hover &quot;[FILE]&quot; n'existe pas</text>
+				</hoverTemplateNotExists>
+				<hoverTemplateNotReadable>
+					<title>Lecture du fichier template Hover impossible</title>
+                                        <text>Verifiez les permissions du serveur web pour le fichier de modele Hover &quot;[FILE]&quot;</text>
+				</hoverTemplateNotReadable>
+                                <onlyPngOrJpgImages>
+                                        <title>NagVis-GD: Images au format PNG ou JPG uniquement</title>
+                                        <text>NagVis-GD: Images au format PNG ou JPG uniquement.</text>
+                                </onlyPngOrJpgImages>
+                                <maybePhpMemoryLimitToLow>
+                                        <title>NagVis-GD: Parametre PHP memory_limit trop bas.</title>
+                                        <text>NagVis-GD: La variable PHP memory_limit est trop basse pour afficher cette image.</text>
+                                </maybePhpMemoryLimitToLow>
+			</messages>
+		</global>
+	</nagvis>
+	<backend>
+		<global>
+			<messages>
+				<!-- Alle globalen Backend Meldungen //-->
+                                <noStateSet>
+                                        <title>Aucun etat defini!</title>
+                                        <text>Aucun etat n'a ete defini!</text>
+                                </noStateSet>
+                                <backendNotExists>
+                                        <title>Le Backend n'existe pas!</title>
+                                        <text>Le backend dont l'ID est &quot;[BACKENDID]&quot; de type &quot;[BACKENDTYPE]&quot; n'existe pas.</text>
+                                </backendNotExists>
+                                <noBackendDefined>
+                                        <title>Aucun backend defini trouve!</title>
+                                        <text>Aucun backend n'a ete trouve dans la configuration de Nagvis.</text>
+                                </noBackendDefined>
+                                <backendNotInitialized>
+                                        <title>Backend non initialise!</title>
+                                        <text>Le backend dont l'ID est &quot;[BACKENDID]&quot; de type &quot;BACKENDTYPE]&quot; n'est pas initialise. Verifiez le fichier de configuration principal.</text>
+                                </backendNotInitialized>
+			</messages>
+		</global>
+		<ndomy>
+			<messages>
+                                <mysqlNotSupported>
+                                        <title>Erreur de backend NDOMy! (Backend [BACKENDID])</title>
+                                        <text>Votre installation de PHP ne supporte pas le SQL. Vous ne pouvez pas utiliser le backend NDOMy sans l'implement php-mysql!</text>
+                                </mysqlNotSupported>
+                                <errorSelectingDb>
+                                        <title>Erreur de backend NDOMy! (Backend [BACKENDID])</title>
+                                        <text>erreur lors de la selection de la base de donnees. Nom de base incorrect ou droits trop restreints ? Erreur MySQL: [MYSQLERR]</text>
+                                </errorSelectingDb>
+                                <nagiosNotRunning>
+                                        <title>Erreur de backend NDOMy! (Backend [BACKENDID])</title>
+                                        <text>INFO : NDO nous informe que Nagios n'est pas lance!</text>
+                                </nagiosNotRunning>
+                                <nagiosDataNotUpToDate>
+                                        <title>Erreur de backend NDOMy! (Backend [BACKENDID])</title>
+                                        <text>INFO : NDO nous informe que Nagios n'a pas mis a jour le statut depuis plus de &quot;[TIMEWITHOUTUPDATE]&quot; secondes! Assurez vous que Nagios et ndo2db sont en cours d'execution!</text>
+                                </nagiosDataNotUpToDate>
+                                <hostNotFoundInDB>
+                                        <title>Hote non trouve dans la base de donnees (Backend [BACKENDID])</title>
+                                        <text>L'hote &quot;[HOST]&quot; n'a pas ete trouve dans la base. Mal orthographie ?</text>
+                                </hostNotFoundInDB>
+                                <hostGroupNotFoundInDB>
+                                        <title>Hostgroup non trouve dans la base de donnees! (Backend [BACKENDID])</title>
+                                        <text>Le Hostgroup &quot;[HOSTGROUP]&quot; n'a pas ete trouve dans la base. Mal orthographie ?</text>
+                                </hostGroupNotFoundInDB>
+                                <serviceNotFoundInDB>
+                                        <title>Service non trouve dans la base de donnees! (Backend [BACKENDID])</title>
+                                        <text>Le Service &quot;[SERVICE]&quot; sur l'hote &quot;[HOST]&quot; n'a pas ete trouve dans la base. Mal orthographie ?</text>
+                                </serviceNotFoundInDB>
+                                <serviceGroupNotFoundInDB>
+                                        <title>Servicegroup non trouve dans la base de donnees! (Backend [BACKENDID])</title>
+                                        <text>Le Servicegroup &quot;[SERVICEGROUP]&quot; n'a pas ete trouve dans la base. Mal orthographie ?</text>
+                                </serviceGroupNotFoundInDB>
+                                <hostIsPending>
+                                        <title>Hote dans l'etat pending ! (Backend [BACKENDID])</title>
+                                        <text>l'hote &quot;[HOST]&quot; est dans un etat pending.</text>
+                                </hostIsPending>
+                                <serviceNotChecked>
+                                        <title>Service non encore verifie! (Backend [BACKENDID])</title>
+                                        <text>Le Service &quot;[SERVICE]&quot; n'a pas encore ete verifie.</text>
+                                </serviceNotChecked>
+                                <noTablesExists>
+                                        <title>Aucune correspondance des tables dans la base (Backend [BACKENDID])</title>
+                                        <text>Il n'y a aucune table dans la base dont le prefixe est &quot;[PREFIX]&quot;.</text>
+                                </noTablesExists>
+			</messages>
+		</ndomy>
+		<html>
+			<messages>
+				<!-- Alle HTML Backend Meldungen //-->
+                                <statusCgiNotFound>
+                                        <title>StatusCgi absent! ([BACKENDID])</title>
+                                        <text>Veririfez le chemin de la variable [STATUSCGI] dans la configuration de Nagvis!</text>
+                                </statusCgiNotFound>
+                                <statusCgiNotExecutable>
+                                        <title>StatusCgi n'est pas executable!</title>
+                                        <text>Verifiez les permissions du StatusCgi!</text>
+                                </statusCgiNotExecutable>
+			</messages>
+		</html>
+	</backend>
+	<wui>
+		<global>
+			<labels>
+				<!-- Alle WUI Beschriftungen //-->
+				<change>
+					<text>Modifier</text>
+				</change>
+				<delete>
+					<text>Effacer</text>
+				</delete>
+				<export>
+					<text>Exporter</text>
+				</export>
+				<import>
+					<text>Importer</text>
+				</import>
+				<positionSize>
+					<text>Position/Taille</text>
+				</positionSize>
+				<yes>
+					<text>Oui</text>
+				</yes>
+				<no>
+					<text>Non</text>
+				</no>
+				<check>
+					<text>Valider</text>
+				</check>
+				<save>
+					<text>Enregistrer</text>
+				</save>
+				<properties>
+					<text>Options</text>
+				</properties>
+				<maps>
+					<text>Carte</text>
+				</maps>
+				<addObject>
+					<text>Ajouter un objet</text>
+				</addObject>
+                                <nagVisConfig>
+                                        <text>Configuration NagVis</text>
+                                </nagVisConfig>
+                                <help>
+                                        <text>Aide</text>
+                                </help>
+                                <open>
+                                        <text>Selection carte</text>
+                                </open>
+                                <openInNagVis>
+                                        <text>Visualiser carte dans Nagvis</text>
+                                </openInNagVis>
+                                <manageMaps>
+                                        <text>Gestion des cartes</text>
+                                </manageMaps>
+                                <manageBackends>
+                                        <text>Gestion du Backend</text>
+                                </manageBackends>
+				<manageBackgrounds>
+					<text>Gestion du Background</text>
+				</manageBackgrounds>
+				<manageShapes>
+					<text>Gestion des images</text>
+				</manageShapes>
+                                <icon>
+                                        <text>Icone</text>
+                                </icon>
+                                <line>
+                                        <text>Ligne</text>
+                                </line>
+                                <special>
+                                        <text>Special</text>
+                                </special>
+                                <createMap>
+                                        <text>Creer carte</text>
+                                </createMap>
+                                <renameMap>
+                                        <text>Renommer carte</text>
+                                </renameMap>
+                                <deleteMap>
+                                        <text>Effacer carte</text>
+                                </deleteMap>
+                                <create>
+                                        <text>Creer</text>
+                                </create>
+                                <delete>
+                                        <text>Effacer</text>
+                                </delete>
+                                <rename>
+                                        <text>Renommer</text>
+                                </rename>
+                                <upload>
+                                        <text>Envoyer</text>
+                                </upload>
+                                <mapName>
+                                        <text>Nom de la carte</text>
+                                </mapName>
+                                <readUsers>
+                                        <text>Utilisateur avec droit de lecture</text>
+                                </readUsers>
+                                <writeUsers>
+                                        <text>Utilisateur avec droit d'ecriture</text>
+                                </writeUsers>
+                                <background>
+                                        <text>Fond</text>
+                                </background>
+                                <chooseMap>
+                                        <text>Selectionner carte</text>
+                                </chooseMap>
+                                <newMapName>
+                                        <text>Nouveau nom</text>
+                                </newMapName>
+                                <choosePngImage>
+                                        <text>Selectionner une image PNG</text>
+                                </choosePngImage>
+                                <mapIconset>
+                                        <text>Jeu d'icones de carte</text>
+                                </mapIconset>
+                                <restore>
+                                        <text>Restaurer</text>
+                                </restore>
+                                <disabled>
+                                        <text>Desactiver</text>
+                                </disabled>
+				<configured>
+					<text>Configure</text>
+				</configured>
+				<inherited>
+					<text>Herite</text>
+				</inherited>
+				<defaultValue>
+					<text>Valeur par defaut</text>
+				</defaultValue>
+			</labels>
+			<messages>
+				<!-- Alle WUI Meldungen //-->
+                                <mustValueNotSet>
+                                        <text>Un champ obligatoire n'a pas ete renseigne. Les champs marques en rouge sont obligatoires.</text>
+                                </mustValueNotSet>
+                                <chosenLineTypeNotValid>
+                                        <text>Le type de ligne selectionnee est invalide.</text>
+                                </chosenLineTypeNotValid>
+                                <onlyLineOrIcon>
+                                        <text>Un objet ne peut etre qu'une icone ou une ligne, iconset et line_type ne peuvent etre definit ensemble.</text>
+                                </onlyLineOrIcon>
+                                <not2coords>
+                                        <text>A priori vous souhaitez definir une ligne, or vous n'avez pas specifie 2 coordonnees ([COORD]).</text>
+                                </not2coords>
+                                <only1or2coords>
+                                        <text>Vous ne pouvez specifier qu'une ou deux coordonnees [COORD].</text>
+                                </only1or2coords>
+                                <lineTypeNotSelected>
+                                        <text>Vous avez specifie 2 [COORD] coordonnees donc vous devez selectionner une line_type.</text>
+                                </lineTypeNotSelected>
+                                <clickMapToSetPoints>
+                                        <text>Cliquez sur la carte pour definir les points manquants.</text>
+                                </clickMapToSetPoints>
+                                <confirmDelete>
+                                        <text>Voulez vous vraiment supprimer cet objet ?</text>
+                                </confirmDelete>
+                                <chooseMapName>
+                                        <text>Vous devez specifier un nom pour la nouvelle carte.</text>
+                                </chooseMapName>
+                                <minOneUserAccess>
+                                        <text>Au moins 1 utilisateur doit avoir les droits sur la carte.</text>
+                                </minOneUserAccess>
+                                <mustChooseDefaultIconset>
+                                        <text>Vous devez selectionner un jeu d'icones par defaut pour cette carte.</text>
+                                </mustChooseDefaultIconset>
+                                <mustChooseBackgroundImage>
+                                        <text>Vous devez selectionner une image de fond pour cette carte.</text>
+                                </mustChooseBackgroundImage>
+                                <confirmNewMap>
+                                        <text>Voulez vous vraiment creer une nouvelle carte ?</text>
+                                </confirmNewMap>
+                                <confirmMapRename>
+                                        <text>Voulez vous vraimant renommer cette carte ?</text>
+                                </confirmMapRename>
+                                <confirmMapDeletion>
+                                        <text>Voulez vous vraiment effacer cette carte ? Cette operation n'est pas reversible!</text>
+                                </confirmMapDeletion>
+                                <noPermissions>
+                                        <text>Vous n'avez pas les droits requis pour modifier cette carte.</text>
+                                </noPermissions>
+                                <minOneUserWriteAccess>
+                                        <text>Au moins 1 utilisateur doit avoir le droit de modifier cette carte.</text>
+                                </minOneUserWriteAccess>
+                                <unableToWorkWithMap>
+                                        <text>La carte ne peut plus etre utilisee. La procedure a ete interrompue.</text>
+                                </unableToWorkWithMap>
+                                <confirmRestore>
+                                        <text>Voulez vous vraiment restaurer la sauvegarde ?</text>
+                                </confirmRestore>
+                                <noSpaceAllowed>
+                                        <text>Les espaces ne sont pas autorises!</text>
+                                </noSpaceAllowed>
+				<firstMustChoosePngImage>
+					<text>Selectionnez une image PNG.</text>
+				</firstMustChoosePngImage>
+				<mustChoosePngImage>
+					<text>Vous devez selectionner une image dont l'extension est &quot;.png&quot;.</text>
+				</mustChoosePngImage>
+			</messages>
+		</global>
+		<editMainCfg>
+			<labels>
+				<!-- Main Configuration Descriptions //-->
+                                <language>
+                                        <text>Selectionnez un langage.</text>
+                                </language>
+                                <defaulticons>
+                                        <text>Jeu d'icones standards.</text>
+                                </defaulticons>
+                                <rotatemaps>
+                                        <text>Rotation des cartes.</text>
+                                </rotatemaps>
+                                <maps>
+                                        <text>Exemple de rotations de cartes : server, lan, wan </text>
+                                </maps>
+                                <displayheader>
+                                        <text>Montrer les entetes</text>
+                                </displayheader>
+                                <headercount>
+                                        <text>Nombre de liens par ligne dans l'entete. </text>
+                                </headercount>
+                                <autoupdatefreq>
+                                        <text>WUI peut effectuer des sauvegardes regulierement. Cet intervalle peut etre defini ici.</text>
+                                </autoupdatefreq>
+                                <usegdlibs>
+                                        <text>Utiliser la lib GD ?Si 'Oui' alors les lignes ne fonctionneront pas. Tous les autres types seront OK.</text>
+                                </usegdlibs>
+                                <refreshtime>
+                                        <text>Temps de raffraichissement (en secondes).</text>
+                                </refreshtime>
+				<icons>
+					<text>Jeu d'icones par defaut pour les cartes.</text>
+				</icons>
+				<backgroundcolor>
+					<text>Couleur de fon par defaut pour les cartes.</text>
+				</backgroundcolor>
+				<recognizeservices>
+					<text>recognizeservices par defaut pour les cartes.</text>
+				</recognizeservices>
+				<onlyhardstates>
+					<text>onlyhardstates par defaut pour les cartes.</text>
+				</onlyhardstates>
+                                <base>
+                                        <text>Chemin absolu du repertoire de base de Nagvis.</text>
+                                </base>
+                                <htmlbase>
+                                        <text>Chemin HTTP de Nagvis (/nagios/nagvis).</text>
+                                </htmlbase>
+                                <htmlcgi>
+                                        <text>chemin HTTP des CGIs de Nagios (/nagios/cgi-bin).</text>
+                                </htmlcgi>
+                                <header>
+                                        <text>Nom du fichier des entetes.</text>
+                                </header>
+			</labels>
+			<messages>
+				<!-- Main Configuration Messages //-->
+                                <dummy>
+                                        <text>dummy - N'effacez pas ceci!</text>
+                                </dummy>
+			</messages>
+		</editMainCfg>
+		<backendManagement>
+			<labels>
+                                <setDefaultBackend>
+                                        <text>Positionner le Backend par defaut</text>
+                                </setDefaultBackend>
+                                <defaultBackend>
+                                        <text>Backend par defaut</text>
+                                </defaultBackend>
+                                <addBackend>
+                                        <text>Ajouter un Backend</text>
+                                </addBackend>
+                                <editBackend>
+                                        <text>Modifier un Backend</text>
+                                </editBackend>
+                                <delBackend>
+                                        <text>Effacer un Backend</text>
+                                </delBackend>
+			</labels>
+			<messages>
+				<mustValueNotSet>
+					<title>Valeur obligatoire manquante</title>
+					<text>La valeur obligatoire &quot;[ATTRIBUTE]&quot; n'est pas renseignee</text>
+				</mustValueNotSet>
+			</messages>
+		</backendManagement>
+		<backgroundManagement>
+			<labels>
+				<uploadBackground>
+					<text>Envoyer une image de fond</text>
+				</uploadBackground>
+				<deleteBackground>
+					<text>Effacer une image de fond</text>
+				</deleteBackground>
+			</labels>
+			<messages>
+                                <foundNoBackgroundToDelete>
+                                        <text>Aucune image de fond trouvee. Fin de l'operation.</text>
+                                </foundNoBackgroundToDelete>
+                                <confirmBackgroundDeletion>
+                                        <text>Voulez vous vraiment effacer cette image de fond ? Cette operation n'est pas reversible!</text>
+                                </confirmBackgroundDeletion>
+                                <unableToDeleteBackground>
+                                        <text>Impossible d'effacer [IMAGE NAME], la carte [MAP] etait en cours d'utilisation.</text>
+                                </unableToDeleteBackground>
+			</messages>
+		</backgroundManagement>
+		<shapeManagement>
+			<labels>
+				<uploadShape>
+					<text>Envoyer une image</text>
+				</uploadShape>
+				<deleteShape>
+					<text>Effacer une image</text>
+				</deleteShape>
+			</labels>
+			<messages>
+				<foundNoShapeToDelete>
+					<text>Aucune image trouvee. Fin de l'operation.</text>
+				</foundNoShapeToDelete>
+				<confirmShapeDeletion>
+					<text>Voulez vous vraiment effacer cette image? Cette operation n'est pas reversible.</text>
+				</confirmShapeDeletion>
+				<unableToDeleteShape>
+					<text>Impossible d'effacer l'image  &quot;[IMAGENAME]&quot; Elle est utilisee par la carte &quot;[MAP]&quot;.</text>
+				</unableToDeleteShape>
+			</messages>
+		</shapeManagement>
+		<mapManagement>
+			<labels>
+				<exportMap>
+					<text>Exporter carte</text>
+				</exportMap>
+				<importMap>
+					<text>Importer carte</text>
+				</importMap>
+				<chooseMapFile>
+					<text>Selectionner un fichier de carte</text>
+				</chooseMapFile>
+			</labels>
+			<messages>
+				<noMapToRename>
+					<text>Aucune carte trouvee. Fin de l'operation.</text>
+				</noMapToRename>
+				<noNewNameGiven>
+					<text>Vous n'avez pas specifie de nouveaux noms.</text>
+				</noNewNameGiven>
+				<mapAlreadyExists>
+					<text>La carte &quot;[MAPNAME]&quot; existe deja. Renommez le fichier.</text>
+				</mapAlreadyExists>
+				<foundNoMapToDelete>
+					<text>Aucune carte trouvee. Fin de l'operation.</text>
+				</foundNoMapToDelete>
+				<foundNoMapToExport>
+					<title>Aucune carte selectionnee</title>
+					<text>Aucune carte trouvee. Selectionnez une carte a exporter.</text>
+				</foundNoMapToExport>
+				<foundNoMapToImport>
+					<title>Aucun fichier selectionne</title>
+					<text>Il n'y a aucun fichier a importer. Selectionnez en un.</text>
+				</foundNoMapToImport>
+				<notCfgFile>
+					<title>Format de fichier non reconnu</title>
+					<text>Le fichier donne ne porte pas l'extension &quot;.cfg&quot;. Rennomez le.</text>
+				</notCfgFile>
+			</messages>
+		</mapManagement>
+		<addModify>
+			<labels>
+				<dummy>
+                                        <text>dummy - N'effacez pas ceci!</text>
+				</dummy>
+			</labels>
+			<messages>
+				<dummy>
+                                        <text>dummy - N'effacez pas ceci!</text>
+				</dummy>
+			</messages>
+		</addModify>
+	</wui>
+</language>
+
