@@ -36,6 +36,45 @@ class NagVisFrontend extends GlobalPage {
 	}
 	
 	/**
+	 * Displays the automatic index page of all maps
+	 *
+	 * @return	Array   HTML Code of Index Page
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getIndexPage() {
+	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage()');
+	    $ret = Array();
+	    
+	    $ret[] = '<div class="infopage">';
+	    $ret[] = '<table>';
+	    $ret[] = '<tr><th colspan="4">Map Index Page</td></tr><tr>';
+	    $i = 1;
+	    foreach($this->getMaps() AS $mapName) {
+	        $MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
+			$MAPCFG->readMapConfig();
+			$MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
+			$state = $MAP->getMapState($MAP->getMapObjects(1,1));
+			
+			// Build object array
+			$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state,'stateOutput'=>'State of the map is '.$state);
+			$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
+			$arrMapObj = $MAP->fixIcon($arrMapObj);
+		    $ret[] = '<td style="width:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';"><h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br /><img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" /></td>';
+		    if($i % 4 == 0) {
+		        
+		        #$this->replaceMacros(
+		        $ret[] = '</tr><tr>';
+		    }
+		    $i++;
+	    }
+	    $ret[] = '</table>';
+	    $ret[] = '</div>';
+	    
+	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage(): Array(HTML)');
+	    return $ret;
+	}
+	
+	/**
 	 * Reads informations from currently running Apache/PHP installation
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -44,6 +83,7 @@ class NagVisFrontend extends GlobalPage {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getInstInformations()');
 		$ret = Array();
 		
+	    $ret[] = '<div class="infopage">';
 		$ret[] = '<table class="instinfo">';
 		$ret[] = '<tr><th colspan="2" class="head">NagVis Debug/Support Informations</td></tr>';
 		$ret[] = '</table><br />';
@@ -66,6 +106,7 @@ class NagVisFrontend extends GlobalPage {
 		$ret[] = '<tr><td>memory_limit</td><td>'.ini_get('memory_limit').'</td></tr>';
 		//FIXME: $ret[] = '<tr><td style="text-align:center;" colspan="2"><a href="">Copy to Clipboard</a></td></tr>';
 		$ret[] = '</table>';
+	    $ret[] = '</div>';
 		
 		$this->addBodyLines($ret);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getInstInformations()');

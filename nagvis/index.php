@@ -38,7 +38,7 @@ $BACKEND = new GlobalBackendMgmt($MAINCFG);
 
 $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 
-if(!isset($_GET['url']) && !isset($_GET['info'])) {
+if(isset($_GET['map']) && $_GET['map'] != '') {
     // Build the page
 	$FRONTEND->getHeaderMenu();
 	$FRONTEND->getMap();
@@ -51,6 +51,12 @@ if(!isset($_GET['url']) && !isset($_GET['info'])) {
 } elseif(isset($_GET['info'])) {
 	$FRONTEND->getInstInformations();
 	$FRONTEND->printPage();
+} else {
+    // Build the page
+	$FRONTEND->getHeaderMenu();
+	$FRONTEND->addBodyLines($FRONTEND->getIndexPage());
+	$FRONTEND->getMessages();
+	
+	$FRONTEND->printPage();
 }
-
 ?>
