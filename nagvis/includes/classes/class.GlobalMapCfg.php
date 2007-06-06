@@ -34,7 +34,7 @@ class GlobalMapCfg {
 							'alias' => Array('must' => 0,
 												'default' => $this->getName()),
 							'usegdlibs' => Array('must' => 0,
-												'default' => $this->MAINCFG->getValue('global', 'usegdlibs')),
+												'default' => $this->MAINCFG->getValue('defaults', 'usegdlibs')),
 							'show_in_lists' => Array('must' => 0,
 												'default' => $this->MAINCFG->getValue('defaults', 'showinlists')),
 							'backend_id' => Array('must' => 0,
