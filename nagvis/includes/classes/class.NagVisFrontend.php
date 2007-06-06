@@ -72,10 +72,12 @@ class NagVisFrontend extends GlobalPage {
     			$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
     			$arrMapObj = $MAP->fixIcon($arrMapObj);
     			
-    		    $ret[] = '<td '.$class.' style="width:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\''.$arrMapObj['stateOutput'].'\');" onClick="'.$onClick.'">';
-    		    $ret[] = '<h2 >'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-    	        $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
-    		    $ret[] = '</td>';
+    		    $ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\''.$arrMapObj['stateOutput'].'\');" onClick="'.$onClick.'">';
+    		    $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
+    		    $ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
+    		    // FIXME: Need better thumbnail format
+    		    $ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->getImage().'" /><br />';
+    	        $ret[] = '</td>';
     		    if($i % 4 == 0) {
     		        $ret[] = '</tr><tr>';
     		    }
