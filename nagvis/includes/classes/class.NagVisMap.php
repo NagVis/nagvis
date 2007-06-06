@@ -599,10 +599,12 @@ class NagVisMap extends GlobalMap {
 							$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
 						} else {
 							$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1,1));
+							// FIXME: Language entry
 							$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
 						}
 					} else {
-						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You\'re not permited to view the state of this map.');
+					    // FIXME: Language entry
+						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You&apos;re not permited to view the state of this map.');
 					}
 				}
 			break;
