@@ -162,15 +162,17 @@ class NagVisFrontend extends GlobalPage {
 								$MAPCFG1 = new NagVisMapCfg($this->MAINCFG,$mapName);
 								$MAPCFG1->readMapConfig(1);
 								
-								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
-								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
-								// auto select current map
-								if($mapName == $this->MAPCFG->getName()) {
-									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
-								} else {
-									$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
-								}
-								$sReplace .= $sReplaceObj;
+								if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1) {
+    								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
+    								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
+    								// auto select current map
+    								if($mapName == $this->MAPCFG->getName()) {
+    									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
+    								} else {
+    									$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
+    								}
+    								$sReplace .= $sReplaceObj;
+    							}
 							}
 							$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
 						}
