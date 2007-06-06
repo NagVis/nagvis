@@ -143,6 +143,10 @@ div.infopage h2 {
 	margin-bottom: 2px;
 }
 
+div.infopage td.disabled h2  {
+    color: #a4a4a4;
+}
+
 div.infopage a {
 	color: #a4a4a4;
 	text-decoration: none;

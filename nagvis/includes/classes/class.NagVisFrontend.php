@@ -55,21 +55,26 @@ class NagVisFrontend extends GlobalPage {
 			$MAPCFG->readMapConfig();
 			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
     		    $MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
+    		    $onClick = '';
+    		    $class = '';
     		    
     		    if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
     		        $strState = $MAP->getMapState($MAP->getMapObjects(1,1));
         			$state = Array('state' => $strState, 'stateOutput' => 'State of the map is &quot;'.$strState.'&quot;.');
+        			$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
     			} else {
     				$state = Array('state' => 'UNKNOWN', 'stateOutput' => 'Error: You are not permited to view the state of this map.');
+    				$onClick = 'alert(\''.$state['stateOutput'].'\');';
+    				$class = 'class="disabled"';
     			}
     			// Build object array
     			$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state['state'],'stateOutput'=> $state['stateOutput']);
     			$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
     			$arrMapObj = $MAP->fixIcon($arrMapObj);
     			
-    		    $ret[] = '<td style="width:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';">';
-    		    $ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-    	        $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" onmouseover="return overlib(\''.$arrMapObj['stateOutput'].'\');" onmouseout="return nd();" />';
+    		    $ret[] = '<td '.$class.' style="width:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\''.$arrMapObj['stateOutput'].'\');" onClick="'.$onClick.'">';
+    		    $ret[] = '<h2 >'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
+    	        $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
     		    $ret[] = '</td>';
     		    if($i % 4 == 0) {
     		        $ret[] = '</tr><tr>';
