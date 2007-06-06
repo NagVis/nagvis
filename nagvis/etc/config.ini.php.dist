@@ -44,6 +44,8 @@
 ;headertemplate="default"
 ; hover template
 ;hovertemplate="default"
+; show map in lists (dropdowns, index page, ...)
+;showinlists=1
 
 ; options for the wui
 [wui]

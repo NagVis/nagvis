@@ -71,7 +71,11 @@ class GlobalMainCfg {
 							'hovertemplate' => Array('must' => 0,
 												 'editable' => 1,
 												'default' => 'default',
-												'type' => 'string')
+												'type' => 'string'),
+							'showinlists' => Array('must' => 0,
+												 'editable' => 1,
+												'default' => 1,
+												'type' => 'boolean')
 							),
 			'wui' => Array('autoupdatefreq' => Array('must' => 1,
 												 'editable' => 1,

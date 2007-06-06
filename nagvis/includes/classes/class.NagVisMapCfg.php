@@ -35,10 +35,11 @@ class NagVisMapCfg extends GlobalMapCfg {
 	function getMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapCfg::getMap()');
 		// if no map was given with parameter, search for a map
+		/* DEPRECATED: Now using automatic index page if there is no map defined in url
 		if($this->name == '') {
 			$arr = explode(',',$this->MAINCFG->getValue('global', 'maps'));
 			$this->name = $arr[0];
-		}
+		}*/
 		
 		// check the $this->name string for security reasons (its the ONLY value we get directly from external...)
 		// Allow ONLY Characters, Numbers, - and _ inside the Name of a Map

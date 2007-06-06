@@ -49,23 +49,39 @@ class NagVisFrontend extends GlobalPage {
 	    $ret[] = '<table>';
 	    $ret[] = '<tr><th colspan="4">Map Index Page</td></tr><tr>';
 	    $i = 1;
-	    foreach($this->getMaps() AS $mapName) {
+	    $arrMaps = $this->getMaps();
+	    foreach($arrMaps AS $mapName) {
 	        $MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
 			$MAPCFG->readMapConfig();
-			$MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
-			$state = $MAP->getMapState($MAP->getMapObjects(1,1));
-			
-			// Build object array
-			$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state,'stateOutput'=>'State of the map is '.$state);
-			$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
-			$arrMapObj = $MAP->fixIcon($arrMapObj);
-		    $ret[] = '<td style="width:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';"><h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br /><img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" /></td>';
-		    if($i % 4 == 0) {
-		        
-		        #$this->replaceMacros(
-		        $ret[] = '</tr><tr>';
-		    }
-		    $i++;
+			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
+    		    $MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
+    		    
+    		    if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+    		        $strState = $MAP->getMapState($MAP->getMapObjects(1,1));
+        			$state = Array('state' => $strState, 'stateOutput' => 'State of the map is &quot;'.$strState.'&quot;.');
+    			} else {
+    				$state = Array('state' => 'UNKNOWN', 'stateOutput' => 'Error: You are not permited to view the state of this map.');
+    			}
+    			// Build object array
+    			$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state['state'],'stateOutput'=> $state['stateOutput']);
+    			$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
+    			$arrMapObj = $MAP->fixIcon($arrMapObj);
+    			
+    		    $ret[] = '<td style="width:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';">';
+    		    $ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
+    	        $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" onmouseover="return overlib(\''.$arrMapObj['stateOutput'].'\');" onmouseout="return nd();" />';
+    		    $ret[] = '</td>';
+    		    if($i % 4 == 0) {
+    		        $ret[] = '</tr><tr>';
+    		    }
+    		    $i++;
+    	    }
+	    }
+	    // Fill table with empty cells if there are not enough maps to get the line filled
+	    if(($i - 1) % 4 != 0) {
+	        for($a=0;$a < (4 - (($i - 1) % 4));$a++) {
+	            $ret[] = '<td>&nbsp;</td>';
+	        }
 	    }
 	    $ret[] = '</table>';
 	    $ret[] = '</div>';
