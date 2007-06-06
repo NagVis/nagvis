@@ -478,7 +478,7 @@ class NagVisMap extends GlobalMap {
 			$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
 			$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
 			$ret = str_replace('[lang_obj_type]',$this->LANG->getLabel($obj['type']),$ret);
-			$ret = str_replace('[tmpl_images]',$this->MAINCFG->getValue('paths','htmlimages').'/templates',$ret);
+			$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlhovertemplateimages'),$ret);
 			$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
 			if($obj['type'] == 'service') {
 				$ret = str_replace('[service_description]',$obj['service_description'],$ret);
