@@ -125,6 +125,14 @@ class GlobalMainCfg {
 												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/',
 												'type' => 'string'),
+							'htmlhovertemplates' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => '/nagios/nagvis/nagvis/etc/templates/hover/',
+												'type' => 'string'),
+							'htmlheadertemplates' => Array('must' => 0,
+												 'editable' => 0,
+												'default' => '/nagios/nagvis/nagvis/etc/templates/header/',
+												'type' => 'string'),			
 							'htmlhovertemplateimages' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/templates/hover/',
@@ -230,6 +238,8 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['headertemplate']['default'] = $base.'nagvis/etc/templates/header/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'nagvis/etc/maps/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
+		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/etc/templates/hover/';
+		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/nagvis/etc/templates/header/';
 		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/header/';
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
