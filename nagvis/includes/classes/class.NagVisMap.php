@@ -296,6 +296,11 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		if(isset($obj['label_text']) && $obj['label_text'] != '') {
+		    // For maps use the alias as display string
+		    if($obj['type'] == 'map') {
+		        $name = 'alias';   
+		    }
+		    
 			$obj['label_text'] = str_replace('[name]',$obj[$name],$obj['label_text']);
 			if($obj['type'] == 'service') {
 				$obj['label_text'] = str_replace('[service_description]',$obj['service_description'],$obj['label_text']);
@@ -468,9 +473,16 @@ class NagVisMap extends GlobalMap {
 				$name = $obj['type'] . '_name';
 			}
 			
+			// For maps use the alias as display string
+			if($obj['type'] == 'map') {
+				$displayName = 'alias';
+			} else {
+				$displayName = $name;
+			}
+			
             // Replace the macros
 			$ret = str_replace('[obj_type]',$obj['type'],$ret);
-			$ret = str_replace('[obj_name]',$obj[$name],$ret);
+			$ret = str_replace('[obj_name]',$obj[$displayName],$ret);
 			$ret = str_replace('[obj_state]',$obj['state'],$ret);
 			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
 			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj[$name]),$ret);
@@ -711,6 +723,11 @@ class NagVisMap extends GlobalMap {
 					$obj = array_merge($obj,$this->getState($obj));
 				}
 				
+				// The map alias only stands in the global section of the child map, get it
+				if($obj['type'] == 'map') {
+				    $obj = $this->getChildMapAlias($obj);
+				}
+				
 				if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
 					$obj['icon'] = $this->getIcon($obj);
 				}
@@ -723,6 +740,21 @@ class NagVisMap extends GlobalMap {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
 			return $objects;
 		}
+	}
+	
+	/**
+	 * The map alias only stands in the global section of the child map, get it
+	 *
+	 * @param	Array	Array with object informations
+	 * @return	Array	Array with object informations
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getChildMapAlias(&$obj) {
+	    $MAPCFG = new NagVisMapCfg($this->MAINCFG,$obj['map_name']);
+		$MAPCFG->readMapConfig(1);
+		$obj['alias'] = $MAPCFG->getValue('global', 0, 'alias');
+		
+		return $obj;
 	}
 	
 	/**
