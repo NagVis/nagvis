@@ -511,6 +511,18 @@
 				<mustChoosePngImage>
 					<text>Du musst ein Image mit der Erweiterung .png w&auml;hlen.</text>
 				</mustChoosePngImage>
+				<mapLocked>
+					<title>Karte Gesperrt</title>
+					<text>Die Karte &quot;[MAP]&quot; ist vom Benutzer &quot;[USER]&quot; von der IP &quot;[IP]&quot; seit [TIME] gesperrt.\n\n Trotzdem bearbeiten? (Sperre ignorieren?)</text>
+				</mapLocked>
+				<mapLockNotExists>
+					<title>Karten Sperre existiert nicht</title>
+					<text>Die Kartensperre &quot;[MAP]&quot; existiert nicht.</text>
+				</mapLockNotExists>
+				<mapLockNotReadable>
+					<title>Karten Sperre nicht lesbar</title>
+					<text>Die Kartensperre &quot;[MAP]&quot; ist nicht lesbar.</text>
+				</mapLockNotReadable>
 			</messages>
 		</global>
 		<editMainCfg>

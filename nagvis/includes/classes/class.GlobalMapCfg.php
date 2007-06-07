@@ -930,6 +930,5 @@ class GlobalMapCfg {
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getName(): '.$this->name);
 		return $this->name;	
 	}
-	
 }
 ?>

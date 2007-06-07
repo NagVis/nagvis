@@ -143,6 +143,12 @@ switch($_GET['myaction']) {
 			
 			backup($MAINCFG,$_POST['mapname']);
 		}
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+		    // FIXME: Language entry
+		    print "<script>alert('Lockfile could not be deleted.');</script>";
+		}
+		
 		// display the same map again
 		print "<script>document.location.href='./index.php?map=".$_POST['mapname']."';</script>\n";
 	break;
@@ -164,6 +170,12 @@ switch($_GET['myaction']) {
 			// do the backup
 			backup($MAINCFG,$_POST['map']);
 			
+    		// delete map lock
+    		if(!$MAPCFG->deleteMapLock()) {
+    		    // FIXME: Language entry
+    		    print "<script>alert('Lockfile could not be deleted.');</script>";
+    		}
+			
 			// refresh the map
 			print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
 			print "<script>window.close();</script>\n";
@@ -180,6 +192,12 @@ switch($_GET['myaction']) {
 		// do the backup
 		backup($MAINCFG,$_POST['map']);
 		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+		    // FIXME: Language entry
+		    print "<script>alert('Lockfile could not be deleted.');</script>";
+		}
+		
 		// display the same map again, with the autosave value activated: the map will automatically be saved
 		// after the next drag and drop (after the user placed the new object on the map)
 		print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."&autosave=true';</script>\n";
@@ -194,9 +212,15 @@ switch($_GET['myaction']) {
 		$MAPCFG->deleteElement($_GET['type'],$_GET['id']);
 		// then write new array to file
 		$MAPCFG->writeElement($_GET['type'],$_GET['id']);
-		
+				
 		// do the backup
 		backup($MAINCFG,$_GET['map']);
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+		    // FIXME: Language entry
+		    print "<script>alert('Lockfile could not be deleted.');</script>";
+		}
 		
 		print "<script>document.location.href='./index.php?map=".$_GET['map']."';</script>\n";
 	break;

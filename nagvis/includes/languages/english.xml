@@ -511,6 +511,18 @@
 				<mustChoosePngImage>
 					<text>You must select an image with the extension &quot;.png&quot;.</text>
 				</mustChoosePngImage>
+				<mapLocked>
+					<title>Map Locked</title>
+					<text>The map &quot;[MAP]&quot; is locked by user &quot;[USER]&quot; from IP &quot;[IP]&quot; since [TIME].\n\n Edit anyway? (Override lock?)</text>
+				</mapLocked>
+				<mapLockNotExists>
+					<title>Map lockfile not exists</title>
+					<text>The lockfile &quot;[MAP]&quot; does not exist.</text>
+				</mapLockNotExists>
+				<mapLockNotReadable>
+					<title>Map lockfile not readable</title>
+					<text>The lockfile &quot;[MAP]&quot; is not readable.</text>
+				</mapLockNotReadable>
 			</messages>
 		</global>
 		<editMainCfg>

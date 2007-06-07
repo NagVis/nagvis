@@ -109,6 +109,9 @@ switch($_GET['page']) {
 			if(!$MAPCFG->checkMapImageReadable(1)) {
 				exit;
 			}
+    		if(!$MAPCFG->checkMapLocked(1)) {
+    		    $MAPCFG->writeMapLock();
+    		}
 		}
 	break;
 }
