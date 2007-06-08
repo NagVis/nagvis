@@ -280,7 +280,6 @@ class GlobalMainCfg {
 	function getBasePath() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath()');
 		$return = preg_replace('/wui|nagvis$/i', '', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
-		echo $return ;
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath(): '.$return);
 	    return $return ;
 	}
