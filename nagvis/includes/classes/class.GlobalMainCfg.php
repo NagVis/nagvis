@@ -87,39 +87,39 @@ class GlobalMainCfg {
 												'type' => 'integer')),
 			'paths' => Array('base' => Array('must' => 1,
 												 'editable' => 1,
-												'default' => '/usr/local/nagios/share/nagvis/',
+												'default' => '',
 												'type' => 'string'),
 							'cfg' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/',
+												'default' => '',
 												'type' => 'string'),
 							'icon' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/iconsets/',
+												'default' => '',
 												'type' => 'string'),
 							'shape' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/shapes/',
+												'default' => '',
 												'type' => 'string'),
 							'language' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/includes/languages/',
+												'default' => '',
 												'type' => 'string'),
 							'map' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/images/maps/',
+												'default' => '',
 												'type' => 'string'),
 							'mapcfg' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/maps/',
+												'default' => '',
 												'type' => 'string'),
 							'hovertemplate' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/header/',
+												'default' => '',
 												'type' => 'string'),
 							'headertemplate' => Array('must' => 0,
 												 'editable' => 0,
-												'default' => '/usr/local/nagios/share/nagvis/nagvis/etc/templates/hover/',
+												'default' => '',
 												'type' => 'string'),
 							'htmlbase' => Array('must' => 1,
 												 'editable' => 1,
@@ -228,15 +228,30 @@ class GlobalMainCfg {
 												'default' => 'NagVis 1.1a1',
 												'locked' => 1,
 												'type' => 'string')));
-				
+		
+		// Try to get the base path via $_SERVER['SCRIPT_FILENAME']
+		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
+		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+			
 		// Read Main Config file
 		$this->configFile = $configFile;
 		$this->readConfig(1);
 		
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
-		$base = $this->getValue('paths','base');
-		$htmlBase = $this->getValue('paths','htmlbase');
-		$this->validConfig['paths']['cfg']['default'] = $base.'nagvis/etc/';
+		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
+	}
+	
+    /**
+	 * Gets the base path 
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function setPathsByBase($base,$htmlBase) {
+	    $this->validConfig['paths']['cfg']['default'] = $base.'nagvis/etc/';
 		$this->validConfig['paths']['icon']['default'] = $base.'nagvis/images/iconsets/';
 		$this->validConfig['paths']['shape']['default'] = $base.'nagvis/images/shapes/';
 		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/languages/';
@@ -253,7 +268,20 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
 		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/nagvis/images/shapes/';
 		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/nagvis/images/maps/';
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
+	}
+	
+    /**
+	 * Gets the base path 
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getBasePath() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath()');
+		$return = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath(): '.$return);
+	    return $return ;
 	}
 	
     /**
