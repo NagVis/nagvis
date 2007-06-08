@@ -51,6 +51,8 @@
 [wui]
 ; auto update frequency
 ;autoupdatefreq=25
+; map lock time (minutes)
+;maplocktime=5
 
 ; path options
 [paths]

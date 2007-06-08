@@ -83,7 +83,7 @@ class WuiMapCfg extends GlobalMapCfg {
         $lockdata = $this->readMapLock();
         if(is_array($lockdata)) {
             // check if the lock is older than 5 Minutes and don't ignore lock
-            if($lockdata['time'] > time() - 360) {
+            if($lockdata['time'] > time() - $this->MAINCFG->getValue('wui','maplocktime') * 60) {
                 if($ignoreLock == 0) {
                     // the lock should be ignored
     				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLocked(): FALSE');
