@@ -42,7 +42,7 @@ class NagVisMap extends GlobalMap {
 	function parseMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap()');
 		$ret = Array();
-		$ret[] = $this->getBackground();
+		$ret = array_merge($ret,$this->getBackground());
 		$ret = array_merge($ret,$this->parseObjects());
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap(): Array(...)');

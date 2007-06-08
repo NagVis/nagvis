@@ -72,7 +72,7 @@ class GlobalMap {
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getBackground(): Array(...)');
-		return '<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="">';
+		return Array('<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="">');
 	}
 	
 	/**

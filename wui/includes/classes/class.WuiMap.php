@@ -109,7 +109,7 @@ class WuiMap extends GlobalMap {
 	function parseMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseMap()');
 		$ret = Array();
-		$ret[] = $this->getBackground('img');
+		$ret = array_merge($ret,$this->getBackground('img'));
 		$ret = array_merge($ret,$this->parseJs(array_merge($this->getJsGraphicObj(),$this->getJsLang())));
 		$ret = array_merge($ret,$this->parseObjects());
 		$ret = array_merge($ret,$this->parseInvisible());
