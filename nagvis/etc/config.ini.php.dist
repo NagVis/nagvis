@@ -65,7 +65,7 @@
 
 ; options for the NDO-Backend
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
-;[backend_ndomy_1]
+[backend_ndomy_1]
 ; type of backend - MUST be set
 ;backendtype="ndomy"
 ; hostname for NDO-db
