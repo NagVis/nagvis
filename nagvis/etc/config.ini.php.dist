@@ -23,8 +23,6 @@
 ;maps="demo,demo2"
 ; show header (0/1)
 ;displayheader=1
-; use gdlibs (if set to 0 lines will not work, all other types should work fine)
-;usegdlibs=1
 ; refresh time of pages
 ;refreshtime=60
 
@@ -46,6 +44,8 @@
 ;hovertemplate="default"
 ; show map in lists (dropdowns, index page, ...)
 ;showinlists=1
+; use gdlibs (if set to 0 lines will not work, all other types should work fine)
+;usegdlibs=1
 
 ; options for the wui
 [wui]
