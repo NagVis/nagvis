@@ -51,7 +51,32 @@ class WuiMainCfg extends GlobalMainCfg {
      */
 	function setSection($sec) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMainCfg::setSection($sec)');
-		$this->config[$sec] = Array();
+		// Try to append new backends after already defined
+		if(ereg('^backend_', $sec)) {
+		    $lastBackendIndex = 0;
+		    $i = 0;
+		    // Loop all sections to find the last defined backend
+		    foreach($this->config AS $type => $vars) {
+		        // If the current section is a backend
+		        if(ereg('^backend_', $type)) {
+		            $lastBackendIndex = $i;
+		        }
+		        $i++;
+		    }
+		    
+		    if($lastBackendIndex != 0) {
+		        // Append the new section after the already defined
+		        $slicedBefore = array_slice($this->config, 0, ($lastBackendIndex + 1));
+		        $slicedAfter = array_slice($this->config, ($lastBackendIndex + 1));
+		        $tmp[$sec] = Array();
+		        $this->config = array_merge($slicedBefore,$tmp,$slicedAfter);
+		    } else {
+		        // If no defined backend found, add it to the EOF
+		        $this->config[$sec] = Array();
+		    }
+	    } else {
+	        $this->config[$sec] = Array();
+	    }
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMainCfg::setSection(): TRUE');
 		return TRUE;
