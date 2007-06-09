@@ -47,6 +47,20 @@ class WuiBackgroundManagement extends GlobalPage {
 		// Inititalize language for JS
 		$this->addBodyLines($this->parseJs($this->getJsLang()));
 		
+		$this->CREATEFORM = new GlobalForm(Array('name'=>'create_image',
+			'id'=>'create_image',
+			'method'=>'POST',
+			'action'=>'./wui.function.inc.php?myaction=mgt_image_create',
+			'onSubmit'=>'return check_image_create();',
+			'cols'=>'2'));
+		$this->addBodyLines($this->CREATEFORM->initForm());
+		$this->addBodyLines($this->CREATEFORM->getCatLine(strtoupper($this->LANG->getLabel('createBackground'))));
+		$this->propCount++;
+		$this->addBodyLines($this->getCreateFields());
+		$this->propCount++;
+		$this->addBodyLines($this->CREATEFORM->getSubmitLine($this->LANG->getLabel('create')));
+		$this->addBodyLines($this->CREATEFORM->closeForm());
+		
 		$this->ADDFORM = new GlobalForm(Array('name'=>'new_image',
 			'id'=>'new_image',
 			'method'=>'POST',
@@ -115,6 +129,28 @@ class WuiBackgroundManagement extends GlobalPage {
 	}
 	
 	/**
+	 * Gets create image fields
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getCreateFields() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getCreateFields()');
+		$ret = Array();
+		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('backgroundName'),'image_name','',TRUE));
+		$this->propCount++;
+		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('backgroundColor'),'image_color','#',TRUE));
+		$this->propCount++;
+		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('backgroundWidth'),'image_width','',TRUE));
+		$this->propCount++;
+		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('backgroundHeight'),'image_height','',TRUE));
+		$this->propCount++;
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getCreateFields(): Array(HTML)');
+		return $ret;
+	}
+	
+	/**
 	 * Reads all map images in map path
 	 *
 	 * @return	Array map images
@@ -156,6 +192,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$ret[] = 'lang[\'foundNoBackgroundToDelete\'] = \''.$this->LANG->getMessageText('foundNoBackgroundToDelete').'\';';
 		$ret[] = 'lang[\'confirmBackgroundDeletion\'] = \''.$this->LANG->getMessageText('confirmBackgroundDeletion').'\';';
 		$ret[] = 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getMessageText('unableToDeleteBackground').'\';';
+		$ret[] = 'lang[\'mustValueNotSet1\'] = \''.$this->LANG->getMessageText('mustValueNotSet1').'\';';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getJsLang(): Array(JS)');
 		return $ret;	

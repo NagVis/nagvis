@@ -620,6 +620,21 @@
 				<deleteBackground>
 					<text>Hintergrund l&ouml;schen</text>
 				</deleteBackground>
+				<createBackground>
+					<text>HIntergrund erstellen</text>
+				</createBackground>
+				<backgroundName>
+					<text>Name</text>
+				</backgroundName>
+				<backgroundColor>
+					<text>Farbe (Hex)</text>
+				</backgroundColor>
+				<backgroundWidth>
+					<text>Breite (px)</text>
+				</backgroundWidth>
+				<backgroundHeight>
+					<text>H&ouml;he (px)</text>
+				</backgroundHeight>
 			</labels>
 			<messages>
 				<foundNoBackgroundToDelete>
@@ -631,6 +646,10 @@
 				<unableToDeleteBackground>
 					<text>Kann Hintergrund [IMAGENAME] nicht l&ouml;schen, da er in der Map [MAP] noch verwendet wird.</text>
 				</unableToDeleteBackground>
+				<mustValueNotSet1>
+					<title>Must value not set</title>
+					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
+				</mustValueNotSet1>
 			</messages>
 		</backgroundManagement>
 		<shapeManagement>

@@ -620,6 +620,21 @@
 				<deleteBackground>
 					<text>Delete background image</text>
 				</deleteBackground>
+				<createBackground>
+					<text>Create background image</text>
+				</createBackground>
+				<backgroundName>
+					<text>Name</text>
+				</backgroundName>
+				<backgroundColor>
+					<text>Color (Hex)</text>
+				</backgroundColor>
+				<backgroundWidth>
+					<text>Width (px)</text>
+				</backgroundWidth>
+				<backgroundHeight>
+					<text>Height (px)</text>
+				</backgroundHeight>
 			</labels>
 			<messages>
 				<foundNoBackgroundToDelete>
@@ -631,6 +646,10 @@
 				<unableToDeleteBackground>
 					<text>Cannot delete background image &quot;[IMAGENAME]&quot; because it is used by map &quot;[MAP]&quot;.</text>
 				</unableToDeleteBackground>
+				<mustValueNotSet1>
+					<title>Must value not set</title>
+					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
+				</mustValueNotSet1>
 			</messages>
 		</backgroundManagement>
 		<shapeManagement>

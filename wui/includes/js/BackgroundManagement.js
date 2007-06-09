@@ -17,6 +17,32 @@ function checkImageUsed(imageName,mapOptions) {
 	return "";
 }
 
+function check_image_create() {
+	if(document.create_image.image_name.value.length == 0) {
+		alert(printLang(lang['mustValueNotSet1'],'ATTRIBUTE~image_name'));
+		
+		return false;
+	}
+	if(document.create_image.image_color.value.length == 0) {
+		alert(printLang(lang['mustValueNotSet1'],'ATTRIBUTE~image_color'));
+		
+		return false;
+	}
+	if(document.create_image.image_width.value.length == 0) {
+		alert(printLang(lang['mustValueNotSet1'],'ATTRIBUTE~image_width'));
+		
+		return false;
+	}
+	if(document.create_image.image_height.value.length == 0) {
+		alert(printLang(lang['mustValueNotSet1'],'ATTRIBUTE~image_height'));
+		
+		return false;
+	}
+	
+	return true;
+	
+}
+
 function check_image_add() {
 	if(document.new_image.image_file.value.length == 0) {
 		alert(printLang(lang['firstMustChoosePngImage'],''));

@@ -344,6 +344,32 @@ switch($_GET['myaction']) {
 			return;
 		}
 	break;
+	case 'mgt_image_create':
+	    if(isset($_POST['image_name']) && isset($_POST['image_color']) && isset($_POST['image_width']) && isset($_POST['image_height'])) {
+    	    if(!file_exists($MAINCFG->getValue('paths', 'map').$_POST['image_name'].'.png')) {
+        		$image = imagecreatetruecolor($_POST['image_width'],$_POST['image_height']);
+        		
+        		// get rgb color from hexcode
+        		$_POST['image_color'] = str_replace('#','',$_POST['image_color']);
+        		$int = hexdec($_POST['image_color']);
+                $r = 0xFF & ($int >> 0x10);
+                $g = 0xFF & ($int >> 0x8);
+                $b = 0xFF & $int;
+        		
+        		$bgColor = imagecolorallocate($image, $r, $g, $b);
+        		imagefill($image, 0, 0, $bgColor);
+        		imagepng($image,$MAINCFG->getValue('paths', 'map').$_POST['image_name'].'.png');
+        		imagedestroy($image);
+        		
+        		print "<script>window.opener.document.location.reload();</script>\n";
+        		print "<script>window.close();</script>\n";
+        	} else {
+        	    print "<script>alert('error: image already exists \"".$MAINCFG->getValue('paths', 'map').$_POST['image_name'].'.png'."\".')</script>";
+        	}
+        } else {
+            print "<script>alert('error: a problem occured!')</script>";
+        }
+	break;
 	case 'mgt_image_delete':
 		if(file_exists($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
 			if(unlink($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
