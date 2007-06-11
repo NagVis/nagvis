@@ -243,7 +243,7 @@
 				</noBackendDefined>
 				<backendNotInitialized>
 					<title>Backend not initialized</title>
-					<text>The backend with the ID &quot;[BACKENDID]&quot; of type &quot;[BACKENDTYPE]&quot; is not initialized. Check your main configuration file.</text>
+					<text>The backend with the ID &quot;[BACKENDID]&quot; of type &quot;[BACKENDTYPE]&quot; is not initialized. Maybe there is an undefined backend used in a map?</text>
 				</backendNotInitialized>
 			</messages>
 		</global>

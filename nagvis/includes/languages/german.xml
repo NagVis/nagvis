@@ -243,7 +243,7 @@
 				</noBackendDefined>
 				<backendNotInitialized>
 					<title>Backend nicht initialisiert</title>
-					<text>Das Backend mit der ID &quot;[BACKENDID]&quot; vom Typ &quot;[BACKENDTYPE]&quot; ist nicht initialisiert. Haupt-Konfigurations-Datei pr&uuml;fen</text>
+					<text>Das Backend mit der ID &quot;[BACKENDID]&quot; vom Typ &quot;[BACKENDTYPE]&quot; ist nicht initialisiert. M&ouml;glicherweise wird ein undefiniertes Backend in einer Karte verwendet.</text>
 				</backendNotInitialized>
 			</messages>
 		</global>
