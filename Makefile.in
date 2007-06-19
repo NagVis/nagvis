@@ -101,7 +101,6 @@ install-html:
 
 install-config:
 	if [ $(NAGVIS_UPDATE) = false ]; then \
-		$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR); \
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/config.ini-sample $(CFGDIR)/config.ini; \
 	else \
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/config.ini-sample $(CFGDIR)/config.ini-sample; \
@@ -114,9 +113,25 @@ install-config:
 	@echo "the documentation for more information on how to actually configure"
 	@echo "NagVis to fit your particular needs."
 	@echo ""
+	
+install-maps:
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)/maps; \
+	
+	for file in $(SRC_ETC)/maps/*.cfg; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(CFGDIR)/maps; done
+	
+	
+	@echo ""
+	@echo "*** Sample map config files installed ***"
+	@echo ""
+	@echo "Remember, these are *SAMPLE* config files.  You'll need to read"
+	@echo "the documentation for more information on how to actually configure"
+	@echo "NagVis to fit your particular needs."
+	@echo ""
 
 install:
 	$(MAKE) install-html
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR); \
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(VARDIR)
 
 	@echo ""
@@ -126,7 +141,9 @@ install:
 	@echo "without any arguments for a list of all possible options):"
 	@echo ""
 	@echo "  make install-config"
-	@echo "     - This installs sample config files in $(CFGDIR)"
+	@echo "     - This installs sample config file in $(CFGDIR)"
+	@echo "  make install-maps"
+	@echo "     - This installs sample map config files in $(CFGDIR)/maps"
 	@echo ""
 
 fullinstall: install

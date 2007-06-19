@@ -37,11 +37,18 @@ AC_PATH_PROG([STRIP],[strip],[true])
 AC_PATH_PROG(CP,cp)
 
 # Optional: Individual Nagios user/group
-AC_ARG_WITH(nagios_user,AC_HELP_STRING([--with-nagios-user=<user>], [sets user name to run nagios]),nagios_user=$withval,nagios_user=nagios)
-AC_ARG_WITH(nagios_group,AC_HELP_STRING([--with-nagios-group=<grp>], [sets group name to run nagios]),nagios_grp=$withval,nagios_grp=nagios)
-AC_SUBST(nagios_user)
-AC_SUBST(nagios_grp)
-INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
+#AC_ARG_WITH(nagios_user,AC_HELP_STRING([--with-nagios-user=<user>], [sets user name to run nagios]),nagios_user=$withval,nagios_user=nagios)
+#AC_ARG_WITH(nagios_group,AC_HELP_STRING([--with-nagios-group=<grp>], [sets group name to run nagios]),nagios_grp=$withval,nagios_grp=nagios)
+#AC_SUBST(nagios_user)
+#AC_SUBST(nagios_grp)
+#INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
+#AC_SUBST(INSTALL_OPTS)
+# Optional: Individual webserver user/group
+AC_ARG_WITH(webserver_user,AC_HELP_STRING([--with-web-user=<user>], [sets user name the webserver is started with]),webserver_user=$withval,webserver_user=wwwrun)
+AC_ARG_WITH(webserver_group,AC_HELP_STRING([--with-web-group=<grp>], [sets group name the webserver is started with]),webserver_grp=$withval,webserver_grp=www)
+AC_SUBST(webserver_user)
+AC_SUBST(webserver_grp)
+INSTALL_OPTS="-o $webserver_user -g $webserver_grp"
 AC_SUBST(INSTALL_OPTS)
 
 # Optional: Debug Modus
@@ -70,7 +77,7 @@ AC_MSG_RESULT([*** Configuration summary for $PKG_NAME $PKG_VERSION $PKG_REL_DAT
 echo ""
 echo " General Options:"
 echo " -------------------------"
-AC_MSG_RESULT([        Nagios user/group:  $nagios_user,$nagios_grp])
+AC_MSG_RESULT([     Webserver user/group:  $webserver_user,$webserver_grp])
 AC_MSG_RESULT([        Install \${prefix}:  $prefix])
 AC_MSG_RESULT([                 HTML Dir:  $SHARE_DIR])
 AC_MSG_RESULT([               Config Dir:  $CFG_DIR])

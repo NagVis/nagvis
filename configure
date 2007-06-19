@@ -274,7 +274,7 @@ PACKAGE_STRING='nagvis 1.2'
 PACKAGE_BUGREPORT='nagvis-devel@lists.sourceforge.net'
 
 ac_default_prefix=/usr/local/nagvis
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS SHARE_DIR CFG_DIR CFG_FILE VAR_DIR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA INSTALL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE STRIP CP nagios_user nagios_grp INSTALL_OPTS WUI NAGVIS_UPDATE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS SHARE_DIR CFG_DIR CFG_FILE VAR_DIR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA INSTALL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE STRIP CP webserver_user webserver_grp INSTALL_OPTS WUI NAGVIS_UPDATE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -808,10 +808,8 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-nagios-user=<user>
-                          sets user name to run nagios
-  --with-nagios-group=<grp>
-                          sets group name to run nagios
+  --with-web-user=<user>  sets user name the webserver is started with
+  --with-web-group=<grp>  sets group name the webserver is started with
   --without-wui           Don't use the WUI (Configuration Utility)
   --with-debug-log=<logfile>
                           Path to the debug logfile
@@ -2444,25 +2442,32 @@ fi
 
 
 # Optional: Individual Nagios user/group
+#AC_ARG_WITH(nagios_user,AC_HELP_STRING([--with-nagios-user=<user>], [sets user name to run nagios]),nagios_user=$withval,nagios_user=nagios)
+#AC_ARG_WITH(nagios_group,AC_HELP_STRING([--with-nagios-group=<grp>], [sets group name to run nagios]),nagios_grp=$withval,nagios_grp=nagios)
+#AC_SUBST(nagios_user)
+#AC_SUBST(nagios_grp)
+#INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
+#AC_SUBST(INSTALL_OPTS)
+# Optional: Individual webserver user/group
 
-# Check whether --with-nagios_user or --without-nagios_user was given.
-if test "${with_nagios_user+set}" = set; then
-  withval="$with_nagios_user"
-  nagios_user=$withval
+# Check whether --with-webserver_user or --without-webserver_user was given.
+if test "${with_webserver_user+set}" = set; then
+  withval="$with_webserver_user"
+  webserver_user=$withval
 else
-  nagios_user=nagios
+  webserver_user=wwwrun
 fi;
 
-# Check whether --with-nagios_group or --without-nagios_group was given.
-if test "${with_nagios_group+set}" = set; then
-  withval="$with_nagios_group"
-  nagios_grp=$withval
+# Check whether --with-webserver_group or --without-webserver_group was given.
+if test "${with_webserver_group+set}" = set; then
+  withval="$with_webserver_group"
+  webserver_grp=$withval
 else
-  nagios_grp=nagios
+  webserver_grp=www
 fi;
 
 
-INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
+INSTALL_OPTS="-o $webserver_user -g $webserver_grp"
 
 
 # Optional: Debug Modus
@@ -3207,8 +3212,8 @@ s,@OBJEXT@,$OBJEXT,;t t
 s,@SET_MAKE@,$SET_MAKE,;t t
 s,@STRIP@,$STRIP,;t t
 s,@CP@,$CP,;t t
-s,@nagios_user@,$nagios_user,;t t
-s,@nagios_grp@,$nagios_grp,;t t
+s,@webserver_user@,$webserver_user,;t t
+s,@webserver_grp@,$webserver_grp,;t t
 s,@INSTALL_OPTS@,$INSTALL_OPTS,;t t
 s,@WUI@,$WUI,;t t
 s,@NAGVIS_UPDATE@,$NAGVIS_UPDATE,;t t
@@ -3489,8 +3494,8 @@ echo "${ECHO_T}*** Configuration summary for $PKG_NAME $PKG_VERSION $PKG_REL_DAT
 echo ""
 echo " General Options:"
 echo " -------------------------"
-echo "$as_me:$LINENO: result:         Nagios user/group:  $nagios_user,$nagios_grp" >&5
-echo "${ECHO_T}        Nagios user/group:  $nagios_user,$nagios_grp" >&6
+echo "$as_me:$LINENO: result:      Webserver user/group:  $webserver_user,$webserver_grp" >&5
+echo "${ECHO_T}     Webserver user/group:  $webserver_user,$webserver_grp" >&6
 echo "$as_me:$LINENO: result:         Install \${prefix}:  $prefix" >&5
 echo "${ECHO_T}        Install \${prefix}:  $prefix" >&6
 echo "$as_me:$LINENO: result:                  HTML Dir:  $SHARE_DIR" >&5
