@@ -1,8 +1,3 @@
-; <?php return 1; ?>
-; the line above is to prevent
-; viewing this file from web.
-; DON'T REMOVE IT!
-
 ; ----------------------------
 ; Default NagVis Configuration File
 ; At delivery everything here is commented out. The default values are set in the NagVis code.
