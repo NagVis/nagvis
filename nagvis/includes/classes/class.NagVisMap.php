@@ -497,6 +497,27 @@ class NagVisMap extends GlobalMap {
 				$ret = str_replace('[service_description]',$obj['service_description'],$ret);
 				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$obj['service_description']),$ret);
 			}
+// FIXME:
+//			// Replace lists
+//			if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
+//				foreach($matchReturn[1] AS $key) {
+//					if($key == 'statelist') {
+//						$sReplace = '';
+//						preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
+//						// loop the child objects
+//						if(isset($obj['childs'])) {
+//    						foreach($obj['childs'] AS $key1 => $childObj) {
+//    						    if($key1 != 'global') {
+//    							    $sReplaceObj = str_replace('[child_obj_name]',$childObj['name'],$matchReturn1[1][0]);
+//    							    $sReplace .= $sReplaceObj;
+//    							}
+//    						}
+//    						$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
+//    				    }
+//					}
+//				}
+//			}
+			
             // Escape chars which could make problems
             $ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
 		}
@@ -576,7 +597,6 @@ class NagVisMap extends GlobalMap {
      */
 	function getState(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getState(&$obj)');
-		$state = Array('State'=>'','Output'=>'');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -590,8 +610,8 @@ class NagVisMap extends GlobalMap {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 					
-					$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
-					$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
+					$obj['state'] = 'ERROR';
+					$obj['checkOutput'] = 'loopInMapRecursion';
 				} else {
 					// save mapName in linkedMaps array
 					$this->linkedMaps[] = $this->MAPCFG->getName();
@@ -607,24 +627,17 @@ class NagVisMap extends GlobalMap {
 			                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 				            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 							
-							$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
-							$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
+							$obj['state'] = 'ERROR';
+							$obj['checkOutput'] = 'loopInMapRecursion';
 						} else {
 							$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1,1));
 							// FIXME: Language entry
-							$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
+							$obj['state'] = $state;
+							$obj['checkOutput'] = 'State of child map is '.$state;
 						}
 					} else {
-					    // FIXME: Language entry
-						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You are not permited to view the state of this map.');
-					}
-				}
-			break;
-			case 'textbox':
-				// Check if set a hostname
-				if(isset($obj['host_name'])) {
-					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
+						$obj['state'] = 'ERROR';
+						$obj['checkOutput'] = 'permissionDenied';
 					}
 				}
 			break;
@@ -638,7 +651,8 @@ class NagVisMap extends GlobalMap {
 						$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
 						$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
 					}
-					$state = Array('State' => $this->wrapState(Array($state1['State'],$state2['State'])),'Output' => 'State1: '.$state1['Output'].'<br />State2:'.$state2['Output']);
+					$obj['state'] = $this->wrapState(Array($state1['state'],$state2['state']));
+					$obj['output'] = 'State1: '.$state1['output'].'<br />State2:'.$state2['output'];
 				} else {
 					if(!isset($obj['service_description'])) {
 						$obj['service_description'] = '';
@@ -648,14 +662,117 @@ class NagVisMap extends GlobalMap {
 					}
 					
 					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
+						$obj = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj);
 					}
 				}
 			break;	
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getState(): Array()');
-		return Array('state' => $state['State'],'stateOutput' => $state['Output']);
+		return $obj;
+	}
+	
+	/**
+	 * Gets the state output string of an object
+	 *
+	 * @param	Array	$obj	Array with object properties
+	 * @return	Array	Array with object properties
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getStateOutput(&$obj) {
+	    switch($obj['type']) {
+	        case 'host':
+	            // If there are childs, for the output
+	            if($obj['recognize_services'] == 1 && isset($obj['childs'])) {
+    	            if($obj['childs']['global']['CRITICAL'] > 0) {
+    					$obj['stateOutput'] = 'Host is UP but there are '.$obj['childs']['global']['CRITICAL'].' CRITICAL, ' .$obj['childs']['global']['WARNING']. ' WARNING and ' .$obj['childs']['global']['UNKNOWN']. ' UNKNOWN Services';
+    				} elseif($obj['childs']['global']['WARNING'] > 0) {
+    					$obj['stateOutput'] = 'Host is UP but there are ' .$obj['childs']['global']['WARNING']. ' WARNING and ' .$obj['childs']['global']['UNKNOWN']. ' UNKNOWN Services';
+    				} elseif($obj['childs']['global']['UNKNOWN'] > 0) {
+    					$obj['stateOutput'] = 'Host is UP but there are '.$obj['childs']['global']['UNKNOWN'].' Services in UNKNOWN state';
+    				} elseif($obj['childs']['global']['ACK'] > 0) {
+    					$obj['stateOutput'] = 'Host is UP but '.$obj['childs']['global']['ACK'].' services are in a NON-OK State but all are ACKNOWLEDGED';
+    				} elseif($obj['childs']['global']['OK'] > 0) {
+    					$obj['stateOutput'] = 'Host is UP and all '.$obj['childs']['global']['OK'].' services are OK';
+    				}
+    				
+    				// Append output for the child objects
+    				foreach($obj['childs'] AS $name => $child) {
+    				    if($name != 'global') {
+    				        $obj['stateOutput'] .= '<br />&nbsp;&nbsp;&nbsp;Service: '.$child['name'].' has state '.$child['state'].' ';
+    				    }
+    				}
+    			} else {
+    			    // Host output if there are no child objects (services)
+    			    if(isset($obj['checkOutput'])) {
+    			        $obj['stateOutput'] = $obj['checkOutput'];
+    			    }
+    		    }
+	        break;
+	        case 'hostgroup':
+	            if(isset($obj['childs'])) {
+        			if($obj['childs']['global']['CRITICAL'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['CRITICAL'].' Hosts are CRITICAL, '.$obj['childs']['global']['WARNING'].' WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN';
+        			} elseif($obj['childs']['global']['WARNING'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['WARNING']. ' Hosts are WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN';
+        			} elseif($obj['childs']['global']['UNKNOWN'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['UNKNOWN'].' are in UNKNOWN state';
+        			} elseif($obj['childs']['global']['ACK'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['ACK'].' Hosts are in a NON-OK State but all errors are ACKNOWLEDGED';
+        			} elseif($obj['childs']['global']['UP'] > 0) {
+        				$obj['stateOutput'] = 'All '.$obj['childs']['global']['UP'].' Hosts are UP';
+        			}
+        			
+    				// Append output for the child objects
+    				foreach($obj['childs'] AS $name => $child) {
+    				    if($name != 'global') {
+    				        $obj['stateOutput'] .= '<br />&nbsp;&nbsp;&nbsp;Host: '.$child['name'].' has state '.$child['state'].' ';
+    				    }
+    				}
+    	        } else {
+    	            if(isset($obj['checkOutput'])) {
+	                    $obj['stateOutput'] = $obj['checkOutput'];
+	                }
+    	        }
+	        break;
+	        case 'servicegroup':
+	            if(isset($obj['childs'])) {
+        			if($obj['childs']['global']['CRITICAL'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['CRITICAL'].' CRITICAL, '.$obj['childs']['global']['WARNING'].' WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN Services';
+        			} elseif($obj['childs']['global']['WARNING'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['WARNING']. ' WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN Services';
+        			} elseif($obj['childs']['global']['UNKNOWN'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['UNKNOWN'].' Services in UNKNOWN state';
+        			} elseif($obj['childs']['global']['ACK'] > 0) {
+        				$obj['stateOutput'] = $obj['childs']['global']['ACK'].' services are in a NON-OK State but all are ACKNOWLEDGED';
+        			} elseif($obj['childs']['global']['OK'] > 0) {
+        				$obj['stateOutput'] = 'All '.$obj['childs']['global']['OK'].' services are OK';	
+        			} else {
+        			    if(isset($obj['checkOutput'])) {
+    	                    $obj['stateOutput'] = $obj['checkOutput'];
+    	                }
+    	            }
+    	        } else {
+    	            if(isset($obj['checkOutput'])) {
+	                    $obj['stateOutput'] = $obj['checkOutput'];
+	                }
+    	        }
+	        break;
+	        case 'map':
+	            if($obj['state'] == 'ERROR' && isset($obj['checkOutput'])) {
+	                $LANG = new GlobalLanguage($this->MAINCFG,'global:global');
+	                $obj['stateOutput'] = $LANG->getMessageText($obj['checkOutput']);
+	            } elseif(isset($obj['checkOutput'])) {
+	                $obj['stateOutput'] = $obj['checkOutput'];
+	            }
+	        case 'service':
+	        default:
+	            if(isset($obj['checkOutput'])) {
+	                $obj['stateOutput'] = $obj['checkOutput'];
+	            }
+	        break;
+	    }
+	    return $obj;   
 	}
 	
 	/**
@@ -719,8 +836,9 @@ class NagVisMap extends GlobalMap {
 				// add default state to the object
 				$obj = array_merge($obj,$objState);
 				
-				if($getState) {
-					$obj = array_merge($obj,$this->getState($obj));
+				if($obj['type'] != 'textbox' && $obj['type'] != 'shape' && $getState) {
+					$obj = $this->getState($obj);
+					$obj = $this->getStateOutput($obj);
 				}
 				
 				// The map alias only stands in the global section of the child map, get it
@@ -775,6 +893,9 @@ class NagVisMap extends GlobalMap {
 		} elseif(in_array('UNKNOWN', $objStates)) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): UNKNOWN');
 			return 'UNKNOWN';
+		} elseif(in_array('ERROR', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ERROR');
+			return 'ERROR';
 		} elseif(in_array('ERROR', $objStates)) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ERROR');
 			return 'ERROR';

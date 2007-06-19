@@ -42,7 +42,7 @@ class NagVisBackground extends NagVisMap {
 		
 		parent::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND);
 		
-		$this->objects = $this->getMapObjects(1);
+		//$this->objects = $this->getMapObjects(1);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::NagVisBackground()');
 	}
 	
@@ -55,7 +55,7 @@ class NagVisBackground extends NagVisMap {
      */
 	function getState($obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::getState(Array(...))');
-		$state = Array('State'=>'','Output'=>'');
+		$state = Array('state'=>'','stateOutput'=>'');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -75,10 +75,11 @@ class NagVisBackground extends NagVisMap {
 						list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(',', $obj['service_description']);
 						
 						if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-							$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
-							$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
+							$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj);
+							$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj);
 						}
-						$state = Array('State' => $this->wrapState(Array($state1['State'],$state2['State'])),'Output' => 'State1: '.$state1['Output'].'<br />State2:'.$state2['Output']);
+						$obj['state'] = $this->wrapState(Array($state1['state'],$state2['state']));
+						$obj['checkOutput'] = 'State1: '.$state1['checkOutput'].'<br />State2:'.$state2['checkOutput'];
 					} else {
 						// line with 1 state...
 						if(!isset($obj['service_description'])) {
@@ -89,7 +90,7 @@ class NagVisBackground extends NagVisMap {
 						}
 						
 						if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-							$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
+							$obj = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj);
 						}
 					}
 				} else {
@@ -99,7 +100,7 @@ class NagVisBackground extends NagVisMap {
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method method NagVisBackground::getState(): Array()');
-		return Array('state' => $state['State'],'stateOutput' => $state['Output']);
+		return $obj;
 	}
 	
 	/**
