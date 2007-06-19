@@ -107,9 +107,9 @@ install-config:
 	fi;
 
 	@echo ""
-	@echo "*** Sample config file installed ***"
+	@echo "*** Sample main configuration file installed ***"
 	@echo ""
-	@echo "Remember, these are *SAMPLE* config files.  You'll need to read"
+	@echo "Remember, this is a *SAMPLE* config file.  You'll need to read"
 	@echo "the documentation for more information on how to actually configure"
 	@echo "NagVis to fit your particular needs."
 	@echo ""

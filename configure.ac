@@ -9,7 +9,7 @@ AC_PREFIX_DEFAULT(/usr/local/nagvis)
 PKG_NAME=nagvis
 PKG_VERSION="1.2"
 PKG_HOME_URL="http://www.nagvis.org"
-PKG_REL_DATE="2007-06-19"
+PKG_REL_DATE="19-06-2007-06"
 
 # Change some defaults
 test "$prefix" = NONE && prefix=/usr/local/nagvis
