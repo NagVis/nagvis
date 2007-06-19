@@ -1,0 +1,25 @@
+prefix=@prefix@
+SHAREDIR=@datadir@
+INSTALL=@INSTALL@
+INSTALL_OPTS=@INSTALL_OPTS@
+
+CP=@CP@
+
+all: install
+
+html: install
+
+clean:
+	-rm index.php
+	-rm config.php
+
+distclean: clean
+	-rm Makefile
+
+devclean: distclean
+
+install:
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)
+
+	for file in *.php; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR); done

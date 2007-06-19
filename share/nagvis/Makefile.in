@@ -1,0 +1,66 @@
+prefix=@prefix@
+SHAREDIR=@datadir@
+INSTALL=@INSTALL@
+INSTALL_OPTS=@INSTALL_OPTS@
+
+all: install
+
+html: install
+
+clean:
+	-rm index.php
+	-rm draw.php
+
+distclean: clean
+	-rm Makefile
+
+devclean: distclean
+
+install:
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/iconsets
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/internal
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/maps
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/shapes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/templates
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/templates/header
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/templates/hover
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/classes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/css
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/js
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/languages
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/templates
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/templates/header
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/templates/hover
+	
+	for file in *.php; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis; done
+	
+	for file in images/iconsets/*; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/iconsets; done
+	for file in images/internal/*; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/internal; done
+	for file in images/maps/*.png; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/maps; done
+#	for file in images/shapes/*; \
+#	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/shapes; done
+#	for file in images/templates/header/*.png; \
+#	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/templates/header; done
+#	for file in images/templates/hover/*.png; \
+#	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/templates/hover; done
+	
+	for file in includes/classes/*.php; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/classes; done
+	for file in includes/css/*.css; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/css; done
+	for file in includes/js/*.js; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/js; done
+	for file in includes/languages/*.xml; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/languages; done
+	
+	for file in templates/header/*; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/templates/header; done
+	for file in templates/hover/*; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/templates/hover; done

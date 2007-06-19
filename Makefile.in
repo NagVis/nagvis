@@ -1,0 +1,132 @@
+###############################
+# Makefile for NagVis
+#
+# Last Modified: 2007-06-19
+###############################
+
+
+# Source code directories
+SRC_BASE=@srcdir@/src
+SRC_SHARE=@srcdir@/share
+SRC_ETC=@srcdir@/etc
+SRC_VAR=@srcdir@/var
+
+CC=@CC@
+CFLAGS=@CFLAGS@ @DEFS@
+LDFLAGS=@LDFLAGS@ @LIBS@
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+VARDIR=@localstatedir@
+CFGDIR=@sysconfdir@
+#BINDIR=@bindir@
+SHAREDIR=@datadir@
+INSTALL=@INSTALL@
+INSTALL_OPTS=@INSTALL_OPTS@
+
+WUI=@WUI@
+NAGVIS_UPDATE=@NAGVIS_UPDATE@
+
+CP=@CP@
+
+@SET_MAKE@
+
+none:
+	@echo "Please supply a command line argument (i.e. 'make all'). Other targets are:"
+	@echo "   clean"
+	@echo "   install install-html install-config fullinstall"
+#	@echo "   uninstall"
+
+# FreeBSD make does not support -C option, so we'll use the Apache style... (patch by Stanley Hopcroft 12/27/1999)
+
+all:
+#	cd $(SRC_BASE) && $(MAKE)
+#	cd $(SRC_SHARE) && $(MAKE)
+#	cd $(SRC_ETC) && $(MAKE)
+#	cd $(SRC_VAR) && $(MAKE)
+
+	@echo ""
+	@echo "*** Nothing to compile in this version ***"
+	@echo ""
+	@echo "  make install"
+	@echo "     - This installs NagVis"
+	@echo ""
+	@echo ""
+	@echo "*** Support Notes *******************************************"
+	@echo ""
+	@echo "If you have questions about configuring or running NagVis,"
+	@echo "please make sure that you:"
+	@echo ""
+	@echo "     - Look at the sample config files"
+	@echo "     - Read the HTML documentation"
+	@echo "     - Read the Docs online at http://www.nagvis.org/"
+	@echo "     - Come to the forum at www.nagios-portal.de and try the search function"
+	@echo "     - Subscribe to the Mailinglist nagvis-users@lists.sourceforge.net"
+	@echo ""
+	@echo "Before you post a question to one of the mailing lists."
+	@echo "Also make sure to include pertinent information that could"
+	@echo "help others help you. This might include:"
+	@echo ""
+	@echo "     - What version of NagVis you are using"
+	@echo "     - What version of PHP,MySQL,Nagios and NDO you are using"
+	@echo "     - Relevant snippets from your config files"
+	@echo "     - Relevant error messages from NagVis and/or Apache log files"
+	@echo ""
+	@echo "*************************************************************"
+	@echo ""
+	@echo "Enjoy."
+	@echo ""
+
+clean:
+	cd $(SRC_SHARE) && $(MAKE) $@
+	cd $(SRC_SHARE)/nagvis && $(MAKE) $@
+	if [ $(WUI) = yes ]; then \
+		cd $(SRC_SHARE)/wui && $(MAKE) $@; \
+	fi;
+	
+	-rm -f *~ *.*~ */*~ */*.*~
+	-rm -f config.log config.status config.cache
+
+distclean: clean
+	-rm -f Makefile
+
+devclean: distclean
+
+install-html:
+	cd $(SRC_SHARE) && $(MAKE) install
+	cd $(SRC_SHARE)/nagvis && $(MAKE) install
+	if [ $(WUI) = yes ]; then \
+		cd $(SRC_SHARE)/wui && $(MAKE) install; \
+	fi;
+
+install-config:
+	if [ $(NAGVIS_UPDATE) = false ]; then \
+		$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR); \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/config.ini-sample $(CFGDIR)/config.ini; \
+	else \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/config.ini-sample $(CFGDIR)/config.ini-sample; \
+	fi;
+
+	@echo ""
+	@echo "*** Sample config file installed ***"
+	@echo ""
+	@echo "Remember, these are *SAMPLE* config files.  You'll need to read"
+	@echo "the documentation for more information on how to actually configure"
+	@echo "NagVis to fit your particular needs."
+	@echo ""
+
+install:
+	$(MAKE) install-html
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(VARDIR)
+
+	@echo ""
+	@echo "*** NagVis installed ***"
+	@echo ""
+	@echo "You can continue with installing NagVis as follows (type 'make'"
+	@echo "without any arguments for a list of all possible options):"
+	@echo ""
+	@echo "  make install-config"
+	@echo "     - This installs sample config files in $(CFGDIR)"
+	@echo ""
+
+fullinstall: install

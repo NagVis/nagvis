@@ -1,0 +1,38 @@
+prefix=@prefix@
+SHAREDIR=@datadir@
+INSTALL=@INSTALL@
+INSTALL_OPTS=@INSTALL_OPTS@
+
+all: install
+
+html: install
+
+clean:
+	-rm index.php
+
+distclean: clean
+	-rm Makefile
+
+devclean: distclean
+
+install:
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui/images
+	
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/classes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/css
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/js
+	
+	for file in *.php; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis; done
+	
+	for file in images/internal/*; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/internal; done
+	
+	for file in includes/classes/*.php; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/classes; done
+	for file in includes/css/*.css; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/css; done
+	for file in includes/js/*.js; \
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/js; done

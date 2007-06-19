@@ -1,0 +1,90 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT(nagvis, 1.2, nagvis-devel@lists.sourceforge.net)
+
+AC_PREFIX_DEFAULT(/usr/local/nagvis)
+
+PKG_NAME=nagvis
+PKG_VERSION="1.2"
+PKG_HOME_URL="http://www.nagvis.org"
+PKG_REL_DATE="2007-06-19"
+
+# Change some defaults
+test "$prefix" = NONE && prefix=/usr/local/nagvis
+
+PRE=$prefix
+SHARE_DIR="$PRE/share"
+AC_SUBST(SHARE_DIR)
+CFG_DIR="$PRE/etc"
+AC_SUBST(CFG_DIR)
+CFG_FILE="$CFG_DIR/config.ini"
+AC_SUBST(CFG_FILE)
+VAR_DIR="$PRE/var"
+AC_SUBST(VAR_DIR)
+
+# Figure out how to invoke "install" and what install options to use.
+
+AC_PROG_INSTALL
+AC_SUBST(INSTALL)
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_MAKE_SET
+AC_PATH_PROG([STRIP],[strip],[true])
+
+AC_PATH_PROG(CP,cp)
+
+# Optional: Individual Nagios user/group
+AC_ARG_WITH(nagios_user,AC_HELP_STRING([--with-nagios-user=<user>], [sets user name to run nagios]),nagios_user=$withval,nagios_user=nagios)
+AC_ARG_WITH(nagios_group,AC_HELP_STRING([--with-nagios-group=<grp>], [sets group name to run nagios]),nagios_grp=$withval,nagios_grp=nagios)
+AC_SUBST(nagios_user)
+AC_SUBST(nagios_grp)
+INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
+AC_SUBST(INSTALL_OPTS)
+
+# Optional: Debug Modus
+AC_ARG_ENABLE(debug,AC_HELP_STRING([--enable-debug], [Enable debuging in NagVis (Default: 0)]),DEBUG="1",DEBUG="0")
+#AC_ARG_WITH(debug,AC_HELP_STRING([--with-debug], [Enable debuging in NagVis]),DEBUG="1",DEBUG="0")
+
+# Optional: Without WUI
+AC_ARG_WITH(wui,AC_HELP_STRING([--without-wui], [Don't use the WUI (Configuration Utility)]),WUI=no,WUI=yes)
+AC_SUBST(WUI)
+# Optional: Debug-Log
+AC_ARG_WITH(debug-log,AC_HELP_STRING([--with-debug-log=<logfile>], [Path to the debug logfile]),DEBUGLOG=$withval,DEBUGLOG=$VAR_DIR/nagvis-debug.log)
+
+# Check if this is an update (check for existing share folder)
+AC_CHECK_FILE($SHARE_DIR,[NAGVIS_UPDATE="true"],[NAGVIS_UPDATE="false"])
+# Check if this is an update (check for existing config.ini) 
+AC_CHECK_FILE($CFG_FILE,[NAGVIS_UPDATE="true"],[NAGVIS_UPDATE="false"])
+AC_SUBST(NAGVIS_UPDATE)
+
+# Config files to create to
+#AC_CONFIG_FILES(Makefile share/Makefile etc/Makefile share/nagvis/index.php share/wui/index.php etc/config.ini)
+AC_CONFIG_FILES(Makefile share/Makefile share/nagvis/Makefile share/wui/Makefile)
+AC_OUTPUT()
+# Output after configure run
+echo ""
+AC_MSG_RESULT([*** Configuration summary for $PKG_NAME $PKG_VERSION $PKG_REL_DATE ***:])
+echo ""
+echo " General Options:"
+echo " -------------------------"
+AC_MSG_RESULT([        Nagios user/group:  $nagios_user,$nagios_grp])
+AC_MSG_RESULT([        Install \${prefix}:  $prefix])
+AC_MSG_RESULT([                 HTML Dir:  $SHARE_DIR])
+AC_MSG_RESULT([               Config Dir:  $CFG_DIR])
+AC_MSG_RESULT([              Install WUI:  $WUI])
+if test "x$DEBUG" = "x1" ;then
+AC_MSG_RESULT([                Debug Log:  $DEBUGLOG])
+AC_MSG_RESULT([            Debug Enabled:  WARNING: Debug Funktions are enabled!])
+AC_MSG_RESULT([                            $DEBUGLOG will grow fast.])
+fi
+if test "x$NAGVIS_UPDATE" = "xtrue"; then
+AC_MSG_RESULT([                Is Update:  Please backup your installation before "make install"!])
+fi
+echo " -------------------------"
+echo ""
+echo "Review the options above for accuracy.  If they look okay,"
+echo "type 'make all' to compile."
+echo ""
