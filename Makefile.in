@@ -105,6 +105,8 @@ install-config:
 	else \
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/config.ini-sample $(CFGDIR)/config.ini-sample; \
 	fi;
+	
+	
 
 	@echo ""
 	@echo "*** Sample main configuration file installed ***"
@@ -136,6 +138,8 @@ install:
 
 	@echo ""
 	@echo "*** NagVis installed ***"
+	@echo ""
+	@echo "Now you need to tell your Webserver to share the NagVis share folder"
 	@echo ""
 	@echo "You can continue with installing NagVis as follows (type 'make'"
 	@echo "without any arguments for a list of all possible options):"

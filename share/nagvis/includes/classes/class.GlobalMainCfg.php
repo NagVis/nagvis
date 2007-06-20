@@ -190,7 +190,7 @@ class GlobalMainCfg {
 																					 'editable' => 1,
 																					'default' => 'root',
 																					'type' => 'string'),
-																'dbpass' => Array('must' => 1,
+																'dbpass' => Array('must' => 0,
 																					 'editable' => 1,
 																					'default' => 'root',
 																					'type' => 'string'),
