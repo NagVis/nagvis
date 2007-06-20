@@ -115,7 +115,7 @@ function createjsDOMenu() {
 	} else {
 		submenu_maps_open = new jsDOMenu(140);
 		for(i=0;i<mapOptions.length;i++) {
-			submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
+			submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:./index.php?map="+mapOptions[i].mapName,"","",""));
 			
 			if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions,"allowedUsers"),username)) {
 				submenu_maps_open.items[mapOptions[i].mapName].enabled=false;
