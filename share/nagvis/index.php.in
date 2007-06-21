@@ -1,16 +1,18 @@
 <?PHP
 ##########################################################################
-##     	        NagVis - The Nagios Visualisation Addon                 ##
+##              NagVis - The Nagios Visualisation Addon                 ##
 ##########################################################################
-## index.php - Main file to get called by the user			            ##
+## index.php - Main file to get called by the user                      ##
 ##########################################################################
-## Licenced under the terms and conditions of the GPL Licence,         	##
+## Licenced under the terms and conditions of the GPL Licence,          ##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
 ##########################################################################
-## For developer guidlines have a look at http://www.nagvis.org			##
+## For developer guidlines have a look at http://www.nagvis.org         ##
 ##########################################################################
+
+define('CONST_VERSION', '@PACKAGE_VERSION@');
 
 require("./includes/classes/class.GlobalDebug.php");
 require("./includes/classes/class.GlobalMainCfg.php");

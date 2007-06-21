@@ -220,12 +220,12 @@ class GlobalMainCfg {
 																					'type' => 'string')))),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => '1.2a1',
+												'default' => CONST_VERSION,
 												'locked' => 1,
 												'type' => 'string'),
 							'title' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => 'NagVis 1.2a1',
+												'default' => 'NagVis '.CONST_VERSION,
 												'locked' => 1,
 												'type' => 'string')));
 		

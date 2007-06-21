@@ -9,6 +9,8 @@ html: install
 
 clean:
 	-rm index.php
+	-rm ajax_handler.php
+	-rm wui.function.inc.php
 
 distclean: clean
 	-rm Makefile

@@ -112,11 +112,11 @@ install-config:
 	@echo ""
 	@echo ""
 	@echo "You can continue with installing NagVis as follows (type 'make'"
-        @echo "without any arguments for a list of all possible options):"
-        @echo ""
-        @echo "  make install-maps"
-        @echo "     - This installs sample map config files in $(CFGDIR)/maps"
-        @echo ""
+	@echo "without any arguments for a list of all possible options):"
+	@echo ""
+	@echo "  make install-maps"
+	@echo "     - This installs sample map config files in $(CFGDIR)/maps"
+	@echo ""
 	
 install-maps:
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)/maps

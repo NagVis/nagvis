@@ -2,15 +2,17 @@
 ##########################################################################
 ##      NagVis WUI - Addon to edit the configuration in the browser     ##
 ##########################################################################
-## index.php - Main file to get called by the user			            ##
+## index.php - Main file to get called by the user                      ##
 ##########################################################################
-## Licenced under the terms and conditions of the GPL Licence,         	##
+## Licenced under the terms and conditions of the GPL Licence,          ##
 ## please see attached "LICENCE" file	                                ##
 ##########################################################################
 
 ##########################################################################
-## For developer guidlines have a look at http://www.nagvis.org			##
+## For developer guidlines have a look at http://www.nagvis.org         ##
 ##########################################################################
+
+define('CONST_VERSION', '@PACKAGE_VERSION@');
 
 require("../nagvis/includes/classes/class.GlobalDebug.php");
 require("../nagvis/includes/classes/class.GlobalMainCfg.php");
@@ -23,7 +25,7 @@ require("../nagvis/includes/classes/class.GlobalGraphic.php");
 require("./includes/classes/class.WuiMainCfg.php");
 require("./includes/classes/class.WuiMapCfg.php");
 
-$MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
+$MAINCFG = new WuiMainCfg('@CFG_FILE@');
 
 // If not set, initialize $_GET['page']
 if(!isset($_GET['page'])) {
