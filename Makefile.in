@@ -149,4 +149,4 @@ install:
 	@echo "     - This installs sample map config files in $(CFGDIR)/maps"
 	@echo ""
 
-fullinstall: install
+fullinstall: install install-config install-maps
