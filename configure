@@ -2554,7 +2554,7 @@ fi
 
 # Config files to create to
 #AC_CONFIG_FILES(Makefile share/Makefile etc/Makefile share/nagvis/index.php share/wui/index.php etc/config.ini)
-                                        ac_config_files="$ac_config_files Makefile share/Makefile share/nagvis/Makefile share/wui/Makefile"
+                                                  ac_config_files="$ac_config_files Makefile etc/nagvis-httpd.conf share/Makefile share/nagvis/Makefile share/wui/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3108,6 +3108,7 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+  "etc/nagvis-httpd.conf" ) CONFIG_FILES="$CONFIG_FILES etc/nagvis-httpd.conf" ;;
   "share/Makefile" ) CONFIG_FILES="$CONFIG_FILES share/Makefile" ;;
   "share/nagvis/Makefile" ) CONFIG_FILES="$CONFIG_FILES share/nagvis/Makefile" ;;
   "share/wui/Makefile" ) CONFIG_FILES="$CONFIG_FILES share/wui/Makefile" ;;
