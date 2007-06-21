@@ -71,6 +71,9 @@ AC_SUBST(DEBUG_LEVEL)
 if test $DEBUG_LEVEL -gt 1 ;then
 DEBUG=1
 AC_SUBST(DEBUG)
+else
+DEBUG=0
+AC_SUBST(DEBUG)
 fi
 AC_SUBST(DEBUG_LEVEL)
 # Optional: Debug-Log

@@ -2524,6 +2524,9 @@ fi;
 if test $DEBUG_LEVEL -gt 1 ;then
 DEBUG=1
 
+else
+DEBUG=0
+
 fi
 
 # Optional: Debug-Log
