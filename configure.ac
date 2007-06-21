@@ -69,7 +69,7 @@ AC_SUBST(NAGVIS_UPDATE)
 
 # Config files to create to
 #AC_CONFIG_FILES(Makefile share/Makefile etc/Makefile share/nagvis/index.php share/wui/index.php etc/config.ini)
-AC_CONFIG_FILES(Makefile etc/nagvis-httpd.conf share/Makefile share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile)
+AC_CONFIG_FILES(Makefile etc/nagvis-httpd.conf share/Makefile share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php)
 AC_OUTPUT()
 # Output after configure run
 echo ""
