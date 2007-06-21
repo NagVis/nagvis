@@ -1,6 +1,6 @@
 ; ----------------------------
 ; Default NagVis Configuration File
-; At delivery everything here is commented out. The default values are set in the NagVis code.
+; At delivery the most here is commented out. The default values are set in the NagVis code.
 ; You can make your changes here, it'll overwrite the default settings.
 ; ----------------------------
 
@@ -52,9 +52,9 @@
 ; path options
 [paths]
 ; absolute physical NagVis path
-;base="/usr/local/nagios/share/nagvis/"
+base="@BASE_DIR@/"
 ; absolute html NagVis path
-;htmlbase="/nagios/nagvis"
+htmlbase="@SHARE_URL@"
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
 

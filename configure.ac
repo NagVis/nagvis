@@ -15,6 +15,8 @@ PKG_REL_DATE="19-06-2007-06"
 test "$prefix" = NONE && prefix=/usr/local/nagvis
 
 PRE=$prefix
+BASE_DIR=$prefix
+AC_SUBST(BASE_DIR)
 SHARE_DIR="$PRE/share"
 AC_SUBST(SHARE_DIR)
 CFG_DIR="$PRE/etc"
@@ -55,6 +57,10 @@ AC_SUBST(INSTALL_OPTS)
 AC_ARG_ENABLE(debug,AC_HELP_STRING([--enable-debug], [Enable debuging in NagVis (Default: 0)]),DEBUG="1",DEBUG="0")
 #AC_ARG_WITH(debug,AC_HELP_STRING([--with-debug], [Enable debuging in NagVis]),DEBUG="1",DEBUG="0")
 
+# Optional: SHARE-URL
+AC_ARG_WITH(SHARE_URL,--with-htmurl=<local-url> sets URL for public html [/nagvis],SHARE_URL=$withval,SHARE_URL=/nagvis)
+AC_SUBST(SHARE_URL)
+
 # Optional: Without WUI
 AC_ARG_WITH(wui,AC_HELP_STRING([--without-wui], [Don't use the WUI (Configuration Utility)]),WUI=no,WUI=yes)
 AC_SUBST(WUI)
@@ -68,8 +74,7 @@ AC_CHECK_FILE($CFG_FILE,[NAGVIS_UPDATE="true"],[NAGVIS_UPDATE="false"])
 AC_SUBST(NAGVIS_UPDATE)
 
 # Config files to create to
-#AC_CONFIG_FILES(Makefile share/Makefile etc/Makefile share/nagvis/index.php share/wui/index.php etc/config.ini)
-AC_CONFIG_FILES(Makefile etc/nagvis-httpd.conf-sample share/Makefile share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php)
+AC_CONFIG_FILES(Makefile etc/nagvis.ini-sample etc/nagvis-httpd.conf-sample share/Makefile share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php)
 AC_OUTPUT()
 # Output after configure run
 echo ""
@@ -79,8 +84,9 @@ echo " General Options:"
 echo " -------------------------"
 AC_MSG_RESULT([     Webserver user/group:  $webserver_user,$webserver_grp])
 AC_MSG_RESULT([        Install \${prefix}:  $prefix])
-AC_MSG_RESULT([                 HTML Dir:  $SHARE_DIR])
 AC_MSG_RESULT([               Config Dir:  $CFG_DIR])
+AC_MSG_RESULT([                 HTML Dir:  $SHARE_DIR])
+AC_MSG_RESULT([                 HTML URL:  $SHARE_URL])
 AC_MSG_RESULT([              Install WUI:  $WUI])
 if test "x$DEBUG" = "x1" ;then
 AC_MSG_RESULT([                Debug Log:  $DEBUGLOG])

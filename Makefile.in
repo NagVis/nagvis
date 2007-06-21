@@ -119,7 +119,6 @@ install-config:
 	@echo ""
 	
 install-maps:
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)/maps
 	
 	for file in $(SRC_ETC)/maps/*.cfg; \
 	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(CFGDIR)/maps; done
@@ -135,6 +134,7 @@ install-maps:
 install:
 	$(MAKE) install-html
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)/maps
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(VARDIR)
 
 	@echo ""

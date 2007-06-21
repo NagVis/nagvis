@@ -274,7 +274,7 @@ PACKAGE_STRING='nagvis 1.2'
 PACKAGE_BUGREPORT='nagvis-devel@lists.sourceforge.net'
 
 ac_default_prefix=/usr/local/nagvis
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS SHARE_DIR CFG_DIR CFG_FILE VAR_DIR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA INSTALL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE STRIP CP webserver_user webserver_grp INSTALL_OPTS WUI NAGVIS_UPDATE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS BASE_DIR SHARE_DIR CFG_DIR CFG_FILE VAR_DIR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA INSTALL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE STRIP CP webserver_user webserver_grp INSTALL_OPTS SHARE_URL WUI NAGVIS_UPDATE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -810,6 +810,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-web-user=<user>  sets user name the webserver is started with
   --with-web-group=<grp>  sets group name the webserver is started with
+--with-htmurl=<local-url> sets URL for public html /nagvis
   --without-wui           Don't use the WUI (Configuration Utility)
   --with-debug-log=<logfile>
                           Path to the debug logfile
@@ -1283,6 +1284,8 @@ PKG_REL_DATE="19-06-2007-06"
 test "$prefix" = NONE && prefix=/usr/local/nagvis
 
 PRE=$prefix
+BASE_DIR=$prefix
+
 SHARE_DIR="$PRE/share"
 
 CFG_DIR="$PRE/etc"
@@ -2480,6 +2483,17 @@ else
 fi;
 #AC_ARG_WITH(debug,AC_HELP_STRING([--with-debug], [Enable debuging in NagVis]),DEBUG="1",DEBUG="0")
 
+# Optional: SHARE-URL
+
+# Check whether --with-SHARE_URL or --without-SHARE_URL was given.
+if test "${with_SHARE_URL+set}" = set; then
+  withval="$with_SHARE_URL"
+  SHARE_URL=$withval
+else
+  SHARE_URL=/nagvis
+fi;
+
+
 # Optional: Without WUI
 
 # Check whether --with-wui or --without-wui was given.
@@ -2553,8 +2567,7 @@ fi
 
 
 # Config files to create to
-#AC_CONFIG_FILES(Makefile share/Makefile etc/Makefile share/nagvis/index.php share/wui/index.php etc/config.ini)
-                                                                                                    ac_config_files="$ac_config_files Makefile etc/nagvis-httpd.conf-sample share/Makefile share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php"
+                                                                                                              ac_config_files="$ac_config_files Makefile etc/nagvis.ini-sample etc/nagvis-httpd.conf-sample share/Makefile share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3108,6 +3121,7 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+  "etc/nagvis.ini-sample" ) CONFIG_FILES="$CONFIG_FILES etc/nagvis.ini-sample" ;;
   "etc/nagvis-httpd.conf-sample" ) CONFIG_FILES="$CONFIG_FILES etc/nagvis-httpd.conf-sample" ;;
   "share/Makefile" ) CONFIG_FILES="$CONFIG_FILES share/Makefile" ;;
   "share/nagvis/Makefile" ) CONFIG_FILES="$CONFIG_FILES share/nagvis/Makefile" ;;
@@ -3200,6 +3214,7 @@ s,@ECHO_C@,$ECHO_C,;t t
 s,@ECHO_N@,$ECHO_N,;t t
 s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
+s,@BASE_DIR@,$BASE_DIR,;t t
 s,@SHARE_DIR@,$SHARE_DIR,;t t
 s,@CFG_DIR@,$CFG_DIR,;t t
 s,@CFG_FILE@,$CFG_FILE,;t t
@@ -3221,6 +3236,7 @@ s,@CP@,$CP,;t t
 s,@webserver_user@,$webserver_user,;t t
 s,@webserver_grp@,$webserver_grp,;t t
 s,@INSTALL_OPTS@,$INSTALL_OPTS,;t t
+s,@SHARE_URL@,$SHARE_URL,;t t
 s,@WUI@,$WUI,;t t
 s,@NAGVIS_UPDATE@,$NAGVIS_UPDATE,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
@@ -3504,10 +3520,12 @@ echo "$as_me:$LINENO: result:      Webserver user/group:  $webserver_user,$webse
 echo "${ECHO_T}     Webserver user/group:  $webserver_user,$webserver_grp" >&6
 echo "$as_me:$LINENO: result:         Install \${prefix}:  $prefix" >&5
 echo "${ECHO_T}        Install \${prefix}:  $prefix" >&6
-echo "$as_me:$LINENO: result:                  HTML Dir:  $SHARE_DIR" >&5
-echo "${ECHO_T}                 HTML Dir:  $SHARE_DIR" >&6
 echo "$as_me:$LINENO: result:                Config Dir:  $CFG_DIR" >&5
 echo "${ECHO_T}               Config Dir:  $CFG_DIR" >&6
+echo "$as_me:$LINENO: result:                  HTML Dir:  $SHARE_DIR" >&5
+echo "${ECHO_T}                 HTML Dir:  $SHARE_DIR" >&6
+echo "$as_me:$LINENO: result:                  HTML URL:  $SHARE_URL" >&5
+echo "${ECHO_T}                 HTML URL:  $SHARE_URL" >&6
 echo "$as_me:$LINENO: result:               Install WUI:  $WUI" >&5
 echo "${ECHO_T}              Install WUI:  $WUI" >&6
 if test "x$DEBUG" = "x1" ;then
