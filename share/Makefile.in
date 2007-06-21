@@ -1,5 +1,6 @@
 prefix=@prefix@
-SHAREDIR=@datadir@
+SRC_SHARE=@srcdir@/share
+SHARE_DIR=@datadir@
 INSTALL=@INSTALL@
 INSTALL_OPTS=@INSTALL_OPTS@
 
@@ -17,7 +18,10 @@ distclean: clean
 devclean: distclean
 
 install:
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)
-
-	for file in *.php; \
-	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR); done
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHARE_DIR)
+	
+	$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_SHARE)/index.php $(SHARE_DIR)/index.php; \
+	
+	if [ $(WUI) = yes ]; then \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_SHARE)/config.php $(SHARE_DIR)/config.php; \
+	fi;

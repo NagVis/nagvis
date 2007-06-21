@@ -13,4 +13,9 @@ Alias /nagvis "@SHARE_DIR@"
    AllowOverride None
    Order allow,deny
    Allow from all
+   AuthName "NagVis Access"
+   AuthType Basic
+   # Using Nagios authentication file
+   AuthUserFile /usr/local/nagios/etc/htpasswd.users
+   Require valid-user
 </Directory>
