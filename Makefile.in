@@ -107,22 +107,20 @@ install-config:
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis-httpd.conf-sample $(CFGDIR)/nagvis-httpd.conf-sample; \
 	fi;
 	
-	if [ $1 = "install-config" ]; then \
-		@echo "" \
-		@echo "*** Sample configuration files installed ***" \
-		@echo "" \
-		@echo "Remember, this is a *SAMPLE* config file.  You'll need to read" \
-		@echo "the documentation for more information on how to actually configure" \
-		@echo "NagVis to fit your particular needs." \
-		@echo "" \
-		@echo "" \
-		@echo "You can continue with installing NagVis as follows (type 'make'" \
-		@echo "without any arguments for a list of all possible options):" \
-		@echo "" \
-		@echo "  make install-maps" \
-		@echo "     - This installs sample map config files in $(CFGDIR)/maps" \
-		@echo "" \
-	fi;
+	@echo ""
+	@echo "*** Sample configuration files installed ***"
+	@echo "" \
+	@echo "Remember, this is a *SAMPLE* config file.  You'll need to read"
+	@echo "the documentation for more information on how to actually configure"
+	@echo "NagVis to fit your particular needs."
+	@echo ""
+	@echo ""
+	@echo "You can continue with installing NagVis as follows (type 'make'"
+	@echo "without any arguments for a list of all possible options):"
+	@echo ""
+	@echo "  make install-maps"
+	@echo "     - This installs sample map config files in $(CFGDIR)/maps"
+	@echo ""
 	
 install-maps:
 	
