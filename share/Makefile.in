@@ -10,8 +10,6 @@ all: install
 html: install
 
 clean:
-	-rm index.php
-	-rm config.php
 
 distclean: clean
 	-rm Makefile

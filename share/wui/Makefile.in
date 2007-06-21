@@ -19,20 +19,20 @@ install:
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui/images
 	
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/classes
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/css
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/js
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui/includes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui/includes/classes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui/includes/css
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/wui/includes/js
 	
 	for file in *.php; \
-	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis; done
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/wui; done
 	
 	for file in images/internal/*; \
-	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/images/internal; done
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/wui/images/internal; done
 	
 	for file in includes/classes/*.php; \
-	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/classes; done
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/wui/includes/classes; done
 	for file in includes/css/*.css; \
-	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/css; done
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/wui/includes/css; done
 	for file in includes/js/*.js; \
-	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/js; done
+	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/wui/includes/js; done
