@@ -101,12 +101,10 @@ install-html:
 
 install-config:
 	if [ $(NAGVIS_UPDATE) = false ]; then \
-		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/config.ini-sample $(CFGDIR)/config.ini; \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis.ini-sample $(CFGDIR)/nagvis.ini; \
 	else \
-		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/config.ini-sample $(CFGDIR)/config.ini-sample; \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis.ini-sample $(CFGDIR)/nagvis.ini-sample; \
 	fi;
-	
-	
 
 	@echo ""
 	@echo "*** Sample main configuration file installed ***"
@@ -121,7 +119,6 @@ install-maps:
 	
 	for file in $(SRC_ETC)/maps/*.cfg; \
 	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(CFGDIR)/maps; done
-	
 	
 	@echo ""
 	@echo "*** Sample map config files installed ***"
