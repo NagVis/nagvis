@@ -40,11 +40,6 @@ none:
 # FreeBSD make does not support -C option, so we'll use the Apache style... (patch by Stanley Hopcroft 12/27/1999)
 
 all:
-#	cd $(SRC_BASE) && $(MAKE)
-#	cd $(SRC_SHARE) && $(MAKE)
-#	cd $(SRC_ETC) && $(MAKE)
-#	cd $(SRC_VAR) && $(MAKE)
-
 	@echo ""
 	@echo "*** Nothing to compile in this version ***"
 	@echo ""
@@ -102,20 +97,29 @@ install-html:
 install-config:
 	if [ $(NAGVIS_UPDATE) = false ]; then \
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis.ini-sample $(CFGDIR)/nagvis.ini; \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis-httpd.conf-sample $(CFGDIR)/nagvis-httpd.conf; \
 	else \
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis.ini-sample $(CFGDIR)/nagvis.ini-sample; \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis-httpd.conf-sample $(CFGDIR)/nagvis-httpd.conf-sample; \
 	fi;
 
 	@echo ""
-	@echo "*** Sample main configuration file installed ***"
+	@echo "*** Sample configuration files installed ***"
 	@echo ""
 	@echo "Remember, this is a *SAMPLE* config file.  You'll need to read"
 	@echo "the documentation for more information on how to actually configure"
 	@echo "NagVis to fit your particular needs."
 	@echo ""
+	@echo ""
+	@echo "You can continue with installing NagVis as follows (type 'make'"
+        @echo "without any arguments for a list of all possible options):"
+        @echo ""
+        @echo "  make install-maps"
+        @echo "     - This installs sample map config files in $(CFGDIR)/maps"
+        @echo ""
 	
 install-maps:
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)/maps; \
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)/maps
 	
 	for file in $(SRC_ETC)/maps/*.cfg; \
 	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(CFGDIR)/maps; done
@@ -130,13 +134,11 @@ install-maps:
 
 install:
 	$(MAKE) install-html
-	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR); \
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(CFGDIR)
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(VARDIR)
 
 	@echo ""
 	@echo "*** NagVis installed ***"
-	@echo ""
-	@echo "Now you need to tell your Webserver to share the NagVis share folder"
 	@echo ""
 	@echo "You can continue with installing NagVis as follows (type 'make'"
 	@echo "without any arguments for a list of all possible options):"
