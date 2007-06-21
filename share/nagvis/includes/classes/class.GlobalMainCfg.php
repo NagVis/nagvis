@@ -251,15 +251,15 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function setPathsByBase($base,$htmlBase) {
-	    $this->validConfig['paths']['cfg']['default'] = $base.'etc/';
-		$this->validConfig['paths']['icon']['default'] = $base.'share/nagvis/images/iconsets/';
-		$this->validConfig['paths']['shape']['default'] = $base.'share/nagvis/images/shapes/';
-		$this->validConfig['paths']['language']['default'] = $base.'share/nagvis/includes/languages/';
-		$this->validConfig['paths']['class']['default'] = $base.'share/nagvis/includes/classes/';
-		$this->validConfig['paths']['map']['default'] = $base.'share/nagvis/images/maps/';
-		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/nagvis/templates/hover/';
-		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/nagvis/templates/header/';
-		$this->validConfig['paths']['mapcfg']['default'] = $base.'etc/maps/';
+	    $this->validConfig['paths']['cfg']['default'] = $base.'/etc/';
+		$this->validConfig['paths']['icon']['default'] = $base.'/share/nagvis/images/iconsets/';
+		$this->validConfig['paths']['shape']['default'] = $base.'/share/nagvis/images/shapes/';
+		$this->validConfig['paths']['language']['default'] = $base.'/share/nagvis/includes/languages/';
+		$this->validConfig['paths']['class']['default'] = $base.'/share/nagvis/includes/classes/';
+		$this->validConfig['paths']['map']['default'] = $base.'/share/nagvis/images/maps/';
+		$this->validConfig['paths']['hovertemplate']['default'] = $base.'/share/nagvis/templates/hover/';
+		$this->validConfig['paths']['headertemplate']['default'] = $base.'/share/nagvis/templates/header/';
+		$this->validConfig['paths']['mapcfg']['default'] = $base.'/etc/maps/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
 		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/nagvis/templates/header/';

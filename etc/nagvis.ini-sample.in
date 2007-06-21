@@ -52,7 +52,7 @@
 ; path options
 [paths]
 ; absolute physical NagVis path
-base="@BASE_DIR@/"
+base="@BASE_DIR@"
 ; absolute html NagVis path
 htmlbase="@SHARE_URL@"
 ; absolute html NagVis cgi path
