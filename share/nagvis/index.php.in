@@ -25,7 +25,7 @@ require("./includes/classes/class.NagVisMapCfg.php");
 require("./includes/classes/class.NagVisMap.php");
 require("./includes/classes/class.NagVisFrontend.php");
 
-$MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
+$MAINCFG = new GlobalMainCfg('@CFG_FILE@');
 
 if(!isset($_GET['map'])) {
 	$_GET['map'] = '';
