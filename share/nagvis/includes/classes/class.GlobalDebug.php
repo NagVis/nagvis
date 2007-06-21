@@ -1,5 +1,5 @@
 <?php
-define('CONST_DEBUGSTART',microtime_float());
+define('DEBUGSTART', microtime_float());
 
 function debug($msg) {
 		$fh=fopen(DEBUGFILE,'a');
