@@ -88,9 +88,13 @@ distclean: clean
 devclean: distclean
 
 install-html:
-	cd $(SRC_SHARE) && $(MAKE) install
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)
+	$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_SHARE)/index.php $(SHAREDIR)/index.php
+	
 	cd $(SRC_SHARE)/nagvis && $(MAKE) install
+	
 	if [ $(WUI) = yes ]; then \
+		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_SHARE)/config.php $(SHAREDIR)/config.php; \
 		cd $(SRC_SHARE)/wui && $(MAKE) install; \
 	fi;
 
@@ -102,21 +106,23 @@ install-config:
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis.ini-sample $(CFGDIR)/nagvis.ini-sample; \
 		$(INSTALL) -b -m 664 $(INSTALL_OPTS) $(SRC_ETC)/nagvis-httpd.conf-sample $(CFGDIR)/nagvis-httpd.conf-sample; \
 	fi;
-
-	@echo ""
-	@echo "*** Sample configuration files installed ***"
-	@echo ""
-	@echo "Remember, this is a *SAMPLE* config file.  You'll need to read"
-	@echo "the documentation for more information on how to actually configure"
-	@echo "NagVis to fit your particular needs."
-	@echo ""
-	@echo ""
-	@echo "You can continue with installing NagVis as follows (type 'make'"
-	@echo "without any arguments for a list of all possible options):"
-	@echo ""
-	@echo "  make install-maps"
-	@echo "     - This installs sample map config files in $(CFGDIR)/maps"
-	@echo ""
+	
+	if [ $1 = "install-config" ]; then \
+		@echo "" \
+		@echo "*** Sample configuration files installed ***" \
+		@echo "" \
+		@echo "Remember, this is a *SAMPLE* config file.  You'll need to read" \
+		@echo "the documentation for more information on how to actually configure" \
+		@echo "NagVis to fit your particular needs." \
+		@echo "" \
+		@echo "" \
+		@echo "You can continue with installing NagVis as follows (type 'make'" \
+		@echo "without any arguments for a list of all possible options):" \
+		@echo "" \
+		@echo "  make install-maps" \
+		@echo "     - This installs sample map config files in $(CFGDIR)/maps" \
+		@echo "" \
+	fi;
 	
 install-maps:
 	
