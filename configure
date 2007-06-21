@@ -1287,7 +1287,7 @@ SHARE_DIR="$PRE/share"
 
 CFG_DIR="$PRE/etc"
 
-CFG_FILE="$CFG_DIR/config.ini"
+CFG_FILE="$CFG_DIR/nagvis.ini"
 
 VAR_DIR="$PRE/var"
 
