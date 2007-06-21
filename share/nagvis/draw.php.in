@@ -12,6 +12,15 @@
 ## For developer guidlines have a look at http://www.nagvis.org         ##
 ##########################################################################
 
+define('DEBUG',@DEBUG@);
+/**
+ * For wanted debug output summarize these possible options:
+ * 1: function beginning and ending
+ * 2: progres informations in the functions
+ * 4: render time
+ */
+define('DEBUGLEVEL', @DEBUG_LEVEL@);
+define('DEBUGFILE', '@DEBUG_LOG@');
 define('CONST_VERSION', '@PACKAGE_VERSION@');
 
 require("./includes/classes/class.GlobalDebug.php");

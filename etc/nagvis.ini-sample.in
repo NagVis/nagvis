@@ -56,7 +56,7 @@ base="@BASE_DIR@"
 ; absolute html NagVis path
 htmlbase="@SHARE_URL@"
 ; absolute html NagVis cgi path
-;htmlcgi="/nagios/cgi-bin"
+;htmlcgi="@CGI_URL@"
 
 ; options for the NDO-Backend
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.

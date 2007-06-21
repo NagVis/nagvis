@@ -274,7 +274,7 @@ PACKAGE_STRING='nagvis 1.2'
 PACKAGE_BUGREPORT='nagvis-devel@lists.sourceforge.net'
 
 ac_default_prefix=/usr/local/nagvis
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS BASE_DIR SHARE_DIR CFG_DIR CFG_FILE VAR_DIR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA INSTALL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE STRIP CP webserver_user webserver_grp INSTALL_OPTS SHARE_URL WUI NAGVIS_UPDATE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS BASE_DIR SHARE_DIR CFG_DIR CFG_FILE VAR_DIR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA INSTALL CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE STRIP CP webserver_user webserver_grp INSTALL_OPTS SHARE_URL CGI_URL WUI DEBUG_LEVEL DEBUG DEBUG_LOG NAGVIS_UPDATE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -800,20 +800,25 @@ if test -n "$ac_init_help"; then
    esac
   cat <<\_ACEOF
 
-Optional Features:
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-debug          Enable debuging in NagVis (Default: 0)
-
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-web-user=<user>  sets user name the webserver is started with
+                          (Default: wwwrun)
   --with-web-group=<grp>  sets group name the webserver is started with
---with-htmurl=<local-url> sets URL for public html /nagvis
-  --without-wui           Don't use the WUI (Configuration Utility)
+                          (Default: www)
+  --with-htmurl=<local-url>
+                          sets URL for public html (Default: /nagvis)
+  --with-cgiurl=<local-url>
+                          sets URL for nagios cgi (Default: /nagios/cgi-bin)
+  --without-wui           don't use the WUI (Configuration Utility)
+  --with-debug-level=<level>
+                          Enable debuging in NagVis (1: function beginning and
+                          ending, 2: progres informations in the functions, 4:
+                          render time) (Default: 0)
   --with-debug-log=<logfile>
-                          Path to the debug logfile
+                          path to the debug logfile (Default:
+                          $VAR_DIR/nagvis-debug.log)
 
 Some influential environment variables:
   CC          C compiler command
@@ -2453,17 +2458,17 @@ fi
 #AC_SUBST(INSTALL_OPTS)
 # Optional: Individual webserver user/group
 
-# Check whether --with-webserver_user or --without-webserver_user was given.
-if test "${with_webserver_user+set}" = set; then
-  withval="$with_webserver_user"
+# Check whether --with-web-user or --without-web-user was given.
+if test "${with_web_user+set}" = set; then
+  withval="$with_web_user"
   webserver_user=$withval
 else
   webserver_user=wwwrun
 fi;
 
-# Check whether --with-webserver_group or --without-webserver_group was given.
-if test "${with_webserver_group+set}" = set; then
-  withval="$with_webserver_group"
+# Check whether --with-web-group or --without-web-group was given.
+if test "${with_web_group+set}" = set; then
+  withval="$with_web_group"
   webserver_grp=$withval
 else
   webserver_grp=www
@@ -2473,24 +2478,25 @@ fi;
 INSTALL_OPTS="-o $webserver_user -g $webserver_grp"
 
 
-# Optional: Debug Modus
-# Check whether --enable-debug or --disable-debug was given.
-if test "${enable_debug+set}" = set; then
-  enableval="$enable_debug"
-  DEBUG="1"
-else
-  DEBUG="0"
-fi;
-#AC_ARG_WITH(debug,AC_HELP_STRING([--with-debug], [Enable debuging in NagVis]),DEBUG="1",DEBUG="0")
-
 # Optional: SHARE-URL
 
-# Check whether --with-SHARE_URL or --without-SHARE_URL was given.
-if test "${with_SHARE_URL+set}" = set; then
-  withval="$with_SHARE_URL"
+# Check whether --with-htmlurl or --without-htmlurl was given.
+if test "${with_htmlurl+set}" = set; then
+  withval="$with_htmlurl"
   SHARE_URL=$withval
 else
   SHARE_URL=/nagvis
+fi;
+
+
+# Optional: Nagios CGI-URL
+
+# Check whether --with-cgiurl or --without-cgiurl was given.
+if test "${with_cgiurl+set}" = set; then
+  withval="$with_cgiurl"
+  CGI_URL=$withval
+else
+  CGI_URL=/nagios/cgi-bin
 fi;
 
 
@@ -2504,15 +2510,32 @@ else
   WUI=yes
 fi;
 
+
+# Optional: Debug Level
+
+# Check whether --with-debug-level or --without-debug-level was given.
+if test "${with_debug_level+set}" = set; then
+  withval="$with_debug_level"
+  DEBUG_LEVEL=$withval
+else
+  DEBUG_LEVEL=0
+fi;
+
+if test $DEBUG_LEVEL -gt 1 ;then
+DEBUG=1
+
+fi
+
 # Optional: Debug-Log
 
 # Check whether --with-debug-log or --without-debug-log was given.
 if test "${with_debug_log+set}" = set; then
   withval="$with_debug_log"
-  DEBUGLOG=$withval
+  DEBUG_LOG=$withval
 else
-  DEBUGLOG=$VAR_DIR/nagvis-debug.log
+  DEBUG_LOG=$VAR_DIR/nagvis-debug.log
 fi;
+
 
 # Check if this is an update (check for existing share folder)
 as_ac_File=`echo "ac_cv_file_$SHARE_DIR" | $as_tr_sh`
@@ -3237,7 +3260,11 @@ s,@webserver_user@,$webserver_user,;t t
 s,@webserver_grp@,$webserver_grp,;t t
 s,@INSTALL_OPTS@,$INSTALL_OPTS,;t t
 s,@SHARE_URL@,$SHARE_URL,;t t
+s,@CGI_URL@,$CGI_URL,;t t
 s,@WUI@,$WUI,;t t
+s,@DEBUG_LEVEL@,$DEBUG_LEVEL,;t t
+s,@DEBUG@,$DEBUG,;t t
+s,@DEBUG_LOG@,$DEBUG_LOG,;t t
 s,@NAGVIS_UPDATE@,$NAGVIS_UPDATE,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
@@ -3509,6 +3536,7 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
+
 # Output after configure run
 echo ""
 echo "$as_me:$LINENO: result: *** Configuration summary for $PKG_NAME $PKG_VERSION $PKG_REL_DATE ***:" >&5
@@ -3518,6 +3546,8 @@ echo " General Options:"
 echo " -------------------------"
 echo "$as_me:$LINENO: result:      Webserver user/group:  $webserver_user,$webserver_grp" >&5
 echo "${ECHO_T}     Webserver user/group:  $webserver_user,$webserver_grp" >&6
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
 echo "$as_me:$LINENO: result:         Install \${prefix}:  $prefix" >&5
 echo "${ECHO_T}        Install \${prefix}:  $prefix" >&6
 echo "$as_me:$LINENO: result:                Config Dir:  $CFG_DIR" >&5
@@ -3528,17 +3558,23 @@ echo "$as_me:$LINENO: result:                  HTML URL:  $SHARE_URL" >&5
 echo "${ECHO_T}                 HTML URL:  $SHARE_URL" >&6
 echo "$as_me:$LINENO: result:               Install WUI:  $WUI" >&5
 echo "${ECHO_T}              Install WUI:  $WUI" >&6
-if test "x$DEBUG" = "x1" ;then
-echo "$as_me:$LINENO: result:                 Debug Log:  $DEBUGLOG" >&5
-echo "${ECHO_T}                Debug Log:  $DEBUGLOG" >&6
-echo "$as_me:$LINENO: result:             Debug Enabled:  WARNING: Debug Funktions are enabled!" >&5
-echo "${ECHO_T}            Debug Enabled:  WARNING: Debug Funktions are enabled!" >&6
-echo "$as_me:$LINENO: result:                             $DEBUGLOG will grow fast." >&5
-echo "${ECHO_T}                            $DEBUGLOG will grow fast." >&6
-fi
 if test "x$NAGVIS_UPDATE" = "xtrue"; then
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
 echo "$as_me:$LINENO: result:                 Is Update:  Please backup your installation before \"make install\"!" >&5
 echo "${ECHO_T}                Is Update:  Please backup your installation before \"make install\"!" >&6
+fi
+if test "x$DEBUG" = "x1" ;then
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:$LINENO: result:             Debug Enabled:  WARNING: Debug functions are enabled!" >&5
+echo "${ECHO_T}            Debug Enabled:  WARNING: Debug functions are enabled!" >&6
+echo "$as_me:$LINENO: result:                             The debug log will grow fast." >&5
+echo "${ECHO_T}                            The debug log will grow fast." >&6
+echo "$as_me:$LINENO: result:               Debug Level:  $DEBUG_LEVEL" >&5
+echo "${ECHO_T}              Debug Level:  $DEBUG_LEVEL" >&6
+echo "$as_me:$LINENO: result:                 Debug Log:  $DEBUG_LOG" >&5
+echo "${ECHO_T}                Debug Log:  $DEBUG_LOG" >&6
 fi
 echo " -------------------------"
 echo ""

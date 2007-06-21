@@ -46,26 +46,36 @@ AC_PATH_PROG(CP,cp)
 #INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
 #AC_SUBST(INSTALL_OPTS)
 # Optional: Individual webserver user/group
-AC_ARG_WITH(webserver_user,AC_HELP_STRING([--with-web-user=<user>], [sets user name the webserver is started with]),webserver_user=$withval,webserver_user=wwwrun)
-AC_ARG_WITH(webserver_group,AC_HELP_STRING([--with-web-group=<grp>], [sets group name the webserver is started with]),webserver_grp=$withval,webserver_grp=www)
+AC_ARG_WITH(web-user,AC_HELP_STRING([--with-web-user=<user>], [sets user name the webserver is started with (Default: wwwrun)]),webserver_user=$withval,webserver_user=wwwrun)
+AC_ARG_WITH(web-group,AC_HELP_STRING([--with-web-group=<grp>], [sets group name the webserver is started with (Default: www)]),webserver_grp=$withval,webserver_grp=www)
 AC_SUBST(webserver_user)
 AC_SUBST(webserver_grp)
 INSTALL_OPTS="-o $webserver_user -g $webserver_grp"
 AC_SUBST(INSTALL_OPTS)
 
-# Optional: Debug Modus
-AC_ARG_ENABLE(debug,AC_HELP_STRING([--enable-debug], [Enable debuging in NagVis (Default: 0)]),DEBUG="1",DEBUG="0")
-#AC_ARG_WITH(debug,AC_HELP_STRING([--with-debug], [Enable debuging in NagVis]),DEBUG="1",DEBUG="0")
-
 # Optional: SHARE-URL
-AC_ARG_WITH(SHARE_URL,--with-htmurl=<local-url> sets URL for public html [/nagvis],SHARE_URL=$withval,SHARE_URL=/nagvis)
+AC_ARG_WITH(htmlurl,AC_HELP_STRING([--with-htmurl=<local-url>], [sets URL for public html (Default: /nagvis)]),SHARE_URL=$withval,SHARE_URL=/nagvis)
 AC_SUBST(SHARE_URL)
 
+# Optional: Nagios CGI-URL
+AC_ARG_WITH(cgiurl,AC_HELP_STRING([--with-cgiurl=<local-url>], [sets URL for nagios cgi (Default: /nagios/cgi-bin)]),CGI_URL=$withval,CGI_URL=/nagios/cgi-bin)
+AC_SUBST(CGI_URL)
+
 # Optional: Without WUI
-AC_ARG_WITH(wui,AC_HELP_STRING([--without-wui], [Don't use the WUI (Configuration Utility)]),WUI=no,WUI=yes)
+AC_ARG_WITH(wui,AC_HELP_STRING([--without-wui], [don't use the WUI (Configuration Utility)]),WUI=no,WUI=yes)
 AC_SUBST(WUI)
+
+# Optional: Debug Level
+AC_ARG_WITH(debug-level,AC_HELP_STRING([--with-debug-level=<level>], [Enable debuging in NagVis (1: function beginning and ending, 2: progres informations in the functions, 4: render time) (Default: 0)]),DEBUG_LEVEL=$withval,DEBUG_LEVEL=0)
+AC_SUBST(DEBUG_LEVEL)
+if test $DEBUG_LEVEL -gt 1 ;then
+DEBUG=1
+AC_SUBST(DEBUG)
+fi
+AC_SUBST(DEBUG_LEVEL)
 # Optional: Debug-Log
-AC_ARG_WITH(debug-log,AC_HELP_STRING([--with-debug-log=<logfile>], [Path to the debug logfile]),DEBUGLOG=$withval,DEBUGLOG=$VAR_DIR/nagvis-debug.log)
+AC_ARG_WITH(debug-log,AC_HELP_STRING([--with-debug-log=<logfile>], [path to the debug logfile (Default: $VAR_DIR/nagvis-debug.log)]),DEBUG_LOG=$withval,DEBUG_LOG=$VAR_DIR/nagvis-debug.log)
+AC_SUBST(DEBUG_LOG)
 
 # Check if this is an update (check for existing share folder)
 AC_CHECK_FILE($SHARE_DIR,[NAGVIS_UPDATE="true"],[NAGVIS_UPDATE="false"])
@@ -76,6 +86,7 @@ AC_SUBST(NAGVIS_UPDATE)
 # Config files to create to
 AC_CONFIG_FILES(Makefile etc/nagvis.ini-sample etc/nagvis-httpd.conf-sample share/Makefile share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php)
 AC_OUTPUT()
+
 # Output after configure run
 echo ""
 AC_MSG_RESULT([*** Configuration summary for $PKG_NAME $PKG_VERSION $PKG_REL_DATE ***:])
@@ -83,18 +94,22 @@ echo ""
 echo " General Options:"
 echo " -------------------------"
 AC_MSG_RESULT([     Webserver user/group:  $webserver_user,$webserver_grp])
+AC_MSG_RESULT()
 AC_MSG_RESULT([        Install \${prefix}:  $prefix])
 AC_MSG_RESULT([               Config Dir:  $CFG_DIR])
 AC_MSG_RESULT([                 HTML Dir:  $SHARE_DIR])
 AC_MSG_RESULT([                 HTML URL:  $SHARE_URL])
 AC_MSG_RESULT([              Install WUI:  $WUI])
-if test "x$DEBUG" = "x1" ;then
-AC_MSG_RESULT([                Debug Log:  $DEBUGLOG])
-AC_MSG_RESULT([            Debug Enabled:  WARNING: Debug Funktions are enabled!])
-AC_MSG_RESULT([                            $DEBUGLOG will grow fast.])
-fi
 if test "x$NAGVIS_UPDATE" = "xtrue"; then
+AC_MSG_RESULT()
 AC_MSG_RESULT([                Is Update:  Please backup your installation before "make install"!])
+fi
+if test "x$DEBUG" = "x1" ;then
+AC_MSG_RESULT()
+AC_MSG_RESULT([            Debug Enabled:  WARNING: Debug functions are enabled!])
+AC_MSG_RESULT([                            The debug log will grow fast.])
+AC_MSG_RESULT([              Debug Level:  $DEBUG_LEVEL])
+AC_MSG_RESULT([                Debug Log:  $DEBUG_LOG])
 fi
 echo " -------------------------"
 echo ""
