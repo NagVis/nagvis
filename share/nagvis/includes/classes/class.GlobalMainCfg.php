@@ -24,14 +24,6 @@ class GlobalMainCfg {
 												 'editable' => 1,
 												'default' => 'english',
 												'type' => 'string'),
-							'rotatemaps' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => '0',
-												'type' => 'boolean'),
-							'maps' => Array('must' => 1,
-												 'editable' => 1,
-												'default' => 'demo,demo2',
-												'type' => 'string'),
 							'displayheader' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '1',
@@ -160,10 +152,6 @@ class GlobalMainCfg {
 							'htmlmap' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/maps/',
-												'type' => 'string'),
-							'htmldoku' => Array('must' => 1,
-												 'editable' => 0,
-												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/',
 												'type' => 'string')),
 			'backend' => Array(
 							'backendtype' => Array('must' => 1,
@@ -218,6 +206,18 @@ class GlobalMainCfg {
 																					 'editable' => 1,
 																					'default' => '/usr/local/nagios/sbin/',
 																					'type' => 'string')))),
+			'rotation' => Array('rotationid' => Array('must' => 1,
+												'editable' => 0,
+												'default' => 'demo',
+												'type' => 'string'),
+							    'maps' => Array('must' => 1,
+			                                    'editable' => 1,
+			                                    'default' => '"demo,demo2"',
+			                                    'type' => 'string'),
+			                    'interval' => Array('must' => 0,
+			                                    'editable' => 1,
+			                                    'default' => '',
+			                                    'type' => 'integer')),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
 												'default' => CONST_VERSION,
@@ -239,6 +239,9 @@ class GlobalMainCfg {
 		
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+		
+		// set default value
+		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
 	}
@@ -279,7 +282,7 @@ class GlobalMainCfg {
      */
 	function getBasePath() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath()');
-		$return = preg_replace('/wui|nagvis$/i', '', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
+		$return = preg_replace('/share\/wui|share\/nagvis$/i', '', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath(): '.$return);
 	    return $return ;
 	}
@@ -330,6 +333,9 @@ class GlobalMainCfg {
 						if(preg_match('/^backend_/i', $sec)) {
 							$this->config[$sec] = Array();
 							$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
+						} elseif(preg_match('/^rotation_/i', $sec)) {
+							$this->config[$sec] = Array();
+							$this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
 						} else {
 							$this->config[$sec] = Array();
 						}
@@ -389,10 +395,12 @@ class GlobalMainCfg {
 		// check given objects and attributes
 		foreach($this->config AS $type => $vars) {
 			if(!ereg('^comment_',$type)) {
-				if(array_key_exists($type,$this->validConfig) || ereg('^backend_', $type)) {
+				if(array_key_exists($type,$this->validConfig) || ereg('^(backend|rotation)_', $type)) {
 					// loop validConfig for checking: => missing "must" atributes
 					if(ereg('^backend_', $type)) {
 						$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+					} elseif(ereg('^rotation_', $type)) {
+						$arrValidConfig = $this->validConfig['rotation'];
 					} else {
 						$arrValidConfig = $this->validConfig[$type];
 					}
@@ -412,7 +420,9 @@ class GlobalMainCfg {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
 								$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
-							} else {
+							} elseif(ereg('^rotation_', $type)) {
+						        $arrValidConfig = $this->validConfig['rotation'];
+					        } else {
 								$arrValidConfig = $this->validConfig[$type];
 							}
 							
@@ -699,6 +709,13 @@ class GlobalMainCfg {
 						return $this->validConfig['backend']['backendtype']['default'];
 					}
 				}
+			} elseif(preg_match('/^rotation_/i', $sec)) {
+			    if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
+    			    if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['rotation'][$var]['default']);
+    				return $this->validConfig['rotation'][$var]['default'];
+    			} else {
+    			    return FALSE;
+    		    }
 			} else {
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig[$sec][$var]['default']);
 				return $this->validConfig[$sec][$var]['default'];

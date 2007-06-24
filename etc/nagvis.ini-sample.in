@@ -1,9 +1,9 @@
 ; ----------------------------
-; Default NagVis Configuration File
+; Sample Configuration File (NagVis @PACKAGE_VERSION@)
 ; At delivery the most here is commented out. The default values are set in the NagVis code.
 ; You can make your changes here, it'll overwrite the default settings.
 ; ----------------------------
-
+; Documentation: http://www.nagvis.org/docs/@PACKAGE_VERSION@/nagvis_config_format_description
 ; ----------------------------
 ; !!! The Sections/Variables with a leading ";" won't be recognized by NagVis (commented out) !!!
 ; ----------------------------
@@ -12,10 +12,6 @@
 [global]
 ; select language (english,german,french,...)
 ;language="english"
-; rotate maps (0/1)
-;rotatemaps=0
-; maps to rotate
-;maps="demo,demo2"
 ; show header (0/1)
 ;displayheader=1
 ; refresh time of pages
@@ -79,6 +75,15 @@ htmlbase="@SHARE_URL@"
 ;dbinstancename="default"
 ; maximum delay of the NDO Database in Seconds
 ;maxtimewithoutupdate=180
+
+; map rotation pools
+; in this example the browser switches between the maps demo and demo2 every 15 seconds
+; the rotation is enabled by url: index.php?rotation=demo
+[rotation_demo]
+; maps to rotate in this pool
+maps="demo,demo2"
+; rotation interval (seconds)
+interval=15
 
 ; -------------------------
 ; EOF
