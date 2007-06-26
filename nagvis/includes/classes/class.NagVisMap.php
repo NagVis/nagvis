@@ -302,6 +302,7 @@ class NagVisMap extends GlobalMap {
 		    }
 		    
 			$obj['label_text'] = str_replace('[name]',$obj[$name],$obj['label_text']);
+			$obj['label_text'] = str_replace('[output]',$obj['stateOutput'],$obj['label_text']);
 			if($obj['type'] == 'service') {
 				$obj['label_text'] = str_replace('[service_description]',$obj['service_description'],$obj['label_text']);
 			}
