@@ -54,7 +54,7 @@ INSTALL_OPTS="-o $webserver_user -g $webserver_grp"
 AC_SUBST(INSTALL_OPTS)
 
 # Optional: SHARE-URL
-AC_ARG_WITH(htmlurl,AC_HELP_STRING([--with-htmurl=<local-url>], [sets URL for public html (Default: /nagvis)]),SHARE_URL=$withval,SHARE_URL=/nagvis)
+AC_ARG_WITH(htmurl,AC_HELP_STRING([--with-htmurl=<local-url>], [sets URL for public html (Default: /nagvis)]),SHARE_URL=$withval,SHARE_URL=/nagvis)
 AC_SUBST(SHARE_URL)
 
 # Optional: Nagios CGI-URL
