@@ -6,7 +6,7 @@
 # configuration file.  Customize the paths, etc. as
 # needed to fit your system.
 
-Alias /nagvis "@SHARE_DIR@"
+Alias @SHARE_URL@  "@SHARE_DIR@"
 
 <Directory "@SHARE_DIR@">
    Options None
