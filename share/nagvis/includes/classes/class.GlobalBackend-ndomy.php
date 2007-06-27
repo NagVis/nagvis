@@ -461,7 +461,7 @@ class GlobalBackendndomy {
 	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function findStateHostgroup(&$obj) {
-	    $arrReturn = Array('childs' => Array('global' => Array('UP' => 0,'OK' => 0, 'UNKNOWN' => 0, 'ACK' => 0, 'WARNING' => 0, 'CRITICAL' => 0)));
+	    $arrReturn = Array('childs' => Array('global' => Array('UP' => 0,'OK' => 0, 'UNKNOWN' => 0, 'ACK' => 0, 'WARNING' => 0, 'CRITICAL' => 0, 'UNREACHABLE' => 0, 'DOWN' => 0)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateHostgroup(Array(...))');
 		
 		//First we have to get the hostgroup_id
@@ -490,6 +490,11 @@ class GlobalBackendndomy {
 			}
 			// Summarize the states to get the state of the hostgroup
 			$arrReturn['state'] = $this->summarizeStates($arrReturn);
+			
+			// FIXME: Workaround until states are numeric
+			if($arrReturn['state'] == 'DOWN' || $arrReturn['state'] == 'UNREACHABLE') {
+			    $arrReturn['state'] = 'CRITICAL';
+			}
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateHostgroup(): Array(...)');
@@ -608,6 +613,9 @@ class GlobalBackendndomy {
 		} elseif(in_array('ACK', $objStates)) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ACK');
 			return 'ACK';
+		} elseif(in_array('UP', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): UP');
+			return 'UP';
 		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): OK');
 			return 'OK';
