@@ -55,23 +55,25 @@ class NagVisFrontend extends GlobalPage {
 			$MAPCFG->readMapConfig();
 			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
     		    $MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
+    			// Build map object array
+    		    $arrMapObj = Array('type'=>'map','iconset'=>'std_big');
     		    $onClick = '';
     		    $class = '';
     		    
-    		    if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-    		        $strState = $MAP->getMapState($MAP->getMapObjects(1,1));
-        			$state = Array('state' => $strState, 'stateOutput' => 'State of the map is &quot;'.$strState.'&quot;.');
+    			if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+    		        $arrMapObj = array_merge($arrMapObj,$MAP->getMapState($MAP->getMapObjects(1,1)));
+    		        $arrMapObj = $MAP->getStateOutput($arrMapObj);
         			$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
     			} else {
-    				$state = Array('state' => 'UNKNOWN', 'stateOutput' => 'Error: You are not permited to view the state of this map.');
-    				$onClick = 'alert(\''.$state['stateOutput'].'\');';
+    				$arrMapObj['state'] = 'UNKNOWN';
+    				$arrMapObj['stateOutput'] = 'Error: You are not permited to view the state of this map.';
+    				$onClick = 'alert(\''.$arrMapObj['stateOutput'].'\');';
     				$class = 'class="disabled"';
     			}
-    			// Build object array
-    			$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state['state'],'stateOutput'=> $state['stateOutput']);
     			$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
     			$arrMapObj = $MAP->fixIcon($arrMapObj);
     			
+    			// FIXME: Need better hover menu with more informations
     		    $ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\''.$arrMapObj['stateOutput'].'\');" onClick="'.$onClick.'">';
     		    $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
     		    $ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
@@ -311,9 +313,11 @@ class NagVisFrontend extends GlobalPage {
         			}
         		}
         	} else {
-        	    // FIXME: Error Message (Map rotation pool does not exist)
-        	    echo "ERROR: Map rotation does not existst";
-        	    if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): ');
+        	    // Error Message (Map rotation pool does not exist)
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR','mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']);
+        	    
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): ');
         	    return $this->MAINCFG->getValue('rotation', 'interval');
             }
     	} else {

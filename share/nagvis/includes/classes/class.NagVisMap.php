@@ -579,14 +579,25 @@ class NagVisMap extends GlobalMap {
      */
 	function getMapState(&$arr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getMapState(Array(...))');
-		$ret = Array();
+		$arrStates = Array();
+		$arrReturn = Array('childs' => Array());
 		foreach($arr AS $obj) {
-			$ret[] = $obj['state'];
+		    if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
+    			if($obj['type'] == 'service') {
+    				$name = 'host_name';
+    			} else {
+    				$name = $obj['type'] . '_name';
+    			}
+    			
+    			$arrStates[] = $obj['state'];
+    			$arrReturn['childs'][$obj['type'].$obj[$name]] = Array();
+    			$arrReturn['childs'][$obj['type'].$obj[$name]]['state'] = $obj['state'];
+    		}
 		}
 		
-		$sRet = $this->wrapState($ret);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getMapState(): '.$sRet);
-		return $sRet;
+		$arrReturn['state'] = $this->wrapState($arrStates);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getMapState(): Array(...)');
+		return $arrReturn;
 	}
 	
 	/**
@@ -631,10 +642,7 @@ class NagVisMap extends GlobalMap {
 							$obj['state'] = 'ERROR';
 							$obj['checkOutput'] = 'loopInMapRecursion';
 						} else {
-							$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1,1));
-							// FIXME: Language entry
-							$obj['state'] = $state;
-							$obj['checkOutput'] = 'State of child map is '.$state;
+							$obj = array_merge($obj,$SUBMAP->getMapState($SUBMAP->getMapObjects(1,1)));
 						}
 					} else {
 						$obj['state'] = 'ERROR';
@@ -760,11 +768,11 @@ class NagVisMap extends GlobalMap {
     	        }
 	        break;
 	        case 'map':
+	            $LANG = new GlobalLanguage($this->MAINCFG,'nagvis:global');
 	            if($obj['state'] == 'ERROR' && isset($obj['checkOutput'])) {
-	                $LANG = new GlobalLanguage($this->MAINCFG,'global:global');
 	                $obj['stateOutput'] = $LANG->getMessageText($obj['checkOutput']);
-	            } elseif(isset($obj['checkOutput'])) {
-	                $obj['stateOutput'] = $obj['checkOutput'];
+	            } else {
+	                $obj['stateOutput'] = $LANG->getLabel('childMapState','STATE~'.$obj['state']);
 	            }
 	        case 'service':
 	        default:

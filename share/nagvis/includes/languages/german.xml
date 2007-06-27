@@ -14,6 +14,10 @@
 				</host>
 				<service>
 					<text>Service</text>
+				<mapRotationPoolNotExists>
+					<title>Map rotation pool not exists</title>
+					<text>The given map rotation pool &quot;[ROTATION]&quot; is not defined in NagVis</text>
+				</mapRotationPoolNotExists>
 				</service>
 				<hostgroup>
 					<text>Hostgruppe</text>
@@ -199,6 +203,9 @@
 				<mapname>
 					<text>Map Name</text>
 				</mapname>
+				<childMapState>
+					<text>State of child map is [STATE].</text>
+				</childMapState>
 			</labels>
 			<messages>
 				<!-- Alle NagVis Meldungen //-->
@@ -222,6 +229,10 @@
 					<title>NagVis-GD: PHP memory_limit zu niedrig</title>
 					<text>Eventuell ist das memory_limit von PHP zu niedrig um dieses Bild darzustellen.</text>
 				</maybePhpMemoryLimitToLow>
+				<mapRotationPoolNotExists>
+					<title>Map rotation pool not exists</title>
+					<text>The given map rotation pool &quot;[ROTATION]&quot; is not defined in NagVis</text>
+				</mapRotationPoolNotExists>
 			</messages>
 		</global>
 	</nagvis>

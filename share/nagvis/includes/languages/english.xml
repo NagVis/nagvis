@@ -199,6 +199,9 @@
 				<mapname>
 					<text>Map Name</text>
 				</mapname>
+				<childMapState>
+					<text>State of child map is [STATE].</text>
+				</childMapState>
 			</labels>
 			<messages>
 				<!-- Alle NagVis Meldungen //-->
@@ -222,6 +225,10 @@
 					<title>NagVis-GD: Maybe PHP memory_limit to low</title>
 					<text>Maybe the memory_limit of PHP is to low for displaying the background image.</text>
 				</maybePhpMemoryLimitToLow>
+				<mapRotationPoolNotExists>
+					<title>Map rotation pool not exists</title>
+					<text>The given map rotation pool &quot;[ROTATION]&quot; is not defined in NagVis</text>
+				</mapRotationPoolNotExists>
 			</messages>
 		</global>
 	</nagvis>
