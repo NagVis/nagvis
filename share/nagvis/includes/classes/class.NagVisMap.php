@@ -250,9 +250,21 @@ class NagVisMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
+		// If there is a presign it should be relative to the objects x/y
+		if(preg_match('/^(\+|\-)/',$obj['label_x'])) {
+			$obj['label_x'] = $obj['x'] + $obj['label_x'];
+		}
+		if(preg_match('/^(\+|\-)/',$obj['label_y'])) {
+			$obj['label_y'] = $obj['y'] + $obj['label_y'];
+		}
+		
 		// If no x/y coords set, fallback to object x/y
-		$obj['label_x'] = $obj['x'] + $obj['label_x'];
-		$obj['label_y'] = $obj['y'] + $obj['label_y'];
+		if(!isset($obj['label_x']) || $obj['label_x'] == '' || $obj['label_x'] == 0) {
+			$obj['label_x'] = $obj['x'];
+		}
+		if(!isset($obj['label_y']) || $obj['label_y'] == '' || $obj['label_y'] == 0) {
+			$obj['label_y'] = $obj['y'];
+		}
 		
 		if(isset($obj['label_width']) && $obj['label_width'] != 'auto') {
 			$obj['label_width'] .= 'px';	

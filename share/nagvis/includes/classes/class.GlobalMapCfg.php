@@ -56,7 +56,7 @@ class GlobalMapCfg {
 							'label_x' => Array('must' => 0,
 												'default' => '-20'),
 							'label_y' => Array('must' => 0,
-												'default' => '20'),
+												'default' => '+20'),
 							'label_width' => Array('must' => 0,
 												'default' => 'auto'),
 							'label_background' => Array('must' => 0,
