@@ -2480,9 +2480,9 @@ INSTALL_OPTS="-o $webserver_user -g $webserver_grp"
 
 # Optional: SHARE-URL
 
-# Check whether --with-htmlurl or --without-htmlurl was given.
-if test "${with_htmlurl+set}" = set; then
-  withval="$with_htmlurl"
+# Check whether --with-htmurl or --without-htmurl was given.
+if test "${with_htmurl+set}" = set; then
+  withval="$with_htmurl"
   SHARE_URL=$withval
 else
   SHARE_URL=/nagvis
