@@ -139,6 +139,10 @@
 					<title>Unbekanntes Attribut</title>
 					<text>Das Attribut &quot;[ATTRIBUTE]&quot; ist in der Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei nicht erlaubt</text>
 				</unknownValue>
+				<wrongValueFormat>
+					<title>Falsches Format</title>
+					<text>Das Attribut &quot;[ATTRIBUTE]&quot; in der Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei entspricht nicht dem korrekten Format &quot;[MATCH]&quot;</text>
+				</wrongValueFormat>
 				<languageNotReadable>
 					<title>Keine Leserechte auf die Sprachdatei</title>
 					<text>Bitte die Leseberechtigungen des Webservers auf die Sprachdatei &quot;[LANGFILE]&quot; pr&uuml;fen</text>
