@@ -64,7 +64,7 @@ class GlobalMapCfg {
 			'host' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
-							'host_name' => Array('must' => 1),
+							'name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
 							'z' => Array('must' => 0,
@@ -95,7 +95,7 @@ class GlobalMapCfg {
 			'hostgroup' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
-							'hostgroup_name' => Array('must' => 1),
+							'name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
 							'z' => Array('must' => 0,
@@ -126,7 +126,7 @@ class GlobalMapCfg {
 			'service' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
-							'host_name' => Array('must' => 1),
+							'name' => Array('must' => 1),
 							'service_description' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
@@ -156,7 +156,7 @@ class GlobalMapCfg {
 			'servicegroup' => Array('type' => Array('must' => 0),
 							'backend_id' => Array('must' => 0,
 												'default' => ''),
-							'servicegroup_name' => Array('must' => 1),
+							'name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
 							'z' => Array('must' => 0,
@@ -183,7 +183,7 @@ class GlobalMapCfg {
 							'label_background' => Array('must' => 0,
 												'default' => '')),
 			'map' => Array('type' => Array('must' => 0),
-							'map_name' => Array('must' => 1),
+							'name' => Array('must' => 1),
 							'x' => Array('must' => 1),
 							'y' => Array('must' => 1),
 							'z' => Array('must' => 0,
@@ -411,13 +411,19 @@ class GlobalMapCfg {
 							$this->mapConfig[$define[1]][$type] = Array('type'=>$define[1]);
 							while (isset($file[$l]) && trim($file[$l]) != '}') {
 								$entry = explode('=',$file[$l], 2);
+								// entry[0]: var name, entry[1]: value
 								$entry[0] = trim($entry[0]);
 								if(isset($entry[1])) {
 									$entry[1] = trim($entry[1]);
 									if(in_array($entry[0],$createArray)) {
 										$this->mapConfig[$define[1]][$type][$entry[0]] = explode(',',str_replace(' ','',$entry[1]));
 									} else {
-										$this->mapConfig[$define[1]][$type][$entry[0]] = $entry[1];
+										// NagVis 1.2: Renamed "*_name" to "name", handle the old maps
+										if(preg_match('/_name$/i',$entry[0])) {
+											$this->mapConfig[$define[1]][$type]['name'] = $entry[1];
+										} else {
+											$this->mapConfig[$define[1]][$type][$entry[0]] = $entry[1];
+										}
 									}
 								}
 								$l++;	

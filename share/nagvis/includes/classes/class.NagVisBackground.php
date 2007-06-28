@@ -56,11 +56,6 @@ class NagVisBackground extends NagVisMap {
 	function getState($obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::getState(Array(...))');
 		$state = Array('state'=>'','stateOutput'=>'');
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
 		
 		switch($obj['type']) {
 			case 'map':
@@ -71,7 +66,7 @@ class NagVisBackground extends NagVisMap {
 				if(isset($obj['line_type'])) {
 					if($obj['line_type'] == '20') {
 						// line with 2 states...
-						list($objNameFrom,$objNameTo) = explode(',', $obj[$name]);
+						list($objNameFrom,$objNameTo) = explode(',', $obj['name']);
 						list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(',', $obj['service_description']);
 						
 						if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
@@ -382,14 +377,9 @@ class NagVisBackground extends NagVisMap {
 	 */
 	function parseLine($obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::parseLine()');
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'].'_name';
-		}
 		
 		if($obj['line_type'] == '10'){
-			$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],0);	
+			$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['name'],$obj['recognize_services'],$obj['service_description'],0);	
 			list($x_from,$x_to) = explode(',', $obj['x']);
 			list($y_from,$y_to) = explode(',', $obj['y']);
 			$x_middle = $this->GRAPHIC->middle($x_from,$x_to);
@@ -398,17 +388,17 @@ class NagVisBackground extends NagVisMap {
 			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_middle,$y_middle,3,1,$this->getColor($state['State']));
 			$this->GRAPHIC->drawArrow($this->image,$x_to,$y_to,$x_middle,$y_middle,3,1,$this->getColor($state['State']));
 		} elseif($obj['line_type'] == '11') {
-			$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],0);	
+			$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['name'],$obj['recognize_services'],$obj['service_description'],0);	
 			list($x_from,$x_to) = explode(',', $obj['x']);
 			list($y_from,$y_to) = explode(',', $obj['y']);
 			
 			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_to,$y_to,3,1,$this->getColor($state['State']));
 		} elseif($obj['line_type'] == '20') {
-			list($host_name_from,$host_name_to) = explode(',', $obj[$name]);
+			list($name_from,$name_to) = explode(',', $obj['name']);
 			list($service_description_from,$service_description_to) = explode(',', $obj['service_description']);
 			
-			$state_from = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$host_name_from,$obj['recognize_services'],$service_description_from,1);	
-			$state_to = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$host_name_to,$obj['recognize_services'],$service_description_to,2);	
+			$state_from = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$name_from,$obj['recognize_services'],$service_description_from,1);	
+			$state_to = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$name_to,$obj['recognize_services'],$service_description_to,2);	
 			
 			list($x_from,$x_to) = explode(',', $obj['x']);
 			list($y_from,$y_to) = explode(',', $obj['y']);

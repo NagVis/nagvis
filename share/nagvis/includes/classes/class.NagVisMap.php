@@ -136,14 +136,8 @@ class NagVisMap extends GlobalMap {
 	 * @fixme 	FIXME 1.1: optimize
 	 */
 	function createBoxLine(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createBoxLine(&$obj,'.$name.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createBoxLine(&$obj)');
 		$ret = Array();
-		
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
 		
 	    if($obj['line_type'] == '10' || $obj['line_type'] == '11'){
 			list($x_from,$x_to) = explode(',', $obj['x']);
@@ -155,7 +149,7 @@ class NagVisMap extends GlobalMap {
 			$obj = $this->fixIcon($obj);
 			$ret[] = $this->parseIcon($obj);
 		} elseif($obj['line_type'] == '20') {
-			list($host_name_from,$host_name_to) = explode(',', $obj[$name]);
+			list($name_from,$name_to) = explode(',', $obj['name']);
 			list($service_description_from,$service_description_to) = explode(',', $obj['service_description']);
 			list($x_from,$x_to) = explode(',', $obj['x']);
 			list($y_from,$y_to) = explode(',', $obj['y']);
@@ -201,12 +195,6 @@ class NagVisMap extends GlobalMap {
 			$imgPath = $this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon'];
 		}
 		
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
-		
 		$ret = '<div class="icon" style="left:'.$obj['x'].'px;top:'.$obj['y'].'px;z-index:'.$obj['z'].';">';
 		
 		if($link) {
@@ -219,7 +207,7 @@ class NagVisMap extends GlobalMap {
 			$menu = '';
 		}
 		
-		$ret .= '<img src="'.$imgPath.'" '.$menu.' alt="'.$obj['type'].'-'.$obj[$name].(($obj['type'] == 'service') ? '-'.$obj['service_description']:'').'">';
+		$ret .= '<img src="'.$imgPath.'" '.$menu.' alt="'.$obj['type'].'-'.$obj['name'].(($obj['type'] == 'service') ? '-'.$obj['service_description']:'').'">';
 		
 		if($link) {
 			$ret .= '</a>';
@@ -243,12 +231,6 @@ class NagVisMap extends GlobalMap {
 	 */
 	function parseLabel(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseLabel(&$obj)');
-		
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
 		
 		// If there is a presign it should be relative to the objects x/y
 		if(preg_match('/^(\+|\-)/',$obj['label_x'])) {
@@ -287,21 +269,16 @@ class NagVisMap extends GlobalMap {
 	 */
 	function replaceMacros(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::replaceMacros(&$obj)');
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
 		
 		if(isset($obj['url']) && $obj['url'] != '') {
-			$obj['url'] = str_replace('['.$name.']',$obj[$name],$obj['url']);
+			$obj['url'] = str_replace('[name]',$obj['name'],$obj['url']);
 			if($obj['type'] == 'service') {
 				$obj['url'] = str_replace('[service_description]',$obj['service_description'],$obj['url']);
 			}
 		}
 		
 		if(isset($obj['hover_url']) && $obj['hover_url'] != '') {
-			$obj['hover_url'] = str_replace('[name]',$obj[$name],$obj['hover_url']);
+			$obj['hover_url'] = str_replace('[name]',$obj['name'],$obj['hover_url']);
 			if($obj['type'] == 'service') {
 				$obj['hover_url'] = str_replace('[service_description]',$obj['service_description'],$obj['hover_url']);
 			}
@@ -311,6 +288,8 @@ class NagVisMap extends GlobalMap {
 		    // For maps use the alias as display string
 		    if($obj['type'] == 'map') {
 		        $name = 'alias';   
+		    } else {
+		    	$name = 'name';	
 		    }
 		    
 			$obj['label_text'] = str_replace('[name]',$obj[$name],$obj['label_text']);
@@ -334,30 +313,25 @@ class NagVisMap extends GlobalMap {
 	 */
 	function createLink(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink(&$obj)');
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
 		
 		if(isset($obj['url']) && $obj['url'] != '') {
 			$link = '<A HREF='.$obj['url'].'>';
     	} else {
     		switch($obj['type']) {
     			case 'map':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj[$name].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj['name'].'">';
     			break;
     			case 'host':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?host='.$obj[$name].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?host='.$obj['name'].'">';
     			break;
     			case 'service':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$obj[$name].'&amp;service='.$obj['service_description'].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$obj['name'].'&amp;service='.$obj['service_description'].'">';
     			break;
     			case 'hostgroup':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?hostgroup='.$obj[$name].'&amp;style=detail">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?hostgroup='.$obj['name'].'&amp;style=detail">';
     			break;
     			case 'servicegroup':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?servicegroup='.$obj[$name].'&amp;style=detail">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?servicegroup='.$obj['name'].'&amp;style=detail">';
     			break;
     		}
     	}
@@ -490,7 +464,7 @@ class NagVisMap extends GlobalMap {
 			if($obj['type'] == 'map') {
 				$displayName = 'alias';
 			} else {
-				$displayName = $name;
+				$displayName = 'name';
 			}
 			
             // Replace the macros
@@ -498,7 +472,7 @@ class NagVisMap extends GlobalMap {
 			$ret = str_replace('[obj_name]',$obj[$displayName],$ret);
 			$ret = str_replace('[obj_state]',$obj['state'],$ret);
 			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
-			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj[$name]),$ret);
+			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj['name']),$ret);
 			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
 			$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
 			$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
@@ -595,15 +569,9 @@ class NagVisMap extends GlobalMap {
 		$arrReturn = Array('childs' => Array());
 		foreach($arr AS $obj) {
 		    if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
-    			if($obj['type'] == 'service') {
-    				$name = 'host_name';
-    			} else {
-    				$name = $obj['type'] . '_name';
-    			}
-    			
     			$arrStates[] = $obj['state'];
-    			$arrReturn['childs'][$obj['type'].$obj[$name]] = Array();
-    			$arrReturn['childs'][$obj['type'].$obj[$name]]['state'] = $obj['state'];
+    			$arrReturn['childs'][$obj['type'].$obj['name']] = Array();
+    			$arrReturn['childs'][$obj['type'].$obj['name']]['state'] = $obj['state'];
     		}
 		}
 		
@@ -621,16 +589,11 @@ class NagVisMap extends GlobalMap {
      */
 	function getState(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getState(&$obj)');
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
-		
+				
 		switch($obj['type']) {
 			case 'map':
 				// prevent direct loops (map including itselfes as map icon)
-				if($this->MAPCFG->getName() == $obj[$name]) {
+				if($this->MAPCFG->getName() == $obj['name']) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 		            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 					
@@ -640,7 +603,7 @@ class NagVisMap extends GlobalMap {
 					// save mapName in linkedMaps array
 					$this->linkedMaps[] = $this->MAPCFG->getName();
 					
-					$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$obj[$name]);
+					$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$obj['name']);
 					$SUBMAPCFG->readMapConfig();
 					$SUBMAP = new NagVisMap($this->MAINCFG,$SUBMAPCFG,$this->LANG,$this->BACKEND);
 					$SUBMAP->linkedMaps = $this->linkedMaps;
@@ -665,7 +628,7 @@ class NagVisMap extends GlobalMap {
 			default:
 				if(isset($obj['line_type']) && $obj['line_type'] == '20') {
 					// line with 2 states...
-					list($objNameFrom,$objNameTo) = explode(',', $obj[$name]);
+					list($objNameFrom,$objNameTo) = explode(',', $obj['name']);
 					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(',', $obj['service_description']);
 					
 					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
@@ -889,7 +852,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getChildMapAlias(&$obj) {
-	    $MAPCFG = new NagVisMapCfg($this->MAINCFG,$obj['map_name']);
+	    $MAPCFG = new NagVisMapCfg($this->MAINCFG,$obj['name']);
 		$MAPCFG->readMapConfig(1);
 		$obj['alias'] = $MAPCFG->getValue('global', 0, 'alias');
 		

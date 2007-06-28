@@ -315,7 +315,7 @@ class GlobalBackendndomy {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateHost(Array())');
 		$QUERYHANDLE = $this->mysqlQuery('SELECT last_hard_state, UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, UNIX_TIMESTAMP(last_state_change) AS last_state_change, current_state, output, problem_has_been_acknowledged 
 		FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h 
-		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$obj['host_name'].'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
+		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$obj['name'].'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
 			$arrReturn['state'] = 'ERROR';
@@ -360,7 +360,7 @@ class GlobalBackendndomy {
 					}
 				}
 			}
-			$arrReturn['name'] = $obj['host_name'];
+			$arrReturn['name'] = $obj['name'];
 			$arrReturn['checkOutput'] = $data['output'];
 			
 			/**
@@ -394,11 +394,11 @@ class GlobalBackendndomy {
 		if(isset($obj['service_description']) && $obj['service_description'] != '') {
     		$QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged 
     		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
-    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$obj['host_name'].'\' AND o.name2 = binary \''.$obj['service_description'].'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id LIMIT 1');
+    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$obj['name'].'\' AND o.name2 = binary \''.$obj['service_description'].'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id LIMIT 1');
         } else {
             $QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged 
     		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
-    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$obj['host_name'].'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id');
+    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$obj['name'].'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id');
         }
 		
 		$iResults = mysql_num_rows($QUERYHANDLE);
@@ -406,7 +406,7 @@ class GlobalBackendndomy {
 		if($iResults == 0) {
 		    $arrReturn['name'] = $obj['service_description'];
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['checkOutput'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$obj['service_description'].',HOST~'.$obj['host_name']);
+			$arrReturn['checkOutput'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$obj['service_description'].',HOST~'.$obj['name']);
 		} else {
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 			    $arrTmpReturn = Array();
@@ -467,12 +467,12 @@ class GlobalBackendndomy {
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT h.hostgroup_id 
 									FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hostgroups AS h 
-									WHERE (o.objecttype_id=3 AND o.name1 = binary \''.$obj['hostgroup_name'].'\' AND o.instance_id='.$this->dbInstanceId.') 
+									WHERE (o.objecttype_id=3 AND o.name1 = binary \''.$obj['name'].'\' AND o.instance_id='.$this->dbInstanceId.') 
 											AND h.hostgroup_object_id=o.object_id LIMIT 1');
 		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['checkOutput'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$obj['hostgroup_name']);
+			$arrReturn['checkOutput'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$obj['name']);
 		} else {
 			$data = mysql_fetch_row($QUERYHANDLE);
 			
@@ -482,7 +482,7 @@ class GlobalBackendndomy {
 										WHERE (h.hostgroup_id='.$data[0].' AND h.instance_id='.$this->dbInstanceId.') 
 												AND (o.objecttype_id=1 AND h.host_object_id=o.object_id)');	
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
-			    $arrHostObj = Array('host_name' => $data[0],'only_hard_states' => $obj['only_hard_states'],'recognize_services' => $obj['recognize_services']);
+			    $arrHostObj = Array('name' => $data[0],'only_hard_states' => $obj['only_hard_states'],'recognize_services' => $obj['recognize_services']);
 				// Get the states of all hosts in the hostgroup
 				$arrReturn['childs'][$data[0]] = $this->findStateHost($arrHostObj);
 				// Count status
@@ -518,12 +518,12 @@ class GlobalBackendndomy {
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT s.servicegroup_id 
 									FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicegroups AS s 
-									WHERE (o.objecttype_id=4 AND o.name1 = binary \''.$obj['servicegroup_name'].'\' AND o.instance_id='.$this->dbInstanceId.') 
+									WHERE (o.objecttype_id=4 AND o.name1 = binary \''.$obj['name'].'\' AND o.instance_id='.$this->dbInstanceId.') 
 											AND s.config_type=1 AND s.servicegroup_object_id=o.object_id');
 		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['checkOutput'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$obj['servicegroup_name']);
+			$arrReturn['checkOutput'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$obj['name']);
 		} else {
 			$data = mysql_fetch_array($QUERYHANDLE);
 			
@@ -533,7 +533,7 @@ class GlobalBackendndomy {
 													AND (o.objecttype_id=2 AND h.service_object_id=o.object_id)');	
 			
 			while($data1 = mysql_fetch_array($QUERYHANDLE)) {
-				$arrServiceObj = Array('host_name' => $data1['name1'],'service_description' => $data1['name2'],'only_hard_states' => $obj['only_hard_states']);
+				$arrServiceObj = Array('name' => $data1['name1'],'service_description' => $data1['name2'],'only_hard_states' => $obj['only_hard_states']);
 				// Get the states of a service
 				$arrReturn['childs'][] = $this->findStateService($arrServiceObj);
 				// Count status
