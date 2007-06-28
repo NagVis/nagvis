@@ -28,6 +28,7 @@ install:
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/images/templates/hover
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/classes
+	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/defines
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/css
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/js
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(SHAREDIR)/nagvis/includes/languages
@@ -53,6 +54,8 @@ install:
 	
 	for file in includes/classes/*.php; \
 	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/classes; done
+	for file in includes/defines/*.php; \
+        do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/defines; done
 	for file in includes/css/*.css; \
 	do $(INSTALL) -m 664 $(INSTALL_OPTS) $$file $(SHAREDIR)/nagvis/includes/css; done
 	for file in includes/js/*.js; \

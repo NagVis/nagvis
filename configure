@@ -2593,7 +2593,7 @@ fi
 
 
 # Config files to create to
-                                                                                                    ac_config_files="$ac_config_files Makefile etc/nagvis.ini-sample etc/nagvis-httpd.conf-sample share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php"
+                                                                                                              ac_config_files="$ac_config_files Makefile etc/nagvis.ini-sample etc/nagvis-httpd.conf-sample share/nagvis/Makefile share/nagvis/index.php share/nagvis/draw.php share/nagvis/includes/defines/global.php share/wui/Makefile share/wui/index.php share/wui/wui.function.inc.php share/wui/ajax_handler.php"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3152,6 +3152,7 @@ do
   "share/nagvis/Makefile" ) CONFIG_FILES="$CONFIG_FILES share/nagvis/Makefile" ;;
   "share/nagvis/index.php" ) CONFIG_FILES="$CONFIG_FILES share/nagvis/index.php" ;;
   "share/nagvis/draw.php" ) CONFIG_FILES="$CONFIG_FILES share/nagvis/draw.php" ;;
+  "share/nagvis/includes/defines/global.php" ) CONFIG_FILES="$CONFIG_FILES share/nagvis/includes/defines/global.php" ;;
   "share/wui/Makefile" ) CONFIG_FILES="$CONFIG_FILES share/wui/Makefile" ;;
   "share/wui/index.php" ) CONFIG_FILES="$CONFIG_FILES share/wui/index.php" ;;
   "share/wui/wui.function.inc.php" ) CONFIG_FILES="$CONFIG_FILES share/wui/wui.function.inc.php" ;;
