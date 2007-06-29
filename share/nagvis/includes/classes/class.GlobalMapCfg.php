@@ -86,7 +86,7 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'name' => Array(	'must' => 1,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_NO_SPACE),
 							'x' => Array(		'must' => 1,
 												'match' => MATCH_INTEGER),
 							'y' => Array(		'must' => 1,
@@ -107,17 +107,17 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'hover_url' => Array('must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'line_type' => Array('must' => 0,
 												'match' => MATCH_INTEGER),
 							'url' => Array(		'must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'label_show' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_BOOLEAN),
 							'label_text' => Array('must' => 0,
 												'default' => '[name]',
-												'match' => '/$.+^/i'),
+												'match' => MATCH_ALL),
 							'label_x' => Array(	'must' => 0,
 												'default' => '',
 												'match' => MATCH_INTEGER_PRESIGN),
@@ -136,7 +136,7 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'name' => Array(	'must' => 1,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_NO_SPACE),
 							'x' => Array(		'must' => 1,
 												'match' => MATCH_INTEGER),
 							'y' => Array(		'must' => 1,
@@ -154,20 +154,20 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'hover_url' => Array('must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'hover_template' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'line_type' => Array('must' => 0,
 												'match' => MATCH_INTEGER),
 							'url' => Array(		'must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'label_show' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_BOOLEAN),
 							'label_text' => Array('must' => 0,
 												'default' => '[name]',
-												'match' => '/$.+^/i'),
+												'match' => MATCH_ALL),
 							'label_x' => Array(	'must' => 0,
 												'default' => '',
 												'match' => MATCH_INTEGER_PRESIGN),
@@ -186,9 +186,9 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'name' => Array(	'must' => 1,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_NO_SPACE),
 							'service_description' => Array('must' => 1,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING),
 							'x' => Array(		'must' => 1,
 												'match' => MATCH_INTEGER),
 							'y' => Array(		'must' => 1,
@@ -203,20 +203,20 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'hover_url' => Array('must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'hover_template' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'line_type' => Array('must' => 0,
 												'match' => MATCH_INTEGER),
 							'url' => Array(		'must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'label_show' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_BOOLEAN),
 							'label_text' => Array('must' => 0,
 												'default' => '[name] [service_description]',
-												'match' => '/$.+^/i'),
+												'match' => MATCH_ALL),
 							'label_x' => Array(	'must' => 0,
 												'default' => '',
 												'match' => MATCH_INTEGER_PRESIGN),
@@ -235,7 +235,7 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'name' => Array(	'must' => 1,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_NO_SPACE),
 							'x' => Array(		'must' => 1,
 												'match' => MATCH_INTEGER),
 							'y' => Array(		'must' => 1,
@@ -250,20 +250,20 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'hover_url' => Array('must' => 0,
-												'match' => ''),
+												'match' => MATCH_STRING_URL),
 							'hover_template' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'line_type' => Array('must' => 0,
 												'match' => MATCH_INTEGER),
 							'url' => Array(		'must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'label_show' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_BOOLEAN),
 							'label_text' => Array('must' => 0,
 												'default' => '[name]',
-												'match' => '/$.+^/i'),
+												'match' => MATCH_ALL),
 							'label_x' => Array(	'must' => 0,
 												'default' => '',
 												'match' => MATCH_INTEGER_PRESIGN),
@@ -294,9 +294,9 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'url' => Array(		'must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'hover_url' => Array('must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'hover_template' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
@@ -305,7 +305,7 @@ class GlobalMapCfg {
 												'match' => MATCH_BOOLEAN),
 							'label_text' => Array('must' => 0,
 												'default' => '[name]',
-												'match' => '/$.+^/i'),
+												'match' => MATCH_ALL),
 							'label_x' => Array(	'must' => 0,
 												'default' => '',
 												'match' => MATCH_INTEGER_PRESIGN),
@@ -321,7 +321,7 @@ class GlobalMapCfg {
 			'textbox' => Array('type' => Array(	'must' => 0,
 												'match' => MATCH_OBJECTTYPE),
 							'text' => Array(	'must' => 1,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_ALL),
 							'x' => Array(		'must' => 1,
 												'match' => MATCH_INTEGER),
 							'y' => Array(		'must' => 1,
@@ -346,9 +346,9 @@ class GlobalMapCfg {
 												'default' => 1,
 												'match' => MATCH_INTEGER),
 							'url' => Array(		'must' => 0,
-												'match' => '/$.+^/i'),
+												'match' => MATCH_STRING_URL),
 							'hover_url' => Array('must' => 0,
-												'match' => '/$.+^/i')));
+												'match' => MATCH_STRING_URL)));
 		
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::GlobalMapCfg()');
@@ -931,10 +931,9 @@ class GlobalMapCfg {
 						}
 					}
 					
-					// loop given elements for checking: => all given atributes valid
+					// loop given elements for checking: => all given attributes valid
 					foreach($element AS $key => $val) {
-						// check for valid atributes
-						// FIXME: check valid value format
+						// check for valid attributes
 						if(!array_key_exists($key,$this->validConfig[$type])) {
 							// unknown atribute
 							if($printErr == 1) {
@@ -943,6 +942,21 @@ class GlobalMapCfg {
 							}
 							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 							return FALSE;
+						} else {
+							// FIXME: Only match non array values at the moment
+							if(!is_array($val)) {
+								// valid attribute, now check for value format
+								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
+									
+									// wrong format
+									if($printErr) {
+										$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+							            $FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
+									}
+									if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
+									return FALSE;
+								}
+							}
 						}
 					}
 				}	

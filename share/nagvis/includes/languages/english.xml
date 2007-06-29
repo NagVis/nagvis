@@ -137,8 +137,12 @@
 				</unknownValue>
 				<wrongValueFormat>
 					<title>Wrong value format</title>
-					<text>The attribute &quot;[ATTRIBUTE]&quot; in section &quot;[TYPE]&quot; does not match the valid value format &quot;[MATCH]&quot; in main configuration file</text>
+					<text>The attribute &quot;[ATTRIBUTE]&quot; in section &quot;[TYPE]&quot; in main configuration file does not match the valid value format</text>
 				</wrongValueFormat>
+				<wrongValueFormatMap>
+					<title>Wrong value format</title>
+					<text>The attribute &quot;[ATTRIBUTE]&quot; in section &quot;[TYPE]&quot; in map configuration file &quot;[MAP]&quot; does not match the valid value format</text>
+				</wrongValueFormatMap>
 				<languageNotReadable>
 					<title>Can not read language file</title>
 					<text>Please check the webservers permission at the language file &quot;[LANGFILE]&quot;</text>

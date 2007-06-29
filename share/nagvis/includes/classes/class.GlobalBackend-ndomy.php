@@ -562,16 +562,16 @@ class GlobalBackendndomy {
         if(isset($objState['childs'])) {
 	        if(isset($objState['childs']['global']['ERROR']) && $objState['childs']['global']['ERROR'] > 0) {
 				$arrStates[] = 'ERROR';
+			} elseif(isset($objState['childs']['global']['UNKNOWN']) && $objState['childs']['global']['UNKNOWN'] > 0) {
+				$arrStates[] = 'UNKNOWN';
 		    } if(isset($objState['childs']['global']['CRITICAL']) && $objState['childs']['global']['CRITICAL'] > 0) {
 				$arrStates[] = 'CRITICAL';
+			} elseif(isset($objState['childs']['global']['UNREACHABLE']) && $objState['childs']['global']['UNREACHABLE'] > 0) {
+				$arrStates[] = 'UNREACHABLE';
 		    } elseif(isset($objState['childs']['global']['DOWN']) && $objState['childs']['global']['DOWN'] > 0) {
 		    	$arrStates[] = 'DOWN';
 			} elseif(isset($objState['childs']['global']['WARNING']) && $objState['childs']['global']['WARNING'] > 0) {
 				$arrStates[] = 'WARNING';
-			} elseif(isset($objState['childs']['global']['UNKNOWN']) && $objState['childs']['global']['UNKNOWN'] > 0) {
-				$arrStates[] = 'UNKNOWN';
-			} elseif(isset($objState['childs']['global']['UNREACHABLE']) && $objState['childs']['global']['UNREACHABLE'] > 0) {
-				$arrStates[] = 'UNREACHABLE';
 			} elseif(isset($objState['childs']['global']['ACK']) && $objState['childs']['global']['ACK'] > 0) {
 				$arrStates[] = 'ACK';
 			} elseif(isset($objState['childs']['global']['UP']) && $objState['childs']['global']['UP'] > 0) {
@@ -598,18 +598,24 @@ class GlobalBackendndomy {
 	 */
 	function wrapState(&$objStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::wrapState(Array(...))');
-		if(in_array('DOWN', $objStates) || in_array('CRITICAL', $objStates)) {
+		if(in_array('ERROR', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ERROR');
+			return 'ERROR';
+		} elseif(in_array('UNKNOWN', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): UNKNOWN');
+			return 'UNKNOWN';
+		} elseif(in_array('CRITICAL', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): CRITICAL');
+			return 'CRITICAL';
+		} elseif(in_array('UNREACHABLE', $objStates)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): UNREACHABLE');
+			return 'UNREACHABLE';
+		} elseif(in_array('DOWN', $objStates)) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): CRITICAL');
 			return 'CRITICAL';
 		} elseif(in_array('WARNING', $objStates)) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): WARNING');
 			return 'WARNING';
-		} elseif(in_array('UNKNOWN', $objStates)) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): UNKNOWN');
-			return 'UNKNOWN';
-		} elseif(in_array('ERROR', $objStates)) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ERROR');
-			return 'ERROR';
 		} elseif(in_array('ACK', $objStates)) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::wrapState(): ACK');
 			return 'ACK';

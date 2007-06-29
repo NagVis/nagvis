@@ -477,6 +477,7 @@ class GlobalMainCfg {
 								$arrValidConfig = $this->validConfig[$type];
 							}
 							
+							// check for valid attribute
 							if(!array_key_exists($key,$arrValidConfig)) {
 								// unknown attribute
 								if($printErr) {
@@ -486,12 +487,13 @@ class GlobalMainCfg {
 								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 								return FALSE;
 							} else {
-								// known attribute, now check for value format
+								// valid attribute, now check for value format
 								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
+									echo $val;
 									// wrong format
 									if($printErr) {
 										$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-							            $FRONTEND->messageToUser('ERROR','wrongValueFormat','TYPE~'.$type.',ATTRIBUTE~'.$key.',VALUE~'.$val.',MATCH~'.$arrValidConfig[$key]['match']);
+							            $FRONTEND->messageToUser('ERROR','wrongValueFormat','TYPE~'.$type.',ATTRIBUTE~'.$key);
 									}
 									if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 									return FALSE;
