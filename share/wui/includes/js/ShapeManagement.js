@@ -7,6 +7,20 @@ function checkPng(imageName) {
 	}
 }
 
+var usedInMap = "";
+function checkShapeInUse(shapeName,mapOptions) {
+	for(var i=0;i<mapOptions.length;i++) {
+		for(var a = 0; a < mapOptions[i].usedShapes.length; a++) {
+			if(mapOptions[i].usedShapes[a] == shapeName) {
+				return true;
+			}
+		}
+		usedInMap =mapOptions[i].mapName;
+	}
+	
+	return false;
+}
+
 function check_image_add() {
     if(document.shape_add.shape_image.value.length == 0) {
 		alert(printLang(lang['firstMustChoosePngImage'],''));
@@ -24,6 +38,11 @@ function check_image_add() {
 function check_image_delete() {
     if(document.shape_delete.shape_image.value == '') {
         alert(printLang(lang['foundNoShapeToDelete'],''));
+        return false;
+    }
+    
+    if(checkShapeInUse(document.shape_delete.shape_image.value, window.opener.mapOptions)) {
+    	alert(printLang(lang['shapeInUse'],'MAP~'+usedInMap));
         return false;
     }
     

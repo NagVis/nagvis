@@ -49,7 +49,7 @@ class WuiMap extends GlobalMap {
 			}
 			
 			$MAPCFG1 = new WuiMapCfg($this->MAINCFG,$map);
-			$MAPCFG1->readMapConfig(1);
+			$MAPCFG1->readMapConfig(0);
 			$mapOptions .= '{ mapName:\''.$map.'\'';
 			
 			// map alias
@@ -87,7 +87,19 @@ class WuiMap extends GlobalMap {
 				if($i > 0) {
 					$mapOptions .= ',';
 				}
-				$mapOptions .= '\''.$obj['map_name'].'\' ';
+				$mapOptions .= '\''.$obj['name'].'\' ';
+				$i++;
+			}
+			$mapOptions .= ' ]';
+			
+			// used shapes
+			$mapOptions .= ', usedShapes:[ ';
+			$i = 0;
+			foreach($MAPCFG1->getDefinitions('shape') AS $key => $obj) {
+				if($i > 0) {
+					$mapOptions .= ',';
+				}
+				$mapOptions .= '\''.$obj['icon'].'\' ';
 				$i++;
 			}
 			$mapOptions .= ' ]';
