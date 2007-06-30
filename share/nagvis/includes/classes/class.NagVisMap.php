@@ -668,24 +668,17 @@ class NagVisMap extends GlobalMap {
 	        case 'host':
 	            // If there are childs, for the output
 	            if($obj['recognize_services'] == 1 && isset($obj['childs'])) {
-    	            if($obj['childs']['global']['CRITICAL'] > 0) {
-    					$obj['stateOutput'] = 'Host is UP but there are '.$obj['childs']['global']['CRITICAL'].' CRITICAL, ' .$obj['childs']['global']['WARNING']. ' WARNING and ' .$obj['childs']['global']['UNKNOWN']. ' UNKNOWN Services';
-    				} elseif($obj['childs']['global']['WARNING'] > 0) {
-    					$obj['stateOutput'] = 'Host is UP but there are ' .$obj['childs']['global']['WARNING']. ' WARNING and ' .$obj['childs']['global']['UNKNOWN']. ' UNKNOWN Services';
-    				} elseif($obj['childs']['global']['UNKNOWN'] > 0) {
-    					$obj['stateOutput'] = 'Host is UP but there are '.$obj['childs']['global']['UNKNOWN'].' Services in UNKNOWN state';
-    				} elseif($obj['childs']['global']['ACK'] > 0) {
-    					$obj['stateOutput'] = 'Host is UP but '.$obj['childs']['global']['ACK'].' services are in a NON-OK State but all are ACKNOWLEDGED';
-    				} elseif($obj['childs']['global']['OK'] > 0) {
-    					$obj['stateOutput'] = 'Host is UP and all '.$obj['childs']['global']['OK'].' services are OK';
-    				}
+    				$obj['stateOutput'] = '<table>';
+	            	// Host Output
+    				$obj['stateOutput'] .= '<tr><td colspan="3">Host is UP ('.$obj['checkOutput'].')</td></tr>';
     				
     				// Append output for the child objects
     				foreach($obj['childs'] AS $name => $child) {
     				    if($name != 'global') {
-    				        $obj['stateOutput'] .= '<br />&nbsp;&nbsp;&nbsp;Service: '.$child['name'].' has state '.$child['state'].' ';
+    				        $obj['stateOutput'] .= '<tr><td>'.$child['name'].'</td><td>'.$child['state'].'</td><td>'.$child['checkOutput'].'</td></tr>';
     				    }
     				}
+    				$obj['stateOutput'] .= '</table>';
     			} else {
     			    // Host output if there are no child objects (services)
     			    if(isset($obj['checkOutput'])) {
@@ -695,24 +688,17 @@ class NagVisMap extends GlobalMap {
 	        break;
 	        case 'hostgroup':
 	            if(isset($obj['childs'])) {
-        			if($obj['childs']['global']['CRITICAL'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['CRITICAL'].' Hosts are CRITICAL, '.$obj['childs']['global']['WARNING'].' WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN';
-        			} elseif($obj['childs']['global']['WARNING'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['WARNING']. ' Hosts are WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN';
-        			} elseif($obj['childs']['global']['UNKNOWN'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['UNKNOWN'].' are in UNKNOWN state';
-        			} elseif($obj['childs']['global']['ACK'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['ACK'].' Hosts are in a NON-OK State but all errors are ACKNOWLEDGED';
-        			} elseif($obj['childs']['global']['UP'] > 0) {
-        				$obj['stateOutput'] = 'All '.$obj['childs']['global']['UP'].' Hosts are UP';
-        			}
+    				$obj['stateOutput'] = '<table>';
+	            	// Hostgroup output
+	            	$obj['stateOutput'] .= '<tr><td colspan="3">Hostgroup is '.$obj['state'].'</td></tr>';
         			
     				// Append output for the child objects
     				foreach($obj['childs'] AS $name => $child) {
     				    if($name != 'global') {
-    				        $obj['stateOutput'] .= '<br />&nbsp;&nbsp;&nbsp;Host: '.$child['name'].' has state '.$child['state'].' ';
+    				        $obj['stateOutput'] .= '<tr><td>'.$child['name'].'</td><td>'.$child['state'].'</td><td>'.$child['checkOutput'].'</td></tr>';
     				    }
     				}
+    				$obj['stateOutput'] .= '</table>';
     	        } else {
     	            if(isset($obj['checkOutput'])) {
 	                    $obj['stateOutput'] = $obj['checkOutput'];
@@ -721,21 +707,17 @@ class NagVisMap extends GlobalMap {
 	        break;
 	        case 'servicegroup':
 	            if(isset($obj['childs'])) {
-        			if($obj['childs']['global']['CRITICAL'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['CRITICAL'].' CRITICAL, '.$obj['childs']['global']['WARNING'].' WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN Services';
-        			} elseif($obj['childs']['global']['WARNING'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['WARNING']. ' WARNING and '.$obj['childs']['global']['UNKNOWN'].' UNKNOWN Services';
-        			} elseif($obj['childs']['global']['UNKNOWN'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['UNKNOWN'].' Services in UNKNOWN state';
-        			} elseif($obj['childs']['global']['ACK'] > 0) {
-        				$obj['stateOutput'] = $obj['childs']['global']['ACK'].' services are in a NON-OK State but all are ACKNOWLEDGED';
-        			} elseif($obj['childs']['global']['OK'] > 0) {
-        				$obj['stateOutput'] = 'All '.$obj['childs']['global']['OK'].' services are OK';	
-        			} else {
-        			    if(isset($obj['checkOutput'])) {
-    	                    $obj['stateOutput'] = $obj['checkOutput'];
-    	                }
-    	            }
+    				$obj['stateOutput'] = '<table>';
+	            	// Servicegroup output
+	            	$obj['stateOutput'] .= '<tr><td colspan="3">Servicegroup is '.$obj['state'].'</td></tr>';
+	            	
+    				// Append output for the child objects
+    				foreach($obj['childs'] AS $name => $child) {
+    				    if($name != 'global') {
+    				         $obj['stateOutput'] .= '<tr><td>'.$child['name'].'</td><td>'.$child['state'].'</td><td>'.$child['checkOutput'].'</td></tr>';
+    				    }
+    				}
+    				$obj['stateOutput'] .= '</table>';
     	        } else {
     	            if(isset($obj['checkOutput'])) {
 	                    $obj['stateOutput'] = $obj['checkOutput'];
