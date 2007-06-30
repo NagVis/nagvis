@@ -156,13 +156,11 @@ class WuiAddModify extends GlobalPage {
 				$this->propCount++;
 			} elseif($propname == "backend_id") {
 				if($this->prop['type'] == 'service') {
-					$field = 'host_name';
 					$type = 'host';
 				} else {
-					$field = $this->prop['type'] . '_name';
 					$type = $this->prop['type'];
 				}
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getBackends(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],"getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');"));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getBackends(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],"getObjects(this.value,'".$type."','name','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');"));
 				$this->propCount++;
 			} elseif($propname == "line_type") {
 				// treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
@@ -175,17 +173,22 @@ class WuiAddModify extends GlobalPage {
 			} elseif($propname == "header_template") {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getHeaderTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
 				$this->propCount++;
-			} elseif($propname == "map_name") {
+			} elseif($this->prop['type'] == 'map' && $propname == "name") {
 				// treat the special case of map_name, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMaps(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must']));
 				$this->propCount++;
-			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
+			} elseif($propname == 'name') {
+				if($this->prop['type'] == 'service') {
+					$type = 'host';
+				} else {
+					$type = $this->prop['type'];
+				}
 				$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
-				$ret[] = "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
+				$ret[] = "<script>getObjects('".$backendId."','".$type."','name','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
 				if(array_key_exists('service_description',$this->MAPCFG->validConfig[$this->prop['type']])) {
 					$ret[] = "<script>getServices('".$backendId."','".$this->prop['type']."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
 				}
-				if($propname == 'host_name') {
+				if($type == 'host') {
 					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,Array(),'',$prop['must'],"getServices('".$backendId."','".$this->prop['type']."',this.value,'service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');"));
 				} else {
 					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,Array(),'',$prop['must']));

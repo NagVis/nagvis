@@ -36,12 +36,12 @@ switch($_GET['action']) {
 		if(method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
 			echo '[ ';
 			$i = 0;
-			if(isset($_GET['host_name']) && $_GET['host_name'] != '') {
-				foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects('service',$_GET['host_name'],'') AS $arr) {
+			if(isset($_GET['name']) && $_GET['name'] != '') {
+				foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects('service',$_GET['name'],'') AS $arr) {
 					if($i != 0) {
 						echo ', ';
 					}
-					echo '{ "host_name": "'.$arr['name1'].'", "service_description": "'.$arr['name2'].'"}';
+					echo '{ "name": "'.$arr['name1'].'", "service_description": "'.$arr['name2'].'"}';
 					$i++;
 				}
 			}

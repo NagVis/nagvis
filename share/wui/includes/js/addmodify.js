@@ -55,7 +55,7 @@ function check_object() {
 	for(i=0;i<document.addmodify.elements.length;i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
 		
-			if(document.addmodify.elements[i].name.substring(document.addmodify.elements[i].name.length-6,document.addmodify.elements[i].name.length)=='_name') {
+			if(document.addmodify.elements[i].name == 'name') {
 				object_name=document.addmodify.elements[i].value;
 			}
 			if(document.addmodify.elements[i].name == 'iconset') {
@@ -84,7 +84,7 @@ function check_object() {
 			
 			if(document.addmodify.elements[i].value != '') {
 				// Prevent direct loop in map recursion
-				if(document.addmodify.type.value == "map" && document.addmodify.elements[i].name == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
+				if(document.addmodify.type.value == "map" && document.addmodify.elements[i].name == "name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
 					// LOOP!
 					alert(printLang(lang['loopInMapRecursion'],''));
 					document.addmodify.properties.value='';

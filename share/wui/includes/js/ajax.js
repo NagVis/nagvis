@@ -52,12 +52,12 @@ function getAnswer(oRequest,myCallback,oOpt) {
 	}
 }
 
-function getServices(backend_id,type,host_name,field,selected) {
+function getServices(backend_id,type,name,field,selected) {
 	var oOpt = Object();
 	oOpt.field = field;
 	oOpt.selected = selected;
 	oOpt.type = type;
-	getRequest('ajax_handler.php?action=getServices&backend_id='+backend_id+'&host_name='+host_name,'printObjects',oOpt);
+	getRequest('ajax_handler.php?action=getServices&backend_id='+backend_id+'&name='+name,'printObjects',oOpt);
 }
 
 function getObjects(backend_id,type,field,selected) {
