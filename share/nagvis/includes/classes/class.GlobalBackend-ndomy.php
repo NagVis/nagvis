@@ -318,8 +318,10 @@ class GlobalBackendndomy {
 		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$obj['name'].'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
+			unset($arrReturn['childs']);
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
+			$arrReturn['name'] = $obj['name'];
+			$arrReturn['checkOutput'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
 		} else {
 			$data = mysql_fetch_array($QUERYHANDLE);
 			
@@ -404,6 +406,7 @@ class GlobalBackendndomy {
 		$iResults = mysql_num_rows($QUERYHANDLE);
 		
 		if($iResults == 0) {
+			unset($arrReturn['childs']);
 		    $arrReturn['name'] = $obj['service_description'];
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['checkOutput'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$obj['service_description'].',HOST~'.$obj['name']);
@@ -471,6 +474,7 @@ class GlobalBackendndomy {
 											AND h.hostgroup_object_id=o.object_id LIMIT 1');
 		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
+			unset($arrReturn['childs']);
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['checkOutput'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$obj['name']);
 		} else {
