@@ -21,9 +21,32 @@ table.hover_table th {
 
 table.hover_table td.label {
 	text-align: center;
+	vertical-align: top;
 	background-color: #eee;
 }
 
 table.hover_table label {
 	font-weight: bold;
+}
+
+table.hover_table tr.detailoutput td {
+	font-size: 10px;
+	padding: 1px;
+	color: #000000;
+}
+
+table.hover_table td.stateOK {
+	background-color: #33FF00;
+}
+table.hover_table td.stateACK {
+	background-color: #1E83F0;
+}
+table.hover_table td.stateUNKNOWN { 
+	background-color: #FF9900;
+}
+table.hover_table td.stateWARNING {
+	background-color: #FFFF00;
+}
+table.hover_table td.stateCRITICAL {
+	background-color: #F83838;
 }

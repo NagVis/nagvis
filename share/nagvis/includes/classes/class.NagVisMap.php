@@ -484,26 +484,38 @@ class NagVisMap extends GlobalMap {
 				$ret = str_replace('[service_description]',$obj['service_description'],$ret);
 				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$obj['service_description']),$ret);
 			}
-// FIXME:
-//			// Replace lists
-//			if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
-//				foreach($matchReturn[1] AS $key) {
-//					if($key == 'statelist') {
-//						$sReplace = '';
-//						preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
-//						// loop the child objects
-//						if(isset($obj['childs'])) {
-//    						foreach($obj['childs'] AS $key1 => $childObj) {
-//    						    if($key1 != 'global') {
-//    							    $sReplaceObj = str_replace('[child_obj_name]',$childObj['name'],$matchReturn1[1][0]);
-//    							    $sReplace .= $sReplaceObj;
-//    							}
-//    						}
-//    						$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
-//    				    }
-//					}
-//				}
-//			}
+			
+			// Replace lists
+			if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
+				foreach($matchReturn[1] AS $key) {
+					if($key == 'detailoutput') {
+						if(!isset($obj['childs'])) {
+							$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/','',$ret);
+						}
+					}
+					if($key == 'statelist') {
+						$sReplace = '';
+						preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
+						// loop the child objects
+						if(isset($obj['childs'])) {
+    						foreach($obj['childs'] AS $key1 => $childObj) {
+    						    if($key1 != 'global') {
+    							    $sReplaceObj = str_replace('[child_obj_name]',$childObj['name'],$matchReturn1[1][0]);
+    							    $sReplaceObj = str_replace('[child_obj_state]',$childObj['state'],$sReplaceObj);
+    							    if(isset($childObj['checkOutput'])) {
+    							    	$sReplaceObj = str_replace('[child_obj_output]',$childObj['checkOutput'],$sReplaceObj);
+    								} else {
+    									if(!isset($childObj['stateOutput'])) print_r($childObj);
+    									$sReplaceObj = str_replace('[child_obj_output]',$childObj['stateOutput'],$sReplaceObj);
+    								}
+    							    $sReplace .= $sReplaceObj;
+    							}
+    						}
+    						$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
+    				    }
+					}
+				}
+			}
 			
             // Escape chars which could make problems
             $ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
@@ -570,8 +582,8 @@ class NagVisMap extends GlobalMap {
 		foreach($arr AS $obj) {
 		    if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
     			$arrStates[] = $obj['state'];
-    			$arrReturn['childs'][$obj['type'].$obj['name']] = Array();
-    			$arrReturn['childs'][$obj['type'].$obj['name']]['state'] = $obj['state'];
+    			$arrReturn['childs'][$obj['type'].'-'.$obj['name']] = $obj;
+    			$arrReturn['childs'][$obj['type'].'-'.$obj['name']] = $this->getStateOutput($arrReturn['childs'][$obj['type'].'-'.$obj['name']]);
     		}
 		}
 		
@@ -668,17 +680,8 @@ class NagVisMap extends GlobalMap {
 	        case 'host':
 	            // If there are childs, for the output
 	            if($obj['recognize_services'] == 1 && isset($obj['childs'])) {
-    				$obj['stateOutput'] = '<table>';
 	            	// Host Output
-    				$obj['stateOutput'] .= '<tr><td colspan="3">Host is UP ('.$obj['checkOutput'].')</td></tr>';
-    				
-    				// Append output for the child objects
-    				foreach($obj['childs'] AS $name => $child) {
-    				    if($name != 'global') {
-    				        $obj['stateOutput'] .= '<tr><td>'.$child['name'].'</td><td>'.$child['state'].'</td><td>'.$child['checkOutput'].'</td></tr>';
-    				    }
-    				}
-    				$obj['stateOutput'] .= '</table>';
+    				$obj['stateOutput'] = 'Host is UP ('.$obj['checkOutput'].')';
     			} else {
     			    // Host output if there are no child objects (services)
     			    if(isset($obj['checkOutput'])) {
@@ -688,17 +691,7 @@ class NagVisMap extends GlobalMap {
 	        break;
 	        case 'hostgroup':
 	            if(isset($obj['childs'])) {
-    				$obj['stateOutput'] = '<table>';
-	            	// Hostgroup output
-	            	$obj['stateOutput'] .= '<tr><td colspan="3">Hostgroup is '.$obj['state'].'</td></tr>';
-        			
-    				// Append output for the child objects
-    				foreach($obj['childs'] AS $name => $child) {
-    				    if($name != 'global') {
-    				        $obj['stateOutput'] .= '<tr><td>'.$child['name'].'</td><td>'.$child['state'].'</td><td>'.$child['checkOutput'].'</td></tr>';
-    				    }
-    				}
-    				$obj['stateOutput'] .= '</table>';
+	            	$obj['stateOutput'] = 'Hostgroup is '.$obj['state'];
     	        } else {
     	            if(isset($obj['checkOutput'])) {
 	                    $obj['stateOutput'] = $obj['checkOutput'];
@@ -707,17 +700,7 @@ class NagVisMap extends GlobalMap {
 	        break;
 	        case 'servicegroup':
 	            if(isset($obj['childs'])) {
-    				$obj['stateOutput'] = '<table>';
-	            	// Servicegroup output
-	            	$obj['stateOutput'] .= '<tr><td colspan="3">Servicegroup is '.$obj['state'].'</td></tr>';
-	            	
-    				// Append output for the child objects
-    				foreach($obj['childs'] AS $name => $child) {
-    				    if($name != 'global') {
-    				         $obj['stateOutput'] .= '<tr><td>'.$child['name'].'</td><td>'.$child['state'].'</td><td>'.$child['checkOutput'].'</td></tr>';
-    				    }
-    				}
-    				$obj['stateOutput'] .= '</table>';
+	            	$obj['stateOutput'] = 'Servicegroup is '.$obj['state'];
     	        } else {
     	            if(isset($obj['checkOutput'])) {
 	                    $obj['stateOutput'] = $obj['checkOutput'];
