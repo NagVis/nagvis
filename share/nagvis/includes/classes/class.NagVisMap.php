@@ -322,16 +322,16 @@ class NagVisMap extends GlobalMap {
     				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj['name'].'">';
     			break;
     			case 'host':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?host='.$obj['name'].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?host='.$obj['name'].'">';
     			break;
     			case 'service':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$obj['name'].'&amp;service='.$obj['service_description'].'">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$obj['name'].'&amp;service='.$obj['service_description'].'">';
     			break;
     			case 'hostgroup':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?hostgroup='.$obj['name'].'&amp;style=detail">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?hostgroup='.$obj['name'].'&amp;style=detail">';
     			break;
     			case 'servicegroup':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlcgi').'/status.cgi?servicegroup='.$obj['name'].'&amp;style=detail">';
+    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?servicegroup='.$obj['name'].'&amp;style=detail">';
     			break;
     		}
     	}

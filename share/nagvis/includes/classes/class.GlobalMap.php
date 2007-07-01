@@ -141,7 +141,6 @@ class GlobalMap {
 			break;
 		}
 		
-		//replaced: if(file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
 		if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getIcon(): '.$icon);
 			return $icon;

@@ -236,7 +236,12 @@ class GlobalMainCfg {
 																					'must' => 0,
 																					'editable' => 1,
 																					'default' => '180',
-																					'match' => MATCH_INTEGER)),
+																					'match' => MATCH_INTEGER),
+																'htmlcgi' => Array(
+																					'must' => 0,
+																					'editable' => 1,
+																					'default' => '',
+																					'match' => MATCH_STRING_PATH)),
 												'html' => Array('backendid' => Array(
 																					'must' => 1,
 																					'editable' => 0,
@@ -293,6 +298,7 @@ class GlobalMainCfg {
 		
 		// set default value
 		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
+		$this->validConfig['backend']['htmlcgi']['default'] = $this->validConfig['paths']['htmlcgi']['default'];
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
 	}
@@ -754,23 +760,44 @@ class GlobalMainCfg {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getValue('.$sec.','.$var.','.$ignoreDefault.')');
 		// if nothing is set in the config file, use the default value
 		if(isset($this->config[$sec]) && is_array($this->config[$sec]) && array_key_exists($var,$this->config[$sec])) {
+			if (DEBUG&&DEBUGLEVEL&2) debug('  Value is set in the config file');
+			
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->config[$sec][$var]);
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
+			if (DEBUG&&DEBUGLEVEL&2) debug('  Not set in config file, try to get default value');
 			if(preg_match('/^backend_/i', $sec)) {
+				if (DEBUG&&DEBUGLEVEL&2) debug('  Section: Backend');
+				
 				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] != '') {
+					if (DEBUG&&DEBUGLEVEL&2) debug('  Backendtype is set in the backend, get the default value from backend default options');
+					
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']);
 					return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
 				} else {
+					if (DEBUG&&DEBUGLEVEL&2) debug('  Backendtype is not set in the backend, get the options of the default backend');
+					
 					if(isset($this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']) && $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'] != '') {
+						if (DEBUG&&DEBUGLEVEL&2) debug('  Got default value from the default backend');
+						
 						if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']);
 						return $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'];
 					} else {
-						if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): ""');
-						return $this->validConfig['backend']['backendtype']['default'];
+						if (DEBUG&&DEBUGLEVEL&2) debug('  The default value is empty or not set in the default backend');
+						if(isset($this->validConfig['backend'][$var]['default']) && $this->validConfig['backend'][$var]['default'] != '') {
+							if (DEBUG&&DEBUGLEVEL&2) debug('  Found the value in "global" backend section');
+							
+							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend'][$var]['default']);
+							return $this->validConfig['backend'][$var]['default'];
+						} else {
+							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['backendtype']['default']);
+							return $this->validConfig['backend']['backendtype']['default'];
+						}
 					}
 				}
 			} elseif(preg_match('/^rotation_/i', $sec)) {
+				if (DEBUG&&DEBUGLEVEL&2) debug('  Section: Rotation');
+				
 			    if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
     			    if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['rotation'][$var]['default']);
     				return $this->validConfig['rotation'][$var]['default'];
@@ -782,6 +809,8 @@ class GlobalMainCfg {
 				return $this->validConfig[$sec][$var]['default'];
 			}
 		} else {
+			if (DEBUG&&DEBUGLEVEL&2) debug('  Not set in config file, not allowed to get default value');
+			
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): FALSE');
 			return FALSE;
 		}
