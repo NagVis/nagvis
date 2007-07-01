@@ -260,12 +260,6 @@ class WuiMap extends GlobalMap {
 	function parseIcon(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseIcon()');
 		$ret = Array();
-				
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
 		
 		$ret[] = "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
 		$ret[] = "\t\t<img src=\"".$obj['htmlPath'].$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
@@ -382,12 +376,6 @@ class WuiMap extends GlobalMap {
      */
 	function infoBox(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::infoBox(&$obj)');
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
-		
 		unset($obj['stateOutput']);
 		unset($obj['state']);
 		

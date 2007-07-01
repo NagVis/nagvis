@@ -466,7 +466,6 @@ switch($_GET['myaction']) {
 		
 		if($bFoundOption) {
 			$MAINCFG->setSection('backend_'.$_POST['backend_id']);
-			$MAINCFG->setValue('backend_'.$_POST['backend_id'],'backendid',$_POST['backend_id']);
 			$MAINCFG->setValue('backend_'.$_POST['backend_id'],'backendtype',$_POST['backendtype']);
 			
 			foreach($aOpt AS $key => $val) {
