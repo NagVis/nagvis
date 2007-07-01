@@ -517,6 +517,7 @@ class GlobalBackendndomy {
 											AND s.config_type=1 AND s.servicegroup_object_id=o.object_id');
 		
 		if (mysql_num_rows($QUERYHANDLE) == 0) {
+			unset($arrReturn['childs']);
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['checkOutput'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$obj['name']);
 		} else {
