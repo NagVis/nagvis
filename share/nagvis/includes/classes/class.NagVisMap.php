@@ -18,7 +18,7 @@ class NagVisMap extends GlobalMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
+	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND,$getState=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
@@ -29,7 +29,7 @@ class NagVisMap extends GlobalMap {
 		
 		parent::GlobalMap($MAINCFG,$MAPCFG);
 		
-		$this->objects = $this->getMapObjects(1,1);
+		$this->objects = $this->getMapObjects($getState,1);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::NagVisMap()');
 	}
 	
@@ -617,7 +617,7 @@ class NagVisMap extends GlobalMap {
 					
 					$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$obj['name']);
 					$SUBMAPCFG->readMapConfig();
-					$SUBMAP = new NagVisMap($this->MAINCFG,$SUBMAPCFG,$this->LANG,$this->BACKEND);
+					$SUBMAP = new NagVisMap($this->MAINCFG,$SUBMAPCFG,$this->LANG,$this->BACKEND,FALSE);
 					$SUBMAP->linkedMaps = $this->linkedMaps;
 					
 					if($this->checkPermissions($SUBMAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
