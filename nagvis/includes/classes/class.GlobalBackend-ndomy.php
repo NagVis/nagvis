@@ -546,7 +546,7 @@ class GlobalBackendndomy {
 			$service = mysql_fetch_array($QUERYHANDLE);				
 			if($service['has_been_checked'] == 0) {
 				$state['Count'] = 1;
-				$state['State'] = 'UNKOWN';
+				$state['State'] = 'UNKNOWN';
 				$state['Output'] = $this->LANG->getMessageText('serviceNotChecked','SERVICE~'.$serviceName);
 			} elseif($service['current_state'] == 0) {
 				$state['Count'] = 1;
