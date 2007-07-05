@@ -606,7 +606,6 @@ class NagVisMap extends GlobalMap {
 					$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
 					$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
 				} else {
-					echo 1;
 					// save mapName in linkedMaps array
 					$this->linkedMaps[] = $this->MAPCFG->getName();
 					
