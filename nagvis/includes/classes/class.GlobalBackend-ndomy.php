@@ -9,8 +9,6 @@
 ## Licenced under the terms and conditions of the GPL Licence,          ##
 ## please see attached "LICENCE" file                                   ##
 ##########################################################################
-## This Backend is maintained by Andreas Husch (dowanup@nagios-wiki.de) ##
-##########################################################################
 
 class GlobalBackendndomy {
 	var $MAINCFG;
@@ -262,21 +260,21 @@ class GlobalBackendndomy {
 	* @return	array $state
 	* @author	m.luebben, Andreas Husch <downanup@nagios-wiki.de>
 	*/
-	function checkStates($Type,$Name,$RecognizeServices,$ServiceName='',$onlyHardStates=0) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkStates('.$Type.','.$Name.','.$RecognizeServices.','.$ServiceName.','.$onlyHardStates.')');
-		if(isset($Name)) {
-			switch($Type) {
+	function checkStates($type,$name,$recognizeServices,$serviceName='',$onlyHardStates=0) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkStates('.$type.','.$name.','.$recognizeServices.','.$serviceName.','.$onlyHardStates.')');
+		if(isset($name)) {
+			switch($type) {
 				case 'host':
-					$state = $this->findStateHost($Name,$RecognizeServices,$onlyHardStates);
+					$arrReturn = $this->findStateHost($name,$recognizeServices,$onlyHardStates);
 				break;
 				case 'service':
-					$state = $this->findStateService($Name,$ServiceName,$onlyHardStates);
+					$arrReturn = $this->findStateService($name,$serviceName,$onlyHardStates);
 				break;
 				case 'hostgroup':
-					$state = $this->findStateHostgroup($Name,$RecognizeServices,$onlyHardStates);
+					$arrReturn = $this->findStateHostgroup($name,$recognizeServices,$onlyHardStates);
 				break;
 				case 'servicegroup':
-					$state = $this->findStateServicegroup($Name,$onlyHardStates);
+					$arrReturn = $this->findStateServicegroup($name,$onlyHardStates);
 				break;
 				default:
 					// Should normally never reach this
@@ -287,14 +285,14 @@ class GlobalBackendndomy {
 		* Case that this Backend could not find any state for the given object
 		* This should normally never happen
 		*/
-		if(!isset($state)) {
+		if(!isset($arrReturn)) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
 			$FRONTEND->messageToUser('WARNING','noStateSet');
 			$FRONTEND->printPage();
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkStates(): Array(...)');
-		return $state;
+		return $arrReturn;
 	}
 
 
