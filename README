@@ -1,1 +1,33 @@
-Please have a look at the "INSTALL" document and the documentation section on www.nagvis.org
+==============================================================================
+NagVis 1.1 Readme
+==============================================================================
+Author: Lars Michelsen
+Date: 2007-07-06
+==============================================================================
+
+README
+------------------
+English documentation: http://www.nagvis.org/doc
+
+INSTALL
+------------------
+Please have a look at the "INSTALL" file or visit the online 
+documentation on the official NagVis Homepage (http://www.nagvis.org/doc).
+
+SUPPORT
+------------------
+There are many ways to get in touch with the NagVis team/community. For a
+detailed list just have a look at http://www.nagvis.org/contact.
+
+BUGS
+------------------
+You got a bug in NagVis? The best way to submit the bug report is the 
+NagVis-Developers-Mailinglist (nagvis-devel@lists.sourceforge.net).
+
+LICENSE
+------------------
+Please have a look at the "LICENCE" file.
+
+==============================================================================
+Have fun using NagVis and please report bugs!
+==============================================================================
