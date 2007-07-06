@@ -156,11 +156,17 @@ class WuiMapCfg extends GlobalMapCfg {
      */
 	function writeMapLock() {
 	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::writeMapLock()');
-	    // open file for writing and insert the needed informations
-	 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock','w');
-	 	fwrite($fp,time().':'.$this->MAINCFG->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
-	 	fclose($fp);
-	 	if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeMapLock(): TRUE');
+		if($this->checkMapLockWriteable(0)) {
+		    // open file for writing and insert the needed informations
+		 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock','w');
+		 	fwrite($fp,time().':'.$this->MAINCFG->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
+		 	fclose($fp);
+	 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeMapLock(): TRUE');
+			return TRUE;
+		} else {
+	        if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeMapLock(): FALSE');
+	        return FALSE;
+	    }
 	}
 	
 	/**
@@ -171,7 +177,7 @@ class WuiMapCfg extends GlobalMapCfg {
      */
 	function deleteMapLock() {
 	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteMapLock()');
-	    if($this->checkMapLockReadable(0)) {
+	    if($this->checkMapLockWriteable(0)) {
 	        if(unlink($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
 	            // map lock deleted => OK
 	            if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapLock(): TRUE');
@@ -237,6 +243,33 @@ class WuiMapCfg extends GlobalMapCfg {
 			}
 		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockReadable(): FALSE');
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable lockfile
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function checkMapLockWriteable($printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapLockWriteable('.$printErr.')');
+		if($this->name != '') {
+			if($this->checkMapLockExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockWriteable(): TRUE');
+				return TRUE;
+			} else {
+				if($printErr == 1) {
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
+		            $FRONTEND->messageToUser('ERROR','mapLockNotWriteable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock');
+				}
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockWriteable(): FALSE');
+				return FALSE;
+			}
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockWriteable(): FALSE');
 			return FALSE;
 		}
 	}

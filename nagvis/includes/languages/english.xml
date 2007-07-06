@@ -523,6 +523,10 @@
 					<title>Map lockfile not readable</title>
 					<text>The lockfile &quot;[MAP]&quot; is not readable.</text>
 				</mapLockNotReadable>
+				<mapLockNotWriteable>
+					<title>Map lockfile not writeable</title>
+					<text>The lockfile &quot;[MAP]&quot; is not writeable.</text>
+				</mapLockNotWriteable>
 			</messages>
 		</global>
 		<editMainCfg>

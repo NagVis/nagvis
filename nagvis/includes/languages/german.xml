@@ -523,6 +523,10 @@
 					<title>Karten Sperre nicht lesbar</title>
 					<text>Die Kartensperre &quot;[MAP]&quot; ist nicht lesbar.</text>
 				</mapLockNotReadable>
+				<mapLockNotWriteable>
+					<title>Karten Sperre nicht schreibbar</title>
+					<text>Die Kartensperre &quot;[MAP]&quot; ist nicht schreibbar.</text>
+				</mapLockNotWriteable>
 			</messages>
 		</global>
 		<editMainCfg>
