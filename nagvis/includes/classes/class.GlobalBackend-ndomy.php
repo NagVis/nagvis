@@ -303,24 +303,26 @@ class GlobalBackendndomy {
 	*
 	* Returns the Nagios State for a single Host
 	*
-	* @param	string $hostName, boolean $recognizeServices, boolean $onlyHardStates
+	* @param	string $hostName
+	* @param	bool   $recognizeServices
+	* @param	bool   $onlyHardStates
 	* @return	array $state
 	* @author	Lars Michelsen <lars@vertical-visions.de>
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	*/
 	function findStateHost($hostName,$recognizeServices,$onlyHardStates) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateHost('.$hostName.','.$recognizeServices.','.$onlyHardStates.')');
-		$QUERYHANDLE = $this->mysqlQuery('SELECT last_hard_state, UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, UNIX_TIMESTAMP(last_state_change) AS last_state_change, current_state, output, problem_has_been_acknowledged 
+		$arrReturn = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT has_been_checked, last_hard_state, UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, UNIX_TIMESTAMP(last_state_change) AS last_state_change, current_state, output, problem_has_been_acknowledged 
 		FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h 
 		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
-			$state['State'] = 'ERROR';
-			$state['Output'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateHost(): Array(..)');
-			return $state;
+			$arrReturn['State'] = 'ERROR';
+			$arrReturn['Output'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
 		} else {
-			$hostState = mysql_fetch_array($QUERYHANDLE);
+			$data = mysql_fetch_array($QUERYHANDLE);
 			
 			/**
 			 * SF.net #1587073
@@ -331,134 +333,191 @@ class GlobalBackendndomy {
 			 * always stay as it is.
 			 */
 			if($onlyHardStates == 1) {
-				if($hostState['last_hard_state'] != '0' && $hostState['last_hard_state_change'] <= $hostState['last_state_change']) {
-					$hostState['current_state'] = $hostState['current_state'];
+				if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
+					$data['current_state'] = $data['current_state'];
 				} else {
-					$hostState['current_state'] = $hostState['last_hard_state'];
+					$data['current_state'] = $data['last_hard_state'];
 				}
 			}
 			
-			if ($hostState['current_state'] == '0') {
+			if($data['has_been_checked'] == '0') {
+				$arrReturn['State'] = 'UNKNOWN';
+				$arrReturn['Output'] = $this->LANG->getMessageText('hostIsPending','HOST~'.$hostName);
+			} elseif($data['current_state'] == '0') {
 				// Host is UP
-				$state['State'] = 'UP';
-				$state['Output'] = $hostState['output'];
-			} elseif ($hostState['current_state'] == '1' || $hostState['current_state'] == '2' || $hostState['current_state'] == '3') {
-				// Host is DOWN/UNREACHABLE/UNKNOWN
-				if($hostState['problem_has_been_acknowledged'] == 1) {
-					$state['State'] = 'ACK';
-				} else {
-					switch($hostState['current_state']) {
-						case '1': 
-							$state['State'] = 'DOWN';
-						break;
-						case '2':
-							$state['State'] = 'UNREACHABLE';
-						break;
-						case '3':
-							$state['State'] = 'UNKNOWN';
-						break;
-					}
-				}
-				$state['Output'] = $hostState['output'];
-			}
-			
-			$hostState = $state['State'];
-			
-			/**
-			* Check the Services of the Host if requested and the Host is UP (makes no sence if the host is DOWN ;-), 
-			* this also makes shure that a host ACK will automatically ACK all services.
-			*/
-			if($recognizeServices == 1 && $hostState == 'UP') {
-				//Initialise Vars
-				$servicesOk = 0;
-				$servicesWarning = 0;
-				$servicesCritical = 0;
-				$servicesUnknown = 0;
-				$servicesAck = 0;
+				$arrReturn['State'] = 'UP';
+				$arrReturn['Output'] = $data['output'];
 				
-				//Get the object ids from all services of this host
-				$QUERYHANDLE = $this->mysqlQuery('SELECT last_hard_state, 
-													UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, 
-													UNIX_TIMESTAMP(last_state_change) AS last_state_change, 
-													current_state, output, problem_has_been_acknowledged 
-											FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s 
-											WHERE (o.objecttype_id=2 AND o.name1=\''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id');
-				while($serviceState = mysql_fetch_array($QUERYHANDLE)) {
-					/**
-					 * SF.net #1587073
-					 * if "last_hard_state" != OK && last_hard_state_change <= last_state_change => state = current_state
-					 *
-					 * last_hard_state in ndo_hoststatus seems not to change if a host returns from State != OK by a successfull service check.
-					 * i think it changes only if a host check returns an OK. so if there are no host checks scheduled the last_hard_state will 
-					 * always stay as it is.
-					 */
-					if($onlyHardStates == 1) {
-						if($serviceState['last_hard_state'] != '0' && $serviceState['last_hard_state_change'] <= $serviceState['last_state_change']) {
-							// $serviceState['current_state'] = $serviceState['current_state'];
-						} else {
-							$serviceState['current_state'] = $serviceState['last_hard_state'];
-						}
+				// Service recognition only makes sense if host is UP
+				if($recognizeServices == 1) {
+					$arrNumChilds = Array('OK' => 0, 'WARNING' => 0, 'CRITICAL' => 0, 'UNKNOWN' => 0, 'ACK' => 0);
+					
+					// Get states of all services on this host
+					$arrServices = $this->findStateService($hostName,'',$onlyHardStates);
+					
+					// Count service states
+					foreach($arrServices AS $arrService) {
+						$arrNumChilds[$arrService['State']]++;
 					}
 					
-					if($serviceState['current_state'] == 0) {
-						$servicesOk++;
-					} elseif($serviceState['problem_has_been_acknowledged'] == 1) {
-						$servicesAck++;				
-					} elseif($serviceState['current_state'] == 1) {
-						$servicesWarning++;
-					} elseif($serviceState['current_state'] == 2) {
-						$servicesCritical++;
-					} elseif($serviceState['current_state'] == 3) {
-						$servicesUnknown++;
+					if($arrNumChilds['CRITICAL'] > 0) {
+						$arrReturn['Count'] = $arrNumChilds['CRITICAL'];
+						$arrReturn['Output'] = 'Host is UP but there are '.$arrNumChilds['CRITICAL'].' CRITICAL, ' .$arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN Services';
+						$arrReturn['State'] = 'CRITICAL';
+					} elseif($arrNumChilds['WARNING'] > 0) {
+						$arrReturn['Count'] = $arrNumChilds['WARNING'];
+						$arrReturn['Output'] = 'Host is UP but there are ' .$arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN Services';
+						$arrReturn['State'] = 'WARNING';		
+					} elseif($arrNumChilds['UNKNOWN'] > 0) {
+						$arrReturn['Count'] = $arrNumChilds['UNKNOWN'];
+						$arrReturn['Output'] = 'Host is UP but there are '.$arrNumChilds['UNKNOWN'].' Services in UNKNOWN state';
+						$arrReturn['State'] = 'UNKNOWN';
+					} elseif($arrNumChilds['ACK'] > 0) {
+						$arrReturn['Count'] = $arrNumChilds['ACK'];
+						$arrReturn['Output'] = 'Host is UP but '.$arrNumChilds['ACK'].' services are in a NON-OK State but all are ACKNOWLEDGED';
+						$arrReturn['State'] = 'ACK';
+					} elseif($arrNumChilds['OK'] > 0) {
+						$arrReturn['Count'] = $arrNumChilds['OK'];
+						$arrReturn['Output'] = 'Host is UP and all '.$arrNumChilds['OK'].' services are OK';
+						$arrReturn['State'] = 'UP';		
 					}
 				}
-				
-				if($servicesCritical > 0) {
-					$state['Count'] = $servicesCritical;
-					$state['Output'] = 'Host is UP but there are '.$servicesCritical.' CRITICAL, ' .$servicesWarning. ' WARNING and ' .$servicesUnknown. ' UNKNOWN Services';
-					$state['State'] = 'CRITICAL';
-				} elseif($servicesWarning > 0) {
-					$state['Count'] = $servicesWarning;
-					$state['Output'] = 'Host is UP but there are ' .$servicesWarning. ' WARNING and ' .$servicesUnknown. ' UNKNOWN Services';
-					$state['State'] = 'WARNING';		
-				} elseif($servicesUnknown > 0) {
-					$state['Count'] = $servicesUnknown;
-					$state['Output'] = 'Host is UP but there are '.$servicesUnknown.' Services in UNKNOWN state';
-					$state['State'] = 'UNKNOWN';
-				} elseif($servicesAck > 0) {
-					$state['Count'] = $servicesAck;
-					$state['Output'] = 'Host is UP but '.$servicesAck.' services are in a NON-OK State but all are ACKNOWLEDGED';
-					$state['State'] = 'ACK';
-				} elseif($servicesOk > 0) {
-					$state['Count'] = $servicesOk;
-					$state['Output'] = 'Host is UP and all '.$servicesOk.' services are OK';
-					//This must be set before by the host, but to be consitend with the other ifs i define it again here:
-					$state['State'] = 'UP';		
+			} else {
+				// Host is DOWN/UNREACHABLE/UNKNOWN
+				if($data['problem_has_been_acknowledged'] == 1) {
+					$arrReturn['State'] = 'ACK';
+					$arrReturn['Output'] = $data['output'];
+				} else {
+					switch($data['current_state']) {
+						case '1': 
+							$arrReturn['State'] = 'DOWN';
+							$arrReturn['Output'] = $data['output'];
+						break;
+						case '2':
+							$arrReturn['State'] = 'UNREACHABLE';
+							$arrReturn['Output'] = $data['output'];
+						break;
+						case '3':
+							$arrReturn['State'] = 'UNKNOWN';
+							$arrReturn['Output'] = $data['output'];
+						break;
+						default:
+							$arrReturn['State'] = 'UNKNOWN';
+							$arrReturn['Output'] = 'GlobalBackendndomy::findStateHost: Undefined state!';
+						break;
+					}
 				}
 			}
 		}
+		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateHost(): Array(..)');
-        return $state;
+        return $arrReturn;
 	}
 	
+	/**
+	* PRIVATE Method findStateService
+	*
+	* Returns the State for a single Service
+	*
+	* @param	string $hostName
+	* @param	string $serviceName
+	* @param	bool   $onlyHardStates
+	* @return	array $state
+	* @author	Andreas Husch (downanup@nagios-wiki.de)
+	* @author	Lars Michelsen <lars@vertical-visions.de>
+	*/
+	function findStateService($hostName,$serviceName,$onlyHardStates) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateService('.$hostName.','.$serviceName.','.$onlyHardStates.')');
+		$arrReturn = Array();
+		
+		if(isset($serviceName) && $serviceName != '') {
+    		$QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged 
+    		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
+    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id LIMIT 1');
+        } else {
+            $QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged 
+    		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
+    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id');
+        }
+		
+		// Count results
+		$iResults = mysql_num_rows($QUERYHANDLE);
+		
+		if($iResults == 0) {
+			$arrReturn['State'] = 'ERROR';
+			$arrReturn['Output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
+		} else {
+			while($data = mysql_fetch_array($QUERYHANDLE)) {
+				$arrTmpReturn = Array();
+				
+				if($onlyHardStates == 1) {
+					if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
+						//$data['current_state'] = $data['current_state'];
+					} else {
+						$data['current_state'] = $data['last_hard_state'];
+					}
+				}
+				
+				if($data['has_been_checked'] == 0) {
+					$arrTmpReturn['Count'] = 1;
+					$arrTmpReturn['State'] = 'UNKNOWN';
+					$arrTmpReturn['Output'] = $this->LANG->getMessageText('serviceNotChecked','SERVICE~'.$data['name2']);
+				} elseif($data['current_state'] == 0) {
+					$arrTmpReturn['Count'] = 1;
+					$arrTmpReturn['State'] = 'OK';
+					$arrTmpReturn['Output'] = $data['output'];
+				} elseif($data['problem_has_been_acknowledged'] == 1) {
+					$arrTmpReturn['Count'] = 1;
+					$arrTmpReturn['State'] = 'ACK';
+					$arrTmpReturn['Output'] = $data['output'];			
+				} elseif($data['current_state'] == 1) {
+					$arrTmpReturn['Count'] = 1;
+					$arrTmpReturn['State'] = 'WARNING';
+					$arrTmpReturn['Output'] = $data['output'];		
+				} elseif($data['current_state'] == 2) {
+					$arrTmpReturn['Count'] = 1;
+					$arrTmpReturn['State'] = 'CRITICAL';
+					$arrTmpReturn['Output'] = $data['output'];		
+				} elseif($data['current_state'] == 3) {
+					$arrTmpReturn['Count'] = 1;
+					$arrTmpReturn['State'] = 'UNKNOWN';
+					$arrTmpReturn['Output'] = $data['output'];
+				} else {
+					// Fallback: Undefined state
+					$arrTmpReturn['Count'] = 1;
+					$arrTmpReturn['State'] = 'UNKNOWN';
+					$arrTmpReturn['Output'] = 'GlobalBackendndomy::findStateService: Undefined state!';
+				}
+				
+				// If more than one service were found append the current to return array
+    			if($iResults == 1) {
+    			    $arrReturn = $arrTmpReturn;
+    			} else {
+    			    // Assign actual dataset to return array
+    			    $arrReturn[$data['name2']] = $arrTmpReturn;
+    			}
+			}
+		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateService(): Array(...)');
+		return $arrReturn;
+	}
 
 	/**
 	* PRIVATE Method findStateHostgroup
 	*
 	* Returns the State for a single Hostgroup 
 	*
-	* @param	string $hostGroupName, boolean $recognzieServices
+	* @param	string $hostGroupName
+	* @param	bool   $recognizeServices
+	* @param	bool   $onlyHardStates
 	* @return	array $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function findStateHostgroup($hostGroupName,$recognizeServices,$onlyHardStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateHostgroup('.$hostGroupName.','.$recognizeServices.','.$onlyHardStates.')');
-		$hostsCritical = 0;
-		$hostsWarning = 0;
-		$hostsUnknown = 0;
-		$hostsAck = 0;
-		$hostsOk = 0;
+		$arrReturn = Array();
+		$arrNumChilds = Array('OK' => 0, 'WARNING' => 0, 'CRITICAL' => 0, 'UNKNOWN' => 0, 'ACK' => 0);
 		
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT h.hostgroup_id 
@@ -466,11 +525,9 @@ class GlobalBackendndomy {
 									WHERE (o.objecttype_id=3 AND o.name1 = binary \''.$hostGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 											AND h.hostgroup_object_id=o.object_id LIMIT 1');
 		
-		if (mysql_num_rows($QUERYHANDLE) == 0) {
-			$state['State'] = 'ERROR';
-			$state['Output'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$hostGroupName);
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateHostgroup(): Array(..)');
-			return $state;
+		if(mysql_num_rows($QUERYHANDLE) == 0) {
+			$arrReturn['State'] = 'ERROR';
+			$arrReturn['Output'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$hostGroupName);
 		} else {
 			$hostGroupId = mysql_fetch_row($QUERYHANDLE);
 			
@@ -480,104 +537,45 @@ class GlobalBackendndomy {
 										WHERE (h.hostgroup_id='.$hostGroupId[0].' AND h.instance_id='.$this->dbInstanceId.') 
 												AND (o.objecttype_id=1 AND h.host_object_id=o.object_id)');	
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
+				// Get state of the current looping host
 				$currentHostState = $this->findStateHost($data['name1'],$recognizeServices,$onlyHardStates);
+				
+				// Count state
 				if($currentHostState['State'] == 'UP') {
-					$hostsOk++;
-				} elseif($currentHostState['State'] == 'ACK') {
-					$hostsAck++;				
-				} elseif($currentHostState['State'] == 'WARNING') {
-					$hostsWarning++;
+					$arrNumChilds['OK']++;
 				} elseif($currentHostState['State'] == 'DOWN' || $currentHostState['State'] == 'UNREACHABLE' || $currentHostState['State'] == 'CRITICAL') {
-					$hostsCritical++;
-				} elseif($currentHostState['State'] == 'UNKNOWN') {
-					$hostsUnknown++;
+					$arrNumChilds['CRITICAL']++;
+				} else {
+					$arrNumChilds[$currentHostState['State']]++;
 				}
 			}
 		
-			if($hostsCritical > 0) {
-				$state['Count'] = $hostsCritical;
-				$state['Output'] = $hostsCritical.' Hosts are CRITICAL, ' .$hostsWarning. ' WARNING and ' .$hostsUnknown. ' UNKNOWN';
-				$state['State'] = 'CRITICAL';
-			} elseif($hostsWarning > 0) {
-				$state['Count'] = $hostsWarning;
-				$state['Output'] = $hostsWarning. ' Hosts are WARNING and ' .$hostsUnknown. ' UNKNOWN';
-				$state['State'] = 'WARNING';		
-			} elseif($hostsUnknown > 0) {
-				$state['Count'] = $hostsUnknown;
-				$state['Output'] = $hostsUnknown.' are in UNKNOWN state';
-				$state['State'] = 'UNKNOWN';
-			} elseif($hostsAck > 0) {
-				$state['Count'] = $hostsAck;
-				$state['Output'] = $hostsAck.' Hosts are in a NON-OK State but all errors are ACKNOWLEDGED';
-				$state['State'] = 'ACK';
-			} elseif($hostsOk > 0) {
-				$state['Count'] = $hostsOk;
-				$state['Output'] = 'All ' .$hostsOk. ' Hosts are OK';
-				//This must be set before by the host, but to be consitend with the other ifs i define it again here:
-				$state['State'] = 'UP';		
+			if($arrNumChilds['CRITICAL'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['CRITICAL'];
+				$arrReturn['Output'] = $arrNumChilds['CRITICAL'].' Hosts are CRITICAL, ' .$arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN';
+				$arrReturn['State'] = 'CRITICAL';
+			} elseif($arrNumChilds['WARNING'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['WARNING'];
+				$arrReturn['Output'] = $arrNumChilds['WARNING']. ' Hosts are WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN';
+				$arrReturn['State'] = 'WARNING';		
+			} elseif($arrNumChilds['UNKNOWN'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['UNKNOWN'];
+				$arrReturn['Output'] = $arrNumChilds['UNKNOWN'].' are in UNKNOWN state';
+				$arrReturn['State'] = 'UNKNOWN';
+			} elseif($arrNumChilds['ACK'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['ACK'];
+				$arrReturn['Output'] = $arrNumChilds['ACK'].' Hosts are in a NON-OK State but all errors are ACKNOWLEDGED';
+				$arrReturn['State'] = 'ACK';
+			} elseif($arrNumChilds['OK'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['OK'];
+				$arrReturn['Output'] = 'All ' .$arrNumChilds['OK']. ' Hosts are OK';
+				$arrReturn['State'] = 'UP';		
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateHostgroup(): Array(..)');
-			return $state;
 		}
-	}
-
-
-	/**
-	* PRIVATE Method findStateService
-	*
-	* Returns the State for a single Service
-	*
-	* @param	string $hostName, string $serviceName
-	* @return	array $state
-	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	*/
-	function findStateService($hostName,$serviceName,$onlyHardStates) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateService('.$hostName.','.$serviceName.','.$onlyHardStates.')');
-		$QUERYHANDLE = $this->mysqlQuery('SELECT has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
-		WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id LIMIT 1');
 		
-		if(mysql_num_rows($QUERYHANDLE) == 0) {
-			$state['State'] = 'ERROR';
-			$state['Output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateService(): Array()');
-			return $state;
-		} else {
-			$service = mysql_fetch_array($QUERYHANDLE);				
-			if($service['has_been_checked'] == 0) {
-				$state['Count'] = 1;
-				$state['State'] = 'UNKNOWN';
-				$state['Output'] = $this->LANG->getMessageText('serviceNotChecked','SERVICE~'.$serviceName);
-			} elseif($service['current_state'] == 0) {
-				$state['Count'] = 1;
-				$state['State'] = 'OK';
-				$state['Output'] = $service['output'];
-			} elseif($service['problem_has_been_acknowledged'] == 1) {
-				$state['Count'] = 1;
-				$state['State'] = 'ACK';
-				$state['Output'] = $service['output'];			
-			} elseif($service['current_state'] == 1) {
-				$state['Count'] = 1;
-				$state['State'] = 'WARNING';
-				$state['Output'] = $service['output'];		
-			} elseif($service['current_state'] == 2) {
-				$state['Count'] = 1;
-				$state['State'] = 'CRITICAL';
-				$state['Output'] = $service['output'];		
-			} elseif($service['current_state'] == 3) {
-				$state['Count'] = 1;
-				$state['State'] = 'UNKNOWN';
-				$state['Output'] = $service['output'];	
-			} elseif($service['last_hard_state'] == 0 && $onlyHardStates == 1) {
-				$state['Count'] = 1;
-				$state['State'] = 'OK';
-				$state['Output'] = $service['output'];
-			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateService(): Array(...)');
-			return $state;
-		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateHostgroup(): Array(..)');
+		return $arrReturn;
 	}
-
 
 	/**
 	* PRIVATE Method findStateServicegroup	
@@ -585,13 +583,15 @@ class GlobalBackendndomy {
 	* Returns the State for a Servicegroup
 	*
 	* @param	string $serviceGroupName
+	* @param	bool   $onlyHardStates
 	* @return	arrray $state
 	* @author	Andreas Husch (downanup@nagios-wiki.de)
 	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function findStateServicegroup($serviceGroupName,$onlyHardStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateServicegroup('.$serviceGroupName.','.$onlyHardStates.')');
-		$objs = Array('critical'=>0,'warning'=>0,'unknown'=>0,'ack'=>0,'ok'=>0);
+		$arrReturn = Array();
+		$arrNumChilds = Array('OK' => 0, 'WARNING' => 0, 'CRITICAL' => 0, 'UNKNOWN' => 0, 'ACK' => 0);
 		
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT s.servicegroup_id 
@@ -599,11 +599,9 @@ class GlobalBackendndomy {
 									WHERE (o.objecttype_id=4 AND o.name1 = binary \''.$serviceGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 											AND s.config_type=1 AND s.servicegroup_object_id=o.object_id');
 		
-		if (mysql_num_rows($QUERYHANDLE) == 0) {
-			$state['State'] = 'ERROR';
-			$state['Output'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$serviceGroupName);
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateServicegroup(): Array()');
-			return $state;
+		if(mysql_num_rows($QUERYHANDLE) == 0) {
+			$arrReturn['State'] = 'ERROR';
+			$arrReturn['Output'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$serviceGroupName);
 		} else {
 			$data = mysql_fetch_array($QUERYHANDLE);
 			
@@ -613,45 +611,36 @@ class GlobalBackendndomy {
 													AND (o.objecttype_id=2 AND h.service_object_id=o.object_id)');	
 			
 			while($data1 = mysql_fetch_array($QUERYHANDLE)) {
+				// Get service states
 				$currentState = $this->findStateService($data1['name1'],$data1['name2'],$onlyHardStates);
-				
-				if($currentState['State'] == 'OK') {
-					$objs['ok']++;
-				} elseif($currentState['State'] == 'ACK') {
-					$objs['ack']++;			
-				} elseif($currentState['State'] == 'WARNING') {
-					$objs['warning']++;
-				} elseif($currentState['State'] == 'CRITICAL') {
-					$objs['critical']++;
-				} elseif($currentState['State'] == 'UNKNOWN') {
-					$objs['unknown']++;
-				}
+				// Count state
+				$arrNumChilds[$currentState['State']]++;
 			}
 		
-			if($objs['critical'] > 0) {
-				$state['Count'] = $objs['critical'];
-				$state['Output'] = $objs['critical'].' CRITICAL, ' .$objs['warning']. ' WARNING and ' .$objs['unknown']. ' UNKNOWN Services';
-				$state['State'] = 'CRITICAL';
-			} elseif($objs['warning'] > 0) {
-				$state['Count'] = $objs['warning'];
-				$state['Output'] = $objs['warning']. ' WARNING and ' .$objs['unknown']. ' UNKNOWN Services';
-				$state['State'] = 'WARNING';		
-			} elseif($objs['unknown'] > 0) {
-				$state['Count'] = $objs['unknown'];
-				$state['Output'] = $objs['unknown'].' Services in UNKNOWN state';
-				$state['State'] = 'UNKNOWN';
-			} elseif($objs['ack'] > 0) {
-				$state['Count'] = $objs['ack'];
-				$state['Output'] = $objs['ack'].' services are in a NON-OK State but all are ACKNOWLEDGED';
-				$state['State'] = 'ACK';
-			} elseif($objs['ok'] > 0) {
-				$state['Count'] = $objs['ok'];
-				$state['Output'] = 'All '.$objs['ok'].' services are OK';
-				$state['State'] = 'OK';		
+			if($arrNumChilds['CRITICAL'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['CRITICAL'];
+				$arrReturn['Output'] = $arrNumChilds['CRITICAL'].' CRITICAL, ' .$arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN Services';
+				$arrReturn['State'] = 'CRITICAL';
+			} elseif($arrNumChilds['WARNING'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['WARNING'];
+				$arrReturn['Output'] = $arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN Services';
+				$arrReturn['State'] = 'WARNING';		
+			} elseif($arrNumChilds['UNKNOWN'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['UNKNOWN'];
+				$arrReturn['Output'] = $arrNumChilds['UNKNOWN'].' Services in UNKNOWN state';
+				$arrReturn['State'] = 'UNKNOWN';
+			} elseif($arrNumChilds['ACK'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['ACK'];
+				$arrReturn['Output'] = $arrNumChilds['ACK'].' services are in a NON-OK State but all are ACKNOWLEDGED';
+				$arrReturn['State'] = 'ACK';
+			} elseif($arrNumChilds['OK'] > 0) {
+				$arrReturn['Count'] = $arrNumChilds['OK'];
+				$arrReturn['Output'] = 'All '.$arrNumChilds['OK'].' services are OK';
+				$arrReturn['State'] = 'OK';		
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateServicegroup(): Array(...)');
-			return $state;
 		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateServicegroup(): Array(...)');
+		return $arrReturn;
 	}
 }
 ?>
