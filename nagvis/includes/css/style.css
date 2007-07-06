@@ -158,3 +158,32 @@ div.infopage a:hover {
 	color: #a4a4a4;
 	text-decoration: underline;
 }
+
+
+table.infopage_hover_table {
+	width: 250px;
+	background-color: #F5F5F5;
+	border-collapse:collapse;
+}
+
+table.infopage_hover_table td, table.infopage_hover_table th {
+	border: 1px #a4a4a4 solid;
+	padding: 2px;
+	
+	font-size: 12px;
+	color: #314455;
+}
+
+table.infopage_hover_table th {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.infopage_hover_table td.label {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.infopage_hover_table label {
+	font-weight: bold;
+}
