@@ -401,8 +401,8 @@ class NagVisMap extends GlobalMap {
 			} else {
 				$ret .= $this->createInfoBox($obj);
 			}
-			
-			$ret .= '\', SHADOW, WRAP, VAUTO);" onmouseout="return nd();"';
+			// 1.1b2: removed SHADOW, 
+			$ret .= '\', WRAP, VAUTO);" onmouseout="return nd();"';
 			
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getHoverMenu(): Array(...)');
 			return $ret;

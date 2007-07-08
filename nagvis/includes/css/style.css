@@ -16,6 +16,11 @@ body, table, th, td {
 	font-size: 12pt;
 }
 
+div {
+	margin: 0;
+	padding: 0;
+}
+
 img {
     border: 0
 }
