@@ -429,11 +429,11 @@ class GlobalBackendndomy {
 		$arrReturn = Array();
 		
 		if(isset($serviceName) && $serviceName != '') {
-    		$QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged 
+    		$QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, last_hard_state_change, current_state, last_state_change, output, problem_has_been_acknowledged 
     		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
     		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id LIMIT 1');
         } else {
-            $QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, current_state, output, problem_has_been_acknowledged 
+            $QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, last_hard_state_change, current_state, last_state_change, output, problem_has_been_acknowledged 
     		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
     		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id');
         }
