@@ -1,5 +1,5 @@
 ==============================================================================
-NagVis 1.0 Quick Installation Instructions
+NagVis 1.1 Quick Installation Instructions
 ==============================================================================
 Author: Andreas Husch, Lars Michelsen
 Document Version: 0.2
@@ -24,7 +24,7 @@ STEP 2: Unpack NagVis
 ------------------
 Unpack NagVis in a path of your choice
 
-> tar xvzf nagvis-1.x.tar.gz
+> tar xvzf nagvis-1.1.x.tar.gz
 
 STEP 3: Move NagVis
 ------------------
