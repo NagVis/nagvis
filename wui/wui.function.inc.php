@@ -320,27 +320,24 @@ switch($_GET['myaction']) {
 		}
 	break;
 	case 'mgt_map_import':
-		if (!isset(${'HTTP_POST_FILES'}) || !is_array(${'HTTP_POST_FILES'})) {
-			$HTTP_POST_FILES = $_FILES;
-		}
 		// check the file (the map) is properly uploaded
-		if(is_uploaded_file($HTTP_POST_FILES['map_file']['tmp_name'])) {
-		    $mapName = $HTTP_POST_FILES['map_file']['name'];
-		    if(substr($mapName,strlen($mapName)-4,4) == '.cfg') {
-		    	if(move_uploaded_file($HTTP_POST_FILES['map_file']['tmp_name'], $MAINCFG->getValue('paths', 'mapcfg').$mapName)) {
+		if(is_uploaded_file($_FILES['map_file']['tmp_name'])) {
+		    $mapName = $_FILES['map_file']['name'];
+		    if(preg_match('/\.cfg/i',$fileName)) {
+		    	if(move_uploaded_file($_FILES['map_file']['tmp_name'], $MAINCFG->getValue('paths', 'mapcfg').$mapName)) {
 		    		chmod($MAINCFG->getValue('paths', 'mapcfg').$mapName,0666);
 				    print "<script>window.opener.document.location.reload();</script>\n";
 				    print "<script>window.close();</script>\n";
 				} else {
-		    		print "A problem occured!";
+		    		print "The file could not be moved to destination (".$MAINCFG->getValue('paths', 'mapcfg').$mapName.")."
 					return;
 		    	}
 		    } else {
-	    		print "A problem occured!";
+	    		print "This is no *.cfg file (".$fileName.").";
 				return;
 	    	}
 		} else {
-			print "A problem occured!";
+			print "The file could not be uploaded.";
 			return;
 		}
 	break;
