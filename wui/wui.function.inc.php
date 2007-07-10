@@ -384,24 +384,24 @@ switch($_GET['myaction']) {
 		print "<script>window.close();</script>\n";
 	break;
 	case 'mgt_new_image':
-		if (!isset(${'HTTP_POST_FILES'}) || !is_array(${'HTTP_POST_FILES'})) {
-			$HTTP_POST_FILES = $_FILES;
-		}
 		// check the file (the map) is properly uploaded
-		if(is_uploaded_file($HTTP_POST_FILES['image_file']['tmp_name'])) {
-		    $ficname = $HTTP_POST_FILES['image_file']['name'];
-		    if(substr($ficname,strlen($ficname)-4,4) == ".png") {
-		    	if(move_uploaded_file($HTTP_POST_FILES['image_file']['tmp_name'], $MAINCFG->getValue('paths', 'map').$ficname)) {
-		    		chmod($MAINCFG->getValue('paths', 'map').$ficname,0666);
+		if(is_uploaded_file($_FILES['image_file']['tmp_name'])) {
+		    $fileName = $_FILES['image_file']['name'];
+		    if(preg_match('/\.png/i',$fileName)) {
+		    	if(move_uploaded_file($_FILES['image_file']['tmp_name'], $MAINCFG->getValue('paths', 'map').$fileName)) {
+					// Change permissions of the map image
+		    		chmod($MAINCFG->getValue('paths', 'map').$fileName,0666);
 				    print "<script>window.opener.document.location.reload();</script>\n";
 				    print "<script>window.close();</script>\n";
 				} else {
-		    		print "A problem occured !";
+		    		print "The file could not be moved to destination (".$MAINCFG->getValue('paths', 'map').$fileName.")."
 					return;
 		    	}
-		    } 
+		    } else {
+				print "This is no *.png file (".$fileName.").";
+			}
 		} else {
-			print "A problem occured !";
+			print "The file could not be uploaded.";
 			return;
 		}
 	break;
