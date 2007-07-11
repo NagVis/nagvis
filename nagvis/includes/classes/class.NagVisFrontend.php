@@ -28,7 +28,7 @@ class NagVisFrontend extends GlobalPage {
 					  'cssIncludes'=>Array('./includes/css/style.css'),
 					  'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/overlib_shadow.js'),
 					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">',
-					  					'<style type="text/css">.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
+					  					'<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
 					  'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
 					  'languageRoot' => 'nagvis:global');
 		parent::GlobalPage($this->MAINCFG,$prop);
