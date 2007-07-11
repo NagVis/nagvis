@@ -31,7 +31,7 @@ class WuiFrontend extends GlobalPage {
 						  './includes/js/jsdomenu.inc.js',
 						  './includes/js/wz_jsgraphics.js',
 						  './includes/js/wz_dragdrop.js'),
-					  'extHeader'=>Array("<style type=\"text/css\">.main { background-color: ".$this->MAPCFG->getValue('global',0, 'background_color')."; }</style>"),
+					  'extHeader'=>Array("<style type=\"text/css\">body.main { background-color: ".$this->MAPCFG->getValue('global',0, 'background_color')."; }</style>"),
 					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'),
 					  'languageRoot' => 'wui:global');
 		parent::GlobalPage($this->MAINCFG,$prop);
