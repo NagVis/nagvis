@@ -329,7 +329,7 @@ switch($_GET['myaction']) {
 				    print "<script>window.opener.document.location.reload();</script>\n";
 				    print "<script>window.close();</script>\n";
 				} else {
-		    		print "The file could not be moved to destination (".$MAINCFG->getValue('paths', 'mapcfg').$mapName.")."
+		    		print "The file could not be moved to destination (".$MAINCFG->getValue('paths', 'mapcfg').$mapName.").";
 					return;
 		    	}
 		    } else {
