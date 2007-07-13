@@ -100,7 +100,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->addBodyLines($this->DELBACKENDFORM->closeForm());
 		
 		// Resize the window
-		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*35+20)));
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*35+180)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::getForm()');
 	}
 	

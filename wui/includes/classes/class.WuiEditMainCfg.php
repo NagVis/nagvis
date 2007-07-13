@@ -54,7 +54,7 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->addBodyLines($this->parseJs($this->getHidden()));
 		
 		// Resize the window
-		$this->addBodyLines($this->parseJs($this->resizeWindow(540,758)));
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,720)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::getForm()');
 	}
 	

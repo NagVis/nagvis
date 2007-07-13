@@ -91,7 +91,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->addBodyLines($this->ADDFORM->closeForm());
 		
 		// Resize the window
-		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*40+10)));
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*30+90)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getForm()');
 	}
 	

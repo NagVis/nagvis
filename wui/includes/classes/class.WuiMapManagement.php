@@ -113,7 +113,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->addBodyLines($this->getSubmit($this->IMPORTFORM,$this->LANG->getLabel('import')));
 		
 		// Resize the window
-		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*30+30)));
+		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*30+100)));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::getForm()');
 	}
 	
