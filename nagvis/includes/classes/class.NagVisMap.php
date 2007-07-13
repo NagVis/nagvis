@@ -497,6 +497,12 @@ class NagVisMap extends GlobalMap {
 			$ret = str_replace('[obj_type]',$obj['type'],$ret);
 			$ret = str_replace('[obj_name]',$obj[$displayName],$ret);
 			$ret = str_replace('[obj_state]',$obj['state'],$ret);
+			$ret = str_replace('[obj_backendid]',$obj['backend_id'],$ret);
+            if($this->MAINCFG->getValue('backend_'.$obj['backend_id'],'backendtype') == 'ndomy') {
+			    $ret = str_replace('[obj_backend_instancename]',$this->MAINCFG->getValue('backend_'.$obj['backend_id'],'dbinstancename'),$ret);
+            } else {
+                $ret = str_replace('[obj_backend_instancename]','',$ret);
+            }
 			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
 			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj[$name]),$ret);
 			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
