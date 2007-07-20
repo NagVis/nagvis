@@ -646,27 +646,15 @@ class NagVisMap extends GlobalMap {
 			case 'textbox':
 			break;
 			default:
-				if(isset($obj['line_type']) && $obj['line_type'] == '20') {
-					// line with 2 states...
-					list($objNameFrom,$objNameTo) = explode(',', $obj[$name]);
-					list($serviceDescriptionFrom,$serviceDescriptionTo) = explode(',', $obj['service_description']);
-					
-					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-						$state1 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameFrom,$obj['recognize_services'],$serviceDescriptionFrom,$obj['only_hard_states']);
-						$state2 = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$objNameTo,$obj['recognize_services'],$serviceDescriptionTo,$obj['only_hard_states']);
-					}
-					$state = Array('State' => $this->wrapState(Array($state1['State'],$state2['State'])),'Output' => 'State1: '.$state1['Output'].'<br />State2:'.$state2['Output']);
-				} else {
-					if(!isset($obj['service_description'])) {
-						$obj['service_description'] = '';
-					}
-					if(!isset($obj['recognize_services'])) {
-						$obj['recognize_services'] = '';	
-					}
-					
-					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
-					}
+				if(!isset($obj['service_description'])) {
+					$obj['service_description'] = '';
+				}
+				if(!isset($obj['recognize_services'])) {
+					$obj['recognize_services'] = '';	
+				}
+				
+				if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
+					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
 				}
 			break;	
 		}
