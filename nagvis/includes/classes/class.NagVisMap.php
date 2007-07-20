@@ -102,9 +102,10 @@ class NagVisMap extends GlobalMap {
 					} else {
 						$obj = $this->fixIcon($obj);
 						$ret[] = $this->parseIcon($obj);
-						if($obj['label_show'] == '1') {
-							$ret[] = $this->parseLabel($obj);
-						}
+					}
+                    
+					if($obj['label_show'] == '1') {
+						$ret[] = $this->parseLabel($obj);
 					}
 				break;	
 			}
