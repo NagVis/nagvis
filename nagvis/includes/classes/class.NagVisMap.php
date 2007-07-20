@@ -644,12 +644,6 @@ class NagVisMap extends GlobalMap {
 				}
 			break;
 			case 'textbox':
-				// Check if set a hostname
-				if(isset($obj['host_name'])) {
-					if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-						$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj['host_name'],$obj['recognize_services'],'',$obj['only_hard_states']);
-					}
-				}
 			break;
 			default:
 				if(isset($obj['line_type']) && $obj['line_type'] == '20') {
