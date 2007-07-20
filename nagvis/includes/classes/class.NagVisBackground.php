@@ -332,13 +332,13 @@ class NagVisBackground extends NagVisMap {
 			$x_middle = $this->GRAPHIC->middle($x_from,$x_to);
 			$y_middle = $this->GRAPHIC->middle($y_from,$y_to);
 			
-			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_middle,$y_middle,3,1,$this->getColor($state['state']));
-			$this->GRAPHIC->drawArrow($this->image,$x_to,$y_to,$x_middle,$y_middle,3,1,$this->getColor($state['state']));
+			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_middle,$y_middle,3,1,$this->getColor($obj['state']));
+			$this->GRAPHIC->drawArrow($this->image,$x_to,$y_to,$x_middle,$y_middle,3,1,$this->getColor($obj['state']));
 		} elseif($obj['line_type'] == '11') {
 			list($x_from,$x_to) = explode(',', $obj['x']);
 			list($y_from,$y_to) = explode(',', $obj['y']);
 			
-			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_to,$y_to,3,1,$this->getColor($state['state']));
+			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_to,$y_to,3,1,$this->getColor($obj['state']));
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::parseLine()');	
 	}
