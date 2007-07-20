@@ -73,7 +73,7 @@
 				</noUser>
 				<gdLibNotFound>
 					<title>GD-Libs nicht gefunden</title>
-					<text>Die GD-Libs sind nicht installiert</text>
+					<text>NagVis wurde konfiguriert die GD-Libs zum parsen von Linien und Hintergrund zu verwenden (usegdlibs=1). Die GD-Libs sind nicht installiert oder geladen.</text>
 				</gdLibNotFound>
 				<mapCfgNotExists>
 					<title>Map Konfigurations-Datei nicht vorhanden</title>

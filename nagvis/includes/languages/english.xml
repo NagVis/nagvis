@@ -72,8 +72,8 @@
 					<text>No user name was handed over at NagVis! Please have a look at the FAQ on www.nagvis.org</text>
 				</noUser>
 				<gdLibNotFound>
-					<title>GD-Libs Missing</title>
-					<text>The GD-Libs are not installed</text>
+					<title>GD-Libs missing</title>
+					<text>You told NagVis to use the GD-Libs for drawing lines on the background image (usegdlibs=1). GD-Libs are not installed or loaded in your php. </text>
 				</gdLibNotFound>
 				<mapCfgNotExists>
 					<title>Map configuration file does not exists</title>
