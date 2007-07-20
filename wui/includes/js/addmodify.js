@@ -96,7 +96,7 @@ function check_object() {
 					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length)+'='+document.addmodify.elements[i].value;
 				} else {
 					if(document.addmodify.elements[i].name=='line_type') {
-						line_type=object_name.split(",").length+document.addmodify.elements[i].value;
+						line_type="1"+document.addmodify.elements[i].value;
 						document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+line_type;
 					} else {
 						document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+document.addmodify.elements[i].value;
