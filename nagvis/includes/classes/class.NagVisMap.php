@@ -91,12 +91,13 @@ class NagVisMap extends GlobalMap {
 					// replace macros in url/hover_url/label_text
 					$obj = $this->replaceMacros($obj);
 					
+                    // Some specials for lines
 					if(isset($obj['line_type'])) {
-						$ret = array_merge($ret,$this->createBoxLine($obj));
-					} else {
-						$obj = $this->fixIcon($obj);
-						$ret[] = $this->parseIcon($obj);
+                        $obj = $this->getLineHoverArea($obj);
 					}
+                    
+                    $obj = $this->fixIcon($obj);
+					$ret[] = $this->parseIcon($obj);
                     
 					if($obj['label_show'] == '1') {
 						$ret[] = $this->parseLabel($obj);
@@ -124,26 +125,23 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
-	 * Create a Link for a Line
+	 * Calculates the position of the line hover area
 	 *
 	 * @param	Array	$obj	Array with object informations
 	 * @return	Array	Array with HTML Code
 	 */
-	function createBoxLine(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createBoxLine(&$obj,'.$name.')');
-		$ret = Array();
+	function getLineHoverArea(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getLineHoverArea(&$obj)');
 		
-		list($x_from,$x_to) = explode(',', $obj['x']);
-		list($y_from,$y_to) = explode(',', $obj['y']);
-		$obj['x'] = $this->GRAPHIC->middle($x_from,$x_to) - 10;
-		$obj['y'] = $this->GRAPHIC->middle($y_from,$y_to) - 10;
+		list($xFrom,$xTo) = explode(',', $obj['x']);
+		list($yFrom,$yTo) = explode(',', $obj['y']);
+        
+		$obj['x'] = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
+		$obj['y'] = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
 		$obj['icon'] = '20x20.gif';
-		
-		$obj = $this->fixIcon($obj);
-		$ret[] = $this->parseIcon($obj);
 
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createBoxLine(): Array(...)');
-		return $ret;
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getLineHoverArea(): Array(...)');
+		return $obj;
 	}
 	
 	/**
