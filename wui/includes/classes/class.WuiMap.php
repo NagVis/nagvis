@@ -218,6 +218,10 @@ class WuiMap extends GlobalMap {
 					
 					$obj = $this->fixIcon($obj);
 					$ret = array_merge($ret,$this->parseIcon($obj));
+					
+					if($obj['label_show'] == '1') {
+						$ret[] = $this->parseLabel($obj);
+					}
 				break;	
 			}
 		}

@@ -229,4 +229,51 @@ class GlobalMap {
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): TRUE');
 		return TRUE;
 	}
+	
+	/**
+	 * Parses the HTML-Code of a label
+	 *
+	 * @param	Array	$obj		Array with object informations
+	 * @param	String	$base		Array with object informations
+	 * @param	Boolean	$link		Add a link to the icon
+	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
+	 * @return	String	String with Html Code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseLabel(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::parseLabel(&$obj)');
+		
+		if($obj['type'] == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $obj['type'] . '_name';
+		}
+		
+		// If there is a presign it should be relative to the objects x/y
+		if(preg_match('/^(\+|\-)/',$obj['label_x'])) {
+			$obj['label_x'] = $obj['x'] + $obj['label_x'];
+		}
+		if(preg_match('/^(\+|\-)/',$obj['label_y'])) {
+			$obj['label_y'] = $obj['y'] + $obj['label_y'];
+		}
+		
+		// If no x/y coords set, fallback to object x/y
+		if(!isset($obj['label_x']) || $obj['label_x'] == '' || $obj['label_x'] == 0) {
+			$obj['label_x'] = $obj['x'];
+		}
+		if(!isset($obj['label_y']) || $obj['label_y'] == '' || $obj['label_y'] == 0) {
+			$obj['label_y'] = $obj['y'];
+		}
+		
+		if(isset($obj['label_width']) && $obj['label_width'] != 'auto') {
+			$obj['label_width'] .= 'px';	
+		}
+		
+		$ret  = '<div class="object_label" style="background:'.$obj['label_background'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
+		$ret .= '<span>'.$obj['label_text'].'</span>';
+		$ret .= '</div>';
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::parseLabel(): HTML String');
+		return $ret;
+	}
 }
