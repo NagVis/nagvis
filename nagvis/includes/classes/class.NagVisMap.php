@@ -163,15 +163,19 @@ class NagVisMap extends GlobalMap {
 			} else {
 				$imgPath = $this->MAINCFG->getValue('paths', 'htmlshape').$obj['icon'];
 			}
+			$alt = $obj['icon'];
 		} else {
 			$imgPath = $this->MAINCFG->getValue('paths', 'htmlicon').$obj['icon'];
+			
+			if($obj['type'] == 'service') {
+				$name = 'host_name';
+				$alt = $obj['host_name'].'-'.$obj['service_description'];
+			} else {
+				$alt = $obj[$obj['type'].'_name'];
+			}
+			
 		}
 		
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $obj['type'] . '_name';
-		}
 		
 		$ret = '<div class="icon" style="left:'.$obj['x'].'px;top:'.$obj['y'].'px;z-index:'.$obj['z'].';">';
 		
@@ -185,7 +189,7 @@ class NagVisMap extends GlobalMap {
 			$menu = '';
 		}
 		
-		$ret .= '<img src="'.$imgPath.'" '.$menu.' alt="'.$obj['type'].'-'.$obj[$name].(($obj['type'] == 'service') ? '-'.$obj['service_description']:'').'">';
+		$ret .= '<img src="'.$imgPath.'" '.$menu.' alt="'.$obj['type'].'-'.$alt.'">';
 		
 		if($link) {
 			$ret .= '</a>';
