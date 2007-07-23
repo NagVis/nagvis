@@ -225,7 +225,7 @@ class GlobalMainCfg {
 												'type' => 'string'),
 							'title' => Array('must' => 1,
 												 'editable' => 0,
-												'default' => 'NagVis 1.1rc2',
+												'default' => 'NagVis 1.1rc3',
 												'locked' => 1,
 												'type' => 'string')));
 		
