@@ -75,7 +75,11 @@ class GlobalMainCfg {
 							'showinlists' => Array('must' => 0,
 												 'editable' => 1,
 												'default' => 1,
-												'type' => 'boolean')
+												'type' => 'boolean'),
+							'urltarget' => Array('must' => 0,
+												'editable' => 1,
+												'default' => '_self',
+												'type' => 'string')
 							),
 			'wui' => Array('autoupdatefreq' => Array('must' => 0,
 												 'editable' => 1,

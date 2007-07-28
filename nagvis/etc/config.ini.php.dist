@@ -46,6 +46,8 @@
 ;showinlists=1
 ; use gdlibs (if set to 0 lines will not work, all other types should work fine)
 ;usegdlibs=1
+; target for the icon links
+;urltarget="_self"
 
 ; options for the wui
 [wui]

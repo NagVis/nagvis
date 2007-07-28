@@ -51,6 +51,8 @@ class GlobalMapCfg {
 												'default' => $this->MAINCFG->getValue('defaults', 'hovertemplate')),
 							'header_template' => Array('must' => 0,
 												'default' => $this->MAINCFG->getValue('defaults', 'headertemplate')),
+							'url_target' => Array('must' => 0,
+												'default' => $this->MAINCFG->getValue('defaults', 'urltarget')),
 							'label_show' => Array('must' => 0,
 												'default' => '0'),
 							'label_x' => Array('must' => 0,
@@ -80,6 +82,7 @@ class GlobalMapCfg {
 							'hover_url' => Array('must' => 0),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0),
+							'url_target' => Array('must' => 0),
 							'label_show' => Array('must' => 0,
 												'default' => ''),
 							'label_text' => Array('must' => 0,
@@ -111,6 +114,7 @@ class GlobalMapCfg {
 												'default' => ''),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0),
+							'url_target' => Array('must' => 0),
 							'label_show' => Array('must' => 0,
 												'default' => ''),
 							'label_text' => Array('must' => 0,
@@ -141,6 +145,7 @@ class GlobalMapCfg {
 												'default' => ''),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0),
+							'url_target' => Array('must' => 0),
 							'label_show' => Array('must' => 0,
 												'default' => ''),
 							'label_text' => Array('must' => 0,
@@ -170,6 +175,7 @@ class GlobalMapCfg {
 												'default' => ''),
 							'line_type' => Array('must' => 0),
 							'url' => Array('must' => 0),
+							'url_target' => Array('must' => 0),
 							'label_show' => Array('must' => 0,
 												'default' => ''),
 							'label_text' => Array('must' => 0,
@@ -193,6 +199,7 @@ class GlobalMapCfg {
 							'iconset' => Array('must' => 0,
 												'default' => ''),
 							'url' => Array('must' => 0),
+							'url_target' => Array('must' => 0),
 							'hover_url' => Array('must' => 0),
 							'hover_template' => Array('must' => 0,
 												'default' => ''),
@@ -224,6 +231,7 @@ class GlobalMapCfg {
 							'z' => Array('must' => 0,
 												'default' => 1),
 							'url' => Array('must' => 0),
+							'url_target' => Array('must' => 0),
 							'hover_url' => Array('must' => 0)));
 		
 		
@@ -247,6 +255,7 @@ class GlobalMapCfg {
 		$this->validConfig['host']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
 		$this->validConfig['host']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['host']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
+		$this->validConfig['host']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['hostgroup']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
 		$this->validConfig['hostgroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['hostgroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
@@ -257,6 +266,7 @@ class GlobalMapCfg {
 		$this->validConfig['hostgroup']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
 		$this->validConfig['hostgroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['hostgroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
+		$this->validConfig['hostgroup']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['service']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['service']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['service']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
@@ -266,6 +276,7 @@ class GlobalMapCfg {
 		$this->validConfig['service']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
 		$this->validConfig['service']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['service']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
+		$this->validConfig['service']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['servicegroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['servicegroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
@@ -275,6 +286,7 @@ class GlobalMapCfg {
 		$this->validConfig['servicegroup']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
 		$this->validConfig['servicegroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['servicegroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
+		$this->validConfig['servicegroup']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
 		$this->validConfig['map']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
@@ -283,6 +295,8 @@ class GlobalMapCfg {
 		$this->validConfig['map']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
 		$this->validConfig['map']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['map']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
+		$this->validConfig['map']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
+		$this->validConfig['shape']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getObjectDefaults()');
 	}
 	
