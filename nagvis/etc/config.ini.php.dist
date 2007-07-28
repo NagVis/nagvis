@@ -42,6 +42,8 @@
 ;headertemplate="default"
 ; hover template
 ;hovertemplate="default"
+; hover menu open delay (seconds)
+;hoverdelay=0
 ; show map in lists (dropdowns, index page, ...)
 ;showinlists=1
 ; use gdlibs (if set to 0 lines will not work, all other types should work fine)
