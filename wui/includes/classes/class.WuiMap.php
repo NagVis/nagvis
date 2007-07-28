@@ -433,7 +433,7 @@ class WuiMap extends GlobalMap {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg") {
+				if(preg_match('/^.+\.cfg$/', $file)) {
 					$files[] = substr($file,0,strlen($file)-4);
 				}				
 			}
