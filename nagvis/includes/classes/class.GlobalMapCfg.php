@@ -301,6 +301,7 @@ class GlobalMapCfg {
 		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
 		$this->validConfig['map']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
+		$this->validConfig['map']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		$this->validConfig['map']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
 		$this->validConfig['map']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
 		$this->validConfig['map']['label_y']['default'] = $this->getValue('global', 0, 'label_y');

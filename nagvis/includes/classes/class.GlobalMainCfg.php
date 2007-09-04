@@ -74,7 +74,7 @@ class GlobalMainCfg {
 												'type' => 'string'),
 							'hoverdelay' => Array('must' => 0,
 												 'editable' => 1,
-												'default' => 0,
+												'default' => '0',
 												'type' => 'integer'),
 							'showinlists' => Array('must' => 0,
 												 'editable' => 1,
