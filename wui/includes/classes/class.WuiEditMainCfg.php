@@ -26,7 +26,7 @@ class WuiEditMainCfg extends GlobalPage {
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array('./includes/js/wui.js'),
 					  'extHeader'=>Array(''),
-					  'allowedUsers' => Array('EVERYONE'),
+					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'wui:editMainCfg');
 		parent::GlobalPage($MAINCFG,$prop);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiEditMainCfg::WuiEditMainCfg()');
@@ -140,6 +140,10 @@ class WuiEditMainCfg extends GlobalPage {
 								
 								if(isset($prop['locked']) && $prop['locked'] == 1) {
 									$ret[] = "<script>document.edit_config.elements['conf_".$key2."'].disabled=true;</script>";
+								}
+								
+								if(is_array($val2)) {
+									$val2 = implode(',',$val2);
 								}
 							break;
 						}

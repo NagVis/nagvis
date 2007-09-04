@@ -275,6 +275,11 @@ class GlobalForm {
 	function getInputField($name,$value) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getInputField('.$name.','.$value.')');
 		$ret = Array();
+		
+		if(is_array($value)) {
+			$value = implode(',',$value);
+		}
+		
 		$ret[] = '<input type="text" name="'.$name.'" value="'.$value.'" />';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getInputField(): Array(...)');

@@ -31,7 +31,7 @@ class WuiBackendManagement extends GlobalPage {
 					  						'./includes/js/BackendManagement.js',
 					  						'./includes/js/ajax.js'),
 					  'extHeader'=>Array(''),
-					  'allowedUsers' => Array('EVERYONE'),
+					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'wui:backendManagement');
 		parent::GlobalPage($MAINCFG,$prop);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackendManagement::WuiBackendManagement()');

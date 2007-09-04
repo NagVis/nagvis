@@ -92,7 +92,12 @@ class GlobalMainCfg {
 						    'maplocktime' => Array('must' => 0,
 												 'editable' => 1,
 												'default' => '350',
-												'type' => 'integer')),
+												'type' => 'integer'),
+							'allowedforconfig' => Array(
+						    					'must' => 0,
+												'editable' => 1,
+												'default' => Array('EVERYONE'),
+												'type' => 'string')),
 			'paths' => Array('base' => Array('must' => 1,
 												 'editable' => 1,
 												'default' => '',
@@ -355,6 +360,11 @@ class GlobalMainCfg {
 						// remove " at beginign and at the end of the string
 						if ((@substr($val,0,1) == '"') && (@substr($val,-1,1)=='"')) {
 							$val = @substr($val,1,@strlen($val)-2);
+						}
+						
+						// Special options (Arrays)
+						if($sec == 'wui' && $key == 'allowedforconfig') {
+							$val = explode(',', str_replace(' ','',$val));
 						}
 						
 						// write in config array

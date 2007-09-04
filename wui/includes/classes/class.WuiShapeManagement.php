@@ -26,7 +26,7 @@ class WuiShapeManagement extends GlobalPage {
                         './includes/js/ajax.js',
                         './includes/js/wui.js'),
                     'extHeader'=>Array(''),
-                    'allowedUsers' => Array('EVERYONE'),
+                    'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
                     'languageRoot' => 'wui:shapeManagement');
         parent::GlobalPage($MAINCFG,$prop);
         if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::WuiShapeManagement()');

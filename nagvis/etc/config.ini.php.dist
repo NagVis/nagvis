@@ -57,6 +57,8 @@
 ;autoupdatefreq=25
 ; map lock time (minutes)
 ;maplocktime=5
+; Users which are allowed to change the NagVis configuration (comma seperated list)
+;allowedforconfig=EVERYONE
 
 ; path options
 [paths]
