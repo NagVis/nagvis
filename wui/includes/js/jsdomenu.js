@@ -863,7 +863,8 @@ function jsDOMenu() { // Public method
     menuElm = createElm("div");
     menuElm.id = "DOMenu" + (++menuCount);
   }
-  menuElm.level = 10;
+  menuElm.level = 1000;
+  menuElm.style.zIndex = 1000;
   menuElm.previousItem = null;
   menuElm.allExceptFilter = allExceptFilter;
   menuElm.noneExceptFilter = noneExceptFilter;
