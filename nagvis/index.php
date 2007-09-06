@@ -1,15 +1,15 @@
 <?PHP
 ##########################################################################
-##     	        NagVis - The Nagios Visualisation Addon                 ##
+##              NagVis - The Nagios Visualisation Addon                 ##
 ##########################################################################
-## index.php - Main file to get called by the user			            ##
+## index.php - Main file to get called by the user                      ##
 ##########################################################################
 ## Licenced under the terms and conditions of the GPL Licence,         	##
-## please see attached "LICENCE" file	                                ##
+## please see attached "LICENCE" file                                   ##
 ##########################################################################
 
 ##########################################################################
-## For developer guidlines have a look at http://www.nagvis.org			##
+## For developer guidlines have a look at http://www.nagvis.org         ##
 ##########################################################################
 
 require("./includes/classes/class.GlobalDebug.php");
@@ -39,24 +39,21 @@ $BACKEND = new GlobalBackendMgmt($MAINCFG);
 $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 
 if(isset($_GET['map']) && $_GET['map'] != '') {
-    // Build the page
+	// Build the page
 	$FRONTEND->getHeaderMenu();
 	$FRONTEND->getMap();
 	$FRONTEND->getMessages();
-	
-	$FRONTEND->printPage();
 } elseif(isset($_GET['url'])) {
-    $arrFile = file($_GET['url']);
-    $FRONTEND->addBodyLines($arrFile);
+	$arrFile = file($_GET['url']);
+	$FRONTEND->addBodyLines($arrFile);
 } elseif(isset($_GET['info'])) {
 	$FRONTEND->getInstInformations();
-	$FRONTEND->printPage();
 } else {
-    // Build the page
+	// Build the page
 	$FRONTEND->getHeaderMenu();
 	$FRONTEND->addBodyLines($FRONTEND->getIndexPage());
 	$FRONTEND->getMessages();
-	
-	$FRONTEND->printPage();
 }
+
+$FRONTEND->printPage();
 ?>
