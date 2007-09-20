@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<language>
+	<meta>
+		<name>english</name>
+		<desc>English language file for NagVis</desc>
+		<version>1.0</version>
+	</meta>
+	<global>
+		<global>
+			<labels>
+				<!-- Alle globalen Beschriftungen //-->
+				<host>
+					<text>Host</text>
+				</host>
+				<service>
+					<text>Service</text>
+				</service>
+				<hostgroup>
+					<text>Hostgroup</text>
+				</hostgroup>
+				<servicegroup>
+					<text>Servicegroup</text>
+				</servicegroup>
+				<map>
+					<text>Map</text>
+				</map>
+				<textbox>
+					<text>Textbox</text>
+				</textbox>
+				<shape>
+					<text>Shape</text>
+				</shape>
+				<!-- Header Template labels //-->
+				<selectMap>
+					<text>Choose map</text>
+				</selectMap>
+				<editMap>
+					<text>Edit current map</text>
+				</editMap>
+				<needHelp>
+					<text>Need Help?</text>
+				</needHelp>
+				<onlineDoc>
+					<text>Online Documentation</text>
+				</onlineDoc>
+				<forum>
+					<text>Support Forum</text>
+				</forum>
+				<supportInfo>
+					<text>NagVis Support Informations</text>
+				</supportInfo>
+				<mapIndex>
+					<text>NagVis Map Index</text>
+				</mapIndex>
+			</labels>
+			<messages>
+				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten können) //-->
+				<mapCfgNotFound>
+					<title>No Map Configuration-File found!</title>
+					<text>Can not open map configuration file &quot;[MAP]&quot;</text>
+				</mapCfgNotFound>
+				<backgroundNotFound>
+					<title>No Map-Image found!</title>
+					<text>Can not open map image &quot;[MAPPATH]&quot;</text>
+				</backgroundNotFound>
+				<permissionDenied>
+					<title>Permissions denied!</title>
+					<text>The user &quot;[USER]&quot; has no permission to view this map</text>
+				</permissionDenied>
+				<noUser>
+					<title>No User</title>
+					<text>No user name was handed over at NagVis! Please have a look at the FAQ on www.nagvis.org</text>
+				</noUser>
+				<gdLibNotFound>
+					<title>GD-Libs missing</title>
+					<text>You told NagVis to use the GD-Libs for drawing lines on the background image (usegdlibs=1). GD-Libs are not installed or loaded in your php. </text>
+				</gdLibNotFound>
+				<mapCfgNotExists>
+					<title>Map configuration file does not exists</title>
+					<text>The map configuration file &quot;[MAP]&quot; does not exists</text>
+				</mapCfgNotExists>
+				<mapCfgNotReadable>
+					<title>Can not read map configuration file</title>
+					<text>Please check the webservers permissions at the map configuration file &quot;[MAP]&quot;</text>
+				</mapCfgNotReadable>
+				<mapCfgNotWriteable>
+					<title>Can not write map configuration file</title>
+					<text>Please check the webservers permissions at the map configuration file &quot;[MAP]&quot;</text>
+				</mapCfgNotWriteable>
+				<mainCfgNotExists>
+					<title>NagVis configuration file does not exists</title>
+					<text>The main configuration file &quot;[MAINCFG]&quot; does not exists</text>
+				</mainCfgNotExists>
+				<mainCfgNotReadable>
+					<title>Can not read NagVis configuration file</title>
+					<text>Please check the webservers permissions at the main configuration file &quot;[MAINCFG]&quot;</text>
+				</mainCfgNotReadable>
+				<mainCfgNotWriteable>
+					<title>Can not write NagVis configuration file</title>
+					<text>Please check the webservers permissions at the main configuration file &quot;[MAINCFG]&quot;</text>
+				</mainCfgNotWriteable>
+				<backgroundNotExists>
+					<title>Map image file does not exists</title>
+					<text>Map image file &quot;[IMGPATH]&quot; does not exists</text>
+				</backgroundNotExists>
+				<backgroundNotReadable>
+					<title>Can not read map image file</title>
+					<text>Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;</text>
+				</backgroundNotReadable>
+				<backgroundNotWriteable>
+					<title>Can not write map image file</title>
+					<text>Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;</text>
+				</backgroundNotWriteable>
+				<mustValueNotSet>
+					<title>Must value not set</title>
+					<text>The must value &quot;[ATTRIBUTE]&quot; is not set in an object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot;</text>
+				</mustValueNotSet>
+				<mainMustValueNotSet> 	 
+                    <title>Must value not set</title>
+                    <text>The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file</text>
+                </mainMustValueNotSet>
+				<unknownObject>
+					<title>Unknown object type defined in map</title>
+					<text>The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed</text>
+				</unknownObject>
+				<unknownAttribute>
+					<title>Unknown attribute defined in map</title>
+					<text>The attribute &quot;[ATTRIBUTE]&quot; is not allowed in elements of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot;</text>
+				</unknownAttribute>
+				<unknownSection> 	 
+					<title>Unknown section defined</title> 	 
+					<text>The section &quot;[TYPE]&quot; in main configuration file is not allowed</text> 	 
+				</unknownSection> 	 
+				<unknownValue> 	 
+					<title>Unknown attribute defined</title> 	 
+					<text>The attribute &quot;[ATTRIBUTE]&quot; is not allowed in section &quot;[TYPE]&quot; in main configuration file</text> 	 
+				</unknownValue>
+				<languageNotReadable>
+					<title>Can not read language file</title>
+					<text>Please check the webservers permission at the language file &quot;[LANGFILE]&quot;</text>
+				</languageNotReadable>
+				<mapCfgDirNotReadable>
+					<title>Can not read map configuration folder</title>
+					<text>Please check the webservers permissions at the map configuration folder &quot;[MAPPATH]&quot;</text>
+				</mapCfgDirNotReadable>
+				<mapCfgDirNotWriteable>
+					<title>Can not write to map configuration folder</title>
+					<text>Please check the webservers permissions at the map configuration folder &quot;[MAPPATH]&quot;</text>
+				</mapCfgDirNotWriteable>
+				<headerTemplateNotExists>
+					<title>Header template not exists</title>
+					<text>The requested header template file &quot;[FILE]&quot; does not exist</text>
+				</headerTemplateNotExists>
+				<headerTemplateNotReadable>
+					<title>Can not read header template file</title>
+					<text>Please check the webservers permissions at the header template file &quot;[FILE]&quot;</text>
+				</headerTemplateNotReadable>
+				<loopInMapRecursion>
+					<title>Loop in map recursion</title>
+					<text>The linked maps are producing a loop. Please fix this loop</text>
+				</loopInMapRecursion>
+				<iconNotExists>
+					<title>Icon does not exists</title>
+					<text>An icon &quot;[IMGPATH]&quot; which is used on the map does not exist</text>
+				</iconNotExists>
+				<couldNotDeleteMapCfg>
+					<title>Unable to delete map configuration</title>
+					<text>Could not delete the map configuration file &quot;[MAPPATH]&quot;</text>
+				</couldNotDeleteMapCfg>
+				<couldNotDeleteMapImage>
+					<title>Unable to delete map image</title>
+					<text>Could not delete the map image file &quot;[IMGPATH]&quot;</text>
+				</couldNotDeleteMapImage>
+			</messages>
+		</global>
+	</global>
+	<nagvis>
+		<global>
+			<labels>
+				<!-- Alle NagVis Beschriftungen //-->
+				<state>
+					<text>State</text>
+				</state>
+				<output>
+					<text>Output</text>
+				</output>
+				<hostname>
+					<text>Host Name</text>
+				</hostname>
+				<servicename>
+					<text>Service Name</text>
+				</servicename>
+				<hostgroupname>
+					<text>Hostgroup Name</text>
+				</hostgroupname>
+				<servicegroupname>
+					<text>Servicegroup Name</text>
+				</servicegroupname>
+				<mapname>
+					<text>Map Name</text>
+				</mapname>
+			</labels>
+			<messages>
+				<!-- Alle NagVis Meldungen //-->
+				<couldNotGetHoverUrl>
+					<title>Could not get hover URL</title>
+					<text>Could not get hover URL &quot;[URL]&quot;. Maybe the URL is password protected.</text>
+				</couldNotGetHoverUrl>
+				<hoverTemplateNotExists>
+					<title>Hover template file does not exists</title>
+					<text>The hover template file &quot;[FILE]&quot; does not exists</text>
+				</hoverTemplateNotExists>
+				<hoverTemplateNotReadable>
+					<title>Can not read hover template file</title>
+					<text>Please check the webservers permissions at the hover template file &quot;[FILE]&quot;</text>
+				</hoverTemplateNotReadable>
+				<onlyPngOrJpgImages>
+					<title>NagVis-GD: Only PNG or JPG images allowed</title>
+					<text>Only PNG or JPG images are allowed for map image files.</text>
+				</onlyPngOrJpgImages>
+				<maybePhpMemoryLimitToLow>
+					<title>NagVis-GD: Maybe PHP memory_limit to low</title>
+					<text>Maybe the memory_limit of PHP is to low for displaying the background image.</text>
+				</maybePhpMemoryLimitToLow>
+			</messages>
+		</global>
+	</nagvis>
+	<backend>
+		<global>
+			<messages>
+				<!-- Alle globalen Backend Meldungen //-->
+				<noStateSet>
+					<title>No state defined</title>
+					<text>No state is defined</text>
+				</noStateSet>
+				<backendNotExists>
+					<title>Backend does not exists</title>
+					<text>The backend with ID &quot;[BACKENDID]&quot; of type &quot;[BACKENDTYPE]&quot; does not exists</text>
+				</backendNotExists>
+				<noBackendDefined>
+					<title>Found no defined backends</title>
+					<text>No backend could be found in NagVis configuration</text>
+				</noBackendDefined>
+				<backendNotInitialized>
+					<title>Backend not initialized</title>
+					<text>The backend with the ID &quot;[BACKENDID]&quot; of type &quot;[BACKENDTYPE]&quot; is not initialized. Maybe there is an undefined backend used in a map?</text>
+				</backendNotInitialized>
+			</messages>
+		</global>
+		<ndomy>
+			<messages>
+				<mysqlNotSupported>
+					<title>NDOMy: No MySQL support (Backend [BACKENDID])</title>
+					<text>Your PHP installation lacks SQL support. You can not use the NDOMy Backend without php-mysql</text>
+				</mysqlNotSupported>
+				<errorSelectingDb>
+					<title>NDOMy: Error selecting database (Backend [BACKENDID])</title>
+					<text>Error selecting the database. Maybe wrong database name  or insufficient permissions. MySQL-Error: [MYSQLERR]</text>
+				</errorSelectingDb>
+				<nagiosNotRunning>
+					<title>NDOMy: Nagios not running (Backend [BACKENDID])</title>
+					<text>NDO reports that Nagios is not running</text>
+				</nagiosNotRunning>
+				<nagiosDataNotUpToDate>
+					<title>NDOMy: NDO data to old (Backend [BACKENDID])</title>
+					<text>NDO claims that Nagios did no status Update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and ndo2db are running</text>
+				</nagiosDataNotUpToDate>
+				<hostNotFoundInDB>
+					<title>NDOMy: Host not found in database (Backend [BACKENDID])</title>
+					<text>The host &quot;[HOST]&quot; could not be found in the database. Maybe it is spelled wrong?</text>
+				</hostNotFoundInDB>
+				<hostGroupNotFoundInDB>
+					<title>NDOMy: Hostgroup not found in database (Backend [BACKENDID])</title>
+					<text>The hostgroup &quot;[HOSTGROUP]&quot; could not be found in the database. Maybe it is spelled wrong?</text>
+				</hostGroupNotFoundInDB>
+				<serviceNotFoundInDB>
+					<title>NDOMy: Service not found in database (Backend [BACKENDID])</title>
+					<text>The service &quot;[SERVICE]&quot; on host &quot;[HOST]&quot; could not be found in the database. Maybe it is spelled wrong?</text>
+				</serviceNotFoundInDB>
+				<serviceGroupNotFoundInDB>
+					<title>NDOMy: Servicegroup not found in database (Backend [BACKENDID])</title>
+					<text>The servicegroup &quot;[SERVICEGROUP]&quot; could not be found in the database. Maybe it is spelled wrong?</text>
+				</serviceGroupNotFoundInDB>
+				<hostIsPending>
+					<title>NDOMy: Host is in pending state (Backend [BACKENDID])</title>
+					<text>The host &quot;[HOST]&quot; is in pending state</text>
+				</hostIsPending>
+				<serviceNotChecked>
+					<title>NDOMy: Service not checked yet (Backend [BACKENDID])</title>
+					<text>The service &quot;[SERVICE]&quot; has not been checked yet</text>
+				</serviceNotChecked>
+				<noTablesExists>
+					<title>NDOMy: No matching tables in database (Backend [BACKENDID])</title>
+					<text>There are no tables in database matching given prefix &quot;[PREFIX]&quot;</text>
+				</noTablesExists>
+			</messages>
+		</ndomy>
+		<html>
+			<messages>
+				<!-- Alle HTML Backend Meldungen //-->
+				<statusCgiNotFound>
+					<title>HTML: StatusCgi not found (Backend [BACKENDID])</title>
+					<text>Check the path of the [STATUSCGI]-Var in the main configuration file</text>
+				</statusCgiNotFound>
+				<statusCgiNotExecutable>
+					<title>HTML: Status.cgi not executable</title>
+					<text>Check the permissions of the status.cgi</text>
+				</statusCgiNotExecutable>
+			</messages>
+		</html>
+	</backend>
+	<wui>
+		<global>
+			<labels>
+				<!-- Alle WUI Beschriftungen //-->
+				<change>
+					<text>Change</text>
+				</change>
+				<delete>
+					<text>Delete</text>
+				</delete>
+				<export>
+					<text>Export</text>
+				</export>
+				<import>
+					<text>Import</text>
+				</import>
+				<positionSize>
+					<text>Position/Size</text>
+				</positionSize>
+				<yes>
+					<text>Yes</text>
+				</yes>
+				<no>
+					<text>No</text>
+				</no>
+				<check>
+					<text>Check</text>
+				</check>
+				<save>
+					<text>Save</text>
+				</save>
+				<properties>
+					<text>Options</text>
+				</properties>
+				<maps>
+					<text>Map</text>
+				</maps>
+				<addObject>
+					<text>Add Object</text>
+				</addObject>
+				<nagVisConfig>
+					<text>NagVis configuration</text>
+				</nagVisConfig>
+				<help>
+					<text>Help</text>
+				</help>
+				<open>
+					<text>Open Map</text>
+				</open>
+				<openInNagVis>
+					<text>Open Map in NagVis</text>
+				</openInNagVis>
+				<manageMaps>
+					<text>Map Management</text>
+				</manageMaps>
+				<manageBackends>
+					<text>Backend Management</text>
+				</manageBackends>
+				<manageBackgrounds>
+					<text>Background Management</text>
+				</manageBackgrounds>
+				<manageShapes>
+					<text>Shape Management</text>
+				</manageShapes>
+				<icon>
+					<text>Icon</text>
+				</icon>
+				<line>
+					<text>Line</text>
+				</line>
+				<special>
+					<text>Special</text>
+				</special>
+				<createMap>
+					<text>Create Map</text>
+				</createMap>
+				<renameMap>
+					<text>Rename Map</text>
+				</renameMap>
+				<deleteMap>
+					<text>Delete Map</text>
+				</deleteMap>
+				<create>
+					<text>Create</text>
+				</create>
+				<delete>
+					<text>Delete</text>
+				</delete>
+				<rename>
+					<text>Rename</text>
+				</rename>
+				<upload>
+					<text>Upload</text>
+				</upload>
+				<mapName>
+					<text>Map name</text>
+				</mapName>
+				<readUsers>
+					<text>User with read permissions</text>
+				</readUsers>
+				<writeUsers>
+					<text>User with write permissions</text>
+				</writeUsers>
+				<background>
+					<text>Background</text>
+				</background>
+				<chooseMap>
+					<text>Select map</text>
+				</chooseMap>
+				<newMapName>
+					<text>New name</text>
+				</newMapName>
+				<choosePngImage>
+					<text>Select a PNG image</text>
+				</choosePngImage>
+				<mapIconset>
+					<text>Map Iconset</text>
+				</mapIconset>
+				<restore>
+					<text>Restore</text>
+				</restore>
+				<disabled>
+					<text>Deactivated</text>
+				</disabled>
+				<configured>
+					<text>Configured</text>
+				</configured>
+				<inherited>
+					<text>Inherited</text>
+				</inherited>
+				<defaultValue>
+					<text>Default value</text>
+				</defaultValue>
+			</labels>
+			<messages>
+				<!-- Alle WUI Meldungen //-->
+				<mustValueNotSet>
+					<text>A necessary value is not set. All red marked values are obligation values.</text>
+				</mustValueNotSet>
+				<chosenLineTypeNotValid>
+					<text>The selected line_type is invalid.</text>
+				</chosenLineTypeNotValid>
+				<onlyLineOrIcon>
+					<text>A Object can be only a Icon or a line, &quot;iconset&quot; and &quot;line_type&quot; can be used not together.</text>
+				</onlyLineOrIcon>
+				<not2coords>
+					<text>It seems, you want to define a line (&quot;line_type&quot; is set). But there are no two &quot;[COORD]&quot; coordinates indicated.</text>
+				</not2coords>
+				<only1or2coords>
+					<text>Only one or two [COORD] coordinates can be defined.</text>
+				</only1or2coords>
+				<lineTypeNotSelected>
+					<text>You submited two [COORD] coordinates, therefore also line_type have to be selected.</text>
+				</lineTypeNotSelected>
+				<clickMapToSetPoints>
+					<text>Click on the map to determine the position of the missing points.</text>
+				</clickMapToSetPoints>
+				<confirmDelete>
+					<text>Do you really want to delete this object? </text>
+				</confirmDelete>
+				<chooseMapName>
+					<text>You must insert a name for the new map.</text>
+				</chooseMapName>
+				<minOneUserAccess>
+					<text>At least one user must have access to the map.</text>
+				</minOneUserAccess>
+				<mustChooseDefaultIconset>
+					<text>You must select an iconset for this map.</text>
+				</mustChooseDefaultIconset>
+				<mustChooseBackgroundImage>
+					<text>You must select the background image for this map.</text>
+				</mustChooseBackgroundImage>
+				<confirmNewMap>
+					<text>Do you really want to create a new map?</text>
+				</confirmNewMap>
+				<confirmMapRename>
+					<text>Do you really want to rename this map?</text>
+				</confirmMapRename>
+				<confirmMapDeletion>
+					<text>Do you really want to delete this map? This action can not be reverted.</text>
+				</confirmMapDeletion>
+				<noPermissions>
+					<text>You don not have the permissions to change this map.</text>
+				</noPermissions>
+				<minOneUserWriteAccess>
+					<text>At least one user must have the authorization, in order to change this map.</text>
+				</minOneUserWriteAccess>
+				<unableToWorkWithMap>
+					<text>The map changes can not be processed no more. Procedure was terminated.</text>
+				</unableToWorkWithMap>
+				<confirmRestore>
+					<text>Surely that you want to restore the backup?</text>
+				</confirmRestore>
+				<noSpaceAllowed>
+					<text>Blanks are not allowed.</text>
+				</noSpaceAllowed>
+				<firstMustChoosePngImage>
+					<text>Please choose a PNG image.</text>
+				</firstMustChoosePngImage>
+				<mustChoosePngImage>
+					<text>You must select an image with the extension &quot;.png&quot;.</text>
+				</mustChoosePngImage>
+				<mapLocked>
+					<title>Map Locked</title>
+					<text>The map &quot;[MAP]&quot; is locked by user &quot;[USER]&quot; from IP &quot;[IP]&quot; since [TIME].\n\n Edit anyway? (Override lock?)</text>
+				</mapLocked>
+				<mapLockNotExists>
+					<title>Map lockfile not exists</title>
+					<text>The lockfile &quot;[MAP]&quot; does not exist.</text>
+				</mapLockNotExists>
+				<mapLockNotReadable>
+					<title>Map lockfile not readable</title>
+					<text>The lockfile &quot;[MAP]&quot; is not readable.</text>
+				</mapLockNotReadable>
+				<mapLockNotWriteable>
+					<title>Map lockfile not writeable</title>
+					<text>The lockfile &quot;[MAP]&quot; is not writeable.</text>
+				</mapLockNotWriteable>
+			</messages>
+		</global>
+		<editMainCfg>
+			<labels>
+				<!-- Main Configuration Descriptions //-->
+				<language>
+					<text>Select a language.</text>
+				</language>
+				<defaulticons>
+					<text>Standard Iconset.</text>
+				</defaulticons>
+				<rotatemaps>
+					<text>Enable/Disable Map rotation.</text>
+				</rotatemaps>
+				<maps>
+					<text>Maps to rotate.</text>
+				</maps>
+				<displayheader>
+					<text>Use header-menu</text>
+				</displayheader>
+				<headercount>
+					<text>Number of on the links of per line in the header-menu.</text>
+				</headercount>
+				<autoupdatefreq>
+					<text>WUI puts on with to work on regularly a backup of the file and/or stores automatically. That interval can be adjusted here.</text>
+				</autoupdatefreq>
+				<usegdlibs>
+					<text>The GD-Lib are needed to print lines in the frontend. When there are problems with the GD-Libs the line support can be disabled here.</text>
+				</usegdlibs>
+				<refreshtime>
+					<text>Map refresh time (seconds).</text>
+				</refreshtime>
+				<icons>
+					<text>Default iconset for the maps.</text>
+				</icons>
+				<backgroundcolor>
+					<text>Default background color for the maps.</text>
+				</backgroundcolor>
+				<recognizeservices>
+					<text>Default recognizeservices in the maps.</text>
+				</recognizeservices>
+				<onlyhardstates>
+					<text>Default onlyhardstates for the maps.</text>
+				</onlyhardstates>
+				<base>
+					<text>Full local path to the NagVis basis directory.</text>
+				</base>
+				<htmlbase>
+					<text>HTTP path to NagVis.</text>
+				</htmlbase>
+				<htmlcgi>
+					<text>HTTP path to the Nagios CGIs.</text>
+				</htmlcgi>
+				<header>
+					<text>Name of the header-menu file.</text>
+				</header>
+			</labels>
+			<messages>
+				<!-- Main Configuration Messages //-->
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</editMainCfg>
+		<backendManagement>
+			<labels>
+				<setDefaultBackend>
+					<text>Set Default Backend</text>
+				</setDefaultBackend>
+				<defaultBackend>
+					<text>Default Backend</text>
+				</defaultBackend>
+				<addBackend>
+					<text>Add Backend</text>
+				</addBackend>
+				<editBackend>
+					<text>Edit Backend</text>
+				</editBackend>
+				<delBackend>
+					<text>Delete Backend</text>
+				</delBackend>
+			</labels>
+			<messages>
+				<mustValueNotSet>
+					<title>Must value not set</title>
+					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
+				</mustValueNotSet>
+			</messages>
+		</backendManagement>
+		<backgroundManagement>
+			<labels>
+				<uploadBackground>
+					<text>Upload background image</text>
+				</uploadBackground>
+				<deleteBackground>
+					<text>Delete background image</text>
+				</deleteBackground>
+				<createBackground>
+					<text>Create background image</text>
+				</createBackground>
+				<backgroundName>
+					<text>Name</text>
+				</backgroundName>
+				<backgroundColor>
+					<text>Color (Hex)</text>
+				</backgroundColor>
+				<backgroundWidth>
+					<text>Width (px)</text>
+				</backgroundWidth>
+				<backgroundHeight>
+					<text>Height (px)</text>
+				</backgroundHeight>
+			</labels>
+			<messages>
+				<foundNoBackgroundToDelete>
+					<text>No background image found. Operation terminated.</text>
+				</foundNoBackgroundToDelete>
+				<confirmBackgroundDeletion>
+					<text>Do you really want to delete this background image? This action cannot be reverted.</text>
+				</confirmBackgroundDeletion>
+				<unableToDeleteBackground>
+					<text>Cannot delete background image &quot;[IMAGENAME]&quot; because it is used by map &quot;[MAP]&quot;.</text>
+				</unableToDeleteBackground>
+				<mustValueNotSet1>
+					<title>Must value not set</title>
+					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
+				</mustValueNotSet1>
+			</messages>
+		</backgroundManagement>
+		<shapeManagement>
+			<labels>
+				<uploadShape>
+					<text>Upload shape</text>
+				</uploadShape>
+				<deleteShape>
+					<text>Delete shape</text>
+				</deleteShape>
+			</labels>
+			<messages>
+				<foundNoShapeToDelete>
+					<text>No shape image found. Operation terminated.</text>
+				</foundNoShapeToDelete>
+				<confirmShapeDeletion>
+					<text>Do you really want to delete this shape image? This action cannot be reverted.</text>
+				</confirmShapeDeletion>
+				<unableToDeleteShape>
+					<text>Cannot delete shape &quot;[IMAGENAME]&quot; because it is used by map &quot;[MAP]&quot;.</text>
+				</unableToDeleteShape>
+			</messages>
+		</shapeManagement>
+		<mapManagement>
+			<labels>
+				<exportMap>
+					<text>Export Map</text>
+				</exportMap>
+				<importMap>
+					<text>Import Map</text>
+				</importMap>
+				<chooseMapFile>
+					<text>Select a MapFile</text>
+				</chooseMapFile>
+			</labels>
+			<messages>
+				<noMapToRename>
+					<text>No map found. Operation terminated.</text>
+				</noMapToRename>
+				<noNewNameGiven>
+					<text>You indicated no new names.</text>
+				</noNewNameGiven>
+				<mapAlreadyExists>
+					<text>The map &quot;[MAPNAME]&quot; already exists. Rename the file.</text>
+				</mapAlreadyExists>
+				<foundNoMapToDelete>
+					<text>No map found. Operation terminated.</text>
+				</foundNoMapToDelete>
+				<foundNoMapToExport>
+					<title>No map choosen</title>
+					<text>No map found. Set a map to export.</text>
+				</foundNoMapToExport>
+				<foundNoMapToImport>
+					<title>No file choosen</title>
+					<text>There is no file given to import. Set a file to import.</text>
+				</foundNoMapToImport>
+				<notCfgFile>
+					<title>Wrong file format</title>
+					<text>The given file has not the extension &quot;.cfg&quot;. Rename the file.</text>
+				</notCfgFile>
+			</messages>
+		</mapManagement>
+		<addModify>
+			<labels>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</labels>
+			<messages>
+				<dummy>
+					<text>dummy - don't delete this!</text>
+				</dummy>
+			</messages>
+		</addModify>
+	</wui>
+</language>

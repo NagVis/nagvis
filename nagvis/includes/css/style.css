@@ -1,0 +1,194 @@
+/* ######################################################################
+##     	                           NagVis                              ##
+##                                                                     ##
+##                    *** StyleSheet's for NagVis ***                  ##
+##                               Lizenz GPL                            ##
+###################################################################### */
+
+body, table, th, td {
+	margin: 0;
+	padding: 0;
+	
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	
+	color: black;
+	font-size: 12pt;
+}
+
+div {
+	margin: 0;
+	padding: 0;
+}
+
+img {
+    border: 0
+}
+
+/* Global DIVs */
+.main {
+	margin: 0;
+	padding: 0;
+	background-color: white;
+	color: black;
+}
+
+.header {
+	top: 0;
+	left: 0;
+	padding: 0;
+	position: relative;
+}
+
+.map {
+	position : relative;
+	top: 0;
+	left: 0;
+}
+
+/* Message-Box */
+.messageBox {
+	width: 600px;
+	border: 0px;
+	background-color:  #CCCCCC;
+}
+
+.messageBox th {
+	height: 22px;
+	
+	background-color: #CCCCCC;
+	
+	font-size: 15pt;
+	font-weight: bold;
+	text-align: center;
+}
+	
+.messageBox td {
+	height: 200px;
+	
+	background-color: #EEEEEE;
+	
+	font-size: 12pt;
+	font-weight: bold; 
+	text-align: center;
+}
+
+/* icons */
+.icon {
+    position : absolute;
+    border : 0;
+    z-index : 1;
+}
+
+/* lines */
+.line {
+    position : absolute;
+    z-index : 1;
+    border-style : dotted;
+    border-width : 1px;
+    border-color : black;
+}
+
+/* textbox (object on map) */
+.box {
+    position : absolute;
+    z-index : 1;
+	border: 1px #000 solid;
+    font-family: arial,serif ;
+    font-size: 11px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 3px;
+    padding-top: 1px;
+}
+
+/* labels for the objects on the maps */
+.object_label {
+    position : absolute;
+    z-index : 1;
+	border: 1px #000 solid;
+    font-family: Verdana,arial,serif ;
+    font-size: 11px;
+    padding: 2px;
+}
+
+/* Style on info pages (index.php?info, index.php) */
+div.infopage table {
+	margin: auto;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	
+	width: 800px;
+	
+	background-color: #F5F5F5;
+	border-collapse:collapse;
+}
+
+div.infopage table td, div.infopage table th {
+	border: 1px #a4a4a4 solid;
+	padding: 4px;
+	
+	font-size: 11px;
+	color: #314455;
+	vertical-align: top;
+}
+
+div.infopage table th {
+	text-align: center;
+	background-color: #eee;
+}
+
+div.infopage table th.head {
+	font-size: 20px;
+}
+
+div.infopage h2 {
+    font-size: 12px;
+	color: #314455;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	margin-left: 2px;
+}
+
+div.infopage td.disabled h2  {
+    color: #a4a4a4;
+}
+
+div.infopage a {
+	color: #a4a4a4;
+	text-decoration: none;
+}
+
+div.infopage a:hover {
+	color: #a4a4a4;
+	text-decoration: underline;
+}
+
+
+table.infopage_hover_table {
+	width: 250px;
+	background-color: #F5F5F5;
+	border-collapse:collapse;
+}
+
+table.infopage_hover_table td, table.infopage_hover_table th {
+	border: 1px #a4a4a4 solid;
+	padding: 2px;
+	
+	font-size: 12px;
+	color: #314455;
+}
+
+table.infopage_hover_table th {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.infopage_hover_table td.label {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.infopage_hover_table label {
+	font-weight: bold;
+}

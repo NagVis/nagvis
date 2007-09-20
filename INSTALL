@@ -1,67 +1,101 @@
-NagVis 1.2 Quick Installation Instructions
-------------------------------------------
-
+==============================================================================
+NagVis 1.1 Quick Installation Instructions
+==============================================================================
 Author: Andreas Husch, Lars Michelsen
-Document Version: 0.3
-Date: 2007-07-26
-Applies to: NagVis 1.2
-------------------------------------------
+Document Version: 0.2
+Date: 2007-04-30
+Applies to: NagVis 1.1
+==============================================================================
 
 STEP 0: Prepair System
-------
+------------------
 Make sure your System meets the requirements:
-- Nagios is running and authentication is configured (.htaccess file placed and 
-configured properly!)
+- Nagios is running and authentication is configured (.htaccess file placed
+ and configured properly!)
 - Working PHP installation (Version > 4.2.0) with "php-gd" support
 - php-mysql support is needed for the strongly recommended "ndomy" backend
 
 STEP 1: Download NagVis
-------
-Get NagVis, the latest release can be found at www.nagvis.org
+------------------
+Get NagVis, the latest releases can be found at the official NagVis Homepage
+ (http://www.nagvis.org/downloads)
 
 STEP 2: Unpack NagVis
-------
+------------------
 Unpack NagVis in a path of your choice
 
-> tar xvzf nagvis-1.x.tar.gz
+> tar xvzf nagvis-1.1.x.tar.gz
 
-STEP 3: Configure NagVis
-------
-Run ./configure --help, check if you need some of the options to change the default
-values to fit your needs.
+STEP 3: Move NagVis
+------------------
+Place the NagVis directory tree into your Nagios share folder.
+With standard Nagios path this is /usr/local/nagios/share.
 
-If you don't need to change the defaults run
+> mv nagvis /usr/local/nagios/share
 
-> ./configure
+You should see the directorys nagvis and wui on
 
-If the command is completed, check the full output for errors especialy have a look
-at the last lines.
+> ls -l /usr/local/nagios/share/nagvis
 
-STEP 4: Install NagVis
-------
-If the output of the configure command is OK, run make
+DON'T move any files or folders inside the NagVis directory (In fact you 
+can move, but in this case you have to change/add some parameters and values
+the main config file - if everything is left untouched it should run "out of 
+the box" without changes in the configuration files)
 
-> make all
-> make install
+STEP 4: Configure
+------------------
+Move to new NagVis directory
 
-Now, if make completes without errors, NagVis is installed in the path you wanted it to.
+> cd /usr/local/nagios/share/nagvis
 
-You can also run make again to install sample configurations
+An example for the configuration files can be found in 
+nagvis/etc/config.ini.php.dist. If you like to change some settings in this
+file copy this example to nagvis/etc/config.ini.php.
 
-> make install-config
-> make install-maps
+> cp nagvis/etc/config.ini.php.dist nagvis/etc/config.ini.php
 
-Now the sample config files are also installed in your NagVis folder.
+Now you can edit this file with your favorite text editor - I use vi:
 
-The most lines in the fresh copied config.ini are commented out. If you want to set 
-different settings, than there are set, uncomment the line and change the value of it.
+> vi etc/config.ini.php
 
-For informations about the possible values have a look at Main Config Format Description 
-on NagVis.org (http://www.nagvis.org/docs).
+The most lines in the fresh copied config.ini.php are commented out. If you
+want to set different settings, than there are set, uncomment the line and
+change the value of it.
 
-STEP 5: The WUI
-------
-NagVis has an included web based config tool called WUI. If you want to use it 
+For informations about the possible values have a look at Main Config Format
+Description on NagVis.org 
+ (http://www.nagvis.org/docs/1.1/nagvis_config_format_description).
+
+STEP 5: Permissions
+------------------
+!!! This is very important for a clean working installation !!!
+
+First check which user the webserver is running with (In my case it is 
+wwwrun). If you don't know which user the webserver is running on have a look
+at the webservers configuration. In case of apache you can do this by the
+following command:
+
+> grep -e '^User' /etc/apache2/httpd.conf
+
+If your configuration file is located in another path you should correct this
+in the command above.
+
+The set the permissions to your NagVis directory (In my case the path are like
+this):
+
+> chown wwwrun:www /usr/local/nagios/share/nagvis -R
+> chmod 664 /usr/local/nagios/share/nagvis/nagvis/etc/config.ini.php
+> chmod 775 /usr/local/nagios/share/nagvis/nagvis/images/maps
+> chmod 664 /usr/local/nagios/share/nagvis/nagvis/images/maps/*
+> chmod 775 /usr/local/nagios/share/nagvis/nagvis/etc/maps
+> chmod 664 /usr/local/nagios/share/nagvis/nagvis/etc/maps/*
+
+It's possible to set lower permissions on the files, in my setup it's ok like
+this. Only change them if you know, what you are doing. 
+
+STEP 6: The WUI
+------------------
+NagVis has an included web based config tool called WUI. If you want to use it
 use your browser to open the page:
 
 	http://<nagiosserver>/<path-to-nagvis>/config.php
@@ -71,18 +105,22 @@ Hint: If you have some script or popup blockers, disable them for the WUI.
 When you see the NagVis image, right click on it, a context menu should open, 
 now you can configure NagVis and create maps with the WUI.
 
-The Config Tools DOES NOT display the current Nagios States of Objects configured.
-Its only for configuring! To "use" your configured Maps afterwards see STEP 7!
+The Config Tools DOES NOT display the current Nagios States of Objects
+configured. Its only for configuring! To "use" your configured Maps afterwards
+see STEP 7!
 
-If this does't work for you, or if you don't want to use the WUI, you can simply 
-edit the map config files in the nagvis/etc/maps/ directory with your favorite text 
-editor. For valid format and values have a look at Map Config Format Description on 
-NagVis.org (http://www.nagvis.org/docs).
+If this does't work for you, or if you don't want to use the WUI, you can
+simply edit the map config files in the nagvis/etc/maps/ directory with your
+favorite text editor. For valid format and values have a look at Map Config 
+Format Description on NagVis.org 
+ (http://www.nagvis.org/docs/1.1/map_config_format_description). 
 
-STEP 6: Watch the Maps
-------
+STEP 7: Watch the Maps
+------------------
 You should now be able to watch your defined maps in your browser:
 
 	http://<nagiosserver>/<path-to-nagvis>/index.php?map=<mapname>
 
-Have fun and please report bugs!
+==============================================================================
+Have fun using NagVis and please report bugs!
+==============================================================================

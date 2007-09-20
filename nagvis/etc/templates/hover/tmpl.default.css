@@ -1,0 +1,29 @@
+/** 
+ * CSS Code used by the default hover template (tmpl.default.html)
+ */
+table.hover_table {
+	background-color: #ff00000;
+	border-collapse:collapse;
+}
+
+table.hover_table td, table.hover_table th {
+	border: 1px #a4a4a4 solid;
+	padding: 2px;
+	
+	font-size: 12px;
+	color: #314455;
+}
+
+table.hover_table th {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.hover_table td.label {
+	text-align: center;
+	background-color: #eee;
+}
+
+table.hover_table label {
+	font-weight: bold;
+}
