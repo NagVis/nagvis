@@ -15,7 +15,8 @@
 require("../nagvis/includes/defines/global.php");
 require("../nagvis/includes/defines/matches.php");
 
-require("../nagvis/includes/classes/class.GlobalDebug.php");
+require("../nagvis/includes/functions/debug.php");
+
 require("../nagvis/includes/classes/class.GlobalMainCfg.php");
 require("../nagvis/includes/classes/class.GlobalMapCfg.php");
 require("../nagvis/includes/classes/class.GlobalLanguage.php");

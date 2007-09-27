@@ -15,7 +15,8 @@
 require("./includes/defines/global.php");
 require("./includes/defines/matches.php");
 
-require("./includes/classes/class.GlobalDebug.php");
+require("./includes/functions/debug.php");
+
 require("./includes/classes/class.GlobalGraphic.php");
 require("./includes/classes/class.GlobalMainCfg.php");
 require("./includes/classes/class.GlobalMapCfg.php");
