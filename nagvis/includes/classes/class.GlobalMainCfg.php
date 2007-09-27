@@ -264,18 +264,18 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function setPathsByBase($base,$htmlBase) {
-	    $this->validConfig['paths']['cfg']['default'] = $base.'nagvis/etc/';
+	    $this->validConfig['paths']['cfg']['default'] = $base.'etc/';
 		$this->validConfig['paths']['icon']['default'] = $base.'nagvis/images/iconsets/';
 		$this->validConfig['paths']['shape']['default'] = $base.'nagvis/images/shapes/';
 		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/languages/';
 		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';
 		$this->validConfig['paths']['map']['default'] = $base.'nagvis/images/maps/';
-		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/etc/templates/hover/';
-		$this->validConfig['paths']['headertemplate']['default'] = $base.'nagvis/etc/templates/header/';
-		$this->validConfig['paths']['mapcfg']['default'] = $base.'nagvis/etc/maps/';
+		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/templates/hover/';
+		$this->validConfig['paths']['headertemplate']['default'] = $base.'nagvis/templates/header/';
+		$this->validConfig['paths']['mapcfg']['default'] = $base.'etc/maps/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
-		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/etc/templates/hover/';
-		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/nagvis/etc/templates/header/';
+		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/templates/hover/';
+		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/nagvis/templates/header/';
 		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/header/';
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
