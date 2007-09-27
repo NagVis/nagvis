@@ -1,5 +1,8 @@
 <?php
 
+require("../nagvis/includes/defines/gobal.php");
+require("../nagvis/includes/defines/matches.php");
+
 require("../nagvis/includes/classes/class.GlobalDebug.php");
 require("../nagvis/includes/classes/class.GlobalMainCfg.php");
 require("../nagvis/includes/classes/class.GlobalMapCfg.php");
@@ -10,7 +13,7 @@ require("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
 require("./includes/classes/class.WuiMainCfg.php");
 require("./includes/classes/class.WuiMapCfg.php");
 
-$MAINCFG = new WuiMainCfg('../nagvis/etc/config.ini.php');
+$MAINCFG = new WuiMainCfg(CONST_MAINCFG);
 
 switch($_GET['action']) {
 	case 'getObjects':

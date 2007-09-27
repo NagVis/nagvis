@@ -12,6 +12,9 @@
 ## For developer guidlines have a look at http://www.nagvis.org         ##
 ##########################################################################
 
+require("./includes/defines/global.php");
+require("./includes/defines/matches.php");
+
 require("./includes/classes/class.GlobalDebug.php");
 require("./includes/classes/class.GlobalMainCfg.php");
 require("./includes/classes/class.GlobalMapCfg.php");
@@ -25,7 +28,7 @@ require("./includes/classes/class.NagVisMapCfg.php");
 require("./includes/classes/class.NagVisMap.php");
 require("./includes/classes/class.NagVisFrontend.php");
 
-$MAINCFG = new GlobalMainCfg('./etc/config.ini.php');
+$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
 if(!isset($_GET['map'])) {
 	$_GET['map'] = '';
