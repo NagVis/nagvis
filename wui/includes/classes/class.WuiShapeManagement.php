@@ -45,7 +45,7 @@ class WuiShapeManagement extends GlobalPage {
         $this->ADDFORM = new GlobalForm(Array('name'=>'shape_add',
                                                 'id'=>'shape_add',
                                                 'method'=>'POST',
-                                                'action'=>'./wui.function.inc.php?myaction=mgt_shape_add',
+                                                'action'=>'./form_handler.php?myaction=mgt_shape_add',
                                                 'onSubmit'=>'return check_image_add();',
                                                 'enctype'=>'multipart/form-data',
                                                 'cols'=>'2'));
@@ -60,7 +60,7 @@ class WuiShapeManagement extends GlobalPage {
         $this->DELFORM = new GlobalForm(Array('name'=>'shape_delete',
                                                 'id'=>'shape_delete',
                                                 'method'=>'POST',
-                                                'action'=>'./wui.function.inc.php?myaction=mgt_shape_delete',
+                                                'action'=>'./form_handler.php?myaction=mgt_shape_delete',
                                                 'onSubmit'=>'return check_image_delete();',
                                                 'cols'=>'2'));
         $this->addBodyLines($this->DELFORM->initForm());

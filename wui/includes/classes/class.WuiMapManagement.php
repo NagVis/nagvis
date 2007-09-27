@@ -53,7 +53,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->CREATEFORM = new GlobalForm(Array('name'=>'map_create',
 			'id'=>'map_create',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_map_create',
+			'action'=>'./form_handler.php?myaction=mgt_map_create',
 			'onSubmit'=>'return check_create_map();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->CREATEFORM->initForm());
@@ -65,7 +65,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->RENAMEFORM = new GlobalForm(Array('name'=>'map_rename',
 			'id'=>'map_rename',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_map_rename',
+			'action'=>'./form_handler.php?myaction=mgt_map_rename',
 			'onSubmit'=>'return check_map_rename();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->RENAMEFORM->initForm());
@@ -77,7 +77,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->DELETEFORM = new GlobalForm(Array('name'=>'map_delete',
 			'id'=>'map_delete',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_map_delete',
+			'action'=>'./form_handler.php?myaction=mgt_map_delete',
 			'onSubmit'=>'return check_map_delete();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DELETEFORM->initForm());
@@ -89,7 +89,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->EXPORTFORM = new GlobalForm(Array('name'=>'map_export',
 			'id'=>'map_export',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_map_export',
+			'action'=>'./form_handler.php?myaction=mgt_map_export',
 			'onSubmit'=>'return check_map_export();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->EXPORTFORM->initForm());
@@ -102,7 +102,7 @@ class WuiMapManagement extends GlobalPage {
 		$this->IMPORTFORM = new GlobalForm(Array('name'=>'map_import',
 			'id'=>'map_import',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_map_import',
+			'action'=>'./form_handler.php?myaction=mgt_map_import',
 			'onSubmit'=>'return check_map_import();',
 			'enctype'=>'multipart/form-data',
 			'cols'=>'2'));

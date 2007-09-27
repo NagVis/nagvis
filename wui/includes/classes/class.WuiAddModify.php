@@ -52,7 +52,7 @@ class WuiAddModify extends GlobalPage {
 		$this->FORM = new GlobalForm(Array('name'=>'addmodify',
 			'id'=>'addmodify',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction='.$this->prop['action'],
+			'action'=>'./form_handler.php?myaction='.$this->prop['action'],
 			'onSubmit'=>'return check_object();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->FORM->initForm());

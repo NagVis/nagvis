@@ -42,7 +42,7 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->FORM = new GlobalForm(Array('name'=>'edit_config',
 									'id'=>'edit_config',
 									'method'=>'POST',
-									'action'=>'./wui.function.inc.php?myaction=update_config',
+									'action'=>'./form_handler.php?myaction=update_config',
 									'onSubmit'=>'return update_param();',
 									'cols'=>'3'));
 		$this->addBodyLines($this->FORM->initForm());

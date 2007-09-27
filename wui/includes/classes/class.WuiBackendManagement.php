@@ -50,7 +50,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->DEFBACKENDFORM = new GlobalForm(Array('name'=>'backend_default',
 			'id'=>'backend_default',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_backend_default',
+			'action'=>'./form_handler.php?myaction=mgt_backend_default',
 			'onSubmit'=>'return update_param(\'backend_default\');',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DEFBACKENDFORM->initForm());
@@ -63,7 +63,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->ADDBACKENDFORM = new GlobalForm(Array('name'=>'backend_add',
 			'id'=>'backend_add',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_backend_add',
+			'action'=>'./form_handler.php?myaction=mgt_backend_add',
 			'onSubmit'=>'return check_backend_add();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->ADDBACKENDFORM->initForm());
@@ -76,7 +76,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->EDITBACKENDFORM = new GlobalForm(Array('name'=>'backend_edit',
 			'id'=>'backend_edit',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_backend_edit',
+			'action'=>'./form_handler.php?myaction=mgt_backend_edit',
 			'onSubmit'=>'return check_backend_edit();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->EDITBACKENDFORM->initForm());
@@ -89,7 +89,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->DELBACKENDFORM = new GlobalForm(Array('name'=>'backend_del',
 			'id'=>'backend_del',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_backend_del',
+			'action'=>'./form_handler.php?myaction=mgt_backend_del',
 			'onSubmit'=>'return check_backend_del();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DELBACKENDFORM->initForm());

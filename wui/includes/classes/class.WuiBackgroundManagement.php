@@ -50,7 +50,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->CREATEFORM = new GlobalForm(Array('name'=>'create_image',
 			'id'=>'create_image',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_image_create',
+			'action'=>'./form_handler.php?myaction=mgt_image_create',
 			'onSubmit'=>'return check_image_create();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->CREATEFORM->initForm());
@@ -64,7 +64,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->ADDFORM = new GlobalForm(Array('name'=>'new_image',
 			'id'=>'new_image',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_new_image',
+			'action'=>'./form_handler.php?myaction=mgt_new_image',
 			'onSubmit'=>'return check_image_add();',
 			'enctype'=>'multipart/form-data',
 			'cols'=>'2'));
@@ -79,7 +79,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->DELFORM = new GlobalForm(Array('name'=>'image_delete',
 			'id'=>'image_delete',
 			'method'=>'POST',
-			'action'=>'./wui.function.inc.php?myaction=mgt_image_delete',
+			'action'=>'./form_handler.php?myaction=mgt_image_delete',
 			'onSubmit'=>'return check_image_delete();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DELFORM->initForm());
