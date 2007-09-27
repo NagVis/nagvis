@@ -197,7 +197,7 @@ class GlobalMainCfg {
 																					'type' => 'integer'),
 																'dbname' => Array('must' => 1,
 																					 'editable' => 1,
-																					'default' => 'db_nagios',
+																					'default' => 'nagios',
 																					'type' => 'string'),
 																'dbuser' => Array('must' => 1,
 																					 'editable' => 1,
