@@ -91,6 +91,18 @@ class WuiMap extends GlobalMap {
 				$i++;
 			}
 			$mapOptions .= ' ]';
+
+			// used shapes
+			$mapOptions .= ', usedShapes:[ ';
+			$i = 0;
+			foreach($MAPCFG1->getDefinitions('shape') AS $key => $obj) {
+				if($i > 0) {
+					$mapOptions .= ',';
+				}
+				$mapOptions .= '\''.$obj['icon'].'\' ';
+				$i++;
+			}
+			$mapOptions .= ' ]';
 			
 			$mapOptions .= ' }';
 			$a++;

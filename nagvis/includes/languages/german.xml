@@ -673,6 +673,9 @@
 				<foundNoShapeToDelete>
 					<text>Kein Shape zum l&ouml;schen gefunden. Operation abgebrochen.</text>
 				</foundNoShapeToDelete>
+				<shapeInUse>
+					<text>Der Shape wird noch in der Map &quot;[MAP]&quot; genutzt.</text>
+				</shapeInUse>
 				<confirmShapeDeletion>
 					<text>Willst du diesen Shape wirklich l&ouml;schen? Diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.</text>
 				</confirmShapeDeletion>

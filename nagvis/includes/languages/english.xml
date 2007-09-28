@@ -673,6 +673,9 @@
 				<foundNoShapeToDelete>
 					<text>No shape image found. Operation terminated.</text>
 				</foundNoShapeToDelete>
+				<shapeInUse>
+					<text>The shape is in use in map &quot;[MAP]&quot;.</text>
+				</shapeInUse>
 				<confirmShapeDeletion>
 					<text>Do you really want to delete this shape image? This action cannot be reverted.</text>
 				</confirmShapeDeletion>
