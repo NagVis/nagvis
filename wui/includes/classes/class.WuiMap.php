@@ -49,7 +49,7 @@ class WuiMap extends GlobalMap {
 			}
 			
 			$MAPCFG1 = new WuiMapCfg($this->MAINCFG,$map);
-			$MAPCFG1->readMapConfig(1);
+			$MAPCFG1->readMapConfig(0);
 			$mapOptions .= '{ mapName:\''.$map.'\'';
 			
 			// map alias
