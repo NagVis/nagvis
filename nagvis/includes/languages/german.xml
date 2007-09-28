@@ -222,6 +222,10 @@
 					<title>NagVis-GD: PHP memory_limit zu niedrig</title>
 					<text>Eventuell ist das memory_limit von PHP zu niedrig um dieses Bild darzustellen.</text>
 				</maybePhpMemoryLimitToLow>
+				<mapRotationPoolNotExists>
+					<title>Map rotations pool existiert nicht</title>
+					<text>Der angegebene Map rotations pool &quot;[ROTATION]&quot; ist nicht definiert.</text>
+				</mapRotationPoolNotExists>
 			</messages>
 		</global>
 	</nagvis>

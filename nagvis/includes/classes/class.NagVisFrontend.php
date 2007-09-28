@@ -27,7 +27,7 @@ class NagVisFrontend extends GlobalPage {
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/style.css'),
 					  'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/overlib_shadow.js'),
-					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->MAINCFG->getValue('global', 'refreshtime').';'.$this->getNextRotate().'">',
+					  'extHeader'=>Array('<META http-equiv="refresh" CONTENT="'.$this->getRefresh().'">',
 					  					'<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
 					  'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
 					  'languageRoot' => 'nagvis:global');
@@ -261,45 +261,69 @@ class NagVisFrontend extends GlobalPage {
 		$this->addBodyLines($this->getUserMessages());
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMessages()');
 	}
-    
-    /**
-     * Gets the Next map to rotate to, if enabled
-     * If Next map is in [ ], it will be an absolute url
-     *
-     * @return      String  URL to rotate to
-     * @author      Lars Michelsen <lars@vertical-visions.de>
-     */
-    function getNextRotate() {
+
+	/**
+	 * Gets the time and page for the next page refresh
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getRefresh() {
+	    return $this->getNextRotate();
+	}
+  
+	/**
+	 * Gets the Next map to rotate to, if enabled
+	 * If Next map is in [ ], it will be an absolute url
+	 *
+	 * @return      String  URL to rotate to
+	 * @author      Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getNextRotate() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotate()');
-	    $maps = explode(',', $this->MAINCFG->getValue('global', 'maps'));
-	    if(($this->MAINCFG->getValue('global', 'rotatemaps') == '1' && (!isset($_GET['rotate']) || isset($_GET['rotate']) && $_GET['rotate'] != '0')) || (isset($_GET['rotate']) && $_GET['rotate'] == '1')) {
-			if(isset($_GET['url']) && $_GET['url'] != '') {
-				$currentMap = '['.$_GET['url'].']';
+		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
+			if($maps = $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'maps')) {
+				$maps = explode(',', str_replace('"','',$maps));
+				if((!isset($_GET['rotate']) || isset($_GET['rotate']) && $_GET['rotate'] != '0') || (isset($_GET['rotate']) && $_GET['rotate'] == '1')) {
+					if(isset($_GET['url']) && $_GET['url'] != '') {
+						$currentMap = '['.$_GET['url'].']';
+					} else {
+						$currentMap = $this->MAPCFG->getName();
+					}
+  	      
+					// get position of actual map in the array
+					$index = array_search($currentMap,$maps);
+					if(($index + 1) >= sizeof($maps)) {
+						// if end of array reached, go to the beginning...
+						$index = 0;
+					} else {
+						$index++;
+					}
+    	    			
+					$nextMap = $maps[$index];
+        				
+        				
+					if(preg_match("/^\[(.+)\]$/",$nextMap,$arrRet)) {
+						if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1]);
+						return $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'interval').'; URL=index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1];
+					} else {
+						if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?rotation='.$_GET['rotation'].'&map='.$nextMap);
+						return $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'interval').'; URL=index.php?rotation='.$_GET['rotation'].'&map='.$nextMap;
+					}
+				}
 			} else {
-				$currentMap = $this->MAPCFG->getName();
+				// Error Message (Map rotation pool does not exist)
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR','mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']);
+				
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): ');
+				return $this->MAINCFG->getValue('rotation', 'interval');
 			}
-			
-			// get position of actual map in the array
-			$index = array_search($currentMap,$maps);
-			if (($index + 1) >= sizeof($maps)) {
-				// if end of array reached, go to the beginning...
-				$index = 0;
-			} else {
-				$index++;
-			}
-			
-			$nextMap = $maps[$index];
-			
-			if(preg_match("/^\[(.+)\]$/",$nextMap,$arrRet)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?rotate=1&url='.$arrRet[1]);
-				return ' URL=index.php?rotate=1&url='.$arrRet[1];
-			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?map='.$nextMap.'&rotate=1');
-				return ' URL=index.php?map='.$nextMap.'&rotate=1';
-			}
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): ');
+			return $this->MAINCFG->getValue('rotation', 'interval');
 		}
-    }
-    
+	}  
+	
 	/**
 	 * Gets all defined maps
 	 *

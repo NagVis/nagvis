@@ -231,6 +231,18 @@ class GlobalMainCfg {
 																					 'editable' => 1,
 																					'default' => '/usr/local/nagios/sbin/',
 																					'type' => 'string')))),
+			'rotation' => Array('rotationid' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'demo',
+					'type' => 'string'),
+				'maps' => Array('must' => 1,
+          'editable' => 1,
+          'default' => 'demo,demo2',
+          'type' => 'string'),
+				'interval' => Array('must' => 0,
+          'editable' => 1,
+          'default' => '',
+          'type' => 'string')),
 			'internal' => Array('version' => Array('must' => 1,
 												 'editable' => 0,
 												'default' => CONST_VERSION,
@@ -249,9 +261,12 @@ class GlobalMainCfg {
 		// Read Main Config file
 		$this->configFile = $configFile;
 		$this->readConfig(1);
-		
+
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+		
+		// set default value
+		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
 	}
@@ -339,10 +354,13 @@ class GlobalMainCfg {
 						// section
 						$sec = @strtolower(@trim(@substr($line, 1, @strlen($line)-2)));
 						
-						// In Array schreiben
+						// write to array
 						if(preg_match('/^backend_/i', $sec)) {
 							$this->config[$sec] = Array();
 							$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
+						} elseif(preg_match('/^rotation_/i', $sec)) {
+							$this->config[$sec] = Array();
+							$this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
 						} else {
 							$this->config[$sec] = Array();
 						}
@@ -407,10 +425,12 @@ class GlobalMainCfg {
 		// check given objects and attributes
 		foreach($this->config AS $type => $vars) {
 			if(!ereg('^comment_',$type)) {
-				if(array_key_exists($type,$this->validConfig) || ereg('^backend_', $type)) {
+				if(array_key_exists($type,$this->validConfig) || ereg('^(backend|rotation)_', $type)) {
 					// loop validConfig for checking: => missing "must" atributes
 					if(ereg('^backend_', $type)) {
 						$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+					} elseif(ereg('^rotation_', $type)) {
+						$arrValidConfig = $this->validConfig['rotation'];
 					} else {
 						$arrValidConfig = $this->validConfig[$type];
 					}
@@ -430,6 +450,8 @@ class GlobalMainCfg {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
 								$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+							} elseif(ereg('^rotation_', $type)) {
+								$arrValidConfig = $this->validConfig['rotation'];
 							} else {
 								$arrValidConfig = $this->validConfig[$type];
 							}
@@ -716,6 +738,14 @@ class GlobalMainCfg {
 						if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): ""');
 						return $this->validConfig['backend']['backendtype']['default'];
 					}
+				}
+			} elseif(preg_match('/^rotation_/i', $sec)) {
+				if (DEBUG&&DEBUGLEVEL&2) debug('  Section: Rotation');
+				if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
+					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['rotation'][$var]['default']);
+					return $this->validConfig['rotation'][$var]['default'];
+				} else {
+					return FALSE;
 				}
 			} else {
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig[$sec][$var]['default']);

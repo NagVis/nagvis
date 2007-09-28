@@ -91,6 +91,15 @@
 ; maximum delay of the NDO Database in Seconds
 ;maxtimewithoutupdate=180
 
+; map rotation pools
+; in this example the browser switches between the maps demo and demo2 every 15
+; seconds the rotation is enabled by url: index.php?rotation=demo
+[rotation_demo]
+; maps to rotate in this pool
+maps="demo,demo2"
+; rotation interval (seconds)
+interval=15
+
 ; -------------------------
 ; EOF
 ; -------------------------
