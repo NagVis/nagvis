@@ -120,7 +120,7 @@ class WuiBackgroundManagement extends GlobalPage {
 	function getAddFields() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getAddFields()');
 		$ret = Array();
-		$ret = array_merge($ret,$this->ADDFORM->getHiddenField('MAX_FILE_SIZE','1000000'));
+		$ret = array_merge($ret,$this->ADDFORM->getHiddenField('MAX_FILE_SIZE','3000000'));
 		$ret = array_merge($ret,$this->ADDFORM->getFileLine($this->LANG->getLabel('choosePngImage'),'image_file',''));
 		$this->propCount++;
 		
