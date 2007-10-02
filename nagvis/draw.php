@@ -17,17 +17,17 @@ require("./includes/defines/matches.php");
 
 require("./includes/functions/debug.php");
 
-require("./includes/classes/class.GlobalGraphic.php");
-require("./includes/classes/class.GlobalMainCfg.php");
-require("./includes/classes/class.GlobalMapCfg.php");
-require("./includes/classes/class.GlobalMap.php");
-require("./includes/classes/class.GlobalPage.php");
-require("./includes/classes/class.GlobalLanguage.php");
-require("./includes/classes/class.GlobalBackendMgmt.php");
+require("./includes/classes/GlobalGraphic.php");
+require("./includes/classes/GlobalMainCfg.php");
+require("./includes/classes/GlobalMapCfg.php");
+require("./includes/classes/GlobalMap.php");
+require("./includes/classes/GlobalPage.php");
+require("./includes/classes/GlobalLanguage.php");
+require("./includes/classes/GlobalBackendMgmt.php");
 
-require("./includes/classes/class.NagVisMap.php");
-require("./includes/classes/class.NagVisBackground.php");
-require("./includes/classes/class.NagVisMapCfg.php");
+require("./includes/classes/NagVisMap.php");
+require("./includes/classes/NagVisBackground.php");
+require("./includes/classes/NagVisMapCfg.php");
 
 $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
