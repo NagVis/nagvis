@@ -75,7 +75,7 @@
 ; portname for NDO-db
 ;dbport=3306
 ; database-name for NDO-db
-;dbname="db_nagios"
+;dbname="nagios"
 ; username for NDO-db
 ;dbuser="root"
 ; password for NDO-db

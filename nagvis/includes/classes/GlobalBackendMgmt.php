@@ -50,7 +50,7 @@ class GlobalBackendMgmt {
 	function checkBackendExists($backendId,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::checkBackendExists('.$backendId.','.$printErr.')');
 		if($backendId != '') {
-			if(file_exists($this->MAINCFG->getValue('paths','class').'class.GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
+			if(file_exists($this->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendMgmt::checkBackendExists(): TRUE');
 				return TRUE;
 			} else {
@@ -109,7 +109,7 @@ class GlobalBackendMgmt {
 		} else {
 			foreach($aBackends AS $backendId) {
 				if($this->checkBackendExists($backendId,1)) {
-					require_once($this->MAINCFG->getValue('paths','class').'class.GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
+					require_once($this->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
 					$backendClass = 'GlobalBackend'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype');
 					$this->BACKENDS[$backendId] = new $backendClass($this->MAINCFG,$backendId);
 				}
