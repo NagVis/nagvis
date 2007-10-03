@@ -17,10 +17,6 @@
 [global]
 ; select language (english,german,french,...)
 ;language="english"
-; rotate maps (0/1)
-;rotatemaps=0
-; maps to rotate
-;maps="demo,demo2"
 ; show header (0/1)
 ;displayheader=1
 ; refresh time of pages
@@ -90,6 +86,8 @@
 ;dbinstancename="default"
 ; maximum delay of the NDO Database in Seconds
 ;maxtimewithoutupdate=180
+; path to the cgi-bin of this backend
+;htmlcgi="/nagios/cgi-bin"
 
 ; map rotation pools
 ; in this example the browser switches between the maps demo and demo2 every 15
