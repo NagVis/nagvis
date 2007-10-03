@@ -6,9 +6,9 @@
  */
 class GlobalMapCfg {
 	var $MAINCFG;
+	var $BACKGROUND;
 	
 	var $name;
-	var $image;
 	var $mapConfig;
 	
 	// Array for config validation
@@ -448,16 +448,16 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Reads which map image should be used
+	 * Initializes the background image
 	 *
-	 * @return	String	MapImage
+	 * @return	GlobalBackground
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-	function getImage() {
+	function getBackground() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getImage()');
-		$ret = $this->image = $this->getValue('global', 0, 'map_image');
+		$RET = new GlobalBackground($this->MAINCFG, $this->getValue('global', 0, 'map_image'));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getImage()');
-		return $ret;
+		return $RET;
 	}
 	
 	/**
@@ -581,7 +581,7 @@ class GlobalMapCfg {
 				}
 				
 				if($this->checkMapConfigIsValid(1)) {
-					$this->getImage();
+					$this->BACKGROUND = $this->getBackground();
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapConfig(): TRUE');
 					return TRUE;
 				} else {
@@ -754,92 +754,6 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Checks for existing map image file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function checkMapImageExists($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageExists('.$printErr.')');
-		if($this->image != '') {
-			//if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image)) {
-			if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'map').$this->image, 'r'))) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageExists(): TRUE');
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('ERROR','backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
-				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageExists(): FALSE');
-				return FALSE;
-			}
-		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageExists(): FALSE');
-			return FALSE;
-		}
-	}
-	
-    /**
-	 * Checks for readable map image file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function checkMapImageReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageReadable('.$printErr.')');
-		if($this->image != '') {
-			if(is_readable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageReadable(): TRUE');
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('ERROR','backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
-				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageReadable(): FALSE');
-				return FALSE;
-			}
-		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageReadable(): FALSE');
-			return FALSE;
-		}
-	}
-	
-    /**
-	 * Checks for writeable map image file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function checkMapImageWriteable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageWriteable('.$printErr.')');
-		if($this->image != '') {
-			//FIXME: is_writable doesn't check write permissions
-			if($this->checkMapImageExists($printErr) /*&& is_writable($this->MAINCFG->getValue('paths', 'map').$this->image)*/) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageWriteable(): TRUE');
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('ERROR','backgroundNotWriteable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
-				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageWriteable(): FALSE');
-				return FALSE;
-			}
-		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageWriteable(): FALSE');
-			return FALSE;
-		}
-	}
-	
-	/**
 	 * Checks for existing config file
 	 *
 	 * @param	Boolean $printErr
@@ -894,7 +808,7 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Checks for writeable map image file
+	 * Checks for writeable map config file
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?

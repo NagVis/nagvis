@@ -22,6 +22,7 @@ require("../nagvis/includes/classes/GlobalMapCfg.php");
 require("../nagvis/includes/classes/GlobalLanguage.php");
 require("../nagvis/includes/classes/GlobalPage.php");
 require("../nagvis/includes/classes/GlobalMap.php");
+require("../nagvis/includes/classes/GlobalBackground.php");
 require("../nagvis/includes/classes/GlobalGraphic.php");
 
 require("./includes/classes/WuiMainCfg.php");
@@ -107,10 +108,10 @@ switch($_GET['page']) {
 			if(!$MAPCFG->checkMapConfigWriteable(1)) {
 				exit;
 			}
-			if(!$MAPCFG->checkMapImageExists(1)) {
+			if(!$MAPCFG->BACKGROUND->checkFileExists(1)) {
 				exit;
 			}
-			if(!$MAPCFG->checkMapImageReadable(1)) {
+			if(!$MAPCFG->BACKGROUND->checkFileReadable(1)) {
 				exit;
 			}
     		if(!$MAPCFG->checkMapLocked(1)) {

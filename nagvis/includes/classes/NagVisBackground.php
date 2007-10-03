@@ -66,11 +66,11 @@ class NagVisBackground extends NagVisMap {
 	
 	function checkMemoryLimit($tryToFix=TRUE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::checkMemoryLimit('.$tryToFix.')');
-		$fileSize = filesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
+		$fileSize = filesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->BACKGROUND->getFileName());
 		$memoryLimit = preg_replace('/[a-z]/i','',ini_get('memory_limit'))*1024*1024;
 		if (DEBUG&&DEBUGLEVEL&2) debug('Memory Limit: '.$memoryLimit);
 		
-		$imageSize = getimagesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
+		$imageSize = getimagesize($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->BACKGROUND->getFileName());
 		if (is_array($imageSize)) {
 			$imageWidth = $imageSize[0];
 			$imageHeight = $imageSize[1];
@@ -179,15 +179,16 @@ class NagVisBackground extends NagVisMap {
 	
 	function initImage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::initImage()');
-		$imageType = explode('.', $this->MAPCFG->getImage());
+		$fileName = $this->MAPCFG->BACKGROUND->getFileName();
+		$imageType = explode('.', $fileName);
 		$this->imageType = strtolower($imageType[1]);
 		
 		switch($this->imageType) {
 			case 'jpg':
-				$this->image = imagecreatefromjpeg($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
+				$this->image = imagecreatefromjpeg($this->MAINCFG->getValue('paths', 'map').$fileName);
 			break;
 			case 'png':
-				$this->image = imagecreatefrompng($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage());
+				$this->image = imagecreatefrompng($this->MAINCFG->getValue('paths', 'map').$fileName);
 			break;
 			default:
 				$this->errorBox($this->LANG->getMessageText('onlyPngOrJpgImages'));
@@ -211,10 +212,10 @@ class NagVisBackground extends NagVisMap {
 	 */
 	function checkPreflight() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::checkPreflight()');
-		if(!$this->MAPCFG->checkMapImageExists(0)) {
+		if(!$this->MAPCFG->BACKGROUND->checkFileExists(0)) {
 			$this->errorBox($this->LANG->getMessageText('backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
-		if(!$this->MAPCFG->checkMapImageReadable(0)) {
+		if(!$this->MAPCFG->BACKGROUND->checkFileReadable(0)) {
 			$this->errorBox($this->LANG->getMessageText('backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
 		if(!$this->checkMemoryLimit()) {

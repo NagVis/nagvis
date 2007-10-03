@@ -22,6 +22,7 @@ require("./includes/classes/GlobalMapCfg.php");
 require("./includes/classes/GlobalLanguage.php");
 require("./includes/classes/GlobalPage.php");
 require("./includes/classes/GlobalMap.php");
+require("./includes/classes/GlobalBackground.php");
 require("./includes/classes/GlobalGraphic.php");
 require("./includes/classes/GlobalBackendMgmt.php");
 

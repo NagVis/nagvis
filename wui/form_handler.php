@@ -18,9 +18,11 @@ require('../nagvis/includes/classes/GlobalLanguage.php');
 require('../nagvis/includes/classes/GlobalMainCfg.php');
 require('../nagvis/includes/classes/GlobalPage.php');
 require('../nagvis/includes/classes/GlobalMapCfg.php');
+require('../nagvis/includes/classes/GlobalBackground.php');
 
 require('./includes/classes/WuiMainCfg.php');
 require('./includes/classes/WuiMapCfg.php');
+require('./includes/classes/WuiBackground.php');
 
 $MAINCFG = new WuiMainCfg(CONST_MAINCFG);
 
@@ -347,64 +349,37 @@ switch($_GET['myaction']) {
 		}
 	break;
 	case 'mgt_image_create':
-	    if(isset($_POST['image_name']) && isset($_POST['image_color']) && isset($_POST['image_width']) && isset($_POST['image_height'])) {
-    	    if(!file_exists($MAINCFG->getValue('paths', 'map').$_POST['image_name'].'.png')) {
-        		$image = imagecreatetruecolor($_POST['image_width'],$_POST['image_height']);
-        		
-        		// get rgb color from hexcode
-        		$_POST['image_color'] = str_replace('#','',$_POST['image_color']);
-        		$int = hexdec($_POST['image_color']);
-                $r = 0xFF & ($int >> 0x10);
-                $g = 0xFF & ($int >> 0x8);
-                $b = 0xFF & $int;
-        		
-        		$bgColor = imagecolorallocate($image, $r, $g, $b);
-        		imagefill($image, 0, 0, $bgColor);
-        		imagepng($image,$MAINCFG->getValue('paths', 'map').$_POST['image_name'].'.png');
-        		imagedestroy($image);
-        		
-        		print "<script>window.opener.document.location.reload();</script>\n";
-        		print "<script>window.close();</script>\n";
-        	} else {
-        	    print "<script>alert('error: image already exists \"".$MAINCFG->getValue('paths', 'map').$_POST['image_name'].'.png'."\".')</script>";
-        	}
-        } else {
+		if(isset($_POST['image_name']) && isset($_POST['image_color']) && isset($_POST['image_width']) && isset($_POST['image_height'])) {
+			$BACKGROUND = new WuiBackground($MAINCFG, $_POST['image_name'].'.png');
+			if($BACKGROUND->createImage($_POST['image_color'], $_POST['image_width'], $_POST['image_height'])) {
+				print "<script>window.opener.document.location.reload();</script>\n";
+				print "<script>window.close();</script>\n";
+			} else {
+				//FIXME: Error handling
+				print "Some error occured";
+			}
+		} else {
             print "<script>alert('error: a problem occured!')</script>";
-        }
+		}
 	break;
 	case 'mgt_image_delete':
-		if(file_exists($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
-			if(unlink($MAINCFG->getValue('paths', 'map').$_POST['map_image'])) {
-				
-			} else {
-				print "<script>alert('error: failed to delete ".$MAINCFG->getValue('paths', 'map').$_POST['map_image'].".')</script>";
-			}
+		$BACKGROUND = new WuiBackground($MAINCFG, $_POST['map_image']);
+		if($BACKGROUND->deleteImage()) {
+			print "<script>window.opener.document.location.reload();</script>\n";
+			print "<script>window.close();</script>\n";
 		} else {
-			print "<script>alert('error: file ".$MAINCFG->getValue('paths', 'map').$_POST['map_image']." doesn\'t exists.')</script>";
+			//FIXME: Error handling
+			print "Some error occured";
 		}
-		print "<script>window.opener.document.location.reload();</script>\n";
-		print "<script>window.close();</script>\n";
 	break;
-	case 'mgt_new_image':
-		// check the file (the map) is properly uploaded
-		if(is_uploaded_file($_FILES['image_file']['tmp_name'])) {
-		    $fileName = $_FILES['image_file']['name'];
-		    if(preg_match('/\.png/i',$fileName)) {
-		    	if(move_uploaded_file($_FILES['image_file']['tmp_name'], $MAINCFG->getValue('paths', 'map').$fileName)) {
-					// Change permissions of the map image
-		    		chmod($MAINCFG->getValue('paths', 'map').$fileName,0666);
-				    print "<script>window.opener.document.location.reload();</script>\n";
-				    print "<script>window.close();</script>\n";
-				} else {
-		    		print "The file could not be moved to destination (".$MAINCFG->getValue('paths', 'map').$fileName.").";
-					return;
-		    	}
-		    } else {
-				print "This is no *.png file (".$fileName.").";
-			}
+	case 'mgt_image_upload':
+		$BACKGROUND = new WuiBackground($MAINCFG, '');
+		if($BACKGROUND->uploadImage($_FILES['image_file'])) {
+		    print "<script>window.opener.document.location.reload();</script>\n";
+		    print "<script>window.close();</script>\n";	
 		} else {
-			print "The file could not be uploaded.";
-			return;
+			//FIXME: Error handling
+			print "Some error occured";
 		}
 	break;
 	case 'map_restore':

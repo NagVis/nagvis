@@ -64,7 +64,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->ADDFORM = new GlobalForm(Array('name'=>'new_image',
 			'id'=>'new_image',
 			'method'=>'POST',
-			'action'=>'./form_handler.php?myaction=mgt_new_image',
+			'action'=>'./form_handler.php?myaction=mgt_image_upload',
 			'onSubmit'=>'return check_image_add();',
 			'enctype'=>'multipart/form-data',
 			'cols'=>'2'));

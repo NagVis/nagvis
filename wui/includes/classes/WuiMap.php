@@ -121,7 +121,7 @@ class WuiMap extends GlobalMap {
 	function parseMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseMap()');
 		$ret = Array();
-		$ret = array_merge($ret,$this->getBackground('img'));
+		$ret = array_merge($ret,$this->getBackground());
 		$ret = array_merge($ret,$this->parseJs(array_merge($this->getJsGraphicObj(),$this->getJsLang())));
 		$ret = array_merge($ret,$this->parseObjects());
 		$ret = array_merge($ret,$this->parseInvisible());
@@ -130,6 +130,26 @@ class WuiMap extends GlobalMap {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::parseMap(): Array(HTML)');
 		return $ret;
+	}
+	
+	/**
+	 * Gets the background of the map
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getBackground() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getBackground('.$type.')');
+		$style = '';
+		if($this->MAPCFG->getName() != '') {
+			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
+		} else {
+			$src = './images/internal/wuilogo.png';
+			$style = 'width:800px; height:600px;';
+		}
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getBackground(): Array(...)');
+		return $this->getBackgroundHtml($src, $style);
 	}
 	
 	/**

@@ -50,6 +50,25 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
+	 * Gets the background of the map
+	 *
+	 * @return	Array	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getBackground() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getBackground('.$type.')');
+		
+		if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $this->checkGd(1)) {
+			$src = './draw.php?map='.$this->MAPCFG->getName();
+		} else {
+			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
+		}
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getBackground(): Array(...)');
+		return $this->getBackgroundHtml($src);
+	}
+	
+	/**
 	 * Parses the Objects
 	 *
 	 * @return	Array 	Array with Html Code

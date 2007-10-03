@@ -99,18 +99,6 @@
 					<title>Can not write NagVis configuration file</title>
 					<text>Please check the webservers permissions at the main configuration file &quot;[MAINCFG]&quot;</text>
 				</mainCfgNotWriteable>
-				<backgroundNotExists>
-					<title>Map image file does not exists</title>
-					<text>Map image file &quot;[IMGPATH]&quot; does not exists</text>
-				</backgroundNotExists>
-				<backgroundNotReadable>
-					<title>Can not read map image file</title>
-					<text>Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;</text>
-				</backgroundNotReadable>
-				<backgroundNotWriteable>
-					<title>Can not write map image file</title>
-					<text>Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;</text>
-				</backgroundNotWriteable>
 				<mustValueNotSet>
 					<title>Must value not set</title>
 					<text>The must value &quot;[ATTRIBUTE]&quot; is not set in an object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot;</text>
@@ -175,10 +163,6 @@
 					<title>Unable to delete map configuration</title>
 					<text>Could not delete the map configuration file &quot;[MAPPATH]&quot;</text>
 				</couldNotDeleteMapCfg>
-				<couldNotDeleteMapImage>
-					<title>Unable to delete map image</title>
-					<text>Could not delete the map image file &quot;[IMGPATH]&quot;</text>
-				</couldNotDeleteMapImage>
 			</messages>
 		</global>
 	</global>
@@ -539,6 +523,26 @@
 					<title>Map lockfile not writeable</title>
 					<text>The lockfile &quot;[MAP]&quot; is not writeable.</text>
 				</mapLockNotWriteable>
+				<couldNotDeleteMapImage>
+					<title>Unable to delete map image</title>
+					<text>Could not delete the map image file &quot;[IMGPATH]&quot;</text>
+				</couldNotDeleteMapImage>
+				<backgroundNotExists>
+					<title>Map image file does not exists</title>
+					<text>Map image file &quot;[IMGPATH]&quot; does not exists</text>
+				</backgroundNotExists>
+				<backgroundNotReadable>
+					<title>Can not read map image file</title>
+					<text>Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;</text>
+				</backgroundNotReadable>
+				<backgroundNotWriteable>
+					<title>Can not write map image file</title>
+					<text>Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;</text>
+				</backgroundNotWriteable>
+				<backgroundFolderNotWriteable>
+					<title>Can not write to background folder</title>
+					<text>Please check the webservers permissions at the background folder &quot;[PATH]&quot;</text>
+				</backgroundFolderNotWriteable>
 			</messages>
 		</global>
 		<editMainCfg>

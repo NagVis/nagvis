@@ -99,18 +99,6 @@
 					<title>Keine Schreibrechte auf die NagVis Konfigurations-Datei</title>
 					<text>Bitte die Schreibberechtigungen des Webservers auf die Haupt-Konfigurations-Datei &quot;[MAINCFG]&quot; pr&uuml;fen</text>
 				</mainCfgNotWriteable>
-				<backgroundNotExists>
-					<title>Die Map Bild-Datei existiert nicht</title>
-					<text>Die Map Bild-Datei &quot;[IMGPATH]&quot; existiert nicht</text>
-				</backgroundNotExists>
-				<backgroundNotReadable>
-					<title>Keine Leserechte auf die Map Bild-Datei</title>
-					<text>Bitte die Leseberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen</text>
-				</backgroundNotReadable>
-				<backgroundNotWriteable>
-					<title>Keine Schreibrechte auf die Map Bild-Datei</title>
-					<text>Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen</text>
-				</backgroundNotWriteable>
 				<mustValueNotSet>
 					<title>Pflichtwert nicht gesetzt</title>
 					<text>Ein Pflichtwert &quot;[ATTRIBUTE]&quot; wurde in einem Objekt vom Typ &quot;[TYPE]&quot; in Map &quot;[MAPNAME]&quot; nicht gesetzt</text>
@@ -175,10 +163,6 @@
 					<title>Konnte Map Konfigurations-Datei nicht l&ouml;schen</title>
 					<text>Die Map Konfigurations-Datei &quot;[MAPPATH]&quot; konnte nicht gel&ouml;scht werden</text>
 				</couldNotDeleteMapCfg>
-				<couldNotDeleteMapImage>
-					<title>Konnte Map Hintergrund nicht l&ouml;schen</title>
-					<text>Der Map Hintergrund &quot;[IMGPATH]&quot; konnte nicht gel&ouml;scht werden</text>
-				</couldNotDeleteMapImage>
 			</messages>
 		</global>
 	</global>
@@ -539,6 +523,26 @@
 					<title>Karten Sperre nicht schreibbar</title>
 					<text>Die Kartensperre &quot;[MAP]&quot; ist nicht schreibbar.</text>
 				</mapLockNotWriteable>
+				<couldNotDeleteMapImage>
+					<title>Konnte Map Hintergrund nicht l&ouml;schen</title>
+					<text>Der Map Hintergrund &quot;[IMGPATH]&quot; konnte nicht gel&ouml;scht werden</text>
+				</couldNotDeleteMapImage>
+				<backgroundNotExists>
+					<title>Die Map Bild-Datei existiert nicht</title>
+					<text>Die Map Bild-Datei &quot;[IMGPATH]&quot; existiert nicht</text>
+				</backgroundNotExists>
+				<backgroundNotReadable>
+					<title>Keine Leserechte auf die Map Bild-Datei</title>
+					<text>Bitte die Leseberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen</text>
+				</backgroundNotReadable>
+				<backgroundNotWriteable>
+					<title>Keine Schreibrechte auf die Map Bild-Datei</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen</text>
+				</backgroundNotWriteable>
+				<backgroundFolderNotWriteable>
+					<title>Keine Schreibrechte auf das Hintergrund-Verzeichnis</title>
+					<text>Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis &quot;[PATH]&quot; pr&uuml;fen</text>
+				</backgroundFolderNotWriteable>
 			</messages>
 		</global>
 		<editMainCfg>

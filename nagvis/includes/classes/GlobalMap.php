@@ -51,27 +51,16 @@ class GlobalMap {
 	}
 	
 	/**
-	 * Gets the background of the map
+	 * Gets the background html code of the map
 	 *
-	 * @param	String	$type	Type of Background (gd/img)
+	 * @param	String	$src	html path
+	 * @param	String	$style  css parameters
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-	function getBackground($type='gd') {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getBackground('.$type.')');
-		$style = '';
-		if($this->MAPCFG->getName() != '') {
-			if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $type == 'gd' && $this->checkGd(1)) {
-				$src = './draw.php?map='.$this->MAPCFG->getName();
-			} else {
-				$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->getImage();
-			}
-		} else {
-			$src = './images/internal/wuilogo.png';
-			$style = 'width:800px; height:600px;';
-		}
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getBackground(): Array(...)');
+	function getBackgroundHtml($src, $style='') {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getBackgroundHtml('.$src.','.$style.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalMap::getBackgroundHtml(HTML)');
 		return Array('<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="">');
 	}
 	
