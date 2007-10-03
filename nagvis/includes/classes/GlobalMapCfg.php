@@ -461,28 +461,6 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Deletes the map image
-	 *
-	 * @param	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function deleteImage($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteImage('.$printErr.')');
-		if($this->checkMapImageWriteable($printErr)) {
-			if(unlink($this->MAINCFG->getValue('paths', 'map').$this->image)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteImage(): TRUE');
-				return TRUE;
-			} else {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		        $FRONTEND->messageToUser('ERROR','couldNotDeleteMapImage','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteImage(): FALSE');
-				return FALSE;
-			}
-		}
-	}
-	
-	/**
 	 * Creates a new Configfile
 	 *
 	 * @return	Boolean	Is Successful?

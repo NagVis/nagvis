@@ -5,14 +5,14 @@ require("../nagvis/includes/defines/matches.php");
 
 require("../nagvis/includes/functions/debug.php");
 
-require("../nagvis/includes/classes/class.GlobalMainCfg.php");
-require("../nagvis/includes/classes/class.GlobalMapCfg.php");
-require("../nagvis/includes/classes/class.GlobalLanguage.php");
-require("../nagvis/includes/classes/class.GlobalPage.php");
-require("../nagvis/includes/classes/class.GlobalBackendMgmt.php");
+require("../nagvis/includes/classes/GlobalMainCfg.php");
+require("../nagvis/includes/classes/GlobalMapCfg.php");
+require("../nagvis/includes/classes/GlobalLanguage.php");
+require("../nagvis/includes/classes/GlobalPage.php");
+require("../nagvis/includes/classes/GlobalBackendMgmt.php");
 
-require("./includes/classes/class.WuiMainCfg.php");
-require("./includes/classes/class.WuiMapCfg.php");
+require("./includes/classes/WuiMainCfg.php");
+require("./includes/classes/WuiMapCfg.php");
 
 $MAINCFG = new WuiMainCfg(CONST_MAINCFG);
 
