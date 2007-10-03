@@ -164,7 +164,8 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
 							'hover_template' => Array('must' => 0,
-												'default' => ''),
+												'default' => '',
+												'match' => MATCH_STRING_NO_SPACE),
 							'hover_delay' => Array('must' => 0,
 												'match' => MATCH_INTEGER),
 							'hover_url' => Array('must' => 0,
@@ -340,7 +341,8 @@ class GlobalMapCfg {
 												'default' => '',
 												'match' => MATCH_INTEGER),
 							'label_background' => Array('must' => 0,
-												'default' => '')),
+												'default' => '',
+												'match' => MATCH_COLOR)),
 			'textbox' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
 							'text' => Array('must' => 1,
@@ -352,7 +354,8 @@ class GlobalMapCfg {
 							'z' => Array('must' => 0,
 												'default' => 1,
 												'match' => MATCH_INTEGER),
-							'w' => Array('must' => 1),
+							'w' => Array('must' => 1,
+												'match' => MATCH_INTEGER),
 							'background_color' => Array('must' => 0,
 												'default' => '#C0C0C0',
 												'match' => MATCH_COLOR)),
@@ -366,7 +369,8 @@ class GlobalMapCfg {
 							'z' => Array('must' => 0,
 												'default' => 1,
 												'match' => MATCH_INTEGER),
-							'url' => Array('must' => 0),
+							'url' => Array('must' => 0,
+												'match' => MATCH_STRING_URL),
 							'url_target' => Array('must' => 0,
 												'match' => MATCH_STRING_NO_SPACE),
 							'hover_url' => Array('must' => 0,
@@ -971,7 +975,7 @@ class GlobalMapCfg {
 							return FALSE;
 						} else {
 							// FIXME: Only match non array values at the moment
-							if(!is_array($val)) {
+							if(!is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
 								// valid attribute, now check for value format
 								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
 									
