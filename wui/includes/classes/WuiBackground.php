@@ -33,6 +33,13 @@ class WuiBackground extends GlobalBackground {
 		}
 	}
 	
+	/**
+	* Uploads a map image
+	*
+	* @param	Boolean	$printErr
+	* @return	Boolean	Is Check Successful?
+	* @author	Lars Michelsen <lars@vertical-visions.de>
+	*/
 	function uploadImage($arr, $printErr=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackground::uploadImage(Array(...))');
 		if(is_uploaded_file($arr['tmp_name'])) {
@@ -63,6 +70,13 @@ class WuiBackground extends GlobalBackground {
 		}
 	}
 	
+	/**
+	* Creates a simple map image
+	*
+	* @param	Boolean	$printErr
+	* @return	Boolean	Is Check Successful?
+	* @author	Lars Michelsen <lars@vertical-visions.de>
+	*/
 	function createImage($color, $width, $height) {
 		if(!$this->checkFileExists(0)) {
     		$image = imagecreatetruecolor($width, $height);
