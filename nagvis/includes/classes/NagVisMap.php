@@ -44,6 +44,7 @@ class NagVisMap extends GlobalMap {
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground());
 		$ret = array_merge($ret,$this->parseObjects());
+		$ret[] = $this->getFavicon();
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap(): Array(...)');
 		return $ret;
@@ -56,7 +57,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBackground() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getBackground('.$type.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getBackground()');
 		
 		if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $this->checkGd(1)) {
 			$src = './draw.php?map='.$this->MAPCFG->getName();
@@ -66,6 +67,23 @@ class NagVisMap extends GlobalMap {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getBackground(): Array(...)');
 		return $this->getBackgroundHtml($src);
+	}
+	
+	/**
+	 * Gets the favicon of the page representation the state of the map
+	 *
+	 * @return	String	HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function getFavicon() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getFavicon()');
+		if(file_exists('./images/internal/favicon_'.strtolower($this->getMapState($this->getMapObjects(1,1))).'.png')) {
+			$favicon = './images/internal/favicon_'.strtolower($this->getMapState($this->getMapObjects(1,1))).'.png';
+		} else {
+			$favicon = './images/internal/favicon.png';
+		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getFavicon()');
+		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
 	}
 	
 	/**
