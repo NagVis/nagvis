@@ -30,6 +30,12 @@
 				<shape>
 					<text>Shape</text>
 				</shape>
+				<overview>
+					<text>Overview</text>
+				</overview>
+				<instance>
+					<text>Instance</text>
+				</instance>
 				<!-- Header Template labels //-->
 				<selectMap>
 					<text>Choose map</text>

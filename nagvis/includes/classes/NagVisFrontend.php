@@ -160,6 +160,8 @@ class NagVisFrontend extends GlobalPage {
 				$ret = str_replace('[lang_online_doc]',$this->LANG->getLabel('onlineDoc'),$ret);
 				$ret = str_replace('[lang_forum]',$this->LANG->getLabel('forum'),$ret);
 				$ret = str_replace('[lang_support_info]',$this->LANG->getLabel('supportInfo'),$ret);
+				$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
+				$ret = str_replace('[lang_instance]',$this->LANG->getLabel('instance'),$ret);
 				// Replace lists
 				if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
 					foreach($matchReturn[1] AS $key) {
