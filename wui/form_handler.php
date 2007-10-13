@@ -484,14 +484,11 @@ switch($_GET['myaction']) {
 		}
 	break;
 	case 'mgt_shape_add':
-		if (!isset(${'HTTP_POST_FILES'}) || !is_array(${'HTTP_POST_FILES'})) {
-			$HTTP_POST_FILES = $_FILES;
-		}
 		// check the file (the map) is properly uploaded
-		if(is_uploaded_file($HTTP_POST_FILES['shape_image']['tmp_name'])) {
-		    $fileName = $HTTP_POST_FILES['shape_image']['name'];
+		if(is_uploaded_file($_FILES['shape_image']['tmp_name'])) {
+		    $fileName = $_FILES['shape_image']['name'];
 		    if(substr($fileName,strlen($fileName)-4,4) == ".png") {
-		    	if(move_uploaded_file($HTTP_POST_FILES['shape_image']['tmp_name'], $MAINCFG->getValue('paths', 'shape').$fileName)) {
+		    	if(move_uploaded_file($_FILES['shape_image']['tmp_name'], $MAINCFG->getValue('paths', 'shape').$fileName)) {
 		    		chmod($MAINCFG->getValue('paths', 'shape').$fileName,0666);
 				    print "<script>window.opener.document.location.reload();</script>\n";
 				    print "<script>window.close();</script>\n";

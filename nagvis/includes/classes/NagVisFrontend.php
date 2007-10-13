@@ -76,7 +76,7 @@ class NagVisFrontend extends GlobalPage {
     		    $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
     		    $ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
     		    // FIXME: Need better thumbnail format
-    		    $ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->getImage().'" /><br />';
+    		    $ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName().'" /><br />';
     	        $ret[] = '</td>';
     		    if($i % 4 == 0) {
     		        $ret[] = '</tr><tr>';
