@@ -44,7 +44,10 @@ class NagVisMap extends GlobalMap {
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground());
 		$ret = array_merge($ret,$this->parseObjects());
+		// Dynamicaly set favicon
 		$ret[] = $this->getFavicon();
+		// Change title (add map alias and map state)
+		$ret[] = '<script type="text/javascript" language="JavaScript">document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->getMapState($this->getMapObjects(1,1)).') | \'+document.title;</script>';
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap(): Array(...)');
 		return $ret;
