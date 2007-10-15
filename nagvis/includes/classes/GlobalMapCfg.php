@@ -88,6 +88,8 @@ class GlobalMapCfg {
 												'match' => MATCH_COLOR)),
 			'host' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
+							'use' => Array('must' => 0,
+												'match' => MATCH_STRING_NO_SPACE),
 							'backend_id' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
@@ -142,6 +144,8 @@ class GlobalMapCfg {
 												'match' => MATCH_COLOR)),
 			'hostgroup' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
+							'use' => Array('must' => 0,
+												'match' => MATCH_STRING_NO_SPACE),
 							'backend_id' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
@@ -196,6 +200,8 @@ class GlobalMapCfg {
 												'match' => MATCH_COLOR)),
 			'service' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
+							'use' => Array('must' => 0,
+												'match' => MATCH_STRING_NO_SPACE),
 							'backend_id' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
@@ -248,6 +254,8 @@ class GlobalMapCfg {
 												'match' => MATCH_COLOR)),
 			'servicegroup' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
+							'use' => Array('must' => 0,
+												'match' => MATCH_STRING_NO_SPACE),
 							'backend_id' => Array('must' => 0,
 												'default' => '',
 												'match' => MATCH_STRING_NO_SPACE),
@@ -299,6 +307,8 @@ class GlobalMapCfg {
 												'match' => MATCH_COLOR)),
 			'map' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
+							'use' => Array('must' => 0,
+												'match' => MATCH_STRING_NO_SPACE),
 							'map_name' => Array('must' => 1,
 												'match' => MATCH_STRING_NO_SPACE),
 							'x' => Array('must' => 1,
@@ -345,6 +355,8 @@ class GlobalMapCfg {
 												'match' => MATCH_COLOR)),
 			'textbox' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
+							'use' => Array('must' => 0,
+												'match' => MATCH_STRING_NO_SPACE),
 							'text' => Array('must' => 1,
 												'match' => MATCH_ALL),
 							'x' => Array('must' => 1,
@@ -361,6 +373,8 @@ class GlobalMapCfg {
 												'match' => MATCH_COLOR)),
 			'shape' => Array('type' => Array('must' => 0,
 												'match' => MATCH_OBJECTTYPE),
+							'use' => Array('must' => 0,
+												'match' => MATCH_STRING_NO_SPACE),
 							'icon' => Array('must' => 1),
 							'x' => Array('must' => 1,
 												'match' => MATCH_INTEGER),
@@ -374,7 +388,11 @@ class GlobalMapCfg {
 							'url_target' => Array('must' => 0,
 												'match' => MATCH_STRING_NO_SPACE),
 							'hover_url' => Array('must' => 0,
-												'match' => MATCH_STRING_URL)));
+												'match' => MATCH_STRING_URL)),
+			'template' => Array('type' => Array('must' => 0,
+												'match' => MATCH_OBJECTTYPE),
+								'name' => Array('must' => 1,
+												'match' => MATCH_STRING_NO_SPACE)));
 		
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::GlobalMapCfg()');
@@ -526,13 +544,13 @@ class GlobalMapCfg {
 		if($this->name != '') {
 			if($this->checkMapConfigReadable(1)) {
 				$this->mapConfig = Array();
-				$types = Array('global'=>0,'host'=>0,'service'=>0,'hostgroup'=>0,'servicegroup'=>0,'map'=>0,'textbox'=>0,'shape'=>0);
+				$types = Array('global'=>0,'host'=>0,'service'=>0,'hostgroup'=>0,'servicegroup'=>0,'map'=>0,'textbox'=>0,'shape'=>0,'template'=>0);
 				
 				// read file in array
 				if (DEBUG&&DEBUGLEVEL&2) debug('Start reading map configuration');
 				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				if (DEBUG&&DEBUGLEVEL&2) debug('End reading map configuration');
-				$createArray = Array('allowed_user','allowed_for_config');
+				$createArray = Array('allowed_user','allowed_for_config','use');
 				$l = 0;
 				
 				if (DEBUG&&DEBUGLEVEL&2) debug('Start parsing map configuration');
@@ -580,6 +598,13 @@ class GlobalMapCfg {
 					$this->filterGlobal();	
 				}
 				
+				if(isset($this->mapConfig['template'])) {
+					// Removes the numeric indexes and replaces them with the template name
+					$this->fixTemplateIndexes();
+					// Merge the objects with the linked templates
+					$this->mergeTemplates();
+				}
+				
 				if($this->checkMapConfigIsValid(1)) {
 					$this->BACKGROUND = $this->getBackground();
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapConfig(): TRUE');
@@ -595,6 +620,52 @@ class GlobalMapCfg {
 		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapConfig(): TRUE');
 			return FALSE;
+		}
+	}
+	
+	/**
+	 * Removes the numeric indexes and replaces them with the template name
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function fixTemplateIndexes() {
+		foreach($this->mapConfig['template'] AS $id => $element) {
+			if(isset($element['name']) && $element['name'] != '') {
+				$this->mapConfig['template'][$element['name']] = $element;
+				unset($this->mapConfig['template'][$id]);
+			}
+		}
+	}
+	
+	/**
+	 * Merges the object which "use" a template with the template values
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	function mergeTemplates() {
+		// Loop all objects
+		foreach($this->mapConfig AS $type => $elements) {
+			// Except global and templates (makes no sense)
+			if($type != 'global' && $type != 'template') {
+				// Loop all objects of that type
+				foreach($elements AS $id => $element) {
+					// Check for "use" value
+					if(isset($element['use']) && is_array($element['use'])) {
+						// loop all given templates
+						foreach($element['use'] AS $templateName) {
+							if(isset($this->mapConfig['template'][$templateName]) && is_array($this->mapConfig['template'][$templateName])) {
+								// merge object array with template object array (except type and name atribute)
+								$tmpArray = $this->mapConfig['template'][$templateName];
+								unset($tmpArray['type']);
+								unset($tmpArray['name']);
+								$this->mapConfig[$type][$id] = array_merge($element,$tmpArray);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -840,57 +911,59 @@ class GlobalMapCfg {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigIsValid('.$printErr.')');
 		// check given objects and attributes
 		foreach($this->mapConfig AS $type => $elements) {
-			if(array_key_exists($type,$this->validConfig)) {
-				foreach($elements AS $id => $element) {
-					// loop validConfig for checking: => missing "must" atributes
-					foreach($this->validConfig[$type] AS $key => $val) {
-						if((isset($val['must']) && $val['must'] == '1')) {
-							// value is "must"
-							if(!isset($element[$key]) || $element[$key] == '') {
-								// a "must" value is missing or empty
-								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-							    $FRONTEND->messageToUser('ERROR','mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id);
-							}
-						}
-					}
-					
-					// loop given elements for checking: => all given atributes valid
-					foreach($element AS $key => $val) {
-						// check for valid atributes
-						if(!array_key_exists($key,$this->validConfig[$type])) {
-							// unknown atribute
-							if($printErr == 1) {
-								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-					            $FRONTEND->messageToUser('ERROR','unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type);
-							}
-							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
-							return FALSE;
-						} else {
-							// FIXME: Only match non array values at the moment
-							if(!is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
-								// valid attribute, now check for value format
-								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
-									
-									// wrong format
-									if($printErr) {
-										$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-							            $FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
-									}
-									if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
-									return FALSE;
+			if($type != 'template') {
+				if(array_key_exists($type,$this->validConfig)) {
+					foreach($elements AS $id => $element) {
+						// loop validConfig for checking: => missing "must" atributes
+						foreach($this->validConfig[$type] AS $key => $val) {
+							if((isset($val['must']) && $val['must'] == '1')) {
+								// value is "must"
+								if(!isset($element[$key]) || $element[$key] == '') {
+									// a "must" value is missing or empty
+									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+								    $FRONTEND->messageToUser('ERROR','mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id);
 								}
 							}
 						}
+						
+						// loop given elements for checking: => all given atributes valid
+						foreach($element AS $key => $val) {
+							// check for valid atributes
+							if(!array_key_exists($key,$this->validConfig[$type])) {
+								// unknown atribute
+								if($printErr == 1) {
+									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+						            $FRONTEND->messageToUser('ERROR','unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type);
+								}
+								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
+								return FALSE;
+							} else {
+								// FIXME: Only match non array values at the moment
+								if(!is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
+									// valid attribute, now check for value format
+									if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
+										
+										// wrong format
+										if($printErr) {
+											$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+								            $FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
+										}
+										if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
+										return FALSE;
+									}
+								}
+							}
+						}
+					}	
+				} else {
+					// unknown type
+					if($printErr == 1) {
+						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+			            $FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
 					}
-				}	
-			} else {
-				// unknown type
-				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
+					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
+					return FALSE;
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
-				return FALSE;
 			}
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): TRUE');
