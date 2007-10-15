@@ -1,10 +1,10 @@
 ==============================================================================
-NagVis 1.1 Quick Installation Instructions
+NagVis 1.2 Quick Installation Instructions
 ==============================================================================
 Author: Andreas Husch, Lars Michelsen
 Document Version: 0.2
-Date: 2007-04-30
-Applies to: NagVis 1.1
+Date: 2007-10-15
+Applies to: NagVis 1.2
 ==============================================================================
 
 STEP 0: Prepair System
@@ -24,7 +24,7 @@ STEP 2: Unpack NagVis
 ------------------
 Unpack NagVis in a path of your choice
 
-> tar xvzf nagvis-1.1.x.tar.gz
+> tar xvzf nagvis-1.2.x.tar.gz
 
 STEP 3: Move NagVis
 ------------------
@@ -49,14 +49,14 @@ Move to new NagVis directory
 > cd /usr/local/nagios/share/nagvis
 
 An example for the configuration files can be found in 
-nagvis/etc/config.ini.php.dist. If you like to change some settings in this
-file copy this example to nagvis/etc/config.ini.php.
+etc/nagvis.ini.php-sample. If you like to change some settings in this
+file copy this example to nagvis/etc/nagvis.ini.php.
 
-> cp nagvis/etc/config.ini.php.dist nagvis/etc/config.ini.php
+> cp etc/nagvis.ini.php-sample etc/nagvis.ini.php
 
 Now you can edit this file with your favorite text editor - I use vi:
 
-> vi etc/config.ini.php
+> vi etc/nagvis.ini.php
 
 The most lines in the fresh copied config.ini.php are commented out. If you
 want to set different settings, than there are set, uncomment the line and
@@ -64,7 +64,7 @@ change the value of it.
 
 For informations about the possible values have a look at Main Config Format
 Description on NagVis.org 
- (http://www.nagvis.org/docs/1.1/nagvis_config_format_description).
+ (http://www.nagvis.org/docs/1.2/nagvis_config_format_description).
 
 STEP 5: Permissions
 ------------------
@@ -84,11 +84,11 @@ The set the permissions to your NagVis directory (In my case the path are like
 this):
 
 > chown wwwrun:www /usr/local/nagios/share/nagvis -R
-> chmod 664 /usr/local/nagios/share/nagvis/nagvis/etc/config.ini.php
+> chmod 664 /usr/local/nagios/share/nagvis/etc/nagvis.ini.php
 > chmod 775 /usr/local/nagios/share/nagvis/nagvis/images/maps
 > chmod 664 /usr/local/nagios/share/nagvis/nagvis/images/maps/*
-> chmod 775 /usr/local/nagios/share/nagvis/nagvis/etc/maps
-> chmod 664 /usr/local/nagios/share/nagvis/nagvis/etc/maps/*
+> chmod 775 /usr/local/nagios/share/nagvis/etc/maps
+> chmod 664 /usr/local/nagios/share/nagvis/etc/maps/*
 
 It's possible to set lower permissions on the files, in my setup it's ok like
 this. Only change them if you know, what you are doing. 
@@ -113,7 +113,7 @@ If this does't work for you, or if you don't want to use the WUI, you can
 simply edit the map config files in the nagvis/etc/maps/ directory with your
 favorite text editor. For valid format and values have a look at Map Config 
 Format Description on NagVis.org 
- (http://www.nagvis.org/docs/1.1/map_config_format_description). 
+ (http://www.nagvis.org/docs/1.2/map_config_format_description). 
 
 STEP 7: Watch the Maps
 ------------------
