@@ -15,10 +15,10 @@ define('MATCH_STRING_PATH', '/^[0-9a-z\s\_\.\-\/\\\]+$/i');
 define('MATCH_STRING_URL', '/^[0-9a-z\s\:\[\]\(\)\=\?\&\_\.\-\/\\\]+$/i');
 
 define('MATCH_INTEGER', '/^[0-9]+$/');
-define('MATCH_BOOLEAN', '/^(1|0|true|false)$/i');
+define('MATCH_BOOLEAN', '/^(1|0)$/i');
 
 define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
-define('MATCH_OBJECTTYPE', '/^(global|host|service|hostgroup|servicegroup|map|textbox|shape)$/i');
+define('MATCH_OBJECTTYPE', '/^(global|host|service|hostgroup|servicegroup|map|textbox|shape|template)$/i');
 define('MATCH_PNGFILE', '/^.+\.png$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
 ?>
