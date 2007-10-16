@@ -15,6 +15,7 @@ define('MATCH_STRING_PATH', '/^[0-9a-z\s\_\.\-\/\\\]+$/i');
 define('MATCH_STRING_URL', '/^[0-9a-z\s\:\[\]\(\)\=\?\&\_\.\-\/\\\]+$/i');
 
 define('MATCH_INTEGER', '/^[0-9]+$/');
+define('MATCH_FLOAT', '/^[0-9]+[\.\,]*[0-9]*$/');
 define('MATCH_BOOLEAN', '/^(1|0)$/i');
 
 define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
