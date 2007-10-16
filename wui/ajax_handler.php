@@ -1,6 +1,6 @@
 <?php
 
-require("../nagvis/includes/defines/gobal.php");
+require("../nagvis/includes/defines/global.php");
 require("../nagvis/includes/defines/matches.php");
 
 require("../nagvis/includes/functions/debug.php");
