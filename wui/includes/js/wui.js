@@ -158,7 +158,7 @@ function confirm_object_deletion() {
 // simple function to ask to confirm before we restore a map
 function confirm_restore() {
 	if(confirm(printLang(lang['confirmRestore'],''))) {
-		document.location.href='./wui.function.inc.php?myaction=map_restore&map='+mapname;
+		document.location.href='./form_handler.php?myaction=map_restore&map='+mapname;
 	}
 	return true;
 }

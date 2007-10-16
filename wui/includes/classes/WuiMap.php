@@ -443,7 +443,7 @@ class WuiMap extends GlobalMap {
 		}
 		
 		$tooltipText .= "<tr><th><a href=\'./index.php?page=addmodify&amp;action=modify&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onclick=\'open_window(href); return false;\'>".$this->LANG->getLabel('change')."</a>&nbsp;".$positionSizeText."</th>";
-		$tooltipText .= "<th><a href=\'./wui.function.inc.php?myaction=delete&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a></th></tr>";
+		$tooltipText .= "<th><a href=\'./form_handler.php?myaction=delete&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getLabel('delete')."</a></th></tr>";
 		
 		$tooltipText.='</table>';
 		
@@ -542,7 +542,7 @@ class WuiMap extends GlobalMap {
 		#                                            obj2 (defined line 6 in the map.cfg file) x=165 y=98
 		# When the user clicks on the Save buton, these lists are passed to a bash script executed on the server, which will parse them and treat them.
 		# This is how it works to save the maps :)
-		$arr[] = '<form id="myvalues" style="display:none;" name="myvalues" action="./wui.function.inc.php?myaction=save" method="post">
+		$arr[] = '<form id="myvalues" style="display:none;" name="myvalues" action="./form_handler.php?myaction=save" method="post">
 			<input type="hidden" name="mapname" value="'.$this->MAPCFG->getName().'" />
 			<input type="hidden" name="image" value="" />
 			<input type="hidden" name="valx" value="" />
