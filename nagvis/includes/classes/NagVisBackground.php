@@ -180,8 +180,7 @@ class NagVisBackground extends NagVisMap {
 	function initImage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::initImage()');
 		$fileName = $this->MAPCFG->BACKGROUND->getFileName();
-		$imageType = explode('.', $fileName);
-		$this->imageType = strtolower($imageType[1]);
+		$this->imageType = strtolower(substr($fileName, strrpos($fileName, '.') + 1));
 		
 		switch($this->imageType) {
 			case 'jpg':
