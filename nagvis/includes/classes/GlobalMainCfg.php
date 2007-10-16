@@ -462,6 +462,9 @@ class GlobalMainCfg {
 								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 								return FALSE;
 							} else {
+								if(isset($val) && is_array($val)) {
+									$val = implode(',',$val);
+								}
 								// valid attribute, now check for value format
 								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
 									echo $val;
