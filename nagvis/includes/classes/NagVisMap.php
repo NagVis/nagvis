@@ -467,6 +467,10 @@ class NagVisMap extends GlobalMap {
 	            } else {
 	                $ret = str_replace('[obj_backend_instancename]','',$ret);
 	            }
+	        } else {
+	        	// Remove the macros in map objects
+	        	$ret = str_replace('[obj_backendid]','',$ret);
+	        	$ret = str_replace('[obj_backend_instancename]','',$ret);
 	        }
 			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
 			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj[$name]),$ret);
