@@ -32,10 +32,10 @@
 				</shape>
 				<!-- Header Template labels //-->
 				<rotationStart>
-					<text>Stop Rotation</text>
+					<text>Start Rotation</text>
 				</rotationStart>
 				<rotationStop>
-					<text>Start Rotation</text>
+					<text>Stop Rotation</text>
 				</rotationStop>
 				<overview>
 					<text>Overview</text>
