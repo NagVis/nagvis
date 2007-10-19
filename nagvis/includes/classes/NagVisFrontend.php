@@ -273,13 +273,25 @@ class NagVisFrontend extends GlobalPage {
 	function getRefresh() {
 	    return $this->getNextRotate();
 	}
+	
+	/**
+	 * Quick 'n dirty gets the next rotate from getNextRotate
+	 * and filters out everything expect the string after "URL="
+	 *
+	 * @return	String	URL to rotate to
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getNextRotateOnlyUrl() {
+		preg_match("/URL\=(.+)$/",$this->getNextRotate(),$matches);
+		return $matches[1];
+	}
   
 	/**
 	 * Gets the Next map to rotate to, if enabled
 	 * If Next map is in [ ], it will be an absolute url
 	 *
-	 * @return      String  URL to rotate to
-	 * @author      Lars Michelsen <lars@vertical-visions.de>
+	 * @return	String  URL to rotate to
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNextRotate() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotate()');

@@ -51,6 +51,8 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 } elseif(isset($_GET['url'])) {
 	$arrFile = file($_GET['url']);
 	$FRONTEND->addBodyLines($arrFile);
+} elseif(isset($_GET['rotation']) && $_GET['rotation'] != '' && (!isset($_GET['url']) || $_GET['url'] == '') && (!isset($_GET['map']) || $_GET['map'] == '')) {
+	header('Location: '.$FRONTEND->getNextRotateOnlyUrl());
 } elseif(isset($_GET['info'])) {
 	$FRONTEND->getInstInformations();
 } else {
