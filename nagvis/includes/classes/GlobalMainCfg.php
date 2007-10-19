@@ -467,7 +467,7 @@ class GlobalMainCfg {
 								}
 								// valid attribute, now check for value format
 								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
-									echo $val;
+									# DEBUG: echo $val;
 									// wrong format
 									if($printErr) {
 										$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
