@@ -263,7 +263,7 @@ class GlobalMainCfg {
 		
 		// set default value
 		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
-		$this->validConfig['backend']['htmlcgi']['default'] = $this->validConfig['paths']['htmlcgi']['default'];
+		$this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
 	}
