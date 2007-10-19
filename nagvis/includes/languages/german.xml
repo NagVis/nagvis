@@ -363,17 +363,20 @@
 				<openInNagVis>
 					<text>Map in NagVis &Ouml;ffnen</text>
 				</openInNagVis>
+				<manage>
+					<text>Verwalten</text>
+				</manage>
 				<manageMaps>
-					<text>Map Verwaltung</text>
+					<text>Maps</text>
 				</manageMaps>
 				<manageBackends>
-					<text>Backend Verwaltung</text>
+					<text>Backends</text>
 				</manageBackends>
 				<manageBackgrounds>
-					<text>Hintergrund Verwaltung</text>
+					<text>Hintergrunds</text>
 				</manageBackgrounds>
 				<manageShapes>
-					<text>Shape Verwaltung</text>
+					<text>Shapes</text>
 				</manageShapes>
 				<icon>
 					<text>Icon</text>

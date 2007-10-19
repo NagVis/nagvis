@@ -512,6 +512,7 @@ class WuiMap extends GlobalMap {
 		$ret[] = 'langMenu[\'map\'] = \''.$this->LANG->getLabel('map').'\';';
 		$ret[] = 'langMenu[\'textbox\'] = \''.$this->LANG->getLabel('textbox').'\';';
 		$ret[] = 'langMenu[\'shape\'] = \''.$this->LANG->getLabel('shape').'\';';
+		$ret[] = 'langMenu[\'manage\'] = \''.$this->LANG->getLabel('manage').'\';';
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'lang[\'clickMapToSetPoints\'] = \''.$this->LANG->getMessageText('clickMapToSetPoints').'\';';
 		$ret[] = 'lang[\'confirmDelete\'] = \''.$this->LANG->getMessageText('confirmDelete').'\';';
