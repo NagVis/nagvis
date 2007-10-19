@@ -45,6 +45,7 @@ $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 
 if(isset($_GET['map']) && $_GET['map'] != '') {
 	// Build the page
+	$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 	$FRONTEND->getHeaderMenu();
 	$FRONTEND->getMap();
 	$FRONTEND->getMessages();
@@ -52,7 +53,7 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 	$arrFile = file($_GET['url']);
 	$FRONTEND->addBodyLines($arrFile);
 } elseif(isset($_GET['rotation']) && $_GET['rotation'] != '' && (!isset($_GET['url']) || $_GET['url'] == '') && (!isset($_GET['map']) || $_GET['map'] == '')) {
-	header('Location: '.$FRONTEND->getNextRotateOnlyUrl());
+	header('Location: '.$FRONTEND->getNextRotationUrl());
 } elseif(isset($_GET['info'])) {
 	$FRONTEND->getInstInformations();
 } else {

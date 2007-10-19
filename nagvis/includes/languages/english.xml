@@ -30,13 +30,19 @@
 				<shape>
 					<text>Shape</text>
 				</shape>
+				<!-- Header Template labels //-->
+				<rotationStart>
+					<text>Stop Rotation</text>
+				</rotationStart>
+				<rotationStop>
+					<text>Start Rotation</text>
+				</rotationStop>
 				<overview>
 					<text>Overview</text>
 				</overview>
 				<instance>
 					<text>Instance</text>
 				</instance>
-				<!-- Header Template labels //-->
 				<selectMap>
 					<text>Choose map</text>
 				</selectMap>

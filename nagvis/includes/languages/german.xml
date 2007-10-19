@@ -30,13 +30,19 @@
 				<shape>
 					<text>Bild</text>
 				</shape>
+				<!-- Header Template Beschriftungen //-->
+				<rotationStart>
+					<text>Stoppe Rotation</text>
+				</rotationStart>
+				<rotationStop>
+					<text>Starte Rotation</text>
+				</rotationStop>
 				<overview>
 					<text>&Uuml;ebersicht</text>
 				</overview>
 				<instance>
 					<text>Instanz</text>
 				</instance>
-				<!-- Header Template Beschriftungen //-->
 				<selectMap>
 					<text>W&auml;hle Map</text>
 				</selectMap>
