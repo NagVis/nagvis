@@ -280,30 +280,25 @@ class NagVisFrontend extends GlobalPage {
 		}
 		$strReturn .= "var nextRotationUrl = '".$this->getNextRotationUrl()."';\n";
 		$strReturn .= "var nextRotationTime = '".$this->getNextRotationTime()."';\n";
-		$strReturn .= "var oRotation = window.setTimeout ('refresh()', nextRotationTime);\n";
+		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";
 		
 	    return $this->parseJs($strReturn);
 	}
 	
 	/**
-	 * Returns the next time to refresh or rotate in miliseconds
+	 * Returns the next time to refresh or rotate in seconds
 	 *
-	 * @return	Integer		Returns The next rotation time in miliseconds
+	 * @return	Integer		Returns The next rotation time in seconds
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNextRotationTime() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotationTime()');
 		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
-			if((!isset($_GET['rotate']) || isset($_GET['rotate']) && $_GET['rotate'] != '0') || (isset($_GET['rotate']) && $_GET['rotate'] == '1')) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotationTime(): ');
-				return $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'interval')*1000;
-			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotationTime(): ');
-				return $this->MAINCFG->getValue('rotation', 'interval')*1000;
-			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotationTime(): ');
+			return $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'interval');
 		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotationTime(): ');
-			return $this->MAINCFG->getValue('rotation', 'interval')*1000;
+			return $this->MAINCFG->getValue('rotation', 'interval');
 		}
 	}
   
