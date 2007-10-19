@@ -69,8 +69,8 @@ class WuiEditMainCfg extends GlobalPage {
 		$ret = Array();
 		
 		foreach($this->MAINCFG->validConfig AS $cat => $arr) {
-			// don't display backend options
-			if(!preg_match("/^backend/i",$cat) && !preg_match("/^internal$/i",$cat)) {
+			// don't display backend,rotation and internal options
+			if(!preg_match("/^backend/i",$cat) && !preg_match("/^internal$/i",$cat) && !preg_match("/^rotation/i",$cat)) {
 				$ret = array_merge($ret,$this->FORM->getCatLine($cat));
 				
 				foreach($arr AS $key2 => $prop) {
