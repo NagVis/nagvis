@@ -165,10 +165,6 @@ class GlobalMainCfg {
 							'htmlmap' => Array('must' => 0,
 												 'editable' => 0,
 												'default' => '/nagios/nagvis/nagvis/images/maps/',
-												'match' => MATCH_STRING_PATH),
-							'htmldoku' => Array('must' => 1,
-												 'editable' => 0,
-												'default' => 'http://luebben-home.de/nagvis-doku/nav.html?nagvis/',
 												'match' => MATCH_STRING_PATH)),
 			'backend' => Array(
 							'backendtype' => Array('must' => 1,
