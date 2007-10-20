@@ -25,12 +25,12 @@ class NagVisFrontend extends GlobalPage {
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis:global');
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
-					  'cssIncludes'=>Array('./includes/css/style.css'),
-					  'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/dynfavicon.js'),
-					  'extHeader'=>Array('<link rel="shortcut icon" href="./images/internal/favicon.png">',
-					  					'<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
-					  'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
-					  'languageRoot' => 'nagvis:global');
+						'cssIncludes'=>Array('./includes/css/style.css'),
+						'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/dynfavicon.js'),
+						'extHeader'=>Array('<link rel="shortcut icon" href="./images/internal/favicon.png">',
+											'<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
+						'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
+						'languageRoot' => 'nagvis:global');
 		parent::GlobalPage($this->MAINCFG,$prop);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::NagVisFrontend()');
 	}
@@ -42,59 +42,60 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIndexPage() {
-	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage()');
-	    $ret = Array();
-	    
-	    $ret[] = '<div class="infopage">';
-	    $ret[] = '<table>';
-	    $ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</td></tr><tr>';
-	    $i = 1;
-	    $arrMaps = $this->getMaps();
-	    foreach($arrMaps AS $mapName) {
-	        $MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
-			$MAPCFG->readMapConfig();
-			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
-    		    $MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
-    		    $onClick = '';
-    		    $class = '';
-    		    
-    		    if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-    		        $strState = $MAP->getMapState($MAP->getMapObjects(1,1));
-        			$state = Array('state' => $strState, 'stateOutput' => 'State of the map is &quot;'.$strState.'&quot;.');
-        			$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
-    			} else {
-    				$state = Array('state' => 'UNKNOWN', 'stateOutput' => 'Error: You are not permited to view the state of this map.');
-    				$onClick = 'alert(\''.$state['stateOutput'].'\');';
-    				$class = 'class="disabled"';
-    			}
-    			// Build object array
-    			$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state['state'],'stateOutput'=> $state['stateOutput']);
-    			$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
-    			$arrMapObj = $MAP->fixIcon($arrMapObj);
-    			
-    		    $ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.$arrMapObj['stateOutput'].'</td></tr></table>\');" onClick="'.$onClick.'">';
-    		    $ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
-    		    $ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-    		    // FIXME: Need better thumbnail format
-    		    $ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName().'" /><br />';
-    	        $ret[] = '</td>';
-    		    if($i % 4 == 0) {
-    		        $ret[] = '</tr><tr>';
-    		    }
-    		    $i++;
-    	    }
-	    }
-	    // Fill table with empty cells if there are not enough maps to get the line filled
-	    if(($i - 1) % 4 != 0) {
-	        for($a=0;$a < (4 - (($i - 1) % 4));$a++) {
-	            $ret[] = '<td>&nbsp;</td>';
-	        }
-	    }
-	    $ret[] = '</table>';
-	    $ret[] = '</div>';
-	    
-	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage(): Array(HTML)');
-	    return $ret;
+			if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage()');
+			$ret = Array();
+			
+			$ret[] = '<div class="infopage">';
+			$ret[] = '<table>';
+			$ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</td></tr><tr>';
+			$i = 1;
+			$arrMaps = $this->getMaps();
+			foreach($arrMaps AS $mapName) {
+				$MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
+				$MAPCFG->readMapConfig();
+				
+				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
+					$MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
+					$onClick = '';
+					$class = '';
+					 
+					if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+							$strState = $MAP->getMapState($MAP->getMapObjects(1,1));
+							$state = Array('state' => $strState, 'stateOutput' => 'State of the map is &quot;'.$strState.'&quot;.');
+							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
+					} else {
+						$state = Array('state' => 'UNKNOWN', 'stateOutput' => 'Error: You are not permited to view the state of this map.');
+						$onClick = 'alert(\''.$state['stateOutput'].'\');';
+						$class = 'class="disabled"';
+					}
+					// Build object array
+					$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state['state'],'stateOutput'=> $state['stateOutput']);
+					$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
+					$arrMapObj = $MAP->fixIcon($arrMapObj);
+					
+						$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.$arrMapObj['stateOutput'].'</td></tr></table>\');" onClick="'.$onClick.'">';
+						$ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
+						$ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
+						// FIXME: Need better thumbnail format
+						$ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName().'" /><br />';
+							$ret[] = '</td>';
+						if($i % 4 == 0) {
+								$ret[] = '</tr><tr>';
+						}
+						$i++;
+					}
+			}
+			// Fill table with empty cells if there are not enough maps to get the line filled
+			if(($i - 1) % 4 != 0) {
+					for($a=0;$a < (4 - (($i - 1) % 4));$a++) {
+							$ret[] = '<td>&nbsp;</td>';
+					}
+			}
+			$ret[] = '</table>';
+			$ret[] = '</div>';
+			
+			if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage(): Array(HTML)');
+			return $ret;
 	}
 	
 	/**
@@ -106,7 +107,7 @@ class NagVisFrontend extends GlobalPage {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getInstInformations()');
 		$ret = Array();
 		
-	    $ret[] = '<div class="infopage">';
+		$ret[] = '<div class="infopage">';
 		$ret[] = '<table class="instinfo">';
 		$ret[] = '<tr><th colspan="2" class="head">'.$this->LANG->getLabel('supportInfo').'</td></tr>';
 		$ret[] = '</table><br />';
@@ -129,7 +130,7 @@ class NagVisFrontend extends GlobalPage {
 		$ret[] = '<tr><td>memory_limit</td><td>'.ini_get('memory_limit').'</td></tr>';
 		//FIXME: $ret[] = '<tr><td style="text-align:center;" colspan="2"><a href="">Copy to Clipboard</a></td></tr>';
 		$ret[] = '</table>';
-	    $ret[] = '</div>';
+		$ret[] = '</div>';
 		
 		$this->addBodyLines($ret);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getInstInformations()');
@@ -174,16 +175,16 @@ class NagVisFrontend extends GlobalPage {
 								$MAPCFG1->readMapConfig(1);
 								
 								if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1) {
-    								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
-    								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
-    								// auto select current map
-    								if($mapName == $this->MAPCFG->getName()) {
-    									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
-    								} else {
-    									$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
-    								}
-    								$sReplace .= $sReplaceObj;
-    							}
+									$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
+									$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
+									// auto select current map
+									if($mapName == $this->MAPCFG->getName()) {
+										$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
+									} else {
+										$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
+									}
+									$sReplace .= $sReplaceObj;
+								}
 							}
 							$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
 						}
@@ -202,7 +203,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkHeaderTemplateExists($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderTemplateExists('.$printErr.')');
 		if(file_exists($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
@@ -211,7 +212,7 @@ class NagVisFrontend extends GlobalPage {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		    	$FRONTEND->messageToUser('WARNING','headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+				$FRONTEND->messageToUser('WARNING','headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateExists(): FALSE');
 			return FALSE;
@@ -224,7 +225,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkHeaderTemplateReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderTemplateReadable('.$printErr.')');
 		if($this->checkHeaderTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
@@ -233,7 +234,7 @@ class NagVisFrontend extends GlobalPage {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		    	$FRONTEND->messageToUser('WARNING','headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+				$FRONTEND->messageToUser('WARNING','headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateReadable(): FALSE');
 			return FALSE;
@@ -320,7 +321,7 @@ class NagVisFrontend extends GlobalPage {
 				} else {
 					$currentMap = $this->MAPCFG->getName();
 				}
-      
+			
 				// get position of actual map in the array
 				$index = array_search($currentMap,$maps);
 				if(($index + 1) >= sizeof($maps)) {
@@ -329,10 +330,10 @@ class NagVisFrontend extends GlobalPage {
 				} else {
 					$index++;
 				}
-	    			
+					
 				$nextMap = $maps[$index];
-    				
-    				
+				
+				
 				if(preg_match("/^\[(.+)\]$/",$nextMap,$arrRet)) {
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1]);
 					return 'index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1];
@@ -352,14 +353,14 @@ class NagVisFrontend extends GlobalPage {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): ');
 			return '';
 		}
-	}  
+	}
 	
 	/**
 	 * Gets all defined maps
 	 *
 	 * @return	Array maps
 	 * @author Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getMaps() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMaps()');
 		$files = Array();
@@ -368,7 +369,7 @@ class NagVisFrontend extends GlobalPage {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match('/^.+\.cfg$/', $file)) {
 					$files[] = substr($file,0,strlen($file)-4);
-				}				
+				}
 			}
 			
 			if ($files) {

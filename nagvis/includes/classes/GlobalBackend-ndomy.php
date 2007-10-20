@@ -24,15 +24,15 @@ class GlobalBackendndomy {
 	var $dbInstanceId;
 	
 	/**
-	* Constructor
-	* Reads needed configuration paramters, connects to the Database
-	* and checks that Nagios is running
-	*
-	* @param	config $MAINCFG
-	* @param	String $backendId
-	* @author	Andreas Husch <downanup@nagios-wiki.de>
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	*/
+	 * Constructor
+	 * Reads needed configuration paramters, connects to the Database
+	 * and checks that Nagios is running
+	 *
+	 * @param	config $MAINCFG
+	 * @param	String $backendId
+	 * @author	Andreas Husch <downanup@nagios-wiki.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function GlobalBackendndomy(&$MAINCFG,$backendId) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::GlobalBackendndomy($MAINCFG,'.$backendId.')');
 		$this->MAINCFG = &$MAINCFG;
@@ -62,7 +62,7 @@ class GlobalBackendndomy {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 				$FRONTEND->messageToUser('ERROR','nagiosNotRunning','BACKENDID~'.$this->backendId);
 			}
-	        
+			 
 			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
 			if(time() - strtotime($nagiosState['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
@@ -111,7 +111,7 @@ class GlobalBackendndomy {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::connectDB()');
 		// don't want to see mysql errors from connecting - only want our error messages
 		$oldLevel = error_reporting(0);
-
+		
 		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		$returnCode = mysql_select_db($this->dbName, $this->CONN);
 		
@@ -185,20 +185,20 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function mysqlQuery($query) {
-	    return mysql_query($query,$this->CONN);
+		return mysql_query($query,$this->CONN);
 	}
 
 	/**
-	* PUBLIC Method getObjects
-	* 
-	* Return the objects configured at Nagios wich are matching the given pattern. 
-	* This is needed for WUI, e.g. to populate drop down lists.
-	*
-	* @param	string $type, string $name1Pattern, string $name2Pattern
-	* @return	array $ret
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	* @author	Andreas Husch <downanup@nagios-wiki.de>
-	*/
+	 * PUBLIC Method getObjects
+	 * 
+	 * Return the objects configured at Nagios wich are matching the given pattern. 
+	 * This is needed for WUI, e.g. to populate drop down lists.
+	 *
+	 * @param	string $type, string $name1Pattern, string $name2Pattern
+	 * @return	array $ret
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @author	Andreas Husch <downanup@nagios-wiki.de>
+	 */
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getObjects('.$type.','.$name1Pattern.','.$name2Pattern.')');
 		$ret = Array();
@@ -250,16 +250,15 @@ class GlobalBackendndomy {
 		return $ret;
 	}
 	
-
 	/**
-	* PUBLIC Method checkStates
-	*	
-	* Returns the State of the given object
-	*
-	* @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName, boolean $onlyHardStates
-	* @return	array $state
-	* @author	m.luebben, Andreas Husch <downanup@nagios-wiki.de>
-	*/
+	 * PUBLIC Method checkStates
+	 *	
+	 * Returns the State of the given object
+	 *
+	 * @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName, boolean $onlyHardStates
+	 * @return	array $state
+	 * @author	m.luebben, Andreas Husch <downanup@nagios-wiki.de>
+	 */
 	function checkStates($type,$name,$recognizeServices,$serviceName='',$onlyHardStates=0) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkStates('.$type.','.$name.','.$recognizeServices.','.$serviceName.','.$onlyHardStates.')');
 		if(isset($name)) {
@@ -297,17 +296,17 @@ class GlobalBackendndomy {
 
 
 	/**
-	* PRIVATE Method findStateHost
-	*
-	* Returns the Nagios State for a single Host
-	*
-	* @param	string $hostName
-	* @param	bool   $recognizeServices
-	* @param	bool   $onlyHardStates
-	* @return	array $state
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	*/
+	 * PRIVATE Method findStateHost
+	 *
+	 * Returns the Nagios State for a single Host
+	 *
+	 * @param	string $hostName
+	 * @param	bool   $recognizeServices
+	 * @param	bool   $onlyHardStates
+	 * @return	array $state
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @author	Andreas Husch (downanup@nagios-wiki.de)
+	 */
 	function findStateHost($hostName,$recognizeServices,$onlyHardStates) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateHost('.$hostName.','.$recognizeServices.','.$onlyHardStates.')');
 		$arrReturn = Array();
@@ -409,34 +408,34 @@ class GlobalBackendndomy {
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateHost(): Array(..)');
-        return $arrReturn;
+		return $arrReturn;
 	}
 	
 	/**
-	* PRIVATE Method findStateService
-	*
-	* Returns the State for a single Service
-	*
-	* @param	string $hostName
-	* @param	string $serviceName
-	* @param	bool   $onlyHardStates
-	* @return	array $state
-	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	*/
+	 * PRIVATE Method findStateService
+	 *
+	 * Returns the State for a single Service
+	 *
+	 * @param	string $hostName
+	 * @param	string $serviceName
+	 * @param	bool   $onlyHardStates
+	 * @return	array $state
+	 * @author	Andreas Husch (downanup@nagios-wiki.de)
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function findStateService($hostName,$serviceName,$onlyHardStates) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateService('.$hostName.','.$serviceName.','.$onlyHardStates.')');
 		$arrReturn = Array();
 		
 		if(isset($serviceName) && $serviceName != '') {
-    		$QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, last_hard_state_change, current_state, last_state_change, output, problem_has_been_acknowledged 
-    		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
-    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id LIMIT 1');
-        } else {
-            $QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, last_hard_state_change, current_state, last_state_change, output, problem_has_been_acknowledged 
-    		    FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
-    		    WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id');
-        }
+			$QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, last_hard_state_change, current_state, last_state_change, output, problem_has_been_acknowledged 
+				FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
+				WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id LIMIT 1');
+		} else {
+			$QUERYHANDLE = $this->mysqlQuery('SELECT name2, has_been_checked, last_hard_state, last_hard_state_change, current_state, last_state_change, output, problem_has_been_acknowledged 
+				FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicestatus AS s
+				WHERE (o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND s.service_object_id=o.object_id');
+		}
 		
 		// Count results
 		$iResults = mysql_num_rows($QUERYHANDLE);
@@ -488,12 +487,12 @@ class GlobalBackendndomy {
 				}
 				
 				// If more than one service were found append the current to return array
-    			if($iResults == 1) {
-    			    $arrReturn = $arrTmpReturn;
-    			} else {
-    			    // Assign actual dataset to return array
-    			    $arrReturn[$data['name2']] = $arrTmpReturn;
-    			}
+				if($iResults == 1) {
+						$arrReturn = $arrTmpReturn;
+				} else {
+						// Assign actual dataset to return array
+						$arrReturn[$data['name2']] = $arrTmpReturn;
+				}
 			}
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateService(): Array(...)');
@@ -501,17 +500,17 @@ class GlobalBackendndomy {
 	}
 
 	/**
-	* PRIVATE Method findStateHostgroup
-	*
-	* Returns the State for a single Hostgroup 
-	*
-	* @param	string $hostGroupName
-	* @param	bool   $recognizeServices
-	* @param	bool   $onlyHardStates
-	* @return	array $state
-	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	*/
+	 * PRIVATE Method findStateHostgroup
+	 *
+	 * Returns the State for a single Hostgroup 
+	 *
+	 * @param	string $hostGroupName
+	 * @param	bool   $recognizeServices
+	 * @param	bool   $onlyHardStates
+	 * @return	array $state
+	 * @author	Andreas Husch (downanup@nagios-wiki.de)
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function findStateHostgroup($hostGroupName,$recognizeServices,$onlyHardStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateHostgroup('.$hostGroupName.','.$recognizeServices.','.$onlyHardStates.')');
 		$arrReturn = Array();
@@ -519,9 +518,9 @@ class GlobalBackendndomy {
 		
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT h.hostgroup_id 
-									FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hostgroups AS h 
-									WHERE (o.objecttype_id=3 AND o.name1 = binary \''.$hostGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-											AND h.hostgroup_object_id=o.object_id LIMIT 1');
+			FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hostgroups AS h 
+			WHERE (o.objecttype_id=3 AND o.name1 = binary \''.$hostGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
+			AND h.hostgroup_object_id=o.object_id LIMIT 1');
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
 			$arrReturn['State'] = 'ERROR';
@@ -531,9 +530,9 @@ class GlobalBackendndomy {
 			
 			//Now we have the Group Id and can get the hosts
 			$QUERYHANDLE = $this->mysqlQuery('SELECT o.name1 
-										FROM '.$this->dbPrefix.'hostgroup_members AS h,'.$this->dbPrefix.'objects AS o 
-										WHERE (h.hostgroup_id='.$hostGroupId[0].' AND h.instance_id='.$this->dbInstanceId.') 
-												AND (o.objecttype_id=1 AND h.host_object_id=o.object_id)');	
+				FROM '.$this->dbPrefix.'hostgroup_members AS h,'.$this->dbPrefix.'objects AS o 
+				WHERE (h.hostgroup_id='.$hostGroupId[0].' AND h.instance_id='.$this->dbInstanceId.') 
+				AND (o.objecttype_id=1 AND h.host_object_id=o.object_id)');	
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 				// Get state of the current looping host
 				$currentHostState = $this->findStateHost($data['name1'],$recognizeServices,$onlyHardStates);
@@ -576,16 +575,16 @@ class GlobalBackendndomy {
 	}
 
 	/**
-	* PRIVATE Method findStateServicegroup	
-	*	
-	* Returns the State for a Servicegroup
-	*
-	* @param	string $serviceGroupName
-	* @param	bool   $onlyHardStates
-	* @return	arrray $state
-	* @author	Andreas Husch (downanup@nagios-wiki.de)
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	*/
+	 * PRIVATE Method findStateServicegroup	
+	 *	
+	 * Returns the State for a Servicegroup
+	 *
+	 * @param	string $serviceGroupName
+	 * @param	bool   $onlyHardStates
+	 * @return	arrray $state
+	 * @author	Andreas Husch (downanup@nagios-wiki.de)
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function findStateServicegroup($serviceGroupName,$onlyHardStates) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findStateServicegroup('.$serviceGroupName.','.$onlyHardStates.')');
 		$arrReturn = Array();
@@ -593,9 +592,9 @@ class GlobalBackendndomy {
 		
 		//First we have to get the servicegroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT s.servicegroup_id 
-									FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicegroups AS s 
-									WHERE (o.objecttype_id=4 AND o.name1 = binary \''.$serviceGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-											AND s.config_type=1 AND s.servicegroup_object_id=o.object_id');
+			FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'servicegroups AS s 
+			WHERE (o.objecttype_id=4 AND o.name1 = binary \''.$serviceGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
+			AND s.config_type=1 AND s.servicegroup_object_id=o.object_id');
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
 			$arrReturn['State'] = 'ERROR';
@@ -604,9 +603,9 @@ class GlobalBackendndomy {
 			$data = mysql_fetch_array($QUERYHANDLE);
 			
 			$QUERYHANDLE = $this->mysqlQuery('SELECT o.name1, o.name2
-											FROM '.$this->dbPrefix.'servicegroup_members AS h,'.$this->dbPrefix.'objects AS o 
-											WHERE (h.servicegroup_id='.$data['servicegroup_id'].' AND h.instance_id='.$this->dbInstanceId.') 
-													AND (o.objecttype_id=2 AND h.service_object_id=o.object_id)');	
+				FROM '.$this->dbPrefix.'servicegroup_members AS h,'.$this->dbPrefix.'objects AS o 
+				WHERE (h.servicegroup_id='.$data['servicegroup_id'].' AND h.instance_id='.$this->dbInstanceId.') 
+				AND (o.objecttype_id=2 AND h.service_object_id=o.object_id)');	
 			
 			while($data1 = mysql_fetch_array($QUERYHANDLE)) {
 				// Get service states
@@ -614,7 +613,7 @@ class GlobalBackendndomy {
 				// Count state
 				$arrNumChilds[$currentState['State']]++;
 			}
-		
+			
 			if($arrNumChilds['CRITICAL'] > 0) {
 				$arrReturn['Count'] = $arrNumChilds['CRITICAL'];
 				$arrReturn['Output'] = $arrNumChilds['CRITICAL'].' CRITICAL, ' .$arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN Services';

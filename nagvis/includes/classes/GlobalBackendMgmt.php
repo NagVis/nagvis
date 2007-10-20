@@ -4,12 +4,12 @@ class GlobalBackendMgmt {
 	var $BACKENDS;
 	
 	/**
-	* Constructor
-	* Initializes all backends
-	*
-	* @param	config $MAINCFG
-	* @author	Lars Michelsen <lars@vertical-visions.de>
-	*/
+	 * Constructor
+	 * Initializes all backends
+	 *
+	 * @param	config $MAINCFG
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function GlobalBackendMgmt(&$MAINCFG) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::GlobalBackendMgmt($MAINCFG)');
 		$this->MAINCFG = &$MAINCFG;
@@ -26,7 +26,7 @@ class GlobalBackendMgmt {
 	 *
 	 * @return	Array Backend-IDs
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getBackends() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::getBackends()');
 		$ret = Array();
@@ -46,7 +46,7 @@ class GlobalBackendMgmt {
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkBackendExists($backendId,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::checkBackendExists('.$backendId.','.$printErr.')');
 		if($backendId != '') {
@@ -56,7 +56,7 @@ class GlobalBackendMgmt {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
-		            $FRONTEND->messageToUser('ERROR','backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
+					$FRONTEND->messageToUser('ERROR','backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
 				}
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendMgmt::checkBackendExists(): FALSE');
 				return FALSE;
@@ -73,7 +73,7 @@ class GlobalBackendMgmt {
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkBackendInitialized($backendId,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::checkBackendInitialized('.$backendId.','.$printErr.')');
 		if($backendId != '') {
@@ -83,7 +83,7 @@ class GlobalBackendMgmt {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
-		            $FRONTEND->messageToUser('ERROR','backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
+					$FRONTEND->messageToUser('ERROR','backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype'));
 				}
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendMgmt::checkBackendInitialized(): FALSE');
 				return FALSE;
@@ -98,7 +98,7 @@ class GlobalBackendMgmt {
 	 * Initializes all backends
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function initBackends() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendMgmt::initBackends()');
 		$aBackends = $this->getBackends();

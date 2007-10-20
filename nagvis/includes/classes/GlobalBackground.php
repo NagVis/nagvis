@@ -20,7 +20,7 @@ class GlobalBackground {
 	 *
 	 * @return	String File Name
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getFileName() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackground::getFileName()');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackground::getFileName()');
@@ -33,7 +33,7 @@ class GlobalBackground {
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkFileExists($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageExists('.$printErr.')');
 		if($this->image != '') {
@@ -45,7 +45,7 @@ class GlobalBackground {
 				if($printErr) {
 					//Error Box
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
-		            $FRONTEND->messageToUser('ERROR','backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND->messageToUser('ERROR','backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageExists(): FALSE');
 				return FALSE;
@@ -56,13 +56,13 @@ class GlobalBackground {
 		}
 	}
 	
-    /**
+	/**
 	 * Checks for readable map image file
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkFileReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageReadable('.$printErr.')');
 		if($this->image != '') {
@@ -73,7 +73,7 @@ class GlobalBackground {
 				if($printErr) {
 					//Error Box
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
-		            $FRONTEND->messageToUser('ERROR','backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND->messageToUser('ERROR','backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageReadable(): FALSE');
 				return FALSE;
@@ -84,13 +84,13 @@ class GlobalBackground {
 		}
 	}
 	
-    /**
+	/**
 	 * Checks for writeable map image file
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkFileWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageWriteable('.$printErr.')');
 		if($this->image != '') {
@@ -102,7 +102,7 @@ class GlobalBackground {
 				if($printErr) {
 					//Error Box
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
-		            $FRONTEND->messageToUser('ERROR','backgroundNotWriteable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+					$FRONTEND->messageToUser('ERROR','backgroundNotWriteable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageWriteable(): FALSE');
 				return FALSE;
@@ -119,7 +119,7 @@ class GlobalBackground {
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkFolderWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageWriteable('.$printErr.')');
 		if(is_writable($this->MAINCFG->getValue('paths', 'map'))) {
@@ -129,7 +129,7 @@ class GlobalBackground {
 			if($printErr) {
 				//Error Box
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
-	            $FRONTEND->messageToUser('ERROR','backgroundFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+				$FRONTEND->messageToUser('ERROR','backgroundFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageWriteable(): FALSE');
 			return FALSE;

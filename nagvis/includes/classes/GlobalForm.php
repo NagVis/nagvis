@@ -286,3 +286,4 @@ class GlobalForm {
 		return $ret;
 	}
 }
+?>

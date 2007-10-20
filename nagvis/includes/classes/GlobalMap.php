@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Class for printing the map
  * Should be used by ALL pages of NagVis and NagVisWui
  */
@@ -24,12 +24,12 @@ class GlobalMap {
 	}
 	
 	/**
-	 * Check if GD-Libs installed, when GD-Libs are enabled.
+	 * Check if GD-Libs installed, when GD-Libs are enabled
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkGd($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkGd('.$printErr.')');
 		if($this->MAPCFG->getValue('global', 0, 'usegdlibs') == '1') {
@@ -57,7 +57,7 @@ class GlobalMap {
 	 * @param	String	$style  css parameters
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getBackgroundHtml($src, $style='') {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getBackgroundHtml('.$src.','.$style.')');
 		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalMap::getBackgroundHtml(HTML)');
@@ -71,7 +71,7 @@ class GlobalMap {
 	 * @return	String	Name of the icon
 	 * @author Michael Luebben <michael_luebben@web.de>
 	 * @author Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getIcon(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIcon(&$obj)');
 		$stateLow = strtolower($obj['state']);
@@ -201,20 +201,20 @@ class GlobalMap {
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkPermissions(&$allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::checkPermissions(Array(...),'.$printErr.')');
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
-        	if($printErr) {
-        		$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		        $FRONTEND->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
-			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): FALSE');
-			return FALSE;
-        } else {
+				if($printErr) {
+						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+						$FRONTEND->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
+				}
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): FALSE');
+				return FALSE;
+		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): TRUE');
-        	return TRUE;
-    	}
+		 	return TRUE;
+		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::checkPermissions(): TRUE');
 		return TRUE;
 	}
@@ -266,3 +266,4 @@ class GlobalMap {
 		return $ret;
 	}
 }
+?>

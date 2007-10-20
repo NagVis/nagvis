@@ -161,7 +161,7 @@ class NagVisBackground extends NagVisMap {
 					exec('ps -eo%mem,rss,pid | grep '.$pid, $output);
 					if (DEBUG&&DEBUGLEVEL&2) debug('Exec: ps -eo%mem,rss,pid | grep '.$pid.': '.implode(',',$output));
 					$output = explode('  ', $output[0]);
-				
+					
 					// rss is given in 1024 byte units
 					$iReturn = $output[1] * 1024;
 				}
@@ -365,3 +365,4 @@ class NagVisBackground extends NagVisMap {
 		return $color;
 	}
 }
+?>

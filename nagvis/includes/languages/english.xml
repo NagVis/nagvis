@@ -116,9 +116,9 @@
 					<text>The must value &quot;[ATTRIBUTE]&quot; is not set in an object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot;</text>
 				</mustValueNotSet>
 				<mainMustValueNotSet> 	 
-                    <title>Must value not set</title>
-                    <text>The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file</text>
-                </mainMustValueNotSet>
+						<title>Must value not set</title>
+						<text>The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file</text>
+				</mainMustValueNotSet>
 				<unknownObject>
 					<title>Unknown object type defined in map</title>
 					<text>The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed</text>

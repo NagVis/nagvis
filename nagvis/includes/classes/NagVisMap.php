@@ -58,7 +58,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getBackground() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getBackground()');
 		
@@ -77,7 +77,7 @@ class NagVisMap extends GlobalMap {
 	 *
 	 * @return	String	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getFavicon() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getFavicon()');
 		if(file_exists('./images/internal/favicon_'.strtolower($this->getMapState($this->getMapObjects(1,1))).'.png')) {
@@ -131,14 +131,14 @@ class NagVisMap extends GlobalMap {
 					// replace macros in url/hover_url/label_text
 					$obj = $this->replaceMacros($obj);
 					
-                    // Some specials for lines
+					// Some specials for lines
 					if(isset($obj['line_type'])) {
-                        $obj = $this->getLineHoverArea($obj);
+						$obj = $this->getLineHoverArea($obj);
 					}
-                    
-                    $obj = $this->fixIcon($obj);
+					
+					$obj = $this->fixIcon($obj);
 					$ret[] = $this->parseIcon($obj);
-                    
+					
 					if($obj['label_show'] == '1') {
 						$ret[] = $this->parseLabel($obj);
 					}
@@ -175,11 +175,11 @@ class NagVisMap extends GlobalMap {
 		
 		list($xFrom,$xTo) = explode(',', $obj['x']);
 		list($yFrom,$yTo) = explode(',', $obj['y']);
-        
+		
 		$obj['x'] = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
 		$obj['y'] = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
 		$obj['icon'] = '20x20.gif';
-
+		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getLineHoverArea(): Array(...)');
 		return $obj;
 	}
@@ -271,11 +271,11 @@ class NagVisMap extends GlobalMap {
 		}
 		
 		if(isset($obj['label_text']) && $obj['label_text'] != '') {
-		    // For maps use the alias as display string
-		    if($obj['type'] == 'map') {
-		        $name = 'alias';   
-		    }
-		    
+			// For maps use the alias as display string
+			if($obj['type'] == 'map') {
+				$name = 'alias';   
+			}
+			
 			$obj['label_text'] = str_replace('[name]',$obj[$name],$obj['label_text']);
 			$obj['label_text'] = str_replace('[output]',$obj['stateOutput'],$obj['label_text']);
 			if($obj['type'] == 'service') {
@@ -305,27 +305,27 @@ class NagVisMap extends GlobalMap {
 		
 		if(isset($obj['url']) && $obj['url'] != '') {
 			$link = '<a href="'.$obj['url'].'" target="'.$obj['url_target'].'">';
-    	} else {
-    		switch($obj['type']) {
-    			case 'map':
-    				$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj[$name].'" target="'.$obj['url_target'].'">';
-    			break;
-    			case 'host':
-    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?host='.$obj[$name].'" target="'.$obj['url_target'].'">';
-    			break;
-    			case 'service':
-    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$obj[$name].'&amp;service='.$obj['service_description'].'" target="'.$obj['url_target'].'">';
-    			break;
-    			case 'hostgroup':
-    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?hostgroup='.$obj[$name].'&amp;style=detail" target="'.$obj['url_target'].'">';
-    			break;
-    			case 'servicegroup':
-    				$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?servicegroup='.$obj[$name].'&amp;style=detail" target="'.$obj['url_target'].'">';
-    			break;
-    		}
-    	}
+			} else {
+				switch($obj['type']) {
+					case 'map':
+						$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$obj[$name].'" target="'.$obj['url_target'].'">';
+					break;
+					case 'host':
+						$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?host='.$obj[$name].'" target="'.$obj['url_target'].'">';
+					break;
+					case 'service':
+						$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$obj[$name].'&amp;service='.$obj['service_description'].'" target="'.$obj['url_target'].'">';
+					break;
+					case 'hostgroup':
+						$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?hostgroup='.$obj[$name].'&amp;style=detail" target="'.$obj['url_target'].'">';
+					break;
+					case 'servicegroup':
+						$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$obj['backend_id'], 'htmlcgi').'/status.cgi?servicegroup='.$obj[$name].'&amp;style=detail" target="'.$obj['url_target'].'">';
+					break;
+				}
+		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createLink(): '.$link);
-    	return $link;
+		return $link;
 	}
 	
 	/**
@@ -352,7 +352,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getHoverMenu(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getHoverMenu(&$obj)');
 		$ret = '';
@@ -378,7 +378,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function readHoverUrl(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::readHoverUrl(&$obj)');
 		/* FIXME: Context is supported in php >= 5.0
@@ -396,7 +396,7 @@ class NagVisMap extends GlobalMap {
 		*/
 		if(!$content = @file_get_contents($obj['hover_url'])) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-	        $FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
+			$FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$obj['hover_url']);
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::readHoverUrl(): HTML');
@@ -409,7 +409,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @return	String	Code for the Hover-Box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function createInfoBox(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox(&$obj)');
 		
@@ -441,9 +441,9 @@ class NagVisMap extends GlobalMap {
 	 */
 	function getHoverTemplate(&$obj) {
 		if($this->checkHoverTemplateReadable($obj,1)) {
-            $ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
-            
-            if($obj['type'] == 'service') {
+			$ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
+			
+			if($obj['type'] == 'service') {
 				$name = 'host_name';
 			} else {
 				$name = $obj['type'] . '_name';
@@ -456,22 +456,22 @@ class NagVisMap extends GlobalMap {
 				$displayName = $name;
 			}
 			
-            // Replace the macros
+			// Replace the macros
 			$ret = str_replace('[obj_type]',$obj['type'],$ret);
 			$ret = str_replace('[obj_name]',$obj[$displayName],$ret);
 			$ret = str_replace('[obj_state]',$obj['state'],$ret);
 			if($obj['type'] != 'map') {
 				$ret = str_replace('[obj_backendid]',$obj['backend_id'],$ret);
-	            if($this->MAINCFG->getValue('backend_'.$obj['backend_id'],'backendtype') == 'ndomy') {
-				    $ret = str_replace('[obj_backend_instancename]',$this->MAINCFG->getValue('backend_'.$obj['backend_id'],'dbinstancename'),$ret);
-	            } else {
-	                $ret = str_replace('[obj_backend_instancename]','',$ret);
-	            }
-	        } else {
-	        	// Remove the macros in map objects
-	        	$ret = str_replace('[obj_backendid]','',$ret);
-	        	$ret = str_replace('[obj_backend_instancename]','',$ret);
-	        }
+				if($this->MAINCFG->getValue('backend_'.$obj['backend_id'],'backendtype') == 'ndomy') {
+					$ret = str_replace('[obj_backend_instancename]',$this->MAINCFG->getValue('backend_'.$obj['backend_id'],'dbinstancename'),$ret);
+				} else {
+					$ret = str_replace('[obj_backend_instancename]','',$ret);
+				}
+			} else {
+				// Remove the macros in map objects
+				$ret = str_replace('[obj_backendid]','',$ret);
+				$ret = str_replace('[obj_backend_instancename]','',$ret);
+			}
 			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
 			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj[$name]),$ret);
 			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
@@ -487,8 +487,8 @@ class NagVisMap extends GlobalMap {
 				$ret = str_replace('[service_description]',$obj['service_description'],$ret);
 				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$obj['service_description']),$ret);
 			}
-            // Escape chars which could make problems
-            $ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
+			// Escape chars which could make problems
+			$ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
 		}
 		
 		return $ret;
@@ -509,7 +509,7 @@ class NagVisMap extends GlobalMap {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-	            $FRONTEND->messageToUser('ERROR','hoverTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
+				$FRONTEND->messageToUser('ERROR','hoverTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateReadable(): FALSE');
 			return FALSE;
@@ -531,7 +531,7 @@ class NagVisMap extends GlobalMap {
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-	            $FRONTEND->messageToUser('ERROR','hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
+				$FRONTEND->messageToUser('ERROR','hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$obj['hover_template'].'.html');
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateExists(): FALSE');
 			return FALSE;
@@ -544,7 +544,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$arr	Array with states
 	 * @return	String	Summary state of the map
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getMapState(&$arr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getMapState(Array(...))');
 		$ret = Array();
@@ -563,7 +563,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object properties
 	 * @return	Array	Array with state of the object
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getState(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getState(&$obj)');
 		$state = Array('State'=>'','Output'=>'');
@@ -578,7 +578,7 @@ class NagVisMap extends GlobalMap {
 				// prevent direct loops (map including itselfes as map icon)
 				if($this->MAPCFG->getName() == $obj[$name]) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+					$FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 					
 					$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
 					$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
@@ -595,8 +595,8 @@ class NagVisMap extends GlobalMap {
 					if($this->checkPermissions($SUBMAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
 						// prevent loops in recursion
 						if(in_array($SUBMAPCFG->getName(),$this->linkedMaps)) {
-			                $FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				            $FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 							
 							$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
 							$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
@@ -606,7 +606,7 @@ class NagVisMap extends GlobalMap {
 							$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
 						}
 					} else {
-					    // FIXME: Language entry
+						// FIXME: Language entry
 						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You are not permited to view the state of this map.');
 					}
 				}
@@ -637,7 +637,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Boolean	$getState	With state?
 	 * @return	Array	Array of Objects of this map
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getMapObjects($getState=1,$mergeWithGlobals=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$getState.','.$mergeWithGlobals.')');
 		$objects = Array();
@@ -661,7 +661,7 @@ class NagVisMap extends GlobalMap {
 	 * @param	Boolean	$getState	With state?
 	 * @return	Array	Array of Objects of this type on the map
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getObjectsOfType($type,$getState=1,$mergeWithGlobals=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$getState.','.$mergeWithGlobals.')');
 		// object array
@@ -723,7 +723,7 @@ class NagVisMap extends GlobalMap {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getChildMapAlias(&$obj) {
-	    $MAPCFG = new NagVisMapCfg($this->MAINCFG,$obj['map_name']);
+		$MAPCFG = new NagVisMapCfg($this->MAINCFG,$obj['map_name']);
 		$MAPCFG->readMapConfig(1);
 		$obj['alias'] = $MAPCFG->getValue('global', 0, 'alias');
 		
@@ -757,3 +757,4 @@ class NagVisMap extends GlobalMap {
 		}
 	}
 }
+?>

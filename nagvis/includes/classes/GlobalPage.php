@@ -81,19 +81,19 @@ class GlobalPage {
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkUser($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkUser('.$printErr.')');
 		if($this->user != '') {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkUser(): TRUE');
-        	return TRUE;
-        } else {
-        	if($printErr) {
-	            $this->messageToUser('ERROR','noUser');
-            }
+					return TRUE;
+		} else {
+			if($printErr) {
+				$this->messageToUser('ERROR','noUser');
+			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkUser(): FALSE');
-            return FALSE;
-        }
+			return FALSE;
+		}
 	}
 	
 	/**
@@ -103,19 +103,19 @@ class GlobalPage {
 	 * @param 	Boolean	$printErr
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkPermissions($allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('StaRt method GlobalPage::checkPermissions(Array(),'.$printErr.')');
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
-        	if($printErr) {
+			if($printErr) {
 				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPermissions(): FALSE');
 			return FALSE;
-        } else {
+		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPermissions(): TRUE');
-        	return TRUE;
-    	}
+			return TRUE;
+		}
 		return TRUE;
 	}
 	
@@ -124,7 +124,7 @@ class GlobalPage {
 	 *
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function checkPreflight() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkPreflight()');
 		$ret = TRUE;
@@ -172,8 +172,8 @@ class GlobalPage {
 	 * Gets the messages to be printed to the user
 	 *
 	 * @return 	Array	HTML Code
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getUserMessages() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUserMessages()');
 		$ret = Array();
@@ -195,15 +195,15 @@ class GlobalPage {
 	 * @param	String	$id			Number of the error messages
 	 * @param	String	$vars		Strings to replace
 	 * @return 	Array	HTML Code
-     * @author	Michael Luebben <michael_luebben@web.de>
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 * @author	Michael Luebben <michael_luebben@web.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function messageBox($serverity, $id, $vars) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::messageBox('.$serverity.','.$id.','.$vars.')');
 		$ret = Array();
 		
 		$LANG = new GlobalLanguage($this->MAINCFG,$this->languageRoot);
-        
+		
 		switch($serverity) {
 			case 'ERROR':
 				$messageIcon = 'img_error.png';
@@ -240,8 +240,8 @@ class GlobalPage {
 	 * @param	String	$line	HTML Code
 	 * @return 	Boolean	TRUE
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     * @deprecated
-     */
+	 * @deprecated
+	 */
 	function addBodyLine($line) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLine('.$line.')');
 		$ret = addBodyLines($line);
@@ -272,7 +272,7 @@ class GlobalPage {
 	 *
 	 * @return 	Array	HTML Code of the Header
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getHeader() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getHeader()');
 		$ret = Array($this->getExtHeader(),$this->getJsIncludes(),$this->getCssIncludes());
@@ -285,7 +285,7 @@ class GlobalPage {
 	 *
 	 * @return 	Array	HTML Code of the Header
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getBody() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getBody()');
 		$ret = $this->body;
@@ -299,7 +299,7 @@ class GlobalPage {
 	 * @param	Array	HTML Code
 	 * @return 	String	Formated HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getLines($arr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getLines(Array(...))');
 		$ret = '';
@@ -317,7 +317,7 @@ class GlobalPage {
 	 *
 	 * @return  String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getExtHeader() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getExtHeader()');
 		$sRet = '';
@@ -335,7 +335,7 @@ class GlobalPage {
 	 *
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getJsIncludes() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getJsIncludes()');
 		$sRet = '';
@@ -355,7 +355,7 @@ class GlobalPage {
 	 *
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getCssIncludes() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getCssIncludes()');
 		$sRet = '';
@@ -377,7 +377,7 @@ class GlobalPage {
 	 *
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function buildPage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::buildPage()');
 		$ret = '';
@@ -397,7 +397,7 @@ class GlobalPage {
 	 * Prints the complete HTML Page
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function printPage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::printPage()');
 		echo $this->buildPage();
@@ -412,7 +412,7 @@ class GlobalPage {
 	 *
 	 * @return	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getPage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getPage()');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getPage()');
@@ -452,7 +452,7 @@ class GlobalPage {
 	 * @param	Int		$y	Y-Coordinates
 	 * @return	Array	JS Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function resizeWindow($x,$y) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::resizeWindow()');
 		$ret = Array('window.resizeTo('.$x.','.$y.')');
@@ -460,3 +460,4 @@ class GlobalPage {
 		return $ret;
 	}
 }
+?>
