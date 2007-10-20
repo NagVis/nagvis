@@ -5,11 +5,21 @@
  */
 function refresh() {
 	if(rotate) {
-		window.open(nextRotationUrl, "_self");
+		if(nextRotationUrl != '') {
+			window.open(nextRotationUrl, "_self");
+		} else {
+			window.location.reload(true);
+		}
 	} else {
 		var tmp = String(window.location).replace(/#/g, '')
-		if(!tmp.match("rotate=0")) {
-			tmp = tmp+"&rotate=0"
+		/**
+		 * When rotation is active we have to set the rotate option to 0
+		 * so the map is even not rotated on next reload
+		 */
+		if(getUrlParam('rotation') == '') {
+			if(!tmp.match("rotate=0")) {
+				tmp = tmp+"&rotate=0"
+			}
 		}
 		window.open(tmp, "_self");
 	}
@@ -22,13 +32,13 @@ function refresh() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function countdown() {
-	nextRotationTime -= 1;
-	if(nextRotationTime <= 0) {
+	nextRefreshTime -= 1;
+	if(nextRefreshTime <= 0) {
 		refresh();
 	} else {
 		// write the time to refresh somewhere
 		if(document.getElementById('refreshCounter')) {
-			document.getElementById('refreshCounter').innerHTML = nextRotationTime;
+			document.getElementById('refreshCounter').innerHTML = nextRefreshTime;
 		}
 		// 1 second timeout to next countdown call
 		window.setTimeout('countdown()', 1000);

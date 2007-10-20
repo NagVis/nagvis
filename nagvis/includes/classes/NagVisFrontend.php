@@ -273,13 +273,13 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function getRefresh() {
 		$strReturn = "";
-		if((!isset($_GET['rotate']) || isset($_GET['rotate']) && $_GET['rotate'] != '0') || (isset($_GET['rotate']) && $_GET['rotate'] == '1')) {
+		if(isset($_GET['rotation']) && $_GET['rotation'] != '' && (!isset($_GET['rotate']) || (isset($_GET['rotate']) && $_GET['rotate'] == '1'))) {
 			$strReturn .= "var rotate = true;\n";
 		} else {
 			$strReturn .= "var rotate = false;\n";
 		}
 		$strReturn .= "var nextRotationUrl = '".$this->getNextRotationUrl()."';\n";
-		$strReturn .= "var nextRotationTime = '".$this->getNextRotationTime()."';\n";
+		$strReturn .= "var nextRefreshTime = '".$this->getNextRotationTime()."';\n";
 		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";
 		
 	    return $this->parseJs($strReturn);
