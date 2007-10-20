@@ -35,14 +35,49 @@ class GlobalLanguage {
 	 */
 	function getLanguage() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getLanguage()');
-		if($strLang = $this->readLanguageFile()) {
-			$this->lang = $this->parseXML($strLang);
-			$this->lang = $this->lang['language'];
-			
+		
+		/**
+		 * If the language cache vars are set and the cache is newer than the
+		 * language file modification time load the cache. If not, read the
+		 * language file and parse the XML
+		 */
+		if(isset($_SESSION['lang_cache']) && is_array($_SESSION['lang_cache']) && isset($_SESSION['lang_cache_time']) && $_SESSION['lang_cache_time'] > $this->getLanguageFileModificationTime()) {
+			if (DEBUG&&DEBUGLEVEL&2) debug('Using language cache (Cache-Time: '.$_SESSION['lang_cache_time'].', Mod-Time: '.$this->getLanguageFileModificationTime().')');
+			$this->lang = $_SESSION['lang_cache'];
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLanguage(): TRUE');
 			return TRUE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLanguage(): FALSE');
+			if (DEBUG&&DEBUGLEVEL&2) debug('Not using language cache');
+			if($strLang = $this->readLanguageFile()) {
+				$this->lang = $this->parseXML($strLang);
+				$this->lang = $this->lang['language'];
+				
+				$_SESSION['lang_cache_time'] = time();
+				$_SESSION['lang_cache'] = $this->lang;
+				
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLanguage(): TRUE');
+				return TRUE;
+			} else {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLanguage(): FALSE');
+				return FALSE;
+			}
+		}
+	}
+	
+	/**
+	 * Gets the last modification time of the language file
+	 *
+	 * @return	Integer Unix timestamp with last modification time
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getLanguageFileModificationTime() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::readLanguageFile()');
+		if($this->checkLanguageFileReadable(1)) {
+			$time = filemtime($this->languageFile);
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::readLanguageFile(): String');
+			return $time;
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::readLanguageFile(): FALSE');
 			return FALSE;
 		}
 	}

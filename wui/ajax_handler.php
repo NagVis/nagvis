@@ -1,5 +1,7 @@
 <?php
 
+@session_start();
+
 require("../nagvis/includes/defines/global.php");
 require("../nagvis/includes/defines/matches.php");
 

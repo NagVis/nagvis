@@ -12,6 +12,8 @@
 ## For developer guidlines have a look at http://www.nagvis.org			##
 ##########################################################################
 
+@session_start();
+
 require("./includes/defines/global.php");
 require("./includes/defines/matches.php");
 
