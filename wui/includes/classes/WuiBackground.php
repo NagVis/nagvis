@@ -79,25 +79,31 @@ class WuiBackground extends GlobalBackground {
 	*/
 	function createImage($color, $width, $height) {
 		if(!$this->checkFileExists(0)) {
-    		$image = imagecreatetruecolor($width, $height);
-    		
-    		// get rgb color from hexcode
-    		$color = str_replace('#','',$color);
-    		$int = hexdec($color);
-            $r = 0xFF & ($int >> 0x10);
-            $g = 0xFF & ($int >> 0x8);
-            $b = 0xFF & $int;
-    		
-    		$bgColor = imagecolorallocate($image, $r, $g, $b);
-    		imagefill($image, 0, 0, $bgColor);
-    		imagepng($image,$this->MAINCFG->getValue('paths', 'map').$this->image);
-    		imagedestroy($image);
-    		
-    		return TRUE;
-    	} else {
-    	    print "<script>alert('error: image already exists \"".$this->MAINCFG->getValue('paths', 'map').$this->image."\")</script>";
-    	    return FALSE;
-    	}
+			if($this->checkFolderWriteable()) {
+				$image = imagecreatetruecolor($width, $height);
+				
+				// get rgb color from hexcode
+				$color = str_replace('#','',$color);
+				$int = hexdec($color);
+				$r = 0xFF & ($int >> 0x10);
+				$g = 0xFF & ($int >> 0x8);
+				$b = 0xFF & $int;
+				
+				$bgColor = imagecolorallocate($image, $r, $g, $b);
+				imagefill($image, 0, 0, $bgColor);
+				imagepng($image,$this->MAINCFG->getValue('paths', 'map').$this->image);
+				imagedestroy($image);
+				
+				return TRUE;
+			} else {
+				//FIXME: Error handling
+				print "The folder (".$this->MAINCFG->getValue('paths', 'map').") is not writeable.";
+				return FALSE;
+			}
+		} else {
+				print "<script>alert('error: image already exists \"".$this->MAINCFG->getValue('paths', 'map').$this->image."\")</script>";
+				return FALSE;
+		}
 	}
 }
 ?>
