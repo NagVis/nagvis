@@ -70,6 +70,183 @@ class WuiMapCfg extends GlobalMapCfg {
 	}
 	
 	/**
+	 * Deletes the map configfile
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function deleteMapConfig($printErr=1) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteMapConfig()');
+		// is file writeable?
+		if($this->checkMapConfigWriteable($printErr)) {
+			if(unlink($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapConfig(): TRUE');
+				return TRUE;
+			} else {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR','couldNotDeleteMapCfg','MAPPATH~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapConfig(): FALSE');
+				return FALSE;
+			}
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapConfig(): FALSE');
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable map config file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkMapConfigWriteable($printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigWriteable('.$printErr.')');
+		if($this->checkMapConfigExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigWriteable(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR','mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigWriteable(): FALSE');
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Writes the element from array to the config file
+	 *
+	 * @param	String	$type	Type of the Element
+	 * @param	Integer	$id		Id of the Element
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function writeElement($type,$id) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::writeElement('.$type.','.$id.')');
+		if($this->checkMapConfigExists(1) && $this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
+			// read file in array
+			$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+			
+			// number of lines in the file
+			$l = 0;
+			// number of elements of the given type
+			$a = 0;
+			// done?!
+			$done = FALSE;
+			while(isset($file[$l]) && $file[$l] != '' && $done == FALSE) {
+				// ignore comments
+				if(!ereg('^#',$file[$l]) && !ereg('^;',$file[$l])) {
+					$defineCln = explode('{', $file[$l]);
+					$define = explode(' ',$defineCln[0]);
+					// select only elements of the given type
+					if(isset($define[1]) && trim($define[1]) == $type) {
+						// check if element exists
+						if($a == $id) {
+							// check if element is an array...
+							if(is_array($this->mapConfig[$type][$a])) {
+								// ...array: update!
+								
+								// choose first parameter line
+								$l++;
+								
+								
+								// loop parameters from array
+								foreach($this->mapConfig[$type][$id] AS $key => $val) {
+									// if key is not type
+									if($key != 'type') {
+										$cfgLines = 0;
+										$cfgLine = '';
+										$cfgLineNr = 0;
+										// Parameter aus Datei durchlaufen
+										while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
+											$entry = explode('=',$file[$l+$cfgLines], 2);
+											if($key == trim($entry[0])) {
+												$cfgLineNr = $l+$cfgLines;
+												if(is_array($val)) {
+													$val = implode(',',$val);
+												}
+												$cfgLine = $key.'='.$val."\n";
+											}
+											$cfgLines++;	
+										}
+										
+										if($cfgLineNr != 0 && $val != '') {
+											// if a parameter was found in file and value is not empty, replace line
+											$file[$cfgLineNr] = $cfgLine;
+										} elseif($cfgLineNr != 0 && $val == '') {
+											// if a paremter is not in array or a value is empty, delete the line in the file
+											unset($file[$cfgLineNr]);
+										} elseif($cfgLineNr == 0 && $val != '') {
+											// if a parameter is was not found in array and a value is not empty, create line
+											if(is_array($val)) {
+												$val = implode(',',$val);
+											}
+											$neu = $key.'='.$val."\n";
+											
+											for($i = $l; $i < count($file);$i++) {
+												$tmp = $file[$i];
+												$file[$i] = $neu;
+												$neu = $tmp;
+											}
+											$file[count($file)] = $neu;
+										} elseif($cfgLineNr == 0 && $val == '') {
+											// if a parameter is empty and a value is empty, do nothing
+										}
+									}
+								}
+								$l++;
+							} else {
+								// ...no array: delete!
+								$cfgLines = 0;
+								while(trim($file[($l+$cfgLines)]) != '}') {
+									$cfgLines++;
+								}
+								$cfgLines++;
+								
+								for($i = $l; $i <= $l+$cfgLines;$i++) {
+									unset($file[$i]);	
+								}
+							}
+							
+							$done = TRUE;
+						}
+						$a++;
+					}
+				}
+				$l++;	
+			}
+			
+			// reached end of file - couldn't find that element, create a new one...
+			if($done == FALSE) {
+				if($file[count($file)-1] != "\n") {
+					$file[] = "\n";
+				}
+				$file[] = 'define '.$type." {\n";
+				foreach($this->mapConfig[$type][$id] AS $key => $val) {
+					if(isset($val) && $val != '') {
+						$file[] = $key.'='.$val."\n";
+					}
+				}
+				$file[] = "}\n";
+				$file[] = "\n";
+			}
+			
+			// open file for writing and replace it
+		 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg','w');
+		 	fwrite($fp,implode('',$file));
+		 	fclose($fp);
+		 	if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeElement(): TRUE');
+			return TRUE;
+		} else {
+		 	if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeElement(): FALSE');
+			return FALSE;
+		} 
+	}
+	
+	/**
 	 * Gets lockfile informations
 	 *
 	 * @param	Boolean $ignoreLock
