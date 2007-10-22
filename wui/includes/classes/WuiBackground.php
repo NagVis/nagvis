@@ -43,22 +43,25 @@ class WuiBackground extends GlobalBackground {
 	function uploadImage($arr, $printErr=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackground::uploadImage(Array(...))');
 		if(is_uploaded_file($arr['tmp_name'])) {
-		    $fileName = $arr['name'];
-		    if(preg_match('/\.png/i',$fileName)) {
-		    	if($this->checkFolderWriteable(1)) {
-			    	if(move_uploaded_file($arr['tmp_name'], $this->MAINCFG->getValue('paths', 'map').$fileName)) {
+			$fileName = $arr['name'];
+			if(preg_match('/\.png/i',$fileName)) {
+				if($this->checkFolderWriteable(1)) {
+					if(move_uploaded_file($arr['tmp_name'], $this->MAINCFG->getValue('paths', 'map').$fileName)) {
 						// Change permissions of the map image
-			    		chmod($this->MAINCFG->getValue('paths', 'map').$fileName,0666);
-			    		
+						chmod($this->MAINCFG->getValue('paths', 'map').$fileName,0666);
+						
 						if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackground::uploadImage(): TRUE');
 						return TRUE;
 					} else {
 						//FIXME: Error handling
-			    		print "The file could not be moved to destination (".$this->MAINCFG->getValue('paths', 'map').$fileName.").";
+						print "The file could not be moved to destination (".$this->MAINCFG->getValue('paths', 'map').$fileName.").";
 						return FALSE;
-			    	}
-			    }
-		    } else {
+					}
+				} else {
+					// No need for error handling here
+					return FALSE;
+				}
+			} else {
 				//FIXME: Error handling
 				print "This is no *.png file (".$fileName.").";
 				return FALSE;
@@ -97,12 +100,13 @@ class WuiBackground extends GlobalBackground {
 				return TRUE;
 			} else {
 				//FIXME: Error handling
-				print "The folder (".$this->MAINCFG->getValue('paths', 'map').") is not writeable.";
+				print("<script>alert('ERROR: The folder (".$this->MAINCFG->getValue('paths', 'map').") is not writeable.')</script>");
 				return FALSE;
 			}
 		} else {
-				print "<script>alert('error: image already exists \"".$this->MAINCFG->getValue('paths', 'map').$this->image."\")</script>";
-				return FALSE;
+			//FIXME: Error handling
+			print("<script>alert('ERROR: image already exists \"".$this->MAINCFG->getValue('paths', 'map').$this->image."\"')</script>");
+			return FALSE;
 		}
 	}
 }
