@@ -293,8 +293,36 @@ class GlobalBackendndomy {
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkStates(): Array(...)');
 		return $arrReturn;
 	}
-
-
+	
+	/**
+	 * PRIVATE Method getHostAckByHostname
+	 *
+	 * Returns if a host state has been acknowledged. The method doesn't check
+	 * if the host is in OK/DOWN, It only checks.the has_been_acknowledged flag.
+	 *
+	 * @param	string $hostName
+	 * @return	bool $ack
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getHostAckByHostname($hostName) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostAckByHostname('.$hostName.')');
+		$return = FALSE;
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT problem_has_been_acknowledged 
+		FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h 
+		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
+		
+		$data = mysql_fetch_array($QUERYHANDLE);
+		// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
+		if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
+			if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostAckByHostname(): TRUE');
+			return TRUE;
+		} else {
+			if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostAckByHostname(): FALSE');
+			return FALSE;
+		}
+	}
+	
 	/**
 	 * PRIVATE Method findStateHost
 	 *
@@ -455,6 +483,15 @@ class GlobalBackendndomy {
 					}
 				}
 				
+				/**
+				 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+				 * acknowledged => check for acknowledged host
+				 */
+				if($data['current_state'] > 0 && $data['problem_has_been_acknowledged'] != 1) {
+					$data['problem_has_been_acknowledged'] = $this->getHostAckByHostname($hostName);
+				}
+				
+				
 				if($data['has_been_checked'] == 0) {
 					$arrTmpReturn['Count'] = 1;
 					$arrTmpReturn['State'] = 'UNKNOWN';
@@ -466,15 +503,15 @@ class GlobalBackendndomy {
 				} elseif($data['problem_has_been_acknowledged'] == 1) {
 					$arrTmpReturn['Count'] = 1;
 					$arrTmpReturn['State'] = 'ACK';
-					$arrTmpReturn['Output'] = $data['output'];			
+					$arrTmpReturn['Output'] = $data['output'];
 				} elseif($data['current_state'] == 1) {
 					$arrTmpReturn['Count'] = 1;
 					$arrTmpReturn['State'] = 'WARNING';
-					$arrTmpReturn['Output'] = $data['output'];		
+					$arrTmpReturn['Output'] = $data['output'];
 				} elseif($data['current_state'] == 2) {
 					$arrTmpReturn['Count'] = 1;
 					$arrTmpReturn['State'] = 'CRITICAL';
-					$arrTmpReturn['Output'] = $data['output'];		
+					$arrTmpReturn['Output'] = $data['output'];
 				} elseif($data['current_state'] == 3) {
 					$arrTmpReturn['Count'] = 1;
 					$arrTmpReturn['State'] = 'UNKNOWN';
@@ -624,16 +661,28 @@ class GlobalBackendndomy {
 				$arrReturn['State'] = 'WARNING';		
 			} elseif($arrNumChilds['UNKNOWN'] > 0) {
 				$arrReturn['Count'] = $arrNumChilds['UNKNOWN'];
-				$arrReturn['Output'] = $arrNumChilds['UNKNOWN'].' Services in UNKNOWN state';
+				if($arrNumChilds['ACK'] == 1) {
+					$arrReturn['Output'] = $arrNumChilds['UNKNOWN'].' Service in UNKNOWN state';
+				} else {
+					$arrReturn['Output'] = $arrNumChilds['UNKNOWN'].' Services in UNKNOWN state';
+				}
 				$arrReturn['State'] = 'UNKNOWN';
 			} elseif($arrNumChilds['ACK'] > 0) {
 				$arrReturn['Count'] = $arrNumChilds['ACK'];
-				$arrReturn['Output'] = $arrNumChilds['ACK'].' services are in a NON-OK State but all are ACKNOWLEDGED';
+				if($arrNumChilds['ACK'] == 1) {
+					$arrReturn['Output'] = $arrNumChilds['ACK'].' Service is in a NON-OK State but is ACKNOWLEDGED';
+				} else {
+					$arrReturn['Output'] = $arrNumChilds['ACK'].' Services are in a NON-OK State but all are ACKNOWLEDGED';
+				}
 				$arrReturn['State'] = 'ACK';
 			} elseif($arrNumChilds['OK'] > 0) {
 				$arrReturn['Count'] = $arrNumChilds['OK'];
-				$arrReturn['Output'] = 'All '.$arrNumChilds['OK'].' services are OK';
-				$arrReturn['State'] = 'OK';		
+				if($arrNumChilds['ACK'] == 1) {
+					$arrReturn['Output'] = $arrNumChilds['OK'].' Service is OK';
+				} else {
+					$arrReturn['Output'] = 'All '.$arrNumChilds['OK'].' Services are OK';
+				}
+				$arrReturn['State'] = 'OK';
 			}
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findStateServicegroup(): Array(...)');
