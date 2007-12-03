@@ -542,17 +542,19 @@ class GlobalMapCfg {
 							$l++;
 							$this->mapConfig[$define[1]][$type] = Array('type'=>$define[1]);
 							while (isset($file[$l]) && trim($file[$l]) != '}') {
-								$entry = explode('=',$file[$l], 2);
-								$entry[0] = trim($entry[0]);
-								if(isset($entry[1])) {
-									$entry[1] = trim($entry[1]);
-									if(in_array($entry[0],$createArray)) {
-										$this->mapConfig[$define[1]][$type][$entry[0]] = explode(',',str_replace(' ','',$entry[1]));
-									} else {
-										$this->mapConfig[$define[1]][$type][$entry[0]] = $entry[1];
+								if(!ereg('^(#|;)',$file[$l])) {
+									$entry = explode('=',$file[$l], 2);
+									$entry[0] = trim($entry[0]);
+									if(isset($entry[1])) {
+										$entry[1] = trim($entry[1]);
+										if(in_array($entry[0],$createArray)) {
+											$this->mapConfig[$define[1]][$type][$entry[0]] = explode(',',str_replace(' ','',$entry[1]));
+										} else {
+											$this->mapConfig[$define[1]][$type][$entry[0]] = $entry[1];
+										}
 									}
 								}
-								$l++;	
+								$l++;
 							}
 							// increase type index
 							$types[$define[1]]++;
