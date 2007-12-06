@@ -36,10 +36,14 @@ function countdown() {
 	if(nextRefreshTime <= 0) {
 		refresh();
 	} else {
-		// write the time to refresh somewhere
-		if(document.getElementById('refreshCounter')) {
-			document.getElementById('refreshCounter').innerHTML = nextRefreshTime;
+		// write the time to refresh to header counter
+		if(document.getElementById('refreshCounterHead')) {
+			document.getElementById('refreshCounterHead').innerHTML = nextRefreshTime;
 		}
+		// write the time to refresh to the normal counter
+		if(document.getElementById('refreshCounter')) {
+                        document.getElementById('refreshCounter').innerHTML = nextRefreshTime;
+                }
 		// 1 second timeout to next countdown call
 		window.setTimeout('countdown()', 1000);
 	}

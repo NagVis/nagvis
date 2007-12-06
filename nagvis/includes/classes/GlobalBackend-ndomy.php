@@ -241,13 +241,49 @@ class GlobalBackendndomy {
 			break;
 		}
 		
-		$QUERYHANDLE = $this->mysqlQuery('SELECT name1,name2 FROM '.$this->dbPrefix.'objects WHERE objecttype_id='.$objectType.' AND '.$filter.' is_active=1 AND instance_id='.$this->dbInstanceId.' ORDER BY name1');
+		/**
+		 * is_active default value is 0.
+		 * When broker option is -1 or BROKER_RETENTION_DATA is activated the 
+		 * current objects have is_active=1 and the deprecated object have 
+		 * is_active=0. Workaround: Check if there is any is_active=1, then use the
+		 * is_active filter.
+		 *
+		 * For details see:
+		 * https://sourceforge.net/tracker/index.php?func=detail&aid=1839631&group_id=132019&atid=725179
+		 * http://www.nagios-portal.de/forum/thread.php?postid=59971#post59971
+		 */
+		if($this->checkForIsActiveObjects()) {
+			$isActiveFilter = ' is_active=1 AND';
+		} else {
+			$isActiveFilter = '';
+		}
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT name1,name2 FROM '.$this->dbPrefix.'objects WHERE objecttype_id='.$objectType.' AND '.$filter.$isActiveFilter.' instance_id='.$this->dbInstanceId.' ORDER BY name1');
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
 			$ret[] = Array('name1' => $data['name1'],'name2' => $data['name2']);
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getObjects(): '.$ret);
 		return $ret;
+	}
+	
+	/**
+	 * PRIVATE Method checkIsActiveObjects
+	 *
+	 * Checks if there are some object records with is_active=1
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkForIsActiveObjects() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkForIsActiveObjects()');
+		if(mysql_num_rows($this->mysqlQuery('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')) > 0) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkForIsActiveObjects(): TRUE');
+			return TRUE;
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkForIsActiveObjects(): FALSE');
+			return FALSE;	
+		}
 	}
 	
 	/**

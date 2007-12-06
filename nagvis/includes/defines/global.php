@@ -15,6 +15,6 @@ define('DEBUG',FALSE);
 define('DEBUGLEVEL', 4);
 define('DEBUGFILE', '/var/log/nagvis-debug.log');
 
-define('CONST_VERSION', '1.2b2');
+define('CONST_VERSION', '1.2rc1');
 define('CONST_MAINCFG', '../etc/nagvis.ini.php');
 ?>

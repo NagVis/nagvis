@@ -77,6 +77,7 @@ img {
 .icon {
 	position : absolute;
 	border : 0;
+	font-size: 5px;
 	z-index : 1;
 }
 

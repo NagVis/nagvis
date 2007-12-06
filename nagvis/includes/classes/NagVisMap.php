@@ -109,6 +109,9 @@ class NagVisMap extends GlobalMap {
 						$obj['background_color'] = '#CCCCCC';
 					}
 					
+					// replace macros in text
+					$obj = $this->replaceMacros($obj);
+					
 					$ret = array_merge($ret,$this->textBox($obj));
 				break;
 				case 'shape':
@@ -254,6 +257,10 @@ class NagVisMap extends GlobalMap {
 			$name = 'host_name';
 		} else {
 			$name = $obj['type'] . '_name';
+		}
+		
+		if(isset($obj['text']) && $obj['text'] != '') {
+			$obj['text'] = str_replace('[refresh_counter]','<font id="refreshCounter"></font>',$obj['text']);
 		}
 		
 		if(isset($obj['url']) && $obj['url'] != '') {

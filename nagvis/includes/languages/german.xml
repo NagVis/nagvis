@@ -77,7 +77,7 @@
 				</backgroundNotFound>
 				<permissionDenied>
 					<title>Keine Rechte</title>
-					<text>Der Benutzer &quot;[USER]&quot; hat keine Rechte zum anzeigen dieser Map</text>
+					<text>Der Benutzer &quot;[USER]&quot; hat keine Rechte fuer diese Aktion</text>
 				</permissionDenied>
 				<noUser>
 					<title>Kein Benutzer</title>

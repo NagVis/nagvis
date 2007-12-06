@@ -30,7 +30,11 @@ require("./includes/classes/GlobalBackendMgmt.php");
 
 require("./includes/classes/NagVisMapCfg.php");
 require("./includes/classes/NagVisMap.php");
+require("./includes/classes/NagVisAutoMap.php");
 require("./includes/classes/NagVisFrontend.php");
+
+require("./includes/classes/objects/NagiosHost.php");
+require("./includes/classes/objects/NagVisHost.php");
 
 $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
@@ -54,6 +58,30 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 } elseif(isset($_GET['url'])) {
 	$arrFile = file($_GET['url']);
 	$FRONTEND->addBodyLines($arrFile);
+} elseif(isset($_GET['automap']) && $_GET['automap'] != '') {
+	if(!isset($_GET['backend_id'])) {
+		$_GET['backend_id'] = '';
+	}
+	if(!isset($_GET['root'])) {
+		$_GET['root'] = '';
+	}
+	if(!isset($_GET['maxLayers'])) {
+		$_GET['maxLayers'] = '';
+	}
+	if(!isset($_GET['renderMode'])) {
+		$_GET['renderMode'] = '';
+	}
+	if(!isset($_GET['width'])) {
+		$_GET['width'] = '';
+	}
+	if(!isset($_GET['height'])) {
+		$_GET['height'] = '';
+	}
+	
+	$FRONTEND->addBodyLines($FRONTEND->getRefresh());
+	$FRONTEND->getHeaderMenu();
+	$FRONTEND->getAutoMap(Array('backendId' => $_GET['backend_id'], 'root' => $_GET['root'], 'maxLayers' => $_GET['maxLayers'], 'renderMode' => $_GET['renderMode'], 'width' => $_GET['width'], 'height' => $_GET['height']));
+	$FRONTEND->getMessages();
 } elseif(isset($_GET['rotation']) && $_GET['rotation'] != '' && (!isset($_GET['url']) || $_GET['url'] == '') && (!isset($_GET['map']) || $_GET['map'] == '')) {
 	header('Location: '.$FRONTEND->getNextRotationUrl());
 } elseif(isset($_GET['info'])) {
