@@ -30,11 +30,7 @@ require("./includes/classes/GlobalBackendMgmt.php");
 
 require("./includes/classes/NagVisMapCfg.php");
 require("./includes/classes/NagVisMap.php");
-require("./includes/classes/NagVisAutoMap.php");
 require("./includes/classes/NagVisFrontend.php");
-
-require("./includes/classes/objects/NagiosHost.php");
-require("./includes/classes/objects/NagVisHost.php");
 
 $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
