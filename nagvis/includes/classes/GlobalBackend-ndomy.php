@@ -559,12 +559,12 @@ class GlobalBackendndomy {
 					$arrTmpReturn['Output'] = 'GlobalBackendndomy::findStateService: Undefined state!';
 				}
 				
-				// If more than one service were found append the current to return array
-				if($iResults == 1) {
-						$arrReturn = $arrTmpReturn;
+				// If more than one services are expected, append the current return informations to return array
+				if(isset($serviceName) && $serviceName != '') {
+					$arrReturn = $arrTmpReturn;
 				} else {
-						// Assign actual dataset to return array
-						$arrReturn[$data['name2']] = $arrTmpReturn;
+					// Assign actual dataset to return array
+					$arrReturn[str_replace(' ','_',$data['name2'])] = $arrTmpReturn;
 				}
 			}
 		}
