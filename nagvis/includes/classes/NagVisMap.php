@@ -284,7 +284,7 @@ class NagVisMap extends GlobalMap {
 			}
 			
 			$obj['label_text'] = str_replace('[name]',$obj[$name],$obj['label_text']);
-			$obj['label_text'] = str_replace('[output]',$obj['stateOutput'],$obj['label_text']);
+			$obj['label_text'] = str_replace('[output]',$obj['output'],$obj['label_text']);
 			if($obj['type'] == 'service') {
 				$obj['label_text'] = str_replace('[service_description]',$obj['service_description'],$obj['label_text']);
 			}
@@ -466,6 +466,16 @@ class NagVisMap extends GlobalMap {
 			// Replace the macros
 			$ret = str_replace('[obj_type]',$obj['type'],$ret);
 			$ret = str_replace('[obj_name]',$obj[$displayName],$ret);
+			if(isset($obj['alias']) && $obj['alias'] != '') {
+				$ret = str_replace('[obj_alias]',$obj['alias'],$ret);
+			} else {
+				$ret = str_replace('[obj_alias]','',$ret);
+			}
+			if(isset($obj['display_name']) && $obj['display_name'] != '') {
+				$ret = str_replace('[obj_display_name]',$obj['display_name'],$ret);
+			} else {
+				$ret = str_replace('[obj_display_name]','',$ret);
+			}
 			$ret = str_replace('[obj_state]',$obj['state'],$ret);
 			if($obj['type'] != 'map') {
 				$ret = str_replace('[obj_backendid]',$obj['backend_id'],$ret);
@@ -479,9 +489,10 @@ class NagVisMap extends GlobalMap {
 				$ret = str_replace('[obj_backendid]','',$ret);
 				$ret = str_replace('[obj_backend_instancename]','',$ret);
 			}
-			$ret = str_replace('[obj_output]',strtr($obj['stateOutput'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
+			$ret = str_replace('[obj_output]',strtr($obj['output'], Array("\r" => '<br />', "\n" => '<br />')),$ret);
 			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$obj[$name]),$ret);
 			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
+			$ret = str_replace('[lang_alias]',$this->LANG->getLabel('alias'),$ret);
 			$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
 			$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
 			$ret = str_replace('[lang_obj_type]',$this->LANG->getLabel($obj['type']),$ret);
@@ -491,9 +502,16 @@ class NagVisMap extends GlobalMap {
 			$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlhovertemplates'),$ret);
 			$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlhovertemplateimages'),$ret);
 			if($obj['type'] == 'service') {
-				$ret = str_replace('[service_description]',$obj['service_description'],$ret);
-				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$obj['service_description']),$ret);
+				preg_match_all('/<!-- BEGIN service -->((?s).*)<!-- END service -->/',$ret,$matchReturn1);
+				$return = $matchReturn1[1][0];
+				$return = str_replace('[service_description]',$obj['service_description'],$return);
+				$return = str_replace('[pnp_service_description]',str_replace(' ','%20',$obj['service_description']),$return);
+				$return = str_replace('[lang_service_description]',$this->LANG->getLabel('servicename'),$return);
+				$ret = preg_replace('/<!-- BEGIN service -->((?s).*)<!-- END service -->/',$return,$ret);
+			} else {
+				$ret = preg_replace('/<!-- BEGIN service -->((?s).*)<!-- END service -->/','',$ret);
 			}
+			
 			// Escape chars which could make problems
 			$ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
 		}
@@ -573,7 +591,6 @@ class NagVisMap extends GlobalMap {
 	 */
 	function getState(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getState(&$obj)');
-		$state = Array('State'=>'','Output'=>'');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -588,7 +605,8 @@ class NagVisMap extends GlobalMap {
 					$FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 					
 					$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
-					$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
+					$obj['state'] = 'UNKNOWN';
+					$obj['output'] = $LANG->getMessageText('loopInMapRecursion');
 				} else {
 					// save mapName in linkedMaps array
 					$this->linkedMaps[] = $this->MAPCFG->getName();
@@ -606,15 +624,18 @@ class NagVisMap extends GlobalMap {
 							$FRONTEND->messageToUser('WARNING','loopInMapRecursion');
 							
 							$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
-							$state = Array('State' => 'UNKNOWN','Output' => $LANG->getMessageText('loopInMapRecursion'));
+							$obj['state'] = 'UNKNOWN';
+							$obj['output'] = $LANG->getMessageText('loopInMapRecursion');
 						} else {
 							$state = $SUBMAP->getMapState($SUBMAP->getMapObjects(1,1));
 							// FIXME: Language entry
-							$state = Array('State' => $state,'Output'=>'State of child map is '.$state);
+							$obj['state'] = $state;
+							$obj['output'] = 'State of child map is '.$state;
 						}
 					} else {
 						// FIXME: Language entry
-						$state = Array('State' => 'UNKNOWN','Output'=>'Error: You are not permited to view the state of this map.');
+						$obj['state'] = 'UNKNOWN';
+						$obj['output'] = 'Error: You are not permited to view the state of this map.';
 					}
 				}
 			break;
@@ -629,13 +650,13 @@ class NagVisMap extends GlobalMap {
 				}
 				
 				if($this->BACKEND->checkBackendInitialized($obj['backend_id'],TRUE)) {
-					$state = $this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']);
+					$obj = array_merge($obj,$this->BACKEND->BACKENDS[$obj['backend_id']]->checkStates($obj['type'],$obj[$name],$obj['recognize_services'],$obj['service_description'],$obj['only_hard_states']));
 				}
 			break;	
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getState(): Array()');
-		return Array('state' => $state['State'],'stateOutput' => $state['Output']);
+		return $obj;
 	}
 	
 	/**
@@ -676,9 +697,9 @@ class NagVisMap extends GlobalMap {
 		
 		// Default object state
 		if($type == 'host' || $type == 'hostgroup') {
-			$objState = Array('state'=>'UP','stateOutput'=>'Default State');
+			$objState = Array('state'=>'UP','output'=>'Default State');
 		} else {
-			$objState = Array('state'=>'OK','stateOutput'=>'Default State');
+			$objState = Array('state'=>'OK','output'=>'Default State');
 		}
 		
 		if(is_array($objs = $this->MAPCFG->getDefinitions($type))){
@@ -700,7 +721,7 @@ class NagVisMap extends GlobalMap {
 				$obj = array_merge($obj,$objState);
 				
 				if($getState) {
-					$obj = array_merge($obj,$this->getState($obj));
+					$obj = $this->getState($obj);
 				}
 				
 				// The map alias only stands in the global section of the child map, get it

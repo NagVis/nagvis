@@ -2,7 +2,6 @@
  * CSS Code used by the default hover template (tmpl.default.html)
  */
 table.hover_table {
-	background-color: #ff00000;
 	border-collapse:collapse;
 }
 
@@ -19,11 +18,33 @@ table.hover_table th {
 	background-color: #eee;
 }
 
-table.hover_table td.label {
-	text-align: center;
-	background-color: #eee;
-}
+table.hover_table td.label { text-align: center; background-color: #eee; }
+table.hover_table td.labelOK, table.hover_table td.labelUP { text-align: center; background-color: #eee; }
+table.hover_table td.labelWARNING { text-align: center; background-color: #eee; }
+table.hover_table td.labelCRITICAL { text-align: center; background-color: #FFBBBB; }
+table.hover_table td.labelERROR { text-align: center; background-color: #eee; }
+table.hover_table td.labelUNKNOWN { text-align: center; background-color: #eee; }
 
 table.hover_table label {
 	font-weight: bold;
+}
+
+table.hover_table td.stateOK, table.hover_table td.stateUP {
+	background-color: #00CC00;
+}
+
+table.hover_table td.stateWARNING {
+	background-color: #FFFF00;
+}
+
+table.hover_table td.stateCRITICAL {
+	background-color: #F83838;
+}
+
+table.hover_table td.stateERROR {
+	background-color: #66CCFF;
+}
+
+table.hover_table td.stateUNKNOWN {
+	background-color: #FFFF99;
 }

@@ -182,6 +182,9 @@
 		<global>
 			<labels>
 				<!-- Alle NagVis Beschriftungen //-->
+				<alias>
+					<text>Alias</text>
+				</alias>
 				<state>
 					<text>Status</text>
 				</state>
