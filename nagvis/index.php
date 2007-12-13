@@ -52,6 +52,8 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 	$FRONTEND->getMap();
 	$FRONTEND->getMessages();
 } elseif(isset($_GET['url'])) {
+	$FRONTEND->addBodyLines($FRONTEND->getRefresh());
+	$FRONTEND->getHeaderMenu();
 	$arrFile = file($_GET['url']);
 	$FRONTEND->addBodyLines($arrFile);
 } elseif(isset($_GET['automap']) && $_GET['automap'] != '') {
