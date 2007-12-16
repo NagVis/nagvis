@@ -49,41 +49,34 @@ class NagVisFrontend extends GlobalPage {
 			$ret[] = '<table>';
 			$ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</td></tr><tr>';
 			$i = 1;
-			$arrMaps = $this->getMaps();
-			foreach($arrMaps AS $mapName) {
+			foreach($this->getMaps() AS $mapName) {
 				$MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
 				$MAPCFG->readMapConfig();
 				
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
 					$MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
+					$MAP->MAPOBJ->fetchIcon();
 					$onClick = '';
 					$class = '';
 					 
 					if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-							$strState = $MAP->getMapState($MAP->getMapObjects(1,1));
-							$state = Array('state' => $strState, 'stateOutput' => 'State of the map is &quot;'.$strState.'&quot;.');
-							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
+						$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
 					} else {
-						$state = Array('state' => 'UNKNOWN', 'stateOutput' => 'Error: You are not permited to view the state of this map.');
-						$onClick = 'alert(\''.$state['stateOutput'].'\');';
+						$onClick = 'alert(\'Error: You are not permited to view the state of this map.\');';
 						$class = 'class="disabled"';
 					}
-					// Build object array
-					$arrMapObj = Array('type'=>'map','iconset'=>'std_big','state' => $state['state'],'stateOutput'=> $state['stateOutput']);
-					$arrMapObj['icon'] = $MAP->getIcon($arrMapObj);
-					$arrMapObj = $MAP->fixIcon($arrMapObj);
 					
-						$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.$arrMapObj['stateOutput'].'</td></tr></table>\');" onClick="'.$onClick.'">';
-						$ret[] = '<img align="right" src="'.$arrMapObj['htmlPath'].$arrMapObj['icon'].'" />';
-						$ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-						// FIXME: Need better thumbnail format
-						$ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName().'" /><br />';
-							$ret[] = '</td>';
-						if($i % 4 == 0) {
-								$ret[] = '</tr><tr>';
-						}
-						$i++;
+					$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.$MAP->MAPOBJ->getSummaryOutput().'</td></tr></table>\');" onClick="'.$onClick.'">';
+					$ret[] = '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
+					$ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
+					// FIXME: Need better thumbnail format
+					$ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName().'" /><br />';
+						$ret[] = '</td>';
+					if($i % 4 == 0) {
+							$ret[] = '</tr><tr>';
 					}
+					$i++;
+				}
 			}
 			// Fill table with empty cells if there are not enough maps to get the line filled
 			if(($i - 1) % 4 != 0) {
@@ -254,6 +247,23 @@ class NagVisFrontend extends GlobalPage {
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMap()');
+	}
+	
+	/**
+	 * Adds the automap to the page
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getAutoMap($arrOptions) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getAutoMap()');
+		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
+		$this->addBodyLines(Array('<div class="map">'));
+		$this->MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $arrOptions);
+		$this->MAP->getObjectCoords($this->MAP->rootObject);
+		//$this->MAP->parseGraphvizConfig();
+		$this->addBodyLines($this->MAP->parseMap());
+		$this->addBodyLines(Array('</div>'));
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getAutoMap()');
 	}
 	
 	/**

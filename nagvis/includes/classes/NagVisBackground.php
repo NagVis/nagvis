@@ -42,7 +42,6 @@ class NagVisBackground extends NagVisMap {
 		
 		parent::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND);
 		
-		$this->objects = $this->getMapObjects(1,1);
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::NagVisBackground()');
 	}
 	
@@ -290,31 +289,32 @@ class NagVisBackground extends NagVisMap {
 	/**
 	 * Parses the Objects
 	 *
-	 * @return	Array 	Array with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::parseObjects()');
-		$ret = Array();
-		foreach($this->objects AS $obj) {
-			switch($obj['type']) {
-				case 'map':
-				case 'textbox':
+		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
+			switch(get_class($OBJ)) {
+				case 'NagVisMapObj':
+				case 'NagVisTextbox':
 					// do nothing for this objects in background image
 					// should never reach this -> method NagVisBackground::getState don't read this objects
 				break;
-				default:
-					if(isset($obj['line_type'])) {
-						$this->parseLine($obj);
+				case 'NagVisHost':
+				case 'NagVisService':
+				case 'NagVisHostgroup':
+				case 'NagVisServicegroup':
+				case 'NagVisShape':
+					if(isset($OBJ->line_type)) {
+						$this->parseLine($OBJ);
 					} else {
 						// do nothing for this objects in background image
 						// should never reach this -> method NagVisBackground::getState don't read this objects
 					}
-				break;	
+				break;
 			}
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::parseObjects(): Array(...)');
-		return $ret;
 	}
 	
 	/**
@@ -324,21 +324,21 @@ class NagVisBackground extends NagVisMap {
 	 * @return	Array 	Array with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseLine($obj) {
+	function parseLine(&$OBJ) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisBackground::parseLine()');
-		if($obj['line_type'] == '10'){
-			list($x_from,$x_to) = explode(',', $obj['x']);
-			list($y_from,$y_to) = explode(',', $obj['y']);
+		if($OBJ->line_type == '10'){
+			list($x_from,$x_to) = explode(',', $OBJ->getX());
+			list($y_from,$y_to) = explode(',', $OBJ->getY());
 			$x_middle = $this->GRAPHIC->middle($x_from,$x_to);
 			$y_middle = $this->GRAPHIC->middle($y_from,$y_to);
 			
-			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_middle,$y_middle,3,1,$this->getColor($obj['state']));
-			$this->GRAPHIC->drawArrow($this->image,$x_to,$y_to,$x_middle,$y_middle,3,1,$this->getColor($obj['state']));
-		} elseif($obj['line_type'] == '11') {
-			list($x_from,$x_to) = explode(',', $obj['x']);
-			list($y_from,$y_to) = explode(',', $obj['y']);
+			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_middle,$y_middle,3,1,$this->getColor($OBJ->getSummaryState()));
+			$this->GRAPHIC->drawArrow($this->image,$x_to,$y_to,$x_middle,$y_middle,3,1,$this->getColor($OBJ->getSummaryState()));
+		} elseif($OBJ->line_type == '11') {
+			list($x_from,$x_to) = explode(',', $OBJ->getX());
+			list($y_from,$y_to) = explode(',', $OBJ->getY());
 			
-			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_to,$y_to,3,1,$this->getColor($obj['state']));
+			$this->GRAPHIC->drawArrow($this->image,$x_from,$y_from,$x_to,$y_to,3,1,$this->getColor($OBJ->getSummaryState()));
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::parseLine()');	
 	}

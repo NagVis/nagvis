@@ -388,7 +388,9 @@ class GlobalMapCfg {
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
 				'hover_url' => Array('must' => 0,
-									'match' => MATCH_STRING_URL)),
+					'match' => MATCH_STRING_URL),
+				'hover_delay' => Array('must' => 0,
+					'match' => MATCH_INTEGER)),
 			'template' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'name' => Array('must' => 1,
@@ -462,6 +464,7 @@ class GlobalMapCfg {
 		$this->validConfig['map']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['map']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['shape']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
+		$this->validConfig['shape']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getObjectDefaults()');
 	}
 	

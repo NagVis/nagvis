@@ -32,6 +32,23 @@ require("./includes/classes/NagVisMapCfg.php");
 require("./includes/classes/NagVisMap.php");
 require("./includes/classes/NagVisFrontend.php");
 
+require("./includes/classes/NagVisAutoMap.php");
+
+require("./includes/classes/objects/NagVisObject.php");
+require("./includes/classes/objects/NagVisStatefulObject.php");
+require("./includes/classes/objects/NagVisStatelessObject.php");
+require("./includes/classes/objects/NagiosHost.php");
+require("./includes/classes/objects/NagVisHost.php");
+require("./includes/classes/objects/NagiosService.php");
+require("./includes/classes/objects/NagVisService.php");
+require("./includes/classes/objects/NagiosHostgroup.php");
+require("./includes/classes/objects/NagVisHostgroup.php");
+require("./includes/classes/objects/NagiosServicegroup.php");
+require("./includes/classes/objects/NagVisServicegroup.php");
+require("./includes/classes/objects/NagVisMapObj.php");
+require("./includes/classes/objects/NagVisShape.php");
+require("./includes/classes/objects/NagVisTextbox.php");
+
 $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
 if(!isset($_GET['map'])) {

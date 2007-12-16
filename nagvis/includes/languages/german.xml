@@ -188,9 +188,15 @@
 				<state>
 					<text>Status</text>
 				</state>
+				<summaryState>
+					<text>Gesamt Status</text>
+				</summaryState>
 				<output>
 					<text>Ausgabe</text>
 				</output>
+				<summaryOutput>
+					<text>Gesamt Ausgabe</text>
+				</summaryOutput>
 				<hostname>
 					<text>Host Name</text>
 				</hostname>

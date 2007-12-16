@@ -71,6 +71,7 @@ class GlobalMap {
 	 * @return	String	Name of the icon
 	 * @author Michael Luebben <michael_luebben@web.de>
 	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 * DEP
 	 */
 	function getIcon(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIcon(&$obj)');
@@ -147,6 +148,7 @@ class GlobalMap {
 	 * @return	Array	Array with object properties
 	 * @author	Michael Luebben <michael_luebben@web.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * DEP
 	 */
 	function fixIcon(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIcon(&$obj)');
@@ -175,6 +177,7 @@ class GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @return	Array	Array with object informations
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * DEP
 	 */
 	function getIconPaths(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIconPaths(&$obj)');
@@ -228,6 +231,7 @@ class GlobalMap {
 	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
 	 * @return	String	String with Html Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * DEP
 	 */
 	function parseLabel(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::parseLabel(&$obj)');
