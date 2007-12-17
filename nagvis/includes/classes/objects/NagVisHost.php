@@ -20,6 +20,27 @@ class NagVisHost extends NagiosHost {
 		return parent::parse();
 	}
 	
+	function parseGraphviz() {
+		// shape=plaintext, 
+		// color=green, 
+		// style="",
+		// <<table border="0"><tr><td><img src="'.$this->MAINCFG->getValue('paths', 'htmlicon').$this->icon.'"></img></td></tr><tr><td>'.$this->host_name.'</td></tr></table>>
+		$strReturn = $this->type.'_'.$this->host_name.' [ ';
+		//$strReturn .= 'label="'.$this->host_name.'", ';
+		$strReturn .= 'label=<<table border="0">';
+		$strReturn .= '<tr><td><img src="'.$this->MAINCFG->getValue('paths', 'icon').$this->icon.'"></img></td></tr>';
+		//  target="'.$this->url_target.'"
+		$strReturn .= '<tr><td href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'" title="'.$this->getHoverMenu().'">'.$this->host_name.'</td></tr>';
+		$strReturn .= '</table>>, ';
+		$strReturn .= 'shape="box", ';
+		$strReturn .= 'fontcolor=black, fontname=Verdana, fontsize=10];'."\n ";
+		foreach($this->getChilds() As $OBJ) {
+			$strReturn .= $OBJ->parseGraphviz();
+			$strReturn .= $this->type.'_'.$this->host_name.' -- '.$OBJ->type.'_'.$OBJ->host_name.' [color=black, decorate=1, fontcolor=black, fontname=Verdana, fontsize=8, style=solid, weight=2 ];'."\n ";
+		}
+		return $strReturn;
+	}
+	
 	# End public methods
 	# #########################################################################
 	

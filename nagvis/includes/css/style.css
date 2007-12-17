@@ -46,6 +46,15 @@ img {
 	left: 0;
 }
 
+/* Automap */
+#automap {
+	z-index: 100;
+}
+
+#automap shape {
+	z-index: 100;
+}
+
 /* Message-Box */
 .messageBox {
 	width: 600px;

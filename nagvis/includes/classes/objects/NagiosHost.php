@@ -60,6 +60,21 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
+	function fetchChilds($maxLayers=-1) {
+		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			$this->fetchDirectChildObjects();
+			
+			/**
+			 * If maxLayers is not set there is no layer limitation
+			 */
+			if($maxLayers < 0 || $maxLayers > 0) {
+				foreach($this->childObjects AS $OBJ) {
+					$OBJ->fetchChilds($maxLayers-1);
+				}
+			}
+		}
+	}
+	
 	# End public methods
 	# #########################################################################
 	
@@ -77,7 +92,10 @@ class NagiosHost extends NagVisStatefulObject {
 	function fetchDirectChildObjects() {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->host_name) AS $childName) {
-				$this->childObjects[] = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->backend_id, $childName);
+				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
+				$OBJ->fetchState();
+				$OBJ->fetchIcon();
+				$this->childObjects[] = $OBJ;
 			}
 		}
 	}
@@ -120,9 +138,6 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 		$this->summary_output .= ' services.';
 	}
-	
-	# END Public Methods
-	# #####################################################
 	
 	function fetchInformationsFromBackend() {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {

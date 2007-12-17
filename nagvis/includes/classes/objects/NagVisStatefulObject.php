@@ -253,7 +253,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function wrapChildState(&$OBJ) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::wrapWithSummaryState('.$OBJ->getSummaryState().')');
 		
-		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1);
+		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
 		if($this->getSummaryState() != '') {
 			if($arrStates[$this->getSummaryState()] < $arrStates[$OBJ->getSummaryState()]) {
 				$this->summary_state = $OBJ->getSummaryState();

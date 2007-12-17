@@ -257,10 +257,8 @@ class NagVisFrontend extends GlobalPage {
 	function getAutoMap($arrOptions) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getAutoMap()');
 		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
-		$this->addBodyLines(Array('<div class="map">'));
+		$this->addBodyLines(Array('<div id="map" class="map">'));
 		$this->MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $arrOptions);
-		$this->MAP->getObjectCoords($this->MAP->rootObject);
-		//$this->MAP->parseGraphvizConfig();
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getAutoMap()');
