@@ -29,8 +29,7 @@ class NagVisHost extends NagiosHost {
 		//$strReturn .= 'label="'.$this->host_name.'", ';
 		$strReturn .= 'label=<<table border="0">';
 		$strReturn .= '<tr><td><img src="'.$this->MAINCFG->getValue('paths', 'icon').$this->icon.'"></img></td></tr>';
-		//  target="'.$this->url_target.'"
-		$strReturn .= '<tr><td href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'" title="">'.$this->host_name.'</td></tr>';
+		$strReturn .= '<tr><td href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'" target="'.$this->url_target.'" title="x">'.$this->host_name.'</td></tr>';
 		$strReturn .= '</table>>, ';
 		$strReturn .= 'shape="box", ';
 		$strReturn .= 'fontcolor=black, fontname=Verdana, fontsize=10];'."\n ";
