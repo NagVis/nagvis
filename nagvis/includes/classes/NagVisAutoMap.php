@@ -15,7 +15,16 @@ class NagVisAutoMap extends GlobalMap {
 	var $width;
 	var $height;
 	var $renderMode;
-
+	
+	/**
+	 * Automap constructor
+	 *
+	 * @param		MAINCFG		Object of NagVisMainCfg
+	 * @param		LANG			Object of GlobalLanguage
+	 * @param		BACKEND		Object of GlobalBackendMgmt
+	 * @return	String 		Graphviz configuration
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisAutoMap(&$MAINCFG, &$LANG, &$BACKEND, $prop) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
@@ -91,6 +100,12 @@ class NagVisAutoMap extends GlobalMap {
 		$this->MAPOBJ->fetchState();
 	}
 	
+	/**
+	 * Parses the graphviz config of the autmap
+	 *
+	 * @return	String 		Graphviz configuration
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parseGraphvizConfig() {
 		// FIXME
 		$str  = 'graph automap { ';
@@ -109,6 +124,13 @@ class NagVisAutoMap extends GlobalMap {
 		return $str;
 	}
 	
+	/**
+	 * Renders the map image, saves it to var/ directory and creates the map and
+	 * ares for the links
+	 *
+	 * @return	Array		HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function renderMap() {
 		/**
 		 * possible render modes are set by selecting the correct binary:
@@ -168,6 +190,12 @@ class NagVisAutoMap extends GlobalMap {
 		return $arrMapCode;
 	}
 	
+	/**
+	 * Parses the Automap HTML code
+	 *
+	 * @return	Array		HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parseMap() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap()');
 		$ret = Array();
