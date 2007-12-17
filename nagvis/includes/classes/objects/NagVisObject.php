@@ -51,6 +51,10 @@ class NagVisObject {
 		return $this->z;
 	}
 	
+	function getHoverTemplate() {
+		return $this->hover_template;
+	}
+	
 	/**
 	 * Get options from configuration
 	 */
@@ -99,7 +103,6 @@ class NagVisObject {
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseIcon(): Array(...)');
 		return $ret;
 	}
-	
 	
 	/**
 	 * Creates a hover box for objects
@@ -165,22 +168,7 @@ class NagVisObject {
 	 */
 	function createInfoBox() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createInfoBox(&$obj)');
-		
-		if(!isset($obj['stateCount'])) {
-			$obj['stateCount'] = 0;
-		}
-		
-		if(!isset($obj['stateHost'])) {
-			$obj['stateHost'] = '';
-		}
-		
-		$Count = $obj['stateCount'];
-		$obj['stateCount'] = str_replace('"','',$obj['stateCount']);
-		$obj['stateCount'] = str_replace("'",'',$obj['stateCount']);
-		$ServiceHostState = $obj['stateHost'];
-		
-		$ret = $this->getHoverTemplate();
-		
+		$ret = $this->readHoverTemplate();
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createInfoBox(): Array(...)');
 		return $ret;
 	}
@@ -192,9 +180,9 @@ class NagVisObject {
 	 * @return	String	HTML	HTML Code for the hover menu
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHoverTemplate() {
+	function readHoverTemplate() {
 		if($this->checkHoverTemplateReadable(1)) {
-			$ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->hover_template.'.html');
+			$ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
 			
 			$ret = $this->replaceHoverTemplateMacros($ret);
 			
@@ -294,13 +282,13 @@ class NagVisObject {
 	 */
 	function checkHoverTemplateReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::checkHoverTemplateReadable(&$obj,'.$printErr.')');
-		if($this->checkHoverTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->hover_template.'.html')) {
+		if($this->checkHoverTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateReadable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','hoverTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->hover_template.'.html');
+				$FRONTEND->messageToUser('ERROR','hoverTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateReadable(): FALSE');
 			return FALSE;
@@ -316,13 +304,13 @@ class NagVisObject {
 	 */
 	function checkHoverTemplateExists($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::checkHoverTemplateExists(&$obj,'.$printErr.')');
-		if(file_exists($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->hover_template.'.html')) {
+		if(file_exists($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateExists(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$this->hover_template.'.html');
+				$FRONTEND->messageToUser('ERROR','hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::checkHoverTemplateExists(): FALSE');
 			return FALSE;

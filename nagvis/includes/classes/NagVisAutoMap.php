@@ -32,6 +32,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Create map configuration
 		$this->MAPCFG = new NagVisMapCfg($this->MAINCFG, '__automap');
+		$this->MAPCFG->readMapConfig();
 		
 		// Do the preflight checks
 		$this->checkPreflight();
@@ -91,9 +92,6 @@ class NagVisAutoMap extends GlobalMap {
 		// Get all object informations from backend
 		$this->getObjectTree();
 		
-		// Write virtual map configuration depending on the Nagios hosts
-		$this->MAPCFG->mapConfig = $this->getMapConfig();
-		
 		parent::GlobalMap($this->MAINCFG, $this->MAPCFG);
 		
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
@@ -119,7 +117,8 @@ class NagVisAutoMap extends GlobalMap {
 		//$str .= '} ';
 		$str .= '} ';
 		
-		//DEBUG: echo $str;
+		//DEBUG: 
+		echo $str;
 		
 		return $str;
 	}
@@ -213,7 +212,7 @@ class NagVisAutoMap extends GlobalMap {
 		$ret[] = $mapObjects;
 		
 		// Create hover areas for map objects
-		$ret[] = $this->getObjects();
+		//$ret[] = $this->getObjects();
 		
 		// Dynamicaly set favicon
 		$ret[] = $this->getFavicon();
@@ -264,7 +263,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * Check if the carphviz binaries can be found in the PATH or in the 
 		 * configured path
 		 */
-		if(TRUE) {
+		if(FALSE) {
 			if($printErr) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('WARNING','gdLibNotFound');
@@ -309,7 +308,26 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectTree() {
-		$this->rootObject->fetchChilds($this->maxLayers);
+		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration());
+	}
+	
+	/**
+	 * Gets the configuration of the objects by the global configuration
+	 *
+	 * @return	Array		Object configuration
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getObjectConfiguration() {
+		$objConf = Array();
+		
+		// Get object configuration from __automap configuration
+		foreach($this->MAPCFG->validConfig['host'] AS $key => $values) {
+			if($key != 'type' && $key != 'backend_id' && $key != 'host_name') {
+				$objConf[$key] = $this->MAPCFG->getValue('global', 0, $key);
+			}
+		}
+		
+		return $objConf;
 	}
 	
 	/**
@@ -342,6 +360,7 @@ class NagVisAutoMap extends GlobalMap {
 		$hostObject = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
 		$hostObject->fetchState();
 		$hostObject->fetchIcon();
+		$hostObject->setConfiguration($this->getObjectConfiguration());
 		$this->rootObject = $hostObject;
 	}
 }
