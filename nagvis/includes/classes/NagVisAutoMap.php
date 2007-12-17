@@ -117,8 +117,7 @@ class NagVisAutoMap extends GlobalMap {
 		//$str .= '} ';
 		$str .= '} ';
 		
-		//DEBUG: 
-		echo $str;
+		//DEBUG: echo $str;
 		
 		return $str;
 	}
