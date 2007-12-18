@@ -175,12 +175,9 @@ class NagVisAutoMap extends GlobalMap {
 		 * The best idea I have for this: Extract the hostname and replace
 		 * title="<hostname>" with the hover menu code.
 		 */
-		if(preg_match_all('/title=\"(\w+)\"/',$strMapCode,$matchReturn) > 0) {
-			foreach($matchReturn[1] AS $hostName) {
-				$sReplace = '';
-				
-				$strMapCode = preg_replace('/title=\"'.$hostName.'\"/', $this->rootObject->getHoverMenu(), $strMapCode);
-			}
+		
+		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
+				$strMapCode = preg_replace('/title=\"'.$OBJ->getName().'\"/', $OBJ->getHoverMenu(), $strMapCode);
 		}
 		
 		return $strMapCode;
