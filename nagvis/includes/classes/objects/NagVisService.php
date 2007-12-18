@@ -38,6 +38,7 @@ class NagVisService extends NagiosService {
 				break;
 				case 'unknown':
 				case 'ok':
+				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.png';
 				break;
 				default:

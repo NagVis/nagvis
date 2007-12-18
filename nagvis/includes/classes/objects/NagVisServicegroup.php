@@ -49,6 +49,7 @@ class NagVisServicegroup extends NagiosServicegroup {
 					$icon = $this->iconset.'_up.png';
 				break;
 				case 'unknown':
+				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.png';
 				break;
 				default:

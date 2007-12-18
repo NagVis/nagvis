@@ -29,8 +29,11 @@ class NagVisHost extends NagiosHost {
 		//$strReturn .= 'label="'.$this->host_name.'", ';
 		$strReturn .= 'label=<<table border="0">';
 		$strReturn .= '<tr><td><img src="'.$this->MAINCFG->getValue('paths', 'icon').$this->icon.'"></img></td></tr>';
-		$strReturn .= '<tr><td href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'" target="'.$this->url_target.'" title="x">'.$this->host_name.'</td></tr>';
+		$strReturn .= '<tr><td>'.$this->host_name.'</td></tr>';
 		$strReturn .= '</table>>, ';
+		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'", ';
+		$strReturn .= 'target="'.$this->url_target.'", ';
+		$strReturn .= 'tooltip="'.$this->host_name.'", ';
 		$strReturn .= 'shape="box", ';
 		$strReturn .= 'fontcolor=black, fontname=Verdana, fontsize=10];'."\n ";
 		foreach($this->getChilds() As $OBJ) {
@@ -69,6 +72,7 @@ class NagVisHost extends NagiosHost {
 					$icon = $this->iconset.'_up.png';
 				break;
 				case 'unknown':
+				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.png';
 				break;
 				default:

@@ -62,6 +62,18 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->state = $this->summary_state;
 	}
 	
+	/**
+	 * Link the object in the object tree to to the map objects
+	 */
+	function objectTreeToMapObjects(&$OBJ) {
+		echo $OBJ->host_name;
+		$this->objects = array_merge($this->$OBJ->getChilds());
+		
+		foreach($OBJ->getChilds() AS $OBJ1) {
+			$this->objectTreeToMapObjects($OBJ1);
+		}
+	}
+	
 	# End public methods
 	# #########################################################################
 	
@@ -233,6 +245,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 					$icon = $this->iconset.'_up.png';
 				break;
 				case 'unknown':
+				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.png';
 				break;
 				default:
