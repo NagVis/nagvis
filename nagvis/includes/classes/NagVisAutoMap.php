@@ -96,9 +96,6 @@ class NagVisAutoMap extends GlobalMap {
 		
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
-		foreach($this->MAPOBJ->objects AS $obj) {
-			echo $obj->host_name;
-		}
 		$this->MAPOBJ->fetchState();
 	}
 	

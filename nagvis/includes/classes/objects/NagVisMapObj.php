@@ -66,8 +66,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * Link the object in the object tree to to the map objects
 	 */
 	function objectTreeToMapObjects(&$OBJ) {
-		echo $OBJ->host_name;
-		$this->objects = array_merge($this->$OBJ->getChilds());
+		$this->objects = array_merge($this->objects,$OBJ->getChilds());
 		
 		foreach($OBJ->getChilds() AS $OBJ1) {
 			$this->objectTreeToMapObjects($OBJ1);
