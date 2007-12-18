@@ -159,14 +159,20 @@ class NagVisAutoMap extends GlobalMap {
 				//FIXME: Error handling
 			break;
 		}
-		//system('echo \''.$this->parseGraphvizConfig().'\' | '.$binary.' -Tpng > '.$this->MAINCFG->getValue('paths', 'var').'automap.png');
-		//system('echo \''.$this->parseGraphvizConfig().'\' | '.$binary.' -Tsvg | sed "s/'.str_replace('/','\/',$this->MAINCFG->getValue('paths', 'icon')).'/'.str_replace('/','\/',$this->MAINCFG->getValue('paths', 'htmlicon')).'/g" > '.$this->MAINCFG->getValue('paths', 'var').'automap.svg');
-		//| sed "s/'.str_replace('/','\/',$this->MAINCFG->getValue('paths', 'icon')).'/'.str_replace('/','\/',$this->MAINCFG->getValue('paths', 'htmlicon')).'/g" > '.$this->MAINCFG->getValue('paths', 'var').'automap.cmapx');
+		
+		// Parse map
 		exec('echo \''.$this->parseGraphvizConfig().'\' | '.$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx',$arrMapCode);
 		
 		return implode("\n", $arrMapCode);
 	}
 	
+	/**
+	 * Replaces some unwanted things from graphviz html code
+	 *
+	 * @param		String		Clear HTML code from graphviz binary
+	 * @return	String		HTML code with fixed hover menus
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fixMapCode($strMapCode) {
 		/**
 		 * The hover menu can't be rendered in graphviz config. The informations
