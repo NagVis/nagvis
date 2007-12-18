@@ -161,7 +161,7 @@ class NagVisAutoMap extends GlobalMap {
 		}
 		
 		// Parse map
-		exec('echo \''.$this->parseGraphvizConfig().'\' | '.$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx',$arrMapCode);
+		exec('echo \''.$this->parseGraphvizConfig().'\' | '.$this->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx',$arrMapCode);
 		
 		return implode("\n", $arrMapCode);
 	}
@@ -273,10 +273,19 @@ class NagVisAutoMap extends GlobalMap {
 		 * configured path
 		 */
 		// Check if dot can be found in path (If it is ther $returnCode is 0, if not it is 1)
-		exec('which '.$binary, $strReturn, $returnCode1);
-		exec('which '.$this->MAINCFG->getvalue('automap','graphvizpath').$binary, $strReturn, $returnCode2);
+		exec('which '.$binary, $arrReturn, $returnCode1);
 		
-		if($returnCode1 | $returnCode2) {
+		if(!$returnCode1) {
+			$this->MAINCFG->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
+		}
+		
+		exec('which '.$this->MAINCFG->getValue('automap','graphvizpath').$binary, $arrReturn, $returnCode2);
+		
+		if(!$returnCode2) {
+			$this->MAINCFG->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
+		}
+		
+		if($returnCode1 & $returnCode2) {
 			if($printErr) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:messages'));
 				$FRONTEND->messageToUser('ERROR','graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->MAINCFG->getvalue('automap','graphvizpath'));

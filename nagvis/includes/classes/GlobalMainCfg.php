@@ -256,7 +256,7 @@ class GlobalMainCfg {
 					'match' =>MATCH_STRING_NO_SPACE),
 				'graphvizpath' => Array('must' => 0,
 					'editable' => 0,
-					'default' => '/usr/bin/',
+					'default' => '/usr/local/bin/',
 					'match' => MATCH_STRING_PATH),
 				'defaultparams' => Array('must' => 0,
 					'editable' => 0,
