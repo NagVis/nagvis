@@ -132,10 +132,14 @@ class NagiosHost extends NagVisStatefulObject {
 		
 		// FIXME: LANGUAGE
 		$this->summary_output = 'Host is '.$this->state.'. There are ';
-		foreach($arrStates AS $state => $num) {
-			if($num > 0) {
-				$this->summary_output .= $num.' '.$state.', ';
+		if(count($this->services) > 0) {
+			foreach($arrStates AS $state => $num) {
+				if($num > 0) {
+					$this->summary_output .= $num.' '.$state.', ';
+				}
 			}
+		} else {
+			$this->summary_output .= '0';
 		}
 		$this->summary_output .= ' services.';
 	}

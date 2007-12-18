@@ -753,8 +753,9 @@ class GlobalBackendndomy {
 		$iResults = mysql_num_rows($QUERYHANDLE);
 		
 		if($iResults == 0) {
-			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','HOST~'.$hostName);
+			//FIXME: Other error handling.
+			//$arrReturn['state'] = 'ERROR';
+			//$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','HOST~'.$hostName);
 		} else {
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 				// Assign actual dataset to return array
