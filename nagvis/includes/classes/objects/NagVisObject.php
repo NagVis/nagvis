@@ -51,6 +51,14 @@ class NagVisObject {
 		return $this->z;
 	}
 	
+	function getType() {
+		return $this->type;
+	}
+	
+	function getName() {
+		return $this->{$this->getType().'_name'};
+	}
+	
 	function getHoverTemplate() {
 		return $this->hover_template;
 	}
