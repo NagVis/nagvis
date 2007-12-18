@@ -584,96 +584,13 @@ class GlobalBackendndomy {
 	}
 	
 	/**
-	 * PRIVATE Method findstateServicegroup	
-	 *	
-	 * Returns the state for a Servicegroup
+	 * PUBLIC Method getHostNamesWithNoParent
 	 *
-	 * @param	string $serviceGroupName
-	 * @param	bool   $onlyHardstates
-	 * @return	arrray $state
-	 * @author	Andreas Husch (downanup@nagios-wiki.de)
+	 * Gets all hosts with no parent host. This method is needed by the automap 
+	 * to get the root host.
+	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * DEP
 	 */
-	/*function findstateServicegroup($serviceGroupName,$onlyHardstates) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findstateServicegroup('.$serviceGroupName.','.$onlyHardstates.')');
-		$arrReturn = Array();
-		$arrNumChilds = Array('OK' => 0, 'WARNING' => 0, 'CRITICAL' => 0, 'UNKNOWN' => 0, 'ACK' => 0);
-		
-		//First we have to get the servicegroup_id
-		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				s.servicegroup_id, s.alias
-			FROM 
-				'.$this->dbPrefix.'objects AS o,
-				'.$this->dbPrefix.'servicegroups AS s 
-			WHERE 
-				(o.objecttype_id=4 AND o.name1 = binary \''.$serviceGroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND s.config_type=1 
-				AND s.servicegroup_object_id=o.object_id');
-		
-		if(mysql_num_rows($QUERYHANDLE) == 0) {
-			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$serviceGroupName);
-		} else {
-			$data = mysql_fetch_array($QUERYHANDLE);
-			
-			$arrReturn['alias'] = $data['alias'];
-			
-			$QUERYHANDLE = $this->mysqlQuery('SELECT 
-					o.name1, o.name2
-				FROM 
-					'.$this->dbPrefix.'servicegroup_members AS h,
-					'.$this->dbPrefix.'objects AS o 
-				WHERE 
-					(h.servicegroup_id='.$data['servicegroup_id'].' AND h.instance_id='.$this->dbInstanceId.') 
-					AND (o.objecttype_id=2 
-					AND h.service_object_id=o.object_id)');	
-			
-			while($data1 = mysql_fetch_array($QUERYHANDLE)) {
-				// Get service states
-				$currentstate = $this->findstateService($data1['name1'],$data1['name2'],$onlyHardstates);
-				// count state
-				$arrNumChilds[$currentstate['state']]++;
-			}
-			
-			if($arrNumChilds['CRITICAL'] > 0) {
-				$arrReturn['count'] = $arrNumChilds['CRITICAL'];
-				$arrReturn['output'] = $arrNumChilds['CRITICAL'].' CRITICAL, ' .$arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN Services';
-				$arrReturn['state'] = 'CRITICAL';
-			} elseif($arrNumChilds['WARNING'] > 0) {
-				$arrReturn['count'] = $arrNumChilds['WARNING'];
-				$arrReturn['output'] = $arrNumChilds['WARNING']. ' WARNING and ' .$arrNumChilds['UNKNOWN']. ' UNKNOWN Services';
-				$arrReturn['state'] = 'WARNING';		
-			} elseif($arrNumChilds['UNKNOWN'] > 0) {
-				$arrReturn['count'] = $arrNumChilds['UNKNOWN'];
-				if($arrNumChilds['ACK'] == 1) {
-					$arrReturn['output'] = $arrNumChilds['UNKNOWN'].' Service in UNKNOWN state';
-				} else {
-					$arrReturn['output'] = $arrNumChilds['UNKNOWN'].' Services in UNKNOWN state';
-				}
-				$arrReturn['state'] = 'UNKNOWN';
-			} elseif($arrNumChilds['ACK'] > 0) {
-				$arrReturn['count'] = $arrNumChilds['ACK'];
-				if($arrNumChilds['ACK'] == 1) {
-					$arrReturn['output'] = $arrNumChilds['ACK'].' Service is in a NON-OK state but is ACKNOWLEDGED';
-				} else {
-					$arrReturn['output'] = $arrNumChilds['ACK'].' Services are in a NON-OK state but all are ACKNOWLEDGED';
-				}
-				$arrReturn['state'] = 'ACK';
-			} elseif($arrNumChilds['OK'] > 0) {
-				$arrReturn['count'] = $arrNumChilds['OK'];
-				if($arrNumChilds['ACK'] == 1) {
-					$arrReturn['output'] = $arrNumChilds['OK'].' Service is OK';
-				} else {
-					$arrReturn['output'] = 'All '.$arrNumChilds['OK'].' Services are OK';
-				}
-				$arrReturn['state'] = 'OK';
-			}
-		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findstateServicegroup(): Array(...)');
-		return $arrReturn;
-	}*/
-	
 	function getHostNamesWithNoParent() {
 		$arrReturn = Array();
 		
@@ -693,6 +610,14 @@ class GlobalBackendndomy {
 		return $arrReturn;
 	}
 	
+	/**
+	 * PUBLIC Method getHostNamesWithNoParent
+	 *
+	 * Gets all hosts with no parent host. This method is needed by the automap 
+	 * to get the root host.
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getHostBasicInformations($hostName) {
 		if(isset($hostName) && $hostName != '') {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT o1.name1, h1.alias, h1.display_name, h1.address
@@ -708,6 +633,7 @@ class GlobalBackendndomy {
 		}
 	}
 	
+	/* UNNEEDED atm
 	function getDirectChildNamesByHostName($hostName) {
 		if(isset($hostName) && $hostName != '') {
 			$arrChildNames = Array();
@@ -732,10 +658,19 @@ class GlobalBackendndomy {
 		} else {
 			//FIXME: Error handling
 		}
-	}
+	}*/
 	
+	/**
+	 * PUBLIC Method getServicesByHostName
+	 *
+	 * Gets all services of a given host
+	 *
+	 * @param		String		Name of host to get the services of
+	 * @return	Array			Array with service descriptions
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getServicesByHostName($hostName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByHostName()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByHostName('.$hostName.')');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -766,8 +701,17 @@ class GlobalBackendndomy {
 		return $arrReturn;
 	}
 	
+	/**
+	 * PUBLIC Method getHostsByHostgroupName
+	 *
+	 * Gets all hosts of a hostgroup
+	 *
+	 * @param		String		Name of hostgroup to get the hosts of
+	 * @return	Array			Array with hostnames
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getHostsByHostgroupName($hostgroupName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByHostName()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostsByHostgroupName('.$hostgroupName.')');
 		$arrReturn = Array();
 		
 		//First we have to get the hostgroup_id
@@ -797,12 +741,21 @@ class GlobalBackendndomy {
 				$arrReturn[] = $data['name1'];
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByHostName(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostsByHostgroupName(): Array(...)');
 		return $arrReturn;
 	}
 	
+	/**
+	 * PUBLIC Method getServicesByServicegroupName
+	 *
+	 * Gets all services of a servicegroup
+	 *
+	 * @param		String		Name of servicegroup to get the services of
+	 * @return	Array			Array with hostnames and service descriptions
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getServicesByServicegroupName($servicegroupName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByHostName()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByServicegroupName('.$servicegroupName.')');
 		$arrReturn = Array();
 		//First we have to get the hostgroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -827,9 +780,8 @@ class GlobalBackendndomy {
 				$arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByHostName(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByServicegroupName(): Array(...)');
 		return $arrReturn;
 	}
-
 }
 ?>

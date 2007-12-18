@@ -144,6 +144,7 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->summary_output .= ' services.';
 	}
 	
+	/* UNNEEDED atm
 	function fetchInformationsFromBackend() {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostBasicInformations($this->host_name);
@@ -152,6 +153,6 @@ class NagiosHost extends NagVisStatefulObject {
 			$this->display_name = $arrValues['display_name'];
 			$this->address = $arrValues['address'];
 		}
-	}
+	}*/
 }
 ?>
