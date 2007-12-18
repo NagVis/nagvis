@@ -465,7 +465,7 @@ class WuiMap extends GlobalMap {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^.+\.cfg$/', $file)) {
+				if(preg_match('/^.+\.cfg$/', $file) && $file != '__automap.cfg') {
 					$files[] = substr($file,0,strlen($file)-4);
 				}				
 			}
