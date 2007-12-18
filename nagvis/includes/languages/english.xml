@@ -239,6 +239,10 @@
 					<title>Map rotation pool not exists</title>
 					<text>The given map rotation pool &quot;[ROTATION]&quot; is not defined in NagVis</text>
 				</mapRotationPoolNotExists>
+				<graphvizBinaryNotFound>
+					<title>Graphviz binary not found</title>
+					<text>The required graphviz binary &quot;[NAME]&quot; could not be found in the paths: &quot;[PATHS]&quot;</text>
+				</graphvizBinaryNotFound>
 			</messages>
 		</global>
 	</nagvis>

@@ -246,26 +246,39 @@ class NagVisAutoMap extends GlobalMap {
 	 * Do the preflight checks to ensure the automap can be drawn
 	 */
 	function checkPreflight() {
+		// The GD-Libs are used by graphviz
 		$this->checkGd(1);
-		$this->checkGraphviz(1);
+		
+		// Check all possibly used binaries of graphviz
+		$this->checkGraphviz('dot', 1);
+		$this->checkGraphviz('neato', 1);
+		$this->checkGraphviz('twopi', 1);
+		$this->checkGraphviz('circo', 1);
+		$this->checkGraphviz('fdp', 1);
 	}
 	
 	/**
 	 * Checks if the Graphviz binaries can be found on the system
 	 *
+	 * @param		String	Filename of the binary
+	 * @param		Bool		Print error message?
 	 * @return	String	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkGraphviz($printErr) {
+	function checkGraphviz($binary, $printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkGraphviz('.$printErr.')');
 		/* FIXME:
 		 * Check if the carphviz binaries can be found in the PATH or in the 
 		 * configured path
 		 */
-		if(FALSE) {
+		// Check if dot can be found in path (If it is ther $returnCode is 0, if not it is 1)
+		exec('which '.$binary, $strReturn, $returnCode1);
+		exec('which '.$this->MAINCFG->getvalue('automap','graphvizpath').$binary, $strReturn, $returnCode2);
+		
+		if($returnCode1 | $returnCode2) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('WARNING','gdLibNotFound');
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:messages'));
+				$FRONTEND->messageToUser('ERROR','graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->MAINCFG->getvalue('automap','graphvizpath'));
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkGraphviz(): FALSE');
 			return FALSE;

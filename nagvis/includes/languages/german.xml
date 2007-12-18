@@ -239,6 +239,10 @@
 					<title>Map rotations pool existiert nicht</title>
 					<text>Der angegebene Map rotations pool &quot;[ROTATION]&quot; ist nicht definiert.</text>
 				</mapRotationPoolNotExists>
+				<graphvizBinaryNotFound>
+					<title>Graphviz Anwendung nicht gefunden</title>
+					<text>Die ben&ouml;tigte Graphviz Anwendung &quot;[NAME]&quot; konnte in den Pfaden &quot;[PATHS]&quot; nicht gefunden werden.</text>
+				</graphvizBinaryNotFound>
 			</messages>
 		</global>
 	</nagvis>
