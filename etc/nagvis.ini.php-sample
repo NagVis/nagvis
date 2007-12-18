@@ -56,6 +56,15 @@
 ; Users which are allowed to change the NagVis configuration (comma seperated list)
 ;allowedforconfig=EVERYONE
 
+; configuration values for the automap
+[automap]
+; default root host (NagVis uses this if it can't detect it via NDO)
+;default_root=""
+; path to the graphviz binaries (dot,neato,...); Only needed if not in ENV PATH
+;graphvizpath="/usr/bin/"
+; Default URL parameters for links to the automap
+;defaultparams=""
+
 ; path options
 [paths]
 ; absolute physical NagVis path
