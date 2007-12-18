@@ -95,6 +95,10 @@ class NagVisAutoMap extends GlobalMap {
 		parent::GlobalMap($this->MAINCFG, $this->MAPCFG);
 		
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
+		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
+		foreach($this->MAPOBJ->objects AS $obj) {
+			echo $obj->host_name;
+		}
 		$this->MAPOBJ->fetchState();
 	}
 	
@@ -108,7 +112,7 @@ class NagVisAutoMap extends GlobalMap {
 		// FIXME
 		$str  = 'graph automap { ';
 		//, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
-		$str .= 'graph [ratio="fill", size="'.$this->pxToInch($this->width).','.$this->pxToInch($this->height).'"]; ';
+		$str .= 'graph [ratio="fill", root="'.$this->rootObject->getType().'_'.$this->rootObject->getName().'", size="'.$this->pxToInch($this->width).','.$this->pxToInch($this->height).'"]; ';
 		//$str .= '{ graph [rank=same, bb=""]; ';
 		
 		// Create nodes for all hosts
@@ -166,26 +170,23 @@ class NagVisAutoMap extends GlobalMap {
 		return implode("\n", $arrMapCode);
 	}
 	
-	function fixMapCode($arrMapCode) {
+	function fixMapCode($strMapCode) {
 		/**
-		 * The map coords are absolute but they have to be relative to div element 
-		 * with the id "map".
+		 * The hover menu can't be rendered in graphviz config. The informations
+		 * which are needed here are rendered like this title="<host_name>".
 		 *
-		 * The cords are given in the following format:
-		 * coords="738,61,804,79"
-		 * coords="x1,y1,x2,y2"
-		 *
-		 * The x coords have to be reduced by the height of the header menu.
-		 * The height of the header menu can be read via javascript at runtime: 
-		 *
-		 * document.getElementById('map').offsetTop
-		 *
-		 * This is not useable cause the coords of the areas have to be changed 
-		 * before rendering.
-		 *
+		 * The best idea I have for this: Extract the hostname and replace
+		 * title="<hostname>" with the hover menu code.
 		 */
+		if(preg_match_all('/title=\"(\w+)\"/',$strMapCode,$matchReturn) > 0) {
+			foreach($matchReturn[1] AS $hostName) {
+				$sReplace = '';
+				
+				$strMapCode = preg_replace('/title=\"'.$hostName.'\"/', $this->rootObject->getHoverMenu(), $strMapCode);
+			}
+		}
 		
-		return $arrMapCode;
+		return $strMapCode;
 	}
 	
 	/**
