@@ -56,21 +56,33 @@ class NagVisFrontend extends GlobalPage {
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
 					$MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
 					$MAP->MAPOBJ->fetchIcon();
-					$onClick = '';
-					$class = '';
-					 
+					
+					// Check if the user is permited to view this map
 					if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-						$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
+						$class = '';
+						
+						if($mapName == '__automap') {
+							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
+						} else {
+							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
+						}
 					} else {
 						$onClick = 'alert(\'Error: You are not permited to view the state of this map.\');';
 						$class = 'class="disabled"';
+					}
+					
+					// If this is the automap display the last rendered image
+					if($mapName == '__automap') {
+						$imgSrc = $this->MAINCFG->getValue('paths','htmlvar').'automap.png';
+					} else {
+						$imgSrc = $this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
 					}
 					
 					$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.$MAP->MAPOBJ->getSummaryOutput().'</td></tr></table>\');" onClick="'.$onClick.'">';
 					$ret[] = '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
 					$ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
 					// FIXME: Need better thumbnail format
-					$ret[] = '<img style="width:200px;height:150px;" src="'.$this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName().'" /><br />';
+					$ret[] = '<img style="width:200px;height:150px;" src="'.$imgSrc.'" /><br />';
 						$ret[] = '</td>';
 					if($i % 4 == 0) {
 							$ret[] = '</tr><tr>';
@@ -170,12 +182,21 @@ class NagVisFrontend extends GlobalPage {
 								if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1) {
 									$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
 									$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
+									
+									// Add defaultparams to map selection
+									if($mapName == '__automap') {
+										$sReplaceObj = str_replace('[url_params]',$this->MAINCFG->getValue('automap', 'defaultparams'),$sReplaceObj);
+									} else {
+										$sReplaceObj = str_replace('[url_params]','',$sReplaceObj);
+									}
+									
 									// auto select current map
-									if($mapName == $this->MAPCFG->getName()) {
+									if($mapName == $this->MAPCFG->getName() || ($mapName == '__automap' && isset($_GET['automap']))) {
 										$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
 									} else {
 										$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
 									}
+									
 									$sReplace .= $sReplaceObj;
 								}
 							}
@@ -375,7 +396,7 @@ class NagVisFrontend extends GlobalPage {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^.+\.cfg$/', $file) && $file != '__automap.cfg') {
+				if(preg_match('/^.+\.cfg$/', $file)) {
 					$files[] = substr($file,0,strlen($file)-4);
 				}
 			}

@@ -97,4 +97,12 @@ function getUrlParam(name) {
 		return results[1];
 	}
 }
+
+function changeMap(htmlBase,mapName) {
+	if(mapName.match('^__automap')) {
+		location.href=htmlBase+'/nagvis/index.php?automap=1'+mapName.replace('__automap','');
+	} else {
+		location.href=htmlBase+'/nagvis/index.php?map='+mapName;
+	}
+}
 		

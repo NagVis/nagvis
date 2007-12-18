@@ -4,8 +4,8 @@
 		<th style="width:150px;text-align:left;padding-left:20px;"><a href="[html_base]/index.php">NagVis</a></th>
 		<td style="width:150px;padding-left:10px;">[lang_select_map]: </td>
 		<td style="width:150px;">
-			<select style="width:100%;" name="chooseMap" onChange="location.href='[html_base]/nagvis/index.php?map='+this.options[this.selectedIndex].value">
-				<!-- BEGIN maplist --><option value="[map_name]" [selected]>[map_alias]</option><!-- END maplist -->
+			<select style="width:100%;" name="chooseMap" onChange="changeMap('[html_base]',this.options[this.selectedIndex].value)">
+				<!-- BEGIN maplist --><option value="[map_name][url_params]" [selected]>[map_alias]</option><!-- END maplist -->
 			</select>
 		</td>
 		<th style="width:150px;"><a href="[html_base]/wui/index.php?map=[current_map]">[lang_edit_map]</a></th>

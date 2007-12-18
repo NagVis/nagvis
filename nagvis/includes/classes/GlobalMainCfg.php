@@ -257,7 +257,11 @@ class GlobalMainCfg {
 				'graphvizpath' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '/usr/bin/',
-					'match' => MATCH_STRING_PATH),),
+					'match' => MATCH_STRING_PATH),
+				'defaultparams' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH)),
 			'internal' => Array(
 				'version' => Array('must' => 1,
 					'editable' => 0,
