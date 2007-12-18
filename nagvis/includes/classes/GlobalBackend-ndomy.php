@@ -610,14 +610,7 @@ class GlobalBackendndomy {
 		return $arrReturn;
 	}
 	
-	/**
-	 * PUBLIC Method getHostNamesWithNoParent
-	 *
-	 * Gets all hosts with no parent host. This method is needed by the automap 
-	 * to get the root host.
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
+	/* UNNEEDED atm
 	function getHostBasicInformations($hostName) {
 		if(isset($hostName) && $hostName != '') {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT o1.name1, h1.alias, h1.display_name, h1.address
@@ -631,9 +624,17 @@ class GlobalBackendndomy {
 		} else {
 			//FIXME: Error handling
 		}
-	}
+	}*/
 	
-	/* UNNEEDED atm
+	/**
+	 * PUBLIC Method getDirectChildNamesByHostName
+	 *
+	 * Gets the names of all child hosts
+	 *
+	 * @param		String		Name of host to get the childs of
+	 * @return	Array			Array with hostnames
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getDirectChildNamesByHostName($hostName) {
 		if(isset($hostName) && $hostName != '') {
 			$arrChildNames = Array();
@@ -658,7 +659,7 @@ class GlobalBackendndomy {
 		} else {
 			//FIXME: Error handling
 		}
-	}*/
+	}
 	
 	/**
 	 * PUBLIC Method getServicesByHostName
