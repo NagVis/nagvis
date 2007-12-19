@@ -596,8 +596,8 @@ class GlobalBackendndomy {
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT o1.name1
 		FROM
-		`nagios_objects` AS o1,
-		`nagios_hosts` AS h1
+		`'.$this->dbPrefix.'objects` AS o1,
+		`'.$this->dbPrefix.'hosts` AS h1
 		LEFT OUTER JOIN `nagios_host_parenthosts` AS ph1 ON h1.host_id=ph1.host_id
 		WHERE o1.objecttype_id=1
 		AND o1.object_id=h1.host_object_id AND h1.config_type=1
@@ -641,11 +641,11 @@ class GlobalBackendndomy {
 			
 			$QUERYHANDLE = $this->mysqlQuery('SELECT o2.name1
 			FROM
-			`nagios_objects` AS o1,
-			`nagios_hosts` AS h1,
-			`nagios_host_parenthosts` AS ph1,
-			`nagios_hosts` AS h2,
-			`nagios_objects` AS o2
+			`'.$this->dbPrefix.'objects` AS o1,
+			`'.$this->dbPrefix.'hosts` AS h1,
+			`'.$this->dbPrefix.'host_parenthosts` AS ph1,
+			`'.$this->dbPrefix.'hosts` AS h2,
+			`'.$this->dbPrefix.'objects` AS o2
 			WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
 			AND h1.config_type=1 AND o1.object_id=h1.host_object_id
 			AND o1.object_id=ph1.parent_host_object_id
