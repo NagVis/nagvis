@@ -142,62 +142,6 @@ class GlobalMap {
 	}
 	
 	/**
-	 * Create a position for a icon on the map
-	 *
-	 * @param	Array	Array with object properties
-	 * @return	Array	Array with object properties
-	 * @author	Michael Luebben <michael_luebben@web.de>
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * DEP
-	 */
-	function fixIcon(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::fixIcon(&$obj)');
-		if(!isset($obj['path']) || $obj['path'] == '') {
-			$imgPath = $obj['icon'];
-		} else {
-			$imgPath = $obj['path'].$obj['icon'];
-		}
-		
-		if(!file_exists($imgPath)) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-		    $FRONTEND->messageToUser('WARNING','iconNotExists','IMGPATH~'.$imgPath);
-		    
-			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
-			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
-			$obj['icon'] = '20x20.gif';
-		}
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::fixIcon(): Array(...)');
-		return $obj;
-	}
-	
-	/**
-	 * Gets the paths to the icon
-	 *
-	 * @param	Array	$obj	Array with object informations
-	 * @return	Array	Array with object informations
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * DEP
-	 */
-	function getIconPaths(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIconPaths(&$obj)');
-		if($obj['type'] == 'shape') {
-			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
-				$obj['path'] = '';
-				$obj['htmlPath'] = '';
-			} else {
-				$obj['path'] = $this->MAINCFG->getValue('paths', 'shape');
-				$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlshape');
-			}
-		} else {
-			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
-			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
-		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getIconPaths(): Array(...)');
-		return $obj;
-	}
-	
-	/**
 	 * Checks for valid Permissions
 	 *
 	 * @param 	String 	$allowed	
