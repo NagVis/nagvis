@@ -54,7 +54,12 @@ class NagVisFrontend extends GlobalPage {
 				$MAPCFG->readMapConfig();
 				
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
-					$MAP = new NagVisMap($this->MAINCFG,$MAPCFG,$this->LANG,$this->BACKEND);
+					if($mapName == '__automap') {
+						//$MAP = new NagVisMap($this->MAINCFG,$this->BACKEND,$this->LANG,$MAPCFG);
+						$MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, Array());
+					} else {
+						$MAP = new NagVisMap($this->MAINCFG, $MAPCFG, $this->LANG, $this->BACKEND);
+					}
 					$MAP->MAPOBJ->fetchIcon();
 					
 					// Check if the user is permited to view this map
