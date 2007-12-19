@@ -109,13 +109,23 @@ class NagVisAutoMap extends GlobalMap {
 		// FIXME
 		$str  = 'graph automap { ';
 		//, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
-		$str .= 'graph [ratio="fill", root="'.$this->rootObject->getType().'_'.$this->rootObject->getName().'", size="'.$this->pxToInch($this->width).','.$this->pxToInch($this->height).'"]; ';
-		//$str .= '{ graph [rank=same, bb=""]; ';
+		$str .= 'graph [ratio="fill", root="'.$this->rootObject->getType().'_'.$this->rootObject->getName().'", size="'.$this->pxToInch($this->width).','.$this->pxToInch($this->height).'"]; '."\n";
+		
+		// Default settings for automap nodes
+		$str .= 'node [';
+		// default margin is 0.11,0.055
+		$str .= 'margin="0.11,0.0", ';
+		// dot: Minimum space between two adjacent nodes in the same rank, in inches.
+		//$str .= 'nodesep="0.15", ';
+		$str .= 'ratio="auto", ';
+		$str .= 'overlap=false, ';
+		$str .= 'shape="none", ';
+		$str .= 'fontcolor=black, fontname=Verdana, fontsize=10';
+		$str .= '];'."\n ";
 		
 		// Create nodes for all hosts
 		$str .= $this->rootObject->parseGraphviz();
 		
-		//$str .= '} ';
 		$str .= '} ';
 		
 		//DEBUG: echo $str;
@@ -174,6 +184,14 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixMapCode($strMapCode) {
+		/**
+		 * Graphviz replaces "-" by "&#45;" so the "-" need to be replaced in the 
+		 * hostnames before parsing the graphiz configuration. It gets replaced by 
+		 * "__", undo it here
+		 */
+		$strMapCode = str_replace('__','-',$strMapCode);
+		$strMapCode = str_replace('&#45;','-',$strMapCode);
+		
 		/**
 		 * The hover menu can't be rendered in graphviz config. The informations
 		 * which are needed here are rendered like this title="<host_name>".
