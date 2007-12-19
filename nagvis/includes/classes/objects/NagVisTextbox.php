@@ -77,7 +77,6 @@ class NagVisTextbox extends NagVisStatelessObject {
 	/**
 	 * Just a dummy here (Textbox won't need an icon)
 	 *
-	 * @return	String	String with HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
