@@ -243,6 +243,14 @@
 					<title>Graphviz Anwendung nicht gefunden</title>
 					<text>Die ben&ouml;tigte Graphviz Anwendung &quot;[NAME]&quot; konnte in den Pfaden &quot;[PATHS]&quot; nicht gefunden werden.</text>
 				</graphvizBinaryNotFound>
+				<varFolderNotExists>
+					<title>var Verzeichnis existiert nicht</title>
+					<text>Das var Verzeichnis &quot;[PATH]&quot; existiert nicht.</text>
+				</varFolderNotExists>
+				<varFolderNotWriteable>
+					<title>var Verzeichnis nicht beschreibbar</title>
+					<text>Das Verzeichnis &quot;[PATH]&quot; ist nicht beschreibbar.</text>
+				</varFolderNotWriteable>
 			</messages>
 		</global>
 	</nagvis>

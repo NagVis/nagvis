@@ -243,6 +243,14 @@
 					<title>Graphviz binary not found</title>
 					<text>The required graphviz binary &quot;[NAME]&quot; could not be found in the paths: &quot;[PATHS]&quot;</text>
 				</graphvizBinaryNotFound>
+				<varFolderNotExists>
+					<title>var folder not exists</title>
+					<text>The var folder &quot;[PATH]&quot; does not exist.</text>
+				</varFolderNotExists>
+				<varFolderNotWriteable>
+					<title>var folder not writeable</title>
+					<text>The var folder &quot;[PATH]&quot; ist not writeable.</text>
+				</varFolderNotWriteable>
 			</messages>
 		</global>
 	</nagvis>

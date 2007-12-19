@@ -268,12 +268,58 @@ class NagVisAutoMap extends GlobalMap {
 		// The GD-Libs are used by graphviz
 		$this->checkGd(1);
 		
+		$this->checkVarFolderWriteable(1);
+		
 		// Check all possibly used binaries of graphviz
 		$this->checkGraphviz('dot', 1);
 		$this->checkGraphviz('neato', 1);
 		$this->checkGraphviz('twopi', 1);
 		$this->checkGraphviz('circo', 1);
 		$this->checkGraphviz('fdp', 1);
+	}
+	
+	/**
+	 * Checks for writeable VarFolder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkVarFolderExists($printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkVarFolderExists('.$printErr.')');
+		if(file_exists(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderExists(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR','varDirNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderExists(): FALSE');
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable VarFolder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkVarFolderWriteable($printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkVarFolderWriteable('.$printErr.')');
+		if($this->checkVarFolderExists($printErr) && @is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderWriteable(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR','varDirNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderWriteable(): FALSE');
+			return FALSE;
+		}
 	}
 	
 	/**
