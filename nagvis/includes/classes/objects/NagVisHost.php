@@ -59,8 +59,14 @@ class NagVisHost extends NagiosHost {
 		$strReturn .= '</table>>, ';
 		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'", ';
 		$strReturn .= 'target="'.$this->url_target.'", ';
+		// default margin is 0.11,0.055
+		$strReturn .= 'margin="0.11,0.0", ';
+		// dot: Minimum space between two adjacent nodes in the same rank, in inches.
+		//$strReturn .= 'nodesep="0.15", ';
+		$strReturn .= 'ratio="auto", ';
+		$strReturn .= 'overlap=false, ';
 		$strReturn .= 'tooltip="'.$this->host_name.'", ';
-		$strReturn .= 'shape="box", ';
+		$strReturn .= 'shape="none", ';
 		$strReturn .= 'fontcolor=black, fontname=Verdana, fontsize=10];'."\n ";
 		foreach($this->getChilds() As $OBJ) {
 			$strReturn .= $OBJ->parseGraphviz();
