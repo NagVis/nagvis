@@ -4,7 +4,6 @@
  */
 class NagVisTextbox extends NagVisStatelessObject {
 	var $MAINCFG;
-	var $BACKEND;
 	var $LANG;
 	
 	var $background_color;
@@ -17,16 +16,15 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisTextbox(&$MAINCFG, &$BACKEND, &$LANG) {
+	function NagVisTextbox(&$MAINCFG, &$LANG) {
 		$this->MAINCFG = &$MAINCFG;
-		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		
 		$this->class = 'box';
 		$this->background_color = '#CCCCCC';
 		
 		$this->type = 'textbox';
-		parent::NagVisStatelessObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisStatelessObject($this->MAINCFG, $this->LANG);
 	}
 	
 	/**

@@ -41,6 +41,7 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagiosService(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName, $serviceDescription) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::NagiosService(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostName.','.$serviceDescription.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
@@ -54,6 +55,7 @@ class NagiosService extends NagVisStatefulObject {
 		
 		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::NagiosService()');
 	}
 	
 	/**
@@ -64,6 +66,7 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchState() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchState()');
 		if($this->BACKEND->checkBackendInitialized($this->backendId, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backendId]->checkStates($this->type,$this->host_name,$this->recognize_services, $this->service_description,$this->only_hard_states);
 			
@@ -77,20 +80,26 @@ class NagiosService extends NagVisStatefulObject {
 			// At least summary output
 			$this->fetchSummaryOutput();
 		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchState()');
 	}
 	
 	# End public methods
 	# #########################################################################
 	
 	function fetchSummaryState() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchSummaryState()');
 		$this->summary_state = $this->state;
 		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchSummaryState()');
 	}
 	
 	function fetchSummaryOutput() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchSummaryOutput()');
 		$this->summary_output = $this->output;
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchSummaryOutput()');
 	}
 	
+	/* UNNEEDED atm
 	function getInformationsFromBackend() {
 		if($this->BACKEND->checkBackendInitialized($this->backendId, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backendId]->getHostBasicInformations($this->host_name);
@@ -99,6 +108,6 @@ class NagiosService extends NagVisStatefulObject {
 			$this->display_name = $arrValues['display_name'];
 			$this->address = $arrValues['address'];
 		}
-	}
+	}*/
 }
 ?>

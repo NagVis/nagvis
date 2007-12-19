@@ -33,6 +33,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisMapObj(&$MAINCFG, &$BACKEND, &$LANG, &$MAPCFG) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::NagVisMapObj(MAINCFG,BACKEND,LANG,MAPCFG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
@@ -49,6 +50,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->has_been_acknowledged = 0;
 		
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::NagVisMapObj()');
 	}
 	
 	/**
@@ -60,10 +62,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::parse()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::parse()');
 		return parent::parse();
 	}
 	
 	function getMapObjects() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::getMapObjects()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::getMapObjects()');
 		return $this->objects;
 	}
 	
@@ -76,6 +82,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchState() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchState()');
 		// Get all Members and states
 		$this->fetchMapObjects();
 		
@@ -85,6 +92,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		// At least summary output
 		$this->fetchSummaryOutput();
 		$this->state = $this->summary_state;
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchState()');
 	}
 	
 	/**
@@ -95,18 +103,21 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function objectTreeToMapObjects(&$OBJ) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::objectTreeToMapObjects()');
 		$this->objects[] = &$OBJ;
-		$this->objects = array_merge($this->objects,$OBJ->getChilds());
+		$this->objects = array_merge($this->objects, $OBJ->getChilds());
 		
 		foreach($OBJ->getChilds() AS $OBJ1) {
 			$this->objectTreeToMapObjects($OBJ1);
 		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::objectTreeToMapObjects()');
 	}
 	
 	# End public methods
 	# #########################################################################
 	
 	function fetchSummaryOutput() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchSummaryOutput()');
 		$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
 		$output = '';
 		
@@ -128,6 +139,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			$this->summary_output .= '0';
 		}
 		$this->summary_output .= ' objeccts.';
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchSummaryOutput()');
 	}
 	
 	/**
@@ -138,7 +150,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMapObjects($getState=1,$mergeWithGlobals=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$getState.','.$mergeWithGlobals.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchMapObjects('.$getState.','.$mergeWithGlobals.')');
 		
 		foreach($this->MAPCFG->validConfig AS $type => $arr) {
 			if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
@@ -201,15 +213,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 					
 					if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
 				}
-				
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getMapObjects(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapObj::fetchMapObjects()');
 	}
 	
 	function checkLoop(&$OBJ) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::checkLoop()');
 		// prevent direct loops (map including itselfes as map icon)
 		if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
@@ -237,21 +248,25 @@ class NagVisMapObj extends NagVisStatefulObject {
 						$OBJ->summary_state = 'UNKNOWN';
 						$OBJ->summary_output = $this->LANG->getMessageText('loopInMapRecursion');
 						
+						if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): FALSE');
 						return FALSE;
 					} else {
 						//$OBJ->fetchMapObjects();
+						if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): TRUE');
 						return TRUE;
 					}
 				}
 				
 				// This is just a fallback if the above loop is not looped when there
 				// are no child maps on this map
+				if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): TRUE');
 				return TRUE;
 			} else {
 				// FIXME: Language entry
 				$OBJ->summary_state = 'UNKNOWN';
 				$OBJ->summary_output = 'Error: You are not permited to view the state of this map.';
 				
+				if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): FALSE');
 				return FALSE;
 			}
 		}
@@ -263,6 +278,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchIcon()');
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
@@ -305,6 +321,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		} else {
 			$this->icon = $this->iconset.'_error.png';
 		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchIcon()');
 	}
 	
 	/**
@@ -314,24 +331,26 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink(&$obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::createLink()');
 		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();
 		} else {
 			$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$this->map_name.'" target="'.$this->url_target.'">';
-		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createLink(): '.$link);
+		};
+		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::createLink():'.$link);
 		return $link;
 	}
 	
 	function fetchSummaryState() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchSummaryState()');
 		// Get summary state member objects
 		foreach($this->objects AS $OBJ) {
 			if(method_exists($OBJ,'getSummaryState')) {
 				$this->wrapChildState($OBJ);
 			}
 		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchSummaryState()');
 	}
 }
 ?>

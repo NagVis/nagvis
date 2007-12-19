@@ -16,6 +16,7 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisShape(&$MAINCFG, &$LANG, $icon) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisShape::NagVisShape(MAINCFG,LANG,'.$icon.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		
@@ -25,6 +26,7 @@ class NagVisShape extends NagVisStatelessObject {
 		$this->icon = $icon;
 		$this->type = 'shape';
 		parent::NagVisStatelessObject($this->MAINCFG, $this->LANG);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisShape::NagVisShape()');
 	}
 	
 	/**
@@ -36,6 +38,8 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisShape::parse()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisShape::parse()');
 		//$this->replaceMacros();
 		//$this->fixIconPosition();
 		return $this->parseIcon();
@@ -48,9 +52,11 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHoverMenu() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisShape::getHoverMenu()');
 		if(isset($this->hover_url) && $this->hover_url != '') {
 			parent::getHoverMenu();
 		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisShape::getHoverMenu()');
 	}
 	
 	/**
@@ -60,7 +66,7 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisShape::createLink(&$obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisShape::createLink()');
 		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();  
@@ -68,7 +74,7 @@ class NagVisShape extends NagVisStatelessObject {
 			$link = '';
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisShape::createLink(): '.$link);
+		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisShape::createLink(): '.$link);
 		return $link;
 	}
 	

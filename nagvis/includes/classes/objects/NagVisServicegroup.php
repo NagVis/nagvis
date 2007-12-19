@@ -18,12 +18,14 @@ class NagVisServicegroup extends NagiosServicegroup {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisServicegroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $servicegroupName) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisServicegroup::NagVisServicegroup(MAINCFG,BACKEND,LANG,'.$backend_id.','.$servicegroupName.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		$this->type = 'servicegroup';
 		$this->iconset = 'std_medium';
 		parent::NagiosServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $servicegroupName);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisServicegroup::NagVisServicegroup()');
 	}
 	
 	/**
@@ -35,6 +37,8 @@ class NagVisServicegroup extends NagiosServicegroup {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisServicegroup::parse()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisServicegroup::parse()');
 		return parent::parse();
 	}
 	
@@ -47,6 +51,7 @@ class NagVisServicegroup extends NagiosServicegroup {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisServicegroup::fetchIcon()');
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
@@ -89,6 +94,7 @@ class NagVisServicegroup extends NagiosServicegroup {
 		} else {
 			$this->icon = $this->iconset.'_error.png';
 		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisServicegroup::fetchIcon()');
 	}
 	
 	/**
@@ -98,14 +104,14 @@ class NagVisServicegroup extends NagiosServicegroup {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink(&$obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisServicegroup::createLink()');
 		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();
 		} else {
 			$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?servicegroup='.$this->servicegroup_name.'&amp;style=detail" target="'.$this->url_target.'">';
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createLink(): '.$link);
+		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisServicegroup::createLink(): '.$link);
 		return $link;
 	}
 }
