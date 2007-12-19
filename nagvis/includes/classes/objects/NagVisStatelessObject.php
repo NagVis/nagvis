@@ -22,11 +22,13 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisStatelessObject(&$MAINCFG, &$LANG) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatelessObject::NagVisStatelessObject(MAINCFG,LANG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		
 		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisObject($this->MAINCFG, $this->LANG);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatelessObject::NagVisStatelessObject()');
 	}
 	
 	/**
@@ -35,7 +37,7 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLineHoverArea() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getLineHoverArea(&$obj)');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatelessObject::getLineHoverArea()');
 		
 		list($xFrom,$xTo) = explode(',', $this->x);
 		list($yFrom,$yTo) = explode(',', $this->y);
@@ -44,8 +46,7 @@ class NagVisStatelessObject extends NagVisObject {
 		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
 		$this->icon = '20x20.gif';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getLineHoverArea(): Array(...)');
-		return TRUE;
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatelessObject::getLineHoverArea()');
 	}
 	
 	
@@ -58,7 +59,7 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseIcon()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatelessObject::parseIcon()');
 		
 		if(preg_match('/^\[(.*)\]$/',$this->icon,$match) > 0) {
 			$imgPath = $match[1];
@@ -72,10 +73,8 @@ class NagVisStatelessObject extends NagVisObject {
 		$ret .= '</a>';
 		$ret .= '</div>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseIcon(): Array(...)');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatelessObject::parseIcon(): HTML code');
 		return $ret;
 	}
-	
-	
 }
 ?>

@@ -17,6 +17,7 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisTextbox(&$MAINCFG, &$LANG) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisTextbox::NagVisTextbox(MAINCFG,LANG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		
@@ -25,6 +26,7 @@ class NagVisTextbox extends NagVisStatelessObject {
 		
 		$this->type = 'textbox';
 		parent::NagVisStatelessObject($this->MAINCFG, $this->LANG);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisTextbox::NagVisTextbox()');
 	}
 	
 	/**
@@ -36,7 +38,9 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisTextbox::parse()');
 		$this->replaceMacros();
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisTextbox::parse(): HTML code');
 		return $this->parseTextbox();
 	}
 	
@@ -49,12 +53,11 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceMacros() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::replaceMacros(&$obj)');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisTextbox::replaceMacros()');
 		
 		$this->text = str_replace('[refresh_counter]','<font id="refreshCounter"></font>', $this->text);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::replaceMacros(): Array(...)');
-		return TRUE;
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisTextbox::replaceMacros()');
 	}
 	
 	/**
@@ -64,11 +67,11 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseTextbox() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisTextbox::parseTextbox(&$obj)');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisTextbox::parseTextbox()');
 		$ret = '<div class="'.$this->class.'" style="background:'.$this->background_color.';left:'.$this->x.'px;top:'.$this->y.'px;width:'.$this->w.'px;overflow:visible;">';	
 		$ret .= "\t".'<span>'.$this->text.'</span>';
 		$ret .= '</div>';
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisTextbox::parseTextbox(): Array(...)');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisTextbox::parseTextbox(): HTML code');
 		return $ret;	
 	}
 	
