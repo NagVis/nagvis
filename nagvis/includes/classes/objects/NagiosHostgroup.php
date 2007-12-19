@@ -98,11 +98,14 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::fetchMemberHostObjects()');
 		// Get all hosts and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			foreach($this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name) AS $hostName) {			
-				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
-				$OBJ->fetchState();
-				
-				$this->members[] = $OBJ;
+			$arrHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name);
+			if(count($arrHosts) > 0) {
+				foreach($arrHosts AS $hostName) {			
+					$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
+					$OBJ->fetchState();
+					
+					$this->members[] = $OBJ;
+				}
 			}
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::fetchMemberHostObjects()');
@@ -117,9 +120,13 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 */
 	function fetchSummaryState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::fetchSummaryState()');
-		// Get summary state member objects
-		foreach($this->members AS $MEMBER) {
-			$this->wrapChildState($MEMBER);
+		if($this->getNumMembers() > 0) {
+			// Get summary state member objects
+			foreach($this->members AS $MEMBER) {
+				$this->wrapChildState($MEMBER);
+			}
+		} else {
+			$this->summary_state = 'ERROR';
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::fetchSummaryState()');
 	}
@@ -133,16 +140,26 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 */
 	function fetchSummaryOutput() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::fetchSummaryOutput()');
-		$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
-		$output = '';
-		
-		// FIXME: Get summary state of this and child objects
-		foreach($this->members AS $MEMBER) {
-			$arrStates[$MEMBER->getSummaryState()]++;
+		if($this->getNumMembers() > 0) {
+			$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
+			$output = '';
+			
+			// FIXME: Get summary state of this and child objects
+			foreach($this->members AS $MEMBER) {
+				$arrStates[$MEMBER->getSummaryState()]++;
+			}
+			
+			// FIXME: LANGUAGE
+			$this->summary_output = 'There are ';
+			foreach($arrStates AS $state => $num) {
+				if($num > 0) {
+					$this->summary_output .= $num.' '.$state.', ';
+				}
+			}
+			$this->summary_output .= ' hosts.';
+		} else {
+			$this->summary_output = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
 		}
-		
-		// FIXME: LANGUAGE
-		$this->summary_output = 'There are '.($arrStates['DOWN']+$arrStates['CRITICAL']).' DOWN/CRTICAL, '.$arrStates['WARNING'].' WARNING, '.$arrStates['UNKNOWN'].' UNKNOWN and '.($arrStates['UP']+$arrStates['OK']).' UP/OK hosts';
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::fetchSummaryOutput()');
 	}
 	

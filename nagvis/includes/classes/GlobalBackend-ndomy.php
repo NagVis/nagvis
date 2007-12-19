@@ -532,10 +532,6 @@ class GlobalBackendndomy {
 					$data['problem_has_been_acknowledged'] = $this->getHostAckByHostname($hostName);
 				}
 				
-				
-				// Store acknowledgement state in array
-				//$arrReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
-				
 				if($data['has_been_checked'] == '0') {
 					$arrTmpReturn['state'] = 'PENDING';
 					$arrTmpReturn['output'] = $this->LANG->getMessageText('serviceNotChecked','SERVICE~'.$data['name2']);
@@ -610,22 +606,6 @@ class GlobalBackendndomy {
 		return $arrReturn;
 	}
 	
-	/* UNNEEDED atm
-	function getHostBasicInformations($hostName) {
-		if(isset($hostName) && $hostName != '') {
-			$QUERYHANDLE = $this->mysqlQuery('SELECT o1.name1, h1.alias, h1.display_name, h1.address
-			FROM
-			`nagios_objects` AS o1,
-			`nagios_hosts` AS h1
-			WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
-			AND h1.config_type=1');
-			
-			return mysql_fetch_array($QUERYHANDLE);
-		} else {
-			//FIXME: Error handling
-		}
-	}*/
-	
 	/**
 	 * PUBLIC Method getDirectChildNamesByHostName
 	 *
@@ -685,19 +665,11 @@ class GlobalBackendndomy {
 				AND s.service_object_id=o.object_id 
 				AND ss.service_object_id=o.object_id');
 		
-		// count results
-		$iResults = mysql_num_rows($QUERYHANDLE);
-		
-		if($iResults == 0) {
-			//FIXME: Other error handling.
-			//$arrReturn['state'] = 'ERROR';
-			//$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','HOST~'.$hostName);
-		} else {
-			while($data = mysql_fetch_array($QUERYHANDLE)) {
-				// Assign actual dataset to return array
-				$arrReturn[] = $data['name2'];
-			}
+		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			// Assign actual dataset to return array
+			$arrReturn[] = $data['name2'];
 		}
+		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByHostName(): Array(...)');
 		return $arrReturn;
 	}
@@ -730,18 +702,11 @@ class GlobalBackendndomy {
 				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id) 
 			LIMIT 1');
 		
-		if(mysql_num_rows($QUERYHANDLE) == 0) {
-			//FIXME: Error Handling (kein Return)
-			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$hostgroupName);
-			print_r($arrReturn);
-			exit();
-		} else {
-			while($data = mysql_fetch_array($QUERYHANDLE)) {
-				// Assign actual dataset to return array
-				$arrReturn[] = $data['name1'];
-			}
+		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			// Assign actual dataset to return array
+			$arrReturn[] = $data['name1'];
 		}
+		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostsByHostgroupName(): Array(...)');
 		return $arrReturn;
 	}
@@ -772,15 +737,12 @@ class GlobalBackendndomy {
 				AND sgm.servicegroup_id=sg.servicegroup_id 
 				AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id) 
 			LIMIT 1');
-		
-		if(mysql_num_rows($QUERYHANDLE) == 0) {
-			//FIXME
-		} else {
-			while($data = mysql_fetch_array($QUERYHANDLE)) {
-				// Assign actual dataset to return array
-				$arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
-			}
+	
+		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			// Assign actual dataset to return array
+			$arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
 		}
+		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByServicegroupName(): Array(...)');
 		return $arrReturn;
 	}

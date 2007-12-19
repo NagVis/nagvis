@@ -182,9 +182,16 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = new NagVisServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['servicegroup_name']);
 						break;
 						case 'map':
-							$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG,$objConf['map_name']);
-							$SUBMAPCFG->readMapConfig();
+							$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG, $objConf['map_name']);
+							if($SUBMAPCFG->checkMapConfigExists(0)) {
+								$SUBMAPCFG->readMapConfig();
+							}
 							$OBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $SUBMAPCFG);
+							
+							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
+								$OBJ->summary_state = 'ERROR';
+								$OBJ->summary_output = $this->LANG->getMessageText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+							}
 						break;
 						case 'shape':
 							$OBJ = new NagVisShape($this->MAINCFG, $this->LANG, $objConf['icon']);
