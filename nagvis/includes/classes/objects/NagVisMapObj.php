@@ -23,6 +23,15 @@ class NagVisMapObj extends NagVisStatefulObject {
 	var $summary_output;
 	var $summary_problem_has_been_acknowledged;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		Object		Object of class NagVisMapCfg
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisMapObj(&$MAINCFG, &$BACKEND, &$LANG, &$MAPCFG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
@@ -42,6 +51,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
 	
+	/**
+	 * PUBLIC parse()
+	 *
+	 * Parses the object
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parse() {
 		return parent::parse();
 	}
@@ -50,6 +67,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 		return $this->objects;
 	}
 	
+	/**
+	 * PUBLIC fetchState()
+	 *
+	 * Fetches the state of the map and all map objects. It also fetches the
+	 * summary output
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchState() {
 		// Get all Members and states
 		$this->fetchMapObjects();
@@ -63,7 +88,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * Link the object in the object tree to to the map objects
+	 * PUBLIC objectTreeToMapObjects()
+	 *
+	 * Links the object in the object tree to to the map objects
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function objectTreeToMapObjects(&$OBJ) {
 		$this->objects[] = &$OBJ;
@@ -81,15 +110,24 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
 		$output = '';
 		
-		// FIXME: Get summary state of this and child objects
-		foreach($this->objects AS $OBJ) {
-			if(method_exists($OBJ,'getSummaryState') && $OBJ->getSummaryState() != '') {
+		foreach($this->getMapObjects() AS $OBJ) {
+			if(method_exists($OBJ,'getSummaryState')) {
 				$arrStates[$OBJ->getSummaryState()]++;
 			}
 		}
 		
 		// FIXME: LANGUAGE
-		$this->summary_output = 'There are '.($arrStates['DOWN']+$arrStates['CRITICAL']).' DOWN/CRTICAL, '.$arrStates['WARNING'].' WARNING, '.$arrStates['UNKNOWN'].' UNKNOWN and '.($arrStates['UP']+$arrStates['OK']).' UP/OK objects';
+		$this->summary_output = 'There are ';
+		if(count($this->getMapObjects()) > 0) {
+			foreach($arrStates AS $state => $num) {
+				if($num > 0) {
+					$this->summary_output .= $num.' '.$state.', ';
+				}
+			}
+		} else {
+			$this->summary_output .= '0';
+		}
+		$this->summary_output .= ' objeccts.';
 	}
 	
 	/**
@@ -219,6 +257,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 		}
 	}
 	
+	/**
+	 * Fetches the icon for the object depending on the summary state
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchIcon() {
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());

@@ -29,6 +29,17 @@ class NagiosService extends NagVisStatefulObject {
 	var $childObjects;
 	var $services;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		Integer 	ID of queried backend
+	 * @param		String		Name of the host
+	 * @param		String		Service description
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagiosService(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName, $serviceDescription) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -45,6 +56,13 @@ class NagiosService extends NagVisStatefulObject {
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
 	
+	/**
+	 * PUBLIC fetchState()
+	 *
+	 * Fetches the state of the service. Also fetch the summary output
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchState() {
 		if($this->BACKEND->checkBackendInitialized($this->backendId, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backendId]->checkStates($this->type,$this->host_name,$this->recognize_services, $this->service_description,$this->only_hard_states);

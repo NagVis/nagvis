@@ -9,6 +9,14 @@ class NagVisTextbox extends NagVisStatelessObject {
 	
 	var $background_color;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisTextbox(&$MAINCFG, &$BACKEND, &$LANG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -21,6 +29,14 @@ class NagVisTextbox extends NagVisStatelessObject {
 		parent::NagVisStatelessObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
 	
+	/**
+	 * PUBLIC parse()
+	 *
+	 * Parses the object
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parse() {
 		$this->replaceMacros();
 		return $this->parseTextbox();
@@ -58,6 +74,12 @@ class NagVisTextbox extends NagVisStatelessObject {
 		return $ret;	
 	}
 	
+	/**
+	 * Just a dummy here (Textbox won't need an icon)
+	 *
+	 * @return	String	String with HTML Code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchIcon() {
 		//FIXME: Nothing to do here, icon is set in constructor
 	}

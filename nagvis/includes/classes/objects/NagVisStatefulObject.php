@@ -18,6 +18,14 @@ class NagVisStatefulObject extends NagVisObject {
 	var $iconPath;
 	var $iconHtmlPath;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisStatefulObject(&$MAINCFG, &$BACKEND, &$LANG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -56,6 +64,14 @@ class NagVisStatefulObject extends NagVisObject {
 		return $this->summary_problem_has_been_acknowledged;
 	}
 	
+	/**
+	 * PUBLIC parse()
+	 *
+	 * Parses the object
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parse() {
 		$this->replaceMacros();
 		//$this->fixIconPosition();
@@ -71,6 +87,11 @@ class NagVisStatefulObject extends NagVisObject {
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * Fetches the icon for the object depending on the summary state
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchIcon() {
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
@@ -178,9 +199,7 @@ class NagVisStatefulObject extends NagVisObject {
 	/**
 	 * Parses the HTML-Code of an icon
 	 *
-	 * @param	Boolean	$link		Add a link to the icon
-	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
-	 * @return	String	String with Html Code
+	 * @return	String		HTML code of the icon
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon() {
@@ -206,6 +225,7 @@ class NagVisStatefulObject extends NagVisObject {
 	/**
 	 * Parses the HTML-Code of a label
 	 *
+	 * @return	String		HTML code of the label
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseLabel() {
@@ -250,6 +270,12 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * Wraps the state of the current object with the given child object
+	 *
+	 * @param		Object		Object with a state
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function wrapChildState(&$OBJ) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::wrapWithSummaryState('.$OBJ->getSummaryState().')');
 		

@@ -24,6 +24,16 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	
 	var $members;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		Integer 	ID of queried backend
+	 * @param		String		Name of the servicegroup
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagiosServicegroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $servicegroupName) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -38,6 +48,14 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
 	
+	/**
+	 * PUBLIC fetchState()
+	 *
+	 * Fetches the state of the servicegroup and all members. It also fetches the
+	 * summary output
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchState() {
 		// Get all Members and states
 		$this->fetchMemberServiceObjects();

@@ -7,6 +7,15 @@ class NagVisShape extends NagVisStatelessObject {
 	var $BACKEND;
 	var $LANG;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		String	 	Image of the shape
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisShape(&$MAINCFG, &$BACKEND, &$LANG, $icon) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -20,16 +29,26 @@ class NagVisShape extends NagVisStatelessObject {
 		parent::NagVisStatelessObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
 	
+	/**
+	 * PUBLIC parse()
+	 *
+	 * Parses the object
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parse() {
 		//$this->replaceMacros();
 		//$this->fixIconPosition();
 		return $this->parseIcon();
 	}
 	
-	function fetchIcon() {
-		//FIXME: Nothing to do here, icon is set in constructor
-	}
-	
+	/**
+	 * Gets the hover menu of a shape if it is requested by configuration
+	 *
+	 * @return	String	The Link
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getHoverMenu() {
 		if(isset($this->hover_url) && $this->hover_url != '') {
 			parent::getHoverMenu();
@@ -53,6 +72,15 @@ class NagVisShape extends NagVisStatelessObject {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisShape::createLink(): '.$link);
 		return $link;
+	}
+	
+	/**
+	 * Just a dummy here (Textbox won't need an icon)
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchIcon() {
+		//FIXME: Nothing to do here, icon is set in constructor
 	}
 }
 ?>

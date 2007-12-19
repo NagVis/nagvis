@@ -7,6 +7,16 @@ class NagVisServicegroup extends NagiosServicegroup {
 	var $BACKEND;
 	var $LANG;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		Integer 	ID of queried backend
+	 * @param		String		Name of the servicegroup
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisServicegroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $servicegroupName) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -16,6 +26,14 @@ class NagVisServicegroup extends NagiosServicegroup {
 		parent::NagiosServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $servicegroupName);
 	}
 	
+	/**
+	 * PUBLIC parse()
+	 *
+	 * Parses the object
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parse() {
 		return parent::parse();
 	}
@@ -23,6 +41,11 @@ class NagVisServicegroup extends NagiosServicegroup {
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * Fetches the icon for the object depending on the summary state
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchIcon() {
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());

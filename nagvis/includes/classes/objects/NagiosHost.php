@@ -25,6 +25,16 @@ class NagiosHost extends NagVisStatefulObject {
 	var $childObjects;
 	var $services;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		Integer 	ID of queried backend
+	 * @param		String		Name of the host
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagiosHost(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -41,6 +51,15 @@ class NagiosHost extends NagVisStatefulObject {
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
 	
+	
+	/**
+	 * PUBLIC fetchState()
+	 *
+	 * Gets the state of the host and all its services from selected backend. It
+	 * forms the summary output
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchState() {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->checkStates($this->type,$this->host_name,$this->recognize_services, '',$this->only_hard_states);
@@ -60,6 +79,14 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC fetchChilds()
+	 *
+	 * Gets all child objects of this host from the backend. The child objects are
+	 * saved to the childObjects array
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchChilds($maxLayers=-1, $objConf=Array()) {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$this->fetchDirectChildObjects($objConf);
@@ -75,9 +102,28 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
+	/**
+	 * PRIVATE getChilds()
+	 *
+	 * Returns all child objects in childObjects array 
+	 *
+	 * @return	Array		Array of host objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getChilds() {
+		return $this->childObjects;
+	}
+	
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * PRIVATE fetchServiceObjects()
+	 *
+	 * Gets all services of the given host and saves them to the services array
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchServiceObjects() {
 		// Get all services and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
@@ -89,6 +135,14 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
+	/**
+	 * PRIVATE fetchDirectChildObjects()
+	 *
+	 * Gets all child objects of the given host and saves them to the childObjects
+	 * array
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchDirectChildObjects($objConf) {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->host_name) AS $childName) {
@@ -101,14 +155,13 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
-	function getNumChilds() {
-		return count($this->childObjects);
-	}
-	
-	function getChilds() {
-		return $this->childObjects;
-	}
-	
+	/**
+	 * PRIVATE fetchSummaryState()
+	 *
+	 * Fetches the summary state from all services
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryState() {
 		$arrStates = Array();
 		
@@ -122,6 +175,13 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
+	/**
+	 * PRIVATE fetchSummaryOutput()
+	 *
+	 * Fetches the summary output from host and all services
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryOutput() {
 		$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
 		$output = '';

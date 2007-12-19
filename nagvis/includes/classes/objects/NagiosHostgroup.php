@@ -24,6 +24,16 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	
 	var $members;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		Integer 	ID of queried backend
+	 * @param		String		Name of the hostgroup
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagiosHostgroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostgroupName) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -38,6 +48,14 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
 	
+	/**
+	 * PUBLIC fetchState()
+	 *
+	 * Fetches the state of the hostgroup and all members. It also fetches the
+	 * summary output
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchState() {
 		// Get all Members and states
 		$this->fetchMemberHostObjects();
@@ -50,9 +68,28 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		$this->state = $this->summary_state;
 	}
 	
+	/**
+	 * PRIVATE getNumMembers()
+	 *
+	 * Returns the number of member objects
+	 *
+	 * @return	Integer		Number of members
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getNumMembers() {
+		return count($this->members);
+	}
+	
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * PRIVATE fetchMemberHostObjects)
+	 *
+	 * Gets all members of the given hostgroup and saves them to the members array
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchMemberHostObjects() {
 		// Get all hosts and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
@@ -65,10 +102,13 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		}
 	}
 	
-	function getNumMembers() {
-		return count($this->members);
-	}
-	
+	/**
+	 * PRIVATE fetchSummaryState()
+	 *
+	 * Fetches the summary state from all members
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryState() {
 		// Get summary state member objects
 		foreach($this->members AS $MEMBER) {
@@ -76,6 +116,13 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		}
 	}
 	
+	/**
+	 * PRIVATE fetchSummaryOutput()
+	 *
+	 * Fetches the summary output from host and all services
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryOutput() {
 		$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
 		$output = '';
@@ -89,6 +136,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		$this->summary_output = 'There are '.($arrStates['DOWN']+$arrStates['CRITICAL']).' DOWN/CRTICAL, '.$arrStates['WARNING'].' WARNING, '.$arrStates['UNKNOWN'].' UNKNOWN and '.($arrStates['UP']+$arrStates['OK']).' UP/OK hosts';
 	}
 	
+	/* UNNEEDED atm
 	function fetchInformationsFromBackend() {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostBasicInformations($this->host_name);
@@ -97,6 +145,6 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			$this->display_name = $arrValues['display_name'];
 			$this->address = $arrValues['address'];
 		}
-	}
+	}*/
 }
 ?>

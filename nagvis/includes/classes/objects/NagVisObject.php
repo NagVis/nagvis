@@ -21,6 +21,14 @@ class NagVisObject {
 	var $iconPath;
 	var $iconHtmlPath;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisObject(&$MAINCFG, &$BACKEND, &$LANG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -31,12 +39,6 @@ class NagVisObject {
 	
 	function get($option) {
 		return $this->{$option};
-	}
-	
-	function setMapCoords($arrCoords) {
-		$this->x = $arrCoords['x'];
-		$this->y = $arrCoords['y'];
-		$this->z = $arrCoords['z'];
 	}
 	
 	function getX() {
@@ -63,8 +65,18 @@ class NagVisObject {
 		return $this->hover_template;
 	}
 	
+	function setMapCoords($arrCoords) {
+		$this->x = $arrCoords['x'];
+		$this->y = $arrCoords['y'];
+		$this->z = $arrCoords['z'];
+	}
+	
 	/**
-	 * Get options from configuration
+	 * PUBLIC setConfiguration()
+	 *
+	 * Sets options of the object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function setConfiguration(&$obj) {
 		foreach($obj AS $key => $val) {
@@ -73,6 +85,8 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC replaceMacros()
+	 *
 	 * Replaces macros of urls and hover_urls
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -85,11 +99,11 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC parseIcon()
+	 *
 	 * Parses the HTML-Code of an icon
 	 *
-	 * @param	Boolean	$link		Add a link to the icon
-	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
-	 * @return	String	String with Html Code
+	 * @return	String		String with Html Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon() {
@@ -113,9 +127,11 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC getHoverMenu
+	 *
 	 * Creates a hover box for objects
 	 *
-	 * @return	String	Code for the hover box
+	 * @return	String		HTML code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHoverMenu() {
@@ -138,9 +154,11 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PRIVATE readHoverUrl()
+	 *
 	 * Reads the given hover url form an object and forms it to a readable format for the hover box
 	 *
-	 * @return	String	Code for the hover box
+	 * @return	String		HTML code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readHoverUrl() {
@@ -169,9 +187,11 @@ class NagVisObject {
 	
 	
 	/**
+	 * PRIVATE createInfoBox()
+	 *
 	 * Creates a JavaScript hover menu
 	 *
-	 * @return	String	Code for the Hover-Box
+	 * @return	String		HTML code for the Hover-Box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createInfoBox() {
@@ -182,10 +202,11 @@ class NagVisObject {
 	}
 	
 	/**
-	 * Gets the hover template
+	 * readHoverTemplate 
 	 *
-	 * @param	Array	$obj	Array with object informations
-	 * @return	String	HTML	HTML Code for the hover menu
+	 * Reads the contents of the hover template file
+	 *
+	 * @return	String		HTML Code for the hover menu
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readHoverTemplate() {
@@ -201,6 +222,15 @@ class NagVisObject {
 		return $ret;
 	}
 	
+	/**
+	 * PRIVATE replaceHoverTemplateMacros
+	 *
+	 * Replaces macros for the hover templates in the template code
+	 *
+	 * @param		String		HTML code with macros
+	 * @return	String		HTML code for the hover menu
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function replaceHoverTemplateMacros($ret) {
 		if($this->type == 'service') {
 			$name = 'host_name';
@@ -282,10 +312,12 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PRIVATE checkHoverTemplateReadable()
+	 *
 	 * Checks if the requested hover template file is readable
 	 *
-	 * @param	Array	$obj	Array with object informations
-	 * @return	Boolean Check Result
+	 * @param		Boolean		Switch for enabling/disabling error messages
+	 * @return	Boolean		Check Result
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateReadable($printErr) {
@@ -304,10 +336,12 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PRIVATE checkHoverTemplateExists()
+	 *
 	 * Checks if the requested hover template file exists
 	 *
-	 * @param	Array	$obj	Array with object informations
-	 * @return	Boolean Check Result
+	 * @param		Boolean		Switch for enabling/disabling error messages
+	 * @return	Boolean		Check Result
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateExists($printErr) {
@@ -326,9 +360,11 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PRIVATE createLink()
+	 *
 	 * Creates a link to the configured url
 	 *
-	 * @return	String	The Link
+	 * @return	String	HTML code of the Link
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {

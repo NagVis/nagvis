@@ -7,6 +7,16 @@ class NagVisHost extends NagiosHost {
 	var $BACKEND;
 	var $LANG;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @param		Integer 	ID of queried backend
+	 * @param		String		Name of the host
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisHost(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
@@ -16,10 +26,26 @@ class NagVisHost extends NagiosHost {
 		parent::NagiosHost($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostName);
 	}
 	
+	/**
+	 * PUBLIC parse()
+	 *
+	 * Parses the object in HTML format
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parse() {
 		return parent::parse();
 	}
 	
+	/**
+	 * PUBLIC parseGraphviz()
+	 *
+	 * Parses the object in graphviz configuration format
+	 *
+	 * @return	String		graphviz configuration code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function parseGraphviz() {
 		// shape=plaintext, 
 		// color=green, 
@@ -46,6 +72,11 @@ class NagVisHost extends NagiosHost {
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * Fetches the icon for the object depending on the summary state
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchIcon() {
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());

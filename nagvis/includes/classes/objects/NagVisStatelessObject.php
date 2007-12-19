@@ -15,6 +15,14 @@ class NagVisStatelessObject extends NagVisObject {
 	var $iconPath;
 	var $iconHtmlPath;
 	
+	/**
+	 * Class constructor
+	 *
+	 * @param		Object 		Object of class GlobalMainCfg
+	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class GlobalLanguage
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function NagVisStatelessObject(&$MAINCFG, &$BACKEND, &$LANG) {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
