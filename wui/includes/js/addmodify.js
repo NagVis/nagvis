@@ -24,17 +24,24 @@ function printObjects(aObjects,oOpt) {
 			var bSelect = false;
 			var bSelectDefault = false;
 			
-			if(aObjects[i].name == "") {
-				bSelectDefault = true;
-			}
-			
-			if(aObjects[i].name == selected) {
-				bSelect = true;
-			}
-			
 			if(type == "service") {
+				if(aObjects[i].service_description == "") {
+					bSelectDefault = true;
+				}
+				if(aObjects[i].service_description == selected) {
+					bSelect = true;
+				}
+				
 				oField.options[oField.options.length] = new Option(aObjects[i].service_description, aObjects[i].service_description, bSelectDefault, bSelect);
 			} else {
+				if(aObjects[i].name == "") {
+					bSelectDefault = true;
+				}
+				
+				if(aObjects[i].name == selected) {
+					bSelect = true;
+				}
+				
 				oField.options[oField.options.length] = new Option(aObjects[i].name, aObjects[i].name, bSelectDefault, bSelect);
 			}
 		}
