@@ -215,10 +215,10 @@ class GlobalBackendndomy {
 			case 'service':
 				$objectType = 2;
 				
-				if($name1Pattern != '') {
-					$filter = ' name1=\''.$name1Pattern.'\' AND ';
-				} elseif($name1Pattern != '' && $name2Pattern != '') {
+				if($name1Pattern != '' && $name2Pattern != '') {
 					$filter = ' name1=\''.$name1Pattern.'\' AND name2=\''.$name2Pattern.'\' AND ';
+				} else if($name1Pattern != '') {
+					$filter = ' name1=\''.$name1Pattern.'\' AND ';
 				}
 			break;
 			case 'hostgroup':
