@@ -63,9 +63,15 @@ class NagVisStatelessObject extends NagVisObject {
 	function parseIcon() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseIcon()');
 		
+		if(preg_match('/^\[(.*)\]$/',$this->icon,$match) > 0) {
+			$imgPath = $match[1];
+		} else {
+			$imgPath = $this->iconHtmlPath.$this->icon;
+		}
+		
 		$ret = '<div class="icon" style="left:'.$this->x.'px;top:'.$this->y.'px;z-index:'.$this->z.';">';
 		$ret .= $this->createLink();
-		$ret .= '<img src="'.$this->iconHtmlPath.$this->icon.'" '.$this->getHoverMenu().' alt="'.$this->type.'-'.$this->icon.'">';
+		$ret .= '<img src="'.$imgPath.'" '.$this->getHoverMenu().' alt="'.$this->type.'-'.$this->icon.'">';
 		$ret .= '</a>';
 		$ret .= '</div>';
 		
