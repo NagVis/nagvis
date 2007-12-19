@@ -18,12 +18,14 @@ class NagVisHost extends NagiosHost {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisHost(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::NagVisHost(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostName.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		$this->type = 'host';
 		$this->iconset = 'std_medium';
 		parent::NagiosHost($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostName);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::NagVisHost()');
 	}
 	
 	/**
@@ -35,6 +37,8 @@ class NagVisHost extends NagiosHost {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::parse()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::parse()');
 		return parent::parse();
 	}
 	
@@ -47,6 +51,7 @@ class NagVisHost extends NagiosHost {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseGraphviz() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::parseGraphviz()');
 		$strReturn = $this->type.'_'.str_replace('-','__',$this->host_name).' [ ';
 		$strReturn .= 'label=<<table border="0">';
 		$strReturn .= '<tr><td><img src="'.$this->MAINCFG->getValue('paths', 'icon').$this->icon.'"></img></td></tr>';
@@ -60,6 +65,7 @@ class NagVisHost extends NagiosHost {
 			$strReturn .= $OBJ->parseGraphviz();
 			$strReturn .= $this->type.'_'.str_replace('-','__',$this->host_name).' -- '.$OBJ->type.'_'.str_replace('-','__',$OBJ->host_name).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
 		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::parseGraphviz(): String HTML');
 		return $strReturn;
 	}
 	
@@ -72,6 +78,7 @@ class NagVisHost extends NagiosHost {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::fetchIcon()');
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
@@ -114,6 +121,7 @@ class NagVisHost extends NagiosHost {
 		} else {
 			$this->icon = $this->iconset.'_error.png';
 		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::fetchIcon()');
 	}
 	
 	/**
@@ -123,14 +131,14 @@ class NagVisHost extends NagiosHost {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::createLink(&$obj)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::createLink()');
 		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();
 		} else {
 			$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'" target="'.$this->url_target.'">';
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::createLink(): '.$link);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisHost::createLink(): '.$link);
 		return $link;
 	}
 }

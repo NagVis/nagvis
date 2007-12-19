@@ -15,6 +15,7 @@ class NagVisAutoMap extends GlobalMap {
 	var $width;
 	var $height;
 	var $renderMode;
+	var $ignoreHosts;
 	
 	/**
 	 * Automap constructor
@@ -84,6 +85,12 @@ class NagVisAutoMap extends GlobalMap {
 			$this->height = $prop['height'];
 		} else {
 			$this->height = 786;
+		}
+		
+		if(isset($prop['ignoreHosts']) && $prop['ignoreHosts'] != '') {
+			$this->ignoreHosts = explode(',', $prop['ignoreHosts']);
+		} else {
+			$this->ignoreHosts = Array();
 		}
 		
 		// Get "root" host object
@@ -394,7 +401,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectTree() {
-		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration());
+		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts);
 	}
 	
 	/**

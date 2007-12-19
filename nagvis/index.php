@@ -92,10 +92,13 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 	if(!isset($_GET['height'])) {
 		$_GET['height'] = '';
 	}
+	if(!isset($_GET['ignoreHosts'])) {
+		$_GET['ignoreHosts'] = '';
+	}
 	
 	$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 	$FRONTEND->getHeaderMenu();
-	$FRONTEND->getAutoMap(Array('backend' => $_GET['backend'], 'root' => $_GET['root'], 'maxLayers' => $_GET['maxLayers'], 'renderMode' => $_GET['renderMode'], 'width' => $_GET['width'], 'height' => $_GET['height']));
+	$FRONTEND->getAutoMap(Array('backend' => $_GET['backend'], 'root' => $_GET['root'], 'maxLayers' => $_GET['maxLayers'], 'renderMode' => $_GET['renderMode'], 'ignoreHosts' => $_GET['ignoreHosts'], 'width' => $_GET['width'], 'height' => $_GET['height']));
 	$FRONTEND->getMessages();
 } elseif(isset($_GET['rotation']) && $_GET['rotation'] != '' && (!isset($_GET['url']) || $_GET['url'] == '') && (!isset($_GET['map']) || $_GET['map'] == '')) {
 	header('Location: '.$FRONTEND->getNextRotationUrl());
