@@ -4,7 +4,6 @@
  */
 class NagVisObject {
 	var $MAINCFG;
-	var $BACKEND;
 	var $LANG;
 	
 	// "Global" Configuration variables for all objects
@@ -29,9 +28,8 @@ class NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisObject(&$MAINCFG, &$BACKEND, &$LANG) {
+	function NagVisObject(&$MAINCFG, &$LANG) {
 		$this->MAINCFG = &$MAINCFG;
-		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		
 		//FIXME: $this->getInformationsFromBackend();

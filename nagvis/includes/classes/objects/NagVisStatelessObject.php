@@ -4,7 +4,6 @@
  */
 class NagVisStatelessObject extends NagVisObject {
 	var $MAINCFG;
-	var $BACKEND;
 	var $LANG;
 	
 	// "Global" Configuration variables for all stateless objects
@@ -19,17 +18,15 @@ class NagVisStatelessObject extends NagVisObject {
 	 * Class constructor
 	 *
 	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class GlobalBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisStatelessObject(&$MAINCFG, &$BACKEND, &$LANG) {
+	function NagVisStatelessObject(&$MAINCFG, &$LANG) {
 		$this->MAINCFG = &$MAINCFG;
-		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		
 		//FIXME: $this->getInformationsFromBackend();
-		parent::NagVisObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisObject($this->MAINCFG, $this->LANG);
 	}
 	
 	/**

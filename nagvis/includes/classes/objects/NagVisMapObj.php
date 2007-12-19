@@ -175,10 +175,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $SUBMAPCFG);
 						break;
 						case 'shape':
-							$OBJ = new NagVisShape($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['icon']);
+							$OBJ = new NagVisShape($this->MAINCFG, $this->LANG, $objConf['icon']);
 						break;
 						case 'textbox':
-							$OBJ = new NagVisTextbox($this->MAINCFG, $this->BACKEND, $this->LANG);
+							$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
 						break;
 						default:
 							//FIXME: Unhandled

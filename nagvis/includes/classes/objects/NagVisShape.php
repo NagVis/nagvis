@@ -4,7 +4,6 @@
  */
 class NagVisShape extends NagVisStatelessObject {
 	var $MAINCFG;
-	var $BACKEND;
 	var $LANG;
 	
 	/**
@@ -16,9 +15,8 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @param		String	 	Image of the shape
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisShape(&$MAINCFG, &$BACKEND, &$LANG, $icon) {
+	function NagVisShape(&$MAINCFG, &$LANG, $icon) {
 		$this->MAINCFG = &$MAINCFG;
-		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		
 		$this->iconPath = $this->MAINCFG->getValue('paths', 'shape');
@@ -26,7 +24,7 @@ class NagVisShape extends NagVisStatelessObject {
 		
 		$this->icon = $icon;
 		$this->type = 'shape';
-		parent::NagVisStatelessObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisStatelessObject($this->MAINCFG, $this->LANG);
 	}
 	
 	/**

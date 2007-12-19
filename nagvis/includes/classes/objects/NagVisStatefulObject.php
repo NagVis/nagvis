@@ -37,7 +37,7 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
 		
 		//FIXME: $this->getInformationsFromBackend();
-		parent::NagVisObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisObject($this->MAINCFG, $this->LANG);
 	}
 	
 	function getState() {
