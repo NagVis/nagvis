@@ -487,7 +487,7 @@ class GlobalBackendndomy {
 					'.$this->dbPrefix.'servicestatus AS ss 
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
-					AND (s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+					AND (s.config_type=0 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 					AND ss.service_object_id=o.object_id 
 				LIMIT 1');
 		} else {
@@ -502,7 +502,7 @@ class GlobalBackendndomy {
 					'.$this->dbPrefix.'servicestatus AS ss 
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-					AND (s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+					AND (s.config_type=0 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 					AND ss.service_object_id=o.object_id');
 		}
 		
