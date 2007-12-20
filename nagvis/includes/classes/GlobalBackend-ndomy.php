@@ -390,7 +390,7 @@ class GlobalBackendndomy {
 			'.$this->dbPrefix.'hoststatus AS hs 
 		WHERE 
 			(o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-			AND (h.config_type=0 AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id) 
+			AND (h.config_type=1 AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id) 
 			AND hs.host_object_id=o.object_id 
 		LIMIT 1');
 		
@@ -487,7 +487,7 @@ class GlobalBackendndomy {
 					'.$this->dbPrefix.'servicestatus AS ss 
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
-					AND (s.config_type=0 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 					AND ss.service_object_id=o.object_id 
 				LIMIT 1');
 		} else {
@@ -502,7 +502,7 @@ class GlobalBackendndomy {
 					'.$this->dbPrefix.'servicestatus AS ss 
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-					AND (s.config_type=0 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 					AND ss.service_object_id=o.object_id');
 		}
 		
@@ -600,7 +600,7 @@ class GlobalBackendndomy {
 		`'.$this->dbPrefix.'hosts` AS h1
 		LEFT OUTER JOIN `nagios_host_parenthosts` AS ph1 ON h1.host_id=ph1.host_id
 		WHERE o1.objecttype_id=1
-		AND (h1.config_type=0 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id) 
+		AND (h1.config_type=1 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id) 
 		AND ph1.parent_host_object_id IS null');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
@@ -633,9 +633,9 @@ class GlobalBackendndomy {
 			`'.$this->dbPrefix.'hosts` AS h2,
 			`'.$this->dbPrefix.'objects` AS o2
 			WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
-			AND (h1.config_type=0 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
+			AND (h1.config_type=1 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
 			AND o1.object_id=ph1.parent_host_object_id
-			AND (h2.config_type=0 AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
+			AND (h2.config_type=1 AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
 			AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 				if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
@@ -671,7 +671,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'servicestatus AS ss 
 			WHERE 
 				(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (s.config_type=0 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+				AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 				AND ss.service_object_id=o.object_id');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
@@ -708,7 +708,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'objects AS o2
 			WHERE 
 				(o.objecttype_id=3 AND o.name1 = binary \''.$hostgroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (hg.config_type=0 AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
+				AND (hg.config_type=1 AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
 				AND hgm.hostgroup_id=hg.hostgroup_id 
 				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id) 
 			LIMIT 1');
@@ -746,7 +746,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'objects AS o2
 			WHERE 
 				(o.objecttype_id=4 AND o.name1 = binary \''.$servicegroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (sg.config_type=0 AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id) 
+				AND (sg.config_type=1 AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id) 
 				AND sgm.servicegroup_id=sg.servicegroup_id 
 				AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id) 
 			LIMIT 1');
