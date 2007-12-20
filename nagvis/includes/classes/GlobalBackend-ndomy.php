@@ -185,7 +185,9 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function mysqlQuery($query) {
-		return mysql_query($query,$this->CONN);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::mysqlQuery('.$query.')');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::mysqlQuery()');
+		return mysql_query($query, $this->CONN);
 	}
 
 	/**
@@ -588,6 +590,7 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHostNamesWithNoParent() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostNamesWithNoParent()');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT o1.name1
@@ -603,6 +606,7 @@ class GlobalBackendndomy {
 			$arrReturn[] = $data['name1'];
 		}
 		
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::getHostNamesWithNoParent()');
 		return $arrReturn;
 	}
 	
@@ -616,6 +620,7 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getDirectChildNamesByHostName($hostName) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getDirectChildNamesByHostName('.$hostName.')');
 		if(isset($hostName) && $hostName != '') {
 			$arrChildNames = Array();
 			
@@ -635,6 +640,7 @@ class GlobalBackendndomy {
 				$arrChildNames[] = $data['name1'];
 			}
 			
+			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::getDirectChildNamesByHostName()');
 			return $arrChildNames;
 		} else {
 			//FIXME: Error handling
