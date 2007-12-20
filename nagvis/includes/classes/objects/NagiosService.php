@@ -45,7 +45,7 @@ class NagiosService extends NagVisStatefulObject {
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
-		$this->backendId = $backend_id;
+		$this->backend_id = $backend_id;
 		$this->host_name = $hostName;
 		$this->service_description = $serviceDescription;
 		
@@ -67,8 +67,8 @@ class NagiosService extends NagVisStatefulObject {
 	 */
 	function fetchState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchState()');
-		if($this->BACKEND->checkBackendInitialized($this->backendId, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backendId]->checkStates($this->type,$this->host_name,$this->recognize_services, $this->service_description,$this->only_hard_states);
+		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->checkStates($this->type,$this->host_name,$this->recognize_services, $this->service_description,$this->only_hard_states);
 			
 			// Append contents of the array to the object properties
 			// Bad: this method is not meant for this, but it works
@@ -101,8 +101,8 @@ class NagiosService extends NagVisStatefulObject {
 	
 	/* UNNEEDED atm
 	function getInformationsFromBackend() {
-		if($this->BACKEND->checkBackendInitialized($this->backendId, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backendId]->getHostBasicInformations($this->host_name);
+		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostBasicInformations($this->host_name);
 			
 			$this->alias = $arrValues['alias'];
 			$this->display_name = $arrValues['display_name'];
