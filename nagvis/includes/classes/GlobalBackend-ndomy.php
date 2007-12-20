@@ -186,8 +186,9 @@ class GlobalBackendndomy {
 	 */
 	function mysqlQuery($query) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::mysqlQuery('.$query.')');
+		$QUERYHANDLE = mysql_query($query, $this->CONN);
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::mysqlQuery()');
-		return mysql_query($query, $this->CONN);
+		return $QUERYHANDLE;
 	}
 
 	/**
@@ -637,7 +638,9 @@ class GlobalBackendndomy {
 			AND h2.config_type=1 AND ph1.host_id=h2.host_id
 			AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
+				if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 				$arrChildNames[] = $data['name1'];
+				if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 			}
 			
 			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::getDirectChildNamesByHostName()');
@@ -672,8 +675,10 @@ class GlobalBackendndomy {
 				AND ss.service_object_id=o.object_id');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = $data['name2'];
+			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByHostName(): Array(...)');
@@ -709,8 +714,10 @@ class GlobalBackendndomy {
 			LIMIT 1');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = $data['name1'];
+			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostsByHostgroupName(): Array(...)');
@@ -745,8 +752,10 @@ class GlobalBackendndomy {
 			LIMIT 1');
 	
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
+			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByServicegroupName(): Array(...)');
