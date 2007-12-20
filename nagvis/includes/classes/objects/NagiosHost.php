@@ -105,7 +105,7 @@ class NagiosHost extends NagVisStatefulObject {
 				}
 			}
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchChilds()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchChilds()');
 	}
 	
 	/**

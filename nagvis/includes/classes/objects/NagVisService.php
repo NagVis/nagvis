@@ -19,7 +19,7 @@ class NagVisService extends NagiosService {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisService(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName, $serviceDescription) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisService::NagVisService(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostName.'.'.$serviceDescription.')');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisService::NagVisService(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostName.','.$serviceDescription.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
