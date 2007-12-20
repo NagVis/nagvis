@@ -138,7 +138,7 @@ class NagiosHost extends NagVisStatefulObject {
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServicesByHostName($this->host_name) As $serviceDescription) {			
 			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->host_name, $serviceDescription);
 			$OBJ->fetchState();
-			$this->services[] = &$OBJ;
+			$this->services[] = $OBJ;
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchServiceObjects()');
 	}
@@ -161,7 +161,7 @@ class NagiosHost extends NagVisStatefulObject {
 				$OBJ->fetchState();
 				$OBJ->fetchIcon();
 				$OBJ->setConfiguration($objConf);
-				$this->childObjects[] = &$OBJ;
+				$this->childObjects[] = $OBJ;
 			}
 			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop Host');
 		}
