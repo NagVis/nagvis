@@ -26,7 +26,8 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisAutoMap(&$MAINCFG, &$LANG, &$BACKEND, $prop) {
+	function NagVisAutoMap(&$MAINCFG, &$LANG, &$BACKEND, &$prop) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::NagVisAutoMap(MAINCFG,LANG,BACKEND,&Array())');
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
@@ -104,6 +105,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		$this->MAPOBJ->fetchState();
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::NagVisAutoMap()');
 	}
 	
 	/**
@@ -113,6 +115,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseGraphvizConfig() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::parseGraphvizConfig()');
 		// FIXME
 		$str  = 'graph automap { ';
 		//, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
@@ -137,6 +140,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		//DEBUG: echo $str;
 		
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::parseGraphvizConfig(): String');
 		return $str;
 	}
 	
@@ -148,6 +152,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function renderMap() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::renderMap()');
 		/**
 		 * possible render modes are set by selecting the correct binary:
 		 *  dot - filter for drawing directed graphs
@@ -177,9 +182,19 @@ class NagVisAutoMap extends GlobalMap {
 			break;
 		}
 		
-		// Parse map
-		exec('echo \''.$this->parseGraphvizConfig().'\' | '.$this->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx',$arrMapCode);
+		/**
+		 * The config can not be forwarded to graphviz binary by echo, this would
+		 * cause in too long commands with big maps. SO write thoe config to a file
+		 * and let it be read by graphviz binary.
+		 */
+		$fh = fopen($this->MAINCFG->getValue('paths', 'var').'automap.dot','w');
+		fwrite($fh, $this->parseGraphvizConfig());
+		fclose($fh);
 		
+		// Parse map
+		exec($this->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx '.$this->MAINCFG->getValue('paths', 'var').'automap.dot', $arrMapCode);
+		
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::renderMap()');
 		return implode("\n", $arrMapCode);
 	}
 	
@@ -191,6 +206,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixMapCode($strMapCode) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::fixMapCode(strMapCode)');
 		/**
 		 * Graphviz replaces "-" by "&#45;" so the "-" need to be replaced in the 
 		 * hostnames before parsing the graphiz configuration. It gets replaced by 
@@ -211,6 +227,7 @@ class NagVisAutoMap extends GlobalMap {
 				$strMapCode = preg_replace('/title=\"'.$OBJ->getName().'\"/', $OBJ->getHoverMenu(), $strMapCode);
 		}
 		
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::fixMapCode(): String');
 		return $strMapCode;
 	}
 	
@@ -221,7 +238,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::parseMap()');
 		$ret = Array();
 		
 		// Render the map image and save it, also generate link coords etc
@@ -246,7 +263,7 @@ class NagVisAutoMap extends GlobalMap {
 		// FIXME: This doesn't work here
 		$ret[] = '<script type="text/javascript" language="JavaScript">document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap(): Array(...)');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::parseMap()');
 		return $ret;
 	}
 	
@@ -272,6 +289,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * Do the preflight checks to ensure the automap can be drawn
 	 */
 	function checkPreflight() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkPreflight()');
 		// The GD-Libs are used by graphviz
 		$this->checkGd(1);
 		
@@ -283,6 +301,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->checkGraphviz('twopi', 1);
 		$this->checkGraphviz('circo', 1);
 		$this->checkGraphviz('fdp', 1);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::checkPreflight()');
 	}
 	
 	/**
@@ -376,13 +395,13 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFavicon() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getFavicon()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getFavicon()');
 		if(file_exists('./images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
 			$favicon = './images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
 			$favicon = './images/internal/favicon.png';
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getFavicon()');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::getFavicon(): String');
 		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
 	}
 	
@@ -392,6 +411,8 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function pxToInch($px) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::pxToInch()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::pxToInch()');
 		return round($px/72, 4);
 	}
 	
@@ -401,7 +422,9 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectTree() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getObjectTree()');
 		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getObjectTree()');
 	}
 	
 	/**
@@ -411,6 +434,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectConfiguration() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getObjectConfiguration()');
 		$objConf = Array();
 		
 		// Get object configuration from __automap configuration
@@ -420,6 +444,7 @@ class NagVisAutoMap extends GlobalMap {
 			}
 		}
 		
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getObjectConfiguration()');
 		return $objConf;
 	}
 	
@@ -429,6 +454,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getRootHostName() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getRootHostName()');
 		$defaultRoot = $this->MAINCFG->getValue('automap','default_root');
 		if(isset($defaultRoot) && $defaultRoot != '') {
 			return $defaultRoot;
@@ -442,6 +468,7 @@ class NagVisAutoMap extends GlobalMap {
 				}
 			}
 		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName()');
 	}
 	
 	/**
@@ -450,11 +477,13 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchHostObjectByName($hostName) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::fetchHostObjectByName()');
 		$hostObject = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
 		$hostObject->fetchState();
 		$hostObject->fetchIcon();
 		$hostObject->setConfiguration($this->getObjectConfiguration());
 		$this->rootObject = $hostObject;
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::fetchHostObjectByName()');
 	}
 }
 ?>
