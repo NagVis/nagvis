@@ -55,8 +55,8 @@ class NagVisFrontend extends GlobalPage {
 				
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
 					if($mapName == '__automap') {
-						//$MAP = new NagVisMap($this->MAINCFG,$this->BACKEND,$this->LANG,$MAPCFG);
-						$MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, Array());
+						$opts = Array();
+						$MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $opts);
 					} else {
 						$MAP = new NagVisMap($this->MAINCFG, $MAPCFG, $this->LANG, $this->BACKEND);
 					}
