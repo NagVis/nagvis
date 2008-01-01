@@ -25,6 +25,10 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => 'english',
 					'match' => MATCH_STRING_NO_SPACE),
+				'dateformat' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'Y-m-d H:m:i',
+					'match' => MATCH_STRING),
 				'displayheader' => Array('must' => 1,
 						'editable' => 1,
 						'default' => '1',
@@ -260,8 +264,8 @@ class GlobalMainCfg {
 					'match' => MATCH_STRING_PATH),
 				'defaultparams' => Array('must' => 0,
 					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH)),
+					'default' => '&maxLayers=2',
+					'match' => MATCH_STRING_URL)),
 			'internal' => Array(
 				'version' => Array('must' => 1,
 					'editable' => 0,
@@ -331,7 +335,7 @@ class GlobalMainCfg {
 	function getBasePath() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath()');
 		$return = preg_replace('/wui|nagvis$/i', '', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath(): '.$return);
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getBasePath(): '.$return);
 		return $return ;
 	}
 	
@@ -797,8 +801,9 @@ class GlobalMainCfg {
 				
 				if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
 					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['rotation'][$var]['default']);
-						return $this->validConfig['rotation'][$var]['default'];
+					return $this->validConfig['rotation'][$var]['default'];
 				} else {
+					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): FALSE');
 					return FALSE;
 				}
 			} else {
