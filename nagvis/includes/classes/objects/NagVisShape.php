@@ -40,8 +40,6 @@ class NagVisShape extends NagVisStatelessObject {
 	function parse() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisShape::parse()');
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisShape::parse()');
-		//$this->replaceMacros();
-		//$this->fixIconPosition();
 		return $this->parseIcon();
 	}
 	
@@ -79,12 +77,12 @@ class NagVisShape extends NagVisStatelessObject {
 	}
 	
 	/**
-	 * Just a dummy here (Textbox won't need an icon)
+	 * Just a dummy here (Shape won't need an icon)
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
-		//FIXME: Nothing to do here, icon is set in constructor
+		// Nothing to do here, icon is set in constructor
 	}
 }
 ?>

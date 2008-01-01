@@ -81,7 +81,7 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
-		//FIXME: Nothing to do here, icon is set in constructor
+		// Nothing to do here, icon is set in constructor
 	}
 }
 ?>
