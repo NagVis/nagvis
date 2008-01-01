@@ -56,6 +56,16 @@ class NagVisFrontend extends GlobalPage {
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
 					if($mapName == '__automap') {
 						$opts = Array();
+						
+						// Fetch option array from defaultparams string (extract variable names and values)
+						$params = explode('&',$this->MAINCFG->getValue('automap','defaultparams'));
+						unset($params[0]);
+						
+						foreach($params AS $set) {
+							$arrSet = explode('=',$set);
+							$opts[$arrSet[0]] = $arrSet[1];
+						}
+						
 						$MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $opts);
 					} else {
 						$MAP = new NagVisMap($this->MAINCFG, $MAPCFG, $this->LANG, $this->BACKEND);
@@ -78,17 +88,23 @@ class NagVisFrontend extends GlobalPage {
 					
 					// If this is the automap display the last rendered image
 					if($mapName == '__automap') {
-						$imgSrc = $this->MAINCFG->getValue('paths','htmlvar').'automap.png';
+						$imgPath = $this->MAINCFG->getValue('paths','var').'automap.png';
+						$imgPathHtml = $this->MAINCFG->getValue('paths','htmlvar').'automap.png';
 					} else {
-						$imgSrc = $this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+						$imgPath = $this->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
+						$imgPathHtml = $this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
 					}
 					
+					// Now form the cell with it's contents
 					$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.$MAP->MAPOBJ->getSummaryOutput().'</td></tr></table>\');" onClick="'.$onClick.'">';
 					$ret[] = '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
 					$ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-					// FIXME: Need better thumbnail format
-					$ret[] = '<img style="width:200px;height:150px;" src="'.$imgSrc.'" /><br />';
-						$ret[] = '</td>';
+					if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
+						$ret[] = '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
+					} else {
+						$ret[] = '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
+					}
+					$ret[] = '</td>';
 					if($i % 4 == 0) {
 							$ret[] = '</tr><tr>';
 					}
@@ -101,11 +117,91 @@ class NagVisFrontend extends GlobalPage {
 							$ret[] = '<td>&nbsp;</td>';
 					}
 			}
+			$ret[] = '</tr>';
 			$ret[] = '</table>';
+			
+			/**
+			 * Infobox lists all map rotation pools
+			 */
+			$ret[] = '<table class="infobox">';
+			$ret[] = '<tr><th>'.$this->LANG->getLabel('rotationPools').'</td></tr>';
+			foreach($this->getRotationPools() AS $poolName) {
+				// Form the onClick action
+				$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?rotation='.$poolName.'\';';
+				
+				// Now form the HTML code for the cell
+				$ret[] = '<tr><td onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
+				$ret[] = '<h2>'.$poolName.'</h2><br />';
+				$ret[] = '</td>';
+				$ret[] = '</tr>';
+			}
+			$ret[] = '</table>';
+			
 			$ret[] = '</div>';
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage(): Array(HTML)');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getIndexPage(): Array(HTML)');
 			return $ret;
+	}
+	
+	/**
+	 * Creates thumbnail images for the index map
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function createThumbnail($imgPath, $mapName) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::createThumbnail()');
+		//FIXME: File exists
+		if(1) {
+			$imgSize = getimagesize($imgPath);
+			// 0: width, 1:height, 2:type
+			
+			switch ($imgSize[2]) {
+				case 1: // GIF
+				$image = imagecreatefromgif($imgPath);
+				break;
+				case 2: // JPEG
+				$image = imagecreatefromjpeg($imgPath);
+				break;
+				case 3: // PNG
+				$image = imagecreatefrompng($imgPath);
+				break;
+				default:
+					//FIXME: Error handling
+					echo "ERROR: Wrong format";
+				break;
+			}
+			
+			// Maximum size
+			$thumbMaxWidth = 200;
+			$thumbMaxHeight = 150;
+			
+			$thumbWidth = $imgSize[0];
+			$thumbHeight = $imgSize[1];
+			
+			if ($thumbWidth > $thumbMaxWidth) {
+				$factor = $thumbMaxWidth / $thumbWidth;
+				$thumbWidth *= $factor;
+				$thumbHeight *= $factor;
+			}
+			
+			if ($thumbHeight > $thumbMaxHeight) {
+				$factor = $thumbMaxHeight / $thumbHeight;
+				$thumbWidth *= $factor;
+				$thumbHeight *= $factor;
+			}
+			
+			$thumb = imagecreatetruecolor($thumbWidth, $thumbHeight);
+			imagecopyresampled($thumb, $image, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $imgSize[0], $imgSize[1]);
+			
+			imagepng($thumb, $this->MAINCFG->getValue('paths','var').$mapName.'-thumb.png');
+			
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::createThumbnail()');
+			return $this->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
+		} else {
+			//FIXME: Error handling
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::createThumbnail()');
+			return '';
+		}
 	}
 	
 	/**
@@ -138,7 +234,6 @@ class NagVisFrontend extends GlobalPage {
 		$ret[] = '<tr><td>safe_mode</td><td>'.ini_get('safe_mode').'</td></tr>';
 		$ret[] = '<tr><td>max_execution_time</td><td>'.ini_get('max_execution_time').'</td></tr>';
 		$ret[] = '<tr><td>memory_limit</td><td>'.ini_get('memory_limit').'</td></tr>';
-		//FIXME: $ret[] = '<tr><td style="text-align:center;" colspan="2"><a href="">Copy to Clipboard</a></td></tr>';
 		$ret[] = '</table>';
 		$ret[] = '</div>';
 		
@@ -414,6 +509,26 @@ class NagVisFrontend extends GlobalPage {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMaps(): Array(...)');
 		return $files;
+	}
+	
+	/**
+	 * Gets all rotation pools
+	 *
+	 * @return	Array pools
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getRotationPools() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getRotationPools()');
+		$ret = Array();
+		
+		foreach($this->MAINCFG->config AS $sec => $var) {
+			if(preg_match('/^rotation_/i', $sec)) {
+				$ret[] = $var['rotationid'];
+			}
+		}
+		
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getRotationPools(): Array(...)');
+		return $ret;
 	}
 }
 ?>
