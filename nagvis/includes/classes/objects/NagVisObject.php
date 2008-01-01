@@ -252,7 +252,7 @@ class NagVisObject {
 			$ret = str_replace('[obj_alias]','',$ret);
 		}
 		
-		if(isset($obj['display_name']) && $this->display_name != '') {
+		if(isset($this->display_name) && $this->display_name != '') {
 			$ret = str_replace('[obj_display_name]',$this->display_name,$ret);
 		} else {
 			$ret = str_replace('[obj_display_name]','',$ret);
@@ -279,8 +279,6 @@ class NagVisObject {
 			$ret = str_replace('[obj_backend_instancename]','',$ret);
 		}
 		
-		// Macros for PNP images
-		
 		$ret = str_replace('[obj_output]',strtr($this->output, Array("\r" => '<br />', "\n" => '<br />')),$ret);
 		$ret = str_replace('[obj_summary_output]',strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />')),$ret);
 		$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
@@ -292,18 +290,39 @@ class NagVisObject {
 		$ret = str_replace('[lang_obj_type]',$this->LANG->getLabel($this->type),$ret);
 		$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
 		$ret = str_replace('[lang_instance]',$this->LANG->getLabel('instance'),$ret);
+		
 		$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
 		$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlhovertemplates'),$ret);
 		$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlhovertemplateimages'),$ret);
 		
+		// Macros which are only for services and hosts
+		if($this->type == 'host' || $this->type == 'service') {
+			$ret = str_replace('[lang_next_check]',$this->LANG->getLabel('nextCheck'),$ret);
+			$ret = str_replace('[lang_last_check]',$this->LANG->getLabel('lastCheck'),$ret);
+			
+			if(isset($this->last_check) && $this->last_check != '0') {
+				$ret = str_replace('[obj_last_check]',date($this->MAINCFG->getValue('global','dateformat'),$this->last_check),$ret);
+			} else {
+				$ret = str_replace('[obj_last_check]','N/A',$ret);
+			}
+			
+			if(isset($this->next_check) && $this->next_check != '0') {
+				$ret = str_replace('[obj_next_check]',date($this->MAINCFG->getValue('global','dateformat'),$this->next_check),$ret);
+			} else {
+				$ret = str_replace('[obj_next_check]','N/A',$ret);
+			}
+		}
+		
+		// Macros which are only for services
 		if($this->type == 'service') {
 			$ret = str_replace('[service_description]',$this->service_description,$ret);
 			$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$this->service_description),$ret);
 			$ret = str_replace('[lang_service_description]',$this->LANG->getLabel('servicename'),$ret);
 		} else {
-			$ret = preg_replace('/<!-- BEGIN service -->((?s).*)<!-- END service -->/','',$ret);
+			$ret = preg_replace('/<!-- BEGIN service -->(.*)<!-- END service -->/','',$ret); //(?s)
 		}
 		
+		// Macros which are only for hosts
 		if($this->type == 'host') {
 			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->$name),$ret);
 		} else {
