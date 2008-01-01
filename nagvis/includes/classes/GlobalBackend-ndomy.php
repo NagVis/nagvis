@@ -383,7 +383,8 @@ class GlobalBackendndomy {
 			UNIX_TIMESTAMP(last_state_change) AS last_state_change, 
 			current_state, 
 			output, 
-			problem_has_been_acknowledged 
+			problem_has_been_acknowledged, 
+			UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check 
 		FROM 
 			'.$this->dbPrefix.'objects AS o, 
 			'.$this->dbPrefix.'hosts AS h, 
@@ -403,6 +404,10 @@ class GlobalBackendndomy {
 			$arrReturn['alias'] = $data['alias'];
 			$arrReturn['display_name'] = $data['display_name'];
 			$arrReturn['address'] = $data['address'];
+			
+			// Add Additional informations to array
+			$arrReturn['last_check'] = $data['last_check'];
+			$arrReturn['next_check'] = $data['next_check'];
 			
 			/**
 			 * SF.net #1587073
@@ -480,7 +485,8 @@ class GlobalBackendndomy {
 				o.name1, o.name2, 
 				s.display_name, 
 				ss.has_been_checked, ss.last_hard_state, ss.last_hard_state_change, ss.current_state, 
-				ss.last_state_change, ss.output, ss.problem_has_been_acknowledged 
+				ss.last_state_change, ss.output, ss.problem_has_been_acknowledged, 
+				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check 
 				FROM 
 					'.$this->dbPrefix.'objects AS o, 
 					'.$this->dbPrefix.'services AS s, 
@@ -495,7 +501,8 @@ class GlobalBackendndomy {
 				o.name1, o.name2, 
 				s.display_name, 
 				ss.has_been_checked, ss.last_hard_state, ss.last_hard_state_change, ss.current_state, 
-				ss.last_state_change, ss.output, ss.problem_has_been_acknowledged 
+				ss.last_state_change, ss.output, ss.problem_has_been_acknowledged, 
+				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check 
 				FROM 
 					'.$this->dbPrefix.'objects AS o, 
 					'.$this->dbPrefix.'services AS s, 
@@ -506,10 +513,7 @@ class GlobalBackendndomy {
 					AND ss.service_object_id=o.object_id');
 		}
 		
-		// count results
-		$iResults = mysql_num_rows($QUERYHANDLE);
-		
-		if($iResults == 0) {
+		if(mysql_num_rows($QUERYHANDLE) == 0) {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
 		} else {
@@ -519,20 +523,16 @@ class GlobalBackendndomy {
 				$arrTmpReturn['display_name'] = $data['display_name'];
 				$arrTmpReturn['alias'] = $data['display_name'];
 				
+				// Add Additional informations to array
+				$arrReturn['last_check'] = $data['last_check'];
+				$arrReturn['next_check'] = $data['next_check'];
+				
 				if($onlyHardstates == 1) {
 					if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
 						//$data['current_state'] = $data['current_state'];
 					} else {
 						$data['current_state'] = $data['last_hard_state'];
 					}
-				}
-				
-				/**
-				 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
-				 * acknowledged => check for acknowledged host
-				 */
-				if($data['current_state'] > 0 && $data['problem_has_been_acknowledged'] != 1) {
-					$data['problem_has_been_acknowledged'] = $this->getHostAckByHostname($hostName);
 				}
 				
 				if($data['has_been_checked'] == '0') {
@@ -545,8 +545,15 @@ class GlobalBackendndomy {
 				} else {
 					// Host is DOWN/UNREACHABLE/UNKNOWN
 					
-					// Store acknowledgement state in array
-					$arrTmpReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
+					/**
+					 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+					 * acknowledged => check for acknowledged host
+					 */
+					if($data['problem_has_been_acknowledged'] != 1) {
+						$arrTmpReturn['problem_has_been_acknowledged'] = $this->getHostAckByHostname($hostName);
+					} else {
+						$arrTmpReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
+					}
 					
 					// Store state and output in array
 					switch($data['current_state']) {
@@ -698,7 +705,6 @@ class GlobalBackendndomy {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostsByHostgroupName('.$hostgroupName.')');
 		$arrReturn = Array();
 		
-		//First we have to get the hostgroup_id
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 				o2.name1
 			FROM 
@@ -736,7 +742,7 @@ class GlobalBackendndomy {
 	function getServicesByServicegroupName($servicegroupName) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByServicegroupName('.$servicegroupName.')');
 		$arrReturn = Array();
-		//First we have to get the hostgroup_id
+		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 				o2.name1, o2.name2 
 			FROM 
@@ -760,6 +766,29 @@ class GlobalBackendndomy {
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByServicegroupName(): Array(...)');
 		return $arrReturn;
+	}
+	
+	/**
+	 * PUBLIC Method getNagiosStartTime
+	 *
+	 * Gets the last start/reload/restart time of NagVis as UNIX timestamp
+	 *
+	 * @return	Integer		Timestamp of Nagios start time
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getNagiosStartTime() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getNagiosStartTime()');
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+				UNIX_TIMESTAMP(program_start_time) AS program_start_time 
+			FROM 
+				'.$this->dbPrefix.'programstatus
+			LIMIT 1');
+		
+		$data = mysql_fetch_array($QUERYHANDLE);
+		
+		if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getNagiosStartTime()');
+		return $data['program_start_time'];
 	}
 }
 ?>
