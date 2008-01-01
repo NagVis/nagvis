@@ -18,6 +18,8 @@ class NagiosService extends NagVisStatefulObject {
 	var $state;
 	var $output;
 	var $problem_has_been_acknowledged;
+	var $last_check;
+	var $next_check;
 	
 	var $summary_state;
 	var $summary_output;
@@ -53,9 +55,20 @@ class NagiosService extends NagVisStatefulObject {
 		$this->state = '';
 		$this->has_been_acknowledged = 0;
 		
-		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::NagiosService()');
+	}
+	
+	/**
+	 * PUBLIC fetchMembers()
+	 *
+	 * Just a dummy here
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchMembers()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchMembers()');
 	}
 	
 	/**
@@ -98,16 +111,5 @@ class NagiosService extends NagVisStatefulObject {
 		$this->summary_output = $this->output;
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchSummaryOutput()');
 	}
-	
-	/* UNNEEDED atm
-	function getInformationsFromBackend() {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostBasicInformations($this->host_name);
-			
-			$this->alias = $arrValues['alias'];
-			$this->display_name = $arrValues['display_name'];
-			$this->address = $arrValues['address'];
-		}
-	}*/
 }
 ?>

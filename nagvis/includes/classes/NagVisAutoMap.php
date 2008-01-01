@@ -94,17 +94,56 @@ class NagVisAutoMap extends GlobalMap {
 			$this->ignoreHosts = Array();
 		}
 		
-		// Get "root" host object
-		$this->fetchHostObjectByName($this->root);
+		/**
+		 * Check if we can use cached objects. The cache is only be used when the 
+		 * following things are OK: NagVis version, Nagios start time < cache time
+		 */
+		if (DEBUG&&DEBUGLEVEL&2) debug('Loading map objects');
+		if(isset($_SESSION['nagvis_version']) 
+		 && isset($_SESSION['nagvis_object_cache_time_automap_'.$this->root]) 
+		 && isset($_SESSION['nagvis_object_cache_prop_automap_'.$this->root])
+		 && isset($_SESSION['nagvis_object_cache_automap_'.$this->root])
+		 && $_SESSION['nagvis_version'] == CONST_VERSION
+		 && $_SESSION['nagvis_object_cache_prop_automap_'.$this->root] == implode(',',$prop)
+		 && $this->BACKEND->checkBackendInitialized($this->MAPCFG->getValue('global', 0, 'backend_id'), TRUE)
+		 && $this->BACKEND->BACKENDS[$this->MAPCFG->getValue('global', 0, 'backend_id')]->getNagiosStartTime() < $_SESSION['nagvis_object_cache_time_automap_'.$this->root]) {
+			if (DEBUG&&DEBUGLEVEL&2) debug('Cache seems to be OK, use it!');
+			// Cache seems to be OK, use it!
+			
+			// Unserialize the string which stores all objects (and child objects) of
+			// this map in it
+			$this->rootObject = unserialize($_SESSION['nagvis_object_cache_automap_'.$this->root]);
+			
+			// The mysql resource $CONN in the BACKEND object is not valid after 
+			// serialisation, now add the current resource to the BACKEND of the cache
+			$this->rootObject->BACKEND = $this->BACKEND;
+		} else {
+			if (DEBUG&&DEBUGLEVEL&2) debug('Not using cache');
+			
+			// Get "root" host object
+			$this->fetchHostObjectByName($this->root);
+			
+			// Get all object informations from backend
+			$this->getObjectTree();
+			
+			// Write the objects to the object cache
+			$_SESSION['nagvis_version'] = CONST_VERSION;
+			$_SESSION['nagvis_object_cache_time_automap_'.$this->root] = time();
+			$_SESSION['nagvis_object_cache_prop_automap_'.$this->root] = implode(',',$prop);
+			// Serialize root object and all it's childs and save this to the cache
+			$_SESSION['nagvis_object_cache_automap_'.$this->root] = serialize($this->rootObject);
+		}
 		
-		// Get all object informations from backend
-		$this->getObjectTree();
+		if (DEBUG&&DEBUGLEVEL&2) debug('Loaded all objects');
 		
 		parent::GlobalMap($this->MAINCFG, $this->MAPCFG);
 		
+		// Create MAPOBJ object, form the object tree to map objects and get the
+		// state of the objects
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		$this->MAPOBJ->fetchState();
+		
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::NagVisAutoMap()');
 	}
 	
@@ -116,21 +155,40 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function parseGraphvizConfig() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::parseGraphvizConfig()');
-		// FIXME
+		
+		/**
+		 * Graph definition
+		 */
 		$str  = 'graph automap { ';
 		//, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
-		$str .= 'graph [ratio="fill", root="'.$this->rootObject->getType().'_'.$this->rootObject->getName().'", size="'.$this->pxToInch($this->width).','.$this->pxToInch($this->height).'"]; '."\n";
+		$str .= 'graph [';
+		$str .= 'dpi="72", ';
+		//ratio: expand, auto, fill, compress
+		$str .= 'ratio="fill", ';
+		$str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getName().'", ';
 		
-		// Default settings for automap nodes
+		/* Directed (DOT) only */
+		$str .= 'nodesep="0", ';
+		$str .= 'ranksep="0.8", ';
+		//rankdir: LR,
+		//$str .= 'rankdir="LR", ';
+		//$str .= 'compound=true, ';
+		//$str .= 'concentrate=true, ';
+		//$str .= 'constraint=false, ';
+		
+		//overlap: true,false,scale,scalexy,ortho,orthoxy,orthoyx,compress,ipsep,vpsc
+		//$str .= 'overlap="ipsep", ';
+		$str .= 'size="'.$this->pxToInch($this->width).','.$this->pxToInch($this->height).'"]; '."\n";
+		
+		/**
+		 * Default settings for automap nodes
+		 */
 		$str .= 'node [';
 		// default margin is 0.11,0.055
 		$str .= 'margin="0.11,0.0", ';
-		// dot: Minimum space between two adjacent nodes in the same rank, in inches.
-		//$str .= 'nodesep="0.15", ';
 		$str .= 'ratio="auto", ';
-		$str .= 'overlap=false, ';
 		$str .= 'shape="none", ';
-		$str .= 'fontcolor=black, fontname=Verdana, fontsize=10';
+		$str .= 'fontcolor=black, fontname=Courier, fontsize=10';
 		$str .= '];'."\n ";
 		
 		// Create nodes for all hosts
@@ -260,7 +318,6 @@ class NagVisAutoMap extends GlobalMap {
 		$ret[] = $this->getFavicon();
 		
 		// Change title (add map alias and map state)
-		// FIXME: This doesn't work here
 		$ret[] = '<script type="text/javascript" language="JavaScript">document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::parseMap()');
@@ -358,7 +415,7 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function checkGraphviz($binary, $printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkGraphviz('.$printErr.')');
-		/* FIXME:
+		/**
 		 * Check if the carphviz binaries can be found in the PATH or in the 
 		 * configured path
 		 */
@@ -457,30 +514,31 @@ class NagVisAutoMap extends GlobalMap {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getRootHostName()');
 		$defaultRoot = $this->MAINCFG->getValue('automap','default_root');
 		if(isset($defaultRoot) && $defaultRoot != '') {
+			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): '.$defaultRoot);
 			return $defaultRoot;
 		} else {
 			if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 				$hostsWithoutParent = $this->BACKEND->BACKENDS[$this->backend_id]->getHostNamesWithNoParent();
 				if(count($hostsWithoutParent) == 1) {
+					if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): '.$hostsWithoutParent[0]);
 					return $hostsWithoutParent[0];
 				} else {
 					//FIXME: ERROR-Handling: Could not get root host for automap
+					if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): FALSE');
 				}
 			}
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName()');
 	}
 	
 	/**
-	 * Creates a hos object by the host name
+	 * Creates a host object by the host name
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchHostObjectByName($hostName) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::fetchHostObjectByName()');
 		$hostObject = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
-		$hostObject->fetchState();
-		$hostObject->fetchIcon();
+		$hostObject->fetchMembers();
 		$hostObject->setConfiguration($this->getObjectConfiguration());
 		$this->rootObject = $hostObject;
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::fetchHostObjectByName()');

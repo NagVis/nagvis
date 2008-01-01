@@ -27,6 +27,7 @@ class NagVisMap extends GlobalMap {
 		
 		parent::GlobalMap($MAINCFG,$MAPCFG);
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
+		$this->MAPOBJ->fetchMembers();
 		
 		if($getState) {
 			$this->MAPOBJ->fetchState();
@@ -51,7 +52,7 @@ class NagVisMap extends GlobalMap {
 		// Change title (add map alias and map state)
 		$ret[] = '<script type="text/javascript" language="JavaScript">document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseMap(): Array(...)');
 		return $ret;
 	}
 	

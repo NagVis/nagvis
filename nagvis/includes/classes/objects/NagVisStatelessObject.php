@@ -26,9 +26,20 @@ class NagVisStatelessObject extends NagVisObject {
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		
-		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisObject($this->MAINCFG, $this->LANG);
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatelessObject::NagVisStatelessObject()');
+	}
+	
+	/**
+	 * PUBLIC fetchMembers()
+	 *
+	 * Just a dummy here
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosStatelessObject::fetchMembers()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosStatelessObject::fetchMembers()');
 	}
 	
 	/**
@@ -73,7 +84,7 @@ class NagVisStatelessObject extends NagVisObject {
 		$ret .= '</a>';
 		$ret .= '</div>';
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatelessObject::parseIcon(): HTML code');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatelessObject::parseIcon(): HTML code');
 		return $ret;
 	}
 }
