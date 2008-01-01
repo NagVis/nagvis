@@ -9,7 +9,7 @@ function debug($msg) {
 
 function debugFinalize() {
 	debug('###########################################################');
-	debug('Render Time: '.(microtime_float()-DEBUGSTART));
+	debug('Render Time: '.(microtime_float()-DEBUGSTART).' URI: '.$_SERVER['REQUEST_URI']);
 	debug('###########################################################');
 }
 
