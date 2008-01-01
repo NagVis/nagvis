@@ -64,6 +64,9 @@
 				<mapIndex>
 					<text>NagVis Map Liste</text>
 				</mapIndex>
+				<rotationPools>
+					<text>Rotation Pools</text>
+				</rotationPools>
 			</labels>
 			<messages>
 				<!-- Alle globalen Meldungen (die in NagVis und WUI auftreten koennen) //-->
@@ -197,6 +200,12 @@
 				<summaryOutput>
 					<text>Gesamt Ausgabe</text>
 				</summaryOutput>
+				<lastCheck>
+					<text>Letzter Check</text>
+				</lastCheck>
+				<nextCheck>
+					<text>N&auml;chster Check</text>
+				</nextCheck>
 				<hostname>
 					<text>Host Name</text>
 				</hostname>
