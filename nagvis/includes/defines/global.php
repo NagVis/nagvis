@@ -5,7 +5,7 @@
  * @author      Lars Michelsen <lars@vertical-visions.de>
  */
 
-define('DEBUG',FALSE);
+define('DEBUG', FALSE);
 /**
  * For wanted debug output summarize these possible options:
  * 1: function beginning and ending
@@ -13,7 +13,7 @@ define('DEBUG',FALSE);
  * 4: render time
  */
 define('DEBUGLEVEL', 4);
-define('DEBUGFILE', '/var/log/nagvis-debug.log');
+define('DEBUGFILE', '../var/nagvis-debug.log');
 
 define('CONST_VERSION', '1.3a1');
 define('CONST_MAINCFG', '../etc/nagvis.ini.php');
