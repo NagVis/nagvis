@@ -17,6 +17,8 @@ class NagiosHost extends NagVisStatefulObject {
 	var $state;
 	var $output;
 	var $problem_has_been_acknowledged;
+	var $last_check;
+	var $next_check;
 	
 	var $summary_state;
 	var $summary_output;
@@ -48,11 +50,23 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->state = '';
 		$this->has_been_acknowledged = 0;
 		
-		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::NagiosHost()');
 	}
 	
+	/**
+	 * PUBLIC fetchMembers()
+	 *
+	 * Gets all member objects
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchMembers()');
+		// Get all service objects
+		$this->fetchServiceObjects();
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchMembers()');
+	}
 	
 	/**
 	 * PUBLIC fetchState()
@@ -71,8 +85,10 @@ class NagiosHost extends NagVisStatefulObject {
 			// Bad: this method is not meant for this, but it works
 			$this->setConfiguration($arrValues);
 			
-			// Get also services and states
-			$this->fetchServiceObjects();
+			// Get all service states
+			foreach($this->services AS $OBJ) {
+				$OBJ->fetchState();
+			}
 			
 			// Also get summary state
 			$this->fetchSummaryState();
@@ -137,7 +153,6 @@ class NagiosHost extends NagVisStatefulObject {
 		// Get all services and states
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServicesByHostName($this->host_name) As $serviceDescription) {			
 			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->host_name, $serviceDescription);
-			$OBJ->fetchState();
 			$this->services[] = $OBJ;
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchServiceObjects()');
@@ -158,6 +173,7 @@ class NagiosHost extends NagVisStatefulObject {
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
 				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
+				$OBJ->fetchMembers();
 				$OBJ->fetchState();
 				$OBJ->fetchIcon();
 				$OBJ->setConfiguration($objConf);
@@ -206,30 +222,16 @@ class NagiosHost extends NagVisStatefulObject {
 			$arrStates[$SERVICE->getSummaryState()]++;
 		}
 		
-		// FIXME: LANGUAGE
-		$this->summary_output = 'Host is '.$this->state.'. There are ';
+		$this->summary_output = 'Host is '.$this->state.'. ';
+		
 		if(count($this->services) > 0) {
-			foreach($arrStates AS $state => $num) {
-				if($num > 0) {
-					$this->summary_output .= $num.' '.$state.', ';
-				}
-			}
+			//FIXME: Language
+			parent::fetchSummaryOutput($arrStates, 'services');
 		} else {
-			$this->summary_output .= '0';
+			//FIXME: Language
+			$this->summary_output .= 'There are 0 services';
 		}
-		$this->summary_output .= ' services.';
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchSummaryState()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchSummaryOutput()');
 	}
-	
-	/* UNNEEDED atm
-	function fetchInformationsFromBackend() {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostBasicInformations($this->host_name);
-			
-			$this->alias = $arrValues['alias'];
-			$this->display_name = $arrValues['display_name'];
-			$this->address = $arrValues['address'];
-		}
-	}*/
 }
 ?>

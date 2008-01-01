@@ -45,8 +45,27 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		$this->members = Array();
 		$this->state = '';
 		
-		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::NagiosHostgroup()');
+	}
+	
+	/**
+	 * PUBLIC fetchMembers()
+	 *
+	 * Gets all member objects
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::fetchMembers()');
+		// Get all member hosts
+		$this->fetchMemberHostObjects();
+		
+		// Get all services of member host
+		foreach($this->members AS $OBJ) {
+			$OBJ->fetchMembers();
+		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::fetchMembers()');
 	}
 	
 	/**
@@ -59,8 +78,11 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 */
 	function fetchState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::fetchState()');
-		// Get all Members and states
-		$this->fetchMemberHostObjects();
+		
+		// Get states of all members
+		foreach($this->members AS $OBJ) {
+			$OBJ->fetchState();
+		}
 		
 		// Also get summary state
 		$this->fetchSummaryState();
@@ -68,6 +90,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		// At least summary output
 		$this->fetchSummaryOutput();
 		$this->state = $this->summary_state;
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::fetchState()');
 	}
 	
 	/**
@@ -100,11 +123,8 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name);
 			if(count($arrHosts) > 0) {
-				foreach($arrHosts AS $hostName) {			
-					$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
-					$OBJ->fetchState();
-					
-					$this->members[] = $OBJ;
+				foreach($arrHosts AS $hostName) {
+					$this->members[] = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
 				}
 			}
 		}
@@ -144,34 +164,17 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
 			$output = '';
 			
-			// FIXME: Get summary state of this and child objects
+			// Get summary state of this and child objects
 			foreach($this->members AS $MEMBER) {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			
-			// FIXME: LANGUAGE
-			$this->summary_output = 'There are ';
-			foreach($arrStates AS $state => $num) {
-				if($num > 0) {
-					$this->summary_output .= $num.' '.$state.', ';
-				}
-			}
-			$this->summary_output .= ' hosts.';
+			//FIXME: Language
+			parent::fetchSummaryOutput($arrStates, 'hosts');
 		} else {
 			$this->summary_output = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::fetchSummaryOutput()');
 	}
-	
-	/* UNNEEDED atm
-	function fetchInformationsFromBackend() {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostBasicInformations($this->host_name);
-			
-			$this->alias = $arrValues['alias'];
-			$this->display_name = $arrValues['display_name'];
-			$this->address = $arrValues['address'];
-		}
-	}*/
 }
 ?>

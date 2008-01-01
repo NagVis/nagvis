@@ -45,9 +45,22 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		$this->members = Array();
 		$this->state = '';
 		
-		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::NagiosServicegroup()');
+	}
+	
+	/**
+	 * PUBLIC fetchMembers()
+	 *
+	 * Gets all member objects
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchMembers()');
+		// Get all member services
+		$this->fetchMemberServiceObjects();
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchMembers()');
 	}
 	
 	/**
@@ -60,8 +73,11 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 */
 	function fetchState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchState()');
-		// Get all Members and states
-		$this->fetchMemberServiceObjects();
+		
+		// Get states of all members
+		foreach($this->members AS $OBJ) {
+			$OBJ->fetchState();
+		}
 		
 		// Also get summary state
 		$this->fetchSummaryState();
@@ -81,10 +97,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicesByServicegroupName($this->servicegroup_name);
 			foreach($arrServices AS $service) {
-				$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $service['host_name'], $service['service_description']);
-				$OBJ->fetchState();
-				
-				$this->members[] = $OBJ;
+				$this->members[] = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $service['host_name'], $service['service_description']);
 			}
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchMemberServiceObjects()');
@@ -115,30 +128,17 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
 			$output = '';
 			
-			// FIXME: Get summary state of this and child objects
+			// Get summary state of this and child objects
 			foreach($this->members AS $MEMBER) {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			
-			// FIXME: LANGUAGE
-			$this->summary_output = 'There are '.($arrStates['DOWN']+$arrStates['CRITICAL']).' DOWN/CRTICAL, '.$arrStates['WARNING'].' WARNING, '.$arrStates['UNKNOWN'].' UNKNOWN and '.($arrStates['UP']+$arrStates['OK']).' UP/OK services';
+			//FIXME: Language
+			parent::fetchSummaryOutput($arrStates, 'services');
 		} else {
 			$this->summary_output = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchSummaryOutput()');
 	}
-	
-	# END Public Methods
-	# #####################################################
-	
-	/* UNUSED atm
-	function fetchInformationsFromBackend() {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupBasicInformations($this->servicegroup_name);
-			
-			$this->alias = $arrValues['alias'];
-			$this->display_name = $arrValues['display_name'];
-		}
-	}*/
 }
 ?>

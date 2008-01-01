@@ -1,6 +1,6 @@
 <?php
 /**
- * Class of a Host in Nagios with all necessary informations
+ * Class of all NagVis objects which have a state
  */
 class NagVisStatefulObject extends NagVisObject {
 	var $MAINCFG;
@@ -37,7 +37,6 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
 		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
 		
-		//FIXME: $this->getInformationsFromBackend();
 		parent::NagVisObject($this->MAINCFG, $this->LANG);
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::NagVisStatefulObject()');
 	}
@@ -277,6 +276,32 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PRIVATE fetchSummaryOutput()
+	 *
+	 * Fetches the summary output from objects and all child objects
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchSummaryOutput(&$arrStates, $objLabel) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::fetchSummaryOutput()');
+		
+		// FIXME: LANGUAGE
+		$this->summary_output .= 'There are ';
+		foreach($arrStates AS $state => $num) {
+			if($num > 0) {
+				$this->summary_output .= $num.' '.$state.', ';
+			}
+		}
+		
+		// Remove last comata
+		$this->summary_output = preg_replace('/, $/', '', $this->summary_output);
+		
+		$this->summary_output .= ' '.$objLabel.'.';
+		
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::fetchSummaryOutput()');
+	}
+	
+	/**
 	 * Wraps the state of the current object with the given child object
 	 *
 	 * @param		Object		Object with a state
@@ -300,7 +325,7 @@ class NagVisStatefulObject extends NagVisObject {
 			$this->summary_state = $OBJ->getSummaryState();
 		}
  		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::warpChildState()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::wrapChildState()');
 	}
 }
 ?>
