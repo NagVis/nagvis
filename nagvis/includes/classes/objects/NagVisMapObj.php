@@ -74,6 +74,25 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
+	 * PUBLIC fetchMembers()
+	 *
+	 * Gets all member objects
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function fetchMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchMembers()');
+		// Get all member objects
+		$this->fetchMapObjects();
+		
+		// Get all services of member host
+		foreach($this->objects AS $OBJ) {
+			$OBJ->fetchMembers();
+		}
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchMembers()');
+	}
+	
+	/**
 	 * PUBLIC fetchState()
 	 *
 	 * Fetches the state of the map and all map objects. It also fetches the
@@ -83,8 +102,19 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	function fetchState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchState()');
-		// Get all Members and states
-		$this->fetchMapObjects();
+		
+		// Get state of all member objects
+		foreach($this->objects AS $OBJ) {
+			// Before getting state of maps we have to check if there is a loop in the maps
+			if(get_class($OBJ) != 'NagVisMapObj' || (get_class($OBJ) == 'NagVisMapObj' && $this->checkLoop($OBJ))) {
+				// Don't get state from textboxes and shapes
+				if($OBJ->type != 'textbox' && $OBJ->type != 'shape') {
+					$OBJ->fetchState();
+				}
+			}
+			
+			$OBJ->fetchIcon();
+		}
 		
 		// Also get summary state
 		$this->fetchSummaryState();
@@ -127,18 +157,13 @@ class NagVisMapObj extends NagVisStatefulObject {
 			}
 		}
 		
-		// FIXME: LANGUAGE
-		$this->summary_output = 'There are ';
 		if(count($this->getMapObjects()) > 0) {
-			foreach($arrStates AS $state => $num) {
-				if($num > 0) {
-					$this->summary_output .= $num.' '.$state.', ';
-				}
-			}
+			// FIXME: LANGUAGE
+			parent::fetchSummaryOutput($arrStates, 'objects');
 		} else {
-			$this->summary_output .= '0';
+			// FIXME: LANGUAGE
+			$this->summary_output .= 'There are 0 objects.';
 		}
-		$this->summary_output .= ' objeccts.';
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchSummaryOutput()');
 	}
 	
@@ -152,75 +177,96 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function fetchMapObjects($getState=1,$mergeWithGlobals=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchMapObjects('.$getState.','.$mergeWithGlobals.')');
 		
-		foreach($this->MAPCFG->validConfig AS $type => $arr) {
-			if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
-				foreach($objs AS $index => $objConf) {
-					if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
-					// workaround
-					$objConf['id'] = $index;
-					
-					if($mergeWithGlobals) {
-						// merge with "global" settings
-						foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
-							if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-								$objConf[$key] = $values['default'];
+		/**
+		 * Check if we can use cached objects. The cache is only be used when the 
+		 * following things are OK: NagVis version, Nagios start time < cache time
+		 */
+		if(isset($_SESSION['nagvis_version']) 
+		 && isset($_SESSION['nagvis_object_cache_time_'.$this->getName()]) 
+		 && isset($_SESSION['nagvis_object_cache'.$this->getName()])
+		 && $_SESSION['nagvis_version'] == CONST_VERSION
+		 && $this->BACKEND->checkBackendInitialized($this->MAPCFG->getValue('global', 0, 'backend_id'), TRUE)
+		 && $this->BACKEND->BACKENDS[$this->MAPCFG->getValue('global', 0, 'backend_id')]->getNagiosStartTime() < $_SESSION['nagvis_object_cache_time_'.$this->getName()]) {
+			// Cache seems to be OK, use it!
+			
+			// Unserialize the string which stores all objects (and child objects) of
+			// this map in it
+			$this->objects = unserialize($_SESSION['nagvis_object_cache'.$this->getName()]);
+			
+			// The mysql resource $CONN in the BACKEND object is not valid after 
+			// serialisation, now add the current resource to the BACKEND of the cache
+			$this->objects[0]->BACKEND = $this->BACKEND;
+		} else {
+			foreach($this->MAPCFG->validConfig AS $type => $arr) {
+				if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
+					foreach($objs AS $index => $objConf) {
+						if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
+						// workaround
+						$objConf['id'] = $index;
+						
+						if($mergeWithGlobals) {
+							// merge with "global" settings
+							foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+								if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+									$objConf[$key] = $values['default'];
+								}
 							}
 						}
-					}
-					
-					switch($type) {
-						case 'host':
-							$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name']);
-						break;
-						case 'service':
-							$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
-						break;
-						case 'hostgroup':
-							$OBJ = new NagVisHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['hostgroup_name']);
-						break;
-						case 'servicegroup':
-							$OBJ = new NagVisServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['servicegroup_name']);
-						break;
-						case 'map':
-							$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG, $objConf['map_name']);
-							if($SUBMAPCFG->checkMapConfigExists(0)) {
-								$SUBMAPCFG->readMapConfig();
-							}
-							$OBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $SUBMAPCFG);
-							
-							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
-								$OBJ->summary_state = 'ERROR';
-								$OBJ->summary_output = $this->LANG->getMessageText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
-							}
-						break;
-						case 'shape':
-							$OBJ = new NagVisShape($this->MAINCFG, $this->LANG, $objConf['icon']);
-						break;
-						case 'textbox':
-							$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
-						break;
-						default:
-							//FIXME: Unhandled
-							echo 'Unhandled: '.$type;
-						break;
-					}
-					
-					$OBJ->setConfiguration($objConf);
-					
-					// Before getting state of maps we have to check if there is a loop in the maps
-					if(get_class($OBJ) != 'NagVisMapObj' || (get_class($OBJ) == 'NagVisMapObj' && $this->checkLoop($OBJ))) {
-						if($getState && ($OBJ->type != 'textbox' && $OBJ->type != 'shape')) {
-							$OBJ->fetchState();
+						
+						switch($type) {
+							case 'host':
+								$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name']);
+							break;
+							case 'service':
+								$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
+							break;
+							case 'hostgroup':
+								$OBJ = new NagVisHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['hostgroup_name']);
+							break;
+							case 'servicegroup':
+								$OBJ = new NagVisServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['servicegroup_name']);
+							break;
+							case 'map':
+								$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG, $objConf['map_name']);
+								if($SUBMAPCFG->checkMapConfigExists(0)) {
+									$SUBMAPCFG->readMapConfig();
+								}
+								$OBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $SUBMAPCFG);
+								
+								if(!$SUBMAPCFG->checkMapConfigExists(0)) {
+									$OBJ->summary_state = 'ERROR';
+									$OBJ->summary_output = $this->LANG->getMessageText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+								}
+							break;
+							case 'shape':
+								$OBJ = new NagVisShape($this->MAINCFG, $this->LANG, $objConf['icon']);
+							break;
+							case 'textbox':
+								$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
+							break;
+							default:
+								//FIXME: Unhandled
+								echo 'Unhandled: '.$type;
+							break;
 						}
+						
+						// Apply default configuration to object
+						$OBJ->setConfiguration($objConf);
+						
+						// Write member to object array
+						$this->objects[] = $OBJ;
+						
+						if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
 					}
-					
-					$OBJ->fetchIcon();
-					
-					$this->objects[] = $OBJ;
-					
-					if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
 				}
 			}
+			
+			// Write the objects to the object cache
+			$_SESSION['nagvis_version'] = CONST_VERSION;
+			$_SESSION['nagvis_object_cache_time_'.$this->getName()] = time();
+			// Serialize all objects of this map (including childs) to a string and
+			// save this to a session variable. This is the object cache
+			$_SESSION['nagvis_object_cache'.$this->getName()] = serialize($this->objects);
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapObj::fetchMapObjects()');
