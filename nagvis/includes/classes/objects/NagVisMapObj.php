@@ -86,7 +86,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->fetchMapObjects();
 		
 		// Get all services of member host
-		foreach($this->objects AS $OBJ) {
+		foreach($this->getMapObjects() AS $OBJ) {
 			$OBJ->fetchMembers();
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchMembers()');
@@ -104,7 +104,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchState()');
 		
 		// Get state of all member objects
-		foreach($this->objects AS $OBJ) {
+		foreach($this->getMapObjects() AS $OBJ) {
 			// Before getting state of maps we have to check if there is a loop in the maps
 			if(get_class($OBJ) != 'NagVisMapObj' || (get_class($OBJ) == 'NagVisMapObj' && $this->checkLoop($OBJ))) {
 				// Don't get state from textboxes and shapes
@@ -135,7 +135,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function objectTreeToMapObjects(&$OBJ) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::objectTreeToMapObjects()');
 		$this->objects[] = &$OBJ;
-		$this->objects = array_merge($this->objects, $OBJ->getChilds());
+		$this->objects = array_merge($this->getMapObjects(), $OBJ->getChilds());
 		
 		foreach($OBJ->getChilds() AS $OBJ1) {
 			$this->objectTreeToMapObjects($OBJ1);
@@ -148,21 +148,18 @@ class NagVisMapObj extends NagVisStatefulObject {
 	
 	function fetchSummaryOutput() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchSummaryOutput()');
-		$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
-		$output = '';
-		
-		foreach($this->getMapObjects() AS $OBJ) {
-			if(method_exists($OBJ,'getSummaryState')) {
-				$arrStates[$OBJ->getSummaryState()]++;
-			}
-		}
-		
 		if(count($this->getMapObjects()) > 0) {
-			// FIXME: LANGUAGE
-			parent::fetchSummaryOutput($arrStates, 'objects');
+			$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+			
+			foreach($this->getMapObjects() AS $OBJ) {
+				if(method_exists($OBJ,'getSummaryState')) {
+					$arrStates[$OBJ->getSummaryState()]++;
+				}
+			}
+			
+			parent::fetchSummaryOutput($arrStates, $this->LANG->getLabel('objects'));
 		} else {
-			// FIXME: LANGUAGE
-			$this->summary_output .= 'There are 0 objects.';
+			$this->summary_output .= $this->LANG->getMessageText('mapIsEmpty','MAP~'.$this->getName());
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchSummaryOutput()');
 	}
@@ -193,9 +190,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 			// this map in it
 			$this->objects = unserialize($_SESSION['nagvis_object_cache'.$this->getName()]);
 			
-			// The mysql resource $CONN in the BACKEND object is not valid after 
-			// serialisation, now add the current resource to the BACKEND of the cache
-			$this->objects[0]->BACKEND = $this->BACKEND;
+			// Only do this if there are objects on that map
+			if(count($this->objects) > 0) {
+				// The mysql resource $CONN in the BACKEND object is not valid after 
+				// serialisation, now add the current resource to the BACKEND of the cache
+				$this->objects[0]->BACKEND = $this->BACKEND;
+			}
 		} else {
 			foreach($this->MAPCFG->validConfig AS $type => $arr) {
 				if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
@@ -315,9 +315,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 				if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): TRUE');
 				return TRUE;
 			} else {
-				// FIXME: Language entry
 				$OBJ->summary_state = 'UNKNOWN';
-				$OBJ->summary_output = 'Error: You are not permited to view the state of this map.';
+				$OBJ->summary_output = $this->LANG->getMessageText('noReadPermissions');
 				
 				if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): FALSE');
 				return FALSE;
