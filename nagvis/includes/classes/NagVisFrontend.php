@@ -81,9 +81,13 @@ class NagVisFrontend extends GlobalPage {
 						} else {
 							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
 						}
+						
+						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 					} else {
-						$onClick = 'alert(\'Error: You are not permited to view the state of this map.\');';
 						$class = 'class="disabled"';
+						
+						$onClick = 'alert(\''.$this->LANG->getMessageText('noReadPermissions').'\');';
+						$summaryOutput = $this->LANG->getMessageText('noReadPermissions');
 					}
 					
 					// If this is the automap display the last rendered image
@@ -96,7 +100,7 @@ class NagVisFrontend extends GlobalPage {
 					}
 					
 					// Now form the cell with it's contents
-					$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.$MAP->MAPOBJ->getSummaryOutput().'</td></tr></table>\');" onClick="'.$onClick.'">';
+					$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.strtr(addslashes($summaryOutput),Array('"' => '\'', "\r" => '', "\n" => '')).'</td></tr></table>\');" onClick="'.$onClick.'">';
 					$ret[] = '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
 					$ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
 					if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
@@ -150,12 +154,12 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function createThumbnail($imgPath, $mapName) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::createThumbnail()');
-		//FIXME: File exists
-		if(1) {
-			$imgSize = getimagesize($imgPath);
+		
+		if($this->checkImageExists($imgPath, TRUE)) {
+			$imgSize = @getimagesize($imgPath);
 			// 0: width, 1:height, 2:type
 			
-			switch ($imgSize[2]) {
+			switch($imgSize[2]) {
 				case 1: // GIF
 				$image = imagecreatefromgif($imgPath);
 				break;
@@ -166,8 +170,8 @@ class NagVisFrontend extends GlobalPage {
 				$image = imagecreatefrompng($imgPath);
 				break;
 				default:
-					//FIXME: Error handling
-					echo "ERROR: Wrong format";
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+					$FRONTEND->messageToUser('ERROR','onlyPngOrJpgImages');
 				break;
 			}
 			
@@ -198,9 +202,31 @@ class NagVisFrontend extends GlobalPage {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::createThumbnail()');
 			return $this->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
 		} else {
-			//FIXME: Error handling
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::createThumbnail()');
 			return '';
+		}
+	}
+	
+	/**
+	 * Checks Image exists
+	 *
+	 * @param 	String	$imgPath
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkImageExists($imgPath, $printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkImageExists('.$printErr.')');
+		if(file_exists($imgPath)) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkImageExists(): TRUE');
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('WARNING','imageNotExists','FILE~'.$imgPath);
+			}
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkImageExists(): FALSE');
+			return FALSE;
 		}
 	}
 	
