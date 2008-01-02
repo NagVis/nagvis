@@ -9,12 +9,21 @@
 		<global>
 			<labels>
 				<!-- Alle globalen Beschriftungen //-->
+				<objects>
+					<text>Objects</text>
+				</objects>
 				<host>
 					<text>Host</text>
 				</host>
+				<hosts>
+					<text>Hosts</text>
+				</hosts>
 				<service>
 					<text>Service</text>
 				</service>
+				<services>
+					<text>Services</text>
+				</services>
 				<hostgroup>
 					<text>Hostgroup</text>
 				</hostgroup>
@@ -221,6 +230,12 @@
 				<mapname>
 					<text>Map Name</text>
 				</mapname>
+				<hostStateIs>
+					<text>The Host is</text>
+				</hostStateIs>
+				<childStatesAre>
+					<text>There are</text>
+				</childStatesAre>
 			</labels>
 			<messages>
 				<!-- Alle NagVis Meldungen //-->
@@ -260,6 +275,22 @@
 					<title>var folder not writeable</title>
 					<text>The var folder &quot;[PATH]&quot; ist not writeable.</text>
 				</varFolderNotWriteable>
+				<mapIsEmpty>
+					<title>Map is empty</title>
+					<text>The map &quot;[MAP]&quot; has 0 Objects.</text>
+				</mapIsEmpty>
+				<hostHasNoServices>
+					<title>Host has no services</title>
+					<text>The host &quot;[HOST]&quot; has no Services.</text>
+				</hostHasNoServices>
+				<noReadPermissions>
+					<title>Permission denied</title>
+					<text>You are not permited to view the state of this map.</text>
+				</noReadPermissions>
+				<imageNotExists>
+					<title>Image does not exists</title>
+					<text>An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist.</text>
+				</imageNotExists>
 			</messages>
 		</global>
 	</nagvis>

@@ -9,17 +9,26 @@
 		<global>
 			<labels>
 				<!-- Alle globalen Beschriftungen //-->
+				<objects>
+					<text>Objekte</text>
+				</objects>
 				<host>
 					<text>Host</text>
 				</host>
+				<hosts>
+					<text>Hosts</text>
+				</hosts>
 				<service>
-					<text>Service</text>
+					<text>Dienst</text>
 				</service>
+				<services>
+					<text>Dienste</text>
+				</services>
 				<hostgroup>
 					<text>Hostgruppe</text>
 				</hostgroup>
 				<servicegroup>
-					<text>Servicegruppe</text>
+					<text>Dienstegruppe</text>
 				</servicegroup>
 				<map>
 					<text>Karte</text>
@@ -221,6 +230,12 @@
 				<mapname>
 					<text>Map Name</text>
 				</mapname>
+				<hostStateIs>
+					<text>Der Host ist</text>
+				</hostStateIs>
+				<childStatesAre>
+					<text>Es sind</text>
+				</childStatesAre>
 			</labels>
 			<messages>
 				<!-- Alle NagVis Meldungen //-->
@@ -260,6 +275,22 @@
 					<title>var Verzeichnis nicht beschreibbar</title>
 					<text>Das Verzeichnis &quot;[PATH]&quot; ist nicht beschreibbar.</text>
 				</varFolderNotWriteable>
+				<mapIsEmpty>
+					<title>Karte ist leer</title>
+					<text>Die Karte &quot;[MAP]&quot; hat keine Objekte.</text>
+				</mapIsEmpty>
+				<hostHasNoServices>
+					<title>Host hat keine Dienste</title>
+					<text>Der Host &quot;[HOST]&quot; hat keine Dienste.</text>
+				</hostHasNoServices>
+				<noReadPermissions>
+					<title>Zugriff verboten</title>
+					<text>Du hast keine Berechtigung den Status dieser Map einzusehen.</text>
+				</noReadPermissions>
+				<imageNotExists>
+					<title>Bild existiert nicht</title>
+					<text>Ein Bild &quot;[FILE]&quot;, welches zum Erstellen einer Vorschau ben&ouml;tigt wird, existiert nicht.</text>
+				</imageNotExists>
 			</messages>
 		</global>
 	</nagvis>
