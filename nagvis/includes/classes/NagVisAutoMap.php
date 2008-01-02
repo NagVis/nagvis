@@ -375,8 +375,8 @@ class NagVisAutoMap extends GlobalMap {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('ERROR','varDirNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR','varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderExists(): FALSE');
 			return FALSE;
@@ -397,8 +397,8 @@ class NagVisAutoMap extends GlobalMap {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('ERROR','varDirNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR','varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderWriteable(): FALSE');
 			return FALSE;
