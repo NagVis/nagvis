@@ -33,7 +33,6 @@ class NagVisObject {
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		
-		//FIXME: $this->getInformationsFromBackend();
 		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::NagVisObject()');
 	}
 	
@@ -319,14 +318,14 @@ class NagVisObject {
 			$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$this->service_description),$ret);
 			$ret = str_replace('[lang_service_description]',$this->LANG->getLabel('servicename'),$ret);
 		} else {
-			$ret = preg_replace('/<!-- BEGIN service -->(.*)<!-- END service -->/','',$ret); //(?s)
+			$ret = preg_replace('/(<!-- BEGIN service -->(.*?)<!-- END service -->)+/sS','',$ret);
 		}
 		
 		// Macros which are only for hosts
 		if($this->type == 'host') {
 			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->$name),$ret);
 		} else {
-			$ret = preg_replace('/<!-- BEGIN host -->((?s).*)<!-- END host -->/','',$ret);
+			$ret = preg_replace('/(<!-- BEGIN host -->(.*?)<!-- END host -->)+/s','',$ret);
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::replaceHoverTemplateMacros()');

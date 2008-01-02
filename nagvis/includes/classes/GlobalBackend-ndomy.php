@@ -524,8 +524,8 @@ class GlobalBackendndomy {
 				$arrTmpReturn['alias'] = $data['display_name'];
 				
 				// Add Additional informations to array
-				$arrReturn['last_check'] = $data['last_check'];
-				$arrReturn['next_check'] = $data['next_check'];
+				$arrTmpReturn['last_check'] = $data['last_check'];
+				$arrTmpReturn['next_check'] = $data['next_check'];
 				
 				if($onlyHardstates == 1) {
 					if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
