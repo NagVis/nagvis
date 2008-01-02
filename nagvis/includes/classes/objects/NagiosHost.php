@@ -125,7 +125,7 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PRIVATE getChilds()
+	 * PUBLIC getChilds()
 	 *
 	 * Returns all child objects in childObjects array 
 	 *
@@ -136,6 +136,20 @@ class NagiosHost extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::getChilds()');
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::getChilds()');
 		return $this->childObjects;
+	}
+	
+	/**
+	 * PUBLIC getNumServices()
+	 *
+	 * Returns the number of services
+	 *
+	 * @return	Integer		Number of services
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getNumServices() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::getNumMembers()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::getNumMembers()');
+		return count($this->services);
 	}
 	
 	# End public methods
@@ -215,21 +229,21 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	function fetchSummaryOutput() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchSummaryOutput()');
-		$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
-		$output = '';
 		
-		foreach($this->services AS $SERVICE) {
-			$arrStates[$SERVICE->getSummaryState()]++;
-		}
+		// Write host state
+		$this->summary_output = $this->LANG->getLabel('hostStateIs').' '.$this->state.'. ';
 		
-		$this->summary_output = 'Host is '.$this->state.'. ';
-		
-		if(count($this->services) > 0) {
-			//FIXME: Language
-			parent::fetchSummaryOutput($arrStates, 'services');
+		// If there are services write the summary state for them
+		if($this->getNumServices() > 0) {
+			$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+			
+			foreach($this->services AS $SERVICE) {
+				$arrStates[$SERVICE->getSummaryState()]++;
+			}
+			
+			parent::fetchSummaryOutput($arrStates, $this->LANG->getLabel('services'));
 		} else {
-			//FIXME: Language
-			$this->summary_output .= 'There are 0 services';
+			$this->summary_output .= $this->LANG->getMessageText('hostHasNoServices','HOST~'.$this->getName());
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchSummaryOutput()');
 	}

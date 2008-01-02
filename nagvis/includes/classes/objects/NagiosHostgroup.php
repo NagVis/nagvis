@@ -161,16 +161,14 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	function fetchSummaryOutput() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::fetchSummaryOutput()');
 		if($this->getNumMembers() > 0) {
-			$arrStates = Array('CRITICAL'=>0,'DOWN'=>0,'WARNING'=>0,'UNKNOWN'=>0,'UP'=>0,'OK'=>0,'ERROR'=>0,'ACK'=>0,'PENDING'=>0);
-			$output = '';
+			$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
 			// Get summary state of this and child objects
 			foreach($this->members AS $MEMBER) {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			
-			//FIXME: Language
-			parent::fetchSummaryOutput($arrStates, 'hosts');
+			parent::fetchSummaryOutput($arrStates, $this->LANG->getLabel('hosts'));
 		} else {
 			$this->summary_output = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
 		}
