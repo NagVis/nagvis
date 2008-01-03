@@ -20,7 +20,7 @@ class WuiBackground extends GlobalBackground {
 	*/
 	function deleteImage($printErr=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackground::deleteImage('.$printErr.')');
-		if($this->checkFileWriteable($printErr)) {
+		if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
 			if(unlink($this->MAINCFG->getValue('paths', 'map').$this->image)) {
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackground::deleteImage(): TRUE');
 				return TRUE;
@@ -82,7 +82,7 @@ class WuiBackground extends GlobalBackground {
 	*/
 	function createImage($color, $width, $height) {
 		if(!$this->checkFileExists(0)) {
-			if($this->checkFolderWriteable()) {
+			if($this->checkFolderWriteable(1)) {
 				$image = imagecreatetruecolor($width, $height);
 				
 				// get rgb color from hexcode
@@ -99,8 +99,7 @@ class WuiBackground extends GlobalBackground {
 				
 				return TRUE;
 			} else {
-				//FIXME: Error handling
-				print("<script>alert('ERROR: The folder (".$this->MAINCFG->getValue('paths', 'map').") is not writeable.')</script>");
+				// No need for error handling here
 				return FALSE;
 			}
 		} else {

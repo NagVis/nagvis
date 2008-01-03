@@ -94,8 +94,7 @@ class GlobalBackground {
 	function checkFileWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageWriteable('.$printErr.')');
 		if($this->image != '') {
-			//FIXME: is_writable doesn't check write permissions
-			if($this->checkFileExists($printErr) /*&& is_writable($this->MAINCFG->getValue('paths', 'map').$this->image)*/) {
+			if($this->checkFileExists($printErr) && is_writable($this->MAINCFG->getValue('paths', 'map').$this->image)) {
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageWriteable(): TRUE');
 				return TRUE;
 			} else {
