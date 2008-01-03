@@ -210,11 +210,23 @@
 					<text>Gesamt Ausgabe</text>
 				</summaryOutput>
 				<lastCheck>
-					<text>Letzter Check</text>
+					<text>Letzte Pr&uuml;fung</text>
 				</lastCheck>
 				<nextCheck>
-					<text>N&auml;chster Check</text>
+					<text>N&auml;chste Pr&uuml;fung</text>
 				</nextCheck>
+				<currentAttempt>
+					<text>Versuch</text>
+				</currentAttempt>
+				<stateType>
+					<text>Status Typ</text>
+				</stateType>
+				<lastStateChange>
+					<text>Letzte Status-&Auml;nderung</text>
+				</lastStateChange>
+				<stateDuration>
+					<text>Status Dauer</text>
+				</stateDuration>
 				<hostname>
 					<text>Host Name</text>
 				</hostname>
@@ -263,10 +275,6 @@
 					<title>Map rotations pool existiert nicht</title>
 					<text>Der angegebene Map rotations pool &quot;[ROTATION]&quot; ist nicht definiert.</text>
 				</mapRotationPoolNotExists>
-				<graphvizBinaryNotFound>
-					<title>Graphviz Anwendung nicht gefunden</title>
-					<text>Die ben&ouml;tigte Graphviz Anwendung &quot;[NAME]&quot; konnte in den Pfaden &quot;[PATHS]&quot; nicht gefunden werden.</text>
-				</graphvizBinaryNotFound>
 				<varFolderNotExists>
 					<title>var Verzeichnis existiert nicht</title>
 					<text>Das var Verzeichnis &quot;[PATH]&quot; existiert nicht.</text>
@@ -293,6 +301,23 @@
 				</imageNotExists>
 			</messages>
 		</global>
+		<automap>
+			<!-- All messages for the automap //-->
+			<messages>
+				<graphvizBinaryNotFound>
+					<title>Graphviz Anwendung nicht gefunden</title>
+					<text>Die ben&ouml;tigte Graphviz Anwendung &quot;[NAME]&quot; konnte in den Pfaden &quot;[PATHS]&quot; nicht gefunden werden.</text>
+				</graphvizBinaryNotFound>
+				<couldNotGetRootHostname>
+					<title>Konnte Urpsrungs-Host nicht ermitteln</title>
+					<text>Die Automap ben&ouml;tigt einen Urpsprungs-Host.[br][br] Es gibt drei M&ouml;glichkeiten um einen Ursprungs-Host zu bestimmen: URL parameter &quot;root&quot;, Haupt-Konfiguration &quot;automap > default_root&quot;, Automatische Ermittlung (Nur m&ouml;glich, wenn es [b]einen[/b] Host ohne Eltern-Host gibt).</text>
+				</couldNotGetRootHostname>
+				<unknownRenderMode>
+					<title>Unbekannter Anzeige Modus</title>
+					<text>Der Anzeige Modus &quot;[MODE]&quot; wird nicht unterst&uuml;tzt.</text>
+				</unknownRenderMode>
+			</messages>
+		</automap>
 	</nagvis>
 	<backend>
 		<global>

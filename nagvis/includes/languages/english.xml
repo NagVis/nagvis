@@ -215,6 +215,18 @@
 				<nextCheck>
 					<text>Next Check</text>
 				</nextCheck>
+				<currentAttempt>
+					<text>Current Attempt</text>
+				</currentAttempt>
+				<stateType>
+					<text>State Type</text>
+				</stateType>
+				<lastStateChange>
+					<text>Last State Change</text>
+				</lastStateChange>
+				<stateDuration>
+					<text>State Duration</text>
+				</stateDuration>
 				<hostname>
 					<text>Host Name</text>
 				</hostname>
@@ -263,10 +275,6 @@
 					<title>Map rotation pool not exists</title>
 					<text>The given map rotation pool &quot;[ROTATION]&quot; is not defined in NagVis</text>
 				</mapRotationPoolNotExists>
-				<graphvizBinaryNotFound>
-					<title>Graphviz binary not found</title>
-					<text>The required graphviz binary &quot;[NAME]&quot; could not be found in the paths: &quot;[PATHS]&quot;</text>
-				</graphvizBinaryNotFound>
 				<varFolderNotExists>
 					<title>var folder not exists</title>
 					<text>The var folder &quot;[PATH]&quot; does not exist.</text>
@@ -293,6 +301,23 @@
 				</imageNotExists>
 			</messages>
 		</global>
+		<automap>
+			<!-- All messages for the automap //-->
+			<messages>
+				<graphvizBinaryNotFound>
+					<title>Graphviz binary not found</title>
+					<text>The required graphviz binary &quot;[NAME]&quot; could not be found in the paths: &quot;[PATHS]&quot;</text>
+				</graphvizBinaryNotFound>
+				<couldNotGetRootHostname>
+					<title>Could not get Root Hostname</title>
+					<text>The Automap needs one root hostname to start the drawing.[br][br] There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is [b]one[/b] host with no parent).</text>
+				</couldNotGetRootHostname>
+				<unknownRenderMode>
+					<title>Unknown render mode</title>
+					<text>The render mode &quot;[MODE]&quot; is not supported.</text>
+				</unknownRenderMode>
+			</messages>
+		</automap>
 	</nagvis>
 	<backend>
 		<global>
