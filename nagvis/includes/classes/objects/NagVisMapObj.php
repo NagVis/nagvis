@@ -182,6 +182,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 		 && isset($_SESSION['nagvis_object_cache_time_'.$this->getName()]) 
 		 && isset($_SESSION['nagvis_object_cache'.$this->getName()])
 		 && $_SESSION['nagvis_version'] == CONST_VERSION
+		 /* The following check is only temporary until I got a good idea for
+		  * reloading the configuration to cached objects */
+		 && $this->MAPCFG->getFileModificationTime() < $_SESSION['nagvis_object_cache_time_'.$this->getName()]
 		 && $this->BACKEND->checkBackendInitialized($this->MAPCFG->getValue('global', 0, 'backend_id'), TRUE)
 		 && $this->BACKEND->BACKENDS[$this->MAPCFG->getValue('global', 0, 'backend_id')]->getNagiosStartTime() < $_SESSION['nagvis_object_cache_time_'.$this->getName()]) {
 			// Cache seems to be OK, use it!
@@ -195,6 +198,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 				// The mysql resource $CONN in the BACKEND object is not valid after 
 				// serialisation, now add the current resource to the BACKEND of the cache
 				$this->objects[0]->BACKEND = $this->BACKEND;
+				
+				// If the configuration file is newer than the cache reload the configuration for the objects
+				if($this->MAPCFG->getFileModificationTime() > $_SESSION['nagvis_object_cache_time_'.$this->getName()]) {
+					//FIXME: Reload the configuration (When this is fixed remove the one check in the above if statement
+				}
 			}
 		} else {
 			foreach($this->MAPCFG->validConfig AS $type => $arr) {
@@ -245,8 +253,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 								$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
 							break;
 							default:
-								//FIXME: Unhandled
-								echo 'Unhandled: '.$type;
+								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+								$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName());
 							break;
 						}
 						
@@ -304,7 +312,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 						if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): FALSE');
 						return FALSE;
 					} else {
-						//$OBJ->fetchMapObjects();
 						if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::checkLoop(): TRUE');
 						return TRUE;
 					}
