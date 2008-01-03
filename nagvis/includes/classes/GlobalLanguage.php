@@ -343,7 +343,7 @@ class GlobalLanguage {
 		// filter type, messages/labels
 		if($strLang != '') {
 			// Replace [i],[b] and their ending tags with HTML code
-			$strLang = preg_replace('/\[(\/|)(i|b)\]/i',"<$1$2>",$strLang);
+			$strLang = preg_replace('/\[(\/|)(i|b|br)\]/i',"<$1$2>",$strLang);
 			
 			if($replace != '') {
 				$arrReplace = explode(',', $replace);
