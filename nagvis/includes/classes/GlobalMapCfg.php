@@ -62,6 +62,9 @@ class GlobalMapCfg {
 				'hover_template' => Array('must' => 0,
 					'default' => $this->MAINCFG->getValue('defaults', 'hovertemplate'),
 					'match' => MATCH_STRING_NO_SPACE),
+				'hover_menu' => Array('must' => 0,
+					'default' => $this->MAINCFG->getValue('defaults', 'hovermenu'),
+					'match' => MATCH_BOOLEAN),
 				'hover_delay' => Array('must' => 0,
 					'default' => $this->MAINCFG->getValue('defaults', 'hoverdelay'),
 					'match' => MATCH_INTEGER),
@@ -111,6 +114,8 @@ class GlobalMapCfg {
 				'iconset' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
+				'hover_menu' => Array('must' => 0,
+					'match' => MATCH_BOOLEAN),
 				'hover_template' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
@@ -167,6 +172,8 @@ class GlobalMapCfg {
 				'iconset' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
+				'hover_menu' => Array('must' => 0,
+					'match' => MATCH_BOOLEAN),
 				'hover_template' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
@@ -221,6 +228,8 @@ class GlobalMapCfg {
 				'iconset' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
+				'hover_menu' => Array('must' => 0,
+					'match' => MATCH_BOOLEAN),
 				'hover_template' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
@@ -274,6 +283,8 @@ class GlobalMapCfg {
 				'iconset' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
+				'hover_menu' => Array('must' => 0,
+					'match' => MATCH_BOOLEAN),
 				'hover_template' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
@@ -328,6 +339,8 @@ class GlobalMapCfg {
 					'match' => MATCH_STRING_URL),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
+				'hover_menu' => Array('must' => 0,
+					'match' => MATCH_BOOLEAN),
 				'hover_template' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
@@ -411,6 +424,7 @@ class GlobalMapCfg {
 		$this->validConfig['host']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['host']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['host']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['host']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
 		$this->validConfig['host']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
 		$this->validConfig['host']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		$this->validConfig['host']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
@@ -423,6 +437,7 @@ class GlobalMapCfg {
 		$this->validConfig['hostgroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['hostgroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['hostgroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['hostgroup']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
 		$this->validConfig['hostgroup']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
 		$this->validConfig['hostgroup']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		$this->validConfig['hostgroup']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
@@ -434,6 +449,7 @@ class GlobalMapCfg {
 		$this->validConfig['service']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['service']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['service']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['service']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
 		$this->validConfig['service']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
 		$this->validConfig['service']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		$this->validConfig['service']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
@@ -445,6 +461,7 @@ class GlobalMapCfg {
 		$this->validConfig['servicegroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['servicegroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['servicegroup']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
 		$this->validConfig['servicegroup']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
 		$this->validConfig['servicegroup']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		$this->validConfig['servicegroup']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
@@ -455,6 +472,7 @@ class GlobalMapCfg {
 		$this->validConfig['servicegroup']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
+		$this->validConfig['map']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
 		$this->validConfig['map']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
 		$this->validConfig['map']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		$this->validConfig['map']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
@@ -812,6 +830,24 @@ class GlobalMapCfg {
 		} else {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getDefinitions(): Array()');
 			return Array();
+		}
+	}
+	
+	/**
+	 * Gets the last modification time of the configuration file
+	 *
+	 * @return	Integer Unix timestamp with last modification time
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getFileModificationTime() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getFileModificationTime()');
+		if($this->checkMapConfigReadable(1)) {
+			$time = filemtime($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getFileModificationTime(): Integer');
+			return $time;
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getFileModificationTime(): FALSE');
+			return FALSE;
 		}
 	}
 	
