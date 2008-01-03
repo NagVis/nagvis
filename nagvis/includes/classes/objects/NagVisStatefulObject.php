@@ -65,6 +65,71 @@ class NagVisStatefulObject extends NagVisObject {
 		return $this->summary_problem_has_been_acknowledged;
 	}
 	
+	function getStateDuration() {
+		if(isset($this->last_state_change) && $this->last_state_change != '0') {
+			return date($this->MAINCFG->getValue('global','dateformat'), (time() - $this->last_state_change));
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	function getLastStateChange() {
+		if(isset($this->last_state_change) && $this->last_state_change != '0') {
+			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_state_change);
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	function getLastHardStateChange() {
+		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
+			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_hard_state_change);
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	function getLastCheck() {
+		if(isset($this->last_check) && $this->last_check != '0') {
+			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_check);
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	function getNextCheck() {
+		if(isset($this->next_check) && $this->next_check != '0') {
+			return date($this->MAINCFG->getValue('global','dateformat'), $this->next_check);
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	function getStateType() {
+		if(isset($this->state_type) && $this->state_type != '') {
+			$stateTypes = Array(0 => 'SOFT', 1 => 'HARD');
+			return $stateTypes[$this->state_type];
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	function getCurrentCheckAttempt() {
+		if(isset($this->current_check_attempt) && $this->current_check_attempt != '') {
+			return $this->current_check_attempt;
+		} else {
+			return '';
+		}
+	}
+	
+	function getMaxCheckAttempts() {
+		if(isset($this->max_check_attempts) && $this->max_check_attempts != '') {
+			return $this->max_check_attempts;
+		} else {
+			return '';
+		}
+	}
+	
 	/**
 	 * PUBLIC parse()
 	 *

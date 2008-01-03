@@ -13,6 +13,7 @@ class NagVisObject {
 	var $z;
 	var $icon;
 	
+	var $hover_menu;
 	var $label_show;
 	var $recognize_services;
 	var $only_hard_states;
@@ -135,8 +136,8 @@ class NagVisObject {
 	function getHoverMenu() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::getHoverMenu()');
 		$ret = '';
-		// FIXME 1.1: check if this is an object, where a menu should be displayed
-		if(1) {
+		
+		if($this->hover_menu) {
 			$ret .= 'onmouseover="return overlib(\'';
 			if(isset($this->hover_url) && $this->hover_url != '') {
 				$ret .= $this->readHoverUrl();
@@ -298,18 +299,19 @@ class NagVisObject {
 		if($this->type == 'host' || $this->type == 'service') {
 			$ret = str_replace('[lang_next_check]',$this->LANG->getLabel('nextCheck'),$ret);
 			$ret = str_replace('[lang_last_check]',$this->LANG->getLabel('lastCheck'),$ret);
+			$ret = str_replace('[lang_state_type]',$this->LANG->getLabel('stateType'),$ret);
+			$ret = str_replace('[lang_current_attempt]',$this->LANG->getLabel('currentAttempt'),$ret);
+			$ret = str_replace('[lang_last_state_change]',$this->LANG->getLabel('lastStateChange'),$ret);
+			$ret = str_replace('[lang_state_duration]',$this->LANG->getLabel('stateDuration'),$ret);
 			
-			if(isset($this->last_check) && $this->last_check != '0') {
-				$ret = str_replace('[obj_last_check]',date($this->MAINCFG->getValue('global','dateformat'),$this->last_check),$ret);
-			} else {
-				$ret = str_replace('[obj_last_check]','N/A',$ret);
-			}
-			
-			if(isset($this->next_check) && $this->next_check != '0') {
-				$ret = str_replace('[obj_next_check]',date($this->MAINCFG->getValue('global','dateformat'),$this->next_check),$ret);
-			} else {
-				$ret = str_replace('[obj_next_check]','N/A',$ret);
-			}
+			$ret = str_replace('[obj_last_check]', $this->getLastCheck(), $ret);
+			$ret = str_replace('[obj_next_check]', $this->getNextCheck(), $ret);
+			$ret = str_replace('[obj_state_type]', $this->getStateType(), $ret);
+			$ret = str_replace('[obj_current_check_attempt]', $this->getCurrentCheckAttempt(), $ret);
+			$ret = str_replace('[obj_max_check_attempts]', $this->getMaxCheckAttempts(), $ret);
+			$ret = str_replace('[obj_last_state_change]', $this->getLastStateChange(), $ret);
+			$ret = str_replace('[obj_last_hard_state_change]', $this->getLastHardStateChange(), $ret);
+			$ret = str_replace('[obj_state_duration]', $this->getStateDuration(), $ret);
 		}
 		
 		// Macros which are only for services

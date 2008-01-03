@@ -19,6 +19,11 @@ class NagiosHost extends NagVisStatefulObject {
 	var $problem_has_been_acknowledged;
 	var $last_check;
 	var $next_check;
+	var $state_type;
+	var $current_check_attempt;
+	var $max_check_attempts;
+	var $last_state_change;
+	var $last_hard_state_change;
 	
 	var $summary_state;
 	var $summary_output;

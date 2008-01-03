@@ -384,7 +384,8 @@ class GlobalBackendndomy {
 			current_state, 
 			output, 
 			problem_has_been_acknowledged, 
-			UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check 
+			UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
+			hs.state_type, hs.current_check_attempt, hs.max_check_attempts 
 		FROM 
 			'.$this->dbPrefix.'objects AS o, 
 			'.$this->dbPrefix.'hosts AS h, 
@@ -408,6 +409,11 @@ class GlobalBackendndomy {
 			// Add Additional informations to array
 			$arrReturn['last_check'] = $data['last_check'];
 			$arrReturn['next_check'] = $data['next_check'];
+			$arrReturn['state_type'] = $data['state_type'];
+			$arrReturn['current_check_attempt'] = $data['current_check_attempt'];
+			$arrReturn['max_check_attempts'] = $data['max_check_attempts'];
+			$arrReturn['last_state_change'] = $data['last_state_change'];
+			$arrReturn['last_hard_state_change'] = $data['last_hard_state_change'];
 			
 			/**
 			 * SF.net #1587073
@@ -484,9 +490,12 @@ class GlobalBackendndomy {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT 
 				o.name1, o.name2, 
 				s.display_name, 
-				ss.has_been_checked, ss.last_hard_state, ss.last_hard_state_change, ss.current_state, 
-				ss.last_state_change, ss.output, ss.problem_has_been_acknowledged, 
-				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check 
+				ss.has_been_checked, ss.last_hard_state, ss.current_state, 
+				UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
+				UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
+				ss.output, ss.problem_has_been_acknowledged, 
+				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
+				ss.state_type, ss.current_check_attempt, ss.max_check_attempts 
 				FROM 
 					'.$this->dbPrefix.'objects AS o, 
 					'.$this->dbPrefix.'services AS s, 
@@ -500,9 +509,12 @@ class GlobalBackendndomy {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT 
 				o.name1, o.name2, 
 				s.display_name, 
-				ss.has_been_checked, ss.last_hard_state, ss.last_hard_state_change, ss.current_state, 
-				ss.last_state_change, ss.output, ss.problem_has_been_acknowledged, 
-				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check 
+				ss.has_been_checked, ss.last_hard_state, ss.current_state, 
+				UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
+				UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
+				ss.output, ss.problem_has_been_acknowledged, 
+				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
+				ss.state_type, ss.current_check_attempt, ss.max_check_attempts 
 				FROM 
 					'.$this->dbPrefix.'objects AS o, 
 					'.$this->dbPrefix.'services AS s, 
@@ -526,6 +538,11 @@ class GlobalBackendndomy {
 				// Add Additional informations to array
 				$arrTmpReturn['last_check'] = $data['last_check'];
 				$arrTmpReturn['next_check'] = $data['next_check'];
+				$arrTmpReturn['state_type'] = $data['state_type'];
+				$arrTmpReturn['current_check_attempt'] = $data['current_check_attempt'];
+				$arrTmpReturn['max_check_attempts'] = $data['max_check_attempts'];
+				$arrTmpReturn['last_state_change'] = $data['last_state_change'];
+				$arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
 				
 				if($onlyHardstates == 1) {
 					if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
@@ -629,32 +646,28 @@ class GlobalBackendndomy {
 	 */
 	function getDirectChildNamesByHostName($hostName) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getDirectChildNamesByHostName('.$hostName.')');
-		if(isset($hostName) && $hostName != '') {
-			$arrChildNames = Array();
-			
-			$QUERYHANDLE = $this->mysqlQuery('SELECT o2.name1
-			FROM
-			`'.$this->dbPrefix.'objects` AS o1,
-			`'.$this->dbPrefix.'hosts` AS h1,
-			`'.$this->dbPrefix.'host_parenthosts` AS ph1,
-			`'.$this->dbPrefix.'hosts` AS h2,
-			`'.$this->dbPrefix.'objects` AS o2
-			WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
-			AND (h1.config_type=1 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
-			AND o1.object_id=ph1.parent_host_object_id
-			AND (h2.config_type=1 AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
-			AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
-			while($data = mysql_fetch_array($QUERYHANDLE)) {
-				if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
-				$arrChildNames[] = $data['name1'];
-				if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
-			}
-			
-			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::getDirectChildNamesByHostName()');
-			return $arrChildNames;
-		} else {
-			//FIXME: Error handling
+		$arrChildNames = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT o2.name1
+		FROM
+		`'.$this->dbPrefix.'objects` AS o1,
+		`'.$this->dbPrefix.'hosts` AS h1,
+		`'.$this->dbPrefix.'host_parenthosts` AS ph1,
+		`'.$this->dbPrefix.'hosts` AS h2,
+		`'.$this->dbPrefix.'objects` AS o2
+		WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
+		AND (h1.config_type=1 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
+		AND o1.object_id=ph1.parent_host_object_id
+		AND (h2.config_type=1 AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
+		AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
+		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
+			$arrChildNames[] = $data['name1'];
+			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
+		
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::getDirectChildNamesByHostName()');
+		return $arrChildNames;
 	}
 	
 	/**
