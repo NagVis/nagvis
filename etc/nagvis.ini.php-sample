@@ -38,6 +38,8 @@
 ;backgroundcolor="#fff"
 ; header template
 ;headertemplate="default"
+; enable/disable hover menu
+;hovermenu=1
 ; hover template
 ;hovertemplate="default"
 ; hover menu open delay (seconds)
