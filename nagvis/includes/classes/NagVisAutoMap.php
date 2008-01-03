@@ -236,7 +236,8 @@ class NagVisAutoMap extends GlobalMap {
 				$binary = 'fdp';
 			break;
 			default:
-				//FIXME: Error handling
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
+				$FRONTEND->messageToUser('ERROR','unknownRenderMode','MODE~'.$this->renderMode);
 			break;
 		}
 		
@@ -434,7 +435,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		if($returnCode1 & $returnCode2) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:messages'));
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
 				$FRONTEND->messageToUser('ERROR','graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->MAINCFG->getvalue('automap','graphvizpath'));
 			}
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkGraphviz(): FALSE');
@@ -512,6 +513,10 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function getRootHostName() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getRootHostName()');
+		/**
+		 * NagVis tries to take configured host from main
+		 * configuration or read the host which has no parent from backend
+		 */
 		$defaultRoot = $this->MAINCFG->getValue('automap','default_root');
 		if(isset($defaultRoot) && $defaultRoot != '') {
 			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): '.$defaultRoot);
@@ -523,7 +528,9 @@ class NagVisAutoMap extends GlobalMap {
 					if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): '.$hostsWithoutParent[0]);
 					return $hostsWithoutParent[0];
 				} else {
-					//FIXME: ERROR-Handling: Could not get root host for automap
+					// Could not get root host for the automap
+					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
+					$FRONTEND->messageToUser('ERROR','couldNotGetRootHostname');
 					if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): FALSE');
 				}
 			}
