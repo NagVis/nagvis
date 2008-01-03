@@ -309,12 +309,14 @@ switch($_GET['myaction']) {
 			// rename config file
 			rename($MAINCFG->getValue('paths', 'mapcfg').$_POST['map_name'].'.cfg',$MAINCFG->getValue('paths', 'mapcfg').$_POST['map_new_name'].'.cfg');
 			
+			echo $_POST['map']." ".$_POST['map_name'];
 			// if renamed map is open, redirect to new name
-			if($_POST['map'] == $_POST['map_name']) {
+			if($_POST['map'] == 'undefined' || $_POST['map'] == '' || $_POST['map'] == $_POST['map_name']) {
 				$map = $_POST['map_new_name'];
 			} else {
 				$map = $_POST['map'];
 			}
+			
 			print "<script>window.opener.document.location.href='./index.php?map=".$map."';</script>\n";
 			print "<script>window.close();</script>\n";
 		} else {
