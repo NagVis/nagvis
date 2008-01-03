@@ -324,7 +324,7 @@ switch($_GET['myaction']) {
 		}
 	break;
 	case 'mgt_map_delete':
-		if(isste($_POST['map_name']) && $_POST['map_name'] != '') {
+		if(isset($_POST['map_name']) && $_POST['map_name'] != '') {
 			// map to delete: $_POST['map_name'];
 			
 			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map_name']);
