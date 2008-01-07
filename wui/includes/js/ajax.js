@@ -46,7 +46,12 @@ function getAnswer(oRequest,myCallback,oOpt) {
 			if(oRequest.responseText.replace(/\s+/g,'').length == 0) {
 				window[myCallback]('',oOpt);
 			} else {
-				window[myCallback](eval('( '+oRequest.responseText+')'),oOpt);
+				// Error handling for the AJAX methods
+				if(oRequest.responseText.match(/Notice:|Warning:|Error:|Parse error:/)) {
+					alert("Error in ajax request handler:\n"+oRequest.responseText);
+				} else {
+					window[myCallback](eval('( '+oRequest.responseText+')'),oOpt);
+				}
 			}
 		}
 	}
