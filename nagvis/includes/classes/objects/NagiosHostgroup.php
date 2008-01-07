@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a Host in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHostgroup extends NagVisStatefulObject {
 	var $MAINCFG;
@@ -124,7 +126,17 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			$arrHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name);
 			if(count($arrHosts) > 0) {
 				foreach($arrHosts AS $hostName) {
-					$this->members[] = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
+					$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
+					
+					// FIXME: The services have to know how they should handle hard/soft 
+					// states. This is a little dirty but the simplest way to do this
+					// until the hard/soft state handling has moved from backend to the
+					// object classes.
+					$objConf = Array('recognize_services' => $this->getRecognizeServices(), 'only_hard_states' => $this->getOnlyHardStates());
+					$OBJ->setConfiguration($objConf);
+					
+					// Add child object to the members array
+					$this->members[] = $OBJ;
 				}
 			}
 		}
@@ -154,8 +166,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	/**
 	 * PRIVATE fetchSummaryOutput()
 	 *
-	 * Fetches the summary output from host and all services
-	 *
+	 * Fetches the summary output from all members
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryOutput() {
