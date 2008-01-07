@@ -53,8 +53,9 @@ class WuiBackground extends GlobalBackground {
 						if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackground::uploadImage(): TRUE');
 						return TRUE;
 					} else {
-						//FIXME: Error handling
-						print "The file could not be moved to destination (".$this->MAINCFG->getValue('paths', 'map').$fileName.").";
+						// Error handling
+						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
+						$FRONTEND->messageToUser('ERROR','moveUploadedFileFailed');
 						return FALSE;
 					}
 				} else {
@@ -62,13 +63,15 @@ class WuiBackground extends GlobalBackground {
 					return FALSE;
 				}
 			} else {
-				//FIXME: Error handling
-				print "This is no *.png file (".$fileName.").";
+				// Error handling
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
+				$FRONTEND->messageToUser('ERROR','mustBePngFile');
 				return FALSE;
 			}
 		} else {
-			//FIXME: Error handling
-			print "The file could not be uploaded.";
+			// Error handling
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
+			$FRONTEND->messageToUser('ERROR','fileCouldNotBeUploaded');
 			return FALSE;
 		}
 	}
@@ -103,8 +106,9 @@ class WuiBackground extends GlobalBackground {
 				return FALSE;
 			}
 		} else {
-			//FIXME: Error handling
-			print("<script>alert('ERROR: image already exists \"".$this->MAINCFG->getValue('paths', 'map').$this->image."\"')</script>");
+			// Error handling
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
+			$FRONTEND->messageToUser('ERROR','imageAlreadyExists','IMAGE~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 			return FALSE;
 		}
 	}
