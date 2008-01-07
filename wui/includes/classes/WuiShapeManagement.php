@@ -156,4 +156,55 @@ class WuiShapeManagement extends GlobalPage {
         if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::getJsLang(): Array(JS)');
         return $ret;
     }
+		
+		/**
+		 * Deletes the given shape image
+		 *
+		 * @param		String	Filename of the shape image
+		 * @author	Lars Michelsen <lars@vertical-visions.de>
+		 */
+		function deleteShape($fileName) {
+			if(file_exists($this->MAINCFG->getValue('paths', 'shape').$fileName)) {
+				if(unlink($this->MAINCFG->getValue('paths', 'shape').$fileName)) {
+					// Go back to last page
+					print("<script>window.history.back();</script>");
+				} else {
+					// Error handling
+					print("ERROR: ".$this->LANG->getLabel('failedToDeleteShape','IMAGE~'.$fileName));
+				}
+			} else {
+				// Error handling
+				print("ERROR: ".$this->LANG->getLabel('shapeDoesNotExist','IMAGE~'.$fileName));
+			}
+		}
+		
+		/**
+		 * Uploads a new shape image
+		 *
+		 * @param		Array	Informations of the new image
+		 * @author	Lars Michelsen <lars@vertical-visions.de>
+		 */
+		function uploadShape(&$arrFile) {
+			// check the file (the map) is properly uploaded
+			if(is_uploaded_file($arrFile['tmp_name'])) {
+				if(preg_match('/\.png/i', $arrFile['name'])) {
+					if(@move_uploaded_file($arrFile['tmp_name'], $this->MAINCFG->getValue('paths', 'shape').$arrFile['name'])) {
+						// Change permissions of the file after the upload
+						chmod($this->MAINCFG->getValue('paths', 'shape').$arrFile['name'],0666);
+						
+						// Go back to last page
+						print("<script>window.history.back();</script>");
+					} else {
+						// Error handling
+						print("ERROR: ".$this->LANG->getLabel('moveUploadedFileFailed','PATH~'.$this->MAINCFG->getValue('paths', 'shape')));
+					}
+				} else {
+					// Error handling
+					print("ERROR: ".$this->LANG->getLabel('mustBePngFile'));
+				}
+			} else {
+				// Error handling
+				print("ERROR: ".$this->LANG->getLabel('uploadFailed'));
+			}
+		}
 }
