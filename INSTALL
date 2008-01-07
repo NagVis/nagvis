@@ -1,19 +1,22 @@
 ==============================================================================
-NagVis 1.2 Quick Installation Instructions
+NagVis 1.3 Quick Installation Instructions
 ==============================================================================
 Author: Andreas Husch, Lars Michelsen
-Document Version: 0.2
+Document Version: 0.3
 Date: 2007-10-15
-Applies to: NagVis 1.2
+Applies to: NagVis 1.3
 ==============================================================================
 
 STEP 0: Prepair System
 ------------------
 Make sure your System meets the requirements:
 - Nagios is running and authentication is configured (.htaccess file placed
- and configured properly!)
+  and configured properly!)
 - Working PHP installation (Version > 4.2.0) with "php-gd" support
 - php-mysql support is needed for the strongly recommended "ndomy" backend
+- graphviz >= 2.14 for the automap (Lower versions have problems with truecolor
+  rendering). You also need more packages like gd,libpng,freetype, ... but if
+  you get graphviz compiled/installed it should work.
 
 STEP 1: Download NagVis
 ------------------
@@ -24,7 +27,7 @@ STEP 2: Unpack NagVis
 ------------------
 Unpack NagVis in a path of your choice
 
-> tar xvzf nagvis-1.2.x.tar.gz
+> tar xvzf nagvis-1.3.x.tar.gz
 
 STEP 3: Move NagVis
 ------------------
@@ -64,7 +67,7 @@ change the value of it.
 
 For informations about the possible values have a look at Main Config Format
 Description on NagVis.org 
- (http://www.nagvis.org/docs/1.2/nagvis_config_format_description).
+ (http://www.nagvis.org/docs/1.3/nagvis_config_format_description).
 
 STEP 5: Permissions
 ------------------
@@ -89,6 +92,8 @@ this):
 > chmod 664 /usr/local/nagios/share/nagvis/nagvis/images/maps/*
 > chmod 775 /usr/local/nagios/share/nagvis/etc/maps
 > chmod 664 /usr/local/nagios/share/nagvis/etc/maps/*
+> chmod 775 /usr/local/nagios/share/nagvis/var
+> chmod 664 /usr/local/nagios/share/nagvis/var/*
 
 It's possible to set lower permissions on the files, in my setup it's ok like
 this. Only change them if you know, what you are doing. 
@@ -113,7 +118,7 @@ If this does't work for you, or if you don't want to use the WUI, you can
 simply edit the map config files in the nagvis/etc/maps/ directory with your
 favorite text editor. For valid format and values have a look at Map Config 
 Format Description on NagVis.org 
- (http://www.nagvis.org/docs/1.2/map_config_format_description). 
+ (http://www.nagvis.org/docs/1.3/map_config_format_description). 
 
 STEP 7: Watch the Maps
 ------------------
