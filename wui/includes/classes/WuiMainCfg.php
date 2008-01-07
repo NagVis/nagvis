@@ -20,23 +20,24 @@ class WuiMainCfg extends GlobalMainCfg {
 	 *
 	 * @return	Array maps
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function getMaps() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMainCfg::getMaps()');
 		$files = Array();
 		
-		if ($handle = opendir($this->getValue('paths', 'mapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".cfg") {
-					$files[] = substr($file,0,strlen($file)-4);
+		if($fh = opendir($this->getValue('paths', 'mapcfg'))) {
+ 			while(FALSE !== ($file = readdir($fh))) {
+				// only handle *.cfg files
+				if(ereg('\.cfg$',$file)) {
+					$files[] = substr($file, 0, strlen($file) - 4);
 				}				
 			}
 			
-			if ($files) {
+			if(count($files) > 1) {
 				natcasesort($files);
 			}
 		}
-		closedir($handle);
+		closedir($fh);
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMainCfg::getMaps(): Array(...)');
 		return $files;
@@ -48,7 +49,7 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * @param	String	$sec	Section
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function setSection($sec) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMainCfg::setSection($sec)');
 		// Try to append new backends after already defined

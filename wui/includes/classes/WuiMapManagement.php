@@ -196,7 +196,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getCreateFields() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::getCreateFields()');
-		//FIXME: Default values
+		
 		$ret = Array();
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('mapName'),'map_name',''));
 		$this->propCount++;

@@ -1,6 +1,8 @@
 <?php
 /** 
  * Class for managing (add,modify,delete the backends in the WUI
+ *
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiBackendManagement extends GlobalPage {
 	var $MAINCFG;
