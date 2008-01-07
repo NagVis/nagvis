@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a Host in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHostgroup extends NagiosHostgroup {
 	var $MAINCFG;

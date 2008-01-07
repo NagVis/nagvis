@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a Host in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisObject {
 	var $MAINCFG;
@@ -41,30 +43,72 @@ class NagVisObject {
 		return $this->{$option};
 	}
 	
+	/**
+	 * Get method for x coordinate of the object
+	 *
+	 * @return	Integer		x coordinate on the map
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getX() {
 		return $this->x;
 	}
 	
+	/**
+	 * Get method for y coordinate of the object
+	 *
+	 * @return	Integer		y coordinate on the map
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getY() {
 		return $this->y;
 	}
 	
+	/**
+	 * Get method for z coordinate of the object
+	 *
+	 * @return	Integer		z coordinate on the map
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getZ() {
 		return $this->z;
 	}
 	
+	/**
+	 * Get method for type of the object
+	 *
+	 * @return	String		Type of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getType() {
 		return $this->type;
 	}
 	
+	/**
+	 * Get method for the name of the object
+	 *
+	 * @return	String		Name of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getName() {
 		return $this->{$this->getType().'_name'};
 	}
 	
+	/**
+	 * Get method for the hover template of the object
+	 *
+	 * @return	String		Hover template of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getHoverTemplate() {
 		return $this->hover_template;
 	}
 	
+	/**
+	 * Set method for the object coords
+	 *
+	 * @return	Array		Array of the objects coords
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function setMapCoords($arrCoords) {
 		$this->x = $arrCoords['x'];
 		$this->y = $arrCoords['y'];
@@ -395,13 +439,5 @@ class NagVisObject {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::createLink()');
 		return '<a href="'.$this->url.'" target="'.$this->url_target.'">';
 	}
-	
-	/* DEPRECATED
-	function fixIconPosition() {
-		// 0: width, 1: height
-		$imgInfo = getimagesize($this->iconPath.$this->icon);
-		$this->x -= $imgInfo[0] * 0.5;
-		$this->y -= $imgInfo[1] * 0.5;
-	}*/
 }
 ?>

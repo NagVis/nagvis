@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a Servicegroups in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisServicegroup extends NagiosServicegroup {
 	var $MAINCFG;
@@ -74,7 +76,7 @@ class NagVisServicegroup extends NagiosServicegroup {
 				break;
 				case 'up':
 				case 'ok':
-					$icon = $this->iconset.'_up.png';
+					$icon = $this->iconset.'_ok.png';
 				break;
 				case 'unknown':
 				case 'pending':

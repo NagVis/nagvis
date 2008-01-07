@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a map objects in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapObj extends NagVisStatefulObject {
 	var $MAINCFG;
@@ -146,6 +148,13 @@ class NagVisMapObj extends NagVisStatefulObject {
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * PRIVATE fetchSummaryOutput()
+	 *
+	 * Fetches the summary output of the map
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryOutput() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchSummaryOutput()');
 		if(count($this->getMapObjects()) > 0) {
@@ -280,6 +289,15 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapObj::fetchMapObjects()');
 	}
 	
+	/**
+	 * PRIVATE checkLoop()
+	 *
+	 * Checks if there is a loop on the linked maps and submaps
+	 *
+	 * @param		Object		Map object to check for a loop
+	 * @return	Boolean		True: No Loop, False: Loop
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function checkLoop(&$OBJ) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::checkLoop()');
 		// prevent direct loops (map including itselfes as map icon)

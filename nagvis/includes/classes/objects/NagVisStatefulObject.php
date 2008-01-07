@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of all NagVis objects which have a state
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisStatefulObject extends NagVisObject {
 	var $MAINCFG;
@@ -41,30 +43,114 @@ class NagVisStatefulObject extends NagVisObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::NagVisStatefulObject()');
 	}
 	
+	/**
+	 * PUBLIC getOnlyHardStates()
+	 *
+	 * Get method for the only hard states option
+	 *
+	 * @return	Boolean		True: Only hard states, False: Not only hard states
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getOnlyHardStates() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::getOnlyHardStates()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::getOnlyHardStates()');
+		return $this->only_hard_states;
+	}
+	
+	/**
+	 * PUBLIC getRecognizeServices()
+	 *
+	 * Get method for the recognize services option
+	 *
+	 * @return	Boolean		True: Recognize service states, False: Not recognize service states
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getRecognizeServices() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::getRecognizeServices()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::getRecognizeServices()');
+		return $this->recognize_services;
+	}
+	
+	/**
+	 * PUBLIC getState()
+	 *
+	 * Get method for the state of this object
+	 *
+	 * @return	String		State of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getState() {
 		return $this->state;
 	}
 	
+	/**
+	 * PUBLIC getOutput()
+	 *
+	 * Get method for the output of this object
+	 *
+	 * @return	String		Output of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getOutput() {
 		return $this->output;
 	}
 	
+	/**
+	 * PUBLIC getAcknowledgement()
+	 *
+	 * Get method for the acknowledgement state of this object
+	 *
+	 * @return	Boolean		True: Acknowledged, False: Not Acknowledged
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getAcknowledgement() {
 		return $this->problem_has_been_acknowledged;
 	}
 	
+	/**
+	 * PUBLIC getSummaryState()
+	 *
+	 * Get method for the summary state of this object and members/childs
+	 *
+	 * @return	String		Summary state
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getSummaryState() {
 		return $this->summary_state;
 	}
 	
+	/**
+	 * PUBLIC getSummaryOutput()
+	 *
+	 * Get method for the summary output of this object and members/childs
+	 *
+	 * @return	String		Summary output
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getSummaryOutput() {
 		return $this->summary_output;
 	}
 	
+	/**
+	 * PUBLIC getSummaryAcknowledgement()
+	 *
+	 * Get method for the acknowledgement state of this object and members/childs
+	 *
+	 * @return	Boolean		True: Acknowledged, False: Not Acknowledged
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getSummaryAcknowledgement() {
 		return $this->summary_problem_has_been_acknowledged;
 	}
 	
+	/**
+	 * PUBLIC getStateDuration()
+	 *
+	 * Get method for the duration of the current state
+	 *
+	 * @return	String		Time in the configured format
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getStateDuration() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			return date($this->MAINCFG->getValue('global','dateformat'), (time() - $this->last_state_change));
@@ -73,6 +159,14 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC getLastStateChange()
+	 *
+	 * Get method for the last state change
+	 *
+	 * @return	String		Time in the configured format
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getLastStateChange() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_state_change);
@@ -81,6 +175,14 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC getLastHardStateChange()
+	 *
+	 * Get method for the last hard state change
+	 *
+	 * @return	String		Time in the configured format
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getLastHardStateChange() {
 		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
 			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_hard_state_change);
@@ -89,6 +191,14 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC getLastCheck()
+	 *
+	 * Get method for the time of the last check
+	 *
+	 * @return	String		Time in the configured format
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getLastCheck() {
 		if(isset($this->last_check) && $this->last_check != '0') {
 			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_check);
@@ -97,6 +207,14 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC getNextCheck()
+	 *
+	 * Get method for the time of the next check
+	 *
+	 * @return	String		Time in the configured format
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getNextCheck() {
 		if(isset($this->next_check) && $this->next_check != '0') {
 			return date($this->MAINCFG->getValue('global','dateformat'), $this->next_check);
@@ -105,6 +223,14 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC getStateType()
+	 *
+	 * Get method for the type of the current state
+	 *
+	 * @return	String		Type of state (HARD/SOFT)
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getStateType() {
 		if(isset($this->state_type) && $this->state_type != '') {
 			$stateTypes = Array(0 => 'SOFT', 1 => 'HARD');
@@ -114,6 +240,14 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC getCurrentCheckAttempt()
+	 *
+	 * Get method for the current check attempt
+	 *
+	 * @return	Integer		Current check attempt
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getCurrentCheckAttempt() {
 		if(isset($this->current_check_attempt) && $this->current_check_attempt != '') {
 			return $this->current_check_attempt;
@@ -122,6 +256,14 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
+	/**
+	 * PUBLIC getMaxCheckAttempts()
+	 *
+	 * Get method for the maximum check attempt
+	 *
+	 * @return	Integer		maximum check attempts
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getMaxCheckAttempts() {
 		if(isset($this->max_check_attempts) && $this->max_check_attempts != '') {
 			return $this->max_check_attempts;
