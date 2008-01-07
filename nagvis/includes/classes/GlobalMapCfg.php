@@ -783,8 +783,9 @@ class GlobalMapCfg {
 								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 								return FALSE;
 							} else {
-								// FIXME: Only match non array values at the moment
 								if(!is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
+									// This is a string value
+									
 									// valid attribute, now check for value format
 									if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
 										
@@ -795,6 +796,22 @@ class GlobalMapCfg {
 										}
 										if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 										return FALSE;
+									}
+								} elseif(is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
+									// This is an array
+									
+									//loop and check each element
+									foreach($val AS $key2 => $val2) {
+										// check the value format
+										if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
+											// wrong format
+											if($printErr) {
+												$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+												$FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
+											}
+											if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
+											return FALSE;
+										}
 									}
 								}
 							}
