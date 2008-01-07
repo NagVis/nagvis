@@ -290,47 +290,6 @@ class GlobalBackendndomy {
 	}
 	
 	/**
-	 * PUBLIC Method checkstates
-	 *	
-	 * Returns the state of the given object
-	 *
-	 * @param	string $Type, string $Name, boolean $RecognizeServices, string $ServiceName, boolean $onlyHardstates
-	 * @return	array $state
-	 * @author	m.luebben, Andreas Husch <downanup@nagios-wiki.de>
-	 */
-	function checkstates($type,$name,$recognizeServices,$serviceName='',$onlyHardstates=0) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkstates('.$type.','.$name.','.$recognizeServices.','.$serviceName.','.$onlyHardstates.')');
-		if(isset($name)) {
-			switch($type) {
-				case 'host':
-					$arrReturn = $this->findstateHost($name,$recognizeServices,$onlyHardstates);
-				break;
-				case 'service':
-					$arrReturn = $this->findstateService($name,$serviceName,$onlyHardstates);
-				break;
-				case 'servicegroup':
-					$arrReturn = $this->findstateServicegroup($name,$onlyHardstates);
-				break;
-				default:
-					// Should normally never reach this
-				break;
-			}
-		}
-		/**
-		* Case that this Backend could not find any state for the given object
-		* This should normally never happen
-		*/
-		if(!isset($arrReturn)) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
-			$FRONTEND->messageToUser('WARNING','nostateSet');
-			$FRONTEND->printPage();
-		}
-		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkstates(): Array(...)');
-		return $arrReturn;
-	}
-	
-	/**
 	 * PRIVATE Method getHostAckByHostname
 	 *
 	 * Returns if a host state has been acknowledged. The method doesn't check
@@ -360,19 +319,17 @@ class GlobalBackendndomy {
 	}
 	
 	/**
-	 * PRIVATE Method findstateHost
+	 * PUBLIC getHostState()
 	 *
-	 * Returns the Nagios state for a single Host
+	 * Returns the Nagios state and aditional informations for the requested host
 	 *
-	 * @param	string $hostName
-	 * @param	bool   $recognizeServices
-	 * @param	bool   $onlyHardstates
-	 * @return	array $state
+	 * @param		String	$hostName
+	 * @param		Boolean	$onlyHardstates
+	 * @return	array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * @author	Andreas Husch (downanup@nagios-wiki.de)
 	 */
-	function findstateHost($hostName,$recognizeServices,$onlyHardstates) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findstateHost('.$hostName.','.$recognizeServices.','.$onlyHardstates.')');
+	function getHostState($hostName,$onlyHardstates) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostState('.$hostName.','.$onlyHardstates.')');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -460,30 +417,29 @@ class GlobalBackendndomy {
 					break;
 					default:
 						$arrReturn['state'] = 'UNKNOWN';
-						$arrReturn['output'] = 'GlobalBackendndomy::findstateHost: Undefined state!';
+						$arrReturn['output'] = 'GlobalBackendndomy::getHostState: Undefined state!';
 					break;
 				}
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findstateHost(): Array(..)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostState(): Array(..)');
 		return $arrReturn;
 	}
 	
 	/**
-	 * PRIVATE Method findstateService
+	 * PUBLIC getHostState()
 	 *
-	 * Returns the state for a single Service
+	 * Returns the state and aditional informations of rhe requested service
 	 *
-	 * @param	string $hostName
-	 * @param	string $serviceName
-	 * @param	bool   $onlyHardstates
-	 * @return	array $state
-	 * @author	Andreas Husch (downanup@nagios-wiki.de)
+	 * @param		String 	$hostName
+	 * @param		String 	$serviceName
+	 * @param		Boolean	$onlyHardstates
+	 * @return	Array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function findstateService($hostName,$serviceName,$onlyHardstates) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::findstateService('.$hostName.','.$serviceName.','.$onlyHardstates.')');
+	function getServiceState($hostName, $serviceName, $onlyHardstates) {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServiceState('.$hostName.','.$serviceName.','.$onlyHardstates.')');
 		$arrReturn = Array();
 		
 		if(isset($serviceName) && $serviceName != '') {
@@ -546,7 +502,7 @@ class GlobalBackendndomy {
 				
 				if($onlyHardstates == 1) {
 					if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
-						//$data['current_state'] = $data['current_state'];
+						$data['current_state'] = $data['current_state'];
 					} else {
 						$data['current_state'] = $data['last_hard_state'];
 					}
@@ -588,7 +544,7 @@ class GlobalBackendndomy {
 						break;
 						default:
 							$arrTmpReturn['state'] = 'UNKNOWN';
-							$arrTmpReturn['output'] = 'GlobalBackendndomy::findstateService: Undefined state!';
+							$arrTmpReturn['output'] = 'GlobalBackendndomy::getServiceState: Undefined state!';
 						break;
 					}
 				}
@@ -602,7 +558,7 @@ class GlobalBackendndomy {
 				}
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::findstateService(): Array(...)');
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServiceState(): Array(...)');
 		return $arrReturn;
 	}
 	
@@ -729,8 +685,7 @@ class GlobalBackendndomy {
 				(o.objecttype_id=3 AND o.name1 = binary \''.$hostgroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 				AND (hg.config_type=1 AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
 				AND hgm.hostgroup_id=hg.hostgroup_id 
-				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id) 
-			LIMIT 1');
+				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
@@ -767,8 +722,7 @@ class GlobalBackendndomy {
 				(o.objecttype_id=4 AND o.name1 = binary \''.$servicegroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 				AND (sg.config_type=1 AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id) 
 				AND sgm.servicegroup_id=sg.servicegroup_id 
-				AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id) 
-			LIMIT 1');
+				AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id)');
 	
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
