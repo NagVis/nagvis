@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a Host in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosService extends NagVisStatefulObject {
 	var $MAINCFG;
@@ -86,7 +88,7 @@ class NagiosService extends NagVisStatefulObject {
 	function fetchState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchState()');
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->checkStates($this->type,$this->host_name,$this->recognize_services, $this->service_description,$this->only_hard_states);
+			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, $this->service_description, $this->only_hard_states);
 			
 			// Append contents of the array to the object properties
 			// Bad: this method is not meant for this, but it works
@@ -104,6 +106,13 @@ class NagiosService extends NagVisStatefulObject {
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * PRIVATE fetchSummaryState()
+	 *
+	 * Is just a dummy here, this sets the state of the service as summary state
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchSummaryState()');
 		$this->summary_state = $this->state;
@@ -111,6 +120,13 @@ class NagiosService extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchSummaryState()');
 	}
 	
+	/**
+	 * PRIVATE fetchSummaryOutput()
+	 *
+	 * Is just a dummy here, this sets the output of the service as summary output
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryOutput() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchSummaryOutput()');
 		$this->summary_output = $this->output;
