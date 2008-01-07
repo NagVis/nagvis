@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a Servicegroups in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosServicegroup extends NagVisStatefulObject {
 	var $MAINCFG;
@@ -91,24 +93,56 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	# End public methods
 	# #########################################################################
 	
+	/**
+	 * PRIVATE fetchMemberServiceObjects()
+	 *
+	 * Gets all members of the given servicegroup and saves them to the members
+	 * array
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchMemberServiceObjects() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchMemberServiceObjects()');
 		// Get all services and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicesByServicegroupName($this->servicegroup_name);
 			foreach($arrServices AS $service) {
-				$this->members[] = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $service['host_name'], $service['service_description']);
+				$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $service['host_name'], $service['service_description']);
+				
+				// FIXME: The services have to know how they should handle hard/soft 
+				// states. This is a little dirty but the simplest way to do this
+				// until the hard/soft state handling has moved from backend to the
+				// object classes.
+				$objConf = Array('only_hard_states' => $this->getOnlyHardStates());
+				$OBJ->setConfiguration($objConf);
+				
+				// Add child object to the members array
+				$this->members[] = $OBJ;
 			}
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchMemberServiceObjects()');
 	}
 	
+	/**
+	 * PRIVATE getNumMembers()
+	 *
+	 * Counts the number of members
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getNumMembers() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::getNumMembers()');
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::getNumMembers()');
 		return count($this->members);
 	}
 	
+	/**
+	 * PRIVATE fetchSummaryState()
+	 *
+	 * Fetches the summary state of all members
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchSummaryState()');
 		if($this->getNumMembers() > 0) {
@@ -122,6 +156,13 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchSummaryState()');
 	}
 	
+	/**
+	 * PRIVATE fetchSummaryOutput()
+	 *
+	 * Fetches the summary output from all members
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryOutput() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchSummaryOutput()');
 		if($this->getNumMembers() > 0) {
