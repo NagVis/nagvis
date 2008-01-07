@@ -771,6 +771,16 @@
 					<title>Must value not set</title>
 					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
 				</mustValueNotSet1>
+				<imageAlreadyExists>
+					<title>Bild existiert bereits</title>
+					<text>Das Bild &quot;[IMAGE]&quot; existiert bereits.</text>
+				</imageAlreadyExists>
+				<mustBePngFile>
+					<text>Die Datei hat das falsche Dateiformat (Muss *.png sein)</text>
+				</mustBePngFile>
+				<moveUploadedFileFailed>
+					<text>Konnte die hochgeladene Datei nicht in das Ziel-Verzeichnis &quot;[PATH]&quot; verschieben.</text>
+				</moveUploadedFileFailed>
 			</messages>
 		</backgroundManagement>
 		<shapeManagement>
@@ -795,6 +805,21 @@
 				<unableToDeleteShape>
 					<text>Kann Shape [IMAGENAME] nicht l&ouml;schen, da er in der Map [MAP] noch verwendet wird.</text>
 				</unableToDeleteShape>
+				<failedToDeleteShape>
+					<text>Konnte Shape &quot;[IMAGE]&quot; nicht l&ouml;schen.</text>
+				</failedToDeleteShape>
+				<shapeDoesNotExist>
+					<text>Der Shape &quot;[IMAGE]&quot; existiert nicht.</text>
+				</shapeDoesNotExist>
+				<moveUploadedFileFailed>
+					<text>Konnte die hochgeladene Datei nicht in das Ziel-Verzeichnis &quot;[PATH]&quot; verschieben.</text>
+				</moveUploadedFileFailed>
+				<mustBePngFile>
+					<text>Die Datei hat das falsche Dateiformat (Muss *.png sein)</text>
+				</mustBePngFile>
+				<uploadFailed>
+					<text>Hochladen der Datei fehlgeschlagen.</text>
+				</uploadFailed>
 			</messages>
 		</shapeManagement>
 		<mapManagement>
@@ -840,6 +865,46 @@
 				</notCfgFile>
 			</messages>
 		</mapManagement>
+		<ajaxHandler>
+			<messages>
+				<mustValueNotSet>
+					<title>Pflichtwert nicht gesetzt</title>
+					<text>Der Pflichtwert &quot;&quot;[ATTRIBUTE]&quot;&quot; ist nicht gef&uuml;llt</text>
+				</mustValueNotSet>
+				<methodNotSupportedByBackend>
+					<title>Methode nicht unterst&uuml;tzt</title>
+					<text>Die Methode &quot;[METHOD]&quot; wird vom gew&auml;hlten Backend nicht unterst&uuml;tzt.</text>
+				</methodNotSupportedByBackend>
+				<accessModeIsNotValid>
+					<title>Zugriffs-Modus nicht g&uuml;ltig</title>
+					<text>Der Zugriffs-Modus &quot;[MODE]&quot; ist nicht g&uuml;ltig.</text>
+				</accessModeIsNotValid>
+				<unknownAction>
+					<title>Aktion unterst&uuml;tzt</title>
+					<text>Die Aktion &quot;[ACTION]&quot; wird vom Formular Handler nicht unterst&uuml;tzt.</text>
+				</unknownAction>
+			</messages>
+		</ajaxHandler>
+		<formHandler>
+			<messages>
+				<mustValueNotSet>
+					<title>Pflichtwert nicht gesetzt</title>
+					<text>Der Pflichtwert &quot;&quot;[ATTRIBUTE]&quot;&quot; ist nicht gef&uuml;llt</text>
+				</mustValueNotSet>
+				<mapDeleted>
+					<title>Karte gel&ouml;scht</title>
+					<text>Die Karte wurde gel&ouml;scht</text>
+				</mapDeleted>
+				<mapLockNotDeleted>
+					<title>Karten Sperre nicht gel&ouml;scht</title>
+					<text>Die Sperre der Karte konnte nicht gel&ouml;scht werden.</text>
+				</mapLockNotDeleted>
+				<unknownAction>
+					<title>Aktion unterst&uuml;tzt</title>
+					<text>Die Aktion &quot;[ACTION]&quot; wird vom Ajax Handler nicht unterst&uuml;tzt.</text>
+				</unknownAction>
+			</messages>
+		</formHandler>
 		<addModify>
 			<labels>
 				<dummy>

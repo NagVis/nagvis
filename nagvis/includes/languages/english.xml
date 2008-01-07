@@ -771,6 +771,16 @@
 					<title>Must value not set</title>
 					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
 				</mustValueNotSet1>
+				<imageAlreadyExists>
+					<title>Image already exists</title>
+					<text>The image &quot;[IMAGE]&quot; already exists.</text>
+				</imageAlreadyExists>
+				<mustBePngFile>
+					<text>The file has the wrong file extension (Has to be *.png)</text>
+				</mustBePngFile>
+				<moveUploadedFileFailed>
+					<text>Could not move the uploaded file to the destination directory &quot;[PATH]&quot;.</text>
+				</moveUploadedFileFailed>
 			</messages>
 		</backgroundManagement>
 		<shapeManagement>
@@ -795,6 +805,21 @@
 				<unableToDeleteShape>
 					<text>Cannot delete shape &quot;[IMAGENAME]&quot; because it is used by map &quot;[MAP]&quot;.</text>
 				</unableToDeleteShape>
+				<failedToDeleteShape>
+					<text>Cannot delete shape &quot;[IMAGE]&quot;.</text>
+				</failedToDeleteShape>
+				<shapeDoesNotExist>
+					<text>The shape &quot;[IMAGE]&quot; does not extist.</text>
+				</shapeDoesNotExist>
+				<moveUploadedFileFailed>
+					<text>Could not move the uploaded file to the shape directory &quot;[PATH]&quot;.</text>
+				</moveUploadedFileFailed>
+				<mustBePngFile>
+					<text>The file has the wrong file extension (Has to be *.png)</text>
+				</mustBePngFile>
+				<uploadFailed>
+					<text>Upload not possible. There are some problems with your webserver configuration.</text>
+				</uploadFailed>
 			</messages>
 		</shapeManagement>
 		<mapManagement>
@@ -836,6 +861,44 @@
 				</notCfgFile>
 			</messages>
 		</mapManagement>
+		<ajaxHandler>
+			<messages>
+				<mustValueNotSet>
+					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
+				</mustValueNotSet>
+				<methodNotSupportedByBackend>
+					<title>Method not supported</title>
+					<text>The method &quot;[METHOD]&quot; is not supported by the backend.</text>
+				</methodNotSupportedByBackend>
+				<accessModeIsNotValid>
+					<title>Access mode is not valid</title>
+					<text>The access mode &quot;[MODE]&quot; is not valid.</text>
+				</accessModeIsNotValid>
+				<unknownAction>
+					<title>Action not supported</title>
+					<text>The action &quot;[ACTION]&quot; is not supported by the ajax handler.</text>
+				</unknownAction>
+			</messages>
+		</ajaxHandler>
+		<formHandler>
+			<messages>
+				<mustValueNotSet>
+					<text>The must value &quot;[ATTRIBUTE]&quot; is not set</text>
+				</mustValueNotSet>
+				<mapDeleted>
+					<title>Map deleted</title>
+					<text>The map was deleted.</text>
+				</mapDeleted>
+				<mapLockNotDeleted>
+					<title>Map lock not deleted</title>
+					<text>The map lock could not be deleted.</text>
+				</mapLockNotDeleted>
+				<unknownAction>
+					<title>Action not supported</title>
+					<text>The action &quot;[ACTION]&quot; is not supported by the form handler.</text>
+				</unknownAction>
+			</messages>
+		</formHandler>
 		<addModify>
 			<labels>
 				<dummy>
