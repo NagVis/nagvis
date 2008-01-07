@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class for handling all backends in NagVis
+ *
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
+ */
 class GlobalBackendMgmt {
 	var $MAINCFG;
 	var $BACKENDS;

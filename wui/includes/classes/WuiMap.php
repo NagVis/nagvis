@@ -139,7 +139,7 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBackground() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getBackground('.$type.')');
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getBackground()');
 		$style = '';
 		if($this->MAPCFG->getName() != '') {
 			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();

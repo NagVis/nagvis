@@ -1,6 +1,8 @@
 <?php
 /** 
  * Class for adding/modify objects on maps
+ *
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiAddModify extends GlobalPage {
 	var $MAINCFG;
