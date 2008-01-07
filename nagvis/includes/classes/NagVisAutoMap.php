@@ -5,17 +5,20 @@
 class NagVisAutoMap extends GlobalMap {
 	var $MAINCFG;
 	var $MAPCFG;
+	var $MAPOBJ;
 	var $LANG;
 	var $BACKEND;
 	
 	var $backend_id;
 	var $root;
 	var $maxLayers;
-	var $rootObject;
 	var $width;
 	var $height;
 	var $renderMode;
 	var $ignoreHosts;
+	
+	var $rootObject;
+	var $arrHostnames;
 	
 	/**
 	 * Automap constructor
@@ -31,6 +34,8 @@ class NagVisAutoMap extends GlobalMap {
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
+		
+		$this->arrHostnames = Array();
 		
 		// Create map configuration
 		$this->MAPCFG = new NagVisMapCfg($this->MAINCFG, '__automap');
@@ -481,7 +486,7 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function getObjectTree() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getObjectTree()');
-		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts);
+		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames);
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getObjectTree()');
 	}
 	
