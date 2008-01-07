@@ -1,6 +1,8 @@
 <?php
 /**
  * Class of a Host in Nagios with all necessary informations
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHost extends NagVisStatefulObject {
 	var $MAINCFG;
@@ -84,7 +86,7 @@ class NagiosHost extends NagVisStatefulObject {
 	function fetchState() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchState()');
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->checkStates($this->type,$this->host_name,$this->recognize_services, '',$this->only_hard_states);
+			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
 			
 			// Append contents of the array to the object properties
 			// Bad: this method is not meant for this, but it works
@@ -112,17 +114,28 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchChilds($maxLayers=-1, &$objConf=Array(), $ignoreHosts=Array()) {
+	function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchChilds()');
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$this->fetchDirectChildObjects($objConf, $ignoreHosts);
+			$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames);
 			
 			/**
 			 * If maxLayers is not set there is no layer limitation
 			 */
 			if($maxLayers < 0 || $maxLayers > 0) {
 				foreach($this->childObjects AS $OBJ) {
-					$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts);
+					/*
+					 * Check if the host is already on the map (If it's not done, the 
+					 * objects with more than one parent be printed several times on the 
+					 *map, especially the links to child objects will be too many.
+					 */
+					if(!in_array($OBJ->getName(), $arrHostnames)){
+						$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames);
+						
+						// Add the name of this host to the array with hostnames which are
+						// already on the map
+						$arrHostnames[] = $OBJ->getName();
+					}
 				}
 			}
 		}
@@ -171,7 +184,15 @@ class NagiosHost extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchServiceObjects()');
 		// Get all services and states
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServicesByHostName($this->host_name) As $serviceDescription) {			
-			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->host_name, $serviceDescription);
+			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->getName(), $serviceDescription);
+			// FIXME: The service of this host has to know how he should handle 
+			//hard/soft states. This is a little dirty but the simplest way to do this
+			//until the hard/soft state handling has moved from backend to the object
+			// classes.
+			$objConf = Array('only_hard_states' => $this->getOnlyHardStates());
+			$OBJ->setConfiguration($objConf);
+			
+			// Add service object to the service array
 			$this->services[] = $OBJ;
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchServiceObjects()');
@@ -185,9 +206,9 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array()) {
+	function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchDirectChildObjects(&Array(), &Array())');
-		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->host_name) AS $childName) {
+		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName()) AS $childName) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop Host');
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
@@ -196,6 +217,8 @@ class NagiosHost extends NagVisStatefulObject {
 				$OBJ->fetchState();
 				$OBJ->fetchIcon();
 				$OBJ->setConfiguration($objConf);
+				
+				// Append the host object to the childObjects array
 				$this->childObjects[] = $OBJ;
 			}
 			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop Host');
@@ -218,9 +241,13 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->summary_state = $this->state;
 		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
 		
-		// Get states of services and merge with host state
-		foreach($this->services AS $SERVICE) {
-			$this->wrapChildState($SERVICE);
+		// Only merge host state with service state when recognize_services is set 
+		// to 1
+		if($this->getRecognizeServices()) {
+			// Get states of services and merge with host state
+			foreach($this->services AS $SERVICE) {
+				$this->wrapChildState($SERVICE);
+			}
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchSummaryState()');
 	}
@@ -238,17 +265,21 @@ class NagiosHost extends NagVisStatefulObject {
 		// Write host state
 		$this->summary_output = $this->LANG->getLabel('hostStateIs').' '.$this->state.'. ';
 		
-		// If there are services write the summary state for them
-		if($this->getNumServices() > 0) {
-			$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
-			
-			foreach($this->services AS $SERVICE) {
-				$arrStates[$SERVICE->getSummaryState()]++;
+		// Only merge host state with service state when recognize_services is set 
+		// to 1
+		if($this->getRecognizeServices()) {
+			// If there are services write the summary state for them
+			if($this->getNumServices() > 0) {
+				$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+				
+				foreach($this->services AS $SERVICE) {
+					$arrStates[$SERVICE->getSummaryState()]++;
+				}
+				
+				parent::fetchSummaryOutput($arrStates, $this->LANG->getLabel('services'));
+			} else {
+				$this->summary_output .= $this->LANG->getMessageText('hostHasNoServices','HOST~'.$this->getName());
 			}
-			
-			parent::fetchSummaryOutput($arrStates, $this->LANG->getLabel('services'));
-		} else {
-			$this->summary_output .= $this->LANG->getMessageText('hostHasNoServices','HOST~'.$this->getName());
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchSummaryOutput()');
 	}
