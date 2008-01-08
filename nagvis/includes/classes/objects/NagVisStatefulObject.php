@@ -34,7 +34,7 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		
-		$this->GRAPHIC = new GlobalGraphic();
+		$this->GRAPHIC = '';
 		
 		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
 		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
@@ -399,6 +399,12 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		list($xFrom,$xTo) = explode(',', $this->getX());
 		list($yFrom,$yTo) = explode(',', $this->getY());
+		
+		// If the graphic class is not initialized
+		if($this->GRAPHIC == '') {
+			// Initialize the GlobalGraphic class
+			$this->GRAPHIC = new GlobalGraphic();
+		}
 		
 		$this->x = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
 		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
