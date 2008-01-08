@@ -73,7 +73,7 @@ class NagVisFrontend extends GlobalPage {
 					$MAP->MAPOBJ->fetchIcon();
 					
 					// Check if the user is permited to view this map
-					if($MAP->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+					if($MAP->MAPOBJ->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
 						$class = '';
 						
 						if($mapName == '__automap') {
