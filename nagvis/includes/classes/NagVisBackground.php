@@ -219,7 +219,7 @@ class NagVisBackground extends NagVisMap {
 		if(!$this->checkMemoryLimit()) {
 			$this->errorBox($this->LANG->getMessageText('maybePhpMemoryLimitToLow'));	
 		}
-		if(!$this->checkPermissions($this->MAPCFG->getValue('global',0, 'allowed_user'),0)) {
+		if(!$this->MAPBOBJ->checkPermissions($this->MAPCFG->getValue('global',0, 'allowed_user'),0)) {
 			$this->errorBox($this->LANG->getMessageText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkPreflight()');
