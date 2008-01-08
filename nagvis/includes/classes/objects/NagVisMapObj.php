@@ -313,9 +313,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 			// No direct loop, now check the harder one: indirect loop
 			// Also check for permissions to view the state of the map
 			
-			// Start a new map wihtout getting the state
-			$SUBMAP = new NagVisMap($this->MAINCFG, $OBJ->MAPCFG, $this->LANG, $this->BACKEND, FALSE);
-			if($SUBMAP->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
+			// Check for valid permissions
+			if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
 				
 				// Loop all objects on the child map to find out if there is a link back to this map (loop)
 				foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
@@ -419,6 +418,13 @@ class NagVisMapObj extends NagVisStatefulObject {
 		return $link;
 	}
 	
+	/**
+	 * PUBLIC fetchSummaryState()
+	 *
+	 * Fetches the summary state of the map object and all members/childs
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function fetchSummaryState() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchSummaryState()');
 		// Get summary state member objects
@@ -428,6 +434,31 @@ class NagVisMapObj extends NagVisStatefulObject {
 			}
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::fetchSummaryState()');
+	}
+	
+	/**
+	 * Checks for valid Permissions
+	 *
+	 * @param 	String 	$allowed	
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkPermissions(&$allowed,$printErr) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::checkPermissions(Array(...),'.$printErr.')');
+		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
+				if($printErr) {
+						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+						$FRONTEND->messageToUser('ERROR', 'permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user'));
+				}
+				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapObj::checkPermissions(): FALSE');
+				return FALSE;
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapObj::checkPermissions(): TRUE');
+		 	return TRUE;
+		}
+		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapObj::checkPermissions(): TRUE');
+		return TRUE;
 	}
 }
 ?>
