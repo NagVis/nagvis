@@ -37,10 +37,10 @@ class NagVisBackground extends NagVisMap {
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
+		parent::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND);
+		
 		$this->checkPreflight();
 		$this->initImage();
-		
-		parent::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND);
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::NagVisBackground()');
 	}
@@ -219,7 +219,7 @@ class NagVisBackground extends NagVisMap {
 		if(!$this->checkMemoryLimit()) {
 			$this->errorBox($this->LANG->getMessageText('maybePhpMemoryLimitToLow'));	
 		}
-		if(!$this->MAPBOBJ->checkPermissions($this->MAPCFG->getValue('global',0, 'allowed_user'),0)) {
+		if(!$this->MAPOBJ->checkPermissions($this->MAPCFG->getValue('global',0, 'allowed_user'),0)) {
 			$this->errorBox($this->LANG->getMessageText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisBackground::checkPreflight()');
