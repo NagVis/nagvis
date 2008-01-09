@@ -27,7 +27,7 @@ class GlobalMainCfg {
 					'match' => MATCH_STRING_NO_SPACE),
 				'dateformat' => Array('must' => 1,
 					'editable' => 1,
-					'default' => 'Y-m-d H:m:i',
+					'default' => 'Y-m-d H:i:s',
 					'match' => MATCH_STRING),
 				'displayheader' => Array('must' => 1,
 						'editable' => 1,
@@ -110,6 +110,10 @@ class GlobalMainCfg {
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
 				'icon' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
+				'images' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
@@ -310,6 +314,7 @@ class GlobalMainCfg {
 	function setPathsByBase($base,$htmlBase) {
 		$this->validConfig['paths']['cfg']['default'] = $base.'etc/';
 		$this->validConfig['paths']['icon']['default'] = $base.'nagvis/images/iconsets/';
+		$this->validConfig['paths']['images']['default'] = $base.'nagvis/images/';
 		$this->validConfig['paths']['shape']['default'] = $base.'nagvis/images/shapes/';
 		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/languages/';
 		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';

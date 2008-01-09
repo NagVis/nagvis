@@ -7,6 +7,7 @@ class NagVisMap extends GlobalMap {
 	var $MAPCFG;
 	var $BACKEND;
 	var $GRAPHIC;
+	var $MAPOBJ;
 	
 	/**
 	 * Class Constructor
@@ -66,7 +67,7 @@ class NagVisMap extends GlobalMap {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getBackground()');
 		
 		if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $this->checkGd(1)) {
-			$src = './draw.php?map='.$this->MAPCFG->getName();
+			$src = $this->MAINCFG->getValue('paths', 'htmlbase').'/nagvis/draw.php?map='.$this->MAPCFG->getName();
 		} else {
 			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
 		}
@@ -83,10 +84,10 @@ class NagVisMap extends GlobalMap {
 	 */
 	function getFavicon() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getFavicon()');
-		if(file_exists('./images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
-			$favicon = './images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
+		if(file_exists($this->MAINCFG->getValue('paths', 'images').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
+			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
-			$favicon = './images/internal/favicon.png';
+			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
 		}
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getFavicon()');
 		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
