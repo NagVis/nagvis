@@ -176,12 +176,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 	/**
 	 * Gets all objects of the map
 	 *
-	 * @param	Boolean	$getState	With state?
-	 * @return	Array	Array of Objects of this map
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMapObjects($getState=1,$mergeWithGlobals=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchMapObjects('.$getState.','.$mergeWithGlobals.')');
+	function fetchMapObjects() {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchMapObjects()');
 		
 		/**
 		 * Check if we can use cached objects. The cache is only be used when the 
@@ -221,12 +219,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 						// workaround
 						$objConf['id'] = $index;
 						
-						if($mergeWithGlobals) {
-							// merge with "global" settings
-							foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
-								if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-									$objConf[$key] = $values['default'];
-								}
+						// merge with "global" settings
+						foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+							if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+								$objConf[$key] = $values['default'];
 							}
 						}
 						
