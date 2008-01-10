@@ -106,7 +106,7 @@ class GlobalPage {
 	 */
 	function checkPermissions($allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('StaRt method GlobalPage::checkPermissions(Array(),'.$printErr.')');
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
+		if(isset($allowed) && !isset($allowed['EVERYONE']) && !isset($allowed[$this->MAINCFG->getRuntimeValue('user')])) {
 			if($printErr) {
 				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}

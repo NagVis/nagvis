@@ -56,7 +56,7 @@ class GlobalBackendndomy {
 			
 			// Do some checks to make sure that Nagios is running and the Data at the DB are ok
 			$QUERYHANDLE = $this->mysqlQuery('SELECT is_currently_running, status_update_time FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
-			$nagiosstate = mysql_fetch_array($QUERYHANDLE);
+			$nagiosstate = mysql_fetch_assoc($QUERYHANDLE);
 			
 			// Check that Nagios reports itself as running	
 			if ($nagiosstate['is_currently_running'] != 1) {
@@ -172,7 +172,7 @@ class GlobalBackendndomy {
 	function getInstanceId() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getInstanceId()');
 		$QUERYHANDLE = $this->mysqlQuery('SELECT instance_id FROM '.$this->dbPrefix.'instances WHERE instance_name=\''.$this->dbInstanceName.'\' LIMIT 1');
-		$ret = mysql_fetch_array($QUERYHANDLE);
+		$ret = mysql_fetch_assoc($QUERYHANDLE);
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getInstanceId(): '.$ret['instance_id']);
 		return $ret['instance_id'];
@@ -263,7 +263,7 @@ class GlobalBackendndomy {
 		}
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT name1,name2 FROM '.$this->dbPrefix.'objects WHERE objecttype_id='.$objectType.' AND '.$filter.$isActiveFilter.' instance_id='.$this->dbInstanceId.' ORDER BY name1');
-		while($data = mysql_fetch_array($QUERYHANDLE)) {
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			$ret[] = Array('name1' => $data['name1'],'name2' => $data['name2']);
 		}
 		
@@ -308,7 +308,7 @@ class GlobalBackendndomy {
 		FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h 
 		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
 		
-		$data = mysql_fetch_array($QUERYHANDLE);
+		$data = mysql_fetch_assoc($QUERYHANDLE);
 		// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
 		if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
 			if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostAckByHostname(): TRUE');
@@ -358,7 +358,7 @@ class GlobalBackendndomy {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
 		} else {
-			$data = mysql_fetch_array($QUERYHANDLE);
+			$data = mysql_fetch_assoc($QUERYHANDLE);
 			
 			$arrReturn['alias'] = $data['alias'];
 			$arrReturn['display_name'] = $data['display_name'];
@@ -486,7 +486,7 @@ class GlobalBackendndomy {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
 		} else {
-			while($data = mysql_fetch_array($QUERYHANDLE)) {
+			while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 				$arrTmpReturn = Array();
 				
 				$arrTmpReturn['service_description'] = $data['name2'];
@@ -585,7 +585,7 @@ class GlobalBackendndomy {
 		AND (h1.config_type=1 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id) 
 		AND ph1.parent_host_object_id IS null');
 		
-		while($data = mysql_fetch_array($QUERYHANDLE)) {
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			$arrReturn[] = $data['name1'];
 		}
 		
@@ -618,7 +618,7 @@ class GlobalBackendndomy {
 		AND o1.object_id=ph1.parent_host_object_id
 		AND (h2.config_type=1 AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
 		AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
-		while($data = mysql_fetch_array($QUERYHANDLE)) {
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			$arrChildNames[] = $data['name1'];
 			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
@@ -652,7 +652,7 @@ class GlobalBackendndomy {
 				AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 				AND ss.service_object_id=o.object_id');
 		
-		while($data = mysql_fetch_array($QUERYHANDLE)) {
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = $data['name2'];
@@ -689,7 +689,7 @@ class GlobalBackendndomy {
 				AND hgm.hostgroup_id=hg.hostgroup_id 
 				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)');
 		
-		while($data = mysql_fetch_array($QUERYHANDLE)) {
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = $data['name1'];
@@ -726,7 +726,7 @@ class GlobalBackendndomy {
 				AND sgm.servicegroup_id=sg.servicegroup_id 
 				AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id)');
 	
-		while($data = mysql_fetch_array($QUERYHANDLE)) {
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
@@ -754,7 +754,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'programstatus
 			LIMIT 1');
 		
-		$data = mysql_fetch_array($QUERYHANDLE);
+		$data = mysql_fetch_assoc($QUERYHANDLE);
 		
 		if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getNagiosStartTime()');
 		return $data['program_start_time'];

@@ -636,7 +636,7 @@ class GlobalMapCfg {
 									$entry[0] = trim($entry[0]);
 									if(isset($entry[1])) {
 										$entry[1] = trim($entry[1]);
-										if(in_array($entry[0],$createArray)) {
+										if(isset($createArray[$entry[0]])) {
 											$this->mapConfig[$define[1]][$type][$entry[0]] = explode(',',str_replace(' ','',$entry[1]));
 										} else {
 											$this->mapConfig[$define[1]][$type][$entry[0]] = $entry[1];

@@ -133,7 +133,7 @@ class NagiosHost extends NagVisStatefulObject {
 					 * objects with more than one parent be printed several times on the 
 					 *map, especially the links to child objects will be too many.
 					 */
-					if(!in_array($OBJ->getName(), $arrHostnames)){
+					if(!isset($arrHostnames[$OBJ->getName()])){
 						$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames);
 						
 						// Add the name of this host to the array with hostnames which are
@@ -251,7 +251,7 @@ class NagiosHost extends NagVisStatefulObject {
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName()) AS $childName) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop Host');
 			// If the host is in ignoreHosts, don't recognize it
-			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
+			if(count($ignoreHosts) == 0 || !iisset($ignoreHosts[$childName])) {
 				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
 				$OBJ->fetchMembers();
 				$OBJ->fetchState();

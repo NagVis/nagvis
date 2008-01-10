@@ -409,7 +409,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	function checkPermissions(&$allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::checkPermissions(Array(...),'.$printErr.')');
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
+		if(isset($allowed) && !isset($allowed['EVERYONE']) && !isset($allowed[$this->MAINCFG->getRuntimeValue('user')])) {
 				if($printErr) {
 						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 						$FRONTEND->messageToUser('ERROR', 'permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user'));
