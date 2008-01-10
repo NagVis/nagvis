@@ -265,7 +265,7 @@ class NagVisObject {
 		* $context = stream_context_create($http_opts);
 		* $content = file_get_contents($obj['hover_url'],FALSE,$context);
 		*/
-		if(!$content = @file_get_contents($this->hover_url)) {
+		if(!$content = file_get_contents($this->hover_url)) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 			$FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$this->hover_url);
 		}

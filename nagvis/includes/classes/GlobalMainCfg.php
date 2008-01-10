@@ -375,32 +375,35 @@ class GlobalMainCfg {
 		// Check for config file and read permissions
 		if($this->checkNagVisConfigExists($printErr) && $this->checkNagVisConfigReadable($printErr)) {
 			// read thx config file line by line in array $file
-			$file = @file($this->configFile);
+			$file = file($this->configFile);
+			
+			// Count the lines before the loop (only counts once)
+			$countLines = count($file);
 			
 			// loop trough array
-			for ($i = 0; $i < @count($file); $i++) {
+			for ($i = 0; $i < $countLines; $i++) {
 				// cut spaces from beginning and end
-				$line = @trim($file[$i]);
+				$line = trim($file[$i]);
 				
 				// don't read empty lines
 				if(isset($line) && $line != '') {
 					// get first char of actual line
-					$firstChar = @substr($line,0,1);
+					$firstChar = substr($line,0,1);
 					
 					// check what's in this line
 					if($firstChar == ';') {
 						// comment...
 						$key = 'comment_'.($numComments++);
-						$val = @trim($line);
+						$val = trim($line);
 						
 						if(isset($sec) && $sec != '') {
 							$this->config[$sec][$key] = $val;
 						} else {
 							$this->config[$key] = $val;
 						}
-					} elseif ((@substr($line, 0, 1) == '[') && (@substr($line, -1, 1)) == ']') {
+					} elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
 						// section
-						$sec = @strtolower(@trim(@substr($line, 1, @strlen($line)-2)));
+						$sec = strtolower(trim(substr($line, 1, strlen($line)-2)));
 						
 						// write to array
 						if(preg_match('/^backend_/i', $sec)) {
@@ -416,16 +419,16 @@ class GlobalMainCfg {
 						// parameter...
 						
 						// seperate string in an array
-						$arr = @explode('=',$line);
+						$arr = explode('=',$line);
 						// read key from array and delete it
-						$key = @strtolower(@trim($arr[0]));
+						$key = strtolower(trim($arr[0]));
 						unset($arr[0]);
 						// build string from rest of array
-						$val = @trim(@implode('=', $arr));
+						$val = trim(implode('=', $arr));
 						
 						// remove " at beginign and at the end of the string
-						if ((@substr($val,0,1) == '"') && (@substr($val,-1,1)=='"')) {
-							$val = @substr($val,1,@strlen($val)-2);
+						if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
+							$val = substr($val,1,strlen($val)-2);
 						}
 						
 						// Special options (Arrays)
@@ -685,7 +688,7 @@ class GlobalMainCfg {
 	 */
 	function checkMapCfgFolderReadable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderReadable('.$printErr.')');
-		if(file_exists($this->getValue('paths', 'mapcfg')) && @is_readable($this->getValue('paths', 'mapcfg'))) {
+		if(file_exists($this->getValue('paths', 'mapcfg')) && is_readable($this->getValue('paths', 'mapcfg'))) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderReadable(): FALSE');
 			return TRUE;
 		} else {
@@ -707,7 +710,7 @@ class GlobalMainCfg {
 	 */
 	function checkMapCfgFolderWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderWriteable('.$printErr.')');
-		if(file_exists(substr($this->getValue('paths', 'mapcfg'),0,-1)) && @is_writable(substr($this->getValue('paths', 'mapcfg'),0,-1))) {
+		if(file_exists(substr($this->getValue('paths', 'mapcfg'),0,-1)) && is_writable(substr($this->getValue('paths', 'mapcfg'),0,-1))) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderWriteable(): TRUE');
 			return TRUE;
 		} else {

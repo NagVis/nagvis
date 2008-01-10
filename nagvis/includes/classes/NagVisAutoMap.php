@@ -366,7 +366,7 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function checkVarFolderWriteable($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkVarFolderWriteable('.$printErr.')');
-		if($this->checkVarFolderExists($printErr) && @is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
+		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderWriteable(): TRUE');
 			return TRUE;
 		} else {

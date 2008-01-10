@@ -200,8 +200,8 @@ class GlobalLanguage {
 		static $trans_tbl;
 		
 		// replace numeric entities
-		$string = preg_replace('~&#x([0-9a-f]+);~ei', 'code2utf(hexdec("\\1"))', $string);
-		$string = preg_replace('~&#([0-9]+);~e', 'code2utf(\\1)', $string);
+		$string = preg_replace('~&#x(?:[0-9a-f]+);~ei', 'code2utf(hexdec("\\1"))', $string);
+		$string = preg_replace('~&#(?:[0-9]+);~e', 'code2utf(\\1)', $string);
 		
 		// replace literal entities
 		if (!isset($trans_tbl)) {

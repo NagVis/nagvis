@@ -457,10 +457,10 @@ class NagVisStatefulObject extends NagVisObject {
 			}
 			
 			// If there is a presign it should be relative to the objects x/y
-			if(preg_match('/^(\+|\-)/', $this->label_x)) {
+			if(preg_match('/^(?:\+|\-)/', $this->label_x)) {
 				$this->label_x = $this->x + $this->label_x;
 			}
-			if(preg_match('/^(\+|\-)/',$this->label_y)) {
+			if(preg_match('/^(?:\+|\-)/',$this->label_y)) {
 				$this->label_y = $this->y + $this->label_y;
 			}
 			
