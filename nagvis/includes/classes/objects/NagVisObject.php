@@ -300,14 +300,32 @@ class NagVisObject {
 	 */
 	function readHoverTemplate() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::readHoverTemplate()');
-		if($this->checkHoverTemplateReadable(1)) {
-			$ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
-			
-			$ret = $this->replaceHoverTemplateMacros($ret);
-			
-			// Escape chars which could make problems
-			$ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
+		
+		// Read hover cache contents
+		$arrHoverCache = $this->MAINCFG->getRuntimeValue('hover_cache');
+		if(isset($arrHoverCache[$this->getHoverTemplate()])) {
+			$ret = $arrHoverCache[$this->getHoverTemplate()];
+		} else {
+			if($this->checkHoverTemplateReadable(1)) {
+				$ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
+				
+				// Build cache for the hover template
+				$arrHoverCache = $this->MAINCFG->getRuntimeValue('hover_cache');
+				if($arrHoverCache == '') {
+					$this->MAINCFG->setRuntimeValue('hover_cache', Array($this->getHoverTemplate() => $ret));
+				} else {
+					$arrHoverCache[$this->getHoverTemplate()] = $ret;
+					$this->MAINCFG->setRuntimeValue('hover_cache', $arrHoverCache);
+				}
+				
+			}
 		}
+		
+		// Replace the macros
+		$ret = $this->replaceHoverTemplateMacros($ret);
+		
+		// Escape chars which could make problems
+		$ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::readHoverTemplate()');
 		return $ret;
