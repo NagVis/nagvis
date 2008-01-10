@@ -88,7 +88,16 @@ class GlobalMapCfg {
 					'match' => MATCH_INTEGER),
 				'label_background' => Array('must' => 0,
 					'default' => 'transparent',
-					'match' => MATCH_COLOR)),
+					'match' => MATCH_COLOR),
+				'hover_childs_show' => Array('must' => 0,
+					'default' => $this->MAINCFG->getValue('defaults', 'hoverchildsshow'),
+					'match' => MATCH_BOOLEAN),
+				'hover_childs_order' => Array('must' => 0,
+					'default' => $this->MAINCFG->getValue('defaults', 'hoverchildsorder'),
+					'match' => MATCH_STRING_NO_SPACE),
+				'hover_childs_limit' => Array('must' => 0,
+					'default' => $this->MAINCFG->getValue('defaults', 'hoverchildslimit'),
+					'match' => MATCH_INTEGER)),
 			'host' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'use' => Array('must' => 0,
@@ -146,7 +155,16 @@ class GlobalMapCfg {
 					'match' => MATCH_INTEGER),
 				'label_background' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_COLOR)),
+					'match' => MATCH_COLOR),
+				'hover_childs_show' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_BOOLEAN),
+				'hover_childs_order' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_NO_SPACE),
+				'hover_childs_limit' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_INTEGER)),
 			'hostgroup' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'use' => Array('must' => 0,
@@ -204,7 +222,16 @@ class GlobalMapCfg {
 					'match' => MATCH_INTEGER),
 				'label_background' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_COLOR)),
+					'match' => MATCH_COLOR),
+				'hover_childs_show' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_BOOLEAN),
+				'hover_childs_order' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_NO_SPACE),
+				'hover_childs_limit' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_INTEGER)),
 			'service' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'use' => Array('must' => 0,
@@ -260,7 +287,16 @@ class GlobalMapCfg {
 					'match' => MATCH_INTEGER),
 				'label_background' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_COLOR)),
+					'match' => MATCH_COLOR),
+				'hover_childs_show' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_BOOLEAN),
+				'hover_childs_order' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_NO_SPACE),
+				'hover_childs_limit' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_INTEGER)),
 			'servicegroup' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'use' => Array('must' => 0,
@@ -315,7 +351,16 @@ class GlobalMapCfg {
 					'match' => MATCH_INTEGER),
 				'label_background' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_COLOR)),
+					'match' => MATCH_COLOR),
+				'hover_childs_show' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_BOOLEAN),
+				'hover_childs_order' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_NO_SPACE),
+				'hover_childs_limit' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_INTEGER)),
 			'map' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'use' => Array('must' => 0,
@@ -365,7 +410,16 @@ class GlobalMapCfg {
 					'match' => MATCH_INTEGER),
 				'label_background' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_COLOR)),
+					'match' => MATCH_COLOR),
+				'hover_childs_show' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_BOOLEAN),
+				'hover_childs_order' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_NO_SPACE),
+				'hover_childs_limit' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_INTEGER)),
 			'textbox' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'use' => Array('must' => 0,
@@ -433,6 +487,9 @@ class GlobalMapCfg {
 		$this->validConfig['host']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['host']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['host']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
+		$this->validConfig['host']['hover_childs_show']['default'] = $this->getValue('hover_childs_show', 0, '');
+		$this->validConfig['host']['hover_childs_order']['default'] = $this->getValue('hover_childs_order', 0, '');
+		$this->validConfig['host']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
 		$this->validConfig['hostgroup']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
 		$this->validConfig['hostgroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['hostgroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
@@ -446,6 +503,9 @@ class GlobalMapCfg {
 		$this->validConfig['hostgroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['hostgroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['hostgroup']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
+		$this->validConfig['hostgroup']['hover_childs_show']['default'] = $this->getValue('hover_childs_show', 0, '');
+		$this->validConfig['hostgroup']['hover_childs_order']['default'] = $this->getValue('hover_childs_order', 0, '');
+		$this->validConfig['hostgroup']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
 		$this->validConfig['service']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['service']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['service']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
@@ -458,6 +518,9 @@ class GlobalMapCfg {
 		$this->validConfig['service']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['service']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['service']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
+		$this->validConfig['service']['hover_childs_show']['default'] = $this->getValue('hover_childs_show', 0, '');
+		$this->validConfig['service']['hover_childs_order']['default'] = $this->getValue('hover_childs_order', 0, '');
+		$this->validConfig['service']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
 		$this->validConfig['servicegroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['servicegroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
@@ -470,6 +533,9 @@ class GlobalMapCfg {
 		$this->validConfig['servicegroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['servicegroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['servicegroup']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
+		$this->validConfig['servicegroup']['hover_childs_show']['default'] = $this->getValue('hover_childs_show', 0, '');
+		$this->validConfig['servicegroup']['hover_childs_order']['default'] = $this->getValue('hover_childs_order', 0, '');
+		$this->validConfig['servicegroup']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
 		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
 		$this->validConfig['map']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
@@ -481,6 +547,9 @@ class GlobalMapCfg {
 		$this->validConfig['map']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['map']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['map']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
+		$this->validConfig['map']['hover_childs_show']['default'] = $this->getValue('hover_childs_show', 0, '');
+		$this->validConfig['map']['hover_childs_order']['default'] = $this->getValue('hover_childs_order', 0, '');
+		$this->validConfig['map']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
 		$this->validConfig['shape']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['shape']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getObjectDefaults()');

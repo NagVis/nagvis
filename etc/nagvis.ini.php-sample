@@ -44,6 +44,12 @@
 ;hovertemplate="default"
 ; hover menu open delay (seconds)
 ;hoverdelay=0
+; show childs in hover menus
+;hoverchildsshow=1
+; sort method of childs (s: state, a: alphabetical)
+;hoverchildsorder="s"
+; limit shown child objects to n
+;hoverchildslimit="10"
 ; show map in lists (dropdowns, index page, ...)
 ;showinlists=1
 ; use gdlibs (if set to 0 lines will not work, all other types should work fine)
