@@ -93,9 +93,14 @@ class NagiosHost extends NagVisStatefulObject {
 			$this->setConfiguration($arrValues);
 			
 			// Get all service states
-			foreach($this->services AS $OBJ) {
-				$OBJ->fetchState();
+			if($this->getNumServices() == 0) {
+				$this->fetchServiceObjects();
 			}
+			
+			// DEP: Old method, getting every single service state/informations
+			/*foreach($this->services AS $OBJ) {
+				$OBJ->fetchState();
+			}*/
 			
 			// Also get summary state
 			$this->fetchSummaryState();
@@ -165,9 +170,23 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNumServices() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::getNumMembers()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::getNumMembers()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::getNumServices()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::getNumServices()');
 		return count($this->services);
+	}
+	
+	/**
+	 * PUBLIC getServices()
+	 *
+	 * Returns the number of services
+	 *
+	 * @return	Array		Array of Services
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getServices() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::getServices()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::getServices()');
+		return $this->services;
 	}
 	
 	# End public methods
@@ -182,8 +201,25 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	function fetchServiceObjects() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHost::fetchServiceObjects()');
-		// Get all services and states
-		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServicesByHostName($this->host_name) As $serviceDescription) {			
+		
+		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states) AS $arrService) {
+			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->host_name, $arrService['service_description']);
+			
+			// Append contents of the array to the object properties
+			// Bad: this method is not meant for this, but it works
+			$OBJ->setConfiguration($arrService);
+			
+			// Also get summary state
+			$OBJ->fetchSummaryState();
+			
+			// At least summary output
+			$OBJ->fetchSummaryOutput();
+			
+			$this->services[] = $OBJ;
+		}
+		
+		// Old method, getting every single method
+		/*foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServicesByHostName($this->host_name) As $serviceDescription) {			
 			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->getName(), $serviceDescription);
 			// FIXME: The service of this host has to know how he should handle 
 			//hard/soft states. This is a little dirty but the simplest way to do this
@@ -194,7 +230,7 @@ class NagiosHost extends NagVisStatefulObject {
 			
 			// Add service object to the service array
 			$this->services[] = $OBJ;
-		}
+		}*/
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHost::fetchServiceObjects()');
 	}
 	
