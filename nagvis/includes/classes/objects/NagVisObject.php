@@ -322,13 +322,13 @@ class NagVisObject {
 	 * @return	String		HTML code for the hover menu
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function replaceHoverTemplateMacros($ret, $childs=1) {
+	function replaceHoverTemplateMacros($ret, $replaceChilds=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::replaceHoverTemplateMacros()');
 		
 		/*
 		 * Macros which are only for objects with childs
 		 */
-		if($this->hover_childs_show == '1' && $childs && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
+		if($this->hover_childs_show == '1' && $replaceChilds && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
 			$matches = Array();
 			$childs = '';
 			if(preg_match('/(<!-- BEGIN loop_child -->(.*?)<!-- END loop_child -->)+/s', $ret, $matches)) {
@@ -375,7 +375,13 @@ class NagVisObject {
 		 * Now replace the regular macros
 		 */
 		$ret = str_replace('[obj_type]', $this->type, $ret);
-		$ret = str_replace('[obj_name]', $this->getName(), $ret);
+		// On child service objects in hover menu replace obj_name with 
+		// service_description
+		if(!$replaceChilds && $this->type == 'service') {
+			$ret = str_replace('[obj_name]', $this->getServiceDescription(), $ret);
+		} else {
+			$ret = str_replace('[obj_name]', $this->getName(), $ret);
+		}
 		
 		if(isset($this->alias) && $this->alias != '') {
 			$ret = str_replace('[obj_alias]',$this->alias,$ret);
