@@ -114,7 +114,9 @@ class GlobalBackendMgmt {
 		} else {
 			foreach($aBackends AS $backendId) {
 				if($this->checkBackendExists($backendId,1)) {
-					require_once($this->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
+					if(!isset($INC_GlobalBackend_{$this->MAINCFG->getValue('backend_'.$backendId,'backendtype')})) {
+						require($this->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
+					}
 					$backendClass = 'GlobalBackend'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype');
 					$this->BACKENDS[$backendId] = new $backendClass($this->MAINCFG,$backendId);
 				}
