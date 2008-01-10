@@ -251,7 +251,7 @@ class NagiosHost extends NagVisStatefulObject {
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName()) AS $childName) {
 			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop Host');
 			// If the host is in ignoreHosts, don't recognize it
-			if(count($ignoreHosts) == 0 || !iisset($ignoreHosts[$childName])) {
+			if(count($ignoreHosts) == 0 || !isset($ignoreHosts[$childName])) {
 				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
 				$OBJ->fetchMembers();
 				$OBJ->fetchState();
