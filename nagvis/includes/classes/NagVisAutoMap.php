@@ -99,45 +99,13 @@ class NagVisAutoMap extends GlobalMap {
 			$this->ignoreHosts = Array();
 		}
 		
-		/**
-		 * Check if we can use cached objects. The cache is only be used when the 
-		 * following things are OK: NagVis version, Nagios start time < cache time
-		 */
-		if (DEBUG&&DEBUGLEVEL&2) debug('Loading map objects');
-		if(isset($_SESSION['nagvis_version']) 
-		 && isset($_SESSION['nagvis_object_cache_time_automap_'.$this->root]) 
-		 && isset($_SESSION['nagvis_object_cache_prop_automap_'.$this->root])
-		 && isset($_SESSION['nagvis_object_cache_automap_'.$this->root])
-		 && $_SESSION['nagvis_version'] == CONST_VERSION
-		 && $_SESSION['nagvis_object_cache_prop_automap_'.$this->root] == implode(',',$prop)
-		 && $this->BACKEND->checkBackendInitialized($this->MAPCFG->getValue('global', 0, 'backend_id'), TRUE)
-		 && $this->BACKEND->BACKENDS[$this->MAPCFG->getValue('global', 0, 'backend_id')]->getNagiosStartTime() < $_SESSION['nagvis_object_cache_time_automap_'.$this->root]) {
-			if (DEBUG&&DEBUGLEVEL&2) debug('Cache seems to be OK, use it!');
-			// Cache seems to be OK, use it!
-			
-			// Unserialize the string which stores all objects (and child objects) of
-			// this map in it
-			$this->rootObject = unserialize($_SESSION['nagvis_object_cache_automap_'.$this->root]);
-			
-			// The mysql resource $CONN in the BACKEND object is not valid after 
-			// serialisation, now add the current resource to the BACKEND of the cache
-			$this->rootObject->BACKEND = $this->BACKEND;
-		} else {
-			if (DEBUG&&DEBUGLEVEL&2) debug('Not using cache');
-			
-			// Get "root" host object
-			$this->fetchHostObjectByName($this->root);
-			
-			// Get all object informations from backend
-			$this->getObjectTree();
-			
-			// Write the objects to the object cache
-			$_SESSION['nagvis_version'] = CONST_VERSION;
-			$_SESSION['nagvis_object_cache_time_automap_'.$this->root] = time();
-			$_SESSION['nagvis_object_cache_prop_automap_'.$this->root] = implode(',',$prop);
-			// Serialize root object and all it's childs and save this to the cache
-			$_SESSION['nagvis_object_cache_automap_'.$this->root] = serialize($this->rootObject);
-		}
+		if (DEBUG&&DEBUGLEVEL&2) debug('Not using cache');
+		
+		// Get "root" host object
+		$this->fetchHostObjectByName($this->root);
+		
+		// Get all object informations from backend
+		$this->getObjectTree();
 		
 		if (DEBUG&&DEBUGLEVEL&2) debug('Loaded all objects');
 		
@@ -190,7 +158,7 @@ class NagVisAutoMap extends GlobalMap {
 		 */
 		$str .= 'node [';
 		// default margin is 0.11,0.055
-		$str .= 'margin="0.11,0.0", ';
+		$str .= 'margin="0.0,0.0", ';
 		$str .= 'ratio="auto", ';
 		$str .= 'shape="none", ';
 		$str .= 'fontcolor=black, fontname=Courier, fontsize=10';
