@@ -26,4 +26,15 @@
 	<tr><td class="label"><label>[lang_next_check]</label></td><td>[obj_next_check]</td></tr>
 	<tr><td class="label"><label>[lang_last_state_change]</label></td><td>[obj_last_state_change]</td></tr>
 	<!-- END service -->
+	<!-- BEGIN childs -->
+	<tr><td class="spacer" colspan="2"></td></tr>
+	<tr><td colspan="2">
+		<table>
+			<tr><td class="label"><label>[lang_name]</label></td><td class="label"><label>[lang_summary_state]</label></td><td class="label"><label>[lang_summary_output]</label></td></tr>
+			<!-- BEGIN loop_child -->
+			<tr><td>[obj_name]</td><td class="state[obj_summary_state]">[obj_summary_state]</td><td>[obj_summary_output]</td></tr>
+			<!-- END loop_child -->
+		</table>
+	</td></tr>
+	<!-- END childs -->
 </table>
