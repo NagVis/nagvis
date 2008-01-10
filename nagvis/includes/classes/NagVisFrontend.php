@@ -156,7 +156,7 @@ class NagVisFrontend extends GlobalPage {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::createThumbnail()');
 		
 		if($this->checkImageExists($imgPath, TRUE)) {
-			$imgSize = @getimagesize($imgPath);
+			$imgSize = getimagesize($imgPath);
 			// 0: width, 1:height, 2:type
 			
 			switch($imgSize[2]) {
@@ -326,7 +326,7 @@ class NagVisFrontend extends GlobalPage {
 									$sReplace .= $sReplaceObj;
 								}
 							}
-							$ret = preg_replace('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
+							$ret = preg_replace('/<!-- BEGIN '.$key.' -->(?:(?s).*)<!-- END '.$key.' -->/',$sReplace,$ret);
 						}
 					}
 				}

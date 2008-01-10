@@ -464,7 +464,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectConfiguration() {
+	function &getObjectConfiguration() {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getObjectConfiguration()');
 		$objConf = Array();
 		

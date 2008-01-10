@@ -366,8 +366,11 @@ class NagVisObject {
 				// Sort the array of child objects by the sort option
 				// FIXME
 				
+				// Count only once, not in loop header
+				$numObjects = count($arrObjects);
+				
 				// Loop all child object until all looped or the child limit is reached
-				for($i = 0; $i < $this->hover_childs_limit, $i < count($arrObjects); $i++) {
+				for($i = 0; $i < $this->hover_childs_limit, $i < $numObjects; $i++) {
 					// Current child object
 					$OBJ = $arrObjects[$i];
 					

@@ -37,8 +37,8 @@ class GlobalBackground {
 	function checkFileExists($printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapImageExists('.$printErr.')');
 		if($this->image != '') {
-			//if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image)) {
-			if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'map').$this->image, 'r'))) {
+			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image)) {
+			//if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'map').$this->image, 'r'))) {
 				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapImageExists(): TRUE');
 				return TRUE;
 			} else {

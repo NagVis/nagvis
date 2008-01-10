@@ -561,7 +561,7 @@ class GlobalMainCfg {
 				if(is_array($item)) {
 					$content .= '['.$key.']'."\n";
 					foreach ($item as $key2 => $item2) {
-						if(@substr($key2,0,8) == 'comment_') {
+						if(substr($key2,0,8) == 'comment_') {
 							$content .= $item2."\n";
 						} else {
 							if(is_numeric($item2) || is_bool($item2))
@@ -570,7 +570,7 @@ class GlobalMainCfg {
 							$content .= $key2.'="'.$item2.'"'."\n";
 						}
 					}
-				} elseif(@substr($key,0,8) == 'comment_') {
+				} elseif(substr($key,0,8) == 'comment_') {
 					$content .= $item."\n";
 				} else {
 					if(is_numeric($item) || is_bool($item))
@@ -735,7 +735,7 @@ class GlobalMainCfg {
 		foreach($this->validConfig AS $key => $item) {
 			if(is_array($item)) {
 				foreach ($item AS $key2 => $item2) {
-					if(@substr($key2,0,8) != 'comment_') {
+					if(substr($key2,0,8) != 'comment_') {
 						if($key2 == $var) {
 							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::findSecOfVar(): '.$key);
 							return $key;
