@@ -488,6 +488,7 @@ class GlobalBackendndomy {
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 				$arrTmpReturn = Array();
 				
+				$arrTmpReturn['service_description'] = $data['name2'];
 				$arrTmpReturn['display_name'] = $data['display_name'];
 				$arrTmpReturn['alias'] = $data['display_name'];
 				
