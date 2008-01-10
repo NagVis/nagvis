@@ -329,7 +329,6 @@ class NagVisObject {
 		 * Macros which are only for objects with childs
 		 */
 		if($this->hover_childs_show == '1' && $childs && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
-			//FIXME!!!! $this->hover_childs_show
 			$matches = Array();
 			$childs = '';
 			if(preg_match('/(<!-- BEGIN loop_child -->(.*?)<!-- END loop_child -->)+/s', $ret, $matches)) {
