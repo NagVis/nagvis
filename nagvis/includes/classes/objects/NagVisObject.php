@@ -359,10 +359,10 @@ class NagVisObject {
 					if(get_class($OBJ) != 'NagVisTextbox' && get_class($OBJ) != 'NagVisShape') {
 						$child = $OBJ->replaceHoverTemplateMacros($child, 0);
 					}
+					
+					// Append the current child to the childs string
+					$childs .= $child;
 				}
-				
-				// Append the current child to the childs string
-				$childs .= $child;
 			}
 			
 			// Add the list of childs to the hover menu
