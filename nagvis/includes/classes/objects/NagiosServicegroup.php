@@ -90,6 +90,34 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchState()');
 	}
 	
+	/**
+	 * PUBLIC getNumMembers()
+	 *
+	 * Counts the number of members
+	 *
+	 * @return	Integer		Number of members
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getNumMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::getNumMembers()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::getNumMembers()');
+		return count($this->members);
+	}
+	
+	/**
+	 * PUBLIC getMembers()
+	 *
+	 * Returns the member objects
+	 *
+	 * @return	Array		Member objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::getMembers()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::getMembers()');
+		return $this->members;
+	}
+	
 	# End public methods
 	# #########################################################################
 	
@@ -121,19 +149,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			}
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchMemberServiceObjects()');
-	}
-	
-	/**
-	 * PRIVATE getNumMembers()
-	 *
-	 * Counts the number of members
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getNumMembers() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::getNumMembers()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::getNumMembers()');
-		return count($this->members);
 	}
 	
 	/**

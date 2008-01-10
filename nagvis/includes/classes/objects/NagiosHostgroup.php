@@ -96,7 +96,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PRIVATE getNumMembers()
+	 * PUBLIC getNumMembers()
 	 *
 	 * Returns the number of member objects
 	 *
@@ -107,6 +107,20 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::getNumMembers()');
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::getNumMembers()');
 		return count($this->members);
+	}
+	
+	/**
+	 * PUBLIC getMembers()
+	 *
+	 * Returns the member objects
+	 *
+	 * @return	Array		Member objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getMembers() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosHostgroup::getMembers()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosHostgroup::getMembers()');
+		return $this->members;
 	}
 	
 	# End public methods
