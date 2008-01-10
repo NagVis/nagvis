@@ -103,6 +103,20 @@ class NagiosService extends NagVisStatefulObject {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchState()');
 	}
 	
+	/**
+	 * PUBLIC getServiceDescription()
+	 *
+	 * Returns the service description
+	 *
+	 * @return	String		Service description
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getServiceDescription() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::getServiceDescription()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::getServiceDescription()');
+		return $this->service_description;
+	}
+	
 	# End public methods
 	# #########################################################################
 	
