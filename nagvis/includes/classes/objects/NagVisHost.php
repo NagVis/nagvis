@@ -49,10 +49,11 @@ class NagVisHost extends NagiosHost {
 	 *
 	 * Parses the object in graphviz configuration format
 	 *
+	 * @param		Integer		Number of the current Layer
 	 * @return	String		graphviz configuration code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseGraphviz() {
+	function parseGraphviz($layer=0) {
 		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::parseGraphviz()');
 		$strReturn = $this->type.'_'.str_replace('-','__',$this->host_name).' [ ';
 		$strReturn .= 'label=<<table border="0">';
@@ -61,10 +62,15 @@ class NagVisHost extends NagiosHost {
 		$strReturn .= '</table>>, ';
 		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.str_replace('-','__',$this->host_name).'", ';
 		$strReturn .= 'target="'.$this->url_target.'", ';
-		$strReturn .= 'tooltip="'.$this->host_name.'"';
+		$strReturn .= 'tooltip="'.$this->host_name.'",';
+		// The root host has to be highlighted, this are the options to do this
+		if($layer == 0) {
+			$strReturn .= 'shape="circle",';
+		}
+		$strReturn .= 'layer="'.$layer.'"';
 		$strReturn .= ' ];'."\n ";
 		foreach($this->getChilds() As $OBJ) {
-			$strReturn .= $OBJ->parseGraphviz();
+			$strReturn .= $OBJ->parseGraphviz($layer+1);
 			$strReturn .= $this->type.'_'.str_replace('-','__',$this->host_name).' -- '.$OBJ->type.'_'.str_replace('-','__',$OBJ->host_name).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
 		}
 		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::parseGraphviz(): String HTML');
