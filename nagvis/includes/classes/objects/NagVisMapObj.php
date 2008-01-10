@@ -75,6 +75,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 		return $this->objects;
 	}
 	
+	function getNumObjects() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::getNumObjects()');
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisMapObj::getNumObjects()');
+		return count($this->objects);
+	}
+	
 	/**
 	 * PUBLIC fetchMembers()
 	 *
@@ -181,105 +187,66 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function fetchMapObjects() {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapObj::fetchMapObjects()');
 		
-		/**
-		 * Check if we can use cached objects. The cache is only be used when the 
-		 * following things are OK: NagVis version, Nagios start time < cache time
-		 */
-		if(isset($_SESSION['nagvis_version']) 
-		 && isset($_SESSION['nagvis_object_cache_time_'.$this->getName()]) 
-		 && isset($_SESSION['nagvis_object_cache'.$this->getName()])
-		 && $_SESSION['nagvis_version'] == CONST_VERSION
-		 /* The following check is only temporary until I got a good idea for
-		  * reloading the configuration to cached objects */
-		 && $this->MAPCFG->getFileModificationTime() < $_SESSION['nagvis_object_cache_time_'.$this->getName()]
-		 && $this->BACKEND->checkBackendInitialized($this->MAPCFG->getValue('global', 0, 'backend_id'), TRUE)
-		 && $this->BACKEND->BACKENDS[$this->MAPCFG->getValue('global', 0, 'backend_id')]->getNagiosStartTime() < $_SESSION['nagvis_object_cache_time_'.$this->getName()]) {
-			// Cache seems to be OK, use it!
-			
-			// Unserialize the string which stores all objects (and child objects) of
-			// this map in it
-			$this->objects = unserialize($_SESSION['nagvis_object_cache'.$this->getName()]);
-			
-			// Only do this if there are objects on that map
-			if(count($this->objects) > 0) {
-				// The mysql resource $CONN in the BACKEND object is not valid after 
-				// serialisation, now add the current resource to the BACKEND of the cache
-				$this->objects[0]->BACKEND = $this->BACKEND;
-				
-				// If the configuration file is newer than the cache reload the configuration for the objects
-				if($this->MAPCFG->getFileModificationTime() > $_SESSION['nagvis_object_cache_time_'.$this->getName()]) {
-					//FIXME: Reload the configuration (When this is fixed remove the one check in the above if statement
-				}
-			}
-		} else {
-			foreach($this->MAPCFG->validConfig AS $type => $arr) {
-				if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
-					foreach($objs AS $index => $objConf) {
-						if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
-						// workaround
-						$objConf['id'] = $index;
-						
-						// merge with "global" settings
-						foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
-							if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-								$objConf[$key] = $values['default'];
-							}
+		foreach($this->MAPCFG->validConfig AS $type => $arr) {
+			if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
+				foreach($objs AS $index => $objConf) {
+					if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
+					// workaround
+					$objConf['id'] = $index;
+					
+					// merge with "global" settings
+					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+							$objConf[$key] = $values['default'];
 						}
-						
-						switch($type) {
-							case 'host':
-								$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name']);
-							break;
-							case 'service':
-								$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
-							break;
-							case 'hostgroup':
-								$OBJ = new NagVisHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['hostgroup_name']);
-							break;
-							case 'servicegroup':
-								$OBJ = new NagVisServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['servicegroup_name']);
-							break;
-							case 'map':
-								$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG, $objConf['map_name']);
-								if($SUBMAPCFG->checkMapConfigExists(0)) {
-									$SUBMAPCFG->readMapConfig();
-								}
-								$OBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $SUBMAPCFG);
-								
-								if(!$SUBMAPCFG->checkMapConfigExists(0)) {
-									$OBJ->summary_state = 'ERROR';
-									$OBJ->summary_output = $this->LANG->getMessageText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
-								}
-							break;
-							case 'shape':
-								$OBJ = new NagVisShape($this->MAINCFG, $this->LANG, $objConf['icon']);
-							break;
-							case 'textbox':
-								$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
-							break;
-							default:
-								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-								$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName());
-							break;
-						}
-						
-						// Apply default configuration to object
-						$OBJ->setConfiguration($objConf);
-						
-						// Write member to object array
-						$this->objects[] = $OBJ;
-						
-						if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
 					}
+					
+					switch($type) {
+						case 'host':
+							$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name']);
+						break;
+						case 'service':
+							$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
+						break;
+						case 'hostgroup':
+							$OBJ = new NagVisHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['hostgroup_name']);
+						break;
+						case 'servicegroup':
+							$OBJ = new NagVisServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['servicegroup_name']);
+						break;
+						case 'map':
+							$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG, $objConf['map_name']);
+							if($SUBMAPCFG->checkMapConfigExists(0)) {
+								$SUBMAPCFG->readMapConfig();
+							}
+							$OBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $SUBMAPCFG);
+							
+							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
+								$OBJ->summary_state = 'ERROR';
+								$OBJ->summary_output = $this->LANG->getMessageText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+							}
+						break;
+						case 'shape':
+							$OBJ = new NagVisShape($this->MAINCFG, $this->LANG, $objConf['icon']);
+						break;
+						case 'textbox':
+							$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
+						break;
+						default:
+							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName());
+						break;
+					}
+					
+					// Apply default configuration to object
+					$OBJ->setConfiguration($objConf);
+					
+					// Write member to object array
+					$this->objects[] = $OBJ;
+					
+					if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
 				}
 			}
-			
-			// Write the objects to the object cache
-			$_SESSION['nagvis_version'] = CONST_VERSION;
-			$_SESSION['nagvis_object_cache_time_'.$this->getName()] = time();
-			// Serialize all objects of this map (including childs) to a string and
-			// save this to a session variable. This is the object cache
-			$_SESSION['nagvis_object_cache'.$this->getName()] = serialize($this->objects);
 		}
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapObj::fetchMapObjects()');
