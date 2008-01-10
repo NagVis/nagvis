@@ -91,8 +91,7 @@ class NagiosService extends NagVisStatefulObject {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, $this->service_description, $this->only_hard_states);
 			
 			// Append contents of the array to the object properties
-			// Bad: this method is not meant for this, but it works
-			$this->setConfiguration($arrValues);
+			$this->setObjectInformation($arrValues);
 			
 			// Also get summary state
 			$this->fetchSummaryState();

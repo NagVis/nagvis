@@ -89,8 +89,7 @@ class NagiosHost extends NagVisStatefulObject {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
 			
 			// Append contents of the array to the object properties
-			// Bad: this method is not meant for this, but it works
-			$this->setConfiguration($arrValues);
+			$this->setObjectInformation($arrValues);
 			
 			// Get all service states
 			if($this->getNumServices() == 0) {
@@ -206,8 +205,13 @@ class NagiosHost extends NagVisStatefulObject {
 			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->host_name, $arrService['service_description']);
 			
 			// Append contents of the array to the object properties
-			// Bad: this method is not meant for this, but it works
-			$OBJ->setConfiguration($arrService);
+			$OBJ->setObjectInformation($arrService);
+			
+			// The service of this host has to know how he should handle 
+			//hard/soft states. This is a little dirty but the simplest way to do this
+			//until the hard/soft state handling has moved from backend to the object
+			// classes.
+			$OBJ->setConfiguration($this->getObjectConfiguration());
 			
 			// Also get summary state
 			$OBJ->fetchSummaryState();

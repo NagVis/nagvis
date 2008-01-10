@@ -8,6 +8,8 @@ class NagVisObject {
 	var $MAINCFG;
 	var $LANG;
 	
+	var $conf;
+	
 	// "Global" Configuration variables for all objects
 	var $type;
 	var $x;
@@ -38,6 +40,8 @@ class NagVisObject {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::NagVisObject(MAINCFG,LANG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
+		
+		$this->conf = Array();
 		
 		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::NagVisObject()');
 	}
@@ -131,8 +135,43 @@ class NagVisObject {
 	 */
 	function setConfiguration(&$obj) {
 		foreach($obj AS $key => $val) {
+			$this->conf[$key] = $val;
 			$this->{$key} = $val;
 		}
+	}
+	
+	/**
+	 * PUBLIC setObjectInformation()
+	 *
+	 * Sets extended informations of the object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function setObjectInformation(&$obj) {
+		foreach($obj AS $key => $val) {
+			$this->{$key} = $val;
+		}
+	}
+	
+	/**
+	 * PULBLIC getObjectConfiguration()
+	 *
+	 * Gets the configuration of the object
+	 *
+	 * @return	Array		Object configuration
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getObjectConfiguration() {
+		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::getObjectConfiguration()');
+		// There have to be removed some options which are only for this object
+		$arr = $this->conf;
+		unset($arr['id']);
+		unset($arr['type']);
+		unset($arr['host_name']);
+		unset($arr[$this->getType().'_name']);
+		unset($arr['service_description']);
+		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::getObjectConfiguration()');
+		return $arr;
 	}
 	
 	/**
@@ -290,7 +329,6 @@ class NagVisObject {
 		 * Macros which are only for objects with childs
 		 */
 		if($this->hover_childs_show == '1' && $childs && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
-			echo 2;
 			//FIXME!!!! $this->hover_childs_show
 			$matches = Array();
 			$childs = '';

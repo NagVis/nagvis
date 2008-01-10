@@ -463,7 +463,6 @@ class GlobalMapCfg {
 				'name' => Array('must' => 1,
 					'match' => MATCH_STRING_NO_SPACE)));
 		
-		
 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::GlobalMapCfg()');
 	}
 	
@@ -487,9 +486,9 @@ class GlobalMapCfg {
 		$this->validConfig['host']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['host']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['host']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['host']['hover_childs_show']['default'] = $this->getValue('hover_childs_show', 0, '');
-		$this->validConfig['host']['hover_childs_order']['default'] = $this->getValue('hover_childs_order', 0, '');
-		$this->validConfig['host']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
+		$this->validConfig['host']['hover_childs_show']['default'] = $this->getValue('global', 0, 'hover_childs_show');
+		$this->validConfig['host']['hover_childs_order']['default'] = $this->getValue('global', 0, 'hover_childs_order');
+		$this->validConfig['host']['hover_childs_limit']['default'] = $this->getValue('global', 0, 'hover_childs_limit');
 		$this->validConfig['hostgroup']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
 		$this->validConfig['hostgroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['hostgroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');

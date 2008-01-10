@@ -137,12 +137,11 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			foreach($arrServices AS $service) {
 				$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $service['host_name'], $service['service_description']);
 				
-				// FIXME: The services have to know how they should handle hard/soft 
+				// The services have to know how they should handle hard/soft 
 				// states. This is a little dirty but the simplest way to do this
 				// until the hard/soft state handling has moved from backend to the
 				// object classes.
-				$objConf = Array('only_hard_states' => $this->getOnlyHardStates());
-				$OBJ->setConfiguration($objConf);
+				$OBJ->setConfiguration($this->getObjectConfiguration());
 				
 				// Add child object to the members array
 				$this->members[] = $OBJ;
