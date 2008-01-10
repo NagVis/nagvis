@@ -16,6 +16,9 @@ class NagVisObject {
 	var $icon;
 	
 	var $hover_menu;
+	var $hover_childs_show;
+	var $hover_childs_order;
+	var $hover_childs_limit;
 	var $label_show;
 	var $recognize_services;
 	var $only_hard_states;
@@ -90,7 +93,11 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getName() {
-		return $this->{$this->getType().'_name'};
+		if($this->type == 'service') {
+			return $this->host_name;
+		} else {
+			return $this->{$this->getType().'_name'};
+		}
 	}
 	
 	/**
@@ -276,19 +283,62 @@ class NagVisObject {
 	 * @return	String		HTML code for the hover menu
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function replaceHoverTemplateMacros($ret) {
+	function replaceHoverTemplateMacros($ret, $childs=1) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::replaceHoverTemplateMacros()');
-		if($this->type == 'service') {
-			$name = 'host_name';
+		
+		/*
+		 * Macros which are only for objects with childs
+		 */
+		if($this->hover_childs_show == '1' && $childs && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
+			echo 2;
+			//FIXME!!!! $this->hover_childs_show
+			$matches = Array();
+			$childs = '';
+			if(preg_match('/(<!-- BEGIN loop_child -->(.*?)<!-- END loop_child -->)+/s', $ret, $matches)) {
+				switch($this->type) {
+					case 'host':
+						$arrObjects = &$this->getServices();
+					break;
+					case 'hostgroup':
+					case 'servicegroup':
+						$arrObjects = &$this->getMembers();
+					break;
+					case 'map':
+						$arrObjects = &$this->getMapObjects();
+					break;
+				}
+				
+				// Sort the array of child objects by the sort option
+				// FIXME
+				
+				// Loop all child object until all looped or the child limit is reached
+				for($i = 0; $i < $this->hover_childs_limit, $i < count($arrObjects); $i++) {
+					// Current child object
+					$OBJ = $arrObjects[$i];
+					
+					// Current child row
+					$child = $matches[2];
+					
+					if(get_class($OBJ) != 'NagVisTextbox' && get_class($OBJ) != 'NagVisShape') {
+						$child = $OBJ->replaceHoverTemplateMacros($child, 0);
+					}
+				}
+				
+				// Append the current child to the childs string
+				$childs .= $child;
+			}
+			
+			// Add the list of childs to the hover menu
+			$ret = preg_replace('/(<!-- BEGIN loop_child -->(.*?)<!-- END loop_child -->)+/s', $childs, $ret);
 		} else {
-			$name = $this->type . '_name';
+			$ret = preg_replace('/(<!-- BEGIN childs -->(.*?)<!-- END childs -->)+/s', '', $ret);
 		}
 		
 		/**
-		 * Now replace the macros
+		 * Now replace the regular macros
 		 */
 		$ret = str_replace('[obj_type]', $this->type, $ret);
-		$ret = str_replace('[obj_name]', $this->$name, $ret);
+		$ret = str_replace('[obj_name]', $this->getName(), $ret);
 		
 		if(isset($this->alias) && $this->alias != '') {
 			$ret = str_replace('[obj_alias]',$this->alias,$ret);
@@ -325,6 +375,11 @@ class NagVisObject {
 		
 		$ret = str_replace('[obj_output]',strtr($this->output, Array("\r" => '<br />', "\n" => '<br />')),$ret);
 		$ret = str_replace('[obj_summary_output]',strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />')),$ret);
+		if($this->type == 'service') {
+			$name = 'host_name';
+		} else {
+			$name = $this->type . '_name';
+		}
 		$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
 		$ret = str_replace('[lang_alias]',$this->LANG->getLabel('alias'),$ret);
 		$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
@@ -369,7 +424,7 @@ class NagVisObject {
 		
 		// Macros which are only for hosts
 		if($this->type == 'host') {
-			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->$name),$ret);
+			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->getName()),$ret);
 		} else {
 			$ret = preg_replace('/(<!-- BEGIN host -->(.*?)<!-- END host -->)+/s','',$ret);
 		}
