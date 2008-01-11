@@ -5,7 +5,9 @@
  * @author      Lars Michelsen <lars@vertical-visions.de>
  */
 
-define('DEBUG', FALSE);
+// enable/disable the debug mode
+define('DEBUG', TRUE);
+
 /**
  * For wanted debug output summarize these possible options:
  * 1: function beginning and ending
@@ -13,8 +15,13 @@ define('DEBUG', FALSE);
  * 4: render time
  */
 define('DEBUGLEVEL', 4);
+
+// Path to the debug file
 define('DEBUGFILE', '../var/nagvis-debug.log');
 
+// NagVis Version
 define('CONST_VERSION', '1.3a1');
+
+// Path to the main configuration file
 define('CONST_MAINCFG', '../etc/nagvis.ini.php');
 ?>

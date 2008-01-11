@@ -104,9 +104,9 @@ class GlobalPage {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkPermissions($allowed,$printErr) {
+	function checkPermissions(&$allowed,$printErr) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('StaRt method GlobalPage::checkPermissions(Array(),'.$printErr.')');
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'),$allowed)) {
+		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
 				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
