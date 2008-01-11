@@ -791,7 +791,7 @@ class GlobalMainCfg {
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
 			if (DEBUG&&DEBUGLEVEL&2) debug('  Not set in config file, try to get default value');
-			if(preg_match('/^backend_/i', $sec)) {
+			if(strpos($sec, 'backend_') === 0) {
 				if (DEBUG&&DEBUGLEVEL&2) debug('  Section: Backend');
 				
 				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] != '') {
@@ -820,7 +820,7 @@ class GlobalMainCfg {
 						}
 					}
 				}
-			} elseif(preg_match('/^rotation_/i', $sec)) {
+			} elseif(strpos($sec, 'rotation_') === 0) {
 				if (DEBUG&&DEBUGLEVEL&2) debug('  Section: Rotation');
 				
 				if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
