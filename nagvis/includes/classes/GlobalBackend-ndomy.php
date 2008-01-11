@@ -556,7 +556,7 @@ class GlobalBackendndomy {
 					$arrReturn = $arrTmpReturn;
 				} else {
 					// Assign actual dataset to return array
-					$arrReturn[str_replace(' ','_',$data['name2'])] = $arrTmpReturn;
+					$arrReturn[strtr($data['name2'],' ','_')] = $arrTmpReturn;
 				}
 			}
 		}
