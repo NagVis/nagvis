@@ -626,7 +626,7 @@ class GlobalMapCfg {
 					if(!ereg('^(#|;)',$file[$l])) {
 						$defineCln = explode('{', $file[$l]);
 						$define = explode(' ',$defineCln[0]);
-						if(isset($define[1]) && array_key_exists(trim($define[1]),$this->validConfig)) {
+						if(isset($define[1]) && isset($this->validConfig[trim($define[1])])) {
 							$type = $types[$define[1]];
 							$l++;
 							$this->mapConfig[$define[1]][$type] = Array('type'=>$define[1]);
@@ -825,7 +825,7 @@ class GlobalMapCfg {
 		// check given objects and attributes
 		foreach($this->mapConfig AS $type => $elements) {
 			if($type != 'template') {
-				if(array_key_exists($type,$this->validConfig)) {
+				if(isset($this->validConfig[$type])) {
 					foreach($elements AS $id => $element) {
 						// loop validConfig for checking: => missing "must" atributes
 						foreach($this->validConfig[$type] AS $key => $val) {
@@ -842,7 +842,7 @@ class GlobalMapCfg {
 						// loop given elements for checking: => all given atributes valid
 						foreach($element AS $key => $val) {
 							// check for valid atributes
-							if(!array_key_exists($key,$this->validConfig[$type])) {
+							if(!isset($this->validConfig[$type][$key])) {
 								// unknown atribute
 								if($printErr == 1) {
 									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
@@ -996,7 +996,7 @@ class GlobalMapCfg {
 	 */
 	function getValue($type, $id, $key, $ignoreDefault=FALSE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getValue('.$type.','.$id.','.$key.','.$ignoreDefault.')');
-		if(isset($this->mapConfig[$type][$id]) && is_array($this->mapConfig[$type][$id]) && array_key_exists($key,$this->mapConfig[$type][$id]) && $this->mapConfig[$type][$id][$key] != '') {
+		if(isset($this->mapConfig[$type][$id]) && is_array($this->mapConfig[$type][$id]) && isset($this->mapConfig[$type][$id][$key]) && $this->mapConfig[$type][$id][$key] != '') {
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getValue(): '.$this->mapConfig[$type][$id][$key]);
 			return $this->mapConfig[$type][$id][$key];
 		} elseif(!$ignoreDefault) {

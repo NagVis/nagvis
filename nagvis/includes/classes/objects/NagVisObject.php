@@ -309,6 +309,79 @@ class NagVisObject {
 			if($this->checkHoverTemplateReadable(1)) {
 				$ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
 				
+				// Replace the static macros (language, paths)
+				if(strpos($ret,'[lang_alias]') !== FALSE) {
+					$ret = str_replace('[lang_alias]',$this->LANG->getLabel('alias'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_state]') !== FALSE) {
+					$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_summary_state]') !== FALSE) {
+					$ret = str_replace('[lang_summary_state]',$this->LANG->getLabel('summaryState'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_output]') !== FALSE) {
+					$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_summary_output]') !== FALSE) {
+					$ret = str_replace('[lang_summary_output]',$this->LANG->getLabel('summaryOutput'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_obj_type]') !== FALSE) {
+					$ret = str_replace('[lang_obj_type]',$this->LANG->getLabel($this->type),$ret);
+				}
+				
+				if(strpos($ret,'[lang_overview]') !== FALSE) {
+					$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_instance]') !== FALSE) {
+					$ret = str_replace('[lang_instance]',$this->LANG->getLabel('instance'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_next_check]') !== FALSE) {
+				$ret = str_replace('[lang_next_check]',$this->LANG->getLabel('nextCheck'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_last_check]') !== FALSE) {
+					$ret = str_replace('[lang_last_check]',$this->LANG->getLabel('lastCheck'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_state_type]') !== FALSE) {
+					$ret = str_replace('[lang_state_type]',$this->LANG->getLabel('stateType'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_current_attempt]') !== FALSE) {
+					$ret = str_replace('[lang_current_attempt]',$this->LANG->getLabel('currentAttempt'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_last_state_change]') !== FALSE) {
+					$ret = str_replace('[lang_last_state_change]',$this->LANG->getLabel('lastStateChange'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_state_duration]') !== FALSE) {
+					$ret = str_replace('[lang_state_duration]',$this->LANG->getLabel('stateDuration'),$ret);
+				}
+				
+				if(strpos($ret,'[lang_service_description]') !== FALSE) {
+					$ret = str_replace('[lang_service_description]',$this->LANG->getLabel('servicename'),$ret);
+				}
+				
+				if(strpos($ret,'[html_base]') !== FALSE) {
+					$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
+				}
+				
+				if(strpos($ret,'[html_templates]') !== FALSE) {
+					$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlhovertemplates'),$ret);
+				}
+				
+				if(strpos($ret,'[html_template_images]') !== FALSE) {
+					$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlhovertemplateimages'),$ret);
+				}
+				
 				// Build cache for the hover template
 				$arrHoverCache = $this->MAINCFG->getRuntimeValue('hover_cache');
 				if($arrHoverCache == '') {
@@ -396,6 +469,7 @@ class NagVisObject {
 		 * Now replace the regular macros
 		 */
 		$ret = str_replace('[obj_type]', $this->type, $ret);
+		
 		// On child service objects in hover menu replace obj_name with 
 		// service_description
 		if(!$replaceChilds && $this->type == 'service') {
@@ -404,16 +478,20 @@ class NagVisObject {
 			$ret = str_replace('[obj_name]', $this->getName(), $ret);
 		}
 		
-		if(isset($this->alias) && $this->alias != '') {
-			$ret = str_replace('[obj_alias]',$this->alias,$ret);
-		} else {
-			$ret = str_replace('[obj_alias]','',$ret);
+		if(strpos($ret,'[obj_alias]') !== FALSE) {
+			if(isset($this->alias) && $this->alias != '') {
+				$ret = str_replace('[obj_alias]',$this->alias,$ret);
+			} else {
+				$ret = str_replace('[obj_alias]','',$ret);
+			}
 		}
 		
-		if(isset($this->display_name) && $this->display_name != '') {
-			$ret = str_replace('[obj_display_name]',$this->display_name,$ret);
-		} else {
-			$ret = str_replace('[obj_display_name]','',$ret);
+		if(strpos($ret,'[obj_display_name]') !== FALSE) {
+			if(isset($this->display_name) && $this->display_name != '') {
+				$ret = str_replace('[obj_display_name]',$this->display_name,$ret);
+			} else {
+				$ret = str_replace('[obj_display_name]','',$ret);
+			}
 		}
 		
 		if($this->getSummaryAcknowledgement() == 1) {
@@ -439,56 +517,67 @@ class NagVisObject {
 		
 		$ret = str_replace('[obj_output]',strtr($this->output, Array("\r" => '<br />', "\n" => '<br />')),$ret);
 		$ret = str_replace('[obj_summary_output]',strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />')),$ret);
-		if($this->type == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $this->type . '_name';
-		}
-		$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
-		$ret = str_replace('[lang_alias]',$this->LANG->getLabel('alias'),$ret);
-		$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
-		$ret = str_replace('[lang_summary_state]',$this->LANG->getLabel('summaryState'),$ret);
-		$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
-		$ret = str_replace('[lang_summary_output]',$this->LANG->getLabel('summaryOutput'),$ret);
-		$ret = str_replace('[lang_obj_type]',$this->LANG->getLabel($this->type),$ret);
-		$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
-		$ret = str_replace('[lang_instance]',$this->LANG->getLabel('instance'),$ret);
 		
-		$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
-		$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlhovertemplates'),$ret);
-		$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlhovertemplateimages'),$ret);
+		if(strpos($ret,'[lang_name]') !== FALSE) {
+			if($this->type == 'service') {
+				$name = 'host_name';
+			} else {
+				$name = $this->type . '_name';
+			}
+			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
+		}
 		
 		// Macros which are only for services and hosts
 		if($this->type == 'host' || $this->type == 'service') {
-			$ret = str_replace('[lang_next_check]',$this->LANG->getLabel('nextCheck'),$ret);
-			$ret = str_replace('[lang_last_check]',$this->LANG->getLabel('lastCheck'),$ret);
-			$ret = str_replace('[lang_state_type]',$this->LANG->getLabel('stateType'),$ret);
-			$ret = str_replace('[lang_current_attempt]',$this->LANG->getLabel('currentAttempt'),$ret);
-			$ret = str_replace('[lang_last_state_change]',$this->LANG->getLabel('lastStateChange'),$ret);
-			$ret = str_replace('[lang_state_duration]',$this->LANG->getLabel('stateDuration'),$ret);
+			if(strpos($ret,'[obj_last_check]') !== FALSE) {
+				$ret = str_replace('[obj_last_check]', $this->getLastCheck(), $ret);
+			}
 			
-			$ret = str_replace('[obj_last_check]', $this->getLastCheck(), $ret);
-			$ret = str_replace('[obj_next_check]', $this->getNextCheck(), $ret);
-			$ret = str_replace('[obj_state_type]', $this->getStateType(), $ret);
-			$ret = str_replace('[obj_current_check_attempt]', $this->getCurrentCheckAttempt(), $ret);
-			$ret = str_replace('[obj_max_check_attempts]', $this->getMaxCheckAttempts(), $ret);
-			$ret = str_replace('[obj_last_state_change]', $this->getLastStateChange(), $ret);
-			$ret = str_replace('[obj_last_hard_state_change]', $this->getLastHardStateChange(), $ret);
-			$ret = str_replace('[obj_state_duration]', $this->getStateDuration(), $ret);
+			if(strpos($ret,'[obj_next_check]') !== FALSE) {
+				$ret = str_replace('[obj_next_check]', $this->getNextCheck(), $ret);
+			}
+			
+			if(strpos($ret,'[obj_state_type]') !== FALSE) {
+				$ret = str_replace('[obj_state_type]', $this->getStateType(), $ret);
+			}
+			
+			if(strpos($ret,'[obj_current_check_attempt]') !== FALSE) {
+				$ret = str_replace('[obj_current_check_attempt]', $this->getCurrentCheckAttempt(), $ret);
+			}
+			
+			if(strpos($ret,'[obj_max_check_attempts]') !== FALSE) {
+				$ret = str_replace('[obj_max_check_attempts]', $this->getMaxCheckAttempts(), $ret);
+			}
+			
+			if(strpos($ret,'[obj_last_state_change]') !== FALSE) {
+				$ret = str_replace('[obj_last_state_change]', $this->getLastStateChange(), $ret);
+			}
+			
+			if(strpos($ret,'[obj_last_hard_state_change]') !== FALSE) {
+				$ret = str_replace('[obj_last_hard_state_change]', $this->getLastHardStateChange(), $ret);
+			}
+			
+			if(strpos($ret,'[obj_state_duration]') !== FALSE) {
+				$ret = str_replace('[obj_state_duration]', $this->getStateDuration(), $ret);
+			}
 		}
 		
 		// Macros which are only for services
 		if($this->type == 'service') {
-			$ret = str_replace('[service_description]',$this->service_description,$ret);
-			$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$this->service_description),$ret);
-			$ret = str_replace('[lang_service_description]',$this->LANG->getLabel('servicename'),$ret);
+			$ret = str_replace('[service_description]',$this->getServiceDescription(),$ret);
+			
+			if(strpos($ret,'[pnp_service_description]') !== FALSE) {
+				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$this->getServiceDescription()),$ret);
+			}
 		} else {
 			$ret = preg_replace('/(<!-- BEGIN service -->(.*?)<!-- END service -->)+/sS','',$ret);
 		}
 		
 		// Macros which are only for hosts
 		if($this->type == 'host') {
-			$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->getName()),$ret);
+			if(strpos($ret,'[pnp_hostname]') !== FALSE) {
+				$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->getName()),$ret);
+			}
 		} else {
 			$ret = preg_replace('/(<!-- BEGIN host -->(.*?)<!-- END host -->)+/s','',$ret);
 		}

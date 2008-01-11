@@ -475,7 +475,7 @@ class GlobalMainCfg {
 		// check given objects and attributes
 		foreach($this->config AS $type => $vars) {
 			if(!ereg('^comment_',$type)) {
-				if(array_key_exists($type,$this->validConfig) || ereg('^(backend|rotation)_', $type)) {
+				if(isset($this->validConfig[$type]) || ereg('^(backend|rotation)_', $type)) {
 					// loop validConfig for checking: => missing "must" atributes
 					if(ereg('^backend_', $type)) {
 						$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
@@ -506,7 +506,7 @@ class GlobalMainCfg {
 								$arrValidConfig = $this->validConfig[$type];
 							}
 							
-							if(!array_key_exists($key,$arrValidConfig)) {
+							if(!isset($arrValidConfig[$key])) {
 								// unknown attribute
 								if($printErr) {
 									$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
@@ -784,7 +784,7 @@ class GlobalMainCfg {
 	function getValue($sec, $var, $ignoreDefault=FALSE) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getValue('.$sec.','.$var.','.$ignoreDefault.')');
 		// if nothing is set in the config file, use the default value
-		if(isset($this->config[$sec]) && is_array($this->config[$sec]) && array_key_exists($var,$this->config[$sec])) {
+		if(isset($this->config[$sec]) && is_array($this->config[$sec]) && isset($this->config[$sec][$var])) {
 			if (DEBUG&&DEBUGLEVEL&2) debug('  Value is set in the config file');
 			
 			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->config[$sec][$var]);
