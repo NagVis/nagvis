@@ -20,6 +20,8 @@ class NagVisAutoMap extends GlobalMap {
 	var $rootObject;
 	var $arrHostnames;
 	
+	var $mapCode;
+	
 	/**
 	 * Automap constructor
 	 *
@@ -30,12 +32,12 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisAutoMap(&$MAINCFG, &$LANG, &$BACKEND, &$prop) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::NagVisAutoMap(MAINCFG,LANG,BACKEND,&Array())');
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
 		
 		$this->arrHostnames = Array();
+		$this->mapCode = '';
 		
 		// Create map configuration
 		$this->MAPCFG = new NagVisMapCfg($this->MAINCFG, '__automap');
@@ -99,7 +101,6 @@ class NagVisAutoMap extends GlobalMap {
 			$this->ignoreHosts = Array();
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&2) debug('Not using cache');
 		
 		// Get "root" host object
 		$this->fetchHostObjectByName($this->root);
@@ -107,7 +108,6 @@ class NagVisAutoMap extends GlobalMap {
 		// Get all object informations from backend
 		$this->getObjectTree();
 		
-		if (DEBUG&&DEBUGLEVEL&2) debug('Loaded all objects');
 		
 		parent::GlobalMap($this->MAINCFG, $this->MAPCFG);
 		
@@ -117,7 +117,6 @@ class NagVisAutoMap extends GlobalMap {
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		$this->MAPOBJ->fetchState();
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::NagVisAutoMap()');
 	}
 	
 	/**
@@ -127,7 +126,6 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseGraphvizConfig() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::parseGraphvizConfig()');
 		
 		/**
 		 * Graph definition
@@ -171,7 +169,6 @@ class NagVisAutoMap extends GlobalMap {
 		
 		//DEBUG: echo $str;
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::parseGraphvizConfig(): String');
 		return $str;
 	}
 	
@@ -183,7 +180,6 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function renderMap() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::renderMap()');
 		/**
 		 * possible render modes are set by selecting the correct binary:
 		 *  dot - filter for drawing directed graphs
@@ -226,26 +222,22 @@ class NagVisAutoMap extends GlobalMap {
 		// Parse map
 		exec($this->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx '.$this->MAINCFG->getValue('paths', 'var').'automap.dot', $arrMapCode);
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::renderMap()');
-		return implode("\n", $arrMapCode);
+		$this->mapCode = implode("\n", $arrMapCode);
 	}
 	
 	/**
 	 * Replaces some unwanted things from graphviz html code
 	 *
-	 * @param		String		Clear HTML code from graphviz binary
-	 * @return	String		HTML code with fixed hover menus
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fixMapCode($strMapCode) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::fixMapCode(strMapCode)');
+	function fixMapCode() {
 		/**
 		 * Graphviz replaces "-" by "&#45;" so the "-" need to be replaced in the 
 		 * hostnames before parsing the graphiz configuration. It gets replaced by 
 		 * "__", undo it here
 		 */
-		$strMapCode = str_replace('__','-',$strMapCode);
-		$strMapCode = str_replace('&#45;','-',$strMapCode);
+		$this->mapCode = str_replace('__', '-', $this->mapCode);
+		$this->mapCode = str_replace('&#45;', '-', $this->mapCode);
 		
 		/**
 		 * The hover menu can't be rendered in graphviz config. The informations
@@ -256,11 +248,8 @@ class NagVisAutoMap extends GlobalMap {
 		 */
 		
 		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
-				$strMapCode = preg_replace('/title=\"'.$OBJ->getName().'\"/', $OBJ->getHoverMenu(), $strMapCode);
+				$this->mapCode = str_replace('title="'.$OBJ->getName().'"', $OBJ->getHoverMenu(), $this->mapCode);
 		}
-		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::fixMapCode(): String');
-		return $strMapCode;
 	}
 	
 	/**
@@ -270,20 +259,19 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::parseMap()');
 		$ret = Array();
 		
 		// Render the map image and save it, also generate link coords etc
-		$mapObjects = $this->renderMap();
+		$this->renderMap();
 		
 		// Fix the map code
-		$mapObjects = $this->fixMapCode($mapObjects);
+		$this->fixMapCode();
 		
 		// Create HTML code for background image
-		$ret = array_merge($ret,$this->getBackground());
+		$ret = $this->getBackground();
 		
 		// Parse the map with its areas
-		$ret[] = $mapObjects;
+		$ret[] = $this->mapCode;
 		
 		// Create hover areas for map objects
 		//$ret[] = $this->getObjects();
@@ -294,7 +282,6 @@ class NagVisAutoMap extends GlobalMap {
 		// Change title (add map alias and map state)
 		$ret[] = '<script type="text/javascript" language="JavaScript">document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::parseMap()');
 		return $ret;
 	}
 	
@@ -305,11 +292,9 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getBackground()');
 		
 		$src = $this->MAINCFG->getValue('paths', 'htmlvar').'automap.png';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::getBackground(): Array(...)');
 		return $this->getBackgroundHtml($src,'','usemap="automap"');
 	}
 	
@@ -320,7 +305,6 @@ class NagVisAutoMap extends GlobalMap {
 	 * Do the preflight checks to ensure the automap can be drawn
 	 */
 	function checkPreflight() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkPreflight()');
 		// The GD-Libs are used by graphviz
 		$this->checkGd(1);
 		
@@ -332,7 +316,6 @@ class NagVisAutoMap extends GlobalMap {
 		$this->checkGraphviz('twopi', 1);
 		$this->checkGraphviz('circo', 1);
 		$this->checkGraphviz('fdp', 1);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::checkPreflight()');
 	}
 	
 	/**
@@ -343,16 +326,13 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkVarFolderExists($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkVarFolderExists('.$printErr.')');
 		if(file_exists(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderExists(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 				$FRONTEND->messageToUser('ERROR','varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -365,16 +345,13 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkVarFolderWriteable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkVarFolderWriteable('.$printErr.')');
 		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderWriteable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 				$FRONTEND->messageToUser('ERROR','varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkVarFolderWriteable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -388,7 +365,6 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkGraphviz($binary, $printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::checkGraphviz('.$printErr.')');
 		/**
 		 * Check if the carphviz binaries can be found in the PATH or in the 
 		 * configured path
@@ -411,10 +387,8 @@ class NagVisAutoMap extends GlobalMap {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
 				$FRONTEND->messageToUser('ERROR','graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->MAINCFG->getvalue('automap','graphvizpath'));
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkGraphviz(): FALSE');
 			return FALSE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::checkGraphviz(): TRUE');
 			return TRUE;
 		}
 	}
@@ -426,13 +400,11 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFavicon() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getFavicon()');
 		if(file_exists('./images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
 			$favicon = './images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
 			$favicon = './images/internal/favicon.png';
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisAutoMap::getFavicon(): String');
 		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
 	}
 	
@@ -442,8 +414,6 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function pxToInch($px) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::pxToInch()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::pxToInch()');
 		return round($px/72, 4);
 	}
 	
@@ -453,9 +423,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectTree() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getObjectTree()');
 		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getObjectTree()');
 	}
 	
 	/**
@@ -465,7 +433,6 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function &getObjectConfiguration() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getObjectConfiguration()');
 		$objConf = Array();
 		
 		// Get object configuration from __automap configuration
@@ -475,7 +442,6 @@ class NagVisAutoMap extends GlobalMap {
 			}
 		}
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getObjectConfiguration()');
 		return $objConf;
 	}
 	
@@ -485,26 +451,22 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getRootHostName() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::getRootHostName()');
 		/**
 		 * NagVis tries to take configured host from main
 		 * configuration or read the host which has no parent from backend
 		 */
 		$defaultRoot = $this->MAINCFG->getValue('automap','default_root');
 		if(isset($defaultRoot) && $defaultRoot != '') {
-			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): '.$defaultRoot);
 			return $defaultRoot;
 		} else {
 			if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 				$hostsWithoutParent = $this->BACKEND->BACKENDS[$this->backend_id]->getHostNamesWithNoParent();
 				if(count($hostsWithoutParent) == 1) {
-					if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): '.$hostsWithoutParent[0]);
 					return $hostsWithoutParent[0];
 				} else {
 					// Could not get root host for the automap
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
 					$FRONTEND->messageToUser('ERROR','couldNotGetRootHostname');
-					if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::getRootHostName(): FALSE');
 				}
 			}
 		}
@@ -516,12 +478,10 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchHostObjectByName($hostName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisAutoMap::fetchHostObjectByName()');
 		$hostObject = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
 		$hostObject->fetchMembers();
 		$hostObject->setConfiguration($this->getObjectConfiguration());
 		$this->rootObject = $hostObject;
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisAutoMap::fetchHostObjectByName()');
 	}
 }
 ?>
