@@ -20,6 +20,8 @@ class NagVisStatefulObject extends NagVisObject {
 	var $iconPath;
 	var $iconHtmlPath;
 	
+	var $dateFormat;
+	
 	/**
 	 * Class constructor
 	 *
@@ -29,18 +31,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisStatefulObject(&$MAINCFG, &$BACKEND, &$LANG) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::NagVisStatefulObject(MAINCFG,BACKEND,LANG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		
 		$this->GRAPHIC = '';
 		
-		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
-		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
-		
 		parent::NagVisObject($this->MAINCFG, $this->LANG);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::NagVisStatefulObject()');
 	}
 	
 	/**
@@ -52,8 +49,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getOnlyHardStates() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::getOnlyHardStates()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::getOnlyHardStates()');
 		return $this->only_hard_states;
 	}
 	
@@ -66,8 +61,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getRecognizeServices() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::getRecognizeServices()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::getRecognizeServices()');
 		return $this->recognize_services;
 	}
 	
@@ -153,7 +146,11 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getStateDuration() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
-			return date($this->MAINCFG->getValue('global','dateformat'), (time() - $this->last_state_change));
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, ($_SERVER['REQUEST_TIME'] - $this->last_state_change));
 		} else {
 			return 'N/A';
 		}
@@ -169,7 +166,11 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastStateChange() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
-			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_state_change);
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->last_state_change);
 		} else {
 			return 'N/A';
 		}
@@ -185,7 +186,11 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastHardStateChange() {
 		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
-			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_hard_state_change);
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->last_hard_state_change);
 		} else {
 			return 'N/A';
 		}
@@ -201,7 +206,11 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastCheck() {
 		if(isset($this->last_check) && $this->last_check != '0') {
-			return date($this->MAINCFG->getValue('global','dateformat'), $this->last_check);
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->last_check);
 		} else {
 			return 'N/A';
 		}
@@ -217,7 +226,11 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getNextCheck() {
 		if(isset($this->next_check) && $this->next_check != '0') {
-			return date($this->MAINCFG->getValue('global','dateformat'), $this->next_check);
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->next_check);
 		} else {
 			return 'N/A';
 		}
@@ -281,16 +294,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::parse()');
 		$this->replaceMacros();
-		//$this->fixIconPosition();
 		
 		// Some specials for lines
 		if(isset($this->line_type)) {
 			$this->getLineHoverArea();
 		}
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::parse(): HTML Code');
 		return $this->parseIcon().$this->parseLabel();
 	}
 	
@@ -298,59 +308,11 @@ class NagVisStatefulObject extends NagVisObject {
 	# #########################################################################
 	
 	/**
-	 * Fetches the icon for the object depending on the summary state
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function fetchIcon() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::fetchIcon()');
-		if($this->getSummaryState() != '') {
-			$stateLow = strtolower($this->getSummaryState());
-			
-			switch($stateLow) {
-				case 'unreachable':
-				case 'down':
-				case 'critical':
-				case 'warning':
-					if($this->getSummaryAcknowledgement() == 1) {
-						$icon = $this->iconset.'_ack.png';
-					} else {
-						$icon = $this->iconset.'_'.$stateLow.'.png';
-					}
-				break;
-				case 'up':
-				case 'ok':
-					$icon = $this->iconset.'_up.png';
-				break;
-				case 'unknown':
-					$icon = $this->iconset.'_'.$stateLow.'.png';
-				break;
-				default:
-					$icon = $this->iconset.'_error.png';
-				break;
-			}
-			
-			$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
-			$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
-			//Checks whether the needed file exists
-			if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
-				$this->icon = $icon;
-			} else {
-				$this->icon = $this->iconset.'_error.png';
-			}
-		} else {
-			$this->icon = $this->iconset.'_error.png';
-		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::fetchIcon()');
-	}
-	
-	/**
 	 * Replaces macros of urls and hover_urls
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceMacros() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::replaceMacros()');
 		if($this->type == 'service') {
 			$name = 'host_name';
 		} else {
@@ -386,7 +348,6 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		parent::replaceMacros();
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::replaceMacros()');
 	}
 	
 	/**
@@ -395,8 +356,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLineHoverArea() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::getLineHoverArea()');
-		
 		list($xFrom,$xTo) = explode(',', $this->getX());
 		list($yFrom,$yTo) = explode(',', $this->getY());
 		
@@ -409,10 +368,7 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->x = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
 		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
 		$this->icon = '20x20.gif';
-		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::getLineHoverArea()');
 	}
-	
 	
 	/**
 	 * Parses the HTML-Code of an icon
@@ -421,8 +377,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::parseIcon()');
-		
 		if($this->type == 'service') {
 			$name = 'host_name';
 			$alt = $this->host_name.'-'.$this->service_description;
@@ -436,7 +390,6 @@ class NagVisStatefulObject extends NagVisObject {
 		$ret .= '</a>';
 		$ret .= '</div>';
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::parseIcon(): HTML code');
 		return $ret;
 	}
 	
@@ -447,8 +400,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseLabel() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::parseLabel()');
-		
 		if(isset($this->label_show) && $this->label_show == '1') {
 			if($this->type == 'service') {
 				$name = 'host_name';
@@ -480,10 +431,8 @@ class NagVisStatefulObject extends NagVisObject {
 			$ret .= '<span>'.$this->label_text.'</span>';
 			$ret .= '</div>';
 			
-			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::parseLabel(): HTML code');
 			return $ret;
 		} else {
-			if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::parseLabel()');
 			return '';
 		}
 	}
@@ -496,8 +445,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryOutput(&$arrStates, $objLabel) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::fetchSummaryOutput()');
-		
 		$this->summary_output .= $this->LANG->getLabel('childStatesAre').' ';
 		foreach($arrStates AS $state => $num) {
 			if($num > 0) {
@@ -509,8 +456,6 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->summary_output = preg_replace('/, $/', '', $this->summary_output);
 		
 		$this->summary_output .= ' '.$objLabel.'.';
-		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::fetchSummaryOutput()');
 	}
 	
 	/**
@@ -520,9 +465,8 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function wrapChildState(&$OBJ) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisStatefulObject::wrapChildState(OBJ)');
-		
 		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
+		
 		if($this->getSummaryState() != '') {
 			if($arrStates[$this->getSummaryState()] < $arrStates[$OBJ->getSummaryState()]) {
 				$this->summary_state = $OBJ->getSummaryState();
@@ -536,8 +480,6 @@ class NagVisStatefulObject extends NagVisObject {
 		} else {
 			$this->summary_state = $OBJ->getSummaryState();
 		}
- 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisStatefulObject::wrapChildState()');
 	}
 }
 ?>
