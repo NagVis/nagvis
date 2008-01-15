@@ -21,14 +21,12 @@ class NagVisService extends NagiosService {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisService(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName, $serviceDescription) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisService::NagVisService(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostName.','.$serviceDescription.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		$this->type = 'service';
 		$this->iconset = 'std_medium';
 		parent::NagiosService($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostName, $serviceDescription);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisService::NagVisService()');
 	}
 	
 	/**
@@ -40,8 +38,6 @@ class NagVisService extends NagiosService {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisService::parse()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisService::parse()');
 		return parent::parse();
 	}
 	
@@ -54,7 +50,10 @@ class NagVisService extends NagiosService {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisService::fetchIcon()');
+		// Set the paths of this icons
+		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
+		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
+		
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
@@ -78,7 +77,7 @@ class NagVisService extends NagiosService {
 			}
 			
 			//Checks whether the needed file exists
-			if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
+			if(@file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
 				$this->icon = $icon;
 			} else {
 				$this->icon = $this->iconset.'_error.png';
@@ -86,7 +85,6 @@ class NagVisService extends NagiosService {
 		} else {
 			$this->icon = $this->iconset.'_error.png';
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisService::fetchIcon()');
 	}
 	
 	
@@ -97,14 +95,12 @@ class NagVisService extends NagiosService {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisService::createLink()');
 		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();
 		} else {
 			$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$this->host_name.'&amp;service='.$this->service_description.'" target="'.$this->url_target.'">';
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisService::createLink(): '.$link);
 		return $link;
 	}
 }
