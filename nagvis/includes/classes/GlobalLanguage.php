@@ -17,14 +17,12 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalLanguage(&$MAINCFG,$languageRoot) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::GlobalLanguage($MAINCFG,'.$languageRoot.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->languageRoot = $languageRoot;
 		$this->cachedLang = Array();
 		
 		$this->languageFile = $this->MAINCFG->getValue('paths', 'language').$this->MAINCFG->getValue('global', 'language').'.xml';
 		$this->getLanguage();
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::GlobalLanguage()');
 	}
 	
 	/**
@@ -34,7 +32,6 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLanguage() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getLanguage()');
 		
 		/**
 		 * If the language cache vars are set and the cache is newer than the
@@ -50,12 +47,9 @@ class GlobalLanguage {
 			&& is_array($_SESSION['nagvis_lang_cache']) 
 			&& $_SESSION['nagvis_version'] == CONST_VERSION 
 			&& $_SESSION['nagvis_lang_cache_time'] > $this->getLanguageFileModificationTime()) {
-			if (DEBUG&&DEBUGLEVEL&2) debug('Using language cache (Cache-Time: '.$_SESSION['nagvis_lang_cache_time'].', Mod-Time: '.$this->getLanguageFileModificationTime().')');
 			$this->lang = $_SESSION['nagvis_lang_cache'];
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLanguage(): TRUE');
 			return TRUE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&2) debug('Not using language cache');
 			if($strLang = $this->readLanguageFile()) {
 				$this->lang = $this->parseXML($strLang);
 				$this->lang = $this->lang['language'];
@@ -64,10 +58,8 @@ class GlobalLanguage {
 				$_SESSION['nagvis_lang_cache_time'] = time();
 				$_SESSION['nagvis_lang_cache'] = $this->lang;
 				
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLanguage(): TRUE');
 				return TRUE;
 			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLanguage(): FALSE');
 				return FALSE;
 			}
 		}
@@ -80,13 +72,10 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLanguageFileModificationTime() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::readLanguageFile()');
 		if($this->checkLanguageFileReadable(1)) {
 			$time = filemtime($this->languageFile);
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::readLanguageFile(): String');
 			return $time;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::readLanguageFile(): FALSE');
 			return FALSE;
 		}
 	}
@@ -98,13 +87,10 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readLanguageFile() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::readLanguageFile()');
 		if($this->checkLanguageFileReadable(1)) {
 			$data = $this->replaceSpecial(file_get_contents($this->languageFile));
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::readLanguageFile(): String');
 			return $data;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::readLanguageFile(): FALSE');
 			return FALSE;
 		}
 	}
@@ -117,7 +103,6 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseXML($data) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::parseXML(String)');
 		$vals = Array();
 		$index = Array();
 		$ret = Array();
@@ -133,7 +118,6 @@ class GlobalLanguage {
 		$tagname = $vals[$i]['tag'];
 		$ret[$tagname] = $this->parseXMLObj($vals, $i);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::parseXML(String)');
 		return $ret;
 	}
 	
@@ -146,10 +130,12 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseXMLObj($vals, &$i) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::parseXMLObj(Array(...),'.$i.')');
 		$child = Array();
 		
-		while($i++ < count($vals)) {
+		// Don't count in the loop
+		$numVals = count($vals);
+		
+		while($i++ < $numVals) {
 			if(isset($vals[$i])) {
 				switch($vals[$i]['type']) {
 					case 'open':
@@ -159,7 +145,6 @@ class GlobalLanguage {
 						$child[$vals[$i]['tag']] = $vals[$i]['value'];
 					break;
 					case 'close':
-						if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::parseXMLObj(): String');
 						return $child;
 					break;
 					default:
@@ -169,7 +154,6 @@ class GlobalLanguage {
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::parseXMLObj(): Array()');
 		return $child;
 	}
 	
@@ -181,11 +165,9 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceSpecial($str) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::replaceSpecial(String)');
 		// DEPRECATED: This is buggy in PHP 4.3, using own methods
 		//$str = html_entity_decode($str,ENT_NOQUOTES,'UTF-8');
 		$str = $this->htmlEntityDecodeUtf8($str);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::replaceSpecial(): String');
 		return $str;
 	}
 	
@@ -238,22 +220,18 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkLanguageFileReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::checkLanguageFileReadable('.$printErr.')');
 		if(!is_readable($this->languageFile)) {
 			if($printErr == 1) {
 				// This has to be a manual error message - using an error message from language File would cause in a loop
 				print '<script>alert(\'Impossible to read from the language file ('.$this->languageFile.')\');</script>';
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::checkLanguageFileReadable(): FALSE');
 			return FALSE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::checkLanguageFileReadable(): TRUE');
 			return TRUE;
 		}
 	}
 	
 	function getMessageText($id,$replace='',$mergeWithGlobal=TRUE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getMessageText('.$id.','.$replace.','.$mergeWithGlobal.')');
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['text']) && $this->cachedLang[$id]['text'] != '') {
 			$ret = $this->cachedLang[$id]['text'];
 		} else {
@@ -266,12 +244,10 @@ class GlobalLanguage {
 			}
 			
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getMessageText(): '.$ret);
 		return $ret;
 	}
 	
 	function getMessageTitle($id,$replace='',$mergeWithGlobal=TRUE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getMessageTitle('.$id.','.$replace.','.$mergeWithGlobal.')');
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['title']) && $this->cachedLang[$id]['title'] != '') {
 			$ret = $this->cachedLang[$id]['title'];
 		} else {
@@ -283,12 +259,10 @@ class GlobalLanguage {
 				$this->cachedLang[$id]['label'] = $ret;
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getMessageTitle(): '.$ret);
 		return $ret;
 	}
 	
 	function getLabel($id,$replace='',$mergeWithGlobal=TRUE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getLabel('.$id.','.$replace.','.$mergeWithGlobal.')');
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['label']) && $this->cachedLang[$id]['label'] != '') {
 			$ret = $this->cachedLang[$id]['label'];
 		} else {
@@ -300,7 +274,6 @@ class GlobalLanguage {
 				$this->cachedLang[$id]['label'] = $ret;
 			}
 	 	}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getLabel(): '.$ret);
 		return $ret;
 	}
 	
@@ -314,7 +287,6 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getText($languagePath,$replace='',$mergeWithGlobal=TRUE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalLanguage::getText('.$languagePath.','.$replace.','.$mergeWithGlobal.')');
 		$arrLang = Array();
 		$strLang = '';
 		$arrLanguagePath = explode(':',$languagePath);
@@ -356,16 +328,13 @@ class GlobalLanguage {
 					}
 				}
 				
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getText(): '.$strLang);
 				// Return string with replaced text
 				return $strLang;
 			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getText(): '.$strLang);
 				// Return without replacement
 				return $strLang;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalLanguage::getText(): TranslationNotFound: '.$languagePath);
 			// Return Translation not Found error
 			return 'TranslationNotFound: '.$languagePath;
 		}
