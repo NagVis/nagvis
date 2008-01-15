@@ -15,7 +15,6 @@ class GlobalMainCfg {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalMainCfg($configFile) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::GlobalMainCfg('.$configFile.')');
 		$this->config = Array();
 		$this->runtimeConfig = Array();
 		
@@ -313,7 +312,6 @@ class GlobalMainCfg {
 		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
 		$this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::GlobalMainCfg()');
 	}
 	
 	/**
@@ -354,9 +352,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBasePath() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getBasePath()');
 		$return = preg_replace('/wui|nagvis$/i', '', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getBasePath(): '.$return);
 		return $return ;
 	}
 	
@@ -368,7 +364,6 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readConfig($printErr=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::readConfig('.$printErr.')');
 		$numComments = 0;
 		$sec = '';
 		
@@ -450,14 +445,11 @@ class GlobalMainCfg {
 			}
 			
 			if($this->checkMainConfigIsValid(1)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): TRUE');
 				return TRUE;
 			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::readConfig(): FALSE');
 			return FALSE;
 		}
 	}
@@ -470,7 +462,6 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMainConfigIsValid($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMainConfigIsValid('.$printErr.')');
 		
 		// check given objects and attributes
 		foreach($this->config AS $type => $vars) {
@@ -512,7 +503,6 @@ class GlobalMainCfg {
 									$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 									$FRONTEND->messageToUser('ERROR','unknownValue','ATTRIBUTE~'.$key.',TYPE~'.$type);
 								}
-								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 								return FALSE;
 							} else {
 								if(isset($val) && is_array($val)) {
@@ -526,7 +516,6 @@ class GlobalMainCfg {
 										$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 										$FRONTEND->messageToUser('ERROR','wrongValueFormat','TYPE~'.$type.',ATTRIBUTE~'.$key);
 									}
-									if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 									return FALSE;
 								}
 							}
@@ -538,12 +527,10 @@ class GlobalMainCfg {
 						$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 						$FRONTEND->messageToUser('ERROR','unknownSection','TYPE~'.$type);
 					}
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMainConfigIsValid(): FALSE');
 					return FALSE;
 				}
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMainConfigIsValid(): TRUE');
 		return TRUE;
 	}
 	
@@ -554,7 +541,6 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function writeConfig() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::writeConfig()');
 		// Check for config file and read permissions
 		if($this->checkNagVisConfigReadable(1) && $this->checkNagVisConfigWriteable(1)) {
 			foreach($this->config as $key => $item) {
@@ -583,22 +569,18 @@ class GlobalMainCfg {
 			if(!$handle = fopen($this->configFile, 'w+')) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','mainCfgNotWriteable');
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): FALSE');
 				return FALSE;
 			}
 			
 			if(!fwrite($handle, $content)) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','19');
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): FALSE');
 				return FALSE;
 			}
 			
 			fclose($handle);
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): TRUE');
 			return TRUE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::writeConfig(): FALSE');
 			return FALSE;
 		}
 	}
@@ -611,21 +593,17 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkNagVisConfigExists($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigExists('.$printErr.')');
 		if($this->configFile != '') {
 			if(file_exists($this->configFile)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigExists(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 					$FRONTEND->messageToUser('ERROR','mainCfgNotExists','MAINCFG~'.$this->configFile);
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigExists(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -638,21 +616,17 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkNagVisConfigReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigReadable('.$printErr.')');
 		if($this->configFile != '') {
 			if(is_readable($this->configFile)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 					$FRONTEND->messageToUser('ERROR','mainCfgNotReadable','MAINCFG~'.$this->configFile);
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -665,16 +639,13 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkNagVisConfigWriteable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkNagVisConfigWriteable('.$printErr.')');
 		if($this->checkNagVisConfigExists($printErr) && is_writeable($this->configFile)) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigWriteable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','mainCfgNotWriteable','MAINCFG~'.$this->configFile);
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkNagVisConfigWriteable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -687,16 +658,13 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapCfgFolderReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderReadable('.$printErr.')');
 		if(file_exists($this->getValue('paths', 'mapcfg')) && is_readable($this->getValue('paths', 'mapcfg'))) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderReadable(): FALSE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','mapCfgDirNotReadable','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -709,16 +677,13 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapCfgFolderWriteable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::checkMapCfgFolderWriteable('.$printErr.')');
 		if(file_exists(substr($this->getValue('paths', 'mapcfg'),0,-1)) && is_writable(substr($this->getValue('paths', 'mapcfg'),0,-1))) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderWriteable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::checkMapCfgFolderWriteable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -731,20 +696,17 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function findSecOfVar($var) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::findSecOfVar('.$var.')');
 		foreach($this->validConfig AS $key => $item) {
 			if(is_array($item)) {
 				foreach ($item AS $key2 => $item2) {
 					if(substr($key2,0,8) != 'comment_') {
 						if($key2 == $var) {
-							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::findSecOfVar(): '.$key);
 							return $key;
 						}
 					}
 				}
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::findSecOfVar(): FALSE');
 		return FALSE;
 	}
 	
@@ -758,7 +720,6 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function setValue($sec, $var, $val) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::setValue('.$sec.','.$var.','.$val.')');
 		if(isset($this->config[$sec][$var]) && $val == '') {
 			// Value is empty and there is an entry in the config array
 			unset($this->config[$sec][$var]);
@@ -768,7 +729,6 @@ class GlobalMainCfg {
 			// Value is set
 			$this->config[$sec][$var] = $val;
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::setValue(): TRUE');
 		return TRUE;
 	}
 	
@@ -782,62 +742,38 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getValue($sec, $var, $ignoreDefault=FALSE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getValue('.$sec.','.$var.','.$ignoreDefault.')');
 		// if nothing is set in the config file, use the default value
 		if(isset($this->config[$sec]) && is_array($this->config[$sec]) && isset($this->config[$sec][$var])) {
-			if (DEBUG&&DEBUGLEVEL&2) debug('  Value is set in the config file');
-			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->config[$sec][$var]);
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
-			if (DEBUG&&DEBUGLEVEL&2) debug('  Not set in config file, try to get default value');
-			if(strpos($sec, 'backend_') === 0) {
-				if (DEBUG&&DEBUGLEVEL&2) debug('  Section: Backend');
-				
+			// Enfasten this method by first check for famous sections and only if 
+			// they don't match try to match the backend_ and rotation_ sections
+			if($sec == 'global' || $sec == 'default' || $sec == 'paths') {
+				return $this->validConfig[$sec][$var]['default'];
+			} elseif(strpos($sec, 'backend_') === 0) {
 				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] != '') {
-					if (DEBUG&&DEBUGLEVEL&2) debug('  Backendtype is set in the backend, get the default value from backend default options');
-					
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']);
 					return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
 				} else {
-					if (DEBUG&&DEBUGLEVEL&2) debug('  Backendtype is not set in the backend, get the options of the default backend');
-					
 					if(isset($this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']) && $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'] != '') {
-						if (DEBUG&&DEBUGLEVEL&2) debug('  Got default value from the default backend');
-						
-						if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']);
 						return $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'];
 					} else {
-						if (DEBUG&&DEBUGLEVEL&2) debug('  The default value is empty or not set in the default backend');
 						if(isset($this->validConfig['backend'][$var]['default']) && $this->validConfig['backend'][$var]['default'] != '') {
-							if (DEBUG&&DEBUGLEVEL&2) debug('  Found the value in "global" backend section');
-							
-							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend'][$var]['default']);
 							return $this->validConfig['backend'][$var]['default'];
 						} else {
-							if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['backend']['backendtype']['default']);
 							return $this->validConfig['backend']['backendtype']['default'];
 						}
 					}
 				}
 			} elseif(strpos($sec, 'rotation_') === 0) {
-				if (DEBUG&&DEBUGLEVEL&2) debug('  Section: Rotation');
-				
 				if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig['rotation'][$var]['default']);
 					return $this->validConfig['rotation'][$var]['default'];
 				} else {
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): FALSE');
 					return FALSE;
 				}
 			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): '.$this->validConfig[$sec][$var]['default']);
 				return $this->validConfig[$sec][$var]['default'];
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&2) debug('  Not set in config file, not allowed to get default value');
-			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getValue(): FALSE');
 			return FALSE;
 		}
 	}
@@ -851,9 +787,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function setRuntimeValue($var, $val) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::setRuntimeValue('.$var.','.$val.')');
 		$this->runtimeConfig[$var] = $val;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::setRuntimeValue(): TRUE');
 		return TRUE;
 	}
 	
@@ -865,12 +799,9 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getRuntimeValue($var) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMainCfg::getRuntimeValue('.$var.')');
 		if(isset($this->runtimeConfig[$var])) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getRuntimeValue(): '.$this->runtimeConfig[$var]);
 			return $this->runtimeConfig[$var];
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMainCfg::getRuntimeValue(): ""');
 			return '';
 		}
 	}
