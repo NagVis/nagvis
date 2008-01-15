@@ -18,7 +18,6 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND,$getState=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
@@ -34,7 +33,6 @@ class NagVisMap extends GlobalMap {
 			$this->MAPOBJ->fetchState();
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::NagVisMap()');
 	}
 	
 	/**
@@ -44,7 +42,6 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseMap()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground());
 		$ret = array_merge($ret,$this->parseObjects());
@@ -53,7 +50,6 @@ class NagVisMap extends GlobalMap {
 		// Change title (add map alias and map state)
 		$ret[] = '<script type="text/javascript" language="JavaScript">document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseMap(): Array(...)');
 		return $ret;
 	}
 	
@@ -64,7 +60,6 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getBackground()');
 		
 		if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $this->checkGd(1)) {
 			$src = $this->MAINCFG->getValue('paths', 'htmlbase').'/nagvis/draw.php?map='.$this->MAPCFG->getName();
@@ -72,7 +67,6 @@ class NagVisMap extends GlobalMap {
 			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getBackground(): Array(...)');
 		return $this->getBackgroundHtml($src);
 	}
 	
@@ -83,13 +77,11 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFavicon() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::getFavicon()');
 		if(file_exists($this->MAINCFG->getValue('paths', 'images').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
 			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
 			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::getFavicon()');
 		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
 	}
 	
@@ -100,7 +92,6 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMap::parseObjects()');
 		$ret = Array();
 		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
 			switch(get_class($OBJ)) {
@@ -116,7 +107,6 @@ class NagVisMap extends GlobalMap {
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMap::parseObjects(): Array(...)');
 		return $ret;
 	}
 }

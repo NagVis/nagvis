@@ -15,13 +15,11 @@ class NagVisMapCfg extends GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisMapCfg(&$MAINCFG,$name='') {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapCfg::NagVisMapCfg($MAINCFG,'.$name.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->name	= $name;
 		
 		$this->getMap();
 		parent::GlobalMapCfg($MAINCFG,$this->name);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapCfg::NagVisMapCfg()');
 	}
 	
 	/**
@@ -33,11 +31,9 @@ class NagVisMapCfg extends GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisMapCfg::getMap()');
 		// check the $this->name string for security reasons (its the ONLY value we get directly from external...)
 		// Allow ONLY Characters, Numbers, - and _ inside the Name of a Map
 		$this->name = preg_replace('/[^a-zA-Z0-9_-]/','',$this->name);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisMapCfg::getMap()');
 	}
 }
 ?>

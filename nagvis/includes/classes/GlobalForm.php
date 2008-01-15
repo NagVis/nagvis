@@ -21,7 +21,6 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalForm($prop=Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>'')) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::GlobalForm(Array(...))');
 		$this->name = $prop['name'];
 		$this->id = $prop['id'];
 		$this->method = (isset($prop['method'])) ? $prop['method']:'';
@@ -29,7 +28,6 @@ class GlobalForm {
 		$this->onSubmit = (isset($prop['onSubmit'])) ? $prop['onSubmit']:'';
 		$this->cols = (isset($prop['cols'])) ? $prop['cols']:'';
 		$this->enctype = (isset($prop['enctype'])) ? $prop['enctype']:'';
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::GlobalForm()');
 	}
 	
 	/**
@@ -41,12 +39,10 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHiddenField($name,$value) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getHiddenField('.$name.','.$value.')');
 		$ret = Array();
 		
 		$ret[] = '<input type="hidden" name="'.$name.'" value="'.$value.'" />';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getHiddenField(): Array(...)');
 		return $ret;
 	}
 	
@@ -58,12 +54,10 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getTitleLine($title) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getTitleLine('.$title.')');
 		$ret = Array();
 		
 		$ret[] = '<tr><th colspan="'.$this->cols.'">'.$title.'</th></tr>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getTitleLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -75,12 +69,10 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getCatLine($title) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getCatLine('.$title.')');
 		$ret = Array();
 		
 		$ret[] = '<tr><th class="cat" colspan="'.$this->cols.'">'.$title.'</th></tr>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getCatLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -94,7 +86,6 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFileLine($label,$name,$value,$must=FALSE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getFileLine('.$label.','.$name.','.$value.','.$must.')');
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -105,7 +96,6 @@ class GlobalForm {
 		
 		$ret[] = '<tr><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield"><input type="file" name="'.$name.'" value="'.$value.'" /></td></tr>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getFileLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -120,7 +110,6 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInputLine($label,$name,$value,$must=FALSE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getInputLine('.$label.','.$name.','.$value.','.$must.')');
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -133,7 +122,6 @@ class GlobalForm {
 		$ret = array_merge($ret,$this->getInputField($name,$value));
 		$ret[] = '</td></tr>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getInputLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -150,7 +138,6 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='') {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSelectLine('.$label.','.$name.',Array(...),'.$selected.','.$must.','.$onChange.')');
 		$ret = Array();
 		
 		if($must) {
@@ -163,7 +150,6 @@ class GlobalForm {
 		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange,$must));
 		$ret[] = '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getSelectLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -175,14 +161,12 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSubmitLine($label) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSubmitLine('.$label.')');
 		$ret = Array();
 		
 		$ret[] = '<tr><td class="tdlabel" colspan="'.$this->cols.'" align="center">';
 		$ret = array_merge($ret,$this->getSubmitField($label));
 		$ret[] = '</td></tr>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getSubmitLine(): Array(...)');
 		return $ret;
 	}
 	
@@ -193,13 +177,11 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function initForm() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::initForm()');
 		$ret = Array();
 		
 		$ret[] = '<form name="'.$this->name.'" id="'.$this->id.'" method="'.$this->method.'" action="'.$this->action.'" enctype="'.$this->enctype.'" onsubmit="'.$this->onSubmit.'">';
 		$ret[] = '<table name="mytable" class="mytable" id="table_'.$this->id.'">';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::initForm(): Array(...)');
 		return $ret;
 	}
 	
@@ -210,9 +192,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function closeForm() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::closeForm()');
 		$ret = Array('</table></form>');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::closeForm(): Array(...)');
 		return $ret;
 	}
 	
@@ -224,11 +204,9 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSubmitField($label) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSubmitField('.$label.')');
 		$ret = Array();
 		$ret[] = '<input class="submit" type="submit" name="submit" id="commit" value="'.$label.'" />';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getSubmitField(): Array(...)');
 		return $ret;
 	}
 	
@@ -243,7 +221,6 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSelectField($name,$arr,$onChange='',$must=FALSE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getSelectField('.$name.',Array(...),'.$onChange.','.$must.')');
 		$ret = Array();
 		$ret[] = '<select name="'.$name.'" onChange="'.$onChange.'">';
 		
@@ -260,7 +237,6 @@ class GlobalForm {
 		}
 		$ret[] = '</select>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getSelectField(): Array(...)');
 		return $ret;
 	}
 	
@@ -273,7 +249,6 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInputField($name,$value) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalForm::getInputField('.$name.','.$value.')');
 		$ret = Array();
 		
 		if(is_array($value)) {
@@ -282,7 +257,6 @@ class GlobalForm {
 		
 		$ret[] = '<input type="text" name="'.$name.'" value="'.$value.'" />';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalForm::getInputField(): Array(...)');
 		return $ret;
 	}
 }

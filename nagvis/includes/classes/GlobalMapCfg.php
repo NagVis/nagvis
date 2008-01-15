@@ -22,7 +22,6 @@ class GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalMapCfg(&$MAINCFG,$name='') {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::GlobalMapCfg($MAINCFG,'.$name.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->name	= $name;
 		
@@ -463,7 +462,6 @@ class GlobalMapCfg {
 				'name' => Array('must' => 1,
 					'match' => MATCH_STRING_NO_SPACE)));
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::GlobalMapCfg()');
 	}
 	
 	/**
@@ -472,7 +470,6 @@ class GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectDefaults() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getObjectDefaults()');
 		$this->validConfig['host']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
 		$this->validConfig['host']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['host']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
@@ -551,7 +548,6 @@ class GlobalMapCfg {
 		$this->validConfig['map']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
 		$this->validConfig['shape']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
 		$this->validConfig['shape']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getObjectDefaults()');
 	}
 	
 	/**
@@ -561,9 +557,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getImage()');
 		$RET = new GlobalBackground($this->MAINCFG, $this->getValue('global', 0, 'map_image'));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getImage()');
 		return $RET;
 	}
 	
@@ -574,7 +568,6 @@ class GlobalMapCfg {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createMapConfig() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::createMapConfig()');
 		// does file exists?
 		if(!$this->checkMapConfigReadable(0)) {
 			if($this->MAINCFG->checkMapCfgFolderWriteable(1)) {
@@ -584,15 +577,12 @@ class GlobalMapCfg {
 				// set permissions
 				chmod($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg',0666);
 				
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::createMapConfig(): TRUE');
 					return TRUE;
 				} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::createMapConfig(): FALSE');
 					return FALSE;
 				}
 		} else {
 			// file exists & is readable
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::createMapConfig(): FALSE');
 			return FALSE;
 		}
 	}
@@ -604,20 +594,16 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readMapConfig($onlyGlobal=0) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::readMapConfig('.$onlyGlobal.')');
 		if($this->name != '') {
 			if($this->checkMapConfigReadable(1)) {
 				$this->mapConfig = Array();
 				$types = Array('global'=>0,'host'=>0,'service'=>0,'hostgroup'=>0,'servicegroup'=>0,'map'=>0,'textbox'=>0,'shape'=>0,'template'=>0);
 				
 				// read file in array
-				if (DEBUG&&DEBUGLEVEL&2) debug('Start reading map configuration');
 				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
-				if (DEBUG&&DEBUGLEVEL&2) debug('End reading map configuration');
 				$createArray = Array('allowed_user','allowed_for_config','use');
 				$l = 0;
 				
-				if (DEBUG&&DEBUGLEVEL&2) debug('Start parsing map configuration');
 				while(isset($file[$l]) && $file[$l] != '') {
 					// tested all of them, seems the runtime is nearly the same
 					// preg_match('/^(#|;)/',$file[$l])
@@ -651,7 +637,6 @@ class GlobalMapCfg {
 					}
 					$l++;
 				}
-				if (DEBUG&&DEBUGLEVEL&2) debug('End parsing map configuration');
 				
 				/**
 				 * The default values refer to global settings in the validConfig array - so they have to be 
@@ -673,18 +658,14 @@ class GlobalMapCfg {
 				
 				if($this->checkMapConfigIsValid(1)) {
 					$this->BACKGROUND = $this->getBackground();
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapConfig(): TRUE');
 					return TRUE;
 				} else {
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapConfig(): FALSE');
 					return FALSE;
 				}
 			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapConfig(): TRUE');
 				return FALSE;	
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapConfig(): TRUE');
 			return FALSE;
 		}
 	}
@@ -744,7 +725,6 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function filterGlobal() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::filterGlobal()');
 		foreach($this->mapConfig AS $key => $val) {
 			if($key != 'global') {
 				unset($this->mapConfig[$key]);
@@ -752,10 +732,8 @@ class GlobalMapCfg {
 		}
 		
 		if(count($this->mapConfig) == 1) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::filterGlobal(): TRUE');
 			return TRUE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::filterGlobal(): FALSE');
 			return FALSE;
 		}
 	}
@@ -767,21 +745,17 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapConfigExists($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigExists('.$printErr.')');
 		if($this->name != '') {
 			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigExists(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 					$FRONTEND->messageToUser('ERROR','mapCfgNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigExists(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -794,21 +768,17 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapConfigReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigReadable('.$printErr.')');
 		if($this->name != '') {
 			if($this->checkMapConfigExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigReadable(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 					$FRONTEND->messageToUser('ERROR','mapCfgNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigReadable(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -821,7 +791,6 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapConfigIsValid($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigIsValid('.$printErr.')');
 		// check given objects and attributes
 		foreach($this->mapConfig AS $type => $elements) {
 			if($type != 'template') {
@@ -848,7 +817,6 @@ class GlobalMapCfg {
 									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 									$FRONTEND->messageToUser('ERROR','unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type);
 								}
-								if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 								return FALSE;
 							} else {
 								if(!is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
@@ -862,7 +830,6 @@ class GlobalMapCfg {
 											$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 											$FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
 										}
-										if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 										return FALSE;
 									}
 								} elseif(is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
@@ -877,7 +844,6 @@ class GlobalMapCfg {
 												$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 												$FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
 											}
-											if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 											return FALSE;
 										}
 									}
@@ -891,12 +857,10 @@ class GlobalMapCfg {
 						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 						$FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
 					}
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): FALSE');
 					return FALSE;
 				}
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigIsValid(): TRUE');
 		return TRUE;
 	}
 	
@@ -908,12 +872,9 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getDefinitions($type) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getDefinitions('.$type.')');
 		if(isset($this->mapConfig[$type]) && count($this->mapConfig[$type]) > 0) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getDefinitions(): Array(...)');
 			return $this->mapConfig[$type];
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getDefinitions(): Array()');
 			return Array();
 		}
 	}
@@ -925,13 +886,10 @@ class GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFileModificationTime() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getFileModificationTime()');
 		if($this->checkMapConfigReadable(1)) {
 			$time = filemtime($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getFileModificationTime(): Integer');
 			return $time;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getFileModificationTime(): FALSE');
 			return FALSE;
 		}
 	}
@@ -945,9 +903,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function deleteElement($type,$id) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteElement('.$type.','.$id.')');
 		$this->mapConfig[$type][$id] = '';
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteElement()');
 		return TRUE;
 	}
 	
@@ -960,10 +916,8 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function addElement($type,$properties) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::addElement('.$type.',Array(...))');
 		//$elementId = (count($this->getDefinitions($type))+1);
 		$this->mapConfig[$type][] = $properties;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::addElement(): '.(count($this->mapConfig[$type])-1));
 		return count($this->mapConfig[$type])-1;
 	}
 	
@@ -978,9 +932,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function setValue($type, $id, $key, $value) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::setValue('.$type.','.$id.','.$key.','.$value.')');
 		$this->mapConfig[$type][$id][$key] = $value;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::setValue(): TRUE');
 		return TRUE;
 	}
 	
@@ -995,13 +947,10 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getValue($type, $id, $key, $ignoreDefault=FALSE) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getValue('.$type.','.$id.','.$key.','.$ignoreDefault.')');
 		if(isset($this->mapConfig[$type][$id]) && is_array($this->mapConfig[$type][$id]) && isset($this->mapConfig[$type][$id][$key]) && $this->mapConfig[$type][$id][$key] != '') {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getValue(): '.$this->mapConfig[$type][$id][$key]);
 			return $this->mapConfig[$type][$id][$key];
 		} elseif(!$ignoreDefault) {
 			if(isset($this->validConfig[$type][$key]['default'])) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getValue(): '.$this->validConfig[$type][$key]['default']);
 				return $this->validConfig[$type][$key]['default'];
 			}
 		}
@@ -1014,8 +963,6 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getName() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::getName()');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::getName(): '.$this->name);
 		return $this->name;	
 	}
 }
