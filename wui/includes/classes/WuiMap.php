@@ -20,7 +20,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiMap(&$MAINCFG,&$MAPCFG,&$LANG) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::WuiMap(&$MAINCFG,&$MAPCFG,&$LANG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
@@ -31,7 +30,6 @@ class WuiMap extends GlobalMap {
 		
 		$this->loadPermissions();
 		$this->objects = $this->getMapObjects(1);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::WuiMap()');
 	}
 	
 	/**
@@ -40,7 +38,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function loadPermissions() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::LoadPermissions()');
 		$mapOptions = '[ ';
 		$a = 0;
 		foreach($this->getMaps() AS $map) {
@@ -109,7 +106,6 @@ class WuiMap extends GlobalMap {
 		}
 		$mapOptions .= ' ]';
 		$this->MAINCFG->setRuntimeValue('mapOptions',$mapOptions);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::LoadPermissions()');
 	}
 	
 	/**
@@ -119,7 +115,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseMap()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground());
 		$ret = array_merge($ret,$this->parseJs(array_merge($this->getJsGraphicObj(),$this->getJsLang())));
@@ -128,7 +123,6 @@ class WuiMap extends GlobalMap {
 		$ret = array_merge($ret,$this->makeObjectsMoveable());
 		$ret = array_merge($ret,Array("<script type=\"text/javascript\" src=\"./includes/js/wz_tooltip.js\"></script>"));
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::parseMap(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -139,7 +133,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getBackground() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getBackground()');
 		$style = '';
 		if($this->MAPCFG->getName() != '') {
 			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
@@ -148,7 +141,6 @@ class WuiMap extends GlobalMap {
 			$style = 'width:800px; height:600px;';
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getBackground(): Array(...)');
 		return $this->getBackgroundHtml($src, $style);
 	}
 	
@@ -159,13 +151,11 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsGraphicObj() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getJsGraphicObj()');
 		$ret = Array();
 		$ret[] = "myshape_background = new jsGraphics('mymap');";
 		$ret[] = "myshape_background.setColor('#FF0000');";
 		$ret[] = "myshape_background.setStroke(1);\n";
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getJsGraphicObj(): Array(JS)');
 		return $ret;
 	}
 	
@@ -176,14 +166,12 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function makeObjectsMoveable() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::makeObjectsMoveable()');
 		$ret = Array();
 		
 		if(strlen($this->moveable) != 0) {
 			$ret = $this->parseJs("SET_DHTML(TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::makeObjectsMoveable(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -195,7 +183,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseJs($js) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseJs(Array/String $js)');
 		$ret = Array();
 		
 		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\">";
@@ -208,7 +195,6 @@ class WuiMap extends GlobalMap {
 		$ret[] = "//-->";
 		$ret[] = "</script>";
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::makeObjectsMoveable(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -219,7 +205,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseObjects()');
 		$ret = Array();
 		
 		foreach($this->objects AS $var => $obj) {
@@ -257,7 +242,6 @@ class WuiMap extends GlobalMap {
 				break;	
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::parseObjects(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -270,7 +254,6 @@ class WuiMap extends GlobalMap {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixIcon(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::fixIcon(&$obj)');
 		$obj = $this->getIconPaths($obj);
 		
 		if($obj['type'] == 'shape' && preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
@@ -292,7 +275,6 @@ class WuiMap extends GlobalMap {
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::fixIcon(): Array(...)');
 		return $obj;
 	}
 	
@@ -304,7 +286,6 @@ class WuiMap extends GlobalMap {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIconPaths(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getIconPaths(&$obj)');
 		if($obj['type'] == 'shape') {
 			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
 				$obj['path'] = '';
@@ -317,7 +298,6 @@ class WuiMap extends GlobalMap {
 			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getIconPaths(): Array(...)');
 		return $obj;
 	}
 	
@@ -328,7 +308,6 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseIcon()');
 		$ret = Array();
 				
 		if($obj['type'] == 'service') {
@@ -341,7 +320,6 @@ class WuiMap extends GlobalMap {
 		$ret[] = "\t\t<img src=\"".$obj['htmlPath'].$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
 		$ret[] = "</div>";
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::fixIcon(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -353,7 +331,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMapObjects($mergeWithGlobals=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getMapObjects('.$mergeWithGlobals.')');
 		$objects = Array();
 		
 		$objects = array_merge($objects,$this->getObjectsOfType('map',$mergeWithGlobals));
@@ -364,7 +341,6 @@ class WuiMap extends GlobalMap {
 		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$mergeWithGlobals));
 		$objects = array_merge($objects,$this->getObjectsOfType('shape',$mergeWithGlobals));
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getMapObjects(): Array(...)');
 		return $objects;
 	}
 	
@@ -377,7 +353,6 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getObjectsOfType($type,$mergeWithGlobals=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::getObjectsOfType('.$type.','.$mergeWithGlobals.')');
 		// object array
 		$objects = Array();
 		
@@ -390,7 +365,6 @@ class WuiMap extends GlobalMap {
 		
 		if(is_array($objs = $this->MAPCFG->getDefinitions($type))){
 			foreach($objs AS $index => $obj) {
-				if (DEBUG&&DEBUGLEVEL&2) debug('Start object of type: '.$type);
 				// workaround
 				$obj['id'] = $index;
 				
@@ -412,10 +386,8 @@ class WuiMap extends GlobalMap {
 				
 				// add object to array of objects
 				$objects[] = $obj;
-				if (DEBUG&&DEBUGLEVEL&2) debug('End object of type: '.$type);
 			}
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::getObjectsOfType(): Array(...)');
 			return $objects;
 		}
 	}
@@ -427,7 +399,6 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function textBox(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::textBox(&$obj)');
 		$ret = Array();
 		
 		if(isset($obj['w'])) {
@@ -440,7 +411,6 @@ class WuiMap extends GlobalMap {
 		$ret[] = "\t<span>".$obj['text']."</span>";
 		$ret[] = "</div>";
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::textBox(): Array(HTML)');
 		return $ret;	
 	}
 	
@@ -451,7 +421,6 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function infoBox(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::infoBox(&$obj)');
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -495,7 +464,6 @@ class WuiMap extends GlobalMap {
 		
 		$info = "onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".$this->LANG->getLabel($obj['type'])."</b>';return escape('".$tooltipText."');\"";
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::infoBox(): HTML');
 		return $info;
 	}
 	
@@ -506,7 +474,6 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMaps() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getMaps()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
@@ -522,7 +489,6 @@ class WuiMap extends GlobalMap {
 		}
 		closedir($handle);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getMaps(): Array(...)');
 		return $files;
 	}
 		
@@ -533,7 +499,6 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getJsLang()');
 		$ret = Array();
 		$ret[] = 'var langMenu = Array();';
 		$ret[] = 'langMenu[\'save\'] = \''.$this->LANG->getLabel('save').'\';';
@@ -564,7 +529,6 @@ class WuiMap extends GlobalMap {
 		$ret[] = 'lang[\'confirmDelete\'] = \''.$this->LANG->getMessageText('confirmDelete').'\';';
 		$ret[] = 'lang[\'confirmRestore\'] = \''.$this->LANG->getMessageText('confirmRestore').'\';';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getJsLang(): Array(HTML)');
 		return $ret;	
 	}
 	
@@ -575,7 +539,6 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function parseInvisible() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseInvisible()');
 		$arr = Array();
 		
 		##################################
@@ -611,7 +574,6 @@ class WuiMap extends GlobalMap {
 			myshape_background.paint();
 			"));
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::parseInvisible(): Array(HTML)');
 		return $arr;
 	}
 }

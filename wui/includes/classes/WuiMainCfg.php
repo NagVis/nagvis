@@ -10,9 +10,7 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiMainCfg($configFile) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMainCfg::WuiMainCfg($configFile)');
 		parent::GlobalMainCfg($configFile);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMainCfg::WuiMainCfg($configFile)');
 	}
 	
 	/**
@@ -22,7 +20,6 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMaps() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMainCfg::getMaps()');
 		$files = Array();
 		
 		if($fh = opendir($this->getValue('paths', 'mapcfg'))) {
@@ -39,7 +36,6 @@ class WuiMainCfg extends GlobalMainCfg {
 		}
 		closedir($fh);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMainCfg::getMaps(): Array(...)');
 		return $files;
 	}
 	
@@ -51,7 +47,6 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function setSection($sec) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMainCfg::setSection($sec)');
 		// Try to append new backends after already defined
 		if(ereg('^backend_', $sec)) {
 		    $lastBackendIndex = 0;
@@ -79,7 +74,6 @@ class WuiMainCfg extends GlobalMainCfg {
 	        $this->config[$sec] = Array();
 	    }
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMainCfg::setSection(): TRUE');
 		return TRUE;
 	}
 	
@@ -91,11 +85,9 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function delSection($sec) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMainCfg::delSection($sec)');
 		$this->config[$sec] = '';
 		unset($this->config[$sec]);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMainCfg::delSection(): TRUE');
 		return TRUE;
 	}
 }

@@ -30,7 +30,6 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalPage(&$MAINCFG,$givenProperties=Array()) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::GlobalPage($MAINCFG,Array(...))');
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
 									'cssIncludes'=>Array('../nagvis/includes/css/style.css'),
@@ -55,7 +54,6 @@ class GlobalPage {
 		$this->MAINCFG->setRuntimeValue('user',$this->user);
 		
 		$this->checkPreflight();
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::GlobalPage()');
 	}
 	
 	/**
@@ -65,12 +63,9 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUser() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUser()');
 		if(isset($_SERVER['PHP_AUTH_USER'])) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getUser(): '.$_SERVER['PHP_AUTH_USER']);
 			return $_SERVER['PHP_AUTH_USER'];
 		} elseif(isset($_SERVER['REMOTE_USER'])) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getUser(): '.$_SERVER['REMOTE_USER']);
 			return $_SERVER['REMOTE_USER'];
 		}
 	}
@@ -83,15 +78,12 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkUser($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkUser('.$printErr.')');
 		if($this->user != '') {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkUser(): TRUE');
 					return TRUE;
 		} else {
 			if($printErr) {
 				$this->messageToUser('ERROR','noUser');
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkUser(): FALSE');
 			return FALSE;
 		}
 	}
@@ -105,15 +97,12 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkPermissions(&$allowed,$printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('StaRt method GlobalPage::checkPermissions(Array(),'.$printErr.')');
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
 				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPermissions(): FALSE');
 			return FALSE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPermissions(): TRUE');
 			return TRUE;
 		}
 		return TRUE;
@@ -126,12 +115,10 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkPreflight() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::checkPreflight()');
 		$ret = TRUE;
 		$ret = $ret & $this->checkUser(TRUE);
 		$ret = $ret & $this->checkPermissions($this->allowedUsers,TRUE);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::checkPreflight(): '.$ret);
 		return $ret;
 	}
 	
@@ -145,12 +132,10 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function messageToUser($serverity='WARNING', $id, $vars='') {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::messageToUser('.$serverity.','.$id.','.$vars.')');
 		switch($serverity) {
 			case 'ERROR':
 				// print the message box and kill the script
 				$this->body = array_merge($this->body,$this->messageBox($serverity,$id,$vars));
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::messageToUser()');
 				$this->printPage();
 				// end of script
 			break;
@@ -165,7 +150,6 @@ class GlobalPage {
 				}
 			break;
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::messageToUser()');
 	}
 	
 	/**
@@ -175,7 +159,6 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUserMessages() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getUserMessages()');
 		$ret = Array();
 		
 		if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
@@ -184,7 +167,6 @@ class GlobalPage {
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getUserMessages(): Array()');
 		return $ret;
 	}
 	
@@ -199,7 +181,6 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function messageBox($serverity, $id, $vars) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::messageBox('.$serverity.','.$id.','.$vars.')');
 		$ret = Array();
 		
 		$LANG = new GlobalLanguage($this->MAINCFG,$this->languageRoot);
@@ -230,7 +211,6 @@ class GlobalPage {
 			$ret[] = '</td></tr></table>';
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::messageBox(): Array(...)');
 		return $ret;
 	}
 	
@@ -243,9 +223,7 @@ class GlobalPage {
 	 * @deprecated
 	 */
 	function addBodyLine($line) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLine('.$line.')');
 		$ret = addBodyLines($line);
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLine(): '.$ret);
 		return $ret;
 	}
 	
@@ -257,13 +235,11 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function addBodyLines($lines) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::addBodyLines('.$lines.')');
 		if(is_string($lines)) {
 			$lines = Array($lines);	
 		}
 		$this->body = array_merge($this->body,$lines);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::addBodyLines(): TRUE');
 		return TRUE;
 	}
 	
@@ -274,9 +250,7 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHeader() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getHeader()');
 		$ret = Array($this->getExtHeader(),$this->getJsIncludes(),$this->getCssIncludes());
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getHeader(): Array(...)');
 		return $ret;
 	}
 	
@@ -287,9 +261,7 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBody() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getBody()');
 		$ret = $this->body;
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getBody()');
 		return $ret;
 	}
 	
@@ -301,14 +273,12 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLines($arr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getLines(Array(...))');
 		$ret = '';
 		
 		foreach($arr AS $line) {
 			$ret .= "\t\t".$line."\n";
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getLines(): HTML');
 		return $ret;
 	}
 	
@@ -319,14 +289,12 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getExtHeader() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getExtHeader()');
 		$sRet = '';
 		
 		foreach($this->extHeader AS $var => $val) {
 			$sRet .= $val;
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getExtHeader(): Array(...)');
 		return $sRet;
 	}
 	
@@ -337,7 +305,6 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsIncludes() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getJsIncludes()');
 		$sRet = '';
 		
 		if(count($this->jsIncludes) > 0) {
@@ -346,7 +313,6 @@ class GlobalPage {
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getJsIncludes(): Array(...)');
 		return $sRet;
 	}
 	
@@ -357,7 +323,6 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getCssIncludes() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getCssIncludes()');
 		$sRet = '';
 		
 		$sRet .= '<style type="text/css"><!--';
@@ -368,7 +333,6 @@ class GlobalPage {
 		}
 		$sRet .= '--></style>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getCssIncludes(): Array(...)');
 		return $sRet;
 	}
 	
@@ -379,7 +343,6 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function buildPage() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::buildPage()');
 		$ret = '';
 		
 		$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'."\n";
@@ -389,7 +352,6 @@ class GlobalPage {
 		$ret .= $this->getLines($this->getBody());
 		$ret .= '</body></html>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::buildPage(): Array(...)');
 		return $ret;
 	}
 	
@@ -399,9 +361,7 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function printPage() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::printPage()');
 		echo $this->buildPage();
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::printPage()');
 		if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 		// printing the page, is the end of everything other - good bye! ;-)
 		exit;
@@ -414,8 +374,6 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getPage() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::getPage()');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::getPage()');
 		return $this->buildPage();
 	}
 	
@@ -427,7 +385,6 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseJs($js) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalPage::parseJs(Array/String $js)');
 		$ret = Array();
 		if($js != '') {
 			
@@ -441,7 +398,6 @@ class GlobalPage {
 			$ret[] = "//-->";
 			$ret[] = "</script>";
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalPage::parseJs(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -454,9 +410,7 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function resizeWindow($x,$y) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapManagement::resizeWindow()');
 		$ret = Array('window.resizeTo('.$x.','.$y.')');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapManagement::resizeWindow(): JS');
 		return $ret;
 	}
 }

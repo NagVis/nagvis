@@ -6,9 +6,7 @@
  */
 class WuiBackground extends GlobalBackground {
 	function WuiBackground(&$MAINCFG, $image) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackground::WuiBackground(&$MAINCFG)');
 		parent::GlobalBackground($MAINCFG, $image);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackground::WuiBackground()');
 	}
 	
 	/**
@@ -19,15 +17,12 @@ class WuiBackground extends GlobalBackground {
 	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function deleteImage($printErr=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackground::deleteImage('.$printErr.')');
 		if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
 			if(unlink($this->MAINCFG->getValue('paths', 'map').$this->image)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackground::deleteImage(): TRUE');
 				return TRUE;
 			} else {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','couldNotDeleteMapImage','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackground::deleteImage(): FALSE');
 				return FALSE;
 			}
 		}
@@ -41,7 +36,6 @@ class WuiBackground extends GlobalBackground {
 	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function uploadImage($arr, $printErr=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackground::uploadImage(Array(...))');
 		if(is_uploaded_file($arr['tmp_name'])) {
 			$fileName = $arr['name'];
 			if(preg_match('/\.png/i',$fileName)) {
@@ -50,7 +44,6 @@ class WuiBackground extends GlobalBackground {
 						// Change permissions of the map image
 						chmod($this->MAINCFG->getValue('paths', 'map').$fileName,0666);
 						
-						if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackground::uploadImage(): TRUE');
 						return TRUE;
 					} else {
 						// Error handling

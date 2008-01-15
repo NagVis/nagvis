@@ -20,14 +20,12 @@ class NagVisHostgroup extends NagiosHostgroup {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisHostgroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostgroupName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHostgroup::NagVisHostgroup(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostgroupName.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		$this->type = 'hostgroup';
 		$this->iconset = 'std_medium';
 		parent::NagiosHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostgroupName);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHostgroup::NagVisHostgroup()');
 	}
 	
 	/**
@@ -39,8 +37,6 @@ class NagVisHostgroup extends NagiosHostgroup {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHostgroup::parse()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHostgroup::parse()');
 		return parent::parse();
 	}
 	
@@ -53,7 +49,10 @@ class NagVisHostgroup extends NagiosHostgroup {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHostgroup::getchIcon()');
+		// Set the paths of this icons
+		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
+		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
+		
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
@@ -88,7 +87,7 @@ class NagVisHostgroup extends NagiosHostgroup {
 			}
 			
 			//Checks whether the needed file exists
-			if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
+			if(@file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
 				$this->icon = $icon;
 			} else {
 				$this->icon = $this->iconset.'_error.png';
@@ -96,7 +95,6 @@ class NagVisHostgroup extends NagiosHostgroup {
 		} else {
 			$this->icon = $this->iconset.'_error.png';
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHostgroup::getchIcon()');
 	}
 	
 	/**
@@ -106,14 +104,12 @@ class NagVisHostgroup extends NagiosHostgroup {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHostgroup::createLink()');
 		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();
 		} else {
 			$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?hostgroup='.$this->hostgroup_name.'&amp;style=detail" target="'.$this->url_target.'">';
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHostgroup::createLink()');
 		return $link;
 	}
 }

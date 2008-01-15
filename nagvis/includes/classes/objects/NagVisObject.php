@@ -37,13 +37,11 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisObject(&$MAINCFG, &$LANG) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::NagVisObject(MAINCFG,LANG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->LANG = &$LANG;
 		
 		$this->conf = Array();
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::NagVisObject()');
 	}
 	
 	function get($option) {
@@ -162,7 +160,6 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectConfiguration() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::getObjectConfiguration()');
 		// There have to be removed some options which are only for this object
 		$arr = $this->conf;
 		unset($arr['id']);
@@ -170,7 +167,6 @@ class NagVisObject {
 		unset($arr['host_name']);
 		unset($arr[$this->getType().'_name']);
 		unset($arr['service_description']);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::getObjectConfiguration()');
 		return $arr;
 	}
 	
@@ -182,8 +178,6 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceMacros() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::replaceMacros()');
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::replaceMacros()');
 		return TRUE;
 	}
 	
@@ -196,8 +190,6 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::parseIcon()');
-		
 		if($this->type == 'service') {
 			$name = 'host_name';
 			$alt = $this->host_name.'-'.$this->service_description;
@@ -211,7 +203,6 @@ class NagVisObject {
 		$ret .= '</a>';
 		$ret .= '</div>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::parseIcon()');
 		return $ret;
 	}
 	
@@ -224,7 +215,6 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHoverMenu() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::getHoverMenu()');
 		$ret = '';
 		
 		if($this->hover_menu) {
@@ -232,12 +222,11 @@ class NagVisObject {
 			if(isset($this->hover_url) && $this->hover_url != '') {
 				$ret .= $this->readHoverUrl();
 			} else {
-				$ret .= $this->createInfoBox();
+				$ret .= $this->readHoverTemplate();
 			}
 			
 			$ret .= '\', WRAP, VAUTO, DELAY, '.($this->hover_delay*1000).');" onmouseout="return nd();"';
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::getHoverMenu()');
 			return $ret;
 		}
 	}
@@ -251,7 +240,6 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readHoverUrl() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::readHoverUrl()');
 		/* FIXME: Context is supported in php >= 5.0
 		* $http_opts = array(
 		*      'http'=>array(
@@ -270,24 +258,7 @@ class NagVisObject {
 			$FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$this->hover_url);
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::readHoverUrl()');
 		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$content)))));
-	}
-	
-	
-	/**
-	 * PRIVATE createInfoBox()
-	 *
-	 * Creates a JavaScript hover menu
-	 *
-	 * @return	String		HTML code for the Hover-Box
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function createInfoBox() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::createInfoBox()');
-		$ret = $this->readHoverTemplate();
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::createInfoBox()');
-		return $ret;
 	}
 	
 	/**
@@ -299,8 +270,6 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readHoverTemplate() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::readHoverTemplate()');
-		
 		// Read hover cache contents
 		$arrHoverCache = $this->MAINCFG->getRuntimeValue('hover_cache');
 		if(isset($arrHoverCache[$this->getHoverTemplate()])) {
@@ -383,14 +352,12 @@ class NagVisObject {
 				}
 				
 				// Build cache for the hover template
-				$arrHoverCache = $this->MAINCFG->getRuntimeValue('hover_cache');
-				if($arrHoverCache == '') {
+				if(!isset($arrHoverCache[$this->getHoverTemplate()])) {
 					$this->MAINCFG->setRuntimeValue('hover_cache', Array($this->getHoverTemplate() => $ret));
 				} else {
 					$arrHoverCache[$this->getHoverTemplate()] = $ret;
 					$this->MAINCFG->setRuntimeValue('hover_cache', $arrHoverCache);
 				}
-				
 			}
 		}
 		
@@ -400,7 +367,6 @@ class NagVisObject {
 		// Escape chars which could make problems
 		$ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::readHoverTemplate()');
 		return $ret;
 	}
 	
@@ -414,15 +380,13 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function replaceHoverTemplateMacros($ret, $replaceChilds=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::replaceHoverTemplateMacros()');
-		
 		/*
 		 * Macros which are only for objects with childs
 		 */
 		if($this->hover_childs_show == '1' && $replaceChilds && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
 			$matches = Array();
 			$childs = '';
-			if(preg_match('/(<!-- BEGIN loop_child -->(.*?)<!-- END loop_child -->)+/s', $ret, $matches)) {
+			if(preg_match('/<!-- BEGIN loop_child -->(.+?)<!-- END loop_child -->/s', $ret, $matches)) {
 				switch($this->type) {
 					case 'host':
 						$arrObjects = &$this->getServices();
@@ -448,9 +412,9 @@ class NagVisObject {
 					$OBJ = $arrObjects[$i];
 					
 					// Current child row
-					$child = $matches[2];
+					$child = $matches[1];
 					
-					if(get_class($OBJ) != 'NagVisTextbox' && get_class($OBJ) != 'NagVisShape') {
+					if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
 						$child = $OBJ->replaceHoverTemplateMacros($child, 0);
 					}
 					
@@ -460,9 +424,9 @@ class NagVisObject {
 			}
 			
 			// Add the list of childs to the hover menu
-			$ret = preg_replace('/(<!-- BEGIN loop_child -->(.*?)<!-- END loop_child -->)+/s', $childs, $ret);
+			$ret = preg_replace('/<!-- BEGIN loop_child -->(.+?)<!-- END loop_child -->/s', $childs, $ret);
 		} else {
-			$ret = preg_replace('/(<!-- BEGIN childs -->(.*?)<!-- END childs -->)+/s', '', $ret);
+			$ret = preg_replace('/<!-- BEGIN childs -->(.+?)<!-- END childs -->/s', '', $ret);
 		}
 		
 		/**
@@ -504,10 +468,13 @@ class NagVisObject {
 		
 		if($this->type != 'map') {
 			$ret = str_replace('[obj_backendid]',$this->backend_id,$ret);
-			if($this->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
-				$ret = str_replace('[obj_backend_instancename]',$this->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename'),$ret);
-			} else {
-				$ret = str_replace('[obj_backend_instancename]','',$ret);
+			
+			if(strpos($ret,'[obj_backend_instancename]') !== FALSE) {
+				if($this->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
+					$ret = str_replace('[obj_backend_instancename]',$this->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename'),$ret);
+				} else {
+					$ret = str_replace('[obj_backend_instancename]','',$ret);
+				}
 			}
 		} else {
 			// Remove the macros in map objects
@@ -515,8 +482,13 @@ class NagVisObject {
 			$ret = str_replace('[obj_backend_instancename]','',$ret);
 		}
 		
-		$ret = str_replace('[obj_output]',strtr($this->output, Array("\r" => '<br />', "\n" => '<br />')),$ret);
-		$ret = str_replace('[obj_summary_output]',strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />')),$ret);
+		if(strpos($ret,'[obj_output]') !== FALSE) {
+			$ret = str_replace('[obj_output]',strtr($this->output, Array("\r" => '<br />', "\n" => '<br />')),$ret);
+		}
+		
+		if(strpos($ret,'[obj_summary_output]') !== FALSE) {
+			$ret = str_replace('[obj_summary_output]',strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />')),$ret);
+		}
 		
 		if(strpos($ret,'[lang_name]') !== FALSE) {
 			if($this->type == 'service') {
@@ -570,7 +542,7 @@ class NagVisObject {
 				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$this->getServiceDescription()),$ret);
 			}
 		} else {
-			$ret = preg_replace('/(<!-- BEGIN service -->(.*?)<!-- END service -->)+/sS','',$ret);
+			$ret = preg_replace('/(<!-- BEGIN service -->(.+?)<!-- END service -->)+/sS','',$ret);
 		}
 		
 		// Macros which are only for hosts
@@ -579,10 +551,9 @@ class NagVisObject {
 				$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->getName()),$ret);
 			}
 		} else {
-			$ret = preg_replace('/(<!-- BEGIN host -->(.*?)<!-- END host -->)+/s','',$ret);
+			$ret = preg_replace('/(<!-- BEGIN host -->(.+?)<!-- END host -->)+/s','',$ret);
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::replaceHoverTemplateMacros()');
 		return $ret;
 	}
 	
@@ -596,16 +567,13 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::checkHoverTemplateReadable('.$printErr.')');
 		if($this->checkHoverTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::checkHoverTemplateReadable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 				$FRONTEND->messageToUser('ERROR','hoverTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::checkHoverTemplateReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -620,16 +588,13 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateExists($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::checkHoverTemplateExists('.$printErr.')');
 		if(file_exists($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::checkHoverTemplateExists(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 				$FRONTEND->messageToUser('ERROR','hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::checkHoverTemplateExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -643,8 +608,6 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisObject::createLink()');
-		if (DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisObject::createLink()');
 		return '<a href="'.$this->url.'" target="'.$this->url_target.'">';
 	}
 }

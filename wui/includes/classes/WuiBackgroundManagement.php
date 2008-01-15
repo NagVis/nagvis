@@ -18,7 +18,6 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiBackgroundManagement(&$MAINCFG) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::WuiBackgroundManagement(&$MAINCFG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->propCount = 0;
 		
@@ -34,7 +33,6 @@ class WuiBackgroundManagement extends GlobalPage {
 					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'wui:backgroundManagement');
 		parent::GlobalPage($MAINCFG,$prop);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::WuiBackgroundManagement()');
 	}
 	
 	/**
@@ -43,7 +41,6 @@ class WuiBackgroundManagement extends GlobalPage {
 	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function getForm() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getForm()');
 		// Inititalize language for JS
 		$this->addBodyLines($this->parseJs($this->getJsLang()));
 		
@@ -92,7 +89,6 @@ class WuiBackgroundManagement extends GlobalPage {
 		
 		// Resize the window
 		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*30+90)));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getForm()');
 	}
 	
 	/**
@@ -102,12 +98,10 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelFields() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getDelFields()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getLabel('choosePngImage'),'map_image',$this->getMapImages(),''));
 		$this->propCount++;
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getDelFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -118,13 +112,11 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getAddFields() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getAddFields()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->ADDFORM->getHiddenField('MAX_FILE_SIZE','3000000'));
 		$ret = array_merge($ret,$this->ADDFORM->getFileLine($this->LANG->getLabel('choosePngImage'),'image_file',''));
 		$this->propCount++;
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getAddFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -135,7 +127,6 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getCreateFields() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getCreateFields()');
 		$ret = Array();
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('backgroundName'),'image_name','',TRUE));
 		$this->propCount++;
@@ -146,7 +137,6 @@ class WuiBackgroundManagement extends GlobalPage {
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('backgroundHeight'),'image_height','',TRUE));
 		$this->propCount++;
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getCreateFields(): Array(HTML)');
 		return $ret;
 	}
 	
@@ -157,7 +147,6 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMapImages() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getMapImages()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
@@ -173,7 +162,6 @@ class WuiBackgroundManagement extends GlobalPage {
 		}
 		closedir($handle);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getMapImages(): Array(...)');
 		return $files;
 	}
 	
@@ -184,7 +172,6 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiBackgroundManagement::getJsLang()');
 		$ret = Array();
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getMessageText('firstMustChoosePngImage').'\';';
@@ -194,7 +181,6 @@ class WuiBackgroundManagement extends GlobalPage {
 		$ret[] = 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getMessageText('unableToDeleteBackground').'\';';
 		$ret[] = 'lang[\'mustValueNotSet1\'] = \''.$this->LANG->getMessageText('mustValueNotSet1').'\';';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiBackgroundManagement::getJsLang(): Array(JS)');
 		return $ret;	
 	}
 }

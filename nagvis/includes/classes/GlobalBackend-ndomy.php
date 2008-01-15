@@ -35,7 +35,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalBackendndomy(&$MAINCFG,$backendId) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::GlobalBackendndomy($MAINCFG,'.$backendId.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->backendId = $backendId;
 		
@@ -65,16 +64,14 @@ class GlobalBackendndomy {
 			}
 			 
 			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
-			if(time() - strtotime($nagiosstate['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
+			if($_SERVER['REQUEST_TIME'] - strtotime($nagiosstate['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 				$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'));
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::GlobalBackendndomy(): FALSE');
 			return FALSE;
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::GlobalBackendndomy(): TRUE');
 		return TRUE;
 	}
 	
@@ -87,15 +84,12 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkTablesExists() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkTablesExists()');
 		if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 			$FRONTEND->messageToUser('ERROR','noTablesExists','BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix);
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkTablesExists(): FALSE');
 			return FALSE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkTablesExists(): TRUE');
 			return TRUE;	
 		}
 	}
@@ -109,7 +103,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function connectDB() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::connectDB()');
 		// don't want to see mysql errors from connecting - only want our error messages
 		$oldLevel = error_reporting(0);
 		
@@ -123,10 +116,8 @@ class GlobalBackendndomy {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 			$FRONTEND->messageToUser('ERROR','errorSelectingDb','BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error());
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::connectDB(): FALSE');
 			return FALSE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::connectDB(): TRUE');
 			return TRUE;
 		}
 	}
@@ -140,7 +131,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMysqlSupport() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkMysqlSupport()');
 		// Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
@@ -149,14 +139,11 @@ class GlobalBackendndomy {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 				$FRONTEND->messageToUser('ERROR','mysqlNotSupported','BACKENDID~'.$this->backendId);
 				
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkMysqlSupport(): FALSE');
 				return FALSE;
 			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkMysqlSupport(): TRUE');
 				return TRUE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkMysqlSupport(): TRUE');
 			return TRUE;	
 		}
 	}
@@ -170,11 +157,9 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInstanceId() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getInstanceId()');
 		$QUERYHANDLE = $this->mysqlQuery('SELECT instance_id FROM '.$this->dbPrefix.'instances WHERE instance_name=\''.$this->dbInstanceName.'\' LIMIT 1');
 		$ret = mysql_fetch_array($QUERYHANDLE);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getInstanceId(): '.$ret['instance_id']);
 		return $ret['instance_id'];
 	}
 	
@@ -186,9 +171,7 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function mysqlQuery($query) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::mysqlQuery('.$query.')');
 		$QUERYHANDLE = mysql_query($query, $this->CONN);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::mysqlQuery()');
 		return $QUERYHANDLE;
 	}
 
@@ -204,7 +187,6 @@ class GlobalBackendndomy {
 	 * @author	Andreas Husch <downanup@nagios-wiki.de>
 	 */
 	function getObjects($type,$name1Pattern='',$name2Pattern='') {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getObjects('.$type.','.$name1Pattern.','.$name2Pattern.')');
 		$ret = Array();
 		$filter = '';
 		
@@ -240,7 +222,6 @@ class GlobalBackendndomy {
 				}
 			break;
 			default:
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getObjects(): Array()');
 				return Array();
 			break;
 		}
@@ -267,7 +248,6 @@ class GlobalBackendndomy {
 			$ret[] = Array('name1' => $data['name1'],'name2' => $data['name2']);
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getObjects(): '.$ret);
 		return $ret;
 	}
 	
@@ -280,12 +260,9 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkForIsActiveObjects() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::checkForIsActiveObjects()');
 		if(mysql_num_rows($this->mysqlQuery('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')) > 0) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkForIsActiveObjects(): TRUE');
 			return TRUE;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::checkForIsActiveObjects(): FALSE');
 			return FALSE;	
 		}
 	}
@@ -301,7 +278,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHostAckByHostname($hostName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostAckByHostname('.$hostName.')');
 		$return = FALSE;
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT problem_has_been_acknowledged 
@@ -311,10 +287,8 @@ class GlobalBackendndomy {
 		$data = mysql_fetch_array($QUERYHANDLE);
 		// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
 		if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
-			if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostAckByHostname(): TRUE');
 			return TRUE;
 		} else {
-			if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostAckByHostname(): FALSE');
 			return FALSE;
 		}
 	}
@@ -330,7 +304,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHostState($hostName,$onlyHardstates) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostState('.$hostName.','.$onlyHardstates.')');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -424,7 +397,6 @@ class GlobalBackendndomy {
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostState(): Array(..)');
 		return $arrReturn;
 	}
 	
@@ -440,7 +412,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getServiceState($hostName, $serviceName, $onlyHardstates) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServiceState('.$hostName.','.$serviceName.','.$onlyHardstates.')');
 		$arrReturn = Array();
 		
 		if(isset($serviceName) && $serviceName != '') {
@@ -560,7 +531,6 @@ class GlobalBackendndomy {
 				}
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServiceState(): Array(...)');
 		return $arrReturn;
 	}
 	
@@ -573,7 +543,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHostNamesWithNoParent() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostNamesWithNoParent()');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT o1.name1
@@ -589,7 +558,6 @@ class GlobalBackendndomy {
 			$arrReturn[] = $data['name1'];
 		}
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::getHostNamesWithNoParent()');
 		return $arrReturn;
 	}
 	
@@ -603,7 +571,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getDirectChildNamesByHostName($hostName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getDirectChildNamesByHostName('.$hostName.')');
 		$arrChildNames = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT o2.name1
@@ -619,12 +586,9 @@ class GlobalBackendndomy {
 		AND (h2.config_type=1 AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
 		AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
-			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			$arrChildNames[] = $data['name1'];
-			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method GlobalBackendndomy::getDirectChildNamesByHostName()');
 		return $arrChildNames;
 	}
 	
@@ -638,7 +602,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getServicesByHostName($hostName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByHostName('.$hostName.')');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -653,13 +616,10 @@ class GlobalBackendndomy {
 				AND ss.service_object_id=o.object_id');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
-			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = $data['name2'];
-			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByHostName(): Array(...)');
 		return $arrReturn;
 	}
 	
@@ -673,7 +633,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHostsByHostgroupName($hostgroupName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getHostsByHostgroupName('.$hostgroupName.')');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -690,13 +649,10 @@ class GlobalBackendndomy {
 				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
-			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = $data['name1'];
-			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getHostsByHostgroupName(): Array(...)');
 		return $arrReturn;
 	}
 	
@@ -710,7 +666,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getServicesByServicegroupName($servicegroupName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getServicesByServicegroupName('.$servicegroupName.')');
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -727,13 +682,10 @@ class GlobalBackendndomy {
 				AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id)');
 	
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
-			if(DEBUG&&DEBUGLEVEL&2) debug('Start Loop');
 			// Assign actual dataset to return array
 			$arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
-			if(DEBUG&&DEBUGLEVEL&2) debug('Stop Loop');
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getServicesByServicegroupName(): Array(...)');
 		return $arrReturn;
 	}
 	
@@ -746,7 +698,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNagiosStartTime() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalBackendndomy::getNagiosStartTime()');
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 				UNIX_TIMESTAMP(program_start_time) AS program_start_time 
@@ -756,7 +707,6 @@ class GlobalBackendndomy {
 		
 		$data = mysql_fetch_array($QUERYHANDLE);
 		
-		if(DEBUG&&DEBUGLEVEL&1) debug('End method GlobalBackendndomy::getNagiosStartTime()');
 		return $data['program_start_time'];
 	}
 }

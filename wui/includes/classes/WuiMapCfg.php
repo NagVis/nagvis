@@ -15,13 +15,11 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiMapCfg(&$MAINCFG,$name='') {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapCfg::WuiMapCfg(&$MAINCFG,'.$name.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->name	= $name;
 		
 		$this->getMap();
 		parent::GlobalMapCfg($MAINCFG,$this->name);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapCfg::WuiMapCfg()');
 	}
 	
 	/**
@@ -33,10 +31,8 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapCfg::getMap()');
 		// check the $this->name string for security reasons (its the ONLY value we get directly from external...)
 		// Allow ONLY Characters, Numbers, - and _ inside the Name of a Map
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapCfg::getMap()');
 		$this->name = preg_replace("/[^a-zA-Z0-9_-]/",'',$this->name);
 	}
 	
@@ -48,7 +44,6 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function exportMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMapCfg::exportMap()');
 		if($this->checkMapConfigReadable(1)) {
 			$mapPath = $this->MAINCFG->getValue('paths', 'mapcfg').$this->getName().'.cfg';
 			
@@ -57,14 +52,11 @@ class WuiMapCfg extends GlobalMapCfg {
 			header('Content-Length: '.filesize($mapPath));
 			
 			if(readfile($mapPath)) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapCfg::exportMap(): exit()');
 				exit;
 			} else {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapCfg::exportMap(): FALSE');
 				return FALSE;	
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMapCfg::exportMap(): FALSE');
 			return FALSE;	
 		}
 	}
@@ -76,20 +68,16 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function deleteMapConfig($printErr=1) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteMapConfig()');
 		// is file writeable?
 		if($this->checkMapConfigWriteable($printErr)) {
 			if(unlink($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapConfig(): TRUE');
 				return TRUE;
 			} else {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','couldNotDeleteMapCfg','MAPPATH~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapConfig(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapConfig(): FALSE');
 			return FALSE;
 		}
 	}
@@ -102,16 +90,13 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapConfigWriteable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapConfigWriteable('.$printErr.')');
 		if($this->checkMapConfigExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigWriteable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('ERROR','mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapConfigWriteable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -125,7 +110,6 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function writeElement($type,$id) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::writeElement('.$type.','.$id.')');
 		if($this->checkMapConfigExists(1) && $this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
 			// read file in array
 			$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
@@ -238,11 +222,9 @@ class WuiMapCfg extends GlobalMapCfg {
 		 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg','w');
 		 	fwrite($fp,implode('',$file));
 		 	fclose($fp);
-		 	if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeElement(): TRUE');
-			return TRUE;
+		 			return TRUE;
 		} else {
-		 	if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeElement(): FALSE');
-			return FALSE;
+		 			return FALSE;
 		} 
 	}
 	
@@ -263,8 +245,7 @@ class WuiMapCfg extends GlobalMapCfg {
             if($lockdata['time'] > time() - $this->MAINCFG->getValue('wui','maplocktime') * 60) {
                 if($ignoreLock == 0) {
                     // the lock should be ignored
-    				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLocked(): FALSE');
-                    return FALSE;
+                        return FALSE;
                 } else {
                     // there is a lock and it should be recognized
                     // check if this is the lock of the current user (Happens e.g. by pressing F5)
@@ -280,22 +261,19 @@ class WuiMapCfg extends GlobalMapCfg {
                         // message the user that there is a lock by another user, the user can decide wether he want's to override it or not
                         print '<script>if(!confirm(\''.$LANG->getMessageText('mapLocked','MAP~'.$this->name.',TIME~'.date('d.m.Y H:i',$lockdata['time']).',USER~'.$lockdata['user'].',IP~'.$lockdata['ip']).'\',\'\')) { history.back(); }</script>';
     				}
-    				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLocked(): TRUE');
-    				return TRUE;
+        				return TRUE;
                 }
             } else {
                 // delete lockfile & continue
                 // try to delete map lock, if nothing to delete its OK
                 $this->deleteMapLock();
-    			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLocked(): FALSE');
-                return FALSE;
+                    return FALSE;
             }
         } else {
             // no valid informations in lock or no lock there
             // try to delete map lock, if nothing to delete its OK
             $this->deleteMapLock();
-    		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLocked(): FALSE');
-            return FALSE;
+                return FALSE;
         }
     }
     
@@ -338,8 +316,7 @@ class WuiMapCfg extends GlobalMapCfg {
 		 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock','w');
 		 	fwrite($fp,time().':'.$this->MAINCFG->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
 		 	fclose($fp);
-	 		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeMapLock(): TRUE');
-			return TRUE;
+	 			return TRUE;
 		} else {
 	        if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeMapLock(): FALSE');
 	        return FALSE;
@@ -378,21 +355,17 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapLockExists($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapLockExists('.$printErr.')');
 		if($this->name != '') {
 			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockExists(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
 		            $FRONTEND->messageToUser('ERROR','mapLockNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock');
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockExists(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -405,21 +378,17 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapLockReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapLockReadable('.$printErr.')');
 		if($this->name != '') {
 			if($this->checkMapLockExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockReadable(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
 		            $FRONTEND->messageToUser('ERROR','mapLockNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock');
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockReadable(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -432,21 +401,17 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapLockWriteable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapLockWriteable('.$printErr.')');
 		if($this->name != '') {
 			if($this->checkMapLockExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockWriteable(): TRUE');
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
 		            $FRONTEND->messageToUser('ERROR','mapLockNotWriteable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock');
 				}
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockWriteable(): FALSE');
 				return FALSE;
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::checkMapLockWriteable(): FALSE');
 			return FALSE;
 		}
 	}

@@ -9,22 +9,17 @@ class GlobalGraphic {
 	}
 	
 	function init(&$image) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalGraphic::init()');
 		$this->black = imagecolorallocate($image, 0,0,0);
 		// UNUSED: $this->red = imagecolorallocate($image, 255, 0, 0);
 		// UNUSED:$this->white = imagecolorallocate($image, 255, 255, 255);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalGraphic::init()');
 	}
 	
 	function middle($x1,$x2) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalGraphic::middle('.$x1.','.$x2.')');
 		$ret = ($x1+($x2-$x1)/2);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalGraphic::middle(): '.$ret);
 		return $ret;
 	}
 	
 	function drawArrow(&$im,$x1,$y1,$x2,$y2,$w,$solid,$color) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalGraphic::drawArrow('.$x1.','.$y1.','.$x2.','.$y2.','.$w.','.$solid.','.$color.')');
 		$point[0]=$x1 + $this->newX($x2-$x1, $y2-$y1, 0, $w);
 		$point[1]=$y1 + $this->newY($x2-$x1, $y2-$y1, 0, $w);
 		$point[2]=$x2 + $this->newX($x2-$x1, $y2-$y1, -4*$w, $w);
@@ -46,20 +41,15 @@ class GlobalGraphic {
 		} else{
 			imagepolygon($im,$point,7,$this->black);
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalGraphic::drawArrow()');
 	}
 	
 	function newX($a,$b,$x,$y) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalGraphic::newX('.$a.','.$b.','.$x.','.$y.')');
 		$ret = (cos(atan2($y,$x)+atan2($b,$a))*sqrt($x*$x+$y*$y));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalGraphic::newX(): '.$ret);
 		return $ret;
 	}
 	
 	function newY($a,$b,$x,$y) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalGraphic::newY('.$a.','.$b.','.$x.','.$y.')');
 		$ret = (sin( atan2($y,$x) + atan2($b,$a) ) * sqrt( $x*$x + $y*$y ));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalGraphic::newY(): '.$ret);
 		return $ret;
 	}
 }

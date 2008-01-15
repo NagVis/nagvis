@@ -20,14 +20,12 @@ class NagVisHost extends NagiosHost {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisHost(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::NagVisHost(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostName.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
 		$this->type = 'host';
 		$this->iconset = 'std_medium';
 		parent::NagiosHost($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostName);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::NagVisHost()');
 	}
 	
 	/**
@@ -39,8 +37,6 @@ class NagVisHost extends NagiosHost {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::parse()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::parse()');
 		return parent::parse();
 	}
 	
@@ -54,15 +50,16 @@ class NagVisHost extends NagiosHost {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseGraphviz($layer=0) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::parseGraphviz()');
-		$strReturn = $this->type.'_'.str_replace('-','__',$this->host_name).' [ ';
+		$graphvizHostname = str_replace('-','__',$this->getName());
+		
+		$strReturn = $this->getType().'_'.$graphvizHostname.' [ ';
 		$strReturn .= 'label=<<table border="0">';
-		$strReturn .= '<tr><td><img src="'.$this->MAINCFG->getValue('paths', 'icon').$this->icon.'"></img></td></tr>';
-		$strReturn .= '<tr><td>'.$this->host_name.'</td></tr>';
+		$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
+		$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
 		$strReturn .= '</table>>, ';
-		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.str_replace('-','__',$this->host_name).'", ';
+		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$graphvizHostname.'", ';
 		$strReturn .= 'target="'.$this->url_target.'", ';
-		$strReturn .= 'tooltip="'.$this->host_name.'",';
+		$strReturn .= 'tooltip="'.$this->getName().'",';
 		// The root host has to be highlighted, this are the options to do this
 		if($layer == 0) {
 			$strReturn .= 'shape="circle",';
@@ -71,9 +68,8 @@ class NagVisHost extends NagiosHost {
 		$strReturn .= ' ];'."\n ";
 		foreach($this->getChilds() As $OBJ) {
 			$strReturn .= $OBJ->parseGraphviz($layer+1);
-			$strReturn .= $this->type.'_'.str_replace('-','__',$this->host_name).' -- '.$OBJ->type.'_'.str_replace('-','__',$OBJ->host_name).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+			$strReturn .= $this->type.'_'.$graphvizHostname.' -- '.$OBJ->type.'_'.str_replace('-','__',$OBJ->host_name).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::parseGraphviz(): String HTML');
 		return $strReturn;
 	}
 	
@@ -86,7 +82,10 @@ class NagVisHost extends NagiosHost {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchIcon() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::fetchIcon()');
+		// Set the paths of this icons
+		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
+		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
+		
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
@@ -121,7 +120,7 @@ class NagVisHost extends NagiosHost {
 			}
 			
 			//Checks whether the needed file exists
-			if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
+			if(@file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
 				$this->icon = $icon;
 			} else {
 				$this->icon = $this->iconset.'_error.png';
@@ -129,7 +128,6 @@ class NagVisHost extends NagiosHost {
 		} else {
 			$this->icon = $this->iconset.'_error.png';
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagVisHost::fetchIcon()');
 	}
 	
 	/**
@@ -139,14 +137,12 @@ class NagVisHost extends NagiosHost {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisHost::createLink()');
 		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();
 		} else {
 			$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name.'" target="'.$this->url_target.'">';
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisHost::createLink(): '.$link);
 		return $link;
 	}
 }

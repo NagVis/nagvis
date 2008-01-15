@@ -50,7 +50,6 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagiosService(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName, $serviceDescription) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::NagiosService(MAINCFG,BACKEND,LANG,'.$backend_id.','.$hostName.','.$serviceDescription.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
@@ -63,7 +62,6 @@ class NagiosService extends NagVisStatefulObject {
 		$this->has_been_acknowledged = 0;
 		
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::NagiosService()');
 	}
 	
 	/**
@@ -74,8 +72,6 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMembers() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchMembers()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchMembers()');
 	}
 	
 	/**
@@ -86,7 +82,6 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchState() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchState()');
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, $this->service_description, $this->only_hard_states);
 			
@@ -99,7 +94,6 @@ class NagiosService extends NagVisStatefulObject {
 			// At least summary output
 			$this->fetchSummaryOutput();
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchState()');
 	}
 	
 	/**
@@ -111,8 +105,6 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getServiceDescription() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::getServiceDescription()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::getServiceDescription()');
 		return $this->service_description;
 	}
 	
@@ -127,10 +119,8 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryState() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchSummaryState()');
 		$this->summary_state = $this->state;
 		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchSummaryState()');
 	}
 	
 	/**
@@ -141,9 +131,7 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryOutput() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosService::fetchSummaryOutput()');
 		$this->summary_output = $this->output;
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosService::fetchSummaryOutput()');
 	}
 }
 ?>

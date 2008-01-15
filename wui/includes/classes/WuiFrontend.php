@@ -17,7 +17,6 @@ class WuiFrontend extends GlobalPage {
 	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function WuiFrontend(&$MAINCFG,&$MAPCFG) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiFrontend::WuiFrontend(&$MAINCFG,&$MAPCFG)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		
@@ -35,7 +34,6 @@ class WuiFrontend extends GlobalPage {
 					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'),
 					  'languageRoot' => 'wui:global');
 		parent::GlobalPage($this->MAINCFG,$prop);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiFrontend::WuiFrontend()');
 	}
 	
 	/**
@@ -44,12 +42,10 @@ class WuiFrontend extends GlobalPage {
 	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function getMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiFrontend::getMap()');
 		$this->addBodyLines('<div id="mymap" class="map">');
 		$this->MAP = new WuiMap($this->MAINCFG,$this->MAPCFG,$this->LANG);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiFrontend::getMap()');
 	}
 	
 	/**
@@ -58,9 +54,7 @@ class WuiFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMessages() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiFrontend::getMessages()');
 		$this->addBodyLines($this->getUserMessages());	
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiFrontend::getMessages()');
 	}
 }
 ?>

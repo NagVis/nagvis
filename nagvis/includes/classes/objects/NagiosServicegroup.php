@@ -37,7 +37,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagiosServicegroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $servicegroupName) {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::NagiosServicegroup(MAINCFG,BACKEND,LANG,'.$backend_id.','.$servicegroupName.')');
 		$this->MAINCFG = &$MAINCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = &$LANG;
@@ -48,7 +47,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		$this->state = '';
 		
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::NagiosServicegroup()');
 	}
 	
 	/**
@@ -59,10 +57,8 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMembers() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchMembers()');
 		// Get all member services
 		$this->fetchMemberServiceObjects();
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchMembers()');
 	}
 	
 	/**
@@ -74,7 +70,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchState() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchState()');
 		
 		// Get states of all members
 		foreach($this->members AS $OBJ) {
@@ -87,7 +82,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		// At least summary output
 		$this->fetchSummaryOutput();
 		$this->state = $this->summary_state;
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchState()');
 	}
 	
 	/**
@@ -99,8 +93,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNumMembers() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::getNumMembers()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::getNumMembers()');
 		return count($this->members);
 	}
 	
@@ -113,8 +105,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMembers() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::getMembers()');
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::getMembers()');
 		return $this->members;
 	}
 	
@@ -130,7 +120,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMemberServiceObjects() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchMemberServiceObjects()');
 		// Get all services and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicesByServicegroupName($this->servicegroup_name);
@@ -147,7 +136,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 				$this->members[] = $OBJ;
 			}
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchMemberServiceObjects()');
 	}
 	
 	/**
@@ -158,7 +146,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryState() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchSummaryState()');
 		if($this->getNumMembers() > 0) {
 			// Get summary state member objects
 			foreach($this->members AS $MEMBER) {
@@ -167,7 +154,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		} else {
 			$this->summary_state = 'ERROR';
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchSummaryState()');
 	}
 	
 	/**
@@ -178,7 +164,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryOutput() {
-		if(DEBUG&&DEBUGLEVEL&1) debug('Start method NagiosServicegroup::fetchSummaryOutput()');
 		if($this->getNumMembers() > 0) {
 			$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
@@ -191,7 +176,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		} else {
 			$this->summary_output = $this->LANG->getMessageText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
 		}
-		if(DEBUG&&DEBUGLEVEL&1) debug('Stop method NagiosServicegroup::fetchSummaryOutput()');
 	}
 }
 ?>
