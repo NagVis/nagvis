@@ -19,7 +19,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisFrontend(&$MAINCFG,&$MAPCFG,&$BACKEND) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND)');
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
@@ -32,7 +31,6 @@ class NagVisFrontend extends GlobalPage {
 						'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
 						'languageRoot' => 'nagvis:global');
 		parent::GlobalPage($this->MAINCFG,$prop);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::NagVisFrontend()');
 	}
 	
 	/**
@@ -42,7 +40,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIndexPage() {
-			if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getIndexPage()');
 			$ret = Array();
 			
 			$ret[] = '<div class="infopage">';
@@ -143,7 +140,6 @@ class NagVisFrontend extends GlobalPage {
 			
 			$ret[] = '</div>';
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getIndexPage(): Array(HTML)');
 			return $ret;
 	}
 	
@@ -153,7 +149,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createThumbnail($imgPath, $mapName) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::createThumbnail()');
 		
 		if($this->checkImageExists($imgPath, TRUE)) {
 			$imgSize = getimagesize($imgPath);
@@ -199,10 +194,8 @@ class NagVisFrontend extends GlobalPage {
 			
 			imagepng($thumb, $this->MAINCFG->getValue('paths','var').$mapName.'-thumb.png');
 			
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::createThumbnail()');
 			return $this->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::createThumbnail()');
 			return '';
 		}
 	}
@@ -216,16 +209,13 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkImageExists($imgPath, $printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkImageExists('.$printErr.')');
 		if(file_exists($imgPath)) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkImageExists(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 				$FRONTEND->messageToUser('WARNING','imageNotExists','FILE~'.$imgPath);
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkImageExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -236,7 +226,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInstInformations() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getInstInformations()');
 		$ret = Array();
 		
 		$ret[] = '<div class="infopage">';
@@ -264,7 +253,6 @@ class NagVisFrontend extends GlobalPage {
 		$ret[] = '</div>';
 		
 		$this->addBodyLines($ret);
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getInstInformations()');
 	}
 	
 	/**
@@ -273,7 +261,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHeaderMenu() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getHeaderMenu()');
 		if($this->MAINCFG->getValue('global', 'displayheader') == '1') {
 			if($this->checkHeaderTemplateReadable(1)) {
 				$ret = file_get_contents($this->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
@@ -334,7 +321,6 @@ class NagVisFrontend extends GlobalPage {
 				$this->addBodyLines('<div class="header">'.$ret.'</div>');
 			}
 		}
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getHeaderMenu()');
 	}
 	
 	/**
@@ -345,16 +331,13 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHeaderTemplateExists($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderTemplateExists('.$printErr.')');
 		if(file_exists($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateExists(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('WARNING','headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateExists(): FALSE');
 			return FALSE;
 		}
 	}
@@ -367,16 +350,13 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHeaderTemplateReadable($printErr) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::checkHeaderTemplateReadable('.$printErr.')');
 		if($this->checkHeaderTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateReadable(): TRUE');
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
 				$FRONTEND->messageToUser('WARNING','headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
 			}
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::checkHeaderTemplateReadable(): FALSE');
 			return FALSE;
 		}
 	}
@@ -387,13 +367,11 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMap() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMap()');
 		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
 		$this->addBodyLines(Array('<div class="map">'));
 		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMap()');
 	}
 	
 	/**
@@ -402,13 +380,11 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getAutoMap($arrOptions) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getAutoMap()');
 		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
 		$this->addBodyLines(Array('<div id="map" class="map">'));
 		$this->MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $arrOptions);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getAutoMap()');
 	}
 	
 	/**
@@ -417,9 +393,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMessages() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMessages()');
 		$this->addBodyLines($this->getUserMessages());
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMessages()');
 	}
 
 	/**
@@ -448,12 +422,9 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNextRotationTime() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotationTime()');
 		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotationTime(): ');
 			return $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'interval');
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotationTime(): ');
 			return $this->MAINCFG->getValue('rotation', 'interval');
 		}
 	}
@@ -466,7 +437,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNextRotationUrl() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getNextRotate()');
 		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
 			if($maps = $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'maps')) {
 				$maps = explode(',', str_replace('"','',$maps));
@@ -490,10 +460,8 @@ class NagVisFrontend extends GlobalPage {
 				
 				
 				if(preg_match("/^\[(.+)\]$/",$nextMap,$arrRet)) {
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1]);
 					return 'index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1];
 				} else {
-					if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): URL=index.php?rotation='.$_GET['rotation'].'&map='.$nextMap);
 					return 'index.php?rotation='.$_GET['rotation'].'&map='.$nextMap;
 				}
 			} else {
@@ -501,11 +469,9 @@ class NagVisFrontend extends GlobalPage {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
 				$FRONTEND->messageToUser('ERROR','mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']);
 				
-				if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): ');
 				return '';
 			}
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getNextRotate(): ');
 			return '';
 		}
 	}
@@ -517,7 +483,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMaps() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getMaps()');
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
@@ -533,7 +498,6 @@ class NagVisFrontend extends GlobalPage {
 		}
 		closedir($handle);
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getMaps(): Array(...)');
 		return $files;
 	}
 	
@@ -544,7 +508,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getRotationPools() {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method NagVisFrontend::getRotationPools()');
 		$ret = Array();
 		
 		foreach($this->MAINCFG->config AS $sec => $var) {
@@ -553,7 +516,6 @@ class NagVisFrontend extends GlobalPage {
 			}
 		}
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method NagVisFrontend::getRotationPools(): Array(...)');
 		return $ret;
 	}
 }
