@@ -54,7 +54,8 @@ class NagVisFrontend extends GlobalPage {
 					if($mapName == '__automap') {
 						$opts = Array();
 						
-						// Fetch option array from defaultparams string (extract variable names and values)
+						// Fetch option array from defaultparams string (extract variable 
+						// names and values)
 						$params = explode('&',$this->MAINCFG->getValue('automap','defaultparams'));
 						unset($params[0]);
 						
@@ -64,6 +65,9 @@ class NagVisFrontend extends GlobalPage {
 						}
 						
 						$MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $opts);
+						// If there is no automap image on first load of the index page,
+						// render the image
+						$MAP->renderMap();
 					} else {
 						$MAP = new NagVisMap($this->MAINCFG, $MAPCFG, $this->LANG, $this->BACKEND);
 					}
