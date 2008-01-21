@@ -116,7 +116,6 @@ class NagVisAutoMap extends GlobalMap {
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		$this->MAPOBJ->fetchState();
-		
 	}
 	
 	/**
@@ -248,7 +247,7 @@ class NagVisAutoMap extends GlobalMap {
 		 */
 		
 		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
-				$this->mapCode = str_replace('title="'.$OBJ->getName().'"', $OBJ->getHoverMenu(), $this->mapCode);
+			$this->mapCode = str_replace('title="'.$OBJ->getName().'"', $OBJ->getHoverMenu(), $this->mapCode);
 		}
 	}
 	
@@ -272,9 +271,6 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Parse the map with its areas
 		$ret[] = $this->mapCode;
-		
-		// Create hover areas for map objects
-		//$ret[] = $this->getObjects();
 		
 		// Dynamicaly set favicon
 		$ret[] = $this->getFavicon();
