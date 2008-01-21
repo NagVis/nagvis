@@ -105,4 +105,44 @@ function changeMap(htmlBase,mapName) {
 		location.href=htmlBase+'/nagvis/index.php?map='+mapName;
 	}
 }
-		
+
+/**
+ * Function to replace macros in hover template areas
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function replaceHoverTemplateMacros(templateHtml, arrMacros, arrChildObjects) {
+	var htmlCode = templateHtml;
+	
+	// Check if there are childs which should be replaced
+	if(arrChildObjects.length > 0) {
+		var regex = new RegExp("<!--\\\sBEGIN\\\sloop_child\\\s-->(.+?)<!--\\\sEND\\\sloop_child\\\s-->");
+		var results = regex.exec(htmlCode);
+		if(results != null) {
+			var childsHtmlCode = '';
+			var rowHtmlCode = results[1];
+			
+			for(var i = 0; i < arrChildObjects.length; i++) {
+				childsHtmlCode += replaceHoverTemplateMacros(rowHtmlCode, arrChildObjects[i], Array());
+			}
+			
+			htmlCode = htmlCode.replace(regex, childsHtmlCode);
+		}
+	}
+	
+	for (var key in arrMacros) {
+		if(key.match('^\\\[.+\\\]$')) {
+			key1 = key.replace('[','\\\[');
+			key1 = key1.replace(']','\\\]');
+			
+			var regex = new RegExp(key1, 'g');
+			htmlCode = htmlCode.replace(regex, arrMacros[key]);
+		} else {
+			var regex = new RegExp(key, 'gm');
+			htmlCode = htmlCode.replace(regex, arrMacros[key]);
+		}
+	}
+	
+	return htmlCode;
+}
+

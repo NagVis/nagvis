@@ -218,14 +218,14 @@ class NagVisObject {
 		$ret = '';
 		
 		if($this->hover_menu) {
-			$ret .= 'onmouseover="return overlib(\'';
+			$ret .= 'onmouseover="return overlib(';
 			if(isset($this->hover_url) && $this->hover_url != '') {
 				$ret .= $this->readHoverUrl();
 			} else {
 				$ret .= $this->readHoverTemplate();
 			}
 			
-			$ret .= '\', WRAP, VAUTO, DELAY, '.($this->hover_delay*1000).');" onmouseout="return nd();"';
+			$ret .= ', WRAP, VAUTO, DELAY, '.($this->hover_delay*1000).');" onmouseout="return nd();"';
 			
 			return $ret;
 		}
@@ -361,198 +361,159 @@ class NagVisObject {
 			}
 		}
 		
+		$childObjects = '[]';
+		$dontShowChilds = '';
 		// Replace the macros
-		$ret = $this->replaceHoverTemplateMacros($ret);
+		if($this->hover_childs_show == '1' && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
+			$childObjects = $this->getHoverTemplateChildReplacements($ret);
+		} else {
+			$dontShowChilds = '\'<!--\\\sBEGIN\\\childs\\\s-->.+?<!--\\\sEND\\\childs\\\s-->\': \'\', ';
+		}
 		
-		// Escape chars which could make problems
-		$ret = strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => ''));
+		// Parse the JS code for the hover template macro replacements
+		$ret = 'replaceHoverTemplateMacros(\''.strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => '')).'\',{'.$dontShowChilds.$this->getHoverTemplateReplacements().'},'.$childObjects.')';
 		
 		return $ret;
 	}
 	
 	/**
-	 * PRIVATE replaceHoverTemplateMacros
+	 * PRIVATE getHoverTemplateReplacements()
 	 *
-	 * Replaces macros for the hover templates in the template code
+	 * This methods forms keys and values for he replaceHoverTemplateMacros 
+	 * function in Javascript
+	 *
+	 * @return	String		Code of Javascript Array Elements
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getHoverTemplateReplacements($child=0) {
+		$ret = '';
+		
+		/**
+		 * Now replace the regular macros
+		 */
+		$ret .= '\'[obj_type]\': \''.$this->type.'\', ';
+		
+		// On child service objects in hover menu replace obj_name with 
+		// service_description
+		if($this->type == 'service') {
+			$ret .= '\'[obj_name]\': \''.$this->getServiceDescription().'\', ';
+		} else {
+			$ret .= '\'[obj_name]\': \''.$this->getName().'\', ';
+		}
+		
+		if(isset($this->alias) && $this->alias != '') {
+			$ret .= '\'[obj_alias]\': \''.$this->alias.'\', ';
+		} else {
+			$ret .= '\'[obj_alias]\': \'\', ';
+		}
+		
+		if(isset($this->display_name) && $this->display_name != '') {
+			$ret .= '\'[obj_display_name]\': \''.$this->display_name.'\', ';
+		} else {
+			$ret .= '\'[obj_display_name]\': \'\', ';
+		}
+		
+		if($this->getSummaryAcknowledgement() == 1) {
+			$ret .= '\'[obj_state]\': \''.$this->getState().' (Acknowledged)\', ';
+			$ret .= '\'[obj_summary_state]\': \''.$this->getSummaryState().' (Acknowledged)\', ';
+		} else {
+			$ret .= '\'[obj_state]\': \''.$this->getState().'\', ';
+			$ret .= '\'[obj_summary_state]\': \''.$this->getSummaryState().'\', ';
+		}
+		
+		if(!$child && $this->type != 'map') {
+			$ret .= '\'[obj_backendid]\': \''.$this->backend_id.'\', ';
+			
+			if($this->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
+				$ret .= '\'[obj_backend_instancename]\': \''.$this->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename').'\', ';
+			} else {
+				$ret .= '\'[obj_backend_instancename]\': \'\', ';
+			}
+		} else {
+			// Remove the macros in map objects
+			$ret .= '\'[obj_backendid]\': \'\', ';
+			$ret .= '\'[obj_backend_instancename]\': \'\', ';
+		}
+		
+		$ret .= '\'[obj_output]\': \''.strtr($this->output, Array("\r" => '<br />', "\n" => '<br />')).'\', ';
+		$ret .= '\'[obj_summary_output]\': \''.strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />')).'\', ';
+		
+		if($this->type == 'service') {
+			$name = 'hostname';
+		} else {
+			$name = $this->type . 'name';
+		}
+		$ret .= '\'[lang_name]\': \''.$this->LANG->getLabel($name).'\', ';
+		
+		// Macros which are only for services and hosts
+		if($this->type == 'host' || $this->type == 'service') {
+			$ret .= '\'[obj_last_check]\': \''.$this->getLastCheck().'\', ';
+			$ret .= '\'[obj_next_check]\': \''.$this->getNextCheck().'\', ';
+			$ret .= '\'[obj_state_type]\': \''.$this->getStateType().'\', ';
+			$ret .= '\'[obj_current_check_attempt]\': \''.$this->getCurrentCheckAttempt().'\', ';
+			$ret .= '\'[obj_max_check_attempts]\': \''.$this->getMaxCheckAttempts().'\', ';
+			$ret .= '\'[obj_last_state_change]\': \''.$this->getLastStateChange().'\', ';
+			$ret .= '\'[obj_last_hard_state_change]\': \''.$this->getLastHardStateChange().'\', ';
+			$ret .= '\'[obj_state_duration]\': \''.$this->getStateDuration().'\', ';
+		}
+		
+		// Macros which are only for services
+		if($this->type == 'service') {
+			$ret .= '\'[service_description]\': \''.$this->getServiceDescription().'\', ';
+			$ret .= '\'[pnp_service_description]\': \''.str_replace(' ','%20',$this->getServiceDescription()).'\', ';
+		} else {
+			$ret .= '\'<!--\\\sBEGIN\\\sservice\\\s-->.+?<!--\\\sEND\\\sservice\\\s-->\': \'\', ';
+		}
+		
+		// Macros which are only for hosts
+		if($this->type == 'host') {
+			$ret .= '\'[pnp_hostname]\': \''.str_replace(' ','%20',$this->getName()).'\', ';
+		} else {
+			$ret .= '\'<!--\\\sBEGIN\\\host\\\s-->.+?<!--\\\sEND\\\shost\\\s-->\': \'\', ';
+		}
+		
+		return $ret;
+	}
+	
+	/**
+	 * PRIVATE getHoverTemplateChildReplacements
+	 *
+	 * Get the hover template child replacement options
 	 *
 	 * @param		String		HTML code with macros
 	 * @return	String		HTML code for the hover menu
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function replaceHoverTemplateMacros($ret, $replaceChilds=1) {
-		/*
-		 * Macros which are only for objects with childs
-		 */
-		if($this->hover_childs_show == '1' && $replaceChilds && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
-			$matches = Array();
-			$childs = '';
-			if(preg_match('/<!-- BEGIN loop_child -->(.+?)<!-- END loop_child -->/s', $ret, $matches)) {
-				switch($this->type) {
-					case 'host':
-						$arrObjects = &$this->getServices();
-					break;
-					case 'hostgroup':
-					case 'servicegroup':
-						$arrObjects = &$this->getMembers();
-					break;
-					case 'map':
-						$arrObjects = &$this->getMapObjects();
-					break;
-				}
-				
-				// Sort the array of child objects by the sort option
-				// FIXME
-				
-				// Count only once, not in loop header
-				$numObjects = count($arrObjects);
-				
-				// Loop all child object until all looped or the child limit is reached
-				for($i = 0; $i < $this->hover_childs_limit, $i < $numObjects; $i++) {
-					// Current child object
-					$OBJ = $arrObjects[$i];
-					
-					// Current child row
-					$child = $matches[1];
-					
-					if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
-						$child = $OBJ->replaceHoverTemplateMacros($child, 0);
-					}
-					
-					// Append the current child to the childs string
-					$childs .= $child;
-				}
-			}
-			
-			// Add the list of childs to the hover menu
-			$ret = preg_replace('/<!-- BEGIN loop_child -->(.+?)<!-- END loop_child -->/s', $childs, $ret);
-		} else {
-			$ret = preg_replace('/<!-- BEGIN childs -->(.+?)<!-- END childs -->/s', '', $ret);
+	function getHoverTemplateChildReplacements($htmlTemplate) {
+		$matches = Array();
+		$childs = '';
+		switch($this->type) {
+			case 'host':
+				$arrObjects = &$this->getServices();
+			break;
+			case 'hostgroup':
+			case 'servicegroup':
+				$arrObjects = &$this->getMembers();
+			break;
+			case 'map':
+				$arrObjects = &$this->getMapObjects();
+			break;
 		}
 		
-		/**
-		 * Now replace the regular macros
-		 */
-		$ret = str_replace('[obj_type]', $this->type, $ret);
+		// Sort the array of child objects by the sort option
+		// FIXME
 		
-		// On child service objects in hover menu replace obj_name with 
-		// service_description
-		if(!$replaceChilds && $this->type == 'service') {
-			$ret = str_replace('[obj_name]', $this->getServiceDescription(), $ret);
-		} else {
-			$ret = str_replace('[obj_name]', $this->getName(), $ret);
-		}
+		// Count only once, not in loop header
+		$numObjects = count($arrObjects);
 		
-		if(strpos($ret,'[obj_alias]') !== FALSE) {
-			if(isset($this->alias) && $this->alias != '') {
-				$ret = str_replace('[obj_alias]',$this->alias,$ret);
-			} else {
-				$ret = str_replace('[obj_alias]','',$ret);
+		$ret = '[ ';
+		// Loop all child object until all looped or the child limit is reached
+		for($i = 0; $i < $this->hover_childs_limit, $i < $numObjects; $i++) {
+			if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
+				$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1).'},';
 			}
 		}
-		
-		if(strpos($ret,'[obj_display_name]') !== FALSE) {
-			if(isset($this->display_name) && $this->display_name != '') {
-				$ret = str_replace('[obj_display_name]',$this->display_name,$ret);
-			} else {
-				$ret = str_replace('[obj_display_name]','',$ret);
-			}
-		}
-		
-		if($this->getSummaryAcknowledgement() == 1) {
-			$ret = str_replace('[obj_state]',$this->getState().' (Acknowledged)',$ret);
-			$ret = str_replace('[obj_summary_state]',$this->getSummaryState().' (Acknowledged)',$ret);
-		} else {
-			$ret = str_replace('[obj_state]',$this->getState(),$ret);
-			$ret = str_replace('[obj_summary_state]',$this->getSummaryState(),$ret);
-		}
-		
-		if($this->type != 'map') {
-			$ret = str_replace('[obj_backendid]',$this->backend_id,$ret);
-			
-			if(strpos($ret,'[obj_backend_instancename]') !== FALSE) {
-				if($this->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
-					$ret = str_replace('[obj_backend_instancename]',$this->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename'),$ret);
-				} else {
-					$ret = str_replace('[obj_backend_instancename]','',$ret);
-				}
-			}
-		} else {
-			// Remove the macros in map objects
-			$ret = str_replace('[obj_backendid]','',$ret);
-			$ret = str_replace('[obj_backend_instancename]','',$ret);
-		}
-		
-		if(strpos($ret,'[obj_output]') !== FALSE) {
-			$ret = str_replace('[obj_output]',strtr($this->output, Array("\r" => '<br />', "\n" => '<br />')),$ret);
-		}
-		
-		if(strpos($ret,'[obj_summary_output]') !== FALSE) {
-			$ret = str_replace('[obj_summary_output]',strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />')),$ret);
-		}
-		
-		if(strpos($ret,'[lang_name]') !== FALSE) {
-			if($this->type == 'service') {
-				$name = 'host_name';
-			} else {
-				$name = $this->type . '_name';
-			}
-			$ret = str_replace('[lang_name]',$this->LANG->getLabel(str_replace('_','',$name)),$ret);
-		}
-		
-		// Macros which are only for services and hosts
-		if($this->type == 'host' || $this->type == 'service') {
-			if(strpos($ret,'[obj_last_check]') !== FALSE) {
-				$ret = str_replace('[obj_last_check]', $this->getLastCheck(), $ret);
-			}
-			
-			if(strpos($ret,'[obj_next_check]') !== FALSE) {
-				$ret = str_replace('[obj_next_check]', $this->getNextCheck(), $ret);
-			}
-			
-			if(strpos($ret,'[obj_state_type]') !== FALSE) {
-				$ret = str_replace('[obj_state_type]', $this->getStateType(), $ret);
-			}
-			
-			if(strpos($ret,'[obj_current_check_attempt]') !== FALSE) {
-				$ret = str_replace('[obj_current_check_attempt]', $this->getCurrentCheckAttempt(), $ret);
-			}
-			
-			if(strpos($ret,'[obj_max_check_attempts]') !== FALSE) {
-				$ret = str_replace('[obj_max_check_attempts]', $this->getMaxCheckAttempts(), $ret);
-			}
-			
-			if(strpos($ret,'[obj_last_state_change]') !== FALSE) {
-				$ret = str_replace('[obj_last_state_change]', $this->getLastStateChange(), $ret);
-			}
-			
-			if(strpos($ret,'[obj_last_hard_state_change]') !== FALSE) {
-				$ret = str_replace('[obj_last_hard_state_change]', $this->getLastHardStateChange(), $ret);
-			}
-			
-			if(strpos($ret,'[obj_state_duration]') !== FALSE) {
-				$ret = str_replace('[obj_state_duration]', $this->getStateDuration(), $ret);
-			}
-		}
-		
-		// Macros which are only for services
-		if($this->type == 'service') {
-			$ret = str_replace('[service_description]',$this->getServiceDescription(),$ret);
-			
-			if(strpos($ret,'[pnp_service_description]') !== FALSE) {
-				$ret = str_replace('[pnp_service_description]',str_replace(' ','%20',$this->getServiceDescription()),$ret);
-			}
-		} else {
-			$ret = preg_replace('/(<!-- BEGIN service -->(.+?)<!-- END service -->)+/sS','',$ret);
-		}
-		
-		// Macros which are only for hosts
-		if($this->type == 'host') {
-			if(strpos($ret,'[pnp_hostname]') !== FALSE) {
-				$ret = str_replace('[pnp_hostname]',str_replace(' ','%20',$this->getName()),$ret);
-			}
-		} else {
-			$ret = preg_replace('/(<!-- BEGIN host -->(.+?)<!-- END host -->)+/s','',$ret);
-		}
+		$ret .= ']';
 		
 		return $ret;
 	}
