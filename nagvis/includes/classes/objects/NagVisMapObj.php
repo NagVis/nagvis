@@ -99,7 +99,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchState() {
-		
 		// Get state of all member objects
 		foreach($this->getMapObjects() AS $OBJ) {
 			// Before getting state of maps we have to check if there is a loop in the maps
@@ -128,12 +127,22 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function objectTreeToMapObjects(&$OBJ) {
-		$this->objects[] = &$OBJ;
-		$this->objects = array_merge($this->getMapObjects(), $OBJ->getChilds());
+	function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
+		$this->objects[] = $OBJ;
 		
 		foreach($OBJ->getChilds() AS $OBJ1) {
-			$this->objectTreeToMapObjects($OBJ1);
+			/*
+			 * Check if the host is already on the map (If it's not done, the 
+			 * objects with more than one parent be printed several times on the 
+			 * map, especially the links to child objects will be too many.
+			 */
+			if(!in_array($OBJ1->getName(), $arrHostnames)){
+				// Add the name of this host to the array with hostnames which are
+				// already on the map
+				$arrHostnames[] = $OBJ1->getName();
+				
+				$this->objectTreeToMapObjects($OBJ1, $arrHostnames);
+			}
 		}
 	}
 	
@@ -365,7 +374,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	function fetchSummaryState() {
 		// Get summary state member objects
-		foreach($this->objects AS $OBJ) {
+		foreach($this->getMapObjects() AS $OBJ) {
 			if(method_exists($OBJ,'getSummaryState')) {
 				$this->wrapChildState($OBJ);
 			}
