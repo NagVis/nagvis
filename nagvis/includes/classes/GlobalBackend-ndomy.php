@@ -347,15 +347,14 @@ class GlobalBackendndomy {
 			$arrReturn['last_hard_state_change'] = $data['last_hard_state_change'];
 			
 			/**
-			 * SF.net #1587073
-			 * if "last_hard_state" != OK && last_hard_state_change <= last_state_change => state = current_state
+			 * Only recognize hard states. There was a discussion about the implementation
+			 * This is a new handling of only_hard_states. For more details, see: 
+			 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
 			 *
-			 * last_hard_state in ndo_hoststatus seems not to change if a host returns from state != OK by a successfull service check.
-			 * i think it changes only if a host check returns an OK. so if there are no host checks scheduled the last_hard_state will 
-			 * always stay as it is.
+			 * Thanks to Andurin and fredy82
 			 */
 			if($onlyHardstates == 1) {
-				if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
+				if($data['state_type'] != '0') {
 					$data['current_state'] = $data['current_state'];
 				} else {
 					$data['current_state'] = $data['last_hard_state'];
@@ -473,8 +472,15 @@ class GlobalBackendndomy {
 				$arrTmpReturn['last_state_change'] = $data['last_state_change'];
 				$arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
 				
+				/**
+				 * Only recognize hard states. There was a discussion about the implementation
+				 * This is a new handling of only_hard_states. For more details, see: 
+				 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
+				 *
+				 * Thanks to Andurin and fredy82
+				 */
 				if($onlyHardstates == 1) {
-					if($data['last_hard_state'] != '0' && $data['last_hard_state_change'] <= $data['last_state_change']) {
+					if($data['state_type'] != '0') {
 						$data['current_state'] = $data['current_state'];
 					} else {
 						$data['current_state'] = $data['last_hard_state'];

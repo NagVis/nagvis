@@ -6,7 +6,7 @@
  */
 
 // enable/disable the debug mode
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 /**
  * For wanted debug output summarize these possible options:
