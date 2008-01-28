@@ -27,12 +27,12 @@ function checkMapLinked(mapName,mapOptions) {
 	for(var i=0;i<mapOptions.length;i++) {
 		for(var a = 0; a < mapOptions[i].linkedMaps.length; a++) {
 			if(mapOptions[i].linkedMaps[a] == mapName) {
-				return true;
+				return mapOptions[i].mapName;
 			}
 		}
 	}
 	
-	return false;
+	return "";
 }
 
 function check_create_map() {
@@ -154,8 +154,9 @@ function check_map_delete() {
 		return false;
 	}
 	
-	if(checkMapLinked(document.map_delete.map_name.value, window.opener.mapOptions)) {
-		alert(printLang(lang['unableToDeleteMap'],'MAP~'+mapname_used_by+',IMAGENAME~'+document.map_delete.map_name.value));
+	var mapWithLink = checkMapLinked(document.map_delete.map_name.value, window.opener.mapOptions)
+	if(mapWithLink != "") {
+		alert(printLang(lang['unableToDeleteMap'],'PARENTMAP~'+mapWithLink+',MAP~'+document.map_delete.map_name.value));
 		return false;
 	}
 	

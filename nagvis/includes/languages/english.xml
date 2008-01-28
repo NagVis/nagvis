@@ -859,6 +859,10 @@
 					<title>Wrong file format</title>
 					<text>The given file has not the extension &quot;.cfg&quot;. Rename the file.</text>
 				</notCfgFile>
+				<unableToDeleteMap>
+					<title>Unable to delete map</title>
+					<text>Unable to delete map &quot;[MAP]&quot;. The map is included in another map &quot;[PARENTMAP]&quot;.</text>
+				</unableToDeleteMap>
 			</messages>
 		</mapManagement>
 		<ajaxHandler>

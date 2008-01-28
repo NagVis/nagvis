@@ -824,6 +824,17 @@
 		</shapeManagement>
 		<mapManagement>
 			<labels>
+				<exportMap>
+					<text>Map exportieren</text>
+				</exportMap>
+				<importMap>
+					<text>Map importieren</text>
+				</importMap>
+				<chooseMapFile>
+					<text>W&auml;hle eine Map-Datei</text>
+				</chooseMapFile>
+			</labels>
+			<messages>
 				<noMapToRename>
 					<text>Keine Map zum umbenennen gefunden. Operation abgebrochen.</text>
 				</noMapToRename>
@@ -836,17 +847,6 @@
 				<foundNoMapToDelete>
 					<text>Keine Map zum l&ouml;schen gefunden. Operation abgebrochen.</text>
 				</foundNoMapToDelete>
-				<exportMap>
-					<text>Map exportieren</text>
-				</exportMap>
-				<importMap>
-					<text>Map importieren</text>
-				</importMap>
-				<chooseMapFile>
-					<text>W&auml;hle eine Map-Datei</text>
-				</chooseMapFile>
-			</labels>
-			<messages>
 				<foundNoMapToExport>
 					<title>Keine Map ausgew&auml;hlt</title>
 					<text>Keine Map zum exportieren gefunden. W&auml;hle eine Map.</text>
@@ -863,6 +863,10 @@
 					<title>Falsches Dateiformat</title>
 					<text>Die Datei hat nicht die Dateiendung &quot;.cfg&quot;. Benenne die Datei um.</text>
 				</notCfgFile>
+				<unableToDeleteMap>
+					<title>Karte nicht l&ouml;schbar</title>
+					<text>Karte &quot;[MAP]&quot; nicht l&ouml;schbar. Die Karte ist in der Karte &quot;[PARENTMAP]&quot; eingebunden.</text>
+				</unableToDeleteMap>
 			</messages>
 		</mapManagement>
 		<ajaxHandler>
