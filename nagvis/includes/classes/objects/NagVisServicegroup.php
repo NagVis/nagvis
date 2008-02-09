@@ -57,6 +57,7 @@ class NagVisServicegroup extends NagiosServicegroup {
 			$stateLow = strtolower($this->getSummaryState());
 			
 			switch($stateLow) {
+				case 'unknown':
 				case 'unreachable':
 				case 'down':
 					if($this->getSummaryAcknowledgement() == 1) {
@@ -77,7 +78,6 @@ class NagVisServicegroup extends NagiosServicegroup {
 				case 'ok':
 					$icon = $this->iconset.'_ok.png';
 				break;
-				case 'unknown':
 				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.png';
 				break;

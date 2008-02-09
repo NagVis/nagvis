@@ -309,6 +309,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			$stateLow = strtolower($this->getSummaryState());
 			
 			switch($stateLow) {
+				case 'unknown':
 				case 'unreachable':
 				case 'down':
 					if($this->getSummaryAcknowledgement() == 1) {
@@ -329,7 +330,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 				case 'ok':
 					$icon = $this->iconset.'_up.png';
 				break;
-				case 'unknown':
 				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.png';
 				break;

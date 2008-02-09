@@ -58,6 +58,7 @@ class NagVisService extends NagiosService {
 			$stateLow = strtolower($this->getSummaryState());
 			
 			switch($stateLow) {
+				case 'unknown':
 				case 'critical':
 				case 'warning':
 					if($this->getSummaryAcknowledgement() == 1) {
@@ -66,7 +67,6 @@ class NagVisService extends NagiosService {
 						$icon = $this->iconset.'_'.$stateLow.'.png';
 					}
 				break;
-				case 'unknown':
 				case 'ok':
 				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.png';
