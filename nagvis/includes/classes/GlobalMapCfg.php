@@ -105,7 +105,7 @@ class GlobalMapCfg {
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
 				'host_name' => Array('must' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
+					'match' => MATCH_STRING),
 				'x' => Array('must' => 1,
 					'match' => MATCH_FLOAT),
 				'y' => Array('must' => 1,
