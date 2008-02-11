@@ -273,6 +273,10 @@ class GlobalMainCfg {
 					'default' => '',
 					'match' => MATCH_INTEGER)),
 			'automap' => Array(
+				'showinlists' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '1',
+					'match' => MATCH_BOOLEAN),
 				'default_root' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'localhost',

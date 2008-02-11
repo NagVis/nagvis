@@ -50,7 +50,7 @@ class NagVisFrontend extends GlobalPage {
 				$MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
 				$MAPCFG->readMapConfig();
 				
-				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
+				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->MAINCFG->getValue('automap', 'showinlists')))) {
 					if($mapName == '__automap') {
 						$opts = Array();
 						
@@ -296,7 +296,7 @@ class NagVisFrontend extends GlobalPage {
 								$MAPCFG1 = new NagVisMapCfg($this->MAINCFG,$mapName);
 								$MAPCFG1->readMapConfig(1);
 								
-								if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1) {
+								if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->MAINCFG->getValue('automap', 'showinlists')))) {
 									$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
 									$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
 									
