@@ -453,8 +453,13 @@ class GlobalBackendndomy {
 		}
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
-			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
+			if(isset($serviceName) && $serviceName != '') {
+				$arrReturn['state'] = 'ERROR';
+				$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
+			} else {
+				$arrReturn['error']['state'] = 'ERROR';
+				$arrReturn['error']['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
+			}
 		} else {
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 				$arrTmpReturn = Array();
