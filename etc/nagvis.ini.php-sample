@@ -68,8 +68,10 @@
 
 ; configuration values for the automap
 [automap]
+; show the automap in the lists (Map index and dropdown menu in header)
+;showinlists=1
 ; default root host (NagVis uses this if it can't detect it via NDO)
-;default_root=""
+;defaultroot=""
 ; path to the graphviz binaries (dot,neato,...); Only needed if not in ENV PATH
 ;graphvizpath="/usr/bin/"
 ; Default URL parameters for links to the automap
