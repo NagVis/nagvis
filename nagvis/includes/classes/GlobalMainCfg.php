@@ -277,7 +277,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '1',
 					'match' => MATCH_BOOLEAN),
-				'default_root' => Array('must' => 0,
+				'defaultroot' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'localhost',
 					'match' => MATCH_STRING_NO_SPACE_EMPTY),

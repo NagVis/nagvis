@@ -451,7 +451,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * NagVis tries to take configured host from main
 		 * configuration or read the host which has no parent from backend
 		 */
-		$defaultRoot = $this->MAINCFG->getValue('automap','default_root');
+		$defaultRoot = $this->MAINCFG->getValue('automap','defaultroot');
 		if(isset($defaultRoot) && $defaultRoot != '') {
 			return $defaultRoot;
 		} else {
