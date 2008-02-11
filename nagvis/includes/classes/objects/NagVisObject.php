@@ -299,10 +299,6 @@ class NagVisObject {
 					$ret = str_replace('[lang_summary_output]',$this->LANG->getLabel('summaryOutput'),$ret);
 				}
 				
-				if(strpos($ret,'[lang_obj_type]') !== FALSE) {
-					$ret = str_replace('[lang_obj_type]',$this->LANG->getLabel($this->type),$ret);
-				}
-				
 				if(strpos($ret,'[lang_overview]') !== FALSE) {
 					$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
 				}
@@ -367,7 +363,7 @@ class NagVisObject {
 		if($this->hover_childs_show == '1' && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
 			$childObjects = $this->getHoverTemplateChildReplacements($ret);
 		} else {
-			$dontShowChilds = '\'<!--\\\sBEGIN\\\childs\\\s-->.+?<!--\\\sEND\\\childs\\\s-->\': \'\', ';
+			$dontShowChilds = '\'<!--\\\sBEGIN\\\schilds\\\s-->.+?<!--\\\sEND\\\childs\\\s-->\': \'\', ';
 		}
 		
 		// Parse the JS code for the hover template macro replacements
@@ -391,6 +387,8 @@ class NagVisObject {
 		/**
 		 * Now replace the regular macros
 		 */
+		$ret .= '\'[lang_obj_type]\': \''.$this->LANG->getLabel($this->type).'\', ';
+		
 		$ret .= '\'[obj_type]\': \''.$this->type.'\', ';
 		
 		// On child service objects in hover menu replace obj_name with 
@@ -469,7 +467,7 @@ class NagVisObject {
 		if($this->type == 'host') {
 			$ret .= '\'[pnp_hostname]\': \''.str_replace(' ','%20',$this->getName()).'\', ';
 		} else {
-			$ret .= '\'<!--\\\sBEGIN\\\host\\\s-->.+?<!--\\\sEND\\\shost\\\s-->\': \'\', ';
+			$ret .= '\'<!--\\\sBEGIN\\\shost\\\s-->.+?<!--\\\sEND\\\shost\\\s-->\': \'\', ';
 		}
 		
 		return $ret;
