@@ -67,8 +67,8 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMembers() {
-		// Get all service objects
-		$this->fetchServiceObjects();
+		// The service objects are all fetched in fetchState() method
+		// Seems this is not needed anymore and only a dummy at this place
 	}
 	
 	/**
@@ -87,14 +87,9 @@ class NagiosHost extends NagVisStatefulObject {
 			$this->setObjectInformation($arrValues);
 			
 			// Get all service states
-			if($this->getNumServices() == 0) {
+			if($this->getState() != 'ERROR' && $this->getNumServices() == 0) {
 				$this->fetchServiceObjects();
 			}
-			
-			// DEP: Old method, getting every single service state/informations
-			/*foreach($this->services AS $OBJ) {
-				$OBJ->fetchState();
-			}*/
 			
 			// Also get summary state
 			$this->fetchSummaryState();
@@ -205,20 +200,6 @@ class NagiosHost extends NagVisStatefulObject {
 			
 			$this->services[] = $OBJ;
 		}
-		
-		// Old method, getting every single method
-		/*foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServicesByHostName($this->host_name) As $serviceDescription) {			
-			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->getName(), $serviceDescription);
-			// FIXME: The service of this host has to know how he should handle 
-			//hard/soft states. This is a little dirty but the simplest way to do this
-			//until the hard/soft state handling has moved from backend to the object
-			// classes.
-			$objConf = Array('only_hard_states' => $this->getOnlyHardStates());
-			$OBJ->setConfiguration($objConf);
-			
-			// Add service object to the service array
-			$this->services[] = $OBJ;
-		}*/
 	}
 	
 	/**
@@ -234,7 +215,6 @@ class NagiosHost extends NagVisStatefulObject {
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
 				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
-				$OBJ->fetchMembers();
 				$OBJ->fetchState();
 				$OBJ->fetchIcon();
 				$OBJ->setConfiguration($objConf);
