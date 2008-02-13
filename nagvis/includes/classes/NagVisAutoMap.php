@@ -20,6 +20,7 @@ class NagVisAutoMap extends GlobalMap {
 	var $ignoreHosts;
 	
 	var $rootObject;
+	var $arrMapObjects;
 	var $arrHostnames;
 	
 	var $mapCode;
@@ -39,6 +40,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->BACKEND = &$BACKEND;
 		
 		$this->arrHostnames = Array();
+		$this->arrMapObjects = Array();
 		$this->mapCode = '';
 		
 		// Create map configuration
@@ -174,8 +176,6 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= $this->rootObject->parseGraphviz();
 		
 		$str .= '} ';
-		
-		//DEBUG: echo $str;
 		
 		return $str;
 	}
@@ -435,7 +435,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectTree() {
-		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames);
+		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
 	}
 	
 	/**

@@ -37,6 +37,7 @@ class NagiosHost extends NagVisStatefulObject {
 	var $summary_output;
 	var $summary_problem_has_been_acknowledged;
 	
+	var $fetchedChildObjects;
 	var $childObjects;
 	var $services;
 	
@@ -57,6 +58,7 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->backend_id = $backend_id;
 		$this->host_name = $hostName;
 		
+		$this->fetchedChildObjects = 0;
 		$this->childObjects = Array();
 		$this->services = Array();
 		$this->state = '';
@@ -113,30 +115,33 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames) {
+	function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames);
+			if(!$this->fetchedChildObjects) {
+				$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+			}
 			
 			/**
 			 * If maxLayers is not set there is no layer limitation
 			 */
 			if($maxLayers < 0 || $maxLayers > 0) {
-				foreach($this->childObjects AS $OBJ) {
-					/*
-					 * Check if the host is already on the map (If it's not done, the 
-					 * objects with more than one parent be printed several times on the 
-					 * map, especially the links to child objects will be too many.
-					 */
-					if(!in_array($OBJ->getName(), $arrHostnames)){
-						$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames);
-						
-						// Add the name of this host to the array with hostnames which are
-						// already on the map
-						$arrHostnames[] = $OBJ->getName();
-					}
+				foreach($this->childObjects AS &$OBJ) {
+					$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
 				}
 			}
 		}
+	}
+	
+	/**
+	 * PUBLIC getNumChilds()
+	 *
+	 * Returns the count of child objects
+	 *
+	 * @return	Integer		Number of child objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getNumChilds() {
+		return count($this->childObjects);
 	}
 	
 	/**
@@ -216,19 +221,43 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames) {
+	function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName()) AS $childName) {
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
-				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
-				$OBJ->setConfiguration($objConf);
-				$OBJ->fetchState();
-				$OBJ->fetchIcon();
-				
-				// Append the host object to the childObjects array
-				$this->childObjects[] = $OBJ;
+				/*
+				 * Check if the host is already on the map (If it's not done, the 
+				 * objects with more than one parent be printed several times on the 
+				 * map, especially the links to child objects will be too many.
+				 */
+				if(!in_array($childName, $arrHostnames)){
+					$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
+					$OBJ->setConfiguration($objConf);
+					$OBJ->fetchIcon();
+					
+					// Append the object to the childObjects array
+					$this->childObjects[] = $OBJ;
+					
+					// Append the object to the arrMapObjects array
+					$arrMapObjects[] = &$this->childObjects[count($this->childObjects)-1];
+					
+					// Add the name of this host to the array with hostnames which are
+					// already on the map
+					$arrHostnames[] = $OBJ->getName();
+				} else {
+					// Add reference of already existing host object to the
+					// child objects array
+					foreach($arrMapObjects AS &$OBJ) {
+						if($OBJ->getName() == $childName) {
+							$this->childObjects[] = &$OBJ;
+						}
+					}
+				}
 			}
 		}
+		
+		// All childs were fetched, save the state for this object
+		$this->fetchedChildObjects = 1;
 	}
 	
 	/**
