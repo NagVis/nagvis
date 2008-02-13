@@ -393,6 +393,37 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
+	 * Searches the icon for an object
+	 *
+	 * @param	Array	$obj	Array with object properties
+	 * @return	String	Name of the icon
+	 * @author Michael Luebben <michael_luebben@web.de>
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getIcon(&$obj) {
+		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getIcon(&$obj)');
+		
+		switch($obj['type']) {
+			case 'service':
+			case 'servicegroup':
+				$icon = $obj['iconset'].'_ok.png';
+			break;
+			default:
+					$icon = $obj['iconset'].'_up.png';
+			break;
+		}
+		
+		//replaced: if(file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
+		if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getIcon(): '.$icon);
+			return $icon;
+		} else {
+			if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getIcon(): '.$obj['iconset'].'_error.png');
+			return $obj['iconset'].'_error.png';
+		}
+	}
+	
+	/**
 	 * Create a Comment-Textbox
 	 *
 	 * @param	Array	$obj	Array with object informations
