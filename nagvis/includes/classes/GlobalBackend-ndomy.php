@@ -321,15 +321,16 @@ class GlobalBackendndomy {
 			dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 		FROM 
 			'.$this->dbPrefix.'hosts AS h, 
-			'.$this->dbPrefix.'hoststatus AS hs, 
 			'.$this->dbPrefix.'objects AS o 
+		LEFT JOIN
+			'.$this->dbPrefix.'hoststatus AS hs
+			ON hs.host_object_id=o.object_id
 		LEFT JOIN
 			'.$this->dbPrefix.'downtimehistory AS dh
 			ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 		WHERE 
 			(o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 			AND (h.config_type=1 AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id) 
-			AND hs.host_object_id=o.object_id 
 		LIMIT 1');
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
@@ -375,7 +376,7 @@ class GlobalBackendndomy {
 				}
 			}
 			
-			if($data['has_been_checked'] == '0') {
+			if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 				$arrReturn['state'] = 'PENDING';
 				$arrReturn['output'] = $this->LANG->getMessageText('hostIsPending','HOST~'.$hostName);
 			} elseif($data['current_state'] == '0') {
@@ -529,7 +530,7 @@ class GlobalBackendndomy {
 					}
 				}
 				
-				if($data['has_been_checked'] == '0') {
+				if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 					$arrTmpReturn['state'] = 'PENDING';
 					$arrTmpReturn['output'] = $this->LANG->getMessageText('serviceNotChecked','SERVICE~'.$data['name2']);
 				} elseif($data['current_state'] == '0') {
