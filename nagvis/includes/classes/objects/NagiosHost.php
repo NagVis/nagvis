@@ -221,9 +221,9 @@ class NagiosHost extends NagVisStatefulObject {
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
 				$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
+				$OBJ->setConfiguration($objConf);
 				$OBJ->fetchState();
 				$OBJ->fetchIcon();
-				$OBJ->setConfiguration($objConf);
 				
 				// Append the host object to the childObjects array
 				$this->childObjects[] = $OBJ;
