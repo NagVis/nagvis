@@ -411,12 +411,27 @@ class NagVisObject {
 			$ret .= '\'[obj_display_name]\': \'\', ';
 		}
 		
+		$ret .= '\'[obj_state]\': \''.$this->getState().'\', ';
+		$ret .= '\'[obj_summary_state]\': \''.$this->getSummaryState().'\', ';
+		
 		if($this->getSummaryAcknowledgement() == 1) {
-			$ret .= '\'[obj_state]\': \''.$this->getState().' (Acknowledged)\', ';
-			$ret .= '\'[obj_summary_state]\': \''.$this->getSummaryState().' (Acknowledged)\', ';
+			$ret .= '\'[obj_summary_acknowledged]\': \' (Acknowledged)\', ';
 		} else {
-			$ret .= '\'[obj_state]\': \''.$this->getState().'\', ';
-			$ret .= '\'[obj_summary_state]\': \''.$this->getSummaryState().'\', ';
+			$ret .= '\'[obj_summary_acknowledged]\': \'\', ';
+		}
+		
+		if($this->getAcknowledgement() == 1) {
+			$ret .= '\'[obj_acknowledged]\': \' (Acknowledged)\', ';
+		} else {
+			$ret .= '\'[obj_acknowledged]\': \'\', ';
+		}
+		
+		if($this->getInDowntime() == 1) {
+			$ret .= '\'[obj_summary_in_downtime]\': \' (Downtime)\', ';
+			$ret .= '\'[obj_in_downtime]\': \' (Downtime)\', ';
+		} else {
+			$ret .= '\'[obj_summary_in_downtime]\': \'\', ';
+			$ret .= '\'[obj_in_downtime]\': \'\', ';
 		}
 		
 		if(!$child && $this->type != 'map') {

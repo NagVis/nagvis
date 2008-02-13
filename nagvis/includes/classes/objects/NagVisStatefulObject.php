@@ -41,6 +41,82 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC getInDowntime()
+	 *
+	 * Get method for the in downtime option
+	 *
+	 * @return	Boolean		True: object is in downtime, False: not in downtime
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getInDowntime() {
+		return $this->in_downtime;
+	}
+	
+	/**
+	 * PUBLIC getDowntimeAuthor()
+	 *
+	 * Get method for the in downtime author
+	 *
+	 * @return	String		The username of the downtime author
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getDowntimeAuthor() {
+		return $this->downtime_author;
+	}
+	
+	/**
+	 * PUBLIC getDowntimeData()
+	 *
+	 * Get method for the in downtime data
+	 *
+	 * @return	String		The downtime data
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getDowntimeData() {
+		return $this->downtime_data;
+	}
+	
+	/**
+	 * PUBLIC getDowntimeStart()
+	 *
+	 * Get method for the in downtime start time
+	 *
+	 * @return	String		The formated downtime start time
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getDowntimeStart() {
+		if(isset($this->in_downtime) && $this->in_downtime == 1) {
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->downtime_start);
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	/**
+	 * PUBLIC getDowntimeEnd()
+	 *
+	 * Get method for the in downtime end time
+	 *
+	 * @return	String		The formated downtime end time
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getDowntimeEnd() {
+		if(isset($this->in_downtime) && $this->in_downtime == 1) {
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->downtime_end);
+		} else {
+			return 'N/A';
+		}
+	}
+	
+	/**
 	 * PUBLIC getOnlyHardStates()
 	 *
 	 * Get method for the only hard states option

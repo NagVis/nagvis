@@ -28,6 +28,12 @@ class NagiosService extends NagVisStatefulObject {
 	var $last_state_change;
 	var $last_hard_state_change;
 	
+	var $in_downtime;
+	var $downtime_start;
+	var $downtime_end;
+	var $downtime_author;
+	var $downtime_data;
+	
 	var $summary_state;
 	var $summary_output;
 	var $summary_problem_has_been_acknowledged;

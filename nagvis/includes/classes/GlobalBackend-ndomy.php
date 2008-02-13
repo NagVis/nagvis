@@ -316,11 +316,16 @@ class GlobalBackendndomy {
 			output, 
 			problem_has_been_acknowledged, 
 			UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
-			hs.state_type, hs.current_check_attempt, hs.max_check_attempts 
+			hs.state_type, hs.current_check_attempt, hs.max_check_attempts, 
+			UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_start, 
+			dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 		FROM 
-			'.$this->dbPrefix.'objects AS o, 
 			'.$this->dbPrefix.'hosts AS h, 
-			'.$this->dbPrefix.'hoststatus AS hs 
+			'.$this->dbPrefix.'hoststatus AS hs, 
+			'.$this->dbPrefix.'objects AS o 
+		LEFT JOIN
+			'.$this->dbPrefix.'downtimehistory AS dh
+			ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 		WHERE 
 			(o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 			AND (h.config_type=1 AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id) 
@@ -345,6 +350,15 @@ class GlobalBackendndomy {
 			$arrReturn['max_check_attempts'] = $data['max_check_attempts'];
 			$arrReturn['last_state_change'] = $data['last_state_change'];
 			$arrReturn['last_hard_state_change'] = $data['last_hard_state_change'];
+			
+			// If there is a downtime for this object, save the data
+			if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+				$arrReturn['in_downtime'] = 1;
+				$arrReturn['downtime_start'] = $data['downtime_start'];
+				$arrReturn['downtime_end'] = $data['downtime_end'];
+				$arrReturn['downtime_author'] = $data['downtime_author'];
+				$arrReturn['downtime_data'] = $data['downtime_data'];
+			}
 			
 			/**
 			 * Only recognize hard states. There was a discussion about the implementation
@@ -422,14 +436,18 @@ class GlobalBackendndomy {
 				UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
 				ss.output, ss.problem_has_been_acknowledged, 
 				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
-				ss.state_type, ss.current_check_attempt, ss.max_check_attempts 
+				ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
+				UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_start, 
+				dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 				FROM 
-                                        '.$this->dbPrefix.'services AS s,
-                                        '.$this->dbPrefix.'objects AS o
-                                LEFT JOIN
-                                        '.$this->dbPrefix.'servicestatus AS ss
-                                ON
-                                        ss.service_object_id=o.object_id
+					'.$this->dbPrefix.'services AS s,
+					'.$this->dbPrefix.'objects AS o
+				LEFT JOIN
+					'.$this->dbPrefix.'servicestatus AS ss
+					ON ss.service_object_id=o.object_id
+				LEFT JOIN
+					'.$this->dbPrefix.'downtimehistory AS dh
+					ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
 					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
@@ -444,19 +462,22 @@ class GlobalBackendndomy {
 				UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
 				ss.output, ss.problem_has_been_acknowledged, 
 				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
-				ss.state_type, ss.current_check_attempt, ss.max_check_attempts 
+				ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
+				UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_start, 
+				dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 				FROM 
 					'.$this->dbPrefix.'services AS s,
 					'.$this->dbPrefix.'objects AS o
-				LEFT JOIN  
-					'.$this->dbPrefix.'servicestatus AS ss  
-				ON
-					ss.service_object_id=o.object_id
+				LEFT JOIN
+					'.$this->dbPrefix.'servicestatus AS ss
+					ON ss.service_object_id=o.object_id
+				LEFT JOIN
+					'.$this->dbPrefix.'downtimehistory AS dh
+					ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 					');
-#AND ss.service_object_id=o.object_id
 		}
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
@@ -483,6 +504,15 @@ class GlobalBackendndomy {
 				$arrTmpReturn['max_check_attempts'] = $data['max_check_attempts'];
 				$arrTmpReturn['last_state_change'] = $data['last_state_change'];
 				$arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
+				
+				// If there is a downtime for this object, save the data
+				if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+					$arrTmpReturn['in_downtime'] = 1;
+					$arrTmpReturn['downtime_start'] = $data['downtime_start'];
+					$arrTmpReturn['downtime_end'] = $data['downtime_end'];
+					$arrTmpReturn['downtime_author'] = $data['downtime_author'];
+					$arrTmpReturn['downtime_data'] = $data['downtime_data'];
+				}
 				
 				/**
 				 * Only recognize hard states. There was a discussion about the implementation
