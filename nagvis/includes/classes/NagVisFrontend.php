@@ -64,6 +64,8 @@ class NagVisFrontend extends GlobalPage {
 							$opts[$arrSet[0]] = $arrSet[1];
 						}
 						
+						$opts['preview'] = 1;
+						
 						$MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $opts);
 						// If there is no automap image on first load of the index page,
 						// render the image

@@ -9,6 +9,8 @@ class NagVisAutoMap extends GlobalMap {
 	var $LANG;
 	var $BACKEND;
 	
+	var $preview;
+	
 	var $backend_id;
 	var $root;
 	var $maxLayers;
@@ -42,6 +44,13 @@ class NagVisAutoMap extends GlobalMap {
 		// Create map configuration
 		$this->MAPCFG = new NagVisMapCfg($this->MAINCFG, '__automap');
 		$this->MAPCFG->readMapConfig();
+
+		// Set the preview option
+		if(isset($prop['preview']) && $prop['preview'] != '') {
+                        $this->preview = $prop['preview'];
+                } else {
+                        $this->preview = 0;
+                }
 		
 		// Do the preflight checks
 		$this->checkPreflight();
@@ -301,17 +310,24 @@ class NagVisAutoMap extends GlobalMap {
 	 * Do the preflight checks to ensure the automap can be drawn
 	 */
 	function checkPreflight() {
-		// The GD-Libs are used by graphviz
-		$this->checkGd(1);
+		// If this is a preview for the index page do not print errors
+		if($this->preview) {
+			$printErr = 0;
+		} else {
+			$printErr = 1;
+		}
 		
-		$this->checkVarFolderWriteable(1);
+		// The GD-Libs are used by graphviz
+		$this->checkGd($printErr);
+		
+		$this->checkVarFolderWriteable($printErr);
 		
 		// Check all possibly used binaries of graphviz
-		$this->checkGraphviz('dot', 1);
-		$this->checkGraphviz('neato', 1);
-		$this->checkGraphviz('twopi', 1);
-		$this->checkGraphviz('circo', 1);
-		$this->checkGraphviz('fdp', 1);
+		$this->checkGraphviz('dot', $printErr);
+		$this->checkGraphviz('neato', $printErr);
+		$this->checkGraphviz('twopi', $printErr);
+		$this->checkGraphviz('circo', $printErr);
+		$this->checkGraphviz('fdp', $printErr);
 	}
 	
 	/**
