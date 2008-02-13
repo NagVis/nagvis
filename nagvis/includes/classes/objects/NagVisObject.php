@@ -433,8 +433,8 @@ class NagVisObject {
 			$ret .= '\'[obj_backend_instancename]\': \'\', ';
 		}
 		
-		$ret .= '\'[obj_output]\': \''.strtr($this->output, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;')).'\', ';
-		$ret .= '\'[obj_summary_output]\': \''.strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;')).'\', ';
+		$ret .= '\'[obj_output]\': \''.strtr($this->output, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')).'\', ';
+		$ret .= '\'[obj_summary_output]\': \''.strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')).'\', ';
 		
 		if($this->type == 'service') {
 			$name = 'hostname';
