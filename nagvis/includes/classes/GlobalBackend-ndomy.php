@@ -171,7 +171,7 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function mysqlQuery($query) {
-		$QUERYHANDLE = mysql_query($query, $this->CONN);
+		$QUERYHANDLE = mysql_query($query, $this->CONN) or die(mysql_error());
 		return $QUERYHANDLE;
 	}
 
@@ -424,9 +424,12 @@ class GlobalBackendndomy {
 				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
 				ss.state_type, ss.current_check_attempt, ss.max_check_attempts 
 				FROM 
-					'.$this->dbPrefix.'objects AS o, 
-					'.$this->dbPrefix.'services AS s, 
-					'.$this->dbPrefix.'servicestatus AS ss 
+                                        '.$this->dbPrefix.'services AS s,
+                                        '.$this->dbPrefix.'objects AS o
+                                LEFT JOIN
+                                        '.$this->dbPrefix.'servicestatus AS ss
+                                ON
+                                        ss.service_object_id=o.object_id
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
 					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
@@ -434,7 +437,7 @@ class GlobalBackendndomy {
 				LIMIT 1');
 		} else {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				o.name1, o.name2, 
+				o.name1, o.name2,
 				s.display_name, 
 				ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 				UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
@@ -443,13 +446,17 @@ class GlobalBackendndomy {
 				UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
 				ss.state_type, ss.current_check_attempt, ss.max_check_attempts 
 				FROM 
-					'.$this->dbPrefix.'objects AS o, 
-					'.$this->dbPrefix.'services AS s, 
-					'.$this->dbPrefix.'servicestatus AS ss 
+					'.$this->dbPrefix.'services AS s,
+					'.$this->dbPrefix.'objects AS o
+				LEFT JOIN  
+					'.$this->dbPrefix.'servicestatus AS ss  
+				ON
+					ss.service_object_id=o.object_id
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
-					AND ss.service_object_id=o.object_id');
+					');
+#AND ss.service_object_id=o.object_id
 		}
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
