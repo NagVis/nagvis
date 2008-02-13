@@ -363,9 +363,6 @@ class NagVisObject {
 		if($this->hover_childs_show == '1' && (($this->type == 'host' && $this->getNumServices() > 0) || (($this->type == 'hostgroup' || $this->type == 'servicegroup') && $this->getNumMembers() > 0) || ($this->type == 'map' && $this->getNumObjects() > 0))) {
 			$childObjects = $this->getHoverTemplateChildReplacements($ret);
 		} else {
-			if($this->type == 'hostgroup') {
-				echo $this->getNumMembers();
-			}
 			$dontShowChilds = '\'<!--\\\sBEGIN\\\schilds\\\s-->.+?<!--\\\sEND\\\schilds\\\s-->\': \'\', ';
 		}
 		

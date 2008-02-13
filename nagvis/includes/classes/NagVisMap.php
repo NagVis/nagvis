@@ -32,7 +32,6 @@ class NagVisMap extends GlobalMap {
 		if($getState) {
 			$this->MAPOBJ->fetchState();
 		}
-		
 	}
 	
 	/**
