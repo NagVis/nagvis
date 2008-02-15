@@ -515,7 +515,7 @@ class NagVisObject {
 		}
 		
 		// Sort the array of child objects by the sort option
-		switch($this->hover_childs_order) {
+		switch($this->hover_childs_sort) {
 			case 's':
 				// Order by State
 				usort($arrObjects, Array("NagVisObject", "sortObjectsByState"));
@@ -525,6 +525,11 @@ class NagVisObject {
 				// Order alhpabetical
 				usort($arrObjects, Array("NagVisObject", "sortObjectsAlphabetical"));
 			break;
+		}
+		
+		// If the sorted array should be reversed
+		if($this->hover_childs_order == 'desc') {
+			$arrObjects = array_reverse($arrObjects);
 		}
 		
 		// Count only once, not in loop header
