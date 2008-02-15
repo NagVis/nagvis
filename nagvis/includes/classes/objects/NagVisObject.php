@@ -367,7 +367,7 @@ class NagVisObject {
 		}
 		
 		// Parse the JS code for the hover template macro replacements
-		$ret = 'replaceHoverTemplateMacros(\''.strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => '')).'\',{'.$dontShowChilds.$this->getHoverTemplateReplacements().'},'.$childObjects.')';
+		$ret = 'replaceHoverTemplateMacros(\''.strtr(addslashes($ret),Array('"' => '\'', "\r" => '', "\n" => '')).'\', {'.$dontShowChilds.$this->getHoverTemplateReplacements().'}, '.$childObjects.')';
 		
 		return $ret;
 	}
@@ -485,7 +485,8 @@ class NagVisObject {
 			$ret .= '\'<!--\\\sBEGIN\\\shost\\\s-->.+?<!--\\\sEND\\\shost\\\s-->\': \'\', ';
 		}
 		
-		return $ret;
+		// Remove the last comma and return the javascript code
+		return rtrim($ret,', ');
 	}
 	
 	/**
