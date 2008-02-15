@@ -44,7 +44,7 @@ class NagVisFrontend extends GlobalPage {
 			
 			$ret[] = '<div class="infopage">';
 			$ret[] = '<table>';
-			$ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</td></tr><tr>';
+			$ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</th></tr><tr>';
 			$i = 1;
 			foreach($this->getMaps() AS $mapName) {
 				$MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
@@ -80,7 +80,7 @@ class NagVisFrontend extends GlobalPage {
 						$class = '';
 						
 						if($mapName == '__automap') {
-							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
+							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.str_replace('&','&nbsp;',$this->MAINCFG->getValue('automap','defaultparams')).'\';';
 						} else {
 							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
 						}
@@ -131,7 +131,7 @@ class NagVisFrontend extends GlobalPage {
 			 * Infobox lists all map rotation pools
 			 */
 			$ret[] = '<table class="infobox">';
-			$ret[] = '<tr><th>'.$this->LANG->getLabel('rotationPools').'</td></tr>';
+			$ret[] = '<tr><th>'.$this->LANG->getLabel('rotationPools').'</th></tr>';
 			foreach($this->getRotationPools() AS $poolName) {
 				// Form the onClick action
 				$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?rotation='.$poolName.'\';';
@@ -304,7 +304,7 @@ class NagVisFrontend extends GlobalPage {
 									
 									// Add defaultparams to map selection
 									if($mapName == '__automap') {
-										$sReplaceObj = str_replace('[url_params]',$this->MAINCFG->getValue('automap', 'defaultparams'),$sReplaceObj);
+										$sReplaceObj = str_replace('[url_params]', str_replace('&','&nbsp;',$this->MAINCFG->getValue('automap', 'defaultparams')), $sReplaceObj);
 									} else {
 										$sReplaceObj = str_replace('[url_params]','',$sReplaceObj);
 									}
