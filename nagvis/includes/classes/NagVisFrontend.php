@@ -81,7 +81,7 @@ class NagVisFrontend extends GlobalPage {
 						$class = '';
 						
 						if($mapName == '__automap') {
-							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.str_replace('&','&nbsp;',$this->MAINCFG->getValue('automap','defaultparams')).'\';';
+							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
 						} else {
 							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
 						}
@@ -305,7 +305,7 @@ class NagVisFrontend extends GlobalPage {
 									
 									// Add defaultparams to map selection
 									if($mapName == '__automap') {
-										$sReplaceObj = str_replace('[url_params]', str_replace('&','&nbsp;',$this->MAINCFG->getValue('automap', 'defaultparams')), $sReplaceObj);
+										$sReplaceObj = str_replace('[url_params]', $this->MAINCFG->getValue('automap', 'defaultparams'), $sReplaceObj);
 									} else {
 										$sReplaceObj = str_replace('[url_params]','',$sReplaceObj);
 									}
