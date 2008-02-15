@@ -300,7 +300,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		$src = $this->MAINCFG->getValue('paths', 'htmlvar').'automap.png';
 		
-		return $this->getBackgroundHtml($src,'','usemap="automap"');
+		return $this->getBackgroundHtml($src,'','usemap="#automap"');
 	}
 	
 	# END Public Methods
