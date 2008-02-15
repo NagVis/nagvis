@@ -89,7 +89,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '1',
 					'match' => MATCH_BOOLEAN),
-				'hoverchildsorder' => Array('must' => 0,
+				'hoverchildssort' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 's',
 					'match' => MATCH_STRING_NO_SPACE),
