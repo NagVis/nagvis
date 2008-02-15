@@ -515,7 +515,17 @@ class NagVisObject {
 		}
 		
 		// Sort the array of child objects by the sort option
-		// FIXME
+		switch($this->hover_childs_order) {
+			case 's':
+				// Order by State
+				usort($arrObjects, Array("NagVisObject", "sortObjectsByState"));
+			break;
+			case 'a':
+			default:
+				// Order alhpabetical
+				usort($arrObjects, Array("NagVisObject", "sortObjectsAlphabetical"));
+			break;
+		}
 		
 		// Count only once, not in loop header
 		$numObjects = count($arrObjects);
@@ -531,6 +541,55 @@ class NagVisObject {
 		
 		return $ret;
 	}
+	
+	/**
+	 * PRIVATE STATIC sortObjectsAlphabetical()
+	 *
+	 * Sorts the both alhabeticaly by the name
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function sortObjectsAlphabetical($a, $b) {
+		switch($this->type) {
+			case 'host':
+				$al = strtolower($a->getServiceDescription());
+				$bl = strtolower($b->getServiceDescription());
+			break;
+			default:
+				$al = strtolower($a->getName());
+				$bl = strtolower($b->getName());
+			break;
+		}
+		
+        if ($al == $bl) {
+            return 0;
+        } elseif($al > $bl) {
+			return +1;
+		} else {
+			return -1;
+		}
+    }
+	/**
+	 * PRIVATE STATIC sortObjectsAlphabetical()
+	 *
+	 * Sorts the both alhabeticaly by the name
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function sortObjectsByState($a, $b) {
+		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
+		
+		$al = $a->getSummaryState();
+		$bl = $b->getSummaryState();
+		
+        if($arrStates[$al] == $arrStates[$bl]) {
+            return 0;
+        } elseif($arrStates[$al] < $arrStates[$bl]) {
+			return +1;
+		} else {
+			return -1;
+		}
+    }
 	
 	/**
 	 * PRIVATE checkHoverTemplateReadable()
