@@ -42,6 +42,7 @@ class NagVisFrontend extends GlobalPage {
 	function getIndexPage() {
 			$ret = Array();
 			
+			$ret[] = '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
 			$ret[] = '<div class="infopage">';
 			$ret[] = '<table>';
 			$ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</th></tr><tr>';
