@@ -552,49 +552,54 @@ class NagVisObject {
 	 *
 	 * Sorts the both alhabeticaly by the name
 	 *
+	 * @param	OBJ		First object to sort
+	 * @param	OBJ		Second object to sort
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function sortObjectsAlphabetical($a, $b) {
+	function sortObjectsAlphabetical($OBJ1, $OBJ2) {
 		switch($this->type) {
 			case 'host':
-				$al = strtolower($a->getServiceDescription());
-				$bl = strtolower($b->getServiceDescription());
+				$name1 = strtolower($a->getServiceDescription());
+				$name2 = strtolower($b->getServiceDescription());
 			break;
 			default:
-				$al = strtolower($a->getName());
-				$bl = strtolower($b->getName());
+				$name1 = strtolower($a->getName());
+				$name2 = strtolower($b->getName());
 			break;
 		}
 		
-        if ($al == $bl) {
+        if ($name1 == $name2) {
             return 0;
-        } elseif($al > $bl) {
+        } elseif($name1 > $name2) {
 			return +1;
 		} else {
 			return -1;
 		}
     }
+	
 	/**
 	 * PRIVATE STATIC sortObjectsAlphabetical()
 	 *
 	 * Sorts the both alhabeticaly by the name
 	 *
+	 * @param	OBJ		First object to sort
+	 * @param	OBJ		Second object to sort
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function sortObjectsByState($a, $b) {
+	function sortObjectsByState($OBJ1, $OBJ2) {
 		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
 		
 		// Textboxes and shapes does not have getSummaryState method, exclude them here
-		if(method_exists($a, 'getSummaryState') && method_exists($b, 'getSummaryState')) {
-			$al = $a->getSummaryState();
-			$bl = $b->getSummaryState();
+		if(method_exists($OBJ1, 'getSummaryState') && method_exists($OBJ2, 'getSummaryState')) {
+			$state1 = $OBJ1->getSummaryState();
+			$state2 = $OBJ2->getSummaryState();
 		} else {
 			return 0;
 		}
 		
-        if($arrStates[$al] == $arrStates[$bl]) {
+        if($arrStates[$state1] == $arrStates[$state2]) {
             return 0;
-        } elseif($arrStates[$al] < $arrStates[$bl]) {
+        } elseif($arrStates[$statel] < $arrStates[$state2]) {
 			return +1;
 		} else {
 			return -1;
