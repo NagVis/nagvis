@@ -584,8 +584,13 @@ class NagVisObject {
 	function sortObjectsByState($a, $b) {
 		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
 		
-		$al = $a->getSummaryState();
-		$bl = $b->getSummaryState();
+		// Textboxes and shapes does not have getSummaryState method, exclude them here
+		if(method_exists($a, 'getSummaryState') && method_exists($b, 'getSummaryState')) {
+			$al = $a->getSummaryState();
+			$bl = $b->getSummaryState();
+		} else {
+			return 0;
+		}
 		
         if($arrStates[$al] == $arrStates[$bl]) {
             return 0;
