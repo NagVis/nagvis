@@ -46,8 +46,10 @@
 ;hoverdelay=0
 ; show childs in hover menus
 ;hoverchildsshow=1
+; order method of childs (desc: descending, asc: ascending)
+;hoverchildsorder="asc"
 ; sort method of childs (s: state, a: alphabetical)
-;hoverchildsorder="s"
+;hoverchildssort="s"
 ; limit shown child objects to n
 ;hoverchildslimit="10"
 ; show map in lists (dropdowns, index page, ...)
