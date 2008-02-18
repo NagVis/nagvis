@@ -51,6 +51,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->has_been_acknowledged = 0;
 		
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		
+		$this->checkMaintenance(1);
 	}
 	
 	/**
@@ -178,7 +180,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMapObjects() {
-		
 		foreach($this->MAPCFG->validConfig AS $type => $arr) {
 			if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
 				foreach($objs AS $index => $objConf) {
@@ -391,13 +392,33 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	function checkPermissions(&$allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
-				if($printErr) {
-						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-						$FRONTEND->messageToUser('ERROR', 'permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user'));
-				}
-				return FALSE;
+			if($printErr) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR', 'permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user'));
+			}
+			return FALSE;
 		} else {
 		 	return TRUE;
+		}
+		return TRUE;
+	}
+	
+	/**
+	 * Checks if the map is in maintenance mode
+	 *
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkMaintenance($printErr) {
+		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
+			if($printErr) {
+				$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('INFO-STOP', 'mapInMaintenance', 'MAP~'.$this->getName());
+			}
+			return FALSE;
+		} else {
+			return TRUE;
 		}
 		return TRUE;
 	}

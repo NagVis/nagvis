@@ -299,6 +299,10 @@
 					<title>Bild existiert nicht</title>
 					<text>Ein Bild &quot;[FILE]&quot;, welches zum Erstellen einer Vorschau ben&ouml;tigt wird, existiert nicht.</text>
 				</imageNotExists>
+				<mapInMaintenance>
+					<title>Wartung</title>
+					<text>Die Karte &quot;[MAP]&quot; befindet sich aktuell im Wartungs-Modus. Diese Seite l&auml;dt automatisch neu.</text>
+				</mapInMaintenance>
 			</messages>
 		</global>
 		<automap>

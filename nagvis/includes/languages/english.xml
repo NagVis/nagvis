@@ -299,6 +299,10 @@
 					<title>Image does not exists</title>
 					<text>An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist.</text>
 				</imageNotExists>
+				<mapInMaintenance>
+					<title>Maintenance</title>
+					<text>The map you are trying to access is in maintenance mode. Please be patient. This page is automaticaly reloading.</text>
+				</mapInMaintenance>
 			</messages>
 		</global>
 		<automap>
