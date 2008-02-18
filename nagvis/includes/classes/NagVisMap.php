@@ -27,6 +27,7 @@ class NagVisMap extends GlobalMap {
 		
 		parent::GlobalMap($MAINCFG,$MAPCFG);
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
+		
 		$this->MAPOBJ->fetchMembers();
 		
 		if($getState) {

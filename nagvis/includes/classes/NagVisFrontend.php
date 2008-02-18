@@ -78,15 +78,22 @@ class NagVisFrontend extends GlobalPage {
 					
 					// Check if the user is permited to view this map
 					if($MAP->MAPOBJ->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-						$class = '';
-						
-						if($mapName == '__automap') {
-							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
+						if($MAP->MAPOBJ->checkMaintenance(0)) {
+							$class = '';
+							
+							if($mapName == '__automap') {
+								$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
+							} else {
+								$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
+							}
+							
+							$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 						} else {
-							$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
+							$class = 'class="disabled"';
+							
+							$onClick = 'alert(\''.$this->LANG->getMessageText('mapInMaintenance').'\');';
+							$summaryOutput = $this->LANG->getMessageText('mapInMaintenance');
 						}
-						
-						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 					} else {
 						$class = 'class="disabled"';
 						
@@ -377,6 +384,7 @@ class NagVisFrontend extends GlobalPage {
 		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
 		$this->addBodyLines(Array('<div class="map">'));
 		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
+		$this->MAP->MAPOBJ->checkMaintenance(1);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines(Array('</div>'));
 	}

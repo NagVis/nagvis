@@ -51,8 +51,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->has_been_acknowledged = 0;
 		
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
-		
-		$this->checkMaintenance(1);
 	}
 	
 	/**
