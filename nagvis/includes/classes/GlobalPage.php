@@ -134,6 +134,7 @@ class GlobalPage {
 	function messageToUser($serverity='WARNING', $id, $vars='') {
 		switch($serverity) {
 			case 'ERROR':
+			case 'INFO-STOP':
 				// print the message box and kill the script
 				$this->body = array_merge($this->body,$this->messageBox($serverity,$id,$vars));
 				$this->printPage();
@@ -193,13 +194,16 @@ class GlobalPage {
 				$messageIcon = 'img_warning.png';
 			break;
 			case 'INFORMATION':
+			case 'INFO-STOP':
 				$messageIcon = 'img_information.png';
 			break;
 		}
 		
-		if($serverity == 'ERROR') {
+		if($serverity == 'ERROR' || $serverity == 'INFO-STOP') {
 			$ret[] = '<META http-equiv="refresh" content="60;">';
-			$ret[] = '<style type="text/css">.main { background-color: yellow; }</style>';
+			if($serverity == 'ERROR') {
+				$ret[] = '<style type="text/css">.main { background-color: yellow; }</style>';
+			}
 			$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
 			$ret[] = '<tr><td align="center">';
 		}
