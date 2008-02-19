@@ -51,6 +51,7 @@ class NagVisHost extends NagiosHost {
 	 */
 	function parseGraphviz($layer=0) {
 		$graphvizHostname = str_replace('-','__',$this->getName());
+		$graphvizHostname = str_replace('.','___',$graphvizHostname);
 		
 		$strReturn = $this->getType().'_'.$graphvizHostname.' [ ';
 		$strReturn .= 'label=<<table border="0">';
@@ -68,7 +69,7 @@ class NagVisHost extends NagiosHost {
 		$strReturn .= ' ];'."\n ";
 		foreach($this->getChilds() As $OBJ) {
 			$strReturn .= $OBJ->parseGraphviz($layer+1);
-			$strReturn .= $this->type.'_'.$graphvizHostname.' -- '.$OBJ->type.'_'.str_replace('-','__',$OBJ->host_name).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+			$strReturn .= $this->type.'_'.$graphvizHostname.' -- '.$OBJ->type.'_'.str_replace('.','___',str_replace('-','__',$OBJ->host_name)).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
 		}
 		return $strReturn;
 	}
