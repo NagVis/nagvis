@@ -703,7 +703,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixTemplateIndexes() {
-		foreach($this->mapConfig['template'] AS $id => $element) {
+		foreach($this->mapConfig['template'] AS $id => &$element) {
 			if(isset($element['name']) && $element['name'] != '') {
 				$this->mapConfig['template'][$element['name']] = $element;
 				unset($this->mapConfig['template'][$id]);
@@ -719,15 +719,15 @@ class GlobalMapCfg {
 	 */
 	function mergeTemplates() {
 		// Loop all objects
-		foreach($this->mapConfig AS $type => $elements) {
+		foreach($this->mapConfig AS $type => &$elements) {
 			// Except global and templates (makes no sense)
 			if($type != 'global' && $type != 'template') {
 				// Loop all objects of that type
-				foreach($elements AS $id => $element) {
+				foreach($elements AS $id => &$element) {
 					// Check for "use" value
 					if(isset($element['use']) && is_array($element['use'])) {
 						// loop all given templates
-						foreach($element['use'] AS $templateName) {
+						foreach($element['use'] AS &$templateName) {
 							if(isset($this->mapConfig['template'][$templateName]) && is_array($this->mapConfig['template'][$templateName])) {
 								// merge object array with template object array (except type and name atribute)
 								$tmpArray = $this->mapConfig['template'][$templateName];
@@ -751,7 +751,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function filterGlobal() {
-		foreach($this->mapConfig AS $key => $val) {
+		foreach($this->mapConfig AS $key => &$val) {
 			if($key != 'global') {
 				unset($this->mapConfig[$key]);
 			}
@@ -818,12 +818,12 @@ class GlobalMapCfg {
 	 */
 	function checkMapConfigIsValid($printErr) {
 		// check given objects and attributes
-		foreach($this->mapConfig AS $type => $elements) {
+		foreach($this->mapConfig AS $type => &$elements) {
 			if($type != 'template') {
 				if(isset($this->validConfig[$type])) {
-					foreach($elements AS $id => $element) {
+					foreach($elements AS $id => &$element) {
 						// loop validConfig for checking: => missing "must" atributes
-						foreach($this->validConfig[$type] AS $key => $val) {
+						foreach($this->validConfig[$type] AS $key => &$val) {
 							if((isset($val['must']) && $val['must'] == '1')) {
 								// value is "must"
 								if(!isset($element[$key]) || $element[$key] == '') {
@@ -835,7 +835,7 @@ class GlobalMapCfg {
 						}
 						
 						// loop given elements for checking: => all given atributes valid
-						foreach($element AS $key => $val) {
+						foreach($element AS $key => &$val) {
 							// check for valid atributes
 							if(!isset($this->validConfig[$type][$key])) {
 								// unknown atribute
@@ -862,7 +862,7 @@ class GlobalMapCfg {
 									// This is an array
 									
 									//loop and check each element
-									foreach($val AS $key2 => $val2) {
+									foreach($val AS $key2 => &$val2) {
 										// check the value format
 										if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
 											// wrong format

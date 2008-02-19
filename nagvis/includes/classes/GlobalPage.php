@@ -279,7 +279,7 @@ class GlobalPage {
 	function getLines($arr) {
 		$ret = '';
 		
-		foreach($arr AS $line) {
+		foreach($arr AS &$line) {
 			$ret .= "\t\t".$line."\n";
 		}
 		
@@ -295,7 +295,7 @@ class GlobalPage {
 	function getExtHeader() {
 		$sRet = '';
 		
-		foreach($this->extHeader AS $var => $val) {
+		foreach($this->extHeader AS $var => &$val) {
 			$sRet .= $val;
 		}
 		
@@ -312,7 +312,7 @@ class GlobalPage {
 		$sRet = '';
 		
 		if(count($this->jsIncludes) > 0) {
-			foreach($this->jsIncludes AS $var => $val) {
+			foreach($this->jsIncludes AS $var => &$val) {
 				$sRet .= '<script type="text/javascript" src="'.$val.'"></script>';
 			}
 		}
@@ -331,7 +331,7 @@ class GlobalPage {
 		
 		$sRet .= '<style type="text/css"><!--';
 		if(count($this->cssIncludes) > 0) {
-			foreach($this->cssIncludes AS $var => $val) {
+			foreach($this->cssIncludes AS $var => &$val) {
 				$sRet .= '@import url('.$val.'); ';
 			}
 		}

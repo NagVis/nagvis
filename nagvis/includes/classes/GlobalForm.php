@@ -228,7 +228,7 @@ class GlobalForm {
 			$ret[] = '<option value=""></option>';
 		}
 		
-		foreach($arr AS $val) {
+		foreach($arr AS &$val) {
 			if(is_array($val)) {
 				$ret[] = '<option value="'.$val['value'].'">'.$val['label'].'</option>';
 			} else {

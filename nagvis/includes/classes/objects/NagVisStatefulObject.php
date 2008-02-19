@@ -522,7 +522,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function fetchSummaryOutput(&$arrStates, $objLabel) {
 		$this->summary_output .= $this->LANG->getLabel('childStatesAre').' ';
-		foreach($arrStates AS $state => $num) {
+		foreach($arrStates AS $state => &$num) {
 			if($num > 0) {
 				$this->summary_output .= $num.' '.$state.', ';
 			}

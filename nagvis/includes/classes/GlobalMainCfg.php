@@ -472,7 +472,7 @@ class GlobalMainCfg {
 	function checkMainConfigIsValid($printErr) {
 		
 		// check given objects and attributes
-		foreach($this->config AS $type => $vars) {
+		foreach($this->config AS $type => &$vars) {
 			if(!ereg('^comment_',$type)) {
 				if(isset($this->validConfig[$type]) || ereg('^(backend|rotation)_', $type)) {
 					// loop validConfig for checking: => missing "must" atributes
@@ -483,7 +483,7 @@ class GlobalMainCfg {
 					} else {
 						$arrValidConfig = $this->validConfig[$type];
 					}
-					foreach($arrValidConfig AS $key => $val) {
+					foreach($arrValidConfig AS $key => &$val) {
 						if((isset($val['must']) && $val['must'] == '1')) {
 							// value is "must"
 							if($this->getValue($type,$key) == '') {
@@ -495,7 +495,7 @@ class GlobalMainCfg {
 					}
 					
 					// loop given elements for checking: => all given atributes valid
-					foreach($vars AS $key => $val) {
+					foreach($vars AS $key => &$val) {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
 								$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
@@ -551,10 +551,10 @@ class GlobalMainCfg {
 	function writeConfig() {
 		// Check for config file and read permissions
 		if($this->checkNagVisConfigReadable(1) && $this->checkNagVisConfigWriteable(1)) {
-			foreach($this->config as $key => $item) {
+			foreach($this->config as $key => &$item) {
 				if(is_array($item)) {
 					$content .= '['.$key.']'."\n";
-					foreach ($item as $key2 => $item2) {
+					foreach ($item as $key2 => &$item2) {
 						if(substr($key2,0,8) == 'comment_') {
 							$content .= $item2."\n";
 						} else {
@@ -704,9 +704,9 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function findSecOfVar($var) {
-		foreach($this->validConfig AS $key => $item) {
+		foreach($this->validConfig AS $key => &$item) {
 			if(is_array($item)) {
-				foreach ($item AS $key2 => $item2) {
+				foreach ($item AS $key2 => &$item2) {
 					if(substr($key2,0,8) != 'comment_') {
 						if($key2 == $var) {
 							return $key;

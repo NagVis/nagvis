@@ -72,7 +72,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	function fetchState() {
 		
 		// Get states of all members
-		foreach($this->members AS $OBJ) {
+		foreach($this->members AS &$OBJ) {
 			$OBJ->fetchState();
 		}
 		
@@ -123,7 +123,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		// Get all services and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicesByServicegroupName($this->servicegroup_name);
-			foreach($arrServices AS $service) {
+			foreach($arrServices AS &$service) {
 				$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $service['host_name'], $service['service_description']);
 				
 				// The services have to know how they should handle hard/soft 
@@ -148,7 +148,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	function fetchSummaryState() {
 		if($this->getNumMembers() > 0) {
 			// Get summary state member objects
-			foreach($this->members AS $MEMBER) {
+			foreach($this->members AS &$MEMBER) {
 				$this->wrapChildState($MEMBER);
 			}
 		} else {
@@ -168,7 +168,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
 			// Get summary state of this and child objects
-			foreach($this->members AS $MEMBER) {
+			foreach($this->members AS &$MEMBER) {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			

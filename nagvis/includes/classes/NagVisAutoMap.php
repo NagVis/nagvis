@@ -448,7 +448,7 @@ class NagVisAutoMap extends GlobalMap {
 		$objConf = Array();
 		
 		// Get object configuration from __automap configuration
-		foreach($this->MAPCFG->validConfig['host'] AS $key => $values) {
+		foreach($this->MAPCFG->validConfig['host'] AS $key => &$values) {
 			if($key != 'type' && $key != 'backend_id' && $key != 'host_name') {
 				$objConf[$key] = $this->MAPCFG->getValue('global', 0, $key);
 			}

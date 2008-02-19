@@ -132,7 +132,7 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function setConfiguration(&$obj) {
-		foreach($obj AS $key => $val) {
+		foreach($obj AS $key => &$val) {
 			$this->conf[$key] = $val;
 			$this->{$key} = $val;
 		}
@@ -146,7 +146,7 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function setObjectInformation(&$obj) {
-		foreach($obj AS $key => $val) {
+		foreach($obj AS $key => &$val) {
 			$this->{$key} = $val;
 		}
 	}

@@ -178,14 +178,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMapObjects() {
-		foreach($this->MAPCFG->validConfig AS $type => $arr) {
+		foreach($this->MAPCFG->validConfig AS $type => &$arr) {
 			if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
-				foreach($objs AS $index => $objConf) {
+				foreach($objs AS $index => &$objConf) {
 					// workaround
 					$objConf['id'] = $index;
 					
 					// merge with "global" settings
-					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
+					foreach($this->MAPCFG->validConfig[$type] AS $key => &$values) {
 						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
 							$objConf[$key] = $values['default'];
 						}

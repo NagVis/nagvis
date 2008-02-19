@@ -32,7 +32,7 @@ class GlobalBackendMgmt {
 	 */
 	function getBackends() {
 		$ret = Array();
-		foreach($this->MAINCFG->config AS $sec => $var) {
+		foreach($this->MAINCFG->config AS $sec => &$var) {
 			if(preg_match('/^backend_/i', $sec)) {
 				$ret[] = $var['backendid'];
 			}
@@ -99,7 +99,7 @@ class GlobalBackendMgmt {
 			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:global'));
 		    $FRONTEND->messageToUser('ERROR','noBackendDefined');
 		} else {
-			foreach($aBackends AS $backendId) {
+			foreach($aBackends AS &$backendId) {
 				if($this->checkBackendExists($backendId,1)) {
 					if(!isset($INC_GlobalBackend_{$this->MAINCFG->getValue('backend_'.$backendId,'backendtype')})) {
 						require($this->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');

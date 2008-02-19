@@ -60,7 +60,7 @@ class NagVisFrontend extends GlobalPage {
 						$params = explode('&',$this->MAINCFG->getValue('automap','defaultparams'));
 						unset($params[0]);
 						
-						foreach($params AS $set) {
+						foreach($params AS &$set) {
 							$arrSet = explode('=',$set);
 							$opts[$arrSet[0]] = $arrSet[1];
 						}
@@ -298,7 +298,7 @@ class NagVisFrontend extends GlobalPage {
 				$ret = str_replace('[lang_rotation_stop]',$this->LANG->getLabel('rotationStop'),$ret);
 				// Replace lists
 				if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
-					foreach($matchReturn[1] AS $key) {
+					foreach($matchReturn[1] AS &$key) {
 						if($key == 'maplist') {
 							$sReplace = '';
 							preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
@@ -525,7 +525,7 @@ class NagVisFrontend extends GlobalPage {
 	function getRotationPools() {
 		$ret = Array();
 		
-		foreach($this->MAINCFG->config AS $sec => $var) {
+		foreach($this->MAINCFG->config AS $sec => &$var) {
 			if(preg_match('/^rotation_/i', $sec)) {
 				$ret[] = $var['rotationid'];
 			}
