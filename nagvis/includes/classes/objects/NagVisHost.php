@@ -68,8 +68,10 @@ class NagVisHost extends NagiosHost {
 		$strReturn .= 'layer="'.$layer.'"';
 		$strReturn .= ' ];'."\n ";
 		foreach($this->getChilds() As $OBJ) {
-			$strReturn .= $OBJ->parseGraphviz($layer+1);
-			$strReturn .= $this->type.'_'.$graphvizHostname.' -- '.$OBJ->type.'_'.str_replace('.','___',str_replace('-','__',$OBJ->host_name)).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+			if(is_object($OBJ)) {
+				$strReturn .= $OBJ->parseGraphviz($layer+1);
+				$strReturn .= $this->type.'_'.$graphvizHostname.' -- '.$OBJ->type.'_'.str_replace('.','___',str_replace('-','__',$OBJ->host_name)).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+			}
 		}
 		return $strReturn;
 	}

@@ -132,6 +132,60 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
+	// FIXME
+	function filterChilds(&$arrAllowedHosts) {
+		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			$remain = 0;
+			
+			$numChilds = $this->getNumChilds();
+			for($i = 0; $i < $numChilds; $i++) {
+				$OBJ = &$this->childObjects[$i];
+				$selfRemain = 0;
+				
+				if(is_object($OBJ)) {
+					/**
+					 * The current child is member in the filter group, it declares 
+					 * itselfs as remaining object
+					 */
+					if(in_array($OBJ->getName(), $arrAllowedHosts)) {
+						$selfRemain = 1;
+					} else {
+						$selfRemain = 0;
+					}
+					
+					/**
+					 * If there are child objects loop them all to get their remaining
+					 * state. If there is no child object the only remaining state is
+					 * the state of the current child object.
+					 */
+					if($OBJ->getNumChilds() > 0) {
+						$childsRemain = $OBJ->filterChilds(&$arrAllowedHosts);
+						
+						if(!$selfRemain && $childsRemain) {
+							//echo $OBJ->getName().' remains cause of childs'."<br>";
+							$selfRemain = 1;
+						}
+					} else {
+						//echo $OBJ->getName().': '.$selfRemain."<br>";
+					}
+					
+					// If the host should not remain on the map remove it from the 
+					// object tree
+					if(!$selfRemain) {
+						//FIXME: Remove the object from the tree
+						//echo $OBJ->getName().': unset'."<br>";
+						unset($this->childObjects[$i]);
+					} else {
+						//echo $OBJ->getName()."remains<br>";
+					}
+				}
+				
+				$remain |= $selfRemain;
+			}
+			return $remain;
+		}
+	}
+	
 	/**
 	 * PUBLIC getNumChilds()
 	 *

@@ -136,7 +136,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			 * objects with more than one parent be printed several times on the 
 			 * map, especially the links to child objects will be too many.
 			 */
-			if(!in_array($OBJ1->getName(), $arrHostnames)){
+			if(is_object($OBJ1) && !in_array($OBJ1->getName(), $arrHostnames)){
 				// Add the name of this host to the array with hostnames which are
 				// already on the map
 				$arrHostnames[] = $OBJ1->getName();

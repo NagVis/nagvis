@@ -18,6 +18,7 @@ class NagVisAutoMap extends GlobalMap {
 	var $height;
 	var $renderMode;
 	var $ignoreHosts;
+	var $filterGroup;
 	
 	var $rootObject;
 	var $arrMapObjects;
@@ -49,10 +50,10 @@ class NagVisAutoMap extends GlobalMap {
 
 		// Set the preview option
 		if(isset($prop['preview']) && $prop['preview'] != '') {
-                        $this->preview = $prop['preview'];
-                } else {
-                        $this->preview = 0;
-                }
+			$this->preview = $prop['preview'];
+		} else {
+			$this->preview = 0;
+		}
 		
 		// Do the preflight checks
 		$this->checkPreflight();
@@ -112,6 +113,11 @@ class NagVisAutoMap extends GlobalMap {
 			$this->ignoreHosts = Array();
 		}
 		
+		if(isset($prop['filterGroup']) && $prop['filterGroup'] != '') {
+			$this->filterGroup = $prop['filterGroup'];
+		} else {
+			$this->filterGroup = '';
+		}
 		
 		// Get "root" host object
 		$this->fetchHostObjectByName($this->root);
@@ -119,6 +125,12 @@ class NagVisAutoMap extends GlobalMap {
 		// Get all object informations from backend
 		$this->getObjectTree();
 		
+		if($this->filterGroup != '') {
+			$this->filterGroupObject = new NagiosHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->filterGroup);
+			$this->filterGroupObject->fetchMemberHostObjects();
+			
+			$this->filterObjectTreeByGroup();
+		}
 		
 		parent::GlobalMap($this->MAINCFG, $this->MAPCFG);
 		
@@ -191,10 +203,10 @@ class NagVisAutoMap extends GlobalMap {
 		/**
 		 * possible render modes are set by selecting the correct binary:
 		 *  dot - filter for drawing directed graphs
-     *  neato - filter for drawing undirected graphs
-     *  twopi - filter for radial layouts of graphs
-     *  circo - filter for circular layout of graphs
-     *  fdp - filter for drawing undirected graphs
+		 *  neato - filter for drawing undirected graphs
+		 *  twopi - filter for radial layouts of graphs
+		 *  circo - filter for circular layout of graphs
+		 *  fdp - filter for drawing undirected graphs
 		 */
 		switch($this->renderMode) {
 			case 'directed':
@@ -304,7 +316,6 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
-		
 		$src = $this->MAINCFG->getValue('paths', 'htmlvar').'automap.png';
 		
 		return $this->getBackgroundHtml($src,'','usemap="#automap"');
@@ -443,6 +454,20 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function getObjectTree() {
 		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
+	}
+	
+	/**
+	 * Filter the object tree by the given filter group
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function filterObjectTreeByGroup() {
+		$hostgroupMembers = Array();
+		foreach($this->filterGroupObject->getMembers() AS $OBJ1) {
+			$hostgroupMembers[] = $OBJ1->getName();
+		}
+		
+		$this->rootObject->filterChilds($hostgroupMembers);
 	}
 	
 	/**
