@@ -316,7 +316,8 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
-		$src = $this->MAINCFG->getValue('paths', 'htmlvar').'automap.png';
+		// Append random number to prevent caching
+		$src = $this->MAINCFG->getValue('paths', 'htmlvar').'automap.png?'.mt_rand(0,10000);
 		
 		return $this->getBackgroundHtml($src,'','usemap="#automap"');
 	}
