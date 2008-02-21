@@ -456,7 +456,25 @@ class NagVisObject {
 		} else {
 			$name = $this->type . 'name';
 		}
+		
+		// Get the child name label
+		switch($this->type) {
+			case 'host':
+				$childType = 'servicename';
+			break;
+			case 'hostgroup':
+				$childType = 'hostname';
+			break;
+			case 'servicegroup':
+				$childType = 'servicename';
+			break;
+			default:
+				$childType = 'objectname';
+			break;
+		}
+		
 		$ret .= '\'[lang_name]\': \''.$this->LANG->getLabel($name).'\', ';
+		$ret .= '\'[lang_child_name]\': \''.$this->LANG->getLabel($childType).'\', ';
 		
 		// Macros which are only for services and hosts
 		if($this->type == 'host' || $this->type == 'service') {
@@ -539,10 +557,14 @@ class NagVisObject {
 		// Loop all child object until all looped or the child limit is reached
 		for($i = 0; $i < $this->hover_childs_limit, $i < $numObjects; $i++) {
 			if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
-				$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1).'},';
+				$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1).'}, ';
 			}
 		}
-		$ret .= ']';
+		
+		// Remove the last comma (Problems in IE)
+		$ret = rtrim($ret,', ');
+		
+		$ret .= ' ]';
 		
 		return $ret;
 	}

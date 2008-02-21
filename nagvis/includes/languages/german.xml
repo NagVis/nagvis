@@ -242,6 +242,9 @@
 				<mapname>
 					<text>Map Name</text>
 				</mapname>
+				<objectname>
+					<text>Objekt Name</text>
+				</objectname>
 				<hostStateIs>
 					<text>Der Host ist</text>
 				</hostStateIs>
