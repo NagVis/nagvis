@@ -381,7 +381,7 @@ class NagVisObject {
 	 * @return	String		Code of Javascript Array Elements
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHoverTemplateReplacements($child=0) {
+	function getHoverTemplateReplacements($child=0, $parent='') {
 		$ret = '';
 		
 		/**
@@ -507,6 +507,20 @@ class NagVisObject {
 			$ret .= '\'<!--\\\sBEGIN\\\shost\\\s-->.+?<!--\\\sEND\\\shost\\\s-->\': \'\', ';
 		}
 		
+		// Macros which are only for servicegroups
+		if($this->type == 'servicegroup') {
+			$ret .= '\'[lang_child_name1]\': \''.$this->LANG->getLabel('hostname').'\', ';
+		} else {
+			$ret .= '\'<!--\\\sBEGIN\\\sservicegroup\\\s-->.+?<!--\\\sEND\\\sservicegroup\\\s-->\': \'\', ';
+		}
+		
+		// Macros which are only for servicegroup childs
+		if($child == '1' && $parent == 'servicegroup' && $this->type == 'service') {
+			$ret .= '\'[obj_name1]\': \''.$this->getName().'\', ';
+		} elseif($child == '1') {
+			$ret .= '\'<!--\\\sBEGIN\\\sservicegroup_child\\\s-->.+?<!--\\\sEND\\\sservicegroup_child\\\s-->\': \'\', ';
+		}
+		
 		// Remove the last comma and return the javascript code
 		return rtrim($ret,', ');
 	}
@@ -523,16 +537,23 @@ class NagVisObject {
 	function getHoverTemplateChildReplacements($htmlTemplate) {
 		$matches = Array();
 		$childs = '';
+		$parent = '';
 		switch($this->type) {
 			case 'host':
 				$arrObjects = &$this->getServices();
+				$parent = 'host';
 			break;
 			case 'hostgroup':
+				$arrObjects = &$this->getMembers();
+				$parent = 'hostgroup';
+			break;
 			case 'servicegroup':
 				$arrObjects = &$this->getMembers();
+				$parent = 'servicegroup';
 			break;
 			case 'map':
 				$arrObjects = &$this->getMapObjects();
+				$parent = 'map';
 			break;
 		}
 		
@@ -561,7 +582,7 @@ class NagVisObject {
 		// Loop all child object until all looped or the child limit is reached
 		for($i = 0; $i < $this->hover_childs_limit, $i < $numObjects; $i++) {
 			if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
-				$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1).'}, ';
+				$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1, $parent).'}, ';
 			}
 		}
 		
