@@ -98,6 +98,8 @@ class NagVisHost extends NagiosHost {
 				case 'down':
 					if($this->getSummaryAcknowledgement() == 1) {
 						$icon = $this->iconset.'_ack.png';
+					} elseif($this->getInDowntime() == 1) {
+						$icon = $this->iconset.'_downtime.png';
 					} else {
 						$icon = $this->iconset.'_'.$stateLow.'.png';
 					}
@@ -106,6 +108,8 @@ class NagVisHost extends NagiosHost {
 				case 'warning':
 					if($this->getSummaryAcknowledgement() == 1) {
 						$icon = $this->iconset.'_sack.png';
+					} elseif($this->getInDowntime() == 1) {
+						$icon = $this->iconset.'_sdowntime.png';
 					} else {
 						$icon = $this->iconset.'_'.$stateLow.'.png';
 					}
