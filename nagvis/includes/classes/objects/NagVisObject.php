@@ -426,11 +426,15 @@ class NagVisObject {
 			$ret .= '\'[obj_acknowledged]\': \'\', ';
 		}
 		
-		if($this->getInDowntime() == 1) {
+		if($this->getSummaryInDowntime() == 1) {
 			$ret .= '\'[obj_summary_in_downtime]\': \' (Downtime)\', ';
-			$ret .= '\'[obj_in_downtime]\': \' (Downtime)\', ';
 		} else {
 			$ret .= '\'[obj_summary_in_downtime]\': \'\', ';
+		}
+		
+		if($this->getInDowntime() == 1) {
+			$ret .= '\'[obj_in_downtime]\': \' (Downtime)\', ';
+		} else {
 			$ret .= '\'[obj_in_downtime]\': \'\', ';
 		}
 		
