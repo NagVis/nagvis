@@ -36,6 +36,7 @@ class NagiosHost extends NagVisStatefulObject {
 	var $summary_state;
 	var $summary_output;
 	var $summary_problem_has_been_acknowledged;
+	var $summary_in_downtime;
 	
 	var $fetchedChildObjects;
 	var $childObjects;
@@ -327,6 +328,7 @@ class NagiosHost extends NagVisStatefulObject {
 		// Get Host state
 		$this->summary_state = $this->state;
 		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
+		$this->summary_in_downtime = $this->in_downtime;
 		
 		// Only merge host state with service state when recognize_services is set 
 		// to 1

@@ -313,7 +313,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				case 'down':
 					if($this->getSummaryAcknowledgement() == 1) {
 						$icon = $this->iconset.'_ack.png';
-					} elseif($this->getSummaryDowntime() == 1) {
+					} elseif($this->getSummaryInDowntime() == 1) {
 						$icon = $this->iconset.'_downtime.png';
 					} else {
 						$icon = $this->iconset.'_'.$stateLow.'.png';
@@ -323,7 +323,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				case 'warning':
 					if($this->getSummaryAcknowledgement() == 1) {
 						$icon = $this->iconset.'_sack.png';
-					} elseif($this->getSummaryDowntime() == 1) {
+					} elseif($this->getSummaryInDowntime() == 1) {
 						$icon = $this->iconset.'_sdowntime.png';
 					} else {
 						$icon = $this->iconset.'_'.$stateLow.'.png';

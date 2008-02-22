@@ -63,7 +63,7 @@ class NagVisService extends NagiosService {
 				case 'warning':
 					if($this->getSummaryAcknowledgement() == 1) {
 						$icon = $this->iconset.'_sack.png';
-					} elseif($this->getInDowntime() == 1) {
+					} elseif($this->getSummaryInDowntime() == 1) {
 						$icon = $this->iconset.'_sdowntime.png';
 					} else {
 						$icon = $this->iconset.'_'.$stateLow.'.png';

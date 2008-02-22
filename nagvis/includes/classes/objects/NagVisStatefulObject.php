@@ -117,6 +117,18 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC getInDowntime()
+	 *
+	 * Get method for the in downtime option
+	 *
+	 * @return	Boolean		True: object is in downtime, False: not in downtime
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getSummaryInDowntime() {
+		return $this->summary_in_downtime;
+	}
+	
+	/**
 	 * PUBLIC getOnlyHardStates()
 	 *
 	 * Get method for the only hard states option
@@ -551,6 +563,12 @@ class NagVisStatefulObject extends NagVisObject {
 					$this->summary_problem_has_been_acknowledged = 1;
 				} else {
 					$this->summary_problem_has_been_acknowledged = 0;
+				}
+				
+				if($OBJ->getSummaryInDowntime() == 1) {
+					$this->summary_in_downtime = 1;
+				} else {
+					$this->summary_in_downtime = 0;
 				}
 			}
 		} else {

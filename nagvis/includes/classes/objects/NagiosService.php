@@ -37,6 +37,7 @@ class NagiosService extends NagVisStatefulObject {
 	var $summary_state;
 	var $summary_output;
 	var $summary_problem_has_been_acknowledged;
+	var $summary_in_downtime;
 	
 	var $recognize_services;
 	var $only_hard_states;
@@ -127,6 +128,7 @@ class NagiosService extends NagVisStatefulObject {
 	function fetchSummaryState() {
 		$this->summary_state = $this->state;
 		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
+		$this->summary_in_downtime = $this->in_downtime;
 	}
 	
 	/**
