@@ -393,7 +393,7 @@ class NagVisObject {
 		
 		// On child service objects in hover menu replace obj_name with 
 		// service_description
-		if($this->type == 'service') {
+		if($child == 1 && $this->type == 'service') {
 			$ret .= '\'[obj_name]\': \''.$this->getServiceDescription().'\', ';
 		} else {
 			$ret .= '\'[obj_name]\': \''.$this->getName().'\', ';
