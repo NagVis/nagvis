@@ -133,7 +133,16 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	
-	// FIXME
+	/**
+	 * PUBLIC filterChilds()
+	 *
+	 * Filters the childs depending on the allowed hosts list. All objects which
+	 * are not in the list and are no parent of a host in this list will be
+	 * removed from the map.
+	 *
+	 * @param	Array	List of allowed hosts
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function filterChilds(&$arrAllowedHosts) {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$remain = 0;
@@ -163,21 +172,15 @@ class NagiosHost extends NagVisStatefulObject {
 						$childsRemain = $OBJ->filterChilds($arrAllowedHosts);
 						
 						if(!$selfRemain && $childsRemain) {
-							//echo $OBJ->getName().' remains cause of childs'."<br>";
 							$selfRemain = 1;
 						}
-					} else {
-						//echo $OBJ->getName().': '.$selfRemain."<br>";
 					}
 					
 					// If the host should not remain on the map remove it from the 
 					// object tree
 					if(!$selfRemain) {
-						//FIXME: Remove the object from the tree
-						//echo $OBJ->getName().': unset'."<br>";
+						// Remove the object from the tree
 						unset($this->childObjects[$i]);
-					} else {
-						//echo $OBJ->getName()."remains<br>";
 					}
 				}
 				
