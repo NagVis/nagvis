@@ -1,4 +1,5 @@
 <?php
+if(!isset($INC_GlobalBackend_ndomy)) {
 $INC_GlobalBackend_ndomy = TRUE;
 ##########################################################################
 ##                 NagVis - The Nagios Visualisation                    ##
@@ -758,5 +759,6 @@ class GlobalBackendndomy {
 		
 		return $data['program_start_time'];
 	}
+}
 }
 ?>
