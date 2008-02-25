@@ -495,7 +495,7 @@ class GlobalMainCfg {
 					}
 					
 					// loop given elements for checking: => all given atributes valid
-					foreach($vars AS $key => &$val) {
+					foreach($vars AS $key => $val) {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
 								$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
