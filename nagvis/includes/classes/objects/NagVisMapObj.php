@@ -20,6 +20,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	var $state;
 	var $output;
 	var $problem_has_been_acknowledged;
+	var $in_downtime;
 	
 	var $summary_state;
 	var $summary_output;

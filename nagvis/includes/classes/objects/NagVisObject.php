@@ -646,7 +646,7 @@ class NagVisObject {
 		
         if($arrStates[$state1] == $arrStates[$state2]) {
             return 0;
-        } elseif($arrStates[$statel] < $arrStates[$state2]) {
+        } elseif($arrStates[$state1] < $arrStates[$state2]) {
 			return +1;
 		} else {
 			return -1;
