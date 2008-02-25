@@ -160,7 +160,7 @@ class NagiosHost extends NagVisStatefulObject {
 					 * the state of the current child object.
 					 */
 					if($OBJ->getNumChilds() > 0) {
-						$childsRemain = $OBJ->filterChilds(&$arrAllowedHosts);
+						$childsRemain = $OBJ->filterChilds($arrAllowedHosts);
 						
 						if(!$selfRemain && $childsRemain) {
 							//echo $OBJ->getName().' remains cause of childs'."<br>";
