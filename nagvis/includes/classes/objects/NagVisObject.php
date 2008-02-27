@@ -495,6 +495,7 @@ class NagVisObject {
 		// Macros which are only for services
 		if($this->type == 'service') {
 			$ret .= '\'[service_description]\': \''.$this->getServiceDescription().'\', ';
+			$ret .= '\'[pnp_hostname]\': \''.str_replace(' ','%20',$this->getName()).'\', ';
 			$ret .= '\'[pnp_service_description]\': \''.str_replace(' ','%20',$this->getServiceDescription()).'\', ';
 		} else {
 			$ret .= '\'<!--\\\sBEGIN\\\sservice\\\s-->.+?<!--\\\sEND\\\sservice\\\s-->\': \'\', ';
