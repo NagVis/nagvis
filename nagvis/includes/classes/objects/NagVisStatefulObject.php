@@ -566,7 +566,6 @@ class NagVisStatefulObject extends NagVisObject {
 				}
 				
 				if($OBJ->getSummaryInDowntime() == 1) {
-					echo $this->getName()."-".$OBJ->getName()."<br>";
 					$this->summary_in_downtime = 1;
 				} else {
 					$this->summary_in_downtime = 0;
