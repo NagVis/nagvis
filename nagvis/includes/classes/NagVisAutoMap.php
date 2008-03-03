@@ -160,17 +160,32 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= 'ratio="fill", ';
 		$str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getName().'", ';
 		
-		/* Directed (DOT) only */
-		$str .= 'nodesep="0", ';
-		$str .= 'ranksep="0.8", ';
-		//rankdir: LR,
-		//$str .= 'rankdir="LR", ';
-		//$str .= 'compound=true, ';
-		//$str .= 'concentrate=true, ';
-		//$str .= 'constraint=false, ';
+		/* Directed (dot) only */
+		if($this->renderMode == 'directed') {
+			$str .= 'nodesep="0", ';
+			//rankdir: LR,
+			//$str .= 'rankdir="LR", ';
+			//$str .= 'compound=true, ';
+			//$str .= 'concentrate=true, ';
+			//$str .= 'constraint=false, ';
+		}
 		
-		//overlap: true,false,scale,scalexy,ortho,orthoxy,orthoyx,compress,ipsep,vpsc
-		//$str .= 'overlap="ipsep", ';
+		/* Directed (dot) and radial (twopi) only */
+		if($this->renderMode == 'directed' || $this->renderMode == 'radial') {
+			$str .= 'ranksep="0.8", ';
+		}
+		
+		/* Only for circular (circo) mode */
+		if($this->renderMode == 'circular') {
+			//$str .= 'mindist="1.0", ';
+		}
+		
+		/* All but directed (dot) */
+		if($this->renderMode != 'directed') {
+			//overlap: true,false,scale,scalexy,ortho,orthoxy,orthoyx,compress,ipsep,vpsc
+			//$str .= 'overlap="ipsep", ';
+		}
+		
 		$str .= 'size="'.$this->pxToInch($this->width).','.$this->pxToInch($this->height).'"]; '."\n";
 		
 		/**
@@ -181,7 +196,7 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= 'margin="0.0,0.0", ';
 		$str .= 'ratio="auto", ';
 		$str .= 'shape="none", ';
-		$str .= 'fontcolor=black, fontname=Courier, fontsize=10';
+		$str .= 'fontcolor=black, fontsize=10';
 		$str .= '];'."\n ";
 		
 		// Create nodes for all hosts
