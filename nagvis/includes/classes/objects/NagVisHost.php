@@ -50,15 +50,12 @@ class NagVisHost extends NagiosHost {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseGraphviz($layer=0) {
-		$graphvizHostname = str_replace('-','__',$this->getName());
-		$graphvizHostname = str_replace('.','___',$graphvizHostname);
-		
-		$strReturn = $this->getType().'_'.$graphvizHostname.' [ ';
+		$strReturn = $this->getType().'_'.$this->getObjectId().' [ ';
 		$strReturn .= 'label=<<table border="0">';
 		$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
 		$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
 		$strReturn .= '</table>>, ';
-		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$graphvizHostname.'", ';
+		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
 		$strReturn .= 'target="'.$this->url_target.'", ';
 		$strReturn .= 'tooltip="'.$this->getName().'",';
 		// The root host has to be highlighted, this are the options to do this
@@ -70,7 +67,7 @@ class NagVisHost extends NagiosHost {
 		foreach($this->getChilds() As $OBJ) {
 			if(is_object($OBJ)) {
 				$strReturn .= $OBJ->parseGraphviz($layer+1);
-				$strReturn .= $this->type.'_'.$graphvizHostname.' -- '.$OBJ->type.'_'.str_replace('.','___',str_replace('-','__',$OBJ->host_name)).' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+				$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
 			}
 		}
 		return $strReturn;

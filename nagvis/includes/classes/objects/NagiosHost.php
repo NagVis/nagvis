@@ -11,6 +11,7 @@ class NagiosHost extends NagVisStatefulObject {
 	
 	var $backend_id;
 	
+	var $object_id;
 	var $host_name;
 	var $alias;
 	var $display_name;

@@ -11,6 +11,7 @@ class NagiosService extends NagVisStatefulObject {
 	
 	var $backend_id;
 	
+	var $object_id;
 	var $host_name;
 	var $service_description;
 	var $alias;

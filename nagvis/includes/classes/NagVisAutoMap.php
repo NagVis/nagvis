@@ -270,15 +270,15 @@ class NagVisAutoMap extends GlobalMap {
 		 * Graphviz has problems with "." and ":" in the object names so the . 
 		 * gets replaced by "___". Undo this here
 		 */
-		$this->mapCode = str_replace('___', '.', $this->mapCode);
+		//$this->mapCode = str_replace('___', '.', $this->mapCode);
 		
 		/**
 		 * Graphviz replaces "-" by "&#45;" so the "-" need to be replaced in the 
 		 * hostnames before parsing the graphiz configuration. It gets replaced by 
 		 * "__", undo it here
 		 */
-		$this->mapCode = str_replace('__', '-', $this->mapCode);
-		$this->mapCode = str_replace('&#45;', '-', $this->mapCode);
+		//$this->mapCode = str_replace('__', '-', $this->mapCode);
+		//$this->mapCode = str_replace('&#45;', '-', $this->mapCode);
 		
 		
 		/**

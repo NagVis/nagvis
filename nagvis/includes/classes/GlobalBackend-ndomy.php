@@ -308,7 +308,7 @@ class GlobalBackendndomy {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-			alias, display_name, address, 
+			o.object_id, alias, display_name, address, 
 			has_been_checked, 
 			last_hard_state, 
 			UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, 
@@ -340,6 +340,7 @@ class GlobalBackendndomy {
 		} else {
 			$data = mysql_fetch_array($QUERYHANDLE);
 			
+			$arrReturn['object_id'] = $data['object_id'];
 			$arrReturn['alias'] = $data['alias'];
 			$arrReturn['display_name'] = $data['display_name'];
 			$arrReturn['address'] = $data['address'];
@@ -431,7 +432,7 @@ class GlobalBackendndomy {
 		
 		if(isset($serviceName) && $serviceName != '') {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				o.name1, o.name2, 
+				o.object_id, o.name1, o.name2, 
 				s.display_name, 
 				ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 				UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
@@ -457,7 +458,7 @@ class GlobalBackendndomy {
 				LIMIT 1');
 		} else {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				o.name1, o.name2,
+				o.object_id, o.name1, o.name2,
 				s.display_name, 
 				ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 				UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
@@ -494,6 +495,7 @@ class GlobalBackendndomy {
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 				$arrTmpReturn = Array();
 				
+				$arrTmpReturn['object_id'] = $data['object_id'];
 				$arrTmpReturn['service_description'] = $data['name2'];
 				$arrTmpReturn['display_name'] = $data['display_name'];
 				$arrTmpReturn['alias'] = $data['display_name'];

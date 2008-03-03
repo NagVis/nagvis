@@ -41,6 +41,18 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC getObjectId()
+	 *
+	 * Get method for the object id
+	 *
+	 * @return	Integer		Object ID
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getObjectId() {
+		return $this->object_id;
+	}
+	
+	/**
 	 * PUBLIC getInDowntime()
 	 *
 	 * Get method for the in downtime option
