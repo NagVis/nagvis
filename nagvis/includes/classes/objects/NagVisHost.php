@@ -45,31 +45,41 @@ class NagVisHost extends NagiosHost {
 	 *
 	 * Parses the object in graphviz configuration format
 	 *
-	 * @param		Integer		Number of the current Layer
+	 * @param	Integer		Number of the current Layer
+	 * @param	Array		Array of hostnames which are already parsed
 	 * @return	String		graphviz configuration code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseGraphviz($layer=0) {
-		$strReturn = $this->getType().'_'.$this->getObjectId().' [ ';
-		$strReturn .= 'label=<<table border="0">';
-		$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
-		$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
-		$strReturn .= '</table>>, ';
-		$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
-		$strReturn .= 'target="'.$this->url_target.'", ';
-		$strReturn .= 'tooltip="'.$this->getName().'",';
-		// The root host has to be highlighted, this are the options to do this
-		if($layer == 0) {
-			$strReturn .= 'shape="circle",';
-		}
-		$strReturn .= 'layer="'.$layer.'"';
-		$strReturn .= ' ];'."\n ";
-		foreach($this->getChilds() As $OBJ) {
-			if(is_object($OBJ)) {
-				$strReturn .= $OBJ->parseGraphviz($layer+1);
-				$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+	function parseGraphviz($layer=0, &$arrHostnamesParsed) {
+		$strReturn = '';
+		
+		if(!in_array($this->getName(), $arrHostnamesParsed)) {
+			$strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
+			$strReturn .= 'label=<<table border="0">';
+			$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
+			$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
+			$strReturn .= '</table>>, ';
+			$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
+			$strReturn .= 'target="'.$this->url_target.'", ';
+			$strReturn .= 'tooltip="'.$this->getName().'",';
+			// The root host has to be highlighted, this are the options to do this
+			if($layer == 0) {
+				$strReturn .= 'shape="circle",';
+			}
+			$strReturn .= 'layer="'.$layer.'"';
+			$strReturn .= ' ];'."\n ";
+			
+			// Add host to the List of parsed hosts
+			$arrHostnamesParsed[] = $this->getName();
+			
+			foreach($this->getChilds() As $OBJ) {
+				if(is_object($OBJ)) {
+					$strReturn .= $OBJ->parseGraphviz($layer+1, $arrHostnamesParsed);
+					$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+				}
 			}
 		}
+		
 		return $strReturn;
 	}
 	

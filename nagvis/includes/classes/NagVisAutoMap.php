@@ -24,6 +24,8 @@ class NagVisAutoMap extends GlobalMap {
 	var $arrMapObjects;
 	var $arrHostnames;
 	
+	var $arrHostnamesParsed;
+	
 	var $mapCode;
 	
 	/**
@@ -42,6 +44,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		$this->arrHostnames = Array();
 		$this->arrMapObjects = Array();
+		$this->arrHostnamesParsed = Array();
 		$this->mapCode = '';
 		
 		// Create map configuration
@@ -200,7 +203,7 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= '];'."\n ";
 		
 		// Create nodes for all hosts
-		$str .= $this->rootObject->parseGraphviz();
+		$str .= $this->rootObject->parseGraphviz(0, $this->arrHostnamesParsed);
 		
 		$str .= '} ';
 		
