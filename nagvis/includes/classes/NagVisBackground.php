@@ -8,7 +8,7 @@ class NagVisBackground extends NagVisMap {
 	var $BACKEND;
 	var $GRAPHIC;
 	
-	var $objects;
+	var $numObjects;
 	var $image;
 	var $imageType;
 	
@@ -26,6 +26,7 @@ class NagVisBackground extends NagVisMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisBackground(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
+		$this->numObjects = 0;
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
@@ -207,25 +208,50 @@ class NagVisBackground extends NagVisMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
+		// Set caching options (Only if there are dynamic objects to render on this map)
+		if($this->numObjects > 0) {
+			// HTTP/1.1
+			header('Cache-Control: no-store, no-cache, must-revalidate');
+			header('Cache-Control: post-check=0, pre-check=0', false);
+			// HTTP/1.0
+			header('Pragma: no-cache');	
+		} else {
+			// No caching options -> depending on proxy/browser/... if this is cached
+			
+			// Get last change of the map background image
+			$gmtLastMod = gmdate("D, d M Y H:i:s", filemtime($this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->BACKGROUND->getFileName())) . ' GMT';
+			
+			// Set the last modified header to background image modification
+			// date. If the date is identical on next reload the cached image
+			// will be used.
+			header('Last-Modified: ' . $gmtLastMod);
+		}
+		
 		switch($this->imageType) {
 			case 'jpg':
 				header('Content-type: image/jpeg');
-				// HTTP/1.1
-				header('Cache-Control: no-store, no-cache, must-revalidate');
-				header('Cache-Control: post-check=0, pre-check=0', false);
-				// HTTP/1.0
-				header('Pragma: no-cache');
+				
+				// If the cached image date is the same as the background image
+				// modification time use the cache
+				if($gmtLastMod == $_SERVER["HTTP_IF_MODIFIED_SINCE"]) {
+					header('HTTP/1.x 304 Not Modified');
+					exit;
+				}
+				
 				imagejpeg($this->image);
 				imagedestroy($this->image);
 				if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 			break;
 			case 'png':
 				header('Content-type: image/png');
-				// HTTP/1.1
-				header('Cache-Control: no-store, no-cache, must-revalidate');
-				header('Cache-Control: post-check=0, pre-check=0', false);
-				// HTTP/1.0
-				header('Pragma: no-cache');
+				
+				// If the cached image date is the same as the background image
+				// modification time use the cache
+				if($gmtLastMod == $_SERVER["HTTP_IF_MODIFIED_SINCE"]) {
+					header('HTTP/1.x 304 Not Modified');
+					exit;
+				}
+				
 				imagepng($this->image);
 				imagedestroy($this->image);
 				if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
@@ -275,6 +301,7 @@ class NagVisBackground extends NagVisMap {
 				case 'NagVisShape':
 					if(isset($OBJ->line_type)) {
 						$this->parseLine($OBJ);
+						$this->numObjects++;
 					} else {
 						// do nothing for this objects in background image
 						// should never reach this -> method NagVisBackground::getState don't read this objects
