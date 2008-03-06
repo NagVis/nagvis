@@ -61,7 +61,7 @@ class NagVisHost extends NagiosHost {
 			$strReturn .= '</table>>, ';
 			$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
 			$strReturn .= 'target="'.$this->url_target.'", ';
-			$strReturn .= 'tooltip="'.$this->getName().'",';
+			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
 			// The root host has to be highlighted, this are the options to do this
 			if($layer == 0) {
 				$strReturn .= 'shape="circle",';

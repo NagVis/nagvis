@@ -278,7 +278,7 @@ class NagVisAutoMap extends GlobalMap {
 		 */
 		
 		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
-			$this->mapCode = str_replace('title="'.$OBJ->getName().'"', $OBJ->getHoverMenu(), $this->mapCode);
+			$this->mapCode = str_replace('title="'.$OBJ->getType().'_'.$OBJ->getObjectId().'"', $OBJ->getHoverMenu(), $this->mapCode);
 		}
 	}
 	
