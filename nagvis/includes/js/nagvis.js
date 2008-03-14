@@ -16,7 +16,7 @@ function refresh() {
 		 * When rotation is active we have to set the rotate option to 0
 		 * so the map is even not rotated on next reload
 		 */
-		if(getUrlParam('rotation') == '') {
+		if(getUrlParam('rotation') != '') {
 			if(!tmp.match("rotate=0")) {
 				if(tmp.search(/\?/) != -1) {
 					tmp = tmp+"&rotate=0";
@@ -94,7 +94,7 @@ function getUrlParam(name) {
 	name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 	var regexS = "[\\?&]"+name+"=([^&#]*)";
 	var regex = new RegExp( regexS );
-	var results = regex.exec(window.location.href);
+	var results = regex.exec(window.location);
 	if( results == null ) {
 		return '';
 	} else {
