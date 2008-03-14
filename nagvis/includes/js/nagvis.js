@@ -18,7 +18,11 @@ function refresh() {
 		 */
 		if(getUrlParam('rotation') == '') {
 			if(!tmp.match("rotate=0")) {
-				tmp = tmp+"&rotate=0"
+				if(tmp.search(/\?/) != -1) {
+					tmp = tmp+"&rotate=0";
+				} else {
+					tmp = tmp+"?rotate=0";
+				}
 			}
 		}
 		window.open(tmp, "_self");

@@ -125,6 +125,7 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 	$FRONTEND->getInstInformations();
 } else {
 	// Build the page
+	$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 	$FRONTEND->getHeaderMenu();
 	$FRONTEND->addBodyLines($FRONTEND->getIndexPage());
 	$FRONTEND->getMessages();
