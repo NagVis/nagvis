@@ -2,37 +2,46 @@
 NagVis 1.3 Quick Installation Instructions
 ==============================================================================
 Author: Andreas Husch, Lars Michelsen
-Document Version: 0.3
-Date: 2007-10-15
+Document Version: 0.4
+Date: 2008-03-25
 Applies to: NagVis 1.3
 ==============================================================================
 
-STEP 0: Prepair System
+STEP 0: Prepare System
 ------------------
-Make sure your System meets the requirements:
+Make sure your System meets the following requirements:
 - Nagios is running and authentication is configured (.htaccess file placed
   and configured properly!)
 - Working PHP installation (Version > 4.2.0) with "php-gd" support
 - php-mysql support is needed for the strongly recommended "ndomy" backend
-- graphviz >= 2.14 for the automap (Lower versions have problems with truecolor
-  rendering). You also need more packages like gd,libpng,freetype, ... but if
-  you get graphviz compiled/installed it should work.
+- graphviz >= 2.14 for the automap (Earlier versions (with lower version
+  numbers) have problems with truecolor rendering). You also need packages
+  like gd,libpng,freetype, ... but if you get graphviz compiled/installed it
+  should work.
 
 STEP 1: Download NagVis
 ------------------
-Get NagVis, the latest releases can be found at the official NagVis Homepage
+The latest releases can be found at the official NagVis Homepage
  (http://www.nagvis.org/downloads)
 
 STEP 2: Unpack NagVis
 ------------------
-Unpack NagVis in a path of your choice
+Unpack NagVis in a directory of your choice
 
 > tar xvzf nagvis-1.3.x.tar.gz
 
+STEP 2.5: Rename the unpacked NagVis directory
+------------------
+Rename the untarred NagVis directory to "nagvis"
+
+> mv nagvis-1.3.x nagvis
+
 STEP 3: Move NagVis
 ------------------
-Place the NagVis directory tree into your Nagios share folder.
-With standard Nagios path this is /usr/local/nagios/share.
+Install the NagVis directory into your Nagios share folder by moving the
+"nagvis" directory from the previous step.
+
+On a standard Nagios installation this folder is /usr/local/nagios/share.
 
 > mv nagvis /usr/local/nagios/share
 
@@ -40,20 +49,19 @@ You should see the directorys nagvis and wui on
 
 > ls -l /usr/local/nagios/share/nagvis
 
-DON'T move any files or folders inside the NagVis directory (In fact you 
-can move, but in this case you have to change/add some parameters and values
-the main config file - if everything is left untouched it should run "out of 
-the box" without changes in the configuration files)
+DON'T move any files or folders inside the NagVis directory unless you
+change/add some parameters and values in the main config file - if everything
+is left untouched it should run "out of the box" 
 
 STEP 4: Configure
 ------------------
-Move to new NagVis directory
+Change directories to the new NagVis directory
 
 > cd /usr/local/nagios/share/nagvis
 
-An example for the configuration files can be found in 
-etc/nagvis.ini.php-sample. If you like to change some settings in this
-file copy this example to nagvis/etc/nagvis.ini.php.
+An example for the main configuration file can be found in the etc folder
+
+Copy this example to etc/nagvis.ini.php.
 
 > cp etc/nagvis.ini.php-sample etc/nagvis.ini.php
 
@@ -65,8 +73,8 @@ The most lines in the fresh copied config.ini.php are commented out. If you
 want to set different settings, than there are set, uncomment the line and
 change the value of it.
 
-For informations about the possible values have a look at Main Config Format
-Description on NagVis.org 
+For informations about the possible values for the configuration options have
+a look at Main Config Format Description on NagVis.org 
  (http://www.nagvis.org/docs/1.3/nagvis_config_format_description).
 
 STEP 5: Permissions
@@ -80,10 +88,10 @@ following command:
 
 > grep -e '^User' /etc/apache2/httpd.conf
 
-If your configuration file is located in another path you should correct this
+If your configuration file is located in another path you should change this
 in the command above.
 
-The set the permissions to your NagVis directory (In my case the path are like
+Then set the permissions to your NagVis directory (In my case the path are like
 this):
 
 > chown wwwrun:www /usr/local/nagios/share/nagvis -R
@@ -95,23 +103,23 @@ this):
 > chmod 775 /usr/local/nagios/share/nagvis/var
 > chmod 664 /usr/local/nagios/share/nagvis/var/*
 
-It's possible to set lower permissions on the files, in my setup it's ok like
-this. Only change them if you know, what you are doing. 
+It's possible to set less restrictive permissions on the files. My setup works
+with those permission settings. Only change them if you know, what you are doing. 
 
 STEP 6: The WUI
 ------------------
-NagVis has an included web based config tool called WUI. If you want to use it
+NagVis has included a web based config tool called WUI. If you want to use it,
 use your browser to open the page:
 
-	http://<nagiosserver>/<path-to-nagvis>/config.php
+  http://<nagiosserver>/<path-to-nagvis>/config.php
 
 Hint: If you have some script or popup blockers, disable them for the WUI.
 
 When you see the NagVis image, right click on it, a context menu should open, 
-now you can configure NagVis and create maps with the WUI.
+and now you can configure NagVis and create maps with the WUI.
 
 The Config Tools DOES NOT display the current Nagios States of Objects
-configured. Its only for configuring! To "use" your configured Maps afterwards
+configured. It's only for configuring! To "use" your configured Maps afterwards
 see STEP 7!
 
 If this does't work for you, or if you don't want to use the WUI, you can
@@ -124,7 +132,12 @@ STEP 7: Watch the Maps
 ------------------
 You should now be able to watch your defined maps in your browser:
 
-	http://<nagiosserver>/<path-to-nagvis>/index.php?map=<mapname>
+  http://<nagiosserver>/<path-to-nagvis>/index.php?map=<mapname>
+
+STEP 8: Problems?
+------------------
+Check the FAQ and the Common Problems sections on the nagvis.org website.
+  (http://www.nagvis.org/doc)
 
 ==============================================================================
 Have fun using NagVis and please report bugs!
