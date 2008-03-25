@@ -581,7 +581,7 @@ class NagVisObject {
 		
 		$ret = '[ ';
 		// Loop all child object until all looped or the child limit is reached
-		for($i = 0; $i < $this->hover_childs_limit, $i < $numObjects; $i++) {
+		for($i = 0; $i < $this->hover_childs_limit && $i < $numObjects; $i++) {
 			if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
 				$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1, $parent).'}, ';
 			}
