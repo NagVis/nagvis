@@ -64,7 +64,7 @@ class NagVisHost extends NagiosHost {
 			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
 			// The root host has to be highlighted, this are the options to do this
 			if($layer == 0) {
-				$strReturn .= 'shape="circle",';
+				$strReturn .= 'shape="egg",';
 			}
 			$strReturn .= 'layer="'.$layer.'"';
 			$strReturn .= ' ];'."\n ";
