@@ -95,6 +95,10 @@
 					<title>No User</title>
 					<text>No user name was handed over at NagVis! Please have a look at the FAQ on www.nagvis.org</text>
 				</noUser>
+				<wrongPhpVersion>
+					<title>Found wrong PHP version</title>
+					<text>The PHP version you are using &quot;[CURRENT_VERSION]&quot; is too old. NagVis needs PHP &quot;[NEEDED_VERSION]&quot; or newer.</text>
+				</wrongPhpVersion>
 				<gdLibNotFound>
 					<title>GD-Libs missing</title>
 					<text>You told NagVis to use the GD-Libs for drawing lines on the background image (usegdlibs=1). GD-Libs are not installed or loaded in your php. </text>

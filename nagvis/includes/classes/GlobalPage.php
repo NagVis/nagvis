@@ -69,6 +69,24 @@ class GlobalPage {
 			return $_SERVER['REMOTE_USER'];
 		}
 	}
+
+  /**
+   * Checks for valid php version
+   *
+   * @param   Boolean $printErr
+   * @return  Boolean Is Check Successful?
+   * @author  Lars Michelsen <lars@vertical-visions.de>
+   */
+  function checkPHPVersion($printErr) {
+		if(version_compare(PHP_VERSION, CONST_NEEDED_PHP_VERSION, ">=")) {
+      return TRUE;
+    } else {
+			if($printErr) {
+				$this->messageToUser('ERROR','wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION);
+      }
+      return FALSE;
+    }
+	}
 	
 	/**
 	 * Checks for logged in Users
@@ -117,6 +135,7 @@ class GlobalPage {
 	function checkPreflight() {
 		$ret = TRUE;
 		$ret = $ret & $this->checkUser(TRUE);
+		$ret = $ret & $this->checkPHPVersion(TRUE);
 		$ret = $ret & $this->checkPermissions($this->allowedUsers,TRUE);
 		
 		return $ret;

@@ -95,6 +95,10 @@
 					<title>Kein Benutzer</title>
 					<text>Es wurde kein Benutzername an NagVis &uuml;bergeben. Mehr Informationen sind in der FAQ auf www.nagvis.org zu finden</text>
 				</noUser>
+				<wrongPhpVersion>
+					<title>Falsche PHP version</title>
+					<text>Die aktuelle PHP version &quot;[CURRENT_VERSION]&quot; ist zu alt. NagVis ben&ouml;tigt PHP &quot;[NEEDED_VERSION]&quot; oder h&ouml;her.</text>
+				</wrongPhpVersion>
 				<gdLibNotFound>
 					<title>GD-Libs nicht gefunden</title>
 					<text>NagVis wurde konfiguriert die GD-Libs zum parsen von Linien und Hintergrund zu verwenden (usegdlibs=1). Die GD-Libs sind nicht installiert oder geladen.</text>
