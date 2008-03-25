@@ -538,10 +538,10 @@ class GlobalMapCfg {
 		$this->validConfig['service']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
 		$this->validConfig['service']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
 		$this->validConfig['service']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['service']['hover_childs_show']['default'] = $this->getValue('hover_childs_show', 0, '');
-		$this->validConfig['service']['hover_childs_sort']['default'] = $this->getValue('hover_childs_sort', 0, '');
-		$this->validConfig['service']['hover_childs_order']['default'] = $this->getValue('hover_childs_order', 0, '');
-		$this->validConfig['service']['hover_childs_limit']['default'] = $this->getValue('hover_childs_limit', 0, '');
+		$this->validConfig['service']['hover_childs_show']['default'] = $this->getValue('global', 0, 'hover_childs_show');
+		$this->validConfig['service']['hover_childs_sort']['default'] = $this->getValue('global', 0, 'hover_childs_sort');
+		$this->validConfig['service']['hover_childs_order']['default'] = $this->getValue('global', 0, 'hover_childs_order');
+		$this->validConfig['service']['hover_childs_limit']['default'] = $this->getValue('global', 0, 'hover_childs_limit');
 		$this->validConfig['servicegroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
 		$this->validConfig['servicegroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
 		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
