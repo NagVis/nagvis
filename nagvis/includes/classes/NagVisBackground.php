@@ -233,7 +233,7 @@ class NagVisBackground extends NagVisMap {
 				
 				// If the cached image date is the same as the background image
 				// modification time use the cache
-				if($this->numObjects <= 0 && $gmtLastMod == $_SERVER["HTTP_IF_MODIFIED_SINCE"]) {
+				if(isset($_SERVER["HTTP_IF_MODIFIED_SINCE"]) && $this->numObjects <= 0 && $gmtLastMod == $_SERVER["HTTP_IF_MODIFIED_SINCE"]) {
 					header('HTTP/1.x 304 Not Modified');
 					exit;
 				}
@@ -247,7 +247,7 @@ class NagVisBackground extends NagVisMap {
 				
 				// If the cached image date is the same as the background image
 				// modification time use the cache
-				if($this->numObjects <= 0 && $gmtLastMod == $_SERVER["HTTP_IF_MODIFIED_SINCE"]) {
+				if(isset($_SERVER["HTTP_IF_MODIFIED_SINCE"]) && $this->numObjects <= 0 && $gmtLastMod == $_SERVER["HTTP_IF_MODIFIED_SINCE"]) {
 					header('HTTP/1.x 304 Not Modified');
 					exit;
 				}
