@@ -24,4 +24,5 @@ define('MATCH_OBJECTTYPE', '/^(?:global|host|service|hostgroup|servicegroup|map|
 define('MATCH_PNGFILE', '/^.+\.png$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
 define('MATCH_ORDER', '/^(?:asc|desc)$/');
+define('MATCH_TEXTBOX_WIDTH', '/^(\-?[0-9]+|auto)$/');
 ?>

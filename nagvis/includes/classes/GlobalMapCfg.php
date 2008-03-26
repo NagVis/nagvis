@@ -455,7 +455,7 @@ class GlobalMapCfg {
 					'default' => 1,
 					'match' => MATCH_INTEGER),
 				'w' => Array('must' => 1,
-					'match' => MATCH_INTEGER),
+					'match' => MATCH_TEXTBOX_WIDTH),
 				'background_color' => Array('must' => 0,
 					'default' => '#C0C0C0',
 					'match' => MATCH_COLOR)),
