@@ -9,6 +9,7 @@ class NagVisTextbox extends NagVisStatelessObject {
 	var $LANG;
 	
 	var $background_color;
+	var $border_color;
 	
 	/**
 	 * Class constructor
@@ -63,7 +64,7 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseTextbox() {
-		$ret = '<div class="'.$this->class.'" style="background:'.$this->background_color.';left:'.$this->x.'px;top:'.$this->y.'px;width:'.$this->w.'px;overflow:visible;">';	
+		$ret = '<div class="'.$this->class.'" style="border-color:'.$this->border_color.';background:'.$this->background_color.';left:'.$this->x.'px;top:'.$this->y.'px;width:'.$this->w.'px;overflow:visible;">';	
 		$ret .= "\t".'<span>'.$this->text.'</span>';
 		$ret .= '</div>';
 		return $ret;	
