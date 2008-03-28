@@ -24,6 +24,7 @@ class GlobalBackendndomy {
 	var $dbPrefix;
 	var $dbInstanceName;
 	var $dbInstanceId;
+	var $objConfigType;
 	
 	/**
 	 * Constructor
@@ -69,6 +70,26 @@ class GlobalBackendndomy {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 				$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'));
 			}
+			
+			/**
+			 * It looks like there is a problem with the config_type value at some
+			 * installations. The NDO docs and mailinglist says that the flag
+			 * config_type marks the objects as being read from retention data or read
+			 * from configuration. Until NagVis 1.3b3 only objects with config_type=1
+			 * were queried.
+			 * Cause of some problem reports that there are NO objects with
+			 * config_type=1 in the DB this check was added. If there is at least one
+			 * object with config_type=1 NagVis only recognizes objects with that
+			 * value set. If there is no object with config_type=1 all objects with
+			 * config_type=0 are recognized.
+			 *
+			 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=9269
+			 */
+			 if($this->checkConfigTypeObjects()) {
+				 $this->objConfigType = 1;
+			 } else {
+				 $this->objConfigType = 0;
+			 }
 		} else {
 			return FALSE;
 		}
@@ -253,7 +274,7 @@ class GlobalBackendndomy {
 	}
 	
 	/**
-	 * PRIVATE Method checkIsActiveObjects
+	 * PRIVATE Method checkForIsActiveObjects
 	 *
 	 * Checks if there are some object records with is_active=1
 	 *
@@ -262,6 +283,22 @@ class GlobalBackendndomy {
 	 */
 	function checkForIsActiveObjects() {
 		if(mysql_num_rows($this->mysqlQuery('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')) > 0) {
+			return TRUE;
+		} else {
+			return FALSE;	
+		}
+	}
+	
+	/**
+	 * PRIVATE Method checkConfigTypeObjects
+	 *
+	 * Checks if there are some object records with config_type=1
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkConfigTypeObjects() {
+		if(mysql_num_rows($this->mysqlQuery('SELECT host_id FROM '.$this->dbPrefix.'hosts WHERE config_type=1 AND instance_id='.$this->dbInstanceId.' LIMIT 1')) > 0) {
 			return TRUE;
 		} else {
 			return FALSE;	
@@ -331,7 +368,7 @@ class GlobalBackendndomy {
 			ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 		WHERE 
 			(o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-			AND (h.config_type=1 AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id) 
+			AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id) 
 		LIMIT 1');
 		
 		if(mysql_num_rows($QUERYHANDLE) == 0) {
@@ -453,7 +490,7 @@ class GlobalBackendndomy {
 					ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
-					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+					AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 					AND ss.service_object_id=o.object_id 
 				LIMIT 1');
 		} else {
@@ -479,7 +516,7 @@ class GlobalBackendndomy {
 					ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 				WHERE 
 					(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-					AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+					AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 					');
 		}
 		
@@ -603,7 +640,7 @@ class GlobalBackendndomy {
 		`'.$this->dbPrefix.'hosts` AS h1
 		LEFT OUTER JOIN `nagios_host_parenthosts` AS ph1 ON h1.host_id=ph1.host_id
 		WHERE o1.objecttype_id=1
-		AND (h1.config_type=1 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id) 
+		AND (h1.config_type='.$this->objConfigType.' AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id) 
 		AND ph1.parent_host_object_id IS null');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
@@ -633,9 +670,9 @@ class GlobalBackendndomy {
 		`'.$this->dbPrefix.'hosts` AS h2,
 		`'.$this->dbPrefix.'objects` AS o2
 		WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
-		AND (h1.config_type=1 AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
+		AND (h1.config_type='.$this->objConfigType.' AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
 		AND o1.object_id=ph1.parent_host_object_id
-		AND (h2.config_type=1 AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
+		AND (h2.config_type='.$this->objConfigType.' AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
 		AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
 			$arrChildNames[] = $data['name1'];
@@ -664,7 +701,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'servicestatus AS ss 
 			WHERE 
 				(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (s.config_type=1 AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
 				AND ss.service_object_id=o.object_id');
 		
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
@@ -696,7 +733,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'objects AS o2
 			WHERE 
 				(o.objecttype_id=3 AND o.name1 = binary \''.$hostgroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (hg.config_type=1 AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
+				AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
 				AND hgm.hostgroup_id=hg.hostgroup_id 
 				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)');
 		
@@ -729,7 +766,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'objects AS o2
 			WHERE 
 				(o.objecttype_id=4 AND o.name1 = binary \''.$servicegroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (sg.config_type=1 AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id) 
+				AND (sg.config_type='.$this->objConfigType.' AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id) 
 				AND sgm.servicegroup_id=sg.servicegroup_id 
 				AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id)');
 	
