@@ -2,7 +2,7 @@
 NagVis 1.3 Readme
 ==============================================================================
 Author: Lars Michelsen
-Date: 2008-01-06
+Date: 2008-03-29
 ==============================================================================
 
 README
@@ -26,7 +26,11 @@ NagVis-Developers-Mailinglist (nagvis-devel@lists.sourceforge.net).
 
 LICENSE
 ------------------
-Please have a look at the "LICENCE" file.
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License version 2 as published by the 
+Free Software Foundation.
+
+For details please have a look at the "LICENCE" file.
 
 ==============================================================================
 Have fun using NagVis and please report bugs!

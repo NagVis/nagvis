@@ -1,16 +1,33 @@
 <?php
+/*****************************************************************************
+ *
+ * GlobalBackend-ndomy.php - backend class for handling object and state 
+ *                           informations stored in the NDO database.
+ *
+ * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+ 
+/**
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 if(!isset($INC_GlobalBackend_ndomy)) {
 $INC_GlobalBackend_ndomy = TRUE;
-##########################################################################
-##                 NagVis - The Nagios Visualisation                    ##
-##########################################################################
-## GlobalBackend_ndomy.php Backend module to fetch the status from      ##
-##                         Nagios NDO Mysql DB. All not special to one  ##
-##                         Backend related things should removed here!  ##
-##########################################################################
-## Licenced under the terms and conditions of the GPL Licence,          ##
-## please see attached "LICENCE" file                                   ##
-##########################################################################
 
 class GlobalBackendndomy {
 	var $MAINCFG;
