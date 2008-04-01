@@ -102,7 +102,7 @@
 ; username for NDO-db
 ;dbuser="root"
 ; password for NDO-db
-;dbpass="xxx"
+;dbpass=""
 ; prefix for tables in NDO-db
 ;dbprefix="nagios_"
 ; instace-name for tables in NDO-db
