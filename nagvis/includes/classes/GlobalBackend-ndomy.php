@@ -558,8 +558,9 @@ class GlobalBackendndomy {
 					$arrReturn['state'] = 'ERROR';
 					$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
 				} else {
-					$arrReturn['error']['state'] = 'ERROR';
-					$arrReturn['error']['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
+					// If the method should fetch all services of the host and do not find
+					// any services for this host, don't return anything => The message
+					// that the host has no services is added by the frontend
 				}
 			} else {
 				while($data = mysql_fetch_array($QUERYHANDLE)) {
