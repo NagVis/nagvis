@@ -603,9 +603,14 @@ class NagVisObject {
 		
 		$ret = '[ ';
 		// Loop all child object until all looped or the child limit is reached
-		for($i = 0; $i < $this->hover_childs_limit && $i < $numObjects; $i++) {
-			if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
-				$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1, $parent).'}, ';
+		for($i = 0; $i <= $this->hover_childs_limit && $i < $numObjects; $i++) {
+			if($i < $this->hover_childs_limit) {
+				if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
+					$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1, $parent).'}, ';
+				}
+			} else {
+				$numRemaining = $numObjects - $this->hover_childs_limit;
+				$ret .= '{\'[obj_type]\': \'host\', \'[obj_name]\': \'\', \'[obj_summary_state]\': \'\', \'[obj_summary_output]\': \''.$numRemaining.' more items...\', \'<!--\\\sBEGIN\\\sservicegroup_child\\\s-->.+?<!--\\\sEND\\\sservicegroup_child\\\s-->\': \'\'}, ';
 			}
 		}
 		
