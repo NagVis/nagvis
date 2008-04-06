@@ -187,7 +187,7 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function createThumbnail($imgPath, $mapName) {
 		
-		if($this->checkImageExists($imgPath, TRUE)) {
+		if($this->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
 			$imgSize = getimagesize($imgPath);
 			// 0: width, 1:height, 2:type
 			
@@ -234,6 +234,44 @@ class NagVisFrontend extends GlobalPage {
 			return $this->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
 		} else {
 			return '';
+		}
+	}
+	
+	/**
+	 * Checks for writeable VarFolder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkVarFolderExists($printErr) {
+		if(file_exists(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR','varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable VarFolder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkVarFolderWriteable($printErr) {
+		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR','varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+			}
+			return FALSE;
 		}
 	}
 	
