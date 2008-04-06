@@ -31,6 +31,7 @@ class NagVisMap extends GlobalMap {
 	var $BACKEND;
 	var $GRAPHIC;
 	var $MAPOBJ;
+	var $numLineObjects;
 	
 	/**
 	 * Class Constructor
@@ -45,6 +46,8 @@ class NagVisMap extends GlobalMap {
 		$this->MAPCFG = &$MAPCFG;
 		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
+		
+		$this->numLineObjects = 0;
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
@@ -83,8 +86,26 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
+		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
+			switch(get_class($OBJ)) {
+				case 'NagVisMapObj':
+				case 'NagVisTextbox':
+					// do nothing for this objects in background image
+					// should never reach this -> method NagVisBackground::getState don't read this objects
+				break;
+				case 'NagVisHost':
+				case 'NagVisService':
+				case 'NagVisHostgroup':
+				case 'NagVisServicegroup':
+				case 'NagVisShape':
+					if(isset($OBJ->line_type)) {
+						$this->numLineObjects++;
+					}
+				break;
+			}
+		}
 		
-		if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $this->checkGd(1)) {
+		if($this->numLineObjects > 0 && $this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $this->checkGd(1)) {
 			$src = $this->MAINCFG->getValue('paths', 'htmlbase').'/nagvis/draw.php?map='.$this->MAPCFG->getName();
 		} else {
 			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
