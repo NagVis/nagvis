@@ -67,7 +67,7 @@ class WuiAddModify extends GlobalPage {
 	 */
 	function getForm() {
 		// Inititalize language for JS, Write JS Array for config validation
-		$this->addBodyLines($this->parseJs(array_merge($this->getJsLang(),$this->getJsValidConfig())));
+		$this->addBodyLines($this->parseJs($this->getJsLang()));
 		
 		$this->FORM = new GlobalForm(Array('name'=>'addmodify',
 			'id'=>'addmodify',
@@ -415,55 +415,6 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=X').'\';';
 		$ret[] = 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=Y').'\';';
 		$ret[] = 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getMessageText('loopInMapRecursion').'\';';
-		
-		return $ret;	
-	}
-	
-	/**
-	 * Gets the validConfig array in javascript format
-	 *
-	 * @return	Array JS
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getJsValidConfig() {
-		$ret = Array();
-		
-		$sRet = "var validConfig = { \n";
-		$i = 0;
-		foreach($this->MAPCFG->validConfig AS $type => $arr) {
-			if($i != 0) {
-				$sRet .= ", \n";	
-			}
-			$sRet .= '\''.$type.'\': { ';
-			$a = 0;
-			foreach($arr AS $key => $opt) {
-				if($a != 0) {
-					$sRet .= ", \n\t";	
-				}
-				if($key != 'type') {
-					$sRet .= '\''.$key.'\': { ';
-						$e = 0;
-						foreach($opt AS $var => $val) {
-							if($e != 0) {
-								$sRet .= ", \n\t\t";	
-							}
-							$sRet .= '\''.$var.'\': ';
-							if(is_numeric($val)) {
-								$sRet .= $val;
-							} else {
-								$sRet .= '\''.$val.'\'';
-							}
-							$e++;
-						}
-					$sRet .= ' }';
-					$a++;
-				}
-			}
-			$sRet .= "\n}";
-			$i++;
-		}
-		$sRet .= ' };';
-		$ret[] = $sRet;
 		
 		return $ret;
 	}

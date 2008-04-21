@@ -140,7 +140,7 @@ class WuiMap extends GlobalMap {
 	function parseMap() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->getBackground());
-		$ret = array_merge($ret,$this->parseJs($this->getJsGraphicObj().$this->getJsLang().$this->getJsValidMainConfig()));
+		$ret = array_merge($ret,$this->parseJs($this->getJsGraphicObj()."\n".$this->getJsLang()."\n".$this->getJsValidMainConfig()."\n".$this->getJsValidMapConfig()));
 		$ret = array_merge($ret,$this->parseObjects());
 		$ret = array_merge($ret,$this->parseInvisible());
 		$ret = array_merge($ret,$this->makeObjectsMoveable());
@@ -177,7 +177,7 @@ class WuiMap extends GlobalMap {
 		$ret = '';
 		$ret .= "myshape_background = new jsGraphics('mymap');\n";
 		$ret .= "myshape_background.setColor('#FF0000');\n";
-		$ret .= "myshape_background.setStroke(1);\n\n";
+		$ret .= "myshape_background.setStroke(1);\n";
 		
 		return $ret;
 	}
@@ -631,6 +631,26 @@ class WuiMap extends GlobalMap {
 		$ret .= 'lang[\'confirmRestore\'] = \''.$this->LANG->getMessageText('confirmRestore').'\';';
 		
 		return $ret;	
+	}
+	
+	/**
+	 * Parses the validation regex of the main configuration values to javascript
+	 *
+	 * @return	String Html
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getJsValidMainConfig() {
+		return 'var validMainConfig = '.json_encode($this->MAINCFG->getValidConfig()).';';
+	}
+	
+	/**
+	 * Parses the validation regex of the map configuration values to javascript
+	 *
+	 * @return	String Html
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getJsValidMapConfig() {
+		return 'var validMapConfig = '.json_encode($this->MAPCFG->getValidConfig()).';';
 	}
 	
 	/**

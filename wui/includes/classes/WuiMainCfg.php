@@ -63,6 +63,16 @@ class WuiMainCfg extends GlobalMainCfg {
 	}
 	
 	/**
+	 * Gets the valid configuration array
+	 *
+	 * @return	Array The validConfig array
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getValidConfig() {
+		return $this->validConfig;
+	}
+	
+	/**
 	 * Sets a config section in the config array
 	 *
 	 * @param	String	$sec	Section

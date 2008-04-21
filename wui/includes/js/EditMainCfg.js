@@ -25,6 +25,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
+function validateForm() {
+	
+	// Everything seems OK. Run update_param to get ready to submit the form
+	return update_param();
+}
+
 // function that builds up the list of parameters/values. There are 2 kinds of parameters values :
 //	- the \"normal value\". example : \$param=\"value\";
 //	- the other one (value computed with other ones) . example : \$param=\"part1\".\$otherparam;

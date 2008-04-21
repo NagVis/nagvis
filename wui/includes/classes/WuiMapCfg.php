@@ -58,6 +58,16 @@ class WuiMapCfg extends GlobalMapCfg {
 	}
 	
 	/**
+	 * Gets the valid configuration array
+	 *
+	 * @return	Array The validConfig array
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getValidConfig() {
+		return $this->validConfig;
+	}
+	
+	/**
 	 * Reads the configuration file of the map and 
 	 * sends it as download to the client.
 	 *

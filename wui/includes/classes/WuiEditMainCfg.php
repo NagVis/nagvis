@@ -61,7 +61,7 @@ class WuiEditMainCfg extends GlobalPage {
 									'id'=>'edit_config',
 									'method'=>'POST',
 									'action'=>'./form_handler.php?myaction=update_config',
-									'onSubmit'=>'return update_param();',
+									'onSubmit'=>'return validateForm();',
 									'cols'=>'3'));
 		$this->addBodyLines($this->FORM->initForm());
 		$this->addBodyLines($this->FORM->getHiddenField('properties',''));
