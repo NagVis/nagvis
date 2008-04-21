@@ -44,7 +44,7 @@ class WuiEditMainCfg extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/wui.js'),
+					  'jsIncludes'=>Array('./includes/js/wui.js','./includes/js/EditMainCfg.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'wui:editMainCfg');
@@ -69,7 +69,6 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->addBodyLines($this->getFields());
 		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getLabel('save')));
 		$this->addBodyLines($this->FORM->closeForm());
-		$this->addBodyLines($this->parseJs($this->getHidden()));
 		
 		// Resize the window
 		$this->addBodyLines($this->parseJs($this->resizeWindow(540,720)));
@@ -271,31 +270,6 @@ class WuiEditMainCfg extends GlobalPage {
 		closedir($handle);
 		
 		return $files;
-	}
-	
-	/**
-	 * Gets the hidden form
-	 *
-	 * @return	Array JS
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getHidden() {
-		$ret = Array();
-		$ret[] = "// function that builds up the list of parameters/values. There are 2 kinds of parameters values :";
-		$ret[] = "//	- the \"normal value\". example : \$param=\"value\";";
-		$ret[] = "//	- the other one (value computed with other ones) . example : \$param=\"part1\".\$otherparam;";
-		$ret[] = "function update_param() {";
-		$ret[] = "	document.edit_config.properties.value='';";
-		$ret[] = "	for(i=0;i<document.edit_config.elements.length;i++) {";
-		$ret[] = "		if(document.edit_config.elements[i].name.substring(0,5)=='conf_') {";
-		$ret[] = "			document.edit_config.properties.value=document.edit_config.properties.value+'^'+document.edit_config.elements[i].name.substring(5,document.edit_config.elements[i].name.length)+'='+document.edit_config.elements[i].value;";
-		$ret[] = "		}";
-		$ret[] = "	}";
-		$ret[] = "	document.edit_config.properties.value=document.edit_config.properties.value.substring(1,document.edit_config.properties.value.length);";
-		$ret[] = "	return true;";
-		$ret[] = "}";
-		
-		return $ret;	
 	}
 }
 ?>
