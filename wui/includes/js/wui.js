@@ -202,6 +202,6 @@ function open_window_management(page,name) {
 	
 	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
 	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
-	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=no,resizable=yes';
+	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=yes,resizable=yes';
 	win = window.open(page, name, options);
 }
