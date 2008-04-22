@@ -380,7 +380,7 @@ class WuiAddModify extends GlobalPage {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/.png$/', $file)) {
+				if ($file != "." && $file != ".." && preg_match('/.png$/i', $file)) {
 					$files[] = $file;
 				}				
 			}
