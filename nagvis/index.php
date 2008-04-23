@@ -31,7 +31,7 @@ require("./includes/defines/matches.php");
 
 // Include functions
 require("./includes/functions/debug.php");
-require("../includes/functions/json.php");
+require("./includes/functions/json.php");
 
 // Include needed global classes
 require("./includes/classes/GlobalMainCfg.php");
