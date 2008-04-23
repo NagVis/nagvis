@@ -100,12 +100,6 @@ switch($_GET['action']) {
 			
 			$objConf = Array();
 			if($_GET['map'] == '__automap') {
-				foreach($MAPCFG->validConfig['host'] AS $key => &$values) {
-					if($key != 'type' && $key != 'backend_id' && $key != 'host_name') {
-						$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
-					}
-				}
-				
 				$objConf['type'] = $_GET['objType'];
 				$objConf['host_name'] = $_GET['objName1'];
 			} else {
