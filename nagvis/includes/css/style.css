@@ -141,6 +141,24 @@ img {
 	padding: 2px;
 }
 
+/* Ajax hover template styles */
+table.ajax_hover_table {
+	border-collapse:collapse;
+}
+
+table.ajax_hover_table td, table.ajax_hover_table th {
+	border: 1px #a4a4a4 solid;
+	padding: 2px;
+	
+	font-size: 9px;
+	color: #314455;
+}
+
+table.ajax_hover_table th {
+	text-align: center;
+	background-color: #eee;
+}
+
 /* Style on info pages (index.php?info, index.php) */
 div.infopage table {
 	margin: auto;

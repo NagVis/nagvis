@@ -240,14 +240,11 @@ class NagVisObject {
 		$ret = '';
 		
 		if($this->hover_menu) {
-			$ret .= 'onmouseover="return overlib(';
-			if(isset($this->hover_url) && $this->hover_url != '') {
-				$ret .= $this->readHoverUrl();
+			if($this->getType() == 'service') {
+				$ret .= 'onmouseover="getObjectHoverMenu(\''.$this->getType().'\',\''.$this->getName().'\',\''.$this->getServiceDescription().'\'); displayHoverMenu('.($this->hover_delay*1000).');" onmouseout=" return hideHoverMenu();"';
 			} else {
-				$ret .= $this->readHoverTemplate();
+				$ret .= 'onmouseover="getObjectHoverMenu(\''.$this->getType().'\',\''.$this->getName().'\',\'\'); displayHoverMenu('.($this->hover_delay*1000).');" onmouseout="return hideHoverMenu();"';
 			}
-			
-			$ret .= ', WRAP, VAUTO, DELAY, '.($this->hover_delay*1000).');" onmouseout="return nd();"';
 			
 			return $ret;
 		}

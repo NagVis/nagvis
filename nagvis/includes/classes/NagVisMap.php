@@ -73,8 +73,8 @@ class NagVisMap extends GlobalMap {
 		$ret = array_merge($ret,$this->parseObjects());
 		// Dynamicaly set favicon
 		$ret[] = $this->getFavicon();
-		// Change title (add map alias and map state)
-		$ret[] = '<script type="text/javascript" language="JavaScript">document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		// Change title (add map alias and map state), set map name
+		$ret[] = '<script type="text/javascript" language="JavaScript">var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		return $ret;
 	}
