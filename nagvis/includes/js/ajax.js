@@ -24,6 +24,8 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
+ 
+var ajaxQueryCache = [];
 
 /**
  * function to create an XMLHttpClient in a cross-browser manner
@@ -66,13 +68,22 @@ function initXMLHttpClient() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getRequest(url,myCallback,oOpt) {
-	var oRequest = initXMLHttpClient();
-	
-	if (oRequest != null) {
-		oRequest.open("GET", url+"&timestamp="+Date.parse(new Date()), true);
-		oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
-		oRequest.onreadystatechange = function() { getAnswer(oRequest,myCallback,oOpt); };
-		oRequest.send(null);
+	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
+	if(typeof(ajaxQueryCache[url]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[url].timestamp <= 30000) {
+		getAnswer(undefined, myCallback, ajaxQueryCache[url], true);
+	} else {
+		var oRequest = initXMLHttpClient();
+		
+		if (oRequest != null) {
+			// Save this options to oOpt (needed for query cache)
+			oOpt.url = url;
+			oOpt.timestamp = Date.parse(new Date());
+			
+			oRequest.open("GET", url+"&timestamp="+oOpt.timestamp, true);
+			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
+			oRequest.onreadystatechange = function() { getAnswer(oRequest,myCallback,oOpt,false); };
+			oRequest.send(null);
+		}
 	}
 }
 
@@ -81,19 +92,36 @@ function getRequest(url,myCallback,oOpt) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getAnswer(oRequest,myCallback,oOpt) {
-	if(oRequest.readyState == 4) {
-		if (oRequest.status == 200) {
-			if(oRequest.responseText.replace(/\s+/g,'').length == 0) {
+function getAnswer(oRequest,myCallback,oOpt,bCached) {
+	if(bCached || (!bCached && oRequest.readyState == 4)) {
+		if(bCached || (!bCached && oRequest.status == 200)) {
+			var responseText;
+			if(!bCached) {
+				responseText = oRequest.responseText;
+			} else {
+				responseText = oOpt.response;
+			}
+			
+			if(responseText.replace(/\s+/g,'').length == 0) {
+				// Cache that dialog
+				updateQueryCache(oOpt.url, oOpt.timestamp, '');
+				
 				window[myCallback]('',oOpt);
 			} else {
+				// Cache that dialog
+				updateQueryCache(oOpt.url, oOpt.timestamp, responseText);
+				
 				// Error handling for the AJAX methods
-				if(oRequest.responseText.match(/Notice:|Warning:|Error:|Parse error:/)) {
-					alert("Error in ajax request handler:\n"+oRequest.responseText);
+				if(responseText.match(/Notice:|Warning:|Error:|Parse error:/)) {
+					alert("Error in ajax request handler:\n"+oresponseText);
 				} else {
-					window[myCallback](eval('( '+oRequest.responseText+')'),oOpt);
+					window[myCallback](eval('( '+responseText+')'),oOpt);
 				}
 			}
 		}
 	}
+}
+
+function updateQueryCache(url,timestamp,response) {
+	ajaxQueryCache[url] = { "timestamp": timestamp, "response": response };
 }
