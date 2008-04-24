@@ -28,7 +28,11 @@
  */
 if(!function_exists('json_encode')) {
 	function json_encode_string($in_str) {
-    mb_internal_encoding("UTF-8");
+		if(!function_exists('mb_internal_encoding')) {
+			//FIXME: Error handling
+		}
+		
+   	mb_internal_encoding("UTF-8");
 		
     $convmap = array(0x80, 0xFFFF, 0, 0xFFFF);
     $str = "";
