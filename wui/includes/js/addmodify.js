@@ -126,7 +126,7 @@ function check_object() {
 					return false;
 				}
 				
-				if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
+				if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
 					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length)+'='+document.addmodify.elements[i].value;
 				} else {
 					if(document.addmodify.elements[i].name=='line_type') {
@@ -137,7 +137,7 @@ function check_object() {
 					}
 				}
 			} else {
-				if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
+				if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
 					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+document.addmodify.elements[i].name+',TYPE~'+document.addmodify.type.value+',MAPNAME~'+document.addmodify.map.value));
 					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
