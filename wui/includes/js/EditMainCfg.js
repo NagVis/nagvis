@@ -31,6 +31,19 @@ function validateForm() {
 	return update_param();
 }
 
+/**
+ * validateMainConfigFieldValue(oField)
+ *
+ * This function checks a config field value for valid format. The check is done
+ * by the match regex from validMapConfig array.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function validateMainConfigFieldValue(oField) {
+	var sName = oField.name.replace('conf_','');
+	return validateValue(sName, oField.value, window.opener.validMainConfig[findSectionOfOption(sName)][sName].match)
+}
+
 // function that builds up the list of parameters/values. There are 2 kinds of parameters values :
 //	- the \"normal value\". example : \$param=\"value\";
 //	- the other one (value computed with other ones) . example : \$param=\"part1\".\$otherparam;
@@ -43,4 +56,23 @@ function update_param() {
 	}
 	document.edit_config.properties.value=document.edit_config.properties.value.substring(1,document.edit_config.properties.value.length);
 	return true;
+}
+
+/**
+ * findSectionOfOption(sOption)
+ *
+ * This function finds the section of an main configuration option by searching
+ * it in the valid config array.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function findSectionOfOption(sOption) {
+	for (var sSection in window.opener.validMainConfig) {
+		for (var sKey in window.opener.validMainConfig[sSection]) {
+			if(sKey == sOption) {
+				return sSection;
+			}
+		}
+	}
+	return false;
 }

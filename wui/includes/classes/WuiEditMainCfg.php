@@ -148,10 +148,10 @@ class WuiEditMainCfg extends GlobalPage {
 									break;
 								}
 								
-								$ret = array_merge($ret,$this->FORM->getSelectField("conf_".$key2,$arrOpts));
+								$ret = array_merge($ret,$this->FORM->getSelectField("conf_".$key2, $arrOpts, '', '' , 'validateMainConfigFieldValue(this)'));
 							break;
 							default:
-								$ret = array_merge($ret,$this->FORM->getInputField("conf_".$key2,$val2));
+								$ret = array_merge($ret,$this->FORM->getInputField("conf_".$key2, $val2, 'validateMainConfigFieldValue(this)'));
 								
 								if(isset($prop['locked']) && $prop['locked'] == 1) {
 									$ret[] = "<script>document.edit_config.elements['conf_".$key2."'].disabled=true;</script>";
