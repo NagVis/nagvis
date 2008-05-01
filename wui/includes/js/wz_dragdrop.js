@@ -1395,6 +1395,9 @@ at http://www.walterzorn.com/dragdrop/api_e.htm (english) or
 http://www.walterzorn.de/dragdrop/api.htm (german)	*/
 function my_PickFunc()
 {
+	// Save old coords
+	dd.obj.oldX = dd.obj.x;
+	dd.obj.oldY = dd.obj.y;
 }
 
 
@@ -1438,6 +1441,12 @@ function my_DropFunc() {
 	var names = "";
 	var coord_x = "";
 	var coord_y = "";
+	
+	// When x or y are negative just return this and make no change
+	if(dd.obj.y < 0 || dd.obj.x < 0) {
+		dd.obj.moveTo(dd.obj.oldX, dd.obj.oldY);
+		return;
+	}
 			
 	for (cpt = dd.elements.length - 1; cpt >=0  ; cpt--) {
 		names = names + dd.elements[cpt].name.replace("box_","") + ",";
@@ -1445,7 +1454,6 @@ function my_DropFunc() {
 		myposy = dd.elements[cpt].y;
 		coord_x = coord_x + myposx + ",";
 		coord_y = coord_y + myposy + ",";
-
 	}
 	
 	// we remove the final comma
