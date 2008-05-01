@@ -358,6 +358,7 @@ class WuiMap extends GlobalMap {
 	 */
 	function parseLabel(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::parseLabel(&$obj)');
+		$relative = 0;
 		
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
@@ -368,9 +369,11 @@ class WuiMap extends GlobalMap {
 		// If there is a presign it should be relative to the objects x/y
 		if(preg_match('/^(\+|\-)/',$obj['label_x'])) {
 			$obj['label_x'] = $obj['x'] + $obj['label_x'];
+			$relative = 1;
 		}
 		if(preg_match('/^(\+|\-)/',$obj['label_y'])) {
 			$obj['label_y'] = $obj['y'] + $obj['label_y'];
+			$relative = 1;
 		}
 		
 		// If no x/y coords set, fallback to object x/y
@@ -385,7 +388,14 @@ class WuiMap extends GlobalMap {
 			$obj['label_width'] .= 'px';	
 		}
 		
-		$ret  = '<div class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
+		//
+		if($relative == 1) {
+			$id = '"id="rel_label_'.$obj['type'].'_'.$obj['id'].'"';
+		} else {
+			$id = '"id="abs_label_'.$obj['type'].'_'.$obj['id'].'"';
+		}
+		
+		$ret  = '<div '.$id.' class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
 		$ret .= '<span>'.$obj['label_text'].'</span>';
 		$ret .= '</div>';
 		

@@ -1398,6 +1398,17 @@ function my_PickFunc()
 	// Save old coords
 	dd.obj.oldX = dd.obj.x;
 	dd.obj.oldY = dd.obj.y;
+	
+	// Check if this is a box
+	if(dd.obj.name.search('box_') != -1) {
+		// When this object has a relative coordinated label, then move this too
+		var sLabelName = dd.obj.name.replace('box_','rel_label_');
+		var oLabel = document.getElementById(sLabelName);
+		if(oLabel) {
+			ADD_DHTML(sLabelName);
+			dd.obj.addChild(sLabelName);
+		}
+	}
 }
 
 
@@ -1447,7 +1458,13 @@ function my_DropFunc() {
 		dd.obj.moveTo(dd.obj.oldX, dd.obj.oldY);
 		return;
 	}
-			
+	
+	// Dragging of relative labels is not allowed, revert it
+	if(dd.obj.name.search('rel_label_') != -1) {
+		dd.obj.moveTo(dd.obj.oldX, dd.obj.oldY);
+		return;
+	}
+	
 	for (cpt = dd.elements.length - 1; cpt >=0  ; cpt--) {
 		names = names + dd.elements[cpt].name.replace("box_","") + ",";
 		myposx = dd.elements[cpt].x;
