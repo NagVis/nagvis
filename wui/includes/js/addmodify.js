@@ -213,3 +213,15 @@ function check_object() {
 	}
 	return true;
 }
+
+/**
+ * validateMapConfigFieldValue(oField)
+ *
+ * This function checks a config field value for valid format. The check is done
+ * by the match regex from validMapConfig array.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function validateMapConfigFieldValue(oField) {
+	return validateValue(oField.name, oField.value, window.opener.validMapConfig[document.addmodify.type.value][oField.name].match)
+}

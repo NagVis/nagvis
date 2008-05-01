@@ -187,8 +187,12 @@
 				</wrongValueFormat>
 				<wrongValueFormatMap>
 					<title>Falsches Format</title>
-					<text>Das Attribut &quot;[ATTRIBUTE]&quot; in der Sektion &quot;[TYPE]&quot; in der Map-Konfigurations-Datei &quot;[MAP]&quot; entspricht nicht dem korrekten Format</text>
+					<text>Das Attribut &quot;[ATTRIBUTE]&quot; in einem Element vom Typ &quot;[TYPE]&quot; in der Map-Konfigurations-Datei &quot;[MAP]&quot; entspricht nicht dem korrekten Format</text>
 				</wrongValueFormatMap>
+				<wrongValueFormatOption>
+					<title>Falsches Format</title>
+					<text>Das Attribut &quot;[ATTRIBUTE]&quot; entspricht nicht dem korrekten Format</text>
+				</wrongValueFormatOption>
 				<languageNotReadable>
 					<title>Keine Leserechte auf die Sprachdatei</title>
 					<text>Bitte die Leseberechtigungen des Webservers auf die Sprachdatei &quot;[LANGFILE]&quot; pr&uuml;fen</text>

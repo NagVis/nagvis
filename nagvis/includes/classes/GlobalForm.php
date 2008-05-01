@@ -130,7 +130,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getInputLine($label,$name,$value,$must=FALSE) {
+	function getInputLine($label,$name,$value,$must=FALSE,$onBlur='') {
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -140,7 +140,7 @@ class GlobalForm {
 		}
 		
 		$ret[] = '<tr><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield">';
-		$ret = array_merge($ret,$this->getInputField($name,$value));
+		$ret = array_merge($ret,$this->getInputField($name,$value,$onBlur));
 		$ret[] = '</td></tr>';
 		
 		return $ret;
@@ -158,7 +158,7 @@ class GlobalForm {
 	 * @return	Array 		Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='') {
+	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='',$onBlur='') {
 		$ret = Array();
 		
 		if($must) {
@@ -168,7 +168,7 @@ class GlobalForm {
 		}
 		
 		$ret[] = '<tr><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
-		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange,$must));
+		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange,$must,$onBlur));
 		$ret[] = '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
 		
 		return $ret;
@@ -241,9 +241,9 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSelectField($name,$arr,$onChange='',$must=FALSE) {
+	function getSelectField($name,$arr,$onChange='',$must=FALSE,$onBlur='') {
 		$ret = Array();
-		$ret[] = '<select name="'.$name.'" onChange="'.$onChange.'">';
+		$ret[] = '<select name="'.$name.'" onChange="'.$onChange.'" onBlur="'.$onBlur.'">';
 		
 		if(!$must) {
 			$ret[] = '<option value=""></option>';
@@ -269,14 +269,14 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getInputField($name,$value) {
+	function getInputField($name,$value,$onBlur='') {
 		$ret = Array();
 		
 		if(is_array($value)) {
 			$value = implode(',',$value);
 		}
 		
-		$ret[] = '<input type="text" name="'.$name.'" value="'.$value.'" />';
+		$ret[] = '<input type="text" name="'.$name.'" value="'.$value.'" onBlur="'.$onBlur.'" />';
 		
 		return $ret;
 	}

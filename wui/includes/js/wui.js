@@ -67,6 +67,30 @@ function getMapPermissions(mapName,mapOptions,permissionLevel) {
 	return false;
 }
 
+/**
+ * validateValue(oField)
+ *
+ * This function checks a string for valid format. The check is done by the
+ * given regex.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function validateValue(sName, sValue, sRegex) {
+	// Remove PHP delimiters
+	sRegex = sRegex.replace(/^\//, "");
+	sRegex = sRegex.replace(/\/[igm]*$/, "");
+	
+	// Match the current value
+	var regex = new RegExp(sRegex);
+	var match = regex.exec(sValue);
+	if(sValue == '' || match != null) {
+		return true;
+	} else {
+		alert(printLang(window.opener.lang['wrongValueFormatOption'],'ATTRIBUTE~'+sName));
+		return false;
+	}
+}
+
 // functions used to track the mouse movements, when the user is adding an object. Draw a line a rectangle following the mouse
 // when the user has defined enough points we open the "add object" window
 

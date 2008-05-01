@@ -629,6 +629,10 @@ class WuiMap extends GlobalMap {
 		$ret .= 'lang[\'clickMapToSetPoints\'] = \''.$this->LANG->getMessageText('clickMapToSetPoints').'\';';
 		$ret .= 'lang[\'confirmDelete\'] = \''.$this->LANG->getMessageText('confirmDelete').'\';';
 		$ret .= 'lang[\'confirmRestore\'] = \''.$this->LANG->getMessageText('confirmRestore').'\';';
+		$ret .= 'lang[\'wrongValueFormat\'] = \''.$this->LANG->getMessageText('wrongValueFormat').'\';';
+		$ret .= 'lang[\'wrongValueFormatMap\'] = \''.$this->LANG->getMessageText('wrongValueFormatMap').'\';';
+		$ret .= 'lang[\'wrongValueFormatOption\'] = \''.$this->LANG->getMessageText('wrongValueFormatOption').'\';';
+		
 		
 		return $ret;	
 	}
