@@ -52,7 +52,7 @@ class WuiAddModify extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/addmodify.js',
+					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/addmodify.js',
 					  					  './includes/js/ajax.js',
 					  					  './includes/js/wui.js'),
 					  'extHeader'=>Array(''),

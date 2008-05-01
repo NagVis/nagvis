@@ -47,7 +47,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/BackgroundManagement.js',
+					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/BackgroundManagement.js',
 					  						'./includes/js/ajax.js',
 					  						'./includes/js/wui.js'),
 					  'extHeader'=>Array(''),
