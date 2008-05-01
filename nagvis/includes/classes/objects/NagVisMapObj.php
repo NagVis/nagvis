@@ -202,7 +202,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	function fetchMapObjects() {
 		foreach($this->MAPCFG->validConfig AS $type => &$arr) {
-			if($type != 'global' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
+			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
 				foreach($objs AS $index => &$objConf) {
 					// workaround
 					$objConf['id'] = $index;
