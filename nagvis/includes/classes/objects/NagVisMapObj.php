@@ -247,7 +247,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 						break;
 						default:
 							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-							$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName());
+							$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName());
 						break;
 					}
 					
