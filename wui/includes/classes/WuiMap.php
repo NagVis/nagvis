@@ -385,7 +385,7 @@ class WuiMap extends GlobalMap {
 			$obj['label_width'] .= 'px';	
 		}
 		
-		$ret  = '<div class="object_label" style="background:'.$obj['label_background'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
+		$ret  = '<div class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
 		$ret .= '<span>'.$obj['label_text'].'</span>';
 		$ret .= '</div>';
 		
