@@ -550,7 +550,7 @@ class NagVisStatefulObject extends NagVisObject {
 				$this->label_width .= 'px';	
 			}
 			
-			$ret  = '<div class="object_label" style="background:'.$this->label_background.';left:'.$this->label_x.'px;top:'.$this->label_y.'px;width:'.$this->label_width.';z-index:'.($this->z+1).';overflow:visible;">';
+			$ret  = '<div class="object_label" style="background:'.$this->label_background.';border-color:'.$this->label_border.';left:'.$this->label_x.'px;top:'.$this->label_y.'px;width:'.$this->label_width.';z-index:'.($this->z+1).';overflow:visible;">';
 			$ret .= '<span>'.$this->label_text.'</span>';
 			$ret .= '</div>';
 			
