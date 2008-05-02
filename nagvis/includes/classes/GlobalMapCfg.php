@@ -737,7 +737,7 @@ class GlobalMapCfg {
 					return FALSE;
 				}
 			} else {
-				return FALSE;	
+				return FALSE;
 			}
 		} else {
 			return FALSE;
@@ -751,7 +751,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixTemplateIndexes() {
-		foreach($this->mapConfig['template'] AS $id => &$element) {
+		foreach($this->mapConfig['template'] AS $id => $element) {
 			if(isset($element['name']) && $element['name'] != '') {
 				$this->mapConfig['template'][$element['name']] = $element;
 				unset($this->mapConfig['template'][$id]);
