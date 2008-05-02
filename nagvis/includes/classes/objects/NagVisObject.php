@@ -302,6 +302,10 @@ class NagVisObject {
 					$ret = str_replace('[lang_alias]',$this->LANG->getLabel('alias'),$ret);
 				}
 				
+				if(strpos($ret,'[lang_address]') !== FALSE) {
+					$ret = str_replace('[lang_address]',$this->LANG->getLabel('address'),$ret);
+				}
+				
 				if(strpos($ret,'[lang_state]') !== FALSE) {
 					$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
 				}

@@ -235,6 +235,9 @@
 				<alias>
 					<text>Alias</text>
 				</alias>
+				<address>
+					<text>Adresse</text>
+				</address>
 				<state>
 					<text>Status</text>
 				</state>
