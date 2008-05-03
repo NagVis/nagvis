@@ -769,7 +769,7 @@ class GlobalMapCfg {
 		// Loop all objects
 		foreach($this->mapConfig AS $type => &$elements) {
 			// Except global and templates (makes no sense)
-			if($type != 'global' && $type != 'template') {
+			if($type != 'global') {
 				// Loop all objects of that type
 				foreach($elements AS $id => &$element) {
 					// Check for "use" value
