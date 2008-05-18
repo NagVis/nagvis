@@ -504,6 +504,7 @@ class GlobalBackendndomy {
 				$QUERYHANDLE = $this->mysqlQuery('SELECT 
 					o.object_id, o.name1, o.name2, 
 					s.display_name, 
+                    h.address, 
 					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
 					UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
@@ -514,6 +515,7 @@ class GlobalBackendndomy {
 					dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 					FROM 
 						'.$this->dbPrefix.'services AS s,
+						'.$this->dbPrefix.'hosts AS h,
 						'.$this->dbPrefix.'objects AS o
 					LEFT JOIN
 						'.$this->dbPrefix.'servicestatus AS ss
@@ -523,13 +525,15 @@ class GlobalBackendndomy {
 						ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 					WHERE 
 						(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
-						AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+						AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
+                        AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
 						AND ss.service_object_id=o.object_id 
 					LIMIT 1');
 			} else {
 				$QUERYHANDLE = $this->mysqlQuery('SELECT 
 					o.object_id, o.name1, o.name2,
 					s.display_name, 
+                    h.address, 
 					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
 					UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
@@ -540,6 +544,7 @@ class GlobalBackendndomy {
 					dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 					FROM 
 						'.$this->dbPrefix.'services AS s,
+						'.$this->dbPrefix.'hosts AS h,
 						'.$this->dbPrefix.'objects AS o
 					LEFT JOIN
 						'.$this->dbPrefix.'servicestatus AS ss
@@ -550,6 +555,7 @@ class GlobalBackendndomy {
 					WHERE 
 						(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
 						AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+                        AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
 						');
 			}
 			
@@ -570,6 +576,7 @@ class GlobalBackendndomy {
 					$arrTmpReturn['service_description'] = $data['name2'];
 					$arrTmpReturn['display_name'] = $data['display_name'];
 					$arrTmpReturn['alias'] = $data['display_name'];
+					$arrTmpReturn['address'] = $data['address'];
 					
 					// Add Additional informations to array
 					$arrTmpReturn['last_check'] = $data['last_check'];

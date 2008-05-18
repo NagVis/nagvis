@@ -422,7 +422,7 @@ class NagVisObject {
 			$ret .= '\'[obj_name]\': \''.$this->getName().'\', ';
 		}
 		
-		if($this->type == 'host') {
+		if($this->type == 'host' || $this->type == 'service') {
 			$ret .= '\'[obj_address]\': \''.$this->address.'\', ';
 		}
 		
