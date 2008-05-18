@@ -823,6 +823,35 @@ class GlobalBackendndomy {
 		
 		return $arrReturn;
 	}
+    
+    /**
+	 * PUBLIC Method getServicegroupInformations
+	 *
+	 * Gets informations like the alias for a servicegroup
+	 *
+	 * @param	String		    Name of servicegroup
+	 * @return	Array			Array with object informations
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getServicegroupInformations($servicegroupName) {
+		$arrReturn = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+				sg.alias
+			FROM 
+				'.$this->dbPrefix.'objects AS o,
+				'.$this->dbPrefix.'servicegroups AS sg
+			WHERE 
+				(o.objecttype_id=4 AND o.name1 = binary \''.$servicegroupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
+				AND (sg.config_type='.$this->objConfigType.' AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id)
+				LIMIT 1');
+		
+		$data = mysql_fetch_array($QUERYHANDLE);
+		
+		$arrReturn['alias'] = $data['alias'];
+		
+		return $arrReturn;
+	}
 	
 	/**
 	 * PUBLIC Method getNagiosStartTime

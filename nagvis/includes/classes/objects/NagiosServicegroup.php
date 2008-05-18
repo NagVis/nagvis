@@ -94,7 +94,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchState() {
-		
 		// Get states of all members
 		foreach($this->members AS &$OBJ) {
 			$OBJ->fetchState();
@@ -146,6 +145,9 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	function fetchMemberServiceObjects() {
 		// Get all services and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			// Get additional informations like the alias (maybe bad place here)
+			$this->setConfiguration($this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupInformations($this->servicegroup_name));
+			
 			$arrServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicesByServicegroupName($this->servicegroup_name);
 			foreach($arrServices AS &$service) {
 				$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $service['host_name'], $service['service_description']);
