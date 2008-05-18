@@ -225,6 +225,10 @@
 					<title>Konnte Map Konfigurations-Datei nicht l&ouml;schen</title>
 					<text>Die Map Konfigurations-Datei &quot;[MAPPATH]&quot; konnte nicht gel&ouml;scht werden</text>
 				</couldNotDeleteMapCfg>
+				<phpModuleNotLoaded>
+					<title>PHP Modul nicht vorhanden</title>
+					<text>Das ben&ouml;tigte PHP Modul &quot;[MODULE]&quot; ist nicht vorhanden.</text>
+				</phpModuleNotLoaded>
 			</messages>
 		</global>
 	</global>

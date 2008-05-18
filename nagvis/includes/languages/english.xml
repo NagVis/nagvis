@@ -225,6 +225,10 @@
 					<title>Unable to delete map configuration</title>
 					<text>Could not delete the map configuration file &quot;[MAPPATH]&quot;</text>
 				</couldNotDeleteMapCfg>
+				<phpModuleNotLoaded>
+					<title>PHP module not available</title>
+					<text>The needed PHP module &quot;[MODULE]&quot; is not available in your installation. Please add the module.</text>
+				</phpModuleNotLoaded>
 			</messages>
 		</global>
 	</global>

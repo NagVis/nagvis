@@ -57,6 +57,24 @@ class WuiFrontend extends GlobalPage {
 		parent::GlobalPage($this->MAINCFG,$prop);
 	}
 	
+	function checkPreflight() {
+		if(!$this->checkPHPMBString(1)) {
+			exit;
+		}
+	}
+	
+	function checkPHPMBString($printErr=1) {
+		if (!extension_loaded('mbstring')) {
+			if($printErr) {
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR','phpModuleNotLoaded','MODULE~mbstring');
+			}
+			return FALSE;
+		} else {
+			return TRUE;
+		}
+	}
+	
 	/**
 	* If enabled, the map is added to the page
 	*

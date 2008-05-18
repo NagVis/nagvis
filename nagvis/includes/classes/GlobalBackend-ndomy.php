@@ -87,7 +87,7 @@ class GlobalBackendndomy {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 				$FRONTEND->messageToUser('ERROR','nagiosNotRunning','BACKENDID~'.$this->backendId);
 			}
-			 
+			
 			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
 			if($_SERVER['REQUEST_TIME'] - strtotime($nagiosstate['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));

@@ -137,6 +137,7 @@ switch($_GET['page']) {
 		$MAPCFG->readMapConfig();
 		
 		$FRONTEND = new WuiFrontend($MAINCFG,$MAPCFG);
+		$FRONTEND->checkPreflight();
 		$FRONTEND->getMap();
 		$FRONTEND->getMessages();
 		
