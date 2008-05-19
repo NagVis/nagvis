@@ -591,7 +591,10 @@ class NagVisStatefulObject extends NagVisObject {
 		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
 		
 		if($this->getSummaryState() != '') {
-			if($arrStates[$this->getSummaryState()] < $arrStates[$OBJ->getSummaryState()]) {
+			/* When the state of the current child is not as good as the current
+			 * summary state or the state is equal and the sub-state differs.
+			 */
+			if($arrStates[$this->getSummaryState()] < $arrStates[$OBJ->getSummaryState()] || ($arrStates[$this->getSummaryState()] == $arrStates[$OBJ->getSummaryState()] && ($this->getSummaryAcknowledgement() || $this->getSummaryInDowntime()))) {
 				$this->summary_state = $OBJ->getSummaryState();
 				
 				if($OBJ->getSummaryAcknowledgement() == 1) {
