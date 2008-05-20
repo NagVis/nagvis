@@ -81,7 +81,7 @@ function validateValue(sName, sValue, sRegex) {
 	sRegex = sRegex.replace(/\/[igm]*$/, "");
 	
 	// Match the current value
-	var regex = new RegExp(sRegex);
+	var regex = new RegExp(sRegex, "i");
 	var match = regex.exec(sValue);
 	if(sValue == '' || match != null) {
 		return true;
