@@ -502,22 +502,22 @@
 					<text>Hilfe</text>
 				</help>
 				<open>
-					<text>Map &Ouml;ffnen</text>
+					<text>Karte &Ouml;ffnen</text>
 				</open>
 				<openInNagVis>
-					<text>Map in NagVis &Ouml;ffnen</text>
+					<text>Karte in NagVis &Ouml;ffnen</text>
 				</openInNagVis>
 				<manage>
 					<text>Verwalten</text>
 				</manage>
 				<manageMaps>
-					<text>Maps</text>
+					<text>Karten</text>
 				</manageMaps>
 				<manageBackends>
 					<text>Backends</text>
 				</manageBackends>
 				<manageBackgrounds>
-					<text>Hintergrunds</text>
+					<text>Hintergr&uuml;nde</text>
 				</manageBackgrounds>
 				<manageShapes>
 					<text>Shapes</text>
@@ -532,7 +532,7 @@
 					<text>Spezielle</text>
 				</special>
 				<createMap>
-					<text>Erstelle eine Map</text>
+					<text>Erstelle eine Karte</text>
 				</createMap>
 				<renameMap>
 					<text>Eine Map umbenennen</text>
