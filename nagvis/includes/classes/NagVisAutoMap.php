@@ -525,21 +525,29 @@ class NagVisAutoMap extends GlobalMap {
 		/**
 		 * NagVis tries to take configured host from main
 		 * configuration or read the host which has no parent from backend
+		 * when the root cannot be fetched via backend it reads the default
+		 * value for the defaultroot
 		 */
 		$defaultRoot = $this->MAINCFG->getValue('automap','defaultroot', TRUE);
-		if(isset($defaultRoot) && $defaultRoot != '') {
-			return $defaultRoot;
-		} else {
+		if(!isset($defaultRoot) || $defaultRoot == '') {
 			if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 				$hostsWithoutParent = $this->BACKEND->BACKENDS[$this->backend_id]->getHostNamesWithNoParent();
 				if(count($hostsWithoutParent) == 1) {
-					return $hostsWithoutParent[0];
-				} else {
-					// Could not get root host for the automap
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
-					$FRONTEND->messageToUser('ERROR','couldNotGetRootHostname');
+					$defaultRoot = $hostsWithoutParent[0];
 				}
 			}
+		}
+		
+		if(!isset($defaultRoot) || $defaultRoot == '') {
+			$defaultRoot = $this->MAINCFG->getValue('automap','defaultroot');
+		}
+		
+		// Could not get root host for the automap
+		if(!isset($defaultRoot) || $defaultRoot == '') {
+			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
+			$FRONTEND->messageToUser('ERROR','couldNotGetRootHostname');
+		} else {
+			return $defaultRoot;
 		}
 	}
 	
