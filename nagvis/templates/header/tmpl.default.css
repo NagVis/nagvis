@@ -31,6 +31,10 @@ table.header_table {
 	width: 100%;
 }
 
+table.header_table tr {
+	height: 31px;
+}
+
 table.header_table td, table.header_table th {
 	border: 1px #a4a4a4 solid;
 	padding: 2px;
@@ -42,6 +46,21 @@ table.header_table td, table.header_table th {
 table.header_table th {
 	text-align: center;
 	background-color: #eee;
+}
+
+table.header_table th.logo {
+	background-color: #fff;
+	width:150px;
+	text-align:left;
+	padding: 0px;
+	margin: 0px;
+	padding-left:20px;
+}
+
+table.header_table th.logo img {
+	padding: 0px;
+	margin: 0px;
+	border: 0;
 }
 
 table.header_table a {
