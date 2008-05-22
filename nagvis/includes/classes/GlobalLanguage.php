@@ -55,7 +55,6 @@ class GlobalLanguage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLanguage() {
-		
 		/**
 		 * If the language cache vars are set and the cache is newer than the
 		 * language file modification time load the cache. If not, read the
@@ -64,11 +63,13 @@ class GlobalLanguage {
 		 * The NagVis version also has to be recognized in the language cache. If 
 		 * not this could cause problems when using different NagVis versions.
 		 */
-		if(isset($_SESSION['nagvis_lang_cache']) 
+		if(isset($_SESSION['nagvis_lang_cache'])
 			&& isset($_SESSION['nagvis_version']) 
 			&& isset($_SESSION['nagvis_lang_cache_time']) 
+			&& isset($_SESSION['nagvis_lang_cache_lang']) 
 			&& is_array($_SESSION['nagvis_lang_cache']) 
 			&& $_SESSION['nagvis_version'] == CONST_VERSION 
+			&& $_SESSION['nagvis_lang_cache_lang'] == $this->MAINCFG->getValue('global', 'language') 
 			&& $_SESSION['nagvis_lang_cache_time'] > $this->getLanguageFileModificationTime()) {
 			$this->lang = $_SESSION['nagvis_lang_cache'];
 			return TRUE;
@@ -78,6 +79,7 @@ class GlobalLanguage {
 				$this->lang = $this->lang['language'];
 				
 				$_SESSION['nagvis_version'] = CONST_VERSION;
+				$_SESSION['nagvis_lang_cache_lang'] = $this->MAINCFG->getValue('global', 'language');
 				$_SESSION['nagvis_lang_cache_time'] = time();
 				$_SESSION['nagvis_lang_cache'] = $this->lang;
 				
