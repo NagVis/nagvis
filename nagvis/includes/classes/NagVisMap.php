@@ -121,8 +121,16 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFavicon() {
-		if(file_exists($this->MAINCFG->getValue('paths', 'images').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
-			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
+		if($this->MAPOBJ->getSummaryInDowntime()) {
+			$favicon = 'downtime';
+		} elseif($this->MAPOBJ->getSummaryAcknowledgement()) {
+			$favicon = 'ack';
+		} else {
+			$favicon = strtolower($this->MAPOBJ->getSummaryState());
+		}
+		
+		if(file_exists($this->MAINCFG->getValue('paths', 'images').'internal/favicon_'.$favicon.'.png')) {
+			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.$favicon.'.png';
 		} else {
 			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
 		}
