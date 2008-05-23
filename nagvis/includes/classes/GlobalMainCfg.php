@@ -331,7 +331,7 @@ class GlobalMainCfg {
 		// Try to get the base path via $_SERVER['SCRIPT_FILENAME']
 		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
-			
+		
 		// Read Main Config file
 		$this->configFile = $configFile;
 		$this->readConfig(1);
@@ -342,7 +342,6 @@ class GlobalMainCfg {
 		// set default value
 		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
 		$this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
-		
 	}
 	
 	/**
@@ -779,15 +778,22 @@ class GlobalMainCfg {
 		} elseif(!$ignoreDefault) {
 			// Enfasten this method by first check for famous sections and only if 
 			// they don't match try to match the backend_ and rotation_ sections
-			if($sec == 'global' || $sec == 'default' || $sec == 'paths') {
+			if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
 				return $this->validConfig[$sec][$var]['default'];
 			} elseif(strpos($sec, 'backend_') === 0) {
+				// If backendtype specified, return the default value of this backend
 				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] != '') {
-					return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
+					if(isset($this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']) && $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'] != '') {
+						return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
+					} else {
+						return $this->validConfig['backend'][$var]['default'];
+					}
 				} else {
+					// When exists, return the default value of the default backend
 					if(isset($this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']) && $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'] != '') {
 						return $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'];
 					} else {
+						// When exists, return the default value of backend-global options
 						if(isset($this->validConfig['backend'][$var]['default']) && $this->validConfig['backend'][$var]['default'] != '') {
 							return $this->validConfig['backend'][$var]['default'];
 						} else {
