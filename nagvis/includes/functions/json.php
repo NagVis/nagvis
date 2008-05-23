@@ -84,11 +84,11 @@ if(!function_exists('json_encode')) {
       }
     } else {
       if(is_string($arr)) {
-        $json_str = "\"". json_encode_string($arr) . "\"";
+        $json_str = "'". str_replace("\\","\\\\",json_encode_string($arr)) . "'";
       } elseif(is_numeric($arr)) {
         $json_str = $arr;
       } else {
-        $json_str = "\"". json_encode_string($arr) . "\"";
+        $json_str = "'". json_encode_string($arr) . "'";
       }
     }
     return $json_str;
