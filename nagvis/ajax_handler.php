@@ -32,6 +32,7 @@ require("./includes/defines/matches.php");
 // Include functions
 require("./includes/functions/debug.php");
 require("./includes/functions/json.php");
+require("./includes/functions/getuser.php");
 
 // Include needed global classes
 require("./includes/classes/GlobalMainCfg.php");
@@ -67,6 +68,10 @@ require("./includes/classes/objects/NagVisTextbox.php");
 
 // Load the main configuration
 $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+
+// FIXME: This is a hack; TODO: create a class "AjaxFrontend" which
+// handles this user authentication related things and the handling below
+$MAINCFG->setRuntimeValue('user', getUser());
 
 // Initialize var
 if(!isset($_GET['action'])) {

@@ -51,7 +51,7 @@ class NagVisMap extends GlobalMap {
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
-		parent::GlobalMap($MAINCFG,$MAPCFG);
+		parent::GlobalMap($this->MAINCFG,$this->MAPCFG);
 		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
 		
 		$this->MAPOBJ->fetchMembers();

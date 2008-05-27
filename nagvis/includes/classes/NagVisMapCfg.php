@@ -40,7 +40,7 @@ class NagVisMapCfg extends GlobalMapCfg {
 		$this->name	= $name;
 		
 		$this->getMap();
-		parent::GlobalMapCfg($MAINCFG,$this->name);
+		parent::GlobalMapCfg($this->MAINCFG,$this->name);
 	}
 	
 	/**
