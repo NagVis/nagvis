@@ -73,7 +73,7 @@ class GlobalPage {
 		$this->user = $this->getUser();
 		$this->MAINCFG->setRuntimeValue('user',$this->user);
 		
-		GlobalPage::checkPreflight();
+		self::checkPreflight();
 	}
 	
 	/**
