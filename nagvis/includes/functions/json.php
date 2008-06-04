@@ -26,8 +26,8 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-if(!function_exists('json_encode')) {
-	function json_encode_string($in_str) {
+if(function_exists('json_encode')) {
+	function json_encode_string_1($in_str) {
 		if(!function_exists('mb_internal_encoding')) {
 			//FIXME: Error handling
 		}
@@ -48,7 +48,7 @@ if(!function_exists('json_encode')) {
     return $str;
   }
 	
-	function json_encode($arr) {
+	function json_encode_1($arr) {
     $json_str = "";
     if(is_array($arr)) {
       $pure_array = true;
@@ -66,7 +66,7 @@ if(!function_exists('json_encode')) {
         $temp = array();
 				
         for($i=0;$i<$array_length;$i++) {
-          $temp[] = sprintf("%s", json_encode($arr[$i]));
+          $temp[] = sprintf("%s", json_encode_1($arr[$i]));
         }
 				
         $json_str .= implode(",",$temp);
@@ -76,7 +76,7 @@ if(!function_exists('json_encode')) {
         $temp = array();
 				
         foreach($arr as $key => $value) {
-          $temp[] = sprintf("\"%s\":%s", $key, json_encode($value));
+          $temp[] = sprintf("\"%s\":%s", $key, json_encode_1($value));
         }
 				
         $json_str .= implode(",",$temp);
@@ -84,11 +84,11 @@ if(!function_exists('json_encode')) {
       }
     } else {
       if(is_string($arr)) {
-        $json_str = "'". str_replace("\\","\\\\",json_encode_string($arr)) . "'";
+        $json_str = "'". str_replace("\\","\\\\",json_encode_string_1($arr)) . "'";
       } elseif(is_numeric($arr)) {
         $json_str = $arr;
       } else {
-        $json_str = "'". json_encode_string($arr) . "'";
+        $json_str = "'". json_encode_string_1($arr) . "'";
       }
     }
     return $json_str;

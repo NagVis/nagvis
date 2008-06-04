@@ -241,9 +241,9 @@ class NagVisObject {
 		
 		if($this->hover_menu) {
 			if($this->getType() == 'service') {
-				$ret .= 'onmouseover="getObjectHoverMenu(\''.$this->getType().'\',\''.$this->getName().'\',\''.$this->getServiceDescription().'\'); displayHoverMenu('.($this->hover_delay*1000).');" onmouseout=" return hideHoverMenu();"';
+				$ret .= 'onmouseover="getObjectHoverMenu(\''.$this->getType().'\',\''.$this->getName().'\',\''.$this->getServiceDescription().'\'); displayHoverMenu('.($this->hover_delay*1000).', '.($this->hover_timeout*1000).');" onmouseout=" return hideHoverMenu();"';
 			} else {
-				$ret .= 'onmouseover="getObjectHoverMenu(\''.$this->getType().'\',\''.$this->getName().'\',\'\'); displayHoverMenu('.($this->hover_delay*1000).');" onmouseout="return hideHoverMenu();"';
+				$ret .= 'onmouseover="getObjectHoverMenu(\''.$this->getType().'\',\''.$this->getName().'\',\'\'); displayHoverMenu('.($this->hover_delay*1000).', '.($this->hover_timeout*1000).');" onmouseout="return hideHoverMenu();"';
 			}
 			
 			return $ret;

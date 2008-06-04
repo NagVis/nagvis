@@ -74,9 +74,9 @@ function setHoverMenu(oResponse,oOpt) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function displayHoverMenu(delay, intWaitTimer) {
-	// Default timeout value is 5 seconds
-	intWaitTimer = typeof(intWaitTimer) != 'undefined' ? intWaitTimer : 5000;
+function displayHoverMenu(delay, intTimeout, intWaitTimer) {
+	// Default timeout value is given timeout value seconds
+	intWaitTimer = typeof(intWaitTimer) != 'undefined' ? intWaitTimer : intTimeout ;
 	
 	// When the hover menu should still be fetched (user did not move mouse out)
 	if(showHoverMenu) {
@@ -88,7 +88,7 @@ function displayHoverMenu(delay, intWaitTimer) {
 				overlib(ajaxStatusHoverMenu('Waiting...', 'Waiting for response. Timeout in '+Math.round(intWaitTimer/1000)+' seconds.'), WRAP, VAUTO, DELAY, delay);
 				
 				// recall this method in 100ms
-				window.setTimeout('displayHoverMenu('+delay+','+(intWaitTimer-100)+')', 100);
+				window.setTimeout('displayHoverMenu('+delay+','+intTimeout+','+(intWaitTimer-100)+')', 100);
 			} else {
 				// The response did timeout (no response within the timeout value)
 				overlib(ajaxStatusHoverMenu('Error', 'Timeout - Waited 5 seconds for response.'), WRAP, VAUTO, DELAY, delay);

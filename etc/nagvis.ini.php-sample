@@ -41,6 +41,8 @@
 ; enable/disable hover menu
 ;hovermenu=1
 ; hover template
+; Timeout of hover menu ajax request (seconds)
+;hovertimeout=5
 ;hovertemplate="default"
 ; hover menu open delay (seconds)
 ;hoverdelay=0
