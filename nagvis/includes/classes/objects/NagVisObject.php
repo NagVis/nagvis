@@ -153,7 +153,7 @@ class NagVisObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setConfiguration(&$obj) {
+	function setConfiguration($obj) {
 		foreach($obj AS $key => &$val) {
 			$this->conf[$key] = $val;
 			$this->{$key} = $val;
@@ -568,19 +568,19 @@ class NagVisObject {
 		$parent = '';
 		switch($this->type) {
 			case 'host':
-				$arrObjects = &$this->getServices();
+				$arrObjects = $this->getServices();
 				$parent = 'host';
 			break;
 			case 'hostgroup':
-				$arrObjects = &$this->getMembers();
+				$arrObjects = $this->getMembers();
 				$parent = 'hostgroup';
 			break;
 			case 'servicegroup':
-				$arrObjects = &$this->getMembers();
+				$arrObjects = $this->getMembers();
 				$parent = 'servicegroup';
 			break;
 			case 'map':
-				$arrObjects = &$this->getMapObjects();
+				$arrObjects = $this->getMapObjects();
 				$parent = 'map';
 			break;
 		}
@@ -636,7 +636,7 @@ class NagVisObject {
 	 * @param	OBJ		Second object to sort
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function sortObjectsAlphabetical($OBJ1, $OBJ2) {
+	 static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
 		switch($this->type) {
 			case 'host':
 				$name1 = strtolower($a->getServiceDescription());
@@ -666,7 +666,7 @@ class NagVisObject {
 	 * @param	OBJ		Second object to sort
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function sortObjectsByState($OBJ1, $OBJ2) {
+	 static function sortObjectsByState($OBJ1, $OBJ2) {
 		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
 		
 		// Textboxes and shapes does not have getSummaryState method, exclude them here

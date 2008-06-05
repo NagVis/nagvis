@@ -373,7 +373,6 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryOutput() {
-		
 		// Write host state
 		$this->summary_output = $this->LANG->getLabel('hostStateIs').' '.$this->state.'. ';
 		
@@ -388,7 +387,7 @@ class NagiosHost extends NagVisStatefulObject {
 					$arrStates[$SERVICE->getSummaryState()]++;
 				}
 				
-				parent::fetchSummaryOutput($arrStates, $this->LANG->getLabel('services'));
+				$this->mergeSummaryOutput($arrStates, $this->LANG->getLabel('services'));
 			} else {
 				$this->summary_output .= $this->LANG->getMessageText('hostHasNoServices','HOST~'.$this->getName());
 			}

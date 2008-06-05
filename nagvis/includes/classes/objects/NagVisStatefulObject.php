@@ -561,13 +561,13 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
-	 * PRIVATE fetchSummaryOutput()
+	 * PRIVATE mergeSummaryOutput()
 	 *
-	 * Fetches the summary output from objects and all child objects
+	 * Merges the summary output from objects and all child objects together
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryOutput(&$arrStates, $objLabel) {
+	function mergeSummaryOutput(&$arrStates, $objLabel) {
 		$this->summary_output .= $this->LANG->getLabel('childStatesAre').' ';
 		foreach($arrStates AS $state => &$num) {
 			if($num > 0) {

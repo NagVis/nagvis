@@ -190,7 +190,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				}
 			}
 			
-			parent::fetchSummaryOutput($arrStates, $this->LANG->getLabel('objects'));
+			$this->mergeSummaryOutput($arrStates, $this->LANG->getLabel('objects'));
 		} else {
 			$this->summary_output .= $this->LANG->getMessageText('mapIsEmpty','MAP~'.$this->getName());
 		}
@@ -416,7 +416,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkPermissions(&$allowed,$printErr) {
+	function checkPermissions($allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
