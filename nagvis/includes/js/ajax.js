@@ -111,6 +111,9 @@ function getAnswer(oRequest,myCallback,oOpt,bCached) {
 				// Cache that dialog
 				updateQueryCache(oOpt.url, oOpt.timestamp, responseText);
 				
+				// Trim the left of the response
+				responseText = responseText.replace(/^\s+/,"");
+				
 				// Error handling for the AJAX methods
 				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
 					alert("Error in ajax request handler:\n"+responseText);
