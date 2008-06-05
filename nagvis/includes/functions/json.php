@@ -48,7 +48,7 @@ if(!function_exists('json_encode')) {
     return $str;
   }
 	
-	function json_encode_1($arr) {
+	function json_encode($arr) {
     $json_str = "";
     if(is_array($arr)) {
       $pure_array = true;
