@@ -66,6 +66,20 @@ require("./includes/classes/objects/NagVisMapObj.php");
 require("./includes/classes/objects/NagVisShape.php");
 require("./includes/classes/objects/NagVisTextbox.php");
 
+/**
+ * This is a coustom error handling function for submitting PHP errors to the
+ * ajax requesting frontend
+ *
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
+ */
+function ajaxError($errno, $errstr) { 
+	echo "Error: (".$errno.") ".$errstr;
+	die();
+}
+
+// Enable coustom error handling
+set_error_handler("ajaxError");
+
 // Load the main configuration
 $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 

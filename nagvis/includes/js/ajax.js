@@ -112,8 +112,8 @@ function getAnswer(oRequest,myCallback,oOpt,bCached) {
 				updateQueryCache(oOpt.url, oOpt.timestamp, responseText);
 				
 				// Error handling for the AJAX methods
-				if(responseText.match(/Notice:|Warning:|Error:|Parse error:/)) {
-					alert("Error in ajax request handler:\n"+oresponseText);
+				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
+					alert("Error in ajax request handler:\n"+responseText);
 				} else {
 					window[myCallback](eval('( '+responseText+')'),oOpt);
 				}
