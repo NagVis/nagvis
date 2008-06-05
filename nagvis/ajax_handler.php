@@ -31,7 +31,7 @@ require("./includes/defines/matches.php");
 
 // Include functions
 require("./includes/functions/debug.php");
-require("./includes/functions/json.php");
+require("./includes/functions/oldPhpVersionFixes.php");
 require("./includes/functions/getuser.php");
 
 // Include needed global classes
@@ -72,8 +72,8 @@ require("./includes/classes/objects/NagVisTextbox.php");
  *
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
-function ajaxError($errno, $errstr) { 
-	echo "Error: (".$errno.") ".$errstr;
+function ajaxError($errno, $errstr, $file, $line) { 
+	echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
 	die();
 }
 

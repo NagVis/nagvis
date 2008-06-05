@@ -32,6 +32,7 @@ require("./includes/defines/matches.php");
 
 // Include defines
 require("./includes/functions/debug.php");
+require("./includes/functions/oldPhpVersionFixes.php");
 
 // Include needed global classes
 require("./includes/classes/GlobalGraphic.php");
