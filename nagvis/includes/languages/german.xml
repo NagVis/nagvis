@@ -76,6 +76,12 @@
 				<rotationStop>
 					<text>Stoppe Rotation</text>
 				</rotationStop>
+				<refreshStart>
+					<text>Starte Z&auml;hler</text>
+				</refreshStart>
+				<refreshStop>
+					<text>Stoppe Z&auml;hler</text>
+				</refreshStop>
 				<overview>
 					<text>&Uuml;ebersicht</text>
 				</overview>

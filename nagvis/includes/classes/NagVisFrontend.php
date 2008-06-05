@@ -355,8 +355,10 @@ class NagVisFrontend extends GlobalPage {
 				$ret = str_replace('[lang_support_info]',$this->LANG->getLabel('supportInfo'),$ret);
 				$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
 				$ret = str_replace('[lang_instance]',$this->LANG->getLabel('instance'),$ret);
-				$ret = str_replace('[lang_rotation_start]',$this->LANG->getLabel('rotationStart'),$ret);
-				$ret = str_replace('[lang_rotation_stop]',$this->LANG->getLabel('rotationStop'),$ret);
+				$ret = str_replace('[lang_rotation_start]','<br />'.$this->LANG->getLabel('rotationStart'),$ret);
+				$ret = str_replace('[lang_rotation_stop]','<br />'.$this->LANG->getLabel('rotationStop'),$ret);
+				$ret = str_replace('[lang_refresh_start]',$this->LANG->getLabel('refreshStart'),$ret);
+				$ret = str_replace('[lang_refresh_stop]',$this->LANG->getLabel('refreshStop'),$ret);
 				// Replace lists
 				if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
 					foreach($matchReturn[1] AS &$key) {
@@ -484,6 +486,7 @@ class NagVisFrontend extends GlobalPage {
 		} else {
 			$strReturn .= "var rotate = false;\n";
 		}
+		$strReturn .= "var bRefresh = true;\n";
 		$strReturn .= "var nextRotationUrl = '".$this->getNextRotationUrl()."';\n";
 		$strReturn .= "var nextRefreshTime = '".$this->getNextRotationTime()."';\n";
 		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";

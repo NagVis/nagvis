@@ -67,21 +67,53 @@ function countdown() {
 	if(nextRefreshTime <= 0) {
 		refresh();
 	} else {
-		// write the time to refresh to header counter
-		if(document.getElementById('refreshCounterHead')) {
-			document.getElementById('refreshCounterHead').innerHTML = nextRefreshTime;
+		// Only countdown if the refresh countdown is enabled
+		if(bRefresh) {
+			// write the time to refresh to header counter
+			if(document.getElementById('refreshCounterHead')) {
+				document.getElementById('refreshCounterHead').innerHTML = nextRefreshTime;
+			}
+			// write the time to refresh to the normal counter
+			if(document.getElementById('refreshCounter')) {
+							document.getElementById('refreshCounter').innerHTML = nextRefreshTime;
+					}
+			// 1 second timeout to next countdown call
+			window.setTimeout('countdown()', 1000);
 		}
-		// write the time to refresh to the normal counter
-		if(document.getElementById('refreshCounter')) {
-                        document.getElementById('refreshCounter').innerHTML = nextRefreshTime;
-                }
-		// 1 second timeout to next countdown call
-		window.setTimeout('countdown()', 1000);
 	}
 }
 
 /**
- * Function to stop the refresh/rotation
+ * Function to start/stop the refresh countdown
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function switchRefresh(obj,startLabel,stopLabel) {
+	if(bRefresh) {
+		bRefresh=false;
+		setRefreshLabel(startLabel,stopLabel);
+	} else {
+		bRefresh=true;
+		countdown();
+		setRefreshLabel(startLabel,stopLabel);
+	}
+}
+
+/**
+ * Function to set the refresh switch label dynamicaly
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setRefreshLabel(startLabel,stopLabel) {
+	if(bRefresh) {
+		document.getElementById('refreshSwitch').innerHTML = stopLabel;
+	} else {
+		document.getElementById('refreshSwitch').innerHTML = startLabel;
+	}
+}
+
+/**
+ * Function to start/stop the rotation
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
@@ -96,7 +128,7 @@ function switchRotation(obj,startLabel,stopLabel) {
 }
 
 /**
- * Function to set the switch label dynamicaly
+ * Function to set the rotation switch label dynamicaly
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
