@@ -79,7 +79,7 @@ class GlobalBackendndomy {
 			$this->dbInstanceId = $this->getInstanceId();
 			
 			// Do some checks to make sure that Nagios is running and the Data at the DB are ok
-			$QUERYHANDLE = $this->mysqlQuery('SELECT is_currently_running, status_update_time FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
+			$QUERYHANDLE = $this->mysqlQuery('SELECT is_currently_running, UNIX_TIMESTAMP(status_update_time) AS status_update_time FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
 			$nagiosstate = mysql_fetch_array($QUERYHANDLE);
 			
 			// Check that Nagios reports itself as running	
@@ -89,7 +89,7 @@ class GlobalBackendndomy {
 			}
 			
 			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
-			if($_SERVER['REQUEST_TIME'] - strtotime($nagiosstate['status_update_time']) > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
+			if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
 				$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'));
 			}
