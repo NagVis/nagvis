@@ -72,9 +72,12 @@ require("./includes/classes/objects/NagVisTextbox.php");
  *
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
-function ajaxError($errno, $errstr, $file, $line) { 
-	echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
-	die();
+function ajaxError($errno, $errstr, $file, $line) {
+	// Don't handle E_STRICT errors
+	if($errno != 2048) {
+		echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
+		die();
+	}
 }
 
 // Enable coustom error handling
