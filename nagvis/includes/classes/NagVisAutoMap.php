@@ -457,10 +457,10 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFavicon() {
-		if(file_exists('./images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
-			$favicon = './images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
+		if(file_exists($this->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
+			$favicon = $this->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
-			$favicon = './images/internal/favicon.png';
+			$favicon = $this->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon.png';
 		}
 		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
 	}
