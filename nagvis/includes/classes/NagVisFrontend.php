@@ -46,9 +46,10 @@ class NagVisFrontend extends GlobalPage {
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
 		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis:global');
+		$htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
-						'cssIncludes'=>Array('./includes/css/style.css'),
-						'jsIncludes'=>Array('./includes/js/nagvis.js','./includes/js/overlib.js','./includes/js/dynfavicon.js','./includes/js/ajax.js','./includes/js/hover.js'),
+						'cssIncludes'=>Array($htmlBase.'/nagvis/includes/css/style.css'),
+						'jsIncludes'=>Array($htmlBase.'/nagvis/includes/js/nagvis.js',$htmlBase.'/nagvis/includes/js/overlib.js',$htmlBase.'/nagvis/includes/js/dynfavicon.js',$htmlBase.'/nagvis/includes/js/ajax.js',$htmlBase.'/nagvis/includes/js/hover.js'),
 						'extHeader'=>Array('<link rel="shortcut icon" href="./images/internal/favicon.png">',
 											'<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
 						'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),

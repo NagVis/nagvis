@@ -52,7 +52,7 @@ class GlobalPage {
 	function GlobalPage(&$MAINCFG,$givenProperties=Array()) {
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
-									'cssIncludes'=>Array('../nagvis/includes/css/style.css'),
+									'cssIncludes'=>Array($this->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css'),
 									'jsIncludes'=>Array(),
 									'extHeader'=>Array(),
 									'allowedUsers'=>Array('EVERYONE'),
