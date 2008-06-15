@@ -50,6 +50,8 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalPage(&$MAINCFG,$givenProperties=Array()) {
+		$this->MAINCFG = &$MAINCFG;
+		
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
 									'cssIncludes'=>Array($this->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css'),
@@ -61,7 +63,6 @@ class GlobalPage {
 		
 		$this->body = Array();
 		
-		$this->MAINCFG = &$MAINCFG;
 		$this->title = $prop['title'];
 		$this->cssIncludes = $prop['cssIncludes'];
 		$this->jsIncludes = $prop['jsIncludes'];
