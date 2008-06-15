@@ -552,99 +552,36 @@ class GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectDefaults() {
-		$this->validConfig['host']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
-		$this->validConfig['host']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
-		$this->validConfig['host']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
-		$this->validConfig['host']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
-		$this->validConfig['host']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
-		$this->validConfig['host']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
-		$this->validConfig['host']['hover_timeout']['default'] = $this->getValue('global', 0, 'hover_timeout');
-		$this->validConfig['host']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
-		$this->validConfig['host']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
-		$this->validConfig['host']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
-		$this->validConfig['host']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
-		$this->validConfig['host']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
-		$this->validConfig['host']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
-		$this->validConfig['host']['label_border']['default'] = $this->getValue('global', 0, 'label_border');
-		$this->validConfig['host']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['host']['hover_childs_show']['default'] = $this->getValue('global', 0, 'hover_childs_show');
-		$this->validConfig['host']['hover_childs_sort']['default'] = $this->getValue('global', 0, 'hover_childs_sort');
-		$this->validConfig['host']['hover_childs_order']['default'] = $this->getValue('global', 0, 'hover_childs_order');
-		$this->validConfig['host']['hover_childs_limit']['default'] = $this->getValue('global', 0, 'hover_childs_limit');
-		$this->validConfig['hostgroup']['recognize_services']['default'] = $this->getValue('global', 0, 'recognize_services');
-		$this->validConfig['hostgroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
-		$this->validConfig['hostgroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
-		$this->validConfig['hostgroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
-		$this->validConfig['hostgroup']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
-		$this->validConfig['hostgroup']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
-		$this->validConfig['hostgroup']['hover_timeout']['default'] = $this->getValue('global', 0, 'hover_timeout');
-		$this->validConfig['hostgroup']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
-		$this->validConfig['hostgroup']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
-		$this->validConfig['hostgroup']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
-		$this->validConfig['hostgroup']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
-		$this->validConfig['hostgroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
-		$this->validConfig['hostgroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
-		$this->validConfig['hostgroup']['label_border']['default'] = $this->getValue('global', 0, 'label_border');
-		$this->validConfig['hostgroup']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['hostgroup']['hover_childs_show']['default'] = $this->getValue('global', 0, 'hover_childs_show');
-		$this->validConfig['hostgroup']['hover_childs_sort']['default'] = $this->getValue('global', 0, 'hover_childs_sort');
-		$this->validConfig['hostgroup']['hover_childs_order']['default'] = $this->getValue('global', 0, 'hover_childs_order');
-		$this->validConfig['hostgroup']['hover_childs_limit']['default'] = $this->getValue('global', 0, 'hover_childs_limit');
-		$this->validConfig['service']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
-		$this->validConfig['service']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
-		$this->validConfig['service']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
-		$this->validConfig['service']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
-		$this->validConfig['service']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
-		$this->validConfig['service']['hover_timeout']['default'] = $this->getValue('global', 0, 'hover_timeout');
-		$this->validConfig['service']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
-		$this->validConfig['service']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
-		$this->validConfig['service']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
-		$this->validConfig['service']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
-		$this->validConfig['service']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
-		$this->validConfig['service']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
-		$this->validConfig['service']['label_border']['default'] = $this->getValue('global', 0, 'label_border');
-		$this->validConfig['service']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['service']['hover_childs_show']['default'] = $this->getValue('global', 0, 'hover_childs_show');
-		$this->validConfig['service']['hover_childs_sort']['default'] = $this->getValue('global', 0, 'hover_childs_sort');
-		$this->validConfig['service']['hover_childs_order']['default'] = $this->getValue('global', 0, 'hover_childs_order');
-		$this->validConfig['service']['hover_childs_limit']['default'] = $this->getValue('global', 0, 'hover_childs_limit');
-		$this->validConfig['servicegroup']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
-		$this->validConfig['servicegroup']['backend_id']['default'] = $this->getValue('global', 0, 'backend_id');
-		$this->validConfig['servicegroup']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
-		$this->validConfig['servicegroup']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
-		$this->validConfig['servicegroup']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
-		$this->validConfig['servicegroup']['hover_timeout']['default'] = $this->getValue('global', 0, 'hover_timeout');
-		$this->validConfig['servicegroup']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
-		$this->validConfig['servicegroup']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
-		$this->validConfig['servicegroup']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
-		$this->validConfig['servicegroup']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
-		$this->validConfig['servicegroup']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
-		$this->validConfig['servicegroup']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
-		$this->validConfig['servicegroup']['label_border']['default'] = $this->getValue('global', 0, 'label_border');
-		$this->validConfig['servicegroup']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['servicegroup']['hover_childs_show']['default'] = $this->getValue('global', 0, 'hover_childs_show');
-		$this->validConfig['servicegroup']['hover_childs_sort']['default'] = $this->getValue('global', 0, 'hover_childs_sort');
-		$this->validConfig['servicegroup']['hover_childs_order']['default'] = $this->getValue('global', 0, 'hover_childs_order');
-		$this->validConfig['servicegroup']['hover_childs_limit']['default'] = $this->getValue('global', 0, 'hover_childs_limit');
-		$this->validConfig['map']['only_hard_states']['default'] = $this->getValue('global', 0, 'only_hard_states');
-		$this->validConfig['map']['iconset']['default'] = $this->getValue('global', 0, 'iconset');
-		$this->validConfig['map']['hover_menu']['default'] = $this->getValue('global', 0, 'hover_menu');
-		$this->validConfig['map']['hover_template']['default'] = $this->getValue('global', 0, 'hover_template');
-		$this->validConfig['map']['hover_timeout']['default'] = $this->getValue('global', 0, 'hover_timeout');
-		$this->validConfig['map']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
-		$this->validConfig['map']['label_show']['default'] = $this->getValue('global', 0, 'label_show');
-		$this->validConfig['map']['label_x']['default'] = $this->getValue('global', 0, 'label_x');
-		$this->validConfig['map']['label_y']['default'] = $this->getValue('global', 0, 'label_y');
-		$this->validConfig['map']['label_width']['default'] = $this->getValue('global', 0, 'label_width');
-		$this->validConfig['map']['label_background']['default'] = $this->getValue('global', 0, 'label_background');
-		$this->validConfig['map']['label_border']['default'] = $this->getValue('global', 0, 'label_border');
-		$this->validConfig['map']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['map']['hover_childs_show']['default'] = $this->getValue('global', 0, 'hover_childs_show');
-		$this->validConfig['map']['hover_childs_sort']['default'] = $this->getValue('global', 0, 'hover_childs_sort');
-		$this->validConfig['map']['hover_childs_order']['default'] = $this->getValue('global', 0, 'hover_childs_order');
-		$this->validConfig['map']['hover_childs_limit']['default'] = $this->getValue('global', 0, 'hover_childs_limit');
-		$this->validConfig['shape']['url_target']['default'] = $this->getValue('global', 0, 'url_target');
-		$this->validConfig['shape']['hover_delay']['default'] = $this->getValue('global', 0, 'hover_delay');
+		$aVars = Array('recognize_services',
+			'only_hard_states',
+			'backend_id',
+			'iconset',
+			'hover_menu',
+			'hover_template',
+			'hover_timeout',
+			'hover_delay',
+			'hover_show',
+			'label_x',
+			'label_y',
+			'label_width',
+			'label_background',
+			'label_border',
+			'url_target',
+			'hover_childs_show',
+			'hover_childs_order',
+			'hover_childs_limit');
+		foreach($aVars As $sVar) {
+			$sTmp = $this->getValue('global', 0, $sVar);
+			$this->validConfig['host'][$sVar]['default'] = $sTmp;
+			$this->validConfig['hostgroup'][$sVar]['default'] = $sTmp;
+			$this->validConfig['service'][$sVar]['default'] = $sTmp;
+			$this->validConfig['servicegroup'][$sVar]['default'] = $sTmp;
+			$this->validConfig['map'][$sVar]['default'] = $sTmp;
+			
+			if($sVar == 'url_target' || $sVar == 'hover_delay') {
+				$this->validConfig['shape'][$sVar]['default'] = $sTmp;
+			}
+		}
 	}
 	
 	/**
