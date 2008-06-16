@@ -149,7 +149,6 @@ class NagiosHost extends NagVisStatefulObject {
 			 */
 			if($maxLayers < 0 || $maxLayers > 0) {
 				foreach($this->childObjects AS &$OBJ) {
-					echo $this->getName()."->".$OBJ->getName()."<br>";
 					$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
 				}
 			}
@@ -337,8 +336,6 @@ class NagiosHost extends NagVisStatefulObject {
 			}
 		}
 
-		print_r($arrHostnames);
-		
 		// All childs were fetched, save the state for this object
 		$this->fetchedChildObjects = 1;
 	}
