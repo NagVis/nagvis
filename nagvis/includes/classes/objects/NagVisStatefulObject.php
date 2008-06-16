@@ -550,7 +550,17 @@ class NagVisStatefulObject extends NagVisObject {
 				$this->label_width .= 'px';	
 			}
 			
-			$ret  = '<div class="object_label" style="background:'.$this->label_background.';border-color:'.$this->label_border.';left:'.$this->label_x.'px;top:'.$this->label_y.'px;width:'.$this->label_width.';z-index:'.($this->z+1).';overflow:visible;">';
+			/**
+			 * IE workaround: The transparent for the color is not enough. The border
+			 * has really to be hidden.
+			 */
+			if($this->label_border == 'transparent') {
+				$borderStyle = 'border-style:none';
+			} else {
+				$borderStyle = 'border-style:solid';
+			}
+			
+			$ret  = '<div class="object_label" style="background:'.$this->label_background.';'.$borderStyle.';border-color:'.$this->label_border.';left:'.$this->label_x.'px;top:'.$this->label_y.'px;width:'.$this->label_width.';z-index:'.($this->z+1).';overflow:visible;">';
 			$ret .= '<span>'.$this->label_text.'</span>';
 			$ret .= '</div>';
 			
