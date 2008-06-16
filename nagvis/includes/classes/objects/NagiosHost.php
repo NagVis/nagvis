@@ -149,6 +149,7 @@ class NagiosHost extends NagVisStatefulObject {
 			 */
 			if($maxLayers < 0 || $maxLayers > 0) {
 				foreach($this->childObjects AS &$OBJ) {
+					echo $this->getName()."->".$OBJ->getName()."<br>";
 					$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
 				}
 			}
@@ -319,7 +320,7 @@ class NagiosHost extends NagVisStatefulObject {
 					$this->childObjects[] = $OBJ;
 					
 					// Append the object to the arrMapObjects array
-					$arrMapObjects[] = &$this->childObjects[count($this->childObjects)-1];
+					$arrMapObjects[] = $this->childObjects[count($this->childObjects)-1];
 					
 					// Add the name of this host to the array with hostnames which are
 					// already on the map
@@ -327,14 +328,16 @@ class NagiosHost extends NagVisStatefulObject {
 				} else {
 					// Add reference of already existing host object to the
 					// child objects array
-					foreach($arrMapObjects AS &$OBJ) {
+					foreach($arrMapObjects AS $OBJ) {
 						if($OBJ->getName() == $childName) {
-							$this->childObjects[] = &$OBJ;
+							$this->childObjects[] = $OBJ;
 						}
 					}
 				}
 			}
 		}
+
+		print_r($arrHostnames);
 		
 		// All childs were fetched, save the state for this object
 		$this->fetchedChildObjects = 1;
