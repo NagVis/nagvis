@@ -511,7 +511,7 @@ class GlobalBackendndomy {
 					ss.output, ss.problem_has_been_acknowledged, 
 					UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
 					ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
-					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_start, 
+					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
 					dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 					FROM 
 						'.$this->dbPrefix.'services AS s,
@@ -540,7 +540,7 @@ class GlobalBackendndomy {
 					ss.output, ss.problem_has_been_acknowledged, 
 					UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
 					ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
-					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_start, 
+					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
 					dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 					FROM 
 						'.$this->dbPrefix.'services AS s,
