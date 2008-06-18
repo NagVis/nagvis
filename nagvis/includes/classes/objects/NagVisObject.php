@@ -637,14 +637,14 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	 static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
-		switch($this->type) {
-			case 'host':
-				$name1 = strtolower($a->getServiceDescription());
-				$name2 = strtolower($b->getServiceDescription());
+		switch($OBJ1->getType()) {
+			case 'service':
+				$name1 = strtolower($OBJ1->getServiceDescription());
+				$name2 = strtolower($OBJ2->getServiceDescription());
 			break;
 			default:
-				$name1 = strtolower($a->getName());
-				$name2 = strtolower($b->getName());
+				$name1 = strtolower($OBJ1->getName());
+				$name2 = strtolower($OBJ2->getName());
 			break;
 		}
 		
@@ -658,9 +658,9 @@ class NagVisObject {
     }
 	
 	/**
-	 * PRIVATE STATIC sortObjectsAlphabetical()
+	 * PRIVATE STATIC sortObjectsByState()
 	 *
-	 * Sorts the both alhabeticaly by the name
+	 * Sorts the both by state of the object
 	 *
 	 * @param	OBJ		First object to sort
 	 * @param	OBJ		Second object to sort
