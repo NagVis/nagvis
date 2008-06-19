@@ -314,7 +314,6 @@ class NagVisFrontend extends GlobalPage {
 		$ret .= '<tr><th colspan="2">Version Informations</td></tr>';
 		$ret .= '<tr><td>NagVis Version</td><td>'.CONST_VERSION.'</td></tr>';
 		$ret .= '<tr><td>PHP Version</td><td>'.PHP_VERSION.'</td></tr>';
-		$ret .= '<tr><td>PHP Modules</td><td>'.implode(", ",get_loaded_extensions()).'</td></tr>';
 		$ret .= '<tr><td>MySQL Version</td><td>'.shell_exec('mysql --version').'</td></tr>';
 		$ret .= '<tr><td>OS</td><td>'.shell_exec('uname -a').'</td></tr>';
 		$ret .= '<t><th colspan="2">Webserver Informations</th></tr>';
@@ -327,6 +326,9 @@ class NagVisFrontend extends GlobalPage {
 		$ret .= '<tr><td>safe_mode</td><td>'.(ini_get('safe_mode')?"yes":"no").'</td></tr>';
 		$ret .= '<tr><td>max_execution_time</td><td>'.ini_get('max_execution_time').' seconds</td></tr>';
 		$ret .= '<tr><td>memory_limit</td><td>'.ini_get('memory_limit').'</td></tr>';
+		$ret .= '<tr><td>loaded modules</td><td>'.implode(", ",get_loaded_extensions()).'</td></tr>';
+		$ret .= '<t><th colspan="2">Client Informations</th></tr>';
+		$ret .= '<tr><td>USER_AGENT</td><td>'.$_SERVER['HTTP_USER_AGENT'].'</td></tr>';
 		$ret .= '</table>';
 		$ret .= '</div>';
 		
