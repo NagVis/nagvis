@@ -27,7 +27,7 @@
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalHttpRequest implements GlobalRequestInterface {
+class GlobalHttpRequest implements GlobalHttpRequestInterface {
 
     /*** Attributes: ***/
 
