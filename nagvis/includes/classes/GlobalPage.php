@@ -34,7 +34,7 @@ class GlobalPage {
 	var $jsIncludes;
 	var $extHeader;
 	
-	// array for the body
+	// String for the body
 	var $body;
 	
 	// logged in user
@@ -54,20 +54,20 @@ class GlobalPage {
 		
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
-									'cssIncludes'=>Array($this->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css'),
-									'jsIncludes'=>Array(),
-									'extHeader'=>Array(),
-									'allowedUsers'=>Array('EVERYONE'),
-									'languageRoot'=>'global:global');
+									'cssIncludes' => Array($this->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css'),
+									'jsIncludes' => Array(),
+									'extHeader' => '',
+									'allowedUsers' => Array('EVERYONE'),
+									'languageRoot' => 'global:global');
 		$prop = array_merge($defaultProperties,$givenProperties);
 		
-		$this->body = Array();
+		$this->body = '';
 		
 		$this->title = $prop['title'];
 		$this->cssIncludes = $prop['cssIncludes'];
 		$this->jsIncludes = $prop['jsIncludes'];
-		$this->extHeader = array_merge(Array('<meta http-equiv="Content-Type" content="text/html;charset=utf-8">',
-											'<title>'.$prop['title'].'</title>'),$prop['extHeader']);
+		$this->extHeader .= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8">';
+		$this->extHeader .= '<title>'.$prop['title'].'</title>';
 		$this->allowedUsers = $prop['allowedUsers'];
 		$this->languageRoot = $prop['languageRoot'];
 		
@@ -178,7 +178,7 @@ class GlobalPage {
 			case 'ERROR':
 			case 'INFO-STOP':
 				// print the message box and kill the script
-				$this->body = array_merge($this->body,$this->messageBox($serverity,$id,$vars));
+				$this->body .= $this->messageBox($serverity,$id,$vars);
 				$this->printPage();
 				// end of script
 			break;
@@ -198,15 +198,15 @@ class GlobalPage {
 	/**
 	 * Gets the messages to be printed to the user
 	 *
-	 * @return 	Array	HTML Code
+	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUserMessages() {
-		$ret = Array();
+		$ret = '';
 		
 		if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
 			foreach($this->MAINCFG->getRuntimeValue('userMessages') AS $message) {
-				$ret = array_merge($ret,$this->messageBox($message['serverity'], $message['nr'], $message['vars']));
+				$ret .= $this->messageBox($message['serverity'], $message['nr'], $message['vars']);
 			}
 		}
 		
@@ -224,7 +224,7 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function messageBox($serverity, $id, $vars) {
-		$ret = Array();
+		$ret = '';
 		
 		$LANG = new GlobalLanguage($this->MAINCFG,$this->languageRoot);
 		
@@ -242,19 +242,19 @@ class GlobalPage {
 		}
 		
 		if($serverity == 'ERROR' || $serverity == 'INFO-STOP') {
-			$ret[] = '<META http-equiv="refresh" content="60;">';
+			$ret .= '<META http-equiv="refresh" content="60;">';
 			if($serverity == 'ERROR') {
-				$ret[] = '<style type="text/css">.main { background-color: yellow; }</style>';
+				$ret .= '<style type="text/css">.main { background-color: yellow; }</style>';
 			}
-			$ret[] = '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
-			$ret[] = '<tr><td align="center">';
+			$ret .= '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
+			$ret .= '<tr><td align="center">';
 		}
-		$ret[] = '<table class="messageBox" cellpadding="2" cellspacing="2">';
-		$ret[] = '<tr><th width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
-		$ret[] = '</th><th>'.$id.': '.$LANG->getMessageTitle($id,$vars).'</th></tr>';
-		$ret[] = '<tr><td colspan="2">'.$LANG->getMessageText($id,$vars).'</td></tr></table>';
+		$ret .= '<table class="messageBox" cellpadding="2" cellspacing="2">';
+		$ret .= '<tr><th width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
+		$ret .= '</th><th>'.$id.': '.$LANG->getMessageTitle($id,$vars).'</th></tr>';
+		$ret .= '<tr><td colspan="2">'.$LANG->getMessageText($id,$vars).'</td></tr></table>';
 		if($serverity == 'ERROR') {
-			$ret[] = '</td></tr></table>';
+			$ret .= '</td></tr></table>';
 		}
 		
 		return $ret;
@@ -281,10 +281,10 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
 	function addBodyLines($lines) {
-		if(is_string($lines)) {
-			$lines = Array($lines);	
+		if(is_array($lines)) {
+			$lines = implode("\n", $lines);	
 		}
-		$this->body = array_merge($this->body,$lines);
+		$this->body .= $lines;
 		
 		return TRUE;
 	}
@@ -292,39 +292,21 @@ class GlobalPage {
 	/**
 	 * Gets the Header of the HTML Page
 	 *
-	 * @return 	Array	HTML Code of the Header
+	 * @return 	String	HTML Code of the Header
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHeader() {
-		$ret = Array($this->getExtHeader(),$this->getJsIncludes(),$this->getCssIncludes());
-		return $ret;
+		return $this->getExtHeader().$this->getJsIncludes().$this->getCssIncludes();
 	}
 	
 	/**
 	 * Gets the Body of the HTML Page
 	 *
-	 * @return 	Array	HTML Code of the Header
+	 * @return 	String	HTML Code of the Header
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBody() {
 		$ret = $this->body;
-		return $ret;
-	}
-	
-	/**
-	 * Gets the formated lines of an array (Body/Head)
-	 *
-	 * @param	Array	HTML Code
-	 * @return 	String	Formated HTML Code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getLines($arr) {
-		$ret = '';
-		
-		foreach($arr AS &$line) {
-			$ret .= "\t\t".$line."\n";
-		}
-		
 		return $ret;
 	}
 	
@@ -335,13 +317,7 @@ class GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getExtHeader() {
-		$sRet = '';
-		
-		foreach($this->extHeader AS $var => &$val) {
-			$sRet .= $val;
-		}
-		
-		return $sRet;
+		return $this->extHeader;
 	}
 	
 	/**
@@ -371,13 +347,13 @@ class GlobalPage {
 	function getCssIncludes() {
 		$sRet = '';
 		
-		$sRet .= '<style type="text/css"><!--';
 		if(count($this->cssIncludes) > 0) {
-			foreach($this->cssIncludes AS $var => &$val) {
-				$sRet .= '@import url('.$val.'); ';
-			}
+			$sRet .= '<style type="text/css"><!--';
+				foreach($this->cssIncludes AS $var => &$val) {
+					$sRet .= '@import url('.$val.'); ';
+				}
+			$sRet .= '--></style>';
 		}
-		$sRet .= '--></style>';
 		
 		return $sRet;
 	}
@@ -393,9 +369,9 @@ class GlobalPage {
 		
 		$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'."\n";
 		$ret .= '<html><head>'."\n";
-		$ret .= $this->getLines($this->getHeader());
+		$ret .= $this->getHeader();
 		$ret .= '</head><body class="main">'."\n";
-		$ret .= $this->getLines($this->getBody());
+		$ret .= $this->getBody();
 		$ret .= '</body></html>';
 		
 		return $ret;
@@ -431,18 +407,18 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseJs($js) {
-		$ret = Array();
+		$ret = '';
 		if($js != '') {
 			
-			$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\">";
-			$ret[] = "<!--";
+			$ret .= "<script type=\"text/javascript\" language=\"JavaScript\">";
+			$ret .= "<!--";
 			if(is_array($js)) {
-				$ret = array_merge($ret,$js);
+				$ret .= implode("\n", $js);
 			} else {
-				$ret[] = $js;
+				$ret .= $js;
 			}
-			$ret[] = "//-->";
-			$ret[] = "</script>";
+			$ret .= "//-->";
+			$ret .= "</script>";
 		}
 		return $ret;
 	}
