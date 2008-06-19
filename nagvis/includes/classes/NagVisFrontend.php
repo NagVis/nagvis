@@ -64,12 +64,12 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIndexPage() {
-			$ret = Array();
+			$ret = '';
 			
-			$ret[] = '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
-			$ret[] = '<div class="infopage">';
-			$ret[] = '<table>';
-			$ret[] = '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</th></tr><tr>';
+			$ret .= '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
+			$ret .= '<div class="infopage">';
+			$ret .= '<table>';
+			$ret .= '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</th></tr><tr>';
 			$i = 1;
 			foreach($this->getMaps() AS $mapName) {
 				$MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
@@ -135,17 +135,17 @@ class NagVisFrontend extends GlobalPage {
 					}
 					
 					// Now form the cell with it's contents
-					$ret[] = '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.strtr(addslashes($summaryOutput),Array('"' => '\'', "\r" => '', "\n" => '')).'</td></tr></table>\');" onClick="'.$onClick.'">';
-					$ret[] = '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
-					$ret[] = '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
+					$ret .= '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.strtr(addslashes($summaryOutput),Array('"' => '\'', "\r" => '', "\n" => '')).'</td></tr></table>\');" onClick="'.$onClick.'">';
+					$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
+					$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
 					if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
-						$ret[] = '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
+						$ret .= '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
 					} else {
-						$ret[] = '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
+						$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
 					}
-					$ret[] = '</td>';
+					$ret .= '</td>';
 					if($i % 4 == 0) {
-							$ret[] = '</tr><tr>';
+							$ret .= '</tr><tr>';
 					}
 					$i++;
 				}
@@ -153,30 +153,32 @@ class NagVisFrontend extends GlobalPage {
 			// Fill table with empty cells if there are not enough maps to get the line filled
 			if(($i - 1) % 4 != 0) {
 					for($a=0;$a < (4 - (($i - 1) % 4));$a++) {
-							$ret[] = '<td>&nbsp;</td>';
+							$ret .= '<td>&nbsp;</td>';
 					}
 			}
-			$ret[] = '</tr>';
-			$ret[] = '</table>';
+			$ret .= '</tr>';
+			$ret .= '</table>';
 			
 			/**
 			 * Infobox lists all map rotation pools
 			 */
-			$ret[] = '<table class="infobox">';
-			$ret[] = '<tr><th>'.$this->LANG->getLabel('rotationPools').'</th></tr>';
-			foreach($this->getRotationPools() AS $poolName) {
-				// Form the onClick action
-				$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?rotation='.$poolName.'\';';
-				
-				// Now form the HTML code for the cell
-				$ret[] = '<tr><td onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
-				$ret[] = '<h2>'.$poolName.'</h2><br />';
-				$ret[] = '</td>';
-				$ret[] = '</tr>';
+			$aRotationPools = $this->getRotationPools();
+			if(count($aRotationPools) > 0) {
+				$ret .= '<table class="infobox">';
+				$ret .= '<tr><th>'.$this->LANG->getLabel('rotationPools').'</th></tr>';
+				foreach($this->getRotationPools() AS $poolName) {
+					// Form the onClick action
+					$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?rotation='.$poolName.'\';';
+					
+					// Now form the HTML code for the cell
+					$ret .= '<tr><td onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
+					$ret .= '<h2>'.$poolName.'</h2><br />';
+					$ret .= '</td>';
+					$ret .= '</tr>';
+				}
+				$ret .= '</table>';
+				$ret .= '</div>';
 			}
-			$ret[] = '</table>';
-			
-			$ret[] = '</div>';
 			
 			return $ret;
 	}
