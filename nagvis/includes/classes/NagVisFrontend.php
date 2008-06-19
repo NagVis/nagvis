@@ -189,7 +189,6 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createThumbnail($imgPath, $mapName) {
-		
 		if($this->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
 			$imgSize = getimagesize($imgPath);
 			// 0: width, 1:height, 2:type
@@ -451,12 +450,12 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getMap() {
-		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
-		$this->addBodyLines(Array('<div class="map">'));
+		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
+		$this->addBodyLines('<div class="map">');
 		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
 		$this->MAP->MAPOBJ->checkMaintenance(1);
 		$this->addBodyLines($this->MAP->parseMap());
-		$this->addBodyLines(Array('</div>'));
+		$this->addBodyLines('</div>');
 	}
 	
 	/**
@@ -465,11 +464,11 @@ class NagVisFrontend extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getAutoMap($arrOptions) {
-		$this->addBodyLines(Array('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'));
-		$this->addBodyLines(Array('<div id="map" class="map">'));
+		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
+		$this->addBodyLines('<div id="map" class="map">');
 		$this->MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $arrOptions);
 		$this->addBodyLines($this->MAP->parseMap());
-		$this->addBodyLines(Array('</div>'));
+		$this->addBodyLines('</div>');
 	}
 	
 	/**
