@@ -67,7 +67,7 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
    public function isValidParameter() {
       // Check if parameter set
       if (TRUE === $this->validateArr['mustSet']) {
-         if (FALSE === $this->mustSet()) {
+         if (FALSE === $this->mustSet($this->parameterValue)) {
             return FALSE;
          }
       }

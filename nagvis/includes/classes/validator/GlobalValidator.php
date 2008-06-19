@@ -48,6 +48,19 @@ class GlobalValidator {
       $this->parameterValue = $value;
 
       $this->validatorArr = array(
+         // Define action
+         'action' => array(
+            'name'         => 'action',
+            'type'         => 'string',
+            'mustSet'      => TRUE,
+            'allowedEntrys'=> array(
+               '0' => 'map',
+               '1' => 'automap',
+               '2' => 'rotation',
+               '3' => 'info',
+               '4' => 'url'
+            )
+         ),
          // Define map
          'map' => array(
             'name'         => 'map',

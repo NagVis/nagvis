@@ -30,6 +30,7 @@
 class GlobalValidatorAbstract {
 
    private $message = NULL;
+   private $parameterValue;
 
    /**
     * Check if parameter valid
@@ -71,8 +72,8 @@ class GlobalValidatorAbstract {
     * @access  protected
     * @author  Michael Luebben <michael_luebben@web.de>
     */
-   protected function mustSet() {
-      if (isset($this->parameterValue)) {
+   protected function mustSet($value) {
+      if (isset($value)) {
          return TRUE;
       }
       $this->setMessage('notSet');
