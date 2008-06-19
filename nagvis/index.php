@@ -133,7 +133,7 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 	header('Location: '.$FRONTEND->getNextRotationUrl());
 } elseif(isset($_GET['info'])) {
 	// Build the page
-	$FRONTEND->getInstInformations();
+	$FRONTEND->addBodyLines(NagVisFrontend::getInstInformations());
 } else {
 	// Build the page
 	$FRONTEND->addBodyLines($FRONTEND->getRefresh());

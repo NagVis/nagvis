@@ -34,25 +34,22 @@ class GlobalControllerInfo {
      // Can be delete, when frontend is fixed
      //______________________________________________________________
       // Load the main configuration
-      $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+      //$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
       // Initialize map configuration
-      $MAPCFG = new NagVisMapCfg($MAINCFG,$_GET['map']);
+      //$MAPCFG = new NagVisMapCfg($MAINCFG,$_GET['map']);
       // Read the map configuration file
-      $MAPCFG->readMapConfig();
+      //$MAPCFG->readMapConfig();
      //______________________________________________________________
 
-      // Initialize backend(s)
-      $BACKEND = new GlobalBackendMgmt($MAINCFG);
-
       // Initialize the frontend
-      $FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
+      // $FRONTEND = new NagVisFrontend(new Object, new Object, new Object);
 
       // Build the page
-      $FRONTEND->getInstInformations();
+      echo NagVisFrontend::getInstInformations();
 
       // Print the page
-      $FRONTEND->printPage();
+      //$FRONTEND->printPage();
    }
 
 }
