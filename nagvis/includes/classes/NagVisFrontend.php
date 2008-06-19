@@ -323,8 +323,8 @@ class NagVisFrontend extends GlobalPage {
 		$ret .= '<tr><td>SCRIPT_NAME</td><td>'.$_SERVER['SCRIPT_NAME'].'</td></tr>';
 		$ret .= '<tr><td>REQUEST_TIME</td><td>'.$_SERVER['REQUEST_TIME'].' ('.date('r',$_SERVER['REQUEST_TIME']).')</td></tr>';
 		$ret .= '<t><th colspan="2">PHP Informations</th></tr>';
-		$ret .= '<tr><td>safe_mode</td><td>'.ini_get('safe_mode').'</td></tr>';
-		$ret .= '<tr><td>max_execution_time</td><td>'.ini_get('max_execution_time').'</td></tr>';
+		$ret .= '<tr><td>safe_mode</td><td>'.(ini_get('safe_mode')?"yes":"no").'</td></tr>';
+		$ret .= '<tr><td>max_execution_time</td><td>'.ini_get('max_execution_time').' seconds</td></tr>';
 		$ret .= '<tr><td>memory_limit</td><td>'.ini_get('memory_limit').'</td></tr>';
 		$ret .= '</table>';
 		$ret .= '</div>';
