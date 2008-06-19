@@ -636,22 +636,24 @@ class NagVisObject {
 	 * @param	OBJ		Second object to sort
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	 static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
-		switch($OBJ1->getType()) {
-			case 'service':
-				$name1 = strtolower($OBJ1->getServiceDescription());
-				$name2 = strtolower($OBJ2->getServiceDescription());
-			break;
-			default:
-				if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox') {
-				 return 0;
-				} else {
-					$name1 = strtolower($OBJ1->getName());
-					$name2 = strtolower($OBJ2->getName());
-				}
-			break;
+	static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
+		// Do not sort shapes and textboxes
+		if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox') {
+			return 0;
+		}
+
+		if($OBJ1->getType() == 'service') {
+			$name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
+		} else {
+			$name1 = strtolower($OBJ1->getName());
 		}
 		
+		if($OBJ2->getType() == 'service') {
+			$name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
+		} else {
+			$name2 = strtolower($OBJ2->getName());
+		}
+
 		if ($name1 == $name2) {
 			return 0;
 		} elseif($name1 > $name2) {
