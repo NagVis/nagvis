@@ -643,19 +643,23 @@ class NagVisObject {
 				$name2 = strtolower($OBJ2->getServiceDescription());
 			break;
 			default:
-				$name1 = strtolower($OBJ1->getName());
-				$name2 = strtolower($OBJ2->getName());
+				if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox') {
+				 return 0;
+				} else {
+					$name1 = strtolower($OBJ1->getName());
+					$name2 = strtolower($OBJ2->getName());
+				}
 			break;
 		}
 		
-        if ($name1 == $name2) {
-            return 0;
-        } elseif($name1 > $name2) {
+		if ($name1 == $name2) {
+			return 0;
+		} elseif($name1 > $name2) {
 			return +1;
 		} else {
 			return -1;
 		}
-    }
+	}
 	
 	/**
 	 * PRIVATE STATIC sortObjectsByState()
