@@ -65,6 +65,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->LANG = &$LANG;
 		
 		$this->map_name = $this->MAPCFG->getName();
+		$this->alias = $this->MAPCFG->getAlias();
 		$this->type = 'map';
 		$this->iconset = 'std_medium';
 		$this->objects = Array();

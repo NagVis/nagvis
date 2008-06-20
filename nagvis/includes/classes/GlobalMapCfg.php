@@ -1002,5 +1002,15 @@ class GlobalMapCfg {
 	function getName() {
 		return $this->name;	
 	}
+	
+	/**
+	 * Gets the map alias
+	 *
+	 * @return	String	Map alias
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getAlias() {
+		return $this->getValue('global', 0, 'alias');	
+	}
 }
 ?>
