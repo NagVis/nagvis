@@ -29,40 +29,40 @@
  */
 interface GlobalValidatorInterface {
 
-   /**
-    * Check if parameter valid
-    *
-    * @return
-    * @access  protected
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function isValid();
+	/**
+	 * Check if parameter valid
+	 *
+	 * @return
+	 * @access  protected
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function isValid();
 
-   /**
-    * Get message
-    *
-    * @return
-    * @access  protected
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function getMessage();
+	/**
+	 * Get message
+	 *
+	 * @return
+	 * @access  protected
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getMessage();
 
-   /**
-    * Get name from parameter
-    *
-    * @return  string   Name from parameter
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function getParameterName();
+	/**
+	 * Get name from parameter
+	 *
+	 * @return  string   Name from parameter
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getParameterName();
 
-   /**
-    * Get value from parameter
-    *
-    * @return  string   Value from parameter
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function getParameterValue();
+	/**
+	 * Get value from parameter
+	 *
+	 * @return  string   Value from parameter
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getParameterValue();
 }
 ?>

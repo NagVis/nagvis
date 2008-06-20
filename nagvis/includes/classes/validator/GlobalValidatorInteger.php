@@ -29,94 +29,94 @@
  */
 class GlobalValidatorInteger extends GlobalValidatorAbstract {
 
-   private $validateArr;
-   private $parameterValue;
+	private $validateArr;
+	private $parameterValue;
 
    /**
-    * Constructor
-    *
-    * @param   array    $validateArr
-    * @param   integer  $parameterValue
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function __construct($validateArr, $parameterValue) {
-      $this->validateArr = $validateArr;
-      $this->parameterValue = $parameterValue;
-   }
+	 * Constructor
+	 *
+	 * @param   array    $validateArr
+	 * @param   integer  $parameterValue
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function __construct($validateArr, $parameterValue) {
+		$this->validateArr = $validateArr;
+		$this->parameterValue = $parameterValue;
+	}
 
-   /**
-    * Set private variables
-    *
-    * @param   string   $name    Name from variable
-    * @param            $value   Value for variable
-    * @access  private
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   private function __set($name, $value) {
-      $this->name = $value;
-   }
+	/**
+	 * Set private variables
+	 *
+	 * @param   string   $name    Name from variable
+	 * @param            $value   Value for variable
+	 * @access  private
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	private function __set($name, $value) {
+		$this->name = $value;
+	}
 
-   /**
-    * Check if has parameter a valid integer
-    *
-    * @return  boolean
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function isValidParameter() {
-      // Check if parameter set
-      if (TRUE === $this->validateArr['mustSet']) {
-         if (FALSE === $this->mustSet($this->parameterValue)) {
-            return FALSE;
-         }
-      }
+	/**
+	 * Check if has parameter a valid integer
+	 *
+	 * @return  boolean
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function isValidParameter() {
+		// Check if parameter set
+		if (TRUE === $this->validateArr['mustSet']) {
+			if (FALSE === $this->mustSet($this->parameterValue)) {
+				return FALSE;
+			}
+		}
 
-      // Check if parameter value is a integer
-      if (FALSE === $this->isInteger()) {
-         return FALSE;
-      }
+		// Check if parameter value is a integer
+		if (FALSE === $this->isInteger()) {
+			return FALSE;
+		}
 
-      // Check if value out of range
-      if (TRUE === $this->validateArr['mustInRange']) {
-         if (FALSE === $this->isInRange()) {
-            return FALSE;
-         }
-      }
+		// Check if value out of range
+		if (TRUE === $this->validateArr['mustInRange']) {
+			if (FALSE === $this->isInRange()) {
+				return FALSE;
+			}
+		}
 
-      return TRUE;
-   }
+		return TRUE;
+	}
 
-   /**
-    * Check if value a valid integer
-    *
-    * @return  boolean
-    * @access  protected
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   protected function isInteger() {
-      if(eregi('^[0-9]*$',$this->parameterValue)) {
-         return TRUE;
-      } else {
-         $this->setMessage('notInteger');
-         return FALSE;
-      }
-   }
+	/**
+	 * Check if value a valid integer
+	 *
+	 * @return  boolean
+	 * @access  protected
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	protected function isInteger() {
+		if (eregi('^[0-9]*$',$this->parameterValue)) {
+			return TRUE;
+		} else {
+			$this->setMessage('notInteger');
+			return FALSE;
+		}
+	}
 
-   /**
-    * Check if value in range
-    *
-    * @return  boolean
-    * @access  protected
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   protected function isInRange() {
-      if ($this->parameterValue >= $this->validateArr['minValue'] && $this->parameterValue <= $this->validateArr['maxValue']) {
-         return TRUE;
-      } else {
-         $this->setMessage('outOfRange');
-         return FALSE;
-      }
-   }
+	/**
+	 * Check if value in range
+	 *
+	 * @return  boolean
+	 * @access  protected
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	protected function isInRange() {
+		if ($this->parameterValue >= $this->validateArr['minValue'] && $this->parameterValue <= $this->validateArr['maxValue']) {
+			return TRUE;
+		} else {
+			$this->setMessage('outOfRange');
+			return FALSE;
+		}
+	}
 }
 ?>

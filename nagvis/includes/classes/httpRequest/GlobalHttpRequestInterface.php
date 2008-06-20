@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalHttpRequest.php - Handles http request
+ * GlobalRequest.php - Interface for GlobalHttpRequest
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -23,24 +23,13 @@
  *****************************************************************************/
 
 /**
- * class GlobalHttpRequest
+ * class GlobalRequestInterface
+ *
+ * Interface class  GlobalHttpRequest
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalHttpRequest implements GlobalHttpRequestInterface {
-
-	private $parameters;
-
-
-	/**
-	 * Copy worth from $_REQUEST to parameters
-	 *
-	 * @access  public
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 */
-	public function __construct( ) {
-		$this->parameters = $_REQUEST;
-	} // end of member function __construktor
+interface GlobalHttpRequestInterface {
 
 	/**
 	 * Get parameter names from http request
@@ -49,9 +38,7 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function getParameterNames() {
-		return array_keys($this->parameters);
-	} // end of member function getParameterName
+	public function getParameterNames();
 
 	/**
 	 * Check if isset a parameter
@@ -61,12 +48,7 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function issetParameter($name ) {
-		if (isset($this->parameters[$name])) {
-			return $this->parameters[$name];
-		}
-		return NULL;
-	} // end of member function issetParam
+	public function issetParameter($name);
 
 	/**
 	 * Get worth from parameter
@@ -76,9 +58,7 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function getParameter( $name) {
-		return $this->parameters[$name];
-	} // end of member function getParamter
+	public function getParameter($name);
 
 	/**
 	 * Get worth from header
@@ -95,12 +75,6 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function getHeader($name) {
-		$name = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
-		if (isset($_SERVER[$name])) {
-			return $_SERVER[$name];
-		}
-		return NULL;
-	} // end of member function getHeader
-} // end of GlobalHttpRequest
+	public function getHeader($name);
+} // end of GlobalRequest
 ?>

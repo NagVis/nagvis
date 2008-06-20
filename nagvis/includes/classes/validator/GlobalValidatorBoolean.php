@@ -29,73 +29,73 @@
  */
 class GlobalValidatorBoolean extends GlobalValidatorAbstract {
 
-   private $validateArr;
-   private $parameterValue;
+	private $validateArr;
+	private $parameterValue;
 
-   /**
-    * Constructor
-    *
-    * @param   array    $validateArr
-    * @param   integer  $parameterValue
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function __construct($validateArr, $parameterValue) {
-      $this->validateArr = $validateArr;
-      $this->parameterValue = $parameterValue;
-   }
+	/**
+	 * Constructor
+	 *
+	 * @param   array    $validateArr
+	 * @param   integer  $parameterValue
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function __construct($validateArr, $parameterValue) {
+		$this->validateArr = $validateArr;
+		$this->parameterValue = $parameterValue;
+	}
 
-   /**
-    * Set private variables
-    *
-    * @param   string   $name    Name from variable
-    * @param            $value   Value for variable
-    * @access  private
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   private function __set($name, $value) {
-      $this->name = $value;
-   }
+	/**
+	 * Set private variables
+	 *
+	 * @param   string   $name    Name from variable
+	 * @param            $value   Value for variable
+	 * @access  private
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	private function __set($name, $value) {
+		$this->name = $value;
+	}
 
-   /**
-    * Check if has parameter a valid boolean
-    *
-    * @return  boolean
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function isValidParameter() {
-      // Check if parameter set
-      if (TRUE === $this->validateArr['mustSet']) {
-         if (FALSE === $this->mustSet($this->parameterValue)) {
-            return FALSE;
-         }
-      }
+	/**
+	 * Check if has parameter a valid boolean
+	 *
+	 * @return  boolean
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function isValidParameter() {
+		// Check if parameter set
+		if (TRUE === $this->validateArr['mustSet']) {
+			if (FALSE === $this->mustSet($this->parameterValue)) {
+				return FALSE;
+			}
+		}
 
-      // Check if parameter value is a boolean
-      if (FALSE === $this->isBoolean()) {
-         return FALSE;
-      }
+		// Check if parameter value is a boolean
+		if (FALSE === $this->isBoolean()) {
+			return FALSE;
+		}
 
-      return TRUE;
-   }
+		return TRUE;
+	}
 
-   /**
-    * Check if value a valid boolean
-    *
-    * @return  boolean
-    * @access  protected
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   protected function isBoolean() {
-      if (eregi('[0-1]',$this->parameterValue)) {
-         return TRUE;
-      } elseif ('TRUE' == strtoupper($this->parameterValue) || 'FALSE' == strtoupper($this->parameterValue)) {
-         return TRUE;
-      } else {
-         $this->setMessage('notBoolean');
-         return FALSE;
-      }
-   }
+	/**
+	 * Check if value a valid boolean
+	 *
+	 * @return  boolean
+	 * @access  protected
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	protected function isBoolean() {
+		if (eregi('[0-1]',$this->parameterValue)) {
+			return TRUE;
+		} elseif ('TRUE' == strtoupper($this->parameterValue) || 'FALSE' == strtoupper($this->parameterValue)) {
+			return TRUE;
+		} else {
+			$this->setMessage('notBoolean');
+			return FALSE;
+		}
+	}
 }
 ?>

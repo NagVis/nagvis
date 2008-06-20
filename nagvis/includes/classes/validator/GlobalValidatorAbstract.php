@@ -29,55 +29,56 @@
  */
 class GlobalValidatorAbstract {
 
-   private $message = NULL;
-   private $parameterValue;
+	private $message = NULL;
+	private $parameterValue;
 
-   /**
-    * Check if parameter valid
-    *
-    * @return  boolean
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function isValid() {
-      return $this->isValidParameter();
-   }
+	/**
+	 * Check if parameter valid
+	 *
+	 * @return  boolean
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function isValid() {
+		return $this->isValidParameter();
+	}
 
-   /**
-    * Get a message
-    *
-    * @return  string   Message from object
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function getMessage() {
-      return $this->message;
-   }
+	/**
+	 * Get a message
+	 *
+	 * @return  string   Message from object
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getMessage() {
+		return $this->message;
+	}
 
-   /**
-    * Set a message
-    *
-    * @param   string   $tring 
-    * @access  private
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   protected function setMessage($string) {
-      $this->message = $string;
-   }
+	/**
+	 * Set a message
+	 *
+	 * @param   string   $tring
+	 * @access  private
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	protected function setMessage($string) {
+		$this->message = $string;
+	}
 
-   /**
-    * Check if parameter is set
-    *
-    * @return  boolean
-    * @access  protected
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   protected function mustSet($value) {
-      if (isset($value)) {
-         return TRUE;
-      }
-      $this->setMessage('notSet');
-      return FALSE;
-   }
+	/**
+	 * Check if parameter is set
+	 *
+	 * @return  boolean
+	 * @access  protected
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	protected function mustSet($value) {
+		if (isset($value)) {
+			return TRUE;
+		}
+
+		$this->setMessage('notSet');
+		return FALSE;
+	}
 }
 ?>

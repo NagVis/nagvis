@@ -48,6 +48,7 @@ require("./includes/classes/NagVisMapCfg.php");
 require("./includes/classes/NagVisMap.php");
 require("./includes/classes/NagVisFrontend.php");
 require("./includes/classes/NagVisAutoMap.php");
+require("./includes/classes/NagVisInfoPage.php");
 
 // Include needed nagvis object classes
 require("./includes/classes/objects/NagVisObject.php");
@@ -132,8 +133,9 @@ if(isset($_GET['map']) && $_GET['map'] != '') {
 	// Redirect to next page
 	header('Location: '.$FRONTEND->getNextRotationUrl());
 } elseif(isset($_GET['info'])) {
-	// Build the page
-	$FRONTEND->addBodyLines(NagVisFrontend::getInstInformations());
+		// Build and view the information page
+		print new NagVisInfoPage($MAINCFG);
+		exit;
 } else {
 	// Build the page
 	$FRONTEND->addBodyLines($FRONTEND->getRefresh());

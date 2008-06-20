@@ -29,28 +29,10 @@
  */
 class GlobalControllerInfo {
 
-   public function __construct() {
+	public function __construct() {
 
-     // Can be delete, when frontend is fixed
-     //______________________________________________________________
-      // Load the main configuration
-      //$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
-
-      // Initialize map configuration
-      //$MAPCFG = new NagVisMapCfg($MAINCFG,$_GET['map']);
-      // Read the map configuration file
-      //$MAPCFG->readMapConfig();
-     //______________________________________________________________
-
-      // Initialize the frontend
-      // $FRONTEND = new NagVisFrontend(new Object, new Object, new Object);
-
-      // Build the page
-      echo NagVisFrontend::getInstInformations();
-
-      // Print the page
-      //$FRONTEND->printPage();
-   }
-
+		// Build the information page
+		echo NagVisFrontend::getInstInformations();
+	}
 }
 ?>

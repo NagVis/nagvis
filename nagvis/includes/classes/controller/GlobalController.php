@@ -29,56 +29,56 @@
  */
 class GlobalController {
 
-   private $action = NULL;
-   private $parameterNames = NULL;
+	private $action = NULL;
+	private $parameterNames = NULL;
 
-   /**
-    * Constructor
-    *
-    * @access  public
-    * @author  Michael Luebben <michael_luebben@web.de>
-    */
-   public function __construct() {
+	/**
+	 * Constructor
+	 *
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function __construct() {
 
-      // Get variables
-      $httpRequest = new GlobalHttpRequest();
-      $this->parameterNames = $httpRequest->getParameterNames();
+		// Get variables
+		$httpRequest = new GlobalHttpRequest();
+		$this->parameterNames = $httpRequest->getParameterNames();
 
-      // Check if variable is valid
-      $validator = new GlobalValidator('action', $this->parameterNames[0]);
+		// Check if variable action is valid
+		$validator = new GlobalValidator('action', $this->parameterNames[0]);
 
-      // Set first action
-      if ($validator->isValid()) {
-         $this->action = $this->parameterNames[0];
-      } else {
-         $this->action = 'default';
-      }
+		// Set first action
+		if ($validator->isValid()) {
+			$this->action = $this->parameterNames[0];
+		} else {
+			$this->action = 'default';
+		}
 
-      switch ($this->action) {
-         case 'default':
-            $displayPage = new GlobalControllerDefault();
-            break;
+		switch ($this->action) {
+			case 'default':
+				$displayPage = new GlobalControllerDefault();
+				break;
 
-         case 'info':
-            $displayPage = new GlobalControllerInfo();
-            break;
+			case 'info':
+				$displayPage = new GlobalControllerInfo();
+				break;
 
-         case 'map':
-            $displayPage = new GlobalControllerMap();
-            break;
+			case 'map':
+				$displayPage = new GlobalControllerMap();
+				break;
 
-         case 'automap':
-            $displayPage = new GlobalControllerAutomap();
-            break;
+			case 'automap':
+				$displayPage = new GlobalControllerAutomap();
+				break;
 
-         case 'rotation':
-            $displayPage = new GlobalControllerRotation();
-            break;
+			case 'rotation':
+				$displayPage = new GlobalControllerRotation();
+				break;
 
-         case 'url':
-            $displayPage = new GlobalControllerUrl();
-            break;
-      }
-   }
+			case 'url':
+				$displayPage = new GlobalControllerUrl();
+				break;
+		}
+	}
 }
 ?>
