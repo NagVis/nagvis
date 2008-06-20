@@ -560,7 +560,7 @@ class GlobalMapCfg {
 			'hover_template',
 			'hover_timeout',
 			'hover_delay',
-			'hover_show',
+			'hover_url',
 			'label_x',
 			'label_y',
 			'label_width',
@@ -576,7 +576,10 @@ class GlobalMapCfg {
 			$this->validConfig['hostgroup'][$sVar]['default'] = $sTmp;
 			$this->validConfig['service'][$sVar]['default'] = $sTmp;
 			$this->validConfig['servicegroup'][$sVar]['default'] = $sTmp;
-			$this->validConfig['map'][$sVar]['default'] = $sTmp;
+			
+			if($sVar != 'recognize_services' && $sVar != 'backend_id') {
+				$this->validConfig['map'][$sVar]['default'] = $sTmp;
+			}
 			
 			if($sVar == 'url_target' || $sVar == 'hover_delay') {
 				$this->validConfig['shape'][$sVar]['default'] = $sTmp;
