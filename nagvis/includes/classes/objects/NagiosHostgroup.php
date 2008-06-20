@@ -150,6 +150,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	function fetchMemberHostObjects() {
 		// Get all hosts and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			// Get additional informations like the alias (maybe bad place here)
+			$this->setConfiguration($this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupInformations($this->hostgroup_name));
+			
 			$arrHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name);
 			if(count($arrHosts) > 0) {
 				foreach($arrHosts AS &$hostName) {

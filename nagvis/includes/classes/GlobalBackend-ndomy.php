@@ -852,6 +852,35 @@ class GlobalBackendndomy {
 		
 		return $arrReturn;
 	}
+    
+    /**
+	 * PUBLIC Method getHostgroupInformations
+	 *
+	 * Gets informations like the alias for a hhostgroup
+	 *
+	 * @param	String		    Name of group
+	 * @return	Array			Array with object informations
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getHostgroupInformations($groupName) {
+		$arrReturn = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+				g.alias
+			FROM 
+				'.$this->dbPrefix.'objects AS o,
+				'.$this->dbPrefix.'hostgroups AS g
+			WHERE 
+				(o.objecttype_id=3 AND o.name1 = binary \''.$groupName.'\' AND o.instance_id='.$this->dbInstanceId.') 
+				AND (g.config_type='.$this->objConfigType.' AND g.instance_id='.$this->dbInstanceId.' AND g.hostgroup_object_id=o.object_id)
+				LIMIT 1');
+		
+		$data = mysql_fetch_array($QUERYHANDLE);
+		
+		$arrReturn['alias'] = $data['alias'];
+		
+		return $arrReturn;
+	}
 	
 	/**
 	 * PUBLIC Method getNagiosStartTime
