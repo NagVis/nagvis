@@ -348,11 +348,11 @@ class GlobalPage {
 		$sRet = '';
 		
 		if(count($this->cssIncludes) > 0) {
-			$sRet .= '<style type="text/css"><!--';
+			$sRet .= '<style type="text/css"><!-- ';
 				foreach($this->cssIncludes AS $var => &$val) {
 					$sRet .= '@import url('.$val.'); ';
 				}
-			$sRet .= '--></style>';
+			$sRet .= ' --></style>';
 		}
 		
 		return $sRet;
@@ -410,14 +410,14 @@ class GlobalPage {
 		$ret = '';
 		if($js != '') {
 			
-			$ret .= "<script type=\"text/javascript\" language=\"JavaScript\">";
-			$ret .= "<!--";
+			$ret .= "<script type=\"text/javascript\" language=\"JavaScript\"> ";
+			$ret .= "<!-- \n";
 			if(is_array($js)) {
 				$ret .= implode("\n", $js);
 			} else {
 				$ret .= $js;
 			}
-			$ret .= "//-->";
+			$ret .= "\n //-->";
 			$ret .= "</script>";
 		}
 		return $ret;
