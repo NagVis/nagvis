@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalControllerinfo.php - Global controller for info page
+ * GlobalControllerDefault.php - Global default controller for nagvis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -23,19 +23,34 @@
  *****************************************************************************/
 
 /**
- * class GlobalControllerInfo
+ * class GlobalControllerDefault
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalControllerInfo {
+class GlobalControllerDefault {
 
 	public function __construct() {
 
 		// Load the main configuration
 		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
-		// Build and view the information page
-		print new NagVisInfoPage($MAINCFG);
+		// Initialize map configuration
+		$MAPCFG = new NagVisMapCfg($MAINCFG,NULL);
+		// Read the map configuration file
+		$MAPCFG->readMapConfig();
+
+		// Initialize backend(s)
+		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+
+		// Initialize the frontend
+		$FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
+		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
+		$FRONTEND->getHeaderMenu();
+		$FRONTEND->addBodyLines($FRONTEND->getIndexPage());
+		$FRONTEND->getMessages();
+
+		// Print the page
+		$FRONTEND->printPage();
 	}
 }
 ?>

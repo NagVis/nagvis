@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalControllerinfo.php - Global controller for info page
+ * GlobalControllerInterface.php - Interface for GlobalController
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -23,19 +23,36 @@
  *****************************************************************************/
 
 /**
- * class GlobalControllerInfo
+ * class interface GlobalController
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalControllerInfo {
+interface GlobalControllerInterface {
 
-	public function __construct() {
+	/**
+	 * Get set action
+	 *
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getAction();
 
-		// Load the main configuration
-		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+	/**
+	 * Return message
+	 *
+	 * @return  string   Message from object
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getMessage();
 
-		// Build and view the information page
-		print new NagVisInfoPage($MAINCFG);
-	}
+	/**
+	 * Check if object is valid
+	 *
+	 * @return
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function isValid();
 }
 ?>

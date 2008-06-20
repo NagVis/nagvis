@@ -27,10 +27,13 @@
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalController {
+class GlobalController implements GlobalControllerInterface {
 
 	private $action = NULL;
 	private $parameterNames = NULL;
+	private $message = NULL;
+	private $mapName = NULL;
+	private $isValid = NULL;
 
 	/**
 	 * Constructor
@@ -45,26 +48,42 @@ class GlobalController {
 		$this->parameterNames = $httpRequest->getParameterNames();
 
 		// Check if variable action is valid
-		$validator = new GlobalValidator('action', $this->parameterNames[0]);
+		$actionValidator = new GlobalValidator('action', $this->parameterNames[0]);
 
 		// Set first action
-		if ($validator->isValid()) {
+		if ($actionValidator->isValid()) {
 			$this->action = $this->parameterNames[0];
 		} else {
 			$this->action = 'default';
+			$this->message = 'setActionToDefault';
 		}
 
 		switch ($this->action) {
 			case 'default':
 				$displayPage = new GlobalControllerDefault();
+				$this->isValid = TRUE;
 				break;
 
 			case 'info':
 				$displayPage = new GlobalControllerInfo();
+				$this->isValid = TRUE;
 				break;
 
 			case 'map':
-				$displayPage = new GlobalControllerMap();
+				if ($httpRequest->issetParameter('map')) {
+					$this->mapName = $httpRequest->getParameter('map');
+					$mapValidator = new GlobalValidator('map', $this->mapName);
+					if ($mapValidator->isValid()) {
+						$displayPage = new GlobalControllerMap($this->mapName);
+						$this->isValid = TRUE;
+					} else {
+						$this->message = $mapValidator->getMessage();
+						$this->isValid = FALSE;
+					}
+				} else {
+					$this->message = 'noMapSet';
+					$this->isValid = FALSE;
+				}
 				break;
 
 			case 'automap':
@@ -79,6 +98,38 @@ class GlobalController {
 				$displayPage = new GlobalControllerUrl();
 				break;
 		}
+	}
+
+	/**
+	 * Get set action
+	 *
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getAction() {
+		return $this->action;
+	}
+
+	/**
+	 * Return message
+	 *
+	 * @return  string   Message from object
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getMessage() {
+		return $this->message;
+	}
+
+	/**
+	 * Check if object is valid
+	 *
+	 * @return
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function isValid() {
+		return $this->isValid;
 	}
 }
 ?>
