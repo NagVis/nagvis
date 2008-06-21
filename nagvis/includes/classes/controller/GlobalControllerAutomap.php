@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalControllerInterface.php - Interface for GlobalController
+ * GlobalControllerAutomap.php - Global automap controller for nagvis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -23,45 +23,37 @@
  *****************************************************************************/
 
 /**
- * class interface GlobalController
+ * class GlobalControllerAutomap
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-interface GlobalControllerInterface {
+class GlobalControllerAutomap {
 
-	/**
-	 * Get set action
-	 *
-	 * @access  public
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 */
-	public function getAction();
+	public function __construct($automapEnv) {
 
-	/**
-	 * Return message
-	 *
-	 * @return  string   Message from object
-	 * @access  public
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 */
-	public function getMessage();
+		// Load the main configuration
+		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
-	/**
-	 * Check if object is valid
-	 *
-	 * @return
-	 * @access  public
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 */
-	public function isValid();
+		// Initialize map configuration
+		$MAPCFG = new NagVisMapCfg($MAINCFG,NULL);
 
-	/**
-	 * Get name from parameter
-	 *
-	 * @return  string   Name from parameter
-	 * @access  public
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 */
-	public function getParameterName();
+		// Read the map configuration file
+		$MAPCFG->readMapConfig();
+
+		// Initialize backend(s)
+		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+
+		// Initialize the frontend
+		$FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
+
+		// Build the page
+		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
+		$FRONTEND->getHeaderMenu();
+		$FRONTEND->getAutoMap($automapEnv);
+		$FRONTEND->getMessages();
+
+		// Print the page
+		$FRONTEND->printPage();
+	}
 }
 ?>

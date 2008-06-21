@@ -31,9 +31,22 @@ class GlobalController implements GlobalControllerInterface {
 
 	private $action = NULL;
 	private $parameterNames = NULL;
+	private $parameterName = NULL;
+	private $parameterValue = NULL;
 	private $message = NULL;
-	private $mapName = NULL;
 	private $isValid = NULL;
+
+	private $mapName = NULL;
+
+	private $automapEnv = array(
+									'backend' 		=> '',
+									'root'			=> '',
+									'maxLayers'		=> '',
+									'renderMode'	=> '',
+									'width'			=> '',
+									'height'			=> '',
+									'ignoreHosts'	=> '',
+									'filterGroup'	=> '');
 
 	/**
 	 * Constructor
@@ -70,9 +83,10 @@ class GlobalController implements GlobalControllerInterface {
 				break;
 
 			case 'map':
-				if ($httpRequest->issetParameter('map')) {
-					$this->mapName = $httpRequest->getParameter('map');
-					$mapValidator = new GlobalValidator('map', $this->mapName);
+				$this->parameterName = 'map';
+				if ($httpRequest->issetParameter($this->parameterName)) {
+					$this->mapName = $httpRequest->getParameter($this->parameterName);
+					$mapValidator = new GlobalValidator($this->parameterName, $this->mapName);
 					if ($mapValidator->isValid()) {
 						$displayPage = new GlobalControllerMap($this->mapName);
 						$this->isValid = TRUE;
@@ -87,7 +101,27 @@ class GlobalController implements GlobalControllerInterface {
 				break;
 
 			case 'automap':
-				$displayPage = new GlobalControllerAutomap();
+				// Check varibles
+				foreach ($this->automapEnv as $this->parameterName => $parameterValue) {
+					if ($httpRequest->issetParameter($this->parameterName)) {
+						$this->parameterValue = $httpRequest->getParameter($this->parameterName);
+						$validator = new GlobalValidator($this->parameterName, $this->parameterValue);
+						if ($validator->isValid()) {
+							$this->automapEnv[$this->parameterName] = $this->parameterValue;
+							$this->isValid = TRUE;
+						} else {
+							$this->message = $validator->getMessage();
+							$this->isValid = FALSE;
+							break;
+						}
+					} else {
+						$this->isValid = TRUE;
+					}	
+				}
+
+				if ($this->isValid) {
+					$displayPage = new GlobalControllerAutomap($this->automapEnv);
+				}
 				break;
 
 			case 'rotation':
@@ -130,6 +164,17 @@ class GlobalController implements GlobalControllerInterface {
 	 */
 	public function isValid() {
 		return $this->isValid;
+	}
+
+	/**
+	 * Get name from parameter
+	 *
+	 * @return  string   Name from parameter
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function getParameterName() {
+		return $this->parameterName;
 	}
 }
 ?>

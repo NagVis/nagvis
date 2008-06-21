@@ -36,6 +36,7 @@ class GlobalControllerDefault {
 
 		// Initialize map configuration
 		$MAPCFG = new NagVisMapCfg($MAINCFG,NULL);
+
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
 
@@ -44,6 +45,8 @@ class GlobalControllerDefault {
 
 		// Initialize the frontend
 		$FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
+
+		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 		$FRONTEND->getHeaderMenu();
 		$FRONTEND->addBodyLines($FRONTEND->getIndexPage());
