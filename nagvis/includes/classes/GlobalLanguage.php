@@ -256,19 +256,23 @@ class GlobalLanguage {
 		}
 	}
 	
-	function getMessageText($id,$replace='',$mergeWithGlobal=TRUE) {
+	function getMessageText($id, $replace = '', $mergeWithGlobal = TRUE) {
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['text']) && $this->cachedLang[$id]['text'] != '') {
 			$ret = $this->cachedLang[$id]['text'];
 		} else {
-			$ret = $this->getText($this->languageRoot.':messages:'.$id.':text',$replace,$mergeWithGlobal);
-			if($replace == '') {
-				if(!isset($this->cachedLang[$id])) {
-					$this->cachedLang[$id] = Array();
-				}
-				$this->cachedLang[$id]['text'] = $ret;
-			}
+			$ret = $this->getText($this->languageRoot.':messages:'.$id.':text',$mergeWithGlobal);
 			
+			// Write this to the language cache
+			if(!isset($this->cachedLang[$id])) {
+				$this->cachedLang[$id] = Array();
+			}
+			$this->cachedLang[$id]['text'] = $ret;
 		}
+		
+		if($replace != '') {
+			$ret = $this->getReplacedString($ret, $replace);
+		}
+		
 		return $ret;
 	}
 	
@@ -276,14 +280,19 @@ class GlobalLanguage {
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['title']) && $this->cachedLang[$id]['title'] != '') {
 			$ret = $this->cachedLang[$id]['title'];
 		} else {
-			$ret = $this->getText($this->languageRoot.':messages:'.$id.':title',$replace,$mergeWithGlobal);
-			if($replace == '') {
-				if(!isset($this->cachedLang[$id])) {
-					$this->cachedLang[$id] = Array();
-				}
-				$this->cachedLang[$id]['label'] = $ret;
+			$ret = $this->getText($this->languageRoot.':messages:'.$id.':title',$mergeWithGlobal);
+			
+			// Write this to the language cache
+			if(!isset($this->cachedLang[$id])) {
+				$this->cachedLang[$id] = Array();
 			}
+			$this->cachedLang[$id]['label'] = $ret;
 		}
+		
+		if($replace != '') {
+			$ret = $this->getReplacedString($ret, $replace);
+		}
+		
 		return $ret;
 	}
 	
@@ -291,14 +300,19 @@ class GlobalLanguage {
 		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['label']) && $this->cachedLang[$id]['label'] != '') {
 			$ret = $this->cachedLang[$id]['label'];
 		} else {
-			$ret = $this->getText($this->languageRoot.':labels:'.$id.':text',$replace,$mergeWithGlobal);
-			if($replace == '') {
-				if(!isset($this->cachedLang[$id])) {
-					$this->cachedLang[$id] = Array();
-				}
-				$this->cachedLang[$id]['label'] = $ret;
+			$ret = $this->getText($this->languageRoot.':labels:'.$id.':text',$mergeWithGlobal);
+			
+			// Write this to the language cache
+			if(!isset($this->cachedLang[$id])) {
+				$this->cachedLang[$id] = Array();
 			}
+			$this->cachedLang[$id]['label'] = $ret;
 	 	}
+		
+		if($replace != '') {
+			$ret = $this->getReplacedString($ret, $replace);
+		}
+		
 		return $ret;
 	}
 	
@@ -306,12 +320,11 @@ class GlobalLanguage {
 	 * Gets the text of an id
 	 *
 	 * @param	String	$languagePath		Path to the Language String in the XML File
-	 * @param	String	$replace			Strings to Replace
 	 * @param	Boolean $mergeWithGlobal	Merge with Global Type
 	 * @return	String	String with Language String
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getText($languagePath,$replace='',$mergeWithGlobal=TRUE) {
+	function getText($languagePath, $mergeWithGlobal=TRUE) {
 		$arrLang = Array();
 		$strLang = '';
 		$arrLanguagePath = explode(':',$languagePath);
@@ -342,27 +355,34 @@ class GlobalLanguage {
 			// Replace [i],[b] and their ending tags with HTML code
 			$strLang = preg_replace('/\[(\/|)(i|b|br)\]/i',"<$1$2>",$strLang);
 			
-			if($replace != '') {
-				$arrReplace = explode(',', $replace);
-				$size = count($arrReplace);
-				for($i=0;$i<$size;$i++) {
-					if(isset($arrReplace[$i])) {
-						// If = are in the text, they'l be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
-						$var = explode('~', $arrReplace[$i]);
-						$strLang = str_replace('['.$var[0].']', $var[1], $strLang);
-					}
-				}
-				
-				// Return string with replaced text
-				return $strLang;
-			} else {
-				// Return without replacement
-				return $strLang;
-			}
+			return $strLang;
 		} else {
 			// Return Translation not Found error
 			return 'TranslationNotFound: '.$languagePath;
 		}
+	}
+	
+	
+	/**
+	 * Gets the text of an id
+	 *
+	 * @param	String	String Plain language string
+	 * @return	String	String Replaced language string
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getReplacedString($sLang, $sReplace) {
+		$aReplace = explode(',', $sReplace);
+		$size = count($aReplace);
+		for($i = 0; $i < $size; $i++) {
+			if(isset($aReplace[$i])) {
+				// If = are in the text, they'l be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
+				$var = explode('~', $aReplace[$i]);
+				$sLang = str_replace('['.$var[0].']', $var[1], $sLang);
+			}
+		}
+		
+		// Return string with replaced text
+		return $sLang;
 	}
 }
 ?>
