@@ -598,14 +598,24 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function wrapChildState(&$OBJ) {
-		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
+		$arrStates = Array('UNREACHABLE' => 6, 
+							'DOWN' => 5, 
+							'CRITICAL' => 5, 
+							'WARNING' => 4, 
+							'UNKNOWN' => 3, 
+							'ERROR' => 2, 
+							'UP' => 1, 
+							'OK' => 1, 
+							'PENDING' => 0);
 		
-		if($this->getSummaryState() != '') {
+		$sSummaryState = $this->getSummaryState();
+		$sObjSummaryState = $OBJ->getSummaryState();
+		if($sSummaryState != '') {
 			/* When the state of the current child is not as good as the current
 			 * summary state or the state is equal and the sub-state differs.
 			 */
-			if($arrStates[$this->getSummaryState()] < $arrStates[$OBJ->getSummaryState()] || ($arrStates[$this->getSummaryState()] == $arrStates[$OBJ->getSummaryState()] && ($this->getSummaryAcknowledgement() || $this->getSummaryInDowntime()))) {
-				$this->summary_state = $OBJ->getSummaryState();
+			if($arrStates[$sSummaryState] < $arrStates[$sObjSummaryState] || ($arrStates[$sSummaryState] == $arrStates[$sObjSummaryState] && ($this->getSummaryAcknowledgement() || $this->getSummaryInDowntime()))) {
+				$this->summary_state = $sObjSummaryState;
 				
 				if($OBJ->getSummaryAcknowledgement() == 1) {
 					$this->summary_problem_has_been_acknowledged = 1;
@@ -620,7 +630,7 @@ class NagVisStatefulObject extends NagVisObject {
 				}
 			}
 		} else {
-			$this->summary_state = $OBJ->getSummaryState();
+			$this->summary_state = $sObjSummaryState;
 			$this->summary_problem_has_been_acknowledged = $OBJ->getSummaryAcknowledgement();
 			$this->summary_in_downtime = $OBJ->getSummaryInDowntime();
 		}
