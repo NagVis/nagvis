@@ -681,6 +681,11 @@ class GlobalMapCfg {
 								$this->mapConfig[$sObjType][$iObjTypeId] = Array('type' => $sObjType);
 								// increase type index
 								$types[$sObjType]++;
+							} else {
+								// unknown object type
+								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+								$FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
+								return FALSE;
 							}
 						} else {
 							// This is another attribute
@@ -771,6 +776,9 @@ class GlobalMapCfg {
 				}
 			}
 		}
+		
+		// Everything is merged: The templates are not interesting anymore
+		unset($this->mapConfig['template']);
 	}
 	
 	/**
@@ -828,39 +836,40 @@ class GlobalMapCfg {
 	 */
 	function checkMapConfigIsValid($printErr) {
 		// check given objects and attributes
-		foreach($this->mapConfig AS $type => &$elements) {
-			if($type != 'template') {
-				if(isset($this->validConfig[$type])) {
-					foreach($elements AS $id => &$element) {
-						// loop validConfig for checking: => missing "must" atributes
-						foreach($this->validConfig[$type] AS $key => &$val) {
-							if((isset($val['must']) && $val['must'] == '1')) {
-								// value is "must"
-								if(!isset($element[$key]) || $element[$key] == '') {
-									// a "must" value is missing or empty
-									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-									$FRONTEND->messageToUser('ERROR','mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id);
-								}
-							}
+		foreach($this->mapConfig AS $type => $elements) {
+			foreach($elements AS $id => $element) {
+				// loop validConfig for checking: => missing "must" atributes
+				foreach($this->validConfig[$type] AS $key => $val) {
+					if(isset($val['must']) && $val['must'] == '1') {
+						// value is "must"
+						if(!isset($element[$key]) || $element[$key] == '') {
+							// a "must" value is missing or empty
+							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND->messageToUser('ERROR','mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id);
 						}
-						
-						// loop given elements for checking: => all given atributes valid
-						foreach($element AS $key => &$val) {
-							// check for valid atributes
-							if(!isset($this->validConfig[$type][$key])) {
-								// unknown atribute
-								if($printErr == 1) {
-									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-									$FRONTEND->messageToUser('ERROR','unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type);
-								}
-								return FALSE;
-							} else {
-								if(!is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
-									// This is a string value
-									
-									// valid attribute, now check for value format
-									if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
-										
+					}
+				}
+				
+				// loop given elements for checking: => all given atributes valid
+				foreach($element AS $key => $val) {
+					// check for valid atributes
+					if(!isset($this->validConfig[$type][$key])) {
+						// unknown atribute
+						if($printErr == 1) {
+							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND->messageToUser('ERROR','unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type);
+						}
+						return FALSE;
+					} else {
+						// The object has a match regex, it can be checked
+						if(isset($this->validConfig[$type][$key]['match'])) {
+							
+							if(is_array($val)) {
+								// This is an array
+								
+								// Loop and check each element
+								foreach($val AS $key2 => $val2) {
+									if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
 										// wrong format
 										if($printErr) {
 											$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
@@ -868,32 +877,21 @@ class GlobalMapCfg {
 										}
 										return FALSE;
 									}
-								} elseif(is_array($val) && isset($this->validConfig[$type][$key]['match'])) {
-									// This is an array
-									
-									//loop and check each element
-									foreach($val AS $key2 => &$val2) {
-										// check the value format
-										if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
-											// wrong format
-											if($printErr) {
-												$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-												$FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
-											}
-											return FALSE;
-										}
+								}
+							} else {
+								// This is a string value
+								
+								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
+									// Wrong format
+									if($printErr) {
+										$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+										$FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
 									}
+									return FALSE;
 								}
 							}
 						}
-					}	
-				} else {
-					// unknown type
-					if($printErr == 1) {
-						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-						$FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
 					}
-					return FALSE;
 				}
 			}
 		}
