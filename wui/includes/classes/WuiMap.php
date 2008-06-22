@@ -138,13 +138,13 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->getBackground());
-		$ret = array_merge($ret,$this->parseJs($this->getJsGraphicObj()."\n".$this->getJsLang()."\n".$this->getJsValidMainConfig()."\n".$this->getJsValidMapConfig()));
-		$ret = array_merge($ret,$this->parseObjects());
-		$ret = array_merge($ret,$this->parseInvisible());
-		$ret = array_merge($ret,$this->makeObjectsMoveable());
-		$ret = array_merge($ret,Array("<script type=\"text/javascript\" src=\"./includes/js/wz_tooltip.js\"></script>"));
+		$ret = '';
+		$ret .= $this->getBackground();
+		$ret .= $this->parseJs($this->getJsGraphicObj()."\n".$this->getJsLang()."\n".$this->getJsValidMainConfig()."\n".$this->getJsValidMapConfig());
+		$ret .= $this->parseObjects();
+		$ret .= $this->parseInvisible();
+		$ret .= $this->makeObjectsMoveable();
+		$ret .= '<script type="text/javascript" src="./includes/js/wz_tooltip.js"></script>';
 		
 		return $ret;
 	}
@@ -189,7 +189,7 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function makeObjectsMoveable() {
-		$ret = Array();
+		$ret = '';
 		
 		if(strlen($this->moveable) != 0) {
 			$ret = $this->parseJs("SET_DHTML(TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
@@ -202,21 +202,21 @@ class WuiMap extends GlobalMap {
 	 * Parses given Js code
 	 *
 	 * @param	String	$js	Javascript code to parse
-	 * @return	Array 	Html
+	 * @return	String 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseJs($js) {
-		$ret = Array();
+		$ret = '';
 		
-		$ret[] = "<script type=\"text/javascript\" language=\"JavaScript\">";
-		$ret[] = "<!--";
+		$ret .= "<script type=\"text/javascript\" language=\"JavaScript\">";
+		$ret .= "<!--\n";
 		if(is_array($js)) {
-			$ret = array_merge($ret,$js);
+			$ret .= implode("\n",$js);
 		} else {
-			$ret[] = $js;
+			$ret .= $js;
 		}
-		$ret[] = "//-->";
-		$ret[] = "</script>";
+		$ret .= "\n//-->";
+		$ret .= "</script>";
 		
 		return $ret;
 	}
@@ -224,11 +224,11 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Parses all objects on the map
 	 *
-	 * @return	Array 	Html
+	 * @return	String 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
-		$ret = Array();
+		$ret = '';
 		
 		foreach($this->objects AS $var => $obj) {
 			switch($obj['type']) {
@@ -236,9 +236,9 @@ class WuiMap extends GlobalMap {
 					$obj['class'] = "box";
 					$obj['icon'] = "20x20.gif";
 					
-					$ret = array_merge($ret,$this->textBox($obj));
+					$ret .= $this->textBox($obj);
 					$obj = $this->fixIcon($obj);
-					$ret = array_merge($ret,$this->parseIcon($obj));
+					$ret .= $this->parseIcon($obj);
 				break;
 				default:
 					if(isset($obj['line_type'])) {
@@ -257,10 +257,10 @@ class WuiMap extends GlobalMap {
 					}
 					
 					$obj = $this->fixIcon($obj);
-					$ret = array_merge($ret,$this->parseIcon($obj));
+					$ret .= $this->parseIcon($obj);
 					
 					if(isset($obj['label_show']) && $obj['label_show'] == '1') {
-						$ret[] = $this->parseLabel($obj);
+						$ret .= $this->parseLabel($obj);
 					}
 				break;	
 			}
@@ -328,10 +328,11 @@ class WuiMap extends GlobalMap {
 	 * Parses the HTML-Code of an icon
 	 *
 	 * @param	Array	$obj	Array with object informations
+	 * @return	String HTML Code
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon(&$obj) {
-		$ret = Array();
+		$ret = '';
 				
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
@@ -339,9 +340,9 @@ class WuiMap extends GlobalMap {
 			$name = $obj['type'] . '_name';
 		}
 		
-		$ret[] = "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
-		$ret[] = "\t\t<img src=\"".$obj['htmlPath'].$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
-		$ret[] = "</div>";
+		$ret .= "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
+		$ret .= "\t\t<img src=\"".$obj['htmlPath'].$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
+		$ret .= "</div>";
 		
 		return $ret;
 	}
@@ -506,11 +507,11 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Create a Comment-Textbox
 	 *
-	 * @param	Array	$obj	Array with object informations
+	 * @param	String HTML Code
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function textBox(&$obj) {
-		$ret = Array();
+		$ret = '';
 		
 		if(isset($obj['w'])) {
 			$obj['w'] = $obj['w'].'px';
@@ -518,9 +519,9 @@ class WuiMap extends GlobalMap {
 			$obj['w'] = 'auto';
 		}
 		
-		$ret[] = "<div class=\"".$obj['class']."\" style=\"left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."; overflow: visible;\">";	
-		$ret[] = "\t<span>".$obj['text']."</span>";
-		$ret[] = "</div>";
+		$ret .= "<div class=\"".$obj['class']."\" style=\"left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."; overflow: visible;\">";	
+		$ret .= "\t<span>".$obj['text']."</span>";
+		$ret .= "</div>";
 		
 		return $ret;	
 	}
@@ -670,11 +671,11 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Parses the invisible forms and JS arrays needed in WUI
 	 *
-	 * @return	Array Html
+	 * @return	String HTML Code
 	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function parseInvisible() {
-		$arr = Array();
+		$arr = '';
 		
 		##################################
 		# important form. it makes possible to communicate the coordinates of all the objects to the server 
@@ -687,7 +688,7 @@ class WuiMap extends GlobalMap {
 		#                                            obj2 (defined line 6 in the map.cfg file) x=165 y=98
 		# When the user clicks on the Save buton, these lists are passed to a bash script executed on the server, which will parse them and treat them.
 		# This is how it works to save the maps :)
-		$arr[] = '<form id="myvalues" style="display:none;" name="myvalues" action="./form_handler.php?myaction=save" method="post">
+		$arr .= '<form id="myvalues" style="display:none;" name="myvalues" action="./form_handler.php?myaction=save" method="post">
 			<input type="hidden" name="mapname" value="'.$this->MAPCFG->getName().'" />
 			<input type="hidden" name="image" value="" />
 			<input type="hidden" name="valx" value="" />
@@ -695,7 +696,7 @@ class WuiMap extends GlobalMap {
 			<input type="submit" name="submit" value="Save" />
 		</form>';
 		
-		$arr = array_merge($arr,$this->parseJs("
+		$arr .= $this->parseJs("
 			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
 			var autosave = '".$this->MAINCFG->getRuntimeValue('justAdded')."';
@@ -707,7 +708,7 @@ class WuiMap extends GlobalMap {
 			
 			// draw the shapes on the background
 			myshape_background.paint();
-			"));
+			");
 		
 		return $arr;
 	}

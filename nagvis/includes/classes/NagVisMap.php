@@ -64,17 +64,17 @@ class NagVisMap extends GlobalMap {
 	/**
 	 * Parses the Map and the Objects
 	 *
-	 * @return	Array 	Array with Html Code
+	 * @return	String 	String with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->getBackground());
-		$ret = array_merge($ret,$this->parseObjects());
+		$ret = '';
+		$ret .= $this->getBackground();
+		$ret .= $this->parseObjects();
 		// Dynamicaly set favicon
-		$ret[] = $this->getFavicon();
+		$ret .= $this->getFavicon();
 		// Change title (add map alias and map state), set map name
-		$ret[] = '<script type="text/javascript" language="JavaScript">var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		$ret .= '<script type="text/javascript" language="JavaScript">var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		return $ret;
 	}
@@ -82,7 +82,7 @@ class NagVisMap extends GlobalMap {
 	/**
 	 * Gets the background of the map
 	 *
-	 * @return	Array	HTML Code
+	 * @return	String HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
@@ -140,11 +140,11 @@ class NagVisMap extends GlobalMap {
 	/**
 	 * Parses the Objects
 	 *
-	 * @return	Array 	Array with Html Code
+	 * @return	String Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseObjects() {
-		$ret = Array();
+		$ret = '';
 		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
 			switch(get_class($OBJ)) {
 				case 'NagVisHost':
@@ -154,7 +154,7 @@ class NagVisMap extends GlobalMap {
 				case 'NagVisMapObj':
 				case 'NagVisShape':
 				case 'NagVisTextbox':
-					$ret[] = $OBJ->parse();
+					$ret .= $OBJ->parse();
 				break;
 			}
 		}

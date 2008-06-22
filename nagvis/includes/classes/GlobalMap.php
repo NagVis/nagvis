@@ -71,11 +71,11 @@ class GlobalMap {
 	 *
 	 * @param	String	$src	html path
 	 * @param	String	$style  css parameters
-	 * @return	Array	HTML Code
+	 * @return	String HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackgroundHtml($src, $style='', $attr='') {
-		return Array('<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="" '.$attr.'>');
+		return '<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="" '.$attr.'>';
 	}
 }
 ?>
