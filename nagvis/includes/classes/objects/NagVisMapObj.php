@@ -401,11 +401,15 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryState() {
-		// Get summary state member objects
-		foreach($this->getMapObjects() AS $OBJ) {
-			if(method_exists($OBJ,'getSummaryState')) {
-				$this->wrapChildState($OBJ);
+		if(count($this->getMapObjects()) > 0) {
+			// Get summary state member objects
+			foreach($this->getMapObjects() AS $OBJ) {
+				if(method_exists($OBJ,'getSummaryState')) {
+					$this->wrapChildState($OBJ);
+				}
 			}
+		} else {
+			$this->summary_state = 'UNKNOWN';
 		}
 	}
 	
