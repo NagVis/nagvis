@@ -48,6 +48,8 @@ class GlobalController implements GlobalControllerInterface {
 									'ignoreHosts'	=> '',
 									'filterGroup'	=> '');
 
+		private $url = NULL;
+
 	/**
 	 * Constructor
 	 *
@@ -86,12 +88,12 @@ class GlobalController implements GlobalControllerInterface {
 				$this->parameterName = 'map';
 				if ($httpRequest->issetParameter($this->parameterName)) {
 					$this->mapName = $httpRequest->getParameter($this->parameterName);
-					$mapValidator = new GlobalValidator($this->parameterName, $this->mapName);
-					if ($mapValidator->isValid()) {
+					$validator = new GlobalValidator($this->parameterName, $this->mapName);
+					if ($validator->isValid()) {
 						$displayPage = new GlobalControllerMap($this->mapName);
 						$this->isValid = TRUE;
 					} else {
-						$this->message = $mapValidator->getMessage();
+						$this->message = $validator->getMessage();
 						$this->isValid = FALSE;
 					}
 				} else {
@@ -125,11 +127,63 @@ class GlobalController implements GlobalControllerInterface {
 				break;
 
 			case 'rotation':
-				$displayPage = new GlobalControllerRotation();
+				$this->parameterName = 'rotation';
+				if ($httpRequest->issetParameter($this->parameterName)) {
+
+					// Check map, when set
+					if ($httpRequest->issetParameter('map')) {
+						$this->parameterName = 'map';
+						$this->mapName = $httpRequest->getParameter($this->parameterName);
+						$validator = new GlobalValidator($this->parameterName, $this->mapName);
+						if ($validator->isValid()) {
+							$displayPage = new GlobalControllerRotation($this->mapName);
+							$this->isValid = TRUE;
+						} else {
+							$this->message = $validator->getMessage();
+							$this->isValid = FALSE;
+							break;
+						}
+					}
+
+					// Check url, when set
+					if ($httpRequest->issetParameter('url')) {
+						$this->parameterName = 'url';
+						$this->mapName = $httpRequest->getParameter($this->parameterName);
+						$validator = new GlobalValidator($this->parameterName, $this->mapName);
+						if ($validator->isValid()) {
+							$displayPage = new GlobalControllerRotation();
+							$this->isValid = TRUE;
+						} else {
+							$this->message = $validator->getMessage();
+							$this->isValid = FALSE;
+							break;
+						}
+					}
+
+					$displayPage = new GlobalControllerRotation();
+					$this->isValid = TRUE;
+				} else {
+					$this->message = 'noRotationpoolSet';
+					$this->isValid = FALSE;
+				}
 				break;
 
 			case 'url':
-				$displayPage = new GlobalControllerUrl();
+				$this->parameterName = 'url';
+				if ($httpRequest->issetParameter($this->parameterName)) {
+					$this->url = $httpRequest->getParameter($this->parameterName);
+					$validator = new GlobalValidator($this->parameterName, $this->url);
+					if ($validator->isValid()) {
+						$displayPage = new GlobalControllerUrl($this->url);
+						$this->isValid = TRUE;
+					} else {
+						$this->message = $validator->getMessage();
+						$this->isValid = FALSE;
+					}
+				} else {
+					$this->message = 'noUrlSet';
+					$this->isValid = FALSE;
+				}
 				break;
 		}
 	}
