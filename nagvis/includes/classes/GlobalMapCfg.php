@@ -662,41 +662,44 @@ class GlobalMapCfg {
 				// Loop each line
 				$iNumLines = count($file);
 				for($l = 0; $l < $iNumLines; $l++) {
-					// Don't recognize comments and empty lines, do nothing with ending delimiters
-					$sFirstChar = substr($file[$l], 0, 1);
-					if($sFirstChar != ';' && $sFirstChar != '#' && $sFirstChar != '}') {
-						// Determine if this is a new object definition
-						if(strpos($file[$l], 'define') !== FALSE) {
-							// If only the global section should be read break the loop after the global section
-							if($onlyGlobal == 1 && $types['global'] == 1) {
-								break;
-							}
-							
-							$iDelimPos = strpos($file[$l], '{', 8);
-							$sObjType = substr($file[$l], 7, ($iDelimPos - 8));
-							
-							if(isset($sObjType) && isset($this->validConfig[$sObjType])) {
-								// This is a new definition and it's a valid one
-								$iObjTypeId = $types[$sObjType];
-								$this->mapConfig[$sObjType][$iObjTypeId] = Array('type' => $sObjType);
-								// increase type index
-								$types[$sObjType]++;
+					// Remove empty dos format lines
+					if(rtrim($file[$l],"\r\n") != '') {
+						// Don't recognize comments and empty lines, do nothing with ending delimiters
+						$sFirstChar = substr($file[$l], 0, 1);
+						if($sFirstChar != ';' && $sFirstChar != '#' && $sFirstChar != '}') {
+							// Determine if this is a new object definition
+							if(strpos($file[$l], 'define') !== FALSE) {
+								// If only the global section should be read break the loop after the global section
+								if($onlyGlobal == 1 && $types['global'] == 1) {
+									break;
+								}
+								
+								$iDelimPos = strpos($file[$l], '{', 8);
+								$sObjType = substr($file[$l], 7, ($iDelimPos - 8));
+								
+								if(isset($sObjType) && isset($this->validConfig[$sObjType])) {
+									// This is a new definition and it's a valid one
+									$iObjTypeId = $types[$sObjType];
+									$this->mapConfig[$sObjType][$iObjTypeId] = Array('type' => $sObjType);
+									// increase type index
+									$types[$sObjType]++;
+								} else {
+									// unknown object type
+									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+									$FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
+									return FALSE;
+								}
 							} else {
-								// unknown object type
-								$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-								$FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
-								return FALSE;
-							}
-						} else {
-							// This is another attribute
-							$iDelimPos = strpos($file[$l], '=');
-							$sKey = trim(substr($file[$l],0,$iDelimPos));
-							$sValue = trim(substr($file[$l],($iDelimPos+1)));
-							
-							if(isset($createArray[$sKey])) {
-								$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', str_replace(' ', '', $sValue));
-							} else {
-								$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
+								// This is another attribute
+								$iDelimPos = strpos($file[$l], '=');
+								$sKey = trim(substr($file[$l],0,$iDelimPos));
+								$sValue = trim(substr($file[$l],($iDelimPos+1)));
+								
+								if(isset($createArray[$sKey])) {
+									$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', str_replace(' ', '', $sValue));
+								} else {
+									$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
+								}
 							}
 						}
 					}
