@@ -72,6 +72,13 @@ class GlobalValidatorBoolean extends GlobalValidatorAbstract {
 			}
 		}
 
+		// Check if parameter empty
+		if (TRUE === $this->validateArr['notEmpty']) {
+			if (FALSE === $this->notEmpty($this->parameterValue)) {
+				return FALSE;
+			}
+		}
+
 		// Check if parameter value is a boolean
 		if (FALSE === $this->isBoolean()) {
 			return FALSE;
@@ -93,7 +100,7 @@ class GlobalValidatorBoolean extends GlobalValidatorAbstract {
 		} elseif ('TRUE' == strtoupper($this->parameterValue) || 'FALSE' == strtoupper($this->parameterValue)) {
 			return TRUE;
 		} else {
-			$this->setMessage('notBoolean');
+			$this->setMessage('notValidBoolean');
 			return FALSE;
 		}
 	}

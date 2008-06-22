@@ -72,6 +72,13 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 			}
 		}
 
+		// Check if parameter empty
+		if (TRUE === $this->validateArr['notEmpty']) {
+			if (FALSE === $this->notEmpty($this->parameterValue)) {
+				return FALSE;
+			}
+		}
+
 		// Check if value a allowed entry
 		if (NULL !== $this->validateArr['allowedEntrys']) {
 			if (FALSE === $this->isAllowedEntry()) {
@@ -98,7 +105,7 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 		if (eregi('^[a-zA-Z0-9_\-]*$',$this->parameterValue)) {
 			return TRUE;
 		} else {
-			$this->setMessage('notString');
+			$this->setMessage('notValidString');
 			return FALSE;
 		}
 	}

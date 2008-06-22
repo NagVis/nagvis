@@ -52,6 +52,7 @@ class GlobalValidator {
 				'name'         => 'action',
 				'type'         => 'string',
 				'mustSet'      => TRUE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> array(
 					'0' => 'map',
 					'1' => 'automap',
@@ -64,7 +65,8 @@ class GlobalValidator {
 			'map' => array(
 				'name'         => 'map',
 				'type'         => 'string',
-				'mustSet'      => FALSE,
+				'mustSet'      => TRUE,
+				'notEmpty'		=> TRUE,
 				'allowedEntrys'=> NULL
 			),
 			// Define automap
@@ -72,12 +74,14 @@ class GlobalValidator {
 				'name'         => 'automap',
 				'type'         => 'boolean',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 			),
 			// Define backend
 			'backend' => array(
 				'name'         => 'backend',
 				'type'         => 'string',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> NULL
 			),
 			// Define root
@@ -85,6 +89,7 @@ class GlobalValidator {
 				'name'         => 'root',
 				'type'         => 'string',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> NULL
 			),
 			// Define maxLayers
@@ -92,6 +97,7 @@ class GlobalValidator {
 				'name'         => 'maxLayers',
 				'type'         => 'integer',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'mustInRange'  => TRUE,
 				'minValue'     => '0',
 				'maxValue'     => '10'
@@ -101,6 +107,7 @@ class GlobalValidator {
 				'name'         => 'renderMode',
 				'type'         => 'string',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> array(
 					'0' => 'directed',
 					'1' => 'undirected',
@@ -114,6 +121,7 @@ class GlobalValidator {
 				'name'         => 'width',
 				'type'         => 'integer',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'mustInRange'  => TRUE,
 				'minValue'     => '0',
 				'maxValue'     => '1024'
@@ -123,6 +131,7 @@ class GlobalValidator {
 				'name'         => 'height',
 				'type'         => 'integer',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'mustInRange'  => TRUE,
 				'minValue'     => '0',
 				'maxValue'     => '768'
@@ -132,6 +141,7 @@ class GlobalValidator {
 				'name'         => 'ignoreHosts',
 				'type'         => 'string',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> NULL
 			),
 			// Define filterGroup
@@ -139,13 +149,15 @@ class GlobalValidator {
 				'name'         => 'filterGroup',
 				'type'         => 'string',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> NULL
 			),
 			// Define rotation
 			'rotation' => array(
 				'name'         => 'rotation',
 				'type'         => 'string',
-				'mustSet'      => FALSE,
+				'mustSet'      => TRUE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> NULL
 			),
 			// Define info
@@ -153,13 +165,15 @@ class GlobalValidator {
 				'name'         => 'info',
 				'type'         => 'string',
 				'mustSet'      => FALSE,
+				'notEmpty'		=> FALSE,
 				'allowedEntrys'=> NULL
 			),
 			// Define url
 			'url' => array(
 				'name'         => 'url',
-				'type'         => 'string',
-				'mustSet'      => FALSE,
+				'type'         => 'url',
+				'mustSet'      => TRUE,
+				'notEmpty'		=> TRUE,
 				'allowedEntrys'=> NULL
 			)
 		);
@@ -186,6 +200,10 @@ class GlobalValidator {
 
 				case 'boolean':
 					$parameter = new GlobalValidatorBoolean($this->validatorArr[$this->parameterName], $this->parameterValue);
+					break;
+
+				case 'url':
+					$parameter = new GlobalValidatorUrl($this->validatorArr[$this->parameterName], $this->parameterValue);
 					break;
 			}
 		}

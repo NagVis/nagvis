@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalValidatorInteger.php - Class to check if parameter a valid integer.
+ * GlobalValidatorUrl.php - Class to check if parameter a valid url.
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -23,16 +23,16 @@
  *****************************************************************************/
 
 /**
- * class GlobalValidatorInteger
+ * class GlobalValidatorUrl
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalValidatorInteger extends GlobalValidatorAbstract {
+class GlobalValidatorUrl extends GlobalValidatorAbstract {
 
 	private $validateArr;
 	private $parameterValue;
 
-   /**
+	/**
 	 * Constructor
 	 *
 	 * @param   array    $validateArr
@@ -58,7 +58,7 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if has parameter a valid integer
+	 * Check if has parameter a valid string
 	 *
 	 * @return  boolean
 	 * @access  public
@@ -79,49 +79,26 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 			}
 		}
 
-		// Check if parameter value is a integer
-		if (FALSE === $this->isInteger()) {
+		// Check if parameter value is a url
+		if (FALSE === $this->isUrl()) {
 			return FALSE;
-		}
-
-		// Check if value out of range
-		if (TRUE === $this->validateArr['mustInRange']) {
-			if (FALSE === $this->isInRange()) {
-				return FALSE;
-			}
 		}
 
 		return TRUE;
 	}
 
 	/**
-	 * Check if value a valid integer
+	 * Check if value a valid string
 	 *
 	 * @return  boolean
 	 * @access  protected
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	protected function isInteger() {
-		if (eregi('^[0-9]*$',$this->parameterValue)) {
+	protected function isUrl() {
+		if (eregi('^[a-zA-Z0-9_\-\.\:\\]*$',$this->parameterValue)) {
 			return TRUE;
 		} else {
-			$this->setMessage('notValidInteger');
-			return FALSE;
-		}
-	}
-
-	/**
-	 * Check if value in range
-	 *
-	 * @return  boolean
-	 * @access  protected
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 */
-	protected function isInRange() {
-		if ($this->parameterValue >= $this->validateArr['minValue'] && $this->parameterValue <= $this->validateArr['maxValue']) {
-			return TRUE;
-		} else {
-			$this->setMessage('outOfRange');
+			$this->setMessage('notValidString');
 			return FALSE;
 		}
 	}

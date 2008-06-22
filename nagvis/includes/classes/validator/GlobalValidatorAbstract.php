@@ -80,5 +80,22 @@ class GlobalValidatorAbstract {
 		$this->setMessage('notSet');
 		return FALSE;
 	}
+
+	/**
+	 * Check if parameter Empty
+	 *
+	 * @return  boolean
+	 * @access  protected
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	protected function notEmpty($value) {
+		if ($value != '') {
+			return TRUE;
+		}
+
+		$this->setMessage('isEmpty');
+		return FALSE;
+	}
+
 }
 ?>
