@@ -630,49 +630,71 @@ class GlobalMapCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function readMapConfig($onlyGlobal=0) {
+	function readMapConfig($onlyGlobal = 0) {
 		if($this->name != '') {
 			if($this->checkMapConfigReadable(1)) {
 				$this->mapConfig = Array();
-				$types = Array('global'=>0,'host'=>0,'service'=>0,'hostgroup'=>0,'servicegroup'=>0,'map'=>0,'textbox'=>0,'shape'=>0,'template'=>0);
+				// Array for counting objects
+				$types = Array('global' => 0,
+								'host' => 0,
+								'service' => 0,
+								'hostgroup' => 0,
+								'servicegroup' => 0,
+								'map' => 0,
+								'textbox' => 0,
+								'shape' => 0,
+								'template' => 0);
 				
-				// read file in array
-				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
-				$createArray = Array('allowed_user','allowed_for_config','use');
+				// Read file in array (Don't read empty lines and ignore new line chars)
+				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+				
+				// Create an array for these options
+				$createArray = Array('allowed_user' => 1,
+									'allowed_for_config' => 1,
+									'use' => 1);
+				
 				$l = 0;
 				
-				while(isset($file[$l]) && $file[$l] != '') {
-					// tested all of them, seems the runtime is nearly the same
-					// preg_match('/^(#|;)/',$file[$l])
-					// (strpos($file[$l],'#') !== 0) && (strpos($file[$l],'#') !== 0)
-					// !ereg('^(#|;)',$file[$l]) && !ereg('^;',$file[$l])
-					if(!ereg('^(#|;)',$file[$l])) {
-						$defineCln = explode('{', $file[$l]);
-						$define = explode(' ',$defineCln[0]);
-						if(isset($define[1]) && isset($this->validConfig[trim($define[1])])) {
-							$type = $types[$define[1]];
-							$l++;
-							$this->mapConfig[$define[1]][$type] = Array('type'=>$define[1]);
-							while (isset($file[$l]) && trim($file[$l]) != '}') {
-								if(!ereg('^(#|;)',$file[$l])) {
-									$entry = explode('=',$file[$l], 2);
-									$entry[0] = trim($entry[0]);
-									if(isset($entry[1])) {
-										$entry[1] = trim($entry[1]);
-										if(in_array($entry[0], $createArray)) {
-											$this->mapConfig[$define[1]][$type][$entry[0]] = explode(',',str_replace(' ','',$entry[1]));
-										} else {
-											$this->mapConfig[$define[1]][$type][$entry[0]] = $entry[1];
-										}
-									}
-								}
-								$l++;
+				// This variables do set which object is currently being filled
+				$sObjType = '';
+				$iObjTypeId = '';
+				
+				// Loop each line
+				$iNumLines = count($file);
+				for($l = 0; $l < $iNumLines; $l++) {
+					// Don't recognize comments and empty lines, do nothing with ending delimiters
+					$sFirstChar = substr($file[$l], 0, 1);
+					if($sFirstChar != ';' && $sFirstChar != '#' && $sFirstChar != '}') {
+						// Determine if this is a new object definition
+						if(strpos($file[$l], 'define') !== FALSE) {
+							// If only the global section should be read break the loop after the global section
+							if($onlyGlobal == 1 && $types['global'] == 1) {
+								break;
 							}
-							// increase type index
-							$types[$define[1]]++;
+							
+							$iDelimPos = strpos($file[$l], '{', 8);
+							$sObjType = substr($file[$l], 7, ($iDelimPos - 8));
+							
+							if(isset($sObjType) && isset($this->validConfig[$sObjType])) {
+								// This is a new definition and it's a valid one
+								$iObjTypeId = $types[$sObjType];
+								$this->mapConfig[$sObjType][$iObjTypeId] = Array('type' => $sObjType);
+								// increase type index
+								$types[$sObjType]++;
+							}
+						} else {
+							// This is another attribute
+							$iDelimPos = strpos($file[$l], '=');
+							$sKey = trim(substr($file[$l],0,$iDelimPos));
+							$sValue = trim(substr($file[$l],($iDelimPos+1)));
+							
+							if(isset($createArray[$sKey])) {
+								$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', str_replace(' ', '', $sValue));
+							} else {
+								$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
+							}
 						}
 					}
-					$l++;
 				}
 				
 				/**
@@ -680,17 +702,15 @@ class GlobalMapCfg {
 				 * defined here and mustn't be defined in the array at creation.
 				 * Cause of the default values should refer to the truely defined settings in global area they have to be read here.
 				 */
-				$this->getObjectDefaults();
-				
-				if($onlyGlobal == 1) {
-					$this->filterGlobal();	
-				}
-				
-				if(isset($this->mapConfig['template'])) {
-					// Removes the numeric indexes and replaces them with the template name
-					$this->fixTemplateIndexes();
-					// Merge the objects with the linked templates
-					$this->mergeTemplates();
+				if($onlyGlobal != 1) {
+					$this->getObjectDefaults();
+					
+					if(isset($this->mapConfig['template'])) {
+						// Removes the numeric indexes and replaces them with the template name
+						$this->fixTemplateIndexes();
+						// Merge the objects with the linked templates
+						$this->mergeTemplates();
+					}
 				}
 				
 				if($this->checkMapConfigIsValid(1)) {
@@ -753,27 +773,6 @@ class GlobalMapCfg {
 		}
 	}
 	
-	/**
-	 * Deletes all elements from the array, only global will be left
-	 * Is needed in WUI to prevent config error warnings while loading the map credentials from
-	 * global section of the map
-	 *
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function filterGlobal() {
-		foreach($this->mapConfig AS $key => &$val) {
-			if($key != 'global') {
-				unset($this->mapConfig[$key]);
-			}
-		}
-		
-		if(count($this->mapConfig) == 1) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
 	/**
 	 * Checks for existing config file
 	 *
