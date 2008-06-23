@@ -308,11 +308,11 @@ class NagVisAutoMap extends GlobalMap {
 	/**
 	 * Parses the Automap HTML code
 	 *
-	 * @return	Array		HTML Code
+	 * @return	String HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseMap() {
-		$ret = Array();
+		$ret = '';
 		
 		// Render the map image and save it, also generate link coords etc
 		$this->renderMap();
@@ -324,13 +324,13 @@ class NagVisAutoMap extends GlobalMap {
 		$ret = $this->getBackground();
 		
 		// Parse the map with its areas
-		$ret[] = $this->mapCode;
+		$ret .= $this->mapCode;
 		
 		// Dynamicaly set favicon
-		$ret[] = $this->getFavicon();
+		$ret .= $this->getFavicon();
 		
 		// Change title (add map alias and map state)
-		$ret[] = '<script type="text/javascript" language="JavaScript">var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		$ret .= '<script type="text/javascript" language="JavaScript">var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		return $ret;
 	}
@@ -471,7 +471,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function pxToInch($px) {
-		return round($px/72, 4);
+		return number_format($px/72, 4, '.','');
 	}
 	
 	/**
