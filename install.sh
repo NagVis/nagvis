@@ -5,8 +5,8 @@
 #
 # Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
 #
-# Developement:
-#  Wolfgang
+# Development:
+#  Wolfgang Nieder
 #  Lars Michelsen <lars@vertical-visions.de>
 #
 # License:
@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1"
+INSTALLER_VERSION="0.1.1"
 # Default action
 INSTALLER_ACTION="install"
 
@@ -55,6 +55,7 @@ WEB_GROUP=""
 
 # Version prerequisites
 NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
+[ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 # TODO: mbstring
 NEED_PHP_MODULES="gd mysql"
 NEED_GV_MOD="dot neato twopi circo fdp"
@@ -79,7 +80,7 @@ Parameters:
 EOD
 }
 
-# Ask user for confirm
+# Ask user for confirmation
 confirm() {
 	echo -n "| $1 [$2]: "
 	read ANS
@@ -117,7 +118,10 @@ log() {
 	if [ -z "$2" ]; then
 		printf "%-71s %s\n" "| $1" "MISSING"
 		exit 1
-	else
+	elif [ "$2" = "needed" ]; then
+    		echo "$1 needed"
+		exit 1
+	else	
 		printf "%-73s %s\n" "| $1" "found"
 	fi
 }
@@ -130,6 +134,10 @@ check_apache_php() {
 	USER=`grep -ri "^User" $DIR | cut -d" " -f2 | uniq`
 	GROUP=`grep -ri "^Group" $DIR | cut -d" " -f2 | uniq`
 	HTML_PATH=`grep -ri "^Alias" $DIR | grep -i "/nagios" | cut -d" " -f2 | uniq` 
+	VAR=`echo $USER | grep "$" >/dev/null 2>&1`
+        [ $? -eq 0 ] && USER=`eval "echo $USER"`
+        VAR=`echo $GROUP | grep "$" >/dev/null 2>&1`
+        [ $? -eq 0 ] && GROUP=`eval "echo $GROUP"`
 }
 
 # Check Graphviz version by installed system package
@@ -143,8 +151,7 @@ check_graphviz_version() {
   log "Graphviz $GRAPHVIZ_VER" $GRAPHVIZ_VER
 
   if [ `echo "$1 $GRAPHVIZ_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $1 ]; then
-    echo "|  Error: Version >= $1 needed"
-    exit 1
+    log "|  Error: Version >= $1" "needed"
   fi
 }
 
@@ -161,8 +168,7 @@ check_graphviz_modules() {
 		log "  Graphviz Module $MOD $GV_MOD_VER" $TMP
 		
 		if [ `echo "$2 $GV_MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
-			echo "|  Error: Version >= $2 needed"
-			exit 1
+			log "|  Error: Version >= $2" "needed"
 		fi
 done
 }
@@ -178,8 +184,7 @@ check_php_version() {
 	log "PHP $PHP_VER" $PHP_VER
 	
 	if [ `echo "$1 $PHP_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $1 ]; then
-		echo "|  Error: Version >= $1 needed"
-		exit 1
+		log "|  Error: Version >= $1" "needed"
 	fi
 }
 
@@ -194,12 +199,11 @@ check_php_modules() {
 		fi
 		
 		TMP=`grep -rie "$MOD" /etc/php? | cut -d"=" -f2`
-    log "  Module: $MOD $MOD_VER" $MOD
+		log "  Module: $MOD $MOD_VER" $MOD
 
 		if [ -n $MOD_VER ]; then
 			if [ `echo "$2 $MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
-				echo "|  Error: Version >= $2 needed"
-				exit 1
+				log "|  Error: Version >= $2" "needed"
 			fi
 		fi
 	done
@@ -255,7 +259,7 @@ done
 # Print welcome message
 welcome
 
-# Start gathering informations
+# Start gathering information
 echo "+------------------------------------------------------------------------------+"
 echo "| Starting installation of NagVis $NAGVIS_VER"
 echo "+------------------------------------------------------------------------------+"
@@ -310,7 +314,7 @@ echo "+--- Trying to detect Apache settings ------------------------------------
 
 HTML_PATH=${HTML_PATH%/}
 WEB_USER=${WEB_USER:-$USER}
-WEB_GROUP=${GRP:-$GROUP}
+WEB_GROUP=${WEB_GROUP:-$GROUP}
 echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
 read AUSR
 if [ ! -z $AUSR ]; then
@@ -361,8 +365,8 @@ echo "| Group of NagVis files will be: $WEB_GROUP"
 echo "| "
 echo "| Installation mode:             $INSTALLER_ACTION"
 if [ "$INSTALLER_ACTION" = "update" ]; then
-  echo "| Old version:                   $NAGVIS_VER_OLD"
-  echo "| New version:                   $NAGVIS_VER"
+	echo "| Old version:                   $NAGVIS_VER_OLD"
+	echo "| New version:                   $NAGVIS_VER"
 	echo "| Backup directory:              $NAGVIS_PATH_OLD"
 	echo "| "
 	echo "| Note: The current NagVis directory will be moved to the backup directory."
@@ -385,13 +389,13 @@ echo "+-------------------------------------------------------------------------
 if [ "$INSTALLER_ACTION" = "update" ]; then
 	echo "+--- Moving old NagVis to  $NAGVIS_PATH_OLD"
 	mv $NAGVIS_PATH $NAGVIS_PATH_OLD
-	chk_rc "| Error moving old NagVis $NAGVIS_PATH_OLD"
+	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD"
 fi
 
 if [ ! -d $NAGVIS_PATH ]; then
 	echo "+--- Creating directory $NAGVIS_PATH"
 	mkdir -p $NAGVIS_PATH
-	chk_rc "| Error creating directory $NAGVIS_PATH"
+	chk_rc "|  Error creating directory $NAGVIS_PATH"
 fi
 
 
@@ -399,54 +403,54 @@ echo "+--- Copying files to $NAGVIS_PATH"
 GLOBIGNORE="install.sh"
 cp -pr * $NAGVIS_PATH
 GLOBIGNORE=""
-chk_rc "| Error copying files to $NAGVIS_PATH"
+chk_rc "|  Error copying files to $NAGVIS_PATH"
 
 if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
   echo "+--- Restoring main configuration file"
 	cp -p $NAGVIS_PATH_OLD/$NAGVIS_CONF $NAGVIS_PATH/$NAGVIS_CONF
-	chk_rc "| Error copying main configuration file"
+	chk_rc "|  Error copying main configuration file"
 	
 	echo "+--- Restoring custom map configuration files"
 	GLOBIGNORE="demo.cfg:demo2.cfg"
 	cp -p $NAGVIS_PATH_OLD/etc/maps/* $NAGVIS_PATH/etc/maps
 	GLOBIGNORE=""
-	chk_rc "| Error copying map configuration files"
+	chk_rc "|  Error copying map configuration files"
 	
 	echo "+--- Restoring custom map images"
 	GLOBIGNORE="nagvis-demo.png"
 	cp -p $NAGVIS_PATH_OLD/nagvis/images/maps/* $NAGVIS_PATH/nagvis/images/maps
 	GLOBIGNORE=""
-	chk_rc "| Error copying map image files"
+	chk_rc "|  Error copying map image files"
 	
 	echo "+--- Restoring custom iconsets"
 	
 	GLOBIGNORE="20x20.png:configerror_*.png:error.png:std_*.png"
 	cp -p $NAGVIS_PATH_OLD/nagvis/images/iconsets/* $NAGVIS_PATH/nagvis/images/iconsets
 	GLOBIGNORE=""
-	chk_rc "| Error copying iconset files"
+	chk_rc "|  Error copying iconset files"
 	
 	echo "+--- Restoring custom shapes"
 	cp -p $NAGVIS_PATH_OLD/nagvis/images/shapes/* $NAGVIS_PATH/nagvis/images/shapes
-	chk_rc "| Error copying shapes"
+	chk_rc "|  Error copying shapes"
 	
 	echo "+--- Restoring custom templates (header, hover)"
 	GLOBIGNORE="tmpl.default*"
 	cp -p $NAGVIS_PATH_OLD/nagvis/templates/header/* $NAGVIS_PATH/nagvis/templates/header
-	chk_rc "| Error copying header templates"
+	chk_rc "|  Error copying header templates"
 	cp -p $NAGVIS_PATH_OLD/nagvis/templates/hover/* $NAGVIS_PATH/nagvis/templates/hover
 	GLOBIGNORE=""
-	chk_rc "| Error copying hover templates"
+	chk_rc "|  Error copying hover templates"
 	
 	echo "+--- Restoring custom template images (header, hover)"
 	GLOBIGNORE="tmpl.default*"
 	cp -p $NAGVIS_PATH_OLD/nagvis/images/templates/header/* $NAGVIS_PATH/nagvis/images/templates/header
 	GLOBIGNORE=""
-	chk_rc "| Error copying header template images"
+	chk_rc "|  Error copying header template images"
 	
 	GLOBIGNORE="tmpl.default*"
   cp -p $NAGVIS_PATH_OLD/nagvis/images/templates/hover/* $NAGVIS_PATH/nagvis/images/templates/hover
 	GLOBIGNORE=""
-	chk_rc "| Error copying hover template images"
+	chk_rc "|  Error copying hover template images"
 fi
 
 echo "+--- Setting permissions"
@@ -464,7 +468,7 @@ fi
 if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
 	echo "+--- Creating main configuration file"
 	cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
-	chk_rc "| Error copying sample configuration"
+	chk_rc "|  Error copying sample configuration"
 fi
 
 echo "|"
