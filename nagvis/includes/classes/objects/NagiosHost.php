@@ -118,7 +118,7 @@ class NagiosHost extends NagVisStatefulObject {
 			$this->setObjectInformation($arrValues);
 			
 			// Get all service states
-			if($this->getState() != 'ERROR' && $this->getNumServices() == 0) {
+			if($this->getState() != 'ERROR' && !$this->hasServices()) {
 				$this->fetchServiceObjects();
 			}
 			
@@ -190,7 +190,7 @@ class NagiosHost extends NagVisStatefulObject {
 					 * state. If there is no child object the only remaining state is
 					 * the state of the current child object.
 					 */
-					if($OBJ->getNumChilds() > 0) {
+					if($OBJ->hasChilds()) {
 						$childsRemain = $OBJ->filterChilds($arrAllowedHosts);
 						
 						if(!$selfRemain && $childsRemain) {
@@ -237,6 +237,18 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
+	 * PUBLIC hasChilds()
+	 *
+	 * Simple check if the host has at least one child
+	 *
+	 * @return Boolean	Yes: Has childs, No: No Child
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function hasChilds() {
+		return isset($this->childObjects[0]);
+	}
+	
+	/**
 	 * PUBLIC getNumServices()
 	 *
 	 * Returns the number of services
@@ -258,6 +270,18 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	function getServices() {
 		return $this->services;
+	}
+	
+	/**
+	 * PUBLIC hasServices()
+	 *
+	 * Simple check if the host has at least one service
+	 *
+	 * @return Boolean	Yes: Has services, No: No Service
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function hasServices() {
+		return isset($this->services[0]);
 	}
 	
 	# End public methods
@@ -380,7 +404,7 @@ class NagiosHost extends NagVisStatefulObject {
 		// to 1
 		if($this->getRecognizeServices()) {
 			// If there are services write the summary state for them
-			if($this->getNumServices() > 0) {
+			if($this->hasServices()) {
 				$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 				
 				foreach($this->services AS &$SERVICE) {

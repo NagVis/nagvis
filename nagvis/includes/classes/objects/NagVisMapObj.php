@@ -98,6 +98,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 		return count($this->objects);
 	}
 	
+	function hasObjects() {
+		return isset($this->objects[0]);
+	}
+	
 	/**
 	 * PUBLIC fetchMembers()
 	 *
@@ -182,7 +186,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryOutput() {
-		if(count($this->getMapObjects()) > 0) {
+		if($this->hasObjects()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
 			foreach($this->getMapObjects() AS $OBJ) {
@@ -401,7 +405,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchSummaryState() {
-		if(count($this->getMapObjects()) > 0) {
+		if($this->hasObjects()) {
 			// Get summary state member objects
 			foreach($this->getMapObjects() AS $OBJ) {
 				if(method_exists($OBJ,'getSummaryState')) {

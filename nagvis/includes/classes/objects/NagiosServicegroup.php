@@ -131,6 +131,18 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		return $this->members;
 	}
 	
+	/**
+	 * PUBLIC hasMembers()
+	 *
+	 * Simple check if the servicegroup has at least one member
+	 *
+	 * @return Boolean	Yes, No
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function hasChilds() {
+		return isset($this->members[0]);
+	}
+	
 	# End public methods
 	# #########################################################################
 	
