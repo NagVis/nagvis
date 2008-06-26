@@ -54,7 +54,7 @@ function getObjectHoverMenu(objType,objName1,objName2) {
 	showHoverMenu = true;
 	
 	// Release the request
-	getRequest('./ajax_handler.php?action=getObjectHoverMenu&map='+mapName+'&objType='+objType+'&objName1='+objName1+'&objName2='+objName2,'setHoverMenu',oOpt);
+	getRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectHoverMenu&map='+mapName+'&objType='+objType+'&objName1='+objName1+'&objName2='+objName2,'setHoverMenu',oOpt);
 }
 
 /**
