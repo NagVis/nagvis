@@ -46,8 +46,16 @@ class GlobalControllerRotation {
 		// Initialize the frontend
 		$FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 
+		if ($mapName == '') {
 		// Redirect to next page
-		header('Location: '.$FRONTEND->getNextRotationUrl());
+			header('Location: '.$FRONTEND->getNextRotationUrl());
+		} else {
+			// Build the page
+			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
+			$FRONTEND->getHeaderMenu();
+			$FRONTEND->getMap();
+			$FRONTEND->getMessages();
+		}
 
 		// Print the page
 		$FRONTEND->printPage();
