@@ -482,30 +482,36 @@ class NagVisObject {
 		$ret .= '\'[obj_output]\': \''.strtr($this->output, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')).'\', ';
 		$ret .= '\'[obj_summary_output]\': \''.strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')).'\', ';
 		
-		if($this->type == 'service') {
-			$name = 'hostname';
-		} else {
-			$name = $this->type . 'name';
-		}
-		
 		// Get the child name label
 		switch($this->type) {
 			case 'host':
-				$childType = 'servicename';
+				$name = $this->LANG->getLabel('hostname');
+				$childName = $this->LANG->getLabel('servicename');
+			break;
+			case 'service':
+				$name = $this->LANG->getLabel('hostname');
+				$childName = '';
 			break;
 			case 'hostgroup':
-				$childType = 'hostname';
+				$name = $this->LANG->getLabel('hostgroupname');
+				$childName = $this->LANG->getLabel('hostname');
 			break;
 			case 'servicegroup':
-				$childType = 'servicename';
+				$name = $this->LANG->getLabel('servicegroupname');
+				$childName = $this->LANG->getLabel('servicename');
+			break;
+			case 'map':
+				$name = $this->LANG->getLabel('mapname');
+				$childName = $this->LANG->getLabel('objectname');
 			break;
 			default:
-				$childType = 'objectname';
+				$name = $this->LANG->getLabel('objectname');
+				$childName = $this->LANG->getLabel('objectname');
 			break;
 		}
 		
-		$ret .= '\'[lang_name]\': \''.$this->LANG->getLabel($name).'\', ';
-		$ret .= '\'[lang_child_name]\': \''.$this->LANG->getLabel($childType).'\', ';
+		$ret .= '\'[lang_name]\': \''.$name.'\', ';
+		$ret .= '\'[lang_child_name]\': \''.$childName.'\', ';
 		
 		// Macros which are only for services and hosts
 		if($this->type == 'host' || $this->type == 'service') {
