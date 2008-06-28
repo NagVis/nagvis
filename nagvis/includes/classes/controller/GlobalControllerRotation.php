@@ -29,7 +29,7 @@
  */
 class GlobalControllerRotation {
 
-	public function __construct($mapName=NULL) {
+	public function __construct($mapName = NULL) {
 
 		// Load the main configuration
 		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
@@ -46,8 +46,8 @@ class GlobalControllerRotation {
 		// Initialize the frontend
 		$FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
 
-		if ($mapName == '') {
-		// Redirect to next page
+		if ($mapName == NULL) {
+			// Redirect to next page
 			header('Location: '.$FRONTEND->getNextRotationUrl());
 		} else {
 			// Build the page
