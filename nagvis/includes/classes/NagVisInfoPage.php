@@ -29,21 +29,18 @@
  */
 class NagVisInfoPage {
 
-	private $mainCfg;
-	private $htmlBase;
+	private $MAINCFG;
 	private $infoPage;
 
 	/**
 	 * Constructor
 	 *
-	 * @param   string  $mainCfg
+	 * @param   Object  $MAINCFG
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function __construct($mainCfg) {
-		$this->mainCfg = $mainCfg;
-		$this->htmlBase = $this->mainCfg->getValue('paths','htmlbase');
-
+	public function __construct($MAINCFG) {
+		$this->MAINCFG = $MAINCFG;
 	}
 
 	/**
@@ -57,7 +54,7 @@ class NagVisInfoPage {
 		$infoPage .= '<html>'."\n";
 		$infoPage .= '   <head>'."\n";
 		$infoPage .= '      <title>'.$this->mainCfg->getValue('internal', 'title').'</title>'."\n";
-		$infoPage .= '      <style type="text/css"><!-- @import url('.$this->htmlBase.'/nagvis/includes/css/style.css);  --></style>'."\n";
+		$infoPage .= '      <style type="text/css"><!-- @import url('.$this->mainCfg->getValue('paths','htmlbase').'/nagvis/includes/css/style.css);  --></style>'."\n";
 		$infoPage .= '   </head>'."\n";
 		$infoPage .= '   <body class="main">'."\n";
 		$infoPage .= '      <div class="infopage">'."\n";

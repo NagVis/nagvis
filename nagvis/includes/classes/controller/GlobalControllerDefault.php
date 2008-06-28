@@ -44,7 +44,7 @@ class GlobalControllerDefault {
 		$BACKEND = new GlobalBackendMgmt($MAINCFG);
 
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG, $BACKEND);
+		$FRONTEND = new NagVisFrontend($MAINCFG, $MAPCFG, $BACKEND);
 
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
