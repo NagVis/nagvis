@@ -360,7 +360,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['icon']['default'] = $base.'nagvis/images/iconsets/';
 		$this->validConfig['paths']['images']['default'] = $base.'nagvis/images/';
 		$this->validConfig['paths']['shape']['default'] = $base.'nagvis/images/shapes/';
-		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/languages/';
+		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/locale';
 		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';
 		$this->validConfig['paths']['map']['default'] = $base.'nagvis/images/maps/';
 		$this->validConfig['paths']['var']['default'] = $base.'var/';
@@ -496,7 +496,6 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMainConfigIsValid($printErr) {
-		
 		// check given objects and attributes
 		foreach($this->config AS $type => &$vars) {
 			if(!ereg('^comment_',$type)) {
