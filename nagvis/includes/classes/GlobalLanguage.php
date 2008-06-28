@@ -44,8 +44,25 @@ class GlobalLanguage {
 		$this->languageRoot = $languageRoot;
 		$this->cachedLang = Array();
 		
-		$this->languageFile = $this->MAINCFG->getValue('paths', 'language').$this->MAINCFG->getValue('global', 'language').'.xml';
-		$this->getLanguage();
+		//$this->languageFile = $this->MAINCFG->getValue('paths', 'language').$this->MAINCFG->getValue('global', 'language').'.xml';
+		//$this->getLanguage();
+		
+		$sCurrentLanguage = $this->MAINCFG->getValue('global', 'language');
+		switch ($sCurrentLanguage) {
+			case 'german':
+				$sCurrentLanguage = 'de_DE.UTF-8';
+			break;
+			case 'english':
+				$sCurrentLanguage = 'en_US.UTF-8';
+			break;
+		}
+		
+		// Set the language to use
+		putenv('LC_ALL='.$sCurrentLanguage);
+		setlocale(LC_ALL, $sCurrentLanguage);
+		
+		bindtextdomain('nagvis', $this->MAINCFG->getValue('paths', 'language'));
+		textdomain('nagvis');
 	}
 	
 	/**
@@ -257,17 +274,7 @@ class GlobalLanguage {
 	}
 	
 	function getMessageText($id, $replace = '', $mergeWithGlobal = TRUE) {
-		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['text']) && $this->cachedLang[$id]['text'] != '') {
-			$ret = $this->cachedLang[$id]['text'];
-		} else {
-			$ret = $this->getText($this->languageRoot.':messages:'.$id.':text',$mergeWithGlobal);
-			
-			// Write this to the language cache
-			if(!isset($this->cachedLang[$id])) {
-				$this->cachedLang[$id] = Array();
-			}
-			$this->cachedLang[$id]['text'] = $ret;
-		}
+		$ret = $this->getText($id);
 		
 		if($replace != '') {
 			$ret = $this->getReplacedString($ret, $replace);
@@ -277,17 +284,7 @@ class GlobalLanguage {
 	}
 	
 	function getMessageTitle($id,$replace='',$mergeWithGlobal=TRUE) {
-		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['title']) && $this->cachedLang[$id]['title'] != '') {
-			$ret = $this->cachedLang[$id]['title'];
-		} else {
-			$ret = $this->getText($this->languageRoot.':messages:'.$id.':title',$mergeWithGlobal);
-			
-			// Write this to the language cache
-			if(!isset($this->cachedLang[$id])) {
-				$this->cachedLang[$id] = Array();
-			}
-			$this->cachedLang[$id]['label'] = $ret;
-		}
+		$ret = $this->getText($id);
 		
 		if($replace != '') {
 			$ret = $this->getReplacedString($ret, $replace);
@@ -297,17 +294,7 @@ class GlobalLanguage {
 	}
 	
 	function getLabel($id,$replace='',$mergeWithGlobal=TRUE) {
-		if($replace == '' && isset($this->cachedLang[$id]) && isset($this->cachedLang[$id]['label']) && $this->cachedLang[$id]['label'] != '') {
-			$ret = $this->cachedLang[$id]['label'];
-		} else {
-			$ret = $this->getText($this->languageRoot.':labels:'.$id.':text',$mergeWithGlobal);
-			
-			// Write this to the language cache
-			if(!isset($this->cachedLang[$id])) {
-				$this->cachedLang[$id] = Array();
-			}
-			$this->cachedLang[$id]['label'] = $ret;
-	 	}
+		$ret = $this->getText($id);
 		
 		if($replace != '') {
 			$ret = $this->getReplacedString($ret, $replace);
@@ -319,46 +306,20 @@ class GlobalLanguage {
 	/**
 	 * Gets the text of an id
 	 *
-	 * @param	String	$languagePath		Path to the Language String in the XML File
-	 * @param	Boolean $mergeWithGlobal	Merge with Global Type
-	 * @return	String	String with Language String
+	 * @param	String	String to be localized
+	 * @return	String	Localized String
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getText($languagePath, $mergeWithGlobal=TRUE) {
-		$arrLang = Array();
-		$strLang = '';
-		$arrLanguagePath = explode(':',$languagePath);
-		# DEBUG: print_r($arrLanguagePath);
-		# [0] => backend
-		# [1] => ndomy
-		# [2] => messages
-		# [3] => errorSelectingDb
-		# [4] => title
-		
-		if($mergeWithGlobal && isset($this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) 
-			  && $this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
-			$strLang = $this->lang['global']['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
-		} else {
-			if($mergeWithGlobal && isset($this->lang[$arrLanguagePath[0]]['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) 
-				  && $this->lang[$arrLanguagePath[0]]['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
-				$strLang = $this->lang[$arrLanguagePath[0]]['global'][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
-			} else {
-				if(isset($this->lang[$arrLanguagePath[0]][$arrLanguagePath[1]][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]]) 
-					  && $this->lang[$arrLanguagePath[0]][$arrLanguagePath[1]][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]] != '') {
-					$strLang = $this->lang[$arrLanguagePath[0]][$arrLanguagePath[1]][$arrLanguagePath[2]][$arrLanguagePath[3]][$arrLanguagePath[4]];
-				}
-			}
-		}
+	function getText($s) {
+		$sLocalized = gettext($s);
 		
 		// filter type, messages/labels
-		if($strLang != '') {
+		if($sLocalized != '') {
 			// Replace [i],[b] and their ending tags with HTML code
-			$strLang = preg_replace('/\[(\/|)(i|b|br)\]/i',"<$1$2>",$strLang);
+			// FIXME
+			$sLocalized = preg_replace('/\[(\/|)(i|b|br)\]/i',"<$1$2>", $sLocalized);
 			
-			return $strLang;
-		} else {
-			// Return Translation not Found error
-			return 'TranslationNotFound: '.$languagePath;
+			return $sLocalized;
 		}
 	}
 	
