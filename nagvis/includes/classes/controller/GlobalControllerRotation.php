@@ -35,7 +35,7 @@ class GlobalControllerRotation {
 		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
 		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($MAINCFG,$mapName);
+		$MAPCFG = new NagVisMapCfg($MAINCFG, $mapName);
 
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
@@ -44,7 +44,7 @@ class GlobalControllerRotation {
 		$BACKEND = new GlobalBackendMgmt($MAINCFG);
 
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($MAINCFG,$MAPCFG,$BACKEND);
+		$FRONTEND = new NagVisFrontend($MAINCFG, $MAPCFG, $BACKEND);
 
 		if ($mapName == NULL) {
 			// Redirect to next page

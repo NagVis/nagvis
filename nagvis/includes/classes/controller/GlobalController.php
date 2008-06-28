@@ -44,7 +44,7 @@ class GlobalController implements GlobalControllerInterface {
 									'maxLayers'		=> '',
 									'renderMode'	=> '',
 									'width'			=> '',
-									'height'			=> '',
+									'height'		=> '',
 									'ignoreHosts'	=> '',
 									'filterGroup'	=> '');
 
