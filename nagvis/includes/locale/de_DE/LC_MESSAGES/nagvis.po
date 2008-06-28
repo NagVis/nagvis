@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-28 19:42+0100\n"
-"PO-Revision-Date: 2008-06-28 19:53+0100\n"
+"POT-Creation-Date: 2008-06-28 19:55+0100\n"
+"PO-Revision-Date: 2008-06-28 19:56+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -589,67 +589,72 @@ msgstr "Eventuell ist das memory_limit von PHP zu niedrig um dieses Bild darzust
 msgid "permissionDenied"
 msgstr "Der Benutzer \"[USER]\" hat keine Rechte für diese Aktion"
 
+#: nagvis/includes/classes/NagVisFrontend.php:72
+msgid "mapIndex"
+msgstr "Karten Übersicht"
+
 #: nagvis/includes/classes/NagVisFrontend.php:118
 #: nagvis/includes/classes/NagVisFrontend.php:119
-msgid "The map you are trying to access is in maintenance mode. Please be patient. This page is automaticaly reloading."
+msgid "mapInMaintenance"
 msgstr "Die Karte \"[MAP]\" befindet sich aktuell im Wartungs-Modus. Diese Seite lädt automatisch neu."
 
 #: nagvis/includes/classes/NagVisFrontend.php:124
 #: nagvis/includes/classes/NagVisFrontend.php:125
-msgid "You are not permited to view the state of this map."
-msgstr "Du hast keine Berechtigung den Status dieser Map einzusehen."
+#: nagvis/includes/classes/objects/NagVisMapObj.php:319
+msgid "noReadPermissions"
+msgstr "Du hast keine Berechtigung den Status dieser Karte einzusehen."
 
 #: nagvis/includes/classes/NagVisFrontend.php:168
 msgid "rotationPools"
 msgstr "Rotation Pools"
 
-#: nagvis/includes/classes/NagVisFrontend.php:357
-msgid "Choose map"
-msgstr "Wähle Karte"
+#: nagvis/includes/classes/NagVisFrontend.php:356
+msgid "selectMap"
+msgstr "Eine Karte wählen"
 
-#: nagvis/includes/classes/NagVisFrontend.php:359
+#: nagvis/includes/classes/NagVisFrontend.php:357
 msgid "editMap"
 msgstr "Diese Karte bearbeiten"
 
-#: nagvis/includes/classes/NagVisFrontend.php:360
+#: nagvis/includes/classes/NagVisFrontend.php:358
 msgid "needHelp"
 msgstr "Hilfe?"
 
-#: nagvis/includes/classes/NagVisFrontend.php:361
+#: nagvis/includes/classes/NagVisFrontend.php:359
 msgid "onlineDoc"
 msgstr "Online Dokumentation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:362
+#: nagvis/includes/classes/NagVisFrontend.php:360
 msgid "forum"
 msgstr "Forum"
 
-#: nagvis/includes/classes/NagVisFrontend.php:363
+#: nagvis/includes/classes/NagVisFrontend.php:361
 msgid "supportInfo"
 msgstr "NagVis Support Informationen"
 
-#: nagvis/includes/classes/NagVisFrontend.php:364
+#: nagvis/includes/classes/NagVisFrontend.php:362
 #: nagvis/includes/classes/objects/NagVisObject.php:326
 msgid "overview"
 msgstr "Üebersicht"
 
-#: nagvis/includes/classes/NagVisFrontend.php:365
+#: nagvis/includes/classes/NagVisFrontend.php:363
 #: nagvis/includes/classes/objects/NagVisObject.php:330
 msgid "instance"
 msgstr "Instanz"
 
-#: nagvis/includes/classes/NagVisFrontend.php:366
+#: nagvis/includes/classes/NagVisFrontend.php:364
 msgid "rotationStart"
 msgstr "Starte Rotation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:367
+#: nagvis/includes/classes/NagVisFrontend.php:365
 msgid "rotationStop"
 msgstr "Stoppe Rotation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:368
+#: nagvis/includes/classes/NagVisFrontend.php:366
 msgid "refreshStart"
 msgstr "Starte Zähler"
 
-#: nagvis/includes/classes/NagVisFrontend.php:369
+#: nagvis/includes/classes/NagVisFrontend.php:367
 msgid "refreshStop"
 msgstr "Stoppe Zähler"
 
@@ -768,7 +773,6 @@ msgid "servicegroupname"
 msgstr "Dienstegruppen Name"
 
 #: nagvis/includes/classes/objects/NagVisObject.php:504
-#, fuzzy
 msgid "mapname"
 msgstr "Karten Name"
 
@@ -786,7 +790,14 @@ msgstr "Objekte"
 msgid "mapIsEmpty"
 msgstr "Die Karte \"[MAP]\" hat keine Objekte."
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:319
-msgid "noReadPermissions"
-msgstr "Du hast keine Berechtigung den Status dieser Karte einzusehen."
+#~ msgid ""
+#~ "The map you are trying to access is in maintenance mode. Please be "
+#~ "patient. This page is automaticaly reloading."
+#~ msgstr ""
+#~ "Die Karte \"[MAP]\" befindet sich aktuell im Wartungs-Modus. Diese Seite "
+#~ "lädt automatisch neu."
+#~ msgid "You are not permited to view the state of this map."
+#~ msgstr "Du hast keine Berechtigung den Status dieser Map einzusehen."
+#~ msgid "Choose map"
+#~ msgstr "Wähle Karte"
 

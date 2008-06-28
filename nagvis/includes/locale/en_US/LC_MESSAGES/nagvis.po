@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-28 19:43+0100\n"
-"PO-Revision-Date: 2008-06-28 19:53+0100\n"
+"POT-Creation-Date: 2008-06-28 19:56+0100\n"
+"PO-Revision-Date: 2008-06-28 19:57+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -592,67 +592,72 @@ msgstr "Maybe the memory_limit of PHP is to low for displaying the background im
 msgid "permissionDenied"
 msgstr "The user \"[USER]\" has no permission for this action"
 
+#: nagvis/includes/classes/NagVisFrontend.php:72
+msgid "mapIndex"
+msgstr "Map Index"
+
 #: nagvis/includes/classes/NagVisFrontend.php:118
 #: nagvis/includes/classes/NagVisFrontend.php:119
-msgid "The map you are trying to access is in maintenance mode. Please be patient. This page is automaticaly reloading."
+msgid "mapInMaintenance"
 msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is automaticaly reloading."
 
 #: nagvis/includes/classes/NagVisFrontend.php:124
 #: nagvis/includes/classes/NagVisFrontend.php:125
-msgid "You are not permited to view the state of this map."
+#: nagvis/includes/classes/objects/NagVisMapObj.php:319
+msgid "noReadPermissions"
 msgstr "You are not permited to view the state of this map."
 
 #: nagvis/includes/classes/NagVisFrontend.php:168
 msgid "rotationPools"
 msgstr "Rotation Pools"
 
-#: nagvis/includes/classes/NagVisFrontend.php:357
-msgid "Choose map"
-msgstr "Choose map"
+#: nagvis/includes/classes/NagVisFrontend.php:356
+msgid "selectMap"
+msgstr "Select map"
 
-#: nagvis/includes/classes/NagVisFrontend.php:359
+#: nagvis/includes/classes/NagVisFrontend.php:357
 msgid "editMap"
 msgstr "Edit current map"
 
-#: nagvis/includes/classes/NagVisFrontend.php:360
+#: nagvis/includes/classes/NagVisFrontend.php:358
 msgid "needHelp"
 msgstr "Need Help?"
 
-#: nagvis/includes/classes/NagVisFrontend.php:361
+#: nagvis/includes/classes/NagVisFrontend.php:359
 msgid "onlineDoc"
 msgstr "Online Documentation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:362
+#: nagvis/includes/classes/NagVisFrontend.php:360
 msgid "forum"
 msgstr "Support Forum"
 
-#: nagvis/includes/classes/NagVisFrontend.php:363
+#: nagvis/includes/classes/NagVisFrontend.php:361
 msgid "supportInfo"
 msgstr "NagVis Support Informations"
 
-#: nagvis/includes/classes/NagVisFrontend.php:364
+#: nagvis/includes/classes/NagVisFrontend.php:362
 #: nagvis/includes/classes/objects/NagVisObject.php:326
 msgid "overview"
 msgstr "Overview"
 
-#: nagvis/includes/classes/NagVisFrontend.php:365
+#: nagvis/includes/classes/NagVisFrontend.php:363
 #: nagvis/includes/classes/objects/NagVisObject.php:330
 msgid "instance"
 msgstr "Instance"
 
-#: nagvis/includes/classes/NagVisFrontend.php:366
+#: nagvis/includes/classes/NagVisFrontend.php:364
 msgid "rotationStart"
 msgstr "Start Rotation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:367
+#: nagvis/includes/classes/NagVisFrontend.php:365
 msgid "rotationStop"
 msgstr "Stop Rotation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:368
+#: nagvis/includes/classes/NagVisFrontend.php:366
 msgid "refreshStart"
 msgstr "Start Refresh"
 
-#: nagvis/includes/classes/NagVisFrontend.php:369
+#: nagvis/includes/classes/NagVisFrontend.php:367
 msgid "refreshStop"
 msgstr "Stop Refresh"
 
@@ -788,7 +793,14 @@ msgstr "Objects"
 msgid "mapIsEmpty"
 msgstr "The map \"[MAP]\" has 0 Objects."
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:319
-msgid "noReadPermissions"
-msgstr "You are not permited to view the state of this map."
+#~ msgid ""
+#~ "The map you are trying to access is in maintenance mode. Please be "
+#~ "patient. This page is automaticaly reloading."
+#~ msgstr ""
+#~ "The map you are trying to access is in maintenance mode. Please be "
+#~ "patient. This page is automaticaly reloading."
+#~ msgid "You are not permited to view the state of this map."
+#~ msgstr "You are not permited to view the state of this map."
+#~ msgid "Choose map"
+#~ msgstr "Choose map"
 
