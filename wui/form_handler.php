@@ -53,6 +53,9 @@ require('./includes/classes/WuiBackground.php');
 // Load the main configuration
 $MAINCFG = new WuiMainCfg(CONST_MAINCFG);
 
+// Error handling
+$LANG = new GlobalLanguage($MAINCFG, 'nagvis');
+
 // Now do the requested action
 switch($_GET['myaction']) {
 	/*
@@ -60,8 +63,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'save':
 		if(!isset($_POST['mapname']) || $_POST['mapname'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~mapname', FALSE);
 		} else {
 			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['mapname']);
@@ -93,7 +94,6 @@ switch($_GET['myaction']) {
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
-				$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 				print("<script>alert('".$LANG->getMessageText('mapLockNotDeleted', '', FALSE)."');</script>");
 			}
 			
@@ -106,16 +106,10 @@ switch($_GET['myaction']) {
 	 */
 	case 'modify':
 		if(!isset($_POST['map']) || $_POST['map'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map', FALSE);
 		} elseif(!isset($_POST['type']) || $_POST['type'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~type', FALSE);
 		} elseif(!isset($_POST['properties']) || $_POST['properties'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~properties', FALSE);
 		} else {
 			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map']);
@@ -134,7 +128,6 @@ switch($_GET['myaction']) {
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
-				$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 				print("<script>alert('".$LANG->getMessageText('mapLockNotDeleted', '', FALSE)."');</script>");
 			}
 			
@@ -150,16 +143,10 @@ switch($_GET['myaction']) {
 	 */
 	case 'add':
 		if(!isset($_POST['map']) || $_POST['map'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map', FALSE);
 		} elseif(!isset($_POST['type']) || $_POST['type'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~type', FALSE);
 		} elseif(!isset($_POST['properties']) || $_POST['properties'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~properties', FALSE);
 		} else {
 			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map']);
@@ -174,7 +161,6 @@ switch($_GET['myaction']) {
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
-				$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 				print("<script>alert('".$LANG->getMessageText('mapLockNotDeleted', '', FALSE)."');</script>");
 			}
 			
@@ -189,16 +175,10 @@ switch($_GET['myaction']) {
 	 */
 	case 'delete':
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map', FALSE);
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~type', FALSE);
 		} elseif(!isset($_GET['id']) || $_GET['id'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~id', FALSE);
 		} else {
 			// initialize map and read map config
@@ -215,7 +195,6 @@ switch($_GET['myaction']) {
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
-				$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 				print("<script>alert('".$LANG->getMessageText('mapLockNotDeleted', '', FALSE)."');</script>");
 			}
 			
@@ -228,8 +207,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'update_config':
 		if(!isset($_POST['properties']) || $_POST['properties'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~properties', FALSE);
 		} else {
 			// Parse properties to array and loop each
@@ -252,16 +229,10 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_map_create':
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map_name', FALSE);
 		} elseif(!isset($_POST['allowed_users']) || $_POST['allowed_users'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~allowed_users', FALSE);
 		} elseif(!isset($_POST['allowed_for_config']) || $_POST['allowed_for_config'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~allowed_for_config', FALSE);
 		} else {
 			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map_name']);
@@ -291,16 +262,10 @@ switch($_GET['myaction']) {
 		// gerade offene map: $_POST['map']
 		
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map_name', FALSE);
 		} elseif(!isset($_POST['map_new_name']) || $_POST['map_new_name'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map_new_name', FALSE);
 		} elseif(!isset($_POST['map']) || $_POST['map'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map', FALSE);
 		} else {
 			$files = Array();
@@ -346,8 +311,6 @@ switch($_GET['myaction']) {
 		// $_POST['map_name'];
 		
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map_name', FALSE);
 		} else {
 			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map_name']);
@@ -355,7 +318,6 @@ switch($_GET['myaction']) {
 			
 			$MAPCFG->deleteMapConfig();
 			
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			print("<script>alert('".$LANG->getMessageText('mapDeleted', '', FALSE)."');</script>");
 			
 			// Open the management page again
@@ -369,8 +331,6 @@ switch($_GET['myaction']) {
 		// $_POST['map_name'];
 		
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map_name', FALSE);
 		} else {
 			$MAPCFG = new WuiMapCfg($MAINCFG,$_POST['map_name']);
@@ -386,8 +346,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_map_import':
 		if(!isset($_FILES['map_file']) || !is_array($_FILES['map_file'])) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map_file', FALSE);
 		} else {
 			// check the file (the map) is properly uploaded
@@ -416,20 +374,12 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_image_create':
 		if(!isset($_POST['image_name']) || $_POST['image_name'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~image_name', FALSE);
 		} elseif(!isset($_POST['image_color']) || $_POST['image_color'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~image_color', FALSE);
 		} elseif(!isset($_POST['image_width']) || $_POST['image_width'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~image_width', FALSE);
 		} elseif(!isset($_POST['image_height']) || $_POST['image_height'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~image_height', FALSE);
 		} else {
 			$BACKGROUND = new WuiBackground($MAINCFG, $_POST['image_name'].'.png');
@@ -444,8 +394,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_image_delete':
 		if(!isset($_POST['map_image']) || $_POST['map_image'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map_image', FALSE);
 		} else {
 			$BACKGROUND = new WuiBackground($MAINCFG, $_POST['map_image']);
@@ -460,8 +408,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_image_upload':
 		if(!isset($_FILES['image_file']) || !is_array($_FILES['image_file'])) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~image_file', FALSE);
 		} else {
 			$BACKGROUND = new WuiBackground($MAINCFG, '');
@@ -476,8 +422,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'map_restore':
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map', FALSE);
 		} else {
 			// delete current config
@@ -520,8 +464,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_backend_default':
 		if(!isset($_POST['defaultbackend']) || $_POST['defaultbackend'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~defaultbackend', FALSE);
 		} else {
 			// Set the default backend
@@ -541,12 +483,8 @@ switch($_GET['myaction']) {
 		// $_POST['backend_id'], $_POST['backendtype']
 		
 		if(!isset($_POST['backend_id']) || $_POST['backend_id'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
 		} elseif(!isset($_POST['backendtype']) || $_POST['backendtype'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backendtype', FALSE);
 		} else {
 			$bFoundOption = FALSE;
@@ -586,8 +524,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_backend_edit':
 		if(!isset($_POST['backend_id']) || $_POST['backend_id'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
 		} else {
 			// Loop all aviable options for this backend
@@ -610,8 +546,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_backend_del':
 		if(!isset($_POST['backend_id']) || $_POST['backend_id'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
 		} else {
 			// Delete the section of the backend
@@ -629,8 +563,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_shape_add':
 		if(!isset($_FILES['shape_image']) || !is_array($_FILES['shape_image'])) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~shape_image', FALSE);
 		} else {
 			// Include page specific global/wui classes
@@ -646,8 +578,6 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_shape_delete':
 		if(!isset($_POST['shape_image']) || $_POST['shape_image'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~shape_image', FALSE);
 		} else {
 			// Include page specific global/wui classes
@@ -662,7 +592,6 @@ switch($_GET['myaction']) {
 	 * Fallback
 	 */
 	default:
-		$LANG = new GlobalLanguage($MAINCFG,'wui:formHandler');
 		echo $LANG->getMessageText('unknownAction', 'ACTION~'.$_GET['action'], FALSE);
 	break;
 }

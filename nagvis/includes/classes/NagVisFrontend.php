@@ -45,7 +45,7 @@ class NagVisFrontend extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis:global');
+		$this->LANG = new GlobalLanguage($MAINCFG, 'nagvis');
 		$htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 						'cssIncludes'=>Array($htmlBase.'/nagvis/includes/css/style.css'),

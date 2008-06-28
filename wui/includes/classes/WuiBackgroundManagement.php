@@ -43,7 +43,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->propCount = 0;
 		
 		// load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG,'wui:backgroundManagement');
+		$this->LANG = new GlobalLanguage($MAINCFG, 'nagvis');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
@@ -52,7 +52,7 @@ class WuiBackgroundManagement extends GlobalPage {
 					  						'./includes/js/wui.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
-					  'languageRoot' => 'wui:backgroundManagement');
+					  'languageRoot' => 'nagvis');
 		parent::GlobalPage($MAINCFG,$prop);
 	}
 	

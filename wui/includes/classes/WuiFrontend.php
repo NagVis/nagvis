@@ -41,7 +41,7 @@ class WuiFrontend extends GlobalPage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		
-		$this->LANG = new GlobalLanguage($this->MAINCFG,'wui:global');
+		$this->LANG = new GlobalLanguage($this->MAINCFG,'nagvis');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/wui.css','./includes/css/office_xp/office_xp.css'),
@@ -53,7 +53,7 @@ class WuiFrontend extends GlobalPage {
 						  './includes/js/wz_dragdrop.js'),
 					  'extHeader'=>Array("<style type=\"text/css\">body.main { background-color: ".$this->MAPCFG->getValue('global',0, 'background_color')."; }</style>"),
 					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'),
-					  'languageRoot' => 'wui:global');
+					  'languageRoot' => 'nagvis');
 		parent::GlobalPage($this->MAINCFG,$prop);
 	}
 	

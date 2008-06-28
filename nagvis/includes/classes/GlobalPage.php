@@ -49,7 +49,7 @@ class GlobalPage {
 	 * @param 	Array			$prop		Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalPage(&$MAINCFG,$givenProperties=Array()) {
+	function GlobalPage(&$MAINCFG, $givenProperties=Array()) {
 		$this->MAINCFG = &$MAINCFG;
 		
 		// Define default Properties here
@@ -58,7 +58,7 @@ class GlobalPage {
 									'jsIncludes' => Array(),
 									'extHeader' => '',
 									'allowedUsers' => Array('EVERYONE'),
-									'languageRoot' => 'global:global');
+									'languageRoot' => 'nagvis');
 		$prop = array_merge($defaultProperties,$givenProperties);
 		
 		$this->body = '';
@@ -226,7 +226,7 @@ class GlobalPage {
 	function messageBox($serverity, $id, $vars) {
 		$ret = '';
 		
-		$LANG = new GlobalLanguage($this->MAINCFG,$this->languageRoot);
+		$LANG = new GlobalLanguage($this->MAINCFG, $this->languageRoot);
 		
 		switch($serverity) {
 			case 'ERROR':

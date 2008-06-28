@@ -72,7 +72,7 @@ class GlobalBackendndomy {
 		$this->dbInstanceName = $this->MAINCFG->getValue('backend_'.$backendId, 'dbinstancename');
 		
 		// initialize a language object for later error messages which be given out as state output
-		$this->LANG = new GlobalLanguage($this->MAINCFG,'backend:ndomy');
+		$this->LANG = new GlobalLanguage($this->MAINCFG, 'nagvis');
 		
 		if($this->checkMysqlSupport() && $this->connectDB() && $this->checkTablesExists()) {
 			// Set the instanceId

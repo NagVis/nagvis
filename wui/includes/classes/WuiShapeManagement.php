@@ -39,12 +39,11 @@ class WuiShapeManagement extends GlobalPage {
     * @author Lars Michelsen <lars@vertical-visions.de>
     */
     function WuiShapeManagement(&$MAINCFG) {
-        if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiShapeManagement::WuiShapeManagement(&$MAINCFG)');
         $this->MAINCFG = &$MAINCFG;
         $this->propCount = 0;
         
         // load the language file
-        $this->LANG = new GlobalLanguage($MAINCFG,'wui:shapeManagement');
+        $this->LANG = new GlobalLanguage($MAINCFG,'nagvis');
         
         $prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
                     'cssIncludes'=>Array('./includes/css/wui.css'),
@@ -53,9 +52,8 @@ class WuiShapeManagement extends GlobalPage {
                         './includes/js/wui.js'),
                     'extHeader'=>Array(''),
                     'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
-                    'languageRoot' => 'wui:shapeManagement');
+                    'languageRoot' => 'nagvis');
         parent::GlobalPage($MAINCFG,$prop);
-        if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::WuiShapeManagement()');
     }
     
     /**
@@ -64,7 +62,6 @@ class WuiShapeManagement extends GlobalPage {
     * @author Lars Michelsen <lars@vertical-visions.de>
     */
     function getForm() {
-        if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiShapeManagement::getForm()');
         // Inititalize language for JS
         $this->addBodyLines($this->parseJs($this->getJsLang()));
         
@@ -99,7 +96,6 @@ class WuiShapeManagement extends GlobalPage {
         
         // Resize the window
         $this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*40+10)));
-        if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::getForm()');
     }
     
     /**
@@ -109,13 +105,11 @@ class WuiShapeManagement extends GlobalPage {
     * @author  Lars Michelsen <lars@vertical-visions.de>
     */
     function getAddFields() {
-        if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiShapeManagement::getAddFields()');
         $ret = Array();
         $ret = array_merge($ret,$this->ADDFORM->getHiddenField('MAX_FILE_SIZE','1000000'));
         $ret = array_merge($ret,$this->ADDFORM->getFileLine($this->LANG->getLabel('choosePngImage'),'shape_image',''));
         $this->propCount++;
         
-        if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::getAddFields(): Array(HTML)');
         return $ret;
     }
     
@@ -126,12 +120,10 @@ class WuiShapeManagement extends GlobalPage {
     * @author  Lars Michelsen <lars@vertical-visions.de>
     */
     function getDelFields() {
-        if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiShapeManagement::getDelFields()');
         $ret = Array();
         $ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getLabel('choosePngImage'),'shape_image',$this->getMapImages(),''));
         $this->propCount++;
         
-        if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::getDelFields(): Array(HTML)');
         return $ret;
     }
     
@@ -142,7 +134,6 @@ class WuiShapeManagement extends GlobalPage {
     * @author  Lars Michelsen <lars@vertical-visions.de>
     */
     function getMapImages() {
-        if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiShapeManagement::getMapImages()');
         $files = Array();
         
         if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
@@ -151,14 +142,13 @@ class WuiShapeManagement extends GlobalPage {
                     $files[] = $file;
                 }
             }
-    
+			
             if ($files) {
                 natcasesort($files);
             }
             closedir($handle);
         }
-    
-        if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::getMapImages(): Array(...)');
+		
         return $files;
     }
     
@@ -169,7 +159,6 @@ class WuiShapeManagement extends GlobalPage {
     * @author  Lars Michelsen <lars@vertical-visions.de>
     */
     function getJsLang() {
-        if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiShapeManagement::getJsLang()');
         $ret = Array();
         $ret[] = 'var lang = Array();';
         $ret[] = 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getMessageText('firstMustChoosePngImage').'\';';
@@ -179,7 +168,6 @@ class WuiShapeManagement extends GlobalPage {
         $ret[] = 'lang[\'confirmShapeDeletion\'] = \''.$this->LANG->getMessageText('confirmShapeDeletion').'\';';
         $ret[] = 'lang[\'unableToDeleteShape\'] = \''.$this->LANG->getMessageText('unableToDeleteShape').'\';';
         
-        if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiShapeManagement::getJsLang(): Array(JS)');
         return $ret;
     }
 		

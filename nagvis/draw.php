@@ -72,7 +72,7 @@ require("./includes/classes/objects/NagVisTextbox.php");
 $MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
 // Initialize the map configuration
-$MAPCFG = new NagVisMapCfg($MAINCFG,$_GET['map']);
+$MAPCFG = new NagVisMapCfg($MAINCFG, $_GET['map']);
 // Read the map configuration file
 $MAPCFG->readMapConfig();
 
@@ -80,10 +80,10 @@ $MAPCFG->readMapConfig();
 $BACKEND = new GlobalBackendMgmt($MAINCFG);
 
 // Initialize the language handling
-$LANG = new GlobalLanguage($MAINCFG,'nagvis:global');
+$LANG = new GlobalLanguage($MAINCFG, 'nagvis');
 
 // Initialize the background image
-$BACKGROUND = new NagVisBackground($MAINCFG,$MAPCFG,$LANG,$BACKEND);
+$BACKGROUND = new NagVisBackground($MAINCFG, $MAPCFG, $LANG, $BACKEND);
 $BACKGROUND->parseObjects();
 $BACKGROUND->parseMap();
 ?>

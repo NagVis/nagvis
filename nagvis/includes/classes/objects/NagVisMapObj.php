@@ -252,7 +252,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
 						break;
 						default:
-							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot' => 'nagvis'));
 							$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName());
 						break;
 					}
@@ -281,8 +281,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function checkLoop(&$OBJ) {
 		// prevent direct loops (map including itselfes as map icon)
 		if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-			$FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+			$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
+			$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
 			
 			$OBJ->summary_state = 'UNKNOWN';
 			$OBJ->summary_output = $this->LANG->getMessageText('loopInMapRecursion');
@@ -298,10 +298,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 				// Loop all objects on the child map to find out if there is a link back to this map (loop)
 				foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
 					if($this->MAPCFG->getName() == $arrChildMap['map_name']) {
-						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-						$FRONTEND->messageToUser('WARNING','loopInMapRecursion');
+						$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
+						$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
 						
-						$LANG = new GlobalLanguage($this->MAINCFG,'global:global');
 						$OBJ->summary_state = 'UNKNOWN';
 						$OBJ->summary_output = $this->LANG->getMessageText('loopInMapRecursion');
 						
@@ -428,7 +427,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function checkPermissions($allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot' => 'nagvis'));
 				$FRONTEND->messageToUser('ERROR', 'permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user'));
 			}
 			return FALSE;
@@ -448,7 +447,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function checkMaintenance($printErr) {
 		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
 				$FRONTEND->messageToUser('INFO-STOP', 'mapInMaintenance', 'MAP~'.$this->getName());
 			}
 			return FALSE;

@@ -45,7 +45,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->propCount = 0;
 		
 		// load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG,'wui:backendManagement');
+		$this->LANG = new GlobalLanguage($MAINCFG, 'nagvis');
 		
 		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
@@ -54,7 +54,7 @@ class WuiBackendManagement extends GlobalPage {
 					  						'./includes/js/ajax.js'),
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
-					  'languageRoot' => 'wui:backendManagement');
+					  'languageRoot' => 'nagvis');
 		parent::GlobalPage($MAINCFG,$prop);
 	}
 	

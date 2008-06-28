@@ -121,7 +121,7 @@ switch($_GET['action']) {
 			// Initialize backend(s)
 			$BACKEND = new GlobalBackendMgmt($MAINCFG);
 			
-			$LANG = new GlobalLanguage($MAINCFG,'nagvis:global');
+			$LANG = new GlobalLanguage($MAINCFG, 'nagvis');
 			
 			$objConf = Array();
 			if($_GET['map'] == '__automap') {

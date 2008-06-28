@@ -54,6 +54,9 @@ if(!isset($_GET['action'])) {
 	$_GET['action'] = '';
 }
 
+// Load the language file
+$LANG = new GlobalLanguage($MAINCFG,'nagvis');
+
 // Now do the requested action
 switch($_GET['action']) {
 	/*
@@ -68,20 +71,12 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~type', FALSE);
 		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'backend:global');
 			echo $LANG->getMessageText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id'], FALSE);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('methodNotSupportedByBackend', 'METHOD~getObjects', FALSE);
 		} else {
 			// Input looks OK, handle the request...
@@ -107,20 +102,12 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
 		} elseif(!isset($_GET['host_name']) || $_GET['host_name'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~host_name', FALSE);
 		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'backend:global');
 			echo $LANG->getMessageText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id'], FALSE);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('methodNotSupportedByBackend', 'METHOD~getObjects', FALSE);
 		} else {
 			// Input looks OK, handle the request...
@@ -147,16 +134,10 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map', FALSE);
 		} elseif(!isset($_GET['mode']) || $_GET['mode'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~mode', FALSE);
 		} elseif($_GET['mode'] != 'read' && $_GET['mode'] != 'write') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('accessModeIsNotValid', 'MODE~'.$_GET['mode'], FALSE);
 		} else {
 			// Input looks OK, handle the request...
@@ -194,8 +175,6 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if((!isset($_GET['backend_type']) || $_GET['backend_type'] == '') && (!isset($_GET['backend_id']) || $_GET['backend_id'] == '')) {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_type', FALSE)."\n";
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
 		} else {
@@ -234,7 +213,6 @@ switch($_GET['action']) {
 					$i++;
 				}
 			} else {
-				$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 				echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_type', FALSE);
 			}
 			echo ' ]';
@@ -249,8 +227,6 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['image']) || $_GET['image'] == '') {
-			// Error handling
-			$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~image', FALSE);
 		} else {
 			// Input looks OK, handle the request...
@@ -279,7 +255,6 @@ switch($_GET['action']) {
 	 * Fallback
 	 */
 	default:
-		$LANG = new GlobalLanguage($MAINCFG,'wui:ajaxHandler');
 		echo $LANG->getMessageText('unknownAction', 'ACTION~'.$_GET['action'], FALSE);
 	break;
 }
