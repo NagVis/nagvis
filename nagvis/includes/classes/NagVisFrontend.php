@@ -362,7 +362,7 @@ class NagVisFrontend extends GlobalPage {
 				$ret = file_get_contents($this->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->headerTemplate.'.html');
 				
 				// Replace some macros
-				if($this->MAP != '') {
+				if($this->MAPCFG != '') {
 					$ret = str_replace('[current_map]',$this->MAPCFG->getName(),$ret);
 					$ret = str_replace('[current_map_alias]',$this->MAPCFG->getValue('global', '0', 'alias'),$ret);
 				}
@@ -404,7 +404,7 @@ class NagVisFrontend extends GlobalPage {
 									}
 									
 									// auto select current map
-									if($this->MAP != '' && $mapName == $this->MAPCFG->getName() || ($mapName == '__automap' && isset($_GET['automap']))) {
+									if($this->MAPCFG != '' && $mapName == $this->MAPCFG->getName() || ($mapName == '__automap' && isset($_GET['automap']))) {
 										$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
 									} else {
 										$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
