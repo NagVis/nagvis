@@ -179,7 +179,7 @@ switch($_GET['action']) {
 						
 						if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 							$OBJ->summary_state = 'ERROR';
-							$OBJ->summary_output = $LANG->getMessageText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+							$OBJ->summary_output = $LANG->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
 						}
 					break;
 					case 'shape':

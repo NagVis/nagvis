@@ -58,28 +58,17 @@ class GlobalLanguage {
 		textdomain($textDomain);
 	}
 	
-	function getMessageText($id, $replace = '', $mergeWithGlobal = TRUE) {
-		$ret = $this->getText($id);
-		
-		if($replace != '') {
-			$ret = $this->getReplacedString($ret, $replace);
-		}
-		
-		return $ret;
-	}
-	
-	function getMessageTitle($id,$replace='',$mergeWithGlobal=TRUE) {
-		$ret = $this->getText($id);
-		
-		if($replace != '') {
-			$ret = $this->getReplacedString($ret, $replace);
-		}
-		
-		return $ret;
-	}
-	
-	function getLabel($id,$replace='',$mergeWithGlobal=TRUE) {
-		$ret = $this->getText($id);
+	/**
+	 * Calls the real getText method and replaces some macros after fetching the
+	 * text
+	 *
+	 * @param	String	String to be localized
+	 * @param	String	Replace options
+	 * @return	String	Localized String
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getText($id, $replace='') {
+		$ret = $this->getTextOfId($id);
 		
 		if($replace != '') {
 			$ret = $this->getReplacedString($ret, $replace);
@@ -95,7 +84,7 @@ class GlobalLanguage {
 	 * @return	String	Localized String
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getText($s) {
+	function getTextOfId($s) {
 		$sLocalized = gettext($s);
 		
 		// filter type, messages/labels

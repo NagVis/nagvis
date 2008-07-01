@@ -578,7 +578,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function mergeSummaryOutput(&$arrStates, $objLabel) {
-		$this->summary_output .= $this->LANG->getLabel('childStatesAre').' ';
+		$this->summary_output .= $this->LANG->getText('childStatesAre').' ';
 		foreach($arrStates AS $state => &$num) {
 			if($num > 0) {
 				$this->summary_output .= $num.' '.$state.', ';

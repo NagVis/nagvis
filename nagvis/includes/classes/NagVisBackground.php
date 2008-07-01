@@ -191,7 +191,7 @@ class NagVisBackground extends NagVisMap {
 				$this->image = imagecreatefrompng($this->MAINCFG->getValue('paths', 'map').$fileName);
 			break;
 			default:
-				$this->errorBox($this->LANG->getMessageText('onlyPngOrJpgImages'));
+				$this->errorBox($this->LANG->getText('onlyPngOrJpgImages'));
 			break;
 		}
 		
@@ -211,16 +211,16 @@ class NagVisBackground extends NagVisMap {
 	 */
 	function checkPreflight() {
 		if(!$this->MAPCFG->BACKGROUND->checkFileExists(0)) {
-			$this->errorBox($this->LANG->getMessageText('backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
+			$this->errorBox($this->LANG->getText('backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
 		if(!$this->MAPCFG->BACKGROUND->checkFileReadable(0)) {
-			$this->errorBox($this->LANG->getMessageText('backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
+			$this->errorBox($this->LANG->getText('backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->MAPCFG->getImage()));
 		}
 		if(!$this->checkMemoryLimit()) {
-			$this->errorBox($this->LANG->getMessageText('maybePhpMemoryLimitToLow'));	
+			$this->errorBox($this->LANG->getText('maybePhpMemoryLimitToLow'));	
 		}
 		if(!$this->MAPOBJ->checkPermissions($this->MAPCFG->getValue('global',0, 'allowed_user'),0)) {
-			$this->errorBox($this->LANG->getMessageText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
+			$this->errorBox($this->LANG->getText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
 		}
 	}
 	

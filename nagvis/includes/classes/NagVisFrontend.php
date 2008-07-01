@@ -84,7 +84,7 @@ class NagVisFrontend extends GlobalPage {
 			$ret .= '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
 			$ret .= '<div class="infopage">';
 			$ret .= '<table>';
-			$ret .= '<tr><th colspan="4">'.$this->LANG->getLabel('mapIndex').'</th></tr><tr>';
+			$ret .= '<tr><th colspan="4">'.$this->LANG->getText('mapIndex').'</th></tr><tr>';
 			$i = 1;
 			foreach($this->getMaps() AS $mapName) {
 				$MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
@@ -130,14 +130,14 @@ class NagVisFrontend extends GlobalPage {
 						} else {
 							$class = 'class="disabled"';
 							
-							$onClick = 'alert(\''.$this->LANG->getMessageText('mapInMaintenance').'\');';
-							$summaryOutput = $this->LANG->getMessageText('mapInMaintenance');
+							$onClick = 'alert(\''.$this->LANG->getText('mapInMaintenance').'\');';
+							$summaryOutput = $this->LANG->getText('mapInMaintenance');
 						}
 					} else {
 						$class = 'class="disabled"';
 						
-						$onClick = 'alert(\''.$this->LANG->getMessageText('noReadPermissions').'\');';
-						$summaryOutput = $this->LANG->getMessageText('noReadPermissions');
+						$onClick = 'alert(\''.$this->LANG->getText('noReadPermissions').'\');';
+						$summaryOutput = $this->LANG->getText('noReadPermissions');
 					}
 					
 					// If this is the automap display the last rendered image
@@ -180,7 +180,7 @@ class NagVisFrontend extends GlobalPage {
 			$aRotationPools = $this->getRotationPools();
 			if(count($aRotationPools) > 0) {
 				$ret .= '<table class="infobox">';
-				$ret .= '<tr><th>'.$this->LANG->getLabel('rotationPools').'</th></tr>';
+				$ret .= '<tr><th>'.$this->LANG->getText('rotationPools').'</th></tr>';
 				foreach($this->getRotationPools() AS $poolName) {
 					// Form the onClick action
 					$onClick = 'location.href=\''.$this->htmlBase.'/index.php?rotation='.$poolName.'\';';
@@ -370,18 +370,18 @@ class NagVisFrontend extends GlobalPage {
 				$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlheadertemplates'),$ret);
 				$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlheadertemplateimages'),$ret);
 				// Replace language macros
-				$ret = str_replace('[lang_select_map]',$this->LANG->getLabel('selectMap'),$ret);
-				$ret = str_replace('[lang_edit_map]',$this->LANG->getLabel('editMap'),$ret);
-				$ret = str_replace('[lang_need_help]',$this->LANG->getLabel('needHelp'),$ret);
-				$ret = str_replace('[lang_online_doc]',$this->LANG->getLabel('onlineDoc'),$ret);
-				$ret = str_replace('[lang_forum]',$this->LANG->getLabel('forum'),$ret);
-				$ret = str_replace('[lang_support_info]',$this->LANG->getLabel('supportInfo'),$ret);
-				$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
-				$ret = str_replace('[lang_instance]',$this->LANG->getLabel('instance'),$ret);
-				$ret = str_replace('[lang_rotation_start]','<br />'.$this->LANG->getLabel('rotationStart'),$ret);
-				$ret = str_replace('[lang_rotation_stop]','<br />'.$this->LANG->getLabel('rotationStop'),$ret);
-				$ret = str_replace('[lang_refresh_start]',$this->LANG->getLabel('refreshStart'),$ret);
-				$ret = str_replace('[lang_refresh_stop]',$this->LANG->getLabel('refreshStop'),$ret);
+				$ret = str_replace('[lang_select_map]',$this->LANG->getText('selectMap'),$ret);
+				$ret = str_replace('[lang_edit_map]',$this->LANG->getText('editMap'),$ret);
+				$ret = str_replace('[lang_need_help]',$this->LANG->getText('needHelp'),$ret);
+				$ret = str_replace('[lang_online_doc]',$this->LANG->getText('onlineDoc'),$ret);
+				$ret = str_replace('[lang_forum]',$this->LANG->getText('forum'),$ret);
+				$ret = str_replace('[lang_support_info]',$this->LANG->getText('supportInfo'),$ret);
+				$ret = str_replace('[lang_overview]',$this->LANG->getText('overview'),$ret);
+				$ret = str_replace('[lang_instance]',$this->LANG->getText('instance'),$ret);
+				$ret = str_replace('[lang_rotation_start]','<br />'.$this->LANG->getText('rotationStart'),$ret);
+				$ret = str_replace('[lang_rotation_stop]','<br />'.$this->LANG->getText('rotationStop'),$ret);
+				$ret = str_replace('[lang_refresh_start]',$this->LANG->getText('refreshStart'),$ret);
+				$ret = str_replace('[lang_refresh_stop]',$this->LANG->getText('refreshStop'),$ret);
 				// Replace lists
 				if(preg_match_all('/<!-- BEGIN (\w+) -->/',$ret,$matchReturn) > 0) {
 					foreach($matchReturn[1] AS &$key) {

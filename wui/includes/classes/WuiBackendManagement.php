@@ -74,10 +74,10 @@ class WuiBackendManagement extends GlobalPage {
 			'onSubmit'=>'return update_param(\'backend_default\');',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DEFBACKENDFORM->initForm());
-		$this->addBodyLines($this->DEFBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('setDefaultBackend'))));
+		$this->addBodyLines($this->DEFBACKENDFORM->getCatLine(strtoupper($this->LANG->getText('setDefaultBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getDefaultFields());
-		$this->addBodyLines($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->DEFBACKENDFORM->getSubmitLine($this->LANG->getText('save')));
 		$this->addBodyLines($this->DEFBACKENDFORM->closeForm());
 		
 		$this->ADDBACKENDFORM = new GlobalForm(Array('name'=>'backend_add',
@@ -87,10 +87,10 @@ class WuiBackendManagement extends GlobalPage {
 			'onSubmit'=>'return check_backend_add();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->ADDBACKENDFORM->initForm());
-		$this->addBodyLines($this->ADDBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('addBackend'))));
+		$this->addBodyLines($this->ADDBACKENDFORM->getCatLine(strtoupper($this->LANG->getText('addBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getAddFields());
-		$this->addBodyLines($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->ADDBACKENDFORM->getSubmitLine($this->LANG->getText('save')));
 		$this->addBodyLines($this->ADDBACKENDFORM->closeForm());
 		
 		$this->EDITBACKENDFORM = new GlobalForm(Array('name'=>'backend_edit',
@@ -100,10 +100,10 @@ class WuiBackendManagement extends GlobalPage {
 			'onSubmit'=>'return check_backend_edit();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->EDITBACKENDFORM->initForm());
-		$this->addBodyLines($this->EDITBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('editBackend'))));
+		$this->addBodyLines($this->EDITBACKENDFORM->getCatLine(strtoupper($this->LANG->getText('editBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getEditFields());
-		$this->addBodyLines($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->EDITBACKENDFORM->getSubmitLine($this->LANG->getText('save')));
 		$this->addBodyLines($this->EDITBACKENDFORM->closeForm());
 		
 		$this->DELBACKENDFORM = new GlobalForm(Array('name'=>'backend_del',
@@ -113,10 +113,10 @@ class WuiBackendManagement extends GlobalPage {
 			'onSubmit'=>'return check_backend_del();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DELBACKENDFORM->initForm());
-		$this->addBodyLines($this->DELBACKENDFORM->getCatLine(strtoupper($this->LANG->getLabel('delBackend'))));
+		$this->addBodyLines($this->DELBACKENDFORM->getCatLine(strtoupper($this->LANG->getText('delBackend'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getDelFields());
-		$this->addBodyLines($this->DELBACKENDFORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->DELBACKENDFORM->getSubmitLine($this->LANG->getText('save')));
 		$this->addBodyLines($this->DELBACKENDFORM->closeForm());
 		
 		// Resize the window
@@ -215,7 +215,7 @@ class WuiBackendManagement extends GlobalPage {
 	function getDefaultFields() {
 		$ret = Array();
 		
-		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getLabel('defaultBackend'),'defaultbackend',$this->getDefinedBackends(),$this->MAINCFG->getValue('defaults','backend',TRUE),TRUE));
+		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getText('defaultBackend'),'defaultbackend',$this->getDefinedBackends(),$this->MAINCFG->getValue('defaults','backend',TRUE),TRUE));
 		$this->propCount++;
 		
 		return $ret;
@@ -277,7 +277,7 @@ class WuiBackendManagement extends GlobalPage {
 	function getJsLang() {
 		$ret = Array();
 		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getMessageText('mustValueNotSet','',FALSE).'\';';
+		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getText('mustValueNotSet').'\';';
 		
 		return $ret;	
 	}

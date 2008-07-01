@@ -399,7 +399,7 @@ class GlobalBackendndomy {
 			
 			if(mysql_num_rows($QUERYHANDLE) == 0) {
 				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = $this->LANG->getMessageText('hostNotFoundInDB','HOST~'.$hostName);
+				$arrReturn['output'] = $this->LANG->getText('hostNotFoundInDB','HOST~'.$hostName);
 			} else {
 				$data = mysql_fetch_array($QUERYHANDLE);
 				
@@ -443,7 +443,7 @@ class GlobalBackendndomy {
 				
 				if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 					$arrReturn['state'] = 'PENDING';
-					$arrReturn['output'] = $this->LANG->getMessageText('hostIsPending','HOST~'.$hostName);
+					$arrReturn['output'] = $this->LANG->getText('hostIsPending','HOST~'.$hostName);
 				} elseif($data['current_state'] == '0') {
 					// Host is UP
 					$arrReturn['state'] = 'UP';
@@ -562,7 +562,7 @@ class GlobalBackendndomy {
 			if(mysql_num_rows($QUERYHANDLE) == 0) {
 				if(isset($serviceName) && $serviceName != '') {
 					$arrReturn['state'] = 'ERROR';
-					$arrReturn['output'] = $this->LANG->getMessageText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
+					$arrReturn['output'] = $this->LANG->getText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
 				} else {
 					// If the method should fetch all services of the host and do not find
 					// any services for this host, don't return anything => The message
@@ -613,7 +613,7 @@ class GlobalBackendndomy {
 					
 					if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 						$arrTmpReturn['state'] = 'PENDING';
-						$arrTmpReturn['output'] = $this->LANG->getMessageText('serviceNotChecked','SERVICE~'.$data['name2']);
+						$arrTmpReturn['output'] = $this->LANG->getText('serviceNotChecked','SERVICE~'.$data['name2']);
 					} elseif($data['current_state'] == '0') {
 						// Host is UP
 						$arrTmpReturn['state'] = 'OK';

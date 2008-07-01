@@ -299,63 +299,63 @@ class NagVisObject {
 				
 				// Replace the static macros (language, paths)
 				if(strpos($ret,'[lang_alias]') !== FALSE) {
-					$ret = str_replace('[lang_alias]',$this->LANG->getLabel('alias'),$ret);
+					$ret = str_replace('[lang_alias]',$this->LANG->getText('alias'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_address]') !== FALSE) {
-					$ret = str_replace('[lang_address]',$this->LANG->getLabel('address'),$ret);
+					$ret = str_replace('[lang_address]',$this->LANG->getText('address'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_state]') !== FALSE) {
-					$ret = str_replace('[lang_state]',$this->LANG->getLabel('state'),$ret);
+					$ret = str_replace('[lang_state]',$this->LANG->getText('state'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_summary_state]') !== FALSE) {
-					$ret = str_replace('[lang_summary_state]',$this->LANG->getLabel('summaryState'),$ret);
+					$ret = str_replace('[lang_summary_state]',$this->LANG->getText('summaryState'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_output]') !== FALSE) {
-					$ret = str_replace('[lang_output]',$this->LANG->getLabel('output'),$ret);
+					$ret = str_replace('[lang_output]',$this->LANG->getText('output'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_summary_output]') !== FALSE) {
-					$ret = str_replace('[lang_summary_output]',$this->LANG->getLabel('summaryOutput'),$ret);
+					$ret = str_replace('[lang_summary_output]',$this->LANG->getText('summaryOutput'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_overview]') !== FALSE) {
-					$ret = str_replace('[lang_overview]',$this->LANG->getLabel('overview'),$ret);
+					$ret = str_replace('[lang_overview]',$this->LANG->getText('overview'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_instance]') !== FALSE) {
-					$ret = str_replace('[lang_instance]',$this->LANG->getLabel('instance'),$ret);
+					$ret = str_replace('[lang_instance]',$this->LANG->getText('instance'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_next_check]') !== FALSE) {
-				$ret = str_replace('[lang_next_check]',$this->LANG->getLabel('nextCheck'),$ret);
+				$ret = str_replace('[lang_next_check]',$this->LANG->getText('nextCheck'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_last_check]') !== FALSE) {
-					$ret = str_replace('[lang_last_check]',$this->LANG->getLabel('lastCheck'),$ret);
+					$ret = str_replace('[lang_last_check]',$this->LANG->getText('lastCheck'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_state_type]') !== FALSE) {
-					$ret = str_replace('[lang_state_type]',$this->LANG->getLabel('stateType'),$ret);
+					$ret = str_replace('[lang_state_type]',$this->LANG->getText('stateType'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_current_attempt]') !== FALSE) {
-					$ret = str_replace('[lang_current_attempt]',$this->LANG->getLabel('currentAttempt'),$ret);
+					$ret = str_replace('[lang_current_attempt]',$this->LANG->getText('currentAttempt'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_last_state_change]') !== FALSE) {
-					$ret = str_replace('[lang_last_state_change]',$this->LANG->getLabel('lastStateChange'),$ret);
+					$ret = str_replace('[lang_last_state_change]',$this->LANG->getText('lastStateChange'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_state_duration]') !== FALSE) {
-					$ret = str_replace('[lang_state_duration]',$this->LANG->getLabel('stateDuration'),$ret);
+					$ret = str_replace('[lang_state_duration]',$this->LANG->getText('stateDuration'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_service_description]') !== FALSE) {
-					$ret = str_replace('[lang_service_description]',$this->LANG->getLabel('servicename'),$ret);
+					$ret = str_replace('[lang_service_description]',$this->LANG->getText('servicename'),$ret);
 				}
 				
 				if(strpos($ret,'[html_base]') !== FALSE) {
@@ -410,7 +410,7 @@ class NagVisObject {
 		/**
 		 * Now replace the regular macros
 		 */
-		$ret .= '\'[lang_obj_type]\': \''.$this->LANG->getLabel($this->type).'\', ';
+		$ret .= '\'[lang_obj_type]\': \''.$this->LANG->getText($this->type).'\', ';
 		
 		$ret .= '\'[obj_type]\': \''.$this->type.'\', ';
 		
@@ -485,28 +485,28 @@ class NagVisObject {
 		// Get the child name label
 		switch($this->type) {
 			case 'host':
-				$name = $this->LANG->getLabel('hostname');
-				$childName = $this->LANG->getLabel('servicename');
+				$name = $this->LANG->getText('hostname');
+				$childName = $this->LANG->getText('servicename');
 			break;
 			case 'service':
-				$name = $this->LANG->getLabel('hostname');
+				$name = $this->LANG->getText('hostname');
 				$childName = '';
 			break;
 			case 'hostgroup':
-				$name = $this->LANG->getLabel('hostgroupname');
-				$childName = $this->LANG->getLabel('hostname');
+				$name = $this->LANG->getText('hostgroupname');
+				$childName = $this->LANG->getText('hostname');
 			break;
 			case 'servicegroup':
-				$name = $this->LANG->getLabel('servicegroupname');
-				$childName = $this->LANG->getLabel('servicename');
+				$name = $this->LANG->getText('servicegroupname');
+				$childName = $this->LANG->getText('servicename');
 			break;
 			case 'map':
-				$name = $this->LANG->getLabel('mapname');
-				$childName = $this->LANG->getLabel('objectname');
+				$name = $this->LANG->getText('mapname');
+				$childName = $this->LANG->getText('objectname');
 			break;
 			default:
-				$name = $this->LANG->getLabel('objectname');
-				$childName = $this->LANG->getLabel('objectname');
+				$name = $this->LANG->getText('objectname');
+				$childName = $this->LANG->getText('objectname');
 			break;
 		}
 		
@@ -543,7 +543,7 @@ class NagVisObject {
 		
 		// Macros which are only for servicegroups
 		if($this->type == 'servicegroup') {
-			$ret .= '\'[lang_child_name1]\': \''.$this->LANG->getLabel('hostname').'\', ';
+			$ret .= '\'[lang_child_name1]\': \''.$this->LANG->getText('hostname').'\', ';
 		} else {
 			$ret .= '\'<!--\\\sBEGIN\\\sservicegroup\\\s-->.+?<!--\\\sEND\\\sservicegroup\\\s-->\': \'\', ';
 		}

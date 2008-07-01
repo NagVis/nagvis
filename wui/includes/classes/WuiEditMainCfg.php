@@ -67,7 +67,7 @@ class WuiEditMainCfg extends GlobalPage {
 		$this->addBodyLines($this->FORM->getHiddenField('properties',''));
 		
 		$this->addBodyLines($this->getFields());
-		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getText('save')));
 		$this->addBodyLines($this->FORM->closeForm());
 		
 		// Resize the window
@@ -97,11 +97,11 @@ class WuiEditMainCfg extends GlobalPage {
 						$ret[] = "<tr>";
 						$ret[] = "\t<td class=\"tdlabel\">".$key2."</td>";
 						
-						if(preg_match('/^TranslationNotFound:/',$this->LANG->getLabel($key2,'',FALSE)) > 0) {
+						if(preg_match('/^TranslationNotFound:/',$this->LANG->getText($key2)) > 0) {
 							$ret[] = "\t<td class=\"tdfield\"></td>";
 						} else {
 							$ret[] = "\t<td class=\"tdfield\">";
-							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getLabel($key2,'',FALSE)." (".$this->LANG->getLabel('defaultValue').": ".$this->MAINCFG->validConfig[$cat][$key2]['default'].")')\" />";
+							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getText($key2)." (".$this->LANG->getText('defaultValue').": ".$this->MAINCFG->validConfig[$cat][$key2]['default'].")')\" />";
 							$ret[] = "\t</td>";
 						}
 						
@@ -135,11 +135,11 @@ class WuiEditMainCfg extends GlobalPage {
 									case 'recognizeservices':
 									case 'onlyhardstates':
 									case 'usegdlibs':
-										$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getLabel('yes')),
-														 Array('value'=>'0','label'=>$this->LANG->getLabel('no')));
+										$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getText('yes')),
+														 Array('value'=>'0','label'=>$this->LANG->getText('no')));
 									break;
 									case 'autoupdatefreq':
-										$arrOpts = Array(Array('value'=>'0','label'=>$this->LANG->getLabel('disabled')),
+										$arrOpts = Array(Array('value'=>'0','label'=>$this->LANG->getText('disabled')),
 														 Array('value'=>'2','label'=>'2'),
 														 Array('value'=>'5','label'=>'5'),
 														 Array('value'=>'10','label'=>'10'),

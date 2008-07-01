@@ -195,9 +195,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 				}
 			}
 			
-			$this->mergeSummaryOutput($arrStates, $this->LANG->getLabel('objects'));
+			$this->mergeSummaryOutput($arrStates, $this->LANG->getText('objects'));
 		} else {
-			$this->summary_output .= $this->LANG->getMessageText('mapIsEmpty','MAP~'.$this->getName());
+			$this->summary_output .= $this->LANG->getText('mapIsEmpty','MAP~'.$this->getName());
 		}
 	}
 	
@@ -242,7 +242,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							
 							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 								$OBJ->summary_state = 'ERROR';
-								$OBJ->summary_output = $this->LANG->getMessageText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+								$OBJ->summary_output = $this->LANG->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
 							}
 						break;
 						case 'shape':
@@ -285,7 +285,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
 			
 			$OBJ->summary_state = 'UNKNOWN';
-			$OBJ->summary_output = $this->LANG->getMessageText('loopInMapRecursion');
+			$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
 			
 			return FALSE;
 		} else {
@@ -302,7 +302,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 						$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
 						
 						$OBJ->summary_state = 'UNKNOWN';
-						$OBJ->summary_output = $this->LANG->getMessageText('loopInMapRecursion');
+						$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
 						
 						return FALSE;
 					} else {
@@ -315,7 +315,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				return TRUE;
 			} else {
 				$OBJ->summary_state = 'UNKNOWN';
-				$OBJ->summary_output = $this->LANG->getMessageText('noReadPermissions');
+				$OBJ->summary_output = $this->LANG->getText('noReadPermissions');
 				
 				return FALSE;
 			}

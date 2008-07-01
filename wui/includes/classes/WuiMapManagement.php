@@ -75,10 +75,10 @@ class WuiMapManagement extends GlobalPage {
 			'onSubmit'=>'return check_create_map();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->CREATEFORM->initForm());
-		$this->addBodyLines($this->CREATEFORM->getCatLine(strtoupper($this->LANG->getLabel('createMap'))));
+		$this->addBodyLines($this->CREATEFORM->getCatLine(strtoupper($this->LANG->getText('createMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getCreateFields());
-		$this->addBodyLines($this->getSubmit($this->CREATEFORM,$this->LANG->getLabel('create')));
+		$this->addBodyLines($this->getSubmit($this->CREATEFORM,$this->LANG->getText('create')));
 		
 		$this->RENAMEFORM = new GlobalForm(Array('name'=>'map_rename',
 			'id'=>'map_rename',
@@ -87,10 +87,10 @@ class WuiMapManagement extends GlobalPage {
 			'onSubmit'=>'return check_map_rename();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->RENAMEFORM->initForm());
-		$this->addBodyLines($this->RENAMEFORM->getCatLine(strtoupper($this->LANG->getLabel('renameMap'))));
+		$this->addBodyLines($this->RENAMEFORM->getCatLine(strtoupper($this->LANG->getText('renameMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getRenameFields());
-		$this->addBodyLines($this->getSubmit($this->RENAMEFORM,$this->LANG->getLabel('rename')));
+		$this->addBodyLines($this->getSubmit($this->RENAMEFORM,$this->LANG->getText('rename')));
 		
 		$this->DELETEFORM = new GlobalForm(Array('name'=>'map_delete',
 			'id'=>'map_delete',
@@ -99,10 +99,10 @@ class WuiMapManagement extends GlobalPage {
 			'onSubmit'=>'return check_map_delete();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->DELETEFORM->initForm());
-		$this->addBodyLines($this->DELETEFORM->getCatLine(strtoupper($this->LANG->getLabel('deleteMap'))));
+		$this->addBodyLines($this->DELETEFORM->getCatLine(strtoupper($this->LANG->getText('deleteMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getDeleteFields());
-		$this->addBodyLines($this->getSubmit($this->DELETEFORM,$this->LANG->getLabel('delete')));
+		$this->addBodyLines($this->getSubmit($this->DELETEFORM,$this->LANG->getText('delete')));
 		
 		$this->EXPORTFORM = new GlobalForm(Array('name'=>'map_export',
 			'id'=>'map_export',
@@ -111,10 +111,10 @@ class WuiMapManagement extends GlobalPage {
 			'onSubmit'=>'return check_map_export();',
 			'cols'=>'2'));
 		$this->addBodyLines($this->EXPORTFORM->initForm());
-		$this->addBodyLines($this->EXPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('exportMap'))));
+		$this->addBodyLines($this->EXPORTFORM->getCatLine(strtoupper($this->LANG->getText('exportMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getExportFields());
-		$this->addBodyLines($this->getSubmit($this->EXPORTFORM,$this->LANG->getLabel('export')));
+		$this->addBodyLines($this->getSubmit($this->EXPORTFORM,$this->LANG->getText('export')));
 		
 		
 		$this->IMPORTFORM = new GlobalForm(Array('name'=>'map_import',
@@ -125,10 +125,10 @@ class WuiMapManagement extends GlobalPage {
 			'enctype'=>'multipart/form-data',
 			'cols'=>'2'));
 		$this->addBodyLines($this->IMPORTFORM->initForm());
-		$this->addBodyLines($this->IMPORTFORM->getCatLine(strtoupper($this->LANG->getLabel('importMap'))));
+		$this->addBodyLines($this->IMPORTFORM->getCatLine(strtoupper($this->LANG->getText('importMap'))));
 		$this->propCount++;
 		$this->addBodyLines($this->getImportFields($this->IMPORTFORM));
-		$this->addBodyLines($this->getSubmit($this->IMPORTFORM,$this->LANG->getLabel('import')));
+		$this->addBodyLines($this->getSubmit($this->IMPORTFORM,$this->LANG->getText('import')));
 		
 		// Resize the window
 		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*30+100)));
@@ -142,7 +142,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getExportFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->getMaps(),''));
 		$this->propCount++;
 		
 		return $ret;
@@ -157,7 +157,7 @@ class WuiMapManagement extends GlobalPage {
 	function getImportFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->IMPORTFORM->getHiddenField('MAX_FILE_SIZE','1000000'));
-		$ret = array_merge($ret,$this->IMPORTFORM->getFileLine($this->LANG->getLabel('chooseMapFile'),'map_file',''));
+		$ret = array_merge($ret,$this->IMPORTFORM->getFileLine($this->LANG->getText('chooseMapFile'),'map_file',''));
 		$this->propCount++;
 		
 		return $ret;
@@ -171,7 +171,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getDeleteFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->getMaps(),''));
 		$this->propCount++;
 		$ret = array_merge($ret,$this->DELETEFORM->getHiddenField('map',''));
 		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
@@ -187,9 +187,9 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getRenameFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getLabel('chooseMap'),'map_name',$this->getMaps(),''));
+		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->getMaps(),''));
 		$this->propCount++;
-		$ret = array_merge($ret,$this->RENAMEFORM->getInputLine($this->LANG->getLabel('newMapName'),'map_new_name',''));
+		$ret = array_merge($ret,$this->RENAMEFORM->getInputLine($this->LANG->getText('newMapName'),'map_new_name',''));
 		$this->propCount++;
 		$ret = array_merge($ret,$this->RENAMEFORM->getHiddenField('map',''));
 		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
@@ -206,15 +206,15 @@ class WuiMapManagement extends GlobalPage {
 	function getCreateFields() {
 		
 		$ret = Array();
-		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('mapName'),'map_name',''));
+		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('mapName'),'map_name',''));
 		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('readUsers'),'allowed_users',''));
+		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('readUsers'),'allowed_users',''));
 		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getLabel('writeUsers'),'allowed_for_config',''));
+		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('writeUsers'),'allowed_for_config',''));
 		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getLabel('mapIconset'),'map_iconset',$this->getIconsets(),$this->MAINCFG->getValue('defaults','icons')));
+		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getText('mapIconset'),'map_iconset',$this->getIconsets(),$this->MAINCFG->getValue('defaults','icons')));
 		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getLabel('background'),'map_image',$this->getMapImages(),''));
+		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getText('background'),'map_image',$this->getMapImages(),''));
 		$this->propCount++;
 		
 		return $ret;
@@ -304,23 +304,23 @@ class WuiMapManagement extends GlobalPage {
 	function getJsLang() {
 		$ret = Array();
 		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang[\'chooseMapName\'] = \''.$this->LANG->getMessageText('chooseMapName').'\';';
-		$ret[] = 'lang[\'minOneUserAccess\'] = \''.$this->LANG->getMessageText('minOneUserAccess').'\';';
-		$ret[] = 'lang[\'mustChooseBackgroundImage\'] = \''.$this->LANG->getMessageText('mustChooseBackgroundImage').'\';';
-		$ret[] = 'lang[\'noMapToRename\'] = \''.$this->LANG->getMessageText('noMapToRename').'\';';
-		$ret[] = 'lang[\'noNewNameGiven\'] = \''.$this->LANG->getMessageText('noNewNameGiven').'\';';
-		$ret[] = 'lang[\'mapAlreadyExists\'] = \''.$this->LANG->getMessageText('mapAlreadyExists').'\';';
-		$ret[] = 'lang[\'foundNoMapToDelete\'] = \''.$this->LANG->getMessageText('foundNoMapToDelete').'\';';
-		$ret[] = 'lang[\'foundNoMapToExport\'] = \''.$this->LANG->getMessageText('foundNoMapToExport').'\';';
-		$ret[] = 'lang[\'foundNoMapToImport\'] = \''.$this->LANG->getMessageText('foundNoMapToImport').'\';';
-		$ret[] = 'lang[\'notCfgFile\'] = \''.$this->LANG->getMessageText('notCfgFile').'\';';
-		$ret[] = 'lang[\'confirmNewMap\'] = \''.$this->LANG->getMessageText('confirmNewMap').'\';';
-		$ret[] = 'lang[\'confirmMapRename\'] = \''.$this->LANG->getMessageText('confirmMapRename').'\';';
-		$ret[] = 'lang[\'confirmMapDeletion\'] = \''.$this->LANG->getMessageText('confirmMapDeletion').'\';';
-		$ret[] = 'lang[\'unableToDeleteMap\'] = \''.$this->LANG->getMessageText('unableToDeleteMap').'\';';
-		$ret[] = 'lang[\'noPermissions\'] = \''.$this->LANG->getMessageText('noPermissions').'\';';
-		$ret[] = 'lang[\'minOneUserWriteAccess\'] = \''.$this->LANG->getMessageText('minOneUserWriteAccess').'\';';
-		$ret[] = 'lang[\'noSpaceAllowed\'] = \''.$this->LANG->getMessageText('noSpaceAllowed').'\';';
+		$ret[] = 'lang[\'chooseMapName\'] = \''.$this->LANG->getText('chooseMapName').'\';';
+		$ret[] = 'lang[\'minOneUserAccess\'] = \''.$this->LANG->getText('minOneUserAccess').'\';';
+		$ret[] = 'lang[\'mustChooseBackgroundImage\'] = \''.$this->LANG->getText('mustChooseBackgroundImage').'\';';
+		$ret[] = 'lang[\'noMapToRename\'] = \''.$this->LANG->getText('noMapToRename').'\';';
+		$ret[] = 'lang[\'noNewNameGiven\'] = \''.$this->LANG->getText('noNewNameGiven').'\';';
+		$ret[] = 'lang[\'mapAlreadyExists\'] = \''.$this->LANG->getText('mapAlreadyExists').'\';';
+		$ret[] = 'lang[\'foundNoMapToDelete\'] = \''.$this->LANG->getText('foundNoMapToDelete').'\';';
+		$ret[] = 'lang[\'foundNoMapToExport\'] = \''.$this->LANG->getText('foundNoMapToExport').'\';';
+		$ret[] = 'lang[\'foundNoMapToImport\'] = \''.$this->LANG->getText('foundNoMapToImport').'\';';
+		$ret[] = 'lang[\'notCfgFile\'] = \''.$this->LANG->getText('notCfgFile').'\';';
+		$ret[] = 'lang[\'confirmNewMap\'] = \''.$this->LANG->getText('confirmNewMap').'\';';
+		$ret[] = 'lang[\'confirmMapRename\'] = \''.$this->LANG->getText('confirmMapRename').'\';';
+		$ret[] = 'lang[\'confirmMapDeletion\'] = \''.$this->LANG->getText('confirmMapDeletion').'\';';
+		$ret[] = 'lang[\'unableToDeleteMap\'] = \''.$this->LANG->getText('unableToDeleteMap').'\';';
+		$ret[] = 'lang[\'noPermissions\'] = \''.$this->LANG->getText('noPermissions').'\';';
+		$ret[] = 'lang[\'minOneUserWriteAccess\'] = \''.$this->LANG->getText('minOneUserWriteAccess').'\';';
+		$ret[] = 'lang[\'noSpaceAllowed\'] = \''.$this->LANG->getText('noSpaceAllowed').'\';';
 		
 		return $ret;	
 	}

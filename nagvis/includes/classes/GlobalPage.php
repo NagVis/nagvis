@@ -253,8 +253,8 @@ class GlobalPage {
 		}
 		$ret .= '<table class="messageBox" cellpadding="2" cellspacing="2">';
 		$ret .= '<tr><th width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
-		$ret .= '</th><th>'.$id.': '.$LANG->getMessageTitle($id,$vars).'</th></tr>';
-		$ret .= '<tr><td colspan="2">'.$LANG->getMessageText($id,$vars).'</td></tr></table>';
+		$ret .= '</th><th>'.$id.': '.$LANG->getText($id,$vars).'</th></tr>';
+		$ret .= '<tr><td colspan="2">'.$LANG->getText($id,$vars).'</td></tr></table>';
 		if($serverity == 'ERROR') {
 			$ret .= '</td></tr></table>';
 		}

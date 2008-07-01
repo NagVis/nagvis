@@ -216,9 +216,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			
-			$this->mergeSummaryOutput($arrStates, $this->LANG->getLabel('hosts'));
+			$this->mergeSummaryOutput($arrStates, $this->LANG->getText('hosts'));
 		} else {
-			$this->summary_output = $this->LANG->getMessageText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+			$this->summary_output = $this->LANG->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
 		}
 	}
 }

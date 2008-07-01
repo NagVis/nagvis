@@ -71,13 +71,13 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~type', FALSE);
-		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			echo $LANG->getMessageText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id'], FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
+		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'])) {
+			echo $LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			echo $LANG->getMessageText('methodNotSupportedByBackend', 'METHOD~getObjects', FALSE);
+			echo $LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -102,13 +102,13 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} elseif(!isset($_GET['host_name']) || $_GET['host_name'] == '') {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~host_name', FALSE);
-		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			echo $LANG->getMessageText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id'], FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~host_name');
+		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'])) {
+			echo $LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			echo $LANG->getMessageText('methodNotSupportedByBackend', 'METHOD~getObjects', FALSE);
+			echo $LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -134,11 +134,11 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~map', FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
 		} elseif(!isset($_GET['mode']) || $_GET['mode'] == '') {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~mode', FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~mode');
 		} elseif($_GET['mode'] != 'read' && $_GET['mode'] != 'write') {
-			echo $LANG->getMessageText('accessModeIsNotValid', 'MODE~'.$_GET['mode'], FALSE);
+			echo $LANG->getText('accessModeIsNotValid', 'MODE~'.$_GET['mode']);
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -175,8 +175,8 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if((!isset($_GET['backend_type']) || $_GET['backend_type'] == '') && (!isset($_GET['backend_id']) || $_GET['backend_id'] == '')) {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_type', FALSE)."\n";
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_id', FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type')."\n";
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -213,7 +213,7 @@ switch($_GET['action']) {
 					$i++;
 				}
 			} else {
-				echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~backend_type', FALSE);
+				echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type');
 			}
 			echo ' ]';
 		}
@@ -227,7 +227,7 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['image']) || $_GET['image'] == '') {
-			echo $LANG->getMessageText('mustValueNotSet', 'ATTRIBUTE~image', FALSE);
+			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~image');
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -255,7 +255,7 @@ switch($_GET['action']) {
 	 * Fallback
 	 */
 	default:
-		echo $LANG->getMessageText('unknownAction', 'ACTION~'.$_GET['action'], FALSE);
+		echo $LANG->getText('unknownAction', 'ACTION~'.$_GET['action']);
 	break;
 }
 ?>

@@ -79,7 +79,7 @@ class WuiAddModify extends GlobalPage {
 		$this->addBodyLines($this->FORM->initForm());
 		$this->addBodyLines($this->getFields());
 		$this->addBodyLines($this->parseJs($this->fillFields()));
-		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getLabel('save')));
+		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getText('save')));
 		$this->addBodyLines($this->FORM->closeForm());
 		$this->addBodyLines($this->parseJs($this->resizeWindow(410,($this->propCount*30+80))));
 	}
@@ -168,7 +168,7 @@ class WuiAddModify extends GlobalPage {
 				$this->propCount++;
 			} elseif($propname == "recognize_services" || $propname == "only_hard_states" || $propname == "label_show" || $propname == "usegdlibs") {
 				// treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
-				$opt = Array(Array('label' => $this->LANG->getLabel('yes'),'value'=>'1'),Array('label' => $this->LANG->getLabel('no'),'value'=>'0'));
+				$opt = Array(Array('label' => $this->LANG->getText('yes'),'value'=>'1'),Array('label' => $this->LANG->getText('no'),'value'=>'0'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif($propname == "backend_id") {
@@ -409,17 +409,17 @@ class WuiAddModify extends GlobalPage {
 		$ret = Array();
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'var user = \''.$this->MAINCFG->getRuntimeValue('user').'\';';
-		$ret[] = 'lang[\'unableToWorkWithMap\'] = \''.$this->LANG->getMessageText('unableToWorkWithMap').'\';';
-		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getMessageText('mustValueNotSet').'\';';
-		$ret[] = 'lang[\'chosenLineTypeNotValid\'] = \''.$this->LANG->getMessageText('chosenLineTypeNotValid').'\';';
-		$ret[] = 'lang[\'onlyLineOrIcon\'] = \''.$this->LANG->getMessageText('onlyLineOrIcon').'\'';
-		$ret[] = 'lang[\'not2coordsX\'] = \''.$this->LANG->getMessageText('not2coords','','COORD=X').'\';';
-		$ret[] = 'lang[\'not2coordsY\'] = \''.$this->LANG->getMessageText('not2coords','','COORD=Y').'\';';
-		$ret[] = 'lang[\'only1or2coordsX\'] = \''.$this->LANG->getMessageText('only1or2coords','','COORD=X').'\';';
-		$ret[] = 'lang[\'only1or2coordsY\'] = \''.$this->LANG->getMessageText('only1or2coords','','COORD=Y').'\';';
-		$ret[] = 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=X').'\';';
-		$ret[] = 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getMessageText('lineTypeNotSelected','','COORD=Y').'\';';
-		$ret[] = 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getMessageText('loopInMapRecursion').'\';';
+		$ret[] = 'lang[\'unableToWorkWithMap\'] = \''.$this->LANG->getText('unableToWorkWithMap').'\';';
+		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getText('mustValueNotSet').'\';';
+		$ret[] = 'lang[\'chosenLineTypeNotValid\'] = \''.$this->LANG->getText('chosenLineTypeNotValid').'\';';
+		$ret[] = 'lang[\'onlyLineOrIcon\'] = \''.$this->LANG->getText('onlyLineOrIcon').'\'';
+		$ret[] = 'lang[\'not2coordsX\'] = \''.$this->LANG->getText('not2coords','','COORD=X').'\';';
+		$ret[] = 'lang[\'not2coordsY\'] = \''.$this->LANG->getText('not2coords','','COORD=Y').'\';';
+		$ret[] = 'lang[\'only1or2coordsX\'] = \''.$this->LANG->getText('only1or2coords','','COORD=X').'\';';
+		$ret[] = 'lang[\'only1or2coordsY\'] = \''.$this->LANG->getText('only1or2coords','','COORD=Y').'\';';
+		$ret[] = 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getText('lineTypeNotSelected','','COORD=X').'\';';
+		$ret[] = 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getText('lineTypeNotSelected','','COORD=Y').'\';';
+		$ret[] = 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getText('loopInMapRecursion').'\';';
 		
 		return $ret;
 	}

@@ -290,7 +290,7 @@ class WuiMapCfg extends GlobalMapCfg {
                         $LANG = new GlobalLanguage($this->MAINCFG,'nagvis');
                         
                         // message the user that there is a lock by another user, the user can decide wether he want's to override it or not
-                        print '<script>if(!confirm(\''.$LANG->getMessageText('mapLocked','MAP~'.$this->name.',TIME~'.date('d.m.Y H:i',$lockdata['time']).',USER~'.$lockdata['user'].',IP~'.$lockdata['ip']).'\',\'\')) { history.back(); }</script>';
+                        print '<script>if(!confirm(\''.$LANG->getText('mapLocked','MAP~'.$this->name.',TIME~'.date('d.m.Y H:i',$lockdata['time']).',USER~'.$lockdata['user'].',IP~'.$lockdata['ip']).'\',\'\')) { history.back(); }</script>';
     				}
         				return TRUE;
                 }
