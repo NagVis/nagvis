@@ -53,8 +53,8 @@ class NagVisInfoPage {
 		$infoPage  = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'."\n";
 		$infoPage .= '<html>'."\n";
 		$infoPage .= '   <head>'."\n";
-		$infoPage .= '      <title>'.$this->mainCfg->getValue('internal', 'title').'</title>'."\n";
-		$infoPage .= '      <style type="text/css"><!-- @import url('.$this->mainCfg->getValue('paths','htmlbase').'/nagvis/includes/css/style.css);  --></style>'."\n";
+		$infoPage .= '      <title>'.$this->MAINCFG->getValue('internal', 'title').'</title>'."\n";
+		$infoPage .= '      <style type="text/css"><!-- @import url('.$this->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css);  --></style>'."\n";
 		$infoPage .= '   </head>'."\n";
 		$infoPage .= '   <body class="main">'."\n";
 		$infoPage .= '      <div class="infopage">'."\n";
