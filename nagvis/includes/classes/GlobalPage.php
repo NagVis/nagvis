@@ -66,10 +66,12 @@ class GlobalPage {
 		$this->title = $prop['title'];
 		$this->cssIncludes = $prop['cssIncludes'];
 		$this->jsIncludes = $prop['jsIncludes'];
-		$this->extHeader .= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8">';
-		$this->extHeader .= '<title>'.$prop['title'].'</title>';
 		$this->allowedUsers = $prop['allowedUsers'];
 		$this->languageRoot = $prop['languageRoot'];
+		
+		// Append additional header informations
+		$this->extHeader .= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8">';
+		$this->extHeader .= '<title>'.$prop['title'].'</title>';
 		
 		$this->user = $this->getUser();
 		$this->MAINCFG->setRuntimeValue('user',$this->user);
