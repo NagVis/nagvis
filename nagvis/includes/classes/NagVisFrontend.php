@@ -34,6 +34,7 @@ class NagVisFrontend extends GlobalPage {
 	var $MAP;
 	
 	var $headerTemplate;
+	var $htmlBase;
 	
 	/**
 	 * Class Constructor
@@ -49,12 +50,13 @@ class NagVisFrontend extends GlobalPage {
 		$this->BACKEND = &$BACKEND;
 		
 		$this->LANG = new GlobalLanguage($MAINCFG, 'nagvis');
-		$htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
+		
+		$this->htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
 		
 		$prop['title'] = $MAINCFG->getValue('internal', 'title');
-		$prop['cssIncludes'] = Array($htmlBase.'/nagvis/includes/css/style.css');
-		$prop['jsIncludes'] = Array($htmlBase.'/nagvis/includes/js/nagvis.js',$htmlBase.'/nagvis/includes/js/overlib.js',$htmlBase.'/nagvis/includes/js/dynfavicon.js',$htmlBase.'/nagvis/includes/js/ajax.js',$htmlBase.'/nagvis/includes/js/hover.js');
-		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$htmlBase.'/nagvis/images/internal/favicon.png">';
+		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css');
+		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js', $this->htmlBase.'/nagvis/includes/js/overlib.js', $this->htmlBase.'/nagvis/includes/js/dynfavicon.js', $this->htmlBase.'/nagvis/includes/js/ajax.js', $this->htmlBase.'/nagvis/includes/js/hover.js');
+		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';
 		$prop['languageRoot'] = 'nagvis';
 		
 		// Only do this, when a map needs to be displayed
@@ -119,9 +121,9 @@ class NagVisFrontend extends GlobalPage {
 							$class = '';
 							
 							if($mapName == '__automap') {
-								$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
+								$onClick = 'location.href=\''.$this->htmlBase.'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
 							} else {
-								$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?map='.$mapName.'\';';
+								$onClick = 'location.href=\''.$this->htmlBase.'/index.php?map='.$mapName.'\';';
 							}
 							
 							$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
@@ -181,7 +183,7 @@ class NagVisFrontend extends GlobalPage {
 				$ret .= '<tr><th>'.$this->LANG->getLabel('rotationPools').'</th></tr>';
 				foreach($this->getRotationPools() AS $poolName) {
 					// Form the onClick action
-					$onClick = 'location.href=\''.$this->MAINCFG->getValue('paths','htmlbase').'/index.php?rotation='.$poolName.'\';';
+					$onClick = 'location.href=\''.$this->htmlBase.'/index.php?rotation='.$poolName.'\';';
 					
 					// Now form the HTML code for the cell
 					$ret .= '<tr><td onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
@@ -364,7 +366,7 @@ class NagVisFrontend extends GlobalPage {
 					$ret = str_replace('[current_map]',$this->MAPCFG->getName(),$ret);
 					$ret = str_replace('[current_map_alias]',$this->MAPCFG->getValue('global', '0', 'alias'),$ret);
 				}
-				$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
+				$ret = str_replace('[html_base]',$this->htmlBase,$ret);
 				$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlheadertemplates'),$ret);
 				$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlheadertemplateimages'),$ret);
 				// Replace language macros
