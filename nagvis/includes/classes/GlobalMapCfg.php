@@ -606,8 +606,8 @@ class GlobalMapCfg {
 	 */
 	function createMapConfig() {
 		// does file exists?
-		if(!$this->checkMapConfigReadable(0)) {
-			if($this->MAINCFG->checkMapCfgFolderWriteable(1)) {
+		if(!$this->checkMapConfigReadable(FALSE)) {
+			if($this->MAINCFG->checkMapCfgFolderWriteable(TRUE)) {
 				// create empty file
 				$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', 'w');
 				fclose($fp); 
@@ -632,7 +632,7 @@ class GlobalMapCfg {
 	 */
 	function readMapConfig($onlyGlobal = 0) {
 		if($this->name != '') {
-			if($this->checkMapConfigReadable(1)) {
+			if($this->checkMapConfigExists(TRUE) && $this->checkMapConfigReadable(TRUE)) {
 				$this->mapConfig = Array();
 				// Array for counting objects
 				$types = Array('global' => 0,
@@ -816,7 +816,7 @@ class GlobalMapCfg {
 	 */
 	function checkMapConfigReadable($printErr) {
 		if($this->name != '') {
-			if($this->checkMapConfigExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+			if(is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
@@ -953,7 +953,6 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function addElement($type,$properties) {
-		//$elementId = (count($this->getDefinitions($type))+1);
 		$this->mapConfig[$type][] = $properties;
 		return count($this->mapConfig[$type])-1;
 	}
