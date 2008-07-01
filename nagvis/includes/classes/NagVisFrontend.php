@@ -33,27 +33,40 @@ class NagVisFrontend extends GlobalPage {
 	
 	var $MAP;
 	
+	var $headerTemplate;
+	
 	/**
 	 * Class Constructor
 	 *
 	 * @param 	GlobalMainCfg 	$MAINCFG
-	 * @param 	GlobalMapCfg 	$MAPCFG
-	 * @param 	GlobalBackend 	$BACKENDMAPCFG
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisFrontend(&$MAINCFG,&$MAPCFG,&$BACKEND) {
+	function NagVisFrontend(&$MAINCFG,&$MAPCFG = '',&$BACKEND = '') {
+		$prop = Array();
+		
 		$this->MAINCFG = &$MAINCFG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
+		
 		$this->LANG = new GlobalLanguage($MAINCFG, 'nagvis');
 		$htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
-		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
-						'cssIncludes'=>Array($htmlBase.'/nagvis/includes/css/style.css'),
-						'jsIncludes'=>Array($htmlBase.'/nagvis/includes/js/nagvis.js',$htmlBase.'/nagvis/includes/js/overlib.js',$htmlBase.'/nagvis/includes/js/dynfavicon.js',$htmlBase.'/nagvis/includes/js/ajax.js',$htmlBase.'/nagvis/includes/js/hover.js'),
-						'extHeader'=>Array('<link rel="shortcut icon" href="'.$htmlBase.'/nagvis/images/internal/favicon.png">',
-											'<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>'),
-						'allowedUsers'=> $this->MAPCFG->getValue('global',0, 'allowed_user'),
-						'languageRoot' => 'nagvis:global');
+		
+		$prop['title'] = $MAINCFG->getValue('internal', 'title');
+		$prop['cssIncludes'] = Array($htmlBase.'/nagvis/includes/css/style.css');
+		$prop['jsIncludes'] = Array($htmlBase.'/nagvis/includes/js/nagvis.js',$htmlBase.'/nagvis/includes/js/overlib.js',$htmlBase.'/nagvis/includes/js/dynfavicon.js',$htmlBase.'/nagvis/includes/js/ajax.js',$htmlBase.'/nagvis/includes/js/hover.js');
+		$prop['extHeader'] = Array('<link rel="shortcut icon" href="'.$htmlBase.'/nagvis/images/internal/favicon.png">');
+		$prop['languageRoot'] = 'nagvis';
+		
+		// Only do this, when a map needs to be displayed
+		if($this->MAPCFG != '') {
+			$this->headerTemplate = $this->MAPCFG->getValue('global', 0, 'header_template');
+			
+			$prop['extHeader'][1] = '<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>';
+			$prop['allowedUsers'] = $this->MAPCFG->getValue('global',0, 'allowed_user');
+		} else {
+			$this->headerTemplate = $this->MAINCFG->getValue('defaults', 'headertemplate');
+		}
+		
 		parent::GlobalPage($this->MAINCFG,$prop);
 	}
 	
@@ -344,11 +357,13 @@ class NagVisFrontend extends GlobalPage {
 	function getHeaderMenu() {
 		if($this->MAINCFG->getValue('global', 'displayheader') == '1') {
 			if($this->checkHeaderTemplateReadable(1)) {
-				$ret = file_get_contents($this->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+				$ret = file_get_contents($this->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->headerTemplate.'.html');
 				
 				// Replace some macros
-				$ret = str_replace('[current_map]',$this->MAPCFG->getName(),$ret);
-				$ret = str_replace('[current_map_alias]',$this->MAPCFG->getValue('global', '0', 'alias'),$ret);
+				if($this->MAP != '') {
+					$ret = str_replace('[current_map]',$this->MAPCFG->getName(),$ret);
+					$ret = str_replace('[current_map_alias]',$this->MAPCFG->getValue('global', '0', 'alias'),$ret);
+				}
 				$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
 				$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlheadertemplates'),$ret);
 				$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlheadertemplateimages'),$ret);
@@ -387,7 +402,7 @@ class NagVisFrontend extends GlobalPage {
 									}
 									
 									// auto select current map
-									if($mapName == $this->MAPCFG->getName() || ($mapName == '__automap' && isset($_GET['automap']))) {
+									if($this->MAP != '' && $mapName == $this->MAPCFG->getName() || ($mapName == '__automap' && isset($_GET['automap']))) {
 										$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
 									} else {
 										$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
@@ -414,12 +429,12 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHeaderTemplateExists($printErr) {
-		if(file_exists($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
+		if(file_exists($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html')) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('WARNING','headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+				$FRONTEND->messageToUser('WARNING','headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html');
 			}
 			return FALSE;
 		}
@@ -433,12 +448,12 @@ class NagVisFrontend extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHeaderTemplateReadable($printErr) {
-		if($this->checkHeaderTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html')) {
+		if($this->checkHeaderTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html')) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('WARNING','headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->MAPCFG->getValue('global', 0, 'header_template').'.html');
+				$FRONTEND->messageToUser('WARNING','headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html');
 			}
 			return FALSE;
 		}
