@@ -38,7 +38,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @param 	GlobalMainCfg 	$MAINCFG
 	 * @param 	GlobalMapCfg 	$MAPCFG
-	 * @param 	GlobalBackend 	$BACKEND
+	 * @param 	GlobalBackend 	$BACKENDMAPCFG
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function NagVisFrontend(&$MAINCFG,&$MAPCFG,&$BACKEND) {
@@ -138,7 +138,7 @@ class NagVisFrontend extends GlobalPage {
 					$ret .= '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.strtr(addslashes($summaryOutput),Array('"' => '\'', "\r" => '', "\n" => '')).'</td></tr></table>\');" onClick="'.$onClick.'">';
 					$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
 					$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-					if($this->MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
+					if($MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
 						$ret .= '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
 					} else {
 						$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
