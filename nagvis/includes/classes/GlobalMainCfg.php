@@ -28,7 +28,10 @@
 class GlobalMainCfg {
 	var $config;
 	var $runtimeConfig;
+	
 	var $configFile;
+	var $cacheFile;
+	
 	var $validConfig;
 	
 	/**
@@ -336,9 +339,27 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
 		
-		// Read Main Config file
+		// Define the main configuration cache file
+		$this->cacheFile = $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache';
+		
+		// Define the main configuration file
 		$this->configFile = $configFile;
-		$this->readConfig(1);
+		
+		// Do preflight checks
+		if(!$this->checkNagVisConfigExists(TRUE) || !$this->checkNagVisConfigReadable(TRUE) || !$this->checkCacheFileReadable(TRUE)) {
+			return FALSE;
+		}
+		
+		// Only proceed when the configuration file exists and is readable
+		if($this->isCached(FALSE)) {
+			$this->readConfigFromCache();
+		} else {
+			// Read Main Config file
+			$this->readConfig(TRUE);
+			
+			// Cache the resulting config
+			$this->writeConfigToCache(TRUE);
+		}
 		
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
@@ -401,88 +422,83 @@ class GlobalMainCfg {
 		$numComments = 0;
 		$sec = '';
 		
-		// Check for config file and read permissions
-		if($this->checkNagVisConfigExists($printErr) && $this->checkNagVisConfigReadable($printErr)) {
-			// read thx config file line by line in array $file
-			$file = file($this->configFile);
+		// read thx config file line by line in array $file
+		$file = file($this->configFile);
+		
+		// Count the lines before the loop (only counts once)
+		$countLines = count($file);
+		
+		// loop trough array
+		for ($i = 0; $i < $countLines; $i++) {
+			// cut spaces from beginning and end
+			$line = trim($file[$i]);
 			
-			// Count the lines before the loop (only counts once)
-			$countLines = count($file);
-			
-			// loop trough array
-			for ($i = 0; $i < $countLines; $i++) {
-				// cut spaces from beginning and end
-				$line = trim($file[$i]);
+			// don't read empty lines
+			if(isset($line) && $line != '') {
+				// get first char of actual line
+				$firstChar = substr($line,0,1);
 				
-				// don't read empty lines
-				if(isset($line) && $line != '') {
-					// get first char of actual line
-					$firstChar = substr($line,0,1);
+				// check what's in this line
+				if($firstChar == ';') {
+					// comment...
+					$key = 'comment_'.($numComments++);
+					$val = trim($line);
 					
-					// check what's in this line
-					if($firstChar == ';') {
-						// comment...
-						$key = 'comment_'.($numComments++);
-						$val = trim($line);
-						
-						if(isset($sec) && $sec != '') {
-							$this->config[$sec][$key] = $val;
-						} else {
-							$this->config[$key] = $val;
-						}
-					} elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
-						// section
-						$sec = strtolower(trim(substr($line, 1, strlen($line)-2)));
-						
-						// write to array
-						if(preg_match('/^backend_/i', $sec)) {
-							$this->config[$sec] = Array();
-							$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
-						} elseif(preg_match('/^rotation_/i', $sec)) {
-							$this->config[$sec] = Array();
-							$this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
-						} else {
-							$this->config[$sec] = Array();
-						}
+					if(isset($sec) && $sec != '') {
+						$this->config[$sec][$key] = $val;
 					} else {
-						// parameter...
-						
-						// seperate string in an array
-						$arr = explode('=',$line);
-						// read key from array and delete it
-						$key = strtolower(trim($arr[0]));
-						unset($arr[0]);
-						// build string from rest of array
-						$val = trim(implode('=', $arr));
-						
-						// remove " at beginign and at the end of the string
-						if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
-							$val = substr($val,1,strlen($val)-2);
-						}
-						
-						// Special options (Arrays)
-						if($sec == 'wui' && $key == 'allowedforconfig') {
-							$val = explode(',', str_replace(' ','',$val));
-						}
-						
-						// write in config array
-						if(isset($sec)) {
-							$this->config[$sec][$key] = $val;
-						} else {
-							$this->config[$key] = $val;
-						}
+						$this->config[$key] = $val;
+					}
+				} elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
+					// section
+					$sec = strtolower(trim(substr($line, 1, strlen($line)-2)));
+					
+					// write to array
+					if(preg_match('/^backend_/i', $sec)) {
+						$this->config[$sec] = Array();
+						$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
+					} elseif(preg_match('/^rotation_/i', $sec)) {
+						$this->config[$sec] = Array();
+						$this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
+					} else {
+						$this->config[$sec] = Array();
 					}
 				} else {
-					$sec = '';
-					$this->config['comment_'.($numComments++)] = '';
+					// parameter...
+					
+					// seperate string in an array
+					$arr = explode('=',$line);
+					// read key from array and delete it
+					$key = strtolower(trim($arr[0]));
+					unset($arr[0]);
+					// build string from rest of array
+					$val = trim(implode('=', $arr));
+					
+					// remove " at beginign and at the end of the string
+					if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
+						$val = substr($val,1,strlen($val)-2);
+					}
+					
+					// Special options (Arrays)
+					if($sec == 'wui' && $key == 'allowedforconfig') {
+						$val = explode(',', str_replace(' ','',$val));
+					}
+					
+					// write in config array
+					if(isset($sec)) {
+						$this->config[$sec][$key] = $val;
+					} else {
+						$this->config[$key] = $val;
+					}
 				}
-			}
-			
-			if($this->checkMainConfigIsValid(1)) {
-				return TRUE;
 			} else {
-				return FALSE;
+				$sec = '';
+				$this->config['comment_'.($numComments++)] = '';
 			}
+		}
+		
+		if($this->checkMainConfigIsValid(1)) {
+			return TRUE;
 		} else {
 			return FALSE;
 		}
@@ -574,8 +590,8 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function writeConfig() {
-		// Check for config file and read permissions
-		if($this->checkNagVisConfigReadable(1) && $this->checkNagVisConfigWriteable(1)) {
+		// Check for config file write permissions
+		if($this->checkNagVisConfigWriteable(1)) {
 			foreach($this->config as $key => &$item) {
 				if(is_array($item)) {
 					$content .= '['.$key.']'."\n";
@@ -672,7 +688,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkNagVisConfigWriteable($printErr) {
-		if($this->checkNagVisConfigExists($printErr) && is_writeable($this->configFile)) {
+		if(is_writeable($this->configFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
@@ -719,6 +735,116 @@ class GlobalMainCfg {
 			}
 			return FALSE;
 		}
+	}
+	
+	/**
+	 * Checks for existing cache
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkCacheFileExists($printErr) {
+		if(file_exists($this->cacheFile)) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR','mainCfgCacheNotExists','FILE~'.$this->cacheFile);
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for readable cache file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkCacheFileReadable($printErr) {
+		if(is_readable($this->configFile)) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR','mainCfgCacheNotReadable','FILE~'.$this->cacheFile);
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Returns the last modification time of the configuration file
+	 *
+	 * @return	Integer	Unix Timestamp
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getConfigFileAge() {
+		return filemtime($this->configFile);
+	}
+	
+	/**
+	 * Returns the last modification time of the cache file
+	 *
+	 * @return	Integer	Unix Timestamp
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getCacheFileAge() {
+		return filemtime($this->cacheFile);
+	}
+	
+	/**
+	 * Checks if the current configuration file has been cached
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function isCached($printErr) {
+		// Check the modification date
+		if($this->checkCacheFileExists($printErr) && $this->getConfigFileAge() <= $this->getCacheFileAge()) {
+			return TRUE;
+		} else {
+			if($printErr) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR','mainCfgNotCached','CFONFIGFILE~'.$this->configFile.',CACHEFILE~'.$this->cacheFile);
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Writes the current config array to cache file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function writeConfigToCache($printErr) {
+		if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR','mainCfgCacheNotWriteable','FILE~'.$this->cacheFile);
+			}
+			return FALSE;
+		}
+		
+		fwrite($fp, serialize($this->config));
+		fclose($fp);
+		
+		return TRUE;
+	}
+	
+	/**
+	 * Reads the configuration array from the cache file
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function readConfigFromCache() {
+		$this->config = unserialize(file_get_contents($this->cacheFile));
+		return TRUE;
 	}
 	
 	/**
