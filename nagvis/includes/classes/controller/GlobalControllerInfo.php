@@ -34,8 +34,17 @@ class GlobalControllerInfo {
 		// Load the main configuration
 		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
-		// Build and view the information page
-		print new NagVisInfoPage($MAINCFG);
+		// Initialize the frontend
+		$FRONTEND = new NagVisFrontend($MAINCFG);
+
+		// Build the page
+		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
+		$FRONTEND->getHeaderMenu();
+		$FRONTEND->addBodyLines(new NagVisInfoPage($MAINCFG));
+		$FRONTEND->getMessages();
+
+		// Print the page
+		$FRONTEND->printPage();
 	}
 }
 ?>
