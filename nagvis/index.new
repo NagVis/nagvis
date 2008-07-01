@@ -3,7 +3,8 @@
  *
  * index.php - Main page of NagVis
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de, michael_luebben@web.de)
+ * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de, 
+ *                                                   michael_luebben@web.de)
  *
  * License:
  *
@@ -33,29 +34,18 @@ require("./includes/defines/matches.php");
 require("./includes/functions/debug.php");
 require("./includes/functions/oldPhpVersionFixes.php");
 
-/**
- * Load required files
- *
- * @param	string	$class
- * @author  Michael Luebben <michael_luebben@web.de>
- */
+// Function for loading required files
 function __autoload($class) {
-	require("${class}.php");
+	require($class.'.php');
 }
 
-/**
- * Sets the path where we will look for files when they
- * are requested.
- *
- * @author  Michael Luebben <michael_luebben@web.de>
- */
-set_include_path(
-	get_include_path()
-	.PATH_SEPARATOR."./includes/classes/"
-	.PATH_SEPARATOR."./includes/classes/objects/"
-	.PATH_SEPARATOR."./includes/classes/controller/"
-	.PATH_SEPARATOR."./includes/classes/validator/"
-	.PATH_SEPARATOR."./includes/classes/httpRequest/"
+// Add NagVis class paths to PHP include_path
+set_include_path(get_include_path()
+	.PATH_SEPARATOR.'./includes/classes/'
+	.PATH_SEPARATOR.'./includes/classes/objects/'
+	.PATH_SEPARATOR.'./includes/classes/controller/'
+	.PATH_SEPARATOR.'./includes/classes/validator/'
+	.PATH_SEPARATOR.'./includes/classes/httpRequest/'
 );
 
 $controller = new GlobalController();
