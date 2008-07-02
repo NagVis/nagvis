@@ -837,7 +837,7 @@ class GlobalBackendndomy {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				sg.alias
+				o.object_id, sg.alias
 			FROM 
 				'.$this->dbPrefix.'objects AS o,
 				'.$this->dbPrefix.'servicegroups AS sg
@@ -849,6 +849,7 @@ class GlobalBackendndomy {
 		$data = mysql_fetch_array($QUERYHANDLE);
 		
 		$arrReturn['alias'] = $data['alias'];
+		$arrReturn['object_id'] = $data['object_id'];
 		
 		return $arrReturn;
 	}
@@ -866,7 +867,7 @@ class GlobalBackendndomy {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				g.alias
+				o.object_id, g.alias
 			FROM 
 				'.$this->dbPrefix.'objects AS o,
 				'.$this->dbPrefix.'hostgroups AS g
@@ -878,6 +879,7 @@ class GlobalBackendndomy {
 		$data = mysql_fetch_array($QUERYHANDLE);
 		
 		$arrReturn['alias'] = $data['alias'];
+		$arrReturn['object_id'] = $data['object_id'];
 		
 		return $arrReturn;
 	}
