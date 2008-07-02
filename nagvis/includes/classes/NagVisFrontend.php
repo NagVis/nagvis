@@ -133,36 +133,31 @@ class NagVisFrontend extends GlobalPage {
 							$onClick = 'alert(\''.$this->LANG->getText('mapInMaintenance').'\');';
 							$summaryOutput = $this->LANG->getText('mapInMaintenance');
 						}
-					} else {
-						$class = 'class="disabled"';
 						
-						$onClick = 'alert(\''.$this->LANG->getText('noReadPermissions').'\');';
-						$summaryOutput = $this->LANG->getText('noReadPermissions');
+						// If this is the automap display the last rendered image
+						if($mapName == '__automap') {
+							$imgPath = $this->MAINCFG->getValue('paths','var').'automap.png';
+							$imgPathHtml = $this->MAINCFG->getValue('paths','htmlvar').'automap.png';
+						} else {
+							$imgPath = $this->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
+							$imgPathHtml = $this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+						}
+						
+						// Now form the cell with it's contents
+						$ret .= '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.strtr(addslashes($summaryOutput),Array('"' => '\'', "\r" => '', "\n" => '')).'</td></tr></table>\');" onClick="'.$onClick.'">';
+						$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
+						$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
+						if($MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
+							$ret .= '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
+						} else {
+							$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
+						}
+						$ret .= '</td>';
+						if($i % 4 == 0) {
+								$ret .= '</tr><tr>';
+						}
+						$i++;
 					}
-					
-					// If this is the automap display the last rendered image
-					if($mapName == '__automap') {
-						$imgPath = $this->MAINCFG->getValue('paths','var').'automap.png';
-						$imgPathHtml = $this->MAINCFG->getValue('paths','htmlvar').'automap.png';
-					} else {
-						$imgPath = $this->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
-						$imgPathHtml = $this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
-					}
-					
-					// Now form the cell with it's contents
-					$ret .= '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.strtr(addslashes($summaryOutput),Array('"' => '\'', "\r" => '', "\n" => '')).'</td></tr></table>\');" onClick="'.$onClick.'">';
-					$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
-					$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-					if($MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
-						$ret .= '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
-					} else {
-						$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
-					}
-					$ret .= '</td>';
-					if($i % 4 == 0) {
-							$ret .= '</tr><tr>';
-					}
-					$i++;
 				}
 			}
 			// Fill table with empty cells if there are not enough maps to get the line filled
