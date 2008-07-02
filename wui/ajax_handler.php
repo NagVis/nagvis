@@ -75,7 +75,7 @@ switch($_GET['action']) {
 			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
 			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
-		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'])) {
+		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
 			echo $LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
 			echo $LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
@@ -106,7 +106,7 @@ switch($_GET['action']) {
 			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} elseif(!isset($_GET['host_name']) || $_GET['host_name'] == '') {
 			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~host_name');
-		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'])) {
+		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
 			echo $LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
 			echo $LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
