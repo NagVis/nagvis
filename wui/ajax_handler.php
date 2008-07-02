@@ -34,6 +34,7 @@ require("../nagvis/includes/defines/matches.php");
 
 // Include functions
 require("../nagvis/includes/functions/debug.php");
+require("../includes/functions/ajaxErrorHandler.php");
 
 // Include needed global classes
 require("../nagvis/includes/classes/GlobalMainCfg.php");
