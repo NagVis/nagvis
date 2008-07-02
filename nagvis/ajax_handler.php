@@ -201,6 +201,30 @@ switch($_GET['action']) {
 			}
 		}
 	break;
+	case 'getMapState':
+		if(!isset($_GET['map']) || $_GET['map'] == '') {
+			// FIXME: Error handling
+			echo 'Error: Parameter "map" not set';
+		} elseif($_GET['map'] == '__automap') {
+			// FIXME: Error handling
+			echo 'Error: Automap not supported here';
+		} else {
+			// Initialize map configuration
+			$MAPCFG = new NagVisMapCfg($MAINCFG, $_GET['map']);
+			$MAPCFG->readMapConfig();
+			
+			// Initialize language
+			$LANG = new GlobalLanguage($MAINCFG, 'nagvis');
+			
+			// Initialize backends
+			$BACKEND = new GlobalBackendMgmt($MAINCFG);
+			
+			$MAP = new NagVisMap($MAINCFG, $MAPCFG, $LANG, $BACKEND);
+			
+			$retArr = Array('summarState' => $MAP->MAPOBJ->getSummaryState(),'summaryOutput' => $MAP->MAPOBJ->getSummaryOutput());
+			echo json_encode($retArr);
+		}
+	break;
 	default:
 		echo 'Error: Unknown query';
 	break;
