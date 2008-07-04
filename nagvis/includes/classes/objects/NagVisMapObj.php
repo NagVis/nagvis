@@ -36,6 +36,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	var $objects;
 	var $linkedMaps;
 	
+	var $object_id;
 	var $map_name;
 	var $alias;
 	
@@ -48,6 +49,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 	var $summary_output;
 	var $summary_problem_has_been_acknowledged;
 	var $summary_in_downtime;
+	
+	// When this map object summarizes the state of a map this is true
+	var $is_summary_object;
 	
 	/**
 	 * Class constructor
@@ -71,9 +75,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->objects = Array();
 		$this->linkedMaps = Array();
 		
+		// Crapy way to get an object ID for a map - got a better idea?
+		$this->object_id = rand(0,1000);
+		
 		$this->state = '';
 		$this->summary_state = '';
 		$this->has_been_acknowledged = 0;
+		
+		$this->is_summary_object = FALSE;
 		
 		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
 	}
@@ -115,7 +124,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// Get all services of member host
 		foreach($this->getMapObjects() AS $OBJ) {
-			$OBJ->fetchMembers();
+			// Only get the next childs when this is no loop
+			if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->MAPCFG->getName() != $OBJ->MAPCFG->getName())) {
+				$OBJ->fetchMembers();
+			} else {
+				$OBJ->is_summary_object = TRUE;
+			}
 		}
 	}
 	
@@ -190,8 +204,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
 			foreach($this->getMapObjects() AS $OBJ) {
-				if(method_exists($OBJ,'getSummaryState')) {
-					$arrStates[$OBJ->getSummaryState()]++;
+				// Don't reconize summarize map objects
+				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && !$OBJ->is_summary_object)) {
+					if(method_exists($OBJ,'getSummaryState')) {
+						$arrStates[$OBJ->getSummaryState()]++;
+					}
 				}
 			}
 			
@@ -210,6 +227,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 		foreach($this->MAPCFG->validConfig AS $type => &$arr) {
 			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
 				foreach($objs AS $index => &$objConf) {
+					$OBJ = '';
+					
 					// workaround
 					$objConf['id'] = $index;
 					
@@ -262,7 +281,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 					
 					// Write member to object array
 					$this->objects[] = $OBJ;
-					
 				}
 			}
 		}
@@ -279,46 +297,20 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkLoop(&$OBJ) {
-		// prevent direct loops (map including itselfes as map icon)
-		if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
-			$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
-			$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
+		// No direct loop, now check the harder one: indirect loop
+		// Also check for permissions to view the state of the map
+		
+		// Check for valid permissions
+		if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
 			
+			// This is just a fallback if the above loop is not looped when there
+			// are no child maps on this map
+			return TRUE;
+		} else {
 			$OBJ->summary_state = 'UNKNOWN';
-			$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
+			$OBJ->summary_output = $this->LANG->getText('noReadPermissions');
 			
 			return FALSE;
-		} else {
-			// No direct loop, now check the harder one: indirect loop
-			// Also check for permissions to view the state of the map
-			
-			// Check for valid permissions
-			if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
-				
-				// Loop all objects on the child map to find out if there is a link back to this map (loop)
-				foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
-					if($this->MAPCFG->getName() == $arrChildMap['map_name']) {
-						$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
-						$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
-						
-						$OBJ->summary_state = 'UNKNOWN';
-						$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
-						
-						return FALSE;
-					} else {
-						return TRUE;
-					}
-				}
-				
-				// This is just a fallback if the above loop is not looped when there
-				// are no child maps on this map
-				return TRUE;
-			} else {
-				$OBJ->summary_state = 'UNKNOWN';
-				$OBJ->summary_output = $this->LANG->getText('noReadPermissions');
-				
-				return FALSE;
-			}
 		}
 	}
 	
@@ -387,7 +379,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createLink() {
-		
 		if(isset($this->url) && $this->url != '') {
 			$link = parent::createLink();
 		} else {
@@ -407,8 +398,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if($this->hasObjects()) {
 			// Get summary state member objects
 			foreach($this->getMapObjects() AS $OBJ) {
-				if(method_exists($OBJ,'getSummaryState')) {
-					$this->wrapChildState($OBJ);
+				// Don't reconize summarize map objects
+				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && !$OBJ->is_summary_object)) {
+					if(method_exists($OBJ,'getSummaryState')) {
+						$this->wrapChildState($OBJ);
+					}
 				}
 			}
 		} else {
