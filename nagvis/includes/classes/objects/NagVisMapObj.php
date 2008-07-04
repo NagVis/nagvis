@@ -149,9 +149,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 		foreach($this->getMapObjects() AS $OBJ) {
 			// Only get the next childs when this is no loop
 			if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->MAPCFG->getName() != $OBJ->MAPCFG->getName())) {
-				// Don't get state from textboxes and shapes
-				if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
-					$OBJ->fetchState();
+				// Check for indirect loop when this is a map object
+				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->checkLoop($OBJ))) {
+					// Don't get state from textboxes and shapes
+					if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
+						$OBJ->fetchState();
+					}
 				}
 			}
 			
@@ -217,7 +220,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			
 			$this->mergeSummaryOutput($arrStates, $this->LANG->getText('objects'));
 		} else {
-			$this->summary_output .= $this->LANG->getText('mapIsEmpty','MAP~'.$this->getName());
+			$this->summary_output = $this->LANG->getText('mapIsEmpty','MAP~'.$this->getName());
 		}
 	}
 	
