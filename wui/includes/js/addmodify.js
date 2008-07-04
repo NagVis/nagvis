@@ -117,13 +117,9 @@ function check_object() {
 			}		
 			
 			if(document.addmodify.elements[i].value != '') {
-				// Prevent direct loop in map recursion
+				// Print a note to the user: This map object will display the summary state of the current map
 				if(document.addmodify.type.value == "map" && document.addmodify.elements[i].name == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
-					// LOOP!
-					alert(printLang(lang['loopInMapRecursion'],''));
-					document.addmodify.properties.value='';
-					document.addmodify.elements[i].focus();
-					return false;
+					alert(printLang(lang['mapObjectWillShowSummaryState'],''));
 				}
 				
 				if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {

@@ -413,13 +413,14 @@ class WuiAddModify extends GlobalPage {
 		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getText('mustValueNotSet').'\';';
 		$ret[] = 'lang[\'chosenLineTypeNotValid\'] = \''.$this->LANG->getText('chosenLineTypeNotValid').'\';';
 		$ret[] = 'lang[\'onlyLineOrIcon\'] = \''.$this->LANG->getText('onlyLineOrIcon').'\'';
-		$ret[] = 'lang[\'not2coordsX\'] = \''.$this->LANG->getText('not2coords','','COORD=X').'\';';
-		$ret[] = 'lang[\'not2coordsY\'] = \''.$this->LANG->getText('not2coords','','COORD=Y').'\';';
-		$ret[] = 'lang[\'only1or2coordsX\'] = \''.$this->LANG->getText('only1or2coords','','COORD=X').'\';';
-		$ret[] = 'lang[\'only1or2coordsY\'] = \''.$this->LANG->getText('only1or2coords','','COORD=Y').'\';';
-		$ret[] = 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getText('lineTypeNotSelected','','COORD=X').'\';';
-		$ret[] = 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getText('lineTypeNotSelected','','COORD=Y').'\';';
+		$ret[] = 'lang[\'not2coordsX\'] = \''.$this->LANG->getText('not2coords','COORD~X').'\';';
+		$ret[] = 'lang[\'not2coordsY\'] = \''.$this->LANG->getText('not2coords','COORD~Y').'\';';
+		$ret[] = 'lang[\'only1or2coordsX\'] = \''.$this->LANG->getText('only1or2coords','COORD~X').'\';';
+		$ret[] = 'lang[\'only1or2coordsY\'] = \''.$this->LANG->getText('only1or2coords','COORD~Y').'\';';
+		$ret[] = 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~X').'\';';
+		$ret[] = 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~Y').'\';';
 		$ret[] = 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getText('loopInMapRecursion').'\';';
+		$ret[] = 'lang[\'mapObjectWillShowSummaryState\'] = \''.$this->LANG->getText('mapObjectWillShowSummaryState').'\';';
 		
 		return $ret;
 	}
