@@ -616,8 +616,11 @@ class NagVisObject {
 		// Loop all child object until all looped or the child limit is reached
 		for($i = 0; $i <= $this->hover_childs_limit && $i < $numObjects; $i++) {
 			if($i < $this->hover_childs_limit) {
-				if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
-					$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1, $parent).'}, ';
+				// Only get the next childs when this is no loop
+				if($arrObjects[$i]->getType() != 'map' || ($arrObjects[$i]->getType() == 'map' && $this->MAPCFG->getName() != $arrObjects[$i]->MAPCFG->getName())) {
+					if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
+						$ret .= '{'.$arrObjects[$i]->getHoverTemplateReplacements(1, $parent).'}, ';
+					}
 				}
 			} else {
 				$numRemaining = $numObjects - $this->hover_childs_limit;

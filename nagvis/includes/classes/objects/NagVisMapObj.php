@@ -126,7 +126,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 		foreach($this->getMapObjects() AS $OBJ) {
 			// Only get the next childs when this is no loop
 			if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->MAPCFG->getName() != $OBJ->MAPCFG->getName())) {
-				$OBJ->fetchMembers();
+				// Check for indirect loop when this is a map object
+				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->checkLoop($OBJ))) {
+					$OBJ->fetchMembers();
+				}
 			} else {
 				$OBJ->is_summary_object = TRUE;
 			}
@@ -144,8 +147,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function fetchState() {
 		// Get state of all member objects
 		foreach($this->getMapObjects() AS $OBJ) {
-			// Before getting state of maps we have to check if there is a loop in the maps
-			if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->checkLoop($OBJ))) {
+			// Only get the next childs when this is no loop
+			if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->MAPCFG->getName() != $OBJ->MAPCFG->getName())) {
 				// Don't get state from textboxes and shapes
 				if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
 					$OBJ->fetchState();
@@ -302,6 +305,20 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// Check for valid permissions
 		if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
+			// Loop all objects on the child map to find out if there is a link back to this map (loop)
+			foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
+				if($this->MAPCFG->getName() == $arrChildMap['map_name']) {
+					$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
+					$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
+					
+					$OBJ->summary_state = 'UNKNOWN';
+					$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
+					
+					return FALSE;
+				} else {
+					return TRUE;
+				}
+			}
 			
 			// This is just a fallback if the above loop is not looped when there
 			// are no child maps on this map
