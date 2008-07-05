@@ -29,7 +29,7 @@
  */
 class GlobalControllerRotation {
 
-	public function __construct($type, $mapName = NULL) {
+	public function __construct($type = NULL, $mapName = NULL) {
 
 		// Load the main configuration
 		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);

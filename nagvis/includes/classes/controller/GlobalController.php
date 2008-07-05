@@ -94,7 +94,6 @@ class GlobalController implements GlobalControllerInterface {
 					} else {
 						$this->message = $validator->getMessage();
 						$this->isValid = FALSE;
-						print new GlobalFrontendMessage('note');
 					}
 				} else {
 					$this->message = 'noMapSet';
@@ -160,7 +159,7 @@ class GlobalController implements GlobalControllerInterface {
 						}
 					}
 
-					$displayPage = new GlobalControllerRotation();
+					$displayPage = new GlobalControllerRotation('map');
 					$this->isValid = TRUE;
 				} else {
 					$this->message = 'noRotationpoolSet';
