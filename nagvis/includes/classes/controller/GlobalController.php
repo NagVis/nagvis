@@ -95,6 +95,7 @@ class GlobalController implements GlobalControllerInterface {
 					} else {
 						$this->message = $validator->getMessage();
 						$this->isValid = FALSE;
+						print new GlobalFrontendMessage('note');
 					}
 				} else {
 					$this->message = 'noMapSet';

@@ -34,15 +34,6 @@ class GlobalControllerUrl {
 		// Load the main configuration
 		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
-		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($MAINCFG, $this->mapName);
-
-		// Read the map configuration file
-		$MAPCFG->readMapConfig();
-
-		// Initialize backend(s)
-		$BACKEND = new GlobalBackendMgmt($MAINCFG);
-
 		// Initialize the frontend
 		$FRONTEND = new NagVisFrontend($MAINCFG);
 
