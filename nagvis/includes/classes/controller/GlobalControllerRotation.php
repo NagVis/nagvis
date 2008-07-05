@@ -29,19 +29,21 @@
  */
 class GlobalControllerRotation {
 
-	public function __construct($mapName = NULL) {
+	public function __construct($type, $mapName = NULL) {
 
 		// Load the main configuration
 		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 
-		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($MAINCFG, $mapName);
+		if ($type == 'map') {
+			// Initialize map configuration
+			$MAPCFG = new NagVisMapCfg($MAINCFG, $mapName);
 
-		// Read the map configuration file
-		$MAPCFG->readMapConfig();
+			// Read the map configuration file
+			$MAPCFG->readMapConfig();
 
-		// Initialize backend(s)
-		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+			// Initialize backend(s)
+			$BACKEND = new GlobalBackendMgmt($MAINCFG);
+		}
 
 		// Initialize the frontend
 		$FRONTEND = new NagVisFrontend($MAINCFG, $MAPCFG, $BACKEND);
@@ -49,12 +51,18 @@ class GlobalControllerRotation {
 		if ($mapName == NULL) {
 			// Redirect to next page
 			header('Location: '.$FRONTEND->getNextRotationUrl());
-		} else {
+		} elseif ($type == 'map') {
 			// Build the page
 			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 			$FRONTEND->getHeaderMenu();
 			$FRONTEND->getMap();
 			$FRONTEND->getMessages();
+		} elseif ($type == 'url') {
+					// Build the page
+			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
+			$FRONTEND->getHeaderMenu();
+			$arrFile = file($mapName);
+			$FRONTEND->addBodyLines($arrFile);
 		}
 
 		// Print the page

@@ -37,6 +37,7 @@ class GlobalController implements GlobalControllerInterface {
 	private $isValid = NULL;
 
 	private $mapName = NULL;
+	private $url = NULL;
 
 	private $automapEnv = array(
 									'backend' 		=> '',
@@ -47,8 +48,6 @@ class GlobalController implements GlobalControllerInterface {
 									'height'		=> '',
 									'ignoreHosts'	=> '',
 									'filterGroup'	=> '');
-
-		private $url = NULL;
 
 	/**
 	 * Constructor
@@ -137,7 +136,7 @@ class GlobalController implements GlobalControllerInterface {
 						$this->mapName = $httpRequest->getParameter($this->parameterName);
 						$validator = new GlobalValidator($this->parameterName, $this->mapName);
 						if ($validator->isValid()) {
-							$displayPage = new GlobalControllerRotation($this->mapName);
+							$displayPage = new GlobalControllerRotation($this->parameterName, $this->mapName);
 							$this->isValid = TRUE;
 						} else {
 							$this->message = $validator->getMessage();
@@ -149,10 +148,10 @@ class GlobalController implements GlobalControllerInterface {
 					// Check url, when set
 					if ($httpRequest->issetParameter('url')) {
 						$this->parameterName = 'url';
-						$this->mapName = $httpRequest->getParameter($this->parameterName);
-						$validator = new GlobalValidator($this->parameterName, $this->mapName);
+						$this->url = $httpRequest->getParameter($this->parameterName);
+						$validator = new GlobalValidator($this->parameterName, $this->url);
 						if ($validator->isValid()) {
-							$displayPage = new GlobalControllerRotation();
+							$displayPage = new GlobalControllerRotation($this->parameterName, $this->url);
 							$this->isValid = TRUE;
 						} else {
 							$this->message = $validator->getMessage();
