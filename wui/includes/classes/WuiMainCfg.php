@@ -123,5 +123,118 @@ class WuiMainCfg extends GlobalMainCfg {
 		
 		return TRUE;
 	}
+	
+	
+	
+	/**
+	 * Writes the config file completly from array $this->configFile
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function writeConfig() {
+		// Check for config file write permissions
+		if($this->checkNagVisConfigWriteable(1)) {
+			foreach($this->config as $key => &$item) {
+				if(is_array($item)) {
+					$content .= '['.$key.']'."\n";
+					foreach ($item as $key2 => &$item2) {
+						if(substr($key2,0,8) == 'comment_') {
+							$content .= $item2."\n";
+						} else {
+							if(is_numeric($item2) || is_bool($item2))
+								$content .= $key2."=".$item2."\n";
+							else
+							$content .= $key2.'="'.$item2.'"'."\n";
+						}
+					}
+				} elseif(substr($key,0,8) == 'comment_') {
+					$content .= $item."\n";
+				} else {
+					if(is_numeric($item) || is_bool($item))
+						$content .= $key.'='.$item."\n";
+					else
+						$content .= $key.'="'.$item.'"'."\n";
+				}
+			}
+			
+			if(!$handle = fopen($this->configFile, 'w+')) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR','mainCfgNotWriteable');
+				return FALSE;
+			}
+			
+			if(!fwrite($handle, $content)) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR','19');
+				return FALSE;
+			}
+			
+			fclose($handle);
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable config file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkNagVisConfigWriteable($printErr) {
+		if(is_writeable($this->configFile)) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR','mainCfgNotWriteable','MAINCFG~'.$this->configFile);
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable MapCfgFolder
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkMapCfgFolderWriteable($printErr) {
+		if(file_exists(substr($this->getValue('paths', 'mapcfg'),0,-1)) && is_writable(substr($this->getValue('paths', 'mapcfg'),0,-1))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
+				$FRONTEND->messageToUser('ERROR','mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg'));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Finds the Section of a var
+	 *
+	 * @param	String	$var	Config variable
+	 * @return	String	Section of the var
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function findSecOfVar($var) {
+		foreach($this->validConfig AS $key => &$item) {
+			if(is_array($item)) {
+				foreach ($item AS $key2 => &$item2) {
+					if(substr($key2,0,8) != 'comment_') {
+						if($key2 == $var) {
+							return $key;
+						}
+					}
+				}
+			}
+		}
+		return FALSE;
+	}
 }
 ?>
