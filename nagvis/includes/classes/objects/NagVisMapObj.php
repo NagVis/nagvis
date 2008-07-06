@@ -99,14 +99,38 @@ class NagVisMapObj extends NagVisStatefulObject {
 		return parent::parse();
 	}
 	
+	/**
+	 * PUBLIC getMapObjects()
+	 *
+	 * Returns the array of objects on the map
+	 *
+	 * @return	Array	Array with map objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getMapObjects() {
 		return $this->objects;
 	}
 	
+	/**
+	 * PUBLIC getNumObjects()
+	 *
+	 * Returns the number of objects on the map
+	 *
+	 * @return	Integer	Number of objects on the map
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function getNumObjects() {
 		return count($this->objects);
 	}
 	
+	/**
+	 * PUBLIC hasObjects()
+	 *
+	 * The fastest way I can expect to check if the map has objects
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	function hasObjects() {
 		return isset($this->objects[0]);
 	}
