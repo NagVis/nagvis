@@ -54,7 +54,7 @@ class GlobalMap {
 		if($this->MAPCFG->getValue('global', 0, 'usegdlibs') == '1') {
 			if(!extension_loaded('gd')) {
 				if($printErr) {
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
+					$FRONTEND = new GlobalPage($this->MAINCFG);
 					$FRONTEND->messageToUser('WARNING','gdLibNotFound');
 				}
 				return FALSE;
