@@ -54,12 +54,11 @@ class GlobalBackground {
 	function checkFileExists($printErr) {
 		if($this->image != '') {
 			if(file_exists($this->MAINCFG->getValue('paths', 'map').$this->image)) {
-			//if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'map').$this->image, 'r'))) {
 				return TRUE;
 			} else {
 				if($printErr) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
+					$FRONTEND = new GlobalPage($this->MAINCFG);
 					$FRONTEND->messageToUser('ERROR','backgroundNotExists','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				return FALSE;
@@ -83,7 +82,7 @@ class GlobalBackground {
 			} else {
 				if($printErr) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
+					$FRONTEND = new GlobalPage($this->MAINCFG);
 					$FRONTEND->messageToUser('ERROR','backgroundNotReadable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				return FALSE;
@@ -107,7 +106,7 @@ class GlobalBackground {
 			} else {
 				if($printErr) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
+					$FRONTEND = new GlobalPage($this->MAINCFG);
 					$FRONTEND->messageToUser('ERROR','backgroundNotWriteable','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 				}
 				return FALSE;
@@ -130,7 +129,7 @@ class GlobalBackground {
 		} else {
 			if($printErr) {
 				//Error Box
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:global'));
+				$FRONTEND = new GlobalPage($this->MAINCFG);
 				$FRONTEND->messageToUser('ERROR','backgroundFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
 			}
 			return FALSE;
