@@ -524,7 +524,7 @@ class NagVisFrontend extends GlobalPage {
 				}
 			} else {
 				// Error Message (Map rotation pool does not exist)
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND = new GlobalPage($this->MAINCFG);
 				$FRONTEND->messageToUser('ERROR','mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']);
 				
 				return '';
