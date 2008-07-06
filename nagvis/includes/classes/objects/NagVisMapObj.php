@@ -124,15 +124,24 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// Get all services of member host
 		foreach($this->getMapObjects() AS $OBJ) {
-			// Only get the next childs when this is no loop
-			if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->MAPCFG->getName() != $OBJ->MAPCFG->getName())) {
-				// Check for indirect loop when this is a map object
-				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->checkLoop($OBJ))) {
-					$OBJ->fetchMembers();
-				}
-			} else {
+			// When the current map object is a summary object skip the map
+			// child for preventing a loop
+			if($OBJ->getType() == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object) {
+				continue;
+			}
+			
+			// When the child map is a summary object declare it as a summary
+			// object
+			if($OBJ->getType() == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
 				$OBJ->is_summary_object = TRUE;
 			}
+			
+			// Check for indirect loop when the current child is a map object
+			if($OBJ->getType() == 'map' && !$OBJ->is_summary_object && !$this->checkLoop($OBJ)) {
+				continue;
+			}
+			
+			$OBJ->fetchMembers();
 		}
 	}
 	
@@ -147,16 +156,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function fetchState() {
 		// Get state of all member objects
 		foreach($this->getMapObjects() AS $OBJ) {
-			// Only get the next childs when this is no loop
-			if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->MAPCFG->getName() != $OBJ->MAPCFG->getName())) {
-				// Check for indirect loop when this is a map object
-				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && $this->checkLoop($OBJ))) {
-					// Don't get state from textboxes and shapes
-					if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
-						$OBJ->fetchState();
-					}
-				}
+			// Don't get state from textboxes and shapes
+			if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
+				continue;
 			}
+			
+			$OBJ->fetchState();
 			
 			$OBJ->fetchIcon();
 		}
@@ -166,6 +171,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// At least summary output
 		$this->fetchSummaryOutput();
+		
 		$this->state = $this->summary_state;
 	}
 	
@@ -211,10 +217,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 			
 			foreach($this->getMapObjects() AS $OBJ) {
 				// Don't reconize summarize map objects
-				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && !$OBJ->is_summary_object)) {
-					if(method_exists($OBJ,'getSummaryState')) {
-						$arrStates[$OBJ->getSummaryState()]++;
-					}
+				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
+					continue;
+				}
+				
+				if(method_exists($OBJ,'getSummaryState')) {
+					$arrStates[$OBJ->getSummaryState()]++;
 				}
 			}
 			
@@ -419,10 +427,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 			// Get summary state member objects
 			foreach($this->getMapObjects() AS $OBJ) {
 				// Don't reconize summarize map objects
-				if($OBJ->getType() != 'map' || ($OBJ->getType() == 'map' && !$OBJ->is_summary_object)) {
-					if(method_exists($OBJ,'getSummaryState')) {
-						$this->wrapChildState($OBJ);
-					}
+				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
+					continue;
+				}
+				
+				if(method_exists($OBJ,'getSummaryState')) {
+					$this->wrapChildState($OBJ);
 				}
 			}
 		} else {
