@@ -40,13 +40,18 @@
 class GlobalFrontendMessage {
 
 	private $page;
+	private $MAINCFG;
+	private $htmlBase;
 
 	function __construct($type, $title, $message) {
+
+		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+		$this->htmlBase = $MAINCFG->getValue('paths','htmlbase');
 
 		$this->page  = '<html>'."\n";
 		$this->page .= '   <head>'."\n";
 		$this->page .= '      <meta http-equiv="Content-Type" content="text/html;charset=utf-8">'."\n";
-		$this->page .= '      <style type="text/css"><!-- @import url(/nagios/nagvis/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
+		$this->page .= '      <style type="text/css"><!-- @import url('.$this->htmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
 		$this->page .= '      <title>'.$title.'</title></head>'."\n";
 		$this->page .= '   </head>'."\n";
 		$this->page .= '   <body>'."\n";
@@ -84,12 +89,11 @@ class GlobalFrontendMessage {
 		$this->page .= '            </tr>'."\n";
 		$this->page .= '         </table>'."\n";
 		$this->page .= '      </div>'."\n";
+		$this->page .= '   </body>'."\n";
+		$this->page .= '</html>'."\n";
 	}
 
 	function __toString () {
-
-		$this->page .= '   </body>'."\n";
-		$this->page .= '</html>'."\n";
 
 		return $this->page;
 	}
