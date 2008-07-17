@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-28 19:56+0100\n"
-"PO-Revision-Date: 2008-06-28 19:57+0100\n"
+"POT-Creation-Date: 2008-07-16 22:44+0100\n"
+"PO-Revision-Date: 2008-07-16 22:45+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -12,86 +12,86 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: getMessageText;getMessageTitle;getLabel\n"
+"X-Poedit-KeywordsList: getMessageText;getMessageTitle;getLabel;getText\n"
 "X-Poedit-Basepath: /home/lami/Daten/nagvis/trunk\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: wui/ajax_handler.php:73
+#: wui/ajax_handler.php:75
 #: wui/ajax_handler.php:77
-#: wui/ajax_handler.php:112
-#: wui/ajax_handler.php:116
-#: wui/ajax_handler.php:152
-#: wui/ajax_handler.php:156
-#: wui/ajax_handler.php:199
-#: wui/ajax_handler.php:200
-#: wui/ajax_handler.php:238
-#: wui/ajax_handler.php:254
-#: wui/form_handler.php:65
+#: wui/ajax_handler.php:106
+#: wui/ajax_handler.php:108
+#: wui/ajax_handler.php:138
+#: wui/ajax_handler.php:140
+#: wui/ajax_handler.php:179
+#: wui/ajax_handler.php:180
+#: wui/ajax_handler.php:217
+#: wui/ajax_handler.php:231
+#: wui/form_handler.php:66
+#: wui/form_handler.php:109
 #: wui/form_handler.php:111
-#: wui/form_handler.php:115
-#: wui/form_handler.php:119
-#: wui/form_handler.php:155
-#: wui/form_handler.php:159
-#: wui/form_handler.php:163
-#: wui/form_handler.php:194
-#: wui/form_handler.php:198
-#: wui/form_handler.php:202
-#: wui/form_handler.php:233
-#: wui/form_handler.php:257
-#: wui/form_handler.php:261
+#: wui/form_handler.php:113
+#: wui/form_handler.php:146
+#: wui/form_handler.php:148
+#: wui/form_handler.php:150
+#: wui/form_handler.php:178
+#: wui/form_handler.php:180
+#: wui/form_handler.php:182
+#: wui/form_handler.php:210
+#: wui/form_handler.php:232
+#: wui/form_handler.php:234
+#: wui/form_handler.php:236
 #: wui/form_handler.php:265
-#: wui/form_handler.php:296
-#: wui/form_handler.php:300
-#: wui/form_handler.php:304
-#: wui/form_handler.php:351
-#: wui/form_handler.php:374
-#: wui/form_handler.php:391
-#: wui/form_handler.php:421
+#: wui/form_handler.php:267
+#: wui/form_handler.php:269
+#: wui/form_handler.php:314
+#: wui/form_handler.php:334
+#: wui/form_handler.php:349
+#: wui/form_handler.php:377
+#: wui/form_handler.php:379
+#: wui/form_handler.php:381
+#: wui/form_handler.php:383
+#: wui/form_handler.php:397
+#: wui/form_handler.php:411
 #: wui/form_handler.php:425
-#: wui/form_handler.php:429
-#: wui/form_handler.php:433
-#: wui/form_handler.php:449
-#: wui/form_handler.php:465
-#: wui/form_handler.php:481
-#: wui/form_handler.php:525
-#: wui/form_handler.php:546
-#: wui/form_handler.php:550
-#: wui/form_handler.php:591
-#: wui/form_handler.php:615
-#: wui/form_handler.php:634
-#: wui/form_handler.php:651
-#: wui/includes/classes/WuiAddModify.php:412
+#: wui/form_handler.php:467
+#: wui/form_handler.php:486
+#: wui/form_handler.php:488
+#: wui/form_handler.php:527
+#: wui/form_handler.php:549
+#: wui/form_handler.php:566
+#: wui/form_handler.php:581
+#: wui/includes/classes/WuiAddModify.php:413
 #: wui/includes/classes/WuiBackendManagement.php:280
 msgid "mustValueNotSet"
 msgstr "A necessary value is not set. All red marked values are obligation values."
 
-#: wui/ajax_handler.php:81
-#: wui/ajax_handler.php:120
+#: wui/ajax_handler.php:79
+#: wui/ajax_handler.php:110
 msgid "backendNotInitialized"
 msgstr "The backend with the ID \"[BACKENDID]\" of type \"[BACKENDTYPE]\" is not initialized. Maybe there is an undefined backend used in a map?"
 
-#: wui/ajax_handler.php:85
-#: wui/ajax_handler.php:124
+#: wui/ajax_handler.php:81
+#: wui/ajax_handler.php:112
 msgid "methodNotSupportedByBackend"
 msgstr "The method \"[METHOD]\" is not supported by the backend."
 
-#: wui/ajax_handler.php:160
+#: wui/ajax_handler.php:142
 msgid "accessModeIsNotValid"
 msgstr "The access mode \"[MODE]\" is not valid."
 
-#: wui/ajax_handler.php:283
-#: wui/form_handler.php:666
+#: wui/ajax_handler.php:259
+#: wui/form_handler.php:595
 msgid "unknownAction"
 msgstr "The action \"[ACTION]\" is not supported by the ajax handler."
 
 #: wui/form_handler.php:97
-#: wui/form_handler.php:138
-#: wui/form_handler.php:178
-#: wui/form_handler.php:219
+#: wui/form_handler.php:131
+#: wui/form_handler.php:164
+#: wui/form_handler.php:198
 msgid "mapLockNotDeleted"
 msgstr "The map lock could not be deleted."
 
-#: wui/form_handler.php:359
+#: wui/form_handler.php:321
 msgid "mapDeleted"
 msgstr "The map has been deleted."
 
@@ -114,12 +114,12 @@ msgstr "Change"
 #: wui/includes/classes/WuiMap.php:573
 #: wui/includes/classes/WuiMapManagement.php:105
 #: wui/includes/classes/WuiBackgroundManagement.php:108
-#: wui/includes/classes/WuiShapeManagement.php:97
+#: wui/includes/classes/WuiShapeManagement.php:94
 msgid "delete"
 msgstr "Delete"
 
 #: wui/includes/classes/WuiMap.php:616
-#: wui/includes/classes/WuiAddModify.php:81
+#: wui/includes/classes/WuiAddModify.php:82
 #: wui/includes/classes/WuiEditMainCfg.php:70
 #: wui/includes/classes/WuiBackendManagement.php:80
 #: wui/includes/classes/WuiBackendManagement.php:93
@@ -240,48 +240,51 @@ msgstr "The attribute \"[ATTRIBUTE]\" in element of type \"[TYPE]\" in map confi
 msgid "wrongValueFormatOption"
 msgstr "The attribute \"[ATTRIBUTE]\" does not match the valid value format"
 
-#: wui/includes/classes/WuiAddModify.php:170
+#: wui/includes/classes/WuiAddModify.php:171
 #: wui/includes/classes/WuiEditMainCfg.php:138
 msgid "yes"
 msgstr "Yes"
 
-#: wui/includes/classes/WuiAddModify.php:170
+#: wui/includes/classes/WuiAddModify.php:171
 #: wui/includes/classes/WuiEditMainCfg.php:139
 msgid "no"
 msgstr "No"
 
-#: wui/includes/classes/WuiAddModify.php:411
+#: wui/includes/classes/WuiAddModify.php:412
 msgid "unableToWorkWithMap"
 msgstr "The map changes can not be processed no more. Procedure was terminated."
 
-#: wui/includes/classes/WuiAddModify.php:413
+#: wui/includes/classes/WuiAddModify.php:414
 msgid "chosenLineTypeNotValid"
 msgstr "The selected line_type is invalid."
 
-#: wui/includes/classes/WuiAddModify.php:414
+#: wui/includes/classes/WuiAddModify.php:415
 msgid "onlyLineOrIcon"
 msgstr "A Object can be only a Icon or a line, \"iconset\" and \"line_type\" can be used not together."
 
-#: wui/includes/classes/WuiAddModify.php:415
 #: wui/includes/classes/WuiAddModify.php:416
+#: wui/includes/classes/WuiAddModify.php:417
 msgid "not2coords"
 msgstr "It seems, you want to define a line (\"line_type\" is set). But there are no two \"[COORD]\" coordinates indicated."
 
-#: wui/includes/classes/WuiAddModify.php:417
 #: wui/includes/classes/WuiAddModify.php:418
+#: wui/includes/classes/WuiAddModify.php:419
 msgid "only1or2coords"
 msgstr "Only one or two [COORD] coordinates can be defined."
 
-#: wui/includes/classes/WuiAddModify.php:419
 #: wui/includes/classes/WuiAddModify.php:420
+#: wui/includes/classes/WuiAddModify.php:421
 msgid "lineTypeNotSelected"
 msgstr "You submited two [COORD] coordinates, therefore also line_type have to be selected."
 
-#: wui/includes/classes/WuiAddModify.php:421
-#: nagvis/includes/classes/objects/NagVisMapObj.php:288
-#: nagvis/includes/classes/objects/NagVisMapObj.php:306
+#: wui/includes/classes/WuiAddModify.php:422
+#: nagvis/includes/classes/objects/NagVisMapObj.php:350
 msgid "loopInMapRecursion"
 msgstr "loopInMapRecursion"
+
+#: wui/includes/classes/WuiAddModify.php:423
+msgid "mapObjectWillShowSummaryState"
+msgstr "This map object will show the summary state of the map and it's childs."
 
 #: wui/includes/classes/WuiMapManagement.php:78
 msgid "createMap"
@@ -446,7 +449,7 @@ msgid "uploadBackground"
 msgstr "Upload background image"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:94
-#: wui/includes/classes/WuiShapeManagement.php:83
+#: wui/includes/classes/WuiShapeManagement.php:80
 msgid "upload"
 msgstr "Upload"
 
@@ -456,8 +459,8 @@ msgstr "Delete background image"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:123
 #: wui/includes/classes/WuiBackgroundManagement.php:138
-#: wui/includes/classes/WuiShapeManagement.php:115
-#: wui/includes/classes/WuiShapeManagement.php:131
+#: wui/includes/classes/WuiShapeManagement.php:110
+#: wui/includes/classes/WuiShapeManagement.php:124
 msgid "choosePngImage"
 msgstr "Select a PNG image"
 
@@ -478,12 +481,12 @@ msgid "backgroundHeight"
 msgstr "Height (px)"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:198
-#: wui/includes/classes/WuiShapeManagement.php:175
+#: wui/includes/classes/WuiShapeManagement.php:164
 msgid "firstMustChoosePngImage"
 msgstr "Please choose an image in PNG-Format."
 
 #: wui/includes/classes/WuiBackgroundManagement.php:199
-#: wui/includes/classes/WuiShapeManagement.php:176
+#: wui/includes/classes/WuiShapeManagement.php:165
 msgid "mustChoosePngImage"
 msgstr "You have to select an image with the extension \".png\"."
 
@@ -523,52 +526,52 @@ msgstr "Delete backend"
 msgid "defaultBackend"
 msgstr "Default backend"
 
-#: wui/includes/classes/WuiShapeManagement.php:79
+#: wui/includes/classes/WuiShapeManagement.php:76
 msgid "uploadShape"
 msgstr "Upload shape"
 
-#: wui/includes/classes/WuiShapeManagement.php:93
+#: wui/includes/classes/WuiShapeManagement.php:90
 msgid "deleteShape"
 msgstr "Delete shape"
 
-#: wui/includes/classes/WuiShapeManagement.php:177
+#: wui/includes/classes/WuiShapeManagement.php:166
 msgid "foundNoShapeToDelete"
 msgstr "No shape image found. Operation terminated."
 
-#: wui/includes/classes/WuiShapeManagement.php:178
+#: wui/includes/classes/WuiShapeManagement.php:167
 msgid "shapeInUse"
 msgstr "The shape is in use on the map \"[MAP]\"."
 
-#: wui/includes/classes/WuiShapeManagement.php:179
+#: wui/includes/classes/WuiShapeManagement.php:168
 msgid "confirmShapeDeletion"
 msgstr "Do you really want to delete this shape image? This action cannot be reverted."
 
-#: wui/includes/classes/WuiShapeManagement.php:180
+#: wui/includes/classes/WuiShapeManagement.php:169
 msgid "unableToDeleteShape"
 msgstr "Cannot delete shape \"[IMAGENAME]\" because it is used by map \"[MAP]\"."
 
-#: wui/includes/classes/WuiShapeManagement.php:199
+#: wui/includes/classes/WuiShapeManagement.php:187
 msgid "failedToDeleteShape"
 msgstr "Cannot delete shape \"[IMAGE]\"."
 
-#: wui/includes/classes/WuiShapeManagement.php:203
+#: wui/includes/classes/WuiShapeManagement.php:191
 msgid "shapeDoesNotExist"
 msgstr "The shape \"[IMAGE]\" does not extist."
 
-#: wui/includes/classes/WuiShapeManagement.php:225
+#: wui/includes/classes/WuiShapeManagement.php:213
 msgid "moveUploadedFileFailed"
 msgstr "Could not move the uploaded file to the shape directory \"[PATH]\"."
 
-#: wui/includes/classes/WuiShapeManagement.php:229
+#: wui/includes/classes/WuiShapeManagement.php:217
 msgid "mustBePngFile"
 msgstr "The file has the wrong file extension (Has to be *.png)"
 
-#: wui/includes/classes/WuiShapeManagement.php:233
+#: wui/includes/classes/WuiShapeManagement.php:221
 msgid "uploadFailed"
 msgstr "Upload not possible. There are some problems with your webserver configuration."
 
-#: nagvis/ajax_handler.php:182
-#: nagvis/includes/classes/objects/NagVisMapObj.php:245
+#: nagvis/ajax_handler.php:166
+#: nagvis/includes/classes/objects/NagVisMapObj.php:302
 msgid "mapCfgNotExists"
 msgstr "The map configuration file \"[MAP]\" does not exist"
 
@@ -592,72 +595,66 @@ msgstr "Maybe the memory_limit of PHP is to low for displaying the background im
 msgid "permissionDenied"
 msgstr "The user \"[USER]\" has no permission for this action"
 
-#: nagvis/includes/classes/NagVisFrontend.php:72
+#: nagvis/includes/classes/NagVisFrontend.php:87
 msgid "mapIndex"
 msgstr "Map Index"
 
-#: nagvis/includes/classes/NagVisFrontend.php:118
-#: nagvis/includes/classes/NagVisFrontend.php:119
+#: nagvis/includes/classes/NagVisFrontend.php:133
+#: nagvis/includes/classes/NagVisFrontend.php:134
 msgid "mapInMaintenance"
 msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is automaticaly reloading."
 
-#: nagvis/includes/classes/NagVisFrontend.php:124
-#: nagvis/includes/classes/NagVisFrontend.php:125
-#: nagvis/includes/classes/objects/NagVisMapObj.php:319
-msgid "noReadPermissions"
-msgstr "You are not permited to view the state of this map."
-
-#: nagvis/includes/classes/NagVisFrontend.php:168
+#: nagvis/includes/classes/NagVisFrontend.php:178
 msgid "rotationPools"
 msgstr "Rotation Pools"
 
-#: nagvis/includes/classes/NagVisFrontend.php:356
+#: nagvis/includes/classes/NagVisFrontend.php:329
 msgid "selectMap"
 msgstr "Select map"
 
-#: nagvis/includes/classes/NagVisFrontend.php:357
+#: nagvis/includes/classes/NagVisFrontend.php:330
 msgid "editMap"
 msgstr "Edit current map"
 
-#: nagvis/includes/classes/NagVisFrontend.php:358
+#: nagvis/includes/classes/NagVisFrontend.php:331
 msgid "needHelp"
 msgstr "Need Help?"
 
-#: nagvis/includes/classes/NagVisFrontend.php:359
+#: nagvis/includes/classes/NagVisFrontend.php:332
 msgid "onlineDoc"
 msgstr "Online Documentation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:360
+#: nagvis/includes/classes/NagVisFrontend.php:333
 msgid "forum"
 msgstr "Support Forum"
 
-#: nagvis/includes/classes/NagVisFrontend.php:361
+#: nagvis/includes/classes/NagVisFrontend.php:334
 msgid "supportInfo"
 msgstr "NagVis Support Informations"
 
-#: nagvis/includes/classes/NagVisFrontend.php:362
+#: nagvis/includes/classes/NagVisFrontend.php:335
 #: nagvis/includes/classes/objects/NagVisObject.php:326
 msgid "overview"
 msgstr "Overview"
 
-#: nagvis/includes/classes/NagVisFrontend.php:363
+#: nagvis/includes/classes/NagVisFrontend.php:336
 #: nagvis/includes/classes/objects/NagVisObject.php:330
 msgid "instance"
 msgstr "Instance"
 
-#: nagvis/includes/classes/NagVisFrontend.php:364
+#: nagvis/includes/classes/NagVisFrontend.php:337
 msgid "rotationStart"
 msgstr "Start Rotation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:365
+#: nagvis/includes/classes/NagVisFrontend.php:338
 msgid "rotationStop"
 msgstr "Stop Rotation"
 
-#: nagvis/includes/classes/NagVisFrontend.php:366
+#: nagvis/includes/classes/NagVisFrontend.php:339
 msgid "refreshStart"
 msgstr "Start Refresh"
 
-#: nagvis/includes/classes/NagVisFrontend.php:367
+#: nagvis/includes/classes/NagVisFrontend.php:340
 msgid "refreshStop"
 msgstr "Stop Refresh"
 
@@ -785,13 +782,17 @@ msgstr "Map Name"
 msgid "objectname"
 msgstr "Object Name"
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:198
+#: nagvis/includes/classes/objects/NagVisMapObj.php:253
 msgid "objects"
 msgstr "Objects"
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:200
+#: nagvis/includes/classes/objects/NagVisMapObj.php:255
 msgid "mapIsEmpty"
 msgstr "The map \"[MAP]\" has 0 Objects."
+
+#: nagvis/includes/classes/objects/NagVisMapObj.php:363
+msgid "noReadPermissions"
+msgstr "You are not permited to view the state of this map."
 
 #~ msgid ""
 #~ "The map you are trying to access is in maintenance mode. Please be "
