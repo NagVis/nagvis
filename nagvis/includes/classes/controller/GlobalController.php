@@ -52,14 +52,19 @@ class GlobalController implements GlobalControllerInterface {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function __construct() {
-
+		$action = '';
+		
 		// Get variables
 		$httpRequest = new GlobalHttpRequest();
 		$this->parameterNames = $httpRequest->getParameterNames();
-
+		
 		// Check if variable action is valid
-		$actionValidator = new GlobalValidator('action', $this->parameterNames[0]);
-
+		if(isset($this->parameterNames[0])) {
+			$action = $this->parameterNames[0];
+		}
+		
+		$actionValidator = new GlobalValidator('action', $action);
+		
 		// Set first action
 		if ($actionValidator->isValid()) {
 			$this->action = $this->parameterNames[0];
