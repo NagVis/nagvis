@@ -40,6 +40,9 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	 */
 	public function __construct( ) {
 		$this->parameters = $_REQUEST;
+		
+		// The session ID parameter is not interesting
+		unset($this->parameters['SESSID']);
 	} // end of member function __construktor
 
 	/**
