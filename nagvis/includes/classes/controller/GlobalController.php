@@ -24,17 +24,26 @@
 
 /**
  * class GlobalController
+ * The global controller controlls the requested actions (map, rotation, etc.)
+ * and check if the variables are valid.
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
 class GlobalController implements GlobalControllerInterface {
 
+	// Contains the set action (map, url, rotation etc...)
 	private $action = NULL;
-	private $parameterNames = NULL;
-	private $parameterValue = NULL;
-	private $message = NULL;
+
+	// Contains the check parameter
+	private $checkedParameterName = NULL;
+
+	// Contains if variable is valid (TRUE or FALSE)
 	private $isValid = NULL;
 
+	// Contains error message
+	private $message = NULL;
+
+	// This array contains possible variables for the automap
 	private $automapEnv = array(
 									'backend' 		=> '',
 									'root'			=> '',
@@ -45,8 +54,15 @@ class GlobalController implements GlobalControllerInterface {
 									'ignoreHosts'	=> '',
 									'filterGroup'	=> '');
 
+	// Contains object which display the page
+	private $displayPage = NULL;
+
+	// Contains object from validator
+	private $validator = NULL;
+
 	/**
-	 * Constructor
+	 * The constructor check if the first variable (action) is set and valid.
+	 * Is nothing set, th constructen set to default.
 	 *
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
@@ -58,41 +74,50 @@ class GlobalController implements GlobalControllerInterface {
 		$httpRequest = new GlobalHttpRequest();
 		$this->parameterNames = $httpRequest->getParameterNames();
 		
-		// Check if variable action is valid
+		// Check if isset th first variable (action)
 		if(isset($this->parameterNames[0])) {
 			$action = $this->parameterNames[0];
 		}
+
+		// Check if the this first variable (action) valid
+		$this->checkedParameterName = 'action';
+		$this->validator = new GlobalValidator('action', $action);
 		
-		$actionValidator = new GlobalValidator('action', $action);
-		
-		// Set first action
-		if ($actionValidator->isValid()) {
+		// Is this first variable (action) valid, then set this variable else set to default
+		if ($this->validator->isValid()) {
 			$this->action = $this->parameterNames[0];
 		} else {
 			$this->action = 'default';
 			$this->message = 'setActionToDefault';
 		}
 
+		// Switch to set action
 		switch ($this->action) {
+
+			// Display index page
 			case 'default':
-				$displayPage = new GlobalControllerDefault();
+				$this->displayPage = new GlobalControllerDefault();
+				$this->checkedParameterName = 'default';
 				$this->isValid = TRUE;
 			break;
 
+			// Display info page
 			case 'info':
-				$displayPage = new GlobalControllerInfo();
+				$this->displayPage = new GlobalControllerInfo();
+				$this->checkedParameterName = 'info';
 				$this->isValid = TRUE;
 			break;
 
+			// Display set map
 			case 'map':
+				$mapName = $httpRequest->getParameter('map');
 				if ($httpRequest->issetParameter('map')) {
-					$mapName = $httpRequest->getParameter('map');
-					$validator = new GlobalValidator('map', $mapName);
-					if ($validator->isValid()) {
-						$displayPage = new GlobalControllerMap($mapName);
+					$this->validator = new GlobalValidator('map', $mapName);
+					if ($this->validator->isValid()) {
+						$this->displayPage = new GlobalControllerMap($mapName);
 						$this->isValid = TRUE;
 					} else {
-						$this->message = $validator->getMessage();
+						$this->message = $this->validator->getMessage();
 						$this->isValid = FALSE;
 					}
 				} else {
@@ -101,17 +126,20 @@ class GlobalController implements GlobalControllerInterface {
 				}
 			break;
 
+			// Diplay automap
 			case 'automap':
-				// Check varibles
+				// Check variables for the automap
+				$this->checkedParameterName = 'automap';
 				foreach ($this->automapEnv AS $parameterName => $parameterValue) {
+					$this->checkedParameterName = $parameterName;
 					if ($httpRequest->issetParameter($parameterName)) {
 						$parameterValue = $httpRequest->getParameter($parameterName);
-						$validator = new GlobalValidator($parameterName, $parameterValue);
-						if ($validator->isValid()) {
+						$this->validator = new GlobalValidator($parameterName, $parameterValue);
+						if ($this->validator->isValid()) {
 							$this->automapEnv[$parameterName] = $parameterValue;
 							$this->isValid = TRUE;
 						} else {
-							$this->message = $validator->getMessage();
+							$this->message = $this->validator->getMessage();
 							$this->isValid = FALSE;
 							break;
 						}
@@ -120,22 +148,26 @@ class GlobalController implements GlobalControllerInterface {
 					}	
 				}
 
+				// If all set variables are valid, the display the autopam
 				if ($this->isValid) {
-					$displayPage = new GlobalControllerAutomap($this->automapEnv);
+					$this->displayPage = new GlobalControllerAutomap($this->automapEnv);
 				}
 			break;
 
+			// Display rotation pool
 			case 'rotation':
+				$this->checkedParameterName = 'rotation';
 				if ($httpRequest->issetParameter('rotation')) {
 					// Check map, when set
 					if ($httpRequest->issetParameter('map')) {
+						$this->checkedParameterName = 'map';
 						$mapName = $httpRequest->getParameter('map');
-						$validator = new GlobalValidator('map', $mapName);
-						if ($validator->isValid()) {
-							$displayPage = new GlobalControllerRotation('map', $mapName);
+						$this->validator = new GlobalValidator('map', $mapName);
+						if ($this->validator->isValid()) {
+							$this->displayPage = new GlobalControllerRotation('map', $mapName);
 							$this->isValid = TRUE;
 						} else {
-							$this->message = $validator->getMessage();
+							$this->message = $this->validator->getMessage();
 							$this->isValid = FALSE;
 							break;
 						}
@@ -143,19 +175,20 @@ class GlobalController implements GlobalControllerInterface {
 
 					// Check url, when set
 					if ($httpRequest->issetParameter('url')) {
+						$this->checkedParameterName = 'url';
 						$url = $httpRequest->getParameter('url');
-						$validator = new GlobalValidator('url', $url);
-						if ($validator->isValid()) {
-							$displayPage = new GlobalControllerRotation('url', $url);
+						$this->validator = new GlobalValidator('url', $url);
+						if ($this->validator->isValid()) {
+							$this->displayPage = new GlobalControllerRotation('url', $url);
 							$this->isValid = TRUE;
 						} else {
-							$this->message = $validator->getMessage();
+							$this->message = $this->validator->getMessage();
 							$this->isValid = FALSE;
 							break;
 						}
 					}
 
-					$displayPage = new GlobalControllerRotation('map');
+					$this->displayPage = new GlobalControllerRotation('map');
 					$this->isValid = TRUE;
 				} else {
 					$this->message = 'noRotationpoolSet';
@@ -163,15 +196,16 @@ class GlobalController implements GlobalControllerInterface {
 				}
 			break;
 
+			// Display url
 			case 'url':
 				if ($httpRequest->issetParameter('url')) {
 					$url = $httpRequest->getParameter('url');
-					$validator = new GlobalValidator('url', $url);
-					if ($validator->isValid()) {
-						$displayPage = new GlobalControllerUrl($url);
+					$this->validator = new GlobalValidator('url', $url);
+					if ($this->validator->isValid()) {
+						$this->displayPage = new GlobalControllerUrl($url);
 						$this->isValid = TRUE;
 					} else {
-						$this->message = $validator->getMessage();
+						$this->message = $this->validator->getMessage();
 						$this->isValid = FALSE;
 					}
 				} else {
@@ -183,7 +217,7 @@ class GlobalController implements GlobalControllerInterface {
 	}
 
 	/**
-	 * Get set action
+	 * Return set action
 	 *
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
@@ -193,7 +227,7 @@ class GlobalController implements GlobalControllerInterface {
 	}
 
 	/**
-	 * Return message
+	 * Return message with error etc.
 	 *
 	 * @return  string   Message from object
 	 * @access  public
@@ -204,7 +238,7 @@ class GlobalController implements GlobalControllerInterface {
 	}
 
 	/**
-	 * Check if object is valid
+	 * Return if object is valid
 	 *
 	 * @return
 	 * @access  public
@@ -215,14 +249,14 @@ class GlobalController implements GlobalControllerInterface {
 	}
 
 	/**
-	 * Get name from parameter
+	 * Return name from parameter
 	 *
 	 * @return  string   Name from parameter
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function getParameterName() {
-		return $this->parameterName;
+		return $this->checkedParameterName;
 	}
 }
 ?>
