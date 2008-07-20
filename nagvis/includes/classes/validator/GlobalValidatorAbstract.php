@@ -29,8 +29,8 @@
  */
 class GlobalValidatorAbstract {
 
+	// Contains message from this validator
 	private $message = NULL;
-	private $parameterValue;
 
 	/**
 	 * Check if parameter valid

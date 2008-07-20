@@ -29,7 +29,10 @@
  */
 class GlobalValidatorBoolean extends GlobalValidatorAbstract {
 
+	// Contains array with options to check the parameter
 	private $validateArr;
+
+	// Contains value from parameter
 	private $parameterValue;
 
 	/**

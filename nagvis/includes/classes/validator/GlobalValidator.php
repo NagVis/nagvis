@@ -29,9 +29,16 @@
  */
 class GlobalValidator {
 
-	private $parameterName;
-	private $parameterValue;
-	private $validatorArr;
+	// Name from parameter which to be check
+	private $parameterName = NULL;
+
+	// Value for parameter
+	private $parameterValue = NULL;
+
+	// This array contains parameter with options, which be allowed
+	private $validatorArr = array();
+
+	// This variable contains message for validator
 	private $message = NULL;
 
 	/**
@@ -46,6 +53,24 @@ class GlobalValidator {
 		$this->parameterName = $name;
 		$this->parameterValue = $value;
 
+		/**
+		 * Array with allowed parameter and there options
+		 *
+		 * Global options for all parameter types:
+		 *		name:				string	Name from parameter
+		 *		type:				string	Type from parameter. Allowed types are string, integer,
+		 *										boolean and url
+		 *		mustSet			boolean	Defines whether a variable must to be set (TRUE or FALSE)
+		 *		notEmpty			boolean	Defines whether a variable can be empty (TRUE or FALSE)
+		 *
+		 * Options only for parameter type string:
+		 * 	allowedEntrys	array		Contains names which only to be allowed for this parameter
+		 *
+		 * Options only for parameter type integer:
+		 *		mustInRange		boolean	Defines whether a integer must to in a range (TRUE or FALSE)
+		 *		minValue			integer	Minimal value (mustInRange must be TRUE)
+		 *		maxValue			integer	Maximal value (mustInRange must be TRUE)
+		 */
 		$this->validatorArr = array(
 			// Define action
 			'action' => array(
@@ -186,6 +211,7 @@ class GlobalValidator {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function isValid() {
+		// Check if paramter allowed
 		if (FALSE === $this->isValidParameterName()) {
 			return FALSE;
 		} else {
@@ -228,7 +254,7 @@ class GlobalValidator {
 	}
 
 	/**
-	 * Get name from parameter
+	 * Return name from parameter
 	 *
 	 * @return  string   Name from parameter
 	 * @access  public
@@ -239,7 +265,7 @@ class GlobalValidator {
 	}
 
 	/**
-	 * Get value from parameter
+	 * Return value from parameter
 	 *
 	 * @return  string   Value from parameter
 	 * @access  public
@@ -267,7 +293,7 @@ class GlobalValidator {
 	}
 
 	/**
-	 * Set a message
+	 * Return message form validator
 	 *
 	 * @param   string   $tring
 	 * @access  private
