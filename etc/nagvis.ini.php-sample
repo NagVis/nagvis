@@ -46,11 +46,11 @@
 ;hovertemplate="default"
 ; hover menu open delay (seconds)
 ;hoverdelay=0
-; show childs in hover menus
+; show children in hover menus
 ;hoverchildsshow=1
-; order method of childs (desc: descending, asc: ascending)
+; order method of children (desc: descending, asc: ascending)
 ;hoverchildsorder="asc"
-; sort method of childs (s: state, a: alphabetical)
+; sort method of children (s: state, a: alphabetical)
 ;hoverchildssort="s"
 ; limit shown child objects to n
 ;hoverchildslimit="10"
@@ -107,9 +107,9 @@
 ;dbpass=""
 ; prefix for tables in NDO-db
 ;dbprefix="nagios_"
-; instace-name for tables in NDO-db
+; instance-name for tables in NDO-db
 ;dbinstancename="default"
-; maximum delay of the NDO Database in Seconds
+; maximum delay of the NDO Database in seconds
 ;maxtimewithoutupdate=180
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"

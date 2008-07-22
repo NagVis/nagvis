@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-16 22:44+0100\n"
-"PO-Revision-Date: 2008-07-16 22:45+0100\n"
-"Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
+"PO-Revision-Date: 2008-07-22 12:23+0100\n"
+"Last-Translator: Wolfgang <wnd@gmx.net>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,7 +63,7 @@ msgstr ""
 #: wui/includes/classes/WuiAddModify.php:413
 #: wui/includes/classes/WuiBackendManagement.php:280
 msgid "mustValueNotSet"
-msgstr "A necessary value is not set. All red marked values are obligation values."
+msgstr "A necessary value is not set. All red marked values are compulsory values."
 
 #: wui/ajax_handler.php:79
 #: wui/ajax_handler.php:110
@@ -260,12 +260,12 @@ msgstr "The selected line_type is invalid."
 
 #: wui/includes/classes/WuiAddModify.php:415
 msgid "onlyLineOrIcon"
-msgstr "A Object can be only a Icon or a line, \"iconset\" and \"line_type\" can be used not together."
+msgstr "An object can be only a icon or a line, \"iconset\" and \"line_type\" can be used not together."
 
 #: wui/includes/classes/WuiAddModify.php:416
 #: wui/includes/classes/WuiAddModify.php:417
 msgid "not2coords"
-msgstr "It seems, you want to define a line (\"line_type\" is set). But there are no two \"[COORD]\" coordinates indicated."
+msgstr "It seems that you want to define a line (\"line_type\" is set) but there are no two \"[COORD]\" coordinates indicated."
 
 #: wui/includes/classes/WuiAddModify.php:418
 #: wui/includes/classes/WuiAddModify.php:419
@@ -275,7 +275,7 @@ msgstr "Only one or two [COORD] coordinates can be defined."
 #: wui/includes/classes/WuiAddModify.php:420
 #: wui/includes/classes/WuiAddModify.php:421
 msgid "lineTypeNotSelected"
-msgstr "You submited two [COORD] coordinates, therefore also line_type have to be selected."
+msgstr "You submitted two [COORD] coordinates, therefore also line_type has to be selected."
 
 #: wui/includes/classes/WuiAddModify.php:422
 #: nagvis/includes/classes/objects/NagVisMapObj.php:350
@@ -284,7 +284,7 @@ msgstr "loopInMapRecursion"
 
 #: wui/includes/classes/WuiAddModify.php:423
 msgid "mapObjectWillShowSummaryState"
-msgstr "This map object will show the summary state of the map and it's childs."
+msgstr "This map object will show the summary state of the map and its children."
 
 #: wui/includes/classes/WuiMapManagement.php:78
 msgid "createMap"
@@ -415,11 +415,11 @@ msgstr "Unable to delete map \"[MAP]\". The map is included in another map \"[PA
 
 #: wui/includes/classes/WuiMapManagement.php:321
 msgid "noPermissions"
-msgstr "You don not have the permissions to change this map."
+msgstr "You do not have the permissions to change this map."
 
 #: wui/includes/classes/WuiMapManagement.php:322
 msgid "minOneUserWriteAccess"
-msgstr "At least one user must have the authorization, in order to change this map."
+msgstr "At least one user must have the authorization in order to change this map."
 
 #: wui/includes/classes/WuiMapManagement.php:323
 msgid "noSpaceAllowed"
@@ -504,7 +504,7 @@ msgstr "Cannot delete the background image \"[IMAGENAME]\" because it is used by
 
 #: wui/includes/classes/WuiBackgroundManagement.php:203
 msgid "mustValueNotSet1"
-msgstr "The must value \"[ATTRIBUTE]\" is not set"
+msgstr "The required value \"[ATTRIBUTE]\" is not set"
 
 #: wui/includes/classes/WuiBackendManagement.php:77
 msgid "setDefaultBackend"
@@ -556,7 +556,7 @@ msgstr "Cannot delete shape \"[IMAGE]\"."
 
 #: wui/includes/classes/WuiShapeManagement.php:191
 msgid "shapeDoesNotExist"
-msgstr "The shape \"[IMAGE]\" does not extist."
+msgstr "The shape \"[IMAGE]\" does not exist."
 
 #: wui/includes/classes/WuiShapeManagement.php:213
 msgid "moveUploadedFileFailed"
@@ -564,7 +564,7 @@ msgstr "Could not move the uploaded file to the shape directory \"[PATH]\"."
 
 #: wui/includes/classes/WuiShapeManagement.php:217
 msgid "mustBePngFile"
-msgstr "The file has the wrong file extension (Has to be *.png)"
+msgstr "The file has the wrong file extension (has to be *.png)"
 
 #: wui/includes/classes/WuiShapeManagement.php:221
 msgid "uploadFailed"
@@ -581,7 +581,7 @@ msgstr "Only PNG or JPG images are allowed for map image files."
 
 #: nagvis/includes/classes/NagVisBackground.php:214
 msgid "backgroundNotExists"
-msgstr "Map image file \"[IMGPATH]\" does not exists"
+msgstr "Map image file \"[IMGPATH]\" does not exist"
 
 #: nagvis/includes/classes/NagVisBackground.php:217
 msgid "backgroundNotReadable"
@@ -589,7 +589,7 @@ msgstr "Please check the webservers permissions at the map image file \"[IMGPATH
 
 #: nagvis/includes/classes/NagVisBackground.php:220
 msgid "maybePhpMemoryLimitToLow"
-msgstr "Maybe the memory_limit of PHP is to low for displaying the background image."
+msgstr "Maybe the memory_limit of PHP is too low for displaying the background image."
 
 #: nagvis/includes/classes/NagVisBackground.php:223
 msgid "permissionDenied"
@@ -602,7 +602,7 @@ msgstr "Map Index"
 #: nagvis/includes/classes/NagVisFrontend.php:133
 #: nagvis/includes/classes/NagVisFrontend.php:134
 msgid "mapInMaintenance"
-msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is automaticaly reloading."
+msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is automatically reloaded."
 
 #: nagvis/includes/classes/NagVisFrontend.php:178
 msgid "rotationPools"
@@ -788,11 +788,11 @@ msgstr "Objects"
 
 #: nagvis/includes/classes/objects/NagVisMapObj.php:255
 msgid "mapIsEmpty"
-msgstr "The map \"[MAP]\" has 0 Objects."
+msgstr "The map \"[MAP]\" has 0 objects."
 
 #: nagvis/includes/classes/objects/NagVisMapObj.php:363
 msgid "noReadPermissions"
-msgstr "You are not permited to view the state of this map."
+msgstr "You are not permitted to view the state of this map."
 
 #~ msgid ""
 #~ "The map you are trying to access is in maintenance mode. Please be "
