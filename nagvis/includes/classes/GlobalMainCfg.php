@@ -266,7 +266,7 @@ class GlobalMainCfg {
 							'match' => MATCH_STRING_NO_SPACE),
 						'dbpass' => Array('must' => 0,
 							'editable' => 1,
-							'default' => 'root',
+							'default' => '',
 							'match' => MATCH_STRING_EMPTY),
 						'dbprefix' => Array('must' => 0,
 							'editable' => 1,
