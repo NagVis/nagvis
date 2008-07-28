@@ -222,39 +222,33 @@ chk_rc() {
 ###############################################################################
 
 # Process command line options
-while [ $# -gt 0 ]; do
-  case $1 in
-    -n)
-      NAGIOS_PATH=$2
-      shift 2
-      ;;
-    -v)
-      GRAPHVIZ_PATH=$2
-      shift 2
-      ;;
-    -u)
-      WEB_USER=$2
-      shift 2
-      ;;
-    -g)
-      WEB_GROUP=$2
-      shift 2
-      ;;
-    -h|--help)
-      usage;
-      exit 0
-      ;;
-    --)
-      shift
-      break
-      ;;
-    *)
-      echo "Error: Unknown option: $1"
-      usage;
-      exit 1
-      ;;
-  esac
-done
+if [ $# -gt 0 ]; then
+	while getopts "n:v:u:g:h" options; do
+		case $options in
+			n)
+				NAGIOS_PATH=$OPTARG
+			;;
+			v)
+				GRAPHVIZ_PATH=$OPTARG
+			;;
+			u)
+				WEB_USER=$OPTARG
+			;;
+			g)
+				WEB_GROUP=$OPTARG
+			;;
+			h)
+				usage
+				exit 0
+			;;
+			*)
+				echo "Error: Unknown option."
+				usage
+				exit 1
+			;;
+		esac
+	done
+fi
 
 # Print welcome message
 welcome
