@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-16 22:44+0100\n"
-"PO-Revision-Date: 2008-07-22 12:23+0100\n"
+"PO-Revision-Date: 2008-07-27 21:24+0100\n"
 "Last-Translator: Wolfgang <wnd@gmx.net>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "No"
 
 #: wui/includes/classes/WuiAddModify.php:412
 msgid "unableToWorkWithMap"
-msgstr "The map changes can not be processed no more. Procedure was terminated."
+msgstr "The map changes can not be processed anymore. Procedure was terminated."
 
 #: wui/includes/classes/WuiAddModify.php:414
 msgid "chosenLineTypeNotValid"
@@ -260,7 +260,7 @@ msgstr "The selected line_type is invalid."
 
 #: wui/includes/classes/WuiAddModify.php:415
 msgid "onlyLineOrIcon"
-msgstr "An object can be only a icon or a line, \"iconset\" and \"line_type\" can be used not together."
+msgstr "An object can be only an icon or a line, \"iconset\" and \"line_type\" can be used not together."
 
 #: wui/includes/classes/WuiAddModify.php:416
 #: wui/includes/classes/WuiAddModify.php:417
