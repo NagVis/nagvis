@@ -68,7 +68,7 @@ function drawNagVisLine(type,x1,y1,x2,y2,state,ack,downtime) {
 		var yMid = middle(y1,y2);
 		
 		drawArrow(x1, y1, xMid, yMid, width, colorFill, colorBorder);
-		drawArrow(x2, x2, xMid, yMid, width, colorFill, colorBorder);
+		drawArrow(x2, y2, xMid, yMid, width, colorFill, colorBorder);
 	} else if(type == 11) {
 		drawArrow(x1, y1, x2, y2, width, colorFill, colorBorder);
 	}
