@@ -28,6 +28,9 @@
 // Start the user session (This is needed by some caching mechanism)
 @session_start();
 
+// Set PHP error handling to standard level
+error_reporting(E_ALL ^ E_STRICT);
+
 // Include defines
 require("../nagvis/includes/defines/global.php");
 require("../nagvis/includes/defines/matches.php");
