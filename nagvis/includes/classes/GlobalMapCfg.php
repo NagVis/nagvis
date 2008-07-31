@@ -685,7 +685,7 @@ class GlobalMapCfg {
 									$types[$sObjType]++;
 								} else {
 									// unknown object type
-									$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+									$FRONTEND = new GlobalPage($this->CORE);
 									$FRONTEND->messageToUser('ERROR', $this->CORE->LANG('unknownObject','TYPE~'.$type));
 									return FALSE;
 								}
@@ -797,7 +797,7 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->CORE->MAINCFG);
+					$FRONTEND = new GlobalPage($this->CORE);
 					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapCfgNotExists','MAP~'.$this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
 				}
 				return FALSE;
@@ -820,7 +820,7 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+					$FRONTEND = new GlobalPage($this->CORE);
 					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable','MAP='.$this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
 				}
 				return FALSE;
@@ -847,7 +847,7 @@ class GlobalMapCfg {
 						// value is "must"
 						if(!isset($element[$key]) || $element[$key] == '') {
 							// a "must" value is missing or empty
-							$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND = new GlobalPage($this->CORE);
 							$FRONTEND->messageToUser('ERROR',$this->CORE->LANG->getText('mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id));
 						}
 					}
@@ -859,7 +859,7 @@ class GlobalMapCfg {
 					if(!isset($this->validConfig[$type][$key])) {
 						// unknown atribute
 						if($printErr == 1) {
-							$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND = new GlobalPage($this->CORE);
 							$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type));
 						}
 						return FALSE;
@@ -875,7 +875,7 @@ class GlobalMapCfg {
 									if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
 										// wrong format
 										if($printErr) {
-											$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+											$FRONTEND = new GlobalPage($this->CORE);
 											$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key));
 										}
 										return FALSE;
@@ -887,7 +887,7 @@ class GlobalMapCfg {
 								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
 									// Wrong format
 									if($printErr) {
-										$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+										$FRONTEND = new GlobalPage($this->CORE);
 										$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key));
 									}
 									return FALSE;
