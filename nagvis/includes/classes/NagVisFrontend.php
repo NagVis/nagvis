@@ -227,22 +227,28 @@ class NagVisFrontend extends GlobalPage {
 			$thumbWidth = $imgSize[0];
 			$thumbHeight = $imgSize[1];
 			
-			if ($thumbWidth > $thumbMaxWidth) {
-				$factor = $thumbMaxWidth / $thumbWidth;
-				$thumbWidth *= $factor;
-				$thumbHeight *= $factor;
+			if (($thumbWidth > $thumbMaxWidth) || ($thumbHeight > $thumbMaxHeight)) {
+				if (($thumbWidth / $thumbHeight) > ($thumbMaxWidth / $thumbMaxHeight)) {
+					$thumbHeight = (int)($thumbHeight * $thumbMaxWidth / $thumbWidth);
+					$thumbWidth = $thumbMaxWidth;
+					$thumbX = 0;
+					$thumbY = (int)(($thumbMaxHeight - $thumbHeight) / 2);
+				} else {
+					$thumbWidth = (int)($thumbWidth * $thumbMaxHeight / $thumbHeight);
+					$thumbHeight = $thumbMaxHeight;
+					$thumbX = (int)(($thumbMaxWidth - $thumbWidth) / 2);
+					$thumbY = 0;
+				}
 			}
 			
-			if ($thumbHeight > $thumbMaxHeight) {
-				$factor = $thumbMaxHeight / $thumbHeight;
-				$thumbWidth *= $factor;
-				$thumbHeight *= $factor;
-			}
+			$thumb = imagecreatetruecolor($thumbMaxWidth, $thumbMaxHeight); 
 			
-			$thumb = imagecreatetruecolor($thumbWidth, $thumbHeight);
-			imagecopyresampled($thumb, $image, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $imgSize[0], $imgSize[1]);
+			imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
+			imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
 			
-			imagepng($thumb, $this->MAINCFG->getValue('paths','var').$mapName.'-thumb.png');
+			imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $imgSize[0], $imgSize[1]);
+			
+			imagepng($thumb, $this->MAINCFG->getValue('paths','var').$mapName.'-thumb.png'); 
 			
 			return $this->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
 		} else {
