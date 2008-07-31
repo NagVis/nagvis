@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHostgroup extends NagiosHostgroup {
+	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
 	var $LANG;
@@ -41,13 +42,15 @@ class NagVisHostgroup extends NagiosHostgroup {
 	 * @param		String		Name of the hostgroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisHostgroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostgroupName) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisHostgroup(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		$this->type = 'hostgroup';
 		$this->iconset = 'std_medium';
-		parent::NagiosHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostgroupName);
+		parent::NagiosHostgroup($this->CORE, $this->BACKEND, $backend_id, $hostgroupName);
 	}
 	
 	/**

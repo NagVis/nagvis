@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHostgroup extends NagVisStatefulObject {
+	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
 	var $LANG;
@@ -60,17 +61,19 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @param		String		Name of the hostgroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagiosHostgroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostgroupName) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagiosHostgroup(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		$this->backend_id = $backend_id;
 		$this->hostgroup_name = $hostgroupName;
 		
 		$this->members = Array();
 		$this->state = '';
 		
-		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
 	}
 	
 	/**
@@ -168,7 +171,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			$arrHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name);
 			if(count($arrHosts) > 0) {
 				foreach($arrHosts AS &$hostName) {
-					$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
+					$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 					
 					// The services have to know how they should handle hard/soft 
 					// states. This is a little dirty but the simplest way to do this

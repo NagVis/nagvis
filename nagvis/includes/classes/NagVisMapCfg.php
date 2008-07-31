@@ -26,21 +26,22 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapCfg extends GlobalMapCfg {
+	var $CORE;
 	var $name;
 	
 	/**
 	 * Class Constructor
 	 *
-	 * @param	GlobalMainCfg	$MAINCFG	
+	 * @param	GlobalCore	$CORE
 	 * @param	String			$name		Name of the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisMapCfg(&$MAINCFG,$name='') {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisMapCfg(&$CORE, $name='') {
+		$this->CORE = &$CORE;
 		$this->name	= $name;
 		
 		$this->getMap();
-		parent::GlobalMapCfg($this->MAINCFG,$this->name);
+		parent::GlobalMapCfg($this->CORE, $this->name);
 	}
 	
 	/**

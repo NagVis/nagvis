@@ -30,6 +30,7 @@ if(!isset($INC_GlobalBackend_ndomy)) {
 $INC_GlobalBackend_ndomy = TRUE;
 
 class GlobalBackendndomy {
+	var $CORE;
 	var $MAINCFG;
 	var $LANG;
 	var $CONN;
@@ -56,8 +57,10 @@ class GlobalBackendndomy {
 	 * @author	Andreas Husch <downanup@nagios-wiki.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalBackendndomy(&$MAINCFG,$backendId) {
-		$this->MAINCFG = &$MAINCFG;
+	function GlobalBackendndomy($CORE, $backendId) {
+		$this->CORE = $CORE;
+		$this->MAINCFG = $this->CORE->MAINCFG;
+		$this->LANG = $this->CORE->LANG;
 		$this->backendId = $backendId;
 		
 		$this->hostCache = Array();
@@ -71,9 +74,6 @@ class GlobalBackendndomy {
 		$this->dbPrefix = $this->MAINCFG->getValue('backend_'.$backendId, 'dbprefix');
 		$this->dbInstanceName = $this->MAINCFG->getValue('backend_'.$backendId, 'dbinstancename');
 		
-		// initialize a language object for later error messages which be given out as state output
-		$this->LANG = new GlobalLanguage($this->MAINCFG, 'nagvis');
-		
 		if($this->checkMysqlSupport() && $this->connectDB() && $this->checkTablesExists()) {
 			// Set the instanceId
 			$this->dbInstanceId = $this->getInstanceId();
@@ -84,14 +84,14 @@ class GlobalBackendndomy {
 			
 			// Check that Nagios reports itself as running	
 			if ($nagiosstate['is_currently_running'] != 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-				$FRONTEND->messageToUser('ERROR','nagiosNotRunning','BACKENDID~'.$this->backendId);
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('nagiosNotRunning', 'BACKENDID~'.$this->backendId));
 			}
 			
 			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
 			if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-				$FRONTEND->messageToUser('ERROR','nagiosDataNotUpToDate','BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'));
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('nagiosDataNotUpToDate', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
 			}
 			
 			/**
@@ -130,8 +130,8 @@ class GlobalBackendndomy {
 	 */
 	function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','noTablesExists','BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix);
+			$FRONTEND = new GlobalPage($this->CORE);
+			$FRONTEND->messageToUser('ERROR', $this->LANG->getText('noTablesExists', 'BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix));
 			
 			return FALSE;
 		} else {
@@ -158,8 +158,8 @@ class GlobalBackendndomy {
 		error_reporting($oldLevel);
 		
 		if(!$returnCode){
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-			$FRONTEND->messageToUser('ERROR','errorSelectingDb','BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error());
+			$FRONTEND = new GlobalPage($this->CORE);
+			$FRONTEND->messageToUser('ERROR', $this->LANG->getText('errorSelectingDb', 'BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error()));
 			
 			return FALSE;
 		} else {
@@ -181,8 +181,8 @@ class GlobalBackendndomy {
 			dl('mysql.so');
 			if (!extension_loaded('mysql')) {
 				//Error Box
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'backend:ndomy'));
-				$FRONTEND->messageToUser('ERROR','mysqlNotSupported','BACKENDID~'.$this->backendId);
+				$FRONTEND = new GlobalPage($this->CORE, Array('languageRoot'=>'backend:ndomy'));
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mysqlNotSupported','BACKENDID~'.$this->backendId));
 				
 				return FALSE;
 			} else {

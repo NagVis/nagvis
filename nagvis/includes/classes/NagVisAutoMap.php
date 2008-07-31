@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisAutoMap extends GlobalMap {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
 	var $MAPOBJ;
@@ -60,9 +61,10 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisAutoMap(&$MAINCFG, &$LANG, &$BACKEND, &$prop) {
-		$this->MAINCFG = &$MAINCFG;
-		$this->LANG = &$LANG;
+	function NagVisAutoMap(&$CORE, &$BACKEND, &$prop) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		$this->BACKEND = &$BACKEND;
 		
 		$this->arrHostnames = Array();
@@ -71,7 +73,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->mapCode = '';
 		
 		// Create map configuration
-		$this->MAPCFG = new NagVisMapCfg($this->MAINCFG, '__automap');
+		$this->MAPCFG = new NagVisMapCfg($this->CORE, '__automap');
 		$this->MAPCFG->readMapConfig();
 
 		// Set the preview option
@@ -152,17 +154,17 @@ class NagVisAutoMap extends GlobalMap {
 		$this->getObjectTree();
 		
 		if($this->filterGroup != '') {
-			$this->filterGroupObject = new NagiosHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->filterGroup);
+			$this->filterGroupObject = new NagiosHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filterGroup);
 			$this->filterGroupObject->fetchMemberHostObjects();
 			
 			$this->filterObjectTreeByGroup();
 		}
 		
-		parent::GlobalMap($this->MAINCFG, $this->MAPCFG);
+		parent::GlobalMap($this->CORE, $this->MAPCFG);
 		
 		// Create MAPOBJ object, form the object tree to map objects and get the
 		// state of the objects
-		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
+		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		$this->MAPOBJ->fetchState();
 	}
@@ -266,8 +268,8 @@ class NagVisAutoMap extends GlobalMap {
 				$binary = 'fdp';
 			break;
 			default:
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
-				$FRONTEND->messageToUser('ERROR','unknownRenderMode','MODE~'.$this->renderMode);
+				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownRenderMode','MODE~'.$this->renderMode));
 			break;
 		}
 		
@@ -387,8 +389,8 @@ class NagVisAutoMap extends GlobalMap {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -406,8 +408,8 @@ class NagVisAutoMap extends GlobalMap {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:global'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -441,8 +443,8 @@ class NagVisAutoMap extends GlobalMap {
 		
 		if($returnCode1 & $returnCode2) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
-				$FRONTEND->messageToUser('ERROR','graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->MAINCFG->getvalue('automap','graphvizpath'));
+				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->MAINCFG->getvalue('automap','graphvizpath')));
 			}
 			return FALSE;
 		} else {
@@ -544,8 +546,8 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Could not get root host for the automap
 		if(!isset($defaultRoot) || $defaultRoot == '') {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:automap'));
-			$FRONTEND->messageToUser('ERROR','couldNotGetRootHostname');
+			$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
+			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('couldNotGetRootHostname'));
 		} else {
 			return $defaultRoot;
 		}
@@ -557,7 +559,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchHostObjectByName($hostName) {
-		$hostObject = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $hostName);
+		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 		$hostObject->fetchMembers();
 		$hostObject->setConfiguration($this->getObjectConfiguration());
 		$this->rootObject = $hostObject;

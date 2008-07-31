@@ -26,7 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMapCfg {
-	var $MAINCFG;
+	var $CORE;
 	var $BACKGROUND;
 	
 	var $name;
@@ -38,12 +38,12 @@ class GlobalMapCfg {
 	/**
 	 * Class Constructor
 	 *
-	 * @param	GlobalMainCfg	$MAINCFG	
+	 * @param	GlobalCore	$CORE
 	 * @param	String			$name		Name of the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalMapCfg(&$MAINCFG,$name='') {
-		$this->MAINCFG = &$MAINCFG;
+	function GlobalMapCfg(&$CORE, $name='') {
+		$this->CORE = &$CORE;
 		$this->name	= $name;
 		
 		$this->validConfig = Array(
@@ -59,43 +59,43 @@ class GlobalMapCfg {
 					'default' => $this->getName(),
 					'match' => MATCH_STRING),
 				'usegdlibs' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'usegdlibs'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'usegdlibs'),
 					'match' => MATCH_BOOLEAN),
 				'show_in_lists' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'showinlists'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'showinlists'),
 					'match' => MATCH_BOOLEAN),
 				'backend_id' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'backend'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'backend'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'recognize_services' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'recognizeservices'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'recognizeservices'),
 					'match' => MATCH_BOOLEAN),
 				'only_hard_states' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'onlyhardstates'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'onlyhardstates'),
 					'match' => MATCH_BOOLEAN),
 				'iconset' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'icons'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'icons'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'background_color' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'backgroundcolor'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'backgroundcolor'),
 					'match' => MATCH_COLOR),
 				'hover_template' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hovertemplate'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hovertemplate'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'hover_timeout' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hovertimeout'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hovertimeout'),
 					'match' => MATCH_INTEGER),
 				'hover_menu' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hovermenu'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hovermenu'),
 					'match' => MATCH_BOOLEAN),
 				'hover_delay' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hoverdelay'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hoverdelay'),
 					'match' => MATCH_INTEGER),
 				'header_template' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'headertemplate'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'headertemplate'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'url_target' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'urltarget'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'urltarget'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'label_show' => Array('must' => 0,
 					'default' => '0',
@@ -119,16 +119,16 @@ class GlobalMapCfg {
 					'default' => '0',
 					'match' => MATCH_BOOLEAN),
 				'hover_childs_show' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hoverchildsshow'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hoverchildsshow'),
 					'match' => MATCH_BOOLEAN),
 				'hover_childs_sort' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hoverchildssort'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hoverchildssort'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'hover_childs_order' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hoverchildsorder'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hoverchildsorder'),
 					'match' => MATCH_ORDER),
 				'hover_childs_limit' => Array('must' => 0,
-					'default' => $this->MAINCFG->getValue('defaults', 'hoverchildslimit'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hoverchildslimit'),
 					'match' => MATCH_INTEGER)),
 			'host' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
@@ -594,7 +594,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
-		$RET = new GlobalBackground($this->MAINCFG, $this->getValue('global', 0, 'map_image'));
+		$RET = new GlobalBackground($this->CORE, $this->getValue('global', 0, 'map_image'));
 		return $RET;
 	}
 	
@@ -607,12 +607,12 @@ class GlobalMapCfg {
 	function createMapConfig() {
 		// does file exists?
 		if(!$this->checkMapConfigReadable(FALSE)) {
-			if($this->MAINCFG->checkMapCfgFolderWriteable(TRUE)) {
+			if($this->CORE->MAINCFG->checkMapCfgFolderWriteable(TRUE)) {
 				// create empty file
-				$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', 'w');
+				$fp = fopen($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', 'w');
 				fclose($fp); 
 				// set permissions
-				chmod($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg',0666);
+				chmod($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg',0666);
 				
 					return TRUE;
 				} else {
@@ -646,7 +646,7 @@ class GlobalMapCfg {
 								'template' => 0);
 				
 				// Read file in array (Don't read empty lines and ignore new line chars)
-				$file = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+				$file = file($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 				
 				// Create an array for these options
 				$createArray = Array('allowed_user' => 1,
@@ -685,8 +685,8 @@ class GlobalMapCfg {
 									$types[$sObjType]++;
 								} else {
 									// unknown object type
-									$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-									$FRONTEND->messageToUser('ERROR','unknownObject','TYPE~'.$type);
+									$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+									$FRONTEND->messageToUser('ERROR', $this->CORE->LANG('unknownObject','TYPE~'.$type));
 									return FALSE;
 								}
 							} else {
@@ -793,12 +793,12 @@ class GlobalMapCfg {
 	 */
 	function checkMapConfigExists($printErr) {
 		if($this->name != '') {
-			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+			if(file_exists($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-					$FRONTEND->messageToUser('ERROR','mapCfgNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+					$FRONTEND = new GlobalPage($this->CORE->MAINCFG);
+					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapCfgNotExists','MAP~'.$this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
 				}
 				return FALSE;
 			}
@@ -816,12 +816,12 @@ class GlobalMapCfg {
 	 */
 	function checkMapConfigReadable($printErr) {
 		if($this->name != '') {
-			if(is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+			if(is_readable($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-					$FRONTEND->messageToUser('ERROR','mapCfgNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+					$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable','MAP='.$this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
 				}
 				return FALSE;
 			}
@@ -847,8 +847,8 @@ class GlobalMapCfg {
 						// value is "must"
 						if(!isset($element[$key]) || $element[$key] == '') {
 							// a "must" value is missing or empty
-							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-							$FRONTEND->messageToUser('ERROR','mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id);
+							$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND->messageToUser('ERROR',$this->CORE->LANG->getText('mustValueNotSet','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type.',ID~'.$id));
 						}
 					}
 				}
@@ -859,8 +859,8 @@ class GlobalMapCfg {
 					if(!isset($this->validConfig[$type][$key])) {
 						// unknown atribute
 						if($printErr == 1) {
-							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-							$FRONTEND->messageToUser('ERROR','unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type);
+							$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+							$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type));
 						}
 						return FALSE;
 					} else {
@@ -875,8 +875,8 @@ class GlobalMapCfg {
 									if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
 										// wrong format
 										if($printErr) {
-											$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-											$FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
+											$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+											$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key));
 										}
 										return FALSE;
 									}
@@ -887,8 +887,8 @@ class GlobalMapCfg {
 								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
 									// Wrong format
 									if($printErr) {
-										$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-										$FRONTEND->messageToUser('ERROR','wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key);
+										$FRONTEND = new GlobalPage($this->CORE->MAINCFG,Array('languageRoot'=>'global:global'));
+										$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap','MAP~'.$this->getName().',TYPE~'.$type.',ATTRIBUTE~'.$key));
 									}
 									return FALSE;
 								}
@@ -924,7 +924,7 @@ class GlobalMapCfg {
 	 */
 	function getFileModificationTime() {
 		if($this->checkMapConfigReadable(1)) {
-			$time = filemtime($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+			$time = filemtime($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
 			return $time;
 		} else {
 			return FALSE;

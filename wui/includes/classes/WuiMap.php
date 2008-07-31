@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiMap extends GlobalMap {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
 	var $LANG;
@@ -38,18 +39,20 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	$MAINCFG WuiMainCfg
+	 * @param 	$CORE WuiMainCfg
 	 * @param 	$MAPCFG  GlobalMapCfg
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiMap(&$MAINCFG,&$MAPCFG,&$LANG) {
-		$this->MAINCFG = &$MAINCFG;
+	function WuiMap(&$CORE, &$MAPCFG) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->MAPCFG = &$MAPCFG;
-		$this->LANG = &$LANG;
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
-		parent::GlobalMap($MAINCFG,$MAPCFG);
+		parent::GlobalMap($CORE, $MAPCFG);
 		
 		$this->loadPermissions();
 		$this->objects = $this->getMapObjects(1);
@@ -68,7 +71,7 @@ class WuiMap extends GlobalMap {
 				$mapOptions .= ', ';	
 			}
 			
-			$MAPCFG1 = new WuiMapCfg($this->MAINCFG,$map);
+			$MAPCFG1 = new WuiMapCfg($this->CORE, $map);
 			$MAPCFG1->readMapConfig(0);
 			$mapOptions .= '{ mapName:\''.$map.'\'';
 			
@@ -289,8 +292,8 @@ class WuiMap extends GlobalMap {
 			}
 			
 			if(!file_exists($imgPath)) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('WARNING','iconNotExists','IMGPATH~'.$imgPath);
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('iconNotExists','IMGPATH~'.$imgPath));
 				
 				$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 				$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');

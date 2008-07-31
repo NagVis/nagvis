@@ -53,14 +53,16 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisStatefulObject(&$MAINCFG, &$BACKEND, &$LANG) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisStatefulObject(&$CORE, &$BACKEND) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		
 		$this->GRAPHIC = '';
 		
-		parent::NagVisObject($this->MAINCFG, $this->LANG);
+		parent::NagVisObject($this->CORE);
 	}
 	
 	/**

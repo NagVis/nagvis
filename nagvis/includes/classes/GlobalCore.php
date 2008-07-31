@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalControllerinfo.php - Global controller for info page
+ * GlobalCore.php - The core of NagVis pages
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -23,28 +23,25 @@
  *****************************************************************************/
 
 /**
- * class GlobalControllerInfo
+ * class GlobalCore
  *
- * @author  Michael Luebben <michael_luebben@web.de>
+ * @author  Lars Michelsen <lars@vertical-visions.de
  */
-class GlobalControllerInfo {
+class GlobalCore {
+	public $MAINCFG;
+	public $LANG;
 
+	/**
+	 * Class Constructor
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function __construct() {
-
-		// Load the core
-		$CORE = new GlobalCore();
-
-		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE);
-
-		// Build the page
-		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-		$FRONTEND->getHeaderMenu();
-		$FRONTEND->addBodyLines(new NagVisInfoPage($MAINCFG));
-		$FRONTEND->getMessages();
-
-		// Print the page
-		$FRONTEND->printPage();
+		// Load the main configuration
+		$this->MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+		
+		// Initialize language
+		$this->LANG = new GlobalLanguage($this->MAINCFG);
 	}
 }
 ?>

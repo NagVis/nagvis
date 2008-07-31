@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiEditMainCfg extends GlobalPage {
+	var $CORE;
 	var $MAINCFG;
 	var $LANG;
 	var $FORM;
@@ -36,19 +37,18 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @param 	$MAINCFG GlobalMainCfg
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiEditMainCfg(&$MAINCFG) {
-		$this->MAINCFG = &$MAINCFG;
+	function WuiEditMainCfg(&$CORE) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		
-		# we load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis');
-		
-		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
+		$prop = Array('title' => $this->CORE->MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array('./includes/js/wui.js','./includes/js/EditMainCfg.js'),
 					  'extHeader'=>Array(''),
-					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
+					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($MAINCFG,$prop);
+		parent::GlobalPage($CORE, $prop);
 	}
 	
 	/**

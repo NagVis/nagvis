@@ -35,19 +35,19 @@ class GlobalControllermap {
 
 		$this->mapName = $mapName;
 
-		// Load the main configuration
-		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+		// Load the core
+		$CORE = new GlobalCore();
 
 		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($MAINCFG, $this->mapName);
+		$MAPCFG = new NagVisMapCfg($CORE, $this->mapName);
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
 
 		// Initialize backend(s)
-		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+		$BACKEND = new GlobalBackendMgmt($CORE);
 
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($MAINCFG, $MAPCFG, $BACKEND);
+		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND);
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 		$FRONTEND->getHeaderMenu();

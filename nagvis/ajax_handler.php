@@ -39,6 +39,7 @@ require("./includes/functions/getuser.php");
 require("./includes/functions/ajaxErrorHandler.php");
 
 // Include needed global classes
+require("./includes/classes/GlobalCore.php");
 require("./includes/classes/GlobalMainCfg.php");
 require("./includes/classes/GlobalMapCfg.php");
 require("./includes/classes/GlobalLanguage.php");
@@ -70,12 +71,12 @@ require("./includes/classes/objects/NagVisMapObj.php");
 require("./includes/classes/objects/NagVisShape.php");
 require("./includes/classes/objects/NagVisTextbox.php");
 
-// Load the main configuration
-$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+// Load the core
+$CORE = new GlobalCore();
 
 // FIXME: This is a hack; TODO: create a class "AjaxFrontend" which
 // handles this user authentication related things and the handling below
-$MAINCFG->setRuntimeValue('user', getUser());
+$CORE->MAINCFG->setRuntimeValue('user', getUser());
 
 // Initialize var
 if(!isset($_GET['action'])) {
@@ -86,26 +87,24 @@ switch($_GET['action']) {
 	case 'getObjectHoverMenu':
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
 			// FIXME: Error handling
-			echo 'Error: Parameter "map" not set';
+			echo 'Error: '.$CORE->LANG->getText('parameterMapNotSet');
 		} elseif(!isset($_GET['objType']) || $_GET['objType'] == '') {
 			// FIXME: Error handling
-			echo 'Error: Parameter "objType" not set';
+			echo 'Error: '.$CORE->LANG->getText('parameterObjTypeNotSet');
 		} elseif(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			// FIXME: Error handling
-			echo 'Error: Parameter "objName1" not set';
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} elseif($_GET['objType'] == 'service' && (!isset($_GET['objName2']) || $_GET['objName2'] == '')) {
 			// FIXME: Error handling
-			echo 'Error: Parameter "objName2" not set';
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName2NotSet');
 		} else  {
 			// Initialize map configuration
-			$MAPCFG = new NagVisMapCfg($MAINCFG, $_GET['map']);
+			$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
 			// Read the map configuration file
 			$MAPCFG->readMapConfig();
 			
 			// Initialize backend(s)
-			$BACKEND = new GlobalBackendMgmt($MAINCFG);
-			
-			$LANG = new GlobalLanguage($MAINCFG, 'nagvis');
+			$BACKEND = new GlobalBackendMgmt($CORE);
 			
 			$objConf = Array();
 			if($_GET['map'] == '__automap') {
@@ -129,7 +128,7 @@ switch($_GET['action']) {
 					}
 				} else {
 					// FIXME: ERROR handling
-					echo "Error: no object of that type on the map";
+					echo 'Error: '.$CORE->LANG->getText('foundNoObjectOfThatTypeOnMap');
 				}
 			}
 			
@@ -143,38 +142,38 @@ switch($_GET['action']) {
 				
 				switch($_GET['objType']) {
 					case 'host':
-						$OBJ = new NagVisHost($MAINCFG, $BACKEND, $LANG, $objConf['backend_id'], $objConf['host_name']);
+						$OBJ = new NagVisHost($CORE, $BACKEND, $objConf['backend_id'], $objConf['host_name']);
 					break;
 					case 'service':
-						$OBJ = new NagVisService($MAINCFG, $BACKEND, $LANG, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
+						$OBJ = new NagVisService($CORE, $BACKEND, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
 					break;
 					case 'hostgroup':
-						$OBJ = new NagVisHostgroup($MAINCFG, $BACKEND, $LANG, $objConf['backend_id'], $objConf['hostgroup_name']);
+						$OBJ = new NagVisHostgroup($CORE, $BACKEND, $objConf['backend_id'], $objConf['hostgroup_name']);
 					break;
 					case 'servicegroup':
-						$OBJ = new NagVisServicegroup($MAINCFG, $BACKEND, $LANG, $objConf['backend_id'], $objConf['servicegroup_name']);
+						$OBJ = new NagVisServicegroup($CORE, $BACKEND, $objConf['backend_id'], $objConf['servicegroup_name']);
 					break;
 					case 'map':
-						$SUBMAPCFG = new NagVisMapCfg($MAINCFG, $objConf['map_name']);
+						$SUBMAPCFG = new NagVisMapCfg($CORE, $objConf['map_name']);
 						if($SUBMAPCFG->checkMapConfigExists(0)) {
 							$SUBMAPCFG->readMapConfig();
 						}
-						$OBJ = new NagVisMapObj($MAINCFG, $BACKEND, $LANG, $SUBMAPCFG);
+						$OBJ = new NagVisMapObj($CORE, $BACKEND, $SUBMAPCFG);
 						
 						if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 							$OBJ->summary_state = 'ERROR';
-							$OBJ->summary_output = $LANG->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+							$OBJ->summary_output = $CORE->LANG->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
 						}
 					break;
 					case 'shape':
-						$OBJ = new NagVisShape($MAINCFG, $LANG, $objConf['icon']);
+						$OBJ = new NagVisShape($CORE, $objConf['icon']);
 					break;
 					case 'textbox':
-						$OBJ = new NagVisTextbox($MAINCFG, $LANG);
+						$OBJ = new NagVisTextbox($CORE);
 					break;
 					default:
-						$FRONTEND = new GlobalPage($MAINCFG,Array('languageRoot'=>'global:global'));
-						$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName());
+						$FRONTEND = new GlobalPage($CORE);
+						$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName()));
 					break;
 				}
 				
@@ -197,36 +196,33 @@ switch($_GET['action']) {
 			} else {
 				// FIXME: Errorhandling
 				// object not on map
-				echo "Error: object not on map";
+				echo 'Error: '.$CORE->LANG->getText('ObjectNotFoundOnMap');
 			}
 		}
 	break;
 	case 'getMapState':
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
 			// FIXME: Error handling
-			echo 'Error: Parameter "map" not set';
+			echo 'Error: '.$CORE->LANG->getText('parameterMapNotSet');
 		} elseif($_GET['map'] == '__automap') {
 			// FIXME: Error handling
-			echo 'Error: Automap not supported here';
+			echo 'Error: '.$CORE->LANG->getText('automapNotSupportedHere');
 		} else {
 			// Initialize map configuration
-			$MAPCFG = new NagVisMapCfg($MAINCFG, $_GET['map']);
+			$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
 			$MAPCFG->readMapConfig();
 			
-			// Initialize language
-			$LANG = new GlobalLanguage($MAINCFG, 'nagvis');
-			
 			// Initialize backends
-			$BACKEND = new GlobalBackendMgmt($MAINCFG);
+			$BACKEND = new GlobalBackendMgmt($CORE);
 			
-			$MAP = new NagVisMap($MAINCFG, $MAPCFG, $LANG, $BACKEND);
+			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
 			
 			$retArr = Array('summarState' => $MAP->MAPOBJ->getSummaryState(),'summaryOutput' => $MAP->MAPOBJ->getSummaryOutput());
 			echo json_encode($retArr);
 		}
 	break;
 	default:
-		echo 'Error: Unknown query';
+		echo 'Error: '.$CORE->LANG->getText('unknownQuery');
 	break;
 }
 ?>

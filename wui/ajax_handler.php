@@ -44,19 +44,17 @@ require("../nagvis/includes/classes/GlobalPage.php");
 require("../nagvis/includes/classes/GlobalBackendMgmt.php");
 
 // Include needed wui specific classes
+require("./includes/classes/WuiCore.php");
 require("./includes/classes/WuiMainCfg.php");
 require("./includes/classes/WuiMapCfg.php");
 
-// Load the main configuration
-$MAINCFG = new WuiMainCfg(CONST_MAINCFG);
+// Load the core
+$CORE = new WuiCore();
 
 // Initialize var
 if(!isset($_GET['action'])) {
 	$_GET['action'] = '';
 }
-
-// Load the language file
-$LANG = new GlobalLanguage($MAINCFG,'nagvis');
 
 // Now do the requested action
 switch($_GET['action']) {
@@ -68,17 +66,17 @@ switch($_GET['action']) {
 		// $_GET['backend_id'], $_GET['type']
 		
 		// Initialize the backend
-		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+		$BACKEND = new GlobalBackendMgmt($CORE);
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
 		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			echo $LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
+			echo $CORE->LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			echo $LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
+			echo $CORE->LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -99,17 +97,17 @@ switch($_GET['action']) {
 		// $_GET['backend_id'], $_GET['host_name']
 		
 		// Initialize the backend
-		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+		$BACKEND = new GlobalBackendMgmt($CORE);
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} elseif(!isset($_GET['host_name']) || $_GET['host_name'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~host_name');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~host_name');
 		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			echo $LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
+			echo $CORE->LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']);
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			echo $LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
+			echo $CORE->LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects');
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -135,16 +133,16 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
 		} elseif(!isset($_GET['mode']) || $_GET['mode'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~mode');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~mode');
 		} elseif($_GET['mode'] != 'read' && $_GET['mode'] != 'write') {
-			echo $LANG->getText('accessModeIsNotValid', 'MODE~'.$_GET['mode']);
+			echo $CORE->LANG->getText('accessModeIsNotValid', 'MODE~'.$_GET['mode']);
 		} else {
 			// Input looks OK, handle the request...
 			
 			// Initialize map configuration
-			$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
+			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
 			$MAPCFG->readMapConfig();
 			
 			echo '[ ';
@@ -176,15 +174,15 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if((!isset($_GET['backend_type']) || $_GET['backend_type'] == '') && (!isset($_GET['backend_id']) || $_GET['backend_id'] == '')) {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type')."\n";
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type')."\n";
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} else {
 			// Input looks OK, handle the request...
 			
 			// If the backend_type is not set try to get the backend_type of the given
 			// backend
 			if($_GET['backend_type'] == '' && $_GET['backend_id'] != '') {
-				$_GET['backend_type'] = $MAINCFG->getValue('backend_'.$_GET['backend_id'],'backendtype');
+				$_GET['backend_type'] = $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],'backendtype');
 			}
 			
 			echo '[ ';
@@ -193,7 +191,7 @@ switch($_GET['action']) {
 			// Check if the backend_type is set
 			if($_GET['backend_type'] != '') {
 				// Loop all options for this backend type
-				foreach($MAINCFG->validConfig['backend']['options'][$_GET['backend_type']] AS $key => $opt) {
+				foreach($CORE->MAINCFG->validConfig['backend']['options'][$_GET['backend_type']] AS $key => $opt) {
 					echo "\t";
 					if($i != 0) {
 						echo ', ';
@@ -206,15 +204,15 @@ switch($_GET['action']) {
 					
 					// If the backend_id is given read the currently set value of the
 					// backend
-					if(isset($_GET['backend_id']) && $_GET['backend_id'] != '' && $MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE) != '') {
-						echo ',  "value": "'.$MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE).'" ';
+					if(isset($_GET['backend_id']) && $_GET['backend_id'] != '' && $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE) != '') {
+						echo ',  "value": "'.$CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE).'" ';
 					}
 					
 					echo "\t".' }'."\n";
 					$i++;
 				}
 			} else {
-				echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type');
+				echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type');
 			}
 			echo ' ]';
 		}
@@ -228,16 +226,16 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['image']) || $_GET['image'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~image');
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~image');
 		} else {
 			// Input looks OK, handle the request...
 			
 			echo '[ ';
 			$i = 0;
 			// Loop all maps
-			foreach($MAINCFG->getMaps() AS $var => $val) {
+			foreach($CORE->MAINCFG->getMaps() AS $var => $val) {
 				// Initialize map configuration 
-				$MAPCFG = new WuiMapCfg($MAINCFG,$val);
+				$MAPCFG = new WuiMapCfg($CORE, $val);
 				$MAPCFG->readMapConfig();
 				
 				// If the map_image is used in the map list the map
@@ -256,7 +254,7 @@ switch($_GET['action']) {
 	 * Fallback
 	 */
 	default:
-		echo $LANG->getText('unknownAction', 'ACTION~'.$_GET['action']);
+		echo $CORE->LANG->getText('unknownAction', 'ACTION~'.$_GET['action']);
 	break;
 }
 ?>

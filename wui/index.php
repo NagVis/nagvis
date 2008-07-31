@@ -46,11 +46,12 @@ require("../nagvis/includes/classes/GlobalBackground.php");
 require("../nagvis/includes/classes/GlobalGraphic.php");
 
 // Include needed wui specific classes
+require("./includes/classes/WuiCore.php");
 require("./includes/classes/WuiMainCfg.php");
 require("./includes/classes/WuiMapCfg.php");
 
-// Load the main configuration
-$MAINCFG = new WuiMainCfg(CONST_MAINCFG);
+// Load the core
+$CORE = new WuiCore();
 
 // If not set, initialize $_GET['page']
 if(!isset($_GET['page'])) {
@@ -64,7 +65,7 @@ switch($_GET['page']) {
 		require("../nagvis/includes/classes/GlobalForm.php");
 		require("./includes/classes/WuiEditMainCfg.php");
 		
-		$FRONTEND = new WuiEditMainCfg($MAINCFG);
+		$FRONTEND = new WuiEditMainCfg($CORE);
 		$FRONTEND->getForm();
 		$FRONTEND->printPage();
 	break;
@@ -73,7 +74,7 @@ switch($_GET['page']) {
 		require("../nagvis/includes/classes/GlobalForm.php");
 		require("./includes/classes/WuiShapeManagement.php");
 		
-		$FRONTEND = new WuiShapeManagement($MAINCFG);
+		$FRONTEND = new WuiShapeManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'background_management':
@@ -81,7 +82,7 @@ switch($_GET['page']) {
 		require("../nagvis/includes/classes/GlobalForm.php");
 		require("./includes/classes/WuiBackgroundManagement.php");
 		
-		$FRONTEND = new WuiBackgroundManagement($MAINCFG);
+		$FRONTEND = new WuiBackgroundManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'map_management':
@@ -89,7 +90,7 @@ switch($_GET['page']) {
 		require("../nagvis/includes/classes/GlobalForm.php");
 		require("./includes/classes/WuiMapManagement.php");
 		
-		$FRONTEND = new WuiMapManagement($MAINCFG);
+		$FRONTEND = new WuiMapManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'backend_management':
@@ -97,7 +98,7 @@ switch($_GET['page']) {
 		require("../nagvis/includes/classes/GlobalForm.php");
 		require("./includes/classes/WuiBackendManagement.php");
 		
-		$FRONTEND = new WuiBackendManagement($MAINCFG);
+		$FRONTEND = new WuiBackendManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'addmodify':
@@ -105,7 +106,7 @@ switch($_GET['page']) {
 		require("../nagvis/includes/classes/GlobalForm.php");
 		require("./includes/classes/WuiAddModify.php");
 		
-		$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
+		$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
 		$MAPCFG->readMapConfig();
 		
 		if(!isset($_GET['coords'])) {
@@ -115,7 +116,7 @@ switch($_GET['page']) {
 			$_GET['id'] = '';
 		}
 		
-		$FRONTEND = new WuiAddModify($MAINCFG,$MAPCFG,Array('action' => $_GET['action'],
+		$FRONTEND = new WuiAddModify($CORE, $MAPCFG, Array('action' => $_GET['action'],
 															'type' => $_GET['type'],
 															'id' => $_GET['id'],
 															'coords' => $_GET['coords']));
@@ -133,10 +134,10 @@ switch($_GET['page']) {
 			$_GET['map'] = '';	
 		}
 		
-		$MAPCFG = new WuiMapCfg($MAINCFG,$_GET['map']);
+		$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
 		$MAPCFG->readMapConfig();
 		
-		$FRONTEND = new WuiFrontend($MAINCFG,$MAPCFG);
+		$FRONTEND = new WuiFrontend($CORE, $MAPCFG);
 		$FRONTEND->checkPreflight();
 		$FRONTEND->getMap();
 		$FRONTEND->getMessages();

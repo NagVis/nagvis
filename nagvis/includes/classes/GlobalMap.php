@@ -26,20 +26,24 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMap {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
+	var $LANG;
 	
 	var $linkedMaps = Array();
 	
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	GlobalMainCfg 	$MAINCFG
+	 * @param 	GlobalCore 	$CORE
 	 * @param 	GlobalMapCfg 	$MAPCFG
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalMap(&$MAINCFG,&$MAPCFG) {
-		$this->MAINCFG = &$MAINCFG;
+	function GlobalMap(&$CORE,&$MAPCFG) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$this->CORE->MAINCFG;
+		$this->LANG = &$this->CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 	}
 	
@@ -54,8 +58,8 @@ class GlobalMap {
 		if($this->MAPCFG->getValue('global', 0, 'usegdlibs') == '1') {
 			if(!extension_loaded('gd')) {
 				if($printErr) {
-					$FRONTEND = new GlobalPage($this->MAINCFG);
-					$FRONTEND->messageToUser('WARNING','gdLibNotFound');
+					$FRONTEND = new GlobalPage($this->CORE);
+					$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('gdLibNotFound'));
 				}
 				return FALSE;
 			} else {

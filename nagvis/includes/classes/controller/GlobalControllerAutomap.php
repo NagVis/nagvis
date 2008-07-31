@@ -31,20 +31,20 @@ class GlobalControllerAutomap {
 
 	public function __construct($automapEnv) {
 
-		// Load the main configuration
-		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+		// Load the core
+		$CORE = new GlobalCore();
 
 		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($MAINCFG, NULL);
+		$MAPCFG = new NagVisMapCfg($CORE, NULL);
 
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
 
 		// Initialize backend(s)
-		$BACKEND = new GlobalBackendMgmt($MAINCFG);
+		$BACKEND = new GlobalBackendMgmt($CORE);
 
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($MAINCFG, $MAPCFG, $BACKEND);
+		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND);
 
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());

@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHost extends NagVisStatefulObject {
+	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
 	var $LANG;
@@ -74,10 +75,12 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @param		String		Name of the host
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagiosHost(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagiosHost(&$CORE, &$BACKEND, $backend_id, $hostName) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		$this->backend_id = $backend_id;
 		$this->host_name = $hostName;
 		
@@ -87,7 +90,7 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->state = '';
 		$this->has_been_acknowledged = 0;
 		
-		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
 	}
 	
 	/**
@@ -296,7 +299,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	function fetchServiceObjects() {
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states) AS $arrService) {
-			$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $this->backend_id, $this->host_name, $arrService['service_description']);
+			$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $this->host_name, $arrService['service_description']);
 			
 			// Append contents of the array to the object properties
 			$OBJ->setObjectInformation($arrService);

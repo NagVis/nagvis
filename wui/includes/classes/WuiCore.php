@@ -1,9 +1,9 @@
 <?php
 /*****************************************************************************
  *
- * GlobalControllerinfo.php - Global controller for info page
+ * WuiCore.php - The core of NagVis WUI pages
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
+ * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
  * License:
  *
@@ -21,30 +21,25 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
-
+ 
 /**
- * class GlobalControllerInfo
- *
- * @author  Michael Luebben <michael_luebben@web.de>
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class GlobalControllerInfo {
-
+class WuiCore {
+	public $MAINCFG;
+	public $LANG;
+	
+	/**
+	 * Class Constructor
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function __construct() {
-
-		// Load the core
-		$CORE = new GlobalCore();
-
-		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE);
-
-		// Build the page
-		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-		$FRONTEND->getHeaderMenu();
-		$FRONTEND->addBodyLines(new NagVisInfoPage($MAINCFG));
-		$FRONTEND->getMessages();
-
-		// Print the page
-		$FRONTEND->printPage();
-	}
+		// Load the main configuration
+		$this->MAINCFG = new WuiMainCfg(CONST_MAINCFG);
+		
+		// Initialize language
+		$this->LANG = new GlobalLanguage($this->MAINCFG);
+	} 
 }
 ?>

@@ -41,13 +41,15 @@ class NagVisHost extends NagiosHost {
 	 * @param		String		Name of the host
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisHost(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisHost(&$CORE, &$BACKEND, $backend_id, $hostName) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		$this->type = 'host';
 		$this->iconset = 'std_medium';
-		parent::NagiosHost($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostName);
+		parent::NagiosHost($this->CORE, $this->BACKEND, $backend_id, $hostName);
 	}
 	
 	/**

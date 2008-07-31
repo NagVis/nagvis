@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosService extends NagVisStatefulObject {
+	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
 	var $LANG;
@@ -79,10 +80,12 @@ class NagiosService extends NagVisStatefulObject {
 	 * @param		String		Service description
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagiosService(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName, $serviceDescription) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagiosService(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		$this->backend_id = $backend_id;
 		$this->host_name = $hostName;
 		$this->service_description = $serviceDescription;
@@ -91,7 +94,7 @@ class NagiosService extends NagVisStatefulObject {
 		$this->state = '';
 		$this->has_been_acknowledged = 0;
 		
-		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
 	}
 	
 	/**

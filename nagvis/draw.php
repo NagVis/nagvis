@@ -38,6 +38,7 @@ require("./includes/functions/debug.php");
 require("./includes/functions/oldPhpVersionFixes.php");
 
 // Include needed global classes
+require("./includes/classes/GlobalCore.php");
 require("./includes/classes/GlobalGraphic.php");
 require("./includes/classes/GlobalMainCfg.php");
 require("./includes/classes/GlobalMapCfg.php");
@@ -68,22 +69,19 @@ require("./includes/classes/objects/NagVisMapObj.php");
 require("./includes/classes/objects/NagVisShape.php");
 require("./includes/classes/objects/NagVisTextbox.php");
 
-// Load the main configuration
-$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+// Load the core
+$CORE = new GlobalCore();
 
 // Initialize the map configuration
-$MAPCFG = new NagVisMapCfg($MAINCFG, $_GET['map']);
+$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
 // Read the map configuration file
 $MAPCFG->readMapConfig();
 
 // Initialize the backend(s)
 $BACKEND = new GlobalBackendMgmt($MAINCFG);
 
-// Initialize the language handling
-$LANG = new GlobalLanguage($MAINCFG, 'nagvis');
-
 // Initialize the background image
-$BACKGROUND = new NagVisBackground($MAINCFG, $MAPCFG, $LANG, $BACKEND);
+$BACKGROUND = new NagVisBackground($CORE, $MAPCFG, $BACKEND);
 $BACKGROUND->parseObjects();
 $BACKGROUND->parseMap();
 ?>

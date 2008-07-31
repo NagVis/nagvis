@@ -27,6 +27,7 @@
  */
 class GlobalPage {
 	var $MAINCFG;
+	var $LANG;
 	
 	// arrays for the header
 	var $title;
@@ -45,12 +46,13 @@ class GlobalPage {
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	GlobalMainCfg 	$MAINCFG
+	 * @param 	GlobalCore 	$CORE
 	 * @param 	Array			$prop		Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalPage(&$MAINCFG, $givenProperties=Array()) {
-		$this->MAINCFG = &$MAINCFG;
+	function GlobalPage(&$CORE, $givenProperties=Array()) {
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
@@ -107,7 +109,7 @@ class GlobalPage {
       return TRUE;
     } else {
 			if($printErr) {
-				$this->messageToUser('ERROR','wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION);
+				$this->messageToUser('ERROR', $this->LANG->getText('wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION));
       }
       return FALSE;
     }
@@ -125,7 +127,7 @@ class GlobalPage {
 					return TRUE;
 		} else {
 			if($printErr) {
-				$this->messageToUser('ERROR','noUser');
+				$this->messageToUser('ERROR', $this->LANG->getText('noUser'));
 			}
 			return FALSE;
 		}
@@ -142,7 +144,7 @@ class GlobalPage {
 	function checkPermissions(&$allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
-				$this->messageToUser('ERROR','permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user'));
+				$this->messageToUser('ERROR', $this->LANG->getText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
 			}
 			return FALSE;
 		} else {
@@ -171,23 +173,22 @@ class GlobalPage {
 	 * serverity: ERROR, WARNING, INFORMATION
 	 *
 	 * @param	String	$serverity	Serverity of the message (ERROR|WARNING|INFORMATION)
-	 * @param	Integer	$id			Message Key in the language file
-	 * @param	String	$vars		String to replace
+	 * @param	String	$text		String to display as message
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-	function messageToUser($serverity='WARNING', $id, $vars='') {
+	function messageToUser($serverity='WARNING', $text) {
 		switch($serverity) {
 			case 'ERROR':
 			case 'INFO-STOP':
 				// print the message box and kill the script
-				$this->body .= $this->messageBox($serverity,$id,$vars);
+				$this->body .= $this->messageBox($serverity, $text);
 				$this->printPage();
 				// end of script
 			break;
 			case 'WARNING':
 			case 'INFORMATION':
 				// add the message to message Array - the printing will be done later, the message array has to be superglobal, not a class variable
-				$arrMessage = Array(Array('serverity' => $serverity, 'nr' => $id, 'vars' => $vars));
+				$arrMessage = Array(Array('serverity' => $serverity, 'text' => $text));
 				if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
 					$this->MAINCFG->setRuntimeValue('userMessages',array_merge($this->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
 				} else {
@@ -208,7 +209,7 @@ class GlobalPage {
 		
 		if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
 			foreach($this->MAINCFG->getRuntimeValue('userMessages') AS $message) {
-				$ret .= $this->messageBox($message['serverity'], $message['nr'], $message['vars']);
+				$ret .= $this->messageBox($message['serverity'], $message['text']);
 			}
 		}
 		
@@ -219,16 +220,13 @@ class GlobalPage {
 	 * Creates a Messagebox for informations and errors
 	 *
 	 * @param	String	$serverity	Serverity of the message (ERROR|WARNING|INFORMATION)
-	 * @param	String	$id			Number of the error messages
-	 * @param	String	$vars		Strings to replace
+	 * @param	String	$text			Error message
 	 * @return 	Array	HTML Code
 	 * @author	Michael Luebben <michael_luebben@web.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function messageBox($serverity, $id, $vars) {
+	function messageBox($serverity, $text) {
 		$ret = '';
-		
-		$LANG = new GlobalLanguage($this->MAINCFG, $this->languageRoot);
 		
 		switch($serverity) {
 			case 'ERROR':
@@ -253,8 +251,8 @@ class GlobalPage {
 		}
 		$ret .= '<table class="messageBox" cellpadding="2" cellspacing="2">';
 		$ret .= '<tr><th width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
-		$ret .= '</th><th>'.$id.': '.$LANG->getText($id,$vars).'</th></tr>';
-		$ret .= '<tr><td colspan="2">'.$LANG->getText($id,$vars).'</td></tr></table>';
+		$ret .= '</th><th>'.$serverity.'</th></tr>';
+		$ret .= '<tr><td colspan="2">'.$text.'</td></tr></table>';
 		if($serverity == 'ERROR') {
 			$ret .= '</td></tr></table>';
 		}

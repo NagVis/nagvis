@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisServicegroup extends NagiosServicegroup {
+	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
 	var $LANG;
@@ -41,13 +42,15 @@ class NagVisServicegroup extends NagiosServicegroup {
 	 * @param		String		Name of the servicegroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisServicegroup(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $servicegroupName) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisServicegroup(&$CORE, &$BACKEND, $backend_id, $servicegroupName) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		$this->type = 'servicegroup';
 		$this->iconset = 'std_medium';
-		parent::NagiosServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $servicegroupName);
+		parent::NagiosServicegroup($this->CORE, $this->BACKEND, $backend_id, $servicegroupName);
 	}
 	
 	/**

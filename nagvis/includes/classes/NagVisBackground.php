@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisBackground extends NagVisMap {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
@@ -48,11 +49,12 @@ class NagVisBackground extends NagVisMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisBackground(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND) {
+	function NagVisBackground(&$CORE,&$MAPCFG,&$BACKEND) {
 		$this->numObjects = 0;
-		$this->MAINCFG = &$MAINCFG;
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
-		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
 		
 		$this->user = $this->getUser();
@@ -60,7 +62,7 @@ class NagVisBackground extends NagVisMap {
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
-		parent::NagVisMap($MAINCFG,$MAPCFG,$LANG,$BACKEND);
+		parent::NagVisMap($CORE,$MAPCFG,$BACKEND);
 		
 		$this->checkPreflight();
 		$this->initImage();

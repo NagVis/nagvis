@@ -27,11 +27,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapObj extends NagVisStatefulObject {
+	var $CORE;
 	var $MAINCFG;
+	var $LANG;
 	var $MAPCFG;
 	var $MAP;
 	var $BACKEND;
-	var $LANG;
 	
 	var $objects;
 	var $linkedMaps;
@@ -62,11 +63,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @param		Object		Object of class NagVisMapCfg
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisMapObj(&$MAINCFG, &$BACKEND, &$LANG, $MAPCFG) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisMapObj(&$CORE, &$BACKEND, $MAPCFG) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		
 		$this->map_name = $this->MAPCFG->getName();
 		$this->alias = $this->MAPCFG->getAlias();
@@ -84,7 +86,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		$this->is_summary_object = FALSE;
 		
-		parent::NagVisStatefulObject($this->MAINCFG, $this->BACKEND, $this->LANG);
+		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
 	}
 	
 	/**
@@ -279,23 +281,23 @@ class NagVisMapObj extends NagVisStatefulObject {
 					
 					switch($type) {
 						case 'host':
-							$OBJ = new NagVisHost($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name']);
+							$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name']);
 						break;
 						case 'service':
-							$OBJ = new NagVisService($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
+							$OBJ = new NagVisService($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
 						break;
 						case 'hostgroup':
-							$OBJ = new NagVisHostgroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['hostgroup_name']);
+							$OBJ = new NagVisHostgroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['hostgroup_name']);
 						break;
 						case 'servicegroup':
-							$OBJ = new NagVisServicegroup($this->MAINCFG, $this->BACKEND, $this->LANG, $objConf['backend_id'], $objConf['servicegroup_name']);
+							$OBJ = new NagVisServicegroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['servicegroup_name']);
 						break;
 						case 'map':
-							$SUBMAPCFG = new NagVisMapCfg($this->MAINCFG, $objConf['map_name']);
+							$SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
 							if($SUBMAPCFG->checkMapConfigExists(0)) {
 								$SUBMAPCFG->readMapConfig();
 							}
-							$OBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $SUBMAPCFG);
+							$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG);
 							
 							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 								$OBJ->summary_state = 'ERROR';
@@ -303,14 +305,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 							}
 						break;
 						case 'shape':
-							$OBJ = new NagVisShape($this->MAINCFG, $this->LANG, $objConf['icon']);
+							$OBJ = new NagVisShape($this->CORE, $objConf['icon']);
 						break;
 						case 'textbox':
-							$OBJ = new NagVisTextbox($this->MAINCFG, $this->LANG);
+							$OBJ = new NagVisTextbox($this->CORE);
 						break;
 						default:
-							$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot' => 'nagvis'));
-							$FRONTEND->messageToUser('ERROR', 'unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName());
+							$FRONTEND = new GlobalPage($this->CORE);
+							$FRONTEND->messageToUser('ERROR', $this->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
 						break;
 					}
 					
@@ -343,8 +345,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 			// Loop all objects on the child map to find out if there is a link back to this map (loop)
 			foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
 				if($this->MAPCFG->getName() == $arrChildMap['map_name']) {
-					$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
-					$FRONTEND->messageToUser('WARNING', 'loopInMapRecursion');
+					$FRONTEND = new GlobalPage($this->CORE);
+					$FRONTEND->messageToUser('WARNING', $this->LANG->getText('loopInMapRecursion'));
 					
 					$OBJ->summary_state = 'UNKNOWN';
 					$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
@@ -475,8 +477,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function checkPermissions($allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot' => 'nagvis'));
-				$FRONTEND->messageToUser('ERROR', 'permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user'));
+				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot' => 'nagvis'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user')));
 			}
 			return FALSE;
 		} else {
@@ -495,8 +497,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function checkMaintenance($printErr) {
 		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG, Array('languageRoot' => 'nagvis'));
-				$FRONTEND->messageToUser('INFO-STOP', 'mapInMaintenance', 'MAP~'.$this->getName());
+				$FRONTEND = new GlobalPage($this->CORE, Array('languageRoot' => 'nagvis'));
+				$FRONTEND->messageToUser('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
 			}
 			return FALSE;
 		} else {

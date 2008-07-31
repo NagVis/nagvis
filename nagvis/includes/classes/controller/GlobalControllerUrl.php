@@ -30,12 +30,11 @@
 class GlobalControllerUrl {
 
 	public function __construct($url) {
-
-		// Load the main configuration
-		$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+		// Load the core
+		$CORE = new GlobalCore();
 
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($MAINCFG);
+		$FRONTEND = new NagVisFrontend($CORE);
 
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());

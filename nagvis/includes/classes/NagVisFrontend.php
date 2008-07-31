@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisFrontend extends GlobalPage {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
@@ -39,21 +40,21 @@ class NagVisFrontend extends GlobalPage {
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	GlobalMainCfg 	$MAINCFG
+	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisFrontend(&$MAINCFG,&$MAPCFG = '',&$BACKEND = '') {
+	function NagVisFrontend(&$CORE,&$MAPCFG = '',&$BACKEND = '') {
 		$prop = Array();
 		
-		$this->MAINCFG = &$MAINCFG;
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
 		
-		$this->LANG = new GlobalLanguage($MAINCFG, 'nagvis');
-		
 		$this->htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
 		
-		$prop['title'] = $MAINCFG->getValue('internal', 'title');
+		$prop['title'] = $this->MAINCFG->getValue('internal', 'title');
 		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css');
 		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js', $this->htmlBase.'/nagvis/includes/js/overlib.js', $this->htmlBase.'/nagvis/includes/js/dynfavicon.js', $this->htmlBase.'/nagvis/includes/js/ajax.js', $this->htmlBase.'/nagvis/includes/js/hover.js');
 		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';
@@ -69,7 +70,7 @@ class NagVisFrontend extends GlobalPage {
 			$this->headerTemplate = $this->MAINCFG->getValue('defaults', 'headertemplate');
 		}
 		
-		parent::GlobalPage($this->MAINCFG,$prop);
+		parent::GlobalPage($CORE, $prop);
 	}
 	
 	/**
@@ -87,7 +88,7 @@ class NagVisFrontend extends GlobalPage {
 			$ret .= '<tr><th colspan="4">'.$this->LANG->getText('mapIndex').'</th></tr><tr>';
 			$i = 1;
 			foreach($this->getMaps() AS $mapName) {
-				$MAPCFG = new NagVisMapCfg($this->MAINCFG,$mapName);
+				$MAPCFG = new NagVisMapCfg($this->CORE,$mapName);
 				$MAPCFG->readMapConfig();
 				
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->MAINCFG->getValue('automap', 'showinlists')))) {
@@ -106,12 +107,12 @@ class NagVisFrontend extends GlobalPage {
 						
 						$opts['preview'] = 1;
 						
-						$MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $opts);
+						$MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $opts);
 						// If there is no automap image on first load of the index page,
 						// render the image
 						$MAP->renderMap();
 					} else {
-						$MAP = new NagVisMap($this->MAINCFG, $MAPCFG, $this->LANG, $this->BACKEND);
+						$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
 					}
 					$MAP->MAPOBJ->fetchIcon();
 					
@@ -214,8 +215,8 @@ class NagVisFrontend extends GlobalPage {
 				$image = imagecreatefrompng($imgPath);
 				break;
 				default:
-					$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-					$FRONTEND->messageToUser('ERROR','onlyPngOrJpgImages');
+					$FRONTEND = new GlobalPage($this->CORE);
+					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
@@ -261,8 +262,8 @@ class NagVisFrontend extends GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -280,8 +281,8 @@ class NagVisFrontend extends GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var'));
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -300,8 +301,8 @@ class NagVisFrontend extends GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('WARNING','imageNotExists','FILE~'.$imgPath);
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('WARNING', $this->LANG->getText('imageNotExists','FILE~'.$imgPath));
 			}
 			return FALSE;
 		}
@@ -345,7 +346,7 @@ class NagVisFrontend extends GlobalPage {
 							$sReplace = '';
 							preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
 							foreach($this->getMaps() AS $mapName) {
-								$MAPCFG1 = new NagVisMapCfg($this->MAINCFG,$mapName);
+								$MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
 								$MAPCFG1->readMapConfig(1);
 								
 								if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->MAINCFG->getValue('automap', 'showinlists')))) {
@@ -391,8 +392,8 @@ class NagVisFrontend extends GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('WARNING','headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html');
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('WARNING', $this->LANG->getText('headerTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html'));
 			}
 			return FALSE;
 		}
@@ -410,8 +411,8 @@ class NagVisFrontend extends GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('WARNING','headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html');
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('WARNING', $this->LANG->getText('headerTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths', 'headertemplate').'tmpl.'.$this->headerTemplate.'.html'));
 			}
 			return FALSE;
 		}
@@ -425,7 +426,7 @@ class NagVisFrontend extends GlobalPage {
 	function getMap() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div class="map">');
-		$this->MAP = new NagVisMap($this->MAINCFG,$this->MAPCFG,$this->LANG,$this->BACKEND);
+		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, $this->BACKEND);
 		$this->MAP->MAPOBJ->checkMaintenance(1);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
@@ -439,7 +440,7 @@ class NagVisFrontend extends GlobalPage {
 	function getAutoMap($arrOptions) {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="map" class="map">');
-		$this->MAP = new NagVisAutoMap($this->MAINCFG, $this->LANG, $this->BACKEND, $arrOptions);
+		$this->MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $arrOptions);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
 	}
@@ -524,8 +525,8 @@ class NagVisFrontend extends GlobalPage {
 				}
 			} else {
 				// Error Message (Map rotation pool does not exist)
-				$FRONTEND = new GlobalPage($this->MAINCFG);
-				$FRONTEND->messageToUser('ERROR','mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']);
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']));
 				
 				return '';
 			}

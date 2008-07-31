@@ -28,6 +28,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisStatelessObject extends NagVisObject {
+	var $CORE;
 	var $MAINCFG;
 	var $LANG;
 	
@@ -46,11 +47,12 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisStatelessObject(&$MAINCFG, &$LANG) {
-		$this->MAINCFG = &$MAINCFG;
-		$this->LANG = &$LANG;
+	function NagVisStatelessObject(&$CORE) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		
-		parent::NagVisObject($this->MAINCFG, $this->LANG);
+		parent::NagVisObject($this->CORE);
 	}
 	
 	/**

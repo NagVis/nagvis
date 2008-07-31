@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiFrontend extends GlobalPage {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
 	var $LANG;
@@ -37,13 +38,14 @@ class WuiFrontend extends GlobalPage {
 	*
 	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
-	function WuiFrontend(&$MAINCFG,&$MAPCFG) {
-		$this->MAINCFG = &$MAINCFG;
+	function WuiFrontend(&$CORE, &$MAPCFG) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->MAPCFG = &$MAPCFG;
 		
-		$this->LANG = new GlobalLanguage($this->MAINCFG,'nagvis');
-		
-		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
+		$prop = Array('title'=>$this->CORE->MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/wui.css','./includes/css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/wui.js',
 					  	  './includes/js/ajax.js',
@@ -54,7 +56,7 @@ class WuiFrontend extends GlobalPage {
 					  'extHeader'=>Array("<style type=\"text/css\">body.main { background-color: ".$this->MAPCFG->getValue('global',0, 'background_color')."; }</style>"),
 					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($this->MAINCFG,$prop);
+		parent::GlobalPage($this->CORE, $prop);
 	}
 	
 	function checkPreflight() {
@@ -66,8 +68,8 @@ class WuiFrontend extends GlobalPage {
 	function checkPHPMBString($printErr=1) {
 		if (!extension_loaded('mbstring')) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('ERROR','phpModuleNotLoaded','MODULE~mbstring');
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('phpModuleNotLoaded','MODULE~mbstring'));
 			}
 			return FALSE;
 		} else {
@@ -82,7 +84,7 @@ class WuiFrontend extends GlobalPage {
 	*/
 	function getMap() {
 		$this->addBodyLines('<div id="mymap" class="map">');
-		$this->MAP = new WuiMap($this->MAINCFG,$this->MAPCFG,$this->LANG);
+		$this->MAP = new WuiMap($this->CORE, $this->MAPCFG);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
 	}

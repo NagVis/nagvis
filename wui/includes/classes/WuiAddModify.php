@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiAddModify extends GlobalPage {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
 	var $LANG;
@@ -37,20 +38,20 @@ class WuiAddModify extends GlobalPage {
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	GlobalMainCfg 	$MAINCFG
+	 * @param 	GlobalMainCfg 	$CORE
 	 * @param 	WuiMapCfg 		$MAPCFG
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiAddModify(&$MAINCFG,&$MAPCFG,$prop) {
-		$this->MAINCFG = &$MAINCFG;
+	function WuiAddModify(&$CORE, &$MAPCFG, $prop) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->MAPCFG = &$MAPCFG;
 		$this->prop = $prop;
 		$this->propCount = 0;
 		
-		# we load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG, 'nagvis');
-		
-		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
+		$prop = Array('title' => $CORE->MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/addmodify.js',
 					  					  './includes/js/ajax.js',
@@ -58,7 +59,7 @@ class WuiAddModify extends GlobalPage {
 					  'extHeader'=>Array(''),
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($MAINCFG, $prop);
+		parent::GlobalPage($CORE, $prop);
 	}
 	
 	/**

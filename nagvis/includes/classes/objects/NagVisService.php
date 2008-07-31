@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisService extends NagiosService {
+	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
 	var $LANG;
@@ -42,13 +43,15 @@ class NagVisService extends NagiosService {
 	 * @param		String		Service description
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisService(&$MAINCFG, &$BACKEND, &$LANG, $backend_id, $hostName, $serviceDescription) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisService(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKEND = &$BACKEND;
-		$this->LANG = &$LANG;
 		$this->type = 'service';
 		$this->iconset = 'std_medium';
-		parent::NagiosService($this->MAINCFG, $this->BACKEND, $this->LANG, $backend_id, $hostName, $serviceDescription);
+		parent::NagiosService($this->CORE, $this->BACKEND, $backend_id, $hostName, $serviceDescription);
 	}
 	
 	/**

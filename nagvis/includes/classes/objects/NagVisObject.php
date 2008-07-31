@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisObject {
+	var $CORE;
 	var $MAINCFG;
 	var $LANG;
 	
@@ -58,9 +59,10 @@ class NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisObject(&$MAINCFG, &$LANG) {
-		$this->MAINCFG = &$MAINCFG;
-		$this->LANG = &$LANG;
+	function NagVisObject(&$CORE) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		
 		$this->conf = Array();
 		
@@ -273,8 +275,8 @@ class NagVisObject {
 		* $content = file_get_contents($obj['hover_url'],FALSE,$context);
 		*/
 		if(!$content = file_get_contents($this->hover_url)) {
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-			$FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$this->hover_url);
+			$FRONTEND = new GlobalPage($this->CORE);
+			$FRONTEND->messageToUser('WARNING', $this->LANG->getText('couldNotGetHoverUrl','URL~'.$this->hover_url));
 		}
 		
 		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$content)))));
@@ -715,8 +717,8 @@ class NagVisObject {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','hoverTemplateNotReadable','FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html'));
 			}
 			return FALSE;
 		}
@@ -736,8 +738,8 @@ class NagVisObject {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR','hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html'));
 			}
 			return FALSE;
 		}

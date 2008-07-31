@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMap extends GlobalMap {
+	var $CORE;
 	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
@@ -41,18 +42,19 @@ class NagVisMap extends GlobalMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisMap(&$MAINCFG,&$MAPCFG,&$LANG,&$BACKEND,$getState=1) {
-		$this->MAINCFG = &$MAINCFG;
+	function NagVisMap(&$CORE,&$MAPCFG,&$BACKEND,$getState=1) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
-		$this->LANG = &$LANG;
 		$this->BACKEND = &$BACKEND;
 		
 		$this->numLineObjects = 0;
 		
 		$this->GRAPHIC = new GlobalGraphic();
 		
-		parent::GlobalMap($this->MAINCFG,$this->MAPCFG);
-		$this->MAPOBJ = new NagVisMapObj($this->MAINCFG, $this->BACKEND, $this->LANG, $this->MAPCFG);
+		parent::GlobalMap($this->CORE, $this->MAPCFG);
+		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG);
 		
 		$this->MAPOBJ->fetchMembers();
 		

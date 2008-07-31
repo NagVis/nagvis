@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiMapManagement extends GlobalPage {
+	var $CORE;
 	var $MAINCFG;
 	var $LANG;
 	var $CREATEFORM;
@@ -38,25 +39,25 @@ class WuiMapManagement extends GlobalPage {
 	/**
 	 * Class Constructor
 	 *
-	 * @param	GlobalMainCfg	$MAINCFG
+	 * @param	GlobalMainCfg	$CORE
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiMapManagement(&$MAINCFG) {
-		$this->MAINCFG = &$MAINCFG;
+	function WuiMapManagement(&$CORE) {
+		$this->CORE = &$CORE;
+		$this->MAINCFG = &$CORE->MAINCFG;
+		$this->LANG = &$CORE->LANG;
+		
 		$this->propCount = 0;
 		
-		// load the language file
-		$this->LANG = new GlobalLanguage($MAINCFG,'nagvis');
-		
-		$prop = Array('title'=>$MAINCFG->getValue('internal', 'title'),
+		$prop = Array('title' => $this->CORE->MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/map_management.js',
 					  						'./includes/js/ajax.js',
 					  						'./includes/js/wui.js'),
 					  'extHeader'=>Array(''),
-					  'allowedUsers' => $this->MAINCFG->getValue('wui','allowedforconfig'),
+					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($MAINCFG,$prop);
+		parent::GlobalPage($CORE, $prop);
 	}
 	
 	/**

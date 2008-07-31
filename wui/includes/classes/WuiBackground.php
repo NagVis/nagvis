@@ -26,8 +26,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiBackground extends GlobalBackground {
-	function WuiBackground(&$MAINCFG, $image) {
-		parent::GlobalBackground($MAINCFG, $image);
+	function WuiBackground(&$CORE, $image) {
+		parent::GlobalBackground($CORE, $image);
 	}
 	
 	/**
@@ -42,8 +42,8 @@ class WuiBackground extends GlobalBackground {
 			if(unlink($this->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('ERROR','couldNotDeleteMapImage','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapImage','IMGPATH~'.$this->MAINCFG->getValue('paths', 'map').$this->image));
 				return FALSE;
 			}
 		}
@@ -68,8 +68,8 @@ class WuiBackground extends GlobalBackground {
 						return TRUE;
 					} else {
 						// Error handling
-						$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
-						$FRONTEND->messageToUser('ERROR','moveUploadedFileFailed');
+						$FRONTEND = new GlobalPage($this->CORE);
+						$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('moveUploadedFileFailed'));
 						return FALSE;
 					}
 				} else {
@@ -78,14 +78,14 @@ class WuiBackground extends GlobalBackground {
 				}
 			} else {
 				// Error handling
-				$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
-				$FRONTEND->messageToUser('ERROR','mustBePngFile');
+				$FRONTEND = new GlobalPage($this->CORE);
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mustBePngFile'));
 				return FALSE;
 			}
 		} else {
 			// Error handling
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
-			$FRONTEND->messageToUser('ERROR','fileCouldNotBeUploaded');
+			$FRONTEND = new GlobalPage($this->CORE);
+			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('fileCouldNotBeUploaded'));
 			return FALSE;
 		}
 	}
@@ -121,8 +121,8 @@ class WuiBackground extends GlobalBackground {
 			}
 		} else {
 			// Error handling
-			$FRONTEND = new GlobalPage($this->MAINCFG,Array('languageRoot'=>'wui:backgroundManagement'));
-			$FRONTEND->messageToUser('ERROR','imageAlreadyExists','IMAGE~'.$this->MAINCFG->getValue('paths', 'map').$this->image);
+			$FRONTEND = new GlobalPage($this->CORE);
+			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('imageAlreadyExists','IMAGE~'.$this->MAINCFG->getValue('paths', 'map').$this->image));
 			return FALSE;
 		}
 	}
