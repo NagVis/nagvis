@@ -247,7 +247,7 @@ class WuiMap extends GlobalMap {
 					if(isset($obj['line_type'])) {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
-						$ret[] = "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
+						$ret .= "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
 						$obj['x'] = $this->GRAPHIC->middle($pointa_x,$pointb_x) - 10;
 						$obj['y'] = $this->GRAPHIC->middle($pointa_y,$pointb_y) - 10;
 						
