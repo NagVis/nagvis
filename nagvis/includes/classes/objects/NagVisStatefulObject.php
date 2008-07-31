@@ -425,11 +425,10 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		// Parse object depending on line or normal icon
 		if(isset($this->line_type)) {
-			
 			$ret .= $this->parseLine();
 			
-			$this->getLineHoverArea();
-			$ret .= $this->parseIcon();
+			// DEPRECATED: $this->getLineHoverArea();
+			// DEPRECATED: $ret .= $this->parseIcon();
 		} else {
 			$ret .= $this->parseIcon();
 		}
@@ -511,13 +510,16 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function parseLine() {
 		$ret = '';
+		$link = '';
 		
 		list($x1,$x2) = explode(',', $this->getX());
 		list($y1,$y2) = explode(',', $this->getY());
 		
-		//$ret .= '<div id="xxxx" style="z-index:'.$this->z.';">';
-		//$ret .= '<div id="xxxx1" style="z-index:'.$this->z.';">';
-		$ret .= '<script type="text/javascript">drawNagVisLine('.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
+		$objId = md5(time());
+		
+		$ret .= '<div id="'.$objId.'" style="z-index:'.$this->z.';" '.$this->getHoverMenu().' onclick="window.open(\''.$this->getUrl().'\',\''.$this->getUrlTarget().'\',\'\');">';
+		$ret .= '<div id="'.$objId.'-border" style="z-index:'.($this->z+1).';">';
+		$ret .= '<script type="text/javascript">drawNagVisLine(\''.$objId.'\','.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
 		
 		return $ret;
 	}
@@ -537,7 +539,7 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 		
 		$ret = '<div class="icon" style="left:'.$this->x.'px;top:'.$this->y.'px;z-index:'.$this->z.';">';
-		$ret .= $this->createLink();
+		$ret .= '<a href="'.$this->getUrl().'" target="'.$this->getUrlTarget().'">';
 		$ret .= '<img src="'.$this->iconHtmlPath.$this->icon.'" '.$this->getHoverMenu().' alt="'.$this->type.'-'.$alt.'">';
 		$ret .= '</a>';
 		$ret .= '</div>';

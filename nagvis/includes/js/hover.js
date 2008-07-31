@@ -75,6 +75,9 @@ function setHoverMenu(oResponse,oOpt) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function displayHoverMenu(delay, intTimeout, intWaitTimer) {
+	// Change cursor to "hand" when displaying hover menu
+	document.body.style.cursor='pointer';
+	
 	// Default timeout value is given timeout value seconds
 	intWaitTimer = typeof(intWaitTimer) != 'undefined' ? intWaitTimer : intTimeout ;
 	
@@ -106,6 +109,9 @@ function displayHoverMenu(delay, intTimeout, intWaitTimer) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function hideHoverMenu() {
+	// Change cursor to auto when hiding hover menu
+	document.body.style.cursor='auto';
+	
 	clearHoverMenu();
 	return nd();
 }

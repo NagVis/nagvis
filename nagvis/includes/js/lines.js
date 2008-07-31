@@ -26,7 +26,7 @@
  */
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(type,x1,y1,x2,y2,state,ack,downtime) {
+function drawNagVisLine(objId, type,x1,y1,x2,y2,state,ack,downtime) {
 	var colorFill = '';
 	var colorBorder = '#000000';
 	
@@ -67,23 +67,17 @@ function drawNagVisLine(type,x1,y1,x2,y2,state,ack,downtime) {
 		var xMid = middle(x1,x2);
 		var yMid = middle(y1,y2);
 		
-		drawArrow(x1, y1, xMid, yMid, width, colorFill, colorBorder);
-		drawArrow(x2, y2, xMid, yMid, width, colorFill, colorBorder);
+		drawArrow(objId, x1, y1, xMid, yMid, width, colorFill, colorBorder);
+		drawArrow(objId, x2, y2, xMid, yMid, width, colorFill, colorBorder);
 	} else if(type == 11) {
-		drawArrow(x1, y1, x2, y2, width, colorFill, colorBorder);
+		drawArrow(objId, x1, y1, x2, y2, width, colorFill, colorBorder);
 	}
 }
 
 // This function draws an arrow like it is used on NagVis maps
-function drawArrow(x1, y1, x2, y2, w, colorFill, colorBorder) {
+function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder) {
 	var xCoord = Array();
 	var yCoord = Array();
-	
-	var oLine1 = new jsGraphics();
-	var oLine1Border = new jsGraphics();
-	
-	oLine1.setColor(colorFill);
-	oLine1Border.setColor(colorBorder);
 	
 	xCoord[0] = x1 + newX(x2-x1, y2-y1, 0, w);
 	xCoord[1] = x2 + newX(x2-x1, y2-y1, -4*w, w);
@@ -101,10 +95,15 @@ function drawArrow(x1, y1, x2, y2, w, colorFill, colorBorder) {
 	yCoord[5] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
 	yCoord[6] = y1 + newY(x2-x1, y2-y1, 0, -w);
 	
-	oLine1.fillPolygon(xCoord, yCoord);
-	oLine1Border.drawPolygon(xCoord, yCoord);
-	oLine1.paint();
-	oLine1Border.paint();
+	var oLine = new jsGraphics(objId);
+	oLine.setColor(colorFill);
+	oLine.fillPolygon(xCoord, yCoord);
+	oLine.paint();
+	
+	var oLineBorder = new jsGraphics(objId+'-border');
+	oLineBorder.setColor(colorBorder);
+	oLineBorder.drawPolygon(xCoord, yCoord);
+	oLineBorder.paint();
 }
 
 function newX(a, b, x, y) {

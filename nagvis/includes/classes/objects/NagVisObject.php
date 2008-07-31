@@ -253,6 +253,30 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PRIVATE getUrl()
+	 *
+	 * Returns the url for the object link
+	 *
+	 * @return	String	URL
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getUrl() {
+		return $this->url;
+	}
+	
+	/**
+	 * PRIVATE getUrlTarget()
+	 *
+	 * Returns the target frame for the object link
+	 *
+	 * @return	String	Target
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getUrlTarget() {
+		return $this->url_target;
+	}
+	
+	/**
 	 * PRIVATE readHoverUrl()
 	 *
 	 * Reads the given hover url form an object and forms it to a readable format for the hover box
@@ -743,18 +767,6 @@ class NagVisObject {
 			}
 			return FALSE;
 		}
-	}
-	
-	/**
-	 * PRIVATE createLink()
-	 *
-	 * Creates a link to the configured url
-	 *
-	 * @return	String	HTML code of the Link
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function createLink() {
-		return '<a href="'.$this->url.'" target="'.$this->url_target.'">';
 	}
 }
 ?>

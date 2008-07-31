@@ -114,21 +114,21 @@ class NagVisService extends NagiosService {
 		}
 	}
 	
-	
 	/**
-	 * Creates a link to Nagios, when this is not set in the Config-File
+	 * PRIVATE getUrl()
 	 *
-	 * @return	String	The Link
+	 * Returns the url for the object link
+	 *
+	 * @return	String	URL
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function createLink() {
-		
+	function getUrl() {
 		if(isset($this->url) && $this->url != '') {
-			$link = parent::createLink();
+			$url = parent::getUrl();
 		} else {
-			$link = '<a href="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$this->host_name.'&amp;service='.$this->service_description.'" target="'.$this->url_target.'">';
+			$url = $this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$this->host_name.'&amp;service='.$this->service_description;
 		}
-		return $link;
+		return $url;
 	}
 }
 ?>

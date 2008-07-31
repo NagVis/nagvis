@@ -77,21 +77,22 @@ class NagVisShape extends NagVisStatelessObject {
 		}
 	}
 	
+	
 	/**
-	 * Creates a link to Nagios, when this is not set in the Config-File
+	 * PRIVATE getUrl()
 	 *
-	 * @return	String	The Link
+	 * Returns the url for the object link
+	 *
+	 * @return	String	URL
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function createLink() {
-		
+	function getUrl() {
 		if(isset($this->url) && $this->url != '') {
-			$link = parent::createLink();  
+			$url = parent::getUrl();
 		} else {
-			$link = '';
+			$url = '';
 		}
-		
-		return $link;
+		return $url;
 	}
 	
 	/**

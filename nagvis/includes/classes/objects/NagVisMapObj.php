@@ -427,18 +427,20 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * Creates a link to Nagios, when this is not set in the Config-File
+	 * PRIVATE getUrl()
 	 *
-	 * @return	String	The Link
+	 * Returns the url for the object link
+	 *
+	 * @return	String	URL
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function createLink() {
+	function getUrl() {
 		if(isset($this->url) && $this->url != '') {
-			$link = parent::createLink();
+			$url = parent::getUrl();
 		} else {
-			$link = '<a href="'.$this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$this->map_name.'" target="'.$this->url_target.'">';
-		};
-		return $link;
+			$url = $this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$this->map_name;
+		}
+		return $url;
 	}
 	
 	/**
