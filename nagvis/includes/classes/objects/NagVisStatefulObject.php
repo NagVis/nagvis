@@ -515,11 +515,13 @@ class NagVisStatefulObject extends NagVisObject {
 		list($x1,$x2) = explode(',', $this->getX());
 		list($y1,$y2) = explode(',', $this->getY());
 		
+		$width = '3';
+		
 		$objId = md5(time());
 		
 		$ret .= '<div id="'.$objId.'-border" style="z-index:'.$this->z.';">';
 		$ret .= '<div id="'.$objId.'" style="z-index:'.$this->z.';" '.$this->getHoverMenu().' onclick="window.open(\''.$this->getUrl().'\',\''.$this->getUrlTarget().'\',\'\');">';
-		$ret .= '<script type="text/javascript">drawNagVisLine(\''.$objId.'\','.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
+		$ret .= '<script type="text/javascript">drawNagVisLine(\''.$objId.'\','.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', '.$width.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
 		
 		return $ret;
 	}

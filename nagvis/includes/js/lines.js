@@ -26,12 +26,9 @@
  */
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objId, type,x1,y1,x2,y2,state,ack,downtime) {
+function drawNagVisLine(objId, type,x1,y1,x2,y2,width,state,ack,downtime) {
 	var colorFill = '';
 	var colorBorder = '#000000';
-	
-	// FIXME: Make the width configurable
-	var width = 3;
 	
 	// Get the fill color depending on the object state
 	switch (state) {
