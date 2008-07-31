@@ -29,18 +29,18 @@
  */
 class NagVisInfoPage {
 
-	private $MAINCFG;
+	private $CORE;
 	private $infoPage;
 
 	/**
 	 * Constructor
 	 *
-	 * @param   Object  $MAINCFG
+	 * @param   Object  $CORE
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function __construct($MAINCFG) {
-		$this->MAINCFG = $MAINCFG;
+	public function __construct($CORE) {
+		$this->CORE = $CORE;
 	}
 
 	/**
@@ -53,8 +53,8 @@ class NagVisInfoPage {
 		$infoPage  = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'."\n";
 		$infoPage .= '<html>'."\n";
 		$infoPage .= '   <head>'."\n";
-		$infoPage .= '      <title>'.$this->MAINCFG->getValue('internal', 'title').'</title>'."\n";
-		$infoPage .= '      <style type="text/css"><!-- @import url('.$this->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css);  --></style>'."\n";
+		$infoPage .= '      <title>'.$this->CORE->MAINCFG->getValue('internal', 'title').'</title>'."\n";
+		$infoPage .= '      <style type="text/css"><!-- @import url('.$this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css);  --></style>'."\n";
 		$infoPage .= '   </head>'."\n";
 		$infoPage .= '   <body class="main">'."\n";
 		$infoPage .= '      <div class="infopage">'."\n";

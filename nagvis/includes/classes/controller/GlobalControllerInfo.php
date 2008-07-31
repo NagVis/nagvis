@@ -40,7 +40,7 @@ class GlobalControllerInfo {
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 		$FRONTEND->getHeaderMenu();
-		$FRONTEND->addBodyLines(new NagVisInfoPage($MAINCFG));
+		$FRONTEND->addBodyLines(new NagVisInfoPage($CORE));
 		$FRONTEND->getMessages();
 
 		// Print the page
