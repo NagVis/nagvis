@@ -96,7 +96,7 @@ class GlobalController implements GlobalControllerInterface {
 
 			// Display index page
 			case 'default':
-				$this->displayPage = new GlobalControllerDefault();
+				$this->displayPage = new GlobalControllerIndex();
 				$this->checkedParameterName = 'default';
 				$this->isValid = TRUE;
 			break;

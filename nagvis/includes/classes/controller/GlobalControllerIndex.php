@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalControllerDefault.php - Global default controller for nagvis
+ * GlobalControllerIndex.php - Index Controller for NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -27,7 +27,7 @@
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalControllerDefault {
+class GlobalControllerIndex {
 
 	public function __construct() {
 
