@@ -56,7 +56,7 @@ class NagVisFrontend extends GlobalPage {
 		
 		$prop['title'] = $this->MAINCFG->getValue('internal', 'title');
 		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css');
-		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js', $this->htmlBase.'/nagvis/includes/js/overlib.js', $this->htmlBase.'/nagvis/includes/js/dynfavicon.js', $this->htmlBase.'/nagvis/includes/js/ajax.js', $this->htmlBase.'/nagvis/includes/js/hover.js');
+		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js', $this->htmlBase.'/nagvis/includes/js/overlib.js', $this->htmlBase.'/nagvis/includes/js/dynfavicon.js', $this->htmlBase.'/nagvis/includes/js/ajax.js', $this->htmlBase.'/nagvis/includes/js/hover.js', $this->htmlBase.'/nagvis/includes/js/wz_jsgraphics.js', $this->htmlBase.'/nagvis/includes/js/lines.js');
 		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';
 		$prop['languageRoot'] = 'nagvis';
 		

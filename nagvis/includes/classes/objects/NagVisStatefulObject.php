@@ -419,14 +419,22 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parse() {
+		$ret = '';
+		
 		$this->replaceMacros();
 		
-		// Some specials for lines
+		// Parse object depending on line or normal icon
 		if(isset($this->line_type)) {
+			
+			$ret .= $this->parseLine();
+			
 			$this->getLineHoverArea();
+			$ret .= $this->parseIcon();
+		} else {
+			$ret .= $this->parseIcon();
 		}
 		
-		return $this->parseIcon().$this->parseLabel();
+		return $ret.$this->parseLabel();
 	}
 	
 	# End public methods
@@ -493,6 +501,25 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->x = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
 		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
 		$this->icon = '20x20.gif';
+	}
+	
+	/**
+	 * Parses the HTML-Code of a line
+	 *
+	 * @return	String		HTML code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseLine() {
+		$ret = '';
+		
+		list($x1,$x2) = explode(',', $this->getX());
+		list($y1,$y2) = explode(',', $this->getY());
+		
+		//$ret .= '<div id="xxxx" style="z-index:'.$this->z.';">';
+		//$ret .= '<div id="xxxx1" style="z-index:'.$this->z.';">';
+		$ret .= '<script type="text/javascript">drawNagVisLine('.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
+		
+		return $ret;
 	}
 	
 	/**
