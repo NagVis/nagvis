@@ -428,7 +428,6 @@ class NagVisStatefulObject extends NagVisObject {
 			$ret .= $this->parseLine();
 			
 			// DEPRECATED: $this->getLineHoverArea();
-			// DEPRECATED: $ret .= $this->parseIcon();
 		} else {
 			$ret .= $this->parseIcon();
 		}
@@ -487,6 +486,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
+	/* DEPRECATED
 	function getLineHoverArea() {
 		list($xFrom,$xTo) = explode(',', $this->getX());
 		list($yFrom,$yTo) = explode(',', $this->getY());
@@ -500,7 +500,7 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->x = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
 		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
 		$this->icon = '20x20.gif';
-	}
+	}*/
 	
 	/**
 	 * Parses the HTML-Code of a line
@@ -517,8 +517,8 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		$objId = md5(time());
 		
+		$ret .= '<div id="'.$objId.'-border" style="z-index:'.$this->z.';">';
 		$ret .= '<div id="'.$objId.'" style="z-index:'.$this->z.';" '.$this->getHoverMenu().' onclick="window.open(\''.$this->getUrl().'\',\''.$this->getUrlTarget().'\',\'\');">';
-		$ret .= '<div id="'.$objId.'-border" style="z-index:'.($this->z+1).';">';
 		$ret .= '<script type="text/javascript">drawNagVisLine(\''.$objId.'\','.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
 		
 		return $ret;
