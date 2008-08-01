@@ -224,6 +224,11 @@ class WuiMap extends GlobalMap {
 		return $ret;
 	}
 	
+	function middle($x1,$x2) {
+		$ret = ($x1+($x2-$x1)/2);
+		return $ret;
+	}
+	
 	/**
 	 * Parses all objects on the map
 	 *
@@ -248,8 +253,8 @@ class WuiMap extends GlobalMap {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
 						$ret .= "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
-						$obj['x'] = $this->GRAPHIC->middle($pointa_x,$pointb_x) - 10;
-						$obj['y'] = $this->GRAPHIC->middle($pointa_y,$pointb_y) - 10;
+						$obj['x'] = ($pointa_x+($pointb_x-$pointa_x)/2) - 10;
+						$obj['y'] = ($pointa_y+($pointb_y-$pointa_y)/2) - 10;
 						
 						$obj['icon'] = '20x20.gif';
 					} else {
