@@ -82,13 +82,14 @@ class NagVisFrontend extends GlobalPage {
 	function getIndexPage() {
 			$ret = '';
 			
+			$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\'\';</script>';
 			$ret .= '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
 			$ret .= '<div class="infopage">';
 			$ret .= '<table>';
 			$ret .= '<tr><th colspan="4">'.$this->LANG->getText('mapIndex').'</th></tr><tr>';
 			$i = 1;
 			foreach($this->getMaps() AS $mapName) {
-				$MAPCFG = new NagVisMapCfg($this->CORE,$mapName);
+				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
 				$MAPCFG->readMapConfig();
 				
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->MAINCFG->getValue('automap', 'showinlists')))) {
@@ -97,7 +98,7 @@ class NagVisFrontend extends GlobalPage {
 						
 						// Fetch option array from defaultparams string (extract variable 
 						// names and values)
-						$params = explode('&',$this->MAINCFG->getValue('automap','defaultparams'));
+						$params = explode('&', $this->MAINCFG->getValue('automap','defaultparams'));
 						unset($params[0]);
 						
 						foreach($params AS &$set) {
@@ -114,6 +115,22 @@ class NagVisFrontend extends GlobalPage {
 					} else {
 						$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
 					}
+					
+					// Apply default configuration to object
+					$objConf = Array();
+					foreach($MAPCFG->validConfig['map'] AS $key => &$values) {
+						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+							$objConf[$key] = $values['default'];
+						}
+					}
+					$MAP->MAPOBJ->setConfiguration($objConf);
+					
+					// Enable hover menu for the map
+					//$MAP->MAPOBJ->hover_menu = 1;
+					//$MAP->MAPOBJ->hover_delay = 0;
+					//$MAP->MAPOBJ->hover_timeout = 0;
+					
+					// Get the icon of the map
 					$MAP->MAPOBJ->fetchIcon();
 					
 					// Check if the user is permited to view this map
@@ -145,7 +162,8 @@ class NagVisFrontend extends GlobalPage {
 						}
 						
 						// Now form the cell with it's contents
-						$ret .= '<td '.$class.' style="width:200px;height:200px;" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';return overlib(\'<table class=\\\'infopage_hover_table\\\'><tr><td>'.strtr(addslashes($summaryOutput),Array('"' => '\'', "\r" => '', "\n" => '')).'</td></tr></table>\');" onClick="'.$onClick.'">';
+						$MAP->MAPOBJ->replaceMacros();
+						$ret .= '<td '.$class.' style="width:200px;height:200px;" '.$MAP->MAPOBJ->getHoverMenu().' onClick="'.$onClick.'">';
 						$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
 						$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
 						if($MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
