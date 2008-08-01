@@ -46,7 +46,6 @@ require("../nagvis/includes/classes/GlobalLanguage.php");
 require("../nagvis/includes/classes/GlobalPage.php");
 require("../nagvis/includes/classes/GlobalMap.php");
 require("../nagvis/includes/classes/GlobalBackground.php");
-require("../nagvis/includes/classes/GlobalGraphic.php");
 
 // Include needed wui specific classes
 require("./includes/classes/WuiCore.php");

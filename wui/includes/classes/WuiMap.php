@@ -30,7 +30,6 @@ class WuiMap extends GlobalMap {
 	var $MAINCFG;
 	var $MAPCFG;
 	var $LANG;
-	var $GRAPHIC;
 	
 	var $objects;
 	var $moveable;
@@ -49,8 +48,6 @@ class WuiMap extends GlobalMap {
 		$this->LANG = &$CORE->LANG;
 		
 		$this->MAPCFG = &$MAPCFG;
-		
-		$this->GRAPHIC = new GlobalGraphic();
 		
 		parent::GlobalMap($CORE, $MAPCFG);
 		
