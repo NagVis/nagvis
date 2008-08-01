@@ -74,263 +74,6 @@ class NagVisFrontend extends GlobalPage {
 	}
 	
 	/**
-	 * Displays the automatic index page of all maps
-	 *
-	 * @return	Array   HTML Code of Index Page
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getIndexPage() {
-			$ret = '';
-			
-			$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\'\';</script>';
-			$ret .= '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
-			$ret .= '<div class="infopage">';
-			$ret .= '<table>';
-			$ret .= '<tr><th colspan="4">'.$this->LANG->getText('mapIndex').'</th></tr><tr>';
-			$i = 1;
-			foreach($this->getMaps() AS $mapName) {
-				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
-				$MAPCFG->readMapConfig();
-				
-				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->MAINCFG->getValue('automap', 'showinlists')))) {
-					if($mapName == '__automap') {
-						$opts = Array();
-						
-						// Fetch option array from defaultparams string (extract variable 
-						// names and values)
-						$params = explode('&', $this->MAINCFG->getValue('automap','defaultparams'));
-						unset($params[0]);
-						
-						foreach($params AS &$set) {
-							$arrSet = explode('=',$set);
-							$opts[$arrSet[0]] = $arrSet[1];
-						}
-						
-						$opts['preview'] = 1;
-						
-						$MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $opts);
-						// If there is no automap image on first load of the index page,
-						// render the image
-						$MAP->renderMap();
-					} else {
-						$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
-					}
-					
-					// Apply default configuration to object
-					$objConf = Array();
-					foreach($MAPCFG->validConfig['map'] AS $key => &$values) {
-						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-							$objConf[$key] = $values['default'];
-						}
-					}
-					$MAP->MAPOBJ->setConfiguration($objConf);
-					
-					// Get the icon of the map
-					$MAP->MAPOBJ->fetchIcon();
-					
-					// Check if the user is permited to view this map
-					if($MAP->MAPOBJ->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-						if($MAP->MAPOBJ->checkMaintenance(0)) {
-							$class = '';
-							
-							if($mapName == '__automap') {
-								$onClick = 'location.href=\''.$this->htmlBase.'/index.php?automap=1'.$this->MAINCFG->getValue('automap','defaultparams').'\';';
-							} else {
-								$onClick = 'location.href=\''.$this->htmlBase.'/index.php?map='.$mapName.'\';';
-							}
-							
-							$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
-						} else {
-							$class = 'class="disabled"';
-							
-							$onClick = 'alert(\''.$this->LANG->getText('mapInMaintenance').'\');';
-							$summaryOutput = $this->LANG->getText('mapInMaintenance');
-						}
-						
-						// If this is the automap display the last rendered image
-						if($mapName == '__automap') {
-							$imgPath = $this->MAINCFG->getValue('paths','var').'automap.png';
-							$imgPathHtml = $this->MAINCFG->getValue('paths','htmlvar').'automap.png';
-						} else {
-							$imgPath = $this->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
-							$imgPathHtml = $this->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
-						}
-						
-						// Now form the cell with it's contents
-						$MAP->MAPOBJ->replaceMacros();
-						$ret .= '<td '.$class.' style="width:200px;height:200px;" '.$MAP->MAPOBJ->getHoverMenu().' onClick="'.$onClick.'">';
-						$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
-						$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-						if($MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
-							$ret .= '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
-						} else {
-							$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
-						}
-						$ret .= '</td>';
-						if($i % 4 == 0) {
-								$ret .= '</tr><tr>';
-						}
-						$i++;
-					}
-				}
-			}
-			// Fill table with empty cells if there are not enough maps to get the line filled
-			if(($i - 1) % 4 != 0) {
-					for($a=0;$a < (4 - (($i - 1) % 4));$a++) {
-							$ret .= '<td>&nbsp;</td>';
-					}
-			}
-			$ret .= '</tr>';
-			$ret .= '</table>';
-			
-			/**
-			 * Infobox lists all map rotation pools
-			 */
-			$aRotationPools = $this->getRotationPools();
-			if(count($aRotationPools) > 0) {
-				$ret .= '<table class="infobox">';
-				$ret .= '<tr><th>'.$this->LANG->getText('rotationPools').'</th></tr>';
-				foreach($this->getRotationPools() AS $poolName) {
-					// Form the onClick action
-					$onClick = 'location.href=\''.$this->htmlBase.'/index.php?rotation='.$poolName.'\';';
-					
-					// Now form the HTML code for the cell
-					$ret .= '<tr><td onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
-					$ret .= '<h2>'.$poolName.'</h2><br />';
-					$ret .= '</td>';
-					$ret .= '</tr>';
-				}
-				$ret .= '</table>';
-				$ret .= '</div>';
-			}
-			
-			return $ret;
-	}
-	
-	/**
-	 * Creates thumbnail images for the index map
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function createThumbnail($imgPath, $mapName) {
-		if($this->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
-			$imgSize = getimagesize($imgPath);
-			// 0: width, 1:height, 2:type
-			
-			switch($imgSize[2]) {
-				case 1: // GIF
-				$image = imagecreatefromgif($imgPath);
-				break;
-				case 2: // JPEG
-				$image = imagecreatefromjpeg($imgPath);
-				break;
-				case 3: // PNG
-				$image = imagecreatefrompng($imgPath);
-				break;
-				default:
-					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
-				break;
-			}
-			
-			// Maximum size
-			$thumbMaxWidth = 200;
-			$thumbMaxHeight = 150;
-			
-			$thumbX = 0;
-			$thumbY = 0;
-			
-			$thumbWidth = $imgSize[0];
-			$thumbHeight = $imgSize[1];
-			
-			if (($thumbWidth > $thumbMaxWidth) || ($thumbHeight > $thumbMaxHeight)) {
-				if (($thumbWidth / $thumbHeight) > ($thumbMaxWidth / $thumbMaxHeight)) {
-					$thumbHeight = (int)($thumbHeight * $thumbMaxWidth / $thumbWidth);
-					$thumbWidth = $thumbMaxWidth;
-					$thumbX = 0;
-					$thumbY = (int)(($thumbMaxHeight - $thumbHeight) / 2);
-				} else {
-					$thumbWidth = (int)($thumbWidth * $thumbMaxHeight / $thumbHeight);
-					$thumbHeight = $thumbMaxHeight;
-					$thumbX = (int)(($thumbMaxWidth - $thumbWidth) / 2);
-					$thumbY = 0;
-				}
-			}
-			
-			$thumb = imagecreatetruecolor($thumbMaxWidth, $thumbMaxHeight); 
-			
-			imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
-			imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
-			
-			imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $imgSize[0], $imgSize[1]);
-			
-			imagepng($thumb, $this->MAINCFG->getValue('paths','var').$mapName.'-thumb.png'); 
-			
-			return $this->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
-		} else {
-			return '';
-		}
-	}
-	
-	/**
-	 * Checks for writeable VarFolder
-	 *
-	 * @param		Boolean 	$printErr
-	 * @return	Boolean		Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkVarFolderExists($printErr) {
-		if(file_exists(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Checks for writeable VarFolder
-	 *
-	 * @param		Boolean 	$printErr
-	 * @return	Boolean		Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkVarFolderWriteable($printErr) {
-		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1)) && @file_exists($this->MAINCFG->getValue('paths', 'var').'.')) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Checks Image exists
-	 *
-	 * @param 	String	$imgPath
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkImageExists($imgPath, $printErr) {
-		if(file_exists($imgPath)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('WARNING', $this->LANG->getText('imageNotExists','FILE~'.$imgPath));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
 	 * If enabled, the header menu is added to the page
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -438,6 +181,19 @@ class NagVisFrontend extends GlobalPage {
 			}
 			return FALSE;
 		}
+	}
+	
+	/**
+	 * Adds the index to the page
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getIndexPage() {
+		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
+		$this->addBodyLines('<div class="infopage">');
+		$this->INDEX = new GlobalIndexPage($this->CORE, $this->BACKEND);
+		$this->addBodyLines($this->INDEX->parse());
+		$this->addBodyLines('</div>');
 	}
 	
 	/**
@@ -580,24 +336,6 @@ class NagVisFrontend extends GlobalPage {
 		closedir($handle);
 		
 		return $files;
-	}
-	
-	/**
-	 * Gets all rotation pools
-	 *
-	 * @return	Array pools
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getRotationPools() {
-		$ret = Array();
-		
-		foreach($this->MAINCFG->config AS $sec => &$var) {
-			if(preg_match('/^rotation_/i', $sec)) {
-				$ret[] = $var['rotationid'];
-			}
-		}
-		
-		return $ret;
 	}
 }
 ?>

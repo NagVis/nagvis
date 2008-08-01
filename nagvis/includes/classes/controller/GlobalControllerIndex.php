@@ -49,7 +49,7 @@ class GlobalControllerIndex {
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 		$FRONTEND->getHeaderMenu();
-		$FRONTEND->addBodyLines($FRONTEND->getIndexPage());
+		$FRONTEND->getIndexPage();
 		$FRONTEND->getMessages();
 
 		// Print the page
