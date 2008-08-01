@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHost extends NagiosHost {
+	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
 	var $LANG;
