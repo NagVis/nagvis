@@ -97,7 +97,7 @@ class GlobalBackendMgmt {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkBackendInitialized($backendId,$printErr) {
-		if($backendId != '') {
+		if(isset($backendId) && $backendId != '') {
 			if(isset($this->BACKENDS[$backendId]) && is_object($this->BACKENDS[$backendId])) {
 				return TRUE;
 			} else {
