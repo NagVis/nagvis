@@ -25,34 +25,17 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-// Start the user session (This is needed by some caching mechanism)
-@session_start();
-
-// Set PHP error handling to standard level
-error_reporting(E_ALL ^ E_STRICT);
 
 // Include defines
 require('../nagvis/includes/defines/global.php');
 require('../nagvis/includes/defines/matches.php');
 
 // Include global functions
+require("../nagvis/includes/functions/autoload.php");
 require('../nagvis/includes/functions/debug.php');
 
 // Include needed WUI specific functions
 require('./includes/functions/form_handler.php');
-
-// Include needed global classes
-require('../nagvis/includes/classes/GlobalLanguage.php');
-require('../nagvis/includes/classes/GlobalMainCfg.php');
-require('../nagvis/includes/classes/GlobalPage.php');
-require('../nagvis/includes/classes/GlobalMapCfg.php');
-require('../nagvis/includes/classes/GlobalBackground.php');
-
-// Include needed WUI specific classes
-require("./includes/classes/WuiCore.php");
-require('./includes/classes/WuiMainCfg.php');
-require('./includes/classes/WuiMapCfg.php');
-require('./includes/classes/WuiBackground.php');
 
 // Load the core
 $CORE = new WuiCore();

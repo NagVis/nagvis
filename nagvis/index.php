@@ -23,44 +23,14 @@
  *
  *****************************************************************************/
 
-// Start the user session (This is needed by some caching mechanism)
-@session_start();
-
-// Set PHP error handling to standard level
-error_reporting(E_ALL ^ E_STRICT);
-
 // Include defines
 require('./includes/defines/global.php');
 require('./includes/defines/matches.php');
 
 // Include functions
+require("./includes/functions/autoload.php");
 require('./includes/functions/debug.php');
 require('./includes/functions/oldPhpVersionFixes.php');
-
-/**
- * Load required files
- *
- * @param	string	$class
- * @author  Michael Luebben <michael_luebben@web.de>
- */
-function __autoload($class) {
-	require($class.'.php');
-}
-
-/**
- * Sets the path where we will look for files when they
- * are requested.
- *
- * @author  Michael Luebben <michael_luebben@web.de>
- */
-set_include_path(
-	get_include_path()
-	.PATH_SEPARATOR.'./includes/classes/'
-	.PATH_SEPARATOR.'./includes/classes/objects/'
-	.PATH_SEPARATOR.'./includes/classes/controller/'
-	.PATH_SEPARATOR.'./includes/classes/validator/'
-	.PATH_SEPARATOR.'./includes/classes/httpRequest/'
-);
 
 $controller = new GlobalController();
 

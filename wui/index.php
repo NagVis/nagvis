@@ -25,32 +25,15 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-// Start the user session (This is needed by some caching mechanism)
-@session_start();
-
-// Set PHP error handling to standard level
-error_reporting(E_ALL ^ E_STRICT);
 
 // Include defines
 require("../nagvis/includes/defines/global.php");
 require("../nagvis/includes/defines/matches.php");
 
 // Include functions
+require("../nagvis/includes/functions/autoload.php");
 require("../nagvis/includes/functions/debug.php");
 require("../nagvis/includes/functions/oldPhpVersionFixes.php");
-
-// Include needed global classes
-require("../nagvis/includes/classes/GlobalMainCfg.php");
-require("../nagvis/includes/classes/GlobalMapCfg.php");
-require("../nagvis/includes/classes/GlobalLanguage.php");
-require("../nagvis/includes/classes/GlobalPage.php");
-require("../nagvis/includes/classes/GlobalMap.php");
-require("../nagvis/includes/classes/GlobalBackground.php");
-
-// Include needed wui specific classes
-require("./includes/classes/WuiCore.php");
-require("./includes/classes/WuiMainCfg.php");
-require("./includes/classes/WuiMapCfg.php");
 
 // Load the core
 $CORE = new WuiCore();
@@ -63,51 +46,27 @@ if(!isset($_GET['page'])) {
 // Display the wanted page, if nothing is set, display the map
 switch($_GET['page']) {
 	case 'edit_config':
-		// Include page specific global/wui classes
-		require("../nagvis/includes/classes/GlobalForm.php");
-		require("./includes/classes/WuiEditMainCfg.php");
-		
 		$FRONTEND = new WuiEditMainCfg($CORE);
 		$FRONTEND->getForm();
 		$FRONTEND->printPage();
 	break;
 	case 'shape_management':
-		// Include page specific global/wui classes
-		require("../nagvis/includes/classes/GlobalForm.php");
-		require("./includes/classes/WuiShapeManagement.php");
-		
 		$FRONTEND = new WuiShapeManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'background_management':
-		// Include page specific global/wui classes
-		require("../nagvis/includes/classes/GlobalForm.php");
-		require("./includes/classes/WuiBackgroundManagement.php");
-		
 		$FRONTEND = new WuiBackgroundManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'map_management':
-		// Include page specific global/wui classes
-		require("../nagvis/includes/classes/GlobalForm.php");
-		require("./includes/classes/WuiMapManagement.php");
-		
 		$FRONTEND = new WuiMapManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'backend_management':
-		// Include page specific global/wui classes
-		require("../nagvis/includes/classes/GlobalForm.php");
-		require("./includes/classes/WuiBackendManagement.php");
-		
 		$FRONTEND = new WuiBackendManagement($CORE);
 		$FRONTEND->getForm();
 	break;
 	case 'addmodify':
-		// Include page specific global/wui classes
-		require("../nagvis/includes/classes/GlobalForm.php");
-		require("./includes/classes/WuiAddModify.php");
-		
 		$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
 		$MAPCFG->readMapConfig();
 		
@@ -126,10 +85,6 @@ switch($_GET['page']) {
 	break;
 	default:
 		// Default is the wui map
-		
-		// Include page specific global/wui classes
-		require("./includes/classes/WuiFrontend.php");
-		require("./includes/classes/WuiMap.php");
 		
 		// Set empty map if none is set
 		if(!isset($_GET['map'])) {

@@ -1,7 +1,7 @@
 <?PHP
 /*****************************************************************************
  *
- * global.php - File for global constants
+ * global.php - File for global constants and some other standards
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -25,6 +25,29 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
+
+// Start the user session (This is needed by some caching mechanism)
+@session_start();
+
+// Set PHP error handling to standard level
+error_reporting(E_ALL ^ E_STRICT);
+
+/**
+ * Sets the path where we will look for files when they
+ * are requested.
+ *
+ * @author  Michael Luebben <michael_luebben@web.de>
+ */
+set_include_path(
+	get_include_path()
+	.PATH_SEPARATOR.'../nagvis/includes/classes/'
+	.PATH_SEPARATOR.'../nagvis/includes/classes/objects/'
+	.PATH_SEPARATOR.'../nagvis/includes/classes/controller/'
+	.PATH_SEPARATOR.'../nagvis/includes/classes/validator/'
+	.PATH_SEPARATOR.'../nagvis/includes/classes/httpRequest/'
+	.PATH_SEPARATOR.'../wui/includes/classes/'
+);
+
 // enable/disable the debug mode
 define('DEBUG', FALSE);
 
