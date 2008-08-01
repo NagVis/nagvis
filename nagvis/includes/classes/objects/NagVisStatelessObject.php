@@ -66,21 +66,6 @@ class NagVisStatelessObject extends NagVisObject {
 	}
 	
 	/**
-	 * Calculates the position of the line hover area
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getLineHoverArea() {
-		list($xFrom,$xTo) = explode(',', $this->x);
-		list($yFrom,$yTo) = explode(',', $this->y);
-		
-		$this->x = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
-		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
-		$this->icon = '20x20.gif';
-	}
-	
-	
-	/**
 	 * Parses the HTML-Code of an icon
 	 *
 	 * @param	Boolean	$link		Add a link to the icon

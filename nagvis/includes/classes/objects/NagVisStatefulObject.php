@@ -426,8 +426,6 @@ class NagVisStatefulObject extends NagVisObject {
 		// Parse object depending on line or normal icon
 		if(isset($this->line_type)) {
 			$ret .= $this->parseLine();
-			
-			// DEPRECATED: $this->getLineHoverArea();
 		} else {
 			$ret .= $this->parseIcon();
 		}
@@ -480,27 +478,6 @@ class NagVisStatefulObject extends NagVisObject {
 		parent::replaceMacros();
 		
 	}
-	
-	/**
-	 * Calculates the position of the line hover area
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	/* DEPRECATED
-	function getLineHoverArea() {
-		list($xFrom,$xTo) = explode(',', $this->getX());
-		list($yFrom,$yTo) = explode(',', $this->getY());
-		
-		// If the graphic class is not initialized
-		if($this->GRAPHIC == '') {
-			// Initialize the GlobalGraphic class
-			$this->GRAPHIC = new GlobalGraphic();
-		}
-		
-		$this->x = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
-		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
-		$this->icon = '20x20.gif';
-	}*/
 	
 	/**
 	 * Parses the HTML-Code of a line
