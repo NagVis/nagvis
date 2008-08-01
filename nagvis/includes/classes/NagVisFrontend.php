@@ -61,7 +61,7 @@ class NagVisFrontend extends GlobalPage {
 		$prop['languageRoot'] = 'nagvis';
 		
 		// Only do this, when a map needs to be displayed
-		if($this->MAPCFG != '') {
+		if(get_class($this->MAPCFG) != '') {
 			$this->headerTemplate = $this->MAPCFG->getValue('global', 0, 'header_template');
 			
 			$prop['extHeader'] .= '<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>';
@@ -367,7 +367,7 @@ class NagVisFrontend extends GlobalPage {
 									}
 									
 									// auto select current map
-									if($this->MAPCFG != '' && $mapName == $this->MAPCFG->getName() || ($mapName == '__automap' && isset($_GET['automap']))) {
+									if(get_class($this->MAPCFG) != '' && $mapName == $this->MAPCFG->getName() || ($mapName == '__automap' && isset($_GET['automap']))) {
 										$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
 									} else {
 										$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
