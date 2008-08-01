@@ -325,7 +325,7 @@ class NagVisFrontend extends GlobalPage {
 				$ret = file_get_contents($this->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->headerTemplate.'.html');
 				
 				// Replace some macros
-				if($this->MAPCFG != '') {
+				if(get_class($this->MAPCFG) != '') {
 					$ret = str_replace('[current_map]',$this->MAPCFG->getName(),$ret);
 					$ret = str_replace('[current_map_alias]',$this->MAPCFG->getValue('global', '0', 'alias'),$ret);
 				}
