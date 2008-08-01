@@ -125,11 +125,6 @@ class NagVisFrontend extends GlobalPage {
 					}
 					$MAP->MAPOBJ->setConfiguration($objConf);
 					
-					// Enable hover menu for the map
-					//$MAP->MAPOBJ->hover_menu = 1;
-					//$MAP->MAPOBJ->hover_delay = 0;
-					//$MAP->MAPOBJ->hover_timeout = 0;
-					
 					// Get the icon of the map
 					$MAP->MAPOBJ->fetchIcon();
 					
@@ -241,6 +236,9 @@ class NagVisFrontend extends GlobalPage {
 			// Maximum size
 			$thumbMaxWidth = 200;
 			$thumbMaxHeight = 150;
+			
+			$thumbX = 0;
+			$thumbY = 0;
 			
 			$thumbWidth = $imgSize[0];
 			$thumbHeight = $imgSize[1];
