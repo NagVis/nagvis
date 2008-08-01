@@ -96,7 +96,9 @@ class NagVisStatelessObject extends NagVisObject {
 		}
 		
 		$ret = '<div class="icon" style="left:'.$this->x.'px;top:'.$this->y.'px;z-index:'.$this->z.';">';
-		$ret .= '<a href="'.$this->getUrl().'" target="'.$this->getUrlTarget().'">';
+		if($this->getUrl() != '') {
+			$ret .= '<a href="'.$this->getUrl().'" target="'.$this->getUrlTarget().'">';
+		}
 		$ret .= '<img src="'.$imgPath.'" '.$this->getHoverMenu().' alt="'.$this->type.'-'.$this->icon.'">';
 		$ret .= '</a>';
 		$ret .= '</div>';
