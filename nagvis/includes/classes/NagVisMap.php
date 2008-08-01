@@ -30,7 +30,6 @@ class NagVisMap extends GlobalMap {
 	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
-	var $GRAPHIC;
 	var $MAPOBJ;
 	var $numLineObjects;
 	
@@ -50,8 +49,6 @@ class NagVisMap extends GlobalMap {
 		$this->BACKEND = &$BACKEND;
 		
 		$this->numLineObjects = 0;
-		
-		$this->GRAPHIC = new GlobalGraphic();
 		
 		parent::GlobalMap($this->CORE, $this->MAPCFG);
 		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG);
