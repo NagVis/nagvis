@@ -71,14 +71,12 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getLineHoverArea() {
-		
 		list($xFrom,$xTo) = explode(',', $this->x);
 		list($yFrom,$yTo) = explode(',', $this->y);
 		
 		$this->x = $this->GRAPHIC->middle($xFrom,$xTo) - 10;
 		$this->y = $this->GRAPHIC->middle($yFrom,$yTo) - 10;
 		$this->icon = '20x20.gif';
-		
 	}
 	
 	
@@ -91,7 +89,6 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseIcon() {
-		
 		if(preg_match('/^\[(.*)\]$/',$this->icon,$match) > 0) {
 			$imgPath = $match[1];
 		} else {
@@ -99,7 +96,7 @@ class NagVisStatelessObject extends NagVisObject {
 		}
 		
 		$ret = '<div class="icon" style="left:'.$this->x.'px;top:'.$this->y.'px;z-index:'.$this->z.';">';
-		$ret .= $this->createLink();
+		$ret .= '<a href="'.$this->getUrl().'" target="'.$this->getUrlTarget().'">';
 		$ret .= '<img src="'.$imgPath.'" '.$this->getHoverMenu().' alt="'.$this->type.'-'.$this->icon.'">';
 		$ret .= '</a>';
 		$ret .= '</div>';
