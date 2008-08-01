@@ -52,6 +52,8 @@ class NagVisAutoMap extends GlobalMap {
 	
 	var $mapCode;
 	
+	var $noBinaryFound;
+	
 	/**
 	 * Automap constructor
 	 *
@@ -71,6 +73,8 @@ class NagVisAutoMap extends GlobalMap {
 		$this->arrMapObjects = Array();
 		$this->arrHostnamesParsed = Array();
 		$this->mapCode = '';
+		
+		$this->noBinaryFound = FALSE;
 		
 		// Create map configuration
 		$this->MAPCFG = new NagVisMapCfg($this->CORE, '__automap');
@@ -243,49 +247,54 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function renderMap() {
-		/**
-		 * possible render modes are set by selecting the correct binary:
-		 *  dot - filter for drawing directed graphs
-		 *  neato - filter for drawing undirected graphs
-		 *  twopi - filter for radial layouts of graphs
-		 *  circo - filter for circular layout of graphs
-		 *  fdp - filter for drawing undirected graphs
-		 */
-		switch($this->renderMode) {
-			case 'directed':
-				$binary = 'dot';
-			break;
-			case 'undirected':
-				$binary = 'neato';
-			break;
-			case 'radial':
-				$binary = 'twopi';
-			break;
-			case 'circular':
-				$binary = 'circo';
-			break;
-			case 'undirected2':
-				$binary = 'fdp';
-			break;
-			default:
-				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownRenderMode','MODE~'.$this->renderMode));
-			break;
+		// This is only usable when this is preview mode (printErr = 0). This checks
+		// if there is no binary on this system. When there is no, the map is not
+		// being rendered
+		if(!$this->noBinaryFound) {
+			/**
+			 * possible render modes are set by selecting the correct binary:
+			 *  dot - filter for drawing directed graphs
+			 *  neato - filter for drawing undirected graphs
+			 *  twopi - filter for radial layouts of graphs
+			 *  circo - filter for circular layout of graphs
+			 *  fdp - filter for drawing undirected graphs
+			 */
+			switch($this->renderMode) {
+				case 'directed':
+					$binary = 'dot';
+				break;
+				case 'undirected':
+					$binary = 'neato';
+				break;
+				case 'radial':
+					$binary = 'twopi';
+				break;
+				case 'circular':
+					$binary = 'circo';
+				break;
+				case 'undirected2':
+					$binary = 'fdp';
+				break;
+				default:
+					$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
+					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownRenderMode','MODE~'.$this->renderMode));
+				break;
+			}
+			
+			/**
+			 * The config can not be forwarded to graphviz binary by echo, this would
+			 * cause in too long commands with big maps. SO write thoe config to a file
+			 * and let it be read by graphviz binary.
+			 */
+			$fh = fopen($this->MAINCFG->getValue('paths', 'var').'automap.dot','w');
+			fwrite($fh, $this->parseGraphvizConfig());
+			fclose($fh);
+			
+			// Parse map
+			exec($this->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx '.$this->MAINCFG->getValue('paths', 'var').'automap.dot', $arrMapCode);
+			
+			$this->mapCode = implode("\n", $arrMapCode);
 		}
-		
-		/**
-		 * The config can not be forwarded to graphviz binary by echo, this would
-		 * cause in too long commands with big maps. SO write thoe config to a file
-		 * and let it be read by graphviz binary.
-		 */
-		$fh = fopen($this->MAINCFG->getValue('paths', 'var').'automap.dot','w');
-		fwrite($fh, $this->parseGraphvizConfig());
-		fclose($fh);
-		
-		// Parse map
-		exec($this->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx '.$this->MAINCFG->getValue('paths', 'var').'automap.dot', $arrMapCode);
-		
-		$this->mapCode = implode("\n", $arrMapCode);
 	}
 	
 	/**
@@ -370,11 +379,13 @@ class NagVisAutoMap extends GlobalMap {
 		$this->checkVarFolderWriteable($printErr);
 		
 		// Check all possibly used binaries of graphviz
-		$this->checkGraphviz('dot', $printErr);
-		$this->checkGraphviz('neato', $printErr);
-		$this->checkGraphviz('twopi', $printErr);
-		$this->checkGraphviz('circo', $printErr);
-		$this->checkGraphviz('fdp', $printErr);
+		if(!$this->checkGraphviz('dot', $printErr) &&
+			!$this->checkGraphviz('neato', $printErr) &&
+			!$this->checkGraphviz('twopi', $printErr) &&
+			!$this->checkGraphviz('circo', $printErr) &&
+			!$this->checkGraphviz('fdp', $printErr)) {
+			$this->noBinaryFound = TRUE;
+		}
 	}
 	
 	/**
