@@ -519,8 +519,8 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		$objId = md5(time());
 		
-		$ret .= '<div id="'.$objId.'-border" style="z-index:'.$this->z.';">';
-		$ret .= '<div id="'.$objId.'" style="z-index:'.$this->z.';" '.$this->getHoverMenu().' onclick="window.open(\''.$this->getUrl().'\',\''.$this->getUrlTarget().'\',\'\');">';
+		$ret .= '<div id="'.$objId.'" style="z-index:'.$this->z.';" '.$this->getHoverMenu().' onclick="window.open(\''.$this->getUrl().'\',\''.$this->getUrlTarget().'\',\'\');"></div>';
+		$ret .= '<div id="'.$objId.'-border" style="z-index:'.$this->z.';"></div>';
 		$ret .= '<script type="text/javascript">drawNagVisLine(\''.$objId.'\','.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', '.$width.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
 		
 		return $ret;
