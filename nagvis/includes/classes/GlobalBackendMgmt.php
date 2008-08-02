@@ -27,8 +27,7 @@
  */
 class GlobalBackendMgmt {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
+	
 	var $BACKENDS;
 	
 	/**
@@ -40,8 +39,7 @@ class GlobalBackendMgmt {
 	 */
 	function GlobalBackendMgmt(&$CORE) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+		
 		$this->BACKENDS = Array();
 		
 		$this->initBackends();
@@ -57,7 +55,7 @@ class GlobalBackendMgmt {
 	 */
 	function getBackends() {
 		$ret = Array();
-		foreach($this->MAINCFG->config AS $sec => &$var) {
+		foreach($this->CORE->MAINCFG->config AS $sec => &$var) {
 			if(preg_match('/^backend_/i', $sec)) {
 				$ret[] = $var['backendid'];
 			}
@@ -73,14 +71,14 @@ class GlobalBackendMgmt {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkBackendExists($backendId,$printErr) {
-		if($backendId != '') {
-			if(file_exists($this->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
+	function checkBackendExists($backendId, $printErr) {
+		if(isset($backendId) && $backendId != '') {
+			if(file_exists($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
+					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
 				}
 				return FALSE;
 			}
@@ -96,14 +94,14 @@ class GlobalBackendMgmt {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkBackendInitialized($backendId,$printErr) {
+	function checkBackendInitialized($backendId, $printErr) {
 		if(isset($backendId) && $backendId != '') {
 			if(isset($this->BACKENDS[$backendId]) && is_object($this->BACKENDS[$backendId])) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
+					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
 				}
 				return FALSE;
 			}
@@ -122,13 +120,13 @@ class GlobalBackendMgmt {
 		
 		if(!count($aBackends)) {
 			$FRONTEND = new GlobalPage($this->CORE);
-		    $FRONTEND->messageToUser('ERROR',$this->LANG->getText('noBackendDefined'));
+		    $FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('noBackendDefined'));
 		} else {
 			foreach($aBackends AS &$backendId) {
-				if($this->checkBackendExists($backendId,1)) {
-					require($this->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
+				if($this->checkBackendExists($backendId, 1)) {
+					require($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
 					
-					$backendClass = 'GlobalBackend'.$this->MAINCFG->getValue('backend_'.$backendId,'backendtype');
+					$backendClass = 'GlobalBackend'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype');
 					$this->BACKENDS[$backendId] = new $backendClass($this->CORE,$backendId);
 				}
 			}
