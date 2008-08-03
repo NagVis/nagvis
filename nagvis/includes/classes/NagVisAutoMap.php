@@ -557,7 +557,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Could not get root host for the automap
 		if(!isset($defaultRoot) || $defaultRoot == '') {
-			$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
+			$FRONTEND = new GlobalPage($this->CORE);
 			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('couldNotGetRootHostname'));
 		} else {
 			return $defaultRoot;
