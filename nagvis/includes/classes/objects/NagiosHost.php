@@ -338,7 +338,7 @@ class NagiosHost extends NagVisStatefulObject {
 				 * map, especially the links to child objects will be too many.
 				 */
 				if(!in_array($childName, $arrHostnames)){
-					$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->LANG, $this->backend_id, $childName);
+					$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $childName);
 					$OBJ->setConfiguration($objConf);
 					$OBJ->fetchIcon();
 					
