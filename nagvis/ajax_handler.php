@@ -78,6 +78,12 @@ switch($_GET['action']) {
 				if($_GET['map'] == '__automap') {
 					$objConf['type'] = $_GET['objType'];
 					$objConf['host_name'] = $_GET['objName1'];
+					
+					foreach($MAPCFG->validConfig['global'] AS $key => &$values) {
+						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+							$objConf[$key] = $values['default'];
+						}
+					}
 				} else {
 					if(is_array($objs = $MAPCFG->getDefinitions($_GET['objType']))){
 						$count = count($objs);
