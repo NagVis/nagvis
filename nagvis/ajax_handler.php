@@ -40,6 +40,10 @@ $CORE = new GlobalCore();
 // handles this user authentication related things and the handling below
 $CORE->MAINCFG->setRuntimeValue('user', getUser());
 
+
+// Initialize backends
+$BACKEND = new GlobalBackendMgmt($CORE);
+
 // Initialize var
 if(!isset($_GET['action'])) {
 	$_GET['action'] = '';
@@ -57,9 +61,6 @@ switch($_GET['action']) {
 			// FIXME: Error handling
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName2NotSet');
 		} else  {
-			// Initialize backend(s)
-			$BACKEND = new GlobalBackendMgmt($CORE);
-			
 			$objConf = Array();
 			
 			/**
@@ -186,24 +187,29 @@ switch($_GET['action']) {
 		}
 	break;
 	case 'getMapState':
-		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			// FIXME: Error handling
-			echo 'Error: '.$CORE->LANG->getText('parameterMapNotSet');
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} elseif($_GET['map'] == '__automap') {
-			// FIXME: Error handling
 			echo 'Error: '.$CORE->LANG->getText('automapNotSupportedHere');
 		} else {
 			// Initialize map configuration
 			$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
 			$MAPCFG->readMapConfig();
 			
-			// Initialize backends
-			$BACKEND = new GlobalBackendMgmt($CORE);
-			
 			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
 			
-			$retArr = Array('summarState' => $MAP->MAPOBJ->getSummaryState(),'summaryOutput' => $MAP->MAPOBJ->getSummaryOutput());
-			echo json_encode($retArr);
+			$arrReturn = Array('summaryState' => $MAP->MAPOBJ->getSummaryState(),'summaryOutput' => $MAP->MAPOBJ->getSummaryOutput());
+			echo json_encode($arrReturn);
+		}
+	break;
+	case 'getHostState':
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} else {
+			$OBJ = NagVisHost($CORE, $BACKEND, $backendId, $_GET['objName1']);
+			
+			$arrReturn = Array('summaryState' => $MAP->MAPOBJ->getSummaryState(),'summaryOutput' => $MAP->MAPOBJ->getSummaryOutput());
+			echo json_encode($arrReturn);
 		}
 	break;
 	default:
