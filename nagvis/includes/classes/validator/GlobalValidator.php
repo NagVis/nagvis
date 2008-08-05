@@ -125,7 +125,7 @@ class GlobalValidator {
 				'notEmpty'		=> FALSE,
 				'mustInRange'  => TRUE,
 				'minValue'     => '0',
-				'maxValue'     => '10'
+				'maxValue'     => '9999'
 			),
 			// Define renderMode
 			'renderMode' => array(
@@ -149,7 +149,7 @@ class GlobalValidator {
 				'notEmpty'		=> FALSE,
 				'mustInRange'  => TRUE,
 				'minValue'     => '0',
-				'maxValue'     => '1024'
+				'maxValue'     => '9999'
 			),
 			// Define height
 			'height' => array(
@@ -159,7 +159,7 @@ class GlobalValidator {
 				'notEmpty'		=> FALSE,
 				'mustInRange'  => TRUE,
 				'minValue'     => '0',
-				'maxValue'     => '768'
+				'maxValue'     => '9999'
 			),
 			// Define ignoreHosts
 			'ignoreHosts' => array(
