@@ -5,6 +5,7 @@
 		<td style="width:150px;padding-left:10px;">[lang_select_map]: </td>
 		<td style="width:150px;">
 			<select style="width:100%;" name="chooseMap" onChange="changeMap('[html_base]',this.options[this.selectedIndex].value)">
+				<option value="" [selected]>[lang_overview]</option>
 				<!-- BEGIN maplist --><option value="[map_name][url_params]" [selected]>[map_alias]</option><!-- END maplist -->
 			</select>
 		</td>
