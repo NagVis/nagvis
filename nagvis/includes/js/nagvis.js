@@ -165,6 +165,10 @@ function changeMap(htmlBase,mapName) {
 	if(mapName.match('^__automap')) {
 		location.href=htmlBase+'/nagvis/index.php?automap=1'+mapName.replace('__automap','');
 	} else {
-		location.href=htmlBase+'/nagvis/index.php?map='+mapName;
+		if (mapName == "") {
+			location.href=htmlBase+'/nagvis/index.php';
+		} else {
+			location.href=htmlBase+'/nagvis/index.php?map='+mapName;
+		}
 	}
 }
