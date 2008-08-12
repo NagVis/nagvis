@@ -197,7 +197,7 @@ class GlobalMainCfg {
 				'htmlcgi' => Array('must' => 1,
 					'editable' => 1,
 					'default' => '/nagios/cgi-bin',
-					'match' => MATCH_STRING_PATH),
+					'match' => MATCH_STRING_URL),
 				'htmlimages' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '/nagios/nagvis/nagvis/images/',
@@ -246,7 +246,7 @@ class GlobalMainCfg {
 				'htmlcgi' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
-					'match' => MATCH_STRING_PATH),
+					'match' => MATCH_STRING_URL),
 				'options' => Array(
 					'ndomy' => Array('dbhost' => Array('must' => 1,
 							'editable' => 1,
