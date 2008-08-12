@@ -100,8 +100,8 @@ class NagVisFrontend extends GlobalPage {
 				$ret = str_replace('[lang_support_info]',$this->LANG->getText('supportInfo'),$ret);
 				$ret = str_replace('[lang_overview]',$this->LANG->getText('overview'),$ret);
 				$ret = str_replace('[lang_instance]',$this->LANG->getText('instance'),$ret);
-				$ret = str_replace('[lang_rotation_start]','<br />'.$this->LANG->getText('rotationStart'),$ret);
-				$ret = str_replace('[lang_rotation_stop]','<br />'.$this->LANG->getText('rotationStop'),$ret);
+				$ret = str_replace('[lang_rotation_start]',$this->LANG->getText('rotationStart'),$ret);
+				$ret = str_replace('[lang_rotation_stop]',$this->LANG->getText('rotationStop'),$ret);
 				$ret = str_replace('[lang_refresh_start]',$this->LANG->getText('refreshStart'),$ret);
 				$ret = str_replace('[lang_refresh_stop]',$this->LANG->getText('refreshStop'),$ret);
 				// Replace lists
