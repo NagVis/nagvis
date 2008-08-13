@@ -618,6 +618,7 @@ class WuiMap extends GlobalMap {
 	function getJsLang() {
 		$ret = '';
 		$ret .= 'var langMenu = Array();';
+		$ret .= 'langMenu[\'overview\'] = \''.$this->LANG->getText('overview').'\';';
 		$ret .= 'langMenu[\'save\'] = \''.$this->LANG->getText('save').'\';';
 		$ret .= 'langMenu[\'restore\'] = \''.$this->LANG->getText('restore').'\';';
 		$ret .= 'langMenu[\'properties\'] = \''.$this->LANG->getText('properties').'\';';

@@ -41,6 +41,8 @@ function get_label(key) {
 function createjsDOMenu() {
 	mainMenu = new jsDOMenu(170);
 	with (mainMenu) {
+		addMenuItem(new menuItem(get_label('overview'), "menu_overview", "link:../nagvis/index.php", ""));
+		addMenuItem(new menuItem("-"));
 		addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
 		addMenuItem(new menuItem(get_label('openInNagVis'), "menu_maps_open_nagvis", ""));
 		addMenuItem(new menuItem("-"));
