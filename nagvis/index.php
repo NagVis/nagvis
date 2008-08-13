@@ -34,6 +34,10 @@ require('./includes/functions/oldPhpVersionFixes.php');
 
 $controller = new GlobalController();
 
+if (!$controller->isValid()) {
+	$NagVisErrorHandling = new NagVisErrorHandling('ERROR',$controller->getMessage(),'VAR~'.$controller->getAction());
+}
+
 // ONLY FOR DEBUGGING
 //-----------------------------------------------------------------------------------------------
 $state = ($controller->isValid()) ? 'TRUE' : 'FALSE';
