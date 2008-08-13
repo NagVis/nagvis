@@ -226,36 +226,54 @@ class GlobalIndexPage {
 				break;
 			}
 			
-			// Maximum size
-			$thumbMaxWidth = 200;
-			$thumbMaxHeight = 150;
+			// Size of source images
+			$bgWidth = $imgSize[0];
+			$bgHeight = $imgSize[1];
 			
-			$thumbX = 0;
-			$thumbY = 0;
+			// Target size
+			$thumbResWidth = 200;
+			$thumbResHeight = 150;
 			
-			$thumbWidth = $imgSize[0];
-			$thumbHeight = $imgSize[1];
-			
-			if (($thumbWidth > $thumbMaxWidth) || ($thumbHeight > $thumbMaxHeight)) {
-				if (($thumbWidth / $thumbHeight) > ($thumbMaxWidth / $thumbMaxHeight)) {
-					$thumbHeight = (int)($thumbHeight * $thumbMaxWidth / $thumbWidth);
-					$thumbWidth = $thumbMaxWidth;
-					$thumbX = 0;
-					$thumbY = (int)(($thumbMaxHeight - $thumbHeight) / 2);
+			if($bgWidth > $bgHeight) {
+				// Calculate size
+				$thumbWidth = $thumbResWidth;
+				$thumbHeight = $bgHeight / ($bgWidth / $thumbWidth);
+				
+				// Calculate offset
+				$thumbX = 0;
+				$thumbY = ($thumbResHeight - $thumbHeight) / 2;
+			} elseif($bgHeight > $bgWidth) {
+				// Calculate size
+				$thumbHeight = $thumbResHeight;
+				$thumbWidth = $bgWidth / ($bgHeight / $thumbResHeight);
+				
+				// Calculate offset
+				$thumbX = ($thumbResWidth - $thumbWidth) / 2;
+				$thumbY = 0;
+			} else {
+				// Calculate size
+				if($thumbResWidth > $thumbResHeight) {
+						$thumbHeight = $thumbResHeight;
+						$thumbWidth = $thumbResHeight;
+				} elseif($thumbResHeight > $thumbResWidth) {
+						$thumbHeight = $thumbResWidth;
+						$thumbWidth = $thumbResWidth;
 				} else {
-					$thumbWidth = (int)($thumbWidth * $thumbMaxHeight / $thumbHeight);
-					$thumbHeight = $thumbMaxHeight;
-					$thumbX = (int)(($thumbMaxWidth - $thumbWidth) / 2);
-					$thumbY = 0;
+						$thumbHeight = $thumbResHeight;
+						$thumbWidth = $thumbResHeight;
 				}
+				
+				// Calculate offset
+				$thumbX = ($thumbResWidth - $thumbWidth) / 2;
+				$thumbY = ($thumbResHeight - $thumbHeight) / 2;
 			}
 			
-			$thumb = imagecreatetruecolor($thumbMaxWidth, $thumbMaxHeight); 
+			$thumb = imagecreatetruecolor($thumbResWidth, $thumbResHeight); 
 			
 			imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
 			imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
 			
-			imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $imgSize[0], $imgSize[1]);
+			imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $bgWidth, $bgHeight);
 			
 			imagepng($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.png'); 
 			
