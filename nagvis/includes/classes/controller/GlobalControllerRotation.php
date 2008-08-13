@@ -32,25 +32,30 @@ class GlobalControllerRotation {
 	public function __construct($type = NULL, $mapName = NULL) {
 		// Load the core
 		$CORE = new GlobalCore();
-
+		
+		$ROTATION = new NagVisRotation($CORE);
+		
+		// If no step given redirect to first step
+		if(!$type) {
+			// Redirect to next page
+			header('Location: '.$ROTATION->getNextStep());
+		}
+		
 		if ($type == 'map') {
 			// Initialize map configuration
 			$MAPCFG = new NagVisMapCfg($CORE, $mapName);
-
+			
 			// Read the map configuration file
 			$MAPCFG->readMapConfig();
-
+			
 			// Initialize backend(s)
 			$BACKEND = new GlobalBackendMgmt($CORE);
 		}
-
+		
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND);
-
-		if ($mapName == NULL) {
-			// Redirect to next page
-			header('Location: '.$FRONTEND->getNextRotationUrl());
-		} elseif ($type == 'map') {
+		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND, $ROTATION);
+		
+		if ($type == 'map') {
 			// Build the page
 			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 			$FRONTEND->getHeaderMenu();

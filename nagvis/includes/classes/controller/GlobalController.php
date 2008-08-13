@@ -188,7 +188,7 @@ class GlobalController implements GlobalControllerInterface {
 						}
 					}
 
-					$this->displayPage = new GlobalControllerRotation('map');
+					$this->displayPage = new GlobalControllerRotation();
 					$this->isValid = TRUE;
 				} else {
 					$this->message = 'noRotationpoolSet';

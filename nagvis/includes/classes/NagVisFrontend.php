@@ -32,6 +32,8 @@ class NagVisFrontend extends GlobalPage {
 	var $BACKEND;
 	var $LANG;
 	
+	var $ROTATION;
+	
 	var $MAP;
 	
 	var $headerTemplate;
@@ -43,7 +45,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisFrontend(&$CORE,&$MAPCFG = '',&$BACKEND = '') {
+	function NagVisFrontend(&$CORE,&$MAPCFG = '',&$BACKEND = '',&$ROTATION= '') {
 		$prop = Array();
 		
 		$this->CORE = &$CORE;
@@ -51,6 +53,7 @@ class NagVisFrontend extends GlobalPage {
 		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
+		$this->ROTATION = &$ROTATION;
 		
 		$this->htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
 		
@@ -244,73 +247,13 @@ class NagVisFrontend extends GlobalPage {
 		} else {
 			$strReturn .= "var rotate = false;\n";
 		}
+		
 		$strReturn .= "var bRefresh = true;\n";
-		$strReturn .= "var nextRotationUrl = '".$this->getNextRotationUrl()."';\n";
-		$strReturn .= "var nextRefreshTime = '".$this->getNextRotationTime()."';\n";
+		$strReturn .= "var nextRotationUrl = '".$this->ROTATION->getNextStep()."';\n";
+		$strReturn .= "var nextRefreshTime = '".$this->ROTATION->getStepInterval()."';\n";
 		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";
 		
-	    return $this->parseJs($strReturn);
-	}
-	
-	/**
-	 * Returns the next time to refresh or rotate in seconds
-	 *
-	 * @return	Integer		Returns The next rotation time in seconds
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getNextRotationTime() {
-		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
-			return $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'interval');
-		} else {
-			return $this->MAINCFG->getValue('rotation', 'interval');
-		}
-	}
-  
-	/**
-	 * Gets the Next map to rotate to, if enabled
-	 * If Next map is in [ ], it will be an absolute url
-	 *
-	 * @return	String  URL to rotate to
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getNextRotationUrl() {
-		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
-			if($maps = $this->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'maps')) {
-				$maps = explode(',', str_replace('"','',$maps));
-				
-				if(isset($_GET['url']) && $_GET['url'] != '') {
-					$currentMap = '['.$_GET['url'].']';
-				} else {
-					$currentMap = $this->MAPCFG->getName();
-				}
-			
-				// get position of actual map in the array
-				$index = array_search($currentMap,$maps);
-				if(($index + 1) >= sizeof($maps)) {
-					// if end of array reached, go to the beginning...
-					$index = 0;
-				} else {
-					$index++;
-				}
-					
-				$nextMap = $maps[$index];
-				
-				
-				if(preg_match("/^\[(.+)\]$/",$nextMap,$arrRet)) {
-					return 'index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1];
-				} else {
-					return 'index.php?rotation='.$_GET['rotation'].'&map='.$nextMap;
-				}
-			} else {
-				// Error Message (Map rotation pool does not exist)
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']));
-				
-				return '';
-			}
-		} else {
-			return '';
-		}
+		return $this->parseJs($strReturn);
 	}
 	
 	/**
