@@ -74,16 +74,29 @@ class GlobalIndexPage {
 		$aRotationPools = $this->getRotationPools();
 		if(count($aRotationPools) > 0) {
 			$ret .= '<table class="infobox">';
-			$ret .= '<tr><th>'.$this->CORE->LANG->getText('rotationPools').'</th></tr>';
+			$ret .= '<tr><th colspan="2">'.$this->CORE->LANG->getText('rotationPools').'</th></tr>';
 			foreach($this->getRotationPools() AS $poolName) {
-				// Form the onClick action
-				$onClick = 'location.href=\''.$this->htmlBase.'/index.php?rotation='.$poolName.'\';';
+				$ROTATION = new NagVisRotation($this->CORE, $poolName);
 				
-				// Now form the HTML code for the cell
-				$ret .= '<tr><td onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
+				// Form the onClick action
+				$onClick = 'location.href=\''.$ROTATION->getNextStepUrl().'\';';
+				
+				// Form the HTML code for the rotation cell
+				$ret .= '<tr>';
+				$ret .= '<td rowspan="'.$ROTATION->getNumSteps().'" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
 				$ret .= '<h2>'.$poolName.'</h2><br />';
 				$ret .= '</td>';
-				$ret .= '</tr>';
+				
+				// Parse the code for the step list
+				foreach($ROTATION->getSteps() AS $id => $step) {
+					if($id != 0) {
+						$ret .= '<tr>';
+					}
+					$onClick = 'location.href=\''.$ROTATION->getStepUrlById($id).'\';';
+					$ret .= '<td width="250" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
+					$ret .= $ROTATION->getStepById($id).'</td>';
+					$ret .= '</tr>';
+				}
 			}
 			$ret .= '</table>';
 		}

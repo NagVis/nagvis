@@ -254,7 +254,7 @@ class NagVisFrontend extends GlobalPage {
 		}
 		
 		$strReturn .= "var bRefresh = true;\n";
-		$strReturn .= "var nextRotationUrl = '".$this->ROTATION->getNextStep()."';\n";
+		$strReturn .= "var nextRotationUrl = '".$this->ROTATION->getNextStepUrl()."';\n";
 		$strReturn .= "var nextRefreshTime = '".$this->ROTATION->getStepInterval()."';\n";
 		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";
 		

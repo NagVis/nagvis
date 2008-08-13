@@ -39,7 +39,7 @@ class GlobalControllerRotation {
 		// If no step given redirect to first step
 		if(!$type) {
 			// Redirect to next page
-			header('Location: '.$ROTATION->getNextStep());
+			header('Location: '.$ROTATION->getNextStepUrl());
 		}
 		
 		if ($type == 'map') {
