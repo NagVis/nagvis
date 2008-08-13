@@ -44,7 +44,7 @@ class GlobalControllerIndex {
 		$BACKEND = new GlobalBackendMgmt($CORE);
 
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND);
+		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND, $ROTATION);
 
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());

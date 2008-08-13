@@ -33,6 +33,7 @@ class GlobalControllerRotation {
 		// Load the core
 		$CORE = new GlobalCore();
 		
+		// Initialize rotation/refresh
 		$ROTATION = new NagVisRotation($CORE);
 		
 		// If no step given redirect to first step

@@ -53,7 +53,12 @@ class NagVisFrontend extends GlobalPage {
 		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
-		$this->ROTATION = &$ROTATION;
+		
+		if(!$ROTATION) {
+			$this->ROTATION = new NagVisRotation($this->CORE);
+		} else {
+			$this->ROTATION = &$ROTATION;
+		}
 		
 		$this->htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
 		

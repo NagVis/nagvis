@@ -53,17 +53,19 @@ class NagVisRotation {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function setRotationOptions() {
-		// Check wether the pool is defined
-		$this->checkPoolExists();
-		
-		// Set the array of steps
-		$this->setSteps();
-		
-		// Set the current step
-		$this->setCurrentStep();
-		
-		// Set tje next step
-		$this->setNextStep();
+		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
+			// Check wether the pool is defined
+			$this->checkPoolExists();
+			
+			// Set the array of steps
+			$this->setSteps();
+			
+			// Set the current step
+			$this->setCurrentStep();
+			
+			// Set tje next step
+			$this->setNextStep();
+		}
 		
 		// Gather step interval
 		$this->setStepInterval();
@@ -105,13 +107,11 @@ class NagVisRotation {
 	}
 	
 	private function checkPoolExists() {
-		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
-			$steps = $this->CORE->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'maps');
-			if(!isset($steps) || sizeof($steps) <= 0) {
-				// Error Message (Map rotation pool does not exist)
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']));
-			}
+		$steps = $this->CORE->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'maps');
+		if(!isset($steps) || sizeof($steps) <= 0) {
+			// Error Message (Map rotation pool does not exist)
+			$FRONTEND = new GlobalPage($this->CORE);
+			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']));
 		}
 	}
 	
@@ -144,15 +144,19 @@ class NagVisRotation {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getNextStep() {
-		$strNextStep = $this->arrSteps[$this->intNextStep];
-		
-		if(preg_match("/^\[(.+)\]$/", $strNextStep, $arrRet)) {
-			$strNextStep = 'index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1];
+		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
+			$strNextStep = $this->arrSteps[$this->intNextStep];
+			
+			if(preg_match("/^\[(.+)\]$/", $strNextStep, $arrRet)) {
+				$strNextStep = 'index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1];
+			} else {
+				$strNextStep = 'index.php?rotation='.$_GET['rotation'].'&map='.$strNextStep;
+			}
+			
+			return $strNextStep;
 		} else {
-			$strNextStep = 'index.php?rotation='.$_GET['rotation'].'&map='.$strNextStep;
+			return '';
 		}
-		
-		return $strNextStep;
 	}
 }
 ?>
