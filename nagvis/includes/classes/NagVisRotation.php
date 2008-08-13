@@ -28,11 +28,14 @@
 class NagVisRotation {
 	private $CORE;
 	
+	private $strPoolName;
+	
 	private $arrSteps;
 	private $intInterval;
 	
 	private $intCurrentStep;
 	private $intNextStep;
+	private $strNextStep;
 	
 	/**
 	 * Class Constructor
@@ -54,6 +57,8 @@ class NagVisRotation {
 	 */
 	private function setRotationOptions() {
 		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
+			$this->setPoolName();
+			
 			// Check wether the pool is defined
 			$this->checkPoolExists();
 			
@@ -71,8 +76,12 @@ class NagVisRotation {
 		$this->setStepInterval();
 	}
 	
+	private function setPoolName() {
+		$this->strPoolName = $_GET['rotation'];
+	}
+	
 	private function setNextStep() {
-		if(($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
+		if($this->intCurrentStep === FALSE || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
 			// if end of array reached, go to the beginning...
 			$this->intNextStep = 0;
 		} else {
@@ -82,7 +91,7 @@ class NagVisRotation {
 	
 	private function setStepInterval() {
 		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
-			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'interval');
+			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation_'.$this->strPoolName, 'interval');
 		} else {
 			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation', 'interval');
 		}
@@ -102,16 +111,16 @@ class NagVisRotation {
 	}
 	
 	private function setSteps() {
-		$steps = $this->CORE->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'maps');
+		$steps = $this->CORE->MAINCFG->getValue('rotation_'.$this->strPoolName, 'maps');
 		$this->arrSteps = explode(',', str_replace('"','',$steps));
 	}
 	
 	private function checkPoolExists() {
-		$steps = $this->CORE->MAINCFG->getValue('rotation_'.$_GET['rotation'], 'maps');
+		$steps = $this->CORE->MAINCFG->getValue('rotation_'.$this->strPoolName, 'maps');
 		if(!isset($steps) || sizeof($steps) <= 0) {
 			// Error Message (Map rotation pool does not exist)
 			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$_GET['rotation']));
+			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$this->strPoolName));
 		}
 	}
 	
@@ -144,19 +153,18 @@ class NagVisRotation {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getNextStep() {
+		$strNextStep = '';
 		if(isset($_GET['rotation']) && $_GET['rotation'] != '') {
 			$strNextStep = $this->arrSteps[$this->intNextStep];
 			
 			if(preg_match("/^\[(.+)\]$/", $strNextStep, $arrRet)) {
-				$strNextStep = 'index.php?rotation='.$_GET['rotation'].'&url='.$arrRet[1];
+				$strNextStep = 'index.php?rotation='.$this->strPoolName.'&url='.$arrRet[1];
 			} else {
-				$strNextStep = 'index.php?rotation='.$_GET['rotation'].'&map='.$strNextStep;
+				$strNextStep = 'index.php?rotation='.$this->strPoolName.'&map='.$strNextStep;
 			}
-			
-			return $strNextStep;
-		} else {
-			return '';
 		}
+		
+		return $strNextStep;
 	}
 }
 ?>
