@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-13 21:22+0100\n"
-"PO-Revision-Date: 2008-08-13 21:24+0100\n"
+"PO-Revision-Date: 2008-08-13 21:59+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -152,15 +152,15 @@ msgstr "Map image file \"[IMGPATH]\" does not exist"
 
 #: nagvis/includes/classes/GlobalBackground.php:86
 msgid "backgroundNotReadable"
-msgstr "Please check the webservers permissions at the map image file \"[IMGPATH]\""
+msgstr "The background image \"[IMGPATH]\" is not readable."
 
 #: nagvis/includes/classes/GlobalBackground.php:110
 msgid "backgroundNotWriteable"
-msgstr "Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;."
+msgstr "The map image file &quot;[IMGPATH]&quot; is not writeable."
 
 #: nagvis/includes/classes/GlobalBackground.php:133
 msgid "backgroundFolderNotWriteable"
-msgstr "Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;."
+msgstr "The background image folder &quot;[PATH]&quot; is not writeable."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:533
 msgid "mainMustValueNotSet"
@@ -293,7 +293,7 @@ msgstr "An image &quot;[FILE]&quot; which is needed to create a thumbnail image 
 
 #: nagvis/includes/classes/GlobalMapCfg.php:827
 msgid "mapCfgNotReadable"
-msgstr "Please check the webservers permissions at the map image file &quot;[IMGPATH]&quot;."
+msgstr "The map configuration file &quot;[IMGPATH]&quot; is not readable."
 
 #: nagvis/includes/classes/GlobalMapCfg.php:854
 #: wui/form_handler.php:50
