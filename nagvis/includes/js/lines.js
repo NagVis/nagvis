@@ -41,7 +41,7 @@ function drawNagVisLine(objId, type,x1,y1,x2,y2,width,state,ack,downtime) {
 		break;
 		case 'CRITICAL':
 		case 'DOWN':
-			colorFill = '#00FFFF';
+			colorFill = '#FF0000';
 		break;
 		case 'ERROR':
 			colorFill = '#0000FF';
