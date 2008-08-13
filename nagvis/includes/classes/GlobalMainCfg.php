@@ -271,7 +271,7 @@ class GlobalMainCfg {
 						'dbprefix' => Array('must' => 0,
 							'editable' => 1,
 							'default' => 'nagios_',
-							'match' => MATCH_STRING_NO_SPACE),
+							'match' => MATCH_STRING_NO_SPACE_EMPTY),
 						'dbinstancename' => Array('must' => 0,
 							'editable' => 1,
 							'default' => 'default',
