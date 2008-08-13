@@ -77,7 +77,7 @@ class GlobalValidatorAbstract {
 			return TRUE;
 		}
 
-		$this->setMessage('notSet');
+		$this->setMessage('validatorNotSetParameterValue');
 		return FALSE;
 	}
 
@@ -93,7 +93,7 @@ class GlobalValidatorAbstract {
 			return TRUE;
 		}
 
-		$this->setMessage('isEmpty');
+		$this->setMessage('validatorIsEmptyParameter');
 		return FALSE;
 	}
 

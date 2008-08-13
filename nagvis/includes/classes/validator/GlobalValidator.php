@@ -288,7 +288,7 @@ class GlobalValidator {
 			}
 		}
 
-		$this->setMessage('notDefined');
+		$this->setMessage('validatorNotDefinedParameter');
 		return FALSE;
 	}
 

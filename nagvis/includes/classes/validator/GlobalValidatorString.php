@@ -108,7 +108,7 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 		if (eregi('^[a-zA-Z0-9_\-]*$',$this->parameterValue)) {
 			return TRUE;
 		} else {
-			$this->setMessage('notValidString');
+			$this->setMessage('validatorNotValidString');
 			return FALSE;
 		}
 	}
@@ -127,7 +127,7 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 			}
 		}
 
-		$this->setMessage('notAllowedEntry');
+		$this->setMessage('ValidatorNotAllowedParameterEntry');
 		return FALSE;
 	}
 }

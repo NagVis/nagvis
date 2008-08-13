@@ -108,7 +108,7 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 		if (eregi('^[0-9]*$',$this->parameterValue)) {
 			return TRUE;
 		} else {
-			$this->setMessage('notValidInteger');
+			$this->setMessage('validatorNotValidInteger');
 			return FALSE;
 		}
 	}
@@ -124,7 +124,7 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 		if ($this->parameterValue >= $this->validateArr['minValue'] && $this->parameterValue <= $this->validateArr['maxValue']) {
 			return TRUE;
 		} else {
-			$this->setMessage('outOfRange');
+			$this->setMessage('validatorValueOutOfRange');
 			return FALSE;
 		}
 	}

@@ -101,7 +101,7 @@ class GlobalValidatorUrl extends GlobalValidatorAbstract {
 		if (eregi('^[a-zA-Z0-9_.:\/\-]*$',$this->parameterValue)) {
 			return TRUE;
 		} else {
-			$this->setMessage('notValidUrl');
+			$this->setMessage('vaidatorNotValidUrl');
 			return FALSE;
 		}
 	}

@@ -103,7 +103,7 @@ class GlobalValidatorBoolean extends GlobalValidatorAbstract {
 		} elseif ('TRUE' == strtoupper($this->parameterValue) || 'FALSE' == strtoupper($this->parameterValue)) {
 			return TRUE;
 		} else {
-			$this->setMessage('notValidBoolean');
+			$this->setMessage('validatorNotValidBoolean');
 			return FALSE;
 		}
 	}
