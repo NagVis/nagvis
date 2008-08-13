@@ -50,9 +50,9 @@ class GlobalMapCfg {
 			'global' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'allowed_for_config' => Array('must' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
+					'match' => MATCH_STRING),
 				'allowed_user' => Array('must' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
+					'match' => MATCH_STRING),
 				'map_image' => Array('must' => 1,
 					'match' => MATCH_PNGFILE),
 				'alias' => Array('must' => 0,
@@ -699,7 +699,7 @@ class GlobalMapCfg {
 								$sValue = trim(substr($file[$l],($iDelimPos+1)));
 								
 								if(isset($createArray[$sKey])) {
-									$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', str_replace(' ', '', $sValue));
+									$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
 								} else {
 									$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
 								}
