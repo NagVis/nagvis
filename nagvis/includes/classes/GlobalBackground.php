@@ -106,7 +106,7 @@ class GlobalBackground {
 			} else {
 				if($printErr) {
 					//Error Box
-					$FRONTEND = new GlobalPage($this->CORE->MAINCFG);
+					$FRONTEND = new GlobalPage($this->CORE);
 					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('backgroundNotWriteable','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
@@ -129,7 +129,7 @@ class GlobalBackground {
 		} else {
 			if($printErr) {
 				//Error Box
-				$FRONTEND = new GlobalPage($this->CORE->MAINCFG);
+				$FRONTEND = new GlobalPage($this->CORE);
 				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('backgroundFolderNotWriteable','PATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 			}
 			return FALSE;
