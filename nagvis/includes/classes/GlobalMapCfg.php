@@ -574,8 +574,11 @@ class GlobalMapCfg {
 			$sTmp = $this->getValue('global', 0, $sVar);
 			$this->validConfig['host'][$sVar]['default'] = $sTmp;
 			$this->validConfig['hostgroup'][$sVar]['default'] = $sTmp;
-			$this->validConfig['service'][$sVar]['default'] = $sTmp;
 			$this->validConfig['servicegroup'][$sVar]['default'] = $sTmp;
+
+			if($sVar != 'recognize_services') {
+				$this->validConfig['service'][$sVar]['default'] = $sTmp;
+			}
 			
 			if($sVar != 'recognize_services' && $sVar != 'backend_id') {
 				$this->validConfig['map'][$sVar]['default'] = $sTmp;
