@@ -37,7 +37,7 @@ require("./includes/functions/ajaxErrorHandler.php");
 $CORE = new GlobalCore();
 
 // FIXME: This is a hack; TODO: create a class "AjaxFrontend" which
-// handles this user authentication related things and the handling below
+// handles this user authenticatgetObjectHoverMenuion related things and the handling below
 $CORE->MAINCFG->setRuntimeValue('user', getUser());
 
 
@@ -155,7 +155,37 @@ switch($_GET['action']) {
 					if($MAPCFG->checkMapConfigExists(0)) {
 						$MAPCFG->readMapConfig();
 					}
-					$OBJ = new NagVisMapObj($CORE, $BACKEND, $MAPCFG);
+					
+					if($objConf['map_name'] == '__automap') {
+						$opts = Array();
+						
+						// Fetch option array from defaultparams string (extract variable 
+						// names and values)
+						$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
+						unset($params[0]);
+						
+						foreach($params AS &$set) {
+							$arrSet = explode('=',$set);
+							$opts[$arrSet[0]] = $arrSet[1];
+						}
+						
+						$opts['preview'] = 1;
+						
+						$MAP = new NagVisAutoMap($CORE, $BACKEND, $opts);
+					} else {
+						$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
+					}
+					
+					// Apply default configuration to object
+					$objConf = Array();
+					foreach($MAPCFG->validConfig['map'] AS $key => &$values) {
+						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+							$objConf[$key] = $values['default'];
+						}
+					}
+					$MAP->MAPOBJ->setConfiguration($objConf);
+					
+					$OBJ = &$MAP->MAPOBJ;
 					
 					if(!$MAPCFG->checkMapConfigExists(0)) {
 						$OBJ->summary_state = 'ERROR';
