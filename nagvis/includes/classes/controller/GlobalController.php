@@ -41,7 +41,7 @@ class GlobalController implements GlobalControllerInterface {
 	private $isValid = NULL;
 
 	// Contains error message
-	private $message = NULL;
+	private $setMessage = NULL;
 
 	// This array contains possible variables for the automap
 	private $automapEnv = array(
@@ -88,7 +88,7 @@ class GlobalController implements GlobalControllerInterface {
 			$this->action = $this->parameterNames[0];
 		} else {
 			$this->action = 'default';
-			$this->message = 'setActionToDefault';
+			$this->setMessage = 'ControllerSetActionToDefault';
 		}
 
 		// Switch to set action
@@ -117,11 +117,11 @@ class GlobalController implements GlobalControllerInterface {
 						$this->displayPage = new GlobalControllerMap($mapName);
 						$this->isValid = TRUE;
 					} else {
-						$this->message = $this->validator->getMessage();
+						$this->setMessage = $this->validator->getMessage();
 						$this->isValid = FALSE;
 					}
 				} else {
-					$this->message = 'noMapSet';
+					$this->setMessage = 'controllerNoMapSet';
 					$this->isValid = FALSE;
 				}
 			break;
@@ -139,7 +139,7 @@ class GlobalController implements GlobalControllerInterface {
 							$this->automapEnv[$parameterName] = $parameterValue;
 							$this->isValid = TRUE;
 						} else {
-							$this->message = $this->validator->getMessage();
+							$this->setMessage = $this->validator->getMessage();
 							$this->isValid = FALSE;
 							break;
 						}
@@ -167,7 +167,7 @@ class GlobalController implements GlobalControllerInterface {
 							$this->displayPage = new GlobalControllerRotation('map', $mapName);
 							$this->isValid = TRUE;
 						} else {
-							$this->message = $this->validator->getMessage();
+							$this->setMessage = $this->validator->getMessage();
 							$this->isValid = FALSE;
 							break;
 						}
@@ -182,7 +182,7 @@ class GlobalController implements GlobalControllerInterface {
 							$this->displayPage = new GlobalControllerRotation('url', $url);
 							$this->isValid = TRUE;
 						} else {
-							$this->message = $this->validator->getMessage();
+							$this->setMessage = $this->validator->getMessage();
 							$this->isValid = FALSE;
 							break;
 						}
@@ -191,7 +191,7 @@ class GlobalController implements GlobalControllerInterface {
 					$this->displayPage = new GlobalControllerRotation();
 					$this->isValid = TRUE;
 				} else {
-					$this->message = 'noRotationpoolSet';
+					$this->setMessage = 'controllerNoRotationpoolSet';
 					$this->isValid = FALSE;
 				}
 			break;
@@ -205,11 +205,11 @@ class GlobalController implements GlobalControllerInterface {
 						$this->displayPage = new GlobalControllerUrl($url);
 						$this->isValid = TRUE;
 					} else {
-						$this->message = $this->validator->getMessage();
+						$this->setMessage = $this->validator->getMessage();
 						$this->isValid = FALSE;
 					}
 				} else {
-					$this->message = 'noUrlSet';
+					$this->setMessage = 'controllerNoUrlSet';
 					$this->isValid = FALSE;
 				}
 			break;
@@ -234,7 +234,7 @@ class GlobalController implements GlobalControllerInterface {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function getMessage() {
-		return $this->message;
+		return $this->setMessage;
 	}
 
 	/**
