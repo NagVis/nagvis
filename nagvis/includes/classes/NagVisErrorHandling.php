@@ -29,6 +29,9 @@
  */
 class NagVisErrorHandling {
 
+	// Contains core object
+	private $CORE;
+
 	// Contains language object
 	private $LANG;
 
@@ -44,7 +47,7 @@ class NagVisErrorHandling {
 	// Contains variables which be change in the message text. Example -> 'TYPE~'.$type.
 	private $messageVariables;
 
-	public function __construct($type, $message, $messageVariables,$title=NULL) {
+	public function __construct($type, $message, $messageVariables,$title=NULL, CORE $CORE=NULL) {
 
 		$this->type = $type;
 		$this->title = $title;
@@ -52,12 +55,17 @@ class NagVisErrorHandling {
 		$this->messageVariables = $messageVariables;
 
 		// Load the core
-		$CORE = new GlobalCore();
- 		$this->LANG = $CORE->LANG;
+		if(!is_Object($CORE)) {
+			$this->CORE = new GlobalCore();
+		} else {
+			$this->CORE = $CORE;
+		}
+
+		$this->LANG = $this->CORE->LANG;
 
 
 		// Initialize the frontend
-		$FRONTEND = new GlobalPage($CORE);
+		$FRONTEND = new GlobalPage($this->CORE);
 		$FRONTEND->messageToUser($this->LANG->getText($this->type), $this->LANG->getText($message, $messageVariables));
 	}
 }
