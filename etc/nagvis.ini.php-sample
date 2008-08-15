@@ -118,8 +118,9 @@
 ; in this example the browser switches between the maps demo and demo2 every 15
 ; seconds the rotation is enabled by url: index.php?rotation=demo
 [rotation_demo]
-; maps to rotate in this pool
-maps="demo,Second demo Map:demo2"
+; These steps are rotated. The "Demo2:" is a label which is being displayed in
+; the index pages rotation list.
+maps="demo,Demo2:demo2"
 ; rotation interval (seconds)
 interval=15
 
