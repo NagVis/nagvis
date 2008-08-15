@@ -110,6 +110,8 @@ class GlobalController implements GlobalControllerInterface {
 
 			// Display set map
 			case 'map':
+				// Check variables for the automap
+				$this->checkedParameterName = 'map';
 				$mapName = $httpRequest->getParameter('map');
 				if ($httpRequest->issetParameter('map')) {
 					$this->validator = new GlobalValidator('map', $mapName);
