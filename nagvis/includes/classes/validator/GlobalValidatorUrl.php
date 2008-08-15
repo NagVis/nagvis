@@ -98,7 +98,7 @@ class GlobalValidatorUrl extends GlobalValidatorAbstract {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	protected function isUrl() {
-		if (eregi(MATCH_STRING_URL, $this->parameterValue)) {
+		if (preg_match(MATCH_STRING_URL, $this->parameterValue)) {
 			return TRUE;
 		} else {
 			$this->setMessage('vaidatorNotValidUrl');
