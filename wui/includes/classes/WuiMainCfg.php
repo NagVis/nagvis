@@ -124,8 +124,6 @@ class WuiMainCfg extends GlobalMainCfg {
 		return TRUE;
 	}
 	
-	
-	
 	/**
 	 * Writes the config file completly from array $this->configFile
 	 *
@@ -135,6 +133,7 @@ class WuiMainCfg extends GlobalMainCfg {
 	function writeConfig() {
 		// Check for config file write permissions
 		if($this->checkNagVisConfigWriteable(1)) {
+			$content = '';
 			foreach($this->config as $key => &$item) {
 				if(is_array($item)) {
 					$content .= '['.$key.']'."\n";
@@ -142,19 +141,44 @@ class WuiMainCfg extends GlobalMainCfg {
 						if(substr($key2,0,8) == 'comment_') {
 							$content .= $item2."\n";
 						} else {
-							if(is_numeric($item2) || is_bool($item2))
+							if(is_numeric($item2) || is_bool($item2)) {
 								$content .= $key2."=".$item2."\n";
-							else
-							$content .= $key2.'="'.$item2.'"'."\n";
+							} else {
+								if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
+									$val = '';
+									// Check if an element has a label defined
+									foreach($item2 AS $intId => $arrStep) {
+										$seperator = ',';
+										$label = '';
+										$step = '';
+										
+										if($intId == 0) {
+											$seperator = '';
+										}
+										
+										if(isset($arrStep['map']) && $arrStep['map'] != '') {
+											$step = $arrStep['map'];
+										} else {
+											$step = '['.$arrStep['url'].']';
+										}
+										
+										if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
+											$label = $arrStep['label'].':';
+										}
+										
+										// Save the extracted informations to an array
+										$val .= $seperator.$label.$step;
+									}
+									
+									$item2 = $val;
+								}
+								
+								$content .= $key2.'="'.$item2.'"'."\n";
+							}
 						}
 					}
 				} elseif(substr($key,0,8) == 'comment_') {
 					$content .= $item."\n";
-				} else {
-					if(is_numeric($item) || is_bool($item))
-						$content .= $key.'='.$item."\n";
-					else
-						$content .= $key.'="'.$item.'"'."\n";
 				}
 			}
 			
