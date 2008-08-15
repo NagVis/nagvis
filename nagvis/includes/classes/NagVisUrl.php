@@ -45,7 +45,7 @@ class NagVisUrl {
 	}
 	
 	public function fetchContents() {
-		$this->strContents = file($this->strUrl);
+		$this->strContents = file_get_contents($this->strUrl);
 	}
 	
 	public function getContents() {
