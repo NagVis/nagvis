@@ -117,6 +117,9 @@ class WuiEditMainCfg extends GlobalPage {
 							case 'usegdlibs':
 							case 'autoupdatefreq':
 							case 'headertemplate':
+							case 'showinlists':
+							case 'hovermenu':
+							case 'hoverchildsshow':
 								switch($key2) {
 									case 'language':
 										$arrOpts = $this->getLanguages();
@@ -135,6 +138,9 @@ class WuiEditMainCfg extends GlobalPage {
 									case 'recognizeservices':
 									case 'onlyhardstates':
 									case 'usegdlibs':
+									case 'showinlists':
+									case 'hovermenu':
+									case 'hoverchildsshow':
 										$arrOpts = Array(Array('value'=>'1','label'=>$this->LANG->getText('yes')),
 														 Array('value'=>'0','label'=>$this->LANG->getText('no')));
 									break;
