@@ -119,7 +119,7 @@
 ; seconds the rotation is enabled by url: index.php?rotation=demo
 [rotation_demo]
 ; maps to rotate in this pool
-maps="demo,demo2"
+maps="demo,Second demo Map:demo2"
 ; rotation interval (seconds)
 interval=15
 
