@@ -195,7 +195,8 @@ switch($_GET['myaction']) {
 		} else {
 			// Parse properties to array and loop each
 			foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
-				$CORE->MAINCFG->setValue($CORE->MAINCFG->findSecOfVar($key),$key,$val);
+				$key = explode('_', $key);
+				$CORE->MAINCFG->setValue($key[0],$key[1],$val);
 			}
 			
 			// Write the changes to the main configuration file
@@ -451,7 +452,7 @@ switch($_GET['myaction']) {
 			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~defaultbackend');
 		} else {
 			// Set the default backend
-			$CORE->MAINCFG->setValue($CORE->MAINCFG->findSecOfVar('backend'),'backend',$_POST['defaultbackend']);
+			$CORE->MAINCFG->setValue('defaults', 'backend', $_POST['defaultbackend']);
 			
 			// Write the changes to the main configuration
 			$CORE->MAINCFG->writeConfig();

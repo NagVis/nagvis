@@ -214,27 +214,5 @@ class WuiMainCfg extends GlobalMainCfg {
 			return FALSE;
 		}
 	}
-	
-	/**
-	 * Finds the Section of a var
-	 *
-	 * @param	String	$var	Config variable
-	 * @return	String	Section of the var
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function findSecOfVar($var) {
-		foreach($this->validConfig AS $key => &$item) {
-			if(is_array($item)) {
-				foreach ($item AS $key2 => &$item2) {
-					if(substr($key2,0,8) != 'comment_') {
-						if($key2 == $var) {
-							return $key;
-						}
-					}
-				}
-			}
-		}
-		return FALSE;
-	}
 }
 ?>

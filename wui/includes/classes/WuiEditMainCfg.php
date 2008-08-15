@@ -148,13 +148,13 @@ class WuiEditMainCfg extends GlobalPage {
 									break;
 								}
 								
-								$ret = array_merge($ret,$this->FORM->getSelectField("conf_".$key2, $arrOpts, '', '' , 'validateMainConfigFieldValue(this)'));
+								$ret = array_merge($ret,$this->FORM->getSelectField("conf_".$cat."_".$key2, $arrOpts, '', '' , 'validateMainConfigFieldValue(this)'));
 							break;
 							default:
-								$ret = array_merge($ret,$this->FORM->getInputField("conf_".$key2, $val2, 'validateMainConfigFieldValue(this)'));
+								$ret = array_merge($ret,$this->FORM->getInputField("conf_".$cat."_".$key2, $val2, 'validateMainConfigFieldValue(this)'));
 								
 								if(isset($prop['locked']) && $prop['locked'] == 1) {
-									$ret[] = "<script>document.edit_config.elements['conf_".$key2."'].disabled=true;</script>";
+									$ret[] = "<script>document.edit_config.elements['conf_".$cat."_".$key2."'].disabled=true;</script>";
 								}
 								
 								if(is_array($val2)) {
@@ -162,7 +162,7 @@ class WuiEditMainCfg extends GlobalPage {
 								}
 							break;
 						}
-						$ret[] = "\t\t<script>document.edit_config.elements['conf_".$key2."'].value='".$val2."';</script>";
+						$ret[] = "\t\t<script>document.edit_config.elements['conf_".$cat."_".$key2."'].value='".$val2."';</script>";
 						$ret[] = "\t</td>";
 						$ret[] = "</tr>";
 					}

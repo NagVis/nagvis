@@ -40,8 +40,8 @@ function validateForm() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function validateMainConfigFieldValue(oField) {
-	var sName = oField.name.replace('conf_','');
-	return validateValue(sName, oField.value, window.opener.validMainConfig[findSectionOfOption(sName)][sName].match)
+	var sName = oField.name.split('_');
+	return validateValue(sName, oField.value, window.opener.validMainConfig[sName[1]][sName[2]].match)
 }
 
 // function that builds up the list of parameters/values. There are 2 kinds of parameters values :
@@ -56,23 +56,4 @@ function update_param() {
 	}
 	document.edit_config.properties.value=document.edit_config.properties.value.substring(1,document.edit_config.properties.value.length);
 	return true;
-}
-
-/**
- * findSectionOfOption(sOption)
- *
- * This function finds the section of an main configuration option by searching
- * it in the valid config array.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function findSectionOfOption(sOption) {
-	for (var sSection in window.opener.validMainConfig) {
-		for (var sKey in window.opener.validMainConfig[sSection]) {
-			if(sKey == sOption) {
-				return sSection;
-			}
-		}
-	}
-	return false;
 }
