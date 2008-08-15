@@ -63,11 +63,12 @@ class GlobalControllerRotation {
 			$FRONTEND->getMap();
 			$FRONTEND->getMessages();
 		} elseif ($type == 'url') {
-					// Build the page
+			$URL = new NagVisUrl($CORE, $mapName);
+			
+			// Build the page
 			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
 			$FRONTEND->getHeaderMenu();
-			$arrFile = file($mapName);
-			$FRONTEND->addBodyLines($arrFile);
+			$FRONTEND->addBodyLines($URL->getContents());
 		}
 
 		// Print the page

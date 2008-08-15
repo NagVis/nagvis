@@ -1,9 +1,9 @@
 <?php
 /*****************************************************************************
  *
- * GlobalControllerDefault.php - Global url controller for nagvis
+ * NagVisUrl.php - This class handles urls which should be shown in NagVis
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
+ * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
  * License:
  *
@@ -21,30 +21,39 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
-
+ 
 /**
- * class GlobalControllerUrl
- *
- * @author  Michael Luebben <michael_luebben@web.de>
+ * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class GlobalControllerUrl {
-
-	public function __construct($url) {
-		// Load the core
-		$CORE = new GlobalCore();
-
-		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE);
+class NagVisUrl {
+	private $CORE;
+	
+	private $strUrl;
+	private $strContents;
+	
+	/**
+	 * Class Constructor
+	 *
+	 * @param 	GlobalCore 	$CORE
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function __construct(&$CORE, $strUrl) {
+		$this->CORE = &$CORE;
 		
-		$URL = new NagVisUrl($CORE, $url);
-
-		// Build the page
-		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-		$FRONTEND->getHeaderMenu();
-		$FRONTEND->addBodyLines($URL->getContents());
-
-		// Print the page
-		$FRONTEND->printPage();
+		$this->strUrl = $strUrl;
+		$this->strContents = '';
+	}
+	
+	public function fetchContents() {
+		$this->strContents = file($this->strUrl);
+	}
+	
+	public function getContents() {
+		if($this->strContents == '') {
+			$this->fetchContents();
+		}
+		
+		return $this->strContents;
 	}
 }
 ?>
