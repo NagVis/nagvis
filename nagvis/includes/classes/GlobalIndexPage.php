@@ -88,13 +88,13 @@ class GlobalIndexPage {
 				$ret .= '</td>';
 				
 				// Parse the code for the step list
-				foreach($ROTATION->getSteps() AS $id => $step) {
-					if($id != 0) {
+				foreach($ROTATION->getSteps() AS $intId => $arrStep) {
+					if($intId != 0) {
 						$ret .= '<tr>';
 					}
-					$onClick = 'location.href=\''.$ROTATION->getStepUrlById($id).'\';';
+					$onClick = 'location.href=\''.$ROTATION->getStepUrlById($intId).'\';';
 					$ret .= '<td width="250" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
-					$ret .= $ROTATION->getStepById($id).'</td>';
+					$ret .= $ROTATION->getStepLabelById($intId).'</td>';
 					$ret .= '</tr>';
 				}
 			}

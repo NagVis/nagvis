@@ -37,8 +37,6 @@ class NagVisRotation {
 	private $intNextStep;
 	private $strNextStep;
 	
-	private $arrStepUrls;
-	
 	/**
 	 * Class Constructor
 	 *
@@ -109,32 +107,41 @@ class NagVisRotation {
 	
 	private function setCurrentStep() {
 		$strCurrentStep = '';
+		$strType = '';
 		
 		if(isset($_GET['url']) && $_GET['url'] != '') {
-			$strCurrentStep = '['.$_GET['url'].']';
+			$strCurrentStep = $_GET['url'];
+			$strType = 'url';
 		} elseif(isset($_GET['map']) && $_GET['map'] != '') {
 			$strCurrentStep = $_GET['map'];
+			$strType = 'map';
 		}
 		
 		// Set position of actual map in the array
-		$this->intCurrentStep = array_search($strCurrentStep, $this->arrSteps);
+		if($strCurrentStep != '') {
+			foreach($this->arrSteps AS $intId => $arrStep) {
+				if($strCurrentStep == $arrStep[$strType]) {
+					$this->intCurrentStep = $intId;
+					continue;
+				}
+			}
+		} else {
+			$this->intCurrentStep = 0;
+		}
 	}
 	
 	private function setStepUrls() {
-		$this->arrStepUrls = $this->arrSteps;
-		
-		foreach ($this->arrStepUrls AS $id => $step) {
-			if(preg_match("/^\[(.+)\]$/", $step, $arrRet)) {
-				$this->arrStepUrls[$id] = 'index.php?rotation='.$this->getPoolName().'&url='.$arrRet[1];
+		foreach ($this->arrSteps AS $intId => $arrStep) {
+			if(isset($arrStep['url']) && $arrStep['url'] != '') {
+				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&url='.$arrStep['url'];
 			} else {
-				$this->arrStepUrls[$id] = 'index.php?rotation='.$this->getPoolName().'&map='.$step;
+				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&map='.$arrStep['map'];
 			}
 		}
 	}
 	
 	private function setSteps() {
-		$steps = $this->CORE->MAINCFG->getValue('rotation_'.$this->getPoolName(), 'maps');
-		$this->arrSteps = explode(',', str_replace('"','',$steps));
+		$this->arrSteps = $this->CORE->MAINCFG->getValue('rotation_'.$this->getPoolName(), 'maps');
 	}
 	
 	private function checkPoolExists() {
@@ -164,8 +171,19 @@ class NagVisRotation {
 	 * @return	String  URL to rotate to
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
+	public function getCurrentStepLabel() {
+		return $this->arrSteps[$this->intCurrentStep]['label'];
+	}
+	
+	/**
+	 * Gets the Next step to rotate to, if enabled
+	 * If Next map is in [ ], it will be an absolute url
+	 *
+	 * @return	String  URL to rotate to
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function getCurrentStepUrl() {
-		return $this->arrStepUrls[$this->intCurrentStep];
+		return $this->arrSteps[$this->intCurrentStep]['target'];
 	}
 	
 	/**
@@ -176,7 +194,7 @@ class NagVisRotation {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getNextStepUrl() {
-		return $this->arrStepUrls[$this->intNextStep];
+		return $this->arrSteps[$this->intNextStep]['target'];
 	}
 	
 	/**
@@ -195,18 +213,18 @@ class NagVisRotation {
 	 * @return	Integer
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getStepUrlById($id) {
-		return $this->arrStepUrls[$id];
+	public function getStepUrlById($intId) {
+		return $this->arrSteps[$intId]['target'];
 	}
 	
 	/**
-	 * Gets the name of a specific step
+	 * Gets the label of a specific step
 	 *
 	 * @return	Integer
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getStepById($id) {
-		return $this->arrSteps[$id];
+	public function getStepLabelById($intId) {
+		return $this->arrSteps[$intId]['label'];
 	}
 	
 	/**

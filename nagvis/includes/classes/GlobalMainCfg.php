@@ -481,7 +481,37 @@ class GlobalMainCfg {
 					
 					// Special options (Arrays)
 					if($sec == 'wui' && $key == 'allowedforconfig') {
-						$val = explode(',', str_replace(' ','',$val));
+						// Explode comma seperated list to array
+						$val = explode(',', $val);
+					} elseif(preg_match('/^rotation_/i', $sec) && $key == 'maps') {
+						// Explode comma seperated list to array
+						$val = explode(',', $val);
+						
+						// Check if an element has a label defined
+						foreach($val AS $id => $element) {
+							if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
+								$label = '';
+								$map = '';
+								
+								// When no label is set, set map or url as label
+								if($arrRet[1] != '') {
+									$label = substr($arrRet[1],0,-1);
+								} else {
+									if($arrRet[3] != '') {
+										$label = $arrRet[3];
+									} else {
+										$label = $arrRet[4];
+									}
+								}
+								
+								if(isset($arrRet[4]) && $arrRet[4] != '') {
+									$map = $arrRet[4];
+								}
+								
+								// Save the extracted informations to an array
+								$val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
+							}
+						}
 					}
 					
 					// write in config array
@@ -554,6 +584,17 @@ class GlobalMainCfg {
 								}
 								return FALSE;
 							} else {
+								// Workaround to get the configured string back
+								if(ereg('^rotation_', $type) && $key == 'maps') {
+									foreach($val AS $intId => $arrStep) {
+										if(isset($arrStep['label']) && $arrStep['label'] != '') {
+											$label = $arrStep['label'].':';
+										}
+										
+										$val[$intId] = $label.$arrStep['url'].$arrStep['map'];
+									}
+								}
+								
 								if(isset($val) && is_array($val)) {
 									$val = implode(',',$val);
 								}
