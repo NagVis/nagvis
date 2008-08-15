@@ -384,9 +384,9 @@ class WuiAddModify extends GlobalPage {
 	function getMapImages() {
 		$files = Array();
 		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/.png$/i', $file)) {
+		if($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
+ 			while(false !== ($file = readdir($handle))) {
+				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file)) {
 					$files[] = $file;
 				}				
 			}

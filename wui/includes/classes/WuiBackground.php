@@ -49,7 +49,7 @@ class WuiBackground extends GlobalBackground {
 		}
 	}
 	
-	/**
+	/**                                
 	* Uploads a map image
 	*
 	* @param	Boolean	$printErr
@@ -59,7 +59,7 @@ class WuiBackground extends GlobalBackground {
 	function uploadImage($arr, $printErr=1) {
 		if(is_uploaded_file($arr['tmp_name'])) {
 			$fileName = $arr['name'];
-			if(preg_match('/\.png/i',$fileName)) {
+			if(preg_match(MATCH_PNG_GIF_JPG_FILE,$fileName)) {
 				if($this->checkFolderWriteable(1)) {
 					if(move_uploaded_file($arr['tmp_name'], $this->CORE->MAINCFG->getValue('paths', 'map').$fileName)) {
 						// Change permissions of the map image
@@ -79,7 +79,7 @@ class WuiBackground extends GlobalBackground {
 			} else {
 				// Error handling
 				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mustBePngFile'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mustChooseValidImageFormat'));
 				return FALSE;
 			}
 		} else {

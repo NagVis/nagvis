@@ -121,7 +121,7 @@ class WuiBackgroundManagement extends GlobalPage {
      */
 	function getDelFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getText('choosePngImage'),'map_image',$this->getMapImages(),''));
+		$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getText('chooseImage'),'map_image',$this->getMapImages(),''));
 		$this->propCount++;
 		
 		return $ret;
@@ -136,7 +136,7 @@ class WuiBackgroundManagement extends GlobalPage {
 	function getAddFields() {
 		$ret = Array();
 		$ret = array_merge($ret,$this->ADDFORM->getHiddenField('MAX_FILE_SIZE','3000000'));
-		$ret = array_merge($ret,$this->ADDFORM->getFileLine($this->LANG->getText('choosePngImage'),'image_file',''));
+		$ret = array_merge($ret,$this->ADDFORM->getFileLine($this->LANG->getText('chooseImage'),'image_file',''));
 		$this->propCount++;
 		
 		return $ret;
@@ -173,7 +173,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".png") {
+				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file)) {
 					$files[] = $file;
 				}				
 			}
@@ -197,7 +197,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$ret = Array();
 		$ret[] = 'var lang = Array();';
 		$ret[] = 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getText('firstMustChoosePngImage').'\';';
-		$ret[] = 'lang[\'mustChoosePngImage\'] = \''.$this->LANG->getText('mustChoosePngImage').'\';';
+		$ret[] = 'lang[\'mustChooseValidImageFormat\'] = \''.$this->LANG->getText('mustChooseValidImageFormat').'\';';
 		$ret[] = 'lang[\'foundNoBackgroundToDelete\'] = \''.$this->LANG->getText('foundNoBackgroundToDelete').'\';';
 		$ret[] = 'lang[\'confirmBackgroundDeletion\'] = \''.$this->LANG->getText('confirmBackgroundDeletion').'\';';
 		$ret[] = 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getText('unableToDeleteBackground').'\';';

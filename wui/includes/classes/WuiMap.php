@@ -501,10 +501,8 @@ class WuiMap extends GlobalMap {
 		
 		//replaced: if(file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
 		if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getIcon(): '.$icon);
 			return $icon;
 		} else {
-			if (DEBUG&&DEBUGLEVEL&1) debug('End method WuiMap::getIcon(): '.$obj['iconset'].'_error.png');
 			return $obj['iconset'].'_error.png';
 		}
 	}

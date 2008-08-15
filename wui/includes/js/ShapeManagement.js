@@ -56,7 +56,7 @@ function check_image_add() {
 	}
 	
 	if(!checkPng(document.shape_add.shape_image.value)) {
-		alert(printLang(lang['mustChoosePngImage'],''));
+		alert(printLang(lang['mustChooseValidImageFormat'],''));
 		
 		return false;
 	}

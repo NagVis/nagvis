@@ -163,7 +163,7 @@ class WuiShapeManagement extends GlobalPage {
 			$ret = Array();
 			$ret[] = 'var lang = Array();';
 			$ret[] = 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getText('firstMustChoosePngImage').'\';';
-			$ret[] = 'lang[\'mustChoosePngImage\'] = \''.$this->LANG->getText('mustChoosePngImage').'\';';
+			$ret[] = 'lang[\'mustChooseValidImageFormat\'] = \''.$this->LANG->getText('mustChooseValidImageFormat').'\';';
 			$ret[] = 'lang[\'foundNoShapeToDelete\'] = \''.$this->LANG->getText('foundNoShapeToDelete').'\';';
 			$ret[] = 'lang[\'shapeInUse\'] = \''.$this->LANG->getText('shapeInUse').'\';';
 			$ret[] = 'lang[\'confirmShapeDeletion\'] = \''.$this->LANG->getText('confirmShapeDeletion').'\';';

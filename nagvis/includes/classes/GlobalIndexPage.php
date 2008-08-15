@@ -288,7 +288,21 @@ class GlobalIndexPage {
 			
 			imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $bgWidth, $bgHeight);
 			
-			imagepng($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.png'); 
+			switch($imgSize[2]) {
+				case 1: // GIF
+					imagegif($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.gif');
+				break;
+				case 2: // JPEG
+					imagejpeg($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.jpg');
+				break;
+				case 3: // PNG
+					imagepng($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.png');
+				break;
+				default:
+					$FRONTEND = new GlobalPage($this->CORE);
+					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
+				break;
+			}
 			
 			return $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
 		} else {

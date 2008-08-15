@@ -34,6 +34,21 @@ function checkPng(imageName) {
 	}
 }
 
+function checkJpg(imageName) {
+	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'jpg') {
+		return false; 
+	} else {
+		return true;
+	}
+}
+
+	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'gif') {
+		return false; 
+	} else {
+		return true;
+	}
+}
+
 function checkImageUsed(imageName,mapOptions) {
 	for(var i=0;i<mapOptions.length;i++) {
 		if(mapOptions[i].mapImage == imageName) {
@@ -73,13 +88,11 @@ function check_image_create() {
 function check_image_add() {
 	if(document.new_image.image_file.value.length == 0) {
 		alert(printLang(lang['firstMustChoosePngImage'],''));
-		
 		return false;
 	}
 	
-	if(!checkPng(document.new_image.image_file.value)) {
-		alert(printLang(lang['mustChoosePngImage'],''));
-		
+	if(!checkPng(document.new_image.image_file.value) && !checkJpg(document.new_image.image_file.value) && !checkGif(document.new_image.image_file.value)) {
+		alert(printLang(lang['mustChooseValidImageFormat'],''));
 		return false;
 	}
 	
