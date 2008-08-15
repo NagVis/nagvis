@@ -159,14 +159,16 @@ class WuiMainCfg extends GlobalMainCfg {
 			}
 			
 			if(!$handle = fopen($this->configFile, 'w+')) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mainCfgNotWriteable'));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgNotWriteable'));
 				return FALSE;
 			}
 			
 			if(!fwrite($handle, $content)) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mainCfgCouldNotWriteMainConfigFile'));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgCouldNotWriteMainConfigFile'));
 				return FALSE;
 			}
 			
@@ -189,8 +191,9 @@ class WuiMainCfg extends GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mainCfgNotWriteable','MAINCFG~'.$this->configFile));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgNotWriteable','MAINCFG~'.$this->configFile));
 			}
 			return FALSE;
 		}
@@ -208,8 +211,9 @@ class WuiMainCfg extends GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg')));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg')));
 			}
 			return FALSE;
 		}

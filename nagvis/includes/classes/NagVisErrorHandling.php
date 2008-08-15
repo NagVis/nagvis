@@ -55,7 +55,7 @@ class NagVisErrorHandling {
 		$this->messageVariables = $messageVariables;
 
 		// Load the core
-		if(!is_Object($CORE)) {
+		if(!is_object($CORE)) {
 			$this->CORE = new GlobalCore();
 		} else {
 			$this->CORE = $CORE;

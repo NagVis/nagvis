@@ -559,8 +559,9 @@ class GlobalMainCfg {
 							// value is "must"
 							if($this->getValue($type,$key) == '') {
 								// a "must" value is missing or empty
-								$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-								$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mainMustValueNotSet', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
+								$CORE = new GlobalCore($this);
+								$FRONTEND = new GlobalPage($CORE);
+								$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainMustValueNotSet', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
 							}
 						}
 					}
@@ -579,8 +580,9 @@ class GlobalMainCfg {
 							if(!isset($arrValidConfig[$key])) {
 								// unknown attribute
 								if($printErr) {
-									$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-									$FRONTEND->messageToUser('ERROR', $this->LANG->getText('unknownValue', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
+									$CORE = new GlobalCore($this);
+									$FRONTEND = new GlobalPage($CORE);
+									$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('unknownValue', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
 								}
 								return FALSE;
 							} else {
@@ -603,8 +605,9 @@ class GlobalMainCfg {
 									# DEBUG: echo $val;
 									// wrong format
 									if($printErr) {
-										$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-										$FRONTEND->messageToUser('ERROR', $this->LANG->getText('wrongValueFormat', 'TYPE~'.$type.',ATTRIBUTE~'.$key));
+										$CORE = new GlobalCore($this);
+										$FRONTEND = new GlobalPage($CORE);
+										$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('wrongValueFormat', 'TYPE~'.$type.',ATTRIBUTE~'.$key));
 									}
 									return FALSE;
 								}
@@ -614,8 +617,9 @@ class GlobalMainCfg {
 				} else {
 					// unknown type
 					if($printErr) {
-						$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-						$FRONTEND->messageToUser('ERROR', $this->LANG->getText('unknownSection', 'TYPE~'.$type));
+						$CORE = new GlobalCore($this);
+						$FRONTEND = new GlobalPage($CORE);
+						$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('unknownSection', 'TYPE~'.$type));
 					}
 					return FALSE;
 				}
@@ -637,8 +641,9 @@ class GlobalMainCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mainCfgNotExists','MAINCFG~'.$this->configFile));
+					$CORE = new GlobalCore($this);
+					$FRONTEND = new GlobalPage($CORE);
+					$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgNotExists','MAINCFG~'.$this->configFile));
 				}
 				return FALSE;
 			}
@@ -660,8 +665,9 @@ class GlobalMainCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mainCfgNotReadable', 'MAINCFG~'.$this->configFile));
+					$CORE = new GlobalCore($this);
+					$FRONTEND = new GlobalPage($CORE);
+					$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgNotReadable', 'MAINCFG~'.$this->configFile));
 				}
 				return FALSE;
 			}
@@ -682,8 +688,9 @@ class GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this,Array('languageRoot'=>'global:global'));
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mapCfgDirNotReadable', 'MAPPATH~'.$this->getValue('paths', 'mapcfg')));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mapCfgDirNotReadable', 'MAPPATH~'.$this->getValue('paths', 'mapcfg')));
 			}
 			return FALSE;
 		}
@@ -701,8 +708,9 @@ class GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mainCfgCacheNotExists','FILE~'.$this->cacheFile));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgCacheNotExists','FILE~'.$this->cacheFile));
 			}
 			return FALSE;
 		}
@@ -720,8 +728,9 @@ class GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mainCfgCacheNotReadable','FILE~'.$this->cacheFile));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgCacheNotReadable','FILE~'.$this->cacheFile));
 			}
 			return FALSE;
 		}
@@ -759,8 +768,9 @@ class GlobalMainCfg {
 			return TRUE;
 		} else {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mainCfgNotCached', 'CFONFIGFILE~'.$this->configFile.',CACHEFILE~'.$this->cacheFile));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgNotCached', 'CFONFIGFILE~'.$this->configFile.',CACHEFILE~'.$this->cacheFile));
 			}
 			return FALSE;
 		}
@@ -776,8 +786,9 @@ class GlobalMainCfg {
 	function writeConfigToCache($printErr) {
 		if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mainCfgCacheNotWriteable','FILE~'.$this->cacheFile));
+				$CORE = new GlobalCore($this);
+				$FRONTEND = new GlobalPage($CORE);
+				$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('mainCfgCacheNotWriteable','FILE~'.$this->cacheFile));
 			}
 			return FALSE;
 		}
