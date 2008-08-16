@@ -97,7 +97,7 @@ function messageBox(type, title, message) {
 		tdMessageBoxHeadingTitleIconLeft.setAttribute("width","60");
 
 	var imgMessageBoxHeadingTitleIconLeft = document.createElement("img");
-		imgMessageBoxHeadingTitleIconLeft.setAttribute("src","/nagios/nagvis/nagvis/images/internal/img_"+type+".png");
+		imgMessageBoxHeadingTitleIconLeft.setAttribute("src","/nagios/nagvis/nagvis/images/internal/msg_"+type+".png");
 
 	// Create title text
 	var tdMessageBoxHeadingTitleText = document.createElement("td");
@@ -113,7 +113,7 @@ function messageBox(type, title, message) {
 		tdMessageBoxHeadingTitleIconRight.setAttribute("width","60");
 
 	var imgMessageBoxHeadingTitleIconRight = document.createElement("img");
-		imgMessageBoxHeadingTitleIconRight.setAttribute("src","/nagios/nagvis/nagvis/images/internal/img_"+type+".png");
+		imgMessageBoxHeadingTitleIconRight.setAttribute("src","/nagios/nagvis/nagvis/images/internal/msg_"+type+".png");
 
 	tdMessageBoxHeadingTitleIconRight.appendChild(imgMessageBoxHeadingTitleIconRight);
 	trMessageBoxHeadingTitle.appendChild(tdMessageBoxHeadingTitleIconRight);

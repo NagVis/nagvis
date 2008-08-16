@@ -230,14 +230,14 @@ class GlobalPage {
 		
 		switch($serverity) {
 			case 'ERROR':
-				$messageIcon = 'img_error.png';
+				$messageIcon = 'msg_error.png';
 			break;
 			case 'WARNING':
-				$messageIcon = 'img_warning.png';
+				$messageIcon = 'msg_warning.png';
 			break;
 			case 'INFORMATION':
 			case 'INFO-STOP':
-				$messageIcon = 'img_information.png';
+				$messageIcon = 'msg_information.png';
 			break;
 		}
 		
