@@ -165,7 +165,7 @@ class WuiAddModify extends GlobalPage {
 				$this->propCount++;
 			}  elseif($propname == "map_image") {
 				// treat the special case of map_image, which will display a listbox instead of the normal textbox
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getAvailableBackgroundImages(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableBackgroundImages(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif($propname == "recognize_services" || $propname == "only_hard_states" || $propname == "label_show" || $propname == "usegdlibs") {
 				// treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox

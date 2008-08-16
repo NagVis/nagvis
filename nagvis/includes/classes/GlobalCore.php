@@ -243,16 +243,19 @@ class GlobalCore {
 	/**
 	 * Reads all maps in mapcfg path
 	 *
-	 * @return	Array maps
+	 * @param		String  Regex to match the map name
+	 * @return	Array   Array of maps
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	public function getAvailableMaps() {
+	 */
+	public function getAvailableMaps($strMatch = NULL) {
 		$files = Array();
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
 				if ($file != "." && $file != ".." && preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
-					$files[] = $arrRet[1];
+					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1])) {
+							$files[] = $arrRet[1];
+					}
 				}				
 			}
 			
