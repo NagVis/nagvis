@@ -204,12 +204,16 @@ switch($_GET['action']) {
 				break;
 			}
 			
-			// Apply default configuration to object
-			$OBJ->setConfiguration($objConf);
-			
-			$OBJ->fetchMembers();
-			
-			$OBJ->fetchState();
+			// These things are already done by NagVisMap and NagVisAutoMap classes
+			// for the NagVisMapObj objects. Does not need to be done a second time.
+			if(get_class($OBJ) != 'NagVisMapObj') {
+				// Apply default configuration to object
+				$OBJ->setConfiguration($objConf);
+				
+				$OBJ->fetchMembers();
+				
+				$OBJ->fetchState();
+			}
 			
 			$OBJ->fetchIcon();
 			
