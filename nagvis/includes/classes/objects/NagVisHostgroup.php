@@ -69,64 +69,6 @@ class NagVisHostgroup extends NagiosHostgroup {
 	# #########################################################################
 	
 	/**
-	 * Fetches the icon for the object depending on the summary state
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function fetchIcon() {
-		// Set the paths of this icons
-		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
-		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
-		
-		if($this->getSummaryState() != '') {
-			$stateLow = strtolower($this->getSummaryState());
-			
-			switch($stateLow) {
-				case 'unknown':
-				case 'unreachable':
-				case 'down':
-					if($this->getSummaryAcknowledgement() == 1) {
-						$icon = $this->iconset.'_ack.png';
-					} elseif($this->getSummaryInDowntime() == 1) {
-						$icon = $this->iconset.'_downtime.png';
-					} else {
-						$icon = $this->iconset.'_'.$stateLow.'.png';
-					}
-				break;
-				case 'critical':
-				case 'warning':
-					if($this->getSummaryAcknowledgement() == 1) {
-						$icon = $this->iconset.'_sack.png';
-					} elseif($this->getSummaryInDowntime() == 1) {
-						$icon = $this->iconset.'_sdowntime.png';
-					} else {
-						$icon = $this->iconset.'_'.$stateLow.'.png';
-					}
-				break;
-				case 'up':
-				case 'ok':
-					$icon = $this->iconset.'_up.png';
-				break;
-				case 'pending':
-					$icon = $this->iconset.'_'.$stateLow.'.png';
-				break;
-				default:
-					$icon = $this->iconset.'_error.png';
-				break;
-			}
-			
-			//Checks whether the needed file exists
-			if(@file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
-				$this->icon = $icon;
-			} else {
-				$this->icon = $this->iconset.'_error.png';
-			}
-		} else {
-			$this->icon = $this->iconset.'_error.png';
-		}
-	}
-	
-	/**
 	 * PRIVATE getUrl()
 	 *
 	 * Returns the url for the object link
