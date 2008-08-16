@@ -143,7 +143,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getExportFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->getMaps(),''));
+		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),''));
 		$this->propCount++;
 		
 		return $ret;
@@ -172,7 +172,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getDeleteFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->getMaps(),''));
+		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),''));
 		$this->propCount++;
 		$ret = array_merge($ret,$this->DELETEFORM->getHiddenField('map',''));
 		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
@@ -188,7 +188,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getRenameFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->getMaps(),''));
+		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),''));
 		$this->propCount++;
 		$ret = array_merge($ret,$this->RENAMEFORM->getInputLine($this->LANG->getText('newMapName'),'map_new_name',''));
 		$this->propCount++;
@@ -213,87 +213,12 @@ class WuiMapManagement extends GlobalPage {
 		$this->propCount++;
 		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('writeUsers'),'allowed_for_config',''));
 		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getText('mapIconset'),'map_iconset',$this->getIconsets(),$this->MAINCFG->getValue('defaults','icons')));
+		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getText('mapIconset'),'map_iconset',$this->CORE->getAvailableIconsets(),$this->MAINCFG->getValue('defaults','icons')));
 		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getText('background'),'map_image',$this->getMapImages(),''));
+		$ret = array_merge($ret,$this->CREATEFORM->getSelectLine($this->LANG->getText('background'),'map_image',$this->CORE->getAvailableBackgroundImages(),''));
 		$this->propCount++;
 		
 		return $ret;
-	}
-	
-	/**
-	 * Gets all iconsets
-	 *
-	 * @return	Array iconsets
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getIconsets() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-7,7) == "_ok.png") {
-					$files[] = substr($file,0,strlen($file)-7);
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Gets all defined maps
-	 *
-	 * @return	Array Maps
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getMaps() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^.+\.cfg$/', $file) && $file != '__automap.cfg') {
-					$files[] = substr($file,0,strlen($file)-4);
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all map images in map path
-	 *
-	 * @return	Array map images
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getMapImages() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && substr($file,strlen($file)-4,4) == ".png") {
-					$files[] = $file;
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
 	}
 	
 	/**

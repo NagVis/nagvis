@@ -145,9 +145,7 @@ class NagVisRotation {
 	}
 	
 	private function checkPoolExists() {
-		$steps = $this->CORE->MAINCFG->getValue('rotation_'.$this->getPoolName(), 'maps');
-		
-		if(!isset($steps) || sizeof($steps) <= 0) {
+		if(array_search($this->strPoolName, $this->CORE->getDefinedRotationPools()) === FALSE) {
 			// Error Message (Map rotation pool does not exist)
 			$FRONTEND = new GlobalPage($this->CORE);
 			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$this->getPoolName()));

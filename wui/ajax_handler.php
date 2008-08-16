@@ -220,7 +220,7 @@ switch($_GET['action']) {
 			echo '[ ';
 			$i = 0;
 			// Loop all maps
-			foreach($CORE->MAINCFG->getMaps() AS $var => $val) {
+			foreach($CORE->getAvailableMaps() AS $var => $val) {
 				// Initialize map configuration 
 				$MAPCFG = new WuiMapCfg($CORE, $val);
 				$MAPCFG->readMapConfig();

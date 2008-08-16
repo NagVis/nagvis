@@ -153,19 +153,19 @@ class WuiAddModify extends GlobalPage {
 		foreach($this->MAPCFG->validConfig[$this->prop['type']] as $propname => $prop) {
 			if($propname == "iconset") {
 				// treat the special case of iconset, which will display a listbox instead of the normal textbox
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getIconsets(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableIconsets(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif($this->prop['type'] == 'shape' && $propname == "icon") {
 				// treat the special case of icon when type is shape, which will display a listbox instead of the normal textbox
 				if(preg_match("/^\[(.*)\]$/",$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$match) > 0) {
 					$ret = array_merge($ret,$this->FORM->getInputLine($propname,$propname,$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				} else {
-					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getShapes(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableShapes(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				}
 				$this->propCount++;
 			}  elseif($propname == "map_image") {
 				// treat the special case of map_image, which will display a listbox instead of the normal textbox
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMapImages(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getAvailableBackgroundImages(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif($propname == "recognize_services" || $propname == "only_hard_states" || $propname == "label_show" || $propname == "usegdlibs") {
 				// treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
@@ -180,7 +180,7 @@ class WuiAddModify extends GlobalPage {
 					$field = $this->prop['type'] . '_name';
 					$type = $this->prop['type'];
 				}
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getBackends(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],"getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');validateMapConfigFieldValue(this);"));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getDefinedBackends(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],"getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');validateMapConfigFieldValue(this);"));
 				$this->propCount++;
 			} elseif($propname == "line_type") {
 				// treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
@@ -188,14 +188,14 @@ class WuiAddModify extends GlobalPage {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,substr($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),1,1),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif($propname == "hover_template") {
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getHoverTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableHoverTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif($propname == "header_template") {
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getHeaderTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableHeaderTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif($propname == "map_name") {
 				// treat the special case of map_name, which will display a listbox instead of the normal textbox
-				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->getMaps(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableMaps(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				$this->propCount++;
 			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
 				$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
@@ -231,173 +231,6 @@ class WuiAddModify extends GlobalPage {
 		}
 		
 		return $ret;
-	}
-	
-	/**
-	 * Reads all defined Backend-IDs from the MAINCFG
-	 *
-	 * @return	Array Backend-IDs
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getBackends() {
-		$ret = Array();
-		foreach($this->MAINCFG->config AS $sec => $var) {
-			if(preg_match("/^backend_/i", $sec)) {
-				$ret[] = $var['backendid'];
-			}
-		}
-		
-		return $ret;
-	}
-	
-	/**
-	 * Reads all hover templates in hovertemplate path
-	 *
-	 * @return	Array hover templates
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getHoverTemplates() {
-		$files = Array();
-		
-		if($handle = opendir($this->MAINCFG->getValue('paths', 'hovertemplate'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' && preg_match('/^tmpl\..+\.html$/', $file)) {
-					$files[] = str_replace('tmpl.','',str_replace('.html','',$file));
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all header templates
-	 *
-	 * @return	Array list
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getHeaderTemplates() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'headertemplate'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' && preg_match('/^tmpl\..+\.html$/', $file)) {
-					$files[] = str_replace('tmpl.','',str_replace('.html','',$file));
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all PNG images in shape path
-	 *
-	 * @return	Array Shapes
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getShapes() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match("/.png$/i",$file)) {
-					$files[] = $file;
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all iconsets in icon path
-	 *
-	 * @return	Array iconsets
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getIconsets() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/_ok.png$/', $file)) {
-					$files[] = str_replace('_ok.png','',$file);
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all maps in mapcfg path
-	 *
-	 * @return	Array maps
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getMaps() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/.cfg$/', $file)) {
-					$files[] = str_replace('.cfg','',$file);
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all map images in map path
-	 *
-	 * @return	Array map images
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getMapImages() {
-		$files = Array();
-		
-		if($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
- 			while(false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file)) {
-					$files[] = $file;
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
 	}
 	
 	/**

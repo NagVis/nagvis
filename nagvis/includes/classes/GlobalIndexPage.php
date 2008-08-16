@@ -71,11 +71,11 @@ class GlobalIndexPage {
 	private function getRotationPoolIndex() {
 		$ret = '';
 		
-		$aRotationPools = $this->getRotationPools();
+		$aRotationPools = $this->CORE->getDefinedRotationPools();
 		if(count($aRotationPools) > 0) {
 			$ret .= '<table class="infobox">';
 			$ret .= '<tr><th colspan="2">'.$this->CORE->LANG->getText('rotationPools').'</th></tr>';
-			foreach($this->getRotationPools() AS $poolName) {
+			foreach($aRotationPools AS $poolName) {
 				$ROTATION = new NagVisRotation($this->CORE, $poolName);
 				
 				// Form the onClick action
@@ -115,7 +115,7 @@ class GlobalIndexPage {
 		$ret .= '<table>';
 		$ret .= '<tr><th colspan="4">'.$this->CORE->LANG->getText('mapIndex').'</th></tr><tr>';
 		$i = 1;
-		foreach($this->getMaps() AS $mapName) {
+		foreach($this->CORE->getAvailableMaps() AS $mapName) {
 			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
 			$MAPCFG->readMapConfig();
 			
@@ -366,49 +366,6 @@ class GlobalIndexPage {
 			}
 			return FALSE;
 		}
-	}
-	
-	/**
-	 * Gets all defined maps
-	 *
-	 * @return	Array maps
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getMaps() {
-		$files = Array();
-		
-		if ($handle = opendir($this->CORE->MAINCFG->getValue('paths', 'mapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^.+\.cfg$/', $file)) {
-					$files[] = substr($file,0,strlen($file)-4);
-				}
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Gets all rotation pools
-	 *
-	 * @return	Array pools
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getRotationPools() {
-		$ret = Array();
-		
-		foreach($this->CORE->MAINCFG->config AS $sec => &$var) {
-			if(preg_match('/^rotation_/i', $sec)) {
-				$ret[] = $var['rotationid'];
-			}
-		}
-		
-		return $ret;
 	}
 }
 ?>

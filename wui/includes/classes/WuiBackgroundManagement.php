@@ -121,7 +121,7 @@ class WuiBackgroundManagement extends GlobalPage {
      */
 	function getDelFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getText('chooseImage'),'map_image',$this->getMapImages(),''));
+		$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getText('chooseImage'),'map_image',$this->CORE->getAvailableBackgroundImages(),''));
 		$this->propCount++;
 		
 		return $ret;
@@ -160,31 +160,6 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->propCount++;
 		
 		return $ret;
-	}
-	
-	/**
-	 * Reads all map images in map path
-	 *
-	 * @return	Array map images
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getMapImages() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file)) {
-					$files[] = $file;
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
 	}
 	
 	/**

@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiCore {
+class WuiCore extends GlobalCore {
 	public $MAINCFG;
 	public $LANG;
 	

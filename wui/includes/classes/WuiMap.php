@@ -63,7 +63,7 @@ class WuiMap extends GlobalMap {
 	function loadPermissions() {
 		$mapOptions = '[ ';
 		$a = 0;
-		foreach($this->getMaps() AS $map) {
+		foreach($this->CORE->getAvailableMaps() AS $map) {
 			if($a > 0) {
 				$mapOptions .= ', ';	
 			}
@@ -580,31 +580,6 @@ class WuiMap extends GlobalMap {
 		$info = "onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".$this->LANG->getText($obj['type'])."</b>';return escape('".$tooltipText."');\"";
 		
 		return $info;
-	}
-	
-	/**
-	 * Gets all defined maps
-	 *
-	 * @return	Array maps
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getMaps() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^.+\.cfg$/', $file) && $file != '__automap.cfg') {
-					$files[] = substr($file,0,strlen($file)-4);
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
 	}
 	
 	/**

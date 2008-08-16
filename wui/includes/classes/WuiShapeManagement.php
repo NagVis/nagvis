@@ -122,35 +122,10 @@ class WuiShapeManagement extends GlobalPage {
 	*/
 	function getDelFields() {
 			$ret = Array();
-			$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getText('choosePngImage'),'shape_image',$this->getMapImages(),''));
+			$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getText('choosePngImage'),'shape_image',$this->CORE->getAvailableShapes(),''));
 			$this->propCount++;
 			
 			return $ret;
-	}
-	
-	/**
-	* Reads all map images in shape path
-	*
-	* @return Array map images
-	* @author  Lars Michelsen <lars@vertical-visions.de>
-	*/
-	function getMapImages() {
-			$files = Array();
-			
-			if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
-					while (false !== ($file = readdir($handle))) {
-							if($file != '.' && $file != '..' && substr($file,strlen($file)-4,4) == ".png") {
-									$files[] = $file;
-							}
-					}
-		
-					if ($files) {
-							natcasesort($files);
-					}
-					closedir($handle);
-			}
-	
-			return $files;
 	}
 	
 	/**

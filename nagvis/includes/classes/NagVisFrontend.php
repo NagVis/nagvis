@@ -118,7 +118,7 @@ class NagVisFrontend extends GlobalPage {
 						if($key == 'maplist') {
 							$sReplace = '';
 							preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$ret,$matchReturn1);
-							foreach($this->getMaps() AS $mapName) {
+							foreach($this->CORE->getAvailableMaps() AS $mapName) {
 								$MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
 								$MAPCFG1->readMapConfig(1);
 								
@@ -259,31 +259,6 @@ class NagVisFrontend extends GlobalPage {
 		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";
 		
 		return $this->parseJs($strReturn);
-	}
-	
-	/**
-	 * Gets all defined maps
-	 *
-	 * @return	Array maps
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getMaps() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^.+\.cfg$/', $file)) {
-					$files[] = substr($file,0,strlen($file)-4);
-				}
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
 	}
 }
 ?>

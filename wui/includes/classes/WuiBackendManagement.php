@@ -132,7 +132,7 @@ class WuiBackendManagement extends GlobalPage {
      */
 	function getEditFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->id."');"));
+		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->CORE->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->id."');"));
 		$this->propCount++;
 		$ret[] = "<script language=\"javascript\">";
 		$ret[] = "\tvar backendOptions = Array();";
@@ -171,7 +171,7 @@ class WuiBackendManagement extends GlobalPage {
 	function getDelFields() {
 		$ret = Array();
 		$this->propCount++;
-		$ret = array_merge($ret,$this->DELBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->getDefinedBackends()),'',TRUE));
+		$ret = array_merge($ret,$this->DELBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->CORE->getDefinedBackends()),'',TRUE));
 		
 		return $ret;
 	}
@@ -188,7 +188,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->propCount++;
 		foreach($this->MAINCFG->validConfig['backend'] as $propname => $prop) {
 			if($propname == "backendtype") {
-				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->getBackends()),'',$prop['must'],"getBackendOptions(this.value,'','".$this->ADDBACKENDFORM->id."');"));
+				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->CORE->getAvailableBackends()),'',$prop['must'],"getBackendOptions(this.value,'','".$this->ADDBACKENDFORM->id."');"));
 				$this->propCount++;
 			}
 		}
@@ -216,57 +216,10 @@ class WuiBackendManagement extends GlobalPage {
 	function getDefaultFields() {
 		$ret = Array();
 		
-		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getText('defaultBackend'),'defaultbackend',$this->getDefinedBackends(),$this->MAINCFG->getValue('defaults','backend',TRUE),TRUE));
+		$ret = array_merge($ret,$this->DEFBACKENDFORM->getSelectLine($this->LANG->getText('defaultBackend'),'defaultbackend',$this->CORE->getDefinedBackends(),$this->MAINCFG->getValue('defaults','backend',TRUE),TRUE));
 		$this->propCount++;
 		
 		return $ret;
-	}
-	
-	/**
-	 * Reads all backends which are defined in config.ini.php
-	 *
-	 * @return	Array Html
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getDefinedBackends() {
-		$ret = Array();
-		
-		foreach($this->MAINCFG->config AS $sec => $arr) {
-			if(preg_match("/^backend_/i", $sec)) {
-				$ret[] = preg_replace("/^backend_/i",'',$sec);
-			}
-		}
-		
-		if(isset($ret) && count($ret) > 1) {
-			natcasesort($ret);
-		}
-		
-		return $ret;
-	}
-	
-	/**
-	 * Reads all aviable backends
-	 *
-	 * @return	Array Html
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getBackends() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
- 			while (false !== ($file = readdir($handle))) {
- 				if ($file != "." && $file != ".." && preg_match('/^class.GlobalBackend-/', $file)) {
-					$files[] = str_replace('class.GlobalBackend-','',str_replace('.php','',$file));
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
 	}
 	
 	/**

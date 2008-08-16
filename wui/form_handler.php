@@ -256,7 +256,7 @@ switch($_GET['myaction']) {
 			$files = Array();
 			
 			// loop all map configs to replace mapname in all map configs
-			foreach($MAINCFG->getMaps() as $mapName) {
+			foreach($CORE->getAvailableMaps() as $mapName) {
 				$MAPCFG1 = new WuiMapCfg($CORE, $mapName);
 				$MAPCFG1->readMapConfig();
 				

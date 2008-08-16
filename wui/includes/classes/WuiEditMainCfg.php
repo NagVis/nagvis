@@ -122,16 +122,16 @@ class WuiEditMainCfg extends GlobalPage {
 							case 'hoverchildsshow':
 								switch($key2) {
 									case 'language':
-										$arrOpts = $this->getLanguages();
+										$arrOpts = $this->CORE->getAvailableLanguages();
 									break;
 									case 'backend':
-										$arrOpts = $this->getBackends();
+										$arrOpts = $this->CORE->getDefinedBackends();
 									break;
 									case 'icons':
-										$arrOpts = $this->getIconsets();
+										$arrOpts = $this->CORE->getAvailableIconsets();
 									break;
 									case 'headertemplate':
-										$arrOpts = $this->getHeaderTemplates();
+										$arrOpts = $this->CORE->getAvailableHeaderTemplates();
 									break;
 									case 'rotatemaps':
 									case 'displayheader':
@@ -176,106 +176,6 @@ class WuiEditMainCfg extends GlobalPage {
 			}
 		}
 		return $ret;
-	}
-	
-	/**
-	 * Reads all aviable backends
-	 *
-	 * @return	Array list
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getBackends() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
- 			while (false !== ($file = readdir($handle))) {
- 				if ($file != "." && $file != ".." && preg_match('/^class.GlobalBackend-/', $file)) {
-					$files[] = str_replace('class.GlobalBackend-','',str_replace('.php','',$file));
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all iconsets (that habe <iconset>_ok.png)
-	 *
-	 * @return	Array list
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getIconsets() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/_ok.png$/', $file)) {
-					$files[] = str_replace('_ok.png','',$file);
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all languages
-	 *
-	 * @return	Array list
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getLanguages() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'language'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/.xml$/', $file)) {
-					$files[] = str_replace('wui_','',str_replace('.xml','',$file));
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
-	}
-	
-	/**
-	 * Reads all header templates
-	 *
-	 * @return	Array list
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getHeaderTemplates() {
-		$files = Array();
-		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'headertemplate'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' && preg_match('/^tmpl\..+\.html$/', $file)) {
-					$files[] = str_replace('tmpl.','',str_replace('.html','',$file));
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
 	}
 }
 ?>

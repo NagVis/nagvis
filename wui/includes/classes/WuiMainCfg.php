@@ -37,32 +37,6 @@ class WuiMainCfg extends GlobalMainCfg {
 	}
 	
 	/**
-	 * Gets all defined maps
-	 *
-	 * @return	Array maps
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getMaps() {
-		$files = Array();
-		
-		if($fh = opendir($this->getValue('paths', 'mapcfg'))) {
- 			while(FALSE !== ($file = readdir($fh))) {
-				// only handle *.cfg files
-				if(ereg('\.cfg$',$file)) {
-					$files[] = substr($file, 0, strlen($file) - 4);
-				}				
-			}
-			
-			if(count($files) > 1) {
-				natcasesort($files);
-			}
-		}
-		closedir($fh);
-		
-		return $files;
-	}
-	
-	/**
 	 * Gets the valid configuration array
 	 *
 	 * @return	Array The validConfig array

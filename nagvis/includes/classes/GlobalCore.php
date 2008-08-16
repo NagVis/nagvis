@@ -51,5 +51,244 @@ class GlobalCore {
 			$this->LANG = &$LANG;
 		}
 	}
+	
+	/* Here are some methods defined which get used all over NagVis and have
+	 * no other special place where they could be located */
+	
+	/**
+	 * Reads all defined Backend-ids from the main configuration
+	 *
+	 * @return	Array Backend-IDs
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	public function getDefinedBackends() {
+		$ret = Array();
+		foreach($this->MAINCFG->config AS $sec => $var) {
+			if(preg_match("/^backend_/i", $sec)) {
+				$ret[] = $var['backendid'];
+			}
+		}
+		
+		return $ret;
+	}
+	
+	/**
+	 * Gets all rotation pools
+	 *
+	 * @return	Array pools
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getDefinedRotationPools() {
+		$ret = Array();
+		
+		foreach($this->MAINCFG->config AS $sec => &$var) {
+			if(preg_match('/^rotation_/i', $sec)) {
+				$ret[] = $var['rotationid'];
+			}
+		}
+		
+		return $ret;
+	}
+	
+	/**
+	 * Reads all languages
+	 *
+	 * @return	Array list
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableLanguages() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'language'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && preg_match('/.xml$/', $file)) {
+					$files[] = str_replace('wui_','',str_replace('.xml','',$file));
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
+	 * Reads all aviable backends
+	 *
+	 * @return	Array Html
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableBackends() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
+ 			while (false !== ($file = readdir($handle))) {
+ 				if ($file != "." && $file != ".." && preg_match('/^class.GlobalBackend-(.+).php/', $file, $arrRet)) {
+					$files[] = $arrRet[1];
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
+	 * Reads all hover templates in hovertemplate path
+	 *
+	 * @return	Array hover templates
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	public function getAvailableHoverTemplates() {
+		$files = Array();
+		
+		if($handle = opendir($this->MAINCFG->getValue('paths', 'hovertemplate'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != '.' && $file != '..' && preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
+					$files[] = $arrRet[1];
+				}
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
+	 * Reads all header templates
+	 *
+	 * @return	Array list
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableHeaderTemplates() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'headertemplate'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != '.' && $file != '..' && preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
+					$files[] = $arrRet[1];
+				}
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
+	 * Reads all PNG images in shape path
+	 *
+	 * @return	Array Shapes
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableShapes() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && preg_match(MATCH_PNG_GIF_JPG_FILE, $file, $arrRet)) {
+					$files[] = $arrRet[1];
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
+	 * Reads all iconsets in icon path
+	 *
+	 * @return	Array iconsets
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableIconsets() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && preg_match('/(.+)_ok.(png|gif|jpg)$/', $file, $arrRet)) {
+					$files[] = $arrRet[1];
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
+	 * Reads all maps in mapcfg path
+	 *
+	 * @return	Array maps
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	public function getAvailableMaps() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
+					$files[] = $arrRet[1];
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
+	 * Reads all map images in map path
+	 *
+	 * @return	Array map images
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+	public function getAvailableBackgroundImages() {
+		$files = Array();
+		
+		if($handle = opendir($this->MAINCFG->getValue('paths', 'map'))) {
+ 			while(false !== ($file = readdir($handle))) {
+				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file)) {
+					$files[] = $file;
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
 }
 ?>
