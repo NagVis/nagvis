@@ -143,7 +143,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getExportFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),''));
+		$ret = array_merge($ret,$this->EXPORTFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps('/[^(__automap)]/'),''));
 		$this->propCount++;
 		
 		return $ret;
@@ -172,7 +172,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getDeleteFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),''));
+		$ret = array_merge($ret,$this->DELETEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps('/[^(__automap)]/'),''));
 		$this->propCount++;
 		$ret = array_merge($ret,$this->DELETEFORM->getHiddenField('map',''));
 		$ret[] = '<script>document.map_rename.map.value=window.opener.document.mapname</script>';
@@ -188,7 +188,7 @@ class WuiMapManagement extends GlobalPage {
      */
 	function getRenameFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),''));
+		$ret = array_merge($ret,$this->RENAMEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps('/[^(__automap)]/'),''));
 		$this->propCount++;
 		$ret = array_merge($ret,$this->RENAMEFORM->getInputLine($this->LANG->getText('newMapName'),'map_new_name',''));
 		$this->propCount++;

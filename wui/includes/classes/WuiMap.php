@@ -63,7 +63,7 @@ class WuiMap extends GlobalMap {
 	function loadPermissions() {
 		$mapOptions = '[ ';
 		$a = 0;
-		foreach($this->CORE->getAvailableMaps() AS $map) {
+		foreach($this->CORE->getAvailableMaps('/[^(__automap)]/') AS $map) {
 			if($a > 0) {
 				$mapOptions .= ', ';	
 			}
