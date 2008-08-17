@@ -66,7 +66,8 @@ class NagVisErrorHandling {
 
 		// Initialize the frontend
 		$FRONTEND = new GlobalPage($this->CORE);
-		$FRONTEND->messageToUser($this->LANG->getText($this->type), $this->LANG->getText($message, $messageVariables));
+		$FRONTEND->messageToUser($this->LANG->getText($this->type), $this->LANG->getText($this->message, $this->messageVariables));
+		//print new GlobalFrontendMessage($this->LANG->getText($this->type),$this->LANG->getText($this->type),$this->LANG->getText($message, $messageVariables), $this->CORE);
 	}
 }
 ?>

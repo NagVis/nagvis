@@ -55,7 +55,7 @@ body, table, th, td {
 	z-index:1;
 }
 
-#errorMessageBoxBorder {
+#errorMessageBoxBorder, #criticalMessageBoxBorder, #downMessageBoxBorder {
 	border:1px solid #F00;
 }
 
@@ -63,7 +63,11 @@ body, table, th, td {
 	border:1px solid #FF0;
 }
 
-#okMessageBoxBorder {
+#unknownMessageBoxBorder, #permissionMessageBoxBorder, #unreachableMessageBoxBorder {
+	border:1px solid #FF9900;
+}
+
+#okMessageBoxBorder, #upMessageBoxBorder {
 	border:1px solid #00B233;
 }
 
@@ -74,7 +78,7 @@ body, table, th, td {
 /**
  * Backgrounds for message box
  */
-.errorMessageBoxBackground {
+.errorMessageBoxBackground, .criticalMessageBoxBackground, .downMessageBoxBackground {
 	background-color: #FFB2B2;
 	text-align: center;
 	vertical-align: middle;
@@ -88,8 +92,15 @@ body, table, th, td {
 	font-size: 16pt;
 }
 
-.okMessageBoxBackground {
+.okMessageBoxBackground, .upMessageBoxBackground {
 	background-color: #CCFF99;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 16pt;
+}
+
+.unknownMessageBoxBackground, .permissionMessageBoxBackground, .unreachableMessageBoxBackground {
+	background-color: #FFE566;
 	text-align: center;
 	vertical-align: middle;
 	font-size: 16pt;
@@ -114,7 +125,7 @@ body, table, th, td {
 	font-size: 26pt;
 }
 
-#errorMessageHeader {
+#errorMessageHeader, #criticalMessageHeader, #downMessageHeader {
 	background-color: #FF6666;
 }
 
@@ -122,10 +133,14 @@ body, table, th, td {
 	background-color: #FFFF66;
 }
 
-#noteMessageHeader {
-	background-color: #99CCFF;
+#unknownMessageHeader, #permissionMessageHeader, #unreachableMessageHeader {
+	background-color: #FFB200;
 }
 
-#okMessageHeader {
+#okMessageHeader, #upMessageHeader {
 	background-color: 99FF66;
+}
+
+#noteMessageHeader {
+	background-color: #99CCFF;
 }
