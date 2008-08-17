@@ -253,7 +253,7 @@ class GlobalCore {
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
 				if ($file != "." && $file != ".." && preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
-					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1])) {
+					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
 							$files[] = $arrRet[1];
 					}
 				}				
