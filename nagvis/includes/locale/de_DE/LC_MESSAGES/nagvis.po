@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-15 19:19+0100\n"
-"PO-Revision-Date: 2008-08-15 19:30+0100\n"
+"POT-Creation-Date: 2008-08-17 14:13+0100\n"
+"PO-Revision-Date: 2008-08-17 14:14+0100\n"
 "Last-Translator: Michael Lübben\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -21,8 +21,8 @@ msgid "parameterObjTypeNotSet"
 msgstr ""
 
 #: nagvis/ajax_handler.php:59
-#: nagvis/ajax_handler.php:227
-#: nagvis/ajax_handler.php:243
+#: nagvis/ajax_handler.php:231
+#: nagvis/ajax_handler.php:247
 msgid "parameterObjName1NotSet"
 msgstr ""
 
@@ -50,12 +50,12 @@ msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
 msgid "unknownObject"
 msgstr "Die Aktion \"[ACTION]\" wird vom Formular-Handler nicht unterstützt"
 
-#: nagvis/ajax_handler.php:229
+#: nagvis/ajax_handler.php:233
 #, fuzzy
 msgid "automapNotSupportedHere"
 msgstr "Die Methode \"[METHOD]\" wird von der gewählten Datenquelle nicht unterstützt."
 
-#: nagvis/ajax_handler.php:252
+#: nagvis/ajax_handler.php:256
 msgid "unknownQuery"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgstr "Die Datenquelle mit der ID \"[BACKENDID]\" vom Typ \"[BACKENDTYPE]\" ist
 msgid "noBackendDefined"
 msgstr ""
 
-#: nagvis/includes/classes/NagVisRotation.php:153
+#: nagvis/includes/classes/NagVisRotation.php:151
 #, fuzzy
 msgid "mapRotationPoolNotExists"
 msgstr "Rotations-Pools"
@@ -171,8 +171,8 @@ msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH
 #: wui/ajax_handler.php:165
 #: wui/ajax_handler.php:202
 #: wui/ajax_handler.php:216
-#: wui/includes/classes/WuiBackendManagement.php:281
-#: wui/includes/classes/WuiAddModify.php:414
+#: wui/includes/classes/WuiBackendManagement.php:234
+#: wui/includes/classes/WuiAddModify.php:247
 msgid "mustValueNotSet"
 msgstr "Der Pflichtwert \"[ATTRIBUTE]\" ist nicht gefüllt"
 
@@ -183,7 +183,7 @@ msgstr "Die Aktion \"[ACTION]\" wird vom Formular-Handler nicht unterstützt"
 
 #: nagvis/includes/classes/GlobalMapCfg.php:882
 #: nagvis/includes/classes/GlobalMapCfg.php:894
-#: wui/includes/classes/WuiMap.php:650
+#: wui/includes/classes/WuiMap.php:623
 msgid "wrongValueFormatMap"
 msgstr "Das Attribut \"[ATTRIBUTE]\" in einem Element vom Typ \"[TYPE]\" in der Karten-Konfigurations-Datei \"[MAP]\" entspricht nicht dem korrekten Format"
 
@@ -196,7 +196,7 @@ msgid "noUser"
 msgstr ""
 
 #: nagvis/includes/classes/GlobalPage.php:147
-#: nagvis/includes/classes/objects/NagVisMapObj.php:483
+#: nagvis/includes/classes/objects/NagVisMapObj.php:425
 msgid "permissionDenied"
 msgstr "Der Benutzer \"[USER]\" hat keine Rechte für diese Aktion"
 
@@ -228,26 +228,27 @@ msgstr "Kartenübersicht"
 
 #: nagvis/includes/classes/GlobalIndexPage.php:173
 #: nagvis/includes/classes/GlobalIndexPage.php:174
-#: nagvis/includes/classes/objects/NagVisMapObj.php:503
+#: nagvis/includes/classes/objects/NagVisMapObj.php:445
 msgid "mapInMaintenance"
 msgstr "Die Karte \"[MAP]\" befindet sich aktuell im Wartungs-Modus. Diese Seite lädt automatisch neu."
 
 #: nagvis/includes/classes/GlobalIndexPage.php:238
+#: nagvis/includes/classes/GlobalIndexPage.php:303
 msgid "onlyPngOrJpgImages"
 msgstr "Es sind nur PNG- oder JPG-Bilder als Hintergrund erlaubt"
 
-#: nagvis/includes/classes/GlobalIndexPage.php:312
+#: nagvis/includes/classes/GlobalIndexPage.php:326
 #: nagvis/includes/classes/NagVisAutoMap.php:404
 #, fuzzy
 msgid "varFolderNotExists"
 msgstr "Das Hintergrundbild \"[IMGPATH]\" existiert nicht"
 
-#: nagvis/includes/classes/GlobalIndexPage.php:331
+#: nagvis/includes/classes/GlobalIndexPage.php:345
 #: nagvis/includes/classes/NagVisAutoMap.php:423
 msgid "varFolderNotWriteable"
 msgstr ""
 
-#: nagvis/includes/classes/GlobalIndexPage.php:351
+#: nagvis/includes/classes/GlobalIndexPage.php:365
 #, fuzzy
 msgid "imageNotExists"
 msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
@@ -278,7 +279,7 @@ msgstr "NagVis-Support-Informationen"
 
 #: nagvis/includes/classes/NagVisFrontend.php:109
 #: nagvis/includes/classes/objects/NagVisObject.php:352
-#: wui/includes/classes/WuiMap.php:621
+#: wui/includes/classes/WuiMap.php:594
 msgid "overview"
 msgstr "Übersicht"
 
@@ -322,7 +323,7 @@ msgid "unknownValue"
 msgstr ""
 
 #: nagvis/includes/classes/GlobalMainCfg.php:610
-#: wui/includes/classes/WuiMap.php:649
+#: wui/includes/classes/WuiMap.php:622
 msgid "wrongValueFormat"
 msgstr "Das Attribut \"[ATTRIBUTE]\" in der Sektion \"[TYPE]\" in der Haupt-Konfigurations-Datei entspricht nicht dem korrekten Format"
 
@@ -410,6 +411,14 @@ msgstr "Parameter [VAR] enthält keinen gültigen integer."
 #: nagvis/includes/classes/validator/GlobalValidatorInteger.php:127
 msgid "validatorValueOutOfRange"
 msgstr "Parameter [VAR] ist nicht innerhalb des erlaubten Wertebereiches."
+
+#: nagvis/includes/classes/frontend/message/GlobalFrontendMessage.php:109
+msgid "messageboxTitleWrongType"
+msgstr "Falscher Type"
+
+#: nagvis/includes/classes/frontend/message/GlobalFrontendMessage.php:110
+msgid "messageboxMessageWrongType"
+msgstr "Der Type [TYPE] ist nicht definiert."
 
 #: nagvis/includes/classes/objects/NagVisObject.php:303
 msgid "couldNotGetHoverUrl"
@@ -537,7 +546,7 @@ msgstr "Die Karte \"[MAP]\" hat keine Objekte."
 
 #: nagvis/includes/classes/objects/NagVisMapObj.php:349
 #: nagvis/includes/classes/objects/NagVisMapObj.php:352
-#: wui/includes/classes/WuiAddModify.php:423
+#: wui/includes/classes/WuiAddModify.php:256
 msgid "loopInMapRecursion"
 msgstr "Die Objekte auf den verlinkten Karten bilden eine Endlosschleife. Bitte auflösen."
 
@@ -545,7 +554,7 @@ msgstr "Die Objekte auf den verlinkten Karten bilden eine Endlosschleife. Bitte 
 msgid "noReadPermissions"
 msgstr "Du hast keine Berechtigung den Status dieser Karte einzusehen."
 
-#: nagvis/includes/classes/objects/NagVisStatefulObject.php:591
+#: nagvis/includes/classes/objects/NagVisStatefulObject.php:653
 msgid "childStatesAre"
 msgstr "Es sind"
 
@@ -574,16 +583,16 @@ msgstr "Die Methode \"[METHOD]\" wird von der gewählten Datenquelle nicht unter
 msgid "accessModeIsNotValid"
 msgstr "Der Zugriffs-Modus \"[MODE]\" ist nicht gültig"
 
-#: wui/includes/classes/WuiMainCfg.php:188
-#: wui/includes/classes/WuiMainCfg.php:220
+#: wui/includes/classes/WuiMainCfg.php:162
+#: wui/includes/classes/WuiMainCfg.php:194
 msgid "mainCfgNotWriteable"
 msgstr ""
 
-#: wui/includes/classes/WuiMainCfg.php:195
+#: wui/includes/classes/WuiMainCfg.php:169
 msgid "mainCfgCouldNotWriteMainConfigFile"
 msgstr ""
 
-#: wui/includes/classes/WuiMainCfg.php:240
+#: wui/includes/classes/WuiMainCfg.php:214
 #, fuzzy
 msgid "mapCfgDirNotWriteable"
 msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
@@ -593,7 +602,7 @@ msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
 #: wui/includes/classes/WuiBackendManagement.php:94
 #: wui/includes/classes/WuiBackendManagement.php:107
 #: wui/includes/classes/WuiBackendManagement.php:120
-#: wui/includes/classes/WuiMap.php:622
+#: wui/includes/classes/WuiMap.php:595
 #: wui/includes/classes/WuiAddModify.php:83
 msgid "save"
 msgstr "Speichern"
@@ -630,7 +639,7 @@ msgid "deleteShape"
 msgstr "Bild löschen"
 
 #: wui/includes/classes/WuiShapeManagement.php:95
-#: wui/includes/classes/WuiMap.php:578
+#: wui/includes/classes/WuiMap.php:576
 #: wui/includes/classes/WuiMapManagement.php:106
 #: wui/includes/classes/WuiBackgroundManagement.php:109
 msgid "delete"
@@ -638,56 +647,55 @@ msgstr "Löschen"
 
 #: wui/includes/classes/WuiShapeManagement.php:111
 #: wui/includes/classes/WuiShapeManagement.php:125
-#: wui/includes/classes/WuiBackgroundManagement.php:124
-#: wui/includes/classes/WuiBackgroundManagement.php:139
 msgid "choosePngImage"
 msgstr "Wähle ein Bild im PNG-Format"
 
-#: wui/includes/classes/WuiShapeManagement.php:165
-#: wui/includes/classes/WuiBackgroundManagement.php:199
+#: wui/includes/classes/WuiShapeManagement.php:140
+#: wui/includes/classes/WuiBackgroundManagement.php:174
 msgid "firstMustChoosePngImage"
 msgstr "Du musst erst ein PNG-Bild auswählen"
 
-#: wui/includes/classes/WuiShapeManagement.php:166
-#: wui/includes/classes/WuiBackgroundManagement.php:200
-msgid "mustChoosePngImage"
+#: wui/includes/classes/WuiShapeManagement.php:141
+#: wui/includes/classes/WuiBackgroundManagement.php:175
+#: wui/includes/classes/WuiBackground.php:82
+#, fuzzy
+msgid "mustChooseValidImageFormat"
 msgstr "Du musst ein Bild im PNG-Format wählen."
 
-#: wui/includes/classes/WuiShapeManagement.php:167
+#: wui/includes/classes/WuiShapeManagement.php:142
 msgid "foundNoShapeToDelete"
 msgstr "Kein Bild zum Löschen gefunden. Operation abgebrochen."
 
-#: wui/includes/classes/WuiShapeManagement.php:168
+#: wui/includes/classes/WuiShapeManagement.php:143
 msgid "shapeInUse"
 msgstr "Das Bild wird noch in der Karte \"[MAP]\" genutzt."
 
-#: wui/includes/classes/WuiShapeManagement.php:169
+#: wui/includes/classes/WuiShapeManagement.php:144
 msgid "confirmShapeDeletion"
 msgstr "Willst du dieses Bild wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: wui/includes/classes/WuiShapeManagement.php:170
+#: wui/includes/classes/WuiShapeManagement.php:145
 msgid "unableToDeleteShape"
 msgstr "Das Bild \"[IMAGENAME]\" kann nicht gelöscht werden. Das Bild wird in der Karte \"[MAP]\" noch verwendet."
 
-#: wui/includes/classes/WuiShapeManagement.php:188
+#: wui/includes/classes/WuiShapeManagement.php:163
 msgid "failedToDeleteShape"
 msgstr "Konnte das Bild \"[IMAGE]\" nicht löschen."
 
-#: wui/includes/classes/WuiShapeManagement.php:192
+#: wui/includes/classes/WuiShapeManagement.php:167
 msgid "shapeDoesNotExist"
 msgstr "Das Bild \"[IMAGE]\" existiert nicht."
 
-#: wui/includes/classes/WuiShapeManagement.php:214
+#: wui/includes/classes/WuiShapeManagement.php:189
 #: wui/includes/classes/WuiBackground.php:72
 msgid "moveUploadedFileFailed"
 msgstr "Konnte die hochgeladene Datei nicht in das Ziel-Verzeichnis \"[PATH]\" verschieben."
 
-#: wui/includes/classes/WuiShapeManagement.php:218
-#: wui/includes/classes/WuiBackground.php:82
+#: wui/includes/classes/WuiShapeManagement.php:193
 msgid "mustBePngFile"
 msgstr "Die Datei hat das falsche Dateiformat (muss *.png sein)"
 
-#: wui/includes/classes/WuiShapeManagement.php:222
+#: wui/includes/classes/WuiShapeManagement.php:197
 msgid "uploadFailed"
 msgstr "Hochladen der Datei fehlgeschlagen"
 
@@ -716,123 +724,123 @@ msgstr "Standard-Datenquelle"
 msgid "iconNotExists"
 msgstr "Das Hintergrundbild \"[IMGPATH]\" existiert nicht"
 
-#: wui/includes/classes/WuiMap.php:566
+#: wui/includes/classes/WuiMap.php:564
 msgid "configured"
 msgstr "Konfiguriert"
 
-#: wui/includes/classes/WuiMap.php:568
+#: wui/includes/classes/WuiMap.php:566
 msgid "inherited"
 msgstr "Vererbt"
 
-#: wui/includes/classes/WuiMap.php:572
+#: wui/includes/classes/WuiMap.php:570
 msgid "positionSize"
 msgstr "Positionieren/Größe"
 
-#: wui/includes/classes/WuiMap.php:577
+#: wui/includes/classes/WuiMap.php:575
 msgid "change"
 msgstr "Ändern"
 
-#: wui/includes/classes/WuiMap.php:623
+#: wui/includes/classes/WuiMap.php:596
 msgid "restore"
 msgstr "Wiederherstellen"
 
-#: wui/includes/classes/WuiMap.php:624
+#: wui/includes/classes/WuiMap.php:597
 msgid "properties"
 msgstr "Einstellungen"
 
-#: wui/includes/classes/WuiMap.php:625
+#: wui/includes/classes/WuiMap.php:598
 msgid "addObject"
 msgstr "Objekt hinzufügen"
 
-#: wui/includes/classes/WuiMap.php:626
+#: wui/includes/classes/WuiMap.php:599
 msgid "nagVisConfig"
 msgstr "NagVis-Konfiguration"
 
-#: wui/includes/classes/WuiMap.php:627
+#: wui/includes/classes/WuiMap.php:600
 msgid "help"
 msgstr "Hilfe"
 
-#: wui/includes/classes/WuiMap.php:628
+#: wui/includes/classes/WuiMap.php:601
 msgid "open"
 msgstr "Öffnen"
 
-#: wui/includes/classes/WuiMap.php:629
+#: wui/includes/classes/WuiMap.php:602
 msgid "openInNagVis"
 msgstr "Karte in NagVis Öffnen"
 
-#: wui/includes/classes/WuiMap.php:630
+#: wui/includes/classes/WuiMap.php:603
 msgid "manageMaps"
 msgstr "Karten"
 
-#: wui/includes/classes/WuiMap.php:631
+#: wui/includes/classes/WuiMap.php:604
 msgid "manageBackends"
 msgstr "Datenquellen"
 
-#: wui/includes/classes/WuiMap.php:632
+#: wui/includes/classes/WuiMap.php:605
 msgid "manageBackgrounds"
 msgstr "Hintergründe"
 
-#: wui/includes/classes/WuiMap.php:633
+#: wui/includes/classes/WuiMap.php:606
 msgid "manageShapes"
 msgstr "Bilder"
 
-#: wui/includes/classes/WuiMap.php:634
+#: wui/includes/classes/WuiMap.php:607
 msgid "icon"
 msgstr "Icon"
 
-#: wui/includes/classes/WuiMap.php:635
+#: wui/includes/classes/WuiMap.php:608
 msgid "line"
 msgstr "Linie"
 
-#: wui/includes/classes/WuiMap.php:636
+#: wui/includes/classes/WuiMap.php:609
 msgid "special"
 msgstr "Spezielle"
 
-#: wui/includes/classes/WuiMap.php:637
+#: wui/includes/classes/WuiMap.php:610
 msgid "host"
 msgstr "Gerät"
 
-#: wui/includes/classes/WuiMap.php:638
+#: wui/includes/classes/WuiMap.php:611
 msgid "service"
 msgstr "Dienst"
 
-#: wui/includes/classes/WuiMap.php:639
+#: wui/includes/classes/WuiMap.php:612
 msgid "hostgroup"
 msgstr "Gerätegruppe"
 
-#: wui/includes/classes/WuiMap.php:640
+#: wui/includes/classes/WuiMap.php:613
 msgid "servicegroup"
 msgstr "Dienstegruppe"
 
-#: wui/includes/classes/WuiMap.php:641
+#: wui/includes/classes/WuiMap.php:614
 msgid "map"
 msgstr "Karte"
 
-#: wui/includes/classes/WuiMap.php:642
+#: wui/includes/classes/WuiMap.php:615
 msgid "textbox"
 msgstr "Textbox"
 
-#: wui/includes/classes/WuiMap.php:643
+#: wui/includes/classes/WuiMap.php:616
 msgid "shape"
 msgstr "Bild"
 
-#: wui/includes/classes/WuiMap.php:644
+#: wui/includes/classes/WuiMap.php:617
 msgid "manage"
 msgstr "Verwalte"
 
-#: wui/includes/classes/WuiMap.php:646
+#: wui/includes/classes/WuiMap.php:619
 msgid "clickMapToSetPoints"
 msgstr "Klicke auf die Karte, um die fehlenden Punkte zu bestimmen"
 
-#: wui/includes/classes/WuiMap.php:647
+#: wui/includes/classes/WuiMap.php:620
 msgid "confirmDelete"
 msgstr "Willst du dieses Objekt wirklich löschen?"
 
-#: wui/includes/classes/WuiMap.php:648
+#: wui/includes/classes/WuiMap.php:621
 msgid "confirmRestore"
 msgstr "Sicher, dass du das Backup wiederherstellen willst?"
 
-#: wui/includes/classes/WuiMap.php:651
+#: wui/includes/classes/WuiMap.php:624
 msgid "wrongValueFormatOption"
 msgstr "Das Attribut \"[ATTRIBUTE]\" entspricht nicht dem korrekten Format"
 
@@ -907,71 +915,71 @@ msgstr "Karten-Iconset"
 msgid "background"
 msgstr "Hintergrund"
 
-#: wui/includes/classes/WuiMapManagement.php:308
+#: wui/includes/classes/WuiMapManagement.php:233
 msgid "chooseMapName"
 msgstr "Du musst einen Namen für die neue Karte angeben."
 
-#: wui/includes/classes/WuiMapManagement.php:309
+#: wui/includes/classes/WuiMapManagement.php:234
 msgid "minOneUserAccess"
 msgstr "Mindestens ein User muss Zugriff auf die Karte haben."
 
-#: wui/includes/classes/WuiMapManagement.php:310
+#: wui/includes/classes/WuiMapManagement.php:235
 msgid "mustChooseBackgroundImage"
 msgstr "Du musst das Hintergrund-Bild für diese Karte wählen."
 
-#: wui/includes/classes/WuiMapManagement.php:311
+#: wui/includes/classes/WuiMapManagement.php:236
 msgid "noMapToRename"
 msgstr "Keine Karte zum Umbenennen gefunden. Operation abgebrochen."
 
-#: wui/includes/classes/WuiMapManagement.php:312
+#: wui/includes/classes/WuiMapManagement.php:237
 msgid "noNewNameGiven"
 msgstr "Du hast keinen neuen Namen angegeben."
 
-#: wui/includes/classes/WuiMapManagement.php:313
+#: wui/includes/classes/WuiMapManagement.php:238
 msgid "mapAlreadyExists"
 msgstr "Die Karte \"[MAPNAME]\" existiert bereits. Wähle einen anderen Namen."
 
-#: wui/includes/classes/WuiMapManagement.php:314
+#: wui/includes/classes/WuiMapManagement.php:239
 msgid "foundNoMapToDelete"
 msgstr "Keine Karte zum Löschen gefunden. Operation abgebrochen."
 
-#: wui/includes/classes/WuiMapManagement.php:315
+#: wui/includes/classes/WuiMapManagement.php:240
 msgid "foundNoMapToExport"
 msgstr "Keine Karte zum Exportieren gefunden. Wähle eine Karte."
 
-#: wui/includes/classes/WuiMapManagement.php:316
+#: wui/includes/classes/WuiMapManagement.php:241
 msgid "foundNoMapToImport"
 msgstr "Es ist keine Datei zum Importieren ausgewählt. Wähle eine Datei."
 
-#: wui/includes/classes/WuiMapManagement.php:317
+#: wui/includes/classes/WuiMapManagement.php:242
 msgid "notCfgFile"
 msgstr "Die Datei hat nicht die Dateiendung \".cfg\". Benenne die Datei um."
 
-#: wui/includes/classes/WuiMapManagement.php:318
+#: wui/includes/classes/WuiMapManagement.php:243
 msgid "confirmNewMap"
 msgstr "Willst du wirklich eine neue Karte erstellen?"
 
-#: wui/includes/classes/WuiMapManagement.php:319
+#: wui/includes/classes/WuiMapManagement.php:244
 msgid "confirmMapRename"
 msgstr "Willst du diese Karte wirklich umbenennen?"
 
-#: wui/includes/classes/WuiMapManagement.php:320
+#: wui/includes/classes/WuiMapManagement.php:245
 msgid "confirmMapDeletion"
 msgstr "Willst du diese Karte wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: wui/includes/classes/WuiMapManagement.php:321
+#: wui/includes/classes/WuiMapManagement.php:246
 msgid "unableToDeleteMap"
 msgstr "Karte \"[MAP]\" nicht löschbar. Die Karte ist in der Karte \"[PARENTMAP]\" eingebunden."
 
-#: wui/includes/classes/WuiMapManagement.php:322
+#: wui/includes/classes/WuiMapManagement.php:247
 msgid "noPermissions"
 msgstr "Der Benutzer \"[USER]\" hat keine Rechte für diese Aktion"
 
-#: wui/includes/classes/WuiMapManagement.php:323
+#: wui/includes/classes/WuiMapManagement.php:248
 msgid "minOneUserWriteAccess"
 msgstr "Mindestens ein Benutzer muss die Berechtigung haben, um diese Karte zu ändern."
 
-#: wui/includes/classes/WuiMapManagement.php:324
+#: wui/includes/classes/WuiMapManagement.php:249
 msgid "noSpaceAllowed"
 msgstr "Leerzeichen sind in diesem Wert nicht erlaubt."
 
@@ -986,6 +994,12 @@ msgstr "Hintergrund hochladen"
 #: wui/includes/classes/WuiBackgroundManagement.php:105
 msgid "deleteBackground"
 msgstr "Hintergrund löschen"
+
+#: wui/includes/classes/WuiBackgroundManagement.php:124
+#: wui/includes/classes/WuiBackgroundManagement.php:139
+#, fuzzy
+msgid "chooseImage"
+msgstr "Wähle ein Bild im PNG-Format"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:153
 msgid "backgroundName"
@@ -1003,19 +1017,19 @@ msgstr "Breite (px)"
 msgid "backgroundHeight"
 msgstr "Höhe (px)"
 
-#: wui/includes/classes/WuiBackgroundManagement.php:201
+#: wui/includes/classes/WuiBackgroundManagement.php:176
 msgid "foundNoBackgroundToDelete"
 msgstr "Kein Hintergrundbild zum Löschen gefunden. Operation abgebrochen."
 
-#: wui/includes/classes/WuiBackgroundManagement.php:202
+#: wui/includes/classes/WuiBackgroundManagement.php:177
 msgid "confirmBackgroundDeletion"
 msgstr "Willst du diesen Hintergrund wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: wui/includes/classes/WuiBackgroundManagement.php:203
+#: wui/includes/classes/WuiBackgroundManagement.php:178
 msgid "unableToDeleteBackground"
 msgstr "Kann Hintergrund \"[IMAGENAME]\" nicht löschen. Das Bild wird noch in der Karte \"[MAP]\" verwendet."
 
-#: wui/includes/classes/WuiBackgroundManagement.php:204
+#: wui/includes/classes/WuiBackgroundManagement.php:179
 msgid "mustValueNotSet1"
 msgstr "Der Pflichtwert \"[ATTRIBUTE]\" wurde nicht gesetzt."
 
@@ -1062,34 +1076,34 @@ msgstr ""
 msgid "imageAlreadyExists"
 msgstr "Die Karte \"[MAPNAME]\" existiert bereits. Wähle einen anderen Namen."
 
-#: wui/includes/classes/WuiAddModify.php:413
+#: wui/includes/classes/WuiAddModify.php:246
 msgid "unableToWorkWithMap"
 msgstr "Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen."
 
-#: wui/includes/classes/WuiAddModify.php:415
+#: wui/includes/classes/WuiAddModify.php:248
 msgid "chosenLineTypeNotValid"
 msgstr "Der gewählte Linien-Typ \"line_type ist\" ungültig."
 
-#: wui/includes/classes/WuiAddModify.php:416
+#: wui/includes/classes/WuiAddModify.php:249
 msgid "onlyLineOrIcon"
 msgstr "Ein Objekt kann nur ein Icon oder eine Linie sein, \"iconset\" und \"line_type\" können nicht gemeinsam verwendet werden."
 
-#: wui/includes/classes/WuiAddModify.php:417
-#: wui/includes/classes/WuiAddModify.php:418
+#: wui/includes/classes/WuiAddModify.php:250
+#: wui/includes/classes/WuiAddModify.php:251
 msgid "not2coords"
 msgstr "Es scheint, du willst eine Linie definieren (\"line_type\" ist gesetzt). Es sind aber keine 2 [COORD] Koordinaten angegeben."
 
-#: wui/includes/classes/WuiAddModify.php:419
-#: wui/includes/classes/WuiAddModify.php:420
+#: wui/includes/classes/WuiAddModify.php:252
+#: wui/includes/classes/WuiAddModify.php:253
 msgid "only1or2coords"
 msgstr "Es ist nur möglich ein oder zwei Koordinaten [COORD] anzugeben."
 
-#: wui/includes/classes/WuiAddModify.php:421
-#: wui/includes/classes/WuiAddModify.php:422
+#: wui/includes/classes/WuiAddModify.php:254
+#: wui/includes/classes/WuiAddModify.php:255
 msgid "lineTypeNotSelected"
 msgstr "Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gewählt werden."
 
-#: wui/includes/classes/WuiAddModify.php:424
+#: wui/includes/classes/WuiAddModify.php:257
 msgid "mapObjectWillShowSummaryState"
 msgstr "Dieses Objekt wird den Gesamt-Status der aktuellen Karte zeigen."
 
