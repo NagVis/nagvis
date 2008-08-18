@@ -46,7 +46,6 @@ set_include_path(
 	.PATH_SEPARATOR.'../nagvis/includes/classes/validator/'
 	.PATH_SEPARATOR.'../nagvis/includes/classes/httpRequest/'
 	.PATH_SEPARATOR.'../nagvis/includes/classes/frontend/'
-	.PATH_SEPARATOR.'../nagvis/includes/classes/frontend/message/'
 	.PATH_SEPARATOR.'../wui/includes/classes/'
 );
 
