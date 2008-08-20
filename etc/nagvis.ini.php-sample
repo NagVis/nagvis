@@ -61,7 +61,14 @@
 ; target for the icon links
 ;urltarget="_self"
 
-; options for the wui
+; Options to configure the Overview page of NagVis
+[index]
+; Set number of map cells per row
+;cellsperrow=4
+; Enable/Disable rotation listing
+;showrotations=1
+
+; Options for the wui
 [wui]
 ; auto update frequency
 ;autoupdatefreq=25
@@ -70,7 +77,7 @@
 ; Users which are allowed to change the NagVis configuration (comma seperated list)
 ;allowedforconfig=EVERYONE
 
-; configuration values for the automap
+; Configuration values for the automap
 [automap]
 ; show the automap in the lists (Map index and dropdown menu in header)
 ;showinlists=1
@@ -81,7 +88,7 @@
 ; Default URL parameters for links to the automap
 ;defaultparams="&maxLayers=2"
 
-; path options
+; Path options
 [paths]
 ; absolute physical NagVis path
 ;base="/usr/local/nagios/share/nagvis/"
@@ -90,7 +97,7 @@
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
 
-; options for the NDO-Backend
+; Options for the NDO-Backend
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 [backend_ndomy_1]
 ; type of backend - MUST be set
@@ -114,7 +121,7 @@
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
-; map rotation pools
+; Map rotation pools
 ; in this example the browser switches between the maps demo and demo2 every 15
 ; seconds the rotation is enabled by url: index.php?rotation=demo
 [rotation_demo]

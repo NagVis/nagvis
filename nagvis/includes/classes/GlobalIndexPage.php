@@ -71,34 +71,37 @@ class GlobalIndexPage {
 	private function getRotationPoolIndex() {
 		$ret = '';
 		
-		$aRotationPools = $this->CORE->getDefinedRotationPools();
-		if(count($aRotationPools) > 0) {
-			$ret .= '<table class="infobox">';
-			$ret .= '<tr><th colspan="2">'.$this->CORE->LANG->getText('rotationPools').'</th></tr>';
-			foreach($aRotationPools AS $poolName) {
-				$ROTATION = new NagVisRotation($this->CORE, $poolName);
-				
-				// Form the onClick action
-				$onClick = 'location.href=\''.$ROTATION->getNextStepUrl().'\';';
-				
-				// Form the HTML code for the rotation cell
-				$ret .= '<tr>';
-				$ret .= '<td rowspan="'.$ROTATION->getNumSteps().'" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
-				$ret .= '<h2>'.$poolName.'</h2><br />';
-				$ret .= '</td>';
-				
-				// Parse the code for the step list
-				foreach($ROTATION->getSteps() AS $intId => $arrStep) {
-					if($intId != 0) {
-						$ret .= '<tr>';
+		// Only display the rotation list when enabled
+		if($this->CORE->MAINCFG->getValue('index','showrotations') == 1) {
+			$aRotationPools = $this->CORE->getDefinedRotationPools();
+			if(count($aRotationPools) > 0) {
+				$ret .= '<table class="infobox">';
+				$ret .= '<tr><th colspan="2">'.$this->CORE->LANG->getText('rotationPools').'</th></tr>';
+				foreach($aRotationPools AS $poolName) {
+					$ROTATION = new NagVisRotation($this->CORE, $poolName);
+					
+					// Form the onClick action
+					$onClick = 'location.href=\''.$ROTATION->getNextStepUrl().'\';';
+					
+					// Form the HTML code for the rotation cell
+					$ret .= '<tr>';
+					$ret .= '<td rowspan="'.$ROTATION->getNumSteps().'" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
+					$ret .= '<h2>'.$poolName.'</h2><br />';
+					$ret .= '</td>';
+					
+					// Parse the code for the step list
+					foreach($ROTATION->getSteps() AS $intId => $arrStep) {
+						if($intId != 0) {
+							$ret .= '<tr>';
+						}
+						$onClick = 'location.href=\''.$ROTATION->getStepUrlById($intId).'\';';
+						$ret .= '<td width="250" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
+						$ret .= $ROTATION->getStepLabelById($intId).'</td>';
+						$ret .= '</tr>';
 					}
-					$onClick = 'location.href=\''.$ROTATION->getStepUrlById($intId).'\';';
-					$ret .= '<td width="250" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
-					$ret .= $ROTATION->getStepLabelById($intId).'</td>';
-					$ret .= '</tr>';
 				}
+				$ret .= '</table>';
 			}
-			$ret .= '</table>';
 		}
 		
 		return $ret;
@@ -112,8 +115,11 @@ class GlobalIndexPage {
 	 */
 	private function getMapIndex() {
 		$ret = '';
+		
+		$intCellsPerRow = $this->CORE->MAINCFG->getValue('index','cellsperrow');
+		
 		$ret .= '<table>';
-		$ret .= '<tr><th colspan="4">'.$this->CORE->LANG->getText('mapIndex').'</th></tr><tr>';
+		$ret .= '<tr><th colspan="'.$intCellsPerRow.'">'.$this->CORE->LANG->getText('mapIndex').'</th></tr><tr>';
 		$i = 1;
 		foreach($this->CORE->getAvailableMaps() AS $mapName) {
 			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
@@ -194,7 +200,7 @@ class GlobalIndexPage {
 						$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
 					}
 					$ret .= '</td>';
-					if($i % 4 == 0) {
+					if($i % $intCellsPerRow == 0) {
 							$ret .= '</tr><tr>';
 					}
 					$i++;
@@ -202,8 +208,8 @@ class GlobalIndexPage {
 			}
 		}
 		// Fill table with empty cells if there are not enough maps to get the line filled
-		if(($i - 1) % 4 != 0) {
-				for($a=0;$a < (4 - (($i - 1) % 4));$a++) {
+		if(($i - 1) % $intCellsPerRow != 0) {
+				for($a=0;$a < ($intCellsPerRow - (($i - 1) % $intCellsPerRow));$a++) {
 						$ret .= '<td>&nbsp;</td>';
 				}
 		}

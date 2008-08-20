@@ -323,6 +323,15 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '&maxLayers=2',
 					'match' => MATCH_STRING_URL)),
+			'index' => Array(
+				'cellsperrow' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '4',
+					'match' => MATCH_INTEGER),
+				'showrotations' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '1',
+					'match' => MATCH_BOOLEAN)),
 			'internal' => Array(
 				'version' => Array('must' => 1,
 					'editable' => 0,
