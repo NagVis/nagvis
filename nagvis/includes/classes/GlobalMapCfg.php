@@ -568,6 +568,7 @@ class GlobalMapCfg {
 			'label_border',
 			'url_target',
 			'hover_childs_show',
+			'hover_childs_sort',
 			'hover_childs_order',
 			'hover_childs_limit');
 		foreach($aVars As $sVar) {
