@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisErrorHandling.php - Handles error messages from nagvis
+ * GlobalFrontendMessage.php - Handles error messages in NagVis and WUI frontend
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -23,51 +23,29 @@
  *****************************************************************************/
 
 /**
- * class NagVisErrorHandling
+ * class GlobalFrontendMessage
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class NagVisErrorHandling {
-
-	// Contains core object
-	private $CORE;
-
-	// Contains language object
-	private $LANG;
-
-	// Contains type of message
-	private $type;
-
-	// Contains title for the message box
-	private $title;
-
-	// Contains message
-	private $message;
-
-	// Contains variables which be change in the message text. Example -> 'TYPE~'.$type.
-	private $messageVariables;
-
-	public function __construct($type, $message, $messageVariables,$title=NULL, CORE $CORE=NULL) {
-
-		$this->type = $type;
-		$this->title = $title;
-		$this->message = $message;
-		$this->messageVariables = $messageVariables;
-
-		// Load the core
-		if(!is_object($CORE)) {
-			$this->CORE = new GlobalCore();
-		} else {
-			$this->CORE = $CORE;
-		}
-
-		$this->LANG = $this->CORE->LANG;
-
-
-		// Initialize the frontend
-		$FRONTEND = new GlobalPage($this->CORE);
-		$FRONTEND->messageToUser($this->LANG->getText($this->type), $this->LANG->getText($this->message, $this->messageVariables));
-		//print new GlobalFrontendMessage($this->LANG->getText($this->type),$this->LANG->getText($this->type),$this->LANG->getText($message, $messageVariables), $this->CORE);
+class GlobalFrontendMessage {
+	/**
+	 * The contructor atm only wrapper for GlobalFrontendMessageBox
+	 *
+	 * @param   strind	$type
+	 * @param   string	$message
+	 * @param   string	$pathHtmlBase
+	 * @param   string	$title
+	 * @access  public
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	public function __construct($type, $message, $pathHtmlBase, $title = NULL) {
+		// Old method
+		$CORE = new GlobalCore();
+		$FRONTEND = new GlobalPage($CORE);
+		$FRONTEND->messageToUser($type, $message);
+		
+		// New method
+		//print new GlobalFrontendMessage($type, $message, $pathHtmlBase, $title);
 	}
 }
 ?>
