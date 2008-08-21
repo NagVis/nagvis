@@ -110,15 +110,15 @@ class GlobalFrontendMessageBox {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	private function buildMessageBox() {
-		$this->page  = '<html>'."\n";
+		/*$this->page  = '<html>'."\n";
 		$this->page .= '   <head>'."\n";
 		$this->page .= '      <meta http-equiv="Content-Type" content="text/html;charset=utf-8">'."\n";
-		$this->page .= '      <style type="text/css"><!-- @import url('.$this->pathHtmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
 		$this->page .= '      <title>'.$this->title.'</title></head>'."\n";
 		$this->page .= '   </head>'."\n";
-		$this->page .= '   <body>'."\n";
-		$this->page .= '      <div id="shadow">'."\n";
-		$this->page .= '         <table class="messageBox" id="'.$this->type.'MessageBoxBorder" border="1" cellpadding="0" cellspacing="0">'."\n";
+		$this->page .= '   <body>'."\n";*/
+		$this->page .= '      <style type="text/css"><!-- @import url('.$this->pathHtmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
+		$this->page .= '      <div id="messageBoxDiv" class="shadow">'."\n";
+		$this->page .= '         <table class="'.$this->type.'MessageBoxBorder" height="100%" border="1" cellpadding="0" cellspacing="0">'."\n";
 		$this->page .= '            <tr>'."\n";
 		$this->page .= '               <td class="'.$this->type.'MessageBoxBackground">'."\n";
 		$this->page .= '                  <table cellpadding="0" cellspacing="0" width="100%" height="10">'."\n";
@@ -129,20 +129,20 @@ class GlobalFrontendMessageBox {
 		$this->page .= '                  </table>'."\n";
 		$this->page .= '                  <table cellpadding="0" cellspacing="0" width="100%">'."\n";
 		$this->page .= '                     <tr>'."\n";
-		$this->page .= '                        <td id="'.$this->type.'MessageHeader" align="center" width="60">'."\n";
+		$this->page .= '                        <td class="'.$this->type.'MessageHeader" align="center" width="60">'."\n";
 		$this->page .= '                           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
 		$this->page .= '                        </td>'."\n";
-		$this->page .= '                        <td class="messageHeader" id="'.$this->type.'MessageHeader">'."\n";
+		$this->page .= '                        <td id="messageHeader" class="'.$this->type.'MessageHeader">'."\n";
 		$this->page .=                             $this->title."\n";
 		$this->page .= '                        </td>'."\n";
-		$this->page .= '                        <td id="'.$this->type.'MessageHeader" align="center" width="60">'."\n";
+		$this->page .= '                        <td class="'.$this->type.'MessageHeader" align="center" width="60">'."\n";
 		$this->page .= '                           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
 		$this->page .= '                        </td>'."\n";
 		$this->page .= '                     </tr>'."\n";
 		$this->page .= '                  </table>'."\n";
 		$this->page .= '                  <table cellpadding="0" cellspacing="0" width="100%" height="78%">'."\n";
 		$this->page .= '                     <tr>'."\n";
-		$this->page .= '                        <td  class="'.$this->type.'MessageBoxBackground">'."\n";
+		$this->page .= '                        <td class="'.$this->type.'MessageBoxBackground">'."\n";
 		$this->page .=                             $this->message."\n";
 		$this->page .= '                        </td>'."\n";
 		$this->page .= '                     </tr>'."\n";
@@ -151,8 +151,8 @@ class GlobalFrontendMessageBox {
 		$this->page .= '            </tr>'."\n";
 		$this->page .= '         </table>'."\n";
 		$this->page .= '      </div>'."\n";
-		$this->page .= '   </body>'."\n";
-		$this->page .= '</html>'."\n";
+		/*$this->page .= '   </body>'."\n";
+		$this->page .= '</html>'."\n";*/
 	}
 
 	/**

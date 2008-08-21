@@ -35,43 +35,41 @@ body, table, th, td {
 	font-size: 12pt;
 }
 
-#shadow {
-	width:650px;
-	height:300px;
-	background-image:url(/nagios/nagvis/nagvis/images/internal/bg_message.png);
-	background-repeat: no-repeat;
-   background-position: center;
-	margin:40 auto;
-	z-index:0;
-}
-
 /**
  *  Message box and border color
  */
-.messageBox {
+#messageBoxDiv {
+	position: absolute;
+  left: 50%;
+  top: 50%;
+	
+	margin-left: -297px;
+	margin-top: -125px;
+
 	width:594px;
 	height:250px;
-	margin:20 auto;
-	z-index:1;
+	
+	/*margin:20 auto;*/
+	z-index: 1000;
 }
 
-#errorMessageBoxBorder, #criticalMessageBoxBorder, #downMessageBoxBorder {
+.errorMessageBoxBorder, .criticalMessageBoxBorder, .downMessageBoxBorder {
 	border:1px solid #F00;
 }
 
-#warningMessageBoxBorder {
+.warningMessageBoxBorder {
 	border:1px solid #FF0;
 }
 
-#unknownMessageBoxBorder, #permissionMessageBoxBorder, #unreachableMessageBoxBorder {
+.unknownMessageBoxBorder, .permissionMessageBoxBorder, .unreachableMessageBoxBorder {
 	border:1px solid #FF9900;
 }
 
-#okMessageBoxBorder, #upMessageBoxBorder {
+.okMessageBoxBorder, .upMessageBoxBorder {
 	border:1px solid #00B233;
 }
 
-#noteMessageBoxBorder {
+.noteMessageBoxBorder {
 	border:1px solid #00F;
 }
 
@@ -116,7 +114,7 @@ body, table, th, td {
 /**
  * Header for message box
  */
-.messageHeader {
+#messageHeader {
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-style: italic;
 	text-align: center;
@@ -125,22 +123,22 @@ body, table, th, td {
 	font-size: 26pt;
 }
 
-#errorMessageHeader, #criticalMessageHeader, #downMessageHeader {
+.errorMessageHeader, .criticalMessageHeader, .downMessageHeader {
 	background-color: #FF6666;
 }
 
-#warningMessageHeader {
+.warningMessageHeader {
 	background-color: #FFFF66;
 }
 
-#unknownMessageHeader, #permissionMessageHeader, #unreachableMessageHeader {
+.unknownMessageHeader, .permissionMessageHeader, .unreachableMessageHeader {
 	background-color: #FFB200;
 }
 
-#okMessageHeader, #upMessageHeader {
+.okMessageHeader, .upMessageHeader {
 	background-color: 99FF66;
 }
 
-#noteMessageHeader {
+.noteMessageHeader {
 	background-color: #99CCFF;
 }
