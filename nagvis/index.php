@@ -35,13 +35,13 @@ require('./includes/functions/oldPhpVersionFixes.php');
 $controller = new GlobalController();
 
 if (!$controller->isValid()) {
-	$NagVisErrorHandling = new NagVisErrorHandling('ERROR',$controller->getMessage(),'VAR~'.$controller->getParameterName());
+	// FIXME: No GlobalCore object here - that's a problem!
+	new GlobalFrontendMessage('ERROR', $controller->getMessage(), '/pathHtmlBase/...');
 }
 
 // ONLY FOR DEBUGGING
 //-----------------------------------------------------------------------------------------------
-$state = ($controller->isValid()) ? 'TRUE' : 'FALSE';
-print "Status        : <b>${state}</b><br />";
+print "Status        : <b>".(($controller->isValid()) ? 'TRUE' : 'FALSE')."</b><br />";
 print "Action        : ".$controller->getAction()."<br />";
 print "Parametername : ".$controller->getParameterName()."<br />";
 print "Message       : ".$controller->getMessage();
