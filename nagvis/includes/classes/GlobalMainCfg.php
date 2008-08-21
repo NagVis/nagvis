@@ -363,11 +363,11 @@ class GlobalMainCfg {
 		if($this->isCached(FALSE)) {
 			$this->readConfigFromCache();
 		} else {
-			// Read Main Config file
-			$this->readConfig(TRUE);
-			
-			// Cache the resulting config
-			$this->writeConfigToCache(TRUE);
+			// Read Main Config file, when succeeded cache it
+			if($this->readConfig(TRUE)) {
+				// Cache the resulting config
+				$this->writeConfigToCache(TRUE);
+			}
 		}
 		
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
