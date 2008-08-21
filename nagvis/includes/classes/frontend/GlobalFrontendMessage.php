@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalFronendMessage.php - Class to display a message in the frontend
+ * GlobalFronendMessageBox.php - Class to render a messagebox in the frontend
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -49,19 +49,12 @@
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalFrontendMessage {
-
-	// Contains object with the main configuration
-	private $MAINCFG;
-
-	//Contains LANG object;
-	private $LANG;
-
+class GlobalFrontendMessageBox {
 	// Contains the page which be print out
 	private $page;
 
 	// Contains path to the html base
-	private $htmlBase;
+	private $pathHtmlBase;
 
 	// This array contains allowed types of message boxes
 	private $allowedTypes = array('error',
@@ -77,39 +70,37 @@ class GlobalFrontendMessage {
 
 	//This variables contains informations which be used to build the message box
 	private $type;
-	private $wrongType;
-	private $title;
 	private $message;
+	private $title;
 
 	/**
 	 * The contructor check the type and build the message box
 	 *
-	 * @param   object 	$CORE
 	 * @param   strind	$type
-	 * @param   string	$title
 	 * @param   string	$message
+	 * @param   string	$pathHtmlBase
+	 * @param   string	$title
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function __construct($type, $title, $message, $CORE) {
-
-		$this->MAINCFG = $CORE->MAINCFG;
-		$this->LANG = $CORE->LANG;
-		$this->htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
+	public function __construct($type, $message, $pathHtmlBase, $title = NULL) {
 		$this->type = strtolower($type);
-
-		//check if type allowed else build error box
-		if(in_array($this->type, $this->allowedTypes)) {
-			$this->title = $title;
-			$this->message = $message;
-			$this->buildMessageBox();
-		} else {
-			$this->wrongType = $type;
-			$this->type = 'error';
-			$this->title = $this->LANG->getText('messageboxTitleWrongType');
-			$this->message = $this->LANG->getText('messageboxMessageWrongType', 'TYPE~'.$this->wrongType);
-			$this->buildMessageBox();
+		$this->message = $message;
+		$this->pathHtmlBase = $pathHtmlBase;
+		
+		if($title === NULL) {
+			$this->title = $this->type;
 		}
+		
+		// Check if type allowed else build error box
+		if(!in_array($this->type, $this->allowedTypes)) {
+			$CORE = new GlobalCore();
+			$this->title = $CORE->LANG->getText('messageboxTitleWrongType');
+			$this->message = $CORE->LANG->getText('messageboxMessageWrongType', 'TYPE~'.$this->wrongType);
+		}
+		
+		// Got all informations, now build the box
+		$this->buildMessageBox();
 	}
 
 	/**
@@ -119,11 +110,10 @@ class GlobalFrontendMessage {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	private function buildMessageBox() {
-
 		$this->page  = '<html>'."\n";
 		$this->page .= '   <head>'."\n";
 		$this->page .= '      <meta http-equiv="Content-Type" content="text/html;charset=utf-8">'."\n";
-		$this->page .= '      <style type="text/css"><!-- @import url('.$this->htmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
+		$this->page .= '      <style type="text/css"><!-- @import url('.$this->pathHtmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
 		$this->page .= '      <title>'.$this->title.'</title></head>'."\n";
 		$this->page .= '   </head>'."\n";
 		$this->page .= '   <body>'."\n";
@@ -140,13 +130,13 @@ class GlobalFrontendMessage {
 		$this->page .= '                  <table cellpadding="0" cellspacing="0" width="100%">'."\n";
 		$this->page .= '                     <tr>'."\n";
 		$this->page .= '                        <td id="'.$this->type.'MessageHeader" align="center" width="60">'."\n";
-		$this->page .= '                           <img src="'.$this->htmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
+		$this->page .= '                           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
 		$this->page .= '                        </td>'."\n";
 		$this->page .= '                        <td class="messageHeader" id="'.$this->type.'MessageHeader">'."\n";
 		$this->page .=                             $this->title."\n";
 		$this->page .= '                        </td>'."\n";
 		$this->page .= '                        <td id="'.$this->type.'MessageHeader" align="center" width="60">'."\n";
-		$this->page .= '                           <img src="'.$this->htmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
+		$this->page .= '                           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
 		$this->page .= '                        </td>'."\n";
 		$this->page .= '                     </tr>'."\n";
 		$this->page .= '                  </table>'."\n";
@@ -168,11 +158,11 @@ class GlobalFrontendMessage {
 	/**
 	 * Print the message box
 	 *
+	 * return   String  HTML Code
 	 * @access  private
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function __toString () {
-
 		return $this->page;
 	}
 }
