@@ -226,18 +226,22 @@ class GlobalIndexPage {
 	 */
 	function createThumbnail($imgPath, $mapName) {
 		if($this->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
-			$imgSize = getimagesize($imgPath);
 			// 0: width, 1:height, 2:type
+			$imgSize = getimagesize($imgPath);
+			$strFileType = '';
 			
 			switch($imgSize[2]) {
-				case 1: // GIF
-				$image = imagecreatefromgif($imgPath);
+				case 1:
+					$image = imagecreatefromgif($imgPath);
+					$strFileType = 'gif';
 				break;
-				case 2: // JPEG
-				$image = imagecreatefromjpeg($imgPath);
+				case 2:
+					$image = imagecreatefromjpeg($imgPath);
+					$strFileType = 'jpg';
 				break;
-				case 3: // PNG
-				$image = imagecreatefrompng($imgPath);
+				case 3:
+					$image = imagecreatefrompng($imgPath);
+					$strFileType = 'png';
 				break;
 				default:
 					$FRONTEND = new GlobalPage($this->CORE);
@@ -295,13 +299,13 @@ class GlobalIndexPage {
 			imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $bgWidth, $bgHeight);
 			
 			switch($imgSize[2]) {
-				case 1: // GIF
+				case 1:
 					imagegif($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.gif');
 				break;
-				case 2: // JPEG
+				case 2:
 					imagejpeg($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.jpg');
 				break;
-				case 3: // PNG
+				case 3:
 					imagepng($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.png');
 				break;
 				default:
@@ -310,7 +314,7 @@ class GlobalIndexPage {
 				break;
 			}
 			
-			return $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.png';
+			return $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.'.$strFileType;
 		} else {
 			return '';
 		}
