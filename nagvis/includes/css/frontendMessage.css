@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * style.css - NagVis Stylesheet
+ * frontendMessage.css - NagVis error message stylesheet
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -29,14 +29,13 @@ body, table, th, td {
 	margin: 0;
 	padding: 0;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	background-color: #FFFFFF;
 	text-decoration: none;
 	color: black;
 	font-size: 12pt;
 }
 
 /**
- *  Message box and border color
+ *  Message box position and size
  */
 #messageBoxDiv {
 	position: absolute;
@@ -53,69 +52,38 @@ body, table, th, td {
 	z-index: 1000;
 }
 
-.errorMessageBoxBorder, .criticalMessageBoxBorder, .downMessageBoxBorder {
+/**
+ *  Message border style and color
+ */
+
+#messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
 	border:1px solid #F00;
 }
 
-.warningMessageBoxBorder {
+#messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
+	border:1px solid #F00;
+}
+
+#messageBoxDiv table.warning {
 	border:1px solid #FF0;
 }
 
-.unknownMessageBoxBorder, .permissionMessageBoxBorder, .unreachableMessageBoxBorder {
+#messageBoxDiv table.unknown, #messageBoxDiv table.permission, #messageBoxDiv table.unreachable {
 	border:1px solid #FF9900;
 }
 
-.okMessageBoxBorder, .upMessageBoxBorder {
+#messageBoxDiv table.ok, #messageBoxDiv table.up {
 	border:1px solid #00B233;
 }
 
-.noteMessageBoxBorder {
+#messageBoxDiv table.note {
 	border:1px solid #00F;
 }
 
 /**
- * Backgrounds for message box
+ * Style for the header area
  */
-.errorMessageBoxBackground, .criticalMessageBoxBackground, .downMessageBoxBackground {
-	background-color: #FFB2B2;
-	text-align: center;
-	vertical-align: middle;
-	font-size: 16pt;
-}
-
-.warningMessageBoxBackground {
-	background-color: #FFFFCC;
-	text-align: center;
-	vertical-align: middle;
-	font-size: 16pt;
-}
-
-.okMessageBoxBackground, .upMessageBoxBackground {
-	background-color: #CCFF99;
-	text-align: center;
-	vertical-align: middle;
-	font-size: 16pt;
-}
-
-.unknownMessageBoxBackground, .permissionMessageBoxBackground, .unreachableMessageBoxBackground {
-	background-color: #FFE566;
-	text-align: center;
-	vertical-align: middle;
-	font-size: 16pt;
-}
-
-.noteMessageBoxBackground {
-	background-color: #CCE5FF;
-	text-align: center;
-	vertical-align: middle;
-	font-size: 16pt;
-}
-
-/**
- * Header for message box
- */
-#messageHeader {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+#messageBoxDiv th {
 	font-style: italic;
 	text-align: center;
 	font-weight: bold;
@@ -123,22 +91,52 @@ body, table, th, td {
 	font-size: 26pt;
 }
 
-.errorMessageHeader, .criticalMessageHeader, .downMessageHeader {
+#messageBoxDiv th.error, #messageBoxDiv th.critical, #messageBoxDiv th.down {
 	background-color: #FF6666;
 }
 
-.warningMessageHeader {
+#messageBoxDiv th.warning {
 	background-color: #FFFF66;
 }
 
-.unknownMessageHeader, .permissionMessageHeader, .unreachableMessageHeader {
+#messageBoxDiv th.unknown, #messageBoxDiv th.permission, #messageBoxDiv th.unreachable {
 	background-color: #FFB200;
 }
 
-.okMessageHeader, .upMessageHeader {
+#messageBoxDiv th.ok, #messageBoxDiv th.up {
 	background-color: 99FF66;
 }
 
-.noteMessageHeader {
+#messageBoxDiv th.note {
 	background-color: #99CCFF;
+}
+
+/**
+ * Style for the message area
+ */
+
+#messageBoxDiv td {
+	text-align: center;
+	vertical-align: middle;
+	font-size: 16pt;
+}
+
+#messageBoxDiv td.error, #messageBoxDiv td.critical, #messageBoxDiv td.down {
+	background-color: #FFB2B2;
+}
+
+#messageBoxDiv td.warning {
+	background-color: #FFFFCC;
+}
+
+#messageBoxDiv td.ok, #messageBoxDiv td.up {
+	background-color: #CCFF99;
+}
+
+#messageBoxDiv td.unknown, #messageBoxDiv td.permission, #messageBoxDiv td.unreachable {
+	background-color: #FFE566;
+}
+
+#messageBoxDiv td.note {
+	background-color: #CCE5FF;
 }
