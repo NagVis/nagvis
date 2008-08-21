@@ -38,14 +38,18 @@ class GlobalFrontendMessage {
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function __construct($type, $message, $pathHtmlBase, $title = NULL) {
+	public function __construct($type, $message, $pathHtmlBase = NULL, $title = NULL) {
 		// Old method
-		$CORE = new GlobalCore();
-		$FRONTEND = new GlobalPage($CORE);
-		$FRONTEND->messageToUser($type, $message);
+		//$FRONTEND = new GlobalPage($CORE);
+		//$FRONTEND->messageToUser($type, $message);
+		
+		if($pathHtmlBase === NULL) {
+			$CORE = new GlobalCore();
+			$pathHtmlBase = $CORE->MAINCFG->getValue('paths', 'htmlbase');
+		}
 		
 		// New method
-		//print new GlobalFrontendMessage($type, $message, $pathHtmlBase, $title);
+		print new GlobalFrontendMessageBox($type, $message, $pathHtmlBase, $title);
 	}
 }
 ?>

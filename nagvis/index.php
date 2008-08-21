@@ -28,7 +28,7 @@ require('./includes/defines/global.php');
 require('./includes/defines/matches.php');
 
 // Include functions
-require("./includes/functions/autoload.php");
+require('./includes/functions/autoload.php');
 require('./includes/functions/debug.php');
 require('./includes/functions/oldPhpVersionFixes.php');
 
@@ -36,7 +36,7 @@ $controller = new GlobalController();
 
 if (!$controller->isValid()) {
 	// FIXME: No GlobalCore object here - that's a problem!
-	new GlobalFrontendMessage('ERROR', $controller->getMessage(), '/pathHtmlBase/...');
+	new GlobalFrontendMessage('ERROR', $controller->getMessage());
 }
 
 // ONLY FOR DEBUGGING
