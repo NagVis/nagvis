@@ -202,10 +202,22 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getInstanceId() {
-		$QUERYHANDLE = $this->mysqlQuery('SELECT instance_id FROM '.$this->dbPrefix.'instances WHERE instance_name=\''.$this->dbInstanceName.'\' LIMIT 1');
-		$ret = mysql_fetch_array($QUERYHANDLE);
+		$intInstanceId = NULL;
 		
-		return $ret['instance_id'];
+		$QUERYHANDLE = $this->mysqlQuery('SELECT instance_id FROM '.$this->dbPrefix.'instances WHERE instance_name=\''.$this->dbInstanceName.'\'');
+		
+		if(mysql_num_rows($QUERYHANDLE) == 1) {
+			$ret = mysql_fetch_array($QUERYHANDLE);
+			$intInstanceId = $ret['instance_id'];
+		} elseif(mysql_num_rows($QUERYHANDLE) == 0) {
+			// ERROR: Instance name not valid
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotValid', 'BACKENDID~'.$this->backendId.',NAME~'.$this->dbInstanceName), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+		} else {
+			// ERROR: Given Instance name is not uniq
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotUniq', 'BACKENDID~'.$this->backendId.',NAME~'.$this->dbInstanceName), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+		}
+		
+		return $intInstanceId;
 	}
 	
 	/**
