@@ -111,8 +111,8 @@ class GlobalFrontendMessageBox {
 	 */
 	private function buildMessageBox() {
 		$this->page .= '<style type="text/css"><!-- @import url('.$this->pathHtmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
-		$this->page .= '<div id="messageBoxDiv" class="shadow">'."\n";
-		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" cellpadding="0" cellspacing="0">'."\n";
+		$this->page .= '<div id="messageBoxDiv"'."\n";
+		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
 		$this->page .= '      <tr>'."\n";
 		$this->page .= '         <td class="'.$this->type.'" colspan="3" height="16">'."\n";
 		$this->page .= '      </tr>'."\n";
