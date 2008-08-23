@@ -249,6 +249,8 @@ class GlobalIndexPage {
 				break;
 			}
 			
+			$pathThumbImage = $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.'.$strFileType;
+			
 			// Size of source images
 			$bgWidth = $imgSize[0];
 			$bgHeight = $imgSize[1];
@@ -300,13 +302,13 @@ class GlobalIndexPage {
 			
 			switch($imgSize[2]) {
 				case 1:
-					imagegif($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.gif');
+					imagegif($thumb, $pathThumbImage);
 				break;
 				case 2:
-					imagejpeg($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.jpg');
+					imagejpeg($thumb, $pathThumbImage);
 				break;
 				case 3:
-					imagepng($thumb, $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.png');
+					imagepng($thumb, $pathThumbImage);
 				break;
 				default:
 					$FRONTEND = new GlobalPage($this->CORE);
@@ -314,7 +316,7 @@ class GlobalIndexPage {
 				break;
 			}
 			
-			return $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.'.$strFileType;
+			return $pathThumbImage;
 		} else {
 			return '';
 		}

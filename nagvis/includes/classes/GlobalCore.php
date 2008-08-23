@@ -101,7 +101,7 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'language'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/.xml$/', $file)) {
+				if(preg_match('/.xml$/', $file)) {
 					$files[] = str_replace('wui_','',str_replace('.xml','',$file));
 				}				
 			}
@@ -126,7 +126,7 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
  			while (false !== ($file = readdir($handle))) {
- 				if ($file != "." && $file != ".." && preg_match('/^class.GlobalBackend-(.+).php/', $file, $arrRet)) {
+ 				if(preg_match('/^class.GlobalBackend-(.+).php/', $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}				
 			}
@@ -151,7 +151,7 @@ class GlobalCore {
 		
 		if($handle = opendir($this->MAINCFG->getValue('paths', 'hovertemplate'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' && preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
+				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}
 			}
@@ -176,7 +176,7 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'headertemplate'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' && preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
+				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}
 			}
@@ -201,7 +201,7 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match(MATCH_PNG_GIF_JPG_FILE, $file, $arrRet)) {
+				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}				
 			}
@@ -226,7 +226,7 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match('/(.+)_ok.(png|gif|jpg)$/', $file, $arrRet)) {
+				if(preg_match('/(.+)_ok.(png|gif|jpg)$/', $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}				
 			}
@@ -252,7 +252,7 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'mapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
+				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
 					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
 							$files[] = $arrRet[1];
 					}
