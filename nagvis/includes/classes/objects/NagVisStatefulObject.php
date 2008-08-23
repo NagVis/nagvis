@@ -535,6 +535,11 @@ class NagVisStatefulObject extends NagVisObject {
 			
 			$this->label_text = str_replace('[name]', $this->$name, $this->label_text);
 			$this->label_text = str_replace('[output]',$this->output, $this->label_text);
+			
+			if($this->type == 'service' || $this->type == 'host') {
+				$this->label_text = str_replace('[perfdata]',$this->perfdata, $this->label_text);
+			}
+			
 			if($this->type == 'service') {
 				$this->label_text = str_replace('[service_description]', $this->service_description, $this->label_text);
 			}

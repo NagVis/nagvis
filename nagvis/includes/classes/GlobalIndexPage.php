@@ -225,7 +225,7 @@ class GlobalIndexPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createThumbnail($imgPath, $mapName) {
-		if($this->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
+		if($this->CORE->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
 			// 0: width, 1:height, 2:type
 			$imgSize = getimagesize($imgPath);
 			$strFileType = '';
@@ -319,44 +319,6 @@ class GlobalIndexPage {
 			return $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.'.$strFileType;
 		} else {
 			return '';
-		}
-	}
-	
-	/**
-	 * Checks for writeable VarFolder
-	 *
-	 * @param		Boolean 	$printErr
-	 * @return	Boolean		Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkVarFolderExists($printErr) {
-		if(file_exists(substr($this->CORE->MAINCFG->getValue('paths', 'var'),0,-1))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('varFolderNotExists','PATH~'.$this->CORE->MAINCFG->getValue('paths', 'var')));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Checks for writeable VarFolder
-	 *
-	 * @param		Boolean 	$printErr
-	 * @return	Boolean		Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkVarFolderWriteable($printErr) {
-		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->CORE->MAINCFG->getValue('paths', 'var'),0,-1)) && @file_exists($this->CORE->MAINCFG->getValue('paths', 'var').'.')) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('varFolderNotWriteable','PATH~'.$this->CORE->MAINCFG->getValue('paths', 'var')));
-			}
-			return FALSE;
 		}
 	}
 	

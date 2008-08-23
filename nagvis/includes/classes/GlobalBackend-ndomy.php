@@ -389,7 +389,7 @@ class GlobalBackendndomy {
 				UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, 
 				UNIX_TIMESTAMP(last_state_change) AS last_state_change, 
 				current_state, 
-				output, 
+				output, perfdata, 
 				problem_has_been_acknowledged, 
 				UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
 				hs.state_type, hs.current_check_attempt, hs.max_check_attempts, 
@@ -421,6 +421,7 @@ class GlobalBackendndomy {
 				$arrReturn['address'] = $data['address'];
 				
 				// Add Additional informations to array
+				$arrReturn['perfdata'] = $data['perfdata'];
 				$arrReturn['last_check'] = $data['last_check'];
 				$arrReturn['next_check'] = $data['next_check'];
 				$arrReturn['state_type'] = $data['state_type'];
@@ -516,11 +517,11 @@ class GlobalBackendndomy {
 				$QUERYHANDLE = $this->mysqlQuery('SELECT 
 					o.object_id, o.name1, o.name2, 
 					s.display_name, 
-                    h.address, 
+					h.address, 
 					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
 					UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
-					ss.output, ss.problem_has_been_acknowledged, 
+					ss.output, ss.perfdata, ss.problem_has_been_acknowledged, 
 					UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
 					ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
 					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
@@ -545,11 +546,11 @@ class GlobalBackendndomy {
 				$QUERYHANDLE = $this->mysqlQuery('SELECT 
 					o.object_id, o.name1, o.name2,
 					s.display_name, 
-                    h.address, 
+					h.address, 
 					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
 					UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
-					ss.output, ss.problem_has_been_acknowledged, 
+					ss.output, ss.perfdata, ss.problem_has_been_acknowledged, 
 					UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
 					ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
 					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
@@ -591,6 +592,7 @@ class GlobalBackendndomy {
 					$arrTmpReturn['address'] = $data['address'];
 					
 					// Add Additional informations to array
+					$arrTmpReturn['perfdata'] = $data['perfdata'];
 					$arrTmpReturn['last_check'] = $data['last_check'];
 					$arrTmpReturn['next_check'] = $data['next_check'];
 					$arrTmpReturn['state_type'] = $data['state_type'];
@@ -905,7 +907,6 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNagiosStartTime() {
-		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 				UNIX_TIMESTAMP(program_start_time) AS program_start_time 
 			FROM 

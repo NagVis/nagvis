@@ -43,6 +43,7 @@ class NagiosService extends NagVisStatefulObject {
 	
 	var $state;
 	var $output;
+	var $perfdata;
 	var $problem_has_been_acknowledged;
 	var $last_check;
 	var $next_check;

@@ -376,7 +376,7 @@ class NagVisAutoMap extends GlobalMap {
 		// The GD-Libs are used by graphviz
 		$this->checkGd($printErr);
 		
-		$this->checkVarFolderWriteable($printErr);
+		$this->CORE->checkVarFolderWriteable($printErr);
 		
 		// Check all possibly used binaries of graphviz
 		if(!$this->checkGraphviz('dot', $printErr) &&
@@ -385,44 +385,6 @@ class NagVisAutoMap extends GlobalMap {
 			!$this->checkGraphviz('circo', $printErr) &&
 			!$this->checkGraphviz('fdp', $printErr)) {
 			$this->noBinaryFound = TRUE;
-		}
-	}
-	
-	/**
-	 * Checks for writeable VarFolder
-	 *
-	 * @param		Boolean 	$printErr
-	 * @return	Boolean		Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkVarFolderExists($printErr) {
-		if(file_exists(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Checks for writeable VarFolder
-	 *
-	 * @param		Boolean 	$printErr
-	 * @return	Boolean		Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkVarFolderWriteable($printErr) {
-		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1)) && @file_exists($this->MAINCFG->getValue('paths', 'var').'.')) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:global'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
-			}
-			return FALSE;
 		}
 	}
 	

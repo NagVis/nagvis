@@ -315,5 +315,43 @@ class GlobalCore {
 		return $files;
 	}
 	
+	
+	/**
+	 * Checks for writeable VarFolder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkVarFolderExists($printErr) {
+		if(file_exists(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable VarFolder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkVarFolderWriteable($printErr) {
+		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1)) && @file_exists($this->MAINCFG->getValue('paths', 'var').'.')) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				$FRONTEND = new GlobalPage($this);
+				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
+			}
+			return FALSE;
+		}
+	}
 }
 ?>

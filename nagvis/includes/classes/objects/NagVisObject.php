@@ -344,6 +344,10 @@ class NagVisObject {
 					$ret = str_replace('[lang_output]',$this->LANG->getText('output'),$ret);
 				}
 				
+				if(strpos($ret,'[lang_perfdata]') !== FALSE) {
+					$ret = str_replace('[lang_perfdata]',$this->LANG->getText('perfdata'),$ret);
+				}
+				
 				if(strpos($ret,'[lang_summary_output]') !== FALSE) {
 					$ret = str_replace('[lang_summary_output]',$this->LANG->getText('summaryOutput'),$ret);
 				}
@@ -549,6 +553,7 @@ class NagVisObject {
 			$ret .= '\'[obj_last_state_change]\': \''.$this->getLastStateChange().'\', ';
 			$ret .= '\'[obj_last_hard_state_change]\': \''.$this->getLastHardStateChange().'\', ';
 			$ret .= '\'[obj_state_duration]\': \''.$this->getStateDuration().'\', ';
+			$ret .= '\'[obj_perfdata]\': \''.strtr($this->perfdata, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')).'\', ';
 		}
 		
 		// Macros which are only for services
