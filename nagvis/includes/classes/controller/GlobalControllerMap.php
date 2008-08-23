@@ -27,7 +27,7 @@
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
-class GlobalControllermap {
+class GlobalControllerMap {
 
 	private $mapName;
 

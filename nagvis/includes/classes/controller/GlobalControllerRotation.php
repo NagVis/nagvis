@@ -43,35 +43,9 @@ class GlobalControllerRotation {
 		}
 		
 		if ($type == 'map') {
-			// Initialize map configuration
-			$MAPCFG = new NagVisMapCfg($CORE, $mapName);
-			
-			// Read the map configuration file
-			$MAPCFG->readMapConfig();
-			
-			// Initialize backend(s)
-			$BACKEND = new GlobalBackendMgmt($CORE);
-		}
-		
-		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND, $ROTATION);
-		
-		if ($type == 'map') {
-			// Build the page
-			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-			$FRONTEND->getHeaderMenu($MAPCFG->getValue('global',0 ,'header_menu'), $MAPCFG->getValue('global',0 ,'header_template'));
-			$FRONTEND->getMap();
-			$FRONTEND->getMessages();
+			new GlobalControllerMap($mapName);
 		} elseif ($type == 'url') {
-			$URL = new NagVisUrl($CORE, $mapName);
-			
-			// Build the page
-			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-			$FRONTEND->getHeaderMenu($CORE->MAINCFG->getValue('index','headermenu'), $CORE->MAINCFG->getValue('index', 'headertemplate'));
-			$FRONTEND->addBodyLines($URL->getContents());
+			new GlobalControllerUrl($mapName);
 		}
-
-		// Print the page
-		$FRONTEND->printPage();
 	}
 }
