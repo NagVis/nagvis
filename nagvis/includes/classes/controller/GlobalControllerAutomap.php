@@ -48,7 +48,7 @@ class GlobalControllerAutomap {
 
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-		$FRONTEND->getHeaderMenu();
+		$FRONTEND->getHeaderMenu($MAPCFG->getValue('global',0 ,'header_menu'), $MAPCFG->getValue('global',0 ,'header_template'));
 		$FRONTEND->getAutoMap($automapEnv);
 		$FRONTEND->getMessages();
 

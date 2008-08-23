@@ -59,7 +59,7 @@ class GlobalControllerRotation {
 		if ($type == 'map') {
 			// Build the page
 			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-			$FRONTEND->getHeaderMenu();
+			$FRONTEND->getHeaderMenu($MAPCFG->getValue('global',0 ,'header_menu'), $MAPCFG->getValue('global',0 ,'header_template'));
 			$FRONTEND->getMap();
 			$FRONTEND->getMessages();
 		} elseif ($type == 'url') {
@@ -67,7 +67,7 @@ class GlobalControllerRotation {
 			
 			// Build the page
 			$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-			$FRONTEND->getHeaderMenu();
+			$FRONTEND->getHeaderMenu($CORE->MAINCFG->getValue('index','headermenu'), $CORE->MAINCFG->getValue('index', 'headertemplate'));
 			$FRONTEND->addBodyLines($URL->getContents());
 		}
 

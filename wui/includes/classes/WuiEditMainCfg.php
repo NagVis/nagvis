@@ -111,7 +111,7 @@ class WuiEditMainCfg extends GlobalPage {
 							case 'backend':
 							case 'icons':
 							case 'rotatemaps':
-							case 'displayheader':
+							case 'headermenu':
 							case 'recognizeservices':
 							case 'onlyhardstates':
 							case 'usegdlibs':
@@ -134,7 +134,7 @@ class WuiEditMainCfg extends GlobalPage {
 										$arrOpts = $this->CORE->getAvailableHeaderTemplates();
 									break;
 									case 'rotatemaps':
-									case 'displayheader':
+									case 'headermenu':
 									case 'recognizeservices':
 									case 'onlyhardstates':
 									case 'usegdlibs':

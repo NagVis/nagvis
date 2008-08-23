@@ -19,8 +19,6 @@
 ;language="english"
 ; dateformat of the time/dates shown in nagvis (For valid format see PHP docs)
 ;dateformat="Y-m-d H:i:s"
-; show header (0/1)
-;displayheader=1
 ; refresh time of pages
 ;refreshtime=60
 
@@ -36,13 +34,15 @@
 ;onlyhardstates=0
 ; background color of maps
 ;backgroundcolor="#fff"
+; enable/disable header menu
+;headermenu="1"
 ; header template
 ;headertemplate="default"
 ; enable/disable hover menu
 ;hovermenu=1
-; hover template
 ; Timeout of hover menu ajax request (seconds)
 ;hovertimeout=5
+; hover template
 ;hovertemplate="default"
 ; hover menu open delay (seconds)
 ;hoverdelay=0
@@ -65,6 +65,10 @@
 [index]
 ; Set number of map cells per row
 ;cellsperrow=4
+; enable/disable header menu
+;headermenu="1"
+; header template
+;headertemplate="default"
 ; Enable/Disable rotation listing
 ;showrotations=1
 

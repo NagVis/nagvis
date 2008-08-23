@@ -28,30 +28,22 @@
  * @author  Michael Luebben <michael_luebben@web.de>
  */
 class GlobalControllerIndex {
-
 	public function __construct() {
-
 		// Load the core
 		$CORE = new GlobalCore();
-
-		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($CORE, NULL);
-
-		// Read the map configuration file
-		$MAPCFG->readMapConfig();
-
+		
 		// Initialize backend(s)
 		$BACKEND = new GlobalBackendMgmt($CORE);
-
+		
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND, $ROTATION);
-
+		$FRONTEND = new NagVisFrontend($CORE, '', $BACKEND, '');
+		
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->getRefresh());
-		$FRONTEND->getHeaderMenu();
+		$FRONTEND->getHeaderMenu($CORE->MAINCFG->getValue('index','headermenu'), $CORE->MAINCFG->getValue('index', 'headertemplate'));
 		$FRONTEND->getIndexPage();
 		$FRONTEND->getMessages();
-
+		
 		// Print the page
 		$FRONTEND->printPage();
 	}
