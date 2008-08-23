@@ -316,7 +316,7 @@ class GlobalIndexPage {
 				break;
 			}
 			
-			return $pathThumbImage;
+			return $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.'.$strFileType;
 		} else {
 			return '';
 		}
