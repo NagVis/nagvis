@@ -224,9 +224,9 @@ class GlobalCore {
 	public function getAvailableIconsets() {
 		$files = Array();
 		
-		if ($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
+		if($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
  			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/(.+)_ok.(png|gif|jpg)$/', $file, $arrRet)) {
+				if(preg_match('/^(.+)_ok.(png|gif|jpg)$/', $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}				
 			}
@@ -238,6 +238,28 @@ class GlobalCore {
 		closedir($handle);
 		
 		return $files;
+	}
+	
+	/**
+	 * Returns the filetype of an iconset
+	 *
+	 * @param   String  Iconset name
+	 * @return	String  Iconset file type
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getIconsetFiletype($iconset) {
+		$type = '';
+		
+		if($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if(preg_match('/^'.$iconset.'_ok.(png|gif|jpg)$/', $file, $arrRet)) {
+					$type = $arrRet[1];
+				}				
+			}
+		}
+		closedir($handle);
+		
+		return $type;
 	}
 	
 	/**

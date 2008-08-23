@@ -489,13 +489,15 @@ class WuiMap extends GlobalMap {
 	function getIcon(&$obj) {
 		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getIcon(&$obj)');
 		
+		$fileType = $this->CORE->getIconsetFiletype($obj['iconset']);
+		
 		switch($obj['type']) {
 			case 'service':
 			case 'servicegroup':
-				$icon = $obj['iconset'].'_ok.png';
+				$icon = $obj['iconset'].'_ok.'.$fileType;
 			break;
 			default:
-					$icon = $obj['iconset'].'_up.png';
+					$icon = $obj['iconset'].'_up.'.$fileType;
 			break;
 		}
 		
@@ -503,7 +505,7 @@ class WuiMap extends GlobalMap {
 		if(@fclose(@fopen($this->MAINCFG->getValue('paths', 'icon').$icon,'r'))) {
 			return $icon;
 		} else {
-			return $obj['iconset'].'_error.png';
+			return $obj['iconset'].'_error.'.$fileType;
 		}
 	}
 	

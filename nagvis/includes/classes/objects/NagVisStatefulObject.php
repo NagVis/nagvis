@@ -443,6 +443,9 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->iconPath = $this->MAINCFG->getValue('paths', 'icon');
 		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlicon');
 		
+		// Read the filetype of the iconset
+		$fileType = $this->CORE->getIconsetFiletype($this->iconset);
+		
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
@@ -451,36 +454,36 @@ class NagVisStatefulObject extends NagVisObject {
 				case 'unreachable':
 				case 'down':
 					if($this->getSummaryAcknowledgement() == 1) {
-						$icon = $this->iconset.'_ack.png';
+						$icon = $this->iconset.'_ack.'.$fileType;
 					} elseif($this->getSummaryInDowntime() == 1) {
-						$icon = $this->iconset.'_downtime.png';
+						$icon = $this->iconset.'_downtime.'.$fileType;
 					} else {
-						$icon = $this->iconset.'_'.$stateLow.'.png';
+						$icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
 					}
 				break;
 				case 'critical':
 				case 'warning':
 					if($this->getSummaryAcknowledgement() == 1) {
-						$icon = $this->iconset.'_sack.png';
+						$icon = $this->iconset.'_sack.'.$fileType;
 					} elseif($this->getSummaryInDowntime() == 1) {
-						$icon = $this->iconset.'_sdowntime.png';
+						$icon = $this->iconset.'_sdowntime.'.$fileType;
 					} else {
-						$icon = $this->iconset.'_'.$stateLow.'.png';
+						$icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
 					}
 				break;
 				case 'up':
 				case 'ok':
 					if($this->getType() == 'service' || $this->getType() == 'servicegroup') {
-						$icon = $this->iconset.'_ok.png';
+						$icon = $this->iconset.'_ok.'.$fileType;
 					} else {
-						$icon = $this->iconset.'_up.png';
+						$icon = $this->iconset.'_up.'.$fileType;
 					}
 				break;
 				case 'pending':
-					$icon = $this->iconset.'_'.$stateLow.'.png';
+					$icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
 				break;
 				default:
-					$icon = $this->iconset.'_error.png';
+					$icon = $this->iconset.'_error.'.$fileType;
 				break;
 			}
 			
@@ -488,10 +491,10 @@ class NagVisStatefulObject extends NagVisObject {
 			if(@file_exists($this->MAINCFG->getValue('paths', 'icon').$icon)) {
 				$this->icon = $icon;
 			} else {
-				$this->icon = $this->iconset.'_error.png';
+				$this->icon = $this->iconset.'_error.'.$fileType;
 			}
 		} else {
-			$this->icon = $this->iconset.'_error.png';
+			$this->icon = $this->iconset.'_error.'.$fileType;
 		}
 	}
 	
