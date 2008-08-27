@@ -693,7 +693,7 @@ class GlobalMapCfg {
 								} else {
 									// unknown object type
 									$FRONTEND = new GlobalPage($this->CORE);
-									$FRONTEND->messageToUser('ERROR', $this->CORE->LANG('unknownObject','TYPE~'.$type));
+									$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownObject','TYPE~'.$type));
 									return FALSE;
 								}
 							} else {
