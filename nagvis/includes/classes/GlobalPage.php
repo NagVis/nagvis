@@ -70,6 +70,7 @@ class GlobalPage {
 		$this->jsIncludes = $prop['jsIncludes'];
 		$this->allowedUsers = $prop['allowedUsers'];
 		$this->languageRoot = $prop['languageRoot'];
+		$this->extHeader = $prop['extHeader'];
 		
 		// Append additional header informations
 		$this->extHeader .= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8">';
