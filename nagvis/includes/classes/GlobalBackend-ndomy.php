@@ -31,8 +31,6 @@ $INC_GlobalBackend_ndomy = TRUE;
 
 class GlobalBackendndomy {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	var $CONN;
 	var $backendId;
 	var $dbName;
@@ -46,6 +44,7 @@ class GlobalBackendndomy {
 	
 	var $hostCache;
 	var $serviceCache;
+	var $hostAckCache;
 	
 	/**
 	 * Constructor
@@ -57,22 +56,22 @@ class GlobalBackendndomy {
 	 * @author	Andreas Husch <downanup@nagios-wiki.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalBackendndomy($CORE, $backendId) {
-		$this->CORE = $CORE;
-		$this->MAINCFG = $this->CORE->MAINCFG;
-		$this->LANG = $this->CORE->LANG;
+	function GlobalBackendndomy(&$CORE, $backendId) {
+		$this->CORE = &$CORE;
+		
 		$this->backendId = $backendId;
 		
 		$this->hostCache = Array();
 		$this->serviceCache = Array();
+		$this->hostAckCache = Array();
 		
-		$this->dbName = $this->MAINCFG->getValue('backend_'.$backendId, 'dbname');
-		$this->dbUser = $this->MAINCFG->getValue('backend_'.$backendId, 'dbuser');
-		$this->dbPass = $this->MAINCFG->getValue('backend_'.$backendId, 'dbpass');
-		$this->dbHost = $this->MAINCFG->getValue('backend_'.$backendId, 'dbhost');
-		$this->dbPort = $this->MAINCFG->getValue('backend_'.$backendId, 'dbport');
-		$this->dbPrefix = $this->MAINCFG->getValue('backend_'.$backendId, 'dbprefix');
-		$this->dbInstanceName = $this->MAINCFG->getValue('backend_'.$backendId, 'dbinstancename');
+		$this->dbName = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbname');
+		$this->dbUser = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbuser');
+		$this->dbPass = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbpass');
+		$this->dbHost = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbhost');
+		$this->dbPort = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbport');
+		$this->dbPrefix = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbprefix');
+		$this->dbInstanceName = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbinstancename');
 		
 		if($this->checkMysqlSupport() && $this->connectDB() && $this->checkTablesExists()) {
 			// Set the instanceId
@@ -88,13 +87,13 @@ class GlobalBackendndomy {
 			// Check that Nagios reports itself as running	
 			if ($nagiosstate['is_currently_running'] != 1) {
 				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('nagiosNotRunning', 'BACKENDID~'.$this->backendId));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('nagiosNotRunning', 'BACKENDID~'.$this->backendId));
 			}
 			
 			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
-			if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
+			if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
 				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('nagiosDataNotUpToDate', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
 			}
 			
 			/**
@@ -134,7 +133,7 @@ class GlobalBackendndomy {
 	function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
 			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->LANG->getText('noTablesExists', 'BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix));
+			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('noTablesExists', 'BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix));
 			
 			return FALSE;
 		} else {
@@ -162,7 +161,7 @@ class GlobalBackendndomy {
 		
 		if(!$returnCode){
 			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->LANG->getText('errorSelectingDb', 'BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error()));
+			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('errorSelectingDb', 'BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error()));
 			
 			return FALSE;
 		} else {
@@ -185,7 +184,7 @@ class GlobalBackendndomy {
 			if (!extension_loaded('mysql')) {
 				//Error Box
 				$FRONTEND = new GlobalPage($this->CORE, Array('languageRoot'=>'backend:ndomy'));
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('mysqlNotSupported','BACKENDID~'.$this->backendId));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mysqlNotSupported','BACKENDID~'.$this->backendId));
 				
 				return FALSE;
 			} else {
@@ -362,21 +361,33 @@ class GlobalBackendndomy {
 	function getHostAckByHostname($hostName) {
 		$return = FALSE;
 		
-		$QUERYHANDLE = $this->mysqlQuery('SELECT problem_has_been_acknowledged 
-		FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h 
-		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
-		
-		$data = mysql_fetch_array($QUERYHANDLE);
-		
-		// Free memory
-		mysql_free_result($QUERYHANDLE);
-		
-		// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
-		if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
-			return TRUE;
+		// Read from cache or fetch from NDO
+		if(isset($this->hostAckCache[$hostName])) {
+			$return = $this->hostAckCache[$hostName];
 		} else {
-			return FALSE;
+			$QUERYHANDLE = $this->mysqlQuery('SELECT problem_has_been_acknowledged 
+			FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h 
+			WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
+			
+			$data = mysql_fetch_array($QUERYHANDLE);
+			
+			// Free memory
+			mysql_free_result($QUERYHANDLE);
+			
+			// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
+			if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
+				
+				$return = TRUE;
+			} else {
+				$this->hostAckCache[$hostName] = False;
+				$return = FALSE;
+			}
+			
+			// Save to cache
+			$this->hostAckCache[$hostName] = $return;
 		}
+		
+		return $return;
 	}
 	
 	/**
@@ -424,7 +435,7 @@ class GlobalBackendndomy {
 			
 			if(mysql_num_rows($QUERYHANDLE) == 0) {
 				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = $this->LANG->getText('hostNotFoundInDB','HOST~'.$hostName);
+				$arrReturn['output'] = $this->CORE->LANG->getText('hostNotFoundInDB','HOST~'.$hostName);
 			} else {
 				$data = mysql_fetch_array($QUERYHANDLE);
 				
@@ -472,7 +483,7 @@ class GlobalBackendndomy {
 				
 				if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 					$arrReturn['state'] = 'PENDING';
-					$arrReturn['output'] = $this->LANG->getText('hostIsPending','HOST~'.$hostName);
+					$arrReturn['output'] = $this->CORE->LANG->getText('hostIsPending','HOST~'.$hostName);
 				} elseif($data['current_state'] == '0') {
 					// Host is UP
 					$arrReturn['state'] = 'UP';
@@ -591,7 +602,7 @@ class GlobalBackendndomy {
 			if(mysql_num_rows($QUERYHANDLE) == 0) {
 				if(isset($serviceName) && $serviceName != '') {
 					$arrReturn['state'] = 'ERROR';
-					$arrReturn['output'] = $this->LANG->getText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
+					$arrReturn['output'] = $this->CORE->LANG->getText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
 				} else {
 					// If the method should fetch all services of the host and do not find
 					// any services for this host, don't return anything => The message
@@ -643,7 +654,7 @@ class GlobalBackendndomy {
 					
 					if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 						$arrTmpReturn['state'] = 'PENDING';
-						$arrTmpReturn['output'] = $this->LANG->getText('serviceNotChecked','SERVICE~'.$data['name2']);
+						$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked','SERVICE~'.$data['name2']);
 					} elseif($data['current_state'] == '0') {
 						// Host is UP
 						$arrTmpReturn['state'] = 'OK';
@@ -696,7 +707,7 @@ class GlobalBackendndomy {
 			mysql_free_result($QUERYHANDLE);
 			
 			// Write return array to cache
-			$this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates] = $arrReturn;
+			$this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates] = &$arrReturn;
 			
 			return $arrReturn;
 		}
