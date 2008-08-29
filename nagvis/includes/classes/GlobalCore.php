@@ -30,6 +30,8 @@
 class GlobalCore {
 	public $MAINCFG;
 	public $LANG;
+	
+	private $iconsetTypeCache;
 
 	/**
 	 * Class Constructor
@@ -37,6 +39,8 @@ class GlobalCore {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct(&$MAINCFG = NULL, &$LANG = NULL) {
+		$this->iconsetTypeCache = Array();
+		
 		if($MAINCFG == NULL) {
 			// Load the main configuration
 			$this->MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
@@ -250,15 +254,20 @@ class GlobalCore {
 	public function getIconsetFiletype($iconset) {
 		$type = '';
 		
-		if($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^'.$iconset.'_ok.(png|gif|jpg)$/', $file, $arrRet)) {
-					$type = $arrRet[1];
-				}				
+		if(isset($this->iconsetTypeCache[$iconset])) {
+			$type = $this->iconsetTypeCache[$iconset];
+		} else {
+			if($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
+				while (false !== ($file = readdir($handle))) {
+					if(preg_match('/^'.$iconset.'_ok.(png|gif|jpg)$/', $file, $arrRet)) {
+						$type = $arrRet[1];
+					}				
+				}
 			}
+			closedir($handle);
 		}
-		closedir($handle);
 		
+		$this->iconsetTypeCache[$iconset] = $type;
 		return $type;
 	}
 	
