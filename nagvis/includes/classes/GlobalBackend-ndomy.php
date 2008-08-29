@@ -82,6 +82,9 @@ class GlobalBackendndomy {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT is_currently_running, UNIX_TIMESTAMP(status_update_time) AS status_update_time FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
 			$nagiosstate = mysql_fetch_array($QUERYHANDLE);
 			
+			// Free memory
+			mysql_free_result($QUERYHANDLE);
+			
 			// Check that Nagios reports itself as running	
 			if ($nagiosstate['is_currently_running'] != 1) {
 				$FRONTEND = new GlobalPage($this->CORE);
@@ -217,6 +220,9 @@ class GlobalBackendndomy {
 			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotUniq', 'BACKENDID~'.$this->backendId.',NAME~'.$this->dbInstanceName), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
 		}
 		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
 		return $intInstanceId;
 	}
 	
@@ -305,6 +311,9 @@ class GlobalBackendndomy {
 			$ret[] = Array('name1' => $data['name1'],'name2' => $data['name2']);
 		}
 		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
 		return $ret;
 	}
 	
@@ -358,6 +367,10 @@ class GlobalBackendndomy {
 		WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
 		
 		$data = mysql_fetch_array($QUERYHANDLE);
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
 		// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
 		if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
 			return TRUE;
@@ -414,6 +427,9 @@ class GlobalBackendndomy {
 				$arrReturn['output'] = $this->LANG->getText('hostNotFoundInDB','HOST~'.$hostName);
 			} else {
 				$data = mysql_fetch_array($QUERYHANDLE);
+				
+				// Free memory
+				mysql_free_result($QUERYHANDLE);
 				
 				$arrReturn['object_id'] = $data['object_id'];
 				$arrReturn['alias'] = $data['alias'];
@@ -676,6 +692,9 @@ class GlobalBackendndomy {
 				}
 			}
 			
+			// Free memory
+			mysql_free_result($QUERYHANDLE);
+			
 			// Write return array to cache
 			$this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates] = $arrReturn;
 			
@@ -706,6 +725,9 @@ class GlobalBackendndomy {
 		while($data = mysql_fetch_array($QUERYHANDLE)) {
 			$arrReturn[] = $data['name1'];
 		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
 		
 		return $arrReturn;
 	}
@@ -738,6 +760,9 @@ class GlobalBackendndomy {
 			$arrChildNames[] = $data['name1'];
 		}
 		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
 		return $arrChildNames;
 	}
 	
@@ -768,6 +793,9 @@ class GlobalBackendndomy {
 			// Assign actual dataset to return array
 			$arrReturn[] = $data['name2'];
 		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
 		
 		return $arrReturn;
 	}
@@ -802,6 +830,9 @@ class GlobalBackendndomy {
 			$arrReturn[] = $data['name1'];
 		}
 		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
 		return $arrReturn;
 	}
 	
@@ -835,6 +866,9 @@ class GlobalBackendndomy {
 			$arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
 		}
 		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
 		return $arrReturn;
 	}
     
@@ -861,6 +895,9 @@ class GlobalBackendndomy {
 				LIMIT 1');
 		
 		$data = mysql_fetch_array($QUERYHANDLE);
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
 		
 		$arrReturn['alias'] = $data['alias'];
 		$arrReturn['object_id'] = $data['object_id'];
@@ -892,6 +929,9 @@ class GlobalBackendndomy {
 		
 		$data = mysql_fetch_array($QUERYHANDLE);
 		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
 		$arrReturn['alias'] = $data['alias'];
 		$arrReturn['object_id'] = $data['object_id'];
 		
@@ -914,6 +954,9 @@ class GlobalBackendndomy {
 			LIMIT 1');
 		
 		$data = mysql_fetch_array($QUERYHANDLE);
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
 		
 		return $data['program_start_time'];
 	}

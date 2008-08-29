@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-23 16:53+0100\n"
-"PO-Revision-Date: 2008-08-23 16:53+0100\n"
+"POT-Creation-Date: 2008-08-29 21:13+0100\n"
+"PO-Revision-Date: 2008-08-29 21:14+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -159,48 +159,60 @@ msgstr "The map image file &quot;[IMGPATH]&quot; is not writeable."
 msgid "backgroundFolderNotWriteable"
 msgstr "The background image folder &quot;[PATH]&quot; is not writeable."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:580
+#: nagvis/includes/classes/GlobalCore.php:332
+msgid "varFolderNotExists"
+msgstr "The var folder &quot;[PATH]&quot; does not exist."
+
+#: nagvis/includes/classes/GlobalCore.php:351
+msgid "varFolderNotWriteable"
+msgstr "The var folder &quot;[PATH]&quot; ist not writeable."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:585
 msgid "mainMustValueNotSet"
 msgstr "The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:600
+#: nagvis/includes/classes/GlobalMainCfg.php:605
 msgid "unknownValue"
 msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not allowed in section &quot;[TYPE]&quot; in main configuration file."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:623
+#: nagvis/includes/classes/GlobalMainCfg.php:612
+msgid "deprecatedOption"
+msgstr "The given option &quot;[ATTRIBUTE]&quot; in section &quot;[TYPE]&quot; is deprecated in this version. Please read the documentation/changelog for details."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:635
 #: wui/includes/classes/WuiMap.php:624
 msgid "wrongValueFormat"
 msgstr "The attribute \"[ATTRIBUTE]\" in section \"[TYPE]\" in main configuration file does not match the valid value format"
 
-#: nagvis/includes/classes/GlobalMainCfg.php:634
+#: nagvis/includes/classes/GlobalMainCfg.php:646
 msgid "unknownSection"
 msgstr "The section &quot;[TYPE]&quot; in main configuration file is not allowed."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:657
+#: nagvis/includes/classes/GlobalMainCfg.php:669
 msgid "mainCfgNotExists"
 msgstr "The main configuration file &quot;[MAINCFG]&quot; does not exists."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:680
+#: nagvis/includes/classes/GlobalMainCfg.php:692
 msgid "mainCfgNotReadable"
 msgstr "Please check the webservers permissions at the main configuration file &quot;[MAINCFG]&quot;."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:702
+#: nagvis/includes/classes/GlobalMainCfg.php:714
 msgid "mapCfgDirNotReadable"
 msgstr "Please check the webservers permissions at the map configuration folder &quot;[MAPPATH]&quot;."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:721
+#: nagvis/includes/classes/GlobalMainCfg.php:733
 msgid "mainCfgCacheNotExists"
 msgstr "The main configuration file \"[MAP]\" does not exist"
 
-#: nagvis/includes/classes/GlobalMainCfg.php:740
+#: nagvis/includes/classes/GlobalMainCfg.php:752
 msgid "mainCfgCacheNotReadable"
 msgstr "The main configuration file cache is not readable."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:779
+#: nagvis/includes/classes/GlobalMainCfg.php:791
 msgid "mainCfgNotCached"
 msgstr "The main configuration file is not cached."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:796
+#: nagvis/includes/classes/GlobalMainCfg.php:808
 msgid "mainCfgCacheNotWriteable"
 msgstr "The main configuration file cache is not writeable."
 
@@ -216,21 +228,11 @@ msgstr "You told NagVis to use the GD-Libs for drawing lines on the background i
 msgid "unknownRenderMode"
 msgstr "The render mode &quot;[MODE]&quot; is not supported."
 
-#: nagvis/includes/classes/NagVisAutoMap.php:404
-#: nagvis/includes/classes/GlobalIndexPage.php:338
-msgid "varFolderNotExists"
-msgstr "The var folder &quot;[PATH]&quot; does not exist."
-
-#: nagvis/includes/classes/NagVisAutoMap.php:423
-#: nagvis/includes/classes/GlobalIndexPage.php:357
-msgid "varFolderNotWriteable"
-msgstr "The var folder &quot;[PATH]&quot; ist not writeable."
-
-#: nagvis/includes/classes/NagVisAutoMap.php:458
+#: nagvis/includes/classes/NagVisAutoMap.php:420
 msgid "graphvizBinaryNotFound"
 msgstr "The required graphviz binary &quot;[NAME]&quot; could not be found in the paths: &quot;[PATHS]&quot;."
 
-#: nagvis/includes/classes/NagVisAutoMap.php:561
+#: nagvis/includes/classes/NagVisAutoMap.php:523
 msgid "couldNotGetRootHostname"
 msgstr "The Automap needs one root hostname to start the drawing.[br][br] There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is [b]one[/b] host with no parent)."
 
@@ -297,7 +299,7 @@ msgstr "The map you are trying to access is in maintenance mode. Please be patie
 msgid "onlyPngOrJpgImages"
 msgstr "Only PNG or JPG images are allowed for map image files."
 
-#: nagvis/includes/classes/GlobalIndexPage.php:377
+#: nagvis/includes/classes/GlobalIndexPage.php:339
 msgid "imageNotExists"
 msgstr "An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist."
 

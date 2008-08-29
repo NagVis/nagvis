@@ -54,6 +54,11 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => 'Y-m-d H:i:s',
 					'match' => MATCH_STRING),
+				'displayheader' => Array('must' => 1,
+						'editable' => 1,
+						'deprecated' => 1,
+						'default' => '1',
+						'match' => MATCH_BOOLEAN),
 				'refreshtime' => Array('must' => 1,
 						'editable' => 1,
 						'default' => '60',
@@ -578,6 +583,7 @@ class GlobalMainCfg {
 								// a "must" value is missing or empty
 								$CORE = new GlobalCore($this);
 								new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainMustValueNotSet', 'ATTRIBUTE~'.$key.',TYPE~'.$type), $CORE->MAINCFG->getValue('paths','htmlbase'));
+								return FALSE;
 							}
 						}
 					}
@@ -598,6 +604,13 @@ class GlobalMainCfg {
 								if($printErr) {
 									$CORE = new GlobalCore($this);
 									new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('unknownValue', 'ATTRIBUTE~'.$key.',TYPE~'.$type), $CORE->MAINCFG->getValue('paths','htmlbase'));
+								}
+								return FALSE;
+							} elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
+								// deprecated option
+								if($printErr) {
+									$CORE = new GlobalCore($this);
+									new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('deprecatedOption', 'ATTRIBUTE~'.$key.',TYPE~'.$type), $CORE->MAINCFG->getValue('paths','htmlbase'));
 								}
 								return FALSE;
 							} else {
