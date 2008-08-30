@@ -62,32 +62,53 @@ class GlobalHeaderMenu {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function replaceHeaderMenuMacros() {
-		// Replace some macros
+		// Replace paths and language macros
+		$arrKeys = Array('[html_base]', 
+			'[html_templates]', 
+			'[html_template_images]',
+			'[lang_select_map]',
+			'[lang_edit_map]',
+			'[lang_need_help]',
+			'[lang_online_doc]',
+			'[lang_forum]',
+			'[lang_support_info]',
+			'[lang_overview]',
+			'[lang_instance]',
+			'[lang_rotation_start]',
+			'[lang_rotation_stop]',
+			'[lang_refresh_start]',
+			'[lang_refresh_stop]');
+		
+		$arrVals = Array($this->pathHtmlBase, 
+			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplates'), 
+			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplateimages'),
+			$this->CORE->LANG->getText('selectMap'),
+			$this->CORE->LANG->getText('editMap'),
+			$this->CORE->LANG->getText('needHelp'),
+			$this->CORE->LANG->getText('onlineDoc'),
+			$this->CORE->LANG->getText('forum'),
+			$this->CORE->LANG->getText('supportInfo'),
+			$this->CORE->LANG->getText('overview'),
+			$this->CORE->LANG->getText('instance'),
+			$this->CORE->LANG->getText('rotationStart'),
+			$this->CORE->LANG->getText('rotationStop'),
+			$this->CORE->LANG->getText('refreshStart'),
+			$this->CORE->LANG->getText('refreshStop'));
+		
+		// Replace some special macros
 		if(get_class($this->OBJPAGE) == 'NagVisMapCfg') {
-			$this->code = str_replace('[current_map]',$this->OBJPAGE->getName(),$this->code);
-			$this->code = str_replace('[current_map_alias]',$this->OBJPAGE->getValue('global', '0', 'alias'),$this->code);
+			$arrKeys[] = '[current_map]';
+			$arrKeys[] = '[current_map_alias]';
+			$arrVals[] = $this->OBJPAGE->getName();
+			$arrVals[] = $this->OBJPAGE->getValue('global', '0', 'alias');
 		} else {
-			$this->code = str_replace('[current_map]', '',$this->code);
-			$this->code = str_replace('[current_map_alias]', '',$this->code);
+			$arrKeys[] = '[current_map]';
+			$arrKeys[] = '[current_map_alias]';
+			$arrVals[] = '';
+			$arrVals[] = '';
 		}
 		
-		$this->code = str_replace('[html_base]',$this->pathHtmlBase,$this->code);
-		$this->code = str_replace('[html_templates]',$this->CORE->MAINCFG->getValue('paths','htmlheadertemplates'),$this->code);
-		$this->code = str_replace('[html_template_images]',$this->CORE->MAINCFG->getValue('paths','htmlheadertemplateimages'),$this->code);
-		
-		// Replace language macros
-		$this->code = str_replace('[lang_select_map]',$this->CORE->LANG->getText('selectMap'),$this->code);
-		$this->code = str_replace('[lang_edit_map]',$this->CORE->LANG->getText('editMap'),$this->code);
-		$this->code = str_replace('[lang_need_help]',$this->CORE->LANG->getText('needHelp'),$this->code);
-		$this->code = str_replace('[lang_online_doc]',$this->CORE->LANG->getText('onlineDoc'),$this->code);
-		$this->code = str_replace('[lang_forum]',$this->CORE->LANG->getText('forum'),$this->code);
-		$this->code = str_replace('[lang_support_info]',$this->CORE->LANG->getText('supportInfo'),$this->code);
-		$this->code = str_replace('[lang_overview]',$this->CORE->LANG->getText('overview'),$this->code);
-		$this->code = str_replace('[lang_instance]',$this->CORE->LANG->getText('instance'),$this->code);
-		$this->code = str_replace('[lang_rotation_start]',$this->CORE->LANG->getText('rotationStart'),$this->code);
-		$this->code = str_replace('[lang_rotation_stop]',$this->CORE->LANG->getText('rotationStop'),$this->code);
-		$this->code = str_replace('[lang_refresh_start]',$this->CORE->LANG->getText('refreshStart'),$this->code);
-		$this->code = str_replace('[lang_refresh_stop]',$this->CORE->LANG->getText('refreshStop'),$this->code);
+		$this->code = str_replace($arrKeys, $arrVals, $this->code);
 		
 		// Replace lists
 		if(preg_match_all('/<!-- BEGIN (\w+) -->/',$this->code,$matchReturn) > 0) {
