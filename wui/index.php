@@ -117,7 +117,8 @@ switch($_GET['page']) {
 		}
 	break;
 }
-		
+
 // print the HTML page
 $FRONTEND->printPage();
+
 ?>
