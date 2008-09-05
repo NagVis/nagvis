@@ -669,8 +669,10 @@ class GlobalMapCfg {
 				// Loop each line
 				$iNumLines = count($file);
 				for($l = 0; $l < $iNumLines; $l++) {
-					// Remove empty dos format lines
-					if(rtrim($file[$l],"\r\n") != '') {
+					// Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
+					$file[$l] = rtrim($file[$l]);
+					// Don't recognize empty lines
+					if($file[$l] != '') {
 						// Don't recognize comments and empty lines, do nothing with ending delimiters
 						$sFirstChar = substr($file[$l], 0, 1);
 						if($sFirstChar != ';' && $sFirstChar != '#' && $sFirstChar != '}') {
