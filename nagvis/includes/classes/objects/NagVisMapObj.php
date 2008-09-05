@@ -257,9 +257,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 				}
 			}
 			
-			$this->mergeSummaryOutput($arrStates, $this->LANG->getText('objects'));
+			$this->mergeSummaryOutput($arrStates, $this->CORE->LANG->getText('objects'));
 		} else {
-			$this->summary_output = $this->LANG->getText('mapIsEmpty','MAP~'.$this->getName());
+			$this->summary_output = $this->CORE->LANG->getText('mapIsEmpty','MAP~'.$this->getName());
 		}
 	}
 	
@@ -306,7 +306,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							
 							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 								$OBJ->summary_state = 'ERROR';
-								$OBJ->summary_output = $this->LANG->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+								$OBJ->summary_output = $this->CORE->LANG->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
 							}
 						break;
 						case 'shape':
@@ -317,7 +317,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 						break;
 						default:
 							$FRONTEND = new GlobalPage($this->CORE);
-							$FRONTEND->messageToUser('ERROR', $this->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
+							$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
 						break;
 					}
 					
@@ -356,9 +356,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 					// skip the looping objects in summary view.
 					//
 					//$FRONTEND = new GlobalPage($this->CORE);
-					//$FRONTEND->messageToUser('WARNING', $this->LANG->getText('loopInMapRecursion'));
+					//$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('loopInMapRecursion'));
 					//$OBJ->summary_state = 'UNKNOWN';
-					//$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
+					//$OBJ->summary_output = $this->CORE->LANG->getText('loopInMapRecursion');
 					
 					return FALSE;
 				}
@@ -369,7 +369,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			return TRUE;
 		} else {
 			$OBJ->summary_state = 'UNKNOWN';
-			$OBJ->summary_output = $this->LANG->getText('noReadPermissions');
+			$OBJ->summary_output = $this->CORE->LANG->getText('noReadPermissions');
 			
 			return FALSE;
 		}
@@ -387,7 +387,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if(isset($this->url) && $this->url != '') {
 			$url = parent::getUrl();
 		} else {
-			$url = $this->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$this->map_name;
+			$url = $this->CORE->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$this->map_name;
 		}
 		return $url;
 	}
@@ -426,10 +426,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkPermissions($allowed,$printErr) {
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
+		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
 				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot' => 'nagvis'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->MAINCFG->getRuntimeValue('user')));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
 			}
 			return FALSE;
 		} else {
