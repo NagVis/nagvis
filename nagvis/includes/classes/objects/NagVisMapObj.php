@@ -150,21 +150,30 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// Get all services of member host
 		foreach($this->getMapObjects() AS $OBJ) {
-			// When the current map object is a summary object skip the map
-			// child for preventing a loop
-			if($OBJ->getType() == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object) {
-				continue;
-			}
-			
-			// When the child map is a summary object declare it as a summary
-			// object
-			if($OBJ->getType() == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
-				$OBJ->is_summary_object = TRUE;
-			}
-			
-			// Check for indirect loop when the current child is a map object
-			if($OBJ->getType() == 'map' && !$OBJ->is_summary_object && !$this->checkLoop($OBJ)) {
-				continue;
+			// Objects of type map need some extra handling for loop prevention
+			if($OBJ->getType() == 'map') {
+				/**
+				 * When the current map object is a summary object skip the map
+				 * child for preventing a loop
+				 */
+				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object) {
+					continue;
+				}
+				
+				/**
+				 * This occurs when someone creates a map icon which links to itselfs
+				 *
+				 * The object will be marked as summary object and ignored on next level.
+				 * See the code above.
+				 */
+				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
+					$OBJ->is_summary_object = TRUE;
+				}
+				
+				// Check for indirect loop when the current child is a map object
+				if(!$OBJ->is_summary_object && !$this->checkLoop($OBJ)) {
+					continue;
+				}
 			}
 			
 			$OBJ->fetchMembers();
@@ -330,30 +339,32 @@ class NagVisMapObj extends NagVisStatefulObject {
 	/**
 	 * PRIVATE checkLoop()
 	 *
-	 * Checks if there is a loop on the linked maps and submaps
+	 * Checks if there is a loop on the linked maps and submaps.
+	 * Also check for permissions to view the state of the map
 	 *
 	 * @param		Object		Map object to check for a loop
 	 * @return	Boolean		True: No Loop, False: Loop
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkLoop(&$OBJ) {
-		// No direct loop, now check the harder one: indirect loop
-		// Also check for permissions to view the state of the map
-		
 		// Check for valid permissions
 		if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
-			// Loop all objects on the child map to find out if there is a link back to this map (loop)
+			// Loop all objects on the child map to find out if there is a link back 
+			// to this map (loop)
+			//
+			// Can't use OBJ->getMapObjects() cause they are not created yet
 			foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
 				if($this->MAPCFG->getName() == $arrChildMap['map_name']) {
-					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('WARNING', $this->LANG->getText('loopInMapRecursion'));
-					
-					$OBJ->summary_state = 'UNKNOWN';
-					$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
+					// Commented out:
+					// The fact of map loops should not be reported anymore. Let's simply
+					// skip the looping objects in summary view.
+					//
+					//$FRONTEND = new GlobalPage($this->CORE);
+					//$FRONTEND->messageToUser('WARNING', $this->LANG->getText('loopInMapRecursion'));
+					//$OBJ->summary_state = 'UNKNOWN';
+					//$OBJ->summary_output = $this->LANG->getText('loopInMapRecursion');
 					
 					return FALSE;
-				} else {
-					return TRUE;
 				}
 			}
 			
