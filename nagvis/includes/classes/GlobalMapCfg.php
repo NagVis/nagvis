@@ -990,7 +990,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getValue($type, $id, $key, $ignoreDefault=FALSE) {
-		if(isset($this->mapConfig[$type][$id]) && is_array($this->mapConfig[$type][$id]) && isset($this->mapConfig[$type][$id][$key]) && $this->mapConfig[$type][$id][$key] != '') {
+		if(isset($this->mapConfig[$type][$id]) && isset($this->mapConfig[$type][$id][$key]) && $this->mapConfig[$type][$id][$key] != '') {
 			return $this->mapConfig[$type][$id][$key];
 		} elseif(!$ignoreDefault) {
 			if(isset($this->validConfig[$type][$key]['default'])) {
