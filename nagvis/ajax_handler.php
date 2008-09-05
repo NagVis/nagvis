@@ -177,7 +177,7 @@ switch($_GET['action']) {
 					}
 					
 					// Apply default configuration to object
-					$objConf = Array();
+					
 					foreach($MAPCFG->validConfig['map'] AS $key => &$values) {
 						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
 							$objConf[$key] = $values['default'];
