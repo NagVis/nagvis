@@ -28,8 +28,6 @@
  */
 class NagVisMapObj extends NagVisStatefulObject {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	var $MAPCFG;
 	var $MAP;
 	var $BACKEND;
@@ -65,8 +63,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	function NagVisMapObj(&$CORE, &$BACKEND, $MAPCFG) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
 		
@@ -346,7 +342,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @return	Boolean		True: No Loop, False: Loop
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkLoop(&$OBJ) {
+	function checkLoop($OBJ) {
 		// Check for valid permissions
 		if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
 			// Loop all objects on the child map to find out if there is a link back 
