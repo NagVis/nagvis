@@ -46,6 +46,9 @@ function drawNagVisLine(objId, type,x1,y1,x2,y2,width,state,ack,downtime) {
 		case 'ERROR':
 			colorFill = '#0000FF';
 		break;
+    case 'PENDING':
+			colorFill = '#C0C0C0';
+		break;
 		default:
 			colorFill = '#FFCC66';
 		break;
