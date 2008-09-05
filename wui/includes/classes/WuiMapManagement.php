@@ -54,7 +54,7 @@ class WuiMapManagement extends GlobalPage {
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/map_management.js',
 					  						'./includes/js/ajax.js',
 					  						'./includes/js/wui.js'),
-					  'extHeader'=>Array(''),
+					  'extHeader'=> '',
 					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
 		parent::GlobalPage($CORE, $prop);

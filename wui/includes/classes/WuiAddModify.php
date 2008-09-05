@@ -56,7 +56,7 @@ class WuiAddModify extends GlobalPage {
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/addmodify.js',
 					  					  './includes/js/ajax.js',
 					  					  './includes/js/wui.js'),
-					  'extHeader'=>Array(''),
+					  'extHeader'=> '',
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'nagvis');
 		parent::GlobalPage($CORE, $prop);

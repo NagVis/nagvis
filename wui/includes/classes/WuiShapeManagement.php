@@ -51,7 +51,7 @@ class WuiShapeManagement extends GlobalPage {
 								'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/ShapeManagement.js',
 										'./includes/js/ajax.js',
 										'./includes/js/wui.js'),
-								'extHeader'=>Array(''),
+								'extHeader'=> '',
 								'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 								'languageRoot' => 'nagvis');
 		parent::GlobalPage($CORE, $prop);
