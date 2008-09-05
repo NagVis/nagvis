@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-29 21:13+0100\n"
-"PO-Revision-Date: 2008-08-29 21:14+0100\n"
+"POT-Creation-Date: 2008-09-05 19:40+0100\n"
+"PO-Revision-Date: 2008-09-05 19:43+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -45,6 +45,7 @@ msgid "mapCfgNotExists"
 msgstr "The map configuration file \"[MAP]\" does not exist"
 
 #: nagvis/ajax_handler.php:203
+#: nagvis/includes/classes/GlobalMapCfg.php:696
 #: nagvis/includes/classes/objects/NagVisMapObj.php:315
 msgid "unknownObject"
 msgstr "The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed."
@@ -57,15 +58,15 @@ msgstr "The automap is not supported here."
 msgid "unknownQuery"
 msgstr "Unknown Query"
 
-#: nagvis/includes/classes/GlobalPage.php:112
+#: nagvis/includes/classes/GlobalPage.php:113
 msgid "wrongPhpVersion"
 msgstr "The PHP version you are using &quot;[CURRENT_VERSION]&quot; is too old. NagVis needs PHP &quot;[NEEDED_VERSION]&quot; or newer."
 
-#: nagvis/includes/classes/GlobalPage.php:130
+#: nagvis/includes/classes/GlobalPage.php:131
 msgid "noUser"
 msgstr "No user name was handed over to NagVis! For possible solutions please have a look at the FAQ on www.nagvis.org."
 
-#: nagvis/includes/classes/GlobalPage.php:147
+#: nagvis/includes/classes/GlobalPage.php:148
 #: nagvis/includes/classes/objects/NagVisMapObj.php:425
 msgid "permissionDenied"
 msgstr "The user \"[USER]\" has no permission for this action"
@@ -84,62 +85,62 @@ msgstr "The backend with the ID \"[BACKENDID]\" of type \"[BACKENDTYPE]\" is not
 msgid "noBackendDefined"
 msgstr "No backend could be found in NagVis configuration."
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:79
+#: nagvis/includes/classes/GlobalHeaderMenu.php:85
 msgid "selectMap"
 msgstr "Select map"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:80
+#: nagvis/includes/classes/GlobalHeaderMenu.php:86
 msgid "editMap"
 msgstr "Edit current map"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:81
+#: nagvis/includes/classes/GlobalHeaderMenu.php:87
 msgid "needHelp"
 msgstr "Need Help?"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:82
+#: nagvis/includes/classes/GlobalHeaderMenu.php:88
 msgid "onlineDoc"
 msgstr "Online Documentation"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:83
+#: nagvis/includes/classes/GlobalHeaderMenu.php:89
 msgid "forum"
 msgstr "Support Forum"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:84
+#: nagvis/includes/classes/GlobalHeaderMenu.php:90
 msgid "supportInfo"
 msgstr "NagVis Support Informations"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:85
+#: nagvis/includes/classes/GlobalHeaderMenu.php:91
 #: nagvis/includes/classes/objects/NagVisObject.php:356
 #: wui/includes/classes/WuiMap.php:596
 msgid "overview"
 msgstr "Overview"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:86
+#: nagvis/includes/classes/GlobalHeaderMenu.php:92
 #: nagvis/includes/classes/objects/NagVisObject.php:360
 msgid "instance"
 msgstr "Instance"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:87
+#: nagvis/includes/classes/GlobalHeaderMenu.php:93
 msgid "rotationStart"
 msgstr "Start Rotation"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:88
+#: nagvis/includes/classes/GlobalHeaderMenu.php:94
 msgid "rotationStop"
 msgstr "Stop Rotation"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:89
+#: nagvis/includes/classes/GlobalHeaderMenu.php:95
 msgid "refreshStart"
 msgstr "Start Refresh"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:90
+#: nagvis/includes/classes/GlobalHeaderMenu.php:96
 msgid "refreshStop"
 msgstr "Stop Refresh"
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:165
+#: nagvis/includes/classes/GlobalHeaderMenu.php:186
 msgid "headerTemplateNotExists"
 msgstr "The requested header template file &quot;[FILE]&quot; does not exist."
 
-#: nagvis/includes/classes/GlobalHeaderMenu.php:184
+#: nagvis/includes/classes/GlobalHeaderMenu.php:205
 msgid "headerTemplateNotReadable"
 msgstr "Please check the webservers permissions at the header template file &quot;[FILE]&quot;."
 
@@ -159,11 +160,11 @@ msgstr "The map image file &quot;[IMGPATH]&quot; is not writeable."
 msgid "backgroundFolderNotWriteable"
 msgstr "The background image folder &quot;[PATH]&quot; is not writeable."
 
-#: nagvis/includes/classes/GlobalCore.php:332
+#: nagvis/includes/classes/GlobalCore.php:341
 msgid "varFolderNotExists"
 msgstr "The var folder &quot;[PATH]&quot; does not exist."
 
-#: nagvis/includes/classes/GlobalCore.php:351
+#: nagvis/includes/classes/GlobalCore.php:360
 msgid "varFolderNotWriteable"
 msgstr "The var folder &quot;[PATH]&quot; ist not writeable."
 
@@ -171,48 +172,48 @@ msgstr "The var folder &quot;[PATH]&quot; ist not writeable."
 msgid "mainMustValueNotSet"
 msgstr "The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:605
+#: nagvis/includes/classes/GlobalMainCfg.php:606
 msgid "unknownValue"
 msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not allowed in section &quot;[TYPE]&quot; in main configuration file."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:612
+#: nagvis/includes/classes/GlobalMainCfg.php:613
 msgid "deprecatedOption"
 msgstr "The given option &quot;[ATTRIBUTE]&quot; in section &quot;[TYPE]&quot; is deprecated in this version. Please read the documentation/changelog for details."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:635
+#: nagvis/includes/classes/GlobalMainCfg.php:636
 #: wui/includes/classes/WuiMap.php:624
 msgid "wrongValueFormat"
 msgstr "The attribute \"[ATTRIBUTE]\" in section \"[TYPE]\" in main configuration file does not match the valid value format"
 
-#: nagvis/includes/classes/GlobalMainCfg.php:646
+#: nagvis/includes/classes/GlobalMainCfg.php:647
 msgid "unknownSection"
 msgstr "The section &quot;[TYPE]&quot; in main configuration file is not allowed."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:669
+#: nagvis/includes/classes/GlobalMainCfg.php:670
 msgid "mainCfgNotExists"
 msgstr "The main configuration file &quot;[MAINCFG]&quot; does not exists."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:692
+#: nagvis/includes/classes/GlobalMainCfg.php:693
 msgid "mainCfgNotReadable"
 msgstr "Please check the webservers permissions at the main configuration file &quot;[MAINCFG]&quot;."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:714
+#: nagvis/includes/classes/GlobalMainCfg.php:715
 msgid "mapCfgDirNotReadable"
 msgstr "Please check the webservers permissions at the map configuration folder &quot;[MAPPATH]&quot;."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:733
+#: nagvis/includes/classes/GlobalMainCfg.php:734
 msgid "mainCfgCacheNotExists"
 msgstr "The main configuration file \"[MAP]\" does not exist"
 
-#: nagvis/includes/classes/GlobalMainCfg.php:752
+#: nagvis/includes/classes/GlobalMainCfg.php:753
 msgid "mainCfgCacheNotReadable"
 msgstr "The main configuration file cache is not readable."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:791
+#: nagvis/includes/classes/GlobalMainCfg.php:792
 msgid "mainCfgNotCached"
 msgstr "The main configuration file is not cached."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:808
+#: nagvis/includes/classes/GlobalMainCfg.php:809
 msgid "mainCfgCacheNotWriteable"
 msgstr "The main configuration file cache is not writeable."
 
@@ -236,47 +237,51 @@ msgstr "The required graphviz binary &quot;[NAME]&quot; could not be found in th
 msgid "couldNotGetRootHostname"
 msgstr "The Automap needs one root hostname to start the drawing.[br][br] There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is [b]one[/b] host with no parent)."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:88
+#: nagvis/includes/classes/GlobalLanguage.php:74
+msgid "phpGettextNotSupported"
+msgstr "The gettext extension module is not loaded in your PHP installation. Please make the module available."
+
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:90
 msgid "nagiosNotRunning"
 msgstr "NDO reports that Nagios is not running"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:94
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:96
 msgid "nagiosDataNotUpToDate"
 msgstr "NDO claims that Nagios did no status Update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and ndo2db are running."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:134
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:136
 msgid "noTablesExists"
 msgstr "There are no tables in database matching given prefix &quot;[PREFIX]&quot;"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:162
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:164
 msgid "errorSelectingDb"
 msgstr "Error selecting the database. Maybe wrong database name  or insufficient permissions. MySQL-Error: [MYSQLERR]."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:185
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:187
 msgid "mysqlNotSupported"
 msgstr "Your PHP installation lacks SQL support. You can not use the NDOMy Backend without php-mysql."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:214
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:216
 msgid "backendInstanceNameNotValid"
 msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not valid."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:217
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:219
 msgid "backendInstanceNameNotUniq"
 msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not unique."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:414
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:438
 msgid "hostNotFoundInDB"
 msgstr "The host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:459
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:486
 msgid "hostIsPending"
 msgstr "The host \"[HOST]\" is in pending state"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:578
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:605
 msgid "serviceNotFoundInDB"
 msgstr "The service \"[SERVICE]\" on host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:630
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:657
 msgid "serviceNotChecked"
 msgstr "The service \"[SERVICE]\" has not been checked yet"
 

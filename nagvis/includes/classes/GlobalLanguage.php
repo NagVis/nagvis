@@ -50,12 +50,35 @@ class GlobalLanguage {
 			break;
 		}
 		
+		// Check for gettext extension
+		$this->checkGettextSupport();
+		
 		// Set the language to use
 		putenv('LC_ALL='.$sCurrentLanguage);
 		setlocale(LC_ALL, $sCurrentLanguage);
 		
 		bindtextdomain($textDomain, $this->MAINCFG->getValue('paths', 'language'));
 		textdomain($textDomain);
+	}
+	
+	/**
+	 * Checks if gettext is supported in this PHP version
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkGettextSupport() {
+		if (!extension_loaded('gettext')) {
+			dl('gettext.so');
+			if (!extension_loaded('gettext')) {
+				new GlobalFrontendMessage('ERROR', $this->getText('phpGettextNotSupported'), $this->MAINCFG->getValue('paths','htmlbase'));
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		} else {
+			return TRUE;	
+		}
 	}
 	
 	/**
