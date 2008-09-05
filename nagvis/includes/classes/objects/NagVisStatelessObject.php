@@ -29,8 +29,6 @@
  */
 class NagVisStatelessObject extends NagVisObject {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	
 	// "Global" Configuration variables for all stateless objects
 	var $label_show;
@@ -49,8 +47,6 @@ class NagVisStatelessObject extends NagVisObject {
 	 */
 	function NagVisStatelessObject(&$CORE) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		parent::NagVisObject($this->CORE);
 	}

@@ -27,10 +27,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHostgroup extends NagVisStatefulObject {
-	var $CORE;
 	var $MAINCFG;
 	var $BACKEND;
-	var $LANG;
 	
 	var $backend_id;
 	
@@ -63,8 +61,6 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 */
 	function NagiosHostgroup(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->backend_id = $backend_id;
@@ -219,9 +215,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			
-			$this->mergeSummaryOutput($arrStates, $this->LANG->getText('hosts'));
+			$this->mergeSummaryOutput($arrStates, $this->CORE->LANG->getText('hosts'));
 		} else {
-			$this->summary_output = $this->LANG->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+			$this->summary_output = $this->CORE->LANG->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
 		}
 	}
 }

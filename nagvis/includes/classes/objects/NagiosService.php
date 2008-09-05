@@ -28,9 +28,7 @@
  */
 class NagiosService extends NagVisStatefulObject {
 	var $CORE;
-	var $MAINCFG;
 	var $BACKEND;
-	var $LANG;
 	
 	var $backend_id;
 	
@@ -83,8 +81,6 @@ class NagiosService extends NagVisStatefulObject {
 	 */
 	function NagiosService(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->backend_id = $backend_id;

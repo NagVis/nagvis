@@ -28,9 +28,7 @@
  */
 class NagiosServicegroup extends NagVisStatefulObject {
 	var $CORE;
-	var $MAINCFG;
 	var $BACKEND;
-	var $LANG;
 	
 	var $backend_id;
 	
@@ -63,8 +61,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 */
 	function NagiosServicegroup(&$CORE, &$BACKEND, $backend_id, $servicegroupName) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->backend_id = $backend_id;
@@ -213,9 +209,9 @@ class NagiosServicegroup extends NagVisStatefulObject {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			
-			$this->mergeSummaryOutput($arrStates, $this->LANG->getText('services'));
+			$this->mergeSummaryOutput($arrStates, $this->CORE->LANG->getText('services'));
 		} else {
-			$this->summary_output = $this->LANG->getText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
+			$this->summary_output = $this->CORE->LANG->getText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
 		}
 	}
 }

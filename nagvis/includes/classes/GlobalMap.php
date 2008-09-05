@@ -27,9 +27,7 @@
  */
 class GlobalMap {
 	var $CORE;
-	var $MAINCFG;
 	var $MAPCFG;
-	var $LANG;
 	
 	var $linkedMaps = Array();
 	
@@ -42,8 +40,6 @@ class GlobalMap {
 	 */
 	function GlobalMap(&$CORE,&$MAPCFG) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$this->CORE->MAINCFG;
-		$this->LANG = &$this->CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 	}
 	

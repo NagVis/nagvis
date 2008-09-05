@@ -26,8 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalPage {
-	var $MAINCFG;
-	var $LANG;
+	var $CORE;
 	
 	// arrays for the header
 	var $title;
@@ -51,12 +50,11 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function GlobalPage(&$CORE, $givenProperties=Array()) {
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+		$this->CORE = &$CORE;
 		
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
-									'cssIncludes' => Array($this->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css'),
+									'cssIncludes' => Array($this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/includes/css/style.css'),
 									'jsIncludes' => Array(),
 									'extHeader' => '',
 									'allowedUsers' => Array('EVERYONE'),
@@ -77,7 +75,7 @@ class GlobalPage {
 		$this->extHeader .= '<title>'.$prop['title'].'</title>';
 		
 		$this->user = $this->getUser();
-		$this->MAINCFG->setRuntimeValue('user',$this->user);
+		$this->CORE->MAINCFG->setRuntimeValue('user',$this->user);
 		
 		self::checkPreflight();
 	}
@@ -110,7 +108,7 @@ class GlobalPage {
       return TRUE;
     } else {
 			if($printErr) {
-				$this->messageToUser('ERROR', $this->LANG->getText('wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION));
+				$this->messageToUser('ERROR', $this->CORE->LANG->getText('wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION));
       }
       return FALSE;
     }
@@ -128,7 +126,7 @@ class GlobalPage {
 					return TRUE;
 		} else {
 			if($printErr) {
-				$this->messageToUser('ERROR', $this->LANG->getText('noUser'));
+				$this->messageToUser('ERROR', $this->CORE->LANG->getText('noUser'));
 			}
 			return FALSE;
 		}
@@ -143,9 +141,9 @@ class GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkPermissions(&$allowed,$printErr) {
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->MAINCFG->getRuntimeValue('user'), $allowed)) {
+		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
-				$this->messageToUser('ERROR', $this->LANG->getText('permissionDenied','USER~'.$this->MAINCFG->getRuntimeValue('user')));
+				$this->messageToUser('ERROR', $this->CORE->LANG->getText('permissionDenied','USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
 			}
 			return FALSE;
 		} else {
@@ -190,10 +188,10 @@ class GlobalPage {
 			case 'INFORMATION':
 				// add the message to message Array - the printing will be done later, the message array has to be superglobal, not a class variable
 				$arrMessage = Array(Array('serverity' => $serverity, 'text' => $text));
-				if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
-					$this->MAINCFG->setRuntimeValue('userMessages',array_merge($this->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
+				if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
+					$this->CORE->MAINCFG->setRuntimeValue('userMessages',array_merge($this->CORE->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
 				} else {
-					$this->MAINCFG->setRuntimeValue('userMessages',$arrMessage);
+					$this->CORE->MAINCFG->setRuntimeValue('userMessages',$arrMessage);
 				}
 			break;
 		}
@@ -208,8 +206,8 @@ class GlobalPage {
 	function getUserMessages() {
 		$ret = '';
 		
-		if(is_array($this->MAINCFG->getRuntimeValue('userMessages'))) {
-			foreach($this->MAINCFG->getRuntimeValue('userMessages') AS $message) {
+		if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
+			foreach($this->CORE->MAINCFG->getRuntimeValue('userMessages') AS $message) {
 				$ret .= $this->messageBox($message['serverity'], $message['text']);
 			}
 		}
@@ -251,7 +249,7 @@ class GlobalPage {
 			$ret .= '<tr><td align="center">';
 		}
 		$ret .= '<table class="messageBox" cellpadding="2" cellspacing="2">';
-		$ret .= '<tr><th width="40"><img src="'.$this->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
+		$ret .= '<tr><th width="40"><img src="'.$this->CORE->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
 		$ret .= '</th><th>'.$serverity.'</th></tr>';
 		$ret .= '<tr><td colspan="2">'.$text.'</td></tr></table>';
 		if($serverity == 'ERROR') {

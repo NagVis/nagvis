@@ -28,9 +28,7 @@
  */
 class NagVisHost extends NagiosHost {
 	var $CORE;
-	var $MAINCFG;
 	var $BACKEND;
-	var $LANG;
 	
 	/**
 	 * Class constructor
@@ -44,8 +42,6 @@ class NagVisHost extends NagiosHost {
 	 */
 	function NagVisHost(&$CORE, &$BACKEND, $backend_id, $hostName) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->type = 'host';
@@ -84,7 +80,7 @@ class NagVisHost extends NagiosHost {
 			$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
 			$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
 			$strReturn .= '</table>>, ';
-			$strReturn .= 'URL="'.$this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
+			$strReturn .= 'URL="'.$this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
 			$strReturn .= 'target="'.$this->url_target.'", ';
 			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
 			// The root host has to be highlighted, this are the options to do this
@@ -123,7 +119,7 @@ class NagVisHost extends NagiosHost {
 		if(isset($this->url) && $this->url != '') {
 			$url = parent::getUrl();
 		} else {
-			$url = $this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name;
+			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name;
 		}
 		return $url;
 	}

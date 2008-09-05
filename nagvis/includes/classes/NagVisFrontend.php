@@ -27,10 +27,8 @@
  */
 class NagVisFrontend extends GlobalPage {
 	var $CORE;
-	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
-	var $LANG;
 	
 	var $ROTATION;
 	
@@ -49,8 +47,6 @@ class NagVisFrontend extends GlobalPage {
 		$prop = Array();
 		
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
 		
@@ -60,9 +56,9 @@ class NagVisFrontend extends GlobalPage {
 			$this->ROTATION = &$ROTATION;
 		}
 		
-		$this->htmlBase = $this->MAINCFG->getValue('paths','htmlbase');
+		$this->htmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 		
-		$prop['title'] = $this->MAINCFG->getValue('internal', 'title');
+		$prop['title'] = $this->CORE->MAINCFG->getValue('internal', 'title');
 		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css');
 		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js', $this->htmlBase.'/nagvis/includes/js/overlib.js', $this->htmlBase.'/nagvis/includes/js/dynfavicon.js', $this->htmlBase.'/nagvis/includes/js/ajax.js', $this->htmlBase.'/nagvis/includes/js/hover.js', $this->htmlBase.'/nagvis/includes/js/wz_jsgraphics.js', $this->htmlBase.'/nagvis/includes/js/lines.js');
 		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';

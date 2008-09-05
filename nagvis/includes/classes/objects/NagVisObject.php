@@ -28,8 +28,6 @@
  */
 class NagVisObject {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	
 	var $conf;
 	
@@ -61,8 +59,6 @@ class NagVisObject {
 	 */
 	function NagVisObject(&$CORE) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->conf = Array();
 		
@@ -300,7 +296,7 @@ class NagVisObject {
 		*/
 		if(!$content = file_get_contents($this->hover_url)) {
 			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('WARNING', $this->LANG->getText('couldNotGetHoverUrl','URL~'.$this->hover_url));
+			$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('couldNotGetHoverUrl','URL~'.$this->hover_url));
 		}
 		
 		return str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$content)))));
@@ -316,96 +312,96 @@ class NagVisObject {
 	 */
 	function readHoverTemplate() {
 		// Read hover cache contents
-		$arrHoverCache = $this->MAINCFG->getRuntimeValue('hover_cache');
+		$arrHoverCache = $this->CORE->MAINCFG->getRuntimeValue('hover_cache');
 		if(isset($arrHoverCache[$this->getHoverTemplate()])) {
 			$ret = $arrHoverCache[$this->getHoverTemplate()];
 		} else {
 			if($this->checkHoverTemplateReadable(1)) {
-				$ret = file_get_contents($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
+				$ret = file_get_contents($this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html');
 				
 				// Replace the static macros (language, paths)
 				if(strpos($ret,'[lang_alias]') !== FALSE) {
-					$ret = str_replace('[lang_alias]',$this->LANG->getText('alias'),$ret);
+					$ret = str_replace('[lang_alias]',$this->CORE->LANG->getText('alias'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_address]') !== FALSE) {
-					$ret = str_replace('[lang_address]',$this->LANG->getText('address'),$ret);
+					$ret = str_replace('[lang_address]',$this->CORE->LANG->getText('address'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_state]') !== FALSE) {
-					$ret = str_replace('[lang_state]',$this->LANG->getText('state'),$ret);
+					$ret = str_replace('[lang_state]',$this->CORE->LANG->getText('state'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_summary_state]') !== FALSE) {
-					$ret = str_replace('[lang_summary_state]',$this->LANG->getText('summaryState'),$ret);
+					$ret = str_replace('[lang_summary_state]',$this->CORE->LANG->getText('summaryState'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_output]') !== FALSE) {
-					$ret = str_replace('[lang_output]',$this->LANG->getText('output'),$ret);
+					$ret = str_replace('[lang_output]',$this->CORE->LANG->getText('output'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_perfdata]') !== FALSE) {
-					$ret = str_replace('[lang_perfdata]',$this->LANG->getText('perfdata'),$ret);
+					$ret = str_replace('[lang_perfdata]',$this->CORE->LANG->getText('perfdata'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_summary_output]') !== FALSE) {
-					$ret = str_replace('[lang_summary_output]',$this->LANG->getText('summaryOutput'),$ret);
+					$ret = str_replace('[lang_summary_output]',$this->CORE->LANG->getText('summaryOutput'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_overview]') !== FALSE) {
-					$ret = str_replace('[lang_overview]',$this->LANG->getText('overview'),$ret);
+					$ret = str_replace('[lang_overview]',$this->CORE->LANG->getText('overview'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_instance]') !== FALSE) {
-					$ret = str_replace('[lang_instance]',$this->LANG->getText('instance'),$ret);
+					$ret = str_replace('[lang_instance]',$this->CORE->LANG->getText('instance'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_next_check]') !== FALSE) {
-				$ret = str_replace('[lang_next_check]',$this->LANG->getText('nextCheck'),$ret);
+				$ret = str_replace('[lang_next_check]',$this->CORE->LANG->getText('nextCheck'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_last_check]') !== FALSE) {
-					$ret = str_replace('[lang_last_check]',$this->LANG->getText('lastCheck'),$ret);
+					$ret = str_replace('[lang_last_check]',$this->CORE->LANG->getText('lastCheck'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_state_type]') !== FALSE) {
-					$ret = str_replace('[lang_state_type]',$this->LANG->getText('stateType'),$ret);
+					$ret = str_replace('[lang_state_type]',$this->CORE->LANG->getText('stateType'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_current_attempt]') !== FALSE) {
-					$ret = str_replace('[lang_current_attempt]',$this->LANG->getText('currentAttempt'),$ret);
+					$ret = str_replace('[lang_current_attempt]',$this->CORE->LANG->getText('currentAttempt'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_last_state_change]') !== FALSE) {
-					$ret = str_replace('[lang_last_state_change]',$this->LANG->getText('lastStateChange'),$ret);
+					$ret = str_replace('[lang_last_state_change]',$this->CORE->LANG->getText('lastStateChange'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_state_duration]') !== FALSE) {
-					$ret = str_replace('[lang_state_duration]',$this->LANG->getText('stateDuration'),$ret);
+					$ret = str_replace('[lang_state_duration]',$this->CORE->LANG->getText('stateDuration'),$ret);
 				}
 				
 				if(strpos($ret,'[lang_service_description]') !== FALSE) {
-					$ret = str_replace('[lang_service_description]',$this->LANG->getText('servicename'),$ret);
+					$ret = str_replace('[lang_service_description]',$this->CORE->LANG->getText('servicename'),$ret);
 				}
 				
 				if(strpos($ret,'[html_base]') !== FALSE) {
-					$ret = str_replace('[html_base]',$this->MAINCFG->getValue('paths','htmlbase'),$ret);
+					$ret = str_replace('[html_base]',$this->CORE->MAINCFG->getValue('paths','htmlbase'),$ret);
 				}
 				
 				if(strpos($ret,'[html_templates]') !== FALSE) {
-					$ret = str_replace('[html_templates]',$this->MAINCFG->getValue('paths','htmlhovertemplates'),$ret);
+					$ret = str_replace('[html_templates]',$this->CORE->MAINCFG->getValue('paths','htmlhovertemplates'),$ret);
 				}
 				
 				if(strpos($ret,'[html_template_images]') !== FALSE) {
-					$ret = str_replace('[html_template_images]',$this->MAINCFG->getValue('paths','htmlhovertemplateimages'),$ret);
+					$ret = str_replace('[html_template_images]',$this->CORE->MAINCFG->getValue('paths','htmlhovertemplateimages'),$ret);
 				}
 				
 				// Build cache for the hover template
 				if(!isset($arrHoverCache[$this->getHoverTemplate()])) {
-					$this->MAINCFG->setRuntimeValue('hover_cache', Array($this->getHoverTemplate() => $ret));
+					$this->CORE->MAINCFG->setRuntimeValue('hover_cache', Array($this->getHoverTemplate() => $ret));
 				} else {
 					$arrHoverCache[$this->getHoverTemplate()] = $ret;
-					$this->MAINCFG->setRuntimeValue('hover_cache', $arrHoverCache);
+					$this->CORE->MAINCFG->setRuntimeValue('hover_cache', $arrHoverCache);
 				}
 			}
 		}
@@ -440,7 +436,7 @@ class NagVisObject {
 		/**
 		 * Now replace the regular macros
 		 */
-		$ret .= '\'[lang_obj_type]\': \''.$this->LANG->getText($this->type).'\', ';
+		$ret .= '\'[lang_obj_type]\': \''.$this->CORE->LANG->getText($this->type).'\', ';
 		
 		$ret .= '\'[obj_type]\': \''.$this->type.'\', ';
 		
@@ -498,8 +494,8 @@ class NagVisObject {
 		if(!$child && $this->type != 'map') {
 			$ret .= '\'[obj_backendid]\': \''.$this->backend_id.'\', ';
 			
-			if($this->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
-				$ret .= '\'[obj_backend_instancename]\': \''.$this->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename').'\', ';
+			if($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
+				$ret .= '\'[obj_backend_instancename]\': \''.$this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename').'\', ';
 			} else {
 				$ret .= '\'[obj_backend_instancename]\': \'\', ';
 			}
@@ -515,28 +511,28 @@ class NagVisObject {
 		// Get the child name label
 		switch($this->type) {
 			case 'host':
-				$name = $this->LANG->getText('hostname');
-				$childName = $this->LANG->getText('servicename');
+				$name = $this->CORE->LANG->getText('hostname');
+				$childName = $this->CORE->LANG->getText('servicename');
 			break;
 			case 'service':
-				$name = $this->LANG->getText('hostname');
+				$name = $this->CORE->LANG->getText('hostname');
 				$childName = '';
 			break;
 			case 'hostgroup':
-				$name = $this->LANG->getText('hostgroupname');
-				$childName = $this->LANG->getText('hostname');
+				$name = $this->CORE->LANG->getText('hostgroupname');
+				$childName = $this->CORE->LANG->getText('hostname');
 			break;
 			case 'servicegroup':
-				$name = $this->LANG->getText('servicegroupname');
-				$childName = $this->LANG->getText('servicename');
+				$name = $this->CORE->LANG->getText('servicegroupname');
+				$childName = $this->CORE->LANG->getText('servicename');
 			break;
 			case 'map':
-				$name = $this->LANG->getText('mapname');
-				$childName = $this->LANG->getText('objectname');
+				$name = $this->CORE->LANG->getText('mapname');
+				$childName = $this->CORE->LANG->getText('objectname');
 			break;
 			default:
-				$name = $this->LANG->getText('objectname');
-				$childName = $this->LANG->getText('objectname');
+				$name = $this->CORE->LANG->getText('objectname');
+				$childName = $this->CORE->LANG->getText('objectname');
 			break;
 		}
 		
@@ -574,7 +570,7 @@ class NagVisObject {
 		
 		// Macros which are only for servicegroups
 		if($this->type == 'servicegroup') {
-			$ret .= '\'[lang_child_name1]\': \''.$this->LANG->getText('hostname').'\', ';
+			$ret .= '\'[lang_child_name1]\': \''.$this->CORE->LANG->getText('hostname').'\', ';
 		} else {
 			$ret .= '\'<!--\\\sBEGIN\\\sservicegroup\\\s-->.+?<!--\\\sEND\\\sservicegroup\\\s-->\': \'\', ';
 		}
@@ -742,12 +738,12 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateReadable($printErr) {
-		if($this->checkHoverTemplateExists($printErr) && is_readable($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
+		if($this->checkHoverTemplateExists($printErr) && is_readable($this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html'));
 			}
 			return FALSE;
 		}
@@ -763,12 +759,12 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkHoverTemplateExists($printErr) {
-		if(file_exists($this->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
+		if(file_exists($this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html')) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
 				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('hoverTemplateNotExists','FILE~'.$this->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html'));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->CORE->MAINCFG->getValue('paths', 'hovertemplate').'tmpl.'.$this->getHoverTemplate().'.html'));
 			}
 			return FALSE;
 		}

@@ -28,8 +28,6 @@
  */
 class NagVisShape extends NagVisStatelessObject {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	
 	/**
 	 * Class constructor
@@ -42,11 +40,9 @@ class NagVisShape extends NagVisStatelessObject {
 	 */
 	function NagVisShape(&$CORE, $icon) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
-		$this->iconPath = $this->MAINCFG->getValue('paths', 'shape');
-		$this->iconHtmlPath = $this->MAINCFG->getValue('paths', 'htmlshape');
+		$this->iconPath = $this->CORE->MAINCFG->getValue('paths', 'shape');
+		$this->iconHtmlPath = $this->CORE->MAINCFG->getValue('paths', 'htmlshape');
 		
 		$this->icon = $icon;
 		$this->type = 'shape';

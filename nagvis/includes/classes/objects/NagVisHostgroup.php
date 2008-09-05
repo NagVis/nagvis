@@ -28,9 +28,7 @@
  */
 class NagVisHostgroup extends NagiosHostgroup {
 	var $CORE;
-	var $MAINCFG;
 	var $BACKEND;
-	var $LANG;
 	
 	/**
 	 * Class constructor
@@ -44,8 +42,6 @@ class NagVisHostgroup extends NagiosHostgroup {
 	 */
 	function NagVisHostgroup(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->type = 'hostgroup';
@@ -80,7 +76,7 @@ class NagVisHostgroup extends NagiosHostgroup {
 		if(isset($this->url) && $this->url != '') {
 			$url = parent::getUrl();
 		} else {
-			$url = $this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?hostgroup='.$this->hostgroup_name;
+			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?hostgroup='.$this->hostgroup_name;
 		}
 		return $url;
 	}

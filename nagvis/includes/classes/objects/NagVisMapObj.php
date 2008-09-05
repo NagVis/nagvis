@@ -61,7 +61,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @param		Object		Object of class NagVisMapCfg
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisMapObj(&$CORE, &$BACKEND, $MAPCFG) {
+	function NagVisMapObj(&$CORE, &$BACKEND, &$MAPCFG) {
 		$this->CORE = &$CORE;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;

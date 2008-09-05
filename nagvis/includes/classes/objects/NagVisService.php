@@ -28,9 +28,7 @@
  */
 class NagVisService extends NagiosService {
 	var $CORE;
-	var $MAINCFG;
 	var $BACKEND;
-	var $LANG;
 	
 	/**
 	 * Class constructor
@@ -45,8 +43,6 @@ class NagVisService extends NagiosService {
 	 */
 	function NagVisService(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->type = 'service';
@@ -81,7 +77,7 @@ class NagVisService extends NagiosService {
 		if(isset($this->url) && $this->url != '') {
 			$url = parent::getUrl();
 		} else {
-			$url = $this->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$this->host_name.'&amp;service='.$this->service_description;
+			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$this->host_name.'&amp;service='.$this->service_description;
 		}
 		return $url;
 	}

@@ -27,7 +27,6 @@
  */
 class NagVisMap extends GlobalMap {
 	var $CORE;
-	var $MAINCFG;
 	var $MAPCFG;
 	var $BACKEND;
 	var $MAPOBJ;
@@ -43,8 +42,6 @@ class NagVisMap extends GlobalMap {
 	 */
 	function NagVisMap(&$CORE,&$MAPCFG,&$BACKEND,$getState=1) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
 		
@@ -73,7 +70,7 @@ class NagVisMap extends GlobalMap {
 		// Dynamicaly set favicon
 		$ret .= $this->getFavicon();
 		// Change title (add map alias and map state), set map name
-		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		return $ret;
 	}
@@ -85,7 +82,7 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackground() {
-		return $this->getBackgroundHtml($this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName());
+		return $this->getBackgroundHtml($this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName());
 	}
 	
 	/**
@@ -103,10 +100,10 @@ class NagVisMap extends GlobalMap {
 			$favicon = strtolower($this->MAPOBJ->getSummaryState());
 		}
 		
-		if(file_exists($this->MAINCFG->getValue('paths', 'images').'internal/favicon_'.$favicon.'.png')) {
-			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.$favicon.'.png';
+		if(file_exists($this->CORE->MAINCFG->getValue('paths', 'images').'internal/favicon_'.$favicon.'.png')) {
+			$favicon = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.$favicon.'.png';
 		} else {
-			$favicon = $this->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
+			$favicon = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
 		}
 		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
 	}

@@ -28,8 +28,6 @@
  */
 class NagVisTextbox extends NagVisStatelessObject {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	
 	var $background_color;
 	var $border_color;
@@ -44,8 +42,6 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 */
 	function NagVisTextbox(&$CORE) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		
 		$this->class = 'box';
 		$this->background_color = '#CCCCCC';

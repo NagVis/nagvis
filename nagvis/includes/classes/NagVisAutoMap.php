@@ -27,10 +27,8 @@
  */
 class NagVisAutoMap extends GlobalMap {
 	var $CORE;
-	var $MAINCFG;
 	var $MAPCFG;
 	var $MAPOBJ;
-	var $LANG;
 	var $BACKEND;
 	
 	var $preview;
@@ -65,8 +63,6 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function NagVisAutoMap(&$CORE, &$BACKEND, &$prop) {
 		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
 		$this->BACKEND = &$BACKEND;
 		
 		$this->arrHostnames = Array();
@@ -93,7 +89,7 @@ class NagVisAutoMap extends GlobalMap {
 		if(isset($prop['backend']) && $prop['backend'] != '') {
 			$this->backend_id = $prop['backend'];
 		} else {
-			$this->backend_id = $this->MAINCFG->getValue('defaults', 'backend');
+			$this->backend_id = $this->CORE->MAINCFG->getValue('defaults', 'backend');
 		}
 		
 		/**
@@ -286,12 +282,12 @@ class NagVisAutoMap extends GlobalMap {
 			 * cause in too long commands with big maps. SO write thoe config to a file
 			 * and let it be read by graphviz binary.
 			 */
-			$fh = fopen($this->MAINCFG->getValue('paths', 'var').'automap.dot','w');
+			$fh = fopen($this->CORE->MAINCFG->getValue('paths', 'var').'automap.dot','w');
 			fwrite($fh, $this->parseGraphvizConfig());
 			fclose($fh);
 			
 			// Parse map
-			exec($this->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx '.$this->MAINCFG->getValue('paths', 'var').'automap.dot', $arrMapCode);
+			exec($this->CORE->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->CORE->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx '.$this->CORE->MAINCFG->getValue('paths', 'var').'automap.dot', $arrMapCode);
 			
 			$this->mapCode = implode("\n", $arrMapCode);
 		}
@@ -341,7 +337,7 @@ class NagVisAutoMap extends GlobalMap {
 		$ret .= $this->getFavicon();
 		
 		// Change title (add map alias and map state)
-		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		return $ret;
 	}
@@ -354,7 +350,7 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function getBackground() {
 		// Append random number to prevent caching
-		$src = $this->MAINCFG->getValue('paths', 'htmlvar').'automap.png?'.mt_rand(0,10000);
+		$src = $this->CORE->MAINCFG->getValue('paths', 'htmlvar').'automap.png?'.mt_rand(0,10000);
 		
 		return $this->getBackgroundHtml($src,'','usemap="#automap"');
 	}
@@ -405,19 +401,19 @@ class NagVisAutoMap extends GlobalMap {
 		exec('which '.$binary, $arrReturn, $returnCode1);
 		
 		if(!$returnCode1) {
-			$this->MAINCFG->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
+			$this->CORE->MAINCFG->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
 		}
 		
-		exec('which '.$this->MAINCFG->getValue('automap','graphvizpath').$binary, $arrReturn, $returnCode2);
+		exec('which '.$this->CORE->MAINCFG->getValue('automap','graphvizpath').$binary, $arrReturn, $returnCode2);
 		
 		if(!$returnCode2) {
-			$this->MAINCFG->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
+			$this->CORE->MAINCFG->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
 		}
 		
 		if($returnCode1 & $returnCode2) {
 			if($printErr) {
 				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->MAINCFG->getvalue('automap','graphvizpath')));
+				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->CORE->MAINCFG->getvalue('automap','graphvizpath')));
 			}
 			return FALSE;
 		} else {
@@ -432,10 +428,10 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFavicon() {
-		if(file_exists($this->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
-			$favicon = $this->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
+		if(file_exists($this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
+			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
-			$favicon = $this->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon.png';
+			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon.png';
 		}
 		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
 	}
@@ -503,7 +499,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * when the root cannot be fetched via backend it reads the default
 		 * value for the defaultroot
 		 */
-		$defaultRoot = $this->MAINCFG->getValue('automap','defaultroot', TRUE);
+		$defaultRoot = $this->CORE->MAINCFG->getValue('automap','defaultroot', TRUE);
 		if(!isset($defaultRoot) || $defaultRoot == '') {
 			if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 				$hostsWithoutParent = $this->BACKEND->BACKENDS[$this->backend_id]->getHostNamesWithNoParent();
@@ -514,7 +510,7 @@ class NagVisAutoMap extends GlobalMap {
 		}
 		
 		if(!isset($defaultRoot) || $defaultRoot == '') {
-			$defaultRoot = $this->MAINCFG->getValue('automap','defaultroot');
+			$defaultRoot = $this->CORE->MAINCFG->getValue('automap','defaultroot');
 		}
 		
 		// Could not get root host for the automap
