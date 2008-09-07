@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.1"
+INSTALLER_VERSION="0.1.2"
 # Default action
 INSTALLER_ACTION="install"
 
@@ -56,7 +56,8 @@ WEB_GROUP=""
 # Version prerequisites
 NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
-# TODO: mbstring
+
+# TODO: mbstring, gettext
 NEED_PHP_MODULES="gd mysql"
 NEED_GV_MOD="dot neato twopi circo fdp"
 NEED_GV_VERSION=2.14
@@ -130,14 +131,18 @@ log() {
 check_apache_php() {
 	DIR=$1
 	[ ! -d $DIR ] && return
+	
+	# The apache user/group are defined by env vars in ubuntu, set them here
+	[ -f $DIR/envvars ] && source $DIR/envvars
+	
 	MODPHP=`grep -rie "mod_php.*\.so" -e "libphp.*\.so" $DIR | tr -s " " | cut -d" " -f3 | uniq`
-	USER=`grep -ri "^User" $DIR | cut -d" " -f2 | uniq`
-	GROUP=`grep -ri "^Group" $DIR | cut -d" " -f2 | uniq`
+	WEB_USER=`grep -ri "^User" $DIR | cut -d" " -f2 | uniq`
+	WEB_GROUP=`grep -ri "^Group" $DIR | cut -d" " -f2 | uniq`
 	HTML_PATH=`grep -ri "^Alias" $DIR | grep -i "/nagios" | cut -d" " -f2 | uniq` 
-	VAR=`echo $USER | grep "$" >/dev/null 2>&1`
-        [ $? -eq 0 ] && USER=`eval "echo $USER"`
-        VAR=`echo $GROUP | grep "$" >/dev/null 2>&1`
-        [ $? -eq 0 ] && GROUP=`eval "echo $GROUP"`
+	VAR=`echo $WEB_USER | grep "$" >/dev/null 2>&1`
+	[ $? -eq 0 ] && WEB_USER=`eval "echo $WEB_USER"`
+	VAR=`echo $WEB_GROUP | grep "$" >/dev/null 2>&1`
+	[ $? -eq 0 ] && WEB_GROUP=`eval "echo $WEB_GROUP"`
 }
 
 # Check Graphviz version by installed system package
@@ -313,7 +318,6 @@ echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
 read AUSR
 if [ ! -z $AUSR ]; then
 	WEB_USER=$AUSR
-q
 fi
 echo -n "| Please enter the name of the web-server group [$WEB_GROUP]: "
 read AGRP
