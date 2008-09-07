@@ -76,14 +76,30 @@ Installs or updates NagVis on your system.
 
 Parameters:
   -n <PATH>   Path to Nagios directory. The default value is /usr/local/nagios
-  -g <PATH>   Path to graphviz binaries. The default value is /usr/local
+  -b <PATH>   Path to graphviz binaries. The default value is /usr/local
   -p <PATH>   Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
   -u <USER>   User which runs the webserver
   -g <GROUP>  Group which runs the webserver
   -q          Quiet mode. The installer won't ask for confirmation of what to do.
               This can be useful for automatic or scripted deployment.
               WARNING: Only use this when you know what you do
+  -v          Version informations
   -h          This message
+
+EOD
+}
+
+# Print version informations
+version() {
+cat <<EOD
+NagVis installer, version $INSTALLER_VERSION
+Copyright (C) 2004-2008 NagVis Project
+
+License: GNU General Public License version 2
+
+Development:
+- Wolfgang Nieder
+- Lars Michelsen <lars@vertical-visions.de>
 
 EOD
 }
@@ -247,12 +263,12 @@ chk_rc() {
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:v:p:u:g:hq" options; do
+	while getopts "n:p:u:b:g:hqv" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
 			;;
-			v)
+			b)
 				GRAPHVIZ_PATH=$OPTARG
 			;;
 			p)
@@ -269,6 +285,10 @@ if [ $# -gt 0 ]; then
 			;;
 			h)
 				usage
+				exit 0
+			;;
+			v)
+				version
 				exit 0
 			;;
 			*)
