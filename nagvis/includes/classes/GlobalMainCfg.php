@@ -237,7 +237,7 @@ class GlobalMainCfg {
 					'match' => MATCH_STRING_PATH),
 				'htmlvar' => Array('must' => 0,
 					'editable' => 0,
-					'default' => '/nagios/var/',
+					'default' => '/nagios/nagvis/var/',
 					'match' => MATCH_STRING_PATH)),
 			'backend' => Array(
 				'backendtype' => Array('must' => 1,
