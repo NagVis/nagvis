@@ -123,7 +123,10 @@ class GlobalIndexPage {
 		$i = 1;
 		foreach($this->CORE->getAvailableMaps() AS $mapName) {
 			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
-			$MAPCFG->readMapConfig();
+			if(!$MAPCFG->readMapConfig()) {
+				// Skip this map when config problem
+				continue;
+			}
 			
 			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
 				if($mapName == '__automap') {
