@@ -167,9 +167,6 @@ function createjsDOMenu() {
 		submenu_addobject.items.menu_addobject_special.setSubMenu(submenu_addobject_special);
 	}
 	
-	filter = new Array("IMG.background");
-	mainMenu.setNoneExceptFilter(filter);
-	
 	setPopUpMenu(mainMenu);
 	activatePopUpMenuBy(1, 2);
 	
