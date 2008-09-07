@@ -430,48 +430,48 @@ chk_rc "|  Error copying files to $NAGVIS_PATH"
 
 if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
   echo "+--- Restoring main configuration file"
-	cp -p $NAGVIS_PATH_OLD/$NAGVIS_CONF $NAGVIS_PATH/$NAGVIS_CONF
+	cp -pr $NAGVIS_PATH_OLD/$NAGVIS_CONF $NAGVIS_PATH/$NAGVIS_CONF
 	chk_rc "|  Error copying main configuration file"
 	
 	echo "+--- Restoring custom map configuration files"
 	GLOBIGNORE="demo.cfg:demo2.cfg"
-	cp -p $NAGVIS_PATH_OLD/etc/maps/* $NAGVIS_PATH/etc/maps
+	cp -pr $NAGVIS_PATH_OLD/etc/maps/* $NAGVIS_PATH/etc/maps
 	GLOBIGNORE=""
 	chk_rc "|  Error copying map configuration files"
 	
 	echo "+--- Restoring custom map images"
 	GLOBIGNORE="nagvis-demo.png"
-	cp -p $NAGVIS_PATH_OLD/nagvis/images/maps/* $NAGVIS_PATH/nagvis/images/maps
+	cp -pr $NAGVIS_PATH_OLD/nagvis/images/maps/* $NAGVIS_PATH/nagvis/images/maps
 	GLOBIGNORE=""
 	chk_rc "|  Error copying map image files"
 	
 	echo "+--- Restoring custom iconsets"
 	
 	GLOBIGNORE="20x20.png:configerror_*.png:error.png:std_*.png"
-	cp -p $NAGVIS_PATH_OLD/nagvis/images/iconsets/* $NAGVIS_PATH/nagvis/images/iconsets
+	cp -pr $NAGVIS_PATH_OLD/nagvis/images/iconsets/* $NAGVIS_PATH/nagvis/images/iconsets
 	GLOBIGNORE=""
 	chk_rc "|  Error copying iconset files"
 	
 	echo "+--- Restoring custom shapes"
-	cp -p $NAGVIS_PATH_OLD/nagvis/images/shapes/* $NAGVIS_PATH/nagvis/images/shapes
+	cp -pr $NAGVIS_PATH_OLD/nagvis/images/shapes/* $NAGVIS_PATH/nagvis/images/shapes
 	chk_rc "|  Error copying shapes"
 	
 	echo "+--- Restoring custom templates (header, hover)"
 	GLOBIGNORE="tmpl.default*"
-	cp -p $NAGVIS_PATH_OLD/nagvis/templates/header/* $NAGVIS_PATH/nagvis/templates/header
+	cp -pr $NAGVIS_PATH_OLD/nagvis/templates/header/* $NAGVIS_PATH/nagvis/templates/header
 	chk_rc "|  Error copying header templates"
-	cp -p $NAGVIS_PATH_OLD/nagvis/templates/hover/* $NAGVIS_PATH/nagvis/templates/hover
+	cp -pr $NAGVIS_PATH_OLD/nagvis/templates/hover/* $NAGVIS_PATH/nagvis/templates/hover
 	GLOBIGNORE=""
 	chk_rc "|  Error copying hover templates"
 	
 	echo "+--- Restoring custom template images (header, hover)"
 	GLOBIGNORE="tmpl.default*"
-	cp -p $NAGVIS_PATH_OLD/nagvis/images/templates/header/* $NAGVIS_PATH/nagvis/images/templates/header
+	cp -pr $NAGVIS_PATH_OLD/nagvis/images/templates/header/* $NAGVIS_PATH/nagvis/images/templates/header
 	GLOBIGNORE=""
 	chk_rc "|  Error copying header template images"
 	
 	GLOBIGNORE="tmpl.default*"
-  cp -p $NAGVIS_PATH_OLD/nagvis/images/templates/hover/* $NAGVIS_PATH/nagvis/images/templates/hover
+  cp -pr $NAGVIS_PATH_OLD/nagvis/images/templates/hover/* $NAGVIS_PATH/nagvis/images/templates/hover
 	GLOBIGNORE=""
 	chk_rc "|  Error copying hover template images"
 fi
