@@ -77,6 +77,9 @@ class NagVisHost extends NagiosHost {
 		if(!in_array($this->getName(), $arrHostnamesParsed)) {
 			$strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
 			$strReturn .= 'label=<<table border="0">';
+			if(isset($this->statusmap_image) && $this->statusmap_image != '') {
+				$strReturn .= '<tr><td><img src="'.$this->CORE->MAINCFG->getValue('paths', 'shape').$this->statusmap_image.'"></img></td></tr>';
+			}
 			$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
 			$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
 			$strReturn .= '</table>>, ';

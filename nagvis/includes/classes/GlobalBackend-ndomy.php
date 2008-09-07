@@ -415,6 +415,7 @@ class GlobalBackendndomy {
 				current_state, 
 				output, perfdata, 
 				problem_has_been_acknowledged, 
+				statusmap_image, 
 				UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
 				hs.state_type, hs.current_check_attempt, hs.max_check_attempts, 
 				UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
@@ -446,6 +447,7 @@ class GlobalBackendndomy {
 				$arrReturn['alias'] = $data['alias'];
 				$arrReturn['display_name'] = $data['display_name'];
 				$arrReturn['address'] = $data['address'];
+				$arrReturn['statusmap_image'] = $data['statusmap_image'];
 				
 				// Add Additional informations to array
 				$arrReturn['perfdata'] = $data['perfdata'];

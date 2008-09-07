@@ -36,6 +36,7 @@ class NagiosHost extends NagVisStatefulObject {
 	var $alias;
 	var $display_name;
 	var $address;
+	var $statusmap_image;
 	
 	var $state;
 	var $output;
