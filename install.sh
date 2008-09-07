@@ -40,6 +40,8 @@ INSTALLER_QUIET=0
 NAGIOS_PATH="/usr/local/nagios"
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
+# Default Path to NagVis base
+NAGVIS_PATH=""
 # Version of NagVis to be installed
 NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 # Version of old NagVis (If update; Will be detected)
@@ -75,6 +77,7 @@ Installs or updates NagVis on your system.
 Parameters:
   -n <PATH>   Path to Nagios directory. The default value is /usr/local/nagios
   -g <PATH>   Path to graphviz binaries. The default value is /usr/local
+  -p <PATH>   Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
   -u <USER>   User which runs the webserver
   -g <GROUP>  Group which runs the webserver
   -q          Quiet mode. The installer won't ask for confirmation of what to do.
@@ -244,13 +247,16 @@ chk_rc() {
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:v:u:g:hq" options; do
+	while getopts "n:v:p:u:g:hq" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
 			;;
 			v)
 				GRAPHVIZ_PATH=$OPTARG
+			;;
+			p)
+				NAGVIS_PATH=$OPTARG
 			;;
 			u)
 				WEB_USER=$OPTARG
@@ -285,23 +291,51 @@ echo "|"
 echo "+--- Checking for packet manager ----------------------------------------------+"
 PKG=`which rpm`
 [ -u $PKG ] && PKG=`which dpkg`
-log "Packet manager $PKG" $PKG
+log "Using packet manager $PKG" $PKG
 
+echo "|"
+echo "+--- Checking paths -----------------------------------------------------------+"
+
+# Get Nagios path
 if [ $INSTALLER_QUIET -ne 1 ]; then
-	echo -n "| Please enter the Nagios base dirrectory [$NAGIOS_PATH]: "
-	read ADST
-	[ ! -z $ADST ] && NAGIOS_PATH=$ADST
+  echo -n "| Please enter the path to Nagios base directory [$NAGIOS_PATH]: "
+  read AGRP
+  if [ ! -z $AGRP ]; then
+    NAGIOS_PATH=$AGRP
+  fi
+fi
+
+# Check Nagios path
+if [ -d $NAGIOS_PATH ]; then
+	log "Nagios path $NAGIOS_PATH" "found"
+else
+	echo "| Nagios home $NAGIOS_PATH is missing. Aborting..."
+	exit 1
+fi
+
+# Set default NagVis path
+[ -z $NAGVIS_PATH ] && NAGVIS_PATH=${NAGIOS_PATH%/}/share/nagvis
+
+# Get NagVis path
+if [ $INSTALLER_QUIET -ne 1 ]; then
+  echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
+  read AGRP
+  if [ ! -z $AGRP ]; then
+    NAGVIS_PATH=$AGRP
+  fi
 fi
 
 echo "|"
 echo "+--- Checking prerequisites ---------------------------------------------------+"
 
-# Check Nagios
-if [ -d $NAGIOS_PATH ]; then NAGIOS=`$NAGIOS_PATH/bin/nagios --version | grep Nagios 2>&1`
+# Check Nagios version
+NAGIOS_BIN="$NAGIOS_PATH/bin/nagios"
+
+if [ -f $NAGIOS_BIN ]; then
+	NAGIOS=`$NAGIOS_PATH/bin/nagios --version | grep Nagios 2>&1`
 	log "$NAGIOS" $NAGIOS
 else
-	echo "| Nagios home $NAGIOS_PATH is missing. Aborting..."
-	exit 1
+	log "Nagios binary $NAGIOS_BIN"
 fi
 NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
 
@@ -361,7 +395,6 @@ fi
 echo "|"
 echo "+--- Checking for existing NagVis ---------------------------------------------+"
 
-NAGVIS_PATH=${NAGIOS_PATH%/}/share/nagvis
 if [ -d $NAGVIS_PATH ]; then
 	INSTALLER_ACTION="update"
 	
