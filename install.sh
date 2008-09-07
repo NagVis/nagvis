@@ -35,6 +35,8 @@ INSTALLER_VERSION="0.1.2"
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
 INSTALLER_QUIET=0
+# Should the installer change config options when possible?
+INSTALLER_CONFIG_MOD="n"
 
 # Default Nagios path
 NAGIOS_PATH="/usr/local/nagios"
@@ -80,6 +82,7 @@ Parameters:
   -p <PATH>   Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
   -u <USER>   User which runs the webserver
   -g <GROUP>  Group which runs the webserver
+  -c [y|n]    Update configuration files when possible?
   -q          Quiet mode. The installer won't ask for confirmation of what to do.
               This can be useful for automatic or scripted deployment.
               WARNING: Only use this when you know what you do
@@ -267,7 +270,7 @@ chk_rc() {
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:p:u:b:g:hqv" options; do
+	while getopts "n:p:u:b:g:c:hqv" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -286,6 +289,9 @@ if [ $# -gt 0 ]; then
 			;;
 			q)
 				INSTALLER_QUIET=1
+			;;
+			c)
+				INSTALLER_CONFIG_MOD=$OPTARG
 			;;
 			h)
 				usage
@@ -433,6 +439,16 @@ if [ -d $NAGVIS_PATH ]; then
 	log "NagVis $NAGVIS_VER_OLD" $NAGVIS_VER_OLD
 fi
 
+if [ "$INSTALLER_ACTION" = "update" ]; then
+	if [ $INSTALLER_QUIET -ne 1 ]; then
+		echo -n "| Do you want the installer to update your config files when possible [$INSTALLER_CONFIG_MOD]?: "
+		read AGRP
+		if [ ! -z $AGRP ]; then
+			INSTALLER_CONFIG_MOD=$AGRP
+		fi
+	fi
+fi
+
 echo "|"
 echo "+------------------------------------------------------------------------------+"
 echo "| Summary"
@@ -449,7 +465,13 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	echo "| "
 	echo "| Note: The current NagVis directory will be moved to the backup directory."
 	if [ ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
-		echo "|       Your configuration files will be migrated."
+		echo "|       Your configuration files will be copied."
+		if [ "$INSTALLER_CONFIG_MOD" = "y" ]; then
+			echo "|       The configuration files will be updated when possible."
+		else
+			echo "|       The configuration files will NOT be updated. Please check the "
+			echo "|       changelog for any changes which affect your configuration files."
+		fi
 	else
 		echo "|"
 		echo "|          !!! UPDATE FROM VERSION \"$NAGVIS_VER_OLD\" IS NOT SUPPORTED !!!"
@@ -546,10 +568,9 @@ if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
 	else
 		echo "| Update from unhandled version $NAGVIS_VER_OLD"
 		echo "| "
-		echo "| HINT: Please check the changelog or the documentation for changes"
+		echo "| HINT: Please check the changelog or the documentation for changes which"
+		echo "|       affect your configuration files"
 	fi
-
-	chk_rc "| Error handling options" "| done"
 fi
 
 echo "+--- Setting permissions..."
