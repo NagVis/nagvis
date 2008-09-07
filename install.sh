@@ -255,6 +255,10 @@ chk_rc() {
 	if [ $RC -ne 0 ]; then
 		echo $* Return Code: $RC
 		exit 1
+	else
+		if [ ! "$2" = "" ]; then
+			echo "$2"
+		fi
 	fi
 }
 
@@ -463,73 +467,92 @@ echo "| Starting installation"
 echo "+------------------------------------------------------------------------------+"
 
 if [ "$INSTALLER_ACTION" = "update" ]; then
-	echo "+--- Moving old NagVis to  $NAGVIS_PATH_OLD"
+	echo "+--- Moving old NagVis to $NAGVIS_PATH_OLD..."
 	mv $NAGVIS_PATH $NAGVIS_PATH_OLD
-	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD"
+	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD" "| done"
 fi
 
 if [ ! -d $NAGVIS_PATH ]; then
-	echo "+--- Creating directory $NAGVIS_PATH"
+	echo "+--- Creating directory $NAGVIS_PATH..."
 	mkdir -p $NAGVIS_PATH
-	chk_rc "|  Error creating directory $NAGVIS_PATH"
+	chk_rc "|  Error creating directory $NAGVIS_PATH" "| done"
 fi
 
 
-echo "+--- Copying files to $NAGVIS_PATH"
+echo "+--- Copying files to $NAGVIS_PATH..."
 GLOBIGNORE="install.sh"
 cp -pr * $NAGVIS_PATH
 GLOBIGNORE=""
-chk_rc "|  Error copying files to $NAGVIS_PATH"
+chk_rc "|  Error copying files to $NAGVIS_PATH" "| done"
 
 if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
-  echo "+--- Restoring main configuration file"
+  echo "+--- Restoring main configuration file..."
 	cp -pr $NAGVIS_PATH_OLD/$NAGVIS_CONF $NAGVIS_PATH/$NAGVIS_CONF
-	chk_rc "|  Error copying main configuration file"
+	chk_rc "|  Error copying main configuration file" "| done"
 	
-	echo "+--- Restoring custom map configuration files"
+	echo "+--- Restoring custom map configuration files..."
 	GLOBIGNORE="demo.cfg:demo2.cfg"
 	cp -pr $NAGVIS_PATH_OLD/etc/maps/* $NAGVIS_PATH/etc/maps
 	GLOBIGNORE=""
-	chk_rc "|  Error copying map configuration files"
+	chk_rc "|  Error copying map configuration files" "| done"
 	
-	echo "+--- Restoring custom map images"
+	echo "+--- Restoring custom map images..."
 	GLOBIGNORE="nagvis-demo.png"
 	cp -pr $NAGVIS_PATH_OLD/nagvis/images/maps/* $NAGVIS_PATH/nagvis/images/maps
 	GLOBIGNORE=""
-	chk_rc "|  Error copying map image files"
+	chk_rc "|  Error copying map image files" "| done"
 	
-	echo "+--- Restoring custom iconsets"
+	echo "+--- Restoring custom iconsets..."
 	
 	GLOBIGNORE="20x20.png:configerror_*.png:error.png:std_*.png"
 	cp -pr $NAGVIS_PATH_OLD/nagvis/images/iconsets/* $NAGVIS_PATH/nagvis/images/iconsets
 	GLOBIGNORE=""
-	chk_rc "|  Error copying iconset files"
+	chk_rc "|  Error copying iconset files" "| done"
 	
-	echo "+--- Restoring custom shapes"
+	echo "+--- Restoring custom shapes..."
 	cp -pr $NAGVIS_PATH_OLD/nagvis/images/shapes/* $NAGVIS_PATH/nagvis/images/shapes
-	chk_rc "|  Error copying shapes"
+	chk_rc "|  Error copying shapes" "| done"
 	
-	echo "+--- Restoring custom templates (header, hover)"
+	echo "+--- Restoring custom templates (header, hover)..."
 	GLOBIGNORE="tmpl.default*"
 	cp -pr $NAGVIS_PATH_OLD/nagvis/templates/header/* $NAGVIS_PATH/nagvis/templates/header
-	chk_rc "|  Error copying header templates"
+	chk_rc "|  Error copying header templates" "| done"
 	cp -pr $NAGVIS_PATH_OLD/nagvis/templates/hover/* $NAGVIS_PATH/nagvis/templates/hover
 	GLOBIGNORE=""
-	chk_rc "|  Error copying hover templates"
+	chk_rc "|  Error copying hover templates" "| done"
 	
-	echo "+--- Restoring custom template images (header, hover)"
+	echo "+--- Restoring custom template images (header, hover)..."
 	GLOBIGNORE="tmpl.default*"
 	cp -pr $NAGVIS_PATH_OLD/nagvis/images/templates/header/* $NAGVIS_PATH/nagvis/images/templates/header
 	GLOBIGNORE=""
-	chk_rc "|  Error copying header template images"
+	chk_rc "|  Error copying header template images" "| done"
 	
 	GLOBIGNORE="tmpl.default*"
   cp -pr $NAGVIS_PATH_OLD/nagvis/images/templates/hover/* $NAGVIS_PATH/nagvis/images/templates/hover
 	GLOBIGNORE=""
-	chk_rc "|  Error copying hover template images"
+	chk_rc "|  Error copying hover template images" "| done"
 fi
 
-echo "+--- Setting permissions"
+# Do some update tasks (Changing options, notify about deprecated options)
+if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
+	echo "+--- Handling changed/removed options..."
+	if [ ! "x`echo $NAGVIS_VER_OLD | grep '1.3'`" = "x" ]; then
+		echo "| Update from 1.3.x"
+		echo "|"
+		echo "+---- Applying changes in main configuration file..."
+		chk_rc "| Error" "| done"
+		echo "+---- Applying changes in map configuration files..."
+		chk_rc "| Error" "| done"
+	else
+		echo "| Update from unhandled version $NAGVIS_VER_OLD"
+		echo "| "
+		echo "| HINT: Please check the changelog or the documentation for changes"
+	fi
+
+	chk_rc "| Error handling options" "| done"
+fi
+
+echo "+--- Setting permissions..."
 chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
 chmod 664 $NAGVIS_PATH/$NAGVIS_CONF-sample
 chmod 775 $NAGVIS_PATH/nagvis/images/maps
@@ -540,11 +563,12 @@ if [ -d $NAGVIS_PATH/nagvis/var ]; then
 	chmod 775 $NAGVIS_PATH/nagvis/var
 	chmod 664 $NAGVIS_PATH/nagvis/var/*
 fi
+echo "| done"
 
 if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
-	echo "+--- Creating main configuration file"
+	echo "+--- Creating main configuration file..."
 	cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
-	chk_rc "|  Error copying sample configuration"
+	chk_rc "|  Error copying sample configuration" "| done"
 fi
 
 echo "|"
