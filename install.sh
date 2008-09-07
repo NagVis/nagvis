@@ -57,8 +57,7 @@ WEB_GROUP=""
 NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
-# TODO: mbstring, gettext
-NEED_PHP_MODULES="gd mysql"
+NEED_PHP_MODULES="gd mysql mbstring gettext"
 NEED_GV_MOD="dot neato twopi circo fdp"
 NEED_GV_VERSION=2.14
 
@@ -120,8 +119,10 @@ log() {
 		printf "%-71s %s\n" "| $1" "MISSING"
 		exit 1
 	elif [ "$2" = "needed" ]; then
-    		echo "$1 needed"
+		echo "$1 needed"
 		exit 1
+	elif [ "$2" = "warning" ]; then
+		echo "$1"
 	else	
 		printf "%-73s %s\n" "| $1" "found"
 	fi
@@ -181,7 +182,7 @@ done
 # Check PHP Version
 check_php_version() {
 	if [ "${PKG##/*/}" = "dpkg" ]; then
-		PHP_VER=`$PKG -l "php[0-9]" | grep "php" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
+		PHP_VER=`$PKG -l "php[0-9]" 2>/dev/null | grep "php" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 	else
 		PHP_VER=`$PKG -qa "php[0-9]" | sed "s/php[0-9]\-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
@@ -198,7 +199,7 @@ check_php_modules() {
 	for MOD in $1
 	do
 		if [ "${PKG##/*/}" = "dpkg" ]; then
-			MOD_VER=`$PKG -l "php[0-9]-$MOD" | grep "php" | grep "ii" | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
+			MOD_VER=`$PKG -l "php[0-9]-$MOD" 2>/dev/null | grep "php" | grep "ii" | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 		else
 			MOD_VER=`$PKG -qa "php[0-9]-$MOD" | sed "s/php[0-9]\-$MOD-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 		fi
@@ -208,7 +209,7 @@ check_php_modules() {
 
 		if [ -n $MOD_VER ]; then
 			if [ `echo "$2 $MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
-				log "|  Error: Version >= $2" "needed"
+				log "|  WARNING: Module not found. This maybe no problem. You can ignore this when your php was compiled with the module included" "warning"
 			fi
 		fi
 	done
