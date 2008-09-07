@@ -167,6 +167,8 @@ function createjsDOMenu() {
 		submenu_addobject.items.menu_addobject_special.setSubMenu(submenu_addobject_special);
 	}
 	
+	mainMenu.setAllExceptFilter(new Array());
+	
 	setPopUpMenu(mainMenu);
 	activatePopUpMenuBy(1, 2);
 	
