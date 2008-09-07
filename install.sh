@@ -401,7 +401,9 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 fi
 echo "|"
 
-confirm "Do you really want to continue?" "y"
+if [ $INSTALLER_QUIET -ne 1 ]; then
+	confirm "Do you really want to continue?" "y"
+fi
 
 echo "+------------------------------------------------------------------------------+"
 echo "| Starting installation"
@@ -500,7 +502,8 @@ printf "%-78s %s|\n" "| You can savely remove this source directory."
 printf "%-78s %s|\n" "|"
 printf "%-78s %s|\n" "| What to do next?"
 printf "%-78s %s|\n" "| - Read the documentation"
-printf "%-78s %s|\n" "| - Maybe you want to edit $NAGVIS_PATH/$NAGVIS_CONF"
+printf "%-78s %s|\n" "| - Maybe you want to edit the main configuration file?"
+printf "%-78s %s|\n" "|   It's location is: $NAGVIS_PATH/$NAGVIS_CONF"
 printf "%-78s %s|\n" "| - Configure NagVis by Browser <http://localhost${HTML_PATH}/nagvis/config.php>"
 echo "+------------------------------------------------------------------------------+"
 exit 0
