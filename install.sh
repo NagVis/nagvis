@@ -33,6 +33,8 @@
 INSTALLER_VERSION="0.1.2"
 # Default action
 INSTALLER_ACTION="install"
+# Be quiet? (Enable/Disable confirmations)
+INSTALLER_QUIET=0
 
 # Default Nagios path
 NAGIOS_PATH="/usr/local/nagios"
@@ -75,6 +77,9 @@ Parameters:
   -g <PATH>   Path to graphviz binaries. The default value is /usr/local
   -u <USER>   User which runs the webserver
   -g <GROUP>  Group which runs the webserver
+  -q          Quiet mode. The installer won't ask for confirmation of what to do.
+              This can be useful for automatic or scripted deployment.
+              WARNING: Only use this when you know what you do
   -h          This message
 
 EOD
@@ -110,7 +115,9 @@ cat <<EOD
 | report that to the NagVis team.                                              |
 +------------------------------------------------------------------------------+
 EOD
-confirm "Do you want to proceed?" "y"
+if [ $INSTALLER_QUIET -ne 1 ]; then
+	confirm "Do you want to proceed?" "y"
+fi
 }
 
 # Print module state, exit if necessary
@@ -137,13 +144,21 @@ check_apache_php() {
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
 	MODPHP=`grep -rie "mod_php.*\.so" -e "libphp.*\.so" $DIR | tr -s " " | cut -d" " -f3 | uniq`
-	WEB_USER=`grep -ri "^User" $DIR | cut -d" " -f2 | uniq`
-	WEB_GROUP=`grep -ri "^Group" $DIR | cut -d" " -f2 | uniq`
 	HTML_PATH=`grep -ri "^Alias" $DIR | grep -i "/nagios" | cut -d" " -f2 | uniq` 
-	VAR=`echo $WEB_USER | grep "$" >/dev/null 2>&1`
-	[ $? -eq 0 ] && WEB_USER=`eval "echo $WEB_USER"`
-	VAR=`echo $WEB_GROUP | grep "$" >/dev/null 2>&1`
-	[ $? -eq 0 ] && WEB_GROUP=`eval "echo $WEB_GROUP"`
+	
+	# Only try to detect user when not set or empty
+	if [ "x$WEB_USER" = "x" ]; then
+		WEB_USER=`grep -ri "^User" $DIR | cut -d" " -f2 | uniq`
+		VAR=`echo $WEB_USER | grep "$" >/dev/null 2>&1`
+		[ $? -eq 0 ] && WEB_USER=`eval "echo $WEB_USER"`
+	fi
+
+	# Only try to detect group when not set or empty
+	if [ "x$WEB_GROUP" = "x" ]; then
+		WEB_GROUP=`grep -ri "^Group" $DIR | cut -d" " -f2 | uniq`
+		VAR=`echo $WEB_GROUP | grep "$" >/dev/null 2>&1`
+		[ $? -eq 0 ] && WEB_GROUP=`eval "echo $WEB_GROUP"`
+	fi
 }
 
 # Check Graphviz version by installed system package
@@ -229,7 +244,7 @@ chk_rc() {
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:v:u:g:h" options; do
+	while getopts "n:v:u:g:hq" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -242,6 +257,9 @@ if [ $# -gt 0 ]; then
 			;;
 			g)
 				WEB_GROUP=$OPTARG
+			;;
+			q)
+				INSTALLER_QUIET=1
 			;;
 			h)
 				usage
@@ -269,8 +287,8 @@ PKG=`which rpm`
 [ -u $PKG ] && PKG=`which dpkg`
 log "Packet manager $PKG" $PKG
 
-if [ -z "$NAGIOS_PATH" ]; then
-	echo -n "| Please enter the Nagios base dir [$NAGIOS_PATH]: "
+if [ $INSTALLER_QUIET -ne 1 ]; then
+	echo -n "| Please enter the Nagios base dirrectory [$NAGIOS_PATH]: "
 	read ADST
 	[ ! -z $ADST ] && NAGIOS_PATH=$ADST
 fi
@@ -313,17 +331,21 @@ echo "|"
 echo "+--- Trying to detect Apache settings -----------------------------------------+"
 
 HTML_PATH=${HTML_PATH%/}
-WEB_USER=${WEB_USER:-$USER}
-WEB_GROUP=${WEB_GROUP:-$GROUP}
-echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
-read AUSR
-if [ ! -z $AUSR ]; then
-	WEB_USER=$AUSR
+
+if [ $INSTALLER_QUIET -ne 1 ]; then
+	echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
+	read AUSR
+	if [ ! -z $AUSR ]; then
+		WEB_USER=$AUSR
+	fi
 fi
-echo -n "| Please enter the name of the web-server group [$WEB_GROUP]: "
-read AGRP
-if [ ! -z $AGRP ]; then
-	WEB_GROUP=$AGRP
+
+if [ $INSTALLER_QUIET -ne 1 ]; then
+	echo -n "| Please enter the name of the web-server group [$WEB_GROUP]: "
+	read AGRP
+	if [ ! -z $AGRP ]; then
+		WEB_GROUP=$AGRP
+	fi
 fi
 
 if [ ! `getent passwd | cut -d':' -f1 | grep $WEB_USER` = "$WEB_USER" ]; then
