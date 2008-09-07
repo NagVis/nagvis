@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-05 19:40+0100\n"
-"PO-Revision-Date: 2008-09-05 19:43+0100\n"
+"POT-Creation-Date: 2008-09-07 17:59+0100\n"
+"PO-Revision-Date: 2008-09-07 17:59+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -39,14 +39,14 @@ msgid "ObjectNotFoundOnMap"
 msgstr "The object could not be found on the given map."
 
 #: nagvis/ajax_handler.php:192
-#: nagvis/includes/classes/GlobalMapCfg.php:808
-#: nagvis/includes/classes/objects/NagVisMapObj.php:304
+#: nagvis/includes/classes/GlobalMapCfg.php:810
+#: nagvis/includes/classes/objects/NagVisMapObj.php:309
 msgid "mapCfgNotExists"
 msgstr "The map configuration file \"[MAP]\" does not exist"
 
 #: nagvis/ajax_handler.php:203
-#: nagvis/includes/classes/GlobalMapCfg.php:696
-#: nagvis/includes/classes/objects/NagVisMapObj.php:315
+#: nagvis/includes/classes/GlobalMapCfg.php:698
+#: nagvis/includes/classes/objects/NagVisMapObj.php:320
 msgid "unknownObject"
 msgstr "The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed."
 
@@ -58,16 +58,16 @@ msgstr "The automap is not supported here."
 msgid "unknownQuery"
 msgstr "Unknown Query"
 
-#: nagvis/includes/classes/GlobalPage.php:113
+#: nagvis/includes/classes/GlobalPage.php:111
 msgid "wrongPhpVersion"
 msgstr "The PHP version you are using &quot;[CURRENT_VERSION]&quot; is too old. NagVis needs PHP &quot;[NEEDED_VERSION]&quot; or newer."
 
-#: nagvis/includes/classes/GlobalPage.php:131
+#: nagvis/includes/classes/GlobalPage.php:129
 msgid "noUser"
 msgstr "No user name was handed over to NagVis! For possible solutions please have a look at the FAQ on www.nagvis.org."
 
-#: nagvis/includes/classes/GlobalPage.php:148
-#: nagvis/includes/classes/objects/NagVisMapObj.php:425
+#: nagvis/includes/classes/GlobalPage.php:146
+#: nagvis/includes/classes/objects/NagVisMapObj.php:432
 msgid "permissionDenied"
 msgstr "The user \"[USER]\" has no permission for this action"
 
@@ -110,13 +110,13 @@ msgid "supportInfo"
 msgstr "NagVis Support Informations"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:91
-#: nagvis/includes/classes/objects/NagVisObject.php:356
+#: nagvis/includes/classes/objects/NagVisObject.php:352
 #: wui/includes/classes/WuiMap.php:596
 msgid "overview"
 msgstr "Overview"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:92
-#: nagvis/includes/classes/objects/NagVisObject.php:360
+#: nagvis/includes/classes/objects/NagVisObject.php:356
 msgid "instance"
 msgstr "Instance"
 
@@ -221,25 +221,26 @@ msgstr "The main configuration file cache is not writeable."
 msgid "mapRotationPoolNotExists"
 msgstr "The given map rotation pool &quot;[ROTATION]&quot; is not defined in NagVis."
 
-#: nagvis/includes/classes/GlobalMap.php:62
+#: nagvis/includes/classes/GlobalMap.php:58
 msgid "gdLibNotFound"
 msgstr "You told NagVis to use the GD-Libs for drawing lines on the background image (usegdlibs=1). GD-Libs are not installed or loaded in your php."
 
-#: nagvis/includes/classes/NagVisAutoMap.php:280
+#: nagvis/includes/classes/NagVisAutoMap.php:276
 msgid "unknownRenderMode"
 msgstr "The render mode &quot;[MODE]&quot; is not supported."
 
-#: nagvis/includes/classes/NagVisAutoMap.php:420
+#: nagvis/includes/classes/NagVisAutoMap.php:416
 msgid "graphvizBinaryNotFound"
 msgstr "The required graphviz binary &quot;[NAME]&quot; could not be found in the paths: &quot;[PATHS]&quot;."
 
-#: nagvis/includes/classes/NagVisAutoMap.php:523
+#: nagvis/includes/classes/NagVisAutoMap.php:519
 msgid "couldNotGetRootHostname"
 msgstr "The Automap needs one root hostname to start the drawing.[br][br] There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is [b]one[/b] host with no parent)."
 
 #: nagvis/includes/classes/GlobalLanguage.php:74
-msgid "phpGettextNotSupported"
-msgstr "The gettext extension module is not loaded in your PHP installation. Please make the module available."
+#: wui/includes/classes/WuiFrontend.php:72
+msgid "phpModuleNotLoaded"
+msgstr "The PHP module &quot;[MODULE]&quot; is not loaded."
 
 #: nagvis/includes/classes/GlobalBackend-ndomy.php:90
 msgid "nagiosNotRunning"
@@ -269,19 +270,19 @@ msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&
 msgid "backendInstanceNameNotUniq"
 msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not unique."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:438
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:439
 msgid "hostNotFoundInDB"
 msgstr "The host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:486
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:488
 msgid "hostIsPending"
 msgstr "The host \"[HOST]\" is in pending state"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:605
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:607
 msgid "serviceNotFoundInDB"
 msgstr "The service \"[SERVICE]\" on host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:657
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:659
 msgid "serviceNotChecked"
 msgstr "The service \"[SERVICE]\" has not been checked yet"
 
@@ -295,7 +296,7 @@ msgstr "Map Index"
 
 #: nagvis/includes/classes/GlobalIndexPage.php:179
 #: nagvis/includes/classes/GlobalIndexPage.php:180
-#: nagvis/includes/classes/objects/NagVisMapObj.php:445
+#: nagvis/includes/classes/objects/NagVisMapObj.php:452
 msgid "mapInMaintenance"
 msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is automatically reloaded."
 
@@ -308,11 +309,11 @@ msgstr "Only PNG or JPG images are allowed for map image files."
 msgid "imageNotExists"
 msgstr "An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:831
+#: nagvis/includes/classes/GlobalMapCfg.php:833
 msgid "mapCfgNotReadable"
 msgstr "The map configuration file &quot;[IMGPATH]&quot; is not readable."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:858
+#: nagvis/includes/classes/GlobalMapCfg.php:860
 #: wui/form_handler.php:50
 #: wui/form_handler.php:93
 #: wui/form_handler.php:95
@@ -362,12 +363,16 @@ msgstr "The map configuration file &quot;[IMGPATH]&quot; is not readable."
 msgid "mustValueNotSet"
 msgstr "A necessary value is not set. All red marked values are compulsory values."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:870
+#: nagvis/includes/classes/GlobalMapCfg.php:872
 msgid "unknownAttribute"
 msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not supported in objects of type &quot;[TYPE]&quot; on map [MAPNAME]."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:886
-#: nagvis/includes/classes/GlobalMapCfg.php:898
+#: nagvis/includes/classes/GlobalMapCfg.php:878
+msgid "mapDeprecatedOption"
+msgstr "The given option &quot;[ATTRIBUTE]&quot; in section of type &quot;[TYPE]&quot; in map &quot;[MAP]&quot; is deprecated in this version. Please read the documentation/changelog for details."
+
+#: nagvis/includes/classes/GlobalMapCfg.php:894
+#: nagvis/includes/classes/GlobalMapCfg.php:906
 #: wui/includes/classes/WuiMap.php:625
 msgid "wrongValueFormatMap"
 msgstr "The attribute \"[ATTRIBUTE]\" in element of type \"[TYPE]\" in map configuration file \"[MAP]\" does not match the valid value format"
@@ -416,145 +421,139 @@ msgstr "Parameter [VAR] contains not a valid string."
 msgid "ValidatorNotAllowedParameterEntry"
 msgstr "Parameter [VAR] is not a allowed entry."
 
-#: nagvis/includes/classes/objects/NagiosHost.php:405
+#: nagvis/includes/classes/objects/NagiosHost.php:402
 msgid "hostStateIs"
 msgstr "The Host is"
 
-#: nagvis/includes/classes/objects/NagiosHost.php:418
-#: nagvis/includes/classes/objects/NagiosServicegroup.php:216
+#: nagvis/includes/classes/objects/NagiosHost.php:415
+#: nagvis/includes/classes/objects/NagiosServicegroup.php:212
 msgid "services"
 msgstr "Services"
 
-#: nagvis/includes/classes/objects/NagiosHost.php:420
+#: nagvis/includes/classes/objects/NagiosHost.php:417
 msgid "hostHasNoServices"
 msgstr "The host \"[HOST]\" has no Services."
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:255
+#: nagvis/includes/classes/objects/NagVisMapObj.php:260
 msgid "objects"
 msgstr "Objects"
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:257
+#: nagvis/includes/classes/objects/NagVisMapObj.php:262
 msgid "mapIsEmpty"
 msgstr "The map \"[MAP]\" has 0 objects."
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:349
-#: nagvis/includes/classes/objects/NagVisMapObj.php:352
-#: wui/includes/classes/WuiAddModify.php:256
-msgid "loopInMapRecursion"
-msgstr "loopInMapRecursion"
-
-#: nagvis/includes/classes/objects/NagVisMapObj.php:365
+#: nagvis/includes/classes/objects/NagVisMapObj.php:372
 msgid "noReadPermissions"
 msgstr "You are not permitted to view the state of this map."
 
-#: nagvis/includes/classes/objects/NagVisStatefulObject.php:661
+#: nagvis/includes/classes/objects/NagVisStatefulObject.php:658
 msgid "childStatesAre"
 msgstr "There are"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:303
+#: nagvis/includes/classes/objects/NagVisObject.php:299
 msgid "couldNotGetHoverUrl"
 msgstr "Could not get hover URL &quot;[URL]&quot;. Maybe the URL is password protected."
 
-#: nagvis/includes/classes/objects/NagVisObject.php:328
+#: nagvis/includes/classes/objects/NagVisObject.php:324
 msgid "alias"
 msgstr "Alias"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:332
+#: nagvis/includes/classes/objects/NagVisObject.php:328
 msgid "address"
 msgstr "Address"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:336
+#: nagvis/includes/classes/objects/NagVisObject.php:332
 msgid "state"
 msgstr "State"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:340
+#: nagvis/includes/classes/objects/NagVisObject.php:336
 msgid "summaryState"
 msgstr "Summary State"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:344
+#: nagvis/includes/classes/objects/NagVisObject.php:340
 msgid "output"
 msgstr "Output"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:348
+#: nagvis/includes/classes/objects/NagVisObject.php:344
 msgid "perfdata"
 msgstr "Pefdata"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:352
+#: nagvis/includes/classes/objects/NagVisObject.php:348
 msgid "summaryOutput"
 msgstr "Summary Output"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:364
+#: nagvis/includes/classes/objects/NagVisObject.php:360
 msgid "nextCheck"
 msgstr "Next Check"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:368
+#: nagvis/includes/classes/objects/NagVisObject.php:364
 msgid "lastCheck"
 msgstr "Last Check"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:372
+#: nagvis/includes/classes/objects/NagVisObject.php:368
 msgid "stateType"
 msgstr "State Type"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:376
+#: nagvis/includes/classes/objects/NagVisObject.php:372
 msgid "currentAttempt"
 msgstr "Current Attempt"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:380
+#: nagvis/includes/classes/objects/NagVisObject.php:376
 msgid "lastStateChange"
 msgstr "Last State Change"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:384
+#: nagvis/includes/classes/objects/NagVisObject.php:380
 msgid "stateDuration"
 msgstr "State Duration"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:388
-#: nagvis/includes/classes/objects/NagVisObject.php:519
-#: nagvis/includes/classes/objects/NagVisObject.php:531
+#: nagvis/includes/classes/objects/NagVisObject.php:384
+#: nagvis/includes/classes/objects/NagVisObject.php:515
+#: nagvis/includes/classes/objects/NagVisObject.php:527
 msgid "servicename"
 msgstr "Service Name"
 
+#: nagvis/includes/classes/objects/NagVisObject.php:514
 #: nagvis/includes/classes/objects/NagVisObject.php:518
-#: nagvis/includes/classes/objects/NagVisObject.php:522
-#: nagvis/includes/classes/objects/NagVisObject.php:527
-#: nagvis/includes/classes/objects/NagVisObject.php:577
+#: nagvis/includes/classes/objects/NagVisObject.php:523
+#: nagvis/includes/classes/objects/NagVisObject.php:573
 msgid "hostname"
 msgstr "Host Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:526
+#: nagvis/includes/classes/objects/NagVisObject.php:522
 msgid "hostgroupname"
 msgstr "Hostgroup Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:530
+#: nagvis/includes/classes/objects/NagVisObject.php:526
 msgid "servicegroupname"
 msgstr "Servicegroup Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:534
+#: nagvis/includes/classes/objects/NagVisObject.php:530
 msgid "mapname"
 msgstr "Map Name"
 
+#: nagvis/includes/classes/objects/NagVisObject.php:531
+#: nagvis/includes/classes/objects/NagVisObject.php:534
 #: nagvis/includes/classes/objects/NagVisObject.php:535
-#: nagvis/includes/classes/objects/NagVisObject.php:538
-#: nagvis/includes/classes/objects/NagVisObject.php:539
 msgid "objectname"
 msgstr "Object Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:750
+#: nagvis/includes/classes/objects/NagVisObject.php:746
 msgid "hoverTemplateNotReadable"
 msgstr "The hover template is not readable. Please check the webservers permissions at the hover template file &quot;[FILE]&quot;."
 
-#: nagvis/includes/classes/objects/NagVisObject.php:771
+#: nagvis/includes/classes/objects/NagVisObject.php:767
 msgid "hoverTemplateNotExists"
 msgstr "The hover template file &quot;[FILE]&quot; does not exist."
 
-#: nagvis/includes/classes/objects/NagiosHostgroup.php:222
+#: nagvis/includes/classes/objects/NagiosHostgroup.php:218
 msgid "hosts"
 msgstr "Hosts"
 
-#: nagvis/includes/classes/objects/NagiosHostgroup.php:224
+#: nagvis/includes/classes/objects/NagiosHostgroup.php:220
 msgid "hostGroupNotFoundInDB"
 msgstr "The hostgroup \"[HOSTGROUP]\" could not be found in the database. Maybe it is spelled wrong?"
 
-#: nagvis/includes/classes/objects/NagiosServicegroup.php:218
+#: nagvis/includes/classes/objects/NagiosServicegroup.php:214
 msgid "serviceGroupNotFoundInDB"
 msgstr "The servicegroup \"[SERVICEGROUP]\" could not be found in the database. Maybe it is spelled wrong?"
 
@@ -906,6 +905,10 @@ msgstr "Only one or two [COORD] coordinates can be defined."
 msgid "lineTypeNotSelected"
 msgstr "You submitted two [COORD] coordinates, therefore also line_type has to be selected."
 
+#: wui/includes/classes/WuiAddModify.php:256
+msgid "loopInMapRecursion"
+msgstr "loopInMapRecursion"
+
 #: wui/includes/classes/WuiAddModify.php:257
 msgid "mapObjectWillShowSummaryState"
 msgstr "This map object will show the summary state of the map and its children."
@@ -936,10 +939,6 @@ msgstr "The lockfile &quot;[MAP]&quot; is not readable."
 #: wui/includes/classes/WuiMapCfg.php:444
 msgid "mapLockNotWriteable"
 msgstr "The lockfile &quot;[MAP]&quot; is not writeable."
-
-#: wui/includes/classes/WuiFrontend.php:72
-msgid "phpModuleNotLoaded"
-msgstr "The PHP module &quot;[MODULE]&quot; is not loaded."
 
 #: wui/includes/classes/WuiMapManagement.php:79
 msgid "createMap"
@@ -1102,6 +1101,11 @@ msgstr "Default value"
 #: wui/includes/classes/WuiEditMainCfg.php:148
 msgid "disabled"
 msgstr "Deactivated"
+
+#~ msgid "phpGettextNotSupported"
+#~ msgstr ""
+#~ "The gettext extension module is not loaded in your PHP installation. "
+#~ "Please make the module available."
 
 #, fuzzy
 #~ msgid "mustBePngJpgOrGifFile"

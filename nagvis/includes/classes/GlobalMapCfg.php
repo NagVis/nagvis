@@ -728,7 +728,7 @@ class GlobalMapCfg {
 						// Merge the objects with the linked templates
 						$this->mergeTemplates();
 					}
-				}
+				}                               
 				
 				if($this->checkMapConfigIsValid(1)) {
 					$this->BACKGROUND = $this->getBackground();
@@ -870,6 +870,12 @@ class GlobalMapCfg {
 						if($printErr == 1) {
 							$FRONTEND = new GlobalPage($this->CORE);
 							$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type));
+						}
+						return FALSE;
+					} elseif(isset($this->validConfig[$type][$key]['deprecated']) && $this->validConfig[$type][$key]['deprecated'] == 1) {
+						// deprecated option
+						if($printErr) {
+							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapDeprecatedOption', 'MAP~'.$this->getName().',ATTRIBUTE~'.$key.',TYPE~'.$type), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
 						}
 						return FALSE;
 					} else {
