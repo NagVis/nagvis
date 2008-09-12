@@ -63,9 +63,12 @@ WEB_GROUP=""
 NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
-NEED_PHP_MODULES="gd mysql mbstring gettext"
+NEED_PHP_MODULES="gd mysql mbstring gettext session xml"
 NEED_GV_MOD="dot neato twopi circo fdp"
 NEED_GV_VERSION=2.14
+
+LINE_SIZE=78
+GREP_INCOMPLETE=0
 
 # Function definitions
 ###############################################################################
@@ -77,22 +80,22 @@ Usage: $0 [OPTIONS]
 Installs or updates NagVis on your system.
 
 Parameters:
-  -n <PATH>   Path to Nagios directory. The default value is /usr/local/nagios
-  -b <PATH>   Path to graphviz binaries. The default value is /usr/local
+  -n <PATH>   Path to Nagios directory. The default value is $NAGIOS_PATH
+  -b <PATH>   Path to graphviz binaries. The default value is $GRAPHVIZ_PATH
   -p <PATH>   Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
-  -u <USER>   User which runs the webserver
-  -g <GROUP>  Group which runs the webserver
+  -u <USER>   User who runs the webserver
+  -g <GROUP>  Group who runs the webserver
   -c [y|n]    Update configuration files when possible?
   -q          Quiet mode. The installer won't ask for confirmation of what to do.
               This can be useful for automatic or scripted deployment.
               WARNING: Only use this when you know what you do
-  -v          Version informations
+  -v          Version information
   -h          This message
 
 EOD
 }
 
-# Print version informations
+# Print version information
 version() {
 cat <<EOD
 NagVis installer, version $INSTALLER_VERSION
@@ -107,6 +110,34 @@ Development:
 EOD
 }
 
+# Print line
+line() {
+	DASHES="--------------------------------------------------------------------------------------------------------------"
+	SIZE2=`expr $LINE_SIZE - 4`
+	if [ -z "$1" ]; then
+		printf "+%${LINE_SIZE}.${LINE_SIZE}s+\n" $DASHES
+	else
+		if [ -z "$2" ]; then
+			printf "+--- %s\n" "$1"
+		else
+			printf "+--- %${SIZE2}.${SIZE2}s+\n" "$1 $DASHES"
+		fi
+	fi
+}
+# Print text
+text() {
+	SIZE2=`expr $LINE_SIZE - 3`
+	if [ -z "$1" ]; then
+		printf "%s%${LINE_SIZE}s%s\n" "|" "" "|"
+	else
+		if [ -z "$2" ]; then
+			printf "%s\n" "$1"
+		else
+			printf "%-${LINE_SIZE}.${LINE_SIZE}s %s\n" "$1" "$2"
+		fi
+	fi
+}
+
 # Ask user for confirmation
 confirm() {
 	echo -n "| $1 [$2]: "
@@ -116,7 +147,7 @@ confirm() {
 	if [ "$ANS" != "Y" ]; then
 		echo "|"
 		echo "| Installer aborted, exiting..."
-		echo "+------------------------------------------------------------------------------+"
+		line ""
 		exit 1
 	fi
 }
@@ -125,7 +156,7 @@ confirm() {
 welcome() {
 cat <<EOD
 +------------------------------------------------------------------------------+
-| Welcome to NagVis Installer $INSTALLER_VERSION                                              |
+| Welcome to NagVis Installer $INSTALLER_VERSION                                            |
 +------------------------------------------------------------------------------+
 | This program is built to facilitate the NagVis installation and update       |
 | procedure for you. The installer has been tested on the following systems:   |
@@ -133,7 +164,7 @@ cat <<EOD
 | - Ubuntu Hardy (8.04)                                                        |
 | - SuSE Linux Enterprise Server 10                                            |
 |                                                                              |
-| When you experience some problems using this on another distribution, please |
+| When you experience some problems using this or another distribution, please |
 | report that to the NagVis team.                                              |
 +------------------------------------------------------------------------------+
 EOD
@@ -166,7 +197,8 @@ check_apache_php() {
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
 	MODPHP=`grep -rie "mod_php.*\.so" -e "libphp.*\.so" $DIR | tr -s " " | cut -d" " -f3 | uniq`
-	HTML_PATH=`grep -ri "^Alias" $DIR | grep -i "/nagios" | cut -d" " -f2 | uniq` 
+	HTML_PATH=`grep -ri "^Alias" $DIR | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | uniq` 
+	HTML_ANZ=`grep -ri "^Alias" $DIR | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | wc -l` 
 	
 	# Only try to detect user when not set or empty
 	if [ "x$WEB_USER" = "x" ]; then
@@ -246,7 +278,9 @@ check_php_modules() {
 
 		if [ -n $MOD_VER ]; then
 			if [ `echo "$2 $MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
-				log "|  WARNING: Module not found. This maybe no problem. You can ignore this when your php was compiled with the module included" "warning"
+				log "|  WARNING: Module $MOD not found." "warning"
+				log "|           This may be no problem. You can ignore this if your php" "warning"
+				log "|           was compiled with the module included" "warning"
 			fi
 		fi
 	done
@@ -263,6 +297,13 @@ chk_rc() {
 			echo "$2"
 		fi
 	fi
+}
+
+copy() {
+	GLOB_IGNORE="$1"
+	cp -pr $NAGVIS_PATH_OLD/$2/* $NAGVIS_PATH/$2
+	chk_rc "|  Error copying $3" "| done"
+	GLOB_IGNORE=""
 }
 
 # Main program starting
@@ -314,17 +355,28 @@ fi
 welcome
 
 # Start gathering information
-echo "+------------------------------------------------------------------------------+"
+line ""
 echo "| Starting installation of NagVis $NAGVIS_VER"
-echo "+------------------------------------------------------------------------------+"
+line ""
 echo "|"
-echo "+--- Checking for packet manager ----------------------------------------------+"
+line "Checking for packet manager" "+"
 PKG=`which rpm`
 [ -u $PKG ] && PKG=`which dpkg`
+if [ -u $PKG ]; then
+	log "No packet manager (rpm/dpkg) found. Aborting..."
+	exit 1
+fi
 log "Using packet manager $PKG" $PKG
 
+# checking grep option as non-Linux might not support "-r"
+grep -r INSTALLER_VERSION install.sh >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+	GREP_INCOMPLETE=1
+	log "grep doesn't support option -r" "warning"
+fi
+
 echo "|"
-echo "+--- Checking paths -----------------------------------------------------------+"
+line "Checking paths" "+"
 
 # Get Nagios path
 if [ $INSTALLER_QUIET -ne 1 ]; then
@@ -356,7 +408,7 @@ if [ $INSTALLER_QUIET -ne 1 ]; then
 fi
 
 echo "|"
-echo "+--- Checking prerequisites ---------------------------------------------------+"
+line "Checking prerequisites" "+"
 
 # Check Nagios version
 NAGIOS_BIN="$NAGIOS_PATH/bin/nagios"
@@ -384,15 +436,19 @@ check_apache_php "/etc/apache2/"
 check_apache_php "/etc/apache/"
 check_apache_php "/etc/http/"
 log "  Apache mod_php" $MODPHP
+if [ $HTML_ANZ -gt 1 ]; then
+	log "more than one alias found" "warning"
+	echo $HTML_PATH
+fi
 
 # Check Graphviz
-check_graphviz_version $NEED_GV_VERSION
+# check_graphviz_version $NEED_GV_VERSION
 
 # Check Graphviz Modules
-check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
+# check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
 
 echo "|"
-echo "+--- Trying to detect Apache settings -----------------------------------------+"
+line "Trying to detect Apache settings" "+"
 
 HTML_PATH=${HTML_PATH%/}
 
@@ -412,18 +468,18 @@ if [ $INSTALLER_QUIET -ne 1 ]; then
 	fi
 fi
 
-if [ ! `getent passwd | cut -d':' -f1 | grep $WEB_USER` = "$WEB_USER" ]; then
+if [ ! `getent passwd | cut -d':' -f1 | grep "^$WEB_USER"` = "$WEB_USER" ]; then
 	echo "|  Error: User $WEB_USER not found."
 	exit 1
 fi
 
-if [ ! `getent group | cut -d':' -f1 | grep $WEB_GROUP` = "$WEB_GROUP" ]; then
+if [ ! `getent group | cut -d':' -f1 | grep "^$WEB_GROUP"` = "$WEB_GROUP" ]; then
   echo "|  Error: Group $WEB_GROUP not found."
   exit 1
 fi
 
 echo "|"
-echo "+--- Checking for existing NagVis ---------------------------------------------+"
+line "Checking for existing NagVis" "+"
 
 if [ -d $NAGVIS_PATH ]; then
 	INSTALLER_ACTION="update"
@@ -442,138 +498,116 @@ fi
 if [ "$INSTALLER_ACTION" = "update" ]; then
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		echo -n "| Do you want the installer to update your config files when possible [$INSTALLER_CONFIG_MOD]?: "
-		read AGRP
-		if [ ! -z $AGRP ]; then
-			INSTALLER_CONFIG_MOD=$AGRP
+		read AMOD
+		if [ ! -z $MOD ]; then
+			INSTALLER_CONFIG_MOD=$AMOD
 		fi
 	fi
 fi
 
 echo "|"
-echo "+------------------------------------------------------------------------------+"
-echo "| Summary"
-echo "+------------------------------------------------------------------------------+"
-echo "| NagVis home will be:           $NAGVIS_PATH"
-echo "| Owner of NagVis files will be: $WEB_USER"
-echo "| Group of NagVis files will be: $WEB_GROUP"
-echo "| "
-echo "| Installation mode:             $INSTALLER_ACTION"
+line ""
+text "| Summary" "|"
+line ""
+text "| NagVis home will be:           $NAGVIS_PATH" "|"
+text "| Owner of NagVis files will be: $WEB_USER" "|"
+text "| Group of NagVis files will be: $WEB_GROUP" "|"
+text
+text "| Installation mode:             $INSTALLER_ACTION" "|"
 if [ "$INSTALLER_ACTION" = "update" ]; then
-	echo "| Old version:                   $NAGVIS_VER_OLD"
-	echo "| New version:                   $NAGVIS_VER"
-	echo "| Backup directory:              $NAGVIS_PATH_OLD"
-	echo "| "
-	echo "| Note: The current NagVis directory will be moved to the backup directory."
+	text "| Old version:                   $NAGVIS_VER_OLD" "|"
+	text "| New version:                   $NAGVIS_VER" "|"
+	text "| Backup directory:              $NAGVIS_PATH_OLD" "|"
+	text
+	text "| Note: The current NagVis directory will be moved to the backup directory." "|"
 	if [ ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
-		echo "|       Your configuration files will be copied."
+		text "|       Your configuration files will be copied." "|"
 		if [ "$INSTALLER_CONFIG_MOD" = "y" ]; then
-			echo "|       The configuration files will be updated when possible."
+			text "|       The configuration files will be updated when possible." "|"
 		else
-			echo "|       The configuration files will NOT be updated. Please check the "
-			echo "|       changelog for any changes which affect your configuration files."
+			text "|       The configuration files will NOT be updated. Please check the " "|"
+			text "|       changelog for any changes which affect your configuration files." "|"
 		fi
 	else
-		echo "|"
-		echo "|          !!! UPDATE FROM VERSION \"$NAGVIS_VER_OLD\" IS NOT SUPPORTED !!!"
-		echo "|       You have to move your custom files manually from backup directory."
+		text
+		text "|          !!! UPDATE FROM VERSION \"$NAGVIS_VER_OLD\" IS NOT SUPPORTED !!!" "|"
+		text "|       You have to move your custom files manually from backup directory." "|"
 	fi
 fi
-echo "|"
+text
 
 if [ $INSTALLER_QUIET -ne 1 ]; then
 	confirm "Do you really want to continue?" "y"
 fi
 
-echo "+------------------------------------------------------------------------------+"
-echo "| Starting installation"
-echo "+------------------------------------------------------------------------------+"
+line ""
+text "| Starting installation" "|"
+line ""
 
 if [ "$INSTALLER_ACTION" = "update" ]; then
-	echo "+--- Moving old NagVis to $NAGVIS_PATH_OLD..."
+	line "Moving old NagVis to $NAGVIS_PATH_OLD..."
 	mv $NAGVIS_PATH $NAGVIS_PATH_OLD
 	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD" "| done"
 fi
 
 if [ ! -d $NAGVIS_PATH ]; then
-	echo "+--- Creating directory $NAGVIS_PATH..."
+	line "Creating directory $NAGVIS_PATH..."
 	mkdir -p $NAGVIS_PATH
 	chk_rc "|  Error creating directory $NAGVIS_PATH" "| done"
 fi
 
 
-echo "+--- Copying files to $NAGVIS_PATH..."
+line "Copying files to $NAGVIS_PATH..."
 GLOBIGNORE="install.sh"
 cp -pr * $NAGVIS_PATH
 GLOBIGNORE=""
 chk_rc "|  Error copying files to $NAGVIS_PATH" "| done"
 
 if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
-  echo "+--- Restoring main configuration file..."
+	line "Restoring main configuration file..."
 	cp -pr $NAGVIS_PATH_OLD/$NAGVIS_CONF $NAGVIS_PATH/$NAGVIS_CONF
 	chk_rc "|  Error copying main configuration file" "| done"
 	
-	echo "+--- Restoring custom map configuration files..."
-	GLOBIGNORE="demo.cfg:demo2.cfg"
-	cp -pr $NAGVIS_PATH_OLD/etc/maps/* $NAGVIS_PATH/etc/maps
-	GLOBIGNORE=""
-	chk_rc "|  Error copying map configuration files" "| done"
+	line "Restoring custom map configuration files..."
+	copy "demo.cfg:demo2.cfg" "etc/maps" "map configuration files"
 	
-	echo "+--- Restoring custom map images..."
-	GLOBIGNORE="nagvis-demo.png"
-	cp -pr $NAGVIS_PATH_OLD/nagvis/images/maps/* $NAGVIS_PATH/nagvis/images/maps
-	GLOBIGNORE=""
-	chk_rc "|  Error copying map image files" "| done"
+	line "Restoring custom map images..."
+	copy "nagvis-demo.png" "nagvis/images/maps" "map image files"
 	
-	echo "+--- Restoring custom iconsets..."
+	line "Restoring custom iconsets..."
+	copy "20x20.png:configerror_*.png:error.png:std_*.png" "nagvis/images/iconsets" "iconset files"
 	
-	GLOBIGNORE="20x20.png:configerror_*.png:error.png:std_*.png"
-	cp -pr $NAGVIS_PATH_OLD/nagvis/images/iconsets/* $NAGVIS_PATH/nagvis/images/iconsets
-	GLOBIGNORE=""
-	chk_rc "|  Error copying iconset files" "| done"
+	line "Restoring custom shapes..."
+	copy "" "nagvis/images/shapes" "shapes"
 	
-	echo "+--- Restoring custom shapes..."
-	cp -pr $NAGVIS_PATH_OLD/nagvis/images/shapes/* $NAGVIS_PATH/nagvis/images/shapes
-	chk_rc "|  Error copying shapes" "| done"
+	line "Restoring custom templates (header, hover)..."
+	copy "tmpl.default*" "nagvis/templates/header" "header templates"
+	copy "tmpl.default*" "nagvis/templates/hover" "hover templates"
 	
-	echo "+--- Restoring custom templates (header, hover)..."
-	GLOBIGNORE="tmpl.default*"
-	cp -pr $NAGVIS_PATH_OLD/nagvis/templates/header/* $NAGVIS_PATH/nagvis/templates/header
-	chk_rc "|  Error copying header templates" "| done"
-	cp -pr $NAGVIS_PATH_OLD/nagvis/templates/hover/* $NAGVIS_PATH/nagvis/templates/hover
-	GLOBIGNORE=""
-	chk_rc "|  Error copying hover templates" "| done"
-	
-	echo "+--- Restoring custom template images (header, hover)..."
-	GLOBIGNORE="tmpl.default*"
-	cp -pr $NAGVIS_PATH_OLD/nagvis/images/templates/header/* $NAGVIS_PATH/nagvis/images/templates/header
-	GLOBIGNORE=""
-	chk_rc "|  Error copying header template images" "| done"
-	
-	GLOBIGNORE="tmpl.default*"
-  cp -pr $NAGVIS_PATH_OLD/nagvis/images/templates/hover/* $NAGVIS_PATH/nagvis/images/templates/hover
-	GLOBIGNORE=""
-	chk_rc "|  Error copying hover template images" "| done"
+	line "Restoring custom template images (header, hover)..."
+	copy "tmpl.default*" "nagvis/images/templates/header" "header template images"
+	copy "tmpl.default*" "nagvis/images/templates/hover" "hover template images"
 fi
 
 # Do some update tasks (Changing options, notify about deprecated options)
 if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
-	echo "+--- Handling changed/removed options..."
+	line "Handling changed/removed options..."
 	if [ ! "x`echo $NAGVIS_VER_OLD | grep '1.3'`" = "x" ]; then
-		echo "| Update from 1.3.x"
-		echo "|"
-		echo "+---- Applying changes in main configuration file..."
+		text "| Update from 1.3.x" "|"
+		text
+		line "Applying changes to main configuration file..."
 		chk_rc "| Error" "| done"
-		echo "+---- Applying changes in map configuration files..."
+		line "Applying changes to map configuration files..."
 		chk_rc "| Error" "| done"
 	else
-		echo "| Update from unhandled version $NAGVIS_VER_OLD"
-		echo "| "
-		echo "| HINT: Please check the changelog or the documentation for changes which"
-		echo "|       affect your configuration files"
+		text "| Update from unhandled version $NAGVIS_VER_OLD" "|"
+		text
+		text "| HINT: Please check the changelog or the documentation for changes which" "|"
+		text "|       affect your configuration files" "|"
 	fi
 fi
 
-echo "+--- Setting permissions..."
+line "Setting permissions..." "+"
 chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
 chmod 664 $NAGVIS_PATH/$NAGVIS_CONF-sample
 chmod 775 $NAGVIS_PATH/nagvis/images/maps
@@ -587,21 +621,22 @@ fi
 echo "| done"
 
 if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
-	echo "+--- Creating main configuration file..."
+	line "Creating main configuration file..."
 	cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
 	chk_rc "|  Error copying sample configuration" "| done"
 fi
 
-echo "|"
-echo "+------------------------------------------------------------------------------+"
-printf "%-78s %s|\n" "| Installation complete"
-echo "+------------------------------------------------------------------------------+"
-printf "%-78s %s|\n" "| You can savely remove this source directory."
-printf "%-78s %s|\n" "|"
-printf "%-78s %s|\n" "| What to do next?"
-printf "%-78s %s|\n" "| - Read the documentation"
-printf "%-78s %s|\n" "| - Maybe you want to edit the main configuration file?"
-printf "%-78s %s|\n" "|   It's location is: $NAGVIS_PATH/$NAGVIS_CONF"
-printf "%-78s %s|\n" "| - Configure NagVis by Browser <http://localhost${HTML_PATH}/nagvis/config.php>"
-echo "+------------------------------------------------------------------------------+"
+text
+line
+text "| Installation complete" "|"
+text
+text "| You can savely remove this source directory." "|"
+text
+text "| What to do next?" "|"
+text "| - Read the documentation" "|"
+text "| - Maybe you want to edit the main configuration file?" "|"
+text "|   Its location is: $NAGVIS_PATH/$NAGVIS_CONF" "|"
+text "| - Configure NagVis via browser" "|"
+text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
+line
 exit 0
