@@ -381,9 +381,9 @@ line "Checking paths" "+"
 # Get Nagios path
 if [ $INSTALLER_QUIET -ne 1 ]; then
   echo -n "| Please enter the path to Nagios base directory [$NAGIOS_PATH]: "
-  read AGRP
-  if [ ! -z $AGRP ]; then
-    NAGIOS_PATH=$AGRP
+  read APATH
+  if [ ! -z $APATH ]; then
+    NAGIOS_PATH=$APATH
   fi
 fi
 
@@ -401,9 +401,9 @@ fi
 # Get NagVis path
 if [ $INSTALLER_QUIET -ne 1 ]; then
   echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
-  read AGRP
-  if [ ! -z $AGRP ]; then
-    NAGVIS_PATH=$AGRP
+  read ABASE
+  if [ ! -z $ABASE ]; then
+    NAGVIS_PATH=$ABASE
   fi
 fi
 
@@ -499,7 +499,7 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		echo -n "| Do you want the installer to update your config files when possible [$INSTALLER_CONFIG_MOD]?: "
 		read AMOD
-		if [ ! -z $MOD ]; then
+		if [ ! -z $AMOD ]; then
 			INSTALLER_CONFIG_MOD=$AMOD
 		fi
 	fi
