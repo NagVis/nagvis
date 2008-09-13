@@ -442,10 +442,10 @@ if [ $HTML_ANZ -gt 1 ]; then
 fi
 
 # Check Graphviz
-# check_graphviz_version $NEED_GV_VERSION
+check_graphviz_version $NEED_GV_VERSION
 
 # Check Graphviz Modules
-# check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
+check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
 
 echo "|"
 line "Trying to detect Apache settings" "+"
