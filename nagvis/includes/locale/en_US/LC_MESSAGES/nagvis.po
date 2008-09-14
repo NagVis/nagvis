@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-07 17:59+0100\n"
-"PO-Revision-Date: 2008-09-07 17:59+0100\n"
+"POT-Creation-Date: 2008-09-14 17:18+0100\n"
+"PO-Revision-Date: 2008-09-14 17:21+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -20,41 +20,44 @@ msgstr ""
 msgid "parameterObjTypeNotSet"
 msgstr "The objType parameter is missing."
 
-#: nagvis/ajax_handler.php:59
-#: nagvis/ajax_handler.php:231
-#: nagvis/ajax_handler.php:247
+#: nagvis/ajax_handler.php:58
+#: nagvis/ajax_handler.php:229
+#: nagvis/ajax_handler.php:245
+#: nagvis/ajax_handler.php:258
+#: nagvis/ajax_handler.php:266
+#: nagvis/ajax_handler.php:278
 msgid "parameterObjName1NotSet"
 msgstr "The objName1 parameter is missing."
 
-#: nagvis/ajax_handler.php:62
+#: nagvis/ajax_handler.php:60
 msgid "parameterObjName2NotSet"
 msgstr "The objName2 parameter is missing."
 
-#: nagvis/ajax_handler.php:105
+#: nagvis/ajax_handler.php:103
 msgid "foundNoObjectOfThatTypeOnMap"
 msgstr "Found no object of that type on the given map."
 
-#: nagvis/ajax_handler.php:118
+#: nagvis/ajax_handler.php:116
 msgid "ObjectNotFoundOnMap"
 msgstr "The object could not be found on the given map."
 
-#: nagvis/ajax_handler.php:192
+#: nagvis/ajax_handler.php:190
 #: nagvis/includes/classes/GlobalMapCfg.php:810
 #: nagvis/includes/classes/objects/NagVisMapObj.php:309
 msgid "mapCfgNotExists"
 msgstr "The map configuration file \"[MAP]\" does not exist"
 
-#: nagvis/ajax_handler.php:203
+#: nagvis/ajax_handler.php:201
 #: nagvis/includes/classes/GlobalMapCfg.php:698
 #: nagvis/includes/classes/objects/NagVisMapObj.php:320
 msgid "unknownObject"
 msgstr "The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed."
 
-#: nagvis/ajax_handler.php:233
+#: nagvis/ajax_handler.php:231
 msgid "automapNotSupportedHere"
 msgstr "The automap is not supported here."
 
-#: nagvis/ajax_handler.php:256
+#: nagvis/ajax_handler.php:285
 msgid "unknownQuery"
 msgstr "Unknown Query"
 
@@ -110,13 +113,13 @@ msgid "supportInfo"
 msgstr "NagVis Support Informations"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:91
-#: nagvis/includes/classes/objects/NagVisObject.php:352
+#: nagvis/includes/classes/GlobalHoverMenu.php:120
 #: wui/includes/classes/WuiMap.php:596
 msgid "overview"
 msgstr "Overview"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:92
-#: nagvis/includes/classes/objects/NagVisObject.php:356
+#: nagvis/includes/classes/GlobalHoverMenu.php:124
 msgid "instance"
 msgstr "Instance"
 
@@ -203,7 +206,7 @@ msgstr "Please check the webservers permissions at the map configuration folder 
 
 #: nagvis/includes/classes/GlobalMainCfg.php:734
 msgid "mainCfgCacheNotExists"
-msgstr "The main configuration file \"[MAP]\" does not exist"
+msgstr "The cache of the main configuration file does not exist."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:753
 msgid "mainCfgCacheNotReadable"
@@ -294,20 +297,86 @@ msgstr "Rotation Pools"
 msgid "mapIndex"
 msgstr "Map Index"
 
-#: nagvis/includes/classes/GlobalIndexPage.php:179
-#: nagvis/includes/classes/GlobalIndexPage.php:180
+#: nagvis/includes/classes/GlobalIndexPage.php:182
+#: nagvis/includes/classes/GlobalIndexPage.php:183
 #: nagvis/includes/classes/objects/NagVisMapObj.php:452
 msgid "mapInMaintenance"
 msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is automatically reloaded."
 
-#: nagvis/includes/classes/GlobalIndexPage.php:248
-#: nagvis/includes/classes/GlobalIndexPage.php:315
+#: nagvis/includes/classes/GlobalIndexPage.php:251
+#: nagvis/includes/classes/GlobalIndexPage.php:318
 msgid "onlyPngOrJpgImages"
 msgstr "Only PNG or JPG images are allowed for map image files."
 
-#: nagvis/includes/classes/GlobalIndexPage.php:339
+#: nagvis/includes/classes/GlobalIndexPage.php:342
 msgid "imageNotExists"
 msgstr "An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist."
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:92
+msgid "alias"
+msgstr "Alias"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:96
+msgid "address"
+msgstr "Address"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:100
+msgid "state"
+msgstr "State"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:104
+msgid "summaryState"
+msgstr "Summary State"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:108
+msgid "output"
+msgstr "Output"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:112
+msgid "perfdata"
+msgstr "Perfdata"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:116
+msgid "summaryOutput"
+msgstr "Summary Output"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:128
+msgid "nextCheck"
+msgstr "Next Check"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:132
+msgid "lastCheck"
+msgstr "Last Check"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:136
+msgid "stateType"
+msgstr "State Type"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:140
+msgid "currentAttempt"
+msgstr "Current Attempt"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:144
+msgid "lastStateChange"
+msgstr "Last State Change"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:148
+msgid "stateDuration"
+msgstr "State Duration"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:152
+#: nagvis/includes/classes/objects/NagVisObject.php:432
+#: nagvis/includes/classes/objects/NagVisObject.php:444
+msgid "servicename"
+msgstr "Service Name"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:193
+msgid "hoverTemplateNotReadable"
+msgstr "The hover template is not readable. Please check the webservers permissions at the hover template file &quot;[FILE]&quot;."
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:214
+msgid "hoverTemplateNotExists"
+msgstr "The hover template file &quot;[FILE]&quot; does not exist."
 
 #: nagvis/includes/classes/GlobalMapCfg.php:833
 msgid "mapCfgNotReadable"
@@ -446,110 +515,44 @@ msgstr "The map \"[MAP]\" has 0 objects."
 msgid "noReadPermissions"
 msgstr "You are not permitted to view the state of this map."
 
-#: nagvis/includes/classes/objects/NagVisStatefulObject.php:658
+#: nagvis/includes/classes/objects/NagVisStatefulObject.php:676
 msgid "childStatesAre"
 msgstr "There are"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:299
+#: nagvis/includes/classes/objects/NagVisObject.php:311
 msgid "couldNotGetHoverUrl"
 msgstr "Could not get hover URL &quot;[URL]&quot;. Maybe the URL is password protected."
 
-#: nagvis/includes/classes/objects/NagVisObject.php:324
-msgid "alias"
-msgstr "Alias"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:328
-msgid "address"
-msgstr "Address"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:332
-msgid "state"
-msgstr "State"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:336
-msgid "summaryState"
-msgstr "Summary State"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:340
-msgid "output"
-msgstr "Output"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:344
-msgid "perfdata"
-msgstr "Pefdata"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:348
-msgid "summaryOutput"
-msgstr "Summary Output"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:360
-msgid "nextCheck"
-msgstr "Next Check"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:364
-msgid "lastCheck"
-msgstr "Last Check"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:368
-msgid "stateType"
-msgstr "State Type"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:372
-msgid "currentAttempt"
-msgstr "Current Attempt"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:376
-msgid "lastStateChange"
-msgstr "Last State Change"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:380
-msgid "stateDuration"
-msgstr "State Duration"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:384
-#: nagvis/includes/classes/objects/NagVisObject.php:515
-#: nagvis/includes/classes/objects/NagVisObject.php:527
-msgid "servicename"
-msgstr "Service Name"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:514
-#: nagvis/includes/classes/objects/NagVisObject.php:518
-#: nagvis/includes/classes/objects/NagVisObject.php:523
-#: nagvis/includes/classes/objects/NagVisObject.php:573
+#: nagvis/includes/classes/objects/NagVisObject.php:431
+#: nagvis/includes/classes/objects/NagVisObject.php:435
+#: nagvis/includes/classes/objects/NagVisObject.php:440
+#: nagvis/includes/classes/objects/NagVisObject.php:490
 msgid "hostname"
 msgstr "Host Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:522
+#: nagvis/includes/classes/objects/NagVisObject.php:439
 msgid "hostgroupname"
 msgstr "Hostgroup Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:526
+#: nagvis/includes/classes/objects/NagVisObject.php:443
 msgid "servicegroupname"
 msgstr "Servicegroup Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:530
+#: nagvis/includes/classes/objects/NagVisObject.php:447
 msgid "mapname"
 msgstr "Map Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:531
-#: nagvis/includes/classes/objects/NagVisObject.php:534
-#: nagvis/includes/classes/objects/NagVisObject.php:535
+#: nagvis/includes/classes/objects/NagVisObject.php:448
+#: nagvis/includes/classes/objects/NagVisObject.php:451
+#: nagvis/includes/classes/objects/NagVisObject.php:452
 msgid "objectname"
 msgstr "Object Name"
 
-#: nagvis/includes/classes/objects/NagVisObject.php:746
-msgid "hoverTemplateNotReadable"
-msgstr "The hover template is not readable. Please check the webservers permissions at the hover template file &quot;[FILE]&quot;."
-
-#: nagvis/includes/classes/objects/NagVisObject.php:767
-msgid "hoverTemplateNotExists"
-msgstr "The hover template file &quot;[FILE]&quot; does not exist."
-
-#: nagvis/includes/classes/objects/NagiosHostgroup.php:218
+#: nagvis/includes/classes/objects/NagiosHostgroup.php:217
 msgid "hosts"
 msgstr "Hosts"
 
-#: nagvis/includes/classes/objects/NagiosHostgroup.php:220
+#: nagvis/includes/classes/objects/NagiosHostgroup.php:219
 msgid "hostGroupNotFoundInDB"
 msgstr "The hostgroup \"[HOSTGROUP]\" could not be found in the database. Maybe it is spelled wrong?"
 

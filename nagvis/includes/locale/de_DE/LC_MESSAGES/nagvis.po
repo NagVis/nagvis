@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 german language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-17 14:13+0100\n"
-"PO-Revision-Date: 2008-08-17 14:14+0100\n"
-"Last-Translator: Michael Lübben\n"
+"POT-Creation-Date: 2008-09-14 17:22+0100\n"
+"PO-Revision-Date: 2008-09-14 17:22+0100\n"
+"Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,56 +13,70 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: getMessageText;getMessageTitle;getLabel;getText;setMessage\n"
-"X-Poedit-Basepath: /mnt/nagios-devel/nagvis\n"
+"X-Poedit-Basepath: /mnt/nagios-devel/nagvis/\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: nagvis/ajax_handler.php:56
 msgid "parameterObjTypeNotSet"
-msgstr ""
+msgstr "Der Parameter &quot;objType&quot; ist nicht gesetzt."
 
-#: nagvis/ajax_handler.php:59
-#: nagvis/ajax_handler.php:231
-#: nagvis/ajax_handler.php:247
+#: nagvis/ajax_handler.php:58
+#: nagvis/ajax_handler.php:229
+#: nagvis/ajax_handler.php:245
+#: nagvis/ajax_handler.php:258
+#: nagvis/ajax_handler.php:266
+#: nagvis/ajax_handler.php:278
 msgid "parameterObjName1NotSet"
-msgstr ""
+msgstr "Der Parameter objName1 ist nicht gesetzt."
 
-#: nagvis/ajax_handler.php:62
+#: nagvis/ajax_handler.php:60
 msgid "parameterObjName2NotSet"
-msgstr ""
+msgstr "Der Parameter objName2 ist nicht gesetzt."
 
-#: nagvis/ajax_handler.php:105
+#: nagvis/ajax_handler.php:103
 msgid "foundNoObjectOfThatTypeOnMap"
-msgstr ""
+msgstr "Es konnte kein Objekt des gegebenen Typs auf der Karte gefunden werden."
 
-#: nagvis/ajax_handler.php:118
+#: nagvis/ajax_handler.php:116
 msgid "ObjectNotFoundOnMap"
-msgstr ""
+msgstr "Das Objekt konnte auf der Karte nicht gefunden werden."
 
-#: nagvis/ajax_handler.php:192
-#: nagvis/includes/classes/GlobalMapCfg.php:804
-#: nagvis/includes/classes/objects/NagVisMapObj.php:304
+#: nagvis/ajax_handler.php:190
+#: nagvis/includes/classes/GlobalMapCfg.php:810
+#: nagvis/includes/classes/objects/NagVisMapObj.php:309
 msgid "mapCfgNotExists"
 msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
 
-#: nagvis/ajax_handler.php:203
-#: nagvis/includes/classes/objects/NagVisMapObj.php:315
-#, fuzzy
+#: nagvis/ajax_handler.php:201
+#: nagvis/includes/classes/GlobalMapCfg.php:698
+#: nagvis/includes/classes/objects/NagVisMapObj.php:320
 msgid "unknownObject"
-msgstr "Die Aktion \"[ACTION]\" wird vom Formular-Handler nicht unterstützt"
+msgstr "Der Objekttyp &quot;[TYPE]&quot; in der Map &quot;[MAPNAME]&quot; ist nicht erlaubt"
 
-#: nagvis/ajax_handler.php:233
-#, fuzzy
+#: nagvis/ajax_handler.php:231
 msgid "automapNotSupportedHere"
-msgstr "Die Methode \"[METHOD]\" wird von der gewählten Datenquelle nicht unterstützt."
+msgstr "Die Automap wird hier nicht unterst&uuml;tzt."
 
-#: nagvis/ajax_handler.php:256
+#: nagvis/ajax_handler.php:285
 msgid "unknownQuery"
-msgstr ""
+msgstr "Unbekannte Anfrage"
+
+#: nagvis/includes/classes/GlobalPage.php:111
+msgid "wrongPhpVersion"
+msgstr "Die aktuelle PHP version &quot;[CURRENT_VERSION]&quot; ist zu alt. NagVis ben&ouml;tigt PHP &quot;[NEEDED_VERSION]&quot; oder h&ouml;her."
+
+#: nagvis/includes/classes/GlobalPage.php:129
+msgid "noUser"
+msgstr "Es wurde kein Benutzername an NagVis &uuml;bergeben. Mehr Informationen sind in der FAQ auf www.nagvis.org zu finden."
+
+#: nagvis/includes/classes/GlobalPage.php:146
+#: nagvis/includes/classes/objects/NagVisMapObj.php:432
+msgid "permissionDenied"
+msgstr "Der Benutzer \"[USER]\" hat keine Rechte für diese Aktion"
 
 #: nagvis/includes/classes/GlobalBackendMgmt.php:81
-#, fuzzy
 msgid "backendNotExists"
-msgstr "Das Hintergrundbild \"[IMGPATH]\" existiert nicht"
+msgstr "Das Backend mit der ID &quot;[BACKENDID]&quot; vom Typ &quot;[BACKENDTYPE]&quot; existiert nicht."
 
 #: nagvis/includes/classes/GlobalBackendMgmt.php:104
 #: wui/ajax_handler.php:64
@@ -72,61 +86,303 @@ msgstr "Die Datenquelle mit der ID \"[BACKENDID]\" vom Typ \"[BACKENDTYPE]\" ist
 
 #: nagvis/includes/classes/GlobalBackendMgmt.php:123
 msgid "noBackendDefined"
-msgstr ""
+msgstr "Es konnte kein definiertes Backend gefunden werden."
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:85
+msgid "selectMap"
+msgstr "Eine Karte wählen"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:86
+msgid "editMap"
+msgstr "Diese Karte bearbeiten"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:87
+msgid "needHelp"
+msgstr "Hilfe?"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:88
+msgid "onlineDoc"
+msgstr "Online-Dokumentation"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:89
+msgid "forum"
+msgstr "Forum"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:90
+msgid "supportInfo"
+msgstr "NagVis-Support-Informationen"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:91
+#: nagvis/includes/classes/GlobalHoverMenu.php:120
+#: wui/includes/classes/WuiMap.php:596
+msgid "overview"
+msgstr "Übersicht"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:92
+#: nagvis/includes/classes/GlobalHoverMenu.php:124
+msgid "instance"
+msgstr "Instanz"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:93
+msgid "rotationStart"
+msgstr "Starte Rotation"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:94
+msgid "rotationStop"
+msgstr "Stoppe Rotation"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:95
+msgid "refreshStart"
+msgstr "Starte Zähler"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:96
+msgid "refreshStop"
+msgstr "Stoppe Zähler"
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:186
+msgid "headerTemplateNotExists"
+msgstr "Die Header Template-Datei &quot;[PATH]&quot; existiert nicht."
+
+#: nagvis/includes/classes/GlobalHeaderMenu.php:205
+msgid "headerTemplateNotReadable"
+msgstr "Bitte die Leseberechtigungen des Webservers auf die Datei &quot;[PATH]&quot; pr&uuml;fen."
+
+#: nagvis/includes/classes/GlobalBackground.php:62
+msgid "backgroundNotExists"
+msgstr "Das Hintergrundbild \"[IMGPATH]\" existiert nicht"
+
+#: nagvis/includes/classes/GlobalBackground.php:86
+msgid "backgroundNotReadable"
+msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH]\" prüfen"
+
+#: nagvis/includes/classes/GlobalBackground.php:110
+msgid "backgroundNotWriteable"
+msgstr "Bitte die Schreibberechtigungen des Webservers auf die PNG-Datei &quot;[IMGPATH]&quot; pr&uuml;fen."
+
+#: nagvis/includes/classes/GlobalBackground.php:133
+msgid "backgroundFolderNotWriteable"
+msgstr "Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis &quot;[PATH]&quot; pr&uuml;fen"
+
+#: nagvis/includes/classes/GlobalCore.php:341
+msgid "varFolderNotExists"
+msgstr "Das var Verzeichnis &quot;[PATH]&quot; existiert nicht."
+
+#: nagvis/includes/classes/GlobalCore.php:360
+msgid "varFolderNotWriteable"
+msgstr "Das Verzeichnis &quot;[PATH]&quot; ist nicht beschreibbar."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:585
+msgid "mainMustValueNotSet"
+msgstr "Der Pflichtwert &quot;[ATTRIBUTE]&quot; wurde in der Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei nicht gesetzt."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:606
+msgid "unknownValue"
+msgstr "Das Attribut &quot;[ATTRIBUTE]&quot; ist in der Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei nicht erlaubt."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:613
+msgid "deprecatedOption"
+msgstr "Die Option &quot;[ATTRIBUTE]&quot; in der Sektion &quot;[TYPE]&quot; ist veraltet. Bitte das Changelog oder die Dokumentation pr&uuml;fen und den Parameter anpassen."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:636
+#: wui/includes/classes/WuiMap.php:624
+msgid "wrongValueFormat"
+msgstr "Das Attribut \"[ATTRIBUTE]\" in der Sektion \"[TYPE]\" in der Haupt-Konfigurations-Datei entspricht nicht dem korrekten Format"
+
+#: nagvis/includes/classes/GlobalMainCfg.php:647
+msgid "unknownSection"
+msgstr "Die Sektion &quot;[TYPE]&quot; in der Haupt-Konfigurations-Datei ist nicht erlaubt."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:670
+msgid "mainCfgNotExists"
+msgstr "Die Haupt-Konfigurations-Datei &quot;[MAINCFG]&quot; existiert nicht."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:693
+msgid "mainCfgNotReadable"
+msgstr "Keine Leserechte auf die NagVis Konfigurations-Datei. Bitte die Leseberechtigungen des Webservers auf die Haupt-Konfigurations-Datei &quot;[MAINCFG]&quot; pr&uuml;fen."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:715
+msgid "mapCfgDirNotReadable"
+msgstr "Keine Leserechte auf das Map Konfigurations Verzeichnis. Bitte die Leseberechtigungen des Webservers auf das Verzeichnis &quot;[MAPPATH]&quot; pr&uuml;fen."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:734
+msgid "mainCfgCacheNotExists"
+msgstr "Der Cache der Haupt-Konfigurations-Datei existiert nicht."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:753
+msgid "mainCfgCacheNotReadable"
+msgstr "Der Cache der Haupt-Konfigurationsdatei ist nicht lesbar."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:792
+msgid "mainCfgNotCached"
+msgstr "Die Haupt-Konfigurationsdatei ist nicht gecacht."
+
+#: nagvis/includes/classes/GlobalMainCfg.php:809
+msgid "mainCfgCacheNotWriteable"
+msgstr "Der Cache der Haupt-Konfigurations-Datei ist nicht schreibbar."
 
 #: nagvis/includes/classes/NagVisRotation.php:151
-#, fuzzy
 msgid "mapRotationPoolNotExists"
-msgstr "Rotations-Pools"
+msgstr "Der angegebene Rotation-Pool &quot;[ROTATION]&quot; ist nicht definiert."
 
-#: nagvis/includes/classes/GlobalMap.php:62
+#: nagvis/includes/classes/GlobalMap.php:58
 msgid "gdLibNotFound"
-msgstr ""
+msgstr "NagVis wurde konfiguriert die GD-Libs zum parsen von Linien und Hintergrund zu verwenden (usegdlibs=1). Die GD-Libs sind nicht installiert oder geladen."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:88
-#, fuzzy
+#: nagvis/includes/classes/NagVisAutoMap.php:276
+msgid "unknownRenderMode"
+msgstr "Der Anzeige Modus &quot;[MODE]&quot; wird nicht unterst&uuml;tzt."
+
+#: nagvis/includes/classes/NagVisAutoMap.php:416
+msgid "graphvizBinaryNotFound"
+msgstr "Die ben&ouml;tigte Graphviz Anwendung &quot;[NAME]&quot; konnte in den Pfaden &quot;[PATHS]&quot; nicht gefunden werden."
+
+#: nagvis/includes/classes/NagVisAutoMap.php:519
+msgid "couldNotGetRootHostname"
+msgstr "Die Automap ben&ouml;tigt einen Urpsprungs-Host.[br][br] Es gibt drei M&ouml;glichkeiten um einen Ursprungs-Host zu bestimmen: URL parameter &quot;root&quot;, Haupt-Konfiguration &quot;automap > default_root&quot;, Automatische Ermittlung (Nur m&ouml;glich, wenn es [b]einen[/b] Host ohne Eltern-Host gibt)."
+
+#: nagvis/includes/classes/GlobalLanguage.php:74
+#: wui/includes/classes/WuiFrontend.php:72
+msgid "phpModuleNotLoaded"
+msgstr "Das ben&ouml;tigte PHP Modul &quot;[MODULE]&quot; ist nicht vorhanden."
+
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:90
 msgid "nagiosNotRunning"
-msgstr "NagVis-Konfiguration"
+msgstr ".Laut NDO l&auml;uft der Nagios Dienst nicht."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:94
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:96
 msgid "nagiosDataNotUpToDate"
-msgstr ""
+msgstr "Laut NDO wurden von Nagios seit mehr als &quot;[TIMEWITHOUTUPDATE]&quot; Sekunden keine Daten mehr verarbeitet. Laufen Nagios und ndo2db?"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:134
-#, fuzzy
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:136
 msgid "noTablesExists"
-msgstr "Die Karte \"[MAPNAME]\" existiert bereits. Wähle einen anderen Namen."
+msgstr "In der Datenbank existieren keine Tabellen mit dem konfigurierten Prefix &quot;&quot;[PREFIX]&quot;&quot;."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:162
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:164
 msgid "errorSelectingDb"
-msgstr ""
+msgstr "Fehler beim selektieren der Datenbank. Falscher dbName oder fehlende Berechtigungen? MySQL-Error: [MYSQLERR]"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:185
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:187
 msgid "mysqlNotSupported"
-msgstr ""
+msgstr "Ihre PHP installation hat keine MySQL unterst&uuml;tzung. Ohne php-mysql k&ouml;nnen Sie das NDO Backend nicht nutzen"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:402
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:216
+msgid "backendInstanceNameNotValid"
+msgstr "Der Instanz-Name &quot;[NAME]&quot; in Backend &quot;[BACKENDID]&quot; ist nicht g&uuml;ltig."
+
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:219
+msgid "backendInstanceNameNotUniq"
+msgstr "Der Instanz-Name &quot;[NAME]&quot; in Backend &quot;[BACKENDID]&quot; ist nicht eindeutig."
+
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:439
 msgid "hostNotFoundInDB"
 msgstr "Der Host \"[HOST]\" konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:446
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:488
 msgid "hostIsPending"
 msgstr "Der Host \"[HOST]\" ist im wartenden Status."
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:565
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:607
 msgid "serviceNotFoundInDB"
 msgstr "Der Dienst \"[SERVICE]\" auf dem Gerät \"[HOST]\" konnte in der Datenbank nicht gefunden werden. Eventuell ist er falsch geschrieben?"
 
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:616
+#: nagvis/includes/classes/GlobalBackend-ndomy.php:659
 msgid "serviceNotChecked"
 msgstr "Der Dienst \"[SERVICE]\" wurde bisher nicht geprüft."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:827
-#, fuzzy
-msgid "mapCfgNotReadable"
-msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH]\" prüfen"
+#: nagvis/includes/classes/GlobalIndexPage.php:79
+msgid "rotationPools"
+msgstr "Rotations-Pools"
 
-#: nagvis/includes/classes/GlobalMapCfg.php:854
+#: nagvis/includes/classes/GlobalIndexPage.php:122
+msgid "mapIndex"
+msgstr "Kartenübersicht"
+
+#: nagvis/includes/classes/GlobalIndexPage.php:182
+#: nagvis/includes/classes/GlobalIndexPage.php:183
+#: nagvis/includes/classes/objects/NagVisMapObj.php:452
+msgid "mapInMaintenance"
+msgstr "Die Karte \"[MAP]\" befindet sich aktuell im Wartungs-Modus. Diese Seite lädt automatisch neu."
+
+#: nagvis/includes/classes/GlobalIndexPage.php:251
+#: nagvis/includes/classes/GlobalIndexPage.php:318
+msgid "onlyPngOrJpgImages"
+msgstr "Es sind nur PNG- oder JPG-Bilder als Hintergrund erlaubt"
+
+#: nagvis/includes/classes/GlobalIndexPage.php:342
+msgid "imageNotExists"
+msgstr "Ein Bild &quot;[FILE]&quot;, welches zum Erstellen einer Vorschau ben&ouml;tigt wird, existiert nicht."
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:92
+msgid "alias"
+msgstr "Alias"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:96
+msgid "address"
+msgstr "Adresse"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:100
+msgid "state"
+msgstr "Status"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:104
+msgid "summaryState"
+msgstr "Gesamtstatus"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:108
+msgid "output"
+msgstr "Ausgabe"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:112
+msgid "perfdata"
+msgstr "Perfdata"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:116
+msgid "summaryOutput"
+msgstr "Gesamtausgabe"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:128
+msgid "nextCheck"
+msgstr "Nächste Prüfung"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:132
+msgid "lastCheck"
+msgstr "Letzte Prüfung"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:136
+msgid "stateType"
+msgstr "Status-Typ"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:140
+msgid "currentAttempt"
+msgstr "Aktueller Versuch"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:144
+msgid "lastStateChange"
+msgstr "Letzter Statuswechsel"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:148
+msgid "stateDuration"
+msgstr "Statusdauer"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:152
+#: nagvis/includes/classes/objects/NagVisObject.php:432
+#: nagvis/includes/classes/objects/NagVisObject.php:444
+msgid "servicename"
+msgstr "Dienstename"
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:193
+msgid "hoverTemplateNotReadable"
+msgstr "Bitte die Leseberechtigungen des Webservers auf die Hover Template-Datei &quot;[FILE]&quot; pr&uuml;fen."
+
+#: nagvis/includes/classes/GlobalHoverMenu.php:214
+msgid "hoverTemplateNotExists"
+msgstr "Die Hover Template-Datei &quot;[FILE]&quot; existiert nicht."
+
+#: nagvis/includes/classes/GlobalMapCfg.php:833
+msgid "mapCfgNotReadable"
+msgstr "Bitte die Leseberechtigungen des Webservers auf die Map Konfigurations-Datei &quot;[MAP]&quot; pr&uuml;fen."
+
+#: nagvis/includes/classes/GlobalMapCfg.php:860
 #: wui/form_handler.php:50
 #: wui/form_handler.php:93
 #: wui/form_handler.php:95
@@ -171,210 +427,48 @@ msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH
 #: wui/ajax_handler.php:165
 #: wui/ajax_handler.php:202
 #: wui/ajax_handler.php:216
-#: wui/includes/classes/WuiBackendManagement.php:234
 #: wui/includes/classes/WuiAddModify.php:247
+#: wui/includes/classes/WuiBackendManagement.php:234
 msgid "mustValueNotSet"
 msgstr "Der Pflichtwert \"[ATTRIBUTE]\" ist nicht gefüllt"
 
-#: nagvis/includes/classes/GlobalMapCfg.php:866
-#, fuzzy
+#: nagvis/includes/classes/GlobalMapCfg.php:872
 msgid "unknownAttribute"
-msgstr "Die Aktion \"[ACTION]\" wird vom Formular-Handler nicht unterstützt"
+msgstr "Das Attribut &quot;[ATTRIBUTE]&quot; ist in Elementen des Typs &quot;[TYPE]&quot; in Map &quot;[MAPNAME]&quot; nicht erlaubt."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:882
+#: nagvis/includes/classes/GlobalMapCfg.php:878
+msgid "mapDeprecatedOption"
+msgstr "Die Option &quot;[ATTRIBUTE]&quot; in einem Objekt des Typs &quot;[TYPE]&quot; auf der Karte &quot;[MAP]&quot; ist veraltet. Bitte Changelog oder Dokumentation pr&uuml;fen und die Option anpassen."
+
 #: nagvis/includes/classes/GlobalMapCfg.php:894
-#: wui/includes/classes/WuiMap.php:623
+#: nagvis/includes/classes/GlobalMapCfg.php:906
+#: wui/includes/classes/WuiMap.php:625
 msgid "wrongValueFormatMap"
 msgstr "Das Attribut \"[ATTRIBUTE]\" in einem Element vom Typ \"[TYPE]\" in der Karten-Konfigurations-Datei \"[MAP]\" entspricht nicht dem korrekten Format"
 
-#: nagvis/includes/classes/GlobalPage.php:112
-msgid "wrongPhpVersion"
-msgstr ""
+#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:98
+msgid "messageboxTitleWrongType"
+msgstr "Falscher Type"
 
-#: nagvis/includes/classes/GlobalPage.php:130
-msgid "noUser"
-msgstr ""
+#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:99
+msgid "messageboxMessageWrongType"
+msgstr "Der Type [TYPE] ist nicht definiert."
 
-#: nagvis/includes/classes/GlobalPage.php:147
-#: nagvis/includes/classes/objects/NagVisMapObj.php:425
-msgid "permissionDenied"
-msgstr "Der Benutzer \"[USER]\" hat keine Rechte für diese Aktion"
+#: nagvis/includes/classes/validator/GlobalValidatorUrl.php:104
+msgid "vaidatorNotValidUrl"
+msgstr "Parameter [VAR] ist keine erlaubte URL."
 
-#: nagvis/includes/classes/GlobalBackground.php:62
-msgid "backgroundNotExists"
-msgstr "Das Hintergrundbild \"[IMGPATH]\" existiert nicht"
+#: nagvis/includes/classes/validator/GlobalValidatorInteger.php:111
+msgid "validatorNotValidInteger"
+msgstr "Parameter [VAR] enthält keinen gültigen integer."
 
-#: nagvis/includes/classes/GlobalBackground.php:86
-msgid "backgroundNotReadable"
-msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH]\" prüfen"
+#: nagvis/includes/classes/validator/GlobalValidatorInteger.php:127
+msgid "validatorValueOutOfRange"
+msgstr "Parameter [VAR] ist nicht innerhalb des erlaubten Wertebereiches."
 
-#: nagvis/includes/classes/GlobalBackground.php:110
-#, fuzzy
-msgid "backgroundNotWriteable"
-msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH]\" prüfen"
-
-#: nagvis/includes/classes/GlobalBackground.php:133
-#, fuzzy
-msgid "backgroundFolderNotWriteable"
-msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH]\" prüfen"
-
-#: nagvis/includes/classes/GlobalIndexPage.php:77
-msgid "rotationPools"
-msgstr "Rotations-Pools"
-
-#: nagvis/includes/classes/GlobalIndexPage.php:116
-msgid "mapIndex"
-msgstr "Kartenübersicht"
-
-#: nagvis/includes/classes/GlobalIndexPage.php:173
-#: nagvis/includes/classes/GlobalIndexPage.php:174
-#: nagvis/includes/classes/objects/NagVisMapObj.php:445
-msgid "mapInMaintenance"
-msgstr "Die Karte \"[MAP]\" befindet sich aktuell im Wartungs-Modus. Diese Seite lädt automatisch neu."
-
-#: nagvis/includes/classes/GlobalIndexPage.php:238
-#: nagvis/includes/classes/GlobalIndexPage.php:303
-msgid "onlyPngOrJpgImages"
-msgstr "Es sind nur PNG- oder JPG-Bilder als Hintergrund erlaubt"
-
-#: nagvis/includes/classes/GlobalIndexPage.php:326
-#: nagvis/includes/classes/NagVisAutoMap.php:404
-#, fuzzy
-msgid "varFolderNotExists"
-msgstr "Das Hintergrundbild \"[IMGPATH]\" existiert nicht"
-
-#: nagvis/includes/classes/GlobalIndexPage.php:345
-#: nagvis/includes/classes/NagVisAutoMap.php:423
-msgid "varFolderNotWriteable"
-msgstr ""
-
-#: nagvis/includes/classes/GlobalIndexPage.php:365
-#, fuzzy
-msgid "imageNotExists"
-msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
-
-#: nagvis/includes/classes/NagVisFrontend.php:103
-msgid "selectMap"
-msgstr "Eine Karte wählen"
-
-#: nagvis/includes/classes/NagVisFrontend.php:104
-msgid "editMap"
-msgstr "Diese Karte bearbeiten"
-
-#: nagvis/includes/classes/NagVisFrontend.php:105
-msgid "needHelp"
-msgstr "Hilfe?"
-
-#: nagvis/includes/classes/NagVisFrontend.php:106
-msgid "onlineDoc"
-msgstr "Online-Dokumentation"
-
-#: nagvis/includes/classes/NagVisFrontend.php:107
-msgid "forum"
-msgstr "Forum"
-
-#: nagvis/includes/classes/NagVisFrontend.php:108
-msgid "supportInfo"
-msgstr "NagVis-Support-Informationen"
-
-#: nagvis/includes/classes/NagVisFrontend.php:109
-#: nagvis/includes/classes/objects/NagVisObject.php:352
-#: wui/includes/classes/WuiMap.php:594
-msgid "overview"
-msgstr "Übersicht"
-
-#: nagvis/includes/classes/NagVisFrontend.php:110
-#: nagvis/includes/classes/objects/NagVisObject.php:356
-msgid "instance"
-msgstr "Instanz"
-
-#: nagvis/includes/classes/NagVisFrontend.php:111
-msgid "rotationStart"
-msgstr "Starte Rotation"
-
-#: nagvis/includes/classes/NagVisFrontend.php:112
-msgid "rotationStop"
-msgstr "Stoppe Rotation"
-
-#: nagvis/includes/classes/NagVisFrontend.php:113
-msgid "refreshStart"
-msgstr "Starte Zähler"
-
-#: nagvis/includes/classes/NagVisFrontend.php:114
-msgid "refreshStop"
-msgstr "Stoppe Zähler"
-
-#: nagvis/includes/classes/NagVisFrontend.php:169
-#, fuzzy
-msgid "headerTemplateNotExists"
-msgstr "Das Bild \"[IMAGE]\" existiert nicht."
-
-#: nagvis/includes/classes/NagVisFrontend.php:188
-msgid "headerTemplateNotReadable"
-msgstr ""
-
-#: nagvis/includes/classes/GlobalMainCfg.php:564
-#, fuzzy
-msgid "mainMustValueNotSet"
-msgstr "Der Pflichtwert \"[ATTRIBUTE]\" ist nicht gefüllt"
-
-#: nagvis/includes/classes/GlobalMainCfg.php:585
-msgid "unknownValue"
-msgstr ""
-
-#: nagvis/includes/classes/GlobalMainCfg.php:610
-#: wui/includes/classes/WuiMap.php:622
-msgid "wrongValueFormat"
-msgstr "Das Attribut \"[ATTRIBUTE]\" in der Sektion \"[TYPE]\" in der Haupt-Konfigurations-Datei entspricht nicht dem korrekten Format"
-
-#: nagvis/includes/classes/GlobalMainCfg.php:622
-#, fuzzy
-msgid "unknownSection"
-msgstr "Die Aktion \"[ACTION]\" wird vom Formular-Handler nicht unterstützt"
-
-#: nagvis/includes/classes/GlobalMainCfg.php:646
-#, fuzzy
-msgid "mainCfgNotExists"
-msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
-
-#: nagvis/includes/classes/GlobalMainCfg.php:670
-#, fuzzy
-msgid "mainCfgNotReadable"
-msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH]\" prüfen"
-
-#: nagvis/includes/classes/GlobalMainCfg.php:693
-#, fuzzy
-msgid "mapCfgDirNotReadable"
-msgstr "Bitte die Leseberechtigungen des Webservers auf die PNG-Datei \"[IMGPATH]\" prüfen"
-
-#: nagvis/includes/classes/GlobalMainCfg.php:713
-#, fuzzy
-msgid "mainCfgCacheNotExists"
-msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
-
-#: nagvis/includes/classes/GlobalMainCfg.php:733
-msgid "mainCfgCacheNotReadable"
-msgstr ""
-
-#: nagvis/includes/classes/GlobalMainCfg.php:773
-msgid "mainCfgNotCached"
-msgstr ""
-
-#: nagvis/includes/classes/GlobalMainCfg.php:791
-msgid "mainCfgCacheNotWriteable"
-msgstr ""
-
-#: nagvis/includes/classes/NagVisAutoMap.php:280
-msgid "unknownRenderMode"
-msgstr ""
-
-#: nagvis/includes/classes/NagVisAutoMap.php:458
-msgid "graphvizBinaryNotFound"
-msgstr ""
-
-#: nagvis/includes/classes/NagVisAutoMap.php:561
-msgid "couldNotGetRootHostname"
-msgstr ""
+#: nagvis/includes/classes/validator/GlobalValidatorBoolean.php:106
+msgid "validatorNotValidBoolean"
+msgstr "Parameter [VAR] enthält keinen gültigen boolean. Bitte nur TRUE oder FALSE angeben."
 
 #: nagvis/includes/classes/validator/GlobalValidatorAbstract.php:80
 msgid "validatorNotSetParameterValue"
@@ -383,14 +477,6 @@ msgstr "Für den Parameter [VAR] wurde kein Wert angegeben."
 #: nagvis/includes/classes/validator/GlobalValidatorAbstract.php:96
 msgid "validatorIsEmptyParameter"
 msgstr "Parameter [VAR] ist leer."
-
-#: nagvis/includes/classes/validator/GlobalValidatorBoolean.php:106
-msgid "validatorNotValidBoolean"
-msgstr "Parameter [VAR] enthält keinen gültigen boolean. Bitte nur TRUE oder FALSE angeben."
-
-#: nagvis/includes/classes/validator/GlobalValidatorUrl.php:104
-msgid "vaidatorNotValidUrl"
-msgstr "Parameter [VAR] ist keine erlaubte URL."
 
 #: nagvis/includes/classes/validator/GlobalValidator.php:291
 msgid "validatorNotDefinedParameter"
@@ -404,159 +490,75 @@ msgstr "Parameter [VAR] enhält keinen gültigen string."
 msgid "ValidatorNotAllowedParameterEntry"
 msgstr "Parameter [VAR] enhält einen nicht erlaubten Eintrag."
 
-#: nagvis/includes/classes/validator/GlobalValidatorInteger.php:111
-msgid "validatorNotValidInteger"
-msgstr "Parameter [VAR] enthält keinen gültigen integer."
-
-#: nagvis/includes/classes/validator/GlobalValidatorInteger.php:127
-msgid "validatorValueOutOfRange"
-msgstr "Parameter [VAR] ist nicht innerhalb des erlaubten Wertebereiches."
-
-#: nagvis/includes/classes/frontend/message/GlobalFrontendMessage.php:109
-msgid "messageboxTitleWrongType"
-msgstr "Falscher Type"
-
-#: nagvis/includes/classes/frontend/message/GlobalFrontendMessage.php:110
-msgid "messageboxMessageWrongType"
-msgstr "Der Type [TYPE] ist nicht definiert."
-
-#: nagvis/includes/classes/objects/NagVisObject.php:303
-msgid "couldNotGetHoverUrl"
-msgstr ""
-
-#: nagvis/includes/classes/objects/NagVisObject.php:328
-msgid "alias"
-msgstr "Alias"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:332
-msgid "address"
-msgstr "Adresse"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:336
-msgid "state"
-msgstr "Status"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:340
-msgid "summaryState"
-msgstr "Gesamtstatus"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:344
-msgid "output"
-msgstr "Ausgabe"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:348
-msgid "summaryOutput"
-msgstr "Gesamtausgabe"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:360
-msgid "nextCheck"
-msgstr "Nächste Prüfung"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:364
-msgid "lastCheck"
-msgstr "Letzte Prüfung"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:368
-msgid "stateType"
-msgstr "Status-Typ"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:372
-msgid "currentAttempt"
-msgstr "Aktueller Versuch"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:376
-msgid "lastStateChange"
-msgstr "Letzter Statuswechsel"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:380
-msgid "stateDuration"
-msgstr "Statusdauer"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:384
-#: nagvis/includes/classes/objects/NagVisObject.php:515
-#: nagvis/includes/classes/objects/NagVisObject.php:527
-msgid "servicename"
-msgstr "Dienstename"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:514
-#: nagvis/includes/classes/objects/NagVisObject.php:518
-#: nagvis/includes/classes/objects/NagVisObject.php:523
-#: nagvis/includes/classes/objects/NagVisObject.php:572
-msgid "hostname"
-msgstr "Gerätename"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:522
-msgid "hostgroupname"
-msgstr "Gerätegruppenname"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:526
-msgid "servicegroupname"
-msgstr "Dienstegruppenname"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:530
-msgid "mapname"
-msgstr "Kartenname"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:531
-#: nagvis/includes/classes/objects/NagVisObject.php:534
-#: nagvis/includes/classes/objects/NagVisObject.php:535
-msgid "objectname"
-msgstr "Objektname"
-
-#: nagvis/includes/classes/objects/NagVisObject.php:745
-msgid "hoverTemplateNotReadable"
-msgstr ""
-
-#: nagvis/includes/classes/objects/NagVisObject.php:766
-msgid "hoverTemplateNotExists"
-msgstr ""
-
-#: nagvis/includes/classes/objects/NagiosServicegroup.php:216
-#: nagvis/includes/classes/objects/NagiosHost.php:417
-msgid "services"
-msgstr "Dienste"
-
-#: nagvis/includes/classes/objects/NagiosServicegroup.php:218
-msgid "serviceGroupNotFoundInDB"
-msgstr "Die Dienstegruppe \"[SERVICEGROUP]\" konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?"
-
-#: nagvis/includes/classes/objects/NagiosHost.php:404
+#: nagvis/includes/classes/objects/NagiosHost.php:402
 msgid "hostStateIs"
 msgstr "Der Host ist"
 
-#: nagvis/includes/classes/objects/NagiosHost.php:419
+#: nagvis/includes/classes/objects/NagiosHost.php:415
+#: nagvis/includes/classes/objects/NagiosServicegroup.php:212
+msgid "services"
+msgstr "Dienste"
+
+#: nagvis/includes/classes/objects/NagiosHost.php:417
 msgid "hostHasNoServices"
 msgstr "Der Host \"[HOST]\" hat keine Dienste."
 
-#: nagvis/includes/classes/objects/NagiosHostgroup.php:222
-msgid "hosts"
-msgstr "Geräte"
-
-#: nagvis/includes/classes/objects/NagiosHostgroup.php:224
-msgid "hostGroupNotFoundInDB"
-msgstr "Die Hostgruppe \"[HOSTGROUP]\" konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?"
-
-#: nagvis/includes/classes/objects/NagVisMapObj.php:255
+#: nagvis/includes/classes/objects/NagVisMapObj.php:260
 msgid "objects"
 msgstr "Objekte"
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:257
+#: nagvis/includes/classes/objects/NagVisMapObj.php:262
 msgid "mapIsEmpty"
 msgstr "Die Karte \"[MAP]\" hat keine Objekte."
 
-#: nagvis/includes/classes/objects/NagVisMapObj.php:349
-#: nagvis/includes/classes/objects/NagVisMapObj.php:352
-#: wui/includes/classes/WuiAddModify.php:256
-msgid "loopInMapRecursion"
-msgstr "Die Objekte auf den verlinkten Karten bilden eine Endlosschleife. Bitte auflösen."
-
-#: nagvis/includes/classes/objects/NagVisMapObj.php:365
+#: nagvis/includes/classes/objects/NagVisMapObj.php:372
 msgid "noReadPermissions"
 msgstr "Du hast keine Berechtigung den Status dieser Karte einzusehen."
 
-#: nagvis/includes/classes/objects/NagVisStatefulObject.php:653
+#: nagvis/includes/classes/objects/NagVisStatefulObject.php:676
 msgid "childStatesAre"
 msgstr "Es sind"
+
+#: nagvis/includes/classes/objects/NagVisObject.php:311
+msgid "couldNotGetHoverUrl"
+msgstr "Konnte Hover-URL &quot;[URL]&quot; nicht finden. Eventuell ist die URL Paswort gesch&uuml;tzt."
+
+#: nagvis/includes/classes/objects/NagVisObject.php:431
+#: nagvis/includes/classes/objects/NagVisObject.php:435
+#: nagvis/includes/classes/objects/NagVisObject.php:440
+#: nagvis/includes/classes/objects/NagVisObject.php:490
+msgid "hostname"
+msgstr "Gerätename"
+
+#: nagvis/includes/classes/objects/NagVisObject.php:439
+msgid "hostgroupname"
+msgstr "Gerätegruppenname"
+
+#: nagvis/includes/classes/objects/NagVisObject.php:443
+msgid "servicegroupname"
+msgstr "Dienstegruppenname"
+
+#: nagvis/includes/classes/objects/NagVisObject.php:447
+msgid "mapname"
+msgstr "Kartenname"
+
+#: nagvis/includes/classes/objects/NagVisObject.php:448
+#: nagvis/includes/classes/objects/NagVisObject.php:451
+#: nagvis/includes/classes/objects/NagVisObject.php:452
+msgid "objectname"
+msgstr "Objektname"
+
+#: nagvis/includes/classes/objects/NagiosHostgroup.php:217
+msgid "hosts"
+msgstr "Geräte"
+
+#: nagvis/includes/classes/objects/NagiosHostgroup.php:219
+msgid "hostGroupNotFoundInDB"
+msgstr "Die Hostgruppe \"[HOSTGROUP]\" konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?"
+
+#: nagvis/includes/classes/objects/NagiosServicegroup.php:214
+msgid "serviceGroupNotFoundInDB"
+msgstr "Die Dienstegruppe \"[SERVICEGROUP]\" konnte in der Datenbank nicht gefunden werden. Eventuell ist sie falsch geschrieben?"
 
 #: wui/form_handler.php:81
 #: wui/form_handler.php:115
@@ -583,84 +585,95 @@ msgstr "Die Methode \"[METHOD]\" wird von der gewählten Datenquelle nicht unter
 msgid "accessModeIsNotValid"
 msgstr "Der Zugriffs-Modus \"[MODE]\" ist nicht gültig"
 
-#: wui/includes/classes/WuiMainCfg.php:162
-#: wui/includes/classes/WuiMainCfg.php:194
-msgid "mainCfgNotWriteable"
-msgstr ""
+#: wui/includes/classes/WuiBackgroundManagement.php:76
+msgid "createBackground"
+msgstr "Hintergrund erstellen"
 
-#: wui/includes/classes/WuiMainCfg.php:169
-msgid "mainCfgCouldNotWriteMainConfigFile"
-msgstr ""
+#: wui/includes/classes/WuiBackgroundManagement.php:80
+#: wui/includes/classes/WuiMapManagement.php:82
+msgid "create"
+msgstr "Erstellen"
 
-#: wui/includes/classes/WuiMainCfg.php:214
-#, fuzzy
-msgid "mapCfgDirNotWriteable"
-msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
+#: wui/includes/classes/WuiBackgroundManagement.php:91
+msgid "uploadBackground"
+msgstr "Hintergrund hochladen"
 
-#: wui/includes/classes/WuiEditMainCfg.php:70
-#: wui/includes/classes/WuiBackendManagement.php:81
-#: wui/includes/classes/WuiBackendManagement.php:94
-#: wui/includes/classes/WuiBackendManagement.php:107
-#: wui/includes/classes/WuiBackendManagement.php:120
-#: wui/includes/classes/WuiMap.php:595
-#: wui/includes/classes/WuiAddModify.php:83
-msgid "save"
-msgstr "Speichern"
+#: wui/includes/classes/WuiBackgroundManagement.php:95
+#: wui/includes/classes/WuiShapeManagement.php:81
+msgid "upload"
+msgstr "Hochladen"
 
-#: wui/includes/classes/WuiEditMainCfg.php:104
-msgid "defaultValue"
-msgstr "Standardwert"
+#: wui/includes/classes/WuiBackgroundManagement.php:105
+msgid "deleteBackground"
+msgstr "Hintergrund löschen"
 
-#: wui/includes/classes/WuiEditMainCfg.php:144
-#: wui/includes/classes/WuiAddModify.php:172
-msgid "yes"
-msgstr "Ja"
+#: wui/includes/classes/WuiBackgroundManagement.php:109
+#: wui/includes/classes/WuiShapeManagement.php:95
+#: wui/includes/classes/WuiMap.php:578
+#: wui/includes/classes/WuiMapManagement.php:106
+msgid "delete"
+msgstr "Löschen"
 
-#: wui/includes/classes/WuiEditMainCfg.php:145
-#: wui/includes/classes/WuiAddModify.php:172
-msgid "no"
-msgstr "Nein"
+#: wui/includes/classes/WuiBackgroundManagement.php:124
+#: wui/includes/classes/WuiBackgroundManagement.php:139
+msgid "chooseImage"
+msgstr "W&auml;hle ein Bild"
 
-#: wui/includes/classes/WuiEditMainCfg.php:148
-msgid "disabled"
-msgstr "Deaktiviert"
+#: wui/includes/classes/WuiBackgroundManagement.php:153
+msgid "backgroundName"
+msgstr "Name"
+
+#: wui/includes/classes/WuiBackgroundManagement.php:155
+msgid "backgroundColor"
+msgstr "Farbe (Hex-Format)"
+
+#: wui/includes/classes/WuiBackgroundManagement.php:157
+msgid "backgroundWidth"
+msgstr "Breite (px)"
+
+#: wui/includes/classes/WuiBackgroundManagement.php:159
+msgid "backgroundHeight"
+msgstr "Höhe (px)"
+
+#: wui/includes/classes/WuiBackgroundManagement.php:174
+#: wui/includes/classes/WuiShapeManagement.php:140
+msgid "firstMustChoosePngImage"
+msgstr "Du musst erst ein PNG-Bild auswählen"
+
+#: wui/includes/classes/WuiBackgroundManagement.php:175
+#: wui/includes/classes/WuiShapeManagement.php:141
+#: wui/includes/classes/WuiBackground.php:82
+msgid "mustChooseValidImageFormat"
+msgstr "Es muss ein Bild mit einem g&uuml;ltigen Datei-Format gew&auml;hlt werden. Gültig sind Bilder im Format png, gif und jpg."
+
+#: wui/includes/classes/WuiBackgroundManagement.php:176
+msgid "foundNoBackgroundToDelete"
+msgstr "Kein Hintergrundbild zum Löschen gefunden. Operation abgebrochen."
+
+#: wui/includes/classes/WuiBackgroundManagement.php:177
+msgid "confirmBackgroundDeletion"
+msgstr "Willst du diesen Hintergrund wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+
+#: wui/includes/classes/WuiBackgroundManagement.php:178
+msgid "unableToDeleteBackground"
+msgstr "Kann Hintergrund \"[IMAGENAME]\" nicht löschen. Das Bild wird noch in der Karte \"[MAP]\" verwendet."
+
+#: wui/includes/classes/WuiBackgroundManagement.php:179
+msgid "mustValueNotSet1"
+msgstr "Der Pflichtwert \"[ATTRIBUTE]\" wurde nicht gesetzt."
 
 #: wui/includes/classes/WuiShapeManagement.php:77
 msgid "uploadShape"
 msgstr "Bild hochladen"
 
-#: wui/includes/classes/WuiShapeManagement.php:81
-#: wui/includes/classes/WuiBackgroundManagement.php:95
-msgid "upload"
-msgstr "Hochladen"
-
 #: wui/includes/classes/WuiShapeManagement.php:91
 msgid "deleteShape"
 msgstr "Bild löschen"
-
-#: wui/includes/classes/WuiShapeManagement.php:95
-#: wui/includes/classes/WuiMap.php:576
-#: wui/includes/classes/WuiMapManagement.php:106
-#: wui/includes/classes/WuiBackgroundManagement.php:109
-msgid "delete"
-msgstr "Löschen"
 
 #: wui/includes/classes/WuiShapeManagement.php:111
 #: wui/includes/classes/WuiShapeManagement.php:125
 msgid "choosePngImage"
 msgstr "Wähle ein Bild im PNG-Format"
-
-#: wui/includes/classes/WuiShapeManagement.php:140
-#: wui/includes/classes/WuiBackgroundManagement.php:174
-msgid "firstMustChoosePngImage"
-msgstr "Du musst erst ein PNG-Bild auswählen"
-
-#: wui/includes/classes/WuiShapeManagement.php:141
-#: wui/includes/classes/WuiBackgroundManagement.php:175
-#: wui/includes/classes/WuiBackground.php:82
-#, fuzzy
-msgid "mustChooseValidImageFormat"
-msgstr "Du musst ein Bild im PNG-Format wählen."
 
 #: wui/includes/classes/WuiShapeManagement.php:142
 msgid "foundNoShapeToDelete"
@@ -699,159 +712,237 @@ msgstr "Die Datei hat das falsche Dateiformat (muss *.png sein)"
 msgid "uploadFailed"
 msgstr "Hochladen der Datei fehlgeschlagen"
 
-#: wui/includes/classes/WuiBackendManagement.php:78
-msgid "setDefaultBackend"
-msgstr "Standard-Datenquelle setzen"
-
-#: wui/includes/classes/WuiBackendManagement.php:91
-msgid "addBackend"
-msgstr "Datenquelle hinzufügen"
-
-#: wui/includes/classes/WuiBackendManagement.php:104
-msgid "editBackend"
-msgstr "Datenquelle bearbeiten"
-
-#: wui/includes/classes/WuiBackendManagement.php:117
-msgid "delBackend"
-msgstr "Datenquelle löschen"
-
-#: wui/includes/classes/WuiBackendManagement.php:219
-msgid "defaultBackend"
-msgstr "Standard-Datenquelle"
-
 #: wui/includes/classes/WuiMap.php:298
-#, fuzzy
 msgid "iconNotExists"
-msgstr "Das Hintergrundbild \"[IMGPATH]\" existiert nicht"
+msgstr "Ein Icon &quot;[IMGPATH]&quot; auf der Map existiert nicht."
 
-#: wui/includes/classes/WuiMap.php:564
+#: wui/includes/classes/WuiMap.php:566
 msgid "configured"
 msgstr "Konfiguriert"
 
-#: wui/includes/classes/WuiMap.php:566
+#: wui/includes/classes/WuiMap.php:568
 msgid "inherited"
 msgstr "Vererbt"
 
-#: wui/includes/classes/WuiMap.php:570
+#: wui/includes/classes/WuiMap.php:572
 msgid "positionSize"
 msgstr "Positionieren/Größe"
 
-#: wui/includes/classes/WuiMap.php:575
+#: wui/includes/classes/WuiMap.php:577
 msgid "change"
 msgstr "Ändern"
 
-#: wui/includes/classes/WuiMap.php:596
+#: wui/includes/classes/WuiMap.php:597
+#: wui/includes/classes/WuiAddModify.php:83
+#: wui/includes/classes/WuiBackendManagement.php:81
+#: wui/includes/classes/WuiBackendManagement.php:94
+#: wui/includes/classes/WuiBackendManagement.php:107
+#: wui/includes/classes/WuiBackendManagement.php:120
+#: wui/includes/classes/WuiEditMainCfg.php:70
+msgid "save"
+msgstr "Speichern"
+
+#: wui/includes/classes/WuiMap.php:598
 msgid "restore"
 msgstr "Wiederherstellen"
 
-#: wui/includes/classes/WuiMap.php:597
+#: wui/includes/classes/WuiMap.php:599
 msgid "properties"
 msgstr "Einstellungen"
 
-#: wui/includes/classes/WuiMap.php:598
+#: wui/includes/classes/WuiMap.php:600
 msgid "addObject"
 msgstr "Objekt hinzufügen"
 
-#: wui/includes/classes/WuiMap.php:599
+#: wui/includes/classes/WuiMap.php:601
 msgid "nagVisConfig"
 msgstr "NagVis-Konfiguration"
 
-#: wui/includes/classes/WuiMap.php:600
+#: wui/includes/classes/WuiMap.php:602
 msgid "help"
 msgstr "Hilfe"
 
-#: wui/includes/classes/WuiMap.php:601
+#: wui/includes/classes/WuiMap.php:603
 msgid "open"
 msgstr "Öffnen"
 
-#: wui/includes/classes/WuiMap.php:602
+#: wui/includes/classes/WuiMap.php:604
 msgid "openInNagVis"
 msgstr "Karte in NagVis Öffnen"
 
-#: wui/includes/classes/WuiMap.php:603
+#: wui/includes/classes/WuiMap.php:605
 msgid "manageMaps"
 msgstr "Karten"
 
-#: wui/includes/classes/WuiMap.php:604
+#: wui/includes/classes/WuiMap.php:606
 msgid "manageBackends"
 msgstr "Datenquellen"
 
-#: wui/includes/classes/WuiMap.php:605
+#: wui/includes/classes/WuiMap.php:607
 msgid "manageBackgrounds"
 msgstr "Hintergründe"
 
-#: wui/includes/classes/WuiMap.php:606
+#: wui/includes/classes/WuiMap.php:608
 msgid "manageShapes"
 msgstr "Bilder"
 
-#: wui/includes/classes/WuiMap.php:607
+#: wui/includes/classes/WuiMap.php:609
 msgid "icon"
 msgstr "Icon"
 
-#: wui/includes/classes/WuiMap.php:608
+#: wui/includes/classes/WuiMap.php:610
 msgid "line"
 msgstr "Linie"
 
-#: wui/includes/classes/WuiMap.php:609
+#: wui/includes/classes/WuiMap.php:611
 msgid "special"
 msgstr "Spezielle"
 
-#: wui/includes/classes/WuiMap.php:610
+#: wui/includes/classes/WuiMap.php:612
 msgid "host"
 msgstr "Gerät"
 
-#: wui/includes/classes/WuiMap.php:611
+#: wui/includes/classes/WuiMap.php:613
 msgid "service"
 msgstr "Dienst"
 
-#: wui/includes/classes/WuiMap.php:612
+#: wui/includes/classes/WuiMap.php:614
 msgid "hostgroup"
 msgstr "Gerätegruppe"
 
-#: wui/includes/classes/WuiMap.php:613
+#: wui/includes/classes/WuiMap.php:615
 msgid "servicegroup"
 msgstr "Dienstegruppe"
 
-#: wui/includes/classes/WuiMap.php:614
+#: wui/includes/classes/WuiMap.php:616
 msgid "map"
 msgstr "Karte"
 
-#: wui/includes/classes/WuiMap.php:615
+#: wui/includes/classes/WuiMap.php:617
 msgid "textbox"
 msgstr "Textbox"
 
-#: wui/includes/classes/WuiMap.php:616
+#: wui/includes/classes/WuiMap.php:618
 msgid "shape"
 msgstr "Bild"
 
-#: wui/includes/classes/WuiMap.php:617
+#: wui/includes/classes/WuiMap.php:619
 msgid "manage"
 msgstr "Verwalte"
 
-#: wui/includes/classes/WuiMap.php:619
+#: wui/includes/classes/WuiMap.php:621
 msgid "clickMapToSetPoints"
 msgstr "Klicke auf die Karte, um die fehlenden Punkte zu bestimmen"
 
-#: wui/includes/classes/WuiMap.php:620
+#: wui/includes/classes/WuiMap.php:622
 msgid "confirmDelete"
 msgstr "Willst du dieses Objekt wirklich löschen?"
 
-#: wui/includes/classes/WuiMap.php:621
+#: wui/includes/classes/WuiMap.php:623
 msgid "confirmRestore"
 msgstr "Sicher, dass du das Backup wiederherstellen willst?"
 
-#: wui/includes/classes/WuiMap.php:624
+#: wui/includes/classes/WuiMap.php:626
 msgid "wrongValueFormatOption"
 msgstr "Das Attribut \"[ATTRIBUTE]\" entspricht nicht dem korrekten Format"
+
+#: wui/includes/classes/WuiBackground.php:46
+msgid "couldNotDeleteMapImage"
+msgstr "Das Hintergrund-Bild &quot;[IMGPATH]&quot; konnte nicht gel&ouml;scht werden"
+
+#: wui/includes/classes/WuiBackground.php:88
+msgid "fileCouldNotBeUploaded"
+msgstr "Die Datei konnte nicht hochgeladen werden."
+
+#: wui/includes/classes/WuiBackground.php:125
+msgid "imageAlreadyExists"
+msgstr "Das Bild &quot;[IMAGE]&quot; existiert bereits."
+
+#: wui/includes/classes/WuiMainCfg.php:162
+#: wui/includes/classes/WuiMainCfg.php:194
+msgid "mainCfgNotWriteable"
+msgstr "Bitte die Schreibberechtigungen des Webservers auf die Haupt-Konfigurations-Datei &quot;[MAINCFG]&quot; pr&uuml;fen."
+
+#: wui/includes/classes/WuiMainCfg.php:169
+msgid "mainCfgCouldNotWriteMainConfigFile"
+msgstr "Die Haupt-Konfigurations-Datei ist nicht schreibbar."
+
+#: wui/includes/classes/WuiMainCfg.php:214
+msgid "mapCfgDirNotWriteable"
+msgstr "Bitte die Schreibberechtigungen des Webservers auf das Verzeichnis &quot;[MAPPATH]&quot; pr&uuml;fen."
+
+#: wui/includes/classes/WuiAddModify.php:172
+#: wui/includes/classes/WuiEditMainCfg.php:144
+msgid "yes"
+msgstr "Ja"
+
+#: wui/includes/classes/WuiAddModify.php:172
+#: wui/includes/classes/WuiEditMainCfg.php:145
+msgid "no"
+msgstr "Nein"
+
+#: wui/includes/classes/WuiAddModify.php:246
+msgid "unableToWorkWithMap"
+msgstr "Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen."
+
+#: wui/includes/classes/WuiAddModify.php:248
+msgid "chosenLineTypeNotValid"
+msgstr "Der gewählte Linien-Typ \"line_type ist\" ungültig."
+
+#: wui/includes/classes/WuiAddModify.php:249
+msgid "onlyLineOrIcon"
+msgstr "Ein Objekt kann nur ein Icon oder eine Linie sein, \"iconset\" und \"line_type\" können nicht gemeinsam verwendet werden."
+
+#: wui/includes/classes/WuiAddModify.php:250
+#: wui/includes/classes/WuiAddModify.php:251
+msgid "not2coords"
+msgstr "Es scheint, du willst eine Linie definieren (\"line_type\" ist gesetzt). Es sind aber keine 2 [COORD] Koordinaten angegeben."
+
+#: wui/includes/classes/WuiAddModify.php:252
+#: wui/includes/classes/WuiAddModify.php:253
+msgid "only1or2coords"
+msgstr "Es ist nur möglich ein oder zwei Koordinaten [COORD] anzugeben."
+
+#: wui/includes/classes/WuiAddModify.php:254
+#: wui/includes/classes/WuiAddModify.php:255
+msgid "lineTypeNotSelected"
+msgstr "Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gewählt werden."
+
+#: wui/includes/classes/WuiAddModify.php:256
+msgid "loopInMapRecursion"
+msgstr "Die Objekte auf den verlinkten Karten bilden eine Endlosschleife. Bitte auflösen."
+
+#: wui/includes/classes/WuiAddModify.php:257
+msgid "mapObjectWillShowSummaryState"
+msgstr "Dieses Objekt wird den Gesamt-Status der aktuellen Karte zeigen."
+
+#: wui/includes/classes/WuiMapCfg.php:111
+msgid "couldNotDeleteMapCfg"
+msgstr "Die Karten Konfigurations-Datei &quot;[MAPPATH]&quot; konnte nicht gel&ouml;scht werden"
+
+#: wui/includes/classes/WuiMapCfg.php:132
+msgid "mapCfgNotWriteable"
+msgstr "Keine Schreibrechte auf die Map Konfigurations-Datei. Bitte die Schreibberechtigungen des Webservers auf die Map Konfigurations-Datei &quot;[MAP]&quot; pr&uuml;fen."
+
+#: wui/includes/classes/WuiMapCfg.php:296
+msgid "mapLocked"
+msgstr "Die Karte \"[MAP]\" ist vom Benutzer \"[USER]\" von der IP \"[IP]\" seit [TIME] gesperrt. Trotzdem bearbeiten? (Sperre ignorieren?)"
+
+#: wui/includes/classes/WuiMapCfg.php:398
+msgid "mapLockNotExists"
+msgstr "Die Kartensperre &quot;[MAP]&quot; existiert nicht."
+
+#: wui/includes/classes/WuiMapCfg.php:421
+msgid "mapLockNotReadable"
+msgstr "Die Kartensperre &quot;[MAP]&quot; ist nicht lesbar."
+
+#: wui/includes/classes/WuiMapCfg.php:444
+msgid "mapLockNotWriteable"
+msgstr "Die Kartensperre &quot;[MAP]&quot; ist nicht schreibbar."
 
 #: wui/includes/classes/WuiMapManagement.php:79
 msgid "createMap"
 msgstr "Erstelle eine Karte"
-
-#: wui/includes/classes/WuiMapManagement.php:82
-#: wui/includes/classes/WuiBackgroundManagement.php:80
-msgid "create"
-msgstr "Erstellen"
 
 #: wui/includes/classes/WuiMapManagement.php:91
 msgid "renameMap"
@@ -983,133 +1074,33 @@ msgstr "Mindestens ein Benutzer muss die Berechtigung haben, um diese Karte zu �
 msgid "noSpaceAllowed"
 msgstr "Leerzeichen sind in diesem Wert nicht erlaubt."
 
-#: wui/includes/classes/WuiBackgroundManagement.php:76
-msgid "createBackground"
-msgstr "Hintergrund erstellen"
+#: wui/includes/classes/WuiBackendManagement.php:78
+msgid "setDefaultBackend"
+msgstr "Standard-Datenquelle setzen"
 
-#: wui/includes/classes/WuiBackgroundManagement.php:91
-msgid "uploadBackground"
-msgstr "Hintergrund hochladen"
+#: wui/includes/classes/WuiBackendManagement.php:91
+msgid "addBackend"
+msgstr "Datenquelle hinzufügen"
 
-#: wui/includes/classes/WuiBackgroundManagement.php:105
-msgid "deleteBackground"
-msgstr "Hintergrund löschen"
+#: wui/includes/classes/WuiBackendManagement.php:104
+msgid "editBackend"
+msgstr "Datenquelle bearbeiten"
 
-#: wui/includes/classes/WuiBackgroundManagement.php:124
-#: wui/includes/classes/WuiBackgroundManagement.php:139
-#, fuzzy
-msgid "chooseImage"
-msgstr "Wähle ein Bild im PNG-Format"
+#: wui/includes/classes/WuiBackendManagement.php:117
+msgid "delBackend"
+msgstr "Datenquelle löschen"
 
-#: wui/includes/classes/WuiBackgroundManagement.php:153
-msgid "backgroundName"
-msgstr "Name"
+#: wui/includes/classes/WuiBackendManagement.php:219
+msgid "defaultBackend"
+msgstr "Standard-Datenquelle"
 
-#: wui/includes/classes/WuiBackgroundManagement.php:155
-msgid "backgroundColor"
-msgstr "Farbe (Hex-Format)"
+#: wui/includes/classes/WuiEditMainCfg.php:104
+msgid "defaultValue"
+msgstr "Standardwert"
 
-#: wui/includes/classes/WuiBackgroundManagement.php:157
-msgid "backgroundWidth"
-msgstr "Breite (px)"
-
-#: wui/includes/classes/WuiBackgroundManagement.php:159
-msgid "backgroundHeight"
-msgstr "Höhe (px)"
-
-#: wui/includes/classes/WuiBackgroundManagement.php:176
-msgid "foundNoBackgroundToDelete"
-msgstr "Kein Hintergrundbild zum Löschen gefunden. Operation abgebrochen."
-
-#: wui/includes/classes/WuiBackgroundManagement.php:177
-msgid "confirmBackgroundDeletion"
-msgstr "Willst du diesen Hintergrund wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
-
-#: wui/includes/classes/WuiBackgroundManagement.php:178
-msgid "unableToDeleteBackground"
-msgstr "Kann Hintergrund \"[IMAGENAME]\" nicht löschen. Das Bild wird noch in der Karte \"[MAP]\" verwendet."
-
-#: wui/includes/classes/WuiBackgroundManagement.php:179
-msgid "mustValueNotSet1"
-msgstr "Der Pflichtwert \"[ATTRIBUTE]\" wurde nicht gesetzt."
-
-#: wui/includes/classes/WuiMapCfg.php:111
-#, fuzzy
-msgid "couldNotDeleteMapCfg"
-msgstr "Karte \"[MAP]\" nicht löschbar. Die Karte ist in der Karte \"[PARENTMAP]\" eingebunden."
-
-#: wui/includes/classes/WuiMapCfg.php:132
-#, fuzzy
-msgid "mapCfgNotWriteable"
-msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
-
-#: wui/includes/classes/WuiMapCfg.php:296
-msgid "mapLocked"
-msgstr "Die Karte \"[MAP]\" ist vom Benutzer \"[USER]\" von der IP \"[IP]\" seit [TIME] gesperrt. Trotzdem bearbeiten? (Sperre ignorieren?)"
-
-#: wui/includes/classes/WuiMapCfg.php:398
-#, fuzzy
-msgid "mapLockNotExists"
-msgstr "Die Karten-Konfigurations-Datei \"[MAP]\" existiert nicht"
-
-#: wui/includes/classes/WuiMapCfg.php:421
-#, fuzzy
-msgid "mapLockNotReadable"
-msgstr "Die Sperre der Karte konnte nicht gelöscht werden"
-
-#: wui/includes/classes/WuiMapCfg.php:444
-#, fuzzy
-msgid "mapLockNotWriteable"
-msgstr "Die Sperre der Karte konnte nicht gelöscht werden"
-
-#: wui/includes/classes/WuiBackground.php:46
-#, fuzzy
-msgid "couldNotDeleteMapImage"
-msgstr "Karte \"[MAP]\" nicht löschbar. Die Karte ist in der Karte \"[PARENTMAP]\" eingebunden."
-
-#: wui/includes/classes/WuiBackground.php:88
-msgid "fileCouldNotBeUploaded"
-msgstr ""
-
-#: wui/includes/classes/WuiBackground.php:125
-#, fuzzy
-msgid "imageAlreadyExists"
-msgstr "Die Karte \"[MAPNAME]\" existiert bereits. Wähle einen anderen Namen."
-
-#: wui/includes/classes/WuiAddModify.php:246
-msgid "unableToWorkWithMap"
-msgstr "Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen."
-
-#: wui/includes/classes/WuiAddModify.php:248
-msgid "chosenLineTypeNotValid"
-msgstr "Der gewählte Linien-Typ \"line_type ist\" ungültig."
-
-#: wui/includes/classes/WuiAddModify.php:249
-msgid "onlyLineOrIcon"
-msgstr "Ein Objekt kann nur ein Icon oder eine Linie sein, \"iconset\" und \"line_type\" können nicht gemeinsam verwendet werden."
-
-#: wui/includes/classes/WuiAddModify.php:250
-#: wui/includes/classes/WuiAddModify.php:251
-msgid "not2coords"
-msgstr "Es scheint, du willst eine Linie definieren (\"line_type\" ist gesetzt). Es sind aber keine 2 [COORD] Koordinaten angegeben."
-
-#: wui/includes/classes/WuiAddModify.php:252
-#: wui/includes/classes/WuiAddModify.php:253
-msgid "only1or2coords"
-msgstr "Es ist nur möglich ein oder zwei Koordinaten [COORD] anzugeben."
-
-#: wui/includes/classes/WuiAddModify.php:254
-#: wui/includes/classes/WuiAddModify.php:255
-msgid "lineTypeNotSelected"
-msgstr "Du hast zwei [COORD] Koordinaten angegeben, also muss auch line_type gewählt werden."
-
-#: wui/includes/classes/WuiAddModify.php:257
-msgid "mapObjectWillShowSummaryState"
-msgstr "Dieses Objekt wird den Gesamt-Status der aktuellen Karte zeigen."
-
-#: wui/includes/classes/WuiFrontend.php:72
-msgid "phpModuleNotLoaded"
-msgstr ""
+#: wui/includes/classes/WuiEditMainCfg.php:148
+msgid "disabled"
+msgstr "Deaktiviert"
 
 #~ msgid "maybePhpMemoryLimitToLow"
 #~ msgstr ""
