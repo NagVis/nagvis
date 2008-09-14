@@ -13,7 +13,7 @@
 ; !!! The Sections/Variables with a leading ";" won't be recognized by NagVis (commented out) !!!
 ; ----------------------------
 
-; global options
+; General options which affect the whole NagVis installation
 [global]
 ; select language (english,german,french,...)
 ;language="english"
@@ -22,16 +22,19 @@
 ; refresh time of pages
 ;refreshtime=60
 
-; default values for the maps
+; Path definitions
+[paths]
+; absolute physical NagVis path
+;base="/usr/local/nagios/share/nagvis/"
+; absolute html NagVis path
+;htmlbase="/nagios/nagvis"
+; absolute html NagVis cgi path
+;htmlcgi="/nagios/cgi-bin"
+
+; Default values which gets inherited to the maps and it's objects
 [defaults]
 ; default backend (id of the default backend)
 ;backend="ndomy_1"
-; default icons
-;icons="std_medium"
-; recognize service states in host/hostgroup objects
-;recognizeservices=1
-; recognize only hard states (not soft)
-;onlyhardstates=0
 ; background color of maps
 ;backgroundcolor="#fff"
 ; enable/disable header menu
@@ -54,12 +57,18 @@
 ;hoverchildssort="s"
 ; limit shown child objects to n
 ;hoverchildslimit="10"
+; default icons
+;icons="std_medium"
+; recognize only hard states (not soft)
+;onlyhardstates=0
+; recognize service states in host/hostgroup objects
+;recognizeservices=1
 ; show map in lists (dropdowns, index page, ...)
 ;showinlists=1
-; use gdlibs (if set to 0 lines will not work, all other types should work fine)
-;usegdlibs=1
 ; target for the icon links
 ;urltarget="_self"
+; use gdlibs (if set to 0 lines will not work, all other types should work fine)
+;usegdlibs=1
 
 ; Options to configure the Overview page of NagVis
 [index]
@@ -72,36 +81,27 @@
 ; Enable/Disable rotation listing
 ;showrotations=1
 
-; Options for the wui
+; Options for the Automap
+[automap]
+; Default URL parameters for links to the automap
+;defaultparams="&maxLayers=2"
+; Default root host (NagVis uses this if it can't detect it via NDO)
+;defaultroot=""
+; Path to the graphviz binaries (dot,neato,...); Only needed if not in ENV PATH
+;graphvizpath="/usr/bin/"
+; Show the automap in the lists (Map index and dropdown menu in header)
+;showinlists=1
+
+; Options for the WUI
 [wui]
+; Users which are allowed to change the NagVis configuration (comma seperated list)
+;allowedforconfig=EVERYONE
 ; auto update frequency
 ;autoupdatefreq=25
 ; map lock time (minutes)
 ;maplocktime=5
-; Users which are allowed to change the NagVis configuration (comma seperated list)
-;allowedforconfig=EVERYONE
 
-; Configuration values for the automap
-[automap]
-; show the automap in the lists (Map index and dropdown menu in header)
-;showinlists=1
-; default root host (NagVis uses this if it can't detect it via NDO)
-;defaultroot=""
-; path to the graphviz binaries (dot,neato,...); Only needed if not in ENV PATH
-;graphvizpath="/usr/bin/"
-; Default URL parameters for links to the automap
-;defaultparams="&maxLayers=2"
-
-; Path options
-[paths]
-; absolute physical NagVis path
-;base="/usr/local/nagios/share/nagvis/"
-; absolute html NagVis path
-;htmlbase="/nagios/nagvis"
-; absolute html NagVis cgi path
-;htmlcgi="/nagios/cgi-bin"
-
-; Options for the NDO-Backend
+; Backend definitions
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 [backend_ndomy_1]
 ; type of backend - MUST be set
@@ -125,7 +125,7 @@
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
-; Map rotation pools
+; Rotation pool definitions
 ; in this example the browser switches between the maps demo and demo2 every 15
 ; seconds the rotation is enabled by url: index.php?rotation=demo
 [rotation_demo]
