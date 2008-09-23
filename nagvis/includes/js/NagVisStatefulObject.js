@@ -155,11 +155,6 @@ function NagVisStatefulObject () {
 		var ret = '';
 		var link = '';
 		
-		var x = this.conf.x.split(',');
-		var y = this.conf.y.split(',');
-		
-		var width = 3;
-		
 		if(this.type == 'service') {
 			alt = this.conf.name+'-'+this.conf.service_description;
 		} else {
@@ -186,19 +181,23 @@ function NagVisStatefulObject () {
 		oLineBorderDiv.style.zIndex = this.conf.z;
 		oContainerDiv.appendChild(oLineBorderDiv);
 		
-		// Add the container to dom
-		//document.getElementById('map').appendChild(oContainerDiv);
-		
 		// Create hover menu
 		this.getHoverMenu(oLineDiv);
 		
 		return oContainerDiv;
 	}
 	
+	/**
+	 * Draws the NagVis lines on the already added divs.
+	 *
+	 * @return	String		HTML code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	this.drawLine = function() {
 		var x = this.conf.x.split(',');
 		var y = this.conf.y.split(',');
 		
+		//FIXME: Make width configurable
 		var width = 3;
 		
 		// Parse the line object
