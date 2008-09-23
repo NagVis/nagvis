@@ -170,6 +170,36 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
+	 * Parses the Map and the Objects
+	 *
+	 * @return	String 	String with Html Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseMapJson() {
+		$ret = '';
+		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+		
+		// Kick of the worker
+		$ret .= 'runWorker(0, \'automap\');';
+		
+		return $ret;
+	}
+	
+	/**
+	 * Parses the Map and the Object options in json format
+	 *
+	 * @return	String 	String with JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseMapPropertiesJson() {
+		$arr = Array();
+		$arr['map_name'] = $this->MAPCFG->getName();
+		
+		return json_encode($arr);
+	}
+	
+	/**
 	 * Parses the graphviz config of the autmap
 	 *
 	 * @return	String 		Graphviz configuration
@@ -337,7 +367,7 @@ class NagVisAutoMap extends GlobalMap {
 		$ret .= $this->getFavicon();
 		
 		// Change title (add map alias and map state)
-		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		return $ret;
 	}

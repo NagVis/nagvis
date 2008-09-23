@@ -89,7 +89,7 @@ class NagiosService extends NagVisStatefulObject {
 		
 		$this->childObjects = Array();
 		$this->state = '';
-		$this->has_been_acknowledged = 0;
+		$this->problem_has_been_acknowledged = 0;
 		
 		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
 	}

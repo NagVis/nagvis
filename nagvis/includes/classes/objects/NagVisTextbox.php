@@ -29,9 +29,6 @@
 class NagVisTextbox extends NagVisStatelessObject {
 	var $CORE;
 	
-	var $background_color;
-	var $border_color;
-	
 	/**
 	 * Class constructor
 	 *
@@ -43,52 +40,24 @@ class NagVisTextbox extends NagVisStatelessObject {
 	function NagVisTextbox(&$CORE) {
 		$this->CORE = &$CORE;
 		
-		$this->class = 'box';
-		$this->background_color = '#CCCCCC';
-		
 		$this->type = 'textbox';
 		parent::NagVisStatelessObject($this->CORE);
 	}
 	
 	/**
-	 * PUBLIC parse()
+	 * PUBLIC parseJson()
 	 *
-	 * Parses the object
+	 * Parses the object in json format
 	 *
-	 * @return	String		HTML code of the object
+	 * @return	String		JSON code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parse() {
-		$this->replaceMacros();
-		return $this->parseTextbox();
+	function parseJson() {
+		return parent::parseJson();
 	}
 	
 	# End public methods
 	# #########################################################################
-	
-	/**
-	 * Replaces macros of urls and hover_urls
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function replaceMacros() {
-		
-		$this->text = str_replace('[refresh_counter]','<font id="refreshCounter"></font>', $this->text);
-		
-	}
-	
-	/**
-	 * Create a Comment-Textbox
-	 *
-	 * @return	String	String with HTML Code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseTextbox() {
-		$ret = '<div class="'.$this->class.'" style="border-color:'.$this->border_color.';background:'.$this->background_color.';left:'.$this->x.'px;top:'.$this->y.'px;width:'.$this->w.'px;overflow:visible;">';	
-		$ret .= "\t".'<span>'.$this->text.'</span>';
-		$ret .= '</div>';
-		return $ret;	
-	}
 	
 	/**
 	 * Just a dummy here (Textbox won't need an icon)

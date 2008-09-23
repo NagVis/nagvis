@@ -76,7 +76,7 @@ class NagVisServicegroup extends NagiosServicegroup {
 		if(isset($this->url) && $this->url != '') {
 			$url = parent::getUrl();
 		} else {
-			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?servicegroup='.$this->servicegroup_name.'&amp;style=detail';
+			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?servicegroup='.$this->servicegroup_name.'&style=detail';
 		}
 		return $url;
 	}

@@ -62,6 +62,20 @@ class NagVisShape extends NagVisStatelessObject {
 	}
 	
 	/**
+	 * PUBLIC parseJson()
+	 *
+	 * Parses the object in json format
+	 *
+	 * @return	String		JSON code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseJson() {
+		$this->setIconPath();
+		
+		return parent::parseJson();
+	}
+	
+	/**
 	 * Gets the hover menu of a shape if it is requested by configuration
 	 *
 	 * @return	String	The Link
@@ -98,6 +112,22 @@ class NagVisShape extends NagVisStatelessObject {
 	 */
 	function fetchIcon() {
 		// Nothing to do here, icon is set in constructor
+	}
+	
+	/**
+	 * Parses the HTML-Code of an icon
+	 *
+	 * @param	Boolean	$link		Add a link to the icon
+	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
+	 * @return	String	String with Html Code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function setIconPath() {
+		if(preg_match('/^\[(.*)\]$/',$this->icon,$match) > 0) {
+			$this->icon = $match[1];
+		} else {
+			$this->icon = $this->iconHtmlPath.$this->icon;
+		}
 	}
 }
 ?>

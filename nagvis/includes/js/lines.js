@@ -26,28 +26,29 @@
  */
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objId, type,x1,y1,x2,y2,width,state,ack,downtime) {
+function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime) {
 	var colorFill = '';
 	var colorBorder = '#000000';
 	
+	// Ensure format
+	x1 = parseInt(x1);
+	x2 = parseInt(x2);
+	y1 = parseInt(y1);
+	y2 = parseInt(y2);
+	width = parseInt(width);
+	
 	// Get the fill color depending on the object state
 	switch (state) {
-    case 'OK':
-    case 'UP':
-			colorFill = '#00FF00';
-		break;
-		case 'WARNING':
-			colorFill = '#FFFF00';
-		break;
-		case 'CRITICAL':
+    case 'UNREACHABLE':
 		case 'DOWN':
-			colorFill = '#FF0000';
-		break;
+		case 'CRITICAL':
+		case 'WARNING':
+    case 'UNKNOWN':
 		case 'ERROR':
-			colorFill = '#0000FF';
-		break;
+    case 'UP':
+    case 'OK':
     case 'PENDING':
-			colorFill = '#C0C0C0';
+			colorFill = oStates[state].color;
 		break;
 		default:
 			colorFill = '#FFCC66';
@@ -95,7 +96,7 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder) {
 	yCoord[5] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
 	yCoord[6] = y1 + newY(x2-x1, y2-y1, 0, -w);
 	
-	var oLine = new jsGraphics(objId);
+	var oLine = new jsGraphics(objId+'-line');
 	oLine.setColor(colorFill);
 	oLine.fillPolygon(xCoord, yCoord);
 	oLine.paint();

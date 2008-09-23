@@ -63,32 +63,71 @@ class NagVisMap extends GlobalMap {
 	 * @return	String 	String with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseMap() {
+	function parseMapJson() {
 		$ret = '';
-		$ret .= $this->getBackground();
-		$ret .= $this->parseObjects();
-		// Dynamicaly set favicon
-		$ret .= $this->getFavicon();
-		// Change title (add map alias and map state), set map name
-		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; var showHoverMenu=false; var hoverMenu=\'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+		$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
+		$ret .= 'var oMapProperties='.$this->parseMapPropertiesJson().';'."\n";
+		$ret .= 'var aMapObjects=Array();'."\n";
+		$ret .= 'var aInitialMapObjects='.$this->parseObjectsJson().';'."\n";
+		
+		$ret .= '
+		var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\';';
+		
+		// Kick of the worker
+		$ret .= 'runWorker(0, \'map\');';
 		
 		return $ret;
 	}
 	
 	/**
-	 * Gets the background of the map
+	 * Parses the config file ages
 	 *
-	 * @return	String HTML Code
+	 * @return	String 	JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getBackground() {
-		return $this->getBackgroundHtml($this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName());
+	function parseFileAges() {
+		$arr = Array();
+		
+		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
+		$arr['map_config'] = $this->MAPCFG->getFileModificationTime();
+		
+		return json_encode($arr);
+	}
+	
+	/**
+	 * Parses the Map and the Object options in json format
+	 *
+	 * @return	String 	String with JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseMapPropertiesJson() {
+		$arr = Array();
+		$arr['map_name'] = $this->MAPCFG->getName();
+		$arr['background_image'] = $this->getBackgroundJson();
+		$arr['favicon_image'] = $this->getFavicon();
+		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');
+		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
+		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
+		
+		return json_encode($arr);
+	}
+	
+	/**
+	 * Gets the path to the background of the map
+	 *
+	 * @return	String  Javascript code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getBackgroundJson() {
+		return $this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
 	}
 	
 	/**
 	 * Gets the favicon of the page representation the state of the map
 	 *
-	 * @return	String	HTML Code
+	 * @return	String	Path to the favicon
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getFavicon() {
@@ -105,17 +144,19 @@ class NagVisMap extends GlobalMap {
 		} else {
 			$favicon = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
 		}
-		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
+		return $favicon;
 	}
 	
 	/**
 	 * Parses the Objects
 	 *
-	 * @return	String Html Code
+	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseObjects() {
-		$ret = '';
+	function parseObjectsJson() {
+		$arrRet = Array();
+		
+		$i = 0;
 		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
 			switch(get_class($OBJ)) {
 				case 'NagVisHost':
@@ -125,12 +166,13 @@ class NagVisMap extends GlobalMap {
 				case 'NagVisMapObj':
 				case 'NagVisShape':
 				case 'NagVisTextbox':
-					$ret .= $OBJ->parse();
+					$arrRet[] = $OBJ->parseJson();
 				break;
 			}
+			$i++;
 		}
 		
-		return $ret;
+		return json_encode($arrRet);
 	}
 }
 ?>

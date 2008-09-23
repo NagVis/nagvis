@@ -59,8 +59,26 @@ class NagVisFrontend extends GlobalPage {
 		$this->htmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 		
 		$prop['title'] = $this->CORE->MAINCFG->getValue('internal', 'title');
-		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css');
-		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js', $this->htmlBase.'/nagvis/includes/js/overlib.js', $this->htmlBase.'/nagvis/includes/js/dynfavicon.js', $this->htmlBase.'/nagvis/includes/js/ajax.js', $this->htmlBase.'/nagvis/includes/js/hover.js', $this->htmlBase.'/nagvis/includes/js/wz_jsgraphics.js', $this->htmlBase.'/nagvis/includes/js/lines.js');
+		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css', $this->htmlBase.'/nagvis/includes/css/frontendEventlog.css');
+		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisObject.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisStatefulObject.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisStatelessObject.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisHost.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisService.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisHostgroup.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisServicegroup.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisMap.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisShape.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisTextbox.js',
+															$this->htmlBase.'/nagvis/includes/js/frontend.js',
+															$this->htmlBase.'/nagvis/includes/js/frontendEventlog.js',
+															$this->htmlBase.'/nagvis/includes/js/overlib.js',
+															$this->htmlBase.'/nagvis/includes/js/dynfavicon.js',
+															$this->htmlBase.'/nagvis/includes/js/ajax.js',
+															$this->htmlBase.'/nagvis/includes/js/hover.js',
+															$this->htmlBase.'/nagvis/includes/js/wz_jsgraphics.js', 
+															$this->htmlBase.'/nagvis/includes/js/lines.js');
 		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';
 		$prop['languageRoot'] = 'nagvis';
 		
@@ -99,6 +117,7 @@ class NagVisFrontend extends GlobalPage {
 		$this->INDEX = new GlobalIndexPage($this->CORE, $this->BACKEND);
 		$this->addBodyLines($this->INDEX->parse());
 		$this->addBodyLines('</div>');
+		$this->addBodyLines($this->parseJs($this->INDEX->parseJson()));
 	}
 	
 	/**
@@ -108,11 +127,11 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function getMap() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
-		$this->addBodyLines('<div class="map">');
+		$this->addBodyLines('<div id="map" class="map">');
 		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, $this->BACKEND);
 		$this->MAP->MAPOBJ->checkMaintenance(1);
-		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
+		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));
 	}
 	
 	/**
@@ -126,6 +145,7 @@ class NagVisFrontend extends GlobalPage {
 		$this->MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $arrOptions);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
+		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));
 	}
 	
 	/**
@@ -136,7 +156,7 @@ class NagVisFrontend extends GlobalPage {
 	function getMessages() {
 		$this->addBodyLines($this->getUserMessages());
 	}
-
+	
 	/**
 	 * Gets the javascript code for the map refresh/rotation
 	 *
@@ -151,11 +171,38 @@ class NagVisFrontend extends GlobalPage {
 		}
 		
 		$strReturn .= "var bRefresh = true;\n";
-		$strReturn .= "var nextRotationUrl = '".$this->ROTATION->getNextStepUrl()."';\n";
+		if($this->ROTATION->getPoolName() != '') {
+			$strReturn .= "var nextRotationUrl = '".$this->ROTATION->getNextStepUrl()."';\n";
+		}
 		$strReturn .= "var nextRefreshTime = '".$this->ROTATION->getStepInterval()."';\n";
 		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";
 		
 		return $this->parseJs($strReturn);
+	}
+	
+	/**
+	 * Gets the javascript code for the map refresh/rotation
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getPagePropertiesJson($bRefresh) {
+		$arr = Array();
+		
+		if($this->ROTATION->getPoolName() != '') {
+			$arr['rotationEnabled'] = 1;
+			$arr['nextStepUrl'] = $this->ROTATION->getNextStepUrl();
+			$arr['nextStepTime'] = $this->ROTATION->getStepInterval();
+		} else {
+			$arr['rotationEnabled'] = 0;
+			$arr['nextStepUrl'] = '';
+			if($bRefresh) {
+				$arr['nextStepTime'] = $this->ROTATION->getStepInterval();
+			} else {
+				$arr['nextStepTime'] = '';
+			}
+		}
+		
+		return json_encode($arr);
 	}
 }
 ?>

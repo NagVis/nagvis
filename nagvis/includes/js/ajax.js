@@ -63,6 +63,119 @@ function initXMLHttpClient() {
 }
 
 /**
+ * Simple HTTP-Get to given URL
+ * - Uses query cache
+ * - Escapes the following chars:
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getHttpRequest(sUrl, bCacheable) {
+	var responseText = "";
+	
+	if (bCacheable == null) {
+		bCacheable = true;
+	}
+	
+	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
+	if(bCacheable && typeof(ajaxQueryCache[sUrl]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
+		responseText = ajaxQueryCache[sUrl].response;
+	} else {
+		var oRequest = initXMLHttpClient();
+		
+		if(oRequest) {
+			try {
+				oRequest.open("GET", sUrl, false);
+				oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
+				oRequest.send(null);
+			} catch(e) {
+				alert("Error! URL: "+ sUrl +"\nError message: "+ e);
+			}
+			
+			
+			var responseText = oRequest.responseText;
+			
+			if(responseText.replace(/\s+/g,'').length == 0) {
+				responseText = '';
+			} else {
+				// Trim the left of the response
+				responseText = responseText.replace(/^\s+/,"");
+			}
+			
+			if(bCacheable) {
+				// Cache that dialog
+				updateQueryCache(sUrl, Date.parse(new Date()), responseText);
+			}
+		}
+	}
+	
+	return responseText;
+}
+
+/**
+ * Function for creating an synchronous GET request
+ * - Uses query cache
+ * - Response needs to be JS code or JSON => Parses the response with eval()
+ * - Errors need to match following Regex: /^Notice:|^Warning:|^Error:|^Parse error:/
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getSyncRequest(sUrl, bCacheable) {
+	var sResponse = "";
+	
+	if (bCacheable == null) {
+		bCacheable = true;
+	}
+	
+	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
+	if(bCacheable && typeof(ajaxQueryCache[sUrl]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
+		responseText = ajaxQueryCache[sUrl].response;
+		
+		sResponse = eval('( '+responseText+')');
+	} else {
+		var oRequest = initXMLHttpClient();
+		
+		if(oRequest) {
+			var oOpt = Object();
+			// Save this options to oOpt (needed for query cache)
+			oOpt.url = sUrl;
+			oOpt.timestamp = Date.parse(new Date());
+			
+			oRequest.open("GET", sUrl+"&timestamp="+oOpt.timestamp, false);
+			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
+			oRequest.send(null);
+			
+			var responseText = oRequest.responseText;
+			
+			if(responseText.replace(/\s+/g,'').length == 0) {
+				if(bCacheable) {
+					// Cache that dialog
+					updateQueryCache(oOpt.url, oOpt.timestamp, '');
+				}
+				
+				sResponse = '';
+			} else {
+				// Trim the left of the response
+				responseText = responseText.replace(/^\s+/,"");
+				
+				// Error handling for the AJAX methods
+				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
+					alert("Error in ajax request handler:\n"+responseText);
+				} else {
+					if(bCacheable) {
+						// Cache that answer (only when no error/warning/...)
+						updateQueryCache(oOpt.url, oOpt.timestamp, responseText);
+					}
+					
+					sResponse = eval('( '+responseText+')');
+				}
+			}
+		}
+	}
+	
+	return sResponse;
+}
+
+/**
  * Function for creating an async GET request
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>

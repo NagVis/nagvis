@@ -27,7 +27,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHostgroup extends NagVisStatefulObject {
-	var $MAINCFG;
 	var $BACKEND;
 	
 	var $backend_id;

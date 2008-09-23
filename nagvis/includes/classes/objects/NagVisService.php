@@ -77,7 +77,7 @@ class NagVisService extends NagiosService {
 		if(isset($this->url) && $this->url != '') {
 			$url = parent::getUrl();
 		} else {
-			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&amp;host='.$this->host_name.'&amp;service='.$this->service_description;
+			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&host='.$this->host_name.'&service='.$this->service_description;
 		}
 		return $url;
 	}

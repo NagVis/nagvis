@@ -62,6 +62,18 @@ class NagVisHost extends NagiosHost {
 	}
 	
 	/**
+	 * PUBLIC parseJson()
+	 *
+	 * Parses the object in json format
+	 *
+	 * @return	String		JSON code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseJson() {
+		return parent::parseJson();
+	}
+	
+	/**
 	 * PUBLIC parseGraphviz()
 	 *
 	 * Parses the object in graphviz configuration format

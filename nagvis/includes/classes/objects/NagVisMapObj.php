@@ -32,6 +32,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 	var $MAP;
 	var $BACKEND;
 	
+	var $backend_id;
+	
 	var $objects;
 	var $linkedMaps;
 	
@@ -72,6 +74,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->iconset = 'std_medium';
 		$this->objects = Array();
 		$this->linkedMaps = Array();
+		
+		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
 		
 		// Crapy way to get an object ID for a map - got a better idea?
 		$this->object_id = rand(0,1000);

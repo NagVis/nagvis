@@ -52,6 +52,21 @@ class NagVisStatelessObject extends NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC parseJson()
+	 *
+	 * Parses the object in json format
+	 *
+	 * @return	String  JSON code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseJson() {
+		$this->replaceMacros();
+		
+		// Get all informations of the object (configuration, state, ...)
+		return $this->getObjectInformation();
+	}
+	
+	/**
 	 * PUBLIC fetchMembers()
 	 *
 	 * Just a dummy here
@@ -59,32 +74,6 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fetchMembers() {
-	}
-	
-	/**
-	 * Parses the HTML-Code of an icon
-	 *
-	 * @param	Boolean	$link		Add a link to the icon
-	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
-	 * @return	String	String with Html Code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseIcon() {
-		if(preg_match('/^\[(.*)\]$/',$this->icon,$match) > 0) {
-			$imgPath = $match[1];
-		} else {
-			$imgPath = $this->iconHtmlPath.$this->icon;
-		}
-		
-		$ret = '<div class="icon" style="left:'.$this->x.'px;top:'.$this->y.'px;z-index:'.$this->z.';">';
-		if($this->getUrl() != '') {
-			$ret .= '<a href="'.$this->getUrl().'" target="'.$this->getUrlTarget().'">';
-		}
-		$ret .= '<img src="'.$imgPath.'" '.$this->getHoverMenu().' alt="'.$this->type.'-'.$this->icon.'">';
-		$ret .= '</a>';
-		$ret .= '</div>';
-		
-		return $ret;
 	}
 }
 ?>

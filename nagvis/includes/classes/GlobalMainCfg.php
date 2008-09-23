@@ -46,10 +46,6 @@ class GlobalMainCfg {
 		
 		$this->validConfig = Array(
 			'global' => Array(
-				'language' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'english',
-					'match' => MATCH_STRING_NO_SPACE),
 				'dateformat' => Array('must' => 1,
 					'editable' => 1,
 					'default' => 'Y-m-d H:i:s',
@@ -59,6 +55,10 @@ class GlobalMainCfg {
 						'deprecated' => 1,
 						'default' => '1',
 						'match' => MATCH_BOOLEAN),
+				'language' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'english',
+					'match' => MATCH_STRING_NO_SPACE),
 				'refreshtime' => Array('must' => 1,
 						'editable' => 1,
 						'default' => '60',
@@ -68,25 +68,13 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => 'ndomy_1',
 					'match' => MATCH_STRING_NO_SPACE),
-				'usegdlibs' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '1',
-					'match' => MATCH_BOOLEAN),
-				'icons' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'std_medium',
-					'match' => MATCH_STRING_NO_SPACE),
 				'backgroundcolor' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '#fff',
 					'match' => MATCH_COLOR),
-				'recognizeservices' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'match' => MATCH_BOOLEAN),
-				'onlyhardstates' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 0,
+				'eventlog' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '1',
 					'match' => MATCH_BOOLEAN),
 				'headermenu' => Array('must' => 1,
 					'editable' => 1,
@@ -112,14 +100,6 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '0',
 					'match' => MATCH_INTEGER),
-				'showinlists' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'match' => MATCH_BOOLEAN),
-				'urltarget' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '_self',
-					'match' => MATCH_STRING_NO_SPACE),
 				'hoverchildsshow' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '1',
@@ -135,21 +115,49 @@ class GlobalMainCfg {
 				'hoverchildslimit' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '10',
-					'match' => MATCH_INTEGER)),
+					'match' => MATCH_INTEGER),
+				'icons' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'std_medium',
+					'match' => MATCH_STRING_NO_SPACE),
+				'loglevel' => Array('must' => 0,
+					'editable' => 0,
+					'default' => 'info',
+					'match' => MATCH_STRING_NO_SPACE),
+				'onlyhardstates' => Array('must' => 0,
+					'editable' => 1,
+					'default' => 0,
+					'match' => MATCH_BOOLEAN),
+				'recognizeservices' => Array('must' => 0,
+					'editable' => 1,
+					'default' => 1,
+					'match' => MATCH_BOOLEAN),
+				'showinlists' => Array('must' => 0,
+					'editable' => 1,
+					'default' => 1,
+					'match' => MATCH_BOOLEAN),
+				'urltarget' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '_self',
+					'match' => MATCH_STRING_NO_SPACE),
+				'usegdlibs' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '1',
+					'match' => MATCH_BOOLEAN)),
 			'wui' => Array(
-					'autoupdatefreq' => Array('must' => 0,
-						'editable' => 1,
-						'default' => '25',
-						'match' => MATCH_INTEGER),
-					'maplocktime' => Array('must' => 0,
-						'editable' => 1,
-						'default' => '350',
-						'match' => MATCH_INTEGER),
-					'allowedforconfig' => Array(
-						'must' => 0,
-						'editable' => 1,
-						'default' => Array('EVERYONE'),
-						'match' => MATCH_STRING)),
+				'allowedforconfig' => Array(
+					'must' => 0,
+					'editable' => 1,
+					'default' => Array('EVERYONE'),
+					'match' => MATCH_STRING),
+				'autoupdatefreq' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '25',
+					'match' => MATCH_INTEGER),
+				'maplocktime' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '350',
+					'match' => MATCH_INTEGER)),
 			'paths' => Array(
 				'base' => Array('must' => 1,
 					'editable' => 1,
@@ -303,19 +311,19 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => 'demo',
 					'match' =>MATCH_STRING_NO_SPACE),
-				'maps' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'demo,demo2',
-					'match' => MATCH_STRING_NO_SPACE),
 				'interval' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
-					'match' => MATCH_INTEGER)),
-			'automap' => Array(
-				'showinlists' => Array('must' => 0,
+					'match' => MATCH_INTEGER),
+				'maps' => Array('must' => 1,
 					'editable' => 1,
-					'default' => '1',
-					'match' => MATCH_BOOLEAN),
+					'default' => 'demo,demo2',
+					'match' => MATCH_STRING_NO_SPACE)),
+			'automap' => Array(
+				'defaultparams' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '&maxLayers=2',
+					'match' => MATCH_STRING_URL),
 				'defaultroot' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'localhost',
@@ -324,10 +332,11 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '/usr/local/bin/',
 					'match' => MATCH_STRING_PATH),
-				'defaultparams' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '&maxLayers=2',
-					'match' => MATCH_STRING_URL)),
+				'showinlists' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '1',
+					'match' => MATCH_BOOLEAN)
+				),
 			'index' => Array(
 				'cellsperrow' => Array('must' => 0,
 					'editable' => 0,
@@ -345,6 +354,15 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '1',
 					'match' => MATCH_BOOLEAN)),
+			'worker' => Array(
+				'interval' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '5',
+					'match' => MATCH_INTEGER),
+				'updateobjectstates' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '15',
+					'match' => MATCH_INTEGER)),
 			'internal' => Array(
 				'version' => Array('must' => 1,
 					'editable' => 0,
@@ -930,6 +948,35 @@ class GlobalMainCfg {
 		} else {
 			return '';
 		}
+	}
+	
+	/**
+	 * Parses general settings
+	 *
+	 * @return	String 	JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseGeneralProperties() {
+		$arr = Array();
+		
+		$arr['date_format'] = $this->getValue('global', 'dateformat');
+		
+		return json_encode($arr);
+	}
+	
+	/**
+	 * Parses the settings for the javascript worker
+	 *
+	 * @return	String 	JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseWorkerProperties() {
+		$arr = Array();
+		
+		$arr['worker_interval'] = $this->getValue('worker', 'interval');
+		$arr['worker_update_object_states'] = $this->getValue('worker', 'updateobjectstates');
+		
+		return json_encode($arr);
 	}
 }
 ?>

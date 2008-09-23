@@ -52,7 +52,7 @@ table.hover_table td.labelACK { text-align: center; background-color: #eee; }
 table.hover_table td.labelPENDING { text-align: center; background-color: #eee; }
 table.hover_table td.labelOK, table.hover_table td.labelUP { text-align: center; background-color: #66FF66; }
 table.hover_table td.labelWARNING { text-align: center; background-color: #FFFF7E; }
-table.hover_table td.labelCRITICAL, table.hover_table td.labelDOWN { text-align: center; background-color: #FFBBBB; }
+table.hover_table td.labelCRITICAL, table.hover_table td.labelDOWN, table.hover_table td.labelUNREACHABLE { text-align: center; background-color: #FFBBBB; }
 table.hover_table td.labelERROR { text-align: center; background-color: #eee; }
 table.hover_table td.labelUNKNOWN { text-align: center; background-color: #eee; }
 

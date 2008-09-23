@@ -54,7 +54,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function NagVisStatefulObject(&$CORE, &$BACKEND) {
 		$this->CORE = &$CORE;
-		
 		$this->BACKEND = &$BACKEND;
 		
 		$this->GRAPHIC = '';
@@ -120,13 +119,9 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getDowntimeStart() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
-			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-			}
-			
-			return date($this->dateFormat, $this->downtime_start);
+			return $this->downtime_start;
 		} else {
-			return 'N/A';
+			return '';
 		}
 	}
 	
@@ -140,13 +135,9 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getDowntimeEnd() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
-			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-			}
-			
-			return date($this->dateFormat, $this->downtime_end);
+			return $this->downtime_end;
 		} else {
-			return 'N/A';
+			return '';
 		}
 	}
 	
@@ -268,13 +259,9 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getStateDuration() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
-			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-			}
-			
-			return date($this->dateFormat, ($_SERVER['REQUEST_TIME'] - $this->last_state_change));
+			return $_SERVER['REQUEST_TIME'] - $this->last_state_change;
 		} else {
-			return 'N/A';
+			return '';
 		}
 	}
 	
@@ -288,13 +275,9 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastStateChange() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
-			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-			}
-			
-			return date($this->dateFormat, $this->last_state_change);
+			return $this->last_state_change;
 		} else {
-			return 'N/A';
+			return '';
 		}
 	}
 	
@@ -308,13 +291,9 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastHardStateChange() {
 		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
-			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-			}
-			
-			return date($this->dateFormat, $this->last_hard_state_change);
+			return $this->last_hard_state_change;
 		} else {
-			return 'N/A';
+			return '';
 		}
 	}
 	
@@ -328,13 +307,9 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastCheck() {
 		if(isset($this->last_check) && $this->last_check != '0') {
-			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-			}
-			
-			return date($this->dateFormat, $this->last_check);
+			return $this->last_check;
 		} else {
-			return 'N/A';
+			return '';
 		}
 	}
 	
@@ -348,13 +323,9 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getNextCheck() {
 		if(isset($this->next_check) && $this->next_check != '0') {
-			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-			}
-			
-			return date($this->dateFormat, $this->next_check);
+			return $this->next_check;
 		} else {
-			return 'N/A';
+			return '';
 		}
 	}
 	
@@ -408,6 +379,66 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PULBLIC getObjectStateInformations()
+	 *
+	 * Gets the state informations of the object
+	 *
+	 * @return	Array		Object configuration
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getObjectStateInformations() {
+		$arr = Array();
+		
+		if(isset($this->alias) && $this->alias != '') {
+			$arr['alias'] = $this->alias;
+		} else {
+			$arr['alias'] = '';
+		}
+		
+		if(isset($this->display_name) && $this->display_name != '') {
+			$arr['display_name'] = $this->display_name;
+		} else {
+			$arr['display_name'] = '';
+		}
+		
+		$arr['state'] = $this->getState();
+		$arr['summary_state'] = $this->getSummaryState();
+		$arr['summary_problem_has_been_acknowledged'] = $this->getSummaryAcknowledgement();
+		$arr['problem_has_been_acknowledged'] = $this->getAcknowledgement();
+		$arr['summary_in_downtime'] = $this->getSummaryInDowntime();
+		$arr['in_downtime'] = $this->getInDowntime();
+		$arr['backend_id'] = $this->backend_id;
+		if($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
+			$arr['backend_instancename'] = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename');
+		} else {
+			$arr['backend_instancename'] = '';
+		}
+		
+		$arr['output'] = strtr($this->output, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
+		$arr['summary_output'] = strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
+		
+		// Macros which are only for services and hosts
+		if($this->type == 'host' || $this->type == 'service') {
+			$arr['downtime_author'] = $this->downtime_author;
+			$arr['downtime_data'] = $this->downtime_data;
+			$arr['downtime_end'] = $this->downtime_end;
+			$arr['downtime_start'] = $this->downtime_start;
+			$arr['address'] = $this->address;
+			$arr['last_check'] = $this->getLastCheck();
+			$arr['next_check'] = $this->getNextCheck();
+			$arr['state_type'] = $this->getStateType();
+			$arr['current_check_attempt'] = $this->getCurrentCheckAttempt();
+			$arr['max_check_attempts'] = $this->getMaxCheckAttempts();
+			$arr['last_state_change'] = $this->getLastStateChange();
+			$arr['last_hard_state_change'] = $this->getLastHardStateChange();
+			$arr['state_duration'] = $this->getStateDuration();
+			$arr['perfdata'] = strtr($this->perfdata, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
+		}
+		
+		return $arr;
+	}
+	
+	/**
 	 * PUBLIC parse()
 	 *
 	 * Parses the object
@@ -428,6 +459,22 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 		
 		return $ret.$this->parseLabel();
+	}
+	
+	/**
+	 * PUBLIC parseJson()
+	 *
+	 * Parses the object in json format
+	 *
+	 * @return	String  JSON code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseJson() {
+		$this->replaceMacros();
+		$this->url = $this->getUrl();
+		
+		// Get all informations of the object (configuration, state, ...)
+		return $this->getObjectInformation();
 	}
 	
 	/**
@@ -544,107 +591,6 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		parent::replaceMacros();
 		
-	}
-	
-	/**
-	 * Parses the HTML-Code of a line
-	 *
-	 * @return	String		HTML code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseLine() {
-		$ret = '';
-		$link = '';
-		
-		list($x1,$x2) = explode(',', $this->getX());
-		list($y1,$y2) = explode(',', $this->getY());
-		
-		$width = '3';
-		
-		$objId = md5(time());
-		
-		$ret .= '<div id="'.$objId.'" style="z-index:'.$this->z.';" '.$this->getHoverMenu().' onclick="window.open(\''.$this->getUrl().'\',\''.$this->getUrlTarget().'\',\'\');"></div>';
-		$ret .= '<div id="'.$objId.'-border" style="z-index:'.$this->z.';"></div>';
-		$ret .= '<script type="text/javascript">drawNagVisLine(\''.$objId.'\','.$this->line_type.', '.$x1.', '.$y1.', '.$x2.', '.$y2.', '.$width.', \''.$this->getSummaryState().'\', \''.$this->getSummaryAcknowledgement().'\', \''.$this->getSummaryInDowntime().'\')</script>';
-		
-		return $ret;
-	}
-	
-	/**
-	 * Parses the HTML-Code of an icon
-	 *
-	 * @return	String		HTML code of the icon
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseIcon() {
-		if($this->type == 'service') {
-			$name = 'host_name';
-			$alt = $this->host_name.'-'.$this->service_description;
-		} else {
-			$alt = $this->{$this->type.'_name'};
-		}
-		
-		$ret = '<div class="icon" style="left:'.$this->x.'px;top:'.$this->y.'px;z-index:'.$this->z.';">';
-		$ret .= '<a href="'.$this->getUrl().'" target="'.$this->getUrlTarget().'">';
-		$ret .= '<img src="'.$this->iconHtmlPath.$this->icon.'" '.$this->getHoverMenu().' alt="'.$this->type.'-'.$alt.'">';
-		$ret .= '</a>';
-		$ret .= '</div>';
-		
-		return $ret;
-	}
-	
-	/**
-	 * Parses the HTML-Code of a label
-	 *
-	 * @return	String		HTML code of the label
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseLabel() {
-		if(isset($this->label_show) && $this->label_show == '1') {
-			if($this->type == 'service') {
-				$name = 'host_name';
-			} else {
-				$name = $this->type . '_name';
-			}
-			
-			// If there is a presign it should be relative to the objects x/y
-			if(preg_match('/^(?:\+|\-)/', $this->label_x)) {
-				$this->label_x = $this->x + $this->label_x;
-			}
-			if(preg_match('/^(?:\+|\-)/',$this->label_y)) {
-				$this->label_y = $this->y + $this->label_y;
-			}
-			
-			// If no x/y coords set, fallback to object x/y
-			if(!isset($this->label_x) || $this->label_x == '' || $this->label_x == 0) {
-				$this->label_x = $this->x;
-			}
-			if(!isset($this->label_y) || $this->label_y == '' || $this->label_y == 0) {
-				$this->label_y = $this->y;
-			}
-			
-			if(isset($this->label_width) && $this->label_width != 'auto') {
-				$this->label_width .= 'px';	
-			}
-			
-			/**
-			 * IE workaround: The transparent for the color is not enough. The border
-			 * has really to be hidden.
-			 */
-			if($this->label_border == 'transparent') {
-				$borderStyle = 'border-style:none';
-			} else {
-				$borderStyle = 'border-style:solid';
-			}
-			
-			$ret  = '<div class="object_label" style="background:'.$this->label_background.';'.$borderStyle.';border-color:'.$this->label_border.';left:'.$this->label_x.'px;top:'.$this->label_y.'px;width:'.$this->label_width.';z-index:'.($this->z+1).';overflow:visible;">';
-			$ret .= '<span>'.$this->label_text.'</span>';
-			$ret .= '</div>';
-			
-			return $ret;
-		} else {
-			return '';
-		}
 	}
 	
 	/**

@@ -50,93 +50,30 @@ if(!isset($_GET['action'])) {
 }
 
 switch($_GET['action']) {
-	case 'getObjectHoverMenu':
+	case 'getHoverChilds':
+		// FIXME: The layout things have to be moved to javascript
 		if(!isset($_GET['objType']) || $_GET['objType'] == '') {
-			// FIXME: Error handling
 			echo 'Error: '.$CORE->LANG->getText('parameterObjTypeNotSet');
 		} elseif(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			// FIXME: Error handling
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} elseif($_GET['objType'] == 'service' && (!isset($_GET['objName2']) || $_GET['objName2'] == '')) {
-			// FIXME: Error handling
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName2NotSet');
 		} else  {
-			$objConf = Array();
-			
-			/**
-			 * There are two ways to get the configuration for an object. When the map
-			 * parameter is set the configuration of the object on the map is read.
-			 * When the map parameter is not set or empty the configurations from main
-			 * configuration file is used.
-			 */
-			if(isset($_GET['map']) && $_GET['map'] != '') {
-				// Initialize map configuration
-				$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
-				// Read the map configuration file
-				$MAPCFG->readMapConfig();
-				
-				if($_GET['map'] == '__automap') {
-					$objConf['type'] = $_GET['objType'];
-					$objConf['host_name'] = $_GET['objName1'];
-					
-					foreach($MAPCFG->validConfig['global'] AS $key => &$values) {
-						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-							$objConf[$key] = $values['default'];
-						}
-					}
-				} else {
-					if(is_array($objs = $MAPCFG->getDefinitions($_GET['objType']))){
-						$count = count($objs);
-						for($i = 0; $i < $count && count($objConf) >= 0; $i++) {
-							if($_GET['objType'] == 'service') {
-								if($objs[$i]['host_name'] == $_GET['objName1'] && $objs[$i]['service_description'] == $_GET['objName2']) {
-									$objConf = $objs[$i];
-									$objConf['id'] = $i;
-								}
-							} else {
-								if($objs[$i][$_GET['objType'].'_name'] == $_GET['objName1']) {
-									$objConf = $objs[$i];
-									$objConf['id'] = $i;
-								}
-							}
-						}
-					} else {
-						// FIXME: ERROR handling
-						echo 'Error: '.$CORE->LANG->getText('foundNoObjectOfThatTypeOnMap');
-					}
-					
-					if(count($objConf) > 0) {
-						// merge with "global" settings
-						foreach($MAPCFG->validConfig[$_GET['objType']] AS $key => &$values) {
-							if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-								$objConf[$key] = $values['default'];
-							}
-						}
-					} else {
-						// FIXME: Errorhandling
-						// object not on map
-						echo 'Error: '.$CORE->LANG->getText('ObjectNotFoundOnMap');
-					}
-				}
+			if(isset($_GET['objName2']) && $_GET['objName2'] != '') {
+				$objName2 = $_GET['objName2'];
 			} else {
-				if($_GET['objType'] == 'service') {
-					$objConf['host_name'] = $_GET['objName1'];
-					$objConf['service_description'] = $_GET['objName2'];
-				} else {
-					$objConf[$_GET['objType'].'_name'] = $_GET['objName1'];
-				}
-				
-				// Get settings from main configuration file by generating a temporary map
-				$TMPMAPCFG = new NagVisMapCfg($CORE);
-				
-				// merge with "global" settings
-				foreach($TMPMAPCFG->validConfig['global'] AS $key => &$values) {
-					if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-						$objConf[$key] = $values['default'];
-					}
-				}
+				$objName2 = '';
 			}
-				
+			
+			if(isset($_GET['map']) && $_GET['map'] != '') {
+				$map = $_GET['map'];
+			} else {
+				$map = '';
+			}
+			
+			// Get the object configuration
+			$objConf = getObjConf($_GET['objType'], $_GET['objName1'], $objName2, $map);
+			
 			switch($_GET['objType']) {
 				case 'host':
 					$OBJ = new NagVisHost($CORE, $BACKEND, $objConf['backend_id'], $objConf['host_name']);
@@ -176,15 +113,6 @@ switch($_GET['action']) {
 						$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
 					}
 					
-					// Apply default configuration to object
-					
-					foreach($MAPCFG->validConfig['map'] AS $key => &$values) {
-						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-							$objConf[$key] = $values['default'];
-						}
-					}
-					$MAP->MAPOBJ->setConfiguration($objConf);
-					
 					$OBJ = &$MAP->MAPOBJ;
 					
 					if(!$MAPCFG->checkMapConfigExists(0)) {
@@ -215,15 +143,7 @@ switch($_GET['action']) {
 				$OBJ->fetchState();
 			}
 			
-			$OBJ->fetchIcon();
-			
-			if(isset($OBJ->hover_url) && $OBJ->hover_url != '') {
-				$code = $OBJ->readHoverUrl();
-			} else {
-				$code = $OBJ->readHoverTemplate();
-			}
-			
-			echo "{ code: ".$code." }";
+			echo json_encode($OBJ->getHoverChildsJson());
 		}
 	break;
 	case 'getMapState':
@@ -242,18 +162,207 @@ switch($_GET['action']) {
 			echo json_encode($arrReturn);
 		}
 	break;
-	case 'getHostState':
+	case 'getObjectStates':
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterTypeNotSet');
+		} elseif(!isset($_GET['objName2']) || $_GET['objName2'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName2NotSet');
+		} elseif(!isset($_GET['objType']) || $_GET['objType'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjTypeNotSet');
+		} elseif(!isset($_GET['objId']) || $_GET['objId'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjIdNotSet');
+		} else {
+			$arrReturn = Array();
+			$sType = $_GET['type'];
+			$arrMap = $_GET['map'];
+			$arrName1 = $_GET['objName1'];
+			$arrName2 = $_GET['objName2'];
+			$arrType = $_GET['objType'];
+			$arrObjId = $_GET['objId'];
+			
+			$numObjects = count($arrType);
+			for($i = 0; $i < $numObjects; $i++) {
+				// Get the object configuration
+				$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrMap[$i]);
+				
+				switch($arrType[$i]) {
+					case 'host':
+						$OBJ = new NagVisHost($CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
+					break;
+					case 'service':
+						$OBJ = new NagVisService($CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i], $arrName2[$i]);
+					break;
+					case 'hostgroup':
+						$OBJ = new NagVisHostgroup($CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
+					break;
+					case 'servicegroup':
+						$OBJ = new NagVisServicegroup($CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
+					break;
+					case 'map':
+						// Initialize map configuration
+						$MAPCFG = new NagVisMapCfg($CORE, $arrName1[$i]);
+						$MAPCFG->readMapConfig();
+						
+						$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
+						
+						$OBJ = $MAP->MAPOBJ;
+					break;
+					default:
+						echo 'Error: '.$CORE->LANG->getText('unknownObject', 'TYPE~'.$type.';MAPNAME~');
+					break;
+				}
+				
+				// Apply default configuration to object
+				$OBJ->setConfiguration($objConf);
+				
+				// These things are already done by NagVisMap and NagVisAutoMap classes
+				// for the NagVisMapObj objects. Does not need to be done a second time.
+				if(get_class($OBJ) != 'NagVisMapObj') {
+					
+					$OBJ->fetchMembers();
+					
+					$OBJ->fetchState();
+				}
+				
+				$OBJ->fetchIcon();
+				
+				switch($sType) {
+					case 'state':
+						$arr = $OBJ->getObjectStateInformations();
+					break;
+					case 'complete':
+						$arr = $OBJ->parseJson();
+					break;
+				}
+				$arr['objId'] = $arrObjId[$i];
+				$arr['icon'] = $OBJ->icon;
+				
+				$arrReturn[] = $arr;
+			}
+			
+			echo json_encode($arrReturn);
+		}
+	break;
+	case 'getMainCfgFileAge':
+		echo '{ age: '.$CORE->MAINCFG->getConfigFileAge().' }';
+	break;
+	case 'getMapCfgFileAge':
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} else {
-			$OBJ = NagVisHost($CORE, $BACKEND, $backendId, $_GET['objName1']);
+			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
+			echo '{ age: '.$MAPCFG->getFileModificationTime().' }';
+		}
+	break;
+	case 'getMapProperties':
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} else {
+			// Initialize map configuration
+			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
+			$MAPCFG->readMapConfig();
 			
-			$arrReturn = Array('summaryState' => $MAP->MAPOBJ->getSummaryState(),'summaryOutput' => $MAP->MAPOBJ->getSummaryOutput());
-			echo json_encode($arrReturn);
+			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
+			echo $MAP->parseMapPropertiesJson();
+		}
+	break;
+	case 'getHoverTemplate':
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} else {
+			$OBJ = new GlobalHoverMenu($CORE, $_GET['objName1']);
+			echo json_encode(str_replace("\r\n","",str_replace("\n","",(string)$OBJ)));
 		}
 	break;
 	default:
 		echo 'Error: '.$CORE->LANG->getText('unknownQuery');
 	break;
+}
+
+function getObjConf($objType, $objName1, $objName2, $map) {
+	global $CORE;
+	$objConf = Array();
+	/**
+	 * There are two ways to get the configuration for an object. When the map
+	 * parameter is set the configuration of the object on the map is read.
+	 * When the map parameter is not set or empty the configurations from main
+	 * configuration file is used.
+	 */
+	
+	if(isset($map) && $map != '' && $map != '__automap') {
+		// Get the object configuration from map configuration (object and
+		// defaults)
+		
+		// Initialize map configuration
+		$MAPCFG = new NagVisMapCfg($CORE, $map);
+		// Read the map configuration file
+		$MAPCFG->readMapConfig();
+		
+		if(is_array($objs = $MAPCFG->getDefinitions($objType))){
+			$count = count($objs);
+			for($i = 0; $i < $count && count($objConf) >= 0; $i++) {
+				if($objType == 'service') {
+					if($objs[$i]['host_name'] == $objName1 && $objs[$i]['service_description'] == $objName2) {
+						$objConf = $objs[$i];
+						$objConf['id'] = $i;
+					}
+				} else {
+					if($objs[$i][$objType.'_name'] == $objName1) {
+						$objConf = $objs[$i];
+						$objConf['id'] = $i;
+					}
+				}
+			}
+		} else {
+			echo 'Error: '.$CORE->LANG->getText('foundNoObjectOfThatTypeOnMap');
+		}
+		
+		if(count($objConf) > 0) {
+			// merge with "global" settings
+			foreach($MAPCFG->validConfig[$objType] AS $key => &$values) {
+				if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+					$objConf[$key] = $values['default'];
+				}
+			}
+		} else {
+			// object not on map
+			echo 'Error: '.$CORE->LANG->getText('ObjectNotFoundOnMap');
+		}
+	} else {
+		// Get the object configuration from main configuration defaults by
+		// creating a temporary map object
+		$objConf['type'] = $objType;
+		
+		if($objType == 'service') {
+			$objConf['host_name'] = $objName1;
+			$objConf['service_description'] = $objName2;
+		} else {
+			$objConf[$objType.'_name'] = $objName1;
+		}
+		
+		// Get settings from main configuration file by generating a temporary 
+		// map or from the automap configuration
+		if($map == '__automap') {
+			$TMPMAPCFG = new NagVisMapCfg($CORE, $map);
+			
+			// Read the map configuration file
+			$TMPMAPCFG->readMapConfig();
+		} else {
+			$TMPMAPCFG = new NagVisMapCfg($CORE);
+		}
+		
+		// merge with "global" settings
+		foreach($TMPMAPCFG->validConfig['global'] AS $key => &$values) {
+			if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+				$objConf[$key] = $values['default'];
+			}
+		}
+		
+		unset($TMPMAPCFG);
+	}
+	
+	return $objConf;
 }
 ?>

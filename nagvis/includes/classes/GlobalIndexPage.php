@@ -63,6 +63,23 @@ class GlobalIndexPage {
 	}
 	
 	/**
+	 * Parses the informations for json
+	 *
+	 * @return	String 	String with Html Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseJson() {
+		$ret = '';
+		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+		
+		// Kick of the worker
+		$ret .= 'runWorker(0, \'overview\');';
+		
+		return $ret;
+	}
+	
+	/**
 	 * Returns a HTML table with the NagVis rotation pools if there are rotations
 	 *
 	 * @return	Array   HTML Code of Index Page

@@ -28,14 +28,14 @@
 class NagVisRotation {
 	private $CORE;
 	
-	private $strPoolName;
+	private $strPoolName = NULL;
 	
-	private $arrSteps;
-	private $intInterval;
+	private $arrSteps = Array();
+	private $intInterval = NULL;
 	
-	private $intCurrentStep;
-	private $intNextStep;
-	private $strNextStep;
+	private $intCurrentStep = NULL;
+	private $intNextStep = NULL;
+	private $strNextStep = NULL;
 	
 	/**
 	 * Class Constructor

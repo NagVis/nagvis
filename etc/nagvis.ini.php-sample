@@ -37,6 +37,8 @@
 ;backend="ndomy_1"
 ; background color of maps
 ;backgroundcolor="#fff"
+; Enable/Disable the eventlog on the page
+;eventlog=1
 ; enable/disable header menu
 ;headermenu="1"
 ; header template
@@ -60,6 +62,8 @@
 ; default icons
 ;icons="std_medium"
 ; recognize only hard states (not soft)
+; Loglevel of the eventlog (Available: debug, info, warning, critical)
+;loglevel="info"
 ;onlyhardstates=0
 ; recognize service states in host/hostgroup objects
 ;recognizeservices=1
@@ -100,6 +104,15 @@
 ;autoupdatefreq=25
 ; map lock time (minutes)
 ;maplocktime=5
+
+; Options for the new Javascript worker
+[worker]
+; The interval in seconds in which the worker will check for objects which need
+; to be updated
+;interval=5
+; The retention time of the states in seconds in the frontend. The state 
+; informations will be refreshed after this time
+;updateobjectstates=15
 
 ; Backend definitions
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
