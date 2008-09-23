@@ -255,7 +255,12 @@ check_php_version() {
 	else
 		PHP_VER=`$PKG -qa "php[0-9]" | sed "s/php[0-9]\-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
-
+	if [ -z "$PHP_VER" ]; then
+		PHP=`which php`
+		if [ -s "$PHP" ]; then
+			PHP_VER=`$PHP -v | head -1 | sed -e "s/PHP \([0-9\]\+\.[0-9\]\+\).*/\1/"`
+		fi
+	fi
 	log "PHP $PHP_VER" $PHP_VER
 	
 	if [ `echo "$1 $PHP_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $1 ]; then
