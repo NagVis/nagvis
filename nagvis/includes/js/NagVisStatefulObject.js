@@ -246,11 +246,12 @@ function NagVisStatefulObject () {
 	this.parseLabel = function () {
 		var oLabelDiv;
 		
+		alert(this.conf.label_x.toString());
 		// If there is a presign it should be relative to the objects x/y
-		if(this.conf.label_x.match(/^(?:\+|\-)/)) {
+		if(this.conf.label_x.toString().match(/^(?:\+|\-)/)) {
 			this.conf.label_x = parseFloat(this.conf.x) + parseFloat(this.conf.label_x);
 		}
-		if(this.conf.label_y.match(/^(?:\+|\-)/)) {
+		if(this.conf.label_y.toString().match(/^(?:\+|\-)/)) {
 			this.conf.label_y = parseFloat(this.conf.y) + parseFloat(this.conf.label_y);
 		}
 		
