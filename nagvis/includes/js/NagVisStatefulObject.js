@@ -77,10 +77,6 @@ function NagVisStatefulObject () {
 		oContainerDiv = document.createElement('div');
 		oContainerDiv.setAttribute('id', this.objId);
 		
-		oAnchor = document.createElement('a');
-		oAnchor.name = '#'+this.objId;
-		oContainerDiv.appendChild(oAnchor);
-		
 		// Parse object depending on line or normal icon
 		if(this.conf.line_type) {
 			oContainerDiv.appendChild(this.parseLine());
@@ -98,6 +94,10 @@ function NagVisStatefulObject () {
 			document.getElementById('map').removeChild(this.parsedObject);
 		}
 		this.parsedObject = document.getElementById('map').appendChild(oContainerDiv);
+		
+		if(this.conf.line_type) {
+			this.drawLine();
+		}
 	}
 	
 	/**
@@ -168,6 +168,7 @@ function NagVisStatefulObject () {
 		
 		// Create container div
 		oContainerDiv = document.createElement('div');
+		oContainerDiv.setAttribute('id', this.objId+'-linediv');
 		
 		// Create line div
 		var oLineDiv = document.createElement('div');
@@ -186,15 +187,22 @@ function NagVisStatefulObject () {
 		oContainerDiv.appendChild(oLineBorderDiv);
 		
 		// Add the container to dom
-		document.getElementById('map').appendChild(oContainerDiv);
-		
-		// Parse the line object
-		drawNagVisLine(this.objId, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime);
+		//document.getElementById('map').appendChild(oContainerDiv);
 		
 		// Create hover menu
 		this.getHoverMenu(oLineDiv);
 		
 		return oContainerDiv;
+	}
+	
+	this.drawLine = function() {
+		var x = this.conf.x.split(',');
+		var y = this.conf.y.split(',');
+		
+		var width = 3;
+		
+		// Parse the line object
+		drawNagVisLine(this.objId, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime);
 	}
 	
 	/**
