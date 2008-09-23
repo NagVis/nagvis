@@ -319,7 +319,11 @@ function updateMapObjects(aMapObjectInformations) {
 			 */
 			
 			// - Highlight (Flashing)
-			flashIcon(intIndex, 10);
+			if(oObj.conf.line_type) {
+				//FIXME: Atm only flash icons, not lines
+			} else {
+				flashIcon(intIndex, 10);
+			}
 			
 			// - Scroll to object
 			//window.scrollTo(oObj.conf.x, oObj.conf.y);
@@ -385,7 +389,7 @@ function flashIcon(intIndex, iNumTimes){
 	
 	var sColor = oStates[aMapObjects[intIndex].conf.summary_state].color;
 	
-	if(oObjIcon.style.border.indexOf("none") != -1) {
+	if(oObjIcon.style.border && oObjIcon.style.border.indexOf("none") != -1) {
 		oObjIcon.style.border = "5px solid "+sColor;
 		oObjIconDiv.style.top = (aMapObjects[intIndex].conf.y-5)+'px';
 		oObjIconDiv.style.left = (aMapObjects[intIndex].conf.x-5)+'px';
