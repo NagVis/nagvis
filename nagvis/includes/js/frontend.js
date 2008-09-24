@@ -125,14 +125,14 @@ function runWorker(iCount, sType) {
 					// Prevent reaching too long urls, split the update to several 
 					// requests. Just start the request and clean the string strUrl
 					if(strUrlBase.length+strUrl.length > 1900) {
-						updateMapObjects(getSyncRequest(strUrl, false));
+						updateMapObjects(getSyncRequest(strUrlBase+strUrl, false));
 						strUrl = '';
 					}
 				}
 				
 				if(arrObj.length > 0) {
 					// Bulk update the objects, this query should not be cached
-					updateMapObjects(getSyncRequest(strUrl, false));
+					updateMapObjects(getSyncRequest(strUrlBase+strUrl, false));
 				}
 			}
 		}
