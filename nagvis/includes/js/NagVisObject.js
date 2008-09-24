@@ -50,11 +50,13 @@ function NagVisObject () {
 				this.hover_template_code = this.hover_template_code.replace(/\r\n/g,'').replace(/\n/g,'').replace(/\t/g,'').replace(/\'/g,'\\\'').replace(/\"/g,'\\\'');
 			} else {
 				this.getHoverTemplateCode();
-				this.replaceHoverTemplateMacros('0', this, this.hover_template_code);
+				
+				//FIXME: Don't replace childs here, replace it on mouseover
+				//this.replaceHoverTemplateMacros('0', this, this.hover_template_code);
 			}
 			
 			// Add the hover menu functionality to the object
-			oObj.onmouseover = new Function('displayHoverMenu(\''+this.hover_template_code+'\', '+this.conf.hover_delay+');');
+			oObj.onmouseover = new Function('displayHoverMenu(replaceHoverTemplateMacros(\'0\', '+ JSON.stringify(this)+', \''+this.hover_template_code+'\'), '+this.conf.hover_delay+');');
 			oObj.onmouseout = new Function('hideHoverMenu();');
 		}
 	}
