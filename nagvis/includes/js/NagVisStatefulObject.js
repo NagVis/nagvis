@@ -197,8 +197,7 @@ function NagVisStatefulObject () {
 		var x = this.conf.x.split(',');
 		var y = this.conf.y.split(',');
 		
-		//FIXME: Make width configurable
-		var width = 3;
+		var width = this.conf.line_width;
 		
 		// Parse the line object
 		drawNagVisLine(this.objId, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime);
