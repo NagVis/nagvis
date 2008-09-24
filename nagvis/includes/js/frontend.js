@@ -124,7 +124,7 @@ function runWorker(iCount, sType) {
 					
 					// Prevent reaching too long urls, split the update to several 
 					// requests. Just start the request and clean the string strUrl
-					if(strBaseUrl.length+strUrl.length > 1900) {
+					if(strUrlBase.length+strUrl.length > 1900) {
 						updateMapObjects(getSyncRequest(strUrl, false));
 						strUrl = '';
 					}
