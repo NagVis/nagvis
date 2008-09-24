@@ -46,12 +46,13 @@ function NagVisObject () {
 		if(this.conf.hover_menu) {
 			// Parse the configured URL or get the hover menu
 			if(this.conf.hover_url && this.conf.hover_url != '') {
+				//FIXME: Just noticed that cronn domain ajax requests are not possible. TODO: Revert to fetching url contents via PHP.
 				this.hover_template_code = getHttpRequest(this.conf.hover_url, true);
 				this.hover_template_code = this.hover_template_code.replace(/\r\n/g,'').replace(/\n/g,'').replace(/\t/g,'').replace(/\'/g,'\\\'').replace(/\"/g,'\\\'');
 			} else {
 				this.getHoverTemplateCode();
 				
-				//FIXME: Don't replace childs here, replace it on mouseover
+				// Don't replace childs here, replace it on mouseover
 				//this.replaceHoverTemplateMacros('0', this, this.hover_template_code);
 			}
 			
