@@ -46,75 +46,44 @@ if(!function_exists('date_default_timezone_set')) {
  * Implements handling of PHP to JSON conversion for NagVis
  * (Needed for < PHP 5.2.0)
  *
+ * Function taken from http://de.php.net/json_encode (Steve 01-May-2008 02:35)
+ *
  * @param		String		Debug message
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
-if(!function_exists('json_encode')) {
-	function json_encode_string($in_str) {
-		if(!function_exists('mb_internal_encoding')) {
-			//FIXME: Error handling
-		}
-		
-		mb_internal_encoding("UTF-8");
-			
-		$convmap = array(0x80, 0xFFFF, 0, 0xFFFF);
-		$str = "";
-			
-		for($i=mb_strlen($in_str)-1; $i>=0; $i--) {
-		  $mb_char = mb_substr($in_str, $i, 1);
-		  if(mb_ereg("&#(\\d+);", mb_encode_numericentity($mb_char, $convmap, "UTF-8"), $match)) {
-			$str = sprintf("\\u%04x", $match[1]) . $str;
-		  } else {
-			$str = $mb_char . $str;
-		  }
-		}
-		return $str;
-	}
-	
-	function json_encode($arr) {
-		$json_str = "";
-		if(is_array($arr)) {
-			$pure_array = true;
-			$array_length = count($arr);
-			
-			for($i=0;$i<$array_length;$i++) {
-				if(! isset($arr[$i])) {
-					$pure_array = false;
-					break;
-				}
+if (!function_exists('json_encode')) {
+	function json_encode($a=false) {
+		if (is_null($a)) return 'null';
+		if ($a === false) return 'false';
+		if ($a === true) return 'true';
+		if (is_scalar($a)) {
+			if (is_float($a)) {
+				// Always use "." for floats.
+				return floatval(str_replace(",", ".", strval($a)));
 			}
-			
-			if($pure_array) {
-				$json_str ="[";
-				$temp = array();
-				
-				for($i=0;$i<$array_length;$i++) {
-					$temp[] = sprintf("%s", json_encode($arr[$i]));
-				}
-				
-				$json_str .= implode(",",$temp);
-				$json_str .="]";
-			} else {
-				$json_str ="{";
-				$temp = array();
-				
-				foreach($arr as $key => $value) {
-					$temp[] = sprintf("\"%s\":%s", $key, json_encode($value));
-				}
-				
-				$json_str .= implode(",",$temp);
-				$json_str .="}";
+
+			if (is_string($a)) {
+				static $jsonReplaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
+				return '"' . str_replace($jsonReplaces[0], $jsonReplaces[1], $a) . '"';
 			}
+			else
+				return $a;
+		}
+		$isList = true;
+		for ($i = 0, reset($a); $i < count($a); $i++, next($a)) {
+			if (key($a) !== $i) {
+				$isList = false;
+				break;
+			}
+		}
+		$result = array();
+		if ($isList) {
+			foreach ($a as $v) $result[] = json_encode($v);
+			return '[' . join(',', $result) . ']';
 		} else {
-			if(is_string($arr)) {
-				$json_str = "'". str_replace("\\","\\\\",json_encode_string($arr)) . "'";
-			} elseif(is_numeric($arr)) {
-				$json_str = $arr;
-			} else {
-				$json_str = "'". json_encode_string($arr) . "'";
-			}
+			foreach ($a as $k => $v) $result[] = json_encode($k).':'.json_encode($v);
+			return '{' . join(',', $result) . '}';
 		}
-		return $json_str;
 	}
 }
 ?>
