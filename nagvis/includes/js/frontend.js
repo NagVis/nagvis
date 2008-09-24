@@ -100,7 +100,8 @@ function runWorker(iCount, sType) {
 				var arrObj = getObjectsToUpdate();
 				
 				// Create the ajax request for bulk update
-				var strNames = '';
+				var strUrlBase = htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&type=state';
+				var strUrl = '';
 				for(var i = 0; i < arrObj.length; i++) {
 					var obj_id = aMapObjects[arrObj[i]].objId;
 					var type = aMapObjects[arrObj[i]].conf.type;
@@ -109,22 +110,29 @@ function runWorker(iCount, sType) {
 					var map = oMapProperties.map_name;
 					
 					if(name) {
-						strNames += '&objId[]='+obj_id;
-						strNames += '&map[]='+map;
-						strNames += '&objType[]='+type;
-						strNames += '&objName1[]='+name;
+						strUrl += '&objId[]='+obj_id;
+						strUrl += '&map[]='+map;
+						strUrl += '&objType[]='+type;
+						strUrl += '&objName1[]='+name;
 					
 						if(service_description) {
-							strNames += '&objName2[]='+service_description;
+							strUrl += '&objName2[]='+service_description;
 						} else {
-							strNames += '&objName2[]=';
+							strUrl += '&objName2[]=';
 						}
+					}
+					
+					// Prevent reaching too long urls, split the update to several 
+					// requests. Just start the request and clean the string strUrl
+					if(strBaseUrl.length+strUrl.length > 1900) {
+						updateMapObjects(getSyncRequest(strUrl, false));
+						strUrl = '';
 					}
 				}
 				
-				if(strNames != '') {
+				if(arrObj.length > 0) {
 					// Bulk update the objects, this query should not be cached
-					updateMapObjects(getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&type=state'+strNames, false));
+					updateMapObjects(getSyncRequest(strUrl, false));
 				}
 			}
 		}
