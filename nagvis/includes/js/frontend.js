@@ -171,10 +171,24 @@ function getObjectsToUpdate() {
 	eventlog("worker", "debug", "getObjectsToUpdate: Start");
 	var arrReturn = Array();
 	
+	// Asign all object indexes to return Array
 	for(var i = 0; i < aMapObjects.length; i++) {
 		if(aMapObjects[i].lastUpdate <= (Date.parse(new Date())-(oWorkerProperties.worker_update_object_states*1000))) {
 			arrReturn.push(i);
 		}
+	}
+	
+	// Now spread the objects in the available timeslots
+	var iNumTimeslots = Math.ceil(oWorkerProperties.worker_update_object_states / oWorkerProperties.worker_interval);
+	var iNumObjectsPerTimeslot = Math.ceil(aMapObjects.length / iNumTimeslots);
+	eventlog("worker", "debug", "Number of timeslots: "+iNumTimeslots+" Number of Objects per Slot: "+iNumObjectsPerTimeslot);
+	
+	// Only spread when the number of objects is larger than the objects for each
+	// timeslot
+	if(arrReturn.length > iNumObjectsPerTimeslot) {
+		eventlog("worker", "debug", "Spreading map objects in timeslots");
+		// Just remove all elements from the end of the array
+		arrReturn = arrReturn.splice(iNumObjectsPerTimeslot, arrReturn.length-iNumObjectsPerTimeslot);
 	}
 	
 	eventlog("worker", "debug", "getObjectsToUpdate: Have to update "+arrReturn.length+" objects");
