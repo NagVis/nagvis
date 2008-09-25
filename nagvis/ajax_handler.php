@@ -246,16 +246,29 @@ switch($_GET['action']) {
 			echo json_encode($arrReturn);
 		}
 	break;
-	case 'getMainCfgFileAge':
-		echo '{ age: '.$CORE->MAINCFG->getConfigFileAge().' }';
-	break;
-	case 'getMapCfgFileAge':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} else {
-			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
-			echo '{ age: '.$MAPCFG->getFileModificationTime().' }';
+	case 'getCfgFileAges':
+		$aReturn = Array();
+		
+		if(isset($_GET['f']) && is_array($_GET['f'])) {
+			$aFiles = $_GET['f'];
+			
+			foreach($aFiles AS $sFile) {
+				if($sFile == 'mainCfg') {
+					$aReturn['mainCfg'] = $CORE->MAINCFG->getConfigFileAge();
+				}
+			}
 		}
+		
+		if(isset($_GET['m']) && is_array($_GET['m'])) {
+			$aMaps = $_GET['m'];
+			
+			foreach($aMaps AS $sMap) {
+				$MAPCFG = new NagVisMapCfg($CORE, $sMap);
+				$aReturn[$sMap] = $MAPCFG->getFileModificationTime();
+			}
+		}
+		
+		echo json_encode($aReturn);
 	break;
 	case 'getMapProperties':
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {

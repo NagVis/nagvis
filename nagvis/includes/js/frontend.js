@@ -100,14 +100,17 @@ function runWorker(iCount, sType) {
 				// Log normal worker step
 				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 				
+				// Get the file ages of important files
+				var oFileAges = getCfgFileAges();
+				
 				// Check for changed main configuration
-				if(checkMainCfgChanged()) {
+				if(checkMainCfgChanged(oFileAges.mainCfg)) {
 					// FIXME: Not handled by ajax frontend, reload the page
 					window.location.reload(true);
 				}
 				
 				// Check for changed map configuration
-				if(checkMapCfgChanged(oMapProperties.map_name)) {
+				if(checkMapCfgChanged(oFileAges[oMapProperties.map_name])) {
 					// Set map basics and map objects
 					setMapBasics(getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oMapProperties.map_name));
 					setMapObjects(getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oMapProperties.map_name));
@@ -196,6 +199,18 @@ function getObjectsToUpdate() {
 }
 
 /**
+ * getCfgFileAges()
+ *
+ * Bulk get file ages of important files
+ *
+ * @return  Boolean
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getCfgFileAges() {
+	return getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oMapProperties.map_name);
+}
+
+/**
  * checkMainCfgChanged()
  *
  * Detects if the main configuration file has changed since last load
@@ -203,8 +218,7 @@ function getObjectsToUpdate() {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function checkMainCfgChanged() {
-	var iCurrentAge = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMainCfgFileAge').age;
+function checkMainCfgChanged(iCurrentAge) {
 	eventlog("worker", "debug", "MainCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" Cached: "+date(oGeneralProperties.date_format, oFileAges.main_config));
 	
 	if(oFileAges.main_config != iCurrentAge) {
@@ -222,9 +236,8 @@ function checkMainCfgChanged() {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function checkMapCfgChanged(mapName) {
-	var iCurrentAge = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapCfgFileAge&objName1='+mapName).age;
-	eventlog("worker", "debug", "MainCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" Cached: "+date(oGeneralProperties.date_format, oFileAges.map_config));
+function checkMapCfgChanged(iCurrentAge) {
+	eventlog("worker", "debug", "MapCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" Cached: "+date(oGeneralProperties.date_format, oFileAges.map_config));
 	
 	if(oFileAges.map_config != iCurrentAge) {
 		return true;
