@@ -304,6 +304,10 @@ function updateMapObjects(aMapObjectInformations) {
 		
 		// Update lastUpdate timestamp
 		oObj.setLastUpdate();
+
+		// Reparse the object (At this place only an update of the hover menu is
+		// needed. Maybe there is a better way in the future
+		oObj.parse();
 		
 		// Detect state changes and do some custom actions
 		if(oObj.stateChanged()) {
@@ -311,7 +315,7 @@ function updateMapObjects(aMapObjectInformations) {
 			/* Internal handling */
 			
 			// Reparse object to map
-			oObj.parse();
+			//oObj.parse();
 			
 			/**
 			 * Additional eventhandling
