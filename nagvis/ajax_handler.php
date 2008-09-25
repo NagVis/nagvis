@@ -269,11 +269,19 @@ switch($_GET['action']) {
 		}
 	break;
 	case 'getHoverTemplate':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		if(!isset($_GET['name']) || $_GET['name'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterNameNotSet');
 		} else {
-			$OBJ = new GlobalHoverMenu($CORE, $_GET['objName1']);
-			echo json_encode(str_replace("\r\n","",str_replace("\n","",(string)$OBJ)));
+			$arrReturn = Array();
+			$arrNames = $_GET['name'];
+			
+			$numObjects = count($arrNames);
+			for($i = 0; $i < $numObjects; $i++) {
+				$OBJ = new GlobalHoverMenu($CORE, $arrNames[$i]);
+				$arrReturn[] = Array('name' => $arrNames[$i], 'code' => str_replace("\r\n","",str_replace("\n","",(string)$OBJ)));
+			}
+			
+			echo json_encode($arrReturn);
 		}
 	break;
 	default:

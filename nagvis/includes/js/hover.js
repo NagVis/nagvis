@@ -30,6 +30,8 @@
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
+ 
+// Is only needed for index/automap atm
 function getHoverTemplate(sName) {
 	return getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverTemplate&objName1='+sName);
 }

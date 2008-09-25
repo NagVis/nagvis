@@ -25,6 +25,11 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
+ 
+/**
+ * Definition of needed variables
+ */
+var oHoverTemplates = Object();
 
 /**
  * runWorker()
@@ -59,6 +64,12 @@ function runWorker(iCount, sType) {
 		if(sType == 'map') {
 			setMapBasics(oMapProperties);
 			setMapObjects(aInitialMapObjects);
+			
+			// Bulk get all hover templates which are needed on the map
+			setMapHoverTemplates();
+			
+			// Asign the hover templates to the objects and parse them
+			parseMapObjectsHoverMenu();
 		}
 	} else {
 		/**
@@ -94,46 +105,46 @@ function runWorker(iCount, sType) {
 					// Set map basics and map objects
 					setMapBasics(getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oMapProperties.map_name));
 					setMapObjects(getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oMapProperties.map_name));
+					
+					// Bulk get all hover templates which are needed on the map
+					setMapHoverTemplates();
+					
+					// Asign the hover templates to the objects and parse them
+					parseMapObjectsHoverMenu();
 				}
 				
 				// Now proceed with real actions when everything is OK
 				var arrObj = getObjectsToUpdate();
 				
 				// Create the ajax request for bulk update
-				var strUrlBase = htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&type=state';
-				var strUrl = '';
+				var aUrlParts = Array();
 				for(var i = 0; i < arrObj.length; i++) {
 					var obj_id = aMapObjects[arrObj[i]].objId;
 					var type = aMapObjects[arrObj[i]].conf.type;
 					var name = aMapObjects[arrObj[i]].conf.name;
 					var service_description = aMapObjects[arrObj[i]].conf.service_description;
 					var map = oMapProperties.map_name;
+					var sUrlPart = '';
 					
 					if(name) {
-						strUrl += '&objId[]='+obj_id;
-						strUrl += '&map[]='+map;
-						strUrl += '&objType[]='+type;
-						strUrl += '&objName1[]='+name;
+						sUrlPart += '&objId[]='+obj_id;
+						sUrlPart += '&map[]='+map;
+						sUrlPart += '&objType[]='+type;
+						sUrlPart += '&objName1[]='+name;
 					
 						if(service_description) {
-							strUrl += '&objName2[]='+service_description;
+							sUrlPart += '&objName2[]='+service_description;
 						} else {
-							strUrl += '&objName2[]=';
+							sUrlPart += '&objName2[]=';
 						}
-					}
-					
-					// Prevent reaching too long urls, split the update to several 
-					// requests. Just start the request and clean the string strUrl
-					if(strUrl != '' && strUrlBase.length+strUrl.length > 1900) {
-						updateMapObjects(getSyncRequest(strUrlBase+strUrl, false));
-						strUrl = '';
+						
+						// Append part to array of parts
+						aUrlParts.push(sUrlPart);
 					}
 				}
 				
-				if(strUrl != '' && arrObj.length > 0) {
-					// Bulk update the objects, this query should not be cached
-					updateMapObjects(getSyncRequest(strUrlBase+strUrl, false));
-				}
+				// Get the updated objects via bulk request
+				updateMapObjects(getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&type=state', aUrlParts, 1900, false));
 			}
 		}
 	}
@@ -199,6 +210,60 @@ function checkMapCfgChanged(mapName) {
 		return true;
 	} else {
 		return false;
+	}
+}
+
+/**
+ * setMapHoverTemplates()
+ *
+ * Gets the code for needed hover templates and saves it for later use in icons
+ *
+ * @param   Object   Object with basic page properties
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setMapHoverTemplates() {
+	var aUrlParts = Array();
+	var aTemplateObjects;
+	
+	// Loop all map objects to get the used hover templates
+	for(var a = 0; a < aMapObjects.length; a++) {
+		// Ignore objects which
+		// a) have a disabled hover menu
+		// b) use hover_url
+		if(aMapObjects[a].conf.hover_menu && (!aMapObjects[a].conf.hover_url || aMapObjects[a].conf.hover_url == '')) {
+			oHoverTemplates[aMapObjects[a].conf.hover_template] = '';
+		}
+	}
+	
+	// Build string for bulk fetching the templates
+	for(i in oHoverTemplates) {
+		aUrlParts.push('&name[]='+i);
+	}
+	
+	// Get the needed templates via bulk request
+	aTemplateObjects = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverTemplate', aUrlParts, 1900, true);
+	
+	// Set the code to global object oHoverTemplates
+	if(aTemplateObjects.length > 0) {
+		for(var i = 0; i < aTemplateObjects.length; i++) {
+			oHoverTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
+		}
+	}
+}
+
+
+/**
+ * parseMapObjectsHoverMenu()
+ *
+ * Asigns the hover template code to the object, replaces all macros and
+ * adds the menu to all map objects
+ *
+ * @param   Object   Object with basic page properties
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseMapObjectsHoverMenu() {
+	for(var a = 0; a < aMapObjects.length; a++) {
+		aMapObjects[a].parseHoverMenu();
 	}
 }
 
@@ -305,9 +370,8 @@ function updateMapObjects(aMapObjectInformations) {
 		// Update lastUpdate timestamp
 		oObj.setLastUpdate();
 
-		// Reparse the object (At this place only an update of the hover menu is
-		// needed. Maybe there is a better way in the future
-		oObj.parse();
+		// Reparse the hover menu
+		oObj.parseHoverMenu();
 		
 		// Detect state changes and do some custom actions
 		if(oObj.stateChanged()) {
@@ -315,7 +379,7 @@ function updateMapObjects(aMapObjectInformations) {
 			/* Internal handling */
 			
 			// Reparse object to map
-			//oObj.parse();
+			oObj.parse();
 			
 			/**
 			 * Additional eventhandling

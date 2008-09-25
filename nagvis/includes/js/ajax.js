@@ -111,6 +111,28 @@ function getHttpRequest(sUrl, bCacheable) {
 	return responseText;
 }
 
+function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
+	var sUrl = '';
+	var aReturn = Array();
+	for(var i = 0; i < aUrlParts.length; i++) {
+		sUrl += aUrlParts[i];
+		
+		// Prevent reaching too long urls, split the update to several 
+		// requests. Just start the request and clean the string strUrl
+		if(sUrl != '' && sBaseUrl.length+sUrl.length > iLimit) {
+			aReturn = aReturn.concat(getSyncRequest(sBaseUrl+sUrl, bCacheable));
+			sUrl = '';
+		}
+	}
+	
+	if(sUrl != '') {
+		// Bulk update the objects, this query should not be cached
+		aReturn = aReturn.concat(getSyncRequest(sBaseUrl+sUrl, bCacheable));
+	}
+	
+	return aReturn;
+}
+
 /**
  * Function for creating an synchronous GET request
  * - Uses query cache

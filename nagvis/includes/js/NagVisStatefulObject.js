@@ -101,6 +101,29 @@ function NagVisStatefulObject () {
 	}
 	
 	/**
+	 * PUBLIC parseHoverMenu()
+	 *
+	 * Parses the hover menu. Don't add this functionality to the normal icon
+	 * parsing
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	this.parseHoverMenu = function () {
+		var oObj;
+		
+		// Get the object to apply the hover menu to
+		if(this.conf.line_type) {
+			oObj = document.getElementById(this.objId+'-linediv');
+		} else {
+			oObj = document.getElementById(this.objId+'-icon');
+		}
+		
+		// Create hover menu
+		this.getHoverMenu(oObj);
+	}
+	
+	/**
 	 * Replaces macros of urls and hover_urls
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -181,9 +204,6 @@ function NagVisStatefulObject () {
 		oLineBorderDiv.style.zIndex = this.conf.z;
 		oContainerDiv.appendChild(oLineBorderDiv);
 		
-		// Create hover menu
-		this.getHoverMenu(oLineDiv);
-		
 		return oContainerDiv;
 	}
 	
@@ -222,8 +242,6 @@ function NagVisStatefulObject () {
 		oIcon.setAttribute('id', this.objId+'-icon');
 		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
 		oIcon.alt = this.conf.type+'-'+alt;
-		
-		this.getHoverMenu(oIcon);
 		
 		var oIconLink = document.createElement('a');
 		oIconLink.href = this.conf.url;

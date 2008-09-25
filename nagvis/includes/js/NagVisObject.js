@@ -51,9 +51,6 @@ function NagVisObject () {
 				this.hover_template_code = this.hover_template_code.replace(/\r\n/g,'').replace(/\n/g,'').replace(/\t/g,'').replace(/\'/g,'\\\'').replace(/\"/g,'\\\'');
 			} else {
 				this.getHoverTemplateCode();
-				
-				// Don't replace childs here, replace it on mouseover
-				//this.replaceHoverTemplateMacros('0', this, this.hover_template_code);
 			}
 			
 			// Add the hover menu functionality to the object
@@ -62,9 +59,17 @@ function NagVisObject () {
 		}
 	}
 	
+	/**
+	 * getHoverMenu()
+	 *
+	 * Get the hover template from the global object which holds all templates of 
+	 * the map
+	 *
+	 * @return	String		HTML code for the hover box
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	this.getHoverTemplateCode = function() {
-		// Get the hover template
-		this.hover_template_code = getHoverTemplate(this.conf.hover_template);
+		this.hover_template_code = oHoverTemplates[this.conf.hover_template];
 	}
 	
 	this.replaceHoverTemplateMacros = function (replaceChild, oObj, sTemplateCode) {
