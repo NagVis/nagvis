@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.2"
+INSTALLER_VERSION="0.1.3"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -164,7 +164,7 @@ cat <<EOD
 | - Ubuntu Hardy (8.04)                                                        |
 | - SuSE Linux Enterprise Server 10                                            |
 |                                                                              |
-| When you experience some problems using this or another distribution, please |
+| If you experience any problems using this or another distribution, please    |
 | report that to the NagVis team.                                              |
 +------------------------------------------------------------------------------+
 EOD
@@ -196,20 +196,20 @@ check_apache_php() {
 	# The apache user/group are defined by env vars in ubuntu, set them here
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
-	MODPHP=`grep -rie "mod_php.*\.so" -e "libphp.*\.so" $DIR | tr -s " " | cut -d" " -f3 | uniq`
-	HTML_PATH=`grep -ri "^Alias" $DIR | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | uniq` 
-	HTML_ANZ=`grep -ri "^Alias" $DIR | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | wc -l` 
+	MODPHP=`find $DIR -type f -exec grep -ie "mod_php.*\.so" -e "libphp.*\.so" {} \; | tr -s " " | cut -d" " -f3 | uniq`
+	HTML_PATH=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | uniq` 
+	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | wc -l` 
 	
 	# Only try to detect user when not set or empty
 	if [ "x$WEB_USER" = "x" ]; then
-		WEB_USER=`grep -ri "^User" $DIR | cut -d" " -f2 | uniq`
+		WEB_USER=`find $DIR -type f -exec grep -i "^User" {} \; | cut -d" " -f2 | uniq`
 		VAR=`echo $WEB_USER | grep "$" >/dev/null 2>&1`
 		[ $? -eq 0 ] && WEB_USER=`eval "echo $WEB_USER"`
 	fi
 
 	# Only try to detect group when not set or empty
 	if [ "x$WEB_GROUP" = "x" ]; then
-		WEB_GROUP=`grep -ri "^Group" $DIR | cut -d" " -f2 | uniq`
+		WEB_GROUP=`find $DIR -type f -exec grep -i "^Group" {} \; | cut -d" " -f2 | uniq`
 		VAR=`echo $WEB_GROUP | grep "$" >/dev/null 2>&1`
 		[ $? -eq 0 ] && WEB_GROUP=`eval "echo $WEB_GROUP"`
 	fi
@@ -275,11 +275,14 @@ check_php_modules() {
 		if [ "${PKG##/*/}" = "dpkg" ]; then
 			MOD_VER=`$PKG -l "php[0-9]-$MOD" 2>/dev/null | grep "php" | grep "ii" | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 		else
-			MOD_VER=`$PKG -qa "php[0-9]-$MOD" | sed "s/php[0-9]\-$MOD-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
+			MOD_VER=`$PKG -qa "php[0-9]?-$MOD" | sed "s/php[0-9]?\-$MOD-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 		fi
-		
-		TMP=`grep -rie "$MOD" /etc/php? | cut -d"=" -f2`
-		log "  Module: $MOD $MOD_VER" $MOD
+
+		TMP=`find /etc/ -type f -name "php?" -exec grep -ie "$MOD" {} \; | cut -d"=" -f2`
+		if [ -z $TMP ]; then
+			TMP=`grep -ie "$MOD" /etc/php.d/* | cut -d"=" -f2`
+		fi
+		log "  Module: $MOD $MOD_VER" $TMP
 
 		if [ -n $MOD_VER ]; then
 			if [ `echo "$2 $MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
@@ -440,6 +443,7 @@ check_php_modules "$NEED_PHP_MODULES" "$NEED_PHP_VERSION"
 check_apache_php "/etc/apache2/"
 check_apache_php "/etc/apache/"
 check_apache_php "/etc/http/"
+check_apache_php "/etc/httpd/"
 log "  Apache mod_php" $MODPHP
 if [ $HTML_ANZ -gt 1 ]; then
 	log "more than one alias found" "warning"
