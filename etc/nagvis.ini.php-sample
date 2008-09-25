@@ -39,6 +39,8 @@
 ;backgroundcolor="#fff"
 ; Enable/Disable the eventlog on the page
 ;eventlog=1
+; Loglevel of the eventlog (Available: debug, info, warning, critical)
+;eventloglevel="info"
 ; enable/disable header menu
 ;headermenu="1"
 ; header template
@@ -62,8 +64,6 @@
 ; default icons
 ;icons="std_medium"
 ; recognize only hard states (not soft)
-; Loglevel of the eventlog (Available: debug, info, warning, critical)
-;loglevel="info"
 ;onlyhardstates=0
 ; recognize service states in host/hostgroup objects
 ;recognizeservices=1

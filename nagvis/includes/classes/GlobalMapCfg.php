@@ -137,7 +137,7 @@ class GlobalMapCfg {
 					'default' => $this->CORE->MAINCFG->getValue('defaults', 'eventlog'),
 					'match' => MATCH_BOOLEAN),
 				'event_log_level' => Array('must' => 0,
-					'default' => $this->CORE->MAINCFG->getValue('defaults', 'loglevel'),
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'eventloglevel'),
 					'match' => MATCH_STRING_NO_SPACE)),
 			'host' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
