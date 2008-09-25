@@ -133,15 +133,15 @@ function runWorker(iCount, sType) {
 					var sUrlPart = '';
 					
 					if(name) {
-						sUrlPart += '&objId[]='+obj_id;
-						sUrlPart += '&map[]='+map;
-						sUrlPart += '&objType[]='+type;
-						sUrlPart += '&objName1[]='+name;
+						sUrlPart += '&i[]='+obj_id;
+						sUrlPart += '&m[]='+map;
+						sUrlPart += '&t[]='+type;
+						sUrlPart += '&n1[]='+name;
 					
 						if(service_description) {
-							sUrlPart += '&objName2[]='+service_description;
+							sUrlPart += '&n2[]='+service_description;
 						} else {
-							sUrlPart += '&objName2[]=';
+							sUrlPart += '&n2[]=';
 						}
 						
 						// Append part to array of parts
@@ -150,7 +150,7 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Get the updated objects via bulk request
-				updateMapObjects(getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&type=state', aUrlParts, 1900, false));
+				updateMapObjects(getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false));
 			}
 		}
 	}

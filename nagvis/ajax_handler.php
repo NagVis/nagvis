@@ -163,24 +163,25 @@ switch($_GET['action']) {
 		}
 	break;
 	case 'getObjectStates':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+		if(!isset($_GET['n1']) || $_GET['n1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
+		} elseif(!isset($_GET['ty']) || $_GET['ty'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterTypeNotSet');
-		} elseif(!isset($_GET['objName2']) || $_GET['objName2'] == '') {
+		} elseif(!isset($_GET['n2']) || $_GET['n2'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName2NotSet');
-		} elseif(!isset($_GET['objType']) || $_GET['objType'] == '') {
+		} elseif(!isset($_GET['t']) || $_GET['t'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjTypeNotSet');
-		} elseif(!isset($_GET['objId']) || $_GET['objId'] == '') {
+		} elseif(!isset($_GET['i']) || $_GET['i'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjIdNotSet');
 		} else {
 			$arrReturn = Array();
-			$sType = $_GET['type'];
-			$arrMap = $_GET['map'];
-			$arrName1 = $_GET['objName1'];
-			$arrName2 = $_GET['objName2'];
-			$arrType = $_GET['objType'];
-			$arrObjId = $_GET['objId'];
+						
+			$sType = $_GET['ty'];
+			$arrMap = $_GET['m'];
+			$arrName1 = $_GET['n1'];
+			$arrName2 = $_GET['n2'];
+			$arrType = $_GET['t'];
+			$arrObjId = $_GET['i'];
 			
 			$numObjects = count($arrType);
 			for($i = 0; $i < $numObjects; $i++) {

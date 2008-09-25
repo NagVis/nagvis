@@ -298,7 +298,7 @@ class NagVisObject {
 		$ret = '';
 		
 		if($this->hover_menu) {
-			$sRequest = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/ajax_handler.php?action=getObjectStates&type=complete&map[]=&objType[]='.$this->getType().'&objName1[]='.$this->getName().'&objId[]=a'.md5(time()).'&objName2[]=';
+			$sRequest = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/ajax_handler.php?action=getObjectStates&ty=complete&map[]=&t[]='.$this->getType().'&n1[]='.$this->getName().'&i[]=a'.md5(time()).'&n2[]=';
 			
 			if($this->getType() == 'service') {
 				$ret .= 'onmouseover="displayHoverMenu(replaceHoverTemplateMacros(\'0\', new NagVisHost(getSyncRequest(\''.$sRequest.$this->service_description.'\')[0]), getHoverTemplate(\''.$this->getHoverTemplate().'\')),'.($this->hover_delay*1000).',\'\');" onmouseout=" return hideHoverMenu();"';
