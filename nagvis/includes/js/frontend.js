@@ -296,7 +296,9 @@ function setMapHoverTemplates() {
  */
 function parseMapObjectsHoverMenu() {
 	for(var a = 0; a < aMapObjects.length; a++) {
-		aMapObjects[a].parseHoverMenu();
+		if(aMapObjects[a].conf.hover_menu) {
+			aMapObjects[a].parseHoverMenu();
+		}
 	}
 }
 
