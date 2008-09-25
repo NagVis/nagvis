@@ -63,13 +63,19 @@ function runWorker(iCount, sType) {
 		// Handle the map rendering
 		if(sType == 'map') {
 			setMapBasics(oMapProperties);
+			
+			eventlog("worker", "info", "Parsing map objects");
 			setMapObjects(aInitialMapObjects);
 			
 			// Bulk get all hover templates which are needed on the map
+			eventlog("worker", "info", "Fetching hover templates");
 			setMapHoverTemplates();
 			
 			// Asign the hover templates to the objects and parse them
+			eventlog("worker", "info", "Parse hover menus");
 			parseMapObjectsHoverMenu();
+			
+			eventlog("worker", "info", "Finished parsing map");
 		}
 	} else {
 		/**
