@@ -337,7 +337,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * title="<hostname>" with the hover menu code.
 		 */
 		
-		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
+		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
 			$this->mapCode = str_replace('title="'.$OBJ->getType().'_'.$OBJ->getObjectId().'"', $OBJ->getHoverMenu(), $this->mapCode);
 		}
 	}

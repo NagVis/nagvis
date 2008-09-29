@@ -193,17 +193,13 @@ class NagVisObject {
 			}
 		}
 		
-		// Save the number of childs
+		// Save the number of members
 		switch($this->getType()) {
 			case 'host':
-				$arr['num_members'] = $this->getNumServices();
-			break;
+			case 'map':
 			case 'hostgroup':
 			case 'servicegroup':
 				$arr['num_members'] = $this->getNumMembers();
-			break;
-			case 'map':
-				$arr['num_members'] = $this->getNumObjects();
 			break;
 		}
 		
@@ -348,16 +344,10 @@ class NagVisObject {
 		
 		switch($this->type) {
 			case 'host':
-				$arrObjects = $this->getServices();
-			break;
 			case 'hostgroup':
-				$arrObjects = $this->getMembers();
-			break;
 			case 'servicegroup':
-				$arrObjects = $this->getMembers();
-			break;
 			case 'map':
-				$arrObjects = $this->getMapObjects();
+				$arrObjects = $this->getMembers();
 			break;
 		}
 		

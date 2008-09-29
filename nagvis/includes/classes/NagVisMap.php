@@ -157,7 +157,7 @@ class NagVisMap extends GlobalMap {
 		$arrRet = Array();
 		
 		$i = 0;
-		foreach($this->MAPOBJ->getMapObjects() AS $OBJ) {
+		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
 			switch(get_class($OBJ)) {
 				case 'NagVisHost':
 				case 'NagVisService':

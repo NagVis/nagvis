@@ -63,7 +63,7 @@ class NagiosHost extends NagVisStatefulObject {
 	
 	var $fetchedChildObjects;
 	var $childObjects;
-	var $services;
+	var $members;
 	
 	/**
 	 * Class constructor
@@ -84,7 +84,7 @@ class NagiosHost extends NagVisStatefulObject {
 		
 		$this->fetchedChildObjects = 0;
 		$this->childObjects = Array();
-		$this->services = Array();
+		$this->members = Array();
 		$this->state = '';
 		$this->problem_has_been_acknowledged = 0;
 		
@@ -250,27 +250,27 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC getNumServices()
+	 * PUBLIC getNumMembers()
 	 *
 	 * Returns the number of services
 	 *
 	 * @return	Integer		Number of services
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNumServices() {
+	function getNumMembers() {
 		return count($this->services);
 	}
 	
 	/**
-	 * PUBLIC getServices()
+	 * PUBLIC getMembers()
 	 *
 	 * Returns the number of services
 	 *
 	 * @return	Array		Array of Services
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getServices() {
-		return $this->services;
+	function getMembers() {
+		return $this->members;
 	}
 	
 	/**
@@ -384,7 +384,7 @@ class NagiosHost extends NagVisStatefulObject {
 		// to 1
 		if($this->getRecognizeServices()) {
 			// Get states of services and merge with host state
-			foreach($this->services AS &$SERVICE) {
+			foreach($this->getMembers() AS $SERVICE) {
 				$this->wrapChildState($SERVICE);
 			}
 		}

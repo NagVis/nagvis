@@ -34,7 +34,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	
 	var $backend_id;
 	
-	var $objects;
+	var $members;
 	var $linkedMaps;
 	
 	var $object_id;
@@ -72,7 +72,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->alias = $this->MAPCFG->getAlias();
 		$this->type = 'map';
 		$this->iconset = 'std_medium';
-		$this->objects = Array();
+		$this->members = Array();
 		$this->linkedMaps = Array();
 		
 		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
@@ -102,27 +102,27 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC getMapObjects()
+	 * PUBLIC getMembers()
 	 *
 	 * Returns the array of objects on the map
 	 *
 	 * @return	Array	Array with map objects
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMapObjects() {
-		return $this->objects;
+	function getMembers() {
+		return $this->members;
 	}
 	
 	/**
-	 * PUBLIC getNumObjects()
+	 * PUBLIC getNumMembers()
 	 *
 	 * Returns the number of objects on the map
 	 *
 	 * @return	Integer	Number of objects on the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNumObjects() {
-		return count($this->objects);
+	function getNumMembers() {
+		return count($this->members);
 	}
 	
 	/**
@@ -134,7 +134,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function hasObjects() {
-		return isset($this->objects[0]);
+		return isset($this->members[0]);
 	}
 	
 	/**
@@ -149,7 +149,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->fetchMapObjects();
 		
 		// Get all services of member host
-		foreach($this->getMapObjects() AS $OBJ) {
+		foreach($this->getMembers() AS $OBJ) {
 			// Objects of type map need some extra handling for loop prevention
 			if($OBJ->getType() == 'map') {
 				/**
@@ -190,7 +190,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	function fetchState() {
 		// Get state of all member objects
-		foreach($this->getMapObjects() AS $OBJ) {
+		foreach($this->getMembers() AS $OBJ) {
 			// Don't get state from textboxes and shapes
 			if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
 				continue;
@@ -218,7 +218,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
-		$this->objects[] = $OBJ;
+		$this->members[] = $OBJ;
 		
 		foreach($OBJ->getChilds() AS $OBJ1) {
 			/*
@@ -250,7 +250,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if($this->hasObjects()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
-			foreach($this->getMapObjects() AS $OBJ) {
+			foreach($this->getMembers() AS $OBJ) {
 				// Don't reconize summarize map objects
 				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
 					continue;
@@ -329,7 +329,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 					$OBJ->setConfiguration($objConf);
 					
 					// Write member to object array
-					$this->objects[] = $OBJ;
+					$this->members[] = $OBJ;
 				}
 			}
 		}
@@ -352,7 +352,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			// Loop all objects on the child map to find out if there is a link back 
 			// to this map (loop)
 			//
-			// Can't use OBJ->getMapObjects() cause they are not created yet
+			// Can't use OBJ->getMembers() cause they are not created yet
 			foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
 				if($this->MAPCFG->getName() == $arrChildMap['map_name']) {
 					// Commented out:
@@ -406,7 +406,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function fetchSummaryState() {
 		if($this->hasObjects()) {
 			// Get summary state member objects
-			foreach($this->getMapObjects() AS $OBJ) {
+			foreach($this->getMembers() AS $OBJ) {
 				// Don't reconize summarize map objects
 				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
 					continue;
