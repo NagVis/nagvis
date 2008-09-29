@@ -119,7 +119,7 @@ class NagiosHost extends NagVisStatefulObject {
 			$this->setObjectInformation($arrValues);
 			
 			// Get all service states
-			if($this->getState() != 'ERROR' && !$this->hasServices()) {
+			if($this->getState() != 'ERROR' && !$this->hasMembers()) {
 				$this->fetchServiceObjects();
 			}
 			
@@ -258,7 +258,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getNumMembers() {
-		return count($this->services);
+		return count($this->members);
 	}
 	
 	/**
@@ -274,15 +274,15 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC hasServices()
+	 * PUBLIC hasMembers()
 	 *
 	 * Simple check if the host has at least one service
 	 *
 	 * @return Boolean	Yes: Has services, No: No Service
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function hasServices() {
-		return isset($this->services[0]);
+	function hasMembers() {
+		return isset($this->members[0]);
 	}
 	
 	# End public methods
@@ -314,7 +314,7 @@ class NagiosHost extends NagVisStatefulObject {
 			// At least summary output
 			$OBJ->fetchSummaryOutput();
 			
-			$this->services[] = $OBJ;
+			$this->members[] = $OBJ;
 		}
 	}
 	
@@ -405,10 +405,10 @@ class NagiosHost extends NagVisStatefulObject {
 		// to 1
 		if($this->getRecognizeServices()) {
 			// If there are services write the summary state for them
-			if($this->hasServices()) {
+			if($this->hasMembers()) {
 				$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 				
-				foreach($this->services AS &$SERVICE) {
+				foreach($this->members AS &$SERVICE) {
 					$arrStates[$SERVICE->getSummaryState()]++;
 				}
 				
