@@ -163,29 +163,6 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getRefresh() {
-		$strReturn = "";
-		if(isset($_GET['rotation']) && $_GET['rotation'] != '' && (!isset($_GET['rotate']) || (isset($_GET['rotate']) && $_GET['rotate'] == '1'))) {
-			$strReturn .= "var rotate = true;\n";
-		} else {
-			$strReturn .= "var rotate = false;\n";
-		}
-		
-		$strReturn .= "var bRefresh = true;\n";
-		if($this->ROTATION->getPoolName() != '') {
-			$strReturn .= "var nextRotationUrl = '".$this->ROTATION->getNextStepUrl()."';\n";
-		}
-		$strReturn .= "var nextRefreshTime = '".$this->ROTATION->getStepInterval()."';\n";
-		$strReturn .= "var oRotation = window.setTimeout('runWorker(0, \'rotation\')', 1000);\n";
-		
-		return $this->parseJs($strReturn);
-	}
-	
-	/**
-	 * Gets the javascript code for the map refresh/rotation
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
 	function getPagePropertiesJson($bRefresh) {
 		$arr = Array();
 		
