@@ -445,7 +445,7 @@ class NagVisStatefulObject extends NagVisObject {
 			
 			foreach($this->getMembers() AS $OBJ) {
 				if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
-					$arr['members'][] = $OBJ->getObjectStateInformations(false);
+					$arr['members'][] = $OBJ->getObjectInformation(false);
 				}
 			}
 		}
