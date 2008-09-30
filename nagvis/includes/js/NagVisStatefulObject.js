@@ -31,6 +31,46 @@ function NagVisStatefulObject () {
 	// Stores the informations from last refresh (Needed for change detection)
 	this.last_conf = new Object();
 	
+	this.getMembers = function() {
+		this.members = new Array();
+		if(this.conf.members && this.conf.members.length > 0) {
+			for(var i = 0; i < this.conf.members.length; i++) {
+				var oMember = this.conf.members[i];
+				
+				switch (oMember.type) {
+					case 'host':
+						oObj = new NagVisHost(oMember);
+					break;
+					case 'service':
+						oObj = new NagVisService(oMember);
+					break;
+					case 'hostgroup':
+						oObj = new NagVisHostgroup(oMember);
+					break;
+					case 'servicegroup':
+						oObj = new NagVisServicegroup(oMember);
+					break;
+					case 'map':
+						oObj = new NagVisMap(oMember);
+					break;
+					case 'textbox':
+						oObj = new NagVisTextbox(oMember);
+					break;
+					case 'shape':
+						oObj = new NagVisShape(oMember);
+					break;
+					default:
+						alert('Error: Unknown member object type ('+oMember.type+')');
+					break;
+				}
+				
+				if(oObj != null) {
+					this.members.push(oObj);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * PUBLIC saveLastState()
 	 *

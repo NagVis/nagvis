@@ -386,8 +386,12 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectStateInformations() {
+	function getObjectStateInformations($bFetchChilds=true) {
 		$arr = Array();
+		
+		//<tr><!-- BEGIN servicegroup_child --><td>[obj_name1]</td><!-- END servicegroup_child --><td>[obj_name]</td>
+		//<td class="state[obj_summary_state]">[obj_summary_state][obj_summary_in_downtime][obj_summary_acknowledged]</td>
+		//<td>[obj_summary_output]</td></tr>
 		
 		if(isset($this->alias) && $this->alias != '') {
 			$arr['alias'] = $this->alias;
@@ -433,6 +437,17 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['last_hard_state_change'] = $this->getLastHardStateChange();
 			$arr['state_duration'] = $this->getStateDuration();
 			$arr['perfdata'] = strtr($this->perfdata, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
+		}
+		
+		// Enable/Disable fetching childs
+		if($bFetchChilds && ($this->type == 'host' || $this->type == 'servicegroup' || $this->type == 'hostgroup' || $this->type == 'map')) {
+			$arr['members'] = Array();
+			
+			foreach($this->getMembers() AS $OBJ) {
+				if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
+					$arr['members'][] = $OBJ->getObjectStateInformations(false);
+				}
+			}
 		}
 		
 		return $arr;

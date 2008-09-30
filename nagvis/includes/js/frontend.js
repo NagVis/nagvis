@@ -400,6 +400,9 @@ function updateMapObjects(aMapObjectInformations) {
 					oObj.conf[strIndex] = aMapObjectInformations[i][strIndex];
 				}
 			}
+			
+			// Update members list
+			oObj.getMembers();
 		}
 		
 		// Update lastUpdate timestamp

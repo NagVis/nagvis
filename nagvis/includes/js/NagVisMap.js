@@ -31,4 +31,5 @@ function NagVisMap (oConf) {
 	this.setLastUpdate();
 	this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
 	this.conf = oConf;
+	this.getMembers();
 }

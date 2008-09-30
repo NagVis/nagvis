@@ -194,18 +194,11 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 		var arrChildObjects;
 		var mapName = '';
 		
-		
 		if(typeof(oMapProperties) != 'undefined' && oMapProperties !== null) {
 			mapName = oMapProperties.map_name;
 		}
 		
-		if(oObj.conf.type == 'service') {
-			arrChildObjects = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverChilds&map='+mapName+'&objType='+oObj.conf.type+'&objName1='+oObj.conf.name+'&objName2='+oObj.conf.service_description);
-		} else {
-			arrChildObjects = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverChilds&map='+mapName+'&objType='+oObj.conf.type+'&objName1='+oObj.conf.name);
-		}
-		
-		if(arrChildObjects.length > 0) {
+		if(oObj.members && oObj.members.length > 0) {
 			var regex = new RegExp("<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
 			var results = regex.exec(sTemplateCode);
 			if(results != null) {
@@ -213,40 +206,15 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 				var rowHtmlCode = results[1];
 				
 				// Loop all child object until all looped or the child limit is reached
-				for(var i = 0; i <= oObj.conf.hover_childs_limit && i < arrChildObjects.length; i++) {
+				for(var i = 0; i <= oObj.conf.hover_childs_limit && i < oObj.members.length; i++) {
 					if(i < oObj.conf.hover_childs_limit) {
-						if(arrChildObjects[i].type != 'textbox' && arrChildObjects[i].type != 'shape') {
-							var oChild;
-							
-							switch (arrChildObjects[i].type) {
-								case 'host':
-									oChild = new NagVisHost(arrChildObjects[i]);
-								break;
-								case 'service':
-									oChild = new NagVisService(arrChildObjects[i]);
-								break;
-								case 'hostgroup':
-									oChild = new NagVisHostgroup(arrChildObjects[i]);
-								break;
-								case 'servicegroup':
-									oChild = new NagVisServicegroup(arrChildObjects[i]);
-								break;
-								case 'map':
-									oChild = new NagVisMap(arrChildObjects[i]);
-								break;
-								case 'textbox':
-									oChild = new NagVisTextbox(arrChildObjects[i]);
-								break;
-								case 'shape':
-									oChild = new NagVisShape(arrChildObjects[i]);
-								break;
-							}
-							
+						var oMember = oObj.members[i];
+						if(oMember.type != 'textbox' && oMember.type != 'shape') {
 							// Childs need to know where they belong
-							oChild.parent_type = oObj.type;
-							oChild.parent_name = oObj.name;
+							oMember.parent_type = oObj.type;
+							oMember.parent_name = oObj.name;
 							
-							childsHtmlCode += replaceHoverTemplateMacros('1', oChild, rowHtmlCode);
+							childsHtmlCode += replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 						}
 					} else {
 						// Add a "end-line"

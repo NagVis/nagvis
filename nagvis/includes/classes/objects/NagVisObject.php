@@ -179,7 +179,7 @@ class NagVisObject {
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectInformation() {
+	function getObjectInformation($bFetchChilds=true) {
 		$arr = Array();
 		
 		// Need to remove some options which are not interesting
@@ -245,9 +245,19 @@ class NagVisObject {
 			}
 			
 			// Little hack: Overwrite the options with correct state informations
-			$arr = array_merge($arr, $this->getObjectStateInformations());
+			$arr = array_merge($arr, $this->getObjectStateInformations(false));
 		}
 		
+		// Only do this for parents
+		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
+			$arr['members'] = Array();
+			
+			foreach($this->getMembers() AS $OBJ) {
+				if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
+					$arr['members'][] = $OBJ->getObjectInformation(false);
+				}
+			}
+		}
 		
 		return $arr;
 	}
