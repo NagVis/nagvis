@@ -91,6 +91,8 @@ function runWorker(iCount, sType) {
 			return false;
 		}
 		
+		updateWorkerCounter();
+		
 		/**
 		 * Do these actions every X runs (Every worker_interval seconds)
 		 */
@@ -157,6 +159,9 @@ function runWorker(iCount, sType) {
 			}
 		}
 	}
+	
+	// Update lastWorkerRun
+	oWorkerProperties.last_run = Date.parse(new Date());
 	
 	// Sleep until next worker run (1 Second)
 	window.setTimeout("runWorker("+(iCount+1)+", '"+sType+"')", 1000);

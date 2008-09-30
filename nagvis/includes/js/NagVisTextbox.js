@@ -66,6 +66,7 @@ function NagVisTextbox (oConf) {
 	 */
 	this.replaceMacros = function () {
 		this.conf.text = this.conf.text.replace('[refresh_counter]', '<font id="refreshCounter"></font>');
+		this.conf.text = this.conf.text.replace('[worker_last_run]', '<font id="workerLastRunCounter"></font>');
 	}
 	
 	/**

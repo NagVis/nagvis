@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
  
-/**
+/**setLastUpdate
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 

@@ -56,6 +56,19 @@ oStates.PENDING.color = '#C0C0C0';
 oStates.PENDING.sound = '';
 
 /**
+ * Update the worker counter
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function updateWorkerCounter() {
+	// write the time to refresh to header counter
+	if(document.getElementById('workerLastRunCounter')) {
+		document.getElementById('workerLastRunCounter').innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+	}
+	return true;
+}
+
+/**
  * Function to start the page refresh/rotation
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
