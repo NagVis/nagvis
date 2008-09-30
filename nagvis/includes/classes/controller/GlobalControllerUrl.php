@@ -39,7 +39,7 @@ class GlobalControllerUrl {
 		$URL = new NagVisUrl($CORE, $url);
 
 		// Build the page
-		$FRONTEND->addBodyLines($FRONTEND->parseJs('var oPageProperties = '.$FRONTEND->getPagePropertiesJson(0).';'));
+		$FRONTEND->addBodyLines($FRONTEND->parseJs('var oPageProperties = '.$FRONTEND->getPagePropertiesJson(1).';'));
 		$FRONTEND->getHeaderMenu($CORE->MAINCFG->getValue('index','headermenu'), $CORE->MAINCFG->getValue('index', 'headertemplate'));
 		$FRONTEND->addBodyLines($FRONTEND->parseJs($URL->parseJson()));
 		$FRONTEND->addBodyLines($URL->getContents());
