@@ -26,8 +26,8 @@
  */
 
 #eventlog {
-	position: absolute;
-	bottom: 20px;
+	position: fixed;
+	bottom: 0px;
 	right: 20px;
 	z-index: 1000;
 	
@@ -36,6 +36,7 @@
 	
 	background-color: #d0d0d0;
 	border: 1px solid #000000;
+	border-bottom: 0;
 	
 	-moz-opacity:0.4; 
 	-khtml-opacity:0.4; 
