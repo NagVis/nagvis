@@ -40,7 +40,27 @@ function eventlogInitialize() {
 		oEventlog.setAttribute("id","eventlog");
 		oEventlog.style.overflow = 'auto';
 		
+		var oEventlogControl = document.createElement('div');
+		oEventlogControl.setAttribute("id","eventlogControl");
+		oEventlogControl.appendChild(document.createTextNode('_'));
+		oEventlogControl.onmouseover = function() {
+			document.body.style.cursor='pointer';
+		}
+		oEventlogControl.onmouseout = function() {
+			document.body.style.cursor='auto';
+		}
+		oEventlogControl.onclick = function() {
+			if(document.getElementById('eventlog').style.display != 'none') {
+				document.getElementById('eventlog').style.display = 'none';
+				document.getElementById('eventlogControl').style.bottom = '0px';
+			} else {
+				document.getElementById('eventlog').style.display = '';
+				document.getElementById('eventlogControl').style.bottom = '75px';
+			}
+		};
+		
 		document.body.appendChild(oEventlog);
+		document.body.appendChild(oEventlogControl);
 	}
 	
 	eventlog("eventlog", "info", "Eventlog initialized (Level: "+oMapProperties.event_log_level+")");

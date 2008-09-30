@@ -47,3 +47,26 @@
 	
 	font-size: 9px;
 }
+
+#eventlogControl {
+	position: fixed;
+	bottom: 75px;
+	right: 20px;
+	z-index: 1001;
+	
+	width: 10px;
+	height: 10px;
+	
+	background-color: #d0d0d0;
+	border: 1px solid #000000;
+	border-bottom: 0;
+	
+	-moz-opacity:0.4; 
+	-khtml-opacity:0.4; 
+	opacity:0.4;
+	/*filter:alpha(opacity=40);*/
+	
+	padding: 2px;
+	
+	font-size: 9px;
+}
