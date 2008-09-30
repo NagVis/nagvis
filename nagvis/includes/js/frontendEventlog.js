@@ -37,7 +37,9 @@ function eventlogInitialize() {
 	
 	if(!oEventlog) {
 		var oEventlog = document.createElement('div');
-		oEventlog.setAttribute("id","eventlog"); 
+		oEventlog.setAttribute("id","eventlog");
+		oEventlog.style.overflow = 'auto';
+		
 		document.body.appendChild(oEventlog);
 	}
 	
@@ -76,7 +78,8 @@ function eventlog(sType, sSeverity, sText) {
 			var oEntry = document.createTextNode(getCurrentTime()+" "+sSeverity+" "+sType+": "+sText);
 			
 			// When the message limit is reached truncate the first log entry
-			if(oEventlog.childNodes && oEventlog.childNodes.length >= 6*2) {
+			// 24 lines is the current limit
+			if(oEventlog.childNodes && oEventlog.childNodes.length >= 24*2) {
 				oEventlog.removeChild(oEventlog.firstChild);
 				oEventlog.removeChild(oEventlog.firstChild);
 			}
@@ -84,6 +87,9 @@ function eventlog(sType, sSeverity, sText) {
 			// Append new message to log
 			oEventlog.appendChild(oEntry);
 			oEventlog.appendChild(document.createElement('br'));
+			
+			// Scroll down
+			oEventlog.scrollTop = oEventlog.scrollHeight;
 		}
 	}
 }
