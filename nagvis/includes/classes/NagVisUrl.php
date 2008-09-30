@@ -55,5 +55,26 @@ class NagVisUrl {
 		
 		return $this->strContents;
 	}
+
+	/**
+   * Parses some option and initializes the worker
+   *
+   * @return  String  String with Html Code
+   * @author  Lars Michelsen <lars@vertical-visions.de>
+   */
+  function parseJson() {
+    $ret = '';
+    $ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+    $ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+    //$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
+
+    $ret .= '
+    var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\';';
+
+    // Kick of the worker
+    $ret .= 'runWorker(0, \'url\');';
+
+    return $ret;
+  }
 }
 ?>

@@ -176,7 +176,7 @@ class NagVisFrontend extends GlobalPage {
 			$strReturn .= "var nextRotationUrl = '".$this->ROTATION->getNextStepUrl()."';\n";
 		}
 		$strReturn .= "var nextRefreshTime = '".$this->ROTATION->getStepInterval()."';\n";
-		$strReturn .= "var oRotation = window.setTimeout('countdown()', 1000);\n";
+		$strReturn .= "var oRotation = window.setTimeout('runWorker(0, \'rotation\')', 1000);\n";
 		
 		return $this->parseJs($strReturn);
 	}
