@@ -63,7 +63,9 @@ oStates.PENDING.sound = '';
 function updateWorkerCounter() {
 	// write the time to refresh to header counter
 	if(document.getElementById('workerLastRunCounter')) {
-		document.getElementById('workerLastRunCounter').innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+		if(oWorkerProperties.last_run) {
+			document.getElementById('workerLastRunCounter').innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+		}
 	}
 	return true;
 }
