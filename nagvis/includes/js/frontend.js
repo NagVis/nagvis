@@ -156,12 +156,13 @@ function runWorker(iCount, sType) {
 				
 				// Get the updated objects via bulk request
 				updateMapObjects(getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false));
+				
+				// Update lastWorkerRun
+				oWorkerProperties.last_run = Date.parse(new Date());
 			}
 		}
 	}
 	
-	// Update lastWorkerRun
-	oWorkerProperties.last_run = Date.parse(new Date());
 	
 	// Sleep until next worker run (1 Second)
 	window.setTimeout("runWorker("+(iCount+1)+", '"+sType+"')", 1000);
