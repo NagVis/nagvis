@@ -202,6 +202,28 @@ function getRandom(min, max) {
 	return min + parseInt(Math.random() * (max-min+1));
 }
 
+function cloneObject(what) {
+	var o;
+	
+	if(what instanceof Array) {
+		o = new Array();
+	} else {
+		o = new Object();
+	}
+	
+	for (i in what) {
+		if (typeof what[i] == 'object') {
+			if(i != 'parsedObject') {
+				o[i] = cloneObject(what[i]);
+			}
+		} else {
+			o[i] = what[i];
+		}
+	}
+	
+	return o;
+}
+
 function date(format, timestamp) {
 	// http://kevin.vanzonneveld.net
 	// +   original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)
