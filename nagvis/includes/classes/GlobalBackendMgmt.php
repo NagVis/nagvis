@@ -77,8 +77,7 @@ class GlobalBackendMgmt {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
 				}
 				return FALSE;
 			}
@@ -100,8 +99,7 @@ class GlobalBackendMgmt {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
 				}
 				return FALSE;
 			}
@@ -119,8 +117,7 @@ class GlobalBackendMgmt {
 		$aBackends = $this->getBackends();
 		
 		if(!count($aBackends)) {
-			$FRONTEND = new GlobalPage($this->CORE);
-		    $FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('noBackendDefined'));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noBackendDefined'));
 		} else {
 			foreach($aBackends AS &$backendId) {
 				if($this->checkBackendExists($backendId, 1)) {

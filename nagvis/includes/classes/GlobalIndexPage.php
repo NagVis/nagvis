@@ -264,8 +264,7 @@ class GlobalIndexPage {
 					$strFileType = 'png';
 				break;
 				default:
-					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
+					new GlobalFrontendMessage('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
@@ -331,8 +330,7 @@ class GlobalIndexPage {
 					imagepng($thumb, $pathThumbImage);
 				break;
 				default:
-					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
+					new GlobalFrontendMessage('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
@@ -355,8 +353,7 @@ class GlobalIndexPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('imageNotExists','FILE~'.$imgPath));
+				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('imageNotExists','FILE~'.$imgPath));
 			}
 			return FALSE;
 		}

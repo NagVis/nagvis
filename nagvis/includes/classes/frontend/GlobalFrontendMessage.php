@@ -39,10 +39,6 @@ class GlobalFrontendMessage {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function __construct($type, $message, $pathHtmlBase = NULL, $title = NULL) {
-		// Old method
-		//$FRONTEND = new GlobalPage($CORE);
-		//$FRONTEND->messageToUser($type, $message);
-		
 		if($pathHtmlBase === NULL) {
 			$CORE = new GlobalCore();
 			$pathHtmlBase = $CORE->MAINCFG->getValue('paths', 'htmlbase');
@@ -50,6 +46,10 @@ class GlobalFrontendMessage {
 		
 		// New method
 		print new GlobalFrontendMessageBox($type, $message, $pathHtmlBase, $title);
+		
+		if($type == 'ERROR') {
+			exit(1);
+		}
 	}
 }
 ?>

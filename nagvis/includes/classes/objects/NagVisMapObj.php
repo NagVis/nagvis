@@ -320,8 +320,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = new NagVisTextbox($this->CORE);
 						break;
 						default:
-							$FRONTEND = new GlobalPage($this->CORE);
-							$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
+							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
 						break;
 					}
 					
@@ -359,8 +358,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 					// The fact of map loops should not be reported anymore. Let's simply
 					// skip the looping objects in summary view.
 					//
-					//$FRONTEND = new GlobalPage($this->CORE);
-					//$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('loopInMapRecursion'));
+					//new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('loopInMapRecursion'));
 					//$OBJ->summary_state = 'UNKNOWN';
 					//$OBJ->summary_output = $this->CORE->LANG->getText('loopInMapRecursion');
 					
@@ -432,8 +430,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function checkPermissions($allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot' => 'nagvis'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
 			}
 			return FALSE;
 		} else {
@@ -452,8 +449,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	function checkMaintenance($printErr) {
 		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->CORE, Array('languageRoot' => 'nagvis'));
-				$FRONTEND->messageToUser('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
+				new GlobalFrontendMessage('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
 			}
 			return FALSE;
 		} else {

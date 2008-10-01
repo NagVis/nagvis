@@ -302,8 +302,7 @@ class NagVisAutoMap extends GlobalMap {
 					$binary = 'fdp';
 				break;
 				default:
-					$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
-					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('unknownRenderMode','MODE~'.$this->renderMode));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownRenderMode','MODE~'.$this->renderMode));
 				break;
 			}
 			
@@ -442,8 +441,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		if($returnCode1 & $returnCode2) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->CORE,Array('languageRoot'=>'nagvis:automap'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->CORE->MAINCFG->getvalue('automap','graphvizpath')));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->CORE->MAINCFG->getvalue('automap','graphvizpath')));
 			}
 			return FALSE;
 		} else {
@@ -545,8 +543,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Could not get root host for the automap
 		if(!isset($defaultRoot) || $defaultRoot == '') {
-			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('couldNotGetRootHostname'));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('couldNotGetRootHostname'));
 		} else {
 			return $defaultRoot;
 		}

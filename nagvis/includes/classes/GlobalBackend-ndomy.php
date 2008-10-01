@@ -86,14 +86,12 @@ class GlobalBackendndomy {
 			
 			// Check that Nagios reports itself as running	
 			if ($nagiosstate['is_currently_running'] != 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('nagiosNotRunning', 'BACKENDID~'.$this->backendId));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('nagiosNotRunning', 'BACKENDID~'.$this->backendId));
 			}
 			
 			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
 			if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
 			}
 			
 			/**
@@ -132,9 +130,7 @@ class GlobalBackendndomy {
 	 */
 	function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
-			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('noTablesExists', 'BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix));
-			
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noTablesExists', 'BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix));
 			return FALSE;
 		} else {
 			return TRUE;	
@@ -160,9 +156,7 @@ class GlobalBackendndomy {
 		error_reporting($oldLevel);
 		
 		if(!$returnCode){
-			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('errorSelectingDb', 'BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error()));
-			
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', 'BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error()));
 			return FALSE;
 		} else {
 			return TRUE;
@@ -182,10 +176,7 @@ class GlobalBackendndomy {
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
 			if (!extension_loaded('mysql')) {
-				//Error Box
-				$FRONTEND = new GlobalPage($this->CORE, Array('languageRoot'=>'backend:ndomy'));
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mysqlNotSupported','BACKENDID~'.$this->backendId));
-				
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported','BACKENDID~'.$this->backendId));
 				return FALSE;
 			} else {
 				return TRUE;

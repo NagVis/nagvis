@@ -182,8 +182,7 @@ class GlobalHeaderMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('headerTemplateNotExists','FILE~'.$this->pathHeaderTemplateFile));
+				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotExists','FILE~'.$this->pathHeaderTemplateFile));
 			}
 			return FALSE;
 		}
@@ -201,8 +200,7 @@ class GlobalHeaderMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('headerTemplateNotReadable','FILE~'.$this->pathHeaderTemplateFile));
+				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotReadable','FILE~'.$this->pathHeaderTemplateFile));
 			}
 			return FALSE;
 		}

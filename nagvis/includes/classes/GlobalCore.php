@@ -337,8 +337,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
+				new GlobalFrontendMessage('ERROR', $this->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -356,8 +355,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this);
-				$FRONTEND->messageToUser('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
+				new GlobalFrontendMessage('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}

@@ -189,8 +189,7 @@ class GlobalHoverMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathHoverTemplateFile));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathHoverTemplateFile));
 			}
 			return FALSE;
 		}
@@ -210,8 +209,7 @@ class GlobalHoverMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathHoverTemplateFile));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathHoverTemplateFile));
 			}
 			return FALSE;
 		}

@@ -127,8 +127,7 @@ switch($_GET['action']) {
 					$OBJ = new NagVisTextbox($CORE);
 				break;
 				default:
-					$FRONTEND = new GlobalPage($CORE);
-					$FRONTEND->messageToUser('ERROR', $CORE->LANG->getText('unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName()));
+					new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('unknownObject', 'TYPE~'.$type.';MAPNAME~'.$this->getName()));
 				break;
 			}
 			
