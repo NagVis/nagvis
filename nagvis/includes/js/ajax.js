@@ -113,6 +113,7 @@ function getHttpRequest(sUrl, bCacheable) {
 
 function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 	var sUrl = '';
+	var o;
 	var aReturn = Array();
 	for(var i = 0; i < aUrlParts.length; i++) {
 		sUrl += aUrlParts[i];
@@ -120,14 +121,20 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 		// Prevent reaching too long urls, split the update to several 
 		// requests. Just start the request and clean the string strUrl
 		if(sUrl != '' && sBaseUrl.length+sUrl.length > iLimit) {
-			aReturn = aReturn.concat(getSyncRequest(sBaseUrl+sUrl, bCacheable));
+			o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
+			if(o) {
+				aReturn = aReturn.concat(o);
+			}
 			sUrl = '';
 		}
 	}
 	
 	if(sUrl != '') {
 		// Bulk update the objects, this query should not be cached
-		aReturn = aReturn.concat(getSyncRequest(sBaseUrl+sUrl, bCacheable));
+		o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
+		if(o) {
+			aReturn = aReturn.concat(o);
+		}
 	}
 	
 	return aReturn;
@@ -141,11 +148,15 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getSyncRequest(sUrl, bCacheable) {
-	var sResponse = "";
+function getSyncRequest(sUrl, bCacheable, bRetryable) {
+	var sResponse = null;
 	
 	if (bCacheable == null) {
 		bCacheable = true;
+	}
+	
+	if (bRetryable == null) {
+		bRetryable = true;
 	}
 	
 	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
@@ -181,7 +192,23 @@ function getSyncRequest(sUrl, bCacheable) {
 				
 				// Error handling for the AJAX methods
 				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-					alert("Error in ajax request handler:\n"+responseText);
+					alert("PHP error in ajax request handler:\n"+responseText);
+				} else if(responseText.match(/^NagVisError:/)) {
+					responseText = responseText.replace(/^NagVisError:/, '');
+					var oMsg = eval('( '+responseText+')');
+					
+					// Handle application message/error
+					frontendMessage(oMsg);
+					
+					// Retry after sleep of x seconds for x times
+					if(bRetryable) {
+						// FIXME: Retry after short wait
+						//for(var i = 0; i < 2 && sResponse == null; i++) {
+						//	sResponse = getSyncRequest(sUrl, bCacheable, false);
+						//}
+					}
+					
+					//FIXME: Think about caching the error!
 				} else {
 					if(bCacheable) {
 						// Cache that answer (only when no error/warning/...)
@@ -192,6 +219,10 @@ function getSyncRequest(sUrl, bCacheable) {
 				}
 			}
 		}
+	}
+	
+	if(sResponse != null) {
+		frontendMessageHide();
 	}
 	
 	return sResponse;

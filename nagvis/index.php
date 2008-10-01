@@ -32,6 +32,9 @@ require('./includes/functions/autoload.php');
 require('./includes/functions/debug.php');
 require('./includes/functions/oldPhpVersionFixes.php');
 
+// This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
+define('CONST_AJAX' , FALSE);
+
 $controller = new GlobalController();
 
 if (!$controller->isValid()) {

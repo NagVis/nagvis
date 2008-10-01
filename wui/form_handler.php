@@ -37,6 +37,9 @@ require('../nagvis/includes/functions/debug.php');
 // Include needed WUI specific functions
 require('./includes/functions/form_handler.php');
 
+// This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
+define('CONST_AJAX' , FALSE);
+
 // Load the core
 $CORE = new WuiCore();
 

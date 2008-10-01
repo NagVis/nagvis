@@ -35,6 +35,9 @@ require("../nagvis/includes/functions/autoload.php");
 require("../nagvis/includes/functions/debug.php");
 require("../nagvis/includes/functions/ajaxErrorHandler.php");
 
+// This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
+define('CONST_AJAX' , TRUE);
+
 // Load the core
 $CORE = new WuiCore();
 

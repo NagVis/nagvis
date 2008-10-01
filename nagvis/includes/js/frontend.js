@@ -106,16 +106,24 @@ function runWorker(iCount, sType) {
 				var oFileAges = getCfgFileAges();
 				
 				// Check for changed main configuration
-				if(checkMainCfgChanged(oFileAges.mainCfg)) {
+				if(oFileAges && checkMainCfgChanged(oFileAges.mainCfg)) {
 					// FIXME: Not handled by ajax frontend, reload the page
 					window.location.reload(true);
 				}
 				
 				// Check for changed map configuration
-				if(checkMapCfgChanged(oFileAges[oMapProperties.map_name])) {
-					// Set map basics and map objects
-					setMapBasics(getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oMapProperties.map_name));
-					setMapObjects(getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oMapProperties.map_name));
+				if(oFileAges && checkMapCfgChanged(oFileAges[oMapProperties.map_name])) {
+					// Set map basics
+					var oMapBasics = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oMapProperties.map_name);
+					if(oMapBasics) {
+						setMapBasics(oMapBasics);
+					}
+					
+					// Set map objects
+					var oMapObjects = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oMapProperties.map_name);
+					if(oMapObjects) {
+						setMapObjects(oMapObjects);
+					}
 					
 					// Bulk get all hover templates which are needed on the map
 					setMapHoverTemplates();
@@ -155,7 +163,10 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Get the updated objects via bulk request
-				updateMapObjects(getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false));
+				var o = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false)
+				if(o.length > 0) {
+					updateMapObjects(o);
+				}
 				
 				// Update lastWorkerRun
 				oWorkerProperties.last_run = Date.parse(new Date());

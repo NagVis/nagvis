@@ -99,17 +99,36 @@ class GlobalFrontendMessageBox {
 			$this->message = $CORE->LANG->getText('messageboxMessageWrongType', 'TYPE~'.$this->wrongType);
 		}
 		
-		// Got all informations, now build the box
-		$this->buildMessageBox();
+		// Got all informations, now build the message
+		// Build an ajax compatible message or a message in HTML format depending on
+		// page which is being called
+		if(CONST_AJAX) {
+			$this->buildAjaxMessage();
+		} else {
+			$this->buildHTMLMessage();
+		}
 	}
-
+	
 	/**
-	 * Build the message box
+	 * Build a message for the user for ajax frontend 
 	 *
 	 * @access  private
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	private function buildMessageBox() {
+	private function buildAjaxMessage() {
+		$aMessage = Array('type' => $this->type,
+		                  'message' => $this->message, 
+		                  'title' => $this->title);
+		$this->page = 'NagVisError:'.json_encode($aMessage);
+	}
+	
+	/**
+	 * Build a message box for the user in HTML format
+	 *
+	 * @access  private
+	 * @author  Michael Luebben <michael_luebben@web.de>
+	 */
+	private function buildHTMLMessage() {
 		$this->page .= '<style type="text/css"><!-- @import url('.$this->pathHtmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
 		$this->page .= '<div id="messageBoxDiv"'."\n";
 		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
