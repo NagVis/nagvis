@@ -282,6 +282,18 @@ switch($_GET['action']) {
 			echo $MAP->parseMapPropertiesJson();
 		}
 	break;
+	case 'getMapObjects':
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} else {
+			// Initialize map configuration
+			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
+			$MAPCFG->readMapConfig();
+			
+			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
+			echo $MAP->parseObjectsJson();
+		}
+	break;
 	case 'getHoverTemplate':
 		if(!isset($_GET['name']) || $_GET['name'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterNameNotSet');
