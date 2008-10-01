@@ -196,7 +196,7 @@ function getObjectsToUpdate() {
 	if(arrReturn.length > iNumObjectsPerTimeslot) {
 		eventlog("worker", "debug", "Spreading map objects in timeslots");
 		// Just remove all elements from the end of the array
-		arrReturn = arrReturn.splice(iNumObjectsPerTimeslot, arrReturn.length-iNumObjectsPerTimeslot);
+		arrReturn = arrReturn.slice(0, iNumObjectsPerTimeslot);
 	}
 	
 	eventlog("worker", "debug", "getObjectsToUpdate: Have to update "+arrReturn.length+" objects");
