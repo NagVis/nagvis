@@ -26,7 +26,9 @@
  */
  
 function frontendMessageHide() {
-	document.body.removeChild(document.getElementById('messageBoxDiv'));
+	if(document.getElementById('messageBoxDiv')) {
+		document.body.removeChild(document.getElementById('messageBoxDiv'));
+	}
 }
 
 function frontendMessage(oMessage) {
