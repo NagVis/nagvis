@@ -207,31 +207,29 @@ class NagVisObject {
 		 * FIXME: Find another place for that! This is a bad place for language strings!
 		 */
 		
-		if($this->type == 'service') {
-			$name = 'hostname';
-		} else {
-			$name = $this->type . 'name';
-		}
-		
 		// Get the child name label
 		switch($this->type) {
 			case 'host':
-				$childType = 'servicename';
+				$sName = $this->CORE->LANG->getText('hostname');
+				$sChildName = $this->CORE->LANG->getText('servicename');
 			break;
 			case 'hostgroup':
-				$childType = 'hostname';
+				$sName = $this->CORE->LANG->getText('hostgroupname');
+				$sChildName = $this->CORE->LANG->getText('hostname');
 			break;
 			case 'servicegroup':
-				$childType = 'servicename';
+				$sName = $this->CORE->LANG->getText('servicegroupname');
+				$sChildName = $this->CORE->LANG->getText('servicename');
 			break;
 			default:
-				$childType = 'objectname';
+				$sName = $this->CORE->LANG->getText('mapname');
+				$sChildName = $this->CORE->LANG->getText('objectname');
 			break;
 		}
 		
 		$arr['lang_obj_type'] = $this->CORE->LANG->getText($this->type);
-		$arr['lang_name'] = $this->CORE->LANG->getText($name);
-		$arr['lang_child_name'] = $this->CORE->LANG->getText($childType);
+		$arr['lang_name'] = $sName;
+		$arr['lang_child_name'] = $sChildName;
 		$arr['lang_child_name1'] = $this->CORE->LANG->getText('hostname');
 		$arr['lang_last_status_refresh'] = $this->CORE->LANG->getText('lastStatusRefresh');
 		

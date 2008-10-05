@@ -110,37 +110,6 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	oMacros.obj_output = oObj.conf.output;
 	oMacros.obj_summary_output = oObj.conf.summary_output;
 	
-	// FIXME: Get the child name label
-	/*switch(oObj.conf.type) {
-		case 'host':
-			$name = $this->CORE->LANG->getText('hostname');
-			$childName = $this->CORE->LANG->getText('servicename');
-		break;
-		case 'service':
-			$name = $this->CORE->LANG->getText('hostname');
-			$childName = '';
-		break;
-		case 'hostgroup':
-			$name = $this->CORE->LANG->getText('hostgroupname');
-			$childName = $this->CORE->LANG->getText('hostname');
-		break;
-		case 'servicegroup':
-			$name = $this->CORE->LANG->getText('servicegroupname');
-			$childName = $this->CORE->LANG->getText('servicename');
-		break;
-		case 'map':
-			$name = $this->CORE->LANG->getText('mapname');
-			$childName = $this->CORE->LANG->getText('objectname');
-		break;
-		default:
-			$name = $this->CORE->LANG->getText('objectname');
-			$childName = $this->CORE->LANG->getText('objectname');
-		break;
-	}
-	
-	oMacros.lang_name = $name;
-	oMacros.lang_child_name = $childName;*/
-	
 	// Macros which are only for services and hosts
 	if(oObj.conf.type == 'host' || oObj.conf.type == 'service') {
 		oMacros.obj_address = oObj.conf.address;
