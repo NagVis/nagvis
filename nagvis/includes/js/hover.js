@@ -43,7 +43,7 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	oMacros.obj_type = oObj.conf.type;
 	oMacros.last_status_refresh = date(oGeneralProperties.date_format, oObj.lastUpdate/1000);
 	
-	// FIXME: Bad place for language strings
+	// Replace language strings
 	oMacros.lang_obj_type = oObj.conf.lang_obj_type;
 	oMacros.lang_name = oObj.conf.lang_name;
 	oMacros.lang_child_name = oObj.conf.lang_child_name;
@@ -186,12 +186,17 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 							childsHtmlCode += replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 						}
 					} else {
-						// Add a "end-line"
+						// Create an end line which shows the number of hidden child items
 						var numHiddenMembers = oObj.conf.num_members - oObj.conf.hover_childs_limit;
-						//FIXME: Create end line
-						childsHtmlCode += '';//'{\'[obj_type]\': \'host\', \'[obj_name]\': \'\', \'[obj_summary_state]\': \'\', \'[obj_summary_output]\': \''.$numRemaining.' more items...\', \'<!--\\\sBEGIN\\\sservicegroup_child\\\s-->.+?<!--\\\sEND\\\sservicegroup_child\\\s-->\': \'\'}, ';
+						
+						var oMember = { 'conf': { 'type': 'host', 
+						                          'name': '', 
+						                          'summary_state': '', 
+						                          'summary_output': numHiddenMembers+' more items...', 
+						                          '<!--\sBEGIN\sservicegroup_child\s-->.+?<!--\sEND\sservicegroup_child\s-->': ''}};
+						
+						childsHtmlCode += replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 					}
-					
 				}
 				
 				sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
