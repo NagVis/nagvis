@@ -105,8 +105,8 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'language'))) {
  			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/.xml$/', $file)) {
-					$files[] = str_replace('wui_','',str_replace('.xml','',$file));
+				if(!preg_match('/^\./', $file)) {
+					$files[] = $file;
 				}				
 			}
 			

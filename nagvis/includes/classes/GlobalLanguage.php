@@ -28,6 +28,7 @@
 class GlobalLanguage {
 	var $MAINCFG;
 	var $textDomain;
+	var $sCurrentLanguage;
 	
 	/**
 	 * Class Constructor
@@ -40,25 +41,30 @@ class GlobalLanguage {
 		$this->MAINCFG = &$MAINCFG;
 		$this->textDomain = $textDomain;
 		
-		$sCurrentLanguage = $this->MAINCFG->getValue('global', 'language');
-		switch ($sCurrentLanguage) {
+		$this->sCurrentLanguage = $this->MAINCFG->getValue('global', 'language');
+		
+		// Fix old language entries (english => en_US, german => de_DE)
+		switch($this->sCurrentLanguage) {
 			case 'german':
-				$sCurrentLanguage = 'de_DE.UTF-8';
+				$this->sCurrentLanguage = 'de_DE';
 			break;
 			case 'english':
-				$sCurrentLanguage = 'en_US.UTF-8';
+				$this->sCurrentLanguage = 'en_US';
 			break;
 		}
+		
+		// Append encoding (UTF8)
+		$this->sCurrentLanguage .= '.UTF-8';
 		
 		// Check for gettext extension
 		$this->checkGettextSupport();
 		
 		// Set the language to use
-		putenv('LC_ALL='.$sCurrentLanguage);
-		setlocale(LC_ALL, $sCurrentLanguage);
-		
-		bindtextdomain($textDomain, $this->MAINCFG->getValue('paths', 'language'));
-		textdomain($textDomain);
+		putenv('LC_ALL='.$this->sCurrentLanguage);
+		setlocale(LC_ALL, $this->sCurrentLanguage);
+
+		bindtextdomain($this->textDomain, $this->MAINCFG->getValue('paths', 'language'));
+		textdomain($this->textDomain);
 	}
 	
 	/**
