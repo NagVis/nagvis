@@ -25,12 +25,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisTextbox.prototype = new NagVisStatelessObject;
-NagVisTextbox.prototype.constructor = NagVisTextbox;
+NagVisTextbox.Inherits(NagVisStatelessObject);
 function NagVisTextbox (oConf) {
-	this.setLastUpdate();
-	this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
-	this.conf = oConf;
+	// Call parent constructor
+	this.Inherits(NagVisStatelessObject, oConf);
 	
 	/**
 	 * PUBLIC parse()

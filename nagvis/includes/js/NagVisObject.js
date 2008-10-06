@@ -25,10 +25,25 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-function NagVisObject () {
+function NagVisObject (oConf) {
 	this.parsedObject;
 	this.hover_template_code;
+	this.conf;
 	
+	this.construct = function(oConf) {
+		// Initialize
+		this.setLastUpdate();
+		this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
+		this.conf = oConf;
+	}
+	
+	/**
+	 * PUBLIC setLastUpdate
+	 *
+	 * Sets the time of last status update of this object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	this.setLastUpdate = function() {
 		this.lastUpdate = Date.parse(new Date());
 	}
@@ -79,4 +94,7 @@ function NagVisObject () {
 	this.replaceHoverTemplateMacros = function (replaceChild, oObj, sTemplateCode) {
 		this.hover_template_code = replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode);
 	}
+	
+	// Call the constructor of the object
+	this.construct(oConf);
 }

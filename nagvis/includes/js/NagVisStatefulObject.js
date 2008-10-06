@@ -25,11 +25,16 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisStatefulObject.prototype = new NagVisObject;
-NagVisStatefulObject.prototype.constructor = NagVisStatefulObject;
-function NagVisStatefulObject () {
+NagVisStatefulObject.Inherits(NagVisObject);
+function NagVisStatefulObject (oConf) {
 	// Stores the informations from last refresh (Needed for change detection)
 	this.last_conf = new Object();
+	
+	// Initialize
+	//...
+	
+	// Call parent constructor
+	this.Inherits(NagVisObject, oConf);
 	
 	this.getMembers = function() {
 		this.members = new Array();

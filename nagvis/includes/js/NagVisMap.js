@@ -25,11 +25,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisMap.prototype = new NagVisStatefulObject;
-NagVisMap.prototype.constructor = NagVisMap;
+NagVisMap.Inherits(NagVisStatefulObject);
 function NagVisMap (oConf) {
-	this.setLastUpdate();
-	this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
-	this.conf = oConf;
+	// Call parent constructor
+	this.Inherits(NagVisStatefulObject, oConf);
+	
 	this.getMembers();
 }

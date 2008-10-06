@@ -26,11 +26,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisHostgroup.prototype = new NagVisStatefulObject;
-NagVisHostgroup.prototype.constructor = NagVisHostgroup;
+NagVisHostgroup.Inherits(NagVisStatefulObject);
 function NagVisHostgroup (oConf) {
-	this.setLastUpdate();
-	this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
-	this.conf = oConf;
+	// Call parent constructor
+	this.Inherits(NagVisStatefulObject, oConf);
+	
 	this.getMembers();
 }

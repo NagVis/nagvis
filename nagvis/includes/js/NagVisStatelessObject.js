@@ -26,7 +26,11 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisStatelessObject.prototype = new NagVisObject;
-NagVisStatelessObject.prototype.constructor = NagVisStatelessObject;
-function NagVisStatelessObject () {
+NagVisStatelessObject.Inherits(NagVisObject);
+function NagVisStatelessObject (oConf) {
+	// Initialize
+	//...
+	
+	// Call parent constructor
+	this.Inherits(NagVisObject, oConf);
 }

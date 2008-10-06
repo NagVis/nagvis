@@ -25,12 +25,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisShape.prototype = new NagVisStatelessObject;
-NagVisShape.prototype.constructor = NagVisShape;
+NagVisShape.Inherits(NagVisStatelessObject);
 function NagVisShape (oConf) {
-	this.setLastUpdate();
-	this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
-	this.conf = oConf;
+	// Call parent constructor
+	this.Inherits(NagVisStatelessObject, oConf);
 	
 	/**
 	 * PUBLIC parse()

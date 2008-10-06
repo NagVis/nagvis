@@ -21,15 +21,14 @@
  *
  *****************************************************************************/
  
-/**setLastUpdate
+/**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisHost.prototype = new NagVisStatefulObject;
-NagVisHost.prototype.constructor = NagVisHost;
+NagVisHost.Inherits(NagVisStatefulObject);
 function NagVisHost (oConf) {
-	this.setLastUpdate();
-	this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
-	this.conf = oConf;
+	// Call parent constructor
+	this.Inherits(NagVisStatefulObject, oConf);
+	
 	this.getMembers();
 }

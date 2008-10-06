@@ -25,10 +25,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisService.prototype = new NagVisStatefulObject;
-NagVisService.prototype.constructor = NagVisService;
+NagVisService.Inherits(NagVisStatefulObject);
 function NagVisService (oConf) {
-	this.setLastUpdate();
-	this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
-	this.conf = oConf;
+	// Call parent constructor
+	this.Inherits(NagVisStatefulObject, oConf);
 }

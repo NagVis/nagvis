@@ -29,7 +29,7 @@
 /**
  * Definition of needed variables
  */
-var oHoverTemplates = Object();
+var oHoverTemplates = new Object();
 
 /**
  * runWorker()
@@ -286,8 +286,10 @@ function setMapHoverTemplates() {
 	}
 	
 	// Build string for bulk fetching the templates
-	for(i in oHoverTemplates) {
-		aUrlParts.push('&name[]='+i);
+	for(var i in oHoverTemplates) {
+		if(i != 'Inherits') {
+			aUrlParts.push('&name[]='+i);
+		}
 	}
 	
 	// Get the needed templates via bulk request
