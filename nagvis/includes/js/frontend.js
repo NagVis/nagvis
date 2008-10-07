@@ -447,7 +447,7 @@ function updateMapObjects(aMapObjectInformations) {
 			 * event_log=1/0 -> already implemented
 			 * event_log_level=1/0 -> already implemented
 			 * event_highlight=1/0
-			 * event_scrollto=1/0
+			 * event_scroll=1/0
 			 * event_sound=1/0
 			 */
 			
@@ -459,8 +459,10 @@ function updateMapObjects(aMapObjectInformations) {
 			}
 			
 			// - Scroll to object
-			//window.scrollTo(oObj.conf.x, oObj.conf.y);
-			//FIXME: scrollSlow(oObj.conf.x, oObj.conf.y, 50);
+			if(oMapProperties.event_scroll) {
+				//window.scrollTo(oObj.conf.x, oObj.conf.y);
+				// FIXME: scrollSlow(oObj.conf.x, oObj.conf.y, 50);
+			}
 			
 			// - Eventlog
 			if(oObj.conf.type == 'service') {

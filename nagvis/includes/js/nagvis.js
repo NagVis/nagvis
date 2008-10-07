@@ -427,9 +427,45 @@ function date(format, timestamp) {
 		});
 }
 
-function scrollSlow(iTargetX, iTargetY, iSpeed) {
+function pageWidth() {
+	var w;
+	
+	if(window.innerWidth != null) { 
+		w = window.innerWidth;
+	} else if(document.documentElement && document.documentElement.clientWidth) {
+		w = document.documentElement.clientWidth;
+	} else if(document.body != null) {
+		w = document.body.clientWidth;
+	} else {
+		w = null;
+	}
+	
+	return w;
+}
+
+function pageHeight() {
+	var h;
+	
+	if(window.innerHeight != null) { 
+		h = window.innerHeight;
+	} else if(document.documentElement && document.documentElement.clientHeight) {
+		h = document.documentElement.clientHeight;
+	} else if(document.body != null) {
+		h = document.body.clientHeight;
+	} else {
+		h = null;
+	}
+	
+	return h;
+}
+
+/*function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	var currentScrollTop;
 	var currentScrollLeft;
+	var scrollTop;
+	var scrollLeft;
+	var iWidth;
+	var iHeight;
 	
 	var iStep = 2;
 	
@@ -449,10 +485,20 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 		currentScrollLeft = document.body.scrollLeft;
 	}
 	
+	// Get measure of the screen
+	iWidth = pageWidth();
+	iHeight = pageHeight();
+	
 	// FIXME: Check if the difference is smaller than iStep. When it is, lower iStep
 	// to make the right step size
+	eventlog("scroll", "info", "Width: "+iWidth+" Height:"+iHeight);
+	eventlog("scroll", "info", "ToX: "+iTargetX+" ToY:"+iTargetY);
 	
-	if(currentScrollTop > iTargetY) {
+		
+	if(iHeight >= iTargetY) {
+		// Target is in current view
+		scrollTop = 0;
+	} else if(currentScrollTop > iTargetY) {
 		scrollTop = -iStep;
 	} else if(currentScrollTop < iTargetY) {
 		scrollTop = iStep;
@@ -460,14 +506,16 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 		scrollTop = 0;
 	}
 	
-	if(currentScrollLeft > iTargetX) {
+	if(iWidth >= iTargetX) {
+		// Target is in current view
+		scrollLeft = 0;
+	} else if(currentScrollLeft > iTargetX) {
 		scrollLeft = -iStep;
 	} else if(currentScrollLeft < iTargetX) {
 		scrollLeft = iStep;
 	} else {
 		scrollLeft = 0;
 	}
-	
 	
 	eventlog("scroll", "info", currentScrollLeft+" to "+iTargetX+" = "+scrollLeft+", "+currentScrollTop+" to "+iTargetY+" = "+scrollTop);
 	
@@ -476,6 +524,27 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 		
 		setTimeout('scrollSlow('+iTargetX+', '+iTargetY+', '+iSpeed+')', iSpeed);
 	} else {
-		alert('No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
+		eventlog("scroll", "info", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
 	}
 }
+
+function goD(d) {
+	//check if div position is above or below the body srollTop
+	if(document.getElementById(d).offsetTop<document.body.scrollTop){
+		window.scrollBy(0,-sy);
+		if(document.getElementById(d).offsetTop>=document.body.scrollTop){
+			document.body.scrollTop=document.getElementById(d).offsetTop;
+			clearTimeout(w);
+		} else{
+			var w=setTimeout('goD(\''+d+'\')',speed);
+		}
+	} else {
+		window.scrollBy(0,sy);
+		if(document.getElementById(d).offsetTop<=document.body.scrollTop){
+			document.body.scrollTop=document.getElementById(d).offsetTop;
+			clearTimeout(w);
+		} else {
+			var w=setTimeout('goD(\''+d+'\')',speed);
+		}
+	}
+}*/
