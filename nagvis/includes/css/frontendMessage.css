@@ -104,7 +104,7 @@ body, table, th, td {
 }
 
 #messageBoxDiv th.ok, #messageBoxDiv th.up {
-	background-color: 99FF66;
+	background-color: #99FF66;
 }
 
 #messageBoxDiv th.note {
