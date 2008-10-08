@@ -446,22 +446,23 @@ function updateMapObjects(aMapObjectInformations) {
 			 *
 			 * event_log=1/0 -> already implemented
 			 * event_log_level=1/0 -> already implemented
-			 * event_highlight=1/0
-			 * event_scroll=1/0
-			 * event_sound=1/0
+			 * event_highlight=1/0 -> already implemented
+			 * event_scroll=1/0 -> already implemented
+			 * event_sound=1/0 -> FIXME
 			 */
 			
 			// - Highlight (Flashing)
-			if(oObj.conf.line_type) {
-				//FIXME: Atm only flash icons, not lines
-			} else {
-				flashIcon(intIndex, 10);
+			if(oMapProperties.event_highlight) {
+				if(oObj.conf.line_type) {
+					// FIXME: Atm only flash icons, not lines
+				} else {
+					flashIcon(intIndex, 10);
+				}
 			}
 			
 			// - Scroll to object
 			if(oMapProperties.event_scroll) {
-				//window.scrollTo(oObj.conf.x, oObj.conf.y);
-				// FIXME: scrollSlow(oObj.conf.x, oObj.conf.y, 50);
+				scrollSlow(oObj.conf.x, oObj.conf.y, 15);
 			}
 			
 			// - Eventlog
@@ -472,7 +473,9 @@ function updateMapObjects(aMapObjectInformations) {
 			}
 			
 			// - Sound
-			playSound(intIndex, 1);
+			if(oMapProperties.event_sound) {
+				playSound(intIndex, 1);
+			}
 		}
 		
 	}
@@ -488,6 +491,8 @@ function updateMapObjects(aMapObjectInformations) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function playSound(intIndex, iNumTimes){
+	var sSound;
+	
 	var id = aMapObjects[intIndex].parsedObject.id
 	
 	var oObjIcon = document.getElementById(id+'-icon');

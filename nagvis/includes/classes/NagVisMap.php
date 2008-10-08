@@ -108,9 +108,11 @@ class NagVisMap extends GlobalMap {
 		$arr['background_image'] = $this->getBackgroundJson();
 		$arr['favicon_image'] = $this->getFavicon();
 		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');
+		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
 		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
 		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
 		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
+		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');
 		
 		return json_encode($arr);
 	}

@@ -459,9 +459,15 @@ function pageHeight() {
 	return h;
 }
 
-/*function scrollSlow(iTargetX, iTargetY, iSpeed) {
+/**
+ * Scrolls the screen to the defined coordinates
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	var currentScrollTop;
 	var currentScrollLeft;
+	var iMapOffsetTop;
 	var scrollTop;
 	var scrollLeft;
 	var iWidth;
@@ -485,66 +491,48 @@ function pageHeight() {
 		currentScrollLeft = document.body.scrollLeft;
 	}
 	
-	// Get measure of the screen
-	iWidth = pageWidth();
-	iHeight = pageHeight();
-	
-	// FIXME: Check if the difference is smaller than iStep. When it is, lower iStep
-	// to make the right step size
-	eventlog("scroll", "info", "Width: "+iWidth+" Height:"+iHeight);
-	eventlog("scroll", "info", "ToX: "+iTargetX+" ToY:"+iTargetY);
-	
-		
-	if(iHeight >= iTargetY) {
-		// Target is in current view
-		scrollTop = 0;
-	} else if(currentScrollTop > iTargetY) {
-		scrollTop = -iStep;
-	} else if(currentScrollTop < iTargetY) {
-		scrollTop = iStep;
+	// Get offset of the map div
+	if(document.getElementById('map') && document.getElementById('map').offsetTop) {
+		iMapOffsetTop = document.getElementById('map').offsetTop;
 	} else {
-		scrollTop = 0;
+		iMapOffsetTop = 0;
 	}
 	
-	if(iWidth >= iTargetX) {
+	// Get measure of the screen
+	iWidth = pageWidth();
+	iHeight = pageHeight() - iMapOffsetTop;
+		
+	if(iTargetY <= (currentScrollTop+iHeight)  && iTargetY >= currentScrollTop) {
+		// Target is in current view
+		scrollTop = 0;
+	} else if(iTargetY < currentScrollTop) {
+		// Target is above current view
+		scrollTop = -iStep;
+	} else if(iTargetY > currentScrollTop) {
+		// Target is below current view
+		scrollTop = iStep;
+	}
+	
+	if(iTargetX <= (currentScrollLeft+iWidth) && iTargetX >= currentScrollLeft) {
 		// Target is in current view
 		scrollLeft = 0;
-	} else if(currentScrollLeft > iTargetX) {
+	} else if(iTargetX < currentScrollLeft) {
+		// Target is left from current view
 		scrollLeft = -iStep;
-	} else if(currentScrollLeft < iTargetX) {
+	} else if(iTargetX > currentScrollLeft) {
+		// Target is right from current view
 		scrollLeft = iStep;
 	} else {
 		scrollLeft = 0;
 	}
 	
-	eventlog("scroll", "info", currentScrollLeft+" to "+iTargetX+" = "+scrollLeft+", "+currentScrollTop+" to "+iTargetY+" = "+scrollTop);
+	eventlog("scroll", "debug", currentScrollLeft+" to "+iTargetX+" = "+scrollLeft+", "+currentScrollTop+" to "+iTargetY+" = "+scrollTop);
 	
 	if(scrollTop != 0 || scrollLeft != 0) {
 		window.scrollBy(scrollLeft, scrollTop);
 		
 		setTimeout('scrollSlow('+iTargetX+', '+iTargetY+', '+iSpeed+')', iSpeed);
 	} else {
-		eventlog("scroll", "info", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
+		eventlog("scroll", "debug", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
 	}
 }
-
-function goD(d) {
-	//check if div position is above or below the body srollTop
-	if(document.getElementById(d).offsetTop<document.body.scrollTop){
-		window.scrollBy(0,-sy);
-		if(document.getElementById(d).offsetTop>=document.body.scrollTop){
-			document.body.scrollTop=document.getElementById(d).offsetTop;
-			clearTimeout(w);
-		} else{
-			var w=setTimeout('goD(\''+d+'\')',speed);
-		}
-	} else {
-		window.scrollBy(0,sy);
-		if(document.getElementById(d).offsetTop<=document.body.scrollTop){
-			document.body.scrollTop=document.getElementById(d).offsetTop;
-			clearTimeout(w);
-		} else {
-			var w=setTimeout('goD(\''+d+'\')',speed);
-		}
-	}
-}*/
