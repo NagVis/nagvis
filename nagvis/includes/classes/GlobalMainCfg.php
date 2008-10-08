@@ -258,6 +258,10 @@ class GlobalMainCfg {
 				'htmlvar' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '/nagios/nagvis/var/',
+					'match' => MATCH_STRING_PATH),
+				'htmlsound' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '/nagios/nagvis/nagvis/sounds/',
 					'match' => MATCH_STRING_PATH)),
 			'backend' => Array(
 				'backendtype' => Array('must' => 1,
@@ -449,6 +453,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/nagvis/images/shapes/';
 		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/nagvis/images/maps/';
 		$this->validConfig['paths']['htmlvar']['default'] = $htmlBase.'/var/';
+		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/nagvis/sounds/';
 	}
 	
 	/**
@@ -972,6 +977,7 @@ class GlobalMainCfg {
 		$arr = Array();
 		
 		$arr['date_format'] = $this->getValue('global', 'dateformat');
+		$arr['path_htmlsounds'] = $this->getValue('paths','htmlsounds');
 		
 		return json_encode($arr);
 	}

@@ -438,17 +438,16 @@ function updateMapObjects(aMapObjectInformations) {
 			// Reparse object to map
 			oObj.parse();
 			
+			// Reset the favicon
+			// Reset the page title
+			
 			/**
 			 * Additional eventhandling
 			 *
-			 * Make the event-handling configurable
-			 * This should be configured in map globals section
-			 *
-			 * event_log=1/0 -> already implemented
-			 * event_log_level=1/0 -> already implemented
-			 * event_highlight=1/0 -> already implemented
-			 * event_scroll=1/0 -> already implemented
-			 * event_sound=1/0 -> FIXME
+			 * event_log=1/0
+			 * event_highlight=1/0
+			 * event_scroll=1/0
+			 * event_sound=1/0
 			 */
 			
 			// - Highlight (Flashing)
@@ -484,31 +483,56 @@ function updateMapObjects(aMapObjectInformations) {
 /**
  * playSound()
  *
- * Play a sound
+ * Play a sound for an object state
  *
  * @param   Integer  Index in aMapObjects
  * @param   Integer  Iterator for number of left runs
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function playSound(intIndex, iNumTimes){
-	var sSound;
+	var sSound = '';
 	
 	var id = aMapObjects[intIndex].parsedObject.id
 	
 	var oObjIcon = document.getElementById(id+'-icon');
 	var oObjIconDiv = document.getElementById(id+'-icondiv');
 	
-	var sSound = oStates[aMapObjects[intIndex].conf.summary_state].sound;
+	var sState = aMapObjects[intIndex].conf.summary_state;
 	
-	// Check if there is a sound defined for the current state
-	if(sSound != '') {
-		//FIXME: Play sound
+	if(oStates[sState]
+	     && oStates[sState].sound
+	     && oStates[sState].sound != '') {
+		sSound = oStates[sState].sound;
 	}
 	
-	iNumTimes = iNumTimes - 1;
+	eventlog("state-change", "debug", "Sound to play: "+sSound);
 	
-	if(iNumTimes > 0) {
-		setTimeout("playSound("+intIndex+", "+iNumTimes+");", 500);
+	if(sSound != '') {
+		// Remove old sound when present
+		if(document.getElementById('sound'+sState)) {
+			document.body.removeChild(document.getElementById('sound'+sState));
+		}
+		
+		// Load sound
+		var oEmbed = document.createElement('embed');
+		oEmbed.setAttribute('id', 'sound'+sState);
+		// Relative URL does not work, add full url
+		oEmbed.setAttribute('src', window.location.protocol + '//' + window.location.host + ':' + window.location.port + oGeneralProperties.path_htmlsounds+sSound);
+		oEmbed.setAttribute('width', '0');
+		oEmbed.setAttribute('height', '0');
+		oEmbed.setAttribute('hidden', 'true');
+		oEmbed.setAttribute('loop', 'false');
+		oEmbed.setAttribute('autostart', 'true');
+		oEmbed.setAttribute('enablejavascript', 'true');
+		
+		// Add object to body => the sound is played
+		oEmbed = document.body.appendChild(oEmbed);
+		
+		iNumTimes = iNumTimes - 1;
+		
+		if(iNumTimes > 0) {
+			setTimeout("playSound("+intIndex+", "+iNumTimes+");", 500);
+		}
 	}
 }
 

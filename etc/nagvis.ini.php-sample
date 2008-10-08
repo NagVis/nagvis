@@ -44,6 +44,8 @@
 ; Enable/Disable scrolling to the icon which changed the state when the icon is
 ; out of the visible scope
 ;eventscroll=1
+; Enable/Disable sound signals on state changes
+;eventsound=1
 ; enable/disable header menu
 ;headermenu="1"
 ; header template
