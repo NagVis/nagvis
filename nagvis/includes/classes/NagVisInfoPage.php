@@ -74,6 +74,7 @@ class NagVisInfoPage {
 		$infoPage .= '            <tr><td>SCRIPT_NAME</td><td>'.$_SERVER['SCRIPT_NAME'].'</td></tr>'."\n";
 		$infoPage .= '            <tr><td>REQUEST_TIME</td><td>'.$_SERVER['REQUEST_TIME'].' (gmdate(): '.gmdate('r',$_SERVER['REQUEST_TIME']).')</td></tr>'."\n";
 		$infoPage .= '            <t><th colspan="2">PHP Informations</th></tr>'."\n";
+		$infoPage .= '            <tr><td>error_reporting</td><td>'.ini_get('error_reporting').'</td></tr>'."\n";
 		$infoPage .= '            <tr><td>safe_mode</td><td>'.(ini_get('safe_mode')?"yes":"no").'</td></tr>'."\n";
 		$infoPage .= '            <tr><td>max_execution_time</td><td>'.ini_get('max_execution_time').' seconds</td></tr>'."\n";
 		$infoPage .= '            <tr><td>memory_limit</td><td>'.ini_get('memory_limit').'</td></tr>'."\n";
