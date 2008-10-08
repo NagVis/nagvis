@@ -85,8 +85,14 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->fetchedChildObjects = 0;
 		$this->childObjects = Array();
 		$this->members = Array();
+		
 		$this->state = '';
 		$this->problem_has_been_acknowledged = 0;
+		$this->in_downtime = 0;
+		
+		$this->summary_state = '';
+		$this->summary_problem_has_been_acknowledged = 0;
+		$this->summary_in_downtime = 0;
 		
 		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
 	}
