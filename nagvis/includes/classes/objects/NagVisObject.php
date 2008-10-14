@@ -245,7 +245,24 @@ class NagVisObject {
 			// Little hack: Overwrite the options with correct state informations
 			$arr = array_merge($arr, $this->getObjectStateInformations(false));
 		}
-		
+    
+    // On childs only return the following options to lower the bandwidth,
+    // memory and cpu usage. If someone wants more informations in hover menu
+    // childs, this is the place to change
+    if(!$bFetchChilds) {
+      $aChild = Array('type' => $arr['type'],
+                      'name' => $arr['name'],
+                      'summary_state' => $arr['summary_state'],
+                      'summary_in_downtime' => $arr['summary_in_downtime'],
+                      'summary_problem_has_been_acknowledged' => $arr['summary_problem_has_been_acknowledged'],
+                      'summary_output' => $arr['summary_output']);
+      if($this->type == 'service') {
+        $aChild['service_description'] = $arr['service_description'];
+      }
+      
+      $arr = $aChild;
+    }
+    
 		// Only do this for parents
 		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
 			$arr['members'] = Array();
