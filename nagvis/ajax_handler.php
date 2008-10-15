@@ -211,7 +211,7 @@ switch($_GET['action']) {
 			$numObjects = count($arrNames);
 			for($i = 0; $i < $numObjects; $i++) {
 				$OBJ = new GlobalHoverMenu($CORE, $arrNames[$i]);
-				$arrReturn[] = Array('name' => $arrNames[$i], 'code' => str_replace("\r\n","",str_replace("\n","",(string)$OBJ)));
+				$arrReturn[] = Array('name' => $arrNames[$i], 'code' => str_replace("\r\n","",str_replace("\n","", $OBJ->__toString())));
 			}
 			
 			echo json_encode($arrReturn);

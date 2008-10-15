@@ -106,7 +106,7 @@ class NagVisFrontend extends GlobalPage {
 		if($headerMenuEnabled) {
 			// Parse the header menu
 			$HEADER = new GlobalHeaderMenu($this->CORE, $headerTemplateName, $this->MAPCFG);
-			$this->addBodyLines($HEADER);
+			$this->addBodyLines($HEADER->__toString());
 		}
 	}
 	

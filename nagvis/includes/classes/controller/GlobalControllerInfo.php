@@ -39,7 +39,8 @@ class GlobalControllerInfo {
 
 		// Build the page
 		$FRONTEND->getHeaderMenu($CORE->MAINCFG->getValue('index','headermenu'), $CORE->MAINCFG->getValue('index', 'headertemplate'));
-		$FRONTEND->addBodyLines(new NagVisInfoPage($CORE));
+    $OBJ = new NagVisInfoPage($CORE);
+		$FRONTEND->addBodyLines($OBJ->__toString());
 		$FRONTEND->getMessages();
 
 		// Print the page

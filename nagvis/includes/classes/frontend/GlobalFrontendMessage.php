@@ -45,7 +45,7 @@ class GlobalFrontendMessage {
 		}
 		
 		// New method
-		print new GlobalFrontendMessageBox($type, $message, $pathHtmlBase, $title);
+		print(new GlobalFrontendMessageBox($type, $message, $pathHtmlBase, $title));
 		
 		if($type == 'ERROR') {
 			exit(1);
