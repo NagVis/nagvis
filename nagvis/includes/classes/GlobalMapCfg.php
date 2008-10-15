@@ -596,6 +596,7 @@ class GlobalMapCfg {
 			'hover_timeout',
 			'hover_delay',
 			'hover_url',
+			'label_show',
 			'label_x',
 			'label_y',
 			'label_width',
