@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-14 17:18+0100\n"
-"PO-Revision-Date: 2008-10-05 11:58+0100\n"
-"Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
+"PO-Revision-Date: 2008-10-15 21:51+0100\n"
+"Last-Translator: Wolfgang <wnd@gmx.net>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -110,7 +110,7 @@ msgstr "Support Forum"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:90
 msgid "supportInfo"
-msgstr "NagVis Support Informations"
+msgstr "NagVis Support Information"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:91
 #: nagvis/includes/classes/GlobalHoverMenu.php:120
@@ -169,7 +169,7 @@ msgstr "The var folder &quot;[PATH]&quot; does not exist."
 
 #: nagvis/includes/classes/GlobalCore.php:360
 msgid "varFolderNotWriteable"
-msgstr "The var folder &quot;[PATH]&quot; ist not writeable."
+msgstr "The var folder &quot;[PATH]&quot; is not writeable."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:585
 msgid "mainMustValueNotSet"
@@ -198,11 +198,11 @@ msgstr "The main configuration file &quot;[MAINCFG]&quot; does not exists."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:693
 msgid "mainCfgNotReadable"
-msgstr "Please check the webservers permissions at the main configuration file &quot;[MAINCFG]&quot;."
+msgstr "Please check the webservers permissions for the main configuration file &quot;[MAINCFG]&quot;."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:715
 msgid "mapCfgDirNotReadable"
-msgstr "Please check the webservers permissions at the map configuration folder &quot;[MAPPATH]&quot;."
+msgstr "Please check the webservers permissions for the map configuration folder &quot;[MAPPATH]&quot;."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:734
 msgid "mainCfgCacheNotExists"
@@ -251,15 +251,15 @@ msgstr "NDO reports that Nagios is not running"
 
 #: nagvis/includes/classes/GlobalBackend-ndomy.php:96
 msgid "nagiosDataNotUpToDate"
-msgstr "NDO claims that Nagios did no status Update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and ndo2db are running."
+msgstr "NDO claims that Nagios did no status update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and ndo2db are running."
 
 #: nagvis/includes/classes/GlobalBackend-ndomy.php:136
 msgid "noTablesExists"
-msgstr "There are no tables in database matching given prefix &quot;[PREFIX]&quot;"
+msgstr "There are no tables in the database matching given prefix &quot;[PREFIX]&quot;"
 
 #: nagvis/includes/classes/GlobalBackend-ndomy.php:164
 msgid "errorSelectingDb"
-msgstr "Error selecting the database. Maybe wrong database name  or insufficient permissions. MySQL-Error: [MYSQLERR]."
+msgstr "Error selecting the database. Maybe wrong database name or insufficient permissions. MySQL-Error: [MYSQLERR]."
 
 #: nagvis/includes/classes/GlobalBackend-ndomy.php:187
 msgid "mysqlNotSupported"
@@ -301,7 +301,7 @@ msgstr "Map Index"
 #: nagvis/includes/classes/GlobalIndexPage.php:183
 #: nagvis/includes/classes/objects/NagVisMapObj.php:452
 msgid "mapInMaintenance"
-msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is automatically reloaded."
+msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is reloaded automatically."
 
 #: nagvis/includes/classes/GlobalIndexPage.php:251
 #: nagvis/includes/classes/GlobalIndexPage.php:318
@@ -372,7 +372,7 @@ msgstr "Service Name"
 
 #: nagvis/includes/classes/GlobalHoverMenu.php:193
 msgid "hoverTemplateNotReadable"
-msgstr "The hover template is not readable. Please check the webservers permissions at the hover template file &quot;[FILE]&quot;."
+msgstr "The hover template is not readable. Please check the webservers permissions for the hover template file &quot;[FILE]&quot;."
 
 #: nagvis/includes/classes/GlobalHoverMenu.php:214
 msgid "hoverTemplateNotExists"
@@ -472,11 +472,11 @@ msgstr "Parameter [VAR] is not a valid boolean (TRUE / FALSE)."
 
 #: nagvis/includes/classes/validator/GlobalValidatorAbstract.php:80
 msgid "validatorNotSetParameterValue"
-msgstr "Parameter [VAR] is not set with a value."
+msgstr "Parameter [VAR] is not set."
 
 #: nagvis/includes/classes/validator/GlobalValidatorAbstract.php:96
 msgid "validatorIsEmptyParameter"
-msgstr "Parameter [VAR] is empty. Set this parameter with a value."
+msgstr "Parameter [VAR] is empty. Fill this parameter with a (valid) value."
 
 #: nagvis/includes/classes/validator/GlobalValidator.php:291
 msgid "validatorNotDefinedParameter"
@@ -488,7 +488,7 @@ msgstr "Parameter [VAR] contains not a valid string."
 
 #: nagvis/includes/classes/validator/GlobalValidatorString.php:130
 msgid "ValidatorNotAllowedParameterEntry"
-msgstr "Parameter [VAR] is not a allowed entry."
+msgstr "Parameter [VAR] is not an allowed entry."
 
 #: nagvis/includes/classes/objects/NagiosHost.php:402
 msgid "hostStateIs"
@@ -869,7 +869,7 @@ msgstr "The main configuration file cache is not writeable."
 
 #: wui/includes/classes/WuiMainCfg.php:214
 msgid "mapCfgDirNotWriteable"
-msgstr "Please check the webservers permissions at the map configuration folder &quot;[MAPPATH]&quot;."
+msgstr "Please check the webservers permissions for the map configuration folder &quot;[MAPPATH]&quot;."
 
 #: wui/includes/classes/WuiAddModify.php:172
 #: wui/includes/classes/WuiEditMainCfg.php:144
@@ -891,12 +891,12 @@ msgstr "The selected line_type is invalid."
 
 #: wui/includes/classes/WuiAddModify.php:249
 msgid "onlyLineOrIcon"
-msgstr "An object can be only an icon or a line, \"iconset\" and \"line_type\" can be used not together."
+msgstr "An object can only be an icon or a line, \"iconset\" and \"line_type\" can be used not together."
 
 #: wui/includes/classes/WuiAddModify.php:250
 #: wui/includes/classes/WuiAddModify.php:251
 msgid "not2coords"
-msgstr "It seems that you want to define a line (\"line_type\" is set) but there are no two \"[COORD]\" coordinates indicated."
+msgstr "It seems that you want to define a line (\"line_type\" is set) but you didn&quot;t give two \"[COORD]\" coordinates."
 
 #: wui/includes/classes/WuiAddModify.php:252
 #: wui/includes/classes/WuiAddModify.php:253
@@ -1027,7 +1027,7 @@ msgstr "No map found. Operation terminated."
 
 #: wui/includes/classes/WuiMapManagement.php:237
 msgid "noNewNameGiven"
-msgstr "You indicated no new names."
+msgstr "You specified no new names."
 
 #: wui/includes/classes/WuiMapManagement.php:238
 msgid "mapAlreadyExists"
