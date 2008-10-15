@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.3"
+INSTALLER_VERSION="0.1.4"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -255,9 +255,9 @@ check_php_version() {
 	else
 		PHP_VER=`$PKG -qa "php[0-9]" | sed "s/php[0-9]\-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
+	PHP=`which php`
 	if [ -z "$PHP_VER" ]; then
-		PHP=`which php`
-		if [ -s "$PHP" ]; then
+		if [ -s "$PHP" -a -x "$PHP" ]; then
 			PHP_VER=`$PHP -v | head -1 | sed -e "s/PHP \([0-9\]\+\.[0-9\]\+\).*/\1/"`
 		fi
 	fi
@@ -278,10 +278,26 @@ check_php_modules() {
 			MOD_VER=`$PKG -qa "php[0-9]?-$MOD" | sed "s/php[0-9]?\-$MOD-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 		fi
 
-		TMP=`find /etc/ -type f -name "php?" -exec grep -ie "$MOD" {} \; | cut -d"=" -f2`
-		if [ -z $TMP ]; then
+		# maybe compiled in module
+		if [ -s "$PHP" -a -x "$PHP" ]; then
+			TMP=`$PHP -m | grep -i "^$MOD$"`
+			[ -z "$MOD_VER" -a -n "$TMP" ]&&MOD_VER="compiled_in"
+		fi
+		
+		if [ -z "$TMP" ]; then
+			TMP=`find /etc/ -type f -name "php?" -exec grep -ie "$MOD" {} \; | cut -d"=" -f2`
+		fi
+		
+		# RedHat: /etc/php.d/...
+		if [ -z "$TMP" -a -d /etc/php.d/ ]; then
 			TMP=`grep -ie "$MOD" /etc/php.d/* | cut -d"=" -f2`
 		fi
+		
+		# Ubuntu: /etc/php5/conf.d
+		if [ -z "$TMP" -a -d /etc/php5/conf.d ]; then
+			TMP=`grep -ie "extension=$MOD" /etc/php5/conf.d/* | sed 's/.*=//;s/\.so*//'`
+		fi
+		
 		log "  Module: $MOD $MOD_VER" $TMP
 
 		if [ -n $MOD_VER ]; then
@@ -431,6 +447,8 @@ NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
 
 # Check NDO
 NDO=`$NAGIOS_PATH/bin/ndo2db-${NAGVER}x --version | grep -i "^NDO2DB" 2>/dev/null`
+# maybe somebody removed version information
+[ -z "$NDO" ]&&NDO=`$NAGIOS_PATH/bin/ndo2db --version | grep -i "^NDO2DB" 2>/dev/null`
 log "$NDO" $NDO
 
 # Check PHP Version
