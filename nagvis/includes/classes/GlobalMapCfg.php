@@ -60,6 +60,7 @@ class GlobalMapCfg {
 					'match' => MATCH_STRING),
 				'usegdlibs' => Array('must' => 0,
 					'default' => $this->CORE->MAINCFG->getValue('defaults', 'usegdlibs'),
+          'deprecated' => 1,
 					'match' => MATCH_BOOLEAN),
 				'show_in_lists' => Array('must' => 0,
 					'default' => $this->CORE->MAINCFG->getValue('defaults', 'showinlists'),

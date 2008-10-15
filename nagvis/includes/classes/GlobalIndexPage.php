@@ -214,7 +214,7 @@ class GlobalIndexPage {
 					$ret .= '<td '.$class.' style="width:200px;height:200px;" '.$MAP->MAPOBJ->getHoverMenu().' onClick="'.$onClick.'">';
 					$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
 					$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
-					if($MAPCFG->getValue('global', 0,'usegdlibs') == '1' && $MAP->checkGd(1)) {
+					if($this->CORE->checkGd(0)) {
 						$ret .= '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
 					} else {
 						$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';

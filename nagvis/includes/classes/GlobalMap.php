@@ -44,28 +44,6 @@ class GlobalMap {
 	}
 	
 	/**
-	 * Check if GD-Libs installed, when GD-Libs are enabled
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkGd($printErr) {
-		if($this->MAPCFG->getValue('global', 0, 'usegdlibs') == '1') {
-			if(!extension_loaded('gd')) {
-				if($printErr) {
-					new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('gdLibNotFound'));
-				}
-				return FALSE;
-			} else {
-				return TRUE;
-			}
-		} else {
-			return TRUE;
-		}
-	}
-	
-	/**
 	 * Gets the background html code of the map
 	 *
 	 * @param	String	$src	html path

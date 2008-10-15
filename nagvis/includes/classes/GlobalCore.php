@@ -58,6 +58,24 @@ class GlobalCore {
 	
 	/* Here are some methods defined which get used all over NagVis and have
 	 * no other special place where they could be located */
+  
+	/**
+	 * Check if GD-Libs installed, when GD-Libs are enabled
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkGd($printErr) {
+    if(!extension_loaded('gd')) {
+      if($printErr) {
+        new GlobalFrontendMessage('WARNING', $this->LANG->getText('gdLibNotFound'));
+      }
+      return FALSE;
+    } else {
+      return TRUE;
+    }
+	}
 	
 	/**
 	 * Reads all defined Backend-ids from the main configuration

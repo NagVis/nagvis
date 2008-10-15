@@ -152,9 +152,10 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '_self',
 					'match' => MATCH_STRING_NO_SPACE),
-				'usegdlibs' => Array('must' => 1,
+				'usegdlibs' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '1',
+          'deprecated' => 1,
 					'match' => MATCH_BOOLEAN)),
 			'wui' => Array(
 				'allowedforconfig' => Array(

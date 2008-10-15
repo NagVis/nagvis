@@ -399,7 +399,7 @@ class NagVisAutoMap extends GlobalMap {
 		}
 		
 		// The GD-Libs are used by graphviz
-		$this->checkGd($printErr);
+		$this->CORE->checkGd($printErr);
 		
 		$this->CORE->checkVarFolderWriteable($printErr);
 		
