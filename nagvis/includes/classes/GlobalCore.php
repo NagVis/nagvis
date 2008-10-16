@@ -224,7 +224,7 @@ class GlobalCore {
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'shape'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file, $arrRet)) {
-					$files[] = $arrRet[1];
+					$files[] = $arrRet[0];
 				}				
 			}
 			
