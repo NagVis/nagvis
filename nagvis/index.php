@@ -38,15 +38,6 @@ define('CONST_AJAX' , FALSE);
 $controller = new GlobalController();
 
 if (!$controller->isValid()) {
-	// FIXME: No GlobalCore object here - that's a problem!
 	new GlobalFrontendMessage('ERROR', $controller->getMessage());
 }
-
-// ONLY FOR DEBUGGING
-//-----------------------------------------------------------------------------------------------
-print "Status        : <b>".(($controller->isValid()) ? 'TRUE' : 'FALSE')."</b><br />";
-print "Action        : ".$controller->getAction()."<br />";
-print "Parametername : ".$controller->getParameterName()."<br />";
-print "Message       : ".$controller->getMessage();
-//-----------------------------------------------------------------------------------------------
 ?>

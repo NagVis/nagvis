@@ -83,7 +83,7 @@ function runWorker(iCount, sType) {
 		 */
 		
 		// Countdown the rotation counter
-		// FIXME: Not handled by ajax frontend. Reload the page with the new url
+		// Not handled by ajax frontend. Reload the page with the new url
 		// If it returns true this means that the page is being changed: Stop the
 		// worker.
 		if(rotationCountdown() === true) {

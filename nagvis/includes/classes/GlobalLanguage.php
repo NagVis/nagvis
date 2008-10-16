@@ -119,7 +119,6 @@ class GlobalLanguage {
 		// filter type, messages/labels
 		if($sLocalized != '') {
 			// Replace [i],[b] and their ending tags with HTML code
-			// FIXME
 			$sLocalized = preg_replace('/\[(\/|)(i|b|br)\]/i',"<$1$2>", $sLocalized);
 			
 			return $sLocalized;
