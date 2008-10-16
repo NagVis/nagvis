@@ -61,9 +61,7 @@ function NagVisObject (oConf) {
 		if(this.conf.hover_menu && this.conf.hover_menu == '1') {
 			// Parse the configured URL or get the hover menu
 			if(this.conf.hover_url && this.conf.hover_url != '') {
-				//FIXME: Just noticed that cross domain ajax requests are not possible. TODO: Revert to fetching url contents via PHP.
-				this.hover_template_code = getHttpRequest(this.conf.hover_url, true);
-				this.hover_template_code = this.hover_template_code.replace(/\r\n/g,'').replace(/\n/g,'').replace(/\t/g,'').replace(/\'/g,'\\\'').replace(/\"/g,'\\\'');
+				this.getHoverUrlCode();
 			} else {
 				this.getHoverTemplateCode();
 			}
@@ -79,7 +77,20 @@ function NagVisObject (oConf) {
 	}
 	
 	/**
-	 * getHoverMenu()
+	 * getHoverUrlCode()
+	 *
+	 * Get the hover code from the hover url
+	 *
+	 * @return	String		HTML code for the hover box
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	this.getHoverUrlCode = function() {
+		// FIXME: Move to bulk fetching like normal hover menus
+		this.hover_template_code = oHoverUrls[this.conf.hover_url];
+	}
+	
+	/**
+	 * getHoverTemplateCode()
 	 *
 	 * Get the hover template from the global object which holds all templates of 
 	 * the map

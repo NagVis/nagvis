@@ -210,8 +210,24 @@ switch($_GET['action']) {
 			
 			$numObjects = count($arrNames);
 			for($i = 0; $i < $numObjects; $i++) {
-				$OBJ = new GlobalHoverMenu($CORE, $arrNames[$i]);
+				$OBJ = new NagVisHoverMenu($CORE, $arrNames[$i]);
 				$arrReturn[] = Array('name' => $arrNames[$i], 'code' => str_replace("\r\n","",str_replace("\n","", $OBJ->__toString())));
+			}
+			
+			echo json_encode($arrReturn);
+		}
+	break;
+	case 'getHoverUrl':
+		if(!isset($_GET['url']) || $_GET['url'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterUrlNotSet');
+		} else {
+			$arrReturn = Array();
+			$arrUrls = $_GET['url'];
+			
+			$numObjects = count($arrUrls);
+			for($i = 0; $i < $numObjects; $i++) {
+				$OBJ = new NagVisHoverUrl($CORE, $arrUrls[$i]);
+				$arrReturn[] = Array('url' => $arrUrls[$i], 'code' => $OBJ->__toString());
 			}
 			
 			echo json_encode($arrReturn);

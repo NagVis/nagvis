@@ -30,6 +30,7 @@
  * Definition of needed variables
  */
 var oHoverTemplates = new Object();
+var oHoverUrls = new Object();
 
 /**
  * runWorker()
@@ -68,8 +69,9 @@ function runWorker(iCount, sType) {
 			setMapObjects(aInitialMapObjects);
 			
 			// Bulk get all hover templates which are needed on the map
-			eventlog("worker", "info", "Fetching hover templates");
+			eventlog("worker", "info", "Fetching hover templates and hover urls");
 			setMapHoverTemplates();
+			setMapHoverUrls();
 			
 			// Asign the hover templates to the objects and parse them
 			eventlog("worker", "info", "Parse hover menus");
@@ -127,6 +129,7 @@ function runWorker(iCount, sType) {
 					
 					// Bulk get all hover templates which are needed on the map
 					setMapHoverTemplates();
+          setMapHoverUrls();
 					
 					// Asign the hover templates to the objects and parse them
 					parseMapObjectsHoverMenu();
@@ -264,6 +267,46 @@ function checkMapCfgChanged(iCurrentAge) {
 }
 
 /**
+ * setMapHoverUrls()
+ *
+ * Gets the code for needed hover templates and saves it for later use in icons
+ *
+ * @param   Object   Object with basic page properties
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setMapHoverUrls() {
+	var aUrlParts = Array();
+	var aTemplateObjects;
+	
+	// Loop all map objects to get the used hover templates
+	for(var a = 0; a < aMapObjects.length; a++) {
+		// Ignore objects which
+		// a) have a disabled hover menu
+		// b) do use hover_url
+		if(aMapObjects[a].conf.hover_menu && aMapObjects[a].conf.hover_menu == 1 && aMapObjects[a].conf.hover_url && aMapObjects[a].conf.hover_url != '') {
+			oHoverUrls[aMapObjects[a].conf.hover_url] = '';
+		}
+	}
+	
+	// Build string for bulk fetching the templates
+	for(var i in oHoverUrls) {
+		if(i != 'Inherits') {
+			aUrlParts.push('&url[]='+i);
+		}
+	}
+	
+	// Get the needed templates via bulk request
+	aTemplateObjects = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverUrl', aUrlParts, 1900, true);
+	
+	// Set the code to global object oHoverTemplates
+	if(aTemplateObjects.length > 0) {
+		for(var i = 0; i < aTemplateObjects.length; i++) {
+			oHoverUrls[aTemplateObjects[i].url] = aTemplateObjects[i].code;
+		}
+	}
+}
+
+/**
  * setMapHoverTemplates()
  *
  * Gets the code for needed hover templates and saves it for later use in icons
@@ -279,8 +322,8 @@ function setMapHoverTemplates() {
 	for(var a = 0; a < aMapObjects.length; a++) {
 		// Ignore objects which
 		// a) have a disabled hover menu
-		// b) use hover_url
-		if(aMapObjects[a].conf.hover_menu && (!aMapObjects[a].conf.hover_url || aMapObjects[a].conf.hover_url == '')) {
+		// b) do not use hover_url
+		if(aMapObjects[a].conf.hover_menu && aMapObjects[a].conf.hover_menu == '1' && (!aMapObjects[a].conf.hover_url || aMapObjects[a].conf.hover_url == '')) {
 			oHoverTemplates[aMapObjects[a].conf.hover_template] = '';
 		}
 	}
@@ -302,7 +345,6 @@ function setMapHoverTemplates() {
 		}
 	}
 }
-
 
 /**
  * parseMapObjectsHoverMenu()
