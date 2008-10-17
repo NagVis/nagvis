@@ -480,8 +480,8 @@ function updateMapObjects(aMapObjectInformations) {
 			// Reparse object to map
 			oObj.parse();
 			
-			// Reset the favicon
-			// Reset the page title
+			// FIXME: Reset the favicon
+			// FIXME: Reset the page title
 			
 			/**
 			 * Additional eventhandling
