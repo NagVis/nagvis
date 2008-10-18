@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.4"
+INSTALLER_VERSION="0.1.5"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -88,7 +88,7 @@ Parameters:
   -c [y|n]    Update configuration files when possible?
   -q          Quiet mode. The installer won't ask for confirmation of what to do.
               This can be useful for automatic or scripted deployment.
-              WARNING: Only use this when you know what you do
+              WARNING: Only use this if you know what you are doing
   -v          Version information
   -h          This message
 
@@ -158,13 +158,16 @@ cat <<EOD
 +------------------------------------------------------------------------------+
 | Welcome to NagVis Installer $INSTALLER_VERSION                                            |
 +------------------------------------------------------------------------------+
-| This program is built to facilitate the NagVis installation and update       |
+| This script is built to facilitate the NagVis installation and update        |
 | procedure for you. The installer has been tested on the following systems:   |
 | - Debian Etch (4.0)                                                          |
 | - Ubuntu Hardy (8.04)                                                        |
 | - SuSE Linux Enterprise Server 10                                            |
 |                                                                              |
-| If you experience any problems using this or another distribution, please    |
+| Similar distributions to the ones mentioned above should work as well.       |
+| That (hopefully) includes RedHat, Fedora, CentOS, OpenSuSE                   |
+|                                                                              |
+| If you experience any problems using these or other distributions, please    |
 | report that to the NagVis team.                                              |
 +------------------------------------------------------------------------------+
 EOD
@@ -184,7 +187,7 @@ log() {
 	elif [ "$2" = "warning" ]; then
 		echo "$1"
 	else	
-		printf "%-73s %s\n" "| $1" "found"
+		printf "%-72s %s\n" "| $1" "found |"
 	fi
 }
  
@@ -193,7 +196,7 @@ check_apache_php() {
 	DIR=$1
 	[ ! -d $DIR ] && return
 	
-	# The apache user/group are defined by env vars in ubuntu, set them here
+	# The apache user/group are defined by env vars in Ubuntu, set them here
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
 	MODPHP=`find $DIR -type f -exec grep -ie "mod_php.*\.so" -e "libphp.*\.so" {} \; | tr -s " " | cut -d" " -f3 | uniq`
@@ -201,14 +204,14 @@ check_apache_php() {
 	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | wc -l` 
 	
 	# Only try to detect user when not set or empty
-	if [ "x$WEB_USER" = "x" ]; then
+	if [ -z "$WEB_USER" ]; then
 		WEB_USER=`find $DIR -type f -exec grep -i "^User" {} \; | cut -d" " -f2 | uniq`
 		VAR=`echo $WEB_USER | grep "$" >/dev/null 2>&1`
 		[ $? -eq 0 ] && WEB_USER=`eval "echo $WEB_USER"`
 	fi
 
 	# Only try to detect group when not set or empty
-	if [ "x$WEB_GROUP" = "x" ]; then
+	if [ -z "$WEB_GROUP" ]; then
 		WEB_GROUP=`find $DIR -type f -exec grep -i "^Group" {} \; | cut -d" " -f2 | uniq`
 		VAR=`echo $WEB_GROUP | grep "$" >/dev/null 2>&1`
 		[ $? -eq 0 ] && WEB_GROUP=`eval "echo $WEB_GROUP"`
@@ -317,7 +320,7 @@ chk_rc() {
 		echo $* Return Code: $RC
 		exit 1
 	else
-		if [ ! "$2" = "" ]; then
+		if [ "$2" != "" ]; then
 			echo "$2"
 		fi
 	fi
@@ -325,9 +328,21 @@ chk_rc() {
 
 copy() {
 	GLOB_IGNORE="$1"
-	cp -pr $NAGVIS_PATH_OLD/$2/* $NAGVIS_PATH/$2
-	chk_rc "|  Error copying $3" "| done"
+	[ -n "$LINE" ] && line "$LINE"
+	if [ -f "$NAGVIS_PATH_OLD/$2" ]; then
+		cp -p $NAGVIS_PATH_OLD/$2 $NAGVIS_PATH/$2
+		chk_rc "|  Error copying file $3" "| done"
+	fi
+	if [ -d "$NAGVIS_PATH_OLD/$2" -a ! -d "$3" ]; then
+		cp -pr $NAGVIS_PATH_OLD/$2/ $NAGVIS_PATH/$2/
+		chk_rc "|  Error copying $3" "| done"
+	fi
+	if [ -d "$3" ]; then
+		cp -pr $2 $3
+		chk_rc "|  Error copying $2 to $3" "| done"
+	fi
 	GLOB_IGNORE=""
+	LINE=""
 }
 
 # Main program starting
@@ -550,7 +565,7 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	if [ ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
 		text "|       Your configuration files will be copied." "|"
 		if [ "$INSTALLER_CONFIG_MOD" = "y" ]; then
-			text "|       The configuration files will be updated when possible." "|"
+			text "|       The configuration files will be updated if possible." "|"
 		else
 			text "|       The configuration files will NOT be updated. Please check the " "|"
 			text "|       changelog for any changes which affect your configuration files." "|"
@@ -584,47 +599,49 @@ if [ ! -d $NAGVIS_PATH ]; then
 fi
 
 
-line "Copying files to $NAGVIS_PATH..."
-GLOBIGNORE="install.sh"
-cp -pr * $NAGVIS_PATH
-GLOBIGNORE=""
-chk_rc "|  Error copying files to $NAGVIS_PATH" "| done"
+LINE="Copying files to $NAGVIS_PATH..."
+copy "install.sh" '*' "$NAGVIS_PATH"
 
-if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
-	line "Restoring main configuration file..."
-	cp -pr $NAGVIS_PATH_OLD/$NAGVIS_CONF $NAGVIS_PATH/$NAGVIS_CONF
-	chk_rc "|  Error copying main configuration file" "| done"
+if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
+	LINE="Restoring main configuration file..."
+	copy "" "$NAGVIS_CONF" "main configuration file"
 	
-	line "Restoring custom map configuration files..."
+	LINE="Restoring custom map configuration files..."
 	copy "demo.cfg:demo2.cfg" "etc/maps" "map configuration files"
 	
-	line "Restoring custom map images..."
+	LINE="Restoring custom map images..."
 	copy "nagvis-demo.png" "nagvis/images/maps" "map image files"
 	
-	line "Restoring custom iconsets..."
+	LINE="Restoring custom iconsets..."
 	copy "20x20.png:configerror_*.png:error.png:std_*.png" "nagvis/images/iconsets" "iconset files"
 	
-	line "Restoring custom shapes..."
+	LINE="Restoring custom shapes..."
 	copy "" "nagvis/images/shapes" "shapes"
 	
-	line "Restoring custom templates (header, hover)..."
+	LINE="Restoring custom header templates..."
 	copy "tmpl.default*" "nagvis/templates/header" "header templates"
+	
+	LINE="Restoring custom hover templates..."
 	copy "tmpl.default*" "nagvis/templates/hover" "hover templates"
 	
-	line "Restoring custom template images (header, hover)..."
+	LINE="Restoring custom header template images..."
 	copy "tmpl.default*" "nagvis/images/templates/header" "header template images"
+
+	LINE="Restoring custom hover template images..."
 	copy "tmpl.default*" "nagvis/images/templates/hover" "hover template images"
 fi
 
 # Do some update tasks (Changing options, notify about deprecated options)
-if [ "$INSTALLER_ACTION" = "update" -a ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
+if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	line "Handling changed/removed options..."
-	if [ ! "x`echo $NAGVIS_VER_OLD | grep '1.3'`" = "x" ]; then
+	if [ "x`echo $NAGVIS_VER_OLD | grep '1.3'`" != "x" ]; then
 		text "| Update from 1.3.x" "|"
 		text
 		line "Applying changes to main configuration file..."
+		text "| oops, sorry, not implemented yet" "|"
 		chk_rc "| Error" "| done"
 		line "Applying changes to map configuration files..."
+		text "| oops, sorry, not implemented yet" "|"
 		chk_rc "| Error" "| done"
 	else
 		text "| Update from unhandled version $NAGVIS_VER_OLD" "|"
