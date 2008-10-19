@@ -166,9 +166,21 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Get the updated objects via bulk request
-				var o = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false)
+				var o = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+				var bStateChanged = false;
 				if(o.length > 0) {
-					updateMapObjects(o);
+					bStateChanged = updateMapObjects(o);
+				}
+				
+				// When some state changed on the map update the title and favicon
+				if(bStateChanged) {
+					var o = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oMapProperties.map_name+'&m[]=&t[]=map&n1[]='+oMapProperties.map_name+'&n2[]=', false)[0];
+					
+					// Update favicon
+					setMapFavicon(getFaviconImage(o));
+					
+					// Update page title
+					setMapPageTitle(oMapProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
 				}
 				
 				// Update lastWorkerRun
@@ -434,10 +446,13 @@ function setMapObjects(aMapObjectConf) {
  *
  * Bulk update map objects
  *
+ * @return  Boolean  Returns true when some state has changed
  * @param   Array    Array of objects to parse to the map
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateMapObjects(aMapObjectInformations) {
+	var bStateChanged = false;
+	
 	for(var i = 0; i < aMapObjectInformations.length; i++) {
 		var objId = aMapObjectInformations[i].objId;
 		var intIndex = -1;
@@ -477,11 +492,11 @@ function updateMapObjects(aMapObjectInformations) {
 			
 			/* Internal handling */
 			
+			// Save for return code
+			bStateChanged = true;
+			
 			// Reparse object to map
 			oObj.parse();
-			
-			// FIXME: Reset the favicon
-			// FIXME: Reset the page title
 			
 			/**
 			 * Additional eventhandling
@@ -518,8 +533,9 @@ function updateMapObjects(aMapObjectInformations) {
 				playSound(intIndex, 1);
 			}
 		}
-		
 	}
+	
+	return bStateChanged;
 }
 
 /**
@@ -632,6 +648,30 @@ function setMapBackground(sImage) {
 	}
 	
 	oImage.src = sImage;
+}
+
+/**
+ * Gets the favicon of the page representation the state of the map
+ *
+ * @return	String	Path to the favicon
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getFaviconImage(oObj) {
+	var sFavicon;
+	
+	// Gather image on summary state of the object
+	if(oObj.summary_in_downtime && oObj.summary_in_downtime == '1') {
+		sFavicon = 'downtime';
+	} else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == '1') {
+		sFavicon = 'ack';
+	} else {
+		sFavicon = oObj.summary_state.toLowerCase();
+	}
+	
+	// Set full path
+	sFavicon = oGeneralProperties.path_htmlimages+'internal/favicon_'+sFavicon+'.png';
+	
+	return sFavicon;
 }
 
 /**

@@ -108,6 +108,7 @@ class NagVisMap extends GlobalMap {
 	function parseMapPropertiesJson() {
 		$arr = Array();
 		$arr['map_name'] = $this->MAPCFG->getName();
+		$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
 		$arr['background_image'] = $this->getBackgroundJson();
 		$arr['favicon_image'] = $this->getFavicon();
 		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');

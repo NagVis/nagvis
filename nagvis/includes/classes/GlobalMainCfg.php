@@ -979,6 +979,8 @@ class GlobalMainCfg {
 		
 		$arr['date_format'] = $this->getValue('global', 'dateformat');
 		$arr['path_htmlsounds'] = $this->getValue('paths','htmlsounds');
+		$arr['path_htmlimages'] = $this->getValue('paths','htmlimages');
+		$arr['internal_title'] = $this->getValue('internal', 'title');
 		
 		return json_encode($arr);
 	}
