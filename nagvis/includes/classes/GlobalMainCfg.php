@@ -82,7 +82,7 @@ class GlobalMainCfg {
 					'match' => MATCH_BOOLEAN),
 				'eventlog' => Array('must' => 0,
 					'editable' => 0,
-					'default' => '1',
+					'default' => '0',
 					'match' => MATCH_BOOLEAN),
 				'eventloglevel' => Array('must' => 0,
 					'editable' => 0,

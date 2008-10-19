@@ -43,8 +43,9 @@
 ; Enable/Disable highlighting of the state changing object by adding a flashing
 ; border
 ;eventhighlight=1
-; Enable/Disable the eventlog on the page
-;eventlog=1
+; Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps
+; track of important actions and informations
+;eventlog=0
 ; Loglevel of the eventlog (Available: debug, info, warning, critical)
 ;eventloglevel="info"
 ; Enable/Disable scrolling to the icon which changed the state when the icon is
