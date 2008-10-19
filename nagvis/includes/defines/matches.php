@@ -42,6 +42,8 @@ define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
 define('MATCH_OBJECTTYPE', '/^(?:global|host|service|hostgroup|servicegroup|map|textbox|shape|template)$/i');
 define('MATCH_PNGFILE', '/^(.+)\.png$/i');
 define('MATCH_PNG_GIF_JPG_FILE', '/^(.+)\.(png|gif|jpg)$/i');
+define('MATCH_PNG_GIF_JPG_FILE_OR_NONE', '/^((.+)\.(png|gif|jpg)|none)$/i');
+
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
 define('MATCH_HTML_TEMPLATE_FILE', '/^tmpl\.(.+)\.html$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');

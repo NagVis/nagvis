@@ -701,17 +701,20 @@ function setMapBackgroundColor(sColor) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setMapBackgroundImage(sImage) {
-	// Use existing image or create new
-	if(document.getElementById('backgroundImage')) {
-		var oImage = document.getElementById('backgroundImage');
-	} else {
-		var oImage = document.createElement('img');
-		oImage.id = 'backgroundImage';
-		oImage.style.zIndex = 0;
-		document.body.appendChild(oImage);
+	// Only work with the background image if some is configured
+	if(sImage == 'none') {
+		// Use existing image or create new
+		if(document.getElementById('backgroundImage')) {
+			var oImage = document.getElementById('backgroundImage');
+		} else {
+			var oImage = document.createElement('img');
+			oImage.id = 'backgroundImage';
+			oImage.style.zIndex = 0;
+			document.body.appendChild(oImage);
+		}
+		
+		oImage.src = sImage;
 	}
-	
-	oImage.src = sImage;
 }
 
 /**
