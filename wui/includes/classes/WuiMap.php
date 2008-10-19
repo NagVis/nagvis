@@ -157,14 +157,23 @@ class WuiMap extends GlobalMap {
      */
 	function getBackground() {
 		$style = '';
+		$src = '';
+		$sRet = '';
+		
 		if($this->MAPCFG->getName() != '') {
-			$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
+			if($this->MAPCFG->BACKGROUND->getFileName() != 'none') {
+				$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
+			}
 		} else {
 			$src = './images/internal/wuilogo.png';
 			$style = 'width:800px; height:600px;';
 		}
 		
-		return $this->getBackgroundHtml($src, $style);
+		if($src != '') {
+			$sRet = $this->getBackgroundHtml($src, $style);
+		}
+		
+		return $sRet;
 	}
 	
 	/**

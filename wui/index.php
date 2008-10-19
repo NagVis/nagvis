@@ -107,12 +107,6 @@ switch($_GET['page']) {
 			if(!$MAPCFG->checkMapConfigWriteable(1)) {
 				exit;
 			}
-			if(!$MAPCFG->BACKGROUND->checkFileExists(1)) {
-				exit;
-			}
-			if(!$MAPCFG->BACKGROUND->checkFileReadable(1)) {
-				exit;
-			}
 			if(!$MAPCFG->checkMapLocked(1)) {
 				// Lock the map for the defined time
 				$MAPCFG->writeMapLock();
