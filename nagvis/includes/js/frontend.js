@@ -181,6 +181,11 @@ function runWorker(iCount, sType) {
 					
 					// Update page title
 					setMapPageTitle(oMapProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
+					
+					// Change background color
+					if(oMapProperties.event_background) {
+						setMapBackgroundColor(getBackgroundColor(o));
+					}
 				}
 				
 				// Update lastWorkerRun
@@ -384,9 +389,10 @@ function parseMapObjectsHoverMenu() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setMapBasics(oProperties) {
-	setMapBackground(oProperties.background_image);
+	setMapBackgroundImage(oProperties.background_image);
 	setMapFavicon(oProperties.favicon_image);
 	setMapPageTitle(oProperties.page_title);
+	setMapBackgroundColor(oProperties.background_color);
 }
 
 /**
@@ -629,25 +635,25 @@ function flashIcon(intIndex, iNumTimes){
 }
 
 /**
- * setMapBackground()
+ * getBackgroundColor()
  *
- * Parses the background image to the map
+ * Gets the background color of the map by the summary state of the map
  *
- * @param   String   Path to map images
+ * @param   Object   Map object
+ * @return  String   Hex code representing the color
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapBackground(sImage) {
-	// Use existing image or create new
-	if(document.getElementById('backgroundImage')) {
-		var oImage = document.getElementById('backgroundImage');
+function getBackgroundColor(oObj) {
+	var sColor;
+	
+	// When state is PENDING, OK, UP, set default background color
+	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP') {
+		sColor = oMapProperties.background_color;
 	} else {
-		var oImage = document.createElement('img');
-		oImage.id = 'backgroundImage';
-		oImage.style.zIndex = 0;
-		document.body.appendChild(oImage);
+		sColor = oStates[oObj.summary_state].bgColor;
 	}
 	
-	oImage.src = sImage;
+	return sColor;
 }
 
 /**
@@ -672,6 +678,40 @@ function getFaviconImage(oObj) {
 	sFavicon = oGeneralProperties.path_htmlimages+'internal/favicon_'+sFavicon+'.png';
 	
 	return sFavicon;
+}
+
+/**
+ * setMapBackgroundColor()
+ *
+ * Sets the background color of the page
+ *
+ * @param   String   Hex code
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setMapBackgroundColor(sColor) {
+	document.body.style.backgroundColor = sColor;
+}
+
+/**
+ * setMapBackgroundImage()
+ *
+ * Parses the background image to the map
+ *
+ * @param   String   Path to map images
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setMapBackgroundImage(sImage) {
+	// Use existing image or create new
+	if(document.getElementById('backgroundImage')) {
+		var oImage = document.getElementById('backgroundImage');
+	} else {
+		var oImage = document.createElement('img');
+		oImage.id = 'backgroundImage';
+		oImage.style.zIndex = 0;
+		document.body.appendChild(oImage);
+	}
+	
+	oImage.src = sImage;
 }
 
 /**

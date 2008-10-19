@@ -110,8 +110,10 @@ class NagVisMap extends GlobalMap {
 		$arr['map_name'] = $this->MAPCFG->getName();
 		$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
 		$arr['background_image'] = $this->getBackgroundJson();
+		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
 		$arr['favicon_image'] = $this->getFavicon();
 		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');
+		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
 		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
 		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
 		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');

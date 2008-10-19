@@ -90,7 +90,6 @@ class NagVisFrontend extends GlobalPage {
 		
 		// Only do this, when a map needs to be displayed
 		if(get_class($this->MAPCFG) != '') {
-			$prop['extHeader'] .= '<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>';
 			$prop['allowedUsers'] = $this->MAPCFG->getValue('global',0, 'allowed_user');
 		}
 		

@@ -39,6 +39,12 @@
 ;backgroundcolor="#fff"
 ; Enable/Disable the eventlog on the page
 ;eventlog=1
+; Enable/Disable changing background color on state changes (Configured color is
+; shown when summary state is PENDING, OK or UP)
+;eventbackground=0
+; Enable/Disable highlighting of the state changing object by adding a flashing
+; border
+;eventhighlight=1
 ; Loglevel of the eventlog (Available: debug, info, warning, critical)
 ;eventloglevel="info"
 ; Enable/Disable scrolling to the icon which changed the state when the icon is
