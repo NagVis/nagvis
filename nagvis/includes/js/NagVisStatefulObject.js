@@ -138,7 +138,19 @@ function NagVisStatefulObject (oConf) {
 		if(this.parsedObject) {
 			document.getElementById('map').removeChild(this.parsedObject);
 		}
+    
+    // Append child to map and save reference in parsedObject
 		this.parsedObject = document.getElementById('map').appendChild(oContainerDiv);
+    
+    // Add a context menu to the object when enabled
+		// FIXME: add config option to make this work
+    if(this.conf.context_menu && this.conf.context_menu == '1') {
+      if(this.conf.line_type && this.conf.line_type != '') {
+        this.addContextMenu(this.objId, this.objId+'-linediv');
+      } else {
+        this.addContextMenu(this.objId, this.objId+'-icon');
+			}
+    }
 		
 		if(this.conf.line_type && this.conf.line_type != '') {
 			this.drawLine();

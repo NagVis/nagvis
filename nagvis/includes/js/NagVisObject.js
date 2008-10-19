@@ -29,6 +29,7 @@ function NagVisObject (oConf) {
 	this.parsedObject;
 	this.hover_template_code;
 	this.conf;
+	this.contextMenu;
 	
 	this.construct = function(oConf) {
 		// Initialize
@@ -47,13 +48,73 @@ function NagVisObject (oConf) {
 	this.setLastUpdate = function() {
 		this.lastUpdate = Date.parse(new Date());
 	}
+  
+	/**
+	 * PUBLIC getContextMenu()
+	 *
+	 * Creates a context menu for the object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	this.addContextMenu = function (sContainerId, sObjId) {
+		var oObj = document.getElementById(sObjId);
+		var oContainer = document.getElementById(sContainerId);
+    
+		// Create menu
+		var contextMenu = document.createElement('div');
+		contextMenu.setAttribute('id', sObjId+'-context');
+		contextMenu.setAttribute('class', 'context');
+		contextMenu.setAttribute('className', 'context');
+		contextMenu.style.zIndex = '1000';
+		contextMenu.style.display = 'none';
+		
+		var oList = document.createElement('ul');
+		
+		var oRow = document.createElement('li');
+		var oLink = document.createElement('a');
+		oLink.href = '';
+		oLink.target = '_blank';
+		// FIXME: Language
+		oLink.appendChild(document.createTextNode('Refresh status'));
+		oRow.appendChild(oLink);
+		oList.appendChild(oRow);
+		
+		var oRow = document.createElement('li');
+		oRow.style.height = '1px';
+		oList.appendChild(oRow);
+		
+		var oRow = document.createElement('li');
+		var oLink = document.createElement('a');
+		oLink.href = '';
+		oLink.target = '_blank';
+		// FIXME: Language
+		oLink.appendChild(document.createTextNode('Schedule downtime'));
+		oRow.appendChild(oLink);
+		oList.appendChild(oRow);
+		
+		var oRow = document.createElement('li');
+		var oLink = document.createElement('a');
+		oLink.href = '';
+		oLink.target = '_blank';
+		// FIXME: Language
+		oLink.appendChild(document.createTextNode('Re-Schedule next check'));
+		oRow.appendChild(oLink);
+		oList.appendChild(oRow);
+		
+		// Bind menu to container
+		contextMenu.appendChild(oList);
+		oContainer.appendChild(contextMenu);
+		
+		// Add eventhandlers for context menu
+		oObj.onmousedown = contextMouseDown;
+		oObj.oncontextmenu = contextShow;
+  }
 	
 	/**
 	 * PUBLIC getHoverMenu
 	 *
 	 * Creates a hover box for objects
 	 *
-	 * @return	String		HTML code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	this.getHoverMenu = function (oObj) {

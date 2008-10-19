@@ -78,6 +78,9 @@ class NagVisMap extends GlobalMap {
 		// Kick of the worker
 		$ret .= 'runWorker(0, \'map\');';
 		
+		// This disables the context menu when someone clicked anywhere on the map
+		$ret .= 'document.body.onmousedown = contextMouseDown;';
+		
 		return $ret;
 	}
 	
