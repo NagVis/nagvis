@@ -15,11 +15,11 @@
 
 ; General options which affect the whole NagVis installation
 [global]
-; select language (english,german,french,...)
-;language="english"
-; dateformat of the time/dates shown in nagvis (For valid format see PHP docs)
+; Dateformat of the time/dates shown in nagvis (For valid format see PHP docs)
 ;dateformat="Y-m-d H:i:s"
-; refresh time of pages
+; Select language (Available by default: english,german)
+;language="english"
+; Refresh time of pages
 ;refreshtime=60
 
 ; Path definitions
@@ -37,14 +37,14 @@
 ;backend="ndomy_1"
 ; background color of maps
 ;backgroundcolor="#fff"
-; Enable/Disable the eventlog on the page
-;eventlog=1
 ; Enable/Disable changing background color on state changes (Configured color is
 ; shown when summary state is PENDING, OK or UP)
 ;eventbackground=0
 ; Enable/Disable highlighting of the state changing object by adding a flashing
 ; border
 ;eventhighlight=1
+; Enable/Disable the eventlog on the page
+;eventlog=1
 ; Loglevel of the eventlog (Available: debug, info, warning, critical)
 ;eventloglevel="info"
 ; Enable/Disable scrolling to the icon which changed the state when the icon is
@@ -58,20 +58,18 @@
 ;headertemplate="default"
 ; enable/disable hover menu
 ;hovermenu=1
-; Timeout of hover menu ajax request (seconds)
-;hovertimeout=5
 ; hover template
 ;hovertemplate="default"
 ; hover menu open delay (seconds)
 ;hoverdelay=0
 ; show children in hover menus
 ;hoverchildsshow=1
+; limit shown child objects to n
+;hoverchildslimit="10"
 ; order method of children (desc: descending, asc: ascending)
 ;hoverchildsorder="asc"
 ; sort method of children (s: state, a: alphabetical)
 ;hoverchildssort="s"
-; limit shown child objects to n
-;hoverchildslimit="10"
 ; default icons
 ;icons="std_medium"
 ; recognize only hard states (not soft)
