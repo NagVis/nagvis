@@ -183,7 +183,7 @@ function runWorker(iCount, sType) {
 					setMapPageTitle(oMapProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
 					
 					// Change background color
-					if(oMapProperties.event_background) {
+					if(oMapProperties.event_background && oMapProperties.event_background == '1') {
 						setMapBackgroundColor(getBackgroundColor(o));
 					}
 				}
