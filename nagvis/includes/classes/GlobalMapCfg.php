@@ -825,7 +825,7 @@ class GlobalMapCfg {
 								$tmpArray = $this->mapConfig['template'][$templateName];
 								unset($tmpArray['type']);
 								unset($tmpArray['name']);
-								$this->mapConfig[$type][$id] = array_merge($element,$tmpArray);
+								$this->mapConfig[$type][$id] = array_merge($tmpArray,$element);
 							}
 						}
 					}
