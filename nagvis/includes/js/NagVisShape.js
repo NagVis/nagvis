@@ -76,7 +76,17 @@ function NagVisShape (oConf) {
 		var oIcon = document.createElement('img');
 		oIcon.src = this.conf.icon;
 		oIcon.alt = this.conf.type;
-		oIconDiv.appendChild(oIcon);
+		
+		if(this.conf.url && this.conf.url != '') {
+			var oIconLink = document.createElement('a');
+			oIconLink.href = this.conf.url;
+			oIconLink.target = this.conf.url_target;
+			oIconLink.appendChild(oIcon);
+			
+			oIconDiv.appendChild(oIconLink);
+		} else {
+			oIconDiv.appendChild(oIcon);
+		}
 		
 		if(this.conf.hover_url && this.conf.hover_url != '') {
 			this.getHoverMenu(oIcon);
