@@ -192,7 +192,13 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 				
 				// Error handling for the AJAX methods
 				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-					alert("PHP error in ajax request handler:\n"+responseText);
+					var oMsg = Object();
+					oMsg.type = 'CRITICAL';
+					oMsg.message = "PHP error in ajax request handler:\n"+responseText;
+					oMsg.title = "PHP error";
+					
+					// Handle application message/error
+					frontendMessage(oMsg);
 				} else if(responseText.match(/^NagVisError:/)) {
 					responseText = responseText.replace(/^NagVisError:/, '');
 					var oMsg = eval('( '+responseText+')');
