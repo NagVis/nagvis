@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.5"
+INSTALLER_VERSION="0.1.6"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -334,8 +334,11 @@ copy() {
 		chk_rc "|  Error copying file $3" "| done"
 	fi
 	if [ -d "$NAGVIS_PATH_OLD/$2" -a ! -d "$3" ]; then
-		cp -pr $NAGVIS_PATH_OLD/$2/ $NAGVIS_PATH/$2/
-		chk_rc "|  Error copying $3" "| done"
+		ANZ=`find $NAGVIS_PATH_OLD/$2 -type f | wc -l`
+		if [ $ANZ -gt 0 ]; then
+			cp -pr $NAGVIS_PATH_OLD/$2/* $NAGVIS_PATH/$2
+			chk_rc "|  Error copying $3" "| done"
+		fi
 	fi
 	if [ -d "$3" ]; then
 		cp -pr $2 $3
