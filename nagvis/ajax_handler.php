@@ -128,9 +128,7 @@ switch($_GET['action']) {
 				// These things are already done by NagVisMap and NagVisAutoMap classes
 				// for the NagVisMapObj objects. Does not need to be done a second time.
 				if(get_class($OBJ) != 'NagVisMapObj') {
-					
 					$OBJ->fetchMembers();
-					
 					$OBJ->fetchState();
 				}
 				
@@ -144,6 +142,7 @@ switch($_GET['action']) {
 						$arr = $OBJ->parseJson();
 					break;
 				}
+				
 				$arr['objId'] = $arrObjId[$i];
 				$arr['icon'] = $OBJ->icon;
 				

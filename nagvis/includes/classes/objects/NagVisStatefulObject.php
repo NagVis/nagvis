@@ -405,6 +405,16 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['display_name'] = '';
 		}
 		
+		// Save the number of members
+		switch($this->getType()) {
+			case 'host':
+			case 'map':
+			case 'hostgroup':
+			case 'servicegroup':
+				$arr['num_members'] = $this->getNumMembers();
+			break;
+		}
+		
 		$arr['state'] = $this->getState();
 		$arr['summary_state'] = $this->getSummaryState();
 		$arr['summary_problem_has_been_acknowledged'] = $this->getSummaryAcknowledgement();
@@ -440,14 +450,8 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 		
 		// Enable/Disable fetching childs
-		if($bFetchChilds && ($this->type == 'host' || $this->type == 'servicegroup' || $this->type == 'hostgroup' || $this->type == 'map')) {
-			$arr['members'] = Array();
-			
-			foreach($this->getMembers() AS $OBJ) {
-				if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
-					$arr['members'][] = $OBJ->getObjectInformation(false);
-				}
-			}
+		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
+			$arr['members'] = $this->getSortedObjectMembers();
 		}
 		
 		return $arr;

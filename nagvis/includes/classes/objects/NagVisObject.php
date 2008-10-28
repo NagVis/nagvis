@@ -265,11 +265,53 @@ class NagVisObject {
     
 		// Only do this for parents
 		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
-			$arr['members'] = Array();
-			
-			foreach($this->getMembers() AS $OBJ) {
-				if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
-					$arr['members'][] = $OBJ->getObjectInformation(false);
+			$arr['members'] = $this->getSortedObjectMembers();
+		}
+		
+		return $arr;
+	}
+	
+	/**
+	 * PULBLIC getSortedObjectMembers()
+	 *
+	 * Gets an array of member objects
+	 *
+	 * @return	Array		Member object informations
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getSortedObjectMembers() {
+		$arr = Array();
+		
+		// FIXME: Try to limit and sort members
+		$aTmpMembers = $this->getMembers();
+		
+		// Sort the array of child objects by the sort option
+		switch($this->hover_childs_sort) {
+			case 's':
+				// Order by State
+				usort($aTmpMembers, Array("NagVisObject", "sortObjectsByState"));
+			break;
+			case 'a':
+			default:
+				// Order alhpabetical
+				usort($aTmpMembers, Array("NagVisObject", "sortObjectsAlphabetical"));
+			break;
+		}
+		
+		// If the sorted array should be reversed
+		if($this->hover_childs_order == 'desc') {
+			$aTmpMembers = array_reverse($aTmpMembers);
+		}
+		
+		// Count only once, not in loop header
+		$iNumObjects = count($aTmpMembers);
+		
+		// Loop all child object until all looped or the child limit is reached
+		for($i = 0; $i <= $this->hover_childs_limit && $i < $iNumObjects; $i++) {
+			// Only get the member when this is no loop
+			if($aTmpMembers[$i]->getType() != 'map' || ($aTmpMembers[$i]->getType() == 'map' && $this->MAPCFG->getName() != $aTmpMembers[$i]->MAPCFG->getName())) {
+				if($aTmpMembers[$i]->getType() != 'textbox' && $aTmpMembers[$i]->getType() != 'shape') {
+					$arr[] = $aTmpMembers[$i]->getObjectInformation(false);
 				}
 			}
 		}
@@ -353,61 +395,6 @@ class NagVisObject {
 	 */
 	function getUrlTarget() {
 		return $this->url_target;
-	}
-	
-	/**
-	 * PRIVATE getHoverTemplateChildReplacements
-	 *
-	 * Get the hover template child replacement options
-	 *
-	 * @return	String		HTML code for the hover menu
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getHoverChildsJson() {
-		$arrObjects = Array();
-		$arrRet = Array();
-		
-		switch($this->type) {
-			case 'host':
-			case 'hostgroup':
-			case 'servicegroup':
-			case 'map':
-				$arrObjects = $this->getMembers();
-			break;
-		}
-		
-		// Sort the array of child objects by the sort option
-		switch($this->hover_childs_sort) {
-			case 's':
-				// Order by State
-				usort($arrObjects, Array("NagVisObject", "sortObjectsByState"));
-			break;
-			case 'a':
-			default:
-				// Order alhpabetical
-				usort($arrObjects, Array("NagVisObject", "sortObjectsAlphabetical"));
-			break;
-		}
-		
-		// If the sorted array should be reversed
-		if($this->hover_childs_order == 'desc') {
-			$arrObjects = array_reverse($arrObjects);
-		}
-		
-		// Count only once, not in loop header
-		$numObjects = count($arrObjects);
-		
-		// Loop all child object until all looped or the child limit is reached
-		for($i = 0; $i <= $this->hover_childs_limit && $i < $numObjects; $i++) {
-			// Only get the next childs when this is no loop
-			if($arrObjects[$i]->getType() != 'map' || ($arrObjects[$i]->getType() == 'map' && $this->MAPCFG->getName() != $arrObjects[$i]->MAPCFG->getName())) {
-				if($arrObjects[$i]->getType() != 'textbox' && $arrObjects[$i]->getType() != 'shape') {
-					$arrRet[] =  $arrObjects[$i]->parseJson();
-				}
-			}
-		}
-		
-		return $arrRet;
 	}
 	
 	/**
