@@ -251,7 +251,9 @@ function NagVisStatefulObject (oConf) {
 		oLineDiv.style.zIndex = this.conf.z;
 		
 		// Add link to the line
-		oLineDiv.onclick = new Function('window.open("'+this.conf.url+'","'+this.conf.url_target+'","");');
+		var sUrl = this.conf.url;
+		var sUrlTarget = this.conf.url_target;
+		oLineDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
 		
 		oContainerDiv.appendChild(oLineDiv);
 		

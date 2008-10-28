@@ -130,10 +130,12 @@ function NagVisObject (oConf) {
 			// Reseting parsedObject. This makes problems in IE when converting to json with JSON.stringify
 			// Maybe it results in other problems when removing parsedObject so clone this before
 			var oObjA = cloneObject(this);
+			var sTemplateCode = this.hover_template_code;
+			var iHoverDelay = this.conf.hover_delay;
 			
 			// Add the hover menu functionality to the object
-			oObj.onmouseover = new Function('displayHoverMenu(replaceHoverTemplateMacros(\'0\', '+ JSON.stringify(oObjA)+', \''+this.hover_template_code+'\'), '+this.conf.hover_delay+');');
-			oObj.onmouseout = new Function('hideHoverMenu();');
+			oObj.onmouseover = function() { displayHoverMenu(replaceHoverTemplateMacros('0', oObjA, sTemplateCode), iHoverDelay); };
+			oObj.onmouseout = function() { hideHoverMenu(); };
 		}
 	}
 	

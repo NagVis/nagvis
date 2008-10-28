@@ -540,7 +540,7 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	if(scrollTop != 0 || scrollLeft != 0) {
 		window.scrollBy(scrollLeft, scrollTop);
 		
-		setTimeout('scrollSlow('+iTargetX+', '+iTargetY+', '+iSpeed+')', iSpeed);
+		setTimeout(function() { scrollSlow(iTargetX, iTargetY, iSpeed) }, iSpeed);
 	} else {
 		eventlog("scroll", "debug", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
 	}

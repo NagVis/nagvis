@@ -347,11 +347,9 @@ class GlobalPage {
 		$sRet = '';
 		
 		if(count($this->cssIncludes) > 0) {
-			$sRet .= '<style type="text/css"><!-- ';
-				foreach($this->cssIncludes AS $var => &$val) {
-					$sRet .= '@import url('.$val.'); ';
-				}
-			$sRet .= ' --></style>';
+			foreach($this->cssIncludes AS $var => &$val) {
+				$sRet .= '<link rel="stylesheet" type="text/css" href="'.$val.'">';
+			}
 		}
 		
 		return $sRet;

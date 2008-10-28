@@ -196,7 +196,7 @@ function runWorker(iCount, sType) {
 	
 	
 	// Sleep until next worker run (1 Second)
-	window.setTimeout("runWorker("+(iCount+1)+", '"+sType+"')", 1000);
+	window.setTimeout(function() {runWorker((iCount+1), sType)}, 1000);
 }
 
 /**
@@ -516,14 +516,14 @@ function updateMapObjects(aMapObjectInformations) {
 					// FIXME: Atm only flash icons, not lines
 				} else {
 					// Detatch the handler
-					setTimeout("flashIcon("+intIndex+", 10);", 0);
+					setTimeout(function() { flashIcon(intIndex, 10) }, 0);
 				}
 			}
 			
 			// - Scroll to object
 			if(oMapProperties.event_scroll) {
 				// Detatch the handler
-				setTimeout("scrollSlow("+oObj.conf.x+", "+oObj.conf.y+", 15);", 0);
+				setTimeout(function() { scrollSlow(oObj.conf.x, oObj.conf.y, 15) }, 0);
 			}
 			
 			// - Eventlog
@@ -536,7 +536,7 @@ function updateMapObjects(aMapObjectInformations) {
 			// - Sound
 			if(oMapProperties.event_sound) {
 				// Detatch the handler
-				setTimeout("playSound("+intIndex+", 1);", 0);
+				setTimeout(function() { playSound(intIndex, 1) }, 0);
 			}
 		}
 
@@ -598,7 +598,7 @@ function playSound(intIndex, iNumTimes){
 		iNumTimes = iNumTimes - 1;
 		
 		if(iNumTimes > 0) {
-			setTimeout("playSound("+intIndex+", "+iNumTimes+");", 500);
+			setTimeout(function() { playSound(intIndex, iNumTimes) }, 500);
 		}
 	}
 }
@@ -633,7 +633,7 @@ function flashIcon(intIndex, iNumTimes){
 	iNumTimes = iNumTimes - 1;
 	
 	if(iNumTimes > 0 || (iNumTimes == 0 && oObjIcon.style.border.indexOf("none") == -1)) {
-		setTimeout("flashIcon("+intIndex+", "+iNumTimes+");", 500);
+		setTimeout(function() { flashIcon(intIndex, iNumTimes) }, 500);
 	}
 }
 
