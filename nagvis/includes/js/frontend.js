@@ -489,9 +489,6 @@ function updateMapObjects(aMapObjectInformations) {
 		
 		// Update lastUpdate timestamp
 		oObj.setLastUpdate();
-
-		// Reparse the hover menu
-		oObj.parseHoverMenu();
 		
 		// Detect state changes and do some custom actions
 		if(oObj.stateChanged()) {
@@ -518,13 +515,15 @@ function updateMapObjects(aMapObjectInformations) {
 				if(oObj.conf.line_type) {
 					// FIXME: Atm only flash icons, not lines
 				} else {
-					flashIcon(intIndex, 10);
+					// Detatch the handler
+					setTimeout("flashIcon("+intIndex+", 10);", 0);
 				}
 			}
 			
 			// - Scroll to object
 			if(oMapProperties.event_scroll) {
-				scrollSlow(oObj.conf.x, oObj.conf.y, 15);
+				// Detatch the handler
+				setTimeout("scrollSlow("+oObj.conf.x+", "+oObj.conf.y+", 15);", 0);
 			}
 			
 			// - Eventlog
@@ -536,9 +535,13 @@ function updateMapObjects(aMapObjectInformations) {
 			
 			// - Sound
 			if(oMapProperties.event_sound) {
-				playSound(intIndex, 1);
+				// Detatch the handler
+				setTimeout("playSound("+intIndex+", 1);", 0);
 			}
 		}
+
+		// Reparse the hover menu
+		oObj.parseHoverMenu();
 	}
 	
 	return bStateChanged;
