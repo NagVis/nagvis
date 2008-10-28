@@ -126,8 +126,8 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	
 	if(oObj.conf.type == 'service') {
 		oMacros.service_description = oObj.conf.service_description;
-		oMacros.pnp_hostname = oObj.conf.name.replace(' ','%20');
-		oMacros.pnp_service_description = oObj.conf.service_description.replace(' ','%20');
+		oMacros.pnp_hostname = oObj.conf.name.replace(/\s/g,'%20');
+		oMacros.pnp_service_description = oObj.conf.service_description.replace(/\s/g,'%20');
 	} else {
 		oSectionMacros.service = '<!--\\\sBEGIN\\\sservice\\\s-->.+?<!--\\\sEND\\\sservice\\\s-->';
 	}
