@@ -33,7 +33,7 @@
  
 // Is only needed for index/automap atm
 function getHoverTemplate(sName) {
-	return getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverTemplate&name[]='+sName)[0].code;
+	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverTemplate&name[]='+sName)[0].code;
 }
 
 function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {

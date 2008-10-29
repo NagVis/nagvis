@@ -29,8 +29,8 @@
 /**
  * Definition of needed variables
  */
-var oHoverTemplates = new Object();
-var oHoverUrls = new Object();
+var oHoverTemplates = {};
+var oHoverUrls = {};
 
 /**
  * runWorker()
@@ -57,7 +57,7 @@ var oHoverUrls = new Object();
 function runWorker(iCount, sType) {
 	// If the iterator is 0 it is the first run of the worker. It's only task is
 	// to render the page
-	if(iCount == 0) {
+	if(iCount === 0) {
 		// Initialize everything
 		eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
 		
@@ -99,8 +99,8 @@ function runWorker(iCount, sType) {
 		 * Do these actions every X runs (Every worker_interval seconds)
 		 */
 		
-		if(sType == 'map') {
-			if(iCount % oWorkerProperties.worker_interval == 0) {
+		if(sType === 'map') {
+			if(iCount % oWorkerProperties.worker_interval === 0) {
 				// Log normal worker step
 				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 				
@@ -116,13 +116,13 @@ function runWorker(iCount, sType) {
 				// Check for changed map configuration
 				if(oFileAges && checkMapCfgChanged(oFileAges[oMapProperties.map_name])) {
 					// Set map basics
-					var oMapBasics = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oMapProperties.map_name);
+					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oMapProperties.map_name);
 					if(oMapBasics) {
 						setMapBasics(oMapBasics);
 					}
 					
 					// Set map objects
-					var oMapObjects = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oMapProperties.map_name);
+					var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oMapProperties.map_name);
 					if(oMapObjects) {
 						setMapObjects(oMapObjects);
 					}
@@ -139,7 +139,7 @@ function runWorker(iCount, sType) {
 				var arrObj = getObjectsToUpdate();
 				
 				// Create the ajax request for bulk update
-				var aUrlParts = Array();
+				var aUrlParts = [];
 				for(var i = 0; i < arrObj.length; i++) {
 					var obj_id = aMapObjects[arrObj[i]].objId;
 					var type = aMapObjects[arrObj[i]].conf.type;
@@ -166,7 +166,7 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Get the updated objects via bulk request
-				var o = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
 					bStateChanged = updateMapObjects(o);
@@ -174,7 +174,7 @@ function runWorker(iCount, sType) {
 				
 				// When some state changed on the map update the title and favicon
 				if(bStateChanged) {
-					var o = getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oMapProperties.map_name+'&m[]=&t[]=map&n1[]='+oMapProperties.map_name+'&n2[]=', false)[0];
+					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oMapProperties.map_name+'&m[]=&t[]=map&n1[]='+oMapProperties.map_name+'&n2[]=', false)[0];
 					
 					// Update favicon
 					setMapFavicon(getFaviconImage(o));
@@ -209,7 +209,7 @@ function runWorker(iCount, sType) {
  */
 function getObjectsToUpdate() {
 	eventlog("worker", "debug", "getObjectsToUpdate: Start");
-	var arrReturn = Array();
+	var arrReturn = [];
 	
 	// Asign all object indexes to return Array
 	for(var i = 0; i < aMapObjects.length; i++) {
@@ -244,7 +244,7 @@ function getObjectsToUpdate() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getCfgFileAges() {
-	return getSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oMapProperties.map_name);
+	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oMapProperties.map_name);
 }
 
 /**
@@ -292,7 +292,7 @@ function checkMapCfgChanged(iCurrentAge) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setMapHoverUrls() {
-	var aUrlParts = Array();
+	var aUrlParts = [];
 	var aTemplateObjects;
 	
 	// Loop all map objects to get the used hover templates
@@ -313,7 +313,7 @@ function setMapHoverUrls() {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverUrl', aUrlParts, 1900, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverUrl', aUrlParts, 1900, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -332,7 +332,7 @@ function setMapHoverUrls() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setMapHoverTemplates() {
-	var aUrlParts = Array();
+	var aUrlParts = [];
 	var aTemplateObjects;
 	
 	// Loop all map objects to get the used hover templates
@@ -353,7 +353,7 @@ function setMapHoverTemplates() {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(htmlBase+'/nagvis/ajax_handler.php?action=getHoverTemplate', aUrlParts, 1900, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverTemplate', aUrlParts, 1900, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {

@@ -983,6 +983,7 @@ class GlobalMainCfg {
 		$arr = Array();
 		
 		$arr['date_format'] = $this->getValue('global', 'dateformat');
+		$arr['path_htmlbase'] = $this->getValue('paths','htmlbase');
 		$arr['path_htmlsounds'] = $this->getValue('paths','htmlsounds');
 		$arr['path_htmlimages'] = $this->getValue('paths','htmlimages');
 		$arr['internal_title'] = $this->getValue('internal', 'title');

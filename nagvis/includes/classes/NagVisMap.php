@@ -72,9 +72,6 @@ class NagVisMap extends GlobalMap {
 		$ret .= 'var aMapObjects=Array();'."\n";
 		$ret .= 'var aInitialMapObjects='.$this->parseObjectsJson().';'."\n";
 		
-		$ret .= '
-		var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\';';
-		
 		// Kick of the worker
 		$ret .= 'runWorker(0, \'map\');';
 		

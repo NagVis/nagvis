@@ -28,7 +28,7 @@
 NagVisStatefulObject.Inherits(NagVisObject);
 function NagVisStatefulObject (oConf) {
 	// Stores the informations from last refresh (Needed for change detection)
-	this.last_conf = new Object();
+	this.last_conf = {};
 	
 	// Initialize
 	//...
@@ -37,7 +37,7 @@ function NagVisStatefulObject (oConf) {
 	this.Inherits(NagVisObject, oConf);
 	
 	this.getMembers = function() {
-		this.members = new Array();
+		this.members = [];
 		if(this.conf.members && this.conf.members.length > 0) {
 			for(var i = 0; i < this.conf.members.length; i++) {
 				var oMember = this.conf.members[i];

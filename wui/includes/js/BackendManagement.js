@@ -30,7 +30,7 @@ function printBackendOptions(aObjects,oOpt) {
 	var form = document.getElementById(myForm);
 	var tbl = document.getElementById('table_'+myForm);
 	
-	var toDelete = Array();
+	var toDelete = [];
 	
 	// Remove old backend options
 	for(i=0;i<tbl.tBodies[0].rows.length;i++) {

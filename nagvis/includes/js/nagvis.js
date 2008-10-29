@@ -85,7 +85,7 @@ function updateWorkerCounter() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotatePage() {
-	if(oPageProperties.nextStepUrl != '') {
+	if(oPageProperties.nextStepUrl !== '') {
 		if(oPageProperties.rotationEnabled) {
 			window.open(oPageProperties.nextStepUrl, "_self");
 			return true;
@@ -104,7 +104,7 @@ function rotatePage() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotationCountdown() {
-	if(oPageProperties.nextStepTime != '') {
+	if(oPageProperties.nextStepTime !== '') {
 		// Countdown one second
 		oPageProperties.nextStepTime -= 1;
 		
@@ -145,7 +145,7 @@ function switchRotation(obj, startLabel, stopLabel) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setRotationLabel(startLabel,stopLabel) {
-	if(getUrlParam('rotation') == '') {
+	if(getUrlParam('rotation') === '') {
 		document.getElementById('rotationSwitch').style.visibility = 'hidden';
 	} else {
 		if(oPageProperties.rotationEnabled) {
@@ -166,7 +166,7 @@ function getUrlParam(name) {
 	var regexS = "[\\?&]"+name+"=([^&#]*)";
 	var regex = new RegExp( regexS );
 	var results = regex.exec(window.location);
-	if( results == null ) {
+	if(results === null) {
 		return '';
 	} else {
 		return results[1];
@@ -177,7 +177,7 @@ function changeMap(htmlBase,mapName) {
 	if(mapName.match('^__automap')) {
 		location.href=htmlBase+'/nagvis/index.php?automap=1'+mapName.replace('__automap','');
 	} else {
-		if (mapName == "") {
+		if (mapName === '') {
 			location.href=htmlBase+'/nagvis/index.php';
 		} else {
 			location.href=htmlBase+'/nagvis/index.php?map='+mapName;
@@ -210,14 +210,15 @@ function getRandom(min, max) {
 		return min;
 	}
 	
-	return min + parseInt(Math.random() * (max-min+1));
+	return min + parseInt(Math.random() * (max-min+1), 0);
 }
 
 function cloneObject(what) {
 	var o;
+	var i;
 	
 	if(what instanceof Array) {
-		o = new Array();
+		o = [];
 	} else {
 		o = {};
 	}
@@ -236,17 +237,17 @@ function cloneObject(what) {
 }
 
 Object.prototype.Inherits = function(parent) {
-	if( arguments.length > 1 ) {
-	parent.apply( this, Array.prototype.slice.call( arguments, 1 ) );
-	} else{
-		parent.call( this );
+	if(arguments.length > 1) {
+		parent.apply(this, Array.prototype.slice.call(arguments, 1));
+	} else {
+		parent.call(this);
 	}
-}
+};
 
-Function.prototype.Inherits = function(parent) {
-	this.prototype = new parent();
+Function.prototype.Inherits = function(Parent) {
+	this.prototype = new Parent();
 	this.prototype.constructor = this;
-}
+};
 
 function date(format, timestamp) {
 	// http://kevin.vanzonneveld.net
@@ -264,7 +265,7 @@ function date(format, timestamp) {
 	var a, jsdate=((timestamp) ? new Date(timestamp*1000) : new Date());
 	var pad = function(n, c){
 		if( (n = n + "").length < c ) {
-			return new Array(++c - n.length).join("0") + n;
+			return new [++c - n.length].join("0") + n;
 		} else {
 			return n;
 		}
@@ -282,7 +283,7 @@ function date(format, timestamp) {
 				return pad(f.j(), 2);
 		},
 		D: function(){
-				t = f.l(); return t.substr(0,3);
+				return f.l().substr(0,3);
 		},
 		j: function(){
 				return jsdate.getDate();
@@ -304,7 +305,9 @@ function date(format, timestamp) {
 		},
 		// Week
 		W: function(){
-				var a = f.z(), b = 364 + f.L() - a;
+				a = f.z();
+				var b = 364 + f.L() - a;
+				
 				var nd2, nd = (new Date(jsdate.getFullYear() + "/1/1").getDay() || 7) - 1;
 	
 				if(b <= 2 && ((jsdate.getDay() || 7) - 1) <= 2 - b){
@@ -327,7 +330,7 @@ function date(format, timestamp) {
 				return pad(f.n(), 2);
 		},
 		M: function(){
-				t = f.F(); return t.substr(0,3);
+				return f.F().substr(0,3);
 		},
 		n: function(){
 				return jsdate.getMonth() + 1;
@@ -371,10 +374,12 @@ function date(format, timestamp) {
 												 (jsdate.getMinutes() * 60) +
 													jsdate.getSeconds() + off;
 				var beat = Math.floor(theSeconds/86.4);
-				if (beat > 1000) beat -= 1000;
-				if (beat < 0) beat += 1000;
-				if ((String(beat)).length == 1) beat = "00"+beat;
-				if ((String(beat)).length == 2) beat = "0"+beat;
+				
+				if (beat > 1000) { beat -= 1000; }
+				if (beat < 0) { beat += 1000; }
+				if ((String(beat)).length == 1) { beat = "00"+beat; }
+				if ((String(beat)).length == 2) { beat = "0"+beat; }
+				
 				return beat;
 		},
 		g: function(){
@@ -401,7 +406,7 @@ function date(format, timestamp) {
 		//I not supported yet
 		O: function(){
 			 var t = pad(Math.abs(jsdate.getTimezoneOffset()/60*100), 4);
-			 if (jsdate.getTimezoneOffset() > 0) t = "-" + t; else t = "+" + t;
+			 if (jsdate.getTimezoneOffset() > 0) { t = "-" + t; } else { t = "+" + t; }
 			 return t;
 		},
 		P: function(){
@@ -421,6 +426,8 @@ function date(format, timestamp) {
 	};
 	
 	return format.replace(/[\\]?([a-zA-Z])/g, function(t, s){
+			var ret;
+			
 			if( t!=s ){
 					// escaped
 					ret = s;
@@ -439,11 +446,11 @@ function date(format, timestamp) {
 function pageWidth() {
 	var w;
 	
-	if(window.innerWidth != null) { 
+	if(window.innerWidth !== null) { 
 		w = window.innerWidth;
 	} else if(document.documentElement && document.documentElement.clientWidth) {
 		w = document.documentElement.clientWidth;
-	} else if(document.body != null) {
+	} else if(document.body !== null) {
 		w = document.body.clientWidth;
 	} else {
 		w = null;
@@ -455,11 +462,11 @@ function pageWidth() {
 function pageHeight() {
 	var h;
 	
-	if(window.innerHeight != null) { 
+	if(window.innerHeight !== null) { 
 		h = window.innerHeight;
 	} else if(document.documentElement && document.documentElement.clientHeight) {
 		h = document.documentElement.clientHeight;
-	} else if(document.body != null) {
+	} else if(document.body !== null) {
 		h = document.body.clientHeight;
 	} else {
 		h = null;
@@ -484,19 +491,19 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	
 	var iStep = 2;
 	
-	if (typeof window.pageYOffset != 'undefined') {
+	if (typeof window.pageYOffset !== 'undefined') {
 		currentScrollTop = window.pageYOffset;
-	} else if (typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') {
+	} else if (typeof document.compatMode !== 'undefined' && document.compatMode !== 'BackCompat') {
 		currentScrollTop = document.documentElement.scrollTop;
-	} else if (typeof document.body != 'undefined') {
+	} else if (typeof document.body !== 'undefined') {
 		currentScrollTop = document.body.scrollTop;
 	}
 	
-	if (typeof window.pageXOffset != 'undefined') {
+	if (typeof window.pageXOffset !== 'undefined') {
 		currentScrollLeft = window.pageXOffset;
-	} else if (typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') {
+	} else if (typeof document.compatMode != 'undefined' && document.compatMode !== 'BackCompat') {
 		currentScrollLeft = document.documentElement.scrollLeft;
-	} else if (typeof document.body != 'undefined') {
+	} else if (typeof document.body !== 'undefined') {
 		currentScrollLeft = document.body.scrollLeft;
 	}
 	
@@ -537,10 +544,10 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	
 	eventlog("scroll", "debug", currentScrollLeft+" to "+iTargetX+" = "+scrollLeft+", "+currentScrollTop+" to "+iTargetY+" = "+scrollTop);
 	
-	if(scrollTop != 0 || scrollLeft != 0) {
+	if(scrollTop !== 0 || scrollLeft !== 0) {
 		window.scrollBy(scrollLeft, scrollTop);
 		
-		setTimeout(function() { scrollSlow(iTargetX, iTargetY, iSpeed) }, iSpeed);
+		setTimeout(function() { scrollSlow(iTargetX, iTargetY, iSpeed); }, iSpeed);
 	} else {
 		eventlog("scroll", "debug", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
 	}

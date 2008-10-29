@@ -40,14 +40,15 @@ function initXMLHttpClient() {
 		xmlhttp = new XMLHttpRequest();
 	} catch (e) {
 		// IE
-		var XMLHTTP_IDS = new Array('MSXML2.XMLHTTP.5.0',
-									'MSXML2.XMLHTTP.4.0',
-									'MSXML2.XMLHTTP.3.0',
-									'MSXML2.XMLHTTP',
-									'Microsoft.XMLHTTP' );
+		var XMLHTTP_IDS = [ 'MSXML2.XMLHTTP.5.0',
+		                    'MSXML2.XMLHTTP.4.0',
+		                    'MSXML2.XMLHTTP.3.0',
+		                    'MSXML2.XMLHTTP',
+		                    'Microsoft.XMLHTTP' ];
+		
 		var success = false;
 		
-		for (var i=0;i < XMLHTTP_IDS.length && !success; i++) {
+		for(var i = 0; i < XMLHTTP_IDS.length && !success; i++) {
 			try {
 				xmlhttp = new ActiveXObject(XMLHTTP_IDS[i]);
 				success = true;
@@ -72,7 +73,7 @@ function initXMLHttpClient() {
 function getHttpRequest(sUrl, bCacheable) {
 	var responseText = "";
 	
-	if (bCacheable == null) {
+	if (bCacheable === null) {
 		bCacheable = true;
 	}
 	
@@ -91,10 +92,9 @@ function getHttpRequest(sUrl, bCacheable) {
 				alert("Error! URL: "+ sUrl +"\nError message: "+ e);
 			}
 			
+			responseText = oRequest.responseText;
 			
-			var responseText = oRequest.responseText;
-			
-			if(responseText.replace(/\s+/g,'').length == 0) {
+			if(responseText.replace(/\s+/g,'').length === 0) {
 				responseText = '';
 			} else {
 				// Trim the left of the response
@@ -114,13 +114,13 @@ function getHttpRequest(sUrl, bCacheable) {
 function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 	var sUrl = '';
 	var o;
-	var aReturn = Array();
+	var aReturn = [];
 	for(var i = 0; i < aUrlParts.length; i++) {
 		sUrl += aUrlParts[i];
 		
 		// Prevent reaching too long urls, split the update to several 
 		// requests. Just start the request and clean the string strUrl
-		if(sUrl != '' && sBaseUrl.length+sUrl.length > iLimit) {
+		if(sUrl !== '' && sBaseUrl.length+sUrl.length > iLimit) {
 			o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
 			if(o) {
 				aReturn = aReturn.concat(o);
@@ -129,7 +129,7 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 		}
 	}
 	
-	if(sUrl != '') {
+	if(sUrl !== '') {
 		// Bulk update the objects, this query should not be cached
 		o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
 		if(o) {
@@ -150,17 +150,18 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
  */
 function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	var sResponse = null;
+	var responseText;
 	
-	if (bCacheable == null) {
+	if (bCacheable === null) {
 		bCacheable = true;
 	}
 	
-	if (bRetryable == null) {
+	if (bRetryable === null) {
 		bRetryable = true;
 	}
 	
 	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
-	if(bCacheable && typeof(ajaxQueryCache[sUrl]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
+	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
 		responseText = ajaxQueryCache[sUrl].response;
 		
 		sResponse = eval('( '+responseText+')');
@@ -168,7 +169,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		var oRequest = initXMLHttpClient();
 		
 		if(oRequest) {
-			var oOpt = Object();
+			var oOpt = {};
 			// Save this options to oOpt (needed for query cache)
 			oOpt.url = sUrl;
 			oOpt.timestamp = Date.parse(new Date());
@@ -177,9 +178,9 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
 			oRequest.send(null);
 			
-			var responseText = oRequest.responseText;
+			responseText = oRequest.responseText;
 			
-			if(responseText.replace(/\s+/g,'').length == 0) {
+			if(responseText.replace(/\s+/g,'').length === 0) {
 				if(bCacheable) {
 					// Cache that dialog
 					updateQueryCache(oOpt.url, oOpt.timestamp, '');
@@ -192,7 +193,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 				
 				// Error handling for the AJAX methods
 				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-					var oMsg = Object();
+					var oMsg = {};
 					oMsg.type = 'CRITICAL';
 					oMsg.message = "PHP error in ajax request handler:\n"+responseText;
 					oMsg.title = "PHP error";
@@ -227,7 +228,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		}
 	}
 	
-	if(sResponse != null) {
+	if(sResponse !== null) {
 		frontendMessageHide();
 	}
 	
@@ -246,7 +247,7 @@ function getRequest(url,myCallback,oOpt) {
 	} else {
 		var oRequest = initXMLHttpClient();
 		
-		if (oRequest != null) {
+		if (oRequest !== null) {
 			// Save this options to oOpt (needed for query cache)
 			oOpt.url = url;
 			oOpt.timestamp = Date.parse(new Date());
@@ -274,7 +275,7 @@ function getAnswer(oRequest,myCallback,oOpt,bCached) {
 				responseText = oOpt.response;
 			}
 			
-			if(responseText.replace(/\s+/g,'').length == 0) {
+			if(responseText.replace(/\s+/g,'').length === 0) {
 				// Cache that dialog
 				updateQueryCache(oOpt.url, oOpt.timestamp, '');
 				

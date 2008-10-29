@@ -95,7 +95,7 @@ function createjsDOMenu() {
 	mainMenu.items.menu_management.setSubMenu(submenu_management);
 	
 	if(mapOptions.length > 15) {
-		submenu_maps_open = Array();
+		submenu_maps_open = [];
 		submenu_maps_open_sep = new jsDOMenu(170);
 		for(i=0;i<=Math.floor(mapOptions.length/15);i++) {
 			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i, "")
@@ -116,7 +116,7 @@ function createjsDOMenu() {
 		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open_sep);
 		
 		// Open in NagVis
-		submenu_maps_open_nagvis = Array();
+		submenu_maps_open_nagvis = [];
 		submenu_maps_open_sep_nagvis = new jsDOMenu(170);
 		for(i=0;i<=Math.floor(mapOptions.length/15);i++) {
 			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i+"_nagvis", "")
@@ -167,7 +167,7 @@ function createjsDOMenu() {
 		submenu_addobject.items.menu_addobject_special.setSubMenu(submenu_addobject_special);
 	}
 	
-	mainMenu.setAllExceptFilter(new Array());
+	mainMenu.setAllExceptFilter([]);
 	
 	setPopUpMenu(mainMenu);
 	activatePopUpMenuBy(1, 2);

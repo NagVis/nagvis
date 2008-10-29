@@ -27,23 +27,23 @@
 
 // replace the system context menu?
 var _replaceContext = false;
-var _openContextMenus = Array();
+var _openContextMenus = [];
 
 // call from the onMouseDown event, passing the event if standards compliant
 function contextMouseDown(event) {
 	// IE is evil and doesn't pass the event object
-	if (event == null) {
+	if (event === null) {
 		event = window.event;
 	}
 	
 	// we assume we have a standards compliant browser, but check if we have IE
-	var target = event.target != null ? event.target : event.srcElement;
+	var target = event.target !== null ? event.target : event.srcElement;
 	
 	// Hide all context menus
 	contextHide();
 	
 	// only show the context menu if the right mouse button is pressed on the obj
-	if (event.button == 2) {
+	if (event.button === 2) {
 		// Prepare to show the context menu
 		_replaceContext = true;
 	}
@@ -58,12 +58,12 @@ function contextHide() {
 
 function contextShow(event) {
 	// IE is evil and doesn't pass the event object
-	if (event == null) {
+	if (event === null) {
 		event = window.event;
 	}
 	
 	// we assume we have a standards compliant browser, but check if we have IE
-	var target = event.target != null ? event.target : event.srcElement;
+	var target = event.target !== null ? event.target : event.srcElement;
 	
 	if(_replaceContext) {
     // Hide hover menu
@@ -78,7 +78,7 @@ function contextShow(event) {
 		// Workaround for the different structure of targets on lines/icons
 		// Would be nice to fix the structure
 		var id;
-		if(target.id != '') {
+		if(target.id !== '') {
 			id = target.id;
 		} else {
 			id = target.parentNode.parentNode.parentNode.id;

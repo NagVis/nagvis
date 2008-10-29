@@ -71,7 +71,7 @@ function frontendMessage(oMessage) {
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = htmlBase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
+	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
 	
 	oCell.appendChild(oImg);
 	oRow.appendChild(oCell);
@@ -89,7 +89,7 @@ function frontendMessage(oMessage) {
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = htmlBase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
+	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
 	
 	oCell.appendChild(oImg);
 	oRow.appendChild(oCell);

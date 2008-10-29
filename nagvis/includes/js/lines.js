@@ -77,8 +77,8 @@ function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime
 
 // This function draws an arrow like it is used on NagVis maps
 function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder) {
-	var xCoord = Array();
-	var yCoord = Array();
+	var xCoord = [];
+	var yCoord = [];
 	
 	xCoord[0] = x1 + newX(x2-x1, y2-y1, 0, w);
 	xCoord[1] = x2 + newX(x2-x1, y2-y1, -4*w, w);
