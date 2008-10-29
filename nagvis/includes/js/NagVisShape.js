@@ -56,6 +56,7 @@ function NagVisShape (oConf) {
 		if(this.parsedObject) {
 			document.getElementById('map').removeChild(this.parsedObject);
 		}
+		
 		this.parsedObject = document.getElementById('map').appendChild(oContainerDiv);
 	}
 	

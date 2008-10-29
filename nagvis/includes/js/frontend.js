@@ -138,30 +138,37 @@ function runWorker(iCount, sType) {
 				// Now proceed with real actions when everything is OK
 				var arrObj = getObjectsToUpdate();
 				
-				// Create the ajax request for bulk update
+				// Create the ajax request for bulk update, handle shape updates
 				var aUrlParts = [];
+				var aShapesToUpdate = [];
 				for(var i = 0; i < arrObj.length; i++) {
-					var obj_id = aMapObjects[arrObj[i]].objId;
 					var type = aMapObjects[arrObj[i]].conf.type;
-					var name = aMapObjects[arrObj[i]].conf.name;
-					var service_description = aMapObjects[arrObj[i]].conf.service_description;
-					var map = oMapProperties.map_name;
-					var sUrlPart = '';
 					
-					if(name) {
-						sUrlPart += '&i[]='+obj_id;
-						sUrlPart += '&m[]='+map;
-						sUrlPart += '&t[]='+type;
-						sUrlPart += '&n1[]='+name;
-					
-						if(service_description) {
-							sUrlPart += '&n2[]='+service_description;
-						} else {
-							sUrlPart += '&n2[]=';
-						}
+					// Shapes which need to update need a special handling
+					if(type === 'shape') {
+						aShapesToUpdate.push(arrObj[i]);
+					} else {
+						var obj_id = aMapObjects[arrObj[i]].objId;
+						var name = aMapObjects[arrObj[i]].conf.name;
+						var service_description = aMapObjects[arrObj[i]].conf.service_description;
+						var map = oMapProperties.map_name;
+						var sUrlPart = '';
 						
-						// Append part to array of parts
-						aUrlParts.push(sUrlPart);
+						if(name) {
+							sUrlPart += '&i[]='+obj_id;
+							sUrlPart += '&m[]='+map;
+							sUrlPart += '&t[]='+type;
+							sUrlPart += '&n1[]='+name;
+						
+							if(service_description) {
+								sUrlPart += '&n2[]='+service_description;
+							} else {
+								sUrlPart += '&n2[]=';
+							}
+							
+							// Append part to array of parts
+							aUrlParts.push(sUrlPart);
+						}
 					}
 				}
 				
@@ -170,6 +177,11 @@ function runWorker(iCount, sType) {
 				var bStateChanged = false;
 				if(o.length > 0) {
 					bStateChanged = updateMapObjects(o);
+				}
+				
+				// Update shapes when needed
+				if(aShapesToUpdate.length > 0) {
+					updateShapes(aShapesToUpdate);
 				}
 				
 				// When some state changed on the map update the title and favicon
@@ -214,7 +226,10 @@ function getObjectsToUpdate() {
 	// Asign all object indexes to return Array
 	for(var i = 0; i < aMapObjects.length; i++) {
 		if(aMapObjects[i].lastUpdate <= (Date.parse(new Date())-(oWorkerProperties.worker_update_object_states*1000))) {
-			arrReturn.push(i);
+			// Do not update shapes where enable_refresh=0
+			if(aMapObjects[i].type !== 'shape' || (aMapObjects[i].type === 'shape' && aMapObjects[i].enable_refresh && aMapObjects[i].enable_refresh === '1')) {
+				arrReturn.push(i);
+			}
 		}
 	}
 	
@@ -447,13 +462,30 @@ function setMapObjects(aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: End setting map objects");
 }
 
+
+/**
+ * updateShapes()
+ *
+ * Bulk refreshes shapes (Only reparsing)
+ *
+ * @param   Array    Array of objects to reparse
+ * @return  Boolean  Returns true when some state has changed
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function updateShapes(aShapes) {
+	var len = aShapes.length;
+	for(var i = 0; i < len; i++) {
+		aMapObjects[i].parse();
+	}
+}
+
 /**
  * updateMapObjects()
  *
  * Bulk update map objects
  *
- * @return  Boolean  Returns true when some state has changed
  * @param   Array    Array of objects to parse to the map
+ * @return  Boolean  Returns true when some state has changed
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateMapObjects(aMapObjectInformations) {
