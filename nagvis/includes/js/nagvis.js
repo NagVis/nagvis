@@ -263,9 +263,9 @@ function date(format, timestamp) {
 	// *     returns 2: 'September 2, 2003, 2:26 am'
 	
 	var a, jsdate=((timestamp) ? new Date(timestamp*1000) : new Date());
-	var pad = function(n, c){
-		if( (n = n + "").length < c ) {
-			return new [++c - n.length].join("0") + n;
+	var pad = function(n, c) {
+		if((n = n + "").length < c ) {
+			return [++c - n.length].join("0") + n;
 		} else {
 			return n;
 		}
