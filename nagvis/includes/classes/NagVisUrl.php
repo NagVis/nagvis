@@ -69,7 +69,7 @@ class NagVisUrl {
     //$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
 
     // Kick of the worker
-    $ret .= 'runWorker(0, \'url\');';
+    $ret .= 'addLoadEvent(runWorker(0, \'url\'));';
 
     return $ret;
   }

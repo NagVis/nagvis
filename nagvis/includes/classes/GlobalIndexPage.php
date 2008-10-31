@@ -74,7 +74,7 @@ class GlobalIndexPage {
 		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
 		
 		// Kick of the worker
-		$ret .= 'runWorker(0, \'overview\');';
+		$ret .= 'addLoadEvent(runWorker(0, \'overview\'));';
 		
 		return $ret;
 	}

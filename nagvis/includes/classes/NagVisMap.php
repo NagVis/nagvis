@@ -73,7 +73,7 @@ class NagVisMap extends GlobalMap {
 		$ret .= 'var aInitialMapObjects='.$this->parseObjectsJson().';'."\n";
 		
 		// Kick of the worker
-		$ret .= 'runWorker(0, \'map\');';
+		$ret .= 'addLoadEvent(runWorker(0, \'map\'));';
 		
 		// This disables the context menu when someone clicked anywhere on the map
 		$ret .= 'document.body.onmousedown = contextMouseDown;';
