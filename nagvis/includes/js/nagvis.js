@@ -145,13 +145,14 @@ function switchRotation(obj, startLabel, stopLabel) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setRotationLabel(startLabel,stopLabel) {
+	var oRotationSwitch = document.getElementById('rotationSwitch');
 	if(getUrlParam('rotation') === '') {
-		document.getElementById('rotationSwitch').style.visibility = 'hidden';
+		oRotationSwitch.style.visibility = 'hidden';
 	} else {
 		if(oPageProperties.rotationEnabled) {
-			document.getElementById('rotationSwitch').innerHTML = stopLabel;
+			oRotationSwitch.innerHTML = stopLabel;
 		} else {
-			document.getElementById('rotationSwitch').innerHTML = startLabel;
+			oRotationSwitch.innerHTML = startLabel;
 		}
 	}
 }
@@ -508,8 +509,9 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	}
 	
 	// Get offset of the map div
-	if(document.getElementById('map') && document.getElementById('map').offsetTop) {
-		iMapOffsetTop = document.getElementById('map').offsetTop;
+	var oMap = document.getElementById('map');
+	if(oMap && oMap.offsetTop) {
+		iMapOffsetTop = oMap.offsetTop;
 	} else {
 		iMapOffsetTop = 0;
 	}

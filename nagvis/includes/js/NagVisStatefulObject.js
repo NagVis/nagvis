@@ -39,7 +39,7 @@ function NagVisStatefulObject (oConf) {
 	this.getMembers = function() {
 		this.members = [];
 		if(this.conf.members && this.conf.members.length > 0) {
-			for(var i = 0; i < this.conf.members.length; i++) {
+			for(var i = 0, len = this.conf.members.length; i < len; i++) {
 				var oMember = this.conf.members[i];
 				
 				switch (oMember.type) {
@@ -135,12 +135,13 @@ function NagVisStatefulObject (oConf) {
 		}
 		
 		// When this is an update, remove the object first
+		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
-			document.getElementById('map').removeChild(this.parsedObject);
+			oMap.removeChild(this.parsedObject);
 		}
     
     // Append child to map and save reference in parsedObject
-		this.parsedObject = document.getElementById('map').appendChild(oContainerDiv);
+		this.parsedObject = oMap.appendChild(oContainerDiv);
     
     // Add a context menu to the object when enabled
 		// FIXME: add config option to make this work

@@ -51,10 +51,12 @@ function NagVisTextbox (oConf) {
 		oContainerDiv.appendChild(this.parseTextbox());
 		
 		// When this is an update, remove the object first
+		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
-			document.getElementById('map').removeChild(this.parsedObject);
+			oMap.removeChild(this.parsedObject);
 		}
-		this.parsedObject = document.getElementById('map').appendChild(oContainerDiv);
+		
+		this.parsedObject = oMap.appendChild(oContainerDiv);
 	}
 	
 	/**

@@ -51,7 +51,7 @@ function contextMouseDown(event) {
 
 function contextHide() {
 	// Loop all open context menus
-	for (var i = 0; i < _openContextMenus.length; i++) {
+	for (var i = 0, len = _openContextMenus.length; i < len; i++) {
 		_openContextMenus[i].style.display = 'none';
 	}
 }

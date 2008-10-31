@@ -141,7 +141,7 @@ function runWorker(iCount, sType) {
 				// Create the ajax request for bulk update, handle shape updates
 				var aUrlParts = [];
 				var aShapesToUpdate = [];
-				for(var i = 0; i < arrObj.length; i++) {
+				for(var i = 0, len = arrObj.length; i < len; i++) {
 					var type = aMapObjects[arrObj[i]].conf.type;
 					
 					// Shapes which need to update need a special handling
@@ -155,15 +155,12 @@ function runWorker(iCount, sType) {
 						var sUrlPart = '';
 						
 						if(name) {
-							sUrlPart += '&i[]='+obj_id;
-							sUrlPart += '&m[]='+map;
-							sUrlPart += '&t[]='+type;
-							sUrlPart += '&n1[]='+name;
+							sUrlPart = sUrlPart + '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
 						
 							if(service_description) {
-								sUrlPart += '&n2[]='+service_description;
+								sUrlPart = sUrlPart + '&n2[]='+service_description;
 							} else {
-								sUrlPart += '&n2[]=';
+								sUrlPart = sUrlPart + '&n2[]=';
 							}
 							
 							// Append part to array of parts
@@ -224,7 +221,7 @@ function getObjectsToUpdate() {
 	var arrReturn = [];
 	
 	// Asign all object indexes to return Array
-	for(var i = 0; i < aMapObjects.length; i++) {
+	for(var i = 0, len = aMapObjects.length; i < len; i++) {
 		if(aMapObjects[i].lastUpdate <= (Date.parse(new Date())-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
 			if(aMapObjects[i].type !== 'shape' || (aMapObjects[i].type === 'shape' && aMapObjects[i].enable_refresh && aMapObjects[i].enable_refresh === '1')) {
@@ -311,7 +308,7 @@ function setMapHoverUrls() {
 	var aTemplateObjects;
 	
 	// Loop all map objects to get the used hover templates
-	for(var a = 0; a < aMapObjects.length; a++) {
+	for(var a = 0, len = aMapObjects.length; a < len; a++) {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do use hover_url
@@ -332,7 +329,7 @@ function setMapHoverUrls() {
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
-		for(var i = 0; i < aTemplateObjects.length; i++) {
+		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
 			oHoverUrls[aTemplateObjects[i].url] = aTemplateObjects[i].code;
 		}
 	}
@@ -351,7 +348,7 @@ function setMapHoverTemplates() {
 	var aTemplateObjects;
 	
 	// Loop all map objects to get the used hover templates
-	for(var a = 0; a < aMapObjects.length; a++) {
+	for(var a = 0, len = aMapObjects.length; a < len; a++) {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do not use hover_url
@@ -372,7 +369,7 @@ function setMapHoverTemplates() {
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
-		for(var i = 0; i < aTemplateObjects.length; i++) {
+		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
 			oHoverTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
 		}
 	}
@@ -420,7 +417,7 @@ function setMapBasics(oProperties) {
  */
 function setMapObjects(aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
-	for(var i = 0; i < aMapObjectConf.length; i++) {
+	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
 		var sType = aMapObjectConf[i].type
 		var oObj;
 		
@@ -473,8 +470,7 @@ function setMapObjects(aMapObjectConf) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateShapes(aShapes) {
-	var len = aShapes.length;
-	for(var i = 0; i < len; i++) {
+	for(var i = 0, len = aShapes.length; i < len; i++) {
 		aMapObjects[i].parse();
 	}
 }
@@ -491,12 +487,12 @@ function updateShapes(aShapes) {
 function updateMapObjects(aMapObjectInformations) {
 	var bStateChanged = false;
 	
-	for(var i = 0; i < aMapObjectInformations.length; i++) {
+	for(var i = 0, len = aMapObjectInformations.length; i < len; i++) {
 		var objId = aMapObjectInformations[i].objId;
 		var intIndex = -1;
 		
 		// Find the id with the matching objId
-		for(var a = 0; a < aMapObjects.length; a++) {
+		for(var a = 0, len = aMapObjects.length; a < len; a++) {
 			if(aMapObjects[a].objId == objId) {
 				intIndex = a;
 			}

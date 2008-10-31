@@ -175,7 +175,7 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 				var rowHtmlCode = results[1];
 				
 				// Loop all child object until all looped or the child limit is reached
-				for(var i = 0; i <= oObj.conf.hover_childs_limit && i < oObj.members.length; i++) {
+				for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
 					if(i < oObj.conf.hover_childs_limit) {
 						var oMember = oObj.members[i];
 						if(oMember.type != 'textbox' && oMember.type != 'shape') {
@@ -183,7 +183,7 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 							oMember.parent_type = oObj.type;
 							oMember.parent_name = oObj.name;
 							
-							childsHtmlCode += replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
+							childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 						}
 					} else {
 						// Create an end line which shows the number of hidden child items
@@ -195,7 +195,7 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 						                          'summary_output': numHiddenMembers+' more items...', 
 						                          '<!--\sBEGIN\sservicegroup_child\s-->.+?<!--\sEND\sservicegroup_child\s-->': ''}};
 						
-						childsHtmlCode += replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
+						childsHtmlCode = childsHtmlCode +  replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 					}
 				}
 				

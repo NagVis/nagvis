@@ -42,7 +42,7 @@ loopTimer: null,
 
 preloadIcons: function(iconSequence) {
   var dummyImageForPreloading = document.createElement("img");
-  for (var i=0; i<iconSequence.length; i++) {
+  for (var i=0, len = iconSequence.length; i < len; i++) {
     dummyImageForPreloading.src = iconSequence[i];
   }
 },
@@ -58,7 +58,7 @@ addLink: function(iconURL) {
 
 removeLinkIfExists: function() {
   var links = this.docHead.getElementsByTagName("link");
-  for (var i=0; i<links.length; i++) {
+  for (var i=0, len = links.length; i<len; i++) {
     var link = links[i];
     if (link.type=="image/x-icon" && link.rel=="shortcut icon") {
       this.docHead.removeChild(link);

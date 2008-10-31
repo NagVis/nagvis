@@ -50,12 +50,12 @@ function eventlogInitialize() {
 			document.body.style.cursor='auto';
 		}
 		oEventlogControl.onclick = function() {
-			if(document.getElementById('eventlog').style.display != 'none') {
-				document.getElementById('eventlog').style.display = 'none';
-				document.getElementById('eventlogControl').style.bottom = '0px';
+			if(oEventlog.style.display != 'none') {
+				oEventlog.style.display = 'none';
+				oEventlogControl.style.bottom = '0px';
 			} else {
-				document.getElementById('eventlog').style.display = '';
-				document.getElementById('eventlogControl').style.bottom = '75px';
+				oEventlog.style.display = '';
+				oEventlogControl.style.bottom = '75px';
 			}
 		};
 		

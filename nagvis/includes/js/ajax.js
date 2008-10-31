@@ -48,7 +48,7 @@ function initXMLHttpClient() {
 		
 		var success = false;
 		
-		for(var i = 0; i < XMLHTTP_IDS.length && !success; i++) {
+		for(var i = 0, len = XMLHTTP_IDS.length; i < len && !success; i++) {
 			try {
 				xmlhttp = new ActiveXObject(XMLHTTP_IDS[i]);
 				success = true;
@@ -115,8 +115,8 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 	var sUrl = '';
 	var o;
 	var aReturn = [];
-	for(var i = 0; i < aUrlParts.length; i++) {
-		sUrl += aUrlParts[i];
+	for(var i = 0, len = aUrlParts.length; i < len; i++) {
+		sUrl = sUrl + aUrlParts[i];
 		
 		// Prevent reaching too long urls, split the update to several 
 		// requests. Just start the request and clean the string strUrl
