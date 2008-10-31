@@ -492,7 +492,7 @@ function updateMapObjects(aMapObjectInformations) {
 		var intIndex = -1;
 		
 		// Find the id with the matching objId
-		for(var a = 0, len = aMapObjects.length; a < len; a++) {
+		for(var a = 0, len1 = aMapObjects.length; a < len1; a++) {
 			if(aMapObjects[a].objId == objId) {
 				intIndex = a;
 			}
