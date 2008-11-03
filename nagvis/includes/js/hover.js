@@ -216,6 +216,22 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 		sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
 	}
 	
+	// Search for images and append current timestamp to src (prevent caching of
+	// images e.a. when some graphs should be fresh)
+	var regex = new RegExp("<img.*src=['\"]?([^>'\"]*)['\"]?>", 'gi');
+	var results = regex.exec(sTemplateCode);
+	if(results != null) {
+		for(var i = 0, len = results.length; i < len; i=i+2) {
+			var sTmp;
+			
+			// Replace src value
+			sTmp = results[i].replace(results[i+1], results[i+1]+"&time="+Date.parse(new Date()));
+			
+			// replace image code
+			sTemplateCode = sTemplateCode.replace(results[i], sTmp);
+		}
+	}
+	
 	return sTemplateCode;
 }
 
