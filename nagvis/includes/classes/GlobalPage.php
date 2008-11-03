@@ -169,25 +169,25 @@ class GlobalPage {
 	
 	/**
 	 * Writes a Message to message array and does what to do...
-	 * serverity: ERROR, WARNING, INFORMATION
+	 * severity: ERROR, WARNING, INFORMATION
 	 *
-	 * @param	String	$serverity	Serverity of the message (ERROR|WARNING|INFORMATION)
+	 * @param	String	$severity	Serverity of the message (ERROR|WARNING|INFORMATION)
 	 * @param	String	$text		String to display as message
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-	function messageToUser($serverity='WARNING', $text) {
-		switch($serverity) {
+	function messageToUser($severity='WARNING', $text) {
+		switch($severity) {
 			case 'ERROR':
 			case 'INFO-STOP':
 				// print the message box and kill the script
-				$this->body .= $this->messageBox($serverity, $text);
+				$this->body .= $this->messageBox($severity, $text);
 				$this->printPage();
 				// end of script
 			break;
 			case 'WARNING':
 			case 'INFORMATION':
 				// add the message to message Array - the printing will be done later, the message array has to be superglobal, not a class variable
-				$arrMessage = Array(Array('serverity' => $serverity, 'text' => $text));
+				$arrMessage = Array(Array('severity' => $severity, 'text' => $text));
 				if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
 					$this->CORE->MAINCFG->setRuntimeValue('userMessages',array_merge($this->CORE->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
 				} else {
@@ -208,7 +208,7 @@ class GlobalPage {
 		
 		if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
 			foreach($this->CORE->MAINCFG->getRuntimeValue('userMessages') AS $message) {
-				$ret .= $this->messageBox($message['serverity'], $message['text']);
+				$ret .= $this->messageBox($message['severity'], $message['text']);
 			}
 		}
 		
@@ -218,16 +218,16 @@ class GlobalPage {
 	/**
 	 * Creates a Messagebox for informations and errors
 	 *
-	 * @param	String	$serverity	Serverity of the message (ERROR|WARNING|INFORMATION)
+	 * @param	String	$severity	Serverity of the message (ERROR|WARNING|INFORMATION)
 	 * @param	String	$text			Error message
 	 * @return 	Array	HTML Code
 	 * @author	Michael Luebben <michael_luebben@web.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function messageBox($serverity, $text) {
+	function messageBox($severity, $text) {
 		$ret = '';
 		
-		switch($serverity) {
+		switch($severity) {
 			case 'ERROR':
 				$messageIcon = 'msg_error.png';
 			break;
@@ -240,9 +240,9 @@ class GlobalPage {
 			break;
 		}
 		
-		if($serverity == 'ERROR' || $serverity == 'INFO-STOP') {
+		if($severity == 'ERROR' || $severity == 'INFO-STOP') {
 			$ret .= '<META http-equiv="refresh" content="60;">';
-			if($serverity == 'ERROR') {
+			if($severity == 'ERROR') {
 				$ret .= '<style type="text/css">.main { background-color: yellow; }</style>';
 			}
 			$ret .= '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
@@ -250,9 +250,9 @@ class GlobalPage {
 		}
 		$ret .= '<table class="messageBox" cellpadding="2" cellspacing="2">';
 		$ret .= '<tr><th width="40"><img src="'.$this->CORE->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
-		$ret .= '</th><th>'.$serverity.'</th></tr>';
+		$ret .= '</th><th>'.$severity.'</th></tr>';
 		$ret .= '<tr><td colspan="2">'.$text.'</td></tr></table>';
-		if($serverity == 'ERROR') {
+		if($severity == 'ERROR') {
 			$ret .= '</td></tr></table>';
 		}
 		
