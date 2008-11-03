@@ -379,11 +379,11 @@ class GlobalMainCfg {
 			'worker' => Array(
 				'interval' => Array('must' => 0,
 					'editable' => 0,
-					'default' => '5',
+					'default' => '10',
 					'match' => MATCH_INTEGER),
 				'updateobjectstates' => Array('must' => 0,
 					'editable' => 0,
-					'default' => '15',
+					'default' => '30',
 					'match' => MATCH_INTEGER)),
 			'internal' => Array(
 				'version' => Array('must' => 1,

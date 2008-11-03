@@ -119,10 +119,10 @@
 [worker]
 ; The interval in seconds in which the worker will check for objects which need
 ; to be updated
-;interval=5
+;interval=10
 ; The retention time of the states in seconds in the frontend. The state 
 ; informations will be refreshed after this time
-;updateobjectstates=15
+;updateobjectstates=30
 
 ; Backend definitions
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
