@@ -129,6 +129,7 @@ class GlobalFrontendMessageBox {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	private function buildHTMLMessage() {
+		$this->page .= '<meta http-equiv="refresh" content="60">';
 		$this->page .= '<style type="text/css"><!-- @import url('.$this->pathHtmlBase.'/nagvis/includes/css/frontendMessage.css);  --></style>'."\n";
 		$this->page .= '<div id="messageBoxDiv"'."\n";
 		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
