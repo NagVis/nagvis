@@ -29,13 +29,13 @@
  */
 class GlobalValidator {
 
-	// Name from parameter which to be check
+	// Name from parameter which has to be checked
 	private $parameterName = NULL;
 
 	// Value for parameter
 	private $parameterValue = NULL;
 
-	// This array contains parameter with options, which be allowed
+	// This array contains parameter with options which be allowed
 	private $validatorArr = array();
 
 	// This variable contains message for validator
@@ -54,7 +54,7 @@ class GlobalValidator {
 		$this->parameterValue = $value;
 
 		/**
-		 * Array with allowed parameter and there options
+		 * Array with allowed parameter and their options
 		 *
 		 * Global options for all parameter types:
 		 *		name:				string	Name from parameter
@@ -64,10 +64,10 @@ class GlobalValidator {
 		 *		notEmpty			boolean	Defines whether a variable can be empty (TRUE or FALSE)
 		 *
 		 * Options only for parameter type string:
-		 * 	allowedEntrys	array		Contains names which only to be allowed for this parameter
+		 * 	allowedEntrys	array		Contains names which are only allowed for this parameter
 		 *
 		 * Options only for parameter type integer:
-		 *		mustInRange		boolean	Defines whether a integer must to in a range (TRUE or FALSE)
+		 *		mustInRange		boolean	Defines whether an integer must to in a range (TRUE or FALSE)
 		 *		minValue			integer	Minimal value (mustInRange must be TRUE)
 		 *		maxValue			integer	Maximal value (mustInRange must be TRUE)
 		 */
@@ -211,7 +211,7 @@ class GlobalValidator {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function isValid() {
-		// Check if paramter allowed
+		// Check if parameter is allowed
 		if (FALSE === $this->isValidParameterName()) {
 			return FALSE;
 		} else {
@@ -293,7 +293,7 @@ class GlobalValidator {
 	}
 
 	/**
-	 * Return message form validator
+	 * Return message from validator
 	 *
 	 * @param   string   $tring
 	 * @access  private

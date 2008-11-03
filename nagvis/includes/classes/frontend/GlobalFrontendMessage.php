@@ -29,7 +29,7 @@
  */
 class GlobalFrontendMessage {
 	/**
-	 * The contructor atm only wrapper for GlobalFrontendMessageBox
+	 * The constructor atm only wrapper for GlobalFrontendMessageBox
 	 *
 	 * @param   strind	$type
 	 * @param   string	$message

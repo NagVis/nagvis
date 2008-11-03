@@ -91,7 +91,7 @@ class GlobalValidatorBoolean extends GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if value a valid boolean
+	 * Check if value is a valid boolean
 	 *
 	 * @return  boolean
 	 * @access  protected

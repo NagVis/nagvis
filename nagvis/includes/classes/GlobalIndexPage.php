@@ -63,7 +63,7 @@ class GlobalIndexPage {
 	}
 	
 	/**
-	 * Parses the informations for json
+	 * Parses the information for json
 	 *
 	 * @return	String 	String with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -125,7 +125,7 @@ class GlobalIndexPage {
 	}
 	
 	/**
-	 * Returns a HTML table with the NagVis maps
+	 * Returns an HTML table with the NagVis maps
 	 *
 	 * @return	Array   HTML Code of Index Page
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -181,7 +181,7 @@ class GlobalIndexPage {
 				// Get the icon of the map
 				$MAP->MAPOBJ->fetchIcon();
 				
-				// Check if the user is permited to view this map
+				// Check if the user is permitted to view this map
 				if($MAP->MAPOBJ->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
 					if($MAP->MAPOBJ->checkMaintenance(0)) {
 						$class = '';
@@ -209,7 +209,7 @@ class GlobalIndexPage {
 						$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
 					}
 					
-					// Now form the cell with it's contents
+					// Now form the cell with its contents
 					$MAP->MAPOBJ->replaceMacros();
 					$ret .= '<td '.$class.' style="width:200px;height:200px;" '.$MAP->MAPOBJ->getHoverMenu().' onClick="'.$onClick.'">';
 					$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';

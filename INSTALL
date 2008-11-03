@@ -15,7 +15,7 @@ Get NagVis. The latest release can be found at www.nagvis.org.
 2. Unpack NagVis
 --------------------
 
-Unpack the archive to a temporary place (For example /tmp). And change to that
+Unpack the archive to a temporary place (for example /tmp). And change to that
 directory
 
 > tar xvzf nagvis-1.4*.tar.gz /tmp
@@ -46,7 +46,7 @@ You can remove the sources after installation.
 
 > rm -rf /tmp/nagvis-1.4*
 
-6. Additional Informations
+6. Additional information
 --------------------
 
 6.1 Command line parameters

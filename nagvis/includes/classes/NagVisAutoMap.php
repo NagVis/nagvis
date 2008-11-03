@@ -104,7 +104,7 @@ class NagVisAutoMap extends GlobalMap {
 		}
 		
 		/**
-		 * This sets how much layers should be displayed. Default value is -1, 
+		 * This sets how many layers should be displayed. Default value is -1, 
 		 * this means no limitation.
 		 */
 		if(isset($prop['maxLayers']) && $prop['maxLayers'] != '') {
@@ -114,7 +114,7 @@ class NagVisAutoMap extends GlobalMap {
 		}
 		
 		/**
-		 * The renderMode can be set via URL, if no is given NagVis takes the "tree"
+		 * The renderMode can be set via URL, if none is given NagVis takes the "tree"
 		 * mode
 		 */
 		if(isset($prop['renderMode']) && $prop['renderMode'] != '') {
@@ -150,7 +150,7 @@ class NagVisAutoMap extends GlobalMap {
 		// Get "root" host object
 		$this->fetchHostObjectByName($this->root);
 		
-		// Get all object informations from backend
+		// Get all object information from backend
 		$this->getObjectTree();
 		
 		if($this->filterGroup != '') {
@@ -200,7 +200,7 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
-	 * Parses the graphviz config of the autmap
+	 * Parses the graphviz config of the automap
 	 *
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -267,14 +267,14 @@ class NagVisAutoMap extends GlobalMap {
 	
 	/**
 	 * Renders the map image, saves it to var/ directory and creates the map and
-	 * ares for the links
+	 * areas for the links
 	 *
 	 * @return	Array		HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function renderMap() {
 		// This is only usable when this is preview mode (printErr = 0). This checks
-		// if there is no binary on this system. When there is no, the map is not
+		// if there is no binary on this system. When there is none, the map is not
 		// being rendered
 		if(!$this->noBinaryFound) {
 			/**
@@ -308,7 +308,7 @@ class NagVisAutoMap extends GlobalMap {
 			
 			/**
 			 * The config can not be forwarded to graphviz binary by echo, this would
-			 * cause in too long commands with big maps. SO write thoe config to a file
+			 * result in commands too long with big maps. So write the config to a file
 			 * and let it be read by graphviz binary.
 			 */
 			$fh = fopen($this->CORE->MAINCFG->getValue('paths', 'var').'automap.dot','w');
@@ -329,8 +329,8 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function fixMapCode() {
 		/**
-		 * The hover menu can't be rendered in graphviz config. The informations
-		 * which are needed here are rendered like this title="<host_name>".
+		 * The hover menu can't be rendered in graphviz config. The information
+		 * which is needed here is rendered like this title="<host_name>".
 		 *
 		 * The best idea I have for this: Extract the hostname and replace
 		 * title="<hostname>" with the hover menu code.
@@ -362,7 +362,7 @@ class NagVisAutoMap extends GlobalMap {
 		// Parse the map with its areas
 		$ret .= $this->mapCode;
 		
-		// Dynamicaly set favicon
+		// Dynamically set favicon
 		$ret .= $this->getFavicon();
 		
 		// Change title (add map alias and map state)
@@ -425,10 +425,10 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	function checkGraphviz($binary, $printErr) {
 		/**
-		 * Check if the carphviz binaries can be found in the PATH or in the 
+		 * Check if the graphviz binaries can be found in the PATH or in the 
 		 * configured path
 		 */
-		// Check if dot can be found in path (If it is ther $returnCode is 0, if not it is 1)
+		// Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
 		exec('which '.$binary, $arrReturn, $returnCode1);
 		
 		if(!$returnCode1) {
@@ -485,7 +485,7 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
-	 * Filter the object tree by the given filter group
+	 * Filter the object tree using the given filter group
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -499,7 +499,7 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
-	 * Gets the configuration of the objects by the global configuration
+	 * Gets the configuration of the objects using the global configuration
 	 *
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>

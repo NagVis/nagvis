@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisHost.php - Class of a Host in NagVis with all necessary informations
+ * NagVisHost.php - Class of a Host in NagVis with all necessary information
  *                  which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
@@ -36,7 +36,7 @@ class NagVisHost extends NagiosHost {
 	 * @param		Object 		Object of class GlobalMainCfg
 	 * @param		Object 		Object of class GlobalBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 	ID of queried backend
+	 * @param		Integer 		ID of queried backend
 	 * @param		String		Name of the host
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -79,7 +79,7 @@ class NagVisHost extends NagiosHost {
 	 * Parses the object in graphviz configuration format
 	 *
 	 * @param	Integer		Number of the current Layer
-	 * @param	Array		Array of hostnames which are already parsed
+	 * @param	Array			Array of hostnames which are already parsed
 	 * @return	String		graphviz configuration code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -98,14 +98,14 @@ class NagVisHost extends NagiosHost {
 			$strReturn .= 'URL="'.$this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
 			$strReturn .= 'target="'.$this->url_target.'", ';
 			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
-			// The root host has to be highlighted, this are the options to do this
+			// The root host has to be highlighted, these are the options to do this
 			if($layer == 0) {
 				$strReturn .= 'shape="egg",';
 			}
 			$strReturn .= 'layer="'.$layer.'"';
 			$strReturn .= ' ];'."\n ";
 			
-			// Add host to the List of parsed hosts
+			// Add host to the list of parsed hosts
 			$arrHostnamesParsed[] = $this->getName();
 			
 			foreach($this->getChilds() As $OBJ) {

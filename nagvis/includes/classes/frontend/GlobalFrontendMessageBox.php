@@ -29,19 +29,19 @@
  *			Follow type available:
  *				Message type for services:
  *					- ok		 		-> Green box for ok messages
- *					- warning 		-> Yellow box for warnings messages
+ *					- warning 		-> Yellow box for warning messages
  *					- unknown 		-> orange box for unknown messages
- *					- critical	 	-> Red box for errors messages
+ *					- critical	 	-> Red box for error messages
  *
  *				Message type for hosts:
  *					- up		 		-> Green box for up messages
- *					- down	 		-> Red box for errors messages
+ *					- down	 		-> Red box for error messages
  *					- unknown 		-> orange box for unknown messages
- *					- unreachable 		-> orange box for unknown messages
+ *					- unreachable 	-> orange box for unknown messages
  *
  *				Message type for another messages:
  *					- note 	 		-> Blue box for Information
- *					- error	 		-> Red box for errors messages
+ *					- error	 		-> Red box for error messages
  *					- permission	-> Orange box for permission messages
  *
  * @param   string   $title	Title for the Box
@@ -50,7 +50,7 @@
  * @author  Michael Luebben <michael_luebben@web.de>
  */
 class GlobalFrontendMessageBox {
-	// Contains the page which be print out
+	// Contains the page which be printed
 	private $page;
 
 	// Contains path to the html base
@@ -68,13 +68,13 @@ class GlobalFrontendMessageBox {
 											'note',
 											'permission');
 
-	//This variables contains informations which be used to build the message box
+	//This variables contains information which will be used to build the message box
 	private $type;
 	private $message;
 	private $title;
 
 	/**
-	 * The contructor check the type and build the message box
+	 * The contructor checks the type and builds the message box
 	 *
 	 * @param   strind	$type
 	 * @param   string	$message
@@ -99,7 +99,7 @@ class GlobalFrontendMessageBox {
 			$this->message = $CORE->LANG->getText('messageboxMessageWrongType', 'TYPE~'.$this->wrongType);
 		}
 		
-		// Got all informations, now build the message
+		// Got all information, now build the message
 		// Build an ajax compatible message or a message in HTML format depending on
 		// page which is being called
 		if(CONST_AJAX) {

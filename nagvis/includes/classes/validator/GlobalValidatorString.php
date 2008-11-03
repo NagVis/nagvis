@@ -68,21 +68,21 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function isValidParameter() {
-		// Check if parameter set
+		// Check if parameter is set
 		if (TRUE === $this->validateArr['mustSet']) {
 			if (FALSE === $this->mustSet($this->parameterValue)) {
 				return FALSE;
 			}
 		}
 
-		// Check if parameter empty
+		// Check if parameter is empty
 		if (TRUE === $this->validateArr['notEmpty']) {
 			if (FALSE === $this->notEmpty($this->parameterValue)) {
 				return FALSE;
 			}
 		}
 
-		// Check if value a allowed entry
+		// Check if value is an allowed entry
 		if (NULL !== $this->validateArr['allowedEntrys']) {
 			if (FALSE === $this->isAllowedEntry()) {
 				return FALSE;
@@ -98,7 +98,7 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if value a valid string
+	 * Check if value is a valid string
 	 *
 	 * @return  boolean
 	 * @access  protected
@@ -114,7 +114,7 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if value a allowed entry
+	 * Check if value is an allowed entry
 	 *
 	 * @return  boolean
 	 * @access  protected

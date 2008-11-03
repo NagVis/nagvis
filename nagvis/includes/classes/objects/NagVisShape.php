@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagVisShape.php - Class of a Shape in NagVis with all necessary 
- *                  informations which belong to the object handling in NagVis
+ *                  information which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *

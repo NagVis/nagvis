@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagVisServicegroup.php - Class of a Servicegroup in NagVis with all necessary 
- *                  informations which belong to the object handling in NagVis
+ *                  information which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -36,7 +36,7 @@ class NagVisServicegroup extends NagiosServicegroup {
 	 * @param		Object 		Object of class GlobalMainCfg
 	 * @param		Object 		Object of class GlobalBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 	ID of queried backend
+	 * @param		Integer 		ID of queried backend
 	 * @param		String		Name of the servicegroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */

@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalValidatorUrl.php - Class to check if parameter a valid url.
+ * GlobalValidatorUrl.php - Class to check if parameter is a valid url.
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -68,14 +68,14 @@ class GlobalValidatorUrl extends GlobalValidatorAbstract {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function isValidParameter() {
-		// Check if parameter set
+		// Check if parameter is set
 		if (TRUE === $this->validateArr['mustSet']) {
 			if (FALSE === $this->mustSet($this->parameterValue)) {
 				return FALSE;
 			}
 		}
 
-		// Check if parameter empty
+		// Check if parameter is empty
 		if (TRUE === $this->validateArr['notEmpty']) {
 			if (FALSE === $this->notEmpty($this->parameterValue)) {
 				return FALSE;
@@ -91,7 +91,7 @@ class GlobalValidatorUrl extends GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if value a valid string
+	 * Check if value is a valid string
 	 *
 	 * @return  boolean
 	 * @access  protected

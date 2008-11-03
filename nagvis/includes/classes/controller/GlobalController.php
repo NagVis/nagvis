@@ -24,8 +24,8 @@
 
 /**
  * class GlobalController
- * The global controller controlls the requested actions (map, rotation, etc.)
- * and check if the variables are valid.
+ * The global controller controls the requested actions (map, rotation, etc.)
+ * and checks if the variables are valid.
  *
  * @author  Michael Luebben <michael_luebben@web.de>
  */
@@ -54,15 +54,15 @@ class GlobalController implements GlobalControllerInterface {
 									'ignoreHosts'	=> '',
 									'filterGroup'	=> '');
 
-	// Contains object which display the page
+	// Contains object which displays the page
 	private $displayPage = NULL;
 
 	// Contains object from validator
 	private $validator = NULL;
 
 	/**
-	 * The constructor check if the first variable (action) is set and valid.
-	 * Is nothing set, th constructen set to default.
+	 * The constructor checks if the first variable (action) is set and valid.
+	 * If nothing is set, the constructor sets to default.
 	 *
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
@@ -79,7 +79,7 @@ class GlobalController implements GlobalControllerInterface {
 			$action = $this->parameterNames[0];
 		}
 
-		// Check if the this first variable (action) valid
+		// Check if the first variable (action) is valid
 		$this->checkedParameterName = 'action';
 		$this->validator = new GlobalValidator('action', $action);
 		
@@ -150,7 +150,7 @@ class GlobalController implements GlobalControllerInterface {
 					}	
 				}
 
-				// If all set variables are valid, the display the autopam
+				// If all set variables are valid, then display the automap
 				if ($this->isValid) {
 					$this->displayPage = new GlobalControllerAutomap($this->automapEnv);
 				}

@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagVisStatefulObject.php - Abstract class of a stateful object in NagVis
- *                  with all necessary informations which belong to the object
+ *                  with all necessary information which belong to the object
  *                  handling in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
@@ -379,9 +379,9 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
-	 * PULBLIC getObjectStateInformations()
+	 * PUBLIC getObjectStateInformations()
 	 *
-	 * Gets the state informations of the object
+	 * Gets the state information of the object
 	 *
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -449,7 +449,7 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['perfdata'] = strtr($this->perfdata, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
 		}
 		
-		// Enable/Disable fetching childs
+		// Enable/Disable fetching children
 		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
 			$arr['members'] = $this->getSortedObjectMembers();
 		}
@@ -492,7 +492,7 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->replaceMacros();
 		$this->url = $this->getUrl();
 		
-		// Get all informations of the object (configuration, state, ...)
+		// Get all information of the object (configuration, state, ...)
 		return $this->getObjectInformation();
 	}
 	
@@ -627,7 +627,7 @@ class NagVisStatefulObject extends NagVisObject {
 			}
 		}
 		
-		// Remove last comata
+		// Remove last comma
 		$this->summary_output = preg_replace('/, $/', '', $this->summary_output);
 		
 		$this->summary_output .= ' '.$objLabel.'.';

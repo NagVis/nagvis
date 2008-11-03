@@ -529,7 +529,7 @@ class GlobalMainCfg {
 				} else {
 					// parameter...
 					
-					// seperate string in an array
+					// separate string in an array
 					$arr = explode('=',$line);
 					// read key from array and delete it
 					$key = strtolower(trim($arr[0]));
@@ -537,17 +537,17 @@ class GlobalMainCfg {
 					// build string from rest of array
 					$val = trim(implode('=', $arr));
 					
-					// remove " at beginign and at the end of the string
+					// remove " at beginning and at the end of the string
 					if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
 						$val = substr($val,1,strlen($val)-2);
 					}
 					
 					// Special options (Arrays)
 					if($sec == 'wui' && $key == 'allowedforconfig') {
-						// Explode comma seperated list to array
+						// Explode comma separated list to array
 						$val = explode(',', $val);
 					} elseif(preg_match('/^rotation_/i', $sec) && $key == 'maps') {
-						// Explode comma seperated list to array
+						// Explode comma separated list to array
 						$val = explode(',', $val);
 						
 						// Check if an element has a label defined
@@ -571,7 +571,7 @@ class GlobalMainCfg {
 									$map = $arrRet[4];
 								}
 								
-								// Save the extracted informations to an array
+								// Save the extracted information to an array
 								$val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
 							}
 						}
@@ -629,7 +629,7 @@ class GlobalMainCfg {
 						}
 					}
 					
-					// loop given elements for checking: => all given atributes valid
+					// loop given elements for checking: => all given attributes valid
 					foreach($vars AS $key => $val) {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
@@ -906,7 +906,7 @@ class GlobalMainCfg {
 		if(isset($this->config[$sec]) && isset($this->config[$sec][$var])) {
 			return $this->config[$sec][$var];
 		} elseif(!$ignoreDefault) {
-			// Enfasten this method by first check for famous sections and only if 
+			// Speed up this method by first checking for major sections and only if 
 			// they don't match try to match the backend_ and rotation_ sections
 			if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
 				return $this->validConfig[$sec][$var]['default'];
@@ -919,11 +919,11 @@ class GlobalMainCfg {
 						return $this->validConfig['backend'][$var]['default'];
 					}
 				} else {
-					// When exists, return the default value of the default backend
+					// When existing, return the default value of the default backend
 					if(isset($this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']) && $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'] != '') {
 						return $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'];
 					} else {
-						// When exists, return the default value of backend-global options
+						// When existing, return the default value of backend-global options
 						if(isset($this->validConfig['backend'][$var]['default']) && $this->validConfig['backend'][$var]['default'] != '') {
 							return $this->validConfig['backend'][$var]['default'];
 						} else {

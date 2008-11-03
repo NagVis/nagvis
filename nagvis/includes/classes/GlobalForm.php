@@ -98,7 +98,7 @@ class GlobalForm {
 	}
 	
 	/**
-	 * Gets an file selection row
+	 * Gets a file selection row
 	 *
 	 * @param 	String 	$label 	Label of the Row
 	 * @param 	String 	$name 	Name of the Field

@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagVisStatelessObject.php - Abstract class of a stateless object in NagVis
- *                  with all necessary informations which belong to the object
+ *                  with all necessary information which belong to the object
  *                  handling in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
@@ -62,7 +62,7 @@ class NagVisStatelessObject extends NagVisObject {
 	function parseJson() {
 		$this->replaceMacros();
 		
-		// Get all informations of the object (configuration, state, ...)
+		// Get all information of the object (configuration, state, ...)
 		return $this->getObjectInformation();
 	}
 	

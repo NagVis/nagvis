@@ -138,7 +138,7 @@ class GlobalCore {
 	}
 	
 	/**
-	 * Reads all aviable backends
+	 * Reads all available backends
 	 *
 	 * @return	Array Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>

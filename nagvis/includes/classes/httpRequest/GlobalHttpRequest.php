@@ -33,7 +33,7 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 
 
 	/**
-	 * Copy worth from $_REQUEST to parameters
+	 * Copy value from $_REQUEST to parameters
 	 *
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
@@ -41,14 +41,14 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	public function __construct( ) {
 		$this->parameters = $_REQUEST;
 		
-		// The session ID parameter is not interesting
+		// The session ID parameter is not relevant
 		unset($this->parameters['SESSID']);
 	} // end of member function __construktor
 
 	/**
 	 * Get parameter names from http request
 	 *
-	 * @return  array Returns a array with parameter names
+	 * @return  array Returns an array with parameter names
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
@@ -59,7 +59,7 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	/**
 	 * Check if isset a parameter
 	 *
-	 * @param   string Name from parameter which to be check
+	 * @param   string Name from parameter which has to be checked
 	 * @return  string Return null or the parameter name
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
@@ -72,19 +72,19 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	} // end of member function issetParam
 
 	/**
-	 * Get worth from parameter
+	 * Get value from parameter
 	 *
 	 * @param   string name Parametername
-	 * @return  string Returns worth from parameter
+	 * @return  string Returns value from parameter
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	public function getParameter( $name) {
 		return $this->parameters[$name];
-	} // end of member function getParamter
+	} // end of member function getParameter
 
 	/**
-	 * Get worth from header
+	 * Get value from header
 	 *
 	 * @param string name Name for header parameter
 	 *        Examples:
@@ -94,7 +94,7 @@ class GlobalHttpRequest implements GlobalHttpRequestInterface {
 	 *           ACCEPT_LANGUAGE
 	 *           etc.
 	 *
-	 * @return  Returns worth from header
+	 * @return  Returns value from header
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */

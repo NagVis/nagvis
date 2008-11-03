@@ -33,7 +33,7 @@ class GlobalValidatorAbstract {
 	private $message = NULL;
 
 	/**
-	 * Check if parameter valid
+	 * Check if parameter is valid
 	 *
 	 * @return  boolean
 	 * @access  public
@@ -82,7 +82,7 @@ class GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if parameter Empty
+	 * Check if parameter is empty
 	 *
 	 * @return  boolean
 	 * @access  protected

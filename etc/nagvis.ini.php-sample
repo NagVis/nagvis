@@ -6,11 +6,11 @@
 ; ----------------------------
 ; Default NagVis Configuration File
 ; At delivery everything here is commented out. The default values are set in the NagVis code.
-; You can make your changes here, it'll overwrite the default settings.
+; You can make your changes here, they'll overwrite the default settings.
 ; ----------------------------
 
 ; ----------------------------
-; !!! The Sections/Variables with a leading ";" won't be recognized by NagVis (commented out) !!!
+; !!! The sections/variables with a leading ";" won't be recognized by NagVis (commented out) !!!
 ; ----------------------------
 
 ; General options which affect the whole NagVis installation
@@ -31,7 +31,7 @@
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
 
-; Default values which gets inherited to the maps and it's objects
+; Default values which get inherited to the maps and its objects
 [defaults]
 ; default backend (id of the default backend)
 ;backend="ndomy_1"
@@ -44,9 +44,9 @@
 ; border
 ;eventhighlight=1
 ; Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps
-; track of important actions and informations
+; track of important actions and information
 ;eventlog=0
-; Loglevel of the eventlog (Available: debug, info, warning, critical)
+; Loglevel of the eventlog (available: debug, info, warning, critical)
 ;eventloglevel="info"
 ; Enable/Disable scrolling to the icon which changed the state when the icon is
 ; out of the visible scope
@@ -108,7 +108,7 @@
 
 ; Options for the WUI
 [wui]
-; Users which are allowed to change the NagVis configuration (comma seperated list)
+; Users which are allowed to change the NagVis configuration (comma separated list)
 ;allowedforconfig=EVERYONE
 ; auto update frequency
 ;autoupdatefreq=25
@@ -120,8 +120,8 @@
 ; The interval in seconds in which the worker will check for objects which need
 ; to be updated
 ;interval=10
-; The retention time of the states in seconds in the frontend. The state 
-; informations will be refreshed after this time
+; The retention time of the states in the frontend in seconds. The state 
+; information will be refreshed after this time
 ;updateobjectstates=30
 
 ; Backend definitions
@@ -133,7 +133,7 @@
 ;dbhost="localhost"
 ; portname for NDO-db
 ;dbport=3306
-; database-name for NDO-db
+; database name for NDO-db
 ;dbname="nagios"
 ; username for NDO-db
 ;dbuser="root"
@@ -141,7 +141,7 @@
 ;dbpass=""
 ; prefix for tables in NDO-db
 ;dbprefix="nagios_"
-; instance-name for tables in NDO-db
+; instance name for tables in NDO-db
 ;dbinstancename="default"
 ; maximum delay of the NDO Database in seconds
 ;maxtimewithoutupdate=180
@@ -150,7 +150,7 @@
 
 ; Rotation pool definitions
 ; in this example the browser switches between the maps demo and demo2 every 15
-; seconds the rotation is enabled by url: index.php?rotation=demo
+; seconds, the rotation is enabled by url: index.php?rotation=demo
 [rotation_demo]
 ; These steps are rotated. The "Demo2:" is a label which is being displayed in
 ; the index pages rotation list.

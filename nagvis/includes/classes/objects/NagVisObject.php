@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagVisObject.php - Abstract class of an object in NagVis with all necessary 
- *                  informations which belong to the object handling in NagVis
+ *                  information which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -161,7 +161,7 @@ class NagVisObject {
 	/**
 	 * PUBLIC setObjectInformation()
 	 *
-	 * Sets extended informations of the object
+	 * Sets extended information of the object
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -174,7 +174,7 @@ class NagVisObject {
 	/**
 	 * PULBLIC getObjectInformation()
 	 *
-	 * Gets all necessary informations of the object as array
+	 * Gets all necessary information of the object as array
 	 *
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -182,7 +182,7 @@ class NagVisObject {
 	function getObjectInformation($bFetchChilds=true) {
 		$arr = Array();
 		
-		// Need to remove some options which are not interesting
+		// Need to remove some options which are not relevant
 		$arrDenyKeys = Array('CORE', 'BACKEND', 'MAPCFG', 'MAP', 'GRAPHIC', 'conf',
 			'services', 'fetchedChildObjects', 'childObjects', 'members', 'objects',
 			'linkedMaps');
@@ -242,13 +242,13 @@ class NagVisObject {
 				unset($arr[$this->getType().'_name']);
 			}
 			
-			// Little hack: Overwrite the options with correct state informations
+			// Little hack: Overwrite the options with correct state information
 			$arr = array_merge($arr, $this->getObjectStateInformations(false));
 		}
     
-    // On childs only return the following options to lower the bandwidth,
-    // memory and cpu usage. If someone wants more informations in hover menu
-    // childs, this is the place to change
+    // On children only return the following options to lower the bandwidth,
+    // memory and cpu usage. If someone wants more information in hover menu
+    // children, this is the place to change
     if(!$bFetchChilds) {
       $aChild = Array('type' => $arr['type'],
                       'name' => $arr['name'],
@@ -276,7 +276,7 @@ class NagVisObject {
 	 *
 	 * Gets an array of member objects
 	 *
-	 * @return	Array		Member object informations
+	 * @return	Array		Member object information
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getSortedObjectMembers() {
@@ -328,7 +328,7 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getObjectConfiguration() {
-		// There have to be removed some options which are only for this object
+		// Some options have to be removed which are only for this object
 		$arr = $this->conf;
 		unset($arr['id']);
 		unset($arr['type']);
@@ -400,7 +400,7 @@ class NagVisObject {
 	/**
 	 * PRIVATE STATIC sortObjectsAlphabetical()
 	 *
-	 * Sorts the both alhabeticaly by the name
+	 * Sorts both objects alphabetically by name
 	 *
 	 * @param	OBJ		First object to sort
 	 * @param	OBJ		Second object to sort
@@ -436,7 +436,7 @@ class NagVisObject {
 	/**
 	 * PRIVATE STATIC sortObjectsByState()
 	 *
-	 * Sorts the both by state of the object
+	 * Sorts both by state of the object
 	 *
 	 * @param	OBJ		First object to sort
 	 * @param	OBJ		Second object to sort
@@ -445,7 +445,7 @@ class NagVisObject {
 	static function sortObjectsByState($OBJ1, $OBJ2) {
 		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
 		
-		// Textboxes and shapes does not have getSummaryState method, exclude them here
+		// Textboxes and shapes do not have getSummaryState method, exclude them here
 		if(method_exists($OBJ1, 'getSummaryState') && method_exists($OBJ2, 'getSummaryState')) {
 			$state1 = $OBJ1->getSummaryState();
 			$state2 = $OBJ2->getSummaryState();

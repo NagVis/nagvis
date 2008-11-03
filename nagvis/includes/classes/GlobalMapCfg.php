@@ -660,7 +660,7 @@ class GlobalMapCfg {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function createMapConfig() {
-		// does file exists?
+		// does file exist?
 		if(!$this->checkMapConfigReadable(FALSE)) {
 			if($this->CORE->MAINCFG->checkMapCfgFolderWriteable(TRUE)) {
 				// create empty file
@@ -710,7 +710,7 @@ class GlobalMapCfg {
 				
 				$l = 0;
 				
-				// This variables do set which object is currently being filled
+				// These variables set which object is currently being filled
 				$sObjType = '';
 				$iObjTypeId = '';
 				
@@ -762,15 +762,17 @@ class GlobalMapCfg {
 				}
 				
 				/**
-				 * The default values refer to global settings in the validConfig array - so they have to be 
-				 * defined here and mustn't be defined in the array at creation.
-				 * Cause of the default values should refer to the truely defined settings in global area they have to be read here.
+				 * The default values refer to global settings in the validConfig 
+				 * array - so they have to be defined here and mustn't be defined
+				 * in the array at creation.
+				 * Because the default values should refer to the truly defined
+				 * settings in global area they have to be read here.
 				 */
 				if($onlyGlobal != 1) {
 					$this->getObjectDefaults();
 					
 					if(isset($this->mapConfig['template'])) {
-						// Removes the numeric indexes and replaces them with the template name
+						// Remove the numeric indexes and replace them with the template name
 						$this->fixTemplateIndexes();
 						// Merge the objects with the linked templates
 						$this->mergeTemplates();
@@ -792,7 +794,7 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Removes the numeric indexes and replaces them with the template name
+	 * Remove the numeric indexes and replace them with the template name
 	 *
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -824,7 +826,7 @@ class GlobalMapCfg {
 						// loop all given templates
 						foreach($element['use'] AS &$templateName) {
 							if(isset($this->mapConfig['template'][$templateName]) && is_array($this->mapConfig['template'][$templateName])) {
-								// merge object array with template object array (except type and name atribute)
+								// merge object array with template object array (except type and name attribute)
 								$tmpArray = $this->mapConfig['template'][$templateName];
 								unset($tmpArray['type']);
 								unset($tmpArray['name']);
@@ -836,7 +838,7 @@ class GlobalMapCfg {
 			}
 		}
 		
-		// Everything is merged: The templates are not interesting anymore
+		// Everything is merged: The templates are not relevant anymore
 		unset($this->mapConfig['template']);
 	}
 	
@@ -895,7 +897,7 @@ class GlobalMapCfg {
 		// check given objects and attributes
 		foreach($this->mapConfig AS $type => $elements) {
 			foreach($elements AS $id => $element) {
-				// loop validConfig for checking: => missing "must" atributes
+				// loop validConfig for checking: => missing "must" attributes
 				foreach($this->validConfig[$type] AS $key => $val) {
 					if(isset($val['must']) && $val['must'] == '1') {
 						// value is "must"
@@ -906,11 +908,11 @@ class GlobalMapCfg {
 					}
 				}
 				
-				// loop given elements for checking: => all given atributes valid
+				// loop given elements for checking: => all given attributes valid
 				foreach($element AS $key => $val) {
-					// check for valid atributes
+					// check for valid attributes
 					if(!isset($this->validConfig[$type][$key])) {
-						// unknown atribute
+						// unknown attribute
 						if($printErr == 1) {
 							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownAttribute','MAPNAME~'.$this->name.',ATTRIBUTE~'.$key.',TYPE~'.$type));
 						}
@@ -988,7 +990,7 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Deletes an element of the specified type to the config array
+	 * Deletes an element of the specified type from the config array
 	 *
 	 * @param	String	$type
 	 * @param	Integer	$id
@@ -1029,7 +1031,7 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Gets a config value in the array
+	 * Gets a config value from the array
 	 *
 	 * @param	String	$type
 	 * @param	Integer	$id

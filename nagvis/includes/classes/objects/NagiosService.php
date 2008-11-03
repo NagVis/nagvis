@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagiosService.php - Class of a Service in Nagios with all necessary 
- *                  informations
+ *                  information
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -74,7 +74,7 @@ class NagiosService extends NagVisStatefulObject {
 	 * @param		Object 		Object of class GlobalMainCfg
 	 * @param		Object 		Object of class GlobalBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 	ID of queried backend
+	 * @param		Integer 		ID of queried backend
 	 * @param		String		Name of the host
 	 * @param		String		Service description
 	 * @author	Lars Michelsen <lars@vertical-visions.de>

@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagVisMapObj.php - Class of a Map object in NagVis with all necessary 
- *                  informations which belong to the object handling in NagVis
+ *                  information which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -165,9 +165,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 				}
 				
 				/**
-				 * This occurs when someone creates a map icon which links to itselfs
+				 * This occurs when someone creates a map icon which links to itself
 				 *
-				 * The object will be marked as summary object and ignored on next level.
+				 * The object will be marked as summary object and is ignored on next level.
 				 * See the code above.
 				 */
 				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
@@ -217,7 +217,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	/**
 	 * PUBLIC objectTreeToMapObjects()
 	 *
-	 * Links the object in the object tree to to the map objects
+	 * Links the object in the object tree to the map objects
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -227,8 +227,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 		foreach($OBJ->getChilds() AS $OBJ1) {
 			/*
 			 * Check if the host is already on the map (If it's not done, the 
-			 * objects with more than one parent be printed several times on the 
-			 * map, especially the links to child objects will be too many.
+			 * objects with more than one parent will be printed several times on 
+			 * the map, especially the links to child objects will be too many.
 			 */
 			if(is_object($OBJ1) && !in_array($OBJ1->getName(), $arrHostnames)){
 				// Add the name of this host to the array with hostnames which are

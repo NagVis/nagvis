@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagiosServicegroup.php - Class of a Servicegroup in Nagios with all necessary 
- *                  informations
+ *                  information
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -55,7 +55,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @param		Object 		Object of class GlobalMainCfg
 	 * @param		Object 		Object of class GlobalBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 	ID of queried backend
+	 * @param		Integer 		ID of queried backend
 	 * @param		String		Name of the servicegroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -163,7 +163,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	function fetchMemberServiceObjects() {
 		// Get all services and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			// Get additional informations like the alias (maybe bad place here)
+			// Get additional information like the alias (maybe bad place here)
 			$this->setConfiguration($this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupInformations($this->servicegroup_name));
 			
 			$arrServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicesByServicegroupName($this->servicegroup_name);

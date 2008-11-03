@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagiosHost.php - Class of a Host in Nagios with all necessary informations
+ * NagiosHost.php - Class of a Host in Nagios with all necessary information
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -71,7 +71,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @param		Object 		Object of class GlobalMainCfg
 	 * @param		Object 		Object of class GlobalBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 	ID of queried backend
+	 * @param		Integer 		ID of queried backend
 	 * @param		String		Name of the host
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -165,7 +165,7 @@ class NagiosHost extends NagVisStatefulObject {
 	/**
 	 * PUBLIC filterChilds()
 	 *
-	 * Filters the childs depending on the allowed hosts list. All objects which
+	 * Filters the children depending on the allowed hosts list. All objects which
 	 * are not in the list and are no parent of a host in this list will be
 	 * removed from the map.
 	 *
@@ -183,7 +183,7 @@ class NagiosHost extends NagVisStatefulObject {
 				
 				if(is_object($OBJ)) {
 					/**
-					 * The current child is member in the filter group, it declares 
+					 * The current child is member of the filter group, it declares 
 					 * itselfs as remaining object
 					 */
 					if(in_array($OBJ->getName(), $arrAllowedHosts)) {
@@ -248,7 +248,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * Simple check if the host has at least one child
 	 *
-	 * @return Boolean	Yes: Has childs, No: No Child
+	 * @return Boolean	Yes: Has children, No: No Child
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function hasChilds() {
@@ -308,7 +308,7 @@ class NagiosHost extends NagVisStatefulObject {
 			// Append contents of the array to the object properties
 			$OBJ->setObjectInformation($arrService);
 			
-			// The service of this host has to know how he should handle 
+			// The service of this host has to know how it should handle 
 			//hard/soft states. This is a little dirty but the simplest way to do this
 			//until the hard/soft state handling has moved from backend to the object
 			// classes.
@@ -338,7 +338,7 @@ class NagiosHost extends NagVisStatefulObject {
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
 				/*
 				 * Check if the host is already on the map (If it's not done, the 
-				 * objects with more than one parent be printed several times on the 
+				 * objects with more than one parent will be printed several times on the 
 				 * map, especially the links to child objects will be too many.
 				 */
 				if(!in_array($childName, $arrHostnames)){
@@ -367,7 +367,7 @@ class NagiosHost extends NagVisStatefulObject {
 			}
 		}
 
-		// All childs were fetched, save the state for this object
+		// All children were fetched, save the state for this object
 		$this->fetchedChildObjects = 1;
 	}
 	

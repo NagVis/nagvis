@@ -138,7 +138,7 @@ class GlobalLanguage {
 		$size = count($aReplace);
 		for($i = 0; $i < $size; $i++) {
 			if(isset($aReplace[$i])) {
-				// If = are in the text, they'l be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
+				// If = are in the text, they'll be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
 				$var = explode('~', $aReplace[$i]);
 				$sLang = str_replace('['.$var[0].']', $var[1], $sLang);
 			}

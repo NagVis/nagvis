@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalValidatorInteger.php - Class to check if parameter a valid integer.
+ * GlobalValidatorInteger.php - Class to check if parameter is a valid integer.
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
  *
@@ -75,19 +75,19 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 			}
 		}
 
-		// Check if parameter empty
+		// Check if parameter is empty
 		if (TRUE === $this->validateArr['notEmpty']) {
 			if (FALSE === $this->notEmpty($this->parameterValue)) {
 				return FALSE;
 			}
 		}
 
-		// Check if parameter value is a integer
+		// Check if parameter value is an integer
 		if (FALSE === $this->isInteger()) {
 			return FALSE;
 		}
 
-		// Check if value out of range
+		// Check if value is out of range
 		if (TRUE === $this->validateArr['mustInRange']) {
 			if (FALSE === $this->isInRange()) {
 				return FALSE;
@@ -98,7 +98,7 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if value a valid integer
+	 * Check if value is a valid integer
 	 *
 	 * @return  boolean
 	 * @access  protected
@@ -114,7 +114,7 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 	}
 
 	/**
-	 * Check if value in range
+	 * Check if value is in range
 	 *
 	 * @return  boolean
 	 * @access  protected

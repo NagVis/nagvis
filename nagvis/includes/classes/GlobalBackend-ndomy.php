@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * GlobalBackend-ndomy.php - backend class for handling object and state 
- *                           informations stored in the NDO database.
+ *                           information stored in the NDO database.
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -48,7 +48,7 @@ class GlobalBackendndomy {
 	
 	/**
 	 * Constructor
-	 * Reads needed configuration paramters, connects to the Database
+	 * Reads needed configuration parameters, connects to the Database
 	 * and checks that Nagios is running
 	 *
 	 * @param	config $MAINCFG
@@ -77,7 +77,7 @@ class GlobalBackendndomy {
 			// Set the instanceId
 			$this->dbInstanceId = $this->getInstanceId();
 			
-			// Do some checks to make sure that Nagios is running and the Data at the DB are ok
+			// Do some checks to make sure that Nagios is running and the Data at the DB is ok
 			$QUERYHANDLE = $this->mysqlQuery('SELECT is_currently_running, UNIX_TIMESTAMP(status_update_time) AS status_update_time FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
 			$nagiosstate = mysql_fetch_array($QUERYHANDLE);
 			
@@ -89,14 +89,14 @@ class GlobalBackendndomy {
 				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('nagiosNotRunning', 'BACKENDID~'.$this->backendId));
 			}
 			
-			// Be suspiciosly and check that the data at the db are not older that "maxTimeWithoutUpdate" too
+			// Be suspicious and check that the data at the db is not older that "maxTimeWithoutUpdate" too
 			if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
 				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
 			}
 			
 			/**
 			 * It looks like there is a problem with the config_type value at some
-			 * installations. The NDO docs and mailinglist says that the flag
+			 * installations. The NDO docs and mailinglist say that the flag
 			 * config_type marks the objects as being read from retention data or read
 			 * from configuration. Until NagVis 1.3b3 only objects with config_type=1
 			 * were queried.
@@ -123,7 +123,7 @@ class GlobalBackendndomy {
 	/**
 	 * PRIVATE Method checkTablesExists
 	 *
-	 * Checks if there are the wanted tables in the DB
+	 * Checks if the needed tables are in the DB
 	 *
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -206,7 +206,7 @@ class GlobalBackendndomy {
 			// ERROR: Instance name not valid
 			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotValid', 'BACKENDID~'.$this->backendId.',NAME~'.$this->dbInstanceName), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
 		} else {
-			// ERROR: Given Instance name is not uniq
+			// ERROR: Given Instance name is not unique
 			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotUniq', 'BACKENDID~'.$this->backendId.',NAME~'.$this->dbInstanceName), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
 		}
 		
@@ -231,7 +231,7 @@ class GlobalBackendndomy {
 	/**
 	 * PUBLIC Method getObjects
 	 * 
-	 * Return the objects configured at Nagios wich are matching the given pattern. 
+	 * Return the objects configured at Nagios which are matching the given pattern. 
 	 * This is needed for WUI, e.g. to populate drop down lists.
 	 *
 	 * @param	string $type, string $name1Pattern, string $name2Pattern
@@ -343,7 +343,7 @@ class GlobalBackendndomy {
 	 * PRIVATE Method getHostAckByHostname
 	 *
 	 * Returns if a host state has been acknowledged. The method doesn't check
-	 * if the host is in OK/DOWN, It only checks.the has_been_acknowledged flag.
+	 * if the host is in OK/DOWN, it only checks the has_been_acknowledged flag.
 	 *
 	 * @param	string $hostName
 	 * @return	bool $ack
@@ -384,7 +384,7 @@ class GlobalBackendndomy {
 	/**
 	 * PUBLIC getHostState()
 	 *
-	 * Returns the Nagios state and aditional informations for the requested host
+	 * Returns the Nagios state and additional information for the requested host
 	 *
 	 * @param		String	$hostName
 	 * @param		Boolean	$onlyHardstates
@@ -440,7 +440,7 @@ class GlobalBackendndomy {
 				$arrReturn['address'] = $data['address'];
 				$arrReturn['statusmap_image'] = $data['statusmap_image'];
 				
-				// Add Additional informations to array
+				// Add Additional information to array
 				$arrReturn['perfdata'] = $data['perfdata'];
 				$arrReturn['last_check'] = $data['last_check'];
 				$arrReturn['next_check'] = $data['next_check'];
@@ -519,7 +519,7 @@ class GlobalBackendndomy {
 	/**
 	 * PUBLIC getServiceState()
 	 *
-	 * Returns the state and aditional informations of rhe requested service
+	 * Returns the state and additional information of the requested service
 	 *
 	 * @param		String 	$hostName
 	 * @param		String 	$serviceName
@@ -597,7 +597,7 @@ class GlobalBackendndomy {
 					$arrReturn['state'] = 'ERROR';
 					$arrReturn['output'] = $this->CORE->LANG->getText('serviceNotFoundInDB','SERVICE~'.$serviceName.',HOST~'.$hostName);
 				} else {
-					// If the method should fetch all services of the host and do not find
+					// If the method should fetch all services of the host and does not find
 					// any services for this host, don't return anything => The message
 					// that the host has no services is added by the frontend
 				}
@@ -611,7 +611,7 @@ class GlobalBackendndomy {
 					$arrTmpReturn['alias'] = $data['display_name'];
 					$arrTmpReturn['address'] = $data['address'];
 					
-					// Add Additional informations to array
+					// Add additional information to array
 					$arrTmpReturn['perfdata'] = $data['perfdata'];
 					$arrTmpReturn['last_check'] = $data['last_check'];
 					$arrTmpReturn['next_check'] = $data['next_check'];
@@ -686,7 +686,7 @@ class GlobalBackendndomy {
 						}
 					}
 					
-					// If more than one services are expected, append the current return informations to return array
+					// If more than one service is expected, append the current return information to return array
 					if(isset($serviceName) && $serviceName != '') {
 						$arrReturn = $arrTmpReturn;
 					} else {
@@ -741,7 +741,7 @@ class GlobalBackendndomy {
 	 *
 	 * Gets the names of all child hosts
 	 *
-	 * @param		String		Name of host to get the childs of
+	 * @param		String		Name of host to get the children of
 	 * @return	Array			Array with hostnames
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -879,10 +879,10 @@ class GlobalBackendndomy {
     /**
 	 * PUBLIC Method getServicegroupInformations
 	 *
-	 * Gets informations like the alias for a servicegroup
+	 * Gets information like the alias for a servicegroup
 	 *
 	 * @param	String		    Name of servicegroup
-	 * @return	Array			Array with object informations
+	 * @return	Array			Array with object information
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getServicegroupInformations($servicegroupName) {
@@ -912,10 +912,10 @@ class GlobalBackendndomy {
     /**
 	 * PUBLIC Method getHostgroupInformations
 	 *
-	 * Gets informations like the alias for a hhostgroup
+	 * Gets information like the alias for a hostgroup
 	 *
 	 * @param	String		    Name of group
-	 * @return	Array			Array with object informations
+	 * @return	Array			Array with object information
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getHostgroupInformations($groupName) {

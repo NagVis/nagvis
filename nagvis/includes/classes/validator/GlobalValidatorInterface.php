@@ -30,7 +30,7 @@
 interface GlobalValidatorInterface {
 
 	/**
-	 * Check if parameter valid
+	 * Check if parameter is valid
 	 *
 	 * @return
 	 * @access  protected

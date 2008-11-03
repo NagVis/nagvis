@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*****************************************************************************
  *
  * GlobalPage.php - Class for managing the common page layout
@@ -70,7 +70,7 @@ class GlobalPage {
 		$this->languageRoot = $prop['languageRoot'];
 		$this->extHeader = $prop['extHeader'];
 		
-		// Append additional header informations
+		// Append additional header information
 		$this->extHeader .= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8">';
 		$this->extHeader .= '<title>'.$prop['title'].'</title>';
 		
@@ -171,7 +171,7 @@ class GlobalPage {
 	 * Writes a Message to message array and does what to do...
 	 * severity: ERROR, WARNING, INFORMATION
 	 *
-	 * @param	String	$severity	Serverity of the message (ERROR|WARNING|INFORMATION)
+	 * @param	String	$severity	Severity of the message (ERROR|WARNING|INFORMATION)
 	 * @param	String	$text		String to display as message
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
@@ -216,9 +216,9 @@ class GlobalPage {
 	}
 	
 	/**
-	 * Creates a Messagebox for informations and errors
+	 * Creates a Messagebox for information and errors
 	 *
-	 * @param	String	$severity	Serverity of the message (ERROR|WARNING|INFORMATION)
+	 * @param	String	$severity	Severity of the message (ERROR|WARNING|INFORMATION)
 	 * @param	String	$text			Error message
 	 * @return 	Array	HTML Code
 	 * @author	Michael Luebben <michael_luebben@web.de>
@@ -273,7 +273,7 @@ class GlobalPage {
 	}
 	
 	/**
-	 * Adds on ore more elements (lines) to the Body Array
+	 * Adds one or more elements (lines) to the Body Array
 	 *
 	 * @param	String/Array	$lines	String or Array with HTML Code
 	 * @return 	Boolean	TRUE
@@ -310,7 +310,7 @@ class GlobalPage {
 	}
 	
 	/**
-	 * Gets the lines of extended header informations
+	 * Gets the lines of extended header information
 	 *
 	 * @return  String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -320,7 +320,7 @@ class GlobalPage {
 	}
 	
 	/**
-	 * Gets the lines of javscript inclusions
+	 * Gets the lines of javascript inclusions
 	 *
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -382,7 +382,7 @@ class GlobalPage {
 	function printPage() {
 		echo $this->buildPage();
 		if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
-		// printing the page, is the end of everything other - good bye! ;-)
+		// printing the page is the end of everything else - good bye! ;-)
 		exit;
 	}
 	
