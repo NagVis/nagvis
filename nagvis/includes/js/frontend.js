@@ -540,7 +540,7 @@ function updateMapObjects(aMapObjectInformations) {
 			
 			// - Highlight (Flashing)
 			if(oMapProperties.event_highlight) {
-				if(oObj.conf.line_type) {
+				if(oObj.conf.view_type === 'line') {
 					// FIXME: Atm only flash icons, not lines
 				} else {
 					// Detatch the handler

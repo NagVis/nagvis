@@ -43,6 +43,8 @@ define('MATCH_OBJECTTYPE', '/^(?:global|host|service|hostgroup|servicegroup|map|
 define('MATCH_PNGFILE', '/^(.+)\.png$/i');
 define('MATCH_PNG_GIF_JPG_FILE', '/^(.+)\.(png|gif|jpg)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_NONE', '/^((.+)\.(png|gif|jpg)|none)$/i');
+define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
+define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
 define('MATCH_HTML_TEMPLATE_FILE', '/^tmpl\.(.+)\.html$/i');
