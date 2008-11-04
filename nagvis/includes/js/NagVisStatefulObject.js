@@ -123,7 +123,7 @@ function NagVisStatefulObject (oConf) {
 		oContainerDiv.setAttribute('id', this.objId);
 		
 		// Parse object depending on line or normal icon
-		if(oObj.conf.view_type === 'line') {
+		if(this.conf.view_type && this.conf.view_type === 'line') {
 			oContainerDiv.appendChild(this.parseLine());
 		} else {
 			oContainerDiv.appendChild(this.parseIcon());
@@ -171,7 +171,7 @@ function NagVisStatefulObject (oConf) {
 		var oObj;
 		
 		// Get the object to apply the hover menu to
-		if(oObj.conf.view_type === 'line') {
+		if(this.conf.view_type && this.conf.view_type === 'line') {
 			oObj = document.getElementById(this.objId+'-linediv');
 		} else {
 			oObj = document.getElementById(this.objId+'-icon');
