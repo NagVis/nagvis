@@ -941,7 +941,6 @@ class GlobalMapCfg {
 					} else {
 						// The object has a match regex, it can be checked
 						if(isset($this->validConfig[$type][$key]['match'])) {
-							
 							if(is_array($val)) {
 								// This is an array
 								
@@ -966,6 +965,12 @@ class GlobalMapCfg {
 									return FALSE;
 								}
 							}
+						}
+						
+						// Check wether a object hast line_type set and not view_type=line
+						// FIXME: This check should be removed in 1.5 or 1.6
+						if($key == 'line_type' && !isset($element['view_type'])) {
+							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('lineTypeButViewTypeNotSet','MAP~'.$this->getName().',TYPE~'.$type));
 						}
 					}
 				}
