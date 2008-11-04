@@ -27,7 +27,7 @@
 
 NagVisStatefulObject.Inherits(NagVisObject);
 function NagVisStatefulObject (oConf) {
-	// Stores the informations from last refresh (Needed for change detection)
+	// Stores the information from last refresh (Needed for change detection)
 	this.last_conf = {};
 	
 	// Initialize

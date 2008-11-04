@@ -40,14 +40,14 @@ var oHoverUrls = {};
  * for tasks which need to be performed like:
  * - Countdown the timers
  * - Rotating to other page
- * - Reload page cause of configuration file changes
+ * - Reload page because of configuration file changes
  * - Handling configuration file changes
- * - Get objects which need an update of the state informations
- * - Update the state informations
+ * - Get objects which need an update of the state information
+ * - Update the state information
  * - Handle state changes
  * After all work it goes to sleep for 1 second and calls itselfs again. These
- * tasks are note performed every run, some every second and some every 
- * configured worker_interval. The state informations are refreshed like 
+ * tasks are not performed every run, some every second and some every 
+ * configured worker_interval. The state information is refreshed like 
  * configured in worker_update_object_states.
  *
  * @param   Integer  The iterator for the run id
@@ -55,7 +55,7 @@ var oHoverUrls = {};
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function runWorker(iCount, sType) {
-	// If the iterator is 0 it is the first run of the worker. It's only task is
+	// If the iterator is 0 it is the first run of the worker. Its only task is
 	// to render the page
 	if(iCount === 0) {
 		// Initialize everything
@@ -73,7 +73,7 @@ function runWorker(iCount, sType) {
 			setMapHoverTemplates();
 			setMapHoverUrls();
 			
-			// Asign the hover templates to the objects and parse them
+			// Assign the hover templates to the objects and parse them
 			eventlog("worker", "info", "Parse hover menus");
 			parseMapObjectsHoverMenu();
 			
@@ -81,7 +81,7 @@ function runWorker(iCount, sType) {
 		}
 	} else {
 		/**
-		 * Do these actions every run (Every second)
+		 * Do these actions every run (every second)
 		 */
 		
 		// Countdown the rotation counter
@@ -131,7 +131,7 @@ function runWorker(iCount, sType) {
 					setMapHoverTemplates();
           setMapHoverUrls();
 					
-					// Asign the hover templates to the objects and parse them
+					// Assign the hover templates to the objects and parse them
 					parseMapObjectsHoverMenu();
 				}
 				
@@ -144,7 +144,7 @@ function runWorker(iCount, sType) {
 				for(var i = 0, len = arrObj.length; i < len; i++) {
 					var type = aMapObjects[arrObj[i]].conf.type;
 					
-					// Shapes which need to update need a special handling
+					// Shapes which need to be updated need a special handling
 					if(type === 'shape') {
 						aShapesToUpdate.push(arrObj[i]);
 					} else {
@@ -211,7 +211,7 @@ function runWorker(iCount, sType) {
 /**
  * getObjectsToUpdate()
  *
- * Detects objects with deprecated state informations
+ * Detects objects with deprecated state information
  *
  * @return  Array    The array of aMapObjects indexes which need an update
  * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -220,7 +220,7 @@ function getObjectsToUpdate() {
 	eventlog("worker", "debug", "getObjectsToUpdate: Start");
 	var arrReturn = [];
 	
-	// Asign all object indexes to return Array
+	// Assign all object indexes to return Array
 	for(var i = 0, len = aMapObjects.length; i < len; i++) {
 		if(aMapObjects[i].lastUpdate <= (Date.parse(new Date())-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
@@ -378,7 +378,7 @@ function setMapHoverTemplates() {
 /**
  * parseMapObjectsHoverMenu()
  *
- * Asigns the hover template code to the object, replaces all macros and
+ * Assigns the hover template code to the object, replaces all macros and
  * adds the menu to all map objects
  *
  * @param   Object   Object with basic page properties
@@ -395,7 +395,7 @@ function parseMapObjectsHoverMenu() {
 /**
  * setMapBasics()
  *
- * Sets basic informations like background image, favicon and page title
+ * Sets basic information like background image, favicon and page title
  *
  * @param   Object   Object with basic page properties
  * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -543,14 +543,14 @@ function updateMapObjects(aMapObjectInformations) {
 				if(oObj.conf.view_type && oObj.conf.view_type === 'line') {
 					// FIXME: Atm only flash icons, not lines
 				} else {
-					// Detatch the handler
+					// Detach the handler
 					setTimeout(function() { flashIcon(intIndex, 10) }, 0);
 				}
 			}
 			
 			// - Scroll to object
 			if(oMapProperties.event_scroll) {
-				// Detatch the handler
+				// Detach the handler
 				setTimeout(function() { scrollSlow(oObj.conf.x, oObj.conf.y, 15) }, 0);
 			}
 			
@@ -563,7 +563,7 @@ function updateMapObjects(aMapObjectInformations) {
 			
 			// - Sound
 			if(oMapProperties.event_sound) {
-				// Detatch the handler
+				// Detach the handler
 				setTimeout(function() { playSound(intIndex, 1) }, 0);
 			}
 		}
@@ -634,10 +634,10 @@ function playSound(intIndex, iNumTimes){
 /**
  * flashIcon()
  *
- * Highlights and object by show/hide a border arround the icon
+ * Highlights an object by show/hide a border around the icon
  *
  * @param   Integer  Index in aMapObjects
- * @param   Integer  Iterator for number of left runs
+ * @param   Integer  Iterator for number of runs left
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function flashIcon(intIndex, iNumTimes){

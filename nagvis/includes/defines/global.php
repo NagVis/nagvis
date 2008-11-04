@@ -53,9 +53,9 @@ set_include_path(
 define('DEBUG', FALSE);
 
 /**
- * For wanted debug output summarize these possible options:
- * 1: function beginning and ending
- * 2: progres informations in the functions
+ * For desired debug output add these possible values:
+ * 1: function start and end
+ * 2: progress information in the functions
  * 4: render time
  */
 define('DEBUGLEVEL', 4);

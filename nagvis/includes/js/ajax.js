@@ -77,7 +77,7 @@ function getHttpRequest(sUrl, bCacheable) {
 		bCacheable = true;
 	}
 	
-	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
+	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
 	if(bCacheable && typeof(ajaxQueryCache[sUrl]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
 		responseText = ajaxQueryCache[sUrl].response;
 	} else {
@@ -141,7 +141,7 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 }
 
 /**
- * Function for creating an synchronous GET request
+ * Function for creating a synchronous GET request
  * - Uses query cache
  * - Response needs to be JS code or JSON => Parses the response with eval()
  * - Errors need to match following Regex: /^Notice:|^Warning:|^Error:|^Parse error:/
@@ -160,7 +160,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		bRetryable = true;
 	}
 	
-	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
+	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
 	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
 		responseText = ajaxQueryCache[sUrl].response;
 		
@@ -241,7 +241,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getRequest(url,myCallback,oOpt) {
-	// Benutze cache, wenn die letzte Anfrage weniger als 30 Sekunden (30000 milisekunden) her ist
+	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
 	if(typeof(ajaxQueryCache[url]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[url].timestamp <= 30000) {
 		getAnswer(undefined, myCallback, ajaxQueryCache[url], true);
 	} else {

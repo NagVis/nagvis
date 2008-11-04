@@ -24,7 +24,7 @@
 
 
 /**
- * This is a coustom error handling function for submitting PHP errors to the
+ * This is a custom error handling function for submitting PHP errors to the
  * ajax requesting frontend
  *
  * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -37,7 +37,7 @@ function ajaxError($errno, $errstr, $file, $line) {
 	}
 }
 
-// Enable coustom error handling
+// Enable custom error handling
 set_error_handler("ajaxError");
 
 ?>

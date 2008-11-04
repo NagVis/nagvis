@@ -33,14 +33,14 @@ require("./includes/functions/oldPhpVersionFixes.php");
 require("./includes/functions/getuser.php");
 require("./includes/functions/ajaxErrorHandler.php");
 
-// This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
+// This defines whether the GlobalFrontendMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
 
 // Load the core
 $CORE = new GlobalCore();
 
 // FIXME: This is a hack; TODO: create a class "AjaxFrontend" which
-// handles this user authenticatgetObjectHoverMenuion related things and the handling below
+// handles this user authentication related things and the handling below/getObjectHoverMenu
 $CORE->MAINCFG->setRuntimeValue('user', getUser());
 
 

@@ -70,8 +70,8 @@ function eventlogInitialize() {
  * eventlog()
  *
  * Logs sth. to the javascript eventlog. The eventlog will be initialized when
- * not already done. The entrys can be logged with several severities. The
- * behavior can be controlled by modify the settings in main configuration.
+ * not already done. The entries can be logged with several severities. The
+ * behaviour can be controlled by modify the settings in main configuration.
  *
  * @param   String   The type of message
  * @param   String   The severity of the message

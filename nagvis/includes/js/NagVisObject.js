@@ -127,7 +127,7 @@ function NagVisObject (oConf) {
 				this.getHoverTemplateCode();
 			}
 			
-			// Reseting parsedObject. This makes problems in IE when converting to json with JSON.stringify
+			// Resetting parsedObject. This causes problems in IE when converting to json with JSON.stringify
 			// Maybe it results in other problems when removing parsedObject so clone this before
 			var oObjA = cloneObject(this);
 			var sTemplateCode = this.hover_template_code;

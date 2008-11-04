@@ -174,12 +174,12 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 				var childsHtmlCode = '';
 				var rowHtmlCode = results[1];
 				
-				// Loop all child object until all looped or the child limit is reached
+				// Loop all child objects until all looped or the child limit is reached
 				for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
 					if(i < oObj.conf.hover_childs_limit) {
 						var oMember = oObj.members[i];
 						if(oMember.type != 'textbox' && oMember.type != 'shape') {
-							// Childs need to know where they belong
+							// Children need to know where they belong
 							oMember.parent_type = oObj.type;
 							oMember.parent_name = oObj.name;
 							
