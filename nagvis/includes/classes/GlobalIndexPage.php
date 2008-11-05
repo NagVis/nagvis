@@ -47,6 +47,215 @@ class GlobalIndexPage {
 	}
 	
 	/**
+	 * Parses the information for json
+	 *
+	 * @return	String 	String with Html Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseJson() {
+		$ret = '';
+		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+		$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
+		$ret .= 'var oIndexProperties='.$this->parseIndexPropertiesJson().';'."\n";
+		$ret .= 'var aObjects=Array();'."\n";
+		$ret .= 'var aInitialMapObjects='.$this->parseObjectsJson().';'."\n";
+		
+		// Kick of the worker
+		$ret .= 'addLoadEvent(runWorker(0, \'overview\'));';
+		
+		return $ret;
+	}
+	
+	/**
+	 * Parses the config file ages
+	 *
+	 * @return	String 	JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseFileAges() {
+		$arr = Array();
+		
+		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
+		
+		return json_encode($arr);
+	}
+	
+	/**
+	 * Parses the objects for the overview page
+	 *
+	 * @return	String  Json Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseObjectsJson() {
+		return json_encode(Array('maps' => $this->parseMapsJson(), 'rotations' => $this->parseRotationsJson()));
+	}
+	
+	/**
+	 * Parses the maps for the overview page
+	 *
+	 * @return	String  Json Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseMapsJson() {
+		$aMaps = Array();
+		
+		foreach($this->CORE->getAvailableMaps() AS $mapName) {
+			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+			if(!$MAPCFG->readMapConfig()) {
+				// Skip this map when config problem
+				continue;
+			}
+			
+			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
+				if($mapName == '__automap') {
+					$opts = Array();
+					
+					// Fetch option array from defaultparams string (extract variable 
+					// names and values)
+					$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
+					unset($params[0]);
+					
+					foreach($params AS &$set) {
+						$arrSet = explode('=',$set);
+						$opts[$arrSet[0]] = $arrSet[1];
+					}
+					
+					$opts['preview'] = 1;
+					
+					$MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $opts);
+					// If there is no automap image on first load of the index page,
+					// render the image
+					$MAP->renderMap();
+				} else {
+					$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
+				}
+				
+				// Apply default configuration to object
+				$objConf = Array();
+				foreach($MAPCFG->validConfig['map'] AS $key => &$values) {
+					if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+						$objConf[$key] = $values['default'];
+					}
+				}
+				$MAP->MAPOBJ->setConfiguration($objConf);
+				
+				// Get the icon of the map
+				$MAP->MAPOBJ->fetchIcon();
+				
+				// Check if the user is permitted to view this map
+				if($MAP->MAPOBJ->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+					if($MAP->MAPOBJ->checkMaintenance(0)) {
+						$class = '';
+						$url = '';
+						
+						if($mapName == '__automap') {
+							$url = $this->htmlBase.'/index.php?automap=1'.$this->CORE->MAINCFG->getValue('automap','defaultparams');
+						} else {
+							$url = $this->htmlBase.'/index.php?map='.$mapName;
+						}
+						
+						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
+					} else {
+						$class = 'disabled';
+						
+						$url = 'alert(\''.$this->LANG->getText('mapInMaintenance').'\');';
+						$summaryOutput = $this->LANG->getText('mapInMaintenance');
+					}
+					
+					// If this is the automap display the last rendered image
+					if($mapName == '__automap') {
+						$imgPath = $this->CORE->MAINCFG->getValue('paths','var').'automap.png';
+						$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').'automap.png';
+					} else {
+						$imgPath = $this->CORE->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
+						$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+					}
+					
+					// Now form the cell with its contents
+					$MAP->MAPOBJ->replaceMacros();
+					
+					if($this->CORE->checkGd(0)) {
+						$image = $this->createThumbnail($imgPath, $mapName);
+					} else {
+						$image = $imgPathHtml;
+					}
+					
+					$aMaps[] = Array('name' => $mapName,
+					                 'alias' => $MAPCFG->getValue('global', '0', 'alias'),
+					                 'class' => $class,
+													 'url' => $url,
+													 'icon' => $MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon,
+													 'image' => $image);
+				}
+			}
+		}
+		
+		return $aMaps;
+	}
+	
+	/**
+	 * Parses the rotations for the overview page
+	 *
+	 * @return	String  Json Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseRotationsJson() {
+		$aRotations = Array();
+		
+		// Only display the rotation list when enabled
+		if($this->CORE->MAINCFG->getValue('index','showrotations') == 1) {
+			$aRotationPools = $this->CORE->getDefinedRotationPools();
+			if(count($aRotationPools) > 0) {
+				foreach($aRotationPools AS $poolName) {
+					$ROTATION = new NagVisRotation($this->CORE, $poolName);
+					
+					$aSteps = Array();
+					
+					// Parse the code for the step list
+					foreach($ROTATION->getSteps() AS $intId => $arrStep) {
+						$aSteps[] = Array('name' => $ROTATION->getStepLabelById($intId),
+						                  'url' => $ROTATION->getStepUrlById($intId));
+					}
+					
+					$aRotations[] = Array('name' => $poolName,
+					                      'url' => $ROTATION->getNextStepUrl(),
+					                      'num_steps' => $ROTATION->getNumSteps(),
+														    'steps' => $aSteps);
+				}
+			}
+		}
+		
+		return $aRotations;
+	}
+	
+	/**
+	 * Parses the overview page options in json format
+	 *
+	 * @return	String 	String with JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseIndexPropertiesJson() {
+		$arr = Array();
+		
+		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index','cellsperrow');
+		
+		/*$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
+		$arr['background_image'] = $this->getBackgroundJson();
+		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
+		$arr['favicon_image'] = $this->getFavicon();
+		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');
+		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
+		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
+		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
+		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
+		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
+		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');*/
+		
+		return json_encode($arr);
+	}
+	
+	/**
 	 * Displays the automatic index page of all maps
 	 *
 	 * @return	Array   HTML Code of Index Page
@@ -60,23 +269,6 @@ class GlobalIndexPage {
 			$ret .= $this->getRotationPoolIndex();
 			
 			return $ret;
-	}
-	
-	/**
-	 * Parses the information for json
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseJson() {
-		$ret = '';
-		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-		
-		// Kick of the worker
-		$ret .= 'addLoadEvent(runWorker(0, \'overview\'));';
-		
-		return $ret;
 	}
 	
 	/**
@@ -211,13 +403,13 @@ class GlobalIndexPage {
 					
 					// Now form the cell with its contents
 					$MAP->MAPOBJ->replaceMacros();
-					$ret .= '<td '.$class.' style="width:200px;height:200px;" '.$MAP->MAPOBJ->getHoverMenu().' onClick="'.$onClick.'">';
+					$ret .= '<td '.$class.' style="width:200px;height:200px;" onClick="'.$onClick.'">';
 					$ret .= '<img align="right" src="'.$MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon.'" />';
 					$ret .= '<h2>'.$MAPCFG->getValue('global', '0', 'alias').'</h2><br />';
 					if($this->CORE->checkGd(0)) {
-						$ret .= '<img style="width:200px;height:150px;" src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
+						$ret .= '<img style="width:200px;height:150px;" '.$MAP->MAPOBJ->getHoverMenu().' src="'.$this->createThumbnail($imgPath, $mapName).'" /><br />';
 					} else {
-						$ret .= '<img style="width:200px;height:150px;" src="'.$imgPathHtml.'" /><br />';
+						$ret .= '<img style="width:200px;height:150px;" '.$MAP->MAPOBJ->getHoverMenu().' src="'.$imgPathHtml.'" /><br />';
 					}
 					$ret .= '</td>';
 					if($i % $intCellsPerRow == 0) {
