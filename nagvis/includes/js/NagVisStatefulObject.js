@@ -123,10 +123,15 @@ function NagVisStatefulObject (oConf) {
 		oContainerDiv.setAttribute('id', this.objId);
 		
 		// Parse object depending on line or normal icon
-		if(this.conf.view_type && this.conf.view_type === 'line') {
-			oContainerDiv.appendChild(this.parseLine());
-		} else {
-			oContainerDiv.appendChild(this.parseIcon());
+		switch(this.conf.view_type) {
+			case 'line':
+				oContainerDiv.appendChild(this.parseLine());
+			break;
+			case 'gadget':
+				oContainerDiv.appendChild(this.parseGadget());
+			break;
+			default:
+				oContainerDiv.appendChild(this.parseIcon());
 		}
 		
 		// Parse label when configured
@@ -146,14 +151,14 @@ function NagVisStatefulObject (oConf) {
     // Add a context menu to the object when enabled
 		// FIXME: add config option to make this work
     if(this.conf.context_menu && this.conf.context_menu == '1') {
-      if(this.conf.line_type && this.conf.line_type != '') {
+      if(this.conf.view_type && this.conf.view_type == 'line') {
         this.addContextMenu(this.objId, this.objId+'-linediv');
       } else {
         this.addContextMenu(this.objId, this.objId+'-icon');
 			}
     }
 		
-		if(this.conf.line_type && this.conf.line_type != '') {
+		if(this.conf.view_type && this.conf.view_type == 'line') {
 			this.drawLine();
 		}
 	}

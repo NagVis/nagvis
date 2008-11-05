@@ -333,6 +333,8 @@ class GlobalMapCfg {
 				'backend_id' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
+				'gadget_url' => Array('must' => 0,
+					'match' => MATCH_STRING_URL),
 				'hover_menu' => Array('must' => 0,
 					'match' => MATCH_BOOLEAN),
 				'hover_template' => Array('must' => 0,
@@ -967,10 +969,15 @@ class GlobalMapCfg {
 							}
 						}
 						
-						// Check wether a object hast line_type set and not view_type=line
+						// Check wether a object has line_type set and not view_type=line
 						// FIXME: This check should be removed in 1.5 or 1.6
 						if($key == 'line_type' && !isset($element['view_type'])) {
 							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('lineTypeButViewTypeNotSet','MAP~'.$this->getName().',TYPE~'.$type));
+						}
+						
+						// Check gadget options when object view type is gadget
+						if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url'])) {
+							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('viewTypeGadgetButNoGadgetUrl','MAP~'.$this->getName().',TYPE~'.$type));
 						}
 					}
 				}

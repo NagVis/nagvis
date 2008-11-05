@@ -489,8 +489,16 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseJson() {
+		// Replace macros in url, hover_url, label_text
 		$this->replaceMacros();
+		
+		// Get the correct url
 		$this->url = $this->getUrl();
+		
+		// When this is a gadget parse the url
+		if($this->view_type == 'gadget') {
+			$this->parseGadgetUrl();
+		}
 		
 		// Get all information of the object (configuration, state, ...)
 		return $this->getObjectInformation();

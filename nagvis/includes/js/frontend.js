@@ -169,7 +169,7 @@ function runWorker(iCount, sType) {
 					}
 				}
 				
-				// Get the updated objects via bulk request
+				// Get the updated objectsupdateMapObjects via bulk request
 				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
@@ -518,7 +518,14 @@ function updateMapObjects(aMapObjectInformations) {
 		// Update lastUpdate timestamp
 		oObj.setLastUpdate();
 		
-		// Detect state changes and do some custom actions
+		// Objects with view_type=gadget need to be reloaded even when no state
+		// changed (perfdata could be changed since last update)
+		if(!oObj.stateChanged() && oObj.conf.view_type === 'gadget') {
+			// Reparse object to map
+			oObj.parse();
+		}
+		
+		// Detect state changes and do some actions
 		if(oObj.stateChanged()) {
 			
 			/* Internal handling */

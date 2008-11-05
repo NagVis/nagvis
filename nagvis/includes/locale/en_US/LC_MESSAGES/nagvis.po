@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-04 19:49+0100\n"
-"PO-Revision-Date: 2008-11-04 19:54+0100\n"
+"POT-Creation-Date: 2008-11-05 20:29+0100\n"
+"PO-Revision-Date: 2008-11-05 20:31+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr ""
 #: wui/form_handler.php:569
 #: wui/includes/classes/WuiBackendManagement.php:234
 #: wui/includes/classes/WuiAddModify.php:247
-#: nagvis/includes/classes/GlobalMapCfg.php:921
+#: nagvis/includes/classes/GlobalMapCfg.php:923
 msgid "mustValueNotSet"
 msgstr "A necessary value is not set. All red marked values are compulsory values."
 
@@ -626,13 +626,13 @@ msgid "confirmRestore"
 msgstr "Are you sure that you want to restore the backup?"
 
 #: wui/includes/classes/WuiMap.php:633
-#: nagvis/includes/classes/GlobalMainCfg.php:677
+#: nagvis/includes/classes/GlobalMainCfg.php:682
 msgid "wrongValueFormat"
 msgstr "The attribute \"[ATTRIBUTE]\" in section \"[TYPE]\" in main configuration file does not match the valid value format"
 
 #: wui/includes/classes/WuiMap.php:634
-#: nagvis/includes/classes/GlobalMapCfg.php:952
-#: nagvis/includes/classes/GlobalMapCfg.php:963
+#: nagvis/includes/classes/GlobalMapCfg.php:954
+#: nagvis/includes/classes/GlobalMapCfg.php:965
 msgid "wrongValueFormatMap"
 msgstr "The attribute \"[ATTRIBUTE]\" in element of type \"[TYPE]\" in map configuration file \"[MAP]\" does not match the valid value format"
 
@@ -668,7 +668,7 @@ msgid "parameterObjIdNotSet"
 msgstr "The parameter &quot;objId&quot; is missing."
 
 #: nagvis/ajax_handler.php:121
-#: nagvis/includes/classes/GlobalMapCfg.php:760
+#: nagvis/includes/classes/GlobalMapCfg.php:762
 #: nagvis/includes/classes/objects/NagVisMapObj.php:327
 msgid "unknownObject"
 msgstr "The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed."
@@ -740,26 +740,30 @@ msgstr "Only PNG or JPG images are allowed for map image files."
 msgid "imageNotExists"
 msgstr "An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:873
+#: nagvis/includes/classes/GlobalMapCfg.php:875
 #: nagvis/includes/classes/objects/NagVisMapObj.php:317
 msgid "mapCfgNotExists"
 msgstr "The map configuration file \"[MAP]\" does not exist"
 
-#: nagvis/includes/classes/GlobalMapCfg.php:895
+#: nagvis/includes/classes/GlobalMapCfg.php:897
 msgid "mapCfgNotReadable"
 msgstr "The map configuration file &quot;[IMGPATH]&quot; is not readable."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:932
+#: nagvis/includes/classes/GlobalMapCfg.php:934
 msgid "unknownAttribute"
 msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not supported in objects of type &quot;[TYPE]&quot; on map [MAPNAME]."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:938
+#: nagvis/includes/classes/GlobalMapCfg.php:940
 msgid "mapDeprecatedOption"
 msgstr "The given option &quot;[ATTRIBUTE]&quot; in section of type &quot;[TYPE]&quot; in map &quot;[MAP]&quot; is deprecated in this version. Please read the documentation/changelog for details."
 
-#: nagvis/includes/classes/GlobalMapCfg.php:973
+#: nagvis/includes/classes/GlobalMapCfg.php:975
 msgid "lineTypeButViewTypeNotSet"
 msgstr "You told NagVis to show an object as line (option line_type set). Since NagVis 1.4 you have to set the option &quot;view_type=line&quot; for line objects. This problem was detected in an object of the type &quot;[TYPE]&quot; on map &quot;[MAP]&quot;."
+
+#: nagvis/includes/classes/GlobalMapCfg.php:980
+msgid "viewTypeGadgetButNoGadgetUrl"
+msgstr "NagVis found an object whitout gadget_url option but view_type=&quot;gadget&quot;. This problem was detected in an object of the type &quot;[TYPE]&quot; on map &quot;[MAP]&quot;."
 
 #: nagvis/includes/classes/GlobalBackendMgmt.php:80
 msgid "backendNotExists"
@@ -894,47 +898,47 @@ msgstr "The map image file &quot;[IMGPATH]&quot; is not writeable."
 msgid "backgroundFolderNotWriteable"
 msgstr "The background image folder &quot;[PATH]&quot; is not writeable."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:626
+#: nagvis/includes/classes/GlobalMainCfg.php:631
 msgid "mainMustValueNotSet"
 msgstr "The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:647
+#: nagvis/includes/classes/GlobalMainCfg.php:652
 msgid "unknownValue"
 msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not allowed in section &quot;[TYPE]&quot; in main configuration file."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:654
+#: nagvis/includes/classes/GlobalMainCfg.php:659
 msgid "deprecatedOption"
 msgstr "The given option &quot;[ATTRIBUTE]&quot; in section &quot;[TYPE]&quot; is deprecated in this version. Please read the documentation/changelog for details."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:688
+#: nagvis/includes/classes/GlobalMainCfg.php:693
 msgid "unknownSection"
 msgstr "The section &quot;[TYPE]&quot; in main configuration file is not allowed."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:711
+#: nagvis/includes/classes/GlobalMainCfg.php:716
 msgid "mainCfgNotExists"
 msgstr "The main configuration file &quot;[MAINCFG]&quot; does not exists."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:734
+#: nagvis/includes/classes/GlobalMainCfg.php:739
 msgid "mainCfgNotReadable"
 msgstr "Please check the webservers permissions for the main configuration file &quot;[MAINCFG]&quot;."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:756
+#: nagvis/includes/classes/GlobalMainCfg.php:761
 msgid "mapCfgDirNotReadable"
 msgstr "Please check the webservers permissions for the map configuration folder &quot;[MAPPATH]&quot;."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:775
+#: nagvis/includes/classes/GlobalMainCfg.php:780
 msgid "mainCfgCacheNotExists"
 msgstr "The cache of the main configuration file does not exist."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:794
+#: nagvis/includes/classes/GlobalMainCfg.php:799
 msgid "mainCfgCacheNotReadable"
 msgstr "The main configuration file cache is not readable."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:833
+#: nagvis/includes/classes/GlobalMainCfg.php:838
 msgid "mainCfgNotCached"
 msgstr "The main configuration file is not cached."
 
-#: nagvis/includes/classes/GlobalMainCfg.php:850
+#: nagvis/includes/classes/GlobalMainCfg.php:855
 msgid "mainCfgCacheNotWriteable"
 msgstr "The main configuration file cache is not writeable."
 
@@ -1074,7 +1078,7 @@ msgstr "Wrong Type"
 msgid "messageboxMessageWrongType"
 msgstr "The type [TYPE] is not a defined message box type."
 
-#: nagvis/includes/classes/objects/NagVisStatefulObject.php:623
+#: nagvis/includes/classes/objects/NagVisStatefulObject.php:631
 msgid "childStatesAre"
 msgstr "There are"
 

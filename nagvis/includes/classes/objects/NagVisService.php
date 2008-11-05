@@ -30,6 +30,8 @@ class NagVisService extends NagiosService {
 	var $CORE;
 	var $BACKEND;
 	
+	var $gadget_url;
+	
 	/**
 	 * Class constructor
 	 *
@@ -47,6 +49,7 @@ class NagVisService extends NagiosService {
 		$this->BACKEND = &$BACKEND;
 		$this->type = 'service';
 		$this->iconset = 'std_medium';
+		
 		parent::NagiosService($this->CORE, $this->BACKEND, $backend_id, $hostName, $serviceDescription);
 	}
 	
@@ -80,6 +83,20 @@ class NagVisService extends NagiosService {
 			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&host='.$this->host_name.'&service='.$this->service_description;
 		}
 		return $url;
+	}
+	
+	/**
+	 * Sets the path of gadget_url. The method adds htmlgadgets path when relative
+	 * path or will remove [] when full url given
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseGadgetUrl() {
+		if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0) {
+			$this->gadget_url = $match[1];
+		} else {
+			$this->gadget_url = $this->CORE->MAINCFG->getValue('paths', 'htmlgadgets').$this->gadget_url;
+		}
 	}
 }
 ?>

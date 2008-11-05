@@ -29,4 +29,51 @@ NagVisService.Inherits(NagVisStatefulObject);
 function NagVisService (oConf) {
 	// Call parent constructor
 	this.Inherits(NagVisStatefulObject, oConf);
+	
+	/**
+	 * PUBLIC parseGadget()
+	 *
+	 * Parses the HTML-Code of a gadget
+	 *
+	 * @return	String		gadget object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	this.parseGadget = function () {
+		var alt = this.conf.name+'-'+this.conf.service_description;
+		
+		// Add object informations and current perfdata to gadget_url
+		var iParam = this.conf.gadget_url.indexOf('?');
+		var sParams = '';
+		if (iParam == -1) {
+			// Append with leading "?" to mark parameter beginning
+			sParams = '?';
+		} else {
+			// Append with leading "&" to continue parameters
+			sParams = '&';
+		}
+		
+		sParams = sParams + 'name1=' + this.conf.name + '&name2=' + this.conf.service_description + '&state=' + this.conf.state + '&stateType=' + this.conf.state_type + '&perfdata=' + this.conf.perfdata;
+		
+		var oIcon = document.createElement('img');
+		oIcon.setAttribute('id', this.objId+'-icon');
+		oIcon.src = this.conf.gadget_url + sParams;
+		oIcon.alt = this.conf.type+'-'+alt;
+		
+		var oIconLink = document.createElement('a');
+		oIconLink.href = this.conf.url;
+		oIconLink.target = this.conf.url_target;
+		oIconLink.appendChild(oIcon);
+		
+		var oIconDiv = document.createElement('div');
+		oIconDiv.setAttribute('id', this.objId+'-icondiv');
+		oIconDiv.setAttribute('class', 'icon');
+		oIconDiv.setAttribute('className', 'icon');
+		oIconDiv.style.position = 'absolute';
+		oIconDiv.style.top = this.conf.y+'px';
+		oIconDiv.style.left = this.conf.x+'px';
+		oIconDiv.style.zIndex = this.conf.z;
+		oIconDiv.appendChild(oIconLink);
+		
+		return oIconDiv;
+	}
 }
