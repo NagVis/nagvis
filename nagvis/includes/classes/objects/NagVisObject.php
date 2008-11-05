@@ -38,6 +38,7 @@ class NagVisObject {
 	var $z;
 	var $icon;
 	
+	var $view_type;
 	var $hover_menu;
 	var $hover_childs_show;
 	var $hover_childs_sort;

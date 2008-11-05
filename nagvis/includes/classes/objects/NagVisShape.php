@@ -50,18 +50,6 @@ class NagVisShape extends NagVisStatelessObject {
 	}
 	
 	/**
-	 * PUBLIC parse()
-	 *
-	 * Parses the object
-	 *
-	 * @return	String		HTML code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parse() {
-		return $this->parseIcon();
-	}
-	
-	/**
 	 * PUBLIC parseJson()
 	 *
 	 * Parses the object in json format

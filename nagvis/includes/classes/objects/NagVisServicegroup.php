@@ -49,18 +49,6 @@ class NagVisServicegroup extends NagiosServicegroup {
 		parent::NagiosServicegroup($this->CORE, $this->BACKEND, $backend_id, $servicegroupName);
 	}
 	
-	/**
-	 * PUBLIC parse()
-	 *
-	 * Parses the object
-	 *
-	 * @return	String		HTML code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parse() {
-		return parent::parse();
-	}
-	
 	# End public methods
 	# #########################################################################
 	

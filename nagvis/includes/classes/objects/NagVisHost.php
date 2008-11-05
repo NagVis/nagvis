@@ -50,18 +50,6 @@ class NagVisHost extends NagiosHost {
 	}
 	
 	/**
-	 * PUBLIC parse()
-	 *
-	 * Parses the object in HTML format
-	 *
-	 * @return	String		HTML code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parse() {
-		return parent::parse();
-	}
-	
-	/**
 	 * PUBLIC parseJson()
 	 *
 	 * Parses the object in json format

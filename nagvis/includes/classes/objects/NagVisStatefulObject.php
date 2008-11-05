@@ -458,29 +458,6 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
-	 * PUBLIC parse()
-	 *
-	 * Parses the object
-	 *
-	 * @return	String		HTML code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parse() {
-		$ret = '';
-		
-		$this->replaceMacros();
-		
-		// Parse object depending on line or normal icon
-		if(isset($this->line_type)) {
-			$ret .= $this->parseLine();
-		} else {
-			$ret .= $this->parseIcon();
-		}
-		
-		return $ret.$this->parseLabel();
-	}
-	
-	/**
 	 * PUBLIC parseJson()
 	 *
 	 * Parses the object in json format

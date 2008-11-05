@@ -94,18 +94,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC parse()
-	 *
-	 * Parses the object
-	 *
-	 * @return	String		HTML code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parse() {
-		return parent::parse();
-	}
-	
-	/**
 	 * PUBLIC getMembers()
 	 *
 	 * Returns the array of objects on the map
