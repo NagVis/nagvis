@@ -96,10 +96,10 @@ class GlobalLanguage {
 	 * @return	String	Localized String
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getText($id, $replace='') {
+	function getText($id, $replace = NULL) {
 		$ret = $this->getTextOfId($id);
 		
-		if($replace != '') {
+		if($replace !== NULL) {
 			$ret = $this->getReplacedString($ret, $replace);
 		}
 		
@@ -114,33 +114,30 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getTextOfId($s) {
-		$sLocalized = gettext($s);
-		
-		// filter type, messages/labels
-		if($sLocalized != '') {
-			// Replace [i],[b] and their ending tags with HTML code
-			$sLocalized = preg_replace('/\[(\/|)(i|b|br)\]/i',"<$1$2>", $sLocalized);
-			
-			return $sLocalized;
-		}
+		return gettext($s);
 	}
 	
 	
 	/**
 	 * Gets the text of an id
 	 *
-	 * @param	String	String Plain language string
-	 * @return	String	String Replaced language string
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   String        String Plain language string
+	 * @param   String/Array  String or Array with macros to replace 
+	 * @return  String        String Replaced language string
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getReplacedString($sLang, $sReplace) {
-		$aReplace = explode(',', $sReplace);
-		$size = count($aReplace);
-		for($i = 0; $i < $size; $i++) {
-			if(isset($aReplace[$i])) {
-				// If = are in the text, they'll be cut: $var = explode('=', str_replace('~','=',$arrReplace[$i]));
-				$var = explode('~', $aReplace[$i]);
-				$sLang = str_replace('['.$var[0].']', $var[1], $sLang);
+	function getReplacedString($sLang, $replace) {
+		if(!is_array($replace)) {
+			$aReplace = explode(',', $replace);
+			for($i = 0, $size = count($aReplace); $i < $size; $i++) {
+				if(isset($aReplace[$i])) {
+					$var = explode('~', $aReplace[$i]);
+					$sLang = str_replace('['.$var[0].']', $var[1], $sLang);
+				}
+			}
+		} else {
+			foreach($replace AS $key => $val) {
+				$sLang = str_replace('['.$key.']', $val, $sLang);
 			}
 		}
 		
