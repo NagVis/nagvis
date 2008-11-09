@@ -151,8 +151,8 @@ class GlobalIndexPage {
 					} else {
 						$class = 'disabled';
 						
-						$url = 'alert(\''.$this->LANG->getText('mapInMaintenance').'\');';
-						$summaryOutput = $this->LANG->getText('mapInMaintenance');
+						$url = 'alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
+						$summaryOutput = $this->CORE->LANG->getText('mapInMaintenance');
 					}
 					
 					// If this is the automap display the last rendered image
@@ -167,7 +167,7 @@ class GlobalIndexPage {
 					// Now form the cell with its contents
 					$MAP->MAPOBJ->replaceMacros();
 					
-					if($this->CORE->checkGd(0)) {
+					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
 						$image = $this->createThumbnail($imgPath, $mapName);
 					} else {
 						$image = $imgPathHtml;
@@ -280,7 +280,7 @@ class GlobalIndexPage {
 					$strFileType = 'png';
 				break;
 				default:
-					new GlobalFrontendMessage('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
@@ -346,7 +346,7 @@ class GlobalIndexPage {
 					imagepng($thumb, $pathThumbImage);
 				break;
 				default:
-					new GlobalFrontendMessage('ERROR', $this->LANG->getText('onlyPngOrJpgImages'));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
