@@ -418,7 +418,7 @@ class GlobalBackendndomy {
 				'.$this->dbPrefix.'hoststatus AS hs
 				ON hs.host_object_id=o.object_id
 			LEFT JOIN
-				'.$this->dbPrefix.'downtimehistory AS dh
+				'.$this->dbPrefix.'scheduleddowntime AS dh
 				ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 			WHERE 
 				(o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
@@ -554,7 +554,7 @@ class GlobalBackendndomy {
 						'.$this->dbPrefix.'servicestatus AS ss
 						ON ss.service_object_id=o.object_id
 					LEFT JOIN
-						'.$this->dbPrefix.'downtimehistory AS dh
+						'.$this->dbPrefix.'scheduleddowntime AS dh
 						ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 					WHERE 
 						(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
@@ -583,7 +583,7 @@ class GlobalBackendndomy {
 						'.$this->dbPrefix.'servicestatus AS ss
 						ON ss.service_object_id=o.object_id
 					LEFT JOIN
-						'.$this->dbPrefix.'downtimehistory AS dh
+						'.$this->dbPrefix.'scheduleddowntime AS dh
 						ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
 					WHERE 
 						(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
