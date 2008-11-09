@@ -119,7 +119,7 @@ class NagVisHost extends NagiosHost {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUrl() {
-		if(isset($this->url) && $this->url != '') {
+		if(isset($this->url)) {
 			$url = parent::getUrl();
 		} else {
 			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->host_name;

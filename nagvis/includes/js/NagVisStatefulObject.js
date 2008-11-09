@@ -308,11 +308,6 @@ function NagVisStatefulObject (oConf) {
 		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
 		oIcon.alt = this.conf.type+'-'+alt;
 		
-		var oIconLink = document.createElement('a');
-		oIconLink.href = this.conf.url;
-		oIconLink.target = this.conf.url_target;
-		oIconLink.appendChild(oIcon);
-		
 		var oIconDiv = document.createElement('div');
 		oIconDiv.setAttribute('id', this.objId+'-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
@@ -321,7 +316,17 @@ function NagVisStatefulObject (oConf) {
 		oIconDiv.style.top = this.conf.y+'px';
 		oIconDiv.style.left = this.conf.x+'px';
 		oIconDiv.style.zIndex = this.conf.z;
-		oIconDiv.appendChild(oIconLink);
+		
+		if(this.conf.url && this.conf.url !== '') {
+			var oIconLink = document.createElement('a');
+			oIconLink.href = this.conf.url;
+			oIconLink.target = this.conf.url_target;
+			oIconLink.appendChild(oIcon);
+			
+			oIconDiv.appendChild(oIconLink);
+		} else {
+			oIconDiv.appendChild(oIcon);
+		}
 		
 		return oIconDiv;
 	}
