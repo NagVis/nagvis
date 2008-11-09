@@ -104,7 +104,7 @@ function rotatePage() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotationCountdown() {
-	if(oPageProperties.nextStepTime !== '') {
+	if(oPageProperties.nextStepTime && oPageProperties.nextStepTime !== '') {
 		// Countdown one second
 		oPageProperties.nextStepTime -= 1;
 		
