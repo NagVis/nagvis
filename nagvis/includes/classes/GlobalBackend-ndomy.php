@@ -771,40 +771,6 @@ class GlobalBackendndomy {
 	}
 	
 	/**
-	 * PUBLIC Method getServicesByHostName
-	 *
-	 * Gets all services of a given host
-	 *
-	 * @param		String		Name of host to get the services of
-	 * @return	Array			Array with service descriptions
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getServicesByHostName($hostName) {
-		$arrReturn = Array();
-		
-		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				o.name2
-			FROM 
-				'.$this->dbPrefix.'objects AS o, 
-				'.$this->dbPrefix.'services AS s, 
-				'.$this->dbPrefix.'servicestatus AS ss 
-			WHERE 
-				(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
-				AND ss.service_object_id=o.object_id');
-		
-		while($data = mysql_fetch_array($QUERYHANDLE)) {
-			// Assign actual dataset to return array
-			$arrReturn[] = $data['name2'];
-		}
-		
-		// Free memory
-		mysql_free_result($QUERYHANDLE);
-		
-		return $arrReturn;
-	}
-	
-	/**
 	 * PUBLIC Method getHostsByHostgroupName
 	 *
 	 * Gets all hosts of a hostgroup
