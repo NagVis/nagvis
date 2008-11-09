@@ -53,7 +53,7 @@ class GlobalMapCfg {
 					'match' => MATCH_STRING),
 				'allowed_user' => Array('must' => 1,
 					'match' => MATCH_STRING),
-				'map_image' => Array('must' => 1,
+				'map_image' => Array('must' => 0,
 					'match' => MATCH_PNG_GIF_JPG_FILE_OR_NONE),
 				'alias' => Array('must' => 0,
 					'default' => $this->getName(),
