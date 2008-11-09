@@ -80,6 +80,7 @@ class NagVisFrontend extends GlobalPage {
 															$this->htmlBase.'/nagvis/includes/js/NagVisMap.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisShape.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisTextbox.js',
+															$this->htmlBase.'/nagvis/includes/js/NagVisRotation.js',
 															$this->htmlBase.'/nagvis/includes/js/overlib.js',
 															$this->htmlBase.'/nagvis/includes/js/dynfavicon.js',
 															$this->htmlBase.'/nagvis/includes/js/hover.js',
@@ -118,10 +119,8 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function getIndexPage() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
-		$this->addBodyLines('<div class="infopage">');
+		$this->addBodyLines('<div id="overview" class="infopage"></div>');
 		$this->INDEX = new GlobalIndexPage($this->CORE, $this->BACKEND);
-		$this->addBodyLines($this->INDEX->parse());
-		$this->addBodyLines('</div>');
 		$this->addBodyLines($this->parseJs($this->INDEX->parseJson()));
 	}
 	
@@ -132,10 +131,9 @@ class NagVisFrontend extends GlobalPage {
 	 */
 	function getMap() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
-		$this->addBodyLines('<div id="map" class="map">');
+		$this->addBodyLines('<div id="map" class="map"></div>');
 		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, $this->BACKEND);
 		$this->MAP->MAPOBJ->checkMaintenance(1);
-		$this->addBodyLines('</div>');
 		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));
 	}
 	

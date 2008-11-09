@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-05 20:29+0100\n"
-"PO-Revision-Date: 2008-11-05 20:31+0100\n"
+"PO-Revision-Date: 2008-11-07 22:01+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -703,7 +703,7 @@ msgstr "The required graphviz binary &quot;[NAME]&quot; could not be found in th
 
 #: nagvis/includes/classes/NagVisAutoMap.php:548
 msgid "couldNotGetRootHostname"
-msgstr "The Automap needs one root hostname to start the drawing.[br][br] There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is [b]one[/b] host with no parent)."
+msgstr "The Automap needs one root hostname to start the drawing.<br><br> There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is <b>one</b> host with no parent)."
 
 #: nagvis/includes/classes/GlobalCore.php:72
 msgid "gdLibNotFound"
@@ -747,7 +747,7 @@ msgstr "The map configuration file \"[MAP]\" does not exist"
 
 #: nagvis/includes/classes/GlobalMapCfg.php:897
 msgid "mapCfgNotReadable"
-msgstr "The map configuration file &quot;[IMGPATH]&quot; is not readable."
+msgstr "The map configuration file &quot;[MAP]&quot; is not readable."
 
 #: nagvis/includes/classes/GlobalMapCfg.php:934
 msgid "unknownAttribute"

@@ -86,6 +86,8 @@
 
 ; Options to configure the Overview page of NagVis
 [index]
+; Color of the overview background
+;backgroundcolor=#fff
 ; Set number of map cells per row
 ;cellsperrow=4
 ; enable/disable header menu

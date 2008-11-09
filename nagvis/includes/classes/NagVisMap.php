@@ -68,9 +68,9 @@ class NagVisMap extends GlobalMap {
 		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
 		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
 		$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
-		$ret .= 'var oMapProperties='.$this->parseMapPropertiesJson().';'."\n";
-		$ret .= 'var aMapObjects=Array();'."\n";
+		$ret .= 'var oPageProperties='.$this->parseMapPropertiesJson().';'."\n";
 		$ret .= 'var aInitialMapObjects='.$this->parseObjectsJson().';'."\n";
+		$ret .= 'var aMapObjects=Array();'."\n";
 		
 		// Kick of the worker
 		$ret .= 'addLoadEvent(runWorker(0, \'map\'));';

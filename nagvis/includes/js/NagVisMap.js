@@ -31,4 +31,46 @@ function NagVisMap (oConf) {
 	this.Inherits(NagVisStatefulObject, oConf);
 	
 	this.getMembers();
+	
+	/**
+	 * Parses the object of a map on the overview page
+	 *
+	 * @return	String		HTML code of the label
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	this.parseOverview = function () {
+		this.replaceMacros();
+		
+		var oTd = document.createElement('td');
+		oTd.setAttribute('id', this.objId+'-icon');
+		oTd.setAttribute('class', this.conf.overview_class);
+		oTd.setAttribute('className', this.conf.overview_class);
+		oTd.style.width = '200px';
+		oTd.style.height = '200px';
+		
+		var sUrl = this.conf.overview_url;
+		oTd.onclick = function() { 
+			location.href = sUrl;
+		};
+		
+		var oImg = document.createElement('img');
+		oImg.align="right";
+		oImg.src=this.conf.iconHtmlPath+this.conf.icon;
+		oTd.appendChild(oImg);
+		
+		var h2 = document.createElement('h2');
+		h2.appendChild(document.createTextNode(this.conf.name));
+		oTd.appendChild(h2);
+		
+		var br = document.createElement('br');
+		oTd.appendChild(br);
+		
+		var oImg = document.createElement('img');
+		oImg.style.width = '200px';
+		oImg.style.height = '150px';
+		oImg.src=this.conf.overview_image;
+		oTd.appendChild(oImg);
+		
+		return oTd;
+	}
 }

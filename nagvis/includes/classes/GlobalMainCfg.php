@@ -379,7 +379,11 @@ class GlobalMainCfg {
 				'showrotations' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '1',
-					'match' => MATCH_BOOLEAN)),
+					'match' => MATCH_BOOLEAN),
+				'backgroundcolor' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '#fff',
+					'match' => MATCH_COLOR)),
 			'worker' => Array(
 				'interval' => Array('must' => 0,
 					'editable' => 0,

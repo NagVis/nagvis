@@ -63,7 +63,7 @@ function eventlogInitialize() {
 		document.body.appendChild(oEventlogControl);
 	}
 	
-	eventlog("eventlog", "info", "Eventlog initialized (Level: "+oMapProperties.event_log_level+")");
+	eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
 }
 
 /**
@@ -79,7 +79,7 @@ function eventlogInitialize() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function eventlog(sType, sSeverity, sText) {
-	if(typeof(oMapProperties) != 'undefined' && oMapProperties !== null && oMapProperties.event_log && oMapProperties.event_log != '0') {
+	if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null && oPageProperties.event_log && oPageProperties.event_log != '0') {
 		var oSeverity = Object();
 		oSeverity.debug = 4;
 		oSeverity.info = 3;
@@ -93,7 +93,7 @@ function eventlog(sType, sSeverity, sText) {
 			var oEventlog = document.getElementById('eventlog');
 		}
 		
-		if(oSeverity[sSeverity] <= oSeverity[oMapProperties.event_log_level]) {
+		if(oSeverity[sSeverity] <= oSeverity[oPageProperties.event_log_level]) {
 			// Format the log entry
 			var oEntry = document.createTextNode(getCurrentTime()+" "+sSeverity+" "+sType+": "+sText);
 			

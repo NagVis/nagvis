@@ -63,21 +63,42 @@ function runWorker(iCount, sType) {
 		
 		// Handle the map rendering
 		if(sType == 'map') {
-			setMapBasics(oMapProperties);
+			setMapBasics(oPageProperties);
 			
 			eventlog("worker", "info", "Parsing map objects");
 			setMapObjects(aInitialMapObjects);
 			
 			// Bulk get all hover templates which are needed on the map
 			eventlog("worker", "info", "Fetching hover templates and hover urls");
-			setMapHoverTemplates();
+			getHoverTemplates(aMapObjects);
 			setMapHoverUrls();
 			
 			// Assign the hover templates to the objects and parse them
 			eventlog("worker", "info", "Parse hover menus");
-			parseMapObjectsHoverMenu();
+			parseHoverMenus(aMapObjects);
 			
 			eventlog("worker", "info", "Finished parsing map");
+		} else if(sType === 'overview') {
+			setMapBasics(oPageProperties);
+			
+			eventlog("worker", "info", "Parsing overview page");
+			parseOverviewPage();
+			
+			eventlog("worker", "info", "Parsing maps");
+			parseOverviewMaps(aInitialMaps);
+			
+			eventlog("worker", "info", "Parsing rotations");
+			setOverviewRotations(aInitialRotations);
+			
+			// Bulk get all hover templates which are needed on the map
+			eventlog("worker", "info", "Fetching hover templates");
+			getHoverTemplates(aMaps);
+			
+			// Assign the hover templates to the objects and parse them
+			eventlog("worker", "info", "Parse hover menus");
+			parseHoverMenus(aMaps);
+			
+			eventlog("worker", "info", "Finished parsing overview");
 		}
 	} else {
 		/**
@@ -114,29 +135,29 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Check for changed map configuration
-				if(oFileAges && checkMapCfgChanged(oFileAges[oMapProperties.map_name])) {
+				if(oFileAges && checkMapCfgChanged(oFileAges[oPageProperties.map_name])) {
 					// Set map basics
-					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oMapProperties.map_name);
+					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);
 					if(oMapBasics) {
 						setMapBasics(oMapBasics);
 					}
 					
 					// Set map objects
-					var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oMapProperties.map_name);
+					var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oPageProperties.map_name);
 					if(oMapObjects) {
 						setMapObjects(oMapObjects);
 					}
 					
 					// Bulk get all hover templates which are needed on the map
-					setMapHoverTemplates();
+					getHoverTemplates(aMapObjects);
           setMapHoverUrls();
 					
 					// Assign the hover templates to the objects and parse them
-					parseMapObjectsHoverMenu();
+					parseHoverMenus(aMapObjects);
 				}
 				
 				// Now proceed with real actions when everything is OK
-				var arrObj = getObjectsToUpdate();
+				var arrObj = getObjectsToUpdate(aMapObjects);
 				
 				// Create the ajax request for bulk update, handle shape updates
 				var aUrlParts = [];
@@ -151,7 +172,7 @@ function runWorker(iCount, sType) {
 						var obj_id = aMapObjects[arrObj[i]].objId;
 						var name = aMapObjects[arrObj[i]].conf.name;
 						var service_description = aMapObjects[arrObj[i]].conf.service_description;
-						var map = oMapProperties.map_name;
+						var map = oPageProperties.map_name;
 						var sUrlPart = '';
 						
 						if(name) {
@@ -173,7 +194,7 @@ function runWorker(iCount, sType) {
 				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
-					bStateChanged = updateMapObjects(o);
+					bStateChanged = updateObjects(o, aMapObjects, sType);
 				}
 				
 				// Update shapes when needed
@@ -183,19 +204,89 @@ function runWorker(iCount, sType) {
 				
 				// When some state changed on the map update the title and favicon
 				if(bStateChanged) {
-					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oMapProperties.map_name+'&m[]=&t[]=map&n1[]='+oMapProperties.map_name+'&n2[]=', false)[0];
+					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
 					
 					// Update favicon
-					setMapFavicon(getFaviconImage(o));
+					setPageFavicon(getFaviconImage(o));
 					
 					// Update page title
-					setMapPageTitle(oMapProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
+					setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
 					
 					// Change background color
-					if(oMapProperties.event_background && oMapProperties.event_background == '1') {
-						setMapBackgroundColor(getBackgroundColor(o));
+					if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+						setPageBackgroundColor(getBackgroundColor(o));
 					}
 				}
+				
+				// Update lastWorkerRun
+				oWorkerProperties.last_run = Date.parse(new Date());
+			}
+		} else if(sType === 'overview') {
+			if(iCount % oWorkerProperties.worker_interval === 0) {
+				// Log normal worker step
+				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
+				
+				// Get the file ages of important files
+				var oFileAges = getCfgFileAges(false);
+				
+				// Check for changed main configuration
+				if(oFileAges && checkMainCfgChanged(oFileAges.mainCfg)) {
+					// FIXME: Not handled by ajax frontend, reload the page
+					window.location.reload(true);
+				}
+				
+				//FIXME: Map configuration changed?
+				
+				// Now proceed with real actions when everything is OK
+				var arrObj = getObjectsToUpdate(aMaps);
+				
+				// Create the ajax request for bulk update, handle object updates
+				var aUrlParts = [];
+				for(var i = 0, len = arrObj.length; i < len; i++) {
+					var type = aMaps[arrObj[i]].conf.type;
+					
+					var obj_id = aMaps[arrObj[i]].objId;
+					var name = aMaps[arrObj[i]].conf.name;
+					var service_description = aMaps[arrObj[i]].conf.service_description;
+					var map = oPageProperties.map_name;
+					var sUrlPart = '';
+					
+					if(name) {
+						sUrlPart = sUrlPart + '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
+					
+						if(service_description) {
+							sUrlPart = sUrlPart + '&n2[]='+service_description;
+						} else {
+							sUrlPart = sUrlPart + '&n2[]=';
+						}
+						
+						// Append part to array of parts
+						aUrlParts.push(sUrlPart);
+					}
+				}
+				
+				// Get the updated objectsupdateMapObjects via bulk request
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+				var bStateChanged = false;
+				if(o.length > 0) {
+					bStateChanged = updateObjects(o, aMaps, sType);
+				}
+				
+				// When some state changed on the map update the title and favicon
+				/* FIXME: if(bStateChanged) {
+					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+					
+					// Update favicon
+					setPageFavicon(getFaviconImage(o));
+					
+					// Update page title
+					setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
+					
+					// Change background color
+					if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+						setPageBackgroundColor(getBackgroundColor(o));
+					}
+				}*/
 				
 				// Update lastWorkerRun
 				oWorkerProperties.last_run = Date.parse(new Date());
@@ -216,15 +307,15 @@ function runWorker(iCount, sType) {
  * @return  Array    The array of aMapObjects indexes which need an update
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getObjectsToUpdate() {
+function getObjectsToUpdate(aObjs) {
 	eventlog("worker", "debug", "getObjectsToUpdate: Start");
 	var arrReturn = [];
 	
 	// Assign all object indexes to return Array
-	for(var i = 0, len = aMapObjects.length; i < len; i++) {
-		if(aMapObjects[i].lastUpdate <= (Date.parse(new Date())-(oWorkerProperties.worker_update_object_states*1000))) {
+	for(var i = 0, len = aObjs.length; i < len; i++) {
+		if(aObjs[i].lastUpdate <= (Date.parse(new Date())-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
-			if(aMapObjects[i].type !== 'shape' || (aMapObjects[i].type === 'shape' && aMapObjects[i].enable_refresh && aMapObjects[i].enable_refresh === '1')) {
+			if(aObjs[i].type !== 'shape' || (aObjs[i].type === 'shape' && aObjs[i].enable_refresh && aObjs[i].enable_refresh === '1')) {
 				arrReturn.push(i);
 			}
 		}
@@ -232,7 +323,7 @@ function getObjectsToUpdate() {
 	
 	// Now spread the objects in the available timeslots
 	var iNumTimeslots = Math.ceil(oWorkerProperties.worker_update_object_states / oWorkerProperties.worker_interval);
-	var iNumObjectsPerTimeslot = Math.ceil(aMapObjects.length / iNumTimeslots);
+	var iNumObjectsPerTimeslot = Math.ceil(aObjs.length / iNumTimeslots);
 	eventlog("worker", "debug", "Number of timeslots: "+iNumTimeslots+" Number of Objects per Slot: "+iNumObjectsPerTimeslot);
 	
 	// Only spread when the number of objects is larger than the objects for each
@@ -255,8 +346,16 @@ function getObjectsToUpdate() {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getCfgFileAges() {
-	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oMapProperties.map_name);
+function getCfgFileAges(bMap) {
+	if(typeof bMap === 'undefined') {
+		bMap = true;
+	}
+	
+	if(bMap) {
+		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oPageProperties.map_name);
+	} else {
+		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg');
+	}
 }
 
 /**
@@ -336,24 +435,40 @@ function setMapHoverUrls() {
 }
 
 /**
- * setMapHoverTemplates()
+ * parseHoverMenus()
  *
- * Gets the code for needed hover templates and saves it for later use in icons
+ * Assigns the hover template code to the object, replaces all macros and
+ * adds the menu to all map objects
  *
  * @param   Object   Object with basic page properties
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapHoverTemplates() {
+function parseHoverMenus(aObjs) {
+	for(var a = 0; a < aObjs.length; a++) {
+		if(aObjs[a].conf.hover_menu) {
+			aObjs[a].parseHoverMenu();
+		}
+	}
+}
+
+/**
+ * getHoverTemplates()
+ *
+ * Gets the code for needed hover templates and saves it for later use in icons
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getHoverTemplates(aObjs) {
 	var aUrlParts = [];
 	var aTemplateObjects;
 	
 	// Loop all map objects to get the used hover templates
-	for(var a = 0, len = aMapObjects.length; a < len; a++) {
+	for(var a = 0, len = aObjs.length; a < len; a++) {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do not use hover_url
-		if(aMapObjects[a].conf.hover_menu && aMapObjects[a].conf.hover_menu == '1' && (!aMapObjects[a].conf.hover_url || aMapObjects[a].conf.hover_url == '')) {
-			oHoverTemplates[aMapObjects[a].conf.hover_template] = '';
+		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu == '1' && (!aObjs[a].conf.hover_url || aObjs[a].conf.hover_url == '')) {
+			oHoverTemplates[aObjs[a].conf.hover_template] = '';
 		}
 	}
 	
@@ -376,35 +491,16 @@ function setMapHoverTemplates() {
 }
 
 /**
- * parseMapObjectsHoverMenu()
- *
- * Assigns the hover template code to the object, replaces all macros and
- * adds the menu to all map objects
- *
- * @param   Object   Object with basic page properties
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function parseMapObjectsHoverMenu() {
-	for(var a = 0; a < aMapObjects.length; a++) {
-		if(aMapObjects[a].conf.hover_menu) {
-			aMapObjects[a].parseHoverMenu();
-		}
-	}
-}
-
-/**
  * setMapBasics()
  *
- * Sets basic information like background image, favicon and page title
+ * Sets basic information like background image
  *
  * @param   Object   Object with basic page properties
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setMapBasics(oProperties) {
+	setPageBasics(oProperties);
 	setMapBackgroundImage(oProperties.background_image);
-	setMapFavicon(oProperties.favicon_image);
-	setMapPageTitle(oProperties.page_title);
-	setMapBackgroundColor(oProperties.background_color);
 }
 
 /**
@@ -459,7 +555,6 @@ function setMapObjects(aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: End setting map objects");
 }
 
-
 /**
  * updateShapes()
  *
@@ -476,15 +571,15 @@ function updateShapes(aShapes) {
 }
 
 /**
- * updateMapObjects()
+ * updateObjects()
  *
- * Bulk update map objects
+ * Bulk update objects
  *
  * @param   Array    Array of objects to parse to the map
  * @return  Boolean  Returns true when some state has changed
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function updateMapObjects(aMapObjectInformations) {
+function updateObjects(aMapObjectInformations, aObjs, sType) {
 	var bStateChanged = false;
 	
 	for(var i = 0, len = aMapObjectInformations.length; i < len; i++) {
@@ -492,13 +587,13 @@ function updateMapObjects(aMapObjectInformations) {
 		var intIndex = -1;
 		
 		// Find the id with the matching objId
-		for(var a = 0, len1 = aMapObjects.length; a < len1; a++) {
-			if(aMapObjects[a].objId == objId) {
+		for(var a = 0, len1 = aObjs.length; a < len1; a++) {
+			if(aObjs[a].objId == objId) {
 				intIndex = a;
 			}
 		}
 		
-		var oObj = aMapObjects[intIndex];
+		var oObj = aObjs[intIndex];
 		
 		// Save old state for later "change detection"
 		oObj.saveLastState();
@@ -534,7 +629,11 @@ function updateMapObjects(aMapObjectInformations) {
 			bStateChanged = true;
 			
 			// Reparse object to map
-			oObj.parse();
+			if(sType === 'map') {
+				oObj.parse();
+			} else if(sType === 'overview') {
+				oObj.parsedObject = oObj.parsedObject.parentNode.replaceChild(oObj.parseOverview(), oObj.parsedObject);
+			}
 			
 			/**
 			 * Additional eventhandling
@@ -546,7 +645,7 @@ function updateMapObjects(aMapObjectInformations) {
 			 */
 			
 			// - Highlight (Flashing)
-			if(oMapProperties.event_highlight) {
+			if(oPageProperties.event_highlight) {
 				if(oObj.conf.view_type && oObj.conf.view_type === 'line') {
 					// FIXME: Atm only flash icons, not lines
 				} else {
@@ -556,7 +655,7 @@ function updateMapObjects(aMapObjectInformations) {
 			}
 			
 			// - Scroll to object
-			if(oMapProperties.event_scroll) {
+			if(oPageProperties.event_scroll) {
 				// Detach the handler
 				setTimeout(function() { scrollSlow(oObj.conf.x, oObj.conf.y, 15) }, 0);
 			}
@@ -569,7 +668,7 @@ function updateMapObjects(aMapObjectInformations) {
 			}
 			
 			// - Sound
-			if(oMapProperties.event_sound) {
+			if(oPageProperties.event_sound) {
 				// Detach the handler
 				setTimeout(function() { playSound(intIndex, 1) }, 0);
 			}
@@ -686,7 +785,7 @@ function getBackgroundColor(oObj) {
 	
 	// When state is PENDING, OK, UP, set default background color
 	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP') {
-		sColor = oMapProperties.background_color;
+		sColor = oPageProperties.background_color;
 	} else {
 		sColor = oStates[oObj.summary_state].bgColor;
 	}
@@ -719,14 +818,14 @@ function getFaviconImage(oObj) {
 }
 
 /**
- * setMapBackgroundColor()
+ * setPageBackgroundColor()
  *
  * Sets the background color of the page
  *
  * @param   String   Hex code
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapBackgroundColor(sColor) {
+function setPageBackgroundColor(sColor) {
 	document.body.style.backgroundColor = sColor;
 }
 
@@ -756,25 +855,161 @@ function setMapBackgroundImage(sImage) {
 }
 
 /**
- * setMapFavicon()
+ * setPageFavicon()
  *
  * Sets the favicon of the pages
  *
  * @param   String   Path to the icon image
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapFavicon(sFavicon) {
+function setPageFavicon(sFavicon) {
 	favicon.change(sFavicon);
 }
 
 /**
- * setMapPageTitle()
+ * setPagePageTitle()
  *
  * Sets the title of the current page
  *
  * @param   String   Title
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapPageTitle(sTitle) {
+function setPageTitle(sTitle) {
 	document.title = sTitle;
+}
+
+/**
+ * setPageBasics()
+ *
+ * Sets basic information like favicon and page title
+ *
+ * @param   Object   Object with basic page properties
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setPageBasics(oProperties) {
+	setPageFavicon(oProperties.favicon_image);
+	setPageTitle(oProperties.page_title);
+	setPageBackgroundColor(oProperties.background_color);
+}
+
+//--- Overview -----------------------------------------------------------------
+
+
+/**
+ * parseOverviewPage()
+ *
+ * Parses the static html code of the overview page 
+ *
+ * @param   Array    Array of objects to parse to the map
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseOverviewPage() {
+	var oContainer = document.getElementById('overview');
+	
+	var oTable = document.createElement('table');
+	oTable.setAttribute('id', 'overviewMaps');
+	
+	var oTr = document.createElement('tr');
+	
+	var oTh = document.createElement('th');
+	oTh.colSpan = oPageProperties.cellsperrow;
+	oTh.appendChild(document.createTextNode(oPageProperties.lang_mapIndex));
+	
+	oTr.appendChild(oTh);
+	oTable.appendChild(oTr);
+	oContainer.appendChild(oTable);
+	
+	if(oPageProperties.showrotations && aInitialRotations.length > 0) {
+		oTable = document.createElement('table');
+		oTable.setAttribute('id', 'overviewRotations');
+		oTable.setAttribute('class', 'infobox');
+		oTable.setAttribute('className', 'infobox');
+		
+		oTr = document.createElement('tr');
+		
+		oTh = document.createElement('th');
+		oTh.colSpan = 2;
+		oTh.appendChild(document.createTextNode(oPageProperties.lang_rotationPools));
+		
+		oTr.appendChild(oTh);
+		oTable.appendChild(oTr);
+		oContainer.appendChild(oTable);
+	}
+}
+
+/**
+ * parseOverviewMaps()
+ *
+ * Does initial parsing of maps on the overview page
+ *
+ * @param   Array    Array of objects to parse to the map
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseOverviewMaps(aMapsConf) {
+	eventlog("worker", "debug", "parseOverviewMaps: Start setting maps");
+	
+	var oTable = document.getElementById('overviewMaps');
+	var oTr = document.createElement('tr');
+	
+	for(var i = 0, len = aMapsConf.length; i < len; i++) {
+		var oObj;
+		
+		oObj = new NagVisMap(aMapsConf[i]);
+		
+		if(oObj != null) {
+			// Save object to map objects array
+			aMaps.push(oObj);
+			
+			// Parse child and save reference in parsedObject
+			oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+		}
+		
+		if((i+1) % oPageProperties.cellsperrow === 0) {
+			oTable.appendChild(oTr);
+			oTr = document.createElement('tr');
+		}
+	}
+	
+	// Fill table with empty cells if there are not enough maps to get the last 
+	// row filled
+	if(i % oPageProperties.cellsperrow !== 0) {
+		for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
+			var oTd = document.createElement('td');
+			oTr.appendChild(oTd);
+		}
+	}
+	
+	// Append last row
+	oTable.appendChild(oTr);
+	
+	eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
+}
+
+
+/**
+ * setOverviewRotations()
+ *
+ * Does initial parsing of rotations on the overview page
+ *
+ * @param   Array    Array of objects to parse to the map
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setOverviewRotations(aRotationsConf) {
+	eventlog("worker", "debug", "setOverviewObjects: Start setting rotations");
+	
+	for(var i = 0, len = aRotationsConf.length; i < len; i++) {
+		var oObj;
+		
+		oObj = new NagVisRotation(aRotationsConf[i]);
+		
+		if(oObj != null) {
+			// Save object to map objects array
+			aRotations.push(oObj);
+			
+			// Parse object to overview
+			oObj.parseOverview();
+		}
+	}
+	
+	eventlog("worker", "debug", "setOverviewObjects: End setting rotations");
 }

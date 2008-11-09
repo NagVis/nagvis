@@ -872,7 +872,7 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotExists','MAP~'.$this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotExists', Array('MAP' => $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')));
 				}
 				return FALSE;
 			}
@@ -894,7 +894,7 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable','MAP='.$this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable', Array('MAP' => $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')));
 				}
 				return FALSE;
 			}

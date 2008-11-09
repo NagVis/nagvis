@@ -84,16 +84,23 @@ switch($_GET['action']) {
 			$arrReturn = Array();
 						
 			$sType = $_GET['ty'];
-			$arrMap = $_GET['m'];
 			$arrName1 = $_GET['n1'];
 			$arrName2 = $_GET['n2'];
 			$arrType = $_GET['t'];
 			$arrObjId = $_GET['i'];
 			
+			if(isset($_GET['m'])) {
+				$arrMap = $_GET['m'];
+			}
+			
 			$numObjects = count($arrType);
 			for($i = 0; $i < $numObjects; $i++) {
 				// Get the object configuration
-				$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrMap[$i]);
+				if(isset($arrMap)) {
+					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrMap[$i]);
+				} else {
+					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i]);
+				}
 				
 				switch($arrType[$i]) {
 					case 'host':
@@ -237,7 +244,7 @@ switch($_GET['action']) {
 	break;
 }
 
-function getObjConf($objType, $objName1, $objName2, $map) {
+function getObjConf($objType, $objName1, $objName2, $map = null) {
 	global $CORE;
 	$objConf = Array();
 	/**

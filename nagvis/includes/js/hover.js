@@ -163,8 +163,8 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 		var arrChildObjects;
 		var mapName = '';
 		
-		if(typeof(oMapProperties) != 'undefined' && oMapProperties !== null) {
-			mapName = oMapProperties.map_name;
+		if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null) {
+			mapName = oPageProperties.map_name;
 		}
 		
 		if(oObj.members && oObj.members.length > 0) {

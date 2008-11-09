@@ -57,9 +57,11 @@ class GlobalIndexPage {
 		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
 		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
 		$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
-		$ret .= 'var oIndexProperties='.$this->parseIndexPropertiesJson().';'."\n";
-		$ret .= 'var aObjects=Array();'."\n";
-		$ret .= 'var aInitialMapObjects='.$this->parseObjectsJson().';'."\n";
+		$ret .= 'var oPageProperties='.$this->parseIndexPropertiesJson().';'."\n";
+		$ret .= 'var aInitialMaps='.$this->parseMapsJson().';'."\n";
+		$ret .= 'var aInitialRotations='.$this->parseRotationsJson().';'."\n";
+		$ret .= 'var aMaps=Array();'."\n";
+		$ret .= 'var aRotations=Array();'."\n";
 		
 		// Kick of the worker
 		$ret .= 'addLoadEvent(runWorker(0, \'overview\'));';
@@ -79,16 +81,6 @@ class GlobalIndexPage {
 		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
 		
 		return json_encode($arr);
-	}
-	
-	/**
-	 * Parses the objects for the overview page
-	 *
-	 * @return	String  Json Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseObjectsJson() {
-		return json_encode(Array('maps' => $this->parseMapsJson(), 'rotations' => $this->parseRotationsJson()));
 	}
 	
 	/**
@@ -181,17 +173,18 @@ class GlobalIndexPage {
 						$image = $imgPathHtml;
 					}
 					
-					$aMaps[] = Array('name' => $mapName,
-					                 'alias' => $MAPCFG->getValue('global', '0', 'alias'),
-					                 'class' => $class,
-													 'url' => $url,
-													 'icon' => $MAP->MAPOBJ->iconHtmlPath.$MAP->MAPOBJ->icon,
-													 'image' => $image);
+					$arr = $MAP->MAPOBJ->parseJson();
+					
+					$arr['overview_class'] = $class;
+					$arr['overview_url'] = $url;
+					$arr['overview_image'] = $image;
+					
+					$aMaps[] = $arr;
 				}
 			}
 		}
 		
-		return $aMaps;
+		return json_encode($aMaps);
 	}
 	
 	/**
@@ -226,7 +219,7 @@ class GlobalIndexPage {
 			}
 		}
 		
-		return $aRotations;
+		return json_encode($aRotations);
 	}
 	
 	/**
@@ -239,12 +232,19 @@ class GlobalIndexPage {
 		$arr = Array();
 		
 		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index','cellsperrow');
+		$arr['showrotations'] = $this->CORE->MAINCFG->getValue('index','showrotations');
+		
+		$arr['page_title'] = $this->CORE->MAINCFG->getValue('internal', 'title');
+		// FIXME: State of the overview like on maps would be nice
+		$arr['favicon_image'] = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
+		$arr['background_color'] = $this->CORE->MAINCFG->getValue('index','backgroundcolor');
+		
+		$arr['lang_mapIndex'] = $this->CORE->LANG->getText('mapIndex');
+		$arr['lang_rotationPools'] = $this->CORE->LANG->getText('rotationPools');
+		
 		
 		/*$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
 		$arr['background_image'] = $this->getBackgroundJson();
-		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
-		$arr['favicon_image'] = $this->getFavicon();
-		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');
 		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
 		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
 		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
