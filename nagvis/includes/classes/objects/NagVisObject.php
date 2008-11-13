@@ -184,12 +184,13 @@ class NagVisObject {
 		$arr = Array();
 		
 		// Need to remove some options which are not relevant
-		$arrDenyKeys = Array('CORE', 'BACKEND', 'MAPCFG', 'MAP', 'GRAPHIC', 'conf',
-			'services', 'fetchedChildObjects', 'childObjects', 'members', 'objects',
-			'linkedMaps');
+		$arrDenyKeys = Array('CORE' => '', 'BACKEND' => '', 'MAPCFG' => '',
+			'MAP' => '', 'GRAPHIC' => '', 'conf' => '', 'services' => '',
+			'fetchedChildObjects' => '', 'childObjects' => '', 'members' => '',
+			'objects' => '', 'linkedMaps' => '');
 		
 		foreach($this AS $key => $val) {
-			if(!in_array($key, $arrDenyKeys)) {
+			if(!isset($arrDenyKeys[$key])) {
 				$arr[$key] = $val;
 			}
 		}
