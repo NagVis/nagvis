@@ -31,13 +31,19 @@ var _openContextMenus = [];
 
 // call from the onMouseDown event, passing the event if standards compliant
 function contextMouseDown(event) {
+	var target;
+
 	// IE is evil and doesn't pass the event object
-	if (event === null) {
+	if (event === null || typeof event === 'undefined') {
 		event = window.event;
 	}
 	
 	// we assume we have a standards compliant browser, but check if we have IE
-	var target = event.target !== null ? event.target : event.srcElement;
+	if(typeof event.target != 'undefined' && event.target !== null) {
+		target = event.target;
+	} else {
+		target = event.srcElement;
+	}
 	
 	// Hide all context menus
 	contextHide();
