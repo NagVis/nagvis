@@ -57,6 +57,8 @@ function NagVisTextbox (oConf) {
 		}
 		
 		this.parsedObject = oMap.appendChild(oContainerDiv);
+		
+		oMap = null;
 	}
 	
 	/**

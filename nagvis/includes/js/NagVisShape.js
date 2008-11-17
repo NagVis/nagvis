@@ -59,6 +59,8 @@ function NagVisShape (oConf) {
 		}
 		
 		this.parsedObject = oMap.appendChild(oContainerDiv);
+		
+		oMap = null;
 	}
 	
 	/**

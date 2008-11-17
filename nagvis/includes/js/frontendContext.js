@@ -101,6 +101,8 @@ function contextShow(event) {
 		// Append to visible menus array
 		_openContextMenus.push(contextMenu);
 		
+		contextMenu = null;
+		
 		_replaceContext = false;
 		
 		// If this returns false, the browser's context menu will not show up

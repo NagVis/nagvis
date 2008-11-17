@@ -735,6 +735,9 @@ function playSound(intIndex, iNumTimes){
 			setTimeout(function() { playSound(intIndex, iNumTimes) }, 500);
 		}
 	}
+	
+	oObjIconDiv = null;
+	oObjIcon = null;
 }
 
 /**
@@ -769,6 +772,9 @@ function flashIcon(intIndex, iNumTimes){
 	if(iNumTimes > 0 || (iNumTimes == 0 && oObjIcon.style.border.indexOf("none") == -1)) {
 		setTimeout(function() { flashIcon(intIndex, iNumTimes) }, 500);
 	}
+	
+	oObjIconDiv = null;
+	oObjIcon = null;
 }
 
 /**
@@ -851,6 +857,7 @@ function setMapBackgroundImage(sImage) {
 		}
 		
 		oImage.src = sImage;
+		oImage = null;
 	}
 }
 
@@ -935,6 +942,8 @@ function parseOverviewPage() {
 		oTable.appendChild(oTr);
 		oContainer.appendChild(oTable);
 	}
+	
+	oContainer = null;
 }
 
 /**
@@ -981,6 +990,8 @@ function parseOverviewMaps(aMapsConf) {
 	
 	// Append last row
 	oTable.appendChild(oTr);
+	
+	oTable = null;
 	
 	eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
 }

@@ -147,6 +147,7 @@ function NagVisStatefulObject (oConf) {
     
     // Append child to map and save reference in parsedObject
 		this.parsedObject = oMap.appendChild(oContainerDiv);
+		oMap = null;
     
     // Add a context menu to the object when enabled
 		// FIXME: add config option to make this work
@@ -184,6 +185,7 @@ function NagVisStatefulObject (oConf) {
 		
 		// Create hover menu
 		this.getHoverMenu(oObj);
+		oObj = null;
 	}
 	
 	/**

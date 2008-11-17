@@ -108,6 +108,9 @@ function NagVisObject (oConf) {
 		// Add eventhandlers for context menu
 		oObj.onmousedown = contextMouseDown;
 		oObj.oncontextmenu = contextShow;
+		
+		oContainer = null;
+		oObj = null;
   }
 	
 	/**

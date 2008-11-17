@@ -61,6 +61,8 @@ function eventlogInitialize() {
 		
 		document.body.appendChild(oEventlog);
 		document.body.appendChild(oEventlogControl);
+		
+		oEventlog = null;
 	}
 	
 	eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
@@ -111,5 +113,7 @@ function eventlog(sType, sSeverity, sText) {
 			// Scroll down
 			oEventlog.scrollTop = oEventlog.scrollHeight;
 		}
+		
+		oEventlog = null;
 	}
 }

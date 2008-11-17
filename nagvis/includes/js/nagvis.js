@@ -70,12 +70,14 @@ oStates.PENDING.sound = '';
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateWorkerCounter() {
+	var oWorkerCounter = document.getElementById('workerLastRunCounter');
 	// write the time to refresh to header counter
-	if(document.getElementById('workerLastRunCounter')) {
+	if(oWorkerCounter) {
 		if(oWorkerProperties.last_run) {
-			document.getElementById('workerLastRunCounter').innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+			oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
 		}
 	}
+	oWorkerCounter = null;
 	return true;
 }
 
@@ -155,6 +157,7 @@ function setRotationLabel(startLabel,stopLabel) {
 			oRotationSwitch.innerHTML = startLabel;
 		}
 	}
+	oRotationSwitch = null;
 }
 
 /**
@@ -531,6 +534,7 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	} else {
 		iMapOffsetTop = 0;
 	}
+	oMap = null;
 	
 	// Get measure of the screen
 	iWidth = pageWidth();

@@ -98,6 +98,8 @@ function NagVisRotation (oConf) {
 			oTr.appendChild(oTd);
 			oTable.appendChild(oTr);
 		}
+		
+		oTable = null;
 	}
 	
 	/*$aRotations[] = Array('name' => $poolName,
