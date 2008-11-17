@@ -446,14 +446,14 @@ function date(format, timestamp) {
 
 function addLoadEvent(func) {
 	var oldonload = window.onload;
-	if (typeof window.onload != 'function') {
+	if (typeof window.onload != 'function' && typeof window.onload != 'object') {
 		window.onload = func;
 	} else {
 		window.onload = function() {
 			if (oldonload) {
 				oldonload();
 			}
-			func();
+			func;
 		}
 	}
 }
