@@ -57,19 +57,23 @@ function NagVisMap (oConf) {
 		oImg.align="right";
 		oImg.src=this.conf.iconHtmlPath+this.conf.icon;
 		oTd.appendChild(oImg);
+		oImg = null;
 		
 		var h2 = document.createElement('h2');
 		h2.appendChild(document.createTextNode(this.conf.name));
 		oTd.appendChild(h2);
+		h2 = null;
 		
 		var br = document.createElement('br');
 		oTd.appendChild(br);
+		br = null;
 		
 		var oImg = document.createElement('img');
 		oImg.style.width = '200px';
 		oImg.style.height = '150px';
 		oImg.src=this.conf.overview_image;
 		oTd.appendChild(oImg);
+		oImg = null;
 		
 		return oTd;
 	}

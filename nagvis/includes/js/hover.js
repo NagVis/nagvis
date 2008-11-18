@@ -160,7 +160,6 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Replace child macros
 	if(replaceChild != '1' && oObj.conf.hover_childs_show == 1 && oObj.conf.num_members > 0) {
-		var arrChildObjects;
 		var mapName = '';
 		
 		if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null) {
@@ -185,6 +184,7 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 							
 							childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 						}
+						oMember = null;
 					} else {
 						// Create an end line which shows the number of hidden child items
 						var numHiddenMembers = oObj.conf.num_members - oObj.conf.hover_childs_limit;
@@ -208,13 +208,17 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	for (var key in oSectionMacros) {
 		var regex = new RegExp(oSectionMacros[key], 'gm');
 		sTemplateCode = sTemplateCode.replace(regex, '');
+		regex = null;
 	}
+	oSectionMacros = null;
 	
 	// Loop and replace all normal macros
 	for (var key in oMacros) {
 		var regex = new RegExp('\\\['+key+'\\\]', 'g');
 		sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
+		regex = null;
 	}
+	oMacros = null;
 	
 	// Search for images and append current timestamp to src (prevent caching of
 	// images e.a. when some graphs should be fresh)
@@ -229,8 +233,12 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 			
 			// replace image code
 			sTemplateCode = sTemplateCode.replace(results[i], sTmp);
+			
+			sTmp = null;
 		}
 	}
+	results = null;
+	regex = null;
 	
 	return sTemplateCode;
 }

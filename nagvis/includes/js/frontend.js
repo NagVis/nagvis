@@ -141,12 +141,14 @@ function runWorker(iCount, sType) {
 					if(oMapBasics) {
 						setMapBasics(oMapBasics);
 					}
+					oMapBasics = null;
 					
 					// Set map objects
 					var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oPageProperties.map_name);
 					if(oMapObjects) {
 						setMapObjects(oMapObjects);
 					}
+					oMapObjects = null;
 					
 					// Bulk get all hover templates which are needed on the map
 					getHoverTemplates(aMapObjects);
@@ -728,6 +730,7 @@ function playSound(intIndex, iNumTimes){
 		
 		// Add object to body => the sound is played
 		oEmbed = document.body.appendChild(oEmbed);
+		oEmbed = null;
 		
 		iNumTimes = iNumTimes - 1;
 		
@@ -943,6 +946,9 @@ function parseOverviewPage() {
 		oContainer.appendChild(oTable);
 	}
 	
+	oTh = null;
+	oTr = null;
+	oTable = null;
 	oContainer = null;
 }
 
@@ -991,6 +997,7 @@ function parseOverviewMaps(aMapsConf) {
 	// Append last row
 	oTable.appendChild(oTr);
 	
+	oTr = null;
 	oTable = null;
 	
 	eventlog("worker", "debug", "parseOverviewMaps: End setting maps");

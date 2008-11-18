@@ -48,16 +48,20 @@ function NagVisTextbox (oConf) {
 		oContainerDiv.setAttribute('id', this.objId);
 		
 		// Parse object depending on line or normal icon
-		oContainerDiv.appendChild(this.parseTextbox());
+		var oTextbox = this.parseTextbox();
+		oContainerDiv.appendChild(oTextbox);
+		oTextbox = null;
 		
 		// When this is an update, remove the object first
 		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
 			oMap.removeChild(this.parsedObject);
+			this.parsedObject = null;
 		}
 		
 		this.parsedObject = oMap.appendChild(oContainerDiv);
 		
+		oContainerDiv = null;
 		oMap = null;
 	}
 	
@@ -104,10 +108,10 @@ function NagVisTextbox (oConf) {
 		
 		// Create span for text and add label text
 		var oLabelSpan = document.createElement('span');
-		
 		oLabelSpan.innerHTML = this.conf.text;
 		
 		oLabelDiv.appendChild(oLabelSpan);
+		oLabelSpan = null;
 		
 		return oLabelDiv;	
 	}

@@ -106,6 +106,8 @@ function getHttpRequest(sUrl, bCacheable) {
 				updateQueryCache(sUrl, Date.parse(new Date()), responseText);
 			}
 		}
+		
+		oRequest = null;
 	}
 	
 	return responseText;
@@ -223,9 +225,12 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 					}
 					
 					sResponse = eval('( '+responseText+')');
+					responseText = null;
 				}
 			}
 		}
+		
+		oRequest = null;
 	}
 	
 	if(sResponse !== null) {

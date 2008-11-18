@@ -58,9 +58,12 @@ function NagVisRotation (oConf) {
 		
 		var oH2 = document.createElement('h2');
 		oH2.appendChild(document.createTextNode(this.conf.name));
+		
 		oTd.appendChild(oH2);
+		oH2 = null;
 		
 		oTr.appendChild(oTd);
+		oTd = null;
 		
 		/* Rotation steps */
 		
@@ -71,6 +74,7 @@ function NagVisRotation (oConf) {
 				// Dummy cell to get rowspan work
 				oTd = document.createElement('td');
 				oTr.appendChild(oTd);
+				oTd = null;
 			}
 			
 			oTd = document.createElement('td');
@@ -96,7 +100,10 @@ function NagVisRotation (oConf) {
 			oTd.appendChild(document.createTextNode(this.conf.steps[i].name));
 			
 			oTr.appendChild(oTd);
+			oTd = null;
+			
 			oTable.appendChild(oTr);
+			oTr = null;
 		}
 		
 		oTable = null;

@@ -63,6 +63,7 @@ function NagVisService (oConf) {
 		oIconLink.href = this.conf.url;
 		oIconLink.target = this.conf.url_target;
 		oIconLink.appendChild(oIcon);
+		oIcon = null;
 		
 		var oIconDiv = document.createElement('div');
 		oIconDiv.setAttribute('id', this.objId+'-icondiv');
@@ -73,6 +74,7 @@ function NagVisService (oConf) {
 		oIconDiv.style.left = this.conf.x+'px';
 		oIconDiv.style.zIndex = this.conf.z;
 		oIconDiv.appendChild(oIconLink);
+		oIconLink = null;
 		
 		return oIconDiv;
 	}

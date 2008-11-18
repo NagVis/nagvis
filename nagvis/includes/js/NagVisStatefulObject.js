@@ -125,28 +125,38 @@ function NagVisStatefulObject (oConf) {
 		// Parse object depending on line or normal icon
 		switch(this.conf.view_type) {
 			case 'line':
-				oContainerDiv.appendChild(this.parseLine());
+				var oLine = this.parseLine();
+				oContainerDiv.appendChild(oLine);
+				oLine = null;
 			break;
 			case 'gadget':
-				oContainerDiv.appendChild(this.parseGadget());
+				var oGadget = this.parseGadget();
+				oContainerDiv.appendChild(oGadget);
+				oGadget = null;
 			break;
 			default:
-				oContainerDiv.appendChild(this.parseIcon());
+				var oIcon = this.parseIcon();
+				oContainerDiv.appendChild(oIcon);
+				oIcon = null;
 		}
 		
 		// Parse label when configured
 		if(this.conf.label_show && this.conf.label_show == '1') {
-			oContainerDiv.appendChild(this.parseLabel());
+			var oLabel = this.parseLabel();
+			oContainerDiv.appendChild(oLabel);
+			oLabel = null;
 		}
 		
 		// When this is an update, remove the object first
 		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
 			oMap.removeChild(this.parsedObject);
+			this.parsedObject = null;
 		}
     
     // Append child to map and save reference in parsedObject
 		this.parsedObject = oMap.appendChild(oContainerDiv);
+		oContainerDiv = null;
 		oMap = null;
     
     // Add a context menu to the object when enabled
@@ -264,12 +274,15 @@ function NagVisStatefulObject (oConf) {
 		oLineDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
 		
 		oContainerDiv.appendChild(oLineDiv);
+		oLineDiv = null;
 		
 		// Create line border div
 		var oLineBorderDiv = document.createElement('div');
 		oLineBorderDiv.setAttribute('id', this.objId+'-border');
 		oLineBorderDiv.style.zIndex = this.conf.z;
+		
 		oContainerDiv.appendChild(oLineBorderDiv);
+		oLineBorderDiv = null;
 		
 		return oContainerDiv;
 	}
@@ -324,10 +337,13 @@ function NagVisStatefulObject (oConf) {
 			oIconLink.href = this.conf.url;
 			oIconLink.target = this.conf.url_target;
 			oIconLink.appendChild(oIcon);
+			oIcon = null;
 			
 			oIconDiv.appendChild(oIconLink);
+			oIconLink = null;
 		} else {
 			oIconDiv.appendChild(oIcon);
+			oIcon = null;
 		}
 		
 		return oIconDiv;
@@ -390,6 +406,7 @@ function NagVisStatefulObject (oConf) {
 		var oLabelSpan = document.createElement('span');
 		oLabelSpan.appendChild(document.createTextNode(this.conf.label_text));
 		oLabelDiv.appendChild(oLabelSpan);
+		oLabelSpan = null;
 		
 		return oLabelDiv;
 	}

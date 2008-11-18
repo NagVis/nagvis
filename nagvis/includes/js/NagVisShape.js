@@ -45,17 +45,22 @@ function NagVisShape (oConf) {
 		oContainerDiv = document.createElement('div');
 		oContainerDiv.setAttribute('id', this.objId);
 		
-		oContainerDiv.appendChild(this.parseShape());
+		var oShape = this.parseShape();
+		oContainerDiv.appendChild(oShape);
+		oShape = null;
 		
 		// Parse label when configured
 		if(this.conf.label_show && this.conf.label_show == '1') {
-			oContainerDiv.appendChild(this.parseLabel());
+			var oLabel = this.parseLabel();
+			oContainerDiv.appendChild(oLabel);
+			oLabel = null;
 		}
 		
 		// When this is an update, remove the object first
 		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
 			oMap.removeChild(this.parsedObject);
+			this.parsedObject = null;
 		}
 		
 		this.parsedObject = oMap.appendChild(oContainerDiv);
@@ -86,10 +91,13 @@ function NagVisShape (oConf) {
 			oIconLink.href = this.conf.url;
 			oIconLink.target = this.conf.url_target;
 			oIconLink.appendChild(oIcon);
+			oIcon = null;
 			
 			oIconDiv.appendChild(oIconLink);
+			oIconLink = null;
 		} else {
 			oIconDiv.appendChild(oIcon);
+			oIcon = null;
 		}
 		
 		if(this.conf.hover_url && this.conf.hover_url != '') {

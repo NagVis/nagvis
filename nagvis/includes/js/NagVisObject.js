@@ -76,21 +76,31 @@ function NagVisObject (oConf) {
 		oLink.target = '_blank';
 		// FIXME: Language
 		oLink.appendChild(document.createTextNode('Refresh status'));
+		
 		oRow.appendChild(oLink);
+		oLink = null;
+		
 		oList.appendChild(oRow);
+		oRow = null;
 		
 		var oRow = document.createElement('li');
 		oRow.style.height = '1px';
+		
 		oList.appendChild(oRow);
+		oRow = null;
 		
 		var oRow = document.createElement('li');
 		var oLink = document.createElement('a');
 		oLink.href = '';
 		oLink.target = '_blank';
 		// FIXME: Language
-		oLink.appendChild(document.createTextNode('Schedule downtime'));
+		oLink.appendChild(documentcreateTextNode('Schedule downtime'));
+		
 		oRow.appendChild(oLink);
+		oLink = null;
+		
 		oList.appendChild(oRow);
+		oRow = null;
 		
 		var oRow = document.createElement('li');
 		var oLink = document.createElement('a');
@@ -98,12 +108,19 @@ function NagVisObject (oConf) {
 		oLink.target = '_blank';
 		// FIXME: Language
 		oLink.appendChild(document.createTextNode('Re-Schedule next check'));
+		
 		oRow.appendChild(oLink);
+		oLink = null;
+		
 		oList.appendChild(oRow);
+		oRow = null;
 		
 		// Bind menu to container
 		contextMenu.appendChild(oList);
+		oList = null;
+		
 		oContainer.appendChild(contextMenu);
+		contextMenu = null;
 		
 		// Add eventhandlers for context menu
 		oObj.onmousedown = contextMouseDown;

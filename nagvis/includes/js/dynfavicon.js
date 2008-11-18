@@ -54,6 +54,7 @@ addLink: function(iconURL) {
   link.href = iconURL;
   this.removeLinkIfExists();
   this.docHead.appendChild(link);
+  link = null;
 },
 
 removeLinkIfExists: function() {

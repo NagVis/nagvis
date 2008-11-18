@@ -59,8 +59,10 @@ function frontendMessage(oMessage) {
 	oCell.style.height = '16px';
 	
 	oRow.appendChild(oCell);
+	oCell = null;
 	
 	oTable.appendChild(oRow);
+	oRow = null;
 	
 	oRow = document.createElement('tr');
 	oRow.style.height = '32px';
@@ -74,7 +76,9 @@ function frontendMessage(oMessage) {
 	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
 	
 	oCell.appendChild(oImg);
+	oImg = null;
 	oRow.appendChild(oCell);
+	oCell = null;
 	
 	oCell = document.createElement('th');
 	oCell.setAttribute('class', oMessage.type);
@@ -82,6 +86,7 @@ function frontendMessage(oMessage) {
 	oCell.appendChild(document.createTextNode(oMessage.title));
 	
 	oRow.appendChild(oCell);
+	oCell = null;
 	
 	oCell = document.createElement('th');
 	oCell.setAttribute('class', oMessage.type);
@@ -92,10 +97,13 @@ function frontendMessage(oMessage) {
 	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
 	
 	oCell.appendChild(oImg);
+	oImg = null;
 	oRow.appendChild(oCell);
+	oCell = null;
 	
 	oTable.appendChild(oRow);
-	
+	oRow = null;
+		
 	oRow = document.createElement('tr');
 	
 	oCell = document.createElement('td');
@@ -106,10 +114,14 @@ function frontendMessage(oMessage) {
 	oCell.appendChild(document.createTextNode(oMessage.message));
 	
 	oRow.appendChild(oCell);
+	oCell = null;
 	
 	oTable.appendChild(oRow);
+	oRow = oTable;
 	
 	oContainerDiv.appendChild(oTable);
+	oTable = null;
 	
 	document.body.appendChild(oContainerDiv);
+	oContainerDiv = null;
 }

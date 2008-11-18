@@ -113,13 +113,18 @@ function rotationCountdown() {
 		if(oPageProperties.nextStepTime <= 0) {
 			return rotatePage();
 		} else {
+			var oRefCountHead = document.getElementById('refreshCounterHead');
 			// write the time to refresh to header counter
-			if(document.getElementById('refreshCounterHead')) {
-				document.getElementById('refreshCounterHead').innerHTML = oPageProperties.nextStepTime;
+			if(oRefCount) {
+				oRefCount.innerHTML = oPageProperties.nextStepTime;
+				oRefCount = null;
 			}
+			
+			var oRefCount = document.getElementById('refreshCounter');
 			// write the time to refresh to the normal counter
-			if(document.getElementById('refreshCounter')) {
-				document.getElementById('refreshCounter').innerHTML = oPageProperties.nextStepTime;
+			if(oRefCount) {
+				oRefCount.innerHTML = oPageProperties.nextStepTime;
+				oRefCount = null;
 			}
 		}
 	}
