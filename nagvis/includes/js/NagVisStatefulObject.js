@@ -195,6 +195,7 @@ function NagVisStatefulObject (oConf) {
 		
 		// Create hover menu
 		this.getHoverMenu(oObj);
+		
 		oObj = null;
 	}
 	

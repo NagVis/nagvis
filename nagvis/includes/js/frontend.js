@@ -198,6 +198,7 @@ function runWorker(iCount, sType) {
 				if(o.length > 0) {
 					bStateChanged = updateObjects(o, aMapObjects, sType);
 				}
+				o = null;
 				
 				// Update shapes when needed
 				if(aShapesToUpdate.length > 0) {
@@ -218,6 +219,8 @@ function runWorker(iCount, sType) {
 					if(oPageProperties.event_background && oPageProperties.event_background == '1') {
 						setPageBackgroundColor(getBackgroundColor(o));
 					}
+					
+					o = null;
 				}
 				
 				// Update lastWorkerRun
@@ -739,8 +742,8 @@ function playSound(intIndex, iNumTimes){
 		}
 	}
 	
-	oObjIconDiv = null;
 	oObjIcon = null;
+	oObjIconDiv = null;
 }
 
 /**
@@ -776,8 +779,8 @@ function flashIcon(intIndex, iNumTimes){
 		setTimeout(function() { flashIcon(intIndex, iNumTimes) }, 500);
 	}
 	
-	oObjIconDiv = null;
 	oObjIcon = null;
+	oObjIconDiv = null;
 }
 
 /**
@@ -799,6 +802,8 @@ function getBackgroundColor(oObj) {
 		sColor = oStates[oObj.summary_state].bgColor;
 	}
 	
+	oObj = null;
+	
 	return sColor;
 }
 
@@ -819,6 +824,8 @@ function getFaviconImage(oObj) {
 	} else {
 		sFavicon = oObj.summary_state.toLowerCase();
 	}
+	
+	oObj = null;
 	
 	// Set full path
 	sFavicon = oGeneralProperties.path_htmlimages+'internal/favicon_'+sFavicon+'.png';

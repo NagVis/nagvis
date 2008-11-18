@@ -157,6 +157,8 @@ function NagVisObject (oConf) {
 			oObj.onmouseover = function() { displayHoverMenu(replaceHoverTemplateMacros('0', oObjA, sTemplateCode), iHoverDelay); };
 			oObj.onmouseout = function() { hideHoverMenu(); };
 		}
+		
+		oObj = null;
 	}
 	
 	/**
@@ -183,10 +185,6 @@ function NagVisObject (oConf) {
 	 */
 	this.getHoverTemplateCode = function() {
 		this.hover_template_code = oHoverTemplates[this.conf.hover_template];
-	}
-	
-	this.replaceHoverTemplateMacros = function (replaceChild, oObj, sTemplateCode) {
-		this.hover_template_code = replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode);
 	}
 	
 	// Call the constructor of the object

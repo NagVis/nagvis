@@ -48,27 +48,33 @@ preloadIcons: function(iconSequence) {
 },
 
 addLink: function(iconURL) {
+  var docHead = document.getElementsByTagName("head")[0];
   var link = document.createElement("link");
   link.type = "image/x-icon";
   link.rel = "shortcut icon";
   link.href = iconURL;
   this.removeLinkIfExists();
-  this.docHead.appendChild(link);
+  docHead.appendChild(link);
   link = null;
+  docHead = null;
 },
 
 removeLinkIfExists: function() {
-  var links = this.docHead.getElementsByTagName("link");
+  var docHead = document.getElementsByTagName("head")[0];
+  var links = docHead.getElementsByTagName("link");
   for (var i=0, len = links.length; i<len; i++) {
     var link = links[i];
     if (link.type=="image/x-icon" && link.rel=="shortcut icon") {
-      this.docHead.removeChild(link);
-      return; // Assuming only one match at most.
+      docHead.removeChild(link);
     }
+    link = null;
   }
-},
-
-docHead:document.getElementsByTagName("head")[0]
+  
+  links = null;
+  docHead = null;
+  
+  return;
+}
 }
 
 // BACKGROUND
