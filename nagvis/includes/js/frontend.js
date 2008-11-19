@@ -855,7 +855,7 @@ function setPageBackgroundColor(sColor) {
  */
 function setMapBackgroundImage(sImage) {
 	// Only work with the background image if some is configured
-	if(sImage != 'none') {
+	if(sImage != 'none' && sImage != '') {
 		// Use existing image or create new
 		if(document.getElementById('backgroundImage')) {
 			var oImage = document.getElementById('backgroundImage');
