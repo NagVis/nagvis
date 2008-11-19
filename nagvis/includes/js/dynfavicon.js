@@ -1,81 +1,60 @@
+/*****************************************************************************
+ *
+ * dynfavicon.js - functions for handling dynamical changes of the page 
+ *                 favicon image. This code is based on Favicon.js from
+ *                 Michael Mahemoff. For details take a look at the bottom of
+ *                 this file.
+ *
+ * Copyright (c) 2004-2008 NagVis Project
+ *****************************************************************************/
+ 
+
+var favicon = {
+	// -- "PUBLIC" ----------------------------------------------------------------
+	
+	change: function(iconURL) {
+		this.addLink(iconURL, true);
+	},
+	
+	// -- "PRIVATE" ---------------------------------------------------------------
+	
+	addLink: function(iconURL) {
+		var docHead = document.getElementsByTagName("head")[0];
+		
+		var link = document.createElement("link");
+		link.type = "image/x-icon";
+		link.rel = "shortcut icon";
+		link.href = iconURL;
+		
+		this.removeLinkIfExists();
+		docHead.appendChild(link);
+		
+		// Cleanup
+		link = null;
+		docHead = null;
+	},
+	
+	removeLinkIfExists: function() {
+		var docHead = document.getElementsByTagName("head")[0];
+		var links = docHead.getElementsByTagName("link");
+		
+		for (var i=0, len = links.length; i<len; i++) {
+			if (links[i].type == "image/x-icon" && links[i].rel == "shortcut icon") {
+				docHead.removeChild(links[i]);
+			}
+		}
+		
+		// Cleanup
+		links = null;
+		docHead = null;
+		
+		return true;
+	}
+}
+
 // Favicon.js - Change favicon dynamically [http://ajaxify.com/run/favicon].
 // Copyright (c) 2006 Michael Mahemoff. Only works in Firefox and Opera.
 // Background and MIT License notice at end of file, see the homepage for more.
-
-// USAGE:
-// * favicon.change("/icon/active.ico");  (Optional 2nd arg is new title.)
-// * favicon.animate(new Array("icon1.ico", "icon2.ico", ...));
-//     Tip: Use "" as the last element to make an empty icon between cycles.
-//     To stop the animation, call change() and pass in the new arg.
-//     (Optional 2nd arg is animation pause in millis, overwrites the default.)
-// * favicon.defaultPause = 5000;
-
-var favicon = {
-
-// -- "PUBLIC" ----------------------------------------------------------------
-
-defaultPause: 2000,
-
-change: function(iconURL, optionalDocTitle) {
-  clearTimeout(this.loopTimer);
-  if (optionalDocTitle) {
-    document.title = optionalDocTitle;
-  }
-  this.addLink(iconURL, true);
-},
-
-animate: function(iconSequence, optionalDelay) {
-  this.preloadIcons(iconSequence);
-  this.iconSequence = iconSequence;
-  this.sequencePause = (optionalDelay) ?  optionalDelay : this.defaultPause;
-  favicon.index = 0;
-  favicon.change(iconSequence[0]);
-  this.loopTimer = setInterval(function() {
-    favicon.index = (favicon.index+1) % favicon.iconSequence.length;
-    favicon.addLink(favicon.iconSequence[favicon.index], false);
-  }, favicon.sequencePause);
-},
-
-// -- "PRIVATE" ---------------------------------------------------------------
-
-loopTimer: null,
-
-preloadIcons: function(iconSequence) {
-  var dummyImageForPreloading = document.createElement("img");
-  for (var i=0, len = iconSequence.length; i < len; i++) {
-    dummyImageForPreloading.src = iconSequence[i];
-  }
-},
-
-addLink: function(iconURL) {
-  var docHead = document.getElementsByTagName("head")[0];
-  var link = document.createElement("link");
-  link.type = "image/x-icon";
-  link.rel = "shortcut icon";
-  link.href = iconURL;
-  this.removeLinkIfExists();
-  docHead.appendChild(link);
-  link = null;
-  docHead = null;
-},
-
-removeLinkIfExists: function() {
-  var docHead = document.getElementsByTagName("head")[0];
-  var links = docHead.getElementsByTagName("link");
-  for (var i=0, len = links.length; i<len; i++) {
-    var link = links[i];
-    if (link.type=="image/x-icon" && link.rel=="shortcut icon") {
-      docHead.removeChild(link);
-    }
-    link = null;
-  }
-  
-  links = null;
-  docHead = null;
-  
-  return;
-}
-}
 
 // BACKGROUND
 // The main point of this script is to give you a means of alerting the user
