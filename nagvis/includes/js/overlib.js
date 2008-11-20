@@ -36,8 +36,8 @@ registerCommands('donothing,inarray,caparray,sticky,background,noclose,caption,l
 // Settings you want everywhere are set here. All of this can also be
 // changed on your html page or through an overLIB call.
 ////////
-if (typeof ol_fgcolor=='undefined') var ol_fgcolor="#CCCCFF";
-if (typeof ol_bgcolor=='undefined') var ol_bgcolor="#333399";
+if (typeof ol_fgcolor=='undefined') var ol_fgcolor="#FFFFFF";
+if (typeof ol_bgcolor=='undefined') var ol_bgcolor="#FFFFFF";
 if (typeof ol_textcolor=='undefined') var ol_textcolor="#000000";
 if (typeof ol_capcolor=='undefined') var ol_capcolor="#FFFFFF";
 if (typeof ol_closecolor=='undefined') var ol_closecolor="#9999FF";
