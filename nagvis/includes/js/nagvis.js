@@ -115,9 +115,9 @@ function rotationCountdown() {
 		} else {
 			var oRefCountHead = document.getElementById('refreshCounterHead');
 			// write the time to refresh to header counter
-			if(oRefCount) {
-				oRefCount.innerHTML = oPageProperties.nextStepTime;
-				oRefCount = null;
+			if(oRefCountHead) {
+				oRefCountHead.innerHTML = oPageProperties.nextStepTime;
+				oRefCountHead = null;
 			}
 			
 			var oRefCount = document.getElementById('refreshCounter');
