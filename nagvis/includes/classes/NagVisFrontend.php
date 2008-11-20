@@ -165,7 +165,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getPagePropertiesJson($bRefresh) {
+	function getRotationPropertiesJson($bRefresh) {
 		$arr = Array();
 		
 		if($this->ROTATION->getPoolName() != '') {

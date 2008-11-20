@@ -87,9 +87,9 @@ function updateWorkerCounter() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotatePage() {
-	if(oPageProperties.nextStepUrl !== '') {
-		if(oPageProperties.rotationEnabled) {
-			window.open(oPageProperties.nextStepUrl, "_self");
+	if(oRotationProperties.nextStepUrl !== '') {
+		if(oRotationProperties.rotationEnabled) {
+			window.open(oRotationProperties.nextStepUrl, "_self");
 			return true;
 		}
 	} else {
@@ -106,24 +106,24 @@ function rotatePage() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotationCountdown() {
-	if(oPageProperties.nextStepTime && oPageProperties.nextStepTime !== '') {
+	if(oRotationProperties.nextStepTime && oRotationProperties.nextStepTime !== '') {
 		// Countdown one second
-		oPageProperties.nextStepTime -= 1;
+		oRotationProperties.nextStepTime -= 1;
 		
-		if(oPageProperties.nextStepTime <= 0) {
+		if(oRotationProperties.nextStepTime <= 0) {
 			return rotatePage();
 		} else {
 			var oRefCountHead = document.getElementById('refreshCounterHead');
 			// write the time to refresh to header counter
 			if(oRefCountHead) {
-				oRefCountHead.innerHTML = oPageProperties.nextStepTime;
+				oRefCountHead.innerHTML = oRotationProperties.nextStepTime;
 				oRefCountHead = null;
 			}
 			
 			var oRefCount = document.getElementById('refreshCounter');
 			// write the time to refresh to the normal counter
 			if(oRefCount) {
-				oRefCount.innerHTML = oPageProperties.nextStepTime;
+				oRefCount.innerHTML = oRotationProperties.nextStepTime;
 				oRefCount = null;
 			}
 		}
@@ -137,11 +137,11 @@ function rotationCountdown() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function switchRotation(obj, startLabel, stopLabel) {
-	if(oPageProperties.rotationEnabled) {
-		oPageProperties.rotationEnabled = false;
+	if(oRotationProperties.rotationEnabled) {
+		oRotationProperties.rotationEnabled = false;
 		setRotationLabel(startLabel, stopLabel);
 	} else {
-		oPageProperties.rotationEnabled = true;
+		oRotationProperties.rotationEnabled = true;
 		setRotationLabel(startLabel, stopLabel);
 	}
 }
@@ -156,7 +156,7 @@ function setRotationLabel(startLabel,stopLabel) {
 	if(getUrlParam('rotation') === '') {
 		oRotationSwitch.style.visibility = 'hidden';
 	} else {
-		if(oPageProperties.rotationEnabled) {
+		if(oRotationProperties.rotationEnabled) {
 			oRotationSwitch.innerHTML = stopLabel;
 		} else {
 			oRotationSwitch.innerHTML = startLabel;
