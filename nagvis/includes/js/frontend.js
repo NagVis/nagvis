@@ -450,7 +450,7 @@ function setMapHoverUrls() {
  */
 function parseHoverMenus(aObjs) {
 	for(var a = 0; a < aObjs.length; a++) {
-		if(aObjs[a].conf.hover_menu) {
+		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu !== '0') {
 			aObjs[a].parseHoverMenu();
 		}
 	}
