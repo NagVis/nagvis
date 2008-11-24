@@ -127,7 +127,13 @@ class NagVisMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getBackgroundJson() {
-		return $this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
+		$sReturn = '';
+		
+		if($this->MAPCFG->BACKGROUND->getFileName() != '' && $this->MAPCFG->BACKGROUND->getFileName() != 'none') {
+			$sReturn = $this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
+		}
+		
+		return $sReturn;
 	}
 	
 	/**
