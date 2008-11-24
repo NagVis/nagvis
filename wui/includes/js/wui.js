@@ -101,10 +101,14 @@ function get_click(newtype,nbclicks,action) {
 	
 	// we init the number of points coordinates we're going to wait for before we display the add object window
 	cpt_clicks=nbclicks;
-		
-	document.images['background'].style.cursor='crosshair';
-	document.body.onclick=get_click_pos;
-	document.body.onmousemove=track_mouse;
+	
+	if(document.images['background']) {
+		document.images['background'].style.cursor='crosshair';
+	}
+	
+	document.onclick=get_click_pos;
+	document.onmousemove=track_mouse;
+	
 	window.status = printLang(lang['clickMapToSetPoints'],'') + cpt_clicks;
 }
 
@@ -183,7 +187,11 @@ function get_click_pos(e) {
 		if (follow_mouse) myshape.clear();
 		coords=coords.substr(0,coords.length-1);
 		window.status='';
-		document.images['background'].style.cursor='default';
+		
+		if(document.images['background']) {
+			document.images['background'].style.cursor='default';
+		}
+		
 		follow_mouse=false;
 		if(action_click=='add') {
 			link="./index.php?page=addmodify&action=add&map="+mapname+"&type="+objtype+"&coords="+coords;

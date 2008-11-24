@@ -161,7 +161,7 @@ class WuiMap extends GlobalMap {
 		$sRet = '';
 		
 		if($this->MAPCFG->getName() != '') {
-			if($this->MAPCFG->BACKGROUND->getFileName() != 'none') {
+			if($this->MAPCFG->BACKGROUND->getFileName() != 'none' && $this->MAPCFG->BACKGROUND->getFileName() != '') {
 				$src = $this->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
 			}
 		} else {
