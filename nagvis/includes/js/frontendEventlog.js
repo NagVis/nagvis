@@ -25,6 +25,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
+var oSeverity = Object();
+oSeverity.debug = 4;
+oSeverity.info = 3;
+oSeverity.warning = 2;
+oSeverity.critical = 1;
+
 /**
  * eventlogInitialize()
  *
@@ -36,7 +42,7 @@ function eventlogInitialize() {
 	var oEventlog = document.getElementById('eventlog');
 	
 	if(!oEventlog) {
-		var oEventlog = document.createElement('div');
+		oEventlog = document.createElement('div');
 		oEventlog.setAttribute("id","eventlog");
 		oEventlog.style.overflow = 'auto';
 		
@@ -60,11 +66,12 @@ function eventlogInitialize() {
 		};
 		
 		document.body.appendChild(oEventlog);
-		oEventlog = null;
 		
 		document.body.appendChild(oEventlogControl);
 		oEventlogControl = null;
 	}
+	
+	oEventlog = null;
 	
 	eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
 }
@@ -83,37 +90,40 @@ function eventlogInitialize() {
  */
 function eventlog(sType, sSeverity, sText) {
 	if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null && oPageProperties.event_log && oPageProperties.event_log != '0') {
-		var oSeverity = Object();
-		oSeverity.debug = 4;
-		oSeverity.info = 3;
-		oSeverity.warning = 2;
-		oSeverity.critical = 1;
-		
 		var oEventlog = document.getElementById('eventlog');
 		
 		if(!oEventlog) {
 			eventlogInitialize();
-			var oEventlog = document.getElementById('eventlog');
+			oEventlog = document.getElementById('eventlog');
 		}
 		
 		if(oSeverity[sSeverity] <= oSeverity[oPageProperties.event_log_level]) {
-			// Format the log entry
-			var oEntry = document.createTextNode(getCurrentTime()+" "+sSeverity+" "+sType+": "+sText);
-			
 			// When the message limit is reached truncate the first log entry
 			// 24 lines is the current limit
 			if(oEventlog.childNodes && oEventlog.childNodes.length >= 24*2) {
+				// Remove line
 				oEventlog.removeChild(oEventlog.firstChild);
+				
+				// Remove line break
 				oEventlog.removeChild(oEventlog.firstChild);
 			}
 			
+			// Format the new log entry
+			var oEntry = document.createTextNode(getCurrentTime()+" "+sSeverity+" "+sType+": "+sText);
+			
 			// Append new message to log
 			oEventlog.appendChild(oEntry);
-			oEventlog.appendChild(document.createElement('br'));
+			oEntry = null;
+			
+			// Add line break after the line
+			var oBr = document.createElement('br');
+			oEventlog.appendChild(oBr);
+			oBr = null;
 			
 			// Scroll down
 			oEventlog.scrollTop = oEventlog.scrollHeight;
 		}
+		
 		oEventlog = null;
 	}
 }
