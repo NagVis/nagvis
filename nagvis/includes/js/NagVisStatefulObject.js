@@ -148,7 +148,23 @@ var NagVisStatefulObject = NagVisObject.extend({
 		// When this is an update, remove the object first
 		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
+			// Remove object from DOM
 			oMap.removeChild(this.parsedObject);
+			
+			// Remove event listeners
+			var oObj;
+			if(this.conf.view_type && this.conf.view_type === 'line') {
+				oObj = document.getElementById(this.objId+'-linediv');
+			} else {
+				oObj = document.getElementById(this.objId+'-icon');
+			}
+			oObj.onmousedown = null;
+			oObj.oncontextmenu = null;
+			oObj.onmouseover = null;
+			oObj.onmouseout = null;
+			oObj = null;
+			
+			// Remove object reference
 			this.parsedObject = null;
 		}
     
