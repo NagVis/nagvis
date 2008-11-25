@@ -25,12 +25,16 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisRotation.Inherits(NagVisStatelessObject);
-function NagVisRotation (oConf) {
-	// Call parent constructor
-	this.Inherits(NagVisStatelessObject, oConf);
+var NagVisRotation = NagVisStatelessObject.extend({
+	constructor: function(oConf) {
+		// Call parent constructor
+		//this.Inherits(NagVisStatefulObject, oConf);
+		this.base(oConf);
+		
+		this.getMembers();
+	},
 	
-	this.parseOverview = function() {
+	parseOverview: function() {
 		var oTable = document.getElementById('overviewRotations');
 		
 		/* Rotation title */
@@ -108,29 +112,4 @@ function NagVisRotation (oConf) {
 		
 		oTable = null;
 	}
-	
-	/*$aRotations[] = Array('name' => $poolName,
-					                      'url' => $ROTATION->getNextStepUrl(),
-					                      'num_steps' => $ROTATION->getNumSteps(),
-														    'steps' => $aSteps);*/
-	
-	/*// Form the onClick action
-	$onClick = 'location.href=\''.$ROTATION->getNextStepUrl().'\';';
-	
-	// Form the HTML code for the rotation cell
-	$ret .= '<tr>';
-	$ret .= '<td rowspan="'.$ROTATION->getNumSteps().'" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
-	$ret .= '<h2>'.$poolName.'</h2><br />';
-	$ret .= '</td>';
-	
-	// Parse the code for the step list
-	foreach($ROTATION->getSteps() AS $intId => $arrStep) {
-		if($intId != 0) {
-			$ret .= '<tr>';
-		}
-		$onClick = 'location.href=\''.$ROTATION->getStepUrlById($intId).'\';';
-		$ret .= '<td width="250" onMouseOut="this.style.cursor=\'auto\';this.bgColor=\'\';return nd();" onMouseOver="this.style.cursor=\'pointer\';this.bgColor=\'#ffffff\';" onClick="'.$onClick.'">';
-		$ret .= $ROTATION->getStepLabelById($intId).'</td>';
-		$ret .= '</tr>';
-	}*/
-}
+});

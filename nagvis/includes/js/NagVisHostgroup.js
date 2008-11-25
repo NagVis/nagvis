@@ -26,10 +26,11 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisHostgroup.Inherits(NagVisStatefulObject);
-function NagVisHostgroup (oConf) {
-	// Call parent constructor
-	this.Inherits(NagVisStatefulObject, oConf);
-	
-	this.getMembers();
-}
+var NagVisHostgroup = NagVisStatefulObject.extend({
+	constructor: function(oConf) {
+		// Call parent constructor
+		this.base(oConf);
+		
+		this.getMembers();
+	}
+});

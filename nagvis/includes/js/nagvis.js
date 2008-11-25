@@ -245,19 +245,6 @@ function cloneObject(what) {
 	return o;
 }
 
-Object.prototype.Inherits = function(parent) {
-	if(arguments.length > 1) {
-		parent.apply(this, Array.prototype.slice.call(arguments, 1));
-	} else {
-		parent.call(this);
-	}
-};
-
-Function.prototype.Inherits = function(Parent) {
-	this.prototype = new Parent();
-	this.prototype.constructor = this;
-};
-
 function date(format, timestamp) {
 	// http://kevin.vanzonneveld.net
 	// +   original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)

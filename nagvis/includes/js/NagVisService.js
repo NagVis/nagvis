@@ -25,10 +25,11 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisService.Inherits(NagVisStatefulObject);
-function NagVisService (oConf) {
-	// Call parent constructor
-	this.Inherits(NagVisStatefulObject, oConf);
+var NagVisService = NagVisStatefulObject.extend({
+	constructor: function(oConf) {
+		// Call parent constructor
+		this.base(oConf);
+	},
 	
 	/**
 	 * PUBLIC parseGadget()
@@ -38,7 +39,7 @@ function NagVisService (oConf) {
 	 * @return	String		gadget object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseGadget = function () {
+	parseGadget: function () {
 		var alt = this.conf.name+'-'+this.conf.service_description;
 		
 		// Add object informations and current perfdata to gadget_url
@@ -78,4 +79,4 @@ function NagVisService (oConf) {
 		
 		return oIconDiv;
 	}
-}
+});

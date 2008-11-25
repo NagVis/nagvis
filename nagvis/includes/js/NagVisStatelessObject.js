@@ -26,11 +26,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisStatelessObject.Inherits(NagVisObject);
-function NagVisStatelessObject (oConf) {
+var NagVisStatelessObject = NagVisObject.extend({
 	// Initialize
-	//...
-	
-	// Call parent constructor
-	this.Inherits(NagVisObject, oConf);
-}
+	constructor: function(oConf) {
+		// Call parent constructor
+		this.base(oConf);
+	}
+});

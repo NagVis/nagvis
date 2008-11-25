@@ -25,18 +25,16 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisStatefulObject.Inherits(NagVisObject);
-function NagVisStatefulObject (oConf) {
+var NagVisStatefulObject = NagVisObject.extend({
 	// Stores the information from last refresh (Needed for change detection)
-	this.last_conf = {};
+	last_conf: {},
 	
-	// Initialize
-	//...
+	constructor: function(oConf) {
+		// Call parent constructor
+		this.base(oConf);
+	},
 	
-	// Call parent constructor
-	this.Inherits(NagVisObject, oConf);
-	
-	this.getMembers = function() {
+	getMembers: function() {
 		this.members = [];
 		if(this.conf.members && this.conf.members.length > 0) {
 			for(var i = 0, len = this.conf.members.length; i < len; i++) {
@@ -74,7 +72,7 @@ function NagVisStatefulObject (oConf) {
 				}
 			}
 		}
-	}
+	},
 	
 	/**
 	 * PUBLIC saveLastState()
@@ -83,12 +81,12 @@ function NagVisStatefulObject (oConf) {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.saveLastState = function() {
+	saveLastState: function() {
 		// FIXME: Do not copy the whole conf array
 		for (i in this.conf) {
 			this.last_conf[i] = this.conf[i];
 		}
-	}
+	},
 	
 	/**
 	 * PUBLIC stateChanged()
@@ -97,13 +95,13 @@ function NagVisStatefulObject (oConf) {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.stateChanged = function() {
+	stateChanged: function() {
 		if(this.conf.summary_state != this.last_conf.summary_state || this.conf.summary_problem_has_been_acknowledged != this.last_conf.summary_problem_has_been_acknowledged || this.conf.summary_in_downtime != this.last_conf.summary_in_downtime) {
 			return true;
 		} else {
 			return false;
 		}
-	}
+	},
 	
 	/**
 	 * PUBLIC parse()
@@ -113,7 +111,7 @@ function NagVisStatefulObject (oConf) {
 	 * @return	String		HTML code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parse = function () {
+	parse: function () {
 		var oContainerDiv;
 		
 		this.replaceMacros();
@@ -172,7 +170,7 @@ function NagVisStatefulObject (oConf) {
 		if(this.conf.view_type && this.conf.view_type == 'line') {
 			this.drawLine();
 		}
-	}
+	},
 	
 	/**
 	 * PUBLIC parseHoverMenu()
@@ -183,7 +181,7 @@ function NagVisStatefulObject (oConf) {
 	 * @return	String		HTML code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseHoverMenu = function () {
+	parseHoverMenu: function () {
 		var oObj;
 		
 		// Get the object to apply the hover menu to
@@ -197,14 +195,14 @@ function NagVisStatefulObject (oConf) {
 		this.getHoverMenu(oObj);
 		
 		oObj = null;
-	}
+	},
 	
 	/**
 	 * Replaces macros of urls and hover_urls
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.replaceMacros = function () {
+	replaceMacros: function () {
 		if(this.conf.type == 'service') {
 			name = 'host_name';
 		} else {
@@ -242,7 +240,7 @@ function NagVisStatefulObject (oConf) {
 				this.conf.label_text = this.conf.label_text.replace('[service_description]', this.conf.service_description);
 			}
 		}
-	}
+	},
 	
 	/**
 	 * Parses the HTML-Code of a line
@@ -250,7 +248,7 @@ function NagVisStatefulObject (oConf) {
 	 * @return	String		HTML code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseLine = function () {
+	parseLine: function () {
 		var ret = '';
 		var link = '';
 		
@@ -286,7 +284,7 @@ function NagVisStatefulObject (oConf) {
 		oLineBorderDiv = null;
 		
 		return oContainerDiv;
-	}
+	},
 	
 	/**
 	 * Draws the NagVis lines on the already added divs.
@@ -294,7 +292,7 @@ function NagVisStatefulObject (oConf) {
 	 * @return	String		HTML code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.drawLine = function() {
+	drawLine: function() {
 		var x = this.conf.x.split(',');
 		var y = this.conf.y.split(',');
 		
@@ -302,7 +300,7 @@ function NagVisStatefulObject (oConf) {
 		
 		// Parse the line object
 		drawNagVisLine(this.objId, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime);
-	}
+	},
 	
 	/**
 	 * PUBLIC parseIcon()
@@ -312,7 +310,7 @@ function NagVisStatefulObject (oConf) {
 	 * @return	String		String with Html Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseIcon = function () {
+	parseIcon: function () {
 		if(this.type == 'service') {
 			alt = this.conf.name+'-'+this.conf.service_description;
 		} else {
@@ -348,7 +346,7 @@ function NagVisStatefulObject (oConf) {
 		}
 		
 		return oIconDiv;
-	}
+	},
 	
 	/**
 	 * Parses the HTML-Code of a label
@@ -356,7 +354,7 @@ function NagVisStatefulObject (oConf) {
 	 * @return	String		HTML code of the label
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseLabel = function () {
+	parseLabel: function () {
 		var oLabelDiv;
 		
 		// If there is a presign it should be relative to the objects x/y
@@ -411,4 +409,4 @@ function NagVisStatefulObject (oConf) {
 		
 		return oLabelDiv;
 	}
-}
+});

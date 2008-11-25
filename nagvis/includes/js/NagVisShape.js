@@ -25,10 +25,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisShape.Inherits(NagVisStatelessObject);
-function NagVisShape (oConf) {
-	// Call parent constructor
-	this.Inherits(NagVisStatelessObject, oConf);
+
+var NagVisShape = NagVisStatelessObject.extend({
+	constructor: function(oConf) {
+		// Call parent constructor;
+		this.base(oConf);
+	},
 	
 	/**
 	 * PUBLIC parse()
@@ -38,7 +40,7 @@ function NagVisShape (oConf) {
 	 * @return	String		HTML code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parse = function () {
+	parse: function () {
 		var oContainerDiv;
 		
 		// Create container div
@@ -66,7 +68,7 @@ function NagVisShape (oConf) {
 		this.parsedObject = oMap.appendChild(oContainerDiv);
 		
 		oMap = null;
-	}
+	},
 	
 	/**
 	 * Parses the shape
@@ -74,7 +76,7 @@ function NagVisShape (oConf) {
 	 * @return	String	String with Html Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseShape = function () {
+	parseShape: function () {
 		var oIconDiv = document.createElement('div');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
@@ -106,4 +108,4 @@ function NagVisShape (oConf) {
 		
 		return oIconDiv;
 	}
-}
+});

@@ -25,18 +25,18 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-function NagVisObject (oConf) {
-	this.parsedObject;
-	this.hover_template_code;
-	this.conf;
-	this.contextMenu;
+var NagVisObject = Base.extend({
+	parsedObject: null,
+	hover_template_code: null,
+	conf: null,
+	contextMenu: null,
 	
-	this.construct = function(oConf) {
+	constructor: function(oConf) {
 		// Initialize
 		this.setLastUpdate();
 		this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
 		this.conf = oConf;
-	}
+	},
 	
 	/**
 	 * PUBLIC setLastUpdate
@@ -45,9 +45,9 @@ function NagVisObject (oConf) {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.setLastUpdate = function() {
+	setLastUpdate: function() {
 		this.lastUpdate = Date.parse(new Date());
-	}
+	},
   
 	/**
 	 * PUBLIC getContextMenu()
@@ -56,7 +56,7 @@ function NagVisObject (oConf) {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.addContextMenu = function (sContainerId, sObjId) {
+	addContextMenu: function (sContainerId, sObjId) {
 		var oObj = document.getElementById(sObjId);
 		var oContainer = document.getElementById(sContainerId);
     
@@ -128,7 +128,7 @@ function NagVisObject (oConf) {
 		
 		oContainer = null;
 		oObj = null;
-  }
+  },
 	
 	/**
 	 * PUBLIC getHoverMenu
@@ -137,7 +137,7 @@ function NagVisObject (oConf) {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.getHoverMenu = function (oObj) {
+	getHoverMenu: function (oObj) {
 		// Only enable hover menu when configured
 		if(this.conf.hover_menu && this.conf.hover_menu == '1') {
 			// Parse the configured URL or get the hover menu
@@ -159,7 +159,7 @@ function NagVisObject (oConf) {
 		}
 		
 		oObj = null;
-	}
+	},
 	
 	/**
 	 * getHoverUrlCode()
@@ -169,10 +169,10 @@ function NagVisObject (oConf) {
 	 * @return	String		HTML code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.getHoverUrlCode = function() {
+	getHoverUrlCode: function() {
 		// FIXME: Move to bulk fetching like normal hover menus
 		this.hover_template_code = oHoverUrls[this.conf.hover_url];
-	}
+	},
 	
 	/**
 	 * getHoverTemplateCode()
@@ -183,10 +183,7 @@ function NagVisObject (oConf) {
 	 * @return	String		HTML code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.getHoverTemplateCode = function() {
+	getHoverTemplateCode: function() {
 		this.hover_template_code = oHoverTemplates[this.conf.hover_template];
 	}
-	
-	// Call the constructor of the object
-	this.construct(oConf);
-}
+});

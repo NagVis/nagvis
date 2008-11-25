@@ -25,10 +25,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisTextbox.Inherits(NagVisStatelessObject);
-function NagVisTextbox (oConf) {
-	// Call parent constructor
-	this.Inherits(NagVisStatelessObject, oConf);
+var NagVisTextbox = NagVisStatelessObject.extend({
+	// Initialize
+	constructor: function(oConf) {
+		// Call parent constructor
+		this.base(oConf);
+	},
 	
 	/**
 	 * PUBLIC parse()
@@ -38,7 +40,7 @@ function NagVisTextbox (oConf) {
 	 * @return	String		HTML code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parse = function () {
+	parse: function() {
 		var oContainerDiv;
 		
 		this.replaceMacros();
@@ -63,17 +65,17 @@ function NagVisTextbox (oConf) {
 		
 		oContainerDiv = null;
 		oMap = null;
-	}
+	},
 	
 	/**
 	 * Replaces macros of urls and hover_urls
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.replaceMacros = function () {
+	replaceMacros: function () {
 		this.conf.text = this.conf.text.replace('[refresh_counter]', '<font id="refreshCounter"></font>');
 		this.conf.text = this.conf.text.replace('[worker_last_run]', '<font id="workerLastRunCounter"></font>');
-	}
+	},
 	
 	/**
 	 * Create a Comment-Textbox
@@ -81,7 +83,7 @@ function NagVisTextbox (oConf) {
 	 * @return	String	String with HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseTextbox = function () {
+	parseTextbox: function () {
 		oLabelDiv = document.createElement('div');
 		oLabelDiv.setAttribute('id', this.objId+'label');
 		oLabelDiv.setAttribute('class', 'box');
@@ -115,4 +117,4 @@ function NagVisTextbox (oConf) {
 		
 		return oLabelDiv;	
 	}
-}
+});

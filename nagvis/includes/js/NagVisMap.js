@@ -25,12 +25,13 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-NagVisMap.Inherits(NagVisStatefulObject);
-function NagVisMap (oConf) {
-	// Call parent constructor
-	this.Inherits(NagVisStatefulObject, oConf);
-	
-	this.getMembers();
+var NagVisMap = NagVisStatefulObject.extend({
+	constructor: function(oConf) {
+		// Call parent constructor
+		this.base(oConf);
+		
+		this.getMembers();
+	},
 	
 	/**
 	 * Parses the object of a map on the overview page
@@ -38,7 +39,7 @@ function NagVisMap (oConf) {
 	 * @return	String		HTML code of the label
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	this.parseOverview = function () {
+	 parseOverview: function () {
 		this.replaceMacros();
 		
 		var oTd = document.createElement('td');
@@ -77,4 +78,4 @@ function NagVisMap (oConf) {
 		
 		return oTd;
 	}
-}
+});
