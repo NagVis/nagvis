@@ -45,6 +45,7 @@ class GlobalLanguage {
 		$this->sCurrentLanguage = $this->MAINCFG->getValue('global', 'language');
 		
 		// Fix old language entries (english => en_US, german => de_DE)
+		// FIXME: Remove this in 1.5, mark this as deprecated somewhere
 		switch($this->sCurrentLanguage) {
 			case 'german':
 				$this->sCurrentLanguage = 'de_DE';

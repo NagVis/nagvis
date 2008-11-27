@@ -57,7 +57,7 @@ class GlobalMainCfg {
 						'match' => MATCH_BOOLEAN),
 				'language' => Array('must' => 1,
 					'editable' => 1,
-					'default' => 'english',
+					'default' => 'en_US',
 					'match' => MATCH_STRING_NO_SPACE),
 				'refreshtime' => Array('must' => 1,
 						'editable' => 1,
