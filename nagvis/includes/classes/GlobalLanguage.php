@@ -29,6 +29,7 @@ class GlobalLanguage {
 	var $MAINCFG;
 	var $textDomain;
 	var $sCurrentLanguage;
+	var $sCurrentEncoding;
 	
 	/**
 	 * Class Constructor
@@ -54,17 +55,27 @@ class GlobalLanguage {
 		}
 		
 		// Append encoding (UTF8)
-		$this->sCurrentLanguage .= '.UTF-8';
+		$this->sCurrentEncoding = 'UTF-8';
 		
 		// Check for gettext extension
 		$this->checkGettextSupport();
 		
 		// Set the language to use
-		putenv('LC_ALL='.$this->sCurrentLanguage);
-		setlocale(LC_ALL, $this->sCurrentLanguage);
+		putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+		setlocale(LC_ALL, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
 
 		bindtextdomain($this->textDomain, $this->MAINCFG->getValue('paths', 'language'));
 		textdomain($this->textDomain);
+	}
+	
+	/**
+	 * Returns the string representing the current language
+	 *
+	 * @return  String
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getCurrentLanguage() {
+		return $this->sCurrentLanguage;
 	}
 	
 	/**
