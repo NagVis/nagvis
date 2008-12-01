@@ -79,7 +79,7 @@ function runWorker(iCount, sType) {
 			
 			eventlog("worker", "info", "Finished parsing map");
 		} else if(sType === 'overview') {
-			setMapBasics(oPageProperties);
+			setPageBasics(oPageProperties);
 			
 			eventlog("worker", "info", "Parsing overview page");
 			parseOverviewPage();
@@ -855,7 +855,7 @@ function setPageBackgroundColor(sColor) {
  */
 function setMapBackgroundImage(sImage) {
 	// Only work with the background image if some is configured
-	if(sImage != 'none' && sImage != '') {
+	if(typeof sImage != 'undefined' && sImage != 'none' && sImage != '') {
 		// Use existing image or create new
 		if(document.getElementById('backgroundImage')) {
 			var oImage = document.getElementById('backgroundImage');
