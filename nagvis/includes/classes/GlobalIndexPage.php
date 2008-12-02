@@ -242,13 +242,13 @@ class GlobalIndexPage {
 		$arr['lang_mapIndex'] = $this->CORE->LANG->getText('mapIndex');
 		$arr['lang_rotationPools'] = $this->CORE->LANG->getText('rotationPools');
 		
+		$arr['event_log'] = $this->CORE->MAINCFG->getValue('defaults', 'eventlog');
+		$arr['event_log_level'] = $this->CORE->MAINCFG->getValue('defaults', 'eventloglevel');
 		
 		/*$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
 		$arr['background_image'] = $this->getBackgroundJson();
 		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
 		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
-		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
-		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
 		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
 		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');*/
 		
