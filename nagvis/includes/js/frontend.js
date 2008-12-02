@@ -114,8 +114,6 @@ function runWorker(iCount, sType) {
 			return false;
 		}
 		
-		updateWorkerCounter();
-		
 		/**
 		 * Do these actions every X runs (Every worker_interval seconds)
 		 */
@@ -225,6 +223,9 @@ function runWorker(iCount, sType) {
 				
 				// Update lastWorkerRun
 				oWorkerProperties.last_run = Date.parse(new Date());
+				
+				// Update the worker counter on maps
+				updateWorkerCounter();
 			}
 		} else if(sType === 'overview') {
 			if(iCount % oWorkerProperties.worker_interval === 0) {
@@ -295,6 +296,9 @@ function runWorker(iCount, sType) {
 				
 				// Update lastWorkerRun
 				oWorkerProperties.last_run = Date.parse(new Date());
+				
+				// Update the worker counter on maps
+				updateWorkerCounter();
 			}
 		}
 	}
@@ -315,16 +319,19 @@ function runWorker(iCount, sType) {
 function getObjectsToUpdate(aObjs) {
 	eventlog("worker", "debug", "getObjectsToUpdate: Start");
 	var arrReturn = [];
+	var oDate = Date.parse(new Date());
 	
 	// Assign all object indexes to return Array
 	for(var i = 0, len = aObjs.length; i < len; i++) {
-		if(aObjs[i].lastUpdate <= (Date.parse(new Date())-(oWorkerProperties.worker_update_object_states*1000))) {
+		if(aObjs[i].lastUpdate <= (oDate-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
 			if(aObjs[i].type !== 'shape' || (aObjs[i].type === 'shape' && aObjs[i].enable_refresh && aObjs[i].enable_refresh === '1')) {
 				arrReturn.push(i);
 			}
 		}
 	}
+	
+	oDate = null;
 	
 	// Now spread the objects in the available timeslots
 	var iNumTimeslots = Math.ceil(oWorkerProperties.worker_update_object_states / oWorkerProperties.worker_interval);
