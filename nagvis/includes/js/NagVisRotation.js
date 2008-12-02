@@ -33,7 +33,7 @@ var NagVisRotation = NagVisStatelessObject.extend({
 	},
 	
 	parseOverview: function() {
-		var oTable = document.getElementById('overviewRotations');
+		var oTbody = document.getElementById('overviewRotations');
 		
 		/* Rotation title */
 		
@@ -72,11 +72,6 @@ var NagVisRotation = NagVisStatelessObject.extend({
 		for(var i = 0, len = this.conf.steps.length; i < len; i++) {
 			if(i !== 0) {
 				oTr = document.createElement('tr');
-				
-				// Dummy cell to get rowspan work
-				oTd = document.createElement('td');
-				oTr.appendChild(oTd);
-				oTd = null;
 			}
 			
 			oTd = document.createElement('td');
@@ -104,10 +99,10 @@ var NagVisRotation = NagVisStatelessObject.extend({
 			oTr.appendChild(oTd);
 			oTd = null;
 			
-			oTable.appendChild(oTr);
+			oTbody.appendChild(oTr);
 			oTr = null;
 		}
 		
-		oTable = null;
+		oTbody = null;
 	}
 });

@@ -931,7 +931,11 @@ function parseOverviewPage() {
 	var oContainer = document.getElementById('overview');
 	
 	var oTable = document.createElement('table');
-	oTable.setAttribute('id', 'overviewMaps');
+	oTable.setAttribute('class', 'infobox');
+	oTable.setAttribute('className', 'infobox');
+	
+	var oTbody = document.createElement('tbody');
+	oTbody.setAttribute('id', 'overviewMaps');
 	
 	var oTr = document.createElement('tr');
 	
@@ -940,14 +944,24 @@ function parseOverviewPage() {
 	oTh.appendChild(document.createTextNode(oPageProperties.lang_mapIndex));
 	
 	oTr.appendChild(oTh);
-	oTable.appendChild(oTr);
+	oTh = null;
+	
+	oTbody.appendChild(oTr);
+	oTr = null;
+	
+	oTable.appendChild(oTbody);
+	oTbody = null;
+	
 	oContainer.appendChild(oTable);
+	oTable = null;
 	
 	if(oPageProperties.showrotations && aInitialRotations.length > 0) {
 		oTable = document.createElement('table');
-		oTable.setAttribute('id', 'overviewRotations');
 		oTable.setAttribute('class', 'infobox');
 		oTable.setAttribute('className', 'infobox');
+		
+		oTbody = document.createElement('tbody');
+		oTbody.setAttribute('id', 'overviewRotations');
 		
 		oTr = document.createElement('tr');
 		
@@ -956,13 +970,18 @@ function parseOverviewPage() {
 		oTh.appendChild(document.createTextNode(oPageProperties.lang_rotationPools));
 		
 		oTr.appendChild(oTh);
-		oTable.appendChild(oTr);
+		oTh = null;
+		
+		oTbody.appendChild(oTr);
+		oTr = null;
+		
+		oTable.appendChild(oTbody);
+		oTbody = null;
+		
 		oContainer.appendChild(oTable);
+		oTable = null;
 	}
 	
-	oTh = null;
-	oTr = null;
-	oTable = null;
 	oContainer = null;
 }
 
@@ -995,8 +1014,11 @@ function parseOverviewMaps(aMapsConf) {
 		
 		if((i+1) % oPageProperties.cellsperrow === 0) {
 			oTable.appendChild(oTr);
+			oTr = null;
 			oTr = document.createElement('tr');
 		}
+		
+		oObj = null;
 	}
 	
 	// Fill table with empty cells if there are not enough maps to get the last 
@@ -1005,13 +1027,14 @@ function parseOverviewMaps(aMapsConf) {
 		for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
 			var oTd = document.createElement('td');
 			oTr.appendChild(oTd);
+			oTd = null;
 		}
 	}
 	
 	// Append last row
 	oTable.appendChild(oTr);
-	
 	oTr = null;
+	
 	oTable = null;
 	
 	eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
@@ -1029,17 +1052,19 @@ function parseOverviewMaps(aMapsConf) {
 function setOverviewRotations(aRotationsConf) {
 	eventlog("worker", "debug", "setOverviewObjects: Start setting rotations");
 	
-	for(var i = 0, len = aRotationsConf.length; i < len; i++) {
-		var oObj;
-		
-		oObj = new NagVisRotation(aRotationsConf[i]);
-		
-		if(oObj != null) {
-			// Save object to map objects array
-			aRotations.push(oObj);
+	if(oPageProperties.showrotations && aRotationsConf.length > 0) {
+		for(var i = 0, len = aRotationsConf.length; i < len; i++) {
+			var oObj;
 			
-			// Parse object to overview
-			oObj.parseOverview();
+			oObj = new NagVisRotation(aRotationsConf[i]);
+			
+			if(oObj != null) {
+				// Save object to map objects array
+				aRotations.push(oObj);
+				
+				// Parse object to overview
+				oObj.parseOverview();
+			}
 		}
 	}
 	

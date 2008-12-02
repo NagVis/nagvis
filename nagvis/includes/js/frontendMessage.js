@@ -34,6 +34,7 @@ function frontendMessageHide() {
 function frontendMessage(oMessage) {
 	var oContainerDiv;
 	var oTable;
+	var oTbody;
 	var oRow;
 	var oCell;
 	var oImg;
@@ -50,6 +51,8 @@ function frontendMessage(oMessage) {
 	oTable.cellPadding = '0';
 	oTable.cellSpacing = '0';
 	
+	oTbody = document.createElement('tbody');
+	
 	oRow = document.createElement('tr');
 	
 	oCell = document.createElement('td');
@@ -61,7 +64,7 @@ function frontendMessage(oMessage) {
 	oRow.appendChild(oCell);
 	oCell = null;
 	
-	oTable.appendChild(oRow);
+	oTbody.appendChild(oRow);
 	oRow = null;
 	
 	oRow = document.createElement('tr');
@@ -101,7 +104,7 @@ function frontendMessage(oMessage) {
 	oRow.appendChild(oCell);
 	oCell = null;
 	
-	oTable.appendChild(oRow);
+	oTbody.appendChild(oRow);
 	oRow = null;
 		
 	oRow = document.createElement('tr');
@@ -116,8 +119,11 @@ function frontendMessage(oMessage) {
 	oRow.appendChild(oCell);
 	oCell = null;
 	
-	oTable.appendChild(oRow);
-	oRow = oTable;
+	oTbody.appendChild(oRow);
+	oRow = null;
+	
+	oTable.appendChild(oTbody);
+	oTbody = null;
 	
 	oContainerDiv.appendChild(oTable);
 	oTable = null;
