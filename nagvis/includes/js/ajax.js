@@ -117,6 +117,7 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 	var sUrl = '';
 	var o;
 	var aReturn = [];
+	
 	for(var i = 0, len = aUrlParts.length; i < len; i++) {
 		sUrl = sUrl + aUrlParts[i];
 		
@@ -124,9 +125,12 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 		// requests. Just start the request and clean the string strUrl
 		if(sUrl !== '' && sBaseUrl.length+sUrl.length > iLimit) {
 			o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
+			
 			if(o) {
 				aReturn = aReturn.concat(o);
 			}
+			
+			o = null;
 			sUrl = '';
 		}
 	}
@@ -137,7 +141,12 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 		if(o) {
 			aReturn = aReturn.concat(o);
 		}
+		
+		o = null;
+		sUrl = '';
 	}
+	
+	sUrl = null;
 	
 	return aReturn;
 }
@@ -167,16 +176,16 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		responseText = ajaxQueryCache[sUrl].response;
 		
 		sResponse = eval('( '+responseText+')');
+		responseText = null;
 	} else {
 		var oRequest = initXMLHttpClient();
 		
 		if(oRequest) {
-			var oOpt = {};
 			// Save this options to oOpt (needed for query cache)
-			oOpt.url = sUrl;
-			oOpt.timestamp = Date.parse(new Date());
+			var url = sUrl;
+			var timestamp = Date.parse(new Date());
 			
-			oRequest.open("GET", sUrl+"&timestamp="+oOpt.timestamp, false);
+			oRequest.open("GET", sUrl+"&timestamp="+timestamp, false);
 			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
 			oRequest.send(null);
 			
@@ -185,7 +194,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 			if(responseText.replace(/\s+/g,'').length === 0) {
 				if(bCacheable) {
 					// Cache that dialog
-					updateQueryCache(oOpt.url, oOpt.timestamp, '');
+					updateQueryCache(url, timestamp, '');
 				}
 				
 				sResponse = '';
@@ -221,13 +230,16 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 				} else {
 					if(bCacheable) {
 						// Cache that answer (only when no error/warning/...)
-						updateQueryCache(oOpt.url, oOpt.timestamp, responseText);
+						updateQueryCache(url, timestamp, responseText);
 					}
 					
 					sResponse = eval('( '+responseText+')');
 					responseText = null;
 				}
 			}
+			
+			url = null;
+			timestamp = null;
 		}
 		
 		oRequest = null;

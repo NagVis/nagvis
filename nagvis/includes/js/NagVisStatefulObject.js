@@ -148,9 +148,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 		// When this is an update, remove the object first
 		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
-			// Remove object from DOM
-			oMap.removeChild(this.parsedObject);
-			
 			// Remove event listeners
 			var oObj;
 			if(this.conf.view_type && this.conf.view_type === 'line') {
@@ -165,6 +162,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 				oObj.onmouseout = null;
 				oObj = null;
 			}
+			
+			// Remove object from DOM
+			oMap.removeChild(this.parsedObject);
 			
 			// Remove object reference
 			this.parsedObject = null;
