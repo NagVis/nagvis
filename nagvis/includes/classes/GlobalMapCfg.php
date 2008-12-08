@@ -643,16 +643,23 @@ class GlobalMapCfg {
 			$sTmp = $this->getValue('global', 0, $sVar);
 			$this->validConfig['host'][$sVar]['default'] = $sTmp;
 			$this->validConfig['hostgroup'][$sVar]['default'] = $sTmp;
-			$this->validConfig['servicegroup'][$sVar]['default'] = $sTmp;
-
+			
+			// Handle exceptions for servicegroups
+			if($sVar != 'recognize_services') {
+				$this->validConfig['servicegroup'][$sVar]['default'] = $sTmp;
+			}
+			
+			// Handle exceptions for services
 			if($sVar != 'recognize_services') {
 				$this->validConfig['service'][$sVar]['default'] = $sTmp;
 			}
 			
+			// Handle exceptions for maps
 			if($sVar != 'recognize_services' && $sVar != 'backend_id') {
 				$this->validConfig['map'][$sVar]['default'] = $sTmp;
 			}
 			
+			// Handle exceptions for hostgroups
 			if($sVar == 'url_target' || $sVar == 'hover_delay') {
 				$this->validConfig['shape'][$sVar]['default'] = $sTmp;
 			}
