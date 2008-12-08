@@ -33,7 +33,6 @@ class WuiAddModify extends GlobalPage {
 	var $FORM;
 	var $prop;
 	var $propertiesList;
-	var $propCount;
 	
 	/**
 	 * Class Constructor
@@ -49,7 +48,6 @@ class WuiAddModify extends GlobalPage {
 		
 		$this->MAPCFG = &$MAPCFG;
 		$this->prop = $prop;
-		$this->propCount = 0;
 		
 		$prop = Array('title' => $CORE->MAINCFG->getValue('internal', 'title'),
 					  'cssIncludes'=>Array('./includes/css/wui.css'),
@@ -154,7 +152,6 @@ class WuiAddModify extends GlobalPage {
 			if($propname == "iconset") {
 				// treat the special case of iconset, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableIconsets(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			} elseif($this->prop['type'] == 'shape' && $propname == "icon") {
 				// treat the special case of icon when type is shape, which will display a listbox instead of the normal textbox
 				if(preg_match("/^\[(.*)\]$/",$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$match) > 0) {
@@ -162,16 +159,13 @@ class WuiAddModify extends GlobalPage {
 				} else {
 					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableShapes(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 				}
-				$this->propCount++;
-			}  elseif($propname == "map_image") {
+			} elseif($propname == "map_image") {
 				// treat the special case of map_image, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableBackgroundImages(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			} elseif($propname == "recognize_services" || $propname == "only_hard_states" || $propname == "label_show" || $propname == "usegdlibs" || $propname == "show_in_lists" || $propname == "hover_menu" || $propname == "hover_childs_show") {
 				// treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
 				$opt = Array(Array('label' => $this->LANG->getText('yes'),'value'=>'1'),Array('label' => $this->LANG->getText('no'),'value'=>'0'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			} elseif($propname == "backend_id") {
 				if($this->prop['type'] == 'service') {
 					$field = 'host_name';
@@ -181,22 +175,17 @@ class WuiAddModify extends GlobalPage {
 					$type = $this->prop['type'];
 				}
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getDefinedBackends(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],"getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');validateMapConfigFieldValue(this);"));
-				$this->propCount++;
 			} elseif($propname == "line_type") {
 				// treat the special case of line_type, which will display a listbox showing the different possible shapes for the line
 				$opt = Array(Array('label' => '------><------','value' => '0'),Array('label' => '-------------->','value'=>'1'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,substr($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),1,1),$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			} elseif($propname == "hover_template") {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableHoverTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			} elseif($propname == "header_template") {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableHeaderTemplates(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			} elseif($propname == "map_name") {
 				// treat the special case of map_name, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableMaps('/[^(__automap)]/'),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
 				$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
 				$ret[] = "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
@@ -212,7 +201,6 @@ class WuiAddModify extends GlobalPage {
 				} else {
 					$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,Array(),'',$prop['must'],'validateMapConfigFieldValue(this)'));
 				}
-				$this->propCount++;
 			} elseif($propname == 'service_description') {
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,Array(),'',$prop['must'],'validateMapConfigFieldValue(this)'));
 			} elseif($propname == 'type') {
@@ -226,7 +214,6 @@ class WuiAddModify extends GlobalPage {
 				}
 				
 				$ret = array_merge($ret,$this->FORM->getInputLine($propname,$propname,$value,$prop['must'],'validateMapConfigFieldValue(this)'));
-				$this->propCount++;
 			}
 		}
 		
