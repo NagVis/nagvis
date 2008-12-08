@@ -162,8 +162,8 @@ class WuiAddModify extends GlobalPage {
 			} elseif($propname == "map_image") {
 				// treat the special case of map_image, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableBackgroundImages(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
-			} elseif($propname == "recognize_services" || $propname == "only_hard_states" || $propname == "label_show" || $propname == "usegdlibs" || $propname == "show_in_lists" || $propname == "hover_menu" || $propname == "hover_childs_show") {
-				// treat the special case of recognize_services, which will display a "yes/no" listbox instead of the normal textbox
+			} elseif($prop['match'] == MATCH_BOOLEAN) {
+				// display a listbox with "yes/no" for boolean options 
 				$opt = Array(Array('label' => $this->LANG->getText('yes'),'value'=>'1'),Array('label' => $this->LANG->getText('no'),'value'=>'0'));
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$opt,$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
 			} elseif($propname == "backend_id") {
