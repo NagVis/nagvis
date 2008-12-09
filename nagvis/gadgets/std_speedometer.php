@@ -104,13 +104,35 @@ function parsePerfdata($sPerfdata) {
 		}
 		}*/
 		
-		$aSet = Array('label' => $aTmp[1],
-		              'value' => $aTmp[2],
-		              'uom' => $aTmp[3],
-		              'warning' => $aTmp[4],
-		              'critical' => $aTmp[5],
-		              'min' => $aTmp[6],
-		              'max' => $aTmp[7]);
+		// Save needed values
+		$aSet = Array('label' => $aTmp[1], 'value' => $aTmp[2]);
+		
+		// Save optional values
+		if(isset($aTmp[3])) {
+			$aSet['uom'] = $aTmp[3];
+		} else {
+			$aSet['uom'] = null;
+		}
+		if(isset($aTmp[4])) {
+			$aSet['warning'] = $aTmp[4];
+		} else {
+			$aSet['warning'] = null;
+		}
+		if(isset($aTmp[5])) {
+			$aSet['critical'] = $aTmp[5];
+		} else {
+			$aSet['critical'] = null;
+		}
+		if(isset($aTmp[6])) {
+			$aSet['min'] = $aTmp[6];
+		} else {
+			$aSet['min'] = null;
+		}
+		if(isset($aTmp[7])) {
+			$aSet['max'] = $aTmp[7];
+		} else {
+			$aSet['max'] = null;
+		}
 		
 		$aPerfdata[] = $aSet;
 	}
@@ -271,9 +293,13 @@ imagecolortransparent($img, $oBackground);
 imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
 
 // Warning
-imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, $warnp, 0, $oYellow, IMG_ARC_EDGED);
+if($warn) {
+	imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, $warnp, 0, $oYellow, IMG_ARC_EDGED);
+}
 // Critical
-imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, $critp, 0, $oRed, IMG_ARC_EDGED);
+if($crit) {
+	imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, $critp, 0, $oRed, IMG_ARC_EDGED);
+}
 
 // Borders
 imagearc($img, $centerx, $centery+1, $outerdia+2, $outerdia+2, 180, 0, $oBlack);
