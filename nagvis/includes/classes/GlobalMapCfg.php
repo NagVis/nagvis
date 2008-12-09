@@ -977,13 +977,15 @@ class GlobalMapCfg {
 						}
 						
 						// Check wether a object has line_type set and not view_type=line
+						// Update: Only check this when not in WUI!
 						// FIXME: This check should be removed in 1.5 or 1.6
-						if($key == 'line_type' && !isset($element['view_type'])) {
+						if(!$this instanceof WuiMapCfg && $key == 'line_type' && !isset($element['view_type'])) {
 							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('lineTypeButViewTypeNotSet','MAP~'.$this->getName().',TYPE~'.$type));
 						}
 						
 						// Check gadget options when object view type is gadget
-						if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url'])) {
+						// Update: Only check this when not in WUI!
+						if(!$this instanceof WuiMapCfg && $key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url'])) {
 							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('viewTypeGadgetButNoGadgetUrl','MAP~'.$this->getName().',TYPE~'.$type));
 						}
 					}
