@@ -258,14 +258,22 @@ function date(format, timestamp) {
 	// *     example 2: date('F j, Y, g:i a', 1062462400);
 	// *     returns 2: 'September 2, 2003, 2:26 am'
 	
-	var a, jsdate=((timestamp) ? new Date(timestamp*1000) : new Date());
+	var a;
+	var jsdate=((timestamp) ? new Date(timestamp*1000) : new Date());
+	
 	var pad = function(n, c) {
-		if((n = n + "").length < c ) {
-			return [++c - n.length].join("0") + n;
+		var len = (n = n + "").length;
+		if(len < c ) {
+			do {
+				n = "0" + n;
+				len++;
+			} while(len < c);
+			return n;
 		} else {
 			return n;
 		}
 	};
+	
 	var txt_weekdays = ["Sunday","Monday","Tuesday","Wednesday",
 		"Thursday","Friday","Saturday"];
 	var txt_ordin = {1:"st",2:"nd",3:"rd",21:"st",22:"nd",23:"rd",31:"st"};

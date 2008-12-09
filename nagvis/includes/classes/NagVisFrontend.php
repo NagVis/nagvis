@@ -65,11 +65,11 @@ class NagVisFrontend extends GlobalPage {
 		                             $this->htmlBase.'/nagvis/includes/css/frontendMessage.css');
 		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js',
 															$this->htmlBase.'/nagvis/includes/js/ExtBase.js',
+															$this->htmlBase.'/nagvis/includes/js/frontendMessage.js',
+															$this->htmlBase.'/nagvis/includes/js/frontendEventlog.js',
 															$this->htmlBase.'/nagvis/includes/js/ajax.js',
 															$this->htmlBase.'/nagvis/includes/js/frontendContext.js',
 															$this->htmlBase.'/nagvis/includes/js/frontend.js',
-															$this->htmlBase.'/nagvis/includes/js/frontendMessage.js',
-															$this->htmlBase.'/nagvis/includes/js/frontendEventlog.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisObject.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisStatefulObject.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisStatelessObject.js',
