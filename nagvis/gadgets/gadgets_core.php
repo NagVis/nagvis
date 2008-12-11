@@ -22,12 +22,16 @@
  *
  *****************************************************************************
  *
- * This is a simple gadget for NagVis. A gadget is a script which generates a
- * dynamic image for visualizing things as graphics in NagVis.
+ * A gadget is a script which generates a dynamic image for visualizing things
+ * as graphics in NagVis.
  *
- * The gadget gets it's data from the NagVis frontend by parameters. This
- * gadget only needs the "perfdata" parameter. NagVis also proceeds the
- * following parameters to the gadgets:
+ * The gadget gets its data from the NagVis frontend via parameters.
+ * This code provides some functions common to all gadgets:
+ *  - examining and parsing the passed parameters
+ *  - creating data structures using the given data
+ *  - showing an error box if the need arises
+ *
+ * NagVis passes the following parameters to the gadgets:
  *  - name1:     Hostname
  *  - name2:     Service description
  *  - state:     Current state
@@ -37,8 +41,8 @@
  *
  * Datastructure:
  * 
- * $aPerfparse as 2-dimensional array where index is counted from 0 to x,
- *  depending on how many perfdata values are provided by the service
+ * $aPerfparse as 2-dimensional array where index ranges from 0 to n-1,
+ * depending on how many perfdata values are provided by the service
  * 
  * aPerfparse[index]['label']     -   label of the perfdata
  *                  ['value']     -   actual perfdata
@@ -60,14 +64,14 @@
  ******************************************************************************/
 
 /**
- * parsePerfdata() prases a Nagios performance data string to an array
+ * parsePerfdata() parses a Nagios performance data string to an array
  *
  * Function adapted from PNP process_perfdata.pl. Thanks to Jörg Linge.
- * The function is originaly taken from from Nagios::Plugin::Performance
+ * The function is originally taken from Nagios::Plugin::Performance
  * Thanks to Gavin Carr and Ton Voon
  *
  * @param   String  Nagios performance data
- * @return  Array   Array which contains parsed performance data informations
+ * @return  Array   Array which contains parsed performance data information
  * @author      Lars Michelsen <lars@vertical-visions.de>
  */
 function parsePerfdata($sPerfdata) {

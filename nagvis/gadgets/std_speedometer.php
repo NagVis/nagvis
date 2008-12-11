@@ -25,8 +25,8 @@
  * This is a simple gadget for NagVis. A gadget is a script which generates a
  * dynamic image for visualizing things as graphics in NagVis.
  *
- * The gadget gets it's data from the NagVis frontend by parameters. This
- * gadget only needs the "perfdata" parameter. NagVis also proceeds the
+ * The gadget gets its data from the NagVis frontend by parameters. This
+ * gadget only needs the "perfdata" parameter. NagVis also passes the
  * following parameters to the gadgets:
  *  - name1:     Hostname
  *  - name2:     Service description
