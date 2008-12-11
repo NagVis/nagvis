@@ -32,6 +32,9 @@ class GlobalMapCfg {
 	var $name;
 	var $mapConfig;
 	
+	var $configFile;
+	var $cacheFile;
+	
 	// Array for config validation
 	var $validConfig;
 	
@@ -56,7 +59,7 @@ class GlobalMapCfg {
 				'map_image' => Array('must' => 0,
 					'match' => MATCH_PNG_GIF_JPG_FILE_OR_NONE),
 				'alias' => Array('must' => 0,
-					'default' => $this->getName(),
+					'default' => $name,
 					'match' => MATCH_STRING),
 				'backend_id' => Array('must' => 0,
 					'default' => $this->CORE->MAINCFG->getValue('defaults', 'backend'),
@@ -611,6 +614,11 @@ class GlobalMapCfg {
 				'name' => Array('must' => 1,
 					'match' => MATCH_STRING_NO_SPACE)));
 		
+		// Define the map configuration cache file
+		$this->cacheFile = $this->CORE->MAINCFG->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache';
+		
+		// Define the map configuration file
+		$this->configFile = $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg';
 	}
 	
 	/**
@@ -688,10 +696,10 @@ class GlobalMapCfg {
 		if(!$this->checkMapConfigReadable(FALSE)) {
 			if($this->CORE->MAINCFG->checkMapCfgFolderWriteable(TRUE)) {
 				// create empty file
-				$fp = fopen($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', 'w');
+				$fp = fopen($this->configFile, 'w');
 				fclose($fp); 
 				// set permissions
-				chmod($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg',0666);
+				chmod($this->configFile,0666);
 				
 					return TRUE;
 				} else {
@@ -711,79 +719,10 @@ class GlobalMapCfg {
 	 */
 	function readMapConfig($onlyGlobal = 0) {
 		if($this->name != '') {
-			if($this->checkMapConfigExists(TRUE) && $this->checkMapConfigReadable(TRUE)) {
-				$this->mapConfig = Array();
-				// Array for counting objects
-				$types = Array('global' => 0,
-								'host' => 0,
-								'service' => 0,
-								'hostgroup' => 0,
-								'servicegroup' => 0,
-								'map' => 0,
-								'textbox' => 0,
-								'shape' => 0,
-								'template' => 0);
-				
-				// Read file in array (Don't read empty lines and ignore new line chars)
-				$file = file($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg', FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
-				
-				// Create an array for these options
-				$createArray = Array('allowed_user' => 1,
-									'allowed_for_config' => 1,
-									'use' => 1);
-				
-				$l = 0;
-				
-				// These variables set which object is currently being filled
-				$sObjType = '';
-				$iObjTypeId = '';
-				
-				// Loop each line
-				$iNumLines = count($file);
-				for($l = 0; $l < $iNumLines; $l++) {
-					// Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
-					$file[$l] = rtrim($file[$l]);
-					// Don't recognize empty lines
-					if($file[$l] != '') {
-						// Don't recognize comments and empty lines, do nothing with ending delimiters
-						$sFirstChar = substr($file[$l], 0, 1);
-						if($sFirstChar != ';' && $sFirstChar != '#' && $sFirstChar != '}') {
-							// Determine if this is a new object definition
-							if(strpos($file[$l], 'define') !== FALSE) {
-								// If only the global section should be read break the loop after the global section
-								if($onlyGlobal == 1 && $types['global'] == 1) {
-									break;
-								}
-								
-								$iDelimPos = strpos($file[$l], '{', 8);
-								$sObjType = substr($file[$l], 7, ($iDelimPos - 8));
-								
-								if(isset($sObjType) && isset($this->validConfig[$sObjType])) {
-									// This is a new definition and it's a valid one
-									$iObjTypeId = $types[$sObjType];
-									$this->mapConfig[$sObjType][$iObjTypeId] = Array('type' => $sObjType);
-									// increase type index
-									$types[$sObjType]++;
-								} else {
-									// unknown object type
-									new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject','TYPE~'.$type));
-									return FALSE;
-								}
-							} else {
-								// This is another attribute
-								$iDelimPos = strpos($file[$l], '=');
-								$sKey = trim(substr($file[$l],0,$iDelimPos));
-								$sValue = trim(substr($file[$l],($iDelimPos+1)));
-								
-								if(isset($createArray[$sKey])) {
-									$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
-								} else {
-									$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
-								}
-							}
-						}
-					}
-				}
+			// Only read cache when whole config file should be read
+			// Also only read cache when some cache is present
+			if($onlyGlobal == 0 && $this->isCached(FALSE)) {
+				$this->readConfigFromCache();
 				
 				/**
 				 * The default values refer to global settings in the validConfig 
@@ -792,25 +731,119 @@ class GlobalMapCfg {
 				 * Because the default values should refer to the truly defined
 				 * settings in global area they have to be read here.
 				 */
-				if($onlyGlobal != 1) {
-					$this->getObjectDefaults();
-					
-					if(isset($this->mapConfig['template'])) {
-						// Remove the numeric indexes and replace them with the template name
-						$this->fixTemplateIndexes();
-						// Merge the objects with the linked templates
-						$this->mergeTemplates();
-					}
-				}                               
+				$this->getObjectDefaults();
 				
-				if($this->checkMapConfigIsValid(1)) {
-					$this->BACKGROUND = $this->getBackground();
-					return TRUE;
+				$this->BACKGROUND = $this->getBackground();
+				
+				return TRUE;
+			} else {
+				if($this->checkMapConfigExists(TRUE) && $this->checkMapConfigReadable(TRUE)) {
+					$this->mapConfig = Array();
+					// Array for counting objects
+					$types = Array('global' => 0,
+									'host' => 0,
+									'service' => 0,
+									'hostgroup' => 0,
+									'servicegroup' => 0,
+									'map' => 0,
+									'textbox' => 0,
+									'shape' => 0,
+									'template' => 0);
+					
+					// Read file in array (Don't read empty lines and ignore new line chars)
+					$file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+					
+					// Create an array for these options
+					$createArray = Array('allowed_user' => 1,
+										'allowed_for_config' => 1,
+										'use' => 1);
+					
+					$l = 0;
+					
+					// These variables set which object is currently being filled
+					$sObjType = '';
+					$iObjTypeId = '';
+					
+					// Loop each line
+					$iNumLines = count($file);
+					for($l = 0; $l < $iNumLines; $l++) {
+						// Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
+						$file[$l] = rtrim($file[$l]);
+						// Don't recognize empty lines
+						if($file[$l] != '') {
+							// Don't recognize comments and empty lines, do nothing with ending delimiters
+							$sFirstChar = substr($file[$l], 0, 1);
+							if($sFirstChar != ';' && $sFirstChar != '#' && $sFirstChar != '}') {
+								// Determine if this is a new object definition
+								if(strpos($file[$l], 'define') !== FALSE) {
+									// If only the global section should be read break the loop after the global section
+									if($onlyGlobal == 1 && $types['global'] == 1) {
+										break;
+									}
+									
+									$iDelimPos = strpos($file[$l], '{', 8);
+									$sObjType = substr($file[$l], 7, ($iDelimPos - 8));
+									
+									if(isset($sObjType) && isset($this->validConfig[$sObjType])) {
+										// This is a new definition and it's a valid one
+										$iObjTypeId = $types[$sObjType];
+										$this->mapConfig[$sObjType][$iObjTypeId] = Array('type' => $sObjType);
+										// increase type index
+										$types[$sObjType]++;
+									} else {
+										// unknown object type
+										new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject','TYPE~'.$type));
+										return FALSE;
+									}
+								} else {
+									// This is another attribute
+									$iDelimPos = strpos($file[$l], '=');
+									$sKey = trim(substr($file[$l],0,$iDelimPos));
+									$sValue = trim(substr($file[$l],($iDelimPos+1)));
+									
+									if(isset($createArray[$sKey])) {
+										$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
+									} else {
+										$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
+									}
+								}
+							}
+						}
+					}
+					
+					/**
+					 * The default values refer to global settings in the validConfig 
+					 * array - so they have to be defined here and mustn't be defined
+					 * in the array at creation.
+					 * Because the default values should refer to the truly defined
+					 * settings in global area they have to be read here.
+					 */
+					if($onlyGlobal != 1) {
+						$this->getObjectDefaults();
+						
+						if(isset($this->mapConfig['template'])) {
+							// Remove the numeric indexes and replace them with the template name
+							$this->fixTemplateIndexes();
+							// Merge the objects with the linked templates
+							$this->mergeTemplates();
+						}
+					}                               
+					
+					if($this->checkMapConfigIsValid(1)) {
+						if($onlyGlobal == 0) { 
+							// Cache the resulting config
+							$this->writeConfigToCache(TRUE);
+						}
+						
+						$this->BACKGROUND = $this->getBackground();
+						
+						return TRUE;
+					} else {
+						return FALSE;
+					}
 				} else {
 					return FALSE;
 				}
-			} else {
-				return FALSE;
 			}
 		} else {
 			return FALSE;
@@ -875,11 +908,11 @@ class GlobalMapCfg {
 	 */
 	function checkMapConfigExists($printErr) {
 		if($this->name != '') {
-			if(file_exists($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+			if(file_exists($this->configFile)) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotExists', Array('MAP' => $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotExists', Array('MAP' => $this->configFile)));
 				}
 				return FALSE;
 			}
@@ -897,11 +930,11 @@ class GlobalMapCfg {
 	 */
 	function checkMapConfigReadable($printErr) {
 		if($this->name != '') {
-			if(is_readable($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+			if(is_readable($this->configFile)) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable', Array('MAP' => $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')));
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable', Array('MAP' => $this->configFile)));
 				}
 				return FALSE;
 			}
@@ -1018,11 +1051,102 @@ class GlobalMapCfg {
 	 */
 	function getFileModificationTime() {
 		if($this->checkMapConfigReadable(1)) {
-			$time = filemtime($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg');
+			$time = filemtime($this->configFile);
 			return $time;
 		} else {
 			return FALSE;
 		}
+	}
+	
+	/**
+	 * Returns the last modification time of the configuration file
+	 *
+	 * @return	Integer	Unix Timestamp
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getConfigFileAge() {
+		return filemtime($this->configFile);
+	}
+	
+	/**
+	 * Returns the last modification time of the cache file
+	 *
+	 * @return	Integer	Unix Timestamp
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getCacheFileAge() {
+		return filemtime($this->cacheFile);
+	}
+	
+	/**
+	 * Checks for existing cache
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkCacheFileExists($printErr) {
+		if(file_exists($this->cacheFile)) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgCacheNotExists','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks if the current configuration file has been cached
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function isCached($printErr) {
+		// Check the modification date
+		// Also only mark as cached when main configuration file is older than cache
+		if($this->checkCacheFileExists($printErr) 
+			&& $this->getConfigFileAge() <= $this->getCacheFileAge()
+			&& $this->CORE->MAINCFG->getConfigFileAge() <= $this->getCacheFileAge()) {
+			return TRUE;
+		} else {
+			if($printErr) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotCached', 'CFONFIGFILE~'.$this->configFile.',CACHEFILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Writes the current config array to cache file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function writeConfigToCache($printErr) {
+		if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
+			if($printErr == 1) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgCacheNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+			}
+			return FALSE;
+		}
+		
+		fwrite($fp, serialize($this->mapConfig));
+		fclose($fp);
+		
+		return TRUE;
+	}
+	
+	/**
+	 * Reads the configuration array from the cache file
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function readConfigFromCache() {
+		$this->mapConfig = unserialize(file_get_contents($this->cacheFile));
+		return TRUE;
 	}
 	
 	/**
