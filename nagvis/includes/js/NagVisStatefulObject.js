@@ -146,6 +146,30 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		// When this is an update, remove the object first
+		this.remove();
+    
+    // Append child to map and save reference in parsedObject
+		var oMap = document.getElementById('map');
+		this.parsedObject = oMap.appendChild(oContainerDiv);
+		oContainerDiv = null;
+		oMap = null;
+    
+    // Add a context menu to the object when enabled
+		// FIXME: add config option to make this work
+    if(this.conf.context_menu && this.conf.context_menu == '1') {
+      if(this.conf.view_type && this.conf.view_type == 'line') {
+        this.addContextMenu(this.objId, this.objId+'-linediv');
+      } else {
+        this.addContextMenu(this.objId, this.objId+'-icon');
+			}
+    }
+		
+		if(this.conf.view_type && this.conf.view_type == 'line') {
+			this.drawLine();
+		}
+	},
+	
+	remove: function () {
 		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
 			// Remove event listeners
@@ -169,25 +193,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			// Remove object reference
 			this.parsedObject = null;
 		}
-    
-    // Append child to map and save reference in parsedObject
-		this.parsedObject = oMap.appendChild(oContainerDiv);
-		oContainerDiv = null;
 		oMap = null;
-    
-    // Add a context menu to the object when enabled
-		// FIXME: add config option to make this work
-    if(this.conf.context_menu && this.conf.context_menu == '1') {
-      if(this.conf.view_type && this.conf.view_type == 'line') {
-        this.addContextMenu(this.objId, this.objId+'-linediv');
-      } else {
-        this.addContextMenu(this.objId, this.objId+'-icon');
-			}
-    }
-		
-		if(this.conf.view_type && this.conf.view_type == 'line') {
-			this.drawLine();
-		}
 	},
 	
 	/**

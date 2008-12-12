@@ -124,16 +124,31 @@ function runWorker(iCount, sType) {
 				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 				
 				// Get the file ages of important files
-				var oFileAges = getCfgFileAges();
+				var oCurrentFileAges = getCfgFileAges();
 				
 				// Check for changed main configuration
-				if(oFileAges && checkMainCfgChanged(oFileAges.mainCfg)) {
+				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
 					// FIXME: Not handled by ajax frontend, reload the page
 					window.location.reload(true);
 				}
 				
 				// Check for changed map configuration
-				if(oFileAges && checkMapCfgChanged(oFileAges[oPageProperties.map_name])) {
+				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name])) {
+					// Remove all old objects
+					for(var a = 0, len = aMapObjects.length; a < len; a++) {
+						// Remove parsed object from map
+						aMapObjects[a].remove();
+						
+						// Remove object
+						aMapObjects[a] = null;
+						
+						// Remove element from map objects array
+						aMapObjects.splice(a,1);
+						
+						// Update timestamp for map configuration (No reparsing next time)
+						oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
+					}
+					
 					// Set map basics
 					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);
 					if(oMapBasics) {
@@ -233,10 +248,10 @@ function runWorker(iCount, sType) {
 				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 				
 				// Get the file ages of important files
-				var oFileAges = getCfgFileAges(false);
+				var oCurrentFileAges = getCfgFileAges(false);
 				
 				// Check for changed main configuration
-				if(oFileAges && checkMainCfgChanged(oFileAges.mainCfg)) {
+				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
 					// FIXME: Not handled by ajax frontend, reload the page
 					window.location.reload(true);
 				}
