@@ -26,9 +26,9 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalBackendMgmt {
-	var $CORE;
-	
-	var $BACKENDS;
+	protected $CORE;
+	public $BACKENDS;
+	private $aInitialized;
 	
 	/**
 	 * Constructor
@@ -37,14 +37,29 @@ class GlobalBackendMgmt {
 	 * @param	config $MAINCFG
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalBackendMgmt(&$CORE) {
+	public function GlobalBackendMgmt(&$CORE) {
 		$this->CORE = &$CORE;
 		
 		$this->BACKENDS = Array();
 		
-		$this->initBackends();
+		$this->aInitialized = Array();
+		
+		$this->loadBackends();
 		
 		return 0;
+	}
+	
+	/**
+	 * Loads all backends and prints an error when no backend defined
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function loadBackends() {
+		$aBackends = $this->getBackends();
+		
+		if(!count($aBackends)) {
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noBackendDefined'));
+		}
 	}
 	
 	/**
@@ -53,7 +68,7 @@ class GlobalBackendMgmt {
 	 * @return	Array Backend-IDs
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getBackends() {
+	private function getBackends() {
 		$ret = Array();
 		foreach($this->CORE->MAINCFG->config AS $sec => &$var) {
 			if(preg_match('/^backend_/i', $sec)) {
@@ -71,7 +86,7 @@ class GlobalBackendMgmt {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkBackendExists($backendId, $printErr) {
+	private function checkBackendExists($backendId, $printErr) {
 		if(isset($backendId) && $backendId != '') {
 			if(file_exists($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
 				return TRUE;
@@ -87,45 +102,46 @@ class GlobalBackendMgmt {
 	}
 	
 	/**
+	 * Initializes a backend
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function initializeBackend($backendId) {
+		if($this->checkBackendExists($backendId, 1)) {
+			require($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
+			
+			$backendClass = 'GlobalBackend'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype');
+			$this->BACKENDS[$backendId] = new $backendClass($this->CORE,$backendId);
+			
+			// Mark backend as initialized
+			$this->aInitialized[$backendId] = true;
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Checks for an initialized backend
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkBackendInitialized($backendId, $printErr) {
-		if(isset($backendId) && $backendId != '') {
-			if(isset($this->BACKENDS[$backendId]) && is_object($this->BACKENDS[$backendId])) {
-				return TRUE;
+	public function checkBackendInitialized($backendId, $printErr) {
+		if(isset($this->aInitialized[$backendId])) {
+			return TRUE;
+		} else {
+			// Try to initialize backend
+			if($this->initializeBackend($backendId)) {
+				return true;
 			} else {
 				if($printErr == 1) {
 					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
 				}
 				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Initializes all backends
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function initBackends() {
-		$aBackends = $this->getBackends();
-		
-		if(!count($aBackends)) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noBackendDefined'));
-		} else {
-			foreach($aBackends AS &$backendId) {
-				if($this->checkBackendExists($backendId, 1)) {
-					require($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
-					
-					$backendClass = 'GlobalBackend'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype');
-					$this->BACKENDS[$backendId] = new $backendClass($this->CORE,$backendId);
-				}
 			}
 		}
 	}
