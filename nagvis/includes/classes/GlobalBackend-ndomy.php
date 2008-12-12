@@ -367,10 +367,8 @@ class GlobalBackendndomy {
 			
 			// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
 			if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
-				
 				$return = TRUE;
 			} else {
-				$this->hostAckCache[$hostName] = False;
 				$return = FALSE;
 			}
 			
@@ -486,6 +484,9 @@ class GlobalBackendndomy {
 					
 					// Store acknowledgement state in array
 					$arrReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
+					
+					// Save to host ack cache
+					$this->hostAckCache[$hostName] = $data['problem_has_been_acknowledged'];
 					
 					// Store state and output in array
 					switch($data['current_state']) {
