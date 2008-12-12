@@ -389,10 +389,6 @@ class NagVisStatefulObject extends NagVisObject {
 	function getObjectStateInformations($bFetchChilds=true) {
 		$arr = Array();
 		
-		//<tr><!-- BEGIN servicegroup_child --><td>[obj_name1]</td><!-- END servicegroup_child --><td>[obj_name]</td>
-		//<td class="state[obj_summary_state]">[obj_summary_state][obj_summary_in_downtime][obj_summary_acknowledged]</td>
-		//<td>[obj_summary_output]</td></tr>
-		
 		if(isset($this->alias) && $this->alias != '') {
 			$arr['alias'] = $this->alias;
 		} else {
