@@ -246,7 +246,9 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	}
 	
 	if(sResponse !== null) {
-		frontendMessageHide();
+		if(typeof frontendMessageHide == 'function') { 
+			frontendMessageHide();
+		}
 	}
 	
 	return sResponse;
