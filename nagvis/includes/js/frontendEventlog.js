@@ -56,13 +56,15 @@ function eventlogInitialize() {
 			document.body.style.cursor='auto';
 		}
 		oEventlogControl.onclick = function() {
-			if(oEventlog.style.display != 'none') {
-				oEventlog.style.display = 'none';
-				oEventlogControl.style.bottom = '0px';
+			var oLog = document.getElementById('eventlog');
+			if(oLog.style.display != 'none') {
+				oLog.style.display = 'none';
+				this.style.bottom = '0px';
 			} else {
-				oEventlog.style.display = '';
-				oEventlogControl.style.bottom = '75px';
+				oLog.style.display = '';
+				this.style.bottom = '75px';
 			}
+			oLog = null;
 		};
 		
 		document.body.appendChild(oEventlog);
