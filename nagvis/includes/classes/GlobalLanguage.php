@@ -61,6 +61,9 @@ class GlobalLanguage {
 		// Check for gettext extension
 		$this->checkGettextSupport();
 		
+		// Check if choosen language is available
+		$this->checkLanguageAvailable();
+		
 		// Set the language to use
 		putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
 		setlocale(LC_ALL, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
@@ -77,6 +80,24 @@ class GlobalLanguage {
 	 */
 	function getCurrentLanguage() {
 		return $this->sCurrentLanguage;
+	}
+	
+	/**
+	 * Checks if the choosen language is available
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkLanguageAvailable($printErr=1) {
+		$CORE = new GlobalCore($this->MAINCFG, $this);
+		if(in_array($this->sCurrentLanguage, $CORE->getAvailableLanguages())) {
+			return TRUE;
+		} else {
+			if($printErr) {
+				new GlobalFrontendMessage('ERROR', $this->getText('languageNotFound','LANG~'.$this->sCurrentLanguage), $this->MAINCFG->getValue('paths','htmlbase'));
+			}
+			return FALSE;
+		}
 	}
 	
 	/**
