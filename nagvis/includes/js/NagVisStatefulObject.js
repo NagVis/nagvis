@@ -36,7 +36,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	
 	getMembers: function() {
 		this.members = [];
-		if(this.conf.members && this.conf.members.length > 0) {
+		if(this.conf && this.conf.members && this.conf.members.length > 0) {
 			for(var i = 0, len = this.conf.members.length; i < len; i++) {
 				var oMember = this.conf.members[i];
 				
