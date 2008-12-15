@@ -81,8 +81,6 @@
 ;showinlists=1
 ; target for the icon links
 ;urltarget="_self"
-; use gdlibs (if set to 0 lines will not work, all other types should work fine)
-;usegdlibs=1
 
 ; Options to configure the Overview page of NagVis
 [index]
