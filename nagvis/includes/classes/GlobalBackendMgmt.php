@@ -88,7 +88,7 @@ class GlobalBackendMgmt {
 	 */
 	private function checkBackendExists($backendId, $printErr) {
 		if(isset($backendId) && $backendId != '') {
-			if(file_exists($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
+			if(file_exists($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
@@ -109,8 +109,6 @@ class GlobalBackendMgmt {
 	 */
 	private function initializeBackend($backendId) {
 		if($this->checkBackendExists($backendId, 1)) {
-			require($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend-'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php');
-			
 			$backendClass = 'GlobalBackend'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype');
 			$this->BACKENDS[$backendId] = new $backendClass($this->CORE,$backendId);
 			

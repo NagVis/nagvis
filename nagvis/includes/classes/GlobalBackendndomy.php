@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalBackend-ndomy.php - backend class for handling object and state 
+ * GlobalBackendndomy.php - backend class for handling object and state 
  *                           information stored in the NDO database.
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
@@ -26,8 +26,6 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-if(!isset($INC_GlobalBackend_ndomy)) {
-$INC_GlobalBackend_ndomy = TRUE;
 
 class GlobalBackendndomy {
 	var $CORE;
@@ -931,6 +929,5 @@ class GlobalBackendndomy {
 		
 		return $data['program_start_time'];
 	}
-}
 }
 ?>
