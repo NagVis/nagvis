@@ -266,7 +266,7 @@ class GlobalBackendndo2fs {
 					$this->hostAckCache[$hostName] = $oStatus->PROBLEMHASBEENACKNOWLEDGED;
 					
 					// Store state and output in array
-					switch($data['current_state']) {
+					switch($oStatus->CURRENTSTATE) {
 						case '1': 
 							$arrReturn['state'] = 'DOWN';
 							$arrReturn['output'] = $oStatus->OUTPUT;
@@ -422,7 +422,7 @@ class GlobalBackendndo2fs {
 						}
 						
 						// Store state and output in array
-						switch($data['current_state']) {
+						switch($aServObj[$i][1]->CURRENTSTATE) {
 							case '1': 
 								$arrTmpReturn['state'] = 'WARNING';
 								$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
