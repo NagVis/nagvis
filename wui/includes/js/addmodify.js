@@ -86,6 +86,9 @@ function check_object() {
 	x='';
 	y='';
 	
+	// Reset options
+	document.addmodify.properties.value='';
+	
 	for(i=0;i<document.addmodify.elements.length;i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
 		
