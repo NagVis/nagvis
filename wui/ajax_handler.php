@@ -74,13 +74,13 @@ switch($_GET['action']) {
 		} else {
 			// Input looks OK, handle the request...
 			
-			echo '[ ';
-			echo '{ "name": "" }';
+			$aRet = Array(Array('name' => ''));
 			// Read all objects of the requested type from the backend
 			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects($_GET['type'],'','') AS $arr) {
-				echo ' ,{ "name": "'.$arr['name1'].'"}';
+				$aRet[] = Array('name' => $arr['name1']);
 			}
-			echo ']';
+			
+			echo json_encode($aRet);
 		}
 	break;
 	/*
@@ -105,17 +105,13 @@ switch($_GET['action']) {
 		} else {
 			// Input looks OK, handle the request...
 			
-			echo '[ ';
-			$i = 0;
+			$aRet = Array();
 			// Read all services of the given host
 			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects('service',$_GET['host_name'],'') AS $arr) {
-				if($i != 0) {
-					echo ', ';
-				}
-				echo '{ "host_name": "'.$arr['name1'].'", "service_description": "'.$arr['name2'].'"}';
-				$i++;
+				$aRet = Array('host_name' => $arr['name1'], 'service_description' => $arr['name2']);
 			}
-			echo ']';
+			
+			echo json_encode($aRet);
 		}
 	break;
 	/*
@@ -139,8 +135,6 @@ switch($_GET['action']) {
 			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
 			$MAPCFG->readMapConfig();
 			
-			echo '[ ';
-			
 			// Read the allowed users for the specified mode
 			if($_GET['mode'] == 'read') {
 				$arr = $MAPCFG->getValue('global', '0', 'allowed_user');
@@ -148,13 +142,12 @@ switch($_GET['action']) {
 				$arr = $MAPCFG->getValue('global', '0', 'allowed_for_config');
 			}
 			
+			$aRet = Array();
 			for($i = 0; count($arr) > $i; $i++) {
-				if($i > 0) {
-					echo ',';	
-				}
-				echo '\''.$arr[$i].'\' ';
+				$aRet[] = $arr[$i];
 			}
-			echo ' ]';
+			
+			echo json_encode($aRet);
 		}
 	break;
 	/*
@@ -179,36 +172,31 @@ switch($_GET['action']) {
 				$_GET['backend_type'] = $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],'backendtype');
 			}
 			
-			echo '[ ';
-			$i = 0;
-			
+			$aRet = Array();
 			// Check if the backend_type is set
 			if($_GET['backend_type'] != '') {
 				// Loop all options for this backend type
 				foreach($CORE->MAINCFG->validConfig['backend']['options'][$_GET['backend_type']] AS $key => $opt) {
-					echo "\t";
-					if($i != 0) {
-						echo ', ';
-					}
-					echo '{ '."\n";
-					echo "\t\t".'"key": "'.$key.'" '."\n";
+					$a = Array('key' => $key);
+					
 					foreach($opt AS $var => $val) {
-						echo "\t\t".', "'.$var.'": "'.$val.'" '."\n";
+						$a[$var] = $val;
 					}
 					
 					// If the backend_id is given read the currently set value of the
 					// backend
 					if(isset($_GET['backend_id']) && $_GET['backend_id'] != '' && $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE) != '') {
-						echo ',  "value": "'.$CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE).'" ';
+						$a['value'] = $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE);
 					}
 					
-					echo "\t".' }'."\n";
-					$i++;
+					$aRet[] = $a;
 				}
 			} else {
-				echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type');
+				echo 'Error: '.$CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type');
+				exit(1);
 			}
-			echo ' ]';
+			
+			echo json_encode($aRet);
 		}
 	break;
 	/*
@@ -291,7 +279,7 @@ switch($_GET['action']) {
 	 * Fallback
 	 */
 	default:
-		echo $CORE->LANG->getText('unknownAction', 'ACTION~'.$_GET['action']);
+		echo 'Error: '.$CORE->LANG->getText('unknownAction', 'ACTION~'.$_GET['action']);
 	break;
 }
 ?>
