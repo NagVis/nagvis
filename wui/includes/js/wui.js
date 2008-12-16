@@ -249,9 +249,25 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	oResult = null;
 }
 
-// simple function to ask to confirm before we delete an object
-function confirm_object_deletion() {
+// This function handles object deletions on maps
+function deleteMapObject(oObj) {
 	if(confirm(printLang(lang['confirmDelete'],''))) {
+		var arr = oObj.id.split('_');
+		var map = mapname;
+		var type = arr[1];
+		var id = arr[2];
+		
+		// Sync ajax request
+		var oResult = getSyncRequest('./ajax_handler.php?action=deleteMapObject&map='+map+'&type='+type+'&id='+id);
+		if(oResult && oResult.status != 'OK') {
+			alert(oResult.message);
+			return false;
+		}
+		oResult = null;
+		
+		//FIXME: Reloading the map (Change to simply removing the object)
+		document.location.href='./index.php?map='+map;
+		
 		return true;
 	} else {
 		return false;

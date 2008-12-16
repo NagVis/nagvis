@@ -584,7 +584,7 @@ class WuiMap extends GlobalMap {
 		}
 		
 		$tooltipText .= "<tr><th><a href=\'./index.php?page=addmodify&amp;action=modify&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onclick=\'open_window(href); return false;\'>".$this->LANG->getText('change')."</a>&nbsp;".$positionSizeText."</th>";
-		$tooltipText .= "<th><a href=\'./form_handler.php?myaction=delete&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onClick=\'return confirm_object_deletion();return false;\'>".$this->LANG->getText('delete')."</a></th></tr>";
+		$tooltipText .= "<th><a href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\' onClick=\'return deleteMapObject(this);return false;\'>".$this->LANG->getText('delete')."</a></th></tr>";
 		
 		$tooltipText.='</table>';
 		

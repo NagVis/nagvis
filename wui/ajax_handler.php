@@ -275,6 +275,41 @@ switch($_GET['action']) {
 			echo json_encode(Array('status' => $status, 'message' => $message));
 		}
 	break;
+	/* This is the new ajax way delete objects
+	 * Delete an object of the given TYPE with the given ID from the given MAP
+	 */
+	case 'deleteMapObject':
+		if(!isset($_GET['map']) || $_GET['map'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
+		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
+		} elseif(!isset($_GET['id']) || $_GET['id'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~id');
+		} else {
+			$status = 'OK';
+			$message = '';
+			
+			// initialize map and read map config
+			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
+			$MAPCFG->readMapConfig();
+			
+			// first delete element from array
+			$MAPCFG->deleteElement($_GET['type'],$_GET['id']);
+			// then write new array to file
+			$MAPCFG->writeElement($_GET['type'],$_GET['id']);
+					
+			// do the backup
+			backup($CORE->MAINCFG,$_GET['map']);
+			
+			// delete map lock
+			if(!$MAPCFG->deleteMapLock()) {
+				$status = 'ERROR';
+				$message = $CORE->LANG->getText('mapLockNotDeleted');
+			}
+			
+			echo json_encode(Array('status' => $status, 'message' => $message));
+		}
+	break;
 	/*
 	 * Fallback
 	 */
