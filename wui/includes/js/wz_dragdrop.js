@@ -1345,13 +1345,8 @@ function ADD_DHTML(d_o) // layers only!
 	dd.mkWzDom();
 }
 
-
-
-
 ////////////////////////////////////////////////////////////
 // If not needed, all code below this line may be removed
-
-
 // For backward compatibility
 dd.d = document;			// < v. 2.72
 var RESET_ZINDEX = RESET_Z; // < 3.44
@@ -1359,15 +1354,10 @@ var KEYDOWN_RESIZE = RESIZABLE; // < 4.43
 var CURSOR_POINTER = CURSOR_HAND; // < 4.44
 var NO_SCROLL = '';		 // < v. 4.49
 
-
-
-
 ////////////////////////////////////////////////////////////
 // FUNCTIONS FOR EXTENDED SCRIPTING
 // Use these for your own extensions,
 // or to call functions defined elsewhere
-
-
 
 /* my_PickFunc IS AUTOMATICALLY CALLED WHEN AN ITEM STARTS TO BE DRAGGED.
 The following objects/properties are accessible from here:
@@ -1393,73 +1383,25 @@ The following objects/properties are accessible from here:
 For more properties and details, visit the API documentation
 at http://www.walterzorn.com/dragdrop/api_e.htm (english) or
 http://www.walterzorn.de/dragdrop/api.htm (german)	*/
-function my_PickFunc()
-{
-	// Save old coords
-	dd.obj.oldX = dd.obj.x;
-	dd.obj.oldY = dd.obj.y;
-	
-	// Check if this is a box
-	if(dd.obj.name.search('box_') != -1) {
-		// When this object has a relative coordinated label, then move this too
-		var sLabelName = dd.obj.name.replace('box_','rel_label_');
-		var oLabel = document.getElementById(sLabelName);
-		if(oLabel) {
-			ADD_DHTML(sLabelName);
-			dd.obj.addChild(sLabelName);
-		}
-	}
+function my_PickFunc() {
+	// Call NagVis specific functions
+	moveMapObject(dd.obj);
 }
-
-
-
 
 /* my_DragFunc IS CALLED WHILE AN ITEM IS DRAGGED
 See the description of my_PickFunc above for what's accessible from here. */
-function my_DragFunc()
-{
-	//window.status = 'dd.elements.' + dd.obj.name + '.x  = ' + dd.obj.x + '	 dd.elements.' + dd.obj.name + '.y = ' + dd.obj.y;
-}
-
-
-
+function my_DragFunc() {}
 
 /* my_ResizeFunc IS CALLED WHILE AN ITEM IS RESIZED
 See the description of my_PickFunc above for what's accessible from here. */
-function my_ResizeFunc()
-{
-	//window.status = 'dd.elements.' + dd.obj.name + '.w  = ' + dd.obj.w + '	 dd.elements.' + dd.obj.name + '.h = ' + dd.obj.h;
-}
+function my_ResizeFunc() {}
 
 /* THIS ONE IS CALLED ONCE AN ITEM IS DROPPED
 See the description of my_PickFunc for what's accessible from here.
 Here may be investigated, for example, what's the name (dd.obj.name)
 of the dropped item, and where (dd.obj.x, dd.obj.y) it has been dropped... */
 
-
-/*
-When we drop the object, we compute the lists image,valx and valy, that we write in hidden fields of a form in the webpage
-For example :
-	image : 2,5  (the numbers representing $key, which is the line number in the map .cfg file, counting from 0)
-	valx : 12,165
-	valy : 41,98
-would represent 2 objects : obj1 (defined line 3 in the map.cfg file) x=12 y=41
-                            obj2 (defined line 6 in the map.cfg file) x=165 y=98
-*/
 function my_DropFunc() {
-	window.status = "";
-	
-	// When x or y are negative just return this and make no change
-	if(dd.obj.y < 0 || dd.obj.x < 0) {
-		dd.obj.moveTo(dd.obj.oldX, dd.obj.oldY);
-		return;
-	}
-	
-	// Dragging of relative labels is not allowed, revert it
-	if(dd.obj.name.search('rel_label_') != -1) {
-		dd.obj.moveTo(dd.obj.oldX, dd.obj.oldY);
-		return;
-	}
-	
+	// Call NagVis specific functions
 	saveObjectAfterMoveAndDrop(dd.obj);
 }

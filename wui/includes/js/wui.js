@@ -204,7 +204,37 @@ function get_click_pos(e) {
 	}	
 }
 
+function moveMapObject(oObj) {
+	// Save old coords for later return when some problem occured
+	dd.obj.oldX = dd.obj.x;
+	dd.obj.oldY = dd.obj.y;
+	
+	// Check if this is a box
+	if(dd.obj.name.search('box_') != -1) {
+		// When this object has a relative coordinated label, then move this too
+		var sLabelName = dd.obj.name.replace('box_','rel_label_');
+		var oLabel = document.getElementById(sLabelName);
+		if(oLabel) {
+			ADD_DHTML(sLabelName);
+			dd.obj.addChild(sLabelName);
+		}
+		oLabel = null;
+	}
+}
+
 function saveObjectAfterMoveAndDrop(oObj) {
+	// When x or y are negative just return this and make no change
+	if(oObj.y < 0 || oObj.x < 0) {
+		dd.obj.moveTo(oObj.oldX, oObj.oldY);
+		return;
+	}
+	
+	// Dragging of relative labels is not allowed, revert it
+	if(oObj.name.search('rel_label_') != -1) {
+		oObj.moveTo(oObj.oldX, oObj.oldY);
+		return;
+	}
+	
 	var arr = oObj.name.split('_');
 	var type = arr[1];
 	var id = arr[2];
