@@ -78,8 +78,6 @@ class GlobalBackendndo2fs {
 		if(file_exists($this->path.'/PROCESS_STATUS') 
 			&& file_exists($this->path.'/PROGRAM_STATUS') 
 			&& file_exists($this->path.'/HOSTS')
-			&& file_exists($this->path.'/HOSTGROUPS')
-			&& file_exists($this->path.'/SERVICEGROUPS')
 			&& file_exists($this->path.'/VIEWS')) {
 			
 			return TRUE;
