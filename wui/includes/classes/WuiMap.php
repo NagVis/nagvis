@@ -665,6 +665,7 @@ class WuiMap extends GlobalMap {
      */
 	function parseInvisible() {
 		$str = $this->parseJs("
+			var oGeneralProperties='".$this->CORE->MAINCFG->parseGeneralProperties()."';
 			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
 			var mapOptions = ".$this->MAINCFG->getRuntimeValue('mapOptions').";
