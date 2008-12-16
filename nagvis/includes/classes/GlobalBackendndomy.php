@@ -148,13 +148,19 @@ class GlobalBackendndomy {
 		$oldLevel = error_reporting(0);
 		
 		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
+		
+		if(!$this->CONN){
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorConnectingMySQL', Array('MYSQLERR' => mysql_error())));
+			return FALSE;
+		}
+		
 		$returnCode = mysql_select_db($this->dbName, $this->CONN);
 		
 		// set the old level of reporting back
 		error_reporting($oldLevel);
 		
 		if(!$returnCode){
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', 'BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error()));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', 'BACKENDID~'.$this->backendId.',MYSQLERR~'.mysql_error($this->CONN)));
 			return FALSE;
 		} else {
 			return TRUE;

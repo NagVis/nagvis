@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-14 17:36+0100\n"
-"PO-Revision-Date: 2008-12-14 17:38+0100\n"
+"POT-Creation-Date: 2008-12-16 18:07+0100\n"
+"PO-Revision-Date: 2008-12-16 18:15+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,7 @@ msgstr "A necessary value is not set. All red marked values are compulsory value
 
 #: wui/ajax_handler.php:67
 #: wui/ajax_handler.php:98
-#: nagvis/includes/classes/GlobalBackendMgmt.php:142
+#: nagvis/includes/classes/GlobalBackendMgmt.php:140
 msgid "backendNotInitialized"
 msgstr "The backend with the ID \"[BACKENDID]\" of type \"[BACKENDTYPE]\" is not initialized. Maybe there is an undefined backend used in a map?"
 
@@ -705,6 +705,59 @@ msgstr "The required graphviz binary &quot;[NAME]&quot; could not be found in th
 msgid "couldNotGetRootHostname"
 msgstr "The Automap needs one root hostname to start the drawing.<br><br> There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is <b>one</b> host with no parent)."
 
+#: nagvis/includes/classes/GlobalBackendndomy.php:87
+msgid "nagiosNotRunning"
+msgstr "NDO reports that Nagios is not running"
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:92
+#: nagvis/includes/classes/GlobalBackendndo2fs.php:65
+msgid "nagiosDataNotUpToDate"
+msgstr "NDO claims that Nagios did no status update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and ndo2db are running."
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:131
+msgid "noTablesExists"
+msgstr "There are no tables in the database matching given prefix &quot;[PREFIX]&quot;"
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:153
+msgid "errorConnectingMySQL"
+msgstr "Error while connecting to MySQL server. Maybe wrong connection properties in backend? MySQL-Error: [MYSQLERR]."
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:165
+msgid "errorSelectingDb"
+msgstr "Error selecting the database. Maybe wrong database name or insufficient permissions. MySQL-Error: [MYSQLERR]."
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:185
+msgid "mysqlNotSupported"
+msgstr "Your PHP installation lacks SQL support. You can not use the NDOMy Backend without php-mysql."
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:213
+msgid "backendInstanceNameNotValid"
+msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not valid."
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:216
+msgid "backendInstanceNameNotUniq"
+msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not unique."
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:434
+#: nagvis/includes/classes/GlobalBackendndo2fs.php:292
+msgid "hostNotFoundInDB"
+msgstr "The host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:483
+#: nagvis/includes/classes/GlobalBackendndo2fs.php:256
+msgid "hostIsPending"
+msgstr "The host \"[HOST]\" is in pending state"
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:605
+#: nagvis/includes/classes/GlobalBackendndo2fs.php:354
+msgid "serviceNotFoundInDB"
+msgstr "The service \"[SERVICE]\" on host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
+
+#: nagvis/includes/classes/GlobalBackendndomy.php:657
+#: nagvis/includes/classes/GlobalBackendndo2fs.php:408
+msgid "serviceNotChecked"
+msgstr "The service \"[SERVICE]\" has not been checked yet"
+
 #: nagvis/includes/classes/GlobalCore.php:72
 msgid "gdLibNotFound"
 msgstr "You told NagVis to use the GD-Libs for drawing lines on the background image (usegdlibs=1). GD-Libs are not installed or loaded in your php."
@@ -739,6 +792,10 @@ msgstr "Only PNG or JPG images are allowed for map image files."
 #: nagvis/includes/classes/GlobalIndexPage.php:372
 msgid "imageNotExists"
 msgstr "An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist."
+
+#: nagvis/includes/classes/GlobalBackendndo2fs.php:61
+msgid "ndo2fsFileStructureNotValid"
+msgstr ""
 
 #: nagvis/includes/classes/GlobalMapCfg.php:915
 #: nagvis/includes/classes/objects/NagVisMapObj.php:305
@@ -957,59 +1014,6 @@ msgstr "The main configuration file cache is not writeable."
 #: nagvis/includes/classes/GlobalLanguage.php:97
 msgid "languageNotFound"
 msgstr "You configured NagVis to load language &quot;[LANG]&quot;. This language could not be found in language path."
-
-#: nagvis/includes/classes/GlobalBackend-ndo2fs.php:63
-msgid "ndo2fsFileStructureNotValid"
-msgstr ""
-
-#: nagvis/includes/classes/GlobalBackend-ndo2fs.php:67
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:94
-msgid "nagiosDataNotUpToDate"
-msgstr "NDO claims that Nagios did no status update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and ndo2db are running."
-
-#: nagvis/includes/classes/GlobalBackend-ndo2fs.php:259
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:477
-msgid "hostIsPending"
-msgstr "The host \"[HOST]\" is in pending state"
-
-#: nagvis/includes/classes/GlobalBackend-ndo2fs.php:295
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:428
-msgid "hostNotFoundInDB"
-msgstr "The host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
-
-#: nagvis/includes/classes/GlobalBackend-ndo2fs.php:357
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:599
-msgid "serviceNotFoundInDB"
-msgstr "The service \"[SERVICE]\" on host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
-
-#: nagvis/includes/classes/GlobalBackend-ndo2fs.php:411
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:651
-msgid "serviceNotChecked"
-msgstr "The service \"[SERVICE]\" has not been checked yet"
-
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:89
-msgid "nagiosNotRunning"
-msgstr "NDO reports that Nagios is not running"
-
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:133
-msgid "noTablesExists"
-msgstr "There are no tables in the database matching given prefix &quot;[PREFIX]&quot;"
-
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:159
-msgid "errorSelectingDb"
-msgstr "Error selecting the database. Maybe wrong database name or insufficient permissions. MySQL-Error: [MYSQLERR]."
-
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:179
-msgid "mysqlNotSupported"
-msgstr "Your PHP installation lacks SQL support. You can not use the NDOMy Backend without php-mysql."
-
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:207
-msgid "backendInstanceNameNotValid"
-msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not valid."
-
-#: nagvis/includes/classes/GlobalBackend-ndomy.php:210
-msgid "backendInstanceNameNotUniq"
-msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not unique."
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:87
 msgid "selectMap"
