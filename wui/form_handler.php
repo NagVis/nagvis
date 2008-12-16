@@ -46,49 +46,6 @@ $CORE = new WuiCore();
 // Now do the requested action
 switch($_GET['myaction']) {
 	/*
-	 * Save the map with the specified MAPNAME
-	 */
-	case 'save':
-		if(!isset($_POST['mapname']) || $_POST['mapname'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~mapname');
-		} else {
-			$MAPCFG = new WuiMapCfg($CORE, $_POST['mapname']);
-			$MAPCFG->readMapConfig();
-			
-			// convert lists to arrays
-			$elements = explode(',',$_POST['image']);
-			$x = explode(',',$_POST['valx']);
-			$y = explode(',',$_POST['valy']);
-				
-			// sth. modified?
-			if(is_array($elements)) {
-				$i = 0;
-				foreach($elements AS $element) {
-					$element = explode('_',$element);
-					// don't write empty elements
-					if($element[0] != '' && $element[1] != '' && $x[$i] != '' && $y[$i] != '') {
-						// set coordinates ($element[0] is type, $element[1] is id)
-						$MAPCFG->setValue($element[0], $element[1], 'x', $x[$i]);
-						$MAPCFG->setValue($element[0], $element[1], 'y', $y[$i]);
-						// write element to file
-						$MAPCFG->writeElement($element[0],$element[1]);
-						$i++;
-					}
-				}
-				
-				backup($CORE->MAINCFG, $_POST['mapname']);
-			}
-			
-			// delete map lock
-			if(!$MAPCFG->deleteMapLock()) {
-				print("<script>alert('".$CORE->LANG->getText('mapLockNotDeleted')."');</script>");
-			}
-			
-			// display the same map again
-			print "<script>document.location.href='./index.php?map=".$_POST['mapname']."';</script>\n";
-		}
-	break;
-	/*
 	 * Modify an object of the given TYPE with the given ID on the given MAP
 	 */
 	case 'modify':
@@ -151,9 +108,8 @@ switch($_GET['myaction']) {
 				print("<script>alert('".$CORE->LANG->getText('mapLockNotDeleted')."');</script>");
 			}
 			
-			// display the same map again, with the autosave value activated: the map will automatically be saved
-			// after the next drag and drop (after the user placed the new object on the map)
-			print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."&autosave=true';</script>\n";
+			// display the same map again
+			print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
 			print "<script>window.close();</script>\n";
 		}
 	break;

@@ -603,7 +603,6 @@ class WuiMap extends GlobalMap {
 		$ret = '';
 		$ret .= 'var langMenu = Array();';
 		$ret .= 'langMenu[\'overview\'] = \''.$this->LANG->getText('overview').'\';';
-		$ret .= 'langMenu[\'save\'] = \''.$this->LANG->getText('save').'\';';
 		$ret .= 'langMenu[\'restore\'] = \''.$this->LANG->getText('restore').'\';';
 		$ret .= 'langMenu[\'properties\'] = \''.$this->LANG->getText('properties').'\';';
 		$ret .= 'langMenu[\'addObject\'] = \''.$this->LANG->getText('addObject').'\';';
@@ -668,7 +667,6 @@ class WuiMap extends GlobalMap {
 		$str = $this->parseJs("
 			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
-			var autosave = '".$this->MAINCFG->getRuntimeValue('justAdded')."';
 			var mapOptions = ".$this->MAINCFG->getRuntimeValue('mapOptions').";
 			var backupAvailable = '".file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak")."';
 			

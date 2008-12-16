@@ -173,8 +173,6 @@ function createjsDOMenu() {
 	
 	
 	if(mapname == '') {
-		mainMenu.items.menu_save.enabled=false;
-		mainMenu.items.menu_save.className='jsdomenuitem_disabled';
 		mainMenu.items.menu_properties.enabled=false;
 		mainMenu.items.menu_properties.className='jsdomenuitem_disabled';
 		mainMenu.items.menu_addobject.enabled=false;
