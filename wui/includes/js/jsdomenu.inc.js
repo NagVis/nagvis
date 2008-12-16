@@ -46,7 +46,6 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
 		addMenuItem(new menuItem(get_label('openInNagVis'), "menu_maps_open_nagvis", ""));
 		addMenuItem(new menuItem("-"));
-		addMenuItem(new menuItem(get_label('save'), "menu_save", "code:document.myvalues.submit.click();","","",""));
 		addMenuItem(new menuItem(get_label('restore'), "menu_restore", "code:confirm_restore();","","",""));
 		addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:open_window('./index.php?page=addmodify&action=modify&map='+mapname+'&type=global&id=0','wui_addmodify');","","",""));
 		addMenuItem(new menuItem(get_label('addObject'), "menu_addobject", "","","",""));

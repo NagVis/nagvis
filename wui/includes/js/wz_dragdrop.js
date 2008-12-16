@@ -1448,10 +1448,6 @@ would represent 2 objects : obj1 (defined line 3 in the map.cfg file) x=12 y=41
 */
 function my_DropFunc() {
 	window.status = "";
-
-	var names = "";
-	var coord_x = "";
-	var coord_y = "";
 	
 	// When x or y are negative just return this and make no change
 	if(dd.obj.y < 0 || dd.obj.x < 0) {
@@ -1465,26 +1461,5 @@ function my_DropFunc() {
 		return;
 	}
 	
-	for (cpt = dd.elements.length - 1; cpt >=0  ; cpt--) {
-		names = names + dd.elements[cpt].name.replace("box_","") + ",";
-		myposx = dd.elements[cpt].x;
-		myposy = dd.elements[cpt].y;
-		coord_x = coord_x + myposx + ",";
-		coord_y = coord_y + myposy + ",";
-	}
-	
-	// we remove the final comma
-	names = names.substr(0,names.length -1);
-	coord_x = coord_x.substr(0,coord_x.length -1);
-	coord_y = coord_y.substr(0,coord_y.length -1);
-	
-	// we store these lists in the hidden fields of the "Save" form
-	document.myvalues.image.value = names;
-	document.myvalues.valx.value = coord_x;
-	document.myvalues.valy.value = coord_y;
-	
-	// if autosave is enabled we submit the form "Save" which will save and refresh the map
-	if(autosave == true) {
-		document.myvalues.submit.click();
-	}
+	saveObjectAfterMoveAndDrop(dd.obj);
 }

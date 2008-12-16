@@ -665,28 +665,7 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function parseInvisible() {
-		$arr = '';
-		
-		##################################
-		# important form. it makes possible to communicate the coordinates of all the objects to the server 
-		# Idea : when one drags and drops an object, the wz_dragdrop.js which handles this has been modified to update these hidden fields.
-		# At any time, the fields are filled like :
-		#    image : 2,5  (the numbers representing $key, which is the line number in the map .cfg file, counting from 0)
-		#    valx : 12,165
-		#    valy : 41,98
-		# this simple example represents 2 objects : obj1 (defined line 3 in the map.cfg file) x=12 y=41
-		#                                            obj2 (defined line 6 in the map.cfg file) x=165 y=98
-		# When the user clicks on the Save buton, these lists are passed to a bash script executed on the server, which will parse them and treat them.
-		# This is how it works to save the maps :)
-		$arr .= '<form id="myvalues" style="display:none;" name="myvalues" action="./form_handler.php?myaction=save" method="post">
-			<input type="hidden" name="mapname" value="'.$this->MAPCFG->getName().'" />
-			<input type="hidden" name="image" value="" />
-			<input type="hidden" name="valx" value="" />
-			<input type="hidden" name="valy" value="" />
-			<input type="submit" name="submit" value="Save" />
-		</form>';
-		
-		$arr .= $this->parseJs("
+		$str = $this->parseJs("
 			var mapname = '".$this->MAPCFG->getName()."';
 			var username = '".$this->MAINCFG->getRuntimeValue('user')."';
 			var autosave = '".$this->MAINCFG->getRuntimeValue('justAdded')."';
@@ -700,6 +679,6 @@ class WuiMap extends GlobalMap {
 			myshape_background.paint();
 			");
 		
-		return $arr;
+		return $str;
 	}
 }

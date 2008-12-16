@@ -204,6 +204,20 @@ function get_click_pos(e) {
 	}	
 }
 
+function saveObjectAfterMoveAndDrop(oObj) {
+	var arr = oObj.name.split('_');
+	var type = arr[1];
+	var id = arr[2];
+	var x = oObj.x;
+	var y = oObj.y;
+	
+	// Sync ajax request
+	var oResult = getSyncRequest('./ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y);
+	if(oResult && oResult.status != 'OK') {
+		alert(oResult.message);
+	}
+	oResult = null;
+}
 
 // simple function to ask to confirm before we delete an object
 function confirm_object_deletion() {

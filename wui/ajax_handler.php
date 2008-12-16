@@ -35,6 +35,10 @@ require("../nagvis/includes/functions/autoload.php");
 require("../nagvis/includes/functions/debug.php");
 require("../nagvis/includes/functions/ajaxErrorHandler.php");
 
+// Include needed WUI specific functions
+//FIXME: Remove this ...
+require('./includes/functions/form_handler.php');
+
 // This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
 
@@ -238,6 +242,49 @@ switch($_GET['action']) {
 				}
 			}
 			echo ' ]';
+		}
+	break;
+	/* This is the new ajax way changing attributes (Not using "properties" hacks)
+	 * Modify an object of the given TYPE with the given ID on the given MAP
+	 */
+	case 'modifyMapObject':
+		if(!isset($_GET['map']) || $_GET['map'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
+		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
+		} else {
+			$status = 'OK';
+			$message = '';
+			
+			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
+			$MAPCFG->readMapConfig();
+			
+			$aOpts = $_GET;
+			// Remove the parameters which are not options of the object
+			unset($aOpts['action']);
+			unset($aOpts['map']);
+			unset($aOpts['id']);
+			unset($aOpts['type']);
+			unset($aOpts['timestamp']);
+			
+			// set options in the array
+			foreach($aOpts AS $key => $val) {
+				$MAPCFG->setValue($_GET['type'], $_GET['id'], $key, $val);
+			}
+			
+			// write element to file
+			$MAPCFG->writeElement($_GET['type'],$_GET['id']);
+			
+			// do the backup
+			backup($CORE->MAINCFG, $_GET['map']);
+			
+			// delete map lock
+			if(!$MAPCFG->deleteMapLock()) {
+				$status = 'ERROR';
+				$message = $CORE->LANG->getText('mapLockNotDeleted');
+			}
+			
+			echo json_encode(Array('status' => $status, 'message' => $message));
 		}
 	break;
 	/*
