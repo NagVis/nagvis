@@ -61,74 +61,51 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function loadPermissions() {
-		$mapOptions = '[ ';
-		$a = 0;
+		$aArr = Array();
 		foreach($this->CORE->getAvailableMaps('/[^(__automap)]/') AS $map) {
-			if($a > 0) {
-				$mapOptions .= ', ';	
-			}
+			$aOpts = Array();
 			
 			$MAPCFG1 = new WuiMapCfg($this->CORE, $map);
 			$MAPCFG1->readMapConfig(0);
-			$mapOptions .= '{ mapName:\''.$map.'\'';
+			
+			$aOpts['mapName'] = $map;
 			
 			// map alias
-			$mapOptions .= ', mapAlias:\''.$MAPCFG1->getValue('global', '0', 'alias').'\'';
+			$aOpts['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
 			
 			// used image
-			$mapOptions .= ', mapImage:\''.$MAPCFG1->getValue('global', '0', 'map_image').'\'';
+			$aOpts['mapImage'] = $MAPCFG1->getValue('global', '0', 'map_image');
 			
 			// permited users for writing
-			$mapOptions .= ', allowedForConfig:[ ';
+			$aOpts['allowedForConfig'] = Array();
 			$arr = $MAPCFG1->getValue('global', '0', 'allowed_for_config');
 			for($i = 0; count($arr) > $i; $i++) {
-				if($i > 0) {
-					$mapOptions .= ',';	
-				}
-				$mapOptions .= '\''.$arr[$i].'\' ';
+				$aOpts['allowedForConfig'][] = $arr[$i];
 			}
-			$mapOptions .= ' ]';
 			
 			// permited users for viewing the map
-			$mapOptions .= ', allowedUsers:[ ';
+			$aOpts['allowedUsers'] = Array();
 			$arr = $MAPCFG1->getValue('global', '0', 'allowed_user');
 			for($i = 0; count($arr) > $i; $i++) {
-				if($i > 0) {
-					$mapOptions .= ',';	
-				}
-				$mapOptions .= '\''.$arr[$i].'\' ';
+				$aOpts['allowedUsers'][] = $arr[$i];
 			}
-			$mapOptions .= ' ]';
 			
 			// linked maps
-			$mapOptions .= ', linkedMaps:[ ';
-			$i = 0;
+			$aOpts['linkedMaps'] = Array();
 			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-				if($i > 0) {
-					$mapOptions .= ',';
-				}
-				$mapOptions .= '\''.$obj['map_name'].'\' ';
-				$i++;
+				$aOpts['allowedUsers'][] = $obj['map_name'];
 			}
-			$mapOptions .= ' ]';
 
 			// used shapes
-			$mapOptions .= ', usedShapes:[ ';
-			$i = 0;
+			$aOpts['usedShapes'] = Array();
 			foreach($MAPCFG1->getDefinitions('shape') AS $key => $obj) {
-				if($i > 0) {
-					$mapOptions .= ',';
-				}
-				$mapOptions .= '\''.$obj['icon'].'\' ';
-				$i++;
+				$aOpts['usedShapes'][] = $obj['icon'];
 			}
-			$mapOptions .= ' ]';
 			
-			$mapOptions .= ' }';
-			$a++;
+			$aArr[] = $aOpts;
 		}
-		$mapOptions .= ' ]';
-		$this->MAINCFG->setRuntimeValue('mapOptions',$mapOptions);
+		
+		$this->MAINCFG->setRuntimeValue('mapOptions', $aArr);
 	}
 	
 	/**
