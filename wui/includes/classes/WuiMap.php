@@ -105,7 +105,7 @@ class WuiMap extends GlobalMap {
 			$aArr[] = $aOpts;
 		}
 		
-		$this->MAINCFG->setRuntimeValue('mapOptions', $aArr);
+		$this->MAINCFG->setRuntimeValue('mapOptions', json_encode($aArr));
 	}
 	
 	/**

@@ -225,9 +225,11 @@ function moveMapObject(oObj) {
 function saveObjectAfterMoveAndDrop(oObj) {
 	// When x or y are negative just return this and make no change
 	if(oObj.y < 0 || oObj.x < 0) {
-		dd.obj.moveTo(oObj.oldX, oObj.oldY);
+		oObj.moveTo(oObj.oldX, oObj.oldY);
 		return;
 	}
+	
+	alert(oObj.defz);
 	
 	// Dragging of relative labels is not allowed, revert it
 	if(oObj.name.search('rel_label_') != -1) {
