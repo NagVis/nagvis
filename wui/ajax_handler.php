@@ -108,7 +108,7 @@ switch($_GET['action']) {
 			$aRet = Array();
 			// Read all services of the given host
 			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects('service',$_GET['host_name'],'') AS $arr) {
-				$aRet = Array('host_name' => $arr['name1'], 'service_description' => $arr['name2']);
+				$aRet[] = Array('host_name' => $arr['name1'], 'service_description' => $arr['name2']);
 			}
 			
 			echo json_encode($aRet);
