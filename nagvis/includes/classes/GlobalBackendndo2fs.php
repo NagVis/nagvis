@@ -30,6 +30,8 @@
 class GlobalBackendndo2fs {
 	private $CORE;
 	private $backendId;
+	private $pathPersistent;
+	private $pathVolatile;
 	private $instanceName;
 	
 	private $hostCache;
@@ -55,7 +57,8 @@ class GlobalBackendndo2fs {
 		$this->hostAckCache = Array();
 		
 		$this->instanceName = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'instancename');
-		$this->path = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path').'/'.$this->instanceName;
+		$this->pathPersistent = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path').'/PERSISTENT/'.$this->instanceName;
+		$this->pathVolatile = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path').'/VOLATILE/'.$this->instanceName;
 		
 		if(!$this->checkFileStructure()) {
 			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('ndo2fsFileStructureNotValid', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
@@ -75,10 +78,10 @@ class GlobalBackendndo2fs {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkFileStructure() {
-		if(file_exists($this->path.'/PROCESS_STATUS') 
-			&& file_exists($this->path.'/PROGRAM_STATUS') 
-			&& file_exists($this->path.'/HOSTS')
-			&& file_exists($this->path.'/VIEWS')) {
+		if(file_exists($this->pathVolatile.'/PROCESS_STATUS') 
+			&& file_exists($this->pathVolatile.'/PROGRAM_STATUS') 
+			&& file_exists($this->pathVolatile.'/HOSTS')
+			&& file_exists($this->pathVolatile.'/VIEWS')) {
 			
 			return TRUE;
 		} else {
@@ -93,7 +96,7 @@ class GlobalBackendndo2fs {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkLastUpdateTime() {
-		$oStatus = json_decode(file_get_contents($this->path.'/PROCESS_STATUS'));
+		$oStatus = json_decode(file_get_contents($this->pathVolatile.'/PROCESS_STATUS'));
 		
 		if($_SERVER['REQUEST_TIME'] - $oStatus->LASTCOMMANDCHECK > $this->CORE->MAINCFG->getValue('backend_'.$this->backendId, 'maxtimewithoutupdate')) {
 			return FALSE;
@@ -119,19 +122,19 @@ class GlobalBackendndo2fs {
 		
 		switch($type) {
 			case 'host':
-				$sDirectory = '/tmp/ndo2fs/default/HOSTS';
+				$sDirectory = $this->pathVolatile.'/HOSTS';
 			break;
 			case 'service':
-				$oServices = json_decode(file_get_contents($this->path.'/VIEWS/SERVICELIST'));
+				$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 				foreach($oServices->$name1Pattern AS $service) {
 					$ret[] = Array('name1' => $name1Pattern, 'name2' => $service);
 				}
 			break;
 			case 'hostgroup':
-				$sDirectory = '/tmp/ndo2fs/default/HOSTGROUPS';
+				$sDirectory = $this->pathVolatile.'/HOSTGROUPS';
 			break;
 			case 'servicegroup':
-				$sDirectory = '/tmp/ndo2fs/default/SERVICEGROUPS';
+				$sDirectory = $this->pathVolatile.'/SERVICEGROUPS';
 			break;
 			default:
 				return Array();
@@ -139,14 +142,16 @@ class GlobalBackendndo2fs {
 		}
 		
 		if($sDirectory != '') {
-			if ($handle = opendir($sDirectory)) {
-				while(false !== ($file = readdir($handle))) {
-					if($file != '..' && $file != '.') {
-						$ret[] = Array('name1' => $file, 'name2' => '');
-					}				
+			if(file_exists($sDirectory)) {
+				if ($handle = opendir($sDirectory)) {
+					while(false !== ($file = readdir($handle))) {
+						if($file != '..' && $file != '.') {
+							$ret[] = Array('name1' => $file, 'name2' => '');
+						}				
+					}
 				}
+				closedir($handle);
 			}
-			closedir($handle);
 		}
 		
 		return $ret;
@@ -169,8 +174,8 @@ class GlobalBackendndo2fs {
 		if(isset($this->hostAckCache[$hostName])) {
 			$return = $this->hostAckCache[$hostName];
 		} else {
-			if(file_exists($this->path.'/HOSTS/'.$hostName)) {
-				$oStatus = json_decode(file_get_contents($this->path.'/HOSTS/'.$hostName.'/STATUS'));
+			if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
+				$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/STATUS'));
 				
 				// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
 				if(isset($oStatus->PROBLEMHASBEENACKNOWLEDGED) && $oStatus->PROBLEMHASBEENACKNOWLEDGED == '1') {
@@ -203,9 +208,9 @@ class GlobalBackendndo2fs {
 		} else {
 			$arrReturn = Array();
 			
-			if(file_exists($this->path.'/HOSTS/'.$hostName)) {
-				$oConfig = json_decode(file_get_contents($this->path.'/HOSTS/'.$hostName.'/CONFIG'));
-				$oStatus = json_decode(file_get_contents($this->path.'/HOSTS/'.$hostName.'/STATUS'));
+			if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
+				$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG'));
+				$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/STATUS'));
 				
 				$arrReturn['object_id'] = $this->iObjIdCounter++;
 				
@@ -226,13 +231,13 @@ class GlobalBackendndo2fs {
 				
 				// If there is a downtime for this object, save the data
 				// FIXME!
-				/*if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+				if($oStatus->SCHEDULEDDOWNTIMEDEPTH > 0) {
 					$arrReturn['in_downtime'] = 1;
 					$arrReturn['downtime_start'] = $data['downtime_start'];
 					$arrReturn['downtime_end'] = $data['downtime_end'];
 					$arrReturn['downtime_author'] = $data['downtime_author'];
 					$arrReturn['downtime_data'] = $data['downtime_data'];
-				}*/
+				}
 				
 				/**
 				 * Only recognize hard states. There was a discussion about the implementation
@@ -316,28 +321,28 @@ class GlobalBackendndo2fs {
 			$aServObj = Array();
 			
 			if(isset($serviceName) && $serviceName != '') {
-				if(file_exists($this->path.'/HOSTS/'.$hostName)) {
-					$oServices = json_decode(file_get_contents($this->path.'/VIEWS/SERVICELIST'));
+				if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
+					$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 					
 					$serviceName = strtr($serviceName,' ','_');
 					
-					if(file_exists($this->path.'/HOSTS/'.$hostName.'/'.$serviceName)) {
-						$oConfig = json_decode(file_get_contents($this->path.'/HOSTS/'.$hostName.'/'.$serviceName.'/CONFIG'));
-						$oStatus = json_decode(file_get_contents($this->path.'/HOSTS/'.$hostName.'/'.$serviceName.'/STATUS'));
+					if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName)) {
+						$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/CONFIG'));
+						$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/STATUS'));
 						
 						$aServObj[] = Array($oConfig, $oStatus);
 					}
 				}
 			} else {
-				if(file_exists($this->path.'/HOSTS/'.$hostName)) {
-					$oServices = json_decode(file_get_contents($this->path.'/VIEWS/SERVICELIST'));
+				if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
+					$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 					
 					foreach($oServices->{$hostName} AS $service) {
-						if(file_exists($this->path.'/HOSTS/'.$hostName.'/'.$service)) {
+						if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service)) {
 							$service = strtr($service,' ','_');
 							
-							$oConfig = json_decode(file_get_contents($this->path.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
-							$oStatus = json_decode(file_get_contents($this->path.'/HOSTS/'.$hostName.'/'.$service.'/STATUS'));
+							$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
+							$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS'));
 							
 							$aServObj[] = Array($oConfig, $oStatus);
 						}
@@ -378,7 +383,7 @@ class GlobalBackendndo2fs {
 					
 					// If there is a downtime for this object, save the data
 					// FIXME!
-					/*if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+					/*if($aServObj[$i][1]->SCHEDULEDDOWNTIMEDEPTH > 0) {
 						$arrTmpReturn['in_downtime'] = 1;
 						$arrTmpReturn['downtime_start'] = $data['downtime_start'];
 						$arrTmpReturn['downtime_end'] = $data['downtime_end'];
@@ -473,7 +478,7 @@ class GlobalBackendndo2fs {
 		if(isset($this->oParentlistCache)) {
 			$oParents = $this->oParentlistCache;
 		} else {
-			$oParents = json_decode(file_get_contents($this->path.'/VIEWS/PARENTLIST'));
+			$oParents = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/PARENTLIST'));
 			$this->oParentlistCache = $oParents;
 		}
 		
@@ -499,7 +504,7 @@ class GlobalBackendndo2fs {
 		if(isset($this->oParentlistCache)) {
 			$oParents = $this->oParentlistCache;
 		} else {
-			$oParents = json_decode(file_get_contents($this->path.'/VIEWS/PARENTLIST'));
+			$oParents = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/PARENTLIST'));
 			$this->oParentlistCache = $oParents;
 		}
 		
@@ -522,8 +527,8 @@ class GlobalBackendndo2fs {
 	function getHostsByHostgroupName($hostgroupName) {
 		$aReturn = Array();
 		
-		if(file_exists($this->path.'/HOSTGROUPS/'.$hostgroupName)) {
-			$oMeta = json_decode(file_get_contents($this->path.'/HOSTGROUPS/'.$hostgroupName.'/META'));
+		if(file_exists($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName)) {
+			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName.'/META'));
 			$aReturn = $oMeta->HOSTGROUPMEMBER;
 		}
 		
@@ -542,8 +547,8 @@ class GlobalBackendndo2fs {
 	function getServicesByServicegroupName($servicegroupName) {
 		$aReturn = Array();
 		
-		if(file_exists($this->path.'/SERVICEGROUPS/'.$servicegroupName)) {
-			$oMeta = json_decode(file_get_contents($this->path.'/SERVICEGROUPS/'.$servicegroupName.'/META'));
+		if(file_exists($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName)) {
+			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName.'/META'));
 			
 			foreach($oMeta->SERVICEGROUPMEMBER AS $member) {
 				$a = explode(';', $member);
@@ -566,8 +571,8 @@ class GlobalBackendndo2fs {
 	function getServicegroupInformations($servicegroupName) {
 		$aReturn = Array();
 		
-		if(file_exists($this->path.'/SERVICEGROUPS/'.$servicegroupName)) {
-			$oMeta = json_decode(file_get_contents($this->path.'/SERVICEGROUPS/'.$servicegroupName.'/META'));
+		if(file_exists($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName)) {
+			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName.'/META'));
 			
 			$aReturn['alias'] = $oMeta->SERVICEGROUPALIAS;
 			$aReturn['object_id'] = $this->iObjIdCounter++;
@@ -588,8 +593,8 @@ class GlobalBackendndo2fs {
 	function getHostgroupInformations($hostgroupName) {
 		$arrReturn = Array();
 		
-		if(file_exists($this->path.'/HOSTGROUPS/'.$hostgroupName)) {
-			$oMeta = json_decode(file_get_contents($this->path.'/HOSTGROUPS/'.$hostgroupName.'/META'));
+		if(file_exists($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName)) {
+			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName.'/META'));
 			
 			$aReturn['alias'] = $oMeta->HOSTGROUPALIAS;
 			$aReturn['object_id'] = $this->iObjIdCounter++;
