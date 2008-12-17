@@ -229,7 +229,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		return;
 	}
 	
-	alert(oObj.defz);
+	// Reset z-index to configured value
+	oObj.setZ(oObj.defz);
 	
 	// Dragging of relative labels is not allowed, revert it
 	if(oObj.name.search('rel_label_') != -1) {
