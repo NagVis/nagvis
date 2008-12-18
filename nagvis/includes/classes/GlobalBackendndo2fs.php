@@ -61,7 +61,7 @@ class GlobalBackendndo2fs {
 		$this->pathVolatile = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path').'/VOLATILE/'.$this->instanceName;
 		
 		if(!$this->checkFileStructure()) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('ndo2fsFileStructureNotValid', 'BACKENDID~'.$this->backendId.',TIMEWITHOUTUPDATE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('ndo2fsFileStructureNotValid', 'BACKENDID~'.$this->backendId.',PATH~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path')));
 		}
 		
 		if(!$this->checkLastUpdateTime()) {

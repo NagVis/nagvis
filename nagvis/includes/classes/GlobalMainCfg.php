@@ -690,12 +690,22 @@ class GlobalMainCfg {
 								if(isset($val) && is_array($val)) {
 									$val = implode(',',$val);
 								}
+								
 								// valid attribute, now check for value format
 								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
 									// wrong format
 									if($printErr) {
 										$CORE = new GlobalCore($this);
 										new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('wrongValueFormat', 'TYPE~'.$type.',ATTRIBUTE~'.$key), $CORE->MAINCFG->getValue('paths','htmlbase'));
+									}
+									return FALSE;
+								}
+								
+								// Check if the configured backend is defined in main configuration file
+								if($type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
+									if($printErr) {
+										$CORE = new GlobalCore($this);
+										new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('backendNotDefined', Array('BACKENDID' => $val)), $CORE->MAINCFG->getValue('paths','htmlbase'));
 									}
 									return FALSE;
 								}

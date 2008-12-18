@@ -1021,6 +1021,11 @@ class GlobalMapCfg {
 						if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url']) && !$this instanceof WuiMapCfg) {
 							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('viewTypeGadgetButNoGadgetUrl','MAP~'.$this->getName().',TYPE~'.$type));
 						}
+						
+						// Check if the configured backend is defined in main configuration file
+						if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
+							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendNotDefined', Array('BACKENDID' => $val)));
+						}
 					}
 				}
 			}
