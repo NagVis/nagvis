@@ -113,13 +113,13 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	// Macros which are only for services and hosts
 	if(oObj.conf.type == 'host' || oObj.conf.type == 'service') {
 		oMacros.obj_address = oObj.conf.address;
-		oMacros.obj_last_check = date(oGeneralProperties.date_format, oObj.conf.last_check);
-		oMacros.obj_next_check = date(oGeneralProperties.date_format, oObj.conf.next_check);
+		oMacros.obj_last_check = oObj.conf.last_check;
+		oMacros.obj_next_check = oObj.conf.next_check;
 		oMacros.obj_state_type = oObj.conf.state_type;
 		oMacros.obj_current_check_attempt = oObj.conf.current_check_attempt;
 		oMacros.obj_max_check_attempts = oObj.conf.max_check_attempts;
-		oMacros.obj_last_state_change = date(oGeneralProperties.date_format, oObj.conf.last_state_change);
-		oMacros.obj_last_hard_state_change = date(oGeneralProperties.date_format, oObj.conf.last_hard_state_change);
+		oMacros.obj_last_state_change = oObj.conf.last_state_change;
+		oMacros.obj_last_hard_state_change = oObj.conf.last_hard_state_change;
 		oMacros.obj_state_duration = oObj.conf.state_duration;
 		oMacros.obj_perfdata = oObj.conf.perfdata;
 	}

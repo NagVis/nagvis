@@ -56,6 +56,8 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->CORE = &$CORE;
 		$this->BACKEND = &$BACKEND;
 		
+		$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+		
 		$this->GRAPHIC = '';
 		
 		parent::NagVisObject($this->CORE);
@@ -434,13 +436,13 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['downtime_end'] = $this->downtime_end;
 			$arr['downtime_start'] = $this->downtime_start;
 			$arr['address'] = $this->address;
-			$arr['last_check'] = $this->getLastCheck();
-			$arr['next_check'] = $this->getNextCheck();
+			$arr['last_check'] = date($this->dateFormat, $this->getLastCheck());
+			$arr['next_check'] = date($this->dateFormat, $this->getNextCheck());
 			$arr['state_type'] = $this->getStateType();
 			$arr['current_check_attempt'] = $this->getCurrentCheckAttempt();
 			$arr['max_check_attempts'] = $this->getMaxCheckAttempts();
-			$arr['last_state_change'] = $this->getLastStateChange();
-			$arr['last_hard_state_change'] = $this->getLastHardStateChange();
+			$arr['last_state_change'] = date($this->dateFormat, $this->getLastStateChange());
+			$arr['last_hard_state_change'] = date($this->dateFormat, $this->getLastHardStateChange());
 			$arr['state_duration'] = $this->getStateDuration();
 			$arr['perfdata'] = strtr($this->perfdata, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
 		}
