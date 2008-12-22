@@ -56,8 +56,6 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->CORE = &$CORE;
 		$this->BACKEND = &$BACKEND;
 		
-		$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
-		
 		$this->GRAPHIC = '';
 		
 		parent::NagVisObject($this->CORE);
@@ -121,9 +119,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getDowntimeStart() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
-			return $this->downtime_start;
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->downtime_start);
 		} else {
-			return '';
+			return 'N/A';
 		}
 	}
 	
@@ -137,9 +139,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getDowntimeEnd() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
-			return $this->downtime_end;
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->downtime_end);
 		} else {
-			return '';
+			return 'N/A';
 		}
 	}
 	
@@ -261,9 +267,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getStateDuration() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
-			return $_SERVER['REQUEST_TIME'] - $this->last_state_change;
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, ($_SERVER['REQUEST_TIME'] - $this->last_state_change));
 		} else {
-			return '';
+			return 'N/A';
 		}
 	}
 	
@@ -277,9 +287,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastStateChange() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
-			return $this->last_state_change;
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->last_state_change);
 		} else {
-			return '';
+			return 'N/A';
 		}
 	}
 	
@@ -293,9 +307,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastHardStateChange() {
 		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
-			return $this->last_hard_state_change;
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->last_hard_state_change);
 		} else {
-			return '';
+			return 'N/A';
 		}
 	}
 	
@@ -309,9 +327,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getLastCheck() {
 		if(isset($this->last_check) && $this->last_check != '0') {
-			return $this->last_check;
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->last_check);
 		} else {
-			return '';
+			return 'N/A';
 		}
 	}
 	
@@ -325,9 +347,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	function getNextCheck() {
 		if(isset($this->next_check) && $this->next_check != '0') {
-			return $this->next_check;
+			if($this->dateFormat == '') {
+				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+			}
+			
+			return date($this->dateFormat, $this->next_check);
 		} else {
-			return '';
+			return 'N/A';
 		}
 	}
 	
@@ -436,13 +462,13 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['downtime_end'] = $this->downtime_end;
 			$arr['downtime_start'] = $this->downtime_start;
 			$arr['address'] = $this->address;
-			$arr['last_check'] = date($this->dateFormat, $this->getLastCheck());
-			$arr['next_check'] = date($this->dateFormat, $this->getNextCheck());
+			$arr['last_check'] = $this->getLastCheck();
+			$arr['next_check'] = $this->getNextCheck();
 			$arr['state_type'] = $this->getStateType();
 			$arr['current_check_attempt'] = $this->getCurrentCheckAttempt();
 			$arr['max_check_attempts'] = $this->getMaxCheckAttempts();
-			$arr['last_state_change'] = date($this->dateFormat, $this->getLastStateChange());
-			$arr['last_hard_state_change'] = date($this->dateFormat, $this->getLastHardStateChange());
+			$arr['last_state_change'] = $this->getLastStateChange();
+			$arr['last_hard_state_change'] = $this->getLastHardStateChange();
 			$arr['state_duration'] = $this->getStateDuration();
 			$arr['perfdata'] = strtr($this->perfdata, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
 		}
