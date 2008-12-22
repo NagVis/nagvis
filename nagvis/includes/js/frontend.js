@@ -136,25 +136,6 @@ function runWorker(iCount, sType) {
 				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name])) {
 					// Remove all old objects
 					var a = 0;
-					while(aMapObjects.length > 0) {
-						// Remove parsed object from map
-						aMapObjects[a].remove();
-						
-						// Remove object
-						aMapObjects[a] = null;
-						
-						// Remove element from map objects array
-						aMapObjects.splice(a,1);
-						
-						a++;
-					}
-					
-					
-					// Update timestamp for map configuration (No reparsing on next worker run)
-					oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
-					
-					// Remove all old objects
-					var a = 0;
 					do {
 						if(aMapObjects[a] && typeof aMapObjects[a].remove === 'function') {
 							// Remove parsed object from map
