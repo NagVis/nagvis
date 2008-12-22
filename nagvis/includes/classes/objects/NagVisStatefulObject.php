@@ -120,7 +120,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function getDowntimeStart() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->downtime_start);
@@ -140,7 +140,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function getDowntimeEnd() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->downtime_end);
@@ -268,7 +268,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function getStateDuration() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, ($_SERVER['REQUEST_TIME'] - $this->last_state_change));
@@ -288,7 +288,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function getLastStateChange() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->last_state_change);
@@ -308,7 +308,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function getLastHardStateChange() {
 		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->last_hard_state_change);
@@ -328,7 +328,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function getLastCheck() {
 		if(isset($this->last_check) && $this->last_check != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->last_check);
@@ -348,7 +348,7 @@ class NagVisStatefulObject extends NagVisObject {
 	function getNextCheck() {
 		if(isset($this->next_check) && $this->next_check != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->next_check);
