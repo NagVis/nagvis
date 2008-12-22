@@ -135,7 +135,8 @@ function runWorker(iCount, sType) {
 				// Check for changed map configuration
 				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name])) {
 					// Remove all old objects
-					for(var a = 0, len = aMapObjects.length; a < len; a++) {
+					var a = 0;
+					while(aMapObjects.length > 0) {
 						// Remove parsed object from map
 						aMapObjects[a].remove();
 						
@@ -145,9 +146,32 @@ function runWorker(iCount, sType) {
 						// Remove element from map objects array
 						aMapObjects.splice(a,1);
 						
-						// Update timestamp for map configuration (No reparsing next time)
-						oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
+						a++;
 					}
+					
+					
+					// Update timestamp for map configuration (No reparsing on next worker run)
+					oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
+					
+					// Remove all old objects
+					var a = 0;
+					do {
+						if(aMapObjects[a] && typeof aMapObjects[a].remove === 'function') {
+							// Remove parsed object from map
+							aMapObjects[a].remove();
+							
+							// Set to null in array
+							aMapObjects[a] = null;
+							
+							// Remove element from map objects array
+							aMapObjects.splice(a,1);
+						} else {
+							a++;
+						}
+					} while(aMapObjects.length > a);
+					
+					// Update timestamp for map configuration (No reparsing next time)
+					oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
 					
 					// Set map basics
 					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);

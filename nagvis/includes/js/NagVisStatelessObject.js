@@ -31,5 +31,28 @@ var NagVisStatelessObject = NagVisObject.extend({
 	constructor: function(oConf) {
 		// Call parent constructor
 		this.base(oConf);
+	},
+	
+	remove: function () {
+		var oMap = document.getElementById('map');
+		if(this.parsedObject) {
+			// Remove event listeners
+			var oObj;
+			oObj = document.getElementById(this.objId);
+			if(oObj) {
+				oObj.onmousedown = null;
+				oObj.oncontextmenu = null;
+				oObj.onmouseover = null;
+				oObj.onmouseout = null;
+				oObj = null;
+			}
+			
+			// Remove object from DOM
+			oMap.removeChild(this.parsedObject);
+			
+			// Remove object reference
+			this.parsedObject = null;
+		}
+		oMap = null;
 	}
 });

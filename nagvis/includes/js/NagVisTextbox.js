@@ -55,12 +55,9 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 		oTextbox = null;
 		
 		// When this is an update, remove the object first
-		var oMap = document.getElementById('map');
-		if(this.parsedObject) {
-			oMap.removeChild(this.parsedObject);
-			this.parsedObject = null;
-		}
+		this.remove();
 		
+		var oMap = document.getElementById('map');
 		this.parsedObject = oMap.appendChild(oContainerDiv);
 		
 		oContainerDiv = null;
