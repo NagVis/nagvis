@@ -291,10 +291,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oLineDiv.setAttribute('id', this.objId+'-line');
 		oLineDiv.style.zIndex = this.conf.z;
 		
-		// Add link to the line
-		var sUrl = this.conf.url;
-		var sUrlTarget = this.conf.url_target;
-		oLineDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
+		// Parse link only when set
+		if(this.conf.url && this.conf.url !== '') {
+			var sUrl = this.conf.url;
+			var sUrlTarget = this.conf.url_target;
+			oLineDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
+		}
 		
 		oContainerDiv.appendChild(oLineDiv);
 		oLineDiv = null;
@@ -355,6 +357,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oIconDiv.style.left = this.conf.x+'px';
 		oIconDiv.style.zIndex = this.conf.z;
 		
+		// Parse link only when set
 		if(this.conf.url && this.conf.url !== '') {
 			var oIconLink = document.createElement('a');
 			oIconLink.href = this.conf.url;

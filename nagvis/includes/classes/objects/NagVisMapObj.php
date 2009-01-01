@@ -378,7 +378,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUrl() {
-		if(isset($this->url) && $this->url != '') {
+		if(isset($this->url)) {
 			$url = parent::getUrl();
 		} else {
 			$url = $this->CORE->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$this->map_name;
