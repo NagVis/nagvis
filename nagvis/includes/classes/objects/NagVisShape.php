@@ -85,7 +85,7 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUrl() {
-		if(isset($this->url) && $this->url != '') {
+		if(isset($this->url)) {
 			$url = parent::getUrl();
 		} else {
 			$url = '';
