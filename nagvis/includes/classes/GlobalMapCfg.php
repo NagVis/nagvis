@@ -229,6 +229,7 @@ class GlobalMapCfg {
 					'default' => '',
 					'match' => MATCH_BOOLEAN),
 				'url' => Array('must' => 0,
+					'default' => '[htmlcgi]/status.cgi?host=[host_name]',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -312,6 +313,7 @@ class GlobalMapCfg {
 					'default' => '',
 					'match' => MATCH_BOOLEAN),
 				'url' => Array('must' => 0,
+					'default' => '[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -396,6 +398,7 @@ class GlobalMapCfg {
 					'default' => '',
 					'match' => MATCH_BOOLEAN),
 				'url' => Array('must' => 0,
+					'default' => '[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -476,6 +479,7 @@ class GlobalMapCfg {
 					'default' => '',
 					'match' => MATCH_BOOLEAN),
 				'url' => Array('must' => 0,
+					'url' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup]&style=detail',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -553,6 +557,7 @@ class GlobalMapCfg {
 					'default' => '',
 					'match' => MATCH_BOOLEAN),
 				'url' => Array('must' => 0,
+					'default' => '[htmlbase]/index.php?map=[map_name]',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -601,6 +606,7 @@ class GlobalMapCfg {
 				'hover_delay' => Array('must' => 0,
 					'match' => MATCH_INTEGER),
 				'url' => Array('must' => 0,
+					'default' => '',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -1206,7 +1212,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getValue($type, $id, $key, $ignoreDefault=FALSE) {
-		if(isset($this->mapConfig[$type][$id]) && isset($this->mapConfig[$type][$id][$key]) && $this->mapConfig[$type][$id][$key] != '') {
+		if(isset($this->mapConfig[$type][$id]) && isset($this->mapConfig[$type][$id][$key])) {
 			return $this->mapConfig[$type][$id][$key];
 		} elseif(!$ignoreDefault) {
 			if(isset($this->validConfig[$type][$key]['default'])) {

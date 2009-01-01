@@ -586,7 +586,10 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 		
 		if(isset($this->url) && $this->url != '') {
-			$this->url = str_replace('['.$name.']',$this->$name,$this->url);
+			$this->url = str_replace('[htmlcgi]', $this->CORE->MAINCFG->getValue('paths', 'htmlcgi'), $this->url);
+			$this->url = str_replace('[htmlbase]', $this->CORE->MAINCFG->getValue('paths', 'htmlbase'), $this->url);
+			$this->url = str_replace('['.$name.']', $this->$name, $this->url);
+			
 			if($this->type == 'service') {
 				$this->url = str_replace('[service_description]', $this->service_description, $this->url);
 			}

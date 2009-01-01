@@ -275,7 +275,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 					
 					// merge with "global" settings
 					foreach($this->MAPCFG->validConfig[$type] AS $key => &$values) {
-						if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
+						if(!isset($objConf[$key]) && isset($values['default'])) {
 							$objConf[$key] = $values['default'];
 						}
 					}
@@ -367,23 +367,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 			
 			return FALSE;
 		}
-	}
-	
-	/**
-	 * PRIVATE getUrl()
-	 *
-	 * Returns the url for the object link
-	 *
-	 * @return	String	URL
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getUrl() {
-		if(isset($this->url)) {
-			$url = parent::getUrl();
-		} else {
-			$url = $this->CORE->MAINCFG->getValue('paths', 'htmlbase').'/index.php?map='.$this->map_name;
-		}
-		return $url;
 	}
 	
 	/**

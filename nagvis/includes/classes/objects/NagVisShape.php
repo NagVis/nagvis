@@ -75,24 +75,6 @@ class NagVisShape extends NagVisStatelessObject {
 		}
 	}
 	
-	
-	/**
-	 * PRIVATE getUrl()
-	 *
-	 * Returns the url for the object link
-	 *
-	 * @return	String	URL
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getUrl() {
-		if(isset($this->url)) {
-			$url = parent::getUrl();
-		} else {
-			$url = '';
-		}
-		return $url;
-	}
-	
 	/**
 	 * Just a dummy here (Shape won't need an icon)
 	 *

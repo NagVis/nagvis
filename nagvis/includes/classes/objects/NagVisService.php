@@ -57,23 +57,6 @@ class NagVisService extends NagiosService {
 	# #########################################################################
 	
 	/**
-	 * PRIVATE getUrl()
-	 *
-	 * Returns the url for the object link
-	 *
-	 * @return	String	URL
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getUrl() {
-		if(isset($this->url)) {
-			$url = parent::getUrl();
-		} else {
-			$url = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/extinfo.cgi?type=2&host='.$this->host_name.'&service='.$this->service_description;
-		}
-		return $url;
-	}
-	
-	/**
 	 * Sets the path of gadget_url. The method adds htmlgadgets path when relative
 	 * path or will remove [] when full url given
 	 *
