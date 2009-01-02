@@ -384,7 +384,11 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getUrl() {
-		return $this->url;
+		if(isset($this->url)) {
+			return $this->url;
+		} else {
+			return '';
+		}
 	}
 	
 	/**
