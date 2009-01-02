@@ -140,9 +140,9 @@ table.infobox {
 
 table.infobox td, table.infobox th {
 	border: 1px #a4a4a4 solid;
-	padding: 1px;
+	padding: 0px;
 	
-	font-size: 11px;
+	font-size: 10px;
 	color: #314455;
 }
 
