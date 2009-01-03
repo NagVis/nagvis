@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.6"
+INSTALLER_VERSION="0.1.7"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -99,7 +99,7 @@ EOD
 version() {
 cat <<EOD
 NagVis installer, version $INSTALLER_VERSION
-Copyright (C) 2004-2008 NagVis Project
+Copyright (C) 2004-2009 NagVis Project
 
 License: GNU General Public License version 2
 
@@ -145,8 +145,8 @@ confirm() {
 	ANS=`echo $ANS | tr "jy" "YY"`
 	[ -z $ANS ] && ANS="Y"
 	if [ "$ANS" != "Y" ]; then
-		echo "|"
-		echo "| Installer aborted, exiting..."
+		text
+		text "| Installer aborted, exiting..." "|"
 		line ""
 		exit 1
 	fi
@@ -178,16 +178,17 @@ fi
 
 # Print module state, exit if necessary
 log() {
+	SIZE=`expr $LINE_SIZE - 8` 
 	if [ -z "$2" ]; then
-		printf "%-71s %s\n" "| $1" "MISSING"
+		printf "%-${SIZE}s %s\n" "| $1" "MISSING |"
 		exit 1
 	elif [ "$2" = "needed" ]; then
 		echo "$1 needed"
 		exit 1
 	elif [ "$2" = "warning" ]; then
-		echo "$1"
+		printf "%-${LINE_SIZE}s |\n" "| $1"
 	else	
-		printf "%-72s %s\n" "| $1" "found |"
+		printf "%-${SIZE}s %s\n" "| $1" "  found |"
 	fi
 }
  
@@ -220,17 +221,21 @@ check_apache_php() {
 
 # Check Graphviz version by installed system package
 check_graphviz_version() {
-  if [ "${PKG##/*/}" = "dpkg" ]; then
-    GRAPHVIZ_VER=`$PKG -l "graphviz" | grep "graphviz" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
-  else
-    GRAPHVIZ_VER=`$PKG -qa "graphviz" | sed "s/graphviz-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
-  fi
+	if [ "${PKG##/*/}" = "dpkg" ]; then
+		GRAPHVIZ_VER=`$PKG -l "graphviz" | grep "graphviz" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
+	else
+		GRAPHVIZ_VER=`$PKG -qa "graphviz" | sed "s/graphviz-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
+	fi
 
-  log "Graphviz $GRAPHVIZ_VER" $GRAPHVIZ_VER
-
-  if [ `echo "$1 $GRAPHVIZ_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $1 ]; then
-    log "|  Error: Version >= $1" "needed"
-  fi
+	if [ -z "$GRAPHVIZ_VER" ]; then
+		log "WARNING: The Graphviz package was not found." "warning"
+		log "         This may not be a problem if you installed it from source" "warning"
+	else 
+		log "Graphviz $GRAPHVIZ_VER" $GRAPHVIZ_VER
+		if [ `echo "$1 $GRAPHVIZ_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $1 ]; then
+			log "|  Error: Version >= $1" "needed"
+		fi
+	fi
 }
 
 # Check Graphviz Modules
@@ -248,7 +253,7 @@ check_graphviz_modules() {
 		if [ `echo "$2 $GV_MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
 			log "|  Error: Version >= $2" "needed"
 		fi
-done
+	done
 }
 
 # Check PHP Version
@@ -303,11 +308,11 @@ check_php_modules() {
 		
 		log "  Module: $MOD $MOD_VER" $TMP
 
-		if [ -n $MOD_VER ]; then
+		if [ -n "$MOD_VER" ]; then
 			if [ `echo "$2 $MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
-				log "|  WARNING: Module $MOD not found." "warning"
-				log "|           This may be no problem. You can ignore this if your php" "warning"
-				log "|           was compiled with the module included" "warning"
+				log "  WARNING: Module $MOD not found." "warning"
+				log "           This may not be a problem. You can ignore this if your php" "warning"
+				log "           was compiled with the module included" "warning"
 			fi
 		fi
 	done
@@ -398,9 +403,9 @@ welcome
 
 # Start gathering information
 line ""
-echo "| Starting installation of NagVis $NAGVIS_VER"
+text "| Starting installation of NagVis $NAGVIS_VER" "|"
 line ""
-echo "|"
+text 
 line "Checking for packet manager" "+"
 PKG=`which rpm`
 [ -u $PKG ] && PKG=`which dpkg`
@@ -417,7 +422,7 @@ if [ $? -ne 0 ]; then
 	log "grep doesn't support option -r" "warning"
 fi
 
-echo "|"
+text
 line "Checking paths" "+"
 
 # Get Nagios path
@@ -442,14 +447,14 @@ fi
 
 # Get NagVis path
 if [ $INSTALLER_QUIET -ne 1 ]; then
-  echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
-  read ABASE
-  if [ ! -z $ABASE ]; then
-    NAGVIS_PATH=$ABASE
-  fi
+	echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
+	read ABASE
+	if [ ! -z $ABASE ]; then
+		NAGVIS_PATH=$ABASE
+	fi
 fi
 
-echo "|"
+text
 line "Checking prerequisites" "+"
 
 # Check Nagios version
@@ -492,7 +497,7 @@ check_graphviz_version $NEED_GV_VERSION
 # Check Graphviz Modules
 check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
 
-echo "|"
+text
 line "Trying to detect Apache settings" "+"
 
 HTML_PATH=${HTML_PATH%/}
@@ -519,11 +524,11 @@ if [ ! `getent passwd | cut -d':' -f1 | grep "^$WEB_USER"` = "$WEB_USER" ]; then
 fi
 
 if [ ! `getent group | cut -d':' -f1 | grep "^$WEB_GROUP"` = "$WEB_GROUP" ]; then
-  echo "|  Error: Group $WEB_GROUP not found."
-  exit 1
+	echo "|  Error: Group $WEB_GROUP not found."
+	exit 1
 fi
 
-echo "|"
+text
 line "Checking for existing NagVis" "+"
 
 if [ -d $NAGVIS_PATH ]; then
@@ -550,7 +555,7 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	fi
 fi
 
-echo "|"
+text
 line ""
 text "| Summary" "|"
 line ""
@@ -600,7 +605,6 @@ if [ ! -d $NAGVIS_PATH ]; then
 	mkdir -p $NAGVIS_PATH
 	chk_rc "|  Error creating directory $NAGVIS_PATH" "| done"
 fi
-
 
 LINE="Copying files to $NAGVIS_PATH..."
 copy "install.sh" '*' "$NAGVIS_PATH"
