@@ -233,10 +233,13 @@ class GlobalBackendndo2fs {
 				// FIXME!
 				if($oStatus->SCHEDULEDDOWNTIMEDEPTH > 0) {
 					$arrReturn['in_downtime'] = 1;
-					$arrReturn['downtime_start'] = $data['downtime_start'];
-					$arrReturn['downtime_end'] = $data['downtime_end'];
-					$arrReturn['downtime_author'] = $data['downtime_author'];
-					$arrReturn['downtime_data'] = $data['downtime_data'];
+					
+					/*if(file_exists($this->pathPersistent.'/DOWNTIME/'.$hostName)) {
+						$arrReturn['downtime_start'] = $data['downtime_start'];
+						$arrReturn['downtime_end'] = $data['downtime_end'];
+						$arrReturn['downtime_author'] = $data['downtime_author'];
+						$arrReturn['downtime_data'] = $data['downtime_data'];
+					}*/
 				}
 				
 				/**
@@ -383,13 +386,16 @@ class GlobalBackendndo2fs {
 					
 					// If there is a downtime for this object, save the data
 					// FIXME!
-					/*if($aServObj[$i][1]->SCHEDULEDDOWNTIMEDEPTH > 0) {
+					if($aServObj[$i][1]->SCHEDULEDDOWNTIMEDEPTH > 0) {
 						$arrTmpReturn['in_downtime'] = 1;
-						$arrTmpReturn['downtime_start'] = $data['downtime_start'];
-						$arrTmpReturn['downtime_end'] = $data['downtime_end'];
-						$arrTmpReturn['downtime_author'] = $data['downtime_author'];
-						$arrTmpReturn['downtime_data'] = $data['downtime_data'];
-					}*/
+						
+						/*if(file_exists($this->pathPersistent.'/DOWNTIME/'.$hostName.'/'.$aServObj[$i][0]->SERVICEDESCRIPTION)) {
+							$arrTmpReturn['downtime_start'] = $data['downtime_start'];
+							$arrTmpReturn['downtime_end'] = $data['downtime_end'];
+							$arrTmpReturn['downtime_author'] = $data['downtime_author'];
+							$arrTmpReturn['downtime_data'] = $data['downtime_data'];
+						}*/
+					}
 					
 					/**
 					 * Only recognize hard states. There was a discussion about the implementation
