@@ -407,7 +407,7 @@ class GlobalPage {
 		$ret = '';
 		if($js != '') {
 			
-			$ret .= "<script type=\"text/javascript\" language=\"JavaScript\"> ";
+			$ret .= "<script type=\"text/javascript\"> ";
 			$ret .= "<!-- \n";
 			if(is_array($js)) {
 				$ret .= implode("\n", $js);
