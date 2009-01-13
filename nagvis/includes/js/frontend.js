@@ -618,8 +618,8 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		var objId = aMapObjectInformations[i].objId;
 		var intIndex = -1;
 		
-		// Find the id with the matching objId
-		for(var a = 0, len1 = aObjs.length; a < len1; a++) {
+		// Find the id (key) with the matching objId in object array
+		for(var a = 0, len1 = aObjs.length; a < len1 && intIndex == -1; a++) {
 			if(aObjs[a].objId == objId) {
 				intIndex = a;
 			}
@@ -630,8 +630,9 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		// Save old state for later "change detection"
 		oObj.saveLastState();
 		
+		// When this is a valid index
 		if(intIndex >= 0) {
-			// Update this object
+			// Update this object (loop all options from array and set in current obj)
 			for (var strIndex in aMapObjectInformations[i]) {
 				if(aMapObjectInformations[i][strIndex] != 'objId') {
 					oObj.conf[strIndex] = aMapObjectInformations[i][strIndex];
@@ -646,7 +647,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		oObj.setLastUpdate();
 		
 		// Objects with view_type=gadget need to be reloaded even when no state
-		// changed (perfdata could be changed since last update)
+		// changed (perfdata could have changed since last update)
 		if(!oObj.stateChanged() && oObj.conf.view_type === 'gadget') {
 			// Reparse object to map
 			oObj.parse();
@@ -694,9 +695,9 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			
 			// - Eventlog
 			if(oObj.conf.type == 'service') {
-				eventlog("state-change", "info", oObj.conf.type+" "+oObj.conf.name+" "+oObj.conf.service_description+": Old state: "+oObj.last_conf.summary_state+" New state: "+oObj.conf.summary_state);
+				eventlog("state-change", "info", oObj.conf.type+" "+oObj.conf.name+" "+oObj.conf.service_description+": Old: "+oObj.last_conf.summary_state+"/"+oObj.last_conf.summary_problem_has_been_acknowledged+"/"+oObj.last_conf.summary_in_downtime+" New: "+oObj.conf.summary_state+"/"+oObj.conf.summary_problem_has_been_acknowledged+"/"+oObj.conf.summary_in_downtime);
 			} else {
-				eventlog("state-change", "info", oObj.conf.type+" "+oObj.conf.name+": Old state: "+oObj.last_conf.summary_state+" New state: "+oObj.conf.summary_state);
+				eventlog("state-change", "info", oObj.conf.type+" "+oObj.conf.name+": Old: "+oObj.last_conf.summary_state+"/"+oObj.last_conf.summary_problem_has_been_acknowledged+"/"+oObj.last_conf.summary_in_downtime+" New: "+oObj.conf.summary_state+"/"+oObj.conf.summary_problem_has_been_acknowledged+"/"+oObj.conf.summary_in_downtime);
 			}
 			
 			// - Sound
@@ -783,7 +784,7 @@ function playSound(intIndex, iNumTimes){
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function flashIcon(intIndex, iNumTimes){
-	var id = aMapObjects[intIndex].parsedObject.id
+	var id = aMapObjects[intIndex].parsedObject.id;
 	
 	var oObjIcon = document.getElementById(id+'-icon');
 	var oObjIconDiv = document.getElementById(id+'-icondiv');
@@ -800,10 +801,11 @@ function flashIcon(intIndex, iNumTimes){
 		oObjIconDiv.style.left = aMapObjects[intIndex].conf.x+'px';
 	}
 	
-	iNumTimes = iNumTimes - 1;
+	var iNumTimes2 = iNumTimes - 1;
 	
-	if(iNumTimes > 0 || (iNumTimes == 0 && oObjIcon.style.border.indexOf("none") == -1)) {
-		setTimeout(function() { flashIcon(intIndex, iNumTimes) }, 500);
+	// Flash again until timer counted down and the border is hidden
+	if(iNumTimes2 > 0 || (iNumTimes2 == 0 && oObjIcon.style.border.indexOf("none") != -1)) {
+		setTimeout(function() { flashIcon(intIndex, iNumTimes2); }, 500);
 	}
 	
 	oObjIcon = null;
