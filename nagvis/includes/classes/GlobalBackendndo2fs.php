@@ -230,16 +230,18 @@ class GlobalBackendndo2fs {
 				$arrReturn['last_hard_state_change'] = $oStatus->LASTHARDSTATECHANGE;
 				
 				// If there is a downtime for this object, save the data
-				// FIXME!
 				if($oStatus->SCHEDULEDDOWNTIMEDEPTH > 0) {
 					$arrReturn['in_downtime'] = 1;
 					
-					/*if(file_exists($this->pathPersistent.'/DOWNTIME/'.$hostName)) {
-						$arrReturn['downtime_start'] = $data['downtime_start'];
-						$arrReturn['downtime_end'] = $data['downtime_end'];
-						$arrReturn['downtime_author'] = $data['downtime_author'];
-						$arrReturn['downtime_data'] = $data['downtime_data'];
-					}*/
+					$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName;
+					if(file_exists($sFile)) {
+						$oDowntime = json_decode(file_get_contents($sFile));
+						
+						$arrReturn['downtime_start'] = $oDowntime->STARTTIME;
+						$arrReturn['downtime_end'] = $oDowntime->ENDTIME;
+						$arrReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+						$arrReturn['downtime_data'] = $oDowntime->COMMENT;
+					}
 				}
 				
 				/**
@@ -385,16 +387,18 @@ class GlobalBackendndo2fs {
 					$arrTmpReturn['last_hard_state_change'] = $aServObj[$i][1]->LASTHARDSTATECHANGE;
 					
 					// If there is a downtime for this object, save the data
-					// FIXME!
 					if($aServObj[$i][1]->SCHEDULEDDOWNTIMEDEPTH > 0) {
 						$arrTmpReturn['in_downtime'] = 1;
 						
-						/*if(file_exists($this->pathPersistent.'/DOWNTIME/'.$hostName.'/'.$aServObj[$i][0]->SERVICEDESCRIPTION)) {
-							$arrTmpReturn['downtime_start'] = $data['downtime_start'];
-							$arrTmpReturn['downtime_end'] = $data['downtime_end'];
-							$arrTmpReturn['downtime_author'] = $data['downtime_author'];
-							$arrTmpReturn['downtime_data'] = $data['downtime_data'];
-						}*/
+						$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
+						if(file_exists($sFile)) {
+							$oDowntime = json_decode(file_get_contents($sFile));
+							
+							$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
+							$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
+							$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+							$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
+						}
 					}
 					
 					/**
