@@ -96,7 +96,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	stateChanged: function() {
-		if(this.conf.summary_state != this.last_conf.summary_state || this.conf.summary_problem_has_been_acknowledged != this.last_conf.summary_problem_has_been_acknowledged || this.conf.summary_in_downtime != this.last_conf.summary_in_downtime) {
+		if(this.conf.summary_state != this.last_conf.summary_state || 
+		   this.conf.summary_problem_has_been_acknowledged != this.last_conf.summary_problem_has_been_acknowledged || 
+		   this.conf.summary_in_downtime != this.last_conf.summary_in_downtime) {
 			return true;
 		} else {
 			return false;
