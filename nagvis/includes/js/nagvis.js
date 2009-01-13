@@ -171,8 +171,8 @@ function setRotationLabel(startLabel,stopLabel) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getUrlParam(name) {
-	name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	var regexS = "[\\?&]"+name+"=([^&#]*)";
+	var name2 = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	var regexS = "[\\?&]"+name2+"=([^&#]*)";
 	var regex = new RegExp( regexS );
 	var results = regex.exec(window.location);
 	if(results === null) {

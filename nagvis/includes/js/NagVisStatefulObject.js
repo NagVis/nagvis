@@ -227,6 +227,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	replaceMacros: function () {
+		var name = '';
 		if(this.conf.type == 'service') {
 			name = 'host_name';
 		} else {
@@ -251,9 +252,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 			// For maps use the alias as display string
 			if(this.conf.type == 'map') {
 				name = 'alias';   
+			} else {
+				name = 'name';
 			}
 			
-			this.conf.label_text = this.conf.label_text.replace('[name]', this.conf.name);
+			this.conf.label_text = this.conf.label_text.replace('['+name+']', this.conf.name);
 			this.conf.label_text = this.conf.label_text.replace('[output]', this.conf.output);
 			
 			if(this.conf.type == 'service' || this.conf.type == 'host') {
@@ -275,12 +278,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	parseLine: function () {
 		var ret = '';
 		var link = '';
-		
-		if(this.type == 'service') {
-			alt = this.conf.name+'-'+this.conf.service_description;
-		} else {
-			alt = this.conf.name;
-		}
 		
 		// Create container div
 		oContainerDiv = document.createElement('div');
@@ -337,6 +334,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseIcon: function () {
+		var alt = '';
+		
 		if(this.type == 'service') {
 			alt = this.conf.name+'-'+this.conf.service_description;
 		} else {
