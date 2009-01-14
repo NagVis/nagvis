@@ -616,13 +616,16 @@ function updateShapes(aShapes) {
  *
  * Bulk update objects
  *
- * @param   Array    Array of objects to parse to the map
+ * @param   Array    Array of objects with new informations
+ * @param   Array    Array of map objects
+ * @param   String   Type of the page
  * @return  Boolean  Returns true when some state has changed
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateObjects(aMapObjectInformations, aObjs, sType) {
 	var bStateChanged = false;
 	
+	// Loop all object which have new informations
 	for(var i = 0, len = aMapObjectInformations.length; i < len; i++) {
 		var objId = aMapObjectInformations[i].objId;
 		var intIndex = -1;
@@ -686,18 +689,18 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			
 			// - Highlight (Flashing)
 			if(oPageProperties.event_highlight) {
-				if(aObjs[intIndex].conf.view_type && aObjs[intIndex].conf.view_type === 'line') {
-					// FIXME: Atm only flash icons, not lines
-				} else {
+				if(aObjs[intIndex].conf.view_type && aObjs[intIndex].conf.view_type === 'icon') {
 					// Detach the handler
-					setTimeout(function() { var iIndex=intIndex; flashIcon(iIndex, 10) }, 0);
+					setTimeout(function() { var iIndex=intIndex; flashIcon(iIndex, 10); }, 100);
+				} else {
+					// FIXME: Atm only flash icons, not lines or gadgets
 				}
 			}
 			
 			// - Scroll to object
 			if(oPageProperties.event_scroll) {
 				// Detach the handler
-				setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15) }, 0);
+				setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15); }, 100);
 			}
 			
 			// - Eventlog
@@ -710,7 +713,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			// - Sound
 			if(oPageProperties.event_sound) {
 				// Detach the handler
-				setTimeout(function() { playSound(intIndex, 1) }, 0);
+				setTimeout(function() { playSound(intIndex, 1); }, 100);
 			}
 		}
 
@@ -733,7 +736,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 function playSound(intIndex, iNumTimes){
 	var sSound = '';
 	
-	var id = aMapObjects[intIndex].parsedObject.id
+	var id = aMapObjects[intIndex].parsedObject.id;
 	
 	var oObjIcon = document.getElementById(id+'-icon');
 	var oObjIconDiv = document.getElementById(id+'-icondiv');
