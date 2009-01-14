@@ -176,7 +176,11 @@ function runWorker(iCount, sType) {
 					parseHoverMenus(aMapObjects);
 				}
 				
-				// Now proceed with real actions when everything is OK
+				/*
+				 * Now proceed with real actions when everything is OK
+				 */
+				
+				// Get objects which need an update
 				var arrObj = getObjectsToUpdate(aMapObjects);
 				
 				// Create the ajax request for bulk update, handle shape updates
@@ -189,15 +193,15 @@ function runWorker(iCount, sType) {
 					if(type === 'shape') {
 						aShapesToUpdate.push(arrObj[i]);
 					} else {
-						var obj_id = aMapObjects[arrObj[i]].objId;
 						var name = aMapObjects[arrObj[i]].conf.name;
-						var service_description = aMapObjects[arrObj[i]].conf.service_description;
-						var map = oPageProperties.map_name;
-						var sUrlPart = '';
 						
 						if(name) {
-							sUrlPart = sUrlPart + '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
-						
+							var obj_id = aMapObjects[arrObj[i]].objId;
+							var service_description = aMapObjects[arrObj[i]].conf.service_description;
+							var map = oPageProperties.map_name;
+							
+							// Create request string
+							var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
 							if(service_description) {
 								sUrlPart = sUrlPart + '&n2[]='+service_description;
 							} else {
@@ -225,6 +229,7 @@ function runWorker(iCount, sType) {
 				
 				// When some state changed on the map update the title and favicon
 				if(bStateChanged) {
+					// Get new map state from core
 					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
 					
 					// Update favicon
@@ -263,23 +268,26 @@ function runWorker(iCount, sType) {
 				
 				//FIXME: Map configuration changed?
 				
-				// Now proceed with real actions when everything is OK
+				/*
+				 * Now proceed with real actions when everything is OK
+				 */
+				
+				// Get objects which need an update
 				var arrObj = getObjectsToUpdate(aMaps);
 				
 				// Create the ajax request for bulk update, handle object updates
 				var aUrlParts = [];
 				for(var i = 0, len = arrObj.length; i < len; i++) {
-					var type = aMaps[arrObj[i]].conf.type;
-					
-					var obj_id = aMaps[arrObj[i]].objId;
 					var name = aMaps[arrObj[i]].conf.name;
-					var service_description = aMaps[arrObj[i]].conf.service_description;
-					var map = oPageProperties.map_name;
-					var sUrlPart = '';
 					
 					if(name) {
-						sUrlPart = sUrlPart + '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
-					
+						var type = aMaps[arrObj[i]].conf.type;
+						var obj_id = aMaps[arrObj[i]].objId;
+						var service_description = aMaps[arrObj[i]].conf.service_description;
+						var map = oPageProperties.map_name;
+						
+						// Create request url part for this object
+						var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
 						if(service_description) {
 							sUrlPart = sUrlPart + '&n2[]='+service_description;
 						} else {
@@ -625,36 +633,34 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			}
 		}
 		
-		var oObj = aObjs[intIndex];
-		
 		// Save old state for later "change detection"
-		oObj.saveLastState();
+		aObjs[intIndex].saveLastState();
 		
 		// When this is a valid index
 		if(intIndex >= 0) {
 			// Update this object (loop all options from array and set in current obj)
 			for (var strIndex in aMapObjectInformations[i]) {
 				if(aMapObjectInformations[i][strIndex] != 'objId') {
-					oObj.conf[strIndex] = aMapObjectInformations[i][strIndex];
+					aObjs[intIndex].conf[strIndex] = aMapObjectInformations[i][strIndex];
 				}
 			}
 			
 			// Update members list
-			oObj.getMembers();
+			aObjs[intIndex].getMembers();
 		}
 		
 		// Update lastUpdate timestamp
-		oObj.setLastUpdate();
+		aObjs[intIndex].setLastUpdate();
 		
 		// Objects with view_type=gadget need to be reloaded even when no state
 		// changed (perfdata could have changed since last update)
-		if(!oObj.stateChanged() && oObj.conf.view_type === 'gadget') {
+		if(!aObjs[intIndex].stateChanged() && aObjs[intIndex].conf.view_type === 'gadget') {
 			// Reparse object to map
-			oObj.parse();
+			aObjs[intIndex].parse();
 		}
 		
 		// Detect state changes and do some actions
-		if(oObj.stateChanged()) {
+		if(aObjs[intIndex].stateChanged()) {
 			
 			/* Internal handling */
 			
@@ -663,9 +669,9 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			
 			// Reparse object to map
 			if(sType === 'map') {
-				oObj.parse();
+				aObjs[intIndex].parse();
 			} else if(sType === 'overview') {
-				oObj.parsedObject = oObj.parsedObject.parentNode.replaceChild(oObj.parseOverview(), oObj.parsedObject);
+				aObjs[intIndex].parsedObject = aObjs[intIndex].parsedObject.parentNode.replaceChild(aObjs[intIndex].parseOverview(), aObjs[intIndex].parsedObject);
 			}
 			
 			/**
@@ -679,25 +685,25 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			
 			// - Highlight (Flashing)
 			if(oPageProperties.event_highlight) {
-				if(oObj.conf.view_type && oObj.conf.view_type === 'line') {
+				if(aObjs[intIndex].conf.view_type && aObjs[intIndex].conf.view_type === 'line') {
 					// FIXME: Atm only flash icons, not lines
 				} else {
 					// Detach the handler
-					setTimeout(function() { flashIcon(intIndex, 10) }, 0);
+					setTimeout(function() { var iIndex=intIndex; flashIcon(iIndex, 10) }, 0);
 				}
 			}
 			
 			// - Scroll to object
 			if(oPageProperties.event_scroll) {
 				// Detach the handler
-				setTimeout(function() { scrollSlow(oObj.conf.x, oObj.conf.y, 15) }, 0);
+				setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15) }, 0);
 			}
 			
 			// - Eventlog
-			if(oObj.conf.type == 'service') {
-				eventlog("state-change", "info", oObj.conf.type+" "+oObj.conf.name+" "+oObj.conf.service_description+": Old: "+oObj.last_conf.summary_state+"/"+oObj.last_conf.summary_problem_has_been_acknowledged+"/"+oObj.last_conf.summary_in_downtime+" New: "+oObj.conf.summary_state+"/"+oObj.conf.summary_problem_has_been_acknowledged+"/"+oObj.conf.summary_in_downtime);
+			if(aObjs[intIndex].conf.type == 'service') {
+				eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+" "+aObjs[intIndex].conf.service_description+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
 			} else {
-				eventlog("state-change", "info", oObj.conf.type+" "+oObj.conf.name+": Old: "+oObj.last_conf.summary_state+"/"+oObj.last_conf.summary_problem_has_been_acknowledged+"/"+oObj.last_conf.summary_in_downtime+" New: "+oObj.conf.summary_state+"/"+oObj.conf.summary_problem_has_been_acknowledged+"/"+oObj.conf.summary_in_downtime);
+				eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
 			}
 			
 			// - Sound
@@ -708,7 +714,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		}
 
 		// Reparse the hover menu
-		oObj.parseHoverMenu();
+		aObjs[intIndex].parseHoverMenu();
 	}
 	
 	return bStateChanged;
@@ -804,7 +810,7 @@ function flashIcon(intIndex, iNumTimes){
 	var iNumTimes2 = iNumTimes - 1;
 	
 	// Flash again until timer counted down and the border is hidden
-	if(iNumTimes2 > 0 || (iNumTimes2 == 0 && oObjIcon.style.border.indexOf("none") != -1)) {
+	if(iNumTimes2 > 0 || (iNumTimes2 <= 0 && oObjIcon.style.border.indexOf("none") == -1)) {
 		setTimeout(function() { flashIcon(intIndex, iNumTimes2); }, 500);
 	}
 	
