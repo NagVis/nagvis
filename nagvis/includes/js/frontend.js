@@ -65,6 +65,7 @@ function runWorker(iCount, sType) {
 		if(sType == 'map') {
 			setMapBasics(oPageProperties);
 			
+			// Create map objects from initialObjects and add them to aMapObjects
 			eventlog("worker", "info", "Parsing map objects");
 			setMapObjects(aInitialMapObjects);
 			
@@ -606,7 +607,7 @@ function setMapObjects(aMapObjectConf) {
  */
 function updateShapes(aShapes) {
 	for(var i = 0, len = aShapes.length; i < len; i++) {
-		aMapObjects[i].parse();
+		aMapObjects[aShapes[i]].parse();
 	}
 }
 
