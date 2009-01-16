@@ -63,6 +63,9 @@ var NagVisObject = Base.extend({
 			// Writes template code to "this.context_template_code"
 			this.getContextTemplateCode();
 			
+			// Replace object specific macros
+			this.replaceContextTemplateMacros();
+			
 			var oObj = document.getElementById(sObjId);
 			var oContainer = document.getElementById(sContainerId);
 			
@@ -92,6 +95,50 @@ var NagVisObject = Base.extend({
 			oObj = null;
 		}
   },
+	
+	/**
+	 * replaceContextTemplateMacros()
+	 *
+	 * Replaces object specific macros in the template code
+	 *
+	 * @return	String		HTML code for the hover box
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	replaceContextTemplateMacros: function() {
+		var oMacros = new Object();
+		var oSectionMacros = new Object();
+		
+		oMacros.obj_id = this.objId;
+		oMacros.name = this.conf.name;
+		
+		if(this.conf.type === 'service') {
+			oMacros.service_description = this.conf.service_description;
+		} else {
+			oSectionMacros.service = '<!--\\\sBEGIN\\\sservice\\\s-->.+?<!--\\\sEND\\\sservice\\\s-->';
+		}
+		
+		// Macros which are only for hosts
+		if(this.conf.type !== 'host') {
+			oSectionMacros.host = '<!--\\\sBEGIN\\\shost\\\s-->.+?<!--\\\sEND\\\shost\\\s-->';
+		}
+		
+		// Loop and replace all unwanted section macros
+		for (var key in oSectionMacros) {
+			var regex = new RegExp(oSectionMacros[key], 'gm');
+			this.context_template_code = this.context_template_code.replace(regex, '');
+			regex = null;
+		}
+		oSectionMacros = null;
+		
+		// Loop and replace all normal macros
+		for (var key in oMacros) {
+			var regex = new RegExp('\\\['+key+'\\\]', 'g');
+			this.context_template_code = this.context_template_code.replace(regex, oMacros[key]);
+			regex = null;
+		}
+		
+		oMacros = null;
+	},
 	
 	/**
 	 * getContextTemplateCode()

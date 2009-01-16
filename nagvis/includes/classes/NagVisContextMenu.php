@@ -88,68 +88,12 @@ class NagVisContextMenu {
 	
 	private function replaceStaticMacros() {
 		// Replace the static macros (language, paths)
-		if(strpos($this->code,'[lang_alias]') !== FALSE) {
-			$this->code = str_replace('[lang_alias]',$this->CORE->LANG->getText('alias'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_address]') !== FALSE) {
-			$this->code = str_replace('[lang_address]',$this->CORE->LANG->getText('address'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_state]') !== FALSE) {
-			$this->code = str_replace('[lang_state]',$this->CORE->LANG->getText('state'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_summary_state]') !== FALSE) {
-			$this->code = str_replace('[lang_summary_state]',$this->CORE->LANG->getText('summaryState'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_output]') !== FALSE) {
-			$this->code = str_replace('[lang_output]',$this->CORE->LANG->getText('output'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_perfdata]') !== FALSE) {
-			$this->code = str_replace('[lang_perfdata]',$this->CORE->LANG->getText('perfdata'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_summary_output]') !== FALSE) {
-			$this->code = str_replace('[lang_summary_output]',$this->CORE->LANG->getText('summaryOutput'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_overview]') !== FALSE) {
-			$this->code = str_replace('[lang_overview]',$this->CORE->LANG->getText('overview'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_instance]') !== FALSE) {
-			$this->code = str_replace('[lang_instance]',$this->CORE->LANG->getText('instance'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_next_check]') !== FALSE) {
-		$this->code = str_replace('[lang_next_check]',$this->CORE->LANG->getText('nextCheck'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_last_check]') !== FALSE) {
-			$this->code = str_replace('[lang_last_check]',$this->CORE->LANG->getText('lastCheck'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_state_type]') !== FALSE) {
-			$this->code = str_replace('[lang_state_type]',$this->CORE->LANG->getText('stateType'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_current_attempt]') !== FALSE) {
-			$this->code = str_replace('[lang_current_attempt]',$this->CORE->LANG->getText('currentAttempt'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_last_state_change]') !== FALSE) {
-			$this->code = str_replace('[lang_last_state_change]',$this->CORE->LANG->getText('lastStateChange'),$this->code);
-		}
-		
-		if(strpos($this->code,'[lang_state_duration]') !== FALSE) {
+		/*if(strpos($this->code,'[lang_state_duration]') !== FALSE) {
 			$this->code = str_replace('[lang_state_duration]',$this->CORE->LANG->getText('stateDuration'),$this->code);
-		}
+		}*/
 		
-		if(strpos($this->code,'[lang_service_description]') !== FALSE) {
-			$this->code = str_replace('[lang_service_description]',$this->CORE->LANG->getText('servicename'),$this->code);
+		if(strpos($this->code,'[html_cgi]') !== FALSE) {
+			$this->code = str_replace('[html_cgi]',$this->CORE->MAINCFG->getValue('paths','htmlcgi'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_base]') !== FALSE) {

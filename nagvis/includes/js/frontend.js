@@ -214,10 +214,12 @@ function runWorker(iCount, sType) {
 				for(var i = 0, len = arrObj.length; i < len; i++) {
 					var type = aMapObjects[arrObj[i]].conf.type;
 					
-					// Shapes which need to be updated need a special handling
+					// Seperate shapes from rest
 					if(type === 'shape') {
+						// Shapes which need to be updated need a special handling
 						aShapesToUpdate.push(arrObj[i]);
 					} else {
+						// Handle other objects
 						var name = aMapObjects[arrObj[i]].conf.name;
 						
 						if(name) {
@@ -254,21 +256,7 @@ function runWorker(iCount, sType) {
 				
 				// When some state changed on the map update the title and favicon
 				if(bStateChanged) {
-					// Get new map state from core
-					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
-					
-					// Update favicon
-					setPageFavicon(getFaviconImage(o));
-					
-					// Update page title
-					setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
-					
-					// Change background color
-					if(oPageProperties.event_background && oPageProperties.event_background == '1') {
-						setPageBackgroundColor(getBackgroundColor(o));
-					}
-					
-					o = null;
+					updateMapBasics();
 				}
 				
 				// Update lastWorkerRun
@@ -374,7 +362,7 @@ function getObjectsToUpdate(aObjs) {
 	var arrReturn = [];
 	var oDate = Date.parse(new Date());
 	
-	// Assign all object indexes to return Array
+	// Assign all object which need an update indexes to return Array
 	for(var i = 0, len = aObjs.length; i < len; i++) {
 		if(aObjs[i].lastUpdate <= (oDate-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
@@ -555,7 +543,6 @@ function getHoverTemplates(aObjs) {
 	}
 }
 
-
 /**
  * getContextTemplates()
  *
@@ -567,13 +554,12 @@ function getContextTemplates(aObjs) {
 	var aUrlParts = [];
 	var aTemplateObjects;
 	
-	// Loop all map objects to get the used hover templates
+	// Loop all map objects to get the used templates
 	for(var a = 0, len = aObjs.length; a < len; a++) {
 		// Ignore objects which
-		// a) have a disabled hover menu
-		// b) do not use hover_url
+		// a) have a disabled menu
 		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu == '1') {
-			oContextTemplates[aObjs[a].conf.hover_template] = '';
+			oContextTemplates[aObjs[a].conf.context_template] = '';
 		}
 	}
 	
@@ -587,7 +573,7 @@ function getContextTemplates(aObjs) {
 	// Get the needed templates via bulk request
 	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getContextTemplate', aUrlParts, 1900, true);
 	
-	// Set the code to global object oHoverTemplates
+	// Set the code to global object oContextTemplates
 	if(aTemplateObjects.length > 0) {
 		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
 			oContextTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
@@ -610,6 +596,80 @@ function parseContextMenus(aObjs) {
 			aObjs[a].parseContextMenu();
 		}
 	}
+}
+
+/**
+ * refreshMapObject()
+ *
+ * Handles manual map object update triggered by e.g. the context menu
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function refreshMapObject(objId) {
+	var iIndex = -1;
+	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++) {
+		if(aMapObjects[i].objId === objId) { 
+			iIndex = i;
+		}
+	}
+	
+	var aUrlParts = [];
+	var name = aMapObjects[iIndex].conf.name;
+	
+	var type = aMapObjects[iIndex].conf.type;
+	var obj_id = aMapObjects[iIndex].objId;
+	var service_description = aMapObjects[iIndex].conf.service_description;
+	var map = oPageProperties.map_name;
+	
+	// Create request string
+	var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+	if(service_description) {
+		sUrlPart = sUrlPart + '&n2[]='+service_description;
+	} else {
+		sUrlPart = sUrlPart + '&n2[]=';
+	}
+	
+	// Append part to array of parts
+	aUrlParts.push(sUrlPart);
+	
+	// Get the updated objectsupdateMapObjects via bulk request
+	var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+	var bStateChanged = false;
+	if(o.length > 0) {
+		bStateChanged = updateObjects(o, aMapObjects, 'map');
+	}
+	o = null;
+	
+	if(bStateChanged) {
+		updateMapBasics();
+	}
+}
+
+
+/**
+ * updateMapBasics()
+ *
+ * This function updates the map basics like background, favicon and title with
+ * current information
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function updateMapBasics() {
+	// Get new map state from core
+	var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+	
+	// Update favicon
+	setPageFavicon(getFaviconImage(o));
+	
+	// Update page title
+	setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
+	
+	// Change background color
+	if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+		setPageBackgroundColor(getBackgroundColor(o));
+	}
+	
+	o = null;
 }
 
 /**
