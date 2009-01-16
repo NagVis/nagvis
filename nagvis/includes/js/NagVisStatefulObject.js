@@ -155,16 +155,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 		this.parsedObject = oMap.appendChild(oContainerDiv);
 		oContainerDiv = null;
 		oMap = null;
-    
-    // Add a context menu to the object when enabled
-		// FIXME: add config option to make this work
-    if(this.conf.context_menu && this.conf.context_menu == '1') {
-      if(this.conf.view_type && this.conf.view_type == 'line') {
-        this.addContextMenu(this.objId, this.objId+'-linediv');
-      } else {
-        this.addContextMenu(this.objId, this.objId+'-icon');
-			}
-    }
 		
 		if(this.conf.view_type && this.conf.view_type == 'line') {
 			this.drawLine();
@@ -221,6 +211,26 @@ var NagVisStatefulObject = NagVisObject.extend({
 		this.getHoverMenu(oObj);
 		
 		oObj = null;
+	},
+	
+	/**
+	 * PUBLIC parseContextMenu()
+	 *
+	 * Parses the context menu. Don't add this functionality to the normal icon
+	 * parsing
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	parseContextMenu: function () {
+    // Add a context menu to the object when enabled
+    if(this.conf.context_menu && this.conf.context_menu == '1') {
+      if(this.conf.view_type && this.conf.view_type == 'line') {
+        this.getContextMenu(this.objId, this.objId+'-linediv');
+      } else {
+        this.getContextMenu(this.objId, this.objId+'-icon');
+			}
+    }
 	},
 	
 	/**

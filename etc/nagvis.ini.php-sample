@@ -37,6 +37,11 @@
 ;backend="ndomy_1"
 ; background color of maps
 ;backgroundcolor="#fff"
+; Enable/Disable the context menu on map objects. With the context menu you are
+; able to bind commands or links to your map objects
+;contextmenu=1
+; Choose the default context template
+;headertemplate="default"
 ; Enable/Disable changing background color on state changes (Configured color is
 ; shown when summary state is PENDING, OK or UP)
 ;eventbackground=0

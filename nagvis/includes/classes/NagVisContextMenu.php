@@ -1,9 +1,9 @@
 <?php
 /*****************************************************************************
  *
- * GlobalHoverMenu.php - Class for handling the hover menus
+ * NagVisContextMenu.php - Class for handling the context menus
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: lars@vertical-visions.de)
  *
  * License:
  *
@@ -25,14 +25,14 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class GlobalHoverMenu {
+class NagVisContextMenu {
 	private $CORE;
 	private $BACKEND;
 	private $OBJPAGE;
 	
 	private $templateName;
 	private $pathHtmlBase;
-	private $pathHoverTemplateFile;
+	private $pathContextTemplateFile;
 	
 	private $code;
 	
@@ -48,7 +48,7 @@ class GlobalHoverMenu {
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
-		$this->pathHoverTemplateFile = $this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->templateName.'.html';
+		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','contexttemplate').'tmpl.'.$this->templateName.'.html';
 		
 		// Read the contents of the template file
 		$this->readTemplate();
@@ -56,31 +56,31 @@ class GlobalHoverMenu {
 	
 	
 	/**
-	 * readHoverTemplate 
+	 * readTemplate
 	 *
-	 * Reads the contents of the hover template file
+	 * Reads the contents of the template file
 	 *
-	 * @return	String		HTML Code for the hover menu
+	 * @return	String		HTML Code for the menu
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readTemplate() {
-		// Read hover cache contents
-		$arrHoverCache = $this->CORE->MAINCFG->getRuntimeValue('hover_cache');
-		if(isset($arrHoverCache[$this->templateName])) {
-			$this->code = $arrHoverCache[$this->templateName];
+		// Read cache contents
+		$arrContextCache = $this->CORE->MAINCFG->getRuntimeValue('context_cache');
+		if(isset($arrContextCache[$this->templateName])) {
+			$this->code = $arrContextCache[$this->templateName];
 		} else {
-			if($this->checkHoverTemplateReadable(1)) {
-				$this->code = file_get_contents($this->pathHoverTemplateFile);
+			if($this->checkTemplateReadable(1)) {
+				$this->code = file_get_contents($this->pathTemplateFile);
 				
 				// The static macros should be replaced before caching
 				$this->replaceStaticMacros();
 				
-				// Build cache for the hover template
-				if(!isset($arrHoverCache[$this->templateName])) {
-					$this->CORE->MAINCFG->setRuntimeValue('hover_cache', Array($this->templateName => $this->code));
+				// Build cache for the template
+				if(!isset($arrContextCache[$this->templateName])) {
+					$this->CORE->MAINCFG->setRuntimeValue('context_cache', Array($this->templateName => $this->code));
 				} else {
-					$arrHoverCache[$this->templateName] = $this->code;
-					$this->CORE->MAINCFG->setRuntimeValue('hover_cache', $arrHoverCache);
+					$arrCoverCache[$this->templateName] = $this->code;
+					$this->CORE->MAINCFG->setRuntimeValue('context_cache', $arrContextCache);
 				}
 			}
 		}
@@ -157,11 +157,11 @@ class GlobalHoverMenu {
 		}
 		
 		if(strpos($this->code,'[html_templates]') !== FALSE) {
-			$this->code = str_replace('[html_templates]',$this->CORE->MAINCFG->getValue('paths','htmlhovertemplates'),$this->code);
+			$this->code = str_replace('[html_templates]',$this->CORE->MAINCFG->getValue('paths','htmlcontexttemplates'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_template_images]') !== FALSE) {
-			$this->code = str_replace('[html_template_images]',$this->CORE->MAINCFG->getValue('paths','htmlhovertemplateimages'),$this->code);
+			$this->code = str_replace('[html_template_images]',$this->CORE->MAINCFG->getValue('paths','htmlcontexttemplateimages'),$this->code);
 		}
 	}
 	
@@ -176,40 +176,40 @@ class GlobalHoverMenu {
 	}
 	
 	/**
-	 * PRIVATE checkHoverTemplateReadable()
+	 * PRIVATE checkTemplateReadable()
 	 *
-	 * Checks if the requested hover template file is readable
+	 * Checks if the requested template file is readable
 	 *
 	 * @param		Boolean		Switch for enabling/disabling error messages
 	 * @return	Boolean		Check Result
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkHoverTemplateReadable($printErr) {
-		if($this->checkHoverTemplateExists($printErr) && is_readable($this->pathHoverTemplateFile)) {
+	private function checkTemplateReadable($printErr) {
+		if($this->checkTemplateExists($printErr) && is_readable($this->pathTemplateFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathHoverTemplateFile));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
 	}
 	
 	/**
-	 * PRIVATE checkHoverTemplateExists()
+	 * PRIVATE checkTemplateExists()
 	 *
-	 * Checks if the requested hover template file exists
+	 * Checks if the requested template file exists
 	 *
 	 * @param		Boolean		Switch for enabling/disabling error messages
 	 * @return	Boolean		Check Result
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkHoverTemplateExists($printErr) {
-		if(file_exists($this->pathHoverTemplateFile)) {
+	private function checkTemplateExists($printErr) {
+		if(file_exists($this->pathTemplateFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathHoverTemplateFile));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

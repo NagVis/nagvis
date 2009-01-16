@@ -223,6 +223,22 @@ switch($_GET['action']) {
 			echo json_encode($arrReturn);
 		}
 	break;
+	case 'getContextTemplate':
+		if(!isset($_GET['name']) || $_GET['name'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterNameNotSet');
+		} else {
+			$arrReturn = Array();
+			$arrNames = $_GET['name'];
+			
+			$numObjects = count($arrNames);
+			for($i = 0; $i < $numObjects; $i++) {
+				$OBJ = new NagVisContextMenu($CORE, $arrNames[$i]);
+				$arrReturn[] = Array('name' => $arrNames[$i], 'code' => str_replace("\r\n","",str_replace("\n","", $OBJ->__toString())));
+			}
+			
+			echo json_encode($arrReturn);
+		}
+	break;
 	case 'getHoverUrl':
 		if(!isset($_GET['url']) || $_GET['url'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterUrlNotSet');

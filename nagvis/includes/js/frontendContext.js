@@ -45,11 +45,23 @@ function contextMouseDown(event) {
 		target = event.srcElement;
 	}
 	
-	// Hide all context menus
-	contextHide();
+	// Workaround for the different structure of targets on lines/icons
+	// Would be nice to fix the structure
+	var id;
+	if(target.id !== '') {
+		id = target.id;
+	} else {
+		id = target.parentNode.parentNode.parentNode.id;
+	}
+	
+	// Hide all context menus except clicking the current open context menu
+	if(id.indexOf('-context') === -1) {
+		// Hide all context menus
+		contextHide();
+	}
 	
 	// only show the context menu if the right mouse button is pressed on the obj
-	if (event.button === 2) {
+	if(event.button === 2) {
 		// Prepare to show the context menu
 		_replaceContext = true;
 	}
@@ -57,8 +69,10 @@ function contextMouseDown(event) {
 
 function contextHide() {
 	// Loop all open context menus
-	for (var i = 0, len = _openContextMenus.length; i < len; i++) {
-		_openContextMenus[i].style.display = 'none';
+	while(_openContextMenus.length > 0) {
+		_openContextMenus[0].style.display = 'none';
+		_openContextMenus[0] = null;
+		_openContextMenus.splice(0,1);
 	}
 }
 
@@ -69,7 +83,11 @@ function contextShow(event) {
 	}
 	
 	// we assume we have a standards compliant browser, but check if we have IE
-	var target = event.target !== null ? event.target : event.srcElement;
+	if(typeof event.target != 'undefined' && event.target !== null) {
+		target = event.target;
+	} else {
+		target = event.srcElement;
+	}
 	
 	if(_replaceContext) {
     // Hide hover menu

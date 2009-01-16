@@ -28,6 +28,7 @@
 var NagVisObject = Base.extend({
 	parsedObject: null,
 	hover_template_code: null,
+	context_template_code: null,
 	conf: null,
 	contextMenu: null,
 	
@@ -56,79 +57,54 @@ var NagVisObject = Base.extend({
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	addContextMenu: function (sContainerId, sObjId) {
-		var oObj = document.getElementById(sObjId);
-		var oContainer = document.getElementById(sContainerId);
-    
-		// Create menu
-		var contextMenu = document.createElement('div');
-		contextMenu.setAttribute('id', sObjId+'-context');
-		contextMenu.setAttribute('class', 'context');
-		contextMenu.setAttribute('className', 'context');
-		contextMenu.style.zIndex = '1000';
-		contextMenu.style.display = 'none';
-		
-		var oList = document.createElement('ul');
-		
-		var oRow = document.createElement('li');
-		var oLink = document.createElement('a');
-		oLink.href = '';
-		oLink.target = '_blank';
-		// FIXME: Language
-		oLink.appendChild(document.createTextNode('Refresh status'));
-		
-		oRow.appendChild(oLink);
-		oLink = null;
-		
-		oList.appendChild(oRow);
-		oRow = null;
-		
-		var oRow = document.createElement('li');
-		oRow.style.height = '1px';
-		
-		oList.appendChild(oRow);
-		oRow = null;
-		
-		var oRow = document.createElement('li');
-		var oLink = document.createElement('a');
-		oLink.href = '';
-		oLink.target = '_blank';
-		// FIXME: Language
-		oLink.appendChild(documentcreateTextNode('Schedule downtime'));
-		
-		oRow.appendChild(oLink);
-		oLink = null;
-		
-		oList.appendChild(oRow);
-		oRow = null;
-		
-		var oRow = document.createElement('li');
-		var oLink = document.createElement('a');
-		oLink.href = '';
-		oLink.target = '_blank';
-		// FIXME: Language
-		oLink.appendChild(document.createTextNode('Re-Schedule next check'));
-		
-		oRow.appendChild(oLink);
-		oLink = null;
-		
-		oList.appendChild(oRow);
-		oRow = null;
-		
-		// Bind menu to container
-		contextMenu.appendChild(oList);
-		oList = null;
-		
-		oContainer.appendChild(contextMenu);
-		contextMenu = null;
-		
-		// Add eventhandlers for context menu
-		oObj.onmousedown = contextMouseDown;
-		oObj.oncontextmenu = contextShow;
-		
-		oContainer = null;
-		oObj = null;
+	getContextMenu: function (sContainerId, sObjId) {
+		// Only enable context menu when configured
+		if(this.conf.context_menu && this.conf.context_menu == '1') {
+			// Writes template code to "this.context_template_code"
+			this.getContextTemplateCode();
+			
+			var oObj = document.getElementById(sObjId);
+			var oContainer = document.getElementById(sContainerId);
+			
+			// Create context menu div
+			var contextMenu = document.createElement('div');
+			contextMenu.setAttribute('id', sObjId+'-context');
+			contextMenu.setAttribute('class', 'context');
+			contextMenu.setAttribute('className', 'context');
+			contextMenu.style.zIndex = '1000';
+			contextMenu.style.display = 'none';
+			
+			//var sTemplateCode = replaceHoverTemplateMacros('0', this, this.hover_template_code);
+			//var iHoverDelay = this.conf.hover_delay;
+			
+			// Append template code to context menu div
+			contextMenu.innerHTML = this.context_template_code;
+			
+			// Append context menu div to object container
+			oContainer.appendChild(contextMenu);
+			contextMenu = null;
+			
+			// Add eventhandlers for context menu
+			oObj.onmousedown = contextMouseDown;
+			oObj.oncontextmenu = contextShow;
+			
+			oContainer = null;
+			oObj = null;
+		}
   },
+	
+	/**
+	 * getContextTemplateCode()
+	 *
+	 * Get the context template from the global object which holds all templates of 
+	 * the map
+	 *
+	 * @return	String		HTML code for the hover box
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	getContextTemplateCode: function() {
+		this.context_template_code = oContextTemplates[this.conf.context_template];
+	},
 	
 	/**
 	 * PUBLIC getHoverMenu

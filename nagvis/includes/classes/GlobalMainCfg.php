@@ -72,6 +72,14 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#fff',
 					'match' => MATCH_COLOR),
+				'contextmenu' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '0',
+					'match' => MATCH_BOOLEAN),
+				'contexttemplate' => Array('must' => 0,
+					'editable' => 1,
+					'default' => 'default',
+					'match' => MATCH_STRING_NO_SPACE),
 				'eventbackground' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '0',
@@ -221,6 +229,10 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
+				'hovercontext' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
 				'htmlbase' => Array('must' => 1,
 					'editable' => 1,
 					'default' => '/nagios/nagvis',
@@ -245,11 +257,19 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),			
+				'htmlcontexttemplates' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
 				'htmlhovertemplateimages' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
 				'htmlheadertemplateimages' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
+				'htmlcontexttemplateimages' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
@@ -469,12 +489,15 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['var']['default'] = $base.'var/';
 		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/templates/hover/';
 		$this->validConfig['paths']['headertemplate']['default'] = $base.'nagvis/templates/header/';
+		$this->validConfig['paths']['contexttemplate']['default'] = $base.'nagvis/templates/context/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'etc/maps/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
 		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/nagvis/templates/header/';
+		$this->validConfig['paths']['htmlcontexttemplates']['default'] = $htmlBase.'/nagvis/templates/context/';
 		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/header/';
+		$this->validConfig['paths']['htmlcontexttemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/context/';
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
 		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/nagvis/images/shapes/';
 		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/nagvis/images/maps/';
@@ -1015,6 +1038,7 @@ class GlobalMainCfg {
 		
 		$arr['date_format'] = $this->getValue('global', 'dateformat');
 		$arr['path_htmlbase'] = $this->getValue('paths','htmlbase');
+		$arr['path_htmlcgi'] = $this->getValue('paths','htmlcgi');
 		$arr['path_htmlsounds'] = $this->getValue('paths','htmlsounds');
 		$arr['path_htmlimages'] = $this->getValue('paths','htmlimages');
 		$arr['internal_title'] = $this->getValue('internal', 'title');

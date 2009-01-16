@@ -31,6 +31,7 @@
  */
 var oHoverTemplates = {};
 var oHoverUrls = {};
+var oContextTemplates = {};
 
 /**
  * runWorker()
@@ -78,6 +79,14 @@ function runWorker(iCount, sType) {
 			eventlog("worker", "info", "Parse hover menus");
 			parseHoverMenus(aMapObjects);
 			
+			// Bulk get all context templates which are needed on the map
+			eventlog("worker", "info", "Fetching context templates");
+			getContextTemplates(aMapObjects);
+			
+			// Assign the context templates to the objects and parse them
+			eventlog("worker", "info", "Parse context menus");
+			parseContextMenus(aMapObjects);
+			
 			eventlog("worker", "info", "Finished parsing map");
 		} else if(sType === 'overview') {
 			setPageBasics(oPageProperties);
@@ -98,6 +107,14 @@ function runWorker(iCount, sType) {
 			// Assign the hover templates to the objects and parse them
 			eventlog("worker", "info", "Parse hover menus");
 			parseHoverMenus(aMaps);
+			
+			// Bulk get all context templates which are needed on the map
+			eventlog("worker", "info", "Fetching context templates");
+			getContextTemplates(aMaps);
+			
+			// Assign the context templates to the objects and parse them
+			eventlog("worker", "info", "Parse context menus");
+			parseContextMenus(aMaps);
 			
 			eventlog("worker", "info", "Finished parsing overview");
 		}
@@ -175,6 +192,13 @@ function runWorker(iCount, sType) {
 					
 					// Assign the hover templates to the objects and parse them
 					parseHoverMenus(aMapObjects);
+					
+					
+					// Bulk get all context templates which are needed on the map
+					getContextTemplates(aMapObjects);
+					
+					// Assign the context templates to the objects and parse them
+					parseContextMenus(aMapObjects);
 				}
 				
 				/*
@@ -527,6 +551,63 @@ function getHoverTemplates(aObjs) {
 	if(aTemplateObjects.length > 0) {
 		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
 			oHoverTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
+		}
+	}
+}
+
+
+/**
+ * getContextTemplates()
+ *
+ * Gets the code for needed context templates and saves it for later use in icons
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getContextTemplates(aObjs) {
+	var aUrlParts = [];
+	var aTemplateObjects;
+	
+	// Loop all map objects to get the used hover templates
+	for(var a = 0, len = aObjs.length; a < len; a++) {
+		// Ignore objects which
+		// a) have a disabled hover menu
+		// b) do not use hover_url
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu == '1') {
+			oContextTemplates[aObjs[a].conf.hover_template] = '';
+		}
+	}
+	
+	// Build string for bulk fetching the templates
+	for(var i in oContextTemplates) {
+		if(i != 'Inherits') {
+			aUrlParts.push('&name[]='+i);
+		}
+	}
+	
+	// Get the needed templates via bulk request
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getContextTemplate', aUrlParts, 1900, true);
+	
+	// Set the code to global object oHoverTemplates
+	if(aTemplateObjects.length > 0) {
+		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
+			oContextTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
+		}
+	}
+}
+
+/**
+ * parseContextMenus()
+ *
+ * Assigns the context template code to the object, replaces all macros and
+ * adds the menu to all map objects
+ *
+ * @param   Object   Object with basic page properties
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseContextMenus(aObjs) {
+	for(var a = 0; a < aObjs.length; a++) {
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu !== '0') {
+			aObjs[a].parseContextMenu();
 		}
 	}
 }
