@@ -77,9 +77,6 @@ var NagVisObject = Base.extend({
 			contextMenu.style.zIndex = '1000';
 			contextMenu.style.display = 'none';
 			
-			//var sTemplateCode = replaceHoverTemplateMacros('0', this, this.hover_template_code);
-			//var iHoverDelay = this.conf.hover_delay;
-			
 			// Append template code to context menu div
 			contextMenu.innerHTML = this.context_template_code;
 			

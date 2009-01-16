@@ -78,7 +78,7 @@ function contextHide() {
 
 function contextShow(event) {
 	// IE is evil and doesn't pass the event object
-	if (event === null) {
+	if (event === null || typeof event === 'undefined') {
 		event = window.event;
 	}
 	
