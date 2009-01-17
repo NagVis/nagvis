@@ -1,4 +1,4 @@
-<style type="text/css"><!--@import url([html_templates]tmpl.default.css); --></style>
+<link rel="stylesheet" type="text/css" href="[html_templates]tmpl.default.css" />
 <table class="header_table">
 	<tr>
 		<th class="logo"><a href="[html_base]/index.php"><img src="[html_base]/nagvis/images/internal/logo_119x31.png" alt="NagVis"></a></th>
@@ -20,10 +20,10 @@
 			<select style="width:100%;" name="chooseSupport" onChange="window.open(this.options[selectedIndex].value);this.selectedIndex=0">
 				<option value="" selected="selected">[lang_need_help]</option>
 				<option value="[html_base]/docs/[current_language]/index.html">[lang_online_doc]</option>
-				<option value="http://www.nagios-portal.org/wbb/index.php?page=Board&boardID=42">[lang_forum]</option>
+				<option value="http://www.nagios-portal.org/wbb/index.php?page=Board&amp;boardID=42">[lang_forum]</option>
 				<option value="[html_base]/nagvis/index.php?info">[lang_support_info]</option>
 			</select>
 		</td>
 	</tr>
 </table>
-<script type="text/javascript" language="JavaScript">setRotationLabel('[lang_rotation_start]','[lang_rotation_stop]');</script>
+<script type="text/javascript">setRotationLabel('[lang_rotation_start]','[lang_rotation_stop]');</script>
