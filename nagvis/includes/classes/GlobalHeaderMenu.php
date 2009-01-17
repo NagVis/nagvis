@@ -30,9 +30,9 @@ class GlobalHeaderMenu {
 	private $BACKEND;
 	private $OBJPAGE;
 	
-	private $headerTemplateName;
+	private $templateName;
 	private $pathHtmlBase;
-	private $pathHeaderTemplateFile;
+	private $pathTemplateFile;
 	
 	private $code;
 	
@@ -42,18 +42,34 @@ class GlobalHeaderMenu {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$headerTemplateName, &$OBJ = NULL) {
+	public function __construct(&$CORE, &$templateName, &$OBJ = NULL) {
 		$this->CORE = &$CORE;
 		$this->OBJPAGE = &$OBJ;
-		$this->headerTemplateName = $headerTemplateName;
+		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
-		$this->pathHeaderTemplateFile = $this->CORE->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->headerTemplateName.'.html';
+		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->templateName.'.html';
 		
-		// Read the contents of the template file
-		$this->readHeaderTemplate();
-		// Replace all macros in the template code
-		$this->replaceHeaderMenuMacros();
+		$this->CACHE = new GlobalFileCache($this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'header-'.$this->templateName.'-cache');
+		
+		// Only use cache when there is
+		// a) Some valid cache file
+		// b) Some valid main configuration cache file
+		// c) This cache file newer than main configuration cache file
+		if($this->CACHE->isCached() !== -1
+		  && $this->CORE->MAINCFG->isCached() !== -1
+		  && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
+			$this->code = $this->CACHE->getCache();
+		} else {
+			// Read the contents of the template file
+			if($this->readTemplate()) {
+				// The static macros should be replaced before caching
+				$this->replaceStaticMacros();
+				
+				// Build cache for the template
+				$this->CACHE->writeCache($this->code, 1);
+			}
+		}
 	}
 	
 	/**
@@ -61,7 +77,7 @@ class GlobalHeaderMenu {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function replaceHeaderMenuMacros() {
+	public function replaceStaticMacros() {
 		// Replace paths and language macros
 		$arrKeys = Array('[html_base]', 
 			'[html_templates]', 
@@ -171,9 +187,12 @@ class GlobalHeaderMenu {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function readHeaderTemplate() {
-		if($this->checkHeaderTemplateReadable(1)) {
-			$this->code =  file_get_contents($this->pathHeaderTemplateFile);
+	private function readTemplate() {
+		if($this->checkTemplateReadable(1)) {
+			$this->code =  file_get_contents($this->pathTemplateFile);
+			return TRUE;
+		} else {
+			return FALSE;
 		}
 	}
 	
@@ -184,12 +203,12 @@ class GlobalHeaderMenu {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkHeaderTemplateExists($printErr) {
-		if(file_exists($this->pathHeaderTemplateFile)) {
+	private function checkTemplateExists($printErr) {
+		if(file_exists($this->pathTemplateFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotExists','FILE~'.$this->pathHeaderTemplateFile));
+				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
@@ -202,12 +221,12 @@ class GlobalHeaderMenu {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkHeaderTemplateReadable($printErr) {
-		if($this->checkHeaderTemplateExists($printErr) && is_readable($this->pathHeaderTemplateFile)) {
+	private function checkTemplateReadable($printErr) {
+		if($this->checkTemplateExists($printErr) && is_readable($this->pathTemplateFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotReadable','FILE~'.$this->pathHeaderTemplateFile));
+				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotReadable','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

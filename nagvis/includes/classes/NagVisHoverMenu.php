@@ -29,10 +29,11 @@ class NagVisHoverMenu {
 	private $CORE;
 	private $BACKEND;
 	private $OBJPAGE;
+	private $CACHE;
 	
 	private $templateName;
 	private $pathHtmlBase;
-	private $pathHoverTemplateFile;
+	private $pathTemplateFile;
 	
 	private $code;
 	
@@ -48,12 +49,29 @@ class NagVisHoverMenu {
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
-		$this->pathHoverTemplateFile = $this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->templateName.'.html';
+		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->templateName.'.html';
 		
-		// Read the contents of the template file
-		$this->readTemplate();
+		$this->CACHE = new GlobalFileCache($this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'hover-'.$this->templateName.'-cache');
+		
+		// Only use cache when there is
+		// a) Some valid cache file
+		// b) Some valid main configuration cache file
+		// c) This cache file newer than main configuration cache file
+		if($this->CACHE->isCached() !== -1
+		  && $this->CORE->MAINCFG->isCached() !== -1
+		  && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
+			$this->code = $this->CACHE->getCache();
+		} else {
+			// Read the contents of the template file
+			if($this->readTemplate()) {
+				// The static macros should be replaced before caching
+				$this->replaceStaticMacros();
+				
+				// Build cache for the template
+				$this->CACHE->writeCache($this->code, 1);
+			}
+		}
 	}
-	
 	
 	/**
 	 * readHoverTemplate 
@@ -63,29 +81,22 @@ class NagVisHoverMenu {
 	 * @return	String		HTML Code for the hover menu
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function readTemplate() {
-		// Read hover cache contents
-		$arrHoverCache = $this->CORE->MAINCFG->getRuntimeValue('hover_cache');
-		if(isset($arrHoverCache[$this->templateName])) {
-			$this->code = $arrHoverCache[$this->templateName];
+	private function readTemplate() {
+		if($this->checkTemplateReadable(1)) {
+			$this->code =  file_get_contents($this->pathTemplateFile);
+			return TRUE;
 		} else {
-			if($this->checkHoverTemplateReadable(1)) {
-				$this->code = file_get_contents($this->pathHoverTemplateFile);
-				
-				// The static macros should be replaced before caching
-				$this->replaceStaticMacros();
-				
-				// Build cache for the hover template
-				if(!isset($arrHoverCache[$this->templateName])) {
-					$this->CORE->MAINCFG->setRuntimeValue('hover_cache', Array($this->templateName => $this->code));
-				} else {
-					$arrHoverCache[$this->templateName] = $this->code;
-					$this->CORE->MAINCFG->setRuntimeValue('hover_cache', $arrHoverCache);
-				}
-			}
+			return FALSE;
 		}
 	}
 	
+	/**
+	 * replaceStaticMacros
+	 *
+	 * Replaces static macros like paths and language strings in template code
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function replaceStaticMacros() {
 		// Replace the static macros (language, paths)
 		if(strpos($this->code,'[lang_alias]') !== FALSE) {
@@ -176,7 +187,7 @@ class NagVisHoverMenu {
 	}
 	
 	/**
-	 * PRIVATE checkHoverTemplateReadable()
+	 * PRIVATE checkTemplateReadable()
 	 *
 	 * Checks if the requested hover template file is readable
 	 *
@@ -184,19 +195,19 @@ class NagVisHoverMenu {
 	 * @return	Boolean		Check Result
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkHoverTemplateReadable($printErr) {
-		if($this->checkHoverTemplateExists($printErr) && is_readable($this->pathHoverTemplateFile)) {
+	private function checkTemplateReadable($printErr) {
+		if($this->checkTemplateExists($printErr) && is_readable($this->pathTemplateFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathHoverTemplateFile));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
 	}
 	
 	/**
-	 * PRIVATE checkHoverTemplateExists()
+	 * PRIVATE checkTemplateExists()
 	 *
 	 * Checks if the requested hover template file exists
 	 *
@@ -204,12 +215,12 @@ class NagVisHoverMenu {
 	 * @return	Boolean		Check Result
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkHoverTemplateExists($printErr) {
-		if(file_exists($this->pathHoverTemplateFile)) {
+	private function checkTemplateExists($printErr) {
+		if(file_exists($this->pathTemplateFile)) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathHoverTemplateFile));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

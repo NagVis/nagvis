@@ -26,11 +26,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMainCfg {
+	private $CACHE;
+	
 	var $config;
 	var $runtimeConfig;
 	
 	var $configFile;
-	var $cacheFile;
 	
 	var $validConfig;
 	
@@ -441,25 +442,26 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
 		
-		// Define the main configuration cache file
-		$this->cacheFile = $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache';
-		
 		// Define the main configuration file
 		$this->configFile = $configFile;
 		
 		// Do preflight checks
-		if(!$this->checkNagVisConfigExists(TRUE) || !$this->checkNagVisConfigReadable(TRUE) || !$this->checkCacheFileReadable(TRUE)) {
+		// Only proceed when the configuration file exists and is readable
+		if(!$this->checkNagVisConfigExists(TRUE) || !$this->checkNagVisConfigReadable(TRUE)) {
 			return FALSE;
 		}
 		
-		// Only proceed when the configuration file exists and is readable
-		if($this->isCached(FALSE)) {
-			$this->readConfigFromCache();
+		// Create instance of GlobalFileCache object for caching the config
+		$this->CACHE = new GlobalFileCache($this->configFile, $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache');
+		
+		if($this->CACHE->isCached(FALSE) !== -1) {
+			$this->config = $this->CACHE->getCache();
 		} else {
 			// Read Main Config file, when succeeded cache it
 			if($this->readConfig(TRUE)) {
+				
 				// Cache the resulting config
-				$this->writeConfigToCache(TRUE);
+				$this->CACHE->writeToCache($this->config, TRUE);
 			}
 		}
 		
@@ -814,44 +816,6 @@ class GlobalMainCfg {
 	}
 	
 	/**
-	 * Checks for existing cache
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkCacheFileExists($printErr) {
-		if(file_exists($this->cacheFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainCfgCacheNotExists','FILE~'.$this->cacheFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Checks for readable cache file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkCacheFileReadable($printErr) {
-		if(is_readable($this->configFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainCfgCacheNotReadable','FILE~'.$this->cacheFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
 	 * Returns the last modification time of the configuration file
 	 *
 	 * @return	Integer	Unix Timestamp
@@ -862,65 +826,14 @@ class GlobalMainCfg {
 	}
 	
 	/**
-	 * Returns the last modification time of the cache file
+	 * Public Adaptor for the isCached method of CACHE object
 	 *
-	 * @return	Integer	Unix Timestamp
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @return  Boolean  Result
+	 * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getCacheFileAge() {
-		return filemtime($this->cacheFile);
-	}
-	
-	/**
-	 * Checks if the current configuration file has been cached
-	 *
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function isCached($printErr) {
-		// Check the modification date
-		if($this->checkCacheFileExists($printErr) && $this->getConfigFileAge() <= $this->getCacheFileAge()) {
-			return TRUE;
-		} else {
-			if($printErr) {
-				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainCfgNotCached', 'CFONFIGFILE~'.$this->configFile.',CACHEFILE~'.$this->cacheFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Writes the current config array to cache file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function writeConfigToCache($printErr) {
-		if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
-			if($printErr == 1) {
-				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainCfgCacheNotWriteable','FILE~'.$this->cacheFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-		
-		fwrite($fp, serialize($this->config));
-		fclose($fp);
-		
-		return TRUE;
-	}
-	
-	/**
-	 * Reads the configuration array from the cache file
-	 *
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function readConfigFromCache() {
-		$this->config = unserialize(file_get_contents($this->cacheFile));
-		return TRUE;
+	function isCached() {
+		return $this->CACHE->isCached();
 	}
 	
 	/**

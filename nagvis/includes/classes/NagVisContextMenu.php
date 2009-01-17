@@ -29,10 +29,11 @@ class NagVisContextMenu {
 	private $CORE;
 	private $BACKEND;
 	private $OBJPAGE;
+	private $CACHE;
 	
 	private $templateName;
 	private $pathHtmlBase;
-	private $pathContextTemplateFile;
+	private $pathTemplateFile;
 	
 	private $code;
 	
@@ -50,47 +51,66 @@ class NagVisContextMenu {
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','contexttemplate').'tmpl.'.$this->templateName.'.html';
 		
-		// Read the contents of the template file
-		$this->readTemplate();
+		$this->CACHE = new GlobalFileCache($this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'context-'.$this->templateName.'-cache');
+		
+		// Only use cache when there is
+		// a) Some valid cache file
+		// b) Some valid main configuration cache file
+		// c) This cache file newer than main configuration cache file
+		if($this->CACHE->isCached() !== -1
+		  && $this->CORE->MAINCFG->isCached() !== -1
+		  && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
+			$this->code = $this->CACHE->getCache();
+		} else {
+			// Read the contents of the template file
+			if($this->readTemplate()) {
+				// The static macros should be replaced before caching
+				$this->replaceStaticMacros();
+				
+				// Build cache for the template
+				$this->CACHE->writeCache($this->code, 1);
+			}
+		}
 	}
-	
 	
 	/**
 	 * readTemplate
 	 *
 	 * Reads the contents of the template file
 	 *
-	 * @return	String		HTML Code for the menu
+	 * @return	Boolean		Result
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function readTemplate() {
-		// Read cache contents
-		$arrContextCache = $this->CORE->MAINCFG->getRuntimeValue('context_cache');
-		if(isset($arrContextCache[$this->templateName])) {
-			$this->code = $arrContextCache[$this->templateName];
+		if($this->checkTemplateReadable(1)) {
+			$this->code = file_get_contents($this->pathTemplateFile);
+			return TRUE;
 		} else {
-			if($this->checkTemplateReadable(1)) {
-				$this->code = file_get_contents($this->pathTemplateFile);
-				
-				// The static macros should be replaced before caching
-				$this->replaceStaticMacros();
-				
-				// Build cache for the template
-				if(!isset($arrContextCache[$this->templateName])) {
-					$this->CORE->MAINCFG->setRuntimeValue('context_cache', Array($this->templateName => $this->code));
-				} else {
-					$arrCoverCache[$this->templateName] = $this->code;
-					$this->CORE->MAINCFG->setRuntimeValue('context_cache', $arrContextCache);
-				}
-			}
+			return FALSE;
 		}
 	}
 	
+	/**
+	 * replaceStaticMacros
+	 *
+	 * Replaces static macros like paths and language strings in template code
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function replaceStaticMacros() {
 		// Replace the static macros (language, paths)
-		/*if(strpos($this->code,'[lang_state_duration]') !== FALSE) {
-			$this->code = str_replace('[lang_state_duration]',$this->CORE->LANG->getText('stateDuration'),$this->code);
-		}*/
+		
+		if(strpos($this->code,'[lang_refresh_status]') !== FALSE) {
+			$this->code = str_replace('[lang_refresh_status]',$this->CORE->LANG->getText('contextRefreshStatus'),$this->code);
+		}
+		
+		if(strpos($this->code,'[lang_reschedule_next_check]') !== FALSE) {
+			$this->code = str_replace('[lang_reschedule_next_check]',$this->CORE->LANG->getText('contextRescheduleNextCheck'),$this->code);
+		}
+		
+		if(strpos($this->code,'[lang_schedule_downtime]') !== FALSE) {
+			$this->code = str_replace('[lang_schedule_downtime]',$this->CORE->LANG->getText('contextScheduleDowntime'),$this->code);
+		}
 		
 		if(strpos($this->code,'[html_cgi]') !== FALSE) {
 			$this->code = str_replace('[html_cgi]',$this->CORE->MAINCFG->getValue('paths','htmlcgi'),$this->code);

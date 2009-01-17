@@ -28,6 +28,7 @@
 class GlobalMapCfg {
 	var $CORE;
 	var $BACKGROUND;
+	private $CACHE;
 	
 	var $name;
 	var $mapConfig;
@@ -654,11 +655,11 @@ class GlobalMapCfg {
 				'name' => Array('must' => 1,
 					'match' => MATCH_STRING_NO_SPACE)));
 		
-		// Define the map configuration cache file
-		$this->cacheFile = $this->CORE->MAINCFG->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache';
-		
 		// Define the map configuration file
 		$this->configFile = $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg';
+		
+		$this->CACHE = new GlobalFileCache($this->configFile, $this->CORE->MAINCFG->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache');
+		
 	}
 	
 	/**
@@ -762,10 +763,16 @@ class GlobalMapCfg {
 	 */
 	function readMapConfig($onlyGlobal = 0) {
 		if($this->name != '') {
-			// Only read cache when whole config file should be read
-			// Also only read cache when some cache is present
-			if($onlyGlobal == 0 && $this->isCached(FALSE)) {
-				$this->readConfigFromCache();
+			// Only use cache when there is
+			// a) When whole config file should be read
+			// b) Some valid cache file
+			// c) Some valid main configuration cache file
+			// d) This cache file newer than main configuration cache file
+			if($onlyGlobal == 0
+			   && $this->CACHE->isCached() !== -1
+				 && $this->CORE->MAINCFG->isCached() !== -1
+				 && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
+				$this->mapConfig = $this->CACHE->getCache();
 				
 				/**
 				 * The default values refer to global settings in the validConfig 
@@ -874,8 +881,8 @@ class GlobalMapCfg {
 					
 					if($this->checkMapConfigIsValid(1)) {
 						if($onlyGlobal == 0) { 
-							// Cache the resulting config
-							$this->writeConfigToCache(TRUE);
+							// Build cache
+							$this->CACHE->writeCache($this->mapConfig, 1);
 						}
 						
 						$this->BACKGROUND = $this->getBackground();
@@ -1104,97 +1111,6 @@ class GlobalMapCfg {
 		} else {
 			return FALSE;
 		}
-	}
-	
-	/**
-	 * Returns the last modification time of the configuration file
-	 *
-	 * @return	Integer	Unix Timestamp
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getConfigFileAge() {
-		return filemtime($this->configFile);
-	}
-	
-	/**
-	 * Returns the last modification time of the cache file
-	 *
-	 * @return	Integer	Unix Timestamp
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getCacheFileAge() {
-		return filemtime($this->cacheFile);
-	}
-	
-	/**
-	 * Checks for existing cache
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkCacheFileExists($printErr) {
-		if(file_exists($this->cacheFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgCacheNotExists','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Checks if the current configuration file has been cached
-	 *
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function isCached($printErr) {
-		// Check the modification date
-		// Also only mark as cached when main configuration file is older than cache
-		if($this->checkCacheFileExists($printErr) 
-			&& $this->getConfigFileAge() <= $this->getCacheFileAge()
-			&& $this->CORE->MAINCFG->getConfigFileAge() <= $this->getCacheFileAge()) {
-			return TRUE;
-		} else {
-			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotCached', 'CFONFIGFILE~'.$this->configFile.',CACHEFILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Writes the current config array to cache file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function writeConfigToCache($printErr) {
-		if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
-			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgCacheNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-		
-		fwrite($fp, serialize($this->mapConfig));
-		fclose($fp);
-		
-		return TRUE;
-	}
-	
-	/**
-	 * Reads the configuration array from the cache file
-	 *
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function readConfigFromCache() {
-		$this->mapConfig = unserialize(file_get_contents($this->cacheFile));
-		return TRUE;
 	}
 	
 	/**
