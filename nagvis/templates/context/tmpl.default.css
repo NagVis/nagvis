@@ -1,0 +1,74 @@
+/*****************************************************************************
+ *
+ * tmpl.default.css - Stlyes for the default context menu in frontend
+ *
+ * Copyright (c) 2004-2009 NagVis Project
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
+/**
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+
+div.context {
+	position: absolute;
+	overflow: visible;
+	margin:0;
+	padding:0;
+	
+	width: 160px;
+	
+	background-color: #a4a4a4;
+	
+	font-size: 11px;
+}
+
+div.context ul {
+  padding: 0px; 
+  cursor: default;
+  margin: 0px;
+}
+
+div.context ul li {
+	background-color: #F5F5F5;
+  list-style-type: none;
+  margin: 1px;
+  position: relative;
+  color: #a4a4a4;
+	padding: 2px;
+}
+
+div.context ul li:hover {
+  background-color: #eeeeee;
+  color: #a4a4a4;
+}
+
+div.context ul li a { 
+	color: #a4a4a4; 
+	display: block; 
+	width: 100%; 
+	text-decoration: none;
+}
+
+div.context ul li a:hover { 
+	color: #a4a4a4; 
+}
+
+div.context ul li:hover > a { 
+	color: #a4a4a4;
+}
