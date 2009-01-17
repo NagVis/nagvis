@@ -148,6 +148,11 @@ class GlobalHeaderMenu {
 			}
 		}
 		
+		// Select overview in header menu when no map shown
+		if(get_class($this->OBJPAGE) != 'NagVisMapCfg') {
+			$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
+		}
+		
 		$this->code = '<div class="header">'.$this->code.'</div>';
 	}
 	
