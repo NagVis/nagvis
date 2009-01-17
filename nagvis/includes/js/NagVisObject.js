@@ -72,6 +72,8 @@ var NagVisObject = Base.extend({
 			// Create context menu div
 			var contextMenu = document.createElement('div');
 			contextMenu.setAttribute('id', sObjId+'-context');
+			contextMenu.setAttribute('class', 'context');
+			contextMenu.setAttribute('className', 'context');
 			contextMenu.style.zIndex = '1000';
 			contextMenu.style.display = 'none';
 			contextMenu.style.position = 'absolute';
