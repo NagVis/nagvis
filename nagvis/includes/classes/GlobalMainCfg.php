@@ -74,7 +74,7 @@ class GlobalMainCfg {
 					'match' => MATCH_COLOR),
 				'contextmenu' => Array('must' => 0,
 					'editable' => 1,
-					'default' => '0',
+					'default' => 1,
 					'match' => MATCH_BOOLEAN),
 				'contexttemplate' => Array('must' => 0,
 					'editable' => 1,
