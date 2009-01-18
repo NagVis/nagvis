@@ -34,7 +34,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	
 	protected $in_downtime;
 	
-	var $members;
+	protected $members;
 	
 	/**
 	 * Class constructor

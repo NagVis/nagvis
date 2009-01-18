@@ -456,8 +456,6 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsByState($OBJ1, $OBJ2) {
-		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
-		
 		// Textboxes and shapes do not have getSummaryState method, exclude them here
 		if(method_exists($OBJ1, 'getSummaryState') && method_exists($OBJ2, 'getSummaryState')) {
 			$state1 = $OBJ1->getSummaryState();
@@ -466,9 +464,9 @@ class NagVisObject {
 			return 0;
 		}
 		
-		if($arrStates[$state1] == $arrStates[$state2]) {
+		if(NagVisStatefulObject::$arrStates[$state1] == NagVisStatefulObject::$arrStates[$state2]) {
 			return 0;
-		} elseif($arrStates[$state1] < $arrStates[$state2]) {
+		} elseif(NagVisStatefulObject::$arrStates[$state1] < NagVisStatefulObject::$arrStates[$state2]) {
 			return +1;
 		} else {
 			return -1;

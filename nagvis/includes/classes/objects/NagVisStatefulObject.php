@@ -31,7 +31,7 @@ class NagVisStatefulObject extends NagVisObject {
 	protected $BACKEND;
 	private $GRAPHIC;
 	
-	private static $arrStates = Array('UNREACHABLE' => 6, 
+	protected static $arrStates = Array('UNREACHABLE' => 6, 
 	                                  'DOWN' => 5, 
 	                                  'CRITICAL' => 5, 
 	                                  'WARNING' => 4, 
