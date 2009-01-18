@@ -113,7 +113,8 @@ function contextShow(event) {
 		// hide the menu first to avoid an "up-then-over" visual effect
 		contextMenu.style.display = 'none';
 		contextMenu.style.left = event.clientX + scrollLeft + 'px';
-		contextMenu.style.top = event.clientY + scrollTop + 'px';
+		// Need to corrent the position by 30px in IE & FF. Don't know why...
+		contextMenu.style.top = event.clientY + scrollTop - 30 + 'px';
 		contextMenu.style.display = '';
 		
 		// Append to visible menus array
