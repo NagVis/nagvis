@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisAutoMap extends GlobalMap {
-	private $MAPCFG;
 	public $MAPOBJ;
 	private $BACKEND;
 	
@@ -71,10 +70,10 @@ class NagVisAutoMap extends GlobalMap {
 		$this->noBinaryFound = FALSE;
 		
 		// Create map configuration
-		$this->MAPCFG = new NagVisMapCfg($CORE, '__automap');
-		$this->MAPCFG->readMapConfig();
+		$MAPCFG = new NagVisMapCfg($CORE, '__automap');
+		$MAPCFG->readMapConfig();
 		
-		parent::__construct($CORE, $this->MAPCFG);
+		parent::__construct($CORE, $MAPCFG);
 
 		// Set the preview option
 		if(isset($prop['preview']) && $prop['preview'] != '') {
