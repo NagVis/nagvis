@@ -49,7 +49,7 @@ class WuiMap extends GlobalMap {
 		
 		$this->MAPCFG = &$MAPCFG;
 		
-		parent::GlobalMap($CORE, $MAPCFG);
+		parent::__construct($CORE, $MAPCFG);
 		
 		$this->loadPermissions();
 		$this->objects = $this->getMapObjects(1);
@@ -442,10 +442,8 @@ class WuiMap extends GlobalMap {
 				
 				if($mergeWithGlobals) {
 					// merge with "global" settings
-					foreach($this->MAPCFG->validConfig[$type] AS $key => $values) {
-						if((!isset($obj[$key]) || $obj[$key] == '') && isset($values['default'])) {
-							$obj[$key] = $values['default'];
-						}
+					foreach($this->MAPCFG->getValidTypeKeys($type) AS $key) {
+						$obj[$key] = $this->MAPCFG->getValue($type, $index, $key);
 					}
 				}
 				
@@ -539,12 +537,12 @@ class WuiMap extends GlobalMap {
 		$defaultText = '';
 		
 		// Get configured/inherited variables
-		foreach($this->MAPCFG->validConfig[$obj['type']] AS $key => $values) {
+		foreach($this->MAPCFG->getValidTypeKeys($obj['type']) AS $key) {
 			$getValue = $this->MAPCFG->getValue($obj['type'],$obj['id'],$key,TRUE);
 			if($key != 'type' && isset($getValue) && $getValue != '') {
 				$configuredText .= '<tr><td>'.$key.'</td><td>'.$getValue.'</td></tr>';
-			} elseif(isset($values['default'])) {
-				$defaultText .= '<tr class=\\\'inherited\\\'><td>'.$key.'</td><td>'.$values['default'].'</td></tr>';
+			} elseif($getValue == FALSE) {
+				$defaultText .= '<tr class=\\\'inherited\\\'><td>'.$key.'</td><td>'.$this->MAPCFG->getValue($obj['type'],$obj['id'],$key,FALSE).'</td></tr>';
 			}
 		}
 		

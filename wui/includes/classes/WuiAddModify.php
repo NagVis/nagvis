@@ -57,7 +57,7 @@ class WuiAddModify extends GlobalPage {
 					  'extHeader'=> '',
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($CORE, $prop);
+		parent::__construct($CORE, $prop);
 	}
 	
 	/**
@@ -148,7 +148,7 @@ class WuiAddModify extends GlobalPage {
 		$ret = array_merge($ret,$this->FORM->getHiddenField('properties',''));
 		
 		// loop all properties
-		foreach($this->MAPCFG->validConfig[$this->prop['type']] as $propname => $prop) {
+		foreach($this->MAPCFG->getValidObjectType($this->prop['type']) as $propname => $prop) {
 			if($propname == "iconset") {
 				// treat the special case of iconset, which will display a listbox instead of the normal textbox
 				$ret = array_merge($ret,$this->FORM->getSelectLine($propname,$propname,$this->CORE->getAvailableIconsets(),$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
@@ -189,7 +189,7 @@ class WuiAddModify extends GlobalPage {
 			} elseif(($propname == 'host_name' || $propname == 'hostgroup_name' || $propname == 'servicegroup_name')) {
 				$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
 				$ret[] = "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
-				if(array_key_exists('service_description',$this->MAPCFG->validConfig[$this->prop['type']])) {
+				if(array_key_exists('service_description',$this->MAPCFG->getValidTypeKeys($this->prop['type']))) {
 					$ret[] = "<script>getServices('".$backendId."','".$this->prop['type']."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
 				}
 				if($propname == 'host_name') {

@@ -28,7 +28,6 @@
  * @author  Michael Luebben <michael_luebben@web.de>
  */
 class NagVisInfoPage {
-
 	private $CORE;
 	private $infoPage;
 

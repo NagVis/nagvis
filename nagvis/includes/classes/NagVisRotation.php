@@ -41,6 +41,7 @@ class NagVisRotation {
 	 * Class Constructor
 	 *
 	 * @param 	GlobalCore 	$CORE
+	 * @param   String  Name of the rotation pool
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct(&$CORE, $strPoolName = NULL) {
@@ -57,6 +58,7 @@ class NagVisRotation {
 	/**
 	 * Gathers all settings of this rotation
 	 *
+	 * @param   String  Name of the rotation pool
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function setRotationOptions($strPoolName) {
@@ -84,10 +86,21 @@ class NagVisRotation {
 		$this->setStepInterval();
 	}
 	
+	/**
+	 * Sets the name of this rotation pool
+	 *
+	 * @param   String  Name of the rotation pool
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function setPoolName($strPoolName) {
 		$this->strPoolName = $strPoolName;
 	}
 	
+	/**
+	 * Sets the next step to take
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function setNextStep() {
 		if($this->intCurrentStep === FALSE || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
 			// if end of array reached, go to the beginning...
@@ -97,6 +110,11 @@ class NagVisRotation {
 		}
 	}
 	
+	/**
+	 * Sets the step intervall
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function setStepInterval() {
 		if($this->getPoolName() != '') {
 			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation_'.$this->getPoolName(), 'interval');
@@ -105,6 +123,11 @@ class NagVisRotation {
 		}
 	}
 	
+	/**
+	 * Sets the current step
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function setCurrentStep() {
 		$strCurrentStep = '';
 		$strType = '';
@@ -130,6 +153,11 @@ class NagVisRotation {
 		}
 	}
 	
+	/**
+	 * Sets the urls of each step in this pool
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function setStepUrls() {
 		foreach ($this->arrSteps AS $intId => $arrStep) {
 			if(isset($arrStep['url']) && $arrStep['url'] != '') {
@@ -140,10 +168,20 @@ class NagVisRotation {
 		}
 	}
 	
+	/**
+	 * Sets the steps which are defined in this pool
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function setSteps() {
 		$this->arrSteps = $this->CORE->MAINCFG->getValue('rotation_'.$this->getPoolName(), 'maps');
 	}
 	
+	/**
+	 * Checks if the specified rotation pool exists
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function checkPoolExists() {
 		if(array_search($this->strPoolName, $this->CORE->getDefinedRotationPools()) === FALSE) {
 			// Error Message (Map rotation pool does not exist)

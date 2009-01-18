@@ -28,21 +28,21 @@
  */
 
 class GlobalBackendndomy {
-	var $CORE;
-	var $CONN;
-	var $backendId;
-	var $dbName;
-	var $dbUser;
-	var $dbPass;
-	var $dbHost;
-	var $dbPrefix;
-	var $dbInstanceName;
-	var $dbInstanceId;
-	var $objConfigType;
+	private $CORE;
+	private $CONN;
+	private $backendId;
+	private $dbName;
+	private $dbUser;
+	private $dbPass;
+	private $dbHost;
+	private $dbPrefix;
+	private $dbInstanceName;
+	private $dbInstanceId;
+	private $objConfigType;
 	
-	var $hostCache;
-	var $serviceCache;
-	var $hostAckCache;
+	private $hostCache;
+	private $serviceCache;
+	private $hostAckCache;
 	
 	/**
 	 * Constructor
@@ -54,7 +54,7 @@ class GlobalBackendndomy {
 	 * @author	Andreas Husch <downanup@nagios-wiki.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalBackendndomy(&$CORE, $backendId) {
+	public function __constructor(&$CORE, $backendId) {
 		$this->CORE = &$CORE;
 		
 		$this->backendId = $backendId;
@@ -126,7 +126,7 @@ class GlobalBackendndomy {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkTablesExists() {
+	private function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
 			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noTablesExists', 'BACKENDID~'.$this->backendId.',PREFIX~'.$this->dbPrefix));
 			return FALSE;
@@ -143,7 +143,7 @@ class GlobalBackendndomy {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function connectDB() {
+	private function connectDB() {
 		// don't want to see mysql errors from connecting - only want our error messages
 		$oldLevel = error_reporting(0);
 		
@@ -175,7 +175,7 @@ class GlobalBackendndomy {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkMysqlSupport() {
+	private function checkMysqlSupport() {
 		// Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
@@ -198,7 +198,7 @@ class GlobalBackendndomy {
 	 * @return	String $ret
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getInstanceId() {
+	private function getInstanceId() {
 		$intInstanceId = NULL;
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT instance_id FROM '.$this->dbPrefix.'instances WHERE instance_name=\''.$this->dbInstanceName.'\'');
@@ -227,7 +227,7 @@ class GlobalBackendndomy {
 	 * @return	Handle      Query Handle
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function mysqlQuery($query) {
+	private function mysqlQuery($query) {
 		$QUERYHANDLE = mysql_query($query, $this->CONN) or die(mysql_error());
 		return $QUERYHANDLE;
 	}
@@ -243,7 +243,7 @@ class GlobalBackendndomy {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 * @author	Andreas Husch <downanup@nagios-wiki.de>
 	 */
-	function getObjects($type,$name1Pattern='',$name2Pattern='') {
+	public function getObjects($type,$name1Pattern='',$name2Pattern='') {
 		$ret = Array();
 		$filter = '';
 		
@@ -319,7 +319,7 @@ class GlobalBackendndomy {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkForIsActiveObjects() {
+	private function checkForIsActiveObjects() {
 		if(mysql_num_rows($this->mysqlQuery('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')) > 0) {
 			return TRUE;
 		} else {
@@ -335,7 +335,7 @@ class GlobalBackendndomy {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkConfigTypeObjects() {
+	private function checkConfigTypeObjects() {
 		if(mysql_num_rows($this->mysqlQuery('SELECT host_id FROM '.$this->dbPrefix.'hosts WHERE config_type=1 AND instance_id='.$this->dbInstanceId.' LIMIT 1')) > 0) {
 			return TRUE;
 		} else {
@@ -353,7 +353,7 @@ class GlobalBackendndomy {
 	 * @return	bool $ack
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostAckByHostname($hostName) {
+	private function getHostAckByHostname($hostName) {
 		$return = FALSE;
 		
 		// Read from cache or fetch from NDO
@@ -393,7 +393,7 @@ class GlobalBackendndomy {
 	 * @return	array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostState($hostName, $onlyHardstates) {
+	public function getHostState($hostName, $onlyHardstates) {
 		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
 			return $this->hostCache[$hostName.'-'.$onlyHardstates];
 		} else {
@@ -532,7 +532,7 @@ class GlobalBackendndomy {
 	 * @return	Array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getServiceState($hostName, $serviceName, $onlyHardstates) {
+	public function getServiceState($hostName, $serviceName, $onlyHardstates) {
 		if(isset($this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates])) {
 			return $this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates];
 		} else {
@@ -719,7 +719,7 @@ class GlobalBackendndomy {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostNamesWithNoParent() {
+	public function getHostNamesWithNoParent() {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT o1.name1
@@ -750,7 +750,7 @@ class GlobalBackendndomy {
 	 * @return	Array			Array with hostnames
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getDirectChildNamesByHostName($hostName) {
+	public function getDirectChildNamesByHostName($hostName) {
 		$arrChildNames = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT o2.name1
@@ -784,7 +784,7 @@ class GlobalBackendndomy {
 	 * @return	Array			Array with hostnames
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostsByHostgroupName($hostgroupName) {
+	public function getHostsByHostgroupName($hostgroupName) {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -820,7 +820,7 @@ class GlobalBackendndomy {
 	 * @return	Array			Array with hostnames and service descriptions
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getServicesByServicegroupName($servicegroupName) {
+	public function getServicesByServicegroupName($servicegroupName) {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -847,7 +847,7 @@ class GlobalBackendndomy {
 		return $arrReturn;
 	}
     
-    /**
+	/**
 	 * PUBLIC Method getServicegroupInformations
 	 *
 	 * Gets information like the alias for a servicegroup
@@ -856,7 +856,7 @@ class GlobalBackendndomy {
 	 * @return	Array			Array with object information
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getServicegroupInformations($servicegroupName) {
+	public function getServicegroupInformations($servicegroupName) {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -880,7 +880,7 @@ class GlobalBackendndomy {
 		return $arrReturn;
 	}
     
-    /**
+	/**
 	 * PUBLIC Method getHostgroupInformations
 	 *
 	 * Gets information like the alias for a hostgroup
@@ -889,7 +889,7 @@ class GlobalBackendndomy {
 	 * @return	Array			Array with object information
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostgroupInformations($groupName) {
+	public function getHostgroupInformations($groupName) {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -921,7 +921,7 @@ class GlobalBackendndomy {
 	 * @return	Integer		Timestamp of Nagios start time
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNagiosStartTime() {
+	public function getNagiosStartTime() {
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 				UNIX_TIMESTAMP(program_start_time) AS program_start_time 
 			FROM 

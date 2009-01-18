@@ -48,7 +48,7 @@ class WuiEditMainCfg extends GlobalPage {
 					  'extHeader'=> '',
 					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($CORE, $prop);
+		parent::__construct($CORE, $prop);
 	}
 	
 	/**
@@ -83,15 +83,16 @@ class WuiEditMainCfg extends GlobalPage {
 	function getFields() {
 		$ret = Array();
 		
-		foreach($this->MAINCFG->validConfig AS $cat => $arr) {
+		foreach($this->MAINCFG->getValidConfig() AS $cat => $arr) {
 			// don't display backend,rotation and internal options
 			if(!preg_match("/^backend/i",$cat) && !preg_match("/^internal$/i",$cat) && !preg_match("/^rotation/i",$cat)) {
 				$ret = array_merge($ret,$this->FORM->getCatLine($cat));
 				
 				foreach($arr AS $key2 => $prop) {
 					// ignore some vars
-					if(isset($this->MAINCFG->validConfig[$cat][$key2]['editable']) && $this->MAINCFG->validConfig[$cat][$key2]['editable']) {
-						$val2 = $this->MAINCFG->getValue($cat,$key2,TRUE);
+					if(isset($arr[$key2]['editable']) && $arr[$key2]['editable']) {
+						//FIXME!!!!
+						$val2 = $this->MAINCFG->getValue($cat, $key2, TRUE);
 						
 						# we add a line in the form
 						$ret[] = "<tr>";
@@ -101,7 +102,7 @@ class WuiEditMainCfg extends GlobalPage {
 							$ret[] = "\t<td class=\"tdfield\"></td>";
 						} else {
 							$ret[] = "\t<td class=\"tdfield\">";
-							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getText($key2)." (".$this->LANG->getText('defaultValue').": ".$this->MAINCFG->validConfig[$cat][$key2]['default'].")')\" />";
+							$ret[] = "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->LANG->getText($key2)." (".$this->LANG->getText('defaultValue').": ".$arr[$key2]['default'].")')\" />";
 							$ret[] = "\t</td>";
 						}
 						

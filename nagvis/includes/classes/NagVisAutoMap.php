@@ -26,31 +26,31 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisAutoMap extends GlobalMap {
-	var $CORE;
-	var $MAPCFG;
-	var $MAPOBJ;
-	var $BACKEND;
+	private $CORE;
+	private $MAPCFG;
+	public $MAPOBJ;
+	private $BACKEND;
 	
-	var $preview;
+	private $preview;
 	
-	var $backend_id;
-	var $root;
-	var $maxLayers;
-	var $width;
-	var $height;
-	var $renderMode;
-	var $ignoreHosts;
-	var $filterGroup;
+	private $backend_id;
+	private $root;
+	private $maxLayers;
+	private $width;
+	private $height;
+	private $renderMode;
+	private $ignoreHosts;
+	private $filterGroup;
 	
-	var $rootObject;
-	var $arrMapObjects;
-	var $arrHostnames;
+	private $rootObject;
+	private $arrMapObjects;
+	private $arrHostnames;
 	
-	var $arrHostnamesParsed;
+	private $arrHostnamesParsed;
 	
-	var $mapCode;
+	private $mapCode;
 	
-	var $noBinaryFound;
+	private $noBinaryFound;
 	
 	/**
 	 * Automap constructor
@@ -61,7 +61,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisAutoMap(&$CORE, &$BACKEND, &$prop) {
+	public function __construct(&$CORE, &$BACKEND, &$prop) {
 		$this->CORE = &$CORE;
 		$this->BACKEND = &$BACKEND;
 		
@@ -160,7 +160,7 @@ class NagVisAutoMap extends GlobalMap {
 			$this->filterObjectTreeByGroup();
 		}
 		
-		parent::GlobalMap($this->CORE, $this->MAPCFG);
+		parent::__construct($this->CORE, $this->MAPCFG);
 		
 		// Create MAPOBJ object, form the object tree to map objects and get the
 		// state of the objects
@@ -175,7 +175,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 	String with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseMapJson() {
+	public function parseMapJson() {
 		$ret = '';
 		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
 		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
@@ -192,7 +192,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 	String with JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseMapPropertiesJson() {
+	public function parseMapPropertiesJson() {
 		$arr = Array();
 		$arr['map_name'] = $this->MAPCFG->getName();
 		
@@ -205,7 +205,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseGraphvizConfig() {
+	private function parseGraphvizConfig() {
 		
 		/**
 		 * Graph definition
@@ -272,7 +272,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	Array		HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function renderMap() {
+	public function renderMap() {
 		// This is only usable when this is preview mode (printErr = 0). This checks
 		// if there is no binary on this system. When there is none, the map is not
 		// being rendered
@@ -327,7 +327,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fixMapCode() {
+	private function fixMapCode() {
 		/**
 		 * The hover menu can't be rendered in graphviz config. The information
 		 * which is needed here is rendered like this title="<host_name>".
@@ -347,7 +347,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseMap() {
+	public function parseMap() {
 		$ret = '';
 		
 		// Render the map image and save it, also generate link coords etc
@@ -377,7 +377,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getBackground() {
+	private function getBackground() {
 		// Append random number to prevent caching
 		$src = $this->CORE->MAINCFG->getValue('paths', 'htmlvar').'automap.png?'.mt_rand(0,10000);
 		
@@ -390,7 +390,7 @@ class NagVisAutoMap extends GlobalMap {
 	/**
 	 * Do the preflight checks to ensure the automap can be drawn
 	 */
-	function checkPreflight() {
+	private function checkPreflight() {
 		// If this is a preview for the index page do not print errors
 		if($this->preview) {
 			$printErr = 0;
@@ -423,7 +423,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkGraphviz($binary, $printErr) {
+	private function checkGraphviz($binary, $printErr) {
 		/**
 		 * Check if the graphviz binaries can be found in the PATH or in the 
 		 * configured path
@@ -457,7 +457,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getFavicon() {
+	private function getFavicon() {
 		if(file_exists($this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
 			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
@@ -471,7 +471,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function pxToInch($px) {
+	private function pxToInch($px) {
 		return number_format($px/72, 4, '.','');
 	}
 	
@@ -480,7 +480,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectTree() {
+	private function getObjectTree() {
 		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
 	}
 	
@@ -489,7 +489,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function filterObjectTreeByGroup() {
+	private function filterObjectTreeByGroup() {
 		$hostgroupMembers = Array();
 		foreach($this->filterGroupObject->getMembers() AS $OBJ1) {
 			$hostgroupMembers[] = $OBJ1->getName();
@@ -504,11 +504,11 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function &getObjectConfiguration() {
+	private function &getObjectConfiguration() {
 		$objConf = Array();
 		
 		// Get object configuration from __automap configuration
-		foreach($this->MAPCFG->validConfig['host'] AS $key => &$values) {
+		foreach($this->MAPCFG->getValidTypeKeys('host') AS $key) {
 			if($key != 'type' && $key != 'backend_id' && $key != 'host_name') {
 				$objConf[$key] = $this->MAPCFG->getValue('global', 0, $key);
 			}
@@ -522,7 +522,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getRootHostName() {
+	private function getRootHostName() {
 		/**
 		 * NagVis tries to take configured host from main
 		 * configuration or read the host which has no parent from backend
@@ -556,7 +556,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchHostObjectByName($hostName) {
+	private function fetchHostObjectByName($hostName) {
 		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 		$hostObject->fetchMembers();
 		$hostObject->setConfiguration($this->getObjectConfiguration());

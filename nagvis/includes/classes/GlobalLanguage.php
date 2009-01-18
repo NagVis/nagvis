@@ -26,10 +26,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalLanguage {
-	var $MAINCFG;
-	var $textDomain;
-	var $sCurrentLanguage;
-	var $sCurrentEncoding;
+	private $MAINCFG;
+	private $textDomain;
+	private $sCurrentLanguage;
+	private $sCurrentEncoding;
 	
 	/**
 	 * Class Constructor
@@ -38,7 +38,7 @@ class GlobalLanguage {
 	 * @param	String			$type		Type of language-file
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalLanguage(&$MAINCFG, $textDomain = 'nagvis') {
+	public function __construct(&$MAINCFG, $textDomain = 'nagvis') {
 		$this->MAINCFG = &$MAINCFG;
 		$this->textDomain = $textDomain;
 		
@@ -78,7 +78,7 @@ class GlobalLanguage {
 	 * @return  String
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getCurrentLanguage() {
+	public function getCurrentLanguage() {
 		return $this->sCurrentLanguage;
 	}
 	
@@ -88,7 +88,7 @@ class GlobalLanguage {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkLanguageAvailable($printErr=1) {
+	private function checkLanguageAvailable($printErr=1) {
 		$CORE = new GlobalCore($this->MAINCFG, $this);
 		if(in_array($this->sCurrentLanguage, $CORE->getAvailableLanguages())) {
 			return TRUE;
@@ -106,7 +106,7 @@ class GlobalLanguage {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkGettextSupport() {
+	private function checkGettextSupport() {
 		if (!extension_loaded('gettext')) {
 			dl('gettext.so');
 			if (!extension_loaded('gettext')) {
@@ -129,7 +129,7 @@ class GlobalLanguage {
 	 * @return	String	Localized String
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getText($id, $replace = NULL) {
+	public function getText($id, $replace = NULL) {
 		$ret = $this->getTextOfId($id);
 		
 		if($replace !== NULL) {
@@ -146,7 +146,7 @@ class GlobalLanguage {
 	 * @return	String	Localized String
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getTextOfId($s) {
+	private function getTextOfId($s) {
 		return gettext($s);
 	}
 	
@@ -159,7 +159,7 @@ class GlobalLanguage {
 	 * @return  String        String Replaced language string
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getReplacedString($sLang, $replace) {
+	private function getReplacedString($sLang, $replace) {
 		if(!is_array($replace)) {
 			$aReplace = explode(',', $replace);
 			for($i = 0, $size = count($aReplace); $i < $size; $i++) {

@@ -56,7 +56,7 @@ class WuiBackendManagement extends GlobalPage {
 					  'extHeader'=> '',
 					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($CORE, $prop);
+		parent::__construct($CORE, $prop);
 	}
 	
 	/**
@@ -132,11 +132,12 @@ class WuiBackendManagement extends GlobalPage {
      */
 	function getEditFields() {
 		$ret = Array();
-		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->CORE->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->id."');"));
+		$ret = array_merge($ret,$this->EDITBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->CORE->getDefinedBackends()),'',TRUE,"getBackendOptions('',this.value,'".$this->EDITBACKENDFORM->getId()."');"));
 		$this->propCount++;
 		$ret[] = "<script language=\"javascript\">";
 		$ret[] = "\tvar backendOptions = Array();";
-		foreach($this->MAINCFG->validConfig['backend']['options'] AS $backendtype => $arr) {
+		$a = $this->MAINCFG->getValidObjectType('backend');
+		foreach($a['options'] AS $backendtype => $arr) {
 			$ret[] = "\tbackendOptions['".$backendtype."'] = Array();";
 			foreach($arr AS $key => $opt) {
 				$ret[] = "\tbackendOptions['".$backendtype."']['".$key."'] = Array();";
@@ -147,7 +148,7 @@ class WuiBackendManagement extends GlobalPage {
 		}
 		$ret[] = "\tvar definedBackends = Array();";
 		$ret[] = "\tdefinedBackends['-'] = Array();";
-		foreach($this->MAINCFG->config AS $sec => $arr) {
+		foreach($this->MAINCFG->getConfig() AS $sec => $arr) {
 			if(preg_match("/^backend_/i", $sec)) {
 				$backend_id = preg_replace("/^backend_/i",'',$sec);
 				$ret[] = "\tdefinedBackends['".$backend_id."'] = Array();";
@@ -186,15 +187,16 @@ class WuiBackendManagement extends GlobalPage {
 		$ret = Array();
 		$ret = array_merge($ret,$this->ADDBACKENDFORM->getInputLine('backend_id','backend_id','',TRUE));
 		$this->propCount++;
-		foreach($this->MAINCFG->validConfig['backend'] as $propname => $prop) {
+		foreach($this->MAINCFG->getValidObjectType('backend') as $propname => $prop) {
 			if($propname == "backendtype") {
-				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->CORE->getAvailableBackends()),'',$prop['must'],"getBackendOptions(this.value,'','".$this->ADDBACKENDFORM->id."');"));
+				$ret = array_merge($ret,$this->ADDBACKENDFORM->getSelectLine($propname,$propname,array_merge(Array(''=>''),$this->CORE->getAvailableBackends()),'',$prop['must'],"getBackendOptions(this.value,'','".$this->ADDBACKENDFORM->getId()."');"));
 				$this->propCount++;
 			}
 		}
 		$ret[] = "<script language=\"javascript\">";
 		$ret[] = "\tvar backendOptions = Array();";
-		foreach($this->MAINCFG->validConfig['backend']['options'] AS $backendtype => $arr) {
+		$a = $this->MAINCFG->getValidObjectType('backend');
+		foreach($a['options'] AS $backendtype => $arr) {
 			$ret[] = "\tbackendOptions['".$backendtype."'] = Array();";
 			foreach($arr AS $key => $opt) {
 				$ret[] = "\tbackendOptions['".$backendtype."']['".$key."'] = Array();";

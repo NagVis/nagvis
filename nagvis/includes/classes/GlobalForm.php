@@ -27,13 +27,13 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalForm {
-	var $name;
-	var $id;
-	var $method;
-	var $action;
-	var $onSubmit;
-	var $cols;
-	var $enctype;
+	private $name;
+	private $id;
+	private $method;
+	private $action;
+	private $onSubmit;
+	private $cols;
+	private $enctype;
 	
 	/**
 	 * Class Constructor
@@ -41,7 +41,7 @@ class GlobalForm {
 	 * @param 	Array	$prop	Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalForm($prop=Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>'')) {
+	public function __construct($prop=Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>'')) {
 		$this->name = $prop['name'];
 		$this->id = $prop['id'];
 		$this->method = (isset($prop['method'])) ? $prop['method']:'';
@@ -59,7 +59,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHiddenField($name,$value) {
+	public function getHiddenField($name,$value) {
 		$ret = Array();
 		
 		$ret[] = '<input type="hidden" name="'.$name.'" value="'.$value.'" />';
@@ -74,7 +74,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getTitleLine($title) {
+	public function getTitleLine($title) {
 		$ret = Array();
 		
 		$ret[] = '<tr><th colspan="'.$this->cols.'">'.$title.'</th></tr>';
@@ -89,7 +89,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getCatLine($title) {
+	public function getCatLine($title) {
 		$ret = Array();
 		
 		$ret[] = '<tr><th class="cat" colspan="'.$this->cols.'">'.$title.'</th></tr>';
@@ -106,7 +106,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getFileLine($label,$name,$value,$must=FALSE) {
+	public function getFileLine($label,$name,$value,$must=FALSE) {
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -130,7 +130,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getInputLine($label,$name,$value,$must=FALSE,$onBlur='') {
+	public function getInputLine($label,$name,$value,$must=FALSE,$onBlur='') {
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -158,7 +158,7 @@ class GlobalForm {
 	 * @return	Array 		Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='',$onBlur='') {
+	public function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='',$onBlur='') {
 		$ret = Array();
 		
 		if($must) {
@@ -181,7 +181,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSubmitLine($label) {
+	public function getSubmitLine($label) {
 		$ret = Array();
 		
 		$ret[] = '<tr><td class="tdlabel" colspan="'.$this->cols.'" align="center">';
@@ -197,7 +197,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function initForm() {
+	public function initForm() {
 		$ret = Array();
 		
 		$ret[] = '<form name="'.$this->name.'" id="'.$this->id.'" method="'.$this->method.'" action="'.$this->action.'" enctype="'.$this->enctype.'" onsubmit="'.$this->onSubmit.'">';
@@ -212,7 +212,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function closeForm() {
+	public function closeForm() {
 		$ret = Array('</table></form>');
 		return $ret;
 	}
@@ -224,7 +224,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSubmitField($label) {
+	public function getSubmitField($label) {
 		$ret = Array();
 		$ret[] = '<input class="submit" type="submit" name="submit" id="commit" value="'.$label.'" />';
 		
@@ -241,7 +241,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSelectField($name,$arr,$onChange='',$must=FALSE,$onBlur='') {
+	public function getSelectField($name,$arr,$onChange='',$must=FALSE,$onBlur='') {
 		$ret = Array();
 		$ret[] = '<select name="'.$name.'" onChange="'.$onChange.'" onBlur="'.$onBlur.'">';
 		
@@ -269,7 +269,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getInputField($name,$value,$onBlur='') {
+	public function getInputField($name,$value,$onBlur='') {
 		$ret = Array();
 		
 		if(is_array($value)) {
@@ -279,6 +279,16 @@ class GlobalForm {
 		$ret[] = '<input type="text" name="'.$name.'" value="'.$value.'" onBlur="'.$onBlur.'" />';
 		
 		return $ret;
+	}
+	
+	/**
+	 * Gets the id of the form
+	 *
+	 * @return	Integer  ID of the form
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getId() {
+		return $this->id;
 	}
 }
 ?>

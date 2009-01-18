@@ -26,21 +26,21 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalPage {
-	var $CORE;
+	private $CORE;
 	
 	// arrays for the header
-	var $title;
-	var $cssIncludes;
-	var $jsIncludes;
-	var $extHeader;
+	private $title;
+	private $cssIncludes;
+	private $jsIncludes;
+	private $extHeader;
 	
 	// String for the body
-	var $body;
+	private $body;
 	
 	// logged in user
-	var $user;
+	private $user;
 	
-	var $languageRoot;
+	private $languageRoot;
 	
 	/**
 	 * Class Constructor
@@ -49,7 +49,7 @@ class GlobalPage {
 	 * @param 	Array			$prop		Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalPage(&$CORE, $givenProperties=Array()) {
+	public function __construct(&$CORE, $givenProperties=Array()) {
 		$this->CORE = &$CORE;
 		
 		// Define default Properties here
@@ -86,7 +86,7 @@ class GlobalPage {
 	 * @return	String	String with Username
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getUser() {
+	private function getUser() {
 		if(isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER'] != '') {
 			return $_SERVER['PHP_AUTH_USER'];
 		} elseif(isset($_SERVER['REMOTE_USER']) && $_SERVER['REMOTE_USER'] != '') {
@@ -103,7 +103,7 @@ class GlobalPage {
    * @return  Boolean Is Check Successful?
    * @author  Lars Michelsen <lars@vertical-visions.de>
    */
-  function checkPHPVersion($printErr) {
+  private function checkPHPVersion($printErr) {
 		if(version_compare(PHP_VERSION, CONST_NEEDED_PHP_VERSION, ">=")) {
       return TRUE;
     } else {
@@ -121,7 +121,7 @@ class GlobalPage {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkUser($printErr) {
+	private function checkUser($printErr) {
 		if($this->user != '') {
 					return TRUE;
 		} else {
@@ -140,7 +140,7 @@ class GlobalPage {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkPermissions(&$allowed,$printErr) {
+	private function checkPermissions(&$allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
 				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('permissionDenied','USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
@@ -158,7 +158,7 @@ class GlobalPage {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkPreflight() {
+	private function checkPreflight() {
 		$ret = TRUE;
 		$ret = $ret & $this->checkUser(TRUE);
 		$ret = $ret & $this->checkPHPVersion(TRUE);
@@ -168,42 +168,13 @@ class GlobalPage {
 	}
 	
 	/**
-	 * Writes a Message to message array and does what to do...
-	 * severity: ERROR, WARNING, INFORMATION
-	 *
-	 * @param	String	$severity	Severity of the message (ERROR|WARNING|INFORMATION)
-	 * @param	String	$text		String to display as message
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function messageToUser($severity='WARNING', $text) {
-		switch($severity) {
-			case 'ERROR':
-			case 'INFO-STOP':
-				// print the message box and kill the script
-				$this->body .= $this->messageBox($severity, $text);
-				$this->printPage();
-				// end of script
-			break;
-			case 'WARNING':
-			case 'INFORMATION':
-				// add the message to message Array - the printing will be done later, the message array has to be superglobal, not a class variable
-				$arrMessage = Array(Array('severity' => $severity, 'text' => $text));
-				if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
-					$this->CORE->MAINCFG->setRuntimeValue('userMessages',array_merge($this->CORE->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
-				} else {
-					$this->CORE->MAINCFG->setRuntimeValue('userMessages',$arrMessage);
-				}
-			break;
-		}
-	}
-	
-	/**
 	 * Gets the messages to be printed to the user
 	 *
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: Need to remove that
 	 */
-	function getUserMessages() {
+	protected function getUserMessages() {
 		$ret = '';
 		
 		if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
@@ -223,6 +194,7 @@ class GlobalPage {
 	 * @return 	Array	HTML Code
 	 * @author	Michael Luebben <michael_luebben@web.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: Need to remove that
 	 */
 	function messageBox($severity, $text) {
 		$ret = '';
@@ -260,26 +232,13 @@ class GlobalPage {
 	}
 	
 	/**
-	 * Adds an Element (line) to the Body Array
-	 *
-	 * @param	String	$line	HTML Code
-	 * @return 	Boolean	TRUE
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * @deprecated
-	 */
-	function addBodyLine($line) {
-		$ret = addBodyLines($line);
-		return $ret;
-	}
-	
-	/**
 	 * Adds one or more elements (lines) to the Body Array
 	 *
 	 * @param	String/Array	$lines	String or Array with HTML Code
 	 * @return 	Boolean	TRUE
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-	function addBodyLines($lines) {
+	public function addBodyLines($lines) {
 		if(is_array($lines)) {
 			$lines = implode("\n", $lines);	
 		}
@@ -294,7 +253,7 @@ class GlobalPage {
 	 * @return 	String	HTML Code of the Header
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHeader() {
+	private function getHeader() {
 		return $this->getExtHeader().$this->getJsIncludes().$this->getCssIncludes();
 	}
 	
@@ -304,7 +263,7 @@ class GlobalPage {
 	 * @return 	String	HTML Code of the Header
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getBody() {
+	private function getBody() {
 		$ret = $this->body;
 		return $ret;
 	}
@@ -315,7 +274,7 @@ class GlobalPage {
 	 * @return  String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getExtHeader() {
+	private function getExtHeader() {
 		return $this->extHeader;
 	}
 	
@@ -325,7 +284,7 @@ class GlobalPage {
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getJsIncludes() {
+	private function getJsIncludes() {
 		$sRet = '';
 		
 		if(count($this->jsIncludes) > 0) {
@@ -343,7 +302,7 @@ class GlobalPage {
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getCssIncludes() {
+	private function getCssIncludes() {
 		$sRet = '';
 		
 		if(count($this->cssIncludes) > 0) {
@@ -361,7 +320,7 @@ class GlobalPage {
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function buildPage() {
+	private function buildPage() {
 		$ret = '';
 		
 		$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'."\n";
@@ -379,21 +338,11 @@ class GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function printPage() {
+	public function printPage() {
 		echo $this->buildPage();
 		if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 		// printing the page is the end of everything else - good bye! ;-)
 		exit;
-	}
-	
-	/**
-	 * Gets the complete HTML Page
-	 *
-	 * @return	String	HTML Code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getPage() {
-		return $this->buildPage();
 	}
 	
 	/**
@@ -403,7 +352,7 @@ class GlobalPage {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseJs($js) {
+	public function parseJs($js) {
 		$ret = '';
 		if($js != '') {
 			
@@ -428,7 +377,7 @@ class GlobalPage {
 	 * @return	Array	JS Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function resizeWindow($x,$y) {
+	public function resizeWindow($x,$y) {
 		$ret = Array('window.resizeTo('.$x.','.$y.')');
 		return $ret;
 	}

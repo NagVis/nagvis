@@ -27,7 +27,7 @@
  */
 class WuiBackground extends GlobalBackground {
 	function WuiBackground(&$CORE, $image) {
-		parent::GlobalBackground($CORE, $image);
+		parent::__construct($CORE, $image);
 	}
 	
 	/**

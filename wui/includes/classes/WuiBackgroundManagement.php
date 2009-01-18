@@ -54,7 +54,7 @@ class WuiBackgroundManagement extends GlobalPage {
 					  'extHeader'=> '',
 					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
-		parent::GlobalPage($CORE, $prop);
+		parent::__construct($CORE, $prop);
 	}
 	
 	/**

@@ -176,7 +176,8 @@ switch($_GET['action']) {
 			// Check if the backend_type is set
 			if($_GET['backend_type'] != '') {
 				// Loop all options for this backend type
-				foreach($CORE->MAINCFG->validConfig['backend']['options'][$_GET['backend_type']] AS $key => $opt) {
+				$a = $CORE->MAINCFG->getValidObjectType('backend');
+				foreach($a['options'][$_GET['backend_type']] AS $key => $opt) {
 					$a = Array('key' => $key);
 					
 					foreach($opt AS $var => $val) {

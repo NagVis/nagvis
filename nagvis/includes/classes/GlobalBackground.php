@@ -26,10 +26,16 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalBackground {
-	var $CORE;
-	var $image;
+	private $CORE;
+	private $image;
 	
-	function GlobalBackground(&$CORE, $image) {
+	/**
+	 * Constructor
+	 *
+	 * @param   config  $MAINCFG
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function __construct(&$CORE, $image) {
 		$this->CORE = &$CORE;
 		$this->image = $image;
 	}
@@ -40,8 +46,22 @@ class GlobalBackground {
 	 * @return	String File Name
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getFileName() {
+	public function getFileName() {
 		return $this->image;
+	}
+	
+	/**
+	 * Gets the background file
+	 *
+	 * @return  String  HTML Path to background file
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getFile() {
+		$sReturn = '';
+		if($this->getFileName() != '' && $this->getFileName() != 'none') {
+			$sReturn = $this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->getFileName();
+		}
+		return $sReturn;
 	}
 	
 	/**
@@ -51,7 +71,7 @@ class GlobalBackground {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkFileExists($printErr) {
+	protected function checkFileExists($printErr) {
 		if($this->image != '') {
 			if(file_exists($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
@@ -73,7 +93,7 @@ class GlobalBackground {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkFileReadable($printErr) {
+	protected function checkFileReadable($printErr) {
 		if($this->image != '') {
 			if($this->checkFileExists($printErr) && is_readable($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
@@ -95,7 +115,7 @@ class GlobalBackground {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkFileWriteable($printErr) {
+	protected function checkFileWriteable($printErr) {
 		if($this->image != '') {
 			if($this->checkFileExists($printErr) && is_writable($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
@@ -117,7 +137,7 @@ class GlobalBackground {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkFolderWriteable($printErr) {
+	protected function checkFolderWriteable($printErr) {
 		if(is_writable($this->CORE->MAINCFG->getValue('paths', 'map'))) {
 			return TRUE;
 		} else {

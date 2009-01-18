@@ -34,8 +34,9 @@ class NagVisUrl {
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   GlobalCore 	$CORE
+	 * @param   String      URL
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct(&$CORE, $strUrl) {
 		$this->CORE = &$CORE;
@@ -44,10 +45,22 @@ class NagVisUrl {
 		$this->strContents = '';
 	}
 	
-	public function fetchContents() {
+	/**
+	 * Fetches the contets of the specified URL
+	 *
+	 * @param 	GlobalCore 	$CORE
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchContents() {
 		$this->strContents = file_get_contents($this->strUrl);
 	}
 	
+	/**
+	 * Gets the contents of the URL
+	 *
+	 * @return  String  Contents of the URL
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function getContents() {
 		if($this->strContents == '') {
 			$this->fetchContents();
@@ -62,7 +75,7 @@ class NagVisUrl {
    * @return  String  String with Html Code
    * @author  Lars Michelsen <lars@vertical-visions.de>
    */
-  function parseJson() {
+  public function parseJson() {
     $ret = '';
     $ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
     $ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";

@@ -33,7 +33,18 @@ class WuiMainCfg extends GlobalMainCfg {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function WuiMainCfg($configFile) {
-		parent::GlobalMainCfg($configFile);
+		parent::__construct($configFile);
+	}
+	
+	/**
+	 * Gets all informations about an object type
+	 *
+	 * @param   String  Type to get the informations for
+	 * @return  Array   The validConfig array
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getValidObjectType($type) {
+		return $this->validConfig[$type];
 	}
 	
 	/**
@@ -44,6 +55,16 @@ class WuiMainCfg extends GlobalMainCfg {
 	 */
 	function getValidConfig() {
 		return $this->validConfig;
+	}
+	
+	/**
+	 * Gets the configuration array
+	 *
+	 * @return	Array The validConfig array
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getConfig() {
+		return $this->config;
 	}
 	
 	/**

@@ -26,10 +26,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMap {
-	var $CORE;
-	var $MAPCFG;
+	private $CORE;
+	private $MAPCFG;
 	
-	var $linkedMaps = Array();
+	private $linkedMaps = Array();
 	
 	/**
 	 * Class Constructor
@@ -38,7 +38,7 @@ class GlobalMap {
 	 * @param 	GlobalMapCfg 	$MAPCFG
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalMap(&$CORE,&$MAPCFG) {
+	public function __construct(&$CORE,&$MAPCFG) {
 		$this->CORE = &$CORE;
 		$this->MAPCFG = &$MAPCFG;
 	}
@@ -51,7 +51,7 @@ class GlobalMap {
 	 * @return	String HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getBackgroundHtml($src, $style='', $attr='') {
+	public function getBackgroundHtml($src, $style='', $attr='') {
 		return '<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="" '.$attr.'>';
 	}
 }

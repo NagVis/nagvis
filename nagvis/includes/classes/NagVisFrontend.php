@@ -26,16 +26,16 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisFrontend extends GlobalPage {
-	var $CORE;
-	var $MAPCFG;
-	var $BACKEND;
+	private $CORE;
+	private $MAPCFG;
+	private $BACKEND;
 	
-	var $ROTATION;
+	private $ROTATION;
 	
-	var $MAP;
+	private $MAP;
 	
-	var $headerTemplate;
-	var $htmlBase;
+	private $headerTemplate;
+	private $htmlBase;
 	
 	/**
 	 * Class Constructor
@@ -43,7 +43,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisFrontend(&$CORE, $MAPCFG = '', $BACKEND = '', $ROTATION= '') {
+	public function __construct(&$CORE, $MAPCFG = '', $BACKEND = '', $ROTATION= '') {
 		$prop = Array();
 		
 		$this->CORE = &$CORE;
@@ -93,7 +93,7 @@ class NagVisFrontend extends GlobalPage {
 			$prop['allowedUsers'] = $this->MAPCFG->getValue('global',0, 'allowed_user');
 		}
 		
-		parent::GlobalPage($CORE, $prop);
+		parent::__construct($CORE, $prop);
 	}
 	
 	/**
@@ -103,7 +103,7 @@ class NagVisFrontend extends GlobalPage {
 	 * @param  String  Header template name
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHeaderMenu($headerMenuEnabled, $headerTemplateName) {
+	public function getHeaderMenu($headerMenuEnabled, $headerTemplateName) {
 		if($headerMenuEnabled) {
 			// Parse the header menu
 			$HEADER = new GlobalHeaderMenu($this->CORE, $headerTemplateName, $this->MAPCFG);
@@ -116,7 +116,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getIndexPage() {
+	public function getIndexPage() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="overview" class="infopage"></div>');
 		$this->INDEX = new GlobalIndexPage($this->CORE, $this->BACKEND);
@@ -128,7 +128,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMap() {
+	public function getMap() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="map" class="map"></div>');
 		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, $this->BACKEND);
@@ -141,7 +141,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getAutoMap($arrOptions) {
+	public function getAutoMap($arrOptions) {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="map" class="map">');
 		$this->MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $arrOptions);
@@ -155,7 +155,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMessages() {
+	public function getMessages() {
 		$this->addBodyLines($this->getUserMessages());
 	}
 	
@@ -164,7 +164,7 @@ class NagVisFrontend extends GlobalPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getRotationPropertiesJson($bRefresh) {
+	public function getRotationPropertiesJson($bRefresh) {
 		$arr = Array();
 		
 		if($this->ROTATION->getPoolName() != '') {

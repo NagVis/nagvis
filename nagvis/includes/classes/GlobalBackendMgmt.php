@@ -32,12 +32,13 @@ class GlobalBackendMgmt {
 	
 	/**
 	 * Constructor
+	 *
 	 * Initializes all backends
 	 *
-	 * @param	config $MAINCFG
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   config  $MAINCFG
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function GlobalBackendMgmt(&$CORE) {
+	public function __construct(&$CORE) {
 		$this->CORE = &$CORE;
 		
 		$this->BACKENDS = Array();
@@ -55,28 +56,11 @@ class GlobalBackendMgmt {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function loadBackends() {
-		$aBackends = $this->getBackends();
+		$aBackends = $this->CORE->getDefinedBackends();
 		
 		if(!count($aBackends)) {
 			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noBackendDefined'));
 		}
-	}
-	
-	/**
-	 * Reads all defined Backend-IDs from the MAINCFG
-	 *
-	 * @return	Array Backend-IDs
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getBackends() {
-		$ret = Array();
-		foreach($this->CORE->MAINCFG->config AS $sec => &$var) {
-			if(preg_match('/^backend_/i', $sec)) {
-				$ret[] = $var['backendid'];
-			}
-		}
-		
-		return $ret;
 	}
 	
 	/**

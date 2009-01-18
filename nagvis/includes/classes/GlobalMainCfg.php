@@ -28,12 +28,12 @@
 class GlobalMainCfg {
 	private $CACHE;
 	
-	var $config;
-	var $runtimeConfig;
+	protected $config;
+	private $runtimeConfig;
 	
-	var $configFile;
+	private $configFile;
 	
-	var $validConfig;
+	protected $validConfig;
 	
 	/**
 	 * Class Constructor
@@ -41,7 +41,7 @@ class GlobalMainCfg {
 	 * @param	String	$configFile			String with path to config file
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function GlobalMainCfg($configFile) {
+	public function __construct($configFile) {
 		$this->config = Array();
 		$this->runtimeConfig = Array();
 		
@@ -461,7 +461,7 @@ class GlobalMainCfg {
 			if($this->readConfig(TRUE)) {
 				
 				// Cache the resulting config
-				$this->CACHE->writeToCache($this->config, TRUE);
+				$this->CACHE->writeCache($this->config, TRUE);
 			}
 		}
 		
@@ -480,7 +480,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setPathsByBase($base,$htmlBase) {
+	private function setPathsByBase($base,$htmlBase) {
 		$this->validConfig['paths']['cfg']['default'] = $base.'etc/';
 		$this->validConfig['paths']['icon']['default'] = $base.'nagvis/images/iconsets/';
 		$this->validConfig['paths']['images']['default'] = $base.'nagvis/images/';
@@ -515,7 +515,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getBasePath() {
+	private function getBasePath() {
 		$return = preg_replace('/wui|nagvis$/i', '', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
 		return $return ;
 	}
@@ -527,7 +527,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function readConfig($printErr=1) {
+	private function readConfig($printErr=1) {
 		$numComments = 0;
 		$sec = '';
 		
@@ -650,7 +650,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkMainConfigIsValid($printErr) {
+	private function checkMainConfigIsValid($printErr) {
 		// check given objects and attributes
 		foreach($this->config AS $type => &$vars) {
 			if(!ereg('^comment_',$type)) {
@@ -757,7 +757,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkNagVisConfigExists($printErr) {
+	private function checkNagVisConfigExists($printErr) {
 		if($this->configFile != '') {
 			if(file_exists($this->configFile)) {
 				return TRUE;
@@ -780,7 +780,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkNagVisConfigReadable($printErr) {
+	private function checkNagVisConfigReadable($printErr) {
 		if($this->configFile != '') {
 			if(is_readable($this->configFile)) {
 				return TRUE;
@@ -797,31 +797,12 @@ class GlobalMainCfg {
 	}
 	
 	/**
-	 * Checks for readable MapCfgFolder
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkMapCfgFolderReadable($printErr) {
-		if(file_exists($this->getValue('paths', 'mapcfg')) && is_readable($this->getValue('paths', 'mapcfg'))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mapCfgDirNotReadable', 'MAPPATH~'.$this->getValue('paths', 'mapcfg')), $CORE->MAINCFG->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
 	 * Returns the last modification time of the configuration file
 	 *
 	 * @return	Integer	Unix Timestamp
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getConfigFileAge() {
+	public function getConfigFileAge() {
 		return filemtime($this->configFile);
 	}
 	
@@ -832,7 +813,7 @@ class GlobalMainCfg {
 	 * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function isCached() {
+	public function isCached() {
 		return $this->CACHE->isCached();
 	}
 	
@@ -845,7 +826,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setValue($sec, $var, $val) {
+	public function setValue($sec, $var, $val) {
 		if(isset($this->config[$sec][$var]) && $val == '') {
 			// Value is empty and there is an entry in the config array
 			unset($this->config[$sec][$var]);
@@ -867,7 +848,7 @@ class GlobalMainCfg {
 	 * @return	String	$val	Value
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getValue($sec, $var, $ignoreDefault=FALSE) {
+	public function getValue($sec, $var, $ignoreDefault=FALSE) {
 		// if nothing is set in the config file, use the default value
 		// (Removed "&& is_array($this->config[$sec]) due to performance issues)
 		if(isset($this->config[$sec]) && isset($this->config[$sec][$var])) {
@@ -911,7 +892,21 @@ class GlobalMainCfg {
 			return FALSE;
 		}
 	}
-
+	
+	/**
+	 * A getter to provide all section names of main configuration
+	 *
+	 * @return  Array  List of all sections as values
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getSections() {
+		$aRet = Array();
+		foreach($this->config AS $key => $var) {
+			$aRet[] = $key;
+		}
+		return $aRet;
+	}
+	
 	/**
 	 * Sets a runtime config value
 	 *
@@ -920,7 +915,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setRuntimeValue($var, $val) {
+	public function setRuntimeValue($var, $val) {
 		$this->runtimeConfig[$var] = $val;
 		return TRUE;
 	}
@@ -932,7 +927,7 @@ class GlobalMainCfg {
 	 * @return	String	$val	Value
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getRuntimeValue($var) {
+	public function getRuntimeValue($var) {
 		if(isset($this->runtimeConfig[$var])) {
 			return $this->runtimeConfig[$var];
 		} else {
@@ -946,7 +941,7 @@ class GlobalMainCfg {
 	 * @return	String 	JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseGeneralProperties() {
+	public function parseGeneralProperties() {
 		$arr = Array();
 		
 		$arr['date_format'] = $this->getValue('global', 'dateformat');
@@ -965,7 +960,7 @@ class GlobalMainCfg {
 	 * @return	String 	JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseWorkerProperties() {
+	public function parseWorkerProperties() {
 		$arr = Array();
 		
 		$arr['worker_interval'] = $this->getValue('worker', 'interval');

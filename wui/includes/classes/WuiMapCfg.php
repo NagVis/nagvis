@@ -43,7 +43,7 @@ class WuiMapCfg extends GlobalMapCfg {
 		$this->name	= $name;
 		
 		$this->getMap();
-		parent::GlobalMapCfg($CORE, $this->name);
+		parent::__construct($CORE, $this->name);
 	}
 	
 	/**
@@ -58,6 +58,17 @@ class WuiMapCfg extends GlobalMapCfg {
 		// check the $this->name string for security reasons (its the ONLY value we get directly from external...)
 		// Allow ONLY Characters, Numbers, - and _ inside the Name of a Map
 		$this->name = preg_replace("/[^a-zA-Z0-9_-]/",'',$this->name);
+	}
+	
+	/**
+	 * Gets all informations about an object type
+	 *
+	 * @param   String  Type to get the informations for
+	 * @return  Array   The validConfig array
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getValidObjectType($type) {
+		return $this->validConfig[$type];
 	}
 	
 	/**

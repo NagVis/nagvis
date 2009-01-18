@@ -300,10 +300,8 @@ function getObjConf($objType, $objName1, $objName2, $map = null) {
 		
 		if(count($objConf) > 0) {
 			// merge with "global" settings
-			foreach($MAPCFG->validConfig[$objType] AS $key => &$values) {
-				if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-					$objConf[$key] = $values['default'];
-				}
+			foreach($MAPCFG->getValidTypeKeys($objType) AS $key) {
+				$objConf[$key] = $MAPCFG->getValue($objType, $objConf['id'], $key);
 			}
 		} else {
 			// object not on map
@@ -333,9 +331,9 @@ function getObjConf($objType, $objName1, $objName2, $map = null) {
 		}
 		
 		// merge with "global" settings
-		foreach($TMPMAPCFG->validConfig['global'] AS $key => &$values) {
-			if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-				$objConf[$key] = $values['default'];
+		foreach($TMPMAPCFG->getValidTypeKeys('global') AS $key) {
+			if($key != 'type') {
+				$objConf[$key] = $TMPMAPCFG->getValue('global', 0, $key);
 			}
 		}
 		

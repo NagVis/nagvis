@@ -52,7 +52,7 @@ class GlobalIndexPage {
 	 * @return	String 	String with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseJson() {
+	public function parseJson() {
 		$ret = '';
 		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
 		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
@@ -75,7 +75,7 @@ class GlobalIndexPage {
 	 * @return	String 	JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseFileAges() {
+	public function parseFileAges() {
 		$arr = Array();
 		
 		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
@@ -89,7 +89,7 @@ class GlobalIndexPage {
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseMapsJson() {
+	public function parseMapsJson() {
 		$aMaps = Array();
 		
 		foreach($this->CORE->getAvailableMaps() AS $mapName) {
@@ -125,11 +125,11 @@ class GlobalIndexPage {
 				
 				// Apply default configuration to object
 				$objConf = Array();
-				foreach($MAPCFG->validConfig['map'] AS $key => &$values) {
-					if((!isset($objConf[$key]) || $objConf[$key] == '') && isset($values['default'])) {
-						$objConf[$key] = $values['default'];
-					}
+				foreach($MAPCFG->getValidTypeKeys('map') AS $key) {
+					$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
 				}
+				$objConf['type'] = 'map';
+				
 				$MAP->MAPOBJ->setConfiguration($objConf);
 				
 				// Get the icon of the map
@@ -193,7 +193,7 @@ class GlobalIndexPage {
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseRotationsJson() {
+	public function parseRotationsJson() {
 		$aRotations = Array();
 		
 		// Only display the rotation list when enabled
@@ -228,7 +228,7 @@ class GlobalIndexPage {
 	 * @return	String 	String with JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseIndexPropertiesJson() {
+	public function parseIndexPropertiesJson() {
 		$arr = Array();
 		
 		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index','cellsperrow');
@@ -260,7 +260,7 @@ class GlobalIndexPage {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function createThumbnail($imgPath, $mapName) {
+	private function createThumbnail($imgPath, $mapName) {
 		if($this->CORE->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
 			// 0: width, 1:height, 2:type
 			$imgSize = getimagesize($imgPath);
@@ -364,7 +364,7 @@ class GlobalIndexPage {
 	 * @return	Boolean	Is Check Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkImageExists($imgPath, $printErr) {
+	private function checkImageExists($imgPath, $printErr) {
 		if(file_exists($imgPath)) {
 			return TRUE;
 		} else {

@@ -26,11 +26,11 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMap extends GlobalMap {
-	var $CORE;
-	var $MAPCFG;
-	var $BACKEND;
-	var $MAPOBJ;
-	var $numLineObjects;
+	private $CORE;
+	private $MAPCFG;
+	private $BACKEND;
+	public $MAPOBJ;
+	private $numLineObjects;
 	
 	/**
 	 * Class Constructor
@@ -40,14 +40,14 @@ class NagVisMap extends GlobalMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisMap(&$CORE,&$MAPCFG,&$BACKEND,$getState=1) {
+	public function __construct(&$CORE,&$MAPCFG,&$BACKEND,$getState=1) {
 		$this->CORE = &$CORE;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
 		
 		$this->numLineObjects = 0;
 		
-		parent::GlobalMap($this->CORE, $this->MAPCFG);
+		parent::__construct($this->CORE, $this->MAPCFG);
 		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG);
 		
 		$this->MAPOBJ->fetchMembers();
@@ -63,7 +63,7 @@ class NagVisMap extends GlobalMap {
 	 * @return	String 	String with Html Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseMapJson() {
+	public function parseMapJson() {
 		$ret = '';
 		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
 		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
@@ -87,7 +87,7 @@ class NagVisMap extends GlobalMap {
 	 * @return	String 	JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseFileAges() {
+	private function parseFileAges() {
 		$arr = Array();
 		
 		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
@@ -102,7 +102,7 @@ class NagVisMap extends GlobalMap {
 	 * @return	String 	String with JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseMapPropertiesJson() {
+	private function parseMapPropertiesJson() {
 		$arr = Array();
 		$arr['map_name'] = $this->MAPCFG->getName();
 		$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
@@ -126,14 +126,8 @@ class NagVisMap extends GlobalMap {
 	 * @return	String  Javascript code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getBackgroundJson() {
-		$sReturn = '';
-		
-		if($this->MAPCFG->BACKGROUND->getFileName() != '' && $this->MAPCFG->BACKGROUND->getFileName() != 'none') {
-			$sReturn = $this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
-		}
-		
-		return $sReturn;
+	private function getBackgroundJson() {
+		return $this->MAPCFG->BACKGROUND->getFile();
 	}
 	
 	/**
@@ -142,7 +136,7 @@ class NagVisMap extends GlobalMap {
 	 * @return	String	Path to the favicon
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getFavicon() {
+	private function getFavicon() {
 		if($this->MAPOBJ->getSummaryInDowntime()) {
 			$favicon = 'downtime';
 		} elseif($this->MAPOBJ->getSummaryAcknowledgement()) {
@@ -165,7 +159,7 @@ class NagVisMap extends GlobalMap {
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseObjectsJson() {
+	public function parseObjectsJson() {
 		$arrRet = Array();
 		
 		$i = 0;

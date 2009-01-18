@@ -82,7 +82,6 @@ class NagVisHoverUrl {
 		*/
     
 		if(!$content = file_get_contents($this->url)) {
-			$FRONTEND->messageToUser('WARNING','couldNotGetHoverUrl','URL~'.$this->hover_url);
 			new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('couldNotGetHoverUrl', 'URL~'.$this->url));
 		}
     

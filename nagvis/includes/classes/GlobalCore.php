@@ -85,9 +85,9 @@ class GlobalCore {
      */
 	public function getDefinedBackends() {
 		$ret = Array();
-		foreach($this->MAINCFG->config AS $sec => $var) {
-			if(preg_match("/^backend_/i", $sec)) {
-				$ret[] = $var['backendid'];
+		foreach($this->MAINCFG->getSections() AS $name) {
+			if(preg_match('/^backend_/i', $name)) {
+				$ret[] = $this->MAINCFG->getValue($name, 'backendid');
 			}
 		}
 		
@@ -100,12 +100,11 @@ class GlobalCore {
 	 * @return	Array pools
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getDefinedRotationPools() {
+	public function getDefinedRotationPools() {
 		$ret = Array();
-		
-		foreach($this->MAINCFG->config AS $sec => &$var) {
-			if(preg_match('/^rotation_/i', $sec)) {
-				$ret[] = $var['rotationid'];
+		foreach($this->MAINCFG->getSections() AS $name) {
+			if(preg_match('/^rotation_/i', $name)) {
+				$ret[] = $this->MAINCFG->getValue($name, 'rotationid');
 			}
 		}
 		
@@ -350,7 +349,7 @@ class GlobalCore {
 	 * @return	Boolean		Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkVarFolderExists($printErr) {
+	public function checkVarFolderExists($printErr) {
 		if(file_exists(substr($this->MAINCFG->getValue('paths', 'var'),0,-1))) {
 			return TRUE;
 		} else {
@@ -368,7 +367,7 @@ class GlobalCore {
 	 * @return	Boolean		Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkVarFolderWriteable($printErr) {
+	public function checkVarFolderWriteable($printErr) {
 		if($this->checkVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'var'),0,-1)) && @file_exists($this->MAINCFG->getValue('paths', 'var').'.')) {
 			return TRUE;
 		} else {
