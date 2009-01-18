@@ -38,8 +38,8 @@ class GlobalBackendMgmt {
 	 * @param   config  $MAINCFG
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE) {
-		$this->CORE = &$CORE;
+	public function __construct($CORE) {
+		$this->CORE = $CORE;
 		
 		$this->BACKENDS = Array();
 		

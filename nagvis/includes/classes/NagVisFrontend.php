@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisFrontend extends GlobalPage {
-	private $CORE;
 	private $MAPCFG;
 	private $BACKEND;
 	
@@ -43,22 +42,21 @@ class NagVisFrontend extends GlobalPage {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $MAPCFG = '', $BACKEND = '', $ROTATION= '') {
+	public function __construct($CORE, $MAPCFG = '', $BACKEND = '', $ROTATION= '') {
 		$prop = Array();
 		
-		$this->CORE = &$CORE;
-		$this->MAPCFG = &$MAPCFG;
-		$this->BACKEND = &$BACKEND;
+		$this->MAPCFG = $MAPCFG;
+		$this->BACKEND = $BACKEND;
 		
 		if(!$ROTATION) {
-			$this->ROTATION = new NagVisRotation($this->CORE);
+			$this->ROTATION = new NagVisRotation($CORE);
 		} else {
-			$this->ROTATION = &$ROTATION;
+			$this->ROTATION = $ROTATION;
 		}
 		
-		$this->htmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
+		$this->htmlBase = $CORE->MAINCFG->getValue('paths','htmlbase');
 		
-		$prop['title'] = $this->CORE->MAINCFG->getValue('internal', 'title');
+		$prop['title'] = $CORE->MAINCFG->getValue('internal', 'title');
 		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css',
 		                             $this->htmlBase.'/nagvis/includes/css/frontendEventlog.css',
 		                             $this->htmlBase.'/nagvis/includes/css/frontendMessage.css');

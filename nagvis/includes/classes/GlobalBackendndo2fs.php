@@ -45,8 +45,8 @@ class GlobalBackendndo2fs {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $backendId) {
-		$this->CORE = &$CORE;
+	public function __construct($CORE, $backendId) {
+		$this->CORE = $CORE;
 		
 		$this->backendId = $backendId;
 		

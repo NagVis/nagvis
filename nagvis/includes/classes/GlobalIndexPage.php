@@ -39,9 +39,9 @@ class GlobalIndexPage {
 	 * @param 	GlobalBackendMgmt	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND) {
-		$this->CORE = &$CORE;
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $BACKEND) {
+		$this->CORE = $CORE;
+		$this->BACKEND = $BACKEND;
 		
 		$this->htmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 	}

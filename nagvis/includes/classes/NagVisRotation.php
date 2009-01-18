@@ -44,8 +44,8 @@ class NagVisRotation {
 	 * @param   String  Name of the rotation pool
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $strPoolName = NULL) {
-		$this->CORE = &$CORE;
+	public function __construct($CORE, $strPoolName = NULL) {
+		$this->CORE = $CORE;
 		
 		if($strPoolName == NULL && isset($_GET['rotation']) && $_GET['rotation'] != '') {
 			$strPoolName = $_GET['rotation'];

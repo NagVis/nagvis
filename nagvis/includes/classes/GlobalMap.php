@@ -26,8 +26,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMap {
-	private $CORE;
-	private $MAPCFG;
+	protected $CORE;
+	protected $MAPCFG;
 	
 	private $linkedMaps = Array();
 	
@@ -38,9 +38,9 @@ class GlobalMap {
 	 * @param 	GlobalMapCfg 	$MAPCFG
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE,&$MAPCFG) {
-		$this->CORE = &$CORE;
-		$this->MAPCFG = &$MAPCFG;
+	public function __construct($CORE,$MAPCFG) {
+		$this->CORE = $CORE;
+		$this->MAPCFG = $MAPCFG;
 	}
 	
 	/**

@@ -38,21 +38,21 @@ class GlobalCore {
 	 *
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$MAINCFG = NULL, &$LANG = NULL) {
+	public function __construct($MAINCFG = NULL, $LANG = NULL) {
 		$this->iconsetTypeCache = Array();
 		
 		if($MAINCFG == NULL) {
 			// Load the main configuration
 			$this->MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
 		} else {
-			$this->MAINCFG = &$MAINCFG;
+			$this->MAINCFG = $MAINCFG;
 		}
 		
 		if($LANG == NULL) {
 			// Initialize language
 			$this->LANG = new GlobalLanguage($this->MAINCFG);
 		} else {
-			$this->LANG = &$LANG;
+			$this->LANG = $LANG;
 		}
 	}
 	

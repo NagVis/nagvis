@@ -38,8 +38,8 @@ class GlobalLanguage {
 	 * @param	String			$type		Type of language-file
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$MAINCFG, $textDomain = 'nagvis') {
-		$this->MAINCFG = &$MAINCFG;
+	public function __construct($MAINCFG, $textDomain = 'nagvis') {
+		$this->MAINCFG = $MAINCFG;
 		$this->textDomain = $textDomain;
 		
 		$this->sCurrentLanguage = $this->MAINCFG->getValue('global', 'language');

@@ -35,7 +35,8 @@ class GlobalFileCache {
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	GlobalCore 	$CORE
+	 * @param 	String  File to check
+	 * @param   String  Path to cache file
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct($file, $cacheFile) {

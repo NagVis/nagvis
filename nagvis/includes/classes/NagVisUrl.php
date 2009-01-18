@@ -38,8 +38,8 @@ class NagVisUrl {
 	 * @param   String      URL
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $strUrl) {
-		$this->CORE = &$CORE;
+	public function __construct($CORE, $strUrl) {
+		$this->CORE = $CORE;
 		
 		$this->strUrl = $strUrl;
 		$this->strContents = '';

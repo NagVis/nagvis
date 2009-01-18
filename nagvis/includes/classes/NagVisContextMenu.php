@@ -27,7 +27,6 @@
  */
 class NagVisContextMenu {
 	private $CORE;
-	private $BACKEND;
 	private $OBJPAGE;
 	private $CACHE;
 	
@@ -43,9 +42,9 @@ class NagVisContextMenu {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $templateName, &$OBJ = NULL) {
-		$this->CORE = &$CORE;
-		$this->OBJPAGE = &$OBJ;
+	public function __construct($CORE, $templateName, $OBJ = NULL) {
+		$this->CORE = $CORE;
+		$this->OBJPAGE = $OBJ;
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');

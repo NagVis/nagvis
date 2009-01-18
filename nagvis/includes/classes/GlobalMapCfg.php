@@ -46,8 +46,8 @@ class GlobalMapCfg {
 	 * @param	String			$name		Name of the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $name='') {
-		$this->CORE = &$CORE;
+	public function __construct($CORE, $name='') {
+		$this->CORE = $CORE;
 		$this->name	= $name;
 		
 		$this->validConfig = Array(

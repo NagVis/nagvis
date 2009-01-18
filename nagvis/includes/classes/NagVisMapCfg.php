@@ -26,9 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapCfg extends GlobalMapCfg {
-	private $CORE;
-	private $name;
-	
 	/**
 	 * Class Constructor
 	 *
@@ -36,12 +33,8 @@ class NagVisMapCfg extends GlobalMapCfg {
 	 * @param	String			$name		Name of the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $name='') {
-		$this->CORE = &$CORE;
-		$this->name	= $name;
-		
-		$this->getMap();
-		parent::__construct($this->CORE, $this->name);
+	public function __construct($CORE, $name='') {
+		parent::__construct($CORE, $this->getMap($name));
 	}
 	
 	/**
@@ -52,10 +45,10 @@ class NagVisMapCfg extends GlobalMapCfg {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function getMap() {
+	private function getMap($name) {
 		// check the $this->name string for security reasons (its the ONLY value we get directly from external...)
 		// Allow ONLY Characters, Numbers, - and _ inside the Name of a Map
-		$this->name = preg_replace('/[^a-zA-Z0-9_-]/','',$this->name);
+		return preg_replace('/[^a-zA-Z0-9_-]/','',$name);
 	}
 }
 ?>

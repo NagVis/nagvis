@@ -26,8 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMap extends GlobalMap {
-	private $CORE;
-	private $MAPCFG;
 	private $BACKEND;
 	public $MAPOBJ;
 	private $numLineObjects;
@@ -40,15 +38,14 @@ class NagVisMap extends GlobalMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE,&$MAPCFG,&$BACKEND,$getState=1) {
-		$this->CORE = &$CORE;
-		$this->MAPCFG = &$MAPCFG;
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $MAPCFG, $BACKEND, $getState=1) {
+		parent::__construct($CORE, $MAPCFG);
+		
+		$this->BACKEND = $BACKEND;
 		
 		$this->numLineObjects = 0;
 		
-		parent::__construct($this->CORE, $this->MAPCFG);
-		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG);
+		$this->MAPOBJ = new NagVisMapObj($CORE, $BACKEND, $MAPCFG);
 		
 		$this->MAPOBJ->fetchMembers();
 		

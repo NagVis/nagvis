@@ -37,8 +37,8 @@ class NagVisHoverUrl {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $url) {
-		$this->CORE = &$CORE;
+	public function __construct($CORE, $url) {
+		$this->CORE = $CORE;
 		$this->url = $url;
     
     $this->code = '';

@@ -26,7 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalPage {
-	private $CORE;
+	protected $CORE;
 	
 	// arrays for the header
 	private $title;

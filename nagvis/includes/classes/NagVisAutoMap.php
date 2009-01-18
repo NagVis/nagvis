@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisAutoMap extends GlobalMap {
-	private $CORE;
 	private $MAPCFG;
 	public $MAPOBJ;
 	private $BACKEND;
@@ -61,9 +60,8 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND, &$prop) {
-		$this->CORE = &$CORE;
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $BACKEND, $prop) {
+		$this->BACKEND = $BACKEND;
 		
 		$this->arrHostnames = Array();
 		$this->arrMapObjects = Array();
@@ -73,8 +71,10 @@ class NagVisAutoMap extends GlobalMap {
 		$this->noBinaryFound = FALSE;
 		
 		// Create map configuration
-		$this->MAPCFG = new NagVisMapCfg($this->CORE, '__automap');
+		$this->MAPCFG = new NagVisMapCfg($CORE, '__automap');
 		$this->MAPCFG->readMapConfig();
+		
+		parent::__construct($CORE, $this->MAPCFG);
 
 		// Set the preview option
 		if(isset($prop['preview']) && $prop['preview'] != '') {
@@ -159,8 +159,6 @@ class NagVisAutoMap extends GlobalMap {
 			
 			$this->filterObjectTreeByGroup();
 		}
-		
-		parent::__construct($this->CORE, $this->MAPCFG);
 		
 		// Create MAPOBJ object, form the object tree to map objects and get the
 		// state of the objects
