@@ -27,10 +27,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisService extends NagiosService {
-	var $CORE;
-	var $BACKEND;
+	private $CORE;
+	private $BACKEND;
 	
-	var $gadget_url;
+	protected $gadget_url;
 	
 	/**
 	 * Class constructor
@@ -43,26 +43,28 @@ class NagVisService extends NagiosService {
 	 * @param		String		Service description
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisService(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
+	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
 		$this->CORE = &$CORE;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->type = 'service';
 		$this->iconset = 'std_medium';
 		
-		parent::NagiosService($this->CORE, $this->BACKEND, $backend_id, $hostName, $serviceDescription);
+		parent::__construct($this->CORE, $this->BACKEND, $backend_id, $hostName, $serviceDescription);
 	}
 	
 	# End public methods
 	# #########################################################################
 	
 	/**
+	 * PROTECTED parseGadgetUrl()
+	 *
 	 * Sets the path of gadget_url. The method adds htmlgadgets path when relative
 	 * path or will remove [] when full url given
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseGadgetUrl() {
+	protected function parseGadgetUrl() {
 		if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0) {
 			$this->gadget_url = $match[1];
 		} else {

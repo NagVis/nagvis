@@ -76,7 +76,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		$this->summary_problem_has_been_acknowledged = 0;
 		$this->summary_in_downtime = 0;
 		
-		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
+		parent::__construct($this->CORE, $this->BACKEND);
 	}
 	
 	/**

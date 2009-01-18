@@ -27,26 +27,26 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHostgroup extends NagVisStatefulObject {
-	var $BACKEND;
+	private $BACKEND;
 	
-	var $backend_id;
+	protected $backend_id;
 	
-	var $hostgroup_name;
-	var $alias;
-	var $display_name;
-	var $address;
+	protected $hostgroup_name;
+	protected $alias;
+	protected $display_name;
+	protected $address;
 	
-	var $state;
-	var $output;
-	var $problem_has_been_acknowledged;
-	var $in_downtime;
+	protected $state;
+	protected $output;
+	protected $problem_has_been_acknowledged;
+	protected $in_downtime;
 	
-	var $summary_state;
-	var $summary_output;
-	var $summary_problem_has_been_acknowledged;
-	var $summary_in_downtime;
+	protected $summary_state;
+	protected $summary_output;
+	protected $summary_problem_has_been_acknowledged;
+	protected $summary_in_downtime;
 	
-	var $members;
+	protected $members;
 	
 	/**
 	 * Class constructor
@@ -58,7 +58,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @param		String		Name of the hostgroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagiosHostgroup(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
+	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
 		$this->CORE = &$CORE;
 		
 		$this->BACKEND = &$BACKEND;
@@ -75,7 +75,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		$this->summary_problem_has_been_acknowledged = 0;
 		$this->summary_in_downtime = 0;
 		
-		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
+		parent::__construct($this->CORE, $this->BACKEND);
 	}
 	
 	/**
@@ -85,7 +85,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMembers() {
+	public function fetchMembers() {
 		// Get all member hosts
 		$this->fetchMemberHostObjects();
 		
@@ -103,7 +103,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchState() {
+	public function fetchState() {
 		
 		// Get states of all members
 		foreach($this->members AS &$OBJ) {
@@ -126,7 +126,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @return	Integer		Number of members
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNumMembers() {
+	public function getNumMembers() {
 		return count($this->members);
 	}
 	
@@ -138,7 +138,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @return	Array		Member objects
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMembers() {
+	public function getMembers() {
 		return $this->members;
 	}
 	
@@ -150,7 +150,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @return Boolean	Yes, No
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function hasMembers() {
+	public function hasMembers() {
 		return isset($this->members[0]);
 	}
 	
@@ -164,7 +164,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMemberHostObjects() {
+	private function fetchMemberHostObjects() {
 		// Get all hosts and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			// Get additional information like the alias (maybe bad place here)
@@ -195,7 +195,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryState() {
+	private function fetchSummaryState() {
 		if($this->hasMembers()) {
 			// Get summary state member objects
 			foreach($this->members AS &$MEMBER) {
@@ -212,7 +212,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * Fetches the summary output from all members
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryOutput() {
+	private function fetchSummaryOutput() {
 		if($this->hasMembers()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			

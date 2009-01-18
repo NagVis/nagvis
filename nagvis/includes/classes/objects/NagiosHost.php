@@ -26,44 +26,44 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHost extends NagVisStatefulObject {
-	var $CORE;
-	var $BACKEND;
+	private $CORE;
+	private $BACKEND;
 	
-	var $backend_id;
+	protected $backend_id;
 	
-	var $object_id;
-	var $host_name;
-	var $alias;
-	var $display_name;
-	var $address;
-	var $statusmap_image;
+	protected $object_id;
+	protected $host_name;
+	protected $alias;
+	protected $display_name;
+	protected $address;
+	protected $statusmap_image;
 	
-	var $state;
-	var $output;
-	var $perfdata;
-	var $problem_has_been_acknowledged;
-	var $last_check;
-	var $next_check;
-	var $state_type;
-	var $current_check_attempt;
-	var $max_check_attempts;
-	var $last_state_change;
-	var $last_hard_state_change;
+	protected $state;
+	protected $output;
+	protected $perfdata;
+	protected $problem_has_been_acknowledged;
+	protected $last_check;
+	protected $next_check;
+	protected $state_type;
+	protected $current_check_attempt;
+	protected $max_check_attempts;
+	protected $last_state_change;
+	protected $last_hard_state_change;
 	
-	var $in_downtime;
-	var $downtime_start;
-	var $downtime_end;
-	var $downtime_author;
-	var $downtime_data;
+	protected $in_downtime;
+	protected $downtime_start;
+	protected $downtime_end;
+	protected $downtime_author;
+	protected $downtime_data;
 	
-	var $summary_state;
-	var $summary_output;
-	var $summary_problem_has_been_acknowledged;
-	var $summary_in_downtime;
+	protected $summary_state;
+	protected $summary_output;
+	protected $summary_problem_has_been_acknowledged;
+	protected $summary_in_downtime;
 	
-	var $fetchedChildObjects;
-	var $childObjects;
-	var $members;
+	protected $fetchedChildObjects;
+	protected $childObjects;
+	protected $members;
 	
 	/**
 	 * Class constructor
@@ -75,7 +75,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @param		String		Name of the host
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagiosHost(&$CORE, &$BACKEND, $backend_id, $hostName) {
+	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostName) {
 		$this->CORE = &$CORE;
 		
 		$this->BACKEND = &$BACKEND;
@@ -94,7 +94,7 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->summary_problem_has_been_acknowledged = 0;
 		$this->summary_in_downtime = 0;
 		
-		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
+		parent::__construct($this->CORE, $this->BACKEND);
 	}
 	
 	/**
@@ -104,7 +104,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMembers() {
+	public function fetchMembers() {
 		// The service objects are all fetched in fetchState() method
 		// Seems this is not needed anymore and only a dummy at this place
 	}
@@ -117,7 +117,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchState() {
+	public function fetchState() {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
 			
@@ -145,7 +145,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
+	public function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			if(!$this->fetchedChildObjects) {
 				$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
@@ -172,7 +172,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @param	Array	List of allowed hosts
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function filterChilds(&$arrAllowedHosts) {
+	public function filterChilds(&$arrAllowedHosts) {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			$remain = 0;
 			
@@ -227,7 +227,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @return	Integer		Number of child objects
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNumChilds() {
+	public function getNumChilds() {
 		return count($this->childObjects);
 	}
 	
@@ -239,7 +239,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @return	Array		Array of host objects
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getChilds() {
+	public function getChilds() {
 		return $this->childObjects;
 	}
 	
@@ -251,7 +251,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @return Boolean	Yes: Has children, No: No Child
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function hasChilds() {
+	public function hasChilds() {
 		return isset($this->childObjects[0]);
 	}
 	
@@ -263,7 +263,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @return	Integer		Number of services
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNumMembers() {
+	public function getNumMembers() {
 		return count($this->members);
 	}
 	
@@ -275,7 +275,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @return	Array		Array of Services
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMembers() {
+	public function getMembers() {
 		return $this->members;
 	}
 	
@@ -287,7 +287,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @return Boolean	Yes: Has services, No: No Service
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function hasMembers() {
+	public function hasMembers() {
 		return isset($this->members[0]);
 	}
 	
@@ -301,7 +301,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchServiceObjects() {
+	private function fetchServiceObjects() {
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states) AS $arrService) {
 			$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $this->host_name, $arrService['service_description']);
 			
@@ -332,7 +332,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
+	private function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
 		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName()) AS $childName) {
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
@@ -378,7 +378,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryState() {
+	private function fetchSummaryState() {
 		$arrStates = Array();
 		
 		// Get Host state
@@ -403,7 +403,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryOutput() {
+	private function fetchSummaryOutput() {
 		// Write host state
 		$this->summary_output = $this->CORE->LANG->getText('hostStateIs').' '.$this->state.'. ';
 		

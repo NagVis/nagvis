@@ -28,15 +28,15 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisStatelessObject extends NagVisObject {
-	var $CORE;
+	private $CORE;
 	
 	// "Global" Configuration variables for all stateless objects
-	var $label_show;
-	var $recognize_services;
-	var $only_hard_states;
+	protected $label_show;
+	protected $recognize_services;
+	protected $only_hard_states;
 	
-	var $iconPath;
-	var $iconHtmlPath;
+	protected $iconPath;
+	protected $iconHtmlPath;
 	
 	/**
 	 * Class constructor
@@ -45,10 +45,10 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisStatelessObject(&$CORE) {
+	public function __construct(&$CORE) {
 		$this->CORE = &$CORE;
 		
-		parent::NagVisObject($this->CORE);
+		parent::__construct($this->CORE);
 	}
 	
 	/**
@@ -59,7 +59,7 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @return	String  JSON code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseJson() {
+	public function parseJson() {
 		$this->replaceMacros();
 		
 		// Get all information of the object (configuration, state, ...)
@@ -73,7 +73,7 @@ class NagVisStatelessObject extends NagVisObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMembers() {
+	public function fetchMembers() {
 	}
 }
 ?>

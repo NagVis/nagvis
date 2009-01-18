@@ -27,46 +27,46 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosService extends NagVisStatefulObject {
-	var $CORE;
-	var $BACKEND;
+	private $CORE;
+	private $BACKEND;
 	
-	var $backend_id;
+	protected $backend_id;
 	
-	var $object_id;
-	var $host_name;
-	var $service_description;
-	var $alias;
-	var $display_name;
-	var $address;
+	protected $object_id;
+	protected $host_name;
+	protected $service_description;
+	protected $alias;
+	protected $display_name;
+	protected $address;
 	
-	var $state;
-	var $output;
-	var $perfdata;
-	var $problem_has_been_acknowledged;
-	var $last_check;
-	var $next_check;
-	var $state_type;
-	var $current_check_attempt;
-	var $max_check_attempts;
-	var $last_state_change;
-	var $last_hard_state_change;
+	protected $state;
+	protected $output;
+	protected $perfdata;
+	protected $problem_has_been_acknowledged;
+	protected $last_check;
+	protected $next_check;
+	protected $state_type;
+	protected $current_check_attempt;
+	protected $max_check_attempts;
+	protected $last_state_change;
+	protected $last_hard_state_change;
 	
-	var $in_downtime;
-	var $downtime_start;
-	var $downtime_end;
-	var $downtime_author;
-	var $downtime_data;
+	protected $in_downtime;
+	protected $downtime_start;
+	protected $downtime_end;
+	protected $downtime_author;
+	protected $downtime_data;
 	
-	var $summary_state;
-	var $summary_output;
-	var $summary_problem_has_been_acknowledged;
-	var $summary_in_downtime;
+	protected $summary_state;
+	protected $summary_output;
+	protected $summary_problem_has_been_acknowledged;
+	protected $summary_in_downtime;
 	
-	var $recognize_services;
-	var $only_hard_states;
+	protected $recognize_services;
+	protected $only_hard_states;
 	
-	var $childObjects;
-	var $services;
+	protected $childObjects;
+	protected $services;
 	
 	/**
 	 * Class constructor
@@ -97,7 +97,7 @@ class NagiosService extends NagVisStatefulObject {
 		$this->summary_problem_has_been_acknowledged = 0;
 		$this->summary_in_downtime = 0;
 		
-		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
+		parent::__construct($this->CORE, $this->BACKEND);
 	}
 	
 	/**

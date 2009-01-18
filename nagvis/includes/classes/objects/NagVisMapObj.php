@@ -27,32 +27,32 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapObj extends NagVisStatefulObject {
-	var $CORE;
-	var $MAPCFG;
-	var $MAP;
-	var $BACKEND;
+	private $CORE;
+	protected $MAPCFG;
+	private $MAP;
+	private $BACKEND;
 	
-	var $backend_id;
+	protected $backend_id;
 	
-	var $members;
-	var $linkedMaps;
+	protected $members;
+	protected $linkedMaps;
 	
-	var $object_id;
-	var $map_name;
-	var $alias;
+	protected $object_id;
+	protected $map_name;
+	protected $alias;
 	
-	var $state;
-	var $output;
-	var $problem_has_been_acknowledged;
-	var $in_downtime;
+	protected $state;
+	protected $output;
+	protected $problem_has_been_acknowledged;
+	protected $in_downtime;
 	
-	var $summary_state;
-	var $summary_output;
-	var $summary_problem_has_been_acknowledged;
-	var $summary_in_downtime;
+	protected $summary_state;
+	protected $summary_output;
+	protected $summary_problem_has_been_acknowledged;
+	protected $summary_in_downtime;
 	
 	// When this map object summarizes the state of a map this is true
-	var $is_summary_object;
+	protected $is_summary_object;
 	
 	/**
 	 * Class constructor
@@ -63,7 +63,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @param		Object		Object of class NagVisMapCfg
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisMapObj(&$CORE, &$BACKEND, &$MAPCFG) {
+	public function __construct(&$CORE, &$BACKEND, &$MAPCFG) {
 		$this->CORE = &$CORE;
 		$this->MAPCFG = &$MAPCFG;
 		$this->BACKEND = &$BACKEND;
@@ -90,7 +90,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		$this->is_summary_object = FALSE;
 		
-		parent::NagVisStatefulObject($this->CORE, $this->BACKEND);
+		parent::__construct($this->CORE, $this->BACKEND);
 	}
 	
 	/**
@@ -101,7 +101,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @return	Array	Array with map objects
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMembers() {
+	public function getMembers() {
 		return $this->members;
 	}
 	
@@ -113,7 +113,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @return	Integer	Number of objects on the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNumMembers() {
+	public function getNumMembers() {
 		return count($this->members);
 	}
 	
@@ -125,7 +125,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function hasObjects() {
+	public function hasObjects() {
 		return isset($this->members[0]);
 	}
 	
@@ -136,7 +136,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMembers() {
+	public function fetchMembers() {
 		// Get all member objects
 		$this->fetchMapObjects();
 		
@@ -180,7 +180,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchState() {
+	public function fetchState() {
 		// Get state of all member objects
 		foreach($this->getMembers() AS $OBJ) {
 			// Don't get state from textboxes and shapes
@@ -209,7 +209,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
+	public function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
 		$this->members[] = $OBJ;
 		
 		foreach($OBJ->getChilds() AS $OBJ1) {
@@ -228,6 +228,47 @@ class NagVisMapObj extends NagVisStatefulObject {
 		}
 	}
 	
+	/**
+	 * Checks if the map is in maintenance mode
+	 *
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkMaintenance($printErr) {
+		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
+			if($printErr) {
+				new GlobalFrontendMessage('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
+			}
+			return FALSE;
+		} else {
+			return TRUE;
+		}
+		return TRUE;
+	}
+	
+	/**
+	 * PUBLIC checkPermissions()
+	 *
+	 * Checks for valid Permissions
+	 *
+	 * @param 	String 	$allowed	
+	 * @param 	Boolean	$printErr
+	 * @return	Boolean	Is Check Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkPermissions($allowed,$printErr) {
+		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
+			if($printErr) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
+			}
+			return FALSE;
+		} else {
+		 	return TRUE;
+		}
+		return TRUE;
+	}
+	
 	# End public methods
 	# #########################################################################
 	
@@ -238,7 +279,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryOutput() {
+	private function fetchSummaryOutput() {
 		if($this->hasObjects()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
@@ -264,7 +305,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMapObjects() {
+	private function fetchMapObjects() {
 		foreach($this->MAPCFG->getValidObjectTypes() AS $type) {
 			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
 				foreach($objs AS $index => &$objConf) {
@@ -322,7 +363,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 				}
 			}
 		}
-		
 	}
 	
 	/**
@@ -335,7 +375,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @return	Boolean		True: No Loop, False: Loop
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkLoop($OBJ) {
+	private function checkLoop($OBJ) {
 		// Check for valid permissions
 		if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
 			// Loop all objects on the child map to find out if there is a link back 
@@ -374,7 +414,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryState() {
+	private function fetchSummaryState() {
 		if($this->hasObjects()) {
 			// Get summary state member objects
 			foreach($this->getMembers() AS $OBJ) {
@@ -390,45 +430,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 		} else {
 			$this->summary_state = 'UNKNOWN';
 		}
-	}
-	
-	/**
-	 * Checks for valid Permissions
-	 *
-	 * @param 	String 	$allowed	
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkPermissions($allowed,$printErr) {
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
-			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
-			}
-			return FALSE;
-		} else {
-		 	return TRUE;
-		}
-		return TRUE;
-	}
-	
-	/**
-	 * Checks if the map is in maintenance mode
-	 *
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkMaintenance($printErr) {
-		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
-			if($printErr) {
-				new GlobalFrontendMessage('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
-			}
-			return FALSE;
-		} else {
-			return TRUE;
-		}
-		return TRUE;
 	}
 }
 ?>

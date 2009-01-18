@@ -27,8 +27,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHost extends NagiosHost {
-	var $CORE;
-	var $BACKEND;
+	private $CORE;
+	private $BACKEND;
 	
 	/**
 	 * Class constructor
@@ -40,13 +40,13 @@ class NagVisHost extends NagiosHost {
 	 * @param		String		Name of the host
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisHost(&$CORE, &$BACKEND, $backend_id, $hostName) {
+	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostName) {
 		$this->CORE = &$CORE;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->type = 'host';
 		$this->iconset = 'std_medium';
-		parent::NagiosHost($this->CORE, $this->BACKEND, $backend_id, $hostName);
+		parent::__construct($this->CORE, $this->BACKEND, $backend_id, $hostName);
 	}
 	
 	/**
@@ -57,7 +57,7 @@ class NagVisHost extends NagiosHost {
 	 * @return	String		JSON code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseJson() {
+	public function parseJson() {
 		return parent::parseJson();
 	}
 	
@@ -71,7 +71,7 @@ class NagVisHost extends NagiosHost {
 	 * @return	String		graphviz configuration code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseGraphviz($layer=0, &$arrHostnamesParsed) {
+	public function parseGraphviz($layer=0, &$arrHostnamesParsed) {
 		$strReturn = '';
 		
 		if(!in_array($this->getName(), $arrHostnamesParsed)) {

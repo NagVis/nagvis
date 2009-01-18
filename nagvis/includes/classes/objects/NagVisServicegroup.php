@@ -27,9 +27,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisServicegroup extends NagiosServicegroup {
-	var $CORE;
-	var $BACKEND;
-	
 	/**
 	 * Class constructor
 	 *
@@ -40,13 +37,13 @@ class NagVisServicegroup extends NagiosServicegroup {
 	 * @param		String		Name of the servicegroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisServicegroup(&$CORE, &$BACKEND, $backend_id, $servicegroupName) {
+	public function __construct(&$CORE, &$BACKEND, $backend_id, $servicegroupName) {
 		$this->CORE = &$CORE;
 		
 		$this->BACKEND = &$BACKEND;
 		$this->type = 'servicegroup';
 		$this->iconset = 'std_medium';
-		parent::NagiosServicegroup($this->CORE, $this->BACKEND, $backend_id, $servicegroupName);
+		parent::__construct($this->CORE, $this->BACKEND, $backend_id, $servicegroupName);
 	}
 	
 	# End public methods

@@ -27,7 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisTextbox extends NagVisStatelessObject {
-	var $CORE;
+	private $CORE;
 	
 	/**
 	 * Class constructor
@@ -37,11 +37,11 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisTextbox(&$CORE) {
+	public function __construct(&$CORE) {
 		$this->CORE = &$CORE;
 		
 		$this->type = 'textbox';
-		parent::NagVisStatelessObject($this->CORE);
+		parent::__construct($this->CORE);
 	}
 	
 	/**
@@ -52,20 +52,22 @@ class NagVisTextbox extends NagVisStatelessObject {
 	 * @return	String		JSON code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseJson() {
+	public function parseJson() {
 		return parent::parseJson();
 	}
 	
-	# End public methods
-	# #########################################################################
-	
 	/**
+	 * PUBLIC fetchIcon()
+	 *
 	 * Just a dummy here (Textbox won't need an icon)
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchIcon() {
+	public function fetchIcon() {
 		// Nothing to do here, icon is set in constructor
 	}
+	
+	# End public methods
+	# #########################################################################
 }
 ?>

@@ -151,7 +151,7 @@ switch($_GET['action']) {
 				}
 				
 				$arr['objId'] = $arrObjId[$i];
-				$arr['icon'] = $OBJ->icon;
+				$arr['icon'] = $OBJ->get('icon');
 				
 				$arrReturn[] = $arr;
 			}

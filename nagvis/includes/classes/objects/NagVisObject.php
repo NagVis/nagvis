@@ -27,29 +27,29 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisObject {
-	var $CORE;
+	private $CORE;
 	
-	var $conf;
+	protected $conf;
 	
 	// "Global" Configuration variables for all objects
-	var $type;
-	var $x;
-	var $y;
-	var $z;
-	var $icon;
+	protected $type;
+	protected $x;
+	protected $y;
+	protected $z;
+	protected $icon;
 	
-	var $view_type;
-	var $hover_menu;
-	var $hover_childs_show;
-	var $hover_childs_sort;
-	var $hover_childs_order;
-	var $hover_childs_limit;
-	var $label_show;
-	var $recognize_services;
-	var $only_hard_states;
+	protected $view_type;
+	protected $hover_menu;
+	protected $hover_childs_show;
+	protected $hover_childs_sort;
+	protected $hover_childs_order;
+	protected $hover_childs_limit;
+	protected $label_show;
+	protected $recognize_services;
+	protected $only_hard_states;
 	
-	var $iconPath;
-	var $iconHtmlPath;
+	protected $iconPath;
+	protected $iconHtmlPath;
 	
 	/**
 	 * Class constructor
@@ -59,13 +59,19 @@ class NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisObject(&$CORE) {
+	public function __construct(&$CORE) {
 		$this->CORE = &$CORE;
 		
 		$this->conf = Array();
 	}
 	
-	function get($option) {
+	/**
+	 * Get method for all options
+	 *
+	 * @return	Value  Value of the given option
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function get($option) {
 		return $this->{$option};
 	}
 	
@@ -75,7 +81,7 @@ class NagVisObject {
 	 * @return	Integer		x coordinate on the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getX() {
+	public function getX() {
 		return $this->x;
 	}
 	
@@ -85,7 +91,7 @@ class NagVisObject {
 	 * @return	Integer		y coordinate on the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getY() {
+	public function getY() {
 		return $this->y;
 	}
 	
@@ -95,7 +101,7 @@ class NagVisObject {
 	 * @return	Integer		z coordinate on the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getZ() {
+	public function getZ() {
 		return $this->z;
 	}
 	
@@ -105,7 +111,7 @@ class NagVisObject {
 	 * @return	String		Type of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getType() {
+	public function getType() {
 		return $this->type;
 	}
 	
@@ -115,7 +121,7 @@ class NagVisObject {
 	 * @return	String		Name of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getName() {
+	public function getName() {
 		if($this->type == 'service') {
 			return $this->host_name;
 		} else {
@@ -129,7 +135,7 @@ class NagVisObject {
 	 * @return	String		Hover template of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHoverTemplate() {
+	public function getHoverTemplate() {
 		return $this->hover_template;
 	}
 	
@@ -139,7 +145,7 @@ class NagVisObject {
 	 * @return	Array		Array of the objects coords
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setMapCoords($arrCoords) {
+	public function setMapCoords($arrCoords) {
 		$this->x = $arrCoords['x'];
 		$this->y = $arrCoords['y'];
 		$this->z = $arrCoords['z'];
@@ -152,7 +158,7 @@ class NagVisObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setConfiguration($obj) {
+	public function setConfiguration($obj) {
 		foreach($obj AS $key => $val) {
 			$this->conf[$key] = $val;
 			$this->{$key} = $val;
@@ -166,7 +172,7 @@ class NagVisObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setObjectInformation($obj) {
+	public function setObjectInformation($obj) {
 		foreach($obj AS $key => $val) {
 			$this->{$key} = $val;
 		}
@@ -180,7 +186,7 @@ class NagVisObject {
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectInformation($bFetchChilds=true) {
+	public function getObjectInformation($bFetchChilds=true) {
 		$arr = Array();
 		
 		// Need to remove some options which are not relevant
@@ -281,7 +287,7 @@ class NagVisObject {
 	 * @return	Array		Member object information
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSortedObjectMembers() {
+	public function getSortedObjectMembers() {
 		$arr = Array();
 		
 		// FIXME: Try to limit and sort members
@@ -329,7 +335,7 @@ class NagVisObject {
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectConfiguration() {
+	public function getObjectConfiguration() {
 		// Some options have to be removed which are only for this object
 		$arr = $this->conf;
 		unset($arr['id']);
@@ -347,7 +353,7 @@ class NagVisObject {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function replaceMacros() {
+	public function replaceMacros() {
 		return TRUE;
 	}
 	
@@ -359,7 +365,7 @@ class NagVisObject {
 	 * @return	String		HTML code for the hover box
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHoverMenu() {
+	public function getHoverMenu() {
 		$ret = '';
 		
 		if($this->hover_menu) {
@@ -375,15 +381,18 @@ class NagVisObject {
 		}
 	}
 	
+	# End public methods
+	# #########################################################################
+	
 	/**
-	 * PRIVATE getUrl()
+	 * PROTECTED getUrl()
 	 *
 	 * Returns the url for the object link
 	 *
 	 * @return	String	URL
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getUrl() {
+	protected function getUrl() {
 		if(isset($this->url)) {
 			return $this->url;
 		} else {
@@ -392,14 +401,14 @@ class NagVisObject {
 	}
 	
 	/**
-	 * PRIVATE getUrlTarget()
+	 * PROTECTED getUrlTarget()
 	 *
 	 * Returns the target frame for the object link
 	 *
 	 * @return	String	Target
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getUrlTarget() {
+	protected function getUrlTarget() {
 		return $this->url_target;
 	}
 	
@@ -412,7 +421,7 @@ class NagVisObject {
 	 * @param	OBJ		Second object to sort
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
+	private static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
 		// Do not sort shapes and textboxes
 		if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox') {
 			return 0;
@@ -448,7 +457,7 @@ class NagVisObject {
 	 * @param	OBJ		Second object to sort
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	static function sortObjectsByState($OBJ1, $OBJ2) {
+	private static function sortObjectsByState($OBJ1, $OBJ2) {
 		$arrStates = Array('UNREACHABLE' => 6, 'DOWN' => 5, 'CRITICAL' => 5, 'WARNING' => 4, 'UNKNOWN' => 3, 'ERROR' => 2, 'UP' => 1, 'OK' => 1, 'PENDING' => 0);
 		
 		// Textboxes and shapes do not have getSummaryState method, exclude them here

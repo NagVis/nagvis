@@ -28,21 +28,21 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisStatefulObject extends NagVisObject {
-	var $CORE;
-	var $BACKEND;
-	var $GRAPHIC;
+	private $CORE;
+	private $BACKEND;
+	private $GRAPHIC;
 	
 	// "Global" Configuration variables for all stateful objects
-	var $iconset;
+	protected $iconset;
 	
-	var $label_show;
-	var $recognize_services;
-	var $only_hard_states;
+	protected $label_show;
+	protected $recognize_services;
+	protected $only_hard_states;
 	
-	var $iconPath;
-	var $iconHtmlPath;
+	protected $iconPath;
+	protected $iconHtmlPath;
 	
-	var $dateFormat;
+	protected $dateFormat;
 	
 	/**
 	 * Class constructor
@@ -52,13 +52,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisStatefulObject(&$CORE, &$BACKEND) {
+	public function __construct(&$CORE, &$BACKEND) {
 		$this->CORE = &$CORE;
 		$this->BACKEND = &$BACKEND;
 		
 		$this->GRAPHIC = '';
 		
-		parent::NagVisObject($this->CORE);
+		parent::__construct($CORE);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Integer		Object ID
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectId() {
+	public function getObjectId() {
 		return $this->object_id;
 	}
 	
@@ -81,7 +81,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Boolean		True: object is in downtime, False: not in downtime
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getInDowntime() {
+	public function getInDowntime() {
 		return $this->in_downtime;
 	}
 	
@@ -93,7 +93,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		The username of the downtime author
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getDowntimeAuthor() {
+	public function getDowntimeAuthor() {
 		return $this->downtime_author;
 	}
 	
@@ -105,7 +105,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		The downtime data
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getDowntimeData() {
+	public function getDowntimeData() {
 		return $this->downtime_data;
 	}
 	
@@ -117,7 +117,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		The formated downtime start time
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getDowntimeStart() {
+	public function getDowntimeStart() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
@@ -137,7 +137,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		The formated downtime end time
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getDowntimeEnd() {
+	public function getDowntimeEnd() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
@@ -157,7 +157,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Boolean		True: object is in downtime, False: not in downtime
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSummaryInDowntime() {
+	public function getSummaryInDowntime() {
 		return $this->summary_in_downtime;
 	}
 	
@@ -169,7 +169,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Boolean		True: Only hard states, False: Not only hard states
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getOnlyHardStates() {
+	public function getOnlyHardStates() {
 		return $this->only_hard_states;
 	}
 	
@@ -181,7 +181,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Boolean		True: Recognize service states, False: Not recognize service states
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getRecognizeServices() {
+	public function getRecognizeServices() {
 		return $this->recognize_services;
 	}
 	
@@ -193,7 +193,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		State of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getState() {
+	public function getState() {
 		return $this->state;
 	}
 	
@@ -205,7 +205,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Output of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getOutput() {
+	public function getOutput() {
 		return $this->output;
 	}
 	
@@ -217,7 +217,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Boolean		True: Acknowledged, False: Not Acknowledged
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getAcknowledgement() {
+	public function getAcknowledgement() {
 		return $this->problem_has_been_acknowledged;
 	}
 	
@@ -229,7 +229,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Summary state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSummaryState() {
+	public function getSummaryState() {
 		return $this->summary_state;
 	}
 	
@@ -241,7 +241,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Summary output
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSummaryOutput() {
+	public function getSummaryOutput() {
 		return $this->summary_output;
 	}
 	
@@ -253,7 +253,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Boolean		True: Acknowledged, False: Not Acknowledged
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getSummaryAcknowledgement() {
+	public function getSummaryAcknowledgement() {
 		return $this->summary_problem_has_been_acknowledged;
 	}
 	
@@ -265,7 +265,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Time in the configured format
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getStateDuration() {
+	public function getStateDuration() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
@@ -285,7 +285,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Time in the configured format
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getLastStateChange() {
+	public function getLastStateChange() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
@@ -305,7 +305,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Time in the configured format
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getLastHardStateChange() {
+	public function getLastHardStateChange() {
 		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
@@ -325,7 +325,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Time in the configured format
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getLastCheck() {
+	public function getLastCheck() {
 		if(isset($this->last_check) && $this->last_check != '0') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
@@ -345,7 +345,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Time in the configured format
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNextCheck() {
+	public function getNextCheck() {
 		if(isset($this->next_check) && $this->next_check != '0') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
@@ -365,7 +365,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String		Type of state (HARD/SOFT)
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getStateType() {
+	public function getStateType() {
 		if(isset($this->state_type) && $this->state_type != '') {
 			$stateTypes = Array(0 => 'SOFT', 1 => 'HARD');
 			return $stateTypes[$this->state_type];
@@ -382,7 +382,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Integer		Current check attempt
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getCurrentCheckAttempt() {
+	public function getCurrentCheckAttempt() {
 		if(isset($this->current_check_attempt) && $this->current_check_attempt != '') {
 			return $this->current_check_attempt;
 		} else {
@@ -398,7 +398,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Integer		maximum check attempts
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMaxCheckAttempts() {
+	public function getMaxCheckAttempts() {
 		if(isset($this->max_check_attempts) && $this->max_check_attempts != '') {
 			return $this->max_check_attempts;
 		} else {
@@ -414,7 +414,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getObjectStateInformations($bFetchChilds=true) {
+	public function getObjectStateInformations($bFetchChilds=true) {
 		$arr = Array();
 		
 		if(isset($this->alias) && $this->alias != '') {
@@ -489,7 +489,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @return	String  JSON code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseJson() {
+	public function parseJson() {
 		// Replace macros in url, hover_url, label_text
 		$this->replaceMacros();
 		
@@ -506,11 +506,13 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC fetchIcon()
+	 *
 	 * Fetches the icon for the object depending on the summary state
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchIcon() {
+	public function fetchIcon() {
 		// Set the paths of this iconset
 		$this->iconPath = $this->CORE->MAINCFG->getValue('paths', 'icon');
 		$this->iconHtmlPath = $this->CORE->MAINCFG->getValue('paths', 'htmlicon');
@@ -570,15 +572,12 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 	}
 	
-	# End public methods
-	# #########################################################################
-	
 	/**
 	 * Replaces macros of urls and hover_urls
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function replaceMacros() {
+	public function replaceMacros() {
 		if($this->type == 'service') {
 			$name = 'host_name';
 		} else {
@@ -621,17 +620,19 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 		
 		parent::replaceMacros();
-		
 	}
 	
+	# End public methods
+	# #########################################################################
+	
 	/**
-	 * PRIVATE mergeSummaryOutput()
+	 * RPROTECTED mergeSummaryOutput()
 	 *
 	 * Merges the summary output from objects and all child objects together
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function mergeSummaryOutput(&$arrStates, $objLabel) {
+	protected function mergeSummaryOutput(&$arrStates, $objLabel) {
 		$this->summary_output .= $this->CORE->LANG->getText('childStatesAre').' ';
 		foreach($arrStates AS $state => &$num) {
 			if($num > 0) {
@@ -646,12 +647,14 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PROTECTED wrapChildState()
+	 *
 	 * Wraps the state of the current object with the given child object
 	 *
 	 * @param		Object		Object with a state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function wrapChildState(&$OBJ) {
+	protected function wrapChildState(&$OBJ) {
 		$arrStates = Array('UNREACHABLE' => 6, 
 							'DOWN' => 5, 
 							'CRITICAL' => 5, 

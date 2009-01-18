@@ -27,7 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisShape extends NagVisStatelessObject {
-	var $CORE;
+	private $CORE;
 	
 	/**
 	 * Class constructor
@@ -38,7 +38,7 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @param		String	 	Image of the shape
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagVisShape(&$CORE, $icon) {
+	public function __construct(&$CORE, $icon) {
 		$this->CORE = &$CORE;
 		
 		$this->iconPath = $this->CORE->MAINCFG->getValue('paths', 'shape');
@@ -46,7 +46,7 @@ class NagVisShape extends NagVisStatelessObject {
 		
 		$this->icon = $icon;
 		$this->type = 'shape';
-		parent::NagVisStatelessObject($this->CORE);
+		parent::__construct($this->CORE);
 	}
 	
 	/**
@@ -57,34 +57,43 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @return	String		JSON code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseJson() {
+	public function parseJson() {
 		$this->setIconPath();
 		
 		return parent::parseJson();
 	}
 	
 	/**
-	 * Gets the hover menu of a shape if it is requested by configuration
+	 * PUBLIC getHoverMenu()
+	 *
+	 *Gets the hover menu of a shape if it is requested by configuration
 	 *
 	 * @return	String	The Link
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHoverMenu() {
+	public function getHoverMenu() {
 		if(isset($this->hover_url) && $this->hover_url != '') {
 			parent::getHoverMenu();
 		}
 	}
 	
 	/**
+	 * PUBLIC fetchIcon()
+	 *
 	 * Just a dummy here (Shape won't need an icon)
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchIcon() {
+	public function fetchIcon() {
 		// Nothing to do here, icon is set in constructor
 	}
 	
+	# End public methods
+	# #########################################################################
+	
 	/**
+	 * PRIVATE setIconPath()
+	 *
 	 * Parses the HTML-Code of an icon
 	 *
 	 * @param	Boolean	$link		Add a link to the icon
@@ -92,7 +101,7 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @return	String	String with Html Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function setIconPath() {
+	private function setIconPath() {
 		if(preg_match('/^\[(.*)\]$/',$this->icon,$match) > 0) {
 			$this->icon = $match[1];
 		} else {
