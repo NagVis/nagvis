@@ -27,6 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHostgroup extends NagiosHostgroup {
+	
 	/**
 	 * Class constructor
 	 *
@@ -37,13 +38,10 @@ class NagVisHostgroup extends NagiosHostgroup {
 	 * @param		String		Name of the hostgroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
-		$this->CORE = &$CORE;
-		
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
 		$this->type = 'hostgroup';
 		$this->iconset = 'std_medium';
-		parent::__construct($this->CORE, $this->BACKEND, $backend_id, $hostgroupName);
+		parent::__construct($CORE, $BACKEND, $backend_id, $hostgroupName);
 	}
 	
 	# End public methods

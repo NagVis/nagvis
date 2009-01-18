@@ -28,16 +28,35 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisStatefulObject extends NagVisObject {
-	private $CORE;
-	private $BACKEND;
+	protected $BACKEND;
 	private $GRAPHIC;
 	
+	private static $arrStates = Array('UNREACHABLE' => 6, 
+	                                  'DOWN' => 5, 
+	                                  'CRITICAL' => 5, 
+	                                  'WARNING' => 4, 
+	                                  'UNKNOWN' => 3, 
+	                                  'ERROR' => 2, 
+	                                  'UP' => 1, 
+	                                  'OK' => 1, 
+	                                  'PENDING' => 0);
+	
 	// "Global" Configuration variables for all stateful objects
+	protected $backend_id;
+	
 	protected $iconset;
 	
 	protected $label_show;
 	protected $recognize_services;
 	protected $only_hard_states;
+	
+	protected $state;
+	protected $output;
+	protected $summary_state;
+	protected $summary_output;
+	protected $summary_problem_has_been_acknowledged;
+	protected $summary_in_downtime;
+	protected $problem_has_been_acknowledged;
 	
 	protected $iconPath;
 	protected $iconHtmlPath;
@@ -52,11 +71,18 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND) {
-		$this->CORE = &$CORE;
-		$this->BACKEND = &$BACKEND;
-		
+	public function __construct($CORE, $BACKEND) {
+		$this->BACKEND = $BACKEND;
 		$this->GRAPHIC = '';
+		
+		$this->state = '';
+		$this->output = '';
+		$this->problem_has_been_acknowledged = 0;
+		$this->in_downtime = 0;
+		
+		$this->summary_state = '';
+		$this->summary_problem_has_been_acknowledged = 0;
+		$this->summary_in_downtime = 0;
 		
 		parent::__construct($CORE);
 	}
@@ -655,23 +681,13 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function wrapChildState(&$OBJ) {
-		$arrStates = Array('UNREACHABLE' => 6, 
-							'DOWN' => 5, 
-							'CRITICAL' => 5, 
-							'WARNING' => 4, 
-							'UNKNOWN' => 3, 
-							'ERROR' => 2, 
-							'UP' => 1, 
-							'OK' => 1, 
-							'PENDING' => 0);
-		
 		$sSummaryState = $this->getSummaryState();
 		$sObjSummaryState = $OBJ->getSummaryState();
 		if($sSummaryState != '') {
 			/* When the state of the current child is not as good as the current
 			 * summary state or the state is equal and the sub-state differs.
 			 */
-			if($arrStates[$sSummaryState] < $arrStates[$sObjSummaryState] || ($arrStates[$sSummaryState] == $arrStates[$sObjSummaryState] && ($this->getSummaryAcknowledgement() || $this->getSummaryInDowntime()))) {
+			 if(self::$arrStates[$sSummaryState] < self::$arrStates[$sObjSummaryState] || (self::$arrStates[$sSummaryState] == self::$arrStates[$sObjSummaryState] && ($this->getSummaryAcknowledgement() || $this->getSummaryInDowntime()))) {
 				$this->summary_state = $sObjSummaryState;
 				
 				if($OBJ->getSummaryAcknowledgement() == 1) {

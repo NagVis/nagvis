@@ -27,24 +27,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHostgroup extends NagVisStatefulObject {
-	private $BACKEND;
-	
-	protected $backend_id;
-	
 	protected $hostgroup_name;
 	protected $alias;
 	protected $display_name;
 	protected $address;
 	
-	protected $state;
-	protected $output;
-	protected $problem_has_been_acknowledged;
 	protected $in_downtime;
-	
-	protected $summary_state;
-	protected $summary_output;
-	protected $summary_problem_has_been_acknowledged;
-	protected $summary_in_downtime;
 	
 	protected $members;
 	
@@ -58,24 +46,13 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @param		String		Name of the hostgroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostgroupName) {
-		$this->CORE = &$CORE;
-		
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
 		$this->backend_id = $backend_id;
 		$this->hostgroup_name = $hostgroupName;
 		
 		$this->members = Array();
 		
-		$this->state = '';
-		$this->problem_has_been_acknowledged = 0;
-		$this->in_downtime = 0;
-		
-		$this->summary_state = '';
-		$this->summary_problem_has_been_acknowledged = 0;
-		$this->summary_in_downtime = 0;
-		
-		parent::__construct($this->CORE, $this->BACKEND);
+		parent::__construct($CORE, $BACKEND);
 	}
 	
 	/**

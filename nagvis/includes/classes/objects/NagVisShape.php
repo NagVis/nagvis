@@ -27,8 +27,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisShape extends NagVisStatelessObject {
-	private $CORE;
-	
 	/**
 	 * Class constructor
 	 *
@@ -38,15 +36,13 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @param		String	 	Image of the shape
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $icon) {
-		$this->CORE = &$CORE;
-		
-		$this->iconPath = $this->CORE->MAINCFG->getValue('paths', 'shape');
-		$this->iconHtmlPath = $this->CORE->MAINCFG->getValue('paths', 'htmlshape');
+	public function __construct($CORE, $icon) {
+		$this->iconPath = $CORE->MAINCFG->getValue('paths', 'shape');
+		$this->iconHtmlPath = $CORE->MAINCFG->getValue('paths', 'htmlshape');
 		
 		$this->icon = $icon;
 		$this->type = 'shape';
-		parent::__construct($this->CORE);
+		parent::__construct($CORE);
 	}
 	
 	/**

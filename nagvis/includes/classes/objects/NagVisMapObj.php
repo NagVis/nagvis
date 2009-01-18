@@ -27,12 +27,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapObj extends NagVisStatefulObject {
-	private $CORE;
 	protected $MAPCFG;
 	private $MAP;
-	private $BACKEND;
-	
-	protected $backend_id;
 	
 	protected $members;
 	protected $linkedMaps;
@@ -41,15 +37,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	protected $map_name;
 	protected $alias;
 	
-	protected $state;
-	protected $output;
-	protected $problem_has_been_acknowledged;
 	protected $in_downtime;
-	
-	protected $summary_state;
-	protected $summary_output;
-	protected $summary_problem_has_been_acknowledged;
-	protected $summary_in_downtime;
 	
 	// When this map object summarizes the state of a map this is true
 	protected $is_summary_object;
@@ -63,10 +51,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @param		Object		Object of class NagVisMapCfg
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND, &$MAPCFG) {
-		$this->CORE = &$CORE;
-		$this->MAPCFG = &$MAPCFG;
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $BACKEND, $MAPCFG) {
+		$this->MAPCFG = $MAPCFG;
 		
 		$this->map_name = $this->MAPCFG->getName();
 		$this->alias = $this->MAPCFG->getAlias();
@@ -74,23 +60,14 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->iconset = 'std_medium';
 		$this->members = Array();
 		$this->linkedMaps = Array();
+		$this->is_summary_object = FALSE;
 		
 		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
 		
 		// Crapy way to get an object ID for a map - got a better idea?
 		$this->object_id = rand(0,1000);
 		
-		$this->state = '';
-		$this->problem_has_been_acknowledged = 0;
-		$this->in_downtime = 0;
-		
-		$this->summary_state = '';
-		$this->summary_problem_has_been_acknowledged = 0;
-		$this->summary_in_downtime = 0;
-		
-		$this->is_summary_object = FALSE;
-		
-		parent::__construct($this->CORE, $this->BACKEND);
+		parent::__construct($CORE, $BACKEND);
 	}
 	
 	/**

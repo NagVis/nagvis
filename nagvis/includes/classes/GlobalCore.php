@@ -276,9 +276,12 @@ class GlobalCore {
 		} else {
 			if($handle = opendir($this->MAINCFG->getValue('paths', 'icon'))) {
 				while (false !== ($file = readdir($handle))) {
-					if(preg_match('/^'.$iconset.'_ok.(png|gif|jpg)$/', $file, $arrRet)) {
-						$type = $arrRet[1];
-					}				
+					// First filter all files with _ok, it is faster than regex all
+					if(strpos($file, '_ok') !== FALSE) {
+						if(preg_match('/^'.$iconset.'_ok.(png|gif|jpg)$/', $file, $arrRet)) {
+							$type = $arrRet[1];
+						}
+					}
 				}
 			}
 			closedir($handle);

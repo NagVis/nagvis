@@ -28,8 +28,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisStatelessObject extends NagVisObject {
-	private $CORE;
-	
 	// "Global" Configuration variables for all stateless objects
 	protected $label_show;
 	protected $recognize_services;
@@ -45,10 +43,8 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE) {
-		$this->CORE = &$CORE;
-		
-		parent::__construct($this->CORE);
+	public function __construct($CORE) {
+		parent::__construct($CORE);
 	}
 	
 	/**

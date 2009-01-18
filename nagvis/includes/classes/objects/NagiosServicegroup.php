@@ -27,25 +27,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosServicegroup extends NagVisStatefulObject {
-	var $CORE;
-	var $BACKEND;
+	protected $servicegroup_name;
+	protected $alias;
+	protected $display_name;
+	protected $address;
 	
-	var $backend_id;
-	
-	var $servicegroup_name;
-	var $alias;
-	var $display_name;
-	var $address;
-	
-	var $state;
-	var $output;
-	var $problem_has_been_acknowledged;
-	var $in_downtime;
-	
-	var $summary_state;
-	var $summary_output;
-	var $summary_problem_has_been_acknowledged;
-	var $summary_in_downtime;
+	protected $in_downtime;
 	
 	var $members;
 	
@@ -59,24 +46,13 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @param		String		Name of the servicegroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagiosServicegroup(&$CORE, &$BACKEND, $backend_id, $servicegroupName) {
-		$this->CORE = &$CORE;
-		
-		$this->BACKEND = &$BACKEND;
+	function __construct($CORE, $BACKEND, $backend_id, $servicegroupName) {
 		$this->backend_id = $backend_id;
 		$this->servicegroup_name = $servicegroupName;
 		
 		$this->members = Array();
 		
-		$this->state = '';
-		$this->problem_has_been_acknowledged = 0;
-		$this->in_downtime = 0;
-		
-		$this->summary_state = '';
-		$this->summary_problem_has_been_acknowledged = 0;
-		$this->summary_in_downtime = 0;
-		
-		parent::__construct($this->CORE, $this->BACKEND);
+		parent::__construct($CORE, $BACKEND);
 	}
 	
 	/**

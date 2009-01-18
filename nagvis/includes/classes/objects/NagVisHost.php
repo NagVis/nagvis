@@ -27,8 +27,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHost extends NagiosHost {
-	private $CORE;
-	private $BACKEND;
 	
 	/**
 	 * Class constructor
@@ -40,13 +38,10 @@ class NagVisHost extends NagiosHost {
 	 * @param		String		Name of the host
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostName) {
-		$this->CORE = &$CORE;
-		
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $BACKEND, $backend_id, $hostName) {
 		$this->type = 'host';
 		$this->iconset = 'std_medium';
-		parent::__construct($this->CORE, $this->BACKEND, $backend_id, $hostName);
+		parent::__construct($CORE, $BACKEND, $backend_id, $hostName);
 	}
 	
 	/**

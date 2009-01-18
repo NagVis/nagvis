@@ -27,11 +27,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosService extends NagVisStatefulObject {
-	private $CORE;
-	private $BACKEND;
-	
-	protected $backend_id;
-	
 	protected $object_id;
 	protected $host_name;
 	protected $service_description;
@@ -39,10 +34,7 @@ class NagiosService extends NagVisStatefulObject {
 	protected $display_name;
 	protected $address;
 	
-	protected $state;
-	protected $output;
 	protected $perfdata;
-	protected $problem_has_been_acknowledged;
 	protected $last_check;
 	protected $next_check;
 	protected $state_type;
@@ -56,14 +48,6 @@ class NagiosService extends NagVisStatefulObject {
 	protected $downtime_end;
 	protected $downtime_author;
 	protected $downtime_data;
-	
-	protected $summary_state;
-	protected $summary_output;
-	protected $summary_problem_has_been_acknowledged;
-	protected $summary_in_downtime;
-	
-	protected $recognize_services;
-	protected $only_hard_states;
 	
 	protected $childObjects;
 	protected $services;
@@ -79,10 +63,7 @@ class NagiosService extends NagVisStatefulObject {
 	 * @param		String		Service description
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function NagiosService(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
-		$this->CORE = &$CORE;
-		
-		$this->BACKEND = &$BACKEND;
+	function __construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription) {
 		$this->backend_id = $backend_id;
 		$this->host_name = $hostName;
 		$this->service_description = $serviceDescription;
@@ -97,7 +78,7 @@ class NagiosService extends NagVisStatefulObject {
 		$this->summary_problem_has_been_acknowledged = 0;
 		$this->summary_in_downtime = 0;
 		
-		parent::__construct($this->CORE, $this->BACKEND);
+		parent::__construct($CORE, $BACKEND);
 	}
 	
 	/**

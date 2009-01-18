@@ -27,9 +27,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisService extends NagiosService {
-	private $CORE;
-	private $BACKEND;
-	
 	protected $gadget_url;
 	
 	/**
@@ -43,14 +40,11 @@ class NagVisService extends NagiosService {
 	 * @param		String		Service description
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, &$BACKEND, $backend_id, $hostName, $serviceDescription) {
-		$this->CORE = &$CORE;
-		
-		$this->BACKEND = &$BACKEND;
+	public function __construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription) {
 		$this->type = 'service';
 		$this->iconset = 'std_medium';
 		
-		parent::__construct($this->CORE, $this->BACKEND, $backend_id, $hostName, $serviceDescription);
+		parent::__construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription);
 	}
 	
 	# End public methods

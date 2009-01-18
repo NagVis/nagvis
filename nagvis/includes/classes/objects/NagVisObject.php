@@ -27,7 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisObject {
-	private $CORE;
+	protected $CORE;
 	
 	protected $conf;
 	
@@ -45,8 +45,6 @@ class NagVisObject {
 	protected $hover_childs_order;
 	protected $hover_childs_limit;
 	protected $label_show;
-	protected $recognize_services;
-	protected $only_hard_states;
 	
 	protected $iconPath;
 	protected $iconHtmlPath;
@@ -59,8 +57,8 @@ class NagVisObject {
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE) {
-		$this->CORE = &$CORE;
+	public function __construct($CORE) {
+		$this->CORE = $CORE;
 		
 		$this->conf = Array();
 	}
