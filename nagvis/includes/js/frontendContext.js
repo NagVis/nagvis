@@ -32,6 +32,7 @@ var _openContextMenus = [];
 // call from the onMouseDown event, passing the event if standards compliant
 function contextMouseDown(event) {
 	var target;
+	var id = -1;
 
 	// IE is evil and doesn't pass the event object
 	if (event === null || typeof event === 'undefined') {
@@ -48,14 +49,16 @@ function contextMouseDown(event) {
 	// Workaround for the different structure of targets on lines/icons
 	// Would be nice to fix the structure
 	var id;
-	if(target.id !== '') {
+	if(target !== null && target.id !== '') {
 		id = target.id;
 	} else {
-		id = target.parentNode.parentNode.parentNode.id;
+		if(target.parentNode !== null && target.parentNode.parentNode !== null && target.parentNode.parentNode.parentNode !== null) {
+			id = target.parentNode.parentNode.parentNode.id;
+		}
 	}
 	
 	// Hide all context menus except clicking the current open context menu
-	if(id.indexOf('-context') === -1) {
+	if(target !== null || id == -1 || id.indexOf('-context') === -1) {
 		// Hide all context menus
 		contextHide();
 	}
