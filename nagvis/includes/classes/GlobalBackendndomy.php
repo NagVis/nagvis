@@ -54,7 +54,7 @@ class GlobalBackendndomy {
 	 * @author	Andreas Husch <downanup@nagios-wiki.de>
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __constructor($CORE, $backendId) {
+	public function __construct($CORE, $backendId) {
 		$this->CORE = $CORE;
 		
 		$this->backendId = $backendId;
