@@ -254,7 +254,9 @@ class WuiMapCfg extends GlobalMapCfg {
 					$file[] = "\n";
 				}
 				$file[] = 'define '.$type." {\n";
-				foreach($this->mapConfig[$type][$id] AS $key => $val) {
+				$aKeys = $this->getValidTypeKeys($type);
+				foreach($aKeys As $key) {
+					$val = $this->getValue($type, $id, $key);
 					if(isset($val) && $val != '') {
 						$file[] = $key.'='.$val."\n";
 					}

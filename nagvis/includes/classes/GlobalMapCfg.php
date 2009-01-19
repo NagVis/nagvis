@@ -973,13 +973,15 @@ class GlobalMapCfg {
 	}
 	
 	/**
+	 * PROTECTED  checkMapConfigReadable()
+	 *
 	 * Checks for readable config file
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkMapConfigReadable($printErr) {
+	protected function checkMapConfigReadable($printErr) {
 		if($this->name != '') {
 			if(is_readable($this->configFile)) {
 				return TRUE;
