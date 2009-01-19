@@ -129,6 +129,7 @@ class GlobalIndexPage {
 					$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
 				}
 				$objConf['type'] = 'map';
+				$objConf['map_name'] = $MAPCFG->getAlias();
 				
 				$MAP->MAPOBJ->setConfiguration($objConf);
 				
