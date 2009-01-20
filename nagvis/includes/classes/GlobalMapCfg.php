@@ -659,7 +659,7 @@ class GlobalMapCfg {
 		$this->configFile = $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg';
 		
 		if($name != '') {
-			$this->CACHE = new GlobalFileCache($this->configFile, $this->CORE->MAINCFG->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache');
+			$this->CACHE = new GlobalFileCache($this->CORE, $this->configFile, $this->CORE->MAINCFG->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache');
 		}
 	}
 	

@@ -452,7 +452,8 @@ class GlobalMainCfg {
 		}
 		
 		// Create instance of GlobalFileCache object for caching the config
-		$this->CACHE = new GlobalFileCache($this->configFile, $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache');
+		$CORE = new GlobalCore($this);
+		$this->CACHE = new GlobalFileCache($CORE, $this->configFile, $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache');
 		
 		if($this->CACHE->isCached(FALSE) !== -1) {
 			$this->config = $this->CACHE->getCache();

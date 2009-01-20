@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalFileCache {
+	private $CORE;
 	private $file;
 	private $cacheFile;
 	
@@ -35,11 +36,13 @@ class GlobalFileCache {
 	/**
 	 * Class Constructor
 	 *
+	 * @param 	Object  Object of GlobalCore
 	 * @param 	String  File to check
 	 * @param   String  Path to cache file
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($file, $cacheFile) {
+	public function __construct($CORE, $file, $cacheFile) {
+		$this->CORE = $CORE;
 		$this->file = $file;
 		$this->cacheFile = $cacheFile;
 		
@@ -69,17 +72,21 @@ class GlobalFileCache {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function writeCache($contents, $printErr=1) {
-		if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
-			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+		if($this->checkCacheFileWriteable($printErr)) {
+			if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
+				if($printErr == 1) {
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+				}
+				return FALSE;
 			}
+			
+			fwrite($fp, serialize($contents));
+			fclose($fp);
+			
+			return TRUE;
+		} else {
 			return FALSE;
 		}
-		
-		fwrite($fp, serialize($contents));
-		fclose($fp);
-		
-		return TRUE;
 	}
 	
 	/**
@@ -111,7 +118,25 @@ class GlobalFileCache {
 	 * @return  Boolean  Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function checkCacheFileExists($printErr) {
+	private function checkCacheFileWriteable($printErr) {
+		if(is_writeable($this->cacheFile)) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for existing cache file
+	 *
+	 * @param   Boolean  $printErr
+	 * @return  Boolean  Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkCacheFileExists($printErr) {
 		if(file_exists($this->cacheFile)) {
 			return TRUE;
 		} else {

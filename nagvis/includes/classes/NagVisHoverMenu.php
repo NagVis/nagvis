@@ -51,7 +51,7 @@ class NagVisHoverMenu {
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->templateName.'.html';
 		
-		$this->CACHE = new GlobalFileCache($this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'hover-'.$this->templateName.'-cache');
+		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'hover-'.$this->templateName.'-cache');
 		
 		// Only use cache when there is
 		// a) Some valid cache file
