@@ -30,8 +30,8 @@ class GlobalMapCfg {
 	public $BACKGROUND;
 	private $CACHE;
 	
-	private $name;
-	private $mapConfig;
+	protected $name;
+	protected $mapConfig;
 	
 	private $configFile;
 	private $cacheFile;

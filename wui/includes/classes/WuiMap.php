@@ -508,7 +508,7 @@ class WuiMap extends GlobalMap {
 			$obj['w'] = 'auto';
 		}
 		
-		$ret .= "<div class=\"".$obj['class']."\" style=\"left: ".$obj['x']."px; top: ".$obj['y']."px; width: ".$obj['w']."; overflow: visible;\">";	
+		$ret .= "<div class=\"".$obj['class']."\" style=\"left: ".$obj['x']."px; top: ".$obj['y']."px; z-index: ".$obj['z']."; width: ".$obj['w']."; overflow: visible;\">";	
 		$ret .= "\t<span>".$obj['text']."</span>";
 		$ret .= "</div>";
 		

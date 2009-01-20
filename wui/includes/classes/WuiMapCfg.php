@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiMapCfg extends GlobalMapCfg {
-	var $name;
 	
 	/**
 	 * Class Constructor
