@@ -29,9 +29,9 @@ class GlobalMainCfg {
 	private $CACHE;
 	
 	protected $config;
-	private $runtimeConfig;
+	protected $runtimeConfig;
 	
-	private $configFile;
+	protected $configFile;
 	
 	protected $validConfig;
 	

@@ -49,8 +49,8 @@ class GlobalPage {
 	 * @param 	Array			$prop		Array('name'=>'myform','id'=>'myform','method'=>'POST','action'=>'','onSubmit'=>'','cols'=>'2','enctype'=>''
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(&$CORE, $givenProperties=Array()) {
-		$this->CORE = &$CORE;
+	public function __construct($CORE, $givenProperties=Array()) {
+		$this->CORE = $CORE;
 		
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
@@ -165,6 +165,37 @@ class GlobalPage {
 		$ret = $ret & $this->checkPermissions($this->allowedUsers,TRUE);
 		
 		return $ret;
+	}
+	
+	/**
+	 * Writes a Message to message array and does what to do...
+	 * severity: ERROR, WARNING, INFORMATION
+	 *
+	 * @param	String	$severity	Severity of the message (ERROR|WARNING|INFORMATION)
+	 * @param	String	$text		String to display as message
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: Need to remove this (Eliminate it at WUI and remove this here)
+	 */
+	function messageToUser($severity='WARNING', $text) {
+		switch($severity) {
+			case 'ERROR':
+			case 'INFO-STOP':
+				// print the message box and kill the script
+				$this->body .= $this->messageBox($severity, $text);
+				$this->printPage();
+				// end of script
+			break;
+			case 'WARNING':
+			case 'INFORMATION':
+				// add the message to message Array - the printing will be done later, the message array has to be superglobal, not a class variable
+				$arrMessage = Array(Array('severity' => $severity, 'text' => $text));
+				if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
+					$this->CORE->MAINCFG->setRuntimeValue('userMessages',array_merge($this->CORE->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
+				} else {
+					$this->CORE->MAINCFG->setRuntimeValue('userMessages',$arrMessage);
+				}
+			break;
+		}
 	}
 	
 	/**

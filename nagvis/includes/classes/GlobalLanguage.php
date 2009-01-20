@@ -65,6 +65,7 @@ class GlobalLanguage {
 		$this->checkLanguageAvailable();
 		
 		// Set the language to use
+		putenv('LANG='.$this->sCurrentLanguage);
 		putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
 		setlocale(LC_ALL, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
 
