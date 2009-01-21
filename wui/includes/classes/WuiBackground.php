@@ -26,7 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiBackground extends GlobalBackground {
-	function WuiBackground(&$CORE, $image) {
+	function __construct($CORE, $image) {
 		parent::__construct($CORE, $image);
 	}
 	

@@ -42,6 +42,7 @@ function checkJpg(imageName) {
 	}
 }
 
+function checkGif(imageName) {
 	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'gif') {
 		return false; 
 	} else {

@@ -26,8 +26,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalBackground {
-	private $CORE;
-	private $image;
+	protected $CORE;
+	protected $image;
 	
 	/**
 	 * Constructor
