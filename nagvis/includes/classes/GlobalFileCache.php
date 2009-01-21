@@ -72,7 +72,8 @@ class GlobalFileCache {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function writeCache($contents, $printErr=1) {
-		if($this->checkCacheFileWriteable($printErr)) {
+		// Writeable check only when cache file exists
+		if(!$this->checkCacheFileExists(0) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
 			if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
 				if($printErr == 1) {
 					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
