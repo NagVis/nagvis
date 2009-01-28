@@ -12,7 +12,7 @@
 </style>
 <![endif]-->
   </head>  
-<h1>NagVis 1.4 Installationsanweisungen</h1>
+<h1>NagVis 1.5 Installationsanweisungen</h1>
 Diese Anweisungen gelten f&uuml;r eine Neuinstallation. <br>
 Wenn Sie Ihre alte NagVis-Installation aktualisieren, raten wir dringend dazu, ein Backup Ihres NagVis-Verzeichnisses zu machen und die Konfigurationsdateien <i>manuell</i> anzupassen. <br>
 
@@ -26,13 +26,13 @@ Holen Sie sich NagVis, die neueste Version finden Sie unter <a href="http://www.
 
 <a name=SCHRITT_2></a>
 <h2>SCHRITT 2: entpacken Sie NagVis</h2>
-<pre>tar xvzf nagvis-1.4.x.tar.gz</pre> 
+<pre>tar xvzf nagvis-1.5.x.tar.gz</pre> 
 
 <a name=SCHRITT_3></a>
 <h2>SCHRITT 3: verschieben Sie das entpackte NagVis-Verzeichnis</h2>
 Platzieren Sie das NagVis-Verzeichnis in Ihrem Nagios-share-Verzeichnis
 (normalerweise /usr/local/nagios/share). <br>
-<pre>mv nagvis-1.4.x /usr/local/nagios/share</pre>
+<pre>mv nagvis-1.5.x /usr/local/nagios/share</pre>
 Sie sollten die Verzeichnisse <code>etc</code>, <code>nagvis</code> und <code>wui</code> unter dem nagvis-Verzeichnis sehen <br>
 <pre>ls -l /usr/local/nagios/share/nagvis</pre>
 <font style="color:red">Verschieben Sie KEINE Dateien oder Verzeichnisse innerhalb des NagVis-Verzeichnisses (Sie k&ouml;nnen das tun, aber in diesem Fall m&uuml;ssen Sie einige Parameter und Werte in der Hauptkonfigurationsdatei anpassen/hinzuf&uuml;gen – wenn Sie nichts ver&auml;ndern, sollte es sofort funktionieren)</font><br>
