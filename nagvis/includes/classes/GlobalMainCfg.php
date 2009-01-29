@@ -342,7 +342,7 @@ class GlobalMainCfg {
 							'match' => MATCH_INTEGER)),
 					'ndo2fs' => Array('path' => Array('must' => 1,
 							'editable' => 1,
-							'default' => '/tmp/ndo2fs',
+							'default' => '/usr/local/ndo2fs/var',
 							'match' => MATCH_STRING_PATH),
 						'instancename' => Array('must' => 1,
 							'editable' => 1,
