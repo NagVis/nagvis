@@ -441,7 +441,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Create span for text and add label text
 		var oLabelSpan = document.createElement('span');
-		oLabelSpan.appendChild(document.createTextNode(this.conf.label_text));
+		oLabelSpan.innerHTML = this.conf.label_text;
 		oLabelDiv.appendChild(oLabelSpan);
 		oLabelSpan = null;
 		
