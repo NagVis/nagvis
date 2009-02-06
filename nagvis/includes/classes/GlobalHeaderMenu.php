@@ -59,6 +59,9 @@ class GlobalHeaderMenu {
 		  && $this->CORE->MAINCFG->isCached() !== -1
 		  && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
 			$this->code = $this->CACHE->getCache();
+			
+			// Replace dynamic macros after caching actions
+			$this->replaceDynamicMacros();
 		} else {
 			// Read the contents of the template file
 			if($this->readTemplate()) {
@@ -67,51 +70,19 @@ class GlobalHeaderMenu {
 				
 				// Build cache for the template
 				$this->CACHE->writeCache($this->code, 1);
+				
+				// Replace dynamic macros after caching actions
+				$this->replaceDynamicMacros();
 			}
 		}
 	}
 	
 	/**
-	 * Replace all macros in the template code
+	 * Replace all dynamic macros in the template code
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function replaceStaticMacros() {
-		// Replace paths and language macros
-		$arrKeys = Array('[html_base]', 
-			'[html_templates]', 
-			'[html_template_images]',
-			'[current_language]',
-			'[lang_select_map]',
-			'[lang_edit_map]',
-			'[lang_need_help]',
-			'[lang_online_doc]',
-			'[lang_forum]',
-			'[lang_support_info]',
-			'[lang_overview]',
-			'[lang_instance]',
-			'[lang_rotation_start]',
-			'[lang_rotation_stop]',
-			'[lang_refresh_start]',
-			'[lang_refresh_stop]');
-		
-		$arrVals = Array($this->pathHtmlBase, 
-			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplates'), 
-			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplateimages'),
-			$this->CORE->LANG->getCurrentLanguage(),
-			$this->CORE->LANG->getText('selectMap'),
-			$this->CORE->LANG->getText('editMap'),
-			$this->CORE->LANG->getText('needHelp'),
-			$this->CORE->LANG->getText('onlineDoc'),
-			$this->CORE->LANG->getText('forum'),
-			$this->CORE->LANG->getText('supportInfo'),
-			$this->CORE->LANG->getText('overview'),
-			$this->CORE->LANG->getText('instance'),
-			$this->CORE->LANG->getText('rotationStart'),
-			$this->CORE->LANG->getText('rotationStop'),
-			$this->CORE->LANG->getText('refreshStart'),
-			$this->CORE->LANG->getText('refreshStop'));
-		
+	public function replaceDynamicMacros() {
 		// Replace some special macros
 		if(get_class($this->OBJPAGE) == 'NagVisMapCfg') {
 			$arrKeys[] = '[current_map]';
@@ -165,8 +136,54 @@ class GlobalHeaderMenu {
 		
 		// Select overview in header menu when no map shown
 		if(get_class($this->OBJPAGE) != 'NagVisMapCfg') {
-			$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
+			$this->code = str_replace('[selected]','selected="selected"', $this->code);
 		}
+		
+		
+	}
+	
+	/**
+	 * Replace all macros in the template code
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function replaceStaticMacros() {
+		// Replace paths and language macros
+		$arrKeys = Array('[html_base]', 
+			'[html_templates]', 
+			'[html_template_images]',
+			'[current_language]',
+			'[lang_select_map]',
+			'[lang_edit_map]',
+			'[lang_need_help]',
+			'[lang_online_doc]',
+			'[lang_forum]',
+			'[lang_support_info]',
+			'[lang_overview]',
+			'[lang_instance]',
+			'[lang_rotation_start]',
+			'[lang_rotation_stop]',
+			'[lang_refresh_start]',
+			'[lang_refresh_stop]');
+		
+		$arrVals = Array($this->pathHtmlBase, 
+			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplates'), 
+			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplateimages'),
+			$this->CORE->LANG->getCurrentLanguage(),
+			$this->CORE->LANG->getText('selectMap'),
+			$this->CORE->LANG->getText('editMap'),
+			$this->CORE->LANG->getText('needHelp'),
+			$this->CORE->LANG->getText('onlineDoc'),
+			$this->CORE->LANG->getText('forum'),
+			$this->CORE->LANG->getText('supportInfo'),
+			$this->CORE->LANG->getText('overview'),
+			$this->CORE->LANG->getText('instance'),
+			$this->CORE->LANG->getText('rotationStart'),
+			$this->CORE->LANG->getText('rotationStop'),
+			$this->CORE->LANG->getText('refreshStart'),
+			$this->CORE->LANG->getText('refreshStop'));
+		
+		$this->code = str_replace($arrKeys, $arrVals, $this->code);
 		
 		$this->code = '<div class="header">'.$this->code.'</div>';
 	}
