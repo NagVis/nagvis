@@ -230,6 +230,9 @@ function runWorker(iCount, sType) {
 							// Create request string
 							var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
 							if(service_description) {
+								// Replace # cause the could confuse the url parsing
+								service_description = service_description.replace('#','%23');
+								
 								sUrlPart = sUrlPart + '&n2[]='+service_description;
 							} else {
 								sUrlPart = sUrlPart + '&n2[]=';
