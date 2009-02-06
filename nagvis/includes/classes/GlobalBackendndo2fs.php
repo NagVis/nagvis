@@ -329,7 +329,7 @@ class GlobalBackendndo2fs {
 				if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
 					$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 					
-					$serviceName = strtr($serviceName,' ','_');
+					$serviceName = strtr($serviceName,' /','__');
 					
 					if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName)) {
 						$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/CONFIG'));
