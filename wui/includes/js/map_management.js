@@ -167,7 +167,7 @@ function check_map_import() {
 		return false;
 	}
 	
-	return false;
+	return true;
 }
 
 function check_map_delete() {

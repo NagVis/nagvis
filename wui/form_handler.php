@@ -263,7 +263,7 @@ switch($_GET['myaction']) {
 			// check the file (the map) is properly uploaded
 			if(is_uploaded_file($_FILES['map_file']['tmp_name'])) {
 				$mapName = $_FILES['map_file']['name'];
-				if(preg_match('/\.cfg/i',$fileName)) {
+				if(preg_match('/\.cfg/i',$mapName)) {
 					if(move_uploaded_file($_FILES['map_file']['tmp_name'], $CORE->MAINCFG->getValue('paths', 'mapcfg').$mapName)) {
 						chmod($CORE->MAINCFG->getValue('paths', 'mapcfg').$mapName,0666);
 						print("<script>window.history.back();</script>");
@@ -272,7 +272,7 @@ switch($_GET['myaction']) {
 						return;
 					}
 				} else {
-					print "This is no *.cfg file (".$fileName.").";
+					print "This is no *.cfg file (".$mapName.").";
 					return;
 				}
 			} else {
