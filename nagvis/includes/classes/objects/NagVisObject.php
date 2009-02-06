@@ -345,17 +345,6 @@ class NagVisObject {
 	}
 	
 	/**
-	 * PUBLIC replaceMacros()
-	 *
-	 * Replaces macros of urls and hover_urls
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function replaceMacros() {
-		return TRUE;
-	}
-	
-	/**
 	 * PUBLIC getHoverMenu
 	 *
 	 * Creates a hover box for objects

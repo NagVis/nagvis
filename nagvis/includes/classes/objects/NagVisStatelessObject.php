@@ -56,8 +56,6 @@ class NagVisStatelessObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseJson() {
-		$this->replaceMacros();
-		
 		// Get all information of the object (configuration, state, ...)
 		return $this->getObjectInformation();
 	}

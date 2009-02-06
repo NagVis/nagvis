@@ -247,10 +247,16 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		if(this.conf.url && this.conf.url != '') {
+			this.conf.url = this.conf.url.replace('[htmlcgi]', oGeneralProperties.path_htmlcgi);
+			this.conf.url = this.conf.url.replace('[htmlbase]', oGeneralProperties.path_htmlbase);
+			
 			this.conf.url = this.conf.url.replace('['+name+']', this.conf.name);
-			if(this.type == 'service') {
+			if(this.conf.type == 'service') {
 				this.conf.url = this.conf.url.replace('[service_description]', this.conf.service_description);
 			}
+			
+			// Replace special chars in url
+			this.conf.url = this.conf.url.replace('#', '%23');
 		}
 		
 		if(this.conf.hover_url && this.conf.hover_url != '') {

@@ -509,7 +509,7 @@ class GlobalMapCfg {
 					'default' => '',
 					'match' => MATCH_BOOLEAN),
 				'url' => Array('must' => 0,
-					'url' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup]&style=detail',
+					'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),

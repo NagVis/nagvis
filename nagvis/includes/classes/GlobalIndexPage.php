@@ -166,7 +166,7 @@ class GlobalIndexPage {
 					}
 					
 					// Now form the cell with its contents
-					$MAP->MAPOBJ->replaceMacros();
+					//DEPRECATED $MAP->MAPOBJ->replaceMacros();
 					
 					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
 						$image = $this->createThumbnail($imgPath, $mapName);

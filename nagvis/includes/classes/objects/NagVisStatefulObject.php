@@ -516,9 +516,6 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseJson() {
-		// Replace macros in url, hover_url, label_text
-		$this->replaceMacros();
-		
 		// Get the correct url
 		$this->url = $this->getUrl();
 		
@@ -596,56 +593,6 @@ class NagVisStatefulObject extends NagVisObject {
 		} else {
 			$this->icon = $this->iconset.'_error.'.$fileType;
 		}
-	}
-	
-	/**
-	 * Replaces macros of urls and hover_urls
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function replaceMacros() {
-		if($this->type == 'service') {
-			$name = 'host_name';
-		} else {
-			$name = $this->type . '_name';
-		}
-		
-		if(isset($this->url) && $this->url != '') {
-			$this->url = str_replace('[htmlcgi]', $this->CORE->MAINCFG->getValue('paths', 'htmlcgi'), $this->url);
-			$this->url = str_replace('[htmlbase]', $this->CORE->MAINCFG->getValue('paths', 'htmlbase'), $this->url);
-			$this->url = str_replace('['.$name.']', $this->$name, $this->url);
-			
-			if($this->type == 'service') {
-				$this->url = str_replace('[service_description]', $this->service_description, $this->url);
-			}
-		}
-		
-		if(isset($this->hover_url) && $this->hover_url != '') {
-			$this->hover_url = str_replace('[name]',$this->$name, $this->hover_url);
-			if($this->type == 'service') {
-				$this->hover_url = str_replace('[service_description]', $this->service_description, $this->hover_url);
-			}
-		}
-		
-		if(isset($this->label_text) && $this->label_text != '') {
-			// For maps use the alias as display string
-			if($this->type == 'map') {
-				$name = 'alias';   
-			}
-			
-			$this->label_text = str_replace('[name]', $this->$name, $this->label_text);
-			$this->label_text = str_replace('[output]',$this->output, $this->label_text);
-			
-			if($this->type == 'service' || $this->type == 'host') {
-				$this->label_text = str_replace('[perfdata]',$this->perfdata, $this->label_text);
-			}
-			
-			if($this->type == 'service') {
-				$this->label_text = str_replace('[service_description]', $this->service_description, $this->label_text);
-			}
-		}
-		
-		parent::replaceMacros();
 	}
 	
 	# End public methods
