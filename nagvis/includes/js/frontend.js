@@ -840,7 +840,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			 */
 			
 			// - Highlight (Flashing)
-			if(oPageProperties.event_highlight) {
+			if(oPageProperties.event_highlight === '1') {
 				if(aObjs[intIndex].conf.view_type && aObjs[intIndex].conf.view_type === 'icon') {
 					// Detach the handler
 					// FIXME: Had problems with this. Could not give the index to function
@@ -852,7 +852,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			}
 			
 			// - Scroll to object
-			if(oPageProperties.event_scroll) {
+			if(oPageProperties.event_scroll === '1') {
 				// Detach the handler
 				window.setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15); }, 0);
 			}
@@ -865,7 +865,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			}
 			
 			// - Sound
-			if(oPageProperties.event_sound) {
+			if(oPageProperties.event_sound === '1') {
 				// Detach the handler
 				window.setTimeout('playSound('+intIndex+', 1)', 0);
 			}
