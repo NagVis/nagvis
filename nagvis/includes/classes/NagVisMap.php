@@ -79,27 +79,12 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
-	 * Parses the config file ages
-	 *
-	 * @return	String 	JSON Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function parseFileAges() {
-		$arr = Array();
-		
-		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
-		$arr['map_config'] = $this->MAPCFG->getFileModificationTime();
-		
-		return json_encode($arr);
-	}
-	
-	/**
 	 * Parses the Map and the Object options in json format
 	 *
 	 * @return	String 	String with JSON Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function parseMapPropertiesJson() {
+	public function parseMapPropertiesJson() {
 		$arr = Array();
 		$arr['map_name'] = $this->MAPCFG->getName();
 		$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
@@ -113,6 +98,21 @@ class NagVisMap extends GlobalMap {
 		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
 		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
 		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');
+		
+		return json_encode($arr);
+	}
+	
+	/**
+	 * Parses the config file ages
+	 *
+	 * @return	String 	JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function parseFileAges() {
+		$arr = Array();
+		
+		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
+		$arr['map_config'] = $this->MAPCFG->getFileModificationTime();
 		
 		return json_encode($arr);
 	}
