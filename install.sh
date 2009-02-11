@@ -3,7 +3,7 @@
 #
 # install.sh - Installs/Updates NagVis
 #
-# Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+# Copyright (c) 2004-2009 NagVis Project (Contact: lars@vertical-visions.de)
 #
 # Development:
 #  Wolfgang Nieder
@@ -30,13 +30,15 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.7"
+INSTALLER_VERSION="0.1.8"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
 INSTALLER_QUIET=0
 # Should the installer change config options when possible?
 INSTALLER_CONFIG_MOD="n"
+# Return Code
+RC=0
 
 # Default Nagios path
 NAGIOS_PATH="/usr/local/nagios"
@@ -181,10 +183,10 @@ log() {
 	SIZE=`expr $LINE_SIZE - 8` 
 	if [ -z "$2" ]; then
 		printf "%-${SIZE}s %s\n" "| $1" "MISSING |"
-		exit 1
+		RC=1
 	elif [ "$2" = "needed" ]; then
 		echo "$1 needed"
-		exit 1
+		RC=1
 	elif [ "$2" = "warning" ]; then
 		printf "%-${LINE_SIZE}s |\n" "| $1"
 	else	
@@ -206,14 +208,14 @@ check_apache_php() {
 	
 	# Only try to detect user when not set or empty
 	if [ -z "$WEB_USER" ]; then
-		WEB_USER=`find $DIR -type f -exec grep -i "^User" {} \; | cut -d" " -f2 | uniq`
+		WEB_USER=`find $DIR -type f -name "*conf" -exec grep -i "^User" {} \; | grep -vi "UserDir" | cut -d" " -f2 | uniq`
 		VAR=`echo $WEB_USER | grep "$" >/dev/null 2>&1`
 		[ $? -eq 0 ] && WEB_USER=`eval "echo $WEB_USER"`
 	fi
 
 	# Only try to detect group when not set or empty
 	if [ -z "$WEB_GROUP" ]; then
-		WEB_GROUP=`find $DIR -type f -exec grep -i "^Group" {} \; | cut -d" " -f2 | uniq`
+		WEB_GROUP=`find $DIR -type f -name "*.conf" -exec grep -i "^Group" {} \; | cut -d" " -f2 | uniq`
 		VAR=`echo $WEB_GROUP | grep "$" >/dev/null 2>&1`
 		[ $? -eq 0 ] && WEB_GROUP=`eval "echo $WEB_GROUP"`
 	fi
@@ -242,11 +244,13 @@ check_graphviz_version() {
 check_graphviz_modules() {
 	for MOD in $1
 	do
-		TMP=`which $MOD`
-		[ -z "$TMP" ] && TMP=`which $GRAPHVIZ_PATH/$MOD`
-		GV_MOD_VER=`$MOD -V 2>&1`
-		GV_MOD_VER=${GV_MOD_VER#*version }
-		GV_MOD_VER=${GV_MOD_VER% (*}
+		TMP=`which $MOD 2>/dev/null`
+		[ -z "$TMP" ] && TMP=`which $GRAPHVIZ_PATH/$MOD 2>/dev/null`
+		if [ -s "$TMP" ]; then
+			GV_MOD_VER=`$MOD -V 2>&1`
+			GV_MOD_VER=${GV_MOD_VER#*version }
+			GV_MOD_VER=${GV_MOD_VER% (*}
+		fi
 		
 		log "  Graphviz Module $MOD $GV_MOD_VER" $TMP
 		
@@ -263,7 +267,7 @@ check_php_version() {
 	else
 		PHP_VER=`$PKG -qa "php[0-9]" | sed "s/php[0-9]\-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
-	PHP=`which php`
+	PHP=`which php 2>/dev/null`
 	if [ -z "$PHP_VER" ]; then
 		if [ -s "$PHP" -a -x "$PHP" ]; then
 			PHP_VER=`$PHP -v | head -1 | sed -e "s/PHP \([0-9\]\+\.[0-9\]\+\).*/\1/"`
@@ -407,8 +411,8 @@ text "| Starting installation of NagVis $NAGVIS_VER" "|"
 line ""
 text 
 line "Checking for packet manager" "+"
-PKG=`which rpm`
-[ -u $PKG ] && PKG=`which dpkg`
+PKG=`which rpm 2>/dev/null`
+[ -u $PKG ] && PKG=`which dpkg 2>/dev/null`
 if [ -u $PKG ]; then
 	log "No packet manager (rpm/dpkg) found. Aborting..."
 	exit 1
@@ -469,9 +473,13 @@ fi
 NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
 
 # Check NDO
-NDO=`$NAGIOS_PATH/bin/ndo2db-${NAGVER}x --version | grep -i "^NDO2DB" 2>/dev/null`
+if [ -f "$NAGIOS_PATH/bin/ndo2db-${NAGVER}x" ]; then
+	NDO=`$NAGIOS_PATH/bin/ndo2db-${NAGVER}x --version | grep -i "^NDO2DB" 2>/dev/null`
+fi
 # maybe somebody removed version information
-[ -z "$NDO" ]&&NDO=`$NAGIOS_PATH/bin/ndo2db --version | grep -i "^NDO2DB" 2>/dev/null`
+if [ -z "$NDO"  -a -f "$NAGIOS_PATH/bin/ndo2db" ]; then
+	NDO=`$NAGIOS_PATH/bin/ndo2db --version | grep -i "^NDO2DB" 2>/dev/null`
+fi
 log "$NDO" $NDO
 
 # Check PHP Version
@@ -496,6 +504,12 @@ check_graphviz_version $NEED_GV_VERSION
 
 # Check Graphviz Modules
 check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
+
+if [ $RC -ne 0 ]; then
+	text
+	line "Errors found during check of prerequisites. Aborting..."
+	exit 1
+fi
 
 text
 line "Trying to detect Apache settings" "+"
