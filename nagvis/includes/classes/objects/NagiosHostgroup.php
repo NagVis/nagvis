@@ -131,17 +131,14 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		return isset($this->members[0]);
 	}
 	
-	# End public methods
-	# #########################################################################
-	
 	/**
-	 * PRIVATE fetchMemberHostObjects)
+	 * PUBLIC fetchMemberHostObjects)
 	 *
 	 * Gets all members of the given hostgroup and saves them to the members array
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fetchMemberHostObjects() {
+	public function fetchMemberHostObjects() {
 		// Get all hosts and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			// Get additional information like the alias (maybe bad place here)
@@ -164,6 +161,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			}
 		}
 	}
+	
+	# End public methods
+	# #########################################################################
 	
 	/**
 	 * PRIVATE fetchSummaryState()
