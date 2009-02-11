@@ -1,14 +1,14 @@
 /* This notice must be untouched at all times.
 
-wz_jsgraphics.js    v. 3.03
+wz_jsgraphics.js    v. 3.05
 The latest version is available at
 http://www.walterzorn.com
 or http://www.devira.com
 or http://www.walterzorn.de
 
-Copyright (c) 2002-2004 Walter Zorn. All rights reserved.
+Copyright (c) 2002-2009 Walter Zorn. All rights reserved.
 Created 3. 11. 2002 by Walter Zorn (Web: http://www.walterzorn.com )
-Last modified: 28. 1. 2008
+Last modified: 2. 2. 2009
 
 Performance optimizations for Internet Explorer
 by Thomas Frank and John Holdsworth.
@@ -45,16 +45,17 @@ or see http://www.gnu.org/copyleft/lesser.html
 var jg_ok, jg_ie, jg_fast, jg_dom, jg_moz;
 
 
-function _chkDHTM(x, i)
+function _chkDHTM(wnd, x, i)
+// Under XUL, owner of 'document' must be specified explicitly
 {
-	x = document.body || null;
-	jg_ie = x && typeof x.insertAdjacentHTML != "undefined" && document.createElement;
+	x = wnd.document.body || null;
+	jg_ie = x && typeof x.insertAdjacentHTML != "undefined" && wnd.document.createElement;
 	jg_dom = (x && !jg_ie &&
 		typeof x.appendChild != "undefined" &&
-		typeof document.createRange != "undefined" &&
-		typeof (i = document.createRange()).setStartBefore != "undefined" &&
+		typeof wnd.document.createRange != "undefined" &&
+		typeof (i = wnd.document.createRange()).setStartBefore != "undefined" &&
 		typeof i.createContextualFragment != "undefined");
-	jg_fast = jg_ie && document.all && !window.opera;
+	jg_fast = jg_ie && wnd.document.all && !wnd.opera;
 	jg_moz = jg_dom && typeof x.style.MozOpacity != "undefined";
 	jg_ok = !!(jg_ie || jg_dom);
 }
@@ -123,7 +124,7 @@ function _htmRpc()
 	return this.htm.replace(
 		_regex,
 		'<div style="overflow:hidden;position:absolute;background-color:'+
-		'$1;left:$2;top:$3;width:$4;height:$5"></div>\n');
+		'$1;left:$2px;top:$3px;width:$4px;height:$5px"></div>\n');
 }
 
 function _htmPrtRpc()
@@ -131,7 +132,7 @@ function _htmPrtRpc()
 	return this.htm.replace(
 		_regex,
 		'<div style="overflow:hidden;position:absolute;background-color:'+
-		'$1;left:$2;top:$3;width:$4;height:$5;border-left:$4px solid $1"></div>\n');
+		'$1;left:$2px;top:$3px;width:$4px;height:$5px;border-left:$4px solid $1"></div>\n');
 }
 
 function _mkLin(x1, y1, x2, y2)
@@ -1023,7 +1024,7 @@ text both horizontally (e.g. right) and vertically within that rectangle */
 	this.htm = "";
 	this.wnd = wnd || window;
 
-	if(!jg_ok) _chkDHTM();
+	if(!jg_ok) _chkDHTM(this.wnd);
 	if(jg_ok)
 	{
 		if(cnv)
@@ -1104,4 +1105,3 @@ function _CompInt(x, y)
 {
 	return(x - y);
 }
-
