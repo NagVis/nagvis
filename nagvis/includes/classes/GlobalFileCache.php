@@ -46,7 +46,9 @@ class GlobalFileCache {
 		$this->file = $file;
 		$this->cacheFile = $cacheFile;
 		
-		$this->fileAge = filemtime($this->file);
+		if($this->checkFileExists(0)) {
+				$this->fileAge = filemtime($this->file);
+		}
 		
 		if($this->checkCacheFileExists(0)) {
 			$this->cacheFileAge = filemtime($this->cacheFile);
@@ -143,6 +145,24 @@ class GlobalFileCache {
 		} else {
 			if($printErr == 1) {
 				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotExists','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for existing file
+	 *
+	 * @param   Boolean  $printErr
+	 * @return  Boolean  Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkFileExists($printErr) {
+		if(file_exists($this->file)) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('fileNotExists','FILE~'.$this->file), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}
