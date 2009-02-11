@@ -288,7 +288,6 @@ class NagVisObject {
 	public function getSortedObjectMembers() {
 		$arr = Array();
 		
-		// FIXME: Try to limit and sort members
 		$aTmpMembers = $this->getMembers();
 		
 		// Sort the array of child objects by the sort option

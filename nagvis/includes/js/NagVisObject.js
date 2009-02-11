@@ -191,7 +191,6 @@ var NagVisObject = Base.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	getHoverUrlCode: function() {
-		// FIXME: Move to bulk fetching like normal hover menus
 		this.hover_template_code = oHoverUrls[this.conf.hover_url];
 	},
 	
