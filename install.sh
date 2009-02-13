@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.8"
+INSTALLER_VERSION="0.1.9"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -473,14 +473,16 @@ fi
 NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
 
 # Check NDO
-if [ -f "$NAGIOS_PATH/bin/ndo2db-${NAGVER}x" ]; then
-	NDO=`$NAGIOS_PATH/bin/ndo2db-${NAGVER}x --version | grep -i "^NDO2DB" 2>/dev/null`
-fi
+NDO_MOD="ndo2db-${NAGVER}x"
+NDO=`$NAGIOS_PATH/bin/$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
+
 # maybe somebody removed version information
-if [ -z "$NDO"  -a -f "$NAGIOS_PATH/bin/ndo2db" ]; then
-	NDO=`$NAGIOS_PATH/bin/ndo2db --version | grep -i "^NDO2DB" 2>/dev/null`
+if [ -z "$NDO" ]; then
+	NDO_MOD="ndo2db"
+	NDO=`$NAGIOS_PATH/bin/$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 fi
-log "$NDO" $NDO
+[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
+log "$NDO_MOD" $NDO
 
 # Check PHP Version
 check_php_version $NEED_PHP_VERSION
