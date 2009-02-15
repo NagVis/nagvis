@@ -42,8 +42,9 @@ class WuiBackground extends GlobalBackground {
 			if(unlink($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapImage','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+				if($printErr) {
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapImage','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+				}
 				return FALSE;
 			}
 		}
@@ -67,9 +68,9 @@ class WuiBackground extends GlobalBackground {
 						
 						return TRUE;
 					} else {
-						// Error handling
-						$FRONTEND = new GlobalPage($this->CORE);
-						$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('moveUploadedFileFailed'));
+						if($printErr) {
+							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('moveUploadedFileFailed'));
+						}
 						return FALSE;
 					}
 				} else {
@@ -77,15 +78,15 @@ class WuiBackground extends GlobalBackground {
 					return FALSE;
 				}
 			} else {
-				// Error handling
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mustChooseValidImageFormat'));
+				if($printErr) {
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mustChooseValidImageFormat'));
+				}
 				return FALSE;
 			}
 		} else {
-			// Error handling
-			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('fileCouldNotBeUploaded'));
+			if($printErr) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('fileCouldNotBeUploaded'));
+			}
 			return FALSE;
 		}
 	}
@@ -120,9 +121,9 @@ class WuiBackground extends GlobalBackground {
 				return FALSE;
 			}
 		} else {
-			// Error handling
-			$FRONTEND = new GlobalPage($this->CORE);
-			$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('imageAlreadyExists','IMAGE~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+			if($printErr) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('imageAlreadyExists','IMAGE~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+			}
 			return FALSE;
 		}
 	}

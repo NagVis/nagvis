@@ -117,8 +117,9 @@ class WuiMapCfg extends GlobalMapCfg {
 			if(unlink($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 				return TRUE;
 			} else {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapCfg','MAPPATH~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
+				if($printErr) {
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapCfg','MAPPATH~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
+				}
 				return FALSE;
 			}
 		} else {
@@ -137,9 +138,8 @@ class WuiMapCfg extends GlobalMapCfg {
 		if($this->checkMapConfigExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 			return TRUE;
 		} else {
-			if($printErr == 1) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
+			if($printErr) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
 			}
 			return FALSE;
 		}
@@ -394,9 +394,8 @@ class WuiMapCfg extends GlobalMapCfg {
 			if(file_exists($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
 				return TRUE;
 			} else {
-				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->CORE);
-					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapLockNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
+				if($printErr) {
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapLockNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
 				}
 				return FALSE;
 			}
@@ -417,9 +416,8 @@ class WuiMapCfg extends GlobalMapCfg {
 			if($this->checkMapLockExists($printErr) && is_readable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
 				return TRUE;
 			} else {
-				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->CORE);
-		            $FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapLockNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
+				if($printErr) {
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapLockNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
 				}
 				return FALSE;
 			}
@@ -440,9 +438,8 @@ class WuiMapCfg extends GlobalMapCfg {
 			if($this->checkMapLockExists($printErr) && is_writeable($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
 				return TRUE;
 			} else {
-				if($printErr == 1) {
-					$FRONTEND = new GlobalPage($this->CORE);
-		            $FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapLockNotWriteable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
+				if($printErr) {
+					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapLockNotWriteable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
 				}
 				return FALSE;
 			}

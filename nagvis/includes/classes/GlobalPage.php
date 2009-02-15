@@ -168,107 +168,12 @@ class GlobalPage {
 	}
 	
 	/**
-	 * Writes a Message to message array and does what to do...
-	 * severity: ERROR, WARNING, INFORMATION
-	 *
-	 * @param	String	$severity	Severity of the message (ERROR|WARNING|INFORMATION)
-	 * @param	String	$text		String to display as message
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * FIXME: Need to remove this (Eliminate it at WUI and remove this here)
-	 */
-	function messageToUser($severity='WARNING', $text) {
-		switch($severity) {
-			case 'ERROR':
-			case 'INFO-STOP':
-				// print the message box and kill the script
-				$this->body .= $this->messageBox($severity, $text);
-				$this->printPage();
-				// end of script
-			break;
-			case 'WARNING':
-			case 'INFORMATION':
-				// add the message to message Array - the printing will be done later, the message array has to be superglobal, not a class variable
-				$arrMessage = Array(Array('severity' => $severity, 'text' => $text));
-				if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
-					$this->CORE->MAINCFG->setRuntimeValue('userMessages',array_merge($this->CORE->MAINCFG->getRuntimeValue('userMessages'),$arrMessage));
-				} else {
-					$this->CORE->MAINCFG->setRuntimeValue('userMessages',$arrMessage);
-				}
-			break;
-		}
-	}
-	
-	/**
-	 * Gets the messages to be printed to the user
-	 *
-	 * @return 	String	HTML Code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * FIXME: Need to remove that
-	 */
-	protected function getUserMessages() {
-		$ret = '';
-		
-		if(is_array($this->CORE->MAINCFG->getRuntimeValue('userMessages'))) {
-			foreach($this->CORE->MAINCFG->getRuntimeValue('userMessages') AS $message) {
-				$ret .= $this->messageBox($message['severity'], $message['text']);
-			}
-		}
-		
-		return $ret;
-	}
-	
-	/**
-	 * Creates a Messagebox for information and errors
-	 *
-	 * @param	String	$severity	Severity of the message (ERROR|WARNING|INFORMATION)
-	 * @param	String	$text			Error message
-	 * @return 	Array	HTML Code
-	 * @author	Michael Luebben <michael_luebben@web.de>
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * FIXME: Need to remove that
-	 */
-	function messageBox($severity, $text) {
-		$ret = '';
-		
-		switch($severity) {
-			case 'ERROR':
-				$messageIcon = 'msg_error.png';
-			break;
-			case 'WARNING':
-				$messageIcon = 'msg_warning.png';
-			break;
-			case 'INFORMATION':
-			case 'INFO-STOP':
-				$messageIcon = 'msg_information.png';
-			break;
-		}
-		
-		if($severity == 'ERROR' || $severity == 'INFO-STOP') {
-			$ret .= '<META http-equiv="refresh" content="60;">';
-			if($severity == 'ERROR') {
-				$ret .= '<style type="text/css">.main { background-color: yellow; }</style>';
-			}
-			$ret .= '<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">';
-			$ret .= '<tr><td align="center">';
-		}
-		$ret .= '<table class="messageBox" cellpadding="2" cellspacing="2">';
-		$ret .= '<tr><th width="40"><img src="'.$this->CORE->MAINCFG->getValue('paths','htmlimages').'internal/'.$messageIcon.'" align="left" />';
-		$ret .= '</th><th>'.$severity.'</th></tr>';
-		$ret .= '<tr><td colspan="2">'.$text.'</td></tr></table>';
-		if($severity == 'ERROR') {
-			$ret .= '</td></tr></table>';
-		}
-		
-		return $ret;
-	}
-	
-	/**
 	 * Adds one or more elements (lines) to the Body Array
 	 *
 	 * @param	String/Array	$lines	String or Array with HTML Code
 	 * @return 	Boolean	TRUE
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	public function addBodyLines($lines) {
 		if(is_array($lines)) {
 			$lines = implode("\n", $lines);	

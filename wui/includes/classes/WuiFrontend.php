@@ -64,8 +64,7 @@ class WuiFrontend extends GlobalPage {
 	function checkPHPMBString($printErr=1) {
 		if (!extension_loaded('mbstring')) {
 			if($printErr) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('phpModuleNotLoaded','MODULE~mbstring'));
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('phpModuleNotLoaded','MODULE~mbstring'));
 			}
 			return FALSE;
 		} else {
@@ -83,15 +82,6 @@ class WuiFrontend extends GlobalPage {
 		$this->MAP = new WuiMap($this->CORE, $this->MAPCFG);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
-	}
-	
-	/**
-	 * Adds the user messages to the page
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getMessages() {
-		$this->addBodyLines($this->getUserMessages());	
 	}
 }
 ?>

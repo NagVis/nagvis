@@ -280,8 +280,7 @@ class WuiMap extends GlobalMap {
 			}
 			
 			if(!file_exists($imgPath)) {
-				$FRONTEND = new GlobalPage($this->CORE);
-				$FRONTEND->messageToUser('WARNING', $this->CORE->LANG->getText('iconNotExists','IMGPATH~'.$imgPath));
+				new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('iconNotExists','IMGPATH~'.$imgPath));
 				
 				$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 				$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');

@@ -52,7 +52,6 @@ $MAPCFG->readMapConfig();
 $FRONTEND = new WuiFrontend($CORE, $MAPCFG);
 $FRONTEND->checkPreflight();
 $FRONTEND->getMap();
-$FRONTEND->getMessages();
 
 if($_GET['map'] != '') {
 	// Do preflight checks (before printing the map)
