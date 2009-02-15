@@ -194,12 +194,13 @@ function get_click_pos(e) {
 		
 		follow_mouse=false;
 		if(action_click=='add') {
-			link="./index.php?page=addmodify&action=add&map="+mapname+"&type="+objtype+"&coords="+coords;
+			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords;
 		} else if(action_click=='modify') {
-			link="./index.php?page=addmodify&action=modify&map="+mapname+"&type="+objtype+"&id="+objid+"&coords="+coords;
+			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
 		
-		open_window(link);
+		// "+get_label('properties')+"
+		popupWindow('TITLE', getSyncRequest(link, true, false));
 		cpt_clicks=-1;
 	}	
 }

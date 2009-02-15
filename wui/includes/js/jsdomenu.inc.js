@@ -47,10 +47,11 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('openInNagVis'), "menu_maps_open_nagvis", ""));
 		addMenuItem(new menuItem("-"));
 		addMenuItem(new menuItem(get_label('restore'), "menu_restore", "code:confirm_restore();","","",""));
-		addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:open_window('./index.php?page=addmodify&action=modify&map='+mapname+'&type=global&id=0','wui_addmodify');","","",""));
+		
+		addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:popupWindow('"+get_label('properties')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map='+mapname+'&type=global&id=0', true, false));","","",""));
 		addMenuItem(new menuItem(get_label('addObject'), "menu_addobject", "","","",""));
 		addMenuItem(new menuItem("-"));
-		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:open_window_management('./index.php?page=edit_config','wui_management');"));
+		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:popupWindow('"+get_label('nagVisConfig')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=editMainCfg', true, false));"));
 		addMenuItem(new menuItem(get_label('manage'), "menu_management", "","","",""));
 	}
 	
@@ -86,10 +87,10 @@ function createjsDOMenu() {
 	
 	submenu_management = new jsDOMenu(170);
 	with (submenu_management) {
-		addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:open_window_management('./index.php?page=map_management','wui_management');"));
-		addMenuItem(new menuItem(get_label('manageBackgrounds'), "menu_background_mgmt", "code:open_window_management('./index.php?page=background_management','wui_management');"));
-		addMenuItem(new menuItem(get_label('manageShapes'), "menu_shape_mgmt", "code:open_window_management('./index.php?page=shape_management','wui_management');"));
-		addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:open_window_management('./index.php?page=backend_management','wui_management');"));
+		addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:popupWindow('"+get_label('manageMaps')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageMaps', true, false));"));
+		addMenuItem(new menuItem(get_label('manageBackgrounds'), "menu_background_mgmt", "code:popupWindow('"+get_label('manageBackgrounds')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackgrounds', true, false));"));
+		addMenuItem(new menuItem(get_label('manageShapes'), "menu_shape_mgmt", "code:popupWindow('"+get_label('manageShapes')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageShapes', true, false));"));
+		addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:popupWindow('"+get_label('manageBackends')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackends', true, false));"));
 	}
 	mainMenu.items.menu_management.setSubMenu(submenu_management);
 	

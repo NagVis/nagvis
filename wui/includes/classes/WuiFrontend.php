@@ -42,6 +42,7 @@ class WuiFrontend extends GlobalPage {
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/wui.css','./includes/css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js',
 							'../nagvis/includes/js/frontendMessage.js',
+					  	'./includes/js/popupWindow.js',
 							'./includes/js/wui.js',
 					  	'./includes/js/ajax.js',
 						  './includes/js/jsdomenu.js',

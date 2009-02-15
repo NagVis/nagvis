@@ -60,11 +60,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getHiddenField($name,$value) {
-		$ret = Array();
-		
-		$ret[] = '<input type="hidden" name="'.$name.'" value="'.$value.'" />';
-		
-		return $ret;
+		return '<input type="hidden" name="'.$name.'" value="'.$value.'" />';
 	}
 	
 	/**
@@ -75,11 +71,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getTitleLine($title) {
-		$ret = Array();
-		
-		$ret[] = '<tr><th colspan="'.$this->cols.'">'.$title.'</th></tr>';
-		
-		return $ret;
+		return '<tr><th colspan="'.$this->cols.'">'.$title.'</th></tr>';
 	}
 	
 	/**
@@ -90,11 +82,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getCatLine($title) {
-		$ret = Array();
-		
-		$ret[] = '<tr><th class="cat" colspan="'.$this->cols.'">'.$title.'</th></tr>';
-		
-		return $ret;
+		return '<tr><th class="cat" colspan="'.$this->cols.'">'.$title.'</th></tr>';
 	}
 	
 	/**
@@ -107,17 +95,13 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getFileLine($label,$name,$value,$must=FALSE) {
-		$ret = Array();
-		
 		if($must != FALSE) {
 			$must = 'style="color:red;"';	
 		} else {
 			$must = '';
 		}
 		
-		$ret[] = '<tr><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield"><input type="file" name="'.$name.'" value="'.$value.'" /></td></tr>';
-		
-		return $ret;
+		return '<tr><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield"><input type="file" name="'.$name.'" value="'.$value.'" /></td></tr>';
 	}
 	
 	/**
@@ -131,7 +115,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getInputLine($label,$name,$value,$must=FALSE,$onBlur='',$rowStyle='',$rowClass='') {
-		$ret = Array();
+		$ret = '';
 		
 		if($must != FALSE) {
 			$must = 'style="color:red;"';	
@@ -151,9 +135,9 @@ class GlobalForm {
 			$class = '';
 		}
 		
-		$ret[] = '<tr'.$style.$class.'><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield">';
-		$ret = array_merge($ret,$this->getInputField($name,$value,$onBlur));
-		$ret[] = '</td></tr>';
+		$ret .= '<tr'.$style.$class.'><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield">';
+		$ret .= $this->getInputField($name,$value,$onBlur);
+		$ret .= '</td></tr>';
 		
 		return $ret;
 	}
@@ -171,7 +155,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='',$onBlur='', $rowStyle='',$rowClass='') {
-		$ret = Array();
+		$ret = '';
 		
 		if($must) {
 			$color = ' style="color:red;"';	
@@ -191,9 +175,9 @@ class GlobalForm {
 			$class = '';
 		}
 		
-		$ret[] = '<tr'.$style.$class.'><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
-		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange,$must,$onBlur));
-		$ret[] = '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
+		$ret .= '<tr'.$style.$class.'><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
+		$ret .= $this->getSelectField($name,$arr,$onChange,$must,$onBlur);
+		$ret .= '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
 		
 		return $ret;
 	}
@@ -206,11 +190,11 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getSubmitLine($label) {
-		$ret = Array();
+		$ret = '';
 		
-		$ret[] = '<tr><td class="tdlabel" colspan="'.$this->cols.'" align="center">';
-		$ret = array_merge($ret,$this->getSubmitField($label));
-		$ret[] = '</td></tr>';
+		$ret .= '<tr><td class="tdlabel" colspan="'.$this->cols.'" align="center">';
+		$ret .= $this->getSubmitField($label);
+		$ret .= '</td></tr>';
 		
 		return $ret;
 	}
@@ -222,10 +206,10 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function initForm() {
-		$ret = Array();
+		$ret = '';
 		
-		$ret[] = '<form name="'.$this->name.'" id="'.$this->id.'" method="'.$this->method.'" action="'.$this->action.'" enctype="'.$this->enctype.'" onsubmit="'.$this->onSubmit.'">';
-		$ret[] = '<table name="mytable" class="mytable" id="table_'.$this->id.'">';
+		$ret .= '<form name="'.$this->name.'" id="'.$this->id.'" method="'.$this->method.'" action="'.$this->action.'" enctype="'.$this->enctype.'" onsubmit="'.$this->onSubmit.'">';
+		$ret .= '<table name="mytable" class="mytable" id="table_'.$this->id.'">';
 		
 		return $ret;
 	}
@@ -237,8 +221,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function closeForm() {
-		$ret = Array('</table></form>');
-		return $ret;
+		return '</table></form>';
 	}
 	
 	/**
@@ -249,10 +232,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getSubmitField($label) {
-		$ret = Array();
-		$ret[] = '<input class="submit" type="submit" name="submit" id="commit" value="'.$label.'" />';
-		
-		return $ret;
+		return '<input class="submit" type="submit" name="submit" id="commit" value="'.$label.'" />';
 	}
 	
 	/**
@@ -266,21 +246,21 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getSelectField($name,$arr,$onChange='',$must=FALSE,$onBlur='') {
-		$ret = Array();
-		$ret[] = '<select id="'.$name.'" name="'.$name.'" onChange="'.$onChange.'" onBlur="'.$onBlur.'">';
+		$ret = '';
+		$ret .= '<select id="'.$name.'" name="'.$name.'" onChange="'.$onChange.'" onBlur="'.$onBlur.'">';
 		
 		if(!$must) {
-			$ret[] = '<option value=""></option>';
+			$ret .= '<option value=""></option>';
 		}
 		
 		foreach($arr AS &$val) {
 			if(is_array($val)) {
-				$ret[] = '<option value="'.$val['value'].'">'.$val['label'].'</option>';
+				$ret .= '<option value="'.$val['value'].'">'.$val['label'].'</option>';
 			} else {
-				$ret[] = '<option value="'.$val.'">'.$val.'</option>';
+				$ret .= '<option value="'.$val.'">'.$val.'</option>';
 			}
 		}
-		$ret[] = '</select>';
+		$ret .= '</select>';
 		
 		return $ret;
 	}
@@ -294,13 +274,13 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getInputField($name,$value,$onBlur='') {
-		$ret = Array();
+		$ret = '';
 		
 		if(is_array($value)) {
 			$value = implode(',',$value);
 		}
 		
-		$ret[] = '<input id="'.$name.'" type="text" name="'.$name.'" value="'.$value.'" onBlur="'.$onBlur.'" />';
+		$ret .= '<input id="'.$name.'" type="text" name="'.$name.'" value="'.$value.'" onBlur="'.$onBlur.'" />';
 		
 		return $ret;
 	}

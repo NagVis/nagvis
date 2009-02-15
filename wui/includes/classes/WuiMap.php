@@ -558,10 +558,12 @@ class WuiMap extends GlobalMap {
 			$positionSizeText = '';	
 		}
 		
-		$tooltipText .= "<tr><th><a href=\'./index.php?page=addmodify&amp;action=modify&amp;map=".$this->MAPCFG->getName()."&amp;type=".$obj['type']."&amp;id=".$obj['id']."\' onclick=\'open_window(href); return false;\'>".$this->LANG->getText('change')."</a>&nbsp;".$positionSizeText."</th>";
+		$tooltipText .= "<tr><th><a href=javascript:popupWindow(\'".$this->LANG->getText('change')."\',"
+			."getSyncRequest(\'./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\',true,false));>"
+			.$this->LANG->getText('change')."</a>&nbsp;".$positionSizeText."</th>";
 		$tooltipText .= "<th><a href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\' onClick=\'return deleteMapObject(this);return false;\'>".$this->LANG->getText('delete')."</a></th></tr>";
 		
-		$tooltipText.='</table>';
+		$tooltipText .= '</table>';
 		
 		$info = "onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".$this->LANG->getText($obj['type'])."</b>';return escape('".$tooltipText."');\"";
 		
@@ -576,6 +578,7 @@ class WuiMap extends GlobalMap {
 	 */
 	function getJsLang() {
 		$ret = '';
+		
 		$ret .= 'var langMenu = Array();';
 		$ret .= 'langMenu[\'overview\'] = \''.$this->LANG->getText('overview').'\';';
 		$ret .= 'langMenu[\'restore\'] = \''.$this->LANG->getText('restore').'\';';
@@ -600,6 +603,7 @@ class WuiMap extends GlobalMap {
 		$ret .= 'langMenu[\'textbox\'] = \''.$this->LANG->getText('textbox').'\';';
 		$ret .= 'langMenu[\'shape\'] = \''.$this->LANG->getText('shape').'\';';
 		$ret .= 'langMenu[\'manage\'] = \''.$this->LANG->getText('manage').'\';';
+		
 		$ret .= 'var lang = Array();';
 		$ret .= 'lang[\'clickMapToSetPoints\'] = \''.$this->LANG->getText('clickMapToSetPoints').'\';';
 		$ret .= 'lang[\'confirmDelete\'] = \''.$this->LANG->getText('confirmDelete').'\';';
@@ -607,7 +611,45 @@ class WuiMap extends GlobalMap {
 		$ret .= 'lang[\'wrongValueFormat\'] = \''.$this->LANG->getText('wrongValueFormat').'\';';
 		$ret .= 'lang[\'wrongValueFormatMap\'] = \''.$this->LANG->getText('wrongValueFormatMap').'\';';
 		$ret .= 'lang[\'wrongValueFormatOption\'] = \''.$this->LANG->getText('wrongValueFormatOption').'\';';
-		
+		$ret .= 'lang[\'unableToWorkWithMap\'] = \''.$this->LANG->getText('unableToWorkWithMap').'\';';
+		$ret .= 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getText('mustValueNotSet').'\';';
+		$ret .= 'lang[\'chosenLineTypeNotValid\'] = \''.$this->LANG->getText('chosenLineTypeNotValid').'\';';
+		$ret .= 'lang[\'onlyLineOrIcon\'] = \''.$this->LANG->getText('onlyLineOrIcon').'\';';
+		$ret .= 'lang[\'not2coordsX\'] = \''.$this->LANG->getText('not2coords','COORD~X').'\';';
+		$ret .= 'lang[\'not2coordsY\'] = \''.$this->LANG->getText('not2coords','COORD~Y').'\';';
+		$ret .= 'lang[\'only1or2coordsX\'] = \''.$this->LANG->getText('only1or2coords','COORD~X').'\';';
+		$ret .= 'lang[\'only1or2coordsY\'] = \''.$this->LANG->getText('only1or2coords','COORD~Y').'\';';
+		$ret .= 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~X').'\';';
+		$ret .= 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~Y').'\';';
+		$ret .= 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getText('loopInMapRecursion').'\';';
+		$ret .= 'lang[\'mapObjectWillShowSummaryState\'] = \''.$this->LANG->getText('mapObjectWillShowSummaryState').'\';';
+		$ret .= 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getText('firstMustChoosePngImage').'\';';
+		$ret .= 'lang[\'mustChooseValidImageFormat\'] = \''.$this->LANG->getText('mustChooseValidImageFormat').'\';';
+		$ret .= 'lang[\'foundNoBackgroundToDelete\'] = \''.$this->LANG->getText('foundNoBackgroundToDelete').'\';';
+		$ret .= 'lang[\'confirmBackgroundDeletion\'] = \''.$this->LANG->getText('confirmBackgroundDeletion').'\';';
+		$ret .= 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getText('unableToDeleteBackground').'\';';
+		$ret .= 'lang[\'mustValueNotSet1\'] = \''.$this->LANG->getText('mustValueNotSet1').'\';';
+		$ret .= 'lang[\'foundNoShapeToDelete\'] = \''.$this->LANG->getText('foundNoShapeToDelete').'\';';
+		$ret .= 'lang[\'shapeInUse\'] = \''.$this->LANG->getText('shapeInUse').'\';';
+		$ret .= 'lang[\'confirmShapeDeletion\'] = \''.$this->LANG->getText('confirmShapeDeletion').'\';';
+		$ret .= 'lang[\'unableToDeleteShape\'] = \''.$this->LANG->getText('unableToDeleteShape').'\';';
+		$ret .= 'lang[\'chooseMapName\'] = \''.$this->LANG->getText('chooseMapName').'\';';
+		$ret .= 'lang[\'minOneUserAccess\'] = \''.$this->LANG->getText('minOneUserAccess').'\';';
+		$ret .= 'lang[\'mustChooseBackgroundImage\'] = \''.$this->LANG->getText('mustChooseBackgroundImage').'\';';
+		$ret .= 'lang[\'noMapToRename\'] = \''.$this->LANG->getText('noMapToRename').'\';';
+		$ret .= 'lang[\'noNewNameGiven\'] = \''.$this->LANG->getText('noNewNameGiven').'\';';
+		$ret .= 'lang[\'mapAlreadyExists\'] = \''.$this->LANG->getText('mapAlreadyExists').'\';';
+		$ret .= 'lang[\'foundNoMapToDelete\'] = \''.$this->LANG->getText('foundNoMapToDelete').'\';';
+		$ret .= 'lang[\'foundNoMapToExport\'] = \''.$this->LANG->getText('foundNoMapToExport').'\';';
+		$ret .= 'lang[\'foundNoMapToImport\'] = \''.$this->LANG->getText('foundNoMapToImport').'\';';
+		$ret .= 'lang[\'notCfgFile\'] = \''.$this->LANG->getText('notCfgFile').'\';';
+		$ret .= 'lang[\'confirmNewMap\'] = \''.$this->LANG->getText('confirmNewMap').'\';';
+		$ret .= 'lang[\'confirmMapRename\'] = \''.$this->LANG->getText('confirmMapRename').'\';';
+		$ret .= 'lang[\'confirmMapDeletion\'] = \''.$this->LANG->getText('confirmMapDeletion').'\';';
+		$ret .= 'lang[\'unableToDeleteMap\'] = \''.$this->LANG->getText('unableToDeleteMap').'\';';
+		$ret .= 'lang[\'noPermissions\'] = \''.$this->LANG->getText('noPermissions').'\';';
+		$ret .= 'lang[\'minOneUserWriteAccess\'] = \''.$this->LANG->getText('minOneUserWriteAccess').'\';';
+		$ret .= 'lang[\'noSpaceAllowed\'] = \''.$this->LANG->getText('noSpaceAllowed').'\';';
 		
 		return $ret;	
 	}

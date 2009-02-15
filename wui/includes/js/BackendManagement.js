@@ -25,7 +25,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
  
-function printBackendOptions(aObjects,oOpt) {
+function printBackendOptions(aObjects, oOpt) {
 	var myForm = oOpt.form;
 	var form = document.getElementById(myForm);
 	var tbl = document.getElementById('table_'+myForm);
@@ -48,10 +48,6 @@ function printBackendOptions(aObjects,oOpt) {
 		tbl.deleteRow(toDelete[i]);
 	}
 	
-	if(toDelete.length > 0) {
-		window.resizeBy(0,(toDelete.length*-32)+7);	
-	}
-	
 	var lastRow = tbl.rows.length-1;
 	
 	// Add spacer row
@@ -62,7 +58,6 @@ function printBackendOptions(aObjects,oOpt) {
 	label.innerHTML = "&nbsp;";
 	var input = row.insertCell(1);
 	input.innerHTML = "&nbsp;";
-	window.resizeBy(0,25);
 	
 	lastRow++;
 	for(i=0;i < aObjects.length;i++) {
@@ -88,7 +83,6 @@ function printBackendOptions(aObjects,oOpt) {
 		}
 		
 		input.innerHTML = "<input name='"+aObjects[i].key+"' id='"+aObjects[i].key+"' value='"+sValue+"' />";
-		window.resizeBy(0,32);
 		
 		lastRow++;
 	}
@@ -110,7 +104,7 @@ function check_backend_add() {
 		// backend_id und backendtype are handled before this loop
 		if(form.elements[i].name != 'backend_id' && form.elements[i].name != 'backendtype') {
 			// if this value is a "must" and emtpy, error
-			if(backendOptions[form.backendtype.value][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
+			if(validMainConfig[form.backendtype.value][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
 				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+form.elements[i].name));
 				return false;
 			}
@@ -132,7 +126,7 @@ function check_backend_edit() {
 		// backend_id und backendtype are handled before this loop
 		if(form.elements[i].name != 'backend_id' && form.elements[i].name != 'backendtype') {
 			// if this value is a "must" and emtpy, error
-			if(backendOptions[definedBackends[form.backend_id.value]['backendtype']][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
+			if(validMainConfig[definedBackends[form.backend_id.value]['backendtype']][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
 				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+form.elements[i].name));
 				return false;
 			}

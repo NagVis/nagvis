@@ -91,10 +91,6 @@ function check_create_map() {
 		}
 	}
 	
-	if (confirm(printLang(lang['confirmNewMap'],'')) === false) {
-		return false;
-	}
-	
 	return true;
 }
 
@@ -121,7 +117,7 @@ function check_map_rename() {
 		}
 	}
 	
-	if(!checkUserAllowed(getMapPermissions(document.map_rename.map_name.value,window.opener.mapOptions,"allowedForConfig"), window.opener.username)) {
+	if(!checkUserAllowed(getMapPermissions(document.map_rename.map_name.value, mapOptions,"allowedForConfig"), username)) {
 		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
@@ -140,7 +136,7 @@ function check_map_export() {
 	}
 	
 	// read and write users are allowed to export the map
-	if(!checkUserAllowed(getMapPermissions(document.map_export.map_name.value,window.opener.mapOptions,"allowedUsersOrAllowedForConfig"), window.opener.username)) {
+	if(!checkUserAllowed(getMapPermissions(document.map_export.map_name.value, mapOptions,"allowedUsersOrAllowedForConfig"), username)) {
 		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
@@ -162,7 +158,7 @@ function check_map_import() {
 	}
 	
 	// check if a map with this name already exists
-	if(checkMapExists(getMapNameByPath(document.map_import.map_file.value), window.opener.mapOptions)) {
+	if(checkMapExists(getMapNameByPath(document.map_import.map_file.value), mapOptions)) {
 		alert(printLang(lang['mapAlreadyExists'],'MAPNAME~'+getMapNameByPath(document.map_import.map_file.value)));
 		return false;
 	}
@@ -176,12 +172,12 @@ function check_map_delete() {
 		return false;
 	}
 	
-	if(!checkUserAllowed(getMapPermissions(document.map_delete.map_name.value,window.opener.mapOptions,"allowedForConfig"), window.opener.username)) {
+	if(!checkUserAllowed(getMapPermissions(document.map_delete.map_name.value,mapOptions,"allowedForConfig"), username)) {
 		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
 	
-	var mapWithLink = checkMapLinked(document.map_delete.map_name.value, window.opener.mapOptions)
+	var mapWithLink = checkMapLinked(document.map_delete.map_name.value, mapOptions)
 	if(mapWithLink != "") {
 		alert(printLang(lang['unableToDeleteMap'],'PARENTMAP~'+mapWithLink+',MAP~'+document.map_delete.map_name.value));
 		return false;

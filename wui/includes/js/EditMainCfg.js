@@ -26,9 +26,10 @@
  */
 
 function validateForm() {
+	// FIXME: Better validating?
 	
-	// Everything seems OK. Run update_param to get ready to submit the form
-	return update_param();
+	// Everything seems OK
+	return true;
 }
 
 /**
@@ -41,19 +42,5 @@ function validateForm() {
  */
 function validateMainConfigFieldValue(oField) {
 	var sName = oField.name.split('_');
-	return validateValue(sName, oField.value, window.opener.validMainConfig[sName[1]][sName[2]].match)
-}
-
-// function that builds up the list of parameters/values. There are 2 kinds of parameters values :
-//	- the \"normal value\". example : \$param=\"value\";
-//	- the other one (value computed with other ones) . example : \$param=\"part1\".\$otherparam;
-function update_param() {
-	document.edit_config.properties.value='';
-	for(i=0;i<document.edit_config.elements.length;i++) {
-		if(document.edit_config.elements[i].name.substring(0,5)=='conf_') {
-			document.edit_config.properties.value=document.edit_config.properties.value+'^'+document.edit_config.elements[i].name.substring(5,document.edit_config.elements[i].name.length)+'='+document.edit_config.elements[i].value;
-		}
-	}
-	document.edit_config.properties.value=document.edit_config.properties.value.substring(1,document.edit_config.properties.value.length);
-	return true;
+	return validateValue(sName, oField.value, validMainConfig[sName[1]][sName[2]].match)
 }

@@ -41,78 +41,28 @@ define('CONST_AJAX' , FALSE);
 // Load the core
 $CORE = new WuiCore();
 
-// If not set, initialize $_GET['page']
-if(!isset($_GET['page'])) {
-	$_GET['page'] = '';	
+// Set empty map if none is set
+if(!isset($_GET['map'])) {
+	$_GET['map'] = '';	
 }
 
-// Display the wanted page, if nothing is set, display the map
-switch($_GET['page']) {
-	case 'edit_config':
-		$FRONTEND = new WuiEditMainCfg($CORE);
-		$FRONTEND->getForm();
-		$FRONTEND->printPage();
-	break;
-	case 'shape_management':
-		$FRONTEND = new WuiShapeManagement($CORE);
-		$FRONTEND->getForm();
-	break;
-	case 'background_management':
-		$FRONTEND = new WuiBackgroundManagement($CORE);
-		$FRONTEND->getForm();
-	break;
-	case 'map_management':
-		$FRONTEND = new WuiMapManagement($CORE);
-		$FRONTEND->getForm();
-	break;
-	case 'backend_management':
-		$FRONTEND = new WuiBackendManagement($CORE);
-		$FRONTEND->getForm();
-	break;
-	case 'addmodify':
-		$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
-		$MAPCFG->readMapConfig();
-		
-		if(!isset($_GET['coords'])) {
-			$_GET['coords'] = '';
-		}
-		if(!isset($_GET['id'])) {
-			$_GET['id'] = '';
-		}
-		
-		$FRONTEND = new WuiAddModify($CORE, $MAPCFG, Array('action' => $_GET['action'],
-															'type' => $_GET['type'],
-															'id' => $_GET['id'],
-															'coords' => $_GET['coords']));
-		$FRONTEND->getForm();
-	break;
-	default:
-		// Default is the wui map
-		
-		// Set empty map if none is set
-		if(!isset($_GET['map'])) {
-			$_GET['map'] = '';	
-		}
-		
-		$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
-		$MAPCFG->readMapConfig();
-		
-		$FRONTEND = new WuiFrontend($CORE, $MAPCFG);
-		$FRONTEND->checkPreflight();
-		$FRONTEND->getMap();
-		$FRONTEND->getMessages();
-		
-		if($_GET['map'] != '') {
-			// Do preflight checks (before printing the map)
-			if(!$MAPCFG->checkMapConfigWriteable(1)) {
-				exit;
-			}
-			if(!$MAPCFG->checkMapLocked(1)) {
-				// Lock the map for the defined time
-				$MAPCFG->writeMapLock();
-			}
-		}
-	break;
+$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
+$MAPCFG->readMapConfig();
+
+$FRONTEND = new WuiFrontend($CORE, $MAPCFG);
+$FRONTEND->checkPreflight();
+$FRONTEND->getMap();
+$FRONTEND->getMessages();
+
+if($_GET['map'] != '') {
+	// Do preflight checks (before printing the map)
+	if(!$MAPCFG->checkMapConfigWriteable(1)) {
+		exit;
+	}
+	if(!$MAPCFG->checkMapLocked(1)) {
+		// Lock the map for the defined time
+		$MAPCFG->writeMapLock();
+	}
 }
 
 // print the HTML page

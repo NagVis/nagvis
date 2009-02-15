@@ -315,7 +315,7 @@ class GlobalPage {
 	 * @return 	String	HTML Code
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function getJsIncludes() {
+	protected function getJsIncludes() {
 		$sRet = '';
 		
 		if(count($this->jsIncludes) > 0) {

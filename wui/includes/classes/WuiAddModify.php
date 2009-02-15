@@ -50,10 +50,7 @@ class WuiAddModify extends GlobalPage {
 		$this->prop = $prop;
 		
 		$prop = Array('title' => $CORE->MAINCFG->getValue('internal', 'title'),
-					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/addmodify.js',
-					  					  './includes/js/ajax.js',
-					  					  './includes/js/wui.js'),
+					  'jsIncludes'=>Array('./includes/js/addmodify.js'),
 					  'extHeader'=> '',
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'nagvis');
@@ -66,8 +63,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getForm() {
-		// Inititalize language for JS, Write JS Array for config validation
-		$this->addBodyLines($this->parseJs($this->getJsLang()));
+		$code = '';
 		
 		$this->FORM = new GlobalForm(Array('name'=>'addmodify',
 			'id'=>'addmodify',
@@ -75,12 +71,15 @@ class WuiAddModify extends GlobalPage {
 			'action'=>'./form_handler.php?myaction='.$this->prop['action'],
 			'onSubmit'=>'return check_object();',
 			'cols'=>'2'));
-		$this->addBodyLines($this->FORM->initForm());
-		$this->addBodyLines($this->getFields());
-		$this->addBodyLines($this->parseJs($this->fillFields()));
-		$this->addBodyLines($this->FORM->getSubmitLine($this->LANG->getText('save')));
-		$this->addBodyLines($this->FORM->closeForm());
-		$this->addBodyLines($this->parseJs($this->resizeWindow(410,720)));
+		
+		$code .= $this->getJsIncludes();
+		$code .= $this->FORM->initForm();
+		$code .= $this->getFields();
+		$code .= $this->parseJs($this->fillFields());
+		$code .= $this->FORM->getSubmitLine($this->LANG->getText('save'));
+		$code .= $this->FORM->closeForm();
+		
+		return $code;
 	}
 	
 	/**
@@ -90,7 +89,7 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function fillFields() {
-		$ret = Array();
+		$ret = '';
 		
 		switch($this->prop['action']) {
 			case 'modify':
@@ -99,12 +98,12 @@ class WuiAddModify extends GlobalPage {
 					$val_coords = explode(',',$this->prop['coords']);
 					if ($this->prop['type'] == 'textbox') {
 						$objwidth = $val_coords[2] - $val_coords[0];
-						$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
-						$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
-						$ret[] = 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
+						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
+						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
+						$ret .= 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
 					} else {
-						$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
-						$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
+						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
+						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
 					}
 				}
 			break;
@@ -113,18 +112,18 @@ class WuiAddModify extends GlobalPage {
 				if($this->prop['coords'] != '') {
 					$val_coords = explode(',',$this->prop['coords']);
 					if(count($val_coords) == 2) {			
-						$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
-						$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
+						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
+						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
 					} elseif(count($val_coords) == 4) {
 						if ($this->prop['type'] == 'textbox') {
 							$objwidth = $val_coords[2] - $val_coords[0];
 							
-							$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
-							$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
-							$ret[] = 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
+							$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
+							$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
+							$ret .= 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
 						} else {
-							$ret[] = 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
-							$ret[] = 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
+							$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
+							$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
 						}		
 					}
 				}
@@ -141,11 +140,11 @@ class WuiAddModify extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getFields() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->FORM->getHiddenField('type',$this->prop['type']));
-		$ret = array_merge($ret,$this->FORM->getHiddenField('id',$this->prop['id']));
-		$ret = array_merge($ret,$this->FORM->getHiddenField('map',$this->MAPCFG->getName()));
-		$ret = array_merge($ret,$this->FORM->getHiddenField('properties',''));
+		$ret = '';
+		$ret .= $this->FORM->getHiddenField('type',$this->prop['type']);
+		$ret .= $this->FORM->getHiddenField('id',$this->prop['id']);
+		$ret .= $this->FORM->getHiddenField('map',$this->MAPCFG->getName());
+		$ret .= $this->FORM->getHiddenField('properties','');
 		
 		// loop all valid properties for that object type
 		foreach($this->MAPCFG->getValidObjectType($this->prop['type']) as $propname => $prop) {
@@ -200,6 +199,16 @@ class WuiAddModify extends GlobalPage {
 							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
 						break;
 						
+						case 'hover_childs_order':
+							$options = Array(Array('label' => $this->LANG->getText('Ascending'), 'value'=>'asc'), Array('label' => $this->LANG->getText('Descending'), 'value' => 'desc'));
+							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
+						break;
+						
+						case 'hover_childs_sort':
+							$options = Array(Array('label' => $this->LANG->getText('Alphabetically'), 'value'=>'a'), Array('label' => $this->LANG->getText('State'), 'value' => 's'));
+							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
+						break;
+						
 						case 'header_template':
 							$options = $this->CORE->getAvailableHeaderTemplates();
 							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
@@ -221,7 +230,7 @@ class WuiAddModify extends GlobalPage {
 							
 							if(preg_match("/^\[(.*)\]$/",$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$match) > 0) {
 								$fieldType = 'textbox';
-								$ret = array_merge($ret,$this->FORM->getInputLine($propname,$propname,$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)'));
+								$ret .= $this->FORM->getInputLine($propname,$propname,$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)');
 							}
 						break;
 						
@@ -255,9 +264,9 @@ class WuiAddModify extends GlobalPage {
 						case 'servicegroup_name':
 							$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
 							
-							$ret[] = "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
+							$ret .= "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
 							if(in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->prop['type']))) {
-								$ret[] = "<script>getServices('".$backendId."', '".$this->prop['type']."', '".$this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
+								$ret .= "<script>getServices('".$backendId."', '".$this->prop['type']."', '".$this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
 							}
 							
 							if($propname == 'host_name') {
@@ -274,14 +283,14 @@ class WuiAddModify extends GlobalPage {
 					
 					// Print this when it is still a dropdown
 					if($fieldType == 'dropdown') {
-						$ret = array_merge($ret, $this->FORM->getSelectLine($propname, $propname, $options, $selected, $prop['must'], $onChange, '', $style, $class));
+						$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $selected, $prop['must'], $onChange, '', $style, $class);
 					}
 				break;
 				
 				case 'boolean':
 					// display a listbox with "yes/no" for boolean options 
 					$options = Array(Array('label' => $this->LANG->getText('yes'), 'value'=>'1'), Array('label' => $this->LANG->getText('no'), 'value'=>'0'));
-					$ret = array_merge($ret, $this->FORM->getSelectLine($propname, $propname, $options, $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE), $prop['must'], 'validateMapConfigFieldValue(this)', '', $style, $class));
+					$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE), $prop['must'], 'validateMapConfigFieldValue(this)', '', $style, $class);
 				break;
 				
 				case 'hidden':
@@ -296,36 +305,10 @@ class WuiAddModify extends GlobalPage {
 						$value = implode(',',$value);
 					}
 					
-					$ret = array_merge($ret,$this->FORM->getInputLine($propname, $propname, $value, $prop['must'], 'validateMapConfigFieldValue(this)', $style, $class));
+					$ret .= $this->FORM->getInputLine($propname, $propname, $value, $prop['must'], 'validateMapConfigFieldValue(this)', $style, $class);
 				break;
 			}
 		}
-		
-		return $ret;
-	}
-	
-	/**
-	 * Gets all needed error messages for WUI
-	 *
-	 * @return	Array JS
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getJsLang() {
-		$ret = Array();
-		$ret[] = 'var lang = Array();';
-		$ret[] = 'var user = \''.$this->MAINCFG->getRuntimeValue('user').'\';';
-		$ret[] = 'lang[\'unableToWorkWithMap\'] = \''.$this->LANG->getText('unableToWorkWithMap').'\';';
-		$ret[] = 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getText('mustValueNotSet').'\';';
-		$ret[] = 'lang[\'chosenLineTypeNotValid\'] = \''.$this->LANG->getText('chosenLineTypeNotValid').'\';';
-		$ret[] = 'lang[\'onlyLineOrIcon\'] = \''.$this->LANG->getText('onlyLineOrIcon').'\'';
-		$ret[] = 'lang[\'not2coordsX\'] = \''.$this->LANG->getText('not2coords','COORD~X').'\';';
-		$ret[] = 'lang[\'not2coordsY\'] = \''.$this->LANG->getText('not2coords','COORD~Y').'\';';
-		$ret[] = 'lang[\'only1or2coordsX\'] = \''.$this->LANG->getText('only1or2coords','COORD~X').'\';';
-		$ret[] = 'lang[\'only1or2coordsY\'] = \''.$this->LANG->getText('only1or2coords','COORD~Y').'\';';
-		$ret[] = 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~X').'\';';
-		$ret[] = 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~Y').'\';';
-		$ret[] = 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getText('loopInMapRecursion').'\';';
-		$ret[] = 'lang[\'mapObjectWillShowSummaryState\'] = \''.$this->LANG->getText('mapObjectWillShowSummaryState').'\';';
 		
 		return $ret;
 	}

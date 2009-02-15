@@ -311,6 +311,50 @@ switch($_GET['action']) {
 			echo json_encode(Array('status' => $status, 'message' => $message));
 		}
 	break;
+	/* Returns the formular contents for the WUI popup windows
+	 */
+	case 'getFormContents':
+		switch($_GET['form']) {
+			case 'addmodify':
+				$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
+				$MAPCFG->readMapConfig();
+				
+				if(!isset($_GET['coords'])) {
+					$_GET['coords'] = '';
+				}
+				if(!isset($_GET['id'])) {
+					$_GET['id'] = '';
+				}
+				
+				$FRONTEND = new WuiAddModify($CORE, $MAPCFG, Array('action' => $_GET['do'],
+																	'type' => $_GET['type'],
+																	'id' => $_GET['id'],
+																	'coords' => $_GET['coords']));
+			break;
+			case 'editMainCfg':
+				$FRONTEND = new WuiEditMainCfg($CORE);
+				$FRONTEND->getForm();
+			break;
+			case 'manageBackends':
+				$FRONTEND = new WuiBackendManagement($CORE);
+				$FRONTEND->getForm();
+			break;
+			case 'manageBackgrounds':
+				$FRONTEND = new WuiBackgroundManagement($CORE);
+				$FRONTEND->getForm();
+			break;
+			case 'manageShapes':
+				$FRONTEND = new WuiShapeManagement($CORE);
+				$FRONTEND->getForm();
+			break;
+			case 'manageMaps':
+				$FRONTEND = new WuiMapManagement($CORE);
+				$FRONTEND->getForm();
+			break;
+		}
+		
+		echo json_encode(Array('code' => $FRONTEND->getForm()));
+	break;
 	/*
 	 * Fallback
 	 */

@@ -86,9 +86,6 @@ function check_object() {
 	x='';
 	y='';
 	
-	// Reset options
-	document.addmodify.properties.value='';
-	
 	for(i=0;i<document.addmodify.elements.length;i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
 		
@@ -109,11 +106,10 @@ function check_object() {
 				users_tab=document.addmodify.elements[i].value.split(',');
 				suicide=true;
 				for(k=0;k<users_tab.length;k++) {
-					if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==user) ) { suicide=false; }
+					if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==username) ) { suicide=false; }
 				}
 				if(suicide) {
 					alert(printLang(lang['unableToWorkWithMap'],''));
-					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
 					return false;
 				}
@@ -125,30 +121,19 @@ function check_object() {
 					alert(printLang(lang['mapObjectWillShowSummaryState'],''));
 				}
 				
-				if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
-					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name.substring(0,document.addmodify.elements[i].name.length)+'='+document.addmodify.elements[i].value;
-				} else {
-					if(document.addmodify.elements[i].name=='line_type') {
-						line_type="1"+document.addmodify.elements[i].value;
-						document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+line_type;
-					} else {
-						document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+document.addmodify.elements[i].value;
-					}
+				if(document.addmodify.elements[i].name=='line_type') {
+					document.addmodify.elements[i].value = "1"+document.addmodify.elements[i].value;
 				}
 			} else {
-				if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
+				if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
 					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+document.addmodify.elements[i].name+',TYPE~'+document.addmodify.type.value+',MAPNAME~'+document.addmodify.map.value));
-					document.addmodify.properties.value='';
 					document.addmodify.elements[i].focus();
 					
 					return false;
-				} else {
-					document.addmodify.properties.value=document.addmodify.properties.value+'^'+document.addmodify.elements[i].name+'='+document.addmodify.elements[i].value;
 				}
 			}
 		}
 	}
-	document.addmodify.properties.value=document.addmodify.properties.value.substring(1,document.addmodify.properties.value.length);
 	
 	// we make some post tests (concerning the line_type and iconset values)
 	if(line_type != '') {
@@ -157,27 +142,23 @@ function check_object() {
 		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
 		if(j==valid_list.length) {
 			alert(printLang(lang['chosenLineTypeNotValid'],''));
-			document.addmodify.properties.value='';
 			return false;
 		}
 		
 		// we verify we don't have both iconset and line_type defined
 		if(iconset != '') {
 			alert(printLang(lang['onlyLineOrIcon'],''));
-			document.addmodify.properties.value='';
 			return false;
 		}
 		
 		// we verify we have 2 x coordinates and 2 y coordinates
 		if(x.split(",").length != 2) {
 			alert(printLang(lang['not2coordsX'],'COORD~X'));
-			document.addmodify.properties.value='';
 			return false;
 		}
 		
 		if(y.split(",").length != 2) {
 			alert(printLang(lang['not2coordsY'],'COORD~Y'));
-			document.addmodify.properties.value='';
 			return false;
 		}
 	}
@@ -185,12 +166,10 @@ function check_object() {
 	if(x.split(",").length > 1) {
 		if(x.split(",").length != 2) {
 			alert(printLang(lang["only1or2coordsX"],'COORD~X'));
-			document.addmodify.properties.value='';
 			return false;
 		} else {
 			if(line_type == '') {
 				alert(printLang(lang["lineTypeNotSelectedX"],'COORD~X'));
-				document.addmodify.properties.value='';
 				return false;
 			}
 		}
@@ -200,12 +179,10 @@ function check_object() {
 		if(y.split(",").length != 2) {
 			alert(printLang(lang["only1or2coordsY"],'COORD~Y'));
 			alert(mess);
-			document.addmodify.properties.value='';
 			return false;
 		} else {
 			if(line_type == '') {
 				alert(printLang(lang["lineTypeNotSelectedY"],'COORD~Y'));
-				document.addmodify.properties.value='';
 				return false;
 			}
 		}
@@ -223,12 +200,12 @@ function check_object() {
 function toggleDependingFields(name, value) {
 	for(var i=0, len=document.addmodify.elements.length;i<len;i++) {
 		if(document.addmodify.elements[i].type != 'hidden' && document.addmodify.elements[i].type != 'submit') {
-			if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
-				 && window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] !== value) {
+			if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
+				 && validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] !== value) {
 				
 				document.getElementById(document.addmodify.elements[i].name).parentNode.parentNode.style.display = 'none';
-			} else if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
-				 && window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] === value) {
+			} else if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
+				 && validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] === value) {
 				document.getElementById(document.addmodify.elements[i].name).parentNode.parentNode.style.display = '';
 			}
 		}
@@ -248,5 +225,5 @@ function validateMapConfigFieldValue(oField) {
 	// event handler function to toggle these fields
 	toggleDependingFields(oField.name, oField.value);
 	
-	return validateValue(oField.name, oField.value, window.opener.validMapConfig[document.addmodify.type.value][oField.name].match)
+	return validateValue(oField.name, oField.value, validMapConfig[document.addmodify.type.value][oField.name].match)
 }

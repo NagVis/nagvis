@@ -72,15 +72,6 @@ table {
 	cursor: default;
 }
 
-/*.tdtitle, .tdcat {
-	font-size: 16px;
-	font-weight: bold;
-	color: #314455;
-	
-	text-align: left;
-	height: 30px;
-}*/
-
 /* WUI tables/form */
 
 table.mytable {
@@ -159,4 +150,41 @@ table.infobox th {
 /* display inherited settings in gray font */
 table.infobox tr.inherited th, table.infobox tr.inherited td {
 	color: #a4a4a4;
+}
+
+/* popupWindow css */
+
+div#popupWindow {
+	z-index: 2000;
+}
+
+#popupWindow table {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border-collapse:collapse;
+}
+
+#popupWindow table tr th, 
+#popupWindow table tr td {
+	background-color: #eee;
+	border: 1px #a4a4a4 solid;
+	
+	font-size: 10px;
+	color: #314455;
+}
+
+#popupWindow table tr th#dragbar {
+	text-align: left;
+	padding-left: 5px;
+	cursor: pointer;
+}
+
+#popupWindow table tbody tr th.control {
+	padding: 0;
+	width: 15px;
+	text-align: center;
+	color: #314455;
+	font-weight: bold;
+	text-decoration: none
 }

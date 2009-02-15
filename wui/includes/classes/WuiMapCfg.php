@@ -249,7 +249,7 @@ class WuiMapCfg extends GlobalMapCfg {
 			
 			// reached end of file - couldn't find that element, create a new one...
 			if($done == FALSE) {
-				if($file[count($file)-1] != "\n") {
+				if(count($file) > 0 && $file[count($file)-1] != "\n") {
 					$file[] = "\n";
 				}
 				$file[] = 'define '.$type." {\n";

@@ -34,6 +34,22 @@ function checkPng(imageName) {
 	}
 }
 
+function checkJpg(imageName) {
+	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'jpg') {
+		return false; 
+	} else {
+		return true;
+	}
+}
+
+function checkGif(imageName) {
+	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'gif') {
+		return false; 
+	} else {
+		return true;
+	}
+}
+
 var usedInMap = "";
 function checkShapeInUse(shapeName,mapOptions) {
 	for(var i=0;i<mapOptions.length;i++) {
@@ -55,7 +71,7 @@ function check_image_add() {
 		return false;
 	}
 	
-	if(!checkPng(document.shape_add.shape_image.value)) {
+	if(!checkPng(document.shape_add.shape_image.value) && !checkJpg(document.shape_add.shape_image.value) && !checkGif(document.shape_add.shape_image.value)) {
 		alert(printLang(lang['mustChooseValidImageFormat'],''));
 		
 		return false;
@@ -68,7 +84,7 @@ function check_image_delete() {
         return false;
     }
 
-		if(checkShapeInUse(document.shape_delete.shape_image.value, window.opener.mapOptions)) {
+		if(checkShapeInUse(document.shape_delete.shape_image.value, mapOptions)) {
 			alert(printLang(lang['shapeInUse'],'MAP~'+usedInMap));
 			return false;
 		}

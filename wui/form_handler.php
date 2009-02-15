@@ -53,14 +53,20 @@ switch($_GET['myaction']) {
 			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
 		} elseif(!isset($_POST['type']) || $_POST['type'] == '') {
 			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
-		} elseif(!isset($_POST['properties']) || $_POST['properties'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~properties');
 		} else {
 			$MAPCFG = new WuiMapCfg($CORE, $_POST['map']);
 			$MAPCFG->readMapConfig();
 			
+			// Clean options
+			$arr = $_POST;
+			unset($arr['submit']);
+			unset($arr['properties']);
+			unset($arr['type']);
+			unset($arr['id']);
+			unset($arr['map']);
+			
 			// set options in the array
-			foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
+			foreach($arr AS $key => $val) {
 				$MAPCFG->setValue($_POST['type'], $_POST['id'], $key, $val);
 			}
 			
@@ -76,10 +82,7 @@ switch($_GET['myaction']) {
 			}
 			
 			// refresh the map
-			print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
-			
-			// close the popup window
-			print "<script>window.close();</script>\n";
+			print "<script>document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
 		}
 	break;
 	/*
@@ -90,15 +93,21 @@ switch($_GET['myaction']) {
 			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
 		} elseif(!isset($_POST['type']) || $_POST['type'] == '') {
 			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
-		} elseif(!isset($_POST['properties']) || $_POST['properties'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~properties');
 		} else {
 			$MAPCFG = new WuiMapCfg($CORE, $_POST['map']);
 			$MAPCFG->readMapConfig();
 			
+			// Clean options
+			$arr = $_POST;
+			unset($arr['submit']);
+			unset($arr['properties']);
+			unset($arr['type']);
+			unset($arr['id']);
+			unset($arr['map']);
+			
 			// append a new object definition line in the map cfg file
-			$elementId = $MAPCFG->addElement($_POST['type'],getArrayFromProperties($_POST['properties']));
-			$MAPCFG->writeElement($_POST['type'],$elementId);
+			$elementId = $MAPCFG->addElement($_POST['type'], $arr);
+			$MAPCFG->writeElement($_POST['type'], $elementId);
 			
 			// do the backup
 			backup($CORE->MAINCFG, $_POST['map']);
@@ -109,32 +118,29 @@ switch($_GET['myaction']) {
 			}
 			
 			// display the same map again
-			print "<script>window.opener.document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
-			print "<script>window.close();</script>\n";
+			print "<script>document.location.href='./index.php?map=".$_POST['map']."';</script>\n";
 		}
 	break;
 	/*
 	 * Change the NagVis main configuration
 	 */
 	case 'update_config':
-		if(!isset($_POST['properties']) || $_POST['properties'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~properties');
-		} else {
-			// Parse properties to array and loop each
-			foreach(getArrayFromProperties($_POST['properties']) AS $key => $val) {
-				$key = explode('_', $key);
-				$CORE->MAINCFG->setValue($key[0],$key[1],$val);
-			}
-			
-			// Write the changes to the main configuration file
-			$CORE->MAINCFG->writeConfig();
-			
-			// Reload the map
-			print "<script>window.opener.document.location.reload();</script>\n";
-			
-			// Close the popup window
-			print "<script>window.close();</script>\n";
+		// Clean options
+		$arr = $_POST;
+		unset($arr['submit']);
+		unset($arr['properties']);
+		
+		// Parse properties to array and loop each
+		foreach($arr AS $key => $val) {
+			$key = explode('_', $key);
+			$CORE->MAINCFG->setValue($key[0],$key[1],$val);
 		}
+		
+		// Write the changes to the main configuration file
+		$CORE->MAINCFG->writeConfig();
+		
+		// Reload the map
+		print("<script>window.history.back();</script>");
 	break;
 	/*
 	 * Create a new map
@@ -159,10 +165,7 @@ switch($_GET['myaction']) {
 			backup($CORE->MAINCFG, $_POST['map_name']);
 			
 			// Redirect to the new map
-			print("<script>window.opener.document.location.href='./index.php?map=".$_POST['map_name']."';</script>");
-			
-			// Close the popup window
-			print("<script>window.close();</script>");
+			print("<script>document.location.href='./index.php?map=".$_POST['map_name']."';</script>");
 		}
 	break;
 	/*
@@ -210,10 +213,7 @@ switch($_GET['myaction']) {
 			}
 			
 			// Refresh open map if it's not the renamed map or redirect to renamed map
-			print "<script>window.opener.document.location.href='./index.php?map=".$map."';</script>\n";
-			
-			// Close the popup
-			print "<script>window.close();</script>\n";
+			print "<script>document.location.href='./index.php?map=".$map."';</script>\n";
 		}
 	break;
 	/*
@@ -230,10 +230,8 @@ switch($_GET['myaction']) {
 			
 			$MAPCFG->deleteMapConfig();
 			
-			print("<script>alert('".$CORE->LANG->getText('mapDeleted')."');</script>");
-			
 			// Open the management page again
-			print("<script>window.history.back();</script>");
+			print "<script>document.location.href='./index.php';</script>\n";
 		}
 	break;
 	/*
@@ -403,7 +401,8 @@ switch($_GET['myaction']) {
 			$aOpt = Array();
 			
 			// Loop all aviable options for this backend
-			foreach($CORE->MAINCFG->validConfig['backend']['options'][$_POST['backendtype']] AS $key => $arr) {
+			$arr = $CORE->MAINCFG->getValidObjectType('backend');
+			foreach($arr['options'][$_POST['backendtype']] AS $key => $arr) {
 				// If there is a value for this option, set it
 				if(isset($_POST[$key]) && $_POST[$key] != '') {
 					$bFoundOption = TRUE;
@@ -439,7 +438,8 @@ switch($_GET['myaction']) {
 			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
 		} else {
 			// Loop all aviable options for this backend
-			foreach($CORE->MAINCFG->validConfig['backend']['options'][$CORE->MAINCFG->getValue('backend_'.$_POST['backend_id'],'backendtype')] AS $key => $arr) {
+			$arr = $CORE->MAINCFG->getValidObjectType('backend');
+			foreach($arr['options'][$CORE->MAINCFG->getValue('backend_'.$_POST['backend_id'],'backendtype')] AS $key => $arr) {
 				// If there is a value for this option, set it
 				if(isset($_POST[$key]) && $_POST[$key] != '') {
 					$CORE->MAINCFG->setValue('backend_'.$_POST['backend_id'],$key,$_POST[$key]);

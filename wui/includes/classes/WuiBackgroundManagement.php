@@ -47,10 +47,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$this->propCount = 0;
 		
 		$prop = Array('title' => $this->CORE->MAINCFG->getValue('internal', 'title'),
-					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js','./includes/js/BackgroundManagement.js',
-					  						'./includes/js/ajax.js',
-					  						'./includes/js/wui.js'),
+					  'jsIncludes'=>Array('./includes/js/BackgroundManagement.js'),
 					  'extHeader'=> '',
 					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
@@ -63,8 +60,8 @@ class WuiBackgroundManagement extends GlobalPage {
 	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function getForm() {
-		// Inititalize language for JS
-		$this->addBodyLines($this->parseJs($this->getJsLang()));
+		$code = '';
+		$code .= $this->getJsIncludes();
 		
 		$this->CREATEFORM = new GlobalForm(Array('name'=>'create_image',
 			'id'=>'create_image',
@@ -72,13 +69,12 @@ class WuiBackgroundManagement extends GlobalPage {
 			'action'=>'./form_handler.php?myaction=mgt_image_create',
 			'onSubmit'=>'return check_image_create();',
 			'cols'=>'2'));
-		$this->addBodyLines($this->CREATEFORM->initForm());
-		$this->addBodyLines($this->CREATEFORM->getCatLine(strtoupper($this->LANG->getText('createBackground'))));
-		$this->propCount++;
-		$this->addBodyLines($this->getCreateFields());
-		$this->propCount++;
-		$this->addBodyLines($this->CREATEFORM->getSubmitLine($this->LANG->getText('create')));
-		$this->addBodyLines($this->CREATEFORM->closeForm());
+		
+		$code .= $this->CREATEFORM->initForm();
+		$code .= $this->CREATEFORM->getCatLine($this->LANG->getText('createBackground'));
+		$code .= $this->getCreateFields();
+		$code .= $this->CREATEFORM->getSubmitLine($this->LANG->getText('create'));
+		$code .= $this->CREATEFORM->closeForm();
 		
 		$this->ADDFORM = new GlobalForm(Array('name'=>'new_image',
 			'id'=>'new_image',
@@ -87,13 +83,12 @@ class WuiBackgroundManagement extends GlobalPage {
 			'onSubmit'=>'return check_image_add();',
 			'enctype'=>'multipart/form-data',
 			'cols'=>'2'));
-		$this->addBodyLines($this->ADDFORM->initForm());
-		$this->addBodyLines($this->ADDFORM->getCatLine(strtoupper($this->LANG->getText('uploadBackground'))));
-		$this->propCount++;
-		$this->addBodyLines($this->getAddFields());
-		$this->propCount++;
-		$this->addBodyLines($this->ADDFORM->getSubmitLine($this->LANG->getText('upload')));
-		$this->addBodyLines($this->ADDFORM->closeForm());
+		
+		$code .= $this->ADDFORM->initForm();
+		$code .= $this->ADDFORM->getCatLine($this->LANG->getText('uploadBackground'));
+		$code .= $this->getAddFields();
+		$code .= $this->ADDFORM->getSubmitLine($this->LANG->getText('upload'));
+		$code .= $this->ADDFORM->closeForm();
 		
 		$this->DELFORM = new GlobalForm(Array('name'=>'image_delete',
 			'id'=>'image_delete',
@@ -101,16 +96,16 @@ class WuiBackgroundManagement extends GlobalPage {
 			'action'=>'./form_handler.php?myaction=mgt_image_delete',
 			'onSubmit'=>'return check_image_delete();',
 			'cols'=>'2'));
-		$this->addBodyLines($this->DELFORM->initForm());
-		$this->addBodyLines($this->DELFORM->getCatLine(strtoupper($this->LANG->getText('deleteBackground'))));
-		$this->propCount++;
-		$this->addBodyLines($this->getDelFields());
-		$this->propCount++;
-		$this->addBodyLines($this->ADDFORM->getSubmitLine($this->LANG->getText('delete')));
-		$this->addBodyLines($this->ADDFORM->closeForm());
 		
-		// Resize the window
-		$this->addBodyLines($this->parseJs($this->resizeWindow(540,$this->propCount*30+90)));
+		$code .= $this->DELFORM->initForm();
+		$code .= $this->DELFORM->getCatLine($this->LANG->getText('deleteBackground'));
+		$this->propCount++;
+		$code .= $this->getDelFields();
+		$this->propCount++;
+		$code .= $this->ADDFORM->getSubmitLine($this->LANG->getText('delete'));
+		$code .= $this->ADDFORM->closeForm();
+		
+		return $code;
 	}
 	
 	/**
@@ -120,11 +115,7 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelFields() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->DELFORM->getSelectLine($this->LANG->getText('chooseImage'),'map_image',$this->CORE->getAvailableBackgroundImages(),''));
-		$this->propCount++;
-		
-		return $ret;
+		return $this->DELFORM->getSelectLine($this->LANG->getText('chooseImage'),'map_image',$this->CORE->getAvailableBackgroundImages(),'');
 	}
 	
 	/**
@@ -134,12 +125,8 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getAddFields() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->ADDFORM->getHiddenField('MAX_FILE_SIZE','3000000'));
-		$ret = array_merge($ret,$this->ADDFORM->getFileLine($this->LANG->getText('chooseImage'),'image_file',''));
-		$this->propCount++;
-		
-		return $ret;
+		return $this->ADDFORM->getHiddenField('MAX_FILE_SIZE','3000000').
+		       $this->ADDFORM->getFileLine($this->LANG->getText('chooseImage'),'image_file','');
 	}
 	
 	/**
@@ -149,36 +136,10 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getCreateFields() {
-		$ret = Array();
-		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundName'),'image_name','',TRUE));
-		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundColor'),'image_color','#',TRUE));
-		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundWidth'),'image_width','',TRUE));
-		$this->propCount++;
-		$ret = array_merge($ret,$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundHeight'),'image_height','',TRUE));
-		$this->propCount++;
-		
-		return $ret;
-	}
-	
-	/**
-	 * Gets all needed messages
-	 *
-	 * @return	Array JS
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getJsLang() {
-		$ret = Array();
-		$ret[] = 'var lang = Array();';
-		$ret[] = 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getText('firstMustChoosePngImage').'\';';
-		$ret[] = 'lang[\'mustChooseValidImageFormat\'] = \''.$this->LANG->getText('mustChooseValidImageFormat').'\';';
-		$ret[] = 'lang[\'foundNoBackgroundToDelete\'] = \''.$this->LANG->getText('foundNoBackgroundToDelete').'\';';
-		$ret[] = 'lang[\'confirmBackgroundDeletion\'] = \''.$this->LANG->getText('confirmBackgroundDeletion').'\';';
-		$ret[] = 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getText('unableToDeleteBackground').'\';';
-		$ret[] = 'lang[\'mustValueNotSet1\'] = \''.$this->LANG->getText('mustValueNotSet1').'\';';
-		
-		return $ret;	
+		return $this->CREATEFORM->getInputLine($this->LANG->getText('backgroundName'),'image_name','',TRUE)
+		      .$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundColor'),'image_color','#',TRUE)
+		      .$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundWidth'),'image_width','',TRUE)
+		      .$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundHeight'),'image_height','',TRUE);
 	}
 }
 ?>
