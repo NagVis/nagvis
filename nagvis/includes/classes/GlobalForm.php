@@ -130,7 +130,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getInputLine($label,$name,$value,$must=FALSE,$onBlur='') {
+	public function getInputLine($label,$name,$value,$must=FALSE,$onBlur='',$rowStyle='',$rowClass='') {
 		$ret = Array();
 		
 		if($must != FALSE) {
@@ -139,7 +139,19 @@ class GlobalForm {
 			$must = '';
 		}
 		
-		$ret[] = '<tr><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield">';
+		if($rowStyle != '') {
+			$style = ' style="'.$rowStyle.'"';
+		} else {
+			$style = '';
+		}
+		
+		if($rowClass != '') {
+			$class = ' class="'.$rowClass.'"';
+		} else {
+			$class = '';
+		}
+		
+		$ret[] = '<tr'.$style.$class.'><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield">';
 		$ret = array_merge($ret,$this->getInputField($name,$value,$onBlur));
 		$ret[] = '</td></tr>';
 		
@@ -158,7 +170,7 @@ class GlobalForm {
 	 * @return	Array 		Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='',$onBlur='') {
+	public function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='',$onBlur='', $rowStyle='',$rowClass='') {
 		$ret = Array();
 		
 		if($must) {
@@ -167,7 +179,19 @@ class GlobalForm {
 			$color = '';
 		}
 		
-		$ret[] = '<tr><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
+		if($rowStyle != '') {
+			$style = ' style="'.$rowStyle.'"';
+		} else {
+			$style = '';
+		}
+		
+		if($rowClass != '') {
+			$class = ' class="'.$rowClass.'"';
+		} else {
+			$class = '';
+		}
+		
+		$ret[] = '<tr'.$style.$class.'><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
 		$ret = array_merge($ret,$this->getSelectField($name,$arr,$onChange,$must,$onBlur));
 		$ret[] = '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
 		
@@ -243,7 +267,7 @@ class GlobalForm {
 	 */
 	public function getSelectField($name,$arr,$onChange='',$must=FALSE,$onBlur='') {
 		$ret = Array();
-		$ret[] = '<select name="'.$name.'" onChange="'.$onChange.'" onBlur="'.$onBlur.'">';
+		$ret[] = '<select id="'.$name.'" name="'.$name.'" onChange="'.$onChange.'" onBlur="'.$onBlur.'">';
 		
 		if(!$must) {
 			$ret[] = '<option value=""></option>';
@@ -276,7 +300,7 @@ class GlobalForm {
 			$value = implode(',',$value);
 		}
 		
-		$ret[] = '<input type="text" name="'.$name.'" value="'.$value.'" onBlur="'.$onBlur.'" />';
+		$ret[] = '<input id="'.$name.'" type="text" name="'.$name.'" value="'.$value.'" onBlur="'.$onBlur.'" />';
 		
 		return $ret;
 	}

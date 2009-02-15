@@ -82,19 +82,20 @@ table {
 }*/
 
 /* WUI tables/form */
+
 table.mytable {
 	background-color: #F5F5F5;
 	border-collapse:collapse;
-	margin-top: 10px;
+	margin-top: 0px;
 	padding: 1px;
 	width: 100%;
 }
 
 table.mytable td, table.mytable th {
 	border: 1px #a4a4a4 solid;
-	padding: 3px;
+	padding: 1px;
 	
-	font-size: 12px;
+	font-size: 10px;
 	color: #314455;
 }
 
@@ -103,23 +104,27 @@ table.mytable th {
 	background-color: #eee;
 	
 	text-align: center;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 /* cat */
 table.mytable th.cat {
-	font-size: 14px;
+	font-size: 12px;
 }
 
 /* td common */
 table.mytable td {
-	text-align: center;
 	color: #2B5377;
-} 
+}
+
+/* Child rows */
+table.mytable tr.child-row td.tdlabel {
+	padding-left: 20px;
+}
 
 /* td labels */
 table.mytable td.tdlabel {
-	font-weight: bold;
+	padding-left: 10px;
 	background-color: #eee;
 	width: 50%;
 } 

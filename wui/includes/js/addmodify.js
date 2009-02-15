@@ -214,6 +214,28 @@ function check_object() {
 }
 
 /**
+ * toggleDependingFields
+ *
+ * This function shows/hides the fields which depend on the changed field
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function toggleDependingFields(name, value) {
+	for(var i=0, len=document.addmodify.elements.length;i<len;i++) {
+		if(document.addmodify.elements[i].type != 'hidden' && document.addmodify.elements[i].type != 'submit') {
+			if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
+				 && window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] !== value) {
+				
+				document.getElementById(document.addmodify.elements[i].name).parentNode.parentNode.style.display = 'none';
+			} else if(window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
+				 && window.opener.validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] === value) {
+				document.getElementById(document.addmodify.elements[i].name).parentNode.parentNode.style.display = '';
+			}
+		}
+	}
+}
+
+/**
  * validateMapConfigFieldValue(oField)
  *
  * This function checks a config field value for valid format. The check is done
@@ -222,5 +244,9 @@ function check_object() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function validateMapConfigFieldValue(oField) {
+	// Check if some fields depend on this. If so: Add a javacript 
+	// event handler function to toggle these fields
+	toggleDependingFields(oField.name, oField.value);
+	
 	return validateValue(oField.name, oField.value, window.opener.validMapConfig[document.addmodify.type.value][oField.name].match)
 }

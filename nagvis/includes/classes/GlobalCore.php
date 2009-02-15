@@ -212,6 +212,31 @@ class GlobalCore {
 	}
 	
 	/**
+	 * Reads all header templates
+	 *
+	 * @return	Array list
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableContextTemplates() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'contexttemplate'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
+					$files[] = $arrRet[1];
+				}
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
+	
+	/**
 	 * Reads all PNG images in shape path
 	 *
 	 * @return	Array Shapes
