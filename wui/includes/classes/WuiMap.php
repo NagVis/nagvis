@@ -178,7 +178,7 @@ class WuiMap extends GlobalMap {
 		$ret = '';
 		
 		if(strlen($this->moveable) != 0) {
-			$ret = $this->parseJs("SET_DHTML(SCROLL,TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
+			$ret = $this->parseJs("SET_DHTML(SCROLL,NO_ALT,TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
 		}
 		
 		return $ret;
