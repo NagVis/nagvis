@@ -63,9 +63,9 @@ function popupWindow(title, content) {
 	var oContainerDiv = document.createElement('div');
 	oContainerDiv.setAttribute('id', 'popupWindow');
 	oContainerDiv.style.position = 'absolute';
-	oContainerDiv.style.width = '300px';
+	oContainerDiv.style.width = '400px';
 	oContainerDiv.style.left = '100px';
-	oContainerDiv.style.top = '50px';
+	oContainerDiv.style.top = '20px';
 	
 	var oTable = document.createElement('table');
 	var oTbody = document.createElement('tbody');

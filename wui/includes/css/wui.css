@@ -54,13 +54,10 @@ table {
 
 .submit {
 	font-weight: bold;
-	color: #000; 
-	text-align: center;
+	color: #314455;
 	vertical-align: middle;
 	
-	height:25px;
-	
-	border: 1px solid #000;
+	border: 1px solid #314455;
 	background-color: #DADADA;
 }
 
@@ -120,7 +117,7 @@ table.mytable td.tdlabel {
 	width: 50%;
 } 
 
-table.mytable td.tdfield input,select {
+table.mytable td.tdfield input, table.mytable td.tdfield select {
 	background-color: #E4EEF6; 
 	border: 1px solid #284279;
 	width: 100%;
@@ -182,6 +179,7 @@ div#popupWindow {
 
 #popupWindow table tbody tr th.control {
 	padding: 0;
+	margin: 0;
 	width: 15px;
 	text-align: center;
 	color: #314455;

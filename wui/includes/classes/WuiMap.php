@@ -178,7 +178,7 @@ class WuiMap extends GlobalMap {
 		$ret = '';
 		
 		if(strlen($this->moveable) != 0) {
-			$ret = $this->parseJs("SET_DHTML(TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
+			$ret = $this->parseJs("SET_DHTML(SCROLL,TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
 		}
 		
 		return $ret;
@@ -560,7 +560,15 @@ class WuiMap extends GlobalMap {
 		
 		$tooltipText .= '</table>';
 		
-		$info = "onmouseover=\"this.T_DELAY=1000;this.T_STICKY=true;this.T_OFFSETX=6;this.T_OFFSETY=6;this.T_WIDTH=200;this.T_FONTCOLOR='#000000';this.T_BORDERCOLOR='#000000';this.T_BGCOLOR='#FFFFFF';this.T_STATIC=true;this.T_TITLE='<b>".$this->LANG->getText($obj['type'])."</b>';return escape('".$tooltipText."');\"";
+		$info = "onmouseout=\"UnTip();\""
+		       ."onmouseover=\"Tip('".$tooltipText."',"
+		       ."DELAY,1000,"
+		       ."STICKY,true,"
+		       ."OFFSETX,6,"
+		       ."OFFSETY,6,"
+		       ."CLICKCLOSE,true,"
+		       ."BORDERWIDTH,0,"
+		       ."BGCOLOR,'#FFFFFF');\"";
 		
 		return $info;
 	}
