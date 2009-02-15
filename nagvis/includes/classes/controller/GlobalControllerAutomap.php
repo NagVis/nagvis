@@ -50,7 +50,6 @@ class GlobalControllerAutomap {
 		$FRONTEND->addBodyLines($FRONTEND->parseJs('var oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(1).';'));
 		$FRONTEND->getHeaderMenu($MAPCFG->getValue('global',0 ,'header_menu'), $MAPCFG->getValue('global',0 ,'header_template'));
 		$FRONTEND->getAutoMap($automapEnv);
-		$FRONTEND->getMessages();
 
 		// Print the page
 		$FRONTEND->printPage();

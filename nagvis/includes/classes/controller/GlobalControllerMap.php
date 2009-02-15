@@ -53,8 +53,7 @@ class GlobalControllerMap {
 		$FRONTEND->addBodyLines($FRONTEND->parseJs('var oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(0).';'));
 		$FRONTEND->getHeaderMenu($MAPCFG->getValue('global',0 ,'header_menu'), $MAPCFG->getValue('global',0 ,'header_template'));
 		$FRONTEND->getMap();
-		$FRONTEND->getMessages();
-
+		
 		// Print the page
 		$FRONTEND->printPage();
 	}

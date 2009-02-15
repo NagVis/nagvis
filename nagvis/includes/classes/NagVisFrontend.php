@@ -149,15 +149,6 @@ class NagVisFrontend extends GlobalPage {
 	}
 	
 	/**
-	 * Adds the user messages to the page
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getMessages() {
-		$this->addBodyLines($this->getUserMessages());
-	}
-	
-	/**
 	 * Gets the javascript code for the map refresh/rotation
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>

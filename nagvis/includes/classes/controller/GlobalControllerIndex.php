@@ -42,7 +42,6 @@ class GlobalControllerIndex {
 		$FRONTEND->addBodyLines($FRONTEND->parseJs('var oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(1).';'));
 		$FRONTEND->getHeaderMenu($CORE->MAINCFG->getValue('index','headermenu'), $CORE->MAINCFG->getValue('index', 'headertemplate'));
 		$FRONTEND->getIndexPage();
-		$FRONTEND->getMessages();
 		
 		// Print the page
 		$FRONTEND->printPage();
