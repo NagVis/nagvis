@@ -186,5 +186,6 @@ div#popupWindow {
 	text-align: center;
 	color: #314455;
 	font-weight: bold;
-	text-decoration: none
+	text-decoration: none;
+	cursor: pointer;
 }
