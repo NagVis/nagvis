@@ -577,81 +577,79 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsLang() {
-		$ret = '';
+		$langMenu = Array(
+			'overview' => $this->LANG->getText('overview'),
+			'restore' => $this->LANG->getText('restore'),
+			'properties' => $this->LANG->getText('properties'),
+			'addObject' => $this->LANG->getText('addObject'),
+			'nagVisConfig' => $this->LANG->getText('nagVisConfig'),
+			'help' => $this->LANG->getText('help'),
+			'open' => $this->LANG->getText('open'),
+			'openInNagVis' => $this->LANG->getText('openInNagVis'),
+			'manageMaps' => $this->LANG->getText('manageMaps'),
+			'manageBackends' => $this->LANG->getText('manageBackends'),
+			'manageBackgrounds' => $this->LANG->getText('manageBackgrounds'),
+			'manageShapes' => $this->LANG->getText('manageShapes'),
+			'icon' => $this->LANG->getText('icon'),
+			'line' => $this->LANG->getText('line'),
+			'special' => $this->LANG->getText('special'),
+			'host' => $this->LANG->getText('host'),
+			'service' => $this->LANG->getText('service'),
+			'hostgroup' => $this->LANG->getText('hostgroup'),
+			'servicegroup' => $this->LANG->getText('servicegroup'),
+			'map' => $this->LANG->getText('map'),
+			'textbox' => $this->LANG->getText('textbox'),
+			'shape' => $this->LANG->getText('shape'),
+			'manage' => $this->LANG->getText('manage'));
 		
-		$ret .= 'var langMenu = Array();';
-		$ret .= 'langMenu[\'overview\'] = \''.$this->LANG->getText('overview').'\';';
-		$ret .= 'langMenu[\'restore\'] = \''.$this->LANG->getText('restore').'\';';
-		$ret .= 'langMenu[\'properties\'] = \''.$this->LANG->getText('properties').'\';';
-		$ret .= 'langMenu[\'addObject\'] = \''.$this->LANG->getText('addObject').'\';';
-		$ret .= 'langMenu[\'nagVisConfig\'] = \''.$this->LANG->getText('nagVisConfig').'\';';
-		$ret .= 'langMenu[\'help\'] = \''.$this->LANG->getText('help').'\';';
-		$ret .= 'langMenu[\'open\'] = \''.$this->LANG->getText('open').'\';';
-		$ret .= 'langMenu[\'openInNagVis\'] = \''.$this->LANG->getText('openInNagVis').'\';';
-		$ret .= 'langMenu[\'manageMaps\'] = \''.$this->LANG->getText('manageMaps').'\';';
-		$ret .= 'langMenu[\'manageBackends\'] = \''.$this->LANG->getText('manageBackends').'\';';
-		$ret .= 'langMenu[\'manageBackgrounds\'] = \''.$this->LANG->getText('manageBackgrounds').'\';';
-		$ret .= 'langMenu[\'manageShapes\'] = \''.$this->LANG->getText('manageShapes').'\';';
-		$ret .= 'langMenu[\'icon\'] = \''.$this->LANG->getText('icon').'\';';
-		$ret .= 'langMenu[\'line\'] = \''.$this->LANG->getText('line').'\';';
-		$ret .= 'langMenu[\'special\'] = \''.$this->LANG->getText('special').'\';';
-		$ret .= 'langMenu[\'host\'] = \''.$this->LANG->getText('host').'\';';
-		$ret .= 'langMenu[\'service\'] = \''.$this->LANG->getText('service').'\';';
-		$ret .= 'langMenu[\'hostgroup\'] = \''.$this->LANG->getText('hostgroup').'\';';
-		$ret .= 'langMenu[\'servicegroup\'] = \''.$this->LANG->getText('servicegroup').'\';';
-		$ret .= 'langMenu[\'map\'] = \''.$this->LANG->getText('map').'\';';
-		$ret .= 'langMenu[\'textbox\'] = \''.$this->LANG->getText('textbox').'\';';
-		$ret .= 'langMenu[\'shape\'] = \''.$this->LANG->getText('shape').'\';';
-		$ret .= 'langMenu[\'manage\'] = \''.$this->LANG->getText('manage').'\';';
+		$lang = Array(
+			'clickMapToSetPoints' => $this->LANG->getText('clickMapToSetPoints'),
+			'confirmDelete' => $this->LANG->getText('confirmDelete'),
+			'confirmRestore' => $this->LANG->getText('confirmRestore'),
+			'wrongValueFormat' => $this->LANG->getText('wrongValueFormat'),
+			'wrongValueFormatMap' => $this->LANG->getText('wrongValueFormatMap'),
+			'wrongValueFormatOption' => $this->LANG->getText('wrongValueFormatOption'),
+			'unableToWorkWithMap' => $this->LANG->getText('unableToWorkWithMap'),
+			'mustValueNotSet' => $this->LANG->getText('mustValueNotSet'),
+			'chosenLineTypeNotValid' => $this->LANG->getText('chosenLineTypeNotValid'),
+			'onlyLineOrIcon' => $this->LANG->getText('onlyLineOrIcon'),
+			'not2coordsX' => $this->LANG->getText('not2coords','COORD~X'),
+			'not2coordsY' => $this->LANG->getText('not2coords','COORD~Y'),
+			'only1or2coordsX' => $this->LANG->getText('only1or2coords','COORD~X'),
+			'only1or2coordsY' => $this->LANG->getText('only1or2coords','COORD~Y'),
+			'lineTypeNotSelectedX' => $this->LANG->getText('lineTypeNotSelected','COORD~X'),
+			'lineTypeNotSelectedY' => $this->LANG->getText('lineTypeNotSelected','COORD~Y'),
+			'loopInMapRecursion' => $this->LANG->getText('loopInMapRecursion'),
+			'mapObjectWillShowSummaryState' => $this->LANG->getText('mapObjectWillShowSummaryState'),
+			'firstMustChoosePngImage' => $this->LANG->getText('firstMustChoosePngImage'),
+			'mustChooseValidImageFormat' => $this->LANG->getText('mustChooseValidImageFormat'),
+			'foundNoBackgroundToDelete' => $this->LANG->getText('foundNoBackgroundToDelete'),
+			'confirmBackgroundDeletion' => $this->LANG->getText('confirmBackgroundDeletion'),
+			'unableToDeleteBackground' => $this->LANG->getText('unableToDeleteBackground'),
+			'mustValueNotSet1' => $this->LANG->getText('mustValueNotSet1'),
+			'foundNoShapeToDelete' => $this->LANG->getText('foundNoShapeToDelete'),
+			'shapeInUse' => $this->LANG->getText('shapeInUse'),
+			'confirmShapeDeletion' => $this->LANG->getText('confirmShapeDeletion'),
+			'unableToDeleteShape' => $this->LANG->getText('unableToDeleteShape'),
+			'chooseMapName' => $this->LANG->getText('chooseMapName'),
+			'minOneUserAccess' => $this->LANG->getText('minOneUserAccess'),
+			'mustChooseBackgroundImage' => $this->LANG->getText('mustChooseBackgroundImage'),
+			'noMapToRename' => $this->LANG->getText('noMapToRename'),
+			'noNewNameGiven' => $this->LANG->getText('noNewNameGiven'),
+			'mapAlreadyExists' => $this->LANG->getText('mapAlreadyExists'),
+			'foundNoMapToDelete' => $this->LANG->getText('foundNoMapToDelete'),
+			'foundNoMapToExport' => $this->LANG->getText('foundNoMapToExport'),
+			'foundNoMapToImport' => $this->LANG->getText('foundNoMapToImport'),
+			'notCfgFile' => $this->LANG->getText('notCfgFile'),
+			'confirmNewMap' => $this->LANG->getText('confirmNewMap'),
+			'confirmMapRename' => $this->LANG->getText('confirmMapRename'),
+			'confirmMapDeletion' => $this->LANG->getText('confirmMapDeletion'),
+			'unableToDeleteMap' => $this->LANG->getText('unableToDeleteMap'),
+			'noPermissions' => $this->LANG->getText('noPermissions'),
+			'minOneUserWriteAccess' => $this->LANG->getText('minOneUserWriteAccess'),
+			'noSpaceAllowed' => $this->LANG->getText('noSpaceAllowed'));
 		
-		$ret .= 'var lang = Array();';
-		$ret .= 'lang[\'clickMapToSetPoints\'] = \''.$this->LANG->getText('clickMapToSetPoints').'\';';
-		$ret .= 'lang[\'confirmDelete\'] = \''.$this->LANG->getText('confirmDelete').'\';';
-		$ret .= 'lang[\'confirmRestore\'] = \''.$this->LANG->getText('confirmRestore').'\';';
-		$ret .= 'lang[\'wrongValueFormat\'] = \''.$this->LANG->getText('wrongValueFormat').'\';';
-		$ret .= 'lang[\'wrongValueFormatMap\'] = \''.$this->LANG->getText('wrongValueFormatMap').'\';';
-		$ret .= 'lang[\'wrongValueFormatOption\'] = \''.$this->LANG->getText('wrongValueFormatOption').'\';';
-		$ret .= 'lang[\'unableToWorkWithMap\'] = \''.$this->LANG->getText('unableToWorkWithMap').'\';';
-		$ret .= 'lang[\'mustValueNotSet\'] = \''.$this->LANG->getText('mustValueNotSet').'\';';
-		$ret .= 'lang[\'chosenLineTypeNotValid\'] = \''.$this->LANG->getText('chosenLineTypeNotValid').'\';';
-		$ret .= 'lang[\'onlyLineOrIcon\'] = \''.$this->LANG->getText('onlyLineOrIcon').'\';';
-		$ret .= 'lang[\'not2coordsX\'] = \''.$this->LANG->getText('not2coords','COORD~X').'\';';
-		$ret .= 'lang[\'not2coordsY\'] = \''.$this->LANG->getText('not2coords','COORD~Y').'\';';
-		$ret .= 'lang[\'only1or2coordsX\'] = \''.$this->LANG->getText('only1or2coords','COORD~X').'\';';
-		$ret .= 'lang[\'only1or2coordsY\'] = \''.$this->LANG->getText('only1or2coords','COORD~Y').'\';';
-		$ret .= 'lang[\'lineTypeNotSelectedX\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~X').'\';';
-		$ret .= 'lang[\'lineTypeNotSelectedY\'] = \''.$this->LANG->getText('lineTypeNotSelected','COORD~Y').'\';';
-		$ret .= 'lang[\'loopInMapRecursion\'] = \''.$this->LANG->getText('loopInMapRecursion').'\';';
-		$ret .= 'lang[\'mapObjectWillShowSummaryState\'] = \''.$this->LANG->getText('mapObjectWillShowSummaryState').'\';';
-		$ret .= 'lang[\'firstMustChoosePngImage\'] = \''.$this->LANG->getText('firstMustChoosePngImage').'\';';
-		$ret .= 'lang[\'mustChooseValidImageFormat\'] = \''.$this->LANG->getText('mustChooseValidImageFormat').'\';';
-		$ret .= 'lang[\'foundNoBackgroundToDelete\'] = \''.$this->LANG->getText('foundNoBackgroundToDelete').'\';';
-		$ret .= 'lang[\'confirmBackgroundDeletion\'] = \''.$this->LANG->getText('confirmBackgroundDeletion').'\';';
-		$ret .= 'lang[\'unableToDeleteBackground\'] = \''.$this->LANG->getText('unableToDeleteBackground').'\';';
-		$ret .= 'lang[\'mustValueNotSet1\'] = \''.$this->LANG->getText('mustValueNotSet1').'\';';
-		$ret .= 'lang[\'foundNoShapeToDelete\'] = \''.$this->LANG->getText('foundNoShapeToDelete').'\';';
-		$ret .= 'lang[\'shapeInUse\'] = \''.$this->LANG->getText('shapeInUse').'\';';
-		$ret .= 'lang[\'confirmShapeDeletion\'] = \''.$this->LANG->getText('confirmShapeDeletion').'\';';
-		$ret .= 'lang[\'unableToDeleteShape\'] = \''.$this->LANG->getText('unableToDeleteShape').'\';';
-		$ret .= 'lang[\'chooseMapName\'] = \''.$this->LANG->getText('chooseMapName').'\';';
-		$ret .= 'lang[\'minOneUserAccess\'] = \''.$this->LANG->getText('minOneUserAccess').'\';';
-		$ret .= 'lang[\'mustChooseBackgroundImage\'] = \''.$this->LANG->getText('mustChooseBackgroundImage').'\';';
-		$ret .= 'lang[\'noMapToRename\'] = \''.$this->LANG->getText('noMapToRename').'\';';
-		$ret .= 'lang[\'noNewNameGiven\'] = \''.$this->LANG->getText('noNewNameGiven').'\';';
-		$ret .= 'lang[\'mapAlreadyExists\'] = \''.$this->LANG->getText('mapAlreadyExists').'\';';
-		$ret .= 'lang[\'foundNoMapToDelete\'] = \''.$this->LANG->getText('foundNoMapToDelete').'\';';
-		$ret .= 'lang[\'foundNoMapToExport\'] = \''.$this->LANG->getText('foundNoMapToExport').'\';';
-		$ret .= 'lang[\'foundNoMapToImport\'] = \''.$this->LANG->getText('foundNoMapToImport').'\';';
-		$ret .= 'lang[\'notCfgFile\'] = \''.$this->LANG->getText('notCfgFile').'\';';
-		$ret .= 'lang[\'confirmNewMap\'] = \''.$this->LANG->getText('confirmNewMap').'\';';
-		$ret .= 'lang[\'confirmMapRename\'] = \''.$this->LANG->getText('confirmMapRename').'\';';
-		$ret .= 'lang[\'confirmMapDeletion\'] = \''.$this->LANG->getText('confirmMapDeletion').'\';';
-		$ret .= 'lang[\'unableToDeleteMap\'] = \''.$this->LANG->getText('unableToDeleteMap').'\';';
-		$ret .= 'lang[\'noPermissions\'] = \''.$this->LANG->getText('noPermissions').'\';';
-		$ret .= 'lang[\'minOneUserWriteAccess\'] = \''.$this->LANG->getText('minOneUserWriteAccess').'\';';
-		$ret .= 'lang[\'noSpaceAllowed\'] = \''.$this->LANG->getText('noSpaceAllowed').'\';';
-		
-		return $ret;	
+		return 'var langMenu = '.json_encode($langMenu).'; var lang = '.json_encode($lang).';';	
 	}
 	
 	/**
