@@ -38,7 +38,7 @@ class WuiFrontend extends GlobalPage {
 	function WuiFrontend($CORE, $MAPCFG) {
 		$this->MAPCFG = $MAPCFG;
 		
-		$prop = Array('title'=> $CORE->MAINCFG->getValue('internal', 'title'),
+		$prop = Array('title'=> $CORE->MAINCFG->getValue('internal', 'title') . 'WUI',
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/wui.css','./includes/css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js',
 							'../nagvis/includes/js/frontendMessage.js',
@@ -50,7 +50,7 @@ class WuiFrontend extends GlobalPage {
 						  './includes/js/wz_jsgraphics.js',
 						  './includes/js/wz_dragdrop.js'),
 					  'extHeader'=> '<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>',
-					  'allowedUsers' => $this->MAPCFG->getValue('global', 0,'allowed_for_config'),
+					  'allowedUsers' => $this->MAPCFG->getValue('global', 0, 'allowed_for_config'),
 					  'languageRoot' => 'nagvis');
 		parent::__construct($CORE, $prop);
 	}
