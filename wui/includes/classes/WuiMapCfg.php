@@ -281,72 +281,67 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @param	Boolean $printErr
 	 * @return	Array/Boolean   Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    function checkMapLocked($ignoreLock=0,$printErr=1) {
-	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::checkMapLocked('.$ignoreLock.','.$printErr.')');
-        // read lockfile
-        $lockdata = $this->readMapLock();
-        if(is_array($lockdata)) {
-            // check if the lock is older than 5 Minutes and don't ignore lock
-            if($lockdata['time'] > time() - $this->MAINCFG->getValue('wui','maplocktime') * 60) {
-                if($ignoreLock == 0) {
-                    // the lock should be ignored
-                        return FALSE;
-                } else {
-                    // there is a lock and it should be recognized
-                    // check if this is the lock of the current user (Happens e.g. by pressing F5)
-                    if($this->MAINCFG->getRuntimeValue('user') == $lockdata['user'] && $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
-                        // refresh the lock (write a new lock)
-                        $this->writeMapLock();
-                        // it's locked by the current user, so it's not locked for him
-                        return FALSE;
-                    }
-                    if($printErr == 1) {
-                        $LANG = new GlobalLanguage($this->MAINCFG,'nagvis');
-                        
-                        // message the user that there is a lock by another user, the user can decide wether he want's to override it or not
-                        print '<script>if(!confirm(\''.$LANG->getText('mapLocked','MAP~'.$this->name.',TIME~'.date('d.m.Y H:i',$lockdata['time']).',USER~'.$lockdata['user'].',IP~'.$lockdata['ip']).'\',\'\')) { history.back(); }</script>';
-    				}
-        				return TRUE;
-                }
-            } else {
-                // delete lockfile & continue
-                // try to delete map lock, if nothing to delete its OK
-                $this->deleteMapLock();
-                    return FALSE;
-            }
-        } else {
-            // no valid informations in lock or no lock there
-            // try to delete map lock, if nothing to delete its OK
-            $this->deleteMapLock();
-                return FALSE;
-        }
-    }
-    
+   */
+	function checkMapLocked($ignoreLock=0,$printErr=1) {
+		// read lockfile
+		$lockdata = $this->readMapLock();
+		if(is_array($lockdata)) {
+			// check if the lock is older than 5 Minutes and don't ignore lock
+			if($lockdata['time'] > time() - $this->MAINCFG->getValue('wui','maplocktime') * 60) {
+				if($ignoreLock == 0) {
+					// the lock should be ignored
+					return FALSE;
+				} else {
+					// there is a lock and it should be recognized
+					// check if this is the lock of the current user (Happens e.g. by pressing F5)
+					if($this->MAINCFG->getRuntimeValue('user') == $lockdata['user'] && $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
+						// refresh the lock (write a new lock)
+						$this->writeMapLock();
+						// it's locked by the current user, so it's not locked for him
+						return FALSE;
+					}
+					if($printErr == 1) {
+						$LANG = new GlobalLanguage($this->MAINCFG,'nagvis');
+						
+						// message the user that there is a lock by another user, the user can decide wether he want's to override it or not
+						print '<script>if(!confirm(\''.$LANG->getText('mapLocked','MAP~'.$this->name.',TIME~'.date('d.m.Y H:i',$lockdata['time']).',USER~'.$lockdata['user'].',IP~'.$lockdata['ip']).'\',\'\')) { history.back(); }</script>';
+					}
+					return TRUE;
+				}
+			} else {
+				// delete lockfile & continue
+				// try to delete map lock, if nothing to delete its OK
+				$this->deleteMapLock();
+				return FALSE;
+			}
+		} else {
+			// no valid informations in lock or no lock there
+			// try to delete map lock, if nothing to delete its OK
+			$this->deleteMapLock();
+			return FALSE;
+		}
+	}
 	
 	/**
 	 * Reads the contents of the lockfile
 	 *
 	 * @return	Array/Boolean   Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function readMapLock() {
-	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::readMapLock()');
-	    if($this->checkMapLockReadable(0)) {
-	        $fileContent = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock');
-	        // only recognize the first line, explode it by :
-	        $arrContent = explode(':',$fileContent[0]);
-	        // if there are more elements in the array it is OK
-	        if(count($arrContent) > 0) {
-	            return Array('time' => $arrContent[0], 'user' => $arrContent[1], 'ip' => $arrContent[2]);
-	        } else {
-	            if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapLock(): FALSE');
-	            return FALSE;
-	        }
-        } else {
-	        if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::readMapLock(): FALSE');
-	        return FALSE;
-	    }
+		if($this->checkMapLockReadable(0)) {
+			$fileContent = file($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock');
+			// only recognize the first line, explode it by :
+			$arrContent = explode(':',$fileContent[0]);
+			// if there are more elements in the array it is OK
+			if(count($arrContent) > 0) {
+				return Array('time' => $arrContent[0], 'user' => $arrContent[1], 'ip' => $arrContent[2]);
+			} else {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
 	}
 	
 	/**
@@ -354,19 +349,17 @@ class WuiMapCfg extends GlobalMapCfg {
 	 *
 	 * @return	Boolean     Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function writeMapLock() {
-	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::writeMapLock()');
 		if($this->checkMapLockWriteable(0)) {
-		    // open file for writing and insert the needed informations
-		 	$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock','w');
-		 	fwrite($fp,time().':'.$this->MAINCFG->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
-		 	fclose($fp);
-	 			return TRUE;
+			// open file for writing and insert the needed informations
+			$fp = fopen($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock','w');
+			fwrite($fp,time().':'.$this->MAINCFG->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
+			fclose($fp);
+			return TRUE;
 		} else {
-	        if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::writeMapLock(): FALSE');
-	        return FALSE;
-	    }
+			return FALSE;
+		}
 	}
 	
 	/**
@@ -374,23 +367,19 @@ class WuiMapCfg extends GlobalMapCfg {
 	 *
 	 * @return	Boolean     Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 */
 	function deleteMapLock() {
-	    if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMapCfg::deleteMapLock()');
-	    if($this->checkMapLockWriteable(0)) {
-	        if(unlink($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
-	            // map lock deleted => OK
-	            if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapLock(): TRUE');
-	            return TRUE;
-	        } else {
-	            if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapLock(): FALSE');
-	            return FALSE;
-	        }
-        } else {
-            // no map lock to delete => OK
-	        if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMapCfg::deleteMapLock(): TRUE');
-	        return TRUE;   
-	    }
+		if($this->checkMapLockWriteable(0)) {
+			if(unlink($this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock')) {
+				// map lock deleted => OK
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		} else {
+			// no map lock to delete => OK
+			return TRUE;   
+		}
 	}
 	
 	/**
@@ -407,7 +396,7 @@ class WuiMapCfg extends GlobalMapCfg {
 			} else {
 				if($printErr == 1) {
 					$FRONTEND = new GlobalPage($this->CORE);
-		            $FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapLockNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
+					$FRONTEND->messageToUser('ERROR', $this->CORE->LANG->getText('mapLockNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
 				}
 				return FALSE;
 			}

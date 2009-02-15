@@ -349,7 +349,6 @@ class WuiMap extends GlobalMap {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function parseLabel(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method GlobalMap::parseLabel(&$obj)');
 		$relative = 0;
 		
 		if($obj['type'] == 'service') {
@@ -391,7 +390,6 @@ class WuiMap extends GlobalMap {
 		$ret .= '<span>'.$obj['label_text'].'</span>';
 		$ret .= '</div>';
 		
-		if (DEBUG&&DEBUGLEVEL&1) debug('End method GlobalMap::parseLabel(): HTML String');
 		return $ret;
 	}
 	
@@ -471,8 +469,6 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIcon(&$obj) {
-		if (DEBUG&&DEBUGLEVEL&1) debug('Start method WuiMap::getIcon(&$obj)');
-		
 		$fileType = $this->CORE->getIconsetFiletype($obj['iconset']);
 		
 		switch($obj['type']) {
