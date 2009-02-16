@@ -39,7 +39,10 @@ class WuiFrontend extends GlobalPage {
 		$this->MAPCFG = $MAPCFG;
 		
 		$prop = Array('title'=> $CORE->MAINCFG->getValue('internal', 'title') . 'WUI',
-					  'cssIncludes'=>Array('../nagvis/includes/css/style.css','./includes/css/wui.css','./includes/css/office_xp/office_xp.css'),
+					  'cssIncludes'=>Array('../nagvis/includes/css/style.css',
+						                     '../nagvis/includes/css/frontendMessage.css',
+						                     './includes/css/wui.css',
+						                     './includes/css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array('../nagvis/includes/js/ajax.js',
 							'../nagvis/includes/js/frontendMessage.js',
 					  	'./includes/js/popupWindow.js',
