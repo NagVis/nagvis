@@ -60,6 +60,19 @@ function frontendMessage(oMessage) {
 	oCell.setAttribute('className', oMessage.type);
 	oCell.colSpan = '3';
 	oCell.style.height = '16px';
+	oCell.style.textAlign = 'right';
+	oCell.style.paddingRight = '5px';
+	oCell.style.fontSize = '10px';
+	
+	var oLink = document.createElement('a');
+	oLink.href = '#';
+	oLink.onclick = function() {
+		frontendMessageHide();
+		return false;
+	};
+	oLink.appendChild(document.createTextNode('[close]'));
+	
+	oCell.appendChild(oLink);
 	
 	oRow.appendChild(oCell);
 	oCell = null;
