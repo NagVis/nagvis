@@ -84,6 +84,7 @@ function frontendMessage(oMessage) {
 	oCell = null;
 	
 	oCell = document.createElement('th');
+	oCell.style.width = '474px';
 	oCell.setAttribute('class', oMessage.type);
 	oCell.setAttribute('className', oMessage.type);
 	oCell.appendChild(document.createTextNode(oMessage.title));
@@ -114,6 +115,7 @@ function frontendMessage(oMessage) {
 	oCell.setAttribute('className', oMessage.type);
 	oCell.colSpan = '3';
 	oCell.style.paddingTop = '16px';
+	oCell.style.height = '202px';
 	oCell.appendChild(document.createTextNode(oMessage.message));
 	
 	oRow.appendChild(oCell);
