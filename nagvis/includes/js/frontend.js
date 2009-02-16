@@ -843,8 +843,8 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			if(oPageProperties.event_highlight === '1') {
 				if(aObjs[intIndex].conf.view_type && aObjs[intIndex].conf.view_type === 'icon') {
 					// Detach the handler
-					// FIXME: Had problems with this. Could not give the index to function
-					//        function() { flashIcon(iIndex, 10); iIndex = null; }
+					//  Had problems with this. Could not give the index to function:
+					//  function() { flashIcon(iIndex, 10); iIndex = null; }
 					window.setTimeout('flashIcon('+intIndex+', 10)', 0);
 				} else {
 					// FIXME: Atm only flash icons, not lines or gadgets
