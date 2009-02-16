@@ -39,6 +39,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		if(this.conf && this.conf.members && this.conf.members.length > 0) {
 			for(var i = 0, len = this.conf.members.length; i < len; i++) {
 				var oMember = this.conf.members[i];
+				var oObj;
 				
 				switch (oMember.type) {
 					case 'host':
@@ -71,6 +72,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 					this.members.push(oObj);
 				}
 			}
+			
+			oObj = null;
 		}
 	},
 	

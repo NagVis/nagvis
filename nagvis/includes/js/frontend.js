@@ -347,9 +347,11 @@ function runWorker(iCount, sType) {
 		}
 	}
 	
-	
 	// Sleep until next worker run (1 Second)
 	window.setTimeout(function() {runWorker((iCount+1), sType)}, 1000);
+	
+	// Pro forma return
+	return true;
 }
 
 /**

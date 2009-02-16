@@ -129,5 +129,7 @@ function contextShow(event) {
 		
 		// If this returns false, the browser's context menu will not show up
 		return false;
+	} else {
+		return true;
 	}
 }
