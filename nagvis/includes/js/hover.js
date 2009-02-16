@@ -154,7 +154,7 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	}
 	
 	// Replace child section when unwanted
-	if(oObj.conf.hover_childs_show != 1 || !oObj.conf.num_members || oObj.conf.num_members == 0) {
+	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != 1) || !oObj.conf.num_members || oObj.conf.num_members == 0) {
 		oSectionMacros.childs = '<!--\\\sBEGIN\\\schilds\\\s-->.+?<!--\\\sEND\\\schilds\\\s-->';
 	}
 	
