@@ -59,7 +59,11 @@ function popupWindowClose() {
 	document.body.removeChild(document.getElementById('popupWindow'));
 }
 
-function popupWindow(title, content) {
+function popupWindow(title, oContent) {
+	if(oContent === null) {
+		return false;
+	}
+	
 	var oContainerDiv = document.createElement('div');
 	oContainerDiv.setAttribute('id', 'popupWindow');
 	oContainerDiv.style.position = 'absolute';
@@ -105,7 +109,7 @@ function popupWindow(title, content) {
 	oCell = document.createElement('td');
 	oCell.colSpan = '2';
 	
-	oCell.innerHTML = content.code;
+	oCell.innerHTML = content;
 	
 	oRow.appendChild(oCell);
 	oCell = null;

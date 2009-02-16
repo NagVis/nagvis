@@ -76,7 +76,6 @@ function frontendMessage(oMessage) {
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	alert(oGeneralProperties.path_htmlbase);
 	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
 	
 	oCell.appendChild(oImg);
