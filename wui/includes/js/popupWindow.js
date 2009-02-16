@@ -39,6 +39,8 @@ function movemouse( e ) {
 	 
    return false;
  }
+ 
+ return true;
 }
 
 function selectmouse(e) {
@@ -109,7 +111,7 @@ function popupWindow(title, oContent) {
 	oCell = document.createElement('td');
 	oCell.colSpan = '2';
 	
-	oCell.innerHTML = content;
+	oCell.innerHTML = oContent.code;
 	
 	oRow.appendChild(oCell);
 	oCell = null;
@@ -125,4 +127,6 @@ function popupWindow(title, oContent) {
 	
 	document.body.appendChild(oContainerDiv);
 	oContainerDiv = null;
+	
+	return true;
 }

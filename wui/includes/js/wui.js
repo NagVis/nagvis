@@ -125,16 +125,20 @@ function printLang(sLang,sReplace) {
 }
 
 function track_mouse(e) {
-	
 	if(follow_mouse) {
-		if (!e) var e = window.event;
+		var event;
+		if(!e) {
+			event = window.event;
+		} else {
+			event = e;
+		}
 		
-		if (e.pageX || e.pageY) {
-			posx = e.pageX;
-			posy = e.pageY;
-		} else if (e.clientX || e.clientY) {
-			posx = e.clientX;
-			posy = e.clientY;
+		if (event.pageX || event.pageY) {
+			posx = event.pageX;
+			posy = event.pageY;
+		} else if (e.clientX || event.clientY) {
+			posx = event.clientX;
+			posy = event.clientY;
 		}
 		
 		myshape.clear();
@@ -147,23 +151,29 @@ function track_mouse(e) {
 		
 		myshape.paint();
 	}
-	return true;
 	
+	return true;
 }
 
 function get_click_pos(e) {
 	if(cpt_clicks > 0) {
 		var posx = 0;
 		var posy = 0;
-		if (!e) var e = window.event;
-	
-		if (e.pageX || e.pageY) {
-			posx = e.pageX;
-			posy = e.pageY;
+		
+		var event;
+		if(!e) {
+			event = window.event;
+		} else {
+			event = e;
 		}
-		else if (e.clientX || e.clientY) {
-			posx = e.clientX;
-			posy = e.clientY;
+	
+		if (event.pageX || event.pageY) {
+			posx = event.pageX;
+			posy = event.pageY;
+		}
+		else if (event.clientX || event.clientY) {
+			posx = event.clientX;
+			posy = event.clientY;
 		}
 		
 		if(cpt_clicks == 2) {		

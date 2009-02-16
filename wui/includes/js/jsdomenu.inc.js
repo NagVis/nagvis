@@ -39,7 +39,7 @@ function get_label(key) {
 //################################################################
 // function that creates the menu
 function createjsDOMenu() {
-	mainMenu = new jsDOMenu(170);
+	var mainMenu = new jsDOMenu(170);
 	with (mainMenu) {
 		addMenuItem(new menuItem(get_label('overview'), "menu_overview", "link:../nagvis/index.php", ""));
 		addMenuItem(new menuItem("-"));
@@ -55,14 +55,14 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('manage'), "menu_management", "","","",""));
 	}
 	
-	submenu_addobject = new jsDOMenu(120);
+	var submenu_addobject = new jsDOMenu(120);
 	with (submenu_addobject) {
 		addMenuItem(new menuItem(get_label('icon'), "menu_addobject_icon", ""));
 		addMenuItem(new menuItem(get_label('line'), "menu_addobject_line", ""));
 		addMenuItem(new menuItem(get_label('special'), "menu_addobject_special", ""));
 	}
 	
-	submenu_addobject_icon = new jsDOMenu(140);
+	var submenu_addobject_icon = new jsDOMenu(140);
 	with (submenu_addobject_icon) {
 		addMenuItem(new menuItem(get_label('host'), "", "code:get_click('host',1,'add');"));
 		addMenuItem(new menuItem(get_label('service'), "", "code:get_click('service',1,'add');"));
@@ -71,7 +71,7 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('map'), "", "code:get_click('map',1,'add');"));
 	}
 	
-	submenu_addobject_line = new jsDOMenu(140);
+	var submenu_addobject_line = new jsDOMenu(140);
 	with (submenu_addobject_line) {
 		addMenuItem(new menuItem(get_label('host'), "", "code:get_click('host',2,'add');"));
 		addMenuItem(new menuItem(get_label('service'), "", "code:get_click('service',2,'add');"));
@@ -79,25 +79,26 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('servicegroup'), "", "code:get_click('servicegroup',2,'add');"));
 	}
 	
-	submenu_addobject_special = new jsDOMenu(140);
+	var submenu_addobject_special = new jsDOMenu(140);
 	with (submenu_addobject_special) {
 		addMenuItem(new menuItem(get_label('textbox'), "", "code:get_click('textbox',2,'add');"));
 		addMenuItem(new menuItem(get_label('shape'), "", "code:get_click('shape',1,'add');"));
 	}
 	
-	submenu_management = new jsDOMenu(170);
+	var submenu_management = new jsDOMenu(170);
 	with (submenu_management) {
 		addMenuItem(new menuItem(get_label('manageMaps'), "menu_map_mgmt", "code:popupWindow('"+get_label('manageMaps')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageMaps', true, false));"));
 		addMenuItem(new menuItem(get_label('manageBackgrounds'), "menu_background_mgmt", "code:popupWindow('"+get_label('manageBackgrounds')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackgrounds', true, false));"));
 		addMenuItem(new menuItem(get_label('manageShapes'), "menu_shape_mgmt", "code:popupWindow('"+get_label('manageShapes')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageShapes', true, false));"));
 		addMenuItem(new menuItem(get_label('manageBackends'), "menu_backend_mgmt", "code:popupWindow('"+get_label('manageBackends')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackends', true, false));"));
 	}
+	
 	mainMenu.items.menu_management.setSubMenu(submenu_management);
 	
 	if(mapOptions.length > 15) {
-		submenu_maps_open = [];
-		submenu_maps_open_sep = new jsDOMenu(170);
-		for(i=0;i<=Math.floor(mapOptions.length/15);i++) {
+		var submenu_maps_open = [];
+		var submenu_maps_open_sep = new jsDOMenu(170);
+		for(var i = 0, len = Math.floor(mapOptions.length/15); i <= len; i++) {
 			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i, "")
 			submenu_maps_open_sep.addMenuItem(newMenuItem);
 			submenu_maps_open[i] = new jsDOMenu(170);
@@ -116,9 +117,9 @@ function createjsDOMenu() {
 		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open_sep);
 		
 		// Open in NagVis
-		submenu_maps_open_nagvis = [];
-		submenu_maps_open_sep_nagvis = new jsDOMenu(170);
-		for(i=0;i<=Math.floor(mapOptions.length/15);i++) {
+		var submenu_maps_open_nagvis = [];
+		var submenu_maps_open_sep_nagvis = new jsDOMenu(170);
+		for(var i=0, len = Math.floor(mapOptions.length/15); i <= len; i++) {
 			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i+"_nagvis", "")
 			submenu_maps_open_sep_nagvis.addMenuItem(newMenuItem);
 			submenu_maps_open_nagvis[i] = new jsDOMenu(170);
