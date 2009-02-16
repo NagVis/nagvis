@@ -30,6 +30,8 @@ Base.extend = function(_instance, _static) { // subclass
 				return (arguments[0].extend || extend).call(arguments[0], proto);
 			}
 		}
+		
+		return false;
 	};
 	
 	// build the class interface
@@ -85,7 +87,7 @@ Base.prototype = {
 			var hidden = ["constructor", "toString", "valueOf"];
 			// if we are prototyping then include the constructor
 			var i = Base._prototyping ? 0 : 1;
-			while (key = hidden[i++]) {
+			while ((key = hidden[i++])) {
 				if (source[key] != proto[key]) {
 					extend.call(this, key, source[key]);
 
