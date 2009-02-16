@@ -42,5 +42,5 @@ function validateForm() {
  */
 function validateMainConfigFieldValue(oField) {
 	var sName = oField.name.split('_');
-	return validateValue(sName, oField.value, validMainConfig[sName[1]][sName[2]].match)
+	return validateValue(sName, oField.value, validMainConfig[sName[0]][sName[1]].match)
 }
