@@ -285,19 +285,3 @@ function confirm_restore() {
 	}
 	return true;
 }
-
-// functions used to open a popup window in different sizes, with or without sidebars
-var win = null;
-function open_window(page,name) {
-	open_window_management(page,name);
-}
-
-function open_window_management(page,name) {
-	L=540;
-	H=660;
-	
-	posX = (screen.width) ? (screen.width - L)/ 2 : 0;
-	posY = (screen.height) ? (screen.height - H)/ 2 : 0;
-	options='height='+H+', width='+L+',top='+posY+',left='+posX+',scrollbars=yes,resizable=yes';
-	win = window.open(page, name, options);
-}
