@@ -236,8 +236,8 @@ class WuiMap extends GlobalMap {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
 						$ret .= "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
-						$obj['x'] = ($pointa_x+($pointb_x-$pointa_x)/2) - 10;
-						$obj['y'] = ($pointa_y+($pointb_y-$pointa_y)/2) - 10;
+						$obj['x'] = round(($pointa_x+($pointb_x-$pointa_x)/2) - 10);
+						$obj['y'] = round(($pointa_y+($pointb_y-$pointa_y)/2) - 10);
 						
 						$obj['icon'] = '20x20.gif';
 					} else {
