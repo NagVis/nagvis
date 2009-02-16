@@ -301,7 +301,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var link = '';
 		
 		// Create container div
-		oContainerDiv = document.createElement('div');
+		var oContainerDiv = document.createElement('div');
 		oContainerDiv.setAttribute('id', this.objId+'-linediv');
 		
 		// Create line div
