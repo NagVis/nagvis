@@ -81,7 +81,7 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseTextbox: function () {
-		oLabelDiv = document.createElement('div');
+		var oLabelDiv = document.createElement('div');
 		oLabelDiv.setAttribute('id', this.objId+'label');
 		oLabelDiv.setAttribute('class', 'box');
 		oLabelDiv.setAttribute('className', 'box');
@@ -112,6 +112,6 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 		oLabelDiv.appendChild(oLabelSpan);
 		oLabelSpan = null;
 		
-		return oLabelDiv;	
+		return oLabelDiv;
 	}
 });
