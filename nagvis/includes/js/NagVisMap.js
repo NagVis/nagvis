@@ -61,7 +61,7 @@ var NagVisMap = NagVisStatefulObject.extend({
 		oImg = null;
 		
 		var h2 = document.createElement('h2');
-		h2.appendChild(document.createTextNode(this.conf.name));
+		h2.appendChild(document.createTextNode(this.conf.alias));
 		oTd.appendChild(h2);
 		h2 = null;
 		
