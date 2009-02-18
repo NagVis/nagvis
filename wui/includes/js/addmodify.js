@@ -136,7 +136,7 @@ function check_object() {
 	}
 	
 	// we make some post tests (concerning the line_type and iconset values)
-	if(line_type != '') {
+	if(view_type == 'line') {
 		// we verify that the current line_type is valid
 		valid_list=new Array("10","11","20");
 		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
@@ -161,6 +161,11 @@ function check_object() {
 			alert(printLang(lang['not2coordsY'],'COORD~Y'));
 			return false;
 		}
+		
+		if(line_type == '') {
+			alert(printLang(lang["lineTypeNotSet"]));
+			return false;
+		}
 	}
 	
 	if(x.split(",").length > 1) {
@@ -168,8 +173,13 @@ function check_object() {
 			alert(printLang(lang["only1or2coordsX"],'COORD~X'));
 			return false;
 		} else {
+			if(view_type != 'line') {
+				alert(printLang(lang["viewTypeWrong"],'COORD~X'));
+				return false;
+			}
+			
 			if(line_type == '') {
-				alert(printLang(lang["lineTypeNotSelectedX"],'COORD~X'));
+				alert(printLang(lang["lineTypeNotSet"]));
 				return false;
 			}
 		}
@@ -181,8 +191,13 @@ function check_object() {
 			alert(mess);
 			return false;
 		} else {
+			if(view_type != 'line') {
+				alert(printLang(lang["viewTypeWrong"],'COORD~Y'));
+				return false;
+			}
+			
 			if(line_type == '') {
-				alert(printLang(lang["lineTypeNotSelectedY"],'COORD~Y'));
+				alert(printLang(lang["lineTypeNotSet"]));
 				return false;
 			}
 		}
