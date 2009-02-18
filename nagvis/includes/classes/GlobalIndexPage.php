@@ -129,7 +129,7 @@ class GlobalIndexPage {
 					$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
 				}
 				$objConf['type'] = 'map';
-				$objConf['map_name'] = $MAPCFG->getAlias();
+				$objConf['map_name'] = $MAPCFG->getName();
 				
 				$MAP->MAPOBJ->setConfiguration($objConf);
 				
@@ -164,9 +164,6 @@ class GlobalIndexPage {
 						$imgPath = $this->CORE->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
 						$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
 					}
-					
-					// Now form the cell with its contents
-					//DEPRECATED $MAP->MAPOBJ->replaceMacros();
 					
 					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
 						$image = $this->createThumbnail($imgPath, $mapName);
@@ -245,13 +242,6 @@ class GlobalIndexPage {
 		
 		$arr['event_log'] = $this->CORE->MAINCFG->getValue('defaults', 'eventlog');
 		$arr['event_log_level'] = $this->CORE->MAINCFG->getValue('defaults', 'eventloglevel');
-		
-		/*$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
-		$arr['background_image'] = $this->getBackgroundJson();
-		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
-		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
-		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
-		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');*/
 		
 		return json_encode($arr);
 	}
