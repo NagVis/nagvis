@@ -113,8 +113,9 @@ function runWorker(iCount, sType) {
 			getContextTemplates(aMaps);
 			
 			// Assign the context templates to the objects and parse them
-			eventlog("worker", "info", "Parse context menus");
-			parseContextMenus(aMaps);
+			// FIXME: No context menus on overview page atm
+			//eventlog("worker", "info", "Parse context menus");
+			//parseContextMenus(aMaps);
 			
 			eventlog("worker", "info", "Finished parsing overview");
 		}
