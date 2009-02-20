@@ -107,7 +107,7 @@ class WuiAddModify extends GlobalPage {
 					}
 				}
 			break;
-			// if the action specified in the URL is "add", we set the object coordinates (that we retrieve from the mycoords parameter)
+			
 			case 'add':
 				if($this->prop['coords'] != '') {
 					$val_coords = explode(',',$this->prop['coords']);
@@ -240,7 +240,12 @@ class WuiAddModify extends GlobalPage {
 							} else {
 								$options = Array('icon', 'line');
 							}
-							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
+							
+							if($this->prop['viewType'] != '') {
+								$selected = $this->prop['viewType'];
+							} else {
+								$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
+							}
 						break;
 						
 						case 'service_description':
@@ -285,12 +290,24 @@ class WuiAddModify extends GlobalPage {
 					if($fieldType == 'dropdown') {
 						$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $selected, $prop['must'], $onChange, '', $style, $class);
 					}
+					
+					// Toggle depending fields
+					if(isset($selected) && $selected != '') {
+						$ret .= $this->parseJs('toggleDependingFields("'.$propname.'", "'.$selected.'");');
+					}                                                                         
 				break;
 				
 				case 'boolean':
+					$value = $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE);
+					
 					// display a listbox with "yes/no" for boolean options 
 					$options = Array(Array('label' => $this->LANG->getText('yes'), 'value'=>'1'), Array('label' => $this->LANG->getText('no'), 'value'=>'0'));
-					$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE), $prop['must'], 'validateMapConfigFieldValue(this)', '', $style, $class);
+					$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $value, $prop['must'], 'validateMapConfigFieldValue(this)', '', $style, $class);
+					
+					// Toggle depending fields
+					if(isset($value) && $value != '') {
+						$ret .= $this->parseJs('toggleDependingFields("'.$propname.'", "'.$value.'");');
+					}
 				break;
 				
 				case 'hidden':
@@ -306,6 +323,11 @@ class WuiAddModify extends GlobalPage {
 					}
 					
 					$ret .= $this->FORM->getInputLine($propname, $propname, $value, $prop['must'], 'validateMapConfigFieldValue(this)', $style, $class);
+					
+					// Toggle depending fields
+					if(isset($value) && $value != '') {
+						$ret .= $this->parseJs('toggleDependingFields("'.$propname.'", "'.$value.'");');
+					}
 				break;
 			}
 		}

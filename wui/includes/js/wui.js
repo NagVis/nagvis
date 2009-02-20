@@ -35,6 +35,7 @@ var myshape_background = null;
 var myshapex=0;
 var myshapey=0;
 var objid=0;
+var viewType = '';
 
 // function that says if the current user is allowed to have access to the map
 function checkUserAllowed(allowedUsers,username) {
@@ -176,24 +177,35 @@ function get_click_pos(e) {
 			posy = event.clientY;
 		}
 		
+		// Start drawing a line
 		if(cpt_clicks == 2) {		
 			myshape = new jsGraphics("mymap");
-			myshapex=posx;
-			myshapey=posy;
+			myshapex = posx;
+			myshapey = posy;
 			
 			myshape.setColor('#06B606');
 			myshape.setStroke(1);
-			follow_mouse=true;
+			
+			follow_mouse = true;
+			
+			// Save view_type for default selection in addmodify dialog
+			viewType = 'line';
 		}
 		
-		coords=coords+posx+','+posy+',';
-		cpt_clicks=cpt_clicks-1;
+		if(viewType == '') {
+			viewType = 'icon';
+		}
+		
+		// Save current click position
+		coords = coords + posx + ',' + posy + ',';
+		
+		// Reduce number of clicks left
+		cpt_clicks = cpt_clicks - 1;
 	}
 	
 	if(cpt_clicks > 0) {
 		window.status = printLang(lang['clickMapToSetPoints'],'') + cpt_clicks;
-	}
-	else if(cpt_clicks == 0) {
+	} else if(cpt_clicks == 0) {
 		if (follow_mouse) myshape.clear();
 		coords=coords.substr(0,coords.length-1);
 		window.status='';
@@ -204,14 +216,15 @@ function get_click_pos(e) {
 		
 		follow_mouse=false;
 		if(action_click=='add') {
-			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords;
+			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
 		} else if(action_click=='modify') {
 			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
 		
-		// "+get_label('properties')+"
+		// FIXME: Title "+get_label('properties')+"
 		popupWindow('TITLE', getSyncRequest(link, true, false));
-		cpt_clicks=-1;
+		
+		cpt_clicks = -1;
 	}	
 }
 

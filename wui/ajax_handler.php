@@ -314,14 +314,20 @@ switch($_GET['action']) {
 				if(!isset($_GET['coords'])) {
 					$_GET['coords'] = '';
 				}
+				
 				if(!isset($_GET['id'])) {
 					$_GET['id'] = '';
+				}
+				
+				if(!isset($_GET['viewType'])) {
+					$_GET['viewType'] = '';
 				}
 				
 				$FRONTEND = new WuiAddModify($CORE, $MAPCFG, Array('action' => $_GET['do'],
 																	'type' => $_GET['type'],
 																	'id' => $_GET['id'],
-																	'coords' => $_GET['coords']));
+																	'coords' => $_GET['coords'],
+																	'viewType' => $_GET['viewType']));
 			break;
 			case 'editMainCfg':
 				$FRONTEND = new WuiEditMainCfg($CORE);
