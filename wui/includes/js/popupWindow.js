@@ -62,7 +62,7 @@ function popupWindowClose() {
 }
 
 function popupWindow(title, oContent) {
-	if(oContent === null) {
+	if(oContent === null || oContent.code === null) {
 		return false;
 	}
 	
