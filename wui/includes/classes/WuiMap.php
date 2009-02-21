@@ -553,7 +553,7 @@ class WuiMap extends GlobalMap {
 			$positionSizeText = '';	
 		}
 		
-		$tooltipText .= "<tr><th><a href=javascript:popupWindow(\'".$this->LANG->getText('change')."\',"
+		$tooltipText .= "<tr><th><a href=# onclick=popupWindow(\'".$this->LANG->getText('change')."\',"
 			."getSyncRequest(\'./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\',true,false));>"
 			.$this->LANG->getText('change')."</a>&nbsp;".$positionSizeText."</th>";
 		$tooltipText .= "<th><a href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\' onClick=\'return deleteMapObject(this);return false;\'>".$this->LANG->getText('delete')."</a></th></tr>";

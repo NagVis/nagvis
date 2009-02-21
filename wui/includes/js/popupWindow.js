@@ -128,5 +128,5 @@ function popupWindow(title, oContent) {
 	document.body.appendChild(oContainerDiv);
 	oContainerDiv = null;
 	
-	return true;
+	return false;
 }
