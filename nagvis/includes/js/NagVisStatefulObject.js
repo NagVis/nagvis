@@ -312,8 +312,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oContainerDiv.appendChild(oLineDiv);
 		oLineDiv = null;
 		
-		// Parse link only when set
-		if(this.conf.url && this.conf.url !== '') {
+		// Parse hover/link area only when needed
+		if((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
 			var oLinkDiv = document.createElement('div');
 			
 			oLinkDiv.setAttribute('id', this.objId+'-linelinkdiv');
@@ -342,7 +342,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var width = this.conf.line_width;
 		
 		// Parse the line object
-		drawNagVisLine(this.objId, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime);
+		drawNagVisLine(this.objId, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
 	},
 	
 	/**

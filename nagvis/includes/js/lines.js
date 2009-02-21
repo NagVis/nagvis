@@ -26,7 +26,7 @@
  */
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime) {
+function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime, bLinkArea) {
 	var colorFill = '';
 	var colorBorder = '#000000';
 	
@@ -68,15 +68,15 @@ function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime
 		var xMid = middle(x1,x2);
 		var yMid = middle(y1,y2);
 		
-		drawArrow(objId, x1, y1, xMid, yMid, width, colorFill, colorBorder);
-		drawArrow(objId, x2, y2, xMid, yMid, width, colorFill, colorBorder);
+		drawArrow(objId, x1, y1, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objId, x2, y2, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
 	} else if(type == 11) {
-		drawArrow(objId, x1, y1, x2, y2, width, colorFill, colorBorder);
+		drawArrow(objId, x1, y1, x2, y2, width, colorFill, colorBorder, bLinkArea);
 	}
 }
 
 // This function draws an arrow like it is used on NagVis maps
-function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder) {
+function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) {
 	var xCoord = [];
 	var yCoord = [];
 	
@@ -139,25 +139,25 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder) {
 		oLine.paint();
 	}
 	
+	oCanvas = null;
 	
 	// Now draw the link
 	// FIXME: Would be better to have a link allover the line
-	// FIXME: Only add hover/link area when hover or link enabled
 	// -------------------------------------------------------------------------
 	
-	var oLinkContainer = document.getElementById(objId+'-linelinkdiv');
-	var oImg = document.createElement('img');
-	oImg.setAttribute('id', objId+'-link');
-	oImg.src = oGeneralProperties.path_htmlimages+'iconsets/20x20.gif';
-	oImg.style.position = 'absolute';
-	oImg.style.left = (middle(x1, x2)-10)+"px";
-	oImg.style.top = (middle(y1, y2)-10)+"px";
-	
-	oLinkContainer.appendChild(oImg);
-	oImg = null;
-	oLinkContainer = null;
-	
-	oCanvas = null;
+	if(bLinkArea) {
+		var oLinkContainer = document.getElementById(objId+'-linelinkdiv');
+		var oImg = document.createElement('img');
+		oImg.setAttribute('id', objId+'-link');
+		oImg.src = oGeneralProperties.path_htmlimages+'iconsets/20x20.gif';
+		oImg.style.position = 'absolute';
+		oImg.style.left = (middle(x1, x2)-10)+"px";
+		oImg.style.top = (middle(y1, y2)-10)+"px";
+		
+		oLinkContainer.appendChild(oImg);
+		oImg = null;
+		oLinkContainer = null;
+	}
 }
 
 function newX(a, b, x, y) {
@@ -168,10 +168,12 @@ function newY(a, b, x, y) {
 	return (Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
 }
 
+// Calculates the middle between two integers
 function middle(x1,x2) {
 	return (x1+(x2-x1)/2);
 }
 
+// Returns the maximum value in an array
 function max(arr) {
 	var max = arr[0];
 	var len = arr.length;
@@ -179,6 +181,7 @@ function max(arr) {
 	return max;
 }
 
+// Returns the minimum value in an array
 function min(arr) {
 	var min = arr[0];
 	var len = arr.length;
