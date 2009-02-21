@@ -190,7 +190,7 @@ class WuiAddModify extends GlobalPage {
 						break;
 						
 						case 'line_type':
-							$options = Array(Array('label' => '------><------', 'value' => '0'), Array('label' => '-------------->', 'value'=>'1'));
+							$options = Array(Array('label' => '------><------', 'value' => '10'), Array('label' => '-------------->', 'value'=>'11'));
 							$selected = substr($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),1,1);
 						break;
 						

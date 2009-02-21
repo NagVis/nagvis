@@ -120,10 +120,6 @@ function check_object() {
 				if(document.addmodify.type.value == "map" && document.addmodify.elements[i].name == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
 					alert(printLang(lang['mapObjectWillShowSummaryState'],''));
 				}
-				
-				if(document.addmodify.elements[i].name=='line_type') {
-					document.addmodify.elements[i].value = "1"+document.addmodify.elements[i].value;
-				}
 			} else {
 				if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
 					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+document.addmodify.elements[i].name+',TYPE~'+document.addmodify.type.value+',MAPNAME~'+document.addmodify.map.value));
