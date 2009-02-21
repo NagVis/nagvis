@@ -107,8 +107,6 @@ function contextShow(event) {
 		var id;
 		if(target.id !== '') {
 			id = target.id;
-		} else {
-			id = target.parentNode.parentNode.parentNode.id;
 		}
 		
 		var contextMenu = document.getElementById(id+'-context');

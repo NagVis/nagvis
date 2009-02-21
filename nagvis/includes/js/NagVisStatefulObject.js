@@ -229,7 +229,7 @@ var NagVisStatefulObject = NagVisObject.extend({
     // Add a context menu to the object when enabled
     if(this.conf.context_menu && this.conf.context_menu == '1') {
       if(this.conf.view_type && this.conf.view_type == 'line') {
-        this.getContextMenu(this.objId, this.objId+'-linediv');
+        this.getContextMenu(this.objId, this.objId+'-link');
       } else {
         this.getContextMenu(this.objId, this.objId+'-icon');
 			}
