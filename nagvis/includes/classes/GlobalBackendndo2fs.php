@@ -118,11 +118,11 @@ class GlobalBackendndo2fs {
 	public function getObjects($type, $name1Pattern='', $name2Pattern='') {
 		$ret = Array();
 		$filter = '';
-		$sDirectory = '';
+		$sFile = '';
 		
 		switch($type) {
 			case 'host':
-				$sDirectory = $this->pathVolatile.'/HOSTS';
+				$sFile = $this->pathVolatile.'/VIEWS/HOSTLIST';
 			break;
 			case 'service':
 				$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
@@ -131,26 +131,25 @@ class GlobalBackendndo2fs {
 				}
 			break;
 			case 'hostgroup':
-				$sDirectory = $this->pathVolatile.'/HOSTGROUPS';
+				$sFile = $this->pathVolatile.'/VIEWS/HOSTGROUPLIST';
 			break;
 			case 'servicegroup':
-				$sDirectory = $this->pathVolatile.'/SERVICEGROUPS';
+				$sFile = $this->pathVolatile.'/VIEWS/SERVICEGROUPLIST';
 			break;
 			default:
 				return Array();
 			break;
 		}
 		
-		if($sDirectory != '') {
-			if(file_exists($sDirectory)) {
-				if ($handle = opendir($sDirectory)) {
-					while(false !== ($file = readdir($handle))) {
-						if($file != '..' && $file != '.') {
-							$ret[] = Array('name1' => $file, 'name2' => '');
-						}				
+		if($sFile != '') {
+			if(file_exists($sFile)) {
+				$oObjects = json_decode(file_get_contents($sFile));
+				
+				foreach($oObjects AS $sObject => $aObjects) {
+					foreach($aObjects AS $sObj) {
+						$ret[] = Array('name1' => $sObj, 'name2' => '');
 					}
 				}
-				closedir($handle);
 			}
 		}
 		
