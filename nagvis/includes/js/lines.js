@@ -96,15 +96,68 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder) {
 	yCoord[5] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
 	yCoord[6] = y1 + newY(x2-x1, y2-y1, 0, -w);
 	
-	var oLine = new jsGraphics(objId+'-line');
-	oLine.setColor(colorFill);
-	oLine.fillPolygon(xCoord, yCoord);
-	oLine.paint();
+	var oCanvas = document.createElement('canvas');
+	if(oCanvas.getContext) {
+		var xMin = Math.round(min(xCoord));
+		var yMin = Math.round(min(yCoord));
+		var xMax = Math.round(max(xCoord));
+		var yMax = Math.round(max(yCoord));
+		
+		var oLineContainer = document.getElementById(objId+'-line');
+		
+		// Draw the line
+		oCanvas.setAttribute('id', objId+'-canvas');
+		oCanvas.style.position = 'absolute';
+		oCanvas.style.left = xMin+"px";
+		oCanvas.style.top = yMin+"px";
+		oCanvas.width = Math.round(xMax-xMin);
+		oCanvas.height = Math.round(yMax-yMin);
+		
+		var ctx = oCanvas.getContext('2d');
+		
+		ctx.fillStyle = colorFill;
+		ctx.beginPath();
+		ctx.moveTo(xCoord[0]-xMin, yCoord[0]-yMin);
+		ctx.lineTo(xCoord[1]-xMin, yCoord[1]-yMin);
+		ctx.lineTo(xCoord[2]-xMin, yCoord[2]-yMin);
+		ctx.lineTo(xCoord[3]-xMin, yCoord[3]-yMin);
+		ctx.lineTo(xCoord[4]-xMin, yCoord[4]-yMin);
+		ctx.lineTo(xCoord[5]-xMin, yCoord[5]-yMin);
+		ctx.lineTo(xCoord[6]-xMin, yCoord[6]-yMin);
+		ctx.fill();
+		
+		oLineContainer.appendChild(oCanvas);
+		ctx = null;
+		oCanvas = null;
+		oLineContainer = null;
+		
+	} else {
+		// Fallback to old line style
+		var oLine = new jsGraphics(objId+'-line');
+		oLine.setColor(colorFill);
+		oLine.fillPolygon(xCoord, yCoord);
+		oLine.paint();
+	}
 	
-	var oLineBorder = new jsGraphics(objId+'-border');
-	oLineBorder.setColor(colorBorder);
-	oLineBorder.drawPolygon(xCoord, yCoord);
-	oLineBorder.paint();
+	
+	// Now draw the link
+	// FIXME: Would be better to have a link allover the line
+	// FIXME: Only add hover/link area when hover or link enabled
+	// -------------------------------------------------------------------------
+	
+	var oLinkContainer = document.getElementById(objId+'-linelinkdiv');
+	var oImg = document.createElement('img');
+	oImg.setAttribute('id', objId+'-link');
+	oImg.src = oGeneralProperties.path_htmlimages+'iconsets/20x20.gif';
+	oImg.style.position = 'absolute';
+	oImg.style.left = (middle(x1, x2)-10)+"px";
+	oImg.style.top = (middle(y1, y2)-10)+"px";
+	
+	oLinkContainer.appendChild(oImg);
+	oImg = null;
+	oLinkContainer = null;
+	
+	oCanvas = null;
 }
 
 function newX(a, b, x, y) {
@@ -117,4 +170,18 @@ function newY(a, b, x, y) {
 
 function middle(x1,x2) {
 	return (x1+(x2-x1)/2);
+}
+
+function max(arr) {
+	var max = arr[0];
+	var len = arr.length;
+	for (var i = 1; i < len; i++) if (arr[i] > max) max = arr[i];
+	return max;
+}
+
+function min(arr) {
+	var min = arr[0];
+	var len = arr.length;
+	for (var i = 1; i < len; i++) if (arr[i] < min) min = arr[i];
+	return min;
 }

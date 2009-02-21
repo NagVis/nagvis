@@ -205,7 +205,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Get the object to apply the hover menu to
 		if(this.conf.view_type && this.conf.view_type === 'line') {
-			oObj = document.getElementById(this.objId+'-linediv');
+			oObj = document.getElementById(this.objId+'-linelinkdiv');
 		} else {
 			oObj = document.getElementById(this.objId+'-icon');
 		}
@@ -309,23 +309,22 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oLineDiv.setAttribute('id', this.objId+'-line');
 		oLineDiv.style.zIndex = this.conf.z;
 		
-		// Parse link only when set
-		if(this.conf.url && this.conf.url !== '') {
-			var sUrl = this.conf.url;
-			var sUrlTarget = this.conf.url_target;
-			oLineDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
-		}
-		
 		oContainerDiv.appendChild(oLineDiv);
 		oLineDiv = null;
 		
-		// Create line border div
-		var oLineBorderDiv = document.createElement('div');
-		oLineBorderDiv.setAttribute('id', this.objId+'-border');
-		oLineBorderDiv.style.zIndex = this.conf.z;
-		
-		oContainerDiv.appendChild(oLineBorderDiv);
-		oLineBorderDiv = null;
+		// Parse link only when set
+		if(this.conf.url && this.conf.url !== '') {
+			var oLinkDiv = document.createElement('div');
+			
+			oLinkDiv.setAttribute('id', this.objId+'-linelinkdiv');
+			oLinkDiv.style.zIndex = (this.conf.z+1);
+			var sUrl = this.conf.url;
+			var sUrlTarget = this.conf.url_target;
+			oLinkDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
+			
+			oContainerDiv.appendChild(oLinkDiv);
+			oLinkDiv = null;
+		}
 		
 		return oContainerDiv;
 	},
