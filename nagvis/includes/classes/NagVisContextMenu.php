@@ -98,6 +98,9 @@ class NagVisContextMenu {
 	 */
 	private function replaceStaticMacros() {
 		// Replace the static macros (language, paths)
+		if(strpos($this->code,'[lang_connect_by_ssh]') !== FALSE) {
+			$this->code = str_replace('[lang_connect_by_ssh]',$this->CORE->LANG->getText('contextConnectBySsh'),$this->code);
+		}
 		
 		if(strpos($this->code,'[lang_refresh_status]') !== FALSE) {
 			$this->code = str_replace('[lang_refresh_status]',$this->CORE->LANG->getText('contextRefreshStatus'),$this->code);
