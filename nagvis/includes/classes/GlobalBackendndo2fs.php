@@ -27,7 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-class GlobalBackendndo2fs {
+class GlobalBackendndo2fs implements GlobalBackendInterface {
 	private $CORE;
 	private $backendId;
 	private $pathPersistent;
@@ -166,7 +166,7 @@ class GlobalBackendndo2fs {
 	 * @return	bool $ack
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostAckByHostname($hostName) {
+	public function getHostAckByHostname($hostName) {
 		$return = FALSE;
 		
 		// Read from cache or fetch from NDO
@@ -201,7 +201,7 @@ class GlobalBackendndo2fs {
 	 * @return	array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostState($hostName, $onlyHardstates) {
+	public function getHostState($hostName, $onlyHardstates) {
 		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
 			return $this->hostCache[$hostName.'-'.$onlyHardstates];
 		} else {
@@ -321,7 +321,7 @@ class GlobalBackendndo2fs {
 	 * @return	Array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getServiceState($hostName, $serviceName, $onlyHardstates) {
+	public function getServiceState($hostName, $serviceName, $onlyHardstates) {
 		if(isset($this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates])) {
 			return $this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates];
 		} else {
@@ -532,7 +532,7 @@ class GlobalBackendndo2fs {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostNamesWithNoParent() {
+	public function getHostNamesWithNoParent() {
 		$aReturn = Array();
 		
 		if(isset($this->oParentlistCache)) {
@@ -558,7 +558,7 @@ class GlobalBackendndo2fs {
 	 * @return	Array			Array with hostnames
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getDirectChildNamesByHostName($hostName) {
+	public function getDirectChildNamesByHostName($hostName) {
 		$aReturn = Array();
 		
 		if(isset($this->oParentlistCache)) {
@@ -584,7 +584,7 @@ class GlobalBackendndo2fs {
 	 * @return	Array			Array with hostnames
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostsByHostgroupName($hostgroupName) {
+	public function getHostsByHostgroupName($hostgroupName) {
 		$aReturn = Array();
 		
 		if(file_exists($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName)) {
@@ -604,7 +604,7 @@ class GlobalBackendndo2fs {
 	 * @return	Array			Array with hostnames and service descriptions
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getServicesByServicegroupName($servicegroupName) {
+	public function getServicesByServicegroupName($servicegroupName) {
 		$aReturn = Array();
 		
 		if(file_exists($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName)) {
@@ -619,7 +619,7 @@ class GlobalBackendndo2fs {
 		return $aReturn;
 	}
     
-    /**
+	/**
 	 * PUBLIC Method getServicegroupInformations
 	 *
 	 * Gets information like the alias for a servicegroup
@@ -628,7 +628,7 @@ class GlobalBackendndo2fs {
 	 * @return	Array			Array with object information
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getServicegroupInformations($servicegroupName) {
+	public function getServicegroupInformations($servicegroupName) {
 		$aReturn = Array();
 		
 		if(file_exists($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName)) {
@@ -641,7 +641,7 @@ class GlobalBackendndo2fs {
 		return $aReturn;
 	}
     
-    /**
+	/**
 	 * PUBLIC Method getHostgroupInformations
 	 *
 	 * Gets information like the alias for a hostgroup
@@ -650,7 +650,7 @@ class GlobalBackendndo2fs {
 	 * @return	Array			Array with object information
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getHostgroupInformations($hostgroupName) {
+	public function getHostgroupInformations($hostgroupName) {
 		$arrReturn = Array();
 		
 		if(file_exists($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName)) {

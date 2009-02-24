@@ -27,7 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-class GlobalBackendndomy {
+class GlobalBackendndomy implements GlobalBackendInterface {
 	private $CORE;
 	private $CONN;
 	private $backendId;
@@ -911,29 +911,6 @@ class GlobalBackendndomy {
 		$arrReturn['object_id'] = $data['object_id'];
 		
 		return $arrReturn;
-	}
-	
-	/**
-	 * PUBLIC Method getNagiosStartTime
-	 *
-	 * Gets the last start/reload/restart time of NagVis as UNIX timestamp
-	 *
-	 * @return	Integer		Timestamp of Nagios start time
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getNagiosStartTime() {
-		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				UNIX_TIMESTAMP(program_start_time) AS program_start_time 
-			FROM 
-				'.$this->dbPrefix.'programstatus
-			LIMIT 1');
-		
-		$data = mysql_fetch_array($QUERYHANDLE);
-		
-		// Free memory
-		mysql_free_result($QUERYHANDLE);
-		
-		return $data['program_start_time'];
 	}
 }
 ?>
