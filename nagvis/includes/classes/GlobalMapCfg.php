@@ -400,6 +400,7 @@ class GlobalMapCfg {
 				'view_type' => Array('must' => 0,
 					'default' => 'icon',
 					'match' => MATCH_VIEW_TYPE,
+					'field_type' => 'dropdown'),
 				'iconset' => Array('must' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE,
@@ -415,7 +416,7 @@ class GlobalMapCfg {
 					'default' => '3',
 					'match' => MATCH_INTEGER,
 					'depends_on' => 'view_type',
-					'depends_value' => 'line'),
+					'depends_value' => 'line',
 					'field_type' => 'dropdown'),
 				
 				'context_menu' => Array('must' => 0,
