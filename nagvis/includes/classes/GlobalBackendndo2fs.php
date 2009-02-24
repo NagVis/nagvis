@@ -207,7 +207,14 @@ class GlobalBackendndo2fs {
 		} else {
 			$arrReturn = Array();
 			
-			if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
+			if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName)
+			  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG')) {
+				$arrReturn['state'] = 'ERROR';
+				$arrReturn['output'] = $this->CORE->LANG->getText('hostNotFoundInDB','HOST~'.$hostName);
+			} elseif(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/STATUS')) {
+				$arrReturn['state'] = 'PENDING';
+				$arrReturn['output'] = $this->CORE->LANG->getText('hostIsPending','HOST~'.$hostName);
+			} else {
 				$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG'));
 				$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/STATUS'));
 				
@@ -294,9 +301,6 @@ class GlobalBackendndo2fs {
 						break;
 					}
 				}
-			} else {
-				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = $this->CORE->LANG->getText('hostNotFoundInDB','HOST~'.$hostName);
 			}
 			
 			// Write return array to cache
