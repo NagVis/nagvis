@@ -332,9 +332,22 @@ class GlobalBackendndo2fs {
 				if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
 					$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 					
+					// Replace some bad chars
 					$serviceName = strtr($serviceName,' /','__');
 					
-					if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName)) {
+					if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName)
+					  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/CONFIG')) {
+						
+						// Services which have no configuration information (Should not exist)
+						$aServObj[] = Array(null, null);
+					} elseif(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/STATUS')) {
+						
+						// Read object configuration
+						$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
+						
+						// No status information: Service is pending
+						$aServObj[] = Array($oConfig, null);
+					} else {
 						$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/CONFIG'));
 						$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/STATUS'));
 						
@@ -346,9 +359,25 @@ class GlobalBackendndo2fs {
 					$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 					
 					foreach($oServices->{$hostName} AS $service) {
-						$service = strtr($service,' ','_');
-						if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service)) {
+						// Replace some bad chars
+						$service = strtr($service,' /','__');
+						
+						if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service)
+						  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG')) {
 							
+							// Services which have no configuration information (Should not exist)
+							echo $this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'."<br>";
+							$aServObj[] = Array(null, null);
+						} elseif(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS')) {		
+							
+							// Read object configuration
+							$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
+							
+							// No status information: Service is pending
+							$aServObj[] = Array($oConfig, null);
+						} else {
+							
+							// Read config and status informations
 							$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
 							$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS'));
 							
@@ -372,6 +401,15 @@ class GlobalBackendndo2fs {
 				for($i = 0; $i < $numServices; $i++) {
 					$arrTmpReturn = Array();
 					
+					// Error handling: Service with no configuration
+					if($aServObj[$i][0] == null && $aServObj[$i][1] == null) {
+						continue;
+					}
+					
+					/**
+					 * Add config/general information to array
+					 */
+					
 					$arrTmpReturn['object_id'] = $this->iObjIdCounter++;
 					
 					$arrTmpReturn['service_description'] = $aServObj[$i][0]->SERVICEDESCRIPTION;
@@ -379,84 +417,93 @@ class GlobalBackendndo2fs {
 					$arrTmpReturn['alias'] = $aServObj[$i][0]->DISPLAYNAME;
 					//$arrTmpReturn['address'] = $aServObj[$i][0]->address'];
 					
-					// Add additional information to array
-					$arrTmpReturn['perfdata'] = $aServObj[$i][1]->PERFDATA;
-					$arrTmpReturn['last_check'] = $aServObj[$i][1]->LASTSERVICECHECK;
-					$arrTmpReturn['next_check'] = $aServObj[$i][1]->NEXTSERVICECHECK;
-					$arrTmpReturn['state_type'] = $aServObj[$i][1]->STATETYPE;
-					$arrTmpReturn['current_check_attempt'] = $aServObj[$i][1]->CURRENTCHECKATTEMPT;
-					$arrTmpReturn['max_check_attempts'] = $aServObj[$i][1]->MAXCHECKATTEMPTS;
-					$arrTmpReturn['last_state_change'] = $aServObj[$i][1]->LASTSTATECHANGE;
-					$arrTmpReturn['last_hard_state_change'] = $aServObj[$i][1]->LASTHARDSTATECHANGE;
-					
-					// If there is a downtime for this object, save the data
-					if($aServObj[$i][1]->SCHEDULEDDOWNTIMEDEPTH > 0) {
-						$arrTmpReturn['in_downtime'] = 1;
-						
-						$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
-						if(file_exists($sFile)) {
-							$oDowntime = json_decode(file_get_contents($sFile));
-							
-							$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
-							$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
-							$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-							$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
-						}
-					}
-					
-					/**
-					 * Only recognize hard states. There was a discussion about the implementation
-					 * This is a new handling of only_hard_states. For more details, see: 
-					 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
-					 *
-					 * Thanks to Andurin and fredy82
-					 */
-					if($onlyHardstates == 1) {
-						if($aServObj[$i][1]->STATETYPE != '0') {
-							$aServObj[$i][1]->CURRENTSTATE = $aServObj[$i][1]->CURRENTSTATE;
-						} else {
-							$aServObj[$i][1]->CURRENTSTATE = $aServObj[$i][1]->LASTHARDSTATE;
-						}
-					}
-					
-					if($aServObj[$i][1]->HASBEENCHECKED == '0' || $aServObj[$i][1]->CURRENTSTATE == '') {
+					// Error handling: Pending service
+					if($aServObj[$i][1] == null) {
 						$arrTmpReturn['state'] = 'PENDING';
 						$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked','SERVICE~'.$aServObj[$i][0]->SERVICEDESCRIPTION);
-					} elseif($aServObj[$i][1]->CURRENTSTATE == '0') {
-						// Host is UP
-						$arrTmpReturn['state'] = 'OK';
-						$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
 					} else {
-						// Host is DOWN/UNREACHABLE/UNKNOWN
-						
 						/**
-						 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
-						 * acknowledged => check for acknowledged host
+						 * Add status information to array
 						 */
-						if($aServObj[$i][1]->PROBLEMHASBEENACKNOWLEDGED != 1) {
-							$arrTmpReturn['problem_has_been_acknowledged'] = $this->getHostAckByHostname($hostName);
-						} else {
-							$arrTmpReturn['problem_has_been_acknowledged'] = $aServObj[$i][1]->PROBLEMHASBEENACKNOWLEDGED;
+						
+						$arrTmpReturn['perfdata'] = $aServObj[$i][1]->PERFDATA;
+						$arrTmpReturn['last_check'] = $aServObj[$i][1]->LASTSERVICECHECK;
+						$arrTmpReturn['next_check'] = $aServObj[$i][1]->NEXTSERVICECHECK;
+						$arrTmpReturn['state_type'] = $aServObj[$i][1]->STATETYPE;
+						$arrTmpReturn['current_check_attempt'] = $aServObj[$i][1]->CURRENTCHECKATTEMPT;
+						$arrTmpReturn['max_check_attempts'] = $aServObj[$i][1]->MAXCHECKATTEMPTS;
+						$arrTmpReturn['last_state_change'] = $aServObj[$i][1]->LASTSTATECHANGE;
+						$arrTmpReturn['last_hard_state_change'] = $aServObj[$i][1]->LASTHARDSTATECHANGE;
+						
+						// If there is a downtime for this object, save the data
+						if($aServObj[$i][1]->SCHEDULEDDOWNTIMEDEPTH > 0) {
+							$arrTmpReturn['in_downtime'] = 1;
+							
+							$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
+							if(file_exists($sFile)) {
+								$oDowntime = json_decode(file_get_contents($sFile));
+								
+								$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
+								$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
+								$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+								$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
+							}
 						}
 						
-						// Store state and output in array
-						switch($aServObj[$i][1]->CURRENTSTATE) {
-							case '1': 
-								$arrTmpReturn['state'] = 'WARNING';
-								$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
-							break;
-							case '2':
-								$arrTmpReturn['state'] = 'CRITICAL';
-								$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
-							break;
-							case '3':
-								$arrTmpReturn['state'] = 'UNKNOWN';
-								$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
-							break;
-							default:
-								$arrTmpReturn['state'] = 'UNKNOWN';
-								$arrTmpReturn['output'] = 'GlobalBackendndomy::getServiceState: Undefined state!';
-							break;
+						/**
+						 * Only recognize hard states. There was a discussion about the implementation
+						 * This is a new handling of only_hard_states. For more details, see: 
+						 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
+						 *
+						 * Thanks to Andurin and fredy82
+						 */
+						if($onlyHardstates == 1) {
+							if($aServObj[$i][1]->STATETYPE != '0') {
+								$aServObj[$i][1]->CURRENTSTATE = $aServObj[$i][1]->CURRENTSTATE;
+							} else {
+								$aServObj[$i][1]->CURRENTSTATE = $aServObj[$i][1]->LASTHARDSTATE;
+							}
+						}
+						
+						if($aServObj[$i][1]->HASBEENCHECKED == '0' || $aServObj[$i][1]->CURRENTSTATE == '') {
+							$arrTmpReturn['state'] = 'PENDING';
+							$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked','SERVICE~'.$aServObj[$i][0]->SERVICEDESCRIPTION);
+						} elseif($aServObj[$i][1]->CURRENTSTATE == '0') {
+							// Host is UP
+							$arrTmpReturn['state'] = 'OK';
+							$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
+						} else {
+							// Host is DOWN/UNREACHABLE/UNKNOWN
+							
+							/**
+							 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+							 * acknowledged => check for acknowledged host
+							 */
+							if($aServObj[$i][1]->PROBLEMHASBEENACKNOWLEDGED != 1) {
+								$arrTmpReturn['problem_has_been_acknowledged'] = $this->getHostAckByHostname($hostName);
+							} else {
+								$arrTmpReturn['problem_has_been_acknowledged'] = $aServObj[$i][1]->PROBLEMHASBEENACKNOWLEDGED;
+							}
+							
+							// Store state and output in array
+							switch($aServObj[$i][1]->CURRENTSTATE) {
+								case '1': 
+									$arrTmpReturn['state'] = 'WARNING';
+									$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
+								break;
+								case '2':
+									$arrTmpReturn['state'] = 'CRITICAL';
+									$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
+								break;
+								case '3':
+									$arrTmpReturn['state'] = 'UNKNOWN';
+									$arrTmpReturn['output'] = $aServObj[$i][1]->OUTPUT;
+								break;
+								default:
+									$arrTmpReturn['state'] = 'UNKNOWN';
+									$arrTmpReturn['output'] = 'GlobalBackendndomy::getServiceState: Undefined state!';
+								break;
+							}
 						}
 					}
 					
