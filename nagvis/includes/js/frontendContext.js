@@ -58,7 +58,7 @@ function contextMouseDown(event) {
 	}
 	
 	// Hide all context menus except clicking the current open context menu
-	if(id.indexOf('http:') === -1 && id.indexOf('-context') === -1) {
+	if(id === -1 || id.indexOf('http:') === -1 && id.indexOf('-context') === -1) {
 		// Hide all context menus
 		contextHide();
 	}
