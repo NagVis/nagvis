@@ -109,6 +109,7 @@ var NagVisObject = Base.extend({
 		
 		oMacros.obj_id = this.objId;
 		oMacros.name = this.conf.name;
+		oMacros.address = this.conf.address;
 		
 		if(this.conf.type === 'service') {
 			oMacros.service_description = this.conf.service_description;
