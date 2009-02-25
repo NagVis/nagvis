@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-24 23:28+0100\n"
-"PO-Revision-Date: 2009-02-24 23:31+0100\n"
+"PO-Revision-Date: 2009-02-25 22:27+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -967,7 +967,7 @@ msgstr "The file &quot;[FILE]&quot; does not exist."
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:87
 msgid "nagiosNotRunning"
-msgstr "NDO reports that Nagios is not running"
+msgstr "NDO reports that Nagios is not running (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:92
 #: nagvis/includes/classes/GlobalBackendndo2fs.php:68
