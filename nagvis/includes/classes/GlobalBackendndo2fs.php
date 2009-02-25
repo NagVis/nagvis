@@ -166,7 +166,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 	 * @return	bool $ack
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostAckByHostname($hostName) {
+	private function getHostAckByHostname($hostName) {
 		$return = FALSE;
 		
 		// Read from cache or fetch from NDO
