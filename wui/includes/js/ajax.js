@@ -31,7 +31,8 @@ function getServices(backend_id,type,host_name,field,selected) {
 		oOpt.field = field;
 		oOpt.selected = selected;
 		oOpt.type = type;
-		getRequest('ajax_handler.php?action=getServices&backend_id='+backend_id+'&host_name='+host_name,'printObjects',oOpt);
+		
+		printObjects(getSyncRequest('ajax_handler.php?action=getServices&backend_id='+backend_id+'&host_name='+host_name), oOpt);
 	}
 }
 
@@ -40,9 +41,11 @@ function getObjects(backend_id,type,field,selected) {
 	oOpt.field = field;
 	oOpt.selected = selected;
 	oOpt.type = type;
-	getRequest('ajax_handler.php?action=getObjects&backend_id='+backend_id+'&type='+type,'printObjects',oOpt);
+	
+	printObjects(getSyncRequest('ajax_handler.php?action=getObjects&backend_id='+backend_id+'&type='+type), oOpt);
 }
 
+// FIXME: Could be removed - the informations are present in maps javascript
 function getBackendOptions(backend_type,backend_id,form) {
 	var oOpt = Object();
 	oOpt.form = form;
