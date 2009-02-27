@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-24 23:28+0100\n"
-"PO-Revision-Date: 2009-02-25 22:27+0100\n"
+"PO-Revision-Date: 2009-02-27 20:57+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -918,7 +918,7 @@ msgstr "The background image folder &quot;[PATH]&quot; is not writeable."
 
 #: nagvis/includes/classes/GlobalBackendMgmt.php:62
 msgid "noBackendDefined"
-msgstr "No backend could be found in NagVis configuration."
+msgstr "No backend could be found in NagVis configuration. You need to define a backend for gathering status information."
 
 #: nagvis/includes/classes/GlobalBackendMgmt.php:79
 msgid "backendNotExists"
@@ -972,23 +972,23 @@ msgstr "NDO reports that Nagios is not running (Backend-ID: [BACKENDID])"
 #: nagvis/includes/classes/GlobalBackendndomy.php:92
 #: nagvis/includes/classes/GlobalBackendndo2fs.php:68
 msgid "nagiosDataNotUpToDate"
-msgstr "NDO claims that Nagios did no status update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and ndo2db are running."
+msgstr "NDO claims that Nagios did no status update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and NDO daemons are running. (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:131
 msgid "noTablesExists"
-msgstr "There are no tables in the database matching given prefix &quot;[PREFIX]&quot;"
+msgstr "There are no tables in the database matching given prefix &quot;[PREFIX]&quot;. (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:153
 msgid "errorConnectingMySQL"
-msgstr "Error while connecting to MySQL server. Maybe wrong connection properties in backend? MySQL-Error: [MYSQLERR]."
+msgstr "Error while connecting to MySQL server. Maybe wrong connection properties in backend? MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:163
 msgid "errorSelectingDb"
-msgstr "Error selecting the database. Maybe wrong database name or insufficient permissions. MySQL-Error: [MYSQLERR]."
+msgstr "Error selecting the database. Maybe wrong database name or insufficient permissions. MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:183
 msgid "mysqlNotSupported"
-msgstr "Your PHP installation lacks SQL support. You can not use the NDOMy Backend without php-mysql."
+msgstr "Your PHP installation lacks SQL support. You can not use the NDOMy Backend without php-mysql.  (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:211
 msgid "backendInstanceNameNotValid"
@@ -1001,7 +1001,7 @@ msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&
 #: nagvis/includes/classes/GlobalBackendndomy.php:432
 #: nagvis/includes/classes/GlobalBackendndo2fs.php:213
 msgid "hostNotFoundInDB"
-msgstr "The host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
+msgstr "The host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?  (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:481
 #: nagvis/includes/classes/GlobalBackendndo2fs.php:216
@@ -1012,7 +1012,7 @@ msgstr "The host \"[HOST]\" is in pending state"
 #: nagvis/includes/classes/GlobalBackendndomy.php:603
 #: nagvis/includes/classes/GlobalBackendndo2fs.php:394
 msgid "serviceNotFoundInDB"
-msgstr "The service \"[SERVICE]\" on host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?"
+msgstr "The service \"[SERVICE]\" on host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong? (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:655
 #: nagvis/includes/classes/GlobalBackendndo2fs.php:423
@@ -1147,7 +1147,7 @@ msgstr "Hosts"
 
 #: nagvis/includes/classes/objects/NagiosHostgroup.php:203
 msgid "hostGroupNotFoundInDB"
-msgstr "The hostgroup \"[HOSTGROUP]\" could not be found in the database. Maybe it is spelled wrong?"
+msgstr "The hostgroup \"[HOSTGROUP]\" could not be found in the database. Maybe it is spelled wrong? (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/objects/NagVisStatefulObject.php:609
 msgid "childStatesAre"
@@ -1181,7 +1181,7 @@ msgstr "Last state refresh"
 
 #: nagvis/includes/classes/objects/NagiosServicegroup.php:197
 msgid "serviceGroupNotFoundInDB"
-msgstr "The servicegroup \"[SERVICEGROUP]\" could not be found in the database. Maybe it is spelled wrong?"
+msgstr "The servicegroup \"[SERVICEGROUP]\" could not be found in the database. Maybe it is spelled wrong? (Backend-ID: [BACKENDID])"
 
 #~ msgid "mapDeleted"
 #~ msgstr "The map has been deleted."
