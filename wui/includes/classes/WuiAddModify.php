@@ -65,12 +65,17 @@ class WuiAddModify extends GlobalPage {
 	function getForm() {
 		$code = '';
 		
-		$this->FORM = new GlobalForm(Array('name'=>'addmodify',
-			'id'=>'addmodify',
-			'method'=>'POST',
-			'action'=>'./form_handler.php?myaction='.$this->prop['action'],
-			'onSubmit'=>'return check_object();',
-			'cols'=>'2'));
+		if($this->prop['action'] == 'modify') {
+			$action = 'modifyMapObject';
+		} else {
+			$action = 'createMapObject';
+		}
+		
+		$this->FORM = new GlobalForm(Array('name' => 'addmodify',
+			'id' => 'addmodify',
+			'method' => '',
+			'action' => 'javascript:(validateForm()) ? formSubmit(\'addmodify\', \''.$action.'\') : alert(\'\');',
+			'cols' => '2'));
 		
 		$code .= $this->getJsIncludes();
 		$code .= $this->FORM->initForm();
@@ -144,7 +149,6 @@ class WuiAddModify extends GlobalPage {
 		$ret .= $this->FORM->getHiddenField('type',$this->prop['type']);
 		$ret .= $this->FORM->getHiddenField('id',$this->prop['id']);
 		$ret .= $this->FORM->getHiddenField('map',$this->MAPCFG->getName());
-		$ret .= $this->FORM->getHiddenField('properties','');
 		
 		// loop all valid properties for that object type
 		foreach($this->MAPCFG->getValidObjectType($this->prop['type']) as $propname => $prop) {

@@ -74,7 +74,7 @@ function printObjects(aObjects,oOpt) {
 
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
-function check_object() {
+function validateForm() {
 	object_name='';
 	line_type='';
 	iconset='';
@@ -127,67 +127,67 @@ function check_object() {
 	}
 	
 	// we make some post tests (concerning the line_type and iconset values)
-	if(view_type && view_type == 'line') {
+	if(document.addmodify.view_type && document.addmodify.view_type.value == 'line') {
 		// we verify that the current line_type is valid
 		valid_list=new Array("10","11","20");
-		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
+		for(j=0;valid_list[j]!=document.addmodify.line_type.value && j<valid_list.length;j++);
 		if(j==valid_list.length) {
 			alert(printLang(lang['chosenLineTypeNotValid'],''));
 			return false;
 		}
 		
 		// we verify we don't have both iconset and line_type defined
-		if(iconset != '') {
+		if(document.addmodify.iconset && document.addmodify.iconset.value != '') {
 			alert(printLang(lang['onlyLineOrIcon'],''));
 			return false;
 		}
 		
 		// we verify we have 2 x coordinates and 2 y coordinates
-		if(x.split(",").length != 2) {
+		if(document.addmodify.x && document.addmodify.x.value.split(",").length != 2) {
 			alert(printLang(lang['not2coordsX'],'COORD~X'));
 			return false;
 		}
 		
-		if(y.split(",").length != 2) {
+		if(document.addmodify.y && document.addmodify.y.value.split(",").length != 2) {
 			alert(printLang(lang['not2coordsY'],'COORD~Y'));
 			return false;
 		}
 		
-		if(line_type == '') {
+		if(document.addmodify.line_type && document.addmodify.line_type.value == '') {
 			alert(printLang(lang["lineTypeNotSet"]));
 			return false;
 		}
 	}
 	
-	if(x.split(",").length > 1) {
-		if(x.split(",").length != 2) {
+	if(document.addmodify.x && document.addmodify.x.value.split(",").length > 1) {
+		if(document.addmodify.x.value.split(",").length != 2) {
 			alert(printLang(lang["only1or2coordsX"],'COORD~X'));
 			return false;
 		} else {
-			if(view_type != 'line') {
+			if(document.addmodify.view_type.value != 'line') {
 				alert(printLang(lang["viewTypeWrong"],'COORD~X'));
 				return false;
 			}
 			
-			if(line_type == '') {
+			if(document.addmodify.line_type.value == '') {
 				alert(printLang(lang["lineTypeNotSet"]));
 				return false;
 			}
 		}
 	}
 	
-	if(y.split(",").length > 1) {
-		if(y.split(",").length != 2) {
+	if(document.addmodify.y && document.addmodify.y.value.split(",").length > 1) {
+		if(document.addmodify.y.value.split(",").length != 2) {
 			alert(printLang(lang["only1or2coordsY"],'COORD~Y'));
 			alert(mess);
 			return false;
 		} else {
-			if(view_type != 'line') {
+			if(document.addmodify.view_type.value != 'line') {
 				alert(printLang(lang["viewTypeWrong"],'COORD~Y'));
 				return false;
 			}
 			
-			if(line_type == '') {
+			if(document.addmodify.line_type.value == '') {
 				alert(printLang(lang["lineTypeNotSet"]));
 				return false;
 			}

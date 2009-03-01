@@ -59,16 +59,14 @@ class WuiEditMainCfg extends GlobalPage {
 	function getForm() {
 		$code = '';
 		
-		$this->FORM = new GlobalForm(Array('name'=>'edit_config',
-									'id'=>'edit_config',
-									'method'=>'POST',
-									'action'=>'./form_handler.php?myaction=update_config',
-									'onSubmit'=>'return validateForm();',
-									'cols'=>'3'));
+		$this->FORM = new GlobalForm(Array('name' => 'edit_config',
+			'id' => 'edit_config',
+			'action' => 'javascript:(validateForm()) ? formSubmit(\'edit_config\', \'updateMainCfg\') : alert(\'\');',
+			'method' => '',
+			'cols' => '3'));
 		
 		$code .= $this->getJsIncludes();
 		$code .= $this->FORM->initForm();
-		$code .= $this->FORM->getHiddenField('properties','');
 		
 		$code .= $this->getFields();
 		$code .= $this->FORM->getSubmitLine($this->LANG->getText('save'));

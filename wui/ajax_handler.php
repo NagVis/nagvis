@@ -228,6 +228,43 @@ switch($_GET['action']) {
 			echo json_encode($aMaps);
 		}
 	break;
+	/* This is the new ajax way adding objects tp the map
+	 */
+	case 'createMapObject':
+		if(!isset($_GET['map']) || $_GET['map'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
+		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type');
+		} else {
+			$status = 'OK';
+			$message = '';
+			
+			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
+			$MAPCFG->readMapConfig();
+			
+			$aOpts = $_GET;
+			// Remove the parameters which are not options of the object
+			unset($aOpts['action']);
+			unset($aOpts['map']);
+			unset($aOpts['id']);
+			unset($aOpts['type']);
+			unset($aOpts['timestamp']);
+			
+			// append a new object definition line in the map cfg file
+			$elementId = $MAPCFG->addElement($_GET['type'], $aOpts);
+			$MAPCFG->writeElement($_GET['type'], $elementId);
+			
+			// do the backup
+			backup($CORE->MAINCFG, $_GET['map']);
+			
+			// delete map lock
+			if(!$MAPCFG->deleteMapLock()) {
+				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mapLockNotDeleted'));
+			}
+			
+			echo json_encode(Array('status' => $status, 'message' => $message));
+		}
+	break;
 	/* This is the new ajax way changing attributes (Not using "properties" hacks)
 	 * Modify an object of the given TYPE with the given ID on the given MAP
 	 */
@@ -257,7 +294,7 @@ switch($_GET['action']) {
 			}
 			
 			// write element to file
-			$MAPCFG->writeElement($_GET['type'],$_GET['id']);
+			$MAPCFG->writeElement($_GET['type'], $_GET['id']);
 			
 			// do the backup
 			backup($CORE->MAINCFG, $_GET['map']);
@@ -303,6 +340,31 @@ switch($_GET['action']) {
 			
 			echo json_encode(Array('status' => $status, 'message' => $message));
 		}
+	break;
+	/* Changes the NagVis main configuration
+	 */
+	case 'updateMainCfg':
+		$status = 'OK';
+		$message = '';
+		
+		// Clean options
+		$aOpts = $_GET;
+		unset($aOpts['action']);
+		unset($aOpts['map']);
+		unset($aOpts['id']);
+		unset($aOpts['type']);
+		unset($aOpts['timestamp']);
+		
+		// Parse properties to array and loop each
+		foreach($aOpts AS $key => $val) {
+			$key = explode('_', $key);
+			$CORE->MAINCFG->setValue($key[0], $key[1], $val);
+		}
+		
+		// Write the changes to the main configuration file
+		$CORE->MAINCFG->writeConfig();
+		
+		echo json_encode(Array('status' => $status, 'message' => $message));
 	break;
 	/* Returns the formular contents for the WUI popup windows
 	 */

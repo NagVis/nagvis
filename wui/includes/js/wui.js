@@ -321,7 +321,7 @@ function deleteMapObject(oObj) {
 		}
 		oResult = null;
 		
-		//FIXME: Reloading the map (Change to simply removing the object)
+		// FIXME: Reloading the map (Change to simply removing the object)
 		document.location.href='./index.php?map='+map;
 		
 		return true;
@@ -336,4 +336,58 @@ function confirm_restore() {
 		document.location.href='./form_handler.php?myaction=map_restore&map='+mapname;
 	}
 	return true;
+}
+
+function formSubmit(formName, action) {
+	var getstr = '';
+	
+	// Read form contents
+	var oForm = document.getElementById(formName);
+	
+	// Get relevant input elements
+	var aFields = oForm.getElementsByTagName('input');
+	for (var i = 0, len = aFields.length; i < len; i++) {
+		if (aFields[i].type == "hidden") {
+			getstr += aFields[i].name + "=" + aFields[i].value + "&";
+		}
+		
+		if (aFields[i].type == "text") {
+			getstr += aFields[i].name + "=" + aFields[i].value + "&";
+		}
+		
+		if (aFields[i].type == "checkbox") {
+			if (aFields[i].checked) {
+				getstr += aFields[i].name + "=" + aFields[i].value + "&";
+			} else {
+				getstr += aFields[i].name + "=&";
+			}
+		}
+		
+		if (aFields[i].type == "radio") {
+			if (aFields[i].checked) {
+				getstr += aFields[i].name + "=" + aFields[i].value + "&";
+			}
+		}
+	}
+	
+	// Get relevant select elements
+	aFields = oForm.getElementsByTagName('select');
+	for (var i = 0, len = aFields.length; i < len; i++) {
+		var sel = aFields[i];
+		getstr += sel.name + "=" + sel.options[sel.selectedIndex].value + "&";
+	}
+	
+	// Submit data
+	var oResult = getSyncRequest('./ajax_handler.php?action='+action+'&'+getstr);
+	if(oResult && oResult.status != 'OK') {
+		alert(oResult.message);
+		return false;
+	}
+	oResult = null;
+	
+	// Close form
+	popupWindowClose();
+	
+	// FIXME: Reloading the map (Change to reload object)
+	document.location.href='./index.php?map='+mapname;
 }
