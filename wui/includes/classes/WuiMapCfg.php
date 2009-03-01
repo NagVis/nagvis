@@ -180,15 +180,15 @@ class WuiMapCfg extends GlobalMapCfg {
 								// choose first parameter line
 								$l++;
 								
-								
-								// loop parameters from array
+								// Loop all parameters from array
 								foreach($this->mapConfig[$type][$id] AS $key => $val) {
 									// if key is not type
 									if($key != 'type') {
 										$cfgLines = 0;
 										$cfgLine = '';
 										$cfgLineNr = 0;
-										// Parameter aus Datei durchlaufen
+										
+										// Loop parameters from file (Find line for this option)
 										while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
 											$entry = explode('=',$file[$l+$cfgLines], 2);
 											if($key == trim($entry[0])) {
@@ -206,7 +206,8 @@ class WuiMapCfg extends GlobalMapCfg {
 											$file[$cfgLineNr] = $cfgLine;
 										} elseif($cfgLineNr != 0 && $val == '') {
 											// if a paremter is not in array or a value is empty, delete the line in the file
-											unset($file[$cfgLineNr]);
+											$file[$cfgLineNr] = '';
+											$cfgLines--;
 										} elseif($cfgLineNr == 0 && $val != '') {
 											// if a parameter is was not found in array and a value is not empty, create line
 											if(is_array($val)) {
