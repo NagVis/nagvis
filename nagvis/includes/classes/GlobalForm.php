@@ -154,7 +154,7 @@ class GlobalForm {
 	 * @return	Array 		Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getSelectLine($label,$name,$arr,$selected,$must=FALSE,$onChange='',$onBlur='', $rowStyle='',$rowClass='') {
+	public function getSelectLine($label,$name,$arr,$selected=NULL,$must=FALSE,$onChange='',$onBlur='', $rowStyle='',$rowClass='') {
 		$ret = '';
 		
 		if($must) {
@@ -177,7 +177,10 @@ class GlobalForm {
 		
 		$ret .= '<tr'.$style.$class.'><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
 		$ret .= $this->getSelectField($name,$arr,$onChange,$must,$onBlur);
-		$ret .= '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
+		
+		if($selected !== NULL) { 
+			$ret .= '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
+		}
 		
 		return $ret;
 	}

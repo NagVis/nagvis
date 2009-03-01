@@ -268,6 +268,7 @@ class WuiAddModify extends GlobalPage {
 						case 'hostgroup_name':
 						case 'servicegroup_name':
 							$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
+							$selected = NULL;
 							
 							$ret .= "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
 							if(in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->prop['type']))) {

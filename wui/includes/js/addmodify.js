@@ -30,7 +30,7 @@ function printObjects(aObjects,oOpt) {
 	var field = oOpt.field;
 	var selected = oOpt.selected;
 	
-	var oField = document.addmodify.elements[field];
+	var oField = document.getElementById(field);
 	
 	if(oField.nodeName == "SELECT") {
 		// delete old options
@@ -39,41 +39,36 @@ function printObjects(aObjects,oOpt) {
 		}
 	}
 	
-	if(aObjects.length > 0) {
-		// backend gives us some services
-		if(oField.nodeName != "SELECT") {
-			oField.parentNode.innerHTML = '<select name="'+oField.name+'"></select>';
-			var oField = document.addmodify.elements[field];
-		}
+	if(aObjects && aObjects.length > 0) {
+		var bSelected = false;
 		
 		// fill with new options
 		for(i = 0; i < aObjects.length; i++) {
+			var oName = '';
 			var bSelect = false;
 			var bSelectDefault = false;
 			
 			if(type == "service") {
-				if(aObjects[i].service_description == "") {
-					bSelectDefault = true;
-				}
-				if(aObjects[i].service_description == selected) {
-					bSelect = true;
-				}
-				
-				oField.options[oField.options.length] = new Option(aObjects[i].service_description, aObjects[i].service_description, bSelectDefault, bSelect);
+				oName = aObjects[i].service_description;
 			} else {
-				if(aObjects[i].name == "") {
-					bSelectDefault = true;
-				}
-				
-				if(aObjects[i].name == selected) {
-					bSelect = true;
-				}
-				
-				oField.options[oField.options.length] = new Option(aObjects[i].name, aObjects[i].name, bSelectDefault, bSelect);
+				oName = aObjects[i].name;
 			}
+			
+			if(selected != '' && oName == selected) {
+				bSelectDefault = true;
+				bSelect = true;
+				bSelected = true;
+			}
+			
+			oField.options[i] = new Option(oName, oName, bSelectDefault, bSelect);
 		}
-	} else {
-		oField.parentNode.innerHTML = '<input name="'+oField.name+'" value="" />';
+	}
+	
+	// Fallback to input field when configured value could not be selected or
+	// the list is empty
+	if((selected != '' && !bSelected) || !aObjects || aObjects.length <= 0) {
+		oField.parentNode.innerHTML = '<input id="'+oField.name+'" name="'+oField.name+'" value="" />';
+		document.addmodify.elements[field].value=selected;
 	}
 }
 
