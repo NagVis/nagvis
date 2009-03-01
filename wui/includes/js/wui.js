@@ -263,13 +263,23 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	}
 	
 	var arr = oObj.name.split('_');
-	var type = arr[1];
-	var id = arr[2];
-	var x = oObj.x;
-	var y = oObj.y;
+	
+	// Handle different ojects
+	var type, id , url;
+	if(arr[1] === 'label') {
+		type = arr[2];
+		id = arr[3];
+		
+		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&label_x='+oObj.x+'&label_y='+oObj.y;
+	} else {
+		type = arr[1];
+		id = arr[2];
+		
+		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+oObj.x+'&y='+oObj.y;
+	}
 	
 	// Sync ajax request
-	var oResult = getSyncRequest('./ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y);
+	var oResult = getSyncRequest(url);
 	if(oResult && oResult.status != 'OK') {
 		alert(oResult.message);
 	}

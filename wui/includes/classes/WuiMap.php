@@ -178,7 +178,7 @@ class WuiMap extends GlobalMap {
 		$ret = '';
 		
 		if(strlen($this->moveable) != 0) {
-			$ret = $this->parseJs("SET_DHTML(SCROLL,NO_ALT,TRANSPARENT,CURSOR_HAND,".substr($this->moveable,0,strlen($this->moveable)-1).");\n");
+			$ret = $this->parseJs("SET_DHTML(SCROLL,NO_ALT,TRANSPARENT,CURSOR_HAND,".substr($this->moveable, 0, strlen($this->moveable) - 1).");\n");
 		}
 		
 		return $ret;
@@ -383,6 +383,7 @@ class WuiMap extends GlobalMap {
 			$id = '"id="rel_label_'.$obj['type'].'_'.$obj['id'].'"';
 		} else {
 			$id = '"id="abs_label_'.$obj['type'].'_'.$obj['id'].'"';
+			$this->moveable .= '"abs_label_'.$obj['type'].'_'.$obj['id'].'",';
 		}
 		
 		$ret  = '<div '.$id.' class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
