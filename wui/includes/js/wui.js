@@ -256,21 +256,40 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	// Reset z-index to configured value
 	oObj.setZ(oObj.defz);
 	
-	// Dragging of relative labels is not allowed, revert it
-	if(oObj.name.search('rel_label_') != -1) {
-		oObj.moveTo(oObj.oldX, oObj.oldY);
-		return;
-	}
-	
+	// Split id to get object informations
 	var arr = oObj.name.split('_');
 	
-	// Handle different ojects
+	// Handle different ojects (Normal icons and labels)
 	var type, id , url;
 	if(arr[1] === 'label') {
+		var align = arr[0];
 		type = arr[2];
 		id = arr[3];
+		var x, y;
 		
-		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&label_x='+oObj.x+'&label_y='+oObj.y;
+		// Handle relative and absolute aligned labels
+		if(align === 'rel') {
+			// Calculate relative coordinates
+			var objX = document.getElementById('box_'+type+'_'+id).style.left.replace('px', '');
+			var objY = document.getElementById('box_'+type+'_'+id).style.top.replace('px', '');
+			
+			x = oObj.x - objX;
+			y = oObj.y - objY;
+			
+			// Add + sign to mark relative positive coords (On negative relative coord
+			// the - sign is added automaticaly
+			if(x >= 0) {
+				x = '+'+x;
+			}
+			if(y >= 0) {
+				y = '+'+y;
+			}
+		} else {
+			x = oObj.x;
+			y = oObj.y;
+		}
+		
+		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&label_x='+x+'&label_y='+y;
 	} else {
 		type = arr[1];
 		id = arr[2];

@@ -127,7 +127,7 @@ function check_object() {
 	}
 	
 	// we make some post tests (concerning the line_type and iconset values)
-	if(view_type == 'line') {
+	if(view_type && view_type == 'line') {
 		// we verify that the current line_type is valid
 		valid_list=new Array("10","11","20");
 		for(j=0;valid_list[j]!=line_type && j<valid_list.length;j++);
