@@ -211,7 +211,10 @@ class GlobalForm {
 	public function initForm() {
 		$ret = '';
 		
-		$ret .= '<form name="'.$this->name.'" id="'.$this->id.'" method="'.$this->method.'" action="'.$this->action.'" enctype="'.$this->enctype.'" onsubmit="'.$this->onSubmit.'">';
+		$method = ($this->method == '') ? '' : 'method="'.$this->method.'"';
+		$onSubmit = ($this->onSubmit == '') ? '' : 'onsubmit="'.$this->onSubmit.'"';
+		
+		$ret .= '<form name="'.$this->name.'" id="'.$this->id.'" '.$method.' action="'.$this->action.'" enctype="'.$this->enctype.'" '.$onSubmit.'>';
 		$ret .= '<table name="mytable" class="mytable" id="table_'.$this->id.'">';
 		
 		return $ret;
