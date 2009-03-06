@@ -224,6 +224,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 				$arrReturn['display_name'] = $oConfig->DISPLAYNAME;
 				$arrReturn['address'] = $oConfig->HOSTADDRESS;
 				$arrReturn['statusmap_image'] = $oConfig->STATUSMAPIMAGE;
+				$arrReturn['notes'] = $oConfig->NOTES;
 				
 				// Add Additional information to array
 				$arrReturn['perfdata'] = $oStatus->PERFDATA;
@@ -416,6 +417,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 					$arrTmpReturn['display_name'] = $aServObj[$i][0]->DISPLAYNAME;
 					$arrTmpReturn['alias'] = $aServObj[$i][0]->DISPLAYNAME;
 					//$arrTmpReturn['address'] = $aServObj[$i][0]->address'];
+					$arrTmpReturn['notes'] = $aServObj[$i][0]->NOTES;
 					
 					// Error handling: Pending service
 					if($aServObj[$i][1] == null) {

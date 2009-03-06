@@ -488,6 +488,7 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['downtime_end'] = $this->downtime_end;
 			$arr['downtime_start'] = $this->downtime_start;
 			$arr['address'] = $this->address;
+			$arr['notes'] = $this->notes;
 			$arr['last_check'] = $this->getLastCheck();
 			$arr['next_check'] = $this->getNextCheck();
 			$arr['state_type'] = $this->getStateType();

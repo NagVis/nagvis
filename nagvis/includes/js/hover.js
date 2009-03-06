@@ -52,19 +52,19 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On child service objects in hover menu replace obj_name with 
 	// service_description
-	if(replaceChild == '1' && oObj.conf.type == 'service') {
+	if(replaceChild == '1' && oObj.conf.type === 'service') {
 		oMacros.obj_name = oObj.conf.service_description;
 	} else {
 		oMacros.obj_name = oObj.conf.name;
 	}
 	
-	if(oObj.conf.alias && oObj.conf.alias != '') {
+	if(oObj.conf.alias && oObj.conf.alias !== '') {
 		oMacros.obj_alias = oObj.conf.alias;
 	} else {
 		oMacros.obj_alias = '';
 	}
 	
-	if(oObj.conf.display_name && oObj.conf.display_name != '') {
+	if(oObj.conf.display_name && oObj.conf.display_name !== '') {
 		oMacros.obj_display_name = oObj.conf.display_name;
 	} else {
 		oMacros.obj_display_name = '';
@@ -95,6 +95,12 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 		oMacros.obj_in_downtime = '(Downtime)';
 	} else {
 		oMacros.obj_in_downtime = '';
+	}
+	
+	if(oObj.conf.notes && oObj.conf.notes !== '') {
+		oMacros.obj_notes = oObj.conf.notes;
+	} else {
+		oMacros.obj_notes = '';
 	}
 	
 	if(replaceChild != '1' && oObj.conf.type != 'map') {

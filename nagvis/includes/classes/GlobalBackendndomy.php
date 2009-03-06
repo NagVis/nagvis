@@ -407,6 +407,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				UNIX_TIMESTAMP(last_state_change) AS last_state_change, 
 				current_state, 
 				output, perfdata, 
+				h.notes, 
 				problem_has_been_acknowledged, 
 				statusmap_image, 
 				UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
@@ -441,6 +442,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				$arrReturn['display_name'] = $data['display_name'];
 				$arrReturn['address'] = $data['address'];
 				$arrReturn['statusmap_image'] = $data['statusmap_image'];
+				$arrReturn['notes'] = $data['notes'];
 				
 				// Add Additional information to array
 				$arrReturn['perfdata'] = $data['perfdata'];
@@ -542,6 +544,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				$QUERYHANDLE = $this->mysqlQuery('SELECT 
 					o.object_id, o.name1, o.name2, 
 					s.display_name, 
+					s.notes, 
 					h.address, 
 					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
@@ -571,6 +574,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				$QUERYHANDLE = $this->mysqlQuery('SELECT 
 					o.object_id, o.name1, o.name2,
 					s.display_name, 
+					s.notes, 
 					h.address, 
 					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
 					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
@@ -615,6 +619,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 					$arrTmpReturn['display_name'] = $data['display_name'];
 					$arrTmpReturn['alias'] = $data['display_name'];
 					$arrTmpReturn['address'] = $data['address'];
+					$arrTmpReturn['notes'] = $data['notes'];
 					
 					// Add additional information to array
 					$arrTmpReturn['perfdata'] = $data['perfdata'];
