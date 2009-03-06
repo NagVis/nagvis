@@ -250,42 +250,43 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		if(this.conf.url && this.conf.url != '') {
-			this.conf.url = this.conf.url.replace('[htmlcgi]', oGeneralProperties.path_htmlcgi);
-			this.conf.url = this.conf.url.replace('[htmlbase]', oGeneralProperties.path_htmlbase);
+			this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlcgi\\\]', 'g'), oGeneralProperties.path_htmlcgi);
+			this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlbase\\\]', 'g'), oGeneralProperties.path_htmlbase);
 			
-			this.conf.url = this.conf.url.replace('['+name+']', this.conf.name);
+			this.conf.url = this.conf.url.replace(new RegExp('\\\['+name+'\\\]', 'g'), this.conf.name);
 			if(this.conf.type == 'service') {
-				this.conf.url = this.conf.url.replace('[service_description]', this.conf.service_description);
+				this.conf.url = this.conf.url.replace(new RegExp('\\\[service_description\\\]', 'g'), this.conf.service_description);
 			}
 			
 			// Replace special chars in url
-			this.conf.url = this.conf.url.replace('#', '%23');
+			this.conf.url = this.conf.url.replace(new RegExp('#', 'g'), '%23');
 		}
 		
 		if(this.conf.hover_url && this.conf.hover_url != '') {
-			this.conf.hover_url = this.conf.hover_url.replace('['+name+']', this.conf.name);
+			this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\\['+name+'\\\]', 'g'), this.conf.name);
 			if(this.conf.type == 'service') {
-				this.conf.hover_url = this.conf.hover_url.replace('[service_description]', this.conf.service_description);
+				this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\\[service_description\\\]', 'g'), this.conf.service_description);
 			}
 		}
 		
 		if(this.conf.label_text && this.conf.label_text != '') {
+			var objName;
 			// For maps use the alias as display string
 			if(this.conf.type == 'map') {
-				name = 'alias';   
+				objName = this.conf.alias;   
 			} else {
-				name = 'name';
+				objName = this.conf.name;
 			}
 			
-			this.conf.label_text = this.conf.label_text.replace('['+name+']', this.conf.name);
-			this.conf.label_text = this.conf.label_text.replace('[output]', this.conf.output);
+			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[name\\\]', 'g'), objName);
+			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[output\\\]', 'g'), this.conf.output);
 			
 			if(this.conf.type == 'service' || this.conf.type == 'host') {
-				this.conf.label_text = this.conf.label_text.replace('[perfdata]', this.conf.perfdata);
+				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[perfdata\\\]', 'g'), this.conf.perfdata);
 			}
 			
 			if(this.conf.type == 'service') {
-				this.conf.label_text = this.conf.label_text.replace('[service_description]', this.conf.service_description);
+				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[service_description\\\]', 'g'), this.conf.service_description);
 			}
 		}
 	},
