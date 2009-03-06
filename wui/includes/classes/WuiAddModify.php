@@ -327,6 +327,10 @@ class WuiAddModify extends GlobalPage {
 						$value = implode(',',$value);
 					}
 					
+					// Escape some bad chars
+					$value = str_replace('\"','&quot;', $value);
+					$value = str_replace('\\\'','\'', $value);
+					
 					$ret .= $this->FORM->getInputLine($propname, $propname, $value, $prop['must'], 'validateMapConfigFieldValue(this)', $style, $class);
 					
 					// Toggle depending fields

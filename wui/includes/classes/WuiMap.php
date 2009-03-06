@@ -535,11 +535,22 @@ class WuiMap extends GlobalMap {
 		
 		// Get configured/inherited variables
 		foreach($this->MAPCFG->getValidTypeKeys($obj['type']) AS $key) {
-			$getValue = $this->MAPCFG->getValue($obj['type'],$obj['id'],$key,TRUE);
-			if($key != 'type' && isset($getValue) && $getValue != '') {
-				$configuredText .= '<tr><td>'.$key.'</td><td>'.$getValue.'</td></tr>';
-			} elseif($getValue == FALSE) {
-				$defaultText .= '<tr class=\\\'inherited\\\'><td>'.$key.'</td><td>'.$this->MAPCFG->getValue($obj['type'],$obj['id'],$key,FALSE).'</td></tr>';
+			$bGlobal = FALSE;
+			$value = $this->MAPCFG->getValue($obj['type'], $obj['id'], $key, TRUE);
+			
+			// Get global value when nothing set
+			if($value == FALSE) {
+				$bGlobal = TRUE;
+				$value = $this->MAPCFG->getValue($obj['type'], $obj['id'], $key, FALSE);
+			}
+			
+			// Cleanup some bad signs
+			$value = str_replace('\"','&quot;', $value);
+			
+			if($bGlobal) {
+				$defaultText .= '<tr class=\\\'inherited\\\'><td>'.$key.'</td><td>'.$value.'</td></tr>';
+			} else {
+				$configuredText .= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
 			}
 		}
 		
