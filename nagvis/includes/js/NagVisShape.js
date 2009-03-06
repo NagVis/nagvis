@@ -83,7 +83,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 		oIconDiv.style.zIndex = this.conf.z;
 		
 		var oIcon = document.createElement('img');
-		oIcon.src = this.conf.icon;
+		oIcon.src = this.conf.icon+'?_t='+Date.parse(new Date());
 		oIcon.alt = this.conf.type;
 		
 		if(this.conf.url && this.conf.url != '') {

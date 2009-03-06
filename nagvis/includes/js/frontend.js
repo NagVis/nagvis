@@ -372,7 +372,7 @@ function getObjectsToUpdate(aObjs) {
 	for(var i = 0, len = aObjs.length; i < len; i++) {
 		if(aObjs[i].lastUpdate <= (oDate-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
-			if(aObjs[i].conf.type !== 'shape' || (aObjs[i].conf.type === 'shape' && aObjs[i].enable_refresh && aObjs[i].enable_refresh === '1')) {
+			if(aObjs[i].conf.type !== 'shape' || (aObjs[i].conf.type === 'shape' && aObjs[i].conf.enable_refresh && aObjs[i].conf.enable_refresh === '1')) {
 				arrReturn.push(i);
 			}
 		}
