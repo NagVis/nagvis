@@ -328,6 +328,7 @@ class WuiAddModify extends GlobalPage {
 					}
 					
 					// Escape some bad chars
+					$value = str_replace('"','&quot;', $value);
 					$value = str_replace('\"','&quot;', $value);
 					$value = str_replace('\\\'','\'', $value);
 					

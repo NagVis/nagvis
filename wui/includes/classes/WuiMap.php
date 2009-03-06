@@ -546,6 +546,7 @@ class WuiMap extends GlobalMap {
 			
 			// Cleanup some bad signs
 			$value = str_replace('\"','&quot;', $value);
+			$value = str_replace('"','&quot;', $value);
 			
 			if($bGlobal) {
 				$defaultText .= '<tr class=\\\'inherited\\\'><td>'.$key.'</td><td>'.$value.'</td></tr>';
