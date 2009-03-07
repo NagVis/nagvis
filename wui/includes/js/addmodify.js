@@ -78,15 +78,30 @@ function printObjects(aObjects,oOpt) {
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
 function validateForm() {
-	object_name='';
-	line_type='';
-	iconset='';
-	x='';
-	y='';
+	var object_name = '';
+	var line_type = '';
+	var iconset = '';
+	var x = '';
+	var y = '';
 	
 	for(var i=0, len = document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
-		
+			var sName = document.addmodify.elements[i].name;
+			
+			// Empty options which use the default value
+			var oField = document.getElementById(sName);
+			var oFieldDefault = document.getElementById('_'+sName);
+			
+			if(oField && oFieldDefault) {
+				// Reset option only when the field and default value are equal
+				if(oField.value === oFieldDefault.value) {
+					oField.value = '';
+				}
+			}
+			
+			oFieldDefault = null;
+			oField = null;
+			
 			if(document.addmodify.elements[i].name.substring(document.addmodify.elements[i].name.length-6,document.addmodify.elements[i].name.length)=='_name') {
 				object_name=document.addmodify.elements[i].value;
 			}
@@ -247,6 +262,40 @@ function changeFieldToInput(sName, sValue) {
 }
 
 /**
+ * toggleDefaultOption
+ *
+ * This function checks the value of the field to reset it to the default value
+ * which is stored in a "helper field". The default value is inserted when there
+ * is no option given in the current object.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function toggleDefaultOption(sName) {
+	var oField = document.getElementById(sName);
+	var oFieldDefault = document.getElementById('_'+sName);
+	
+	if(oField && oFieldDefault) {
+		// Set option only when the field is emtpy and the default value has a value
+		if(oField.value === '' && oFieldDefault.value !== '') {
+			// Set value to default value
+			oField.value = oFieldDefault.value;
+			
+			// Visualize the default value
+			oField.style.color = '#B0A8B8';
+		} else if(oField.value != oFieldDefault.value) {
+			// Reset the visualisation
+			oField.style.color = '';
+		} else if(oField.value == oFieldDefault.value) {
+			// Visualize the default value
+			oField.style.color = '#B0A8B8';
+		}
+	}
+	
+	oFieldDefault = null;
+	oField = null;
+}
+
+/**
  * validateMapConfigFieldValue(oField)
  *
  * This function checks a config field value for valid format. The check is done
@@ -262,6 +311,9 @@ function validateMapConfigFieldValue(oField) {
 	// Check if "manual input" was selected in this field. If so: change the field
 	// type from select to input
 	var bChanged = changeFieldToInput(oField.name, oField.value);
+	
+	// Toggle the value of the field. If empty try to display the default value
+	toggleDefaultOption(oField.name);
 	
 	// Only validate when field type not changed
 	if(!bChanged) {

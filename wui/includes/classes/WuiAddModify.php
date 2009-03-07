@@ -154,19 +154,27 @@ class WuiAddModify extends GlobalPage {
 		foreach($this->MAPCFG->getValidObjectType($this->prop['type']) as $propname => $prop) {
 			$style = '';
 			$class = '';
+			$isDefaultValue = FALSE;
 			
 			// Check if depends_on and depends_value are defined and if the value
 			// is equal. If not equal hide the field
 			if(isset($prop['depends_on']) && isset($prop['depends_value'])
-				&& $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $prop['depends_on'], TRUE) != $prop['depends_value']) {
+				&& $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $prop['depends_on'], FALSE) != $prop['depends_value']) {
 				
 				$style .= 'display:none;';
 				$class = 'child-row';
 			} elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
-				&& $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $prop['depends_on'], TRUE) == $prop['depends_value']) {
+				&& $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $prop['depends_on'], FALSE) == $prop['depends_value']) {
 				
 				$style .= 'display:;';
 				$class = 'child-row';
+			}
+			
+			// Create a "helper" field which contains the real applied value
+			if($this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE) === FALSE) {
+				$ret .= $this->FORM->getHiddenField('_'.$propname, $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, FALSE));
+			} else {
+				$ret .= $this->FORM->getHiddenField('_'.$propname, '');
 			}
 			
 			// Set field type to show

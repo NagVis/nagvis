@@ -250,6 +250,13 @@ switch($_GET['action']) {
 			unset($aOpts['type']);
 			unset($aOpts['timestamp']);
 			
+			// Also remove all "helper fields" which begin with a _
+			foreach($aOpts AS $key => $val) {
+				if(strpos($key, '_') === 0) {
+					unset($aOpts[$key]);
+				}
+			}
+			
 			// append a new object definition line in the map cfg file
 			$elementId = $MAPCFG->addElement($_GET['type'], $aOpts);
 			$MAPCFG->writeElement($_GET['type'], $elementId);
@@ -287,6 +294,13 @@ switch($_GET['action']) {
 			unset($aOpts['id']);
 			unset($aOpts['type']);
 			unset($aOpts['timestamp']);
+			
+			// Also remove all "helper fields" which begin with a _
+			foreach($aOpts AS $key => $val) {
+				if(strpos($key, '_') === 0) {
+					unset($aOpts[$key]);
+				}
+			}
 			
 			// set options in the array
 			foreach($aOpts AS $key => $val) {

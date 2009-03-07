@@ -60,7 +60,7 @@ class GlobalForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getHiddenField($name,$value) {
-		return '<input type="hidden" name="'.$name.'" value="'.$value.'" />';
+		return '<input type="hidden" id="'.$name.'" name="'.$name.'" value="'.$value.'" />';
 	}
 	
 	/**
@@ -114,7 +114,7 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getInputLine($label,$name,$value,$must=FALSE,$onBlur='',$rowStyle='',$rowClass='') {
+	public function getInputLine($label,$name,$value=NULL,$must=FALSE,$onBlur='',$rowStyle='',$rowClass='') {
 		$ret = '';
 		
 		if($must != FALSE) {
@@ -136,8 +136,18 @@ class GlobalForm {
 		}
 		
 		$ret .= '<tr'.$style.$class.'><td class="tdlabel" '.$must.'>'.$label.'</td><td class="tdfield">';
-		$ret .= $this->getInputField($name,$value,$onBlur);
+		$ret .= $this->getInputField($name, '', $onBlur);
 		$ret .= '</td></tr>';
+		
+		if($value !== NULL && $value !== FALSE && $value !== '') {
+			if(is_array($value)) {
+				$value = implode(',',$value);
+			}
+			
+			$ret .= '<script>document.'.$this->name.'.'.$name.'.value="'.$value.'";</script>';
+		} else {
+			$ret .= '<script>toggleDefaultOption(\''.$name.'\');</script>';
+		}
 		
 		return $ret;
 	}
@@ -177,9 +187,12 @@ class GlobalForm {
 		
 		$ret .= '<tr'.$style.$class.'><td class="tdlabel"'.$color.'>'.$label.'</td><td class="tdfield">';
 		$ret .= $this->getSelectField($name,$arr,$onChange,$must,$onBlur);
+		$ret .= '</td></tr>';
 		
-		if($selected !== NULL) { 
-			$ret .= '</td></tr><script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
+		if($selected !== NULL && $selected !== FALSE && $selected !== '') { 
+			$ret .= '<script>document.'.$this->name.'.'.$name.'.value="'.$selected.'";</script>';
+		} else {
+			$ret .= '<script>toggleDefaultOption(\''.$name.'\');</script>';
 		}
 		
 		return $ret;
@@ -279,12 +292,8 @@ class GlobalForm {
 	 * @return	Array 	Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getInputField($name,$value,$onBlur='') {
+	public function getInputField($name,$value='',$onBlur='') {
 		$ret = '';
-		
-		if(is_array($value)) {
-			$value = implode(',',$value);
-		}
 		
 		$ret .= '<input id="'.$name.'" type="text" name="'.$name.'" value="'.$value.'" onBlur="'.$onBlur.'" />';
 		
