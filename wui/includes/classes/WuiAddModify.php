@@ -195,7 +195,7 @@ class WuiAddModify extends GlobalPage {
 						
 						case 'line_type':
 							$options = Array(Array('label' => '------><------', 'value' => '10'), Array('label' => '-------------->', 'value'=>'11'));
-							$selected = substr($this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE),1,1);
+							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
 						break;
 						
 						case 'hover_template':
