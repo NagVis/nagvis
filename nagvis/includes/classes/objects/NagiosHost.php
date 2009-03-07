@@ -32,6 +32,7 @@ class NagiosHost extends NagVisStatefulObject {
 	protected $display_name;
 	protected $address;
 	protected $statusmap_image;
+	protected $notes;
 	
 	protected $perfdata;
 	protected $last_check;
