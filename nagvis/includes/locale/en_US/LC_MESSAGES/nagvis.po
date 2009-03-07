@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-06 18:02+0100\n"
-"PO-Revision-Date: 2009-03-06 18:02+0100\n"
+"POT-Creation-Date: 2009-03-07 17:41+0100\n"
+"PO-Revision-Date: 2009-03-07 17:51+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -100,12 +100,12 @@ msgid "defaultValue"
 msgstr "Default value"
 
 #: wui/includes/classes/WuiEditMainCfg.php:146
-#: wui/includes/classes/WuiAddModify.php:309
+#: wui/includes/classes/WuiAddModify.php:312
 msgid "yes"
 msgstr "Yes"
 
 #: wui/includes/classes/WuiEditMainCfg.php:147
-#: wui/includes/classes/WuiAddModify.php:309
+#: wui/includes/classes/WuiAddModify.php:312
 msgid "no"
 msgstr "No"
 
@@ -128,6 +128,11 @@ msgstr "Alphabetically"
 #: wui/includes/classes/WuiAddModify.php:212
 msgid "State"
 msgstr "Status"
+
+#: wui/includes/classes/WuiAddModify.php:297
+#: wui/includes/classes/WuiMap.php:668
+msgid "manualInput"
+msgstr "» Manual Input..."
 
 #: wui/includes/classes/WuiFrontend.php:70
 #: nagvis/includes/classes/GlobalLanguage.php:114
@@ -1149,7 +1154,7 @@ msgstr "Hosts"
 msgid "hostGroupNotFoundInDB"
 msgstr "The hostgroup \"[HOSTGROUP]\" could not be found in the database. Maybe it is spelled wrong? (Backend-ID: [BACKENDID])"
 
-#: nagvis/includes/classes/objects/NagVisStatefulObject.php:609
+#: nagvis/includes/classes/objects/NagVisStatefulObject.php:610
 msgid "childStatesAre"
 msgstr "There are"
 
