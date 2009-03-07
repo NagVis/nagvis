@@ -171,6 +171,9 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		bRetryable = true;
 	}
 	
+	// Encode the url
+	sUrl = sUrl.replace("+", "%2B");
+	
 	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
 	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
 		responseText = ajaxQueryCache[sUrl].response;
