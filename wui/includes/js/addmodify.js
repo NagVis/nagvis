@@ -64,6 +64,9 @@ function printObjects(aObjects,oOpt) {
 		}
 	}
 	
+	// Give the users the option give manual input
+	oField.options[oField.options.length] = new Option(lang['manualInput'], lang['manualInput'], false, false);
+	
 	// Fallback to input field when configured value could not be selected or
 	// the list is empty
 	if((selected != '' && !bSelected) || !aObjects || aObjects.length <= 0) {
@@ -81,7 +84,7 @@ function validateForm() {
 	x='';
 	y='';
 	
-	for(i=0;i<document.addmodify.elements.length;i++) {
+	for(var i=0, len = document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
 		
 			if(document.addmodify.elements[i].name.substring(document.addmodify.elements[i].name.length-6,document.addmodify.elements[i].name.length)=='_name') {
@@ -100,7 +103,7 @@ function validateForm() {
 			if(document.addmodify.elements[i].name == 'allowed_for_config') {
 				users_tab=document.addmodify.elements[i].value.split(',');
 				suicide=true;
-				for(k=0;k<users_tab.length;k++) {
+				for(var k = 0, len2 = users_tab.length; k < len2; k++) {
 					if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==username) ) { suicide=false; }
 				}
 				if(suicide) {
@@ -129,11 +132,12 @@ function validateForm() {
 	// we make some post tests (concerning the line_type and iconset values)
 	if(document.addmodify.view_type && document.addmodify.view_type.value == 'line') {
 		// we verify that the current line_type is valid
-		valid_list=new Array("10","11","20");
-		for(j=0;valid_list[j]!=document.addmodify.line_type.value && j<valid_list.length;j++);
-		if(j==valid_list.length) {
-			alert(printLang(lang['chosenLineTypeNotValid'],''));
-			return false;
+		var valid_list=new Array("10","11","20");
+		for(var j = 0, len = valid_list.length; valid_list[j] != document.addmodify.line_type.value && j < len; j++) {
+			if(j==valid_list.length) {
+				alert(printLang(lang['chosenLineTypeNotValid'],''));
+				return false;
+			}
 		}
 		
 		// we verify we don't have both iconset and line_type defined
@@ -219,6 +223,30 @@ function toggleDependingFields(name, value) {
 }
 
 /**
+ * changeFieldToInput
+ *
+ * Change the field type from select to input
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function changeFieldToInput(sName, sValue) {
+	var bReturn = false;
+	
+	// Check if the field should be changed
+	if(sValue === lang['manualInput']) {
+		var oField = document.getElementById(sName);
+		
+		// Change the field to input field
+		oField.parentNode.innerHTML = '<input id="'+sName+'" name="'+sName+'" value="" onchange="validateMapConfigFieldValue(this)" />';
+		
+		oField = null;
+		bReturn = true;
+	}
+	
+	return bReturn;
+}
+
+/**
  * validateMapConfigFieldValue(oField)
  *
  * This function checks a config field value for valid format. The check is done
@@ -231,5 +259,14 @@ function validateMapConfigFieldValue(oField) {
 	// event handler function to toggle these fields
 	toggleDependingFields(oField.name, oField.value);
 	
-	return validateValue(oField.name, oField.value, validMapConfig[document.addmodify.type.value][oField.name].match)
+	// Check if "manual input" was selected in this field. If so: change the field
+	// type from select to input
+	var bChanged = changeFieldToInput(oField.name, oField.value);
+	
+	// Only validate when field type not changed
+	if(!bChanged) {
+		return validateValue(oField.name, oField.value, validMapConfig[document.addmodify.type.value][oField.name].match);
+	} else {
+		return false;
+	}
 }

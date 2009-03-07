@@ -664,7 +664,8 @@ class WuiMap extends GlobalMap {
 			'unableToDeleteMap' => $this->LANG->getText('unableToDeleteMap'),
 			'noPermissions' => $this->LANG->getText('noPermissions'),
 			'minOneUserWriteAccess' => $this->LANG->getText('minOneUserWriteAccess'),
-			'noSpaceAllowed' => $this->LANG->getText('noSpaceAllowed'));
+			'noSpaceAllowed' => $this->LANG->getText('noSpaceAllowed'),
+			'manualInput' => $this->LANG->getText('manualInput'));
 		
 		return 'var langMenu = '.json_encode($langMenu).'; var lang = '.json_encode($lang).';';	
 	}

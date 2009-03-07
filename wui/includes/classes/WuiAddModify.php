@@ -293,6 +293,9 @@ class WuiAddModify extends GlobalPage {
 					
 					// Print this when it is still a dropdown
 					if($fieldType == 'dropdown') {
+						// Give the users the option give manual input
+						$options[] = $this->LANG->getText('manualInput');
+						
 						$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $selected, $prop['must'], $onChange, '', $style, $class);
 					}
 					
