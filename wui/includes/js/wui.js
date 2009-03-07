@@ -87,7 +87,7 @@ function validateValue(sName, sValue, sRegex) {
 	if(sValue == '' || match != null) {
 		return true;
 	} else {
-		alert(printLang(window.opener.lang['wrongValueFormatOption'],'ATTRIBUTE~'+sName));
+		alert(printLang(lang['wrongValueFormatOption'],'ATTRIBUTE~'+sName));
 		return false;
 	}
 }
