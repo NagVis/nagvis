@@ -147,7 +147,7 @@ class GlobalCore {
 		
 		if ($handle = opendir($this->MAINCFG->getValue('paths', 'class'))) {
  			while (false !== ($file = readdir($handle))) {
- 				if(preg_match('/^GlobalBackend([^M].+)\.php$/', $file, $arrRet)) {
+ 				if(preg_match('/^GlobalBackend([^MI].+)\.php$/', $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}				
 			}
