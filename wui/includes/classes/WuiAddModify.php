@@ -246,6 +246,11 @@ class WuiAddModify extends GlobalPage {
 							}
 						break;
 						
+						case 'gadget_url':
+							$options = $this->CORE->getAvailableGadgets();
+							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
+						break;
+						
 						case 'view_type':
 							if($this->prop['type'] == 'service') {
 								$options = Array('icon', 'line', 'gadget');

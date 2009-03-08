@@ -572,6 +572,7 @@ class GlobalMapCfg {
 					'depends_value' => 'line'),
 				'gadget_url' => Array('must' => 0,
 					'match' => MATCH_STRING_URL,
+					'field_type' => 'dropdown',
 					'depends_on' => 'view_type',
 					'depends_value' => 'gadget'),
 				

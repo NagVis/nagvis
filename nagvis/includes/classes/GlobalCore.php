@@ -369,6 +369,32 @@ class GlobalCore {
 		return $files;
 	}
 	
+	/**
+	 * Reads all available gadgets
+	 *
+	 * @return	Array   Array of gadgets
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableGadgets() {
+		$files = Array();
+		
+		if ($handle = opendir($this->MAINCFG->getValue('paths', 'gadget'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if($file !== 'gadgets_core.php') {
+					if(preg_match(MATCH_PHP_FILE, $file, $arrRet)) {
+						$files[] = $arrRet[1];
+					}
+				}
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+		}
+		closedir($handle);
+		
+		return $files;
+	}
 	
 	/**
 	 * Checks for writeable VarFolder
