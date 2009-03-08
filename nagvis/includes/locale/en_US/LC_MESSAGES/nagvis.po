@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 english language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-07 17:41+0100\n"
-"PO-Revision-Date: 2009-03-07 17:51+0100\n"
+"PO-Revision-Date: 2009-03-08 16:14+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -358,7 +358,7 @@ msgstr "Position/Size"
 #: wui/includes/classes/WuiMap.php:570
 #: wui/includes/classes/WuiMap.php:572
 msgid "change"
-msgstr "Change"
+msgstr "Modify"
 
 #: wui/includes/classes/WuiMap.php:598
 #: nagvis/includes/classes/NagVisHoverMenu.php:131

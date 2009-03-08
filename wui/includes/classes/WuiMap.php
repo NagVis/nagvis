@@ -554,20 +554,41 @@ class WuiMap extends GlobalMap {
 				$configuredText .= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
 			}
 		}
-		// lines and textboxes have one more link in the tooltip: "size/position"	
+		
+		/*
+		 * Add action links
+		 */
+		
+		$tooltipText .= "<tr><th colspan=\'2\' style=\'height:34px;\'>";
+		$tooltipText .= "<ul class=\'nav\'>";
+		
+		// Edit link
+		$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->MAINCFG->getValue('paths','htmlbase')."/wui/images/internal/modify.png)\'"
+		  ." href=# onclick=popupWindow(\'".$this->LANG->getText('change')."\',"
+			."getSyncRequest(\'./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\',true,false));>"
+			."<span>".$this->LANG->getText('change')."</span></a></li>";
+		
+		// Position/Size link on textboxes/lines
+		//$tooltipText .= "&nbsp;".$positionSizeText;
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
-			$positionSizeText = "<a href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>".$this->LANG->getText('positionSize')."</a>";			
-		} else {
-			$positionSizeText = '';	
+			$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->MAINCFG->getValue('paths','htmlbase')."/wui/images/internal/move.png)\'"
+						." href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>"
+						."<span>".$this->LANG->getText('positionSize')."</span></a></li>";			
 		}
 		
-		$tooltipText .= "<tr><th><a href=# onclick=popupWindow(\'".$this->LANG->getText('change')."\',"
-			."getSyncRequest(\'./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\',true,false));>"
-			.$this->LANG->getText('change')."</a>&nbsp;".$positionSizeText."</th>";
-		$tooltipText .= "<th><a href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\' onClick=\'return deleteMapObject(this);return false;\'>".$this->LANG->getText('delete')."</a></th></tr>";
+		// Delete link
+		$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->MAINCFG->getValue('paths','htmlbase')."/wui/images/internal/delete.png)\'"
+		  ." href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\'"
+			." onClick=\'return deleteMapObject(this);return false;\'>"
+		  ."<span>".$this->LANG->getText('delete')."</span></a></li>";
+		
+		$tooltipText .= "</ul>";
+		$tooltipText .= "</th></tr>";
+		
 		
 		// Print configured settings
 		$tooltipText .= '<tr><th colspan=\\\'2\\\'>'.$this->LANG->getText('configured').'</th></tr>'.$configuredText;
+		
 		// Print inherited settings
 		$tooltipText .= '<tr class=\\\'inherited\\\'><th colspan=\\\'2\\\'>'.$this->LANG->getText('inherited').'</th></tr>'.$defaultText;
 		

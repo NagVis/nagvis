@@ -26,21 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-body, table, th, td {
-	margin: 0;
-	padding: 0;
-	
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	text-decoration: none;
-	
-	color: black;
-	font-size: 12pt;
-}
-
-img {
-    border: 0
-}
-
 table { 
 	background-color: #F5F5F5; 
 	width: 100%;
@@ -69,7 +54,9 @@ table {
 	cursor: default;
 }
 
-/* WUI tables/form */
+/*
+ * WUI tables/form
+ */
 
 table.mytable {
 	background-color: #F5F5F5;
@@ -123,7 +110,10 @@ table.mytable td.tdfield input, table.mytable td.tdfield select {
 	width: 100%;
 }
 
-/* WUI INFOBOX */
+/*
+ * WUI INFOBOX
+ */
+
 table.infobox {
 	background-color: #F5F5F5; 
 	border-collapse:collapse;
@@ -144,12 +134,54 @@ table.infobox th {
 	background-color: #eee;
 }
 
+table.infobox a:link,
+table.infobox a:visited,
+table.infobox a:active {
+	color: #44B0CC;
+	text-decoration: none;
+}
+
+table.infobox a:hover {
+	color: #7EA238;
+	text-decoration: none;
+}
+
 /* display inherited settings in gray font */
 table.infobox tr.inherited th, table.infobox tr.inherited td {
 	color: #a4a4a4;
 }
 
-/* popupWindow css */
+ul.nav {
+	margin: 0;
+	padding: 0;
+	height: 34px;
+	width: 300px;
+}
+
+ul.nav li {
+	float: left;
+  list-style-type: none;
+	border-right: 1px #a4a4a4 solid;
+}
+
+ul.nav li a {
+	float: left;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-position: 5px 50%;
+}
+
+ul.nav li a span {
+  padding: 0 .4em 0 42px;
+  display: inline;
+  line-height: 34px;
+	vertical-align: middle;
+}
+
+
+/*
+ * popupWindow css
+ */
 
 div#popupWindow {
 	z-index: 2000;
