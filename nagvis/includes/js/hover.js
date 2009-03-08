@@ -37,8 +37,8 @@ function getHoverTemplate(sName) {
 }
 
 function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
-	var oMacros = new Object();
-	var oSectionMacros = new Object();
+	var oMacros = {};
+	var oSectionMacros = {};
 	
 	oMacros.obj_type = oObj.conf.type;
 	oMacros.last_status_refresh = date(oGeneralProperties.date_format, oObj.lastUpdate/1000);

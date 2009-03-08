@@ -349,7 +349,7 @@ function runWorker(iCount, sType) {
 	}
 	
 	// Sleep until next worker run (1 Second)
-	window.setTimeout(function() {runWorker((iCount+1), sType)}, 1000);
+	window.setTimeout(function() { runWorker((iCount+1), sType); }, 1000);
 	
 	// Pro forma return
 	return true;
@@ -470,7 +470,7 @@ function setMapHoverUrls() {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do use hover_url
-		if(aMapObjects[a].conf.hover_menu && aMapObjects[a].conf.hover_menu == 1 && aMapObjects[a].conf.hover_url && aMapObjects[a].conf.hover_url != '') {
+		if(aMapObjects[a].conf.hover_menu && aMapObjects[a].conf.hover_menu == 1 && aMapObjects[a].conf.hover_url && aMapObjects[a].conf.hover_url !== '') {
 			oHoverUrls[aMapObjects[a].conf.hover_url] = '';
 		}
 	}
@@ -564,7 +564,7 @@ function getContextTemplates(aObjs) {
 	for(var a = 0, len = aObjs.length; a < len; a++) {
 		// Ignore objects which
 		// a) have a disabled menu
-		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu == '1') {
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu === '1') {
 			oContextTemplates[aObjs[a].conf.context_template] = '';
 		}
 	}
@@ -575,7 +575,7 @@ function getContextTemplates(aObjs) {
 			aUrlParts.push('&name[]='+i);
 			
 			// Load template css file
-			var oLink = document.createElement('link')
+			var oLink = document.createElement('link');
 			oLink.href = oGeneralProperties.path_htmlbase+'/nagvis/templates/context/tmpl.'+i+'.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
@@ -710,7 +710,7 @@ function setMapBasics(oProperties) {
 function setMapObjects(aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
 	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
-		var sType = aMapObjectConf[i].type
+		var sType = aMapObjectConf[i].type;
 		var oObj;
 		
 		switch (sType) {
@@ -740,7 +740,7 @@ function setMapObjects(aMapObjectConf) {
 			break;
 		}
 		
-		if(oObj != null) {
+		if(oObj !== null) {
 			// Save object to map objects array
 			aMapObjects.push(oObj);
 			
@@ -900,15 +900,13 @@ function playSound(intIndex, iNumTimes){
 	
 	var sState = aMapObjects[intIndex].conf.summary_state;
 	
-	if(oStates[sState]
-	     && oStates[sState].sound
-	     && oStates[sState].sound != '') {
+	if(oStates[sState] && oStates[sState].sound && oStates[sState].sound !== '') {
 		sSound = oStates[sState].sound;
 	}
 	
 	eventlog("state-change", "debug", "Sound to play: "+sSound);
 	
-	if(sSound != '') {
+	if(sSound !== '') {
 		// Remove old sound when present
 		if(document.getElementById('sound'+sState)) {
 			document.body.removeChild(document.getElementById('sound'+sState));
@@ -933,7 +931,7 @@ function playSound(intIndex, iNumTimes){
 		iNumTimes = iNumTimes - 1;
 		
 		if(iNumTimes > 0) {
-			window.setTimeout(function() { playSound(intIndex, iNumTimes) }, 500);
+			window.setTimeout(function() { playSound(intIndex, iNumTimes); }, 500);
 		}
 	}
 	
@@ -1051,7 +1049,7 @@ function setPageBackgroundColor(sColor) {
  */
 function setMapBackgroundImage(sImage) {
 	// Only work with the background image if some is configured
-	if(typeof sImage != 'undefined' && sImage != 'none' && sImage != '') {
+	if(typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
 		// Use existing image or create new
 		if(document.getElementById('backgroundImage')) {
 			var oImage = document.getElementById('backgroundImage');
@@ -1193,7 +1191,7 @@ function parseOverviewMaps(aMapsConf) {
 		
 		oObj = new NagVisMap(aMapsConf[i]);
 		
-		if(oObj != null) {
+		if(oObj !== null) {
 			// Save object to map objects array
 			aMaps.push(oObj);
 			
@@ -1247,7 +1245,7 @@ function setOverviewRotations(aRotationsConf) {
 			
 			oObj = new NagVisRotation(aRotationsConf[i]);
 			
-			if(oObj != null) {
+			if(oObj !== null) {
 				// Save object to map objects array
 				aRotations.push(oObj);
 				

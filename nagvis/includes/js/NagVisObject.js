@@ -104,8 +104,8 @@ var NagVisObject = Base.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	replaceContextTemplateMacros: function() {
-		var oMacros = new Object();
-		var oSectionMacros = new Object();
+		var oMacros = {};
+		var oSectionMacros = {};
 		
 		oMacros.obj_id = this.objId;
 		oMacros.name = this.conf.name;
@@ -164,7 +164,7 @@ var NagVisObject = Base.extend({
 		// Only enable hover menu when configured
 		if(this.conf.hover_menu && this.conf.hover_menu == '1') {
 			// Parse the configured URL or get the hover menu
-			if(this.conf.hover_url && this.conf.hover_url != '') {
+			if(this.conf.hover_url && this.conf.hover_url !== '') {
 				this.getHoverUrlCode();
 			} else {
 				this.getHoverTemplateCode();

@@ -25,7 +25,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-var oSeverity = Object();
+var oSeverity = {};
 oSeverity.debug = 4;
 oSeverity.info = 3;
 oSeverity.warning = 2;
@@ -51,10 +51,12 @@ function eventlogInitialize() {
 		oEventlogControl.appendChild(document.createTextNode('_'));
 		oEventlogControl.onmouseover = function() {
 			document.body.style.cursor='pointer';
-		}
+		};
+		
 		oEventlogControl.onmouseout = function() {
 			document.body.style.cursor='auto';
-		}
+		};
+		
 		oEventlogControl.onclick = function() {
 			var oLog = document.getElementById('eventlog');
 			if(oLog.style.display != 'none') {

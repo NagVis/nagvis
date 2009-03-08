@@ -207,6 +207,14 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	return sResponse;
 }
 
+/**
+ * Saves the query information to the query cache. The query cache persists
+ * unless the page is being reloaded
+ *
+ * FIXME: There needs to be a job for cleaning up the cache.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 function updateQueryCache(url,timestamp,response) {
 	ajaxQueryCache[url] = { "timestamp": timestamp, "response": response };
 }

@@ -176,15 +176,25 @@ function middle(x1,x2) {
 // Returns the maximum value in an array
 function max(arr) {
 	var max = arr[0];
-	var len = arr.length;
-	for (var i = 1; i < len; i++) if (arr[i] > max) max = arr[i];
+	
+	for (var i = 1, len = arr.length; i < len; i++) {
+		if (arr[i] > max) {
+			max = arr[i];
+		}
+	}
+	
 	return max;
 }
 
 // Returns the minimum value in an array
 function min(arr) {
 	var min = arr[0];
-	var len = arr.length;
-	for (var i = 1; i < len; i++) if (arr[i] < min) min = arr[i];
+	
+	for (var i = 1, len = arr.length; i < len; i++) {
+		if (arr[i] < min) {
+			min = arr[i];
+		}
+	}
+	
 	return min;
 }
