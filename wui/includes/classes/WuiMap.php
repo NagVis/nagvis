@@ -554,12 +554,6 @@ class WuiMap extends GlobalMap {
 				$configuredText .= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
 			}
 		}
-		
-		// Print configured settings
-		$tooltipText .= '<tr><th colspan=\\\'2\\\'>'.$this->LANG->getText('configured').'</th></tr>'.$configuredText;
-		// Print inherited settings
-		$tooltipText .= '<tr class=\\\'inherited\\\'><th colspan=\\\'2\\\'>'.$this->LANG->getText('inherited').'</th></tr>'.$defaultText;
-		
 		// lines and textboxes have one more link in the tooltip: "size/position"	
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
 			$positionSizeText = "<a href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>".$this->LANG->getText('positionSize')."</a>";			
@@ -572,11 +566,16 @@ class WuiMap extends GlobalMap {
 			.$this->LANG->getText('change')."</a>&nbsp;".$positionSizeText."</th>";
 		$tooltipText .= "<th><a href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\' onClick=\'return deleteMapObject(this);return false;\'>".$this->LANG->getText('delete')."</a></th></tr>";
 		
+		// Print configured settings
+		$tooltipText .= '<tr><th colspan=\\\'2\\\'>'.$this->LANG->getText('configured').'</th></tr>'.$configuredText;
+		// Print inherited settings
+		$tooltipText .= '<tr class=\\\'inherited\\\'><th colspan=\\\'2\\\'>'.$this->LANG->getText('inherited').'</th></tr>'.$defaultText;
+		
 		$tooltipText .= '</table>';
 		
 		$info = "onmouseout=\"UnTip();\""
 		       ."onmouseover=\"Tip('".$tooltipText."',"
-		       ."DELAY,1000,"
+		       ."DELAY,200,"
 		       ."STICKY,true,"
 		       ."OFFSETX,6,"
 		       ."OFFSETY,6,"
