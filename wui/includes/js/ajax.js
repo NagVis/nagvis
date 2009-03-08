@@ -49,5 +49,5 @@ function getObjects(backend_id,type,field,selected) {
 function getBackendOptions(backend_type,backend_id,form) {
 	var oOpt = Object();
 	oOpt.form = form;
-	getRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backend_id+'&backend_type='+backend_type, 'printBackendOptions', oOpt);
+	printBackendOptions(getSyncRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backend_id+'&backend_type='+backend_type), oOpt);
 }

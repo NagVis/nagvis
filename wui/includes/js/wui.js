@@ -403,3 +403,37 @@ function formSubmit(formId, action) {
 	
 	return true;
 }
+
+/**
+ * toggleDefaultOption
+ *
+ * This function checks the value of the field to reset it to the default value
+ * which is stored in a "helper field". The default value is inserted when there
+ * is no option given in the current object.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function toggleDefaultOption(sName) {
+	var oField = document.getElementById(sName);
+	var oFieldDefault = document.getElementById('_'+sName);
+	
+	if(oField && oFieldDefault) {
+		// Set option only when the field is emtpy and the default value has a value
+		if(oField.value === '' && oFieldDefault.value !== '') {
+			// Set value to default value
+			oField.value = oFieldDefault.value;
+			
+			// Visualize the default value
+			oField.style.color = '#B0A8B8';
+		} else if(oField.value != oFieldDefault.value) {
+			// Reset the visualisation
+			oField.style.color = '';
+		} else if(oField.value == oFieldDefault.value) {
+			// Visualize the default value
+			oField.style.color = '#B0A8B8';
+		}
+	}
+	
+	oFieldDefault = null;
+	oField = null;
+}

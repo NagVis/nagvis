@@ -48,6 +48,11 @@ function printBackendOptions(aObjects, oOpt) {
 		tbl.deleteRow(toDelete[i]);
 	}
 	
+	// Terminate on no valid options
+	if(!aObjects || aObjects === null) {
+		return false;
+	}
+	
 	var lastRow = tbl.rows.length-1;
 	
 	// Add spacer row
