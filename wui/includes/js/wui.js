@@ -338,11 +338,21 @@ function confirm_restore() {
 	return true;
 }
 
-function formSubmit(formName, action) {
+/**
+ * formSubmit()
+ *
+ * Submits the form contents to the ajax handler by a synchronous HTTP-GET
+ *
+ * @param   String   ID of the form
+ * @param   String   Action to send to the ajax handler
+ * @return  Boolean  
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function formSubmit(formId, action) {
 	var getstr = '';
 	
 	// Read form contents
-	var oForm = document.getElementById(formName);
+	var oForm = document.getElementById(formId);
 	
 	// Get relevant input elements
 	var aFields = oForm.getElementsByTagName('input');
@@ -390,4 +400,6 @@ function formSubmit(formName, action) {
 	
 	// FIXME: Reloading the map (Change to reload object)
 	document.location.href='./index.php?map='+mapname;
+	
+	return true;
 }

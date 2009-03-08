@@ -32,7 +32,16 @@ var bDragging = false;
 var x, y, tx, ty;
 var dobj;
 
-function movemouse( e ) {
+/**
+ * movemouse()
+ *
+ * Eventhandler for moving the dialogs on the page
+ *
+ * @param   Object   Event object
+ * @return  Boolean  
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function movemouse(e) {
  if(bDragging) {
    dobj.style.left = popupNN6 ? (tx + e.clientX - x) + 'px' : (tx + event.clientX - x) + 'px';
    dobj.style.top  = popupNN6 ? (ty + e.clientY - y) + 'px' : (ty + event.clientY - y) + 'px';
@@ -43,6 +52,15 @@ function movemouse( e ) {
  return true;
 }
 
+/**
+ * selectmouse()
+ *
+ * Eventhandler for mouse clicking on the page
+ *
+ * @param   Object   Event object
+ * @return  Boolean  
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 function selectmouse(e) {
 	bDragging = true;
 	
@@ -57,10 +75,27 @@ function selectmouse(e) {
 	return false;
 }
 
+/**
+ * popupWindowClose()
+ *
+ * Closes and removes the open dialog
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 function popupWindowClose() {
 	document.body.removeChild(document.getElementById('popupWindow'));
 }
 
+/**
+ * popupWindow()
+ *
+ * Creates a javascript dialog
+ *
+ * @param   String   Window title
+ * @param   Object   Object containing the contents
+ * @return  Boolean  
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 function popupWindow(title, oContent) {
 	if(oContent === null || oContent.code === null) {
 		return false;

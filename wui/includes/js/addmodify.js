@@ -34,7 +34,7 @@ function printObjects(aObjects,oOpt) {
 	
 	if(oField.nodeName == "SELECT") {
 		// delete old options
-		for(i=oField.length; i>=0; i--){
+		for(var i = oField.length; i >= 0; i--){
 			oField.options[i] = null;
 		}
 	}
@@ -223,15 +223,21 @@ function validateForm() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function toggleDependingFields(name, value) {
-	for(var i=0, len=document.addmodify.elements.length;i<len;i++) {
+	for(var i=0, len=document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'hidden' && document.addmodify.elements[i].type != 'submit') {
-			if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
-				 && validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] !== value) {
+			var sTypeName = document.addmodify.type.value;
+			var sFieldName = document.addmodify.elements[i].name;
+			
+			// Show option fields when parent field value is equal and hide when 
+			// parent field value differs
+			if(validMapConfig[sTypeName][sFieldName]['depends_on'] === name
+				 && validMapConfig[sTypeName][sFieldName]['depends_value'] !== value) {
 				
-				document.getElementById(document.addmodify.elements[i].name).parentNode.parentNode.style.display = 'none';
-			} else if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_on'] === name
-				 && validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['depends_value'] === value) {
-				document.getElementById(document.addmodify.elements[i].name).parentNode.parentNode.style.display = '';
+				document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
+			} else if(validMapConfig[sTypeName][sFieldName]['depends_on'] === name
+				 && validMapConfig[sTypeName][sFieldName]['depends_value'] === value) {
+				
+				document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
 			}
 		}
 	}
