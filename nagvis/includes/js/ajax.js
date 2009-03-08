@@ -28,7 +28,7 @@
 var ajaxQueryCache = [];
 
 /**
- * function to create an XMLHttpClient in a cross-browser manner
+ * Function to create an XMLHttpClient in a cross-browser manner
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
@@ -61,56 +61,6 @@ function initXMLHttpClient() {
 	}
 	
 	return xmlhttp;
-}
-
-/**
- * Simple HTTP-Get to given URL
- * - Uses query cache
- * - Escapes the following chars:
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getHttpRequest(sUrl, bCacheable) {
-	var responseText = "";
-	
-	if (bCacheable === null) {
-		bCacheable = true;
-	}
-	
-	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
-	if(bCacheable && typeof(ajaxQueryCache[sUrl]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
-		responseText = ajaxQueryCache[sUrl].response;
-	} else {
-		var oRequest = initXMLHttpClient();
-		
-		if(oRequest) {
-			try {
-				oRequest.open("GET", sUrl, false);
-				oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
-				oRequest.send(null);
-			} catch(e) {
-				alert("Error! URL: "+ sUrl +"\nError message: "+ e);
-			}
-			
-			responseText = oRequest.responseText;
-			
-			if(responseText.replace(/\s+/g,'').length === 0) {
-				responseText = '';
-			} else {
-				// Trim the left of the response
-				responseText = responseText.replace(/^\s+/,"");
-			}
-			
-			if(bCacheable) {
-				// Cache that dialog
-				updateQueryCache(sUrl, Date.parse(new Date()), responseText);
-			}
-		}
-		
-		oRequest = null;
-	}
-	
-	return responseText;
 }
 
 function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
@@ -255,69 +205,6 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	}
 	
 	return sResponse;
-}
-
-/**
- * Function for creating an async GET request
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getRequest(url,myCallback,oOpt) {
-	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
-	if(typeof(ajaxQueryCache[url]) != 'undefined' && Date.parse(new Date())-ajaxQueryCache[url].timestamp <= 30000) {
-		getAnswer(undefined, myCallback, ajaxQueryCache[url], true);
-	} else {
-		var oRequest = initXMLHttpClient();
-		
-		if (oRequest !== null) {
-			// Save this options to oOpt (needed for query cache)
-			oOpt.url = url;
-			oOpt.timestamp = Date.parse(new Date());
-			
-			oRequest.open("GET", url+"&timestamp="+oOpt.timestamp, true);
-			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
-			oRequest.onreadystatechange = function() { getAnswer(oRequest,myCallback,oOpt,false); };
-			oRequest.send(null);
-		}
-	}
-}
-
-/**
- * Function for handling the answers of the ajax requests (including error handling)
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getAnswer(oRequest,myCallback,oOpt,bCached) {
-	if(bCached || (!bCached && oRequest.readyState == 4)) {
-		if(bCached || (!bCached && oRequest.status == 200)) {
-			var responseText;
-			if(!bCached) {
-				responseText = oRequest.responseText;
-			} else {
-				responseText = oOpt.response;
-			}
-			
-			if(responseText.replace(/\s+/g,'').length === 0) {
-				// Cache that dialog
-				updateQueryCache(oOpt.url, oOpt.timestamp, '');
-				
-				window[myCallback]('',oOpt);
-			} else {
-				// Cache that dialog
-				updateQueryCache(oOpt.url, oOpt.timestamp, responseText);
-				
-				// Trim the left of the response
-				responseText = responseText.replace(/^\s+/,"");
-				
-				// Error handling for the AJAX methods
-				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-					alert("Error in ajax request handler:\n"+responseText);
-				} else {
-					window[myCallback](eval('( '+responseText+')'),oOpt);
-				}
-			}
-		}
-	}
 }
 
 function updateQueryCache(url,timestamp,response) {
