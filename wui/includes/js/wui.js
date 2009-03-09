@@ -357,25 +357,28 @@ function formSubmit(formId, action) {
 	// Get relevant input elements
 	var aFields = oForm.getElementsByTagName('input');
 	for (var i = 0, len = aFields.length; i < len; i++) {
-		if (aFields[i].type == "hidden") {
-			getstr += aFields[i].name + "=" + aFields[i].value + "&";
-		}
-		
-		if (aFields[i].type == "text") {
-			getstr += aFields[i].name + "=" + aFields[i].value + "&";
-		}
-		
-		if (aFields[i].type == "checkbox") {
-			if (aFields[i].checked) {
+		// Filter helper fields
+		if(aFields[i].name.charAt(0) !== '_') {
+			if (aFields[i].type == "hidden") {
 				getstr += aFields[i].name + "=" + aFields[i].value + "&";
-			} else {
-				getstr += aFields[i].name + "=&";
 			}
-		}
-		
-		if (aFields[i].type == "radio") {
-			if (aFields[i].checked) {
+			
+			if (aFields[i].type == "text") {
 				getstr += aFields[i].name + "=" + aFields[i].value + "&";
+			}
+			
+			if (aFields[i].type == "checkbox") {
+				if (aFields[i].checked) {
+					getstr += aFields[i].name + "=" + aFields[i].value + "&";
+				} else {
+					getstr += aFields[i].name + "=&";
+				}
+			}
+			
+			if (aFields[i].type == "radio") {
+				if (aFields[i].checked) {
+					getstr += aFields[i].name + "=" + aFields[i].value + "&";
+				}
 			}
 		}
 	}
@@ -383,8 +386,10 @@ function formSubmit(formId, action) {
 	// Get relevant select elements
 	aFields = oForm.getElementsByTagName('select');
 	for (var i = 0, len = aFields.length; i < len; i++) {
-		var sel = aFields[i];
-		getstr += sel.name + "=" + sel.options[sel.selectedIndex].value + "&";
+		// Filter helper fields
+		if(aFields[i].name.charAt(0) !== '_') {
+			getstr += aFields[i].name + "=" + aFields[i].options[aFields[i].selectedIndex].value + "&";
+		}
 	}
 	
 	// Submit data
