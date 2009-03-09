@@ -268,6 +268,9 @@ function runWorker(iCount, sType) {
 				
 				// Update the worker counter on maps
 				updateWorkerCounter();
+				
+				// Cleanup ajax query cache
+				cleanupAjaxQueryCache();
 			}
 		} else if(sType === 'overview') {
 			if(iCount % oWorkerProperties.worker_interval === 0) {
@@ -344,6 +347,9 @@ function runWorker(iCount, sType) {
 				
 				// Update the worker counter on maps
 				updateWorkerCounter();
+				
+				// Cleanup ajax query cache
+				cleanupAjaxQueryCache();
 			}
 		}
 	}

@@ -24,8 +24,11 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
- 
-var ajaxQueryCache = [];
+
+// Array to store the cached queries
+var ajaxQueryCache = {};
+// Cache lifetime is 30 seconds (30,000 milliseconds)
+var ajaxQueryCacheLifetime = 30000;
 
 /**
  * Function to create an XMLHttpClient in a cross-browser manner
@@ -125,7 +128,8 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	sUrl = sUrl.replace("+", "%2B");
 	
 	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
-	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= 30000) {
+	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
+		eventlog("ajax", "debug", "Using cached query");
 		responseText = ajaxQueryCache[sUrl].response;
 		
 		sResponse = eval('( '+responseText+')');
@@ -211,10 +215,32 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
  * Saves the query information to the query cache. The query cache persists
  * unless the page is being reloaded
  *
- * FIXME: There needs to be a job for cleaning up the cache.
- *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateQueryCache(url,timestamp,response) {
 	ajaxQueryCache[url] = { "timestamp": timestamp, "response": response };
+	eventlog("ajax", "debug", "Caching Query: "+url);
+}
+
+/**
+ * Cleans up the ajax query cache. It removes the deprecated cache entries and
+ * shrinks the cache array.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function cleanupAjaxQueryCache() {
+	// Loop query cache array
+	eventlog("ajax", "debug", "Removing old cached ajax queries");
+	for(var sKey in ajaxQueryCache) {
+		// If cache expired remove and shrink the array
+		if(Date.parse(new Date())-ajaxQueryCache[sKey].timestamp > ajaxQueryCacheLifetime) {
+			// Set to null in array
+			ajaxQueryCache[sKey] = null;
+			
+			// Really remove key
+			delete ajaxQueryCache[sKey];
+			
+			eventlog("ajax", "debug", "Removed cached ajax query:"+sKey);
+		}
+	}
 }

@@ -69,7 +69,7 @@ var NagVisMap = NagVisStatefulObject.extend({
 		oTd.appendChild(br);
 		br = null;
 		
-		var oImg = document.createElement('img');
+		oImg = document.createElement('img');
 		oImg.style.width = '200px';
 		oImg.style.height = '150px';
 		oImg.src=this.conf.overview_image;

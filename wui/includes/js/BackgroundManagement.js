@@ -51,7 +51,7 @@ function checkGif(imageName) {
 }
 
 function checkImageUsed(imageName,mapOptions) {
-	for(var i=0;i<mapOptions.length;i++) {
+	for(var i=0, len = mapOptions.length; i< len; i++) {
 		if(mapOptions[i].mapImage == imageName) {
 			return mapOptions[i].mapName;
 		}
@@ -107,8 +107,8 @@ function check_image_delete() {
 		return false;
 	}
 	
-	imageUsedBy = checkImageUsed(document.image_delete.map_image.value, window.opener.mapOptions);
-	if(imageUsedBy != "") {
+	var imageUsedBy = checkImageUsed(document.image_delete.map_image.value, mapOptions);
+	if(imageUsedBy !== "") {
 		alert(printLang(lang['unableToDeleteBackground'],'MAP~'+imageUsedBy+',IMAGENAME~'+document.image_delete.map_image.value));
 		return false;
 	}

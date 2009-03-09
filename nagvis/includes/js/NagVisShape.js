@@ -86,7 +86,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 		oIcon.src = this.conf.icon+'?_t='+Date.parse(new Date());
 		oIcon.alt = this.conf.type;
 		
-		if(this.conf.url && this.conf.url != '') {
+		if(this.conf.url && this.conf.url !== '') {
 			var oIconLink = document.createElement('a');
 			oIconLink.href = this.conf.url;
 			oIconLink.target = this.conf.url_target;
@@ -100,7 +100,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 			oIcon = null;
 		}
 		
-		if(this.conf.hover_url && this.conf.hover_url != '') {
+		if(this.conf.hover_url && this.conf.hover_url !== '') {
 			this.getHoverMenu(oIcon);
 		}
 		
