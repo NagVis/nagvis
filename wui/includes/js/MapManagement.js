@@ -79,10 +79,6 @@ function check_create_map() {
 		alert(printLang(lang['minOneUserWriteAccess'],''));
 		return false;
 	}
-	if (document.map_create.map_image.value=='') {
-		alert(printLang(lang['mustChooseBackgroundImage'],''));
-		return false;
-	}
 	
 	for(var i=0;i<document.map_rename.map_name.length;i++) {
 		if(document.map_rename.map_name.options[i].value == document.map_create.map_name.value) {

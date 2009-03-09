@@ -670,7 +670,6 @@ class WuiMap extends GlobalMap {
 			'unableToDeleteShape' => $this->LANG->getText('unableToDeleteShape'),
 			'chooseMapName' => $this->LANG->getText('chooseMapName'),
 			'minOneUserAccess' => $this->LANG->getText('minOneUserAccess'),
-			'mustChooseBackgroundImage' => $this->LANG->getText('mustChooseBackgroundImage'),
 			'noMapToRename' => $this->LANG->getText('noMapToRename'),
 			'noNewNameGiven' => $this->LANG->getText('noNewNameGiven'),
 			'mapAlreadyExists' => $this->LANG->getText('mapAlreadyExists'),
