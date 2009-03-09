@@ -109,8 +109,6 @@ function get_click(newtype,nbclicks,action) {
 	
 	document.onclick=get_click_pos;
 	document.onmousemove=track_mouse;
-	
-	window.status = printLang(lang['clickMapToSetPoints'],'') + cpt_clicks;
 }
 
 function printLang(sLang,sReplace) {
@@ -203,12 +201,9 @@ function get_click_pos(e) {
 		cpt_clicks = cpt_clicks - 1;
 	}
 	
-	if(cpt_clicks > 0) {
-		window.status = printLang(lang['clickMapToSetPoints'],'') + cpt_clicks;
-	} else if(cpt_clicks == 0) {
+	if(cpt_clicks == 0) {
 		if (follow_mouse) myshape.clear();
 		coords=coords.substr(0,coords.length-1);
-		window.status='';
 		
 		if(document.images['background']) {
 			document.images['background'].style.cursor='default';
