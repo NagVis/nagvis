@@ -92,7 +92,8 @@ class WuiAddModify extends GlobalPage {
 	 *
 	 * @return	Array	JS Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+	 * FIXME: Recode to javascript frontend (wui.js:get_click_pos())
+   */
 	function fillFields() {
 		$ret = '';
 		
@@ -106,6 +107,7 @@ class WuiAddModify extends GlobalPage {
 						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
 						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
 						$ret .= 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
+						$ret .= 'toggleDefaultOption(\'w\');';
 					} else {
 						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
 						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
@@ -126,11 +128,15 @@ class WuiAddModify extends GlobalPage {
 							$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
 							$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
 							$ret .= 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
+							$ret .= 'toggleDefaultOption(\'w\');';
 						} else {
 							$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
 							$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
-						}		
+						}
 					}
+					
+					$ret .= 'toggleDefaultOption(\'x\');';
+					$ret .= 'toggleDefaultOption(\'y\');';
 				}
 			break;
 		}
