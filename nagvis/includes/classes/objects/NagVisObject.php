@@ -247,6 +247,34 @@ class NagVisObject {
 				unset($arr[$this->getType().'_name']);
 			}
 			
+			if(isset($this->alias) && $this->alias != '') {
+				$arr['alias'] = $this->alias;
+			} else {
+				$arr['alias'] = '';
+			}
+			
+			if(isset($this->display_name) && $this->display_name != '') {
+				$arr['display_name'] = $this->display_name;
+			} else {
+				$arr['display_name'] = '';
+			}
+			
+			// Save the number of members
+			switch($this->getType()) {
+				case 'host':
+				case 'map':
+				case 'hostgroup':
+				case 'servicegroup':
+					$arr['num_members'] = $this->getNumMembers();
+				break;
+			}
+			
+			if($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
+				$arr['backend_instancename'] = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename');
+			} else {
+				$arr['backend_instancename'] = '';
+			}
+			
 			// Little hack: Overwrite the options with correct state information
 			$arr = array_merge($arr, $this->getObjectStateInformations(false));
 		}
@@ -284,7 +312,7 @@ class NagVisObject {
 	 * @return	Array		Member object information
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getSortedObjectMembers() {
+	public function getSortedObjectMembers($bStateInfo=FALSE) {
 		$arr = Array();
 		
 		$aTmpMembers = $this->getMembers();
@@ -315,7 +343,11 @@ class NagVisObject {
 			// Only get the member when this is no loop
 			if($aTmpMembers[$i]->getType() != 'map' || ($aTmpMembers[$i]->getType() == 'map' && $this->MAPCFG->getName() != $aTmpMembers[$i]->MAPCFG->getName())) {
 				if($aTmpMembers[$i]->getType() != 'textbox' && $aTmpMembers[$i]->getType() != 'shape') {
-					$arr[] = $aTmpMembers[$i]->getObjectInformation(false);
+					if($bStateInfo) {
+						$arr[] = $aTmpMembers[$i]->getObjectStateInformation(false);
+					} else {
+						$arr[] = $aTmpMembers[$i]->getObjectInformation(false);
+					}
 				}
 			}
 		}

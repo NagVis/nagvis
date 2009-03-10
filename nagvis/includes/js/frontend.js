@@ -407,6 +407,8 @@ function getObjectsToUpdate(aObjs) {
  * getCfgFileAges()
  *
  * Bulk get file ages of important files
+ * The request is being cached to prevent too often updates. The worker asks
+ * every 5 seconds by default - this is too much for a config check.
  *
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -417,9 +419,9 @@ function getCfgFileAges(bMap) {
 	}
 	
 	if(bMap) {
-		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oPageProperties.map_name);
+		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oPageProperties.map_name, true);
 	} else {
-		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg');
+		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg', true);
 	}
 }
 

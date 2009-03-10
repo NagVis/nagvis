@@ -443,6 +443,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getObjectStateInformations($bFetchChilds=true) {
 		$arr = Array();
 		
+		/* FIXME: These are no state informations - don't send them
 		if(isset($this->alias) && $this->alias != '') {
 			$arr['alias'] = $this->alias;
 		} else {
@@ -463,7 +464,7 @@ class NagVisStatefulObject extends NagVisObject {
 			case 'servicegroup':
 				$arr['num_members'] = $this->getNumMembers();
 			break;
-		}
+		}*/
 		
 		$arr['state'] = $this->getState();
 		$arr['summary_state'] = $this->getSummaryState();
@@ -471,12 +472,6 @@ class NagVisStatefulObject extends NagVisObject {
 		$arr['problem_has_been_acknowledged'] = $this->getAcknowledgement();
 		$arr['summary_in_downtime'] = $this->getSummaryInDowntime();
 		$arr['in_downtime'] = $this->getInDowntime();
-		$arr['backend_id'] = $this->backend_id;
-		if($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
-			$arr['backend_instancename'] = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename');
-		} else {
-			$arr['backend_instancename'] = '';
-		}
 		
 		$arr['output'] = strtr($this->output, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
 		$arr['summary_output'] = strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
@@ -487,8 +482,6 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['downtime_data'] = $this->downtime_data;
 			$arr['downtime_end'] = $this->downtime_end;
 			$arr['downtime_start'] = $this->downtime_start;
-			$arr['address'] = $this->address;
-			$arr['notes'] = $this->notes;
 			$arr['last_check'] = $this->getLastCheck();
 			$arr['next_check'] = $this->getNextCheck();
 			$arr['state_type'] = $this->getStateType();
