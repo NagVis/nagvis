@@ -237,7 +237,6 @@ class NagVisObject {
 		$arr['lang_name'] = $sName;
 		$arr['lang_child_name'] = $sChildName;
 		$arr['lang_child_name1'] = $this->CORE->LANG->getText('hostname');
-		$arr['lang_last_status_refresh'] = $this->CORE->LANG->getText('lastStatusRefresh');
 		
 		// I want only "name" in js
 		if($this->type != 'shape' && $this->type != 'textbox') {

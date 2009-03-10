@@ -167,6 +167,10 @@ class NagVisHoverMenu {
 			$this->code = str_replace('[lang_notes]', $this->CORE->LANG->getText('notes'), $this->code);
 		}
 		
+		if(strpos($this->code,'[lang_last_status_refresh]') !== FALSE) {
+			$this->code = str_replace('[lang_last_status_refresh]', $this->CORE->LANG->getText('lastStatusRefresh'), $this->code);
+		}
+		
 		if(strpos($this->code,'[html_base]') !== FALSE) {
 			$this->code = str_replace('[html_base]',$this->CORE->MAINCFG->getValue('paths','htmlbase'),$this->code);
 		}

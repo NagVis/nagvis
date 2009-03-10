@@ -31,6 +31,8 @@ var NagVisObject = Base.extend({
 	context_template_code: null,
 	conf: null,
 	contextMenu: null,
+	lastUpdate: null,
+	prevUpdate: null,
 	
 	constructor: function(oConf) {
 		// Initialize
@@ -47,6 +49,9 @@ var NagVisObject = Base.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	setLastUpdate: function() {
+		// Save datetime of the previous update
+		this.prevUpdate = this.lastUpdate;
+		
 		this.lastUpdate = Date.parse(new Date());
 	},
   
@@ -107,6 +112,11 @@ var NagVisObject = Base.extend({
 		var oMacros = {};
 		var oSectionMacros = {};
 		
+		// Break when no template code found
+		if(!this.context_template_code || this.context_template_code === '') {
+			return false;
+		}
+		
 		oMacros.obj_id = this.objId;
 		oMacros.name = this.conf.name;
 		oMacros.address = this.conf.address;
@@ -163,17 +173,20 @@ var NagVisObject = Base.extend({
 	getHoverMenu: function (oObj) {
 		// Only enable hover menu when configured
 		if(this.conf.hover_menu && this.conf.hover_menu == '1') {
+			var sTemplateCode;
+			var iHoverDelay = this.conf.hover_delay;
+			
 			// Parse the configured URL or get the hover menu
 			if(this.conf.hover_url && this.conf.hover_url !== '') {
 				this.getHoverUrlCode();
+				
+				sTemplateCode = this.hover_template_code;
 			} else {
 				this.getHoverTemplateCode();
+				
+				// Replace dynamic (state dependent) macros
+				sTemplateCode = replaceHoverTemplateDynamicMacros('0', this, this.hover_template_code);
 			}
-			
-			// Resetting parsedObject. This causes problems in IE when converting to json with JSON.stringify
-			// Maybe it results in other problems when removing parsedObject so clone this before
-			var sTemplateCode = replaceHoverTemplateMacros('0', this, this.hover_template_code);
-			var iHoverDelay = this.conf.hover_delay;
 			
 			// Add the hover menu functionality to the object
 			oObj.onmouseover = function() { var sT = sTemplateCode; var iH = iHoverDelay; displayHoverMenu(sT, iH); sT = null; iH = null; };
@@ -205,6 +218,8 @@ var NagVisObject = Base.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	getHoverTemplateCode: function() {
-		this.hover_template_code = oHoverTemplates[this.conf.hover_template];
+		// Asign the template code and replace only the static macros
+		// These are typicaly configured static configued values from nagios
+		this.hover_template_code = replaceHoverTemplateStaticMacros('0', this, oHoverTemplates[this.conf.hover_template]);
 	}
 });

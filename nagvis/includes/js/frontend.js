@@ -570,7 +570,7 @@ function getContextTemplates(aObjs) {
 	for(var a = 0, len = aObjs.length; a < len; a++) {
 		// Ignore objects which
 		// a) have a disabled menu
-		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu === '1') {
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu === 1 && oContextTemplates[aObjs[a].conf.context_template] !== '') {
 			oContextTemplates[aObjs[a].conf.context_template] = '';
 		}
 	}
