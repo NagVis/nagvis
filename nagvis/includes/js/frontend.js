@@ -570,19 +570,19 @@ function getContextTemplates(aObjs) {
 	for(var a = 0, len = aObjs.length; a < len; a++) {
 		// Ignore objects which
 		// a) have a disabled menu
-		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu === 1 && oContextTemplates[aObjs[a].conf.context_template] !== '') {
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu === '1' && oContextTemplates[aObjs[a].conf.context_template] !== '') {
 			oContextTemplates[aObjs[a].conf.context_template] = '';
 		}
 	}
 	
 	// Build string for bulk fetching the templates
-	for(var i in oContextTemplates) {
-		if(i != 'Inherits') {
-			aUrlParts.push('&name[]='+i);
+	for(var sName in oContextTemplates) {
+		if(sName !== 'Inherits') {
+			aUrlParts.push('&name[]='+sName);
 			
 			// Load template css file
 			var oLink = document.createElement('link');
-			oLink.href = oGeneralProperties.path_htmlbase+'/nagvis/templates/context/tmpl.'+i+'.css';
+			oLink.href = oGeneralProperties.path_htmlbase+'/nagvis/templates/context/tmpl.'+sName+'.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
 			document.body.appendChild(oLink);
