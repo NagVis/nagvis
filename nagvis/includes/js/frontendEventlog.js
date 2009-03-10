@@ -87,12 +87,12 @@ function eventlogInitialize() {
  * not already done. The entries can be logged with several severities. The
  * behaviour can be controlled by modify the settings in main configuration.
  *
- * @param   String   The type of message
+ * @param   String   The component where the message occured
  * @param   String   The severity of the message
  * @param   String   The message
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function eventlog(sType, sSeverity, sText) {
+function eventlog(sComponent, sSeverity, sText) {
 	if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null && oPageProperties.event_log && oPageProperties.event_log != '0') {
 		var oEventlog = document.getElementById('eventlog');
 		
@@ -113,7 +113,7 @@ function eventlog(sType, sSeverity, sText) {
 			}
 			
 			// Format the new log entry
-			var oEntry = document.createTextNode(getCurrentTime()+" "+sSeverity+" "+sType+": "+sText);
+			var oEntry = document.createTextNode(getCurrentTime()+" "+sSeverity+" "+sComponent+": "+sText);
 			
 			// Append new message to log
 			oEventlog.appendChild(oEntry);
