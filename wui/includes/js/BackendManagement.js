@@ -25,18 +25,17 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
  
-function printBackendOptions(aObjects, oOpt) {
-	var myForm = oOpt.form;
-	var form = document.getElementById(myForm);
-	var tbl = document.getElementById('table_'+myForm);
+function updateBackendOptions(backendType, backendId, sFormId) {
+	var form = document.getElementById(sFormId);
+	var tbl = document.getElementById('table_'+sFormId);
 	
 	var toDelete = [];
 	
 	// Remove old backend options
-	for(i=0;i<tbl.tBodies[0].rows.length;i++) {
+	for(var i=0, len = tbl.tBodies[0].rows.length; i < len; i++) {
 		if(tbl.tBodies[0].rows[i].attributes.length > 0) {
-			if(tbl.tBodies[0].rows[i].id != '') {
-				if(tbl.tBodies[0].rows[i].id.search("row_") != -1) {
+			if(tbl.tBodies[0].rows[i].id !== '') {
+				if(tbl.tBodies[0].rows[i].id.search("row_") !== -1) {
 					toDelete[toDelete.length] = i;
 				}
 			}
@@ -44,20 +43,14 @@ function printBackendOptions(aObjects, oOpt) {
 	}
 	
 	toDelete.reverse();
-	for(i=0;i<toDelete.length;i++) {
+	for(var i=0, len = toDelete.length; i < len; i++) {
 		tbl.deleteRow(toDelete[i]);
-	}
-	
-	// Terminate on no valid options
-	if(!aObjects || aObjects === null) {
-		return false;
 	}
 	
 	var lastRow = tbl.rows.length-1;
 	
 	// Add spacer row
 	var row = tbl.insertRow(lastRow);
-	//row.setAttribute('id', 'row_'+lastRow);
 	row.id = 'row_'+lastRow;
 	var label = row.insertCell(0);
 	label.innerHTML = "&nbsp;";
@@ -65,29 +58,65 @@ function printBackendOptions(aObjects, oOpt) {
 	input.innerHTML = "&nbsp;";
 	
 	lastRow++;
-	for(i=0;i < aObjects.length;i++) {
+	
+	// When no backendId and no backendType set terminate here
+	if(backendId === '' && backendType === '') {
+		return false;
+	}
+	
+	// Get configured values
+	var oValues;
+	if(backendId !== '') {
+		oValues = getSyncRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backendId);
+	}
+	
+	// Get backend type from configued values when not set via function call
+	// This occurs when editing backends cause only backendid is given
+	if(backendType === '') {
+		backendType = oValues['backendtype'];
+	}
+	
+	// Fallback to default backendtype when nothing set here
+	if(backendType === '') {
+		backendType = validMainConfig['backend']['backendtype']['default'];
+	}
+	
+	// Merge global backend options with type specific options
+	var oOptions;
+	oOptions = validMainConfig['backend']['options'][backendType];
+	for(var sKey in validMainConfig['backend']) {
+		// Exclude: backendid, backendtype, options
+		if(sKey !== 'backendid' && sKey !== 'backendtype' && sKey !== 'options') {
+			oOptions[sKey] = validMainConfig['backend'][sKey];
+		}
+	}
+	
+	for(var sKey in oOptions) {
+		var sValue = "";
+		
 		var row = tbl.insertRow(lastRow);
-		//row.setAttribute('id', 'row_'+lastRow);
 		row.id = 'row_'+lastRow;
 		
+		// Add label
 		var label = row.insertCell(0);
-		//label.setAttribute('class', 'tdlabel');
 		label.className = "tdlabel";
-		if(aObjects[i].must == 1) {
+		if(oOptions[sKey].must === 1) {
 			label.setAttribute('style', 'color:red;');
 		}
-		label.innerHTML = aObjects[i].key;
+		label.innerHTML = sKey;
 		
+		// Add option
 		var input = row.insertCell(1);
-		//input.setAttribute('class', 'tdfield');
 		input.className = "tdfield";
 		
-		var sValue = "";
-		if(aObjects[i].value != null) {
-			sValue = aObjects[i].value;
+		// When editing fill the fields with configured values
+		if(backendId !== '') {
+			if(oValues[sKey] !== null && oValues[sKey] !== '') {
+				sValue = oValues[sKey];
+			}
 		}
 		
-		input.innerHTML = "<input name='"+aObjects[i].key+"' id='"+aObjects[i].key+"' value='"+sValue+"' />";
+		input.innerHTML = "<input name='"+sKey+"' id='"+sKey+"' value='"+sValue+"' />";
 		
 		lastRow++;
 	}

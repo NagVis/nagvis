@@ -133,7 +133,7 @@ class WuiBackendManagement extends GlobalPage {
 		                                             array_merge(Array(''=>''), $this->CORE->getDefinedBackends()), 
 		                                             '',
 		                                             TRUE,
-		                                             "getBackendOptions('', this.value, '".$this->EDITBACKENDFORM->getId()."');");
+		                                             "updateBackendOptions('', this.value, '".$this->EDITBACKENDFORM->getId()."');");
 	}
 	
 	/**
@@ -161,7 +161,7 @@ class WuiBackendManagement extends GlobalPage {
 				$ret .= $this->ADDBACKENDFORM->getSelectLine($propname,
 					$propname,array_merge(Array(''=>''),$this->CORE->getAvailableBackends()),
 					'',
-					$prop['must'],"getBackendOptions(this.value, '', '".$this->ADDBACKENDFORM->getId()."');");
+					$prop['must'],"updateBackendOptions(this.value, '', '".$this->ADDBACKENDFORM->getId()."');");
 			}
 		}
 		

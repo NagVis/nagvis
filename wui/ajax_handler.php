@@ -152,48 +152,40 @@ switch($_GET['action']) {
 		}
 	break;
 	/*
-	 * Get all options which are setable in the backends of the given TYPE. If the
-	 * TYPE is not set the TYPE can be read by given BACKEND-ID. If the BACKEND-ID
-	 * is set it returns also the currently set values of each option.
+	 * Gets values for the backend options of a defined backend. Needed when
+	 * editing existing backends
 	 */
 	case 'getBackendOptions':
 		// These values are submited by WUI requests:
-		// $_GET['backend_type'], ($_GET['backend_id'])
+		// ($_GET['backend_id'])
 		
 		// Do some validations
-		if((!isset($_GET['backend_type']) || $_GET['backend_type'] == '') && (!isset($_GET['backend_id']) || $_GET['backend_id'] == '')) {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id"/"backend_type'));
+		if(!isset($_GET['backend_id'])) {
+			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id'));
 		} else {
 			// Input looks OK, handle the request...
-			
-			// If the backend_type is not set try to get the backend_type of the given
-			// backend
-			if($_GET['backend_type'] == '' && $_GET['backend_id'] != '') {
-				$_GET['backend_type'] = $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],'backendtype');
-			}
-			
 			$aRet = Array();
-			// Check if the backend_type is set
-			if($_GET['backend_type'] != '') {
-				// Loop all options for this backend type
-				$a = $CORE->MAINCFG->getValidObjectType('backend');
-				foreach($a['options'][$_GET['backend_type']] AS $key => $opt) {
-					$a = Array('key' => $key);
-					
-					foreach($opt AS $var => $val) {
-						$a[$var] = $val;
-					}
-					
-					// If the backend_id is given read the currently set value of the
-					// backend
-					if(isset($_GET['backend_id']) && $_GET['backend_id'] != '' && $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE) != '') {
-						$a['value'] = $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],$key,TRUE);
-					}
-					
-					$aRet[] = $a;
+			
+			$backendType = $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'],'backendtype');
+			
+			// Loop all options for this backend type
+			$aBackendOpts = $CORE->MAINCFG->getValidObjectType('backend');
+			
+			// Merge global backend options with type specific options
+			$aOpts = $aBackendOpts['options'][$backendType];
+			
+			foreach($aBackendOpts AS $sKey => $aOpt) {
+				if($sKey !== 'backendid' && $sKey !== 'options') {
+					$aOpts[$sKey] = $aOpt;
 				}
-			} else {
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_type'));
+			} 
+			
+			foreach($aOpts AS $key => $aOpt) {
+				if($CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'], $key, TRUE) !== FALSE) {
+					$aRet[$key] = $CORE->MAINCFG->getValue('backend_'.$_GET['backend_id'], $key, TRUE);
+				} else {
+					$aRet[$key] = '';
+				}
 			}
 			
 			echo json_encode($aRet);

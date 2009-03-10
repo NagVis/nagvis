@@ -44,10 +44,3 @@ function getObjects(backend_id,type,field,selected) {
 	
 	printObjects(getSyncRequest('ajax_handler.php?action=getObjects&backend_id='+backend_id+'&type='+type), oOpt);
 }
-
-// FIXME: Could be removed - the informations are present in maps javascript
-function getBackendOptions(backend_type,backend_id,form) {
-	var oOpt = Object();
-	oOpt.form = form;
-	printBackendOptions(getSyncRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backend_id+'&backend_type='+backend_type), oOpt);
-}
