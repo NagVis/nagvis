@@ -206,6 +206,10 @@ var NagVisObject = Base.extend({
 	 */
 	getHoverUrlCode: function() {
 		this.hover_template_code = oHoverUrls[this.conf.hover_url];
+		
+		if(this.hover_template_code == null) {
+			this.hover_template_code = '';
+		}
 	},
 	
 	/**

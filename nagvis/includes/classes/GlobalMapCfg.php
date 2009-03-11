@@ -1007,6 +1007,10 @@ class GlobalMapCfg {
 					'match' => MATCH_BOOLEAN,
 					'field_type' => 'boolean'),
 				
+				'hover_menu' => Array('must' => 0,
+					'default' => 0,
+					'match' => MATCH_BOOLEAN,
+					'field_type' => 'boolean'),
 				'hover_url' => Array('must' => 0,
 					'match' => MATCH_STRING_URL),
 				'hover_delay' => Array('must' => 0,

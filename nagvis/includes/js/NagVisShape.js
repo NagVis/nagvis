@@ -83,6 +83,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 		oIconDiv.style.zIndex = this.conf.z;
 		
 		var oIcon = document.createElement('img');
+		oIcon.setAttribute('id', this.objId+'-icon');
 		oIcon.src = this.conf.icon+'?_t='+Date.parse(new Date());
 		oIcon.alt = this.conf.type;
 		
@@ -100,10 +101,18 @@ var NagVisShape = NagVisStatelessObject.extend({
 			oIcon = null;
 		}
 		
-		if(this.conf.hover_url && this.conf.hover_url !== '') {
-			this.getHoverMenu(oIcon);
-		}
-		
 		return oIconDiv;
+	},
+	
+	parseHoverMenu: function () {
+		var oObj;
+		
+		// Get the object to apply the hover menu to
+		oObj = document.getElementById(this.objId+'-icon');
+		
+		// Create hover menu
+		this.getHoverMenu(oObj);
+		
+		oObj = null;
 	}
 });
