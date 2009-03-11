@@ -53,6 +53,10 @@
 ;eventlog=0
 ; Loglevel of the eventlog (available: debug, info, warning, critical)
 ;eventloglevel="info"
+; Height of the eventlog when visible in px
+;eventlogheight="75"
+; Hide/Show the eventlog on page load
+;eventloghidden="1"
 ; Enable/Disable scrolling to the icon which changed the state when the icon is
 ; out of the visible scope
 ;eventscroll=1

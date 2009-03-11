@@ -242,6 +242,8 @@ class GlobalIndexPage {
 		
 		$arr['event_log'] = $this->CORE->MAINCFG->getValue('defaults', 'eventlog');
 		$arr['event_log_level'] = $this->CORE->MAINCFG->getValue('defaults', 'eventloglevel');
+		$arr['event_log_height'] = $this->CORE->MAINCFG->getValue('defaults', 'eventlogheight');
+		$arr['event_log_hidden'] = $this->CORE->MAINCFG->getValue('defaults', 'eventloghidden');
 		
 		return json_encode($arr);
 	}

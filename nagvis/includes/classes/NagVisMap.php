@@ -96,6 +96,8 @@ class NagVisMap extends GlobalMap {
 		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
 		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
 		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
+		$arr['event_log_height'] = $this->MAPCFG->getValue('global', 0, 'event_log_height');
+		$arr['event_log_hidden'] = $this->MAPCFG->getValue('global', 0, 'event_log_hidden');
 		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
 		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');
 		
