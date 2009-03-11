@@ -293,10 +293,10 @@ switch($_GET['myaction']) {
 	 * Add a new backend to the main configuration
 	 */
 	case 'mgt_backend_add':
-		// $_POST['backend_id'], $_POST['backendtype']
+		// $_POST['backendid'], $_POST['backendtype']
 		
-		if(!isset($_POST['backend_id']) || $_POST['backend_id'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
+		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
 		} elseif(!isset($_POST['backendtype']) || $_POST['backendtype'] == '') {
 			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendtype');
 		} else {
@@ -316,13 +316,12 @@ switch($_GET['myaction']) {
 			// If there is at least one option set...
 			if($bFoundOption) {
 				// Set standard values
-				$CORE->MAINCFG->setSection('backend_'.$_POST['backend_id']);
-				$CORE->MAINCFG->setValue('backend_'.$_POST['backend_id'],'backendid',$_POST['backend_id']);
-				$CORE->MAINCFG->setValue('backend_'.$_POST['backend_id'],'backendtype',$_POST['backendtype']);
+				$CORE->MAINCFG->setSection('backend_'.$_POST['backendid']);
+				$CORE->MAINCFG->setValue('backend_'.$_POST['backendid'], 'backendtype', $_POST['backendtype']);
 				
 				// Set all options
 				foreach($aOpt AS $key => $val) {
-					$CORE->MAINCFG->setValue('backend_'.$_POST['backend_id'],$key,$val);
+					$CORE->MAINCFG->setValue('backend_'.$_POST['backendid'], $key, $val);
 				}
 			}
 			
@@ -337,15 +336,15 @@ switch($_GET['myaction']) {
 	 * Edit the values of the backend with the given BACKEND-ID
 	 */
 	case 'mgt_backend_edit':
-		if(!isset($_POST['backend_id']) || $_POST['backend_id'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
+		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
 		} else {
 			// Loop all aviable options for this backend
 			$arr = $CORE->MAINCFG->getValidObjectType('backend');
-			foreach($arr['options'][$CORE->MAINCFG->getValue('backend_'.$_POST['backend_id'],'backendtype')] AS $key => $arr) {
+			foreach($arr['options'][$CORE->MAINCFG->getValue('backend_'.$_POST['backendid'],'backendtype')] AS $key => $arr) {
 				// If there is a value for this option, set it
 				if(isset($_POST[$key]) && $_POST[$key] != '') {
-					$CORE->MAINCFG->setValue('backend_'.$_POST['backend_id'],$key,$_POST[$key]);
+					$CORE->MAINCFG->setValue('backend_'.$_POST['backendid'],$key,$_POST[$key]);
 				}
 			}
 			
@@ -360,11 +359,11 @@ switch($_GET['myaction']) {
 	 * Delete the specified backend with the given BACKEND-ID
 	 */
 	case 'mgt_backend_del':
-		if(!isset($_POST['backend_id']) || $_POST['backend_id'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id');
+		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
+			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
 		} else {
 			// Delete the section of the backend
-			$CORE->MAINCFG->delSection('backend_'.$_POST['backend_id']);
+			$CORE->MAINCFG->delSection('backend_'.$_POST['backendid']);
 			
 			// Write the changes to the main configuration
 			$CORE->MAINCFG->writeConfig();

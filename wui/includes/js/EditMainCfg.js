@@ -31,16 +31,3 @@ function validateForm() {
 	// Everything seems OK
 	return true;
 }
-
-/**
- * validateMainConfigFieldValue(oField)
- *
- * This function checks a config field value for valid format. The check is done
- * by the match regex from validMapConfig array.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function validateMainConfigFieldValue(oField) {
-	var sName = oField.name.split('_');
-	return validateValue(sName, oField.value, validMainConfig[sName[0]][sName[1]].match)
-}

@@ -25,7 +25,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
  
-function updateBackendOptions(backendType, backendId, sFormId) {
+function updateBackendOptions(sBackendType, backendId, sFormId) {
+	var backendType = sBackendType;
 	var form = document.getElementById(sFormId);
 	var tbl = document.getElementById('table_'+sFormId);
 	
@@ -86,7 +87,7 @@ function updateBackendOptions(backendType, backendId, sFormId) {
 	oOptions = validMainConfig['backend']['options'][backendType];
 	for(var sKey in validMainConfig['backend']) {
 		// Exclude: backendid, backendtype, options
-		if(sKey !== 'backendid' && sKey !== 'backendtype' && sKey !== 'options') {
+		if(sKey !== 'backendid' && (sBackendType === '' || (sBackendType !== '' && sKey !== 'backendtype')) && sKey !== 'options') {
 			oOptions[sKey] = validMainConfig['backend'][sKey];
 		}
 	}
@@ -123,23 +124,36 @@ function updateBackendOptions(backendType, backendId, sFormId) {
 }
 
 function check_backend_add() {
-	form = document.backend_add;
+	var backendType = document.backend_add.backendtype.value;
 	
-	if(form.backend_id.value == '') {
-		alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~backend_id'));
-		return false;
-	}
-	if(form.backendtype.value == '') {
-		alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~backendtype'));
-		return false;
+	// Merge global backend options with type specific options
+	var oOptions;
+	oOptions = validMainConfig['backend']['options'][backendType];
+	for(var sKey in validMainConfig['backend']) {
+		// Exclude: options
+		if(sKey !== 'options') {
+			oOptions[sKey] = validMainConfig['backend'][sKey];
+		}
 	}
 	
-	for(i=0;i<form.elements.length;i++) {
-		// backend_id und backendtype are handled before this loop
-		if(form.elements[i].name != 'backend_id' && form.elements[i].name != 'backendtype') {
+	for(var i = 0, len = document.backend_add.elements.length ; i < len;i++) {
+		var oField = document.backend_add.elements[i];
+		
+		if(oField.name !== 'submit') {
 			// if this value is a "must" and emtpy, error
-			if(validMainConfig[form.backendtype.value][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
-				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+form.elements[i].name));
+			if(oOptions[oField.name].must == '1' && oField.value == '') {
+				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+oField.name));
+				return false;
+			}
+		}
+	}
+	
+	for(var i = 0, len = document.backend_add.elements.length ; i < len;i++) {
+		var oField = document.backend_add.elements[i];
+		
+		if(oField.name !== 'submit') {
+			// Validate value format
+			if(!validateValue(oField.name, oField.value, oOptions[oField.name].match)) {
 				return false;
 			}
 		}
@@ -149,19 +163,36 @@ function check_backend_add() {
 }
 
 function check_backend_edit() {
-	form = document.backend_edit;
+	var backendType = document.backend_edit.backendtype.value;
 	
-	if(form.backend_id.value == '') {
-		alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~backend_id'));
-		return false;
+	// Merge global backend options with type specific options
+	var oOptions;
+	oOptions = validMainConfig['backend']['options'][backendType];
+	for(var sKey in validMainConfig['backend']) {
+		// Exclude: options
+		if(sKey !== 'options') {
+			oOptions[sKey] = validMainConfig['backend'][sKey];
+		}
 	}
 	
-	for(i=0;i<form.elements.length;i++) {
-		// backend_id und backendtype are handled before this loop
-		if(form.elements[i].name != 'backend_id' && form.elements[i].name != 'backendtype') {
+	for(var i = 0, len = document.backend_edit.elements.length ; i < len;i++) {
+		var oField = document.backend_edit.elements[i];
+		
+		if(oField.name !== 'submit') {
 			// if this value is a "must" and emtpy, error
-			if(validMainConfig[definedBackends[form.backend_id.value]['backendtype']][form.elements[i].name]['must'] == '1' && form.elements[i].value == '') {
-				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+form.elements[i].name));
+			if(oOptions[oField.name].must == '1' && oField.value == '') {
+				alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+oField.name));
+				return false;
+			}
+		}
+	}
+	
+	for(var i = 0, len = document.backend_edit.elements.length ; i < len;i++) {
+		var oField = document.backend_edit.elements[i];
+		
+		if(oField.name !== 'submit') {
+			// Validate value format
+			if(!validateValue(oField.name, oField.value, oOptions[oField.name].match)) {
 				return false;
 			}
 		}

@@ -128,8 +128,8 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getEditFields() {
-		return $this->EDITBACKENDFORM->getSelectLine('backend_id',
-		                                             'backend_id', 
+		return $this->EDITBACKENDFORM->getSelectLine('backendid',
+		                                             'backendid', 
 		                                             array_merge(Array(''=>''), $this->CORE->getDefinedBackends()), 
 		                                             '',
 		                                             TRUE,
@@ -143,7 +143,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelFields() {
-		return $this->DELBACKENDFORM->getSelectLine('backend_id','backend_id',array_merge(Array(''=>''),$this->CORE->getDefinedBackends()),'',TRUE);
+		return $this->DELBACKENDFORM->getSelectLine('backendid','backendid',array_merge(Array(''=>''),$this->CORE->getDefinedBackends()),'',TRUE);
 	}
 	
 	/**
@@ -154,7 +154,7 @@ class WuiBackendManagement extends GlobalPage {
      */
 	function getAddFields() {
 		$ret = '';
-		$ret .= $this->ADDBACKENDFORM->getInputLine('backend_id','backend_id','',TRUE);
+		$ret .= $this->ADDBACKENDFORM->getInputLine('backendid','backendid','',TRUE);
 		
 		foreach($this->MAINCFG->getValidObjectType('backend') as $propname => $prop) {
 			if($propname == "backendtype") {
