@@ -25,7 +25,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-function getServices(backend_id,type,host_name,field,selected) {
+function getServices(backend_id, type, host_name, field, selected) {
 	if(host_name != '') {
 		var oOpt = Object();
 		oOpt.field = field;
@@ -36,7 +36,7 @@ function getServices(backend_id,type,host_name,field,selected) {
 	}
 }
 
-function getObjects(backend_id,type,field,selected) {
+function getObjects(backend_id, type, field, selected) {
 	var oOpt = Object();
 	oOpt.field = field;
 	oOpt.selected = selected;

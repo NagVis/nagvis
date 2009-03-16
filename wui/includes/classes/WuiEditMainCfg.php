@@ -61,7 +61,7 @@ class WuiEditMainCfg extends GlobalPage {
 		
 		$this->FORM = new GlobalForm(Array('name' => 'edit_config',
 			'id' => 'edit_config',
-			'action' => 'javascript:(validateForm()) ? formSubmit(\'edit_config\', \'updateMainCfg\') : alert(\'\');',
+			'action' => 'javascript:(validateMainCfgForm()) ? formSubmit(\'edit_config\', \'updateMainCfg\') : alert(\'\');',
 			'method' => '',
 			'cols' => '3'));
 		

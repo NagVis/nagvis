@@ -297,13 +297,11 @@ class GlobalPage {
 		if($js != '') {
 			
 			$ret .= "<script type=\"text/javascript\"> ";
-			$ret .= "<!-- \n";
 			if(is_array($js)) {
 				$ret .= implode("\n", $js);
 			} else {
 				$ret .= $js;
 			}
-			$ret .= "\n //-->";
 			$ret .= "</script>";
 		}
 		return $ret;

@@ -37,47 +37,47 @@ function printObjects(aObjects,oOpt) {
 		for(var i = oField.length; i >= 0; i--){
 			oField.options[i] = null;
 		}
-	}
-	
-	if(aObjects && aObjects.length > 0) {
-		var bSelected = false;
 		
-		// fill with new options
-		for(i = 0; i < aObjects.length; i++) {
-			var oName = '';
-			var bSelect = false;
-			var bSelectDefault = false;
+		if(aObjects && aObjects.length > 0) {
+			var bSelected = false;
 			
-			if(type == "service") {
-				oName = aObjects[i].service_description;
-			} else {
-				oName = aObjects[i].name;
+			// fill with new options
+			for(i = 0; i < aObjects.length; i++) {
+				var oName = '';
+				var bSelect = false;
+				var bSelectDefault = false;
+				
+				if(type == "service") {
+					oName = aObjects[i].service_description;
+				} else {
+					oName = aObjects[i].name;
+				}
+				
+				if(selected != '' && oName == selected) {
+					bSelectDefault = true;
+					bSelect = true;
+					bSelected = true;
+				}
+				
+				oField.options[i] = new Option(oName, oName, bSelectDefault, bSelect);
 			}
-			
-			if(selected != '' && oName == selected) {
-				bSelectDefault = true;
-				bSelect = true;
-				bSelected = true;
-			}
-			
-			oField.options[i] = new Option(oName, oName, bSelectDefault, bSelect);
 		}
+		
+		// Give the users the option give manual input
+		oField.options[oField.options.length] = new Option(lang['manualInput'], lang['manualInput'], false, false);
 	}
-	
-	// Give the users the option give manual input
-	oField.options[oField.options.length] = new Option(lang['manualInput'], lang['manualInput'], false, false);
 	
 	// Fallback to input field when configured value could not be selected or
 	// the list is empty
 	if((selected != '' && !bSelected) || !aObjects || aObjects.length <= 0) {
 		oField.parentNode.innerHTML = '<input id="'+oField.name+'" name="'+oField.name+'" value="" />';
-		document.addmodify.elements[field].value=selected;
+		document.addmodify.elements[field].value = selected;
 	}
 }
 
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
-function validateForm() {
+function validateMapCfgForm() {
 	var object_name = '';
 	var line_type = '';
 	var iconset = '';

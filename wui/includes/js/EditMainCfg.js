@@ -25,7 +25,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-function validateForm() {
+function validateMainCfgForm() {
 	// FIXME: Better validating?
 	
 	// Everything seems OK

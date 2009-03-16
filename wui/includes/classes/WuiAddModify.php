@@ -74,7 +74,7 @@ class WuiAddModify extends GlobalPage {
 		$this->FORM = new GlobalForm(Array('name' => 'addmodify',
 			'id' => 'addmodify',
 			'method' => '',
-			'action' => 'javascript:(validateForm()) ? formSubmit(\'addmodify\', \''.$action.'\') : alert(\'\');',
+			'action' => 'javascript:(validateMapCfgForm()) ? formSubmit(\'addmodify\', \''.$action.'\') : alert(\'\');',
 			'cols' => '2'));
 		
 		$code .= $this->getJsIncludes();

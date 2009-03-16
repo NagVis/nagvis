@@ -147,9 +147,9 @@ function popupWindow(title, oContent) {
 	oCell.colSpan = '2';
 	
 	oCell.innerHTML = oContent.code;
-	
 	oRow.appendChild(oCell);
-	oCell = null;
+	// Don't reset cell to null here, it's been reset at bottom of the method
+	// after executing the js
 	
 	oTbody.appendChild(oRow);
 	oRow = null;
@@ -162,6 +162,24 @@ function popupWindow(title, oContent) {
 	
 	document.body.appendChild(oContainerDiv);
 	oContainerDiv = null;
+	
+	// Need to fix javascript execution in innerHTML
+	var aScripts = oCell.getElementsByTagName('script');
+	for(var i = 0, len = aScripts.length; i < len; i++) {
+		if(aScripts[i].src && aScripts[i].src !== '') {
+			var oScr = document.createElement('script');  
+			oScr.src = aScripts[i].src;  
+			document.body.appendChild(oScr);
+			oScr = null;
+		} else {
+			try {
+				eval(aScripts[i].text);
+			} catch(e) {
+				alert(oDump(e)+": "+aScripts[i].text);
+			}
+		}
+	}
+	oCell = null;
 	
 	return false;
 }
