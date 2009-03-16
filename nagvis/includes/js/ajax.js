@@ -244,32 +244,3 @@ function cleanupAjaxQueryCache() {
 		}
 	}
 }
-
-/**
- * Function to dumping arrays/objects in javascript for debugging purposes
- * Taken from http://refactormycode.com/codes/226-recursively-dump-an-object
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function oDump(object, depth, max){
-	depth = depth || 0;
-	max = max || 2;
-	
-	if (depth > max)
-		return false;
-	
-	var indent = "";
-	for (var i = 0; i < depth; i++)
-		indent += "  ";
-	
-	var output = "";  
-	for (var key in object){
-		output += "\n" + indent + key + ": ";
-		switch (typeof object[key]){
-			case "object": output += oDump(object[key], depth + 1, max); break;
-			case "function": output += "function"; break;
-			default: output += object[key]; break;        
-		}
-	}
-	return output;
-}
