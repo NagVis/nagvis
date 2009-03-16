@@ -74,6 +74,10 @@ class GlobalPage {
 		$this->extHeader .= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8">';
 		$this->extHeader .= '<title>'.$prop['title'].'</title>';
 		
+		// Hint for iphone scaling (not verified - have no iphone)
+		// http://www.nagios-portal.org/wbb/index.php?page=Thread&threadID=13885
+		$this->extHeader .= '<meta name="viewport" content="width=480; initial-scale=0.6666; maximum-scale=1.0; minimum-scale=0.6666" />';
+		
 		$this->user = $this->getUser();
 		$this->CORE->MAINCFG->setRuntimeValue('user',$this->user);
 		
