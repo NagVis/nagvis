@@ -363,7 +363,7 @@ class NagVisAutoMap extends GlobalMap {
 		$ret .= $this->getFavicon();
 		
 		// Change title (add map alias and map state)
-		$ret .= '<script type="text/javascript" language="JavaScript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
+		$ret .= '<script type="text/javascript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
 		
 		return $ret;
 	}
@@ -460,7 +460,7 @@ class NagVisAutoMap extends GlobalMap {
 		} else {
 			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon.png';
 		}
-		return '<script type="text/javascript" language="JavaScript">favicon.change(\''.$favicon.'\'); </script>';
+		return '<script type="text/javascript">favicon.change(\''.$favicon.'\'); </script>';
 	}
 	
 	/**

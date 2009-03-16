@@ -194,7 +194,7 @@ class WuiMap extends GlobalMap {
 	function parseJs($js) {
 		$ret = '';
 		
-		$ret .= "<script type=\"text/javascript\" language=\"JavaScript\">";
+		$ret .= "<script type=\"text/javascript\">";
 		$ret .= "<!--\n";
 		if(is_array($js)) {
 			$ret .= implode("\n",$js);
@@ -380,10 +380,10 @@ class WuiMap extends GlobalMap {
 		
 		//
 		if($relative == 1) {
-			$id = '"id="rel_label_'.$obj['type'].'_'.$obj['id'].'"';
+			$id = 'id="rel_label_'.$obj['type'].'_'.$obj['id'].'"';
 			$this->moveable .= '"rel_label_'.$obj['type'].'_'.$obj['id'].'",';
 		} else {
-			$id = '"id="abs_label_'.$obj['type'].'_'.$obj['id'].'"';
+			$id = 'id="abs_label_'.$obj['type'].'_'.$obj['id'].'"';
 			$this->moveable .= '"abs_label_'.$obj['type'].'_'.$obj['id'].'",';
 		}
 		

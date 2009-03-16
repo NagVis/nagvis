@@ -172,7 +172,7 @@ class WuiAddModify extends GlobalPage {
 			} elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
 				&& $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $prop['depends_on'], FALSE) == $prop['depends_value']) {
 				
-				$style .= 'display:;';
+				//$style .= 'display:;';
 				$class = 'child-row';
 			}
 			
@@ -293,9 +293,9 @@ class WuiAddModify extends GlobalPage {
 							$backendId = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'backend_id');
 							$selected = NULL;
 							
-							$ret .= "<script>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
+							$ret .= "<script type='text/Javascript'>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE)."');</script>";
 							if(in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->prop['type']))) {
-								$ret .= "<script>getServices('".$backendId."', '".$this->prop['type']."', '".$this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
+								$ret .= "<script type='text/Javascript'>getServices('".$backendId."', '".$this->prop['type']."', '".$this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE)."','service_description','".$this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],'service_description',TRUE)."');</script>";
 							}
 							
 							if($propname == 'host_name') {
