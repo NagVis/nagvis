@@ -64,7 +64,7 @@ define('DEBUGLEVEL', 4);
 define('DEBUGFILE', '../var/nagvis-debug.log');
 
 // NagVis Version
-define('CONST_VERSION', '1.4rc2');
+define('CONST_VERSION', '1.4rc3');
 
 // Path to the main configuration file
 define('CONST_MAINCFG', '../etc/nagvis.ini.php');

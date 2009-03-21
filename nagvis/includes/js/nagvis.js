@@ -604,7 +604,6 @@ function oDump(object, depth, max){
 	return output;
 }
 
-
 /**
  * Detect firefox browser
  *
