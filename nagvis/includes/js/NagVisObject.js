@@ -182,7 +182,11 @@ var NagVisObject = Base.extend({
 				
 				sTemplateCode = this.hover_template_code;
 			} else {
-				this.getHoverTemplateCode();
+				// Only fetch hover template code and parse static macros when this is
+				// no update
+				if(this.hover_template_code == null) {
+					this.getHoverTemplateCode();
+				}
 				
 				// Replace dynamic (state dependent) macros
 				sTemplateCode = replaceHoverTemplateDynamicMacros('0', this, this.hover_template_code);

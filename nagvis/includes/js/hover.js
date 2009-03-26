@@ -53,15 +53,13 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 			// Loop all child objects until all looped or the child limit is reached
 			for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
 				if(i < oObj.conf.hover_childs_limit) {
-					var oMember = oObj.members[i];
-					if(oMember.type != 'textbox' && oMember.type != 'shape') {
+					if(oObj.members[i].type != 'textbox' && oObj.members[i].type != 'shape') {
 						// Children need to know where they belong
-						oMember.parent_type = oObj.type;
-						oMember.parent_name = oObj.name;
+						oObj.members[i].parent_type = oObj.type;
+						oObj.members[i].parent_name = oObj.name;
 						
-						childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
+						childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oObj.members[i], rowHtmlCode);
 					}
-					oMember = null;
 				} else {
 					// Create an end line which shows the number of hidden child items
 					var numHiddenMembers = oObj.conf.num_members - oObj.conf.hover_childs_limit;
@@ -77,6 +75,9 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 			}
 			
 			sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
+			
+			childsHtmlCode = null;
+			rowHtmlCode = null;
 		}
 	}
 	
@@ -159,7 +160,14 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	var oMacros = {};
 	var oSectionMacros = {};
 	
-	oMacros.obj_type = oObj.conf.type;
+	// Try to catch some error
+	if(!oObj.conf) {
+		eventlog("hover-parsing", "critical", "Problem while parsing hover template");
+	}
+	
+	if(oObj.conf.type && oObj.conf.type !== '') {
+		oMacros.obj_type = oObj.conf.type;
+	}
 	
 	// Replace language strings
 	oMacros.lang_obj_type = oObj.conf.lang_obj_type;
@@ -223,10 +231,8 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		oSectionMacros.host = '<!--\\\sBEGIN\\\shost\\\s-->.+?<!--\\\sEND\\\shost\\\s-->';
 	}
 	
-	// Macros which are only for servicegroups
-	if(oObj.conf.type == 'servicegroup') {
-		//$ret .= '\'[lang_child_name1]\': \''.$this->CORE->LANG->getText('hostname');
-	} else {
+	// Replace servicegroup sections when not servicegroup object
+	if(oObj.conf.type != 'servicegroup') {
 		oSectionMacros.servicegroup = '<!--\\\sBEGIN\\\sservicegroup\\\s-->.+?<!--\\\sEND\\\sservicegroup\\\s-->';
 	}
 	
