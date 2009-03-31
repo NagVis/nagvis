@@ -269,6 +269,9 @@ class NagVisObject {
 				break;
 			}
 			
+			// Add the custom htmlcgi path for the object
+			$arr['htmlcgi'] = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi');
+			
 			if($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
 				$arr['backend_instancename'] = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename');
 			} else {

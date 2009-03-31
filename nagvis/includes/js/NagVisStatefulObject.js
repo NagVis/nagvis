@@ -250,7 +250,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		if(this.conf.url && this.conf.url !== '') {
-			this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlcgi\\\]', 'g'), oGeneralProperties.path_htmlcgi);
+			if(this.conf.htmlcgi && this.conf.htmlcgi !== '') {
+				this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlcgi\\\]', 'g'), this.conf.htmlcgi);
+			} else {
+				this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlcgi\\\]', 'g'), oGeneralProperties.path_htmlcgi);
+			}
+			
 			this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlbase\\\]', 'g'), oGeneralProperties.path_htmlbase);
 			
 			this.conf.url = this.conf.url.replace(new RegExp('\\\['+name+'\\\]', 'g'), this.conf.name);
