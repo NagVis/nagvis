@@ -134,7 +134,7 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On a update the image url replacement is easier. Just replace the old
 	// timestamp with the current
-	oMacros['_t='+this.prevUpdate] = '_t='+this.lastUpdate;
+	oMacros['_t='+oObj.prevUpdate] = '_t='+oObj.lastUpdate;
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
@@ -284,7 +284,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 			var sTmp;
 			
 			// Replace src value
-			sTmp = results[i].replace(results[i+1], results[i+1]+"&_t="+this.lastUpdate);
+			sTmp = results[i].replace(results[i+1], results[i+1]+"&_t="+oObj.lastUpdate);
 			
 			// replace image code
 			sTemplateCode = sTemplateCode.replace(results[i], sTmp);
