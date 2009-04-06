@@ -494,7 +494,7 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 		
 		// Enable/Disable fetching children
-		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
+		if($bFetchChilds && $this->getNumMembers() > 0) {
 			$arr['members'] = $this->getSortedObjectMembers();
 		}
 		

@@ -27,7 +27,9 @@
 
 var NagVisStatefulObject = NagVisObject.extend({
 	// Stores the information from last refresh (Needed for change detection)
-	last_conf: {},
+	last_conf: null,
+	// Array of member objects
+	members: null,
 	
 	constructor: function(oConf) {
 		// Call parent constructor
@@ -35,7 +37,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 	
 	getMembers: function() {
-		this.members = [];              
+		// Clear member array on every launch
+		this.members = [];
+		
 		if(this.conf && this.conf.members && this.conf.members.length > 0) {
 			for(var i = 0, len = this.conf.members.length; i < len; i++) {
 				var oMember = this.conf.members[i];
@@ -71,9 +75,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 				if(oObj !== null) {
 					this.members.push(oObj);
 				}
+				
+				oObj = null;
+				oMember = null;
 			}
-			
-			oObj = null;
 		}
 	},
 	
@@ -85,8 +90,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	saveLastState: function() {
+		this.last_conf = {};
+		
 		// FIXME: Do not copy the whole conf array
-		for (i in this.conf) {
+		for (var i in this.conf) {
 			this.last_conf[i] = this.conf[i];
 		}
 	},

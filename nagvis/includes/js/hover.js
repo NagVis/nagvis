@@ -36,50 +36,66 @@ function getHoverTemplate(sName) {
 	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverTemplate&name[]='+sName)[0].code;
 }
 
+function getHoverTemplateChildCode(sTemplateCode) {
+	var rowHtmlCode = '';
+	var regex = new RegExp("<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
+	var results = regex.exec(sTemplateCode);
+	
+	if(results != null) {
+		rowHtmlCode = results[1];
+	}
+	
+	return rowHtmlCode;
+}
+
 function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 	var mapName = '';
+	var childsHtmlCode = '';
 	
 	if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null) {
 		mapName = oPageProperties.map_name;
 	}
 	
-	if(oObj.members && oObj.members.length > 0) {
-		var regex = new RegExp("<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
-		var results = regex.exec(sTemplateCode);
-		if(results != null) {
-			var childsHtmlCode = '';
-			var rowHtmlCode = results[1];
-			
-			// Loop all child objects until all looped or the child limit is reached
-			for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
-				if(i < oObj.conf.hover_childs_limit) {
-					if(oObj.members[i].type != 'textbox' && oObj.members[i].type != 'shape') {
-						// Children need to know where they belong
-						oObj.members[i].parent_type = oObj.type;
-						oObj.members[i].parent_name = oObj.name;
-						
-						childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oObj.members[i], rowHtmlCode);
-					}
-				} else {
-					// Create an end line which shows the number of hidden child items
-					var numHiddenMembers = oObj.conf.num_members - oObj.conf.hover_childs_limit;
+	var rowHtmlCode = getHoverTemplateChildCode(sTemplateCode);
+	
+	if(rowHtmlCode != '' && oObj.members && oObj.members.length > 0) {
+		// Loop all child objects until all looped or the child limit is reached
+		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
+			if(i < oObj.conf.hover_childs_limit) {
+				var oMember = oObj.members[i];
+				if(oMember.conf.type != 'textbox' && oMember.conf.type != 'shape') {
+					// Children need to know where they belong
+					oMember.parent_type = oObj.conf.type;
+					oMember.parent_name = oObj.conf.name;
 					
-					var oMember = { 'conf': { 'type': 'host', 
-																		'name': '', 
-																		'summary_state': '', 
-																		'summary_output': numHiddenMembers+' more items...', 
-																		'<!--\sBEGIN\sservicegroup_child\s-->.+?<!--\sEND\sservicegroup_child\s-->': ''}};
+					if(oMember.conf.service_description == 'Current Load') {
+						alert(oDump(oMember));
+					}
 					
 					childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 				}
+				oMember = null;
+			} else {
+				// Create an end line which shows the number of hidden child items
+				var numHiddenMembers = oObj.conf.num_members - oObj.conf.hover_childs_limit;
+				
+				var oMember = { 'conf': { 'type': 'host', 
+																	'name': '', 
+																	'summary_state': '', 
+																	'summary_output': numHiddenMembers+' more items...', 
+																	'<!--\sBEGIN\sservicegroup_child\s-->.+?<!--\sEND\sservicegroup_child\s-->': ''}};
+				
+				childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 			}
-			
-			sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
-			
-			childsHtmlCode = null;
-			rowHtmlCode = null;
 		}
+		
+		var regex = new RegExp('<!--\\\sBEGIN\\\sloop_child\\\s-->(.+?)<!--\\\sEND\\\sloop_child\\\s-->');
+		sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
+		regex = null;
 	}
+	
+	childsHtmlCode = null;
+	rowHtmlCode = null;
 	
 	return sTemplateCode;
 }
@@ -177,7 +193,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On child service objects in hover menu replace obj_name with 
 	// service_description
-	if(replaceChild == '1' && oObj.conf.type === 'service') {
+	if(replaceChild == '1' && oObj.conf.type == 'service') {
 		oMacros.obj_name = oObj.conf.service_description;
 	} else {
 		oMacros.obj_name = oObj.conf.name;
@@ -250,9 +266,11 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
-	if(replaceChild != '1' && oObj.conf.hover_childs_show && oObj.conf.hover_childs_show == 1 && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0) {
+	// FIXME: Childs can'not be replaced here at the moment (updates won't work when
+	// everything is replaced here)
+	/*if(replaceChild != '1' && oObj.conf.hover_childs_show && oObj.conf.hover_childs_show == 1 && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0) {
 		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
-	}
+	}*/
 	
 	// Loop and replace all unwanted section macros
 	for (var key in oSectionMacros) {
@@ -264,6 +282,11 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	}
 	oSectionMacros = null;
 	
+	// Get loop child code for later replacing
+	// FIXME: This is workaround is needed cause the obj_name macro is replaced
+	// by the parent objects macro in current progress
+	var sChildCode = getHoverTemplateChildCode(sTemplateCode);
+	
 	// Loop and replace all normal macros
 	for (var key in oMacros) {
 		var regex = new RegExp('\\\['+key+'\\\]', 'g');
@@ -274,6 +297,19 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		regex = null;
 	}
 	oMacros = null;
+	iChildStart = null;
+	iChildEnd = null;
+	
+	// Re-add the clean child code
+	if(sChildCode != '') {
+		var regex = new RegExp('<!--\\\sBEGIN\\\sloop_child\\\s-->(.+?)<!--\\\sEND\\\sloop_child\\\s-->', 'gm');
+		
+		if(sTemplateCode.search(regex) !== -1) {
+			sTemplateCode = sTemplateCode.replace(regex, '<!-- BEGIN loop_child -->'+sChildCode+'<!-- END loop_child -->');
+		}
+		
+		regex = null;
+	}
 	
 	// Search for images and append current timestamp to src (prevent caching of
 	// images e.a. when some graphs should be fresh)
