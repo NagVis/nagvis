@@ -68,10 +68,6 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 					oMember.parent_type = oObj.conf.type;
 					oMember.parent_name = oObj.conf.name;
 					
-					if(oMember.conf.service_description == 'Current Load') {
-						alert(oDump(oMember));
-					}
-					
 					childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
 				}
 				oMember = null;
