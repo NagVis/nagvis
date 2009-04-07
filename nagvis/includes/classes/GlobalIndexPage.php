@@ -137,7 +137,7 @@ class GlobalIndexPage {
 				$MAP->MAPOBJ->fetchIcon();
 				
 				// Check if the user is permitted to view this map
-				if($MAP->MAPOBJ->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+				if($MAPCFG->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
 					if($MAP->MAPOBJ->checkMaintenance(0)) {
 						$class = '';
 						$url = '';

@@ -224,28 +224,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 		return TRUE;
 	}
 	
-	/**
-	 * PUBLIC checkPermissions()
-	 *
-	 * Checks for valid Permissions
-	 *
-	 * @param 	String 	$allowed	
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function checkPermissions($allowed,$printErr) {
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
-			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('permissionDenied', 'USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
-			}
-			return FALSE;
-		} else {
-		 	return TRUE;
-		}
-		return TRUE;
-	}
-	
 	# End public methods
 	# #########################################################################
 	
@@ -354,7 +332,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	private function checkLoop($OBJ) {
 		// Check for valid permissions
-		if($OBJ->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
+		if($OBJ->MAPCFG->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
 			// Loop all objects on the child map to find out if there is a link back 
 			// to this map (loop)
 			//

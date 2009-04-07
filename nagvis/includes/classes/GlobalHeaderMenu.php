@@ -109,24 +109,27 @@ class GlobalHeaderMenu {
 						$MAPCFG1->readMapConfig(1);
 						
 						if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
-							$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
-							$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
-							
-							// Add defaultparams to map selection
-							if($mapName == '__automap') {
-								$sReplaceObj = str_replace('[url_params]', $this->CORE->MAINCFG->getValue('automap', 'defaultparams'), $sReplaceObj);
-							} else {
-								$sReplaceObj = str_replace('[url_params]','',$sReplaceObj);
+							// Only proceed permited objects
+							if($MAPCFG1->checkPermissions($MAPCFG1->getValue('global',0, 'allowed_user'),FALSE)) {
+								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
+								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
+								
+								// Add defaultparams to map selection
+								if($mapName == '__automap') {
+									$sReplaceObj = str_replace('[url_params]', $this->CORE->MAINCFG->getValue('automap', 'defaultparams'), $sReplaceObj);
+								} else {
+									$sReplaceObj = str_replace('[url_params]','',$sReplaceObj);
+								}
+								
+								// auto select current map
+								if(get_class($this->OBJPAGE) == 'NagVisMapCfg' && ($mapName == $this->OBJPAGE->getName() || $mapName == '__automap' && isset($_GET['automap']))) {
+									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
+								} else {
+									$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
+								}
+								
+								$sReplace .= $sReplaceObj;
 							}
-							
-							// auto select current map
-							if(get_class($this->OBJPAGE) == 'NagVisMapCfg' && ($mapName == $this->OBJPAGE->getName() || $mapName == '__automap' && isset($_GET['automap']))) {
-								$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
-							} else {
-								$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
-							}
-							
-							$sReplace .= $sReplaceObj;
 						}
 					}
 					$this->code = preg_replace('/<!-- BEGIN '.$key.' -->(?:(?s).*)<!-- END '.$key.' -->/',$sReplace,$this->code);
