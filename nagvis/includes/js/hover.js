@@ -149,8 +149,8 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On a update the image url replacement is easier. Just replace the old
 	// timestamp with the current
-	if(oObj.prevUpdate !== null) {
-		var regex = new RegExp('_t='+oObj.prevUpdate, 'g');
+	if(oObj.firstUpdate !== null) {
+		var regex = new RegExp('_t='+oObj.firstUpdate, 'g');
 		// Search before matching - saves some time
 		if(sTemplateCode.search(regex) !== -1) {
 			sTemplateCode = sTemplateCode.replace(regex, '_t='+oObj.lastUpdate);
@@ -327,7 +327,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 			var sTmp;
 			
 			// Replace src value
-			sTmp = results[i].replace(results[i+1], results[i+1]+"&_t="+oObj.lastUpdate);
+			sTmp = results[i].replace(results[i+1], results[i+1]+"&_t="+oObj.firstUpdate);
 			
 			// replace image code
 			sTemplateCode = sTemplateCode.replace(results[i], sTmp);

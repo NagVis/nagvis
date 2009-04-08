@@ -32,7 +32,7 @@ var NagVisObject = Base.extend({
 	conf: null,
 	contextMenu: null,
 	lastUpdate: null,
-	prevUpdate: null,
+	firstUpdate: null,
 	
 	constructor: function(oConf) {
 		// Initialize
@@ -49,10 +49,12 @@ var NagVisObject = Base.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	setLastUpdate: function() {
-		// Save datetime of the previous update
-		this.prevUpdate = this.lastUpdate;
-		
 		this.lastUpdate = Date.parse(new Date());
+		
+		// Save datetime of the first state update (needed for hover parsing)
+		if(this.firstUpdate === null) {
+			this.firstUpdate = this.lastUpdate;
+		}
 	},
   
 	/**
