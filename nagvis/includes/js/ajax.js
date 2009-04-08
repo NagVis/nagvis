@@ -66,42 +66,38 @@ function initXMLHttpClient() {
 	return xmlhttp;
 }
 
-function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
-	var sUrl = '';
-	var o;
-	var aReturn = [];
-	
-	for(var i = 0, len = aUrlParts.length; i < len; i++) {
-		sUrl = sUrl + aUrlParts[i];
-		
-		// Prevent reaching too long urls, split the update to several 
-		// requests. Just start the request and clean the string strUrl
-		if(sUrl !== '' && sBaseUrl.length+sUrl.length > iLimit) {
-			o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
+/**
+ * Saves the query information to the query cache. The query cache persists
+ * unless the page is being reloaded
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function updateQueryCache(url,timestamp,response) {
+	ajaxQueryCache[url] = { "timestamp": timestamp, "response": response };
+	eventlog("ajax", "debug", "Caching Query: "+url);
+}
+
+/**
+ * Cleans up the ajax query cache. It removes the deprecated cache entries and
+ * shrinks the cache array.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function cleanupAjaxQueryCache() {
+	// Loop query cache array
+	eventlog("ajax", "debug", "Removing old cached ajax queries");
+	for(var sKey in ajaxQueryCache) {
+		// If cache expired remove and shrink the array
+		if(Date.parse(new Date())-ajaxQueryCache[sKey].timestamp > ajaxQueryCacheLifetime) {
+			// Set to null in array
+			ajaxQueryCache[sKey] = null;
 			
-			if(o) {
-				aReturn = aReturn.concat(o);
-			}
+			// Really remove key
+			delete ajaxQueryCache[sKey];
 			
-			o = null;
-			sUrl = '';
+			eventlog("ajax", "debug", "Removed cached ajax query:"+sKey);
 		}
 	}
-	
-	if(sUrl !== '') {
-		// Bulk update the objects, this query should not be cached
-		o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
-		if(o) {
-			aReturn = aReturn.concat(o);
-		}
-		
-		o = null;
-		sUrl = '';
-	}
-	
-	sUrl = null;
-	
-	return aReturn;
 }
 
 /**
@@ -211,36 +207,40 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	return sResponse;
 }
 
-/**
- * Saves the query information to the query cache. The query cache persists
- * unless the page is being reloaded
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function updateQueryCache(url,timestamp,response) {
-	ajaxQueryCache[url] = { "timestamp": timestamp, "response": response };
-	eventlog("ajax", "debug", "Caching Query: "+url);
-}
-
-/**
- * Cleans up the ajax query cache. It removes the deprecated cache entries and
- * shrinks the cache array.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function cleanupAjaxQueryCache() {
-	// Loop query cache array
-	eventlog("ajax", "debug", "Removing old cached ajax queries");
-	for(var sKey in ajaxQueryCache) {
-		// If cache expired remove and shrink the array
-		if(Date.parse(new Date())-ajaxQueryCache[sKey].timestamp > ajaxQueryCacheLifetime) {
-			// Set to null in array
-			ajaxQueryCache[sKey] = null;
+function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
+	var sUrl = '';
+	var o;
+	var aReturn = [];
+	
+	for(var i = 0, len = aUrlParts.length; i < len; i++) {
+		sUrl = sUrl + aUrlParts[i];
+		
+		// Prevent reaching too long urls, split the update to several 
+		// requests. Just start the request and clean the string strUrl
+		if(sUrl !== '' && sBaseUrl.length+sUrl.length > iLimit) {
+			o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
 			
-			// Really remove key
-			delete ajaxQueryCache[sKey];
+			if(o) {
+				aReturn = aReturn.concat(o);
+			}
 			
-			eventlog("ajax", "debug", "Removed cached ajax query:"+sKey);
+			o = null;
+			sUrl = '';
 		}
 	}
+	
+	if(sUrl !== '') {
+		// Bulk update the objects, this query should not be cached
+		o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
+		if(o) {
+			aReturn = aReturn.concat(o);
+		}
+		
+		o = null;
+		sUrl = '';
+	}
+	
+	sUrl = null;
+	
+	return aReturn;
 }
