@@ -34,334 +34,6 @@ var oHoverUrls = {};
 var oContextTemplates = {};
 
 /**
- * runWorker()
- *
- * This function is the heart of the new NagVis frontend. It's called worker.
- * The worker is being called by setTimeout() every second. This method checks
- * for tasks which need to be performed like:
- * - Countdown the timers
- * - Rotating to other page
- * - Reload page because of configuration file changes
- * - Handling configuration file changes
- * - Get objects which need an update of the state information
- * - Update the state information
- * - Handle state changes
- * After all work it goes to sleep for 1 second and calls itselfs again. These
- * tasks are not performed every run, some every second and some every 
- * configured worker_interval. The state information is refreshed like 
- * configured in worker_update_object_states.
- *
- * @param   Integer  The iterator for the run id
- * @param   String   The type of the page which is currently displayed
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function runWorker(iCount, sType) {
-	// If the iterator is 0 it is the first run of the worker. Its only task is
-	// to render the page
-	if(iCount === 0) {
-		// Initialize everything
-		eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
-		
-		// Handle the map rendering
-		if(sType == 'map') {
-			setMapBasics(oPageProperties);
-			
-			// Create map objects from initialObjects and add them to aMapObjects
-			eventlog("worker", "info", "Parsing map objects");
-			setMapObjects(aInitialMapObjects);
-			
-			// Bulk get all hover templates which are needed on the map
-			eventlog("worker", "info", "Fetching hover templates and hover urls");
-			getHoverTemplates(aMapObjects);
-			setMapHoverUrls();
-			
-			// Assign the hover templates to the objects and parse them
-			eventlog("worker", "info", "Parse hover menus");
-			parseHoverMenus(aMapObjects);
-			
-			// Bulk get all context templates which are needed on the map
-			eventlog("worker", "info", "Fetching context templates");
-			getContextTemplates(aMapObjects);
-			
-			// Assign the context templates to the objects and parse them
-			eventlog("worker", "info", "Parse context menus");
-			parseContextMenus(aMapObjects);
-			
-			eventlog("worker", "info", "Finished parsing map");
-		} else if(sType === 'overview') {
-			setPageBasics(oPageProperties);
-			
-			eventlog("worker", "info", "Parsing overview page");
-			parseOverviewPage();
-			
-			eventlog("worker", "info", "Parsing maps");
-			parseOverviewMaps(aInitialMaps);
-			
-			eventlog("worker", "info", "Parsing rotations");
-			setOverviewRotations(aInitialRotations);
-			
-			// Bulk get all hover templates which are needed on the map
-			eventlog("worker", "info", "Fetching hover templates");
-			getHoverTemplates(aMaps);
-			
-			// Assign the hover templates to the objects and parse them
-			eventlog("worker", "info", "Parse hover menus");
-			parseHoverMenus(aMaps);
-			
-			// Bulk get all context templates which are needed on the map
-			eventlog("worker", "info", "Fetching context templates");
-			getContextTemplates(aMaps);
-			
-			// Assign the context templates to the objects and parse them
-			// FIXME: No context menus on overview page atm
-			//eventlog("worker", "info", "Parse context menus");
-			//parseContextMenus(aMaps);
-			
-			eventlog("worker", "info", "Finished parsing overview");
-		}
-	} else {
-		/**
-		 * Do these actions every run (every second)
-		 */
-		
-		// Countdown the rotation counter
-		// Not handled by ajax frontend. Reload the page with the new url
-		// If it returns true this means that the page is being changed: Stop the
-		// worker.
-		if(rotationCountdown() === true) {
-			eventlog("worker", "debug", "Worker stopped: Rotate/Refresh detected");
-			return false;
-		}
-		
-		/**
-		 * Do these actions every X runs (Every worker_interval seconds)
-		 */
-		
-		if(sType === 'map') {
-			if(iCount % oWorkerProperties.worker_interval === 0) {
-				// Log normal worker step
-				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
-				
-				// Get the file ages of important files
-				var oCurrentFileAges = getCfgFileAges();
-				
-				// Check for changed main configuration
-				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
-					// FIXME: Not handled by ajax frontend, reload the page
-					window.location.reload(true);
-				}
-				
-				// Check for changed map configuration
-				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name])) {
-					// Remove all old objects
-					var a = 0;
-					do {
-						if(aMapObjects[a] && typeof aMapObjects[a].remove === 'function') {
-							// Remove parsed object from map
-							aMapObjects[a].remove();
-							
-							// Set to null in array
-							aMapObjects[a] = null;
-							
-							// Remove element from map objects array
-							aMapObjects.splice(a,1);
-						} else {
-							a++;
-						}
-					} while(aMapObjects.length > a);
-					
-					// Update timestamp for map configuration (No reparsing next time)
-					oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
-					
-					// Set map basics
-					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);
-					if(oMapBasics) {
-						setMapBasics(oMapBasics);
-					}
-					oMapBasics = null;
-					
-					// Set map objects
-					var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oPageProperties.map_name);
-					if(oMapObjects) {
-						setMapObjects(oMapObjects);
-					}
-					oMapObjects = null;
-					
-					// Bulk get all hover templates which are needed on the map
-					getHoverTemplates(aMapObjects);
-          setMapHoverUrls();
-					
-					// Assign the hover templates to the objects and parse them
-					parseHoverMenus(aMapObjects);
-					
-					
-					// Bulk get all context templates which are needed on the map
-					getContextTemplates(aMapObjects);
-					
-					// Assign the context templates to the objects and parse them
-					parseContextMenus(aMapObjects);
-				}
-				
-				/*
-				 * Now proceed with real actions when everything is OK
-				 */
-				
-				// Get objects which need an update
-				var arrObj = getObjectsToUpdate(aMapObjects);
-				
-				// Create the ajax request for bulk update, handle shape updates
-				var aUrlParts = [];
-				var aShapesToUpdate = [];
-				for(var i = 0, len = arrObj.length; i < len; i++) {
-					var type = aMapObjects[arrObj[i]].conf.type;
-					
-					// Seperate shapes from rest
-					if(type === 'shape') {
-						// Shapes which need to be updated need a special handling
-						aShapesToUpdate.push(arrObj[i]);
-					} else {
-						// Handle other objects
-						var name = aMapObjects[arrObj[i]].conf.name;
-						
-						if(name) {
-							var obj_id = aMapObjects[arrObj[i]].objId;
-							var service_description = aMapObjects[arrObj[i]].conf.service_description;
-							var map = oPageProperties.map_name;
-							
-							// Create request string
-							var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
-							if(service_description) {
-								// Replace # cause the could confuse the url parsing
-								service_description = service_description.replace('#','%23');
-								
-								sUrlPart = sUrlPart + '&n2[]='+service_description;
-							} else {
-								sUrlPart = sUrlPart + '&n2[]=';
-							}
-							
-							// Append part to array of parts
-							aUrlParts.push(sUrlPart);
-						}
-					}
-				}
-				
-				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
-				var bStateChanged = false;
-				if(o.length > 0) {
-					bStateChanged = updateObjects(o, aMapObjects, sType);
-				}
-				o = null;
-				
-				// Update shapes when needed
-				if(aShapesToUpdate.length > 0) {
-					updateShapes(aShapesToUpdate);
-				}
-				
-				// When some state changed on the map update the title and favicon
-				if(bStateChanged) {
-					updateMapBasics();
-				}
-				
-				// Update lastWorkerRun
-				oWorkerProperties.last_run = Date.parse(new Date());
-				
-				// Update the worker counter on maps
-				updateWorkerCounter();
-				
-				// Cleanup ajax query cache
-				cleanupAjaxQueryCache();
-			}
-		} else if(sType === 'overview') {
-			if(iCount % oWorkerProperties.worker_interval === 0) {
-				// Log normal worker step
-				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
-				
-				// Get the file ages of important files
-				var oCurrentFileAges = getCfgFileAges(false);
-				
-				// Check for changed main configuration
-				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
-					// FIXME: Not handled by ajax frontend, reload the page
-					window.location.reload(true);
-				}
-				
-				//FIXME: Map configuration changed?
-				
-				/*
-				 * Now proceed with real actions when everything is OK
-				 */
-				
-				// Get objects which need an update
-				var arrObj = getObjectsToUpdate(aMaps);
-				
-				// Create the ajax request for bulk update, handle object updates
-				var aUrlParts = [];
-				for(var i = 0, len = arrObj.length; i < len; i++) {
-					var name = aMaps[arrObj[i]].conf.name;
-					
-					if(name) {
-						var type = aMaps[arrObj[i]].conf.type;
-						var obj_id = aMaps[arrObj[i]].objId;
-						var service_description = aMaps[arrObj[i]].conf.service_description;
-						var map = oPageProperties.map_name;
-						
-						// Create request url part for this object
-						var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
-						if(service_description) {
-							sUrlPart = sUrlPart + '&n2[]='+service_description;
-						} else {
-							sUrlPart = sUrlPart + '&n2[]=';
-						}
-						
-						// Append part to array of parts
-						aUrlParts.push(sUrlPart);
-					}
-				}
-				
-				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
-				var bStateChanged = false;
-				if(o.length > 0) {
-					bStateChanged = updateObjects(o, aMaps, sType);
-				}
-				
-				// When some state changed on the map update the title and favicon
-				/* FIXME: if(bStateChanged) {
-					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
-					
-					// Update favicon
-					setPageFavicon(getFaviconImage(o));
-					
-					// Update page title
-					setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
-					
-					// Change background color
-					if(oPageProperties.event_background && oPageProperties.event_background == '1') {
-						setPageBackgroundColor(getBackgroundColor(o));
-					}
-				}*/
-				
-				// Update lastWorkerRun
-				oWorkerProperties.last_run = Date.parse(new Date());
-				
-				// Update the worker counter on maps
-				updateWorkerCounter();
-				
-				// Cleanup ajax query cache
-				cleanupAjaxQueryCache();
-			}
-		}
-	}
-	
-	// Sleep until next worker run (1 Second)
-	window.setTimeout(function() { runWorker((iCount+1), sType); }, 1000);
-	
-	// Pro forma return
-	return true;
-}
-
-/**
  * getObjectsToUpdate()
  *
  * Detects objects with deprecated state information
@@ -1264,4 +936,332 @@ function setOverviewRotations(aRotationsConf) {
 	}
 	
 	eventlog("worker", "debug", "setOverviewObjects: End setting rotations");
+}
+
+/**
+ * runWorker()
+ *
+ * This function is the heart of the new NagVis frontend. It's called worker.
+ * The worker is being called by setTimeout() every second. This method checks
+ * for tasks which need to be performed like:
+ * - Countdown the timers
+ * - Rotating to other page
+ * - Reload page because of configuration file changes
+ * - Handling configuration file changes
+ * - Get objects which need an update of the state information
+ * - Update the state information
+ * - Handle state changes
+ * After all work it goes to sleep for 1 second and calls itselfs again. These
+ * tasks are not performed every run, some every second and some every 
+ * configured worker_interval. The state information is refreshed like 
+ * configured in worker_update_object_states.
+ *
+ * @param   Integer  The iterator for the run id
+ * @param   String   The type of the page which is currently displayed
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function runWorker(iCount, sType) {
+	// If the iterator is 0 it is the first run of the worker. Its only task is
+	// to render the page
+	if(iCount === 0) {
+		// Initialize everything
+		eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
+		
+		// Handle the map rendering
+		if(sType == 'map') {
+			setMapBasics(oPageProperties);
+			
+			// Create map objects from initialObjects and add them to aMapObjects
+			eventlog("worker", "info", "Parsing map objects");
+			setMapObjects(aInitialMapObjects);
+			
+			// Bulk get all hover templates which are needed on the map
+			eventlog("worker", "info", "Fetching hover templates and hover urls");
+			getHoverTemplates(aMapObjects);
+			setMapHoverUrls();
+			
+			// Assign the hover templates to the objects and parse them
+			eventlog("worker", "info", "Parse hover menus");
+			parseHoverMenus(aMapObjects);
+			
+			// Bulk get all context templates which are needed on the map
+			eventlog("worker", "info", "Fetching context templates");
+			getContextTemplates(aMapObjects);
+			
+			// Assign the context templates to the objects and parse them
+			eventlog("worker", "info", "Parse context menus");
+			parseContextMenus(aMapObjects);
+			
+			eventlog("worker", "info", "Finished parsing map");
+		} else if(sType === 'overview') {
+			setPageBasics(oPageProperties);
+			
+			eventlog("worker", "info", "Parsing overview page");
+			parseOverviewPage();
+			
+			eventlog("worker", "info", "Parsing maps");
+			parseOverviewMaps(aInitialMaps);
+			
+			eventlog("worker", "info", "Parsing rotations");
+			setOverviewRotations(aInitialRotations);
+			
+			// Bulk get all hover templates which are needed on the map
+			eventlog("worker", "info", "Fetching hover templates");
+			getHoverTemplates(aMaps);
+			
+			// Assign the hover templates to the objects and parse them
+			eventlog("worker", "info", "Parse hover menus");
+			parseHoverMenus(aMaps);
+			
+			// Bulk get all context templates which are needed on the map
+			eventlog("worker", "info", "Fetching context templates");
+			getContextTemplates(aMaps);
+			
+			// Assign the context templates to the objects and parse them
+			// FIXME: No context menus on overview page atm
+			//eventlog("worker", "info", "Parse context menus");
+			//parseContextMenus(aMaps);
+			
+			eventlog("worker", "info", "Finished parsing overview");
+		}
+	} else {
+		/**
+		 * Do these actions every run (every second)
+		 */
+		
+		// Countdown the rotation counter
+		// Not handled by ajax frontend. Reload the page with the new url
+		// If it returns true this means that the page is being changed: Stop the
+		// worker.
+		if(rotationCountdown() === true) {
+			eventlog("worker", "debug", "Worker stopped: Rotate/Refresh detected");
+			return false;
+		}
+		
+		/**
+		 * Do these actions every X runs (Every worker_interval seconds)
+		 */
+		
+		if(sType === 'map') {
+			if(iCount % oWorkerProperties.worker_interval === 0) {
+				// Log normal worker step
+				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
+				
+				// Get the file ages of important files
+				var oCurrentFileAges = getCfgFileAges();
+				
+				// Check for changed main configuration
+				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
+					// FIXME: Not handled by ajax frontend, reload the page
+					window.location.reload(true);
+				}
+				
+				// Check for changed map configuration
+				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name])) {
+					// Remove all old objects
+					var a = 0;
+					do {
+						if(aMapObjects[a] && typeof aMapObjects[a].remove === 'function') {
+							// Remove parsed object from map
+							aMapObjects[a].remove();
+							
+							// Set to null in array
+							aMapObjects[a] = null;
+							
+							// Remove element from map objects array
+							aMapObjects.splice(a,1);
+						} else {
+							a++;
+						}
+					} while(aMapObjects.length > a);
+					
+					// Update timestamp for map configuration (No reparsing next time)
+					oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
+					
+					// Set map basics
+					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);
+					if(oMapBasics) {
+						setMapBasics(oMapBasics);
+					}
+					oMapBasics = null;
+					
+					// Set map objects
+					var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oPageProperties.map_name);
+					if(oMapObjects) {
+						setMapObjects(oMapObjects);
+					}
+					oMapObjects = null;
+					
+					// Bulk get all hover templates which are needed on the map
+					getHoverTemplates(aMapObjects);
+          setMapHoverUrls();
+					
+					// Assign the hover templates to the objects and parse them
+					parseHoverMenus(aMapObjects);
+					
+					
+					// Bulk get all context templates which are needed on the map
+					getContextTemplates(aMapObjects);
+					
+					// Assign the context templates to the objects and parse them
+					parseContextMenus(aMapObjects);
+				}
+				
+				/*
+				 * Now proceed with real actions when everything is OK
+				 */
+				
+				// Get objects which need an update
+				var arrObj = getObjectsToUpdate(aMapObjects);
+				
+				// Create the ajax request for bulk update, handle shape updates
+				var aUrlParts = [];
+				var aShapesToUpdate = [];
+				for(var i = 0, len = arrObj.length; i < len; i++) {
+					var type = aMapObjects[arrObj[i]].conf.type;
+					
+					// Seperate shapes from rest
+					if(type === 'shape') {
+						// Shapes which need to be updated need a special handling
+						aShapesToUpdate.push(arrObj[i]);
+					} else {
+						// Handle other objects
+						var name = aMapObjects[arrObj[i]].conf.name;
+						
+						if(name) {
+							var obj_id = aMapObjects[arrObj[i]].objId;
+							var service_description = aMapObjects[arrObj[i]].conf.service_description;
+							var map = oPageProperties.map_name;
+							
+							// Create request string
+							var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+							if(service_description) {
+								// Replace # cause the could confuse the url parsing
+								service_description = service_description.replace('#','%23');
+								
+								sUrlPart = sUrlPart + '&n2[]='+service_description;
+							} else {
+								sUrlPart = sUrlPart + '&n2[]=';
+							}
+							
+							// Append part to array of parts
+							aUrlParts.push(sUrlPart);
+						}
+					}
+				}
+				
+				// Get the updated objectsupdateMapObjects via bulk request
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+				var bStateChanged = false;
+				if(o.length > 0) {
+					bStateChanged = updateObjects(o, aMapObjects, sType);
+				}
+				o = null;
+				
+				// Update shapes when needed
+				if(aShapesToUpdate.length > 0) {
+					updateShapes(aShapesToUpdate);
+				}
+				
+				// When some state changed on the map update the title and favicon
+				if(bStateChanged) {
+					updateMapBasics();
+				}
+				
+				// Update lastWorkerRun
+				oWorkerProperties.last_run = Date.parse(new Date());
+				
+				// Update the worker counter on maps
+				updateWorkerCounter();
+				
+				// Cleanup ajax query cache
+				cleanupAjaxQueryCache();
+			}
+		} else if(sType === 'overview') {
+			if(iCount % oWorkerProperties.worker_interval === 0) {
+				// Log normal worker step
+				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
+				
+				// Get the file ages of important files
+				var oCurrentFileAges = getCfgFileAges(false);
+				
+				// Check for changed main configuration
+				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
+					// FIXME: Not handled by ajax frontend, reload the page
+					window.location.reload(true);
+				}
+				
+				//FIXME: Map configuration changed?
+				
+				/*
+				 * Now proceed with real actions when everything is OK
+				 */
+				
+				// Get objects which need an update
+				var arrObj = getObjectsToUpdate(aMaps);
+				
+				// Create the ajax request for bulk update, handle object updates
+				var aUrlParts = [];
+				for(var i = 0, len = arrObj.length; i < len; i++) {
+					var name = aMaps[arrObj[i]].conf.name;
+					
+					if(name) {
+						var type = aMaps[arrObj[i]].conf.type;
+						var obj_id = aMaps[arrObj[i]].objId;
+						var service_description = aMaps[arrObj[i]].conf.service_description;
+						var map = oPageProperties.map_name;
+						
+						// Create request url part for this object
+						var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
+						if(service_description) {
+							sUrlPart = sUrlPart + '&n2[]='+service_description;
+						} else {
+							sUrlPart = sUrlPart + '&n2[]=';
+						}
+						
+						// Append part to array of parts
+						aUrlParts.push(sUrlPart);
+					}
+				}
+				
+				// Get the updated objectsupdateMapObjects via bulk request
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+				var bStateChanged = false;
+				if(o.length > 0) {
+					bStateChanged = updateObjects(o, aMaps, sType);
+				}
+				
+				// When some state changed on the map update the title and favicon
+				/* FIXME: if(bStateChanged) {
+					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+					
+					// Update favicon
+					setPageFavicon(getFaviconImage(o));
+					
+					// Update page title
+					setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
+					
+					// Change background color
+					if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+						setPageBackgroundColor(getBackgroundColor(o));
+					}
+				}*/
+				
+				// Update lastWorkerRun
+				oWorkerProperties.last_run = Date.parse(new Date());
+				
+				// Update the worker counter on maps
+				updateWorkerCounter();
+				
+				// Cleanup ajax query cache
+				cleanupAjaxQueryCache();
+			}
+		}
+	}
+	
+	// Sleep until next worker run (1 Second)
+	window.setTimeout(function() { runWorker((iCount+1), sType); }, 1000);
+	
+	// Pro forma return
+	return true;
 }
