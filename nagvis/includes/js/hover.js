@@ -62,15 +62,18 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 		// Loop all child objects until all looped or the child limit is reached
 		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
 			if(i < oObj.conf.hover_childs_limit) {
-				var oMember = oObj.members[i];
-				if(oMember.conf.type != 'textbox' && oMember.conf.type != 'shape') {
-					// Children need to know where they belong
-					oMember.parent_type = oObj.conf.type;
-					oMember.parent_name = oObj.conf.name;
-					
-					childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
+				// Try to catch some error
+				if(!oObj.members[i].conf) {
+					eventlog("hover-parsing", "critical", "Problem while parsing child in hover template (t:" & oObj.conf.type & " n:" & oObj.conf.name &")");
+				} else {
+					if(oObj.members[i].conf.type != 'textbox' && oObj.members[i].conf.type != 'shape') {
+						// Children need to know where they belong
+						oObj.members[i].parent_type = oObj.conf.type;
+						oObj.members[i].parent_name = oObj.conf.name;
+						
+						childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oObj.members[i], rowHtmlCode);
+					}
 				}
-				oMember = null;
 			} else {
 				// Create an end line which shows the number of hidden child items
 				var numHiddenMembers = oObj.conf.num_members - oObj.conf.hover_childs_limit;
