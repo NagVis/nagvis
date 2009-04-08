@@ -29,6 +29,15 @@
 var _replaceContext = false;
 var _openContextMenus = [];
 
+function contextHide() {
+	// Loop all open context menus
+	while(_openContextMenus.length > 0) {
+		_openContextMenus[0].style.display = 'none';
+		_openContextMenus[0] = null;
+		_openContextMenus.splice(0,1);
+	}
+}
+
 // call from the onMouseDown event, passing the event if standards compliant
 function contextMouseDown(event) {
 	var target;
@@ -70,16 +79,9 @@ function contextMouseDown(event) {
 	}
 }
 
-function contextHide() {
-	// Loop all open context menus
-	while(_openContextMenus.length > 0) {
-		_openContextMenus[0].style.display = 'none';
-		_openContextMenus[0] = null;
-		_openContextMenus.splice(0,1);
-	}
-}
-
 function contextShow(event) {
+	var target;
+	
 	// IE is evil and doesn't pass the event object
 	if (event === null || typeof event === 'undefined') {
 		event = window.event;

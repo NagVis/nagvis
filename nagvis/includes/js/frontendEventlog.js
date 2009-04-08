@@ -31,6 +31,23 @@ oSeverity.info = 3;
 oSeverity.warning = 2;
 oSeverity.critical = 1;
 
+
+function eventlogToggle() {
+	var oLog = document.getElementById('eventlog');
+	var oLogControl = document.getElementById('eventlogControl');
+	
+	if(oLog.style.display != 'none') {
+		oLog.style.display = 'none';
+		oLogControl.style.bottom = '0px';
+	} else {
+		oLog.style.display = '';
+		oLog.style.height = oPageProperties.event_log_height+'px';
+		oLogControl.style.bottom = (parseInt(oPageProperties.event_log_height)+5)+'px';
+	}
+	
+	oLog = null;
+}
+
 /**
  * eventlogInitialize()
  *
@@ -75,22 +92,6 @@ function eventlogInitialize() {
 	oEventlog = null;
 	
 	eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
-}
-
-function eventlogToggle() {
-	var oLog = document.getElementById('eventlog');
-	var oLogControl = document.getElementById('eventlogControl');
-	
-	if(oLog.style.display != 'none') {
-		oLog.style.display = 'none';
-		oLogControl.style.bottom = '0px';
-	} else {
-		oLog.style.display = '';
-		oLog.style.height = oPageProperties.event_log_height+'px';
-		oLogControl.style.bottom = (parseInt(oPageProperties.event_log_height)+5)+'px';
-	}
-	
-	oLog = null;
 }
 
 /**

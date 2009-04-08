@@ -293,52 +293,90 @@ function parseContextMenus(aObjs) {
 }
 
 /**
- * refreshMapObject()
+ * getBackgroundColor()
  *
- * Handles manual map object update triggered by e.g. the context menu
+ * Gets the background color of the map by the summary state of the map
  *
+ * @param   Object   Map object
+ * @return  String   Hex code representing the color
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function refreshMapObject(objId) {
-	var iIndex = -1;
-	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++) {
-		if(aMapObjects[i].objId === objId) { 
-			iIndex = i;
-		}
-	}
+function getBackgroundColor(oObj) {
+	var sColor;
 	
-	var aUrlParts = [];
-	var name = aMapObjects[iIndex].conf.name;
-	
-	var type = aMapObjects[iIndex].conf.type;
-	var obj_id = aMapObjects[iIndex].objId;
-	var service_description = aMapObjects[iIndex].conf.service_description;
-	var map = oPageProperties.map_name;
-	
-	// Create request string
-	var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
-	if(service_description) {
-		sUrlPart = sUrlPart + '&n2[]='+service_description;
+	// When state is PENDING, OK, UP, set default background color
+	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP') {
+		sColor = oPageProperties.background_color;
 	} else {
-		sUrlPart = sUrlPart + '&n2[]=';
+		sColor = oStates[oObj.summary_state].bgColor;
 	}
 	
-	// Append part to array of parts
-	aUrlParts.push(sUrlPart);
+	oObj = null;
 	
-	// Get the updated objectsupdateMapObjects via bulk request
-	var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
-	var bStateChanged = false;
-	if(o.length > 0) {
-		bStateChanged = updateObjects(o, aMapObjects, 'map');
-	}
-	o = null;
-	
-	if(bStateChanged) {
-		updateMapBasics();
-	}
+	return sColor;
 }
 
+/**
+ * Gets the favicon of the page representation the state of the map
+ *
+ * @return	String	Path to the favicon
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getFaviconImage(oObj) {
+	var sFavicon;
+	
+	// Gather image on summary state of the object
+	if(oObj.summary_in_downtime && oObj.summary_in_downtime == '1') {
+		sFavicon = 'downtime';
+	} else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == '1') {
+		sFavicon = 'ack';
+	} else {
+		sFavicon = oObj.summary_state.toLowerCase();
+	}
+	
+	oObj = null;
+	
+	// Set full path
+	sFavicon = oGeneralProperties.path_htmlimages+'internal/favicon_'+sFavicon+'.png';
+	
+	return sFavicon;
+}
+
+/**
+ * setPageBackgroundColor()
+ *
+ * Sets the background color of the page
+ *
+ * @param   String   Hex code
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setPageBackgroundColor(sColor) {
+	document.body.style.backgroundColor = sColor;
+}
+
+/**
+ * setPageFavicon()
+ *
+ * Sets the favicon of the pages
+ *
+ * @param   String   Path to the icon image
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setPageFavicon(sFavicon) {
+	favicon.change(sFavicon);
+}
+
+/**
+ * setPagePageTitle()
+ *
+ * Sets the title of the current page
+ *
+ * @param   String   Title
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setPageTitle(sTitle) {
+	document.title = sTitle;
+}
 
 /**
  * updateMapBasics()
@@ -364,86 +402,6 @@ function updateMapBasics() {
 	}
 	
 	o = null;
-}
-
-/**
- * setMapBasics()
- *
- * Sets basic information like background image
- *
- * @param   Object   Object with basic page properties
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setMapBasics(oProperties) {
-	setPageBasics(oProperties);
-	setMapBackgroundImage(oProperties.background_image);
-}
-
-/**
- * setMapObjects()
- *
- * Does initial parsing of map objects
- *
- * @param   Array    Array of objects to parse to the map
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setMapObjects(aMapObjectConf) {
-	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
-	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
-		var sType = aMapObjectConf[i].type;
-		var oObj;
-		
-		switch (sType) {
-			case 'host':
-				oObj = new NagVisHost(aMapObjectConf[i]);
-			break;
-			case 'service':
-				oObj = new NagVisService(aMapObjectConf[i]);
-			break;
-			case 'hostgroup':
-				oObj = new NagVisHostgroup(aMapObjectConf[i]);
-			break;
-			case 'servicegroup':
-				oObj = new NagVisServicegroup(aMapObjectConf[i]);
-			break;
-			case 'map':
-				oObj = new NagVisMap(aMapObjectConf[i]);
-			break;
-			case 'textbox':
-				oObj = new NagVisTextbox(aMapObjectConf[i]);
-			break;
-			case 'shape':
-				oObj = new NagVisShape(aMapObjectConf[i]);
-			break;
-			default:
-				alert('Error: Unknown object type');
-			break;
-		}
-		
-		if(oObj !== null) {
-			// Save object to map objects array
-			aMapObjects.push(oObj);
-			
-			// Parse object to map
-			oObj.parse();
-		}
-	}
-	eventlog("worker", "debug", "setMapObjects: End setting map objects");
-}
-
-/**
- * updateShapes()
- *
- * Bulk refreshes shapes (Only reparsing)
- *
- * @param   Array    Array of objects to reparse
- * @return  Boolean  Returns true when some state has changed
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function updateShapes(aShapes) {
-	for(var i = 0, len = aShapes.length; i < len; i++) {
-		aMapObjects[aShapes[i]].parse();
-	}
 }
 
 /**
@@ -562,6 +520,174 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 }
 
 /**
+ * refreshMapObject()
+ *
+ * Handles manual map object update triggered by e.g. the context menu
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function refreshMapObject(objId) {
+	var iIndex = -1;
+	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++) {
+		if(aMapObjects[i].objId === objId) { 
+			iIndex = i;
+		}
+	}
+	
+	var aUrlParts = [];
+	var name = aMapObjects[iIndex].conf.name;
+	
+	var type = aMapObjects[iIndex].conf.type;
+	var obj_id = aMapObjects[iIndex].objId;
+	var service_description = aMapObjects[iIndex].conf.service_description;
+	var map = oPageProperties.map_name;
+	
+	// Create request string
+	var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+	if(service_description) {
+		sUrlPart = sUrlPart + '&n2[]='+service_description;
+	} else {
+		sUrlPart = sUrlPart + '&n2[]=';
+	}
+	
+	// Append part to array of parts
+	aUrlParts.push(sUrlPart);
+	
+	// Get the updated objectsupdateMapObjects via bulk request
+	var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+	var bStateChanged = false;
+	if(o.length > 0) {
+		bStateChanged = updateObjects(o, aMapObjects, 'map');
+	}
+	o = null;
+	
+	if(bStateChanged) {
+		updateMapBasics();
+	}
+}
+
+
+/**
+ * setMapBackgroundImage()
+ *
+ * Parses the background image to the map
+ *
+ * @param   String   Path to map images
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setMapBackgroundImage(sImage) {
+	// Only work with the background image if some is configured
+	if(typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
+		// Use existing image or create new
+		if(document.getElementById('backgroundImage')) {
+			var oImage = document.getElementById('backgroundImage');
+		} else {
+			var oImage = document.createElement('img');
+			oImage.id = 'backgroundImage';
+			oImage.style.zIndex = 0;
+			document.body.appendChild(oImage);
+		}
+		
+		oImage.src = sImage;
+		oImage = null;
+	}
+}
+
+/**
+ * setPageBasics()
+ *
+ * Sets basic information like favicon and page title
+ *
+ * @param   Object   Object with basic page properties
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setPageBasics(oProperties) {
+	setPageFavicon(oProperties.favicon_image);
+	setPageTitle(oProperties.page_title);
+	setPageBackgroundColor(oProperties.background_color);
+}
+
+/**
+ * setMapBasics()
+ *
+ * Sets basic information like background image
+ *
+ * @param   Object   Object with basic page properties
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setMapBasics(oProperties) {
+	setPageBasics(oProperties);
+	setMapBackgroundImage(oProperties.background_image);
+}
+
+/**
+ * setMapObjects()
+ *
+ * Does initial parsing of map objects
+ *
+ * @param   Array    Array of objects to parse to the map
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setMapObjects(aMapObjectConf) {
+	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
+	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
+		var sType = aMapObjectConf[i].type;
+		var oObj;
+		
+		switch (sType) {
+			case 'host':
+				oObj = new NagVisHost(aMapObjectConf[i]);
+			break;
+			case 'service':
+				oObj = new NagVisService(aMapObjectConf[i]);
+			break;
+			case 'hostgroup':
+				oObj = new NagVisHostgroup(aMapObjectConf[i]);
+			break;
+			case 'servicegroup':
+				oObj = new NagVisServicegroup(aMapObjectConf[i]);
+			break;
+			case 'map':
+				oObj = new NagVisMap(aMapObjectConf[i]);
+			break;
+			case 'textbox':
+				oObj = new NagVisTextbox(aMapObjectConf[i]);
+			break;
+			case 'shape':
+				oObj = new NagVisShape(aMapObjectConf[i]);
+			break;
+			default:
+				alert('Error: Unknown object type');
+			break;
+		}
+		
+		if(oObj !== null) {
+			// Save object to map objects array
+			aMapObjects.push(oObj);
+			
+			// Parse object to map
+			oObj.parse();
+		}
+	}
+	eventlog("worker", "debug", "setMapObjects: End setting map objects");
+}
+
+/**
+ * updateShapes()
+ *
+ * Bulk refreshes shapes (Only reparsing)
+ *
+ * @param   Array    Array of objects to reparse
+ * @return  Boolean  Returns true when some state has changed
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function updateShapes(aShapes) {
+	for(var i = 0, len = aShapes.length; i < len; i++) {
+		aMapObjects[aShapes[i]].parse();
+	}
+}
+
+/**
  * playSound()
  *
  * Play a sound for an object state
@@ -655,132 +781,6 @@ function flashIcon(intIndex, iNumTimes){
 	
 	oObjIcon = null;
 	oObjIconDiv = null;
-}
-
-/**
- * getBackgroundColor()
- *
- * Gets the background color of the map by the summary state of the map
- *
- * @param   Object   Map object
- * @return  String   Hex code representing the color
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getBackgroundColor(oObj) {
-	var sColor;
-	
-	// When state is PENDING, OK, UP, set default background color
-	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP') {
-		sColor = oPageProperties.background_color;
-	} else {
-		sColor = oStates[oObj.summary_state].bgColor;
-	}
-	
-	oObj = null;
-	
-	return sColor;
-}
-
-/**
- * Gets the favicon of the page representation the state of the map
- *
- * @return	String	Path to the favicon
- * @author 	Lars Michelsen <lars@vertical-visions.de>
- */
-function getFaviconImage(oObj) {
-	var sFavicon;
-	
-	// Gather image on summary state of the object
-	if(oObj.summary_in_downtime && oObj.summary_in_downtime == '1') {
-		sFavicon = 'downtime';
-	} else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == '1') {
-		sFavicon = 'ack';
-	} else {
-		sFavicon = oObj.summary_state.toLowerCase();
-	}
-	
-	oObj = null;
-	
-	// Set full path
-	sFavicon = oGeneralProperties.path_htmlimages+'internal/favicon_'+sFavicon+'.png';
-	
-	return sFavicon;
-}
-
-/**
- * setPageBackgroundColor()
- *
- * Sets the background color of the page
- *
- * @param   String   Hex code
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageBackgroundColor(sColor) {
-	document.body.style.backgroundColor = sColor;
-}
-
-/**
- * setMapBackgroundImage()
- *
- * Parses the background image to the map
- *
- * @param   String   Path to map images
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setMapBackgroundImage(sImage) {
-	// Only work with the background image if some is configured
-	if(typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
-		// Use existing image or create new
-		if(document.getElementById('backgroundImage')) {
-			var oImage = document.getElementById('backgroundImage');
-		} else {
-			var oImage = document.createElement('img');
-			oImage.id = 'backgroundImage';
-			oImage.style.zIndex = 0;
-			document.body.appendChild(oImage);
-		}
-		
-		oImage.src = sImage;
-		oImage = null;
-	}
-}
-
-/**
- * setPageFavicon()
- *
- * Sets the favicon of the pages
- *
- * @param   String   Path to the icon image
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageFavicon(sFavicon) {
-	favicon.change(sFavicon);
-}
-
-/**
- * setPagePageTitle()
- *
- * Sets the title of the current page
- *
- * @param   String   Title
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageTitle(sTitle) {
-	document.title = sTitle;
-}
-
-/**
- * setPageBasics()
- *
- * Sets basic information like favicon and page title
- *
- * @param   Object   Object with basic page properties
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageBasics(oProperties) {
-	setPageFavicon(oProperties.favicon_image);
-	setPageTitle(oProperties.page_title);
-	setPageBackgroundColor(oProperties.background_color);
 }
 
 //--- Overview -----------------------------------------------------------------

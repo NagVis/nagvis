@@ -25,6 +25,13 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
+/* Comments for jslint */
+/*global document, location, navigator, window, setTimeout, ActiveXObject */
+/*global XMLHttpRequest, alert */
+/*global oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties */
+/*global aInitialMapObjects, aInitialMaps, aInitialRotations, aMapObjects, aMaps */
+/*global aRotations */
+
 // Define some state options
 var oStates = {};
 oStates.UNREACHABLE = {};
@@ -63,187 +70,6 @@ oStates.PENDING = {};
 oStates.PENDING.color = '#C0C0C0';
 oStates.PENDING.bgColor = '#C0C0C0';
 oStates.PENDING.sound = '';
-
-/**
- * Update the worker counter
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function updateWorkerCounter() {
-	var oWorkerCounter = document.getElementById('workerLastRunCounter');
-	// write the time to refresh to header counter
-	if(oWorkerCounter) {
-		if(oWorkerProperties.last_run) {
-			oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
-		}
-	}
-	oWorkerCounter = null;
-	return true;
-}
-
-/**
- * Function to start the page refresh/rotation
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function rotatePage() {
-	if(oRotationProperties.nextStepUrl !== '') {
-		if(oRotationProperties.rotationEnabled) {
-			window.open(oRotationProperties.nextStepUrl, "_self");
-			return true;
-		}
-	} else {
-		window.location.reload(true);
-		return true;
-	}
-	return false;
-}
-
-/**
- * Function counts down in 1 second intervals. If nextRotationTime is smaller
- * than 0, refresh/rotate
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function rotationCountdown() {
-	if(oRotationProperties.nextStepTime && oRotationProperties.nextStepTime !== '') {
-		// Countdown one second
-		oRotationProperties.nextStepTime -= 1;
-		
-		if(oRotationProperties.nextStepTime <= 0) {
-			return rotatePage();
-		} else {
-			var oRefCountHead = document.getElementById('refreshCounterHead');
-			// write the time to refresh to header counter
-			if(oRefCountHead) {
-				oRefCountHead.innerHTML = oRotationProperties.nextStepTime;
-				oRefCountHead = null;
-			}
-			
-			var oRefCount = document.getElementById('refreshCounter');
-			// write the time to refresh to the normal counter
-			if(oRefCount) {
-				oRefCount.innerHTML = oRotationProperties.nextStepTime;
-				oRefCount = null;
-			}
-		}
-	}
-	return false;
-}
-
-/**
- * Function to start/stop the rotation
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function switchRotation(obj, startLabel, stopLabel) {
-	if(oRotationProperties.rotationEnabled) {
-		oRotationProperties.rotationEnabled = false;
-		setRotationLabel(startLabel, stopLabel);
-	} else {
-		oRotationProperties.rotationEnabled = true;
-		setRotationLabel(startLabel, stopLabel);
-	}
-}
-
-/**
- * Function to set the rotation switch label dynamicaly
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setRotationLabel(startLabel,stopLabel) {
-	var oRotationSwitch = document.getElementById('rotationSwitch');
-	if(getUrlParam('rotation') === '') {
-		oRotationSwitch.style.visibility = 'hidden';
-	} else {
-		if(oRotationProperties.rotationEnabled) {
-			oRotationSwitch.innerHTML = stopLabel;
-		} else {
-			oRotationSwitch.innerHTML = startLabel;
-		}
-	}
-	oRotationSwitch = null;
-}
-
-/**
- * Function gets the value of url params
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getUrlParam(name) {
-	var name2 = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	var regexS = "[\\?&]"+name2+"=([^&#]*)";
-	var regex = new RegExp( regexS );
-	var results = regex.exec(window.location);
-	if(results === null) {
-		return '';
-	} else {
-		return results[1];
-	}
-}
-
-function changeMap(htmlBase,mapName) {
-	if(mapName.match('^__automap')) {
-		location.href=htmlBase+'/nagvis/index.php?automap=1'+mapName.replace('__automap','');
-	} else {
-		if (mapName === '') {
-			location.href=htmlBase+'/nagvis/index.php';
-		} else {
-			location.href=htmlBase+'/nagvis/index.php?map='+mapName;
-		}
-	}
-}
-
-function getCurrentTime() {
-	var oDate = new Date();
-	var sHours = oDate.getHours();
-	sHours = (( sHours < 10) ? "0"+sHours : sHours);
-	var sMinutes = oDate.getMinutes();
-	sMinutes = (( sMinutes < 10) ? "0"+sMinutes : sMinutes);
-	var sSeconds = oDate.getSeconds();
-	sSeconds = (( sSeconds < 10) ? "0"+sSeconds : sSeconds);
-	
-	return sHours+":"+sMinutes+":"+sSeconds;
-}
-
-function getRandomLowerCaseLetter() {
-   return String.fromCharCode(97 + Math.round(Math.random() * 25));
-}
-
-function getRandom(min, max) {
-	if( min > max ) {
-		return -1;
-	}
-	
-	if( min == max ) {
-		return min;
-	}
-	
-	return min + parseInt(Math.random() * (max-min+1), 0);
-}
-
-function cloneObject(what) {
-	var o;
-	var i;
-	
-	if(what instanceof Array) {
-		o = [];
-	} else {
-		o = {};
-	}
-	
-	for (i in what) {
-		if (typeof what[i] == 'object') {
-			if(i != 'parsedObject') {
-				o[i] = cloneObject(what[i]);
-			}
-		} else {
-			o[i] = what[i];
-		}
-	}
-	
-	return o;
-}
 
 function date(format, timestamp) {
 	// http://kevin.vanzonneveld.net
@@ -445,6 +271,187 @@ function date(format, timestamp) {
 			
 			return ret;
 		});
+}
+
+/**
+ * Update the worker counter
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function updateWorkerCounter() {
+	var oWorkerCounter = document.getElementById('workerLastRunCounter');
+	// write the time to refresh to header counter
+	if(oWorkerCounter) {
+		if(oWorkerProperties.last_run) {
+			oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+		}
+	}
+	oWorkerCounter = null;
+	return true;
+}
+
+/**
+ * Function to start the page refresh/rotation
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function rotatePage() {
+	if(oRotationProperties.nextStepUrl !== '') {
+		if(oRotationProperties.rotationEnabled) {
+			window.open(oRotationProperties.nextStepUrl, "_self");
+			return true;
+		}
+	} else {
+		window.location.reload(true);
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Function counts down in 1 second intervals. If nextRotationTime is smaller
+ * than 0, refresh/rotate
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function rotationCountdown() {
+	if(oRotationProperties.nextStepTime && oRotationProperties.nextStepTime !== '') {
+		// Countdown one second
+		oRotationProperties.nextStepTime -= 1;
+		
+		if(oRotationProperties.nextStepTime <= 0) {
+			return rotatePage();
+		} else {
+			var oRefCountHead = document.getElementById('refreshCounterHead');
+			// write the time to refresh to header counter
+			if(oRefCountHead) {
+				oRefCountHead.innerHTML = oRotationProperties.nextStepTime;
+				oRefCountHead = null;
+			}
+			
+			var oRefCount = document.getElementById('refreshCounter');
+			// write the time to refresh to the normal counter
+			if(oRefCount) {
+				oRefCount.innerHTML = oRotationProperties.nextStepTime;
+				oRefCount = null;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Function gets the value of url params
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getUrlParam(name) {
+	var name2 = name.replace('[', '\\[').replace(']', '\\]');
+	var regexS = "[\\?&]"+name2+"=([^&#]*)";
+	var regex = new RegExp( regexS );
+	var results = regex.exec(window.location);
+	if(results === null) {
+		return '';
+	} else {
+		return results[1];
+	}
+}
+
+/**
+ * Function to set the rotation switch label dynamicaly
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function setRotationLabel(startLabel,stopLabel) {
+	var oRotationSwitch = document.getElementById('rotationSwitch');
+	if(getUrlParam('rotation') === '') {
+		oRotationSwitch.style.visibility = 'hidden';
+	} else {
+		if(oRotationProperties.rotationEnabled) {
+			oRotationSwitch.innerHTML = stopLabel;
+		} else {
+			oRotationSwitch.innerHTML = startLabel;
+		}
+	}
+	oRotationSwitch = null;
+}
+
+/**
+ * Function to start/stop the rotation
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function switchRotation(obj, startLabel, stopLabel) {
+	if(oRotationProperties.rotationEnabled) {
+		oRotationProperties.rotationEnabled = false;
+		setRotationLabel(startLabel, stopLabel);
+	} else {
+		oRotationProperties.rotationEnabled = true;
+		setRotationLabel(startLabel, stopLabel);
+	}
+}
+
+function changeMap(htmlBase,mapName) {
+	if(mapName.match('^__automap')) {
+		location.href=htmlBase+'/nagvis/index.php?automap=1'+mapName.replace('__automap','');
+	} else {
+		if (mapName === '') {
+			location.href=htmlBase+'/nagvis/index.php';
+		} else {
+			location.href=htmlBase+'/nagvis/index.php?map='+mapName;
+		}
+	}
+}
+
+function getCurrentTime() {
+	var oDate = new Date();
+	var sHours = oDate.getHours();
+	sHours = (( sHours < 10) ? "0"+sHours : sHours);
+	var sMinutes = oDate.getMinutes();
+	sMinutes = (( sMinutes < 10) ? "0"+sMinutes : sMinutes);
+	var sSeconds = oDate.getSeconds();
+	sSeconds = (( sSeconds < 10) ? "0"+sSeconds : sSeconds);
+	
+	return sHours+":"+sMinutes+":"+sSeconds;
+}
+
+function getRandomLowerCaseLetter() {
+   return String.fromCharCode(97 + Math.round(Math.random() * 25));
+}
+
+function getRandom(min, max) {
+	if( min > max ) {
+		return -1;
+	}
+	
+	if( min == max ) {
+		return min;
+	}
+	
+	return min + parseInt(Math.random() * (max-min+1), 0);
+}
+
+function cloneObject(what) {
+	var o;
+	var i;
+	
+	if(what instanceof Array) {
+		o = [];
+	} else {
+		o = {};
+	}
+	
+	for (i in what) {
+		if (typeof what[i] == 'object') {
+			if(i != 'parsedObject') {
+				o[i] = cloneObject(what[i]);
+			}
+		} else {
+			o[i] = what[i];
+		}
+	}
+	
+	return o;
 }
 
 function addLoadEvent(func) {

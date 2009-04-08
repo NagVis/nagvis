@@ -20,7 +20,8 @@ Base.extend = function(_instance, _static) { // subclass
 	// create the wrapper for the constructor function
 	//var constructor = proto.constructor.valueOf(); //-dean
 	var constructor = proto.constructor;
-	var klass = proto.constructor = function() {
+	
+	proto.constructor = function() {
 		if (!Base._prototyping) {
 			if (this._constructing || this.constructor == klass) { // instantiation
 				this._constructing = true;
@@ -33,6 +34,8 @@ Base.extend = function(_instance, _static) { // subclass
 		
 		return false;
 	};
+	
+	var klass = proto.constructor;
 	
 	// build the class interface
 	klass.ancestor = this;
@@ -47,7 +50,9 @@ Base.extend = function(_instance, _static) { // subclass
 	};
 	extend.call(klass, _static);
 	// class initialisation
-	if (typeof klass.init == "function") klass.init();
+	if (typeof klass.init == "function") { 
+		klass.init();
+	}
 	return klass;
 };
 
@@ -87,6 +92,7 @@ Base.prototype = {
 			var hidden = ["constructor", "toString", "valueOf"];
 			// if we are prototyping then include the constructor
 			var i = Base._prototyping ? 0 : 1;
+			var key;
 			while ((key = hidden[i++])) {
 				if (source[key] != proto[key]) {
 					extend.call(this, key, source[key]);
@@ -95,7 +101,9 @@ Base.prototype = {
 			}
 			// copy each of the source object's properties to this object
 			for (var key in source) {
-				if (!proto[key]) extend.call(this, key, source[key]);
+				if (!proto[key]) {
+					extend.call(this, key, source[key]);
+				}
 			}
 		}
 		return this;
