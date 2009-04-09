@@ -54,14 +54,14 @@ class GlobalIndexPage {
 	 */
 	public function parseJson() {
 		$ret = '';
-		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-		$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
-		$ret .= 'var oPageProperties='.$this->parseIndexPropertiesJson().';'."\n";
-		$ret .= 'var aInitialMaps='.$this->parseMapsJson().';'."\n";
-		$ret .= 'var aInitialRotations='.$this->parseRotationsJson().';'."\n";
-		$ret .= 'var aMaps=Array();'."\n";
-		$ret .= 'var aRotations=Array();'."\n";
+		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+		$ret .= 'oFileAges='.$this->parseFileAges().';'."\n";
+		$ret .= 'oPageProperties='.$this->parseIndexPropertiesJson().';'."\n";
+		$ret .= 'aInitialMaps='.$this->parseMapsJson().';'."\n";
+		$ret .= 'aInitialRotations='.$this->parseRotationsJson().';'."\n";
+		$ret .= 'aMaps=Array();'."\n";
+		$ret .= 'aRotations=Array();'."\n";
 		
 		// Kick of the worker
 		$ret .= 'addLoadEvent(runWorker(0, \'overview\'));';

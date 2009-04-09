@@ -126,12 +126,12 @@ var NagVisObject = Base.extend({
 		if(this.conf.type === 'service') {
 			oMacros.service_description = this.conf.service_description;
 		} else {
-			oSectionMacros.service = '<!--\\\sBEGIN\\\sservice\\\s-->.+?<!--\\\sEND\\\sservice\\\s-->';
+			oSectionMacros.service = '<!--\\sBEGIN\\sservice\\s-->.+?<!--\\sEND\\sservice\\s-->';
 		}
 		
 		// Macros which are only for hosts
 		if(this.conf.type !== 'host') {
-			oSectionMacros.host = '<!--\\\sBEGIN\\\shost\\\s-->.+?<!--\\\sEND\\\shost\\\s-->';
+			oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 		}
 		
 		// Loop and replace all unwanted section macros
@@ -144,7 +144,7 @@ var NagVisObject = Base.extend({
 		
 		// Loop and replace all normal macros
 		for (var key in oMacros) {
-			var regex = new RegExp('\\\['+key+'\\\]', 'g');
+			var regex = new RegExp('\\['+key+'\\]', 'g');
 			this.context_template_code = this.context_template_code.replace(regex, oMacros[key]);
 			regex = null;
 		}
@@ -186,7 +186,7 @@ var NagVisObject = Base.extend({
 			} else {
 				// Only fetch hover template code and parse static macros when this is
 				// no update
-				if(this.hover_template_code == null) {
+				if(this.hover_template_code === null) {
 					this.getHoverTemplateCode();
 				}
 				
@@ -213,7 +213,7 @@ var NagVisObject = Base.extend({
 	getHoverUrlCode: function() {
 		this.hover_template_code = oHoverUrls[this.conf.hover_url];
 		
-		if(this.hover_template_code == null) {
+		if(this.hover_template_code === null) {
 			this.hover_template_code = '';
 		}
 	},

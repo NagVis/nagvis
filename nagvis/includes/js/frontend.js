@@ -206,14 +206,14 @@ function getHoverTemplates(aObjs) {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do not use hover_url
-		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu == '1' && (!aObjs[a].conf.hover_url || aObjs[a].conf.hover_url == '')) {
+		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu === '1' && (!aObjs[a].conf.hover_url || aObjs[a].conf.hover_url === '')) {
 			oHoverTemplates[aObjs[a].conf.hover_template] = '';
 		}
 	}
 	
 	// Build string for bulk fetching the templates
 	for(var i in oHoverTemplates) {
-		if(i != 'Inherits') {
+		if(i !== 'Inherits') {
 			aUrlParts.push('&name[]='+i);
 		}
 	}

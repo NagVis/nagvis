@@ -47,7 +47,7 @@ class GlobalControllerAutomap {
 		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND);
 
 		// Build the page
-		$FRONTEND->addBodyLines($FRONTEND->parseJs('var oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(1).';'));
+		$FRONTEND->addBodyLines($FRONTEND->parseJs('oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(1).';'));
 		$FRONTEND->getHeaderMenu($MAPCFG->getValue('global',0 ,'header_menu'), $MAPCFG->getValue('global',0 ,'header_template'));
 		$FRONTEND->getAutoMap($automapEnv);
 

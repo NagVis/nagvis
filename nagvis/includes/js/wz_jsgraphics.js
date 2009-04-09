@@ -81,9 +81,7 @@ function _pntDoc()
 	this.htm = '';
 }
 
-function _pntN()
-{
-	;
+function _pntN() {
 }
 
 function _mkDiv(x, y, w, h)

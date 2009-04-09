@@ -42,7 +42,7 @@ function eventlogToggle() {
 	} else {
 		oLog.style.display = '';
 		oLog.style.height = oPageProperties.event_log_height+'px';
-		oLogControl.style.bottom = (parseInt(oPageProperties.event_log_height)+5)+'px';
+		oLogControl.style.bottom = (parseInt(oPageProperties.event_log_height, 10)+5)+'px';
 	}
 	
 	oLog = null;
@@ -90,8 +90,6 @@ function eventlogInitialize() {
 	}
 	
 	oEventlog = null;
-	
-	eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
 }
 
 /**
@@ -112,6 +110,7 @@ function eventlog(sComponent, sSeverity, sText) {
 		
 		if(!oEventlog) {
 			eventlogInitialize();
+			eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
 			oEventlog = document.getElementById('eventlog');
 		}
 		

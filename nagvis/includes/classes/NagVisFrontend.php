@@ -64,9 +64,13 @@ class NagVisFrontend extends GlobalPage {
 															$this->htmlBase.'/nagvis/includes/js/ExtBase.js',
 															$this->htmlBase.'/nagvis/includes/js/frontendMessage.js',
 															$this->htmlBase.'/nagvis/includes/js/frontendEventlog.js',
+															$this->htmlBase.'/nagvis/includes/js/hover.js',
 															$this->htmlBase.'/nagvis/includes/js/frontendContext.js',
 															$this->htmlBase.'/nagvis/includes/js/ajax.js',
-															$this->htmlBase.'/nagvis/includes/js/frontend.js',
+															$this->htmlBase.'/nagvis/includes/js/dynfavicon.js',
+															$this->htmlBase.'/nagvis/includes/js/frontend.js',  
+															$this->htmlBase.'/nagvis/includes/js/lines.js',
+															$this->htmlBase.'/nagvis/includes/js/overlib.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisObject.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisStatefulObject.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisStatelessObject.js',
@@ -78,11 +82,7 @@ class NagVisFrontend extends GlobalPage {
 															$this->htmlBase.'/nagvis/includes/js/NagVisShape.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisTextbox.js',
 															$this->htmlBase.'/nagvis/includes/js/NagVisRotation.js',
-															$this->htmlBase.'/nagvis/includes/js/overlib.js',
-															$this->htmlBase.'/nagvis/includes/js/dynfavicon.js',
-															$this->htmlBase.'/nagvis/includes/js/hover.js',
-															$this->htmlBase.'/nagvis/includes/js/wz_jsgraphics.js',  
-															$this->htmlBase.'/nagvis/includes/js/lines.js');
+															$this->htmlBase.'/nagvis/includes/js/wz_jsgraphics.js');
 		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';
 		$prop['languageRoot'] = 'nagvis';
 		

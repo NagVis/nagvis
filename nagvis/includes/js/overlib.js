@@ -1120,7 +1120,10 @@ function windowWidth() {
 
 // create the div container for popup content if it doesn't exist
 function createDivContainer(id,frm,zValue) {
-	id = (id || 'overDiv'), frm = (frm || o3_frame), zValue = (zValue || 1000);
+	id = (id || 'overDiv');
+	frm = (frm || o3_frame);
+	zValue = (zValue || 1000);
+	
 	var objRef, divContainer = layerReference(id);
 
 	if (divContainer == null) {
@@ -1425,7 +1428,11 @@ function runHook(fnHookTo, hookType) {
 		arS=argToString(ar,2);
 		l=l.chain;
 
-		for (k=l.length; k > 0; k--) if((rtnVal=eval('l[k-1]('+arS+')'))!=void(0)) break;
+		for (k=l.length; k > 0; k--) {
+			if((rtnVal=eval('l[k-1]('+arS+')')) != 'undefined') { 
+				break;
+			}
+		}
 	}
 
 	return rtnVal;

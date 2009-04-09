@@ -258,16 +258,16 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		if(this.conf.url && this.conf.url !== '') {
 			if(this.conf.htmlcgi && this.conf.htmlcgi !== '') {
-				this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlcgi\\\]', 'g'), this.conf.htmlcgi);
+				this.conf.url = this.conf.url.replace(new RegExp('\\[htmlcgi\\]', 'g'), this.conf.htmlcgi);
 			} else {
-				this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlcgi\\\]', 'g'), oGeneralProperties.path_htmlcgi);
+				this.conf.url = this.conf.url.replace(new RegExp('\\[htmlcgi\\]', 'g'), oGeneralProperties.path_htmlcgi);
 			}
 			
-			this.conf.url = this.conf.url.replace(new RegExp('\\\[htmlbase\\\]', 'g'), oGeneralProperties.path_htmlbase);
+			this.conf.url = this.conf.url.replace(new RegExp('\\[htmlbase\\]', 'g'), oGeneralProperties.path_htmlbase);
 			
-			this.conf.url = this.conf.url.replace(new RegExp('\\\['+name+'\\\]', 'g'), this.conf.name);
+			this.conf.url = this.conf.url.replace(new RegExp('\\['+name+'\\]', 'g'), this.conf.name);
 			if(this.conf.type == 'service') {
-				this.conf.url = this.conf.url.replace(new RegExp('\\\[service_description\\\]', 'g'), this.conf.service_description);
+				this.conf.url = this.conf.url.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
 			}
 			
 			// Replace special chars in url
@@ -275,9 +275,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		if(this.conf.hover_url && this.conf.hover_url !== '') {
-			this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\\['+name+'\\\]', 'g'), this.conf.name);
+			this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\['+name+'\\]', 'g'), this.conf.name);
 			if(this.conf.type == 'service') {
-				this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\\[service_description\\\]', 'g'), this.conf.service_description);
+				this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
 			}
 		}
 		
@@ -290,15 +290,15 @@ var NagVisStatefulObject = NagVisObject.extend({
 				objName = this.conf.name;
 			}
 			
-			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[name\\\]', 'g'), objName);
-			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[output\\\]', 'g'), this.conf.output);
+			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[name\\]', 'g'), objName);
+			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[output\\]', 'g'), this.conf.output);
 			
 			if(this.conf.type == 'service' || this.conf.type == 'host') {
-				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[perfdata\\\]', 'g'), this.conf.perfdata);
+				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[perfdata\\]', 'g'), this.conf.perfdata);
 			}
 			
 			if(this.conf.type == 'service') {
-				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\\[service_description\\\]', 'g'), this.conf.service_description);
+				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
 			}
 		}
 	},
@@ -425,10 +425,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		// If no x/y coords set, fallback to object x/y
-		if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x == 0) {
+		if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x === '0') {
 			this.conf.label_x = this.conf.x;
 		}
-		if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y == 0) {
+		if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0') {
 			this.conf.label_y = this.conf.y;
 		}
 		

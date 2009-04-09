@@ -25,54 +25,43 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-// This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime, bLinkArea) {
-	var colorFill = '';
-	var colorBorder = '#000000';
+// Calculates the middle between two integers
+function middle(x1,x2) {
+	return (x1+(x2-x1)/2);
+}
+
+// Returns the maximum value in an array
+function max(arr) {
+	var max = arr[0];
 	
-	// Ensure format
-	x1 = parseInt(x1);
-	x2 = parseInt(x2);
-	y1 = parseInt(y1);
-	y2 = parseInt(y2);
-	width = parseInt(width);
-	
-	// Get the fill color depending on the object state
-	switch (state) {
-    case 'UNREACHABLE':
-		case 'DOWN':
-		case 'CRITICAL':
-		case 'WARNING':
-    case 'UNKNOWN':
-		case 'ERROR':
-    case 'UP':
-    case 'OK':
-    case 'PENDING':
-			colorFill = oStates[state].color;
-		break;
-		default:
-			colorFill = '#FFCC66';
-		break;
-  }
-	
-	// Get the border color depending on ack/downtime
-	if(ack) {
-		colorBorder = '#666666';
+	for (var i = 1, len = arr.length; i < len; i++) {
+		if (arr[i] > max) {
+			max = arr[i];
+		}
 	}
 	
-	if(downtime) {
-		colorBorder = '#666666';
+	return max;
+}
+
+// Returns the minimum value in an array
+function min(arr) {
+	var min = arr[0];
+	
+	for (var i = 1, len = arr.length; i < len; i++) {
+		if (arr[i] < min) {
+			min = arr[i];
+		}
 	}
 	
-	if(type == 10) {
-		var xMid = middle(x1,x2);
-		var yMid = middle(y1,y2);
-		
-		drawArrow(objId, x1, y1, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
-		drawArrow(objId, x2, y2, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
-	} else if(type == 11) {
-		drawArrow(objId, x1, y1, x2, y2, width, colorFill, colorBorder, bLinkArea);
-	}
+	return min;
+}
+
+function newX(a, b, x, y) {
+	return (Math.cos(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
+}
+
+function newY(a, b, x, y) {
+	return (Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
 }
 
 // This function draws an arrow like it is used on NagVis maps
@@ -141,7 +130,7 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) 
 	
 	oCanvas = null;
 	
-	// Now draw the link
+	// Now draw the link 
 	// FIXME: Would be better to have a link allover the line
 	// -------------------------------------------------------------------------
 	
@@ -160,41 +149,52 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) 
 	}
 }
 
-function newX(a, b, x, y) {
-	return (Math.cos(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
-}
-
-function newY(a, b, x, y) {
-	return (Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
-}
-
-// Calculates the middle between two integers
-function middle(x1,x2) {
-	return (x1+(x2-x1)/2);
-}
-
-// Returns the maximum value in an array
-function max(arr) {
-	var max = arr[0];
+// This function is being called by NagVis for drawing the lines
+function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime, bLinkArea) {
+	var colorFill = '';
+	var colorBorder = '#000000';
 	
-	for (var i = 1, len = arr.length; i < len; i++) {
-		if (arr[i] > max) {
-			max = arr[i];
-		}
+	// Ensure format
+	x1 = parseInt(x1, 10);
+	x2 = parseInt(x2, 10);
+	y1 = parseInt(y1, 10);
+	y2 = parseInt(y2, 10);
+	width = parseInt(width, 10);
+	
+	// Get the fill color depending on the object state
+	switch (state) {
+    case 'UNREACHABLE':
+		case 'DOWN':
+		case 'CRITICAL':
+		case 'WARNING':
+    case 'UNKNOWN':
+		case 'ERROR':
+    case 'UP':
+    case 'OK':
+    case 'PENDING':
+			colorFill = oStates[state].color;
+		break;
+		default:
+			colorFill = '#FFCC66';
+		break;
+  }
+	
+	// Get the border color depending on ack/downtime
+	if(ack) {
+		colorBorder = '#666666';
 	}
 	
-	return max;
-}
-
-// Returns the minimum value in an array
-function min(arr) {
-	var min = arr[0];
-	
-	for (var i = 1, len = arr.length; i < len; i++) {
-		if (arr[i] < min) {
-			min = arr[i];
-		}
+	if(downtime) {
+		colorBorder = '#666666';
 	}
 	
-	return min;
+	if(type == 10) {
+		var xMid = middle(x1,x2);
+		var yMid = middle(y1,y2);
+		
+		drawArrow(objId, x1, y1, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objId, x2, y2, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
+	} else if(type == 11) {
+		drawArrow(objId, x1, y1, x2, y2, width, colorFill, colorBorder, bLinkArea);
+	}
 }

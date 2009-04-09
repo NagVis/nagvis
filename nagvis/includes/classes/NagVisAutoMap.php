@@ -174,8 +174,8 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	public function parseMapJson() {
 		$ret = '';
-		$ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-		$ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
 		
 		// Kick of the worker
 		$ret .= 'addLoadEvent(runWorker(0, \'automap\'));';

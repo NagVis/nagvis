@@ -66,8 +66,8 @@ function selectmouse(e) {
 	
 	dobj = document.getElementById('popupWindow');
 	
-	tx = parseInt(dobj.style.left+0);
-	ty = parseInt(dobj.style.top+0);
+	tx = parseInt(dobj.style.left+0, 10);
+	ty = parseInt(dobj.style.top+0, 10);
 	x = popupNN6 ? e.clientX : event.clientX;
 	y = popupNN6 ? e.clientY : event.clientY;
 	

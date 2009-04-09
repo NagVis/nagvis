@@ -50,7 +50,7 @@ var favicon = {
 		
 		return true;
 	}
-}
+};
 
 // Favicon.js - Change favicon dynamically [http://ajaxify.com/run/favicon].
 // Copyright (c) 2006 Michael Mahemoff. Only works in Firefox and Opera.

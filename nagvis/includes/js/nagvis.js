@@ -28,9 +28,14 @@
 /* Comments for jslint */
 /*global document, location, navigator, window, setTimeout, ActiveXObject */
 /*global XMLHttpRequest, alert */
-/*global oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties */
-/*global aInitialMapObjects, aInitialMaps, aInitialRotations, aMapObjects, aMaps */
-/*global aRotations */
+
+/*jslint evil: true, */
+
+/* Initiate global vars which are set later in the parsed HTML */
+var oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties;
+var oFileAges;
+var aInitialMapObjects, aInitialMaps, aInitialRotations, aMapObjects, aMaps;
+var aRotations;
 
 // Define some state options
 var oStates = {};
@@ -428,7 +433,7 @@ function getRandom(min, max) {
 		return min;
 	}
 	
-	return min + parseInt(Math.random() * (max-min+1), 0);
+	return min + parseInt(Math.random() * (max-min+1, 10), 0);
 }
 
 function cloneObject(what) {

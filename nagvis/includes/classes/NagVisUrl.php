@@ -77,8 +77,8 @@ class NagVisUrl {
    */
   public function parseJson() {
     $ret = '';
-    $ret .= 'var oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-    $ret .= 'var oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+    $ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
+    $ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
     //$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
 
     // Kick of the worker
