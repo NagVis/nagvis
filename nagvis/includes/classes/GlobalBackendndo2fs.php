@@ -40,6 +40,21 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 	private $oParentlistCache;
 	private $iObjIdCounter;
 	
+	// These are the backend local configuration options
+	private static $validConfig = Array(
+		'path' => Array('must' => 1,
+			'editable' => 1,
+			'default' => '/usr/local/ndo2fs/var',
+			'match' => MATCH_STRING_PATH),
+		'instancename' => Array('must' => 1,
+			'editable' => 1,
+			'default' => 'default',
+			'match' => MATCH_STRING_NO_SPACE),
+		'maxtimewithoutupdate' => Array('must' => 1,
+			'editable' => 1,
+			'default' => '180',
+			'match' => MATCH_INTEGER));
+	
 	/**
 	 * Constructor
 	 *
@@ -103,6 +118,18 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 		}
 		
 		return TRUE;
+	}
+	
+	/**
+	 * PUBLIC Method getValidConfig
+	 * 
+	 * Returns the valid config for this backend
+	 *
+	 * @return	Array
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function getValidConfig() {
+		return self::$validConfig;
 	}
 	
 	/**

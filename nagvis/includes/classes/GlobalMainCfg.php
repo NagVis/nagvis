@@ -319,64 +319,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_STRING_URL),
-				'options' => Array(
-					'ndomy' => Array('dbhost' => Array('must' => 1,
-							'editable' => 1,
-							'default' => 'localhost',
-							'match' => MATCH_STRING_NO_SPACE),
-						'dbport' => Array('must' => 0,
-							'editable' => 1,
-							'default' => '3306',
-							'match' => MATCH_INTEGER),
-						'dbname' => Array('must' => 1,
-							'editable' => 1,
-							'default' => 'nagios',
-							'match' => MATCH_STRING_NO_SPACE),
-						'dbuser' => Array('must' => 1,
-							'editable' => 1,
-							'default' => 'root',
-							'match' => MATCH_STRING_NO_SPACE),
-						'dbpass' => Array('must' => 0,
-							'editable' => 1,
-							'default' => '',
-							'match' => MATCH_STRING_EMPTY),
-						'dbprefix' => Array('must' => 0,
-							'editable' => 1,
-							'default' => 'nagios_',
-							'match' => MATCH_STRING_NO_SPACE_EMPTY),
-						'dbinstancename' => Array('must' => 0,
-							'editable' => 1,
-							'default' => 'default',
-							'match' => MATCH_STRING_NO_SPACE),
-						'maxtimewithoutupdate' => Array('must' => 0,
-							'editable' => 1,
-							'default' => '180',
-							'match' => MATCH_INTEGER)),
-					'ndo2fs' => Array('path' => Array('must' => 1,
-							'editable' => 1,
-							'default' => '/usr/local/ndo2fs/var',
-							'match' => MATCH_STRING_PATH),
-						'instancename' => Array('must' => 1,
-							'editable' => 1,
-							'default' => 'default',
-							'match' => MATCH_STRING_NO_SPACE),
-						'maxtimewithoutupdate' => Array('must' => 1,
-							'editable' => 1,
-							'default' => '180',
-							'match' => MATCH_INTEGER)),
-					'html' => Array(
-						'backendid' => Array('must' => 1,
-							'editable' => 0,
-							'default' => 'html_1',
-							'match' => MATCH_STRING_NO_SPACE),
-						'cgiuser' => Array('must' => 1,
-							'editable' => 1,
-							'default' => 'nagiosadmin',
-							'match' => MATCH_STRING_NO_SPACE),
-						'cgi' => Array('must' => 1,
-							'editable' => 1,
-							'default' => '/usr/local/nagios/sbin/',
-							'match' => MATCH_STRING_PATH)))),
+				'options' => Array()),
 			'rotation' => Array(
 				'rotationid' => Array('must' => 1,
 					'editable' => 1,
@@ -467,9 +410,13 @@ class GlobalMainCfg {
 		$CORE = new GlobalCore($this);
 		$this->CACHE = new GlobalFileCache($CORE, $this->configFile, $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache');
 		
+		// Get the valid configuration definitions from the available backends
+		$this->getBackendValidConf();
+		
 		if($this->CACHE->isCached(FALSE) !== -1) {
 			$this->config = $this->CACHE->getCache();
 		} else {
+			
 			// Read Main Config file, when succeeded cache it
 			if($this->readConfig(TRUE)) {
 				
@@ -484,6 +431,29 @@ class GlobalMainCfg {
 		// set default value
 		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
 		$this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
+	}
+	
+	/**
+	 * Gets the valid configuration definitions from the available backends. The
+	 * definitions were moved to the backends so it is easier to create new
+	 * backends without any need to modify the main configuration
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getBackendValidConf() {
+		// Get the configuration options from the backends
+		$CORE = new GlobalCore($this);
+		$aBackends = $CORE->getAvailableBackends();
+		
+		foreach($aBackends AS $backend) {
+			$class = 'GlobalBackend'.$backend;
+			
+			// FIXME: Does not work in PHP 5.2 (http://bugs.php.net/bug.php?id=31318)
+			//$this->validConfig['backend']['options'][$backend] = $class->getValidConfig();
+			// I'd prefer to use the above but for the moment I use the fix below
+			
+			$this->validConfig['backend']['options'][$backend] = call_user_func(array('GlobalBackend'.$backend, 'getValidConfig'));
+		}
 	}
 	
 	/**

@@ -28,6 +28,7 @@
 
 interface GlobalBackendInterface {
 	public function __construct($CORE, $backendId);
+	public static function getValidConfig();
 	public function getObjects($type, $name1Pattern = '', $name2Pattern = '');
 	public function getHostState($hostName, $onlyHardstates);
 	public function getServiceState($hostName, $serviceName, $onlyHardstates);

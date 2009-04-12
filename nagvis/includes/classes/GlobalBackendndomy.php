@@ -44,6 +44,41 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	private $serviceCache;
 	private $hostAckCache;
 	
+	// Define the backend local configuration options
+	private static $validConfig = Array(
+		'dbhost' => Array('must' => 1,
+			'editable' => 1,
+			'default' => 'localhost',
+			'match' => MATCH_STRING_NO_SPACE),
+		'dbport' => Array('must' => 0,
+			'editable' => 1,
+			'default' => '3306',
+			'match' => MATCH_INTEGER),
+		'dbname' => Array('must' => 1,
+			'editable' => 1,
+			'default' => 'nagios',
+			'match' => MATCH_STRING_NO_SPACE),
+		'dbuser' => Array('must' => 1,
+			'editable' => 1,
+			'default' => 'root',
+			'match' => MATCH_STRING_NO_SPACE),
+		'dbpass' => Array('must' => 0,
+			'editable' => 1,
+			'default' => '',
+			'match' => MATCH_STRING_EMPTY),
+		'dbprefix' => Array('must' => 0,
+			'editable' => 1,
+			'default' => 'nagios_',
+			'match' => MATCH_STRING_NO_SPACE_EMPTY),
+		'dbinstancename' => Array('must' => 0,
+			'editable' => 1,
+			'default' => 'default',
+			'match' => MATCH_STRING_NO_SPACE),
+		'maxtimewithoutupdate' => Array('must' => 0,
+			'editable' => 1,
+			'default' => '180',
+			'match' => MATCH_INTEGER));
+	
 	/**
 	 * Constructor
 	 * Reads needed configuration parameters, connects to the Database
@@ -230,6 +265,18 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	private function mysqlQuery($query) {
 		$QUERYHANDLE = mysql_query($query, $this->CONN) or die(mysql_error());
 		return $QUERYHANDLE;
+	}
+	
+	/**
+	 * PUBLIC Method getValidConfig
+	 * 
+	 * Returns the valid config for this backend
+	 *
+	 * @return	Array
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function getValidConfig() {
+		return self::$validConfig;
 	}
 
 	/**
