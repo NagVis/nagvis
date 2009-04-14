@@ -58,8 +58,7 @@ class NagVisFrontend extends GlobalPage {
 		
 		$prop['title'] = $CORE->MAINCFG->getValue('internal', 'title');
 		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css',
-		                             $this->htmlBase.'/nagvis/includes/css/frontendEventlog.css',
-		                             $this->htmlBase.'/nagvis/includes/css/frontendMessage.css');
+		                             $this->htmlBase.'/nagvis/includes/css/frontendEventlog.css');
 		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js',
 															$this->htmlBase.'/nagvis/includes/js/ExtBase.js',
 															$this->htmlBase.'/nagvis/includes/js/frontendMessage.js',

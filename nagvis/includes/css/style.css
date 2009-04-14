@@ -235,3 +235,106 @@ table.infopage_hover_table td.label {
 table.infopage_hover_table label {
 	font-weight: bold;
 }
+
+/**
+ *
+ *  Message box
+ *
+ */
+ 
+#messageBoxDiv {
+	position: absolute;
+  left: 50%;
+  top: 50%;
+	
+	margin-left: -297px;
+	margin-top: -125px;
+
+	width:594px;
+	height:250px;
+	
+	/*margin:20 auto;*/
+	z-index: 1000;
+}
+
+#messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
+	border:1px solid #F00;
+}
+
+#messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
+	border:1px solid #F00;
+}
+
+#messageBoxDiv table.warning {
+	border:1px solid #FF0;
+}
+
+#messageBoxDiv table.unknown, #messageBoxDiv table.permission, #messageBoxDiv table.unreachable {
+	border:1px solid #FF9900;
+}
+
+#messageBoxDiv table.ok, #messageBoxDiv table.up {
+	border:1px solid #00B233;
+}
+
+#messageBoxDiv table.note {
+	border:1px solid #00F;
+}
+
+/* Style for the header area */
+
+#messageBoxDiv th {
+	font-style: italic;
+	text-align: center;
+	font-weight: bold;
+	color: black;
+	font-size: 26pt;
+}
+
+#messageBoxDiv th.error, #messageBoxDiv th.critical, #messageBoxDiv th.down {
+	background-color: #FF6666;
+}
+
+#messageBoxDiv th.warning {
+	background-color: #FFFF66;
+}
+
+#messageBoxDiv th.unknown, #messageBoxDiv th.permission, #messageBoxDiv th.unreachable {
+	background-color: #FFB200;
+}
+
+#messageBoxDiv th.ok, #messageBoxDiv th.up {
+	background-color: #99FF66;
+}
+
+#messageBoxDiv th.note {
+	background-color: #99CCFF;
+}
+
+/* Style for the message area */
+
+#messageBoxDiv td {
+	text-align: center;
+	vertical-align: middle;
+	font-size: 16pt;
+}
+
+#messageBoxDiv td.error, #messageBoxDiv td.critical, #messageBoxDiv td.down {
+	background-color: #FFB2B2;
+}
+
+#messageBoxDiv td.warning {
+	background-color: #FFFFCC;
+}
+
+#messageBoxDiv td.ok, #messageBoxDiv td.up {
+	background-color: #CCFF99;
+}
+
+#messageBoxDiv td.unknown, #messageBoxDiv td.permission, #messageBoxDiv td.unreachable {
+	background-color: #FFE566;
+}
+
+#messageBoxDiv td.note {
+	background-color: #CCE5FF;
+}

@@ -40,7 +40,6 @@ class WuiFrontend extends GlobalPage {
 		
 		$prop = Array('title'=> $CORE->MAINCFG->getValue('internal', 'title') . 'WUI',
 					  'cssIncludes'=>Array('../nagvis/includes/css/style.css',
-						                     '../nagvis/includes/css/frontendMessage.css',
 						                     './includes/css/wui.css',
 						                     './includes/css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array(
