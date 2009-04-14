@@ -72,7 +72,7 @@ table.hover_table td.stateWARNING {
 	background-color: #FFFF00;
 }
 
-table.hover_table td.stateCRITICAL, table.hover_table td.stateDOWN {
+table.hover_table td.stateCRITICAL, table.hover_table td.stateDOWN, table.hover_table td.stateUNREACHABLE {
 	background-color: #F83838;
 }
 
