@@ -37,6 +37,9 @@ var oFileAges;
 var aInitialMapObjects, aInitialMaps, aInitialRotations, aMapObjects, aMaps;
 var aRotations;
 
+// Initialize and define some other basic vars
+var iNow = Date.parse(new Date());
+
 // Define some state options
 var oStates = {};
 oStates.UNREACHABLE = {};

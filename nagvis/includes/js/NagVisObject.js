@@ -49,7 +49,7 @@ var NagVisObject = Base.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	setLastUpdate: function() {
-		this.lastUpdate = Date.parse(new Date());
+		this.lastUpdate = iNow;
 		
 		// Save datetime of the first state update (needed for hover parsing)
 		if(this.firstUpdate === null) {

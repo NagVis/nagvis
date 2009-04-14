@@ -44,19 +44,16 @@ var oContextTemplates = {};
 function getObjectsToUpdate(aObjs) {
 	eventlog("worker", "debug", "getObjectsToUpdate: Start");
 	var arrReturn = [];
-	var oDate = Date.parse(new Date());
 	
 	// Assign all object which need an update indexes to return Array
 	for(var i = 0, len = aObjs.length; i < len; i++) {
-		if(aObjs[i].lastUpdate <= (oDate-(oWorkerProperties.worker_update_object_states*1000))) {
+		if(aObjs[i].lastUpdate <= (iNow-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
 			if(aObjs[i].conf.type !== 'shape' || (aObjs[i].conf.type === 'shape' && aObjs[i].conf.enable_refresh && aObjs[i].conf.enable_refresh === '1')) {
 				arrReturn.push(i);
 			}
 		}
 	}
-	
-	oDate = null;
 	
 	// Now spread the objects in the available timeslots
 	var iNumTimeslots = Math.ceil(oWorkerProperties.worker_update_object_states / oWorkerProperties.worker_interval);
@@ -1096,8 +1093,10 @@ function runWorker(iCount, sType) {
 		}
 	} else {
 		/**
-		 * Do these actions every run (every second)
+		 * Do these actions every run (every second) excepting the first run 
 		 */
+		
+		iNow = Date.parse(new Date());
 		
 		// Countdown the rotation counter
 		// Not handled by ajax frontend. Reload the page with the new url
@@ -1195,7 +1194,7 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Update lastWorkerRun
-				oWorkerProperties.last_run = Date.parse(new Date());
+				oWorkerProperties.last_run = iNow;
 				
 				// Update the worker counter on maps
 				updateWorkerCounter();
@@ -1274,7 +1273,7 @@ function runWorker(iCount, sType) {
 				}*/
 				
 				// Update lastWorkerRun
-				oWorkerProperties.last_run = Date.parse(new Date());
+				oWorkerProperties.last_run = iNow;
 				
 				// Update the worker counter on maps
 				updateWorkerCounter();

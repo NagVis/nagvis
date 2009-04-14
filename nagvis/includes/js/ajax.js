@@ -103,7 +103,7 @@ function cleanupAjaxQueryCache() {
 	eventlog("ajax", "debug", "Removing old cached ajax queries");
 	for(var sKey in ajaxQueryCache) {
 		// If cache expired remove and shrink the array
-		if(Date.parse(new Date())-ajaxQueryCache[sKey].timestamp > ajaxQueryCacheLifetime) {
+		if(iNow - ajaxQueryCache[sKey].timestamp > ajaxQueryCacheLifetime) {
 			cleanupQueryCache(sKey);
 		}
 	}
@@ -133,7 +133,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	sUrl = sUrl.replace("+", "%2B");
 	
 	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
-	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && Date.parse(new Date())-ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
+	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && iNow - ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
 		eventlog("ajax", "debug", "Using cached query");
 		responseText = ajaxQueryCache[sUrl].response;
 		
@@ -152,7 +152,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		if(oRequest) {
 			// Save this options to oOpt (needed for query cache)
 			var url = sUrl;
-			var timestamp = Date.parse(new Date());
+			var timestamp = iNow;
 			
 			oRequest.open("GET", sUrl+"&timestamp="+timestamp, false);
 			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
