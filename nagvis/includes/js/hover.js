@@ -183,7 +183,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	var oSectionMacros = {};
 	
 	// Try to catch some error
-	if(!oObj.conf) {
+	if(oObj.conf === null) {
 		eventlog("hover-parsing", "critical", "Problem while parsing hover template");
 	}
 	

@@ -72,7 +72,7 @@ function initXMLHttpClient() {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function updateQueryCache(url,timestamp,response) {
+function updateQueryCache(url, timestamp, response) {
 	ajaxQueryCache[url] = { "timestamp": timestamp, "response": response };
 	eventlog("ajax", "debug", "Caching Query: "+url);
 }

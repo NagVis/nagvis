@@ -657,6 +657,7 @@ function setMapObjects(aMapObjectConf) {
 				oObj = new NagVisShape(aMapObjectConf[i]);
 			break;
 			default:
+				oObj = null;
 				alert('Error: Unknown object type');
 			break;
 		}
@@ -666,8 +667,9 @@ function setMapObjects(aMapObjectConf) {
 			aMapObjects.push(oObj);
 			
 			// Parse object to map
-			oObj.parse();
+			aMapObjects[aMapObjects.length-1].parse();
 		}
+		oObj = null;
 	}
 	eventlog("worker", "debug", "setMapObjects: End setting map objects");
 }
