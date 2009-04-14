@@ -107,13 +107,17 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	oMacros.obj_state = oObj.conf.state;
 	oMacros.obj_summary_state = oObj.conf.summary_state;
 	
-	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged === '1') {
+	// FIXME: Need to use == instead of === cause there are some inconsistences
+	// in the PHP code somewhere. This should be cleaned up
+	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged == 1) {
 		oMacros.obj_summary_acknowledged = '(Acknowledged)';
 	} else {
 		oMacros.obj_summary_acknowledged = '';
 	}
 	
-	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged === '1') {
+	// FIXME: Need to use == instead of === cause there are some inconsistences
+	// in the PHP code somewhere. This should be cleaned up
+	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged == 1) {
 		oMacros.obj_acknowledged = '(Acknowledged)';
 	} else {
 		oMacros.obj_acknowledged = '';
