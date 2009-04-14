@@ -107,25 +107,25 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	oMacros.obj_state = oObj.conf.state;
 	oMacros.obj_summary_state = oObj.conf.summary_state;
 	
-	if(oObj.conf.summary_problem_has_been_acknowledged) {
+	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged === '1') {
 		oMacros.obj_summary_acknowledged = '(Acknowledged)';
 	} else {
 		oMacros.obj_summary_acknowledged = '';
 	}
 	
-	if(oObj.conf.problem_has_been_acknowledged) {
+	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged === '1') {
 		oMacros.obj_acknowledged = '(Acknowledged)';
 	} else {
 		oMacros.obj_acknowledged = '';
 	}
 	
-	if(oObj.conf.summary_in_downtime) {
+	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime === 1) {
 		oMacros.obj_summary_in_downtime = '(Downtime)';
 	} else {
 		oMacros.obj_summary_in_downtime = '';
 	}
 	
-	if(oObj.conf.in_downtime) {
+	if(oObj.conf.in_downtime && oObj.conf.in_downtime === 1) {
 		oMacros.obj_in_downtime = '(Downtime)';
 	} else {
 		oMacros.obj_in_downtime = '';
