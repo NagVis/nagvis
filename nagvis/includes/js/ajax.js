@@ -78,6 +78,21 @@ function updateQueryCache(url, timestamp, response) {
 }
 
 /**
+ * Removes the query cache for a given url
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function cleanupQueryCache(sUrl) {
+	// Set to null in array
+	ajaxQueryCache[sUrl] = null;
+	
+	// Really remove key
+	delete ajaxQueryCache[sUrl];
+	
+	eventlog("ajax", "debug", "Removed cached ajax query:"+sUrl);
+}
+
+/**
  * Cleans up the ajax query cache. It removes the deprecated cache entries and
  * shrinks the cache array.
  *
@@ -89,13 +104,7 @@ function cleanupAjaxQueryCache() {
 	for(var sKey in ajaxQueryCache) {
 		// If cache expired remove and shrink the array
 		if(Date.parse(new Date())-ajaxQueryCache[sKey].timestamp > ajaxQueryCacheLifetime) {
-			// Set to null in array
-			ajaxQueryCache[sKey] = null;
-			
-			// Really remove key
-			delete ajaxQueryCache[sKey];
-			
-			eventlog("ajax", "debug", "Removed cached ajax query:"+sKey);
+			cleanupQueryCache(sKey);
 		}
 	}
 }
@@ -128,7 +137,14 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		eventlog("ajax", "debug", "Using cached query");
 		responseText = ajaxQueryCache[sUrl].response;
 		
-		sResponse = eval('( '+responseText+')');
+		// Prevent using invalid code in cache
+		if(responseText !== '') {
+			sResponse = eval('( '+responseText+')');
+		} else {
+			// Remove the invalid code from cache
+			cleanupQueryCache(sUrl);
+		}
+		
 		responseText = null;
 	} else {
 		var oRequest = initXMLHttpClient();
@@ -140,11 +156,29 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 			
 			oRequest.open("GET", sUrl+"&timestamp="+timestamp, false);
 			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
-			oRequest.send(null);
+			
+			try {
+				oRequest.send(null);
+			} catch(e) {
+				// Add frontend eventlog entry
+				eventlog("ajax", "critical", "Problem while ajax transaction");
+				eventlog("ajax", "debug", e.toString());
+				
+				// Handle application message/error
+				var oMsg = {};
+				oMsg.type = 'CRITICAL';
+				oMsg.message = "Problem while ajax transaction. Is the NagVis host reachable?";
+				oMsg.title = "Ajax transaction error";
+				frontendMessage(oMsg);
+				oMsg = null;
+				
+				// This bad response should not be cached
+				bCacheable = false;
+			}
 			
 			responseText = oRequest.responseText;
 			
-			if(responseText.replace(/\s+/g,'').length === 0) {
+			if(responseText.replace(/\s+/g, '').length === 0) {
 				if(bCacheable) {
 					// Cache that dialog
 					updateQueryCache(url, timestamp, '');
@@ -164,12 +198,14 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 					
 					// Handle application message/error
 					frontendMessage(oMsg);
+					oMsg = null;
 				} else if(responseText.match(/^NagVisError:/)) {
 					responseText = responseText.replace(/^NagVisError:/, '');
 					var oMsg = eval('( '+responseText+')');
 					
 					// Handle application message/error
 					frontendMessage(oMsg);
+					oMsg = null;
 					
 					// Retry after sleep of x seconds for x times
 					if(bRetryable) {
@@ -198,7 +234,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		oRequest = null;
 	}
 	
-	if(sResponse !== null) {
+	if(sResponse !== null && sResponse !== '') {
 		if(typeof frontendMessageHide == 'function') { 
 			frontendMessageHide();
 		}
