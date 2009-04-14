@@ -909,7 +909,6 @@ function parseOverviewMaps(aMapsConf) {
 	eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
 }
 
-
 /**
  * setOverviewRotations()
  *
@@ -938,6 +937,75 @@ function setOverviewRotations(aRotationsConf) {
 	}
 	
 	eventlog("worker", "debug", "setOverviewObjects: End setting rotations");
+}
+
+/**
+ * reparseMap()
+ *
+ * Reparses the map on e.g. changed map configuration
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function reparseMap(iMapCfgAge) {
+	var bReturn = false;
+	
+	// Get new map/object information from ajax handler
+	var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oPageProperties.map_name);
+	
+	// Only perform the reparsing actions when all information are there 
+	if(oMapBasics && oMapObjects) {
+		// Remove all old objects
+		var a = 0;
+		do {
+			if(aMapObjects[a] && typeof aMapObjects[a].remove === 'function') {
+				// Remove parsed object from map
+				aMapObjects[a].remove();
+				
+				// Set to null in array
+				aMapObjects[a] = null;
+				
+				// Remove element from map objects array
+				aMapObjects.splice(a,1);
+			} else {
+				a++;
+			}
+		} while(aMapObjects.length > a);
+		a = null;
+		
+		// Update timestamp for map configuration (No reparsing next time)
+		oFileAges.map_config = iMapCfgAge;
+			
+		// Set map basics
+		setMapBasics(oMapBasics);
+		
+		// Set map objects
+		setMapObjects(oMapObjects);
+		
+		// Bulk get all hover templates which are needed on the map
+		getHoverTemplates(aMapObjects);
+		setMapHoverUrls();
+		
+		// Assign the hover templates to the objects and parse them
+		parseHoverMenus(aMapObjects);
+		
+		
+		// Bulk get all context templates which are needed on the map
+		getContextTemplates(aMapObjects);
+		
+		// Assign the context templates to the objects and parse them
+		parseContextMenus(aMapObjects);
+		
+		bReturn = true;
+	} else {
+		bReturn = false;
+	}
+	
+	oMapBasics = null;
+	oMapObjects = null;
+	
+	return bReturn;
 }
 
 /**
@@ -1060,53 +1128,9 @@ function runWorker(iCount, sType) {
 				
 				// Check for changed map configuration
 				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name])) {
-					// Remove all old objects
-					var a = 0;
-					do {
-						if(aMapObjects[a] && typeof aMapObjects[a].remove === 'function') {
-							// Remove parsed object from map
-							aMapObjects[a].remove();
-							
-							// Set to null in array
-							aMapObjects[a] = null;
-							
-							// Remove element from map objects array
-							aMapObjects.splice(a,1);
-						} else {
-							a++;
-						}
-					} while(aMapObjects.length > a);
-					
-					// Update timestamp for map configuration (No reparsing next time)
-					oFileAges.map_config = oCurrentFileAges[oPageProperties.map_name];
-					
-					// Set map basics
-					var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);
-					if(oMapBasics) {
-						setMapBasics(oMapBasics);
+					if(reparseMap(oCurrentFileAges[oPageProperties.map_name]) === false) {
+						eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
 					}
-					oMapBasics = null;
-					
-					// Set map objects
-					var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oPageProperties.map_name);
-					if(oMapObjects) {
-						setMapObjects(oMapObjects);
-					}
-					oMapObjects = null;
-					
-					// Bulk get all hover templates which are needed on the map
-					getHoverTemplates(aMapObjects);
-          setMapHoverUrls();
-					
-					// Assign the hover templates to the objects and parse them
-					parseHoverMenus(aMapObjects);
-					
-					
-					// Bulk get all context templates which are needed on the map
-					getContextTemplates(aMapObjects);
-					
-					// Assign the context templates to the objects and parse them
-					parseContextMenus(aMapObjects);
 				}
 				
 				/*
