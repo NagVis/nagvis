@@ -241,7 +241,9 @@ function getContextTemplates(aObjs) {
 	for(var a = 0, len = aObjs.length; a < len; a++) {
 		// Ignore objects which
 		// a) have a disabled menu
-		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu === '1' && oContextTemplates[aObjs[a].conf.context_template] !== '') {
+		// FIXME: conf.context_menu has inconsistent types (with and without quotes)
+		//        fix this and  === can be used here
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu == 1 && oContextTemplates[aObjs[a].conf.context_template] !== '') {
 			oContextTemplates[aObjs[a].conf.context_template] = '';
 		}
 	}
@@ -628,10 +630,9 @@ function setMapBasics(oProperties) {
 function setMapObjects(aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
 	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
-		var sType = aMapObjectConf[i].type;
 		var oObj;
 		
-		switch (sType) {
+		switch (aMapObjectConf[i].type) {
 			case 'host':
 				oObj = new NagVisHost(aMapObjectConf[i]);
 			break;
