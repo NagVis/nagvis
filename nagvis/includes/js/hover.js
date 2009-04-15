@@ -52,13 +52,13 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 	var mapName = '';
 	var childsHtmlCode = '';
 	
-	if(typeof(oPageProperties) !== 'undefined' && oPageProperties !== null) {
+	if(typeof(oPageProperties) != 'undefined' && oPageProperties != null) {
 		mapName = oPageProperties.map_name;
 	}
 	
 	var rowHtmlCode = getHoverTemplateChildCode(sTemplateCode);
 	
-	if(rowHtmlCode !== '' && oObj.members && oObj.members.length > 0) {
+	if(rowHtmlCode != '' && oObj.members && oObj.members.length > 0) {
 		// Loop all child objects until all looped or the child limit is reached
 		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
 			if(i < oObj.conf.hover_childs_limit) {
@@ -164,7 +164,7 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
-	if(replaceChild !== '1' && oObj.conf.hover_childs_show && oObj.conf.hover_childs_show === '1' && typeof oObj.conf.num_members !== 'undefined' && oObj.conf.num_members > 0) {
+	if(replaceChild != '1' && oObj.conf.hover_childs_show && oObj.conf.hover_childs_show == '1' && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0) {
 		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
 	}
 	
@@ -191,7 +191,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		eventlog("hover-parsing", "critical", "Problem while parsing hover template");
 	}
 	
-	if(oObj.conf.type && oObj.conf.type !== '') {
+	if(oObj.conf.type && oObj.conf.type != '') {
 		oMacros.obj_type = oObj.conf.type;
 	}
 	
@@ -203,7 +203,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On child service objects in hover menu replace obj_name with 
 	// service_description
-	if(replaceChild === '1' && oObj.conf.type === 'service') {
+	if(replaceChild == '1' && oObj.conf.type === 'service') {
 		oMacros.obj_name = oObj.conf.service_description;
 	} else {
 		oMacros.obj_name = oObj.conf.name;
@@ -227,7 +227,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		oMacros.obj_notes = '';
 	}
 	
-	if(replaceChild !== '1' && oObj.conf.type !== 'map') {
+	if(replaceChild != '1' && oObj.conf.type !== 'map') {
 		oMacros.obj_backendid = oObj.conf.backend_id;
 		
 		oMacros.obj_backend_instancename = oObj.conf.backend_instancename;
@@ -258,19 +258,19 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	}
 	
 	// Replace servicegroup sections when not servicegroup object
-	if(oObj.conf.type != 'servicegroup') {
+	if(oObj.conf.type !== 'servicegroup') {
 		oSectionMacros.servicegroup = '<!--\\sBEGIN\\sservicegroup\\s-->.+?<!--\\sEND\\sservicegroup\\s-->';
 	}
 	
 	// Macros which are only for servicegroup childs
-	if(replaceChild === '1' && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service') {
+	if(replaceChild == '1' && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service') {
 		oMacros.obj_name1 = oObj.parent_name;
 	} else {
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
 	}
 	
 	// Replace child section when unwanted
-	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show !== '1') || typeof oObj.conf.num_members === 'undefined' || oObj.conf.num_members === 0) {
+	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1') || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0) {
 		oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
 	}
 	
@@ -301,7 +301,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	for (var key in oMacros) {
 		var regex = new RegExp('\\['+key+'\\]', 'g');
 		// Search before matching - saves some time
-		if(sTemplateCode.search(regex) !== -1) {
+		if(sTemplateCode.search(regex) != -1) {
 			sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
 		}
 		regex = null;
@@ -312,7 +312,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	iChildEnd = null;
 	
 	// Re-add the clean child code
-	if(sChildCode !== '') {
+	if(sChildCode != '') {
 		var regex = new RegExp('<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->', 'gm');
 		
 		if(sTemplateCode.search(regex) !== -1) {
