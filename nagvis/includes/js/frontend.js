@@ -49,7 +49,7 @@ function getObjectsToUpdate(aObjs) {
 	for(var i = 0, len = aObjs.length; i < len; i++) {
 		if(aObjs[i].lastUpdate <= (iNow-(oWorkerProperties.worker_update_object_states*1000))) {
 			// Do not update shapes where enable_refresh=0
-			if(aObjs[i].conf.type !== 'shape' || (aObjs[i].conf.type === 'shape' && aObjs[i].conf.enable_refresh && aObjs[i].conf.enable_refresh === '1')) {
+			if(aObjs[i].conf.type !== 'shape' || (aObjs[i].conf.type === 'shape' && aObjs[i].conf.enable_refresh && aObjs[i].conf.enable_refresh == '1')) {
 				arrReturn.push(i);
 			}
 		}
@@ -203,7 +203,7 @@ function getHoverTemplates(aObjs) {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do not use hover_url
-		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu === '1' && (!aObjs[a].conf.hover_url || aObjs[a].conf.hover_url === '')) {
+		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu == '1' && (!aObjs[a].conf.hover_url || aObjs[a].conf.hover_url === '')) {
 			oHoverTemplates[aObjs[a].conf.hover_template] = '';
 		}
 	}
