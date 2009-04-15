@@ -436,7 +436,7 @@ function getRandom(min, max) {
 		return min;
 	}
 	
-	return min + parseInt(Math.random() * (max-min+1, 10), 0);
+	return min + parseInt(Math.random() * (max-min+1), 0);
 }
 
 function cloneObject(what) {
