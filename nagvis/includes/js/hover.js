@@ -123,13 +123,13 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 		oMacros.obj_acknowledged = '';
 	}
 	
-	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime === 1) {
+	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime == 1) {
 		oMacros.obj_summary_in_downtime = '(Downtime)';
 	} else {
 		oMacros.obj_summary_in_downtime = '';
 	}
 	
-	if(oObj.conf.in_downtime && oObj.conf.in_downtime === 1) {
+	if(oObj.conf.in_downtime && oObj.conf.in_downtime == 1) {
 		oMacros.obj_in_downtime = '(Downtime)';
 	} else {
 		oMacros.obj_in_downtime = '';

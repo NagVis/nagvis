@@ -285,7 +285,7 @@ function getContextTemplates(aObjs) {
  */
 function parseContextMenus(aObjs) {
 	for(var a = 0; a < aObjs.length; a++) {
-		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu !== '0') {
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu != '0') {
 			aObjs[a].parseContextMenu();
 		}
 	}
@@ -329,6 +329,8 @@ function getFaviconImage(oObj) {
 		sFavicon = 'downtime';
 	} else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == '1') {
 		sFavicon = 'ack';
+	} else if(oObj.summary_state.toLowerCase() == 'unreachable') {
+		sFavicon = 'down';
 	} else {
 		sFavicon = oObj.summary_state.toLowerCase();
 	}
