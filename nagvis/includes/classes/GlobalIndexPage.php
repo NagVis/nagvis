@@ -64,7 +64,7 @@ class GlobalIndexPage {
 		$ret .= 'aRotations=Array();'."\n";
 		
 		// Kick of the worker
-		$ret .= 'addDOMLoadEvent(runWorker(0, \'overview\'));';
+		$ret .= 'addDOMLoadEvent(function(){runWorker(0, \'overview\')});';
 		
 		return $ret;
 	}
