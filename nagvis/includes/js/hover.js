@@ -265,7 +265,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	// Macros which are only for servicegroup childs
 	if(replaceChild == '1' && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service') {
 		oMacros.obj_name1 = oObj.parent_name;
-	} else {
+	} else if(replaceChild == '0' && oObj.conf.type !== 'servicegroup') {
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
 	}
 	
