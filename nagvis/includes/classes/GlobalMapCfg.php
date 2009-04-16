@@ -1230,7 +1230,7 @@ class GlobalMapCfg {
 										$types[$sObjType]++;
 									} else {
 										// unknown object type
-										new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject','TYPE~'.$type));
+										new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
 										return FALSE;
 									}
 								} else {
