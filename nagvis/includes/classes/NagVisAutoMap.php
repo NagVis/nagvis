@@ -178,7 +178,7 @@ class NagVisAutoMap extends GlobalMap {
 		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
 		
 		// Kick of the worker
-		$ret .= 'addLoadEvent(runWorker(0, \'automap\'));';
+		$ret .= 'addDOMLoadEvent(runWorker(0, \'automap\'));';
 		
 		return $ret;
 	}
