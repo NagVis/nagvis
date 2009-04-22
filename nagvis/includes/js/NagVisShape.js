@@ -84,7 +84,13 @@ var NagVisShape = NagVisStatelessObject.extend({
 		
 		var oIcon = document.createElement('img');
 		oIcon.setAttribute('id', this.objId+'-icon');
-		oIcon.src = this.conf.icon+'?_t='+iNow;
+		
+		if(this.conf.icon.indexOf('?') !== -1) {
+			oIcon.src = this.conf.icon+'&_t='+iNow;
+		} else {
+			oIcon.src = this.conf.icon+'?_t='+iNow;
+		}
+		
 		oIcon.alt = this.conf.type;
 		
 		if(this.conf.url && this.conf.url !== '') {
