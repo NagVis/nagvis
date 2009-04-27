@@ -452,7 +452,9 @@ class GlobalMainCfg {
 			//$this->validConfig['backend']['options'][$backend] = $class->getValidConfig();
 			// I'd prefer to use the above but for the moment I use the fix below
 			
-			$this->validConfig['backend']['options'][$backend] = call_user_func(array('GlobalBackend'.$backend, 'getValidConfig'));
+			if(method_exists($class, 'getValidConfig')) {
+				$this->validConfig['backend']['options'][$backend] = call_user_func(Array('GlobalBackend'.$backend, 'getValidConfig'));
+			}
 		}
 	}
 	
@@ -641,7 +643,11 @@ class GlobalMainCfg {
 				if(isset($this->validConfig[$type]) || ereg('^(backend|rotation)_', $type)) {
 					// loop validConfig for checking: => missing "must" atributes
 					if(ereg('^backend_', $type)) {
-						$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+						if(is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
+							$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+						} else {
+							$arrValidConfig = $this->validConfig['backend'];
+						}
 					} elseif(ereg('^rotation_', $type)) {
 						$arrValidConfig = $this->validConfig['rotation'];
 					} else {
@@ -663,7 +669,11 @@ class GlobalMainCfg {
 					foreach($vars AS $key => $val) {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
-								$arrValidConfig = array_merge($this->validConfig['backend'],$this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+								if(is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
+									$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+								} else {
+									$arrValidConfig = $this->validConfig['backend'];
+								}
 							} elseif(ereg('^rotation_', $type)) {
 								$arrValidConfig = $this->validConfig['rotation'];
 							} else {
