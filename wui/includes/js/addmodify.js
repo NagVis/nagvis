@@ -25,6 +25,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
+var bFormIsValid = true;
+
 function printObjects(aObjects,oOpt) {
 	var type = oOpt.type;
 	var field = oOpt.field;
@@ -84,6 +86,12 @@ function validateMapCfgForm() {
 	var x = '';
 	var y = '';
 	
+	// Terminate fast when validateMapConfigFieldValue marked the form contents
+	// as invalid
+	if(bFormIsValid === false) {
+		return false;
+	}
+	
 	for(var i=0, len = document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
 			var sName = document.addmodify.elements[i].name;
@@ -110,7 +118,7 @@ function validateMapCfgForm() {
 			}
 			if(document.addmodify.elements[i].name == 'x') {
 				x=document.addmodify.elements[i].value;
-			}			
+			}
 			if(document.addmodify.elements[i].name == 'y') {
 				y=document.addmodify.elements[i].value;
 			}
@@ -212,6 +220,7 @@ function validateMapCfgForm() {
 			}
 		}
 	}
+	
 	return true;
 }
 
@@ -289,7 +298,9 @@ function validateMapConfigFieldValue(oField) {
 	
 	// Only validate when field type not changed
 	if(!bChanged) {
-		return validateValue(oField.name, oField.value, validMapConfig[document.addmodify.type.value][oField.name].match);
+		bFormIsValid = validateValue(oField.name, oField.value, validMapConfig[document.addmodify.type.value][oField.name].match);
+		
+		return bFormIsValid;
 	} else {
 		return false;
 	}
