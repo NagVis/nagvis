@@ -643,7 +643,8 @@ class GlobalMainCfg {
 				if(isset($this->validConfig[$type]) || ereg('^(backend|rotation)_', $type)) {
 					// loop validConfig for checking: => missing "must" atributes
 					if(ereg('^backend_', $type)) {
-						if(is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
+						if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]) 
+							 && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
 							$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
 						} else {
 							$arrValidConfig = $this->validConfig['backend'];
@@ -669,7 +670,8 @@ class GlobalMainCfg {
 					foreach($vars AS $key => $val) {
 						if(!ereg('^comment_',$key)) {
 							if(ereg('^backend_', $type)) {
-								if(is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
+								if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]) 
+									 && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
 									$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
 								} else {
 									$arrValidConfig = $this->validConfig['backend'];
