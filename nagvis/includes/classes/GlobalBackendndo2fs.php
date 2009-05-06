@@ -256,7 +256,14 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 				// Add Additional information to array
 				$arrReturn['perfdata'] = $oStatus->PERFDATA;
 				$arrReturn['last_check'] = $oStatus->LASTHOSTCHECK;
-				$arrReturn['next_check'] = $oStatus->NEXTHOSTCHECK;
+				
+				// It seems in some cases the option is not set
+				if(isset($oStatus->NEXTHOSTCHECK)) {
+					$arrReturn['next_check'] = $oStatus->NEXTHOSTCHECK;
+				} else {
+					$arrReturn['next_check'] = 0;
+				}
+				
 				$arrReturn['state_type'] = $oStatus->STATETYPE;
 				$arrReturn['current_check_attempt'] = $oStatus->CURRENTCHECKATTEMPT;
 				$arrReturn['max_check_attempts'] = $oStatus->MAXCHECKATTEMPTS;
@@ -361,7 +368,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 					$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 					
 					// Replace some bad chars
-					$serviceName = strtr($serviceName,' /','__');
+					$serviceName = strtr($serviceName,' /:\\','____');
 					
 					if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName)
 					  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/CONFIG')) {
@@ -388,7 +395,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 					
 					foreach($oServices->{$hostName} AS $service) {
 						// Replace some bad chars
-						$service = strtr($service,' /','__');
+						$service = strtr($service,' /:\\','____');
 						
 						if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service)
 						  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG')) {
@@ -457,7 +464,14 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 						
 						$arrTmpReturn['perfdata'] = $aServObj[$i][1]->PERFDATA;
 						$arrTmpReturn['last_check'] = $aServObj[$i][1]->LASTSERVICECHECK;
-						$arrTmpReturn['next_check'] = $aServObj[$i][1]->NEXTSERVICECHECK;
+						
+						// It seems this is not set in some cases
+						if(isset($aServObj[$i][1]->NEXTSERVICECHECK)) {
+							$arrTmpReturn['next_check'] = $aServObj[$i][1]->NEXTSERVICECHECK;
+						} else {
+							$arrTmpReturn['next_check'] = 0;
+						}
+						
 						$arrTmpReturn['state_type'] = $aServObj[$i][1]->STATETYPE;
 						$arrTmpReturn['current_check_attempt'] = $aServObj[$i][1]->CURRENTCHECKATTEMPT;
 						$arrTmpReturn['max_check_attempts'] = $aServObj[$i][1]->MAXCHECKATTEMPTS;
