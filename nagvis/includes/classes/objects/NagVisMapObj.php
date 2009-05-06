@@ -245,7 +245,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 				}
 				
 				if(method_exists($OBJ,'getSummaryState')) {
-					$arrStates[$OBJ->getSummaryState()]++;
+					$sState = $OBJ->getSummaryState();
+					if(isset($arrStates[$sState])) {
+						$arrStates[$sState]++;
+					}
 				}
 			}
 			
