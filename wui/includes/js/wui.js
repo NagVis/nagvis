@@ -225,20 +225,27 @@ function get_click_pos(e) {
 
 function moveMapObject(oObj) {
 	// Save old coords for later return when some problem occured
-	dd.obj.oldX = dd.obj.x;
-	dd.obj.oldY = dd.obj.y;
+	oObj.oldX = oObj.x;
+	oObj.oldY = oObj.y;
 	
 	// Check if this is a box
-	if(dd.obj.name.search('box_') != -1) {
+	if(oObj.name.search('box_') != -1) {
 		// When this object has a relative coordinated label, then move this too
-		var sLabelName = dd.obj.name.replace('box_','rel_label_');
+		var sLabelName = oObj.name.replace('box_','rel_label_');
 		var oLabel = document.getElementById(sLabelName);
 		if(oLabel) {
 			ADD_DHTML(sLabelName);
-			dd.obj.addChild(sLabelName);
+			oObj.addChild(sLabelName);
 		}
 		oLabel = null;
 	}
+}
+
+function dragMapObject(oObj) {
+	// Hide the hover menu while dragging
+	// This function should not be called outside wz_tooltip (Not public) but the
+	// normal function UnTip() does not work here
+	tt_Hide();
 }
 
 function saveObjectAfterMoveAndDrop(oObj) {

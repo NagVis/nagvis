@@ -1399,7 +1399,9 @@ function my_PickFunc() {
 
 /* my_DragFunc IS CALLED WHILE AN ITEM IS DRAGGED
 See the description of my_PickFunc above for what's accessible from here. */
-function my_DragFunc() {}
+function my_DragFunc() {
+	dragMapObject(dd.obj);
+}
 
 /* my_ResizeFunc IS CALLED WHILE AN ITEM IS RESIZED
 See the description of my_PickFunc above for what's accessible from here. */
