@@ -446,7 +446,8 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 					// that the host has no services is added by the frontend
 				}
 			} else {
-				for($i = 0; $i < $numServices; $i++) {
+				$iSize = count($aServObj);
+				for($i = 0; $i < $iSize; $i++) {
 					$arrTmpReturn = Array();
 					
 					// Error handling: Service with no configuration
