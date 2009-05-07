@@ -29,6 +29,27 @@
 var _replaceContext = false;
 var _openContextMenus = [];
 
+/**
+ * Checks if a context menu is open at the moment
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function contextOpen() {
+	var bReturn;
+	if(_openContextMenus.length > 0) {
+		bReturn = true;
+	} else {
+		bReturn = false;
+	}
+	
+	return bReturn
+}
+
+/**
+ * Hides all open context menus
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 function contextHide() {
 	// Loop all open context menus
 	while(_openContextMenus.length > 0) {

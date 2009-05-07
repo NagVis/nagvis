@@ -350,11 +350,14 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 }
 
 function displayHoverMenu(sHoverCode, iHoverDelay) {
-	// Change cursor to "hand" when displaying hover menu
-	document.body.style.cursor = 'pointer';
-	
-	// Everything seems ok, display the hover menu
-	overlib(sHoverCode, WRAP, VAUTO, DELAY, iHoverDelay*1000);
+	// Only show up hover menu when no context menu is opened
+	if(contextOpen() === false) {
+		// Change cursor to "hand" when displaying hover menu
+		document.body.style.cursor = 'pointer';
+		
+		// Everything seems ok, display the hover menu
+		overlib(sHoverCode, WRAP, VAUTO, DELAY, iHoverDelay*1000);
+	}
 }
 
 /**
