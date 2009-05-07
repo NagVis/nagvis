@@ -416,6 +416,26 @@ function escapeGetValue(sStr) {
 		sStr = sStr.replace('&', '%26');
 	}
 	
+	if(sStr.search('#') !== -1) {
+		sStr = sStr.replace('#', '%23');
+	}
+	
+	if(sStr.search(':') !== -1) {
+		sStr = sStr.replace(':', '%3A');
+	}
+	
+	if(sStr.search(' ') !== -1) {
+		sStr = sStr.replace(' ', '%20');
+	}
+	
+	if(sStr.search('=') !== -1) {
+		sStr = sStr.replace('=', '%3D');
+	}
+	
+	if(sStr.search('\\?') !== -1) {
+		sStr = sStr.replace('\\?', '%3F');
+	}
+	
 	return sStr;
 }
 
