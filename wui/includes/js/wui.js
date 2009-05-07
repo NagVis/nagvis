@@ -355,16 +355,16 @@ function formSubmit(formId, action) {
 		// Filter helper fields
 		if(aFields[i].name.charAt(0) !== '_') {
 			if (aFields[i].type == "hidden") {
-				getstr += aFields[i].name + "=" + escapeGetValue(aFields[i].value) + "&";
+				getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
 			}
 			
 			if (aFields[i].type == "text") {
-				getstr += aFields[i].name + "=" + escapeGetValue(aFields[i].value) + "&";
+				getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
 			}
 			
 			if (aFields[i].type == "checkbox") {
 				if (aFields[i].checked) {
-					getstr += aFields[i].name + "=" + escapeGetValue(aFields[i].value) + "&";
+					getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
 				} else {
 					getstr += aFields[i].name + "=&";
 				}
@@ -372,7 +372,7 @@ function formSubmit(formId, action) {
 			
 			if (aFields[i].type == "radio") {
 				if (aFields[i].checked) {
-					getstr += aFields[i].name + "=" + escapeGetValue(aFields[i].value) + "&";
+					getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
 				}
 			}
 		}
@@ -383,7 +383,7 @@ function formSubmit(formId, action) {
 	for (var i = 0, len = aFields.length; i < len; i++) {
 		// Filter helper fields
 		if(aFields[i].name.charAt(0) !== '_') {
-			getstr += aFields[i].name + "=" + escapeGetValue(aFields[i].options[aFields[i].selectedIndex].value) + "&";
+			getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[aFields[i].selectedIndex].value) + "&";
 		}
 	}
 	
@@ -402,41 +402,6 @@ function formSubmit(formId, action) {
 	document.location.href='./index.php?map='+mapname;
 	
 	return true;
-}
-
-/**
- * escapeGetValue
- *
- * Escapes some evil signs in the get parameters
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function escapeGetValue(sStr) {
-	if(sStr.search('&') !== -1) {
-		sStr = sStr.replace('&', '%26');
-	}
-	
-	if(sStr.search('#') !== -1) {
-		sStr = sStr.replace('#', '%23');
-	}
-	
-	if(sStr.search(':') !== -1) {
-		sStr = sStr.replace(':', '%3A');
-	}
-	
-	if(sStr.search(' ') !== -1) {
-		sStr = sStr.replace(' ', '%20');
-	}
-	
-	if(sStr.search('=') !== -1) {
-		sStr = sStr.replace('=', '%3D');
-	}
-	
-	if(sStr.search('\\?') !== -1) {
-		sStr = sStr.replace('\\?', '%3F');
-	}
-	
-	return sStr;
 }
 
 /**

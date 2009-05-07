@@ -124,7 +124,7 @@ var NagVisObject = Base.extend({
 		oMacros.address = this.conf.address;
 		
 		if(this.conf.type === 'service') {
-			oMacros.service_description = this.conf.service_description;
+			oMacros.service_description = escapeUrlValues(this.conf.service_description);
 		} else {
 			oSectionMacros.service = '<!--\\sBEGIN\\sservice\\s-->.+?<!--\\sEND\\sservice\\s-->';
 		}

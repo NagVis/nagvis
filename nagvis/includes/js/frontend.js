@@ -546,7 +546,7 @@ function refreshMapObject(objId) {
 	// Create request string
 	var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
 	if(service_description) {
-		sUrlPart = sUrlPart + '&n2[]='+service_description;
+		sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 	} else {
 		sUrlPart = sUrlPart + '&n2[]=';
 	}
@@ -1164,10 +1164,7 @@ function runWorker(iCount, sType) {
 							// Create request string
 							var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
 							if(service_description) {
-								// Replace # cause the could confuse the url parsing
-								service_description = service_description.replace('#','%23');
-								
-								sUrlPart = sUrlPart + '&n2[]='+service_description;
+								sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 							} else {
 								sUrlPart = sUrlPart + '&n2[]=';
 							}
@@ -1242,7 +1239,7 @@ function runWorker(iCount, sType) {
 						// Create request url part for this object
 						var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
 						if(service_description) {
-							sUrlPart = sUrlPart + '&n2[]='+service_description;
+							sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 						} else {
 							sUrlPart = sUrlPart + '&n2[]=';
 						}

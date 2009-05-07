@@ -575,6 +575,41 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 }
 
 /**
+ * escapeUrlValues
+ *
+ * Escapes some evil signs in the url parameters
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function escapeUrlValues(sStr) {
+	if(sStr.search('&') !== -1) {
+		sStr = sStr.replace('&', '%26');
+	}
+	
+	if(sStr.search('#') !== -1) {
+		sStr = sStr.replace('#', '%23');
+	}
+	
+	if(sStr.search(':') !== -1) {
+		sStr = sStr.replace(':', '%3A');
+	}
+	
+	if(sStr.search(' ') !== -1) {
+		sStr = sStr.replace(' ', '%20');
+	}
+	
+	if(sStr.search('=') !== -1) {
+		sStr = sStr.replace('=', '%3D');
+	}
+	
+	if(sStr.search('\\?') !== -1) {
+		sStr = sStr.replace('\\?', '%3F');
+	}
+	
+	return sStr;
+}
+
+/**
  * Function to dumping arrays/objects in javascript for debugging purposes
  * Taken from http://refactormycode.com/codes/226-recursively-dump-an-object
  *
