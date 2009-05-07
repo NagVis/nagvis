@@ -362,6 +362,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 		} else {
 			$arrReturn = Array();
 			$aServObj = Array();
+			$numServices = 0;
 			
 			if(isset($serviceName) && $serviceName != '') {
 				if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
@@ -382,11 +383,17 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 						
 						// No status information: Service is pending
 						$aServObj[] = Array($oConfig, null);
+						
+						// Count the services which are matching
+						$numServices++;
 					} else {
 						$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/CONFIG'));
 						$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$serviceName.'/STATUS'));
 						
 						$aServObj[] = Array($oConfig, $oStatus);
+						
+						// Count the services which are matching
+						$numServices++;
 					}
 				}
 			} else {
@@ -411,6 +418,9 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 							
 							// No status information: Service is pending
 							$aServObj[] = Array($oConfig, null);
+							
+							// Count the services which are matching
+							$numServices++;
 						} else {
 							
 							// Read config and status informations
@@ -418,12 +428,14 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 							$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS'));
 							
 							$aServObj[] = Array($oConfig, $oStatus);
+							
+							// Count the services which are matching
+							$numServices++;
 						}
 					}
 				}
 			}
 			
-			$numServices = count($aServObj);
 			if($numServices <= 0) {
 				if(isset($serviceName) && $serviceName != '') {
 					$arrReturn['state'] = 'ERROR';
