@@ -454,6 +454,7 @@ class GlobalMainCfg {
 			
 			if(method_exists($class, 'getValidConfig')) {
 				$this->validConfig['backend']['options'][$backend] = call_user_func(Array('GlobalBackend'.$backend, 'getValidConfig'));
+				//$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
 			}
 		}
 	}
