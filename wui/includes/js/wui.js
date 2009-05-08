@@ -281,10 +281,12 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			// Add + sign to mark relative positive coords (On negative relative coord
 			// the - sign is added automaticaly
 			if(x >= 0) {
-				x = '+'+x;
+				// %2B is escaped +
+				x = '%2B'+x;
 			}
 			if(y >= 0) {
-				y = '+'+y;
+				// %2B is escaped +
+				y = '%2B'+y;
 			}
 		} else {
 			x = oObj.x;
