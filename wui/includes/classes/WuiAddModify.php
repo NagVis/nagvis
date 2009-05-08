@@ -316,6 +316,13 @@ class WuiAddModify extends GlobalPage {
 						$options[] = $this->LANG->getText('manualInput');
 						
 						$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $selected, $prop['must'], $onChange, '', $style, $class);
+						
+						/* Add helper fields (Hidden by default and ignored on form submit)
+						 * These helper fields will be displayed when the fields are changed
+						 * to manual input. The user enters the text here and the text is set
+						 * as value of the select fields on submit.
+						 */
+						$ret .= $this->FORM->getInputLine($propname, '_inp_'.$propname, $selected, $prop['must'], $onChange, 'display:none ', $class);
 					}
 					
 					// Toggle depending fields

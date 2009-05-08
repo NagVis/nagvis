@@ -392,7 +392,13 @@ function formSubmit(formId, action) {
 	for (var i = 0, len = aFields.length; i < len; i++) {
 		// Filter helper fields
 		if(aFields[i].name.charAt(0) !== '_') {
-			getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[aFields[i].selectedIndex].value) + "&";
+			
+			// Check if the value of the input helper field should be used
+			if(aFields[i].options[aFields[i].selectedIndex].value === lang['manualInput']) {
+				getstr += aFields[i].name + "=" + escapeUrlValues(document.getElementById('_inp_'+aFields[i].name).value) + "&";
+			} else {
+				getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[aFields[i].selectedIndex].value) + "&";
+			}
 		}
 	}
 	
@@ -422,13 +428,18 @@ function formSubmit(formId, action) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function toggleDefaultOption(sName) {
+function toggleDefaultOption(sName, bOverrideCurrentValue) {
 	var oField = document.getElementById(sName);
 	var oFieldDefault = document.getElementById('_'+sName);
 	
+	if(typeof bOverrideCurrentValue === 'undefined') {
+		bOverrideCurrentValue = false;
+	}
+	
 	if(oField && oFieldDefault) {
 		// Set option only when the field is emtpy and the default value has a value
-		if(oField.value === '' && oFieldDefault.value !== '') {
+		// Added override flag to ignore the current value
+		if((bOverrideCurrentValue === true || (bOverrideCurrentValue === false && oField.value === '')) && oFieldDefault.value !== '') {
 			// Set value to default value
 			oField.value = oFieldDefault.value;
 			

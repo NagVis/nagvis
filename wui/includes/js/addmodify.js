@@ -72,8 +72,7 @@ function printObjects(aObjects,oOpt) {
 	// Fallback to input field when configured value could not be selected or
 	// the list is empty
 	if((selected != '' && !bSelected) || !aObjects || aObjects.length <= 0) {
-		oField.parentNode.innerHTML = '<input id="'+oField.name+'" name="'+oField.name+'" value="" />';
-		document.addmodify.elements[field].value = selected;
+		toggleFieldType(oField.name, oField.value)
 	}
 }
 
@@ -232,44 +231,71 @@ function validateMapCfgForm() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function toggleDependingFields(name, value) {
-	for(var i=0, len=document.addmodify.elements.length; i < len; i++) {
-		if(document.addmodify.elements[i].type != 'hidden' && document.addmodify.elements[i].type != 'submit') {
-			var sTypeName = document.addmodify.type.value;
-			var sFieldName = document.addmodify.elements[i].name;
-			
-			// Show option fields when parent field value is equal and hide when 
-			// parent field value differs
-			if(validMapConfig[sTypeName][sFieldName]['depends_on'] === name
-				 && validMapConfig[sTypeName][sFieldName]['depends_value'] !== value) {
+	var aFields = document.addmodify.elements;
+	
+	for(var i = 0, len = aFields.length; i < len; i++) {
+		// Filter helper fields
+		if(aFields[i].name.charAt(0) !== '_') {
+			if(aFields[i].type != 'hidden' && aFields[i].type != 'submit') {
+				var sTypeName = document.addmodify.type.value;
+				var sFieldName = aFields[i].name;
 				
-				document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
-			} else if(validMapConfig[sTypeName][sFieldName]['depends_on'] === name
-				 && validMapConfig[sTypeName][sFieldName]['depends_value'] === value) {
-				
-				document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
+				// Show option fields when parent field value is equal and hide when 
+				// parent field value differs
+				if(validMapConfig[sTypeName][sFieldName]['depends_on'] === name
+					 && validMapConfig[sTypeName][sFieldName]['depends_value'] !== value) {
+					
+					document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
+				} else if(validMapConfig[sTypeName][sFieldName]['depends_on'] === name
+					 && validMapConfig[sTypeName][sFieldName]['depends_value'] === value) {
+					
+					document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
+				}
 			}
 		}
 	}
+	
+	aFields = null;
 }
 
 /**
- * changeFieldToInput
+ * toggleFieldType
  *
- * Change the field type from select to input
+ * Changes the field type from select to input and vice versa
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function changeFieldToInput(sName, sValue) {
+function toggleFieldType(sName, sValue) {
 	var bReturn = false;
+	var sBaseName;
+	var bInputHelper = false;
+	
+	if(sName.indexOf('_inp_') !== -1) {
+		sBaseName = sName.replace('_inp_', '');
+		bInputHelper = true;
+	} else {
+		sBaseName = sName;
+	}
 	
 	// Check if the field should be changed
-	if(sValue === lang['manualInput']) {
-		var oField = document.getElementById(sName);
+	// this is toggled on
+	// a) Select field set to "Manual Input..." or
+	// b) Input helper field set to ""
+	if((bInputHelper == false && sValue === lang['manualInput']) || (bInputHelper === true && sValue == '')) {
+		var oSelectField = document.getElementById(sBaseName);
+		var oInputField = document.getElementById('_inp_' + sBaseName);
 		
-		// Change the field to input field
-		oField.parentNode.innerHTML = '<input id="'+sName+'" name="'+sName+'" value="" onchange="validateMapConfigFieldValue(this)" />';
+		if(bInputHelper == false) {
+			oSelectField.parentNode.parentNode.style.display = 'none';
+			oInputField.parentNode.parentNode.style.display = '';
+		} else {
+			oSelectField.parentNode.parentNode.style.display = '';
+			oInputField.parentNode.parentNode.style.display = 'none';
+		}
 		
-		oField = null;
+		oInputField = null;
+		oSelectField = null;
+		
 		bReturn = true;
 	}
 	
@@ -285,20 +311,32 @@ function changeFieldToInput(sName, sValue) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function validateMapConfigFieldValue(oField) {
+	var sName;
+	var bInputHelper = false;
+	var bChanged;
+	
+	if(oField.name.indexOf('_inp_') !== -1) {
+		sName = oField.name.replace('_inp_', '');
+		bInputHelper = true;
+	} else {
+		sName = oField.name;
+	}
+			
 	// Check if some fields depend on this. If so: Add a javacript 
 	// event handler function to toggle these fields
-	toggleDependingFields(oField.name, oField.value);
+	toggleDependingFields(sName, oField.value);
 	
 	// Check if "manual input" was selected in this field. If so: change the field
 	// type from select to input
-	var bChanged = changeFieldToInput(oField.name, oField.value);
+	bChanged = toggleFieldType(oField.name, oField.value);
 	
-	// Toggle the value of the field. If empty try to display the default value
-	toggleDefaultOption(oField.name);
+	// Toggle the value of the field. If empty or just switched the function will
+	// try to display the default value
+	toggleDefaultOption(sName, bChanged);
 	
 	// Only validate when field type not changed
 	if(!bChanged) {
-		bFormIsValid = validateValue(oField.name, oField.value, validMapConfig[document.addmodify.type.value][oField.name].match);
+		bFormIsValid = validateValue(sName, oField.value, validMapConfig[document.addmodify.type.value][sName].match);
 		
 		return bFormIsValid;
 	} else {

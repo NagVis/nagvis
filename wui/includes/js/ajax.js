@@ -26,7 +26,7 @@
  */
 
 function getServices(backend_id, type, host_name, field, selected) {
-	if(host_name != '') {
+	if(host_name != '' && host_name != lang['manualInput']) {
 		var oOpt = Object();
 		oOpt.field = field;
 		oOpt.selected = selected;
