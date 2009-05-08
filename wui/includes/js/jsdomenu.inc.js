@@ -95,13 +95,19 @@ function createjsDOMenu() {
 	
 	mainMenu.items.menu_management.setSubMenu(submenu_management);
 	
+	// Seperate map listing when there are more than 15 maps
 	if(mapOptions.length > 15) {
 		var submenu_maps_open = [];
 		var submenu_maps_open_sep = new jsDOMenu(170);
+		
+		// Iterate the needed submenu entries
 		for(var i = 0, len = Math.floor(mapOptions.length/15); i <= len; i++) {
-			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i, "")
+			// Create a 15 element sized submenu
+			var newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i, "")
 			submenu_maps_open_sep.addMenuItem(newMenuItem);
+			
 			submenu_maps_open[i] = new jsDOMenu(170);
+			// Loop the next 15 maps
 			for(a=(0+15*i);a<(15+15*i);a++) {
 				if(a >= mapOptions.length) break;
 				
@@ -111,6 +117,7 @@ function createjsDOMenu() {
 				}
 			}
 			
+			// and append it to the list
 			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open[i]);
 		}
 		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open_sep);
@@ -119,23 +126,25 @@ function createjsDOMenu() {
 		var submenu_maps_open_nagvis = [];
 		var submenu_maps_open_sep_nagvis = new jsDOMenu(170);
 		for(var i=0, len = Math.floor(mapOptions.length/15); i <= len; i++) {
-			newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i+"_nagvis", "")
+			var newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i+"_nagvis", "")
 			submenu_maps_open_sep_nagvis.addMenuItem(newMenuItem);
+			
 			submenu_maps_open_nagvis[i] = new jsDOMenu(170);
 			for(a=(0+15*i);a<(15+15*i);a++) {
 				if(a >= mapOptions.length) break;
 				
 				// Only add permited objects
-				if(!checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions, "allowedUsers"),username)) {
+				if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions, "allowedUsers"),username)) {
 					submenu_maps_open_nagvis[i].addMenuItem(new menuItem(mapOptions[a].mapAlias,mapOptions[a].mapAlias,"link:../nagvis/index.php?map="+mapOptions[a].mapName,"","",""));
 				}
 			}
 			
+			// and append it to the list
 			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open_nagvis[i]);
 		}
 		mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_sep_nagvis);
 	} else {
-		submenu_maps_open = new jsDOMenu(170);
+		var submenu_maps_open = new jsDOMenu(170);
 		for(i=0;i<mapOptions.length;i++) {
 			
 			// Only add permited objects
@@ -146,7 +155,7 @@ function createjsDOMenu() {
 		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);
 		
 		// Open in NagVis
-		submenu_maps_open_nagvis = new jsDOMenu(170);
+		var submenu_maps_open_nagvis = new jsDOMenu(170);
 		for(i=0;i<mapOptions.length;i++) {
 			
 			// Only add permited objects
