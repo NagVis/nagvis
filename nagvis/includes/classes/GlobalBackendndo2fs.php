@@ -153,8 +153,10 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 			break;
 			case 'service':
 				$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
-				foreach($oServices->$name1Pattern AS $service) {
-					$ret[] = Array('name1' => $name1Pattern, 'name2' => $service);
+				if(isset($oServices->$name1Pattern)) {
+					foreach($oServices->$name1Pattern AS $service) {
+						$ret[] = Array('name1' => $name1Pattern, 'name2' => $service);
+					}
 				}
 			break;
 			case 'hostgroup':
