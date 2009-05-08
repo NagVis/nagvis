@@ -26,6 +26,7 @@
  */
 
 function getServices(backend_id, type, host_name, field, selected) {
+	// Only update services when host is not empty and not "Manual input..."
 	if(host_name != '' && host_name != lang['manualInput']) {
 		var oOpt = Object();
 		oOpt.field = field;
