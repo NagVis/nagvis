@@ -450,9 +450,10 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		// Update lastUpdate timestamp
 		aObjs[intIndex].setLastUpdate();
 		
-		// Objects with view_type=gadget need to be reloaded even when no state
-		// changed (perfdata could have changed since last update)
-		if(!aObjs[intIndex].stateChanged() && aObjs[intIndex].conf.view_type === 'gadget') {
+		// Some objects need to be reloaded even when no state changed (perfdata or 
+		// output could have changed since last update). Basically this is only
+		// needed for gadgets and/or labels with [output] or [perfdata] macros
+		if(!aObjs[intIndex].stateChanged() && aObjs[intIndex].outputOrPerfdataChanged()) {
 			// Reparse object to map
 			aObjs[intIndex].parse();
 		}

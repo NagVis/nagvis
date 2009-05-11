@@ -116,6 +116,22 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 	
 	/**
+	 * PUBLIC outputChanged()
+	 *
+	 * Check if an output/perfdata change occured since last refresh
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	outputOrPerfdataChanged: function() {
+		if(this.conf.output != this.last_conf.output || 
+		   this.conf.perfdata != this.last_conf.perfdata) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+	
+	/**
 	 * PUBLIC parse()
 	 *
 	 * Parses the object
@@ -126,7 +142,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 	parse: function () {
 		var oContainerDiv;
 		
-		this.replaceMacros();
+		// Only replace the macros on first parse
+		if(!this.parsedObject) {
+			this.replaceMacros();
+		}
+		
+		// When this is an update, remove the object first
+		this.remove();
 		
 		// Create container div
 		oContainerDiv = document.createElement('div');
@@ -156,9 +178,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 			oContainerDiv.appendChild(oLabel);
 			oLabel = null;
 		}
-		
-		// When this is an update, remove the object first
-		this.remove();
     
     // Append child to map and save reference in parsedObject
 		var oMap = document.getElementById('map');
@@ -172,8 +191,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 	
 	remove: function () {
-		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
+			var oMap = document.getElementById('map');
+			
 			// Remove event listeners
 			var oObj;
 			if(this.conf.view_type && this.conf.view_type === 'line') {
@@ -181,6 +201,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			} else {
 				oObj = document.getElementById(this.objId+'-icon');
 			}
+			
 			if(oObj) {
 				oObj.onmousedown = null;
 				oObj.oncontextmenu = null;
@@ -194,8 +215,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 			
 			// Remove object reference
 			this.parsedObject = null;
+			
+			oMap = null;
 		}
-		oMap = null;
 	},
 	
 	/**
@@ -281,6 +303,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			}
 		}
 		
+		// Replace static macros in label_text when needed
 		if(this.conf.label_text && this.conf.label_text !== '') {
 			var objName;
 			// For maps use the alias as display string
@@ -291,16 +314,31 @@ var NagVisStatefulObject = NagVisObject.extend({
 			}
 			
 			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[name\\]', 'g'), objName);
-			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[output\\]', 'g'), this.conf.output);
-			
-			if(this.conf.type == 'service' || this.conf.type == 'host') {
-				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[perfdata\\]', 'g'), this.conf.perfdata);
-			}
 			
 			if(this.conf.type == 'service') {
 				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
 			}
 		}
+	},
+	
+	/**
+	 * Replaces dynamic macros which need to be updated on every state refresh
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	replaceLabelTextDynamicMacros: function () {
+		var sReturn = this.conf.label_text;
+		
+		// Replace static macros in label_text when needed
+		if(sReturn && sReturn !== '') {
+			sReturn = sReturn.replace(new RegExp('\\[output\\]', 'g'), this.conf.output);
+			
+			if(this.conf.type == 'service' || this.conf.type == 'host') {
+				sReturn = sReturn.replace(new RegExp('\\[perfdata\\]', 'g'), this.conf.perfdata);
+			}
+		}
+		
+		return sReturn;
 	},
 	
 	/**
@@ -437,15 +475,15 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		oLabelDiv = document.createElement('div');
-		oLabelDiv.setAttribute('id', this.objId+'-label');
+		oLabelDiv.setAttribute('id', this.objId + '-label');
 		oLabelDiv.setAttribute('class', 'object_label');
 		oLabelDiv.setAttribute('className', 'object_label');
-		oLabelDiv.style.background=this.conf.label_background;
-		oLabelDiv.style.borderColor=this.conf.label_border;
+		oLabelDiv.style.background = this.conf.label_background;
+		oLabelDiv.style.borderColor = this.conf.label_border;
 		
 		oLabelDiv.style.position = 'absolute';
-		oLabelDiv.style.left = this.conf.label_x+'px';
-		oLabelDiv.style.top = this.conf.label_y+'px';
+		oLabelDiv.style.left = this.conf.label_x + 'px';
+		oLabelDiv.style.top = this.conf.label_y + 'px';
 		oLabelDiv.style.width = this.conf.label_width;
 		oLabelDiv.style.zIndex = this.conf.z+1;
 		oLabelDiv.style.overflow= 'visible';
@@ -462,7 +500,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Create span for text and add label text
 		var oLabelSpan = document.createElement('span');
-		oLabelSpan.innerHTML = this.conf.label_text;
+		oLabelSpan.innerHTML = this.replaceLabelTextDynamicMacros();
 		oLabelDiv.appendChild(oLabelSpan);
 		oLabelSpan = null;
 		

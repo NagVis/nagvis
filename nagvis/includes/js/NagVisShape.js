@@ -51,13 +51,6 @@ var NagVisShape = NagVisStatelessObject.extend({
 		oContainerDiv.appendChild(oShape);
 		oShape = null;
 		
-		// Parse label when configured
-		if(this.conf.label_show && this.conf.label_show == '1') {
-			var oLabel = this.parseLabel();
-			oContainerDiv.appendChild(oLabel);
-			oLabel = null;
-		}
-		
 		// When this is an update, remove the object first
 		this.remove();
 		
