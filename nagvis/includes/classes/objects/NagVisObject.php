@@ -241,6 +241,7 @@ class NagVisObject {
 		// I want only "name" in js
 		if($this->type != 'shape' && $this->type != 'textbox') {
 			$arr['name'] = $this->getName();
+			
 			if($this->type == 'service') {
 				unset($arr['host_name']);
 			} else {
@@ -257,16 +258,6 @@ class NagVisObject {
 				$arr['display_name'] = $this->display_name;
 			} else {
 				$arr['display_name'] = '';
-			}
-			
-			// Save the number of members
-			switch($this->getType()) {
-				case 'host':
-				case 'map':
-				case 'hostgroup':
-				case 'servicegroup':
-					$arr['num_members'] = $this->getNumMembers();
-				break;
 			}
 			
 			// Add the custom htmlcgi path for the object
@@ -342,15 +333,21 @@ class NagVisObject {
 		$iNumObjects = count($aTmpMembers);
 		
 		// Loop all child object until all looped or the child limit is reached
-		for($i = 0; $i <= $this->hover_childs_limit && $i < $iNumObjects; $i++) {
+		for($i = 0, $iEnum = 0; $iEnum <= $this->hover_childs_limit && $i < $iNumObjects; $i++) {
+			$sType = $aTmpMembers[$i]->getType();
+			
 			// Only get the member when this is no loop
-			if($aTmpMembers[$i]->getType() != 'map' || ($aTmpMembers[$i]->getType() == 'map' && $this->MAPCFG->getName() != $aTmpMembers[$i]->MAPCFG->getName())) {
-				if($aTmpMembers[$i]->getType() != 'textbox' && $aTmpMembers[$i]->getType() != 'shape') {
+			if($sType != 'map' || ($sType == 'map' && $this->MAPCFG->getName() != $aTmpMembers[$i]->MAPCFG->getName())) {
+				if($sType != 'textbox' && $sType != 'shape') {
 					if($bStateInfo) {
 						$arr[] = $aTmpMembers[$i]->getObjectStateInformation(false);
 					} else {
 						$arr[] = $aTmpMembers[$i]->getObjectInformation(false);
 					}
+					
+					// Only count objects which are added to the list for checking
+					// reached hover_childs_limit
+					$iEnum++;
 				}
 			}
 		}
