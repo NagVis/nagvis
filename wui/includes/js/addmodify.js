@@ -93,59 +93,62 @@ function validateMapCfgForm() {
 	
 	for(var i=0, len = document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
-			var sName = document.addmodify.elements[i].name;
-			
-			// Empty options which use the default value
-			var oField = document.getElementById(sName);
-			var oFieldDefault = document.getElementById('_'+sName);
-			
-			if(oField && oFieldDefault) {
-				// Reset option only when the field and default value are equal
-				if(oField.value === oFieldDefault.value) {
-					oField.value = '';
+			// Filter helper fields
+			if(document.addmodify.elements[i].name.charAt(0) !== '_') {
+				var sName = document.addmodify.elements[i].name;
+				
+				// Empty options which use the default value
+				var oField = document.getElementById(sName);
+				var oFieldDefault = document.getElementById('_'+sName);
+				
+				if(oField && oFieldDefault) {
+					// Reset option only when the field and default value are equal
+					if(oField.value === oFieldDefault.value) {
+						oField.value = '';
+					}
 				}
-			}
-			
-			oFieldDefault = null;
-			oField = null;
-			
-			if(document.addmodify.elements[i].name.substring(document.addmodify.elements[i].name.length-6,document.addmodify.elements[i].name.length)=='_name') {
-				object_name=document.addmodify.elements[i].value;
-			}
-			if(document.addmodify.elements[i].name == 'iconset') {
-				iconset=document.addmodify.elements[i].value;
-			}
-			if(document.addmodify.elements[i].name == 'x') {
-				x=document.addmodify.elements[i].value;
-			}
-			if(document.addmodify.elements[i].name == 'y') {
-				y=document.addmodify.elements[i].value;
-			}
-			
-			if(document.addmodify.elements[i].name == 'allowed_for_config') {
-				users_tab=document.addmodify.elements[i].value.split(',');
-				suicide=true;
-				for(var k = 0, len2 = users_tab.length; k < len2; k++) {
-					if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==username) ) { suicide=false; }
+				
+				oFieldDefault = null;
+				oField = null;
+				
+				if(document.addmodify.elements[i].name.substring(document.addmodify.elements[i].name.length-6,document.addmodify.elements[i].name.length)=='_name') {
+					object_name=document.addmodify.elements[i].value;
 				}
-				if(suicide) {
-					alert(printLang(lang['unableToWorkWithMap'],''));
-					document.addmodify.elements[i].focus();
-					return false;
+				if(document.addmodify.elements[i].name == 'iconset') {
+					iconset=document.addmodify.elements[i].value;
 				}
-			}		
-			
-			if(document.addmodify.elements[i].value != '') {
-				// Print a note to the user: This map object will display the summary state of the current map
-				if(document.addmodify.type.value == "map" && document.addmodify.elements[i].name == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
-					alert(printLang(lang['mapObjectWillShowSummaryState'],''));
+				if(document.addmodify.elements[i].name == 'x') {
+					x=document.addmodify.elements[i].value;
 				}
-			} else {
-				if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
-					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+document.addmodify.elements[i].name+',TYPE~'+document.addmodify.type.value+',MAPNAME~'+document.addmodify.map.value));
-					document.addmodify.elements[i].focus();
-					
-					return false;
+				if(document.addmodify.elements[i].name == 'y') {
+					y=document.addmodify.elements[i].value;
+				}
+				
+				if(document.addmodify.elements[i].name == 'allowed_for_config') {
+					users_tab=document.addmodify.elements[i].value.split(',');
+					suicide=true;
+					for(var k = 0, len2 = users_tab.length; k < len2; k++) {
+						if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==username) ) { suicide=false; }
+					}
+					if(suicide) {
+						alert(printLang(lang['unableToWorkWithMap'],''));
+						document.addmodify.elements[i].focus();
+						return false;
+					}
+				}		
+				
+				if(document.addmodify.elements[i].value != '') {
+					// Print a note to the user: This map object will display the summary state of the current map
+					if(document.addmodify.type.value == "map" && document.addmodify.elements[i].name == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
+						alert(printLang(lang['mapObjectWillShowSummaryState'],''));
+					}
+				} else {
+					if(validMapConfig[document.addmodify.type.value][document.addmodify.elements[i].name]['must'] == '1') {
+						alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+document.addmodify.elements[i].name+',TYPE~'+document.addmodify.type.value+',MAPNAME~'+document.addmodify.map.value));
+						document.addmodify.elements[i].focus();
+						
+						return false;
+					}
 				}
 			}
 		}
