@@ -133,7 +133,10 @@
 ; information will be refreshed after this time
 ;updateobjectstates=30
 
+; ----------------------------
 ; Backend definitions
+; ----------------------------
+
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 [backend_ndomy_1]
 ; type of backend - MUST be set
@@ -157,7 +160,42 @@
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
+; in this example the ID of the Backend is "ndo2fs_1" you can define another ID.
+[backend_ndo2fs_1]
+; type of backend - MUST be set
+;backendtype="ndo2fs"
+; Path to the ndo2fs var directory where the VOLATILE and PERSISTENT directories are
+;path="/usr/local/ndo2fs/var"
+; Name of the instance to get the data from
+;instancename="default"
+; maximum delay of the last status update in seconds
+;maxtimewithoutupdate=180
+; path to the cgi-bin of this backend
+;htmlcgi="/nagios/cgi-bin"
+
+; in this example the ID of the Backend is "merlinmy_1" you can define another ID.
+[backend_merlinmy_1]
+; type of backend - MUST be set
+;backendtype="merlinmy"
+; hostname for Merlin db
+;dbhost="localhost"
+; portname for Merlin db
+;dbport=3306
+; database name for Merlin db
+;dbname="merlin"
+; username for Merlin db
+;dbuser="merlin"
+; password for Merlin db
+;dbpass="merlin"
+; maximum delay of the Merlin Database in seconds
+;maxtimewithoutupdate=180
+; path to the cgi-bin of this backend
+;htmlcgi="/nagios/cgi-bin"
+
+; ----------------------------
 ; Rotation pool definitions
+; ----------------------------
+
 ; in this example the browser switches between the maps demo and demo2 every 15
 ; seconds, the rotation is enabled by url: index.php?rotation=demo
 [rotation_demo]
