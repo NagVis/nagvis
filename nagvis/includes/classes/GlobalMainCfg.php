@@ -254,7 +254,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '/nagios/cgi-bin',
 					'match' => MATCH_STRING_URL),
-				'htmlgadget' => Array('must' => 0,
+				'htmlgadgets' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),

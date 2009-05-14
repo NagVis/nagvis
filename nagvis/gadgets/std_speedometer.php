@@ -35,6 +35,14 @@
  *
  *****************************************************************************/
 
+/** 
+ * Dummy perfdata for WUI
+ *
+ * This string needs to be set in every gadget to have some sample data in the 
+ * WUI to be able to place the gadget easily on the map
+ ******************************************************************************/
+$sDummyPerfdata = 'config=20%;80;90;0;100';
+
 // Load gadget core functions
 require('./gadgets_core.php');
 
@@ -53,45 +61,6 @@ $max = -1;
 $default = 0; 
  
 /* Now read the parameters */
-
-$aOpts = Array('name1', 'name2', 'state', 'stateType', 'perfdata');
-$aPerfdata = Array();
-
-/**
- * Needed:
- *  perfdata=load1=0.960;5.000;10.000;0; load5=0.570;4.000;6.000;0; load15=0.540;3.000;4.000;0;
- *
- * Optional
- *  name1=localhost
- *  name2=Current Load
- *  state=OK
- *  stateType=HARD
- */
-
-if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
-	$aOpts['perfdata'] = $_GET['perfdata'];
-} else {
-	errorBox('ERROR: The needed parameter "perfdata" is missing.');
-}
-
-if(isset($_GET['name1']) && $_GET['name1'] != '') {
-	$aOpts['name1'] = $_GET['name1'];
-}
-
-if(isset($_GET['name2']) && $_GET['name2'] != '') {
-	$aOpts['name2'] = $_GET['name2'];
-}
-
-if(isset($_GET['state']) && $_GET['state'] != '') {
-	$aOpts['state'] = $_GET['state'];
-}
-
-if(isset($_GET['stateType']) && $_GET['stateType'] != '') {
-	$aOpts['stateType'] = $_GET['stateType'];
-}
-
-/* Now parse the perfdata */
-$aPerfdata = parsePerfdata($aOpts['perfdata']);
 
 // This gadget is simple and dirty, it only recognizes the first dataset of
 // performance data

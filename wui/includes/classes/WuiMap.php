@@ -224,6 +224,7 @@ class WuiMap extends GlobalMap {
 				case 'textbox':
 					$obj['class'] = "box";
 					$obj['icon'] = "20x20.gif";
+					$obj['iconParams'] = '';
 					
 					$ret .= $this->textBox($obj);
 					$obj = $this->fixIcon($obj);
@@ -243,6 +244,19 @@ class WuiMap extends GlobalMap {
 						if(!isset($obj['line_type']) && $obj['type'] != 'textbox') {
 							$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
 						}
+					}
+					
+					if(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
+						$sDelim = '&';
+						
+						// If there is no ? use the ? as start for the params list
+						if(strpos($obj['gadget_url'], '?') === false) {
+							$sDelim = '?';
+						}
+						
+						$obj['iconParams'] = $sDelim . 'name1=dummyHost&name2=dummyService&state=OK&stateType=HARD&conf=1';
+					} else {
+						$obj['iconParams'] = '';
 					}
 					
 					$obj = $this->fixIcon($obj);
@@ -270,6 +284,18 @@ class WuiMap extends GlobalMap {
 		
 		if($obj['type'] == 'shape' && preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
 			$obj['icon'] = $match[1];
+		} elseif(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
+			if(preg_match('/^\[(.*)\]$/', $obj['gadget_url'], $match) > 0) {
+				$obj['icon'] = $match[1];
+			} else {
+				$obj['icon'] = $obj['gadget_url'];
+				
+				if(!isset($obj['path']) || $obj['path'] == '') {
+					$imgPath = $obj['icon'];
+				} else {
+					$imgPath = $obj['path'].$obj['icon'];
+				}
+			}
 		} else {
 			if(!isset($obj['path']) || $obj['path'] == '') {
 				$imgPath = $obj['icon'];
@@ -305,6 +331,14 @@ class WuiMap extends GlobalMap {
 				$obj['path'] = $this->MAINCFG->getValue('paths', 'shape');
 				$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlshape');
 			}
+		} elseif(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
+			if(preg_match('/^\[(.*)\]$/', $obj['gadget_url'], $match) > 0) {
+				$obj['path'] = '';
+				$obj['htmlPath'] = '';
+			} else {
+				$obj['path'] = $this->MAINCFG->getValue('paths', 'gadget');
+				$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlgadgets');
+			}
 		} else {
 			$obj['path'] = $this->MAINCFG->getValue('paths', 'icon');
 			$obj['htmlPath'] = $this->MAINCFG->getValue('paths', 'htmlicon');
@@ -329,7 +363,7 @@ class WuiMap extends GlobalMap {
 		}
 		
 		$ret .= "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
-		$ret .= "\t\t<img src=\"".$obj['htmlPath'].$obj['icon']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
+		$ret .= "\t\t<img src=\"".$obj['htmlPath'].$obj['icon'].$obj['iconParams']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
 		$ret .= "</div>";
 		
 		return $ret;

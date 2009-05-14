@@ -170,6 +170,8 @@ $aPerfdata = Array();
 
 if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
 	$aOpts['perfdata'] = $_GET['perfdata'];
+} elseif(isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
+	$aOpts['perfdata'] = $sDummyPerfdata;
 } else {
 	errorBox('ERROR: The needed parameter "perfdata" is missing.');
 }
