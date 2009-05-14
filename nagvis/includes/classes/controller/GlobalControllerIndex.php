@@ -39,7 +39,7 @@ class GlobalControllerIndex {
 		$FRONTEND = new NagVisFrontend($CORE, '', $BACKEND, '');
 		
 		// Build the page
-		$FRONTEND->addBodyLines($FRONTEND->parseJs('oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(1).';'));
+		$FRONTEND->addBodyLines($FRONTEND->parseJs('oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(0).';'));
 		$FRONTEND->getHeaderMenu($CORE->MAINCFG->getValue('index','headermenu'), $CORE->MAINCFG->getValue('index', 'headertemplate'));
 		$FRONTEND->getIndexPage();
 		
