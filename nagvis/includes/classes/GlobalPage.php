@@ -78,44 +78,28 @@ class GlobalPage {
 		// http://www.nagios-portal.org/wbb/index.php?page=Thread&threadID=13885
 		$this->extHeader .= '<meta name="viewport" content="width=480; initial-scale=0.6666; maximum-scale=1.0; minimum-scale=0.6666" />';
 		
-		$this->user = $this->getUser();
+		$this->user = getUser();
 		$this->CORE->MAINCFG->setRuntimeValue('user',$this->user);
 		
 		self::checkPreflight();
 	}
 	
 	/**
-	 * Gets the User
+	 * Checks for valid php version
 	 *
-	 * @return	String	String with Username
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   Boolean $printErr
+	 * @return  Boolean Is Check Successful?
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function getUser() {
-		if(isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER'] != '') {
-			return $_SERVER['PHP_AUTH_USER'];
-		} elseif(isset($_SERVER['REMOTE_USER']) && $_SERVER['REMOTE_USER'] != '') {
-			return $_SERVER['REMOTE_USER'];
-		} else {
-			return FALSE;
-		}
-	}
-
-  /**
-   * Checks for valid php version
-   *
-   * @param   Boolean $printErr
-   * @return  Boolean Is Check Successful?
-   * @author  Lars Michelsen <lars@vertical-visions.de>
-   */
-  private function checkPHPVersion($printErr) {
+	private function checkPHPVersion($printErr) {
 		if(version_compare(PHP_VERSION, CONST_NEEDED_PHP_VERSION, ">=")) {
-      return TRUE;
-    } else {
+			return TRUE;
+		} else {
 			if($printErr) {
 				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION));
-      }
-      return FALSE;
-    }
+			}
+			return FALSE;
+		}
 	}
 	
 	/**
@@ -127,7 +111,7 @@ class GlobalPage {
 	 */
 	private function checkUser($printErr) {
 		if($this->user != '') {
-					return TRUE;
+			return TRUE;
 		} else {
 			if($printErr) {
 				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noUser'));

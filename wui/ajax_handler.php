@@ -33,6 +33,7 @@ require("../nagvis/includes/defines/matches.php");
 // Include functions
 require("../nagvis/includes/functions/autoload.php");
 require("../nagvis/includes/functions/debug.php");
+require("../nagvis/includes/functions/getuser.php");
 require("../nagvis/includes/functions/oldPhpVersionFixes.php");
 require("../nagvis/includes/functions/ajaxErrorHandler.php");
 

@@ -30,6 +30,7 @@ require('./includes/defines/matches.php');
 // Include functions
 require('./includes/functions/autoload.php');
 require('./includes/functions/debug.php');
+require("./includes/functions/getuser.php");
 require('./includes/functions/oldPhpVersionFixes.php');
 
 // This defines whether the GlobalFrontendMessage prints HTML or ajax error messages
