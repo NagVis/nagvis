@@ -295,7 +295,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT host.id AS id, alias, display_name, address, has_been_checked,'
 				.' last_hard_state, UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change,'
 				.' UNIX_TIMESTAMP(last_state_change) AS last_state_change, current_state,'
-				.' plugin_output AS output, perf_data, notes, problem_has_been_acknowledged, statusmap_image,'
+				.' output, perf_data, notes, problem_has_been_acknowledged, statusmap_image,'
 				.' UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check,'
 				.' state_type, current_attempt, max_check_attempts,'
 				.' UNIX_TIMESTAMP(sdt.start_time) AS downtime_start, UNIX_TIMESTAMP(sdt.end_time) AS downtime_end,'
@@ -421,7 +421,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT s.id, s.host_name AS name1, s.service_description AS name2,'
 				.' s.display_name, s.notes, h.address, s.has_been_checked, s.last_hard_state, s.current_state,'
 				.' UNIX_TIMESTAMP(s.last_hard_state_change) AS last_hard_state_change, UNIX_TIMESTAMP(s.last_state_change) AS last_state_change,'
-				.' s.plugin_output AS output, s.perf_data, s.problem_has_been_acknowledged,'
+				.' s.output, s.perf_data, s.problem_has_been_acknowledged,'
 				.' UNIX_TIMESTAMP(s.last_check) AS last_check, UNIX_TIMESTAMP(s.next_check) AS next_check,'
 				.' s.state_type, s.current_attempt, s.max_check_attempts,'
 				.' UNIX_TIMESTAMP(sdt.start_time) AS downtime_start, UNIX_TIMESTAMP(sdt.end_time) AS downtime_end,'
@@ -444,7 +444,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 				while($data = mysql_fetch_array($QUERYHANDLE)) {
 					$arrTmpReturn = Array();
 					
-					$arrTmpReturn['object_id'] = $data['object_id'];
+					$arrTmpReturn['object_id'] = $data['id'];
 					$arrTmpReturn['service_description'] = $data['name2'];
 					$arrTmpReturn['display_name'] = $data['display_name'];
 					$arrTmpReturn['alias'] = $data['display_name'];
