@@ -583,27 +583,27 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
  */
 function escapeUrlValues(sStr) {
 	if(sStr.search('&') !== -1) {
-		sStr = sStr.replace('&', '%26');
+		sStr = sStr.replace(/&/g, '%26');
 	}
 	
 	if(sStr.search('#') !== -1) {
-		sStr = sStr.replace('#', '%23');
+		sStr = sStr.replace(/#/g, '%23');
 	}
 	
 	if(sStr.search(':') !== -1) {
-		sStr = sStr.replace(':', '%3A');
+		sStr = sStr.replace(/:/g, '%3A');
 	}
 	
 	if(sStr.search(' ') !== -1) {
-		sStr = sStr.replace(' ', '%20');
+		sStr = sStr.replace(/ /g, '%20');
 	}
 	
 	if(sStr.search('=') !== -1) {
-		sStr = sStr.replace('=', '%3D');
+		sStr = sStr.replace(/=/g, '%3D');
 	}
 	
 	if(sStr.search('\\?') !== -1) {
-		sStr = sStr.replace('\\?', '%3F');
+		sStr = sStr.replace(/\?/g, '%3F');
 	}
 	
 	return sStr;
