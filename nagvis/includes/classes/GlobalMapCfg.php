@@ -384,7 +384,7 @@ class GlobalMapCfg {
 					'field_type' => 'boolean'),
 				
 				'url' => Array('must' => 0,
-					'default' => '[htmlcgi]/status.cgi?host=[host_name]',
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hosturl'),
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -534,7 +534,7 @@ class GlobalMapCfg {
 					'field_type' => 'boolean'),
 				
 				'url' => Array('must' => 0,
-					'default' => '[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]',
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hostgroupurl'),
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -687,7 +687,7 @@ class GlobalMapCfg {
 					'field_type' => 'boolean'),
 				
 				'url' => Array('must' => 0,
-					'default' => '[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]',
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'serviceurl'),
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
@@ -832,7 +832,7 @@ class GlobalMapCfg {
 					'field_type' => 'boolean'),
 				
 				'url' => Array('must' => 0,
-					'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'servicegroupurl'),
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),

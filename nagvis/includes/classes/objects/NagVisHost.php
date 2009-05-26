@@ -78,7 +78,9 @@ class NagVisHost extends NagiosHost {
 			$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
 			$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
 			$strReturn .= '</table>>, ';
-			$strReturn .= 'URL="'.$this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi').'/status.cgi?host='.$this->getName().'", ';
+			$strReturn .= 'URL="'.str_replace(array('[htmlcgi]', '[host_name]'),
+				array($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi'), $this->getName()),
+				$this->CORE->MAINCFG->getValue('defaults', 'hosturl')).'", ';
 			$strReturn .= 'target="'.$this->url_target.'", ';
 			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
 			// The root host has to be highlighted, these are the options to do this
