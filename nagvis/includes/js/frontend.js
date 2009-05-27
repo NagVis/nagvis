@@ -488,7 +488,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 					// Detach the handler
 					//  Had problems with this. Could not give the index to function:
 					//  function() { flashIcon(iIndex, 10); iIndex = null; }
-					window.setTimeout('flashIcon('+intIndex+', 10)', 0);
+					window.setTimeout('flashIcon('+intIndex+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
 				} else {
 					// FIXME: Atm only flash icons, not lines or gadgets
 				}
@@ -754,10 +754,11 @@ function playSound(intIndex, iNumTimes){
  * Highlights an object by show/hide a border around the icon
  *
  * @param   Integer  Index in aMapObjects
- * @param   Integer  Iterator for number of runs left
+ * @param   Integer  Time remaining in miliseconds
+ * @param   Integer  Interval in miliseconds
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function flashIcon(intIndex, iNumTimes){
+function flashIcon(intIndex, iDuration, iInterval){
 	var id = aMapObjects[intIndex].parsedObject.id;
 	
 	var oObjIcon = document.getElementById(id+'-icon');
@@ -775,11 +776,11 @@ function flashIcon(intIndex, iNumTimes){
 		oObjIconDiv.style.left = aMapObjects[intIndex].conf.x+'px';
 	}
 	
-	var iNumTimes2 = iNumTimes - 1;
+	var iDurationNew = iDuration - iInterval;
 	
 	// Flash again until timer counted down and the border is hidden
-	if(iNumTimes2 > 0 || (iNumTimes2 <= 0 && oObjIcon.style.border.indexOf("none") == -1)) {
-		window.setTimeout(function() { flashIcon(intIndex, iNumTimes2); }, 500);
+	if(iDurationNew > 0 || (iDurationNew <= 0 && oObjIcon.style.border.indexOf("none") == -1)) {
+		window.setTimeout(function() { flashIcon(intIndex, iDurationNew, iInterval); }, iInterval);
 	}
 	
 	oObjIcon = null;

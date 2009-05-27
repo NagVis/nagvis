@@ -48,6 +48,10 @@
 ; Enable/Disable highlighting of the state changing object by adding a flashing
 ; border
 ;eventhighlight=1
+; The duration of the event highlight in miliseconds (10 seconds by default)
+;eventhighlightduration=10000
+; The interval of the event highlight in miliseconds (0.5 seconds by default)
+;eventhighlightinterval=500
 ; Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps
 ; track of important actions and information
 ;eventlog=0
