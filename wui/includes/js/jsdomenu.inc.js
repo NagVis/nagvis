@@ -97,58 +97,71 @@ function createjsDOMenu() {
 	
 	// Seperate map listing when there are more than 15 maps
 	if(mapOptions.length > 15) {
+		// Create open in WUI menu
 		var submenu_maps_open = [];
 		var submenu_maps_open_sep = new jsDOMenu(170);
 		
-		// Iterate the needed submenu entries
-		for(var i = 0, len = Math.floor(mapOptions.length/15); i <= len; i++) {
-			// Create a 15 element sized submenu
-			var newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i, "")
-			submenu_maps_open_sep.addMenuItem(newMenuItem);
-			
-			submenu_maps_open[i] = new jsDOMenu(170);
-			// Loop the next 15 maps
-			for(a=(0+15*i);a<(15+15*i);a++) {
-				if(a >= mapOptions.length) break;
-				
-				// Only add permited objects
-				if(checkUserAllowed(getMapPermissions(mapOptions[a].mapName,mapOptions, "allowedForConfig"),username)) {
-					submenu_maps_open[i].addMenuItem(new menuItem(mapOptions[a].mapAlias,mapOptions[a].mapAlias,"link:./index.php?map="+mapOptions[a].mapName,"","",""));
-				}
-			}
-			
-			// and append it to the list
-			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open[i]);
-		}
-		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open_sep);
-		
-		// Open in NagVis
+		// Create open in NagVis menu
 		var submenu_maps_open_nagvis = [];
 		var submenu_maps_open_sep_nagvis = new jsDOMenu(170);
-		for(var i=0, len = Math.floor(mapOptions.length/15); i <= len; i++) {
-			var newMenuItem = new menuItem((0+15*i)+"-"+(15+15*i), "menu_maps_open_"+i+"_nagvis", "")
-			submenu_maps_open_sep_nagvis.addMenuItem(newMenuItem);
+		
+		// Loop maps
+		var iWuiLinks = 0;
+		var iWuiCurSubmenu = 0;
+		var iNagVisLinks = 0;
+		var iNagVisCurSubmenu = 0;
+		var iLinksPerPage = 15
+		for(var i = 0, len = mapOptions.length; i < len; i++) {
+			iNagVisCurSubmenu = Math.floor(iNagVisLinks / iLinksPerPage);
+			iWuiCurSubmenu = Math.floor(iWuiLinks / iLinksPerPage);
 			
-			submenu_maps_open_nagvis[i] = new jsDOMenu(170);
-			for(a=(0+15*i);a<(15+15*i);a++) {
-				if(a >= mapOptions.length) break;
+			// Next WUI seperator needed?
+			if(submenu_maps_open[iWuiCurSubmenu] == undefined) {
+				// Create a 15 element sized submenu
+				var newMenuItem = new menuItem(i+"-"+(i+iLinksPerPage), "menu_maps_open_"+iWuiCurSubmenu, "")
+				submenu_maps_open_sep.addMenuItem(newMenuItem);
 				
-				// Only add permited objects
-				if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions, "allowedUsers"),username)) {
-					submenu_maps_open_nagvis[i].addMenuItem(new menuItem(mapOptions[a].mapAlias,mapOptions[a].mapAlias,"link:../nagvis/index.php?map="+mapOptions[a].mapName,"","",""));
-				}
+				submenu_maps_open[iWuiCurSubmenu] = new jsDOMenu(170);
+				
+				// Append it to the list
+				document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open[iWuiCurSubmenu]);
 			}
 			
-			// and append it to the list
-			document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open_nagvis[i]);
+			// Next NagVis seperator needed?
+			if(submenu_maps_open_nagvis[iNagVisCurSubmenu] == undefined) {
+				// Add new seperator menu
+				var newMenuItem = new menuItem(i+"-"+(i+iLinksPerPage), "menu_maps_open_"+iNagVisCurSubmenu+"_nagvis", "")
+				submenu_maps_open_sep_nagvis.addMenuItem(newMenuItem);
+				
+				// Create new submenu
+				submenu_maps_open_nagvis[iNagVisCurSubmenu] = new jsDOMenu(170);
+				
+				// Append it to the list
+				document.getElementById(newMenuItem.id).setSubMenu(submenu_maps_open_nagvis[iNagVisCurSubmenu]);
+			}
+			
+			// Only add permited objects to the NagVis list
+			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName, mapOptions, "allowedUsers"), username)) {
+				submenu_maps_open_nagvis[iNagVisCurSubmenu].addMenuItem(new menuItem(mapOptions[i].mapAlias, mapOptions[i].mapAlias, "link:../nagvis/index.php?map="+mapOptions[i].mapName, "", "", ""));
+				iNagVisLinks++;
+			}
+			
+			// Only add permited objects to the WUI list
+			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions, "allowedForConfig"),username)) {
+				submenu_maps_open[iWuiCurSubmenu].addMenuItem(new menuItem(mapOptions[i].mapAlias, mapOptions[i].mapAlias, "link:./index.php?map="+mapOptions[i].mapName, "", "", ""));
+				iWuiLinks++;
+			}
 		}
+		
+		// Append both menus
+		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open_sep);
 		mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_sep_nagvis);
 	} else {
 		var submenu_maps_open = new jsDOMenu(170);
-		for(i=0;i<mapOptions.length;i++) {
+		for(var i=0;i<mapOptions.length;i++) {
 			
 			// Only add permited objects
-			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions, "allowedForConfig"),username)) {
+			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName, mapOptions, "allowedForConfig"), username)) {
 				submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:./index.php?map="+mapOptions[i].mapName,"","",""));
 			}
 		}
@@ -156,10 +169,10 @@ function createjsDOMenu() {
 		
 		// Open in NagVis
 		var submenu_maps_open_nagvis = new jsDOMenu(170);
-		for(i=0;i<mapOptions.length;i++) {
+		for(var i=0;i<mapOptions.length;i++) {
 			
 			// Only add permited objects
-			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions, "allowedUsers"),username)) {
+			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName, mapOptions, "allowedUsers"), username)) {
 				submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
 			}
 		}

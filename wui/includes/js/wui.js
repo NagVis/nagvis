@@ -47,7 +47,7 @@ function checkUserAllowed(allowedUsers,username) {
 	return false;
 }
 
-function getMapPermissions(mapName,mapOptions,permissionLevel) {
+function getMapPermissions(mapName, mapOptions, permissionLevel) {
 	if(permissionLevel == "") {
 		permissionLevel = "allowedUsers";
 	}
