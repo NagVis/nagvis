@@ -778,7 +778,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		FROM
 		`'.$this->dbPrefix.'objects` AS o1,
 		`'.$this->dbPrefix.'hosts` AS h1
-		LEFT OUTER JOIN `nagios_host_parenthosts` AS ph1 ON h1.host_id=ph1.host_id
+		LEFT OUTER JOIN `'.$this->dbPrefix.'host_parenthosts` AS ph1 ON h1.host_id=ph1.host_id
 		WHERE o1.objecttype_id=1
 		AND (h1.config_type='.$this->objConfigType.' AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id) 
 		AND ph1.parent_host_object_id IS null');
