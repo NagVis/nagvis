@@ -166,7 +166,17 @@ class GlobalIndexPage {
 					}
 					
 					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
-						$image = $this->createThumbnail($imgPath, $mapName);
+						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
+						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','var').$sThumbFile;
+						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$sThumbFile;
+						
+						// Only create a new thumb when there is no cached one
+						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+						if(!$FCACHE->isCached()) {
+							$image = $this->createThumbnail($imgPath, $sThumbPath);
+						}
+						
+						$image = $sThumbPathHtml;
 					} else {
 						$image = $imgPathHtml;
 					}
@@ -249,11 +259,36 @@ class GlobalIndexPage {
 	}
 	
 	/**
+	 * Returns the filetype
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getFileType($imgPath) {
+		$imgSize = getimagesize($imgPath);
+		switch($imgSize[2]) {
+			case 1:
+				$strFileType = 'gif';
+			break;
+			case 2:
+				$strFileType = 'jpg';
+			break;
+			case 3:
+				$strFileType = 'png';
+			break;
+			default:
+				$strFileType = '';
+			break;
+		}
+		
+		return $strFileType;
+	}
+	
+	/**
 	 * Creates thumbnail images for the index map
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function createThumbnail($imgPath, $mapName) {
+	private function createThumbnail($imgPath, $thumbPath) {
 		if($this->CORE->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
 			// 0: width, 1:height, 2:type
 			$imgSize = getimagesize($imgPath);
@@ -276,8 +311,6 @@ class GlobalIndexPage {
 					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('onlyPngOrJpgImages'));
 				break;
 			}
-			
-			$pathThumbImage = $this->CORE->MAINCFG->getValue('paths','var').$mapName.'-thumb.'.$strFileType;
 			
 			// Size of source images
 			$bgWidth = $imgSize[0];
@@ -330,20 +363,20 @@ class GlobalIndexPage {
 			
 			switch($imgSize[2]) {
 				case 1:
-					imagegif($thumb, $pathThumbImage);
+					imagegif($thumb, $thumbPath);
 				break;
 				case 2:
-					imagejpeg($thumb, $pathThumbImage);
+					imagejpeg($thumb, $thumbPath);
 				break;
 				case 3:
-					imagepng($thumb, $pathThumbImage);
+					imagepng($thumb, $thumbPath);
 				break;
 				default:
 					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
-			return $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'-thumb.'.$strFileType;
+			return $thumbPath;
 		} else {
 			return '';
 		}
