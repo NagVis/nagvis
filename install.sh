@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.9"
+INSTALLER_VERSION="0.1.10"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -83,6 +83,8 @@ Installs or updates NagVis on your system.
 
 Parameters:
   -n <PATH>   Path to Nagios directory. The default value is $NAGIOS_PATH
+  -B <BINARY> Full path to the Nagios binary. The default value is $NAGIOS_PATH/bin/nagios
+  -m <BINARY> Full path to the NDO module. The default value is $NAGIOS_PATH/bin/ndo2db
   -b <PATH>   Path to graphviz binaries. The default value is $GRAPHVIZ_PATH
   -p <PATH>   Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
   -u <USER>   User who runs the webserver
@@ -292,7 +294,7 @@ check_php_modules() {
 
 		# maybe compiled in module
 		if [ -s "$PHP" -a -x "$PHP" ]; then
-			TMP=`$PHP -m | grep -i "^$MOD$"`
+			TMP=`$PHP -m 2>&1 | grep -i "^$MOD$"`
 			[ -z "$MOD_VER" -a -n "$TMP" ]&&MOD_VER="compiled_in"
 		fi
 		
@@ -362,10 +364,16 @@ copy() {
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:p:u:b:g:c:hqv" options; do
+	while getopts "n:B:m:p:u:b:g:c:hqv" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
+			;;
+			B)
+				NAGIOS_BIN=$OPTARG
+			;;
+			m)
+				NDO_MOD=$OPTARG
 			;;
 			b)
 				GRAPHVIZ_PATH=$OPTARG
@@ -462,10 +470,10 @@ text
 line "Checking prerequisites" "+"
 
 # Check Nagios version
-NAGIOS_BIN="$NAGIOS_PATH/bin/nagios"
+[ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/nagios"
 
 if [ -f $NAGIOS_BIN ]; then
-	NAGIOS=`$NAGIOS_PATH/bin/nagios --version | grep Nagios 2>&1`
+	NAGIOS=`$NAGIOS_BIN --version | grep Nagios 2>&1`
 	log "$NAGIOS" $NAGIOS
 else
 	log "Nagios binary $NAGIOS_BIN"
@@ -473,13 +481,13 @@ fi
 NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
 
 # Check NDO
-NDO_MOD="ndo2db-${NAGVER}x"
-NDO=`$NAGIOS_PATH/bin/$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
+[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-${NAGVER}x"
+NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 
 # maybe somebody removed version information
 if [ -z "$NDO" ]; then
-	NDO_MOD="ndo2db"
-	NDO=`$NAGIOS_PATH/bin/$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
+	NDO_MOD="$NAGIOS_PATH/bin/ndo2db"
+	NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 fi
 [ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
 log "$NDO_MOD" $NDO
@@ -495,6 +503,7 @@ check_apache_php "/etc/apache2/"
 check_apache_php "/etc/apache/"
 check_apache_php "/etc/http/"
 check_apache_php "/etc/httpd/"
+check_apache_php "/usr/local/etc/apache2/"	# FreeBSD
 log "  Apache mod_php" $MODPHP
 if [ $HTML_ANZ -gt 1 ]; then
 	log "more than one alias found" "warning"
