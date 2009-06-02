@@ -152,7 +152,7 @@ class GlobalIndexPage {
 					} else {
 						$class = 'disabled';
 						
-						$url = 'alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
+						$url = 'javascript:alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
 						$summaryOutput = $this->CORE->LANG->getText('mapInMaintenance');
 					}
 					
