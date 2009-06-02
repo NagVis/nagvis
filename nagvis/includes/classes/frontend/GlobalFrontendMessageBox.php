@@ -57,16 +57,17 @@ class GlobalFrontendMessageBox {
 	private $pathHtmlBase;
 
 	// This array contains allowed types of message boxes
-	private $allowedTypes = array('error',
-											'down',
-											'critical',
-											'up',
-											'ok',
-											'warning',
-											'unknown',
-											'unreachable',
-											'note',
-											'permission');
+	private $allowedTypes = array(
+	  'error',
+	  'down',
+	  'critical',
+	  'up',
+	  'ok',
+	  'warning',
+	  'unknown',
+	  'unreachable',
+	  'note',
+	  'permission');
 
 	//This variables contains information which will be used to build the message box
 	private $type;
@@ -88,6 +89,11 @@ class GlobalFrontendMessageBox {
 		$this->message = $message;
 		$this->pathHtmlBase = $pathHtmlBase;
 		
+		// Remap old types
+		if($this->type == 'info-stop') {
+			$this->type = 'note';
+		}
+		
 		if($title === NULL) {
 			$this->title = $this->type;
 		}
@@ -96,7 +102,7 @@ class GlobalFrontendMessageBox {
 		if(!in_array($this->type, $this->allowedTypes)) {
 			$CORE = new GlobalCore();
 			$this->title = $CORE->LANG->getText('messageboxTitleWrongType');
-			$this->message = $CORE->LANG->getText('messageboxMessageWrongType', 'TYPE~'.$this->wrongType);
+			$this->message = $CORE->LANG->getText('messageboxMessageWrongType', 'TYPE~' . $this->type);
 		}
 		
 		// Got all information, now build the message
@@ -130,7 +136,7 @@ class GlobalFrontendMessageBox {
 	 */
 	private function buildHTMLMessage() {
 		$this->page .= '<meta http-equiv="refresh" content="60">';
-		$this->page .= '<style type="text/css"><!-- @import url('.$this->pathHtmlBase.'/nagvis/includes/css/style.css);  --></style>'."\n";
+		$this->page .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/nagvis/includes/css/style.css" />';
 		$this->page .= '<div id="messageBoxDiv">'."\n";
 		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
 		$this->page .= '      <tr>'."\n";
