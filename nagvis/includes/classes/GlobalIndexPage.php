@@ -172,7 +172,8 @@ class GlobalIndexPage {
 						
 						// Only create a new thumb when there is no cached one
 						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-						if(!$FCACHE->isCached()) {
+						if($FCACHE->isCached() === -1) {
+							echo "not cached";
 							$image = $this->createThumbnail($imgPath, $sThumbPath);
 						}
 						
