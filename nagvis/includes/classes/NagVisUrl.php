@@ -52,7 +52,17 @@ class NagVisUrl {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchContents() {
-		$this->strContents = file_get_contents($this->strUrl);
+		// Suppress error messages from file_get_contents
+		$oldLevel = error_reporting(0);
+		
+		if(false == ($this->strContents = file_get_contents($this->strUrl))) {
+			$aError = error_get_last();
+			
+			echo new GlobalFrontendMessageBox('ERROR', $this->CORE->LANG->getText('problemReadingUrl', 'URL~'.$this->strUrl.',MSG~'.$aError['message']), $this->CORE->MAINCFG->getValue('paths','htmlbase'), 'error');
+		}
+		
+		// set the old level of reporting back
+		error_reporting($oldLevel);
 	}
 	
 	/**
