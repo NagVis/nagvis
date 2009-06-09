@@ -212,6 +212,14 @@ function getHoverTemplates(aObjs) {
 	for(var i in oHoverTemplates) {
 		if(i !== 'Inherits') {
 			aUrlParts.push('&name[]='+i);
+			
+			// Load template css file
+			var oLink = document.createElement('link');
+			oLink.href = oGeneralProperties.path_htmlbase+'/nagvis/templates/hover/tmpl.'+i+'.css';
+			oLink.rel = 'stylesheet';
+			oLink.type = 'text/css';
+			document.body.appendChild(oLink);
+			oLink = null;
 		}
 	}
 	
