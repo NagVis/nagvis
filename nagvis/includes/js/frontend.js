@@ -214,6 +214,8 @@ function getHoverTemplates(aObjs) {
 			aUrlParts.push('&name[]='+i);
 			
 			// Load template css file
+			// This is needed for some old browsers which do no load css files
+			// which are included in such fetched html code
 			var oLink = document.createElement('link');
 			oLink.href = oGeneralProperties.path_htmlbase+'/nagvis/templates/hover/tmpl.'+i+'.css';
 			oLink.rel = 'stylesheet';
