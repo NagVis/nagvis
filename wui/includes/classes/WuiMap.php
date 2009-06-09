@@ -537,7 +537,19 @@ class WuiMap extends GlobalMap {
 			$obj['w'] = 'auto';
 		}
 		
-		$ret .= "<div class=\"".$obj['class']."\" style=\"left: ".$obj['x']."px; top: ".$obj['y']."px; z-index: ".$obj['z']."; width: ".$obj['w']."; overflow: visible;\">";	
+		if(isset($obj['background_color'])) {
+			$sBgColor = $obj['background_color'];
+		} else {
+			$sBgColor = 'transparent';
+		}
+		
+		if(isset($obj['border_color'])) {
+			$sBorderColor = $obj['border_color'];
+		} else {
+			$sBorderColor = 'border_color';
+		}
+		
+		$ret .= "<div class=\"".$obj['class']."\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left: ".$obj['x']."px; top: ".$obj['y']."px; z-index: ".$obj['z']."; width: ".$obj['w']."; overflow: visible;\">";	
 		$ret .= "\t<span>".$obj['text']."</span>";
 		$ret .= "</div>";
 		
