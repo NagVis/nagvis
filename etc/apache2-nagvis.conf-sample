@@ -2,9 +2,9 @@
 #
 # #############################################################################
 
-Alias /nagvis "/usr/local/nagvis/share"
+Alias /nagvis "@NAGVIS_PATH@/share"
 
-<Directory "/usr/local/nagvis/share">
+<Directory "@NAGVIS_PATH@/share">
 #  SSLRequireSSL
    Options FollowSymLinks
    AllowOverride None
@@ -15,7 +15,7 @@ Alias /nagvis "/usr/local/nagvis/share"
 #  Allow from 127.0.0.1
    AuthName "NagVis Access"
    AuthType Basic
-   AuthUserFile /usr/local/nagios/etc/htpasswd.users
+   AuthUserFile @NAGIOS_PATH@/etc/htpasswd.users
    Require valid-user
 </Directory>
 
