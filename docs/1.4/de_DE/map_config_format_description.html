@@ -1,0 +1,836 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>map_config_format_description</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1> NagVis 1.4 Formatbeschreibung der Map-Konfiguration </h1>
+
+<h2>Allgemeine Informationen</h2>
+<p>Das NagVis-Konfigurationsdateiformat ist sehr &auml;hnlich zu dem Format, das von <a href=http://www.nagios.org/>Nagios</a>(TM) benutzt wird. </p>
+<p>Konfigurationsanweisungen beginnen mit dem Schl&uuml;sselwort "define" gefolgt von einem Typfeld und einer &ouml;ffnenden 
+geschweiften Klammer ({). Jede folgende Zeile definiert Variablen-Werte-Paare, getrennt durch ein Gleichheitszeichen ( = ), bis zu einer schlie&szlig;enden geschweiften Klammer (}). </p>
+<p>Hashes (#) werden benutzt, um Kommentare zu markieren. Beachten Sie, dass eine Kommentarzeile mit einem Hash-Zeichen
+beginnen MUSS, alle anderen Zeichen (auch "Whitespaces") sind ung&uuml;ltig! </p>
+
+<h2>Objekttypen</h2>
+<ul>
+<li><a href=#global>global</a></li>
+<li><a href=#host>host</a></li>
+<li><a href=#service>service</a></li>
+<li><a href=#hostgroup>hostgroup</a></li>
+<li><a href=#servicegroup>servicegroup</a></li>
+<li><a href=#map>map</a></li>
+<li><a href=#textbox>textbox</a></li>
+<li><a href=#shape>shape</a></li>
+<li><a href=#template>template</a></li>
+</ul>
+
+<a name=global></a>
+<h2>Beschreibung der Objekttypen</h2>
+<h3>global</h3>
+Die erste Definition in jeder Konfigurationsdatei sollte vom Typ "global" sein. Optionen in diesem Abschnitt gelten f&uuml;r die gesamte Map und werden an
+andere Typen vererbt, die sp&auml;ter definiert werden. <br><br>
+Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen: <br>
+<pre>define global {
+  allowed_user=EVERYONE
+  allowed_for_config=nagiosadmin
+  map_image=lan.png
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>allowed_for_config</b></td><td> </td><td>Kommaseparierte Liste von Nagios-Benutzern, die diese Map editieren d&uuml;rfen.
+EVERYONE erlaubt jedem den Zugriff</td>
+</tr>
+<tr>
+<td><b>allowed_user</b></td><td> </td><td>Kommaseparierte Liste von Nagios-Benutzern, die berechtigt sind, diese Maps anzusehen.
+EVERYONE erlaubt jedem den Zugriff</td>
+</tr>
+<tr>
+<td>map_image</td><td> </td><td>Das Bild, das als Hintergrund der NagVis-Map angezeigt werden soll (z.B. eine Visio (TM)-Zeichnung). <br><font color=#ff0000>(neu in 1.4):</font> Der Wert kann auch &quot;none&quot; oder leer sein f&uuml;r kein Hintergrundbild</td>
+</tr>
+<tr>
+<td>alias</td><td>Map-Name</td><td>Der Alias ist das Label f&uuml;r jede Map. Wenn definiert, wird es &uuml;berall im NagVis-Frontend und WUI angezeigt</td>
+</tr>
+<tr>
+<td>backend_id</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt.</td>
+</tr>
+<tr>
+<td>background_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Hintergrundfarbe dieser Map. Falls dieser Wert nicht gesetzt wird, wird die Hintergrundfarbe aus der Hauptkonfigurationsdatei genommen. </td>
+</tr>
+<tr>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>event_background</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der sich &auml;ndernden Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird angezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist). <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>event_highlight</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der Hervorhebung des sich &auml;ndernden Objekts durch eine blinkende Umrandung. <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>event_log</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Eventlogs im neuen JavaScript-Backend. Das Eventlog protokolliert wichtige Aktionen und Informationen. <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>event_log_level</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Loglevel des Eventlogs (verf&uuml;gbar: debug, info, warning, critical). <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>event_log_height</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>H&ouml;he des JavaScript-Eventlogs in Pixeln. <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>event_log_hidden</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Verstecken/zeigen des JavaScript-Eventlogs w&auml;hrend des Map-Ladens. <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>event_scroll</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Fokussierens auf das Icon, das den Zustand ver&auml;ndert hat, wenn dieses au&szlig;erhalb des sichtbaren Bereichs ist. <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>event_sound</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Sound-Signalen bei Status&auml;nderungen. <font color="#ff0000">(Neu in 1.4)</font></td>
+</tr>
+<tr>
+<td>header_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Header-Men&uuml;s </td>
+</tr>
+<tr>
+<td>header_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td><a href=header_templates.html#header/templates>header template</a> f&uuml;r diese Map </td>
+</tr>
+<tr>
+<td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden </td>
+</tr>
+<tr>
+<td>hover_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Default <a href=hover_templates.html#hover/templates>hover template</a> f&uuml;r diese Map </td>
+</tr>
+<tr>
+<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
+</tr>
+<tr>
+<td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+</tr>
+<tr>
+<td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+</tr>
+<tr>
+<td>iconset</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Iconset, das als Standard f&uuml;r alle auf der Map platzierten Objekte benutzt werden soll. Kann f&uuml;r jedes Objekt &uuml;berschrieben werden.<br> Im Beispiel wird "std_small" benutzt, was bedeutet, dass ein OK-Zustand das Icon "std_small_<i>ok</i>.png", benutzt, ein CRITICAL-Zustand "std_small_<i>critical</i>.png" usw. </td>
+</tr>
+<tr>
+<td>in_maintenance</td><td>0</td><td>aktiviert/deaktiviert den Wartungsmodus. Wenn eine Map im Wartungsmodus ist, wird statt der Map lediglich ein Hinweis angezeigt</td>
+</tr>
+<tr>
+<td>label_show</td><td>0</td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
+</tr>
+<tr>
+<td>label_x</td><td>-20</td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_y</td><td>+20</td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_width </td><td>auto </td><td>Default-Breite der Label in Pixeln </td>
+</tr>
+<tr>
+<td>label_background</td><td>transparent</td><td>Default-Hintergrundfarbe der Label. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td></td>
+</tr>
+<tr>
+<td>label_border</td><td>#000000</td><td>Default-Rahmenfarbe der Label. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>only_hard_states</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+</tr>
+<tr>
+<td>recognize_services</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
+</tr>
+<tr>
+<td>show_in_lists</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Map-Anzeige in Listenformat (Dropdowns, Indexseite, ...) </td>
+</tr>
+<tr>
+<td>url_target </td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster) </td>
+</tr>
+<tr>
+<td><strike>usegdlibs</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Aktiviert die Benutzung der GD-Libs f&uuml;r diese Map (Linien k&ouml;nnen nur benutzt werden, wenn die GD-Libs aktiviert sind)</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+</tr>
+</table>
+
+<a name=host></a>
+<h3>host</h3>
+Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass Optionen nicht gesetzt werden m&uuml;ssen, wenn sie bereits im global-Abschnitt definiert wurden): <br>
+<pre>define host {
+  host_name=localhost
+  x=100
+  y=200
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>host_name</b></td><td> </td><td>Name des Hosts wie in Nagios definiert </td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate</td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt.</td>
+</tr>
+<tr>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden </td>
+</tr>
+<tr>
+<td>hover_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Default <a href=hover_templates.html#hover/templates>hover template</a> f&uuml;r diese Map </td>
+</tr>
+<tr>
+<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_url </td><td> </td><td>URL, der im Hover-Menu statt der Standard-Informationen angezeigt werden soll. Verf&uuml;gbare Makros:<br>
+<b>[host_name]</b>: Dieses Makro steht f&uuml;r den Objektnamen. </td>
+</tr>
+<tr>
+<td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+</tr>
+<tr>
+<td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+</tr>
+<tr>
+<td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
+</tr>
+<tr>
+<td>iconset</td><td>vererbt (<a href=#global>global</a>)</td><td>Spezielles Iconset. Wird vom global-Paragraph vererbt, falls es hier nicht angegeben wird. </td>
+</tr>
+<tr>
+<td>label_show</td><td>vererbt (<a href=#global>global</a>) </td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
+</tr>
+<tr>
+<td>label_text</td><td>[name]</td><td>Text des Labels. Verf&uuml;gbare Makros: [name], [output]</td>
+</tr>
+<tr>
+<td>label_x</td><td>vererbt (<a href=#global>global</a>) </td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_y</td><td>vererbt (<a href=#global>global</a>) </td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_width</td><td>vererbt (<a href=#global>global</a>) </td><td>Breite des Labels in Pixeln </td>
+</tr>
+<tr>
+<td>label_background</td><td>vererbt (<a href=#global>global</a>) </td><td>Hintergrundfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+</tr>
+<tr>
+<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+</tr>
+<tr>
+<td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+</tr>
+<tr>
+<td>recognize_services</td><td>vererbt (<a href=#global>global</a>)</td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
+</tr>
+<tr>
+<td>url </td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Die Makros [host_name], [htmlcgi] und [htmlbase] sind verf&uuml;gbar. <br><font color="#ff0000">Neu in 1.4:</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+</tr>
+<tr>
+<td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Das Makro [name] ist verf&uuml;gbar.</td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
+</tr>
+</table>
+
+<a name=service></a>
+<h3>Service</h3>
+Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass Optionen nicht gesetzt werden m&uuml;ssen, wenn sie bereits im global-Abschnitt definiert wurden): <br>
+<pre>define service {
+  host_name=localhost
+  service_description=ping
+  iconset=std_big
+  x=100
+  y=200
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>host_name</b></td><td> </td><td>Name des Hosts wie in Nagios definiert </td>
+</tr>
+<tr>
+<td><b>service_description</b></td><td> </td><td>Name des Service wie in Nagios definiert </td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate</td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt. </td>
+</tr>
+<tr>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>gadget_url</td><td></td><td>Der Wert kann ein Gadget-Script im Gadget-Verzeichnis (<code>nagvis/gadgets</code>) sein, z.B. &quot;std_speedometer.php&quot; oder eine in Klammern gesetzte komplette URI auf ein Gadget-Script, z.B. &quot;[http://127.0.0.1/nagios/nagvis/gadgets/std_speedometer.php]&quot;. Details zu Gadgets finden Sie <a href="gadgets.html">hier</a>. Diese Option wird nur erkannt, wenn view_type=&quot;gadget&quot; gesetzt ist. <font color="#ff0000">(Neu in 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_template</td><td>vererbt (<a href=#global>global</a>) </td><td><a href=hover_templates.html#hover/templates>Hover template</a> f&uuml;r dieses Objekt </td>
+</tr>
+<tr>
+<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
+</tr>
+<tr>
+<td>hover_url </td><td> </td><td>URL, der im Hover-Menu statt der Standard-Informationen angezeigt werden soll. Verf&uuml;gbare Makros:<br>
+<b>[host_name]</b>: Dieses Makro steht f&uuml;r den Objektnamen.<br>
+<b>[service_description]</b>: Dieses Makro steht f&uuml;r die Service-Beschreibung und wird nur in Service-Objekten ersetzt. </td>
+</tr>
+<tr>
+<td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+</tr>
+<tr>
+<td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+</tr>
+<tr>
+<td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
+</tr>
+<tr>
+<td>iconset</td><td>vererbt (<a href=#global>global</a>) </td><td>Spezielles Iconset. Wird vom global-Paragraph vererbt, falls es hier nicht angegeben wird</td>
+</tr>
+<tr>
+<td>label_show</td><td>vererbt (<a href=#global>global</a>) </td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
+</tr>
+<tr>
+<td>label_text</td><td>[name][service_description]</td><td>Text des Labels. Verf&uuml;gbare Makros: [name], [service_description], [output]</td>
+</tr>
+<tr>
+<td>label_x</td><td>vererbt (<a href=#global>global</a>) </td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_y</td><td>vererbt (<a href=#global>global</a>) </td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_width</td><td>vererbt (<a href=#global>global</a>) </td><td>Breite des Labels in Pixeln </td>
+</tr>
+<tr>
+<td>label_background</td><td>vererbt (<a href=#global>global</a>) </td><td>Hintergrundfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+</tr>
+<tr>
+<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+</tr>
+<tr>
+<td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+</tr>
+<tr>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Verf&uuml;gbare Makros: [host_name], [service_description], [htmlcgi] und [htmlbase]. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+</tr>
+<tr>
+<td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbare Makros: [name], [service_description]</td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
+</tr>
+</table>
+
+<a name=hostgroup></a>
+<h3>Hostgroup</h3>
+Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass Optionen nicht gesetzt werden m&uuml;ssen, wenn sie bereits im global-Abschnitt definiert wurden): <br>
+<pre>define hostgroup {
+  hostgroup_name=servers
+  x=100
+  y=200
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>hostgroup_name</b></td><td> </td><td>Name der Hostgroup wie in Nagios definiert </td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate</td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt. </td>
+</tr>
+<tr>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_template</td><td>vererbt (<a href=#global>global</a>) </td><td><a href=hover_templates.html#hover/templates>Hover template</a> f&uuml;r dieses Objekt </td>
+</tr>
+<tr>
+<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
+</tr>
+<tr>
+<td>hover_url </td><td> </td><td>URL, der im Hover-Menu statt der Standard-Informationen angezeigt werden soll. Verf&uuml;gbare Makros:<br>
+<b>[hostgroup_name]</b>: Dieses Makro steht f&uuml;r den Objektnamen. </td>
+</tr>
+<tr>
+<td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+</tr>
+<tr>
+<td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+</tr>
+<tr>
+<td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
+</tr>
+<tr>
+<td>iconset</td><td>vererbt (<a href=#global>global</a>) </td><td>Spezielles Iconset. Wird vom global-Paragraph vererbt, falls es hier nicht angegeben wird</td>
+</tr>
+<tr>
+<td>label_show</td><td>vererbt (<a href=#global>global</a>) </td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
+</tr>
+<tr>
+<td>label_text</td><td>[name]</td><td>Text des Labels, verf&uuml;gbare Makros: [name] und [output]</td>
+</tr>
+<tr>
+<td>label_x</td><td>vererbt (<a href=#global>global</a>)</td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_y</td><td>vererbt (<a href=#global>global</a>) </td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_width</td><td>vererbt (<a href=#global>global</a>) </td><td>Breite des Labels in Pixeln </td>
+</tr>
+<tr>
+<td>label_background</td><td>vererbt (<a href=#global>global</a>) </td><td>Hintergrundfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+</tr>
+<tr>
+<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+</tr>
+<tr>
+<td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+</tr>
+<tr>
+<td>recognize_services</td><td>vererbt (<a href=#global>global</a>) </td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
+</tr>
+<tr>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Die Makros [hostgroup_name], [htmlcgi] und [htmlbase] sind verf&uuml;gbar. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+</tr>
+<tr>
+<td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbares Makro: [name] </td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
+</tr>
+</table>
+
+<a name=servicegroup></a>
+<h3>Servicegroup</h3>
+Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass Optionen nicht gesetzt werden m&uuml;ssen, wenn sie bereits im global-Abschnitt definiert wurden): <br>
+<pre>define servicegroup {
+  servicegroup_name=servicegroup1
+  x=100
+  y=200
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>servicegroup_name</b></td><td> </td><td>Name der Servicegroup wie in Nagios definiert. </td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate</td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt. </td>
+</tr>
+<tr>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_url </td><td> </td><td>URL, der im Hover-Menu statt der Standard-Informationen angezeigt werden soll. Verf&uuml;gbare Makros:<br>
+<b>[servicegroup_name]</b>: Dieses Makro steht f&uuml;r den Objektnamen. </td>
+</tr>
+<tr>
+<td>hover_template</td><td>vererbt (<a href=#global>global</a>) </td><td><a href=hover_templates.html#hover/templates>Hover template</a> f&uuml;r dieses Objekt </td>
+</tr>
+<tr>
+<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
+</tr>
+<tr>
+<td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+</tr>
+<tr>
+<td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+</tr>
+<tr>
+<td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
+</tr>
+<tr>
+<td>iconset</td><td>vererbt (<a href=#global>global</a>) </td><td>Spezielles Iconset. Wird vom global-Paragraph vererbt, falls es hier nicht angegeben wird</td>
+</tr>
+<tr>
+<td>label_show</td><td>vererbt (<a href=#global>global</a>) </td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
+</tr>
+<tr>
+<td>label_text</td><td>[name]</td><td>Text des Labels, verf&uuml;gbare Makros: [name] und [output]</td>
+</tr>
+<tr>
+<td>label_x</td><td>vererbt (<a href=#global>global</a>)</td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_y</td><td>vererbt (<a href=#global>global</a>) </td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_width</td><td>vererbt (<a href=#global>global</a>) </td><td>Breite des Labels in Pixeln </td>
+</tr>
+<tr>
+<td>label_background</td><td>vererbt (<a href=#global>global</a>) </td><td>Hintergrundfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+</tr>
+<tr>
+<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+</tr>
+<tr>
+<td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+</tr>
+<tr>
+<td>recognize_services</td><td>vererbt (<a href=#global>global</a>) </td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
+</tr>
+<tr>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Verf&uuml;gbare Makros: [servicegroup_name], [htmlcgi] und [htmlbase]. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+</tr>
+<tr>
+<td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbare Makros: [name]. </td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
+</tr>
+</table>
+
+<a name=map></a>
+<h3>Map</h3>
+Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass Optionen nicht gesetzt werden m&uuml;ssen, wenn sie bereits im global-Abschnitt definiert wurden): <br>
+<pre>define map {
+  map_name=webserver
+  x=77
+  y=156
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>map_name</b></td><td> </td><td>Name der Map-Konfigurationsdatei (ohne .cfg-Erweiterung) </td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate</td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_url </td><td> </td><td>URL, der im Hover-Menu statt der Standard-Informationen angezeigt werden soll. Verf&uuml;gbare Makros:<br>
+<b>[map_name]</b>: Dieses Makro steht f&uuml;r den Objektnamen. </td>
+</tr>
+<tr>
+<td>hover_template</td><td>vererbt (<a href=#global>global</a>) </td><td><a href=hover_templates.html#hover/templates>Hover template</a> f&uuml;r dieses Objekt </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
+</tr>
+<tr>
+<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+</tr>
+<tr>
+<td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+</tr>
+<tr>
+<td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
+</tr>
+<tr>
+<td>iconset</td><td>vererbt (<a href=#global>global</a>) </td><td>Spezielles Iconset. Wird vom global-Paragraph vererbt, falls es hier nicht angegeben wird</td>
+</tr>
+<tr>
+<td>label_show</td><td>vererbt (<a href=#global>global</a>) </td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
+</tr>
+<tr>
+<td>label_text</td><td>[name]</td><td>Text des Labels, verf&uuml;gbare Makros: [name] und [output]</td>
+</tr>
+<tr>
+<td>label_x</td><td>vererbt (<a href=#global>global</a>)</td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_y</td><td>vererbt (<a href=#global>global</a>) </td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+</tr>
+<tr>
+<td>label_width</td><td>vererbt (<a href=#global>global</a>) </td><td>Breite des Labels in Pixeln </td>
+</tr>
+<tr>
+<td>label_background</td><td>vererbt (<a href=#global>global</a>) </td><td>Hintergrundfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+</tr>
+<tr>
+<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+</tr>
+<tr>
+<td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+</tr>
+<tr>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist kein Verweis. Verf&uuml;gbare Makros: [map_name], [htmlcgi] und [htmlbase]. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+</tr>
+<tr>
+<td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbare Makros: [name]. </td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
+</tr>
+</table>
+
+<a name=textbox></a>
+<h3>Textbox</h3>
+Beispiel mit allen m&ouml;glichen Optionen: <br>
+<pre>define textbox {
+  text="This is an informational text which can be placed anywhere on the map, HTML can also be used for formatting purposes"
+  x=200
+  y=100
+  w=200
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>text</b></td><td> </td><td>Ihr eigener Text, HTML ist m&ouml;glich. Es gibt die Makros <br>
+<b>[refresh_counter]</b>: zeigt die Zeit bis zur n&auml;chsten Aktualisierung/Rotation <br>
+<b>[worker_last_run]</b>: zeigt die Zeit des letzten "Worker-Runs"</td>
+</tr>
+<tr>
+<td><b>w</b></td><td> </td><td>Breite der Textbox </td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate </td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td>background_color</td><td>#C0C0C0</td><td>Hintergrundfarbe der Textbox. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>border_color</td><td>#000000</td><td>Rahmenfarbe der Textbox. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten 
+Wert wird an der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen.
+</table>
+
+<a name=shape></a>
+<h3>Shape</h3>
+Beispiel mit allen Werten, die gesetzt werden m&uuml;ssen: <br>
+<pre>define shape {
+  icon="test"
+  x=200
+  y=100
+}</pre>
+ 
+<table border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>Icon</b></td><td> </td><td>Dateiname des Shapes. Shapes m&uuml;ssen im shape-Verzeichnis abgelegt werden (Default: <code>nagvis/images/shapes</code>) </td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate </td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td> enable_refresh </td><td> 0 </td><td> Diese Option aktiviert das Shape f&uuml;r regelm&auml;&szlig;ige Aktualisierungen im Frontent. Dies wird nur f&uuml;r dynamische Shapes ben&ouml;tigt, die sich gelegentlich &auml;ndern. <font color="#ff0000">(New in 1.4)</font> </td>
+</tr>
+<tr>
+<td>hover_menu</td><td> 0 </td><td>Aktivieren/Deaktivieren von Hover-Men&uuml;s (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>hover_url</td><td> </td><td>URL, der beim Schweben &uuml;ber dem Bild anzuzeigen ist. Normalerweise gibt es keine Aktion w&auml;hrend des Schwebens. </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
+</tr>
+<tr>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Normalerweise gibt es keinen Verweis. </td>
+</tr>
+<tr>
+<td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster) </td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
+</tr>
+</table>
+
+<a name=template></a>
+<h3>Template</h3>
+Seit Nagvis 1.2 gibt es eine neue Objektart namens <code>template</code>. Mit diesem Objekt haben Sie die M&ouml;glichkeit, alle optionalen Werte in einem Objekt zu definieren, das f&uuml;r viele andere gilt. Sie k&ouml;nnen alle Attribute auf die
+Werte setzen, die Sie ben&ouml;tigen und diese mit dem <code>use</code>-Attribut an andere Objekte vererben. <br><br>
+Zur Zeit m&uuml;ssen die Templates direkt in den Dateien definiert werden, weil die WUI die Definition nicht unterst&uuml;tzt. Wahrscheinlich wird dies in folgenden Versionen m&ouml;glich sein. <br><br>
+Beispiel mit allen Werten, die gesetzt werden m&uuml;ssen: <br>
+<pre>define template {
+  name=generic-template
+}</pre>
+ 
+<table width=100% border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>name</b></td><td> </td><td>Template-Name (einfache Zeichenkette ohne Leerzeichen – muss in der Map eindeutig sein) </td>
+</tr>
+<tr>
+<td>...</td><td> </td><td>Alle Werte, die in den Objekten verf&uuml;gbar sind, die dieses Template erben </td>
+</tr>
+</table>
+</html>

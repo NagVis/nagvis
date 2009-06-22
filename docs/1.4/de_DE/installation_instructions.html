@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>installation_instructions</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>NagVis 1.4 Installationsanweisungen</h1>
+Diese Anweisungen gelten f&uuml;r eine Neuinstallation. <br>
+Wenn Sie Ihre alte NagVis-Installation aktualisieren, raten wir dringend dazu, ein Backup Ihres NagVis-Verzeichnisses zu machen und die Konfigurationsdateien <i>manuell</i> anzupassen. <br>
+
+<a name=SCHRITT_0></a>
+<h2>SCHRITT 0: das System vorbereiten</h2>
+Stellen Sie sicher, dass Ihr System den <a href="system_requirements.html">Systemanforderungen</a> entspricht. <br>
+
+<a name=SCHRITT_1></a>
+<h2>SCHRITT 1: NagVis herunterladen</h2>
+Holen Sie sich NagVis, die neueste Version finden Sie unter <a href="http://www.nagvis.org/">www.nagvis.org</a>. <br>
+
+<a name=SCHRITT_2></a>
+<h2>SCHRITT 2: entpacken Sie NagVis</h2>
+<pre>tar xvzf nagvis-1.4.x.tar.gz</pre> 
+
+<a name=SCHRITT_3></a>
+<h2>SCHRITT 3: verschieben Sie das entpackte NagVis-Verzeichnis</h2>
+Platzieren Sie das NagVis-Verzeichnis in Ihrem Nagios-share-Verzeichnis
+(normalerweise /usr/local/nagios/share). <br>
+<pre>mv nagvis-1.4.x /usr/local/nagios/share</pre>
+Sie sollten die Verzeichnisse <code>etc</code>, <code>nagvis</code> und <code>wui</code> unter dem nagvis-Verzeichnis sehen <br>
+<pre>ls -l /usr/local/nagios/share/nagvis</pre>
+<font style="color:red">Verschieben Sie KEINE Dateien oder Verzeichnisse innerhalb des NagVis-Verzeichnisses (Sie k&ouml;nnen das tun, aber in diesem Fall m&uuml;ssen Sie einige Parameter und Werte in der Hauptkonfigurationsdatei anpassen/hinzuf&uuml;gen – wenn Sie nichts ver&auml;ndern, sollte es sofort funktionieren)</font><br>
+
+<a name=SCHRITT_4></a>
+<h2>SCHRITT 4: konfigurieren Sie NagVis</h2>
+Wechseln Sie zur neuen Position des NagVis-Verzeichnisses <br>
+<pre>cd /usr/local/nagios/share/nagvis</pre>
+Eine Beispiel-Hauptkonfigurationsdatei finden Sie als <code>etc/nagvis.ini.php-sample</code>.
+Wenn Sie Einstellungen ver&auml;ndern m&ouml;chten, kopieren Sie dieses Beispiel nach <code>etc/nagvis.ini.php</code>:<br>
+<pre>cp etc/nagvis.ini.php-sample etc/nagvis.ini.php</pre>
+Nun k&ouml;nnen Sie dieses Datei mit Ihrem bevorzugten Texteditor &auml;ndern – ich benutze vi: <br>
+<pre>vi etc/nagvis.ini.php</pre>
+Die meisten Zeilen in der frisch kopierten <code>nagvis.ini.php</code> sind auskommentiert (beginnen mit einem Semikolon). Wenn Sie verschiedene Einstellungen setzen m&ouml;chten, dann entfernen Sie das Kommentarzeichen und
+&auml;ndern Sie den Wert. <br>
+Informationen zu allen m&ouml;glichen Werten finden Sie in der <a href="nagvis_config_format_description.html">Formatbeschreibung der Hauptkonfigurationsdatei</a>. <br>
+
+<a name=SCHRITT_5></a>
+<h2>SCHRITT 5: Berechtigungen</h2>
+<font style="color:red">Dies ist sehr wichtig f&uuml;r eine funktionierende Installation.</font> <br>
+<br>
+Pr&uuml;fen Sie zuerst, welcher Unix-Account f&uuml;r Ihren Webserver benutzt wird (in meinem Fall <code>wwwrun</code>). Wenn Sie nicht wissen, mit welchem Benutzer der Webserver l&auml;uft, dann werfen Sie einen Blick in die Webserver-Konfiguration. Im Falle von Apache k&ouml;nnen Sie dies mit dem folgenden Befehl tun:<br><br>
+Ubuntu<pre>grep -e 'USER' /etc/apache2/envvars</pre>
+SuSE/RedHat/Debian (SLES, OpenSuSE, Fedora)<pre>grep -e '^User' /etc/apache2/*.conf</pre>
+Wenn Ihre Konfigurationsdatei an anderer Stelle liegt, dann passen Sie den obigen Befehl an.
+<br>
+Gew&auml;hren Sie nun dem Webserver-Benutzer Berechtigungen f&uuml;r das
+NagVis-Verzeichnis (in meinem Fall sind die Pfade wie folgt): <br>
+<pre>chown wwwrun:www /usr/local/nagios/share/nagvis -R
+chmod 664 /usr/local/nagios/share/nagvis/etc/nagvis.ini.php
+chmod 775 /usr/local/nagios/share/nagvis/nagvis/images/maps
+chmod 664 /usr/local/nagios/share/nagvis/nagvis/images/maps/*
+chmod 775 /usr/local/nagios/share/nagvis/etc/maps
+chmod 664 /usr/local/nagios/share/nagvis/etc/maps/*
+chmod 775 /usr/local/nagios/share/nagvis/var
+chmod 664 /usr/local/nagios/share/nagvis/var/*</pre>
+Es ist m&ouml;glich, restriktivere Berechtigungen f&uuml;r die Dateien zu setzen, aber f&uuml;r die meisten Setups sollten die Beispiele ausreichen. Ver&auml;ndern Sie die Werte nur dann, wenn Sie wissen, was Sie tun! <br>
+
+<a name=SCHRITT_6></a>
+<h2>SCHRITT 6: das grafische Konfigurations-Tool (WUI)</h2>
+NagVis besitzt ein eingebautes webbasiertes Konfigurations-Tool namens WUI. Wenn Sie es einsetzen wollen, benutzen Sie folgenden URL in Ihrem Browser, um die Seite zu &ouml;ffnen: <br>
+<pre>http://&lt;nagiosserver>/&lt;path-to-nagvis>/config.php</pre>(z.B. http://localhost/nagios/nagvis/config.php, dabei erfolgt eine Weiterleitung).<br>
+Hinweis: wenn Sie Script- oder Popup-Blocker einsetzen, dann deaktivieren Sie diese vor der Nutzung der WUI. <br>
+<br>Wenn Sie das NagVis-Bild sehen, klicken Sie rechts und es sollte sich ein Kontext-Menu &ouml;ffnen, mit dem Sie &uuml;ber die WUI NagVis konfigurieren und Maps anlegen k&ouml;nnen. <br>
+<p><img src="../general/img/medium_nagvis-1.0-wui-preview.png" /></p>
+<p><font style="color:red">Das Konfigurations-Tool zeigt NICHT die aktuellen Zust&auml;nde der konfigurierten Nagios-Objekte. Es dient lediglich zur Konfiguration! Um Ihre Maps nachher benutzen zu k&ouml;nnen, schauen Sie unter SCHRITT 7!</font></p>
+Wenn das bei Ihnen nicht funktioniert oder wenn Sie die WUI nicht benutzen m&ouml;chten, dann editieren Sie einfach die Map-Konfigurationsdateien im <code>etc/maps/</code>-Verzeichnis mit Ihrem bevorzugten Text-Editor. <br>
+Informationen zu g&uuml;ltigen Formaten und Werten finden Sie in der <a href="map_config_format_description.html">Formatbeschreibung der Map-Konfigurationsdatei</a>. <br>
+
+<a name=SCHRITT_7></a>
+<h2>SCHRITT 7: betrachten Sie die Maps</h2>
+Sie sollten nun in der Lage sein, Ihre definierten Maps in Ihrem Browser anzusehen: <br>
+<pre>http://&lt;nagiosserver>/&lt;Pfad-zu-NagVis>/index.php?map=&lt;mapname></pre>(z.B. http://localhost/nagios/nagvis/index.php?map=demo, dabei erfolgt eine Weiterleitung)<br><br>
+
+Viel Spa&szlig; und bitte melden Sie Bugs!<br>
+</html>

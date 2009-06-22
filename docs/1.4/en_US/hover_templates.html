@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Hover Templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Hover Templates</h1>
+		<h2> Introduction </h2>
+		
+		Hover templates are html files with some macros in it. These files can be used as hover menus for the objects on the maps. The hover templates are located in <code>nagvis/etc/templates/hover/</code> relative to the nagvis root directory. The templates are named like this: <code>tmpl.*.html</code>.
+		There are macros which are available in hover menus of all object types and some which are only available for some special objects. All standard macros are listed below.
+		
+		<h2> General </h2>
+		The following macros are available in hover menus of all object types:
+		
+		<table style="width:100%">
+		<tr>
+		<th width="250"> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<th colspan="2"> General </th>
+		</tr>
+		<tr>
+		<td> [obj_type] </td><td> Type of the object (host, service, hostgroup, ...) </td>
+		</tr>
+		<tr>
+		<td> [obj_name] </td><td> Name of the object (hostname, hostgroupname, servicegroupname, mapname,...) </td>
+		</tr>
+		<tr>
+		<td> [obj_alias] </td><td> Alias of the object (If no alias is defined it is equal with [obj_name]) </td>
+		</tr>
+		<tr>
+		<td> [obj_display_name] </td><td> Display name of the object </td>
+		</tr>
+		<tr>
+		<td> [obj_state] </td><td> State of the object (OK, WARNING, CRITICAL,...) </td>
+		</tr>
+		<tr>
+		<td> [obj_summary_state] </td><td> Merged state of the object and all child objects (OK, WARNING, CRITICAL, ...) </td>
+		</tr>
+		<tr>
+		<td> [obj_acknowledged] </td><td> When the state is acknowledged the macro is replaced with "(Acknowledged)" </td>
+		</tr>
+		<tr>
+		<td> [obj_summary_acknowledged] </td><td> When the summary state is acknowledged the macro is replaced with "(Acknowledged)" </td>
+		</tr>
+		<tr>
+		<td> [obj_in_downtime] </td><td> When the object is currenty in a downtime this macro is replaced with "(In Downtime)" </td>
+		</tr>
+		<tr>
+		<td> [obj_summary_in_downtime] </td><td> When the object is currenty in a downtime this macro is replaced with "(In Downtime)" </td>
+		</tr>
+		<tr>
+		<td> [obj_output] </td><td> Output for this object </td>
+		</tr>
+		<tr>
+		<td> [obj_summary_output] </td><td> Summary output of the object </td>
+		</tr>
+		<tr>
+		<th colspan="2"> Language macros </th>
+		</tr>
+		<tr>
+		<td> [lang_name] </td><td> Label for the object name </td>
+		</tr>
+		<tr>
+		<td> [lang_child_name] </td><td> Label for the child object names </td>
+		</tr>
+		<tr>
+		<td> [lang_alias] </td><td> Label for the object alias </td>
+		</tr>
+		<tr>
+		<td> [lang_address] </td><td> Label for the object address </td>
+		</tr>
+		<tr>
+		<td> [lang_state] </td><td> Label for the object state </td>
+		</tr>
+		<tr>
+		<td> [lang_obj_type] </td><td> Label for the object type </td>
+		</tr>
+		<tr>
+		<td> [lang_summary_state] </td><td> Label for the summary state </td>
+		</tr>
+		<tr>
+		<td> [lang_output] </td><td> Label for the output </td>
+		</tr>
+		<tr>
+		<td> [lang_summary_output] </td><td> Label for the summary output </td>
+		</tr>
+		<tr>
+		<td> [lang_overview] </td><td> Label for the overview </td>
+		</tr>
+		<tr>
+		<td> [lang_instance] </td><td> Label for the NDO instance </td>
+		</tr>
+		<tr>
+		<td> [lang_next_check] </td><td> Label for the next check of the object </td>
+		</tr>
+		<tr>
+		<td> [lang_last_check] </td><td> Label for the last check of the object </td>
+		</tr>
+		<tr>
+		<td> [lang_current_attempt] </td><td> Label for the current attempt </td>
+		</tr>
+		<tr>
+		<td> [lang_last_state_change] </td><td> Label for the last state change </td>
+		</tr>
+		<tr>
+		<td> [lang_state_duration] </td><td> Label for the state duration </td>
+		</tr>
+		<tr>
+		<td> [lang_service_description] </td><td> Label for the service description </td>
+		</tr>
+		<tr>
+		<td>[lang_notes]</td><td>Label for the object notes</td>
+		</tr>
+		<tr>
+		<th colspan="2"> Paths </th>
+		</tr>
+		<tr>
+		<td> [html_base] </td><td> Absolute URL to HTML-Base (/nagios/nagvis) </td>
+		</tr>
+		<tr>
+		<td> [html_templates] </td><td> Path to hover templates directory (nagvis/nagvis/etc/templates/hover) </td>
+		</tr>
+		<tr>
+		<td> [html_template_images] </td><td> Path to hover template images directory (nagvis/nagvis/images/templates/hover) </td>
+		</tr>
+		</table>
+		
+		<h2> Special macros </h2>
+		There are macros for hover templates of a specified type. These macros should be surrounded by section macros. The section macros define that the included code will be removed if the hover template is not parsed for this type.
+		
+		For example a section macro for host macros looks like this:
+			&lt;!-- BEGIN host -->.+?&lt;!-- END host -->
+		
+		Below you can find a full list of the special macros
+		
+		<h3> All exception map objects </h3>
+		<table style="width:100%">
+		<tr>
+		<th width="250"> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> [obj_backendid] </td><td> The backend-id of the objects backend (backend_<*>) </td>
+		</tr>
+		<tr>
+		<td> [obj_backend_instancename] </td><td> The NDO instance name of the objects backend </td>
+		</tr>
+		</table>
+		
+		<h3> Host/Service objects </h3>
+		<table style="width:100%">
+		<tr>
+		<th width="250"> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> [obj_address] </td><td> The address of the host object </td>
+		</tr>
+		<tr>
+		<td> [obj_last_check] </td><td> The date and time of the last check of this object. The datetime is printed in the defined <a href="nagvis_config_format_description.html">dateformat</a>. </td>
+		</tr>
+		<tr>
+		<td> [obj_next_check] </td><td> The date and time of the next check of this object. The datetime is printed in the defined <a href="nagvis_config_format_description.html">dateformat</a>. </td>
+		</tr>
+		<tr>
+		<td> [obj_state_type] </td><td> The current state type (HARD/SOFT) </td>
+		</tr>
+		<tr>
+		<td> [obj_current_check_attempt] </td><td> The number of the current check attempt </td>
+		</tr>
+		<tr>
+		<td> [obj_max_check_attempts] </td><td> The number of the maximum check attempts </td>
+		</tr>
+		<tr>
+		<td> [obj_last_state_change] </td><td> The date and time of the last state change. The datetime is printed in the defined <a href="nagvis_config_format_description.html">dateformat</a>. </td>
+		</tr>
+		<tr>
+		<td> [obj_last_hard_state_change] </td><td> The date and time of the last hard state change. The datetime is printed in the defined <a href="nagvis_config_format_description.html">dateformat</a>. </td>
+		</tr>
+		<tr>
+		<td> [obj_state_duration] </td><td> The duration of the current state </td>
+		</tr>
+		<tr>
+		<td>[obj_notes]</td><td>The configured notes of the host or service objects</td>
+		</tr>
+		</table>
+		
+		<h3> Service objects </h3>
+		<table style="width:100%">
+		<tr>
+		<th> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> [service_description] </td><td> Service description in Nagios</td>
+		</tr>
+		<tr>
+		<td> [pnp_hostname] </td><td> Hostname with replaced blanks for links to PNP images </td>
+		</tr>
+		<tr>
+		<td> [pnp_service_description] </td><td> Service description with replaced blanks for links to PNP images </td>
+		</tr>
+		</table>
+		
+		<h3> Host objects </h3>
+		<table style="width:100%">
+		<tr>
+		<th width="250"> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> [pnp_hostname] </td><td> Hostname with replaced blanks for links to PNP images </td>
+		</tr>
+		</table>
+		
+		
+		<h3> Servicegroup objects </h3>
+		There is a very special macro for the child services of a servicegroup, this is the selection macro <code>&lt;!-- BEGIN servicegroup_child -->&lt;!-- END servicegroup_child --></code>.
+		<table style="width:100%">
+		<tr>
+		<th width="250"> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> [lang_child_name1] </td><td> Label for the host name of the child service </td>
+		</tr>
+		<tr>
+		<td> [obj_name1] </td><td> Hostname for the child service </td>
+		</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Context Templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Context Templates</h1>
+		<h2>Introduction</h2>
+		<p>Context templates are html files with some macros in them. These files can be used as context menus (right click menus) for the objects on the maps.</p>
+		<p>The context templates are located in <code>nagvis/templates/context/</code> relative to the nagvis root directory. The templates are named like this: <code>tmpl.&lt;name&gt;.html</code>. It is possible to add a css file to the template, the name has to be: <code>tmpl.&lt;name&gt;.css</code>.</p> 
+		<p>There are some so called macros available in context menus of all object types and some which are only available for some special objects. All standard macros are listed below.</p>
+		
+		<h2> General </h2>
+		<p>The following macros are available in hover menus of all object types:</p>
+		
+		<table style="width:100%">
+		<tr>
+		<th width="250"> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<th colspan="2"> General </th>
+		</tr>
+		<tr>
+		<td>[obj_id]</td><td>ID of object in JavaScript. Needed to locate the object specific parts e.g. to schedule a manual update of the state information.</td>
+		</tr>
+		<tr>
+		<td>[name]</td><td>Name of the object (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
+		</tr>
+		<tr>
+		<th colspan="2"> Language macros </th>
+		</tr>
+		<tr>
+		<td>[lang_refresh_status]</td><td>Label for refreshing the status of the object in frontend.</td>
+		</tr>
+		<tr>
+		<td>[lang_schedule_downtime]</td><td>Label for scheduling a downtime in Nagios.</td>
+		</tr>
+		<tr>
+		<td>[lang_reschedule_next_check]</td><td>Label for re-scheduling the next check of the object in Nagios.</td>
+		</tr>
+		<tr>
+		<td>[lang_connect_by_ssh]</td><td>Label for connecting a host by ssh.</td>
+		</tr>
+		<tr>
+		<th colspan="2"> Paths </th>
+		</tr>
+		<tr>
+		<td>[html_base]</td><td>Absolute URL to HTML-Base (Default: /nagios/nagvis)</td>
+		</tr>
+		<tr>
+		<td>[html_cgi]</td><td>Absolute URL to the Nagios CGIs (Default: /nagios/cgi-bin)</td>
+		</tr>
+		<tr>
+		<td>[html_templates]</td><td> Path to context templates directory (Default: /nagios/nagvis/nagvis/etc/templates/context)</td>
+		</tr>
+		<tr>
+		<td>[html_template_images]</td><td> Path to context template images directory (Default: /nagios/nagvis/nagvis/images/templates/context)</td>
+		</tr>
+		</table>
+		
+		<h2> Special macros </h2>
+		<p>There are macros for context templates of a specified type. These macros should be surrounded by section macros. The section macros define that the included code will be removed if the hover template is not parsed for this type.</p>
+		
+		<p>For example a section macro for host macros looks like this:</p>
+		<pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>
+		
+		<p>Below you can find a full list of the special macros.</p>
+		<h3>Host objects</h3>
+		<table style="width:100%">
+		<tr>
+		<th>Macro</th><th>Description</th>
+		</tr>
+		<tr>
+		<td>[address]</td><td>Address of the host configured in Nagios</td>
+		</tr>
+		</table>
+		<h3>Service objects</h3>
+		<table style="width:100%">
+		<tr>
+		<th>Macro</th><th>Description</th>
+		</tr>
+		<tr>
+		<td>[service_description]</td><td>Service description in Nagios</td>
+		</tr>
+		</table>
+	</body>
+</html>

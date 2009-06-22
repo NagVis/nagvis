@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>Templates installieren</h1>
+Seit NagVis 1.1x k&ouml;nnen Sie Templates hinzuf&uuml;gen, um das Aussehen von Header- und Hover-Men&uuml;s anpassen zu k&ouml;nnen.
+Einige dieser Templates erhalten Sie auf der <a href="http://www.nagvis.org/download/templates" target="_blank">NagVis template download</a>-Seite</p>
+<h2>Templates entpacken</h2>
+Entpacken Sie NagVis-Templates in einem Verzeichnis Ihrer Wahl
+<pre>tar xvzf NagVis-Template-&lt;name>-&lt;version>.tar.gz</pre>
+
+<h2>NagVis-Template installieren</h2>
+Mischen Sie den NagVis-Template-Verzeichnisbaum mit Ihrem NagVis-Ordner (Default /usr/local/nagios/share/nagvis).
+
+<pre>cp -r nagvis /usr/local/nagios/share/nagvis</pre>
+
+<h2>Konfigurieren</h2>
+<p>Nun sollten Sie das neue Template nutzen k&ouml;nnen. Sie m&uuml;ssen nur die Maps oder Objekte so konfigurieren, dass sie das Template nutzen.</p>
+<h3>Header-Templates</h3>
+<p>Sie k&ouml;nnen das Header-Template in der Hauptkonfiguration von NagVis oder im global-Abschnitt der Map-Konfiguration setzen. 
+Details finden Sie in der <a href="../map_config_format_description.html" target="_blank">Map-Konfigurationsformatbeschreibung</a>.</p>
+<h3>Hover-Templates</h3>
+<p>Sie k&ouml;nnen das Hover-Template in der Hauptkonfiguration f&uuml;r all Ihre Maps setzen, im global-Abschnitt einer Map f&uuml;r alle Objekte auf dieser Map oder in jedem Objekt, um ein angepasstes Men&uuml; f&uuml;r spezielle Objekte zu erhalten.
+Details finden Sie in der <a href="../map_config_format_description.html" target="_blank">Map-Konfigurationsformatbeschreibung</a>.</p>
+ </html>

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>Gadgets</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+		<h1>Gadgets</h1>
+		
+		<h2>General Information</h2>
+		<p>Gadgets are small programs which generate images from information which 
+			is provided by NagVis. The main idea is to provide the performance data 
+			of Nagios to these programs for visualizing it as nice graphs or fancy 
+			speedometers, thermometers etc.</p>
+		<p>The gadgets can be written in any language which can be interpreted by 
+			your webserver. Some options can be PHP, Perl,...</p>
+		<p>Gadgets are only supported for service objects. An object can be turned 
+			into a gadget by setting view_type=&quot;gadget&quot; and a valid gadget_url.</p>
+		<p>NagVis supports gadgets since version 1.4.</p>
+		
+		<img src="../general/img/nagvis-1.4-gadget-label-hover.png" alt="NagVis 1.4 std_speedometer gadget with label and hover menu" /><br />
+		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer gadget on test map with enabled label.</p>
+		
+		<h2>Parameters</h2>
+		<p>The gadgets get their information via a HTTP-Get call from NagVis.</p>
+		<p>The following parameters are being passed to the gadgets:</p>
+		
+		<table style="width:100%">
+			<tr>
+				<th width="200">Parameter</th>
+				<th width="150">Example value</th>
+				<th>Description</th>
+			</tr>
+			<tr>
+				<td>name1</td>
+				<td>localhost</td>
+				<td>The name of the host.</td>
+			</tr>
+			<tr>
+				<td>name2</td>
+				<td>Current Load</td>
+				<td>The service description of the object.</td>
+			</tr>
+			<tr>
+				<td>state</td>
+				<td>OK</td>
+				<td>The string which represents the current state.</td>
+			</tr>
+			<tr>
+				<td>stateType</td>
+				<td>HARD</td>
+				<td>The type of the current state. Can be HARD or SOFT</td>
+			</tr>
+			<tr>
+				<td>perfdata</td>
+				<td>load1=0.960;5.000;10.000;0; load5=0.570;4.000;6.000;0; load15=0.540;3.000;4.000;0;</td>
+				<td>The current performance data information provided by Nagios. 
+					It's important to have valid performance data here.</td>
+			</tr>
+		</table>
+		
+		<p>A valid http get on the std_speedometer.php looks like this:</p>
+		<code>std_speedometer.php?name1=localhost&amp;name2=Current%20Load&amp;state=OK&amp;stateType=HARD&amp;perfdata=load1=0.450;5.000;10.000;0;%20load5=0.260;4.000;6.000;0;%20load15=0.750;3.000;4.000;0;</code>
+		
+		<h2>How to configure?</h2>
+		<p>Please check the parameters <code>view_type</code> and <code>gadget_url</code> on service object in the <a href="map_config_format_description.html#service">map configuration format description</a></p>.
+		
+		<h2>How to create an own Gadget</h2>
+		<p>The best thing is to take a look at the std_speedometer and adapt the
+			core things from there</p>
+		<p>You should set a sample perfdata string in the gadget code by writing it to
+			the variable $sDummyPerfdata. This makes it possible to show the gadget with
+			dummy data in the WUI. It's much easier to design the maps in the WUI when
+			the gadgets are shown there. Important: The variable needs to be set before
+			the gadgets_core.php is included.</p>
+	</body>
+</html>

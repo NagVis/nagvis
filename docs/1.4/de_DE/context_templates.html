@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Kontext-Templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Kontext-Templates</h1>
+		<h2>Einleitung</h2>
+		<p>Kontext-Templates sind HTML-Dateien, die u.a. Makros enthalten. Dieses Dateien k&ouml;nnen als Kontextmen&uuml;s ("Rechtsklick"-Men&uuml;s) f&uuml;r die Objekte auf der Map benutzt werden.</p>
+		<p>Die Kontextmen&uuml;s befinden sich in <code>nagvis/templates/context/</code> relativ zum NagVis-Root-Verzeichnis. Die Templates sind wie folgt benannt: <code>tmpl.&lt;name&gt;.html</code>. Es ist m&ouml;glich, eine CSS-Datei zum Template hinzuzuf&uuml;gen, der Name lautet dann: <code>tmpl.&lt;name&gt;.css</code>.</p> 
+		<p>Es gibt einige sogenannte Makros in Kontextmen&uuml;s, die f&uuml;r alle Objekte verf&uuml;gbar sind, und einige, die nur f&uuml;r spezielle Makros gelten. Alle Standardmakros sind nachfolgend aufgef&uuml;hrt.</p>
+		
+		<h2> Allgemeines </h2>
+		<p>Die folgenden Makros sind in Hover-Men&uuml;s f&uuml;r alle Objekttypen verf&uuml;gbar:</p>
+		
+		<table style="width:100%">
+		<tr>
+		<th width="250"> Makro </th><th> Beschreibung </th>
+		</tr>
+		<tr>
+		<th colspan="2"> Allgemein </th>
+		</tr>
+		<tr>
+		<td>[obj_id]</td><td>ID des Objekts in JavaScript. Wird ben&ouml;tigt, um die objektspezifischen Teile zu lokalisieren, z.B. f&uuml;r eine manuelle Aktualisierung einer Statusinformation.</td>
+		</tr>
+		<tr>
+		<td>[name]</td><td>Name des Objekts (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
+		</tr>
+		<tr>
+		<th colspan="2"> Sprachmakros </th>
+		</tr>
+		<tr>
+		<td>[lang_refresh_status]</td><td>Bezeichnung f&uuml;r die Auffrischung des Zustands des Objekts im Frontend.</td>
+		</tr>
+		<tr>
+		<td>[lang_schedule_downtime]</td><td>Bezeichnung f&uuml;r die Planung einer Ausfallzeit in Nagios.</td>
+		</tr>
+		<tr>
+		<td>[lang_reschedule_next_check]</td><td>Bezeichnung f&uuml;r die erneute Planung der n&auml;chsten Pr&uuml;fung des Objekts in Nagios.</td>
+		</tr>
+		<tr>
+		<th colspan="2"> Pfade </th>
+		</tr>
+		<tr>
+		<td>[html_base]</td><td>Absolute URL zur HTML-Basis (Default: /nagios/nagvis)</td>
+		</tr>
+		<tr>
+		<td>[html_cgi]</td><td>Absolute URL zu den Nagios-CGIs (Default: /nagios/cgi-bin)</td>
+		</tr>
+		<tr>
+		<td>[html_templates]</td><td> Pfad zum Context-Templates-Verzeichnis (Default: /nagios/nagvis/nagvis/etc/templates/context)</td>
+		</tr>
+		<tr>
+		<td>[html_template_images]</td><td> Pfad zum Context-Template-Images-Verzeichnis (Default: /nagios/nagvis/nagvis/images/templates/context)</td>
+		</tr>
+		</table>
+		
+		<h2> Spezielle Makros </h2>
+		<p>Es gibt Makros f&uuml;r Context-Templates eines bestimmten Typs. Diese Makros sollten zwischen "Section"-Makros stehen. Die "Section"-Makros definieren, dass der eingeschlossene Code entfernt wird, wenn das Hover-Template nicht f&uuml;r diesen Typ geparst wird???.</p>
+		
+		<p>Ein "Section"-Makro f&uuml;r Host-Makros sieht wie folgt aus:</p>
+		<pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>
+		
+		<p>Nachfolgend finden Sie eine vollst&auml;ndige Liste der speziellen Makros.</p>
+		<h3>Service-Objekte</h3>
+		<table style="width:100%">
+		<tr>
+		<th>Makro</th><th>Beschreibung</th>
+		</tr>
+		<tr>
+		<td>[service_description]</td><td>Service-Beschreibung in Nagios</td>
+		</tr>
+		</table>
+	</body>
+</html>

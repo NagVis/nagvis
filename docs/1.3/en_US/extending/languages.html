@@ -1,0 +1,200 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Language file format</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Language file format</h1>
+		<h2> General Informations </h2>
+		Since NagVis 1.x we changed the language format from simple textfiles to XML. The different files for NagVis, WUI, Labels were also merged together to one file per language.
+		
+		The language files are stored in <code>nagvis/includes/languages</code>. The files are named <code><language>.xml</code>.
+		
+		At the moment there are language files for the following languages:
+		<ul>
+		<li> english</li>
+		<li> german</li>
+		</ul>
+		
+		<h2> Build your own... </h2>
+		Your language is not supported by NagVis? No problem! You can easily build your own language file. Just copy an existing file, rename it and change all the values you want to change.
+		
+		If you built a new language file or fixed sth. in existing language files you're welcome to submit the file to us so we can implement it in the next NagVis release or publish it on Nagvis.org
+		
+		<h2> XML Layout example </h2>
+		This is only an example to show the structure of the language files. If you like to see the complete structure of the language files, have a look at the delivered files at <code>nagvis/includes/languages</code>.
+		<pre>
+&lt;?xml version="1.0" encoding="UTF-8" ?>
+&lt;language>
+	&lt;meta>
+		&lt;name>language-name&lt;/name>
+		&lt;desc>language description&lt;/desc>
+		&lt;version>language file version&lt;/version>
+	&lt;/meta>
+	&lt;global>
+		&lt;global>
+			&lt;labels>
+				&lt;!-- All labels which are used in NagVis and WUI //-->
+				&lt;key>
+					&lt;text>Value&lt;/text>
+				&lt;/key>
+			&lt;/labels>
+			&lt;messages>
+				&lt;!-- All messages which are used in NagVis and WUI //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/global>
+	&lt;/global>
+	&lt;nagvis>
+		&lt;global>
+			&lt;labels>
+				&lt;!-- All labels which are used in NagVis //-->
+				&lt;key>
+					&lt;text>Value&lt;/text>
+				&lt;/key>
+			&lt;/labels>
+			&lt;messages>
+				&lt;!-- All messages which are used in NagVis //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/global>
+	&lt;/nagvis>
+	&lt;backend>
+		&lt;global>
+			&lt;messages>
+				&lt;!-- All messages which are used in all backends //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/global>
+		&lt;ndomy>
+			&lt;messages>
+				&lt;!-- All messages which are used in NDO-MySQL backend //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/ndomy>
+		&lt;html>
+			&lt;messages>
+				&lt;!-- All messages which are used in HTML backend //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/html>
+	&lt;/backend>
+	&lt;wui>
+		&lt;global>
+			&lt;labels>
+				&lt;!-- All labels which are used in WUI //-->
+				&lt;key>
+					&lt;text>Value&lt;/text>
+				&lt;/key>
+			&lt;/labels>
+			&lt;messages>
+				&lt;!-- All messages which are used WUI //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/global>
+		&lt;editMainCfg>
+			&lt;labels>
+				&lt;!-- All labels which are used in WUI Main Configuration //-->
+				&lt;key>
+					&lt;text>Value&lt;/text>
+				&lt;/key>
+			&lt;/labels>
+			&lt;messages>
+				&lt;!-- All messages which are used WUI Main Configuration //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/editMainCfg>
+		&lt;mapManagement>
+			&lt;labels>
+				&lt;!-- All labels which are used in WUI Map Management //-->
+				&lt;key>
+					&lt;text>Value&lt;/text>
+				&lt;/key>
+			&lt;/label>
+			&lt;messages>
+				&lt;!-- All messages which are used WUI Map Management //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/mapManagement>
+		&lt;addModify>
+			&lt;labels>
+				&lt;!-- All labels which are used in WUI Add/Modify //-->
+				&lt;key>
+					&lt;text>Value&lt;/text>
+				&lt;/key>
+			&lt;/label>
+			&lt;messages>
+				&lt;!-- All messages which are used WUI Add/Modify //-->
+				&lt;key>
+					&lt;title>Title Value&lt;/title>
+					&lt;text>Text Value&lt;/text>
+				&lt;/key>
+			&lt;/messages>
+		&lt;/addModify>
+	&lt;/wui>
+&lt;/language></pre>
+		
+		<h2> Macros </h2>
+		There is support for replacing given strings with some other values. 
+		
+		In the following language definition there are two types of replacements. First there is a string (<code>[USER]</code>) and second there are two default codes (<code>[I]</code> and <code>[/i]</code>) which are replaced with the same HTML-Tag without passing any values by calling the definition:
+		
+		<pre>&lt;permissionDenied>
+	&lt;title>Permissions denied!&lt;/title>
+	&lt;text>The user [I][USER][/I] has no permission to view this map!&lt;/text>
+&lt;/permissionDenied></pre>
+		
+		When the language definition is called as follows, the string <code>[USER]</code> will be replaced by the value in <code>$user</code>.
+		<pre>$FRONTEND->messageToUser('ERROR','permissionDenied','USER~'.$user);</pre>
+		
+		<h2> Default Macros </h2>
+		Default Macros are sth. like HTML-Tags which don't have to be defined by the user. At the moment the following default macros are supported:
+		
+		<table>
+		<tr>
+		<th> Macro </th><th> Replaced by </th>
+		</tr>
+		<tr>
+		<td> [i] </td><td> &lt;i> </td>
+		</tr>
+		<tr>
+		<td> [/i] </td><td> &lt;/i> </td>
+		</tr>
+		<tr>
+		<td> [b] </td><td> &lt;b> </td>
+		</tr>
+		<tr>
+		<td> [/b] </td><td> &lt;/b> </td>
+		</tr>
+		</table>
+		
+		<h2> Special Chars </h2>
+		Special chars like &auml;,&ouml;,&uuml;,&quot;,',... have to be set as HTML-entities (e.g. &amp;nbsp;)
+		</p>
+	</body>
+</html>

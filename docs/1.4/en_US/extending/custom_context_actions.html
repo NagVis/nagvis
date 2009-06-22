@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Custom Context Menu Actions</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Custom Context Menu Actions</h1>
+		
+		<h2>Introduction</h2>
+		<p><img src="../../general/img/nagvis-1.4-context-ssh-1.png" style="margin-right:10px;" align="left" /> 
+		NagVis 1.4 introduces a powerful new feature called context menus. The 
+		context menus basically are right-click menus on the status icons. You can 
+		customize these menus by simply editing some template files. The template
+		files are simple html files including some macros which are replaced during
+		render time in NagVis.</p>
+		<p>The context menus give you the ability to improve your administrative
+		workflow with the monitoring information dramatically. Imagine you have a 
+		NagVis map as the primary user interface to gather status information about 
+		your systems and even as a base to control your systems. Imagine you can view
+		status information from NagVis and simply connect to the problematic systems
+		by ssh or via terminal session by just two clicks. It is also possible to store
+		some default recover jobs in scripts or anything else.</p>
+		<p>Take a look at this guide to get some ideas of the power of this new feature.</p>
+		<p>&nbsp;</p>
+		<h2>Quick how-to</h2>
+		<p>This is a quick how-to to add a &quot;connect by ssh&quot; option to the 
+		NagVis hosts context menu. Most of the changes have to be made on the client
+		browsers to get it handle ssh connections. In this guide I am using the firefox
+		on Ubuntu. It is no problem to get this work on other systems like Windows.</p>
+		
+		<h3>1. Read basics about context templates</h3>
+		
+		The basics about the context templates are described <a href="../context_templates.html">here</a>. Read it before proceeding.
+		
+		<h3>2. Create custom context template</h3>
+		
+		Just copy the default backend:
+		
+		<pre>cd /usr/local/nagios/share/nagvis
+cp nagvis/templates/context/tmpl.default.html nagvis/templates/context/tmpl.default-ssh.html</pre>
+		
+		Now add a line to the host specific macro section like follows
+		
+		<pre>&lt;li>&lt;a href="ssh://[address]">[lang_connect_by_ssh]&lt;/a>&lt;/li></pre>
+		
+		The template is finished.
+		
+		<h3>3. Configure host to use the new template</h3>
+		
+		Set the option to use the new template called default-ssh:
+		
+		<pre>context_menu=true
+context_template=default-ssh</pre>
+		
+		You can set this option in the global section of a map, in a host object or even
+		a template which is used in a host object.
+		
+		<h3>4. Configure your client to handle ssh:// uris</h3>
+		
+		In this case I configure firefox on Ubuntu Linux. This may differ on your system.
+		
+		Open <code>about:config</code> in your firefox. Add some new options:
+		
+		<pre>Name: network.protocol-handler.app.ssh
+Type: String
+Value: /usr/local/bin/ssh-connect-handler</pre>
+		
+		<pre>Name: network.protocol-handler.expose.ssh
+Type: Boolean
+Value: true</pre>
+		
+		<pre>Name: network.protocol-handler.external.ssh
+Type: Boolean
+Value: true</pre>
+		
+		<pre>Name: network.protocol-handler.warn-external.ssh
+Type: Boolean
+Value: false</pre>
+		
+		<h3>5. Create a handler script</h3>
+		
+		Create the script at the given script path. In my case it is <code>/usr/local/bin/ssh-connect-handler</code>.
+		
+		<pre>#!/bin/bash
+xterm -e ssh ${1#ssh:\/\/*}</pre>
+		
+		You need to make this script executable.
+		
+		<pre>chmod +x /usr/local/bin/ssh-connect-handler</pre>
+		
+		<h3>6. Test handler script</h3>
+		
+		Just enter <code>ssh://&lt;test-host></code> in your browser address bar and press enter.
+		If an xterm with the ssh session opens everything is ok here.
+		
+		<h3>7. Test context links</h3>
+		Now open the map you configured the new context template usage. Then 
+		right-click the host you configured and hit the menu entry &quot;Connect by ssh&quot;.
+		A terminal window should open now.
+		
+		<h2>Perspective</h2>
+		<p>With this knowledge you are ready to configure NagVis to be the core of your
+		daily administrative and monitoring tasks. Be creative now!</p>
+		<p>We like you to give us some feedback on this feature and how you use it.</p>
+	</body>
+</html>

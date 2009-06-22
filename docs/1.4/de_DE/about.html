@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+	<title>&Uuml;ber</title>
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+</head>
+<body>
+	<h1>&Uuml;ber</h1>
+	</a name=whatis>
+	<h2>Was ist NagVis?</h2>
+		<p>NagVis ist ein Visualisierungs-Addon f&uuml;r das bekannte Netzwerk-Management-System Nagios&reg;.</p>
+		<p>NagVis kann benutzt werden, um Nagios-Daten zu visualisieren, d.h. IT-Prozesse wie ein Mail-System oder eine Netzwerkinfrastruktur darzustellen.
+			Durch die Benutzung von Daten, die von NDO (einem Nagios-Addon) zur Verf&uuml;gung gestellt werden, kann NagVis die Objekte auf den Maps in regelm&auml;&szlig;igen Intervallen aktualisieren.
+			Diese Maps erm&ouml;glichen es, die Objekte auf verschiedene Arten zu arrangieren:
+			<ul>
+			<li>physikalisch (z.B. alle Hosts in einem Rack/Raum/Bereich)</li>
+			<li>logisch (z.B. alle Applikations-Server)</li>
+			<li>geographisch (z.B. alle Hosts in einem Land)</li>
+			<li>Gesch&auml;ftsprozesse (z.B. alle Hosts/Services, die in einen Prozess involviert sind)</li>
+			</ul>
+		</p>
+	</a name="howworks">
+	<h2>Wie arbeitet NagVis?</h2>
+		<p>NagVis ist ein Pr&auml;sentationswerkzeug f&uuml;r die Informationen, die von Nagios gesammelt werden. NagVis erh&auml;lt diese Informationen von Backends.
+		Es gibt ein Default-Backend, das mit NagVis geliefert wird: NDO-MySQL-Backend. Dieses Backend liest alle Informationen aus der NDO-(Nagios Data Out)-Datenbank.	
+		NDO ist ein Addon f&uuml;r Nagios. Sie finden es auf der <a href="http://www.nagios.org/" target="_blank">offiziellen Nagios-Homepage</a>.</p>
+		<p>Sie k&ouml;nnen alle Nagios-Objekte (Hosts, Services, Hostgroups, Servicegroups) zu so genannten Maps hinzuf&uuml;gen. Jede Map kann durch ihre eigene 
+		<a href="map_config_format_description.html">Konfigurationsdatei</a> konfiguiert werden. Sie k&ouml;nnen diese Konfigurationsdateien mit Ihrem bevorzugten
+		Texteditor oder mit Hilfe des Web-Konfigurations-Tool namens WUI anpassen. Au&szlig;erdem k&ouml;nnen Sie einige spezielle NagVis-Objekts zu den Maps hinzuf&uuml;gen.
+		Diese Objekte sind "Shapes", "Textboxen" und Referenzobjekte f&uuml;r andere Maps.</p>
+		<p>Jedes der Objekte auf Ihren Maps kann nach Ihren Bed&uuml;rfnissen angepasst werden. Es gibt z.B. Verweise auf das Nagios-Frontend f&uuml;r jedes Objekt,
+		das ein Nagios-Objekt repr&auml;sentiert. Sie k&ouml;nnen diese Verweise einfach anpassen. <br>Es gibt ein Hover-Men&uuml;, das per Default aktiviert ist.
+		Das Hover-Men&uuml; zeigt detaillierte Informationen f&uuml;r jedes Objekt. Hover-Men&uuml;s k&ouml;nnen einfach ge&auml;ndert werden, indem die 
+		<a href="hover_templates.html">Templates</a> angepasst werden. Sie k&ouml;nnen auch das Hover-Men&uuml; deaktivieren.<br>
+		Per Default werden die Objekte als Icons auf der Map angezeigt. Sie k&ouml;nnen diese Icons durch <a href="extending/iconsets.html">Iconsets</a> von der 
+		NagVis-Homepage oder durch eigene ersetzen. Die Objekte k&ouml;nnen auch als Linien oder als <a href="gadgets.html">Gadgets</a> angezeigt werden.</p>
+		<p>Neben den normalen Maps gibt es die <a href="automap.html">Automap</a>. Sie wird automatisch auf Basis der Nagios-Konfiguration generiert. Zur Nutzung der 
+		Automap m&uuml;ssen Sie die "Parent"-Abh&auml;ngigkeiten in Nagios nutzen. Die Automap erzeugt ein Hintergrundbild basierend auf der Konfiguration, den
+		Layout-Parametern und den Parent-Abh&auml;ngigkeiten.</p>
+	</a name=licensing>
+	<h2>Lizenzierung</h2>
+		<p>NagVis ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License Version 2 verteilen und/oder modifizieren, die von der Free Software Foundation ver&ouml;ffentlich wurden.</p>
+		<p>NagVis wird in der Hoffnung verteilt, dass es n&uuml;tzlich ist, aber OHNE JEGLICHE GARANTIE, auch ohne die implizite Garantie der VERMARKTBARKEIT oder der TAUGLICHKEIT F&uuml;R EINEN BESTIMMTEN ZWECK.
+		Genauere Details finden Sie in der GNU General Public License.</p>
+</body>
+</html>

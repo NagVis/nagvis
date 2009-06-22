@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Main configuration format description</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>  
+		<h1>Main configuration format description</h1>
+		<h2> General Information </h2>
+		<p>The Main Configuration file is designed in plain text "ini"-like format.
+		There are sections which are marked by the surrounding brackets [] and variables which have an assigned value. The variables have to be in the correct section so you have to ensure to have uncommented the section too.
+		Semicolons (<code>;</code>) are used to mark comments. Sections and variables with a leading semicolon are commented out and won't be recognized by NagVis.</p>
+		<p>In a fresh NagVis installation there is no file with the default configuration. The default configuration is stored in the PHP-Code of NagVis. If there is a file <code>etc/nagvis.ini.php</code> which has stored configuration information it will override the default configurations.
+		There is a file <code>etc/nagvis.ini.php-sample</code> with sample configuration values. All values are commented out.</p>
+		
+		<h2>Section overview</h2>
+		<ul>
+		<li>
+			<a href="#global">global</a><br />
+			General options which affect the whole NagVis installation</li>
+		<li>
+			<a href="#paths">paths</a><br />
+			Path definitions</li>
+		<li>
+			<a href="#defaults">defaults</a><br />
+			Default values which are inherited to the maps and its objects</li>
+		<li>
+			<a href="#index">index</a><br />
+			Options to configure the Overview page of NagVis <font color="#ff0000">(New in 1.4)</font></li>
+		<li>
+			<a href="#automap">automap</a><br />
+			Options for the Automap</li>
+		<li>
+			<a href="#wui">wui</a><br />
+			Options for the WUI</li>
+		<li>
+			<a href="#worker">worker</a><br />
+			Options for the Worker <font color="#ff0000">(New in 1.4)</font></li>
+		<li>
+			<a href="#backend">backend_*</a><br />
+			Backend definitions</li>
+		<li>
+			<a href="#rotation">rotation_*</a><br />
+			Rotation pool definitions</li>
+		</ul>
+		
+		<h2>Description of the sections in detail</h2>
+		<a name="global"></a><h3>global</h3>
+		<p>All values which are used througout NagVis are stored in the global section.</p>
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> dateformat </td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date()</a> function of php</td>
+		</tr>
+		<tr>
+		<td> <strike>displayheader</strike> </td><td> <strike>1</strike> </td><td> <strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font> </td>
+		</tr>
+		<tr>
+		<td> language </td><td> en_US </td><td> Select language to use in NagVis by default. There are three language files delivered by default: en_US (english), de_DE (german) and fr_FR (french). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> refreshtime </td><td> 60 </td><td> Refresh time of maps or reloading the next map in map rotation </td>
+		</tr>
+		</table>
+		
+		<a name="paths"></a><h3> paths </h3>
+		In this section all needed path variables are defined.
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> base </td><td> <code>/usr/local/nagios/share/nagvis/</code> </td><td> Absolute physical NagVis path </td>
+		</tr>
+		<tr>
+		<td> htmlbase </td><td> <code>/nagios/nagvis</code> </td><td> Absolute html NagVis path </td>
+		</tr>
+		<tr>
+		<td> htmlcgi </td><td> <code>/nagios/cgi-bin</code> </td><td> Absolute html NagVis cgi path </td>
+		</tr>
+		</table>
+		
+		<a name="defaults"></a><h3> defaults </h3>
+		Default values which are applied to the maps you use. If there is no value set in the map or an element on the map the default value is used.
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> backend </td><td> ndomy_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
+		</tr>
+		<tr>
+		<td> backgroundcolor </td><td> #fff </td><td> Default background color of maps </td>
+		</tr>
+		<tr>
+		<td>contextmenu</td><td>0</td><td>Enable/Disable the context menu on your map objects. (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP)  (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> eventhighlight </td><td> 1 </td><td> Enable/Disable highlighting of the state changing object by adding a flashing border  (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> eventhighlightduration </td><td> 10000 </td><td> Duration of the highlighting in miliseconds (<font color="#ff0000">New in 1.4.1</font>)</td>
+		</tr>
+		<tr>
+		<td> eventhighlightinterval </td><td> 500 </td><td> Interval of the highlighting in miliseconds (<font color="#ff0000">New in 1.4.1</font>)</td>
+		</tr>
+		<tr>
+		<td> eventlog </td><td> 0 </td><td> Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information  (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td>eventloghidden</td><td>1</td><td>Hide/Show the eventlog on map loading (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td>eventscroll</td><td> 1 </td><td> Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope  (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> eventsound </td><td> 1 </td><td> Enable/Disable sound signals on state changes  (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu </td>
+		</tr>
+		<tr>
+		<td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
+		</tr>
+		<tr>
+		<td> hovermenu </td><td> 1 </td><td> Enable/Disable the hover menu </td>
+		</tr>
+		<tr>
+		<td> hovertemplate </td><td> default </td><td> Default <a href="hover_templates.html">hover template</a> </td>
+		</tr>
+		<tr>
+		<td> <strike>hovertimeout</strike> </td><td> <strike>5</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
+		</tr>
+		<tr>
+		<td> hoverdelay </td><td> 0 </td><td> Delay of hover menu appearance in seconds </td>
+		</tr>
+		<tr>
+		<td> hoverchildsshow </td><td> 1 </td><td> Enable/Disable the child objects in hover menu</td>
+		</tr>
+		<tr>
+		<td> hoverchildslimit </td><td> 10 </td><td> Limit hover child objects to this maximum value</td>
+		</tr>
+		<tr>
+		<td> hoverchildsorder </td><td> asc </td><td> Order of the child objects (Available: asc/desc)</td>
+		</tr>
+		<tr>
+		<td> hoverchildssort </td><td> a </td><td> Sort method of the child objects (Available: "s": State, "a": Alphabet )</td>
+		</tr>
+		<tr>
+		<td> icons </td><td> std_medium </td><td> Default iconset </td>
+		</tr>
+		<tr>
+		<td> onlyhardstates </td><td> 0 </td><td> Recognize only hard states (not soft) </td>
+		</tr>
+		<tr>
+		<td> recognizeservices </td><td> 1 </td><td> Recognize service states in host/hostgroup objects </td>
+		</tr>
+		<tr>
+		<td> showinlists </td><td> 1 </td><td> Show the maps in lists (dropdowns,index page,...) </td>
+		</tr>
+		<tr>
+		<td> urltarget </td><td> _self </td><td> Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
+		</tr>
+		<tr>
+		<td> <strike>usegdlibs</strike> </td><td> <strike>1</strike> </td><td> <strike>Use gdlibs (if set to 0, lines will not work, all other types should work fine)</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
+		</tr>
+		</table>
+		
+		<a name="index"></a>
+		<h3> index </h3>
+		Options to configure the Overview page of NagVis <font color="#ff0000">(New in 1.4)</font>
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+			<td>backgroundcolor</td>
+			<td>#fff</td>
+			<td>Configure the background color of the overview page</td>
+		</tr>
+		<tr>
+		<td> cellsperrow </td><td> 4 </td><td> Maps per row in map listing </td>
+		</tr>
+		<tr>
+		<td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu</td>
+		</tr>
+		<tr>
+		<td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
+		</tr>
+		<tr>
+		<td> showrotations </td><td> 1 </td><td>Enable/Disable the listing of defined rotations</td>
+		</tr>
+		</table>
+		
+		<a name="automap"></a>
+		<h3> automap </h3>
+		Sets the automap options.
+		
+		<table style="width:100%">
+			<tr>
+			<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+			</tr>
+			<tr>
+			<td> defaultparams </td><td> &amp;maxLayers=2 </td><td> These are the parameters for the automap views and links in the lists (map index page, dropdown menus in header) </td>
+			</tr>
+			<tr>
+			<td> defaultroot </td><td> localhost </td><td> Default value for the root object. For details see <a href="automap.html">Automap documentation</a> </td>
+			</tr>
+			<tr>
+			<td> graphvizpath </td><td> /usr/local/bin </td><td> If the graphviz binaries (dot,neato,twopi,...) could not be found in the PATH the path has to be set here </td>
+			</tr>
+			<tr>
+			<td> showinlists </td><td> 1 </td><td> Enable/Disable the automap in map lists (map index page, dropdown menus in header) </td>
+			</tr>
+		</table>
+		
+		<a name="wui"></a>
+		<h3> wui </h3>
+		These are the options for the WUI.
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> allowedforconfig </td><td> EVERYONE </td><td> Users who are allowed to change the NagVis configuration (comma separated list) or EVERYONE </td>
+		</tr>
+		<tr>
+		<td> autoupdatefreq </td><td> 25 </td><td> In this interval the map gets backuped by the WUI. </td>
+		</tr>
+		<tr>
+		<td> maplocktime </td><td> 5 </td><td> Time in minutes a map is locked by an editing user. </td>
+		</tr>
+		</table>
+		
+		<a name="worker"></a>
+		<h3> worker </h3>
+		Options for the new worker in the javascript frontend of NagVis. <font color="#ff0000">(New in 1.4)</font>
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> interval </td><td> 5 </td><td> The interval in seconds in which the worker will check for objects which need to be updated. </td>
+		</tr>
+		<tr>
+		<td> updateobjectstates </td><td> 15 </td><td> The retention time of the states in seconds in the frontend. The state information will be refreshed after this time is over on next worker interval. </td>
+		</tr>
+		</table>
+		
+		<a name="backend"></a><h3> backend_* </h3>
+		The backend sections to define the backends are all named <code>[backend_&lt;backend-id>]</code>.
+		In the example the <code>backend_id</code> is <code>ndomy_1</code>.
+		
+		Depending on the value in backendtype the valid values for the backends have to be set. In this example it is the ndomy backend.
+		
+<pre>[backend_ndomy_1]
+backendtype="ndomy"
+htmlcgi="/nagios/cgi-bin"
+; the following options depend on the selected backendtype, in this case it is ndomy
+dbhost="localhost"
+dbport=3306
+dbname="db_nagios"
+dbuser="root"
+dbpass="xxx"
+dbprefix="nagios_"
+dbinstancename="default"
+maxtimewithoutupdate=181</pre>
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> backendtype </td><td> ndomy </td><td> type of backend - MUST be set </td>
+		</tr>
+		<tr>
+		<td> htmlcgi </td><td> /nagios/cgi-bin </td><td> Path to the cgi-bin directory of this backend (interesting for multiple NDO backends) </td>
+		</tr>
+		</table>
+		<p>For the backendtype specific options see the <a href="backends.html">backends documentation</a>.</p>
+		
+		<a name="rotation"></a>
+		<h3> rotation_* </h3>
+		Defines several map rotation pools. In this example the browser switches between the maps demo and demo2 every 15 seconds. The rotation is enabled by url: index.php?rotation=<rotation-id> in this case the rotation id is: "demo"
+		
+<pre>[rotation_demo]
+maps="demo,demo2"
+interval=15</pre>
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> interval </td><td> 15 </td><td> Map rotation interval in seconds </td>
+		</tr>
+		<tr>
+		<td> maps </td><td> </td>
+		<td> 
+			<p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessable by the server which NagVis is running on.</p>
+			<font color="#ff0000">New in 1.4:</font> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.
+		</td>
+		</tr>
+		</table>
+	</body>
+</html>

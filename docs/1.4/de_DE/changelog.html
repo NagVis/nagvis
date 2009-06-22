@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+   <head>
+      <title>changelog</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+   </head>
+   <body>
+		<h1>NagVis 1.4.x Changelog</h1>
+			<ul>
+				<li><a href=#current>aktuelle Entwicklung</a></li>
+				<li><a href=#1.4.1>1.4.1</a></li>
+				<li><a href=#1.4>1.4</a></li>
+				<li><a href=#1.4rc3>1.4rc3</a></li>
+				<li><a href=#1.4rc2>1.4rc2</a></li>
+				<li><a href=#1.4rc1>1.4rc1</a></li>
+			</ul>		
+		<a name=current></a>
+		<h2>Subversion - aktuelle Entwicklung</h2>
+		<ul>
+			<li>keine &Auml;nderungen bisher</li>
+		</ul>
+
+		<a name="1.4.1"></a>
+		<h2>Release 1.4.1 - 09.06.2009</h2>
+		<h3>Allgemein</h3>
+		<ul>
+			<li>hosturl, serviceurl, ... f&uuml;r einfachere Integration mit Drittanbieter-Tools integriert. Danke an die Jungs von op5.</li>
+			<li>die Optionen event_highlight_interval und event_highligt_duration zu den Konfigurationen hinzugef&uuml;gt, um das Ereignis-Highlighting zu kontrollieren</li>
+			<li>Caching-Mechanismus f&uuml;r Map-Thumbsnails auf der &Uuml;bersichtsseite hinzugef&uuml;gt</li>
+			<li>Fehlerbehandlung verbessert, wenn externe URLs in Rotationen ge&ouml;ffnet werden</li>
+			<li>die CSS-Dateien von Hover-Men&uuml;s werden nun in allen F&auml;llen geladen, wenn IE6 benutzt wird</li>
+			<li>Bugfix: hartkodierten Tabellenpr&auml;fix beim ndomy-Backend entfernt</li>
+			<li>Bugfix: Benutzermeldung korrigiert, wenn eine Map im Wartungsmodus ist</li>
+			<li>Popup auf der &Uuml;bersichtsseite korrigiert, wenn eine Map im Wartungsmodus ist</li>
+			<li>Rotationen k&ouml;nnen wieder URLs mit mehreren Parametern haben</li>
+		</ul>
+		<h3>WUI</h3>
+		<ul>
+			<li>WUI: die WUI erkennt nun background_color und bg_color bei Textboxen</li>
+			<li>WUI: Bugfix: Problem beim mehrfachen Ersetzen von speziellen Zeichen in AJAX-Anfragen korrigiert</li>
+			<li>WUI: Bugfix: Fehler bei Listings mit mehr als 15 Maps korrigiert</li>
+		</ul>
+
+		<a name="1.4"></a>
+		<h2>Release 1.4 - 22.05.2009</h2>
+		<h3>Allgemein</h3>
+		<ul>
+			<li>Client-Speichernutzungsverbesserungen</li>
+			<li>Jetzt werden nur Maps mit g&uuml;ltigen Berechtigungen in Map-Auswahllisten angezeigt (Header, WUI)</li>
+			<li>Backend-Konfigurationsdefinitionen in Backend-Dateien verschoben. Das macht es einfacher, eigene Backends zu erstellen</li>
+			<li>Code hinzugef&uuml;gt, um Verbindungsprobleme festzustellen, wenn der NagVis-Host aus unbekannten Gr&uuml;nden unerreichbar wird</li>
+			<li>das Hover-Men&uuml; wird nur angezeigt, wenn kein Kontext-Men&uuml; ge&ouml;ffnet ist</li>
+			<li>Gadgets k&ouml;nnen nun einen Dummy-Perfdata-String liefern, damit das Gadget in der WUI angezeigt wird</li>
+			<li>erste Version des merlin-Backends hinzugef&uml;gt, um NagVis an merlin-Datenbanken anzubinden. Dieses Bakend ist in der Testphase</li>
+			<li>Page-reload der &Uuml;bersichtsseite deaktiviert (die Statusinformationen werden nun &uuml;ber AJAX geholt)</li>
+			<li>Bugfix: Hover-Template-Parsing-Problem bei Ajax-Status-Updates korrigiert</li> 
+			<li>Bugfix: Reload von Images (z.B. Performance-Graphen) in Hover-Men&uuml;s korrigiert</li>
+			<li>Bugfix: Verarbeitung der Backend-Option htmlcgi im Frontend korrigiert</li>
+			<li>Bugfix: Hover-Farbe f&uuml;r Hostzustand "unreachable" in Default-Templates korrigiert</li>
+			<li>Bugfix: Status-Icon korrigiert, wenn Host im Zustand "unreachable" ist</li>
+			<li>Bugfix: Falschen downtime/acknowledged-Status in Hover-Men&uuml;s korrigiert</li>
+			<li>Bugfix: Fehlerbehandlung bei falschem Objekttyp in Map-Konfiguration korrigiert</li>
+			<li>Bugfix: Service-Beschreibungen von Servicegroup-Kindern werden wieder in Hover-Men&uuml;s angezeigt</li>
+			<li>Bugfix: Shape-Anzeigeprobleme mit Parametern in der URL korrigiert</li>
+			<li>Bugfix: Problem im ndo2fs-Backend bei Services korrigiert, die &quot;:&quot; in der Service-Beschreibung enthalten</li>
+			<li>Bugfix: Verarbeitung von nicht-existierenden Services in ndo2fs korrigiert</li>
+			<li>Bugfix: Bug beim Auflisten von Map-Objektkindern in Hover-Men&uuml;s korrigiert</li>
+			<li>Bugfix: Perfdata- und Output-Makros in Labeln werden nun neu geladen, wenn etwas Neues anzuzeigen ist</li>
+		</ul>
+		<h3>WUI</h3>
+		<ul>
+			<li>WUI: das Add-/Modify-Formular kann nicht abgeschickt werden, wenn ung&uuml;ltige Werte existieren</li>
+			<li>WUI: das Hover-Men&uuml; wird beim Verschieben von Objekten versteckt</li>
+			<li>WUI: der Wechsel zwischen Eingabe- und Auswahlfeldern in Add-/Modify-Dialogen ist nun in beiden Richtungen m&ouml;glich. Bei Feldern, wo dies m&ouml;glich ist, wird ein Eingabe- zu einem Auswahlfelder, wenn es leer gelassen wird</li>
+			<li>WUI: Gadgets k&ouml;nnen nun auch in der WUI angezeigt werden (dummy perfdata</li>
+			<li>Bugfix: WUI: einige spezielle Zeichen in GET-Parametern werden nun maskiert</li>
+			<li>Bugfix: WUI: relative Label wurden nach dem Verschieben unter bestimmten Bedingungen nicht gespeichert</li>
+			<li>Bugfix: WUI: Map-Listing in Kontext-Men&uuml;s funktioniert nun korrekt bei mehr als 15 Maps</li>
+		</ul>
+
+		<a name="1.4rc3"></a>
+		<h2>Release 1.4rc3 - 21.03.2009</h2>
+		<h3>Allgemein</h3>
+		<ul>
+			<li>Line-Parsing auf Canvas umgestellt f&uuml;r Firefox und andere Browser, die diese Elemente unterst&uuml;ten. Line-Parsing ist im Firefox nun viel schneller</li>
+			<li>Performance- und Traffic-Verbesserungen im Frontend</li>
+			<li>Adress-Makro zu Host-Kontext-Men&uuml;s hinzugef&uuml;fgt</li>
+			<li>Die Hover-Men&uuml;s auf Shapes erfordern nun die Option hover_menu=1 wie bei anderen Icons</li>
+			<li>Bugfix: Optionen event_log_hidden und event_log_height hinzugef&uuml;gt, um das JavaScript-Eventlog besser zu konfigurieren</li>
+			<li>Bugfix: HTML-Code in Labeln ist nun wieder m&ouml;glich</li>
+			<li>Bugfix: Caching-Probleme in Header-Men&uuml;s bei dynamischen Makros und Listenersetzungen behoben</li>
+			<li>Bugfix: Ajax-Statusermittlung bei Services mit # in der Servicebeschreibung korrigiert</li>
+			<li>Bugfix: Status-Informationen f&uuml;r Services/in Namen im ndo2fs-Backend korrigiert</li>
+			<li>Bugfix: Eventhandling-Schalter korrigiert. Das Eventhandling kann nun wieder aktiviert/deaktiviert werden</li> 
+			<li>Bugfix: Fehlermeldung des Filecaching-Mechanismus korrigiert, wenn die Quelldatei nicht existiert</li>
+			<li>Bugfix: Shape-Icons k&ouml;nnen nun wieder URLs sein</li>
+			<li>Bugfix: Refresh-Problem bei Seiten mit definiertem Alias behoben</li>
+			<li>Bugfix: Statusinformationen f&uuml;r Services mit "/" im Namen im ndo2fs-Backend</li>
+			<li>Bugfix: ndo2fs-Backend behandelt nun Pending-Hostzust&auml;nde korrekt</li>
+			<li>Bugfix: erneutes Laden von Shapes korrigiert, bei denen enable_refresh=1 gesetzt ist</li>
+			<li>Bugfix: Hover-Men&uuml;s auf Shapes korrigiert</li>
+		</ul>
+		<h3>WUI</h3>
+		<ul>
+			<li>Konfigurationsdialoge in JavaScript-Popup-Fenster umkodiert (keine Browser-Popups mehr)</li> 
+			<li>Unteroptionen werden jetzt nur dann angezeigt, wenn die Hauptoptionen in Add/Modify-Dialogen gesetzt sind (z.B. kann hover_template nur ausgew&auml;hlt werden, wenn hover_menu aktiviert ist)</li>
+			<li>Label sind nun "ziehbar"(dragable)</li>
+			<li>Code hinzugef&uuml;gt, um f&uuml;r Benutzereingaben Auswahlfelder in Hinzuf&uuml;gen-/&Auml;ndern-Dialogen in normale Eingabefelder umzuwandeln</li>
+			<li>Leere Eingabefelder in Hinzuf&uuml;gen-/&Auml;ndern-Dialogen werden mit Default-Werten gef&uuml;llt<li>
+			<li>Dropdown-Men&uuml; zur Auswahl von verf&uuml;gbaren Gadgets in Hinzuf&uuml;gen-/&Auml;ndern-Dialogen hinzugef&uuml;gt</li>
+			<li>Bugfix: Problem beim L&ouml;schen von Optionen aus Map-Objekt-Definitionen behoben</li>
+			<li>Bugfix: Problem beim Importieren von Map-Konfigurationen behoben</li>
+			<li>Bugfix: Problem beim Editieren von Linien mit ungeraden Koordinaten behoben<li>
+			<li>Bugfix: Host-Listen-Problem bei der Verwendung von PHP &lt; 5.2 behoben</li>
+			<li>Bugfix: Probleme mit Anf&uuml;hrungszeichen in Konfigurationswerten in Hinzuf&uuml;gen-/&Auml;ndern-Dialogen behoben</li>
+		</ul>
+		
+		<a name=1.4rc2></a>
+		<h2>Release 1.4rc2 - 29.01.2009</h2>
+		<h3>Allgemeines</h3>
+		<ul>
+			<li>ndo2fs-Backend hinzugef&uuml;gt. Dies ist eine vollst&auml;ndig unterst&uuml;tzte Alternative zu ndo2db
+			<li>usegdlibs-Parameter aus Hauptkonfigurationsdatei entfernt (veraltet)</li>
+			<li>Fehlermeldung hinzugef&uuml;gt, um Nutzung von nicht definierten Backends zu verhindern</li>
+			<li>Teile des Datums-Parsings wieder nach PHP verschoben. In JavaScript dauerte es zu lange auf langsamen Systemen</li>
+			<li>Code-Bereinigung in der URL-Parameter-Behandlung. Makros [htmlcgi] und [htmlbase] hinzugef&uuml;gt</li>
+			<li>Kontext-Men&uuml; hinzugef&uuml;gt. Sie k&ouml;nnen nun ein eigenes Kontext-Men&uuml; zu Ihren Map-Objekten hinzuf&uuml;gen, um Aktionen/Links f&uuml;r sie zu definieren.</li>
+			<li>franz&ouml;sische Sprachdatei hinzugef&uuml;gt. Danke an Laurent!</li>
+		</ul>
+		<h3>Korrekturen</h3>
+		<ul>
+			<li>Dateieinschluss-Bug korrigiert, wenn verschiedene Backends des gleichen Typs konfiguriert sind</li>
+			<li>Map-Reparsing-Bug korrigiert, wenn Map-Konfigurationsdatei ge&auml;ndert wurde</li>
+			<li>Leeren URL-Parameter in Objektdefinition von Services, Hostgroups, Servicegroups und Maps korrigiert</li>
+			<li>Option label_text wieder zum global-Abschnitt von Maps hinzugef&uuml;gt</li>
+			<li>einige Variablendeklarationsprobleme im JavaScript-Code behoben</li>
+			<li>Problem behoben bei der Aktualisierung von Shape-Objekten, wenn Refresh aktiviert ist</li>
+			<li>Event-Hervorhebung korrigiert (der Rahmen erschien an falschen Objekten und verschwand nicht am Schluss)</li>
+			<li>Umlaute in deutscher Sprachdatei korrigiert</li>
+		</ul>
+		<h3>WUI</h3>
+		<ul>
+			<li>Bugfix: es wurden ung&uuml;ltige Eigenschaften erzeugt, wenn Items verschoben und sp&auml;ter globale Optionen ge&auml;ndert wurden</li>
+			<li>verschobene Items werden nun automatisch gespeichert. Der "Save"-Button in der WUI wird nicht mehr ben&ouml;tigt</li>
+			<li>Liste verf&uuml;gbarer Backends korrigiert</li>
+			<li>WUI setzt z-index nun nach Verschieben eines Objekts auf konfigurierten Wert zur&uuml;ck</li>
+		</ul>
+
+		<a name="1.4rc1"></a>
+		<h2>Release 1.4rc1 - 14.12.2008</h2>
+		<h3>Allgemeines</h3>
+		<ul>
+			<li>den NagVis-Installer eingef&uuml;hrt (install.sh). Dies sollte in Zukunft das bevorzugte Werkzeug zur Installation und Aktualisierung von NagVis sein.</li>
+		   <li>gro&szlig;e &Auml;nderungen in der Objektbehandlung</li>
+		   <li>gro&szlig;e &Auml;nderungen beim Linienzeichnen: die gdlibs werden nicht l&auml;nger ben&ouml;tigt. Die Linien werden nun via JavaScript gezeichnet</li>
+		   <li>interne HTML-Code-Behandlung umgeschrieben (Performance-Tuning)</li>
+		   <li>Parse-Methode der Map-Konfiguration umgeschrieben (nur Unix-Zeilenumbr&uuml;che werden unterst&uuml;tzt)</li>
+		   <li>Haupt-Konfigurationscache hinzugef&uuml;gt</li>
+		   <li>Map-Konfigurationscache hinzugef&uuml;gt</li>
+		   <li>Sprachformat auf gettext ge&auml;ndert (SF.net 2000176)</li>
+		   <li>Map-Objekte k&ouml;nnen nun den Gesamtstatus der aktuellen Map darstellen, indem der gleiche Map-Name als aktuelle Map zum Objekt hinzugef&uuml;gt wird</li>
+		   <li>neuer Code zur Gr&ouml;&szlig;en&auml;nderung von Thumbnails auf der Index-Seite ohne Verzerrung</li>
+		   <li>htmlcgi in Pfaden und Backend k&ouml;nnen nun vollst&auml;ndige URL sein (SF.net 2047653)</li>
+		   <li>Leerzeichen in Benutzernamen sind nun erlaubt</li>
+		   <li>dbprefix in den NDO-Backend-Optionen kann nun leer sein</li>
+		   <li>Sie k&ouml;nnen nun Label f&uuml;r Rotationsschritte setzen</li>
+		   <li>Hintergrundbilder k&ouml;nnen nun im jpg-, gif- oder png-Format sein (SF.net 1901540)</li>
+			<li>Iconset-Bilder k&ouml;nnen nun im jpg-, gif- oder png-Format sein Alle Bilder eines Iconsets m&uuml;ssen den gleichen Dateityp haben (SF.net 1901539)</li>
+			<li>Header-Men&uuml;-Handling umkodiert. Das Header-Men&uuml; kann nun f&uuml;r jede Map und die Indexseite (de/)aktiviert werden.<br />displayheader-Option aus dem general-Abschnitt der Hauptkonfigurationsdatei entfernt. Neue Optionen headermenu und headertemplate in defaults- und index-Abschnitt hinzugef&uuml;gt.</li>
+			<li>Performance-Daten sind nun in Hover-Men&uuml;s und Labeln von Host- und Service-Objekten verf&uuml;gbar.</li>
+			<li>Erkennung von veralteten Optionen zur Validierung der Hauptkonfiguration hinzugef&uuml;gt</li>
+			<li>Automap: wenn f&uuml;r einen Host ein benutzerdefiniertes Bild f&uuml;r die Statusmap existiert, wird es oberhalb des NagVis-Statusbildes angezeigt.<br>
+			Das benutzerdefinierte Bild (statusmap_image in Nagios) muss im png-Format sein. Es muss von nagios/share/images/logos ins nagvis/images/shapes-Verzeichnis kopiert werden.</li>
+			<li>Map-Objektbehandlung nun in JavaScript. Die komplette Visualisierung von normalen Maps, Map-Icons und Hover-Men&uuml;s wird nun mit Ajax erledigt.</li>
+			<li>Option "line_width" zu zustandsbehafteten Map-Objekten hinzugef&uuml;gt, um die Linienbreite auf normalen Maps zu konfigurieren</li>
+			<li>Es gibt ein neues Eventlog, das einige Informationen zu den Aktionen im JavaScript/Ajax-Frontend zeigt</li>
+			<li>NagVis kann nun Status&auml;nderungen in folgender Weise hervorheben</li>
+			<ul>
+				<li>das Icon f&uuml;r einige Sekunden durch eine blinkende Umrandung umgeben (neue Option: event_highlight=1)</li>
+				<li>den Browser-Fokus auf das Icon setzen, wenn es nicht im Blickfeld ist (neue Option: event_scroll=1)</li>
+				<li>Status&auml;nderungen im NagVis-Frontend-Eventlog protokollieren (neue Optionen: event_log=1 und event_log_level=info)</li>
+			</ul>
+			</li>
+			<li>Neue Option view_type, um das Aussehen von Objekten zu &auml;ndern. Wenn Sie Linien sehen m&ouml;chten, setzen Sie view_type=line</li>
+			<li>Neues Feature: "Gadgets": Gadgets sind kleine Scripte, die Bilder mit Nagios Performance-Daten erzeugen. Details finden Sie in der Dokumentation zu 1.4.</li>
+			<li>Backends werden jetzt nur dann initialisiert, falls andere Objekte sie ben&ouml;tigen</li>
+		</ul>
+
+		<h3>&Uuml;bersichtsseite</h3>
+		<ul>
+		   <li>nun werden normale Hover-Men&uuml;s benutzt</li>
+		   <li>Maps, f&uuml;r die keine Berechtigungen existieren, werden nun in der Map-Indexseite nicht mehr angezeigt (SF.net 1994581)</li>
+		   <li>Rotationspool-Liste verstecken, falls keine Rotationen definiert sind (SF.net 1998278)</li>
+			<li>neuen Abschnitt f&uuml;r die &Uuml;bersichtsseite in die Hauptkonfigurationsdatei eingef&uuml;gt. Die &Uuml;bersichtsseite kann nun nach Ihren Belangen angepasst werden.</li>
+		   <li>Einzelschrittliste zur Rotationsliste auf der &Uuml;bersichtsseite hinzugef&uuml;gt</li>
+		   <li>neue Option backgroundcolor hinzugef&uuml;gt, um die Hintergrundfarbe der &Uuml;bersichtsseite &auml;ndern zu k&ouml;nnen</li>
+		</ul>
+		
+		<h3>WUI</h3>
+		<ul>
+		   <li>Linien in der WUI werden nun so angezeigt wie in den Maps des Frontends</li>
+		   <li>Link zur &Uuml;bersicht im WUI-Kontextmenü hinzugef&uuml;gt</li>
+		</ul>
+		
+		<h3>Bugfixes</h3>
+		<ul>
+		   <li>&auml;rgerliche "sh: /usr/local/bin/neato: not found"-Meldungen im Apache-error.log beim &Ouml;ffnen der Indexseite korrigiert</li>
+		   <li>transparenten Label-Rahmen im IE korrigiert (SF.net 1994891)</li>
+		   <li>Problem im Automap-Child-Fetch-Algorithmus korrigiert (SF.net 1994873)</li>
+		   <li>PHP-Parse-Fehler in Frontend-Class korrigiert</li>
+		   <li>Problem beim Holen der Downtime-Endezeit korrigiert (SF.net 1887091)</li>
+		   <li>Problem beim alphabetischen Sortieren von "Kindern" in Hover-Men&uuml;s korrigiert (SF.net 1997111)</li>
+		   <li>Problem mit Leerzeichen in oldPhpVersionFixes.php korrigiert</li>
+		   <li>Problem mit der Alias-Anzeige in Maps und Hostgroup-Hover-Men&uuml;s korrigiert</li>
+		   <li>Problem mit der Gesamtanzeige bei einer verbundenen leeren Map korrigiert</li>
+		   <li>Plus-Zeichen als g&uuml;ltiges Zeichen bei String-Matches hinzugef&uuml;gt (SF.net 1994579)</li>
+		   <li>Hartkodierten Pfad in Javascript-Code korrigiert</li>
+		   <li>Fehler beim Holen der usegdlibs-Einstellungen auf der Index-Seite korrigiert</li>
+		   <li>fehlenden htmlBase-Pfad zu Automap-Javascript-Code hinzugef&uuml;gt (SF.net 2009179)</li>
+		   <li>Bugfix: @-Zeichen sind nun in verschiedenen Zeichenketten erlaubt, z.B. Benutzernamen bei allowed_for_config in Maps</li>
+		</ul>
+		NagVis 1.4 Code startete mit Rev. 1337 des NagVis 1.3rc5 Codes.
+	</body>
+</html>

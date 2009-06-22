@@ -1,0 +1,55 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Language file format</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Language file format</h1>
+		<h2>General Informations</h2>
+		<p>Since NagVis 1.4 the language format has been changed from xml files to gettext language files. The old xml files were much overhead and consumed a lot of runtime to get parsed.<br />
+		The main benefit of gettext is much better performance. For details about gettext see the <a href="http://www.gnu.org/software/gettext/" target="_blank">official gettext page</a>.</p>
+		
+		<p>The language files are stored in the language specific subdirectories of <code>nagvis/includes/locale</code> directory.<br />
+		The english language file is <code>en_US/LC_MESSAGES/nagvis.mo</code>.</p>
+		<p>The files with .po extension are the sources which have to be compiled to .mo files.</p>
+		
+		<p>By default the following languages are supported in the current NagVis versions:</p>
+		<ul>
+			<li> english</li>
+			<li> german</li>
+		</ul>
+		
+		<h2>Build your own...</h2>
+		<p>Your language is not supported by NagVis? No problem! You can easily build your own language file.</p>
+		<p>If you built a new language file or fixed sth. in existing language files you're welcome to submit the file to us so we can implement it in the next NagVis release or publish it on Nagvis.org.</p>
+		
+		<h2> Macros </h2>
+		<p>There is support for replacing given strings with some other values.</p> 
+		<p>An example for a macro is the string <code>[USER]</code>. This string will be replaced before displaying in NagVis when the language entry supports it.</p>
+		
+		<h2> Default Macros </h2>
+		<p>Default Macros are sth. like HTML-Tags which don't have to be defined by the user. At the moment the following default macros are supported:</p>
+		
+		<table>
+		<tr>
+		<th>Macro</th><th>Replaced by</th>
+		</tr>
+		<tr>
+		<td>[i]</td><td>&lt;i></td>
+		</tr>
+		<tr>
+		<td>[/i]</td><td>&lt;/i></td>
+		</tr>
+		<tr>
+		<td>[b]</td><td>&lt;b></td>
+		</tr>
+		<tr>
+		<td>[/b]</td><td>&lt;/b></td>
+		</tr>
+		</table>
+		
+		<h2> Special Chars </h2>
+		<p>Special chars like &auml;,&ouml;,&uuml;,&quot;,',... have to be set as HTML-entities (e.g. &amp;nbsp;)</p>
+	</body>
+</html>

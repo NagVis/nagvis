@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>changelog</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+	<h1>NagVis 1.3 Changelog</h1>
+		<ul>
+			<li><a href=#current>aktuelle Entwicklung</a></li>
+			<li><a href=#rel-1.3>Release 1.3.2</a></li>
+			<li><a href=#rel-1.3>Release 1.3.1</a></li>
+			<li><a href=#rel-1.3>Release 1.3</a></li>
+			<li><a href=#rel-1.3rc5>Release 1.3rc5</a></li>
+			<li><a href=#rel-1.3rc4>Release 1.3rc4</a></li>
+			<li><a href=#rel-1.3rc3>Release 1.3rc3</a></li>
+			<li><a href=#rel-1.3rc2>Release 1.3rc2</a></li>
+			<li><a href=#rel-1.3rc1>Release 1.3rc1</a></li>
+			<li><a href=#rel-1.3b3>Release 1.3b3</a></li>
+			<li><a href=#rel-1.3b2>Release 1.3b2</a></li>
+			<li><a href=#rel-1.3b1>Release 1.3b1</a></li>
+		</ul>		
+<a name=current></a>
+<h2>Subversion - aktuelle Entwicklung (beginnend mit Rev. 1778)</h2>
+keine &Auml;nderungen bisher
+
+<a name=rel-1.3.2></a>
+<h2>Release 1.3.2 - 20.10.08</h2>
+<ul>
+<li>Bugfix: @-Zeichen sind nun in verschiedenen Zeichenketten erlaubt, z.B. Benutzernamen bei allowed_for_config in Maps</li>
+<li>Bugfix: die Automap-Hover-Men&uuml;s erkannten nicht das konfigurierte Backend</li>
+<li>Bugfix: statischen Pr&auml;fix korrigiert beim Holen von Hosts ohne Parents
+</ul>
+
+<a name=rel-1.3.1></a>
+<h2>Release 1.3.1 - 22.08.08</h2>
+<ul>
+<li>Hartkodierten Pfad in Javascript-Code korrigiert</li>
+<li>Fehlenden htmlBase-Pfad zu Automap-Javascript-Code hinzugef&uuml;gt (SF.net 2009179)</li>
+<li>MySQL-Fehlermeldung bei fehlerhaft konfiguriertem Instance-Namen korrigiert (SF.net 2065750)
+<li>htmlcgi in Pfaden und Backend k&ouml;ennen nun vollst&auml;ndige URL sein (SF.net 2047653)</li>
+<li>Leerzeichen in Benutzernamen sind nun erlaubt</li>
+<li>dbprefix in den NDO-Backend-Optionen kann nun leer sein</li>
+</ul>
+
+<a name=rel-1.3></a>
+<h2>Release 1.3 - 25.06.08</h2>
+<ul>
+<li>Bugfix: transparente Label-Rahmen im IE korrigiert (SF.net 1994891)</li>
+<li>Bugfix: Problem im Automap-Child-Fetching-Algorithmus korrigiert (SF.net 1994873)</li>
+<li>Bugfix: PHP-Parse-Fehler in Frontend-Class korrigiert</li>
+<li>Bugfix: Problem beim Holen der Downtime-Endezeit korrigiert (SF.net 1997091)</li>
+<li>Bugfix: Problem beim alphabetischen Sortieren der Children in Hover-Men&uuml;s korrigiert (SF.net 1997111)</li>
+<li>Bugfix: Problem mit Leerzeichen in oldPhpVersionFixes.php korrigiert</li>
+<li>Bugfix: Problem mit Summary-Status, wenn eine verbundene Map leer war</li>
+<li>Bugfix: Plus-Zeichen (+) zu g&uuml;ltigen Zeichen bei String-Matches hinzugef&uuml;gt (SF.net 1994579)</li>
+</ul>
+
+<a name=rel-1.3rc5></a>
+<h2>Release 1.3rc5 - 12.06.08</h2>
+<ul>
+<li>benutzerdefinierte Fehlerbehandlung f&uuml;r die Behandlung von PHP-Problemen bei Ajax-Aufrufen hinzugef&uuml;gt (SF.net 1985772)</li>
+<li>Option "hovertimeout" zum defaults-Abschnitt in der Hauptkonfigurationsdatei und "hover_timeout" zu allgemeinen Map-Objekten zur Anpassung des Ajax-Request-Timeouts hinzugef&uuml;gt (SF.net 1982732)</li>
+<li>"stop refresh"-Verweis zum Header hinzuf&uuml;gt (SF.net 1984763)</li>
+<li>einige hartkodierte js/css-Pfade entfernt (SF.net 1991289)</li>
+<li>Bugfix: NDO-Backend korrigiert, damit Unix-Timestamps statt datetime-Parsing bei der Pr&uuml;fung auf aktuelle Daten benutzt werden (Zeitzonenproblem, SF.net 1964660)</li>
+<li>Bugfix: Problem mit Berechtigungen bei Map-Vererbungen mit verbundenen Maps korrigiert (SF.net 1974571)</li>
+<li>Bugfix: allowed_users konnten Map-Konfigurationen &uuml;ber die WUI &auml;ndern (SF.net 1974570)</li>
+</ul>
+
+<a name=rel-1.3rc4></a>
+<h2>Release 1.3rc4 - 26.05.08</h2>
+<ul>
+<li>Bugfix: Die regul&auml;ren Ausdr&uuml;cke f&uuml;r validation check in der WUI werden nun korrekt maskiert</li>
+<li>Bugfix: Problem beim Holen des globalen Backend-Default-htmlcgi-Wertes korrigiert (SF.net 1969509)</li>
+</ul>
+
+<a name=rel-1.3rc3></a>
+<h2>Release 1.3rc3 - 22.05.08</h2>
+<ul>
+<li>[obj_address]-Makro zu Service-Hover-Men&uuml;s hinzugef&uuml;gt (SF.net 1965102)</li>
+<li>Favicon zeigt nun auch Acknowledged/Downtime-Zust&auml;nde</li>
+<li>kleinere Design-Anpassungen (Logo, favicon)</li>
+<li>WUI: Pr&uuml;fung auf php-mbstring hinzugef&uuml;gt (SF.net 1964453)</li>
+<li>Bugfix: Der Servicegroup-Alias wird nun in Hover-Men&uuml;s angezeigt (SF.net 1965605)</li>
+<li>Bugfix: Acknowledge/Downtime-Status &uuml;bersteuerte leere Critical/Warning-Zust&auml;nde (SF.net 1965614)</li>
+<li>Bugfix: Sprachen&auml;nderungen wurden wegen des Language Cache ignoriert (SF.net 1969679)</li>
+<li>Bugfix: WUI, der Wert validation check ist nun unabh&auml;ngig von Gro&szlig;-/Kleinschreibung</li>
+</ul>
+
+<a name=rel-1.3rc2></a>
+<h2>Release 1.3rc2 - 03.05.08</h2>
+
+<ul>
+<li>Gro&szlig;e &auml;nderung in der Hover-Men&uuml;-Behandlung: die Hover-Men&uuml;s werden nun nach Bedarf &uuml;ber Ajax geholt.</li>
+<li>neue Option “label_border” hinzugef&uuml;gt, um die Rahmenfarbe des Labels zu konfigurieren (SF.net 1955519)</li>
+<li>neue Makros [obj_address] und [lang_address] zu Host-Hover-Men&uuml;s hinzugef&uuml;gt (SF.net 1955523)</li>
+<li>Wertepr&uuml;fung zu WUI-Dialogen hinzugef&uuml;gt (Hauptkonfiguration, hinzuf&uuml;gen/&auml;ndern) (SF.net 1955636)</li>
+<li>Template-Vererbung hinzugef&uuml;gt (SF.net 1956821)</li>
+<li>WUI: Label bewegen sich nun, wenn ein Icon verschoben wird (SF.net 1955680)</li>
+<li>Bugfix: Schreibberechtigungspr&uuml;fung f&uuml;r var-Ordner korrigiert (Executable-Flag wurde nicht gepr&uuml;ft) (SF.net 1934675)</li>
+<li>Bugfix: es ist wieder m&ouml;glich, Hosts ohne Services zu haben (keine ERROR-Meldung, lediglich ein Hinweis in Gesamtausgabe) (SF.net 1932201)</li>
+<li>Bugfix: Bug im NDO-Backend bei der Ermittlung einer Host-Ausfallzeit korrigiert (SF.net 1947394)</li>
+<li>Bugfix: Bug in Maps bei Hosts im Zustand UNREACHABLE korrigiert (SF.net 1954765)</li>
+<li>Bugfix: Bug in Map-Konfiguration bei der Objektbehandlung mit Templates korrigiert (SF.net 1955542)</li>
+<li>Bugfix: Templates funktionierten nicht bei mehr als einer Template-Definition auf einer Map (SF.net 1956431)</li>
+</ul>
+
+<a name=rel-1.3rc1></a>
+<h2>Release 1.3rc1 - 01.04.08</h2>
+
+<ul>
+<li>NagVis ben&ouml;tigt nun mindestens PHP 5.0 (SF.net 1924332)</li>
+<li>“border_color”-Option f&uuml;r textbox-Objekte hinzugef&uuml;gt (SF.net 1924329)</li>
+<li>Bugfix: Bug mit hover_childs_limit korrigiert (SF.net 1925329)</li>
+<li>Bugfix: Root-shape ist nun eif&ouml;rmig - es gibt Probleme mit einem Kreis in einigen Browsern (SF.net 1909033)</li>
+<li>Bugfix: Problem mit autoskalierender Textbox-Breite korrigiert (SF.net 1926569)</li>
+<li>Bugfix: Problem in NDO-Instanzen korrigiert, in denen es NUR config_type=0 Objekte gibt (SF.net 1928298)</li>
+</ul>
+
+<a name=rel-1.3b3></a>
+<h2>Release 1.3b3 - 14.03.08</h2>
+
+<ul>
+<li>Caching von dynamischen Hintergrundbildern verbessert (SF.net 1907497)</li>
+<li>Seiten-Refresh f&uuml;r die Index-Seite hinzugef&uuml;gt (SF.net 1914535)</li>
+<li>Bugfix: Benennung von Automap-Objekten auf "<obj_type>_<obj_id>" ge&auml;ndert (SF.net 1906488)</li>
+<li>Bugfix: Verhinderung von Doppellinien bei graphviz config rendering hinzugef&uuml;gt (SF.net 1906501)</li>
+<li>Bugfix: der Start/Stop-Button f&uuml;r die Rotation wurde im NagVis-Header nicht angezeigt (SF.net 1914528)</li>
+<li>Bugfix: die gestoppte Rotation wurde nicht f&uuml;r den n&auml;chsten Refresh ber&uuml;cksichtigt (SF.net 1914529)</li>
+</ul>
+
+<a name=rel-1.3b2></a>
+<h2>Release 1.3b2 - 27.02.08</h2>
+
+<ul>
+<li>Bugfix: der Hostname wurde in Service-Hover-Men&uuml;s nicht angezeigt (SF.net 1901026)</li>
+<li>Bugfix: falsche Child-Objekte mit mehr als einem Map-Objekt (SF.net 1901024)</li>
+<li>Bugfix: Problem mit der Authentifizierungspr&uuml;fung auf WUI-Management-Seiten (SF.net 1901272)</li>
+<li>Bugfix: Probleme mit mehreren Backends des gleichen Typs (SF.net 1901311)</li>
+<li>Bugfix: Tippfehler in Child-Sortiermethode korrigiert</li>
+<li>Bugfix: verschiedene PHP-Hinweise korrigiert</li>
+<li>Bugfix: [pnp_hostname] wurde in Service-Hover-Men&uuml;s nicht ersetzt (SF.net 1903367)</li>
+</ul>
+
+<a name=rel-1.3b1></a>
+<h2>Release 1.3b1 - 23.02.08</h2>
+<h3>Neu</h3>
+
+<ul>
+<li>Automap-Feature eingef&uuml;hrt. Die Automap kann mit der folgenden URL angesehen werden: index.php?automap=1. Die Automap kann &uuml;ber URL-Parameter konfiguriert werden, Details finden Sie in der <a href=./user_interface.html>User-Interface-</a> und <a href=./automap.html>Automap-Dokumentation</a> (SF.net 1583108)</li>
+<li>Maintenance-Modus hinzugef&uuml;gt. Eine Map kann durch die Option in_maintenance=1 im global-Abschnitt einer Map in den Wartungsmodus versetzt werden (SF.net 1681335)</li>
+<li>Neue Icons <code>&lt;iconset-name>_downtime.png</code> (Host) und <code>&lt;iconset-name>_sdowntime.png</code> (Service) zu Iconsets hinzugef&uuml;gt (SF.net 1879241)</li>
+</ul>
+
+<h3>&auml;nderungen</h3>
+
+<ul>
+<li>Komplette Objektbehandlung neu kodiert; auch Behandlung von Backend-Informationen im Kern neu kodiert, um dadurch mehr Informationen wie Alias, Display-Name usw. zu erhalten (SF.net 1793062)</li>
+<li>&uuml;bersichtsausgabe f&uuml;r alle Objekte verbessert (SF.net 1793062)</li>
+<li>Map-Index: Thumbnail-Format verbessert (PNGs werden durch GDlibs in der Gr&ouml;&szlig;e ver&auml;ndert - wenn aktiviert und verf&uuml;gbar) (SF.net 1861735)</li>
+<li>Rotationsliste zum Map-Index hinzugef&uuml;gt (SF.net 1861737)</li>
+<li>&lt;!– BEGIN service –> und &lt;!– END service –> Makros zu Hover-Men&uuml;s hinzugef&uuml;gt, um besondere Informationen auf Service-Hover-Men&uuml;s anzuzeigen (SF.net 1793062)</li>
+<li>[alias] und [display_name] Makros zu Hover-Men&uuml;s hinzugef&uuml;gt (SF.net 1793062)</li>
+<li>Hover-Makros [last_check] und [next_check] zu Host- und Service-Objekten hinzugef&uuml;gt (SF.net 1733479)</li>
+<li>Makros zu Host/Service-Hover-Men&uuml;s: [obj_current_check_attempt], [obj_max_check_attempts], [obj_state_type], [obj_last_state_change], [obj_last_hard_state_change] (SF.net 1733479)</li>
+<li>hover_menu-Parameter zu Objektkonfigurationen und Default-Parameter “hovermenu” zur Hauptkonfiguration hinzugef&uuml;gt, um das Hover-Menu zu aktivieren/deaktivieren (SF.net 1862954)</li>
+<li>aufgerufene URL zur “render time”-Debug-Ausgabe hinzugef&uuml;gt (SF.net 1861739)</li>
+<li>WUI: Fehlerbehandlung zu Ajax/Formatabfrage-Behandlungsseiten hinzugef&uuml;gt (SF.net 1814669/1757756)</li>
+<li>neues Icon <code>&lt;iconset-name>_pending.png</code> zu Standard-Iconsets hinzugef&uuml;gt (SF.net 1897776)</li>
+<li>alten Iconset-Ordner <code>&lt;folder_*</code> entfernt. Das Iconset ist in Zukunft optional.</li>
+</ul>
+
+<h3>Bugfixes</h3>
+
+<ul>
+<li>Bugfix: Falsche only_hard_states-Behandlung korrigiert (SF.net 1876615)</li>
+<li>Bugfix: Rotation stoppte beim rotieren zu externen Seiten (SF.net 1849857)</li>
+<li>Bugfix: "@"-Symbol zu erlaubten Zeichen in URLs hinzugef&uuml;gt (SF.net 1852541)</li>
+<li>Bugfix: logischen Fehler in getObjects(services) korrigiert (SF.net 1853809)</li>
+<li>Bugfix: Leerzeichen war in hostgroup_name nicht erlaubt (SF.net 1854383)</li>
+<li>Bugfix: Leerzeichen im Format %20 sind nun in URLs erlaubt (SF.net 1870579)</li>
+<li>Bugfix: WUI: beim Editieren eines Service wurde dieser nicht automatisch im Dropdown-Menu selektiert (SF.net 1853901)</li>
+<li>Bugfix: Versionspr&uuml;fung f&uuml;r den Language-Cache hinzugef&uuml;gt. Verschiedene NagVis-Versionen auf einem Server konnten Probleme verursachen (SF.net 1861732)</li>
+<li>Bugfix: WUI: beim Umbenennen einer Map funktioniert die Weiterleitung nicht korrekt (SF.net 1862963)</li>
+<li>Bugfix: WUI: l&ouml;schen einer Map &uuml;ber die WUI war nicht m&ouml;glich (SF.net 1863096)</li>
+<li>Bugfix: Problem beim Einf&uuml;gen von NagVis-HTML-Code auf anderen Seiten korrigiert; Pfade zu favicon und draw.php sind nun absolut (SF.net 1867528)</li>
+<li>Bugfix: WUI: Map-L&ouml;schschutz korrigiert, wenn Map in einer anderen verbunden ist (SF.net 1881446)</li>
+<li>Bugfix: Leerzeichen sind nun in allen Nagios-Objektnamen erlaubt (SF.net 1891400, 1897880)</li>
+</ul>
+
+NagVis 1.3 Code startete mit Rev. 979 mit NagVis 1.2rc1 Code.
+ 
+</html>

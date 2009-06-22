@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>hover_templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>Hover-Templates</h1>
+
+<h2>Einleitung</h2>
+Hover-Templates sind HTML-Dateien, die einige Makros enthalten. Diese Dateien k&ouml;nnen als Hover-Men&uuml;s in den Maps benutzt werden.
+Die Hover-Templates sind im Verzeichnis <code>nagvis/etc/templates/hover/</code> relativ zum NagVis-Root-Verzeichnis zu finden. Die Templates sind wie folgt benannt: <code>tmpl.*.html</code><br>
+Es gibt Makros, die in Hover-Men&uuml;s aller Objekttypen verf&uuml;gbar sind und bestimmte, die nur bei speziellen Objekten verf&uuml;gbar sind. Alle Standard-Makros finden Sie nachfolgend.
+</pre>
+<br>
+
+<h2>Allgemeines</h2>
+<p>Die folgenden Makros sind in allen Objekttypen verf&uuml;gbar:</p>
+<table border=0 width=100%>
+<tr>
+<th>Makro</th><th>Beschreibung</th>
+</tr>
+<tr>
+<th colspan=2>Allgemeines</th>
+</tr>
+<tr>
+<td>[obj_type]</td><td>Art des Objekts (host, service, hostgroup, ...) </td>
+</tr>
+<tr>
+<td>[obj_name]</td><td>Name des Objekts (hostname, hostgroupname, servicegroupname, mapname, ...)</td>
+</tr>
+<tr>
+<td>[obj_alias]</td><td>Alias des Objekts (wenn kein Alias definiert ist, ist es identisch zu [obj_name])</td>
+</tr>
+<tr>
+<td>[obj_display_name]</td><td>Anzeigename des Objekts</td>
+</tr>
+<tr>
+<td>[obj_state]</td><td>Zustand des Objekts (OK,WARNING,CRITICAL,...)</td>
+</tr>
+<tr>
+<td>[obj_summary_state]</td><td>Gesamtzustand des Objekts und aller abh&auml;ngigen Objekte (OK,WARNING,CRITICAL,...)</td>
+</tr>
+<tr>
+<td>[obj_acknowledged]</td><td>wenn der Status best&auml;tigt ist, wird das Makro durch "(Acknowledged)" ersetzt</td>
+</tr>
+<tr>
+<td>[obj_summary_acknowledged]</td><td>wenn der Gesamtzustand best&auml;tigt ist, wird das Makro durch "(Acknowledged)" ersetzt</td>
+</tr>
+<tr>
+<td>[obj_in_downtime]</td><td>wenn das Objekt gerade in einer Ausfallzeit ist, wird das Makro durch "(In Downtime)" ersetzt</td>
+</tr>
+<tr>
+<td>[obj_summary_in_downtime]</td><td>wenn das Objekt gerade in einer Ausfallzeit ist, wird das Makro durch "(In Downtime)" ersetzt</td>
+</tr>
+<tr>
+<td>[obj_output]</td><td>Ausgabe f&uuml;r dieses Objekt </td>
+</tr>
+<tr>
+<td>[obj_summary_output]</td><td>Gesamtausgabe des Objekts</td>
+</tr>
+<tr>
+<th colspan=2>Sprach-Makros</th>
+</tr>
+<tr>
+<td>[lang_name]</td><td>Label f&uuml;r den Objektnamen </td>
+</tr>
+<tr>
+<td>[lang_child_name]</td><td> Label f&uuml;r Child-Objektnamen</td>
+</tr>
+<tr>
+<td>[lang_alias]</td><td> Label f&uuml;r den Objektalias</td>
+</tr>
+<tr>
+<td>[lang_address]</td><td> Label f&uuml;r die Objektadresse</td>
+</tr>
+<tr>
+<td>[lang_state]</td><td>Label f&uuml;r den Objektzustand </td>
+</tr>
+<tr>
+<td>[lang_obj_type]</td><td>Label f&uuml;r die Objektart </td>
+</tr>
+<tr>
+<td>[lang_summary_state]</td><td>Label f&uuml;r den Gesamtzustand </td>
+</tr>
+<tr>
+<td>[lang_output]</td><td>Label f&uuml;r die Objektausgabe </td>
+</tr>
+<tr>
+<td>[lang_summary_output]</td><td>Label f&uuml;r die Gesamtausgabe </td>
+</tr>
+<tr>
+<td>[lang_overview]</td><td>Label f&uuml;r &Uuml;berblick </td>
+</tr>
+<tr>
+<td>[lang_instance]</td><td>Label f&uuml;r die Instanz-Zeichenkette </td>
+</tr>
+<tr>
+<td>[lang_next_check]</td><td>Label f&uuml;r den n&auml;chsten Check des Objekts </td>
+</tr>
+<tr>
+<td>[lang_last_check]</td><td>Label f&uuml;r den letzten Check des Objekts </td>
+</tr>
+<tr>
+<td>[lang_current_attempt]</td><td>Label f&uuml;r den aktuellen Versuch </td>
+</tr>
+<tr>
+<td>[lang_last_state_change]</td><td>Label f&uuml;r den letzten Zustandswechsel </td>
+</tr>
+<tr>
+<td>[lang_state_duration]</td><td>Label f&uuml;r die Dauer des Zustands </td>
+</tr>
+<tr>
+<td>[lang_service_description]</td><td>Label f&uuml;r die Service-Beschreibung</td>
+</tr>
+<tr>
+<td>[obj_notes]</td><td>Label f&uuml;r die Objekt-Anmerkungen</td>
+</tr>
+<tr>
+<th colspan=2>Pfade</th>
+</tr>
+<tr>
+<td>[html_base]</td><td>URL zur HTML-Basis (/nagios/nagvis) </td>
+</tr>
+<tr>
+<td>[html_templates]</td><td>Pfad zu Hover-Templates (nagvis/nagvis/etc/templates/hover)</td>
+</tr>
+<tr>
+<td>[html_template_images]</td><td>Pfad zu Hover-Template-Images (nagvis/nagvis/images/templates/hover)</td>
+</tr>
+</table>
+
+<h2>spezielle Makros</h2>
+Es gibt Makros f&uuml;r Hover-Templates eines angegebenen Typs. Diese Makros sollten von Abschnittsmakros umgeben werden. Die Abschnittsmakros definieren, dass der angegebene Code entfernt wird, wenn das Hover-Template nicht dem angebenen Typ entspricht.
+
+Ein Abschnittsmakros f&uuml;r Host-Makros k&ouml;nnte bspw. so aussehen:
+
+<pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>
+
+Nachfolgend finden Sie eine vollst&auml;ndige Liste der Spezialmakros
+<h3>alle besonderen Map-Objekte</h3>
+<table border=0 width=100%>
+<tr>
+<th>Makro</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>[obj_backendid]</td><td>die Backend-id des Backend-Objekts (backend_&lt;*>)
+<tr>
+<td>[obj_backend_instancename]</td><td>der NDO-Instanzname des Backend-Objekts</td>
+</tr>
+</table>
+
+<h3>Host-/Service-Objekte</h3>
+<table border=0 width=100%>
+<tr>
+<th>Makro</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>[obj_address]</td><td>Die Adresse des Host-Objekts.</td>
+</tr>
+<tr>
+<td>[obj_last_check]</td><td>Datum und Uhrzeit des letzten Checks dieses Objekts; Angabe im definierten Format.</td>
+</tr>
+<tr>
+<td>[obj_next_check]</td><td>Datum und Uhrzeit des n&auml;chsten Checks dieses Objekts; Angabe im definierten Format.</td>
+</tr>
+<tr>
+<td>[obj_state_type]</td><td>der aktuelle Zustandstyp (HARD/SOFT)</td>
+</tr>
+<tr>
+<td>[obj_current_check_attempt]</td><td>die aktuelle Zahl der Check-Versuche</td>
+</tr>
+<tr>
+<td>[obj_max_check_attempts]</td><td>die Zahl der max. Check-Versuche</td>
+</tr>
+<tr>
+<td>[obj_last_state_change]</td><td>Datum und Uhrzeit des letzten Zustandswechsels; Angabe im definierten Format.</td>
+</tr>
+<tr>
+<td>[obj_last_hard_state_change]</td><td>Datum und Uhrzeit des letzten HARD-Zustandswechsels; Angabe im definierten Format.</td>
+</tr>
+<tr>
+<td>[obj_state_duration]</td><td>die Dauer des aktuellen Zustands</td>
+</tr>
+<tr>
+<td>[obj_notes]</td><td>die Anmerkungen f&uuml;r die Host- oder Service-Objekte</td>
+</tr>
+</table>
+
+<h3>Service-Objekte</h3>
+<table border=0 width=100%>
+<tr>
+<th>Makro</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>[service_description]</td><td>Service-Beschreibung in Nagios</td>
+</tr>
+<tr>
+<td>[pnp_hostname]</td><td>Hostname PNP (Leerzeichen ersetzt durch Unterstrich)</td>
+</tr>
+<tr>
+<td>[pnp_service_description]</td><td>Service-Beschreibung f&uuml;r PNP (Leerzeichen ersetzt durch Unterstrich)</td>
+</tr>
+</table>
+
+<h3>Host-Objekte</h3>
+<table border=0 width=100%>
+<tr>
+<th>Makro</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>[obj_address]</td><td>die Adresse dieses Host-Objekts</td>
+</tr>
+<tr>
+<td>[pnp_hostname]</td><td>Hostname PNP (Leerzeichen ersetzt durch Unterstrich)</td>
+</tr>
+</table>
+
+<h3>Servicegroup-Objekte</h3>
+Es gibt ein sehr spezielles Makro f&uuml;r abh&auml;ngige Services einer Servicegroup, das Auswahlmakro<br>&lt;!– BEGIN servicegroup_child –>&lt;!– END servicegroup_child –>.
+<table border=0 width=100%>
+<tr>
+<th>Makro</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>[lang_child_name1]</td><td>Label des Hostnamens des abh. Service</td>
+</tr>
+<tr>
+<td>[obj_name1]</td><td>Hostname des abh. Service</td>
+</tr>
+</table>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>Backends</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+		<h1>Backends</h1>
+		<h2>General Information</h2>
+		<p>The NagVis code is separated into several layers. One of these layers is the &quot;data layer&quot;. The data layer is used to handle requests for information from third party sources like the Nagios NDO. We call this layer &quot;backend&quot; in general. There are some components inside NagVis to manage these backends which act as the glue between the single backends and the other layers.</p>
+		
+		<h2>Default backend</h2>
+		<p>At the moment there are two backends delivered with the NagVis core packages: the ndomy and the ndo2fs backend. Both backends are described in detail below.<br />
+		The ndomy backend is the default backend since NagVis 1.0. It fetches Nagios information from the NDO MySQL database.</p>
+		
+		<h2>Backend types</h2>
+		
+		<h3>ndo2db MySQL backend (ndomy)</h3>
+		<p>The ndo2db MySQL backend, in short ndomy backend, is used to fetch Nagios information like status and configuration data via a MySQL database. The Nagios addon called ndoutils stores all information which are present in a running Nagios in an MySQL database. This database is being queried by the NagVis ndomy backend.</p>
+		<p>You can use the following parameters to configure a ndomy backend:</p>
+		
+		<table style="width:100%">
+		<tr>
+		<th width="200">Value</th><th width="150">Default</th><th>Description</th>
+		</tr>
+		<tr>
+		<td>dbhost</td><td>localhost</td><td>Hostname of the NDO Database</td>
+		</tr>
+		<tr>
+		<td>dbport</td><td>3306</td><td>Port of the NDO Database</td>
+		</tr>
+		<tr>
+		<td>dbname</td><td>db_nagios</td><td>Name of the NDO Database</td>
+		</tr>
+		<tr>
+		<td>dbuser</td><td>root</td><td>Username for Database Access (only needs read permissions)</td>
+		</tr>
+		<tr>
+		<td>dbpass</td><td>root</td><td>Password for Database Access (only needs read permissions)</td>
+		</tr>
+		<tr>
+		<td>dbprefix</td><td> nagios_ </td><td>Prefix of the tables in NDO Database (like defined in ndo2db.cfg)</td>
+		</tr>
+		<tr>
+		<td>dbinstancename</td><td> default </td><td>Name of the Nagios instance in NDO Database (like defined in ndomod.cfg)</td>
+		</tr>
+		<tr>
+		<td>maxtimewithoutupdate</td><td>180</td><td>Maximum delay in seconds after last update in NDO. NagVis will report Nagios is not running if the delay is reached</td>
+		</tr>
+		</table>
+		<p>There are also some general parameters. You can see them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
+		
+		<h3>ndo2fs backend</h3>
+		<table style="width:100%">
+		<tr>
+		<th width="200">Value</th><th width="150">Default</th><th>Description</th>
+		</tr>
+		<tr>
+		<td>path</td><td>/usr/local/ndo2fs/var</td><td>Path to the ndo2fs var directory. The files in this directory should be ndo2fs.pid, VOLATILE and PERSISTENT.</td>
+		</tr>
+		<tr>
+		<td>instancename</td><td>default</td><td>Name of the backend instance.</td>
+		</tr>
+		<tr>
+		<td>maxtimewithoutupdate</td><td>180</td><td>Maximum delay in seconds after last update in NDO. NagVis will report Nagios is not running if the delay is reached</td>
+		</tr>
+		</table>
+		<p>There are also some general parameters. You can see them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
+		
+		<h3>Other backend types</h3>
+		<p>FIXME: Hint to other backends (Create own, 3rd party backends, ...).</p>
+		
+		<h2>Configuring backends</h2>
+		<p>The backends are defined in the main configuration file. See <a href="nagvis_config_format_description.html#backend">main configuration format description</a> on how to define backends.</p>
+	</body>
+</html>

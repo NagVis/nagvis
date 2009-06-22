@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<head>
+	<title>NagVis 1.4 Sprachdatei-Format</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+</head>
+
+<body>
+
+<h1>NagVis 1.4 Sprachdatei-Format</h1>
+<h2> Allgemeines </h2>
+<p>Mit NagVis 1.4 ist das Sprachformat von XML-Dateien ins gettext-Sprachformat ge&auml;ndert worden. Die alten XML-Dateien bedeuteten eine Menge Overhead und verbrauchten viel CPU-Zeit beim Parsen.
+Der Hauptvorteil besteht in viel besserer Performance. Mehr Informationen zu gettext finden Sie auf der <a href=http://www.gnu.org/software/gettext/>offiziellen gettext-Seite</a>.
+Die Sprachdateien werden in <code>nagvis/includes/locale</code> abgelegt.</p>
+Die Dateien mit .po-Dateierweiterung sind die Sourcen, die zu .mo-Dateien umgewandelt werden m&uuml;ssen.
+
+<p>Im Moment gibt es Sprachdateien f&uuml;r die folgenden Sprachen:</p>
+<ul>
+<li> Englisch</li>
+<li> Deutsch</li>
+</ul>
+<h2> Erzeugen Sie Ihre eigene... </h2>
+<p>Ihre Sprache wird von NagVis nicht unterst&uuml;tzt? Kein Problem! Sie k&ouml;nnen einfach Ihre eigene Sprachdatei erstellen. Kopieren Sie eine bestehende Datei, benennen Sie sie um und passen Sie alle Werte an, die Sie &auml;ndern m&ouml;chten.</p>
+<p>Wenn Sie eine neue Sprachdatei erstellt oder etwas in einer bestehenden korrigiert haben, dann schicken Sie diese bitte an uns, so dass wir sie in die n&auml;chste NagVis-Version einbauen oder auf Nagvis.org ver&ouml;ffentlichen k&ouml;nnen.</p>
+
+</pre><h2> Makros </h2>
+<p>Es gibt Unterst&uuml;tzung f&uuml;r die Ersetzung von vorgegebenen Zeichenketten durch einige Werte. </p>
+<p>Ein Beispiel f&uuml;r ein Makro ist die Zeichenkette (<code>[USER]</code>), die vor der Anzeige in NagVis ersetzt wird, wenn der Spracheintrag dies unterst&uuml;tzt.</p>
+<h2> Default-Makros </h2>
+<p>Default-Makros sind so etwas wie HTML-Tags, die nicht durch den Benutzer definiert werden m&uuml;ssen. Zur Zeit werden die folgenden Default-Makros unterst&uuml;tzt:</p>
+<table>
+
+<tr>
+<th> Makro </th>
+<th> ersetzt durch </th>
+</tr>
+<tr>
+<td> [i] </td>
+<td> &lt;i> </td>
+</tr>
+<tr>
+
+<td> [/i] </td>
+<td> &lt;/i> </td>
+</tr>
+<tr>
+<td> [b] </td>
+<td> &lt;b> </td>
+</tr>
+<tr>
+<td> [/b] </td>
+
+<td> &lt;/b> </td>
+</tr>
+</table>
+<h2> Spezielle Zeichen </h2>
+<p>Spezielle Zeichen wie &auml;,&ouml;,&uuml;,&quot;,',... m&uuml;ssen als HTML-Entities geschrieben werden (z.B. &amp;nbsp;)</p>

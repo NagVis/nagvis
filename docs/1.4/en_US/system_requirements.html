@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>System requirements</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+	<body>
+		<h1>System requirements</h1>
+		<h2>Nagios (installed, configured, running)</h2>
+		<p>You need an installed, configured and running Nagios to get NagVis working. You can get Nagios from the <a href="http://www.nagios.org/" target="_blank">official Nagios Homepage</a>.</p>
+		
+		<h2>NDO (installed, configured, running)</h2>
+		<p>You need an installed, configured and running NDO (Nagios data out). This Nagios addon stores all status information collected by the Nagios process in a database. You can get the NDO from the <a href="http://www.nagios.org/" target="_blank">official Nagios Homepage</a>.</p>
+		
+		<h2>Webserver with PHP support</h2>
+		<p>NagVis is a web based application realized in Javascript and PHP. You need a webserver with PHP support to run NagVis. We recommend the usage of <a href="http://www.apache.org/" target="_blank">Apache Webserver</a> with <a href="http://www.apache.net/" target="_blank">mod_php</a>.</p>
+		
+		<p>The minimum version requirement of PHP is 5.0.0.</p>
+		
+		<h2>PHP modules needed</h2>
+		<p>Besides the base php packet you need the following modules in your php installation:</p>
+		<ul>
+		<li>php5-gd</li>
+		<li>php5-gettext</li>
+		<li>php5-mysql</li>
+		<li>php5-mbstring</li>
+		<li>php5-session</li>
+		<li>php5-xml</li>
+		</ul>
+		<p>Note: Maybe some of these functions are compiled in your php.</p>
+		
+		<h2>Graphviz for the automap</h2>
+		<p>The <a href="automap.html">Automap</a> is based on Graphviz. You need it when you like to use the automap feature. We recomment the use of Graphviz version >= 2.14 (Earlier versions (with lower version numbers) have some problems with truecolor rendering).</p>
+		<p>Graphviz is available in some distributions. When you can not use a precompiled distribution package, you can get Graphviz from the <a href="http://www.graphviz.org/" target="_blank">official Graphviz Homepage</a> for compiling it on your own.</p>
+		<p>You will also need more packages like gd, libpng, freetype, ... but if you get graphviz compiled and/or installed it should work.</p>
+	</body>
+</html>

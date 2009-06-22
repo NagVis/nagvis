@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Main configuration format description</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>  
+		<h1>Main configuration format description</h1>
+		<h2> General Informations </h2>
+		The Main Configuration file is designed in plain text "ini"-like format.
+		
+		There are sections which are marked by the surrounding brackets [] and variables which have an assigned value. The variables have to be in the correct section so you have to ensure to have uncommented the section too.
+		
+		Semicolons (<code>;</code>) are used to mark comments. Sections and variables with a leading semicolon are commented out and won't be recognized by NagVis.
+		
+		In a fresh NagVis installation there is no file with the default configuration. The default configuration is stored in the PHP-Code. If there is a file <code>etc/nagvis.ini.php</code> which has stored configuration information it will override the default configurations.
+		
+		There is a file <code>etc/nagvis.ini.php-sample</code> with sample configuration values. All values are commented out.
+		<h2> Description of the sections in detail </h2>
+
+		<ul>
+		<li><a href=#global>global</a></li>
+		<li><a href=#defaults>defaults</a></li>
+		<li><a href=#wui>wui</a></li>
+		<li><a href=#paths>paths</a></li>
+		<li><a href=#backend>backend_*</a></li>
+		<li><a href=#rotation>rotation_*</a></li>
+		<li><a href=#automap>automap</a></li>
+		</ul>
+		
+		<a name=global></a>
+		<h3> global </h3>
+		All values which are used througout NagVis are stored in the global section.
+		This example shows all values of the global section:
+		
+<pre>[global]
+language="english"
+displayheader=1
+refreshtime=60
+dateformat="Y-m-d H:i:s"</pre>
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> language </td><td> english </td><td> Select language (<code>german</code> and <code>english</code> available by default) </td>
+		</tr>
+		<tr>
+		<td> displayheader </td><td> 1 </td><td> Show header menu in maps </td>
+		</tr>
+		<tr>
+		<td> refreshtime </td><td> 60 </td><td> Refresh time of maps or reloading the next map in map rotation </td>
+		</tr>
+		<tr>
+		<td> dateformat </td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date()</a> function of php <font style="color:red;">(New in 1.3)</font> </td>
+		</tr>
+		</table>
+		
+		<a name=defaults></a>
+		<h3> defaults </h3>
+		Default values which are applied to the maps you use. If there is no value set in the map or an element on the map the default value is used.
+		
+		This example shows some values of the defaults section:
+		
+<pre>[defaults]
+backend="ndomy_1"
+icons="std_medium"
+recognizeservices=1
+onlyhardstates=0
+usegdlibs=1
+backgroundcolor="#fff"
+headertemplate="default"
+hovertemplate="default"
+hoverdelay=0
+showinlists=1
+urltarget="_self"</pre>
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> backend </td><td> ndomy_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
+		</tr>
+		<tr>
+		<td> icons </td><td> std_medium </td><td> Default iconset </td>
+		</tr>
+		<tr>
+		<td> recognizeservices </td><td> 1 </td><td> Recognize service states in host/hostgroup objects </td>
+		</tr>
+		<tr>
+		<td> onlyhardstates </td><td> 0 </td><td> Recognize only hard states (not soft) </td>
+		</tr>
+		<tr>
+		<td> backgroundcolor </td><td> #fff </td><td> Default background color of maps </td>
+		</tr>
+		<tr>
+		<td> usegdlibs </td><td> 1 </td><td> Use gdlibs (if set to 0, lines will not work, all other types should work fine) </td>
+		</tr>
+		<tr>
+		<td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
+		</tr>
+		<tr>
+		<td> showinlists </td><td> 1 </td><td> Show the maps in lists (dropdowns,index page,...) </td>
+		</tr>
+		<tr>
+		<td> urltarget </td><td> _self </td><td> Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
+		</tr>
+		<tr>
+		<td> hovermenu </td><td> 1 </td><td> Enable/Disable the hover menu <font style="color:red;">(New in 1.3)</font> </td>
+		</tr>
+		<tr>
+		<td> hovertemplate </td><td> default </td><td> Default <a href="hover_templates.html">hover template</a> </td>
+		</tr>
+		<tr>
+		<td> hovertimeout </td><td> 5 </td><td> Default hover menu ajax request timeout in seconds <font style="color:red;">(New in 1.3)</font></td>
+		</tr>
+		<tr>
+		<td> hoverdelay </td><td> 0 </td><td> Delay of hover menu appearance in seconds </td>
+		</tr>
+		<tr>
+		<td> hoverchildsshow </td><td> 1 </td><td> Enable/Disable the child objects in hover menu <font style="color:red;">(New in 1.3)</font> </td>
+		</tr>
+		<tr>
+		<td> hoverchildssort </td><td> a </td><td> Sort method of the child objects (Available: "s": State, "a": Alphabet ) <font style="color:red;">(New in 1.3)</font> </td>
+		</tr>
+		<tr>
+		<td> hoverchildsorder </td><td> asc </td><td> Order of the child objects (Available: asc/desc) <font style="color:red;">(New in 1.3)</font> </td>
+		</tr>
+		<tr>
+		<td> hoverchildslimit </td><td> 10 </td><td> Limit hover child objects to this maximum value <font style="color:red;">(New in 1.3)</font> </td>
+		</tr>
+		</table>
+		
+		<a name=wui></a>
+		<h3> wui </h3>
+		These are the options for the WUI.
+		
+		This example shows all values of the wui section:
+		
+<pre>[wui]
+autoupdatefreq=25
+maplocktime=5
+allowedforconfig=EVERYONE
+</pre>
+		
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> autoupdatefreq </td><td> 25 </td><td> In this interval the map gets backuped by the WUI. </td>
+		</tr>
+		<tr>
+		<td> maplocktime </td><td> 5 </td><td> Time in minutes a map is locked by an editing user. </td>
+		</tr>
+		<tr>
+		<td> allowedforconfig </td><td> EVERYONE </td><td> Users who are allowed to change the NagVis configuration (comma seperated list) or EVERYONE </td>
+		</tr>
+		</table>
+		
+		<a name=paths></a>
+		<h3> paths </h3>
+		In this section all needed path variables are defined.
+		
+		This example shows all values of the paths section:
+		
+<pre>[paths]
+base="/usr/local/nagios/share/nagvis/"
+htmlbase="/nagios/nagvis"
+htmlcgi="/nagios/cgi-bin"</pre>
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> base </td><td> <code>/usr/local/nagios/share/nagvis/</code> </td><td> Absolute physical NagVis path </td>
+		</tr>
+		<tr>
+		<td> htmlbase </td><td> <code>/nagios/nagvis</code> </td><td> Absolute html NagVis path </td>
+		</tr>
+		<tr>
+		<td> htmlcgi </td><td> <code>/nagios/cgi-bin</code> </td><td> Absolute html NagVis cgi path </td>
+		</tr>
+		</table>
+		
+		<a name=backend></a>
+		<h3> backend_* </h3>
+		The backend sections to define the backends are all named <code>[backend_&lt;backend-id>]</code>.
+		In the example the <code>backend_id</code> is <code>ndomy_1</code>.
+		
+		Depending on the value in backendtype the valid values for the backends have to be set. In this example it is the ndomy backend.
+		
+<pre>[backend_ndomy_1]
+backendtype="ndomy"
+; the following options depend on the selected backendtype, in this case it is ndomy
+dbhost="localhost"
+dbport=3306
+dbname="db_nagios"
+dbuser="root"
+dbpass="xxx"
+dbprefix="nagios_"
+dbinstancename="default"
+maxtimewithoutupdate=181
+htmlcgi="/nagios/cgi-bin"</pre>
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> backendtype </td><td> ndomy </td><td> type of backend - MUST be set </td>
+		</tr>
+		<tr>
+		<td> dbhost </td><td> localhost </td><td> Hostname of the NDO Database </td>
+		</tr>
+		<tr>
+		<td> dbport </td><td> 3306 </td><td> Port of the NDO Database </td>
+		</tr>
+		<tr>
+		<td> dbname </td><td> db_nagios </td><td> Name of the NDO Database </td>
+		</tr>
+		<tr>
+		<td> dbuser </td><td> root </td><td> Username for Database Access (only needs read permissions) </td>
+		</tr>
+		<tr>
+		<td> dbpass </td><td> root </td><td> Password for Database Access (only needs read permissions) </td>
+		</tr>
+		<tr>
+		<td> dbprefix </td><td> nagios_ </td><td> Prefix of the tables in NDO Database (like defined in ndo2db.cfg) </td>
+		</tr>
+		<tr>
+		<td> dbinstancename </td><td> default </td><td> Name of the Nagios instance in NDO Database (like defined in ndomod.cfg) </td>
+		</tr>
+		<tr>
+		<td> maxtimewithoutupdate </td><td> 180 </td><td> Maximum delay in seconds after last update in NDO. NagVis will report Nagios is not running if the delay is reached. </td>
+		</tr>
+		<tr>
+		<td> htmlcgi </td><td> /nagios/cgi-bin </td><td> Path to the cgi-bin directory of this backend (interesting for multiple NDO backends) </td>
+		</tr>
+		</table>
+		
+		<a name=rotation></a>
+		<h3> rotation_* </h3>
+		Defines several map rotation pools. In this example the browser switches between the maps demo and demo2 every 15 seconds. The rotation is enabled by url: index.php?rotation=<rotation-id> in this case the rotation id is: "demo"
+		
+<pre>[rotation_demo]
+maps="demo,demo2"
+interval=15</pre>
+
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> maps </td><td> </td><td> List of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable by the server which NagVis is running on. </td>
+		</tr>
+		<tr>
+		<td> interval </td><td> 15 </td><td> Map rotation interval in seconds </td>
+		</tr>
+		</table>
+		
+		<a name=automap></a>
+		<h3> automap </h3>
+		<font style="color:red;">(New in 1.3)</font>
+		
+		Sets the automap options.
+		
+<pre>[automap]
+showinlists=1
+defaultroot="localhost"
+graphvizpath="/usr/local/bin"
+defaultparams="&amp;maxLayers=2"</pre>
+
+		<table style="width:100%">
+			<tr>
+			<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+			</tr>
+			<tr>
+			<td> showinlists </td><td> 1 </td><td> Enable/Disable the automap in map lists (map index page, dropdown menus in header) </td>
+			</tr>
+			<tr>
+			<td> defaultroot </td><td> localhost </td><td> Default value for the root object. For details see <a href="automap.html">Automap documentation</a> </td>
+			</tr>
+			<tr>
+			<td> graphvizpath </td><td> /usr/local/bin </td><td> If the graphviz binaries (dot,neato,twopi,...) could not be found in the PATH the path has to be set here </td>
+			</tr>
+			<tr>
+			<td> defaultparams </td><td> &amp;maxLayers=2 </td><td> These are the parameters for the automap views and links in the lists (map index page, dropdown menus in header) </td>
+			</tr>
+		</table>
+	</body>
+</html>

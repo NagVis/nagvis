@@ -1,0 +1,61 @@
+﻿body {
+	font-family: Arial, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+
+table {
+	font-size: 1.0em;
+}
+
+a, a:visited, a:active, a:link {
+	color: #45b1cd;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+h1 {
+	margin:0 0 10px 0;
+	font-size:2.2em;
+	font-weight:normal;
+}
+
+h2 {
+	margin:12px 0 12px 0;
+	font-size:1.6em;
+	font-weight:normal;
+}
+
+h3 {
+	margin:10px 0 10px 0;
+	font-size:1.5em;
+	font-weight:normal;
+}
+
+pre, code {
+	padding: 0;
+	border: 1px solid gray;
+	background-color: #E0E0E0;
+	font-size: 1.0em;
+}
+
+pre {
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-bottom: 5px;
+}
+
+table {
+	margin: 5px;
+}
+
+table th, table td {
+	background-color: #E0E0E0;
+	vertical-align: top;
+}
+
+table th {
+	border: 1px solid gray;
+}

@@ -1,0 +1,116 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>nagvis_automap</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>Automap</h1>
+<h2>Einleitung</h2>
+Die NagVis-Automap wurde mit NagVis-1.3 eingef&uuml;hrt. Die Hauptaufgabe dieses Features ist der Ersatz der eingebauten
+Map von Nagios. Das gr&ouml;&szlig;te Problem der Nagios-Map ist die fehlende Skalierbarkeit. In gro&szlig;en Nagios-Installationen
+ist die Automap nicht nutzbar. Das liegt u.a. an fehlenden Konfigurationsoptionen wie z.B. der Selektion von bestimmten
+anzuzeigenden Elementen. 
+<br>
+<br>
+NagVis behandelt die Objekte und definiert eine Konfiguration f&uuml;r <a href="http://www.graphviz.org/">Graphviz</a>. Das Map-Bild und der HTML-Code f&uuml;r die Links werden von GraphViz erzeugt und an NagVis weitergeleitet.
+<br>
+<h2>Voraussetzungen</h2>
+<ul>
+<li> eine lauff&auml;hige NDO-Installation </li>
+<li> GraphViz >= 2.14 f&uuml;r die Automap (niedrigere Versionen haben Probleme mit Truecolor-Unterst&uuml;tzung beim Rendering).
+Sie ben&ouml;tigen weitere Pakete wie gd, libpng und freetype, ... aber wenn Sie graphviz kompiliert/installiert haben, sollte es funktionieren.
+</li>
+<li>
+Sie m&uuml;ssen Abh&auml;ngigkeiten zwischen den einzelnen Hosts definieren. Hinweise finden Sie u.a. <a href="http://www.nagios-wiki.de/nagios/doku3/networkreachability">hier</a>
+</li>
+</ul>
+
+<h2>Erster Aufruf</h2>
+Die Automap kann wie folgt aufgerufen werden: <code>http://&lt;nagios-server>/&lt;path-to-nagvis>/nagvis/index.php?automap=1</code>.
+Wenn alles richtig konfiguriert ist, sollten der Root-Host und zwei Ebenen von abh&auml;ngigen Hosts auf der Automap angezeigt werden.
+<br>
+<h2>Hauptkonfiguration</h2>
+Einige Parameter f&uuml;r die Automap k&ouml;nnen in der Hauptkonfiguration von NagVis gesetzt werden. Weitere Informationen finden Sie in der <a href=./nagvis_config_format_description.html>Beschreibung der Hauptkonfigurationsdatei</a>.
+<br>
+<h2>Map-Konfiguration</h2>
+Die Automap kann durch eine spezielle Map-Konfigurationsdatei namens <code>__automap.cfg</code> konfiguriert werden. Die Map-Konfigurationsdatei wird im normalen Map-Pfad (<code>etc/maps/</code>) abgelegt. Diese Konfigurationsdatei enth&auml;lt lediglich einen global-Abschnitt. Alle Werte k&ouml;nnen - wie im "global"-Kapitel der <a href=./map_config_format_description.html>Beschreibung der Map-Konfigurationsdatei</a> angegeben - definiert werden.
+<br>
+<br>
+Die Werte wie iconset usw. werden an alle Objekte der Map vererbt.
+<br>
+<h2>URL-Parameter</h2>
+Die Automap kann mit verschiedenen URL-Parametern aufgerufen werden. Hier eine Liste aller verf&uuml;gbarer Optionen:<br>
+<table border=0>
+<tr>
+<th> Parameter </th><th> Default </th><th> Beschreibung </th>
+</tr> 
+<tr>
+<td> backend </td><td> default backend </td><td> Die Backend-Id des Backends, dessen Objekte benutzt werden sollen. F&uuml;r Einzelheiten schauen Sie in den [backend_*]-Abschnitt der <a href=./nagvis_config_format_description.html>Beschreibung der Hauptkonfigurationsdatei</a>.</td>
+</tr>
+<tr>
+<td> root </td><td> siehe <a href="#root/object/definition">root object definition</a></td><td>Dies ist der Name des Root-Objektes. Es ist nicht notwendig, den Host hier zu setzen. Es gibt mehrere Wege, das Root-Objekt zu ermitteln. Einzelheiten finden Sie im <a href=#Root-Objekt-Definition>Root-Objekt-Definition</a>-Kapitel auf dieser Seite</td>
+</tr>
+<tr>
+<td> maxLayers </td><td> 2 </td><td> maximale Anzahl von anzuzeigenden Ebenen abh&auml;ngiger Hosts. </td>
+</tr>
+<tr>
+<td> renderMode </td><td> undirected </td><td> Setzt den Render-Modus der Map. Einzelheiten finden Sie unter <a href=#available/render/modes>verf&uuml;gbare Render-Modi</a> </td>
+</tr>
+<tr>
+<td> width </td><td> 1024 </td><td> Breite der Automap in Pixeln </td>
+</tr>
+<tr>
+<td> height </td><td> 786 </td><td> H&ouml;he der Automap in Pixeln</td>
+</tr>
+<tr>
+<td> ignoreHosts </td><td> none </td><td> Kommaseparierte Liste von Hosts (einschie&szlig;lich abh&auml;ngiger Hosts), die nicht angezeigt werden sollen</td>
+</tr>
+<tr>
+<td> filterGroup </td><td> none </td><td> Geben Sie den Namen einer Hostgruppe an. Nur Hosts dieser Hostgruppe werden auf der Map angezeigt.</td>
+</tr>
+</table>
+<a name=root/object/definition></a> 
+<h2>Root-Objekt-Definition</h2> 
+Die Vorgehensweise der Automap ist, beim Root-Objekt zu beginnen und den in Nagios definierten Abh&auml;ngigkeitsbaum zu durchlaufen und die gefundenen Objekte auf der Map anzuzeigen.
+<br>
+Es gibt mehrere Wege, um das Root-Objekt zu ermitteln:
+<ul>
+<li> URL-Parameter: das Root-Objekt kann durch den Parameter <code>root</code> gesetzt werden<br></li>
+<li> Hauptkonfiguration: die <code>defaultroot</code>-Option kann im <code>[automap]</code>-Abschnitt gesetzt werden<br></li>
+<li> automatische Erkennung: NDO nach einem Host ohne Eltern fragen. Das funktioniert allerdings nur, wenn es genau EINEN Host ohne Eltern in der NDO gibt.<br></li>
+</ul>
+Die obige Liste ist nach Priorit&auml;t geordnet.
+<br>
+<a name=available/render/modes></a>
+<h2>Verf&uuml;gbare Render-Modi</h2>
+Es gibt verschiedene verf&uuml;gbare Render-Modi: <br>
+<table border=0>
+<tr>
+<td> Modus </td><td> Beispiel-Bild </td>
+</tr>
+<tr>
+<td valign="top"> directed </td>
+<td align="center"><img alt="" src="../general/img/nagvis-1.3-automap-directed-1-thumb.png" /></td>
+</tr>
+<tr>
+<td valign="top"> undirected </td>
+<td align="center"><img alt="" src="../general/img/nagvis-1.3-automap_undirected-1-thumb.png" /></td>
+</tr>
+<tr>
+<td> radial </td><td> </td>
+</tr>
+<tr>
+<td> circular </td><td> </td>
+</tr>
+<tr>
+<td> undirected2 </td><td> </td>
+</tr>
+</html>

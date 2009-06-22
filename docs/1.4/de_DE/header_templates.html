@@ -1,0 +1,87 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>header_templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>Header-Templates</h1>
+</a name=Header-Templates>
+<h2>Einleitung</h2>
+Header-Templates sind HTML-Dateien, die einige Makros enthalten. Diese Dateien k&ouml;nnen als Header-Men&uuml; in den Maps benutzt werden. Die Header-Templates sind im Verzeichnis <code>nagvis/etc/templates/header/</code> relativ zum NagVis-Root-Verzeichnis abgelegt. Die Template sind wie folgt benannt: <code>tmpl.*.html</code>.
+<br>
+ 
+<h2>Makros</h2>
+<p>Die folgenden Makros sind in den Header-Men&uuml;s verf&uuml;gbar:</p>
+<table border=0>
+<tr>
+<th>Makro</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>[current_map]</td><td>Name der aktuellen Map (z.B. demo,demo2) </td>
+</tr>
+<tr>
+<td>[current_map_alias]</td><td>Alias der aktuellen Map </td>
+</tr>
+<tr>
+<td>[current_language]</td><td>Zeichenkette, die die aktuell eingestellte Sprache enth&auml;lt (z.B. de_DE). Dies wird f&uuml;r den Verweis auf die Dokumentation ben&ouml;tigt. </td>
+</tr>
+<tr>
+<td>&lt;!– BEGIN maplist –><br>[map_name]<br>&lt;!– END maplist –></td>
+<td>Eine Liste aller in NagVis definierten Maps. Der Code zwischen <code>&lt;!– BEGIN maplist –></code> und <code>&lt;!– END maplist –></code> wird f&uuml;r jede Map wiederholt.
+Ein Beispiel finden Sie in <code>nagvis/etc/templates/header/tmpl.default.html</code>.<br>
+Innerhalb der BEGIN/END-Marken sind die folgenden Makros verf&uuml;gbar:<br>* <i>[map_name]</i>: Name der Map<br>* <i>[map_alias]</i>: Alias der Map<br>* <i>[selected]</i>: Wenn der Map-Name der Name der aktuell ge&ouml;ffneten Map ist, wird er durch selected=“selected” ersetzt </td>
+</tr>
+<tr>
+<td>[html_base]</td><td>URL zur HTML-Basis (/nagios/nagvis) </td>
+</tr>
+<tr>
+<td>[html_templates]</td><td>Pfad zu den Header-Templates (nagvis/nagvis/etc/templates/header)</td>
+</tr>
+<tr>
+<td>[html_template_images]</td><td>Pfad zu den Header-Template-Images (nagvis/nagvis/images/templates/header)</td>
+</tr>
+<tr>
+<td>[lang_select_map]</td><td>Label f&uuml;r Map-Auswahl </td>
+</tr>
+<tr>
+<td>[lang_edit_map]</td><td>Label zum editieren der Map</td>
+</tr>
+<tr>
+<td>[lang_need_help]</td><td>Label f&uuml;r Hilfe-Auswahl </td>
+</tr>
+<tr>
+<td>[lang_online_doc]</td><td>Label f&uuml;r Link zur Online-Dokumentation </td>
+</tr>
+<tr>
+<td>[lang_forum]</td><td>Label f&uuml;r Link zum NagVis-Forum </td>
+</tr>
+<tr>
+<td>[lang_support_info]</td><td>Label f&uuml;r Link zu Support-Informationen </td>
+</tr>
+<tr>
+<td>[lang_overview]</td><td>Label f&uuml;r &Uuml;berblick</td>
+</tr>
+<tr>
+<td>[lang_instance]</td><td>Label f&uuml;r Instanznamen </td>
+</tr>
+<tr>
+<td>[lang_rotation_start]</td><td>Label zum Starten der Map-Rotation </td>
+</tr>
+<tr>
+<td>[lang_rotation_stop]</td><td>Label zum Stoppen der Map-Rotation</td>
+</tr>
+<tr>
+<td>[lang_refresh_start]</td><td>Label zum Starten des Map-Refresh-Countdowns </td>
+</tr>
+<tr>
+<td>[lang_refresh_stop]</td><td>Label zum Stoppen des Map-Refresh-Countdowns</td>
+</tr>
+</html>

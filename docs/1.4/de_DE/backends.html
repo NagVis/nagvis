@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>Backends</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+		<h1>Backends</h1>
+		<h2>Allgemeine Informationen</h2>
+		<p>Der NagVis-Code besteht aus mehreren Schichten. Eine dieser Schichten ist die &quot;Daten-Schicht&quot;. Die Datenschicht wird benutzt, um Informationsanfragen von Dritten zu behandeln, wie z.B. Nagios NDO. Wir nennen diese Schicht im Allgemeinen &quot;Backend&quot;. Innerhalb von NagVis gibt es einige Komponenten, um diese Backends zu verwalten und sie dienen als "Kleber" zwischen den einzelnen Backends und den anderen Schichten.</p>
+		
+		<h2>Default-Backend</h2>
+		<p>Zur Zeit werden mit dem NagVis-Kern zwei Backends ausgeliefert: das ndomy- und das ndo2fs-Backend. Beide Backends werden im Folgenden genauer beschrieben.<br />
+		Das ndomy-Backend ist das Default-Backend seit NagVis 1.0. Es holt Nagios-Informationen aus der NDO-MySQL-Datenbank.</p>
+		
+		<h2>Backend-Typen</h2>
+		
+		<h3>ndo2db-MySQL-Backend (ndomy)</h3>
+		<p>Das ndo2db-MySQL-Backend, kurz ndomy-Backend, wird benutzt, um Nagios-Informationen wie Status- und Konfigurationsdaten aus einer MySQL-Datenbank zu holen. Ein Nagios-Addon namens ndoutils speichert alle Informationen, die bei einem laufenden Nagios anfallen, in einer MySQL-Datenbank. Diese Datenbank wird &uuml;ber das NagVis-ndomy-Backend abgefragt.</p>
+		<p>Sie k&ouml;nnen die folgenden Parameter benutzen, um ein ndomy-Backend zu konfigurieren:</p>
+		
+		<table style="width:100%">
+		<tr>
+		<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+		</tr>
+		<tr>
+		<td>dbhost</td><td>localhost</td><td>Hostname der NDO-Datenbank</td>
+		</tr>
+		<tr>
+		<td>dbport</td><td>3306</td><td>Port der NDO-Datenbank</td>
+		</tr>
+		<tr>
+		<td>dbname</td><td>db_nagios</td><td>Name der NDO-Datenbank</td>
+		</tr>
+		<tr>
+		<td>dbuser</td><td>root</td><td>Benutzername f&uuml;r den Datenbankzugriff (Leseberechtigung ist ausreichend)</td>
+		</tr>
+		<tr>
+		<td>dbpass</td><td>root</td><td>Passwort f&uuml;r den Datenbankzugriff (Leseberechtigung ist ausreichend)</td>
+		</tr>
+		<tr>
+		<td>dbprefix</td><td> nagios_ </td><td>Pr&auml;fix der Tabellen in der NDO-Datenbank (wie in der ndo2db.cfg definiert)</td>
+		</tr>
+		<tr>
+		<td>dbinstancename</td><td> default </td><td>Name der Nagios-Instanz in der NDO-Datenbank (wie in der ndomod.cfg definiert)</td>
+		</tr>
+		<tr>
+		<td>maxtimewithoutupdate</td><td>180</td><td>Maximale Zeit in Sekunden nach der letzten Aktualisierung in NDO. NagVis wird melden, dass Nagios nicht l&auml;uft, wenn diese Zeit &uuml;berschritten ist</td>
+		</tr>
+		</table>
+		<p>Es gibt auch einige allgemeine Parameter. Sie finden sie in der <a href="nagvis_config_format_description.html#backend">Formatbeschreibung der Hauptkonfigurationsdatei</a>.</p>
+		
+		<h3>ndo2fs-Backend</h3>
+		<table style="width:100%">
+		<tr>
+		<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+		</tr>
+		<tr>
+		<td>path</td><td>/usr/local/ndo2fs/var</td><td>Pfad zum ndo2fs-var-Verzeichnis. Die Dateien in diesem Verzeichnis sollten ndo2fs.pid, VOLATILE und PERSISTENT sein.</td>
+		</tr>
+		<tr>
+		<td>instancename</td><td>default</td><td>Name der Backend-Instanz.</td>
+		</tr>
+		<tr>
+		<td>maxtimewithoutupdate</td><td>180</td><td>Maximale Zeit in Sekunden nach der letzten Aktualisierung in NDO. NagVis wird melden, dass Nagios nicht l&auml;uft, wenn diese Zeit &uuml;berschritten ist</td>
+		</tr>
+		</table>
+		<p>Es gibt auch einige allgemeine Parameter. Sie finden sie in der <a href="nagvis_config_format_description.html#backend">Formatbeschreibung der Hauptkonfigurationsdatei</a>.</p>
+		
+		<h3>Andere Backend-Typen</h3>
+		<p>FIXME: Hinweis auf andere Backends (eigene erzeugen, Backends von Dritten, ...).</p>
+		
+		<h2>Konfigurieren von Backends</h2>
+		<p>Die Backends werden in der Hauptkonfigurationsdatei definiert. Schauen Sie in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>, wie Backends definiert werden.</p>
+	</body>
+</html>

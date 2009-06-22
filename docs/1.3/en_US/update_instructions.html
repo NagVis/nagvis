@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Update instructions</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>  
+  <body>
+		<h1>Update instructions</h1>
+		
+		First rule: Always make a backup before updating an existing installation.
+		
+		There are two cases of updating:
+		<ol>
+		<li> Upgrading from an older main version (1.1x or 1.2x to 1.3x)</li>
+		<li> Updating the sub version (1.3x to 1.3x)</li>
+		</ol>
+		
+		<h2> Updating from NagVis 1.2 or lower </h2>
+		
+		There have been many changes to the internal structure of NagVis and the configuration values. The best way upgrading to the newest NagVis version is to set up the new version as new installation and migrate your maps/icons/configurations etc. manually.
+		
+		You should take a look at the following things:
+		
+		<ul>
+		<li> Maps (etc/maps)<br />
+		Just copy all map configuration files</li>
+		<li> Background-Images (nagvis/images/maps)<br />
+		Just copy all map background images</li>
+		<li> Iconsets (nagvis/images/iconsets)<br />
+		Just copy everything which is not named "std_*"</li>
+		<li> Shapes (nagvis/images/shapes)<br />
+		Just copy everything</li>
+		<li> Templates (nagvis/templates/hover and nagvis/templates/header)<br />
+		Just copy all your custom templates. <font style="color:#ff0000">Be aware:</font> Don't replace the default templates.<br />Maybe you need to update your pre 1.3 templates to 1.3 version. For more information take a look at the <a href="http://www.nagvis.org/download/templates" target="_blank">template download</a> page.</li>
+		<li> Template-Images (nagvis/images/templates/hover and nagvis/images/templates/header)<br />
+		Just copy everything</li>
+		<li> Main configuration (etc/nagvis.inc.php)<br />
+		You should <font style="color:#ff0000">not</font> copy that file. The best way is to  copy the sample configuration of the new NagVis version to etc/nagvis.inc.php and merge the settings of your old installation manually to that file</li>
+		</ul>
+		
+		<h2> Updating from NagVis 1.3x </h2>
+		
+		Until you didn't change anything in the NagVis code of your installation you can easily copy the contents of the new package into the existing installation.
+		
+		The configuration files do not get replaced by the packages. <br>
+		
+		<font style="color:red">After the update, check your <a href="installation_instructions.html">permissions</a>.</font>
+	</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+	<title>About</title>
+</head>
+<body>
+	<h1>About</h1>
+	</a name="whatis">
+	<h2>What is NagVis?</h2>
+		<p>NagVis is a visualization addon for the well known network management system Nagios&reg;.</p>
+		<p>NagVis can be used to visualize Nagios data, e.g. to display IT processes like a mail system or a network infrastructure.
+			Using data supplied by NDO (a Nagios addon) it will update objects placed on maps in certain intervals to reflect the current status.
+			These maps allow to arrange the objects to display them in different layouts:
+			<ul>
+				<li>physical (e.g. all hosts in a rack/room/department)</li>
+				<li>logical (e.g. all application servers)</li>
+				<li>geographical (e.g. all hosts in a country)</li>
+				<li>business processes (e.g. all hosts/services involved in a process)</li>
+			</ul>
+		</p>
+	</a name="howworks">
+	<h2>How does NagVis work?</h2>
+		<p>In general NagVis is a presentation tool for the information which is gathered by Nagios. NagVis collects the information from backends. 
+		There is a default backend delivered with NagVis: NDO MySQL Backend. This backend reads all information from the NDO (Nagios Data Out) MySQL database. 
+		The NDO is an addon for Nagios. You can find it on the <a href="http://www.nagios.org/" target="_blank">official Nagios Homepage</a>.</p>
+		<p>You can add all objects from Nagios (Host, Services, Hostgroups, Servicegroups) on so called maps. Each map can be configured through its own
+		<a href="map_config_format_description.html">configuration file</a>. You can edit the configuration files directly by using your favorite text editor 
+		or the web configuration tool called WUI. Furthermore you can add some special NagVis objects to the maps. These objects are shapes, textboxes and 
+		reference objects for other maps.</p>
+		<p>Each of the objects on your maps can be configured to fit your needs. For example there are links to the Nagios frontend on each object which represents
+		a Nagios object. You can easily customize these links.<br>
+		There is a hover menu which is enabled by default. The hover menu displays detailed information
+		for each object. Hover menus can easily be modified by changing the <a href="hover_templates.html">templates</a> for them. You can also disable the hover menu.<br> 
+		By default the objects are displayed as icons on the map. You can change these icons by adding <a href="extending/iconsets.html">iconsets</a> from the NagVis 
+		homepage or create your own. The objects can also be displayed as lines or as <a href="gadgets.html">gadgets</a>.</p>
+		<p>In addition to the normal maps there is an <a href="automap.html">automap</a>. The automap is generated automatically based on the Nagios configuration. For using the automap 
+		you have to set up the parent relationships in Nagios. The automap generates a background image based on the configuration, the layout parameters and the parent 
+		relationships.</p>
+	</a name="licensing">
+	<h2>Licensing</h2>
+		<p>NagVis is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2 as published by the Free Software Foundation.</p>
+		<p>NagVis is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+</body>
+</html>

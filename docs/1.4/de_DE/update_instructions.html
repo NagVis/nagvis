@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>update_instructions</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>NagVis 1.4 Update-Hinweise</h1>
+
+Wichtigste Regel: machen Sie immer ein Backup, bevor Sie eine existierende Installation aktualisieren.<br><br>
+
+Es gibt zwei F&auml;lle der Aktualisierung:<br>
+<ol>
+<li>Aktualisierung einer &auml;lteren Hauptversion (1.1x, 1.2x, 1.3.x auf 1.4x)</li>
+<li>Aktualisierung der Sub-Version (1.4x auf 1.4x)</li>
+</ol>
+ 
+<h2>Aktualisierung von NagVis 1.2 oder darunter</h2>
+Es gab viele &Auml;nderungen an der inneren Struktur von NagVis und den Konfigurationswerten. Der beste Weg zur Aktualisierung auf die neueste NagVis-Version ist, die neue Version als Neuinstallation aufzusetzen und Ihre Maps/Icons/Konfigurationen usw. manuell zu migrieren.<br><br>
+Sie sollten einen Blick auf die folgenden Dinge werfen:
+<ul>
+<li> Maps (etc/maps)</li>
+kopieren Sie einfach alle Map-Konfigurationsdateien
+</ul>
+    
+<ul>
+<li> Hintergrundbilder (nagvis/images/maps)</li>
+kopieren Sie einfach alle Hintergrundbilder
+</ul>
+    
+<ul>
+<li> Iconsets (nagvis/images/iconsets)</li>
+kopieren Sie einfach alles, was nicht "std_*" hei&szlig;t
+</ul>
+    
+<ul>
+<li> Shapes (nagvis/images/shapes)</li>
+kopieren Sie einfach alles
+</ul>
+    
+<ul>
+<li> Templates (nagvis/templates/hover und nagvis/images/templates/header)</li>
+kopieren Sie einfach alles
+</ul>
+    
+<ul>
+<li> Template-Bilder (nagvis/images/templates/hover und nagvis/images/templates/header)</li>
+kopieren Sie einfach Ihre eigenen Templates. <font color=red>Achtung: </font>&Uuml;berschreiben Sie nicht die Default-Templates. M&ouml;glicherweise m&uuml;ssen Sie Ihre vor-1.3-Templates auf Version 1.4 aktualisieren. Mehr Informationen finden Sie auf der <a href=http://www.nagvis.org/download/templates>Template download</a>-Seite.
+</ul>
+    
+<ul>
+<li> Hauptkonfiguration (etc/nagvis.inc.php)</li>
+Sie sollten diese Datei <font color=red>nicht</font> kopieren. Der beste Weg ist, die Beispieldatei der neuen NagVis-Version nach etc/nagvis.inc.php zu kopieren und die Werte Ihrer alten Installation manuell in die neue Datei zu migrieren.
+</ul>
+    
+
+<h2>Aktualisierung von NagVis 1.4x</h2>
+Solange Sie in Ihrer Installation nichts am NagVis-Code ge&auml;ndert haben, k&ouml;nnen Sie einfach den Inhalt des neuen Packages in die bestehende Installation kopieren.<br><br>
+Die Konfigurationsdateien werden durch die Packages nicht ersetzt.<br><br>
+<font color=red>&Uuml;berpr&uuml;fen Sie nach der Aktualisierung die <a href=./installation_instructions.html#SCHRITT_5>Berechtigungen</a></font> 
+</html>

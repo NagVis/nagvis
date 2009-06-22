@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>system_requirements</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>Systemvoraussetzungen f&uuml;r NagVis 1.4</h1>
+
+<h2>Nagios (installiert, konfiguriert, lauff&auml;hig)</h2>
+<p>Sie ben&ouml;tigen ein installiertes, konfiguriertes und lauff&auml;higes Nagios, damit NagVis funktioniert.
+Nagios bekommen Sie auf der <a href=http://www.nagios.org>offiziellen Nagios Homepage</a>, Schnellstart-Installationsanleitungen finden Sie u.a. <a href=http://www.nagios-wiki.de/nagios/doku3/quickstart>hier</a>.</p>
+
+<h2>NDO (installiert, konfiguriert, lauff&auml;hig)</h2>
+<p>Sie ben&ouml;tigen ein installiertes, konfiguriertes und lauff&auml;higes NDO (Nagios Data Out). Dieses Nagios-Addon speichert alle Statusinformationen, die vom Nagios-Prozess gesammelt werden, in einer Datenbank.
+NDO bekommen Sie auf der <a href=http://www.nagios.org>offiziellen Nagios Homepage</a>
+
+<h2>Webserver mit PHP-Unterst&uuml;tzung</h2>
+NagVis ist eine webbasierte Applikation, die in JavaScript und PHP realisiert ist. Sie ben&ouml;tigen daher einen Web-Server mit PHP-Unterst&uuml;tzung.
+Wir empfehlen den Einsatz des <a href="http://www.apache.org/" target="_blank">Apache-Webservers</a> mit <a href="http://www.apache.net/" target="_blank">mod_php</a>.</p>
+
+Die minimale PHP-Version ist 5.0.0
+<h2>ben&ouml;tigte PHP-Module</h2>
+<p>Neben dem PHP-Basis-Paket ben&ouml;tigen Sie noch die folgenden Module:</p>
+<ul>
+<li>php-gd</li>
+<li>php-gettext</li>
+<li>php-mysql</li>
+<li>php-mbstring</li>
+<li>php-session</li>
+<li>php-xml</li>
+</ul>
+Anmerkung: m&ouml;glicherweise sind einige dieser Funktionen bereits in Ihrer PHP-Version enthalten.
+
+<h2>Graphviz f&uuml;r die Automap-Funktionalit&auml;t</h2>
+<p>Die <a href="automap.html">Automap</a> basiert auf GraphViz. Sie brauchen es, wenn Sie das Automap-Feature nutzen m&ouml;chten. Wir empfehlen GraphViz >= 2.14 f&uuml;r die Automap (&auml;ltere Versionen (mit niedrigeren Versionsnummern) haben Probleme mit Truecolor-Rendering).</p>
+<p>GraphViz ist in einigen Distributionen enthalten. Wenn Sie kein vorgefertigtes Paket benutzen k&ouml;nnen, bekommen Sie GraphViz auf der <a href=http://www.graphviz.org>offiziellen GraphViz-Homepage</a>, und k&ouml;nnen es selbst kompilieren.</p>
+<p>Sie ben&ouml;tigen weitere Packages wie gd, libpng, freetyp, ... aber wenn Sie Graphviz kompiliert/installiert haben, sollte es funktionieren.</p>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Install Templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Install Templates</h1>
+		<p>Since NagVis 1.1x you can add templates to customize the look of header- and hover-menus. You can get some of these templates at the <a href="http://www.nagvis.org/download/templates" target="_blank">NagVis template download</a> page.</p>
+		
+		<h2>Unpack Template</h2>
+		<p>Unpack the NagVis template in a path of your choice.</p>
+		
+		<pre>tar xvzf NagVis-Template-&lt;name>-&lt;version>.tar.gz</pre>
+		
+		<h2> Install NagVis-Template </h2>
+		<p>Merge the NagVis-Template directory tree with your NagVis Folder (default /usr/local/nagios/share/nagvis).</p>
+		
+		<pre>cp -r nagvis /usr/local/nagios/share/nagvis</pre>
+		
+		<h2>Configure</h2>
+		<p>Now you should be able to use the new template in NagVis. You only have to configure the maps or objects to use the template.</p>
+		<h3>Header-Templates</h3>
+		<p>You can set the header template in the main configuration of NagVis or in the global section of the map configuration. For details see <a href="../map_config_format_description.html" target="_blank">map configuration format description</a>.</p>
+		<h3>Hover-Templates</h3>
+		<p>You can set the hover template in the main configuration for all your maps, in the global section of a map for all the objects on this map or in each object for having a custom hover menu for special objects. For details see <a href="../map_config_format_description.html" target="_blank">map configuration format description</a>.</p> 
+	</body>
+</html>

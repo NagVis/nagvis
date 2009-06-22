@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>User Interface</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+  <body>
+		<h1>User Interface</h1>
+		This page is meant do describe the different views of the NagVis User Interface. The paths are relative to the NagVis root directory.
+		
+		<table style="width:100%">
+		<tr><th> URL </th><th> Description </th></tr>
+		<tr><th colspan="2"> NagVis frontend </th></tr>
+		<tr>
+		<td> index.php </td><td> This is a redirection to nagvis/index.php (NagVis frontend) </td>
+		</tr>
+		<tr>
+		<td> nagvis/index.php </td><td> This is Map Index, the main page of NagVis. On the main page all maps are listed. You can exclude one map by setting the show_in_lists option to 0. </td>
+		</tr>
+		<tr>
+		<td> nagvis/index.php?map=&lt;name> </td><td> This is the map view. In this mode the specified NagVis map is shown and refreshed using the configured interval (refreshtime in <a href=nagvis_config_format_description.html#global>global</a> section of <a href=nagvis_config_format_description.html>NagVis main configuration</a>). </td>
+		</tr>
+		<tr>
+		<td> nagvis/index.php?info </td><td> This a page with some support information which you can submit when you are having problems with NagVis </td>
+		</tr>
+		<tr><th colspan="2"> Rotations </th></tr>
+		<tr>
+		<td> nagvis/index.php?rotation=&lt;name> </td><td> This is the map rotation mode. In this mode you call the specified map rotation mode (<a href=nagvis_config_format_description.html#rotation>rotation</a> has to be defined in main configuration file), it opens the first map like the map view. After a defined interval it loads the next map in the pool and so on. </td>
+		</tr>
+		<tr>
+		<td> nagvis/index.php?rotation=&lt;name>&amp;rotate=0 </td><td> This is the rotation mode. In this mode the maps reloads itself. The rotation is stopped by the rotate value 0 which can be useful when you found sth. interesting on the map. The rotation can be turned on by setting rotate to 1 or removing the rotate value </td>
+		</tr>
+		<tr><th colspan="2"> Automap </th></tr>
+		<tr>
+		<td> nagvis/index.php?automap=1 </td><td> This is the url to the new automap feature (introduced in 1.3).  For details see the <a href="automap.html">automap page</a>. </td>
+		</tr>
+		<tr><th colspan="2"> WUI (NagVis configuration)</th></tr>
+		<tr>
+		<td> config.php </td><td> This is a redirection to wui/index.php (configuration interface) </td>
+		</tr>
+		<tr>
+		<td> wui/index.php </td><td> This is the Welcome page of the NagVis configuration interface (WUI). Right click on the background image to open the WUI menu. </td>
+		</tr>
+	</body>
+</table>
+</html>

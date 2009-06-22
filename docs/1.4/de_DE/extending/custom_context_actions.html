@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Eigene Kontext-Men&uuml;-Aktionen</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+  </head>
+	<body>
+		<h1>Eigene Kontext-Men&uuml;-Aktionen</h1>
+		
+		<h2>Einleitung</h2>
+		<p><img src="../../general/img/nagvis-1.4-context-ssh-1.png" style="margin-right:10px;" align="left" /> 
+		NagVis 1.4 bringt ein neues m&auml;chtiges Feature namens Kontext-Men&uuml;s. Dies sind grunds&auml;tzlich
+		Rechtsklick-Men&uuml;s bei Status-Icons. Sie k&ouml;nnen diese Men&uuml;s durch Editieren von Template-Dateien
+		anpassen. Diese Template-Dateien sind einfache HTML-Dateien mit einigen Makros, die w&auml;hrend des Renderns
+		im NagVis ersetzt werden.</p>
+		<p>Die Kontext-Men&uuml;s geben Ihnen die M&ouml;glichkeit, Ihre administrative Arbeitsweise mit den
+		&Uuml;berwachungsinformationen dramatisch zu verbessern. Stellen Sie sich vor, Sie haben eine NagVis-Map
+		als das prim&auml;re Benutzer-Interface, um Statusinformationen &uuml;ber Ihre Systeme zu sammeln oder sogar
+		als Basis zur Kontrolle Ihrer Systeme. Stellen Sie sich vor, Sie k&ouml;nnen Statusinformationen &uuml;ber
+		NagVis ansehen und sich mit zwei einfachen Klicks per ssh oder &uuml;ber eine Terminal-Session mit dem
+		problematischen System verbinden. Es ist auch m&ouml;glich, einige Standard-Wiederherstellungsjobs
+		in Scripts zu speichern oder &auml;hnliches.</p>
+		<p>Werfen Sie einen Blick in diese Anleitung, um einen Eindruck &uuml;ber die M&auml;chtigkeit dieses neuen
+		Features zu bekommen.</p>
+		<p>&nbsp;</p>
+		<h2>Kurzes How-To</h2>
+		<p>Dies ist ein kurzes How-To, um eine &quot;connect by ssh&quot;-Option zu den NagVis-Host-Kontext-Men&uuml;s
+		hinzuzuf&uuml;gen. Die meisten der &Auml;nderungen m&uuml;ssen beim Client-Browser durchgef&uuml;hrt werden,
+		damit mit dieser SSH-Verbindungen umgehen kann. In dieser Anleitung benutze ich den Firefox-Browser auf Ubuntu.
+		Es ist kein Problem, diese Dinge auch auf anderen Systemen wie z.B. Windows zum Laufen zu bringen.</p>
+		
+		<h3>1. Lesen Sie die Grundlagen zu Kontext-Templates</h3>
+		Die Grundlagen zu Kontext-Templates sind <a href="../context_templates.html">hier</a> beschrieben. Bitte lesen Sie sie, bevor Sie fortfahren.
+		
+		<h3>2. Erstellen eines eigenen Kontext-Templates</h3>
+		Kopieren Sie einfach das Default-Backend:
+		
+		<pre>cd /usr/local/nagios/share/nagvis
+cp nagvis/templates/context/tmpl.default.html nagvis/templates/context/tmpl.default-ssh.html</pre>
+
+		Nun f&uuml;gen Sie eine Zeile zum Host-spezifischen Makroabschnitt hinzu
+		
+		<pre>&lt;li>&lt;a href="ssh://[address]">[lang_connect_by_ssh]&lt;/a>&lt;/li></pre>
+		
+		Das Template ist fertig.
+		
+		<h3>3. Konfigurieren Sie den Host, damit das neue Template benutzt wird</h3>
+		Setzen Sie die Option, um das neue Template namens default-ssh zu nutzen:
+		
+		<pre>context_menu=true
+context_template=default-ssh</pre>
+		
+		Sie k&oum;nnen diese Option im global-Abschnitt einer Map setzen, in einem Host-Objekt oder sogar
+		ein Template, das in einem Host-Objekt benutzt wird.
+		
+		<h3>4. Konfigurieren Sie Ihren Client, um ssh://-URIs verarbeiten zu k&ouml;nnen</h3>
+		In diesem Fall konfiguriere ich Firefox auf Ubuntu-Linux. Dies mag von Ihrem System abweichen.
+				
+		&Ouml;ffnen Sie <code>about:config</code> im Firefox. F&uuml;gen Sie einige neue Optionen hinzu:
+		
+		<pre>Name: network.protocol-handler.app.ssh
+Type: String
+Value: /usr/local/bin/ssh-connect-handler</pre>
+		
+		<pre>Name: network.protocol-handler.expose.ssh
+Type: Boolean
+Value: true</pre>
+		
+		<pre>Name: network.protocol-handler.external.ssh
+Type: Boolean
+Value: true</pre>
+		
+		<pre>Name: network.protocol-handler.warn-external.ssh
+Type: Boolean
+Value: false</pre>
+		
+		<h3>5. Erstellen eines Handler-Scripts</h3>
+		Erstellen Sie das Script im angegebenen Script-Pfad. In meinem Fall ist es <code>/usr/local/bin/ssh-connect-handler</code>.
+		
+		<pre>#!/bin/bash
+xterm -e ssh ${1#ssh:\/\/*}</pre>
+		Sie m&uuml;ssen das Script ausf&uuml;hrbar machen.
+		
+		<pre>chmod +x /usr/local/bin/ssh-connect-handler</pre>
+		
+		<h3>6. Testen des Handler-Scripts</h3>
+		Geben Sie einfach <code>ssh://&lt;test-host></code> in Ihre Browser-Zeile ein und dr&uuml;cken Enter.
+		Wenn sich ein xterm mit der ssh-Session &ouml;ffnet, ist alles OK hier.
+		
+		<h3>7. Testen von Kontext-Links</h3>
+		Nun &ouml;ffnen Sie die Map, die Sie f&uuml;r die Nutzung des neuen Kontext-Templates konfiguriert haben.
+		Dann rechtsklicken Sie den konfigurierten Host und klicken Sie den Men&uuml;-Eintrag &quot;Connect by ssh&quot;.
+		Ein Terminal-Fenster sollte sich &ouml;ffnen.
+		
+		<h2>Ausblick</h2>
+		<p>Mit diesem Wissen sind Sie bereit, NagVis als Kern Ihrer t&auml;glichen Administratiions- und &Uuml;berwachungs-Aufgaben
+		zu konfigurieren. Seien Sie kreativ!</p>
+		<p>Wir freuen uns auf Ihr Feedback zu diesem Feature und wie Sie es nutzen.</p>
+	</body>
+</html>

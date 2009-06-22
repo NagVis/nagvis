@@ -1,0 +1,126 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>iconsets</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>Eigene Iconsets hinzuf&uuml;gen</h1>
+<h2>Beispiel</h2>
+Ihr Chef kommt herein und erz&auml;hlt Ihnen, dass ein Techniker eine &uuml;bersichtliche Map mit mehr als 250 Hosts ben&ouml;tigt.
+Sie denken: "Hey, das ist unm&ouml;glich bei einer vollst&auml;ndigen Beschreibung f&uuml;r jeden Host." Die Schriftgr&ouml;&szlig;e des Hintergrundbildes
+ist nicht das Problem, aber der std_small-Iconset von NagVis ist zu gro&szlig; f&uuml;r solch eine Anforderung.<br>
+<h3>L&ouml;sung</h3>
+Erstellen Sie Ihr eigenes Iconset.
+<br>
+<h2>Was ist ein Iconset?</h2>
+<p>Ein vollst&auml;ndiges Iconset besteht aus elf Dateien. Diese Dateien sind PNG-Bilder, die folgenderma&szlig;en hei&szlig;en m&uuml;ssen:</p>
+
+<table border=0>
+<tr>
+<th> Dateiname </th><th> Beschreibung </th>
+</tr>
+<tr>
+<td> &lt;set>_ack.png </td><td> best&auml;tigtes Problem (acknowledged)</td>
+</tr>
+<tr>
+<td> &lt;set>_critical.png </td><td> kritischer Zustand (critical) </td>
+</tr>
+<tr>
+<td> &lt;set>_down.png </td><td> Down-Zustand (Host) </td>
+</tr>
+<tr>
+<td> &lt;set>_downtime.png </td><td> Ausfallzeit (Host) </td>
+</tr>
+<tr>
+<td> &lt;set>_error.png </td><td> Fehler beim Holen des Zustands </td>
+</tr>
+<tr>
+<td> &lt;set>_ok.png </td><td> OK-Status </td>
+</tr>
+<!--
+<tr>
+<td> &lt;set>_pending.png </td><td> Pending-Zustand </td>
+</tr>
+-->
+<tr>
+<td> &lt;set>_sack.png </td><td> best&auml;tigtes Problem (Service) </td>
+</tr>
+<tr>
+<td> &lt;set>_sdowntime.png </td><td> Ausfallzeit (Service) </td>
+</tr>
+<tr>
+<td> &lt;set>_unknown.png </td><td> unbekannter Zustand (unknown) </td>
+</tr>
+<tr>
+<td> &lt;set>_up.png </td><td> Up-Zustand (Host) </td>
+</tr>
+<tr>
+<td> &lt;set>_warning.png </td><td> Warning-Zustand </td>
+</tr>
+</table>
+<br>
+NagVis sucht nach <code>&lt;set>_ok.png</code>-Bildern, um die Iconsets aufzulisten. Das hei&szlig;t, dass ein <code><set>_ok.png</code>-Bild vorhanden sein muss,
+damit man ein komplettes Iconset &uuml;ber die WUI ausw&auml;hlen kann.
+<br>
+<h2>Welches Programm soll ich benutzen, um ein Iconset zu erstellen?</h2>
+Fast jedes Grafikprogramm ist in der Lage, PNG-Dateien zu erstellen. In diesem Beispiel wird Photoshop(TM) benutzt, um eine kleinere Version des std_small-Iconsets namens std_mini zu erstellen.
+<br>
+<table border=0>
+<tr>
+<th> Iconset </th><th> Icon-Gr&ouml;&szlig;e </th><th> Icon-Map </th>
+</tr>
+<tr>
+<td> std_small </td><td> 16×16 pixel </td><td> <img src=http://www.nagvis.org/sites/default/files/misc/iconset-std_small.jpg></td>
+</tr>
+<tr>
+<td> mini </td><td> 9×9 pixel </td><td> <img src=http://www.nagvis.org/sites/default/files/misc/iconset-std_mini.jpg> </td>
+</tr>
+<tr>
+<p>Die folgenden Dateien sollten erstellt werden, um ein Iconset zu erhalten </td>
+</tr>
+</table>
+<br>
+<table border=0>
+<tr>
+<td> mini_ack.png </td>
+</tr>
+<tr>
+<td> mini_error.png </td>
+</tr>
+<tr>
+<td> mini_unknown.png </td>
+</tr>
+<tr>
+<td> mini_critical.png </td>
+</tr>
+<tr>
+<td> mini_ok.png </td>
+</tr>
+<tr>
+<td> mini_up.png </td>
+</tr>
+<tr>
+<td> mini_down.png </td>
+</tr>
+<tr>
+<td> mini_sack.png </td>
+</tr>
+<tr>
+<td> mini_warning.png </td>
+</tr>
+</table>
+<h2>Implementieren des Iconsets</h2>
+Um das Iconset in Ihrer NagVis-Installation zu nutzen, kopieren Sie alle Dateien in den iconset-Ordner. In Version 0.9 ist das <code>nagvis/iconsets</code>, seit Version 1.1 ist das <code>nagvis/nagvis/images/iconsets</code>.
+<br>
+<h2>Der Test</h2>
+&ouml;ffnen Sie eine Ihrer Maps und f&uuml;gen Sie ein neues Host-Icon hinzu. Sie sollten nun in der Lage sein, std_mini als Iconset auszuw&auml;hlen.
+<br>
+</html>

@@ -1,0 +1,81 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Header Templates</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+  <body>
+		<h1>Header Templates</h1>
+		<h2> Introduction </h2>
+		
+		Header templates are html files with some macros in it. These files can be used as header menu in the maps. The header templates are located in <code>nagvis/etc/templates/header/</code> relative to the nagvis root directory. The templates are named like this: <code>tmpl.*.html</code>.
+		
+		<h2> Macros </h2>
+		The following macros are available in the header templates:
+		
+		<table style="width:100%">
+		<tr>
+		<th> Macro </th><th> Description </th>
+		</tr>
+		<tr>
+		<td> [current_map] </td><td> Name of the current map (e.g. demo,demo2) </td>
+		</tr>
+		<tr>
+		<td> [current_map_alias] </td><td> Alias of the current map </td>
+		</tr>
+		<tr>
+		<td>[current_language]</td><td>String representing the current language (For example en_US). This is needed for link to documentation.</td>
+		</tr>
+		<tr>
+		<td valign="top"> &lt;!-- BEGIN maplist --> <br>[map_name] <br>&lt;!-- END maplist --> 
+		</td>
+		<td> A list of all maps defined in NagVis. The code between <code>&lt;!-- BEGIN maplist --></code> and <code>&lt;!-- END maplist --></code> is repeated for each map. For an example have a look at <code>nagvis/etc/templates/header/tmpl.default.html</code>. <br><br>Within the BEGIN/END-Tags the following macros are available: <br>* <i>[map_name]</i>: Name of the map<br>* <i>[map_alias]</i>: Alias of the map<br>* <i>[selected]</i>: If the mapname is equal to the currently opened map it will be replaced with selected="selected" </td>
+		</tr>
+		<tr>
+		<td> [html_base] </td><td> URL to HTML-Base (/nagios/nagvis) </td>
+		</tr>
+		<tr>
+		<td> [html_templates] </td><td> Path to header templates (nagvis/nagvis/etc/templates/header) </td>
+		</tr>
+		<tr>
+		<td> [html_template_images] </td><td> Path to header template images (nagvis/nagvis/images/templates/header) </td>
+		</tr>
+		<tr>
+		<td> [lang_select_map] </td><td> Label for map selection </td>
+		</tr>
+		<tr>
+		<td> [lang_edit_map] </td><td> Label for edit map link </td>
+		</tr>
+		<tr>
+		<td> [lang_need_help] </td><td> Label for help selection </td>
+		</tr>
+		<tr>
+		<td> [lang_online_doc] </td><td> Label for link to online documentation </td>
+		</tr>
+		<tr>
+		<td> [lang_forum] </td><td> Label for link to NagVis forum  </td>
+		</tr>
+		<tr>
+		<td> [lang_support_info] </td><td> Label for link to support information </td>
+		</tr>
+		<tr>
+		<td> [lang_overview] </td><td> Label for overview string </td>
+		</tr>
+		<tr>
+		<td> [lang_instance] </td><td> Label for instance string </td>
+		</tr>
+		<tr>
+		<td> [lang_rotation_start] </td><td> Label for starting the map rotation </td>
+		</tr>
+		<tr>
+		<td> [lang_rotation_stop] </td><td> Label for stopping the map rotation </td>
+		</tr>
+		<tr>
+		<td> [lang_refresh_start] </td><td> Label for starting the map refresh countdown </td>
+		</tr>
+		<tr>
+		<td> [lang_refresh_stop] </td><td> Label for stopping the map refresh countdown </td>
+		</tr>
+	</body>
+</table>
+</html>

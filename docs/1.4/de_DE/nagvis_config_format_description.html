@@ -1,0 +1,393 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>nagvis_config_format_description</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+.page #mainContent { zoom: 1; padding-top: 15px; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+  </head>  
+<h1>Formatbeschreibung der Hauptkonfigurationsdatei </h1>
+<h2>Allgemeine Informationen</h2>
+<a name="Allgemeine Informationen"></a>
+Die Hauptkonfigurationsdatei ist im reinen Textformat im Stil der "ini"-Dateien. <br>
+Abschnitte sind durch [] markiert und Variablen haben einen zugewiesenen Wert. Die Variablen m&uuml;ssen auch im richtigen Abschnitt stehen, so dass Sie sicherstellen m&uuml;ssen, dass ggf. auch der Abschnitt aktiviert ist. <br>
+Semikola (<code>;</code>) werden benutzt, um Kommentare zu markieren. Abschnitte und Variablen mit einem vorangestellten Semikolon werden als Kommentare angesehen und von NagVis nicht erkannt. </p>
+Bei einer neuen NagVis-Installation gibt es keine Datei mit einer Default-Konfiguration. Standardwerte sind im PHP-Code enthalten.
+Konfigurationseinstellungen in der Datei <code>etc/nagvis.ini.php</code> &uuml;bersteuern diese Standardwerte. <br>
+Es gibt eine Datei <code>etc/nagvis.ini.php-sample</code> mit Beispiel-Konfigurationswerten. Alle Werte sind auskommentiert. <br>
+
+<a name="Ueberblick"></a>
+<h2>&Uuml;berblick</h2>
+
+		<ul>
+		<li><a href=#global>global</a>
+		<br>allgemeine Optionen, die die gesamte NagVis-Installation beeinflussen
+		</li>
+		<li><a href=#paths>paths</a>
+		<br>Pfaddefinitionen
+		</li>
+		<li><a href=#defaults>defaults</a>
+		<br>Standardwerte, die an die Maps und ihre Objekte vererbt werden
+		</li>
+		<li><a href=#index>index</a>
+		<br>Optionen, um die &Uuml;bersichtsseite f&uuml;r NagVis zu konfigurieren <font color="#ff0000">(neu in 1.4)</font>
+		</li>
+		<li><a href=#automap>automap</a>
+		<br>Optionen f&uuml;r die Automap
+		</li>
+		<li><a href=#wui>wui</a>
+		<br>Optionen f&uuml;r die WUI
+		</li>
+		<li><a href=#worker>worker</a>
+		<br>Optionen f&uuml;r den Worker <font color="#ff0000">(neu in 1.4)</font></li>
+		</li>
+		<li><a href=#backend>backend_*</a>
+		<br>Backend-Definitionen
+		</li>
+		<li><a href=#rotation>rotation_*</a>
+		<br>Rotationspool-Definitionen
+		</li>
+		</ul>		
+
+<h2>Beschreibung der Abschnitte im Detail</h2>
+
+<a name=global></a>
+<h3>global</h3>
+Alle Werte, die f&uuml;r das gesamte NagVis gelten, werden im global-Abschnitt gespeichert. 
+<!--Dieses Beispiel zeigt alle Werte des global-Abschnittes: <br>
+<pre>[global] 
+language="english"
+displayheader=1
+refreshtime=60
+dateformat="Y-m-d H:i:s"</pre> 
+--> 
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>dateformat</td><td>Y-m-d H:i:s</td><td>Das in NagVis benutzte Format f&uuml;r Datum- und Zeit. Verf&uuml;gbare Optionen wie bei der <a href="http://www.php.net/date">date()</a>-Funktion von php </td><td> 
+</tr>
+<tr>
+<td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Anzeigen des Header-Menus in Maps</strike><font color="#ff0000"> Entf&auml;llt ab Version 1.4, siehe Option "headermenu" in den default- und index-Abschnitten</font></td>
+</tr>
+<tr>
+<td>language</td><td>en_US</td><td>W&auml;hlen Sie die Sprache, die in NagVis benutzt werden soll. <code>de_DE</code> (Deutsch), <code>en_US</code> (Englisch) und <code>fr_FR</code> (Franz&ouml;sisch) sind als Standard verf&uuml;gbar). Seit 1.4 m&uuml;ssen Sie die Sprache in einem anderen Format angeben. (&quot;de_DE&quot; statt &quot;german&quot;)</td>
+</tr>
+<tr>
+<td>refreshtime</td><td>60</td><td>Aktualisierungsintervall in Maps bzw. laden der n&auml;chsten Map bei Map-Rotation</td>
+</tr>
+</table>
+
+<a name="paths"></a>
+<h3>paths</h3>
+In diesem Abschnitt werden alle ben&ouml;tigten Pfad-Variablen definiert. <br>
+<!--Dieses Beispiel zeigt alle Werte des paths-Abschnitts: <br>
+<pre>[paths]
+base="/usr/local/nagios/share/nagvis/"
+htmlbase="/nagios/nagvis"
+htmlcgi="/nagios/cgi-bin"</pre>
+--> 
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>base</td><td><code>/usr/local/nagios/share/nagvis/</code></td><td>absoluter physikalischer NagVis-Pfad</td>
+</tr>
+<tr>
+<td>htmlbase</td><td><code>/nagios/nagvis</code></td><td>absoluter html-NagVis-Pfad</td>
+</tr>
+<tr>
+<td>htmlcgi</td><td><code>/nagios/cgi-bin</code></td><td>absoluter html-NagVis-cgi-Pfad</td>
+</tr>
+</table>
+
+<a name=defaults></a>
+<h3>defaults</h3>
+Default-Werte f&uuml;r Maps, die Sie benutzen. Wenn f&uuml;r die Map bzw. ein Element kein Wert angegeben wurde, dann wird ein Standardwert benutzt. <br>
+<!--Dieses Beispiel zeigt alle Werte im defaults-Abschnitt: <br>
+<pre>[defaults]
+backend="ndomy_1"
+icons="std_medium"
+recognizeservices=1
+onlyhardstates=0
+usegdlibs=1
+backgroundcolor="#fff"
+headertemplate="default"
+showinlists=1
+urltarget="_self"
+hovermenu=1
+hovertemplate="default"
+hoverdelay=0
+hoverchildshow=1
+hoverchildssort="a"
+hoverchildsorder="asc"
+hoverchildslimit=10
+</pre>
+-->
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>backend</td><td>ndomy_1</td><td>Default-Backend (ID des Backends - kopieren Sie den Text, der f&uuml;r <code>&lt;backend-id></code> steht, nach <code>[backend_&lt;backend-id>]</code>)</td>
+</tr>
+<tr>
+<td>backgroundcolor</td><td>#fff</td><td>Default-Hintergrundfarbe f&uuml;r Maps</td>
+</tr>
+<tr>
+<td>contextmenu</td><td>0</td><td>Aktivieren/Deaktivieren des Kontextmen&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventbackground </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Wechselns der Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird gezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist) (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventhighlight </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) der Hervorhebung von Status&auml;nderungen durch Hinzuf&uuml;gen einer blinkenden Umrandung (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventlog </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Ereignisprotokolls im neuen JavaScript-Frontend. Das Ereignisprotokoll enth&auml;lt wichtige Aktionen und Informationen (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventloglevel </td><td> info </td><td> Loglevel des Ereignisprotokolls (verf&uuml;gbar: debug, info, warning, critical) (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventheight </td><td> 100 </td><td> H&ouml;he des JavaScript-Eventlogs in Pixeln (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventhidden </td><td> 1 </td><td> Verstecken/Zeigen des Eventlogs w&auml;hrend des Map-Ladens (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventscroll </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) des Bewegens zu dem Icon, das den Status ver&auml;ndert hat, falls das Icon nicht im sichtbaren Bereich liegt (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td> eventsound </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) von Sound-Signalen bei Status&auml;nderungen (<font color="#ff0000">Neu in 1.4</font>)</td>
+</tr>
+<tr>
+<td>headermenu</td><td>1</td><td>aktivieren (1) bzw. deaktivieren (0) des Headermen&uuml;s</a></td>
+</tr>
+<tr>
+<td>headertemplate</td><td>default</td><td>Default <a href=./header_templates.html#header/templates">header template</a></td>
+</tr>
+<tr>
+<td>hoverchildslimit</td><td>10</td><td>max. Anzahl von Child-Objekten </td>
+</tr>
+<tr>
+<td>hoverchildsorder</td><td>asc</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+</tr>
+<tr>
+<td>hoverchildsshow</td><td>1</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hoverchildssort</td><td>a</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+</tr>
+<tr>
+<td>hoverdelay</td><td>0</td><td>Verz&ouml;gerung des Hover-Men&uuml;-Auftretens (in Sekunden)</td>
+</tr>
+<tr>
+<td>hovermenu</td><td>1</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+</tr>
+<tr>
+<td>hovertemplate</td><td>default</td><td>Default <a href=./hover_templates.html#hover/templates>hover template</a></td>
+</tr>
+<tr>
+<td><strike>hovertimeout</strike></td><td><strike>5</strike></td><td><strike>Default-Timeout bei Ajax-Anfragen in Hover-Men&uuml;s (in Sekunden)</strike> <font color=#ff0000>veraltet ab 1.4</font> </td>
+</tr>
+<tr>
+<td>icons </td><td>std_medium </td><td>Default-Iconset</td>
+</tr>
+<tr>
+<td>onlyhardstates</td><td>0</td><td>nur Hard-Zust&auml;nde benutzen (keine Soft-Zust&auml;nde)</td>
+</tr>
+<tr>
+<td>recognizeservices</td><td>1</td><td>Service-Zust&auml;nde in Host/Hostgroup-Objekten erkennen</td>
+</tr>
+<tr>
+<td>showinlists</td><td>1</td><td>Anzeigen von Maps in Listen (Dropdowns, Index-Seite, ...)</td>
+</tr>
+<tr>
+<td>urltarget</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster)</td>
+</tr>
+<tr>
+<td><strike>usegdlibs</strike></td><td><strike>1</strike></td><td><strike>gdlibs benutzen (wenn 0, werden Linien ggf. nicht funktionieren, alle anderen Typen sollten funktionieren)</strike> <font color=#ff0000>veraltet ab 1.4</font></td>
+</tr>
+</table>
+
+<a name="index"></a>
+<h3>index</h3>
+Dieses sind die Optionen f&uuml;r die &Uuml;bersichtsseite von NagVis <font color=red>(neu mit 1.4)</font>. <br>
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>backgroundcolor</td><td>#fff</td><td>Default-Hintergrundfarbe f&uuml;r die &Uuml;bersichtsseite</td>
+</tr>
+<tr>
+<td>cellsperrow</td><td>4</td><td>Maps pro Zeile in Map-Listen.</td>
+</tr>
+<tr>
+<td>headermenu</td><td>1</td><td>aktivieren (1) bzw. deaktivieren (0) des Headermen&uuml;s</a></td>
+</tr>
+<tr>
+<td>headertemplate</td><td>default</td><td>Default <a href=./header_templates.html#header/templates">header template</a></td>
+</tr>
+<tr>
+<td>showrotations</td><td>1</td><td>aktivieren/deaktivieren der Anzeige von definierten Rotationen</td>
+</tr>
+</table>
+
+<a name="automap"></a>
+<h3>automap</h3>
+Setzt die Automap-Optionen.
+<!--
+<pre>[automap]
+showinlists=1
+defaultroot="localhost"
+graphvizpath="/usr/local/bin"
+defaultparams="&maxLayers=2"</pre>
+-->
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>defaultparams</td><td>&maxLayers=2</td><td>Dies sind die Parameter f&uuml;r die Automap-Ansichten und Links in den Listen (Map-Indexseite, Dropdown-Men&uuml;s in den Headern)</td>
+</tr>
+<tr>
+<td>defaultroot</td><td>localhost</td><td>Default-Wert f&uuml;r das Root-Objekt. Details finden Sie in der <a href=./automap.html>Automap-Dokumentation</a></td>
+</tr>
+<tr>
+<td>graphvizpath</td><td>/usr/local/bin</td><td>wenn die graphviz-Binaries (dot,neato,twopi,...) nicht &uuml;ber PATH gefunden werden k&ouml;nnen, muss der Pfad hier gesetzt werden</td>
+</tr>
+<tr>
+<td>showinlists</td><td>1</td><td>aktivieren/deaktivieren der Automap in Map-Listen (Map-Indexseite, Dropdown-Men&uuml;s in den Headern)</td>
+</tr>
+</table>
+
+<a name="wui"></a>
+<h3>wui</h3>
+Dieses sind die Optionen f&uuml;r die WUI. <br>
+<!--Dieses Beispiel zeigt alle Werte des wui-Abschnitts: <br>
+<pre>[wui]
+autoupdatefreq=25
+maplocktime=5
+allowedforconfig=EVERYONE</pre>
+--> 
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>allowedforconfig</td><td>EVERYONE</td><td>Benutzer, die die NagVis-Konfiguration &auml;ndern d&uuml;rfen (kommaseparierte Liste) oder EVERYONE</td>
+</tr>
+<tr>
+<td>autoupdatefreq</td><td>25</td><td>In diesem Intervall wird die Map von der WUI gesichert.</td>
+</tr>
+<tr>
+<td>maplocktime</td><td>5</td><td>Zeit in Minuten, die eine Map von einem editierenden Benutzer blockiert wird.</td>
+</tr>
+</table>
+
+<a name="worker"></a>
+<h3> worker </h3>
+Optionen f&uuml;r den neuen Worker im JavaScript-Frontend von NagVis. <font color="#ff0000">(neu in 1.4)</font>
+<table style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td> interval </td><td> 5 </td><td> Das Intervall in Sekunden, in dem der Worker auf zu aktualisierende Objekte pr&uuml;ft. </td>
+</tr>
+<tr>
+<td> updateobjectstates </td><td> 15 </td><td> Die Aufbewahrungszeit in Sekunden f&uuml;r die Zust&auml;nde im Frontend. Die Statusinformationen werden nach Ablauf dieser Zeit im folgenden Worker-Intervall aufgefrischt. </td>
+</tr>
+</table>
+
+<a name="backend"></a>
+<h3>backend_*</h3>
+Die Backend-Abschnitte zur Definition der Backends werden alle <code>[backend_&lt;backend-id>]</code> benannt. In dem Beispiel ist <code>ndomy_1</code> die <code>backend_id</code>. <br><br>
+Abh&auml;ngig vom Wert in backendtype m&uuml;ssen die g&uuml;ltigen Werte f&uuml;r die Backends gesetzt werden. In diesem Beispiel ist es das ndomy-Backend. <br>
+<pre>[backend_ndomy_1]
+backendtype="ndomy"
+; the following options depend on the selected backendtype, in this case it is ndomy
+dbhost="localhost"
+dbport=3306
+dbname="db_nagios"
+dbuser="root"
+dbpass="xxx"
+dbprefix="nagios_"
+dbinstancename="default"
+maxtimewithoutupdate=181
+htmlcgi="/nagios/cgi-bin"</pre>
+
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>backendtype</td><td>ndomy</td><td>Art des Backends – MUSS gesetzt werden</td>
+</tr>
+<tr>
+<td>dbhost</td><td>localhost</td><td>Hostname des Rechner mit der NDO-Datenbank</td>
+</tr>
+<tr>
+<td>dbport</td><td>3306</td><td>Port der NDO-Datenbank </td>
+</tr>
+<tr>
+<td>dbname</td><td>db_nagios</td><td>Name der NDO-Datenbank </td>
+</tr>
+<tr>
+<td>dbuser</td><td>root</td><td>Benutzername f&uuml;r den Datenbankzugriff (nur Lese-Berechtigung erforderlich) </td>
+</tr>
+<tr>
+<td>dbpass</td><td>root</td><td>Passwort f&uuml;r den Datenbankzugriff (nur Lese-Berechtigung erforderlich) </td>
+</tr>
+<tr>
+<td>dbprefix </td><td>nagios_</td><td>Pr&auml;fix der Tabellen der NDO-Datenbank (wie in ndo2db.cfg definiert) </td>
+</tr>
+<tr>
+<td>dbinstancename</td><td>default</td><td>Name der Nagios-Instanz der NDO-Datenbank (wie in ndomod.cfg definiert) </td>
+</tr>
+<tr>
+<td>maxtimewithoutupdate</td><td>180</td><td>Max. Verz&ouml;gerung in Sekunden nach dem letzten Update in NDO. NagVis meldet, dass Nagios nicht l&auml;uft, wenn die Verz&ouml;gerung erreicht wurde. </td>
+</tr>
+<tr>
+<td>htmlcgi</td><td>/nagios/cgi-bin</td><td>Pfad zum cgi-bin-Verzeichnis dieses Backends (interessant bei mehreren NDO-Backends)</td>
+</tr>
+</table>
+
+<a name="rotation"></a>
+<h3>rotation_*</h3>
+Definiert verschiedene Map-Rotationspools. In diesem Beispiel schaltet der Browser alle 15 Sekunden zwischen den Maps "demo" und "demo2" hin und her. Die Rotation wird aktiviert durch die URL: index.php?rotation=&lt;rotation-id>.
+In diesem Fall ist die Rotation-ID "demo" <br>
+<pre>[rotation_demo]
+maps="demo,demo2"
+interval=15</pre>
+
+<table border=0 style="width:100%">
+<tr>
+<th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+</tr>
+<tr>
+<td>interval</td><td>15</td><td>Map-Rotationsintervall in Sekunden </td>
+</tr>
+<tr>
+<td>maps</td><td> </td>
+<td>
+	kommaseparierte Liste von Maps in diesem Pool, die zu rotieren sind. Sie k&ouml;nnen auch externe URLs durch [ ] klammern (z.B. maps="demo1,[http://localhost/test.php]". Die URL muss von dem Server erreichbar sein, auf dem NagVis l&auml;uft.<br><br> 
+	<font color="#ff0000">Neu in 1.4:</font> Sie k&ouml;nnen Label im folgenden Format hinzuf&uuml;gen: &lt;label&gt;:&lt;map&gt; und &lt;label&gt;:&lt;[url]&gt;. Die Label werden in der Rotationsliste angezeigt.
+</td>
+</tr>
+</table>
+
+</html>
