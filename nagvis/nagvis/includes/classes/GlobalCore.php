@@ -312,6 +312,11 @@ class GlobalCore {
 			closedir($handle);
 		}
 		
+		// Catch error when iconset filetype could not be fetched
+		if($type === '') {
+			new GlobalFrontendMessage('ERROR', $this->LANG->getText('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
+		}
+		
 		$this->iconsetTypeCache[$iconset] = $type;
 		return $type;
 	}

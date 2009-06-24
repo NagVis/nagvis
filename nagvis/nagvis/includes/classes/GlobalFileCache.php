@@ -47,7 +47,7 @@ class GlobalFileCache {
 		$this->cacheFile = $cacheFile;
 		
 		if($this->checkFileExists(0)) {
-				$this->fileAge = filemtime($this->file);
+			$this->fileAge = filemtime($this->file);
 		}
 		
 		if($this->checkCacheFileExists(0)) {
@@ -74,8 +74,9 @@ class GlobalFileCache {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function writeCache($contents, $printErr=1) {
-		// Writeable check only when cache file exists
-		if(!$this->checkCacheFileExists(0) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
+		// Perform file writeable check only when cache file exists
+		// When no cache file exists check if file can be created in directory
+		if((!$this->checkCacheFileExists(0) && $this->checkCacheFolderWriteable($printErr)) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
 			if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
 				if($printErr == 1) {
 					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
@@ -115,7 +116,25 @@ class GlobalFileCache {
 	}
 	
 	/**
-	 * Checks for existing cache file
+	 * Checks for writeable cache folder
+	 *
+	 * @param   Boolean  $printErr
+	 * @return  Boolean  Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkCacheFolderWriteable($printErr) {
+		if(is_writeable(dirname($this->cacheFile))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('cacheFolderNotWriteable', Array('FILE' => $this->cacheFile)), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable cache file
 	 *
 	 * @param   Boolean  $printErr
 	 * @return  Boolean  Is Successful?
