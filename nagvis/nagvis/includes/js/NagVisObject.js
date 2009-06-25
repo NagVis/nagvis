@@ -33,6 +33,7 @@ var NagVisObject = Base.extend({
 	contextMenu: null,
 	lastUpdate: null,
 	firstUpdate: null,
+	bIsFlashing: false,
 	
 	constructor: function(oConf) {
 		// Initialize
