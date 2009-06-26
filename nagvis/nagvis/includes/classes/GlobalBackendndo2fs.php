@@ -402,37 +402,40 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 				if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName)) {
 					$oServices = json_decode(file_get_contents($this->pathVolatile.'/VIEWS/SERVICELIST'));
 					
-					foreach($oServices->{$hostName} AS $service) {
-						// Replace some bad chars
-						$service = strtr($service,' /:\\','____');
-						
-						if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service)
-						  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG')) {
+					// Only try to loop when there are some services for this host
+					if(isset($oServices->{$hostName})) {
+						foreach($oServices->{$hostName} AS $service) {
+							// Replace some bad chars
+							$service = strtr($service,' /:\\','____');
 							
-							// Services which have no configuration information (Should not exist)
-							// FIXME: Error handling
-							echo "ndo2fs config not found: ".$this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'."<br>";
-							$aServObj[] = Array(null, null);
-						} elseif(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS')) {		
-							
-							// Read object configuration
-							$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
-							
-							// No status information: Service is pending
-							$aServObj[] = Array($oConfig, null);
-							
-							// Count the services which are matching
-							$numServices++;
-						} else {
-							
-							// Read config and status informations
-							$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
-							$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS'));
-							
-							$aServObj[] = Array($oConfig, $oStatus);
-							
-							// Count the services which are matching
-							$numServices++;
+							if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service)
+							  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG')) {
+								
+								// Services which have no configuration information (Should not exist)
+								// FIXME: Error handling
+								echo "ndo2fs config not found: ".$this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'."<br>";
+								$aServObj[] = Array(null, null);
+							} elseif(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS')) {		
+								
+								// Read object configuration
+								$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
+								
+								// No status information: Service is pending
+								$aServObj[] = Array($oConfig, null);
+								
+								// Count the services which are matching
+								$numServices++;
+							} else {
+								
+								// Read config and status informations
+								$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
+								$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS'));
+								
+								$aServObj[] = Array($oConfig, $oStatus);
+								
+								// Count the services which are matching
+								$numServices++;
+							}
 						}
 					}
 				}

@@ -776,11 +776,18 @@ function flashIcon(intIndex, iDuration, iInterval){
 	
 	var sColor = oStates[aMapObjects[intIndex].conf.summary_state].color;
 	
-	if(oObjIcon.style.border && oObjIcon.style.border.indexOf("none") != -1) {
+	// Removed attribute check: "oObjIcon.style.border && "
+	if(aMapObjects[intIndex].bIsFlashing === false) {
+		// save state
+		aMapObjects[intIndex].bIsFlashing = true;
+		
 		oObjIcon.style.border = "5px solid "+sColor;
 		oObjIconDiv.style.top = (aMapObjects[intIndex].conf.y-5)+'px';
 		oObjIconDiv.style.left = (aMapObjects[intIndex].conf.x-5)+'px';
 	} else {
+		// save state
+		aMapObjects[intIndex].bIsFlashing = false;
+		
 		oObjIcon.style.border = "none";
 		oObjIconDiv.style.top = aMapObjects[intIndex].conf.y+'px';
 		oObjIconDiv.style.left = aMapObjects[intIndex].conf.x+'px';
@@ -789,7 +796,7 @@ function flashIcon(intIndex, iDuration, iInterval){
 	var iDurationNew = iDuration - iInterval;
 	
 	// Flash again until timer counted down and the border is hidden
-	if(iDurationNew > 0 || (iDurationNew <= 0 && oObjIcon.style.border.indexOf("none") == -1)) {
+	if(iDurationNew > 0 || (iDurationNew <= 0 && aMapObjects[intIndex].bIsFlashing === true)) {
 		window.setTimeout(function() { flashIcon(intIndex, iDurationNew, iInterval); }, iInterval);
 	}
 	
