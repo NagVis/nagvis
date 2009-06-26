@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="modules.gmap.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+>
+    <mx:Metadata>
+        [Event(name="save", type="flash.events.Event")]
+        [Event(name="change", type="mx.events.ListEvent")]
+    </mx:Metadata>
+	<mx:List top="70" left="10" right="20" bottom="10" id="list" change="dispatchEvent(event)"></mx:List>
+	<flexlib:PromptingTextInput id="preName" prompt="viewpoint name" left="10" right="80" top="40" height="22"/>
+	<mx:Button label="Add" right="20" click="dispatchEvent(new Event('save'))" top="40" height="22"/>
+</Dialog>

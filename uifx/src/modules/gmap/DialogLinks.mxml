@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="modules.gmap.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+    <mx:Metadata>
+        [Event(name="link", type="flash.events.Event")]
+    </mx:Metadata>
+	<mx:Button label="Link" right="20" bottom="10" click="dispatchEvent(new Event('link'))"/>
+	<mx:ComboBox top="40" left="10" right="20" id="point1"></mx:ComboBox>
+	<mx:ComboBox top="70" left="10" right="20" id="point2"></mx:ComboBox>
+	<mx:DataGrid top="100" left="10" right="20" id="services" height="160">
+		<mx:columns>
+			<mx:DataGridColumn width="15" dataField="selected" itemRenderer="mx.controls.CheckBox"/>
+			<mx:DataGridColumn dataField="description"/>
+			<mx:DataGridColumn dataField="host"/>
+		</mx:columns>
+	</mx:DataGrid>
+</Dialog>

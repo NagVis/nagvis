@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResizingBox xmlns="lib.ui.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+	click="activate()"
+	expanded="onExpanded()"
+>
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var image : Class;
+
+			[Bindable]
+			public var dialog : Dialog;
+
+			public function activate() : void
+			{
+				if(dialog)
+					this.aniheight = dialog.height;
+			}
+
+			private function onExpanded() : void
+			{
+				if(dialog)
+					dialog.visible = true;
+			}
+		]]>
+	</mx:Script>
+	<mx:Image
+		source="{image}"
+	 	top="5" left="5" width="30" height="30"
+	 	scaleContent="true"
+	 />
+</ResizingBox>

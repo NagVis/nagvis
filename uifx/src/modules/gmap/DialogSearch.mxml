@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="modules.gmap.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+>
+    <mx:Metadata>
+        [Event(name="locate", type="flash.events.Event")]
+    </mx:Metadata>
+	<flexlib:PromptingTextArea id="address"
+		left="10" right="20" top="45" bottom="40" cornerRadius="4"
+		prompt="Address"
+	/>
+	<mx:Button label="Locate" bottom="10" right="20"
+		click="dispatchEvent(new Event('locate'))"
+	/>
+</Dialog>
