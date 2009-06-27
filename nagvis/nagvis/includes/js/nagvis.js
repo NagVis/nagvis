@@ -727,3 +727,32 @@ addDOMLoadEvent = (function(){
         load_events.push(func);
     }
 })();
+
+/**
+ * Handles javascript errors in the browser. It sends some entry to the frontend
+ * eventlog. It also displays an error box to the user.
+ * It returns true to let the browser also handle the error.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function handleJSError(sMsg, sUrl, iLine) {
+    // Log to javascript eventlog
+	eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
+	
+	// Show error box
+	var oMsg = {};
+	oMsg.type = 'CRITICAL';
+	oMsg.message = "Javascript error occured:\n " + sMsg + " " + sUrl + " (" + iLine + ")";
+	oMsg.title = "Javascript error";
+	
+	// Handle application message/error
+	frontendMessage(oMsg);
+	oMsg = null;
+	
+	return false;
+}
+
+// Enable javascript error handler
+try {
+	window.onerror = handleJSError;
+} catch(er) {}
