@@ -85,7 +85,8 @@ if($value == null) {
 	}
 }
 
-if ($max == 0) {
+// If there is no max value given set it critical value
+if(intval($max) == 0 || $max == '') {
 	$max = $crit + 1;
 }
 
@@ -96,6 +97,12 @@ if ($max == 0) {
 $p = 180 / $max * $value;
 $warnp = -180 + (180 / $max * $warn);
 $critp = -180 + (180 / $max * $crit);
+
+// If the critp is bigger than -1 it can not be rendered by the php functions.
+// Set it to -1 for having at least a small critical area drawn
+if($critp > -1) {
+	$critp = -1;
+}
 
 /**
  * Don't change anything below (except you know what you do)
@@ -138,13 +145,16 @@ imagecolortransparent($img, $oBackground);
 imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
 
 // Warning
-if($warn) {
+if($warn && $warnp <= -1) {
 	imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, $warnp, 0, $oYellow, IMG_ARC_EDGED);
 }
 // Critical
-if($crit) {
+if($crit && $critp <= -1) {
 	imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, $critp, 0, $oRed, IMG_ARC_EDGED);
 }
+
+// Debug:
+imagestring($img, 1, 0, 0, $critp, $oBlack);
 
 // Borders
 imagearc($img, $centerx, $centery+1, $outerdia+2, $outerdia+2, 180, 0, $oBlack);
