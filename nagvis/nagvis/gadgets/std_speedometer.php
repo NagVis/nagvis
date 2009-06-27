@@ -153,9 +153,6 @@ if($crit && $critp <= -1) {
 	imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, $critp, 0, $oRed, IMG_ARC_EDGED);
 }
 
-// Debug:
-imagestring($img, 1, 0, 0, $critp, $oBlack);
-
 // Borders
 imagearc($img, $centerx, $centery+1, $outerdia+2, $outerdia+2, 180, 0, $oBlack);
 imagefilledarc($img, $centerx, $centery, $outerdia/10, $outerdia/10,180, 0, $oBlue, IMG_ARC_EDGED);
