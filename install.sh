@@ -631,8 +631,18 @@ if [ ! -d $NAGVIS_PATH ]; then
 	chk_rc "|  Error creating directory $NAGVIS_PATH" "| done"
 fi
 
+# Create var directory when not exists
+if [ ! -d $NAGVIS_PATH/var ]; then
+	line "Creating directory $NAGVIS_PATH/var..."
+	mkdir -p $NAGVIS_PATH/var
+	chk_rc "|  Error creating directory $NAGVIS_PATH/var" "| done"
+fi
+
+# Copy all files except some unwanted files
 LINE="Copying files to $NAGVIS_PATH..."
-copy "install.sh:INSTALL" '*' "$NAGVIS_PATH"
+copy "" "share" "$NAGVIS_PATH"
+copy "" "LICENSE" "$NAGVIS_PATH"
+copy "" "README" "$NAGVIS_PATH"
 
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring main configuration file..."
@@ -691,7 +701,7 @@ chmod 664 $NAGVIS_PATH/share/nagvis/images/maps/*
 chmod 775 $NAGVIS_PATH/etc/maps
 chmod 664 $NAGVIS_PATH/etc/maps/*
 if [ -d $NAGVIS_PATH/var ]; then
-	chmod 775 $NAGVIS_PATHi/var
+	chmod 775 $NAGVIS_PATH/var
 	chmod 664 $NAGVIS_PATH/var/*
 fi
 echo "| done"
