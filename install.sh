@@ -166,6 +166,7 @@ cat <<EOD
 | procedure for you. The installer has been tested on the following systems:   |
 | - Debian Etch (4.0)                                                          |
 | - Ubuntu Hardy (8.04)                                                        |
+| - Ubuntu Intrepid (8.10)                                                        |
 | - SuSE Linux Enterprise Server 10                                            |
 |                                                                              |
 | Similar distributions to the ones mentioned above should work as well.       |
@@ -728,6 +729,6 @@ text "| - Read the documentation" "|"
 text "| - Maybe you want to edit the main configuration file?" "|"
 text "|   Its location is: $NAGVIS_PATH/$NAGVIS_CONF" "|"
 text "| - Configure NagVis via browser" "|"
-text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
+text "|   <http://localhost${HTML_PATH}/config.php>" "|"
 line
 exit 0
