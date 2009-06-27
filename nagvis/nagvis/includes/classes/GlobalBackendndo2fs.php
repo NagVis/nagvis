@@ -93,10 +93,10 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkFileStructure() {
-		if(file_exists($this->pathVolatile.'/PROCESS_STATUS') 
-			&& file_exists($this->pathVolatile.'/PROGRAM_STATUS') 
-			&& file_exists($this->pathVolatile.'/HOSTS')
-			&& file_exists($this->pathVolatile.'/VIEWS')) {
+		if(file_exists($this->pathVolatile.'/PROCESS_STATUS') && is_readable($this->pathVolatile.'/PROCESS_STATUS')
+			&& file_exists($this->pathVolatile.'/PROGRAM_STATUS') && is_readable($this->pathVolatile.'/PROGRAM_STATUS')
+			&& file_exists($this->pathVolatile.'/HOSTS') && is_readable($this->pathVolatile.'/HOSTS')
+			&& file_exists($this->pathVolatile.'/VIEWS') && is_readable($this->pathVolatile.'/VIEWS')) {
 			
 			return TRUE;
 		} else {
