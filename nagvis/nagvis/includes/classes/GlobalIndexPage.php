@@ -59,6 +59,7 @@ class GlobalIndexPage {
 		$ret .= 'oFileAges='.$this->parseFileAges().';'."\n";
 		$ret .= 'oPageProperties='.$this->parseIndexPropertiesJson().';'."\n";
 		$ret .= 'aInitialMaps='.$this->parseMapsJson().';'."\n";
+		$ret .= 'aInitialAutomaps='.$this->parseAutomapsJson().';'."\n";
 		$ret .= 'aInitialRotations='.$this->parseRotationsJson().';'."\n";
 		$ret .= 'aMaps=Array();'."\n";
 		$ret .= 'aRotations=Array();'."\n";
@@ -84,44 +85,41 @@ class GlobalIndexPage {
 	}
 	
 	/**
-	 * Parses the maps for the overview page
+	 * Parses the automaps for the overview page
 	 *
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function parseMapsJson() {
+	public function parseAutomapsJson() {
 		$aMaps = Array();
 		
-		foreach($this->CORE->getAvailableMaps() AS $mapName) {
-			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+		foreach($this->CORE->getAvailableAutomaps() AS $mapName) {
+			$MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
 			if(!$MAPCFG->readMapConfig()) {
 				// Skip this map when config problem
 				continue;
 			}
 			
 			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
-				if($mapName == '__automap') {
-					$opts = Array();
-					
-					// Fetch option array from defaultparams string (extract variable 
-					// names and values)
-					$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
-					unset($params[0]);
-					
-					foreach($params AS &$set) {
-						$arrSet = explode('=',$set);
-						$opts[$arrSet[0]] = $arrSet[1];
-					}
-					
-					$opts['preview'] = 1;
-					
-					$MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $opts);
-					// If there is no automap image on first load of the index page,
-					// render the image
-					$MAP->renderMap();
-				} else {
-					$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
+				$opts = Array();
+				
+				// Fetch option array from defaultparams string (extract variable 
+				// names and values)
+				$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
+				unset($params[0]);
+				
+				foreach($params AS &$set) {
+					$arrSet = explode('=',$set);
+					$opts[$arrSet[0]] = $arrSet[1];
 				}
+				
+				// Save the automap name to use
+				$opts['automap'] = $mapName;
+				
+				// Save the preview mode
+				$opts['preview'] = 1;
+				
+				$MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $opts);
 				
 				// Apply default configuration to object
 				$objConf = Array();
@@ -142,11 +140,7 @@ class GlobalIndexPage {
 						$class = '';
 						$url = '';
 						
-						if($mapName == '__automap') {
-							$url = $this->htmlBase.'/index.php?automap=1'.$this->CORE->MAINCFG->getValue('automap','defaultparams');
-						} else {
-							$url = $this->htmlBase.'/index.php?map='.$mapName;
-						}
+						$url = $this->htmlBase.'/index.php?automap='.$mapName.$this->CORE->MAINCFG->getValue('automap','defaultparams');
 						
 						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 					} else {
@@ -157,13 +151,95 @@ class GlobalIndexPage {
 					}
 					
 					// If this is the automap display the last rendered image
-					if($mapName == '__automap') {
-						$imgPath = $this->CORE->MAINCFG->getValue('paths','var').'automap.png';
-						$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').'automap.png';
-					} else {
-						$imgPath = $this->CORE->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
-						$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+					$imgPath = $this->CORE->MAINCFG->getValue('paths','var').$mapName.'.png';
+					$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'.png';
+					
+					// If there is no automap image on first load of the index page,
+					// render the image
+					if(!$this->checkImageExists($imgPath, FALSE)) {
+						$MAP->renderMap();
 					}
+					
+					if($this->CORE->checkGd(0)) {
+						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
+						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','var').$sThumbFile;
+						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$sThumbFile;
+						
+						// Only create a new thumb when there is no cached one
+						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+						if($FCACHE->isCached() === -1) {
+							$image = $this->createThumbnail($imgPath, $sThumbPath);
+						}
+						
+						$image = $sThumbPathHtml;
+					} else {
+						$image = $imgPathHtml;
+					}
+					
+					$arr = $MAP->MAPOBJ->parseJson();
+					
+					$arr['overview_class'] = $class;
+					$arr['overview_url'] = $url;
+					$arr['overview_image'] = $image;
+					
+					$aMaps[] = $arr;
+				}
+			}
+		}
+		
+		return json_encode($aMaps);
+	}
+	
+	/**
+	 * Parses the maps for the overview page
+	 *
+	 * @return	String  Json Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function parseMapsJson() {
+		$aMaps = Array();
+		
+		foreach($this->CORE->getAvailableMaps() AS $mapName) {
+			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+			if(!$MAPCFG->readMapConfig()) {
+				// Skip this map when config problem
+				continue;
+			}
+			
+			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
+				$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
+				
+				// Apply default configuration to object
+				$objConf = Array();
+				foreach($MAPCFG->getValidTypeKeys('map') AS $key) {
+					$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
+				}
+				$objConf['type'] = 'map';
+				$objConf['map_name'] = $MAPCFG->getName();
+				
+				$MAP->MAPOBJ->setConfiguration($objConf);
+				
+				// Get the icon of the map
+				$MAP->MAPOBJ->fetchIcon();
+				
+				// Check if the user is permitted to view this map
+				if($MAPCFG->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+					if($MAP->MAPOBJ->checkMaintenance(0)) {
+						$class = '';
+						$url = '';
+						
+						$url = $this->htmlBase.'/index.php?map='.$mapName;
+						
+						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
+					} else {
+						$class = 'disabled';
+						
+						$url = 'javascript:alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
+						$summaryOutput = $this->CORE->LANG->getText('mapInMaintenance');
+					}
+					
+					$imgPath = $this->CORE->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
+					$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
 					
 					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
 						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
@@ -239,8 +315,9 @@ class GlobalIndexPage {
 	public function parseIndexPropertiesJson() {
 		$arr = Array();
 		
-		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index','cellsperrow');
-		$arr['showrotations'] = $this->CORE->MAINCFG->getValue('index','showrotations');
+		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index', 'cellsperrow');
+		$arr['showrotations'] = $this->CORE->MAINCFG->getValue('index', 'showrotations');
+		$arr['showautomaps'] = $this->CORE->MAINCFG->getValue('index', 'showautomaps');
 		
 		$arr['page_title'] = $this->CORE->MAINCFG->getValue('internal', 'title');
 		// FIXME: State of the overview like on maps would be nice

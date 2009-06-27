@@ -84,7 +84,7 @@ class GlobalHeaderMenu {
 	 */
 	public function replaceDynamicMacros() {
 		// Replace some special macros
-		if(get_class($this->OBJPAGE) == 'NagVisMapCfg') {
+		if(get_class($this->OBJPAGE) == 'NagVisMapCfg' || get_class($this->OBJPAGE) == 'NagVisAutomapCfg') {
 			$arrKeys[] = '[current_map]';
 			$arrKeys[] = '[current_map_alias]';
 			$arrVals[] = $this->OBJPAGE->getName();
@@ -103,26 +103,48 @@ class GlobalHeaderMenu {
 			foreach($matchReturn[1] AS &$key) {
 				if($key == 'maplist') {
 					$sReplace = '';
-					preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/',$this->code,$matchReturn1);
+					preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/', $this->code, $matchReturn1);
+					
 					foreach($this->CORE->getAvailableMaps() AS $mapName) {
 						$MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
+						$MAPCFG1->readMapConfig(1);
+						
+						if($MAPCFG1->getValue('global', 0, 'show_in_lists') == 1) {
+							// Only proceed permited objects
+							if($MAPCFG1->checkPermissions($MAPCFG1->getValue('global',0, 'allowed_user'), FALSE)) {
+								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(), $matchReturn1[1][0]);
+								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'), $sReplaceObj);
+								
+								// Add defaultparams to map selection
+								$sReplaceObj = str_replace('[url_params]', '', $sReplaceObj);
+								
+								// auto select current map
+								if(get_class($this->OBJPAGE) == 'NagVisMapCfg' && $mapName == $this->OBJPAGE->getName()) {
+									$sReplaceObj = str_replace('[selected]', 'selected="selected"', $sReplaceObj);
+								} else {
+									$sReplaceObj = str_replace('[selected]', '', $sReplaceObj);
+								}
+								
+								$sReplace .= $sReplaceObj;
+							}
+						}
+					}
+					
+					foreach($this->CORE->getAvailableAutomaps() AS $mapName) {
+						$MAPCFG1 = new NagVisAutomapCfg($this->CORE, $mapName);
 						$MAPCFG1->readMapConfig(1);
 						
 						if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
 							// Only proceed permited objects
 							if($MAPCFG1->checkPermissions($MAPCFG1->getValue('global',0, 'allowed_user'),FALSE)) {
-								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(),$matchReturn1[1][0]);
-								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'),$sReplaceObj);
+								$sReplaceObj = str_replace('[map_name]', 'automap='.$MAPCFG1->getName(), $matchReturn1[1][0]);
+								$sReplaceObj = str_replace('[map_alias]', $MAPCFG1->getValue('global', '0', 'alias'), $sReplaceObj);
 								
 								// Add defaultparams to map selection
-								if($mapName == '__automap') {
-									$sReplaceObj = str_replace('[url_params]', $this->CORE->MAINCFG->getValue('automap', 'defaultparams'), $sReplaceObj);
-								} else {
-									$sReplaceObj = str_replace('[url_params]','',$sReplaceObj);
-								}
+								$sReplaceObj = str_replace('[url_params]', $this->CORE->MAINCFG->getValue('automap', 'defaultparams'), $sReplaceObj);
 								
 								// auto select current map
-								if(get_class($this->OBJPAGE) == 'NagVisMapCfg' && ($mapName == $this->OBJPAGE->getName() || $mapName == '__automap' && isset($_GET['automap']))) {
+								if(get_class($this->OBJPAGE) == 'NagVisAutomapCfg' && $mapName == $this->OBJPAGE->getName()) {
 									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
 								} else {
 									$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
@@ -132,6 +154,7 @@ class GlobalHeaderMenu {
 							}
 						}
 					}
+					
 					$this->code = preg_replace('/<!-- BEGIN '.$key.' -->(?:(?s).*)<!-- END '.$key.' -->/',$sReplace,$this->code);
 				}
 			}

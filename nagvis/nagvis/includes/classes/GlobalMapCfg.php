@@ -33,7 +33,7 @@ class GlobalMapCfg {
 	protected $name;
 	protected $mapConfig;
 	
-	private $configFile;
+	private $configFile = '';
 	private $cacheFile;
 	
 	// Array for config validation
@@ -1053,12 +1053,13 @@ class GlobalMapCfg {
 				'name' => Array('must' => 1,
 					'match' => MATCH_STRING_NO_SPACE)));
 		
-		// Define the map configuration file
-		$this->configFile = $this->CORE->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg';
-		
-		if($name != '') {
-			$this->CACHE = new GlobalFileCache($this->CORE, $this->configFile, $this->CORE->MAINCFG->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache');
+		// Define the map configuration file when no one set until here
+		if($this->configFile === '') {
+			$this->setConfigFile($this->CORE->MAINCFG->getValue('paths', 'mapcfg').$name.'.cfg');
 		}
+		
+		// Initialize the map configuration cache
+		$this->initCache();
 	}
 	
 	/**
@@ -1114,6 +1115,27 @@ class GlobalMapCfg {
 			if($sVar == 'url_target' || $sVar == 'hover_delay') {
 				$this->validConfig['shape'][$sVar]['default'] = $sTmp;
 			}
+		}
+	}
+	
+	/**
+	 * Initializes the map configuration file caching
+	 *
+	 * @param   String   Path to the configuration file
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function setConfigFile($file) {
+		$this->configFile = $file;
+	}
+	
+	/**
+	 * Initializes the map configuration file caching
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function initCache() {
+		if($this->name !== '') {
+			$this->CACHE = new GlobalFileCache($this->CORE, $this->configFile, $this->CORE->MAINCFG->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache');
 		}
 	}
 	

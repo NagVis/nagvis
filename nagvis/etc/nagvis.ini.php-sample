@@ -113,6 +113,8 @@
 ;headermenu="1"
 ; header template
 ;headertemplate="default"
+; Enable/Disable automap listing
+;showautomaps=1
 ; Enable/Disable rotation listing
 ;showrotations=1
 

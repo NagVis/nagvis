@@ -250,6 +250,10 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
+				'automapcfg' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
 				'gadget' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
@@ -388,6 +392,10 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '1',
 					'match' => MATCH_BOOLEAN),
+				'showautomaps' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '1',
+					'match' => MATCH_BOOLEAN),
 				'backgroundcolor' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '#fff',
@@ -499,6 +507,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['headertemplate']['default'] = $base.'nagvis/templates/header/';
 		$this->validConfig['paths']['contexttemplate']['default'] = $base.'nagvis/templates/context/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'etc/maps/';
+		$this->validConfig['paths']['automapcfg']['default'] = $base.'etc/automaps/';
 		$this->validConfig['paths']['gadget']['default'] = $base.'nagvis/gadgets/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
 		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/templates/hover/';

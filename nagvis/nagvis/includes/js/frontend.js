@@ -843,6 +843,36 @@ function parseOverviewPage() {
 	oContainer.appendChild(oTable);
 	oTable = null;
 	
+	// Render the automaps when enabled
+	if(oPageProperties.showautomaps && aInitialAutomaps.length > 0) {
+		oTable = document.createElement('table');
+		oTable.setAttribute('class', 'infobox');
+		oTable.setAttribute('className', 'infobox');
+		
+		oTbody = document.createElement('tbody');
+		oTbody.setAttribute('id', 'overviewAutomaps');
+		
+		oTr = document.createElement('tr');
+		
+		oTh = document.createElement('th');
+		oTh.colSpan = oPageProperties.cellsperrow;
+		oTh.appendChild(document.createTextNode(oPageProperties.lang_mapIndex));
+		
+		oTr.appendChild(oTh);
+		oTh = null;
+		
+		oTbody.appendChild(oTr);
+		oTr = null;
+		
+		oTable.appendChild(oTbody);
+		oTbody = null;
+		
+		oContainer.appendChild(oTable);
+		oTable = null;
+	}
+	
+	// Render the rotation list when enabled
+	
 	if(oPageProperties.showrotations && aInitialRotations.length > 0) {
 		oTable = document.createElement('table');
 		oTable.setAttribute('class', 'infobox');
@@ -929,14 +959,69 @@ function parseOverviewMaps(aMapsConf) {
 }
 
 /**
- * setOverviewRotations()
+ * parseOverviewAutomaps()
+ *
+ * Does initial parsing of automaps on the overview page
+ *
+ * @param   Array    Array of objects to parse to the page
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseOverviewAutomaps(aMapsConf) {
+	eventlog("worker", "debug", "parseOverviewAutomaps: Start setting automaps");
+	
+	var oTable = document.getElementById('overviewAutomaps');
+	var oTr = document.createElement('tr');
+	
+	for(var i = 0, len = aMapsConf.length; i < len; i++) {
+		var oObj;
+		
+		oObj = new NagVisMap(aMapsConf[i]);
+		
+		if(oObj !== null) {
+			// Save object to map objects array
+			aMaps.push(oObj);
+			
+			// Parse child and save reference in parsedObject
+			oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+		}
+		
+		if((i+1) % oPageProperties.cellsperrow === 0) {
+			oTable.appendChild(oTr);
+			oTr = null;
+			oTr = document.createElement('tr');
+		}
+		
+		oObj = null;
+	}
+	
+	// Fill table with empty cells if there are not enough maps to get the last 
+	// row filled
+	if(i % oPageProperties.cellsperrow !== 0) {
+		for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
+			var oTd = document.createElement('td');
+			oTr.appendChild(oTd);
+			oTd = null;
+		}
+	}
+	
+	// Append last row
+	oTable.appendChild(oTr);
+	oTr = null;
+	
+	oTable = null;
+	
+	eventlog("worker", "debug", "parseOverviewAutomaps: End setting automaps");
+}
+
+/**
+ * parseOverviewRotations()
  *
  * Does initial parsing of rotations on the overview page
  *
  * @param   Array    Array of objects to parse to the map
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setOverviewRotations(aRotationsConf) {
+function parseOverviewRotations(aRotationsConf) {
 	eventlog("worker", "debug", "setOverviewObjects: Start setting rotations");
 	
 	if(oPageProperties.showrotations && aRotationsConf.length > 0) {
@@ -1091,8 +1176,11 @@ function runWorker(iCount, sType) {
 			eventlog("worker", "info", "Parsing maps");
 			parseOverviewMaps(aInitialMaps);
 			
+			eventlog("worker", "info", "Parsing automaps");
+			parseOverviewAutomaps(aInitialAutomaps);
+			
 			eventlog("worker", "info", "Parsing rotations");
-			setOverviewRotations(aInitialRotations);
+			parseOverviewRotations(aInitialRotations);
 			
 			// Bulk get all hover templates which are needed on the map
 			eventlog("worker", "info", "Fetching hover templates");

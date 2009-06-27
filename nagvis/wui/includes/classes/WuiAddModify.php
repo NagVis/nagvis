@@ -233,7 +233,7 @@ class WuiAddModify extends GlobalPage {
 						break;
 						
 						case 'map_name':
-							$options = $this->CORE->getAvailableMaps('/[^(__automap)]/');
+							$options = array_merge($this->CORE->getAvailableMaps(), $this->CORE->getAvailableAutomaps());
 							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
 						break;
 						

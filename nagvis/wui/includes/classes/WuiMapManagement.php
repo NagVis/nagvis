@@ -135,7 +135,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getExportFields() {
-		return $this->EXPORTFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps('/[^(__automap)]/'),'');
+		return $this->EXPORTFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),'');
 	}
 	
 	/**
@@ -156,7 +156,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDeleteFields() {
-		return $this->DELETEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps('/[^(__automap)]/'),'')
+		return $this->DELETEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),'')
 		      .$this->DELETEFORM->getHiddenField('map','')
 		      .'<script>document.map_rename.map.value=document.mapname</script>';
 	}
@@ -168,7 +168,7 @@ class WuiMapManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getRenameFields() {
-		return $this->RENAMEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps('/[^(__automap)]/'),'')
+		return $this->RENAMEFORM->getSelectLine($this->LANG->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),'')
 		      .$this->RENAMEFORM->getInputLine($this->LANG->getText('newMapName'),'map_new_name','')
 		      .$this->RENAMEFORM->getHiddenField('map','')
 		      .'<script>document.map_rename.map.value=document.mapname</script>';

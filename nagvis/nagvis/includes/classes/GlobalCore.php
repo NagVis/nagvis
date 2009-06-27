@@ -67,14 +67,14 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkGd($printErr) {
-    if(!extension_loaded('gd')) {
-      if($printErr) {
-        new GlobalFrontendMessage('WARNING', $this->LANG->getText('gdLibNotFound'));
-      }
-      return FALSE;
-    } else {
-      return TRUE;
-    }
+	if(!extension_loaded('gd')) {
+		if($printErr) {
+			new GlobalFrontendMessage('WARNING', $this->LANG->getText('gdLibNotFound'));
+		}
+			return FALSE;
+		} else {
+			return TRUE;
+		}
 	}
 	
 	/**
@@ -130,8 +130,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -155,8 +156,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -180,8 +182,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -205,8 +208,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -230,8 +234,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -255,8 +260,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -280,8 +286,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -322,9 +329,38 @@ class GlobalCore {
 	}
 	
 	/**
+	 * Reads all automaps in automapcfg path
+	 *
+	 * @param   String  Regex to match the map name
+	 * @return	Array   Array of maps
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableAutomaps($strMatch = NULL) {
+		$files = Array();
+		
+		if($handle = opendir($this->MAINCFG->getValue('paths', 'automapcfg'))) {
+ 			while (false !== ($file = readdir($handle))) {
+				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
+					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
+							$files[] = $arrRet[1];
+					}
+				}				
+			}
+			
+			if ($files) {
+				natcasesort($files);
+			}
+			
+			closedir($handle);
+		}
+		
+		return $files;
+	}
+	
+	/**
 	 * Reads all maps in mapcfg path
 	 *
-	 * @param		String  Regex to match the map name
+	 * @param   String  Regex to match the map name
 	 * @return	Array   Array of maps
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -343,8 +379,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}
@@ -395,8 +432,9 @@ class GlobalCore {
 			if ($files) {
 				natcasesort($files);
 			}
+			
+			closedir($handle);
 		}
-		closedir($handle);
 		
 		return $files;
 	}

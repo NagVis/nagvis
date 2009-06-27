@@ -31,7 +31,7 @@ class NagVisAutoMap extends GlobalMap {
 	
 	private $preview;
 	
-	private $config;
+	private $name;
 	private $backend_id;
 	private $root;
 	private $maxLayers;
@@ -72,13 +72,13 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Set the map configuration to use
 		if(isset($prop['automap']) && $prop['automap'] !== '' && $prop['automap'] !== '1') {
-			$this->config = $prop['automap'];
+			$this->name = $prop['automap'];
 		} else {
-			$this->config = '__automap';
+			$this->name = '__automap';
 		}
 		
 		// Create map configuration
-		$MAPCFG = new NagVisMapCfg($CORE, $this->config);
+		$MAPCFG = new NagVisAutomapCfg($CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
 		parent::__construct($CORE, $MAPCFG);
@@ -316,12 +316,12 @@ class NagVisAutoMap extends GlobalMap {
 			 * result in commands too long with big maps. So write the config to a file
 			 * and let it be read by graphviz binary.
 			 */
-			$fh = fopen($this->CORE->MAINCFG->getValue('paths', 'var').'automap.dot','w');
+			$fh = fopen($this->CORE->MAINCFG->getValue('paths', 'var').$this->name.'.dot','w');
 			fwrite($fh, $this->parseGraphvizConfig());
 			fclose($fh);
 			
 			// Parse map
-			exec($this->CORE->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->CORE->MAINCFG->getValue('paths', 'var').'automap.png\' -Tcmapx '.$this->CORE->MAINCFG->getValue('paths', 'var').'automap.dot', $arrMapCode);
+			exec($this->CORE->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->CORE->MAINCFG->getValue('paths', 'var').$this->name.'.png\' -Tcmapx '.$this->CORE->MAINCFG->getValue('paths', 'var').$this->name.'.dot', $arrMapCode);
 			
 			$this->mapCode = implode("\n", $arrMapCode);
 		}
@@ -384,7 +384,7 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	private function getBackground() {
 		// Append random number to prevent caching
-		$src = $this->CORE->MAINCFG->getValue('paths', 'htmlvar').'automap.png?'.mt_rand(0,10000);
+		$src = $this->CORE->MAINCFG->getValue('paths', 'htmlvar').$this->name.'.png?'.mt_rand(0,10000);
 		
 		return $this->getBackgroundHtml($src,'','usemap="#automap"');
 	}

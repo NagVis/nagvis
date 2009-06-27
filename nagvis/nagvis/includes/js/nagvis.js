@@ -399,14 +399,14 @@ function switchRotation(obj, startLabel, stopLabel) {
 	}
 }
 
-function changeMap(htmlBase,mapName) {
-	if(mapName.match('^__automap')) {
-		location.href=htmlBase+'/nagvis/index.php?automap=1'+mapName.replace('__automap','');
+function changeMap(htmlBase, mapName) {
+	if(mapName.match('^automap=')) {
+		location.href=htmlBase+'/nagvis/index.php?' + mapName;
 	} else {
 		if (mapName === '') {
 			location.href=htmlBase+'/nagvis/index.php';
 		} else {
-			location.href=htmlBase+'/nagvis/index.php?map='+mapName;
+			location.href=htmlBase+'/nagvis/index.php?map=' + mapName;
 		}
 	}
 }
