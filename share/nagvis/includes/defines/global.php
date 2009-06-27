@@ -61,13 +61,13 @@ define('DEBUG', FALSE);
 define('DEBUGLEVEL', 4);
 
 // Path to the debug file
-define('DEBUGFILE', '../var/nagvis-debug.log');
+define('DEBUGFILE', '../../var/nagvis-debug.log');
 
 // NagVis Version
 define('CONST_VERSION', '1.4.1');
 
 // Path to the main configuration file
-define('CONST_MAINCFG', '../etc/nagvis.ini.php');
+define('CONST_MAINCFG', '../../etc/nagvis.ini.php');
 
 // Needed minimal PHP version
 define('CONST_NEEDED_PHP_VERSION', '5.0');

@@ -532,8 +532,8 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getBasePath() {
-		$return = preg_replace('/wui|nagvis$/i', '', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
-		return $return ;
+		// Go 3 levels up from nagvis/share/nagvis to nagvis base path
+		return realpath(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))).'/';
 	}
 	
 	/**
