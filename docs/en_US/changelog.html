@@ -8,14 +8,11 @@
 		<h1>Changelog</h1>
 		<ul>
 			<li><a href="#current">Current Development</a></li>
-			<li><a href="#1.4.1">1.4.1</a></li>
-			<li><a href="#1.4">1.4</a></li>
-			<li><a href="#1.4rc3">1.4rc3</a></li>
-			<li><a href="#1.4rc2">1.4rc2</a></li>
-			<li><a href="#1.4rc1">1.4rc1</a></li>
 		</ul>
 		<a name="current"></a>
 		<h2>Subversion - Current development </h2>
+
+		<h3>General</h3>
 		<ul>
 			<li>Speedometer Gadget: Fixed critical/warning area drawing when no max value is given in perfdata</li>
 			<li>Enhanced javascript error handling; Added logging and popup message to handle javascript errors</li>
@@ -23,204 +20,15 @@
 			<li>Bugfix: Fixed problem viewing a host without services on the automap using ndo2fs</li>
 			<li>Bugfix: Fixed missing object highlighting in Internet Explorer</li>
 		</ul>
+		
+		<h3>Automap</h3>
+		<ul>
+			<li>The automap can now be launched with index.php?automap=<mapname> to use different automap configs for different views</li>
+			<li>Splitted automap configuration files from maps directory to separate etc/automaps directory</li>
+			<li>Automaps are listed separate on overview page now</li>
+			<li>There is an option for enable/disable the automap listing on overview page</li>
+		</ul>
 
-		<a name="1.4.1"></a>
-		<h2>Release 1.4.1 - 2009-06-09</h2>
-		<ul>
-			<li>Added hosturl, serviceurl, ... for easier integration with third party tools. Thanks to the guys from op5.</li>
-			<li>Added two new options event_highlight_interval and event_highlight_duration to configurations to control the event highlighting</li>
-			<li>Added caching mechanism for map thumbnails on overview page</li>
-			<li>Improved error handling when opening external urls in rotations</li>
-			<li>The css files of hover menus are now loaded in all cases when using IE6</li>
-			<li>Bugfix: Removed hard coded table prefix from ndomy backend</li>
-			<li>Bugfix: Fixed user message when a map is in maintenance mode</li>
-			<li>Bugfix: Fixed popup on overview page when a map is in maintenance mode</li>
-			<li>Bugfix: Rotations can have URLs with several parameters again</li>
-			<li>WUI: The WUI recognizes background_color and bg_color of textboxes now</li>
-			<li>WUI: Bugfix: Fixed problem replacing special chars multiple times in ajax requests</li>
-			<li>WUI: Bugfix: Fixed map listings when there are more than 15 maps</li>
-		</ul>
-		
-		<a name="1.4"></a>
-		<h2>Release 1.4 - 2009-05-22</h2>
-		<h3>General</h3>
-		<ul>
-			<li>Client memory usage enhancements</li>
-			<li>Only maps with valid permissions are displayed in map selection lists (header, wui) now</li>
-			<li>Moved backend configuration definitions to backend files. Makes it easier to create own backends</li>
-			<li>Added code to catch connection problems when NagVis host gets unreachable for some reason</li>
-			<li>The hover menu is only shown when no context menu is opened</li>
-			<li>Gadgets can now provide a dummy perfdata string to show the gadget also in WUI</li>
-			<li>Added first version of the merlinmy backend to connect NagVis to merlin databases. This backend is in testing state.</li>
-			<li>Disabled page reload of overview page (new status infos are fetched via AJAX now)</li>
-			<li>Bugfix: Fixed hover template parsing problems on ajax status updates</li>
-			<li>Bugfix: Fixed reload of images (e.g. performance graphs) in hover menus</li>
-			<li>Bugfix: Fixed frontend ignoring htmlcgi option of backends</li>
-			<li>Bugfix: Fixed hover color on unreachable host state in default templates</li>
-			<li>Bugfix: Fixed status icon when host is in unreachable state</li>
-			<li>Bugfix: Fixed wrong downtime/acknowledged status in hover menu</li>
-			<li>Bugfix: Fixed error handling on wrong object type in map configuration</li>
-			<li>Bugfix: Service descriptions of servicegroup children are displayed in hover menus again</li>
-			<li>Bugfix: Fixed shape display problems with parameters in the url</li>
-			<li>Bugfix: Fixed problem in ndo2fs backend with services containing &quot;:&quot; in the service_description</li>
-			<li>Bugfix: Fixed handling of non-existing services in ndo2fs</li>
-			<li>Bugfix: Fixed bug listing correct map object children in hover menus</li>
-			<li>Bugfix: Perfdata and Output macro in labels are now reloaded when there is something new to show</li>
-		</ul>
-		<h3>WUI</h3>
-		<ul>
-			<li>WUI: Will not submit the add/modify form when there is one invalid value anywhere</li>
-			<li>WUI: The hover menu is now hidden when moving objects</li>
-			<li>WUI: Switch between input and select fields in add/modify dialog is now possible in both ways. On fields where this is possible the input field is changed to select field when it is left empty</li>
-			<li>WUI: Gadgets can be shown in WUI too using the new dummy perfdata</li>
-			<li>Bugfix: WUI: Some special signs in GET params are now escaped</li>
-			<li>Bugfix: WUI: Relative labels where not saved after moving in some cases</li>
-			<li>Bugfix: WUI: Map listing in context menu works now correctly when there are more than 15 maps</li>
-		</ul>
-		
-		<a name="1.4rc3"></a>
-		<h2>Release 1.4rc3 - 2009-03-21</h2>
-		<h3>General</h3>
-		<ul>
-		<li>Changed line parsing to canvas for Firefox and other browsers which can handle these elements. Line parsing now performs much better in Firefox</li>
-		<li>Performance and Traffic improvements in frontend</li>
-		<li>Added address macro to host context menus</li>
-		<li>The hover menus on shapes needs to be enabled via hover_menu=1 option like at the other icons now</li>
-		<li>Added options event_log_hidden and event_log_height to better configure the javascript eventlog</li>
-		<li>Added page scaling meta tag for iphone</li>
-		<li>Bugfix: HTML code in labels is now possible again</li>
-		<li>Bugfix: Fixed caching issues with dynamic macros and lists replacements in header menu</li>
-		<li>Bugfix: Fixed ajax status look-up for services with # in service description</li>
-		<li>Bugfix: Fixed event handling toggle. The event handling can be enabled/disabled again</li>
-		<li>Bugfix: Fixed error messages of file caching mechanism when source file not exists</li>
-		<li>Bugfix: Shape icons can now be URLs again</li>
-		<li>Bugfix: Fixed refresh problem of pages with alias defined</li>
-		<li>Bugfix: Fixed status info for services with / in name in ndo2fs backend</li>
-		<li>Bugfix: ndo2fs backend now handles pending host states correctly</li>
-		<li>Bugfix: Fixed reloading of shapes which are configured to be refreshed by enable_refresh=1</li>
-		<li>Bugfix: Fixed hover menus on shapes</li>
-		</ul>
-		<h3>WUI</h3>
-		<ul>
-		<li>Recoded configuration dialogs to javascript popup windows (No more browser popups)</li>
-		<li>Sub-Option are now only shown when main options are set in add/modify dialogs (e.g. hover_template can only be selected when hover_menu is enabled)</li>
-		<li>Labels are now dragable</li>
-		<li>Added code to change select fields in add/modify dialogs to normal input fields for custom user input</li>
-		<li>Empty input fields in addmodify dialog are filled with default values for information</li>
-		<li>Added dropdown menu for selecting available gadgets in add/modify dialogs</li>
-		<li>Bugfix: Fixed problem removing options from map object definition</li>
-		<li>Bugfix: Fixed problem importing map configurations</li>
-		<li>Bugfix: Fixed problem editing lines with odd coords</li>
-		<li>Bugfix: Fixed hostlist problem in WUI using PHP version lower than 5.2</li>
-		<li>Bugfix: Fixed problems with some quotes in configuration values in add/modify dialogs</li>
-		</ul>
-		<ul>
-		</ul>
-		
-		<a name="1.4rc2"></a>
-		<h2>Release 1.4rc2 - 2009-01-29</h2>
-		<h3>General</h3>
-		<ul>
-		<li>Added backend for ndo2fs. This is a fully supported alternative to ndo2db</li>
-		<li>Removed usegdlibs parameter from sample main configuration file (deprecated)</li>
-		<li>Added error message to prevent use of undefined backends</li>
-		<li>Moved some date parsing back to php. It took too much time to parse all that dates in javascript on slow systems</li>
-		<li>Some code cleanup in url parameter handling. Added macros [htmlcgi] and [htmlbase]</li>
-		<li>Added context menu feature. You can now add a custom context menu to your map objects for adding actions/links to them.</li>
-		<li>Added french translation files. Thanks to Laurent!</li>
-		</ul>
-		<h3>Fixes</h3>
-		<ul>
-		<li>Fixed file inclusion bug when several backends of same type are configured</li>
-		<li>Fixed map reparsing bug when the map configuration file was modified</li>
-		<li>Fixed empty url parameter in object definitions in services, hostgroups, servicegroups and maps</li>
-		<li>Returned label_text option to global section of maps</li>
-		<li>Fixed some variable declaration problems in javascript code</li>
-		<li>Fixed problem with updating shape objects where refresh enabled</li>
-		<li>Fixed event highlighting (the border appeared on wrong objects and didn't disappear at the end)</li>
-		<li>Fixed umlauts in german translation file</li>
-		</ul>
-		<h3>WUI</h3>
-		<ul>
-    <li>WUI is now resetting z-index to configured value after moving an object</li>
-		<li>Fixed bug which was generating invalid properties when items were moved and global options were edited later on</li>
-		<li>Moved items are now saved automatically. No need for the save link in WUI anymore</li>
-		<li>Fixed lists of available backends</li>
-		</ul>
-		
-		<a name="1.4rc1"></a>
-		<h2>Release 1.4rc1 - 14.12.2008</h2>
-		<h3>General</h3>
-		<ul>
-		<li>Introduced the NagVis installer (install.sh). This should be the prefered tool for installing and upgrading NagVis in future</li>
-		<li>Big change in object handling</li>
-		<li>Big change in line drawing: The gdlibs are not needed anymore. The lines are being build via javascript now</li>
-		<li>Internal HTML Code handling rewritten (Performance tuning)</li>
-		<li>Rewrote map configuration parse method (Only UNIX line breaks are supported now)</li>
-		<li>Added main configuration cache</li>
-		<li>Added map configuration cache</li>
-		<li>Changed language format to gettext (SF.net 2000176)</li>
-		<li>Map objects can now represent the summary state of the current map by adding the same map name to the object as the current map</li>
-		<li>New code for resizing the thumbnails on map index page without distortion</li>
-		<li>htmlcgi in paths and backend can now be full url (SF.net 2047653)</li>
-		<li>Spaces in usernames are now allowed</li>
-		<li>The dbprefix can now be empty in NDO backend options</li>
-		<li>You can now set labels for map rotations steps</li>
-		<li>Background image can now be in jpg, gif or png format (SF.net 1901540)</li>
-		<li>Iconset images can now be in jpg, gif or png format. All images of an iconset need to have the same filetype (SF.net 1901539)</li>
-		<li>Recoded header menu handling. The header menu can now be enabled/disabled for each map and for the index page. <br />Removed displayheader option from main configuration general section. Added new option headermenu and headertemplate in defaults and index section.</li>
-		<li>Performance data is now available in hover menu and labels of host and service objects</li>
-		<li>Added detection of deprecated options to main configuration validation</li>
-		<li>Automap: When a host has a user supplied image for the statusmap it is displayed above the NagVis status image. <br/>The user supplied image (statusmap_image in Nagios) has to be in png format. It has to be copied from nagios/share/images/logos to nagvis/images/shapes directory.</li>
-		<li>Moved map object handling to javascript. The complete visualisation of regular maps, map icons and hover menus is now done via ajax.</li>
-		<li>Added option "line_width" to stateful map objects to configure the line width on normal maps</li>
-		<li>There is a new eventlog which shows some information about the actions in the javascript/ajax frontend.</li>
-		<li>NagVis can now highlight state changes in the following ways:<br />
-			<ul>
-				<li>Surround the icon by a flashing border for several seconds (New option: event_highlight=1)</li>
-				<li>Scroll the browser focus to the icon when out of scope (New option: event_scroll=1)</li>
-				<li>Log state changes in NagVis frontend eventlog (New options: event_log=1 and event_log_level=info)</li>
-			</ul>
-		</li>
-		<li>Added new option view_type to change the look of objects. When you like to see lines set view_type=line.</li>
-		<li>Added new feature: Gadgets. Gadgets are small scripts which create images by Nagios performance data. For details see 1.4 docs.</li>
-		<li>Backends are now only initialized when some objects need them</li>
-		</ul>
-		<h3>Overview Page</h3>
-		<ul>
-		<li>Now using normal hover menu</li>
-		<li>Maps without permissions are now hidden (SF.net 1994581)</li>
-		<li>Hide rotation pool list when there are no rotations defined (SF.net 1998278)</li>
-		<li>Added new section in main configuration for the overview page. The overview page can now be configured to fit your needs.</li>
-		<li>Added single step list to rotation list on overview page</li>
-		<li>Added new option backgroundcolor to change the background color of the overview page</li>
-		</ul>
-		<h3>WUI</h3>
-		<ul>
-		<li>Lines in WUI now appear same as on maps in frontend</li>
-		<li>Added link to overview in wui context menu</li>
-		<li>The WUI context menu is not limited to background image anymore</li>
-		</ul>
-		<h3>Bugfixes</h3>
-		<ul>
-		<li>Fixed annoying \"sh: /usr/local/bin/neato: not found\" messages in apache error log when opening index page</li>
-		<li>Fixed transparent label border in IE (SF.net 1994891)
-		<li>Fixed problem in automap child fetching algorithm (SF.net 1994873)</li>
-		<li>Fixed php parse error in frontend class</li>
-		<li>Fixed problem with fetching downtime end time (SF.net 1997091)
-		<li>Fixed problem with sorting children alphabetically in hover menus (SF.net 1997111)</li>
-		<li>Fixed problem with spaces in oldPhpVersionFixes.php</li>
-		<li>Fixed alias not being displayed in map and hostgroup hover menus</li>
-		<li>Fixed problem with summary state when a linked map was empty</li>
-		<li>Added plus sign to string matches (SF.net 1994579)</li>
-		<li>Fixed hardcoded path in javascript code</li>
-		<li>Fixed bug when getting usegdlibs setting on index page</li>
-		<li>Fixed missing htmlBase path in automap javascript code (SF.net 2009179)</li>
-		<li>Fixed problem when editing showinlists option in WUI</li>
-		<li>Fixed mysql error message when configured bad NDO instance name (SF.net 2065750)</li>
-		<li>@ Signs are now allowed in several strings, for example usernames in allowed_for_config on maps</li>
-		</ul>
-		
-		NagVis 1.4 Code started at rev. 1337 with NagVis 1.3rc5 code.
+		NagVis 1.5 Code started at with NagVis 1.4.1 code.
 	</body>
 </html>
