@@ -3,36 +3,36 @@
 *~
 
 # Exclude main configuration file
-nagvis/etc/nagvis.ini.php
+etc/nagvis.ini.php
 
 # Exclude all maps except the demo maps
-nagvis/etc/maps/*.cfg
-!nagvis/etc/maps/demo*.cfg
+etc/maps/*.cfg
+!etc/maps/demo*.cfg
 
 # Exclude all maps except the default automap
-nagvis/etc/automaps/*.cfg
-!nagvis/etc/automaps/__automap.cfg
+etc/automaps/*.cfg
+!etc/automaps/__automap.cfg
 
 # Exclude all background images except the default
-nagvis/nagvis/images/maps/*.png
-!nagvis/nagvis/images/maps/demo_background.png
-!nagvis/nagvis/images/maps/nagvis-demo.png
+share/nagvis/images/maps/*.png
+!share/nagvis/images/maps/demo_background.png
+!share/nagvis/images/maps/nagvis-demo.png
 
 # Exclude all shapes except the default
-nagvis/nagvis/images/shapes/*.png
-nagvis/nagvis/images/shapes/*.jpg
-nagvis/nagvis/images/shapes/*.gif
-!nagvis/nagvis/images/shapes/demo*.png
+share/nagvis/images/shapes/*.png
+share/nagvis/images/shapes/*.jpg
+share/nagvis/images/shapes/*.gif
+!share/nagvis/images/shapes/demo*.png
 
 # Exclude all header/hover/context templates except the default
-nagvis/nagvis/templates/*/*.html
-nagvis/nagvis/templates/*/*.css
-!nagvis/nagvis/templates/*/tmpl.default.html
-!nagvis/nagvis/templates/*/tmpl.default.css
+share/nagvis/templates/*/*.html
+share/nagvis/templates/*/*.css
+!share/nagvis/templates/*/tmpl.default.html
+!share/nagvis/templates/*/tmpl.default.css
 
 # Exclude all gadgets except the default
-nagvis/nagvis/gadgets/*.php
-nagvis/nagvis/gadgets/std_speedometer.php
+share/nagvis/gadgets/*.php
+share/nagvis/gadgets/std_speedometer.php
 
 # Exclude all var contents
-nagvis/var/*
+var/*
