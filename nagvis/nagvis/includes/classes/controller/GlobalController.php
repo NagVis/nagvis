@@ -45,6 +45,7 @@ class GlobalController implements GlobalControllerInterface {
 
 	// This array contains possible variables for the automap
 	private $automapEnv = array(
+									'automap' 		=> '',
 									'backend' 		=> '',
 									'root'			=> '',
 									'maxLayers'		=> '',

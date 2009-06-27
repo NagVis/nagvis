@@ -92,14 +92,15 @@ class GlobalValidator {
 				'type'         => 'string',
 				'mustSet'      => TRUE,
 				'notEmpty'		=> TRUE,
-				'allowedEntrys'=> NULL
+				'allowedEntrys' => NULL
 			),
 			// Define automap
 			'automap' => array(
 				'name'         => 'automap',
-				'type'         => 'boolean',
+				'type'         => 'string',
 				'mustSet'      => FALSE,
 				'notEmpty'		=> FALSE,
+				'allowedEntrys' => NULL
 			),
 			// Define backend
 			'backend' => array(

@@ -31,6 +31,7 @@ class NagVisAutoMap extends GlobalMap {
 	
 	private $preview;
 	
+	private $config;
 	private $backend_id;
 	private $root;
 	private $maxLayers;
@@ -69,8 +70,15 @@ class NagVisAutoMap extends GlobalMap {
 		
 		$this->noBinaryFound = FALSE;
 		
+		// Set the map configuration to use
+		if(isset($prop['automap']) && $prop['automap'] !== '' && $prop['automap'] !== '1') {
+			$this->config = $prop['automap'];
+		} else {
+			$this->config = '__automap';
+		}
+		
 		// Create map configuration
-		$MAPCFG = new NagVisMapCfg($CORE, '__automap');
+		$MAPCFG = new NagVisMapCfg($CORE, $this->config);
 		$MAPCFG->readMapConfig();
 		
 		parent::__construct($CORE, $MAPCFG);
@@ -504,7 +512,7 @@ class NagVisAutoMap extends GlobalMap {
 	private function &getObjectConfiguration() {
 		$objConf = Array();
 		
-		// Get object configuration from __automap configuration
+		// Get object configuration from configuration file
 		foreach($this->MAPCFG->getValidTypeKeys('host') AS $key) {
 			if($key != 'type' && $key != 'backend_id' && $key != 'host_name') {
 				$objConf[$key] = $this->MAPCFG->getValue('global', 0, $key);
