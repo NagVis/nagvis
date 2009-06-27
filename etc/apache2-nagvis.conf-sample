@@ -1,3 +1,7 @@
+# NagVis Apache2 sample configuration file
+#
+# #############################################################################
+
 Alias /nagvis "/usr/local/nagvis/share"
 
 <Directory "/usr/local/nagvis/share">

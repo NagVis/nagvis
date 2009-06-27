@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.1.10"
+INSTALLER_VERSION="0.2"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -45,15 +45,15 @@ NAGIOS_PATH="/usr/local/nagios"
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
 # Default Path to NagVis base
-NAGVIS_PATH=""
+NAGVIS_PATH="/usr/local/nagvis"
 # Version of NagVis to be installed
-NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+NAGVIS_VER=`cat share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 # Version of old NagVis (If update; Will be detected)
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
 NAGVIS_CONF="etc/nagvis.ini.php"
 # Default nagios share webserver path
-HTML_PATH="/nagios"
+HTML_PATH="/nagvis"
 # Saving current timestamp for backup when updating
 DATE=`date +%s`
 # Default webserver user
@@ -62,7 +62,7 @@ WEB_USER=""
 WEB_GROUP=""
 
 # Version prerequisites
-NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
+NEED_PHP_VERSION=`cat share/nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
 NEED_PHP_MODULES="gd mysql mbstring gettext session xml"
@@ -632,7 +632,7 @@ if [ ! -d $NAGVIS_PATH ]; then
 fi
 
 LINE="Copying files to $NAGVIS_PATH..."
-copy "install.sh" '*' "$NAGVIS_PATH"
+copy "install.sh:INSTALL" '*' "$NAGVIS_PATH"
 
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring main configuration file..."
@@ -686,13 +686,13 @@ fi
 line "Setting permissions..." "+"
 chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
 chmod 664 $NAGVIS_PATH/$NAGVIS_CONF-sample
-chmod 775 $NAGVIS_PATH/nagvis/images/maps
-chmod 664 $NAGVIS_PATH/nagvis/images/maps/*
+chmod 775 $NAGVIS_PATH/share/nagvis/images/maps
+chmod 664 $NAGVIS_PATH/share/nagvis/images/maps/*
 chmod 775 $NAGVIS_PATH/etc/maps
 chmod 664 $NAGVIS_PATH/etc/maps/*
-if [ -d $NAGVIS_PATH/nagvis/var ]; then
-	chmod 775 $NAGVIS_PATH/nagvis/var
-	chmod 664 $NAGVIS_PATH/nagvis/var/*
+if [ -d $NAGVIS_PATH/var ]; then
+	chmod 775 $NAGVIS_PATHi/var
+	chmod 664 $NAGVIS_PATH/var/*
 fi
 echo "| done"
 
