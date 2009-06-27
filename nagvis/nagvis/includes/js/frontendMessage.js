@@ -38,14 +38,15 @@ function frontendMessage(oMessage) {
 	var oRow;
 	var oCell;
 	var oImg;
+	var sBoxType = oMessage.type.toLowerCase();
 	
 	oContainerDiv = document.createElement('div');
 	oContainerDiv.setAttribute('id', 'messageBoxDiv');
 	
 	oTable = document.createElement('table');
 	oTable.setAttribute('id', 'messageBox');
-	oTable.setAttribute('class', oMessage.type);
-	oTable.setAttribute('className', oMessage.type);
+	oTable.setAttribute('class', sBoxType);
+	oTable.setAttribute('className', sBoxType);
 	oTable.style.height = '100%';
 	oTable.style.width = '100%';
 	oTable.cellPadding = '0';
@@ -56,8 +57,8 @@ function frontendMessage(oMessage) {
 	oRow = document.createElement('tr');
 	
 	oCell = document.createElement('td');
-	oCell.setAttribute('class', oMessage.type);
-	oCell.setAttribute('className', oMessage.type);
+	oCell.setAttribute('class', sBoxType);
+	oCell.setAttribute('className', sBoxType);
 	oCell.colSpan = '3';
 	oCell.style.height = '16px';
 	oCell.style.textAlign = 'right';
@@ -84,12 +85,12 @@ function frontendMessage(oMessage) {
 	oRow.style.height = '32px';
 	
 	oCell = document.createElement('th');
-	oCell.setAttribute('class', oMessage.type);
-	oCell.setAttribute('className', oMessage.type);
+	oCell.setAttribute('class', sBoxType);
+	oCell.setAttribute('className', sBoxType);
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
+	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+sBoxType+'.png';
 	
 	oCell.appendChild(oImg);
 	oImg = null;
@@ -98,20 +99,20 @@ function frontendMessage(oMessage) {
 	
 	oCell = document.createElement('th');
 	oCell.style.width = '474px';
-	oCell.setAttribute('class', oMessage.type);
-	oCell.setAttribute('className', oMessage.type);
+	oCell.setAttribute('class', sBoxType);
+	oCell.setAttribute('className', sBoxType);
 	oCell.appendChild(document.createTextNode(oMessage.title));
 	
 	oRow.appendChild(oCell);
 	oCell = null;
 	
 	oCell = document.createElement('th');
-	oCell.setAttribute('class', oMessage.type);
-	oCell.setAttribute('className', oMessage.type);
+	oCell.setAttribute('class', sBoxType);
+	oCell.setAttribute('className', sBoxType);
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+oMessage.type+'.png';
+	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+sBoxType+'.png';
 	
 	oCell.appendChild(oImg);
 	oImg = null;
@@ -124,8 +125,8 @@ function frontendMessage(oMessage) {
 	oRow = document.createElement('tr');
 	
 	oCell = document.createElement('td');
-	oCell.setAttribute('class', oMessage.type);
-	oCell.setAttribute('className', oMessage.type);
+	oCell.setAttribute('class', sBoxType);
+	oCell.setAttribute('className', sBoxType);
 	oCell.colSpan = '3';
 	oCell.style.paddingTop = '16px';
 	oCell.style.height = '202px';
