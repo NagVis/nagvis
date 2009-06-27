@@ -338,7 +338,7 @@ chk_rc() {
 }
 
 copy() {
-	GLOB_IGNORE="$1"
+	GLOBIGNORE="$1"
 	[ -n "$LINE" ] && line "$LINE"
 	if [ -f "$NAGVIS_PATH_OLD/$2" ]; then
 		cp -p $NAGVIS_PATH_OLD/$2 $NAGVIS_PATH/$2
@@ -355,7 +355,7 @@ copy() {
 		cp -pr $2 $3
 		chk_rc "|  Error copying $2 to $3" "| done"
 	fi
-	GLOB_IGNORE=""
+	GLOBIGNORE=""
 	LINE=""
 }
 
