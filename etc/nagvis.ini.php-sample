@@ -25,9 +25,9 @@
 ; Path definitions
 [paths]
 ; absolute physical NagVis path
-;base="/usr/local/nagios/share/nagvis/"
+;base="/usr/local/nagvis/"
 ; absolute html NagVis path
-;htmlbase="/nagios/nagvis"
+;htmlbase="/nagvis"
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
 

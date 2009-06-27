@@ -272,7 +272,7 @@ class GlobalMainCfg {
 					'match' => MATCH_STRING_PATH),
 				'htmlbase' => Array('must' => 1,
 					'editable' => 1,
-					'default' => '/nagios/nagvis',
+					'default' => '/nagvis',
 					'match' => MATCH_STRING_PATH),
 				'htmlcgi' => Array('must' => 1,
 					'editable' => 1,
@@ -496,19 +496,19 @@ class GlobalMainCfg {
 	 */
 	private function setPathsByBase($base,$htmlBase) {
 		$this->validConfig['paths']['cfg']['default'] = $base.'etc/';
-		$this->validConfig['paths']['icon']['default'] = $base.'nagvis/images/iconsets/';
-		$this->validConfig['paths']['images']['default'] = $base.'nagvis/images/';
-		$this->validConfig['paths']['shape']['default'] = $base.'nagvis/images/shapes/';
-		$this->validConfig['paths']['language']['default'] = $base.'nagvis/includes/locale';
-		$this->validConfig['paths']['class']['default'] = $base.'nagvis/includes/classes/';
-		$this->validConfig['paths']['map']['default'] = $base.'nagvis/images/maps/';
+		$this->validConfig['paths']['icon']['default'] = $base.'share/nagvis/images/iconsets/';
+		$this->validConfig['paths']['images']['default'] = $base.'share/nagvis/images/';
+		$this->validConfig['paths']['shape']['default'] = $base.'share/nagvis/images/shapes/';
+		$this->validConfig['paths']['language']['default'] = $base.'share/nagvis/includes/locale';
+		$this->validConfig['paths']['class']['default'] = $base.'share/nagvis/includes/classes/';
+		$this->validConfig['paths']['map']['default'] = $base.'share/nagvis/images/maps/';
 		$this->validConfig['paths']['var']['default'] = $base.'var/';
-		$this->validConfig['paths']['hovertemplate']['default'] = $base.'nagvis/templates/hover/';
-		$this->validConfig['paths']['headertemplate']['default'] = $base.'nagvis/templates/header/';
-		$this->validConfig['paths']['contexttemplate']['default'] = $base.'nagvis/templates/context/';
+		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/nagvis/templates/hover/';
+		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/nagvis/templates/header/';
+		$this->validConfig['paths']['contexttemplate']['default'] = $base.'share/nagvis/templates/context/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'etc/maps/';
 		$this->validConfig['paths']['automapcfg']['default'] = $base.'etc/automaps/';
-		$this->validConfig['paths']['gadget']['default'] = $base.'nagvis/gadgets/';
+		$this->validConfig['paths']['gadget']['default'] = $base.'share/nagvis/gadgets/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
 		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/nagvis/templates/header/';
