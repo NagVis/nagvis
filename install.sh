@@ -166,7 +166,7 @@ cat <<EOD
 | procedure for you. The installer has been tested on the following systems:   |
 | - Debian Etch (4.0)                                                          |
 | - Ubuntu Hardy (8.04)                                                        |
-| - Ubuntu Intrepid (8.10)                                                        |
+| - Ubuntu Intrepid (8.10)                                                     |
 | - SuSE Linux Enterprise Server 10                                            |
 |                                                                              |
 | Similar distributions to the ones mentioned above should work as well.       |
@@ -560,8 +560,8 @@ line "Checking for existing NagVis" "+"
 if [ -d $NAGVIS_PATH ]; then
 	INSTALLER_ACTION="update"
 	
-	if [ -e $NAGVIS_PATH/nagvis/includes/defines/global.php ]; then
-		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	if [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	else
 		NAGVIS_VER_OLD="UNKNOWN"
 	fi
