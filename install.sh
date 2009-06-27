@@ -206,8 +206,8 @@ check_apache_php() {
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
 	MODPHP=`find $DIR -type f -exec grep -ie "mod_php.*\.so" -e "libphp.*\.so" {} \; | tr -s " " | cut -d" " -f3 | uniq`
-	HTML_PATH=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | uniq` 
-	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagios[/]\?$"  | wc -l` 
+	HTML_PATH=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagvis[/]\?$"  | uniq` 
+	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagvis[/]\?$"  | wc -l` 
 	
 	# Only try to detect user when not set or empty
 	if [ -z "$WEB_USER" ]; then
