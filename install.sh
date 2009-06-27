@@ -638,11 +638,12 @@ if [ ! -d $NAGVIS_PATH/var ]; then
 	chk_rc "|  Error creating directory $NAGVIS_PATH/var" "| done"
 fi
 
-# Copy all files except some unwanted files
+# Copy all wanted files
 LINE="Copying files to $NAGVIS_PATH..."
 copy "" "share" "$NAGVIS_PATH"
-copy "" "LICENSE" "$NAGVIS_PATH"
-copy "" "README" "$NAGVIS_PATH"
+copy "" "etc" "$NAGVIS_PATH"
+copy "" "LICENCE README" "$NAGVIS_PATH"
+copy "" "docs" "$NAGVIS_PATH/share"
 
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring main configuration file..."
@@ -702,7 +703,11 @@ chmod 775 $NAGVIS_PATH/etc/maps
 chmod 664 $NAGVIS_PATH/etc/maps/*
 if [ -d $NAGVIS_PATH/var ]; then
 	chmod 775 $NAGVIS_PATH/var
-	chmod 664 $NAGVIS_PATH/var/*
+	
+	# Only set file permissions when there are some files
+	if [ `find $NAGVIS_PATH/var -type f | wc -l` -gt 0 ]; then
+		chmod 664 $NAGVIS_PATH/var/*
+	fi
 fi
 echo "| done"
 
