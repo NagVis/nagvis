@@ -246,6 +246,10 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
+				'sharedvar' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
 				'mapcfg' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
@@ -326,7 +330,7 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
-				'htmlvar' => Array('must' => 0,
+				'htmlsharedvar' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH)),
@@ -503,6 +507,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['class']['default'] = $base.'share/nagvis/includes/classes/';
 		$this->validConfig['paths']['map']['default'] = $base.'share/nagvis/images/maps/';
 		$this->validConfig['paths']['var']['default'] = $base.'var/';
+		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
 		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/nagvis/templates/hover/';
 		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/nagvis/templates/header/';
 		$this->validConfig['paths']['contexttemplate']['default'] = $base.'share/nagvis/templates/context/';
@@ -519,7 +524,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
 		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/nagvis/images/shapes/';
 		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/nagvis/images/maps/';
-		$this->validConfig['paths']['htmlvar']['default'] = $htmlBase.'/var/';
+		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
 		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/nagvis/sounds/';
 		$this->validConfig['paths']['htmlgadgets']['default'] = $htmlBase.'/nagvis/gadgets/';
 	}

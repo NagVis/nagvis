@@ -321,7 +321,7 @@ class NagVisAutoMap extends GlobalMap {
 			fclose($fh);
 			
 			// Parse map
-			exec($this->CORE->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->CORE->MAINCFG->getValue('paths', 'var').$this->name.'.png\' -Tcmapx '.$this->CORE->MAINCFG->getValue('paths', 'var').$this->name.'.dot', $arrMapCode);
+			exec($this->CORE->MAINCFG->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->CORE->MAINCFG->getValue('paths', 'sharedvar').$this->name.'.png\' -Tcmapx '.$this->CORE->MAINCFG->getValue('paths', 'var').$this->name.'.dot', $arrMapCode);
 			
 			$this->mapCode = implode("\n", $arrMapCode);
 		}
@@ -384,7 +384,7 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	private function getBackground() {
 		// Append random number to prevent caching
-		$src = $this->CORE->MAINCFG->getValue('paths', 'htmlvar').$this->name.'.png?'.mt_rand(0,10000);
+		$src = $this->CORE->MAINCFG->getValue('paths', 'htmlsharedvar').$this->name.'.png?'.mt_rand(0,10000);
 		
 		return $this->getBackgroundHtml($src,'','usemap="#automap"');
 	}

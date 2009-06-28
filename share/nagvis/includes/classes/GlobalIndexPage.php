@@ -151,8 +151,8 @@ class GlobalIndexPage {
 					}
 					
 					// If this is the automap display the last rendered image
-					$imgPath = $this->CORE->MAINCFG->getValue('paths','var').$mapName.'.png';
-					$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$mapName.'.png';
+					$imgPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$mapName.'.png';
+					$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$mapName.'.png';
 					
 					// If there is no automap image on first load of the index page,
 					// render the image
@@ -162,8 +162,8 @@ class GlobalIndexPage {
 					
 					if($this->CORE->checkGd(0)) {
 						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','var').$sThumbFile;
-						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$sThumbFile;
+						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$sThumbFile;
+						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$sThumbFile;
 						
 						// Only create a new thumb when there is no cached one
 						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
@@ -243,8 +243,8 @@ class GlobalIndexPage {
 					
 					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
 						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','var').$sThumbFile;
-						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$sThumbFile;
+						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$sThumbFile;
+						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$sThumbFile;
 						
 						// Only create a new thumb when there is no cached one
 						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);

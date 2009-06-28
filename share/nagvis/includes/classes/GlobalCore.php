@@ -440,7 +440,7 @@ class GlobalCore {
 	}
 	
 	/**
-	 * Checks for writeable VarFolder
+	 * Checks for existing var folder
 	 *
 	 * @param		Boolean 	$printErr
 	 * @return	Boolean		Is Successful?
@@ -470,6 +470,42 @@ class GlobalCore {
 		} else {
 			if($printErr == 1) {
 				new GlobalFrontendMessage('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for existing shared var folder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkSharedVarFolderExists($printErr) {
+		if(file_exists(substr($this->MAINCFG->getValue('paths', 'sharedvar'),0,-1))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				new GlobalFrontendMessage('ERROR', $this->LANG->getText('sharedVarFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable shared var folder
+	 *
+	 * @param		Boolean 	$printErr
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkSharedVarFolderWriteable($printErr) {
+		if($this->checkSharedVarFolderExists($printErr) && is_writable(substr($this->MAINCFG->getValue('paths', 'sharedvar'),0,-1)) && @file_exists($this->MAINCFG->getValue('paths', 'sharedvar').'.')) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				new GlobalFrontendMessage('ERROR', $this->LANG->getText('sharedVarFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
 			}
 			return FALSE;
 		}
