@@ -360,6 +360,14 @@ copy() {
 	LINE=""
 }
 
+makedir() {
+	if [ ! -d $1 ]; then
+		line "Creating directory $1..."
+		mkdir -p $1
+		chk_rc "|  Error creating directory $1" "| done"
+	fi
+}
+
 # Main program starting
 ###############################################################################
 
@@ -626,18 +634,11 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD" "| done"
 fi
 
-if [ ! -d $NAGVIS_PATH ]; then
-	line "Creating directory $NAGVIS_PATH..."
-	mkdir -p $NAGVIS_PATH
-	chk_rc "|  Error creating directory $NAGVIS_PATH" "| done"
-fi
+# Create base path
+makedir "$NAGVIS_PATH"
 
-# Create var directory when not exists
-if [ ! -d $NAGVIS_PATH/var ]; then
-	line "Creating directory $NAGVIS_PATH/var..."
-	mkdir -p $NAGVIS_PATH/var
-	chk_rc "|  Error creating directory $NAGVIS_PATH/var" "| done"
-fi
+# Create non shared var directory when not exists
+makedir "$NAGVIS_PATH/var"
 
 # Copy all wanted files
 LINE="Copying files to $NAGVIS_PATH..."
@@ -645,6 +646,9 @@ copy "" "share" "$NAGVIS_PATH"
 copy "" "etc" "$NAGVIS_PATH"
 copy "" "LICENCE README" "$NAGVIS_PATH"
 copy "" "docs" "$NAGVIS_PATH/share"
+
+# Create shared var directory when not exists
+makedir "$NAGVIS_PATH/share/var"
 
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring main configuration file..."
@@ -702,16 +706,19 @@ chmod 775 $NAGVIS_PATH/share/nagvis/images/maps
 chmod 664 $NAGVIS_PATH/share/nagvis/images/maps/*
 chmod 775 $NAGVIS_PATH/etc/maps
 chmod 664 $NAGVIS_PATH/etc/maps/*
-if [ -d $NAGVIS_PATH/var ]; then
-	chmod 775 $NAGVIS_PATH/var
-	
-	# Only set file permissions when there are some files
-	if [ `find $NAGVIS_PATH/var -type f | wc -l` -gt 0 ]; then
-		chmod 664 $NAGVIS_PATH/var/*
-	fi
+chmod 775 $NAGVIS_PATH/var
+
+# Only set file permissions when there are some files
+if [ `find $NAGVIS_PATH/var -type f | wc -l` -gt 0 ]; then
+	chmod 664 $NAGVIS_PATH/var/*
 fi
+if [ `find $NAGVIS_PATH/share/var -type f | wc -l` -gt 0 ]; then
+	chmod 664 $NAGVIS_PATH/share/var/*
+fi
+
 echo "| done"
 
+# Create main configuration file from sample when no file exists
 if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
 	line "Creating main configuration file..."
 	cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
