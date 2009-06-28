@@ -116,8 +116,13 @@ switch($_GET['action']) {
 						$OBJ = new NagVisServicegroup($CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
 					break;
 					case 'map':
-						// Initialize map configuration
-						$MAPCFG = new NagVisMapCfg($CORE, $arrName1[$i]);
+						// Initialize map configuration based on map type
+						if($CORE->checkMapIsAutomap($arrName1[$i])) {
+							$MAPCFG = new NagVisAutomapCfg($CORE, $arrName1[$i]);
+						} else {
+							$MAPCFG = new NagVisMapCfg($CORE, $arrName1[$i]);
+						}
+						
 						$MAPCFG->readMapConfig();
 						
 						$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
