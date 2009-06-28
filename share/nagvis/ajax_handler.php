@@ -183,6 +183,11 @@ switch($_GET['action']) {
 		
 		echo json_encode($aReturn);
 	break;
+	case 'getOverviewProperties':
+		// Initialize map configuration
+		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
+		echo $OVERVIEW->parseIndexPropertiesJson();
+	break;
 	case 'getMapProperties':
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');

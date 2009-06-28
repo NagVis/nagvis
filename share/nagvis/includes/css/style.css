@@ -238,6 +238,57 @@ table.infopage_hover_table label {
 
 /**
  *
+ *  Status message dialog
+ *
+ */
+
+#statusMessage {
+  position: absolute;
+  display: none;
+  top: -1px;
+  left: 200px;
+  right: 200px;
+  z-index: 5000;
+  opacity: 0.85;
+  /* IE */
+  filter: alpha(opacity=85);
+}
+
+#statusMessage div {
+  width: 400px;
+  margin: 0px auto;
+  height: 24px;
+  min-height: 24px;
+  padding: 8px 10px 8px 46px;
+}
+
+#statusMessage div.notice {
+  background: url(../../images/internal/info.png) 6px 3px no-repeat;
+  background-color: #F7FDCB;
+  border: 1px solid #C2D071;
+}
+
+#statusMessage div.error,
+#statusMessage div.warning {
+  background: url(../../images/internal/warning.png) 6px 3px no-repeat;
+  background-color: #EF9398;
+  border: 1px solid #DC5757;
+}
+
+#statusMessage div.confirmation {
+  background: url(../../images/internal/confirm.png) 6px 3px no-repeat;
+  background-color: #A6EF7B;
+  border: 1px solid #76C83F;
+}
+
+#statusMessage div.loading {
+  background: url(../../images/internal/loading.gif) 6px 3px no-repeat;
+  background-color: #EBEBEB;
+  border: 1px solid #CCCCCC;
+}
+
+/**
+ *
  *  Message box
  *
  */

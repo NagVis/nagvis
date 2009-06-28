@@ -56,8 +56,6 @@ class GlobalIndexPage {
 		$ret = '';
 		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
 		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-		$ret .= 'oFileAges='.$this->parseFileAges().';'."\n";
-		$ret .= 'oPageProperties='.$this->parseIndexPropertiesJson().';'."\n";
 		$ret .= 'aInitialMaps='.$this->parseMapsJson().';'."\n";
 		$ret .= 'aInitialAutomaps='.$this->parseAutomapsJson().';'."\n";
 		$ret .= 'aInitialRotations='.$this->parseRotationsJson().';'."\n";

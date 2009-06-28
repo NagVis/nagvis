@@ -64,13 +64,9 @@ class NagVisMap extends GlobalMap {
 		$ret = '';
 		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
 		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-		$ret .= 'oFileAges='.$this->parseFileAges().';'."\n";
-		$ret .= 'oPageProperties='.$this->parseMapPropertiesJson().';'."\n";
-		$ret .= 'aInitialMapObjects='.$this->parseObjectsJson().';'."\n";
-		$ret .= 'aMapObjects=Array();'."\n";
 		
 		// Kick of the worker
-		$ret .= 'addDOMLoadEvent(function(){runWorker(0, \'map\')});';
+		$ret .= 'addDOMLoadEvent(function(){runWorker(0, \'map\', \''.$this->MAPCFG->getName().'\')});';
 		
 		// This disables the context menu when someone clicked anywhere on the map
 		$ret .= 'document.body.onmousedown = contextMouseDown;';
@@ -102,21 +98,6 @@ class NagVisMap extends GlobalMap {
 		$arr['event_log_hidden'] = $this->MAPCFG->getValue('global', 0, 'event_log_hidden');
 		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
 		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');
-		
-		return json_encode($arr);
-	}
-	
-	/**
-	 * Parses the config file ages
-	 *
-	 * @return	String 	JSON Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function parseFileAges() {
-		$arr = Array();
-		
-		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
-		$arr['map_config'] = $this->MAPCFG->getFileModificationTime();
 		
 		return json_encode($arr);
 	}

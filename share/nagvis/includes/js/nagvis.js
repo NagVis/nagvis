@@ -36,6 +36,9 @@ var oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties;
 var oFileAges;
 var aInitialMapObjects, aInitialMaps, aInitialRotations, aMapObjects, aMaps;
 var aRotations;
+var oStatusMessageTimer;
+
+var aMapObjects = [];
 
 // Initialize and define some other basic vars
 var iNow = Date.parse(new Date());
@@ -756,3 +759,59 @@ function handleJSError(sMsg, sUrl, iLine) {
 try {
 	window.onerror = handleJSError;
 } catch(er) {}
+
+
+/**
+ * Displays a system status message
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function displayStatusMessage(msg, type, hold) {
+	var iMessageTime = 5000;
+	
+	var oMessage = document.getElementById('statusMessage');
+	
+	// Initialize when not yet done
+	if(!oMessage) {
+		oMessage = document.createElement('div');
+		oMessage.setAttribute('id', 'statusMessage');
+		
+		document.body.appendChild(oMessage);
+	}
+	
+	// When there is another timer clear it
+	if(oStatusMessageTimer) {
+		clearTimeout(oStatusMessageTimer);
+	}
+	
+	var cont = msg;
+	if (type) {
+		cont = '<div class="'+type+'">'+cont+'</div>';
+	}
+	
+	oMessage.innerHTML = cont;
+	oMessage.style.display = 'block';
+	
+	if (type != 'loading') {
+		oMessage.onmousedown = function() { hideStatusMessage(); return true; };
+	}
+	
+	if (!hold) {
+		oStatusMessageTimer = window.setTimeout(function() { hideStatusMessage(); }, iMessageTime);
+	}
+	
+	oMessage = null;
+}
+
+
+// make a message row disapear
+function hideStatusMessage() {
+	var oMessage = document.getElementById('statusMessage');
+	
+	// Only hide when initialized
+	if(oMessage) {
+		oMessage.style.display = 'none';
+		oMessage.onmousedown = null;
+	}
+}
+

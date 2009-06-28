@@ -82,12 +82,12 @@ function getObjectsToUpdate(aObjs) {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getCfgFileAges(bMap) {
-	if(typeof bMap === 'undefined') {
-		bMap = true;
+function getCfgFileAges(sMap) {
+	if(typeof(sMap) === 'undefined') {
+		sMap = '';
 	}
 	
-	if(bMap) {
+	if(sMap !== '') {
 		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oPageProperties.map_name, true);
 	} else {
 		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg', true);
@@ -103,9 +103,9 @@ function getCfgFileAges(bMap) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function checkMainCfgChanged(iCurrentAge) {
-	eventlog("worker", "debug", "MainCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" Cached: "+date(oGeneralProperties.date_format, oFileAges.main_config));
+	eventlog("worker", "debug", "MainCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" In Use: "+date(oGeneralProperties.date_format, oFileAges.mainCfg));
 	
-	if(oFileAges.main_config != iCurrentAge) {
+	if(oFileAges.mainCfg != iCurrentAge) {
 		return true;
 	} else {
 		return false;
@@ -120,10 +120,10 @@ function checkMainCfgChanged(iCurrentAge) {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function checkMapCfgChanged(iCurrentAge) {
-	eventlog("worker", "debug", "MapCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" Cached: "+date(oGeneralProperties.date_format, oFileAges.map_config));
+function checkMapCfgChanged(iCurrentAge, mapName) {
+	eventlog("worker", "debug", "MapCfg " + mapName + " Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" In Use: "+date(oGeneralProperties.date_format, oFileAges[mapName]));
 	
-	if(oFileAges.map_config != iCurrentAge) {
+	if(oFileAges[mapName] != iCurrentAge) {
 		return true;
 	} else {
 		return false;
@@ -1044,21 +1044,45 @@ function parseOverviewRotations(aRotationsConf) {
 }
 
 /**
- * reparseMap()
+ * getOverviewProperties()
  *
- * Reparses the map on e.g. changed map configuration
+ * Fetches the current map properties from the core
  *
  * @return  Boolean  Success?
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function reparseMap(iMapCfgAge) {
+function getOverviewProperties(mapName) {
+	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getOverviewProperties')
+}
+
+/**
+ * getMapProperties()
+ *
+ * Fetches the current map properties from the core
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getMapProperties(mapName) {
+	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+mapName)
+}
+
+/**
+ * parseMap()
+ *
+ * Parses the map on initial page load or changed map configuration
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseMap(iMapCfgAge, mapName) {
 	var bReturn = false;
 	
 	// Get new map/object information from ajax handler
-	var oMapBasics = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+oPageProperties.map_name);
-	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+oPageProperties.map_name);
+	var oMapBasics = getMapProperties(mapName);
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+mapName);
 	
-	// Only perform the reparsing actions when all information are there 
+	// Only perform the reparsing actions when all information are there
 	if(oMapBasics && oMapObjects) {
 		// Remove all old objects
 		var a = 0;
@@ -1079,26 +1103,30 @@ function reparseMap(iMapCfgAge) {
 		a = null;
 		
 		// Update timestamp for map configuration (No reparsing next time)
-		oFileAges.map_config = iMapCfgAge;
+		oFileAges[mapName] = iMapCfgAge;
 			
 		// Set map basics
 		setMapBasics(oMapBasics);
 		
 		// Set map objects
+		eventlog("worker", "info", "Parsing map objects");
 		setMapObjects(oMapObjects);
 		
 		// Bulk get all hover templates which are needed on the map
+		eventlog("worker", "info", "Fetching hover templates and hover urls");
 		getHoverTemplates(aMapObjects);
 		setMapHoverUrls();
 		
 		// Assign the hover templates to the objects and parse them
+		eventlog("worker", "info", "Parse hover menus");
 		parseHoverMenus(aMapObjects);
 		
-		
 		// Bulk get all context templates which are needed on the map
+		eventlog("worker", "info", "Fetching context templates");
 		getContextTemplates(aMapObjects);
 		
 		// Assign the context templates to the objects and parse them
+		eventlog("worker", "info", "Parse context menus");
 		parseContextMenus(aMapObjects);
 		
 		bReturn = true;
@@ -1132,66 +1160,78 @@ function reparseMap(iMapCfgAge) {
  *
  * @param   Integer  The iterator for the run id
  * @param   String   The type of the page which is currently displayed
+ * @param   String   Optional: Identifier of the page to be displayed
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function runWorker(iCount, sType) {
+function runWorker(iCount, sType, sIdentifier) {
+	// The identifier is only used on first load when page properties is not
+	// present
+	if(typeof(sIdentifier) === 'undefined') {
+		sIdentifier = '';
+	}
+	
 	// If the iterator is 0 it is the first run of the worker. Its only task is
 	// to render the page
 	if(iCount === 0) {
+		// Show status message
+		displayStatusMessage('Loading...', 'loading', true);
+		
 		// Initialize everything
 		eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
 		
-		// Handle the map rendering
+		// Handle the page rendering
 		if(sType == 'map') {
-			setMapBasics(oPageProperties);
+			// Loading a simple map
+			eventlog("worker", "debug", "Parsing map: " + sIdentifier);
 			
-			// Create map objects from initialObjects and add them to aMapObjects
-			eventlog("worker", "info", "Parsing map objects");
-			setMapObjects(aInitialMapObjects);
+			// Load the map properties
+			eventlog("worker", "debug", "Loading the map properties");
+			oPageProperties = getMapProperties(sIdentifier);
 			
-			// Bulk get all hover templates which are needed on the map
-			eventlog("worker", "info", "Fetching hover templates and hover urls");
-			getHoverTemplates(aMapObjects);
-			setMapHoverUrls();
+			// Load the file ages of the important configuration files
+			eventlog("worker", "debug", "Loading the file ages");
+			oFileAges = getCfgFileAges(sIdentifier);
 			
-			// Assign the hover templates to the objects and parse them
-			eventlog("worker", "info", "Parse hover menus");
-			parseHoverMenus(aMapObjects);
-			
-			// Bulk get all context templates which are needed on the map
-			eventlog("worker", "info", "Fetching context templates");
-			getContextTemplates(aMapObjects);
-			
-			// Assign the context templates to the objects and parse them
-			eventlog("worker", "info", "Parse context menus");
-			parseContextMenus(aMapObjects);
+			if(parseMap(oFileAges[sIdentifier], sIdentifier) === false) {
+				eventlog("worker", "error", "Problem while parsing the map on page load");
+			}
 			
 			eventlog("worker", "info", "Finished parsing map");
 		} else if(sType === 'overview') {
+			// Load the overview properties
+			eventlog("worker", "debug", "Loading the overview properties");
+			oPageProperties = getOverviewProperties();
+			
+			// Loading the overview page
+			eventlog("worker", "debug", "Setting page basiscs like title and favicon");
 			setPageBasics(oPageProperties);
 			
-			eventlog("worker", "info", "Parsing overview page");
+			eventlog("worker", "debug", "Parsing overview page");
 			parseOverviewPage();
 			
-			eventlog("worker", "info", "Parsing maps");
+			// Load the file ages of the important configuration files
+			eventlog("worker", "debug", "Loading the file ages");
+			oFileAges = getCfgFileAges();
+			
+			eventlog("worker", "debug", "Parsing maps");
 			parseOverviewMaps(aInitialMaps);
 			
-			eventlog("worker", "info", "Parsing automaps");
+			eventlog("worker", "debug", "Parsing automaps");
 			parseOverviewAutomaps(aInitialAutomaps);
 			
-			eventlog("worker", "info", "Parsing rotations");
+			eventlog("worker", "debug", "Parsing rotations");
 			parseOverviewRotations(aInitialRotations);
 			
-			// Bulk get all hover templates which are needed on the map
-			eventlog("worker", "info", "Fetching hover templates");
+			// Bulk get all hover templates which are needed on the overview page
+			eventlog("worker", "debug", "Fetching hover templates");
 			getHoverTemplates(aMaps);
 			
 			// Assign the hover templates to the objects and parse them
-			eventlog("worker", "info", "Parse hover menus");
+			eventlog("worker", "debug", "Parse hover menus");
 			parseHoverMenus(aMaps);
 			
-			// Bulk get all context templates which are needed on the map
-			eventlog("worker", "info", "Fetching context templates");
+			// Bulk get all context templates which are needed on the overview page
+			eventlog("worker", "debug", "Fetching context templates");
 			getContextTemplates(aMaps);
 			
 			// Assign the context templates to the objects and parse them
@@ -1201,6 +1241,9 @@ function runWorker(iCount, sType) {
 			
 			eventlog("worker", "info", "Finished parsing overview");
 		}
+		
+		// Close the status message window
+		hideStatusMessage();
 	} else {
 		/**
 		 * Do these actions every run (every second) excepting the first run 
@@ -1227,20 +1270,25 @@ function runWorker(iCount, sType) {
 				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 				
 				// Get the file ages of important files
-				var oCurrentFileAges = getCfgFileAges();
+				eventlog("worker", "debug", "Loading the file ages");
+				var oCurrentFileAges = getCfgFileAges(oPageProperties.map_name);
 				
 				// Check for changed main configuration
 				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
 					// FIXME: Not handled by ajax frontend, reload the page
+					eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
 					window.location.reload(true);
 				}
 				
 				// Check for changed map configuration
-				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name])) {
-					if(reparseMap(oCurrentFileAges[oPageProperties.map_name]) === false) {
+				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
+					eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
+					if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
 						eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
 					}
 				}
+				
+				oCurrentFileAges = null;
 				
 				/*
 				 * Now proceed with real actions when everything is OK
@@ -1315,7 +1363,7 @@ function runWorker(iCount, sType) {
 				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 				
 				// Get the file ages of important files
-				var oCurrentFileAges = getCfgFileAges(false);
+				var oCurrentFileAges = getCfgFileAges();
 				
 				// Check for changed main configuration
 				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
