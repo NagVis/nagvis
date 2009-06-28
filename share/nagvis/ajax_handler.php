@@ -56,11 +56,14 @@ switch($_GET['action']) {
 	case 'getMapState':
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} elseif($_GET['map'] == '__automap') {
-			echo 'Error: '.$CORE->LANG->getText('automapNotSupportedHere');
 		} else {
 			// Initialize map configuration
-			$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
+			if($CORE->checkMapIsAutomap($_GET['map'])) {
+				$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['map']);
+			} else {
+				$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
+			}
+			
 			$MAPCFG->readMapConfig();
 			
 			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
@@ -181,7 +184,12 @@ switch($_GET['action']) {
 			$aMaps = $_GET['m'];
 			
 			foreach($aMaps AS $sMap) {
-				$MAPCFG = new NagVisMapCfg($CORE, $sMap);
+				if($CORE->checkMapIsAutomap($sMap)) {
+					$MAPCFG = new NagVisAutomapCfg($CORE, $sMap);
+				} else {
+					$MAPCFG = new NagVisMapCfg($CORE, $sMap);
+				}
+				
 				$aReturn[$sMap] = $MAPCFG->getFileModificationTime();
 			}
 		}
@@ -197,8 +205,13 @@ switch($_GET['action']) {
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} else {
-			// Initialize map configuration
-			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
+			// Initialize map configuration based on map type
+			if($CORE->checkMapIsAutomap($_GET['objName1'])) {
+				$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
+			} else {
+				$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
+			}
+			
 			$MAPCFG->readMapConfig();
 			
 			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
@@ -209,8 +222,13 @@ switch($_GET['action']) {
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} else {
-			// Initialize map configuration
-			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
+			// Initialize map configuration based on map type
+			if($CORE->checkMapIsAutomap($_GET['objName1'])) {
+				$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
+			} else {
+				$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
+			}
+			
 			$MAPCFG->readMapConfig();
 			
 			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
@@ -280,12 +298,13 @@ function getObjConf($objType, $objName1, $objName2, $map = null) {
 	 * configuration file is used.
 	 */
 	
-	if(isset($map) && $map != '' && $map != '__automap') {
+	if(isset($map) && $map !== '' && !$CORE->checkMapIsAutomap($map)) {
 		// Get the object configuration from map configuration (object and
 		// defaults)
 		
 		// Initialize map configuration
 		$MAPCFG = new NagVisMapCfg($CORE, $map);
+		
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
 		
@@ -331,8 +350,8 @@ function getObjConf($objType, $objName1, $objName2, $map = null) {
 		
 		// Get settings from main configuration file by generating a temporary 
 		// map or from the automap configuration
-		if($map == '__automap') {
-			$TMPMAPCFG = new NagVisMapCfg($CORE, $map);
+		if($CORE->checkMapIsAutomap($map)) {
+			$TMPMAPCFG = new NagVisAutomapCfg($CORE, $map);
 			
 			// Read the map configuration file
 			$TMPMAPCFG->readMapConfig();

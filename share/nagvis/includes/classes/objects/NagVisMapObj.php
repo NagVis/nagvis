@@ -291,7 +291,13 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = new NagVisServicegroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['servicegroup_name']);
 						break;
 						case 'map':
-							$SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
+							// Initialize map configuration based on map type
+							if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
+								$SUBMAPCFG = new NagVisAutomapCfg($this->CORE, $objConf['map_name']);
+							} else {
+								$SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
+							}
+							
 							if($SUBMAPCFG->checkMapConfigExists(0)) {
 								$SUBMAPCFG->readMapConfig();
 							}
