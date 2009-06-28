@@ -440,6 +440,24 @@ class GlobalCore {
 	}
 	
 	/**
+	 * This method checks if the given map is a automap
+	 * This is quite hackish but have no better option at the moment
+	 *
+	 * @param   String      Name of the map
+	 * @return	Boolean		Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkMapIsAutomap($sMap) {
+		$aAutomaps = $this->getAvailableAutomaps();
+		
+		if(in_array($sMap, $aAutomaps)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Checks for existing var folder
 	 *
 	 * @param		Boolean 	$printErr
