@@ -30,13 +30,17 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2"
+INSTALLER_VERSION="0.2  "
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
 INSTALLER_QUIET=0
 # Should the installer change config options when possible?
 INSTALLER_CONFIG_MOD="n"
+# files to ignore/delete
+IGNORE_DEMO=""
+# backends to use
+NAGVIS_BACKEND="ndo2db,ndo2fs,merlin"
 # Return Code
 RC=0
 
@@ -44,25 +48,41 @@ RC=0
 NAGIOS_PATH="/usr/local/nagios"
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
+# Version of NagVis to be installed
+
+NAGVIS_VER=""
+[ -f share/nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+[ -f nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+NAGVIS_TAG=`perl -e '$ARGV[0] =~ /(\d+)\.(\d+)/; printf "%02d%02d",$1,$2' $NAGVIS_VER` 
+
 # Default Path to NagVis base
 NAGVIS_PATH="/usr/local/nagvis"
-# Version of NagVis to be installed
-NAGVIS_VER=`cat share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
-# Version of old NagVis (If update; Will be detected)
+[ $NAGVIS_TAG -lt 0105 ]&&NAGVIS_PATH="/usr/local/nagios/share/nagvis"
+
+# Version of old NagVis (will be detected if update)
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
 NAGVIS_CONF="etc/nagvis.ini.php"
+# Default nagios web conf
+HTML_SAMPLE="apache2-nagvis.conf-sample"
+# Default nagios web conf
+HTML_CONF="nagvis.conf"
 # Default nagios share webserver path
 HTML_PATH="/nagvis"
+[ $NAGVIS_TAG -lt 0105 ]&&HTML_PATH="/nagios"
+HTML_BASE=$HTML_PATH
 # Saving current timestamp for backup when updating
 DATE=`date +%s`
+# Path to webserver conf
+WEB_PATH=""
 # Default webserver user
 WEB_USER=""
 # Default webserver group
 WEB_GROUP=""
 
 # Version prerequisites
-NEED_PHP_VERSION=`cat share/nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
+[ -f share/nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat share/nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
+[ -f nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
 NEED_PHP_MODULES="gd mysql mbstring gettext session xml"
@@ -78,23 +98,27 @@ GREP_INCOMPLETE=0
 # Print usage
 usage() {
 cat <<EOD
-Usage: $0 [OPTIONS]
+NagVis Installer $INSTALLER_VERSION
 Installs or updates NagVis on your system.
 
+Usage: $0 [OPTIONS]
+
 Parameters:
-  -n <PATH>   Path to Nagios directory. The default value is $NAGIOS_PATH
-  -B <BINARY> Full path to the Nagios binary. The default value is $NAGIOS_PATH/bin/nagios
-  -m <BINARY> Full path to the NDO module. The default value is $NAGIOS_PATH/bin/ndo2db
-  -b <PATH>   Path to graphviz binaries. The default value is $GRAPHVIZ_PATH
-  -p <PATH>   Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
-  -u <USER>   User who runs the webserver
-  -g <GROUP>  Group who runs the webserver
-  -c [y|n]    Update configuration files when possible?
-  -q          Quiet mode. The installer won't ask for confirmation of what to do.
-              This can be useful for automatic or scripted deployment.
-              WARNING: Only use this if you know what you are doing
-  -v          Version information
-  -h          This message
+  -n <PATH>     Path to Nagios directory. The default value is $NAGIOS_PATH
+  -B <BINARY>   Full path to the Nagios binary. The default value is $NAGIOS_PATH/bin/nagios
+  -m <BINARY>   Full path to the NDO module. The default value is $NAGIOS_PATH/bin/ndo2db
+  -b <PATH>     Path to graphviz binaries. The default value is $GRAPHVIZ_PATH
+  -p <PATH>     Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
+  -u <USER>     User who runs the webserver
+  -g <GROUP>    Group who runs the webserver
+  -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ndo2fs, merlin
+  -c [y|n]      Update configuration files when possible?
+  -o            omit demo files
+  -q            Quiet mode. The installer won't ask for confirmation of what to do.
+                This can be useful for automatic or scripted deployment.
+                WARNING: Only use this if you know what you are doing
+  -v            Version information
+  -h            This message
 
 EOD
 }
@@ -192,22 +216,66 @@ log() {
 		RC=1
 	elif [ "$2" = "warning" ]; then
 		printf "%-${LINE_SIZE}s |\n" "| $1"
+	elif [ "$2" = "done" ]; then
+		printf "%-${SIZE}s %s\n" "| $1" "  done  |"
 	else	
 		printf "%-${SIZE}s %s\n" "| $1" "  found |"
 	fi
 }
  
+# Check Backend module prequisites
+check_backend() {
+	BACKENDS=""
+	text "| Checking Backends" "|"
+	# Check NDO module if necessary
+	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
+	if [ $? -eq 0 ]; then
+		# Check NDO
+		[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-${NAGVER}x"
+		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
+
+		# maybe somebody removed version information
+		if [ -z "$NDO" ]; then
+			NDO_MOD="$NAGIOS_PATH/bin/ndo2db"
+			NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
+		fi
+		[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
+		log "  $NDO_MOD (ndo2db)" $NDO
+		BACKENDS="ndo2db"
+	fi
+
+	# Check NDO2FS prerequisites if necessary
+	echo $NAGVIS_BACKEND | grep -i "NDO2FS" >/dev/null
+	if [ $? -eq 0 ]; then
+		JSON=`perl -e '$erg=eval "use JSON::XS;1"; print "found" if ($erg==1)'`
+		log "  Checking perl module JSON::XS (ndo2fs)" $JSON
+		BACKENDS=$BACKENDS",ndo2fs"
+	fi
+
+	# Check merlin prerequisites if necessary
+	echo $NAGVIS_BACKEND | grep -i "merlin" >/dev/null
+	if [ $? -eq 0 ]; then
+		text "|   *** Sorry, no checks yet for merlin" "|"
+		BACKENDS=$BACKENDS",merlin"
+	fi
+	if [ -z "$BACKENDS" ]; then
+		log "NO (valid) backend(s) specified"
+	fi
+}
+
 # Check Apache PHP module
 check_apache_php() {
 	DIR=$1
 	[ ! -d $DIR ] && return
+	WEB_PATH=${DIR%%/}
+	[ -d $DIR/conf.d ]&&WEB_PATH=$WEB_PATH/conf.d
 	
 	# The apache user/group are defined by env vars in Ubuntu, set them here
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
 	MODPHP=`find $DIR -type f -exec grep -ie "mod_php.*\.so" -e "libphp.*\.so" {} \; | tr -s " " | cut -d" " -f3 | uniq`
-	HTML_PATH=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagvis[/]\?$"  | uniq` 
-	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "/nagvis[/]\?$"  | wc -l` 
+	HTML_PATH=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "$HTML_BASE[/]\?$"  | uniq` 
+	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "$HTML_BASE[/]\?$"  | wc -l` 
 	
 	# Only try to detect user when not set or empty
 	if [ -z "$WEB_USER" ]; then
@@ -340,31 +408,42 @@ chk_rc() {
 
 copy() {
 	GLOBIGNORE="$1"
-	[ -n "$LINE" ] && line "$LINE"
+	DONE=""
+#	[ -n "$LINE" ] && line "$LINE"
+	[ -n "$LINE" ] && DONE=`log "$LINE" done` 
 	if [ -f "$NAGVIS_PATH_OLD/$2" ]; then
 		cp -p $NAGVIS_PATH_OLD/$2 $NAGVIS_PATH/$2
-		chk_rc "|  Error copying file $3" "| done"
+		chk_rc "|  Error copying file $3" "$DONE"
 	fi
 	if [ -d "$NAGVIS_PATH_OLD/$2" -a ! -d "$3" ]; then
 		ANZ=`find $NAGVIS_PATH_OLD/$2 -type f | wc -l`
 		if [ $ANZ -gt 0 ]; then
 			cp -pr $NAGVIS_PATH_OLD/$2/* $NAGVIS_PATH/$2
-			chk_rc "|  Error copying $3" "| done"
+			chk_rc "|  Error copying $3" "$DONE"
 		fi
 	fi
 	if [ -d "$3" ]; then
 		cp -pr $2 $3
-		chk_rc "|  Error copying $2 to $3" "| done"
+		chk_rc "|  Error copying $2 to $3" "$DONE"
 	fi
 	GLOBIGNORE=""
 	LINE=""
+	DONE=""
+}
+
+set_perm() {
+	if [ -d "$2" -o -f "$2" ]; then
+		DONE=`log "$2" done` 
+		chmod $1 $2
+		chk_rc "| Error setting permissions for $2" "$DONE"
+	fi
 }
 
 makedir() {
 	if [ ! -d $1 ]; then
-		line "Creating directory $1..."
+		DONE=`log "Creating directory $1..." done` 
 		mkdir -p $1
-		chk_rc "|  Error creating directory $1" "| done"
+		chk_rc "|  Error creating directory $1" "$DONE"
 	fi
 }
 
@@ -373,7 +452,7 @@ makedir() {
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:u:b:g:c:hqv" options; do
+	while getopts "n:B:m:p:u:b:g:c:i:ohqv" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -395,6 +474,12 @@ if [ $# -gt 0 ]; then
 			;;
 			g)
 				WEB_GROUP=$OPTARG
+			;;
+			i)
+				NAGVIS_BACKEND=$OPTARG
+			;;
+			o)
+				IGNORE_DEMO="demo*cfg demo*png"
 			;;
 			q)
 				INSTALLER_QUIET=1
@@ -426,6 +511,10 @@ welcome
 line ""
 text "| Starting installation of NagVis $NAGVIS_VER" "|"
 line ""
+[ -f /etc/issue ]&&OS=`grep -v "^\s*$" /etc/issue | sed 's/\\.*//' | head -1` 
+[ -n "$OS" ]&&text "| OS  : $OS" "|"
+PERL=`perl -e 'print $];'` 
+[ -n "$PERL" ]&&text "| Perl: $PERL" "|"
 text 
 line "Checking for packet manager" "+"
 PKG=`which rpm 2>/dev/null`
@@ -435,6 +524,7 @@ if [ -u $PKG ]; then
 	exit 1
 fi
 log "Using packet manager $PKG" $PKG
+SED=`which sed` 
 
 # checking grep option as non-Linux might not support "-r"
 grep -r INSTALLER_VERSION install.sh >/dev/null 2>&1
@@ -489,17 +579,8 @@ else
 fi
 NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
 
-# Check NDO
-[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-${NAGVER}x"
-NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
-
-# maybe somebody removed version information
-if [ -z "$NDO" ]; then
-	NDO_MOD="$NAGIOS_PATH/bin/ndo2db"
-	NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
-fi
-[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
-log "$NDO_MOD" $NDO
+# Check Backend prerequisites
+check_backend
 
 # Check PHP Version
 check_php_version $NEED_PHP_VERSION
@@ -561,6 +642,7 @@ if [ ! `getent group | cut -d':' -f1 | grep "^$WEB_GROUP"` = "$WEB_GROUP" ]; the
 	echo "|  Error: Group $WEB_GROUP not found."
 	exit 1
 fi
+text "| HTML base directory $HTML_PATH" "|"
 
 text
 line "Checking for existing NagVis" "+"
@@ -569,6 +651,8 @@ if [ -d $NAGVIS_PATH ]; then
 	INSTALLER_ACTION="update"
 	
 	if [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	elif [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
 		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	else
 		NAGVIS_VER_OLD="UNKNOWN"
@@ -596,7 +680,12 @@ line ""
 text "| NagVis home will be:           $NAGVIS_PATH" "|"
 text "| Owner of NagVis files will be: $WEB_USER" "|"
 text "| Group of NagVis files will be: $WEB_GROUP" "|"
+text "| Path to Apache config dir is:  $WEB_PATH" "|"
 text
+if [ "$IGNORE_DEMO" != "" ]; then
+	text "| demo files will NOT be copied" "|"
+	text
+fi
 text "| Installation mode:             $INSTALLER_ACTION" "|"
 if [ "$INSTALLER_ACTION" = "update" ]; then
 	text "| Old version:                   $NAGVIS_VER_OLD" "|"
@@ -629,26 +718,39 @@ text "| Starting installation" "|"
 line ""
 
 if [ "$INSTALLER_ACTION" = "update" ]; then
-	line "Moving old NagVis to $NAGVIS_PATH_OLD..."
+	DONE=`log "Moving old NagVis to $NAGVIS_PATH_OLD..." done` 
 	mv $NAGVIS_PATH $NAGVIS_PATH_OLD
-	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD" "| done"
+	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD" "$DONE"
 fi
 
 # Create base path
 makedir "$NAGVIS_PATH"
 
-# Create non shared var directory when not exists
-makedir "$NAGVIS_PATH/var"
+if [ $NAGVIS_TAG -ge 105 ]; then
+	# Create non shared var directory when not exists
+	makedir "$NAGVIS_PATH/var"
+	# Create shared var directory when not exists
+	makedir "$NAGVIS_PATH/share/var"
+	# Copy all desired files
+	LINE="Copying files to $NAGVIS_PATH..."
+	copy "" "share" "$NAGVIS_PATH"
+	copy "" "etc" "$NAGVIS_PATH"
+	copy "" "LICENCE README" "$NAGVIS_PATH"
+	copy "" "docs" "$NAGVIS_PATH/share"
+else
+	LINE="Copying files to $NAGVIS_PATH..."
+	copy "install.sh" '*' "$NAGVIS_PATH"
+fi
 
-# Copy all wanted files
-LINE="Copying files to $NAGVIS_PATH..."
-copy "" "share" "$NAGVIS_PATH"
-copy "" "etc" "$NAGVIS_PATH"
-copy "" "LICENCE README" "$NAGVIS_PATH"
-copy "" "docs" "$NAGVIS_PATH/share"
-
-# Create shared var directory when not exists
-makedir "$NAGVIS_PATH/share/var"
+# Remove demo maps if desired
+if [ "$IGNORE_DEMO" != "" ]; then
+	for i in $IGNORE_DEMO;
+	do
+		DONE=`log "Removing file(s) $i" done` 
+		find $NAGVIS_PATH -name "$i" -exec rm {} \;
+		chk_rc "|  Error removing $i" "$DONE"
+	done	
+fi
 
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring main configuration file..."
@@ -677,11 +779,15 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 
 	LINE="Restoring custom hover template images..."
 	copy "tmpl.default*" "nagvis/images/templates/hover" "hover template images"
+
+	LINE="Restoring custom gadgets..."
+	copy "" "nagvis/gadgets" "gadgets"
 fi
+text
 
 # Do some update tasks (Changing options, notify about deprecated options)
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
-	line "Handling changed/removed options..."
+	line "Handling changed/removed options..." "+"
 	if [ "x`echo $NAGVIS_VER_OLD | grep '1.3'`" != "x" ]; then
 		text "| Update from 1.3.x" "|"
 		text
@@ -698,44 +804,64 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 		text "|       affect your configuration files" "|"
 	fi
 fi
+text
 
 line "Setting permissions..." "+"
 chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
-chmod 664 $NAGVIS_PATH/$NAGVIS_CONF-sample
-chmod 775 $NAGVIS_PATH/share/nagvis/images/maps
-chmod 664 $NAGVIS_PATH/share/nagvis/images/maps/*
-chmod 775 $NAGVIS_PATH/etc/maps
-chmod 664 $NAGVIS_PATH/etc/maps/*
-chmod 775 $NAGVIS_PATH/var
-
-# Only set file permissions when there are some files
-if [ `find $NAGVIS_PATH/var -type f | wc -l` -gt 0 ]; then
-	chmod 664 $NAGVIS_PATH/var/*
-fi
-if [ `find $NAGVIS_PATH/share/var -type f | wc -l` -gt 0 ]; then
-	chmod 664 $NAGVIS_PATH/share/var/*
-fi
-
-echo "| done"
+set_perm 664 "$NAGVIS_PATH/$NAGVIS_CONF-sample"
+set_perm 775 "$NAGVIS_PATH/etc/maps"
+set_perm 664 "$NAGVIS_PATH/etc/maps/*"
+if [ $NAGVIS_TAG -lt 0105 ]; then
+	set_perm 775 "$NAGVIS_PATH/nagvis/images/maps"
+	set_perm 664 "$NAGVIS_PATH/nagvis/images/maps/*"
+	set_perm 775 "$NAGVIS_PATH/nagvis/var"
+	set_perm 664 "$NAGVIS_PATH/nagvis/var/*"
+else
+	set_perm 775 "$NAGVIS_PATH/share/nagvis/images/maps"
+	set_perm 664 "$NAGVIS_PATH/share/nagvis/images/maps/*"
+	set_perm 775 "$NAGVIS_PATH/var"
+	set_perm 664 "$NAGVIS_PATH/var/*"
+	set_perm 775 "$NAGVIS_PATH/share/var"
+	set_perm 664 "$NAGVIS_PATH/share/var/*"
+fi	
+text
 
 # Create main configuration file from sample when no file exists
-if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
-	line "Creating main configuration file..."
-	cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
-	chk_rc "|  Error copying sample configuration" "| done"
+if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
+	if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
+		DONE=`log "Creating main configuration file..." done` 
+		cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
+		chk_rc "|  Error copying sample configuration" "$DONE"
+	fi
+fi
+
+# Create apache configuration file from sample when no file exists
+if [ -f etc/HTML_SAMPLE ]; then
+	if [ ! -s $WEB_PATH/$HTML_CONF ]; then
+		DONE=`log "Creating web configuration file..." done`
+		cat etc/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g" > $WEB_PATH/$HTML_CONF
+		chk_rc "|  Error creating web configuration" "$DONE"
+		DONE=`log "Setting permissions for web configuration file..." done`
+		chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
+		chk_rc "|  Error setting web conf permissions" "$DONE"
+	fi
 fi
 
 text
 line
 text "| Installation complete" "|"
 text
-text "| You can savely remove this source directory." "|"
+text "| You can safely remove this source directory." "|"
 text
 text "| What to do next?" "|"
 text "| - Read the documentation" "|"
 text "| - Maybe you want to edit the main configuration file?" "|"
 text "|   Its location is: $NAGVIS_PATH/$NAGVIS_CONF" "|"
 text "| - Configure NagVis via browser" "|"
-text "|   <http://localhost${HTML_PATH}/config.php>" "|"
+if [ $NAGVIS_TAG -lt 0105 ]; then
+	text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
+else
+	text "|   <http://localhost${HTML_PATH}/config.php>" "|"
+fi
 line
 exit 0
