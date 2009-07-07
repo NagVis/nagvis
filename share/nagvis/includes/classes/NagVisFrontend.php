@@ -141,7 +141,7 @@ class NagVisFrontend extends GlobalPage {
 	public function getAutoMap($arrOptions) {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="map" class="map">');
-		$this->MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $arrOptions);
+		$this->MAP = new NagVisAutoMap($this->CORE, $this->MAPCFG, $this->BACKEND, $arrOptions);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
 		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));

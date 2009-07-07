@@ -60,7 +60,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $BACKEND, $prop) {
+	public function __construct($CORE, $MAPCFG, $BACKEND, $prop) {
 		$this->BACKEND = $BACKEND;
 		
 		$this->arrHostnames = Array();
@@ -69,17 +69,6 @@ class NagVisAutoMap extends GlobalMap {
 		$this->mapCode = '';
 		
 		$this->noBinaryFound = FALSE;
-		
-		// Set the map configuration to use
-		if(isset($prop['automap']) && $prop['automap'] !== '' && $prop['automap'] !== '1') {
-			$this->name = $prop['automap'];
-		} else {
-			$this->name = '__automap';
-		}
-		
-		// Create map configuration
-		$MAPCFG = new NagVisAutomapCfg($CORE, $this->name);
-		$MAPCFG->readMapConfig();
 		
 		parent::__construct($CORE, $MAPCFG);
 

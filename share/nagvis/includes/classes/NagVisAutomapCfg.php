@@ -35,6 +35,11 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct($CORE, $name) {
+		// Fix the automap name (backward compatible to old automap=1)
+		if(isset($name) && $name === '1') {
+			$name = '__automap';
+		}
+		
 		// Start of the parent constructor
 		parent::__construct($CORE, $name);
 		

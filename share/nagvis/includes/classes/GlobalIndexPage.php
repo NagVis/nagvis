@@ -117,7 +117,7 @@ class GlobalIndexPage {
 				// Save the preview mode
 				$opts['preview'] = 1;
 				
-				$MAP = new NagVisAutoMap($this->CORE, $this->BACKEND, $opts);
+				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, $opts);
 				
 				// Apply default configuration to object
 				$objConf = Array();
