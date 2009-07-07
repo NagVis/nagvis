@@ -43,21 +43,20 @@ IGNORE_DEMO=""
 NAGVIS_BACKEND="ndo2db,ndo2fs,merlin"
 # Return Code
 RC=0
+# data source
+SOURCE=nagios
 
 # Default Nagios path
-NAGIOS_PATH="/usr/local/nagios"
+NAGIOS_PATH="/usr/local/$SOURCE"
+# Default Path to NagVis base
+NAGVIS_PATH="/usr/local/nagvis"
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
 # Version of NagVis to be installed
-
 NAGVIS_VER=""
 [ -f share/nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 [ -f nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 NAGVIS_TAG=`perl -e '$ARGV[0] =~ /(\d+)\.(\d+)/; printf "%02d%02d",$1,$2' $NAGVIS_VER` 
-
-# Default Path to NagVis base
-NAGVIS_PATH="/usr/local/nagvis"
-[ $NAGVIS_TAG -lt 0105 ]&&NAGVIS_PATH="/usr/local/nagios/share/nagvis"
 
 # Version of old NagVis (will be detected if update)
 NAGVIS_VER_OLD=""
@@ -67,10 +66,6 @@ NAGVIS_CONF="etc/nagvis.ini.php"
 HTML_SAMPLE="apache2-nagvis.conf-sample"
 # Default nagios web conf
 HTML_CONF="nagvis.conf"
-# Default nagios share webserver path
-HTML_PATH="/nagvis"
-[ $NAGVIS_TAG -lt 0105 ]&&HTML_PATH="/nagios"
-HTML_BASE=$HTML_PATH
 # Saving current timestamp for backup when updating
 DATE=`date +%s`
 # Path to webserver conf
@@ -104,14 +99,15 @@ Installs or updates NagVis on your system.
 Usage: $0 [OPTIONS]
 
 Parameters:
-  -n <PATH>     Path to Nagios directory. The default value is $NAGIOS_PATH
-  -B <BINARY>   Full path to the Nagios binary. The default value is $NAGIOS_PATH/bin/nagios
-  -m <BINARY>   Full path to the NDO module. The default value is $NAGIOS_PATH/bin/ndo2db
+  -n <PATH>     Path to Nagios/Icinga directory. The default value is $NAGIOS_PATH
+  -B <BINARY>   Full path to the Nagios/Icinga binary. The default value is $NAGIOS_PATH/bin/nagios
+  -m <BINARY>   Full path to the NDO/IDO module. The default value is $NAGIOS_PATH/bin/ndo2db
   -b <PATH>     Path to graphviz binaries. The default value is $GRAPHVIZ_PATH
   -p <PATH>     Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
   -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ndo2fs, merlin
+  -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -c [y|n]      Update configuration files when possible?
   -o            omit demo files
   -q            Quiet mode. The installer won't ask for confirmation of what to do.
@@ -452,7 +448,7 @@ makedir() {
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:u:b:g:c:i:ohqv" options; do
+	while getopts "n:B:m:p:u:b:g:c:i:s:ohqv" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -487,6 +483,9 @@ if [ $# -gt 0 ]; then
 			c)
 				INSTALLER_CONFIG_MOD=$OPTARG
 			;;
+			s)
+				SOURCE=`echo $OPTARG | tr [A-Z] [a-z]` 
+			;;
 			h)
 				usage
 				exit 0
@@ -503,6 +502,17 @@ if [ $# -gt 0 ]; then
 		esac
 	done
 fi
+
+# more re/initialization
+# Default Nagios path
+NAGIOS_PATH="/usr/local/$SOURCE"
+# Default Path to NagVis base
+NAGVIS_PATH="/usr/local/nagvis"
+[ $NAGVIS_TAG -lt 0105 ]&&NAGVIS_PATH="/usr/local/$SOURCE/share/nagvis"
+# Default nagios share webserver path
+HTML_PATH="/nagvis"
+[ $NAGVIS_TAG -lt 0105 ]&&HTML_PATH="/$SOURCE"
+HTML_BASE=$HTML_PATH
 
 # Print welcome message
 welcome
@@ -538,7 +548,7 @@ line "Checking paths" "+"
 
 # Get Nagios path
 if [ $INSTALLER_QUIET -ne 1 ]; then
-  echo -n "| Please enter the path to Nagios base directory [$NAGIOS_PATH]: "
+  echo -n "| Please enter the path to the $SOURCE base directory [$NAGIOS_PATH]: "
   read APATH
   if [ ! -z $APATH ]; then
     NAGIOS_PATH=$APATH
@@ -547,9 +557,9 @@ fi
 
 # Check Nagios path
 if [ -d $NAGIOS_PATH ]; then
-	log "Nagios path $NAGIOS_PATH" "found"
+	log "$SOURCE path $NAGIOS_PATH" "found"
 else
-	echo "| Nagios home $NAGIOS_PATH is missing. Aborting..."
+	echo "| $SOURCE home $NAGIOS_PATH is missing. Aborting..."
 	exit 1
 fi
 
@@ -569,15 +579,16 @@ text
 line "Checking prerequisites" "+"
 
 # Check Nagios version
-[ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/nagios"
+[ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
 
 if [ -f $NAGIOS_BIN ]; then
-	NAGIOS=`$NAGIOS_BIN --version | grep Nagios 2>&1`
+	NAGIOS=`$NAGIOS_BIN --version | grep -i "$SOURCE" 2>&1`
 	log "$NAGIOS" $NAGIOS
 else
-	log "Nagios binary $NAGIOS_BIN"
+	log "$SOURCE binary $NAGIOS_BIN"
 fi
 NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
+[ "$SOURCE" = "icinga" ]&&NAGVER=3
 
 # Check Backend prerequisites
 check_backend
@@ -718,7 +729,7 @@ text "| Starting installation" "|"
 line ""
 
 if [ "$INSTALLER_ACTION" = "update" ]; then
-	DONE=`log "Moving old NagVis to $NAGVIS_PATH_OLD..." done` 
+	DONE=`log "Moving old NagVis to $NAGVIS_PATH_OLD.." done` 
 	mv $NAGVIS_PATH $NAGVIS_PATH_OLD
 	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD" "$DONE"
 fi
@@ -752,6 +763,31 @@ if [ "$IGNORE_DEMO" != "" ]; then
 	done	
 fi
 
+# Create main configuration file from sample when no file exists
+if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
+	if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
+		DONE=`log "Creating main configuration file..." done` 
+		cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
+		chk_rc "|  Error copying sample configuration" "$DONE"
+	fi
+fi
+
+# Create apache configuration file from sample when no file exists
+if [ -f etc/$HTML_SAMPLE ]; then
+	if [ -s $WEB_PATH/$HTML_CONF ]; then
+		text "| *** $WEB_PATH/$HTML_CONF will NOT be overwritten !" "|"
+		HTML_CONF="$HTML_CONF.$DATE"
+		text "| *** creating $WEB_PATH/$HTML_CONF instead" "|"
+	fi
+	DONE=`log "Creating web configuration file..." done`
+	cat etc/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g" > $WEB_PATH/$HTML_CONF
+	chk_rc "|  Error creating web configuration" "$DONE"
+	DONE=`log "Setting permissions for web configuration file..." done`
+	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
+	chk_rc "|  Error setting web conf permissions" "$DONE"
+fi
+
+text
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring main configuration file..."
 	copy "" "$NAGVIS_CONF" "main configuration file"
@@ -826,28 +862,6 @@ else
 fi	
 text
 
-# Create main configuration file from sample when no file exists
-if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
-	if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
-		DONE=`log "Creating main configuration file..." done` 
-		cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
-		chk_rc "|  Error copying sample configuration" "$DONE"
-	fi
-fi
-
-# Create apache configuration file from sample when no file exists
-if [ -f etc/HTML_SAMPLE ]; then
-	if [ ! -s $WEB_PATH/$HTML_CONF ]; then
-		DONE=`log "Creating web configuration file..." done`
-		cat etc/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g" > $WEB_PATH/$HTML_CONF
-		chk_rc "|  Error creating web configuration" "$DONE"
-		DONE=`log "Setting permissions for web configuration file..." done`
-		chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
-		chk_rc "|  Error setting web conf permissions" "$DONE"
-	fi
-fi
-
-text
 line
 text "| Installation complete" "|"
 text
