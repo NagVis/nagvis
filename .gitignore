@@ -1,6 +1,12 @@
 # Exclude backup files
 *.bak
 *~
+.metadata
+uifx/.settings
+uifx/.actionScriptProperties
+uifx/.flexProperties
+uifx/.project
+uifx/bin
 
 # Exclude main configuration file
 etc/nagvis.ini.php
