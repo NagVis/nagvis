@@ -130,7 +130,7 @@ private function getLocations_handler(event : ResultEvent) : void
 
 	linksBox.point1.dataProvider = locations;
 	linksBox.point2.dataProvider = locations;
-	linksBox.services.dataProvider = services;
+	//linksBox.services.dataProvider = services;
 
 	locationsView.showLocations();
 
@@ -216,7 +216,7 @@ private function getHosts_handler(event : ResultEvent) : void
 	for each (var host : Host in result)
 		hosts.addItem(host);
 
-	locationBox.locHosts.dataProvider = hosts;
+	//locationBox.locHosts.dataProvider = hosts;
 }
 
 private function getServices_handler(event : ResultEvent) : void
@@ -227,7 +227,7 @@ private function getServices_handler(event : ResultEvent) : void
 	for each (var service : Service in result)
 		services.addItem(service);
 
-	linksBox.services.dataProvider = services;
+	//linksBox.services.dataProvider = services;
 }
 
 /*********************************************/

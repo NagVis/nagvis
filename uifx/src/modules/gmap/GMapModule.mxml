@@ -24,6 +24,15 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	creationComplete="init()"
 >
+	<mx:Style>
+		@font-face
+		{
+			fontFamily: embededArial;
+    		src: local("Arial");
+    		font-weight: bold;
+    		advancedAntiAliasing: true;
+		}
+	</mx:Style>
 	<mx:Style source="GMapModule.css" />
 	<mx:Script>
 		<![CDATA[
@@ -54,16 +63,23 @@
 		currentState="right-contracted"
 	/>
 	<ui:EdgeBoxGroup id="ebg"/>
-	<gmap:DialogLinks id="linksBox" group="{ebg}"
+	<gmap:DialogRelation id="relationBox" group="{ebg}"
+		logo="{settingsImage}"
+		y="{linksBox.y + linksBox.height + 5}" right="-10" width="610"
+		expandedWidth="600" expandedHeight="300"
+		contractedWidth="40" contractedHeight="40"
+		currentState="right-contracted"
+	/>	
+	<gmap:DialogLink id="linksBox" group="{ebg}"
 		logo="{viewpointImage}"
 		y="{locationBox.y + locationBox.height + 5}" right="-10" width="310"
-		expandedWidth="300" expandedHeight="300"
+		expandedWidth="300" expandedHeight="150"
 		contractedWidth="40" contractedHeight="40"
 		currentState="right-contracted"
 		link="onLink()"
 		expanded="onShowLinkBox()"
 	/>
-	<gmap:DialogEdit id="locationBox" group="{ebg}"
+	<gmap:DialogLocation id="locationBox" group="{ebg}"
 		logo="{editImage}"
 		y="{searchBox.y + searchBox.height + 5}" right="-10" width="310"
 		expandedWidth="300" expandedHeight="220"

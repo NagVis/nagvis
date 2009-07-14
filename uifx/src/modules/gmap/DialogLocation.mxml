@@ -56,28 +56,6 @@
 			}
 		]]>
 	</mx:Script>
-	<mx:Style>
-		@font-face
-		{
-			fontFamily: embededArial;
-    		src: local("Arial");
-    		font-weight: bold;
-    		advancedAntiAliasing: true;
-		}
-		.accordion
-        {
-            borderStyle: none;
-            headerStyleName: accordionHeader;
-            headerWidth: 16;
-        }
-		.accordionHeader
-		{
-			fontFamily: embededArial;
-			fontWeight: bold;
-			fontSize: 10;
-		}
-	</mx:Style>
-
 	<flexlib:HAccordion left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
 		<mx:Canvas label="General" width="100%" height="100%">
 			<flexlib:PromptingTextInput id="locName" prompt="Name"
@@ -97,15 +75,6 @@
 			<flexlib:PromptingTextArea  id="locDescription" prompt="Description"
 				right="10" left="10" top="0" bottom="0"
 			/>
-		</mx:Canvas>
-		<mx:Canvas label="Hosts" width="100%" height="100%">
-			<mx:DataGrid id="locHosts" height="100%" right="10" left="10" top="0" bottom="0">
-				<mx:columns>
-					<mx:DataGridColumn width="15" dataField="selected" itemRenderer="mx.controls.CheckBox"/>
-					<mx:DataGridColumn dataField="name"/>
-					<mx:DataGridColumn dataField="address"/>
-				</mx:columns>
-			</mx:DataGrid>
 		</mx:Canvas>
 		<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
 			<mx:RadioButtonGroup id="clickGroup"/>

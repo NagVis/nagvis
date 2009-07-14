@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2009 NagVis Project
+ 
+ License:
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 2 as
+ published by the Free Software Foundation.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+-->
+<Dialog xmlns="modules.gmap.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+ xmlns:ns1="flexlib.controls.*">
+	<flexlib:HAccordion left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all" selectedIndex="1">
+		<mx:Canvas label="Hosts" width="100%" height="100%">
+		</mx:Canvas>
+		<mx:Canvas label="Services" width="100%" height="100%">
+			<mx:DataGrid right="0" left="0" bottom="0" top="30" showHeaders="false" paddingLeft="2" paddingRight="2" paddingBottom="0" paddingTop="0">
+				<mx:columns>
+					<mx:DataGridColumn dataField="col1"/>
+					<mx:DataGridColumn dataField="col2"/>
+					<mx:DataGridColumn dataField="col3"/>
+					<mx:DataGridColumn dataField="col4"/>
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:HBox y="0" width="100%" horizontalGap="1">
+				<ns1:PromptingTextInput width="100%" prompt="Name"/>
+				<ns1:PromptingTextInput width="100%" prompt="Host"/>
+				<ns1:PromptingTextInput width="100%" prompt="Location"/>
+				<ns1:PromptingTextInput width="100%" prompt="Service"/>
+			</mx:HBox>		
+		</mx:Canvas>
+		<mx:Canvas label="HostGroups" width="100%" height="100%">
+		</mx:Canvas>
+		<mx:Canvas label="ServiceGroups" width="100%" height="100%">
+		</mx:Canvas>
+	</flexlib:HAccordion>	
+	<mx:Button label="Relate with" right="340" bottom="10"/>
+	<mx:ComboBox width="150" right="180" bottom="10"></mx:ComboBox>
+	<mx:ComboBox width="150" right="20" bottom="10"></mx:ComboBox>
+</Dialog>

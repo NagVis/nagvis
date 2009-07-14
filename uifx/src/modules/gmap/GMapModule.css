@@ -41,3 +41,16 @@ PromptingTextArea
 	borderColor : #000000;
 	cornerRadius : 4;
 }
+
+.accordion
+{
+    borderStyle: none;
+    headerStyleName: accordionHeader;
+    headerWidth: 16;
+}
+.accordionHeader
+{
+	fontFamily: embededArial;
+	fontWeight: bold;
+	fontSize: 10;
+}
