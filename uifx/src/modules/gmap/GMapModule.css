@@ -28,14 +28,7 @@ Dialog
 	backgroundColor : #ffffff;
 }
 
-PromptingTextInput
-{
-	borderStyle : solid;
-	borderColor : #000000;
-	cornerRadius : 4;
-}
-
-PromptingTextArea
+PromptingTextInput, PromptingTextArea
 {
 	borderStyle : solid;
 	borderColor : #000000;
@@ -53,4 +46,5 @@ PromptingTextArea
 	fontFamily: embededArial;
 	fontWeight: bold;
 	fontSize: 10;
+	border-style : none;
 }

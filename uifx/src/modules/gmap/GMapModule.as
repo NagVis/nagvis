@@ -321,10 +321,11 @@ next_host:
 					break next_host;
 				}
 
-	if (locationsView.selectedLocation)
+	if (locationsView && locationsView.selectedLocation)
 		locationBox.update(locationsView.selectedLocation);
 	else
-		locationBox.update(foundLocationsView.selectedLocation);
+		if(foundLocationsView && foundLocationsView.selectedLocation)
+			locationBox.update(foundLocationsView.selectedLocation);
 }
 
 private function onHideLocationBox() : void

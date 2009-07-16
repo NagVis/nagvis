@@ -20,6 +20,9 @@
 <Dialog xmlns="modules.gmap.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	creationComplete="init()"
 >
     <mx:Metadata>
         [Event(name="save", type="flash.events.Event")]
@@ -27,11 +30,27 @@
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import mx.events.MenuEvent;
+			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import com.google.maps.LatLng;
 
 			[Bindable]
 			public var locID : String;
+
+			[Bindable]
+			public var objects : ArrayCollection = new ArrayCollection([
+				{name : "Goteburg Location", notes : "Goteburg Office"}, 
+				{name : "Stockholm Location", notes : "Head Office"},
+				{name : "Lviv Location", notes : "N-iX"}
+			]);
+
+			private function init():void
+			{
+				locNObject.flowBox.setStyle("borderStyle", "solid");
+				locNObject.flowBox.setStyle("borderColor", "#000000");
+				locNObject.flowBox.setStyle("cornerRadius", "3");
+			}
 
 			public function update(location : Location) : void
 			{
@@ -54,9 +73,24 @@
 					locDescription.text = "";
 				}
 			}
+			
+			private function objectItemClick( event:MenuEvent ):void
+			{
+				switch (String(event.item.@data))
+				{
+					case "browse":
+						locNObject.showBrowser();
+						break;
+				}
+			}
 		]]>
 	</mx:Script>
-	<flexlib:HAccordion left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
+	    <mx:XML format="e4x" id="autoCompleteMenu">
+		<root>
+			<menuitem data="browse" label="Browse..."/>
+		</root>
+	</mx:XML>
+	<flexlib:HAccordion selectedIndex="2" left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
 		<mx:Canvas label="General" width="100%" height="100%">
 			<flexlib:PromptingTextInput id="locName" prompt="Name"
 				left="10" right="10" top="0"
@@ -75,6 +109,44 @@
 			<flexlib:PromptingTextArea  id="locDescription" prompt="Description"
 				right="10" left="10" top="0" bottom="0"
 			/>
+		</mx:Canvas>
+		<mx:Canvas label="Nagios" width="100%" height="100%">
+			<mx:VBox left="5" right="5" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
+				<mx:Spacer/>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:Label text="Type:" left="10" top="10" height="18"/>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:ComboBox selectedIndex="2" width="100%">
+						<mx:ArrayCollection>
+							<mx:String>Host</mx:String>
+							<mx:String>Service</mx:String>
+							<mx:String>Host Group</mx:String>
+							<mx:String>Service Group</mx:String>
+						</mx:ArrayCollection>
+					</mx:ComboBox>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:Label text="Object:" top="70" left="10"/>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<hc:AdvancedAutoComplete id="locNObject" width="100%"
+						dataProvider="{objects}" labelField="name" selectedItemStyleName="underline"
+						matchType="anyPart" allowMultipleSelection="false"
+						actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
+						browserFields="{['name', 'notes']}"
+					/>
+					<mx:Spacer/>
+				</mx:HBox>
+			</mx:VBox>
+			<mx:TextInput cornerRadius="10" text=" Associate with" top="0" left="15" width="90" borderStyle="solid" editable="false"/>
 		</mx:Canvas>
 		<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
 			<mx:RadioButtonGroup id="clickGroup"/>
@@ -102,7 +174,7 @@
 					<mx:Spacer/>
 				</mx:HBox>
 			</mx:VBox>
-			<mx:TextInput cornerRadius="10" text="On Click" top="0" left="5" width="55" borderStyle="solid" editable="false"/>
+			<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
 		</mx:Canvas>
 	</flexlib:HAccordion>
 	<mx:Button label="Save" right="95" bottom="10" click="dispatchEvent(new Event('save'))"/>
