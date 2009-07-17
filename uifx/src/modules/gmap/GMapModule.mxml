@@ -118,6 +118,8 @@
 	</mx:RemoteObject>
 	<mx:RemoteObject id="rDatabase" destination="zend" source="Database" fault="fault(event)">
 		<mx:method name="getHosts" result="getHosts_handler(event)"/>
+		<mx:method name="getHostGroups" result="getHostGroups_handler(event)"/>
 		<mx:method name="getServices" result="getServices_handler(event)"/>
+		<mx:method name="getServiceGroups" result="getServiceGroups_handler(event)"/>
 	</mx:RemoteObject>
 </mx:Module>

@@ -31,7 +31,8 @@ package modules.gmap
 		private var _label : String;
 		private var _address : String;
 		private var _description : String;
-		private var _hosts : Array;
+		private var _object : Object;
+		private var _objectType : String;
 
 		public function get id() : String
 		{
@@ -103,16 +104,30 @@ package modules.gmap
 			}
 		}
 
-		public function get hosts() : Array
+		public function get object() : Object
 		{
-			return this._hosts;
+			return this._object;
 		}
 
-		public function set hosts(value : Array) : void
+		public function set object(value : Object) : void
 		{
-			if ( _hosts != value)
+			if (_object != value)
 			{
-				this._hosts = value;
+				this._object = value;
+				dispatchEvent(new LocationEvent('change', this));
+			}
+		}
+
+		public function get objectType() : String
+		{
+			return this._objectType;
+		}
+
+		public function set objectType(value : String) : void
+		{
+			if (_objectType != value)
+			{
+				this._objectType = value;
 				dispatchEvent(new LocationEvent('change', this));
 			}
 		}
@@ -123,7 +138,9 @@ package modules.gmap
 			this.point = value.point;
 			this.label = value.label;
 			this.address = value.address;
-			this.description = value.description;			
+			this.description = value.description;
+			this.object = value.object;
+			this.objectType = value.objectType;
 		}
 	}
 }

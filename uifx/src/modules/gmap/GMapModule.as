@@ -48,7 +48,9 @@ private var locations      : LocationsCollection = new LocationsCollection;
 private var foundLocations : LocationsCollection = new LocationsCollection;
 private var links          : ArrayCollection;
 private var hosts          : ArrayCollection;
+private var hostgroups     : ArrayCollection;
 private var services       : ArrayCollection = new ArrayCollection();
+private var servicegroups  : ArrayCollection = new ArrayCollection();
 
 private var locationsView      : LocationsView;
 private var foundLocationsView : FoundLocationsView;
@@ -230,6 +232,28 @@ private function getServices_handler(event : ResultEvent) : void
 	//linksBox.services.dataProvider = services;
 }
 
+private function getHostGroups_handler(event : ResultEvent) : void
+{
+	var result : ArrayCollection = new ArrayCollection(event.result as Array);
+
+	hostgroups = new ArrayCollection();
+	for each (var hostgroup : HostGroup in result)
+		hostgroups.addItem(hostgroup);
+
+	//locationBox.locHosts.dataProvider = hosts;
+}
+
+private function getServiceGroups_handler(event : ResultEvent) : void
+{
+	var result : ArrayCollection = new ArrayCollection(event.result as Array);
+
+	servicegroups = new ArrayCollection();
+	for each (var servicegroup : ServiceGroup in result)
+		servicegroups.addItem(servicegroup);
+
+	//linksBox.services.dataProvider = services;
+}
+
 /*********************************************/
 /* Location markers
 /*********************************************/
@@ -311,6 +335,7 @@ private function onShowLocationBox() : void
 	if (searchBox.status == "expanded")
 		searchBox.setCurrentState("right-contracted");
 
+	/*
 	for each (var host : Host in hosts)
 next_host:
 		for each (var location : Location in locations)
@@ -320,6 +345,7 @@ next_host:
 					host.selected = true;
 					break next_host;
 				}
+	*/
 
 	if (locationsView && locationsView.selectedLocation)
 		locationBox.update(locationsView.selectedLocation);
@@ -366,6 +392,7 @@ private function onDeleteLocation() : void
 
 private function onShowLinkBox() : void
 {
+	/*
 	for each (var service : Service in services)
 next_service:
 		for each (var link : Link in links)
@@ -375,6 +402,7 @@ next_service:
 					service.selected = true;
 					break next_service;
 				}
+	*/
 }
 
 private function onLink() : void

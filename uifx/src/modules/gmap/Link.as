@@ -27,6 +27,5 @@ package modules.gmap
 	{
 		public var id1 : String;
 		public var id2 : String;
-		public var services : Array;
 	}
 }

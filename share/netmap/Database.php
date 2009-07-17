@@ -59,6 +59,33 @@ class Database
 
 		return $services;
 	}
+
+	/**
+	 * @return array of HostGroup
+	 */
+	public function getHostGroups()
+	{
+		$hostgroups = array();
+
+		$hostgroups[] = new HostGroup('1', 'Gothenburg');
+		$hostgroups[] = new HostGroup('2', 'Stockholm');
+		$hostgroups[] = new HostGroup('3', 'Lviv');
+
+		return $hostgroups;
+	}
+
+	/**
+	 * @return array of ServiceGroup
+	 */
+	public function getServiceGroups()
+	{
+		$servicegroups = array();
+
+		$servicegroups[] = new ServiceGroup('1', 'Gothenburg-Stockholm VPN link');
+		$servicegroups[] = new ServiceGroup('2', 'Stockholm-Lviv VPN link');
+
+		return $servicegroups;
+	}
 }
 
 ?>
