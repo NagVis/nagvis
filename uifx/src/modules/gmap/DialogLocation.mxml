@@ -38,12 +38,36 @@
 			[Bindable]
 			public var locID : String;
 
-			[Bindable]
-			public var objects : ArrayCollection = new ArrayCollection([
+			public var host : Array =
+			[
+				{name : "devel", ip: "172.27.76.33", notes: "Devel server"},
+				{name : "beta", ip: "192.168.1.4", notes: "Beta system with automated rollout"},
+				{name : "beta64", ip: "192.168.1.113", notes: "Beta 64 bit system  with automated rollaout"}
+			];
+			
+			public var service : Array =
+			[
+				{name: "ping", host: "devel"},
+				{name: "ping", host: "beta"},
+				{name: "ping", host: "beta64"},
+			];
+
+			public var hostGroup : Array =
+			[
 				{name : "Goteburg Location", notes : "Goteburg Office"}, 
 				{name : "Stockholm Location", notes : "Head Office"},
-				{name : "Lviv Location", notes : "N-iX"}
-			]);
+				{name : "Lviv Location", notes : "N-iX"}			
+			];
+
+			public var serviceGroup : Array =
+			[
+				{name: "service group 1", notes: "lalala"},
+				{name: "service group 2", notes: "tramtamtam"},
+				{name: "service group 3", notes: "cool"},
+			];
+
+			[Bindable]
+			public var objects : ArrayCollection = new ArrayCollection(hostGroup);
 
 			private function init():void
 			{
@@ -80,6 +104,50 @@
 				{
 					case "browse":
 						locNObject.showBrowser();
+						break;
+				}
+			}
+			
+			public function hostLabelFunction( item:Object ):String
+			{
+				return item.name + ' ' + item.ip;
+			}
+
+			public function serviceLabelFunction( item:Object ):String
+			{
+				return item.name + ' ' + item.host;
+			}
+
+			public function groupLabelFunction( item:Object ):String
+			{
+				return item.name;
+			}
+			
+			private function onObjectTypeChange():void
+			{
+				locNObject.removeAll();
+				
+				switch(locNObjectType.selectedIndex)
+				{
+					case 0:
+						objects.source = host;
+						locNObject.browserFields = ["name", "ip", "notes"];
+						locNObject.labelFunction = hostLabelFunction;
+						break;
+					case 1:
+						objects.source = service;
+						locNObject.browserFields = ["name", "host"];
+						locNObject.labelFunction = serviceLabelFunction;
+						break;
+					case 2:
+						objects.source = hostGroup;
+						locNObject.browserFields = ["name", "notes"];
+						locNObject.labelFunction = groupLabelFunction;
+						break;
+					case 3:
+						objects.source = serviceGroup;
+						locNObject.browserFields = ["name", "notes"];
+						locNObject.labelFunction = groupLabelFunction;
 						break;
 				}
 			}
@@ -120,7 +188,7 @@
 				</mx:HBox>
 				<mx:HBox width="100%">
 					<mx:Spacer/>
-					<mx:ComboBox selectedIndex="2" width="100%">
+					<mx:ComboBox id="locNObjectType" selectedIndex="2" width="100%" change="onObjectTypeChange()">
 						<mx:ArrayCollection>
 							<mx:String>Host</mx:String>
 							<mx:String>Service</mx:String>
@@ -138,7 +206,7 @@
 				<mx:HBox width="100%">
 					<mx:Spacer/>
 					<hc:AdvancedAutoComplete id="locNObject" width="100%"
-						dataProvider="{objects}" labelField="name" selectedItemStyleName="underline"
+						dataProvider="{objects}" selectedItemStyleName="underline" labelFunction="groupLabelFunction"
 						matchType="anyPart" allowMultipleSelection="false"
 						actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
 						browserFields="{['name', 'notes']}"
