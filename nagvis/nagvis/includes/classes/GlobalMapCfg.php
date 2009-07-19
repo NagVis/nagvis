@@ -54,6 +54,9 @@ class GlobalMapCfg {
 			'global' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
 					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'hidden'),
 				'allowed_for_config' => Array('must' => 1,
 					'match' => MATCH_STRING),
 				'allowed_user' => Array('must' => 1,
@@ -257,6 +260,9 @@ class GlobalMapCfg {
 			'host' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
 					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'hidden'),
 				'host_name' => Array('must' => 1,
 					'match' => MATCH_STRING,
 					'field_type' => 'dropdown'),
@@ -405,6 +411,9 @@ class GlobalMapCfg {
 			
 			'hostgroup' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
+					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
 					'field_type' => 'hidden'),
 				'hostgroup_name' => Array('must' => 1,
 					'match' => MATCH_STRING,
@@ -555,6 +564,9 @@ class GlobalMapCfg {
 			
 			'service' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
+					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
 					'field_type' => 'hidden'),
 				'host_name' => Array('must' => 1,
 					'match' => MATCH_STRING,
@@ -709,6 +721,9 @@ class GlobalMapCfg {
 			'servicegroup' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
 					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'hidden'),
 				'servicegroup_name' => Array('must' => 1,
 					'match' => MATCH_STRING,
 					'field_type' => 'dropdown'),
@@ -854,6 +869,9 @@ class GlobalMapCfg {
 			'map' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
 					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'hidden'),
 				'map_name' => Array('must' => 1,
 					'match' => MATCH_STRING_NO_SPACE,
 					'field_type' => 'dropdown'),
@@ -993,6 +1011,9 @@ class GlobalMapCfg {
 			'textbox' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
 					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'hidden'),
 				'text' => Array('must' => 1,
 					'match' => MATCH_ALL),
 				'x' => Array('must' => 1,
@@ -1015,6 +1036,9 @@ class GlobalMapCfg {
 			
 			'shape' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
+					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
 					'field_type' => 'hidden'),
 				'icon' => Array('must' => 1,
 					'match' => MATCH_PNG_GIF_JPG_FILE_OR_URL,
@@ -1211,7 +1235,8 @@ class GlobalMapCfg {
 					
 					// These variables set which object is currently being filled
 					$sObjType = '';
-					$iObjTypeId = '';
+					$iObjTypeId = 0;
+					$iObjId = 0;
 					
 					// Loop each line
 					$iNumLines = count($file);
@@ -1235,10 +1260,20 @@ class GlobalMapCfg {
 									
 									if(isset($sObjType) && isset($this->validConfig[$sObjType])) {
 										// This is a new definition and it's a valid one
+										
+										// Get the type index
 										$iObjTypeId = $types[$sObjType];
-										$this->mapConfig[$sObjType][$iObjTypeId] = Array('type' => $sObjType);
+										
+										$this->mapConfig[$sObjType][$iObjTypeId] = Array(
+										  'type' => $sObjType,
+										  'object_id' => $iObjId
+										);
+										
 										// increase type index
 										$types[$sObjType]++;
+										
+										// Increase the map object id to identify the object on the map
+										$iObjId++;
 									} else {
 										// unknown object type
 										new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));

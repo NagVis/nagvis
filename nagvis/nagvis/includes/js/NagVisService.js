@@ -56,12 +56,12 @@ var NagVisService = NagVisStatefulObject.extend({
 		sParams = sParams + 'name1=' + this.conf.name + '&name2=' + escapeUrlValues(this.conf.service_description) + '&state=' + this.conf.state + '&stateType=' + this.conf.state_type + '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22');
 		
 		var oIcon = document.createElement('img');
-		oIcon.setAttribute('id', this.objId+'-icon');
+		oIcon.setAttribute('id', this.conf.object_id+'-icon');
 		oIcon.src = this.conf.gadget_url + sParams;
 		oIcon.alt = this.conf.type+'-'+alt;
 		
 		var oIconDiv = document.createElement('div');
-		oIconDiv.setAttribute('id', this.objId+'-icondiv');
+		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
 		oIconDiv.style.position = 'absolute';

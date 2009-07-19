@@ -152,7 +152,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Create container div
 		oContainerDiv = document.createElement('div');
-		oContainerDiv.setAttribute('id', this.objId);
+		oContainerDiv.setAttribute('id', this.conf.object_id);
 		
 		// Parse object depending on line or normal icon
 		switch(this.conf.view_type) {
@@ -197,9 +197,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 			// Remove event listeners
 			var oObj;
 			if(this.conf.view_type && this.conf.view_type === 'line') {
-				oObj = document.getElementById(this.objId+'-linediv');
+				oObj = document.getElementById(this.conf.object_id+'-linediv');
 			} else {
-				oObj = document.getElementById(this.objId+'-icon');
+				oObj = document.getElementById(this.conf.object_id+'-icon');
 			}
 			
 			if(oObj) {
@@ -234,9 +234,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Get the object to apply the hover menu to
 		if(this.conf.view_type && this.conf.view_type === 'line') {
-			oObj = document.getElementById(this.objId+'-linelinkdiv');
+			oObj = document.getElementById(this.conf.object_id+'-linelinkdiv');
 		} else {
-			oObj = document.getElementById(this.objId+'-icon');
+			oObj = document.getElementById(this.conf.object_id+'-icon');
 		}
 		
 		// Create hover menu
@@ -258,9 +258,9 @@ var NagVisStatefulObject = NagVisObject.extend({
     // Add a context menu to the object when enabled
     if(this.conf.context_menu && this.conf.context_menu == '1') {
       if(this.conf.view_type && this.conf.view_type == 'line') {
-        this.getContextMenu(this.objId, this.objId+'-link');
+        this.getContextMenu(this.conf.object_id, this.conf.object_id+'-link');
       } else {
-        this.getContextMenu(this.objId, this.objId+'-icon');
+        this.getContextMenu(this.conf.object_id, this.conf.object_id+'-icon');
 			}
     }
 	},
@@ -353,11 +353,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Create container div
 		var oContainerDiv = document.createElement('div');
-		oContainerDiv.setAttribute('id', this.objId+'-linediv');
+		oContainerDiv.setAttribute('id', this.conf.object_id+'-linediv');
 		
 		// Create line div
 		var oLineDiv = document.createElement('div');
-		oLineDiv.setAttribute('id', this.objId+'-line');
+		oLineDiv.setAttribute('id', this.conf.object_id+'-line');
 		oLineDiv.style.zIndex = this.conf.z;
 		
 		oContainerDiv.appendChild(oLineDiv);
@@ -367,7 +367,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		if((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
 			var oLinkDiv = document.createElement('div');
 			
-			oLinkDiv.setAttribute('id', this.objId+'-linelinkdiv');
+			oLinkDiv.setAttribute('id', this.conf.object_id+'-linelinkdiv');
 			oLinkDiv.style.zIndex = (this.conf.z+1);
 			var sUrl = this.conf.url;
 			var sUrlTarget = this.conf.url_target;
@@ -393,7 +393,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var width = this.conf.line_width;
 		
 		// Parse the line object
-		drawNagVisLine(this.objId, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
 	},
 	
 	/**
@@ -414,12 +414,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		var oIcon = document.createElement('img');
-		oIcon.setAttribute('id', this.objId+'-icon');
+		oIcon.setAttribute('id', this.conf.object_id+'-icon');
 		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
 		oIcon.alt = this.conf.type+'-'+alt;
 		
 		var oIconDiv = document.createElement('div');
-		oIconDiv.setAttribute('id', this.objId+'-icondiv');
+		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
 		oIconDiv.style.position = 'absolute';
@@ -475,7 +475,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		oLabelDiv = document.createElement('div');
-		oLabelDiv.setAttribute('id', this.objId + '-label');
+		oLabelDiv.setAttribute('id', this.conf.object_id + '-label');
 		oLabelDiv.setAttribute('class', 'object_label');
 		oLabelDiv.setAttribute('className', 'object_label');
 		oLabelDiv.style.background = this.conf.label_background;

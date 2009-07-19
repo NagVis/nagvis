@@ -33,7 +33,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 	protected $members;
 	protected $linkedMaps;
 	
-	protected $object_id;
 	protected $map_name;
 	protected $alias;
 	
@@ -63,9 +62,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->is_summary_object = FALSE;
 		
 		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
-		
-		// Crapy way to get an object ID for a map - got a better idea?
-		$this->object_id = rand(0,1000);
 		
 		parent::__construct($CORE, $BACKEND);
 	}
@@ -270,7 +266,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 					$OBJ = '';
 					
 					// workaround
-					$objConf['id'] = $index;
+					$objConf['id'] = $objConf['object_id'];
 					
 					// merge with "global" settings
 					foreach($this->MAPCFG->getValidTypeKeys($type) AS $key) {
