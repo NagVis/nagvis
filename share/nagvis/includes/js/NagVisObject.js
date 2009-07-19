@@ -38,8 +38,13 @@ var NagVisObject = Base.extend({
 	constructor: function(oConf) {
 		// Initialize
 		this.setLastUpdate();
-		this.objId = getRandomLowerCaseLetter() + getRandom(1, 99999);
+		
 		this.conf = oConf;
+		
+		// When no object_id given by server: generate own id
+		if(this.conf.object_id == null) {
+			this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
+		}
 	},
 	
 	/**
@@ -120,7 +125,7 @@ var NagVisObject = Base.extend({
 			return false;
 		}
 		
-		oMacros.obj_id = this.objId;
+		oMacros.obj_id = this.conf.object_id;
 		oMacros.name = this.conf.name;
 		oMacros.address = this.conf.address;
 		

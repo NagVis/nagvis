@@ -33,6 +33,7 @@ class NagVisObject {
 	
 	// "Global" Configuration variables for all objects
 	protected $type;
+	protected $object_id;
 	protected $x;
 	protected $y;
 	protected $z;
@@ -59,6 +60,9 @@ class NagVisObject {
 	 */
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
+		
+		// Initialize object_id (Should be overriden later)
+		$this->object_id = rand(0, 1000);
 		
 		$this->conf = Array();
 	}
@@ -111,6 +115,18 @@ class NagVisObject {
 	 */
 	public function getType() {
 		return $this->type;
+	}
+	
+	/**
+	 * PUBLIC getObjectId()
+	 *
+	 * Get method for the object id
+	 *
+	 * @return	Integer		Object ID
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getObjectId() {
+		return $this->object_id;
 	}
 	
 	/**
@@ -367,6 +383,7 @@ class NagVisObject {
 		// Some options have to be removed which are only for this object
 		$arr = $this->conf;
 		unset($arr['id']);
+		unset($arr['object_id']);
 		unset($arr['type']);
 		unset($arr['host_name']);
 		unset($arr[$this->getType().'_name']);

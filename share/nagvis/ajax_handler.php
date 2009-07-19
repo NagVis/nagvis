@@ -100,9 +100,10 @@ switch($_GET['action']) {
 			for($i = 0; $i < $numObjects; $i++) {
 				// Get the object configuration
 				if(isset($arrMap)) {
-					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrMap[$i]);
+					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i], $arrMap[$i]);
 				} else {
-					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i]);
+					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i]);
+					$objConf['object_id'] = $arrObjId[$i];
 				}
 				
 				switch($arrType[$i]) {
@@ -158,7 +159,7 @@ switch($_GET['action']) {
 					break;
 				}
 				
-				$arr['objId'] = $arrObjId[$i];
+				$arr['object_id'] = $OBJ->getObjectId();
 				$arr['icon'] = $OBJ->get('icon');
 				
 				$arrReturn[] = $arr;
@@ -288,7 +289,7 @@ switch($_GET['action']) {
 	break;
 }
 
-function getObjConf($objType, $objName1, $objName2, $map = null) {
+function getObjConf($objType, $objName1, $objName2, $objectId, $map = null) {
 	global $CORE;
 	$objConf = Array();
 	/**
@@ -311,16 +312,9 @@ function getObjConf($objType, $objName1, $objName2, $map = null) {
 		if(is_array($objs = $MAPCFG->getDefinitions($objType))){
 			$count = count($objs);
 			for($i = 0; $i < $count && count($objConf) >= 0; $i++) {
-				if($objType == 'service') {
-					if($objs[$i]['host_name'] == $objName1 && $objs[$i]['service_description'] == $objName2) {
-						$objConf = $objs[$i];
-						$objConf['id'] = $i;
-					}
-				} else {
-					if($objs[$i][$objType.'_name'] == $objName1) {
-						$objConf = $objs[$i];
-						$objConf['id'] = $i;
-					}
+				if($objs[$i]['object_id'] == $objectId) {
+					$objConf = $objs[$i];
+					$objConf['id'] = $i;
 				}
 			}
 		} else {

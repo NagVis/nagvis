@@ -38,7 +38,7 @@ var NagVisStatelessObject = NagVisObject.extend({
 		if(this.parsedObject) {
 			// Remove event listeners
 			var oObj;
-			oObj = document.getElementById(this.objId);
+			oObj = document.getElementById(this.conf.object_id);
 			if(oObj) {
 				oObj.onmousedown = null;
 				oObj.oncontextmenu = null;

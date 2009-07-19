@@ -91,7 +91,7 @@ class GlobalIndexPage {
 	public function parseAutomapsJson() {
 		$aMaps = Array();
 		
-		foreach($this->CORE->getAvailableAutomaps() AS $mapName) {
+		foreach($this->CORE->getAvailableAutomaps() AS $object_id => $mapName) {
 			$MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
 			if(!$MAPCFG->readMapConfig()) {
 				// Skip this map when config problem
@@ -126,6 +126,7 @@ class GlobalIndexPage {
 				}
 				$objConf['type'] = 'map';
 				$objConf['map_name'] = $MAPCFG->getName();
+				$objConf['object_id'] = $object_id;
 				
 				$MAP->MAPOBJ->setConfiguration($objConf);
 				
@@ -214,6 +215,7 @@ class GlobalIndexPage {
 				}
 				$objConf['type'] = 'map';
 				$objConf['map_name'] = $MAPCFG->getName();
+				$objConf['object_id'] = $object_id;
 				
 				$MAP->MAPOBJ->setConfiguration($objConf);
 				

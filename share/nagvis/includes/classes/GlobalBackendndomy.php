@@ -500,7 +500,6 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				// Free memory
 				mysql_free_result($QUERYHANDLE);
 				
-				$arrReturn['object_id'] = $data['object_id'];
 				$arrReturn['alias'] = $data['alias'];
 				$arrReturn['display_name'] = $data['display_name'];
 				$arrReturn['address'] = $data['address'];
@@ -677,7 +676,6 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				while($data = mysql_fetch_array($QUERYHANDLE)) {
 					$arrTmpReturn = Array();
 					
-					$arrTmpReturn['object_id'] = $data['object_id'];
 					$arrTmpReturn['service_description'] = $data['name2'];
 					$arrTmpReturn['display_name'] = $data['display_name'];
 					$arrTmpReturn['alias'] = $data['display_name'];
@@ -943,7 +941,6 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		mysql_free_result($QUERYHANDLE);
 		
 		$arrReturn['alias'] = $data['alias'];
-		$arrReturn['object_id'] = $data['object_id'];
 		
 		return $arrReturn;
 	}
@@ -976,7 +973,6 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		mysql_free_result($QUERYHANDLE);
 		
 		$arrReturn['alias'] = $data['alias'];
-		$arrReturn['object_id'] = $data['object_id'];
 		
 		return $arrReturn;
 	}

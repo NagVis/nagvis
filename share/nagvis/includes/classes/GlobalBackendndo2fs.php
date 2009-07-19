@@ -38,7 +38,6 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 	private $serviceCache;
 	private $hostAckCache;
 	private $oParentlistCache;
-	private $iObjIdCounter;
 	
 	// These are the backend local configuration options
 	private static $validConfig = Array(
@@ -64,8 +63,6 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 		$this->CORE = $CORE;
 		
 		$this->backendId = $backendId;
-		
-		$this->iObjIdCounter = 0;
 		
 		$this->hostCache = Array();
 		$this->serviceCache = Array();
@@ -262,8 +259,6 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 			} else {
 				$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG'));
 				$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/STATUS'));
-				
-				$arrReturn['object_id'] = $this->iObjIdCounter++;
 				
 				$arrReturn['alias'] = $oConfig->HOSTALIAS;
 				$arrReturn['display_name'] = $oConfig->DISPLAYNAME;
@@ -479,8 +474,6 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 					/**
 					 * Add config/general information to array
 					 */
-					
-					$arrTmpReturn['object_id'] = $this->iObjIdCounter++;
 					
 					$arrTmpReturn['service_description'] = $aServObj[$i][0]->SERVICEDESCRIPTION;
 					$arrTmpReturn['display_name'] = $aServObj[$i][0]->DISPLAYNAME;
@@ -713,7 +706,6 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName.'/META'));
 			
 			$aReturn['alias'] = $oMeta->SERVICEGROUPALIAS;
-			$aReturn['object_id'] = $this->iObjIdCounter++;
 		}
 		
 		return $aReturn;
@@ -735,7 +727,6 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName.'/META'));
 			
 			$aReturn['alias'] = $oMeta->HOSTGROUPALIAS;
-			$aReturn['object_id'] = $this->iObjIdCounter++;
 			
 		}
 		

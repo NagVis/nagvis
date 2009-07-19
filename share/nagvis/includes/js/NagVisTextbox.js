@@ -47,7 +47,7 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 		
 		// Create container div
 		oContainerDiv = document.createElement('div');
-		oContainerDiv.setAttribute('id', this.objId);
+		oContainerDiv.setAttribute('id', this.conf.object_id);
 		
 		// Parse object depending on line or normal icon
 		var oTextbox = this.parseTextbox();
@@ -82,7 +82,7 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 	 */
 	parseTextbox: function () {
 		var oLabelDiv = document.createElement('div');
-		oLabelDiv.setAttribute('id', this.objId+'label');
+		oLabelDiv.setAttribute('id', this.conf.object_id+'label');
 		oLabelDiv.setAttribute('class', 'box');
 		oLabelDiv.setAttribute('className', 'box');
 		oLabelDiv.style.background=this.conf.background_color;

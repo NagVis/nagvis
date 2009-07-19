@@ -43,7 +43,7 @@ var NagVisMap = NagVisStatefulObject.extend({
 		this.replaceMacros();
 		
 		var oTd = document.createElement('td');
-		oTd.setAttribute('id', this.objId+'-icon');
+		oTd.setAttribute('id', this.conf.object_id+'-icon');
 		oTd.setAttribute('class', this.conf.overview_class);
 		oTd.setAttribute('className', this.conf.overview_class);
 		oTd.style.width = '200px';

@@ -45,7 +45,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 		
 		// Create container div
 		oContainerDiv = document.createElement('div');
-		oContainerDiv.setAttribute('id', this.objId);
+		oContainerDiv.setAttribute('id', this.conf.object_id);
 		
 		var oShape = this.parseShape();
 		oContainerDiv.appendChild(oShape);
@@ -76,7 +76,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 		oIconDiv.style.zIndex = this.conf.z;
 		
 		var oIcon = document.createElement('img');
-		oIcon.setAttribute('id', this.objId+'-icon');
+		oIcon.setAttribute('id', this.conf.object_id+'-icon');
 		
 		if(this.conf.icon.indexOf('?') !== -1) {
 			oIcon.src = this.conf.icon+'&_t='+iNow;
@@ -107,7 +107,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 		var oObj;
 		
 		// Get the object to apply the hover menu to
-		oObj = document.getElementById(this.objId+'-icon');
+		oObj = document.getElementById(this.conf.object_id+'-icon');
 		
 		// Create hover menu
 		this.getHoverMenu(oObj);

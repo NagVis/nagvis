@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHost extends NagVisStatefulObject {
-	protected $object_id;
 	protected $host_name;
 	protected $alias;
 	protected $display_name;

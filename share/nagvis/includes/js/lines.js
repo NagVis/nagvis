@@ -65,7 +65,7 @@ function newY(a, b, x, y) {
 }
 
 // This function draws an arrow like it is used on NagVis maps
-function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) {
+function drawArrow(objectId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) {
 	var xCoord = [];
 	var yCoord = [];
 	
@@ -92,10 +92,10 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) 
 		var xMax = Math.round(max(xCoord));
 		var yMax = Math.round(max(yCoord));
 		
-		var oLineContainer = document.getElementById(objId+'-line');
+		var oLineContainer = document.getElementById(objectId+'-line');
 		
 		// Draw the line
-		oCanvas.setAttribute('id', objId+'-canvas');
+		oCanvas.setAttribute('id', objectId+'-canvas');
 		oCanvas.style.position = 'absolute';
 		oCanvas.style.left = xMin+"px";
 		oCanvas.style.top = yMin+"px";
@@ -122,7 +122,7 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) 
 		
 	} else {
 		// Fallback to old line style
-		var oLine = new jsGraphics(objId+'-line');
+		var oLine = new jsGraphics(objectId+'-line');
 		oLine.setColor(colorFill);
 		oLine.fillPolygon(xCoord, yCoord);
 		oLine.paint();
@@ -135,9 +135,9 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) 
 	// -------------------------------------------------------------------------
 	
 	if(bLinkArea) {
-		var oLinkContainer = document.getElementById(objId+'-linelinkdiv');
+		var oLinkContainer = document.getElementById(objectId+'-linelinkdiv');
 		var oImg = document.createElement('img');
-		oImg.setAttribute('id', objId+'-link');
+		oImg.setAttribute('id', objectId+'-link');
 		oImg.src = oGeneralProperties.path_htmlimages+'iconsets/20x20.gif';
 		oImg.style.position = 'absolute';
 		oImg.style.left = (middle(x1, x2)-10)+"px";
@@ -150,7 +150,7 @@ function drawArrow(objId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) 
 }
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime, bLinkArea) {
+function drawNagVisLine(objectId, type, x1, y1, x2, y2, width, state, ack, downtime, bLinkArea) {
 	var colorFill = '';
 	var colorBorder = '#000000';
 	
@@ -192,9 +192,9 @@ function drawNagVisLine(objId, type, x1, y1, x2, y2, width, state, ack, downtime
 		var xMid = middle(x1,x2);
 		var yMid = middle(y1,y2);
 		
-		drawArrow(objId, x1, y1, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
-		drawArrow(objId, x2, y2, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objectId, x1, y1, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objectId, x2, y2, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
 	} else if(type == 11) {
-		drawArrow(objId, x1, y1, x2, y2, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objectId, x1, y1, x2, y2, width, colorFill, colorBorder, bLinkArea);
 	}
 }

@@ -431,12 +431,12 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 	
 	// Loop all object which have new informations
 	for(var i = 0, len = aMapObjectInformations.length; i < len; i++) {
-		var objId = aMapObjectInformations[i].objId;
+		var objectId = aMapObjectInformations[i].object_id;
 		var intIndex = -1;
 		
-		// Find the id (key) with the matching objId in object array
+		// Find the id (key) with the matching object_id in object array
 		for(var a = 0, len1 = aObjs.length; a < len1 && intIndex == -1; a++) {
-			if(aObjs[a].objId == objId) {
+			if(aObjs[a].conf.object_id == objectId) {
 				intIndex = a;
 			}
 		}
@@ -448,7 +448,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		if(intIndex >= 0) {
 			// Update this object (loop all options from array and set in current obj)
 			for (var strIndex in aMapObjectInformations[i]) {
-				if(aMapObjectInformations[i][strIndex] != 'objId') {
+				if(aMapObjectInformations[i][strIndex] != 'object_id') {
 					aObjs[intIndex].conf[strIndex] = aMapObjectInformations[i][strIndex];
 				}
 			}
@@ -538,10 +538,10 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function refreshMapObject(objId) {
+function refreshMapObject(objectId) {
 	var iIndex = -1;
 	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++) {
-		if(aMapObjects[i].objId === objId) { 
+		if(aMapObjects[i].conf.object_id == objectId) { 
 			iIndex = i;
 		}
 	}
@@ -550,7 +550,7 @@ function refreshMapObject(objId) {
 	var name = aMapObjects[iIndex].conf.name;
 	
 	var type = aMapObjects[iIndex].conf.type;
-	var obj_id = aMapObjects[iIndex].objId;
+	var obj_id = aMapObjects[iIndex].conf.object_id;
 	var service_description = aMapObjects[iIndex].conf.service_description;
 	var map = oPageProperties.map_name;
 	
@@ -1312,7 +1312,7 @@ function runWorker(iCount, sType, sIdentifier) {
 						var name = aMapObjects[arrObj[i]].conf.name;
 						
 						if(name) {
-							var obj_id = aMapObjects[arrObj[i]].objId;
+							var obj_id = aMapObjects[arrObj[i]].conf.object_id;
 							var service_description = aMapObjects[arrObj[i]].conf.service_description;
 							var map = oPageProperties.map_name;
 							
@@ -1387,7 +1387,7 @@ function runWorker(iCount, sType, sIdentifier) {
 					
 					if(name) {
 						var type = aMaps[arrObj[i]].conf.type;
-						var obj_id = aMaps[arrObj[i]].objId;
+						var obj_id = aMaps[arrObj[i]].conf.object_id;
 						var service_description = aMaps[arrObj[i]].conf.service_description;
 						var map = oPageProperties.map_name;
 						
