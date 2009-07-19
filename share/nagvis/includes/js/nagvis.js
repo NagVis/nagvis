@@ -46,8 +46,8 @@ var iNow = Date.parse(new Date());
 // Define some state options
 var oStates = {};
 oStates.UNREACHABLE = {};
-oStates.UNREACHABLE.color = '#FF0000';
-oStates.UNREACHABLE.bgColor = '#FF0000';
+oStates.UNREACHABLE.color = '#F1811B';
+oStates.UNREACHABLE.bgColor = '#F1811B';
 oStates.UNREACHABLE.sound = 'std_unreachable.mp3';
 oStates.DOWN = {};
 oStates.DOWN.color = '#FF0000';
