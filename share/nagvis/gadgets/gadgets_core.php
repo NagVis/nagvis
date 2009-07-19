@@ -44,13 +44,17 @@
  * $aPerfparse as 2-dimensional array where index ranges from 0 to n-1,
  * depending on how many perfdata values are provided by the service
  * 
- * aPerfparse[index]['label']     -   label of the perfdata
- *                  ['value']     -   actual perfdata
- *                  ['uom']       -   unit of measurement (might be NULL)
- *                  ['warning']   -   warning threshold (might be NULL)
- *                  ['critical']  -   critical threshold (might be NULL)
- *                  ['min']       -   minimum possible value (might be NULL)
- *                  ['max']       -   maximum possible value (might be NULL)
+ * aPerfparse[index]['label']         -   label of the perfdata
+ *                  ['value']         -   actual perfdata
+ *                  ['uom']           -   unit of measurement (might be NULL)
+ *                  ['warning']       -   warning threshold (if over)
+ *                  ['warning_min']   -   warning threshold (if below)
+ *                  ['warning_max']   -   warning threshold (if above)
+ *                  ['critical']      -   critical threshold (might be NULL)
+ *                  ['critical_min']  -   critical threshold (if below)
+ *                  ['critical_max']  -   critical threshold (if above)
+ *                  ['min']           -   minimum possible value (might be NULL)
+ *                  ['max']           -   maximum possible value (might be NULL)
  *
  * 
  * $aOpts as array of the parameters passed to the gadget
@@ -86,13 +90,15 @@ function parsePerfdata($sPerfdata) {
 	$sTmpPerfdata = $sPerfdata;
 	
 	// Parse perfdata
+	// We are trying to match the following string:
+	//  temp=78.8F;55:93;50:98;0;100;
+	//               metric    current    unit      warning          critical          min           max
 	preg_match_all('/([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/', $sPerfdata, $aMatches, PREG_SET_ORDER);
 	
 	// When no match found
 	if(!isset($aMatches[0])) {
 		errorBox('ERROR: Found no valid performance data in string');
 	}
-	
 	for($i = 0, $len = sizeof($aMatches); $i < $len; $i++) {
 		$aTmp = $aMatches[$i];
 		
@@ -107,11 +113,17 @@ function parsePerfdata($sPerfdata) {
 		}
 		if(isset($aTmp[4])) {
 			$aSet['warning'] = $aTmp[4];
+			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[4], $matches);
+			$aSet['warning_min'] = $matches[1][0];
+			$aSet['warning_max'] = $matches[2][0];
 		} else {
 			$aSet['warning'] = null;
 		}
 		if(isset($aTmp[5])) {
 			$aSet['critical'] = $aTmp[5];
+			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[5], $matches);
+			$aSet['critical_min'] = $matches[1][0];
+			$aSet['critical_max'] = $matches[2][0];
 		} else {
 			$aSet['critical'] = null;
 		}
