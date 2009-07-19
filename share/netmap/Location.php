@@ -1,5 +1,26 @@
 <?php
 
+/*****************************************************************************
+ *
+ * Copyright (C) 2009 NagVis Project
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
 class Location
 {
 	public $id;
@@ -7,16 +28,18 @@ class Location
 	public $label;
 	public $address;
 	public $description;
-	public $hosts;
+	public $object;
+	public $objectType;
 
-	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $hosts = array())
+	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $object = null, $objectType = "")
 	{
 		$this->id = $id;
 		$this->point = $point;
 		$this->label = $label;
 		$this->address = $address;
 		$this->description = $description;
-		$this->hosts = $hosts;
+		$this->object = $object;
+		$this->objectType = $objectType;
 	}
 
 	/**
@@ -30,14 +53,49 @@ class Location
 		$locations = array();
 		foreach ($xml->location as $location)
 		{
-			$hosts = array();
-			foreach ($location->children() as $host)
-				$hosts[] = array('id' => (string)$host['id'], 'name' => (string)$host['name']);
+			$object = null;
+			$object_type = '';
+
+			/* Note: there should be only one child of location node,
+			         but it is required to use foreach with children() */
+			foreach ($location->children() as $object_node)
+			{
+				$object_type = $object_node->getName();
+				switch ($object_type)
+				{
+					case 'host':
+						$object = new Host((string)$object_node['id'],
+							(string)$object_node['name'],
+							(string)$object_node['address']);
+						break;
+
+					case 'hostgroup':
+						$object = new HostGroup((string)$object_node['id'],
+							(string)$object_node['name'],
+							(string)$object_node['alias']);
+						break;
+
+					case 'service':
+						$object = new Service((string)$object_node['id'],
+							(string)$object_node['description'],
+							(string)$object_node['host']);
+						break;
+
+					case 'servicegroup':
+						$object = new ServiceGroup((string)$object_node['id'],
+							(string)$object_node['name'],
+							(string)$object_node['alias']);
+						break;
+
+					default:
+						throw new Exception('Unknown object type in locations.xml');
+				}
+			}
 
 			$locations[] = new Location((string)$location['id'],
 				(string)$location['point'], (string)$location['label'],
 				(string)$location['address'], (string)$location['description'],
-				$hosts);
+				$object, $object_type);
 		}
 
 		return $locations;
@@ -152,6 +210,44 @@ class Location
 			$locations[] = new Location("", $location['point'], "", $location['address'], "");
 
 		return $locations;
+	}
+
+	/**
+	 * @param  array $hosts
+	 * @return array of Location
+	 */
+	public function getByFailedHosts($hosts = array())
+	{
+		$result = array();
+		$locations = $this->getAll();
+
+		$all_hosts = array();
+		$failed_hosts = array();
+
+		if (($lines = file('hosts.all', FILE_IGNORE_NEW_LINES)) === FALSE)
+			throw new Exception('Could not read hosts.all');
+
+		foreach ($lines as $line)
+		{
+			$fields = explode('|', $line);
+			$all_hosts[$fields[0]] = $fields[1];
+		}
+
+		if (($lines = file('hosts.failed', FILE_IGNORE_NEW_LINES)) === FALSE)
+			throw new Exception('Could not read hosts.failed');
+
+		foreach ($lines as $line)
+		{
+			$fields = explode('|', $line);
+			$failed_hosts[$fields[0]] = false; /* dummy value, may be used in future */
+		}
+
+		foreach (array_unique(array_values(array_intersect_key($all, $failed))) as $location_id)
+			foreach ($locations as $location)
+				if ($location->id == $location_id)
+					$result[] = $location;
+
+		return $result;
 	}
 }
 

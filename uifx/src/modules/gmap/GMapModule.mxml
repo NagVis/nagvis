@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2009 NagVis Project
+ 
+ License:
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 2 as
+ published by the Free Software Foundation.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+-->
 <mx:Module xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:gmap="modules.gmap.*"
 	xmlns:ui="lib.ui.*"
@@ -6,6 +24,15 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	creationComplete="init()"
 >
+	<mx:Style>
+		@font-face
+		{
+			fontFamily: embededArial;
+    		src: local("Arial");
+    		font-weight: bold;
+    		advancedAntiAliasing: true;
+		}
+	</mx:Style>
 	<mx:Style source="GMapModule.css" />
 	<mx:Script>
 		<![CDATA[
@@ -30,22 +57,22 @@
 	/>
 	<gmap:DialogSettings id="settingsBox"
 		logo="{settingsImage}"
-		y="400" right="-10" width="310"
+		bottom="50" right="-10" width="310"
 		expandedWidth="300" expandedHeight="110"
 		contractedWidth="40" contractedHeight="40"
 		currentState="right-contracted"
 	/>
 	<ui:EdgeBoxGroup id="ebg"/>
-	<gmap:DialogLinks id="linksBox" group="{ebg}"
+	<gmap:DialogLink id="linksBox" group="{ebg}"
 		logo="{viewpointImage}"
 		y="{locationBox.y + locationBox.height + 5}" right="-10" width="310"
-		expandedWidth="300" expandedHeight="300"
+		expandedWidth="300" expandedHeight="150"
 		contractedWidth="40" contractedHeight="40"
 		currentState="right-contracted"
 		link="onLink()"
 		expanded="onShowLinkBox()"
 	/>
-	<gmap:DialogEdit id="locationBox" group="{ebg}"
+	<gmap:DialogLocation id="locationBox" group="{ebg}"
 		logo="{editImage}"
 		y="{searchBox.y + searchBox.height + 5}" right="-10" width="310"
 		expandedWidth="300" expandedHeight="220"
@@ -91,6 +118,8 @@
 	</mx:RemoteObject>
 	<mx:RemoteObject id="rDatabase" destination="zend" source="Database" fault="fault(event)">
 		<mx:method name="getHosts" result="getHosts_handler(event)"/>
+		<mx:method name="getHostGroups" result="getHostGroups_handler(event)"/>
 		<mx:method name="getServices" result="getServices_handler(event)"/>
+		<mx:method name="getServiceGroups" result="getServiceGroups_handler(event)"/>
 	</mx:RemoteObject>
 </mx:Module>

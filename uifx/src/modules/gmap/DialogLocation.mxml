@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2009 NagVis Project
+ 
+ License:
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 2 as
+ published by the Free Software Foundation.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+-->
+<Dialog xmlns="modules.gmap.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	creationComplete="init()"
+>
+    <mx:Metadata>
+        [Event(name="save", type="flash.events.Event")]
+        [Event(name="remove", type="flash.events.Event")]
+    </mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import mx.events.MenuEvent;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import com.google.maps.LatLng;
+
+			[Bindable]
+			public var locID : String;
+
+			public var host : Array =
+			[
+				{name : "devel", ip: "172.27.76.33", notes: "Devel server"},
+				{name : "beta", ip: "192.168.1.4", notes: "Beta system with automated rollout"},
+				{name : "beta64", ip: "192.168.1.113", notes: "Beta 64 bit system  with automated rollaout"}
+			];
+			
+			public var service : Array =
+			[
+				{name: "ping", host: "devel"},
+				{name: "ping", host: "beta"},
+				{name: "ping", host: "beta64"},
+			];
+
+			public var hostGroup : Array =
+			[
+				{name : "Goteburg Location", notes : "Goteburg Office"}, 
+				{name : "Stockholm Location", notes : "Head Office"},
+				{name : "Lviv Location", notes : "N-iX"}			
+			];
+
+			public var serviceGroup : Array =
+			[
+				{name: "service group 1", notes: "lalala"},
+				{name: "service group 2", notes: "tramtamtam"},
+				{name: "service group 3", notes: "cool"},
+			];
+
+			[Bindable]
+			public var objects : ArrayCollection = new ArrayCollection(hostGroup);
+
+			private function init():void
+			{
+				locNObject.flowBox.setStyle("borderStyle", "solid");
+				locNObject.flowBox.setStyle("borderColor", "#000000");
+				locNObject.flowBox.setStyle("cornerRadius", "3");
+			}
+
+			public function update(location : Location) : void
+			{
+				if (location)
+				{
+					locID = location.id;
+					locName.text = location.label;
+					locLat.text = LatLng.fromUrlValue(location.point).lat().toString();
+					locLng.text = LatLng.fromUrlValue(location.point).lng().toString();
+					locAddress.text = location.address;
+					locDescription.text = location.description;
+				}
+				else
+				{
+					locID = "";
+					locName.text = "";
+					locLat.text = "";
+					locLng.text = "";
+					locAddress.text = "";
+					locDescription.text = "";
+				}
+			}
+			
+			private function objectItemClick( event:MenuEvent ):void
+			{
+				switch (String(event.item.@data))
+				{
+					case "browse":
+						locNObject.showBrowser();
+						break;
+				}
+			}
+			
+			public function hostLabelFunction( item:Object ):String
+			{
+				return item.name + ' ' + item.ip;
+			}
+
+			public function serviceLabelFunction( item:Object ):String
+			{
+				return item.name + ' ' + item.host;
+			}
+
+			public function groupLabelFunction( item:Object ):String
+			{
+				return item.name;
+			}
+			
+			private function onObjectTypeChange():void
+			{
+				locNObject.removeAll();
+				
+				switch(locNObjectType.selectedIndex)
+				{
+					case 0:
+						objects.source = host;
+						locNObject.browserFields = ["name", "ip", "notes"];
+						locNObject.labelFunction = hostLabelFunction;
+						break;
+					case 1:
+						objects.source = service;
+						locNObject.browserFields = ["name", "host"];
+						locNObject.labelFunction = serviceLabelFunction;
+						break;
+					case 2:
+						objects.source = hostGroup;
+						locNObject.browserFields = ["name", "notes"];
+						locNObject.labelFunction = groupLabelFunction;
+						break;
+					case 3:
+						objects.source = serviceGroup;
+						locNObject.browserFields = ["name", "notes"];
+						locNObject.labelFunction = groupLabelFunction;
+						break;
+				}
+			}
+		]]>
+	</mx:Script>
+	    <mx:XML format="e4x" id="autoCompleteMenu">
+		<root>
+			<menuitem data="browse" label="Browse..."/>
+		</root>
+	</mx:XML>
+	<flexlib:HAccordion selectedIndex="2" left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
+		<mx:Canvas label="General" width="100%" height="100%">
+			<flexlib:PromptingTextInput id="locName" prompt="Name"
+				left="10" right="10" top="0"
+			/>
+			<flexlib:PromptingTextInput id="locLat" prompt="Latitude"
+				left="10" top="30" 	width="45%"
+			 />
+			<flexlib:PromptingTextInput id="locLng" prompt="Longitude"
+				top="30" right="10"	width="45%"
+		 	/>
+			<flexlib:PromptingTextArea  id="locAddress" prompt="Address"
+				right="10" left="10" top="60" bottom="0"
+			/>
+		</mx:Canvas>
+		<mx:Canvas label="Description" width="100%" height="100%">
+			<flexlib:PromptingTextArea  id="locDescription" prompt="Description"
+				right="10" left="10" top="0" bottom="0"
+			/>
+		</mx:Canvas>
+		<mx:Canvas label="Nagios" width="100%" height="100%">
+			<mx:VBox left="5" right="5" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
+				<mx:Spacer/>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:Label text="Type:" left="10" top="10" height="18"/>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:ComboBox id="locNObjectType" selectedIndex="2" width="100%" change="onObjectTypeChange()">
+						<mx:ArrayCollection>
+							<mx:String>Host</mx:String>
+							<mx:String>Service</mx:String>
+							<mx:String>Host Group</mx:String>
+							<mx:String>Service Group</mx:String>
+						</mx:ArrayCollection>
+					</mx:ComboBox>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:Label text="Object:" top="70" left="10"/>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<hc:AdvancedAutoComplete id="locNObject" width="100%"
+						dataProvider="{objects}" selectedItemStyleName="underline" labelFunction="groupLabelFunction"
+						matchType="anyPart" allowMultipleSelection="false"
+						actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
+						browserFields="{['name', 'notes']}"
+					/>
+					<mx:Spacer/>
+				</mx:HBox>
+			</mx:VBox>
+			<mx:TextInput cornerRadius="10" text=" Associate with" top="0" left="15" width="90" borderStyle="solid" editable="false"/>
+		</mx:Canvas>
+		<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
+			<mx:RadioButtonGroup id="clickGroup"/>
+			<mx:VBox left="5" right="0" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
+				<mx:Spacer/>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:RadioButton id="locActionNo" label="do nothing" groupName="clickGroup" selected="true"/>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:RadioButton id="locActionUrl" label="go to" groupName="clickGroup"/>
+					<flexlib:PromptingTextInput width="100%" prompt="URL" cornerRadius="4"/>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer/>
+					<mx:RadioButton id="locActionNagvis" label="show NagVis map" groupName="clickGroup"/>
+					<mx:Spacer/>
+				</mx:HBox>
+				<mx:HBox width="100%">
+					<mx:Spacer width="30"/>
+					<mx:ComboBox width="100%"></mx:ComboBox>
+					<mx:Spacer/>
+				</mx:HBox>
+			</mx:VBox>
+			<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
+		</mx:Canvas>
+	</flexlib:HAccordion>
+	<mx:Button label="Save" right="95" bottom="10" click="dispatchEvent(new Event('save'))"/>
+	<mx:Button label="Delete" bottom="10" width="64" right="20" click="dispatchEvent(new Event('remove'))"/>
+</Dialog>

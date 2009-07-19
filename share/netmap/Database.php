@@ -1,5 +1,26 @@
 <?php
 
+/*****************************************************************************
+ *
+ * Copyright (C) 2009 NagVis Project
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
 class Database
 {
 	/**
@@ -37,6 +58,33 @@ class Database
 		*/
 
 		return $services;
+	}
+
+	/**
+	 * @return array of HostGroup
+	 */
+	public function getHostGroups()
+	{
+		$hostgroups = array();
+
+		$hostgroups[] = new HostGroup('1', 'Gothenburg');
+		$hostgroups[] = new HostGroup('2', 'Stockholm');
+		$hostgroups[] = new HostGroup('3', 'Lviv');
+
+		return $hostgroups;
+	}
+
+	/**
+	 * @return array of ServiceGroup
+	 */
+	public function getServiceGroups()
+	{
+		$servicegroups = array();
+
+		$servicegroups[] = new ServiceGroup('1', 'Gothenburg-Stockholm VPN link');
+		$servicegroups[] = new ServiceGroup('2', 'Stockholm-Lviv VPN link');
+
+		return $servicegroups;
 	}
 }
 

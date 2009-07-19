@@ -1,3 +1,5 @@
+<?php
+
 /*****************************************************************************
  *
  * Copyright (C) 2009 NagVis Project
@@ -19,25 +21,20 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+class ServiceGroup
 {
-	import flash.events.Event;
+	public $id;
+	public $name;
+	public $alias;
+	public $selected;
 
-	public class LocationEvent extends Event
+	public function __construct($id, $name, $alias = '', $selected = false)
 	{
-		public static const CHANGE : String = "change";
-		public var location : Location;
-
-		public function LocationEvent(type : String, location : Location = null)
-		{
-			super(type);
-
-			this.location = location;
-		}
-
-        override public function clone() : Event
-        {
-			return new LocationEvent(type, this.location);
-        }
+		$this->id = $id;
+		$this->name = $name;
+		$this->alias = $alias;
+		$this->selected = $selected;
 	}
 }
+
+?>

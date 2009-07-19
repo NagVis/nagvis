@@ -1,3 +1,24 @@
+/*****************************************************************************
+ *
+ * Copyright (C) 2009 NagVis Project
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
 import com.google.maps.LatLng;
 import com.google.maps.controls.ZoomControl;
 import com.google.maps.overlays.Polyline;
@@ -27,7 +48,9 @@ private var locations      : LocationsCollection = new LocationsCollection;
 private var foundLocations : LocationsCollection = new LocationsCollection;
 private var links          : ArrayCollection;
 private var hosts          : ArrayCollection;
+private var hostgroups     : ArrayCollection;
 private var services       : ArrayCollection = new ArrayCollection();
+private var servicegroups  : ArrayCollection = new ArrayCollection();
 
 private var locationsView      : LocationsView;
 private var foundLocationsView : FoundLocationsView;
@@ -109,7 +132,7 @@ private function getLocations_handler(event : ResultEvent) : void
 
 	linksBox.point1.dataProvider = locations;
 	linksBox.point2.dataProvider = locations;
-	linksBox.services.dataProvider = services;
+	//linksBox.services.dataProvider = services;
 
 	locationsView.showLocations();
 
@@ -195,7 +218,7 @@ private function getHosts_handler(event : ResultEvent) : void
 	for each (var host : Host in result)
 		hosts.addItem(host);
 
-	locationBox.locHosts.dataProvider = hosts;
+	//locationBox.locHosts.dataProvider = hosts;
 }
 
 private function getServices_handler(event : ResultEvent) : void
@@ -206,7 +229,29 @@ private function getServices_handler(event : ResultEvent) : void
 	for each (var service : Service in result)
 		services.addItem(service);
 
-	linksBox.services.dataProvider = services;
+	//linksBox.services.dataProvider = services;
+}
+
+private function getHostGroups_handler(event : ResultEvent) : void
+{
+	var result : ArrayCollection = new ArrayCollection(event.result as Array);
+
+	hostgroups = new ArrayCollection();
+	for each (var hostgroup : HostGroup in result)
+		hostgroups.addItem(hostgroup);
+
+	//locationBox.locHosts.dataProvider = hosts;
+}
+
+private function getServiceGroups_handler(event : ResultEvent) : void
+{
+	var result : ArrayCollection = new ArrayCollection(event.result as Array);
+
+	servicegroups = new ArrayCollection();
+	for each (var servicegroup : ServiceGroup in result)
+		servicegroups.addItem(servicegroup);
+
+	//linksBox.services.dataProvider = services;
 }
 
 /*********************************************/
@@ -290,6 +335,7 @@ private function onShowLocationBox() : void
 	if (searchBox.status == "expanded")
 		searchBox.setCurrentState("right-contracted");
 
+	/*
 	for each (var host : Host in hosts)
 next_host:
 		for each (var location : Location in locations)
@@ -299,11 +345,13 @@ next_host:
 					host.selected = true;
 					break next_host;
 				}
+	*/
 
-	if (locationsView.selectedLocation)
+	if (locationsView && locationsView.selectedLocation)
 		locationBox.update(locationsView.selectedLocation);
 	else
-		locationBox.update(foundLocationsView.selectedLocation);
+		if(foundLocationsView && foundLocationsView.selectedLocation)
+			locationBox.update(foundLocationsView.selectedLocation);
 }
 
 private function onHideLocationBox() : void
@@ -344,6 +392,7 @@ private function onDeleteLocation() : void
 
 private function onShowLinkBox() : void
 {
+	/*
 	for each (var service : Service in services)
 next_service:
 		for each (var link : Link in links)
@@ -353,6 +402,7 @@ next_service:
 					service.selected = true;
 					break next_service;
 				}
+	*/
 }
 
 private function onLink() : void

@@ -21,23 +21,13 @@
 
 package modules.gmap
 {
-	import flash.events.Event;
-
-	public class LocationEvent extends Event
+	[Bindable]
+	[RemoteClass(alias="HostGroup")]
+	public class HostGroup
 	{
-		public static const CHANGE : String = "change";
-		public var location : Location;
-
-		public function LocationEvent(type : String, location : Location = null)
-		{
-			super(type);
-
-			this.location = location;
-		}
-
-        override public function clone() : Event
-        {
-			return new LocationEvent(type, this.location);
-        }
+		public var id : String;
+		public var name : String;
+		public var alias : String;
+		public var selected : Boolean;
 	}
 }

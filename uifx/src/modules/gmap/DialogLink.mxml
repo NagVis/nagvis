@@ -17,34 +17,11 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<ResizingBox xmlns="lib.ui.*" xmlns:mx="http://www.adobe.com/2006/mxml"
-	click="activate()"
-	expanded="onExpanded()"
->
-	<mx:Script>
-		<![CDATA[
-			[Bindable]
-			public var image : Class;
-
-			[Bindable]
-			public var dialog : Dialog;
-
-			public function activate() : void
-			{
-				if(dialog)
-					this.aniheight = dialog.height;
-			}
-
-			private function onExpanded() : void
-			{
-				if(dialog)
-					dialog.visible = true;
-			}
-		]]>
-	</mx:Script>
-	<mx:Image
-		source="{image}"
-	 	top="5" left="5" width="30" height="30"
-	 	scaleContent="true"
-	 />
-</ResizingBox>
+<Dialog xmlns="modules.gmap.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+    <mx:Metadata>
+        [Event(name="link", type="flash.events.Event")]
+    </mx:Metadata>
+	<mx:Button label="Link" right="20" bottom="10" click="dispatchEvent(new Event('link'))"/>
+	<mx:ComboBox top="40" left="10" right="20" id="point1"></mx:ComboBox>
+	<mx:ComboBox top="70" left="10" right="20" id="point2"></mx:ComboBox>
+</Dialog>
