@@ -84,6 +84,8 @@ private function onMapReady(event : Event) : void
 
 	rDatabase.getHosts();
 	rDatabase.getServices();
+	rDatabase.getHostGroups();
+	rDatabase.getServiceGroups();
 	rViewpoints.getAll();
 	rLocations.getAll();
 	// Note: rLinks.getAll() is called at the end of getLocations_handler
@@ -218,7 +220,7 @@ private function getHosts_handler(event : ResultEvent) : void
 	for each (var host : Host in result)
 		hosts.addItem(host);
 
-	//locationBox.locHosts.dataProvider = hosts;
+	locationBox.hosts = hosts;
 }
 
 private function getServices_handler(event : ResultEvent) : void
@@ -229,6 +231,7 @@ private function getServices_handler(event : ResultEvent) : void
 	for each (var service : Service in result)
 		services.addItem(service);
 
+	locationBox.services = services;
 	//linksBox.services.dataProvider = services;
 }
 
@@ -240,7 +243,7 @@ private function getHostGroups_handler(event : ResultEvent) : void
 	for each (var hostgroup : HostGroup in result)
 		hostgroups.addItem(hostgroup);
 
-	//locationBox.locHosts.dataProvider = hosts;
+	locationBox.hostgroups = hostgroups;
 }
 
 private function getServiceGroups_handler(event : ResultEvent) : void
@@ -251,7 +254,7 @@ private function getServiceGroups_handler(event : ResultEvent) : void
 	for each (var servicegroup : ServiceGroup in result)
 		servicegroups.addItem(servicegroup);
 
-	//linksBox.services.dataProvider = services;
+	locationBox.servicegroups = servicegroups;
 }
 
 /*********************************************/

@@ -38,38 +38,15 @@
 			[Bindable]
 			public var locID : String;
 
-			public var host : Array =
-			[
-				{name : "devel", ip: "172.27.76.33", notes: "Devel server"},
-				{name : "beta", ip: "192.168.1.4", notes: "Beta system with automated rollout"},
-				{name : "beta64", ip: "192.168.1.113", notes: "Beta 64 bit system  with automated rollaout"}
-			];
-			
-			public var service : Array =
-			[
-				{name: "ping", host: "devel"},
-				{name: "ping", host: "beta"},
-				{name: "ping", host: "beta64"},
-			];
-
-			public var hostGroup : Array =
-			[
-				{name : "Goteburg Location", notes : "Goteburg Office"}, 
-				{name : "Stockholm Location", notes : "Head Office"},
-				{name : "Lviv Location", notes : "N-iX"}			
-			];
-
-			public var serviceGroup : Array =
-			[
-				{name: "service group 1", notes: "lalala"},
-				{name: "service group 2", notes: "tramtamtam"},
-				{name: "service group 3", notes: "cool"},
-			];
+			public var hosts         : ArrayCollection = new ArrayCollection()
+			public var hostgroups    : ArrayCollection = new ArrayCollection()
+			public var services      : ArrayCollection = new ArrayCollection();
+			public var servicegroups : ArrayCollection = new ArrayCollection();
 
 			[Bindable]
-			public var objects : ArrayCollection = new ArrayCollection(hostGroup);
+			public var objects : ArrayCollection = hostgroups;
 
-			private function init():void
+			private function init() : void
 			{
 				locNObject.flowBox.setStyle("borderStyle", "solid");
 				locNObject.flowBox.setStyle("borderColor", "#000000");
@@ -97,8 +74,8 @@
 					locDescription.text = "";
 				}
 			}
-			
-			private function objectItemClick( event:MenuEvent ):void
+
+			private function objectItemClick(event : MenuEvent) : void
 			{
 				switch (String(event.item.@data))
 				{
@@ -107,58 +84,58 @@
 						break;
 				}
 			}
-			
-			public function hostLabelFunction( item:Object ):String
+
+			public function hostLabelFunction(item : Object) : String
 			{
-				return item.name + ' ' + item.ip;
+				return item.name + ' ' + item.address;
 			}
 
-			public function serviceLabelFunction( item:Object ):String
+			public function serviceLabelFunction(item : Object) : String
 			{
-				return item.name + ' ' + item.host;
+				return item.description + ' ' + item.host;
 			}
 
-			public function groupLabelFunction( item:Object ):String
+			public function groupLabelFunction(item : Object) : String
 			{
-				return item.name;
+				return item.name + ' ' + item.alias;
 			}
-			
-			private function onObjectTypeChange():void
+
+			private function onObjectTypeChange() : void
 			{
 				locNObject.removeAll();
-				
+
 				switch(locNObjectType.selectedIndex)
 				{
 					case 0:
-						objects.source = host;
-						locNObject.browserFields = ["name", "ip", "notes"];
+						objects = hosts;
+						locNObject.browserFields = ["name", "address"];
 						locNObject.labelFunction = hostLabelFunction;
 						break;
 					case 1:
-						objects.source = service;
-						locNObject.browserFields = ["name", "host"];
+						objects = services;
+						locNObject.browserFields = ["description", "host"];
 						locNObject.labelFunction = serviceLabelFunction;
 						break;
 					case 2:
-						objects.source = hostGroup;
-						locNObject.browserFields = ["name", "notes"];
+						objects = hostgroups;
+						locNObject.browserFields = ["name", "alias"];
 						locNObject.labelFunction = groupLabelFunction;
 						break;
 					case 3:
-						objects.source = serviceGroup;
-						locNObject.browserFields = ["name", "notes"];
+						objects = servicegroups;
+						locNObject.browserFields = ["name", "alias"];
 						locNObject.labelFunction = groupLabelFunction;
 						break;
 				}
 			}
 		]]>
 	</mx:Script>
-	    <mx:XML format="e4x" id="autoCompleteMenu">
+	<mx:XML format="e4x" id="autoCompleteMenu">
 		<root>
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
-	<flexlib:HAccordion selectedIndex="2" left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
+	<flexlib:HAccordion selectedIndex="0" left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
 		<mx:Canvas label="General" width="100%" height="100%">
 			<flexlib:PromptingTextInput id="locName" prompt="Name"
 				left="10" right="10" top="0"
@@ -209,7 +186,7 @@
 						dataProvider="{objects}" selectedItemStyleName="underline" labelFunction="groupLabelFunction"
 						matchType="anyPart" allowMultipleSelection="false"
 						actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
-						browserFields="{['name', 'notes']}"
+						browserFields="{['name', 'alias']}"
 					/>
 					<mx:Spacer/>
 				</mx:HBox>

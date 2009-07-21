@@ -47,6 +47,8 @@ $server->setClassMap("Location", "Location");
 $server->setClassMap("Link", "Link");
 $server->setClassMap("Host", "Host");
 $server->setClassMap("Service", "Service");
+$server->setClassMap("HostGroup", "HostGroup");
+$server->setClassMap("ServiceGroup", "ServiceGroup");
 echo ($server->handle());
 
 ?>
