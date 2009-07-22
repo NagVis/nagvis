@@ -102,6 +102,8 @@
 ;serviceurl="[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]"
 ; URL template for servicegroup object links
 ;servicegroupurl="[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail"
+; URL template for nested map links
+;mapurl="[htmlbase]/index.php?map=[map_name]"
 
 ; Options to configure the Overview page of NagVis
 [index]

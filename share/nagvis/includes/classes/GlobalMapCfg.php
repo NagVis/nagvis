@@ -982,7 +982,7 @@ class GlobalMapCfg {
 					'field_type' => 'boolean'),
 				
 				'url' => Array('must' => 0,
-					'default' => '[htmlbase]/index.php?map=[map_name]',
+					'default' => $this->CORE->MAINCFG->getValue('defaults', 'mapurl'),
 					'match' => MATCH_STRING_URL_EMPTY),
 				'url_target' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
