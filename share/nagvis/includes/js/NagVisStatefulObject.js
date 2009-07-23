@@ -314,6 +314,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			}
 			
 			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[name\\]', 'g'), objName);
+			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[alias\\]', 'g'), this.conf.alias);
 			
 			if(this.conf.type == 'service') {
 				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
