@@ -537,11 +537,14 @@ class GlobalMainCfg {
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
 	private function getBasePath() {
 		// Go 3 levels up from nagvis/share/nagvis to nagvis base path
-		return realpath(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))).'/';
+		return realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../..') . '/';
+		// Note: the method below causes problems when <docroot>/nagvis is a symlink to <nagvis-base>/share
+		// return realpath(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))).'/';
 	}
 	
 	/**
