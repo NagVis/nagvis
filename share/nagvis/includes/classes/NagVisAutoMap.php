@@ -72,6 +72,8 @@ class NagVisAutoMap extends GlobalMap {
 		
 		parent::__construct($CORE, $MAPCFG);
 
+		$this->name = $this->MAPCFG->getName();
+
 		// Set the preview option
 		if(isset($prop['preview']) && $prop['preview'] != '') {
 			$this->preview = $prop['preview'];
