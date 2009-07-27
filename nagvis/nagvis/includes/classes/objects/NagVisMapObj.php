@@ -266,7 +266,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 					$OBJ = '';
 					
 					// workaround
-					$objConf['id'] = $objConf['object_id'];
+					//$objConf['id'] = $objConf['object_id'];
+					$objConf['id'] = $index;
 					
 					// merge with "global" settings
 					foreach($this->MAPCFG->getValidTypeKeys($type) AS $key) {
