@@ -64,26 +64,23 @@ class Location
 				switch ($object_type)
 				{
 					case 'host':
-						$object = new Host((string)$object_node['id'],
-							(string)$object_node['name'],
-							(string)$object_node['address']);
+						$object = new Host((string)$object_node['name'],
+							(string)$object_node['address'],
+							(string)$object_node['alias']);
 						break;
 
 					case 'hostgroup':
-						$object = new HostGroup((string)$object_node['id'],
-							(string)$object_node['name'],
+						$object = new HostGroup((string)$object_node['name'],
 							(string)$object_node['alias']);
 						break;
 
 					case 'service':
-						$object = new Service((string)$object_node['id'],
-							(string)$object_node['description'],
-							(string)$object_node['host']);
+						$object = new Service((string)$object_node['host'],
+							(string)$object_node['description']);
 						break;
 
 					case 'servicegroup':
-						$object = new ServiceGroup((string)$object_node['id'],
-							(string)$object_node['name'],
+						$object = new ServiceGroup((string)$object_node['name'],
 							(string)$object_node['alias']);
 						break;
 

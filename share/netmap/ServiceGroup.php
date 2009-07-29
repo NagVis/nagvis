@@ -23,13 +23,11 @@
 
 class ServiceGroup
 {
-	public $id;
 	public $name;
 	public $alias;
 
-	public function __construct($id, $name, $alias = '')
+	public function __construct($name, $alias = '')
 	{
-		$this->id = $id;
 		$this->name = $name;
 		$this->alias = $alias;
 	}

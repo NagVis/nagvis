@@ -25,7 +25,6 @@ package modules.gmap
 	[RemoteClass(alias="Service")]
 	public class Service
 	{
-		public var id : String;
 		public var host : String;
 		public var description : String;
 	}

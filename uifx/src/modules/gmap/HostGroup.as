@@ -25,7 +25,6 @@ package modules.gmap
 	[RemoteClass(alias="HostGroup")]
 	public class HostGroup
 	{
-		public var id : String;
 		public var name : String;
 		public var alias : String;
 	}

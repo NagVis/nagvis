@@ -23,15 +23,15 @@
 
 class Host
 {
-	public $id;
 	public $name;
 	public $address;
+	public $alias;
 
-	public function __construct($id, $name, $address)
+	public function __construct($name, $address, $alias = '')
 	{
-		$this->id = $id;
 		$this->name = $name;
 		$this->address = $address;
+		$this->alias = $alias;
 	}
 }
 

@@ -23,13 +23,11 @@
 
 class Service
 {
-	public $id;
 	public $host;
 	public $description;
 
-	public function __construct($id, $description, $host)
+	public function __construct($host, $description)
 	{
-		$this->id = $id;
 		$this->host = $host;
 		$this->description= $description;
 	}

@@ -66,7 +66,7 @@ class Database
 
 		$objects = $this->backend->getObjectsEx('host');
 		foreach ($objects as $object)
-			$hosts[] = new Host($object['id'], $object['name'], $object['address']);
+			$hosts[] = new Host($object['name'], $object['address'], $object['alias']);
 
 		return $hosts;
 	}
@@ -80,7 +80,7 @@ class Database
 
 		$objects = $this->backend->getObjectsEx('service');
 		foreach ($objects as $object)
-			$services[] = new Service($object['id'], $object['host'], $object['description']);
+			$services[] = new Service($object['host'], $object['description']);
 
 		return $services;
 	}
@@ -94,7 +94,7 @@ class Database
 
 		$objects = $this->backend->getObjectsEx('hostgroup');
 		foreach ($objects as $object)
-			$hostgroups[] = new HostGroup($object['id'], $object['name'], $object['alias']);
+			$hostgroups[] = new HostGroup($object['name'], $object['alias']);
 
 		return $hostgroups;
 	}
@@ -108,7 +108,7 @@ class Database
 
 		$objects = $this->backend->getObjectsEx('servicegroup');
 		foreach ($objects as $object)
-			$servicegroups[] = new ServiceGroup($object['id'], $object['name'], $object['alias']);
+			$servicegroups[] = new ServiceGroup($object['name'], $object['alias']);
 
 		return $servicegroups;
 	}

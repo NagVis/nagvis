@@ -87,7 +87,7 @@
 
 			public function hostLabelFunction(item : Object) : String
 			{
-				return item.name + ' ' + item.address;
+				return item.name + ' ' + item.address + ' ' + item.alias;
 			}
 
 			public function serviceLabelFunction(item : Object) : String
@@ -108,7 +108,7 @@
 				{
 					case 0:
 						objects = hosts;
-						locNObject.browserFields = ["name", "address"];
+						locNObject.browserFields = ["name", "address", "alias"];
 						locNObject.labelFunction = hostLabelFunction;
 						break;
 					case 1:
