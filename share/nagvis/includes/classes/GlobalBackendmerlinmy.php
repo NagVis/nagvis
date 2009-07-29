@@ -250,7 +250,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		$ret = Array();
 
 		if($type == 'host') {
-			$QUERYHANDLE = $this->mysqlQuery('SELECT host_name AS name, address FROM host ORDER BY host_name');
+			$QUERYHANDLE = $this->mysqlQuery('SELECT host_name AS name, address, alias FROM host ORDER BY host_name');
 		} elseif($type == 'service') {
 			$QUERYHANDLE = $this->mysqlQuery('SELECT host_name AS host, service_description AS description FROM service ORDER BY host_name');
 		} elseif(in_array($type, array('hostgroup', 'servicegroup'))) {
