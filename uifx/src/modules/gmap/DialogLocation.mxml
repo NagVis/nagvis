@@ -113,7 +113,7 @@
 						break;
 					case 1:
 						objects = services;
-						locNObject.browserFields = ["description", "host"];
+						locNObject.browserFields = ["host", "description"];
 						locNObject.labelFunction = serviceLabelFunction;
 						break;
 					case 2:

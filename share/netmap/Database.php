@@ -23,6 +23,40 @@
 
 class Database
 {
+	private $CORE;
+	private $BACKEND;
+	private $backend;
+
+	public function __construct()
+	{
+		require_once("../nagvis/includes/defines/global.php");
+		require_once("../nagvis/includes/defines/matches.php");
+		//require("../nagvis/includes/functions/autoload.php");
+		set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__))
+			. PATH_SEPARATOR . '../nagvis/includes/classes/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/'
+			//. PATH_SEPARATOR . '../nagvis/includes/classes/objects/'
+			//. PATH_SEPARATOR . '../nagvis/includes/classes/controller/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/validator/'
+			//. PATH_SEPARATOR . '../nagvis/includes/classes/httpRequest/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/frontend/');
+		//require("../nagvis/includes/functions/debug.php");
+		require_once("../nagvis/includes/functions/oldPhpVersionFixes.php");
+		require_once("../nagvis/includes/functions/getuser.php");
+
+		$this->CORE = new GlobalCore();
+		$this->CORE->MAINCFG->setRuntimeValue('user', getUser());
+		$this->BACKEND = new GlobalBackendMgmt($this->CORE);
+
+		if (($backendId = $this->CORE->MAINCFG->getValue('defaults', 'backend')) === false)
+			throw new Exception('Default backend is not set');
+
+		if (!$this->BACKEND->checkBackendInitialized($backendId, 0))
+			throw new Exception('Backend ' . $backendId . ' could not be initialized');
+
+		$this->backend = $this->BACKEND->BACKENDS[$backendId];
+	}
+
 	/**
 	 * @return array of Host
 	 */
@@ -30,11 +64,9 @@ class Database
 	{
 		$hosts = array();
 
-		$hosts[] = new Host('1', 'firewall', '123.45.67.89');
-		$hosts[] = new Host('2', 'storage', '123.45.67.90');
-		$hosts[] = new Host('3', 'test', '123.45.67.91');
-		$hosts[] = new Host('4', 'foobar', '123.45.67.92');
-		$hosts[] = new Host('5', 'kitchen', '23.45.67.89');
+		$objects = $this->backend->getObjectsEx('host');
+		foreach ($objects as $object)
+			$hosts[] = new Host($object['id'], $object['name'], $object['address']);
 
 		return $hosts;
 	}
@@ -46,16 +78,9 @@ class Database
 	{
 		$services = array();
 
-		$services[] = new Service('1', 'test', 'firewall');
-		$services[] = new Service('2', 'ping', 'firewall');
-		$services[] = new Service('3', 'ping', 'storage');
-		$services[] = new Service('4', 'abcdefg', 'foobar');
-		$services[] = new Service('5', 'ping', 'foobar');
-
-		/*
-		for ($i = 0; $i < 10000; $i++)
-			$services[] = new Service((string)$i, uniqid(), (string)$i);
-		*/
+		$objects = $this->backend->getObjectsEx('service');
+		foreach ($objects as $object)
+			$services[] = new Service($object['id'], $object['host'], $object['description']);
 
 		return $services;
 	}
@@ -67,9 +92,9 @@ class Database
 	{
 		$hostgroups = array();
 
-		$hostgroups[] = new HostGroup('1', 'Gothenburg');
-		$hostgroups[] = new HostGroup('2', 'Stockholm');
-		$hostgroups[] = new HostGroup('3', 'Lviv');
+		$objects = $this->backend->getObjectsEx('hostgroup');
+		foreach ($objects as $object)
+			$hostgroups[] = new HostGroup($object['id'], $object['name'], $object['alias']);
 
 		return $hostgroups;
 	}
@@ -81,8 +106,9 @@ class Database
 	{
 		$servicegroups = array();
 
-		$servicegroups[] = new ServiceGroup('1', 'Gothenburg-Stockholm VPN link');
-		$servicegroups[] = new ServiceGroup('2', 'Stockholm-Lviv VPN link');
+		$objects = $this->backend->getObjectsEx('servicegroup');
+		foreach ($objects as $object)
+			$servicegroups[] = new ServiceGroup($object['id'], $object['name'], $object['alias']);
 
 		return $servicegroups;
 	}
