@@ -359,6 +359,22 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PUBLIC Method getObjectsEx
+	 * 
+	 * Return all objects configured at Nagios plus some additional information. 
+	 * This is needed for gmap, e.g. to populate lists.
+	 *
+	 * @param	string $type
+	 * @return	array $ret
+	 * @author	Roman Kyrylych <rkyrylych@op5.com>
+	 */
+	public function getObjectsEx($type) {
+		$ret = Array();
+
+		return $ret;
+	}
+
+	/**
 	 * PRIVATE Method checkForIsActiveObjects
 	 *
 	 * Checks if there are some object records with is_active=1
