@@ -26,8 +26,7 @@ package modules.gmap
 	public class Service
 	{
 		public var id : String;
-		public var description : String;
 		public var host : String;
-		public var selected : Boolean;
+		public var description : String;
 	}
 }

@@ -24,16 +24,14 @@
 class Service
 {
 	public $id;
-	public $description;
 	public $host;
-	public $selected;
+	public $description;
 
-	public function __construct($id, $description, $host, $selected = false)
+	public function __construct($id, $description, $host)
 	{
 		$this->id = $id;
-		$this->description= $description;
 		$this->host = $host;
-		$this->selected = $selected;
+		$this->description= $description;
 	}
 }
 

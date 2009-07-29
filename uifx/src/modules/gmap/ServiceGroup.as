@@ -28,6 +28,5 @@ package modules.gmap
 		public var id : String;
 		public var name : String;
 		public var alias : String;
-		public var selected : Boolean;
 	}
 }

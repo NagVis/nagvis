@@ -26,14 +26,12 @@ class ServiceGroup
 	public $id;
 	public $name;
 	public $alias;
-	public $selected;
 
-	public function __construct($id, $name, $alias = '', $selected = false)
+	public function __construct($id, $name, $alias = '')
 	{
 		$this->id = $id;
 		$this->name = $name;
 		$this->alias = $alias;
-		$this->selected = $selected;
 	}
 }
 
