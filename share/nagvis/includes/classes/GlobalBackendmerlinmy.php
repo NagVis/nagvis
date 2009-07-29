@@ -259,7 +259,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			return Array();
 		}
 		
-		while($data = mysql_fetch_array($QUERYHANDLE, MSQL_ASSOC)) {
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			$ret[] = $data;
 		}
 		
