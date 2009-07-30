@@ -167,10 +167,10 @@
 					<mx:Spacer/>
 					<mx:ComboBox id="locNObjectType" selectedIndex="2" width="100%" change="onObjectTypeChange()">
 						<mx:ArrayCollection>
-							<mx:String>Host</mx:String>
-							<mx:String>Service</mx:String>
-							<mx:String>Host Group</mx:String>
-							<mx:String>Service Group</mx:String>
+							<mx:Object label="Host" value="host"/>
+							<mx:Object label="Service" value="service"/>
+							<mx:Object label="Host Group" value="hostgroup"/>
+							<mx:Object label="Service Group" value="servicegroup"/>
 						</mx:ArrayCollection>
 					</mx:ComboBox>
 					<mx:Spacer/>

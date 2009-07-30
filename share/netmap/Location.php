@@ -120,33 +120,32 @@ class Location
 		// Note: @ prevents warnings when attribute value is an empty string
 
 		$object_node = $node->addChild($objectType);
-		switch ($object_type)
+		switch ($objectType)
 		{
 			case 'host':
-				$object_node->addAttribute('name', $object['name']);
-				@$object_node->addAttribute('address', $object['address']);
-				@$object_node->addAttribute('alias', $object['alias']);
+				$object_node->addAttribute('name', $object->name);
+				@$object_node->addAttribute('address', $object->address);
+				@$object_node->addAttribute('alias', $object->alias);
 				break;
 
 			case 'hostgroup':
-				$object_node->addAttribute('name', $object['name']);
-				@$object_node->addAttribute('alias', $object['alias']);
+				$object_node->addAttribute('name', $object->name);
+				@$object_node->addAttribute('alias', $object->alias);
 				break;
 
 			case 'service':
-				$object_node->addAttribute('host', $object['host']);
-				@$object_node->addAttribute('description', $object['description']);
+				$object_node->addAttribute('host', $object->host);
+				@$object_node->addAttribute('description', $object->description);
 				break;
 
 			case 'servicegroup':
-				$object_node->addAttribute('name', $object['name']);
-				@$object_node->addAttribute('alias', $object['alias']);
+				$object_node->addAttribute('name', $object->name);
+				@$object_node->addAttribute('alias', $object->alias);
 				break;
 
 			default:
 				throw new Exception('Cannot save unknown object type');
 		}
-	}
 
 		$location = new Location($id, $point, $label, $address, $description, $object, $objectType);
 
