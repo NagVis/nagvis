@@ -26,7 +26,7 @@ class ServiceGroup
 	public $name;
 	public $alias;
 
-	public function __construct($name, $alias = '')
+	public function __construct($name = '', $alias = '')
 	{
 		$this->name = $name;
 		$this->alias = $alias;

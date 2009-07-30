@@ -26,7 +26,7 @@ class Service
 	public $host;
 	public $description;
 
-	public function __construct($host, $description)
+	public function __construct($host = '', $description = '')
 	{
 		$this->host = $host;
 		$this->description= $description;

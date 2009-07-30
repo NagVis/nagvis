@@ -27,7 +27,7 @@ class Host
 	public $address;
 	public $alias;
 
-	public function __construct($name, $address, $alias = '')
+	public function __construct($name = '', $address = '', $alias = '')
 	{
 		$this->name = $name;
 		$this->address = $address;
