@@ -105,7 +105,7 @@ class Location
 	 * @param  string $description
 	 * @return Location
 	 */
-	public function add($point, $label, $address, $description)
+	public function add($point, $label, $address, $description, $object, $objectType)
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
@@ -119,7 +119,36 @@ class Location
 		@$node->addAttribute('description', $description);
 		// Note: @ prevents warnings when attribute value is an empty string
 
-		$location = new Location($id, $point, $label, $address, $description);
+		$object_node = $node->addChild($objectType);
+		switch ($object_type)
+		{
+			case 'host':
+				$object_node->addAttribute('name', $object['name']);
+				@$object_node->addAttribute('address', $object['address']);
+				@$object_node->addAttribute('alias', $object['alias']);
+				break;
+
+			case 'hostgroup':
+				$object_node->addAttribute('name', $object['name']);
+				@$object_node->addAttribute('alias', $object['alias']);
+				break;
+
+			case 'service':
+				$object_node->addAttribute('host', $object['host']);
+				@$object_node->addAttribute('description', $object['description']);
+				break;
+
+			case 'servicegroup':
+				$object_node->addAttribute('name', $object['name']);
+				@$object_node->addAttribute('alias', $object['alias']);
+				break;
+
+			default:
+				throw new Exception('Cannot save unknown object type');
+		}
+	}
+
+		$location = new Location($id, $point, $label, $address, $description, $object, $objectType);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
 			return $location;
@@ -135,7 +164,7 @@ class Location
 	 * @param  string $description
 	 * @return Location
 	 */
-	public function edit($id, $point, $label, $address, $description)
+	public function edit($id, $point, $label, $address, $description, $object, $objectType)
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
