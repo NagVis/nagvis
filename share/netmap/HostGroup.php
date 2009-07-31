@@ -31,6 +31,21 @@ class HostGroup
 		$this->name = $name;
 		$this->alias = $alias;
 	}
+
+	public static function fromXML($node)
+	{
+		return new HostGroup((string)$node['name'],
+			(string)$node['alias']);
+	}
+
+	public function toXML($parent)
+	{
+		$node = $parent->addChild('hostgroup');
+		$node->addAttribute('name', $this->name);
+		@$node->addAttribute('alias', $this->alias);
+
+		return $node;
+	}
 }
 
 ?>

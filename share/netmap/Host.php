@@ -33,6 +33,23 @@ class Host
 		$this->address = $address;
 		$this->alias = $alias;
 	}
+
+	public static function fromXML($node)
+	{
+		return new Host((string)$node['name'],
+			(string)$node['address'],
+			(string)$node['alias']);
+	}
+
+	public function toXML($parent)
+	{
+		$node = $parent->addChild('host');
+		$node->addAttribute('name', $this->name);
+		@$node->addAttribute('address', $this->address);
+		@$node->addAttribute('alias', $this->alias);
+
+		return $node;
+	}
 }
 
 ?>

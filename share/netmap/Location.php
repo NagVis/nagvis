@@ -64,24 +64,19 @@ class Location
 				switch ($object_type)
 				{
 					case 'host':
-						$object = new Host((string)$object_node['name'],
-							(string)$object_node['address'],
-							(string)$object_node['alias']);
+						$object = Host::fromXML($object_node);
 						break;
 
 					case 'hostgroup':
-						$object = new HostGroup((string)$object_node['name'],
-							(string)$object_node['alias']);
+						$object = HostGroup::fromXML($object_node);
 						break;
 
 					case 'service':
-						$object = new Service((string)$object_node['host'],
-							(string)$object_node['description']);
+						$object = Service::fromXML($object_node);
 						break;
 
 					case 'servicegroup':
-						$object = new ServiceGroup((string)$object_node['name'],
-							(string)$object_node['alias']);
+						$object = ServiceGroup::fromXML($object_node);
 						break;
 
 					default:
@@ -119,33 +114,7 @@ class Location
 		@$node->addAttribute('description', $description);
 		// Note: @ prevents warnings when attribute value is an empty string
 
-		$object_node = $node->addChild($objectType);
-		switch ($objectType)
-		{
-			case 'host':
-				$object_node->addAttribute('name', $object->name);
-				@$object_node->addAttribute('address', $object->address);
-				@$object_node->addAttribute('alias', $object->alias);
-				break;
-
-			case 'hostgroup':
-				$object_node->addAttribute('name', $object->name);
-				@$object_node->addAttribute('alias', $object->alias);
-				break;
-
-			case 'service':
-				$object_node->addAttribute('host', $object->host);
-				@$object_node->addAttribute('description', $object->description);
-				break;
-
-			case 'servicegroup':
-				$object_node->addAttribute('name', $object->name);
-				@$object_node->addAttribute('alias', $object->alias);
-				break;
-
-			default:
-				throw new Exception('Cannot save unknown object type');
-		}
+		$object->toXML($node);
 
 		$location = new Location($id, $point, $label, $address, $description, $object, $objectType);
 

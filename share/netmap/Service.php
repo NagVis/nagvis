@@ -31,6 +31,21 @@ class Service
 		$this->host = $host;
 		$this->description= $description;
 	}
+
+	public static function fromXML($node)
+	{
+		return new Service((string)$node['host'],
+			(string)$node['description']);
+	}
+
+	public function toXML($parent)
+	{
+		$node = $parent->addChild('service');
+		$node->addAttribute('host', $this->host);
+		@$node->addAttribute('description', $this->description);
+
+		return $node;
+	}
 }
 
 ?>

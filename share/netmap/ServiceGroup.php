@@ -31,6 +31,21 @@ class ServiceGroup
 		$this->name = $name;
 		$this->alias = $alias;
 	}
+
+	public static function fromXML($node)
+	{
+		return new ServiceGroup((string)$node['name'],
+			(string)$node['alias']);
+	}
+
+	public function toXML($parent)
+	{
+		$node = $parent->addChild('servicegroup');
+		$node->addAttribute('name', $this->name);
+		@$node->addAttribute('alias', $this->alias);
+
+		return $node;
+	}
 }
 
 ?>
