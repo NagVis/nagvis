@@ -32,7 +32,6 @@ package modules.gmap
 		private var _address : String;
 		private var _description : String;
 		private var _object : Object;
-		private var _objectType : String;
 
 		public function get id() : String
 		{
@@ -118,20 +117,6 @@ package modules.gmap
 			}
 		}
 
-		public function get objectType() : String
-		{
-			return this._objectType;
-		}
-
-		public function set objectType(value : String) : void
-		{
-			if (_objectType != value)
-			{
-				this._objectType = value;
-				dispatchEvent(new LocationEvent('change', this));
-			}
-		}
-
 		public function update(value : Location) : void
 		{
 			this.id = value.id;
@@ -140,7 +125,6 @@ package modules.gmap
 			this.address = value.address;
 			this.description = value.description;
 			this.object = value.object;
-			this.objectType = value.objectType;
 		}
 	}
 }

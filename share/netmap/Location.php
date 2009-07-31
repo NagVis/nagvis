@@ -29,9 +29,8 @@ class Location
 	public $address;
 	public $description;
 	public $object;
-	public $objectType;
 
-	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $object = null, $objectType = "")
+	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $object = null)
 	{
 		$this->id = $id;
 		$this->point = $point;
@@ -39,7 +38,6 @@ class Location
 		$this->address = $address;
 		$this->description = $description;
 		$this->object = $object;
-		$this->objectType = $objectType;
 	}
 
 	/**
@@ -100,7 +98,7 @@ class Location
 	 * @param  string $description
 	 * @return Location
 	 */
-	public function add($point, $label, $address, $description, $object, $objectType)
+	public function add($point, $label, $address, $description, $object)
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
@@ -116,7 +114,7 @@ class Location
 
 		$object->toXML($node);
 
-		$location = new Location($id, $point, $label, $address, $description, $object, $objectType);
+		$location = new Location($id, $point, $label, $address, $description, $object);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
 			return $location;
@@ -132,7 +130,7 @@ class Location
 	 * @param  string $description
 	 * @return Location
 	 */
-	public function edit($id, $point, $label, $address, $description, $object, $objectType)
+	public function edit($id, $point, $label, $address, $description, $object)
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');

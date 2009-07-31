@@ -380,7 +380,7 @@ private function onSaveLocation() : void
 	{
 		rLocations.add((new LatLng(parseFloat(locationBox.locLat.text), parseFloat(locationBox.locLng.text)).toUrlValue(16)),
 			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text,
-			locationBox.locNObject.selectedItem, locationBox.locNObjectType.selectedItem.value);
+			locationBox.locNObject.selectedItem);
 	}
 }
 
