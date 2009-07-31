@@ -47,10 +47,10 @@ private var viewpoints     : ArrayCollection;
 private var locations      : LocationsCollection = new LocationsCollection;
 private var foundLocations : LocationsCollection = new LocationsCollection;
 private var links          : ArrayCollection;
-private var hosts          : ArrayCollection;
-private var hostgroups     : ArrayCollection;
-private var services       : ArrayCollection = new ArrayCollection();
-private var servicegroups  : ArrayCollection = new ArrayCollection();
+private var hosts          : ArrayCollection = new ArrayCollection;
+private var hostgroups     : ArrayCollection = new ArrayCollection;
+private var services       : ArrayCollection = new ArrayCollection;
+private var servicegroups  : ArrayCollection = new ArrayCollection;
 
 private var locationsView      : LocationsView;
 private var foundLocationsView : FoundLocationsView;
@@ -352,9 +352,10 @@ next_host:
 
 	if (locationsView && locationsView.selectedLocation)
 		locationBox.update(locationsView.selectedLocation);
+	else if(foundLocationsView && foundLocationsView.selectedLocation)
+		locationBox.update(foundLocationsView.selectedLocation);
 	else
-		if(foundLocationsView && foundLocationsView.selectedLocation)
-			locationBox.update(foundLocationsView.selectedLocation);
+		locationBox.update(null);
 }
 
 private function onHideLocationBox() : void
@@ -374,7 +375,8 @@ private function onSaveLocation() : void
 	{
 		rLocations.edit(locationBox.locID,
 			(new LatLng(parseFloat(locationBox.locLat.text), parseFloat(locationBox.locLng.text)).toUrlValue(16)),
-			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text);
+			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text,
+			locationBox.locNObject.selectedItem);
 	}
 	else
 	{

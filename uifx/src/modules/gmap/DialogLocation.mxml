@@ -30,18 +30,19 @@
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
-			import mx.events.MenuEvent;
-			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import com.google.maps.LatLng;
+
+			import mx.collections.ArrayCollection;
+			import mx.events.MenuEvent;
 
 			[Bindable]
 			public var locID : String;
 
-			public var hosts         : ArrayCollection = new ArrayCollection()
-			public var hostgroups    : ArrayCollection = new ArrayCollection()
-			public var services      : ArrayCollection = new ArrayCollection();
-			public var servicegroups : ArrayCollection = new ArrayCollection();
+			public var hosts         : ArrayCollection = new ArrayCollection;
+			public var hostgroups    : ArrayCollection = new ArrayCollection;
+			public var services      : ArrayCollection = new ArrayCollection;
+			public var servicegroups : ArrayCollection = new ArrayCollection;
 
 			[Bindable]
 			public var objects : ArrayCollection = hostgroups;
@@ -51,7 +52,6 @@
 				locNObject.flowBox.setStyle("borderStyle", "solid");
 				locNObject.flowBox.setStyle("borderColor", "#000000");
 				locNObject.flowBox.setStyle("cornerRadius", "3");
-				this.onObjectTypeChange();
 			}
 
 			public function update(location : Location) : void
@@ -64,6 +64,39 @@
 					locLng.text = LatLng.fromUrlValue(location.point).lng().toString();
 					locAddress.text = location.address;
 					locDescription.text = location.description;
+
+					if (location.object is Host)
+					{
+						locNObjectType.selectedIndex = 0;
+						onObjectTypeChange();
+						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+						//       though documentation says it should
+						locNObject.selectedItem = location.object;
+					}
+					else if (location.object is Service)
+					{
+						locNObjectType.selectedIndex = 1;
+						onObjectTypeChange();
+						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+						//       though documentation says it should
+						locNObject.selectedItem = location.object;
+					}
+					else if (location.object is HostGroup)
+					{
+						locNObjectType.selectedIndex = 2;
+						onObjectTypeChange();
+						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+						//       though documentation says it should
+						locNObject.selectedItem = location.object;
+					}
+					else if (location.object is ServiceGroup)
+					{
+						locNObjectType.selectedIndex = 3;
+						onObjectTypeChange();
+						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+						//       though documentation says it should
+						locNObject.selectedItem = location.object;
+					}
 				}
 				else
 				{
@@ -73,6 +106,11 @@
 					locLng.text = "";
 					locAddress.text = "";
 					locDescription.text = "";
+					locNObjectType.selectedIndex = 2;
+					onObjectTypeChange();
+					// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+					//       though documentation says it should
+					locNObject.selectedItem = null;
 				}
 			}
 
@@ -88,17 +126,17 @@
 
 			public function hostLabelFunction(item : Object) : String
 			{
-				return item.name + ' ' + item.address + ' ' + item.alias;
+				return item.name + ' / ' + item.address + ' (' + item.alias + ')';
 			}
 
 			public function serviceLabelFunction(item : Object) : String
 			{
-				return item.description + ' ' + item.host;
+				return item.description + ' on ' + item.host;
 			}
 
 			public function groupLabelFunction(item : Object) : String
 			{
-				return item.name + ' ' + item.alias;
+				return item.name + ' (' + item.alias + ')';
 			}
 
 			private function onObjectTypeChange() : void
@@ -166,7 +204,7 @@
 				</mx:HBox>
 				<mx:HBox width="100%">
 					<mx:Spacer/>
-					<mx:ComboBox id="locNObjectType" selectedIndex="2" width="100%" change="onObjectTypeChange()">
+					<mx:ComboBox id="locNObjectType" width="100%" change="onObjectTypeChange()">
 						<mx:ArrayCollection>
 							<mx:String>Host</mx:String>
 							<mx:String>Service</mx:String>
@@ -185,7 +223,7 @@
 					<mx:Spacer/>
 					<hc:AdvancedAutoComplete id="locNObject" width="100%"
 						dataProvider="{objects}" selectedItemStyleName="underline" labelFunction="groupLabelFunction"
-						matchType="anyPart" allowMultipleSelection="false"
+						matchType="anyPart" allowMultipleSelection="false" showRemoveIcon="true"
 						actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
 						browserFields="{['name', 'alias']}"
 					/>
