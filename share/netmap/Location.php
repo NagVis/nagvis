@@ -112,7 +112,8 @@ class Location
 		@$node->addAttribute('description', $description);
 		// Note: @ prevents warnings when attribute value is an empty string
 
-		$object->toXML($node);
+		if (is_object($object))
+			$object->toXML($node);
 
 		$location = new Location($id, $point, $label, $address, $description, $object);
 
@@ -150,7 +151,8 @@ class Location
 				unset($location->hostgroup);
 				unset($location->servicegroup);
 
-				$object->toXML($location);
+				if (is_object($object))
+					$object->toXML($location);
 
 				$success = true;
 				break;
