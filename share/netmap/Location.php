@@ -143,6 +143,15 @@ class Location
 				$location['label'] = $label;
 				$location['address'] = $address;
 				$location['description'] = $description;
+
+				// remove all children
+				unset($location->host);
+				unset($location->service);
+				unset($location->hostgroup);
+				unset($location->servicegroup);
+
+				$object->toXML($location);
+
 				$success = true;
 				break;
 			}
@@ -151,7 +160,7 @@ class Location
 		if (!isset($success))
 			throw new Exception('Location does not exist');
 
-		$location = new Location($id, $point, $label, $address, $description);
+		$location = new Location($id, $point, $label, $address, $description, $object);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
 			return $location;
