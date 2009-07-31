@@ -45,8 +45,8 @@ class Geocode
 				{
 					$coordinates = explode(',', (string)$placemark->Point->coordinates);
 					$locations[] = array(
-						'point' => ($coordinates[1] . ',' . $coordinates[0]),
-						'address' => substr((string)$placemark->address, 0, -2)
+						'point' =>  ($coordinates[1] . ',' . $coordinates[0]),
+						'address' =>(string)$placemark->address
 					);
 				}
 				break;
