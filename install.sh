@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2  "
+INSTALLER_VERSION="0.2.1"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -46,17 +46,12 @@ RC=0
 # data source
 SOURCE=nagios
 
-# Default Nagios path
-NAGIOS_PATH="/usr/local/$SOURCE"
-# Default Path to NagVis base
-NAGVIS_PATH="/usr/local/nagvis"
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
 # Version of NagVis to be installed
 NAGVIS_VER=""
 [ -f share/nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 [ -f nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
-NAGVIS_TAG=`perl -e '$ARGV[0] =~ /(\d+)\.(\d+)/; printf "%02d%02d",$1,$2' $NAGVIS_VER` 
 
 # Version of old NagVis (will be detected if update)
 NAGVIS_VER_OLD=""
@@ -89,6 +84,12 @@ GREP_INCOMPLETE=0
 
 # Function definitions
 ###############################################################################
+
+# format version string
+fmt_version() {
+   LNG=${2:-6}
+	echo `perl -e '$v = $ARGV[0];$v =~ s/rc|b/.0./gi; @f = split (/\./,$v); for (0..$#f) { $z .= sprintf "%02d", $f[$_]; }; print substr($z."000000",0,$ARGV[1]);' $1 $LNG` 
+}
 
 # Print usage
 usage() {
@@ -296,12 +297,13 @@ check_graphviz_version() {
 		GRAPHVIZ_VER=`$PKG -qa "graphviz" | sed "s/graphviz-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
 
+   GRAPHVIZ_FMT=`fmt_version $GRAPHVIZ_VER` 
 	if [ -z "$GRAPHVIZ_VER" ]; then
 		log "WARNING: The Graphviz package was not found." "warning"
 		log "         This may not be a problem if you installed it from source" "warning"
 	else 
 		log "Graphviz $GRAPHVIZ_VER" $GRAPHVIZ_VER
-		if [ `echo "$1 $GRAPHVIZ_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $1 ]; then
+		if [ $GRAPHVIZ_FMT -lt $GRAPHVIZ_REQ ]; then
 			log "|  Error: Version >= $1" "needed"
 		fi
 	fi
@@ -320,8 +322,9 @@ check_graphviz_modules() {
 		fi
 		
 		log "  Graphviz Module $MOD $GV_MOD_VER" $TMP
+      GV_MOD_FMT=`fmt_version $GV_MOD_VER` 
 		
-		if [ `echo "$2 $GV_MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
+		if [ $GV_MOD_FMT -lt $GRAPHVIZ_REQ ]; then
 			log "|  Error: Version >= $2" "needed"
 		fi
 	done
@@ -341,8 +344,10 @@ check_php_version() {
 		fi
 	fi
 	log "PHP $PHP_VER" $PHP_VER
+	PHP_FMT=`fmt_version $PHP_VER` 
+	PHP_REQ=`fmt_version $NEED_PHP_VERSION` 
 	
-	if [ `echo "$1 $PHP_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $1 ]; then
+	if [ $PHP_FMT -lt $PHP_REQ ]; then
 		log "|  Error: Version >= $1" "needed"
 	fi
 }
@@ -504,14 +509,16 @@ if [ $# -gt 0 ]; then
 fi
 
 # more re/initialization
+# Version info
+NAGVIS_TAG=`fmt_version "$NAGVIS_VER"` 
 # Default Nagios path
 NAGIOS_PATH="/usr/local/$SOURCE"
 # Default Path to NagVis base
 NAGVIS_PATH="/usr/local/nagvis"
-[ $NAGVIS_TAG -lt 0105 ]&&NAGVIS_PATH="/usr/local/$SOURCE/share/nagvis"
+[ $NAGVIS_TAG -lt 010500 ]&&NAGVIS_PATH="/usr/local/$SOURCE/share/nagvis"
 # Default nagios share webserver path
 HTML_PATH="/nagvis"
-[ $NAGVIS_TAG -lt 0105 ]&&HTML_PATH="/$SOURCE"
+[ $NAGVIS_TAG -lt 010500 ]&&HTML_PATH="/$SOURCE/nagvis"
 HTML_BASE=$HTML_PATH
 
 # Print welcome message
@@ -612,6 +619,7 @@ if [ $HTML_ANZ -gt 1 ]; then
 fi
 
 # Check Graphviz
+GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
 check_graphviz_version $NEED_GV_VERSION
 
 # Check Graphviz Modules
@@ -737,7 +745,7 @@ fi
 # Create base path
 makedir "$NAGVIS_PATH"
 
-if [ $NAGVIS_TAG -ge 105 ]; then
+if [ $NAGVIS_TAG -ge 010401 ]; then
 	# Create non shared var directory when not exists
 	makedir "$NAGVIS_PATH/var"
 	# Create shared var directory when not exists
@@ -844,10 +852,10 @@ text
 
 line "Setting permissions..." "+"
 chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
-set_perm 664 "$NAGVIS_PATH/$NAGVIS_CONF-sample"
+[ -f "$NAGVIS_PATH/$NAGVIS_CONF-sample" ]&&set_perm 664 "$NAGVIS_PATH/$NAGVIS_CONF-sample"
 set_perm 775 "$NAGVIS_PATH/etc/maps"
 set_perm 664 "$NAGVIS_PATH/etc/maps/*"
-if [ $NAGVIS_TAG -lt 0105 ]; then
+if [ $NAGVIS_TAG -lt 010500 ]; then
 	set_perm 775 "$NAGVIS_PATH/nagvis/images/maps"
 	set_perm 664 "$NAGVIS_PATH/nagvis/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/nagvis/var"
@@ -872,7 +880,7 @@ text "| - Read the documentation" "|"
 text "| - Maybe you want to edit the main configuration file?" "|"
 text "|   Its location is: $NAGVIS_PATH/$NAGVIS_CONF" "|"
 text "| - Configure NagVis via browser" "|"
-if [ $NAGVIS_TAG -lt 0105 ]; then
+if [ $NAGVIS_TAG -lt 010500 ]; then
 	text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
 else
 	text "|   <http://localhost${HTML_PATH}/config.php>" "|"
