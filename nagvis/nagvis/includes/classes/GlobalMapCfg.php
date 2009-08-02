@@ -1289,7 +1289,7 @@ class GlobalMapCfg {
 									$sKey = trim(substr($file[$l],0,$iDelimPos));
 									$sValue = trim(substr($file[$l],($iDelimPos+1)));
 									
-									if(isset($ignoreKeys[$sKey])) {
+									if(!isset($ignoreKeys[$sKey])) {
 										if(isset($createArray[$sKey])) {
 											$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
 										} else {
@@ -1452,7 +1452,7 @@ class GlobalMapCfg {
 						// value is "must"
 						if(!isset($element[$key]) || $element[$key] == '') {
 							// a "must" value is missing or empty
-							new GlobalFrontendMessage('ERROR',$this->CORE->LANG->getText('mustValueNotSet', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type, 'ID' => $id)));
+							new GlobalFrontendMessage('ERROR',$this->CORE->LANG->getText('mapCfgMustValueNotSet', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type, 'ID' => $id)));
 						}
 					}
 				}
