@@ -145,6 +145,14 @@
 ; The interval in seconds in which the worker will check for objects which need
 ; to be updated
 ;interval=10
+; The maximum number of parameters used in ajax http requests
+; Some intrusion detection/prevention systems have a problem with
+; too many parameters in the url. Give 0 for no limit.
+;requestmaxparams=0
+; The maxium length of http request urls during ajax http requests
+; Some intrusion detection/prevention systems have a problem with
+; too long queries
+;requestmaxlength=1900
 ; The retention time of the states in the frontend in seconds. The state 
 ; information will be refreshed after this time
 ;updateobjectstates=30

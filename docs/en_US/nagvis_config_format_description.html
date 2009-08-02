@@ -258,6 +258,12 @@
 		<td> interval </td><td> 5 </td><td> The interval in seconds in which the worker will check for objects which need to be updated. </td>
 		</tr>
 		<tr>
+		<td> requestmaxparams</td><td>0</td><td>The maximum number of parameters used in ajax http requests Some intrusion detection/prevention systems have a problem with too many parameters in the url. Give 0 for no limit.</td>
+		</tr>
+		<tr>
+		<td> requestmaxlength</td><td>1900</td><td>The maxium length of http request urls during ajax http requests. Some intrusion detection/prevention systems have a problem with too long queries.</td>
+		</tr>
+		<tr>
 		<td> updateobjectstates </td><td> 15 </td><td> The retention time of the states in seconds in the frontend. The state information will be refreshed after this time is over on next worker interval. </td>
 		</tr>
 		</table>
