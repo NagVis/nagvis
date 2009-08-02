@@ -526,6 +526,9 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 
 		// Reparse the hover menu
 		aObjs[intIndex].parseHoverMenu();
+		
+		// Reparse the context menu
+		aObjs[intIndex].parseContextMenu();
 	}
 	
 	return bStateChanged;
