@@ -286,6 +286,9 @@ function getObjConf($objType, $objName1, $objName2, $objectId, $map = null) {
 				if($objs[$i]['object_id'] == $objectId) {
 					$objConf = $objs[$i];
 					$objConf['id'] = $i;
+					
+					// Break the loop on first match
+					break;
 				}
 			}
 		} else {
