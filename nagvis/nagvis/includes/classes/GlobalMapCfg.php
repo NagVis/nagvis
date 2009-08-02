@@ -1230,6 +1230,10 @@ class GlobalMapCfg {
 					$createArray = Array('allowed_user' => 1,
 										'allowed_for_config' => 1,
 										'use' => 1);
+										
+					// Don't read these keys
+					$ignoreKeys = Array('object_id' => 0,
+					                    'type' => 0);
 					
 					$l = 0;
 					
@@ -1285,10 +1289,12 @@ class GlobalMapCfg {
 									$sKey = trim(substr($file[$l],0,$iDelimPos));
 									$sValue = trim(substr($file[$l],($iDelimPos+1)));
 									
-									if(isset($createArray[$sKey])) {
-										$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
-									} else {
-										$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
+									if(isset($ignoreKeys[$sKey])) {
+										if(isset($createArray[$sKey])) {
+											$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
+										} else {
+											$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
+										}
 									}
 								}
 							}
