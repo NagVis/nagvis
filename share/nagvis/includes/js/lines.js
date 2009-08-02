@@ -119,13 +119,17 @@ function drawArrow(objectId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkAre
 		ctx = null;
 		oCanvas = null;
 		oLineContainer = null;
-		
 	} else {
+		var oLineContainer = document.getElementById(objectId+'-line');
+		
 		// Fallback to old line style
-		var oLine = new jsGraphics(objectId+'-line');
+		var oLine = new jsGraphics(document.getElementById(objectId+'-line'));
 		oLine.setColor(colorFill);
 		oLine.fillPolygon(xCoord, yCoord);
 		oLine.paint();
+		
+		oLine = null;
+		oLineContainer = null;
 	}
 	
 	oCanvas = null;
