@@ -160,7 +160,7 @@ function setMapHoverUrls() {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverUrl', aUrlParts, 1900, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -226,7 +226,7 @@ function getHoverTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverTemplate', aUrlParts, 1900, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -274,7 +274,7 @@ function getContextTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getContextTemplate', aUrlParts, 1900, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oContextTemplates
 	if(aTemplateObjects.length > 0) {
@@ -546,7 +546,6 @@ function refreshMapObject(objectId) {
 		}
 	}
 	
-	var aUrlParts = [];
 	var name = aMapObjects[iIndex].conf.name;
 	
 	var type = aMapObjects[iIndex].conf.type;
@@ -562,11 +561,8 @@ function refreshMapObject(objectId) {
 		sUrlPart = sUrlPart + '&n2[]=';
 	}
 	
-	// Append part to array of parts
-	aUrlParts.push(sUrlPart);
-	
 	// Get the updated objectsupdateMapObjects via bulk request
-	var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+	var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state' + sUrlPart, false);
 	var bStateChanged = false;
 	if(o.length > 0) {
 		bStateChanged = updateObjects(o, aMapObjects, 'map');
@@ -1164,7 +1160,12 @@ function runWorker(iCount, sType) {
 				// Create the ajax request for bulk update, handle shape updates
 				var aUrlParts = [];
 				var aShapesToUpdate = [];
-				for(var i = 0, len = arrObj.length; i < len; i++) {
+				var iUrlParams = 0;
+				var iUrlLength = 0;
+				
+				// Only continue with the loop when below param limit
+				// and below maximum length
+				for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)) && iUrlLength < oWorkerProperties.worker_request_max_length; i++) {
 					var type = aMapObjects[arrObj[i]].conf.type;
 					
 					// Seperate shapes from rest
@@ -1188,6 +1189,12 @@ function runWorker(iCount, sType) {
 								sUrlPart = sUrlPart + '&n2[]=';
 							}
 							
+							// Adding 4 params above code, count them here
+							iUrlParams += 4;
+							
+							// Also count the length
+							iUrlLength += sUrlPart.length
+							
 							// Append part to array of parts
 							aUrlParts.push(sUrlPart);
 						}
@@ -1195,7 +1202,7 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
 					bStateChanged = updateObjects(o, aMapObjects, sType);
@@ -1269,7 +1276,7 @@ function runWorker(iCount, sType) {
 				}
 				
 				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, 1900, false);
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
 					bStateChanged = updateObjects(o, aMaps, sType);

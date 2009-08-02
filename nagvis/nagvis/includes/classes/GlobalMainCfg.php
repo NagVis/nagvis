@@ -400,6 +400,14 @@ class GlobalMainCfg {
 				'updateobjectstates' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '30',
+					'match' => MATCH_INTEGER),
+				'requestmaxparams' => Array('must' => 0,
+					'editable' => 1,
+					'default' => 0,
+					'match' => MATCH_INTEGER),
+				'requestmaxlength' => Array('must' => 0,
+					'editable' => 1,
+					'default' => 1900,
 					'match' => MATCH_INTEGER)),
 			'internal' => Array(
 				'version' => Array('must' => 1,
@@ -982,6 +990,8 @@ class GlobalMainCfg {
 		
 		$arr['worker_interval'] = $this->getValue('worker', 'interval');
 		$arr['worker_update_object_states'] = $this->getValue('worker', 'updateobjectstates');
+		$arr['worker_request_max_params'] = $this->getValue('worker', 'requestmaxparams');
+		$arr['worker_request_max_length'] = $this->getValue('worker', 'requestmaxlength');
 		
 		return json_encode($arr);
 	}
