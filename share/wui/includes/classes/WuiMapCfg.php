@@ -183,7 +183,7 @@ class WuiMapCfg extends GlobalMapCfg {
 								// Loop all parameters from array
 								foreach($this->mapConfig[$type][$id] AS $key => $val) {
 									// if key is not type
-									if($key != 'type') {
+									if($key != 'type' && $key != 'object_id') {
 										$cfgLines = 0;
 										$cfgLine = '';
 										$cfgLineNr = 0;
