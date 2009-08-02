@@ -198,7 +198,7 @@ class GlobalIndexPage {
 	public function parseMapsJson() {
 		$aMaps = Array();
 		
-		foreach($this->CORE->getAvailableMaps() AS $mapName) {
+		foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
 			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
 			if(!$MAPCFG->readMapConfig()) {
 				// Skip this map when config problem
