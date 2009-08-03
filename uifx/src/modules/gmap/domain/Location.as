@@ -21,6 +21,8 @@
 
 package modules.gmap.domain
 {
+	import modules.gmap.events.LocationEvent;
+	
 	[Bindable]
 	[RemoteClass(alias="Location")]
 	[Event(name="change", type="modules.gmap.LocationEvent")]

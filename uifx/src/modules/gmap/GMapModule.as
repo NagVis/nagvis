@@ -30,12 +30,17 @@ import flash.events.IOErrorEvent;
 import flash.net.URLLoader;
 import flash.system.Security;
 
-import modules.gmap.Link;
-import modules.gmap.Location;
 import modules.gmap.LocationsCollection;
 import modules.gmap.LocationsView;
-import modules.gmap.LocationsViewEvent;
-import modules.gmap.Viewpoint;
+import modules.gmap.domain.Link;
+import modules.gmap.domain.Location;
+import modules.gmap.domain.Viewpoint;
+import modules.gmap.domain.nagios.Host;
+import modules.gmap.domain.nagios.HostGroup;
+import modules.gmap.domain.nagios.Service;
+import modules.gmap.domain.nagios.ServiceGroup;
+import modules.gmap.events.LocationEvent;
+import modules.gmap.events.LocationsViewEvent;
 
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
@@ -116,12 +121,14 @@ private function onMapReady(event : Event) : void
 	foundLocationsView = new FoundLocationsView(map, foundLocations);
 	foundLocationsView.addEventListener(LocationsViewEvent.SELECT_LOCATION, onSelectFoundLocation);
 
+	/* TODO: reenable
 	rDatabase.getHosts();
 	rDatabase.getServices();
 	rDatabase.getHostGroups();
 	rDatabase.getServiceGroups();
 	rViewpoints.getAll();
-	rLocations.getAll();
+	rLocations.getAll(); 
+	*/
 	// Note: rLinks.getAll() is called at the end of getLocations_handler
 	//       due to asynchronous nature of remote calls
 }
@@ -172,7 +179,9 @@ private function getLocations_handler(event : ResultEvent) : void
 
 	locationsView.showLocations();
 
+	/* TODO: reenable
 	rLinks.getAll();
+	*/
 }
 
 private function addLocation_handler(event : ResultEvent) : void
@@ -337,7 +346,9 @@ private function showLinks() : void
 private function onLocateAddress(address : String) : void
 {
 	locationsView.hideLocations();
+	/*
 	rLocations.find(address);
+	*/
 }
 
 private function onHideSearchBox() : void
@@ -407,23 +418,29 @@ private function onSaveLocation() : void
 {
 	if (locationBox.locID != "")
 	{
+		/* TODO: reenable
 		rLocations.edit(locationBox.locID,
 			(new LatLng(parseFloat(locationBox.locLat.text), parseFloat(locationBox.locLng.text)).toUrlValue(16)),
 			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text,
 			locationBox.locNObject.selectedItem);
+		*/
 	}
 	else
 	{
+		/* TODO: reenable
 		rLocations.add((new LatLng(parseFloat(locationBox.locLat.text), parseFloat(locationBox.locLng.text)).toUrlValue(16)),
 			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text,
 			locationBox.locNObject.selectedItem);
+		*/
 	}
 }
 
 private function onDeleteLocation() : void
 {
+	/* TODO: reenable
 	if (locationBox.locID != "")
 		rLocations.remove(locationBox.locID);
+	*/
 }
 
 /*********************************************/
@@ -475,7 +492,11 @@ private function onLink() : void
 	}
 
 	if (!exists)
+	{
+		/* TODO: reenable
 		rLinks.add(location1.id, location2.id);
+		*/
+	}
 	else
 	{
 		Alert.show("The link between selected locations already exists", "Error");
@@ -489,7 +510,9 @@ private function onLink() : void
 
 private function onSaveViewpoint(name : String) : void
 {
+	/* TODO: reenable
 	rViewpoints.add(name, map.getCenter().toUrlValue(16), map.getZoom());
+	*/
 }
 
 private function onSelectViewpoint(event : ListEvent) : void

@@ -23,6 +23,8 @@ package modules.gmap
 {
 	import com.google.maps.LatLng;
 	
+	import modules.gmap.domain.Location;
+	
 	import mx.collections.ArrayCollection;
 
 	public class LocationsCollection extends ArrayCollection

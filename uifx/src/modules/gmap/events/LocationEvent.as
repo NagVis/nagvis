@@ -19,16 +19,18 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.events
 {
 	import flash.events.Event;
+	
+	import modules.gmap.domain.Location;
 
-	public class LocationsViewEvent extends Event
+	public class LocationEvent extends Event
 	{
-		public static const SELECT_LOCATION : String = "selectLocation";
+		public static const CHANGE : String = "change";
 		public var location : Location;
 
-		public function LocationsViewEvent(type : String, location : Location = null)
+		public function LocationEvent(type : String, location : Location = null)
 		{
 			super(type);
 
@@ -37,7 +39,7 @@ package modules.gmap
 
         override public function clone() : Event
         {
-			return new LocationsViewEvent(type, this.location);
+			return new LocationEvent(type, this.location);
         }
 	}
 }

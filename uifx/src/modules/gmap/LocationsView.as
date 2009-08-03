@@ -29,6 +29,9 @@ package modules.gmap
 	
 	import flash.events.EventDispatcher;
 	
+	import modules.gmap.domain.Location;
+	import modules.gmap.events.LocationsViewEvent;
+	
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
 

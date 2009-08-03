@@ -30,6 +30,11 @@
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.domain.nagios.ServiceGroup;
+			import modules.gmap.domain.nagios.HostGroup;
+			import modules.gmap.domain.nagios.Service;
+			import modules.gmap.domain.nagios.Host;
+			import modules.gmap.domain.Location;
 			import mx.controls.Alert;
 			import com.google.maps.LatLng;
 
