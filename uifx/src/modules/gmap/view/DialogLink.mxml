@@ -17,7 +17,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<Dialog xmlns="modules.gmap.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+<Dialog xmlns="modules.gmap.view.*" xmlns:mx="http://www.adobe.com/2006/mxml">
     <mx:Metadata>
         [Event(name="link", type="flash.events.Event")]
     </mx:Metadata>

@@ -19,7 +19,7 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.view
 {
 	import flash.events.MouseEvent;
 	
