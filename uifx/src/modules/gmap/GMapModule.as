@@ -20,10 +20,14 @@
  *****************************************************************************/
 
 import com.google.maps.LatLng;
+import com.google.maps.Map;
+import com.google.maps.MapEvent;
 import com.google.maps.controls.ZoomControl;
 import com.google.maps.overlays.Polyline;
 
 import flash.events.Event;
+import flash.events.IOErrorEvent;
+import flash.net.URLLoader;
 import flash.system.Security;
 
 import modules.gmap.Link;
@@ -38,10 +42,14 @@ import mx.controls.Alert;
 import mx.events.ListEvent;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
+import mx.utils.StringUtil;
 
 /*********************************************/
 /* Global objects
 /*********************************************/
+
+private var map : Map;
+private var key : String;
 
 private var viewpoints     : ArrayCollection;
 private var locations      : LocationsCollection = new LocationsCollection;
@@ -62,6 +70,29 @@ private var foundLocationsView : FoundLocationsView;
 private function init() : void
 {
 	Security.allowInsecureDomain("*");
+
+	var keyLoader : URLLoader  = new URLLoader();
+	var keyURL    : URLRequest = new URLRequest("GoogleMaps.key");
+
+	keyLoader.addEventListener(Event.COMPLETE, function() : void {
+		key = StringUtil.trim(keyLoader.data);
+		initMap();
+	});
+	keyLoader.addEventListener(IOErrorEvent.IO_ERROR, function() : void {
+		Alert.show("Error loading GoogleMaps.key");
+	});
+
+	keyLoader.load(keyURL);
+}
+
+private function initMap() : void
+{
+	map = new Map();
+	map.key = key;
+	map.width = mapContainer.width;
+	map.height = mapContainer.height;
+	map.addEventListener(MapEvent.MAP_READY, onMapReady);
+	mapContainer.addChild(map);
 }
 
 private function onLocationsChange(event : LocationEvent) : void
