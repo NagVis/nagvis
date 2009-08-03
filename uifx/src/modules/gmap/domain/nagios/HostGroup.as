@@ -19,14 +19,13 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.domain.nagios
 {
 	[Bindable]
-	[RemoteClass(alias="Viewpoint")]
-	public class Viewpoint
+	[RemoteClass(alias="HostGroup")]
+	public class HostGroup
 	{
-		public var label : String;
-		public var center : String;
-		public var zoom : int;
+		public var name : String;
+		public var alias : String;
 	}
 }

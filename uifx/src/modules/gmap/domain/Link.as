@@ -19,13 +19,13 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.domain
 {
 	[Bindable]
-	[RemoteClass(alias="ServiceGroup")]
-	public class ServiceGroup
+	[RemoteClass(alias="Link")]
+	public class Link
 	{
-		public var name : String;
-		public var alias : String;
+		public var id1 : String;
+		public var id2 : String;
 	}
 }

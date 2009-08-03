@@ -19,13 +19,14 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.domain.nagios
 {
 	[Bindable]
-	[RemoteClass(alias="Link")]
-	public class Link
+	[RemoteClass(alias="Host")]
+	public class Host
 	{
-		public var id1 : String;
-		public var id2 : String;
+		public var name : String;
+		public var address : String;
+		public var alias : String;
 	}
 }

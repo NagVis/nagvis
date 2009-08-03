@@ -19,7 +19,7 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.domain.nagios
 {
 	[Bindable]
 	[RemoteClass(alias="Service")]

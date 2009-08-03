@@ -19,11 +19,11 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.domain.nagios
 {
 	[Bindable]
-	[RemoteClass(alias="HostGroup")]
-	public class HostGroup
+	[RemoteClass(alias="ServiceGroup")]
+	public class ServiceGroup
 	{
 		public var name : String;
 		public var alias : String;

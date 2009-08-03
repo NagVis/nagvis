@@ -19,14 +19,14 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.domain
 {
 	[Bindable]
-	[RemoteClass(alias="Host")]
-	public class Host
+	[RemoteClass(alias="Viewpoint")]
+	public class Viewpoint
 	{
-		public var name : String;
-		public var address : String;
-		public var alias : String;
+		public var label : String;
+		public var center : String;
+		public var zoom : int;
 	}
 }

@@ -19,7 +19,7 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.domain
 {
 	[Bindable]
 	[RemoteClass(alias="Location")]
