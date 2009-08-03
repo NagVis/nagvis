@@ -19,7 +19,7 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.view
 {
 	import com.google.maps.LatLng;
 	import com.google.maps.Map;
@@ -29,6 +29,7 @@ package modules.gmap
 	
 	import flash.events.EventDispatcher;
 	
+	import modules.gmap.LocationsCollection;
 	import modules.gmap.domain.Location;
 	import modules.gmap.events.LocationsViewEvent;
 	

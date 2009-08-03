@@ -31,7 +31,6 @@ import flash.net.URLLoader;
 import flash.system.Security;
 
 import modules.gmap.LocationsCollection;
-import modules.gmap.LocationsView;
 import modules.gmap.domain.Link;
 import modules.gmap.domain.Location;
 import modules.gmap.domain.Viewpoint;

@@ -19,13 +19,17 @@
  *
  *****************************************************************************/
 
-package modules.gmap
+package modules.gmap.view
 {
 	import com.google.maps.LatLng;
 	import com.google.maps.Map;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
+	
+	import modules.gmap.LocationsCollection;
+	import modules.gmap.domain.Location;
+	import modules.gmap.events.LocationsViewEvent;
 	
 	import mx.controls.Alert;
 	import mx.events.CollectionEvent;

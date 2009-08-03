@@ -23,11 +23,11 @@
 	xmlns:ui="lib.ui.*"
 	layout="vertical" width="100%" height="100%"
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
-	creationComplete="init()"
 >
 	
 	<view:Main width="100%" height="100%"/>
 
+	<!--TODO: reenable
 	<mx:RemoteObject id="rViewpoints" destination="zend" source="Viewpoint" fault="fault(event)">
 		<mx:method name="getAll" result="getViewpoints_handler(event)"/>
 		<mx:method name="add" result="addViewpoint_handler(event)"/>
@@ -49,4 +49,5 @@
 		<mx:method name="getServices" result="getServices_handler(event)"/>
 		<mx:method name="getServiceGroups" result="getServiceGroups_handler(event)"/>
 	</mx:RemoteObject>
+	-->
 </mx:Module>
