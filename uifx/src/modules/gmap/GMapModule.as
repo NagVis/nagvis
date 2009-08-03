@@ -79,7 +79,10 @@ private function init() : void
 		initMap();
 	});
 	keyLoader.addEventListener(IOErrorEvent.IO_ERROR, function() : void {
-		Alert.show("Error loading GoogleMaps.key");
+		Alert.show("Error loading GoogleMaps.key\n\n"
+			+ "Accessing the free Google Maps API requires the specification of an API key linked to a base URL.\n"
+			+ "You can obtain a free API key from Google at http://www.google.com/apis/maps/signup.html",
+			"Error");
 	});
 
 	keyLoader.load(keyURL);
