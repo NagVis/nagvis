@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap
+   xmlns:mx="http://www.adobe.com/2006/mxml"
+   xmlns="http://mate.asfusion.com/"
+>
+	<mx:Script>
+		<![CDATA[
+			import com.asfusion.mate.events.Dispatcher;
+
+			import modules.gmap.view.GMapControl;
+			import modules.gmap.view.MainView;
+			import modules.gmap.view.DialogViewpoint;
+			
+			import modules.gmap.mediator.MainMD;
+			import modules.gmap.mediator.MapMD;
+
+			import modules.gmap.data.ViewpointsData;
+		]]>
+	</mx:Script>
+
+	<Injectors target="{DialogViewpoint}" debug="true">
+		<PropertyInjector targetKey="dataProvider" source="{ViewpointsData}"/>
+	</Injectors>
+	
+	<EventHandlers type="{MainView.READY}" debug="true">
+		<ObjectBuilder generator="{MainMD}" constructorArguments="{[event.target, scope.dispatcher]}" />
+	</EventHandlers>
+	
+	<EventHandlers type="{GMapControl.READY}" debug="true">
+		<ObjectBuilder generator="{MapMD}" constructorArguments="{[event.target, scope.dispatcher]}" />
+	</EventHandlers>
+	
+</EventMap>

@@ -71,7 +71,8 @@ private var foundLocationsView : FoundLocationsView;
 /* Initialization
 /*********************************************/
 
-private function init() : void
+/* Done
+private function init2() : void
 {
 	Security.allowInsecureDomain("*");
 
@@ -91,7 +92,9 @@ private function init() : void
 
 	keyLoader.load(keyURL);
 }
+*/
 
+/* Done
 private function initMap() : void
 {
 	map = new Map();
@@ -101,19 +104,23 @@ private function initMap() : void
 	map.addEventListener(MapEvent.MAP_READY, onMapReady);
 	mapContainer.addChild(map);
 }
+*/
 
+/* Nothing to do
 private function onLocationsChange(event : LocationEvent) : void
 {
 	Alert.show("LocationEvent catched, event.location.id = " + event.location.id);
 }
+*/
 
 private function onMapReady(event : Event) : void
 {
+	/* Done
   	map.enableScrollWheelZoom();
 	map.enableContinuousZoom();
 	map.addControl(new ZoomControl());
 	map.setZoom(2);
-
+	*/
 	locationsView = new LocationsView(map, locations);
 	locationsView.addEventListener(LocationsViewEvent.SELECT_LOCATION, onSelectLocation);
 
@@ -507,16 +514,19 @@ private function onLink() : void
 /* Viewpoints dialog box
 /*********************************************/
 
+/* Done
 private function onSaveViewpoint(name : String) : void
 {
-	/* TODO: reenable
+	
 	rViewpoints.add(name, map.getCenter().toUrlValue(16), map.getZoom());
-	*/
 }
+*/
 
+/* Done
 private function onSelectViewpoint(event : ListEvent) : void
 {
 	var viewpoint : Viewpoint = viewpointBox.list.selectedItem as Viewpoint;
 	map.setCenter(LatLng.fromUrlValue(viewpoint.center));
 	map.setZoom(viewpoint.zoom);
 }
+*/

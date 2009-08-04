@@ -25,6 +25,17 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	creationComplete="init()"
 >
+	<mx:Script>
+		<![CDATA[
+			public static const READY : String = "MainViewReady";
+			
+			private function init():void
+			{
+				dispatchEvent(new Event(READY, true));
+			}
+		]]>
+	</mx:Script>
+
 	<mx:Style>
 		@font-face
 		{
@@ -34,7 +45,6 @@
     		advancedAntiAliasing: true;
 		}
 	</mx:Style>
-	<mx:Style source="../css/Main.css" />
 	<mx:Script>
 		<![CDATA[
             [Bindable] [Embed(source="modules/gmap/img/locate.jpg")]
@@ -51,7 +61,7 @@
 		]]>
 	</mx:Script>
 	<mx:Script source="../GMapModule.as"/>
-	<mx:UIComponent id="mapContainer" width="100%" height="100%"/>
+	<mx:VBox id="mapContainer" left="0" top="0" right="0" bottom="0"/>
 	<view:DialogSettings id="settingsBox"
 		logo="{settingsImage}"
 		bottom="50" right="-10" width="310"
@@ -95,7 +105,5 @@
 		expandedWidth="300" expandedHeight="220"
 		contractedWidth="40" contractedHeight="40"
 		currentState="right-contracted"
-		save="onSaveViewpoint(viewpointBox.preName.text)"
-		change="onSelectViewpoint(event)"
 	/>	
 </mx:Canvas>

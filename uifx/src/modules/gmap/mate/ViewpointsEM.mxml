@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap
+   xmlns:mx="http://www.adobe.com/2006/mxml"
+   xmlns="http://mate.asfusion.com/"
+>
+	<mx:Script>
+		<![CDATA[
+			import modules.gmap.mediator.MapMD;
+			import modules.gmap.data.ViewpointsData;
+			import modules.gmap.events.ViewpointEvent;
+		]]>
+	</mx:Script>
+
+	<EventHandlers type="{ViewpointEvent.SELECTED}">
+		<MethodInvoker generator="{MapMD}" method="focusViewpoint" arguments="{event.viewpoint}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{ViewpointEvent.CREATE}">
+		<MethodInvoker generator="{MapMD}" method="extractViewpoint" arguments="{event.viewpoint.label}"/>
+		<EventAnnouncer generator="{ViewpointEvent}" constructorArguments="{[ViewpointEvent.CREATED, lastReturn]}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{ViewpointEvent.CREATED}">
+		<MethodInvoker generator="{ViewpointsData}" method="addItem" arguments="{event.viewpoint}"/>
+		<RemoteObjectInvoker destination="zend" source="Viewpoint" method="add" 
+			arguments="{[event.viewpoint.label, event.viewpoint.center, event.viewpoint.zoom]}"
+		/>
+	</EventHandlers>
+	
+</EventMap>

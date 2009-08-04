@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap
+   xmlns:mx="http://www.adobe.com/2006/mxml"
+   xmlns="http://mate.asfusion.com/"
+>
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+		
+			import modules.gmap.mediator.MainMD;
+			import modules.gmap.mediator.MapMD;
+			
+			import modules.gmap.data.ViewpointsData;
+		]]>
+	</mx:Script>
+
+	<Injectors target="{MainMD}" debug="true">
+	
+		<MethodInvoker generator="{MainMD}" method="init"/>
+	
+		<HTTPServiceInvoker url="GoogleMaps.key">
+			<resultHandlers>
+				<MethodInvoker generator="{MainMD}" method="showMap" arguments="{resultObject}"/>
+			</resultHandlers>
+			<faultHandlers>
+				<InlineInvoker method="Alert.show" arguments="{[
+					'Error loading GoogleMaps.key\n\nAccessing the free Google Maps API requires the specification of an API key linked to a base URL.\nYou can obtain a free API key from Google at http://www.google.com/apis/maps/signup.html',
+					'Error'
+					]}"/>
+			</faultHandlers>
+		</HTTPServiceInvoker>
+		
+		<RemoteObjectInvoker destination="zend" source="Viewpoint" method="getAll" debug="true">
+			<resultHandlers>
+				<MethodInvoker generator="{ViewpointsData}" method="fill" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+		
+	</Injectors>
+	
+	<Injectors target="{MapMD}" debug="true">
+		<MethodInvoker generator="{MapMD}" method="init"/>
+	</Injectors>
+
+</EventMap>

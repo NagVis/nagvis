@@ -25,7 +25,39 @@
         [Event(name="save", type="flash.events.Event")]
         [Event(name="change", type="mx.events.ListEvent")]
     </mx:Metadata>
-	<mx:List top="70" left="10" right="20" bottom="10" id="list" change="dispatchEvent(event)"></mx:List>
-	<flexlib:PromptingTextInput id="preName" prompt="viewpoint name" left="10" right="80" top="40" height="22"/>
-	<mx:Button label="Add" right="20" click="dispatchEvent(new Event('save'))" top="40" height="22"/>
+    <mx:Script>
+    	<![CDATA[
+    		import modules.gmap.domain.Viewpoint;
+    		import modules.gmap.events.ViewpointEvent;
+    		import modules.gmap.data.ViewpointsData;
+    		
+    		[Bindable] public var dataProvider : ViewpointsData;
+    		
+    		public function onListSelectChange():void
+    		{
+    			dispatchEvent(new ViewpointEvent(ViewpointEvent.SELECTED, list.selectedItem as Viewpoint));
+    		}
+    		
+    		public function onSaveButtonClick():void
+    		{
+    			var vp:Viewpoint = new Viewpoint;
+    			vp.label = preName.text;
+    			
+    			dispatchEvent(new ViewpointEvent(ViewpointEvent.CREATE, vp));
+    		}
+    	]]>
+    </mx:Script>
+	<mx:List id="list" 
+		top="70" left="10" right="20" bottom="10"
+		dataProvider="{dataProvider}"
+		change="onListSelectChange()"
+	/>
+	<flexlib:PromptingTextInput id="preName" 
+		prompt="viewpoint name" 
+		left="10" right="80" top="40" height="22"
+	/>
+	<mx:Button label="Save" 
+		right="20" top="40" height="22"
+		click="onSaveButtonClick()"
+	/>
 </Dialog>
