@@ -29,6 +29,8 @@
 	<mate:UIInitEM/>
 	<mate:StartupEM/>
 	<mate:ViewpointsEM/>
+	<mate:LocationsEM/>
+	<mate:LinksEM/>
 	
 	<mx:Style source="css/Main.css" />
 	<view:MainView width="100%" height="100%"/>

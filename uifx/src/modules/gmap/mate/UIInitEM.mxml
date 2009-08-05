@@ -7,21 +7,19 @@
 		<![CDATA[
 			import com.asfusion.mate.events.Dispatcher;
 
-			import modules.gmap.view.GMapControl;
 			import modules.gmap.view.MainView;
+			import modules.gmap.view.GMapControl;
+			import modules.gmap.view.GMapLocationsControl;
 			import modules.gmap.view.DialogViewpoint;
 			
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
 
 			import modules.gmap.data.ViewpointsData;
+			import modules.gmap.data.LocationsData;
 		]]>
 	</mx:Script>
 
-	<Injectors target="{DialogViewpoint}" debug="true">
-		<PropertyInjector targetKey="dataProvider" source="{ViewpointsData}"/>
-	</Injectors>
-	
 	<EventHandlers type="{MainView.READY}" debug="true">
 		<ObjectBuilder generator="{MainMD}" constructorArguments="{[event.target, scope.dispatcher]}" />
 	</EventHandlers>
@@ -30,4 +28,11 @@
 		<ObjectBuilder generator="{MapMD}" constructorArguments="{[event.target, scope.dispatcher]}" />
 	</EventHandlers>
 	
+	<Injectors target="{DialogViewpoint}" debug="true">
+		<PropertyInjector targetKey="dataProvider" source="{ViewpointsData}"/>
+	</Injectors>
+	
+	<Injectors target="{GMapLocationsControl}" debug="true">
+		<PropertyInjector targetKey="dataProvider" source="{LocationsData}"/>
+	</Injectors>
 </EventMap>

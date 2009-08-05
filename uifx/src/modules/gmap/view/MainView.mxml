@@ -60,8 +60,11 @@
 			private var settingsImage : Class;
 		]]>
 	</mx:Script>
+
 	<mx:Script source="../GMapModule.as"/>
-	<mx:VBox id="mapContainer" left="0" top="0" right="0" bottom="0"/>
+
+	<view:GMapControl left="0" top="0" right="0" bottom="0"/>
+
 	<view:DialogSettings id="settingsBox"
 		logo="{settingsImage}"
 		bottom="50" right="-10" width="310"

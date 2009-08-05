@@ -1,20 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Map 
-	xmlns="com.google.maps.*" 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:maps="com.google.maps.*"
+	xmlns:view="modules.gmap.view.*"
 	width="100%" height="100%"
-	mapevent_mapready="onReady(event)"
+	creationComplete="init()"
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.StringUtil;
+			import com.google.maps.Map;
+			import mx.controls.Alert;
 			import com.google.maps.MapEvent;
 			
 			public static const READY : String = "MapControlReady";
+			public static const MAP_READY : String = "MapControlMapReady";
+
+			public var map : Map;
 			
-			private function onReady(event : MapEvent):void
+			private function init():void
 			{
 				dispatchEvent(new Event(READY, true));
 			}
+			
+			public function createMap(key : String):void
+			{
+				if(map == null)
+				{
+					map = new Map;
+					map.key = StringUtil.trim(key);
+					map.setStyle("left", 0); 
+					map.setStyle("top", 0);
+					map.setStyle("right", 0);
+					map.setStyle("bottom", 0);
+					map.addEventListener(MapEvent.MAP_READY, onMapReady);
+					
+					this.addChild(map);
+				}				
+			}
+			
+			private function onMapReady(event : MapEvent):void
+			{
+				dispatchEvent(new Event(MAP_READY, true));
+				
+				locationsControl.map = map;
+			}			
 		]]>
-	</mx:Script>	
-</Map>
+	</mx:Script>
+	<view:GMapLocationsControl id="locationsControl"/>	
+</mx:Canvas>

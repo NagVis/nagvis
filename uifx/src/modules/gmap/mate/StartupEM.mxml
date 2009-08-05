@@ -5,7 +5,10 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.LocationsData;
 			import mx.controls.Alert;
+		
+			import modules.gmap.view.GMapControl;
 		
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
@@ -17,10 +20,25 @@
 	<Injectors target="{MainMD}" debug="true">
 	
 		<MethodInvoker generator="{MainMD}" method="init"/>
+			
+		<RemoteObjectInvoker destination="zend" source="Viewpoint" method="getAll" debug="true">
+			<resultHandlers>
+				<MethodInvoker generator="{ViewpointsData}" method="fill" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+		<RemoteObjectInvoker destination="zend" source="Location" method="getAll" debug="true">
+			<resultHandlers>
+				<MethodInvoker generator="{LocationsData}" method="fill" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+		
+	</Injectors>
+	
+	<Injectors target="{MapMD}" debug="true">
 	
 		<HTTPServiceInvoker url="GoogleMaps.key">
 			<resultHandlers>
-				<MethodInvoker generator="{MainMD}" method="showMap" arguments="{resultObject}"/>
+				<MethodInvoker generator="{MapMD}" method="showMap" arguments="{resultObject}"/>
 			</resultHandlers>
 			<faultHandlers>
 				<InlineInvoker method="Alert.show" arguments="{[
@@ -29,17 +47,11 @@
 					]}"/>
 			</faultHandlers>
 		</HTTPServiceInvoker>
-		
-		<RemoteObjectInvoker destination="zend" source="Viewpoint" method="getAll" debug="true">
-			<resultHandlers>
-				<MethodInvoker generator="{ViewpointsData}" method="fill" arguments="{resultObject}"/>
-			</resultHandlers>
-		</RemoteObjectInvoker>
-		
-	</Injectors>
 	
-	<Injectors target="{MapMD}" debug="true">
-		<MethodInvoker generator="{MapMD}" method="init"/>
 	</Injectors>
+
+	<EventHandlers type="{GMapControl.MAP_READY}" debug="true">
+		<MethodInvoker generator="{MapMD}" method="initMap"/>
+	</EventHandlers>
 
 </EventMap>
