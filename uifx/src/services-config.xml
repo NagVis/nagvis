@@ -17,7 +17,7 @@
 	<channels>
 		<channel-definition id="zend-endpoint"
 			class="mx.messaging.channels.SecureAMFChannel">
-			<endpoint uri="https://op5.org/nagvis/netmap/amf-server.php"
+			<endpoint uri="https://{server.name}:{server.port}/nagvis/netmap/amf-server.php"
 				class="flex.messaging.endpoints.SecureAMFEndpoint"/>
 		</channel-definition>
 	</channels>
