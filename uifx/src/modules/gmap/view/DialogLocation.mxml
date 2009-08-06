@@ -192,7 +192,7 @@
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="20" top="40" bottom="10">
-		<flexlib:HAccordion selectedIndex="0" left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
+		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
 			<mx:Canvas label="General" width="100%" height="100%">
 				<flexlib:PromptingTextInput id="locName" prompt="Name"
 					left="10" right="10" top="0"
