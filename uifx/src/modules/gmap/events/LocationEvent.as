@@ -29,12 +29,12 @@ package modules.gmap.events
 	{
 		public static const SELECTED : String = "LocationSelected";
 		public static const CHANGE : String = "LocationChange";
+		
 		public var location : Location;
 
-		public function LocationEvent(type : String, location : Location = null, bubbles:Boolean = true, cancelable:Boolean = false)
+		public function LocationEvent(type:String, location:Location = null, bubbles:Boolean = true, cancelable:Boolean = false)
 		{
 			super(type, bubbles, cancelable);
-
 			this.location = location;
 		}
 

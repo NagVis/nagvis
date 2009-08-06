@@ -4,6 +4,7 @@ package modules.gmap.mediator
 	import flash.system.Security;
 	
 	import modules.gmap.domain.Location;
+	import modules.gmap.events.ModeEvent;
 	import modules.gmap.view.MainView;
 	
 	import mx.controls.Alert; 
@@ -12,6 +13,7 @@ package modules.gmap.mediator
 	{
 		public static const MODE_DEFAULT : int = 0;
 		public static const MODE_LOCATION_EDIT : int = 1;
+		public static const MODE_LOCATION_SEARCH : int = 2;
 		
 		private var _mode:int = 0;
 		 
@@ -36,7 +38,14 @@ package modules.gmap.mediator
 		
 		public function set mode(value:int):void
 		{
-			_mode = value;
+			if(_mode !== value)
+			{
+				_dispatcher.dispatchEvent(
+					new ModeEvent(ModeEvent.CHANGED, _mode, value)
+				);
+				
+				_mode = value;
+			}
 		}
 		
 		public function reconsiderMode():void
@@ -45,6 +54,9 @@ package modules.gmap.mediator
 			{
 				case _view.locationBox:
 					mode = MODE_LOCATION_EDIT;
+					break;
+				case _view.searchBox:
+					mode = MODE_LOCATION_SEARCH;
 					break;
 				default:
 					mode = MODE_DEFAULT;

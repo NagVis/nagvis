@@ -5,12 +5,19 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.events.ModeEvent;
+		
 			import modules.gmap.mediator.MainMD;
+			import modules.gmap.mediator.MapMD;
 		]]>
 	</mx:Script>
 
 	<EventHandlers type="resized">
 		<MethodInvoker generator="{MainMD}" method="reconsiderMode"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{ModeEvent.CHANGED}">
+		<MethodInvoker generator="{MapMD}" method="onModeChanged" arguments="{[event.oldMode, event.newMode]}"/>
 	</EventHandlers>
 		
 </EventMap>

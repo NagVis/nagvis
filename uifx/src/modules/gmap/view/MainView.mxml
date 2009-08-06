@@ -99,7 +99,6 @@
 		expandedWidth="300" expandedHeight="130"
 		contractedWidth="40" contractedHeight="40"
 		currentState="right-contracted"
-		locate="onLocateAddress(searchBox.address.text)"
 		contracted="onHideSearchBox()"
 	/>
 	<view:DialogViewpoint id="viewpointBox" group="{ebg}"

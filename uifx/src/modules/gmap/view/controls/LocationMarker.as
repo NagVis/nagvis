@@ -31,10 +31,15 @@ package modules.gmap.view.controls
 		{	
 			var point : LatLng = LatLng.fromUrlValue(location.point);
 			
-			var options : MarkerOptions = new MarkerOptions();
-			options.icon = new okIcon();
-			options.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER || MarkerOptions.ALIGN_VERTICAL_CENTER;
-			options.hasShadow = false;
+			var options : MarkerOptions;
+			
+			if(location.id && location.id.length > 0)
+			{
+				options = new MarkerOptions();
+				options.icon = new okIcon();
+				options.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER || MarkerOptions.ALIGN_VERTICAL_CENTER;
+				options.hasShadow = false;
+			}
 			
 			super(point, options);
 			

@@ -7,9 +7,10 @@ package modules.gmap.view.controls
 	import modules.gmap.data.LocationsData;
 	import modules.gmap.domain.Location;
 	import modules.gmap.events.LocationEvent;
-	import modules.gmap.view.controls.LocationMarker;
 	
 	import mx.containers.VBox;
+	import mx.events.CollectionEvent;
+	import mx.events.CollectionEventKind;
 
 	public class GMapLocationsControl extends VBox
 	{
@@ -51,15 +52,20 @@ package modules.gmap.view.controls
 		{
 			if(_dataProvider !== value)
 			{
-				if(visible)
-					hideMarkers();
-					
 				_dataProvider = value;
-				reinitMarkers();
+				_dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, onDataProviderChanged);
 				
-				if(visible)
-					showMarkers();	
+				reinitMarkers();
 			}
+		}
+		
+		protected function onDataProviderChanged(event : CollectionEvent):void
+		{
+			if(event.kind == CollectionEventKind.RESET)
+				reinitMarkers();
+			
+			//TODO: handle items addition
+			//TODO: handle items removal
 		}
 		
 		public override function set visible(value:Boolean):void
@@ -84,6 +90,9 @@ package modules.gmap.view.controls
 				
 		protected function reinitMarkers():void
 		{
+			if(visible)
+				hideMarkers();
+
 			if(_map)
 			{
 				_markers = [];
@@ -94,6 +103,10 @@ package modules.gmap.view.controls
 					_markers.push(m);	
 				}
 			}
+			
+			if(visible)
+				showMarkers();				
+
 		}
 		
 		protected function showMarkers():void

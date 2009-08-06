@@ -44,8 +44,10 @@
 				dispatchEvent(new Event(MAP_READY, true));
 				
 				locationsControl.map = map;
+				locationsExtControl.map = map;
 			}			
 		]]>
 	</mx:Script>
 	<controls:GMapLocationsControl id="locationsControl"/>
+	<controls:GMapLocationsExtControl id="locationsExtControl" visible="false"/>
 </mx:Canvas>

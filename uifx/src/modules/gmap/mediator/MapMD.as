@@ -10,42 +10,51 @@ package modules.gmap.mediator
 
 	public class MapMD
 	{
-		private var view : GMapControl;
-		private var dispatcher : IEventDispatcher;
+		private var _view : GMapControl;
+		private var _dispatcher : IEventDispatcher;
 		
 		public function MapMD(view : GMapControl, dispatcher : IEventDispatcher)
 		{
-			this.view = view;
-			this.dispatcher = dispatcher;
+			this._view = view;
+			this._dispatcher = dispatcher;
 		}
 		
 		public function showMap(key : String) : void
 		{
-			view.createMap(key);
+			_view.createMap(key);
 		}
 				
 		public function initMap():void
 		{
-		  	view.map.enableScrollWheelZoom();
-			view.map.enableContinuousZoom();
-			view.map.addControl(new ZoomControl());
-			view.map.setZoom(2);			
+		  	_view.map.enableScrollWheelZoom();
+			_view.map.enableContinuousZoom();
+			_view.map.addControl(new ZoomControl());
+			_view.map.setZoom(2);			
 		}
 		
 		public function focusViewpoint(where : Viewpoint):void
 		{
-			view.map.setCenter(LatLng.fromUrlValue(where.center));
-			view.map.setZoom(where.zoom);
+			_view.map.setCenter(LatLng.fromUrlValue(where.center));
+			_view.map.setZoom(where.zoom);
 		}
 		
 		public function extractViewpoint(name : String):Viewpoint
 		{
 			var vp : Viewpoint = new Viewpoint;
 			vp.label = name;
-			vp.center = view.map.getCenter().toUrlValue(16);
-			vp.zoom = view.map.getZoom();
+			vp.center = _view.map.getCenter().toUrlValue(16);
+			vp.zoom = _view.map.getZoom();
 			
 			return vp;
+		}
+		
+		public function onModeChanged(oldMode:int, newMode:int):void
+		{
+			if(MainMD.MODE_LOCATION_SEARCH == oldMode)
+				_view.locationsExtControl.visible = false;
+				
+			if(MainMD.MODE_LOCATION_SEARCH == newMode)
+				_view.locationsExtControl.visible = true;
 		}
 	}
 }

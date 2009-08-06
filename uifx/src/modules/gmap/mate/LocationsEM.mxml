@@ -6,17 +6,28 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
+			
+			import modules.gmap.data.LocationsExtData;
 		
+			import modules.gmap.events.AddressEvent;
 			import modules.gmap.events.LocationEvent;
 			
 			import modules.gmap.mediator.MainMD;
 		]]>
 	</mx:Script>
 
-	<mx:RemoteObject id="Locations" destination="zend" source="Location" />
+	<mx:RemoteObject id="LocationsService" destination="zend" source="Location" />
 	
 	<EventHandlers type="{LocationEvent.SELECTED}">
 		<MethodInvoker generator="{MainMD}" method="selectLocation" arguments="{event.location}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{AddressEvent.LOCATE}">
+		<RemoteObjectInvoker instance="{LocationsService}" method="find" arguments="{event.address}">
+			<resultHandlers>
+				<MethodInvoker generator="{LocationsExtData}" method="fill" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
 	</EventHandlers>
 
 </EventMap>

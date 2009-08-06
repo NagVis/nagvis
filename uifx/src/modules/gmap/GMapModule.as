@@ -112,36 +112,29 @@ private function onLocationsChange(event : LocationEvent) : void
 }
 */
 
+/* Done or will be done automagically now :)
 private function onMapReady(event : Event) : void
 {
-	/* Done
   	map.enableScrollWheelZoom();
 	map.enableContinuousZoom();
 	map.addControl(new ZoomControl());
 	map.setZoom(2);
-	*/
 	
-	/* Done
 	locationsView = new LocationsView(map, locations);
 	locationsView.addEventListener(LocationsViewEvent.SELECT_LOCATION, onSelectLocation);
-	*/
 
 	foundLocationsView = new FoundLocationsView(map, foundLocations);
-	/* Reenable
 	foundLocationsView.addEventListener(LocationsViewEvent.SELECT_LOCATION, onSelectFoundLocation);
-	*/
-
-	/* TODO: reenable
 	rDatabase.getHosts();
 	rDatabase.getServices();
 	rDatabase.getHostGroups();
 	rDatabase.getServiceGroups();
 	rViewpoints.getAll();
 	rLocations.getAll(); 
-	*/
 	// Note: rLinks.getAll() is called at the end of getLocations_handler
 	//       due to asynchronous nature of remote calls
 }
+*/
 
 /*********************************************/
 /* Remoting
@@ -228,6 +221,7 @@ private function removeLocation_handler(event : ResultEvent) : void
 	locationBox.setCurrentState("right-contracted");
 }
 
+/* Done
 private function findLocation_handler(event : ResultEvent) : void
 {
 	var result : ArrayCollection = new ArrayCollection(event.result as Array);
@@ -249,6 +243,7 @@ private function findLocation_handler(event : ResultEvent) : void
 
 	foundLocationsView.showLocations();
 }
+*/
 
 private function getLinks_handler(event : ResultEvent) : void
 {
@@ -360,13 +355,13 @@ private function showLinks() : void
 /* Search location by address
 /*********************************************/
 
+/* Done
 private function onLocateAddress(address : String) : void
 {
 	locationsView.hideLocations();
-	/*
 	rLocations.find(address);
-	*/
 }
+*/
 
 private function onHideSearchBox() : void
 {

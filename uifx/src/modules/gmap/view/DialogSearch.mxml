@@ -21,6 +21,11 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 >
+    <mx:Script>
+    	<![CDATA[
+    		import modules.gmap.events.AddressEvent;
+    	]]>
+    </mx:Script>
     <mx:Metadata>
         [Event(name="locate", type="flash.events.Event")]
     </mx:Metadata>
@@ -29,6 +34,6 @@
 		prompt="Address"
 	/>
 	<mx:Button label="Locate" bottom="10" right="20"
-		click="dispatchEvent(new Event('locate'))"
+		click="dispatchEvent(new AddressEvent(AddressEvent.LOCATE, address.text))"
 	/>
 </Dialog>

@@ -5,6 +5,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.LocationsExtData;
 			import modules.gmap.data.LocationsData;
 			import mx.events.FlexEvent;
 			import modules.gmap.data.ViewpointsData;
@@ -14,6 +15,7 @@
 	<EventHandlers type="{FlexEvent.PREINITIALIZE}" debug="true">
 		<ObjectBuilder generator="{ViewpointsData}"/>
 		<ObjectBuilder generator="{LocationsData}"/>
+		<ObjectBuilder generator="{LocationsExtData}"/>
 	</EventHandlers>
 	
 </EventMap>
