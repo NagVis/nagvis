@@ -17,7 +17,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<Dialog xmlns="modules.gmap.view.*"
+<EdgeBox xmlns="lib.ui.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	xmlns:hc="com.hillelcoren.components.*"
@@ -179,93 +179,107 @@
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
-	<flexlib:HAccordion selectedIndex="0" left="10" right="20" top="40" bottom="40" styleName="accordion" creationPolicy="all">
-		<mx:Canvas label="General" width="100%" height="100%">
-			<flexlib:PromptingTextInput id="locName" prompt="Name"
-				left="10" right="10" top="0"
-			/>
-			<flexlib:PromptingTextInput id="locLat" prompt="Latitude"
-				left="10" top="30" 	width="45%"
-			 />
-			<flexlib:PromptingTextInput id="locLng" prompt="Longitude"
-				top="30" right="10"	width="45%"
-		 	/>
-			<flexlib:PromptingTextArea  id="locAddress" prompt="Address"
-				right="10" left="10" top="60" bottom="0"
-			/>
-		</mx:Canvas>
-		<mx:Canvas label="Description" width="100%" height="100%">
-			<flexlib:PromptingTextArea  id="locDescription" prompt="Description"
-				right="10" left="10" top="0" bottom="0"
-			/>
-		</mx:Canvas>
-		<mx:Canvas label="Nagios" width="100%" height="100%">
-			<mx:VBox left="5" right="5" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
-				<mx:Spacer/>
-				<mx:HBox width="100%">
+	<mx:HBox left="10" right="20" top="10" height="20">
+		<mx:Image id="logo"
+			source="@Embed(source='modules/gmap/img/pin.png')"
+			click="setCurrentState('right-expanded')"
+		/>
+		<mx:Label text="Label"/>
+		<mx:Spacer width="100%"/>
+		<mx:Image id="close"
+			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
+			click="setCurrentState('right-contracted')"
+		/>
+	</mx:HBox>
+	<mx:Canvas left="10" right="20" top="40" bottom="10">
+		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
+			<mx:Canvas label="General" width="100%" height="100%">
+				<flexlib:PromptingTextInput id="locName" prompt="Name"
+					left="10" right="10" top="0"
+				/>
+				<flexlib:PromptingTextInput id="locLat" prompt="Latitude"
+					left="10" top="30" 	width="45%"
+				 />
+				<flexlib:PromptingTextInput id="locLng" prompt="Longitude"
+					top="30" right="10"	width="45%"
+			 	/>
+				<flexlib:PromptingTextArea  id="locAddress" prompt="Address"
+					right="10" left="10" top="60" bottom="0"
+				/>
+			</mx:Canvas>
+			<mx:Canvas label="Description" width="100%" height="100%">
+				<flexlib:PromptingTextArea  id="locDescription" prompt="Description"
+					right="10" left="10" top="0" bottom="0"
+				/>
+			</mx:Canvas>
+			<mx:Canvas label="Nagios" width="100%" height="100%">
+				<mx:VBox left="5" right="5" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
 					<mx:Spacer/>
-					<mx:Label text="Type:" left="10" top="10" height="18"/>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:Label text="Type:" left="10" top="10" height="18"/>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:ComboBox id="locNObjectType" width="100%" change="onObjectTypeChange()">
+							<mx:ArrayCollection>
+								<mx:String>Host</mx:String>
+								<mx:String>Service</mx:String>
+								<mx:String>Host Group</mx:String>
+								<mx:String>Service Group</mx:String>
+							</mx:ArrayCollection>
+						</mx:ComboBox>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:Label text="Object:" top="70" left="10"/>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<hc:AdvancedAutoComplete id="locNObject" width="100%"
+							dataProvider="{objects}" selectedItemStyleName="underline" labelFunction="groupLabelFunction"
+							matchType="anyPart" allowMultipleSelection="false" showRemoveIcon="true"
+							actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
+							browserFields="{['name', 'alias']}"
+						/>
+						<mx:Spacer/>
+					</mx:HBox>
+				</mx:VBox>
+				<mx:TextInput cornerRadius="10" text=" Associate with" top="0" left="15" width="90" borderStyle="solid" editable="false"/>
+			</mx:Canvas>
+			<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
+				<mx:RadioButtonGroup id="clickGroup"/>
+				<mx:VBox left="5" right="0" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
 					<mx:Spacer/>
-				</mx:HBox>
-				<mx:HBox width="100%">
-					<mx:Spacer/>
-					<mx:ComboBox id="locNObjectType" width="100%" change="onObjectTypeChange()">
-						<mx:ArrayCollection>
-							<mx:String>Host</mx:String>
-							<mx:String>Service</mx:String>
-							<mx:String>Host Group</mx:String>
-							<mx:String>Service Group</mx:String>
-						</mx:ArrayCollection>
-					</mx:ComboBox>
-					<mx:Spacer/>
-				</mx:HBox>
-				<mx:HBox width="100%">
-					<mx:Spacer/>
-					<mx:Label text="Object:" top="70" left="10"/>
-					<mx:Spacer/>
-				</mx:HBox>
-				<mx:HBox width="100%">
-					<mx:Spacer/>
-					<hc:AdvancedAutoComplete id="locNObject" width="100%"
-						dataProvider="{objects}" selectedItemStyleName="underline" labelFunction="groupLabelFunction"
-						matchType="anyPart" allowMultipleSelection="false" showRemoveIcon="true"
-						actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
-						browserFields="{['name', 'alias']}"
-					/>
-					<mx:Spacer/>
-				</mx:HBox>
-			</mx:VBox>
-			<mx:TextInput cornerRadius="10" text=" Associate with" top="0" left="15" width="90" borderStyle="solid" editable="false"/>
-		</mx:Canvas>
-		<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
-			<mx:RadioButtonGroup id="clickGroup"/>
-			<mx:VBox left="5" right="0" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
-				<mx:Spacer/>
-				<mx:HBox width="100%">
-					<mx:Spacer/>
-					<mx:RadioButton id="locActionNo" label="do nothing" groupName="clickGroup" selected="true"/>
-					<mx:Spacer/>
-				</mx:HBox>
-				<mx:HBox width="100%">
-					<mx:Spacer/>
-					<mx:RadioButton id="locActionUrl" label="go to" groupName="clickGroup"/>
-					<flexlib:PromptingTextInput width="100%" prompt="URL" cornerRadius="4"/>
-					<mx:Spacer/>
-				</mx:HBox>
-				<mx:HBox width="100%">
-					<mx:Spacer/>
-					<mx:RadioButton id="locActionNagvis" label="show NagVis map" groupName="clickGroup"/>
-					<mx:Spacer/>
-				</mx:HBox>
-				<mx:HBox width="100%">
-					<mx:Spacer width="30"/>
-					<mx:ComboBox width="100%"></mx:ComboBox>
-					<mx:Spacer/>
-				</mx:HBox>
-			</mx:VBox>
-			<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
-		</mx:Canvas>
-	</flexlib:HAccordion>
-	<mx:Button label="Save" right="95" bottom="10" click="dispatchEvent(new Event('save'))"/>
-	<mx:Button label="Delete" bottom="10" width="64" right="20" click="dispatchEvent(new Event('remove'))"/>
-</Dialog>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:RadioButton id="locActionNo" label="do nothing" groupName="clickGroup" selected="true"/>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:RadioButton id="locActionUrl" label="go to" groupName="clickGroup"/>
+						<flexlib:PromptingTextInput width="100%" prompt="URL" cornerRadius="4"/>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:RadioButton id="locActionNagvis" label="show NagVis map" groupName="clickGroup"/>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer width="30"/>
+						<mx:ComboBox width="100%"></mx:ComboBox>
+						<mx:Spacer/>
+					</mx:HBox>
+				</mx:VBox>
+				<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
+			</mx:Canvas>
+		</flexlib:HAccordion>
+		<mx:Button label="Save" right="0" bottom="0" height="22" click="dispatchEvent(new Event('save'))"/>
+		<mx:Button label="Delete" right="0" bottom="0" height="22" click="dispatchEvent(new Event('remove'))"/>
+	</mx:Canvas>
+</EdgeBox>

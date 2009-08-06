@@ -17,11 +17,31 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<Dialog xmlns="modules.gmap.view.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+<EdgeBox xmlns="lib.ui.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:flexlib="http://code.google.com/p/flexlib/"
+>
     <mx:Metadata>
         [Event(name="link", type="flash.events.Event")]
     </mx:Metadata>
-	<mx:Button label="Link" right="20" bottom="10" click="dispatchEvent(new Event('link'))"/>
-	<mx:ComboBox top="40" left="10" right="20" id="point1"></mx:ComboBox>
-	<mx:ComboBox top="70" left="10" right="20" id="point2"></mx:ComboBox>
-</Dialog>
+	<mx:HBox left="10" right="20" top="10" height="20">
+		<mx:Image id="logo"
+			source="@Embed(source='modules/gmap/img/connect.png')"
+			click="setCurrentState('right-expanded')"
+		/>
+		<mx:Label text="Label"/>
+		<mx:Spacer width="100%"/>
+		<mx:Image id="close"
+			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
+			click="setCurrentState('right-contracted')"
+		/>
+	</mx:HBox>
+	<mx:Canvas left="10" right="20" top="40" bottom="10">
+		<mx:ComboBox top="0" left="0" right="0" id="point1"></mx:ComboBox>
+		<mx:ComboBox top="30" left="0" right="0" id="point2"></mx:ComboBox>
+		<mx:Button label="Link"
+			right="0" bottom="0" height="22"
+			click="dispatchEvent(new Event('link'))"
+		/>
+	</mx:Canvas>
+</EdgeBox>

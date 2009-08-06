@@ -17,14 +17,34 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<Dialog xmlns="modules.gmap.view.*"
+<EdgeBox xmlns="lib.ui.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 >
     <mx:Metadata>
         [Event(name="getGMapKey", type="flash.events.Event")]
     </mx:Metadata>
-	<flexlib:PromptingTextInput left="10" right="20" prompt="Google Maps Key" top="40"/>
-	<mx:Button label="Apply" right="20" top="70"/>
-	<mx:LinkButton label="Get Google Maps Key" left="10" textAlign="left" click="dispatchEvent(new Event('getGMapKey'))" top="70"/>
-</Dialog>
+	<mx:HBox left="10" right="20" top="10" height="20">
+		<mx:Image id="logo"
+			source="@Embed(source='modules/gmap/img/cog.png')"
+			click="setCurrentState('right-expanded')"
+		/>
+		<mx:Label text="Label"/>
+		<mx:Spacer width="100%"/>
+		<mx:Image id="close"
+			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
+			click="setCurrentState('right-contracted')"
+		/>
+	</mx:HBox>
+	<mx:Canvas left="10" right="20" top="40" bottom="10">
+		<flexlib:PromptingTextInput id="key"
+		 	left="0" right="0" top="0" bottom="30"
+			cornerRadius="4" prompt="Google Maps Key"
+		 />
+		<mx:LinkButton label="Get Google Maps Key"
+			left="0" bottom="0" textAlign="left"
+			click="dispatchEvent(new Event('getGMapKey'))"
+		/>
+		<mx:Button label="Apply" right="0" bottom="0" height="22"/>
+	</mx:Canvas>
+</EdgeBox>

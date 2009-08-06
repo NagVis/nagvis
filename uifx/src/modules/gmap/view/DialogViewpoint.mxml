@@ -17,7 +17,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<Dialog xmlns="modules.gmap.view.*"
+<EdgeBox xmlns="lib.ui.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 >
@@ -47,17 +47,31 @@
     		}
     	]]>
     </mx:Script>
-	<mx:List id="list" 
-		top="70" left="10" right="20" bottom="10"
-		dataProvider="{dataProvider}"
-		change="onListSelectChange()"
-	/>
-	<flexlib:PromptingTextInput id="preName" 
-		prompt="viewpoint name" 
-		left="10" right="80" top="40" height="22"
-	/>
-	<mx:Button label="Save" 
-		right="20" top="40" height="22"
-		click="onSaveButtonClick()"
-	/>
-</Dialog>
+	<mx:HBox left="10" right="20" top="10" height="20">
+		<mx:Image id="logo"
+			source="@Embed(source='modules/gmap/img/eye.png')"
+			click="setCurrentState('right-expanded')"
+		/>
+		<mx:Label text="Label"/>
+		<mx:Spacer width="100%"/>
+		<mx:Image id="close"
+			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
+			click="setCurrentState('right-contracted')"
+		/>
+	</mx:HBox>
+	<mx:Canvas left="10" right="20" top="40" bottom="10">
+		<mx:List id="list" 
+			top="0" left="0" right="0" height="138"
+			dataProvider="{dataProvider}"
+			change="onListSelectChange()"
+		/>
+		<flexlib:PromptingTextInput id="preName" 
+			left="0" right="62" bottom="0" height="22"
+			prompt="viewpoint name"
+		/>
+		<mx:Button label="Save"
+			right="0" bottom="0" height="22"
+			click="onSaveButtonClick()"
+		/>
+	</mx:Canvas>
+</EdgeBox>

@@ -31,7 +31,6 @@ package modules.gmap.view
 	
 	import modules.gmap.LocationsCollection;
 	import modules.gmap.domain.Location;
-	import modules.gmap.events.LocationsViewEvent;
 	
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
