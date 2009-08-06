@@ -179,19 +179,19 @@
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
-	<mx:HBox left="10" right="20" top="10" height="20">
+	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo"
 			source="@Embed(source='modules/gmap/img/pin.png')"
 			click="setCurrentState('right-expanded')"
 		/>
-		<mx:Label text="Label"/>
+		<mx:Label text="Location Details"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
 			click="setCurrentState('right-contracted')"
 		/>
 	</mx:HBox>
-	<mx:Canvas left="10" right="20" top="40" bottom="10">
+	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
 			<mx:Canvas label="General" width="100%" height="100%">
 				<flexlib:PromptingTextInput id="locName" prompt="Name"

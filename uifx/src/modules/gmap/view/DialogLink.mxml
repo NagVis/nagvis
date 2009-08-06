@@ -24,19 +24,19 @@
     <mx:Metadata>
         [Event(name="link", type="flash.events.Event")]
     </mx:Metadata>
-	<mx:HBox left="10" right="20" top="10" height="20">
+	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo"
 			source="@Embed(source='modules/gmap/img/connect.png')"
 			click="setCurrentState('right-expanded')"
 		/>
-		<mx:Label text="Label"/>
+		<mx:Label text="Link Details"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
 			click="setCurrentState('right-contracted')"
 		/>
 	</mx:HBox>
-	<mx:Canvas left="10" right="20" top="40" bottom="10">
+	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<mx:ComboBox top="0" left="0" right="0" id="point1"></mx:ComboBox>
 		<mx:ComboBox top="30" left="0" right="0" id="point2"></mx:ComboBox>
 		<mx:Button label="Link"

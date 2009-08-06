@@ -47,19 +47,19 @@
     		}
     	]]>
     </mx:Script>
-	<mx:HBox left="10" right="20" top="10" height="20">
+	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo"
 			source="@Embed(source='modules/gmap/img/eye.png')"
 			click="setCurrentState('right-expanded')"
 		/>
-		<mx:Label text="Label"/>
+		<mx:Label text="View Points"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
 			click="setCurrentState('right-contracted')"
 		/>
 	</mx:HBox>
-	<mx:Canvas left="10" right="20" top="40" bottom="10">
+	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<mx:List id="list" 
 			top="0" left="0" right="0" height="138"
 			dataProvider="{dataProvider}"
