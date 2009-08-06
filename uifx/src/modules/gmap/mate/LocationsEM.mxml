@@ -5,9 +5,18 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
+		
+			import modules.gmap.events.LocationEvent;
+			
+			import modules.gmap.mediator.MainMD;
 		]]>
 	</mx:Script>
 
 	<mx:RemoteObject id="Locations" destination="zend" source="Location" />
+	
+	<EventHandlers type="{LocationEvent.SELECTED}">
+		<MethodInvoker generator="{MainMD}" method="selectLocation" arguments="{event.location}"/>
+	</EventHandlers>
 
 </EventMap>

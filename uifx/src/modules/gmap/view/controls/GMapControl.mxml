@@ -2,7 +2,7 @@
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:maps="com.google.maps.*"
-	xmlns:view="modules.gmap.view.*"
+	xmlns:controls="modules.gmap.view.controls.*"
 	width="100%" height="100%"
 	creationComplete="init()"
 >
@@ -47,5 +47,5 @@
 			}			
 		]]>
 	</mx:Script>
-	<view:GMapLocationsControl id="locationsControl"/>	
+	<controls:GMapLocationsControl id="locationsControl"/>
 </mx:Canvas>

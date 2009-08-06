@@ -20,6 +20,7 @@
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:view="modules.gmap.view.*"
+	xmlns:controls="modules.gmap.view.controls.*"
 	xmlns:ui="lib.ui.*" 
 	
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
@@ -63,7 +64,7 @@
 
 	<mx:Script source="../GMapModule.as"/>
 
-	<view:GMapControl left="0" top="0" right="0" bottom="0"/>
+	<controls:GMapControl left="0" top="0" right="0" bottom="0"/>
 
 	<view:DialogSettings id="settingsBox"
 		logo="{settingsImage}"

@@ -8,8 +8,8 @@
 			import com.asfusion.mate.events.Dispatcher;
 
 			import modules.gmap.view.MainView;
-			import modules.gmap.view.GMapControl;
-			import modules.gmap.view.GMapLocationsControl;
+			import modules.gmap.view.controls.GMapControl;
+			import modules.gmap.view.controls.GMapLocationsControl;
 			import modules.gmap.view.DialogViewpoint;
 			
 			import modules.gmap.mediator.MainMD;
@@ -35,4 +35,5 @@
 	<Injectors target="{GMapLocationsControl}" debug="true">
 		<PropertyInjector targetKey="dataProvider" source="{LocationsData}"/>
 	</Injectors>
+		
 </EventMap>

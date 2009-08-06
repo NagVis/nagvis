@@ -6,7 +6,7 @@ package modules.gmap.mediator
 	import flash.events.IEventDispatcher;
 	
 	import modules.gmap.domain.Viewpoint;
-	import modules.gmap.view.GMapControl;
+	import modules.gmap.view.controls.GMapControl;
 
 	public class MapMD
 	{

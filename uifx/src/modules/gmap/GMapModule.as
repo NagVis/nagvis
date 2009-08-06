@@ -121,7 +121,10 @@ private function onMapReady(event : Event) : void
 	map.addControl(new ZoomControl());
 	map.setZoom(2);
 	*/
+	
+	/* Done
 	locationsView = new LocationsView(map, locations);
+	*/
 	locationsView.addEventListener(LocationsViewEvent.SELECT_LOCATION, onSelectLocation);
 
 	foundLocationsView = new FoundLocationsView(map, foundLocations);
@@ -143,6 +146,7 @@ private function onMapReady(event : Event) : void
 /* Remoting
 /*********************************************/
 
+/* No need to move
 private function fault(event : FaultEvent) : void
 {
 	var msg : String = event.fault.faultString as String;
@@ -150,7 +154,9 @@ private function fault(event : FaultEvent) : void
  	msg = msg.replace("java.lang.Exception :", "");
 	Alert.show(msg, "Error");
 }
+*/
 
+/* Done
 private function getViewpoints_handler(event : ResultEvent) : void
 {
 	var result : ArrayCollection = new ArrayCollection(event.result as Array);
@@ -161,13 +167,17 @@ private function getViewpoints_handler(event : ResultEvent) : void
 
 	viewpointBox.list.dataProvider = viewpoints;
 }
+*/
 
+/* Done
 private function addViewpoint_handler(event : ResultEvent) : void
 {
 	var result : Viewpoint = event.result as Viewpoint;
 
 	viewpoints.addItem({label: result.label, center: LatLng.fromUrlValue(result.center), zoom: result.zoom});
 }
+
+*/
 
 private function getLocations_handler(event : ResultEvent) : void
 {

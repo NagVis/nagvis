@@ -1,36 +1,21 @@
-package modules.gmap.view
+package modules.gmap.view.controls
 {
-	import com.google.maps.LatLng;
 	import com.google.maps.Map;
-	import com.google.maps.overlays.Marker;
-	import com.google.maps.overlays.MarkerOptions;
+	
+	import flash.events.Event;
 	
 	import modules.gmap.data.LocationsData;
 	import modules.gmap.domain.Location;
+	import modules.gmap.events.LocationEvent;
+	import modules.gmap.view.controls.LocationMarker;
 	
 	import mx.containers.VBox;
-	import mx.controls.Alert;
 
 	public class GMapLocationsControl extends VBox
-	{ 
-		[Embed(source="modules/gmap/img/std_small_ok.png")]
-		protected var okIcon : Class;
-		
-		[Embed(source="modules/gmap/img/std_small_warning.png")]
-		protected var warningIcon : Class;
-		
-		[Embed(source="modules/gmap/img/std_small_error.png")]
-		protected var errorIcon : Class;
-		
-		[Embed(source="modules/gmap/img/std_small_critical.png")]
-		protected var criticalIcon : Class;
-		
-		[Embed(source="modules/gmap/img/std_small_unknown.png")]
-		protected var unknownIcon : Class;		
-		
+	{
 		private var _dataProvider : LocationsData;
 		private var _map : Map;
-		private var _signs : Array;
+		private var _markers : Array;
 		
 		public function GMapLocationsControl()
 		{
@@ -87,29 +72,24 @@ package modules.gmap.view
 				super.visible = value;
 			}
 		}
+		
+		// Marker is not an UI component, so
+		// we need to redispatch his events to get them into Mate.
+		protected function redispatchMarkerEvent(event : Event):void
+		{
+			dispatchEvent(event);
+		}
 				
 		protected function reinitMarkers():void
 		{
 			if(_map)
 			{
-				_signs = [];
+				_markers = [];
 				for each (var l : Location in _dataProvider)
 				{
-					var options : MarkerOptions = new MarkerOptions();
-					options.icon = new okIcon();
-					options.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER || MarkerOptions.ALIGN_VERTICAL_CENTER;
-					options.hasShadow = false;
-					
-					var point : LatLng = LatLng.fromUrlValue(l.point);
-								
-					var m : Marker = new Marker(point, options);
-					
-					_signs.push(
-						{
-							marker : m,
-							location : l
-						}
-					);	
+					var m : LocationMarker = new LocationMarker(l);
+					m.addEventListener(LocationEvent.SELECTED, redispatchMarkerEvent);
+					_markers.push(m);	
 				}
 			}
 		}
@@ -118,8 +98,8 @@ package modules.gmap.view
 		{
 			if(_map)
 			{
-				for each (var s : Object in _signs)
-					_map.addOverlay(s.marker);
+				for each (var m : LocationMarker in _markers)
+					_map.addOverlay(m);
 			}
 		}
 		
@@ -127,8 +107,8 @@ package modules.gmap.view
 		{
 			if(_map)
 			{ 
-				for each (var s : Object in _signs)
-					_map.removeOverlay(s.marker);
+				for each (var m : LocationMarker in _markers)
+					_map.removeOverlay(m);
 			}			
 		}
 	}

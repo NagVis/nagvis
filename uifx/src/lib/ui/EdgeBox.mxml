@@ -59,7 +59,7 @@
 			<mx:SetProperty name="height" value="{contractedHeight}"/>
 			<mx:enterState>
 				<![CDATA[
-					dispatchEvent(new Event("contracted"));
+					dispatchEvent(new Event("contracted", true));
 				]]>
 			</mx:enterState>
 		</mx:State>
@@ -68,7 +68,7 @@
 			<mx:SetProperty name="height" value="{expandedHeight}"/>
 			<mx:enterState>
 				<![CDATA[
-					dispatchEvent(new Event("expanded"));
+					dispatchEvent(new Event("expanded", true));
 				]]>
 			</mx:enterState>
 		</mx:State>
@@ -76,13 +76,13 @@
 	<mx:transitions>
 		<mx:Transition fromState="right-contracted" toState="right-expanded">
 			<mx:Parallel>
-				<mx:Resize target="{this}" effectEnd="dispatchEvent(new Event('resized'))"/>
+				<mx:Resize target="{this}" effectEnd="dispatchEvent(new Event('resized', true))"/>
 				<mx:Move target="{this}"/>
 			</mx:Parallel>
 		</mx:Transition>
 		<mx:Transition fromState="right-expanded" toState="right-contracted">
 			<mx:Parallel>
-				<mx:Resize target="{this}" effectEnd="dispatchEvent(new Event('resized'))"/>
+				<mx:Resize target="{this}" effectEnd="dispatchEvent(new Event('resized', true))"/>
 				<mx:Move target="{this}"/>
 			</mx:Parallel>
 		</mx:Transition>

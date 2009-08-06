@@ -28,6 +28,7 @@
 	<mate:PreinitEM/>
 	<mate:UIInitEM/>
 	<mate:StartupEM/>
+	<mate:GeneralEM/>
 	<mate:ViewpointsEM/>
 	<mate:LocationsEM/>
 	<mate:LinksEM/>

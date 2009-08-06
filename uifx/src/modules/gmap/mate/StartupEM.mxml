@@ -5,15 +5,15 @@
 >
 	<mx:Script>
 		<![CDATA[
-			import modules.gmap.data.LocationsData;
 			import mx.controls.Alert;
 		
-			import modules.gmap.view.GMapControl;
+			import modules.gmap.view.controls.GMapControl;
 		
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
 			
 			import modules.gmap.data.ViewpointsData;
+			import modules.gmap.data.LocationsData;
 		]]>
 	</mx:Script>
 

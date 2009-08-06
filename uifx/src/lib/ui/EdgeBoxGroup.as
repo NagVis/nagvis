@@ -29,6 +29,11 @@ package lib.ui
 
 		public var busy : Boolean = false;
 
+		public function get current():EdgeBox
+		{
+			return _current;
+		}
+
 		public function register(component : EdgeBox):void
 		{
 			_components.push(component);
