@@ -92,7 +92,6 @@
 		save="onSaveLocation()"
 		remove="onDeleteLocation()"
 		contracted="onHideLocationBox()"
-		expanded="onShowLocationBox()"
 	/>
 	<view:DialogSearch id="searchBox" group="{ebg}"
 		logo="{searchImage}"

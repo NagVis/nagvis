@@ -93,7 +93,7 @@ package modules.gmap.view
 			}
 
 			this.selectedLocation = this.locations.getItemAt(0) as Location;
-			dispatchEvent(new LocationsViewEvent('selectLocation', this.selectedLocation));
+			//dispatchEvent(new LocationsViewEvent('selectLocation', this.selectedLocation));
 		}
 
 		public function clearLocations() : void

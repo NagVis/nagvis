@@ -39,7 +39,6 @@ import modules.gmap.domain.nagios.HostGroup;
 import modules.gmap.domain.nagios.Service;
 import modules.gmap.domain.nagios.ServiceGroup;
 import modules.gmap.events.LocationEvent;
-import modules.gmap.events.LocationsViewEvent;
 
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
@@ -124,11 +123,13 @@ private function onMapReady(event : Event) : void
 	
 	/* Done
 	locationsView = new LocationsView(map, locations);
-	*/
 	locationsView.addEventListener(LocationsViewEvent.SELECT_LOCATION, onSelectLocation);
+	*/
 
 	foundLocationsView = new FoundLocationsView(map, foundLocations);
+	/* Reenable
 	foundLocationsView.addEventListener(LocationsViewEvent.SELECT_LOCATION, onSelectFoundLocation);
+	*/
 
 	/* TODO: reenable
 	rDatabase.getHosts();
@@ -179,6 +180,7 @@ private function addViewpoint_handler(event : ResultEvent) : void
 
 */
 
+/* Done
 private function getLocations_handler(event : ResultEvent) : void
 {
 	var result : ArrayCollection = new ArrayCollection(event.result as Array);
@@ -195,10 +197,9 @@ private function getLocations_handler(event : ResultEvent) : void
 
 	locationsView.showLocations();
 
-	/* TODO: reenable
 	rLinks.getAll();
-	*/
 }
+*/
 
 private function addLocation_handler(event : ResultEvent) : void
 {
@@ -383,33 +384,38 @@ private function onHideSearchBox() : void
 /* Location dialog box
 /*********************************************/
 
+/* Done
 private function onSelectLocation(event : LocationsViewEvent) : void
 {
 	if (locationBox.status == "contracted")
 		locationBox.setCurrentState("right-expanded");
 }
+*/
 
+/* We be done automagically :) 
 private function onSelectFoundLocation(event : LocationsViewEvent) : void
 {
 	locationBox.setCurrentState("right-expanded");
 }
+*/
 
+/* Done
 private function onShowLocationBox() : void
 {
 	if (searchBox.status == "expanded")
 		searchBox.setCurrentState("right-contracted");
 
-	/*
-	for each (var host : Host in hosts)
-next_host:
-		for each (var location : Location in locations)
-			for each (var locationhost : Array in location.hosts)
-				if (locationhost.id == host.id)
-				{
-					host.selected = true;
-					break next_host;
-				}
-	*/
+	
+//	for each (var host : Host in hosts)
+//next_host:
+//		for each (var location : Location in locations)
+//			for each (var locationhost : Array in location.hosts)
+//				if (locationhost.id == host.id)
+//				{
+//					host.selected = true;
+//					break next_host;
+//				}
+	
 
 	if (locationsView && locationsView.selectedLocation)
 		locationBox.update(locationsView.selectedLocation);
@@ -418,6 +424,7 @@ next_host:
 	else
 		locationBox.update(null);
 }
+*/
 
 private function onHideLocationBox() : void
 {

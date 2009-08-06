@@ -155,7 +155,7 @@ package modules.gmap.view
 			if (location)
 			{
 				this.selectedLocation = location;
-				dispatchEvent(new LocationsViewEvent('selectLocation', this.selectedLocation));
+				//dispatchEvent(new LocationsViewEvent('selectLocation', this.selectedLocation));
 			}
 		}
 	}

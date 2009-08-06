@@ -27,6 +27,8 @@ package modules.gmap.view.controls
 			return _map;
 		}
 		
+		//Already initialized map has to be set here
+		//TODO: support uninitialized map
 		public function set map(value : Map):void
 		{
 			if(_map !== value)
