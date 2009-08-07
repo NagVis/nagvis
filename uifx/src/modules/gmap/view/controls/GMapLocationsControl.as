@@ -65,7 +65,27 @@ package modules.gmap.view.controls
 				reinitMarkers();
 			
 			//TODO: handle items addition
-			//TODO: handle items removal
+
+			if(event.kind == CollectionEventKind.REMOVE)
+			{
+				for each (var removed:Location in event.items)
+				{
+					var marked : LocationMarker;
+					for(var i:int = _markers.length; i >=0; i--)
+					{
+						marked = _markers.shift();
+						
+						if(marked.location.id === removed.id)
+						{
+							if(visible && _map)
+								_map.removeOverlay(marked);
+							break;
+						}
+							
+						_markers.push(marked);
+					} 
+				}
+			}
 		}
 		
 		public override function set visible(value:Boolean):void

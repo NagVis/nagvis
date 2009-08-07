@@ -25,7 +25,7 @@ package modules.gmap.view.controls
 		[Embed(source="modules/gmap/img/std_small_unknown.png")]
 		protected var unknownIcon : Class;				
 				
-		private var location : Location;
+		private var _location : Location;
 		
 		public function LocationMarker(location:Location)
 		{	
@@ -43,7 +43,7 @@ package modules.gmap.view.controls
 			
 			super(point, options);
 			
-			this.location = location;
+			_location = location;
 			
 			this.addEventListener(MapMouseEvent.CLICK, this.onClick);
 		}
@@ -51,8 +51,13 @@ package modules.gmap.view.controls
 		protected function onClick(event : *):void
 		{
 			dispatchEvent(
-				new LocationEvent(LocationEvent.SELECTED, this.location, true)
+				new LocationEvent(LocationEvent.SELECTED, _location, true)
 			);
+		}
+		
+		public function get location():Location
+		{
+			return _location;
 		}
 		
 	}

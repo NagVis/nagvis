@@ -32,6 +32,7 @@
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
 			import modules.gmap.events.LocationEvent;
 			import modules.gmap.domain.nagios.ServiceGroup;
 			import modules.gmap.domain.nagios.HostGroup;
@@ -124,6 +125,15 @@
 					locNObject.selectedItem = null;
 				}
 			}
+			
+			protected function reverseUpdate():void
+			{
+				location.point = new LatLng(parseFloat(locLat.text), parseFloat(locLng.text)).toUrlValue(16);
+				location.label = locName.text;
+				location.address = locAddress.text;
+				location.description = locDescription.text;
+				location.object = locNObject.selectedItem;				
+			}
 
 			private function objectItemClick(event : MenuEvent) : void
 			{
@@ -178,6 +188,37 @@
 						break;
 				}
 			}
+
+			private function onSaveClicked():void
+			{
+				if(this.location) 
+				{
+					reverseUpdate(); 
+					dispatchEvent(new LocationEvent(LocationEvent.SAVE, this.location));
+				}
+			} 
+			
+			private function onDeleteClicked():void
+			{
+				if(this.location)
+				{
+					Alert.show(
+						'Are you sure to delete location ' + location.label + "?", 
+						'Confirmation', 
+						3, this,
+						deleteConfirmation
+					);
+				}
+			}
+			
+			private function deleteConfirmation(event : CloseEvent):void
+			{ 
+				if(event.detail == Alert.YES)
+				{
+					reverseUpdate(); 
+					dispatchEvent(new LocationEvent(LocationEvent.DELETE, this.location));
+				}
+			}			
 		]]>
 	</mx:Script>
 	<mx:XML format="e4x" id="autoCompleteMenu">
@@ -284,11 +325,11 @@
 		</flexlib:HAccordion>
 		<mx:Button label="Save" 
 			right="0" bottom="0" 
-			click="dispatchEvent(new LocationEvent(LocationEvent.SAVE, this.location))"
+			click="onSaveClicked()"
 		/>
 		<mx:Button label="Delete" 
 			right="65" bottom="0" 
-			click="dispatchEvent(new LocationEvent(LocationEvent.DELETE, this.location))"
+			click="onDeleteClicked()"
 		/>
 	</mx:Canvas>
 </EdgeBox>

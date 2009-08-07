@@ -203,6 +203,7 @@ private function addLocation_handler(event : ResultEvent) : void
 	locationBox.setCurrentState("right-contracted");
 }
 
+/* Done
 private function editLocation_handler(event : ResultEvent) : void
 {
 	var result : Location = event.result as Location;
@@ -211,6 +212,7 @@ private function editLocation_handler(event : ResultEvent) : void
 
 	locationBox.setCurrentState("right-contracted");
 }
+*/
 
 private function removeLocation_handler(event : ResultEvent) : void
 {
@@ -436,7 +438,7 @@ private function onSaveLocation() : void
 {
 	if (locationBox.locID != "")
 	{
-		/* TODO: reenable
+		/* TODO: Done
 		rLocations.edit(locationBox.locID,
 			(new LatLng(parseFloat(locationBox.locLat.text), parseFloat(locationBox.locLng.text)).toUrlValue(16)),
 			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text,
@@ -453,13 +455,13 @@ private function onSaveLocation() : void
 	}
 }
 
+/* TODO: done
 private function onDeleteLocation() : void
 {
-	/* TODO: reenable
 	if (locationBox.locID != "")
 		rLocations.remove(locationBox.locID);
-	*/
 }
+*/
 
 /*********************************************/
 /* Link dialog box

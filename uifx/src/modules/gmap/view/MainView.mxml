@@ -71,7 +71,6 @@
 		contractedWidth="35" contractedHeight="35"
 		currentState="right-contracted"
 		save="onSaveLocation()"
-		remove="onDeleteLocation()"
 		contracted="onHideLocationBox()"
 	/>
 	<view:DialogSearch id="searchBox" group="{ebg}"
