@@ -23,6 +23,8 @@
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
 	creationComplete="init()"
+	contracted="addEventListener(MouseEvent.CLICK, onClick)"
+	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
     <mx:Metadata>
         [Event(name="save", type="flash.events.Event")]
@@ -184,15 +186,12 @@
 		</root>
 	</mx:XML>
 	<mx:HBox left="10" right="15" top="10" height="20">
-		<mx:Image id="logo"
-			source="@Embed(source='modules/gmap/img/pin.png')"
-			click="setCurrentState('right-expanded')"
-		/>
+		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/pin.png')"/>
 		<mx:Label text="Location Details"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
-			click="setCurrentState('right-contracted')"
+			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">

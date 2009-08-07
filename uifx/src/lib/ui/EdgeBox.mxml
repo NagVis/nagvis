@@ -151,6 +151,11 @@
 
 				return slices;
 			}
+
+			public function onClick(event : Event) : void
+			{
+				this.setCurrentState('right-expanded');
+			}
 		]]>
 	</mx:Script>
 

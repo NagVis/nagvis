@@ -20,20 +20,19 @@
 <EdgeBox xmlns="lib.ui.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	contracted="addEventListener(MouseEvent.CLICK, onClick)"
+	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
     <mx:Metadata>
         [Event(name="link", type="flash.events.Event")]
     </mx:Metadata>
 	<mx:HBox left="10" right="15" top="10" height="20">
-		<mx:Image id="logo"
-			source="@Embed(source='modules/gmap/img/connect.png')"
-			click="setCurrentState('right-expanded')"
-		/>
+		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/connect.png')"/>
 		<mx:Label text="Link Details"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
-			click="setCurrentState('right-contracted')"
+			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">

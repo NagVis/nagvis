@@ -20,6 +20,8 @@
 <EdgeBox xmlns="lib.ui.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	contracted="addEventListener(MouseEvent.CLICK, onClick)"
+	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
     <mx:Metadata>
         [Event(name="save", type="flash.events.Event")]
@@ -48,15 +50,12 @@
     	]]>
     </mx:Script>
 	<mx:HBox left="10" right="15" top="10" height="20">
-		<mx:Image id="logo"
-			source="@Embed(source='modules/gmap/img/eye.png')"
-			click="setCurrentState('right-expanded')"
-		/>
+		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/eye.png')"/>
 		<mx:Label text="View Points"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
-			click="setCurrentState('right-contracted')"
+			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
