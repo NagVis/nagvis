@@ -5,12 +5,20 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
+		
+			import com.asfusion.mate.events.UnhandledFaultEvent;
+			
 			import modules.gmap.events.ModeEvent;
 		
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
 		]]>
 	</mx:Script>
+
+	<EventHandlers type="{UnhandledFaultEvent.FAULT}">
+		<InlineInvoker method="Alert.show" arguments="{[event.fault.faultDetail, 'Error']}"/>		
+	</EventHandlers>
 
 	<EventHandlers type="resized">
 		<MethodInvoker generator="{MainMD}" method="reconsiderMode"/>

@@ -32,6 +32,7 @@
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
 			import modules.gmap.events.LocationEvent;
 			import modules.gmap.domain.nagios.ServiceGroup;
 			import modules.gmap.domain.nagios.HostGroup;
@@ -75,6 +76,19 @@
 					locLng.text = LatLng.fromUrlValue(location.point).lng().toString();
 					locAddress.text = location.address;
 					locDescription.text = location.description;
+
+					if(location.id && location.id.length > 0)
+					{
+						addButton.visible = false;
+						saveButton.visible = true;
+						deleteButton.visible = true;
+					}
+					else
+					{
+						addButton.visible = true;
+						saveButton.visible = false;
+						deleteButton.visible = false;
+					}
 
 					if (location.object is Host)
 					{
@@ -123,6 +137,15 @@
 					//       though documentation says it should
 					locNObject.selectedItem = null;
 				}
+			}
+			
+			protected function reverseUpdate():void
+			{
+				location.point = new LatLng(parseFloat(locLat.text), parseFloat(locLng.text)).toUrlValue(16);
+				location.label = locName.text;
+				location.address = locAddress.text;
+				location.description = locDescription.text;
+				location.object = locNObject.selectedItem;				
 			}
 
 			private function objectItemClick(event : MenuEvent) : void
@@ -178,6 +201,46 @@
 						break;
 				}
 			}
+
+			private function onAddClicked():void
+			{
+				if(this.location) 
+				{
+					reverseUpdate(); 
+					dispatchEvent(new LocationEvent(LocationEvent.ADD, this.location));
+				}
+			} 
+
+			private function onSaveClicked():void
+			{
+				if(this.location) 
+				{
+					reverseUpdate(); 
+					dispatchEvent(new LocationEvent(LocationEvent.SAVE, this.location));
+				}
+			} 
+			
+			private function onDeleteClicked():void
+			{
+				if(this.location)
+				{
+					Alert.show(
+						'Are you sure to delete location ' + location.label + "?", 
+						'Confirmation', 
+						3, this,
+						deleteConfirmation
+					);
+				}
+			}
+			
+			private function deleteConfirmation(event : CloseEvent):void
+			{ 
+				if(event.detail == Alert.YES)
+				{
+					reverseUpdate(); 
+					dispatchEvent(new LocationEvent(LocationEvent.DELETE, this.location));
+				}
+			}			
 		]]>
 	</mx:Script>
 	<mx:XML format="e4x" id="autoCompleteMenu">
@@ -282,13 +345,18 @@
 				<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
-		<mx:Button label="Save" 
-			right="0" bottom="0" 
-			click="dispatchEvent(new LocationEvent(LocationEvent.SAVE, this.location))"
+		<mx:Button id="addButton" label="Add" 
+			right="0" bottom="0"
+			visible="false" 
+			click="onAddClicked()"
 		/>
-		<mx:Button label="Delete" 
+		<mx:Button id="saveButton" label="Save" 
+			right="0" bottom="0" 
+			click="onSaveClicked()"
+		/>
+		<mx:Button id="deleteButton" label="Delete" 
 			right="65" bottom="0" 
-			click="dispatchEvent(new LocationEvent(LocationEvent.DELETE, this.location))"
+			click="onDeleteClicked()"
 		/>
 	</mx:Canvas>
 </EdgeBox>

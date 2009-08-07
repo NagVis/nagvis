@@ -64,8 +64,32 @@ package modules.gmap.view.controls
 			if(event.kind == CollectionEventKind.RESET)
 				reinitMarkers();
 			
-			//TODO: handle items addition
-			//TODO: handle items removal
+			if(event.kind == CollectionEventKind.ADD)
+			{
+				for each (var added:Location in event.items)
+					createMarker(added);
+			}
+
+			if(event.kind == CollectionEventKind.REMOVE)
+			{
+				for each (var removed:Location in event.items)
+				{
+					var marked : LocationMarker;
+					for(var i:int = _markers.length - 1; i >=0; i--)
+					{
+						marked = _markers.shift();
+						
+						if(marked.location.id === removed.id)
+						{
+							if(visible && _map)
+								_map.removeOverlay(marked);
+							break;
+						}
+							
+						_markers.push(marked);
+					} 
+				}
+			}
 		}
 		
 		public override function set visible(value:Boolean):void
@@ -80,33 +104,15 @@ package modules.gmap.view.controls
 				super.visible = value;
 			}
 		}
-		
-		// Marker is not an UI component, so
-		// we need to redispatch his events to get them into Mate.
-		protected function redispatchMarkerEvent(event : Event):void
-		{
-			dispatchEvent(event);
-		}
-				
+						
 		protected function reinitMarkers():void
 		{
 			if(visible)
 				hideMarkers();
 
-			if(_map)
-			{
-				_markers = [];
-				for each (var l : Location in _dataProvider)
-				{
-					var m : LocationMarker = new LocationMarker(l);
-					m.addEventListener(LocationEvent.SELECTED, redispatchMarkerEvent);
-					_markers.push(m);	
-				}
-			}
-			
-			if(visible)
-				showMarkers();				
-
+			_markers = [];
+			for each (var l : Location in _dataProvider)
+				createMarker(l);	
 		}
 		
 		protected function showMarkers():void
@@ -126,5 +132,26 @@ package modules.gmap.view.controls
 					_map.removeOverlay(m);
 			}			
 		}
+		
+		protected function createMarker(location:Location):void
+		{
+			if(_map)
+			{
+				var m : LocationMarker = new LocationMarker(location);
+				m.addEventListener(LocationEvent.SELECTED, redispatchMarkerEvent);
+				_markers.push(m);
+				
+				if(visible)
+					_map.addOverlay(m);
+			}
+		}
+		
+		// Marker is not an UI component, so
+		// we need to redispatch his events to get them into Mate.
+		protected function redispatchMarkerEvent(event : Event):void
+		{
+			dispatchEvent(event);
+		}
+
 	}
 }

@@ -72,7 +72,13 @@ package modules.gmap.mediator
 					break;
 				case MODE_LOCATION_EDIT:
 					_view.locationBox.update(location);
-					break; 
+					break;
+				case MODE_LOCATION_SEARCH:
+					if(location.id && location.id.length > 0)
+						break;
+					_view.locationBox.update(location);
+					_view.locationBox.setCurrentState('right-expanded'); 
+					break;
 			}
 		}	
 	}
