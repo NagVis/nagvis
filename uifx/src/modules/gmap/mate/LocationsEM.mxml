@@ -31,17 +31,16 @@
 		</RemoteObjectInvoker>
 	</EventHandlers>
 	
+	<EventHandlers type="{LocationEvent.ADD}">
+		<RemoteObjectInvoker instance="{LocationsService}" method="add" arguments="{event.location}">
+			<resultHandlers>
+				<MethodInvoker generator="{LocationsData}" method="addUpdateItem" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+	
 	<EventHandlers type="{LocationEvent.SAVE}">
-		<RemoteObjectInvoker instance="{LocationsService}" method="edit" 
-			arguments="{[
-				event.location.id,
-				event.location.point,
-				event.location.label, 
-				event.location.address,
-				event.location.description,
-				event.location.object			
-			]}"
-		>
+		<RemoteObjectInvoker instance="{LocationsService}" method="edit" arguments="{event.location}">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="addUpdateItem" arguments="{resultObject}"/>
 			</resultHandlers>
@@ -49,7 +48,6 @@
 	</EventHandlers>
 
 	<EventHandlers type="{LocationEvent.DELETE}">
-		<InlineInvoker method="Alert.show" arguments="{[event.location.label, 'Delete Location']}"/>
 		<RemoteObjectInvoker instance="{LocationsService}" method="remove" arguments="{event.location.id}">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="removeItemById" arguments="{resultObject}"/>

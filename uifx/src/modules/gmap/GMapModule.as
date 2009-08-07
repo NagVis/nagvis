@@ -194,6 +194,7 @@ private function getLocations_handler(event : ResultEvent) : void
 }
 */
 
+/* Done
 private function addLocation_handler(event : ResultEvent) : void
 {
 	var result : Location = event.result as Location;
@@ -202,6 +203,7 @@ private function addLocation_handler(event : ResultEvent) : void
 
 	locationBox.setCurrentState("right-contracted");
 }
+*/
 
 /* Done
 private function editLocation_handler(event : ResultEvent) : void
@@ -214,6 +216,7 @@ private function editLocation_handler(event : ResultEvent) : void
 }
 */
 
+/* Done
 private function removeLocation_handler(event : ResultEvent) : void
 {
 	var result : String = event.result as String;
@@ -222,6 +225,7 @@ private function removeLocation_handler(event : ResultEvent) : void
 
 	locationBox.setCurrentState("right-contracted");
 }
+*/
 
 /* Done
 private function findLocation_handler(event : ResultEvent) : void
@@ -423,6 +427,7 @@ private function onShowLocationBox() : void
 }
 */
 
+/* Not needed
 private function onHideLocationBox() : void
 {
 	if (foundLocationsView && foundLocationsView.selectedLocation)
@@ -433,27 +438,26 @@ private function onHideLocationBox() : void
 	else if (locationsView && locationsView.selectedLocation)
 		locationsView.unselectLocation();
 }
+*/
 
+/* Done
 private function onSaveLocation() : void
 {
 	if (locationBox.locID != "")
 	{
-		/* TODO: Done
 		rLocations.edit(locationBox.locID,
 			(new LatLng(parseFloat(locationBox.locLat.text), parseFloat(locationBox.locLng.text)).toUrlValue(16)),
 			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text,
 			locationBox.locNObject.selectedItem);
-		*/
 	}
 	else
 	{
-		/* TODO: reenable
 		rLocations.add((new LatLng(parseFloat(locationBox.locLat.text), parseFloat(locationBox.locLng.text)).toUrlValue(16)),
 			locationBox.locName.text, locationBox.locAddress.text, locationBox.locDescription.text,
 			locationBox.locNObject.selectedItem);
-		*/
 	}
 }
+*/
 
 /* TODO: done
 private function onDeleteLocation() : void

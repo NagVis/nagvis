@@ -77,6 +77,19 @@
 					locAddress.text = location.address;
 					locDescription.text = location.description;
 
+					if(location.id && location.id.length > 0)
+					{
+						addButton.visible = false;
+						saveButton.visible = true;
+						deleteButton.visible = true;
+					}
+					else
+					{
+						addButton.visible = true;
+						saveButton.visible = false;
+						deleteButton.visible = false;
+					}
+
 					if (location.object is Host)
 					{
 						locNObjectType.selectedIndex = 0;
@@ -188,6 +201,15 @@
 						break;
 				}
 			}
+
+			private function onAddClicked():void
+			{
+				if(this.location) 
+				{
+					reverseUpdate(); 
+					dispatchEvent(new LocationEvent(LocationEvent.ADD, this.location));
+				}
+			} 
 
 			private function onSaveClicked():void
 			{
@@ -323,11 +345,16 @@
 				<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
-		<mx:Button label="Save" 
+		<mx:Button id="addButton" label="Add" 
+			right="0" bottom="0"
+			visible="false" 
+			click="onAddClicked()"
+		/>
+		<mx:Button id="saveButton" label="Save" 
 			right="0" bottom="0" 
 			click="onSaveClicked()"
 		/>
-		<mx:Button label="Delete" 
+		<mx:Button id="deleteButton" label="Delete" 
 			right="65" bottom="0" 
 			click="onDeleteClicked()"
 		/>
