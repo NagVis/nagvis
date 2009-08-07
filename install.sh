@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.1"
+INSTALLER_VERSION="0.2.2"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -87,8 +87,8 @@ GREP_INCOMPLETE=0
 
 # format version string
 fmt_version() {
-   LNG=${2:-6}
-	echo `perl -e '$v = $ARGV[0];$v =~ s/rc|b/.0./gi; @f = split (/\./,$v); for (0..$#f) { $z .= sprintf "%02d", $f[$_]; }; print substr($z."000000",0,$ARGV[1]);' $1 $LNG` 
+   LNG=${2:-8}
+	echo `perl -e '$v = $ARGV[0];$v =~ s/a/.0.0/i; $v =~ s/b/.0.2/i; $v =~ s/rc/.0.4/i; @f = split (/\./,$v); for (0..$#f) { $z .= sprintf "%02d", $f[$_]; }; print substr($z."0"x$ARGV[1],0,$ARGV[1]);' $1 $LNG` 
 }
 
 # Print usage
@@ -515,10 +515,10 @@ NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
 NAGIOS_PATH="/usr/local/$SOURCE"
 # Default Path to NagVis base
 NAGVIS_PATH="/usr/local/nagvis"
-[ $NAGVIS_TAG -lt 010500 ]&&NAGVIS_PATH="/usr/local/$SOURCE/share/nagvis"
+[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="/usr/local/$SOURCE/share/nagvis"
 # Default nagios share webserver path
 HTML_PATH="/nagvis"
-[ $NAGVIS_TAG -lt 010500 ]&&HTML_PATH="/$SOURCE/nagvis"
+[ $NAGVIS_TAG -lt 01050000 ]&&HTML_PATH="/$SOURCE/nagvis"
 HTML_BASE=$HTML_PATH
 
 # Print welcome message
@@ -589,7 +589,7 @@ line "Checking prerequisites" "+"
 [ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
 
 if [ -f $NAGIOS_BIN ]; then
-	NAGIOS=`$NAGIOS_BIN --version | grep -i "$SOURCE" 2>&1`
+	NAGIOS=`$NAGIOS_BIN --version | grep -iE "$SOURCE\s+" 2>&1`
 	log "$NAGIOS" $NAGIOS
 else
 	log "$SOURCE binary $NAGIOS_BIN"
@@ -745,7 +745,7 @@ fi
 # Create base path
 makedir "$NAGVIS_PATH"
 
-if [ $NAGVIS_TAG -ge 010401 ]; then
+if [ $NAGVIS_TAG -ge 01050000 ]; then
 	# Create non shared var directory when not exists
 	makedir "$NAGVIS_PATH/var"
 	# Create shared var directory when not exists
@@ -855,7 +855,8 @@ chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
 [ -f "$NAGVIS_PATH/$NAGVIS_CONF-sample" ]&&set_perm 664 "$NAGVIS_PATH/$NAGVIS_CONF-sample"
 set_perm 775 "$NAGVIS_PATH/etc/maps"
 set_perm 664 "$NAGVIS_PATH/etc/maps/*"
-if [ $NAGVIS_TAG -lt 010500 ]; then
+# prior to 1.5.x
+if [ $NAGVIS_TAG -lt 01050000 ]; then
 	set_perm 775 "$NAGVIS_PATH/nagvis/images/maps"
 	set_perm 664 "$NAGVIS_PATH/nagvis/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/nagvis/var"
@@ -880,7 +881,7 @@ text "| - Read the documentation" "|"
 text "| - Maybe you want to edit the main configuration file?" "|"
 text "|   Its location is: $NAGVIS_PATH/$NAGVIS_CONF" "|"
 text "| - Configure NagVis via browser" "|"
-if [ $NAGVIS_TAG -lt 010500 ]; then
+if [ $NAGVIS_TAG -lt 01050000 ]; then
 	text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
 else
 	text "|   <http://localhost${HTML_PATH}/config.php>" "|"
