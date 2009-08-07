@@ -29,5 +29,13 @@
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
+	
+	<EventHandlers type="{LocationEvent.SAVE}">
+		<InlineInvoker method="Alert.show" arguments="{[event.location.label, 'Save Location']}"/>		
+	</EventHandlers>
+
+	<EventHandlers type="{LocationEvent.DELETE}">
+		<InlineInvoker method="Alert.show" arguments="{[event.location.label, 'Delete Location']}"/>		
+	</EventHandlers>
 
 </EventMap>

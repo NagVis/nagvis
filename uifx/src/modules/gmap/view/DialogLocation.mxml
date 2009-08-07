@@ -30,6 +30,7 @@
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.events.LocationEvent;
 			import modules.gmap.domain.nagios.ServiceGroup;
 			import modules.gmap.domain.nagios.HostGroup;
 			import modules.gmap.domain.nagios.Service;
@@ -40,6 +41,8 @@
 
 			import mx.collections.ArrayCollection;
 			import mx.events.MenuEvent;
+
+			private var location:Location;
 
 			[Bindable]
 			public var locID : String;
@@ -61,6 +64,7 @@
 
 			public function update(location : Location) : void
 			{
+				this.location = location;
 				if (location)
 				{
 					locID = location.id;
@@ -279,7 +283,13 @@
 				<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
-		<mx:Button label="Save" right="0" bottom="0" height="22" click="dispatchEvent(new Event('save'))"/>
-		<mx:Button label="Delete" right="0" bottom="0" height="22" click="dispatchEvent(new Event('remove'))"/>
+		<mx:Button label="Save" 
+			right="0" bottom="0" 
+			click="dispatchEvent(new LocationEvent(LocationEvent.SAVE, this.location))"
+		/>
+		<mx:Button label="Delete" 
+			right="65" bottom="0" 
+			click="dispatchEvent(new LocationEvent(LocationEvent.DELETE, this.location))"
+		/>
 	</mx:Canvas>
 </EdgeBox>
