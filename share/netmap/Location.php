@@ -40,6 +40,60 @@ class Location
 		$this->object = $object;
 	}
 
+	private function fromXML($node)
+	{
+		$object = null;
+		$object_type = '';
+
+		/* Note: there should be only one child of location node,
+				 but it is required to use foreach with children() */
+		foreach ($node->children() as $object_node)
+		{
+			$object_type = $object_node->getName();
+			switch ($object_type)
+			{
+				case 'host':
+					$object = Host::fromXML($object_node);
+					break;
+
+				case 'hostgroup':
+					$object = HostGroup::fromXML($object_node);
+					break;
+
+				case 'service':
+					$object = Service::fromXML($object_node);
+					break;
+
+				case 'servicegroup':
+					$object = ServiceGroup::fromXML($object_node);
+					break;
+
+				default:
+					throw new Exception('Unknown object type in locations.xml');
+			}
+		}
+
+		return new Location((string)$node['id'],
+			(string)$node['point'], (string)$node['label'],
+			(string)$node['address'], (string)$node['description'],
+			$object);
+	}
+
+	private function toXML($parent)
+	{
+		$node = $parent->addChild('location');
+		$node->addAttribute('id', $this->id);
+		$node->addAttribute('point', $this->point);
+		@$node->addAttribute('label', $this->label);
+		@$node->addAttribute('address', $this->address);
+		@$node->addAttribute('description', $this->description);
+
+		if (is_object($this->object))
+			$this->object->toXML($node);
+
+		return $node;
+	}
+
 	/**
 	 * @return array of Location
 	 */
@@ -50,72 +104,22 @@ class Location
 
 		$locations = array();
 		foreach ($xml->location as $location)
-		{
-			$object = null;
-			$object_type = '';
-
-			/* Note: there should be only one child of location node,
-			         but it is required to use foreach with children() */
-			foreach ($location->children() as $object_node)
-			{
-				$object_type = $object_node->getName();
-				switch ($object_type)
-				{
-					case 'host':
-						$object = Host::fromXML($object_node);
-						break;
-
-					case 'hostgroup':
-						$object = HostGroup::fromXML($object_node);
-						break;
-
-					case 'service':
-						$object = Service::fromXML($object_node);
-						break;
-
-					case 'servicegroup':
-						$object = ServiceGroup::fromXML($object_node);
-						break;
-
-					default:
-						throw new Exception('Unknown object type in locations.xml');
-				}
-			}
-
-			$locations[] = new Location((string)$location['id'],
-				(string)$location['point'], (string)$location['label'],
-				(string)$location['address'], (string)$location['description'],
-				$object, $object_type);
-		}
+			$locations[] = Location::fromXML($location);
 
 		return $locations;
 	}
 
 	/**
-	 * @param  string $point
-	 * @param  string $label
-	 * @param  string $address
-	 * @param  string $description
+	 * @param  object $location
 	 * @return Location
 	 */
-	public function add($point, $label, $address, $description, $object)
+	public function add($location)
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
-		$node = $xml->addChild('location');
-		$id = uniqid('', true);
-		$node->addAttribute('id', $id);
-		$node->addAttribute('point', $point);
-		@$node->addAttribute('label', $label);
-		@$node->addAttribute('address', $address);
-		@$node->addAttribute('description', $description);
-		// Note: @ prevents warnings when attribute value is an empty string
-
-		if (is_object($object))
-			$object->toXML($node);
-
-		$location = new Location($id, $point, $label, $address, $description, $object);
+		$location->id = uniqid('', true);
+		$node = $location->toXML($xml);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
 			return $location;
@@ -123,46 +127,36 @@ class Location
 			throw new Exception('Could not write locations.xml');
     }
 
+	protected function removeNode(&$xml, $id)
+	{
+		$index = 0;
+		foreach ($xml->location as $node)
+		{
+			if ($node['id'] == $id)
+			{
+				// Note: unset($node) won't work thus the need for $index
+				unset($xml->location[$index]);
+				$success = true;
+				break;
+			}
+			$index++;
+		}
+		if (!isset($success))
+			throw new Exception('Location does not exist');
+	}
+
 	/**
-	 * @param  string $id
-	 * @param  string $point
-	 * @param  string $label
-	 * @param  string $address
-	 * @param  string $description
+	 * @param  object $location
 	 * @return Location
 	 */
-	public function edit($id, $point, $label, $address, $description, $object)
+	public function edit($location)
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
-		foreach ($xml->location as $location)
-		{
-			if ($location['id'] == $id)
-			{
-				$location['point'] = $point;
-				$location['label'] = $label;
-				$location['address'] = $address;
-				$location['description'] = $description;
+		Location::removeNode($xml, $location->id);
 
-				// remove all children
-				unset($location->host);
-				unset($location->service);
-				unset($location->hostgroup);
-				unset($location->servicegroup);
-
-				if (is_object($object))
-					$object->toXML($location);
-
-				$success = true;
-				break;
-			}
-		}
-
-		if (!isset($success))
-			throw new Exception('Location does not exist');
-
-		$location = new Location($id, $point, $label, $address, $description, $object);
+		$location->toXML($xml);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
 			return $location;
@@ -179,21 +173,7 @@ class Location
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
-		$index = 0;
-		foreach ($xml->location as $location)
-		{
-			if ($location['id'] == $id)
-			{
-				// Note: unset($location) won't work thus the need for $index
-				unset($xml->location[$index]);
-				$success = true;
-				break;
-			}
-			$index++;
-		}
-
-		if (!isset($success))
-			throw new Exception('Location does not exist');
+		Location::removeNode($xml, $id);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
 			return $id;
