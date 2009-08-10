@@ -22,7 +22,6 @@
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
-	creationComplete="init()"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
@@ -45,7 +44,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.events.MenuEvent;
 
-			private var location:Location;
+			private var _location:Location;
 
 			[Bindable]
 			public var locID : String;
@@ -58,96 +57,147 @@
 			[Bindable]
 			public var objects : ArrayCollection = hostgroups;
 
-			private function init() : void
+			public function set location(location : Location) : void
+			{
+				if(_location !== location)
+				{
+					_location = location;
+					
+					if(location)
+					{
+						locID = location.id;
+						locName.text = location.label;
+						locLat.text = LatLng.fromUrlValue(location.point).lat().toString();
+						locLng.text = LatLng.fromUrlValue(location.point).lng().toString();
+						locAddress.text = location.address;
+						locDescription.text = location.description;
+	
+						if(location.id && location.id.length > 0)
+						{
+							addButton.visible = false;
+							saveButton.visible = true;
+							deleteButton.visible = true;
+						}
+						else
+						{
+							addButton.visible = true;
+							saveButton.visible = false;
+							deleteButton.visible = false;
+						}
+	
+						if (location.object is Host)
+						{
+							locNObjectType.selectedIndex = 0;
+							onObjectTypeChange();
+							// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+							//       though documentation says it should
+							locNObject.selectedItem = location.object;
+						}
+						else if (location.object is Service)
+						{
+							locNObjectType.selectedIndex = 1;
+							onObjectTypeChange();
+							// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+							//       though documentation says it should
+							locNObject.selectedItem = location.object;
+						}
+						else if (location.object is HostGroup)
+						{
+							locNObjectType.selectedIndex = 2;
+							onObjectTypeChange();
+							// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+							//       though documentation says it should
+							locNObject.selectedItem = location.object;
+						}
+						else if (location.object is ServiceGroup)
+						{
+							locNObjectType.selectedIndex = 3;
+							onObjectTypeChange();
+							// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+							//       though documentation says it should
+							locNObject.selectedItem = location.object;
+						}
+					}
+					else
+					{
+						locID = "";
+						locName.text = "";
+						locLat.text = "";
+						locLng.text = "";
+						locAddress.text = "";
+						locDescription.text = "";
+						locNObjectType.selectedIndex = 2;
+						onObjectTypeChange();
+						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
+						//       though documentation says it should
+						locNObject.selectedItem = null;
+					}
+				}
+			}
+			
+			protected function getUpdatedLocation():Location
+			{
+				var ul:Location = new Location();
+				
+				ul.id = _location.id;	
+				ul.point = new LatLng(parseFloat(locLat.text), parseFloat(locLng.text)).toUrlValue(16);
+				ul.label = locName.text;
+				ul.address = locAddress.text;
+				ul.description = locDescription.text;
+				ul.object = locNObject.selectedItem;
+				
+				return ul;				
+			}
+
+			private function onAddClicked():void
+			{
+				dispatchEvent(new LocationEvent(LocationEvent.ADD, getUpdatedLocation()));
+			} 
+
+			private function onSaveClicked():void
+			{
+				if(_location && _location.id && _location.id.length > 0)
+				{
+					dispatchEvent(new LocationEvent(LocationEvent.SAVE, getUpdatedLocation()));
+				}
+			} 
+			
+			private function onDeleteClicked():void
+			{
+				if(_location && _location.id && _location.id.length > 0)
+				{
+					Alert.show(
+						'Are you sure to delete location ' + _location.label + "?", 
+						'Confirmation', 
+						3, this,
+						deleteConfirmation
+					);
+				}
+			}
+			
+			private function deleteConfirmation(event : CloseEvent):void
+			{ 
+				if(event.detail == Alert.YES)
+				{
+					dispatchEvent(new LocationEvent(LocationEvent.DELETE, getUpdatedLocation()));
+				}
+			}			
+		]]>
+	</mx:Script>
+	<mx:Script>
+		<![CDATA[
+			
+			/***
+			 * Code concerning Nagios object autocomlete
+			 ***/
+			 
+			private function initNObect():void
 			{
 				locNObject.flowBox.setStyle("borderStyle", "solid");
 				locNObject.flowBox.setStyle("borderColor", "#000000");
 				locNObject.flowBox.setStyle("cornerRadius", "3");
 			}
-
-			public function update(location : Location) : void
-			{
-				this.location = location;
-				if (location)
-				{
-					locID = location.id;
-					locName.text = location.label;
-					locLat.text = LatLng.fromUrlValue(location.point).lat().toString();
-					locLng.text = LatLng.fromUrlValue(location.point).lng().toString();
-					locAddress.text = location.address;
-					locDescription.text = location.description;
-
-					if(location.id && location.id.length > 0)
-					{
-						addButton.visible = false;
-						saveButton.visible = true;
-						deleteButton.visible = true;
-					}
-					else
-					{
-						addButton.visible = true;
-						saveButton.visible = false;
-						deleteButton.visible = false;
-					}
-
-					if (location.object is Host)
-					{
-						locNObjectType.selectedIndex = 0;
-						onObjectTypeChange();
-						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
-						//       though documentation says it should
-						locNObject.selectedItem = location.object;
-					}
-					else if (location.object is Service)
-					{
-						locNObjectType.selectedIndex = 1;
-						onObjectTypeChange();
-						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
-						//       though documentation says it should
-						locNObject.selectedItem = location.object;
-					}
-					else if (location.object is HostGroup)
-					{
-						locNObjectType.selectedIndex = 2;
-						onObjectTypeChange();
-						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
-						//       though documentation says it should
-						locNObject.selectedItem = location.object;
-					}
-					else if (location.object is ServiceGroup)
-					{
-						locNObjectType.selectedIndex = 3;
-						onObjectTypeChange();
-						// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
-						//       though documentation says it should
-						locNObject.selectedItem = location.object;
-					}
-				}
-				else
-				{
-					locID = "";
-					locName.text = "";
-					locLat.text = "";
-					locLng.text = "";
-					locAddress.text = "";
-					locDescription.text = "";
-					locNObjectType.selectedIndex = 2;
-					onObjectTypeChange();
-					// Note: onObjectTypeChange is called because Flex does not do this when setting selectedIndex manually
-					//       though documentation says it should
-					locNObject.selectedItem = null;
-				}
-			}
-			
-			protected function reverseUpdate():void
-			{
-				location.point = new LatLng(parseFloat(locLat.text), parseFloat(locLng.text)).toUrlValue(16);
-				location.label = locName.text;
-				location.address = locAddress.text;
-				location.description = locDescription.text;
-				location.object = locNObject.selectedItem;				
-			}
-
+			 
 			private function objectItemClick(event : MenuEvent) : void
 			{
 				switch (String(event.item.@data))
@@ -200,49 +250,9 @@
 						locNObject.labelFunction = groupLabelFunction;
 						break;
 				}
-			}
-
-			private function onAddClicked():void
-			{
-				if(this.location) 
-				{
-					reverseUpdate(); 
-					dispatchEvent(new LocationEvent(LocationEvent.ADD, this.location));
-				}
-			} 
-
-			private function onSaveClicked():void
-			{
-				if(this.location) 
-				{
-					reverseUpdate(); 
-					dispatchEvent(new LocationEvent(LocationEvent.SAVE, this.location));
-				}
-			} 
-			
-			private function onDeleteClicked():void
-			{
-				if(this.location)
-				{
-					Alert.show(
-						'Are you sure to delete location ' + location.label + "?", 
-						'Confirmation', 
-						3, this,
-						deleteConfirmation
-					);
-				}
-			}
-			
-			private function deleteConfirmation(event : CloseEvent):void
-			{ 
-				if(event.detail == Alert.YES)
-				{
-					reverseUpdate(); 
-					dispatchEvent(new LocationEvent(LocationEvent.DELETE, this.location));
-				}
 			}			
 		]]>
-	</mx:Script>
+	</mx:Script>	
 	<mx:XML format="e4x" id="autoCompleteMenu">
 		<root>
 			<menuitem data="browse" label="Browse..."/>
@@ -306,6 +316,7 @@
 					<mx:HBox width="100%">
 						<mx:Spacer/>
 						<hc:AdvancedAutoComplete id="locNObject" width="100%"
+							creationComplete="initNObect()"
 							dataProvider="{objects}" selectedItemStyleName="underline" labelFunction="groupLabelFunction"
 							matchType="anyPart" allowMultipleSelection="false" showRemoveIcon="true"
 							actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"

@@ -7,6 +7,7 @@
 		<![CDATA[
 			import mx.controls.Alert;
 			
+			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsData;
 			import modules.gmap.data.LocationsExtData;
 		
@@ -20,6 +21,7 @@
 	<mx:RemoteObject id="LocationsService" destination="zend" source="Location" />
 	
 	<EventHandlers type="{LocationEvent.SELECTED}">
+		<MethodInvoker generator="{CurrentLocation}" method="update" arguments="{event.location}"/>
 		<MethodInvoker generator="{MainMD}" method="selectLocation" arguments="{event.location}"/>
 	</EventHandlers>
 	
@@ -35,6 +37,7 @@
 		<RemoteObjectInvoker instance="{LocationsService}" method="add" arguments="{event.location}">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="addUpdateItem" arguments="{resultObject}"/>
+				<MethodInvoker generator="{CurrentLocation}" method="update" arguments="{resultObject}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
