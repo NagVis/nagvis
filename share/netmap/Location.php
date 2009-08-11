@@ -215,6 +215,9 @@ class Location
 		{
 			$location = Location::fromXML($node);
 
+			if (!isset($location->object))
+				continue;
+
 			switch (get_class($location->object))
 			{
 				case 'Host':
