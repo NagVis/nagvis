@@ -28,7 +28,7 @@ EdgeBox
 	backgroundColor : #ffffff;
 }
 
-PromptingTextInput, PromptingTextArea
+PromptingTextInput, PromptingTextArea, TextInput
 {
 	borderStyle : solid;
 	borderColor : #000000;
