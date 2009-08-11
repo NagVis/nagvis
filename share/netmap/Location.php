@@ -214,8 +214,28 @@ class Location
 		foreach ($xml->location as $node)
 		{
 			$location = Location::fromXML($node);
-			// TODO: check status of $location->children() here
-			$location->state = self::STATE_OK;
+
+			switch ($location->object->get_class())
+			{
+				case 'Host':
+					$location->state = Database::getHostState($location->object);
+					break;
+
+				case 'HostGroup':
+					$location->state = Database::getHostGroupState($location->object);
+					break;
+
+				case 'Service':
+					$location->state = Database::getServiceState($location->object);
+					break;
+
+				case 'ServiceGroup':
+					$location->state = Database::getServiceGroupState($location->object);
+					break;
+
+				default:
+					throw new Exception('Unknown object type in locations.xml');
+			}
 
 			$locations[] = $location;
 		}

@@ -112,6 +112,94 @@ class Database
 
 		return $servicegroups;
 	}
+
+	/**
+	 * @return integer
+	 */
+	public function getHostState($host)
+	{
+		$data = $this->backend->getHostState($host->name, 0);
+
+		switch ($data['state'])
+		{
+			case 'ERROR':
+				return Location::STATE_ERROR;
+
+			case 'PENDING':
+				return Location::STATE_WARNING;
+
+			case 'UP':
+				return Location::STATE_OK;
+
+			case 'DOWN':
+				return Location::STATE_ERROR;
+
+			case 'UNREACHABLE':
+				return Location::STATE_ERROR;
+
+			case 'UNKNOWN':
+			case default:
+				return Location::STATE_UNKNOWN;
+		}
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getServiceState($service)
+	{
+		$data = $this->backend->getServiceState($service->host, $service->description, 0);
+
+		switch ($data['state'])
+		{
+			case 'ERROR':
+				return Location::STATE_ERROR;
+
+			case 'PENDING':
+				return Location::STATE_WARNING;
+
+			case 'OK':
+				return Location::STATE_OK;
+
+			case 'WARNING':
+				return Location::STATE_WARNING;
+
+			case 'CRITICAL':
+				return Location::STATE_ERROR;
+
+			case 'UNKNOWN':
+			case default:
+				return Location::STATE_UNKNOWN;
+		}
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getHostGroupState($hostgroup)
+	{
+		$hosts = $this->backend->getHostsByHostgroupName($hostgroup->name);
+		$state = Location::STATE_UNKNOWN;
+
+		foreach ($hosts as $host)
+			$state = max($state, getHostState($host));
+
+		return $state;
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getServiceGroupState($servicegroup)
+	{
+		$services = $this->backend->getServicesByServicegroupName($servicegroup->name);
+		$state = Location::STATE_UNKNOWN;
+
+		foreach ($services as $service)
+			$state = max($state, getServiceState($service['host_name'], $service['service_description']));
+
+		return $state;
+	}
 }
 
 ?>
