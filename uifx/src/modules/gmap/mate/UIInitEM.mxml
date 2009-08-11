@@ -21,6 +21,7 @@
 			
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
+			import modules.gmap.mediator.Poller;
 
 			import modules.gmap.data.ViewpointsData;
 			import modules.gmap.data.CurrentLocation;
