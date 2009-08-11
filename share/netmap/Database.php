@@ -182,7 +182,7 @@ class Database
 		$state = Location::STATE_UNKNOWN;
 
 		foreach ($hosts as $host)
-			$state = max($state, $this->getHostState($host));
+			$state = max($state, $this->getHostState(new Host($host)));
 
 		return $state;
 	}
@@ -196,7 +196,7 @@ class Database
 		$state = Location::STATE_UNKNOWN;
 
 		foreach ($services as $service)
-			$state = max($state, $this->getServiceState($service['host_name'], $service['service_description']));
+			$state = max($state, $this->getServiceState(new Service($service['host_name'], $service['service_description'])));
 
 		return $state;
 	}
