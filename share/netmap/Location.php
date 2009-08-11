@@ -215,7 +215,7 @@ class Location
 		{
 			$location = Location::fromXML($node);
 
-			switch ($location->object->get_class())
+			switch (get_class($location->object))
 			{
 				case 'Host':
 					$location->state = Database::getHostState($location->object);
