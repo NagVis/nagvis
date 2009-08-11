@@ -23,14 +23,20 @@
 
 class Location
 {
+	const STATE_UNKNOWN = 0;
+	const STATE_OK = 1;
+	const STATE_WARNING = 2;
+	const STATE_ERROR = 3;
+
 	public $id;
 	public $point;
 	public $label;
 	public $address;
 	public $description;
 	public $object;
+	public $state;
 
-	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $object = null)
+	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $object = null, $state = self::STATE_UNKNOWN)
 	{
 		$this->id = $id;
 		$this->point = $point;
@@ -38,6 +44,7 @@ class Location
 		$this->address = $address;
 		$this->description = $description;
 		$this->object = $object;
+		$this->state = $state;
 	}
 
 	private function fromXML($node)
@@ -191,6 +198,27 @@ class Location
 
 		foreach(Geocode::resolve($address) as $location)
 			$locations[] = new Location("", $location['point'], "", $location['address'], "");
+
+		return $locations;
+	}
+
+	/**
+	 * @return array of Location
+	 */
+	public function checkAll()
+	{
+		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
+			throw new Exception('Could not read locations.xml');
+
+		$locations = array();
+		foreach ($xml->location as $node)
+		{
+			$location = Location::fromXML($node);
+			// TODO: check status of $location->children() here
+			$location->state = self::STATE_OK;
+
+			$locations[] = $location;
+		}
 
 		return $locations;
 	}

@@ -8,8 +8,9 @@
 			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsExtData;
 			import modules.gmap.data.LocationsData;
-			import mx.events.FlexEvent;
 			import modules.gmap.data.ViewpointsData;
+
+			import mx.events.FlexEvent;
 		]]>
 	</mx:Script>
 

@@ -15,6 +15,7 @@
 			import modules.gmap.events.LocationEvent;
 			
 			import modules.gmap.mediator.MainMD;
+			import modules.gmap.mediator.Poller;
 		]]>
 	</mx:Script>
 
@@ -54,6 +55,14 @@
 		<RemoteObjectInvoker instance="{LocationsService}" method="remove" arguments="{event.location.id}">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="removeItemById" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{Poller.TIMEOUT}">
+		<RemoteObjectInvoker instance="{LocationsService}" method="checkAll">
+			<resultHandlers>
+				<InlineInvoker method="Alert.show" arguments="state checked"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>

@@ -11,6 +11,7 @@
 		
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
+			import modules.gmap.mediator.Poller;
 			
 			import modules.gmap.data.ViewpointsData;
 			import modules.gmap.data.LocationsData;
@@ -21,6 +22,8 @@
 	
 		<MethodInvoker generator="{MainMD}" method="init"/>
 			
+		<ObjectBuilder generator="{Poller}" constructorArguments="{scope.dispatcher}"/>
+
 		<RemoteObjectInvoker destination="zend" source="Viewpoint" method="getAll" debug="true">
 			<resultHandlers>
 				<MethodInvoker generator="{ViewpointsData}" method="fill" arguments="{resultObject}"/>
@@ -29,8 +32,9 @@
 		<RemoteObjectInvoker destination="zend" source="Location" method="getAll" debug="true">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="fill" arguments="{resultObject}"/>
+				<MethodInvoker generator="{Poller}" method="resourceReady"/>
 			</resultHandlers>
-		</RemoteObjectInvoker>
+		</RemoteObjectInvoker>	
 		
 	</Injectors>
 	
