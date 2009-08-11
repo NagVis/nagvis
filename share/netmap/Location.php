@@ -210,6 +210,8 @@ class Location
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
+		$db = new Database();
+
 		$locations = array();
 		foreach ($xml->location as $node)
 		{
@@ -221,19 +223,19 @@ class Location
 			switch (get_class($location->object))
 			{
 				case 'Host':
-					$location->state = Database::getHostState($location->object);
+					$location->state = $db->getHostState($location->object);
 					break;
 
 				case 'HostGroup':
-					$location->state = Database::getHostGroupState($location->object);
+					$location->state = $db->getHostGroupState($location->object);
 					break;
 
 				case 'Service':
-					$location->state = Database::getServiceState($location->object);
+					$location->state = $db->getServiceState($location->object);
 					break;
 
 				case 'ServiceGroup':
-					$location->state = Database::getServiceGroupState($location->object);
+					$location->state = $db->getServiceGroupState($location->object);
 					break;
 
 				default:
