@@ -495,7 +495,7 @@ class GlobalMainCfg {
 			//$this->validConfig['backend']['options'][$backend] = $class->getValidConfig();
 			// I'd prefer to use the above but for the moment I use the fix below
 			
-			if(method_exists($class, 'getValidConfig')) {
+			if (is_callable(array($class, 'getValidConfig'))) {
 				$this->validConfig['backend']['options'][$backend] = call_user_func(Array('GlobalBackend'.$backend, 'getValidConfig'));
 				//$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
 			}

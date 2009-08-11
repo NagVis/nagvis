@@ -210,55 +210,42 @@ class Location
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
+		$db = new Database();
+
 		$locations = array();
 		foreach ($xml->location as $node)
 		{
 			$location = Location::fromXML($node);
-			// TODO: check status of $location->children() here
-			$location->state = self::STATE_OK;
+
+			if (!isset($location->object))
+				continue;
+
+			switch (get_class($location->object))
+			{
+				case 'Host':
+					$location->state = $db->getHostState($location->object);
+					break;
+
+				case 'HostGroup':
+					$location->state = $db->getHostGroupState($location->object);
+					break;
+
+				case 'Service':
+					$location->state = $db->getServiceState($location->object);
+					break;
+
+				case 'ServiceGroup':
+					$location->state = $db->getServiceGroupState($location->object);
+					break;
+
+				default:
+					throw new Exception('Unknown object type in locations.xml');
+			}
 
 			$locations[] = $location;
 		}
 
 		return $locations;
-	}
-
-	/**
-	 * @param  array $hosts
-	 * @return array of Location
-	 */
-	public function getByFailedHosts($hosts = array())
-	{
-		$result = array();
-		$locations = $this->getAll();
-
-		$all_hosts = array();
-		$failed_hosts = array();
-
-		if (($lines = file('hosts.all', FILE_IGNORE_NEW_LINES)) === FALSE)
-			throw new Exception('Could not read hosts.all');
-
-		foreach ($lines as $line)
-		{
-			$fields = explode('|', $line);
-			$all_hosts[$fields[0]] = $fields[1];
-		}
-
-		if (($lines = file('hosts.failed', FILE_IGNORE_NEW_LINES)) === FALSE)
-			throw new Exception('Could not read hosts.failed');
-
-		foreach ($lines as $line)
-		{
-			$fields = explode('|', $line);
-			$failed_hosts[$fields[0]] = false; /* dummy value, may be used in future */
-		}
-
-		foreach (array_unique(array_values(array_intersect_key($all, $failed))) as $location_id)
-			foreach ($locations as $location)
-				if ($location->id == $location_id)
-					$result[] = $location;
-
-		return $result;
 	}
 }
 
