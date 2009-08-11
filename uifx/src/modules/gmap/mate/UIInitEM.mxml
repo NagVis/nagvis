@@ -5,6 +5,10 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.ServiceGroupsData;
+			import modules.gmap.data.ServicesData;
+			import modules.gmap.data.HostGroupsData;
+			import modules.gmap.data.HostsData;
 			import com.asfusion.mate.events.Dispatcher;
 
 			import modules.gmap.view.MainView;
@@ -39,6 +43,10 @@
 	
 	<Injectors target="{DialogLocation}" debug="true">
 		<PropertyInjector targetKey="location" source="{CurrentLocation}" sourceKey="location"/>
+		<PropertyInjector targetKey="hosts" source="{HostsData}"/>
+		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
+		<PropertyInjector targetKey="services" source="{ServicesData}"/>
+		<PropertyInjector targetKey="servicegroups" source="{ServiceGroupsData}"/>
 	</Injectors>
 	
 	<Injectors target="{GMapLocationControl}" debug="true">

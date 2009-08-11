@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap
+   xmlns:mx="http://www.adobe.com/2006/mxml"
+   xmlns="http://mate.asfusion.com/"
+>
+	<mx:Script>
+		<![CDATA[
+			import modules.gmap.data.ServicesData;
+			import modules.gmap.data.HostsData;
+			import modules.gmap.data.ServiceGroupsData;
+			import mx.controls.Alert;
+		
+			import modules.gmap.events.NagiosObjectEvent;
+
+			import modules.gmap.data.HostGroupsData;
+		]]>
+	</mx:Script>
+
+	<mx:RemoteObject id="NagiosService" destination="zend" source="Database"/>
+
+	<EventHandlers type="{NagiosObjectEvent.NEED_ALL_HOSTS}">
+		<DataCopier destination="data" destinationKey="count" source="{HostsData}" sourceKey="length"/>
+		<EventAnnouncer generator="{NagiosObjectEvent}"
+			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_HOSTS, data.count]}"
+		/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_HOSTS_ONCE}">
+		<RemoteObjectInvoker instance="{NagiosService}" method="getHosts">
+			<resultHandlers>
+				<DataCopier source="result" destination="{HostsData}" destinationKey="source"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{NagiosObjectEvent.NEED_ALL_SERVICES}">
+		<DataCopier destination="data" destinationKey="count" source="{ServicesData}" sourceKey="length"/>
+		<EventAnnouncer generator="{NagiosObjectEvent}"
+			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_SERVICES, data.count]}"
+		/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_SERVICES_ONCE}">
+		<RemoteObjectInvoker instance="{NagiosService}" method="getServices">
+			<resultHandlers>
+				<DataCopier source="result" destination="{ServicesData}" destinationKey="source"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{NagiosObjectEvent.NEED_ALL_HOSTGROUPS}">
+		<DataCopier destination="data" destinationKey="count" source="{HostGroupsData}" sourceKey="length"/>
+		<EventAnnouncer generator="{NagiosObjectEvent}"
+			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_HOSTGROUPS, data.count]}"
+		/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_HOSTGROUPS_ONCE}">
+		<RemoteObjectInvoker instance="{NagiosService}" method="getHostGroups">
+			<resultHandlers>
+				<DataCopier source="result" destination="{HostGroupsData}" destinationKey="source"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{NagiosObjectEvent.NEED_ALL_SERVICEGROUPS}">
+		<DataCopier destination="data" destinationKey="count" source="{ServiceGroupsData}" sourceKey="length"/>
+		<EventAnnouncer generator="{NagiosObjectEvent}"
+			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_SERVICEGROUPS, data.count]}"
+		/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_SERVICEGROUPS_ONCE}">
+		<RemoteObjectInvoker instance="{NagiosService}" method="getServiceGroups">
+			<resultHandlers>
+				<DataCopier source="result" destination="{ServiceGroupsData}" destinationKey="source"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+		
+</EventMap>

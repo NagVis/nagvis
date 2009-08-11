@@ -5,11 +5,16 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
+
+			import modules.gmap.data.ViewpointsData;
 			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsExtData;
 			import modules.gmap.data.LocationsData;
-			import mx.events.FlexEvent;
-			import modules.gmap.data.ViewpointsData;
+			import modules.gmap.data.HostsData;
+			import modules.gmap.data.HostGroupsData;
+			import modules.gmap.data.ServicesData;
+			import modules.gmap.data.ServiceGroupsData;
 		]]>
 	</mx:Script>
 
@@ -18,6 +23,10 @@
 		<ObjectBuilder generator="{CurrentLocation}"/>
 		<ObjectBuilder generator="{LocationsData}"/>
 		<ObjectBuilder generator="{LocationsExtData}"/>
+		<ObjectBuilder generator="{HostsData}"/>
+		<ObjectBuilder generator="{HostGroupsData}"/>
+		<ObjectBuilder generator="{ServicesData}"/>
+		<ObjectBuilder generator="{ServiceGroupsData}"/>
 	</EventHandlers>
 	
 </EventMap>

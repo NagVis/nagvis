@@ -28,10 +28,6 @@
     		import modules.gmap.events.AddressEvent;
     	]]>
     </mx:Script>
-    <mx:Metadata>
-        [Event(name="locate", type="flash.events.Event")]
-    </mx:Metadata>
-
 	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/find.png')"/>
 		<mx:Label text="Address Search"/>
