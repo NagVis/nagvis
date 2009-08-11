@@ -27,6 +27,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.formatters.SwitchSymbolFormatter;
 			import modules.gmap.events.NagiosObjectEvent;
 			import mx.events.CloseEvent;
 			import mx.events.MenuEvent;
@@ -213,6 +214,23 @@
 						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_SERVICEGROUPS));
 						break;
 				}
+			}
+
+			protected function onActionChanges():void
+			{			
+				switch(locAction.selectedIndex)
+				{
+					case 2:
+						locActionMaps.visible = true; 
+						locActionURL.visible = false;
+						break;
+					case 3:
+						locActionMaps.visible = false; 
+						locActionURL.visible = true;
+						break;
+					default:
+						locActionMaps.visible = locActionURL.visible = false;
+				}
 			}		
 		]]>
 	</mx:Script>
@@ -332,32 +350,25 @@
 				<mx:TextInput cornerRadius="10" text=" Associate with" top="0" left="15" width="90" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 			<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
-				<mx:RadioButtonGroup id="clickGroup"/>
-				<mx:VBox left="5" right="0" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
-					<mx:Spacer/>
-					<mx:HBox width="100%">
-						<mx:Spacer/>
-						<mx:RadioButton id="locActionNo" label="do nothing" groupName="clickGroup" selected="true"/>
-						<mx:Spacer/>
-					</mx:HBox>
-					<mx:HBox width="100%">
-						<mx:Spacer/>
-						<mx:RadioButton id="locActionUrl" label="go to" groupName="clickGroup"/>
-						<flexlib:PromptingTextInput width="100%" prompt="URL" cornerRadius="4"/>
-						<mx:Spacer/>
-					</mx:HBox>
-					<mx:HBox width="100%">
-						<mx:Spacer/>
-						<mx:RadioButton id="locActionNagvis" label="show NagVis map" groupName="clickGroup"/>
-						<mx:Spacer/>
-					</mx:HBox>
-					<mx:HBox width="100%">
-						<mx:Spacer width="30"/>
-						<mx:ComboBox width="100%"></mx:ComboBox>
-						<mx:Spacer/>
-					</mx:HBox>
-				</mx:VBox>
-				<mx:TextInput cornerRadius="10" text="On Click" top="0" left="15" width="55" borderStyle="solid" editable="false"/>
+				<mx:Canvas left="5" right="0" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000">
+					<mx:ComboBox id="locAction" change="onActionChanges()"
+						left="5" right="5" top="30"
+					>
+						<mx:ArrayCollection>
+							<mx:String>do nothing</mx:String>
+							<mx:String>open Nagios details page</mx:String>
+							<mx:String>open NagVis map</mx:String>
+							<mx:String>go to URL</mx:String>
+						</mx:ArrayCollection>
+					</mx:ComboBox>
+					<mx:ComboBox id="locActionMaps" visible="false"
+						left="5" right="5" top="70"
+					/>
+					<mx:TextInput id="locActionURL" visible="false"
+						left="5" right="5" top="70"
+					/>
+				</mx:Canvas>
+				<mx:TextInput cornerRadius="10" text="On Double Click" top="0" left="15" width="100" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
 		<mx:Button id="addButton" label="Add" visible="false"
