@@ -138,7 +138,7 @@ class Database
 				return Location::STATE_ERROR;
 
 			case 'UNKNOWN':
-			case default:
+			default:
 				return Location::STATE_UNKNOWN;
 		}
 	}
@@ -168,7 +168,7 @@ class Database
 				return Location::STATE_ERROR;
 
 			case 'UNKNOWN':
-			case default:
+			default:
 				return Location::STATE_UNKNOWN;
 		}
 	}
