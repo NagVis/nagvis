@@ -59,6 +59,12 @@ package modules.gmap.data
 		public function removeItemById(id:String):void
 		{
 			removeItemAt(getItemIndex(getItemById(id)));
-		}			
+		}	
+		
+		public function virginize():void
+		{
+			for each(var location : Location in this)
+				location.state = Location.STATE_OK;		
+		}		
 	}
 }

@@ -62,6 +62,7 @@
 	<EventHandlers type="{Poller.TIMEOUT}">
 		<RemoteObjectInvoker instance="{LocationsService}" method="getAll" arguments="true">
 			<resultHandlers>
+				<MethodInvoker generator="{LocationsData}" method="virginize"/>
 				<MethodInvoker generator="{LocationsData}" method="addUpdateItems" arguments="{resultObject}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
