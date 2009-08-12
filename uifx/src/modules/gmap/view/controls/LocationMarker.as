@@ -62,8 +62,8 @@ package modules.gmap.view.controls
 		{
 			if(location.id && location.id.length > 0)
 			{
-				var options : MarkerOptions = new MarkerOptions();
-
+				var options : MarkerOptions = this.getOptions();
+				
 				switch (_location.state)
 				{
 					case Location.STATE_OK:
@@ -82,8 +82,6 @@ package modules.gmap.view.controls
 					default:
 						options.icon = new unknownIcon();
 				}
-				options.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER || MarkerOptions.ALIGN_VERTICAL_CENTER;
-				options.hasShadow = false;
 				
 				this.setOptions(options);
 			}
