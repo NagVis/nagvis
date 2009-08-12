@@ -101,6 +101,36 @@ class Location
 		return $node;
 	}
 
+	private function updateState()
+	{
+		$db = new Database();
+
+		if (isset($this->object))
+			switch (get_class($this->object))
+			{
+				case 'Host':
+					$this->state = $db->getHostState($this->object);
+					break;
+
+				case 'HostGroup':
+					$this->state = $db->getHostGroupState($this->object);
+					break;
+
+				case 'Service':
+					$this->state = $db->getServiceState($this->object);
+					break;
+
+				case 'ServiceGroup':
+					$this->state = $db->getServiceGroupState($this->object);
+					break;
+
+				default:
+					throw new Exception('Unknown object type in locations.xml');
+			}
+		else
+			$this->state = self::STATE_UNKNOWN;
+	}
+
 	/**
 	 * @param  boolean $problemonly
 	 * @return array of Location
@@ -110,35 +140,12 @@ class Location
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
-		$db = new Database();
-
 		$locations = array();
 		foreach ($xml->location as $node)
 		{
 			$location = Location::fromXML($node);
 
-			if (isset($location->object))
-				switch (get_class($location->object))
-				{
-					case 'Host':
-						$location->state = $db->getHostState($location->object);
-						break;
-
-					case 'HostGroup':
-						$location->state = $db->getHostGroupState($location->object);
-						break;
-
-					case 'Service':
-						$location->state = $db->getServiceState($location->object);
-						break;
-
-					case 'ServiceGroup':
-						$location->state = $db->getServiceGroupState($location->object);
-						break;
-
-					default:
-						throw new Exception('Unknown object type in locations.xml');
-				}
+			$location->updateState();
 
 			if (!$problemonly || $location->state != self::STATE_OK)
 				$locations[] = $location;
@@ -157,6 +164,7 @@ class Location
 			throw new Exception('Could not read locations.xml');
 
 		$location->id = uniqid('', true);
+		$location->updateState();
 		$node = $location->toXML($xml);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
@@ -165,7 +173,7 @@ class Location
 			throw new Exception('Could not write locations.xml');
     }
 
-	protected function removeNode(&$xml, $id)
+	private function removeNode(&$xml, $id)
 	{
 		$index = 0;
 		foreach ($xml->location as $node)
@@ -191,6 +199,8 @@ class Location
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
+
+		$location->updateState();
 
 		Location::removeNode($xml, $location->id);
 
