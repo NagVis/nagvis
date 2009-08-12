@@ -66,7 +66,7 @@ package modules.gmap.view.controls
 				{		
 					var  mo:MarkerOptions = new MarkerOptions();
 					mo.icon = new _icon();
-					mo.iconAlignment = MarkerOptions.ALIGN_RIGHT || MarkerOptions.ALIGN_BOTTOM;
+					mo.iconAlignment = MarkerOptions.ALIGN_RIGHT | MarkerOptions.ALIGN_BOTTOM;
 					
 					_marker = new Marker(
 						LatLng.fromUrlValue(_location.point), mo
