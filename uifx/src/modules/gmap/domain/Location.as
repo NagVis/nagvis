@@ -28,12 +28,18 @@ package modules.gmap.domain
 	[Event(name="change", type="modules.gmap.LocationEvent")]
 	public class Location
 	{
+		public static const STATE_UNKNOWN : Number = 0;
+		public static const STATE_OK : Number = 1;
+		public static const STATE_WARNING : Number = 2;
+		public static const STATE_ERROR : Number = 3;
+
 		private var _id : String;
 		private var _point : String;
 		private var _label : String;
 		private var _address : String;
 		private var _description : String;
 		private var _object : Object;
+		private var _state : Number;
 
 		public function get id() : String
 		{
@@ -119,6 +125,20 @@ package modules.gmap.domain
 			}
 		}
 
+		public function get state() : Number
+		{
+			return this._state;
+		}
+
+		public function set state(value : Number) : void
+		{
+			if(_state != value)
+			{
+				this._state = value;
+				dispatchEvent(new LocationEvent('change', this));
+			}
+		}
+
 		public function update(value : Location) : void
 		{
 			this.id = value.id;
@@ -127,6 +147,7 @@ package modules.gmap.domain
 			this.address = value.address;
 			this.description = value.description;
 			this.object = value.object;
+			this.state = value.state;
 		}
 	}
 }

@@ -60,9 +60,9 @@
 	</EventHandlers>
 
 	<EventHandlers type="{Poller.TIMEOUT}">
-		<RemoteObjectInvoker instance="{LocationsService}" method="checkAll">
+		<RemoteObjectInvoker instance="{LocationsService}" method="getAll" arguments="true">
 			<resultHandlers>
-				<InlineInvoker method="Alert.show" arguments="state checked"/>
+				<MethodInvoker generator="{LocationsData}" method="addUpdateItems" arguments="{resultObject}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>

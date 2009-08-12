@@ -5,6 +5,7 @@ package modules.gmap.data
 	import modules.gmap.domain.Location;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
 
 	public class LocationsData extends ArrayCollection
 	{
@@ -48,7 +49,13 @@ package modules.gmap.data
 			else
 				location.update(item);
 		}
-		
+
+		public function addUpdateItems(items : Array) : void
+		{
+			for each(var location : Location in items)
+				this.addUpdateItem(location);
+		}
+
 		public function removeItemById(id:String):void
 		{
 			removeItemAt(getItemIndex(getItemById(id)));

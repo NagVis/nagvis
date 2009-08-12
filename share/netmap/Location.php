@@ -102,16 +102,47 @@ class Location
 	}
 
 	/**
+	 * @param  boolean $problemonly
 	 * @return array of Location
 	 */
-	public function getAll()
+	public function getAll($problemonly = false)
 	{
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
+		$db = new Database();
+
 		$locations = array();
-		foreach ($xml->location as $location)
-			$locations[] = Location::fromXML($location);
+		foreach ($xml->location as $node)
+		{
+			$location = Location::fromXML($node);
+
+			if (isset($location->object))
+				switch (get_class($location->object))
+				{
+					case 'Host':
+						$location->state = $db->getHostState($location->object);
+						break;
+
+					case 'HostGroup':
+						$location->state = $db->getHostGroupState($location->object);
+						break;
+
+					case 'Service':
+						$location->state = $db->getServiceState($location->object);
+						break;
+
+					case 'ServiceGroup':
+						$location->state = $db->getServiceGroupState($location->object);
+						break;
+
+					default:
+						throw new Exception('Unknown object type in locations.xml');
+				}
+
+			if (!$problemonly || $location->state != self::STATE_OK)
+				$locations[] = $location;
+		}
 
 		return $locations;
 	}
@@ -198,52 +229,6 @@ class Location
 
 		foreach(Geocode::resolve($address) as $location)
 			$locations[] = new Location("", $location['point'], "", $location['address'], "");
-
-		return $locations;
-	}
-
-	/**
-	 * @return array of Location
-	 */
-	public function checkAll()
-	{
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
-			throw new Exception('Could not read locations.xml');
-
-		$db = new Database();
-
-		$locations = array();
-		foreach ($xml->location as $node)
-		{
-			$location = Location::fromXML($node);
-
-			if (!isset($location->object))
-				continue;
-
-			switch (get_class($location->object))
-			{
-				case 'Host':
-					$location->state = $db->getHostState($location->object);
-					break;
-
-				case 'HostGroup':
-					$location->state = $db->getHostGroupState($location->object);
-					break;
-
-				case 'Service':
-					$location->state = $db->getServiceState($location->object);
-					break;
-
-				case 'ServiceGroup':
-					$location->state = $db->getServiceGroupState($location->object);
-					break;
-
-				default:
-					throw new Exception('Unknown object type in locations.xml');
-			}
-
-			$locations[] = $location;
-		}
 
 		return $locations;
 	}

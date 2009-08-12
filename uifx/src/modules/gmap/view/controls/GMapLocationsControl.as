@@ -152,6 +152,5 @@ package modules.gmap.view.controls
 		{
 			dispatchEvent(event);
 		}
-
 	}
 }

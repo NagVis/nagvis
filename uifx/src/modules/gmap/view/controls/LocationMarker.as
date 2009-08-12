@@ -5,6 +5,8 @@ package modules.gmap.view.controls
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
 	
+	import flash.events.Event;
+	
 	import modules.gmap.domain.Location;
 	import modules.gmap.events.LocationEvent;
 
@@ -43,9 +45,10 @@ package modules.gmap.view.controls
 			
 			super(point, options);
 			
-			_location = location;
-			
 			this.addEventListener(MapMouseEvent.CLICK, this.onClick);
+			
+			_location = location;
+			_location.addEventListener('change', this.onChange);
 		}
 		
 		protected function onClick(event : *):void
@@ -55,6 +58,37 @@ package modules.gmap.view.controls
 			);
 		}
 		
+		protected function onChange(event : *):void
+		{
+			if(location.id && location.id.length > 0)
+			{
+				var options : MarkerOptions = new MarkerOptions();
+
+				switch (_location.state)
+				{
+					case Location.STATE_OK:
+						options.icon = new okIcon();
+						break;
+
+					case Location.STATE_WARNING:
+						options.icon = new warningIcon();
+						break;
+
+					case Location.STATE_ERROR:
+						options.icon = new errorIcon();
+						break;
+
+					case Location.STATE_UNKNOWN:
+					default:
+						options.icon = new unknownIcon();
+				}
+				options.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER || MarkerOptions.ALIGN_VERTICAL_CENTER;
+				options.hasShadow = false;
+				
+				this.setOptions(options);
+			}
+		}
+
 		public function get location():Location
 		{
 			return _location;
