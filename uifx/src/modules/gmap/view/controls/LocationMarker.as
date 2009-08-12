@@ -5,8 +5,6 @@ package modules.gmap.view.controls
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
 	
-	import flash.events.Event;
-	
 	import modules.gmap.domain.Location;
 	import modules.gmap.events.LocationEvent;
 
@@ -39,7 +37,7 @@ package modules.gmap.view.controls
 			{
 				options = new MarkerOptions();
 				options.icon = new okIcon();
-				options.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER || MarkerOptions.ALIGN_VERTICAL_CENTER;
+				options.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER | MarkerOptions.ALIGN_VERTICAL_CENTER;
 				options.hasShadow = false;
 			}
 			
