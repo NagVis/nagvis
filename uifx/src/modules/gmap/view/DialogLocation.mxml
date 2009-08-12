@@ -84,27 +84,32 @@
 						 */
 						if (location.object is HostGroup)
 						{
-							locNObjectType.selectedIndex = 2;
+							locNObjectType.selectedIndex = 3;
 							onObjectTypeChange();
 							locNObject.selectedItem = location.object;
 						}
 						else if (location.object is ServiceGroup)
 						{
-							locNObjectType.selectedIndex = 3;
+							locNObjectType.selectedIndex = 4;
 							onObjectTypeChange();
 							locNObject.selectedItem = location.object;
 						}
 						else if (location.object is Host)
 						{
-							locNObjectType.selectedIndex = 0;
+							locNObjectType.selectedIndex = 1;
 							onObjectTypeChange();
 							locNObject.selectedItem = location.object;
 						}
 						else if (location.object is Service)
 						{
-							locNObjectType.selectedIndex = 1;
+							locNObjectType.selectedIndex = 2;
 							onObjectTypeChange();
 							locNObject.selectedItem = location.object;
+						}
+						else
+						{
+							locNObjectType.selectedIndex = 0;
+							onObjectTypeChange();
 						}
 					}
 					else
@@ -114,7 +119,7 @@
 						locLng.text = "";
 						locAddress.text = "";
 						locDescription.text = "";
-						locNObjectType.selectedIndex = 2;
+						locNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
 					}
 				}
@@ -171,25 +176,35 @@
 			private function onObjectTypeChange() : void
 			{
 				locNObject.removeAll();
+				locNObject.textInput.text = '';
 
 				switch(locNObjectType.selectedIndex)
 				{
 					case 0:
+						locNObject.textInput.enabled = false;
+						locNObject.dataProvider = null;
+						locNObject.browserFields = null;
+						locNObject.labelFunction = null;
+					case 1:
+						locNObject.textInput.enabled = true;
 						locNObject.dataProvider = hosts;
 						locNObject.browserFields = ["name", "address", "alias"];
 						locNObject.labelFunction = hostLabelFunction;
 						break;
-					case 1:
+					case 2:
+						locNObject.textInput.enabled = true;
 						locNObject.dataProvider = services;
 						locNObject.browserFields = ["host", "description"];
 						locNObject.labelFunction = serviceLabelFunction;
 						break;
-					case 2:
+					case 3:
+						locNObject.textInput.enabled = true;
 						locNObject.dataProvider = hostgroups;
 						locNObject.browserFields = ["name", "alias"];
 						locNObject.labelFunction = groupLabelFunction;
 						break;
-					case 3:
+					case 4:
+						locNObject.textInput.enabled = true;
 						locNObject.dataProvider = servicegroups;
 						locNObject.browserFields = ["name", "alias"];
 						locNObject.labelFunction = groupLabelFunction;
@@ -201,16 +216,16 @@
 			{
 				switch(locNObjectType.selectedIndex)
 				{
-					case 0:
+					case 1:
 						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_HOSTS));
 						break;
-					case 1:
+					case 2:
 						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_SERVICES));
 						break;
-					case 2:
+					case 3:
 						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_HOSTGROUPS));
 						break;
-					case 3:
+					case 4:
 						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_SERVICEGROUPS));
 						break;
 				}
@@ -220,11 +235,11 @@
 			{			
 				switch(locAction.selectedIndex)
 				{
-					case 2:
+					case 3:
 						locActionMaps.visible = true; 
 						locActionURL.visible = false;
 						break;
-					case 3:
+					case 4:
 						locActionMaps.visible = false; 
 						locActionURL.visible = true;
 						break;
@@ -236,6 +251,7 @@
 	</mx:Script>
 	<mx:Script>
 		<![CDATA[
+			import mx.events.CollectionEvent;
 			
 			/***
 			 * Code concerning Nagios object autocomlete
@@ -253,10 +269,25 @@
 				switch (String(event.item.@data))
 				{
 					case "browse":
-						loadNagiosData();
-						locNObject.showBrowser();
+						
+						if(locNObject.dataProvider.length == 0)
+						{
+							locNObject.dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, openBrowser);	
+							loadNagiosData();
+						}
+						else
+						{
+							locNObject.showBrowser();
+						}
+						
 						break;
 				}
+			}
+			
+			private function openBrowser(event:*):void
+			{
+				locNObject.dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE, openBrowser);
+				locNObject.showBrowser();
 			}
 
 			public function hostLabelFunction(item : Object) : String
@@ -322,6 +353,7 @@
 						<mx:Spacer/>
 						<mx:ComboBox id="locNObjectType" width="100%" change="onObjectTypeChange()">
 							<mx:ArrayCollection>
+								<mx:String>Unset</mx:String>
 								<mx:String>Host</mx:String>
 								<mx:String>Service</mx:String>
 								<mx:String>Host Group</mx:String>
