@@ -40,6 +40,7 @@ package modules.gmap.domain
 		private var _description : String;
 		private var _object : Object;
 		private var _state : Number;
+		private var _action : String;
 
 		public function get id() : String
 		{
@@ -136,6 +137,20 @@ package modules.gmap.domain
 			{
 				this._state = value;
 				dispatchEvent(new LocationEvent('change', this));
+			}
+		}
+		
+		public function get action():String
+		{
+			return _action;
+		}
+		
+		public function set action(value:String):void
+		{
+			if(_action !== value)
+			{
+				_action = value;
+				dispatchEvent(new LocationEvent('change', this));	
 			}
 		}
 
