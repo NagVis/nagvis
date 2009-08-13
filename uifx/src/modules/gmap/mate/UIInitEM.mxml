@@ -5,6 +5,8 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.view.DialogSettings;
+			import modules.gmap.data.SettingsData;
 			import modules.gmap.data.ServiceGroupsData;
 			import modules.gmap.data.ServicesData;
 			import modules.gmap.data.HostGroupsData;
@@ -38,6 +40,10 @@
 		<ObjectBuilder generator="{MapMD}" constructorArguments="{[event.target, scope.dispatcher]}" />
 	</EventHandlers>
 	
+	<Injectors target="{DialogSettings}" debug="true">
+		<PropertyInjector targetKey="settings" source="{SettingsData}" sourceKey="settings"/>
+	</Injectors>
+
 	<Injectors target="{DialogViewpoint}" debug="true">
 		<PropertyInjector targetKey="dataProvider" source="{ViewpointsData}"/>
 	</Injectors>

@@ -7,6 +7,8 @@ package modules.gmap.mediator
 	
 	import modules.gmap.domain.Viewpoint;
 	import modules.gmap.view.controls.GMapControl;
+	
+	import mx.controls.Alert;
 
 	public class MapMD
 	{
@@ -30,6 +32,14 @@ package modules.gmap.mediator
 			_view.map.enableContinuousZoom();
 			_view.map.addControl(new ZoomControl());
 			_view.map.setZoom(2);			
+
+			if (!_view.map.isLoaded())
+			{
+				Alert.show('Error initializing Google Maps.\n\n'
+					+ 'Accessing the free Google Maps API requires the specification of an API key linked to a base URL.\n'
+					+ 'You can obtain a free API key from Google at http://www.google.com/apis/maps/signup.html',
+					'Error');
+			}
 		}
 		
 		public function focusViewpoint(where : Viewpoint):void

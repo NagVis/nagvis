@@ -53,11 +53,11 @@ class Settings
 	 */
 	public function save($settings)
 	{
-		$xml = new SimpleXMLElement('<?xml version="1.0" standalone="yes"?>\n<settings/>\n');
+		$xml = new SimpleXMLElement("<?xml version=\"1.0\" standalone=\"yes\"?>\n<settings/>\n");
 
-		$xml->addAttribute('googleMapsKey', $settings->googleMapsKey);
-		$xml->addAttribute('defaultLocationAction', $settings->defaultLocationAction);
-		$xml->addAttribute('openLinksInNewWindow', $settings->openLinksInNewWindow);
+		@$xml->addAttribute('googleMapsKey', $settings->googleMapsKey);
+		@$xml->addAttribute('defaultLocationAction', $settings->defaultLocationAction);
+		@$xml->addAttribute('openLinksInNewWindow', $settings->openLinksInNewWindow);
 
 		if (file_put_contents('settings.xml', $xml->asXML()) !== FALSE)
 			return $settings;

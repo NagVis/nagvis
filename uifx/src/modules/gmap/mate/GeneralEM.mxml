@@ -5,12 +5,13 @@
 >
 	<mx:Script>
 		<![CDATA[
-			import modules.gmap.events.GoogleMapsKeyEvent;
+			import modules.gmap.data.SettingsData;
 			import mx.controls.Alert;
 		
 			import com.asfusion.mate.events.UnhandledFaultEvent;
 			
 			import modules.gmap.events.ModeEvent;
+			import modules.gmap.events.SettingsEvent;
 		
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
@@ -29,8 +30,16 @@
 		<MethodInvoker generator="{MapMD}" method="onModeChanged" arguments="{[event.oldMode, event.newMode]}"/>
 	</EventHandlers>
 		
-	<EventHandlers type="{GoogleMapsKeyEvent.SAVE}">
-		<RemoteObjectInvoker destination="zend" source="Geocode" method="saveKey" arguments="{event.key}">
+	<EventHandlers type="{SettingsEvent.CHANGE}">
+		<RemoteObjectInvoker destination="zend" source="Settings" method="save" arguments="{event.settings}">
+			<resultHandlers>
+				<DataCopier destination="{SettingsData}" destinationKey="settings" source="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{SettingsEvent.RELOAD}">
+		<RemoteObjectInvoker destination="zend" source="Settings" method="save" arguments="{event.settings}">
 			<resultHandlers>
 				<InlineInvoker method="ExternalInterface.call" arguments="window.location.reload"/>
 			</resultHandlers>
