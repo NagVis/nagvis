@@ -33,16 +33,18 @@ class Location
 	public $label;
 	public $address;
 	public $description;
+	public $action;
 	public $object;
 	public $state;
 
-	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $object = null, $state = self::STATE_UNKNOWN)
+	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $action = "", $object = null, $state = self::STATE_UNKNOWN)
 	{
 		$this->id = $id;
 		$this->point = $point;
 		$this->label = $label;
 		$this->address = $address;
 		$this->description = $description;
+		$this->action = $action;
 		$this->object = $object;
 		$this->state = $state;
 	}
@@ -80,10 +82,9 @@ class Location
 			}
 		}
 
-		return new Location((string)$node['id'],
-			(string)$node['point'], (string)$node['label'],
-			(string)$node['address'], (string)$node['description'],
-			$object);
+		return new Location((string)$node['id'], (string)$node['point'],
+			(string)$node['label'], (string)$node['address'],
+			(string)$node['description'], (string)$node['action'], $object);
 	}
 
 	private function toXML($parent)
@@ -94,6 +95,7 @@ class Location
 		@$node->addAttribute('label', $this->label);
 		@$node->addAttribute('address', $this->address);
 		@$node->addAttribute('description', $this->description);
+		@$node->addAttribute('action', $this->action);
 
 		if (is_object($this->object))
 			$this->object->toXML($node);
@@ -238,7 +240,7 @@ class Location
 		$locations = array();
 
 		foreach(Geocode::resolve($address) as $location)
-			$locations[] = new Location("", $location['point'], "", $location['address'], "");
+			$locations[] = new Location("", $location['point'], "", $location['address'], "", "");
 
 		return $locations;
 	}

@@ -38,9 +38,9 @@ package modules.gmap.domain
 		private var _label : String;
 		private var _address : String;
 		private var _description : String;
+		private var _action : String;
 		private var _object : Object;
 		private var _state : Number;
-		private var _action : String;
 
 		public function get id() : String
 		{
@@ -112,6 +112,20 @@ package modules.gmap.domain
 			}
 		}
 
+		public function get action():String
+		{
+			return _action;
+		}
+		
+		public function set action(value:String):void
+		{
+			if(_action !== value)
+			{
+				_action = value;
+				dispatchEvent(new LocationEvent('change', this));	
+			}
+		}
+
 		public function get object() : Object
 		{
 			return this._object;
@@ -140,20 +154,6 @@ package modules.gmap.domain
 			}
 		}
 		
-		public function get action():String
-		{
-			return _action;
-		}
-		
-		public function set action(value:String):void
-		{
-			if(_action !== value)
-			{
-				_action = value;
-				dispatchEvent(new LocationEvent('change', this));	
-			}
-		}
-
 		public function update(value : Location) : void
 		{
 			this.id = value.id;
@@ -161,6 +161,7 @@ package modules.gmap.domain
 			this.label = value.label;
 			this.address = value.address;
 			this.description = value.description;
+			this.action = value.action;
 			this.object = value.object;
 			this.state = value.state;
 		}
