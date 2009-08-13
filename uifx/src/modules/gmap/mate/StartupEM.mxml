@@ -40,7 +40,7 @@
 	
 	<Injectors target="{MapMD}" debug="true">
 	
-		<HTTPServiceInvoker url="GoogleMaps.key">
+		<RemoteObjectInvoker destination="zend" source="Geocode" method="getKey">
 			<resultHandlers>
 				<MethodInvoker generator="{MapMD}" method="showMap" arguments="{resultObject}"/>
 			</resultHandlers>
@@ -50,7 +50,7 @@
 					'Error'
 					]}"/>
 			</faultHandlers>
-		</HTTPServiceInvoker>
+		</RemoteObjectInvoker>
 	
 	</Injectors>
 
