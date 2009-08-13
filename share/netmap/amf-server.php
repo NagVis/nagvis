@@ -42,6 +42,7 @@ class Custom_Zend_Amf_Server extends Zend_Amf_Server
 }
 
 $server = new Custom_Zend_Amf_Server();
+$server->setClassMap("Settings", "Settings");
 $server->setClassMap("Viewpoint", "Viewpoint");
 $server->setClassMap("Location", "Location");
 $server->setClassMap("Link", "Link");
