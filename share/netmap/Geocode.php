@@ -21,8 +21,6 @@
  *
  *****************************************************************************/
 
-define('KEY', 'ABQIAAAAbL-l0p12tju9OYnJPNXPYBT3DJAw-5FLyP9xbJAH2x0dPCeSTRSPyzBWS-uRnuZRdDF49cYyKSpsdQ');
-
 class Geocode
 {
 	/**
@@ -33,7 +31,7 @@ class Geocode
 	{
 		$locations = array();
 
-		$request_url = 'http://maps.google.com/maps/geo?output=xml&key=' . KEY
+		$request_url = 'http://maps.google.com/maps/geo?output=xml&key=' . $this->getKey()
 			. '&sensor=false&oe=utf8&q=' . urlencode($address);
 		if (($xml = @simplexml_load_file($request_url)) === FALSE)
 			throw new Exception('Cannot connect to Google Maps');
@@ -69,6 +67,22 @@ class Geocode
 		}
 
 		return $locations;
+	}
+
+	public function getKey()
+	{
+		if (($key = file_get_contents('GoogleMaps.key')) !== FALSE)
+			return trim($key);
+		else
+			throw new Exception('Could not read GoogleMaps.key');
+	}
+
+	public function saveKey($key)
+	{
+		if (file_put_contents('GoogleMaps.key', $key) !== FALSE)
+			return;
+		else
+			throw new Exception('Could not write GoogleMaps.key');
 	}
 }
 
