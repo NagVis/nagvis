@@ -30,7 +30,11 @@
 	</EventHandlers>
 		
 	<EventHandlers type="{GoogleMapsKeyEvent.SAVE}">
-		<RemoteObjectInvoker destination="zend" source="Geocode" method="saveKey" arguments="{event.key}"/>
+		<RemoteObjectInvoker destination="zend" source="Geocode" method="saveKey" arguments="{event.key}">
+			<resultHandlers>
+				<InlineInvoker method="ExternalInterface.call" arguments="window.location.reload"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
 	</EventHandlers>
 
 </EventMap>
