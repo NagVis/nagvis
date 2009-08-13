@@ -23,6 +23,11 @@
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
+    <mx:Script>
+    	<![CDATA[
+    		import modules.gmap.events.GoogleMapsKeyEvent;
+    	]]>
+    </mx:Script>
     <mx:Metadata>
         [Event(name="getGMapKey", type="flash.events.Event")]
     </mx:Metadata>
@@ -45,6 +50,8 @@
 			icon="@Embed(source='modules/gmap/img/key.png')"
 			click="dispatchEvent(new Event('getGMapKey'))"
 		/>
-		<mx:Button label="Apply" right="0" bottom="0" height="22"/>
+		<mx:Button label="Apply" right="0" bottom="0" height="22"
+			click="dispatchEvent(new GoogleMapsKeyEvent(GoogleMapsKeyEvent.SAVE, key.text))"
+		/>
 	</mx:Canvas>
 </EdgeBox>

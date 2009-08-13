@@ -70,6 +70,14 @@ class Geocode
 
 		return $locations;
 	}
+
+	public function saveKey($key)
+	{
+		if (file_put_contents('GoogleMaps.key', $key) !== FALSE)
+			return;
+		else
+			throw new Exception('Could not write GoogleMaps.key');
+	}
 }
 
 ?>

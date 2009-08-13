@@ -5,6 +5,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.events.GoogleMapsKeyEvent;
 			import mx.controls.Alert;
 		
 			import com.asfusion.mate.events.UnhandledFaultEvent;
@@ -28,4 +29,8 @@
 		<MethodInvoker generator="{MapMD}" method="onModeChanged" arguments="{[event.oldMode, event.newMode]}"/>
 	</EventHandlers>
 		
+	<EventHandlers type="{GoogleMapsKeyEvent.SAVE}">
+		<RemoteObjectInvoker destination="zend" source="Geocode" method="saveKey" arguments="{event.key}"/>
+	</EventHandlers>
+
 </EventMap>
