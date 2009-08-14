@@ -8,6 +8,8 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.events.LocationEvent;
+			import com.google.maps.MapMouseEvent;
 			import mx.utils.StringUtil;
 			import com.google.maps.Map;
 			import mx.controls.Alert;
@@ -34,6 +36,7 @@
 					map.setStyle("right", 0);
 					map.setStyle("bottom", 0);
 					map.addEventListener(MapEvent.MAP_READY, onMapReady);
+					map.addEventListener(MapMouseEvent.CLICK, onClick);
 					
 					this.addChild(map);
 				}				
@@ -46,7 +49,12 @@
 				locationControl.map = map;
 				locationsControl.map = map;
 				locationsExtControl.map = map;
-			}			
+			}		
+			
+			private function onClick(event:MapMouseEvent):void
+			{
+				dispatchEvent(new LocationEvent(LocationEvent.SELECTED));
+			}	
 		]]>
 	</mx:Script>
 	<controls:GMapLocationControl id="locationControl"/>

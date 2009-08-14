@@ -1,9 +1,14 @@
 package modules.gmap.view.controls
 {
+	import com.google.maps.InfoWindowOptions;
 	import com.google.maps.LatLng;
 	import com.google.maps.Map;
+	import com.google.maps.interfaces.IInfoWindow;
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
+	
+	import flash.geom.Point;
+	import flash.text.TextFormat;
 	
 	import modules.gmap.domain.Location;
 	
@@ -16,7 +21,7 @@ package modules.gmap.view.controls
 		
 		private var _location : Location;
 		private var _map : Map;
-		private var _marker : Marker;
+		private var _info : IInfoWindow;
 		
 		public function GMapLocationControl()
 		{
@@ -36,7 +41,7 @@ package modules.gmap.view.controls
 			{
 				_map = value;
 				
-				reinitMarker();
+				reinitInfo();
 			}
 		}
 		
@@ -48,31 +53,33 @@ package modules.gmap.view.controls
 		public function set location(value:Location):void
 		{
 			if(_location !== value)
-			{		
 				_location = value;
-				
-				reinitMarker();
-			}	
+			
+			reinitInfo();
 		}
 		
-		protected function reinitMarker():void
+		protected function reinitInfo():void
 		{
 			if(_map)
 			{
-				if(_marker)
-					_map.removeOverlay(_marker);
-
 				if(_location)
-				{		
-					var  mo:MarkerOptions = new MarkerOptions();
-					mo.icon = new _icon();
-					mo.iconAlignment = MarkerOptions.ALIGN_RIGHT | MarkerOptions.ALIGN_BOTTOM;
+				{
+					var title:TextFormat = new TextFormat;
+					title.bold = true;
+					title.underline = true
 					
-					_marker = new Marker(
-						LatLng.fromUrlValue(_location.point), mo
-					);
+					var io:InfoWindowOptions = new InfoWindowOptions;
+					io.title = _location.label;
+					io.titleFormat = title;
+					io.content = _location.description;
+					io.hasCloseButton = false;
+					io.pointOffset = new Point(-3, -5); 
 					
-					_map.addOverlay(_marker);
+					_map.openInfoWindow(LatLng.fromUrlValue(_location.point), io);
+				}
+				else
+				{
+					_map.closeInfoWindow();
 				}
 			}
 		}
