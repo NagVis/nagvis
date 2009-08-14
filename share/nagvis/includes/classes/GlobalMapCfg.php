@@ -611,6 +611,11 @@ class GlobalMapCfg {
 					'field_type' => 'dropdown',
 					'depends_on' => 'view_type',
 					'depends_value' => 'gadget'),
+				'gadget_scale' => Array('must' => 0,
+					'default' => 100,
+					'match' => MATCH_INTEGER,
+					'depends_on' => 'view_type',
+					'depends_value' => 'gadget'),
 				
 				'context_menu' => Array('must' => 0,
 					'match' => MATCH_BOOLEAN,
