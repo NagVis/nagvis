@@ -39,7 +39,15 @@ var NagVisMap = NagVisStatefulObject.extend({
 	 * @return	String		HTML code of the label
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	 parseOverview: function () {
+	parseOverview: function () {
+		var alt = '';
+		
+		if(this.type == 'service') {
+			alt = this.conf.name+'-'+this.conf.service_description;
+		} else {
+			alt = this.conf.name;
+		}
+		
 		this.replaceMacros();
 		
 		var oTd = document.createElement('td');
@@ -49,32 +57,39 @@ var NagVisMap = NagVisStatefulObject.extend({
 		oTd.style.width = '200px';
 		oTd.style.height = '200px';
 		
-		var sUrl = this.conf.overview_url;
-		oTd.onclick = function() { 
-			location.href = sUrl;
-		};
+		// Link
+		var oLink = document.createElement('a');
+		oLink.href = this.conf.overview_url;
 		
+		// Status image
 		var oImg = document.createElement('img');
 		oImg.align="right";
 		oImg.src=this.conf.iconHtmlPath+this.conf.icon;
-		oTd.appendChild(oImg);
+		oImg.alt = this.conf.type+'-'+alt;
+		
+		oLink.appendChild(oImg);
 		oImg = null;
 		
+		// Title
 		var h2 = document.createElement('h2');
 		h2.appendChild(document.createTextNode(this.conf.alias));
-		oTd.appendChild(h2);
+		oLink.appendChild(h2);
 		h2 = null;
 		
 		var br = document.createElement('br');
-		oTd.appendChild(br);
+		oLink.appendChild(br);
 		br = null;
 		
+		// Map thumb
 		oImg = document.createElement('img');
 		oImg.style.width = '200px';
 		oImg.style.height = '150px';
 		oImg.src=this.conf.overview_image;
-		oTd.appendChild(oImg);
+		oLink.appendChild(oImg);
 		oImg = null;
+		
+		oTd.appendChild(oLink);
+		oLink = null;
 		
 		return oTd;
 	}
