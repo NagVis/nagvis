@@ -113,17 +113,25 @@ function parsePerfdata($sPerfdata) {
 		}
 		if(isset($aTmp[4])) {
 			$aSet['warning'] = $aTmp[4];
+			
+			// Try to get warn min/max
 			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[4], $matches);
-			$aSet['warning_min'] = $matches[1][0];
-			$aSet['warning_max'] = $matches[2][0];
+			if(!isset($matches[0])) {
+				$aSet['warning_min'] = $matches[1][0];
+				$aSet['warning_max'] = $matches[2][0];
+			}
 		} else {
 			$aSet['warning'] = null;
 		}
 		if(isset($aTmp[5])) {
 			$aSet['critical'] = $aTmp[5];
+			
+			// Try to get critical min/max
 			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[5], $matches);
-			$aSet['critical_min'] = $matches[1][0];
-			$aSet['critical_max'] = $matches[2][0];
+			if(!isset($matches[0])) {
+				$aSet['critical_min'] = $matches[1][0];
+				$aSet['critical_max'] = $matches[2][0];
+			}
 		} else {
 			$aSet['critical'] = null;
 		}
