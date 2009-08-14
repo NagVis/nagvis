@@ -94,7 +94,7 @@
 						left="5" right="5" top="0"
 					>
 						<mx:ArrayCollection>
-							<mx:String>default action</mx:String>
+							<mx:String>do nothing</mx:String>
 							<mx:String>open Nagios details page</mx:String>
 						</mx:ArrayCollection>
 					</mx:ComboBox>
