@@ -35,48 +35,14 @@
 				_settings = settings;
 
 				key.text = settings.googleMapsKey;
+				newWindow.selected = (settings.openLinksInNewWindow)? true : false;
 
 				if(settings.defaultLocationAction && settings.defaultLocationAction.length > 0)
 				{
-					var slices:Array = settings.defaultLocationAction.split(':', 2);
-					switch(slices[0])
-					{
-						case 'nagios':
-							settingsAction.selectedIndex = 1;
-							break;
-						case 'nagvis':
-							settingsAction.selectedIndex = 2;
-							settingsActionMaps.text = slices[1];
-							break;
-						case 'http':
-						case 'https':
-							settingsAction.selectedIndex = 3;
-							settingsActionURL.text = settings.defaultLocationAction;
-							break;
-						default:
-							settingsAction.selectedIndex = 0;
-					}
-					onActionChanges();
-				}
-			}
-
-			private function onActionChanges():void
-			{			
-				switch(settingsAction.selectedIndex)
-				{
-					case 2:
-						settingsAction.setStyle('top', 30);
-						settingsActionMaps.visible = true; 
-						settingsActionURL.visible = false;
-						break;
-					case 3:
-						settingsAction.setStyle('top', 30);
-						settingsActionMaps.visible = false; 
-						settingsActionURL.visible = true;
-						break;
-					default:
-						settingsAction.setStyle('top', 50);
-						settingsActionMaps.visible = settingsActionURL.visible = false;
+					if (settings.defaultLocationAction == 'nagios:')
+						action.selectedIndex = 1;
+					else
+						action.selectedIndex = 0;
 				}
 			}
 
@@ -86,22 +52,12 @@
 					SettingsEvent.CHANGE : SettingsEvent.RELOAD;
 
 				_settings.googleMapsKey = key.text;
-				_settings.openLinksInNewWindow = false;
+				_settings.openLinksInNewWindow = newWindow.selected;
 
-				switch(settingsAction.selectedIndex)
-				{
-					case 1:
-						_settings.defaultLocationAction = 'nagios:';
-						break;
-					case 2:
-						_settings.defaultLocationAction = 'nagvis:' + settingsActionMaps.text;
-						break;
-					case 3:
-						_settings.defaultLocationAction = settingsActionURL.text;
-						break;
-					default:
-						_settings.defaultLocationAction = null;
-				}
+				if (action.selectedIndex == 1)
+					_settings.defaultLocationAction = 'nagios:';
+				else
+					_settings.defaultLocationAction = '';
 
 				dispatchEvent(new SettingsEvent(eventType, _settings));
 			}
@@ -120,8 +76,8 @@
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
-		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
-			<mx:Canvas label="Google Maps Key" width="100%" height="100%">
+		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="88" styleName="accordion" creationPolicy="all">
+			<mx:Canvas label="Google Key" width="100%" height="100%">
 				<flexlib:PromptingTextInput id="key"
 				 	left="10" right="10" top="0" height="22"
 					cornerRadius="4" prompt="Google Maps Key"
@@ -133,25 +89,20 @@
 				/>
 			</mx:Canvas>
 			<mx:Canvas label="Default Actions" width="100%" height="100%" horizontalScrollPolicy="off">
-				<mx:Canvas left="5" right="0" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000">
-					<mx:ComboBox id="settingsAction" change="onActionChanges()"
-						left="5" right="5" top="50"
+				<mx:Canvas left="5" right="0" top="0" bottom="0">
+					<mx:ComboBox id="action"
+						left="5" right="5" top="0"
 					>
 						<mx:ArrayCollection>
 							<mx:String>default action</mx:String>
 							<mx:String>open Nagios details page</mx:String>
-							<mx:String>open NagVis map</mx:String>
-							<mx:String>go to URL</mx:String>
 						</mx:ArrayCollection>
 					</mx:ComboBox>
-					<mx:ComboBox id="settingsActionMaps" visible="false"
-						left="5" right="5" top="70"
-					/>
-					<mx:TextInput id="settingsActionURL" visible="false"
-						left="5" right="5" top="70"
+					<mx:CheckBox id="newWindow"
+						left="10" right="10" top="30"
+						label="Open in new window"
 					/>
 				</mx:Canvas>
-				<mx:TextInput cornerRadius="10" text="On Double Click" top="0" left="15" width="100" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
 		<mx:Button label="Apply" right="0" bottom="0" height="22" click="onApply()"/>

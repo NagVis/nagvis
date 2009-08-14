@@ -50,7 +50,7 @@
 
 	<view:DialogSettings id="settingsBox"
 		bottom="50" right="-10" width="310"
-		expandedWidth="300" expandedHeight="220"
+		expandedWidth="300" expandedHeight="170"
 		contractedWidth="35" contractedHeight="35"
 		currentState="right-contracted"
 	/>
