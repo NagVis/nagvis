@@ -32,6 +32,7 @@ package modules.gmap.events
 		public static const ADD : String = "LocationAdd";
 		public static const SAVE : String = "LocationSave";
 		public static const DELETE : String = "LocationDelete";
+		public static const ACTIVATE : String = "LocationActivate";
 		
 		public var location : Location;
 

@@ -139,6 +139,7 @@ package modules.gmap.view.controls
 			{
 				var m : LocationMarker = new LocationMarker(location);
 				m.addEventListener(LocationEvent.SELECTED, redispatchMarkerEvent);
+				m.addEventListener(LocationEvent.ACTIVATE, redispatchMarkerEvent);
 				_markers.push(m);
 				
 				if(visible)

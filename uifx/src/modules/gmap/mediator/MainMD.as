@@ -4,6 +4,7 @@ package modules.gmap.mediator
 	import flash.system.Security;
 	
 	import modules.gmap.domain.Location;
+	import modules.gmap.domain.Settings;
 	import modules.gmap.events.ModeEvent;
 	import modules.gmap.view.MainView;
 	
@@ -82,5 +83,9 @@ package modules.gmap.mediator
 			}
 		}
 		
+		public function activateLocation(location:Location, settings:Settings):void
+		{
+				
+		}
 	}
 }

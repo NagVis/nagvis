@@ -5,6 +5,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.SettingsData;
 			import mx.controls.Alert;
 			
 			import modules.gmap.data.CurrentLocation;
@@ -24,6 +25,11 @@
 	<EventHandlers type="{LocationEvent.SELECTED}">
 		<MethodInvoker generator="{CurrentLocation}" method="update" arguments="{event.location}"/>
 		<MethodInvoker generator="{MainMD}" method="selectLocation" arguments="{event.location}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{LocationEvent.ACTIVATE}">
+		<DataCopier destination="data" destinationKey="settings" source="{SettingsData}" sourceKey="settings"/>
+		<MethodInvoker generator="{MainMD}" method="activateLocation" arguments="{[event.location, data.settings]}"/>
 	</EventHandlers>
 	
 	<EventHandlers type="{AddressEvent.LOCATE}">
