@@ -27,6 +27,8 @@ package modules.gmap.view.controls
 		[Embed(source="modules/gmap/img/std_small_unknown.png")]
 		protected static var unknownIcon : Class;				
 				
+		private var _lastTimeClicked:Number = 0;		
+			
 		private var _location : Location;
 		
 		public function LocationMarker(location:Location)
@@ -51,8 +53,24 @@ package modules.gmap.view.controls
 			_location.addEventListener('change', this.onChange);
 		}
 		
+		/***
+		 * Handles click & double click events
+		 * because of the bug in Google Maps API
+		 * http://code.google.com/p/gmaps-api-issues/issues/detail?id=394
+		 ***/
 		protected function onClick(event : *):void
 		{
+			var date:Date = new Date;
+
+			if(date.time - _lastTimeClicked < 350)
+			{
+				dispatchEvent(
+					new LocationEvent(LocationEvent.ACTIVATE, _location, true)
+				);
+				return;
+			}
+			
+			_lastTimeClicked = date.time;
 			dispatchEvent(
 				new LocationEvent(LocationEvent.SELECTED, _location, true)
 			);
