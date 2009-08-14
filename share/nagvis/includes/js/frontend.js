@@ -528,7 +528,12 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		aObjs[intIndex].parseHoverMenu();
 		
 		// Reparse the context menu
-		aObjs[intIndex].parseContextMenu();
+		// FIXME: Context menu is not available on the overview page
+		if(sType === 'map') {
+			aObjs[intIndex].parseContextMenu();
+		} else if(sType === 'overview') {
+			
+		}
 	}
 	
 	return bStateChanged;
