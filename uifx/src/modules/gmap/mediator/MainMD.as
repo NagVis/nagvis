@@ -1,14 +1,13 @@
 package modules.gmap.mediator
 {
 	import flash.events.IEventDispatcher;
+	import flash.external.ExternalInterface;
 	import flash.system.Security;
 	
 	import modules.gmap.domain.Location;
 	import modules.gmap.domain.Settings;
 	import modules.gmap.events.ModeEvent;
-	import modules.gmap.view.MainView;
-	
-	import mx.controls.Alert; 
+	import modules.gmap.view.MainView; 
 	
 	public class MainMD
 	{
@@ -85,7 +84,36 @@ package modules.gmap.mediator
 		
 		public function activateLocation(location:Location, settings:Settings):void
 		{
-				
+			var slices1:Array = location.action.split(':', 2);
+			switch(slices1[0])
+			{
+				case 'nagios':
+					gotoURL('/nagios', settings.openLinksInNewWindow);
+					return;
+				case 'nagvis':
+					gotoURL('/nagvis', settings.openLinksInNewWindow);
+					return;
+				case 'http':
+				case 'https':
+					gotoURL(location.action, settings.openLinksInNewWindow);
+					return;
+			}				
+
+			var slices2:Array = settings.defaultLocationAction.split(':', 2);
+			switch(slices2[0])
+			{
+				case 'nagios':
+					gotoURL('/nagios', settings.openLinksInNewWindow);
+					return;
+			}				
+		}
+		
+		public function gotoURL(url:String, newWindow:Boolean):void
+		{
+			if(newWindow)
+				ExternalInterface.call('window.open("' + url + '")');
+			else
+				ExternalInterface.call('window.location.assign("' + url + '")');
 		}
 	}
 }
