@@ -669,8 +669,8 @@ line "Checking for existing NagVis" "+"
 if [ -d $NAGVIS_PATH ]; then
 	INSTALLER_ACTION="update"
 	
-	if [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
-		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	if [ -e $NAGVIS_PATH/nagvis/includes/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	elif [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
 		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	else
