@@ -825,7 +825,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "tmpl.default*" "nagvis/images/templates/hover" "hover template images"
 
 	LINE="Restoring custom gadgets..."
-	copy "" "nagvis/gadgets" "gadgets"
+	copy "gadgets_core.php:std_*.php" "nagvis/gadgets" "gadgets"
 fi
 text
 
