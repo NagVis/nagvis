@@ -37,7 +37,7 @@
 				<MethodInvoker generator="{Poller}" method="resourceReady"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
-		<RemoteObjectInvoker destination="zend" source="Links" method="getAll" debug="true">
+		<RemoteObjectInvoker destination="zend" source="Link" method="getAll" debug="true">
 			<resultHandlers>
 				<MethodInvoker generator="{LinksData}" method="fill" arguments="{resultObject}"/>
 			</resultHandlers>
