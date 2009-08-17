@@ -20,6 +20,8 @@
 <EdgeBox xmlns="lib.ui.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"	
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
@@ -35,6 +37,8 @@
 			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
 		/>
 	</mx:HBox>
+	
+<!--	
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<mx:ComboBox top="0" left="0" right="0" id="point1"></mx:ComboBox>
 		<mx:ComboBox top="30" left="0" right="0" id="point2"></mx:ComboBox>
@@ -43,4 +47,307 @@
 			click="dispatchEvent(new Event('link'))"
 		/>
 	</mx:Canvas>
+-->
+	<mx:Script>
+		<![CDATA[
+			import modules.gmap.domain.Link;
+			import mx.formatters.SwitchSymbolFormatter;
+			import modules.gmap.events.NagiosObjectEvent;
+			import mx.events.CloseEvent;
+			import mx.events.MenuEvent;
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+
+			import com.google.maps.LatLng;
+
+			import modules.gmap.events.LocationEvent;
+			import modules.gmap.domain.nagios.ServiceGroup;
+			import modules.gmap.domain.nagios.HostGroup;
+			import modules.gmap.domain.nagios.Service;
+			import modules.gmap.domain.nagios.Host;
+			import modules.gmap.domain.Location;
+
+			public var hosts : ArrayCollection;
+			public var hostgroups : ArrayCollection;
+			public var services : ArrayCollection;
+			public var servicegroups : ArrayCollection;
+
+			private var _link : Link;
+			
+			public function set link(link:Link):void
+			{
+				if(_link != link)
+				{
+					_link = link;
+					
+					if(link)
+					{
+						
+					}
+					else
+					{
+						lnkDescription.text = "";
+						lnkNObjectType.selectedIndex = 0;
+						onObjectTypeChange();
+						lnkAction.selectedIndex = 0;
+						onActionChanges();						
+					}
+				}
+			}
+
+			private function onAddClicked() : void
+			{
+			}
+
+			private function onSaveClicked():void
+			{
+			}
+
+			private function onDeleteClicked() : void
+			{
+				if (_link)
+				{
+					Alert.show(
+						'Are you sure to unlink these locations?',
+						'Confirmation',
+						3, this,
+						deleteConfirmation
+					);
+				}
+			}
+
+			private function deleteConfirmation(event : CloseEvent) : void
+			{
+				if (event.detail == Alert.YES)
+				{
+				}
+			}
+
+			private function onObjectTypeChange() : void
+			{
+				lnkNObject.removeAll();
+				lnkNObject.textInput.text = '';
+
+				switch (lnkNObjectType.selectedIndex)
+				{
+					case 0:
+						lnkNObject.textInput.enabled = false;
+						lnkNObject.dataProvider = null;
+						lnkNObject.browserFields = null;
+						lnkNObject.labelFunction = null;
+					case 1:
+						lnkNObject.textInput.enabled = true;
+						lnkNObject.dataProvider = hosts;
+						lnkNObject.browserFields = ["name", "address", "alias"];
+						lnkNObject.labelFunction = hostLabelFunction;
+						break;
+					case 2:
+						lnkNObject.textInput.enabled = true;
+						lnkNObject.dataProvider = services;
+						lnkNObject.browserFields = ["host", "description"];
+						lnkNObject.labelFunction = serviceLabelFunction;
+						break;
+					case 3:
+						lnkNObject.textInput.enabled = true;
+						lnkNObject.dataProvider = hostgroups;
+						lnkNObject.browserFields = ["name", "alias"];
+						lnkNObject.labelFunction = groupLabelFunction;
+						break;
+					case 4:
+						lnkNObject.textInput.enabled = true;
+						lnkNObject.dataProvider = servicegroups;
+						lnkNObject.browserFields = ["name", "alias"];
+						lnkNObject.labelFunction = groupLabelFunction;
+						break;
+				}
+			}
+
+			private function loadNagiosData() : void
+			{
+				switch (lnkNObjectType.selectedIndex)
+				{
+					case 1:
+						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_HOSTS));
+						break;
+					case 2:
+						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_SERVICES));
+						break;
+					case 3:
+						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_HOSTGROUPS));
+						break;
+					case 4:
+						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_SERVICEGROUPS));
+						break;
+				}
+			}
+
+			protected function onActionChanges() : void
+			{
+				switch (lnkAction.selectedIndex)
+				{
+					case 2:
+						lnkAction.setStyle('top', 30);
+						lnkActionMaps.visible = true;
+						lnkActionURL.visible = false;
+						break;
+					case 3:
+						lnkAction.setStyle('top', 30);
+						lnkActionMaps.visible = false;
+						lnkActionURL.visible = true;
+						break;
+					default:
+						lnkAction.setStyle('top', 50);
+						lnkActionMaps.visible = lnkActionURL.visible = false;
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Script>
+		<![CDATA[
+			import mx.events.MenuEvent;
+			import mx.events.CollectionEvent;
+
+			/***
+			 * Code concerning Nagios object autocomlete
+			 ***/
+
+			private function initNObject() : void
+			{
+				lnkNObject.flowBox.setStyle("borderStyle", "solid");
+				lnkNObject.flowBox.setStyle("borderColor", "#000000");
+				lnkNObject.flowBox.setStyle("cornerRadius", "3");
+			}
+
+			private function objectItemClick(event : MenuEvent) : void
+			{
+				switch (String(event.item.@data))
+				{
+					case "browse":
+
+						if (lnkNObject.dataProvider.length == 0)
+						{
+							lnkNObject.dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, openBrowser);
+							loadNagiosData();
+						}
+						else
+						{
+							lnkNObject.showBrowser();
+						}
+
+						break;
+				}
+			}
+
+			private function openBrowser(event : *) : void
+			{
+				lnkNObject.dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE, openBrowser);
+				lnkNObject.showBrowser();
+			}
+
+			public function hostLabelFunction(item : Object) : String
+			{
+				return item.name + ' / ' + item.address + ' (' + item.alias + ')';
+			}
+
+			public function serviceLabelFunction(item : Object) : String
+			{
+				return item.description + ' on ' + item.host;
+			}
+
+			public function groupLabelFunction(item : Object) : String
+			{
+				return item.name + ' (' + item.alias + ')';
+			}
+		]]>
+	</mx:Script>
+	<mx:XML format="e4x" id="autoCompleteMenu">
+		<root>
+			<menuitem data="browse" label="Browse..."/>
+		</root>
+	</mx:XML>
+	<mx:Canvas left="10" right="15" top="40" bottom="10">
+		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
+			<mx:Canvas label="General" width="100%" height="100%">
+			</mx:Canvas>
+			<mx:Canvas label="Description" width="100%" height="100%">
+				<flexlib:PromptingTextArea  id="lnkDescription" prompt="Description"
+					right="10" left="10" top="0" bottom="0"
+				/>
+			</mx:Canvas>
+			<mx:Canvas label="Nagios" width="100%" height="100%">
+				<mx:VBox left="5" right="5" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
+					<mx:Spacer/>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:Label text="Type:" left="10" top="10" height="18"/>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:ComboBox id="lnkNObjectType" width="100%" change="onObjectTypeChange()">
+							<mx:ArrayCollection>
+								<mx:String></mx:String>
+								<mx:String>Host</mx:String>
+								<mx:String>Service</mx:String>
+								<mx:String>Host Group</mx:String>
+								<mx:String>Service Group</mx:String>
+							</mx:ArrayCollection>
+						</mx:ComboBox>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<mx:Label text="Object:" top="70" left="10"/>
+						<mx:Spacer/>
+					</mx:HBox>
+					<mx:HBox width="100%">
+						<mx:Spacer/>
+						<hc:AdvancedAutoComplete id="lnkNObject" width="100%"
+							creationComplete="initNObject()" focusIn="loadNagiosData()"
+							selectedItemStyleName="underline" labelFunction="groupLabelFunction"
+							matchType="anyPart" allowMultipleSelection="false" showRemoveIcon="true"
+							actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
+							browserFields="{['name', 'alias']}"
+						/>
+						<mx:Spacer/>
+					</mx:HBox>
+				</mx:VBox>
+				<mx:TextInput cornerRadius="10" text=" Associate with" top="0" left="15" width="90" borderStyle="solid" editable="false"/>
+			</mx:Canvas>
+			<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
+				<mx:Canvas left="5" right="0" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000">
+					<mx:ComboBox id="lnkAction" change="onActionChanges()"
+						left="5" right="5" top="50"
+					>
+						<mx:ArrayCollection>
+							<mx:String>default action</mx:String>
+							<mx:String>open Nagios details page</mx:String>
+							<mx:String>open NagVis map</mx:String>
+							<mx:String>go to URL</mx:String>
+						</mx:ArrayCollection>
+					</mx:ComboBox>
+					<mx:ComboBox id="lnkActionMaps" visible="false"
+						left="5" right="5" top="70"
+					/>
+					<mx:TextInput id="lnkActionURL" visible="false"
+						left="5" right="5" top="70"
+					/>
+				</mx:Canvas>
+				<mx:TextInput cornerRadius="10" text="On Double Click" top="0" left="15" width="100" borderStyle="solid" editable="false"/>
+			</mx:Canvas>
+		</flexlib:HAccordion>
+		<mx:Button id="addButton" label="Add" visible="false"
+			right="0" bottom="0"
+			click="onAddClicked()"
+		/>
+		<mx:Button id="saveButton" label="Save"
+			right="0" bottom="0"
+			click="onSaveClicked()"
+		/>
+		<mx:Button id="deleteButton" label="Delete"
+			right="65" bottom="0"
+			click="onDeleteClicked()"
+		/>
+	</mx:Canvas>
+	
 </EdgeBox>

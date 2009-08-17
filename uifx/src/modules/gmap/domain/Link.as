@@ -26,6 +26,9 @@ package modules.gmap.domain
 	public class Link
 	{
 		public var id1 : String;
+		public var location1:Location;
+
 		public var id2 : String;
+		public var location2:Location;
 	}
 }

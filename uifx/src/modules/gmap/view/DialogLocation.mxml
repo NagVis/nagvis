@@ -399,7 +399,7 @@
 						<mx:Spacer/>
 						<mx:ComboBox id="locNObjectType" width="100%" change="onObjectTypeChange()">
 							<mx:ArrayCollection>
-								<mx:String>Unset</mx:String>
+								<mx:String></mx:String>
 								<mx:String>Host</mx:String>
 								<mx:String>Service</mx:String>
 								<mx:String>Host Group</mx:String>

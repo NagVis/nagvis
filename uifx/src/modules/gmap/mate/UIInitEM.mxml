@@ -5,6 +5,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.view.DialogLink;
 			import modules.gmap.view.DialogSettings;
 			import modules.gmap.data.SettingsData;
 			import modules.gmap.data.ServiceGroupsData;
@@ -29,6 +30,7 @@
 			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsData;
 			import modules.gmap.data.LocationsExtData;
+			import modules.gmap.data.CurrentLink;
 		]]>
 	</mx:Script>
 
@@ -50,6 +52,14 @@
 
 	<Injectors target="{DialogLocation}" debug="true">
 		<PropertyInjector targetKey="location" source="{CurrentLocation}" sourceKey="location"/>
+		<PropertyInjector targetKey="hosts" source="{HostsData}"/>
+		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
+		<PropertyInjector targetKey="services" source="{ServicesData}"/>
+		<PropertyInjector targetKey="servicegroups" source="{ServiceGroupsData}"/>
+	</Injectors>
+
+	<Injectors target="{DialogLink}" debug="true">
+		<PropertyInjector targetKey="link" source="{CurrentLink}" sourceKey="link"/>
 		<PropertyInjector targetKey="hosts" source="{HostsData}"/>
 		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
 		<PropertyInjector targetKey="services" source="{ServicesData}"/>

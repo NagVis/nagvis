@@ -49,6 +49,8 @@
 				locationControl.map = map;
 				locationsControl.map = map;
 				locationsExtControl.map = map;
+				
+				linksControl.map = map;
 			}
 
 			private function onClick(event:MapMouseEvent):void
@@ -60,4 +62,5 @@
 	<controls:GMapLocationControl id="locationControl"/>
 	<controls:GMapLocationsControl id="locationsControl"/>
 	<controls:GMapLocationsExtControl id="locationsExtControl" visible="false"/>
+	<controls:GMapLinksControl id="linksControl"/>
 </mx:Canvas>

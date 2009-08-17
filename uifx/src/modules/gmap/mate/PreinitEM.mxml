@@ -12,6 +12,8 @@
 			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsExtData;
 			import modules.gmap.data.LocationsData;
+			import modules.gmap.data.CurrentLink;
+			import modules.gmap.data.LinksData;
 			import modules.gmap.data.HostsData;
 			import modules.gmap.data.HostGroupsData;
 			import modules.gmap.data.ServicesData;
@@ -25,6 +27,8 @@
 		<ObjectBuilder generator="{CurrentLocation}"/>
 		<ObjectBuilder generator="{LocationsData}"/>
 		<ObjectBuilder generator="{LocationsExtData}"/>
+		<ObjectBuilder generator="{CurrentLink}"/>
+		<ObjectBuilder generator="{LinksData}" constructorArguments="{LocationsData}"/>
 		<ObjectBuilder generator="{HostsData}"/>
 		<ObjectBuilder generator="{HostGroupsData}"/>
 		<ObjectBuilder generator="{ServicesData}"/>
