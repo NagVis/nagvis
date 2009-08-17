@@ -7,6 +7,7 @@ uifx/.actionScriptProperties
 uifx/.flexProperties
 uifx/.project
 uifx/bin
+uifx/bin-release
 
 # Exclude main configuration file
 etc/nagvis.ini.php
