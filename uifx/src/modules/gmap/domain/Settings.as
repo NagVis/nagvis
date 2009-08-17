@@ -7,6 +7,8 @@ package modules.gmap.domain
 		public var googleMapsKey : String;
 		public var defaultLocationAction : String;
 		public var openLinksInNewWindow : Boolean;
+		public var htmlbase : String;
+		public var htmlcgi : String;
 		public var hosturl : String;
 		public var hostgroupurl : String;
 		public var serviceurl : String;
@@ -16,6 +18,8 @@ package modules.gmap.domain
 		public function Settings(googleMapsKey : String = "",
 			defaultLocationAction : String = "",
 			openLinksInNewWindow : Boolean = false,
+			htmlbase : String = "",
+			htmlcgi : String = "",
 			hosturl : String = "",
 			hostgroupurl : String = "",
 			serviceurl : String = "",
@@ -25,6 +29,8 @@ package modules.gmap.domain
 			this.googleMapsKey = googleMapsKey;
 			this.defaultLocationAction = defaultLocationAction;
 			this.openLinksInNewWindow = openLinksInNewWindow;
+			this.htmlbase = htmlbase;
+			this.htmlcgi = htmlcgi;
 			this.hosturl = hosturl;
 			this.hostgroupurl = hostgroupurl;
 			this.serviceurl = serviceurl;

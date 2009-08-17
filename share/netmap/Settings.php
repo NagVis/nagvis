@@ -26,6 +26,8 @@ class Settings
 	public $googleMapsKey;
 	public $defaultLocationAction;
 	public $openLinksInNewWindow;
+	public $htmlbase;
+	public $htmlcgi;
 	public $hosturl;
 	public $hostgroupurl;
 	public $serviceurl;
@@ -33,12 +35,14 @@ class Settings
 	public $mapurl;
 
 	public function __construct($googleMapsKey = '', $defaultLocationAction = '',
-		$openLinksInNewWindow = false, $hosturl = '', $hostgroupurl = '',
-		$serviceurl = '', $servicegroupurl = '', $mapurl = '')
+		$openLinksInNewWindow = false, $htmlbase = '', $htmlcgi = '',
+		$hosturl = '', $hostgroupurl = '', $serviceurl = '', $servicegroupurl = '', $mapurl = '')
 	{
 		$this->googleMapsKey = $googleMapsKey;
 		$this->defaultLocationAction = $defaultLocationAction;
 		$this->openLinksInNewWindow = $openLinksInNewWindow;
+		$this->htmlbase = $htmlbase;
+		$this->htmlcgi = $htmlcgi;
 		$this->hosturl = $hosturl;
 		$this->hostgroupurl = $hostgroupurl;
 		$this->serviceurl = $serviceurl;
@@ -64,6 +68,10 @@ class Settings
 		$CORE = new GlobalCore();
 		$CORE->MAINCFG->setRuntimeValue('user', getUser());
 
+		if (($htmlbase = $CORE->MAINCFG->getValue('paths', 'htmlbase')) === false)
+			throw new Exception('Error in NagVis configuration');
+		if (($htmlcgi = $CORE->MAINCFG->getValue('paths', 'htmlcgi')) === false)
+			throw new Exception('Error in NagVis configuration');
 		if (($hosturl = $CORE->MAINCFG->getValue('defaults', 'hosturl')) === false)
 			throw new Exception('Error in NagVis configuration');
 		if (($hostgroupurl = $CORE->MAINCFG->getValue('defaults', 'hostgroupurl')) === false)
@@ -81,6 +89,7 @@ class Settings
 		return new Settings((string)$xml['googleMapsKey'],
 				(string)$xml['defaultLocationAction'],
 				(boolean)$xml['openLinksInNewWindow'],
+				$htmlbase, $htmlcgi,
 				$hosturl, $hostgroupurl, $serviceurl, $servicegroupurl, $mapurl);
 	}
 
