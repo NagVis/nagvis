@@ -126,7 +126,7 @@ class Database
 				return Location::STATE_ERROR;
 
 			case 'PENDING':
-				return Location::STATE_WARNING;
+				return Location::STATE_UNKNOWN;
 
 			case 'UP':
 				return Location::STATE_OK;
@@ -135,7 +135,7 @@ class Database
 				return Location::STATE_ERROR;
 
 			case 'UNREACHABLE':
-				return Location::STATE_ERROR;
+				return Location::STATE_WARNING;
 
 			case 'UNKNOWN':
 			default:
@@ -156,7 +156,7 @@ class Database
 				return Location::STATE_ERROR;
 
 			case 'PENDING':
-				return Location::STATE_WARNING;
+				return Location::STATE_UNKNOWN;
 
 			case 'OK':
 				return Location::STATE_OK;
