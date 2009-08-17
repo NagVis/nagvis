@@ -115,7 +115,8 @@
 						if (location.action && location.action.length > 0)
 						{
 							var slices : Array = location.action.split(':', 2);
-							switch(slices[0])
+
+							switch (slices[0])
 							{
 								case 'nagios':
 									locAction.selectedIndex = 1;
@@ -124,14 +125,11 @@
 									locAction.selectedIndex = 2;
 									locActionMaps.text = slices[1];
 									break;
-								case 'http':
-								case 'https':
+								default:
 									locAction.selectedIndex = 3;
 									locActionURL.text = location.action;
-									break;
-								default:
-									locAction.selectedIndex = 0;
 							}
+
 							onActionChanges();
 						}
 						else
