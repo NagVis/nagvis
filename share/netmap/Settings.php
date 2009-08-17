@@ -26,12 +26,24 @@ class Settings
 	public $googleMapsKey;
 	public $defaultLocationAction;
 	public $openLinksInNewWindow;
+	public $hosturl;
+	public $hostgroupurl;
+	public $serviceurl;
+	public $servicegroupurl;
+	public $mapurl;
 
-	public function __construct($googleMapsKey = "", $defaultLocationAction = "", $openLinksInNewWindow = false)
+	public function __construct($googleMapsKey = '', $defaultLocationAction = '',
+		$openLinksInNewWindow = false, $hosturl = '', $hostgroupurl = '',
+		$serviceurl = '', $servicegroupurl = '', $mapurl = '')
 	{
 		$this->googleMapsKey = $googleMapsKey;
 		$this->defaultLocationAction = $defaultLocationAction;
 		$this->openLinksInNewWindow = $openLinksInNewWindow;
+		$this->hosturl = $hosturl;
+		$this->hostgroupurl = $hostgroupurl;
+		$this->serviceurl = $serviceurl;
+		$this->servicegroupurl = $servicegroupurl;
+		$this->mapurl = $mapurl;
 	}
 
 	/**
@@ -39,12 +51,37 @@ class Settings
 	 */
 	public function load()
 	{
+		require_once("../nagvis/includes/defines/global.php");
+		require_once("../nagvis/includes/defines/matches.php");
+		set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__))
+			. PATH_SEPARATOR . '../nagvis/includes/classes/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/validator/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/frontend/');
+		require_once("../nagvis/includes/functions/oldPhpVersionFixes.php");
+		require_once("../nagvis/includes/functions/getuser.php");
+
+		$CORE = new GlobalCore();
+		$CORE->MAINCFG->setRuntimeValue('user', getUser());
+
+		if (($hosturl = $CORE->MAINCFG->getValue('defaults', 'hosturl')) === false)
+			throw new Exception('Error in NagVis configuration');
+		if (($hostgroupurl = $CORE->MAINCFG->getValue('defaults', 'hostgroupurl')) === false)
+			throw new Exception('Error in NagVis configuration');
+		if (($serviceurl = $CORE->MAINCFG->getValue('defaults', 'serviceurl')) === false)
+			throw new Exception('Error in NagVis configuration');
+		if (($servicegroupurl = $CORE->MAINCFG->getValue('defaults', 'servicegroupurl')) === false)
+			throw new Exception('Error in NagVis configuration');
+		if (($mapurl = $CORE->MAINCFG->getValue('defaults', 'mapurl')) === false)
+			throw new Exception('Error in NagVis configuration');
+
 		if (($xml = @simplexml_load_file('settings.xml')) === FALSE)
 			throw new Exception('Could not read settings.xml');
 
 		return new Settings((string)$xml['googleMapsKey'],
 				(string)$xml['defaultLocationAction'],
-				(boolean)$xml['openLinksInNewWindow']);
+				(boolean)$xml['openLinksInNewWindow'],
+				$hosturl, $hostgroupurl, $serviceurl, $servicegroupurl, $mapurl);
 	}
 
 	/**
