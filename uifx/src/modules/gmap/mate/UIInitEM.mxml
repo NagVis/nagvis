@@ -20,7 +20,7 @@
 			import modules.gmap.view.controls.GMapLocationsExtControl;
 			import modules.gmap.view.DialogViewpoint;
 			import modules.gmap.view.DialogLocation;
-			
+
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
 			import modules.gmap.mediator.Poller;
@@ -35,11 +35,11 @@
 	<EventHandlers type="{MainView.READY}" debug="true">
 		<ObjectBuilder generator="{MainMD}" constructorArguments="{[event.target, scope.dispatcher]}" />
 	</EventHandlers>
-	
+
 	<EventHandlers type="{GMapControl.READY}" debug="true">
 		<ObjectBuilder generator="{MapMD}" constructorArguments="{[event.target, scope.dispatcher]}" />
 	</EventHandlers>
-	
+
 	<Injectors target="{DialogSettings}" debug="true">
 		<PropertyInjector targetKey="settings" source="{SettingsData}" sourceKey="settings"/>
 	</Injectors>
@@ -47,7 +47,7 @@
 	<Injectors target="{DialogViewpoint}" debug="true">
 		<PropertyInjector targetKey="dataProvider" source="{ViewpointsData}"/>
 	</Injectors>
-	
+
 	<Injectors target="{DialogLocation}" debug="true">
 		<PropertyInjector targetKey="location" source="{CurrentLocation}" sourceKey="location"/>
 		<PropertyInjector targetKey="hosts" source="{HostsData}"/>
@@ -55,17 +55,17 @@
 		<PropertyInjector targetKey="services" source="{ServicesData}"/>
 		<PropertyInjector targetKey="servicegroups" source="{ServiceGroupsData}"/>
 	</Injectors>
-	
+
 	<Injectors target="{GMapLocationControl}" debug="true">
 		<PropertyInjector targetKey="location" source="{CurrentLocation}" sourceKey="location"/>
 	</Injectors>
-	
+
 	<Injectors target="{GMapLocationsControl}" debug="true">
 		<PropertyInjector targetKey="dataProvider" source="{LocationsData}"/>
 	</Injectors>
-	
+
 	<Injectors target="{GMapLocationsExtControl}" debug="true">
 		<PropertyInjector targetKey="dataProvider" source="{LocationsExtData}"/>
 	</Injectors>
-		
+
 </EventMap>

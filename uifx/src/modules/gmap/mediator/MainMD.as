@@ -3,7 +3,7 @@ package modules.gmap.mediator
 	import flash.events.IEventDispatcher;
 	import flash.external.ExternalInterface;
 	import flash.system.Security;
-	
+
 	import modules.gmap.domain.Location;
 	import modules.gmap.domain.Settings;
 	import modules.gmap.domain.nagios.Host;
@@ -11,50 +11,50 @@ package modules.gmap.mediator
 	import modules.gmap.domain.nagios.Service;
 	import modules.gmap.domain.nagios.ServiceGroup;
 	import modules.gmap.events.ModeEvent;
-	import modules.gmap.view.MainView; 
-	
+	import modules.gmap.view.MainView;
+
 	public class MainMD
 	{
 		public static const MODE_DEFAULT : int = 0;
 		public static const MODE_LOCATION_EDIT : int = 1;
 		public static const MODE_LOCATION_SEARCH : int = 2;
-		
+
 		private var _mode:int = 0;
-		 
+
 		private var _view : MainView;
 		private var _dispatcher : IEventDispatcher;
-		
+
 		public function MainMD(view : MainView, dispatcher : IEventDispatcher)
 		{
 			this._view = view;
 			this._dispatcher = dispatcher;
 		}
-		
-		public function init():void
+
+		public function init() : void
 		{
 			Security.allowInsecureDomain("*");
 		}
-		
-		public function get mode():int
+
+		public function get mode() : int
 		{
 			return _mode;
 		}
-		
-		public function set mode(value:int):void
+
+		public function set mode(value : int) : void
 		{
-			if(_mode !== value)
+			if (_mode !== value)
 			{
 				_dispatcher.dispatchEvent(
 					new ModeEvent(ModeEvent.CHANGED, _mode, value)
 				);
-				
+
 				_mode = value;
 			}
 		}
-		
-		public function reconsiderMode():void
+
+		public function reconsiderMode() : void
 		{
-			switch(_view.ebg.current)
+			switch (_view.ebg.current)
 			{
 				case _view.locationBox:
 					mode = MODE_LOCATION_EDIT;
@@ -66,10 +66,10 @@ package modules.gmap.mediator
 					mode = MODE_DEFAULT;
 			}
 		}
-		
-		public function selectLocation(location : Location):void
+
+		public function selectLocation(location : Location) : void
 		{
-			switch(_mode)
+			switch (_mode)
 			{
 				case MODE_DEFAULT:
 					//Alert.show(location.label);
@@ -78,15 +78,15 @@ package modules.gmap.mediator
 					//_view.locationBox.update(location);
 					break;
 				case MODE_LOCATION_SEARCH:
-					if(location.id && location.id.length > 0)
+					if (location.id && location.id.length > 0)
 						break;
 					//_view.locationBox.update(location);
-					_view.locationBox.setCurrentState('right-expanded'); 
+					_view.locationBox.setCurrentState('right-expanded');
 					break;
 			}
 		}
-		
-		public function activateLocation(location:Location, settings:Settings):void
+
+		public function activateLocation(location : Location, settings : Settings) : void
 		{
 			var slices : Array;
 
@@ -95,7 +95,7 @@ package modules.gmap.mediator
 			else
 				slices = location.action.split(':', 2);
 
-			switch(slices[0])
+			switch (slices[0])
 			{
 				case '':
 					return;
@@ -142,12 +142,12 @@ package modules.gmap.mediator
 				default:
 					gotoURL(location.action, settings.openLinksInNewWindow);
 					return;
-			}				
+			}
 		}
-		
-		public function gotoURL(url:String, newWindow:Boolean):void
+
+		public function gotoURL(url : String, newWindow : Boolean) : void
 		{
-			if(newWindow)
+			if (newWindow)
 				ExternalInterface.call('window.open("' + url + '")');
 			else
 				ExternalInterface.call('window.location.assign("' + url + '")');

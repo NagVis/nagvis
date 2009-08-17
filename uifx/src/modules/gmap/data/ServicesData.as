@@ -4,10 +4,9 @@ package modules.gmap.data
 
 	public class ServicesData extends ArrayCollection
 	{
-		public function ServicesData(source:Array=null)
+		public function ServicesData(source : Array = null)
 		{
 			super(source);
 		}
-		
 	}
 }

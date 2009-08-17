@@ -4,7 +4,7 @@ package modules.gmap.data
 
 	public class HostGroupsData extends ArrayCollection
 	{
-		public function HostGroupsData(source:Array=null)
+		public function HostGroupsData(source : Array = null)
 		{
 			super(source);
 		}

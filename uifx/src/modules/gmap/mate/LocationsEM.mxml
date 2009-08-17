@@ -7,31 +7,31 @@
 		<![CDATA[
 			import modules.gmap.data.SettingsData;
 			import mx.controls.Alert;
-			
+
 			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsData;
 			import modules.gmap.data.LocationsExtData;
-		
+
 			import modules.gmap.events.AddressEvent;
 			import modules.gmap.events.LocationEvent;
-			
+
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.Poller;
 		]]>
 	</mx:Script>
 
 	<mx:RemoteObject id="LocationsService" destination="zend" source="Location" />
-	
+
 	<EventHandlers type="{LocationEvent.SELECTED}">
 		<MethodInvoker generator="{CurrentLocation}" method="update" arguments="{event.location}"/>
 		<MethodInvoker generator="{MainMD}" method="selectLocation" arguments="{event.location}"/>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{LocationEvent.ACTIVATE}">
 		<DataCopier destination="data" destinationKey="settings" source="{SettingsData}" sourceKey="settings"/>
 		<MethodInvoker generator="{MainMD}" method="activateLocation" arguments="{[event.location, data.settings]}"/>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{AddressEvent.LOCATE}">
 		<RemoteObjectInvoker instance="{LocationsService}" method="find" arguments="{event.address}">
 			<resultHandlers>
@@ -39,7 +39,7 @@
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{LocationEvent.ADD}">
 		<RemoteObjectInvoker instance="{LocationsService}" method="add" arguments="{event.location}">
 			<resultHandlers>
@@ -48,7 +48,7 @@
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{LocationEvent.SAVE}">
 		<RemoteObjectInvoker instance="{LocationsService}" method="edit" arguments="{event.location}">
 			<resultHandlers>

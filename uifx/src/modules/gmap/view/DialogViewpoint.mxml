@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  Copyright (C) 2009 NagVis Project
- 
+
  License:
- 
+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License version 2 as
  published by the Free Software Foundation.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,19 +32,19 @@
     		import modules.gmap.domain.Viewpoint;
     		import modules.gmap.events.ViewpointEvent;
     		import modules.gmap.data.ViewpointsData;
-    		
+
     		[Bindable] public var dataProvider : ViewpointsData;
-    		
-    		public function onListSelectChange():void
+
+    		public function onListSelectChange() : void
     		{
     			dispatchEvent(new ViewpointEvent(ViewpointEvent.SELECTED, list.selectedItem as Viewpoint));
     		}
-    		
-    		public function onSaveButtonClick():void
+
+    		public function onSaveButtonClick() : void
     		{
-    			var vp:Viewpoint = new Viewpoint;
+    			var vp : Viewpoint = new Viewpoint;
     			vp.label = preName.text;
-    			
+
     			dispatchEvent(new ViewpointEvent(ViewpointEvent.CREATE, vp));
     		}
     	]]>
@@ -59,12 +59,12 @@
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
-		<mx:List id="list" 
+		<mx:List id="list"
 			top="0" left="0" right="0" height="138"
 			dataProvider="{dataProvider}"
 			change="onListSelectChange()"
 		/>
-		<flexlib:PromptingTextInput id="preName" 
+		<flexlib:PromptingTextInput id="preName"
 			left="0" right="62" bottom="0" height="22"
 			prompt="viewpoint name"
 		/>

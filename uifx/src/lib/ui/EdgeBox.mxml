@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  Copyright (C) 2009 NagVis Project
- 
+
  License:
- 
+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License version 2 as
  published by the Free Software Foundation.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -33,13 +33,13 @@
 		<![CDATA[
 			private var _group : EdgeBoxGroup;
 
-			public function get group():EdgeBoxGroup
+			public function get group() : EdgeBoxGroup
 			{
 				return _group;
 			}
 
 			[Bindable]
-			public function set group(g : EdgeBoxGroup):void
+			public function set group(g : EdgeBoxGroup) : void
 			{
 				_group = g;
 				_group.register(this);
@@ -97,9 +97,9 @@
 
 			public override function setCurrentState(stateName : String, playTransition : Boolean = true):void
 			{
-				if(stateName != currentState)
+				if (stateName != currentState)
 				{
-					if(group)
+					if (group)
 					{
 						switch(getStatus(stateName))
 						{
@@ -119,7 +119,7 @@
 				}
 			}
 
-			public function getStatus(stateName : String):String
+			public function getStatus(stateName : String) : String
 			{
 				return splitState(stateName)[1];
 			}
@@ -129,7 +129,7 @@
 				return getStatus(currentState);
 			}
 
-			public function getSide(stateName : String):String
+			public function getSide(stateName : String) : String
 			{
 				return splitState(stateName)[0];
 			}
@@ -139,14 +139,14 @@
 				return getSide(currentState);
 			}
 
-			protected function splitState(stateName : String):Array
+			protected function splitState(stateName : String) : Array
 			{
-				if(stateName == null)
+				if (stateName == null)
 					return [null, null];
 
 				var slices : Array = stateName.split('-');
 
-				if(slices.length != 2)
+				if (slices.length != 2)
 					return [null, null];
 
 				return slices;

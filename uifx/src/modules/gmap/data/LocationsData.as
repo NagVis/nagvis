@@ -1,24 +1,24 @@
 package modules.gmap.data
 {
 	import com.google.maps.LatLng;
-	
+
 	import modules.gmap.domain.Location;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 
 	public class LocationsData extends ArrayCollection
 	{
-		public function LocationsData(source:Array=null)
+		public function LocationsData(source : Array = null)
 		{
 			super(source);
 		}
-		
-		public function fill(data : Array):void
+
+		public function fill(data : Array) : void
 		{
 			this.source = data;
 		}
-		
+
 		public function getItemById(id : String) : Location
 		{
 			for each(var location : Location in this)
@@ -56,15 +56,15 @@ package modules.gmap.data
 				this.addUpdateItem(location);
 		}
 
-		public function removeItemById(id:String):void
+		public function removeItemById(id : String) : void
 		{
 			removeItemAt(getItemIndex(getItemById(id)));
-		}	
-		
-		public function virginize():void
+		}
+
+		public function virginize() : void
 		{
 			for each(var location : Location in this)
-				location.state = Location.STATE_OK;		
-		}		
+				location.state = Location.STATE_OK;
+		}
 	}
 }

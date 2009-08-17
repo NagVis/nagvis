@@ -6,6 +6,5 @@ package modules.gmap.view.controls
 		{
 			super();
 		}
-		
 	}
 }

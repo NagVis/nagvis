@@ -4,7 +4,7 @@ package modules.gmap.events
 
 	/***
 	 * This class serves two purposes:
-	 * 	-	it is the placeholder of different event type constants 
+	 * 	-	it is the placeholder of different event type constants
 	 * 		that are used to relize the Nagios oblects laze load
 	 * 	-	it's suffix param let us relize a nice hack to load
 	 * 		these objects only once just by means of Mate event maps
@@ -26,11 +26,10 @@ package modules.gmap.events
 		public static const LOAD_ALL_SERVICES_ONCE : String = "NagiosObjectLoadAllServices0";
 		public static const LOAD_ALL_SERVICEGROUPS : String = "NagiosObjectLoadAllServicegroups";
 		public static const LOAD_ALL_SERVICEGROUPS_ONCE : String = "NagiosObjectLoadAllServicegroups0";
-		
-		public function NagiosObjectEvent(type:String, suffix:String = '', bubbles:Boolean = true, cancelable:Boolean = false)
+
+		public function NagiosObjectEvent(type : String, suffix : String = '', bubbles : Boolean = true, cancelable : Boolean = false)
 		{
 			super(type + suffix, bubbles, cancelable);
 		}
-		
 	}
 }

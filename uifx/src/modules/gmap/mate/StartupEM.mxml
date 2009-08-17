@@ -7,22 +7,22 @@
 		<![CDATA[
 			import modules.gmap.data.SettingsData;
 			import mx.controls.Alert;
-		
+
 			import modules.gmap.view.controls.GMapControl;
-		
+
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
 			import modules.gmap.mediator.Poller;
-			
+
 			import modules.gmap.data.ViewpointsData;
 			import modules.gmap.data.LocationsData;
 		]]>
 	</mx:Script>
 
 	<Injectors target="{MainMD}" debug="true">
-	
+
 		<MethodInvoker generator="{MainMD}" method="init"/>
-			
+
 		<ObjectBuilder generator="{Poller}" constructorArguments="{scope.dispatcher}"/>
 
 		<RemoteObjectInvoker destination="zend" source="Viewpoint" method="getAll" debug="true">
@@ -35,19 +35,19 @@
 				<MethodInvoker generator="{LocationsData}" method="fill" arguments="{resultObject}"/>
 				<MethodInvoker generator="{Poller}" method="resourceReady"/>
 			</resultHandlers>
-		</RemoteObjectInvoker>	
-		
+		</RemoteObjectInvoker>
+
 	</Injectors>
-	
+
 	<Injectors target="{MapMD}" debug="true">
-	
+
 		<RemoteObjectInvoker destination="zend" source="Settings" method="load">
 			<resultHandlers>
 				<DataCopier destination="{SettingsData}" destinationKey="settings" source="{resultObject}"/>
 				<MethodInvoker generator="{MapMD}" method="showMap" arguments="{resultObject.googleMapsKey}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
-	
+
 	</Injectors>
 
 	<EventHandlers type="{GMapControl.MAP_READY}" debug="true">

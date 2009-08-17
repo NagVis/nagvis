@@ -9,7 +9,7 @@
 			import modules.gmap.data.HostsData;
 			import modules.gmap.data.ServiceGroupsData;
 			import mx.controls.Alert;
-		
+
 			import modules.gmap.events.NagiosObjectEvent;
 
 			import modules.gmap.data.HostGroupsData;
@@ -22,9 +22,9 @@
 		<DataCopier destination="data" destinationKey="count" source="{HostsData}" sourceKey="length"/>
 		<EventAnnouncer generator="{NagiosObjectEvent}"
 			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_HOSTS, data.count]}"
-		/>		
+		/>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_HOSTS_ONCE}">
 		<RemoteObjectInvoker instance="{NagiosService}" method="getHosts" showBusyCursor="true">
 			<resultHandlers>
@@ -37,9 +37,9 @@
 		<DataCopier destination="data" destinationKey="count" source="{ServicesData}" sourceKey="length"/>
 		<EventAnnouncer generator="{NagiosObjectEvent}"
 			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_SERVICES, data.count]}"
-		/>		
+		/>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_SERVICES_ONCE}">
 		<RemoteObjectInvoker instance="{NagiosService}" method="getServices" showBusyCursor="true">
 			<resultHandlers>
@@ -52,9 +52,9 @@
 		<DataCopier destination="data" destinationKey="count" source="{HostGroupsData}" sourceKey="length"/>
 		<EventAnnouncer generator="{NagiosObjectEvent}"
 			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_HOSTGROUPS, data.count]}"
-		/>		
+		/>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_HOSTGROUPS_ONCE}">
 		<RemoteObjectInvoker instance="{NagiosService}" method="getHostGroups" showBusyCursor="true">
 			<resultHandlers>
@@ -67,9 +67,9 @@
 		<DataCopier destination="data" destinationKey="count" source="{ServiceGroupsData}" sourceKey="length"/>
 		<EventAnnouncer generator="{NagiosObjectEvent}"
 			constructorArguments="{[NagiosObjectEvent.LOAD_ALL_SERVICEGROUPS, data.count]}"
-		/>		
+		/>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{NagiosObjectEvent.LOAD_ALL_SERVICEGROUPS_ONCE}">
 		<RemoteObjectInvoker instance="{NagiosService}" method="getServiceGroups" showBusyCursor="true">
 			<resultHandlers>
@@ -77,5 +77,5 @@
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
-		
+
 </EventMap>

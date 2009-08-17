@@ -16,16 +16,16 @@ package modules.gmap.mediator
 		public function Poller(dispatcher : IEventDispatcher)
 		{
 			_dispatcher = dispatcher;
-			
+
 			_timer = new Timer(5000);
 			_timer.addEventListener(TimerEvent.TIMER, onTimer);
 		}
-		
+
 		public function resourceReady():void
 		{
 			_semaphor--;
-			
-			if(_semaphor === 0)
+
+			if (_semaphor === 0)
 				_timer.start();
 		}
 

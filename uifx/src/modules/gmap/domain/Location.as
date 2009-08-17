@@ -22,7 +22,7 @@
 package modules.gmap.domain
 {
 	import modules.gmap.events.LocationEvent;
-	
+
 	[Bindable]
 	[RemoteClass(alias="Location")]
 	[Event(name="change", type="modules.gmap.LocationEvent")]
@@ -49,7 +49,7 @@ package modules.gmap.domain
 
 		public function set id(value : String) : void
 		{
-			if(_id != value)
+			if (_id != value)
 			{
 				this._id = value;
 				dispatchEvent(new LocationEvent('change', this));
@@ -63,7 +63,7 @@ package modules.gmap.domain
 
 		public function set point(value : String) : void
 		{
-			if(_point != value)
+			if (_point != value)
 			{
 				this._point = value;
 				dispatchEvent(new LocationEvent('change', this));
@@ -77,7 +77,7 @@ package modules.gmap.domain
 
 		public function set label(value : String) : void
 		{
-			if(_label != value)
+			if (_label != value)
 			{
 				this._label = value;
 				dispatchEvent(new LocationEvent('change', this));
@@ -91,7 +91,7 @@ package modules.gmap.domain
 
 		public function set address(value : String) : void
 		{
-			if(_address != value)
+			if (_address != value)
 			{
 				this._address = value;
 				dispatchEvent(new LocationEvent('change', this));
@@ -105,7 +105,7 @@ package modules.gmap.domain
 
 		public function set description(value : String) : void
 		{
-			if ( _description != value)
+			if (_description != value)
 			{
 				this._description = value;
 				dispatchEvent(new LocationEvent('change', this));
@@ -116,13 +116,13 @@ package modules.gmap.domain
 		{
 			return _action;
 		}
-		
+
 		public function set action(value:String):void
 		{
-			if(_action !== value)
+			if (_action !== value)
 			{
 				_action = value;
-				dispatchEvent(new LocationEvent('change', this));	
+				dispatchEvent(new LocationEvent('change', this));
 			}
 		}
 
@@ -147,13 +147,13 @@ package modules.gmap.domain
 
 		public function set state(value : Number) : void
 		{
-			if(_state != value)
+			if (_state != value)
 			{
 				this._state = value;
 				dispatchEvent(new LocationEvent('change', this));
 			}
 		}
-		
+
 		public function update(value : Location) : void
 		{
 			this.id = value.id;

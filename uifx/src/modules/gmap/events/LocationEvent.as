@@ -22,7 +22,7 @@
 package modules.gmap.events
 {
 	import flash.events.Event;
-	
+
 	import modules.gmap.domain.Location;
 
 	public class LocationEvent extends Event
@@ -33,10 +33,10 @@ package modules.gmap.events
 		public static const SAVE : String = "LocationSave";
 		public static const DELETE : String = "LocationDelete";
 		public static const ACTIVATE : String = "LocationActivate";
-		
+
 		public var location : Location;
 
-		public function LocationEvent(type:String, location:Location = null, bubbles:Boolean = true, cancelable:Boolean = false)
+		public function LocationEvent(type : String, location : Location = null, bubbles:Boolean = true, cancelable : Boolean = false)
 		{
 			super(type, bubbles, cancelable);
 			this.location = location;

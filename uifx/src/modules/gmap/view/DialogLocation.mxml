@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  Copyright (C) 2009 NagVis Project
- 
+
  License:
- 
+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License version 2 as
  published by the Free Software Foundation.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -33,9 +33,9 @@
 			import mx.events.MenuEvent;
 			import mx.controls.Alert;
 			import mx.collections.ArrayCollection;
-			
+
 			import com.google.maps.LatLng;
-			
+
 			import modules.gmap.events.LocationEvent;
 			import modules.gmap.domain.nagios.ServiceGroup;
 			import modules.gmap.domain.nagios.HostGroup;
@@ -43,28 +43,28 @@
 			import modules.gmap.domain.nagios.Host;
 			import modules.gmap.domain.Location;
 
-			public var hosts:ArrayCollection;
-			public var hostgroups:ArrayCollection;
-			public var services:ArrayCollection;
-			public var servicegroups:ArrayCollection;
+			public var hosts : ArrayCollection;
+			public var hostgroups : ArrayCollection;
+			public var services : ArrayCollection;
+			public var servicegroups : ArrayCollection;
 
-			private var _location:Location;
+			private var _location : Location;
 
 			public function set location(location : Location) : void
 			{
-				if(_location !== location)
+				if (_location !== location)
 				{
 					_location = location;
-					
-					if(location)
+
+					if (location)
 					{
 						locName.text = location.label;
 						locLat.text = LatLng.fromUrlValue(location.point).lat().toString();
 						locLng.text = LatLng.fromUrlValue(location.point).lng().toString();
 						locAddress.text = location.address;
 						locDescription.text = location.description;
-	
-						if(location.id && location.id.length > 0)
+
+						if (location.id && location.id.length > 0)
 						{
 							addButton.visible = false;
 							saveButton.visible = true;
@@ -76,10 +76,10 @@
 							saveButton.visible = false;
 							deleteButton.visible = false;
 						}
-	
-						/* Note: 
-						 *	onObjectTypeChange is called manually because Flex 
-						 *	does not do this when setting selectedIndex programatically 
+
+						/* Note:
+						 *	onObjectTypeChange is called manually because Flex
+						 *	does not do this when setting selectedIndex programatically
 						 *	though documentation says it should
 						 */
 						if (location.object is HostGroup)
@@ -111,10 +111,10 @@
 							locNObjectType.selectedIndex = 0;
 							onObjectTypeChange();
 						}
-						
-						if(location.action && location.action.length > 0)
+
+						if (location.action && location.action.length > 0)
 						{
-							var slices:Array = location.action.split(':', 2);
+							var slices : Array = location.action.split(':', 2);
 							switch(slices[0])
 							{
 								case 'nagios':
@@ -137,7 +137,7 @@
 						else
 						{
 							locAction.selectedIndex = 0;
-							onActionChanges();							
+							onActionChanges();
 						}
 					}
 					else
@@ -154,19 +154,19 @@
 					}
 				}
 			}
-			
-			protected function getUpdatedLocation():Location
+
+			protected function getUpdatedLocation() : Location
 			{
-				var ul:Location = new Location();
-				
-				ul.id = _location.id;	
+				var ul : Location = new Location();
+
+				ul.id = _location.id;
 				ul.point = new LatLng(parseFloat(locLat.text), parseFloat(locLng.text)).toUrlValue(16);
 				ul.label = locName.text;
 				ul.address = locAddress.text;
 				ul.description = locDescription.text;
 				ul.object = locNObject.selectedItem;
-				
-				switch(locAction.selectedIndex)
+
+				switch (locAction.selectedIndex)
 				{
 					case 1:
 						ul.action = 'nagios:';
@@ -180,50 +180,50 @@
 					default:
 						ul.action = null;
 				}
-				
-				return ul;				
+
+				return ul;
 			}
 
-			private function onAddClicked():void
+			private function onAddClicked() : void
 			{
 				dispatchEvent(new LocationEvent(LocationEvent.ADD, getUpdatedLocation()));
-			} 
+			}
 
 			private function onSaveClicked():void
 			{
-				if(_location && _location.id && _location.id.length > 0)
+				if (_location && _location.id && _location.id.length > 0)
 				{
 					dispatchEvent(new LocationEvent(LocationEvent.SAVE, getUpdatedLocation()));
 				}
-			} 
-			
-			private function onDeleteClicked():void
+			}
+
+			private function onDeleteClicked() : void
 			{
-				if(_location && _location.id && _location.id.length > 0)
+				if (_location && _location.id && _location.id.length > 0)
 				{
 					Alert.show(
-						'Are you sure to delete location ' + _location.label + "?", 
-						'Confirmation', 
+						'Are you sure to delete location ' + _location.label + "?",
+						'Confirmation',
 						3, this,
 						deleteConfirmation
 					);
 				}
 			}
-			
-			private function deleteConfirmation(event : CloseEvent):void
-			{ 
-				if(event.detail == Alert.YES)
+
+			private function deleteConfirmation(event : CloseEvent) : void
+			{
+				if (event.detail == Alert.YES)
 				{
 					dispatchEvent(new LocationEvent(LocationEvent.DELETE, getUpdatedLocation()));
 				}
 			}
-			
+
 			private function onObjectTypeChange() : void
 			{
 				locNObject.removeAll();
 				locNObject.textInput.text = '';
 
-				switch(locNObjectType.selectedIndex)
+				switch (locNObjectType.selectedIndex)
 				{
 					case 0:
 						locNObject.textInput.enabled = false;
@@ -256,10 +256,10 @@
 						break;
 				}
 			}
-			
-			private function loadNagiosData():void
+
+			private function loadNagiosData() : void
 			{
-				switch(locNObjectType.selectedIndex)
+				switch (locNObjectType.selectedIndex)
 				{
 					case 1:
 						dispatchEvent(new NagiosObjectEvent(NagiosObjectEvent.NEED_ALL_HOSTS));
@@ -276,63 +276,63 @@
 				}
 			}
 
-			protected function onActionChanges():void
-			{			
-				switch(locAction.selectedIndex)
+			protected function onActionChanges() : void
+			{
+				switch (locAction.selectedIndex)
 				{
 					case 2:
 						locAction.setStyle('top', 30);
-						locActionMaps.visible = true; 
+						locActionMaps.visible = true;
 						locActionURL.visible = false;
 						break;
 					case 3:
 						locAction.setStyle('top', 30);
-						locActionMaps.visible = false; 
+						locActionMaps.visible = false;
 						locActionURL.visible = true;
 						break;
 					default:
 						locAction.setStyle('top', 50);
 						locActionMaps.visible = locActionURL.visible = false;
 				}
-			}		
+			}
 		]]>
 	</mx:Script>
 	<mx:Script>
 		<![CDATA[
 			import mx.events.CollectionEvent;
-			
+
 			/***
 			 * Code concerning Nagios object autocomlete
 			 ***/
-			 
-			private function initNObject():void
+
+			private function initNObject() : void
 			{
 				locNObject.flowBox.setStyle("borderStyle", "solid");
 				locNObject.flowBox.setStyle("borderColor", "#000000");
 				locNObject.flowBox.setStyle("cornerRadius", "3");
 			}
-			
+
 			private function objectItemClick(event : MenuEvent) : void
 			{
 				switch (String(event.item.@data))
 				{
 					case "browse":
-						
-						if(locNObject.dataProvider.length == 0)
+
+						if (locNObject.dataProvider.length == 0)
 						{
-							locNObject.dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, openBrowser);	
+							locNObject.dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, openBrowser);
 							loadNagiosData();
 						}
 						else
 						{
 							locNObject.showBrowser();
 						}
-						
+
 						break;
 				}
 			}
-			
-			private function openBrowser(event:*):void
+
+			private function openBrowser(event : *) : void
 			{
 				locNObject.dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE, openBrowser);
 				locNObject.showBrowser();
@@ -353,7 +353,7 @@
 				return item.name + ' (' + item.alias + ')';
 			}
 		]]>
-	</mx:Script>	
+	</mx:Script>
 	<mx:XML format="e4x" id="autoCompleteMenu">
 		<root>
 			<menuitem data="browse" label="Browse..."/>
@@ -455,12 +455,12 @@
 			right="0" bottom="0"
 			click="onAddClicked()"
 		/>
-		<mx:Button id="saveButton" label="Save" 
-			right="0" bottom="0" 
+		<mx:Button id="saveButton" label="Save"
+			right="0" bottom="0"
 			click="onSaveClicked()"
 		/>
-		<mx:Button id="deleteButton" label="Delete" 
-			right="65" bottom="0" 
+		<mx:Button id="deleteButton" label="Delete"
+			right="65" bottom="0"
 			click="onDeleteClicked()"
 		/>
 	</mx:Canvas>

@@ -1,9 +1,9 @@
 package modules.gmap.events
 {
 	import flash.events.Event;
-	
+
 	import modules.gmap.domain.Settings;
-	
+
 	public class SettingsEvent extends Event
 	{
 		public static const CHANGE : String = "SettingsChanged";

@@ -7,12 +7,12 @@
 		<![CDATA[
 			import modules.gmap.data.SettingsData;
 			import mx.controls.Alert;
-		
+
 			import com.asfusion.mate.events.UnhandledFaultEvent;
-			
+
 			import modules.gmap.events.ModeEvent;
 			import modules.gmap.events.SettingsEvent;
-		
+
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
 		]]>
@@ -25,11 +25,11 @@
 	<EventHandlers type="resized">
 		<MethodInvoker generator="{MainMD}" method="reconsiderMode"/>
 	</EventHandlers>
-	
+
 	<EventHandlers type="{ModeEvent.CHANGED}">
 		<MethodInvoker generator="{MapMD}" method="onModeChanged" arguments="{[event.oldMode, event.newMode]}"/>
 	</EventHandlers>
-		
+
 	<EventHandlers type="{SettingsEvent.CHANGE}">
 		<RemoteObjectInvoker destination="zend" source="Settings" method="save" arguments="{event.settings}">
 			<resultHandlers>
