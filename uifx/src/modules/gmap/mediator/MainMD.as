@@ -6,6 +6,10 @@ package modules.gmap.mediator
 	
 	import modules.gmap.domain.Location;
 	import modules.gmap.domain.Settings;
+	import modules.gmap.domain.nagios.Host;
+	import modules.gmap.domain.nagios.HostGroup;
+	import modules.gmap.domain.nagios.Service;
+	import modules.gmap.domain.nagios.ServiceGroup;
 	import modules.gmap.events.ModeEvent;
 	import modules.gmap.view.MainView; 
 	
@@ -84,26 +88,59 @@ package modules.gmap.mediator
 		
 		public function activateLocation(location:Location, settings:Settings):void
 		{
-			var slices1:Array = location.action.split(':', 2);
-			switch(slices1[0])
-			{
-				case 'nagios':
-					gotoURL('/nagios', settings.openLinksInNewWindow);
-					return;
-				case 'nagvis':
-					gotoURL('/nagvis', settings.openLinksInNewWindow);
-					return;
-				case 'http':
-				case 'https':
-					gotoURL(location.action, settings.openLinksInNewWindow);
-					return;
-			}				
+			var slices : Array;
 
-			var slices2:Array = settings.defaultLocationAction.split(':', 2);
-			switch(slices2[0])
+			if (location.action == "")
+				slices = settings.defaultLocationAction.split(':', 2);
+			else
+				slices = location.action.split(':', 2);
+
+			switch(slices[0])
 			{
+				case '':
+					return;
+
 				case 'nagios':
-					gotoURL('/nagios', settings.openLinksInNewWindow);
+					var nagiosUrl : String;
+					if (location.object is Host)
+					{
+						nagiosUrl = settings.hosturl;
+						nagiosUrl = nagiosUrl.replace(/\[host_name]/, location.object.name);
+					}
+					else if (location.object is HostGroup)
+					{
+						nagiosUrl = settings.hostgroupurl;
+						nagiosUrl = nagiosUrl.replace(/\[hostgroup_name]/, location.object.name);
+					}
+					else if (location.object is Service)
+					{
+						nagiosUrl = settings.serviceurl;
+						nagiosUrl = nagiosUrl.replace(/\[host_name]/, location.object.host);
+						nagiosUrl = nagiosUrl.replace(/\[service_description]/, location.object.description);
+					}
+					else if (location.object is ServiceGroup)
+					{
+						nagiosUrl = settings.servicegroupurl;
+						nagiosUrl = nagiosUrl.replace(/\[servicegroup_name]/, location.object.name);
+					}
+					else
+						return; // this should not ever happen
+
+					nagiosUrl = nagiosUrl.replace(/\[htmlbase]/, settings.htmlbase);
+					nagiosUrl = nagiosUrl.replace(/\[htmlcgi]/, settings.htmlcgi);
+					gotoURL(nagiosUrl, settings.openLinksInNewWindow);
+					return;
+
+				case 'nagvis':
+					var nagvisUrl : String = settings.mapurl;
+					nagvisUrl = nagvisUrl.replace(/\[htmlbase]/, settings.htmlbase);
+					nagvisUrl = nagvisUrl.replace(/\[htmlcgi]/, settings.htmlcgi);
+					nagvisUrl = nagvisUrl.replace(/\[map_name]/, slices[1]);
+					gotoURL(nagvisUrl, settings.openLinksInNewWindow);
+					return;
+
+				default:
+					gotoURL(location.action, settings.openLinksInNewWindow);
 					return;
 			}				
 		}
