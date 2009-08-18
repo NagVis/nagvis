@@ -30,6 +30,8 @@ package modules.gmap.view.controls
 	import modules.gmap.domain.Link;
 	import modules.gmap.events.LinkEvent;
 
+	import mx.events.PropertyChangeEvent;
+
 	public class LinkLine extends Polyline
 	{
 		private var _lastTimeClicked : Number = 0;
@@ -55,7 +57,7 @@ package modules.gmap.view.controls
 			this.addEventListener(MapMouseEvent.CLICK, this.onClick);
 
 			_link = link;
-			_link.addEventListener('change', this.onChange);
+			_link.addEventListener(mx.events.PropertyChangeEvent.PROPERTY_CHANGE, this.onChange);
 		}
 
 		/***
