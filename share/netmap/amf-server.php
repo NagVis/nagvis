@@ -27,14 +27,6 @@ require_once('Zend/Loader.php');
 
 Zend_Loader::registerAutoload();
 
-/*
-fix a bug in IE
-http://www.blog.lessrain.com/flash-nasty-xml-load-bug-in-internet-explorer/
-http://kb.adobe.com/selfservice/viewContent.do?externalId=kb401472
-*/
-header('Cache-Control: cache, must-revalidate');
-header('Pragma: public');
-
 // extend Zend_Amf_Server to allow passing exception messages back to Flex
 class Custom_Zend_Amf_Server extends Zend_Amf_Server
 {
