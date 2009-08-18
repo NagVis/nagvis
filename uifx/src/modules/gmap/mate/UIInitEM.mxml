@@ -80,6 +80,7 @@
 
 	<Injectors target="{DialogLink}" debug="true">
 		<PropertyInjector targetKey="link" source="{CurrentLink}" sourceKey="link"/>
+		<PropertyInjector targetKey="locations" source="{LocationsData}"/>
 		<PropertyInjector targetKey="hosts" source="{HostsData}"/>
 		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
 		<PropertyInjector targetKey="services" source="{ServicesData}"/>

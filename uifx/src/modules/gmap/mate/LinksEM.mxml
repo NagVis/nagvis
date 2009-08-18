@@ -23,9 +23,59 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.mediator.MainMD;
+			import modules.gmap.mediator.Poller;
+			import modules.gmap.data.SettingsData;
+			import modules.gmap.data.LinksData;
+			import modules.gmap.events.LinkEvent;
+			import modules.gmap.data.CurrentLink;
 		]]>
 	</mx:Script>
 
-	<mx:RemoteObject id="Links" destination="zend" source="Link" />
+	<mx:RemoteObject id="LinksService" destination="zend" source="Link" />
+
+	<EventHandlers type="{LinkEvent.SELECTED}">
+		<MethodInvoker generator="{CurrentLink}" method="update" arguments="{event.link}"/>
+		<MethodInvoker generator="{MainMD}" method="selectLink" arguments="{event.link}"/>
+	</EventHandlers>
+
+	<EventHandlers type="{LinkEvent.ACTIVATE}">
+		<DataCopier destination="data" destinationKey="settings" source="{SettingsData}" sourceKey="settings"/>
+		<MethodInvoker generator="{MainMD}" method="activateLink" arguments="{[event.link, data.settings]}"/>
+	</EventHandlers>
+
+	<EventHandlers type="{LinkEvent.ADD}">
+		<RemoteObjectInvoker instance="{LinksService}" method="add" arguments="{event.link}">
+			<resultHandlers>
+				<MethodInvoker generator="{LinksData}" method="addUpdateItem" arguments="{resultObject}"/>
+				<MethodInvoker generator="{CurrentLink}" method="update" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{LinkEvent.SAVE}">
+		<RemoteObjectInvoker instance="{LinksService}" method="edit" arguments="{event.link}">
+			<resultHandlers>
+				<MethodInvoker generator="{LinksData}" method="addUpdateItem" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{LinkEvent.DELETE}">
+		<RemoteObjectInvoker instance="{LinksService}" method="remove" arguments="{[event.link.id1, event.link.id2]}">
+			<resultHandlers>
+				<MethodInvoker generator="{LinksData}" method="removeItemById" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+
+	<EventHandlers type="{Poller.TIMEOUT}">
+		<RemoteObjectInvoker instance="{LinksService}" method="getAll" arguments="true">
+			<resultHandlers>
+				<MethodInvoker generator="{LinksData}" method="virginize"/>
+				<MethodInvoker generator="{LinksData}" method="addUpdateItems" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
 
 </EventMap>
