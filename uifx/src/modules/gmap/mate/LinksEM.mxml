@@ -36,7 +36,7 @@
 
 	<EventHandlers type="{LinkEvent.SELECTED}">
 		<MethodInvoker generator="{CurrentLink}" method="update" arguments="{event.link}"/>
-		<MethodInvoker generator="{MainMD}" method="selectLink" arguments="{event.link}"/>
+		<MethodInvoker generator="{MainMD}" method="activate" arguments="{event.link}"/>
 	</EventHandlers>
 
 	<EventHandlers type="{LinkEvent.ACTIVATE}">

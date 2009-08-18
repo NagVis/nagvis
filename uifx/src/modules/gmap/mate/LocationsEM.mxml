@@ -47,7 +47,7 @@
 
 	<EventHandlers type="{LocationEvent.ACTIVATE}">
 		<DataCopier destination="data" destinationKey="settings" source="{SettingsData}" sourceKey="settings"/>
-		<MethodInvoker generator="{MainMD}" method="activateLocation" arguments="{[event.location, data.settings]}"/>
+		<MethodInvoker generator="{MainMD}" method="activate" arguments="{[event.location, data.settings]}"/>
 	</EventHandlers>
 
 	<EventHandlers type="{AddressEvent.LOCATE}">

@@ -25,6 +25,7 @@ package modules.gmap.mediator
 	import flash.external.ExternalInterface;
 	import flash.system.Security;
 
+	import modules.gmap.domain.Link;
 	import modules.gmap.domain.Location;
 	import modules.gmap.domain.Settings;
 	import modules.gmap.domain.nagios.Host;
@@ -107,14 +108,27 @@ package modules.gmap.mediator
 			}
 		}
 
-		public function activateLocation(location : Location, settings : Settings) : void
+		public function selectLink(link : Link) : void
+		{
+			_view.linksBox.setCurrentState('right-expanded');
+		}
+
+		public function gotoURL(url : String, newWindow : Boolean) : void
+		{
+			if (newWindow)
+				ExternalInterface.call('window.open("' + url + '")');
+			else
+				ExternalInterface.call('window.location.assign("' + url + '")');
+		}
+
+		public function activate(element : Object, settings : Settings) : void
 		{
 			var slices : Array;
 
-			if (location.action == "")
+			if (element.action == "")
 				slices = settings.defaultLocationAction.split(':', 2);
 			else
-				slices = location.action.split(':', 2);
+				slices = element.action.split(':', 2);
 
 			switch (slices[0])
 			{
@@ -123,26 +137,26 @@ package modules.gmap.mediator
 
 				case 'nagios':
 					var nagiosUrl : String;
-					if (location.object is Host)
+					if (element.object is Host)
 					{
 						nagiosUrl = settings.hosturl;
-						nagiosUrl = nagiosUrl.replace(/\[host_name]/, location.object.name);
+						nagiosUrl = nagiosUrl.replace(/\[host_name]/, element.object.name);
 					}
-					else if (location.object is HostGroup)
+					else if (element.object is HostGroup)
 					{
 						nagiosUrl = settings.hostgroupurl;
-						nagiosUrl = nagiosUrl.replace(/\[hostgroup_name]/, location.object.name);
+						nagiosUrl = nagiosUrl.replace(/\[hostgroup_name]/, element.object.name);
 					}
-					else if (location.object is Service)
+					else if (element.object is Service)
 					{
 						nagiosUrl = settings.serviceurl;
-						nagiosUrl = nagiosUrl.replace(/\[host_name]/, location.object.host);
-						nagiosUrl = nagiosUrl.replace(/\[service_description]/, location.object.description);
+						nagiosUrl = nagiosUrl.replace(/\[host_name]/, element.object.host);
+						nagiosUrl = nagiosUrl.replace(/\[service_description]/, element.object.description);
 					}
-					else if (location.object is ServiceGroup)
+					else if (element.object is ServiceGroup)
 					{
 						nagiosUrl = settings.servicegroupurl;
-						nagiosUrl = nagiosUrl.replace(/\[servicegroup_name]/, location.object.name);
+						nagiosUrl = nagiosUrl.replace(/\[servicegroup_name]/, element.object.name);
 					}
 					else
 						return; // this should not ever happen
@@ -161,17 +175,9 @@ package modules.gmap.mediator
 					return;
 
 				default:
-					gotoURL(location.action, settings.openLinksInNewWindow);
+					gotoURL(element.action, settings.openLinksInNewWindow);
 					return;
 			}
-		}
-
-		public function gotoURL(url : String, newWindow : Boolean) : void
-		{
-			if (newWindow)
-				ExternalInterface.call('window.open("' + url + '")');
-			else
-				ExternalInterface.call('window.location.assign("' + url + '")');
 		}
 	}
 }
