@@ -25,31 +25,9 @@
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
-    <mx:Metadata>
-        [Event(name="link", type="flash.events.Event")]
-    </mx:Metadata>
-	<mx:HBox left="10" right="15" top="10" height="20">
-		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/connect.png')"/>
-		<mx:Label text="Link Details"/>
-		<mx:Spacer width="100%"/>
-		<mx:Image id="close"
-			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
-			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
-		/>
-	</mx:HBox>
-
-<!--
-	<mx:Canvas left="10" right="15" top="40" bottom="10">
-		<mx:ComboBox top="0" left="0" right="0" id="point1"></mx:ComboBox>
-		<mx:ComboBox top="30" left="0" right="0" id="point2"></mx:ComboBox>
-		<mx:Button label="Link"
-			right="0" bottom="0" height="22"
-			click="dispatchEvent(new Event('link'))"
-		/>
-	</mx:Canvas>
--->
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.events.LinkEvent;
 			import modules.gmap.domain.Link;
 			import mx.formatters.SwitchSymbolFormatter;
 			import modules.gmap.events.NagiosObjectEvent;
@@ -60,29 +38,105 @@
 
 			import com.google.maps.LatLng;
 
-			import modules.gmap.events.LocationEvent;
 			import modules.gmap.domain.nagios.ServiceGroup;
 			import modules.gmap.domain.nagios.HostGroup;
 			import modules.gmap.domain.nagios.Service;
 			import modules.gmap.domain.nagios.Host;
-			import modules.gmap.domain.Location;
 
 			public var hosts : ArrayCollection;
 			public var hostgroups : ArrayCollection;
 			public var services : ArrayCollection;
 			public var servicegroups : ArrayCollection;
+			[Bindable]
+			public var locations : ArrayCollection;
 
 			private var _link : Link;
 
-			public function set link(link:Link):void
+			public function set link(link : Link) : void
 			{
-				if(_link != link)
+				if (_link != link)
 				{
 					_link = link;
 
-					if(link)
+					if (link)
 					{
+						location1.selectedItem = link.location1;
+						location2.selectedItem = link.location2;
+						lnkDescription.text = link.description;
 
+						if (link.id1 && link.id1.length > 0 && link.id2 && link.id2.length > 0)
+						{
+							addButton.visible = false;
+							saveButton.visible = true;
+							deleteButton.visible = true;
+						}
+						else
+						{
+							addButton.visible = true;
+							saveButton.visible = false;
+							deleteButton.visible = false;
+						}
+
+						/* Note:
+						 *	onObjectTypeChange is called manually because Flex
+						 *	does not do this when setting selectedIndex programatically
+						 *	though documentation says it should
+						 */
+						if (link.object is HostGroup)
+						{
+							lnkNObjectType.selectedIndex = 3;
+							onObjectTypeChange();
+							lnkNObject.selectedItem = link.object;
+						}
+						else if (link.object is ServiceGroup)
+						{
+							lnkNObjectType.selectedIndex = 4;
+							onObjectTypeChange();
+							lnkNObject.selectedItem = link.object;
+						}
+						else if (link.object is Host)
+						{
+							lnkNObjectType.selectedIndex = 1;
+							onObjectTypeChange();
+							lnkNObject.selectedItem = link.object;
+						}
+						else if (link.object is Service)
+						{
+							lnkNObjectType.selectedIndex = 2;
+							onObjectTypeChange();
+							lnkNObject.selectedItem = link.object;
+						}
+						else
+						{
+							lnkNObjectType.selectedIndex = 0;
+							onObjectTypeChange();
+						}
+
+						if (link.action && link.action.length > 0)
+						{
+							var slices : Array = link.action.split(':', 2);
+
+							switch (slices[0])
+							{
+								case 'nagios':
+									lnkAction.selectedIndex = 1;
+									break;
+								case 'nagvis':
+									lnkAction.selectedIndex = 2;
+									lnkActionMaps.text = slices[1];
+									break;
+								default:
+									lnkAction.selectedIndex = 3;
+									lnkActionURL.text = link.action;
+							}
+
+							onActionChanges();
+						}
+						else
+						{
+							lnkAction.selectedIndex = 0;
+							onActionChanges();
+						}
 					}
 					else
 					{
@@ -95,12 +149,44 @@
 				}
 			}
 
-			private function onAddClicked() : void
+			protected function getUpdatedLink() : Link
 			{
+				var ul : Link = new Link();
+
+				ul.id1 = _link.id1;
+				ul.id2 = _link.id2;
+				ul.description = lnkDescription.text;
+				ul.object = lnkNObject.selectedItem;
+
+				switch (lnkAction.selectedIndex)
+				{
+					case 1:
+						ul.action = 'nagios:';
+						break;
+					case 2:
+						ul.action = 'nagvis:' + lnkActionMaps.text;
+						break;
+					case 3:
+						ul.action = lnkActionURL.text;
+						break;
+					default:
+						ul.action = null;
+				}
+
+				return ul;
 			}
 
-			private function onSaveClicked():void
+			private function onAddClicked() : void
 			{
+				dispatchEvent(new LinkEvent(LinkEvent.ADD, getUpdatedLink()));
+			}
+
+			private function onSaveClicked() : void
+			{
+				if (_link && _link.id1 && _link.id1.length > 0 && _link.id2 && _link.id2.length > 0)
+				{
+					dispatchEvent(new LinkEvent(LinkEvent.SAVE, getUpdatedLink()));
+				}
 			}
 
 			private function onDeleteClicked() : void
@@ -120,6 +206,7 @@
 			{
 				if (event.detail == Alert.YES)
 				{
+					dispatchEvent(new LinkEvent(LinkEvent.DELETE, getUpdatedLink()));
 				}
 			}
 
@@ -265,9 +352,20 @@
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
+	<mx:HBox left="10" right="15" top="10" height="20">
+		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/connect.png')"/>
+		<mx:Label text="Link Details"/>
+		<mx:Spacer width="100%"/>
+		<mx:Image id="close"
+			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
+			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
+		/>
+	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
 			<mx:Canvas label="General" width="100%" height="100%">
+				<mx:ComboBox top="0" left="10" right="10" id="location1" dataProvider="{locations}"></mx:ComboBox>
+				<mx:ComboBox top="30" left="10" right="10" id="location2" dataProvider="{locations}"></mx:ComboBox>
 			</mx:Canvas>
 			<mx:Canvas label="Description" width="100%" height="100%">
 				<flexlib:PromptingTextArea  id="lnkDescription" prompt="Description"

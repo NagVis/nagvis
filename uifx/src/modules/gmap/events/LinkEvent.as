@@ -19,36 +19,32 @@
  *
  *****************************************************************************/
 
-package modules.gmap.domain
+package modules.gmap.events
 {
-	[Bindable]
-	[RemoteClass(alias="Link")]
-	public class Link
+	import flash.events.Event;
+
+	import modules.gmap.domain.Link;
+
+	public class LinkEvent extends Event
 	{
-		public static const STATE_UNKNOWN : Number = 0;
-		public static const STATE_OK : Number = 1;
-		public static const STATE_WARNING : Number = 2;
-		public static const STATE_ERROR : Number = 3;
+		public static const SELECTED : String = "LinkSelected";
+		public static const CHANGE : String = "LinkChange";
+		public static const ADD : String = "LinkAdd";
+		public static const SAVE : String = "LinkSave";
+		public static const DELETE : String = "LinkDelete";
+		public static const ACTIVATE : String = "LinkActivate";
 
-		public var id1 : String;
-		public var location1 : Location;
+		public var link : Link;
 
-		public var id2 : String;
-		public var location2:Location;
-
-		public var description : String;
-		public var action : String;
-		public var object : Object;
-		public var state : Number;
-
-		public function update(value : Link) : void
+		public function LinkEvent(type : String, location : Link = null, bubbles : Boolean = true, cancelable : Boolean = false)
 		{
-			this.id1 = value.id1;
-			this.id2 = value.id2;
-			this.description = value.description;
-			this.action = value.action;
-			this.object = value.object;
-			this.state = value.state;
+			super(type, bubbles, cancelable);
+			this.link = link;
 		}
+
+        override public function clone() : Event
+        {
+			return new LinkEvent(this.type, this.link, this.bubbles, this.cancelable);
+        }
 	}
 }
