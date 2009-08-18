@@ -6,6 +6,7 @@
 			messageTypes="flex.messaging.messages.RemotingMessage">
 			<destination id="zend">
 				<channels>
+					<channel ref="zend-endpoint-secure"/>
 					<channel ref="zend-endpoint"/>
 				</channels>
 				<properties>

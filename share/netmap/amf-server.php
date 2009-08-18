@@ -21,6 +21,9 @@
  *
  *****************************************************************************/
 
+//fix for IE bug with SSL
+header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__)) . '/library/');
 
 require_once('Zend/Loader.php');
