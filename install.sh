@@ -595,12 +595,12 @@ line "Checking prerequisites" "+"
 [ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
 
 if [ -f $NAGIOS_BIN ]; then
-	NAGIOS=`$NAGIOS_BIN --version | grep -iE "$SOURCE\s+" 2>&1`
+	NAGIOS=`$NAGIOS_BIN --version | grep -i "^$SOURCE\s" 2>&1`
 	log "$NAGIOS" $NAGIOS
 else
 	log "$SOURCE binary $NAGIOS_BIN"
 fi
-NAGVER=`echo $NAGIOS | cut -d" " -f2 | cut -c1,1`
+NAGVER=`echo $NAGIOS | cut -d" " -f3 | cut -c1,1`
 [ "$SOURCE" = "icinga" ]&&NAGVER=3
 
 # Check Backend prerequisites
