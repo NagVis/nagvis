@@ -79,7 +79,7 @@
 	<Injectors target="{GMapLocationsExtControl}" debug="true">
 		<PropertyInjector targetKey="dataProvider" source="{LocationsExtData}"/>
 	</Injectors>
-	
+
 	<Injectors target="{GMapLinksControl}">
 		<PropertyInjector targetKey="dataProvider" source="{LinksData}"/>
 	</Injectors>

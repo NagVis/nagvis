@@ -49,11 +49,11 @@
 				locationControl.map = map;
 				locationsControl.map = map;
 				locationsExtControl.map = map;
-				
+
 				linksControl.map = map;
 			}
 
-			private function onClick(event:MapMouseEvent):void
+			private function onClick(event : MapMouseEvent) : void
 			{
 				dispatchEvent(new LocationEvent(LocationEvent.SELECTED));
 			}

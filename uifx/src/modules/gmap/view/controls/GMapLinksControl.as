@@ -1,12 +1,12 @@
 package modules.gmap.view.controls
 {
 	import com.google.maps.Map;
-	
+
 	import flash.events.Event;
-	
+
 	import modules.gmap.data.LinksData;
 	import modules.gmap.domain.Link;
-	
+
 	import mx.core.UIComponent;
 	import mx.events.CollectionEvent;
 
@@ -15,7 +15,7 @@ package modules.gmap.view.controls
 		private var _dataProvider : LinksData;
 		private var _map : Map;
 		private var _lines : Array;
-		
+
 		public function GMapLinksControl()
 		{
 			super();
@@ -40,7 +40,7 @@ package modules.gmap.view.controls
 					showLines();
 			}
 		}
-		
+
 		public function get dataProvider() : LinksData
 		{
 			return _dataProvider;
@@ -56,12 +56,12 @@ package modules.gmap.view.controls
 				reinitLines();
 			}
 		}
-				
+
 		protected function onDataProviderChanged(event : CollectionEvent) : void
 		{
 			//TODO: do something
 		}
-		
+
 		public override function set visible(value : Boolean) : void
 		{
 			if (super.visible != value)
@@ -73,8 +73,8 @@ package modules.gmap.view.controls
 
 				super.visible = value;
 			}
-		}		
-		
+		}
+
 		protected function reinitLines() : void
 		{
 			if (visible)
@@ -107,7 +107,7 @@ package modules.gmap.view.controls
 		{
 			if (_map)
 			{
-				var l:LinkLine = new LinkLine(link);
+				var l : LinkLine = new LinkLine(link);
 				//m.addEventListener(LocationEvent.SELECTED, redispatchMarkerEvent);
 				//m.addEventListener(LocationEvent.ACTIVATE, redispatchMarkerEvent);
 				_lines.push(l);
@@ -123,7 +123,5 @@ package modules.gmap.view.controls
 		{
 			dispatchEvent(event);
 		}
-
-		
 	}
 }

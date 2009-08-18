@@ -21,7 +21,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	xmlns:hc="com.hillelcoren.components.*"
-	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"	
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
@@ -37,8 +37,8 @@
 			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
 		/>
 	</mx:HBox>
-	
-<!--	
+
+<!--
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<mx:ComboBox top="0" left="0" right="0" id="point1"></mx:ComboBox>
 		<mx:ComboBox top="30" left="0" right="0" id="point2"></mx:ComboBox>
@@ -73,16 +73,16 @@
 			public var servicegroups : ArrayCollection;
 
 			private var _link : Link;
-			
+
 			public function set link(link:Link):void
 			{
 				if(_link != link)
 				{
 					_link = link;
-					
+
 					if(link)
 					{
-						
+
 					}
 					else
 					{
@@ -90,7 +90,7 @@
 						lnkNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
 						lnkAction.selectedIndex = 0;
-						onActionChanges();						
+						onActionChanges();
 					}
 				}
 			}
@@ -349,5 +349,5 @@
 			click="onDeleteClicked()"
 		/>
 	</mx:Canvas>
-	
+
 </EdgeBox>
