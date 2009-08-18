@@ -28,7 +28,7 @@
 		<ObjectBuilder generator="{LocationsData}"/>
 		<ObjectBuilder generator="{LocationsExtData}"/>
 		<ObjectBuilder generator="{CurrentLink}"/>
-		<ObjectBuilder generator="{LinksData}" constructorArguments="{LocationsData}"/>
+		<ObjectBuilder generator="{LinksData}"/>
 		<ObjectBuilder generator="{HostsData}"/>
 		<ObjectBuilder generator="{HostGroupsData}"/>
 		<ObjectBuilder generator="{ServicesData}"/>

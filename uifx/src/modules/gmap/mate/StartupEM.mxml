@@ -35,14 +35,14 @@
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="fill" arguments="{resultObject}"/>
 				<MethodInvoker generator="{Poller}" method="resourceReady"/>
+				<RemoteObjectInvoker destination="zend" source="Link" method="getAll" debug="true">
+					<resultHandlers>
+						<DataCopier destination="data" destinationKey="locations" source="{LocationsData}"/>
+						<MethodInvoker generator="{LinksData}" method="fill" arguments="{[resultObject, data.locations]}"/>
+					</resultHandlers>
+				</RemoteObjectInvoker>
 			</resultHandlers>
 		</RemoteObjectInvoker>
-		<RemoteObjectInvoker destination="zend" source="Link" method="getAll" debug="true">
-			<resultHandlers>
-				<MethodInvoker generator="{LinksData}" method="fill" arguments="{resultObject}"/>
-			</resultHandlers>
-		</RemoteObjectInvoker>
-
 	</Injectors>
 
 	<Injectors target="{MapMD}" debug="true">
