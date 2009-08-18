@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.2"
+INSTALLER_VERSION="0.2.3"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -451,12 +451,30 @@ makedir() {
 # Main program starting
 ###############################################################################
 
+# More (re)initialisations
+
+# Version info
+NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
+# Default Nagios path
+NAGIOS_PATH="/usr/local/$SOURCE"
+# Default Path to NagVis base
+NAGVIS_PATH="/usr/local/nagvis"
+[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
+# Default nagios share webserver path
+HTML_PATH="/nagvis"
+[ $NAGVIS_TAG -lt 01050000 ]&&HTML_PATH="/$SOURCE/nagvis"
+HTML_BASE=$HTML_PATH
+
 # Process command line options
 if [ $# -gt 0 ]; then
 	while getopts "n:B:m:p:u:b:g:c:i:s:ohqv" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
+
+				# NagVis below 1.5 depends on the given Nagios path
+				# So set it here when some given by param
+				[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
 			;;
 			B)
 				NAGIOS_BIN=$OPTARG
@@ -508,19 +526,6 @@ if [ $# -gt 0 ]; then
 	done
 fi
 
-# more re/initialization
-# Version info
-NAGVIS_TAG=`fmt_version "$NAGVIS_VER"` 
-# Default Nagios path
-NAGIOS_PATH="/usr/local/$SOURCE"
-# Default Path to NagVis base
-NAGVIS_PATH="/usr/local/nagvis"
-[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="/usr/local/$SOURCE/share/nagvis"
-# Default nagios share webserver path
-HTML_PATH="/nagvis"
-[ $NAGVIS_TAG -lt 01050000 ]&&HTML_PATH="/$SOURCE/nagvis"
-HTML_BASE=$HTML_PATH
-
 # Print welcome message
 welcome
 
@@ -569,9 +574,6 @@ else
 	echo "| $SOURCE home $NAGIOS_PATH is missing. Aborting..."
 	exit 1
 fi
-
-# Set default NagVis path
-[ -z $NAGVIS_PATH ] && NAGVIS_PATH=${NAGIOS_PATH%/}/share/nagvis
 
 # Get NagVis path
 if [ $INSTALLER_QUIET -ne 1 ]; then
