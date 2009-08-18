@@ -5,13 +5,6 @@
 >
 	<mx:Script>
 		<![CDATA[
-			import modules.gmap.view.DialogLink;
-			import modules.gmap.view.DialogSettings;
-			import modules.gmap.data.SettingsData;
-			import modules.gmap.data.ServiceGroupsData;
-			import modules.gmap.data.ServicesData;
-			import modules.gmap.data.HostGroupsData;
-			import modules.gmap.data.HostsData;
 			import com.asfusion.mate.events.Dispatcher;
 
 			import modules.gmap.view.MainView;
@@ -19,8 +12,11 @@
 			import modules.gmap.view.controls.GMapLocationControl;
 			import modules.gmap.view.controls.GMapLocationsControl;
 			import modules.gmap.view.controls.GMapLocationsExtControl;
+			import modules.gmap.view.controls.GMapLinksControl;
 			import modules.gmap.view.DialogViewpoint;
 			import modules.gmap.view.DialogLocation;
+			import modules.gmap.view.DialogLink;
+			import modules.gmap.view.DialogSettings;
 
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.MapMD;
@@ -31,6 +27,12 @@
 			import modules.gmap.data.LocationsData;
 			import modules.gmap.data.LocationsExtData;
 			import modules.gmap.data.CurrentLink;
+			import modules.gmap.data.LinksData;
+			import modules.gmap.data.SettingsData;
+			import modules.gmap.data.ServiceGroupsData;
+			import modules.gmap.data.ServicesData;
+			import modules.gmap.data.HostGroupsData;
+			import modules.gmap.data.HostsData;
 		]]>
 	</mx:Script>
 
@@ -76,6 +78,10 @@
 
 	<Injectors target="{GMapLocationsExtControl}" debug="true">
 		<PropertyInjector targetKey="dataProvider" source="{LocationsExtData}"/>
+	</Injectors>
+	
+	<Injectors target="{GMapLinksControl}">
+		<PropertyInjector targetKey="dataProvider" source="{LinksData}"/>
 	</Injectors>
 
 </EventMap>
