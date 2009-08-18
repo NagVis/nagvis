@@ -528,7 +528,7 @@ welcome
 line ""
 text "| Starting installation of NagVis $NAGVIS_VER" "|"
 line ""
-[ -f /etc/issue ]&&OS=`grep -v "^\s*$" /etc/issue | sed 's/\\.*//' | head -1` 
+[ -f /etc/issue ]&&OS=`grep -v "^\s*$" /etc/issue | sed 's/\\\.*//' | head -1` 
 [ -n "$OS" ]&&text "| OS  : $OS" "|"
 PERL=`perl -e 'print $];'` 
 [ -n "$PERL" ]&&text "| Perl: $PERL" "|"
