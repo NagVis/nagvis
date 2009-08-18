@@ -31,6 +31,7 @@ package modules.gmap.view.controls
 
 	import mx.core.UIComponent;
 	import mx.events.CollectionEvent;
+	import mx.events.CollectionEventKind;
 
 	public class GMapLinksControl extends UIComponent
 	{
@@ -81,7 +82,35 @@ package modules.gmap.view.controls
 
 		protected function onDataProviderChanged(event : CollectionEvent) : void
 		{
-			//TODO: do something
+			if (event.kind == CollectionEventKind.RESET)
+				reinitLines();
+
+			if (event.kind == CollectionEventKind.ADD)
+			{
+				for each (var added : Link in event.items)
+					createLine(added);
+			}
+
+			if (event.kind == CollectionEventKind.REMOVE)
+			{
+				for each (var removed : Link in event.items)
+				{
+					var marked : LinkLine;
+					for (var i : int = _lines.length - 1; i >= 0; i--)
+					{
+						marked = _lines.shift();
+
+						if (marked.link.id1 === removed.id1 && marked.link.id2 === removed.id2)
+						{
+							if (visible && _map)
+								_map.removeOverlay(marked);
+							break;
+						}
+
+						_lines.push(marked);
+					}
+				}
+			}
 		}
 
 		public override function set visible(value : Boolean) : void
