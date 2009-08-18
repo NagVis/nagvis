@@ -217,7 +217,7 @@ class Link
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
-		Location::removeNode($xml, $id1, $id2);
+		Link::removeNode($xml, $id1, $id2);
 
 		if (file_put_contents('links.xml', $xml->asXML()) !== FALSE)
 			return true;
