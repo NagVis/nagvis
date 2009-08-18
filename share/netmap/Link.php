@@ -171,12 +171,12 @@ class Link
 	private function removeNode(&$xml, $id1, $id2)
 	{
 		$index = 0;
-		foreach ($xml->location as $node)
+		foreach ($xml->link as $node)
 		{
 			if ($node['id1'] == $id1 && $node['id2'] == $id2)
 			{
 				// Note: unset($node) won't work thus the need for $index
-				unset($xml->location[$index]);
+				unset($xml->link[$index]);
 				$success = true;
 				break;
 			}
@@ -197,7 +197,7 @@ class Link
 
 		$link->updateState();
 
-		Location::removeNode($xml, $link->id1, $link->id2);
+		Link::removeNode($xml, $link->id1, $link->id2);
 
 		$link->toXML($xml);
 
