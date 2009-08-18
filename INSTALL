@@ -1,10 +1,10 @@
 ==============================================================================
-NagVis 1.4 Quick Installation Instructions
+NagVis 1.5 Quick Installation Instructions
 ==============================================================================
 Author: Andreas Husch, Lars Michelsen
-Document Version: 0.5
-Date: 2008-09-14
-Applies to: NagVis 1.4
+Document Version: 0.6
+Date: 2008-08-18
+Applies to: NagVis 1.5
 ==============================================================================
 
 1. Download NagVis
@@ -18,8 +18,8 @@ Get NagVis. The latest release can be found at www.nagvis.org.
 Unpack the archive to a temporary place (for example /tmp). And change to that
 directory
 
-> tar xvzf nagvis-1.4*.tar.gz /tmp
-> cd /tmp/nagvis-1.4*
+> tar xvzf nagvis-1.5*.tar.gz /tmp
+> cd /tmp/nagvis-1.5*
 
 3. Make installer executable
 --------------------
@@ -44,7 +44,7 @@ installation of NagVis. If you experience any problems please let us know.
 
 You can remove the sources after installation.
 
-> rm -rf /tmp/nagvis-1.4*
+> rm -rf /tmp/nagvis-1.5*
 
 6. Additional information
 --------------------
