@@ -25,10 +25,20 @@ package modules.gmap.domain
 	[RemoteClass(alias="Link")]
 	public class Link
 	{
+		public static const STATE_UNKNOWN : Number = 0;
+		public static const STATE_OK : Number = 1;
+		public static const STATE_WARNING : Number = 2;
+		public static const STATE_ERROR : Number = 3;
+
 		public var id1 : String;
 		public var location1 : Location;
 
 		public var id2 : String;
 		public var location2:Location;
+
+		private var description : String;
+		private var action : String;
+		private var object : Object;
+		private var state : Number;
 	}
 }
