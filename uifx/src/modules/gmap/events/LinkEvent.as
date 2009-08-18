@@ -36,7 +36,7 @@ package modules.gmap.events
 
 		public var link : Link;
 
-		public function LinkEvent(type : String, location : Link = null, bubbles : Boolean = true, cancelable : Boolean = false)
+		public function LinkEvent(type : String, link : Link = null, bubbles : Boolean = true, cancelable : Boolean = false)
 		{
 			super(type, bubbles, cancelable);
 			this.link = link;
