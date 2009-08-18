@@ -22,16 +22,13 @@
 package modules.gmap.view.controls
 {
 	import com.google.maps.LatLng;
+	import com.google.maps.MapMouseEvent;
 	import com.google.maps.overlays.Polyline;
 	import com.google.maps.overlays.PolylineOptions;
 	import com.google.maps.styles.StrokeStyle;
 
-	import flash.events.MouseEvent;
-
 	import modules.gmap.domain.Link;
 	import modules.gmap.events.LinkEvent;
-
-	import mx.graphics.Stroke;
 
 	public class LinkLine extends Polyline
 	{
@@ -54,7 +51,8 @@ package modules.gmap.view.controls
 
 			super([point1, point2], options);
 
-			this.addEventListener(MouseEvent.CLICK, this.onClick); 
+			// Note: the event gets redispatched here from GMapLinksControl
+			this.addEventListener(MapMouseEvent.CLICK, this.onClick);
 
 			_link = link;
 			_link.addEventListener('change', this.onChange);

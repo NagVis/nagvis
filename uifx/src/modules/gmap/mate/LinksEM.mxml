@@ -36,12 +36,12 @@
 
 	<EventHandlers type="{LinkEvent.SELECTED}">
 		<MethodInvoker generator="{CurrentLink}" method="update" arguments="{event.link}"/>
-		<MethodInvoker generator="{MainMD}" method="activate" arguments="{event.link}"/>
+		<MethodInvoker generator="{MainMD}" method="selectLink" arguments="{event.link}"/>
 	</EventHandlers>
 
 	<EventHandlers type="{LinkEvent.ACTIVATE}">
 		<DataCopier destination="data" destinationKey="settings" source="{SettingsData}" sourceKey="settings"/>
-		<MethodInvoker generator="{MainMD}" method="activateLink" arguments="{[event.link, data.settings]}"/>
+		<MethodInvoker generator="{MainMD}" method="activate" arguments="{[event.link, data.settings]}"/>
 	</EventHandlers>
 
 	<EventHandlers type="{LinkEvent.ADD}">

@@ -27,6 +27,7 @@ package modules.gmap.view.controls
 
 	import modules.gmap.data.LinksData;
 	import modules.gmap.domain.Link;
+	import modules.gmap.events.LinkEvent;
 
 	import mx.core.UIComponent;
 	import mx.events.CollectionEvent;
@@ -129,8 +130,8 @@ package modules.gmap.view.controls
 			if (_map)
 			{
 				var l : LinkLine = new LinkLine(link);
-				//m.addEventListener(LocationEvent.SELECTED, redispatchMarkerEvent);
-				//m.addEventListener(LocationEvent.ACTIVATE, redispatchMarkerEvent);
+				l.addEventListener(LinkEvent.SELECTED, redispatchMarkerEvent);
+				l.addEventListener(LinkEvent.ACTIVATE, redispatchMarkerEvent);
 				_lines.push(l);
 
 				if (visible)

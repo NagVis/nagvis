@@ -68,6 +68,7 @@ package modules.gmap.view.controls
 
 			super(point, options);
 
+			// Note: the event gets redispatched here from GMapLocationsControl
 			this.addEventListener(MapMouseEvent.CLICK, this.onClick);
 
 			_location = location;
