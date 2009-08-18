@@ -16,9 +16,20 @@
 	</services>
 	<channels>
 		<channel-definition id="zend-endpoint"
+			class="mx.messaging.channels.AMFChannel">
+			<endpoint uri="http://{server.name}:{server.port}/nagvis/netmap/amf-server.php"
+				class="flex.messaging.endpoints.SecureAMFEndpoint"/>
+			<properties>
+				<add-no-cache-headers>false</add-no-cache-headers>
+			</properties>
+		</channel-definition>
+		<channel-definition id="zend-endpoint-secure"
 			class="mx.messaging.channels.SecureAMFChannel">
 			<endpoint uri="https://{server.name}:{server.port}/nagvis/netmap/amf-server.php"
 				class="flex.messaging.endpoints.SecureAMFEndpoint"/>
+			<properties>
+				<add-no-cache-headers>false</add-no-cache-headers>
+			</properties>
 		</channel-definition>
 	</channels>
 </services-config>
