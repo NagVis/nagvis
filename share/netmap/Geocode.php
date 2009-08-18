@@ -30,8 +30,9 @@ class Geocode
 	public function resolve($address)
 	{
 		$locations = array();
+		$settings = Settings::load();
 
-		$request_url = 'http://maps.google.com/maps/geo?output=xml&key=' . Settings::getKey()
+		$request_url = 'http://maps.google.com/maps/geo?output=xml&key=' . $settings->googleMapsKey
 			. '&sensor=false&oe=utf8&q=' . urlencode($address);
 		if (($xml = @simplexml_load_file($request_url)) === FALSE)
 			throw new Exception('Cannot connect to Google Maps');
