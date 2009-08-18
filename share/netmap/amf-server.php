@@ -21,7 +21,8 @@
  *
  *****************************************************************************/
 
-//fix for IE bug with SSL
+// fix IE bug with SSL
+// see http://www.gmrweb.net/2005/08/18/flash-remoting-https-internet-explorer/
 header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__)) . '/library/');
