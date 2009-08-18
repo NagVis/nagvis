@@ -575,6 +575,10 @@ else
 	exit 1
 fi
 
+# NagVis below 1.5 depends on the given Nagios path
+# So set it here when some given by param
+[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+
 # Get NagVis path
 if [ $INSTALLER_QUIET -ne 1 ]; then
 	echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
