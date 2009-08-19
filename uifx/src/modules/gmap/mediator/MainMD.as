@@ -110,7 +110,8 @@ package modules.gmap.mediator
 
 		public function selectLink(link : Link) : void
 		{
-			_view.linksBox.setCurrentState('right-expanded');
+			if (link)
+				_view.linksBox.setCurrentState('right-expanded');
 		}
 
 		public function gotoURL(url : String, newWindow : Boolean) : void
