@@ -22,6 +22,7 @@
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	creationComplete="init()"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
@@ -48,10 +49,16 @@
 			public var hostgroups : ArrayCollection;
 			public var services : ArrayCollection;
 			public var servicegroups : ArrayCollection;
-			[Bindable]
-			public var locations : ArrayCollection;
+			
+			[Bindable] public var locations : ArrayCollection;
 
 			private var _link : Link;
+
+			protected function init():void
+			{
+				lnkLocation1.selectedItem = null;
+				lnkLocation2.selectedItem = null;
+			}
 
 			public function set link(link : Link) : void
 			{
@@ -61,6 +68,7 @@
 
 					if (link)
 					{
+						title.text = "Link - Edit Details";
 						lnkLocation1.selectedItem = link.location1;
 						lnkLocation2.selectedItem = link.location2;
 						lnkDescription.text = link.description;
@@ -141,8 +149,9 @@
 					}
 					else
 					{
-						lnkLocation1.selectedIndex = 0;
-						lnkLocation2.selectedIndex = 0;
+						title.text = "Link - Connect Locations";
+						lnkLocation1.selectedIndex = -1;
+						lnkLocation2.selectedIndex = -1;
 						lnkDescription.text = "";
 						lnkNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
@@ -368,7 +377,7 @@
 	</mx:XML>
 	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/connect.png')"/>
-		<mx:Label text="Link Details"/>
+		<mx:Label id="title" text="Link - Connect Locations"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
@@ -376,10 +385,10 @@
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
-		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
+		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" bottom="30" styleName="accordion" creationPolicy="all">
 			<mx:Canvas label="General" width="100%" height="100%">
-				<mx:ComboBox top="0" left="10" right="10" id="lnkLocation1" dataProvider="{locations}"></mx:ComboBox>
-				<mx:ComboBox top="30" left="10" right="10" id="lnkLocation2" dataProvider="{locations}"></mx:ComboBox>
+				<mx:ComboBox top="0" left="10" right="10" id="lnkLocation1" dataProvider="{locations}" prompt="-" selectedIndex="-1" />
+				<mx:ComboBox top="30" left="10" right="10" id="lnkLocation2" dataProvider="{locations}" prompt="-" selectedIndex="-1" />
 			</mx:Canvas>
 			<mx:Canvas label="Description" width="100%" height="100%">
 				<flexlib:PromptingTextArea  id="lnkDescription" prompt="Description"
@@ -448,7 +457,7 @@
 				<mx:TextInput cornerRadius="10" text="On Double Click" top="0" left="15" width="100" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
-		<mx:Button id="addButton" label="Add"
+		<mx:Button id="addButton" label="Connect"
 			right="0" bottom="0"
 			click="onAddClicked()"
 		/>
@@ -456,7 +465,7 @@
 			right="0" bottom="0"
 			click="onSaveClicked()"
 		/>
-		<mx:Button id="deleteButton" label="Delete" visible="false"
+		<mx:Button id="deleteButton" label="Disconnect" visible="false"
 			right="65" bottom="0"
 			click="onDeleteClicked()"
 		/>
