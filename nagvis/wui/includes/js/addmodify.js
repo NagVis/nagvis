@@ -183,7 +183,7 @@ function validateMapCfgForm() {
 		}
 		
 		if(document.addmodify.line_type && document.addmodify.line_type.value == '') {
-			alert(printLang(lang["lineTypeNotSet"]));
+			alert(printLang(lang["lineTypeNotSet"], ''));
 			return false;
 		}
 	}
