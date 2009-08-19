@@ -112,7 +112,8 @@ package modules.gmap.mediator
 			
 			if (_mode == MODE_LINK_EDIT)
 			{
-				_view.linksBox.pushLocation(location);
+				if(location)
+					_view.linksBox.pushLocation(location);
 			}
 		}
 
