@@ -45,7 +45,7 @@ package modules.gmap.view.controls
 			var options : PolylineOptions = new PolylineOptions({
 				strokeStyle: new StrokeStyle({
 					color: chooseColor(link.state),
-					thickness: 10,
+					thickness: 5,
 					alpha: 1
 				})
 			});
