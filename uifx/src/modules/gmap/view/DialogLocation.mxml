@@ -66,12 +66,14 @@
 
 						if (location.id && location.id.length > 0)
 						{
+							title.text = "Location - Edit Details";
 							addButton.visible = false;
 							saveButton.visible = true;
 							deleteButton.visible = true;
 						}
 						else
 						{
+							title.text = "Location - Add New";
 							addButton.visible = true;
 							saveButton.visible = false;
 							deleteButton.visible = false;
@@ -140,6 +142,7 @@
 					}
 					else
 					{
+						title.text = "Location";
 						locName.text = "";
 						locLat.text = "";
 						locLng.text = "";
@@ -148,7 +151,7 @@
 						locNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
 						locAction.selectedIndex = 0;
-						addButton.visible = true;
+						addButton.visible = false;
 						saveButton.visible = false;
 						deleteButton.visible = false;
 						onActionChanges();
@@ -362,7 +365,7 @@
 	</mx:XML>
 	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/pin.png')"/>
-		<mx:Label text="Location Details"/>
+		<mx:Label id="title" text="Location"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
@@ -452,7 +455,7 @@
 				<mx:TextInput cornerRadius="10" text="On Double Click" top="0" left="15" width="100" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
-		<mx:Button id="addButton" label="Add"
+		<mx:Button id="addButton" label="Add" visible="false"
 			right="0" bottom="0"
 			click="onAddClicked()"
 		/>
