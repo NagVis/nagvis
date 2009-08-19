@@ -41,7 +41,7 @@
 ; able to bind commands or links to your map objects
 ;contextmenu=1
 ; Choose the default context template
-;headertemplate="default"
+;contexttemplate="default"
 ; Enable/Disable changing background color on state changes (Configured color is
 ; shown when summary state is PENDING, OK or UP)
 ;eventbackground=0
