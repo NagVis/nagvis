@@ -26,6 +26,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.events.LinkEvent;
 			import modules.gmap.events.LocationEvent;
 			import com.google.maps.MapMouseEvent;
 			import mx.utils.StringUtil;
@@ -74,6 +75,7 @@
 			private function onClick(event : MapMouseEvent) : void
 			{
 				dispatchEvent(new LocationEvent(LocationEvent.SELECTED));
+				dispatchEvent(new LinkEvent(LinkEvent.SELECTED));
 			}
 		]]>
 	</mx:Script>
