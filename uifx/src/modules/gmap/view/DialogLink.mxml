@@ -392,8 +392,17 @@
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" bottom="30" styleName="accordion" creationPolicy="all">
 			<mx:Canvas label="General" width="100%" height="100%">
-				<mx:ComboBox top="0" left="10" right="10" id="lnkLocation1" dataProvider="{locations}" prompt="-" selectedIndex="-1" />
-				<mx:ComboBox top="30" left="10" right="10" id="lnkLocation2" dataProvider="{locations}" prompt="-" selectedIndex="-1" />
+				<mx:Canvas left="5" right="5" top="0" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000">
+					<mx:Label text="Locations : "
+						left="5" right="5" top="30"
+					/>
+					<mx:ComboBox id="lnkLocation1" dataProvider="{locations}" prompt="-" selectedIndex="-1"
+						left="5" right="5" top="50"
+					/>
+					<mx:ComboBox id="lnkLocation2" dataProvider="{locations}" prompt="-" selectedIndex="-1" width="100%" 
+						left="5" right="5" top="80"
+					/>
+				</mx:Canvas>
 			</mx:Canvas>
 			<mx:Canvas label="Description" width="100%" height="100%">
 				<flexlib:PromptingTextArea  id="lnkDescription" prompt="Description"
