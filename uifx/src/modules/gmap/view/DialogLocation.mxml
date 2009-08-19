@@ -160,7 +160,7 @@
 			{
 				var ul : Location = new Location();
 
-				ul.id = _location.id;
+				ul.id = (_location)? _location.id : '';
 				ul.point = new LatLng(parseFloat(locLat.text), parseFloat(locLng.text)).toUrlValue(16);
 				ul.label = locName.text;
 				ul.address = locAddress.text;
