@@ -144,6 +144,9 @@
 						lnkNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
 						lnkAction.selectedIndex = 0;
+						addButton.visible = true;
+						saveButton.visible = false;
+						deleteButton.visible = false;
 						onActionChanges();
 					}
 				}
@@ -434,15 +437,15 @@
 				<mx:TextInput cornerRadius="10" text="On Double Click" top="0" left="15" width="100" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
-		<mx:Button id="addButton" label="Add" visible="false"
+		<mx:Button id="addButton" label="Add"
 			right="0" bottom="0"
 			click="onAddClicked()"
 		/>
-		<mx:Button id="saveButton" label="Save"
+		<mx:Button id="saveButton" label="Save" visible="false"
 			right="0" bottom="0"
 			click="onSaveClicked()"
 		/>
-		<mx:Button id="deleteButton" label="Delete"
+		<mx:Button id="deleteButton" label="Delete" visible="false"
 			right="65" bottom="0"
 			click="onDeleteClicked()"
 		/>
