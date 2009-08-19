@@ -49,7 +49,7 @@
 	</EventHandlers>
 
 	<EventHandlers type="{SettingsEvent.CHANGE}">
-		<RemoteObjectInvoker destination="zend" source="Settings" method="save" arguments="{event.settings}">
+		<RemoteObjectInvoker destination="zend" source="SettingsService" method="save" arguments="{event.settings}">
 			<resultHandlers>
 				<DataCopier destination="{SettingsData}" destinationKey="settings" source="{resultObject}"/>
 			</resultHandlers>
@@ -57,7 +57,7 @@
 	</EventHandlers>
 
 	<EventHandlers type="{SettingsEvent.RELOAD}">
-		<RemoteObjectInvoker destination="zend" source="Settings" method="save" arguments="{event.settings}">
+		<RemoteObjectInvoker destination="zend" source="SettingsService" method="save" arguments="{event.settings}">
 			<resultHandlers>
 				<InlineInvoker method="ExternalInterface.call" arguments="window.location.reload"/>
 			</resultHandlers>

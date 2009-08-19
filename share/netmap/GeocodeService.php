@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-class Geocode
+class GeocodeService
 {
 	/**
 	 * @param  string $address
@@ -30,7 +30,7 @@ class Geocode
 	public function resolve($address)
 	{
 		$locations = array();
-		$settings = Settings::load();
+		$settings = SettingsService::load();
 
 		$request_url = 'http://maps.google.com/maps/geo?output=xml&key=' . $settings->googleMapsKey
 			. '&sensor=false&oe=utf8&q=' . urlencode($address);

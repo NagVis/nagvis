@@ -49,7 +49,7 @@ class Location
 		$this->state = $state;
 	}
 
-	private function fromXML($node)
+	public static function fromXML($node)
 	{
 		$object = null;
 		$object_type = '';
@@ -87,7 +87,7 @@ class Location
 			(string)$node['description'], (string)$node['action'], $object);
 	}
 
-	private function toXML($parent)
+	public function toXML($parent)
 	{
 		$node = $parent->addChild('location');
 		$node->addAttribute('id', $this->id);
@@ -101,148 +101,6 @@ class Location
 			$this->object->toXML($node);
 
 		return $node;
-	}
-
-	private function updateState()
-	{
-		$db = new Database();
-
-		if (isset($this->object))
-			switch (get_class($this->object))
-			{
-				case 'Host':
-					$this->state = $db->getHostState($this->object);
-					break;
-
-				case 'HostGroup':
-					$this->state = $db->getHostGroupState($this->object);
-					break;
-
-				case 'Service':
-					$this->state = $db->getServiceState($this->object);
-					break;
-
-				case 'ServiceGroup':
-					$this->state = $db->getServiceGroupState($this->object);
-					break;
-
-				default:
-					throw new Exception('Unknown object type in locations.xml');
-			}
-		else
-			$this->state = self::STATE_UNKNOWN;
-	}
-
-	/**
-	 * @param  boolean $problemonly
-	 * @return array of Location
-	 */
-	public function getAll($problemonly = false)
-	{
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
-			throw new Exception('Could not read locations.xml');
-
-		$locations = array();
-		foreach ($xml->location as $node)
-		{
-			$location = Location::fromXML($node);
-
-			$location->updateState();
-
-			if (!$problemonly || $location->state != self::STATE_OK)
-				$locations[] = $location;
-		}
-
-		return $locations;
-	}
-
-	/**
-	 * @param  object $location
-	 * @return Location
-	 */
-	public function add($location)
-	{
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
-			throw new Exception('Could not read locations.xml');
-
-		$location->id = uniqid('', true);
-		$location->updateState();
-		$node = $location->toXML($xml);
-
-		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
-			return $location;
-		else
-			throw new Exception('Could not write locations.xml');
-    }
-
-	private function removeNode(&$xml, $id)
-	{
-		$index = 0;
-		foreach ($xml->location as $node)
-		{
-			if ($node['id'] == $id)
-			{
-				// Note: unset($node) won't work thus the need for $index
-				unset($xml->location[$index]);
-				$success = true;
-				break;
-			}
-			$index++;
-		}
-		if (!isset($success))
-			throw new Exception('Location does not exist');
-	}
-
-	/**
-	 * @param  object $location
-	 * @return Location
-	 */
-	public function edit($location)
-	{
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
-			throw new Exception('Could not read locations.xml');
-
-		$location->updateState();
-
-		Location::removeNode($xml, $location->id);
-
-		$location->toXML($xml);
-
-		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
-			return $location;
-		else
-			throw new Exception('Could not write locations.xml');
-    }
-
-	/**
-	 * @param  string $id
-	 * @return string
-	 */
-	public function remove($id)
-	{
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
-			throw new Exception('Could not read locations.xml');
-
-		Location::removeNode($xml, $id);
-
-		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
-			return $id;
-		else
-			throw new Exception('Could not write locations.xml');
-    }
-
-	/**
-	 * @param  string $address
-	 * @return Location
-	 */
-	public function find($address)
-	{
-		$locations = array();
-
-		foreach(Geocode::resolve($address) as $location)
-			$locations[] = new Location("", $location['point'], "", $location['address'], "", "");
-
-		return $locations;
 	}
 }
 
