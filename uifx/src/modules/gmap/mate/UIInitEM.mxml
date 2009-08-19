@@ -30,6 +30,7 @@
 			import modules.gmap.view.controls.GMapLocationControl;
 			import modules.gmap.view.controls.GMapLocationsControl;
 			import modules.gmap.view.controls.GMapLocationsExtControl;
+			import modules.gmap.view.controls.GMapLinkControl;
 			import modules.gmap.view.controls.GMapLinksControl;
 			import modules.gmap.view.DialogViewpoint;
 			import modules.gmap.view.DialogLocation;
@@ -99,6 +100,10 @@
 		<PropertyInjector targetKey="dataProvider" source="{LocationsExtData}"/>
 	</Injectors>
 
+	<Injectors target="{GMapLinkControl}">
+		<PropertyInjector targetKey="link" source="{CurrentLink}" sourceKey="link"/>
+	</Injectors>
+		
 	<Injectors target="{GMapLinksControl}">
 		<PropertyInjector targetKey="dataProvider" source="{LinksData}"/>
 	</Injectors>
