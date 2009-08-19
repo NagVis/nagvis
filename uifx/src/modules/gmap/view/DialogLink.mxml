@@ -310,6 +310,11 @@
 						lnkActionMaps.visible = lnkActionURL.visible = false;
 				}
 			}
+
+			public function set nagvisMaps(maps : ArrayCollection) : void
+			{
+				lnkActionMaps.dataProvider = maps;
+			}
 		]]>
 	</mx:Script>
 	<mx:Script>

@@ -23,6 +23,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.NagVisMapsData;
 			import com.asfusion.mate.events.Dispatcher;
 
 			import modules.gmap.view.MainView;
@@ -77,6 +78,7 @@
 		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
 		<PropertyInjector targetKey="services" source="{ServicesData}"/>
 		<PropertyInjector targetKey="servicegroups" source="{ServiceGroupsData}"/>
+		<PropertyInjector targetKey="nagvisMaps" source="{NagVisMapsData}"/>
 	</Injectors>
 
 	<Injectors target="{DialogLink}" debug="true">
@@ -86,6 +88,7 @@
 		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
 		<PropertyInjector targetKey="services" source="{ServicesData}"/>
 		<PropertyInjector targetKey="servicegroups" source="{ServiceGroupsData}"/>
+		<PropertyInjector targetKey="nagvisMaps" source="{NagVisMapsData}"/>
 	</Injectors>
 
 	<Injectors target="{GMapLocationControl}" debug="true">

@@ -23,6 +23,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.NagVisMapsData;
 			import mx.controls.Alert;
 
 			import modules.gmap.view.controls.GMapControl;
@@ -61,6 +62,12 @@
 				</RemoteObjectInvoker>
 			</resultHandlers>
 		</RemoteObjectInvoker>
+		<RemoteObjectInvoker destination="zend" source="NagVisService" method="getMaps">
+			<resultHandlers>
+				<MethodInvoker generator="{NagVisMapsData}" method="fill" arguments="{resultObject}"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+		
 	</Injectors>
 
 	<Injectors target="{MapMD}" debug="true">

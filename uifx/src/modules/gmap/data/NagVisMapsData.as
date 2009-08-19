@@ -29,5 +29,10 @@ package modules.gmap.data
 		{
 			super(source);
 		}
+
+		public function fill(data : Array) : void
+		{
+			this.source = data;
+		}		
 	}
 }
