@@ -88,6 +88,12 @@ class NagVisFrontend extends GlobalPage {
 		// Only do this, when a map needs to be displayed
 		if(get_class($this->MAPCFG) != '') {
 			$prop['allowedUsers'] = $this->MAPCFG->getValue('global',0, 'allowed_user');
+			
+			// Load custom (map specific) stylesheets
+			$customStylesheet = $this->MAPCFG->getValue('global',0, 'stylesheet');
+			if($customStylesheet !== '') {
+				$prop['cssIncludes'][] = $CORE->MAINCFG->getValue('paths','htmlstyles') . $customStylesheet;
+			}
 		}
 		
 		parent::__construct($CORE, $prop);

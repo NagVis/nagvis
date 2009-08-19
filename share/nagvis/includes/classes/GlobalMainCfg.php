@@ -81,6 +81,10 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => 'default',
 					'match' => MATCH_STRING_NO_SPACE),
+				'stylesheet' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_NO_SPACE),
 				'eventbackground' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '0',
@@ -325,7 +329,11 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
-				'htmlsound' => Array('must' => 0,
+				'htmlsounds' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
+				'htmlstyles' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
@@ -537,6 +545,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/nagvis/images/maps/';
 		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
 		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/nagvis/sounds/';
+		$this->validConfig['paths']['htmlstyles']['default'] = $htmlBase.'/nagvis/styles/';
 		$this->validConfig['paths']['htmlgadgets']['default'] = $htmlBase.'/nagvis/gadgets/';
 	}
 	
