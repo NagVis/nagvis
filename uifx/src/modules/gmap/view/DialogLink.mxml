@@ -184,6 +184,12 @@
 				return ul;
 			}
 
+			public function pushLocation(location:Location):void
+			{
+				lnkLocation1.selectedItem = lnkLocation2.selectedItem;
+				lnkLocation2.selectedItem = location;
+			}
+
 			private function onAddClicked() : void
 			{
 				dispatchEvent(new LinkEvent(LinkEvent.ADD, getUpdatedLink()));
