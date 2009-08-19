@@ -49,7 +49,7 @@ class Location
 		$this->state = $state;
 	}
 
-	private function fromXML($node)
+	public static function fromXML($node)
 	{
 		$object = null;
 		$object_type = '';
@@ -87,7 +87,7 @@ class Location
 			(string)$node['description'], (string)$node['action'], $object);
 	}
 
-	private function toXML($parent)
+	public function toXML($parent)
 	{
 		$node = $parent->addChild('location');
 		$node->addAttribute('id', $this->id);

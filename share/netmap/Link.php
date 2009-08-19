@@ -46,7 +46,7 @@ class Link
 		$this->state = $state;
 	}
 
-	private function fromXML($node)
+	public static function fromXML($node)
 	{
 		$object = null;
 		$object_type = '';
@@ -83,7 +83,7 @@ class Link
 			(string)$node['description'], (string)$node['action'], $object);
 	}
 
-	private function toXML($parent)
+	public function toXML($parent)
 	{
 		$node = $parent->addChild('link');
 		$node->addAttribute('id1', $this->id1);

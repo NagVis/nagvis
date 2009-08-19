@@ -23,34 +23,34 @@
 
 class LinkService
 {
-	private function updateState()
+	private function updateState(&$link)
 	{
 		$db = new NagiosService();
 
-		if (isset($this->object))
-			switch (get_class($this->object))
+		if (isset($link->object))
+			switch (get_class($link->object))
 			{
 				case 'Host':
-					$this->state = $db->getHostState($this->object);
+					$link->state = $db->getHostState($link->object);
 					break;
 
 				case 'HostGroup':
-					$this->state = $db->getHostGroupState($this->object);
+					$link->state = $db->getHostGroupState($link->object);
 					break;
 
 				case 'Service':
-					$this->state = $db->getServiceState($this->object);
+					$link->state = $db->getServiceState($link->object);
 					break;
 
 				case 'ServiceGroup':
-					$this->state = $db->getServiceGroupState($this->object);
+					$link->state = $db->getServiceGroupState($link->object);
 					break;
 
 				default:
 					throw new Exception('Unknown object type in links.xml');
 			}
 		else
-			$this->state = Link::STATE_UNKNOWN;
+			$link->state = Link::STATE_UNKNOWN;
 	}
 
 	/**
@@ -67,7 +67,7 @@ class LinkService
 		{
 			$link = Link::fromXML($node);
 
-			$link->updateState();
+			self::updateState($link);
 
 			if (!$problemonly || $link->state != Link::STATE_OK)
 				$links[] = $link;
@@ -85,7 +85,7 @@ class LinkService
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
-		$link->updateState();
+		self::updateState($link);
 		$node = $link->toXML($xml);
 
 		if (file_put_contents('links.xml', $xml->asXML()) !== FALSE)
@@ -121,7 +121,7 @@ class LinkService
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
-		$link->updateState();
+		self::updateState($link);
 
 		self::removeNode($xml, $link->id1, $link->id2);
 

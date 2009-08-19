@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-class Viewpoint
+class ViewpointService
 {
 	/**
 	 * @return array of Viewpoint

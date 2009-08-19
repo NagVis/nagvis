@@ -23,34 +23,34 @@
 
 class LocationService
 {
-	private function updateState()
+	private function updateState(&$location)
 	{
 		$db = new NagiosService();
 
-		if (isset($this->object))
-			switch (get_class($this->object))
+		if (isset($location->object))
+			switch (get_class($location->object))
 			{
 				case 'Host':
-					$this->state = $db->getHostState($this->object);
+					$location->state = $db->getHostState($location->object);
 					break;
 
 				case 'HostGroup':
-					$this->state = $db->getHostGroupState($this->object);
+					$location->state = $db->getHostGroupState($location->object);
 					break;
 
 				case 'Service':
-					$this->state = $db->getServiceState($this->object);
+					$location->state = $db->getServiceState($location->object);
 					break;
 
 				case 'ServiceGroup':
-					$this->state = $db->getServiceGroupState($this->object);
+					$location->state = $db->getServiceGroupState($location->object);
 					break;
 
 				default:
 					throw new Exception('Unknown object type in locations.xml');
 			}
 		else
-			$this->state = Location::STATE_UNKNOWN;
+			$location->state = Location::STATE_UNKNOWN;
 	}
 
 	/**
@@ -67,7 +67,7 @@ class LocationService
 		{
 			$location = Location::fromXML($node);
 
-			$location->updateState();
+			self::updateState($location);
 
 			if (!$problemonly || $location->state != Location::STATE_OK)
 				$locations[] = $location;
@@ -86,7 +86,7 @@ class LocationService
 			throw new Exception('Could not read locations.xml');
 
 		$location->id = uniqid('', true);
-		$location->updateState();
+		self::updateState($location);
 		$node = $location->toXML($xml);
 
 		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
@@ -122,7 +122,7 @@ class LocationService
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
-		$location->updateState();
+		self::updateState($location);
 
 		self::removeNode($xml, $location->id);
 
