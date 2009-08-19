@@ -22,26 +22,35 @@
 package modules.gmap.data
 {
 	import modules.gmap.domain.Link;
-
+	
 	import mx.collections.ArrayCollection;
-	import mx.events.CollectionEvent;
 
 	public class LinksData extends ArrayCollection
 	{
+		private var _locations : LocationsData;
+		
 		public function LinksData(source : Array = null)
 		{
 			super(source);
 		}
 
-		public function fill(data : Array, locations:LocationsData) : void
+		public function set locations(value:LocationsData):void
+		{
+			_locations = value;
+		}
+
+		public function fill(data : Array) : void
 		{
 			this.source = data;
 
 			for each(var link : Link in this)
-			{
-				link.location1 = locations.getItemById(link.id1);
-				link.location2 = locations.getItemById(link.id2);
-			}
+				resolveLink(link);
+		}
+		
+		protected function resolveLink(link:Link):void
+		{
+			link.location1 = _locations.getItemById(link.id1);
+			link.location2 = _locations.getItemById(link.id2);
 		}
 
 		public function getItemByIds(id1 : String, id2 : String) : Link
@@ -55,10 +64,14 @@ package modules.gmap.data
 
 		public function addUpdateItem(item : Link) : void
 		{
+			trace(item.id1);
 			var link : Link = this.getItemByIds(item.id1, item.id2);
 
 			if (link == null)
+			{
+				resolveLink(item);
 				this.addItem(item);
+			}
 			else
 				link.update(item);
 		}

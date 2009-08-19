@@ -50,18 +50,22 @@
 				<MethodInvoker generator="{ViewpointsData}" method="fill" arguments="{resultObject}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
+
 		<RemoteObjectInvoker destination="zend" source="LocationService" method="getAll" debug="true">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="fill" arguments="{resultObject}"/>
 				<MethodInvoker generator="{Poller}" method="resourceReady"/>
+
+				<DataCopier destination="{LinksData}" destinationKey="locations" source="{LocationsData}"/>
 				<RemoteObjectInvoker destination="zend" source="LinkService" method="getAll" debug="true">
 					<resultHandlers>
-						<DataCopier destination="data" destinationKey="locations" source="{LocationsData}"/>
-						<MethodInvoker generator="{LinksData}" method="fill" arguments="{[resultObject, data.locations]}"/>
+						<MethodInvoker generator="{LinksData}" method="fill" arguments="{resultObject}"/>
 					</resultHandlers>
 				</RemoteObjectInvoker>
+
 			</resultHandlers>
 		</RemoteObjectInvoker>
+
 		<RemoteObjectInvoker destination="zend" source="NagVisService" method="getMaps">
 			<resultHandlers>
 				<MethodInvoker generator="{NagVisMapsData}" method="fill" arguments="{resultObject}"/>
