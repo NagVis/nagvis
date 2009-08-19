@@ -254,7 +254,7 @@ class WuiMap extends GlobalMap {
 							$sDelim = '?';
 						}
 						
-						$obj['iconParams'] = $sDelim . 'name1=dummyHost&name2=dummyService&state=OK&stateType=HARD&conf=1';
+						$obj['iconParams'] = $sDelim . 'name1=dummyHost&name2=dummyService&state=OK&stateType=HARD&conf=1&scale=' . $obj['gadget_scale'];
 					} else {
 						$obj['iconParams'] = '';
 					}

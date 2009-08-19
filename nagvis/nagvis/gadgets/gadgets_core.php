@@ -36,6 +36,7 @@
  *  - name2:     Service description
  *  - state:     Current state
  *  - stateType: Current state type (soft/hard)
+ *  - scale:    Scale of the gadget in percent (default 100)
  *
  *****************************************************************************
  *
@@ -64,6 +65,7 @@
  * aOpts['state']                 -   State of the service (OK, WARNING,
  *                                    CRITICAL, UNKNOWN)  
  * aOpts['stateType']             -   Type of the state (HARD, SOFT)
+ * aOpts['scale']                 -   Scale of the gadget in percent (INTEGER)
  *  
  ******************************************************************************/
 
@@ -186,6 +188,7 @@ $aPerfdata = Array();
  *  name2=Current Load
  *  state=OK
  *  stateType=HARD
+ *  scale=100
  */
 
 if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
@@ -211,6 +214,14 @@ if(isset($_GET['state']) && $_GET['state'] != '') {
 if(isset($_GET['stateType']) && $_GET['stateType'] != '') {
 	$aOpts['stateType'] = $_GET['stateType'];
 }
+
+if (isset($_GET['scale']) && $_GET['scale'] != '') {
+	$aOpts['scale'] = $_GET['scale'];
+} else {
+	/* If no scale is set, default to 100 */
+	$aOpts['scale'] = 100;
+}
+
 
 /* Now parse the perfdata */
 $aPerfdata = parsePerfdata($aOpts['perfdata']);
