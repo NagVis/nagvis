@@ -168,7 +168,10 @@ class WuiMainCfg extends GlobalMainCfg {
 									$item2 = $val;
 								}
 								
-								$content .= $key2.'="'.$item2.'"'."\n";
+								// Don't write the backendid attribute (Is internal)
+								if($key2 !== 'backendid') {
+									$content .= $key2.'="'.$item2.'"'."\n";
+								}
 							}
 						}
 					}

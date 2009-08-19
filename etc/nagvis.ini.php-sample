@@ -164,7 +164,7 @@
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 [backend_ndomy_1]
 ; type of backend - MUST be set
-;backendtype="ndomy"
+backendtype="ndomy"
 ; hostname for NDO-db
 ;dbhost="localhost"
 ; portname for NDO-db
@@ -187,7 +187,7 @@
 ; in this example the ID of the Backend is "ndo2fs_1" you can define another ID.
 [backend_ndo2fs_1]
 ; type of backend - MUST be set
-;backendtype="ndo2fs"
+backendtype="ndo2fs"
 ; Path to the ndo2fs var directory where the VOLATILE and PERSISTENT directories are
 ;path="/usr/local/ndo2fs/var"
 ; Name of the instance to get the data from
@@ -200,7 +200,7 @@
 ; in this example the ID of the Backend is "merlinmy_1" you can define another ID.
 [backend_merlinmy_1]
 ; type of backend - MUST be set
-;backendtype="merlinmy"
+backendtype="merlinmy"
 ; hostname for Merlin db
 ;dbhost="localhost"
 ; portname for Merlin db
