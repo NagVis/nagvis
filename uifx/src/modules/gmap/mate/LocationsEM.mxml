@@ -38,7 +38,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:RemoteObject id="LocationsService" destination="zend" source="Location" />
+	<mx:RemoteObject id="LocationsService" destination="zend" source="LocationService" />
 
 	<EventHandlers type="{LocationEvent.SELECTED}">
 		<MethodInvoker generator="{CurrentLocation}" method="update" arguments="{event.location}"/>

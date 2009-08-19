@@ -44,16 +44,16 @@
 
 		<ObjectBuilder generator="{Poller}" constructorArguments="{scope.dispatcher}"/>
 
-		<RemoteObjectInvoker destination="zend" source="Viewpoint" method="getAll" debug="true">
+		<RemoteObjectInvoker destination="zend" source="ViewpointService" method="getAll" debug="true">
 			<resultHandlers>
 				<MethodInvoker generator="{ViewpointsData}" method="fill" arguments="{resultObject}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
-		<RemoteObjectInvoker destination="zend" source="Location" method="getAll" debug="true">
+		<RemoteObjectInvoker destination="zend" source="LocationService" method="getAll" debug="true">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="fill" arguments="{resultObject}"/>
 				<MethodInvoker generator="{Poller}" method="resourceReady"/>
-				<RemoteObjectInvoker destination="zend" source="Link" method="getAll" debug="true">
+				<RemoteObjectInvoker destination="zend" source="LinkService" method="getAll" debug="true">
 					<resultHandlers>
 						<DataCopier destination="data" destinationKey="locations" source="{LocationsData}"/>
 						<MethodInvoker generator="{LinksData}" method="fill" arguments="{[resultObject, data.locations]}"/>
@@ -65,7 +65,7 @@
 
 	<Injectors target="{MapMD}" debug="true">
 
-		<RemoteObjectInvoker destination="zend" source="Settings" method="load">
+		<RemoteObjectInvoker destination="zend" source="SettingsService" method="load">
 			<resultHandlers>
 				<DataCopier destination="{SettingsData}" destinationKey="settings" source="{resultObject}"/>
 				<MethodInvoker generator="{MapMD}" method="showMap" arguments="{resultObject.googleMapsKey}"/>

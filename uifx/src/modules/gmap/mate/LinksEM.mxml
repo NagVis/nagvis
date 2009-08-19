@@ -32,7 +32,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:RemoteObject id="LinksService" destination="zend" source="Link" />
+	<mx:RemoteObject id="LinksService" destination="zend" source="LinkService" />
 
 	<EventHandlers type="{LinkEvent.SELECTED}">
 		<MethodInvoker generator="{CurrentLink}" method="update" arguments="{event.link}"/>
