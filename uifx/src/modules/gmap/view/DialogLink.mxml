@@ -141,6 +141,8 @@
 					}
 					else
 					{
+						location1.selectedIndex = 0;
+						location2.selectedIndex = 0;
 						lnkDescription.text = "";
 						lnkNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
