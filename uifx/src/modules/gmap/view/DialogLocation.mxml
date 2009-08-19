@@ -356,6 +356,11 @@
 			{
 				return item.name + ' (' + item.alias + ')';
 			}
+
+			public function set nagvisMaps(maps : ArrayCollection) : void
+			{
+				locActionMaps.dataProvider = maps;
+			}
 		]]>
 	</mx:Script>
 	<mx:XML format="e4x" id="autoCompleteMenu">
