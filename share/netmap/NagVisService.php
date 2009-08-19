@@ -21,33 +21,30 @@
  *
  *****************************************************************************/
 
-class Settings
+class NagVisService
 {
-	public $googleMapsKey;
-	public $defaultLocationAction;
-	public $openLinksInNewWindow;
-	public $htmlbase;
-	public $htmlcgi;
-	public $hosturl;
-	public $hostgroupurl;
-	public $serviceurl;
-	public $servicegroupurl;
-	public $mapurl;
+	private $CORE;
 
-	public function __construct($googleMapsKey = '', $defaultLocationAction = '',
-		$openLinksInNewWindow = false, $htmlbase = '', $htmlcgi = '',
-		$hosturl = '', $hostgroupurl = '', $serviceurl = '', $servicegroupurl = '', $mapurl = '')
+	private function init()
 	{
-		$this->googleMapsKey = $googleMapsKey;
-		$this->defaultLocationAction = $defaultLocationAction;
-		$this->openLinksInNewWindow = $openLinksInNewWindow;
-		$this->htmlbase = $htmlbase;
-		$this->htmlcgi = $htmlcgi;
-		$this->hosturl = $hosturl;
-		$this->hostgroupurl = $hostgroupurl;
-		$this->serviceurl = $serviceurl;
-		$this->servicegroupurl = $servicegroupurl;
-		$this->mapurl = $mapurl;
+		require_once("../nagvis/includes/defines/global.php");
+		require_once("../nagvis/includes/defines/matches.php");
+		set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__))
+			. PATH_SEPARATOR . '../nagvis/includes/classes/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/validator/'
+			. PATH_SEPARATOR . '../nagvis/includes/classes/frontend/');
+		require_once("../nagvis/includes/functions/oldPhpVersionFixes.php");
+		require_once("../nagvis/includes/functions/getuser.php");
+
+		$this->CORE = new GlobalCore();
+		$this->CORE->MAINCFG->setRuntimeValue('user', getUser());
+	}
+
+	public function getMaps()
+	{
+		$this->init();
+		$maps = $this->CORE->getAvailableMaps();
+		return array_values($maps);
 	}
 }
 

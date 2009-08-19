@@ -46,7 +46,7 @@ class Link
 		$this->state = $state;
 	}
 
-	private function fromXML($node)
+	public static function fromXML($node)
 	{
 		$object = null;
 		$object_type = '';
@@ -83,7 +83,7 @@ class Link
 			(string)$node['description'], (string)$node['action'], $object);
 	}
 
-	private function toXML($parent)
+	public function toXML($parent)
 	{
 		$node = $parent->addChild('link');
 		$node->addAttribute('id1', $this->id1);
@@ -96,134 +96,6 @@ class Link
 
 		return $node;
 	}
-
-	private function updateState()
-	{
-		$db = new Database();
-
-		if (isset($this->object))
-			switch (get_class($this->object))
-			{
-				case 'Host':
-					$this->state = $db->getHostState($this->object);
-					break;
-
-				case 'HostGroup':
-					$this->state = $db->getHostGroupState($this->object);
-					break;
-
-				case 'Service':
-					$this->state = $db->getServiceState($this->object);
-					break;
-
-				case 'ServiceGroup':
-					$this->state = $db->getServiceGroupState($this->object);
-					break;
-
-				default:
-					throw new Exception('Unknown object type in links.xml');
-			}
-		else
-			$this->state = self::STATE_UNKNOWN;
-	}
-
-	/**
-	 * @param  boolean $problemonly
-	 * @return array of Link
-	 */
-	public function getAll($problemonly = false)
-	{
-		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
-			throw new Exception('Could not read links.xml');
-
-		$links = array();
-		foreach ($xml->link as $node)
-		{
-			$link = Link::fromXML($node);
-
-			$link->updateState();
-
-			if (!$problemonly || $link->state != self::STATE_OK)
-				$links[] = $link;
-		}
-
-		return $links;
-	}
-
-	/**
-	 * @param  object $link
-	 * @return Link
-	 */
-	public function add($link)
-	{
-		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
-			throw new Exception('Could not read links.xml');
-
-		$link->updateState();
-		$node = $link->toXML($xml);
-
-		if (file_put_contents('links.xml', $xml->asXML()) !== FALSE)
-			return $link;
-		else
-			throw new Exception('Could not write links.xml');
-    }
-
-	private function removeNode(&$xml, $id1, $id2)
-	{
-		$index = 0;
-		foreach ($xml->link as $node)
-		{
-			if ($node['id1'] == $id1 && $node['id2'] == $id2)
-			{
-				// Note: unset($node) won't work thus the need for $index
-				unset($xml->link[$index]);
-				$success = true;
-				break;
-			}
-			$index++;
-		}
-		if (!isset($success))
-			throw new Exception('Link does not exist');
-	}
-
-	/**
-	 * @param  object $link
-	 * @return Link
-	 */
-	public function edit($link)
-	{
-		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
-			throw new Exception('Could not read links.xml');
-
-		$link->updateState();
-
-		Link::removeNode($xml, $link->id1, $link->id2);
-
-		$link->toXML($xml);
-
-		if (file_put_contents('links.xml', $xml->asXML()) !== FALSE)
-			return $link;
-		else
-			throw new Exception('Could not write links.xml');
-    }
-
-	/**
-	 * @param  string $id1
-	 * @param  string $id2
-	 * @return string
-	 */
-	public function remove($id1, $id2)
-	{
-		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
-			throw new Exception('Could not read links.xml');
-
-		Link::removeNode($xml, $id1, $id2);
-
-		if (file_put_contents('links.xml', $xml->asXML()) !== FALSE)
-			return true;
-		else
-			throw new Exception('Could not write links.xml');
-    }
 }
 
 ?>

@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-class Database
+class NagiosService
 {
 	private $CORE;
 	private $BACKEND;

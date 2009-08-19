@@ -66,12 +66,14 @@
 
 						if (location.id && location.id.length > 0)
 						{
+							title.text = "Location - Edit Details";
 							addButton.visible = false;
 							saveButton.visible = true;
 							deleteButton.visible = true;
 						}
 						else
 						{
+							title.text = "Location - Add New";
 							addButton.visible = true;
 							saveButton.visible = false;
 							deleteButton.visible = false;
@@ -140,6 +142,7 @@
 					}
 					else
 					{
+						title.text = "Location";
 						locName.text = "";
 						locLat.text = "";
 						locLng.text = "";
@@ -148,6 +151,9 @@
 						locNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
 						locAction.selectedIndex = 0;
+						addButton.visible = false;
+						saveButton.visible = false;
+						deleteButton.visible = false;
 						onActionChanges();
 					}
 				}
@@ -157,7 +163,7 @@
 			{
 				var ul : Location = new Location();
 
-				ul.id = _location.id;
+				ul.id = (_location)? _location.id : '';
 				ul.point = new LatLng(parseFloat(locLat.text), parseFloat(locLng.text)).toUrlValue(16);
 				ul.label = locName.text;
 				ul.address = locAddress.text;
@@ -350,6 +356,11 @@
 			{
 				return item.name + ' (' + item.alias + ')';
 			}
+
+			public function set nagvisMaps(maps : ArrayCollection) : void
+			{
+				locActionMaps.dataProvider = maps;
+			}
 		]]>
 	</mx:Script>
 	<mx:XML format="e4x" id="autoCompleteMenu">
@@ -359,7 +370,7 @@
 	</mx:XML>
 	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/pin.png')"/>
-		<mx:Label text="Location Details"/>
+		<mx:Label id="title" text="Location"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
@@ -453,11 +464,11 @@
 			right="0" bottom="0"
 			click="onAddClicked()"
 		/>
-		<mx:Button id="saveButton" label="Save"
+		<mx:Button id="saveButton" label="Save" visible="false"
 			right="0" bottom="0"
 			click="onSaveClicked()"
 		/>
-		<mx:Button id="deleteButton" label="Delete"
+		<mx:Button id="deleteButton" label="Delete" visible="false"
 			right="65" bottom="0"
 			click="onDeleteClicked()"
 		/>

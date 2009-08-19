@@ -22,11 +22,13 @@
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	creationComplete="init()"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.domain.Location;
 			import modules.gmap.events.LinkEvent;
 			import modules.gmap.domain.Link;
 			import mx.formatters.SwitchSymbolFormatter;
@@ -47,10 +49,16 @@
 			public var hostgroups : ArrayCollection;
 			public var services : ArrayCollection;
 			public var servicegroups : ArrayCollection;
-			[Bindable]
-			public var locations : ArrayCollection;
+			
+			[Bindable] public var locations : ArrayCollection;
 
 			private var _link : Link;
+
+			protected function init():void
+			{
+				lnkLocation1.selectedItem = null;
+				lnkLocation2.selectedItem = null;
+			}
 
 			public function set link(link : Link) : void
 			{
@@ -60,8 +68,9 @@
 
 					if (link)
 					{
-						location1.selectedItem = link.location1;
-						location2.selectedItem = link.location2;
+						title.text = "Link - Edit Details";
+						lnkLocation1.selectedItem = link.location1;
+						lnkLocation2.selectedItem = link.location2;
 						lnkDescription.text = link.description;
 
 						if (link.id1 && link.id1.length > 0 && link.id2 && link.id2.length > 0)
@@ -140,10 +149,16 @@
 					}
 					else
 					{
+						title.text = "Link - Connect Locations";
+						lnkLocation1.selectedIndex = -1;
+						lnkLocation2.selectedIndex = -1;
 						lnkDescription.text = "";
 						lnkNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
 						lnkAction.selectedIndex = 0;
+						addButton.visible = true;
+						saveButton.visible = false;
+						deleteButton.visible = false;
 						onActionChanges();
 					}
 				}
@@ -153,8 +168,10 @@
 			{
 				var ul : Link = new Link();
 
-				ul.id1 = _link.id1;
-				ul.id2 = _link.id2;
+				ul.id1 = (_link)? _link.id1 : lnkLocation1.selectedItem.id;
+				ul.id2 = (_link)? _link.id2 : lnkLocation2.selectedItem.id;
+				ul.location1 = (_link)? _link.location1 : lnkLocation1.selectedItem as Location;
+				ul.location2 = (_link)? _link.location2 : lnkLocation2.selectedItem as Location;
 				ul.description = lnkDescription.text;
 				ul.object = lnkNObject.selectedItem;
 
@@ -174,6 +191,12 @@
 				}
 
 				return ul;
+			}
+
+			public function pushLocation(location:Location):void
+			{
+				lnkLocation1.selectedItem = lnkLocation2.selectedItem;
+				lnkLocation2.selectedItem = location;
 			}
 
 			private function onAddClicked() : void
@@ -287,6 +310,11 @@
 						lnkActionMaps.visible = lnkActionURL.visible = false;
 				}
 			}
+
+			public function set nagvisMaps(maps : ArrayCollection) : void
+			{
+				lnkActionMaps.dataProvider = maps;
+			}
 		]]>
 	</mx:Script>
 	<mx:Script>
@@ -354,7 +382,7 @@
 	</mx:XML>
 	<mx:HBox left="10" right="15" top="10" height="20">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/connect.png')"/>
-		<mx:Label text="Link Details"/>
+		<mx:Label id="title" text="Link - Connect Locations"/>
 		<mx:Spacer width="100%"/>
 		<mx:Image id="close"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
@@ -362,10 +390,19 @@
 		/>
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
-		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
+		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" bottom="30" styleName="accordion" creationPolicy="all">
 			<mx:Canvas label="General" width="100%" height="100%">
-				<mx:ComboBox top="0" left="10" right="10" id="location1" dataProvider="{locations}"></mx:ComboBox>
-				<mx:ComboBox top="30" left="10" right="10" id="location2" dataProvider="{locations}"></mx:ComboBox>
+				<mx:Canvas left="5" right="5" top="0" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000">
+					<mx:Label text="Locations : "
+						left="5" right="5" top="30"
+					/>
+					<mx:ComboBox id="lnkLocation1" dataProvider="{locations}" prompt="-" selectedIndex="-1"
+						left="5" right="5" top="50"
+					/>
+					<mx:ComboBox id="lnkLocation2" dataProvider="{locations}" prompt="-" selectedIndex="-1" width="100%" 
+						left="5" right="5" top="80"
+					/>
+				</mx:Canvas>
 			</mx:Canvas>
 			<mx:Canvas label="Description" width="100%" height="100%">
 				<flexlib:PromptingTextArea  id="lnkDescription" prompt="Description"
@@ -434,15 +471,15 @@
 				<mx:TextInput cornerRadius="10" text="On Double Click" top="0" left="15" width="100" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
 		</flexlib:HAccordion>
-		<mx:Button id="addButton" label="Add" visible="false"
+		<mx:Button id="addButton" label="Connect"
 			right="0" bottom="0"
 			click="onAddClicked()"
 		/>
-		<mx:Button id="saveButton" label="Save"
+		<mx:Button id="saveButton" label="Save" visible="false"
 			right="0" bottom="0"
 			click="onSaveClicked()"
 		/>
-		<mx:Button id="deleteButton" label="Delete"
+		<mx:Button id="deleteButton" label="Disconnect" visible="false"
 			right="65" bottom="0"
 			click="onDeleteClicked()"
 		/>

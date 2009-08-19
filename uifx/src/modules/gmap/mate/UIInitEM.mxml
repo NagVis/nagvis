@@ -23,6 +23,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.NagVisMapsData;
 			import com.asfusion.mate.events.Dispatcher;
 
 			import modules.gmap.view.MainView;
@@ -30,6 +31,7 @@
 			import modules.gmap.view.controls.GMapLocationControl;
 			import modules.gmap.view.controls.GMapLocationsControl;
 			import modules.gmap.view.controls.GMapLocationsExtControl;
+			import modules.gmap.view.controls.GMapLinkControl;
 			import modules.gmap.view.controls.GMapLinksControl;
 			import modules.gmap.view.DialogViewpoint;
 			import modules.gmap.view.DialogLocation;
@@ -76,6 +78,7 @@
 		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
 		<PropertyInjector targetKey="services" source="{ServicesData}"/>
 		<PropertyInjector targetKey="servicegroups" source="{ServiceGroupsData}"/>
+		<PropertyInjector targetKey="nagvisMaps" source="{NagVisMapsData}"/>
 	</Injectors>
 
 	<Injectors target="{DialogLink}" debug="true">
@@ -85,6 +88,7 @@
 		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
 		<PropertyInjector targetKey="services" source="{ServicesData}"/>
 		<PropertyInjector targetKey="servicegroups" source="{ServiceGroupsData}"/>
+		<PropertyInjector targetKey="nagvisMaps" source="{NagVisMapsData}"/>
 	</Injectors>
 
 	<Injectors target="{GMapLocationControl}" debug="true">
@@ -99,6 +103,10 @@
 		<PropertyInjector targetKey="dataProvider" source="{LocationsExtData}"/>
 	</Injectors>
 
+	<Injectors target="{GMapLinkControl}">
+		<PropertyInjector targetKey="link" source="{CurrentLink}" sourceKey="link"/>
+	</Injectors>
+		
 	<Injectors target="{GMapLinksControl}">
 		<PropertyInjector targetKey="dataProvider" source="{LinksData}"/>
 	</Injectors>

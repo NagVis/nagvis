@@ -26,6 +26,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.events.LinkEvent;
 			import modules.gmap.events.LocationEvent;
 			import com.google.maps.MapMouseEvent;
 			import mx.utils.StringUtil;
@@ -68,17 +69,20 @@
 				locationsControl.map = map;
 				locationsExtControl.map = map;
 
+				linkControl.map = map;
 				linksControl.map = map;
 			}
 
 			private function onClick(event : MapMouseEvent) : void
 			{
 				dispatchEvent(new LocationEvent(LocationEvent.SELECTED));
+				dispatchEvent(new LinkEvent(LinkEvent.SELECTED));
 			}
 		]]>
 	</mx:Script>
 	<controls:GMapLocationControl id="locationControl"/>
 	<controls:GMapLocationsControl id="locationsControl"/>
 	<controls:GMapLocationsExtControl id="locationsExtControl" visible="false"/>
+	<controls:GMapLinkControl id="linkControl"/>
 	<controls:GMapLinksControl id="linksControl"/>
 </mx:Canvas>

@@ -29,7 +29,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:RemoteObject id="ViewpointsService" destination="zend" source="Viewpoint" />
+	<mx:RemoteObject id="ViewpointsService" destination="zend" source="ViewpointService" />
 
 	<EventHandlers type="{ViewpointEvent.SELECTED}">
 		<MethodInvoker generator="{MapMD}" method="focusViewpoint" arguments="{event.viewpoint}"/>

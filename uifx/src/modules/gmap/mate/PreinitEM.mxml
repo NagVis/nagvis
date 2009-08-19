@@ -23,9 +23,9 @@
 >
 	<mx:Script>
 		<![CDATA[
-			import modules.gmap.data.SettingsData;
 			import mx.events.FlexEvent;
 
+			import modules.gmap.data.SettingsData;
 			import modules.gmap.data.ViewpointsData;
 			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsExtData;
@@ -36,6 +36,7 @@
 			import modules.gmap.data.HostGroupsData;
 			import modules.gmap.data.ServicesData;
 			import modules.gmap.data.ServiceGroupsData;
+			import modules.gmap.data.NagVisMapsData;
 		]]>
 	</mx:Script>
 
@@ -51,6 +52,7 @@
 		<ObjectBuilder generator="{HostGroupsData}"/>
 		<ObjectBuilder generator="{ServicesData}"/>
 		<ObjectBuilder generator="{ServiceGroupsData}"/>
+		<ObjectBuilder generator="{NagVisMapsData}"/>
 	</EventHandlers>
 
 </EventMap>

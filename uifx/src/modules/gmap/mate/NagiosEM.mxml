@@ -34,7 +34,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:RemoteObject id="NagiosService" destination="zend" source="Database"/>
+	<mx:RemoteObject id="NagiosService" destination="zend" source="NagiosService"/>
 
 	<EventHandlers type="{NagiosObjectEvent.NEED_ALL_HOSTS}">
 		<DataCopier destination="data" destinationKey="count" source="{HostsData}" sourceKey="length"/>

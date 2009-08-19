@@ -1,5 +1,3 @@
-<?php
-
 /*****************************************************************************
  *
  * Copyright (C) 2009 NagVis Project
@@ -21,18 +19,20 @@
  *
  *****************************************************************************/
 
-class Viewpoint
+package modules.gmap.data
 {
-	public $label;
-	public $center;
-	public $zoom;
+	import mx.collections.ArrayCollection;
 
-	public function __construct($label = "", $center = "", $zoom = 0)
+	public class NagVisMapsData extends ArrayCollection
 	{
-		$this->label = $label;
-		$this->center = $center;
-		$this->zoom = $zoom;
+		public function NagVisMapsData(source : Array = null)
+		{
+			super(source);
+		}
+
+		public function fill(data : Array) : void
+		{
+			this.source = data;
+		}		
 	}
 }
-
-?>

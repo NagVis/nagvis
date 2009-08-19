@@ -40,6 +40,7 @@ package modules.gmap.mediator
 		public static const MODE_DEFAULT : int = 0;
 		public static const MODE_LOCATION_EDIT : int = 1;
 		public static const MODE_LOCATION_SEARCH : int = 2;
+		public static const MODE_LINK_EDIT : int = 3;
 
 		private var _mode:int = 0;
 
@@ -84,6 +85,9 @@ package modules.gmap.mediator
 				case _view.searchBox:
 					mode = MODE_LOCATION_SEARCH;
 					break;
+				case _view.linksBox:
+					mode = MODE_LINK_EDIT;
+					break;
 				default:
 					mode = MODE_DEFAULT;
 			}
@@ -91,26 +95,30 @@ package modules.gmap.mediator
 
 		public function selectLocation(location : Location) : void
 		{
-			switch (_mode)
+			if (_mode == MODE_LOCATION_SEARCH)
 			{
-				case MODE_DEFAULT:
-					//Alert.show(location.label);
-					break;
-				case MODE_LOCATION_EDIT:
-					//_view.locationBox.update(location);
-					break;
-				case MODE_LOCATION_SEARCH:
-					if (location.id && location.id.length > 0)
-						break;
-					//_view.locationBox.update(location);
-					_view.locationBox.setCurrentState('right-expanded');
-					break;
+				//no location selected - do nothing
+				if (!location) 
+					return;
+				
+				//selected existing location - do nothing
+				if (location.id && location.id.length > 0)
+					return;
+					
+				//selected the new location - open location dialog to add it
+				_view.locationBox.setCurrentState('right-expanded');
+				return;
+			}
+			
+			if (_mode == MODE_LINK_EDIT)
+			{
+				if(location)
+					_view.linksBox.pushLocation(location);
 			}
 		}
 
 		public function selectLink(link : Link) : void
 		{
-			_view.linksBox.setCurrentState('right-expanded');
 		}
 
 		public function gotoURL(url : String, newWindow : Boolean) : void
