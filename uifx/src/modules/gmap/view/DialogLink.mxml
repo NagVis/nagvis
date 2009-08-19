@@ -61,8 +61,8 @@
 
 					if (link)
 					{
-						location1.selectedItem = link.location1;
-						location2.selectedItem = link.location2;
+						lnkLocation1.selectedItem = link.location1;
+						lnkLocation2.selectedItem = link.location2;
 						lnkDescription.text = link.description;
 
 						if (link.id1 && link.id1.length > 0 && link.id2 && link.id2.length > 0)
@@ -141,8 +141,8 @@
 					}
 					else
 					{
-						location1.selectedIndex = 0;
-						location2.selectedIndex = 0;
+						lnkLocation1.selectedIndex = 0;
+						lnkLocation2.selectedIndex = 0;
 						lnkDescription.text = "";
 						lnkNObjectType.selectedIndex = 0;
 						onObjectTypeChange();
@@ -159,10 +159,10 @@
 			{
 				var ul : Link = new Link();
 
-				ul.id1 = (_link)? _link.id1 : location1.selectedItem.id;
-				ul.id2 = (_link)? _link.id2 : location2.selectedItem.id;
-				ul.location1 = (_link)? _link.location1 : location1.selectedItem as Location;
-				ul.location2 = (_link)? _link.location2 : location2.selectedItem as Location;
+				ul.id1 = (_link)? _link.id1 : lnkLocation1.selectedItem.id;
+				ul.id2 = (_link)? _link.id2 : lnkLocation2.selectedItem.id;
+				ul.location1 = (_link)? _link.location1 : lnkLocation1.selectedItem as Location;
+				ul.location2 = (_link)? _link.location2 : lnkLocation2.selectedItem as Location;
 				ul.description = lnkDescription.text;
 				ul.object = lnkNObject.selectedItem;
 
@@ -372,8 +372,8 @@
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" height="138" styleName="accordion" creationPolicy="all">
 			<mx:Canvas label="General" width="100%" height="100%">
-				<mx:ComboBox top="0" left="10" right="10" id="location1" dataProvider="{locations}"></mx:ComboBox>
-				<mx:ComboBox top="30" left="10" right="10" id="location2" dataProvider="{locations}"></mx:ComboBox>
+				<mx:ComboBox top="0" left="10" right="10" id="lnkLocation1" dataProvider="{locations}"></mx:ComboBox>
+				<mx:ComboBox top="30" left="10" right="10" id="lnkLocation2" dataProvider="{locations}"></mx:ComboBox>
 			</mx:Canvas>
 			<mx:Canvas label="Description" width="100%" height="100%">
 				<flexlib:PromptingTextArea  id="lnkDescription" prompt="Description"
