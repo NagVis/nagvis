@@ -27,6 +27,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.domain.Location;
 			import modules.gmap.events.LinkEvent;
 			import modules.gmap.domain.Link;
 			import mx.formatters.SwitchSymbolFormatter;
@@ -156,8 +157,10 @@
 			{
 				var ul : Link = new Link();
 
-				ul.id1 = _link.id1;
-				ul.id2 = _link.id2;
+				ul.id1 = (_link)? _link.id1 : location1.selectedItem.id;
+				ul.id2 = (_link)? _link.id2 : location2.selectedItem.id;
+				ul.location1 = (_link)? _link.location1 : location1.selectedItem as Location;
+				ul.location2 = (_link)? _link.location2 : location2.selectedItem as Location;
 				ul.description = lnkDescription.text;
 				ul.object = lnkNObject.selectedItem;
 
