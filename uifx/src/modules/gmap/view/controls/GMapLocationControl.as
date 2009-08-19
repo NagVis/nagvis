@@ -90,12 +90,20 @@ package modules.gmap.view.controls
 					title.underline = true
 
 					var io : InfoWindowOptions = new InfoWindowOptions;
-					io.title = _location.label;
-					io.titleFormat = title;
-					io.content = _location.description;
 					io.hasCloseButton = false;
 					io.pointOffset = new Point(-3, -5);
 
+					if(_location.id && _location.id.length > 0)
+					{
+						io.title = _location.label;
+						io.titleFormat = title;
+						io.content = _location.description;
+					}
+					else
+					{
+						io.content = _location.address;
+					}
+					
 					_map.openInfoWindow(LatLng.fromUrlValue(_location.point), io);
 				}
 				else
