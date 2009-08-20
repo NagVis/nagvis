@@ -73,7 +73,7 @@
 						lnkLocation2.selectedItem = link.location2;
 						lnkDescription.text = link.description;
 
-						if (link.id1 && link.id1.length > 0 && link.id2 && link.id2.length > 0)
+						if (link.id && link.id.length)
 						{
 							addButton.visible = false;
 							saveButton.visible = true;
@@ -168,6 +168,7 @@
 			{
 				var ul : Link = new Link();
 
+				ul.id = (_link)? _link.id : '';
 				ul.id1 = (_link)? _link.id1 : lnkLocation1.selectedItem.id;
 				ul.id2 = (_link)? _link.id2 : lnkLocation2.selectedItem.id;
 				ul.location1 = (_link)? _link.location1 : lnkLocation1.selectedItem as Location;
@@ -206,7 +207,7 @@
 
 			private function onSaveClicked() : void
 			{
-				if (_link && _link.id1 && _link.id1.length > 0 && _link.id2 && _link.id2.length > 0)
+				if (_link && _link.id && _link.id.length > 0)
 				{
 					dispatchEvent(new LinkEvent(LinkEvent.SAVE, getUpdatedLink()));
 				}

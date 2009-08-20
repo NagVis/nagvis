@@ -28,6 +28,7 @@ class Link
 	const STATE_WARNING = 2;
 	const STATE_ERROR = 3;
 
+	public $id;
 	public $id1;
 	public $id2;
 	public $description;
@@ -35,9 +36,10 @@ class Link
 	public $object;
 	public $state;
 
-	public function __construct($id1 = "", $id2 = "", $description = "",
+	public function __construct($id = '', $id1 = "", $id2 = "", $description = "",
 		$action = "", $object = null, $state = self::STATE_UNKNOWN)
 	{
+		$this->id = $id;
 		$this->id1 = $id1;
 		$this->id2 = $id2;
 		$this->description = $description;
@@ -79,13 +81,14 @@ class Link
 			}
 		}
 
-		return new Link((string)$node['id1'], (string)$node['id2'],
+		return new Link((string)$node['id'], (string)$node['id1'], (string)$node['id2'],
 			(string)$node['description'], (string)$node['action'], $object);
 	}
 
 	public function toXML($parent)
 	{
 		$node = $parent->addChild('link');
+		$node->addAttribute('id', $this->id);
 		$node->addAttribute('id1', $this->id1);
 		$node->addAttribute('id2', $this->id2);
 		@$node->addAttribute('description', $this->description);

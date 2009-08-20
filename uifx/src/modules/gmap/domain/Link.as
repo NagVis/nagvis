@@ -30,6 +30,8 @@ package modules.gmap.domain
 		public static const STATE_WARNING : Number = 2;
 		public static const STATE_ERROR : Number = 3;
 
+		public var id : String;
+
 		public var id1 : String;
 		public var location1 : Location;
 
@@ -43,6 +45,7 @@ package modules.gmap.domain
 
 		public function update(value : Link) : void
 		{
+			this.id = value.id;
 			this.id1 = value.id1;
 			this.id2 = value.id2;
 			this.description = value.description;
