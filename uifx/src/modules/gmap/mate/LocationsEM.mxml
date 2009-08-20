@@ -79,6 +79,7 @@
 		<RemoteObjectInvoker instance="{LocationsService}" method="remove" arguments="{event.location.id}">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="removeItemById" arguments="{resultObject}"/>
+				<EventAnnouncer generator="{LocationEvent}" constructorArguments="{LocationEvent.SELECTED}" />
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
