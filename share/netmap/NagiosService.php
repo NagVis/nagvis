@@ -31,16 +31,10 @@ class NagiosService
 	{
 		require_once("../nagvis/includes/defines/global.php");
 		require_once("../nagvis/includes/defines/matches.php");
-		//require("../nagvis/includes/functions/autoload.php");
 		set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__))
 			. PATH_SEPARATOR . '../nagvis/includes/classes/'
-			. PATH_SEPARATOR . '../nagvis/includes/classes/'
-			//. PATH_SEPARATOR . '../nagvis/includes/classes/objects/'
-			//. PATH_SEPARATOR . '../nagvis/includes/classes/controller/'
 			. PATH_SEPARATOR . '../nagvis/includes/classes/validator/'
-			//. PATH_SEPARATOR . '../nagvis/includes/classes/httpRequest/'
 			. PATH_SEPARATOR . '../nagvis/includes/classes/frontend/');
-		//require("../nagvis/includes/functions/debug.php");
 		require_once("../nagvis/includes/functions/oldPhpVersionFixes.php");
 		require_once("../nagvis/includes/functions/getuser.php");
 
