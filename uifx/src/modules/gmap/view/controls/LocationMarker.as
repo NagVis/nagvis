@@ -39,11 +39,8 @@ package modules.gmap.view.controls
 		[Embed(source="modules/gmap/img/std_small_warning.png")]
 		protected static var warningIcon : Class;
 
-		[Embed(source="modules/gmap/img/std_small_error.png")]
-		protected static var errorIcon : Class;
-
 		[Embed(source="modules/gmap/img/std_small_critical.png")]
-		protected static var criticalIcon : Class;
+		protected static var errorIcon : Class;
 
 		[Embed(source="modules/gmap/img/std_small_unknown.png")]
 		protected static var unknownIcon : Class;
