@@ -18,7 +18,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 package modules.gmap.view.controls
 {
 	import com.google.maps.LatLng;
@@ -62,14 +62,14 @@ package modules.gmap.view.controls
 		public function get link():Link
 		{
 			return _link;
-		}		
+		}
 
 		public function set link(value:Link):void
 		{
 			if(_link !== value)
 				_link = value;
 
-			reinitLine(); 
+			reinitLine();
 		}
 
 		protected function reinitLine():void
@@ -95,11 +95,11 @@ package modules.gmap.view.controls
 				}
 				else
 				{
-					if(_line)
+					if (_line)
 					{
 						_map.removeOverlay(_line);
 						_line = null;
-					}	
+					}
 				}
 			}
 		}
