@@ -50,7 +50,7 @@ class LinkService
 					throw new Exception('Unknown object type in links.xml');
 			}
 		else
-			$link->state = Link::STATE_UNKNOWN;
+			$link->state = State::UNKNOWN;
 	}
 
 	/**
@@ -69,7 +69,7 @@ class LinkService
 
 			self::updateState($link);
 
-			if (!$problemonly || $link->state != Link::STATE_OK)
+			if (!$problemonly || $link->state != State::OK)
 				$links[] = $link;
 		}
 

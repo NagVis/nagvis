@@ -23,11 +23,6 @@
 
 class Link
 {
-	const STATE_UNKNOWN = 0;
-	const STATE_OK = 1;
-	const STATE_WARNING = 2;
-	const STATE_ERROR = 3;
-
 	public $id;
 	public $id1;
 	public $id2;
@@ -37,7 +32,7 @@ class Link
 	public $state;
 
 	public function __construct($id = '', $id1 = "", $id2 = "", $description = "",
-		$action = "", $object = null, $state = self::STATE_UNKNOWN)
+		$action = "", $object = null, $state = State::UNKNOWN)
 	{
 		$this->id = $id;
 		$this->id1 = $id1;

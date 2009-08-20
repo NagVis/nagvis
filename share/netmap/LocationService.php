@@ -50,7 +50,7 @@ class LocationService
 					throw new Exception('Unknown object type in locations.xml');
 			}
 		else
-			$location->state = Location::STATE_UNKNOWN;
+			$location->state = State::UNKNOWN;
 	}
 
 	/**
@@ -69,7 +69,7 @@ class LocationService
 
 			self::updateState($location);
 
-			if (!$problemonly || $location->state != Location::STATE_OK)
+			if (!$problemonly || $location->state != State::OK)
 				$locations[] = $location;
 		}
 

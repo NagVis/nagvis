@@ -23,11 +23,6 @@
 
 class Location
 {
-	const STATE_UNKNOWN = 0;
-	const STATE_OK = 1;
-	const STATE_WARNING = 2;
-	const STATE_ERROR = 3;
-
 	public $id;
 	public $point;
 	public $label;
@@ -37,7 +32,8 @@ class Location
 	public $object;
 	public $state;
 
-	public function __construct($id = "", $point = "", $label = "", $address = "", $description = "", $action = "", $object = null, $state = self::STATE_UNKNOWN)
+	public function __construct($id = "", $point = "", $label = "", $address = "",
+		$description = "", $action = "", $object = null, $state = State::UNKNOWN)
 	{
 		$this->id = $id;
 		$this->point = $point;

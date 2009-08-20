@@ -117,23 +117,23 @@ class NagiosService
 		switch ($data['state'])
 		{
 			case 'ERROR':
-				return Location::STATE_ERROR;
+				return State::ERROR;
 
 			case 'PENDING':
-				return Location::STATE_UNKNOWN;
+				return State::UNKNOWN;
 
 			case 'UP':
-				return Location::STATE_OK;
+				return State::OK;
 
 			case 'DOWN':
-				return Location::STATE_ERROR;
+				return State::ERROR;
 
 			case 'UNREACHABLE':
-				return Location::STATE_WARNING;
+				return State::WARNING;
 
 			case 'UNKNOWN':
 			default:
-				return Location::STATE_UNKNOWN;
+				return State::UNKNOWN;
 		}
 	}
 
@@ -147,23 +147,23 @@ class NagiosService
 		switch ($data['state'])
 		{
 			case 'ERROR':
-				return Location::STATE_ERROR;
+				return State::ERROR;
 
 			case 'PENDING':
-				return Location::STATE_UNKNOWN;
+				return State::UNKNOWN;
 
 			case 'OK':
-				return Location::STATE_OK;
+				return State::OK;
 
 			case 'WARNING':
-				return Location::STATE_WARNING;
+				return State::WARNING;
 
 			case 'CRITICAL':
-				return Location::STATE_ERROR;
+				return State::ERROR;
 
 			case 'UNKNOWN':
 			default:
-				return Location::STATE_UNKNOWN;
+				return State::UNKNOWN;
 		}
 	}
 
@@ -173,7 +173,7 @@ class NagiosService
 	public function getHostGroupState($hostgroup)
 	{
 		$hosts = $this->backend->getHostsByHostgroupName($hostgroup->name);
-		$state = Location::STATE_UNKNOWN;
+		$state = State::UNKNOWN;
 
 		foreach ($hosts as $host)
 			$state = max($state, $this->getHostState(new Host($host)));
@@ -187,7 +187,7 @@ class NagiosService
 	public function getServiceGroupState($servicegroup)
 	{
 		$services = $this->backend->getServicesByServicegroupName($servicegroup->name);
-		$state = Location::STATE_UNKNOWN;
+		$state = State::UNKNOWN;
 
 		foreach ($services as $service)
 			$state = max($state, $this->getServiceState(new Service($service['host_name'], $service['service_description'])));
