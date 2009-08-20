@@ -51,13 +51,13 @@
 			</resultHandlers>
 		</RemoteObjectInvoker>
 
-		<RemoteObjectInvoker destination="zend" source="LocationService" method="getAll" debug="true">
+		<RemoteObjectInvoker destination="zend" source="LocationService" method="getAll" arguments="false" debug="true">
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="fill" arguments="{resultObject}"/>
 				<MethodInvoker generator="{Poller}" method="resourceReady"/>
 
 				<DataCopier destination="{LinksData}" destinationKey="locations" source="{LocationsData}"/>
-				<RemoteObjectInvoker destination="zend" source="LinkService" method="getAll" debug="true">
+				<RemoteObjectInvoker destination="zend" source="LinkService" method="getAll" arguments="false" debug="true">
 					<resultHandlers>
 						<MethodInvoker generator="{LinksData}" method="fill" arguments="{resultObject}"/>
 					</resultHandlers>
