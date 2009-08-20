@@ -26,9 +26,9 @@ package modules.gmap.view.controls
 	import com.google.maps.overlays.Polyline;
 	import com.google.maps.overlays.PolylineOptions;
 	import com.google.maps.styles.StrokeStyle;
-	
+
 	import modules.gmap.domain.Link;
-	
+
 	import mx.core.UIComponent;
 
 	public class GMapLinkControl extends UIComponent
@@ -63,15 +63,15 @@ package modules.gmap.view.controls
 		{
 			return _link;
 		}		
-		
+
 		public function set link(value:Link):void
 		{
 			if(_link !== value)
 				_link = value;
-				
+
 			reinitLine(); 
 		}
-		
+
 		protected function reinitLine():void
 		{
 			if(_map)
@@ -80,7 +80,7 @@ package modules.gmap.view.controls
 				{
 					var point1 : LatLng = LatLng.fromUrlValue(_link.location1.point);
 					var point2 : LatLng = LatLng.fromUrlValue(_link.location2.point);
-		
+
 					var options : PolylineOptions = new PolylineOptions({
 						strokeStyle: new StrokeStyle({
 							color: 0xffffff,
@@ -88,9 +88,9 @@ package modules.gmap.view.controls
 							alpha: 1
 						})
 					});
-		
+
 					_line = new Polyline([point1, point2], options);
-					
+
 					_map.addOverlay(_line);
 				}
 				else

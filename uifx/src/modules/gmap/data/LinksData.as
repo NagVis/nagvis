@@ -73,17 +73,24 @@ package modules.gmap.data
 			return null;
 		}
 
-		public function addUpdateItem(item : Link) : void
+		public function addUpdateItem(item : Link) : Link
 		{
 			var link : Link = this.getItemById(item.id);
 
-			if (link == null)
+			if (link)
 			{
-				if(resolveLink(item))
-					addItem(item);
-			}
-			else
+				resolveLink(item);
 				link.update(item);
+				return link;
+			}
+
+			if (resolveLink(item))
+			{
+				addItem(item);
+				return item;
+			}
+
+			return null;
 		}
 
 		public function addUpdateItems(items : Array) : void

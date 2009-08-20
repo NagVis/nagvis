@@ -29,6 +29,7 @@ package modules.gmap.view.controls
 	import modules.gmap.domain.Link;
 	import modules.gmap.events.LinkEvent;
 
+	import mx.controls.RichTextEditor;
 	import mx.core.UIComponent;
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
@@ -100,7 +101,7 @@ package modules.gmap.view.controls
 					{
 						marked = _lines.shift();
 
-						if (marked.link.id1 === removed.id1 && marked.link.id2 === removed.id2)
+						if (marked.link.id === removed.id)
 						{
 							if (visible && _map)
 								_map.removeOverlay(marked);
@@ -161,6 +162,7 @@ package modules.gmap.view.controls
 				var l : LinkLine = new LinkLine(link);
 				l.addEventListener(LinkEvent.SELECTED, redispatchMarkerEvent);
 				l.addEventListener(LinkEvent.ACTIVATE, redispatchMarkerEvent);
+				l.addEventListener(LinkEvent.CHANGE, onLinkChange);
 				_lines.push(l);
 
 				if (visible)
@@ -173,6 +175,24 @@ package modules.gmap.view.controls
 		protected function redispatchMarkerEvent(event : Event) : void
 		{
 			dispatchEvent(event);
+		}
+
+		protected function onLinkChange(event : LinkEvent) : void
+		{
+			for (var i:int = 0; i < _lines.length; i++)
+			{
+				if(_lines[i].link.id == event.link.id)
+				{
+					if(_map)
+						_map.removeOverlay(_lines[i]);
+
+					_lines.splice(i, 1);
+
+					createLine(event.link);
+
+					break;
+				}
+			}
 		}
 	}
 }

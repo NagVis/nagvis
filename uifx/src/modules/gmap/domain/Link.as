@@ -46,6 +46,8 @@ package modules.gmap.domain
 		public function update(value : Link) : void
 		{
 			this.id = value.id;
+			this.location1 = value.location1;
+			this.location2 = value.location2;
 			this.id1 = value.id1;
 			this.id2 = value.id2;
 			this.description = value.description;

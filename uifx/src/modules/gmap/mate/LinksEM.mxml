@@ -48,7 +48,7 @@
 		<RemoteObjectInvoker instance="{LinksService}" method="add" arguments="{event.link}">
 			<resultHandlers>
 				<MethodInvoker generator="{LinksData}" method="addUpdateItem" arguments="{resultObject}"/>
-				<MethodInvoker generator="{CurrentLink}" method="update" arguments="{resultObject}"/>
+				<MethodInvoker generator="{CurrentLink}" method="update" arguments="{lastReturn}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
@@ -56,7 +56,9 @@
 	<EventHandlers type="{LinkEvent.SAVE}">
 		<RemoteObjectInvoker instance="{LinksService}" method="edit" arguments="{event.link}">
 			<resultHandlers>
+				<MethodInvoker generator="{CurrentLink}" method="update" arguments="{null}"/>
 				<MethodInvoker generator="{LinksData}" method="addUpdateItem" arguments="{resultObject}"/>
+				<MethodInvoker generator="{CurrentLink}" method="update" arguments="{lastReturn}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>

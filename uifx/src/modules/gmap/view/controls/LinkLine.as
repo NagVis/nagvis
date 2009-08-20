@@ -102,11 +102,23 @@ package modules.gmap.view.controls
 			}
 		}
 
-		protected function onChange(event : *) : void
+		protected function onChange(event : PropertyChangeEvent) : void
 		{
-			var options : PolylineOptions = this.getOptions();
-			options.strokeStyle.color = chooseColor(link.state);
-			this.setOptions(options);
+			trace(event.property + ':' + event.oldValue + ' -> ' + event.newValue);
+			switch (event.property)
+			{
+				case 'id1':
+				case 'id2':
+					dispatchEvent(
+						new LinkEvent(LinkEvent.CHANGE, _link, true)
+					);
+					break;
+
+				case 'state':
+					var options : PolylineOptions = this.getOptions();
+					options.strokeStyle.color = chooseColor(link.state);
+					this.setOptions(options);
+			}
 		}
 
 		public function get link() : Link
