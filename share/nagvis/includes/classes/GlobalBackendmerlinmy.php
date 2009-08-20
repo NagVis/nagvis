@@ -386,7 +386,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 					}
 				}
 				
-				if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
+				if($data['current_state'] == '') {
 					$arrReturn['state'] = 'PENDING';
 					$arrReturn['output'] = $this->CORE->LANG->getText('hostIsPending', Array('HOST' => $hostName));
 				} elseif($data['current_state'] == '0') {
@@ -516,7 +516,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 						}
 					}
 					
-					if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
+					if($data['current_state'] == '') {
 						$arrTmpReturn['state'] = 'PENDING';
 						$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked', Array('SERVICE' => $data['name2']));
 					} elseif($data['current_state'] == '0') {
