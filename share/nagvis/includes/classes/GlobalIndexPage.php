@@ -198,72 +198,85 @@ class GlobalIndexPage {
 	public function parseMapsJson() {
 		$aMaps = Array();
 		
-		foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
-			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
-			if(!$MAPCFG->readMapConfig()) {
-				// Skip this map when config problem
-				continue;
-			}
-			
-			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
-				$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
-				
-				// Apply default configuration to object
-				$objConf = Array();
-				foreach($MAPCFG->getValidTypeKeys('map') AS $key) {
-					$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
+
+		// Only display the rotation list when enabled
+		if($this->CORE->MAINCFG->getValue('index','showmaps') == 1) {
+			foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
+				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+				if(!$MAPCFG->readMapConfig()) {
+					// Skip this map when config problem
+					continue;
 				}
-				$objConf['type'] = 'map';
-				$objConf['map_name'] = $MAPCFG->getName();
-				$objConf['object_id'] = $object_id;
 				
-				$MAP->MAPOBJ->setConfiguration($objConf);
-				
-				// Get the icon of the map
-				$MAP->MAPOBJ->fetchIcon();
-				
-				// Check if the user is permitted to view this map
-				if($MAPCFG->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
-					if($MAP->MAPOBJ->checkMaintenance(0)) {
-						$class = '';
-						$url = '';
-						
-						$url = $this->htmlBase.'/index.php?map='.$mapName;
-						
-						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
-					} else {
-						$class = 'disabled';
-						
-						$url = 'javascript:alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
-						$summaryOutput = $this->CORE->LANG->getText('mapInMaintenance');
+				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
+					$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
+					
+					// Apply default configuration to object
+					$objConf = Array();
+					foreach($MAPCFG->getValidTypeKeys('map') AS $key) {
+						$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
 					}
+					$objConf['type'] = 'map';
+					$objConf['map_name'] = $MAPCFG->getName();
+					$objConf['object_id'] = $object_id;
 					
-					$imgPath = $this->CORE->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
-					$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+					$MAP->MAPOBJ->setConfiguration($objConf);
 					
-					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
-						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$sThumbFile;
-						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$sThumbFile;
-						
-						// Only create a new thumb when there is no cached one
-						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-						if($FCACHE->isCached() === -1) {
-							$image = $this->createThumbnail($imgPath, $sThumbPath);
+					// Get the icon of the map
+					$MAP->MAPOBJ->fetchIcon();
+					
+					// Check if the user is permitted to view this map
+					if($MAPCFG->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+						if($MAP->MAPOBJ->checkMaintenance(0)) {
+							$class = '';
+							$url = '';
+							
+							$url = $this->htmlBase.'/index.php?map='.$mapName;
+							
+							$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
+						} else {
+							$class = 'disabled';
+							
+							$url = 'javascript:alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
+							$summaryOutput = $this->CORE->LANG->getText('mapInMaintenance');
 						}
 						
-						$image = $sThumbPathHtml;
-					} else {
-						$image = $imgPathHtml;
+						// Only handle thumbnail image when told to do so
+						if($this->CORE->MAINCFG->getValue('index','showmapthumbs') == 1) {
+							$imgPath = $this->CORE->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
+							$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+							
+							if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
+								$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
+								$sThumbPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$sThumbFile;
+								$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$sThumbFile;
+								
+								// Only create a new thumb when there is no cached one
+								$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+								if($FCACHE->isCached() === -1) {
+									$image = $this->createThumbnail($imgPath, $sThumbPath);
+								}
+								
+								$image = $sThumbPathHtml;
+							} else {
+								$image = $imgPathHtml;
+							}
+							
+						}
+						
+						$arr = $MAP->MAPOBJ->parseJson();
+						
+						
+						// Only handle thumbnail image when told to do so
+						if($this->CORE->MAINCFG->getValue('index','showmapthumbs') == 1) {
+							$arr['overview_image'] = $image;
+						}
+						
+						$arr['overview_class'] = $class;
+						$arr['overview_url'] = $url;
+						
+						$aMaps[] = $arr;
 					}
-					
-					$arr = $MAP->MAPOBJ->parseJson();
-					
-					$arr['overview_class'] = $class;
-					$arr['overview_url'] = $url;
-					$arr['overview_image'] = $image;
-					
-					$aMaps[] = $arr;
 				}
 			}
 		}
@@ -316,8 +329,10 @@ class GlobalIndexPage {
 		$arr = Array();
 		
 		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index', 'cellsperrow');
-		$arr['showrotations'] = $this->CORE->MAINCFG->getValue('index', 'showrotations');
 		$arr['showautomaps'] = $this->CORE->MAINCFG->getValue('index', 'showautomaps');
+		$arr['showmaps'] = $this->CORE->MAINCFG->getValue('index', 'showmaps');
+		$arr['showmapthumbs'] = $this->CORE->MAINCFG->getValue('index', 'showmapthumbs');
+		$arr['showrotations'] = $this->CORE->MAINCFG->getValue('index', 'showrotations');
 		
 		$arr['page_title'] = $this->CORE->MAINCFG->getValue('internal', 'title');
 		// FIXME: State of the overview like on maps would be nice

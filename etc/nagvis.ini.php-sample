@@ -120,6 +120,10 @@
 ;headertemplate="default"
 ; Enable/Disable automap listing
 ;showautomaps=1
+; Enable/Disable map listing
+;showmaps=1
+; Enable/Disable map thumbnails
+;showmapthumbs=1
 ; Enable/Disable rotation listing
 ;showrotations=1
 

@@ -822,33 +822,36 @@ function flashIcon(intIndex, iDuration, iInterval){
 function parseOverviewPage() {
 	var oContainer = document.getElementById('overview');
 	
-	var oTable = document.createElement('table');
-	oTable.setAttribute('class', 'infobox');
-	oTable.setAttribute('className', 'infobox');
-	
-	var oTbody = document.createElement('tbody');
-	oTbody.setAttribute('id', 'overviewMaps');
-	
-	var oTr = document.createElement('tr');
-	
-	var oTh = document.createElement('th');
-	oTh.colSpan = oPageProperties.cellsperrow;
-	oTh.appendChild(document.createTextNode(oPageProperties.lang_mapIndex));
-	
-	oTr.appendChild(oTh);
-	oTh = null;
-	
-	oTbody.appendChild(oTr);
-	oTr = null;
-	
-	oTable.appendChild(oTbody);
-	oTbody = null;
-	
-	oContainer.appendChild(oTable);
-	oTable = null;
+	// Render the maps when enabled
+	if(oPageProperties.showmaps == 1 && aInitialMaps.length > 0) {
+		var oTable = document.createElement('table');
+		oTable.setAttribute('class', 'infobox');
+		oTable.setAttribute('className', 'infobox');
+		
+		var oTbody = document.createElement('tbody');
+		oTbody.setAttribute('id', 'overviewMaps');
+		
+		var oTr = document.createElement('tr');
+		
+		var oTh = document.createElement('th');
+		oTh.colSpan = oPageProperties.cellsperrow;
+		oTh.appendChild(document.createTextNode(oPageProperties.lang_mapIndex));
+		
+		oTr.appendChild(oTh);
+		oTh = null;
+		
+		oTbody.appendChild(oTr);
+		oTr = null;
+		
+		oTable.appendChild(oTbody);
+		oTbody = null;
+		
+		oContainer.appendChild(oTable);
+		oTable = null;
+	}
 	
 	// Render the automaps when enabled
-	if(oPageProperties.showautomaps && aInitialAutomaps.length > 0) {
+	if(oPageProperties.showautomaps == 1 && aInitialAutomaps.length > 0) {
 		oTable = document.createElement('table');
 		oTable.setAttribute('class', 'infobox');
 		oTable.setAttribute('className', 'infobox');
@@ -877,7 +880,7 @@ function parseOverviewPage() {
 	
 	// Render the rotation list when enabled
 	
-	if(oPageProperties.showrotations && aInitialRotations.length > 0) {
+	if(oPageProperties.showrotations == 1 && aInitialRotations.length > 0) {
 		oTable = document.createElement('table');
 		oTable.setAttribute('class', 'infobox');
 		oTable.setAttribute('className', 'infobox');
@@ -918,46 +921,49 @@ function parseOverviewPage() {
 function parseOverviewMaps(aMapsConf) {
 	eventlog("worker", "debug", "parseOverviewMaps: Start setting maps");
 	
-	var oTable = document.getElementById('overviewMaps');
-	var oTr = document.createElement('tr');
-	
-	for(var i = 0, len = aMapsConf.length; i < len; i++) {
-		var oObj;
-		
-		oObj = new NagVisMap(aMapsConf[i]);
-		
-		if(oObj !== null) {
-			// Save object to map objects array
-			aMaps.push(oObj);
+	// Render the maps when enabled
+	if(oPageProperties.showmaps == 1 && aMapsConf.length > 0) {
+		var oTable = document.getElementById('overviewMaps');
+		var oTr = document.createElement('tr');
 			
-			// Parse child and save reference in parsedObject
-			oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+		for(var i = 0, len = aMapsConf.length; i < len; i++) {
+			var oObj;
+			
+			oObj = new NagVisMap(aMapsConf[i]);
+			
+			if(oObj !== null) {
+				// Save object to map objects array
+				aMaps.push(oObj);
+				
+				// Parse child and save reference in parsedObject
+				oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+			}
+			
+			if((i+1) % oPageProperties.cellsperrow === 0) {
+				oTable.appendChild(oTr);
+				oTr = null;
+				oTr = document.createElement('tr');
+			}
+			
+			oObj = null;
+		}
+	
+		// Fill table with empty cells if there are not enough maps to get the last 
+		// row filled
+		if(i % oPageProperties.cellsperrow !== 0) {
+			for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
+				var oTd = document.createElement('td');
+				oTr.appendChild(oTd);
+				oTd = null;
+			}
 		}
 		
-		if((i+1) % oPageProperties.cellsperrow === 0) {
-			oTable.appendChild(oTr);
-			oTr = null;
-			oTr = document.createElement('tr');
-		}
+		// Append last row
+		oTable.appendChild(oTr);
+		oTr = null;
 		
-		oObj = null;
+		oTable = null;
 	}
-	
-	// Fill table with empty cells if there are not enough maps to get the last 
-	// row filled
-	if(i % oPageProperties.cellsperrow !== 0) {
-		for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
-			var oTd = document.createElement('td');
-			oTr.appendChild(oTd);
-			oTd = null;
-		}
-	}
-	
-	// Append last row
-	oTable.appendChild(oTr);
-	oTr = null;
-	
-	oTable = null;
 	
 	eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
 }
@@ -973,46 +979,49 @@ function parseOverviewMaps(aMapsConf) {
 function parseOverviewAutomaps(aMapsConf) {
 	eventlog("worker", "debug", "parseOverviewAutomaps: Start setting automaps");
 	
-	var oTable = document.getElementById('overviewAutomaps');
-	var oTr = document.createElement('tr');
-	
-	for(var i = 0, len = aMapsConf.length; i < len; i++) {
-		var oObj;
+	// Render the maps when enabled
+	if(oPageProperties.showautomaps == 1 && aMapsConf.length > 0) {
+		var oTable = document.getElementById('overviewAutomaps');
+		var oTr = document.createElement('tr');
 		
-		oObj = new NagVisMap(aMapsConf[i]);
-		
-		if(oObj !== null) {
-			// Save object to map objects array
-			aMaps.push(oObj);
+		for(var i = 0, len = aMapsConf.length; i < len; i++) {
+			var oObj;
 			
-			// Parse child and save reference in parsedObject
-			oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+			oObj = new NagVisMap(aMapsConf[i]);
+			
+			if(oObj !== null) {
+				// Save object to map objects array
+				aMaps.push(oObj);
+				
+				// Parse child and save reference in parsedObject
+				oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+			}
+			
+			if((i+1) % oPageProperties.cellsperrow === 0) {
+				oTable.appendChild(oTr);
+				oTr = null;
+				oTr = document.createElement('tr');
+			}
+			
+			oObj = null;
 		}
 		
-		if((i+1) % oPageProperties.cellsperrow === 0) {
-			oTable.appendChild(oTr);
-			oTr = null;
-			oTr = document.createElement('tr');
+		// Fill table with empty cells if there are not enough maps to get the last 
+		// row filled
+		if(i % oPageProperties.cellsperrow !== 0) {
+			for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
+				var oTd = document.createElement('td');
+				oTr.appendChild(oTd);
+				oTd = null;
+			}
 		}
 		
-		oObj = null;
+		// Append last row
+		oTable.appendChild(oTr);
+		oTr = null;
+		
+		oTable = null;
 	}
-	
-	// Fill table with empty cells if there are not enough maps to get the last 
-	// row filled
-	if(i % oPageProperties.cellsperrow !== 0) {
-		for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
-			var oTd = document.createElement('td');
-			oTr.appendChild(oTd);
-			oTd = null;
-		}
-	}
-	
-	// Append last row
-	oTable.appendChild(oTr);
-	oTr = null;
-	
-	oTable = null;
 	
 	eventlog("worker", "debug", "parseOverviewAutomaps: End setting automaps");
 }
@@ -1028,7 +1037,7 @@ function parseOverviewAutomaps(aMapsConf) {
 function parseOverviewRotations(aRotationsConf) {
 	eventlog("worker", "debug", "setOverviewObjects: Start setting rotations");
 	
-	if(oPageProperties.showrotations && aRotationsConf.length > 0) {
+	if(oPageProperties.showrotations == 1 && aRotationsConf.length > 0) {
 		for(var i = 0, len = aRotationsConf.length; i < len; i++) {
 			var oObj;
 			

@@ -55,7 +55,11 @@ var NagVisMap = NagVisStatefulObject.extend({
 		oTd.setAttribute('class', this.conf.overview_class);
 		oTd.setAttribute('className', this.conf.overview_class);
 		oTd.style.width = '200px';
-		oTd.style.height = '200px';
+		
+		// Only show map thumb when configured
+		if(oPageProperties.showmapthumbs == 1) {
+			oTd.style.height = '200px';
+		}
 		
 		// Link
 		var oLink = document.createElement('a');
@@ -80,14 +84,16 @@ var NagVisMap = NagVisStatefulObject.extend({
 		oLink.appendChild(br);
 		br = null;
 		
-		// Map thumb
-		oImg = document.createElement('img');
-		oImg.style.width = '200px';
-		oImg.style.height = '150px';
-		oImg.src=this.conf.overview_image;
-		oLink.appendChild(oImg);
-		oImg = null;
-		
+		// Only show map thumb when configured
+		if(oPageProperties.showmapthumbs == 1) {
+			oImg = document.createElement('img');
+			oImg.style.width = '200px';
+			oImg.style.height = '150px';
+			oImg.src=this.conf.overview_image;
+			oLink.appendChild(oImg);
+			oImg = null;
+		}
+				
 		oTd.appendChild(oLink);
 		oLink = null;
 		
