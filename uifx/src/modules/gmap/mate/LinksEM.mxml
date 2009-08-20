@@ -64,7 +64,7 @@
 	</EventHandlers>
 
 	<EventHandlers type="{LinkEvent.DELETE}">
-		<RemoteObjectInvoker instance="{LinksService}" method="remove" arguments="{[event.link.id1, event.link.id2]}">
+		<RemoteObjectInvoker instance="{LinksService}" method="remove" arguments="{event.link.id}">
 			<resultHandlers>
 				<MethodInvoker generator="{LinksData}" method="removeItemById" arguments="{resultObject}"/>
 				<EventAnnouncer generator="{LinkEvent}" constructorArguments="{LinkEvent.SELECTED}" />
