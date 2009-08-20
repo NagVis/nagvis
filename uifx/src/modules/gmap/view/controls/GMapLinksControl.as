@@ -160,8 +160,8 @@ package modules.gmap.view.controls
 			if (_map)
 			{
 				var l : LinkLine = new LinkLine(link);
-				l.addEventListener(LinkEvent.SELECTED, redispatchMarkerEvent);
-				l.addEventListener(LinkEvent.ACTIVATE, redispatchMarkerEvent);
+				l.addEventListener(LinkEvent.SELECTED, redispatchLineEvent);
+				l.addEventListener(LinkEvent.ACTIVATE, redispatchLineEvent);
 				l.addEventListener(LinkEvent.CHANGE, onLinkChange);
 				_lines.push(l);
 
@@ -172,7 +172,7 @@ package modules.gmap.view.controls
 
 		// Marker is not an UI component, so
 		// we need to redispatch his events to get them into Mate.
-		protected function redispatchMarkerEvent(event : Event) : void
+		protected function redispatchLineEvent(event : Event) : void
 		{
 			dispatchEvent(event);
 		}
