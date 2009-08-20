@@ -64,10 +64,10 @@ package modules.gmap.data
 			return true
 		}
 
-		public function getItemByIds(id1 : String, id2 : String) : Link
+		public function getItemById(id : String) : Link
 		{
 			for each(var link : Link in this)
-				if (link.id1 == id1 && link.id2 == id2)
+				if (link.id == id)
 					return link;
 
 			return null;
@@ -75,7 +75,7 @@ package modules.gmap.data
 
 		public function addUpdateItem(item : Link) : void
 		{
-			var link : Link = this.getItemByIds(item.id1, item.id2);
+			var link : Link = this.getItemById(item.id);
 
 			if (link == null)
 			{
@@ -92,9 +92,9 @@ package modules.gmap.data
 				this.addUpdateItem(link);
 		}
 
-		public function removeItemByIds(id1 : String, id2 : String) : void
+		public function removeItemById(id : String) : void
 		{
-			removeItemAt(getItemIndex(getItemByIds(id1, id2)));
+			removeItemAt(getItemIndex(getItemById(id)));
 		}
 
 		public function virginize() : void

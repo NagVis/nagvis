@@ -85,6 +85,7 @@ class LinkService
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
+		$link->id = uniqid('', true);
 		self::updateState($link);
 		$node = $link->toXML($xml);
 
@@ -94,12 +95,12 @@ class LinkService
 			throw new Exception('Could not write links.xml');
     }
 
-	private function removeNode(&$xml, $id1, $id2)
+	private function removeNode(&$xml, $id)
 	{
 		$index = 0;
 		foreach ($xml->link as $node)
 		{
-			if ($node['id1'] == $id1 && $node['id2'] == $id2)
+			if ($node['id'] == $id)
 			{
 				// Note: unset($node) won't work thus the need for $index
 				unset($xml->link[$index]);
@@ -123,7 +124,7 @@ class LinkService
 
 		self::updateState($link);
 
-		self::removeNode($xml, $link->id1, $link->id2);
+		self::removeNode($xml, $link->id);
 
 		$link->toXML($xml);
 
@@ -134,19 +135,18 @@ class LinkService
     }
 
 	/**
-	 * @param  string $id1
-	 * @param  string $id2
+	 * @param  string $id
 	 * @return string
 	 */
-	public function remove($id1, $id2)
+	public function remove($id)
 	{
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
-		self::removeNode($xml, $id1, $id2);
+		self::removeNode($xml, $id);
 
 		if (file_put_contents('links.xml', $xml->asXML()) !== FALSE)
-			return true;
+			return $id;
 		else
 			throw new Exception('Could not write links.xml');
     }
