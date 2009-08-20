@@ -39,7 +39,7 @@
 	<EventHandlers type="{UnhandledFaultEvent.FAULT}">
 		<InlineInvoker method="Alert.show" arguments="{[event.fault.faultString, 'Error']}"/>
 	</EventHandlers>
-
+	
 	<EventHandlers type="resized">
 		<MethodInvoker generator="{MainMD}" method="reconsiderMode"/>
 	</EventHandlers>

@@ -24,6 +24,8 @@ package modules.gmap.data
 	import modules.gmap.domain.Link;
 	
 	import mx.collections.ArrayCollection;
+	import mx.logging.LogEvent;
+	import mx.logging.LogEventLevel;
 
 	public class LinksData extends ArrayCollection
 	{
@@ -43,14 +45,23 @@ package modules.gmap.data
 		{
 			this.source = data;
 
-			for each(var link : Link in this)
-				resolveLink(link);
+			for (var i:int = length - 1; i >= 0; i--)
+			{
+				var link:Link = getItemAt(i) as Link;
+  				if (!resolveLink(link))
+  					removeItemAt(i);
+			}
 		}
 		
-		protected function resolveLink(link:Link):void
+		protected function resolveLink(link:Link):Boolean
 		{
 			link.location1 = _locations.getItemById(link.id1);
 			link.location2 = _locations.getItemById(link.id2);
+				
+			if(!link.location1 || !link.location2)
+				return false;
+			
+			return true
 		}
 
 		public function getItemByIds(id1 : String, id2 : String) : Link
@@ -64,13 +75,12 @@ package modules.gmap.data
 
 		public function addUpdateItem(item : Link) : void
 		{
-			trace(item.id1);
 			var link : Link = this.getItemByIds(item.id1, item.id2);
 
 			if (link == null)
 			{
-				resolveLink(item);
-				this.addItem(item);
+				if(resolveLink(item))
+					addItem(item);
 			}
 			else
 				link.update(item);
