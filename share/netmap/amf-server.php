@@ -20,9 +20,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
+ 
+// instruct PHP not to send any cache control headers (see note 'HTTPS on IE')
+ini_set('session.cache_limiter', '');
 
-// fix IE bug with SSL
-// see http://www.gmrweb.net/2005/08/18/flash-remoting-https-internet-explorer/
+// manually setup the no-cache headers that don't break IE
 header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__)) . '/library/');
@@ -48,4 +50,24 @@ $server->setClassMap("HostGroup", "HostGroup");
 $server->setClassMap("ServiceGroup", "ServiceGroup");
 echo ($server->handle());
 
+
+/*******
+ * Notes
+ *******
+ * HTTPS on IE
+ *
+ * IE bug prevents data loading via https if the server uses a no-cache header.
+ * See http://kb2.adobe.com/cps/000/fdc7b5c.html for details.
+ *
+ * Tests show that the main problem provides 'Pragma: no-cache' header, while
+ * 'Cache-Control:' header may be used.
+ *
+ * On session start PHP automatically sends different no-cache headers depending 
+ * on the value of session.cache_limiter configuration setting.
+ * See http://php.net/manual/en/function.session-cache-limiter.php for details.
+ *
+ * See also these posts:
+ *	http://www.gmrweb.net/2005/08/18/flash-remoting-https-internet-explorer/
+ *	http://faindu.wordpress.com/2008/04/18/ie7-ssl-xml-flex-error-2032-stream-error/		
+ *******/
 ?>
