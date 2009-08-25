@@ -29,9 +29,6 @@ class Viewpoint
 
 	public function __construct($label = "", $center = "", $zoom = 0)
 	{
-		if ($label == '')
-			throw new Exception('Attempt to create an invalid object of Viewpoint class');
-
 		$this->label = $label;
 		$this->center = $center;
 		$this->zoom = $zoom;
