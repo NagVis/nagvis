@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.3"
+INSTALLER_VERSION="0.2.4"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -40,11 +40,13 @@ INSTALLER_CONFIG_MOD="n"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKEND="ndo2db,ndo2fs,merlin"
+NAGVIS_BACKENDS="ndo2db,ndo2fs,merlin"
 # Return Code
 RC=0
 # data source
 SOURCE=nagios
+# skip checks
+FORCE=0
 
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
@@ -88,7 +90,7 @@ GREP_INCOMPLETE=0
 # format version string
 fmt_version() {
    LNG=${2:-8}
-	echo `perl -e '$v = $ARGV[0];$v =~ s/a/.0.0/i; $v =~ s/b/.0.2/i; $v =~ s/rc/.0.4/i; @f = split (/\./,$v); for (0..$#f) { $z .= sprintf "%02d", $f[$_]; }; print substr($z."0"x$ARGV[1],0,$ARGV[1]);' $1 $LNG` 
+	echo `perl -e '$v = $ARGV[0]; $v =~ s/a/.0.0/i; $v =~ s/b/.0.2/i; $v =~ s/rc/.0.4/i; @f = split (/\./,$v); for (0..$#f) { $z .= sprintf "%02d", $f[$_]; }; print substr($z."0"x$ARGV[1],0,$ARGV[1]);' $1 $LNG` 
 }
 
 # Print usage
@@ -107,6 +109,7 @@ Parameters:
   -p <PATH>     Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
+  -w <PATH>     Path to the webserver config files
   -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ndo2fs, merlin
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -c [y|n]      Update configuration files when possible?
@@ -223,8 +226,21 @@ log() {
 # Check Backend module prequisites
 check_backend() {
 	BACKENDS=""
-	text "| Checking Backends" "|"
+	text "| Checking Backends: $NAGVIS_BACKEND" "|"
 	# Check NDO module if necessary
+	if [ $INSTALLER_QUIET -ne 1 ]; then
+		if [ -z "$NAGVIS_BACKEND" ]; then
+			ASK=`echo $NAGVIS_BACKENDS | sed 's/,/ /g'` 
+			for i in $ASK; do
+				echo -n "| Do you want to use backend $i [n]: "
+				read ABACK
+				if [ ! -z $ABACK ]; then
+					BACKENDS=$BACKENDS,$i
+				fi
+			done
+			NAGVIS_BACKEND=$BACKENDS
+		fi
+	fi
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
 		# Check NDO
@@ -293,8 +309,10 @@ check_apache_php() {
 check_graphviz_version() {
 	if [ "${PKG##/*/}" = "dpkg" ]; then
 		GRAPHVIZ_VER=`$PKG -l "graphviz" | grep "graphviz" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
-	else
+	elif [ "${PKG##/*/}" = "rpm" ]; then
 		GRAPHVIZ_VER=`$PKG -qa "graphviz" | sed "s/graphviz-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
+	else
+		GRAPHVIZ_VER=`$PKG list installed "graphviz" | grep "installed" | awk -F' ' '{ print $2 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
 
    GRAPHVIZ_FMT=`fmt_version $GRAPHVIZ_VER` 
@@ -322,10 +340,12 @@ check_graphviz_modules() {
 		fi
 		
 		log "  Graphviz Module $MOD $GV_MOD_VER" $TMP
-      GV_MOD_FMT=`fmt_version $GV_MOD_VER` 
+		if [ -n "$GV_MOD_VER" ]; then
+			GV_MOD_FMT=`fmt_version $GV_MOD_VER` 
 		
-		if [ $GV_MOD_FMT -lt $GRAPHVIZ_REQ ]; then
-			log "|  Error: Version >= $2" "needed"
+			if [ $GV_MOD_FMT -lt $GRAPHVIZ_REQ ]; then
+				log "|  Error: Version >= $2" "needed"
+			fi
 		fi
 	done
 }
@@ -334,8 +354,10 @@ check_graphviz_modules() {
 check_php_version() {
 	if [ "${PKG##/*/}" = "dpkg" ]; then
 		PHP_VER=`$PKG -l "php[0-9]" 2>/dev/null | grep "php" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
-	else
+	elif [ "${PKG##/*/}" = "rpm" ]; then
 		PHP_VER=`$PKG -qa "php[0-9]" | sed "s/php[0-9]\-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
+	else
+		PHP_VER=`$PKG list installed "php[0-9]" 2>/dev/null | grep "installed" | awk -F' ' '{ print $2 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
 	PHP=`which php 2>/dev/null`
 	if [ -z "$PHP_VER" ]; then
@@ -344,11 +366,13 @@ check_php_version() {
 		fi
 	fi
 	log "PHP $PHP_VER" $PHP_VER
-	PHP_FMT=`fmt_version $PHP_VER` 
-	PHP_REQ=`fmt_version $NEED_PHP_VERSION` 
+	if [ -n "$PHP_VER" ]; then
+		PHP_FMT=`fmt_version $PHP_VER` 
+		PHP_REQ=`fmt_version $NEED_PHP_VERSION` 
 	
-	if [ $PHP_FMT -lt $PHP_REQ ]; then
-		log "|  Error: Version >= $1" "needed"
+		if [ $PHP_FMT -lt $PHP_REQ ]; then
+			log "|  Error: Version >= $1" "needed"
+		fi
 	fi
 }
 
@@ -358,8 +382,10 @@ check_php_modules() {
 	do
 		if [ "${PKG##/*/}" = "dpkg" ]; then
 			MOD_VER=`$PKG -l "php[0-9]-$MOD" 2>/dev/null | grep "php" | grep "ii" | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
-		else
+		elif [ "${PKG##/*/}" = "rpm" ]; then
 			MOD_VER=`$PKG -qa "php[0-9]?-$MOD" | sed "s/php[0-9]?\-$MOD-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
+		else
+			MOD_VER=`$PKG list installed "php[0-9]-$MOD" 2>/dev/null | grep "php" | grep "installed" | awk -F' ' '{ print $2 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 		fi
 
 		# maybe compiled in module
@@ -467,13 +493,13 @@ HTML_BASE=$HTML_PATH
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:u:b:g:c:i:s:ohqv" options; do
+	while getopts "n:B:m:p:w:u:b:g:c:i:s:ohqvF" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
 
 				# NagVis below 1.5 depends on the given Nagios path
-				# So set it here when some given by param
+				# So set it here when set by param
 				[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
 			;;
 			B)
@@ -487,6 +513,9 @@ if [ $# -gt 0 ]; then
 			;;
 			p)
 				NAGVIS_PATH=$OPTARG
+			;;
+			w)
+				WEB_PATH=$OPTARG
 			;;
 			u)
 				WEB_USER=$OPTARG
@@ -509,6 +538,9 @@ if [ $# -gt 0 ]; then
 			s)
 				SOURCE=`echo $OPTARG | tr [A-Z] [a-z]` 
 			;;
+			F)
+				FORCE=1
+			;;
 			h)
 				usage
 				exit 0
@@ -526,6 +558,13 @@ if [ $# -gt 0 ]; then
 	done
 fi
 
+if [ $FORCE -eq 1 ]; then
+	if [ -z "$WEB_USER" -o -z "$WEB:GROUP" -o -z "$WEB_PATH" ]; then
+		echo "ERROR: Using '-F' you also have to specify '-u ...', '-g ...' and '-w ...'"
+		exit 1
+	fi
+fi
+
 # Print welcome message
 welcome
 
@@ -537,12 +576,19 @@ line ""
 [ -n "$OS" ]&&text "| OS  : $OS" "|"
 PERL=`perl -e 'print $];'` 
 [ -n "$PERL" ]&&text "| Perl: $PERL" "|"
-text 
+text
+line "Checking for which" "+"
+WHICH=`whereis which | awk '{print $2}'` 
+if [ -z $WHICH ]; then
+	log "'which' not found (maybe package missing). Aborting..."
+	exit 1
+fi
 line "Checking for packet manager" "+"
 PKG=`which rpm 2>/dev/null`
 [ -u $PKG ] && PKG=`which dpkg 2>/dev/null`
+[ -u $PKG ] && PKG=`which yum 2>/dev/null`
 if [ -u $PKG ]; then
-	log "No packet manager (rpm/dpkg) found. Aborting..."
+	log "No packet manager (rpm/dpkg/yum) found. Aborting..."
 	exit 1
 fi
 log "Using packet manager $PKG" $PKG
@@ -558,33 +604,35 @@ fi
 text
 line "Checking paths" "+"
 
-# Get Nagios path
-if [ $INSTALLER_QUIET -ne 1 ]; then
-  echo -n "| Please enter the path to the $SOURCE base directory [$NAGIOS_PATH]: "
-  read APATH
-  if [ ! -z $APATH ]; then
-    NAGIOS_PATH=$APATH
-  fi
-fi
+if [ $FORCE -eq 0 ]; then
+	# Get Nagios path
+	if [ $INSTALLER_QUIET -ne 1 ]; then
+	  echo -n "| Please enter the path to the $SOURCE base directory [$NAGIOS_PATH]: "
+	  read APATH
+	  if [ ! -z $APATH ]; then
+	    NAGIOS_PATH=$APATH
+	  fi
+	fi
 
-# Check Nagios path
-if [ -d $NAGIOS_PATH ]; then
-	log "$SOURCE path $NAGIOS_PATH" "found"
-else
-	echo "| $SOURCE home $NAGIOS_PATH is missing. Aborting..."
-	exit 1
-fi
+	# Check Nagios path
+	if [ -d $NAGIOS_PATH ]; then
+		log "$SOURCE path $NAGIOS_PATH" "found"
+	else
+		echo "| $SOURCE home $NAGIOS_PATH is missing. Aborting..."
+		exit 1
+	fi
 
-# NagVis below 1.5 depends on the given Nagios path
-# So set it here when some given by param
-[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+	# NagVis below 1.5 depends on the given Nagios path
+	# So set it here when some given by param
+	[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
 
-# Get NagVis path
-if [ $INSTALLER_QUIET -ne 1 ]; then
-	echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
-	read ABASE
-	if [ ! -z $ABASE ]; then
+	# Get NagVis path
+	if [ $INSTALLER_QUIET -ne 1 ]; then
+		echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
+		read ABASE
+		if [ ! -z $ABASE ]; then
 		NAGVIS_PATH=$ABASE
+		fi
 	fi
 fi
 
@@ -595,69 +643,71 @@ line "Checking prerequisites" "+"
 [ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
 
 if [ -f $NAGIOS_BIN ]; then
-	NAGIOS=`$NAGIOS_BIN --version | grep -i "^$SOURCE\s" 2>&1`
+	NAGIOS=`$NAGIOS_BIN --version | grep -i "^$SOURCE " | head -1 2>&1`
 	log "$NAGIOS" $NAGIOS
 else
 	log "$SOURCE binary $NAGIOS_BIN"
 fi
-NAGVER=`echo $NAGIOS | cut -d" " -f3 | cut -c1,1`
+NAGVER=`echo $NAGIOS | sed 's/^.* //' | cut -c1,1`
 [ "$SOURCE" = "icinga" ]&&NAGVER=3
 
-# Check Backend prerequisites
-check_backend
+if [ $FORCE -eq 0 ]; then
+	# Check Backend prerequisites
+	check_backend
 
-# Check PHP Version
-check_php_version $NEED_PHP_VERSION
+	# Check PHP Version
+	check_php_version $NEED_PHP_VERSION
 
-# Check PHP Modules
-check_php_modules "$NEED_PHP_MODULES" "$NEED_PHP_VERSION"
+	# Check PHP Modules
+	check_php_modules "$NEED_PHP_MODULES" "$NEED_PHP_VERSION"
 
-# Check Apache PHP Module
-check_apache_php "/etc/apache2/"
-check_apache_php "/etc/apache/"
-check_apache_php "/etc/http/"
-check_apache_php "/etc/httpd/"
-check_apache_php "/usr/local/etc/apache2/"	# FreeBSD
-log "  Apache mod_php" $MODPHP
-if [ $HTML_ANZ -gt 1 ]; then
-	log "more than one alias found" "warning"
-	echo $HTML_PATH
-fi
+	# Check Apache PHP Module
+	check_apache_php "/etc/apache2/"
+	check_apache_php "/etc/apache/"
+	check_apache_php "/etc/http/"
+	check_apache_php "/etc/httpd/"
+	check_apache_php "/usr/local/etc/apache2/"	# FreeBSD
+	log "  Apache mod_php" $MODPHP
+	if [ $HTML_ANZ -gt 1 ]; then
+		log "more than one alias found" "warning"
+		echo $HTML_PATH
+	fi
 
-# Check Graphviz
-GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
-check_graphviz_version $NEED_GV_VERSION
+	# Check Graphviz
+	GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
+	check_graphviz_version $NEED_GV_VERSION
 
-# Check Graphviz Modules
-check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
+	# Check Graphviz Modules
+	check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
 
-if [ $RC -ne 0 ]; then
+	if [ $RC -ne 0 ]; then
+		text
+		line "Errors found during check of prerequisites. Aborting..."
+		exit 1
+	fi
+
 	text
-	line "Errors found during check of prerequisites. Aborting..."
-	exit 1
-fi
+	line "Trying to detect Apache settings" "+"
 
-text
-line "Trying to detect Apache settings" "+"
+	HTML_PATH=${HTML_PATH%/}
 
-HTML_PATH=${HTML_PATH%/}
-
-if [ $INSTALLER_QUIET -ne 1 ]; then
-	echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
-	read AUSR
-	if [ ! -z $AUSR ]; then
-		WEB_USER=$AUSR
+	if [ $INSTALLER_QUIET -ne 1 ]; then
+		echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
+		read AUSR
+		if [ ! -z $AUSR ]; then
+			WEB_USER=$AUSR
+		fi
 	fi
-fi
 
-if [ $INSTALLER_QUIET -ne 1 ]; then
-	echo -n "| Please enter the name of the web-server group [$WEB_GROUP]: "
-	read AGRP
-	if [ ! -z $AGRP ]; then
-		WEB_GROUP=$AGRP
+	if [ $INSTALLER_QUIET -ne 1 ]; then
+		echo -n "| Please enter the name of the web-server group [$WEB_GROUP]: "
+		read AGRP
+		if [ ! -z $AGRP ]; then
+			WEB_GROUP=$AGRP
+		fi
 	fi
-fi
 
+fi
 if [ ! `getent passwd | cut -d':' -f1 | grep "^$WEB_USER"` = "$WEB_USER" ]; then
 	echo "|  Error: User $WEB_USER not found."
 	exit 1
@@ -788,13 +838,15 @@ fi
 
 # Create apache configuration file from sample when no file exists
 if [ -f etc/$HTML_SAMPLE ]; then
+	CHG='s/^//'
 	if [ -s $WEB_PATH/$HTML_CONF ]; then
 		text "| *** $WEB_PATH/$HTML_CONF will NOT be overwritten !" "|"
 		HTML_CONF="$HTML_CONF.$DATE"
 		text "| *** creating $WEB_PATH/$HTML_CONF instead" "|"
+		CHG='s/^/#new /'
 	fi
 	DONE=`log "Creating web configuration file..." done`
-	cat etc/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g" > $WEB_PATH/$HTML_CONF
+	cat etc/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
 	chk_rc "|  Error creating web configuration" "$DONE"
 	DONE=`log "Setting permissions for web configuration file..." done`
 	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
@@ -803,6 +855,10 @@ fi
 
 text
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
+	# Gather path prefix
+	NAGVIS_DIR="nagvis"
+	[ $NAGVIS_TAG -ge 01050000 ] && NAGVIS_DIR="share/nagvis"
+
 	LINE="Restoring main configuration file..."
 	copy "" "$NAGVIS_CONF" "main configuration file"
 	
@@ -810,28 +866,31 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "demo.cfg:demo2.cfg" "etc/maps" "map configuration files"
 	
 	LINE="Restoring custom map images..."
-	copy "nagvis-demo.png" "nagvis/images/maps" "map image files"
+	copy "nagvis-demo.png" "$NAGVIS_DIR/images/maps" "map image files"
 	
 	LINE="Restoring custom iconsets..."
-	copy "20x20.png:configerror_*.png:error.png:std_*.png" "nagvis/images/iconsets" "iconset files"
+	copy "20x20.png:configerror_*.png:error.png:std_*.png" "$NAGVIS_DIR/images/iconsets" "iconset files"
 	
 	LINE="Restoring custom shapes..."
-	copy "" "nagvis/images/shapes" "shapes"
+	copy "" "$NAGVIS_DIR/images/shapes" "shapes"
 	
 	LINE="Restoring custom header templates..."
-	copy "tmpl.default*" "nagvis/templates/header" "header templates"
+	copy "tmpl.default*" "$NAGVIS_DIR/templates/header" "header templates"
 	
 	LINE="Restoring custom hover templates..."
-	copy "tmpl.default*" "nagvis/templates/hover" "hover templates"
+	copy "tmpl.default*" "$NAGVIS_DIR/templates/hover" "hover templates"
 	
 	LINE="Restoring custom header template images..."
-	copy "tmpl.default*" "nagvis/images/templates/header" "header template images"
+	copy "tmpl.default*" "$NAGVIS_DIR/images/templates/header" "header template images"
 
 	LINE="Restoring custom hover template images..."
-	copy "tmpl.default*" "nagvis/images/templates/hover" "hover template images"
+	copy "tmpl.default*" "$NAGVIS_DIR/images/templates/hover" "hover template images"
 
 	LINE="Restoring custom gadgets..."
-	copy "gadgets_core.php:std_*.php" "nagvis/gadgets" "gadgets"
+	copy "gadgets_core.php:std_*.php" "$NAGVIS_DIR/gadgets" "gadgets"
+
+	LINE="Restoring custom stylesheets..."
+  copy "" "$NAGVIS_DIR/styles" "stylesheets"
 fi
 text
 
