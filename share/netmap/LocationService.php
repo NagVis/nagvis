@@ -100,12 +100,12 @@ class LocationService
 	 */
 	public function add($location)
 	{
+		$location->id = uniqid('', true);
 		self::validate($location);
 
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
-		$location->id = uniqid('', true);
 		self::updateState($location);
 		$node = $location->toXML($xml);
 

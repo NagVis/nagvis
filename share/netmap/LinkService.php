@@ -100,12 +100,12 @@ class LinkService
 	 */
 	public function add($link)
 	{
+		$link->id = uniqid('', true);
 		self::validate($link);
 
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
-		$link->id = uniqid('', true);
 		self::updateState($link);
 		$node = $link->toXML($xml);
 
