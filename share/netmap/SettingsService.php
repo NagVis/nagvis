@@ -26,7 +26,7 @@ class SettingsService
 	private function createFile()
 	{
 		$xml = '<?xml version="1.0" standalone="yes" ?><settings/>';
-		if (file_put_contents('settings.xml', $xml) === FALSE)
+		if (file_put_contents($config_path . 'settings.xml', $xml) === FALSE)
 			throw new Exception('Could not create settings.xml');
 	}
 
@@ -63,10 +63,10 @@ class SettingsService
 		if (($mapurl = $CORE->MAINCFG->getValue('defaults', 'mapurl')) === false)
 			throw new Exception('Error in NagVis configuration');
 
-		if (!file_exists('settings.xml'))
+		if (!file_exists($config_path . 'settings.xml'))
 			self::createFile();
 
-		if (($xml = @simplexml_load_file('settings.xml')) === FALSE)
+		if (($xml = @simplexml_load_file($config_path . 'settings.xml')) === FALSE)
 			throw new Exception('Could not read settings.xml');
 
 		return new Settings((string)$xml['googleMapsKey'],
@@ -88,7 +88,7 @@ class SettingsService
 		@$xml->addAttribute('defaultLocationAction', $settings->defaultLocationAction);
 		@$xml->addAttribute('openLinksInNewWindow', $settings->openLinksInNewWindow);
 
-		if (file_put_contents('settings.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents($config_path . 'settings.xml', $xml->asXML()) !== FALSE)
 			return $settings;
 		else
 			throw new Exception('Could not write settings.xml');

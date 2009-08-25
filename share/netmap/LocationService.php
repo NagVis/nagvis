@@ -62,7 +62,7 @@ class LocationService
 	private function createFile()
 	{
 		$xml = '<?xml version="1.0" standalone="yes" ?><locations/>';
-		if (file_put_contents('locations.xml', $xml) === FALSE)
+		if (file_put_contents($config_path . 'locations.xml', $xml) === FALSE)
 			throw new Exception('Could not create locations.xml');
 	}
 
@@ -72,10 +72,10 @@ class LocationService
 	 */
 	public function getAll($problemonly = false)
 	{
-		if (!file_exists('locations.xml'))
+		if (!file_exists($config_path . 'locations.xml'))
 			self::createFile();
 
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
+		if (($xml = @simplexml_load_file($config_path . 'locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
 		$locations = array();
@@ -103,13 +103,13 @@ class LocationService
 		$location->id = uniqid('', true);
 		self::validate($location);
 
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
+		if (($xml = @simplexml_load_file($config_path . 'locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
 		self::updateState($location);
 		$node = $location->toXML($xml);
 
-		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents($config_path . 'locations.xml', $xml->asXML()) !== FALSE)
 			return $location;
 		else
 			throw new Exception('Could not write locations.xml');
@@ -141,7 +141,7 @@ class LocationService
 	{
 		self::validate($location);
 
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
+		if (($xml = @simplexml_load_file($config_path . 'locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
 		self::updateState($location);
@@ -150,7 +150,7 @@ class LocationService
 
 		$location->toXML($xml);
 
-		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents($config_path . 'locations.xml', $xml->asXML()) !== FALSE)
 			return $location;
 		else
 			throw new Exception('Could not write locations.xml');
@@ -162,12 +162,12 @@ class LocationService
 	 */
 	public function remove($id)
 	{
-		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
+		if (($xml = @simplexml_load_file($config_path . 'locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
 		self::removeNode($xml, $id);
 
-		if (file_put_contents('locations.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents($config_path . 'locations.xml', $xml->asXML()) !== FALSE)
 			return $id;
 		else
 			throw new Exception('Could not write locations.xml');
