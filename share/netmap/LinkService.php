@@ -23,6 +23,12 @@
 
 class LinkService
 {
+	private function validate($link)
+	{
+		if ($link->id == '' || $link->id1 == '' || $link->id2 == '')
+			throw new Exception('Attempt to create an invalid object of Link class');
+	}
+
 	private function updateState(&$link)
 	{
 		$db = new NagiosService();
@@ -77,6 +83,8 @@ class LinkService
 		{
 			$link = Link::fromXML($node);
 
+			self::validate($link);
+
 			self::updateState($link);
 
 			if (!$problemonly || $link->state != State::OK)
@@ -92,6 +100,8 @@ class LinkService
 	 */
 	public function add($link)
 	{
+		self::validate($link);
+
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
@@ -129,6 +139,8 @@ class LinkService
 	 */
 	public function edit($link)
 	{
+		self::validate($link);
+
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 

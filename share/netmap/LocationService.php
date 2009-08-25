@@ -23,6 +23,12 @@
 
 class LocationService
 {
+	private function validate($location)
+	{
+		if ($location->id == '' || $location->point == '' || $location->label == '')
+		throw new Exception('Attempt to create an invalid object of Location class');
+	}
+
 	private function updateState(&$location)
 	{
 		$db = new NagiosService();
@@ -77,6 +83,8 @@ class LocationService
 		{
 			$location = Location::fromXML($node);
 
+			self::validate($location);
+
 			self::updateState($location);
 
 			if (!$problemonly || $location->state != State::OK)
@@ -92,6 +100,8 @@ class LocationService
 	 */
 	public function add($location)
 	{
+		self::validate($location);
+
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
@@ -129,6 +139,8 @@ class LocationService
 	 */
 	public function edit($location)
 	{
+		self::validate($location);
+
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
