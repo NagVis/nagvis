@@ -24,7 +24,8 @@ package modules.gmap.mediator
 	import flash.events.IEventDispatcher;
 	import flash.external.ExternalInterface;
 	import flash.system.Security;
-
+	
+	import modules.gmap.data.LinksData;
 	import modules.gmap.domain.Link;
 	import modules.gmap.domain.Location;
 	import modules.gmap.domain.Settings;
@@ -32,6 +33,7 @@ package modules.gmap.mediator
 	import modules.gmap.domain.nagios.HostGroup;
 	import modules.gmap.domain.nagios.Service;
 	import modules.gmap.domain.nagios.ServiceGroup;
+	import modules.gmap.events.LinkEvent;
 	import modules.gmap.events.ModeEvent;
 	import modules.gmap.view.MainView;
 
@@ -127,6 +129,18 @@ package modules.gmap.mediator
 				ExternalInterface.call('window.open("' + url + '")');
 			else
 				ExternalInterface.call('window.location.assign("' + url + '")');
+		}
+		
+		public function removeRelatedLinks(locationID:String, links:LinksData):void
+		{
+			for(var i:int = links.length - 1; i >=0; --i)
+			{
+				var link:Link = links.getItemAt(i) as Link;
+				if(link.id1 == locationID || link.id2 == locationID)
+					_dispatcher.dispatchEvent(
+						new LinkEvent(LinkEvent.DELETE, link)
+					);
+			}
 		}
 
 		public function activate(element : Object, settings : Settings) : void
