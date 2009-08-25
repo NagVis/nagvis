@@ -53,12 +53,22 @@ class LinkService
 			$link->state = State::UNKNOWN;
 	}
 
+	private function createFile()
+	{
+		$xml = '<?xml version="1.0" standalone="yes" ?><links/>';
+		if (file_put_contents('links.xml', $xml) === FALSE)
+			throw new Exception('Could not create links.xml');
+	}
+
 	/**
 	 * @param  boolean $problemonly
 	 * @return array of Link
 	 */
 	public function getAll($problemonly = false)
 	{
+		if (!file_exists('links.xml'))
+			self::createFile();
+
 		if (($xml = @simplexml_load_file('links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 

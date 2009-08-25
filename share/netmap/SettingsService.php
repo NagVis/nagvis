@@ -23,6 +23,13 @@
 
 class SettingsService
 {
+	private function createFile()
+	{
+		$xml = '<?xml version="1.0" standalone="yes" ?><settings/>';
+		if (file_put_contents('settings.xml', $xml) === FALSE)
+			throw new Exception('Could not create settings.xml');
+	}
+
 	/**
 	 * @return array of Settings
 	 */
@@ -55,6 +62,9 @@ class SettingsService
 			throw new Exception('Error in NagVis configuration');
 		if (($mapurl = $CORE->MAINCFG->getValue('defaults', 'mapurl')) === false)
 			throw new Exception('Error in NagVis configuration');
+
+		if (!file_exists('settings.xml'))
+			self::createFile();
 
 		if (($xml = @simplexml_load_file('settings.xml')) === FALSE)
 			throw new Exception('Could not read settings.xml');

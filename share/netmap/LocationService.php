@@ -53,12 +53,22 @@ class LocationService
 			$location->state = State::UNKNOWN;
 	}
 
+	private function createFile()
+	{
+		$xml = '<?xml version="1.0" standalone="yes" ?><locations/>';
+		if (file_put_contents('locations.xml', $xml) === FALSE)
+			throw new Exception('Could not create locations.xml');
+	}
+
 	/**
 	 * @param  boolean $problemonly
 	 * @return array of Location
 	 */
 	public function getAll($problemonly = false)
 	{
+		if (!file_exists('locations.xml'))
+			self::createFile();
+
 		if (($xml = @simplexml_load_file('locations.xml')) === FALSE)
 			throw new Exception('Could not read locations.xml');
 
