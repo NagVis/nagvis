@@ -27,6 +27,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.LocationsData;
 			import mx.formatters.SwitchSymbolFormatter;
 			import modules.gmap.events.NagiosObjectEvent;
 			import mx.events.CloseEvent;
@@ -48,6 +49,8 @@
 			public var services : ArrayCollection;
 			public var servicegroups : ArrayCollection;
 
+			[Bindable] public var locations:LocationsData;
+
 			private var _location : Location;
 
 			public function set location(location : Location) : void
@@ -58,6 +61,7 @@
 
 					if (location)
 					{
+						locationsList.selectedItem = location;
 						locName.text = location.label;
 						locLat.text = LatLng.fromUrlValue(location.point).lat().toString();
 						locLng.text = LatLng.fromUrlValue(location.point).lng().toString();
@@ -66,14 +70,12 @@
 
 						if (location.id && location.id.length > 0)
 						{
-							title.text = "Location - Edit Details";
 							addButton.visible = false;
 							saveButton.visible = true;
 							deleteButton.visible = true;
 						}
 						else
 						{
-							title.text = "Location - Add New";
 							addButton.visible = true;
 							saveButton.visible = false;
 							deleteButton.visible = false;
@@ -142,7 +144,7 @@
 					}
 					else
 					{
-						title.text = "Location";
+						locationsList.selectedIndex = -1;
 						locName.text = "";
 						locLat.text = "";
 						locLng.text = "";
@@ -386,11 +388,14 @@
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
-	<mx:HBox left="10" right="15" top="10" height="20">
+	<mx:HBox left="10" right="15" top="10">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/pin.png')"/>
-		<mx:Label id="title" text="Location"/>
-		<mx:Spacer width="100%"/>
-		<mx:Image id="close"
+		<mx:ComboBox id="locationsList" width="100%" 
+			prompt="Location" selectedIndex="-1" 
+			dataProvider="{locations}"
+			change="dispatchEvent(new LocationEvent(LocationEvent.SELECTED, locationsList.selectedItem as Location))"
+		/>
+		<mx:Image id="close" height="22" verticalAlign="middle"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
 			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
 		/>
