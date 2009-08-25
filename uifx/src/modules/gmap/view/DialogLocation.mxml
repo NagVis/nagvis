@@ -188,14 +188,32 @@
 				return ul;
 			}
 
+			private function validate() : Boolean
+			{
+				if (locName.text == "")
+				{
+					Alert.show("Please enter a label for the location");
+					return false;
+				}
+
+				if (locLat.text == "" || locLng.text == "")
+				{
+					Alert.show("Please specify coordinates for the location");
+					return false;
+				}
+
+				return true;
+			}
+
 			private function onAddClicked() : void
 			{
-				dispatchEvent(new LocationEvent(LocationEvent.ADD, getUpdatedLocation()));
+				if (validate())
+					dispatchEvent(new LocationEvent(LocationEvent.ADD, getUpdatedLocation()));
 			}
 
 			private function onSaveClicked():void
 			{
-				if (_location && _location.id && _location.id.length > 0)
+				if (_location && _location.id && _location.id.length > 0 && validate())
 				{
 					dispatchEvent(new LocationEvent(LocationEvent.SAVE, getUpdatedLocation()));
 				}
