@@ -22,15 +22,23 @@
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
+	toolTip="Address Search&#13;transform address into the location on the map"
 >
     <mx:Script>
     	<![CDATA[
     		import modules.gmap.events.AddressEvent;
     		
-    		public function onLocateClicked():void
+    		public function locateAddress():void
     		{
+    			address.text = address.text.replace(/\s+/g, ' ');
     			if(address.text.length > 0)
     				dispatchEvent(new AddressEvent(AddressEvent.LOCATE, address.text))
+    		}
+
+    		public function onAddressFieldKeyPressed(event:KeyboardEvent):void
+    		{
+    			if(event.keyCode == Keyboard.ENTER)
+    				locateAddress();
     		}
     	]]>
     </mx:Script>
@@ -47,10 +55,11 @@
 		<flexlib:PromptingTextArea id="address"
 		 	left="0" right="0" top="0" bottom="30"
 			cornerRadius="4" prompt="Address"
+			keyUp="onAddressFieldKeyPressed(event)"
 		 />
 		<mx:Button label="Locate"
 			right="0" bottom="0" height="22"
-			click="onLocateClicked()"
+			click="locateAddress()"
 		/>
 	</mx:Canvas>
 </EdgeBox>

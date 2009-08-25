@@ -73,6 +73,7 @@
 	</Injectors>
 
 	<Injectors target="{DialogLocation}" debug="true">
+		<PropertyInjector targetKey="locations" source="{LocationsData}"/>
 		<PropertyInjector targetKey="location" source="{CurrentLocation}" sourceKey="location"/>
 		<PropertyInjector targetKey="hosts" source="{HostsData}"/>
 		<PropertyInjector targetKey="hostgroups" source="{HostGroupsData}"/>
@@ -82,6 +83,7 @@
 	</Injectors>
 
 	<Injectors target="{DialogLink}" debug="true">
+		<PropertyInjector targetKey="links" source="{LinksData}"/>
 		<PropertyInjector targetKey="link" source="{CurrentLink}" sourceKey="link"/>
 		<PropertyInjector targetKey="locations" source="{LocationsData}"/>
 		<PropertyInjector targetKey="hosts" source="{HostsData}"/>

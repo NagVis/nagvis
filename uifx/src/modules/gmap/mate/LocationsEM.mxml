@@ -23,12 +23,13 @@
 >
 	<mx:Script>
 		<![CDATA[
-			import modules.gmap.data.SettingsData;
 			import mx.controls.Alert;
 
 			import modules.gmap.data.CurrentLocation;
 			import modules.gmap.data.LocationsData;
 			import modules.gmap.data.LocationsExtData;
+			import modules.gmap.data.LinksData;
+			import modules.gmap.data.SettingsData;
 
 			import modules.gmap.events.AddressEvent;
 			import modules.gmap.events.LocationEvent;
@@ -80,6 +81,9 @@
 			<resultHandlers>
 				<MethodInvoker generator="{LocationsData}" method="removeItemById" arguments="{resultObject}"/>
 				<EventAnnouncer generator="{LocationEvent}" constructorArguments="{LocationEvent.SELECTED}" />
+				
+				<DataCopier destination="data" destinationKey="links" source="{LinksData}"/>
+				<MethodInvoker generator="{MainMD}" method="removeRelatedLinks" arguments="{[resultObject, data.links]}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>

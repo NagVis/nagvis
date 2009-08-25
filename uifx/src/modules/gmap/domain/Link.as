@@ -55,5 +55,13 @@ package modules.gmap.domain
 			this.object = value.object;
 			this.state = value.state;
 		}
+		
+		public function get label():String
+		{
+			if(location1 && location2)
+				return location1.label + ' - ' + location2.label;
+				
+			return 'Invalid Link';			
+		}
 	}
 }

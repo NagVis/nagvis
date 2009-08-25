@@ -26,9 +26,9 @@ package modules.gmap.view.controls
 	import com.google.maps.overlays.Polyline;
 	import com.google.maps.overlays.PolylineOptions;
 	import com.google.maps.styles.StrokeStyle;
-
+	
 	import modules.gmap.domain.Link;
-
+	
 	import mx.core.UIComponent;
 
 	public class GMapLinkControl extends UIComponent
@@ -72,34 +72,57 @@ package modules.gmap.view.controls
 			reinitLine();
 		}
 
+		override public function set visible(value:Boolean):void
+		{
+			if(_map && _line)
+			{
+				if(value)
+					_map.addOverlay(_line);
+				else
+					_map.removeOverlay(_line);
+			}
+			
+			super.visible = value;
+		} 
+
 		protected function reinitLine():void
 		{
 			if(_map)
 			{
+				if (_line)
+				{
+					_map.removeOverlay(_line);
+					_line = null;
+				}
+				
 				if(_link)
 				{
 					var point1 : LatLng = LatLng.fromUrlValue(_link.location1.point);
 					var point2 : LatLng = LatLng.fromUrlValue(_link.location2.point);
 
-					var options : PolylineOptions = new PolylineOptions({
-						strokeStyle: new StrokeStyle({
-							color: 0xffffff,
-							thickness: 3,
-							alpha: 1
-						})
-					});
+					var options : PolylineOptions = new PolylineOptions();
 
+					if(_link.id && _link.id.length > 0)
+					{										
+						options.strokeStyle = new StrokeStyle({
+							color: 0x002FA7,
+							thickness: 2,
+							alpha: 1
+						});
+					}
+					else
+					{										
+						options.strokeStyle = new StrokeStyle({
+							color: 0xffffff,
+							thickness: 5,
+							alpha: 0.7
+						});
+					}
+					
 					_line = new Polyline([point1, point2], options);
 
-					_map.addOverlay(_line);
-				}
-				else
-				{
-					if (_line)
-					{
-						_map.removeOverlay(_line);
-						_line = null;
-					}
+					if(visible)
+						_map.addOverlay(_line);
 				}
 			}
 		}

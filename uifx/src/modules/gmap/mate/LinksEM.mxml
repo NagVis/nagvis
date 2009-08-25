@@ -23,6 +23,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.mediator.MapMD;
 			import modules.gmap.mediator.MainMD;
 			import modules.gmap.mediator.Poller;
 			import modules.gmap.data.SettingsData;
@@ -37,6 +38,10 @@
 	<EventHandlers type="{LinkEvent.SELECTED}">
 		<MethodInvoker generator="{CurrentLink}" method="update" arguments="{event.link}"/>
 		<MethodInvoker generator="{MainMD}" method="selectLink" arguments="{event.link}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{LinkEvent.TRYON}">
+		<MethodInvoker generator="{MapMD}" method="tryOnLink" arguments="{event.link}"/>
 	</EventHandlers>
 
 	<EventHandlers type="{LinkEvent.ACTIVATE}">

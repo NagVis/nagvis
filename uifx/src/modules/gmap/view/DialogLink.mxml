@@ -25,9 +25,12 @@
 	creationComplete="init()"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
+	toolTip="Links&#13;view, edit and create links between locations"
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.LocationsData;
+			import modules.gmap.data.LinksData;
 			import modules.gmap.domain.Location;
 			import modules.gmap.events.LinkEvent;
 			import modules.gmap.domain.Link;
@@ -50,7 +53,8 @@
 			public var services : ArrayCollection;
 			public var servicegroups : ArrayCollection;
 
-			[Bindable] public var locations : ArrayCollection;
+			[Bindable] public var links:LinksData;
+			[Bindable] public var locations:LocationsData;
 
 			private var _link : Link;
 
@@ -68,12 +72,12 @@
 
 					if (link)
 					{
-						title.text = "Link - Edit Details";
+						linksList.selectedItem = link;
 						lnkLocation1.selectedItem = link.location1;
 						lnkLocation2.selectedItem = link.location2;
 						lnkDescription.text = link.description;
 
-						if (link.id && link.id.length)
+						if (link.id && link.id.length > 0)
 						{
 							addButton.visible = false;
 							saveButton.visible = true;
@@ -149,7 +153,7 @@
 					}
 					else
 					{
-						title.text = "Link - Connect Locations";
+						linksList.selectedIndex = -1;
 						lnkLocation1.selectedIndex = -1;
 						lnkLocation2.selectedIndex = -1;
 						lnkDescription.text = "";
@@ -198,6 +202,7 @@
 			{
 				lnkLocation1.selectedItem = lnkLocation2.selectedItem;
 				lnkLocation2.selectedItem = location;
+				onLocationChanged();
 			}
 
 			private function validate() : Boolean
@@ -209,6 +214,20 @@
 				}
 
 				return true;
+			}
+
+			private function onLocationChanged():void
+			{
+				if(lnkLocation1.selectedItem != null && lnkLocation2.selectedItem != null)
+				{
+					var ul : Link = new Link();
+					ul.location1 = lnkLocation1.selectedItem as Location;
+					ul.location2 = lnkLocation2.selectedItem as Location;
+					
+					dispatchEvent(
+						new LinkEvent(LinkEvent.TRYON, ul)
+					); 															
+				}
 			}
 
 			private function onAddClicked() : void
@@ -393,14 +412,17 @@
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
-	<mx:HBox left="10" right="15" top="10" height="20">
+	<mx:HBox left="10" right="15" top="10">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/connect.png')"/>
-		<mx:Label id="title" text="Link - Connect Locations"/>
-		<mx:Spacer width="100%"/>
-		<mx:Image id="close"
+		<mx:ComboBox id="linksList" width="100%" 
+			prompt="Link - Create New" selectedIndex="-1" 
+			dataProvider="{links}"
+			change="dispatchEvent(new LinkEvent(LinkEvent.SELECTED, linksList.selectedItem as Link))"
+		/>
+		<mx:Image id="close" height="22" verticalAlign="middle"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
 			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
-		/>
+		/>		
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" bottom="30" styleName="accordion" creationPolicy="all">
@@ -411,9 +433,11 @@
 					/>
 					<mx:ComboBox id="lnkLocation1" dataProvider="{locations}" prompt="-" selectedIndex="-1"
 						left="5" right="5" top="50"
+						change="onLocationChanged()"
 					/>
 					<mx:ComboBox id="lnkLocation2" dataProvider="{locations}" prompt="-" selectedIndex="-1" width="100%" 
 						left="5" right="5" top="80"
+						change="onLocationChanged()"
 					/>
 				</mx:Canvas>
 			</mx:Canvas>

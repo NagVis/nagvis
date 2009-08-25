@@ -28,6 +28,7 @@ package modules.gmap.events
 	public class LinkEvent extends Event
 	{
 		public static const SELECTED : String = "LinkSelected";
+		public static const TRYON : String = "LinkTryOn";
 		public static const CHANGE : String = "LinkChange";
 		public static const ADD : String = "LinkAdd";
 		public static const SAVE : String = "LinkSave";
