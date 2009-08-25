@@ -23,12 +23,13 @@ package modules.gmap.mediator
 {
 	import com.google.maps.LatLng;
 	import com.google.maps.controls.ZoomControl;
-
+	
 	import flash.events.IEventDispatcher;
-
+	
+	import modules.gmap.domain.Link;
 	import modules.gmap.domain.Viewpoint;
 	import modules.gmap.view.controls.GMapControl;
-
+	
 	import mx.controls.Alert;
 
 	public class MapMD
@@ -86,6 +87,17 @@ package modules.gmap.mediator
 
 			if (MainMD.MODE_LOCATION_SEARCH == newMode)
 				_view.locationsExtControl.visible = true;
+				
+			if(MainMD.MODE_LINK_EDIT == oldMode)
+				_view.linkTryOnControl.visible = false;
+
+			if(MainMD.MODE_LINK_EDIT == newMode)
+				_view.linkTryOnControl.visible = true;
+		}
+		
+		public function tryOnLink(link:Link):void
+		{
+			_view.linkTryOnControl.link = link;		
 		}
 	}
 }

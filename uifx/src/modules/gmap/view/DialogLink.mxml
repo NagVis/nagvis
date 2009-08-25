@@ -68,19 +68,20 @@
 
 					if (link)
 					{
-						title.text = "Link - Edit Details";
 						lnkLocation1.selectedItem = link.location1;
 						lnkLocation2.selectedItem = link.location2;
 						lnkDescription.text = link.description;
 
-						if (link.id && link.id.length)
+						if (link.id && link.id.length > 0)
 						{
+							title.text = "Link - Edit Details";
 							addButton.visible = false;
 							saveButton.visible = true;
 							deleteButton.visible = true;
 						}
 						else
 						{
+							title.text = "Link - Connect Locations";
 							addButton.visible = true;
 							saveButton.visible = false;
 							deleteButton.visible = false;
@@ -198,6 +199,7 @@
 			{
 				lnkLocation1.selectedItem = lnkLocation2.selectedItem;
 				lnkLocation2.selectedItem = location;
+				onLocationChanged();
 			}
 
 			private function validate() : Boolean
@@ -209,6 +211,20 @@
 				}
 
 				return true;
+			}
+
+			private function onLocationChanged():void
+			{
+				if(lnkLocation1.selectedItem != null && lnkLocation2.selectedItem != null)
+				{
+					var ul : Link = new Link();
+					ul.location1 = lnkLocation1.selectedItem as Location;
+					ul.location2 = lnkLocation2.selectedItem as Location;
+					
+					dispatchEvent(
+						new LinkEvent(LinkEvent.TRYON, ul)
+					); 															
+				}
 			}
 
 			private function onAddClicked() : void
@@ -411,9 +427,11 @@
 					/>
 					<mx:ComboBox id="lnkLocation1" dataProvider="{locations}" prompt="-" selectedIndex="-1"
 						left="5" right="5" top="50"
+						change="onLocationChanged()"
 					/>
 					<mx:ComboBox id="lnkLocation2" dataProvider="{locations}" prompt="-" selectedIndex="-1" width="100%" 
 						left="5" right="5" top="80"
+						change="onLocationChanged()"
 					/>
 				</mx:Canvas>
 			</mx:Canvas>

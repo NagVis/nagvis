@@ -70,6 +70,7 @@
 				locationsExtControl.map = map;
 
 				linkControl.map = map;
+				linkTryOnControl.map = map;
 				linksControl.map = map;
 			}
 
@@ -84,5 +85,6 @@
 	<controls:GMapLocationsControl id="locationsControl"/>
 	<controls:GMapLocationsExtControl id="locationsExtControl" visible="false"/>
 	<controls:GMapLinkControl id="linkControl"/>
+	<controls:GMapLinkControl id="linkTryOnControl"/>
 	<controls:GMapLinksControl id="linksControl"/>
 </mx:Canvas>
