@@ -43,14 +43,11 @@ package modules.gmap.data
 
 		public function fill(data : Array) : void
 		{
-			this.source = data;
+			for (var i:int = data.length - 1; i >= 0; i--)
+				if(!resolveLink(data[i] as Link))
+					data.splice(i, 1);
 
-			for (var i:int = length - 1; i >= 0; i--)
-			{
-				var link:Link = getItemAt(i) as Link;
-  				if (!resolveLink(link))
-  					removeItemAt(i);
-			}
+			this.source = data;
 		}
 		
 		protected function resolveLink(link:Link):Boolean
