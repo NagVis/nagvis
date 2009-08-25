@@ -23,11 +23,22 @@
 
 class ViewpointService
 {
+	private function createFile()
+	{
+		$xml = '<?xml version="1.0" standalone="yes" ?><viewpoints/>';
+		if (file_put_contents('viewpoints.xml', $xml) === FALSE)
+			throw new Exception('Could not create viewpoints.xml');
+	}
+
 	/**
 	 * @return array of Viewpoint
 	 */
 	public function getAll()
 	{
+
+		if (!file_exists('viewpoints.xml'))
+			self::createFile();
+
 		if (($xml = @simplexml_load_file('viewpoints.xml')) === FALSE)
 			throw new Exception('Could not read viewpoints.xml');
 

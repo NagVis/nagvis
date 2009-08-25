@@ -49,7 +49,7 @@
 			public var hostgroups : ArrayCollection;
 			public var services : ArrayCollection;
 			public var servicegroups : ArrayCollection;
-			
+
 			[Bindable] public var locations : ArrayCollection;
 
 			private var _link : Link;
@@ -200,14 +200,26 @@
 				lnkLocation2.selectedItem = location;
 			}
 
+			private function validate() : Boolean
+			{
+				if (lnkLocation1.selectedItem == lnkLocation2.selectedItem)
+				{
+					Alert.show("You cannot create a link between the same location");
+					return false;
+				}
+
+				return true;
+			}
+
 			private function onAddClicked() : void
 			{
-				dispatchEvent(new LinkEvent(LinkEvent.ADD, getUpdatedLink()));
+				if (validate())
+					dispatchEvent(new LinkEvent(LinkEvent.ADD, getUpdatedLink()));
 			}
 
 			private function onSaveClicked() : void
 			{
-				if (_link && _link.id && _link.id.length > 0)
+				if (_link && _link.id && _link.id.length > 0 && validate())
 				{
 					dispatchEvent(new LinkEvent(LinkEvent.SAVE, getUpdatedLink()));
 				}
