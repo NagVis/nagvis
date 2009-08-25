@@ -26,7 +26,7 @@ class ViewpointService
 	private function createFile()
 	{
 		$xml = '<?xml version="1.0" standalone="yes" ?><viewpoints/>';
-		if (file_put_contents($config_path . 'viewpoints.xml', $xml) === FALSE)
+		if (file_put_contents(CONFIG_PATH . 'viewpoints.xml', $xml) === FALSE)
 			throw new Exception('Could not create viewpoints.xml');
 	}
 
@@ -36,10 +36,10 @@ class ViewpointService
 	public function getAll()
 	{
 
-		if (!file_exists($config_path . 'viewpoints.xml'))
+		if (!file_exists(CONFIG_PATH . 'viewpoints.xml'))
 			self::createFile();
 
-		if (($xml = @simplexml_load_file($config_path . 'viewpoints.xml')) === FALSE)
+		if (($xml = @simplexml_load_file(CONFIG_PATH . 'viewpoints.xml')) === FALSE)
 			throw new Exception('Could not read viewpoints.xml');
 
 		$viewpoints = array();
@@ -58,7 +58,7 @@ class ViewpointService
 	 */
 	public function add($label, $center, $zoom)
 	{
-		if (($xml = @simplexml_load_file($config_path . 'viewpoints.xml')) === FALSE)
+		if (($xml = @simplexml_load_file(CONFIG_PATH . 'viewpoints.xml')) === FALSE)
 			throw new Exception('Could not read viewpoints.xml');
 
 		$node = $xml->addChild('viewpoint');
@@ -68,7 +68,7 @@ class ViewpointService
 
 		$viewpoint = new Viewpoint($label, $center, $zoom);
 
-		if (file_put_contents($config_path . 'viewpoints.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents(CONFIG_PATH . 'viewpoints.xml', $xml->asXML()) !== FALSE)
 			return $viewpoint;
 		else
 			throw new Exception('Could not write viewpoints.xml');

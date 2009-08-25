@@ -62,7 +62,7 @@ class LinkService
 	private function createFile()
 	{
 		$xml = '<?xml version="1.0" standalone="yes" ?><links/>';
-		if (file_put_contents($config_path . 'links.xml', $xml) === FALSE)
+		if (file_put_contents(CONFIG_PATH . 'links.xml', $xml) === FALSE)
 			throw new Exception('Could not create links.xml');
 	}
 
@@ -72,10 +72,10 @@ class LinkService
 	 */
 	public function getAll($problemonly = false)
 	{
-		if (!file_exists($config_path . 'links.xml'))
+		if (!file_exists(CONFIG_PATH . 'links.xml'))
 			self::createFile();
 
-		if (($xml = @simplexml_load_file($config_path . 'links.xml')) === FALSE)
+		if (($xml = @simplexml_load_file(CONFIG_PATH . 'links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
 		$links = array();
@@ -103,13 +103,13 @@ class LinkService
 		$link->id = uniqid('', true);
 		self::validate($link);
 
-		if (($xml = @simplexml_load_file($config_path . 'links.xml')) === FALSE)
+		if (($xml = @simplexml_load_file(CONFIG_PATH . 'links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
 		self::updateState($link);
 		$node = $link->toXML($xml);
 
-		if (file_put_contents($config_path . 'links.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents(CONFIG_PATH . 'links.xml', $xml->asXML()) !== FALSE)
 			return $link;
 		else
 			throw new Exception('Could not write links.xml');
@@ -141,7 +141,7 @@ class LinkService
 	{
 		self::validate($link);
 
-		if (($xml = @simplexml_load_file($config_path . 'links.xml')) === FALSE)
+		if (($xml = @simplexml_load_file(CONFIG_PATH . 'links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
 		self::updateState($link);
@@ -150,7 +150,7 @@ class LinkService
 
 		$link->toXML($xml);
 
-		if (file_put_contents($config_path . 'links.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents(CONFIG_PATH . 'links.xml', $xml->asXML()) !== FALSE)
 			return $link;
 		else
 			throw new Exception('Could not write links.xml');
@@ -162,12 +162,12 @@ class LinkService
 	 */
 	public function remove($id)
 	{
-		if (($xml = @simplexml_load_file($config_path . 'links.xml')) === FALSE)
+		if (($xml = @simplexml_load_file(CONFIG_PATH . 'links.xml')) === FALSE)
 			throw new Exception('Could not read links.xml');
 
 		self::removeNode($xml, $id);
 
-		if (file_put_contents($config_path . 'links.xml', $xml->asXML()) !== FALSE)
+		if (file_put_contents(CONFIG_PATH . 'links.xml', $xml->asXML()) !== FALSE)
 			return $id;
 		else
 			throw new Exception('Could not write links.xml');

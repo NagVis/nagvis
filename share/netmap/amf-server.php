@@ -39,7 +39,7 @@ class Custom_Zend_Amf_Server extends Zend_Amf_Server
 	protected $_production = false;
 }
 
-$config_path = realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../..') . '/etc/geomap/';
+define('CONFIG_PATH', realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../..') . '/etc/geomap/');
 
 $server = new Custom_Zend_Amf_Server();
 $server->setClassMap("Settings", "Settings");
