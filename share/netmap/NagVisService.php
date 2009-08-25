@@ -27,14 +27,14 @@ class NagVisService
 
 	private function init()
 	{
-		require_once("../nagvis/includes/defines/global.php");
-		require_once("../nagvis/includes/defines/matches.php");
+		require_once(INCLUDE_PATH . 'defines/global.php');
+		require_once(INCLUDE_PATH . 'defines/matches.php');
 		set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__))
-			. PATH_SEPARATOR . '../nagvis/includes/classes/'
-			. PATH_SEPARATOR . '../nagvis/includes/classes/validator/'
-			. PATH_SEPARATOR . '../nagvis/includes/classes/frontend/');
-		require_once("../nagvis/includes/functions/oldPhpVersionFixes.php");
-		require_once("../nagvis/includes/functions/getuser.php");
+			. PATH_SEPARATOR . INCLUDE_PATH . 'classes/'
+			. PATH_SEPARATOR . INCLUDE_PATH . 'classes/validator/'
+			. PATH_SEPARATOR . INCLUDE_PATH . 'classes/frontend/');
+		require_once(INCLUDE_PATH . 'functions/oldPhpVersionFixes.php');
+		require_once(INCLUDE_PATH . 'functions/getuser.php');
 
 		$this->CORE = new GlobalCore();
 		$this->CORE->MAINCFG->setRuntimeValue('user', getUser());
