@@ -26,6 +26,12 @@
     <mx:Script>
     	<![CDATA[
     		import modules.gmap.events.AddressEvent;
+    		
+    		public function onLocateClicked():void
+    		{
+    			if(address.text.length > 0)
+    				dispatchEvent(new AddressEvent(AddressEvent.LOCATE, address.text))
+    		}
     	]]>
     </mx:Script>
 	<mx:HBox left="10" right="15" top="10" height="20">
@@ -44,7 +50,7 @@
 		 />
 		<mx:Button label="Locate"
 			right="0" bottom="0" height="22"
-			click="dispatchEvent(new AddressEvent(AddressEvent.LOCATE, address.text))"
+			click="onLocateClicked()"
 		/>
 	</mx:Canvas>
 </EdgeBox>
