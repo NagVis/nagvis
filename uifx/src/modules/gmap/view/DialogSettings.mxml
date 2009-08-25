@@ -89,10 +89,10 @@
 					verticalScrollPolicy="off"
 				 />
 				<mx:LinkButton label="Get Google Maps Key"
-					left="10" right="10" textAlign="left"
+					left="10" right="10"  bottom="0" textAlign="left"
 					icon="@Embed(source='modules/gmap/img/key.png')"
 					click="onGetKey()"
- bottom="0"/>
+				/>
 			</mx:Canvas>
 			<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
 				<mx:Canvas left="5" right="0" top="0" bottom="0" borderStyle="solid" borderColor="#000000" cornerRadius="4">
