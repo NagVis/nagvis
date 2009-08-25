@@ -83,6 +83,7 @@
 	</Injectors>
 
 	<Injectors target="{DialogLink}" debug="true">
+		<PropertyInjector targetKey="links" source="{LinksData}"/>
 		<PropertyInjector targetKey="link" source="{CurrentLink}" sourceKey="link"/>
 		<PropertyInjector targetKey="locations" source="{LocationsData}"/>
 		<PropertyInjector targetKey="hosts" source="{HostsData}"/>

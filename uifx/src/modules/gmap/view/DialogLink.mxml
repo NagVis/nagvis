@@ -28,6 +28,8 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import modules.gmap.data.LocationsData;
+			import modules.gmap.data.LinksData;
 			import modules.gmap.domain.Location;
 			import modules.gmap.events.LinkEvent;
 			import modules.gmap.domain.Link;
@@ -50,7 +52,8 @@
 			public var services : ArrayCollection;
 			public var servicegroups : ArrayCollection;
 
-			[Bindable] public var locations : ArrayCollection;
+			[Bindable] public var links:LinksData;
+			[Bindable] public var locations:LocationsData;
 
 			private var _link : Link;
 
@@ -68,20 +71,19 @@
 
 					if (link)
 					{
+						linksList.selectedItem = link;
 						lnkLocation1.selectedItem = link.location1;
 						lnkLocation2.selectedItem = link.location2;
 						lnkDescription.text = link.description;
 
 						if (link.id && link.id.length > 0)
 						{
-							title.text = "Link - Edit Details";
 							addButton.visible = false;
 							saveButton.visible = true;
 							deleteButton.visible = true;
 						}
 						else
 						{
-							title.text = "Link - Connect Locations";
 							addButton.visible = true;
 							saveButton.visible = false;
 							deleteButton.visible = false;
@@ -150,7 +152,7 @@
 					}
 					else
 					{
-						title.text = "Link - Connect Locations";
+						linksList.selectedIndex = -1;
 						lnkLocation1.selectedIndex = -1;
 						lnkLocation2.selectedIndex = -1;
 						lnkDescription.text = "";
@@ -409,14 +411,17 @@
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
-	<mx:HBox left="10" right="15" top="10" height="20">
+	<mx:HBox left="10" right="15" top="10">
 		<mx:Image id="logo" source="@Embed(source='modules/gmap/img/connect.png')"/>
-		<mx:Label id="title" text="Link - Connect Locations"/>
-		<mx:Spacer width="100%"/>
-		<mx:Image id="close"
+		<mx:ComboBox id="linksList" width="100%" 
+			prompt="Link - Create New" selectedIndex="-1" 
+			dataProvider="{links}"
+			change="dispatchEvent(new LinkEvent(LinkEvent.SELECTED, linksList.selectedItem as Link))"
+		/>
+		<mx:Image id="close" height="22" verticalAlign="middle"
 			source="@Embed(source='modules/gmap/img/control_fastforward.png')"
 			click="setCurrentState('right-contracted'); event.stopImmediatePropagation()"
-		/>
+		/>		
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<flexlib:HAccordion selectedIndex="0" left="0" right="0" top="0" bottom="30" styleName="accordion" creationPolicy="all">
