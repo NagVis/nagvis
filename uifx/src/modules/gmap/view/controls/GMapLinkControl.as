@@ -105,17 +105,17 @@ package modules.gmap.view.controls
 					if(_link.id && _link.id.length > 0)
 					{										
 						options.strokeStyle = new StrokeStyle({
-							color: 0x000000,
-							thickness: 1,
+							color: 0x002FA7,
+							thickness: 2,
 							alpha: 1
 						});
 					}
 					else
 					{										
 						options.strokeStyle = new StrokeStyle({
-							color: 0x0000ff,
-							thickness: 3,
-							alpha: 0.5
+							color: 0xffffff,
+							thickness: 5,
+							alpha: 0.7
 						});
 					}
 					
