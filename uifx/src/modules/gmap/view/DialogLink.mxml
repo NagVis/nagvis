@@ -25,6 +25,7 @@
 	creationComplete="init()"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
+	toolTip="Links&#13;view, edit and create links between locations"
 >
 	<mx:Script>
 		<![CDATA[

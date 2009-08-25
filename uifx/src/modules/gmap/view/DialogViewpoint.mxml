@@ -22,6 +22,7 @@
 	xmlns:flexlib="http://code.google.com/p/flexlib/"
 	contracted="addEventListener(MouseEvent.CLICK, onClick)"
 	expanded="removeEventListener(MouseEvent.CLICK, onClick)"
+	toolTip="Viewpoints&#13;quick navigation to predefined positions"
 >
     <mx:Metadata>
         [Event(name="save", type="flash.events.Event")]
