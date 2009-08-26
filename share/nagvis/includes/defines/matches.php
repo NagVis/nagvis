@@ -50,6 +50,7 @@ define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
+define('MATCH_MP3_FILE', '/^(.+)\.mp3$/i');
 define('MATCH_HTML_TEMPLATE_FILE', '/^tmpl\.(.+)\.html$/i');
 define('MATCH_PHP_FILE', '/^(.+\.php)$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');

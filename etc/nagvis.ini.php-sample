@@ -48,6 +48,36 @@
 ;up=1
 ;ok=1
 ;pending=0
+; Colors of the different states
+;unreachable_bgcolor=#F1811B
+;unreachable_color=#F1811B
+;down_bgcolor=#FF0000
+;down_color=#FF0000
+;critical_bgcolor=#FF0000
+;critical_color=#FF0000
+;warning_bgcolor=#FFFF00
+;warning_color=#FFFF00
+;unknown_bgcolor=#FFCC66
+;unknown_color=#FFCC66
+;error_bgcolor=#0000FF
+;error_color=#0000FF
+;up_bgcolor=#00FF00
+;up_color=#00FF00
+;ok_bgcolor=#00FF00
+;ok_color=#00FF00
+;pending_bgcolor=#C0C0C0
+;pending_color=#C0C0C0
+; Sound of the different states to be used by the sound eventhandler in the
+; frontend
+;unreachable_sound=std_unreachable.mp3
+;down_sound=std_down.mp3
+;critical_sound=std_critical.mp3
+;warning_sound=std_warning.mp3
+;unknown_sound=
+;error_sound=
+;up_sound=
+;ok_sound=
+;pending_sound=
 
 ; Path definitions
 [paths]
