@@ -103,7 +103,7 @@
 					>
 						<mx:ArrayCollection>
 							<mx:String>do nothing</mx:String>
-							<mx:String>open Nagios details page</mx:String>
+							<mx:String>show object details</mx:String>
 						</mx:ArrayCollection>
 					</mx:ComboBox>
 					<mx:CheckBox id="newWindow"

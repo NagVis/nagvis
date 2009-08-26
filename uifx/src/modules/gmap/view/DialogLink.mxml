@@ -446,7 +446,7 @@
 					right="10" left="10" top="0" bottom="0"
 				/>
 			</mx:Canvas>
-			<mx:Canvas label="Nagios" width="100%" height="100%">
+			<mx:Canvas label="Monitored Object" width="100%" height="100%">
 				<mx:VBox left="5" right="5" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
 					<mx:Spacer/>
 					<mx:HBox width="100%">
@@ -493,7 +493,7 @@
 					>
 						<mx:ArrayCollection>
 							<mx:String>default action</mx:String>
-							<mx:String>open Nagios details page</mx:String>
+							<mx:String>show object details</mx:String>
 							<mx:String>open NagVis map</mx:String>
 							<mx:String>go to URL</mx:String>
 						</mx:ArrayCollection>
