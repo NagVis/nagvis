@@ -27,6 +27,9 @@ package modules.gmap.view.controls
 	import com.google.maps.overlays.PolylineOptions;
 	import com.google.maps.styles.StrokeStyle;
 	
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	
 	import modules.gmap.domain.Link;
 	
 	import mx.core.UIComponent;
@@ -35,11 +38,15 @@ package modules.gmap.view.controls
 	{
 		private var _map : Map;
 		private var _link : Link;
-		private var _line : Polyline;
+		private var _line : Polyline;		
+		private var _timer : Timer;
 
 		public function GMapLinkControl()
 		{
 			super();
+			
+			_timer = new Timer(250, 1);
+			_timer.addEventListener(TimerEvent.TIMER, onTimer);
 		}
 
 		public function get map():Map
@@ -69,6 +76,13 @@ package modules.gmap.view.controls
 			if(_link !== value)
 				_link = value;
 
+			//give the user chanse to performe a doubleclick
+			//then display the selection link
+			_timer.start();
+		}
+		
+		private function onTimer(event : TimerEvent) : void
+		{
 			reinitLine();
 		}
 

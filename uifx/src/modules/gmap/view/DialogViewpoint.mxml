@@ -30,6 +30,7 @@
     </mx:Metadata>
     <mx:Script>
     	<![CDATA[
+    		import mx.controls.Alert;
     		import modules.gmap.domain.Viewpoint;
     		import modules.gmap.events.ViewpointEvent;
     		import modules.gmap.data.ViewpointsData;
@@ -41,10 +42,35 @@
     			dispatchEvent(new ViewpointEvent(ViewpointEvent.SELECTED, list.selectedItem as Viewpoint));
     		}
 
+			private function trim(str:String):String
+			{
+			    for(var j:int = str.length-1; str.charCodeAt(j) < 33; j--);
+			    if(j < 0) return '';
+			    for(var i:int = 0; str.charCodeAt(i) < 33; i++);
+			    return str.substring(i, j+1);
+			}
+
     		public function onSaveButtonClick() : void
     		{
+    			var name:String = trim(preName.text);
+    			
+    			if(name.length == 0)
+    			{
+    				Alert.show('Please, select a name for a View Point', 'Error');
+    				return;	
+    			}
+    			
+				for each(var v:Viewpoint in dataProvider)
+				{
+					if(v.label == name)
+					{
+						Alert.show('View Point named ' + name + ' already exists.', 'Error');
+						return;
+					}
+				}
+					
     			var vp : Viewpoint = new Viewpoint;
-    			vp.label = preName.text;
+    			vp.label = name;
 
     			dispatchEvent(new ViewpointEvent(ViewpointEvent.CREATE, vp));
     		}

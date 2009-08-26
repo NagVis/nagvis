@@ -22,6 +22,7 @@
 package modules.gmap.mediator
 {
 	import com.google.maps.LatLng;
+	import com.google.maps.MapAction;
 	import com.google.maps.controls.ZoomControl;
 	
 	import flash.events.IEventDispatcher;
@@ -54,6 +55,7 @@ package modules.gmap.mediator
 			_view.map.enableContinuousZoom();
 			_view.map.addControl(new ZoomControl());
 			_view.map.setZoom(2);
+			_view.map.setDoubleClickMode(MapAction.ACTION_NOTHING);
 
 			if (!_view.map.isLoaded())
 			{
