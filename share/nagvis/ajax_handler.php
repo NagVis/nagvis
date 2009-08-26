@@ -236,6 +236,9 @@ switch($_GET['action']) {
 			echo $MAP->parseObjectsJson();
 		}
 	break;
+	case 'getStateProperties':
+		echo json_encode($CORE->MAINCFG->getStateWeight());
+	break;
 	case 'getHoverTemplate':
 		if(!isset($_GET['name']) || $_GET['name'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterNameNotSet');

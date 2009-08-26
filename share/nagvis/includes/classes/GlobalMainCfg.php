@@ -245,7 +245,7 @@ class GlobalMainCfg {
 				'pending' => Array('must' => 1,
 					'editable' => 1,
 					'default' => '0',
-					'match' => MATCH_INTEGER)
+					'match' => MATCH_INTEGER),
 				'pending_bgcolor' => Array('must' => 1,
 					'editable' => 1,
 					'default' => '#C0C0C0',
