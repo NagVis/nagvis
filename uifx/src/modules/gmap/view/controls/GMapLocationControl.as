@@ -25,14 +25,17 @@ package modules.gmap.view.controls
 	import com.google.maps.LatLng;
 	import com.google.maps.Map;
 	import com.google.maps.interfaces.IInfoWindow;
-	import com.google.maps.overlays.Marker;
-	import com.google.maps.overlays.MarkerOptions;
-
+	
 	import flash.geom.Point;
+	import flash.text.Font;
 	import flash.text.TextFormat;
-
+	
 	import modules.gmap.domain.Location;
-
+	import modules.gmap.domain.nagios.Host;
+	import modules.gmap.domain.nagios.HostGroup;
+	import modules.gmap.domain.nagios.Service;
+	import modules.gmap.domain.nagios.ServiceGroup;
+	
 	import mx.core.UIComponent;
 
 	public class GMapLocationControl extends UIComponent
@@ -87,8 +90,8 @@ package modules.gmap.view.controls
 				{
 					var title : TextFormat = new TextFormat;
 					title.bold = true;
-					title.underline = true
-
+					title.underline = true;
+					
 					var io : InfoWindowOptions = new InfoWindowOptions;
 					io.hasCloseButton = false;
 					io.pointOffset = new Point(-3, -5);
@@ -97,7 +100,23 @@ package modules.gmap.view.controls
 					{
 						io.title = _location.label;
 						io.titleFormat = title;
-						io.content = _location.description;
+						io.contentHTML = '';	
+						io.contentFormat = new TextFormat("Arial", 10);					
+						
+						if(_location.object)
+						{
+							if(_location.object is Host)
+								io.contentHTML += 'Host: <b>' + _location.object.name + '</b>\n';
+							else if(_location.object is Service)
+								io.contentHTML += 'Service: <b>' + _location.object.description + ' on ' + _location.object.host + '</b>\n';
+							else if(_location.object is HostGroup)
+								io.contentHTML += 'Host Group: <b>' + _location.object.name + '</b>\n';
+							else if(_location.object is ServiceGroup)
+								io.contentHTML += 'Service Group: <b>' + _location.object.name + '</b>\n';
+						}
+						
+						if(_location.description.length > 0)
+							io.contentHTML += '\n <i>' + _location.description + '</i>';
 					}
 					else
 					{
