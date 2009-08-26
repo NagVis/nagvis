@@ -362,7 +362,10 @@ function getFaviconImage(oObj) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setPageBackgroundColor(sColor) {
+	eventlog("background", "debug", "Setting backgroundcolor to " + sColor);
+	eventlog("background", "debug", "Old backgroundcolor: " + document.body.style.backgroundColor);
 	document.body.style.backgroundColor = sColor;
+	eventlog("background", "debug", "New backgroundcolor: " + document.body.style.backgroundColor);
 }
 
 /**
