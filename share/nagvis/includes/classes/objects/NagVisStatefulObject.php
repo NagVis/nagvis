@@ -31,16 +31,6 @@ class NagVisStatefulObject extends NagVisObject {
 	protected $BACKEND;
 	private $GRAPHIC;
 	
-	protected static $arrStates = Array('UNREACHABLE' => 6, 
-	                                  'DOWN' => 5, 
-	                                  'CRITICAL' => 5, 
-	                                  'WARNING' => 4, 
-	                                  'UNKNOWN' => 3, 
-	                                  'ERROR' => 2, 
-	                                  'UP' => 1, 
-	                                  'OK' => 1, 
-	                                  'PENDING' => 0);
-	
 	// "Global" Configuration variables for all stateful objects
 	protected $backend_id;
 	
@@ -232,7 +222,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAcknowledgement() {
-		return $this->problem_has_been_acknowledged;
+		return (int) $this->problem_has_been_acknowledged;
 	}
 	
 	/**
@@ -268,7 +258,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getSummaryAcknowledgement() {
-		return $this->summary_problem_has_been_acknowledged;
+		return (int) $this->summary_problem_has_been_acknowledged;
 	}
 	
 	/**
@@ -616,29 +606,54 @@ class NagVisStatefulObject extends NagVisObject {
 	protected function wrapChildState(&$OBJ) {
 		$sSummaryState = $this->getSummaryState();
 		$sObjSummaryState = $OBJ->getSummaryState();
-		if($sSummaryState != '') {
-			/* When the state of the current child is not as good as the current
-			 * summary state or the state is equal and the sub-state differs.
-			 */
-			 if(self::$arrStates[$sSummaryState] < self::$arrStates[$sObjSummaryState] || (self::$arrStates[$sSummaryState] == self::$arrStates[$sObjSummaryState] && ($this->getSummaryAcknowledgement() || $this->getSummaryInDowntime()))) {
+	
+		$stateWeight = $this->CORE->MAINCFG->getStateWeight();
+		
+		if(isset($stateWeight[$sObjSummaryState])) {
+			if($sSummaryState != '') {
+				/* When the state of the current child is not as good as the current
+				 * summary state or the state is equal and the sub-state differs.
+				 */
+				
+				// Gather the current summary state type
+				$sType = 'normal';
+				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+					$sType = 'ack';
+				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+					$sType = 'downtime';
+				}
+				
+				// Gather the object summary state type
+				$sObjType = 'normal';
+				if($OBJ->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sObjSummaryState]['ack'])) {
+					$sObjType = 'ack';
+				} elseif($OBJ->getSummaryInDowntime() == 1 && isset($stateWeight[$sObjSummaryState]['downtime'])) {
+					$sObjType = 'downtime';
+				}
+				
+				if($stateWeight[$sSummaryState][$sType] < $stateWeight[$sObjSummaryState][$sObjType]) { 
+					$this->summary_state = $sObjSummaryState;
+					
+					if($OBJ->getSummaryAcknowledgement() == 1) {
+						$this->summary_problem_has_been_acknowledged = 1;
+					} else {
+						$this->summary_problem_has_been_acknowledged = 0;
+					}
+					
+					if($OBJ->getSummaryInDowntime() == 1) {
+						$this->summary_in_downtime = 1;
+					} else {
+						$this->summary_in_downtime = 0;
+					}
+				}
+			} else {
 				$this->summary_state = $sObjSummaryState;
-				
-				if($OBJ->getSummaryAcknowledgement() == 1) {
-					$this->summary_problem_has_been_acknowledged = 1;
-				} else {
-					$this->summary_problem_has_been_acknowledged = 0;
-				}
-				
-				if($OBJ->getSummaryInDowntime() == 1) {
-					$this->summary_in_downtime = 1;
-				} else {
-					$this->summary_in_downtime = 0;
-				}
+				$this->summary_problem_has_been_acknowledged = $OBJ->getSummaryAcknowledgement();
+				$this->summary_in_downtime = $OBJ->getSummaryInDowntime();
 			}
 		} else {
-			$this->summary_state = $sObjSummaryState;
-			$this->summary_problem_has_been_acknowledged = $OBJ->getSummaryAcknowledgement();
-			$this->summary_in_downtime = $OBJ->getSummaryInDowntime();
+			//FIXME: Error no valid state
+			echo $OBJ->getName().": Unkown state: ".$sObjSummaryState;
 		}
 	}
 }
