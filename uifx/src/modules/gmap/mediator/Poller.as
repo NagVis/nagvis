@@ -30,7 +30,7 @@ package modules.gmap.mediator
 	{
 		public static const TIMEOUT : String = "PollerTimeout";
 
-		private var _semaphor : int = 1;
+		private var _semaphor : int = 2;
 		private var _dispatcher : IEventDispatcher;
 		private var _timer : Timer;
 
@@ -38,7 +38,7 @@ package modules.gmap.mediator
 		{
 			_dispatcher = dispatcher;
 
-			_timer = new Timer(5000);
+			_timer = new Timer(30000);
 			_timer.addEventListener(TimerEvent.TIMER, onTimer);
 		}
 

@@ -60,6 +60,7 @@
 				<RemoteObjectInvoker destination="zend" source="LinkService" method="getAll" arguments="false" debug="true">
 					<resultHandlers>
 						<MethodInvoker generator="{LinksData}" method="fill" arguments="{resultObject}"/>
+						<MethodInvoker generator="{Poller}" method="resourceReady"/>
 					</resultHandlers>
 				</RemoteObjectInvoker>
 
