@@ -268,6 +268,7 @@
 			private function onObjectTypeChange() : void
 			{
 				lnkNObject.removeAll();
+				lnkNObject.selectedItems.removeAll();
 				lnkNObject.textInput.text = '';
 
 				switch (lnkNObjectType.selectedIndex)

@@ -247,6 +247,7 @@
 			private function onObjectTypeChange() : void
 			{
 				locNObject.removeAll();
+				locNObject.selectedItems.removeAll();
 				locNObject.textInput.text = '';
 
 				switch (locNObjectType.selectedIndex)
