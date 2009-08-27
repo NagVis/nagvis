@@ -39,6 +39,7 @@
 
     		public function onListSelectChange() : void
     		{
+    			preName.text = (list.selectedItem as Viewpoint).label;
     			dispatchEvent(new ViewpointEvent(ViewpointEvent.SELECTED, list.selectedItem as Viewpoint));
     		}
 
@@ -50,29 +51,52 @@
 			    return str.substring(i, j+1);
 			}
 
-    		public function onSaveButtonClick() : void
+			private function nameExist(name:String):Boolean
+			{
+				for each(var v:Viewpoint in dataProvider)
+					if(v.label == name)
+						return true;
+
+				return false;			
+			}
+
+    		public function onSaveButtonClick():void
     		{
     			var name:String = trim(preName.text);
     			
     			if(name.length == 0)
-    			{
-    				Alert.show('Please, select a name for a View Point', 'Error');
     				return;	
-    			}
-    			
-				for each(var v:Viewpoint in dataProvider)
+
+				if(nameExist(name))
 				{
-					if(v.label == name)
-					{
-						Alert.show('View Point named ' + name + ' already exists.', 'Error');
-						return;
-					}
-				}
+					Alert.show('View Point "' + name + '" already exists.', 'Error');
+					return;
+				}    			
 					
     			var vp : Viewpoint = new Viewpoint;
     			vp.label = name;
 
     			dispatchEvent(new ViewpointEvent(ViewpointEvent.CREATE, vp));
+    		}
+    		
+    		public function onDeleteButtonClick():void
+    		{
+    			var name:String = trim(preName.text);
+    			
+    			if(name.length == 0)
+    				return;	
+
+				if(!nameExist(name))
+				{
+					Alert.show('View Point "' + name + '" does not exist.', 'Error');
+					return;
+				}    			
+					
+    			var vp : Viewpoint = new Viewpoint;
+    			vp.label = name;
+
+    			dispatchEvent(new ViewpointEvent(ViewpointEvent.DELETE, vp));
+    			preName.text = '';
     		}
     	]]>
     </mx:Script>
@@ -87,17 +111,21 @@
 	</mx:HBox>
 	<mx:Canvas left="10" right="15" top="40" bottom="10">
 		<mx:List id="list"
-			top="0" left="0" right="0" height="138"
+			top="0" left="0" right="0" bottom="30"
 			dataProvider="{dataProvider}"
 			change="onListSelectChange()"
-		/>
+		 />
 		<flexlib:PromptingTextInput id="preName"
-			left="0" right="62" bottom="0" height="22"
+			left="0" right="136" bottom="0"
 			prompt="viewpoint name"
 		/>
 		<mx:Button label="Save"
-			right="0" bottom="0" height="22"
+			right="68" bottom="0" height="22" width="64"
 			click="onSaveButtonClick()"
+		 />
+		<mx:Button label="Delete" 
+			bottom="0" right="0" width="64"
+			click="onDeleteButtonClick()"
 		/>
 	</mx:Canvas>
 </EdgeBox>

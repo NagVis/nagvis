@@ -73,6 +73,41 @@ class ViewpointService
 		else
 			throw new Exception('Could not write viewpoints.xml');
     }
+    
+	private function removeNodeByLabel(&$xml, $label)
+	{
+		$index = 0;
+		foreach ($xml->viewpoint as $node)
+		{
+			if ($node['label'] == $label)
+			{
+				// Note: unset($node) won't work thus the need for $index
+				unset($xml->viewpoint[$index]);
+				$success = true;
+				break;
+			}
+			$index++;
+		}
+		if (!isset($success))
+			throw new Exception('View Point does not exist');
+	}
+	
+	/**
+	 * @param  string $label
+	 * @return string
+	 */
+	public function remove($label)
+	{
+		if (($xml = @simplexml_load_file(CONFIG_PATH . 'viewpoints.xml')) === FALSE)
+			throw new Exception('Could not read viewpoints.xml');
+
+		self::removeNodeByLabel($xml, $label);
+
+		if (file_put_contents(CONFIG_PATH . 'viewpoints.xml', $xml->asXML()) !== FALSE)
+			return $label;
+		else
+			throw new Exception('Could not write viewpoints.xml');
+    }	
 }
 
 ?>

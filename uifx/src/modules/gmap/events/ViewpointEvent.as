@@ -31,6 +31,7 @@ package modules.gmap.events
 		public static const CREATE : String = "ViewpointCreate";
 		public static const CREATED : String = "ViewpointCreated";
 		public static const SAVE : String = "ViewpointSave";
+		public static const DELETE : String = "ViewpointDelete";
 
 		public var viewpoint : Viewpoint;
 

@@ -22,7 +22,7 @@
 package modules.gmap.data
 {
 	import modules.gmap.domain.Viewpoint;
-
+	
 	import mx.collections.ArrayCollection;
 
 	public class ViewpointsData extends ArrayCollection
@@ -37,5 +37,16 @@ package modules.gmap.data
 			this.source = data;
 		}
 
+		public function removeItemByLabel(label:String):void
+		{
+			for(var i:int = this.length - 1; i >= 0; --i)
+			{
+				if ((getItemAt(i) as Viewpoint).label == label)
+				{
+					removeItemAt(i);
+					return;					
+				}
+			}
+		}
 	}
 }

@@ -47,4 +47,11 @@
 		/>
 	</EventHandlers>
 
+	<EventHandlers type="{ViewpointEvent.DELETE}">
+		<MethodInvoker generator="{ViewpointsData}" method="removeItemByLabel" arguments="{event.viewpoint.label}"/>
+		<RemoteObjectInvoker instance="{ViewpointsService}" method="remove"
+			arguments="{event.viewpoint.label}"
+		/>
+	</EventHandlers>
+
 </EventMap>
