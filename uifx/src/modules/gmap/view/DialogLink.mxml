@@ -273,30 +273,31 @@
 				switch (lnkNObjectType.selectedIndex)
 				{
 					case 0:
-						lnkNObject.textInput.enabled = false;
+						lnkNObject.visible = false;
 						lnkNObject.dataProvider = null;
 						lnkNObject.browserFields = null;
 						lnkNObject.labelFunction = null;
+						break;
 					case 1:
-						lnkNObject.textInput.enabled = true;
+						lnkNObject.visible = true;
 						lnkNObject.dataProvider = hosts;
 						lnkNObject.browserFields = ["name", "address", "alias"];
 						lnkNObject.labelFunction = hostLabelFunction;
 						break;
 					case 2:
-						lnkNObject.textInput.enabled = true;
+						lnkNObject.visible = true;
 						lnkNObject.dataProvider = services;
 						lnkNObject.browserFields = ["host", "description"];
 						lnkNObject.labelFunction = serviceLabelFunction;
 						break;
 					case 3:
-						lnkNObject.textInput.enabled = true;
+						lnkNObject.visible = true;
 						lnkNObject.dataProvider = hostgroups;
 						lnkNObject.browserFields = ["name", "alias"];
 						lnkNObject.labelFunction = groupLabelFunction;
 						break;
 					case 4:
-						lnkNObject.textInput.enabled = true;
+						lnkNObject.visible = true;
 						lnkNObject.dataProvider = servicegroups;
 						lnkNObject.browserFields = ["name", "alias"];
 						lnkNObject.labelFunction = groupLabelFunction;
@@ -407,6 +408,12 @@
 			}
 		]]>
 	</mx:Script>
+	<mx:Style>
+		.noObject
+		{
+			fontWeight: bold;
+		}
+	</mx:Style>
 	<mx:XML format="e4x" id="autoCompleteMenu">
 		<root>
 			<menuitem data="browse" label="Browse..."/>
@@ -449,14 +456,9 @@
 			<mx:Canvas label="Monitored Object" width="100%" height="100%">
 				<mx:VBox left="5" right="5" top="10" bottom="0" borderStyle="solid" cornerRadius="4" borderColor="#000000" verticalAlign="middle">
 					<mx:Spacer/>
-					<mx:HBox width="100%">
-						<mx:Spacer/>
-						<mx:Label text="Type:" left="10" top="10" height="18"/>
-						<mx:Spacer/>
-					</mx:HBox>
-					<mx:HBox width="100%">
-						<mx:Spacer/>
-						<mx:ComboBox id="lnkNObjectType" width="100%" change="onObjectTypeChange()">
+					<mx:Canvas width="100%">
+						<mx:Label text="Type:" left="5" right="5" top="0"/>
+						<mx:ComboBox id="lnkNObjectType" left="5" right="5" top="20" change="onObjectTypeChange()">
 							<mx:ArrayCollection>
 								<mx:String></mx:String>
 								<mx:String>Host</mx:String>
@@ -465,24 +467,19 @@
 								<mx:String>Service Group</mx:String>
 							</mx:ArrayCollection>
 						</mx:ComboBox>
-						<mx:Spacer/>
-					</mx:HBox>
-					<mx:HBox width="100%">
-						<mx:Spacer/>
-						<mx:Label text="Object:" top="70" left="10"/>
-						<mx:Spacer/>
-					</mx:HBox>
-					<mx:HBox width="100%">
-						<mx:Spacer/>
-						<hc:AdvancedAutoComplete id="lnkNObject" width="100%"
+						<mx:Label text="Object:" left="5" right="5" top="50"/>
+						<mx:Label text="None" styleName="noObject"
+							left="50" right="5" top="70"
+						/>
+						<hc:AdvancedAutoComplete id="lnkNObject" 
+							left="5" right="5" top="70" visible="false"
 							creationComplete="initNObject()" focusIn="loadNagiosData()"
 							selectedItemStyleName="underline" labelFunction="groupLabelFunction"
 							matchType="anyPart" allowMultipleSelection="false" showRemoveIcon="true"
 							actionsMenuDataProvider="{autoCompleteMenu}" itemClick="objectItemClick(event)"
 							browserFields="{['name', 'alias']}"
 						/>
-						<mx:Spacer/>
-					</mx:HBox>
+					</mx:Canvas>
 				</mx:VBox>
 				<mx:TextInput cornerRadius="10" text=" Associate with" top="0" left="15" width="90" borderStyle="solid" editable="false"/>
 			</mx:Canvas>
