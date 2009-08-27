@@ -45,42 +45,6 @@ var iNow = Date.parse(new Date());
 
 // Define some state options
 var oStates = {};
-oStates.UNREACHABLE = {};
-oStates.UNREACHABLE.color = '#F1811B';
-oStates.UNREACHABLE.bgColor = '#F1811B';
-oStates.UNREACHABLE.sound = 'std_unreachable.mp3';
-oStates.DOWN = {};
-oStates.DOWN.color = '#FF0000';
-oStates.DOWN.bgColor = '#FF0000';
-oStates.DOWN.sound = 'std_down.mp3';
-oStates.CRITICAL = {};
-oStates.CRITICAL.color = '#FF0000';
-oStates.CRITICAL.bgColor = '#FF0000';
-oStates.CRITICAL.sound = 'std_critical.mp3';
-oStates.WARNING = {};
-oStates.WARNING.color = '#FFFF00';
-oStates.WARNING.bgColor = '#FFFF00';
-oStates.WARNING.sound = 'std_warning.mp3';
-oStates.UNKNOWN = {};
-oStates.UNKNOWN.color = '#FFCC66';
-oStates.UNKNOWN.bgColor = '#FFCC66';
-oStates.UNKNOWN.sound = '';
-oStates.ERROR = {};
-oStates.ERROR.color = '#0000FF';
-oStates.ERROR.bgColor = '#0000FF';
-oStates.ERROR.sound = '';
-oStates.UP = {};
-oStates.UP.color = '#00FF00';
-oStates.UP.bgColor = '#00FF00';
-oStates.UP.sound = '';
-oStates.OK = {};
-oStates.OK.color = '#00FF00';
-oStates.OK.bgColor = '#00FF00';
-oStates.OK.sound = '';
-oStates.PENDING = {};
-oStates.PENDING.color = '#C0C0C0';
-oStates.PENDING.bgColor = '#C0C0C0';
-oStates.PENDING.sound = '';
 
 function date(format, timestamp) {
 	// http://kevin.vanzonneveld.net

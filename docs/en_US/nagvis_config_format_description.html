@@ -18,6 +18,9 @@
 			<a href="#global">global</a><br />
 			General options which affect the whole NagVis installation</li>
 		<li>
+			<a href="#states">states</a> <font color="#ff0000">(New in 1.5)</font><br />
+			Options which affect the handling and appearance of the different states</li>
+		<li>
 			<a href="#paths">paths</a><br />
 			Path definitions</li>
 		<li>
@@ -63,6 +66,77 @@
 		<tr>
 		<td> refreshtime </td><td> 60 </td><td> Refresh time of maps or reloading the next map in map rotation </td>
 		</tr>
+		</table>
+		
+		<a name="states"></a><h3>states <font color="#ff0000">(New in 1.5)</font></h3>
+		<p>Options which affect the handling and appearance of the different states in the NagVis installation.</p>
+		
+		<p>These settings define the state handling behaviour. Mainly it is possible to configure which state will
+			cover another state changing these values. The state with the highest value will become the &quot;summary state&quot; for an object. 
+			For example a critical state (5) will cover a warning state (4).
+			Another example: An acknowledged critical state (2) will not cover a warning state (4).</p>
+		
+		<table>
+		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
+		<tr><td>unreachable</td><td>6</td></tr>
+		<tr><td>unreachable_ack</td><td>2</td></tr>
+		<tr><td>unreachable_downtime</td><td>2</td></tr>
+		<tr><td>down</td><td>5</td></tr>
+		<tr><td>down_ack</td><td>2</td></tr>
+		<tr><td>down_downtime</td><td>2</td></tr>
+		<tr><td>critical</td><td>5</td></tr>
+		<tr><td>critical_ack</td><td>2</td></tr>
+		<tr><td>critical_downtime</td><td>2</td></tr>
+		<tr><td>warning</td><td>4</td></tr>
+		<tr><td>warning_ack</td><td>2</td></tr>
+		<tr><td>warning_downtime</td><td>2</td></tr>
+		<tr><td>unknown</td><td>3</td></tr>
+		<tr><td>unknown_ack</td><td>2</td></tr>
+		<tr><td>unknown_downtime</td><td>2</td></tr>
+		<tr><td>error</td><td>2</td></tr>
+		<tr><td>error_ack</td><td>2</td></tr>
+		<tr><td>error_downtime</td><td>2</td></tr>
+		<tr><td>ok</td><td>1</td></tr>
+		<tr><td>up</td><td>1</td></tr>
+		<tr><td>pending</td><td>0</td></tr>
+		</table>
+		
+		<p>This settings define the behaviour of states in the frontend.</p>
+		<ul>
+			<li><b>*_bgcolor:</b> The bgcolor option is used in the background color changing eventhandler.</li>
+			<li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight eventhandler.</li>
+			<li><b>*_sound:</b> The sound file is being played on changes to the mentioned state (Needs to be MP3 format).</li>
+		</ul>
+		
+		<table>
+		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
+		<tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
+		<tr><td>unreachable_color</td><td>#F1811B</td></tr>
+		<tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
+		<tr><td>down_bgcolor</td><td>#FF0000</td></tr>
+		<tr><td>down_color</td><td>#FF0000</td></tr>
+		<tr><td>down_sound</td><td>std_down.mp3</td></tr>
+		<tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
+		<tr><td>critical_color</td><td>#FF0000</td></tr>
+		<tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
+		<tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
+		<tr><td>warning_color</td><td>#FFFF00</td></tr>
+		<tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
+		<tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
+		<tr><td>unknown_color</td><td>#FFCC66</td></tr>
+		<tr><td>unknown_sound</td><td></td></tr>
+		<tr><td>error_bgcolor</td><td>#0000FF</td></tr>
+		<tr><td>error_color</td><td>#0000FF</td></tr>
+		<tr><td>error_sound</td><td></td></tr>
+		<tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
+		<tr><td>ok_color</td><td>#00FF00</td></tr>
+		<tr><td>ok</td><td></td></tr>
+		<tr><td>up_bgcolor</td><td>#00FF00</td></tr>
+		<tr><td>up_color</td><td>#00FF00</td></tr>
+		<tr><td>up_sound</td><td></td></tr>
+		<tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
+		<tr><td>pending_color</td><td>#C0C0C0</td></tr>
+		<tr><td>pending_sound</td><td></td></tr>
 		</table>
 		
 		<a name="paths"></a><h3> paths </h3>

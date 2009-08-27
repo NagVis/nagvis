@@ -22,6 +22,63 @@
 ; Refresh time of pages
 ;refreshtime=60
 
+; Configure different state related settings
+[states]
+; State coverage/weight: This defines the state handling behaviour. For example
+; a critical state will cover a warning state and a an acknowledged critical
+; state will not cover a warning state.
+;unreachable=6
+;unreachable_ack=2
+;unreachable_downtime=2
+;down=5
+;down_ack=2
+;down_downtime=2
+;critical=5
+;critical_ack=2
+;critical_downtime=2
+;warning=4
+;warning_ack=2
+;warning_downtime=2
+;unknown=3
+;unknown_ack=2
+;unknown_downtime=2
+;error=2
+;error_ack=2
+;error_downtime=2
+;up=1
+;ok=1
+;pending=0
+; Colors of the different states
+;unreachable_bgcolor=#F1811B
+;unreachable_color=#F1811B
+;down_bgcolor=#FF0000
+;down_color=#FF0000
+;critical_bgcolor=#FF0000
+;critical_color=#FF0000
+;warning_bgcolor=#FFFF00
+;warning_color=#FFFF00
+;unknown_bgcolor=#FFCC66
+;unknown_color=#FFCC66
+;error_bgcolor=#0000FF
+;error_color=#0000FF
+;up_bgcolor=#00FF00
+;up_color=#00FF00
+;ok_bgcolor=#00FF00
+;ok_color=#00FF00
+;pending_bgcolor=#C0C0C0
+;pending_color=#C0C0C0
+; Sound of the different states to be used by the sound eventhandler in the
+; frontend
+;unreachable_sound=std_unreachable.mp3
+;down_sound=std_down.mp3
+;critical_sound=std_critical.mp3
+;warning_sound=std_warning.mp3
+;unknown_sound=
+;error_sound=
+;up_sound=
+;ok_sound=
+;pending_sound=
+
 ; Path definitions
 [paths]
 ; absolute physical NagVis path

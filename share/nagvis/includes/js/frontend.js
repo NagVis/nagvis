@@ -317,7 +317,7 @@ function getBackgroundColor(oObj) {
 	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP') {
 		sColor = oPageProperties.background_color;
 	} else {
-		sColor = oStates[oObj.summary_state].bgColor;
+		sColor = oStates[oObj.summary_state].bgcolor;
 	}
 	
 	oObj = null;
@@ -362,7 +362,10 @@ function getFaviconImage(oObj) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setPageBackgroundColor(sColor) {
+	eventlog("background", "debug", "Setting backgroundcolor to " + sColor);
+	eventlog("background", "debug", "Old backgroundcolor: " + document.body.style.backgroundColor);
 	document.body.style.backgroundColor = sColor;
+	eventlog("background", "debug", "New backgroundcolor: " + document.body.style.backgroundColor);
 }
 
 /**
@@ -1081,6 +1084,19 @@ function getMapProperties(mapName) {
 }
 
 /**
+ * getStateProperties()
+ *
+ * Fetches the current state properties like colors and
+ * sounds from the core
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getStateProperties() {
+	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getStateProperties')
+}
+
+/**
  * parseMap()
  *
  * Parses the map on initial page load or changed map configuration
@@ -1191,6 +1207,10 @@ function runWorker(iCount, sType, sIdentifier) {
 		
 		// Initialize everything
 		eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
+		
+		// Load state properties
+		eventlog("worker", "debug", "Loading the state properties");
+		oStates =	getStateProperties();
 		
 		// Handle the page rendering
 		if(sType == 'map') {

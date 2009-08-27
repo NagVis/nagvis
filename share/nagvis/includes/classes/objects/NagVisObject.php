@@ -499,10 +499,18 @@ class NagVisObject {
 		} else {
 			return 0;
 		}
-		
-		if(NagVisStatefulObject::$arrStates[$state1] == NagVisStatefulObject::$arrStates[$state2]) {
+
+		// Break when nothing to compare
+		if($state1 == '' || $state2 == '') {
 			return 0;
-		} elseif(NagVisStatefulObject::$arrStates[$state1] < NagVisStatefulObject::$arrStates[$state2]) {
+		}
+
+		$stateWeight = $OBJ1->CORE->MAINCFG->getStateWeight();
+		
+		// FIXME: Should handle ack/downtime states
+		if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {
+			return 0;
+		} elseif($stateWeight[$state1]['normal'] < $stateWeight[$state2]['normal']) {
 			return +1;
 		} else {
 			return -1;
