@@ -147,7 +147,11 @@ package modules.gmap.mediator
 		{
 			var slices : Array;
 
-			if (element.action == "")
+			//paranoid check
+			if(element == null)
+				return;
+
+			if (element.action == null || element.action == "")
 				slices = settings.defaultLocationAction.split(':', 2);
 			else
 				slices = element.action.split(':', 2);
