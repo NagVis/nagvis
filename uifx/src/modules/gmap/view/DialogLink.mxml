@@ -304,6 +304,10 @@
 						lnkNObject.labelFunction = groupLabelFunction;
 						break;
 				}
+
+				//AutoComplete component have some problems with positioning on Canvas
+				//this is a quick hack - refactoring needed.
+				lnkNObject.textInput.width = 175;				
 			}
 
 			private function loadNagiosData() : void
