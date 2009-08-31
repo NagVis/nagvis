@@ -35,6 +35,44 @@
 	<mate:LinksEM/>
 	<mate:NagiosEM/>
 
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+
+			ExternalInterface.addCallback("handleWheel", function(event : Object) : void
+			{
+				var obj : InteractiveObject = null;
+				var objects : Array = Application.application.getObjectsUnderPoint(new Point(event.x, event.y));
+
+				for (var i : int = objects.length - 1; i >= 0; i--)
+				{
+					if (objects[i] is InteractiveObject)
+					{
+						obj = objects[i] as InteractiveObject;
+						break;
+					}
+					else
+					{
+						if (objects[i] is Shape && (objects[i] as Shape).parent)
+						{
+							obj = (objects[i] as Shape).parent;
+							break;
+						}
+					}
+				}
+
+				if (obj)
+				{
+					var mEvent : MouseEvent = new MouseEvent(MouseEvent.MOUSE_WHEEL, true, false, 
+						event.x, event.y, obj, 
+						event.ctrlKey, event.altKey, event.shiftKey, 
+						false, -Number(event.delta));
+
+					obj.dispatchEvent(mEvent);
+				}
+			});
+		]]>
+	</mx:Script>
 	<mx:Style source="css/Main.css" />
 	<view:MainView width="100%" height="100%"/>
 	
