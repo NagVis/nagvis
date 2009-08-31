@@ -1566,7 +1566,7 @@ class GlobalMapCfg {
 	 * @return	Array	All elements of this type
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public public function getDefinitions($type) {
+	public function getDefinitions($type) {
 		if(isset($this->mapConfig[$type]) && count($this->mapConfig[$type]) > 0) {
 			return $this->mapConfig[$type];
 		} else {
