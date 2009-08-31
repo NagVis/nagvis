@@ -84,7 +84,7 @@ class GlobalHeaderMenu {
 	 */
 	public function replaceDynamicMacros() {
 		// Replace some special macros
-		if(get_class($this->OBJPAGE) == 'NagVisMapCfg' || get_class($this->OBJPAGE) == 'NagVisAutomapCfg') {
+		if($this->OBJPAGE !== null && (get_class($this->OBJPAGE) == 'NagVisMapCfg' || get_class($this->OBJPAGE) == 'NagVisAutomapCfg')) {
 			$arrKeys[] = '[current_map]';
 			$arrKeys[] = '[current_map_alias]';
 			$arrVals[] = $this->OBJPAGE->getName();
