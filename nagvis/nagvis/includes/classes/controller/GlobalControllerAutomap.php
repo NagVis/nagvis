@@ -35,7 +35,7 @@ class GlobalControllerAutomap {
 		$CORE = new GlobalCore();
 
 		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($CORE, NULL);
+		$MAPCFG = new NagVisMapCfg($CORE, '__automap');
 
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
