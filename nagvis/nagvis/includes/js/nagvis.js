@@ -583,7 +583,7 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
  */
 function escapeUrlValues(sStr) {
 	if(sStr.search('+') !== -1) {
-		sStr = sStr.replace(/+/g, '%2B');
+		sStr = sStr.replace(/\+/g, '%2B');
 	}
 	
 	if(sStr.search('&') !== -1) {
