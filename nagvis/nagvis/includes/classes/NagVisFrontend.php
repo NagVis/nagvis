@@ -86,7 +86,7 @@ class NagVisFrontend extends GlobalPage {
 		$prop['languageRoot'] = 'nagvis';
 		
 		// Only do this, when a map needs to be displayed
-		if(get_class($this->MAPCFG) != '') {
+		if($this->MAPCFG !== null && get_class($this->MAPCFG) != '') {
 			$prop['allowedUsers'] = $this->MAPCFG->getValue('global',0, 'allowed_user');
 		}
 		
