@@ -461,7 +461,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 				.' FROM  host AS h, service AS s LEFT JOIN scheduled_downtime AS sdt ON sdt.host_name = s.host_name'
 				.' AND sdt.service_description = s.service_description AND NOW() > sdt.start_time AND NOW() < sdt.end_time'
 				." WHERE s.host_name = '$hostName' AND h.host_name = s.host_name"
-				.((isset($serviceName) && $serviceName != '')? " AND s.service_description = '$serviceName'" : '').' LIMIT 1');
+				.((isset($serviceName) && $serviceName != '')? " AND s.service_description = '$serviceName' LIMIT 1" : ''));
 			
 			if(mysql_num_rows($QUERYHANDLE) == 0) {
 				if(isset($serviceName) && $serviceName != '') {
