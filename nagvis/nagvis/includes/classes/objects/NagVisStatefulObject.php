@@ -616,6 +616,20 @@ class NagVisStatefulObject extends NagVisObject {
 	protected function wrapChildState(&$OBJ) {
 		$sSummaryState = $this->getSummaryState();
 		$sObjSummaryState = $OBJ->getSummaryState();
+
+		// The state of the compare object is empty: Do not compare!
+		if($sObjSummaryState == '') {
+			echo "NagVisError: Object state in object (".$OBJ->getName().") is empty\n";
+			exit(1);
+		}
+		
+		// The state of the item to be compared is invalid
+		if(!isset(self::$arrStates[$sObjSummaryState])) {
+			echo "NagVisError: Invalid object state \"".$sObjSummaryState."\" in object (".$OBJ->getName().")\n";
+			exit(1);
+		}
+		
+		// When this object has no state yet it is not needed to compare anything
 		if($sSummaryState != '') {
 			/* When the state of the current child is not as good as the current
 			 * summary state or the state is equal and the sub-state differs.
