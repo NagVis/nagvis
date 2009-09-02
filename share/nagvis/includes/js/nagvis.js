@@ -549,7 +549,7 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function escapeUrlValues(sStr) {
-	if(sStr.search('+') !== -1) {
+	if(sStr.search('\\+') !== -1) {
 		sStr = sStr.replace(/\+/g, '%2B');
 	}
 	
