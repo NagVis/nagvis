@@ -54,5 +54,5 @@ define('MATCH_HTML_TEMPLATE_FILE', '/^tmpl\.(.+)\.html$/i');
 define('MATCH_PHP_FILE', '/^(.+\.php)$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
 define('MATCH_ORDER', '/^(?:asc|desc)$/');
-define('MATCH_TEXTBOX_WIDTH', '/^(\-?[0-9]+|auto)$/');
+define('MATCH_TEXTBOX_WIDTH', '/^([0-9]+|auto)$/');
 ?>
