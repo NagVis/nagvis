@@ -135,7 +135,7 @@ function track_mouse(e) {
 		if (event.pageX || event.pageY) {
 			posx = event.pageX;
 			posy = event.pageY;
-		} else if (e.clientX || event.clientY) {
+		} else if (event.clientX || event.clientY) {
 			posx = event.clientX;
 			posy = event.clientY;
 		}
