@@ -155,7 +155,7 @@ function setMapHoverUrls() {
 	// Build string for bulk fetching the templates
 	for(var i in oHoverUrls) {
 		if(i != 'Inherits') {
-			aUrlParts.push('&url[]='+i);
+			aUrlParts.push('&url[]='+escapeUrlValues(i));
 		}
 	}
 	
