@@ -33,6 +33,7 @@ interface GlobalBackendInterface {
 	public function getObjectsEx($type);
 	public function getHostState($hostName, $onlyHardstates);
 	public function getServiceState($hostName, $serviceName, $onlyHardstates);
+	public function getHostgroupState($hostgroupName, $onlyHardstates);
 	public function getHostNamesWithNoParent();
 	public function getDirectChildNamesByHostName($hostName);
 	public function getHostsByHostgroupName($hostgroupName);
