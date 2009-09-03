@@ -795,6 +795,23 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PUBLIC getServicegroupState()
+	 *
+	 * Returns the Nagios state and additional information for the requested servicegroup
+	 *
+	 * @param	String		$servicegroupName
+	 * @param	Boolean		$onlyHardstates
+	 * @return	array		$state
+	 * @author	Roman Kyrylych <rkyrylych@op5.com>
+	 */
+	public function getServicegroupState($servicegroupName, $onlyHardstates)
+	{
+		$arrReturn = Array();
+		
+		return $arrReturn;
+	}
+	
+	/**
 	 * PUBLIC Method getHostNamesWithNoParent
 	 *
 	 * Gets all hosts with no parent host. This method is needed by the automap 

@@ -34,6 +34,7 @@ interface GlobalBackendInterface {
 	public function getHostState($hostName, $onlyHardstates);
 	public function getServiceState($hostName, $serviceName, $onlyHardstates);
 	public function getHostgroupState($hostgroupName, $onlyHardstates);
+	public function getServicegroupState($servicegroupName, $onlyHardstates);
 	public function getHostNamesWithNoParent();
 	public function getDirectChildNamesByHostName($hostName);
 	public function getHostsByHostgroupName($hostgroupName);

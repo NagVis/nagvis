@@ -656,6 +656,85 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PUBLIC getServicegroupState()
+	 *
+	 * Returns the Nagios state and additional information for the requested servicegroup
+	 *
+	 * @param	String		$servicegroupName
+	 * @param	Boolean		$onlyHardstates
+	 * @return	array		$state
+	 * @author	Roman Kyrylych <rkyrylych@op5.com>
+	 */
+	public function getServicegroupState($servicegroupName, $onlyHardstates)
+	{
+		$arrReturn = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT s.host_name, s.service_description,'
+			.' s.last_hard_state, s.current_state, s.state_type'
+			.' FROM  host AS h, service AS s LEFT JOIN scheduled_downtime AS sdt ON sdt.host_name = s.host_name'
+			.' AND sdt.service_description = s.service_description AND NOW() > sdt.start_time AND NOW() < sdt.end_time'
+			.' LEFT JOIN service_servicegroup AS ssg ON ssg.service = service.id'
+			.' LEFT JOIN servicegroup AS sg ON sg.id = ssg.servicegroup'
+			." WHERE sg.servicegroup_name = '$servicegroupName'");
+		
+		if(mysql_num_rows($QUERYHANDLE) == 0) {
+			$arrReturn['state'] = 'ERROR';
+		} else {
+			while($data = mysql_fetch_array($QUERYHANDLE)) {
+				$arrRow = Array('host'] => $data['host_name'],
+					'description' => $data['service_description']);
+				
+				/**
+				 * Only recognize hard states. There was a discussion about the implementation
+				 * This is a new handling of only_hard_states. For more details, see: 
+				 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
+				 *
+				 * Thanks to Andurin and fredy82
+				 */
+				if($onlyHardstates == 1) {
+					if($data['state_type'] != '0') {
+						$data['current_state'] = $data['current_state'];
+					} else {
+						$data['current_state'] = $data['last_hard_state'];
+					}
+				}
+				
+				if($data['current_state'] == '') {
+					$arrRow['state'] = 'PENDING';
+				} elseif($data['current_state'] == '0') {
+					// Host is UP
+					$arrRow['state'] = 'OK';
+				} else {
+					// Host is DOWN/UNREACHABLE/UNKNOWN
+					
+					// Store state and output in array
+					switch($data['current_state']) {
+						case '1': 
+							$arrRow['state'] = 'WARNING';
+						break;
+						case '2':
+							$arrRow['state'] = 'CRITICAL';
+						break;
+						case '3':
+							$arrRow['state'] = 'UNKNOWN';
+						break;
+						default:
+							$arrRow['state'] = 'UNKNOWN';
+						break;
+					}
+				}
+				
+				$arrReturn[] = $arrRow;
+			}
+		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
+		return $arrReturn;
+	}
+	
+	/**
 	 * PUBLIC Method getHostNamesWithNoParent
 	 *
 	 * Gets all hosts with no parent host. This method is needed by the automap 
