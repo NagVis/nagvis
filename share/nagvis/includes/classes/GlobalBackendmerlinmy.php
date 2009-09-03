@@ -598,7 +598,9 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			.' LEFT JOIN hostgroup AS hg ON hg.id = hhg.hostgroup'
 			." WHERE hg.hostgroup_name = '$hostgroupName'");
 		
-		if(mysql_num_rows($QUERYHANDLE)) {
+		if(mysql_num_rows($QUERYHANDLE) == 0) {
+			$arrReturn = false;
+		} else {
 			while($data = mysql_fetch_array($QUERYHANDLE))
 			{
 				$arrRow = Array('name' => $data['host_name']);
@@ -675,7 +677,9 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			.' LEFT JOIN servicegroup AS sg ON sg.id = ssg.servicegroup'
 			." WHERE sg.servicegroup_name = '$servicegroupName'");
 		
-		if(mysql_num_rows($QUERYHANDLE)) {
+		if(mysql_num_rows($QUERYHANDLE) == 0) {
+			$arrReturn = false;
+		} else {
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
 				$arrRow = Array('host'] => $data['host_name'],
 					'description' => $data['service_description']);
