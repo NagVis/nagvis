@@ -173,11 +173,37 @@ class NagiosService
 	 */
 	public function getHostGroupState($hostgroup)
 	{
-		$hosts = $this->backend->getHostsByHostgroupName($hostgroup->name);
-		$state = State::UNKNOWN;
+		if (($data = $this->backend->getHostgroupState($hostgroup, 0) === false)
+			return State::ERROR;
 
-		foreach ($hosts as $host)
-			$state = max($state, $this->getHostState(new Host($host)));
+		$state = State::UNKNOWN;
+		foreach ($data as $host)
+		{
+			switch ($host['state'])
+			{
+				case 'PENDING':
+					$host_state = State::UNKNOWN;
+					break;
+
+				case 'UP':
+					$host_state = State::OK;
+					break;
+
+				case 'DOWN':
+					$host_state = State::ERROR;
+					break;
+
+				case 'UNREACHABLE':
+					$host_state = State::WARNING;
+					break;
+
+				case 'UNKNOWN':
+				default:
+					$host_state = State::UNKNOWN;
+			}
+
+			$state = max($state, $host_state);
+		}
 
 		return $state;
 	}
@@ -187,11 +213,37 @@ class NagiosService
 	 */
 	public function getServiceGroupState($servicegroup)
 	{
-		$services = $this->backend->getServicesByServicegroupName($servicegroup->name);
-		$state = State::UNKNOWN;
+		if (($data = $this->backend->getServicegroupState($servicegroup, 0) === false)
+			return State::ERROR;
 
-		foreach ($services as $service)
-			$state = max($state, $this->getServiceState(new Service($service['host_name'], $service['service_description'])));
+		$state = State::UNKNOWN;
+		foreach ($data as $service)
+		{
+			switch ($service['state'])
+			{
+				case 'PENDING':
+					$service_state =  State::UNKNOWN;
+					break;
+
+				case 'OK':
+					$service_state =  State::OK;
+					break;
+
+				case 'WARNING':
+					$service_state =  State::WARNING;
+					break;
+
+				case 'CRITICAL':
+					$service_state =  State::ERROR;
+					break;
+
+				case 'UNKNOWN':
+				default:
+					$service_state =  State::UNKNOWN;
+			}
+
+			$state = max($state, $service_state);
+		}
 
 		return $state;
 	}
