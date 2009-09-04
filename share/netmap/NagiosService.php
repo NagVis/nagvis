@@ -173,7 +173,7 @@ class NagiosService
 	 */
 	public function getHostGroupState($hostgroup)
 	{
-		if (($data = $this->backend->getHostgroupState($hostgroup, 0)) === false)
+		if (($data = $this->backend->getHostgroupState($hostgroup->name, 0)) === false)
 			return State::ERROR;
 
 		$state = State::UNKNOWN;
@@ -213,7 +213,7 @@ class NagiosService
 	 */
 	public function getServiceGroupState($servicegroup)
 	{
-		if (($data = $this->backend->getServicegroupState($servicegroup, 0)) === false)
+		if (($data = $this->backend->getServicegroupState($servicegroup->name, 0)) === false)
 			return State::ERROR;
 
 		$state = State::UNKNOWN;
