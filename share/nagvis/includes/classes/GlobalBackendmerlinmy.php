@@ -681,7 +681,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			$arrReturn = false;
 		} else {
 			while($data = mysql_fetch_array($QUERYHANDLE)) {
-				$arrRow = Array('host'] => $data['host_name'],
+				$arrRow = Array('host' => $data['host_name'],
 					'description' => $data['service_description']);
 				
 				/**
