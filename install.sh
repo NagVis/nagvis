@@ -855,9 +855,11 @@ fi
 
 text
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
-	# Gather path prefix
+	# Gather path prefixes
 	NAGVIS_DIR="nagvis"
 	[ $NAGVIS_TAG -ge 01050000 ] && NAGVIS_DIR="share/nagvis"
+	USERFILES_DIR="nagvis"
+	[ $NAGVIS_TAG -ge 01050000 ] && USERFILES_DIR="share/userfiles"
 
 	LINE="Restoring main configuration file..."
 	copy "" "$NAGVIS_CONF" "main configuration file"
@@ -866,31 +868,31 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "demo.cfg:demo2.cfg" "etc/maps" "map configuration files"
 	
 	LINE="Restoring custom map images..."
-	copy "nagvis-demo.png" "$NAGVIS_DIR/images/maps" "map image files"
+	copy "nagvis-demo.png" "$USERFILES_DIR/images/maps" "map image files"
 	
 	LINE="Restoring custom iconsets..."
-	copy "20x20.png:configerror_*.png:error.png:std_*.png" "$NAGVIS_DIR/images/iconsets" "iconset files"
+	copy "20x20.png:configerror_*.png:error.png:std_*.png" "$USERFILES_DIR/images/iconsets" "iconset files"
 	
 	LINE="Restoring custom shapes..."
-	copy "" "$NAGVIS_DIR/images/shapes" "shapes"
+	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
 	LINE="Restoring custom header templates..."
-	copy "tmpl.default*" "$NAGVIS_DIR/templates/header" "header templates"
+	copy "tmpl.default*" "$USERFILES_DIR/templates/header" "header templates"
 	
 	LINE="Restoring custom hover templates..."
-	copy "tmpl.default*" "$NAGVIS_DIR/templates/hover" "hover templates"
+	copy "tmpl.default*" "$USERFILES_DIR/templates/hover" "hover templates"
 	
 	LINE="Restoring custom header template images..."
-	copy "tmpl.default*" "$NAGVIS_DIR/images/templates/header" "header template images"
+	copy "tmpl.default*" "$USERFILES_DIR/images/templates/header" "header template images"
 
 	LINE="Restoring custom hover template images..."
-	copy "tmpl.default*" "$NAGVIS_DIR/images/templates/hover" "hover template images"
+	copy "tmpl.default*" "$USERFILES_DIR/images/templates/hover" "hover template images"
 
 	LINE="Restoring custom gadgets..."
-	copy "gadgets_core.php:std_*.php" "$NAGVIS_DIR/gadgets" "gadgets"
+	copy "gadgets_core.php:std_*.php" "$USERFILES_DIR/gadgets" "gadgets"
 
 	LINE="Restoring custom stylesheets..."
-  copy "" "$NAGVIS_DIR/styles" "stylesheets"
+  copy "" "$USERFILES_DIR/styles" "stylesheets"
 fi
 text
 
@@ -927,8 +929,8 @@ if [ $NAGVIS_TAG -lt 01050000 ]; then
 	set_perm 775 "$NAGVIS_PATH/nagvis/var"
 	set_perm 664 "$NAGVIS_PATH/nagvis/var/*"
 else
-	set_perm 775 "$NAGVIS_PATH/share/nagvis/images/maps"
-	set_perm 664 "$NAGVIS_PATH/share/nagvis/images/maps/*"
+	set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
+	set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/var"
 	set_perm 664 "$NAGVIS_PATH/var/*"
 	set_perm 775 "$NAGVIS_PATH/share/var"

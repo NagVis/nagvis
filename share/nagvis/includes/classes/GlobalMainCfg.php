@@ -724,34 +724,41 @@ class GlobalMainCfg {
 	 */
 	private function setPathsByBase($base,$htmlBase) {
 		$this->validConfig['paths']['cfg']['default'] = $base.'etc/';
-		$this->validConfig['paths']['icon']['default'] = $base.'share/nagvis/images/iconsets/';
-		$this->validConfig['paths']['images']['default'] = $base.'share/nagvis/images/';
-		$this->validConfig['paths']['shape']['default'] = $base.'share/nagvis/images/shapes/';
-		$this->validConfig['paths']['language']['default'] = $base.'share/nagvis/includes/locale';
-		$this->validConfig['paths']['class']['default'] = $base.'share/nagvis/includes/classes/';
-		$this->validConfig['paths']['map']['default'] = $base.'share/nagvis/images/maps/';
-		$this->validConfig['paths']['var']['default'] = $base.'var/';
-		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
-		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/nagvis/templates/hover/';
-		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/nagvis/templates/header/';
-		$this->validConfig['paths']['contexttemplate']['default'] = $base.'share/nagvis/templates/context/';
 		$this->validConfig['paths']['mapcfg']['default'] = $base.'etc/maps/';
 		$this->validConfig['paths']['automapcfg']['default'] = $base.'etc/automaps/';
-		$this->validConfig['paths']['gadget']['default'] = $base.'share/nagvis/gadgets/';
-		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
-		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/nagvis/templates/hover/';
-		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/nagvis/templates/header/';
-		$this->validConfig['paths']['htmlcontexttemplates']['default'] = $htmlBase.'/nagvis/templates/context/';
-		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/hover/';
-		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/header/';
-		$this->validConfig['paths']['htmlcontexttemplateimages']['default'] = $this->validConfig['paths']['htmlimages']['default'].'templates/context/';
-		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/nagvis/images/iconsets/';
-		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/nagvis/images/shapes/';
-		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/nagvis/images/maps/';
+		
+		$this->validConfig['paths']['var']['default'] = $base.'var/';
+		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
 		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
-		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/nagvis/sounds/';
-		$this->validConfig['paths']['htmlstyles']['default'] = $htmlBase.'/nagvis/styles/';
-		$this->validConfig['paths']['htmlgadgets']['default'] = $htmlBase.'/nagvis/gadgets/';
+		
+		$this->validConfig['paths']['language']['default'] = $base.'share/nagvis/includes/locale';
+		$this->validConfig['paths']['class']['default'] = $base.'share/nagvis/includes/classes/';
+		
+		$this->validConfig['paths']['images']['default'] = $base.'share/nagvis/images/';
+		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
+		
+		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/userfiles/templates/hover/';
+		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/userfiles/templates/header/';
+		$this->validConfig['paths']['contexttemplate']['default'] = $base.'share/userfiles/templates/context/';
+		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/userfiles/templates/hover/';
+		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/userfiles/templates/header/';
+		$this->validConfig['paths']['htmlcontexttemplates']['default'] = $htmlBase.'/userfiles/templates/context/';
+		
+		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/userfiles/sounds/';
+		$this->validConfig['paths']['htmlstyles']['default'] = $htmlBase.'/userfiles/styles/';
+		
+		$this->validConfig['paths']['gadget']['default'] = $base.'share/userfiles/gadgets/';
+		$this->validConfig['paths']['htmlgadgets']['default'] = $htmlBase.'/userfiles/gadgets/';
+		
+		$this->validConfig['paths']['icon']['default'] = $base.'share/userfiles/images/iconsets/';
+		$this->validConfig['paths']['shape']['default'] = $base.'share/userfiles/images/shapes/';
+		$this->validConfig['paths']['map']['default'] = $base.'share/userfiles/images/maps/';
+		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/userfiles/images/iconsets/';
+		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/userfiles/images/shapes/';
+		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/userfiles/images/maps/';
+		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/hover/';
+		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $htmlBase.'/userfiles/images/emplates/header/';
+		$this->validConfig['paths']['htmlcontexttemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/context/';
 	}
 	
 	/**
