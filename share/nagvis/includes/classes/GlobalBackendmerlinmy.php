@@ -591,7 +591,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	{
 		$arrReturn = Array();
 		
-		$QUERYHANDLE = $this->mysqlQuery('SELECT host_name, last_hard_state, current_state, state_type'
+		$QUERYHANDLE = $this->mysqlQuery('SELECT host.host_name, last_hard_state, current_state, state_type'
 			.' FROM host LEFT JOIN scheduled_downtime AS sdt ON sdt.host_name = host.host_name'
 			.' AND NOW() > sdt.start_time AND NOW() < sdt.end_time'
 			.' LEFT JOIN host_hostgroup AS hhg ON hhg.host = host.id'
