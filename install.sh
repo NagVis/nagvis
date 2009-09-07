@@ -52,7 +52,7 @@ FORCE=0
 GRAPHVIZ_PATH="/usr/local/bin"
 # Version of NagVis to be installed
 NAGVIS_VER=""
-[ -f share/nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+[ -f share/server/core/defines/global.php ]&&NAGVIS_VER=`cat share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 [ -f nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 
 # Version of old NagVis (will be detected if update)
@@ -73,7 +73,7 @@ WEB_USER=""
 WEB_GROUP=""
 
 # Version prerequisites
-[ -f share/nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat share/nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
+[ -f share/server/core/defines/global.php ]&&NEED_PHP_VERSION=`cat share/server/core/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -f nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
@@ -729,6 +729,8 @@ if [ -d $NAGVIS_PATH ]; then
 		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	elif [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
 		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	elif [ -e $NAGVIS_PATH/share/server/core/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	else
 		NAGVIS_VER_OLD="UNKNOWN"
 	fi
