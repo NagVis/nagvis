@@ -1226,6 +1226,7 @@ class GlobalMainCfg {
 		$arr['path_htmlcgi'] = $this->getValue('paths','htmlcgi');
 		$arr['path_htmlsounds'] = $this->getValue('paths','htmlsounds');
 		$arr['path_htmlimages'] = $this->getValue('paths','htmlimages');
+		$arr['path_htmlserver'] = $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php';
 		$arr['internal_title'] = $this->getValue('internal', 'title');
 		
 		return json_encode($arr);

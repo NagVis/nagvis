@@ -88,9 +88,9 @@ function getCfgFileAges(sMap) {
 	}
 	
 	if(sMap !== '') {
-		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg&m[]='+oPageProperties.map_name, true);
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+oPageProperties.map_name, true);
 	} else {
-		return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getCfgFileAges&f[]=mainCfg', true);
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg', true);
 	}
 }
 
@@ -160,7 +160,7 @@ function setMapHoverUrls() {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -226,7 +226,7 @@ function getHoverTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -274,7 +274,7 @@ function getContextTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oContextTemplates
 	if(aTemplateObjects.length > 0) {
@@ -402,7 +402,7 @@ function setPageTitle(sTitle) {
  */
 function updateMapBasics() {
 	// Get new map state from core
-	var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
 	
 	// Update favicon
 	setPageFavicon(getFaviconImage(o));
@@ -573,7 +573,7 @@ function refreshMapObject(objectId) {
 	}
 	
 	// Get the updated objectsupdateMapObjects via bulk request
-	var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state' + sUrlPart, false);
+	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state' + sUrlPart, false);
 	var bStateChanged = false;
 	if(o.length > 0) {
 		bStateChanged = updateObjects(o, aMapObjects, 'map');
@@ -1068,7 +1068,7 @@ function parseOverviewRotations(aRotationsConf) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getOverviewProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getOverviewProperties')
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewProperties')
 }
 
 /**
@@ -1080,7 +1080,7 @@ function getOverviewProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getMapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapProperties&objName1='+mapName)
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getMapProperties&objName1='+mapName)
 }
 
 /**
@@ -1093,7 +1093,7 @@ function getMapProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getStateProperties() {
-	return getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getStateProperties')
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getStateProperties')
 }
 
 /**
@@ -1109,7 +1109,7 @@ function parseMap(iMapCfgAge, mapName) {
 	
 	// Get new map/object information from ajax handler
 	var oMapBasics = getMapProperties(mapName);
-	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getMapObjects&objName1='+mapName);
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getMapObjects&objName1='+mapName);
 	
 	// Only perform the reparsing actions when all information are there
 	if(oMapBasics && oMapObjects) {
@@ -1375,7 +1375,7 @@ function runWorker(iCount, sType, sIdentifier) {
 				}
 				
 				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
 					bStateChanged = updateObjects(o, aMapObjects, sType);
@@ -1449,7 +1449,7 @@ function runWorker(iCount, sType, sIdentifier) {
 				}
 				
 				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+				var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
 					bStateChanged = updateObjects(o, aMaps, sType);
@@ -1457,7 +1457,7 @@ function runWorker(iCount, sType, sIdentifier) {
 				
 				// When some state changed on the map update the title and favicon
 				/* FIXME: if(bStateChanged) {
-					var o = getSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+					var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
 					
 					// Update favicon
 					setPageFavicon(getFaviconImage(o));
