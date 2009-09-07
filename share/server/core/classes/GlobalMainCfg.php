@@ -86,7 +86,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#F1811B',
 					'match' => MATCH_COLOR),
-				'unreachable_sound' => Array('must' => 1,
+				'unreachable_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'std_unreachable.mp3',
 					'match' => MATCH_MP3_FILE),
@@ -110,7 +110,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#FF0000',
 					'match' => MATCH_COLOR),
-				'down_sound' => Array('must' => 1,
+				'down_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'std_down.mp3',
 					'match' => MATCH_MP3_FILE),
@@ -134,7 +134,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#FF0000',
 					'match' => MATCH_COLOR),
-				'critical_sound' => Array('must' => 1,
+				'critical_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'std_critical.mp3',
 					'match' => MATCH_MP3_FILE),
@@ -158,7 +158,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#FFFF00',
 					'match' => MATCH_COLOR),
-				'warning_sound' => Array('must' => 1,
+				'warning_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'std_warning.mp3',
 					'match' => MATCH_MP3_FILE),
@@ -182,7 +182,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#FFCC66',
 					'match' => MATCH_COLOR),
-				'unknown_sound' => Array('must' => 1,
+				'unknown_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_MP3_FILE),
@@ -206,7 +206,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#0000FF',
 					'match' => MATCH_COLOR),
-				'error_sound' => Array('must' => 1,
+				'error_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_MP3_FILE),
@@ -222,7 +222,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#00FF00',
 					'match' => MATCH_COLOR),
-				'up_sound' => Array('must' => 1,
+				'up_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_MP3_FILE),
@@ -238,7 +238,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#00FF00',
 					'match' => MATCH_COLOR),
-				'ok_sound' => Array('must' => 1,
+				'ok_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_MP3_FILE),
@@ -254,7 +254,7 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '#C0C0C0',
 					'match' => MATCH_COLOR),
-				'pending_sound' => Array('must' => 1,
+				'pending_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_MP3_FILE)),
@@ -483,6 +483,10 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '/nagios/cgi-bin',
 					'match' => MATCH_STRING_URL),
+				'htmlcss' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
 				'htmlgadgets' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
@@ -490,6 +494,10 @@ class GlobalMainCfg {
 				'htmlimages' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '/',
+					'match' => MATCH_STRING_PATH),
+				'htmljs' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '',
 					'match' => MATCH_STRING_PATH),
 				'htmlhovertemplates' => Array('must' => 0,
 					'editable' => 0,
@@ -731,8 +739,11 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
 		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
 		
-		$this->validConfig['paths']['language']['default'] = $base.'share/nagvis/includes/locale';
-		$this->validConfig['paths']['class']['default'] = $base.'share/nagvis/includes/classes/';
+		$this->validConfig['paths']['language']['default'] = $base.'frontend/nagvis-js/locale';
+		$this->validConfig['paths']['class']['default'] = $base.'frontend/nagvis-js/classes';
+
+		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/css/';
+		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/js/';
 		
 		$this->validConfig['paths']['images']['default'] = $base.'share/nagvis/images/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
