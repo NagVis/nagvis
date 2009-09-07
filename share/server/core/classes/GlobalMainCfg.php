@@ -737,16 +737,16 @@ class GlobalMainCfg {
 		
 		$this->validConfig['paths']['var']['default'] = $base.'var/';
 		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
-		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
+		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/frontend/nagvis-js/var/';
 		
 		$this->validConfig['paths']['language']['default'] = $base.'share/frontend/nagvis-js/locale';
 		$this->validConfig['paths']['class']['default'] = $base.'share/server/core/classes';
 
-		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/css/';
-		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/js/';
+		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/frontend/nagvis-js/css/';
+		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/frontend/nagvis-js/js/';
 		
 		$this->validConfig['paths']['images']['default'] = $base.'share/nagvis/images/';
-		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/nagvis/images/';
+		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/frontend/nagvis-js/images/';
 		
 		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/userfiles/templates/hover/';
 		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/userfiles/templates/header/';

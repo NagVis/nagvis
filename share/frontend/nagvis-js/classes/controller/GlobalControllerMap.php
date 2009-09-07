@@ -43,11 +43,8 @@ class GlobalControllerMap {
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
 
-		// Initialize backend(s)
-		$BACKEND = new GlobalBackendMgmt($CORE);
-
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, $BACKEND);
+		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, null);
 		
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->parseJs('oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(0).';'));

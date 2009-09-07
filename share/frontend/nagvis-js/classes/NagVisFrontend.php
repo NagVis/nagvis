@@ -69,23 +69,23 @@ class NagVisFrontend extends GlobalPage {
 															$this->htmlJs.'frontendEventlog.js',
 															$this->htmlJs.'hover.js',
 															$this->htmlJs.'frontendContext.js',
-															$this->htmlBase.'/nagvis/includes/js/ajax.js',
-															$this->htmlBase.'/nagvis/includes/js/dynfavicon.js',
-															$this->htmlBase.'/nagvis/includes/js/frontend.js',  
-															$this->htmlBase.'/nagvis/includes/js/lines.js',
-															$this->htmlBase.'/nagvis/includes/js/overlib.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisObject.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisStatefulObject.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisStatelessObject.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisHost.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisService.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisHostgroup.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisServicegroup.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisMap.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisShape.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisTextbox.js',
-															$this->htmlBase.'/nagvis/includes/js/NagVisRotation.js',
-															$this->htmlBase.'/nagvis/includes/js/wz_jsgraphics.js');
+															$this->htmlJs.'ajax.js',
+															$this->htmlJs.'dynfavicon.js',
+															$this->htmlJs.'frontend.js',  
+															$this->htmlJs.'lines.js',
+															$this->htmlJs.'overlib.js',
+															$this->htmlJs.'NagVisObject.js',
+															$this->htmlJs.'NagVisStatefulObject.js',
+															$this->htmlJs.'NagVisStatelessObject.js',
+															$this->htmlJs.'NagVisHost.js',
+															$this->htmlJs.'NagVisService.js',
+															$this->htmlJs.'NagVisHostgroup.js',
+															$this->htmlJs.'NagVisServicegroup.js',
+															$this->htmlJs.'NagVisMap.js',
+															$this->htmlJs.'NagVisShape.js',
+															$this->htmlJs.'NagVisTextbox.js',
+															$this->htmlJs.'NagVisRotation.js',
+															$this->htmlJs.'wz_jsgraphics.js');
 		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';
 		$prop['languageRoot'] = 'nagvis';
 		
@@ -138,8 +138,8 @@ class NagVisFrontend extends GlobalPage {
 	public function getMap() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="map" class="map"></div>');
-		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, $this->BACKEND, false);
-		$this->MAP->MAPOBJ->checkMaintenance(1);
+		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, null, false);
+		//FIXME: $this->MAP->MAPOBJ->checkMaintenance(1);
 		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));
 	}
 	
