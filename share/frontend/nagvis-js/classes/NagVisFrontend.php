@@ -35,6 +35,8 @@ class NagVisFrontend extends GlobalPage {
 	
 	private $headerTemplate;
 	private $htmlBase;
+	private $htmlCss;
+	private $htmlJs;
 	
 	/**
 	 * Class Constructor
@@ -55,16 +57,18 @@ class NagVisFrontend extends GlobalPage {
 		}
 		
 		$this->htmlBase = $CORE->MAINCFG->getValue('paths','htmlbase');
+		$this->htmlCss = $CORE->MAINCFG->getValue('paths','htmlcss');
+		$this->htmlJs = $CORE->MAINCFG->getValue('paths','htmljs');
 		
 		$prop['title'] = $CORE->MAINCFG->getValue('internal', 'title');
-		$prop['cssIncludes'] = Array($this->htmlBase.'/nagvis/includes/css/style.css',
-		                             $this->htmlBase.'/nagvis/includes/css/frontendEventlog.css');
-		$prop['jsIncludes'] = Array($this->htmlBase.'/nagvis/includes/js/nagvis.js',
-															$this->htmlBase.'/nagvis/includes/js/ExtBase.js',
-															$this->htmlBase.'/nagvis/includes/js/frontendMessage.js',
-															$this->htmlBase.'/nagvis/includes/js/frontendEventlog.js',
-															$this->htmlBase.'/nagvis/includes/js/hover.js',
-															$this->htmlBase.'/nagvis/includes/js/frontendContext.js',
+		$prop['cssIncludes'] = Array($this->htmlCss.'style.css',
+		                             $this->htmlCss.'frontendEventlog.css');
+		$prop['jsIncludes'] = Array($this->htmlJs.'nagvis.js',
+															$this->htmlJs.'ExtBase.js',
+															$this->htmlJs.'frontendMessage.js',
+															$this->htmlJs.'frontendEventlog.js',
+															$this->htmlJs.'hover.js',
+															$this->htmlJs.'frontendContext.js',
 															$this->htmlBase.'/nagvis/includes/js/ajax.js',
 															$this->htmlBase.'/nagvis/includes/js/dynfavicon.js',
 															$this->htmlBase.'/nagvis/includes/js/frontend.js',  
@@ -134,7 +138,7 @@ class NagVisFrontend extends GlobalPage {
 	public function getMap() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="map" class="map"></div>');
-		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, $this->BACKEND);
+		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, $this->BACKEND, false);
 		$this->MAP->MAPOBJ->checkMaintenance(1);
 		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));
 	}

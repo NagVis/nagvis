@@ -739,8 +739,8 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
 		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
 		
-		$this->validConfig['paths']['language']['default'] = $base.'frontend/nagvis-js/locale';
-		$this->validConfig['paths']['class']['default'] = $base.'frontend/nagvis-js/classes';
+		$this->validConfig['paths']['language']['default'] = $base.'share/frontend/nagvis-js/locale';
+		$this->validConfig['paths']['class']['default'] = $base.'share/server/core/classes';
 
 		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/css/';
 		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/js/';
@@ -782,7 +782,7 @@ class GlobalMainCfg {
 	 */
 	private function getBasePath() {
 		// Go 3 levels up from nagvis/share/nagvis to nagvis base path
-		return realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../..') . '/';
+		return realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../../..') . '/';
 		// Note: the method below causes problems when <docroot>/nagvis is a symlink to <nagvis-base>/share
 		// return realpath(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))).'/';
 	}

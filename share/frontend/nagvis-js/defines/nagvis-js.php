@@ -1,9 +1,10 @@
 <?PHP
 /*****************************************************************************
  *
- * index.php - Main page of NagVis
+ * nagvis-js.php - File for nagvis-js frontend related constants and some
+ *                 other standards
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: lars@vertical-visions.de)
  *
  * License:
  *
@@ -21,26 +22,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
+ 
+/**
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 
-// Include global defines
-require('../../server/core/defines/global.php');
-require('../../server/core/defines/matches.php');
-
-// Include frontend related defines
-require('defines/nagvis-js.php');
-
-// Include functions
-require('../../server/core/functions/autoload.php');
-require('../../server/core/functions/debug.php');
-require("../../server/core/functions/getuser.php");
-require('../../server/core/functions/oldPhpVersionFixes.php');
-
-// This defines whether the GlobalFrontendMessage prints HTML or ajax error messages
-define('CONST_AJAX' , FALSE);
-
-$controller = new GlobalController();
-
-if (!$controller->isValid()) {
-	new GlobalFrontendMessage('ERROR', $controller->getMessage());
-}
+/**
+ * Set the path to look for included files
+ */
+set_include_path(
+	get_include_path()
+	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/controller/'
+	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/validator/'
+	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/httpRequest/'
+	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/frontend/'
+	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/'
+	.PATH_SEPARATOR.'../../frontend/wui/includes/classes/'
+);
 ?>

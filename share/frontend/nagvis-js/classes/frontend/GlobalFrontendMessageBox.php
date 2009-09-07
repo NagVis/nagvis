@@ -136,7 +136,7 @@ class GlobalFrontendMessageBox {
 	 */
 	private function buildHTMLMessage() {
 		$this->page .= '<meta http-equiv="refresh" content="60">';
-		$this->page .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/nagvis/includes/css/style.css" />';
+		$this->page .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/frontend/nagvis-js/css/style.css" />';
 		$this->page .= '<div id="messageBoxDiv">'."\n";
 		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
 		$this->page .= '      <tr>'."\n";
@@ -144,11 +144,11 @@ class GlobalFrontendMessageBox {
 		$this->page .= '      </tr>'."\n";
 		$this->page .= '      <tr height="32">'."\n";
 		$this->page .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
-		$this->page .= '           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
+		$this->page .= '           <img src="'.$this->pathHtmlBase.'/frontend/nagvis-js/images/internal/msg_'.$this->type.'.png"/>'."\n";
 		$this->page .= '         </th>'."\n";
 		$this->page .= '         <th class="'.$this->type.'">'.$this->title.'</td>'."\n";
 		$this->page .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
-		$this->page .= '           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
+		$this->page .= '           <img src="'.$this->pathHtmlBase.'/frontend/nagvis-js/images/internal/msg_'.$this->type.'.png"/>'."\n";
 		$this->page .= '         </th>'."\n";
 		$this->page .= '       </tr>'."\n";
 		$this->page .= '       <tr>'."\n";

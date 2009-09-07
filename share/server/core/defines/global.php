@@ -33,20 +33,12 @@
 error_reporting(E_ALL ^ E_STRICT);
 
 /**
- * Sets the path where we will look for files when they
- * are requested.
- *
- * @author  Michael Luebben <michael_luebben@web.de>
+ * Set the search path for included files
  */
 set_include_path(
 	get_include_path()
-	.PATH_SEPARATOR.'../nagvis/includes/classes/'
-	.PATH_SEPARATOR.'../nagvis/includes/classes/objects/'
-	.PATH_SEPARATOR.'../nagvis/includes/classes/controller/'
-	.PATH_SEPARATOR.'../nagvis/includes/classes/validator/'
-	.PATH_SEPARATOR.'../nagvis/includes/classes/httpRequest/'
-	.PATH_SEPARATOR.'../nagvis/includes/classes/frontend/'
-	.PATH_SEPARATOR.'../wui/includes/classes/'
+	.PATH_SEPARATOR.'../../server/core/classes/'
+	.PATH_SEPARATOR.'../../server/core/classes/objects/'
 );
 
 // enable/disable the debug mode
@@ -61,13 +53,13 @@ define('DEBUG', FALSE);
 define('DEBUGLEVEL', 4);
 
 // Path to the debug file
-define('DEBUGFILE', '../../var/nagvis-debug.log');
+define('DEBUGFILE', '../../../var/nagvis-debug.log');
 
 // NagVis Version
 define('CONST_VERSION', '1.5a1');
 
 // Path to the main configuration file
-define('CONST_MAINCFG', '../../etc/nagvis.ini.php');
+define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
 
 // Needed minimal PHP version
 define('CONST_NEEDED_PHP_VERSION', '5.0');
