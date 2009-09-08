@@ -24,6 +24,7 @@ etc/automaps/*.cfg
 share/nagvis/images/maps/*.png
 !share/nagvis/images/maps/demo_background.png
 !share/nagvis/images/maps/nagvis-demo.png
+!share/nagvis/images/maps/geomap-thumb.png
 
 # Exclude all shapes except the default
 share/nagvis/images/shapes/*.png

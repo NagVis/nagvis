@@ -331,6 +331,7 @@ class GlobalIndexPage {
 		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index', 'cellsperrow');
 		$arr['showautomaps'] = $this->CORE->MAINCFG->getValue('index', 'showautomaps');
 		$arr['showmaps'] = $this->CORE->MAINCFG->getValue('index', 'showmaps');
+		$arr['showgeomap'] = $this->CORE->MAINCFG->getValue('index', 'showgeomap');
 		$arr['showmapthumbs'] = $this->CORE->MAINCFG->getValue('index', 'showmapthumbs');
 		$arr['showrotations'] = $this->CORE->MAINCFG->getValue('index', 'showrotations');
 		
