@@ -740,7 +740,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/frontend/nagvis-js/var/';
 		
 		$this->validConfig['paths']['language']['default'] = $base.'share/frontend/nagvis-js/locale';
-		$this->validConfig['paths']['class']['default'] = $base.'share/server/core/classes';
+		$this->validConfig['paths']['class']['default'] = $base.'share/server/core/classes/';
 
 		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/frontend/nagvis-js/css/';
 		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/frontend/nagvis-js/js/';
