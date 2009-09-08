@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.4"
+INSTALLER_VERSION="0.2.5"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -40,7 +40,7 @@ INSTALLER_CONFIG_MOD="n"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKENDS="ndo2db,ndo2fs,merlin"
+NAGVIS_BACKENDS="ndo2db,ido2db,ndo2fs,merlin"
 # Return Code
 RC=0
 # data source
@@ -110,7 +110,7 @@ Parameters:
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
   -w <PATH>     Path to the webserver config files
-  -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ndo2fs, merlin
+  -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ido2db, ndo2fs, merlin
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -c [y|n]      Update configuration files when possible?
   -o            omit demo files
@@ -255,6 +255,18 @@ check_backend() {
 		[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
 		log "  $NDO_MOD (ndo2db)" $NDO
 		BACKENDS="ndo2db"
+	fi
+
+	echo $NAGVIS_BACKEND | grep -i "IDO2DB" >/dev/null
+	if [ $? -eq 0 ]; then
+		# Check IDO
+		if [ -z "$NDO" ]; then
+			NDO_MOD="$NAGIOS_PATH/bin/ido2db"
+		fi
+		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^IDO2DB"`
+		[ -z "$NDO" ]&&NDO_MOD="IDO Module ido2db"
+		log "  $NDO_MOD (ido2db)" $NDO
+		BACKENDS=$BACKENDS",ido2db"
 	fi
 
 	# Check NDO2FS prerequisites if necessary
@@ -480,6 +492,7 @@ makedir() {
 # More (re)initialisations
 
 # Version info
+[ -z "$NAGVIS_VER" ]&&NAGVIS_VER=1.5a
 NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
 # Default Nagios path
 NAGIOS_PATH="/usr/local/$SOURCE"
