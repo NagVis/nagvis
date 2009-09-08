@@ -263,26 +263,26 @@ table.infopage_hover_table label {
 }
 
 #statusMessage div.notice {
-  background: url(../../images/internal/info.png) 6px 3px no-repeat;
+  background: url(../images/internal/info.png) 6px 3px no-repeat;
   background-color: #F7FDCB;
   border: 1px solid #C2D071;
 }
 
 #statusMessage div.error,
 #statusMessage div.warning {
-  background: url(../../images/internal/warning.png) 6px 3px no-repeat;
+  background: url(../images/internal/warning.png) 6px 3px no-repeat;
   background-color: #EF9398;
   border: 1px solid #DC5757;
 }
 
 #statusMessage div.confirmation {
-  background: url(../../images/internal/confirm.png) 6px 3px no-repeat;
+  background: url(../images/internal/confirm.png) 6px 3px no-repeat;
   background-color: #A6EF7B;
   border: 1px solid #76C83F;
 }
 
 #statusMessage div.loading {
-  background: url(../../images/internal/loading.gif) 6px 3px no-repeat;
+  background: url(../images/internal/loading.gif) 6px 3px no-repeat;
   background-color: #EBEBEB;
   border: 1px solid #CCCCCC;
 }
