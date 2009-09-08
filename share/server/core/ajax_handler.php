@@ -22,16 +22,16 @@
  *
  *****************************************************************************/
 
-// Include defines
-require("./includes/defines/global.php");
-require("./includes/defines/matches.php");
+// Include global defines
+require('../../server/core/defines/global.php');
+require('../../server/core/defines/matches.php');
 
 // Include functions
-require("./includes/functions/autoload.php");
-require("./includes/functions/debug.php");
-require("./includes/functions/oldPhpVersionFixes.php");
-require("./includes/functions/getuser.php");
-require("./includes/functions/ajaxErrorHandler.php");
+require('../../server/core/functions/autoload.php');
+require('../../server/core/functions/debug.php');
+require("../../server/core/functions/getuser.php");
+require('../../server/core/functions/oldPhpVersionFixes.php');
+require('../../server/core/functions/ajaxErrorHandler.php');
 
 // This defines whether the GlobalFrontendMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);

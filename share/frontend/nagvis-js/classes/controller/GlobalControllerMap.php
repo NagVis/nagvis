@@ -37,14 +37,15 @@ class GlobalControllerMap {
 
 		// Load the core
 		$CORE = new GlobalCore();
-
+		
+		//FIXME: Remove $MAPCFG somehow here?
 		// Initialize map configuration
 		$MAPCFG = new NagVisMapCfg($CORE, $this->mapName);
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
 
 		// Initialize the frontend
-		$FRONTEND = new NagVisFrontend($CORE, $MAPCFG, null);
+		$FRONTEND = new NagVisFrontend($CORE, $this->mapName, null);
 		
 		// Build the page
 		$FRONTEND->addBodyLines($FRONTEND->parseJs('oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(0).';'));

@@ -138,9 +138,10 @@ class NagVisFrontend extends GlobalPage {
 	public function getMap() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="map" class="map"></div>');
-		$this->MAP = new NagVisMap($this->CORE, $this->MAPCFG, null, false);
+		//FIXME: Need recoding here: $this->MAPCFG is the mapname and $this->MAP should be $this->VIEW
+		$this->MAP = new NagVisMapView($this->CORE, $this->MAPCFG);
 		//FIXME: $this->MAP->MAPOBJ->checkMaintenance(1);
-		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));
+		$this->addBodyLines($this->parseJs($this->MAP->parse()));
 	}
 	
 	/**
