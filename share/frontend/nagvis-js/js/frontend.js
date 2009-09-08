@@ -265,7 +265,7 @@ function getContextTemplates(aObjs) {
 			
 			// Load template css file
 			var oLink = document.createElement('link');
-			oLink.href = oGeneralProperties.path_htmlbase+'/context/templates/context/tmpl.'+sName+'.css';
+			oLink.href = oGeneralProperties.path_htmlbase+'/userfiles/templates/context/tmpl.'+sName+'.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
 			document.body.appendChild(oLink);
