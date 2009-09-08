@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="[html_templates]tmpl.default.css" />
 <table class="header_table">
 	<tr>
-		<th class="logo"><a href="[html_base]/index.php"><img src="[html_base]/nagvis/images/internal/logo_119x31.png" alt="NagVis"></a></th>
+		<th class="logo"><a href="[html_base]/frontend/nagvis-js/index.php"><img src="[html_images]internal/logo_119x31.png" alt="NagVis"></a></th>
 		<td style="width:150px;padding-left:10px;">[lang_select_map]: </td>
 		<td style="width:150px;">
 			<select style="width:100%;" name="chooseMap" onChange="changeMap('[html_base]',this.options[this.selectedIndex].value)">
@@ -9,7 +9,7 @@
 				<!-- BEGIN maplist --><option value="[map_name][url_params]" [selected]>[map_alias]</option><!-- END maplist -->
 			</select>
 		</td>
-		<th style="width:150px;"><a href="[html_base]/wui/index.php?map=[current_map]">[lang_edit_map]</a></th>
+		<th style="width:150px;"><a href="[html_base]/frontend/wui/index.php?map=[current_map]">[lang_edit_map]</a></th>
 		<td></td>
 		<td style="width:20px;text-align:center;" id="refreshCounterHead"></td>
 		<th style="width:150px;">

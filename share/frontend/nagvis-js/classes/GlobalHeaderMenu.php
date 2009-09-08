@@ -176,6 +176,7 @@ class GlobalHeaderMenu {
 	public function replaceStaticMacros() {
 		// Replace paths and language macros
 		$arrKeys = Array('[html_base]', 
+			'[html_images]', 
 			'[html_templates]', 
 			'[html_template_images]',
 			'[current_language]',
@@ -193,6 +194,7 @@ class GlobalHeaderMenu {
 			'[lang_refresh_stop]');
 		
 		$arrVals = Array($this->pathHtmlBase, 
+			$this->CORE->MAINCFG->getValue('paths','htmlimages'), 
 			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplates'), 
 			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplateimages'),
 			$this->CORE->LANG->getCurrentLanguage(),
