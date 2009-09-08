@@ -217,7 +217,7 @@ function getHoverTemplates(aObjs) {
 			// This is needed for some old browsers which do no load css files
 			// which are included in such fetched html code
 			var oLink = document.createElement('link');
-			oLink.href = oGeneralProperties.path_htmlbase+'/nagvis/templates/hover/tmpl.'+i+'.css';
+			oLink.href = oGeneralProperties.path_htmlbase+'/userfiles/templates/hover/tmpl.'+i+'.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
 			document.body.appendChild(oLink);
@@ -265,7 +265,7 @@ function getContextTemplates(aObjs) {
 			
 			// Load template css file
 			var oLink = document.createElement('link');
-			oLink.href = oGeneralProperties.path_htmlbase+'/nagvis/templates/context/tmpl.'+sName+'.css';
+			oLink.href = oGeneralProperties.path_htmlbase+'/context/templates/context/tmpl.'+sName+'.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
 			document.body.appendChild(oLink);
