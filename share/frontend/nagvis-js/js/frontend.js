@@ -881,6 +881,34 @@ function parseOverviewPage() {
 		oTable = null;
 	}
 	
+	// Render the geomap when enabled
+	if(oPageProperties.showgeomap == 1) {
+		oTable = document.createElement('table');
+		oTable.setAttribute('class', 'infobox');
+		oTable.setAttribute('className', 'infobox');
+		
+		oTbody = document.createElement('tbody');
+		oTbody.setAttribute('id', 'overviewGeomap');
+		
+		oTr = document.createElement('tr');
+		
+		oTh = document.createElement('th');
+		oTh.colSpan = oPageProperties.cellsperrow;
+		oTh.appendChild(document.createTextNode('Geomap'));
+		
+		oTr.appendChild(oTh);
+		oTh = null;
+		
+		oTbody.appendChild(oTr);
+		oTr = null;
+		
+		oTable.appendChild(oTbody);
+		oTbody = null;
+		
+		oContainer.appendChild(oTable);
+		oTable = null;
+	}
+	
 	// Render the rotation list when enabled
 	
 	if(oPageProperties.showrotations == 1 && aInitialRotations.length > 0) {
@@ -1027,6 +1055,89 @@ function parseOverviewAutomaps(aMapsConf) {
 	}
 	
 	eventlog("worker", "debug", "parseOverviewAutomaps: End setting automaps");
+}
+
+/**
+ * parseOverviewGeomap()
+ *
+ * Does initial parsing of geomap on the overview page
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Roman Kyrylych <rkyrylych@op5.com>
+ */
+function parseOverviewGeomap() {
+	eventlog("worker", "debug", "parseOverviewGeomap: Start setting geomap");
+	
+	// Render the maps when enabled
+	if(oPageProperties.showgeomap == 1) {
+		var oTable = document.getElementById('overviewGeomap');
+		var oTr = document.createElement('tr');
+		
+		var oTd = document.createElement('td');
+		oTd.setAttribute('id', 'geomap-icon');
+		oTd.setAttribute('class', 'geomap');
+		oTd.setAttribute('className', 'geomap');
+		oTd.style.width = '200px';
+		
+		// Only show map thumb when configured
+		if(oPageProperties.showmapthumbs == 1) {
+			oTd.style.height = '200px';
+		}
+		
+		oTr.appendChild(oTd);
+		
+		// Link
+		var oLink = document.createElement('a');
+		oLink.href = oGeneralProperties['path_htmlbase']+'/netmap/shell.html';
+		
+		// Status image
+		var oImg = document.createElement('img');
+		oImg.align="right";
+		oImg.src=oGeneralProperties['path_htmlimages']+'/iconsets/std_small_unknown.png';
+		oImg.alt = 'geomap';
+		
+		oLink.appendChild(oImg);
+		oImg = null;
+		
+		// Title
+		var h2 = document.createElement('h2');
+		h2.appendChild(document.createTextNode('Geomap'));
+		oLink.appendChild(h2);
+		h2 = null;
+		
+		var br = document.createElement('br');
+		oLink.appendChild(br);
+		br = null;
+		
+		// Only show map thumb when configured
+		if(oPageProperties.showmapthumbs == 1) {
+			oImg = document.createElement('img');
+			oImg.style.width = '200px';
+			oImg.style.height = '150px';
+			oImg.src=oGeneralProperties['path_htmlimages']+'/maps/geomap-thumb.png';
+			oLink.appendChild(oImg);
+			oImg = null;
+		}
+		
+		oTd.appendChild(oLink);
+		oLink = null;
+		
+		oTd = null;
+		
+		for(var a = 0; a < (oPageProperties.cellsperrow - 1); a++) {
+			var oTd = document.createElement('td');
+			oTr.appendChild(oTd);
+			oTd = null;
+		}
+		
+		// Append last row
+		oTable.appendChild(oTr);
+		oTr = null;
+		
+		oTable = null;
+	}
+	
+	eventlog("worker", "debug", "parseOverviewGeomap: End setting geomap");
 }
 
 /**
@@ -1252,6 +1363,9 @@ function runWorker(iCount, sType, sIdentifier) {
 			eventlog("worker", "debug", "Parsing automaps");
 			parseOverviewAutomaps(aInitialAutomaps);
 			
+			eventlog("worker", "debug", "Parsing geomap");
+			parseOverviewGeomap();
+
 			eventlog("worker", "debug", "Parsing rotations");
 			parseOverviewRotations(aInitialRotations);
 			

@@ -173,7 +173,7 @@ class NagiosService
 	 */
 	public function getHostGroupState($hostgroup)
 	{
-		if (($data = $this->backend->getHostgroupState($hostgroup, 0) === false)
+		if (($data = $this->backend->getHostgroupState($hostgroup->name, 0)) === false)
 			return State::ERROR;
 
 		$state = State::UNKNOWN;
@@ -213,7 +213,7 @@ class NagiosService
 	 */
 	public function getServiceGroupState($servicegroup)
 	{
-		if (($data = $this->backend->getServicegroupState($servicegroup, 0) === false)
+		if (($data = $this->backend->getServicegroupState($servicegroup->name, 0)) === false)
 			return State::ERROR;
 
 		$state = State::UNKNOWN;
@@ -222,24 +222,24 @@ class NagiosService
 			switch ($service['state'])
 			{
 				case 'PENDING':
-					$service_state =  State::UNKNOWN;
+					$service_state = State::UNKNOWN;
 					break;
 
 				case 'OK':
-					$service_state =  State::OK;
+					$service_state = State::OK;
 					break;
 
 				case 'WARNING':
-					$service_state =  State::WARNING;
+					$service_state = State::WARNING;
 					break;
 
 				case 'CRITICAL':
-					$service_state =  State::ERROR;
+					$service_state = State::ERROR;
 					break;
 
 				case 'UNKNOWN':
 				default:
-					$service_state =  State::UNKNOWN;
+					$service_state = State::UNKNOWN;
 			}
 
 			$state = max($state, $service_state);
