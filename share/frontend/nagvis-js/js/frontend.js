@@ -826,7 +826,7 @@ function parseOverviewPage() {
 	var oContainer = document.getElementById('overview');
 	
 	// Render the maps when enabled
-	if(oPageProperties.showmaps == 1 && aInitialMaps.length > 0) {
+	if(oPageProperties.showmaps == 1) {
 		var oTable = document.createElement('table');
 		oTable.setAttribute('class', 'infobox');
 		oTable.setAttribute('className', 'infobox');
@@ -854,7 +854,7 @@ function parseOverviewPage() {
 	}
 	
 	// Render the automaps when enabled
-	if(oPageProperties.showautomaps == 1 && aInitialAutomaps.length > 0) {
+	if(oPageProperties.showautomaps == 1) {
 		oTable = document.createElement('table');
 		oTable.setAttribute('class', 'infobox');
 		oTable.setAttribute('className', 'infobox');
@@ -911,7 +911,7 @@ function parseOverviewPage() {
 	
 	// Render the rotation list when enabled
 	
-	if(oPageProperties.showrotations == 1 && aInitialRotations.length > 0) {
+	if(oPageProperties.showrotations == 1) {
 		oTable = document.createElement('table');
 		oTable.setAttribute('class', 'infobox');
 		oTable.setAttribute('className', 'infobox');
