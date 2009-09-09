@@ -1093,7 +1093,7 @@ function parseOverviewGeomap() {
 		// Status image
 		var oImg = document.createElement('img');
 		oImg.align="right";
-		oImg.src=oGeneralProperties['path_htmlimages']+'/iconsets/std_small_unknown.png';
+		oImg.src=oGeneralProperties['path_htmlimages']+'iconsets/std_small_unknown.png';
 		oImg.alt = 'geomap';
 		
 		oLink.appendChild(oImg);
@@ -1114,7 +1114,7 @@ function parseOverviewGeomap() {
 			oImg = document.createElement('img');
 			oImg.style.width = '200px';
 			oImg.style.height = '150px';
-			oImg.src=oGeneralProperties['path_htmlimages']+'/maps/geomap-thumb.png';
+			oImg.src=oGeneralProperties['path_htmlimages']+'maps/geomap-thumb.png';
 			oLink.appendChild(oImg);
 			oImg = null;
 		}
