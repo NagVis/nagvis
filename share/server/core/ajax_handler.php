@@ -198,9 +198,20 @@ switch($_GET['action']) {
 		echo json_encode($aReturn);
 	break;
 	case 'getOverviewProperties':
-		// Initialize map configuration
 		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
 		echo $OVERVIEW->parseIndexPropertiesJson();
+	break;
+	case 'getOverviewMaps':
+		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
+		echo $OVERVIEW->parseMapsJson();
+	break;
+	case 'getOverviewAutomaps':
+		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
+		echo $OVERVIEW->parseAutomapsJson();
+	break;
+	case 'getOverviewRotations':
+		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
+		echo $OVERVIEW->parseRotationsJson();
 	break;
 	case 'getMapProperties':
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {

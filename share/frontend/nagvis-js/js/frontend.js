@@ -1183,6 +1183,42 @@ function getOverviewProperties(mapName) {
 }
 
 /**
+ * getOverviewMaps()
+ *
+ * Fetches all maps to be shown on the overview page
+ *
+ * @return  Array of maps
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getOverviewMaps() {
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewMaps')
+}
+
+/**
+ * getOverviewAutomaps()
+ *
+ * Fetches all automaps to be shown on the overview page
+ *
+ * @return  Array of maps
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getOverviewAutomaps() {
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewAutomaps')
+}
+
+/**
+ * getOverviewRotations()
+ *
+ * Fetches all rotations to be shown on the overview page
+ *
+ * @return  Array of rotations
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getOverviewRotations() {
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewRotations')
+}
+
+/**
  * getMapProperties()
  *
  * Fetches the current map properties from the core
@@ -1336,6 +1372,7 @@ function runWorker(iCount, sType, sIdentifier) {
 			eventlog("worker", "debug", "Loading the file ages");
 			oFileAges = getCfgFileAges(sIdentifier);
 			
+			// Parse the map
 			if(parseMap(oFileAges[sIdentifier], sIdentifier) === false) {
 				eventlog("worker", "error", "Problem while parsing the map on page load");
 			}
@@ -1358,16 +1395,16 @@ function runWorker(iCount, sType, sIdentifier) {
 			oFileAges = getCfgFileAges();
 			
 			eventlog("worker", "debug", "Parsing maps");
-			parseOverviewMaps(aInitialMaps);
+			parseOverviewMaps(getOverviewMaps());
 			
 			eventlog("worker", "debug", "Parsing automaps");
-			parseOverviewAutomaps(aInitialAutomaps);
+			parseOverviewAutomaps(getOverviewAutomaps());
 			
 			eventlog("worker", "debug", "Parsing geomap");
 			parseOverviewGeomap();
 
 			eventlog("worker", "debug", "Parsing rotations");
-			parseOverviewRotations(aInitialRotations);
+			parseOverviewRotations(getOverviewRotations());
 			
 			// Bulk get all hover templates which are needed on the overview page
 			eventlog("worker", "debug", "Fetching hover templates");

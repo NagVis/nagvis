@@ -47,42 +47,6 @@ class GlobalIndexPage {
 	}
 	
 	/**
-	 * Parses the information for json
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseJson() {
-		$ret = '';
-		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-		$ret .= 'aInitialMaps='.$this->parseMapsJson().';'."\n";
-		$ret .= 'aInitialAutomaps='.$this->parseAutomapsJson().';'."\n";
-		$ret .= 'aInitialRotations='.$this->parseRotationsJson().';'."\n";
-		$ret .= 'aMaps=Array();'."\n";
-		$ret .= 'aRotations=Array();'."\n";
-		
-		// Kick of the worker
-		$ret .= 'addDOMLoadEvent(function(){runWorker(0, \'overview\')});';
-		
-		return $ret;
-	}
-	
-	/**
-	 * Parses the config file ages
-	 *
-	 * @return	String 	JSON Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseFileAges() {
-		$arr = Array();
-		
-		$arr['main_config'] = $this->CORE->MAINCFG->getConfigFileAge();
-		
-		return json_encode($arr);
-	}
-	
-	/**
 	 * Parses the automaps for the overview page
 	 *
 	 * @return	String  Json Code
