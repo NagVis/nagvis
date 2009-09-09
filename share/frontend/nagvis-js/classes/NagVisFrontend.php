@@ -126,8 +126,8 @@ class NagVisFrontend extends GlobalPage {
 	public function getIndexPage() {
 		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
 		$this->addBodyLines('<div id="overview" class="infopage"></div>');
-		$this->INDEX = new GlobalIndexPage($this->CORE, $this->BACKEND);
-		$this->addBodyLines($this->parseJs($this->INDEX->parseJson()));
+		$this->INDEX = new NagVisOverviewView($this->CORE, $this->BACKEND);
+		$this->addBodyLines($this->parseJs($this->INDEX->parse()));
 	}
 	
 	/**
