@@ -3,7 +3,7 @@
  *
  * index.php - Main page of the WUI
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -26,15 +26,18 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-// Include defines
-require("../nagvis/includes/defines/global.php");
-require("../nagvis/includes/defines/matches.php");
+// Include global defines
+require('../../server/core/defines/global.php');
+require('../../server/core/defines/matches.php');
+
+// Include wui related defines
+require('defines/wui.php');
 
 // Include functions
-require("../nagvis/includes/functions/autoload.php");
-require("../nagvis/includes/functions/debug.php");
-require("../nagvis/includes/functions/getuser.php");
-require("../nagvis/includes/functions/oldPhpVersionFixes.php");
+require("../../server/core/functions/autoload.php");
+require("../../server/core/functions/debug.php");
+require("../../server/core/functions/getuser.php");
+require("../../server/core/functions/oldPhpVersionFixes.php");
 
 // This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
