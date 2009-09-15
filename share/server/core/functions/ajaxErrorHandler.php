@@ -38,6 +38,9 @@ function ajaxError($errno, $errstr, $file, $line) {
 }
 
 // Enable custom error handling
+ini_set('display_errors', 0);
 set_error_handler("ajaxError");
-
+if(function_exists('set_exception_handler')) {
+	set_exception_handler('ajaxError');
+}
 ?>
