@@ -35,17 +35,18 @@ class GlobalFrontendMessage {
 	 * @param   string	$message
 	 * @param   string	$pathHtmlBase
 	 * @param   string	$title
+	 * @param   string  $sRedirect
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	public function __construct($type, $message, $pathHtmlBase = NULL, $title = NULL) {
+	public function __construct($type, $message, $pathHtmlBase = NULL, $title = NULL, $sRedirect = '') {
 		if($pathHtmlBase === NULL) {
 			$CORE = new GlobalCore();
 			$pathHtmlBase = $CORE->MAINCFG->getValue('paths', 'htmlbase');
 		}
 		
 		// New method
-		print(new GlobalFrontendMessageBox($type, $message, $pathHtmlBase, $title));
+		print(new GlobalFrontendMessageBox($type, $message, $pathHtmlBase, $title, true, $sRedirect));
 		
 		if($type == 'ERROR' || $type == 'INFO-STOP') {
 			exit(1);

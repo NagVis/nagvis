@@ -3,7 +3,7 @@
  *
  * GlobalFronendMessageBox.php - Class to render a messagebox in the frontend
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: michael_luebben@web.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -48,6 +48,7 @@
  * @param   string   $message	Message
  *
  * @author  Michael Luebben <michael_luebben@web.de>
+ * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalFrontendMessageBox {
 	// Contains the page which will be printed
@@ -73,6 +74,8 @@ class GlobalFrontendMessageBox {
 	private $type;
 	private $message;
 	private $title;
+	private $bReload;
+	private $bRedirect;
 
 	/**
 	 * The contructor checks the type and builds the message box
@@ -81,13 +84,18 @@ class GlobalFrontendMessageBox {
 	 * @param   string	$message
 	 * @param   string	$pathHtmlBase
 	 * @param   string	$title
+	 * @param   bool    $bReload
+	 * @param   string  $sRedirect
 	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($type, $message, $pathHtmlBase, $title = NULL) {
+	public function __construct($type, $message, $pathHtmlBase, $title = NULL, $bReload = true, $sRedirect = '') {
 		$this->type = strtolower($type);
 		$this->message = $message;
 		$this->pathHtmlBase = $pathHtmlBase;
+		$this->bReload = $bReload;
+		$this->sRedirect = $sRedirect;
 		
 		// Remap old types
 		if($this->type == 'info-stop') {
@@ -135,7 +143,13 @@ class GlobalFrontendMessageBox {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	private function buildHTMLMessage() {
-		$this->page .= '<meta http-equiv="refresh" content="60">';
+		if($this->bReload) {
+			if($this->sRedirect = '') {
+				$this->page .= '<meta http-equiv="refresh" content="60">';
+			} else {
+				$this->page .= '<meta http-equiv="refresh" content="5; URL='.$this->sRedirect.'">';
+			}
+		}
 		$this->page .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/frontend/nagvis-js/css/style.css" />';
 		$this->page .= '<div id="messageBoxDiv">'."\n";
 		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
