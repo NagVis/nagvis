@@ -144,12 +144,13 @@ class GlobalFrontendMessageBox {
 	 */
 	private function buildHTMLMessage() {
 		if($this->bReload) {
-			if($this->sRedirect = '') {
+			if($this->sRedirect == '') {
 				$this->page .= '<meta http-equiv="refresh" content="60">';
 			} else {
 				$this->page .= '<meta http-equiv="refresh" content="5; URL='.$this->sRedirect.'">';
 			}
 		}
+		
 		$this->page .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/frontend/nagvis-js/css/style.css" />';
 		$this->page .= '<div id="messageBoxDiv">'."\n";
 		$this->page .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
