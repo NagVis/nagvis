@@ -217,12 +217,25 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 					
 					//FIXME: Think about caching the error!
 				} else {
-					if(bCacheable) {
+					// Handle invalid response (No JSON format)
+					try {
+						sResponse = eval('( '+responseText+')');
+					} catch(e) {
+						var oMsg = {};
+						oMsg.type = 'CRITICAL';
+						oMsg.message = "Invalid JSON response:\n"+responseText;
+						oMsg.title = "Syntax error";
+						
+						// Handle application message/error
+						frontendMessage(oMsg);
+						oMsg = null;
+					}
+					
+					if(sResponse !== null && bCacheable) {
 						// Cache that answer (only when no error/warning/...)
 						updateQueryCache(url, timestamp, responseText);
 					}
 					
-					sResponse = eval('( '+responseText+')');
 					responseText = null;
 				}
 			}
