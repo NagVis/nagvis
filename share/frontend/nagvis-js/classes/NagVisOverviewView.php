@@ -45,16 +45,17 @@ class NagVisOverviewView {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parse() {
-		$ret = '';
-		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-		$ret .= 'aMaps=Array();'."\n";
-		$ret .= 'aRotations=Array();'."\n";
-		
-		// Kick of the worker
-		$ret .= 'addDOMLoadEvent(function(){runWorker(0, \'overview\')});';
-		
-		return $ret;
+		// Initialize template system
+		$TMPL = New FrontendTemplateSystem($this->CORE);
+		$TMPLSYS = $TMPL->getTmplSys();
+
+		$aData = Array(
+			'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
+			'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+		);
+
+		// Build page based on the template file and the data array
+		return $TMPLSYS->get($TMPL->getTmplFile('overview'), $aData);
 	}
 }
 ?>

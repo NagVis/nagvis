@@ -103,7 +103,7 @@ class GlobalIndexPage {
 						$class = '';
 						$url = '';
 						
-						$url = $this->htmlBase.'/index.php?automap='.$mapName.$this->CORE->MAINCFG->getValue('automap','defaultparams');
+						$url = $this->htmlBase.'/index.php?mod=Automap&act=view&show='.$mapName.$this->CORE->MAINCFG->getValue('automap','defaultparams');
 						
 						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 					} else {

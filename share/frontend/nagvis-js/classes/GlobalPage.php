@@ -258,6 +258,16 @@ class GlobalPage {
 	}
 	
 	/**
+	 * Returns the complete HTML Page
+	 *
+	 * @return  String  HTML Code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getPage() {
+		return $this->buildPage();
+	}
+	
+	/**
 	 * Prints the complete HTML Page
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>

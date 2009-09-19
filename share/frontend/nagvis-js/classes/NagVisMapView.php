@@ -36,7 +36,7 @@ class NagVisMapView {
 	 * @param    String          $NAME
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $name) {
+	public function __construct(GlobalCore $CORE, $name) {
 		$this->CORE = $CORE;
 		
 		// FIXME: Already validated?
@@ -50,17 +50,18 @@ class NagVisMapView {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parse() {
-		$ret = '';
-		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
+		// Initialize template system
+		$TMPL = New FrontendTemplateSystem($this->CORE);
+		$TMPLSYS = $TMPL->getTmplSys();
 		
-		// Kick of the worker
-		$ret .= 'addDOMLoadEvent(function(){runWorker(0, \'map\', \''.$this->name.'\')});';
-		
-		// This disables the context menu when someone clicked anywhere on the map
-		$ret .= 'document.body.onmousedown = contextMouseDown;';
-		
-		return $ret;
+		$aData = Array(
+				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
+				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+				'mapName' => $this->name
+			);
+
+    // Build page based on the template file and the data array
+    return $TMPLSYS->get($TMPL->getTmplFile('map'), $aData);
 	}
 }
 ?>

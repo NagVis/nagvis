@@ -48,23 +48,58 @@ class GlobalMainCfg {
 		
 		$this->validConfig = Array(
 			'global' => Array(
+				'authmodule' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'CoreAuthModFile',
+					'match' => MATCH_STRING),
+				'authorisationmodule' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'CoreAuthorisationModFile',
+					'match' => MATCH_STRING),
 				'dateformat' => Array('must' => 1,
 					'editable' => 1,
 					'default' => 'Y-m-d H:i:s',
 					'match' => MATCH_STRING),
 				'displayheader' => Array('must' => 1,
-						'editable' => 1,
-						'deprecated' => 1,
-						'default' => '1',
-						'match' => MATCH_BOOLEAN),
+					'editable' => 1,
+					'deprecated' => 1,
+					'default' => '1',
+					'match' => MATCH_BOOLEAN),
 				'language' => Array('must' => 1,
 					'editable' => 1,
 					'default' => 'en_US',
 					'match' => MATCH_STRING_NO_SPACE),
+				'logonmodule' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'FrontendLogonDialog',
+					'match' => MATCH_STRING),
 				'refreshtime' => Array('must' => 1,
-						'editable' => 1,
-						'default' => '60',
-						'match' => MATCH_INTEGER)),
+					'editable' => 1,
+					'default' => '60',
+					'match' => MATCH_INTEGER),
+				//FIXME: doc
+				'sesscookiedomain' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'dev.nagvis.org',
+					'match' => MATCH_STRING),
+				//FIXME: doc
+				'sesscookiepath' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '/nagvis',
+					'match' => MATCH_STRING),
+				//FIXME: doc
+				'sesscookieduration' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '3600',
+					'match' => MATCH_STRING),
+				'startmodule' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'Overview',
+					'match' => MATCH_STRING),
+				'startaction' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'view',
+					'match' => MATCH_STRING)),
 			'states' => Array(
 				'unreachable' => Array('must' => 1,
 					'editable' => 1,
@@ -471,7 +506,11 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
-				'hovercontext' => Array('must' => 0,
+				'contexttemplate' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
+				'pagetemplate' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
@@ -508,6 +547,10 @@ class GlobalMainCfg {
 					'default' => '',
 					'match' => MATCH_STRING_PATH),			
 				'htmlcontexttemplates' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
+				'htmlpagetemplates' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
@@ -741,7 +784,7 @@ class GlobalMainCfg {
 		
 		$this->validConfig['paths']['var']['default'] = $base.'var/';
 		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
-		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/frontend/nagvis-js/var/';
+		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
 		
 		$this->validConfig['paths']['language']['default'] = $base.'share/frontend/nagvis-js/locale';
 		$this->validConfig['paths']['class']['default'] = $base.'share/server/core/classes/';
@@ -749,15 +792,17 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/frontend/nagvis-js/css/';
 		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/frontend/nagvis-js/js/';
 		
-		$this->validConfig['paths']['images']['default'] = $base.'share/nagvis/images/';
+		$this->validConfig['paths']['images']['default'] = $base.'share/frontend/nagvis-js/images/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/frontend/nagvis-js/images/';
 		
 		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/userfiles/templates/hover/';
 		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/userfiles/templates/header/';
 		$this->validConfig['paths']['contexttemplate']['default'] = $base.'share/userfiles/templates/context/';
+		$this->validConfig['paths']['pagetemplate']['default'] = $base.'share/userfiles/templates/pages/';
 		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/userfiles/templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/userfiles/templates/header/';
 		$this->validConfig['paths']['htmlcontexttemplates']['default'] = $htmlBase.'/userfiles/templates/context/';
+		$this->validConfig['paths']['htmlpagetemplates']['default'] = $htmlBase.'/userfiles/templates/pages/';
 		
 		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/userfiles/sounds/';
 		$this->validConfig['paths']['htmlstyles']['default'] = $htmlBase.'/userfiles/styles/';

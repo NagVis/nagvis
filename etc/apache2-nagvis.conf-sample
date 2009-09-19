@@ -13,9 +13,13 @@ Alias /nagvis "@NAGVIS_PATH@/share"
 #  Order deny,allow
 #  Deny from all
 #  Allow from 127.0.0.1
-   AuthName "NagVis Access"
-   AuthType Basic
-   AuthUserFile @NAGIOS_PATH@/etc/htpasswd.users
-   Require valid-user
+
+# Derecated basic auth
+# Commented out in NagVis 1.5
+#
+#   AuthName "NagVis Access"
+#   AuthType Basic
+#   AuthUserFile @NAGIOS_PATH@/etc/htpasswd.users
+#   Require valid-user
 </Directory>
 

@@ -166,23 +166,6 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
-	 * Parses the Map and the Objects
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseMapJson() {
-		$ret = '';
-		$ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-		$ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-		
-		// Kick of the worker
-		$ret .= 'addDOMLoadEvent(function(){runWorker(0, \'automap\')});';
-		
-		return $ret;
-	}
-	
-	/**
 	 * Parses the Map and the Object options in json format
 	 *
 	 * @return	String 	String with JSON Code
@@ -454,10 +437,10 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getFavicon() {
-		if(file_exists($this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
-			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
+		if(file_exists($this->CORE->MAINCFG->getValue('paths','images').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
+			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlimages').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
 		} else {
-			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/nagvis/images/internal/favicon.png';
+			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlimages').'internal/favicon.png';
 		}
 		return '<script type="text/javascript">favicon.change(\''.$favicon.'\'); </script>';
 	}

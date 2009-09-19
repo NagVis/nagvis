@@ -147,7 +147,7 @@ class GlobalFrontendMessageBox {
 			if($this->sRedirect == '') {
 				$this->page .= '<meta http-equiv="refresh" content="60">';
 			} else {
-				$this->page .= '<meta http-equiv="refresh" content="5; URL='.$this->sRedirect.'">';
+				$this->page .= '<meta http-equiv="refresh" content="2; URL='.$this->sRedirect.'">';
 			}
 		}
 		

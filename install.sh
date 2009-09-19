@@ -59,6 +59,8 @@ NAGVIS_VER=""
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
 NAGVIS_CONF="etc/nagvis.ini.php"
+# Relative path to the NagVis users configuration file
+NAGVIS_USER_CONF="etc/users.ini.php"
 # Default nagios web conf
 HTML_SAMPLE="apache2-nagvis.conf-sample"
 # Default nagios web conf
@@ -849,6 +851,15 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 		cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
 		chk_rc "|  Error copying sample configuration" "$DONE"
 	fi
+fi
+
+# Create user configuration file from sample when no file exists
+if [ -f $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample ]; then
+  if [ ! -f $NAGVIS_PATH/$NAGVIS_USER_CONF ]; then
+    DONE=`log "Creating user configuration file..." done`
+    cp -p $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample $NAGVIS_PATH/$NAGVIS_USER_CONF
+    chk_rc "|  Error copying sample user configuration" "$DONE"
+  fi
 fi
 
 # Create apache configuration file from sample when no file exists

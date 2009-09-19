@@ -41,7 +41,7 @@ function get_label(key) {
 function createjsDOMenu() {
 	var mainMenu = new jsDOMenu(170);
 	with (mainMenu) {
-		addMenuItem(new menuItem(get_label('overview'), "menu_overview", "link:../nagvis/index.php", ""));
+		addMenuItem(new menuItem(get_label('overview'), "menu_overview", "link:../nagvis-js/index.php", ""));
 		addMenuItem(new menuItem("-"));
 		addMenuItem(new menuItem(get_label('open'), "menu_maps_open", ""));
 		addMenuItem(new menuItem(get_label('openInNagVis'), "menu_maps_open_nagvis", ""));
@@ -142,7 +142,7 @@ function createjsDOMenu() {
 			
 			// Only add permited objects to the NagVis list
 			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName, mapOptions, "allowedUsers"), username)) {
-				submenu_maps_open_nagvis[iNagVisCurSubmenu].addMenuItem(new menuItem(mapOptions[i].mapAlias, mapOptions[i].mapAlias, "link:../nagvis/index.php?map="+mapOptions[i].mapName, "", "", ""));
+				submenu_maps_open_nagvis[iNagVisCurSubmenu].addMenuItem(new menuItem(mapOptions[i].mapAlias, mapOptions[i].mapAlias, "link:../nagvis-js/index.php?mod=Map&act=view&show="+mapOptions[i].mapName, "", "", ""));
 				iNagVisLinks++;
 			}
 			
@@ -173,7 +173,7 @@ function createjsDOMenu() {
 			
 			// Only add permited objects
 			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName, mapOptions, "allowedUsers"), username)) {
-				submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:../index.php?map="+mapOptions[i].mapName,"","",""));
+				submenu_maps_open_nagvis.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:../nagvis-js/index.php?mod=Map&act=view&show="+mapOptions[i].mapName,"","",""));
 			}
 		}
 		mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_nagvis);

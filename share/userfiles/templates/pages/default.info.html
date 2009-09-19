@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>{$pageTitle}</title>
+		<style type="text/css"><!-- @import url({$htmlBase}/frontend/nagvis-js/css/style.css);  --></style>
+		<link rel="shortcut icon" href="{$htmlBase}/frontend/nagvis-js/images/internal/favicon.png" />
+	</head>
+	<body class="main">
+		<div class="infopage">
+			<table class="instinfo">
+				<tr><th colspan="2" class="head">Support Informations</td></tr>
+			</table>
+			<br />
+			<table class="instinfo">
+				<tr><th colspan="2">Version Informations</td></tr>
+				<tr><td>NagVis Version</td><td>{$nagvisVersion}</td></tr>
+				<tr><td>PHP Version</td><td>{$phpVersion}</td></tr>
+				<tr><td>MySQL Version</td><td>{$mysqlVersion}</td></tr>
+				<tr><td>OS</td><td>{$os}</td></tr>
+				<t><th colspan="2">Webserver Informations</th></tr>
+				<tr><td>SERVER_SOFTWARE</td><td>{$serverSoftware}</td></tr>
+				<tr><td>REMOTE_USER</td><td>{$remoteUser}</td></tr>
+				<tr><td>SCRIPT_FILENAME</td><td>{$scriptFilename}</td></tr>
+				<tr><td>SCRIPT_NAME</td><td>{$scriptName}</td></tr>
+				<tr><td>REQUEST_TIME</td><td>{$requestTime}</td></tr>
+				<t><th colspan="2">PHP Informations</th></tr>
+				<tr><td>error_reporting</td><td>{$phpErrorReporting}</td></tr>
+				<tr><td>safe_mode</td><td>{$phpSafeMode}</td></tr>
+				<tr><td>max_execution_time</td><td>{$phpMaxExecTime} seconds</td></tr>
+				<tr><td>memory_limit</td><td>{$phpMemoryLimit}</td></tr>
+				<tr><td>loaded modules</td><td>{$phpLoadedExtensions}</td></tr>
+				<t><th colspan="2">Client Informations</th></tr>
+				<tr><td>USER_AGENT</td><td>{$userAgent}</td></tr>
+			</table>
+		</div>
+	</body>
+</html>

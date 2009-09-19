@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+	<title>{$pageTitle}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' id='login-css'  href='{$stylesheet}' type='text/css' media='all' />
+	<link rel="shortcut icon" href="{$htmlBase}/frontend/nagvis-js/images/internal/favicon.png" />
+	<meta name='robots' content='noindex,nofollow' />
+</head>
+<body class="login">
+
+<div id="login">
+<h1><h1><a href="#" title="{$pageTitle}" style="background-image:url({$htmlImages}/internal/logo_119x31.png)">{$pageTitle}</a></h1>
+
+<form name="loginform" id="loginform" action="{$formTarget}" method="post">
+	<p>
+		<label>{$langName}<br />
+		<input type="text" name="username" id="user_login" class="input" value="" size="{$maxLength}" tabindex="10" /></label>
+	</p>
+	<p>
+		<label>{$langPassword}<br />
+		<input type="password" name="password" id="user_pass" class="input" value="" size="{$maxLength}" tabindex="20" /></label>
+
+	</p>
+	<p class="submit">
+		<input type="submit" name="submit" id="submit" value="{$langLogin}" tabindex="100" />
+	</p>
+</form>
+
+</div>
+
+</body>
+</html>

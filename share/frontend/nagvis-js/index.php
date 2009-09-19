@@ -38,9 +38,115 @@ require('../../server/core/functions/oldPhpVersionFixes.php');
 // This defines whether the GlobalFrontendMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
-$controller = new GlobalController();
+// Initialize the core
+$CORE = new GlobalCore();
 
-if (!$controller->isValid()) {
-	new GlobalFrontendMessage('ERROR', $controller->getMessage());
+/*
+ * Url: Parse the url to know later what module and
+ *      action is called. The requested uri is splitted
+ *      into elements for later usage.
+ */
+
+$UHANDLER = new CoreUriHandler($CORE);
+
+/*
+ * Session: Handle the user session
+ */
+
+$SHANDLER = new CoreSessionHandler($CORE);
+
+/*
+ * Authentication 1: First try to use an existing session
+ *                   If that fails use the configured login method
+ */
+
+$AUTH = new CoreAuthHandler($CORE, $SHANDLER, 'CoreAuthModSession');
+
+/*
+ * Authorisation 1: Collect and save the permissions when the user is logged in
+ *                  and nothing other is saved yet
+ */
+
+if($AUTH->isAuthenticated()) {
+	// First try to get information from session
+	$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, 'CoreAuthorisationModSession');
+	$aPerms = $AUTHORISATION->parsePermissions();
+
+	// When no information in session get permission and write to session
+	if($aPerms === false) {
+		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->MAINCFG->getValue('global', 'authorisationmodule'));
+
+		// Save credentials to seession
+ 		$SHANDLER->set('userPermissions', $AUTHORISATION->parsePermissions());
+	}
+} else {
+	$AUTHORISATION = null;
 }
+
+/*
+ * Module handling 1: Choose modules
+ */
+
+// Load the module handler
+$MHANDLER = new FrontendModuleHandler($CORE);
+
+// Register valid modules
+// Unregistered modules can not be accessed
+$MHANDLER->regModule('LogonDialog');
+$MHANDLER->regModule('Info');
+$MHANDLER->regModule('Auth');
+$MHANDLER->regModule('Map');
+$MHANDLER->regModule('Automap');
+$MHANDLER->regModule('Overview');
+
+// Load the module
+$MODULE = $MHANDLER->loadModule($UHANDLER->get('module'));
+if($MODULE == null) {
+	new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('unknownModule', Array('module' => $UHANDLER->get('module'))));
+}
+$MODULE->passAuth($AUTH, $AUTHORISATION);
+$MODULE->setAction($UHANDLER->get('action'));
+
+/*
+ * Authorisation 2: Check if the user is permitted to use this module/action
+ *                  If not redirect to Msg/401 (Unauthorized) page
+ */
+
+// Only check modules which should have authorisation checks
+// This are all modules excluded some core things
+if($MODULE->actionRequiresAuthorisation()) {
+	// Only proceed with authenticated users
+	if($AUTH->isAuthenticated()) {
+		// Check if the user is permited to this action in the module
+		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('module'), $UHANDLER->get('action'))) {
+			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('notPermitted'));
+		}
+	} else {
+		// When not authenticated redirect to logon dialog
+		$MODULE = $MHANDLER->loadModule('LogonDialog');
+		$UHANDLER->set('action', 'view');
+	}
+}
+
+/*
+ * Module handling 2: Render the modules when permitted
+ *                    otherwise handle other pages
+ */
+
+// Handle regular action when everything is ok
+// When no matching module or action is found show the 404 error
+if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('action'))) {
+	$MODULE->setAction($UHANDLER->get('action'));
+
+	// Handle the given action in the module
+	$sContent = $MODULE->handleAction();
+} else {
+	// Create instance of msg module
+	new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('actionNotValid'));
+}
+
+echo $sContent;
+if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
+exit(1);
+
 ?>

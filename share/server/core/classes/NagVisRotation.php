@@ -281,5 +281,31 @@ class NagVisRotation {
 	public function getNumSteps() {
 		return sizeof($this->arrSteps);
 	}
+
+	/**
+	 * Gets the javascript code for the map refresh/rotation
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getRotationPropertiesJson($bRefresh) {
+		$arr = Array();
+		
+		if($this->ROTATION->getPoolName() != '') {
+			$arr['rotationEnabled'] = 1;
+			$arr['nextStepUrl'] = $this->ROTATION->getNextStepUrl();
+			$arr['nextStepTime'] = $this->ROTATION->getStepInterval();
+		} else {
+			$arr['rotationEnabled'] = 0;
+			$arr['nextStepUrl'] = '';
+			
+			if($bRefresh) {
+				$arr['nextStepTime'] = $this->ROTATION->getStepInterval();
+			} else {
+				$arr['nextStepTime'] = '';
+			}
+		}
+		
+		return json_encode($arr);
+	}
 }
 ?>

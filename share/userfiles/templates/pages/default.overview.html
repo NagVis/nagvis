@@ -1,0 +1,12 @@
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<div id="overview" class="infopage"></div>
+
+<script type="text/javascript">
+oGeneralProperties = {$generalProperties};
+oWorkerProperties = {$workerProperties};
+aMaps = Array();
+aRotations = Array();
+
+// Kick of the worker
+addDOMLoadEvent(function()\{runWorker(0, 'overview')});
+</script>

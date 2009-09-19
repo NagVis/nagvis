@@ -26,9 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-// Start the user session (This is needed by some caching mechanism)
-@session_start();
-
 // Set PHP error handling to standard level
 error_reporting(E_ALL ^ E_STRICT);
 
@@ -61,6 +58,23 @@ define('CONST_VERSION', '1.5a1');
 // Path to the main configuration file
 define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
 
+// Path to the main configuration file
+define('CONST_USERCFG', '../../../etc/users.ini.php');
+
 // Needed minimal PHP version
 define('CONST_NEEDED_PHP_VERSION', '5.0');
+
+// NagVis session name
+define('SESSION_NAME', 'nagvis_session');
+
+// Other basic constants
+define('REQUIRES_AUTHORISATION', true);
+
+// Permission wildcard
+define('AUTH_PERMISSION_WILDCARD', '*');
+
+// Salt for the password hashes
+// Note: If you change this you will need to rehash all saved 
+//       password hashes
+define('AUTH_PASSWORD_SALT', '29d58ead6a65f5c00342ae03cdc6d26565e20954');
 ?>

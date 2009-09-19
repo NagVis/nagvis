@@ -86,7 +86,7 @@ class NagVisFrontend extends GlobalPage {
 															$this->htmlJs.'NagVisTextbox.js',
 															$this->htmlJs.'NagVisRotation.js',
 															$this->htmlJs.'wz_jsgraphics.js');
-		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/nagvis/images/internal/favicon.png">';
+		$prop['extHeader'] = '<link rel="shortcut icon" href="'.$this->htmlBase.'/frontend/nagvis-js/images/internal/favicon.png" />';
 		$prop['languageRoot'] = 'nagvis';
 		
 		// Only do this, when a map needs to be displayed
@@ -117,47 +117,7 @@ class NagVisFrontend extends GlobalPage {
 			$this->addBodyLines($HEADER->__toString());
 		}
 	}
-	
-	/**
-	 * Adds the index to the page
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getIndexPage() {
-		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
-		$this->addBodyLines('<div id="overview" class="infopage"></div>');
-		$this->INDEX = new NagVisOverviewView($this->CORE, $this->BACKEND);
-		$this->addBodyLines($this->parseJs($this->INDEX->parse()));
-	}
-	
-	/**
-	 * Adds the map to the page
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getMap() {
-		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
-		$this->addBodyLines('<div id="map" class="map"></div>');
-		//FIXME: Need recoding here: $this->MAPCFG is the mapname and $this->MAP should be $this->VIEW
-		$this->MAP = new NagVisMapView($this->CORE, $this->MAPCFG);
-		//FIXME: $this->MAP->MAPOBJ->checkMaintenance(1);
-		$this->addBodyLines($this->parseJs($this->MAP->parse()));
-	}
-	
-	/**
-	 * Adds the automap to the page
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getAutoMap($arrOptions) {
-		$this->addBodyLines('<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>');
-		$this->addBodyLines('<div id="map" class="map">');
-		$this->MAP = new NagVisAutoMap($this->CORE, $this->MAPCFG, $this->BACKEND, $arrOptions);
-		$this->addBodyLines($this->MAP->parseMap());
-		$this->addBodyLines('</div>');
-		$this->addBodyLines($this->parseJs($this->MAP->parseMapJson()));
-	}
-	
+
 	/**
 	 * Gets the javascript code for the map refresh/rotation
 	 *

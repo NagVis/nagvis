@@ -49,6 +49,8 @@ define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\
 define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 
+define('MATCH_URI_PART', '/^[a-zA-Z0-9-_]*$/');
+
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
 define('MATCH_MP3_FILE', '/^(.+)\.mp3$/i');
 define('MATCH_HTML_TEMPLATE_FILE', '/^tmpl\.(.+)\.html$/i');
