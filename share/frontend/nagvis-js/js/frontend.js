@@ -467,8 +467,11 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		// output could have changed since last update). Basically this is only
 		// needed for gadgets and/or labels with [output] or [perfdata] macros
 		if(!aObjs[intIndex].stateChanged() && aObjs[intIndex].outputOrPerfdataChanged()) {
-			// Reparse object to map
-			aObjs[intIndex].parse();
+			// Reparse object to map (only for maps!)
+			// No else for overview here, senseless!
+      if(sType === 'map') {
+				aObjs[intIndex].parse();
+			}
 		}
 		
 		// Detect state changes and do some actions
@@ -483,7 +486,13 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			if(sType === 'map') {
 				aObjs[intIndex].parse();
 			} else if(sType === 'overview') {
-				aObjs[intIndex].parsedObject = aObjs[intIndex].parsedObject.parentNode.replaceChild(aObjs[intIndex].parseOverview(), aObjs[intIndex].parsedObject);
+				// Reparsing the object on index page.
+				// replaceChild seems not to work in all cases so workaround it
+				var oOld = aObjs[intIndex].parsedObject;
+				aObjs[intIndex].parsedObject = aObjs[intIndex].parsedObject.parentNode.insertBefore(aObjs[intIndex].parseOverview(), aObjs[intIndex].parsedObject);
+				aObjs[intIndex].parsedObject.parentNode.removeChild(oOld);
+
+				oOld = null;
 			}
 			
 			/**
