@@ -218,10 +218,12 @@ class NagVisObject {
 		// Save the number of members
 		switch($this->getType()) {
 			case 'host':
-			case 'map':
 			case 'hostgroup':
 			case 'servicegroup':
 				$arr['num_members'] = $this->getNumMembers();
+			break;
+			case 'map':
+				$arr['num_members'] = $this->getNumStatefulMembers();
 			break;
 		}
 		

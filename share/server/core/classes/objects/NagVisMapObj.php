@@ -91,6 +91,26 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
+	 * PUBLIC getNumiStatefulMembers()
+	 *
+	 * Returns the number of stateful objects on the map
+	 *
+	 * @return  Integer    Number of stateful objects on the map
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getNumStatefulMembers() {
+		$i = 0;
+		// Loop all objects except the stateless ones and count them
+		foreach($this->members AS $OBJ) {
+			if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
+				$i++;
+			}
+		}
+
+		return $i;
+	}
+	
+	/**
 	 * PUBLIC hasObjects()
 	 *
 	 * The fastest way I can expect to check if the map has objects
@@ -100,6 +120,27 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	public function hasObjects() {
 		return isset($this->members[0]);
+	}
+
+	/**
+	 * PUBLIC hasStatefulObjects()
+	 *
+	 * Check if the map has a stateful object on it
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function hasStatefulObjects() {
+		// Loop all objects on the map
+		foreach($this->members AS $OBJ) {
+			if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
+				// Exit on first result
+				return true;
+			}
+		}
+
+		// No stateful object found
+		return false;
 	}
 	
 	/**
@@ -231,12 +272,17 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryOutput() {
-		if($this->hasObjects()) {
+		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
 			foreach($this->getMembers() AS $OBJ) {
 				// Don't reconize summarize map objects
 				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
+					continue;
+				}
+
+				// Don't recognize textboxes and shapes
+				if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
 					continue;
 				}
 				
@@ -376,11 +422,16 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryState() {
-		if($this->hasObjects()) {
+		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			// Get summary state member objects
 			foreach($this->getMembers() AS $OBJ) {
 				// Don't reconize summarize map objects
 				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
+					continue;
+				}
+				
+				// Don't recognize textboxes and shapes
+				if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
 					continue;
 				}
 				
