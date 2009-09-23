@@ -65,7 +65,7 @@ function newY(a, b, x, y) {
 }
 
 // This function draws an arrow like it is used on NagVis maps
-function drawArrow(objectId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkArea) {
+function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLinkArea) {
 	var xCoord = [];
 	var yCoord = [];
 	
@@ -101,6 +101,7 @@ function drawArrow(objectId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkAre
 		oCanvas.style.top = yMin+"px";
 		oCanvas.width = Math.round(xMax-xMin);
 		oCanvas.height = Math.round(yMax-yMin);
+		oCanvas.style.zIndex = z;
 		
 		var ctx = oCanvas.getContext('2d');
 		
@@ -146,6 +147,7 @@ function drawArrow(objectId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkAre
 		oImg.style.position = 'absolute';
 		oImg.style.left = (middle(x1, x2)-10)+"px";
 		oImg.style.top = (middle(y1, y2)-10)+"px";
+		oImg.style.zIndex = z+1;
 		
 		oLinkContainer.appendChild(oImg);
 		oImg = null;
@@ -154,7 +156,7 @@ function drawArrow(objectId, x1, y1, x2, y2, w, colorFill, colorBorder, bLinkAre
 }
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objectId, type, x1, y1, x2, y2, width, state, ack, downtime, bLinkArea) {
+function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, state, ack, downtime, bLinkArea) {
 	var colorFill = '';
 	var colorBorder = '#000000';
 	
@@ -196,9 +198,9 @@ function drawNagVisLine(objectId, type, x1, y1, x2, y2, width, state, ack, downt
 		var xMid = middle(x1,x2);
 		var yMid = middle(y1,y2);
 		
-		drawArrow(objectId, x1, y1, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
-		drawArrow(objectId, x2, y2, xMid, yMid, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill, colorBorder, bLinkArea);
 	} else if(type == 11) {
-		drawArrow(objectId, x1, y1, x2, y2, width, colorFill, colorBorder, bLinkArea);
+		drawArrow(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder, bLinkArea);
 	}
 }
