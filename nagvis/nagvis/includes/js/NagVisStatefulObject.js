@@ -394,7 +394,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var width = this.conf.line_width;
 		
 		// Parse the line object
-		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
 	},
 	
 	/**
