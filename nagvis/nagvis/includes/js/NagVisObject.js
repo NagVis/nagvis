@@ -70,7 +70,7 @@ var NagVisObject = Base.extend({
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	getContextMenu: function (sContainerId, sObjId) {
+	getContextMenu: function (sObjId) {
 		// Only enable context menu when configured
 		if(this.conf.context_menu && this.conf.context_menu == '1') {
 			// Writes template code to "this.context_template_code"
@@ -80,11 +80,16 @@ var NagVisObject = Base.extend({
 			this.replaceContextTemplateMacros();
 			
 			var oObj = document.getElementById(sObjId);
-			var oContainer = document.getElementById(sContainerId);
+			var oContainer = document.getElementById(this.conf.object_id);
 			
-			// Create context menu div
-			var contextMenu = document.createElement('div');
-			contextMenu.setAttribute('id', sObjId+'-context');
+			// Only create a new div when the context menu does not exist
+			var contextMenu = document.getElementById(this.conf.object_id+'-context');
+			if(!contextMenu) {
+				// Create context menu div
+				var contextMenu = document.createElement('div');
+				contextMenu.setAttribute('id', this.conf.object_id+'-context');
+			}
+			
 			contextMenu.setAttribute('class', 'context');
 			contextMenu.setAttribute('className', 'context');
 			contextMenu.style.zIndex = '1000';

@@ -193,8 +193,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	remove: function () {
 		if(this.parsedObject) {
 			var oMap = document.getElementById('map');
-			
-			// Remove event listeners
+
 			var oObj;
 			if(this.conf.view_type && this.conf.view_type === 'line') {
 				oObj = document.getElementById(this.conf.object_id+'-linediv');
@@ -203,11 +202,20 @@ var NagVisStatefulObject = NagVisObject.extend({
 			}
 			
 			if(oObj) {
+				// Remove event listeners
 				oObj.onmousedown = null;
 				oObj.oncontextmenu = null;
 				oObj.onmouseover = null;
 				oObj.onmouseout = null;
 				oObj = null;
+			}
+
+			var oContext = document.getElementById(this.conf.object_id+'-context');
+			// Remove context menu
+			// Needs to be removed after unsetting the eventhandlers
+			if(oContext) {
+				this.parsedObject.removeChild(oContext);
+				oContext = null;
 			}
 			
 			// Remove object from DOM
@@ -258,9 +266,9 @@ var NagVisStatefulObject = NagVisObject.extend({
     // Add a context menu to the object when enabled
     if(this.conf.context_menu && this.conf.context_menu == '1') {
       if(this.conf.view_type && this.conf.view_type == 'line') {
-        this.getContextMenu(this.conf.object_id, this.conf.object_id+'-link');
+        this.getContextMenu(this.conf.object_id+'-link');
       } else {
-        this.getContextMenu(this.conf.object_id, this.conf.object_id+'-icon');
+        this.getContextMenu(this.conf.object_id+'-icon');
 			}
     }
 	},
