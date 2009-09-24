@@ -121,7 +121,12 @@ function checkMainCfgChanged(iCurrentAge) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function checkMapCfgChanged(iCurrentAge) {
-	eventlog("worker", "debug", "MapCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" Cached: "+date(oGeneralProperties.date_format, oFileAges.map_config));
+	var now = date(oGeneralProperties.date_format, iCurrentAge);
+	var cached = date(oGeneralProperties.date_format, oFileAges.map_config);
+	
+	eventlog("worker", "debug", "MapCfg Current: "+now+" Cached: "+cached);
+	cached = null;
+	now = null;
 	
 	if(oFileAges.map_config != iCurrentAge) {
 		return true;
@@ -1166,6 +1171,8 @@ function runWorker(iCount, sType) {
 						eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
 					}
 				}
+
+				oCurrentFileAges = null;
 				
 				/*
 				 * Now proceed with real actions when everything is OK
@@ -1217,6 +1224,9 @@ function runWorker(iCount, sType) {
 						}
 					}
 				}
+				iUrlParams = null;
+				iUrlLength = null;
+				arrObj = null;
 				
 				// Get the updated objectsupdateMapObjects via bulk request
 				var o = getBulkSyncRequest(oGeneralProperties.path_htmlbase+'/nagvis/ajax_handler.php?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
@@ -1225,16 +1235,19 @@ function runWorker(iCount, sType) {
 					bStateChanged = updateObjects(o, aMapObjects, sType);
 				}
 				o = null;
+				aUrlParts = null;
 				
 				// Update shapes when needed
 				if(aShapesToUpdate.length > 0) {
 					updateShapes(aShapesToUpdate);
 				}
+				aShapesToUpdate = null;
 				
 				// When some state changed on the map update the title and favicon
 				if(bStateChanged) {
 					updateMapBasics();
 				}
+				bStateChanged = null;
 				
 				// Update lastWorkerRun
 				oWorkerProperties.last_run = iNow;
@@ -1298,6 +1311,8 @@ function runWorker(iCount, sType) {
 				if(o.length > 0) {
 					bStateChanged = updateObjects(o, aMaps, sType);
 				}
+				aUrlParts = null;
+				o = null;
 				
 				// When some state changed on the map update the title and favicon
 				/* FIXME: if(bStateChanged) {
