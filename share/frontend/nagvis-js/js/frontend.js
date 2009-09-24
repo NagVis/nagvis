@@ -540,7 +540,8 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		aObjs[intIndex].parseHoverMenu();
 		
 		// Reparse the context menu
-		// FIXME: Context menu is not available on the overview page
+		// The context menu only needs to be reparsed when the
+		// icon object has been reparsed
 		if(sType === 'map') {
 			aObjs[intIndex].parseContextMenu();
 		} else if(sType === 'overview') {
