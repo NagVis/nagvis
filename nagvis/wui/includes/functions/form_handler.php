@@ -89,7 +89,7 @@ function backup(&$MAINCFG, $mapname) {
 			// is status for this map there?
 			$file = file($MAINCFG->getValue('paths', 'mapcfg').'autobackup.status');
 			foreach($file AS $key => $val) {
-				if(ereg("^".$mapname."=",$val)) {
+				if(preg_match('/^'.$mapname.'=/',$val)) { 
 					// $arr[1] is value
 					$arr = explode('=',$val);
 					

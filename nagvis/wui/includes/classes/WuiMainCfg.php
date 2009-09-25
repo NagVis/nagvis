@@ -76,13 +76,13 @@ class WuiMainCfg extends GlobalMainCfg {
 	 */
 	function setSection($sec) {
 		// Try to append new backends after already defined
-		if(ereg('^backend_', $sec)) {
+		if(preg_match('/^backend_/', $sec)) { 
 		    $lastBackendIndex = 0;
 		    $i = 0;
 		    // Loop all sections to find the last defined backend
 		    foreach($this->config AS $type => $vars) {
 		        // If the current section is a backend
-		        if(ereg('^backend_', $type)) {
+						if(preg_match('/^backend_/', $type)) { 
 		            $lastBackendIndex = $i;
 		        }
 		        $i++;

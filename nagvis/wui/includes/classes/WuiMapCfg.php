@@ -166,7 +166,7 @@ class WuiMapCfg extends GlobalMapCfg {
 			$done = FALSE;
 			while(isset($file[$l]) && $file[$l] != '' && $done == FALSE) {
 				// ignore comments
-				if(!ereg('^#',$file[$l]) && !ereg('^;',$file[$l])) {
+				if(!preg_match('/^#/',$file[$l]) && !preg_match('/^;/',$file[$l])) { 
 					$defineCln = explode('{', $file[$l]);
 					$define = explode(' ',$defineCln[0]);
 					// select only elements of the given type

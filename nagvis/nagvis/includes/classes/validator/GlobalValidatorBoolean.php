@@ -98,7 +98,7 @@ class GlobalValidatorBoolean extends GlobalValidatorAbstract {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	protected function isBoolean() {
-		if (eregi('[0-1]',$this->parameterValue)) {
+		if (preg_match('/[0-1]/', $this->parameterValue)) {
 			return TRUE;
 		} elseif ('TRUE' == strtoupper($this->parameterValue) || 'FALSE' == strtoupper($this->parameterValue)) {
 			return TRUE;
