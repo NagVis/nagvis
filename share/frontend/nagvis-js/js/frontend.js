@@ -34,6 +34,107 @@ var oHoverUrls = {};
 var oContextTemplates = {};
 
 /**
+ * searchObjectsKeyCheck()
+ *
+ * Checks the keys which are entered to the object search field
+ * if the user hits enter it searches for the matching object(s)
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function searchObjectsKeyCheck(sMatch, e) {
+	var charCode;
+	
+	if(e && e.which) {
+		charCode = e.which;
+	} else if(window.event) {
+		e = window.event;
+		charCode = e.keyCode;
+	}
+	
+	// Search on enter key press
+	if(charCode == 13) {
+		searchObjects(sMatch);
+	}
+}
+
+/**
+ * searchObjects()
+ *
+ * Searches for matching objects on the map an highlights / focuses
+ * the found object(s)
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function searchObjects(sMatch) {
+	var aResults = [];
+	var bMatch = false;
+
+	// Skip empty searches
+	if(sMatch == '') {
+		return false;
+	}
+	
+	// Loop all map objects and search the matching attributes
+	for(var i = 0, len = aMapObjects.length; i < len; i++) {
+		// Don't search shapes/textboxes
+		if(aMapObjects[i].conf.type != 'shape' && aMapObjects[i].conf.type != 'textbox') {
+			bMatch = false;
+			var regex = new RegExp(sMatch, 'g');
+			
+			// Current matching attributes:
+			// - type
+			// - name1
+			// - name2
+			
+	    if(aMapObjects[i].conf.type.search(regex) !== -1) {
+				bMatch = true;
+    	}
+			
+  	  if(aMapObjects[i].conf.name.search(regex) !== -1) {
+				bMatch = true;
+	    }
+			
+			// only search the service_description on service objects
+	    if(aMapObjects[i].conf.type === 'service' && aMapObjects[i].conf.service_description.search(regex) !== -1) {
+				bMatch = true;
+    	}
+			
+  	  regex = null;
+			
+			// Found some match?
+			if(bMatch === true) {
+				aResults.push(i);
+			}
+		}
+	}
+
+	// Actions for the results:
+	// When multiple found: highlight all
+	// When single found: highlight and focus the object
+	for(var i = 0, len = aResults.length; i < len; i++) {
+		var intIndex = aResults[i];
+		
+		// - highlight the object
+		if(aMapObjects[intIndex].conf.view_type && aMapObjects[intIndex].conf.view_type === 'icon') {
+			// Detach the handler
+			//  Had problems with this. Could not give the index to function:
+			//  function() { flashIcon(iIndex, 10); iIndex = null; }
+			window.setTimeout('flashIcon('+intIndex+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
+		} else {
+			// FIXME: Atm only flash icons, not lines or gadgets
+		}
+
+		// - Scroll to object
+		if(len = 1) {
+			// Detach the handler
+			window.setTimeout('scrollSlow('+aMapObjects[intIndex].conf.x+', '+aMapObjects[intIndex].conf.y+', 15)', 0);
+		}
+		
+		intIndex = null;
+	}
+}
+
+/**
  * getObjectsToUpdate()
  *
  * Detects objects with deprecated state information
@@ -1319,6 +1420,12 @@ function parseMap(iMapCfgAge, mapName) {
 		// Assign the context templates to the objects and parse them
 		eventlog("worker", "info", "Parse context menus");
 		parseContextMenus(aMapObjects);
+
+		// When user searches for an object highlight it
+		eventlog("worker", "info", "Searching for matching object(s)");
+		if(oViewProperties && oViewProperties.search && oViewProperties.search != '') {
+			searchObjects(oViewProperties.search);
+		}
 		
 		bReturn = true;
 	} else {

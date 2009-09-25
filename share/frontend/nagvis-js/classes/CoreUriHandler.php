@@ -9,7 +9,7 @@ class CoreUriHandler {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aAliases = Array('module' => 0, 'action' => 1, 'show' => 2, 'lang' => 3);
+		$this->aAliases = Array('module' => 'mod', 'action' => 'act');
 		
 		$this->sRequestUri = strip_tags($_SERVER['REQUEST_URI']);
 		
@@ -69,29 +69,38 @@ class CoreUriHandler {
 		//$this->aOpts = explode('/', substr($sRequest,1));
 		
 		if(isset($_GET['mod'])) {
-			$this->aOpts[0] = $_GET['mod'];
+			$this->aOpts['mod'] = $_GET['mod'];
 		}
 		if(isset($_GET['act'])) {
-			$this->aOpts[1] = $_GET['act'];
+			$this->aOpts['act'] = $_GET['act'];
 		}
 		if(isset($_GET['show'])) {
-			$this->aOpts[2] = $_GET['show'];
+			$this->aOpts['show'] = $_GET['show'];
+		}
+
+		// Optional: Map view search parameter
+		if(isset($_GET['search'])) {
+			$this->aOpts['search'] = $_GET['search'];
 		}
 	}
 	
 	private function setDefaults() {
 		// Handle default options when no module given
-		if(!$this->isSetAndNotEmpty(0)) {
-			$this->aOpts[0] = $this->CORE->MAINCFG->getValue('global', 'startmodule');
+		if(!$this->isSetAndNotEmpty('mod')) {
+			$this->aOpts['mod'] = $this->CORE->MAINCFG->getValue('global', 'startmodule');
 		}
 		
 		// Handle default options when no action given
-		if(!$this->isSetAndNotEmpty(1)) {
-			$this->aOpts[1] = $this->CORE->MAINCFG->getValue('global', 'startaction');
+		if(!$this->isSetAndNotEmpty('act')) {
+			$this->aOpts['act'] = $this->CORE->MAINCFG->getValue('global', 'startaction');
 		}
 
-		if(!$this->isSetAndNotEmpty(2)) {
-			$this->aOpts[2] = '';
+		if(!$this->isSetAndNotEmpty('show')) {
+			$this->aOpts['show'] = '';
+		}
+
+		if(!$this->isSetAndNotEmpty('search')) {
+			$this->aOpts['search'] = '';
 		}
 	}
 	

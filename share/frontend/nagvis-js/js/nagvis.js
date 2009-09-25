@@ -33,6 +33,7 @@
 
 /* Initiate global vars which are set later in the parsed HTML */
 var oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties;
+var oViewProperties;
 var oFileAges;
 var aInitialMapObjects, aInitialMaps, aInitialRotations, aMapObjects, aMaps;
 var aRotations;

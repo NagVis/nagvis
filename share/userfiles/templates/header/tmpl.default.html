@@ -9,11 +9,14 @@
 				<!-- BEGIN maplist --><option value="[map_name][url_params]" [selected]>[map_alias]</option><!-- END maplist -->
 			</select>
 		</td>
+		<td style="width:150px;padding-left:10px;">[lang_search]: </td>
+		<td style="width:120px;">
+			<input type="text" name="highlightInput" id="highlightInput" onkeypress="searchObjectsKeyCheck(this.value, event)" />
+		</td>
 		<th style="width:150px;"><a href="[html_base]/frontend/wui/index.php?map=[current_map]">[lang_edit_map]</a></th>
 		<td></td>
 		<td style="width:20px;text-align:center;" id="refreshCounterHead"></td>
 		<th style="width:150px;">
-			<a id="refreshSwitch" href="#" onClick="switchRefresh(this,'[lang_refresh_start]','[lang_refresh_stop]');"><!-- This label is set with the setRefreshLabel() function dynamicaly --></a><br />
 			<a id="rotationSwitch" href="#" onClick="switchRotation(this,'[lang_rotation_start]','[lang_rotation_stop]');"><!-- This label is set with the setRotationLabel() function dynamicaly --></a>
 		</th>
 		<td style="width:150px;">

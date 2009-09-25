@@ -100,12 +100,12 @@ $MHANDLER->regModule('Automap');
 $MHANDLER->regModule('Overview');
 
 // Load the module
-$MODULE = $MHANDLER->loadModule($UHANDLER->get('module'));
+$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if($MODULE == null) {
-	new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('unknownModule', Array('module' => $UHANDLER->get('module'))));
+	new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('unknownModule', Array('module' => $UHANDLER->get('mod'))));
 }
 $MODULE->passAuth($AUTH, $AUTHORISATION);
-$MODULE->setAction($UHANDLER->get('action'));
+$MODULE->setAction($UHANDLER->get('act'));
 
 /*
  * Authorisation 2: Check if the user is permitted to use this module/action
@@ -118,13 +118,13 @@ if($MODULE->actionRequiresAuthorisation()) {
 	// Only proceed with authenticated users
 	if($AUTH->isAuthenticated()) {
 		// Check if the user is permited to this action in the module
-		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('module'), $UHANDLER->get('action'))) {
+		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'))) {
 			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('notPermitted'));
 		}
 	} else {
 		// When not authenticated redirect to logon dialog
 		$MODULE = $MHANDLER->loadModule('LogonDialog');
-		$UHANDLER->set('action', 'view');
+		$UHANDLER->set('act', 'view');
 	}
 }
 
@@ -135,8 +135,8 @@ if($MODULE->actionRequiresAuthorisation()) {
 
 // Handle regular action when everything is ok
 // When no matching module or action is found show the 404 error
-if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('action'))) {
-	$MODULE->setAction($UHANDLER->get('action'));
+if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
+	$MODULE->setAction($UHANDLER->get('act'));
 
 	// Handle the given action in the module
 	$sContent = $MODULE->handleAction();

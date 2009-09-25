@@ -28,6 +28,7 @@
 class NagVisMapView {
 	private $CORE = null;
 	private $name = '';
+	private $search = '';
 	
 	/**
 	 * Class Constructor
@@ -41,6 +42,15 @@ class NagVisMapView {
 		
 		// FIXME: Already validated?
 		$this->name = $name;
+	}
+
+	/**
+	 * Set the search value if the user searches for an object
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setSearch($s) {
+		$this->search = $s;
 	}
 	
 	/**
@@ -57,11 +67,27 @@ class NagVisMapView {
 		$aData = Array(
 				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
 				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+				'viewProperties' => $this->parseViewProperties(),
 				'mapName' => $this->name
 			);
 
     // Build page based on the template file and the data array
     return $TMPLSYS->get($TMPL->getTmplFile('map'), $aData);
+	}
+
+	/**
+	 * Parses the view specific properties. In most cases this will be user
+	 * defined values which maybe given by url or session
+	 *
+	 * @return  String  JSON array
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function parseViewProperties() {
+		$arr = Array();
+		
+		$arr['search'] = $this->search;
+		
+		return json_encode($arr);
 	}
 }
 ?>

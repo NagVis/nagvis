@@ -1,13 +1,15 @@
 <?php
 class FrontendModMap extends FrontendModule {
 	private $CORE;
-	private $name;
+	private $name = '';
+	private $search = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
 		$UHANDLER = new CoreUriHandler($this->CORE); 
 		$this->name = $UHANDLER->get('show');
+		$this->search = $UHANDLER->get('search');
 		
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
@@ -60,6 +62,10 @@ class FrontendModMap extends FrontendModule {
 
 		// Initialize map view
 		$this->MAP = new NagVisMapView($this->CORE, $this->name);
+
+		// The user is searching for an object
+		$this->MAP->setSearch($this->search);
+		
     //FIXME: Maintenance mode not supported atm
 		//$this->MAP->MAPOBJ->checkMaintenance(1);
     $INDEX->setContent($this->MAP->parse());
