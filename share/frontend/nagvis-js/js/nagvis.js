@@ -35,8 +35,7 @@
 var oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties;
 var oViewProperties;
 var oFileAges;
-var aInitialMapObjects, aInitialMaps, aInitialRotations, aMapObjects, aMaps;
-var aRotations;
+var aMapObjects;
 var oStatusMessageTimer;
 
 var aMapObjects = [];
