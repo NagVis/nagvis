@@ -105,7 +105,7 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
 	protected function isInteger() {
-		if (eregi('^[0-9]*$',$this->parameterValue)) {
+		if (preg_match('/^[0-9]*$/i', $this->parameterValue)) {
 			return TRUE;
 		} else {
 			$this->setMessage('validatorNotValidInteger');

@@ -969,17 +969,17 @@ class GlobalMainCfg {
 	private function checkMainConfigIsValid($printErr) {
 		// check given objects and attributes
 		foreach($this->config AS $type => &$vars) {
-			if(!ereg('^comment_',$type)) {
-				if(isset($this->validConfig[$type]) || ereg('^(backend|rotation)_', $type)) {
+			if(!preg_match('/^comment_/',$type)) {
+				if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation)_/', $type)) {
 					// loop validConfig for checking: => missing "must" atributes
-					if(ereg('^backend_', $type)) {
+					if(preg_match('/^backend_/', $type)) {
 						if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]) 
 							 && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
 							$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
 						} else {
 							$arrValidConfig = $this->validConfig['backend'];
 						}
-					} elseif(ereg('^rotation_', $type)) {
+					} elseif(preg_match('/^rotation_/', $type)) {
 						$arrValidConfig = $this->validConfig['rotation'];
 					} else {
 						$arrValidConfig = $this->validConfig[$type];
