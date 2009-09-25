@@ -77,11 +77,6 @@ class CoreUriHandler {
 		if(isset($_GET['show'])) {
 			$this->aOpts['show'] = $_GET['show'];
 		}
-
-		// Optional: Map view search parameter
-		if(isset($_GET['search'])) {
-			$this->aOpts['search'] = $_GET['search'];
-		}
 	}
 	
 	private function setDefaults() {
@@ -97,10 +92,6 @@ class CoreUriHandler {
 
 		if(!$this->isSetAndNotEmpty('show')) {
 			$this->aOpts['show'] = '';
-		}
-
-		if(!$this->isSetAndNotEmpty('search')) {
-			$this->aOpts['search'] = '';
 		}
 	}
 	

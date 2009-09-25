@@ -9,7 +9,9 @@ class FrontendModMap extends FrontendModule {
 
 		$UHANDLER = new CoreUriHandler($this->CORE); 
 		$this->name = $UHANDLER->get('show');
-		$this->search = $UHANDLER->get('search');
+
+		// And parse the view specific options
+		$this->getMapOptions($UHANDLER);
 		
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
@@ -29,6 +31,17 @@ class FrontendModMap extends FrontendModule {
 		}
 		
 		return $sReturn;
+	}
+
+	private function getMapOptions(CoreUriHandler $UHANDLER) {
+		// Parse view specific uri params
+		$aKeys = Array('search' => '');
+		
+		// Load the specific params to the UriHandler
+		$UHANDLER->parseModSpecificUri($aKeys);
+		
+		// Now get those params
+		$this->search = $UHANDLER->get('search');
 	}
 	
 	private function showViewDialog() {
