@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.4"
+INSTALLER_VERSION="0.2.5"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -40,25 +40,28 @@ INSTALLER_CONFIG_MOD="n"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKENDS="ndo2db,ndo2fs,merlin"
+NAGVIS_BACKENDS="ndo2db,ido2db,ndo2fs,merlin"
 # Return Code
 RC=0
 # data source
 SOURCE=nagios
 # skip checks
 FORCE=0
+REMOVE="n"
 
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
 # Version of NagVis to be installed
 NAGVIS_VER=""
-[ -f share/nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+[ -f share/server/core/defines/global.php ]&&NAGVIS_VER=`cat share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 [ -f nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 
 # Version of old NagVis (will be detected if update)
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
 NAGVIS_CONF="etc/nagvis.ini.php"
+# Relative path to the NagVis users configuration file
+NAGVIS_USER_CONF="etc/users.ini.php"
 # Default nagios web conf
 HTML_SAMPLE="apache2-nagvis.conf-sample"
 # Default nagios web conf
@@ -73,7 +76,7 @@ WEB_USER=""
 WEB_GROUP=""
 
 # Version prerequisites
-[ -f share/nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat share/nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
+[ -f share/server/core/defines/global.php ]&&NEED_PHP_VERSION=`cat share/server/core/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -f nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
@@ -110,17 +113,18 @@ Parameters:
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
   -w <PATH>     Path to the webserver config files
-  -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ndo2fs, merlin
+  -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ido2db, ndo2fs, merlin
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
-  -c [y|n]      Update configuration files when possible?
   -o            omit demo files
-  -q            Quiet mode. The installer won't ask for confirmation of what to do.
-                This can be useful for automatic or scripted deployment.
+  -r            remove backup directory after successful installation
+  -q            Quiet mode. The installer won't ask for confirmation of what to do
+                This can be useful for automatic or scripted deployment
                 WARNING: Only use this if you know what you are doing
   -v            Version information
   -h            This message
 
 EOD
+#  -c [y|n]      Update configuration files when possible?
 }
 
 # Print version information
@@ -255,6 +259,18 @@ check_backend() {
 		[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
 		log "  $NDO_MOD (ndo2db)" $NDO
 		BACKENDS="ndo2db"
+	fi
+
+	echo $NAGVIS_BACKEND | grep -i "IDO2DB" >/dev/null
+	if [ $? -eq 0 ]; then
+		# Check IDO
+		if [ -z "$NDO" ]; then
+			NDO_MOD="$NAGIOS_PATH/bin/ido2db"
+		fi
+		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^IDO2DB"`
+		[ -z "$NDO" ]&&NDO_MOD="IDO Module ido2db"
+		log "  $NDO_MOD (ido2db)" $NDO
+		BACKENDS=$BACKENDS",ido2db"
 	fi
 
 	# Check NDO2FS prerequisites if necessary
@@ -493,7 +509,7 @@ HTML_BASE=$HTML_PATH
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:w:u:b:g:c:i:s:ohqvF" options; do
+	while getopts "n:B:m:p:w:u:b:g:c:i:s:ohqvFr" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -541,6 +557,9 @@ if [ $# -gt 0 ]; then
 			F)
 				FORCE=1
 			;;
+			r)
+				REMOVE="y"
+			;;
 			h)
 				usage
 				exit 0
@@ -577,13 +596,12 @@ line ""
 PERL=`perl -e 'print $];'` 
 [ -n "$PERL" ]&&text "| Perl: $PERL" "|"
 text
-line "Checking for which" "+"
+line "Checking for tools" "+"
 WHICH=`whereis which | awk '{print $2}'` 
 if [ -z $WHICH ]; then
 	log "'which' not found (maybe package missing). Aborting..."
 	exit 1
 fi
-line "Checking for packet manager" "+"
 PKG=`which rpm 2>/dev/null`
 [ -u $PKG ] && PKG=`which dpkg 2>/dev/null`
 [ -u $PKG ] && PKG=`which yum 2>/dev/null`
@@ -729,6 +747,8 @@ if [ -d $NAGVIS_PATH ]; then
 		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	elif [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
 		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	elif [ -e $NAGVIS_PATH/share/server/core/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	else
 		NAGVIS_VER_OLD="UNKNOWN"
 	fi
@@ -744,6 +764,11 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 		read AMOD
 		if [ ! -z $AMOD ]; then
 			INSTALLER_CONFIG_MOD=$AMOD
+		fi
+		echo -n "| Should the backup directory be removed after successful installation [$REMOVE]?: "
+		read AMOD
+		if [ ! -z $AMOD ]; then
+			REMOVE=$AMOD
 		fi
 	fi
 fi
@@ -768,6 +793,11 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	text "| Backup directory:              $NAGVIS_PATH_OLD" "|"
 	text
 	text "| Note: The current NagVis directory will be moved to the backup directory." "|"
+	if [ "$REMOVE" = "y" ]; then
+		text "|       The backup directory will be removed after successful installation. " "|"
+	else
+		text "|       The backup directory will be NOT removed after successful installation. " "|"
+	fi
 	if [ ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
 		text "|       Your configuration files will be copied." "|"
 		if [ "$INSTALLER_CONFIG_MOD" = "y" ]; then
@@ -836,6 +866,15 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	fi
 fi
 
+# Create user configuration file from sample when no file exists
+if [ -f $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample ]; then
+  if [ ! -f $NAGVIS_PATH/$NAGVIS_USER_CONF ]; then
+    DONE=`log "Creating user configuration file..." done`
+    cp -p $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample $NAGVIS_PATH/$NAGVIS_USER_CONF
+    chk_rc "|  Error copying sample user configuration" "$DONE"
+  fi
+fi
+
 # Create apache configuration file from sample when no file exists
 if [ -f etc/$HTML_SAMPLE ]; then
 	CHG='s/^//'
@@ -855,9 +894,11 @@ fi
 
 text
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
-	# Gather path prefix
+	# Gather path prefixes
 	NAGVIS_DIR="nagvis"
 	[ $NAGVIS_TAG -ge 01050000 ] && NAGVIS_DIR="share/nagvis"
+	USERFILES_DIR="nagvis"
+	[ $NAGVIS_TAG -ge 01050000 ] && USERFILES_DIR="share/userfiles"
 
 	LINE="Restoring main configuration file..."
 	copy "" "$NAGVIS_CONF" "main configuration file"
@@ -866,31 +907,31 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "demo.cfg:demo2.cfg" "etc/maps" "map configuration files"
 	
 	LINE="Restoring custom map images..."
-	copy "nagvis-demo.png" "$NAGVIS_DIR/images/maps" "map image files"
+	copy "nagvis-demo.png" "$USERFILES_DIR/images/maps" "map image files"
 	
 	LINE="Restoring custom iconsets..."
-	copy "20x20.png:configerror_*.png:error.png:std_*.png" "$NAGVIS_DIR/images/iconsets" "iconset files"
+	copy "20x20.png:configerror_*.png:error.png:std_*.png" "$USERFILES_DIR/images/iconsets" "iconset files"
 	
 	LINE="Restoring custom shapes..."
-	copy "" "$NAGVIS_DIR/images/shapes" "shapes"
+	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
 	LINE="Restoring custom header templates..."
-	copy "tmpl.default*" "$NAGVIS_DIR/templates/header" "header templates"
+	copy "tmpl.default*" "$USERFILES_DIR/templates/header" "header templates"
 	
 	LINE="Restoring custom hover templates..."
-	copy "tmpl.default*" "$NAGVIS_DIR/templates/hover" "hover templates"
+	copy "tmpl.default*" "$USERFILES_DIR/templates/hover" "hover templates"
 	
 	LINE="Restoring custom header template images..."
-	copy "tmpl.default*" "$NAGVIS_DIR/images/templates/header" "header template images"
+	copy "tmpl.default*" "$USERFILES_DIR/images/templates/header" "header template images"
 
 	LINE="Restoring custom hover template images..."
-	copy "tmpl.default*" "$NAGVIS_DIR/images/templates/hover" "hover template images"
+	copy "tmpl.default*" "$USERFILES_DIR/images/templates/hover" "hover template images"
 
 	LINE="Restoring custom gadgets..."
-	copy "gadgets_core.php:std_*.php" "$NAGVIS_DIR/gadgets" "gadgets"
+	copy "gadgets_core.php:std_*.php" "$USERFILES_DIR/gadgets" "gadgets"
 
 	LINE="Restoring custom stylesheets..."
-  copy "" "$NAGVIS_DIR/styles" "stylesheets"
+  copy "" "$USERFILES_DIR/styles" "stylesheets"
 fi
 text
 
@@ -927,14 +968,20 @@ if [ $NAGVIS_TAG -lt 01050000 ]; then
 	set_perm 775 "$NAGVIS_PATH/nagvis/var"
 	set_perm 664 "$NAGVIS_PATH/nagvis/var/*"
 else
-	set_perm 775 "$NAGVIS_PATH/share/nagvis/images/maps"
-	set_perm 664 "$NAGVIS_PATH/share/nagvis/images/maps/*"
+	set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
+	set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/var"
 	set_perm 664 "$NAGVIS_PATH/var/*"
 	set_perm 775 "$NAGVIS_PATH/share/var"
 	set_perm 664 "$NAGVIS_PATH/share/var/*"
 fi	
 text
+
+if [ "$INSTALLER_ACTION" = "update" -a "$REMOVE" = "y" ]; then
+    DONE=`log "Removing backup directory" done`
+    rm -rf $NAGVIS_PATH_OLD
+    chk_rc "|  Error removing directory user configuration" "$DONE"
+fi
 
 line
 text "| Installation complete" "|"
