@@ -47,6 +47,7 @@ RC=0
 SOURCE=nagios
 # skip checks
 FORCE=0
+REMOVE="n"
 
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
@@ -114,15 +115,16 @@ Parameters:
   -w <PATH>     Path to the webserver config files
   -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ido2db, ndo2fs, merlin
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
-  -c [y|n]      Update configuration files when possible?
   -o            omit demo files
-  -q            Quiet mode. The installer won't ask for confirmation of what to do.
-                This can be useful for automatic or scripted deployment.
+  -r            remove backup directory after successful installation
+  -q            Quiet mode. The installer won't ask for confirmation of what to do
+                This can be useful for automatic or scripted deployment
                 WARNING: Only use this if you know what you are doing
   -v            Version information
   -h            This message
 
 EOD
+#  -c [y|n]      Update configuration files when possible?
 }
 
 # Print version information
@@ -508,7 +510,7 @@ HTML_BASE=$HTML_PATH
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:w:u:b:g:c:i:s:ohqvF" options; do
+	while getopts "n:B:m:p:w:u:b:g:c:i:s:ohqvFr" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -556,6 +558,9 @@ if [ $# -gt 0 ]; then
 			F)
 				FORCE=1
 			;;
+			r)
+				REMOVE="y"
+			;;
 			h)
 				usage
 				exit 0
@@ -592,13 +597,12 @@ line ""
 PERL=`perl -e 'print $];'` 
 [ -n "$PERL" ]&&text "| Perl: $PERL" "|"
 text
-line "Checking for which" "+"
+line "Checking for tools" "+"
 WHICH=`whereis which | awk '{print $2}'` 
 if [ -z $WHICH ]; then
 	log "'which' not found (maybe package missing). Aborting..."
 	exit 1
 fi
-line "Checking for packet manager" "+"
 PKG=`which rpm 2>/dev/null`
 [ -u $PKG ] && PKG=`which dpkg 2>/dev/null`
 [ -u $PKG ] && PKG=`which yum 2>/dev/null`
@@ -762,6 +766,11 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 		if [ ! -z $AMOD ]; then
 			INSTALLER_CONFIG_MOD=$AMOD
 		fi
+		echo -n "| Should the backup directory be removed after successful installation [$REMOVE]?: "
+		read AMOD
+		if [ ! -z $AMOD ]; then
+			REMOVE=$AMOD
+		fi
 	fi
 fi
 
@@ -785,6 +794,11 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	text "| Backup directory:              $NAGVIS_PATH_OLD" "|"
 	text
 	text "| Note: The current NagVis directory will be moved to the backup directory." "|"
+	if [ "$REMOVE" = "y" ]; then
+		text "|       The backup directory will be removed after successful installation. " "|"
+	else
+		text "|       The backup directory will be NOT removed after successful installation. " "|"
+	fi
 	if [ ! "$NAGVIS_VER_OLD" = "UNKNOWN" ]; then
 		text "|       Your configuration files will be copied." "|"
 		if [ "$INSTALLER_CONFIG_MOD" = "y" ]; then
@@ -963,6 +977,12 @@ else
 	set_perm 664 "$NAGVIS_PATH/share/var/*"
 fi	
 text
+
+if [ "$INSTALLER_ACTION" = "update" -a "$REMOVE" = "y" ]; then
+    DONE=`log "Removing backup directory" done`
+    rm -rf $NAGVIS_PATH_OLD
+    chk_rc "|  Error removing directory user configuration" "$DONE"
+fi
 
 line
 text "| Installation complete" "|"
