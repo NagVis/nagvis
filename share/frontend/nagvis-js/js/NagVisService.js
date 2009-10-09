@@ -53,7 +53,13 @@ var NagVisService = NagVisStatefulObject.extend({
 			sParams = '&';
 		}
 		
-		sParams = sParams + 'name1=' + this.conf.name + '&name2=' + escapeUrlValues(this.conf.service_description) + '&scale=' + escapeUrlValues(this.conf.gadget_scale.toString()) + '&state=' + this.conf.state + '&stateType=' + this.conf.state_type + '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22');
+		// Process the optional gadget_opts param
+		var sGadgetOpts = '';
+		if(this.conf.gadget_opts && this.conf.gadget_opts != '') {
+			sGadgetOpts = '&opts=' + escapeUrlValues(this.conf.gadget_opts.toString());
+		}
+		
+		sParams = sParams + 'name1=' + this.conf.name + '&name2=' + escapeUrlValues(this.conf.service_description) + '&scale=' + escapeUrlValues(this.conf.gadget_scale.toString()) + '&state=' + this.conf.state + '&stateType=' + this.conf.state_type + '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22') + sGadgetOpts;
 		
 		var oIcon = document.createElement('img');
 		oIcon.setAttribute('id', this.conf.object_id+'-icon');
