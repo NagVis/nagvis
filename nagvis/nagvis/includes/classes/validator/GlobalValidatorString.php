@@ -106,7 +106,7 @@ class GlobalValidatorString extends GlobalValidatorAbstract {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function isString() {
-		if(preg_match('/^[a-zA-Z0-9_\-,\s]*$/',$this->parameterValue)) {
+		if(preg_match('/^[a-zA-Z0-9_\-,\.\s]*$/',$this->parameterValue)) {
 			return TRUE;
 		} else {
 			$this->setMessage('validatorNotValidString');
