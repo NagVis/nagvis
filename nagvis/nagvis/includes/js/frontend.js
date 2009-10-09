@@ -512,7 +512,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 					// Detach the handler
 					//  Had problems with this. Could not give the index to function:
 					//  function() { flashIcon(iIndex, 10); iIndex = null; }
-					window.setTimeout('flashIcon('+intIndex+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
+					setTimeout('flashIcon('+intIndex+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
 				} else {
 					// FIXME: Atm only flash icons, not lines or gadgets
 				}
@@ -521,7 +521,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			// - Scroll to object
 			if(oPageProperties.event_scroll === '1') {
 				// Detach the handler
-				window.setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15); }, 0);
+				setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15); }, 0);
 			}
 			
 			// - Eventlog
@@ -534,7 +534,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			// - Sound
 			if(oPageProperties.event_sound === '1') {
 				// Detach the handler
-				window.setTimeout('playSound('+intIndex+', 1)', 0);
+				setTimeout('playSound('+intIndex+', 1)', 0);
 			}
 		}
 
@@ -769,7 +769,7 @@ function playSound(intIndex, iNumTimes){
 		iNumTimes = iNumTimes - 1;
 		
 		if(iNumTimes > 0) {
-			window.setTimeout(function() { playSound(intIndex, iNumTimes); }, 500);
+			setTimeout(function() { playSound(intIndex, iNumTimes); }, 500);
 		}
 	}
 	
@@ -816,7 +816,7 @@ function flashIcon(intIndex, iDuration, iInterval){
 	
 	// Flash again until timer counted down and the border is hidden
 	if(iDurationNew > 0 || (iDurationNew <= 0 && aMapObjects[intIndex].bIsFlashing === true)) {
-		window.setTimeout(function() { flashIcon(intIndex, iDurationNew, iInterval); }, iInterval);
+		setTimeout(function() { flashIcon(intIndex, iDurationNew, iInterval); }, iInterval);
 	}
 	
 	oObjIcon = null;
