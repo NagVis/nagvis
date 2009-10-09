@@ -253,8 +253,13 @@ class WuiMap extends GlobalMap {
 						if(strpos($obj['gadget_url'], '?') === false) {
 							$sDelim = '?';
 						}
+
+						$sGadgetOpts = '';
+						if(isset($obj['gadget_opts']) && $obj['gadget_opts'] != '') {
+							$sGadgetOpts = '&opts=' . urlencode($obj['gadget_opts']);
+						}
 						
-						$obj['iconParams'] = $sDelim . 'name1=dummyHost&name2=dummyService&state=OK&stateType=HARD&conf=1&scale=' . $obj['gadget_scale'];
+						$obj['iconParams'] = $sDelim . 'name1=dummyHost&name2=dummyService&state=OK&stateType=HARD&conf=1&scale=' . $obj['gadget_scale'] . $sGadgetOpts;
 					} else {
 						$obj['iconParams'] = '';
 					}
