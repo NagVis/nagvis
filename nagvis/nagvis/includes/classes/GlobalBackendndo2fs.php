@@ -644,7 +644,11 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 		
 		if(file_exists($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName)) {
 			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/HOSTGROUPS/'.$hostgroupName.'/META'));
-			$aReturn = $oMeta->HOSTGROUPMEMBER;
+			
+			// The property does not exist in empty hostgroups
+			if(isset($oMeta->HOSTGROUPMEMBER)) {
+				$aReturn = $oMeta->HOSTGROUPMEMBER;
+			}
 		}
 		
 		return $aReturn;
