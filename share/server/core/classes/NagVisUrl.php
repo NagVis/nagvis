@@ -38,7 +38,7 @@ class NagVisUrl {
 	 * @param   String      URL
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $strUrl) {
+	public function __construct(GlobalCore $CORE, $strUrl) {
 		$this->CORE = $CORE;
 		
 		$this->strUrl = $strUrl;
@@ -86,23 +86,5 @@ class NagVisUrl {
 		
 		return $this->strContents;
 	}
-
-	/**
-   * Parses some option and initializes the worker
-   *
-   * @return  String  String with Html Code
-   * @author  Lars Michelsen <lars@vertical-visions.de>
-   */
-  public function parseJson() {
-    $ret = '';
-    $ret .= 'oGeneralProperties='.$this->CORE->MAINCFG->parseGeneralProperties().';'."\n";
-    $ret .= 'oWorkerProperties='.$this->CORE->MAINCFG->parseWorkerProperties().';'."\n";
-    //$ret .= 'var oFileAges='.$this->parseFileAges().';'."\n";
-
-    // Kick of the worker
-    $ret .= 'addDOMLoadEvent(function(){runWorker(0, \'url\')});';
-
-    return $ret;
-  }
 }
 ?>

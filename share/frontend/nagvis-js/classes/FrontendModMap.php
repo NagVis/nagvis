@@ -34,6 +34,9 @@ class FrontendModMap extends FrontendModule {
 	}
 
 	private function getMapOptions(CoreUriHandler $UHANDLER) {
+		// FIXME: The array should contain orders for validating the given value
+		// the options should be validated by the uri handler
+		
 		// Parse view specific uri params
 		$aKeys = Array('search' => '');
 		

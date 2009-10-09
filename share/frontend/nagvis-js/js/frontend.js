@@ -1439,6 +1439,20 @@ function parseMap(iMapCfgAge, mapName) {
 }
 
 /**
+ * Fetches the contents of the given url and prints it on the current page
+ *
+ * @param   String   The url to fetch
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseUrl(sUrl) {
+	// FIXME: Fetch contents from server
+	
+	// FIXME: Clear the current contents
+	
+	// FIMXE: Add the contents to the page
+}
+
+/**
  * runWorker()
  *
  * This function is the heart of the new NagVis frontend. It's called worker.
@@ -1546,6 +1560,11 @@ function runWorker(iCount, sType, sIdentifier) {
 			//parseContextMenus(aMaps);
 			
 			eventlog("worker", "info", "Finished parsing overview");
+		} else if(sType === 'url') {
+			// Fetches the contents from the server and prints it to the page
+			parseUrl(sIdentifier);
+		} else {
+			eventlog("worker", "error", "Unknown view type: "+sType);
 		}
 		
 		// Close the status message window

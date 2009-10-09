@@ -96,6 +96,7 @@ $MHANDLER->regModule('LogonDialog');
 $MHANDLER->regModule('Info');
 $MHANDLER->regModule('Auth');
 $MHANDLER->regModule('Map');
+$MHANDLER->regModule('Url');
 $MHANDLER->regModule('Automap');
 $MHANDLER->regModule('Overview');
 
