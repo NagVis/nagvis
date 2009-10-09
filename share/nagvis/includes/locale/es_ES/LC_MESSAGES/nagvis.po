@@ -1,0 +1,1312 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: NagVis 1.4 spanish language file\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-07 15:17+0100\n"
+"PO-Revision-Date: 2009-10-07 15:18+0100\n"
+"Last-Translator: Carlos de Nova <carlos.de.nova@gmail.com>\n"
+"Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: getMessageText;getMessageTitle;getLabel;getText;setMessage\n"
+"X-Poedit-Basepath: ~/Documentos/ICMonitor/projects/nagvis/\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Documentos/ICMonitor/projects/pnp4nagios.old/share/pnp/application/controllers/system.php:31
+msgid "The requested page doesn't exist"
+msgstr "La página solicitada no existe"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:71
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:73
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:102
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:104
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:130
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:132
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:167
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:206
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:230
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:232
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:275
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:277
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:324
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:326
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:328
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:54
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:56
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:58
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:84
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:86
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:88
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:130
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:148
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:163
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:191
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:193
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:195
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:197
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:211
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:225
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:239
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:281
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:300
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:302
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:341
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:364
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:381
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:396
+msgid "mustValueNotSet"
+msgstr "Un valor necesario no está configurado. Todos los valores marcados en rojo son obligatorios."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:75
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:106
+msgid "backendNotInitialized"
+msgstr "El backend con el ID \"[BACKENDID]\" del tipo \"[BACKENDTYPE]\" no está inicializado. ¿Puede estar usando un backend no definido en un mapa?"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:77
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:108
+msgid "methodNotSupportedByBackend"
+msgstr "El método \"[METHOD]\" no está soportado por el backend."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:134
+msgid "accessModeIsNotValid"
+msgstr "El modo de acceso \"[MODE]\" no es válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:264
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:313
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:347
+msgid "mapLockNotDeleted"
+msgstr "El mapa bloqueado no puede ser borrado."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/ajax_handler.php:432
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/form_handler.php:410
+msgid "unknownAction"
+msgstr "La acción \"[ACTION]\" no está soportada por el manejador ajax."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiFrontend.php:78
+msgid "phpModuleNotLoaded"
+msgstr "El módulo PHP &quot;[MODULE]&quot; no está cargado."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:75
+msgid "createMap"
+msgstr "Crear mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:77
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:76
+msgid "create"
+msgstr "Crear"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:87
+msgid "renameMap"
+msgstr "Renombrar mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:89
+msgid "rename"
+msgstr "Renombrar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:99
+msgid "deleteMap"
+msgstr "Borrar mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:101
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:105
+msgid "delete"
+msgstr "Borrar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:111
+msgid "exportMap"
+msgstr "Exportar mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:113
+msgid "export"
+msgstr "Exportar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:124
+msgid "importMap"
+msgstr "Importar mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:126
+msgid "import"
+msgstr "Importar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:138
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:159
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:171
+msgid "chooseMap"
+msgstr "Seleccionar mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:149
+msgid "chooseMapFile"
+msgstr "Seleccionar un fichero de configuración de mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:172
+msgid "newMapName"
+msgstr "Nuevo nombre"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:184
+msgid "mapName"
+msgstr "Nombre de mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:185
+msgid "readUsers"
+msgstr "Usuario con permisos de lectura"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:186
+msgid "writeUsers"
+msgstr "Usuario con permisos de escritura"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:187
+msgid "mapIconset"
+msgstr "Conjunto de iconos de mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapManagement.php:188
+msgid "background"
+msgstr "Fondo"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:74
+msgid "createBackground"
+msgstr "Crear imagen de fondo"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:88
+msgid "uploadBackground"
+msgstr "Subir imagen de fondo"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:90
+msgid "upload"
+msgstr "Subir"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:101
+msgid "deleteBackground"
+msgstr "Borrar imagen de fondo"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:118
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:129
+msgid "chooseImage"
+msgstr "Elija una imagen"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:139
+msgid "backgroundName"
+msgstr "Nombre"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:140
+msgid "backgroundColor"
+msgstr "Color (Hex)"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:141
+msgid "backgroundWidth"
+msgstr "Ancho (px)"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackgroundManagement.php:142
+msgid "backgroundHeight"
+msgstr "Alto (px)"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:84
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:79
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:92
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:105
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:118
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiEditMainCfg.php:72
+msgid "save"
+msgstr "Guardar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:221
+msgid "Ascending"
+msgstr "Ascendente"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:221
+msgid "Descending"
+msgstr "Descendente"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:226
+msgid "Alphabetically"
+msgstr "Alfabéticamente"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:226
+msgid "State"
+msgstr "Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:316
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:731
+msgid "manualInput"
+msgstr "» Entrada Manual ..."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:338
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiEditMainCfg.php:146
+msgid "yes"
+msgstr "Sí"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiAddModify.php:338
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiEditMainCfg.php:147
+msgid "no"
+msgstr "No"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:77
+msgid "setDefaultBackend"
+msgstr "Establecer backend por defecto"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:90
+msgid "addBackend"
+msgstr "Añadir backend"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:103
+msgid "editBackend"
+msgstr "Editar backend"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:116
+msgid "delBackend"
+msgstr "Borrar backend"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackendManagement.php:178
+msgid "defaultBackend"
+msgstr "Backend por defecto"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackground.php:46
+msgid "couldNotDeleteMapImage"
+msgstr "No se puede borrar el fichero de mapa de imagen &quot;[IMGPATH]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackground.php:72
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:156
+msgid "moveUploadedFileFailed"
+msgstr "No se puede mover el fichero subido al directorio de figuras \"[PATH]\"."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackground.php:82
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:706
+msgid "mustChooseValidImageFormat"
+msgstr "Debe seleccionar una imagen en un formato soportado (Png, Gif, Jpg)."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackground.php:88
+msgid "fileCouldNotBeUploaded"
+msgstr "El fichero no puede ser subido al servidor web."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiBackground.php:125
+msgid "imageAlreadyExists"
+msgstr "La imagen \"[MAPNAME]\" ya existe. Renombre el fichero."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:307
+msgid "iconNotExists"
+msgstr "Un icono &quot;[IMGPATH]&quot; que está siendo usado en el mapa no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:611
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:613
+msgid "change"
+msgstr "Modificar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:620
+msgid "positionSize"
+msgstr "Posición/Tamaño"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:634
+msgid "configured"
+msgstr "Configurado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:637
+msgid "inherited"
+msgstr "Heredado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:662
+msgid "overview"
+msgstr "Vista general"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:663
+msgid "restore"
+msgstr "Restaurar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:664
+msgid "properties"
+msgstr "Opciones"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:665
+msgid "addObject"
+msgstr "Añadir objetos"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:666
+msgid "nagVisConfig"
+msgstr "Configuración de NagVis"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:667
+msgid "help"
+msgstr "Ayuda"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:668
+msgid "open"
+msgstr "Abrir mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:669
+msgid "openInNagVis"
+msgstr "Abrir en NagVis"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:670
+msgid "manageMaps"
+msgstr "Mapas"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:671
+msgid "manageBackends"
+msgstr "Backends"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:672
+msgid "manageBackgrounds"
+msgstr "Fondos"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:673
+msgid "manageShapes"
+msgstr "Figuras"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:674
+msgid "icon"
+msgstr "Icono"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:675
+msgid "line"
+msgstr "Línea"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:676
+msgid "special"
+msgstr "Especial"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:677
+msgid "host"
+msgstr "Equipo"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:678
+msgid "service"
+msgstr "Servicio"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:679
+msgid "hostgroup"
+msgstr "Grupo de equipos"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:680
+msgid "servicegroup"
+msgstr "Grupo de servicios"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:681
+msgid "map"
+msgstr "Mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:682
+msgid "textbox"
+msgstr "Cuadro de texto"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:683
+msgid "shape"
+msgstr "Figura"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:684
+msgid "manage"
+msgstr "Gestionar"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:687
+msgid "clickMapToSetPoints"
+msgstr "Haga clic en el mapa para determinar la posición de los puntos que faltan."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:688
+msgid "confirmDelete"
+msgstr "¿Está seguro de que quiere borrar este objeto?"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:689
+msgid "confirmRestore"
+msgstr "¿Está seguro de que quiere restaurar la copia de seguridad?"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:690
+msgid "wrongValueFormat"
+msgstr "El atributo \"[ATTRIBUTE]\" en la sección \"[TYPE]\" en el fichero de configuración principal no tiene un formato válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:691
+msgid "wrongValueFormatMap"
+msgstr "El atributo \"[ATTRIBUTE]\" en el elemento del tipo \"[TYPE]\" en la configuración del mapa \"[MAP]\" no tiene un formato de válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:692
+msgid "wrongValueFormatOption"
+msgstr "El atributo \"[ATTRIBUTE]\" no tiene un formato válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:693
+msgid "unableToWorkWithMap"
+msgstr "Los cambios en el mapa no pueden ser procesados. El procedimiento finalizó."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:695
+msgid "chosenLineTypeNotValid"
+msgstr "El tipo de línea seleccionado no es válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:696
+msgid "onlyLineOrIcon"
+msgstr "Un objeto sólo puede ser un icono o una línea, \"iconset\" y \"line_type\" no pueden ser usados juntos."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:697
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:698
+msgid "not2coords"
+msgstr "Parece que ha querido definir una línea (\"line_type\" is set) pero no ha establecido &quot;t las dos \"[COORD]\" coordenadas."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:699
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:700
+msgid "only1or2coords"
+msgstr "Sólo una o dos [COORD] coordenadas pueden definirse."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:701
+msgid "viewTypeWrong"
+msgstr "El tipo de vista es incorrecto. Se ha configurado más de una vez la coordenada &quot;[COORD]&quot;. Debería cambiarse el tipo de vista a &quot;line&quot;"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:702
+msgid "lineTypeNotSet"
+msgstr "La opción &quot;line_type&quot; no se ha establecido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:703
+msgid "loopInMapRecursion"
+msgstr "loopInMapRecursion"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:704
+msgid "mapObjectWillShowSummaryState"
+msgstr "Este objeto mostrará un resumen de estado del mapa y de sus hijos."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:705
+msgid "firstMustChoosePngImage"
+msgstr "Por favor elija una imagen en formato PNG."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:707
+msgid "foundNoBackgroundToDelete"
+msgstr "No se ha encontrado imagen de fondo. Operación terminada."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:708
+msgid "confirmBackgroundDeletion"
+msgstr "¿Seguro que quiere borrar esta imagen de fondo? Esta acción no se puede deshacer."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:709
+msgid "unableToDeleteBackground"
+msgstr "No se puede borrar la imagen de fondo \"[IMAGENAME]\" porque está siendo usada en el mapa \"[MAP]\"."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:710
+msgid "mustValueNotSet1"
+msgstr "El valor requerido \"[ATTRIBUTE]\" no se ha establecido"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:711
+msgid "foundNoShapeToDelete"
+msgstr "No se ha encontrado imagen de figura. Operación terminada."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:712
+msgid "shapeInUse"
+msgstr "La figura está siendo usada en el mapa \"[MAP]\"."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:713
+msgid "confirmShapeDeletion"
+msgstr "¿Realmente quiere borrar esta figura? No podrá deshacerse esta acción."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:714
+msgid "unableToDeleteShape"
+msgstr "No puedo borrar la figura \"[IMAGENAME]\" porque está siendo usada en el mapa \"[MAP]\"."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:715
+msgid "chooseMapName"
+msgstr "Tiene que insertar un nombre para el nuevo mapa."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:716
+msgid "minOneUserAccess"
+msgstr "Al menos un usuario debe tener acceso al mapa."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:717
+msgid "noMapToRename"
+msgstr "No se ha encontrado el mapa. Operación terminada."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:718
+msgid "noNewNameGiven"
+msgstr "No ha especificado nuevos nombres."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:719
+msgid "mapAlreadyExists"
+msgstr "El mapa \"[MAPNAME]\" ya existe. Renombre el fichero."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:720
+msgid "foundNoMapToDelete"
+msgstr "No se ha encontrado el mapa. Operación terminada."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:721
+msgid "foundNoMapToExport"
+msgstr "No se ha encontrado el mapa. Seleccione un mapa para exportar."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:722
+msgid "foundNoMapToImport"
+msgstr "No se ha facilitado ningún fichero para importar. Seleccione un fichero para importar."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:723
+msgid "notCfgFile"
+msgstr "El fichero facilitado no tiene extension \".cfg\". Renombre el fichero."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:724
+msgid "confirmNewMap"
+msgstr "¿Quiere realmente crear un nuevo mapa?"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:725
+msgid "confirmMapRename"
+msgstr "¿Realmente quiere renombrar este mapa?"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:726
+msgid "confirmMapDeletion"
+msgstr "¿Está seguro de que quiere borrar este mapa? Esta acción no se puede deshacer."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:727
+msgid "unableToDeleteMap"
+msgstr "Imposible borrar el mapa \"[MAP]\". El mapa está incluído en otro mapa \"[PARENTMAP]\"."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:728
+msgid "noPermissions"
+msgstr "No tiene permisos para cambiar este mapa."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:729
+msgid "minOneUserWriteAccess"
+msgstr "Al menos un usuario debe tener autorización para poder cambiar este mapa."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMap.php:730
+msgid "noSpaceAllowed"
+msgstr "No se permiten los espacios en blanco."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMainCfg.php:185
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMainCfg.php:215
+msgid "mainCfgNotWriteable"
+msgstr "El fichero principal de configuración no tiene permisos de escritura."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMainCfg.php:191
+msgid "mainCfgCouldNotWriteMainConfigFile"
+msgstr "La caché del fichero principal de configuración no tiene permisos de escritura."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMainCfg.php:234
+msgid "mapCfgDirNotWriteable"
+msgstr "Por favor compruebe los permisos de la carpeta de configuración de mapas en el servidor web &quot;[MAPPATH]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapCfg.php:121
+msgid "couldNotDeleteMapCfg"
+msgstr "No se puede borrar el fichero de configuración de mapa &quot;[MAPPATH]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapCfg.php:142
+msgid "mapCfgNotWriteable"
+msgstr "No se puede escribir en el fichero de configuración del mapa."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapCfg.php:308
+msgid "mapLocked"
+msgstr ""
+"El mapa \"[MAP]\" está bloqueado por el usuario \"[USER]\" en la IP \"[IP]\" desde [TIME].\n"
+"\n"
+" ¿Editar de cualquier forma? (¿Sobreescribir el bloqueo?)"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapCfg.php:399
+msgid "mapLockNotExists"
+msgstr "El fichero de bloqueo &quot;[MAP]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapCfg.php:421
+msgid "mapLockNotReadable"
+msgstr "El fichero de bloqueo &quot;[MAP]&quot; no es legible."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiMapCfg.php:443
+msgid "mapLockNotWriteable"
+msgstr "No se puede escribir en el fichero de bloqueo. &quot;[MAP]&quot; ."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiEditMainCfg.php:106
+msgid "defaultValue"
+msgstr "Valor por defecto"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiEditMainCfg.php:150
+msgid "disabled"
+msgstr "Desactivado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:75
+msgid "uploadShape"
+msgstr "Subir figura"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:88
+msgid "deleteShape"
+msgstr "Borrar figura"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:104
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:114
+msgid "choosePngImage"
+msgstr "Seleccionar imagen PNG"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:130
+msgid "failedToDeleteShape"
+msgstr "No puedo borrar la figura \"[IMAGE]\"."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:134
+msgid "shapeDoesNotExist"
+msgstr "La figura \"[IMAGE]\" no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:160
+msgid "mustBePngFile"
+msgstr "El fichero tiene una extensión de fichero incorrecta (debe ser *.png)"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/wui/includes/classes/WuiShapeManagement.php:164
+msgid "uploadFailed"
+msgstr "La subida no es posible. Hay problemas con la configuración de su servidor web."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/index.php:105
+#, fuzzy
+msgid "unknownModule"
+msgstr "El modo de renderizado &quot;[MODE]&quot; no está soportado."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/index.php:122
+#, fuzzy
+msgid "notPermitted"
+msgstr "Heredado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/index.php:145
+#, fuzzy
+msgid "actionNotValid"
+msgstr "El parámetro [VAR] no es una URL válida."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalPage.php:99
+msgid "wrongPhpVersion"
+msgstr "La versión de PHP que está usando &quot;[CURRENT_VERSION]&quot; es demasiado antigua. NagVis necesita PHP &quot;[NEEDED_VERSION]&quot; o posterior."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalPage.php:117
+msgid "noUser"
+msgstr "¡No se ha facilitado nombre de usuario a NagVis! Para posibles soluciones mire las FAQ on www.nagvis.org."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalPage.php:134
+msgid "permissionDenied"
+msgstr "El usuario \"[USER]\" no tiene permisos para realizar esta acción."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/NagVisInfoView.php:54
+msgid "supportInfo"
+msgstr "Información de Soporte NagVis"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/FrontendModAuth.php:52
+msgid "authSuccess"
+msgstr "Autorización válida"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/FrontendModAuth.php:58
+msgid "authInvalidCredentials"
+msgstr "Credenciales de autorización inválidas"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:203
+msgid "selectMap"
+msgstr "Seleccionar Mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:204
+msgid "editMap"
+msgstr "Editar el mapa actual"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:205
+msgid "needHelp"
+msgstr "¿Necesita Ayuda?"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:206
+msgid "onlineDoc"
+msgstr "Documentación"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:207
+msgid "forum"
+msgstr "Foro de Soporte"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:209
+#, fuzzy
+msgid "search"
+msgstr "Servicio"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:211
+msgid "instance"
+msgstr "Instancia"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:212
+msgid "logout"
+msgstr "Cerrar sesión"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:213
+msgid "rotationStart"
+msgstr "Comenzar Rotación"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:214
+msgid "rotationStop"
+msgstr "Parar Rotación"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:215
+msgid "refreshStart"
+msgstr "Comenzar Refresco"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:216
+msgid "refreshStop"
+msgstr "Parar Refresco"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:259
+msgid "headerTemplateNotExists"
+msgstr "El fichero de Tplantilla de cabecera &quot;[FILE]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:277
+msgid "headerTemplateNotReadable"
+msgstr "Compruebe los permisos del servidor web sobre el fichero de plantillas de cabecera &quot;[FILE]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/NagVisUrl.php:62
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/NagVisUrl.php:69
+msgid "problemReadingUrl"
+msgstr "Imposible abrir la URL &quot;[URL]&quot;. Error: &quot;[MSG]&quot;"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/CoreModuleHandler.php:26
+msgid "moduleNotRegistered"
+msgstr "Módulo no registrado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/CoreModuleHandler.php:40
+#, fuzzy
+msgid "moduleClassNotExists"
+msgstr "El fichero &quot;[FILE]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/NagVisLoginView.php:60
+#, fuzzy
+msgid "Name"
+msgstr "Nombre de mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/NagVisLoginView.php:61
+msgid "Password"
+msgstr "Contraseña"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/NagVisLoginView.php:62
+msgid "Login"
+msgstr "Login"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/CoreUriHandler.php:110
+#, fuzzy
+msgid "moduleNotValid"
+msgstr "El modo de acceso \"[MODE]\" no es válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/frontend/GlobalFrontendMessageBox.php:112
+msgid "messageboxTitleWrongType"
+msgstr "Wrong Type"
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/frontend/GlobalFrontendMessageBox.php:113
+msgid "messageboxMessageWrongType"
+msgstr "The type [TYPE] is not a defined message box type."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorString.php:112
+msgid "validatorNotValidString"
+msgstr "El parámetro [VAR] contiene una cadena no válida."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorString.php:131
+msgid "ValidatorNotAllowedParameterEntry"
+msgstr "El parámetro [VAR] tiene un valor no permitido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorAbstract.php:80
+msgid "validatorNotSetParameterValue"
+msgstr "El parámetro [VAR] no está establecido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorAbstract.php:96
+msgid "validatorIsEmptyParameter"
+msgstr "El parámetro [VAR] está vacío. Rellene este parámetro con un valor (válido)."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidator.php:292
+msgid "validatorNotDefinedParameter"
+msgstr "El parámetro [VAR] no es un parámetro definido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorUrl.php:104
+msgid "vaidatorNotValidUrl"
+msgstr "El parámetro [VAR] no es una URL válida."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorBoolean.php:106
+msgid "validatorNotValidBoolean"
+msgstr "El parámetro [VAR] no es un valor lógico (VERDADERO / FALS0)."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorInteger.php:111
+msgid "validatorNotValidInteger"
+msgstr "El parámetro [VAR] contiene un entero no válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/frontend/nagvis-js/classes/validator/GlobalValidatorInteger.php:127
+msgid "validatorValueOutOfRange"
+msgstr "El parámetro [VAR] está fuera de rango."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:58
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:77
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:218
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:235
+msgid "parameterObjName1NotSet"
+msgstr "El parámetro objName1 está perdido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:79
+msgid "parameterTypeNotSet"
+msgstr "El parámetro &quot;type&quot; está perdido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:81
+msgid "parameterObjName2NotSet"
+msgstr "El parámetro objName2 está perdido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:83
+msgid "parameterObjTypeNotSet"
+msgstr "El parámetro objType está perdido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:85
+msgid "parameterObjIdNotSet"
+msgstr "El parámetro &quot;objId&quot; está perdido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:137
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1313
+msgid "unknownObject"
+msgstr "El objeto del tipo &quot;[TYPE]&quot; en el mapa &quot;[MAPNAME]&quot; no se permite."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:255
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:271
+msgid "parameterNameNotSet"
+msgstr "Falta el parámetro &quot;name&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:287
+msgid "parameterUrlNotSet"
+msgstr "El parámtro &quot;url&quot; está perdido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:302
+msgid "unknownQuery"
+msgstr "Consulta Desconocida"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:338
+msgid "foundNoObjectOfThatTypeOnMap"
+msgstr "No se ha encontrado objeto de este tipo en el mapa."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/ajax_handler.php:348
+msgid "ObjectNotFoundOnMap"
+msgstr "El objeto no se ha podido encontrar en el mapa."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisRotation.php:188
+msgid "mapRotationPoolNotExists"
+msgstr "El pool de rotación del mapa &quot;[ROTATION]&quot; no está definido en NagVis."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalLanguage.php:98
+msgid "languageNotFound"
+msgstr "Ha configurado Nagvis para que cargue el lenguaje &quot;[LANG]&quot;. Este lenguaje no se puede encontrar en la ruta de lenguajes."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverUrl.php:94
+msgid "couldNotGetHoverUrl"
+msgstr "No puedo acceder a la hover URL &quot;[URL]&quot;. Quizá la URL esté protegida por contraseña."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisAutoMap.php:284
+msgid "unknownRenderMode"
+msgstr "El modo de renderizado &quot;[MODE]&quot; no está soportado."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisAutoMap.php:425
+msgid "graphvizBinaryNotFound"
+msgstr "El binario requerido de graphviz &quot;[NAME]&quot; no puede encontrarse en las rutas: &quot;[PATHS]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisAutoMap.php:527
+msgid "couldNotGetRootHostname"
+msgstr "La función de Automapa necesita un nombre de equipo raíz para comenzar el dibujo.<br><br> Hay tres maneras de obtener un equipo raíz: parámetro URL &quot;root&quot;, Configuración principal &quot;automap > default_root&quot;, auto detect (Sólo es posible cuando hay <b>un</b> equipo sin dependencias)."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1435
+msgid "mapCfgNotExists"
+msgstr "No existe el fichero de configuración del mapa \"[MAP]\""
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1459
+msgid "mapCfgNotReadable"
+msgstr "No se puede leer el fichero de configuración del mapa &quot;[MAP]&quot; ."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1485
+#, fuzzy
+msgid "mapCfgMustValueNotSet"
+msgstr "El valor requerido &quot;[ATTRIBUTE]&quot; no está establecido en la sección &quot;[TYPE]&quot; dentro del fichero de configuración principal."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1496
+msgid "unknownAttribute"
+msgstr "El atributo &quot;[ATTRIBUTE]&quot; no está soportado en los objetos de tipo &quot;[TYPE]&quot; en el mapa [MAPNAME]."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1502
+msgid "mapDeprecatedOption"
+msgstr "La opción &quot;[ATTRIBUTE]&quot; en la sección &quot;[TYPE]&quot; en el mapa &quot;[MAP]&quot; es obsoleta en esta versión. Lea la documentación/log de cambios para tener más detalles."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1538
+msgid "lineTypeButViewTypeNotSet"
+msgstr "Le ha dicho a NagVis que muestre un objeto como una línea (opción line type set). Desde la versión 1.4 de NagVis se tiene que establecer esta opción &quot;view_type=line&quot; para los objetos línea. Este problema ha sido detectado en un objeto del tipo &quot;[TYPE]&quot; en el mapa &quot;[MAP]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1544
+msgid "viewTypeGadgetButNoGadgetUrl"
+msgstr "NagVis ha encontrado un objeto sin la opción gadget_url en la vista=&quot;gadget&quot;. El problema se ha encontrado en un objeto del tipo &quot;[TYPE]&quot; en el mapa &quot;[MAP]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMapCfg.php:1549
+msgid "backendNotDefined"
+msgstr "El backend con el id &quot;[BACKENDID]&quot; no está definido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMainCfg.php:993
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalUserCfg.php:200
+msgid "mainMustValueNotSet"
+msgstr "El valor requerido &quot;[ATTRIBUTE]&quot; no está establecido en la sección &quot;[TYPE]&quot; dentro del fichero de configuración principal."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMainCfg.php:1019
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalUserCfg.php:214
+msgid "unknownValue"
+msgstr "El atributo &quot;[ATTRIBUTE]&quot; no está permitido en la sección &quot;[TYPE]&quot; dentro del fichero de configuración principal."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMainCfg.php:1026
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalUserCfg.php:221
+msgid "deprecatedOption"
+msgstr "La opción &quot;[ATTRIBUTE]&quot; en la sección &quot;[TYPE]&quot; está obsoleta en esta versión. Lea la documentación y el registro de cambios para más detalles."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMainCfg.php:1070
+msgid "unknownSection"
+msgstr "La sección &quot;[TYPE]&quot; del fichero de configuración principal, no está permitida."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMainCfg.php:1093
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalUserCfg.php:260
+msgid "mainCfgNotExists"
+msgstr "El fichero de configuración principal &quot;[MAINCFG]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalMainCfg.php:1116
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalUserCfg.php:283
+msgid "mainCfgNotReadable"
+msgstr "Compruebe los permisos del servidor web sobre el fichero de configuración principal &quot;[MAINCFG]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalFileCache.php:82
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalFileCache.php:148
+msgid "cacheFileNotWriteable"
+msgstr "El fichero de caché &quot;[FILE]&quot; no es escribible."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalFileCache.php:112
+msgid "fileNotCached"
+msgstr "El fichero &quot;[FILE]&quot; no está cacheado."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalFileCache.php:130
+msgid "cacheFolderNotWriteable"
+msgstr "No se puede escribir en la carpeta establecida para los ficheros &quot;[FILE]&quot; de caché. No se puede crear el fichero de caché. Revise los permisos del sistema de ficheros."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalFileCache.php:166
+msgid "cacheFileNotExists"
+msgstr "El fichero de caché &quot;[FILE]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalFileCache.php:184
+msgid "fileNotExists"
+msgstr "El fichero &quot;[FILE]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalCore.php:72
+msgid "gdLibNotFound"
+msgstr "Ha configurado NagVis para usar GD-Libs para el dibujado de líneas sobre la imagen de fondo (usegdlibs=1). GD-Libs no est instalado o cargado en la configuración de php."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalCore.php:324
+msgid "iconsetFiletypeUnknown"
+msgstr "Imposible determinar el tipo de fichero para el conjunto de iconos &quot;[ICONSET]&quot;. ¿Podría faltar la imagen &quot;_ok&quot;?"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalCore.php:472
+msgid "varFolderNotExists"
+msgstr "La carpeta var &quot;[PATH]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalCore.php:490
+msgid "varFolderNotWriteable"
+msgstr "No se puede escribir en la carpeta var &quot;[PATH]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalCore.php:508
+#, fuzzy
+msgid "sharedVarFolderNotExists"
+msgstr "La carpeta var &quot;[PATH]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalCore.php:526
+#, fuzzy
+msgid "sharedVarFolderNotWriteable"
+msgstr "No se puede escribir en la carpeta var &quot;[PATH]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:112
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:113
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:204
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:205
+msgid "mapInMaintenance"
+msgstr "El mapa al que está intentando acceder está en modo de mantenimiento. Por favor tenga paciencia. Esta página se recargará automáticamente."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:307
+msgid "mapIndex"
+msgstr "Índice de Mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:308
+msgid "rotationPools"
+msgstr "Pools de Rotación"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:368
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:432
+msgid "onlyPngOrJpgImages"
+msgstr "Sólo las imágenes PNG o JPG están permitidas para los archivos de mapa de imagen."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalIndexPage.php:455
+msgid "imageNotExists"
+msgstr "Una imagen &quot;[FILE]&quot; que se necesita para crear una miniatura, no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:113
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:166
+msgid "noTablesExists"
+msgstr "No hay tablas en la base de datos que coincidan con el prefijo &quot;[PREFIX]&quot;. (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:135
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:188
+msgid "errorConnectingMySQL"
+msgstr "Error al conectar con el servidor MySQL. ¿Podrían estar equivocadas las propiedades de conexión en el backend? MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:145
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:198
+msgid "errorSelectingDb"
+msgstr "Error al seleccionar la base de datos. ¿Podría estar equivocado el nombre de la base de datos o tener permisos insuficientes?. MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:165
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:218
+msgid "mysqlNotSupported"
+msgstr "Su instalación de PHP carece de soporte PHP. No puede usar el Backend NDOMy sin php-mysql.  (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:342
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:496
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:255
+msgid "hostNotFoundInDB"
+msgstr "El equipo \"[HOST]\" no puede ser encontrado en la base de datos. ¿Podría ser un error en el nombre?  (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:391
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:545
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:258
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:318
+msgid "hostIsPending"
+msgstr "El equipo \"[HOST]\" está en estado pendiente"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:469
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:669
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:458
+msgid "serviceNotFoundInDB"
+msgstr "El servicio \"[SERVICE]\" en el equipo \"[HOST]\" no puede ser encontrado en la base de datos. ¿Podría ser un error en el nombre? (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendmerlinmy.php:521
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:721
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:487
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:541
+msgid "serviceNotChecked"
+msgstr "El servicio \"[SERVICE]\" no se ha comprobado todavía"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:122
+msgid "nagiosNotRunning"
+msgstr "NDO reporta que Nagios no está corriendo (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:127
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:80
+msgid "nagiosDataNotUpToDate"
+msgstr "NDO avisa de que Nagios no ha actualizado el estado por más de &quot;[TIMEWITHOUTUPDATE]&quot; segundos. Asegúrese de que Nagios y NDO están corriendo. (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:246
+msgid "backendInstanceNameNotValid"
+msgstr "El nombre de la instancia &quot;[NAME]&quot; en el backend &quot;[BACKENDID]&quot; no es válido."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndomy.php:249
+msgid "backendInstanceNameNotUniq"
+msgstr "El nombre de la instancia &quot;[NAME]&quot; en el backend &quot;[BACKENDID]&quot; no es único."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:103
+msgid "alias"
+msgstr "Alias"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:107
+msgid "address"
+msgstr "Dirección"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:111
+msgid "state"
+msgstr "Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:115
+msgid "summaryState"
+msgstr "Resumen de Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:119
+msgid "output"
+msgstr "Salida"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:123
+msgid "perfdata"
+msgstr "Datos de Rendimiento"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:127
+msgid "summaryOutput"
+msgstr "Resumen de Salida"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:139
+msgid "nextCheck"
+msgstr "Próxima Comprobación"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:143
+msgid "lastCheck"
+msgstr "Última Comprobación"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:147
+msgid "stateType"
+msgstr "Tipo de Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:151
+msgid "currentAttempt"
+msgstr "Intento Actual"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:155
+msgid "lastStateChange"
+msgstr "Último Cambio de Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:159
+msgid "stateDuration"
+msgstr "Duración Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:163
+msgid "servicename"
+msgstr "Nombre del Servicio"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:167
+msgid "notes"
+msgstr "Notas"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:171
+msgid "lastStatusRefresh"
+msgstr "Último Refresco de Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:211
+msgid "hoverTemplateNotReadable"
+msgstr "No se puede leer la plantilla. Compruebe los permisos del servidor web sobre el fichero de plantilla &quot;[FILE]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisHoverMenu.php:231
+msgid "hoverTemplateNotExists"
+msgstr "El fichero de plantilla &quot;[FILE]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendMgmt.php:62
+msgid "noBackendDefined"
+msgstr "No se puede encontrar ningún backend en la configuración de NagVis. Se necesita definir un backend para recuperar la información de estado."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendMgmt.php:79
+msgid "backendNotExists"
+msgstr "El backend con ID &quot;[BACKENDID]&quot; del tipo &quot;[BACKENDTYPE]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackendndo2fs.php:76
+msgid "ndo2fsFileStructureNotValid"
+msgstr "La estructura de ficheros en el directorio ndo2fs &quot;[PATH]&quot; no es válida. El directorio está siendo usado por el backend con el id &quot;[BACKENDID]&quot;"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackground.php:80
+msgid "backgroundNotExists"
+msgstr "El fichero de mapa de imagen \"[IMGPATH]\" no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackground.php:102
+msgid "backgroundNotReadable"
+msgstr "La imagen de fondo \"[IMGPATH]\" no es legible."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackground.php:124
+msgid "backgroundNotWriteable"
+msgstr "No se puede escribir el fichero de imagen de mapa &quot;[IMGPATH]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/GlobalBackground.php:145
+msgid "backgroundFolderNotWriteable"
+msgstr "La carpeta par imagen de fondo &quot;[PATH]&quot; no es escribible."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisContextMenu.php:102
+msgid "contextConnectBySsh"
+msgstr "Conectar por ssh"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisContextMenu.php:106
+msgid "contextRefreshStatus"
+msgstr "Refrescar Estado"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisContextMenu.php:110
+msgid "contextRescheduleNextCheck"
+msgstr "Reprogramar nueva Comprobación"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisContextMenu.php:114
+msgid "contextScheduleDowntime"
+msgstr "Programar Parada"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisContextMenu.php:158
+msgid "contextTemplateNotReadable"
+msgstr "No se puede leer la plantilla. Compruebe los permisos del fichero de plantilla &quot;[FILE]&quot;."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/NagVisContextMenu.php:178
+msgid "contextTemplateNotExists"
+msgstr "El fichero de plantilla &quot;[FILE]&quot; no existe."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisObject.php:237
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisObject.php:242
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisObject.php:257
+msgid "hostname"
+msgstr "Nombre de Equipo"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisObject.php:241
+msgid "hostgroupname"
+msgstr "Nombre de Grupo de Equipos"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisObject.php:245
+msgid "servicegroupname"
+msgstr "Nombre del Grupo de Servicios"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisObject.php:249
+msgid "mapname"
+msgstr "Nombre del mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisObject.php:250
+msgid "objectname"
+msgstr "Nombre del Objeto"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisStatefulObject.php:585
+msgid "childStatesAre"
+msgstr "Hay"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagiosServicegroup.php:195
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagiosHost.php:397
+msgid "services"
+msgstr "Servicios"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagiosServicegroup.php:197
+msgid "serviceGroupNotFoundInDB"
+msgstr "El grupo de servicios \"[SERVICEGROUP]\" no se puede encontrar en la base de datos. ¿Puede estar mal escrito? (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisMapObj.php:297
+msgid "objects"
+msgstr "Objetos"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisMapObj.php:299
+msgid "mapIsEmpty"
+msgstr "El mapa \"[MAP]\" tiene 0 objetos."
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagVisMapObj.php:411
+msgid "noReadPermissions"
+msgstr "No se le permite ver el estado del mapa"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagiosHostgroup.php:201
+msgid "hosts"
+msgstr "Equipos"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagiosHostgroup.php:203
+msgid "hostGroupNotFoundInDB"
+msgstr "El grupo de equipos \"[HOSTGROUP]\" no se puede encontrar en la base de datos. ¿Puede estar mal escrito? (Backend-ID: [BACKENDID])"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagiosHost.php:384
+msgid "hostStateIs"
+msgstr "El equipo está"
+
+#: Documentos/ICMonitor/projects/nagvis/share/server/core/classes/objects/NagiosHost.php:399
+msgid "hostHasNoServices"
+msgstr "El equipo \"[HOST]\" no tiene Servicios."
+
+#~ msgid "automapNotSupportedHere"
+#~ msgstr "El automapa no está soportado aquí."
+#~ msgid "mustChooseBackgroundImage"
+#~ msgstr "You have to select the background image for this map."
+#~ msgid "mapDeleted"
+#~ msgstr "The map has been deleted."
+#~ msgid "mapCfgCacheNotExists"
+#~ msgstr "The cache of the map configuration file does not exist."
+#~ msgid "mapCfgCacheNotWriteable"
+#~ msgstr "The map configuration file cache is not writeable."
+#~ msgid "mapCfgDirNotReadable"
+#~ msgstr ""
+#~ "Please check the webservers permissions for the map configuration folder "
+#~ "&quot;[MAPPATH]&quot;."
+#~ msgid "mainCfgCacheNotExists"
+#~ msgstr "The cache of the main configuration file does not exist."
+#~ msgid "mainCfgCacheNotReadable"
+#~ msgstr "The main configuration file cache is not readable."
+#~ msgid "mainCfgNotCached"
+#~ msgstr "The main configuration file is not cached."
+#~ msgid "mainCfgCacheNotWriteable"
+#~ msgstr "The main configuration file cache is not writeable."
+#~ msgid "phpGettextNotSupported"
+#~ msgstr ""
+#~ "The gettext extension module is not loaded in your PHP installation. "
+#~ "Please make the module available."
+
+#, fuzzy
+#~ msgid "mustBePngJpgOrGifFile"
+#~ msgstr "The file has the wrong file extension (has to be *.png)"
+#~ msgid "maybePhpMemoryLimitToLow"
+#~ msgstr ""
+#~ "Maybe the memory_limit of PHP is too low for displaying the background "
+#~ "image."
+#~ msgid ""
+#~ "The map you are trying to access is in maintenance mode. Please be "
+#~ "patient. This page is automaticaly reloading."
+#~ msgstr ""
+#~ "The map you are trying to access is in maintenance mode. Please be "
+#~ "patient. This page is automaticaly reloading."
+#~ msgid "You are not permited to view the state of this map."
+#~ msgstr "You are not permited to view the state of this map."
+#~ msgid "Choose map"
+#~ msgstr "Choose map"
+
