@@ -59,7 +59,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->iconset = 'std_medium';
 		$this->members = Array();
 		$this->linkedMaps = Array();
-		$this->is_summary_object = FALSE;
+		$this->is_summary_object = false;
 		
 		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
 		
@@ -76,6 +76,42 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	public function getMembers() {
 		return $this->members;
+	}
+
+	/**
+	 * PUBLIC getStateRelevantMembers()
+	 *
+	 * Returns an array of state relevant members
+	 * textboxes, shapes and "summary objects" are
+	 * excluded here
+	 *
+	 * @return  Array Array with map objects
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getStateRelevantMembers() {
+		$a = Array();
+		
+		// Loop all members
+		foreach($this->members AS $OBJ) {
+
+			// Skip unrelevant object types
+			if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
+				continue;
+      }
+
+			/**
+			 * When the current map object is a summary object skip the map
+			 * child for preventing a loop
+			 */
+			if($OBJ->getType() == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object == true) {
+				continue;
+			}
+
+			// Add relevant objects to array
+			$a[] = $OBJ;
+    }
+
+    return $a;
 	}
 	
 	/**
@@ -162,7 +198,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				 * When the current map object is a summary object skip the map
 				 * child for preventing a loop
 				 */
-				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object) {
+				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object == true) {
 					continue;
 				}
 				
@@ -173,7 +209,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				 * See the code above.
 				 */
 				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
-					$OBJ->is_summary_object = TRUE;
+					$OBJ->is_summary_object = true;
 				}
 				
 				// Check for indirect loop when the current child is a map object
@@ -196,17 +232,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	public function fetchState() {
 		// Get state of all member objects
-		foreach($this->getMembers() AS $OBJ) {
-			// Don't get state from textboxes and shapes
-			if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
-				continue;
-			}
-			
+		foreach($this->getStateRelevantMembers() AS $OBJ) {
 			$OBJ->fetchState();
 			
 			$OBJ->fetchIcon();
 		}
-		
+
 		// Also get summary state
 		$this->fetchSummaryState();
 		
@@ -275,17 +306,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
-			foreach($this->getMembers() AS $OBJ) {
-				// Don't reconize summarize map objects
-				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
-					continue;
-				}
-
-				// Don't recognize textboxes and shapes
-				if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
-					continue;
-				}
-				
+			foreach($this->getStateRelevantMembers() AS $OBJ) {
 				if(method_exists($OBJ,'getSummaryState')) {
 					$sState = $OBJ->getSummaryState();
 					if(isset($arrStates[$sState])) {
@@ -418,17 +439,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	private function fetchSummaryState() {
 		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			// Get summary state member objects
-			foreach($this->getMembers() AS $OBJ) {
-				// Don't reconize summarize map objects
-				if($OBJ->getType() == 'map' && $OBJ->is_summary_object) {
-					continue;
-				}
-				
-				// Don't recognize textboxes and shapes
-				if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
-					continue;
-				}
-				
+			foreach($this->getStateRelevantMembers() AS $OBJ) {
 				if(method_exists($OBJ,'getSummaryState')) {
 					$this->wrapChildState($OBJ);
 				}

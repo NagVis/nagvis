@@ -327,7 +327,7 @@ class NagVisObject {
 	public function getSortedObjectMembers($bStateInfo=FALSE) {
 		$arr = Array();
 		
-		$aTmpMembers = $this->getMembers();
+		$aTmpMembers = $this->getStateRelevantMembers();
 		
 		// Sort the array of child objects by the sort option
 		switch($this->hover_childs_sort) {
@@ -498,6 +498,10 @@ class NagVisObject {
 		if(method_exists($OBJ1, 'getSummaryState') && method_exists($OBJ2, 'getSummaryState')) {
 			$state1 = $OBJ1->getSummaryState();
 			$state2 = $OBJ2->getSummaryState();
+
+			if($state1 == '' || $state2 == '') {
+				return 0;
+			}
 		} else {
 			return 0;
 		}
