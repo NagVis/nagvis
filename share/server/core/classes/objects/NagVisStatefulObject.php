@@ -76,6 +76,20 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		parent::__construct($CORE);
 	}
+
+	/**
+	 * PUBLIC getStateRelevantMembers
+	 *
+	 * This is a wrapper function. When not implemented by the specific
+	 * object it only calls the getMembers() function. It is useful to
+	 * exclude uninteresting objects on maps.
+	 *
+	 * @return  Array  Array of child objects
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getStateRelevantMembers() {
+		return $this->getMembers();
+	}
 	
 	/**
 	 * PUBLIC getInDowntime()
