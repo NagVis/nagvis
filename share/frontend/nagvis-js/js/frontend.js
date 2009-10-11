@@ -113,7 +113,7 @@ function searchObjects(sMatch) {
 	// When single found: highlight and focus the object
 	for(var i = 0, len = aResults.length; i < len; i++) {
 		var intIndex = aResults[i];
-		
+
 		// - highlight the object
 		if(aMapObjects[intIndex].conf.view_type && aMapObjects[intIndex].conf.view_type === 'icon') {
 			// Detach the handler
@@ -125,7 +125,7 @@ function searchObjects(sMatch) {
 		}
 
 		// - Scroll to object
-		if(len = 1) {
+		if(len == 1) {
 			// Detach the handler
 			setTimeout('scrollSlow('+aMapObjects[intIndex].conf.x+', '+aMapObjects[intIndex].conf.y+', 15)', 0);
 		}
