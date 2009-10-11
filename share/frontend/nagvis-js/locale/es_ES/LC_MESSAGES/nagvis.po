@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: NagVis 1.4 spanish language file\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-03 09:37+0100\n"
-"PO-Revision-Date: 2009-08-03 09:37+0100\n"
+"PO-Revision-Date: 2009-10-10 09:43+0100\n"
 "Last-Translator: Carlos de Nova <carlos.de.nova@gmail.com>\n"
 "Language-Team: NagVis Project Team <lars@vertical-visions.de; michael_luebben@web.de>\n"
 "MIME-Version: 1.0\n"
@@ -1126,7 +1126,7 @@ msgstr "Nombre del Objeto"
 
 #: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/objects/NagVisStatefulObject.php:595
 msgid "childStatesAre"
-msgstr "Hay"
+msgstr "Estados Hijo"
 
 #: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/objects/NagiosServicegroup.php:195
 #: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/objects/NagiosHost.php:397
