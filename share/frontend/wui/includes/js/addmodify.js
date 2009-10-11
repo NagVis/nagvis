@@ -199,7 +199,7 @@ function validateMapCfgForm() {
 			}
 			
 			if(document.addmodify.line_type.value == '') {
-				alert(printLang(lang["lineTypeNotSet"]));
+				alert(printLang(lang["lineTypeNotSet"], ''));
 				return false;
 			}
 		}
@@ -208,7 +208,6 @@ function validateMapCfgForm() {
 	if(document.addmodify.y && document.addmodify.y.value.split(",").length > 1) {
 		if(document.addmodify.y.value.split(",").length != 2) {
 			alert(printLang(lang["only1or2coordsY"],'COORD~Y'));
-			alert(mess);
 			return false;
 		} else {
 			if(document.addmodify.view_type.value != 'line') {
@@ -217,7 +216,7 @@ function validateMapCfgForm() {
 			}
 			
 			if(document.addmodify.line_type.value == '') {
-				alert(printLang(lang["lineTypeNotSet"]));
+				alert(printLang(lang["lineTypeNotSet"], ''));
 				return false;
 			}
 		}
