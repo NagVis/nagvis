@@ -416,7 +416,7 @@ class GlobalMainCfg {
 					'default' => '_self',
 					'match' => MATCH_STRING_NO_SPACE),
 				'mapurl' => Array('must' => 0,
-					'default' => '[htmlbase]/index.php?map=[map_name]',
+					'default' => '[htmlbase]/index.php?mod=Map&act=view&show=[map_name]',
 					'match' => MATCH_STRING_URL_EMPTY),
 				'hosturl' => Array('must' => 0,
 					'default' => '[htmlcgi]/status.cgi?host=[host_name]',
