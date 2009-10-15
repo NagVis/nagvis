@@ -396,7 +396,7 @@ function getContextTemplates(aObjs) {
  * Assigns the context template code to the object, replaces all macros and
  * adds the menu to all map objects
  *
- * @param   Object   Object with basic page properties
+ * @param   Object   Array of map objects to parse the context menu for
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function parseContextMenus(aObjs) {
@@ -651,7 +651,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		if(sType === 'map') {
 			aObjs[intIndex].parseContextMenu();
 		} else if(sType === 'overview') {
-			
+			// FIXME: Parsing context menu on overview page
 		}
 	}
 	
@@ -667,6 +667,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
  */
 function refreshMapObject(objectId) {
 	var iIndex = -1;
+	
 	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++) {
 		if(aMapObjects[i].conf.object_id == objectId) { 
 			iIndex = i;
@@ -680,8 +681,14 @@ function refreshMapObject(objectId) {
 	var service_description = aMapObjects[iIndex].conf.service_description;
 	var map = oPageProperties.map_name;
 	
+	// Only append map param if it is a known map
+	var sMapPart = '';
+	if(typeof map !== 'undefined') {
+		sMapPart = '&m[]='+escapeUrlValues(map);
+	}
+	
 	// Create request string
-	var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+	var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+sMapPart+'&t[]='+escapeUrlValues(type)+'&n1[]='+escapeUrlValues(name);
 	if(service_description) {
 		sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 	} else {
@@ -1080,7 +1087,7 @@ function parseOverviewMaps(aMapsConf) {
 			
 			if(oObj !== null) {
 				// Save object to map objects array
-				aMaps.push(oObj);
+				aMapObjects.push(oObj);
 				
 				// Parse child and save reference in parsedObject
 				oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
@@ -1138,7 +1145,7 @@ function parseOverviewAutomaps(aMapsConf) {
 			
 			if(oObj !== null) {
 				// Save object to map objects array
-				aMaps.push(oObj);
+				aMapObjects.push(oObj);
 				
 				// Parse child and save reference in parsedObject
 				oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
@@ -1544,20 +1551,19 @@ function runWorker(iCount, sType, sIdentifier) {
 			
 			// Bulk get all hover templates which are needed on the overview page
 			eventlog("worker", "debug", "Fetching hover templates");
-			getHoverTemplates(aMaps);
+			getHoverTemplates(aMapObjects);
 			
 			// Assign the hover templates to the objects and parse them
 			eventlog("worker", "debug", "Parse hover menus");
-			parseHoverMenus(aMaps);
+			parseHoverMenus(aMapObjects);
 			
 			// Bulk get all context templates which are needed on the overview page
-			eventlog("worker", "debug", "Fetching context templates");
-			getContextTemplates(aMaps);
+			eventlog("worker", "aMapObjects", "Fetching context templates");
+			getContextTemplates(aMapObjects);
 			
 			// Assign the context templates to the objects and parse them
-			// FIXME: No context menus on overview page atm
-			//eventlog("worker", "info", "Parse context menus");
-			//parseContextMenus(aMaps);
+			eventlog("worker", "info", "Parse context menus");
+			parseContextMenus(aMapObjects);
 			
 			eventlog("worker", "info", "Finished parsing overview");
 		} else if(sType === 'url') {
@@ -1722,17 +1728,17 @@ function runWorker(iCount, sType, sIdentifier) {
 				 */
 				
 				// Get objects which need an update
-				var arrObj = getObjectsToUpdate(aMaps);
+				var arrObj = getObjectsToUpdate(aMapObjects);
 				
 				// Create the ajax request for bulk update, handle object updates
 				var aUrlParts = [];
 				for(var i = 0, len = arrObj.length; i < len; i++) {
-					var name = aMaps[arrObj[i]].conf.name;
+					var name = aMapObjects[arrObj[i]].conf.name;
 					
 					if(name) {
-						var type = aMaps[arrObj[i]].conf.type;
-						var obj_id = aMaps[arrObj[i]].conf.object_id;
-						var service_description = aMaps[arrObj[i]].conf.service_description;
+						var type = aMapObjects[arrObj[i]].conf.type;
+						var obj_id = aMapObjects[arrObj[i]].conf.object_id;
+						var service_description = aMapObjects[arrObj[i]].conf.service_description;
 						var map = oPageProperties.map_name;
 						
 						// Create request url part for this object
@@ -1752,7 +1758,7 @@ function runWorker(iCount, sType, sIdentifier) {
 				var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 				var bStateChanged = false;
 				if(o.length > 0) {
-					bStateChanged = updateObjects(o, aMaps, sType);
+					bStateChanged = updateObjects(o, aMapObjects, sType);
 				}
 				aUrlParts = null;
 				o = null;

@@ -51,10 +51,11 @@ var NagVisMap = NagVisStatefulObject.extend({
 		this.replaceMacros();
 		
 		var oTd = document.createElement('td');
-		oTd.setAttribute('id', this.conf.object_id+'-icon');
+		oTd.setAttribute('id', this.conf.object_id);
 		oTd.setAttribute('class', this.conf.overview_class);
 		oTd.setAttribute('className', this.conf.overview_class);
 		oTd.style.width = '200px';
+		oTd.style.margin = '0';
 		
 		// Only show map thumb when configured
 		if(oPageProperties.showmapthumbs == 1) {
@@ -63,6 +64,11 @@ var NagVisMap = NagVisStatefulObject.extend({
 		
 		// Link
 		var oLink = document.createElement('a');
+		oLink.setAttribute('id', this.conf.object_id+'-icon');
+		oLink.style.zIndex = 1000;
+		oLink.style.display = "block";
+		oLink.style.width = "100%";
+		oLink.style.height = "100%";
 		oLink.href = this.conf.overview_url;
 		
 		// Status image

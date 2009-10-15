@@ -125,6 +125,18 @@ function contextShow(event) {
 		var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
 			document.documentElement.scrollLeft;
 		
+		// Maybe the event is triggered by a child si try to get the right object
+		// id from a parent element
+		if(typeof target.id == 'undefined' || target.id == '') {
+			// Take the first parent
+			if(target.parentNode != null && target.parentNode.id !== '' && target.parentNode.id.indexOf('-') !== -1) {
+				target = target.parentNode;
+			}
+			
+			// At the moment there is no need to loop more layers. Maybe this is
+			// needed in the future?
+		}
+		
 		// Workaround for the different structure of targets on lines/icons
 		// Would be nice to fix the structure
 		var id;
@@ -135,9 +147,11 @@ function contextShow(event) {
 		// Only the object id is interesing so remove the other contents
 		// like -icon or -line. Simply split the string by - and take the
 		// first element
-		var aId = id.split("-");
-		id = aId[0];
-		aId = null;
+		if(id.indexOf('-') !== -1) {
+			var aId = id.split("-");
+			id = aId[0];
+			aId = null;
+		}
 		
 		var contextMenu = document.getElementById(id+'-context');
 		

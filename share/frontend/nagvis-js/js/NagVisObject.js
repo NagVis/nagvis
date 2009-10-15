@@ -82,6 +82,10 @@ var NagVisObject = Base.extend({
 			var oObj = document.getElementById(sObjId);
 			var oContainer = document.getElementById(this.conf.object_id);
 			
+			if(oContainer == null) {
+				eventlog("NagVisObject", "critical", "Could not get context menu container (ID:"+this.conf.object_id+")");
+			}
+			
 			// Only create a new div when the context menu does not exist
 			var contextMenu = document.getElementById(this.conf.object_id+'-context');
 			if(!contextMenu) {
