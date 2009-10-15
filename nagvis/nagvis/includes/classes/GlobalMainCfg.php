@@ -352,7 +352,7 @@ class GlobalMainCfg {
 				'maps' => Array('must' => 1,
 					'editable' => 1,
 					'default' => 'demo,demo2',
-					'match' => MATCH_STRING_NO_SPACE)),
+					'match' => MATCH_STRING)),
 			'automap' => Array(
 				'defaultparams' => Array('must' => 0,
 					'editable' => 1,
@@ -629,8 +629,13 @@ class GlobalMainCfg {
 								}
 								
 								if(isset($arrRet[4]) && $arrRet[4] != '') {
+									// Remove leading/trailing spaces
 									$map = $arrRet[4];
 								}
+
+								// Remove surrounding spaces
+								$label = trim($label);
+								$map = trim($map);
 								
 								// Save the extracted information to an array
 								$val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
