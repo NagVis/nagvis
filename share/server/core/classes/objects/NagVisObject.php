@@ -393,30 +393,6 @@ class NagVisObject {
 		return $arr;
 	}
 	
-	/**
-	 * PUBLIC getHoverMenu
-	 *
-	 * Creates a hover box for objects
-	 *
-	 * @return	String		HTML code for the hover box
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getHoverMenu() {
-		$ret = '';
-		
-		if($this->hover_menu) {
-			$sRequest = $this->CORE->MAINCFG->getValue('paths','htmlbase').'/server/core/ajax_handler.php?action=getObjectStates&ty=complete&m[]=&t[]='.$this->getType().'&n1[]='.$this->getName().'&i[]=a'.md5(time()).'&n2[]=';
-			
-			if($this->getType() == 'service') {
-				$ret .= 'onmouseover="displayHoverMenu(replaceHoverTemplateMacros(\'0\', new NagVisHost(getSyncRequest(\''.$sRequest.$this->service_description.'\')[0]), getHoverTemplate(\''.$this->getHoverTemplate().'\')),'.($this->hover_delay*1000).',\'\');" onmouseout=" return hideHoverMenu();"';
-			} else {
-				$ret .= 'onmouseover="displayHoverMenu(replaceHoverTemplateMacros(\'0\', new NagVisHost(getSyncRequest(\''.$sRequest.'\')[0]), getHoverTemplate(\''.$this->getHoverTemplate().'\')),'.($this->hover_delay*1000).',\'\');" onmouseout=" return hideHoverMenu();"';
-			}
-			
-			return $ret;
-		}
-	}
-	
 	# End public methods
 	# #########################################################################
 	

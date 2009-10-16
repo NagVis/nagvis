@@ -173,9 +173,36 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	public function parseMapPropertiesJson() {
 		$arr = Array();
+		
 		$arr['map_name'] = $this->MAPCFG->getName();
+		$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
+		$arr['background_image'] = $this->getBackgroundJson();
+		$arr['background_usemap'] = '#automap';
+		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
+		$arr['favicon_image'] = $this->getFavicon();
+		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');
+		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
+		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
+		$arr['event_highlight_interval'] = $this->MAPCFG->getValue('global', 0, 'event_highlight_interval');
+		$arr['event_highlight_duration'] = $this->MAPCFG->getValue('global', 0, 'event_highlight_duration');
+		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
+		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
+		$arr['event_log_height'] = $this->MAPCFG->getValue('global', 0, 'event_log_height');
+		$arr['event_log_hidden'] = $this->MAPCFG->getValue('global', 0, 'event_log_hidden');
+		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
+		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');
 		
 		return json_encode($arr);
+	}
+	
+	/**
+	 * Gets the path to the background of the map
+	 *
+	 * @return	String  Javascript code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getBackgroundJson() {
+		return $this->CORE->MAINCFG->getValue('paths', 'htmlsharedvar').$this->name.'.png?'.mt_rand(0,10000);
 	}
 	
 	/**
@@ -232,7 +259,12 @@ class NagVisAutoMap extends GlobalMap {
 		// default margin is 0.11,0.055
 		$str .= 'margin="0.0,0.0", ';
 		$str .= 'ratio="auto", ';
-		$str .= 'shape="none", ';
+		//$str .= 'shape="none", ';
+		$str .= 'shape="rect", ';
+		$str .= 'color="white", ';
+		// FIXME: This should be scaled by the choosen iconset
+		$str .= 'width="'.$this->pxToInch(16).'", ';
+		$str .= 'height="'.$this->pxToInch(16).'", ';
 		$str .= 'fontcolor=black, fontsize=10';
 		$str .= '];'."\n ";
 		
@@ -302,21 +334,70 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
-	 * Replaces some unwanted things from graphviz html code
+	 * PUBLIC setMapObjectPositions()
+	 *
+	 * Reads the rendered positions from the map code and
+	 * sets it to the map objects
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fixMapCode() {
-		/**
-		 * The hover menu can't be rendered in graphviz config. The information
-		 * which is needed here is rendered like this title="<host_name>".
+	public function setMapObjectPositions() {
+		// Render the map image and save it, also generate link coords etc. 
+		// when not done yet
+		if($this->mapCode == '') {
+			$this->renderMap();
+		}
+		
+		/*
+		 * Sample code to parse:
+		 * <map id="automap" name="automap">
+		 * <area shape="poly" href="/nagios/cgi-bin/status.cgi?host=dev.nagvis.org" target="_self" title="host_662" alt="" coords="425,394 443,392 458,388 468,381 471,373 469,364 463,356 454,348 442,342 430,339 418,338 405,340 393,345 383,352 375,360 370,368 371,377 378,384 390,390 407,394"/>
+		 * <area shape="rect" href="/nagios/cgi-bin/status.cgi?host=exchange.nagvis.org" target="_self" title="host_11" alt="" coords="742,294,834,334"/>
+		 * <area shape="rect" href="/nagios/cgi-bin/status.cgi?host=www.nagvis.com" target="_self" title="host_184" alt="" coords="249,667,325,707"/>
+		 * <area shape="rect" href="/nagios/cgi-bin/status.cgi?host=www.nagvis.org" target="_self" title="host_231" alt="" coords="151,78,225,118"/>
+		 * </map>
 		 *
-		 * The best idea I have for this: Extract the hostname and replace
-		 * title="<hostname>" with the hover menu code.
+		 * Coord description:
+		 * For a rectangle, you map the top left and bottom right corners. All 
+		 * coordinates are listed as x,y (over,up). So, for upper left corner 
+		 * 0,0 and lower right corner 10,15 you would type: 0,0,10,15.
+		 *
 		 */
 		
+		// Extract the positions from the html area definitions
+		$aMapCode = explode("\n", $this->mapCode);
+		$aObjCoords = Array();
+		foreach($aMapCode AS $sLine) {
+			// Extract the area objects
+			// Only parsing rect/polys at the moment
+			if(preg_match('/^<area\sshape="(rect|poly)"\shref="\/nagios\/cgi-bin\/status\.cgi\?host=([^"]+)"\starget="_self"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
+				if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[3])) {
+					$type = $aMatches[1];
+					$name1 = trim($aMatches[2]);
+					$coords = trim($aMatches[3]);
+					
+					switch($type) {
+						case 'rect':
+							$aCoords = explode(',', $coords);
+							
+							// FIXME: z-index configurable?
+							$aObjCoords[$name1] = Array('x' => $aCoords[0], 'y' => $aCoords[1], 'z' => 101);
+						break;
+						case 'poly':
+							//$aCoords = explode(',', $coords);
+						
+							//$aObjCoords[$name1] = Array('x' => $aCoords[0], 'y' => $aCoords[1], 'z' => 101);
+						break;
+					}
+				}
+			}
+		}
+		
+		// Now apply the coords
 		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
-			$this->mapCode = str_replace('title="'.$OBJ->getType().'_'.$OBJ->getObjectId().'"', $OBJ->getHoverMenu(), $this->mapCode);
+			if(isset($aObjCoords[$OBJ->getName()])) {
+				$OBJ->setMapCoords($aObjCoords[$OBJ->getName()]);
+			}
 		}
 	}
 	
@@ -327,40 +408,38 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseMap() {
-		$ret = '';
-		
 		// Render the map image and save it, also generate link coords etc
 		$this->renderMap();
 		
-		// Fix the map code
-		$this->fixMapCode();
-		
-		// Create HTML code for background image
-		$ret = $this->getBackground();
-		
-		// Parse the map with its areas
-		$ret .= $this->mapCode;
-		
-		// Dynamically set favicon
-		$ret .= $this->getFavicon();
-		
-		// Change title (add map alias and map state)
-		$ret .= '<script type="text/javascript">var htmlBase=\''.$this->CORE->MAINCFG->getValue('paths', 'htmlbase').'\'; var mapName=\''.$this->MAPCFG->getName().'\'; document.title=\''.$this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: \'+document.title;</script>';
-		
-		return $ret;
+		return $this->mapCode;
 	}
 	
 	/**
-	 * Gets the background of the map
+	 * Parses the Objects
 	 *
-	 * @return	Array	HTML Code
+	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function getBackground() {
-		// Append random number to prevent caching
-		$src = $this->CORE->MAINCFG->getValue('paths', 'htmlsharedvar').$this->name.'.png?'.mt_rand(0,10000);
+	public function parseObjectsJson() {
+		$arrRet = Array();
 		
-		return $this->getBackgroundHtml($src,'','usemap="#automap"');
+		$i = 0;
+		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
+			switch(get_class($OBJ)) {
+				case 'NagVisHost':
+				case 'NagVisService':
+				case 'NagVisHostgroup':
+				case 'NagVisServicegroup':
+				case 'NagVisMapObj':
+				case 'NagVisShape':
+				case 'NagVisTextbox':
+					$arrRet[] = $OBJ->parseJson();
+				break;
+			}
+			$i++;
+		}
+		
+		return json_encode($arrRet);
 	}
 	
 	# END Public Methods
@@ -437,12 +516,20 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getFavicon() {
-		if(file_exists($this->CORE->MAINCFG->getValue('paths','images').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png')) {
-			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlimages').'internal/favicon_'.strtolower($this->MAPOBJ->getSummaryState()).'.png';
+		if($this->MAPOBJ->getSummaryInDowntime()) {
+			$favicon = 'downtime';
+		} elseif($this->MAPOBJ->getSummaryAcknowledgement()) {
+			$favicon = 'ack';
 		} else {
-			$favicon = $this->CORE->MAINCFG->getValue('paths','htmlimages').'internal/favicon.png';
+			$favicon = strtolower($this->MAPOBJ->getSummaryState());
 		}
-		return '<script type="text/javascript">favicon.change(\''.$favicon.'\'); </script>';
+		
+		if(file_exists($this->CORE->MAINCFG->getValue('paths', 'images').'internal/favicon_'.$favicon.'.png')) {
+			$favicon = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.$favicon.'.png';
+		} else {
+			$favicon = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
+		}
+		return $favicon;
 	}
 	
 	/**
@@ -489,9 +576,13 @@ class NagVisAutoMap extends GlobalMap {
 		// Get object configuration from configuration file
 		foreach($this->MAPCFG->getValidTypeKeys('host') AS $key) {
 			if($key != 'type' && $key != 'backend_id' && $key != 'host_name' & $key != 'object_id') {
-				$objConf[$key] = $this->MAPCFG->getValue('global', 0, $key);
+				$objConf[$key] = $this->MAPCFG->getValue('host', 0, $key);
 			}
 		}
+		
+		// FIXME: Need to add some code here to make "sub automap" links possible
+		// If a host matching the current hostname ist available in the automap configuration
+		// load all settings here
 		
 		return $objConf;
 	}

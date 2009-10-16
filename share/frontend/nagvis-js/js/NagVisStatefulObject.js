@@ -132,6 +132,48 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 	
 	/**
+	 * PUBLIC parseAutomap()
+	 *
+	 * Parses the object on the automap
+	 *
+	 * @return	String		HTML code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	parseAutomap: function () {
+		var oContainerDiv;
+		
+		if(!this.parsedObject) {
+			// Only replace the macros on first parse
+			this.replaceMacros();
+		}
+		
+		// When this is an update, remove the object first
+		this.remove();
+		
+		// Create container div
+		oContainerDiv = document.createElement('div');
+		oContainerDiv.setAttribute('id', this.conf.object_id);
+		
+		// Parse icon on automap
+		var oIcon = this.parseAutomapIcon();
+		oContainerDiv.appendChild(oIcon);
+		oIcon = null;
+		
+		// Parse label when configured
+		if(this.conf.label_show && this.conf.label_show == '1') {
+			var oLabel = this.parseLabel();
+			oContainerDiv.appendChild(oLabel);
+			oLabel = null;
+		}
+    
+    // Append child to map and save reference in parsedObject
+		var oMap = document.getElementById('map');
+		this.parsedObject = oMap.appendChild(oContainerDiv);
+		oContainerDiv = null;
+		oMap = null;
+	},
+	
+	/**
 	 * PUBLIC parse()
 	 *
 	 * Parses the object
@@ -403,6 +445,55 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Parse the line object
 		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+	},
+	
+	/**
+	 * PUBLIC parseAutomapIcon()
+	 *
+	 * Parses the HTML-Code of an automap icon
+	 *
+	 * @return	String		String with Html Code
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	parseAutomapIcon: function () {
+		var alt = '';
+		
+		if(this.type == 'service') {
+			alt = this.conf.name+'-'+this.conf.service_description;
+		} else {
+			alt = this.conf.name;
+		}
+		
+		var oIcon = document.createElement('img');
+		oIcon.setAttribute('id', this.conf.object_id+'-icon');
+		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
+		oIcon.alt = this.conf.type+'-'+alt;
+		
+		var oIconDiv = document.createElement('div');
+		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
+		oIconDiv.setAttribute('class', 'icon');
+		oIconDiv.setAttribute('className', 'icon');
+		oIconDiv.style.position = 'absolute';
+		oIconDiv.style.top = this.conf.y+'px';
+		oIconDiv.style.left = this.conf.x+'px';
+		oIconDiv.style.zIndex = this.conf.z;
+		
+		// Parse link only when set
+		if(this.conf.url && this.conf.url !== '') {
+			var oIconLink = document.createElement('a');
+			oIconLink.href = this.conf.url;
+			oIconLink.target = this.conf.url_target;
+			oIconLink.appendChild(oIcon);
+			oIcon = null;
+			
+			oIconDiv.appendChild(oIconLink);
+			oIconLink = null;
+		} else {
+			oIconDiv.appendChild(oIcon);
+			oIcon = null;
+		}
+		
+		return oIconDiv;
 	},
 	
 	/**

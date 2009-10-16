@@ -71,22 +71,16 @@ class NagVisHost extends NagiosHost {
 		
 		if(!in_array($this->getName(), $arrHostnamesParsed)) {
 			$strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
-			$strReturn .= 'label=<<table border="0">';
-			if(isset($this->statusmap_image) && $this->statusmap_image != '') {
-				$strReturn .= '<tr><td><img src="'.$this->CORE->MAINCFG->getValue('paths', 'shape').$this->statusmap_image.'"></img></td></tr>';
-			}
-			$strReturn .= '<tr><td><img src="'.$this->iconPath.$this->icon.'"></img></td></tr>';
-			$strReturn .= '<tr><td>'.$this->getName().'</td></tr>';
-			$strReturn .= '</table>>, ';
+			$strReturn .= 'label="", ';
 			$strReturn .= 'URL="'.str_replace(array('[htmlcgi]', '[host_name]'),
 				array($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi'), $this->getName()),
 				$this->CORE->MAINCFG->getValue('defaults', 'hosturl')).'", ';
 			$strReturn .= 'target="'.$this->url_target.'", ';
 			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
 			// The root host has to be highlighted, these are the options to do this
-			if($layer == 0) {
+			/*if($layer == 0) {
 				$strReturn .= 'shape="egg",';
-			}
+			}*/
 			$strReturn .= 'layer="'.$layer.'"';
 			$strReturn .= ' ];'."\n ";
 			

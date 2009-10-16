@@ -185,13 +185,17 @@ switch($_GET['action']) {
 			$aMaps = $_GET['m'];
 			
 			foreach($aMaps AS $sMap) {
-				if($CORE->checkMapIsAutomap($sMap)) {
-					$MAPCFG = new NagVisAutomapCfg($CORE, $sMap);
-				} else {
-					$MAPCFG = new NagVisMapCfg($CORE, $sMap);
-				}
-				
+				$MAPCFG = new NagVisMapCfg($CORE, $sMap);
 				$aReturn[$sMap] = $MAPCFG->getFileModificationTime();
+			}
+		}
+		
+		if(isset($_GET['am']) && is_array($_GET['am'])) {
+			$aAutomaps = $_GET['am'];
+			
+			foreach($aAutomaps AS $sAutomap) {
+				$MAPCFG = new NagVisAutomapCfg($CORE, $sAutomap);
+				$aReturn[$sAutomap] = $MAPCFG->getFileModificationTime();
 			}
 		}
 		
@@ -213,17 +217,70 @@ switch($_GET['action']) {
 		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
 		echo $OVERVIEW->parseRotationsJson();
 	break;
+	case 'getAutomapProperties':
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} else {
+			$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
+			$MAPCFG->readMapConfig();
+			
+			// FIXME: Maybe should be recoded?
+			// FIXME: What about the options given in URL when calling the map?
+			$opts = Array();
+			// Fetch option array from defaultparams string (extract variable
+			// names and values)
+			$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
+			unset($params[0]);
+			foreach($params AS &$set) {
+				$arrSet = explode('=',$set);
+				$opts[$arrSet[0]] = $arrSet[1];
+			}
+			// Save the automap name to use
+			$opts['automap'] = $_GET['objName1'];
+			// Save the preview mode
+			$opts['preview'] = 1;
+			
+			$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
+			echo $MAP->parseMapPropertiesJson();
+		}
+	break;
+	case 'getAutomapObjects':
+		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} else {
+			$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
+			$MAPCFG->readMapConfig();
+			
+			// FIXME: Maybe should be recoded?
+			// FIXME: What about the options given in URL when calling the map?
+			$opts = Array();
+			// Fetch option array from defaultparams string (extract variable
+			// names and values)
+			$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
+			unset($params[0]);
+			foreach($params AS &$set) {
+				$arrSet = explode('=',$set);
+				$opts[$arrSet[0]] = $arrSet[1];
+			}
+			// Save the automap name to use
+			$opts['automap'] = $_GET['objName1'];
+			// Save the preview mode
+			$opts['preview'] = 1;
+			
+			$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
+			// Fetch the state
+			$MAP->MAPOBJ->fetchState();
+			// Read position from graphviz and set it on the objects
+			$MAP->setMapObjectPositions();
+
+			echo $MAP->parseObjectsJson();
+		}
+	break;
 	case 'getMapProperties':
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} else {
-			// Initialize map configuration based on map type
-			if($CORE->checkMapIsAutomap($_GET['objName1'])) {
-				$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
-			} else {
-				$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
-			}
-			
+			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
 			$MAPCFG->readMapConfig();
 			
 			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
@@ -234,13 +291,7 @@ switch($_GET['action']) {
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
 		} else {
-			// Initialize map configuration based on map type
-			if($CORE->checkMapIsAutomap($_GET['objName1'])) {
-				$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
-			} else {
-				$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
-			}
-			
+			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
 			$MAPCFG->readMapConfig();
 			
 			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);

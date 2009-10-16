@@ -39,8 +39,9 @@ class NagVisAutoMapView {
 	 * @param    String          $NAME
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(GlobalCore $CORE) {
+	public function __construct(GlobalCore $CORE, $name) {
 		$this->CORE = $CORE;
+		$this->name = $name;
 	}
 
 	public function setContent($s) {
@@ -61,6 +62,7 @@ class NagVisAutoMapView {
 		$aData = Array(
 				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
 				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+				'mapName' => $this->name,
 				'automap' => $this->content
 			);
 

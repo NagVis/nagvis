@@ -183,13 +183,21 @@ function getObjectsToUpdate(aObjs) {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getCfgFileAges(sMap) {
+function getCfgFileAges(sViewType, sMap) {
+	if(typeof(sViewType) === 'undefined') {
+		sViewType = '';
+	}
+	
 	if(typeof(sMap) === 'undefined') {
 		sMap = '';
 	}
 	
 	if(sMap !== '') {
-		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+oPageProperties.map_name, true);
+		if(sViewType === 'map') {
+			return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+sMap, true);
+		} else if(sViewType === 'automap') {
+			return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&am[]='+sMap, true);
+		}
 	} else {
 		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg', true);
 	}
@@ -767,10 +775,11 @@ function setMapBasics(oProperties) {
  *
  * Does initial parsing of map objects
  *
+ * @param   String   View type of the map (map|automap|...)
  * @param   Array    Array of objects to parse to the map
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapObjects(aMapObjectConf) {
+function setMapObjects(sViewType, aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
 	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
 		var oObj;
@@ -808,7 +817,11 @@ function setMapObjects(aMapObjectConf) {
 			aMapObjects.push(oObj);
 			
 			// Parse object to map
-			aMapObjects[aMapObjects.length-1].parse();
+			if(sViewType === 'map') {
+				aMapObjects[aMapObjects.length-1].parse();
+			} else if(sViewType === 'automap') {
+				aMapObjects[aMapObjects.length-1].parseAutomap();
+			}
 		}
 		oObj = null;
 	}
@@ -1342,6 +1355,18 @@ function getOverviewRotations() {
 }
 
 /**
+ * getAutomapProperties()
+ *
+ * Fetches the current automap properties from the core
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getAutomapProperties(mapName) {
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getAutomapProperties&objName1='+mapName)
+}
+
+/**
  * getMapProperties()
  *
  * Fetches the current map properties from the core
@@ -1409,7 +1434,86 @@ function parseMap(iMapCfgAge, mapName) {
 		
 		// Set map objects
 		eventlog("worker", "info", "Parsing map objects");
-		setMapObjects(oMapObjects);
+		setMapObjects('map', oMapObjects);
+		
+		// Bulk get all hover templates which are needed on the map
+		eventlog("worker", "info", "Fetching hover templates and hover urls");
+		getHoverTemplates(aMapObjects);
+		setMapHoverUrls();
+		
+		// Assign the hover templates to the objects and parse them
+		eventlog("worker", "info", "Parse hover menus");
+		parseHoverMenus(aMapObjects);
+		
+		// Bulk get all context templates which are needed on the map
+		eventlog("worker", "info", "Fetching context templates");
+		getContextTemplates(aMapObjects);
+		
+		// Assign the context templates to the objects and parse them
+		eventlog("worker", "info", "Parse context menus");
+		parseContextMenus(aMapObjects);
+
+		// When user searches for an object highlight it
+		eventlog("worker", "info", "Searching for matching object(s)");
+		if(oViewProperties && oViewProperties.search && oViewProperties.search != '') {
+			searchObjects(oViewProperties.search);
+		}
+		
+		bReturn = true;
+	} else {
+		bReturn = false;
+	}
+	
+	oMapBasics = null;
+	oMapObjects = null;
+	
+	return bReturn;
+}
+
+/**
+ * parseAutomap()
+ *
+ * Parses the automap on initial page load or changed map configuration
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseAutomap(iMapCfgAge, mapName) {
+	var bReturn = false;
+	
+	// Get new map/object information from ajax handler
+	var oMapBasics = getAutomapProperties(mapName);
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getAutomapObjects&objName1='+mapName);
+	
+	// Only perform the reparsing actions when all information are there
+	if(oMapBasics && oMapObjects) {
+		// Remove all old objects
+		var a = 0;
+		do {
+			if(aMapObjects[a] && typeof aMapObjects[a].remove === 'function') {
+				// Remove parsed object from map
+				aMapObjects[a].remove();
+				
+				// Set to null in array
+				aMapObjects[a] = null;
+				
+				// Remove element from map objects array
+				aMapObjects.splice(a,1);
+			} else {
+				a++;
+			}
+		} while(aMapObjects.length > a);
+		a = null;
+		
+		// Update timestamp for map configuration (No reparsing next time)
+		oFileAges[mapName] = iMapCfgAge;
+			
+		// Set map basics
+		setMapBasics(oMapBasics);
+		
+		// Set map objects
+		eventlog("worker", "info", "Parsing automap objects");
+		setMapObjects('automap', oMapObjects);
 		
 		// Bulk get all hover templates which are needed on the map
 		eventlog("worker", "info", "Fetching hover templates and hover urls");
@@ -1513,7 +1617,7 @@ function runWorker(iCount, sType, sIdentifier) {
 			
 			// Load the file ages of the important configuration files
 			eventlog("worker", "debug", "Loading the file ages");
-			oFileAges = getCfgFileAges(sIdentifier);
+			oFileAges = getCfgFileAges(sType, sIdentifier);
 			
 			// Parse the map
 			if(parseMap(oFileAges[sIdentifier], sIdentifier) === false) {
@@ -1569,6 +1673,24 @@ function runWorker(iCount, sType, sIdentifier) {
 		} else if(sType === 'url') {
 			// Fetches the contents from the server and prints it to the page
 			parseUrl(sIdentifier);
+		} else if(sType == 'automap') {
+			// Loading a simple map
+			eventlog("worker", "debug", "Parsing automap: " + sIdentifier);
+			
+			// Load the automap properties
+			eventlog("worker", "debug", "Loading the automap properties");
+			oPageProperties = getAutomapProperties(sIdentifier);
+			
+			// Load the file ages of the important configuration files
+			eventlog("worker", "debug", "Loading the file ages");
+			oFileAges = getCfgFileAges(sType, sIdentifier);
+			
+			// Parse the map
+			if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false) {
+				eventlog("worker", "error", "Problem while parsing the automap on page load");
+			}
+			
+			eventlog("worker", "info", "Finished parsing automap");
 		} else {
 			eventlog("worker", "error", "Unknown view type: "+sType);
 		}
@@ -1602,7 +1724,7 @@ function runWorker(iCount, sType, sIdentifier) {
 				
 				// Get the file ages of important files
 				eventlog("worker", "debug", "Loading the file ages");
-				var oCurrentFileAges = getCfgFileAges(oPageProperties.map_name);
+				var oCurrentFileAges = getCfgFileAges(sType, oPageProperties.map_name);
 				
 				// Check for changed main configuration
 				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
