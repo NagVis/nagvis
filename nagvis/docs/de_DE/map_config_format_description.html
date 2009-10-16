@@ -320,6 +320,12 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>gadget_url</td><td></td><td>Der Wert kann ein Gadget-Script im Gadget-Verzeichnis (<code>nagvis/gadgets</code>) sein, z.B. &quot;std_speedometer.php&quot; oder eine in Klammern gesetzte komplette URI auf ein Gadget-Script, z.B. &quot;[http://127.0.0.1/nagios/nagvis/gadgets/std_speedometer.php]&quot;. Details zu Gadgets finden Sie <a href="gadgets.html">hier</a>. Diese Option wird nur erkannt, wenn view_type=&quot;gadget&quot; gesetzt ist. <font color="#ff0000">(Neu in 1.4)</font> </td>
 </tr>
 <tr>
+<tr>
+<td> gadget_scale </td><td>100</td><td> Die Gr&ouml;&szlig;e des Gadgets. Default ist 100 (Prozent). Die Gadgets sollten in der Lage sein, abh&auml;ngig von diesem Parameter zu skalieren <font color="#ff0000">(Neu in 1.4.2)</font> </td>
+</tr>
+<tr>
+<td> gadget_opts </td><td></td><td> Optionale Gadget-spezifische Parameter. Die Inhalte k&ouml;nnen f&uuml;r jedes Gadget frei definiert werden. Der Wert wird als GET-Parameter &quot;opts&quot; verarbeitet. Wir empfehlen, ein var/val-Format zu nutzen: key1=val1,key2=val2. Dadurch k&ouml;nnen Sie diese Zeichenkette m Gadget leicht in ein Array aufteilen. <font color="#ff0000">(Neu in 1.4.4)</font> </td>
+</tr>
 <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
 </tr>
 <tr>

@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.5"
+INSTALLER_VERSION="0.2.6"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -48,6 +48,8 @@ SOURCE=nagios
 # skip checks
 FORCE=0
 REMOVE="n"
+LOG=config.log
+CALL="$0"
 
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
@@ -147,41 +149,40 @@ line() {
 	DASHES="--------------------------------------------------------------------------------------------------------------"
 	SIZE2=`expr $LINE_SIZE - 4`
 	if [ -z "$1" ]; then
-		printf "+%${LINE_SIZE}.${LINE_SIZE}s+\n" $DASHES
+		OUT=`printf "+%${LINE_SIZE}.${LINE_SIZE}s+\n" $DASHES`
 	else
 		if [ -z "$2" ]; then
-			printf "+--- %s\n" "$1"
+			OUT=`printf "+--- %s\n" "$1"`
 		else
-			printf "+--- %${SIZE2}.${SIZE2}s+\n" "$1 $DASHES"
+			OUT=`printf "+--- %${SIZE2}.${SIZE2}s+\n" "$1 $DASHES"`
 		fi
 	fi
+	echo "$OUT"
+	echo "$OUT" >> $LOG
 }
 # Print text
 text() {
 	SIZE2=`expr $LINE_SIZE - 3`
 	if [ -z "$1" ]; then
-		printf "%s%${LINE_SIZE}s%s\n" "|" "" "|"
+		OUT=`printf "%s%${LINE_SIZE}s%s\n" "|" "" "|"`
 	else
 		if [ -z "$2" ]; then
-			printf "%s\n" "$1"
+			OUT=`printf "%s\n" "$1"`
 		else
-			printf "%-${LINE_SIZE}.${LINE_SIZE}s %s\n" "$1" "$2"
+			OUT=`printf "%-${LINE_SIZE}.${LINE_SIZE}s %s\n" "$1" "$2"`
 		fi
 	fi
+	echo "$OUT"
+	echo "$OUT" >> $LOG
 }
 
 # Ask user for confirmation
 confirm() {
 	echo -n "| $1 [$2]: "
 	read ANS
-	ANS=`echo $ANS | tr "jy" "YY"`
-	[ -z $ANS ] && ANS="Y"
-	if [ "$ANS" != "Y" ]; then
-		text
-		text "| Installer aborted, exiting..." "|"
-		line ""
-		exit 1
-	fi
+	[ -z $ANS ] && ANS=$2
+	ANS=`echo $ANS | tr "jyos" "YYYY" | cut -c 1,1`
+ 	[ "$ANS" != "Y" ]&&ANS="N"	
 }
 
 # Print welcome message
@@ -206,6 +207,12 @@ cat <<EOD
 EOD
 if [ $INSTALLER_QUIET -ne 1 ]; then
 	confirm "Do you want to proceed?" "y"
+	if [ "$ANS" != "Y" ]; then
+		text
+		text "| Installer aborted, exiting..." "|"
+		line ""
+		exit 1
+	fi
 fi
 }
 
@@ -213,21 +220,23 @@ fi
 log() {
 	SIZE=`expr $LINE_SIZE - 8` 
 	if [ -z "$2" ]; then
-		printf "%-${SIZE}s %s\n" "| $1" "MISSING |"
+		OUT=`printf "%-${SIZE}s %s\n" "| $1" "MISSING |"`
 		RC=1
 	elif [ "$2" = "needed" ]; then
-		echo "$1 needed"
+		OUT="$1 needed"
 		RC=1
 	elif [ "$2" = "warning" ]; then
-		printf "%-${LINE_SIZE}s |\n" "| $1"
+		OUT=`printf "%-${LINE_SIZE}s |\n" "| $1"`
 	elif [ "$2" = "done" ]; then
-		printf "%-${SIZE}s %s\n" "| $1" "  done  |"
+		OUT=`printf "%-${SIZE}s %s\n" "| $1" "  done  |"`
 	else	
-		printf "%-${SIZE}s %s\n" "| $1" "  found |"
+		OUT=`printf "%-${SIZE}s %s\n" "| $1" "  found |"`
 	fi
+	echo "$OUT"
+	echo "$OUT" >> $LOG
 }
  
-# Check Backend module prequisites
+# Check Backend module prerequisites
 check_backend() {
 	BACKENDS=""
 	text "| Checking Backends: $NAGVIS_BACKEND" "|"
@@ -236,14 +245,14 @@ check_backend() {
 		if [ -z "$NAGVIS_BACKEND" ]; then
 			ASK=`echo $NAGVIS_BACKENDS | sed 's/,/ /g'` 
 			for i in $ASK; do
-				echo -n "| Do you want to use backend $i [n]: "
-				read ABACK
-				if [ ! -z $ABACK ]; then
+				confirm "Do you want to use backend $i?" "n"
+				if [ "$ANS" = "Y" ]; then
 					BACKENDS=$BACKENDS,$i
 				fi
 			done
 			NAGVIS_BACKEND=$BACKENDS
 		fi
+		NAGVIS_BACKEND=${NAGVIS_BACKEND#,}
 	fi
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
@@ -290,6 +299,7 @@ check_backend() {
 	if [ -z "$BACKENDS" ]; then
 		log "NO (valid) backend(s) specified"
 	fi
+	BACKENDS=${BACKENDS#,}
 }
 
 # Check Apache PHP module
@@ -495,8 +505,10 @@ makedir() {
 
 # More (re)initialisations
 
+echo "`date`: Installer $INSTALLER_VERSION" > $LOG
 # Version info
 NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
+[ -z "$NAGVIS_TAG" ]&&NAGVIS_TAG=01000000
 # Default Nagios path
 NAGIOS_PATH="/usr/local/$SOURCE"
 # Default Path to NagVis base
@@ -639,6 +651,7 @@ if [ $FORCE -eq 0 ]; then
 		echo "| $SOURCE home $NAGIOS_PATH is missing. Aborting..."
 		exit 1
 	fi
+	CALL="$CALL -n $NAGIOS_PATH"
 
 	# NagVis below 1.5 depends on the given Nagios path
 	# So set it here when some given by param
@@ -652,6 +665,7 @@ if [ $FORCE -eq 0 ]; then
 		NAGVIS_PATH=$ABASE
 		fi
 	fi
+	CALL="$CALL -p $NAGVIS_PATH"
 fi
 
 text
@@ -666,12 +680,15 @@ if [ -f $NAGIOS_BIN ]; then
 else
 	log "$SOURCE binary $NAGIOS_BIN"
 fi
+CALL="$CALL -B $NAGIOS_BIN"
+
 NAGVER=`echo $NAGIOS | sed 's/^.* //' | cut -c1,1`
 [ "$SOURCE" = "icinga" ]&&NAGVER=3
 
 if [ $FORCE -eq 0 ]; then
 	# Check Backend prerequisites
 	check_backend
+	CALL="$CALL -b $NAGVIS_BACKEND"
 
 	# Check PHP Version
 	check_php_version $NEED_PHP_VERSION
@@ -736,6 +753,7 @@ if [ ! `getent group | cut -d':' -f1 | grep "^$WEB_GROUP"` = "$WEB_GROUP" ]; the
 	exit 1
 fi
 text "| HTML base directory $HTML_PATH" "|"
+CALL="$CALL -u $WEB_USER -g $WEB_GROUP -w $WEB_PATH"
 
 text
 line "Checking for existing NagVis" "+"
@@ -760,16 +778,10 @@ fi
 
 if [ "$INSTALLER_ACTION" = "update" ]; then
 	if [ $INSTALLER_QUIET -ne 1 ]; then
-		echo -n "| Do you want the installer to update your config files when possible [$INSTALLER_CONFIG_MOD]?: "
-		read AMOD
-		if [ ! -z $AMOD ]; then
-			INSTALLER_CONFIG_MOD=$AMOD
-		fi
-		echo -n "| Should the backup directory be removed after successful installation [$REMOVE]?: "
-		read AMOD
-		if [ ! -z $AMOD ]; then
-			REMOVE=$AMOD
-		fi
+		confirm "Do you want the installer to update your config files when possible?" "$INSTALLER_CONFIG_MOD"
+		INSTALLER_CONFIG_MOD=$ANS
+		confirm "Should the backup directory be removed after successful installation?" "$REMOVE"
+		REMOVE=$AMOD
 	fi
 fi
 
@@ -814,8 +826,15 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 fi
 text
 
+echo "$CALL" >> $LOG
 if [ $INSTALLER_QUIET -ne 1 ]; then
 	confirm "Do you really want to continue?" "y"
+	if [ "$ANS" != "Y" ]; then
+		text
+		text "| Installer aborted, exiting..." "|"
+		line ""
+		exit 1
+	fi
 fi
 
 line ""
