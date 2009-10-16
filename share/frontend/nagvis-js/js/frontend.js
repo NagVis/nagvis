@@ -183,19 +183,15 @@ function getObjectsToUpdate(aObjs) {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getCfgFileAges(sViewType, sMap) {
-	if(typeof(sViewType) === 'undefined') {
-		sViewType = '';
-	}
-	
+function getCfgFileAges(sMap) {
 	if(typeof(sMap) === 'undefined') {
 		sMap = '';
 	}
 	
 	if(sMap !== '') {
-		if(sViewType === 'map') {
+		if(oPageProperties.view_type === 'map') {
 			return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+sMap, true);
-		} else if(sViewType === 'automap') {
+		} else if(oPageProperties.view_type === 'automap') {
 			return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&am[]='+sMap, true);
 		}
 	} else {
@@ -558,6 +554,12 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			}
 		}
 		
+		// Object not found
+		if(intIndex === -1) {
+			eventlog("updateObjects", "critical", "Could not find an object with the id "+objectId+" in object array");
+			return false;
+		}
+		
 		// Save old state for later "change detection"
 		aObjs[intIndex].saveLastState();
 		
@@ -682,6 +684,12 @@ function refreshMapObject(objectId) {
 		}
 	}
 	
+	// Object not found
+	if(iIndex === -1) {
+		eventlog("refreshMapObject", "critical", "Could not find an object with the id "+objectId+" in object array");
+		return false;
+	}
+	
 	var name = aMapObjects[iIndex].conf.name;
 	
 	var type = aMapObjects[iIndex].conf.type;
@@ -692,7 +700,11 @@ function refreshMapObject(objectId) {
 	// Only append map param if it is a known map
 	var sMapPart = '';
 	if(typeof map !== 'undefined') {
-		sMapPart = '&m[]='+escapeUrlValues(map);
+		if(oPageProperties.view_type === 'map') {
+			sMapPart = '&m[]='+escapeUrlValues(map);
+		} else if(oPageProperties.view_type === 'automap') {
+			sMapPart = '&am[]='+escapeUrlValues(map);
+		}
 	}
 	
 	// Create request string
@@ -707,7 +719,7 @@ function refreshMapObject(objectId) {
 	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state' + sUrlPart, false);
 	var bStateChanged = false;
 	if(o.length > 0) {
-		bStateChanged = updateObjects(o, aMapObjects, 'map');
+		bStateChanged = updateObjects(o, aMapObjects, oPageProperties.view_type);
 	}
 	o = null;
 	
@@ -779,7 +791,7 @@ function setMapBasics(oProperties) {
  * @param   Array    Array of objects to parse to the map
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapObjects(sViewType, aMapObjectConf) {
+function setMapObjects(aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
 	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
 		var oObj;
@@ -817,9 +829,9 @@ function setMapObjects(sViewType, aMapObjectConf) {
 			aMapObjects.push(oObj);
 			
 			// Parse object to map
-			if(sViewType === 'map') {
+			if(oPageProperties.view_type === 'map') {
 				aMapObjects[aMapObjects.length-1].parse();
-			} else if(sViewType === 'automap') {
+			} else if(oPageProperties.view_type === 'automap') {
 				aMapObjects[aMapObjects.length-1].parseAutomap();
 			}
 		}
@@ -1434,7 +1446,7 @@ function parseMap(iMapCfgAge, mapName) {
 		
 		// Set map objects
 		eventlog("worker", "info", "Parsing map objects");
-		setMapObjects('map', oMapObjects);
+		setMapObjects(oMapObjects);
 		
 		// Bulk get all hover templates which are needed on the map
 		eventlog("worker", "info", "Fetching hover templates and hover urls");
@@ -1513,7 +1525,7 @@ function parseAutomap(iMapCfgAge, mapName) {
 		
 		// Set map objects
 		eventlog("worker", "info", "Parsing automap objects");
-		setMapObjects('automap', oMapObjects);
+		setMapObjects(oMapObjects);
 		
 		// Bulk get all hover templates which are needed on the map
 		eventlog("worker", "info", "Fetching hover templates and hover urls");
@@ -1568,11 +1580,12 @@ function parseUrl(sUrl) {
  *
  * Does the initial parsing of the pages
  *
+ * @param   Integer  The iterator for the run id
  * @param   String   The type of the page which is currently displayed
  * @param   String   Optional: Identifier of the page to be displayed
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function workerInitialize(sType, sIdentifier) {
+function workerInitialize(iCount, sType, sIdentifier) {
 	// Show status message
 	displayStatusMessage('Loading...', 'loading', true);
 	
@@ -1591,6 +1604,7 @@ function workerInitialize(sType, sIdentifier) {
 		// Load the map properties
 		eventlog("worker", "debug", "Loading the map properties");
 		oPageProperties = getMapProperties(sIdentifier);
+		oPageProperties.view_type = sType;
 		
 		// Load the file ages of the important configuration files
 		eventlog("worker", "debug", "Loading the file ages");
@@ -1606,6 +1620,7 @@ function workerInitialize(sType, sIdentifier) {
 		// Load the overview properties
 		eventlog("worker", "debug", "Loading the overview properties");
 		oPageProperties = getOverviewProperties();
+		oPageProperties.view_type = sType;
 		
 		// Loading the overview page
 		eventlog("worker", "debug", "Setting page basiscs like title and favicon");
@@ -1657,10 +1672,11 @@ function workerInitialize(sType, sIdentifier) {
 		// Load the automap properties
 		eventlog("worker", "debug", "Loading the automap properties");
 		oPageProperties = getAutomapProperties(sIdentifier);
+		oPageProperties.view_type = sType;
 		
 		// Load the file ages of the important configuration files
 		eventlog("worker", "debug", "Loading the file ages");
-		oFileAges = getCfgFileAges(sType, sIdentifier);
+		oFileAges = getCfgFileAges(sIdentifier);
 		
 		// Parse the map
 		if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false) {
@@ -1709,7 +1725,7 @@ function runWorker(iCount, sType, sIdentifier) {
 	// If the iterator is 0 it is the first run of the worker. Its only task is
 	// to render the page
 	if(iCount === 0) {
-		workerInitialize(sType, sIdentifier);
+		workerInitialize(iCount, sType, sIdentifier);
 	} else {
 		/**
 		 * Do these actions every run (every second) excepting the first run 
@@ -1737,7 +1753,7 @@ function runWorker(iCount, sType, sIdentifier) {
 				
 				// Get the file ages of important files
 				eventlog("worker", "debug", "Loading the file ages");
-				var oCurrentFileAges = getCfgFileAges(sType, oPageProperties.map_name);
+				var oCurrentFileAges = getCfgFileAges(oPageProperties.map_name);
 				
 				// Check for changed main configuration
 				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
