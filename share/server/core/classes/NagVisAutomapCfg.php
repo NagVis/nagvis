@@ -52,5 +52,28 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		// Re-initialize the cache
 		$this->initCache();
 	}
+	
+	/**
+	 * Gets the configuration of the objects using the global configuration
+	 *
+	 * @return	Array		Object configuration
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function &getObjectConfiguration() {
+		$objConf = Array();
+		
+		// Get object configuration from configuration file
+		foreach($this->getValidTypeKeys('host') AS $key) {
+			if($key != 'type' && $key != 'backend_id' && $key != 'host_name' & $key != 'object_id') {
+				$objConf[$key] = $this->getValue('host', 0, $key);
+			}
+		}
+		
+		// #22 FIXME: Need to add some code here to make "sub automap" links possible
+		// If a host matching the current hostname ist available in the automap configuration
+		// load all settings here
+		
+		return $objConf;
+	}
 }
 ?>

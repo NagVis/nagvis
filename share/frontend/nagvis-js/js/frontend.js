@@ -512,7 +512,7 @@ function setPageTitle(sTitle) {
  */
 function updateMapBasics() {
 	// Get new map state from core
-	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]='+oPageProperties.view_type+'&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
 	
 	// Update favicon
 	setPageFavicon(getFaviconImage(o));
@@ -587,6 +587,8 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			// No else for overview here, senseless!
       if(sType === 'map') {
 				aObjs[intIndex].parse();
+			} else if(sType === 'automap') {
+				aObjs[intIndex].parseAutomap();
 			}
 		}
 		
@@ -601,6 +603,8 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			// Reparse object to map
 			if(sType === 'map') {
 				aObjs[intIndex].parse();
+			} else if(sType === 'automap') {
+				aObjs[intIndex].parseAutomap();
 			} else if(sType === 'overview') {
 				// Reparsing the object on index page.
 				// replaceChild seems not to work in all cases so workaround it
@@ -658,11 +662,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 		// Reparse the context menu
 		// The context menu only needs to be reparsed when the
 		// icon object has been reparsed
-		if(sType === 'map') {
-			aObjs[intIndex].parseContextMenu();
-		} else if(sType === 'overview') {
-			// FIXME: Parsing context menu on overview page
-		}
+		aObjs[intIndex].parseContextMenu();
 	}
 	
 	return bStateChanged;

@@ -96,11 +96,20 @@ switch($_GET['action']) {
 				$arrMap = $_GET['m'];
 			}
 			
+			if(isset($_GET['am'])) {
+				$arrAutoMap = $_GET['am'];
+			}
+			
 			$numObjects = count($arrType);
 			for($i = 0; $i < $numObjects; $i++) {
 				// Get the object configuration
 				if(isset($arrMap)) {
-					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i], $arrMap[$i]);
+					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i], 'map', $arrMap[$i]);
+				} elseif(isset($arrAutoMap)) {
+					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i], 'automap', $arrAutoMap[$i]);
+					
+					// The object id needs to be set here to identify the object in the response
+					$objConf['object_id'] = $arrObjId[$i];
 				} else {
 					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i]);
 					$objConf['object_id'] = $arrObjId[$i];
@@ -121,20 +130,39 @@ switch($_GET['action']) {
 					break;
 					case 'map':
 						// Initialize map configuration based on map type
-						if($CORE->checkMapIsAutomap($arrName1[$i])) {
-							$MAPCFG = new NagVisAutomapCfg($CORE, $arrName1[$i]);
-						} else {
-							$MAPCFG = new NagVisMapCfg($CORE, $arrName1[$i]);
-						}
-						
+						$MAPCFG = new NagVisMapCfg($CORE, $arrName1[$i]);
 						$MAPCFG->readMapConfig();
 						
 						$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
 						
 						$OBJ = $MAP->MAPOBJ;
 					break;
+					case 'automap':
+						// Initialize map configuration based on map type
+						$MAPCFG = new NagVisAutomapCfg($CORE, $arrName1[$i]);
+						$MAPCFG->readMapConfig();
+						
+						// FIXME: Maybe should be recoded?
+						// FIXME: What about the options given in URL when calling the map?
+						$opts = Array();
+						// Fetch option array from defaultparams string (extract variable
+						// names and values)
+						$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
+						unset($params[0]);
+						foreach($params AS &$set) {
+							$arrSet = explode('=',$set);
+							$opts[$arrSet[0]] = $arrSet[1];
+						}
+						// Save the automap name to use
+						$opts['automap'] = $arrName1[$i];
+						// Save the preview mode
+						$opts['preview'] = 1;
+						
+						$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
+						$OBJ = $MAP->MAPOBJ;
+					break;
 					default:
-						echo 'Error: '.$CORE->LANG->getText('unknownObject', 'TYPE~'.$type.';MAPNAME~');
+						echo 'Error: '.$CORE->LANG->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
 					break;
 				}
 				
@@ -354,7 +382,7 @@ switch($_GET['action']) {
 	break;
 }
 
-function getObjConf($objType, $objName1, $objName2, $objectId, $map = null) {
+function getObjConf($objType, $objName1, $objName2, $objectId, $viewType = null, $map = null) {
 	global $CORE;
 	$objConf = Array();
 	/**
@@ -364,7 +392,7 @@ function getObjConf($objType, $objName1, $objName2, $objectId, $map = null) {
 	 * configuration file is used.
 	 */
 	
-	if(isset($map) && $map !== '' && !$CORE->checkMapIsAutomap($map)) {
+	if(isset($viewType) && $viewType !== '' && $viewType === 'map' && isset($map) && $map !== '') {
 		// Get the object configuration from map configuration (object and
 		// defaults)
 		
@@ -398,6 +426,16 @@ function getObjConf($objType, $objName1, $objName2, $objectId, $map = null) {
 			// object not on map
 			echo 'Error: '.$CORE->LANG->getText('ObjectNotFoundOnMap');
 		}
+	} elseif(isset($viewType) && $viewType !== '' && $viewType === 'automap' && isset($map) && $map !== '') {
+		$MAPCFG = new NagVisAutomapCfg($CORE, $map);
+			
+		// Read the map configuration file
+		$MAPCFG->readMapConfig();
+		
+		$objConf = $MAPCFG->getObjectConfiguration();
+		
+		// backend_id is filtered in getObjectConfiguration(). Set it manually
+		$objConf['backend_id'] = $MAPCFG->getValue('global', 0, 'backend_id');
 	} else {
 		// Get the object configuration from main configuration defaults by
 		// creating a temporary map object
@@ -410,16 +448,7 @@ function getObjConf($objType, $objName1, $objName2, $objectId, $map = null) {
 			$objConf[$objType.'_name'] = $objName1;
 		}
 		
-		// Get settings from main configuration file by generating a temporary 
-		// map or from the automap configuration
-		if($CORE->checkMapIsAutomap($map)) {
-			$TMPMAPCFG = new NagVisAutomapCfg($CORE, $map);
-			
-			// Read the map configuration file
-			$TMPMAPCFG->readMapConfig();
-		} else {
-			$TMPMAPCFG = new NagVisMapCfg($CORE);
-		}
+		$TMPMAPCFG = new NagVisMapCfg($CORE);
 		
 		// merge with "global" settings
 		foreach($TMPMAPCFG->getValidTypeKeys('global') AS $key) {

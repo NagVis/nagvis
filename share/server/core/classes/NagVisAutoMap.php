@@ -547,7 +547,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getObjectTree() {
-		$this->rootObject->fetchChilds($this->maxLayers, $this->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
+		$this->rootObject->fetchChilds($this->maxLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
 	}
 	
 	/**
@@ -562,29 +562,6 @@ class NagVisAutoMap extends GlobalMap {
 		}
 		
 		$this->rootObject->filterChilds($hostgroupMembers);
-	}
-	
-	/**
-	 * Gets the configuration of the objects using the global configuration
-	 *
-	 * @return	Array		Object configuration
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function &getObjectConfiguration() {
-		$objConf = Array();
-		
-		// Get object configuration from configuration file
-		foreach($this->MAPCFG->getValidTypeKeys('host') AS $key) {
-			if($key != 'type' && $key != 'backend_id' && $key != 'host_name' & $key != 'object_id') {
-				$objConf[$key] = $this->MAPCFG->getValue('host', 0, $key);
-			}
-		}
-		
-		// #22 FIXME: Need to add some code here to make "sub automap" links possible
-		// If a host matching the current hostname ist available in the automap configuration
-		// load all settings here
-		
-		return $objConf;
 	}
 	
 	/**
@@ -629,7 +606,7 @@ class NagVisAutoMap extends GlobalMap {
 	private function fetchHostObjectByName($hostName) {
 		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 		$hostObject->fetchMembers();
-		$hostObject->setConfiguration($this->getObjectConfiguration());
+		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration());
 		$this->rootObject = $hostObject;
 	}
 }
