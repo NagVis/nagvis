@@ -1178,6 +1178,7 @@ class GlobalMainCfg {
 	 * @param   Bool	$ignoreDefault Don't read default value
 	 * @return	String	$val	Value
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: Needs to be simplified
 	 */
 	public function getValue($sec, $var, $ignoreDefault=FALSE) {
 		// if nothing is set in the config file, use the default value
@@ -1190,24 +1191,22 @@ class GlobalMainCfg {
 			if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
 				return $this->validConfig[$sec][$var]['default'];
 			} elseif(strpos($sec, 'backend_') === 0) {
-				// If backendtype specified, return the default value of this backend
-				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] != '') {
-					if(isset($this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default']) && $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'] != '') {
-						return $this->validConfig['backend']['options'][$this->config[$sec]['backendtype']][$var]['default'];
-					} else {
-						return $this->validConfig['backend'][$var]['default'];
-					}
+				
+				// Choose the backend type (Configured one or the system default)
+				$backendType = '';
+				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] !== '') {
+					$backendType = $this->config[$sec]['backendtype'];
 				} else {
-					// When existing, return the default value of the default backend
-					if(isset($this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default']) && $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'] != '') {
-						return $this->validConfig['backend']['options'][$this->validConfig['backend']['backendtype']['default']][$var]['default'];
-					} else {
-						// When existing, return the default value of backend-global options
-						if(isset($this->validConfig['backend'][$var]['default']) && $this->validConfig['backend'][$var]['default'] != '') {
-							return $this->validConfig['backend'][$var]['default'];
-						} else {
-							return $this->validConfig['backend']['backendtype']['default'];
-						}
+					$backendType = $this->validConfig['backend']['backendtype']['default'];
+				}
+				
+				// This value could be emtpy - so only check if it is set
+				if(isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
+					return $this->validConfig['backend']['options'][$backendType][$var]['default'];
+				} else {
+					// This value could be emtpy - so only check if it is set
+					if(isset($this->validConfig['backend'][$var]['default'])) {
+						return $this->validConfig['backend'][$var]['default'];
 					}
 				}
 			} elseif(strpos($sec, 'rotation_') === 0) {
