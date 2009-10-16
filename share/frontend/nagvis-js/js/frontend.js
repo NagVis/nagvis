@@ -1564,6 +1564,119 @@ function parseUrl(sUrl) {
 }
 
 /**
+ * workerInitialize()
+ *
+ * Does the initial parsing of the pages
+ *
+ * @param   String   The type of the page which is currently displayed
+ * @param   String   Optional: Identifier of the page to be displayed
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function workerInitialize(sType, sIdentifier) {
+	// Show status message
+	displayStatusMessage('Loading...', 'loading', true);
+	
+	// Initialize everything
+	eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
+	
+	// Load state properties
+	eventlog("worker", "debug", "Loading the state properties");
+	oStates =	getStateProperties();
+	
+	// Handle the page rendering
+	if(sType == 'map') {
+		// Loading a simple map
+		eventlog("worker", "debug", "Parsing map: " + sIdentifier);
+		
+		// Load the map properties
+		eventlog("worker", "debug", "Loading the map properties");
+		oPageProperties = getMapProperties(sIdentifier);
+		
+		// Load the file ages of the important configuration files
+		eventlog("worker", "debug", "Loading the file ages");
+		oFileAges = getCfgFileAges(sType, sIdentifier);
+		
+		// Parse the map
+		if(parseMap(oFileAges[sIdentifier], sIdentifier) === false) {
+			eventlog("worker", "error", "Problem while parsing the map on page load");
+		}
+		
+		eventlog("worker", "info", "Finished parsing map");
+	} else if(sType === 'overview') {
+		// Load the overview properties
+		eventlog("worker", "debug", "Loading the overview properties");
+		oPageProperties = getOverviewProperties();
+		
+		// Loading the overview page
+		eventlog("worker", "debug", "Setting page basiscs like title and favicon");
+		setPageBasics(oPageProperties);
+		
+		eventlog("worker", "debug", "Parsing overview page");
+		parseOverviewPage();
+		
+		// Load the file ages of the important configuration files
+		eventlog("worker", "debug", "Loading the file ages");
+		oFileAges = getCfgFileAges();
+		
+		eventlog("worker", "debug", "Parsing maps");
+		parseOverviewMaps(getOverviewMaps());
+		
+		eventlog("worker", "debug", "Parsing automaps");
+		parseOverviewAutomaps(getOverviewAutomaps());
+		
+		eventlog("worker", "debug", "Parsing geomap");
+		parseOverviewGeomap();
+
+		eventlog("worker", "debug", "Parsing rotations");
+		parseOverviewRotations(getOverviewRotations());
+		
+		// Bulk get all hover templates which are needed on the overview page
+		eventlog("worker", "debug", "Fetching hover templates");
+		getHoverTemplates(aMapObjects);
+		
+		// Assign the hover templates to the objects and parse them
+		eventlog("worker", "debug", "Parse hover menus");
+		parseHoverMenus(aMapObjects);
+		
+		// Bulk get all context templates which are needed on the overview page
+		eventlog("worker", "aMapObjects", "Fetching context templates");
+		getContextTemplates(aMapObjects);
+		
+		// Assign the context templates to the objects and parse them
+		eventlog("worker", "info", "Parse context menus");
+		parseContextMenus(aMapObjects);
+		
+		eventlog("worker", "info", "Finished parsing overview");
+	} else if(sType === 'url') {
+		// Fetches the contents from the server and prints it to the page
+		parseUrl(sIdentifier);
+	} else if(sType == 'automap') {
+		// Loading a simple map
+		eventlog("worker", "debug", "Parsing automap: " + sIdentifier);
+		
+		// Load the automap properties
+		eventlog("worker", "debug", "Loading the automap properties");
+		oPageProperties = getAutomapProperties(sIdentifier);
+		
+		// Load the file ages of the important configuration files
+		eventlog("worker", "debug", "Loading the file ages");
+		oFileAges = getCfgFileAges(sType, sIdentifier);
+		
+		// Parse the map
+		if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false) {
+			eventlog("worker", "error", "Problem while parsing the automap on page load");
+		}
+		
+		eventlog("worker", "info", "Finished parsing automap");
+	} else {
+		eventlog("worker", "error", "Unknown view type: "+sType);
+	}
+	
+	// Close the status message window
+	hideStatusMessage();
+}
+
+/**
  * runWorker()
  *
  * This function is the heart of the new NagVis frontend. It's called worker.
@@ -1596,107 +1709,7 @@ function runWorker(iCount, sType, sIdentifier) {
 	// If the iterator is 0 it is the first run of the worker. Its only task is
 	// to render the page
 	if(iCount === 0) {
-		// Show status message
-		displayStatusMessage('Loading...', 'loading', true);
-		
-		// Initialize everything
-		eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
-		
-		// Load state properties
-		eventlog("worker", "debug", "Loading the state properties");
-		oStates =	getStateProperties();
-		
-		// Handle the page rendering
-		if(sType == 'map') {
-			// Loading a simple map
-			eventlog("worker", "debug", "Parsing map: " + sIdentifier);
-			
-			// Load the map properties
-			eventlog("worker", "debug", "Loading the map properties");
-			oPageProperties = getMapProperties(sIdentifier);
-			
-			// Load the file ages of the important configuration files
-			eventlog("worker", "debug", "Loading the file ages");
-			oFileAges = getCfgFileAges(sType, sIdentifier);
-			
-			// Parse the map
-			if(parseMap(oFileAges[sIdentifier], sIdentifier) === false) {
-				eventlog("worker", "error", "Problem while parsing the map on page load");
-			}
-			
-			eventlog("worker", "info", "Finished parsing map");
-		} else if(sType === 'overview') {
-			// Load the overview properties
-			eventlog("worker", "debug", "Loading the overview properties");
-			oPageProperties = getOverviewProperties();
-			
-			// Loading the overview page
-			eventlog("worker", "debug", "Setting page basiscs like title and favicon");
-			setPageBasics(oPageProperties);
-			
-			eventlog("worker", "debug", "Parsing overview page");
-			parseOverviewPage();
-			
-			// Load the file ages of the important configuration files
-			eventlog("worker", "debug", "Loading the file ages");
-			oFileAges = getCfgFileAges();
-			
-			eventlog("worker", "debug", "Parsing maps");
-			parseOverviewMaps(getOverviewMaps());
-			
-			eventlog("worker", "debug", "Parsing automaps");
-			parseOverviewAutomaps(getOverviewAutomaps());
-			
-			eventlog("worker", "debug", "Parsing geomap");
-			parseOverviewGeomap();
-
-			eventlog("worker", "debug", "Parsing rotations");
-			parseOverviewRotations(getOverviewRotations());
-			
-			// Bulk get all hover templates which are needed on the overview page
-			eventlog("worker", "debug", "Fetching hover templates");
-			getHoverTemplates(aMapObjects);
-			
-			// Assign the hover templates to the objects and parse them
-			eventlog("worker", "debug", "Parse hover menus");
-			parseHoverMenus(aMapObjects);
-			
-			// Bulk get all context templates which are needed on the overview page
-			eventlog("worker", "aMapObjects", "Fetching context templates");
-			getContextTemplates(aMapObjects);
-			
-			// Assign the context templates to the objects and parse them
-			eventlog("worker", "info", "Parse context menus");
-			parseContextMenus(aMapObjects);
-			
-			eventlog("worker", "info", "Finished parsing overview");
-		} else if(sType === 'url') {
-			// Fetches the contents from the server and prints it to the page
-			parseUrl(sIdentifier);
-		} else if(sType == 'automap') {
-			// Loading a simple map
-			eventlog("worker", "debug", "Parsing automap: " + sIdentifier);
-			
-			// Load the automap properties
-			eventlog("worker", "debug", "Loading the automap properties");
-			oPageProperties = getAutomapProperties(sIdentifier);
-			
-			// Load the file ages of the important configuration files
-			eventlog("worker", "debug", "Loading the file ages");
-			oFileAges = getCfgFileAges(sType, sIdentifier);
-			
-			// Parse the map
-			if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false) {
-				eventlog("worker", "error", "Problem while parsing the automap on page load");
-			}
-			
-			eventlog("worker", "info", "Finished parsing automap");
-		} else {
-			eventlog("worker", "error", "Unknown view type: "+sType);
-		}
-		
-		// Close the status message window
-		hideStatusMessage();
+		workerInitialize(sType, sIdentifier);
 	} else {
 		/**
 		 * Do these actions every run (every second) excepting the first run 
