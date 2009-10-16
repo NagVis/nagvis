@@ -1693,6 +1693,198 @@ function workerInitialize(iCount, sType, sIdentifier) {
 }
 
 /**
+ * workerUpdate()
+ *
+ * Updates the page on a regular base
+ *
+ * @param   Integer  The iterator for the run id
+ * @param   String   The type of the page which is currently displayed
+ * @param   String   Optional: Identifier of the page to be displayed
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function workerUpdate(iCount, sType, sIdentifier) {
+	// Log normal worker step
+	eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
+	
+	if(sType === 'map') {
+		// Get the file ages of important files
+		eventlog("worker", "debug", "Loading the file ages");
+		var oCurrentFileAges = getCfgFileAges(oPageProperties.map_name);
+		
+		// Check for changed main configuration
+		if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
+			// FIXME: Not handled by ajax frontend, reload the page
+			eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
+			window.location.reload(true);
+		}
+		
+		// Check for changed map configuration
+		if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
+			eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
+			if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
+			}
+		}
+
+		oCurrentFileAges = null;
+		
+		/*
+		 * Now proceed with real actions when everything is OK
+		 */
+		
+		// Get objects which need an update
+		var arrObj = getObjectsToUpdate(aMapObjects);
+		
+		// Create the ajax request for bulk update, handle shape updates
+		var aUrlParts = [];
+		var aShapesToUpdate = [];
+		var iUrlParams = 0;
+		var iUrlLength = 0;
+		
+		// Only continue with the loop when below param limit
+		// and below maximum length
+		for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)) && iUrlLength < oWorkerProperties.worker_request_max_length; i++) {
+			var type = aMapObjects[arrObj[i]].conf.type;
+			
+			// Seperate shapes from rest
+			if(type === 'shape') {
+				// Shapes which need to be updated need a special handling
+				aShapesToUpdate.push(arrObj[i]);
+			} else {
+				// Handle other objects
+				var name = aMapObjects[arrObj[i]].conf.name;
+				
+				if(name) {
+					var obj_id = aMapObjects[arrObj[i]].conf.object_id;
+					var service_description = aMapObjects[arrObj[i]].conf.service_description;
+					var map = oPageProperties.map_name;
+					
+					// Create request string
+					var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+					if(service_description) {
+						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
+					} else {
+						sUrlPart = sUrlPart + '&n2[]=';
+					}
+					
+					// Adding 4 params above code, count them here
+					iUrlParams += 4;
+					
+					// Also count the length
+					iUrlLength += sUrlPart.length
+					
+					// Append part to array of parts
+					aUrlParts.push(sUrlPart);
+				}
+			}
+		}
+		iUrlParams = null;
+		iUrlLength = null;
+		arrObj = null;
+		
+		// Get the updated objectsupdateMapObjects via bulk request
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var bStateChanged = false;
+		if(o.length > 0) {
+			bStateChanged = updateObjects(o, aMapObjects, sType);
+		}
+		o = null;
+		aUrlParts = null;
+		
+		// Update shapes when needed
+		if(aShapesToUpdate.length > 0) {
+			updateShapes(aShapesToUpdate);
+		}
+		aShapesToUpdate = null;
+		
+		// When some state changed on the map update the title and favicon
+		if(bStateChanged) {
+			updateMapBasics();
+		}
+		bStateChanged = null;
+		
+		// Cleanup ajax query cache
+		cleanupAjaxQueryCache();
+	} else if(sType === 'overview') {
+		// Get the file ages of important files
+		var oCurrentFileAges = getCfgFileAges();
+		
+		// Check for changed main configuration
+		if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
+			// FIXME: Not handled by ajax frontend, reload the page
+			window.location.reload(true);
+		}
+		
+		//FIXME: Map configuration(s) changed?
+		
+		/*
+		 * Now proceed with real actions when everything is OK
+		 */
+		
+		// Get objects which need an update
+		var arrObj = getObjectsToUpdate(aMapObjects);
+		
+		// Create the ajax request for bulk update, handle object updates
+		var aUrlParts = [];
+		for(var i = 0, len = arrObj.length; i < len; i++) {
+			var name = aMapObjects[arrObj[i]].conf.name;
+			
+			if(name) {
+				var type = aMapObjects[arrObj[i]].conf.type;
+				var obj_id = aMapObjects[arrObj[i]].conf.object_id;
+				var service_description = aMapObjects[arrObj[i]].conf.service_description;
+				var map = oPageProperties.map_name;
+				
+				// Create request url part for this object
+				var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
+				if(service_description) {
+					sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
+				} else {
+					sUrlPart = sUrlPart + '&n2[]=';
+				}
+				
+				// Append part to array of parts
+				aUrlParts.push(sUrlPart);
+			}
+		}
+		
+		// Get the updated objectsupdateMapObjects via bulk request
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var bStateChanged = false;
+		if(o.length > 0) {
+			bStateChanged = updateObjects(o, aMapObjects, sType);
+		}
+		aUrlParts = null;
+		o = null;
+		
+		// When some state changed on the map update the title and favicon
+		/* FIXME: if(bStateChanged) {
+			var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+			
+			// Update favicon
+			setPageFavicon(getFaviconImage(o));
+			
+			// Update page title
+			setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
+			
+			// Change background color
+			if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+				setPageBackgroundColor(getBackgroundColor(o));
+			}
+		}*/
+	}
+	
+	// Update lastWorkerRun
+	oWorkerProperties.last_run = iNow;
+	
+	// Update the worker counter on maps
+	updateWorkerCounter();
+	
+	// Cleanup ajax query cache
+	cleanupAjaxQueryCache();
+}
+
+/**
  * runWorker()
  *
  * This function is the heart of the new NagVis frontend. It's called worker.
@@ -1745,200 +1937,8 @@ function runWorker(iCount, sType, sIdentifier) {
 		/**
 		 * Do these actions every X runs (Every worker_interval seconds)
 		 */
-		
-		if(sType === 'map') {
-			if(iCount % oWorkerProperties.worker_interval === 0) {
-				// Log normal worker step
-				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
-				
-				// Get the file ages of important files
-				eventlog("worker", "debug", "Loading the file ages");
-				var oCurrentFileAges = getCfgFileAges(oPageProperties.map_name);
-				
-				// Check for changed main configuration
-				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
-					// FIXME: Not handled by ajax frontend, reload the page
-					eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
-					window.location.reload(true);
-				}
-				
-				// Check for changed map configuration
-				if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
-					eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-					if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
-						eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
-					}
-				}
-
-				oCurrentFileAges = null;
-				
-				oCurrentFileAges = null;
-				
-				/*
-				 * Now proceed with real actions when everything is OK
-				 */
-				
-				// Get objects which need an update
-				var arrObj = getObjectsToUpdate(aMapObjects);
-				
-				// Create the ajax request for bulk update, handle shape updates
-				var aUrlParts = [];
-				var aShapesToUpdate = [];
-				var iUrlParams = 0;
-				var iUrlLength = 0;
-				
-				// Only continue with the loop when below param limit
-				// and below maximum length
-				for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)) && iUrlLength < oWorkerProperties.worker_request_max_length; i++) {
-					var type = aMapObjects[arrObj[i]].conf.type;
-					
-					// Seperate shapes from rest
-					if(type === 'shape') {
-						// Shapes which need to be updated need a special handling
-						aShapesToUpdate.push(arrObj[i]);
-					} else {
-						// Handle other objects
-						var name = aMapObjects[arrObj[i]].conf.name;
-						
-						if(name) {
-							var obj_id = aMapObjects[arrObj[i]].conf.object_id;
-							var service_description = aMapObjects[arrObj[i]].conf.service_description;
-							var map = oPageProperties.map_name;
-							
-							// Create request string
-							var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
-							if(service_description) {
-								sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
-							} else {
-								sUrlPart = sUrlPart + '&n2[]=';
-							}
-							
-							// Adding 4 params above code, count them here
-							iUrlParams += 4;
-							
-							// Also count the length
-							iUrlLength += sUrlPart.length
-							
-							// Append part to array of parts
-							aUrlParts.push(sUrlPart);
-						}
-					}
-				}
-				iUrlParams = null;
-				iUrlLength = null;
-				arrObj = null;
-				
-				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
-				var bStateChanged = false;
-				if(o.length > 0) {
-					bStateChanged = updateObjects(o, aMapObjects, sType);
-				}
-				o = null;
-				aUrlParts = null;
-				
-				// Update shapes when needed
-				if(aShapesToUpdate.length > 0) {
-					updateShapes(aShapesToUpdate);
-				}
-				aShapesToUpdate = null;
-				
-				// When some state changed on the map update the title and favicon
-				if(bStateChanged) {
-					updateMapBasics();
-				}
-				bStateChanged = null;
-				
-				// Update lastWorkerRun
-				oWorkerProperties.last_run = iNow;
-				
-				// Update the worker counter on maps
-				updateWorkerCounter();
-				
-				// Cleanup ajax query cache
-				cleanupAjaxQueryCache();
-			}
-		} else if(sType === 'overview') {
-			if(iCount % oWorkerProperties.worker_interval === 0) {
-				// Log normal worker step
-				eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
-				
-				// Get the file ages of important files
-				var oCurrentFileAges = getCfgFileAges();
-				
-				// Check for changed main configuration
-				if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
-					// FIXME: Not handled by ajax frontend, reload the page
-					window.location.reload(true);
-				}
-				
-				//FIXME: Map configuration changed?
-				
-				/*
-				 * Now proceed with real actions when everything is OK
-				 */
-				
-				// Get objects which need an update
-				var arrObj = getObjectsToUpdate(aMapObjects);
-				
-				// Create the ajax request for bulk update, handle object updates
-				var aUrlParts = [];
-				for(var i = 0, len = arrObj.length; i < len; i++) {
-					var name = aMapObjects[arrObj[i]].conf.name;
-					
-					if(name) {
-						var type = aMapObjects[arrObj[i]].conf.type;
-						var obj_id = aMapObjects[arrObj[i]].conf.object_id;
-						var service_description = aMapObjects[arrObj[i]].conf.service_description;
-						var map = oPageProperties.map_name;
-						
-						// Create request url part for this object
-						var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
-						if(service_description) {
-							sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
-						} else {
-							sUrlPart = sUrlPart + '&n2[]=';
-						}
-						
-						// Append part to array of parts
-						aUrlParts.push(sUrlPart);
-					}
-				}
-				
-				// Get the updated objectsupdateMapObjects via bulk request
-				var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
-				var bStateChanged = false;
-				if(o.length > 0) {
-					bStateChanged = updateObjects(o, aMapObjects, sType);
-				}
-				aUrlParts = null;
-				o = null;
-				
-				// When some state changed on the map update the title and favicon
-				/* FIXME: if(bStateChanged) {
-					var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
-					
-					// Update favicon
-					setPageFavicon(getFaviconImage(o));
-					
-					// Update page title
-					setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
-					
-					// Change background color
-					if(oPageProperties.event_background && oPageProperties.event_background == '1') {
-						setPageBackgroundColor(getBackgroundColor(o));
-					}
-				}*/
-				
-				// Update lastWorkerRun
-				oWorkerProperties.last_run = iNow;
-				
-				// Update the worker counter on maps
-				updateWorkerCounter();
-				
-				// Cleanup ajax query cache
-				cleanupAjaxQueryCache();
-			}
+		if(iCount % oWorkerProperties.worker_interval === 0) {
+			workerUpdate(iCount, sType, sIdentifier);
 		}
 	}
 	
