@@ -580,7 +580,7 @@ class NagVisAutoMap extends GlobalMap {
 			}
 		}
 		
-		// FIXME: Need to add some code here to make "sub automap" links possible
+		// #22 FIXME: Need to add some code here to make "sub automap" links possible
 		// If a host matching the current hostname ist available in the automap configuration
 		// load all settings here
 		
