@@ -103,7 +103,7 @@ class GlobalIndexPage {
 						$class = '';
 						$url = '';
 						
-						$url = $this->htmlBase.'/index.php?mod=Automap&act=view&show='.$mapName.$this->CORE->MAINCFG->getValue('automap','defaultparams');
+						$url = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$this->CORE->MAINCFG->getValue('automap','defaultparams');
 						
 						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 					} else {
@@ -195,7 +195,7 @@ class GlobalIndexPage {
 							$class = '';
 							$url = '';
 							
-							$url = $this->htmlBase.'/index.php?map='.$mapName;
+							$url = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
 							
 							$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 						} else {

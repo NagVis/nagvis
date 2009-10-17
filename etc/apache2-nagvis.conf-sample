@@ -14,7 +14,7 @@ Alias /nagvis "@NAGVIS_PATH@/share"
 #  Deny from all
 #  Allow from 127.0.0.1
 
-# Derecated basic auth
+# Deprecated basic auth
 # Commented out in NagVis 1.5
 #
 #   AuthName "NagVis Access"
