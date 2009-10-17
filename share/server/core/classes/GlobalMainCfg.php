@@ -1275,11 +1275,14 @@ class GlobalMainCfg {
 		$arr = Array();
 		
 		$arr['date_format'] = $this->getValue('global', 'dateformat');
-		$arr['path_htmlbase'] = $this->getValue('paths','htmlbase');
-		$arr['path_htmlcgi'] = $this->getValue('paths','htmlcgi');
-		$arr['path_htmlsounds'] = $this->getValue('paths','htmlsounds');
-		$arr['path_htmlimages'] = $this->getValue('paths','htmlimages');
-		$arr['path_htmlserver'] = $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php';
+		$arr['path_base'] = $this->getValue('paths','htmlbase');
+		$arr['path_cgi'] = $this->getValue('paths','htmlcgi');
+		$arr['path_sounds'] = $this->getValue('paths','htmlsounds');
+		$arr['path_iconsets'] = $this->getValue('paths','htmlicon');
+		$arr['path_context_templates'] = $this->getValue('paths','htmlcontexttemplates');
+		$arr['path_hover_templates'] = $this->getValue('paths','htmlhovertemplates');
+		$arr['path_images'] = $this->getValue('paths','htmlimages');
+		$arr['path_server'] = $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php';
 		$arr['internal_title'] = $this->getValue('internal', 'title');
 		
 		return json_encode($arr);

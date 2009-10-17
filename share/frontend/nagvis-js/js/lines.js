@@ -143,7 +143,7 @@ function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLink
 		var oLinkContainer = document.getElementById(objectId+'-linelinkdiv');
 		var oImg = document.createElement('img');
 		oImg.setAttribute('id', objectId+'-link');
-		oImg.src = oGeneralProperties.path_htmlimages+'iconsets/20x20.gif';
+		oImg.src = oGeneralProperties.path_images+'iconsets/20x20.gif';
 		oImg.style.position = 'absolute';
 		oImg.style.left = (middle(x1, x2)-10)+"px";
 		oImg.style.top = (middle(y1, y2)-10)+"px";

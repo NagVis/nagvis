@@ -103,7 +103,7 @@ function frontendMessage(oMessage, iTimeout) {
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = oGeneralProperties.path_htmlimages+'internal/msg_'+sBoxType+'.png';
+	oImg.src = oGeneralProperties.path_images+'internal/msg_'+sBoxType+'.png';
 	
 	oCell.appendChild(oImg);
 	oImg = null;
@@ -125,7 +125,7 @@ function frontendMessage(oMessage, iTimeout) {
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = oGeneralProperties.path_htmlimages+'internal/msg_'+sBoxType+'.png';
+	oImg.src = oGeneralProperties.path_images+'internal/msg_'+sBoxType+'.png';
 	
 	oCell.appendChild(oImg);
 	oImg = null;

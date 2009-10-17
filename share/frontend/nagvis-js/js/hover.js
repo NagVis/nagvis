@@ -33,7 +33,7 @@
  
 // Is only needed for automap atm
 function getHoverTemplate(sName) {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getHoverTemplate&name[]='+escapeUrlValues(sName))[0].code;
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate&name[]='+escapeUrlValues(sName))[0].code;
 }
 
 function getHoverTemplateChildCode(sTemplateCode) {
