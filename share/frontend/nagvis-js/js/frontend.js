@@ -1403,6 +1403,18 @@ function getStateProperties() {
 }
 
 /**
+ * automapParse()
+ *
+ * Parses the automap background image
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function automapParse(mapName) {
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=parseAutomap&n1='+escapeUrlValues(mapName))
+}
+
+/**
  * parseMap()
  *
  * Parses the map on initial page load or changed map configuration
@@ -1806,8 +1818,13 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		
 		// Check for changed map configuration
 		if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
-			// FIXME: Render new background image and dot file
-			// FIXME: Set new background image (renew random value at the end)
+			// Render new background image and dot file
+			automapParse(oPageProperties.map_name);
+			
+			// Update background image for automap
+			if(oPageProperties.view_type === 'automap') {
+				setMapBackgroundImage(oPageProperties.background_image+iNow);
+			}
 			
 			// Reparse the automap on changed map configuration
 			eventlog("worker", "info", "Automap configuration file was updated. Reparsing the map.");

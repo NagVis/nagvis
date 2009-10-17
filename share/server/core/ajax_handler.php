@@ -245,6 +245,35 @@ switch($_GET['action']) {
 		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
 		echo $OVERVIEW->parseRotationsJson();
 	break;
+	case 'parseAutomap':
+		if(!isset($_GET['n1']) || $_GET['n1'] == '') {
+			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
+		} else {
+			$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['n1']);
+			$MAPCFG->readMapConfig();
+			
+			// FIXME: Maybe should be recoded?
+			// FIXME: What about the options given in URL when calling the map?
+			$opts = Array();
+			// Fetch option array from defaultparams string (extract variable
+			// names and values)
+			$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
+			unset($params[0]);
+			foreach($params AS &$set) {
+				$arrSet = explode('=',$set);
+				$opts[$arrSet[0]] = $arrSet[1];
+			}
+			// Save the automap name to use
+			$opts['automap'] = $_GET['n1'];
+			// Save the preview mode
+			$opts['preview'] = 1;
+			
+			$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
+			$MAP->renderMap();
+			
+			echo json_encode(true);
+		}
+	break;
 	case 'getAutomapProperties':
 		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
