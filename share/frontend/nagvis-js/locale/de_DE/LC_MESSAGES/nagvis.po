@@ -1084,11 +1084,11 @@ msgstr "Parameter [VAR] ist leer."
 msgid "validatorNotDefinedParameter"
 msgstr "Parameter [VAR] ist keine definierter Parameter."
 
-#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:98
+#: nagvis/includes/classes/frontend/GlobalMessageBox.php:98
 msgid "messageboxTitleWrongType"
 msgstr "Falscher Typ"
 
-#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:99
+#: nagvis/includes/classes/frontend/GlobalMessageBox.php:99
 msgid "messageboxMessageWrongType"
 msgstr "Der Typ [TYPE] ist nicht definiert."
 

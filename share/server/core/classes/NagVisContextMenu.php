@@ -155,7 +155,7 @@ class NagVisContextMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
@@ -175,7 +175,7 @@ class NagVisContextMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotExists','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

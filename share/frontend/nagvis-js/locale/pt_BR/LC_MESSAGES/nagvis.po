@@ -485,11 +485,11 @@ msgstr "O mapa informado no pool de rotacao &quot;[ROTATION]&quot; nao esta defi
 msgid "problemReadingUrl"
 msgstr "Impossivel abrir a URL &quot;[URL]&quot;. Erro: &quot;[MSG]&quot;"
 
-#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:104
+#: nagvis/includes/classes/frontend/GlobalMessageBox.php:104
 msgid "messageboxTitleWrongType"
 msgstr "Tipo Errado"
 
-#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:105
+#: nagvis/includes/classes/frontend/GlobalMessageBox.php:105
 msgid "messageboxMessageWrongType"
 msgstr "O tipo de mensagem informada e' desconhecido."
 

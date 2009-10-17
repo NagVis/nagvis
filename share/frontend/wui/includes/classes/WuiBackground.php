@@ -43,7 +43,7 @@ class WuiBackground extends GlobalBackground {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapImage','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapImage','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -69,7 +69,7 @@ class WuiBackground extends GlobalBackground {
 						return TRUE;
 					} else {
 						if($printErr) {
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('moveUploadedFileFailed'));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('moveUploadedFileFailed'));
 						}
 						return FALSE;
 					}
@@ -79,13 +79,13 @@ class WuiBackground extends GlobalBackground {
 				}
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mustChooseValidImageFormat'));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mustChooseValidImageFormat'));
 				}
 				return FALSE;
 			}
 		} else {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('fileCouldNotBeUploaded'));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('fileCouldNotBeUploaded'));
 			}
 			return FALSE;
 		}
@@ -122,7 +122,7 @@ class WuiBackground extends GlobalBackground {
 			}
 		} else {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('imageAlreadyExists','IMAGE~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('imageAlreadyExists','IMAGE~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 			}
 			return FALSE;
 		}

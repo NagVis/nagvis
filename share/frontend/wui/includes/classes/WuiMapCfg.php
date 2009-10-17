@@ -118,7 +118,7 @@ class WuiMapCfg extends GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapCfg','MAPPATH~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapCfg','MAPPATH~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
 				}
 				return FALSE;
 			}
@@ -139,7 +139,7 @@ class WuiMapCfg extends GlobalMapCfg {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotWriteable','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.cfg'));
 			}
 			return FALSE;
 		}
@@ -396,7 +396,7 @@ class WuiMapCfg extends GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapLockNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapLockNotExists','MAP~'.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
 				}
 				return FALSE;
 			}
@@ -418,7 +418,7 @@ class WuiMapCfg extends GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapLockNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapLockNotReadable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
 				}
 				return FALSE;
 			}
@@ -440,7 +440,7 @@ class WuiMapCfg extends GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapLockNotWriteable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapLockNotWriteable','MAP='.$this->MAINCFG->getValue('paths', 'mapcfg').$this->name.'.lock'));
 				}
 				return FALSE;
 			}

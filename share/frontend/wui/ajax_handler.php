@@ -43,7 +43,7 @@ require("../../server/core/functions/oldPhpVersionFixes.php");
 //FIXME: Remove this ...
 require('./includes/functions/form_handler.php');
 
-// This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
+// This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
 
 // Load the core
@@ -68,13 +68,13 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type'));
 		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']));
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -99,13 +99,13 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
 		} elseif(!isset($_GET['host_name']) || $_GET['host_name'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~host_name'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~host_name'));
 		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']));
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -127,11 +127,11 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map'));
 		} elseif(!isset($_GET['mode']) || $_GET['mode'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~mode'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~mode'));
 		} elseif($_GET['mode'] != 'read' && $_GET['mode'] != 'write') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('accessModeIsNotValid', 'MODE~'.$_GET['mode']));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('accessModeIsNotValid', 'MODE~'.$_GET['mode']));
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -164,7 +164,7 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id'])) {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backend_id'));
 		} else {
 			// Input looks OK, handle the request...
 			$aRet = Array();
@@ -203,7 +203,7 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['image']) || $_GET['image'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~image'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~image'));
 		} else {
 			// Input looks OK, handle the request...
 			
@@ -261,7 +261,7 @@ switch($_GET['action']) {
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mapLockNotDeleted'));
+				new GlobalMessage('ERROR', $CORE->LANG->getText('mapLockNotDeleted'));
 			}
 			
 			echo json_encode(Array('status' => $status, 'message' => $message));
@@ -272,9 +272,9 @@ switch($_GET['action']) {
 	 */
 	case 'modifyMapObject':
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map'));
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type'));
 		} else {
 			$status = 'OK';
 			$message = '';
@@ -310,7 +310,7 @@ switch($_GET['action']) {
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mapLockNotDeleted'));
+				new GlobalMessage('ERROR', $CORE->LANG->getText('mapLockNotDeleted'));
 			}
 			
 			echo json_encode(Array('status' => $status, 'message' => $message));
@@ -321,11 +321,11 @@ switch($_GET['action']) {
 	 */
 	case 'deleteMapObject':
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map'));
 		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~type'));
 		} elseif(!isset($_GET['id']) || $_GET['id'] == '') {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~id'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~id'));
 		} else {
 			$status = 'OK';
 			$message = '';
@@ -344,7 +344,7 @@ switch($_GET['action']) {
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mapLockNotDeleted'));
+				new GlobalMessage('ERROR', $CORE->LANG->getText('mapLockNotDeleted'));
 			}
 			
 			echo json_encode(Array('status' => $status, 'message' => $message));
@@ -429,7 +429,7 @@ switch($_GET['action']) {
 	 * Fallback
 	 */
 	default:
-		new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('unknownAction', 'ACTION~'.$_GET['action']));
+		new GlobalMessage('ERROR', $CORE->LANG->getText('unknownAction', 'ACTION~'.$_GET['action']));
 	break;
 }
 ?>

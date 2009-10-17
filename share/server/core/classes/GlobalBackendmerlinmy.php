@@ -110,7 +110,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 */
 	private function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery("SHOW TABLES LIKE 'program_status'")) == 0) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
 			return FALSE;
 		} else {
 			return TRUE;	
@@ -132,7 +132,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		
 		if(!$this->CONN){
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
 			return FALSE;
 		}
 		
@@ -142,7 +142,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		error_reporting($oldLevel);
 		
 		if(!$returnCode){
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
 			return FALSE;
 		} else {
 			return TRUE;
@@ -162,7 +162,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
 			if (!extension_loaded('mysql')) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
 				return FALSE;
 			} else {
 				return TRUE;

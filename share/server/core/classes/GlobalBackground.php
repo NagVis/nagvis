@@ -77,7 +77,7 @@ class GlobalBackground {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backgroundNotExists','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundNotExists','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -99,7 +99,7 @@ class GlobalBackground {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backgroundNotReadable','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundNotReadable','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -121,7 +121,7 @@ class GlobalBackground {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backgroundNotWriteable','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundNotWriteable','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -142,7 +142,7 @@ class GlobalBackground {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backgroundFolderNotWriteable','PATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundFolderNotWriteable','PATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
 			}
 			return FALSE;
 		}

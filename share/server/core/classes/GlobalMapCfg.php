@@ -1315,7 +1315,7 @@ class GlobalMapCfg {
 										$iObjId++;
 									} else {
 										// unknown object type
-										new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
+										new GlobalMessage('ERROR', $this->CORE->LANG->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
 										return FALSE;
 									}
 								} else {
@@ -1437,7 +1437,7 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotExists', Array('MAP' => $this->configFile)));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotExists', Array('MAP' => $this->configFile)));
 				}
 				return FALSE;
 			}
@@ -1461,7 +1461,7 @@ class GlobalMapCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable', Array('MAP' => $this->configFile)));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapCfgNotReadable', Array('MAP' => $this->configFile)));
 				}
 				return FALSE;
 			}
@@ -1487,7 +1487,7 @@ class GlobalMapCfg {
 						// value is "must"
 						if(!isset($element[$key]) || $element[$key] == '') {
 							// a "must" value is missing or empty
-							new GlobalFrontendMessage('ERROR',$this->CORE->LANG->getText('mapCfgMustValueNotSet', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type, 'ID' => $id)));
+							new GlobalMessage('ERROR',$this->CORE->LANG->getText('mapCfgMustValueNotSet', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type, 'ID' => $id)));
 						}
 					}
 				}
@@ -1498,13 +1498,13 @@ class GlobalMapCfg {
 					if(!isset($this->validConfig[$type][$key])) {
 						// unknown attribute
 						if($printErr == 1) {
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
 						}
 						return FALSE;
 					} elseif(isset($this->validConfig[$type][$key]['deprecated']) && $this->validConfig[$type][$key]['deprecated'] == 1) {
 						// deprecated option
 						if($printErr) {
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
 						}
 						return FALSE;
 					} else {
@@ -1518,7 +1518,7 @@ class GlobalMapCfg {
 									if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
 										// wrong format
 										if($printErr) {
-											new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
+											new GlobalMessage('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
 										}
 										return FALSE;
 									}
@@ -1529,7 +1529,7 @@ class GlobalMapCfg {
 								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
 									// Wrong format
 									if($printErr) {
-										new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
+										new GlobalMessage('ERROR', $this->CORE->LANG->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
 									}
 									return FALSE;
 								}
@@ -1540,18 +1540,18 @@ class GlobalMapCfg {
 						// Update: Only check this when not in WUI!
 						// FIXME: This check should be removed in 1.5 or 1.6
 						if($key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
 						}
 						
 						// Check gadget options when object view type is gadget
 						// Update: Only check this when not in WUI!
 						if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url']) && !$this instanceof WuiMapCfg) {
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('viewTypeGadgetButNoGadgetUrl', Array('MAP' => $this->getName(), 'TYPE' => $type)));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('viewTypeGadgetButNoGadgetUrl', Array('MAP' => $this->getName(), 'TYPE' => $type)));
 						}
 						
 						// Check if the configured backend is defined in main configuration file
 						if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendNotDefined', Array('BACKENDID' => $val)));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('backendNotDefined', Array('BACKENDID' => $val)));
 						}
 					}
 				}
@@ -1715,7 +1715,7 @@ class GlobalMapCfg {
 	public function checkPermissions($allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('permissionDenied', Array('USER' => $this->CORE->MAINCFG->getRuntimeValue('user'))));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('permissionDenied', Array('USER' => $this->CORE->MAINCFG->getRuntimeValue('user'))));
 			}
 			return FALSE;
 		} else {

@@ -208,7 +208,7 @@ class NagVisHoverMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
@@ -228,7 +228,7 @@ class NagVisHoverMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

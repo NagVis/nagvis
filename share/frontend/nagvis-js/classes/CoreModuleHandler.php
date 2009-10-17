@@ -23,7 +23,7 @@ class CoreModuleHandler {
 			return $MOD;
 		} else {
 			// Error handling
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('moduleNotRegistered'));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('moduleNotRegistered'));
 			return null;
 		}
 	}
@@ -37,7 +37,7 @@ class CoreModuleHandler {
 			return true;
 		} else {
 			// Error handling
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('moduleClassNotExists'));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('moduleClassNotExists'));
 			return false;
 		}
 	}

@@ -38,7 +38,7 @@ require("../nagvis/includes/functions/getuser.php");
 // Include needed WUI specific functions
 require('./includes/functions/form_handler.php');
 
-// This defines wether the GlobalFrontendMessage prints HTML or ajax error messages
+// This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
 // Load the core

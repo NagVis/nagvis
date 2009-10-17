@@ -1094,11 +1094,11 @@ msgstr "No se puede leer la plantilla. Compruebe los permisos del fichero de pla
 msgid "contextTemplateNotExists"
 msgstr "El fichero de plantilla &quot;[FILE]&quot; no existe."
 
-#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:104
+#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/frontend/GlobalMessageBox.php:104
 msgid "messageboxTitleWrongType"
 msgstr "Wrong Type"
 
-#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:105
+#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/frontend/GlobalMessageBox.php:105
 msgid "messageboxMessageWrongType"
 msgstr "The type [TYPE] is not a defined message box type."
 

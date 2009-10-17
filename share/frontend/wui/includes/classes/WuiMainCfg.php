@@ -182,13 +182,13 @@ class WuiMainCfg extends GlobalMainCfg {
 			
 			if(!$handle = fopen($this->configFile, 'w+')) {
 				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainCfgNotWriteable'), $CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $CORE->LANG->getText('mainCfgNotWriteable'), $CORE->MAINCFG->getValue('paths','htmlbase'));
 				return FALSE;
 			}
 			
 			if(!fwrite($handle, $content)) {
 				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainCfgCouldNotWriteMainConfigFile'), $CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $CORE->LANG->getText('mainCfgCouldNotWriteMainConfigFile'), $CORE->MAINCFG->getValue('paths','htmlbase'));
 				return FALSE;
 			}
 			
@@ -212,7 +212,7 @@ class WuiMainCfg extends GlobalMainCfg {
 		} else {
 			if($printErr == 1) {
 				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mainCfgNotWriteable','MAINCFG~'.$this->configFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $CORE->LANG->getText('mainCfgNotWriteable','MAINCFG~'.$this->configFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}
@@ -231,7 +231,7 @@ class WuiMainCfg extends GlobalMainCfg {
 		} else {
 			if($printErr == 1) {
 				$CORE = new GlobalCore($this);
-				new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg')), $CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $CORE->LANG->getText('mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg')), $CORE->MAINCFG->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}

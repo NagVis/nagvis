@@ -96,7 +96,7 @@ class GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('wrongPhpVersion','CURRENT_VERSION~'.PHP_VERSION.',NEEDED_VERSION~'.CONST_NEEDED_PHP_VERSION));
 			}
 			return FALSE;
 		}
@@ -114,7 +114,7 @@ class GlobalPage {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noUser'));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('noUser'));
 			}
 			return FALSE;
 		}
@@ -131,7 +131,7 @@ class GlobalPage {
 	private function checkPermissions(&$allowed,$printErr) {
 		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->MAINCFG->getRuntimeValue('user'), $allowed)) {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('permissionDenied','USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('permissionDenied','USER~'.$this->CORE->MAINCFG->getRuntimeValue('user')));
 			}
 			return FALSE;
 		} else {

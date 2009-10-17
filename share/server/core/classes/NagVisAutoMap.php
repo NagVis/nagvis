@@ -313,7 +313,7 @@ class NagVisAutoMap extends GlobalMap {
 					$binary = 'fdp';
 				break;
 				default:
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownRenderMode','MODE~'.$this->renderMode));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('unknownRenderMode','MODE~'.$this->renderMode));
 				break;
 			}
 			
@@ -501,7 +501,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		if($returnCode1 & $returnCode2) {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->CORE->MAINCFG->getvalue('automap','graphvizpath')));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->CORE->MAINCFG->getvalue('automap','graphvizpath')));
 			}
 			return FALSE;
 		} else {
@@ -592,7 +592,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Could not get root host for the automap
 		if(!isset($defaultRoot) || $defaultRoot == '') {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('couldNotGetRootHostname'));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('couldNotGetRootHostname'));
 		} else {
 			return $defaultRoot;
 		}

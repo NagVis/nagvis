@@ -59,14 +59,14 @@ class NagVisUrl {
 		// Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
 		$aUrl = parse_url($this->strUrl);
 		if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '') {
-			echo new GlobalFrontendMessageBox('ERROR', $this->CORE->LANG->getText('problemReadingUrl', 'URL~'.$this->strUrl.',MSG~Not allowed url'), $this->CORE->MAINCFG->getValue('paths','htmlbase'), 'error');
+			echo new GlobalMessageBox('ERROR', $this->CORE->LANG->getText('problemReadingUrl', 'URL~'.$this->strUrl.',MSG~Not allowed url'), $this->CORE->MAINCFG->getValue('paths','htmlbase'), 'error');
 			exit(1);
 		}
 				
 		if(false == ($this->strContents = file_get_contents($this->strUrl))) {
 			$aError = error_get_last();
 			
-			echo new GlobalFrontendMessageBox('ERROR', $this->CORE->LANG->getText('problemReadingUrl', 'URL~'.$this->strUrl.',MSG~'.$aError['message']), $this->CORE->MAINCFG->getValue('paths','htmlbase'), 'error');
+			echo new GlobalMessageBox('ERROR', $this->CORE->LANG->getText('problemReadingUrl', 'URL~'.$this->strUrl.',MSG~'.$aError['message']), $this->CORE->MAINCFG->getValue('paths','htmlbase'), 'error');
 		}
 		
 		// set the old level of reporting back

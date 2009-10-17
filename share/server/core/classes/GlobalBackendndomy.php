@@ -119,12 +119,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			
 			// Check that Nagios reports itself as running	
 			if ($nagiosstate['is_currently_running'] != 1) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('nagiosNotRunning', Array('BACKENDID' =>$this->backendId)));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('nagiosNotRunning', Array('BACKENDID' =>$this->backendId)));
 			}
 			
 			// Be suspicious and check that the data at the db is not older that "maxTimeWithoutUpdate" too
 			if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
 			}
 			
 			/**
@@ -163,7 +163,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 */
 	private function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix)));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix)));
 			return FALSE;
 		} else {
 			return TRUE;	
@@ -185,7 +185,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		
 		if(!$this->CONN){
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
 			return FALSE;
 		}
 		
@@ -195,7 +195,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		error_reporting($oldLevel);
 		
 		if(!$returnCode){
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
 			return FALSE;
 		} else {
 			return TRUE;
@@ -215,7 +215,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
 			if (!extension_loaded('mysql')) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
 				return FALSE;
 			} else {
 				return TRUE;
@@ -243,10 +243,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			$intInstanceId = $ret['instance_id'];
 		} elseif(mysql_num_rows($QUERYHANDLE) == 0) {
 			// ERROR: Instance name not valid
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotValid', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotValid', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
 		} else {
 			// ERROR: Given Instance name is not unique
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotUniq', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('backendInstanceNameNotUniq', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
 		}
 		
 		// Free memory

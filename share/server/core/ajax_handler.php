@@ -33,7 +33,7 @@ require("../../server/core/functions/getuser.php");
 require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/functions/ajaxErrorHandler.php');
 
-// This defines whether the GlobalFrontendMessage prints HTML or ajax error messages
+// This defines whether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
 
 // Load the core

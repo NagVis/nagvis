@@ -1092,11 +1092,11 @@ msgstr "Le paramètre [VAR] est vide. Renseignez le paramètre avec une valeur v
 msgid "validatorNotDefinedParameter"
 msgstr "Le paramètre [VAR] n`est pas un paramètre défini."
 
-#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:98
+#: nagvis/includes/classes/frontend/GlobalMessageBox.php:98
 msgid "messageboxTitleWrongType"
 msgstr "Mauvais type"
 
-#: nagvis/includes/classes/frontend/GlobalFrontendMessageBox.php:99
+#: nagvis/includes/classes/frontend/GlobalMessageBox.php:99
 msgid "messageboxMessageWrongType"
 msgstr "Le type [TYPE] n`est pas un type de boîte de dialogue défini."
 

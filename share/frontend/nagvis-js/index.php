@@ -35,7 +35,7 @@ require('../../server/core/functions/debug.php');
 require("../../server/core/functions/getuser.php");
 require('../../server/core/functions/oldPhpVersionFixes.php');
 
-// This defines whether the GlobalFrontendMessage prints HTML or ajax error messages
+// This defines whether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
 // Initialize the core
@@ -103,7 +103,7 @@ $MHANDLER->regModule('Overview');
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if($MODULE == null) {
-	new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('unknownModule', Array('module' => $UHANDLER->get('mod'))));
+	new GlobalMessage('ERROR', $CORE->LANG->getText('unknownModule', Array('module' => $UHANDLER->get('mod'))));
 }
 $MODULE->passAuth($AUTH, $AUTHORISATION);
 $MODULE->setAction($UHANDLER->get('act'));
@@ -120,7 +120,7 @@ if($MODULE->actionRequiresAuthorisation()) {
 	if($AUTH->isAuthenticated()) {
 		// Check if the user is permited to this action in the module
 		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'))) {
-			new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('notPermitted'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('notPermitted'));
 		}
 	} else {
 		// When not authenticated redirect to logon dialog
@@ -143,7 +143,7 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
 	$sContent = $MODULE->handleAction();
 } else {
 	// Create instance of msg module
-	new GlobalFrontendMessage('ERROR', $CORE->LANG->getText('actionNotValid'));
+	new GlobalMessage('ERROR', $CORE->LANG->getText('actionNotValid'));
 }
 
 echo $sContent;

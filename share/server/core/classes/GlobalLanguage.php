@@ -95,7 +95,7 @@ class GlobalLanguage {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->getText('languageNotFound','LANG~'.$this->sCurrentLanguage), $this->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->getText('languageNotFound','LANG~'.$this->sCurrentLanguage), $this->MAINCFG->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}
@@ -111,7 +111,7 @@ class GlobalLanguage {
 		if (!extension_loaded('gettext')) {
 			dl('gettext.so');
 			if (!extension_loaded('gettext')) {
-				new GlobalFrontendMessage('ERROR', $this->getText('phpModuleNotLoaded','MODULE~gettext'), $this->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->getText('phpModuleNotLoaded','MODULE~gettext'), $this->MAINCFG->getValue('paths','htmlbase'));
 				return FALSE;
 			} else {
 				return TRUE;

@@ -75,7 +75,7 @@ class WuiFrontend extends GlobalPage {
 	function checkPHPMBString($printErr=1) {
 		if (!extension_loaded('mbstring')) {
 			if($printErr) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('phpModuleNotLoaded','MODULE~mbstring'));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('phpModuleNotLoaded','MODULE~mbstring'));
 			}
 			return FALSE;
 		} else {

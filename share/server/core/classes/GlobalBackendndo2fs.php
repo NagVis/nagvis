@@ -73,11 +73,11 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 		$this->pathVolatile = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path').'/VOLATILE/'.$this->instanceName;
 		
 		if(!$this->checkFileStructure()) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('ndo2fsFileStructureNotValid', Array('BACKENDID' => $this->backendId, 'PATH' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path'))));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('ndo2fsFileStructureNotValid', Array('BACKENDID' => $this->backendId, 'PATH' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path'))));
 		}
 		
 		if(!$this->checkLastUpdateTime()) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
 		}
 		
 		return TRUE;

@@ -183,17 +183,11 @@ function getObjectsToUpdate(aObjs) {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getCfgFileAges(sMap) {
-	if(typeof(sMap) === 'undefined') {
-		sMap = '';
-	}
-	
-	if(sMap !== '') {
-		if(oPageProperties.view_type === 'map') {
-			return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+sMap, true);
-		} else if(oPageProperties.view_type === 'automap') {
-			return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&am[]='+sMap, true);
-		}
+function getCfgFileAges() {
+	if(oPageProperties.view_type === 'map') {
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+oGeneralProperties.map_name, true);
+	} else if(oPageProperties.view_type === 'automap') {
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&am[]='+oGeneralProperties.map_name, true);
 	} else {
 		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg', true);
 	}
@@ -1608,7 +1602,7 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		
 		// Load the file ages of the important configuration files
 		eventlog("worker", "debug", "Loading the file ages");
-		oFileAges = getCfgFileAges(sType, sIdentifier);
+		oFileAges = getCfgFileAges();
 		
 		// Parse the map
 		if(parseMap(oFileAges[sIdentifier], sIdentifier) === false) {
@@ -1676,7 +1670,7 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		
 		// Load the file ages of the important configuration files
 		eventlog("worker", "debug", "Loading the file ages");
-		oFileAges = getCfgFileAges(sIdentifier);
+		oFileAges = getCfgFileAges();
 		
 		// Parse the map
 		if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false) {
@@ -1706,18 +1700,18 @@ function workerUpdate(iCount, sType, sIdentifier) {
 	// Log normal worker step
 	eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 	
+	// Get the file ages of important files
+	eventlog("worker", "debug", "Loading the file ages");
+	var oCurrentFileAges = getCfgFileAges();
+	
+	// Check for changed main configuration
+	if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
+		// FIXME: Not handled by ajax frontend, reload the page
+		eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
+		window.location.reload(true);
+	}
+	
 	if(sType === 'map') {
-		// Get the file ages of important files
-		eventlog("worker", "debug", "Loading the file ages");
-		var oCurrentFileAges = getCfgFileAges(oPageProperties.map_name);
-		
-		// Check for changed main configuration
-		if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
-			// FIXME: Not handled by ajax frontend, reload the page
-			eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
-			window.location.reload(true);
-		}
-		
 		// Check for changed map configuration
 		if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
 			eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
@@ -1802,18 +1796,99 @@ function workerUpdate(iCount, sType, sIdentifier) {
 			updateMapBasics();
 		}
 		bStateChanged = null;
+	
+	} elseif(sType === 'automap') {
 		
-		// Cleanup ajax query cache
-		cleanupAjaxQueryCache();
-	} else if(sType === 'overview') {
-		// Get the file ages of important files
-		var oCurrentFileAges = getCfgFileAges();
-		
-		// Check for changed main configuration
-		if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
-			// FIXME: Not handled by ajax frontend, reload the page
-			window.location.reload(true);
+		// Check for changed map configuration
+		if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
+			// FIXME: Render new background image and dot file
+			// FIXME: Set new background image (renew random value at the end)
+			
+			// Reparse the automap on changed map configuration
+			eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
+			if(parseAutomap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
+			}
 		}
+
+		oCurrentFileAges = null;
+		
+		/*
+		 * Now proceed with real actions when everything is OK
+		 */
+		
+		// Get objects which need an update
+		var arrObj = getObjectsToUpdate(aMapObjects);
+		
+		// Create the ajax request for bulk update, handle shape updates
+		var aUrlParts = [];
+		var aShapesToUpdate = [];
+		var iUrlParams = 0;
+		var iUrlLength = 0;
+		
+		// Only continue with the loop when below param limit
+		// and below maximum length
+		for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)) && iUrlLength < oWorkerProperties.worker_request_max_length; i++) {
+			var type = aMapObjects[arrObj[i]].conf.type;
+			
+			// Seperate shapes from rest
+			if(type === 'shape') {
+				// Shapes which need to be updated need a special handling
+				aShapesToUpdate.push(arrObj[i]);
+			} else {
+				// Handle other objects
+				var name = aMapObjects[arrObj[i]].conf.name;
+				
+				if(name) {
+					var obj_id = aMapObjects[arrObj[i]].conf.object_id;
+					var service_description = aMapObjects[arrObj[i]].conf.service_description;
+					var map = oPageProperties.map_name;
+					
+					// Create request string
+					var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+					if(service_description) {
+						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
+					} else {
+						sUrlPart = sUrlPart + '&n2[]=';
+					}
+					
+					// Adding 4 params above code, count them here
+					iUrlParams += 4;
+					
+					// Also count the length
+					iUrlLength += sUrlPart.length
+					
+					// Append part to array of parts
+					aUrlParts.push(sUrlPart);
+				}
+			}
+		}
+		iUrlParams = null;
+		iUrlLength = null;
+		arrObj = null;
+		
+		// Get the updated objectsupdateMapObjects via bulk request
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var bStateChanged = false;
+		if(o.length > 0) {
+			bStateChanged = updateObjects(o, aMapObjects, sType);
+		}
+		o = null;
+		aUrlParts = null;
+		
+		// Update shapes when needed
+		if(aShapesToUpdate.length > 0) {
+			updateShapes(aShapesToUpdate);
+		}
+		aShapesToUpdate = null;
+		
+		// When some state changed on the map update the title and favicon
+		if(bStateChanged) {
+			updateMapBasics();
+		}
+		bStateChanged = null;
+		
+	} else if(sType === 'overview') {
 		
 		//FIXME: Map configuration(s) changed?
 		

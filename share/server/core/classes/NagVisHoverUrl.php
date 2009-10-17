@@ -85,13 +85,13 @@ class NagVisHoverUrl {
 		// Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
 		$aUrl = parse_url($this->url);
 		if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '') {
-			echo new GlobalFrontendMessageBox('ERROR', $this->CORE->LANG->getText('problemReadingUrl', 'URL~'.$this->url.',MSG~Not allowed url'), $this->CORE->MAINCFG->getValue('paths','htmlbase'), 'error');
+			echo new GlobalMessageBox('ERROR', $this->CORE->LANG->getText('problemReadingUrl', 'URL~'.$this->url.',MSG~Not allowed url'), $this->CORE->MAINCFG->getValue('paths','htmlbase'), 'error');
 			exit(1);
 		}
 
     
 		if(!$content = file_get_contents($this->url)) {
-			new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('couldNotGetHoverUrl', 'URL~'.$this->url));
+			new GlobalMessage('WARNING', $this->CORE->LANG->getText('couldNotGetHoverUrl', 'URL~'.$this->url));
 		}
     
     $this->code = $content;

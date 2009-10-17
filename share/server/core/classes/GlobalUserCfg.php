@@ -197,7 +197,7 @@ class GlobalUserCfg {
 						// value is "must"
 						if($this->getValue($type,$key) == '') {
 							// a "must" value is missing or empty
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mainMustValueNotSet', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('mainMustValueNotSet', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
 							return false;
 						}
 					}
@@ -211,14 +211,14 @@ class GlobalUserCfg {
 							// unknown attribute
 							if($printErr) {
 								$CORE = new GlobalCore($this);
-								new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownValue', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
+								new GlobalMessage('ERROR', $this->CORE->LANG->getText('unknownValue', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
 							}
 							return false;
 						} elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
 							// deprecated option
 							if($printErr) {
 								$CORE = new GlobalCore($this);
-								new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('deprecatedOption', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
+								new GlobalMessage('ERROR', $this->CORE->LANG->getText('deprecatedOption', 'ATTRIBUTE~'.$key.',TYPE~'.$type));
 							}
 							return false;
 						} else {
@@ -231,7 +231,7 @@ class GlobalUserCfg {
 								// wrong format
 								if($printErr) {
 									$CORE = new GlobalCore($this);
-									new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('wrongValueFormat', 'TYPE~'.$type.',ATTRIBUTE~'.$key));
+									new GlobalMessage('ERROR', $this->CORE->LANG->getText('wrongValueFormat', 'TYPE~'.$type.',ATTRIBUTE~'.$key));
 								}
 								return false;
 							}
@@ -257,7 +257,7 @@ class GlobalUserCfg {
 			} else {
 				if($printErr == 1) {
 					$CORE = new GlobalCore($this);
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mainCfgNotExists','MAINCFG~'.$this->configFile));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mainCfgNotExists','MAINCFG~'.$this->configFile));
 				}
 				return false;
 			}
@@ -280,7 +280,7 @@ class GlobalUserCfg {
 			} else {
 				if($printErr == 1) {
 					$CORE = new GlobalCore($this);
-					new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mainCfgNotReadable', 'MAINCFG~'.$this->configFile));
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mainCfgNotReadable', 'MAINCFG~'.$this->configFile));
 				}
 				return false;
 			}

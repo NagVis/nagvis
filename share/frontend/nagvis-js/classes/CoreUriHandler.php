@@ -107,7 +107,7 @@ class CoreUriHandler {
 		
 		// If one param is invalid send the user to 404 page
 		if($bValid === false) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('moduleNotValid'));
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('moduleNotValid'));
 		}
 	}
 	

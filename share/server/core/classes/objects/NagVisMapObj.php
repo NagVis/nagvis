@@ -283,7 +283,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	public function checkMaintenance($printErr) {
 		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
 			if($printErr) {
-				new GlobalFrontendMessage('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
+				new GlobalMessage('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
 			}
 			return FALSE;
 		} else {
@@ -379,7 +379,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = new NagVisTextbox($this->CORE);
 						break;
 						default:
-							new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
+							new GlobalMessage('ERROR', $this->CORE->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
 						break;
 					}
 					
@@ -416,7 +416,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 					// The fact of map loops should not be reported anymore. Let's simply
 					// skip the looping objects in summary view.
 					//
-					//new GlobalFrontendMessage('WARNING', $this->CORE->LANG->getText('loopInMapRecursion'));
+					//new GlobalMessage('WARNING', $this->CORE->LANG->getText('loopInMapRecursion'));
 					//$OBJ->summary_state = 'UNKNOWN';
 					//$OBJ->summary_output = $this->CORE->LANG->getText('loopInMapRecursion');
 					

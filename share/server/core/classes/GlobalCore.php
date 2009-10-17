@@ -69,7 +69,7 @@ class GlobalCore {
 	public function checkGd($printErr) {
 	if(!extension_loaded('gd')) {
 		if($printErr) {
-			new GlobalFrontendMessage('WARNING', $this->LANG->getText('gdLibNotFound'));
+			new GlobalMessage('WARNING', $this->LANG->getText('gdLibNotFound'));
 		}
 			return FALSE;
 		} else {
@@ -321,7 +321,7 @@ class GlobalCore {
 		
 		// Catch error when iconset filetype could not be fetched
 		if($type === '') {
-			new GlobalFrontendMessage('ERROR', $this->LANG->getText('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
+			new GlobalMessage('ERROR', $this->LANG->getText('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
 		}
 		
 		$this->iconsetTypeCache[$iconset] = $type;
@@ -469,7 +469,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
+				new GlobalMessage('ERROR', $this->LANG->getText('varFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -487,7 +487,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
+				new GlobalMessage('ERROR', $this->LANG->getText('varFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -505,7 +505,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->LANG->getText('sharedVarFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
+				new GlobalMessage('ERROR', $this->LANG->getText('sharedVarFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
 			}
 			return FALSE;
 		}
@@ -523,7 +523,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalFrontendMessage('ERROR', $this->LANG->getText('sharedVarFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
+				new GlobalMessage('ERROR', $this->LANG->getText('sharedVarFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
 			}
 			return FALSE;
 		}
