@@ -48,13 +48,13 @@ class FrontendModAuth extends FrontendModule {
 	}
 	
 	public function msgAuthenticated() {
-		new GlobalMessage('NOTE', $this->CORE->LANG->getText('authSuccess', Array('refererUrl' => $this->GHANDLER->getReferer())), null, null, 1, $this->GHANDLER->getReferer());
+		new GlobalMessage('NOTE', $this->CORE->LANG->getText('You have been authenticated. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, null, 1, $this->GHANDLER->getReferer());
 		
 		return '';
 	}
 	
 	public function msgInvalidCredentials() {
-		new GlobalMessage('ERROR', $this->CORE->LANG->getText('authInvalidCredentials', Array('refererUrl' => $this->GHANDLER->getReferer())));
+		new GlobalMessage('ERROR', $this->CORE->LANG->getText('Authentication failed. Invalid credentials.', Array('refererUrl' => $this->GHANDLER->getReferer())));
 		
 		return '';
 	}

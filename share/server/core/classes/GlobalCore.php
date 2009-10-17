@@ -505,7 +505,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->LANG->getText('sharedVarFolderNotExists','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
+				new GlobalMessage('ERROR', $this->LANG->getText('The shared var folder [PATH] does not exist', Array('PATH' => $this->MAINCFG->getValue('paths', 'sharedvar'))));
 			}
 			return FALSE;
 		}
@@ -523,7 +523,7 @@ class GlobalCore {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->LANG->getText('sharedVarFolderNotWriteable','PATH~'.$this->MAINCFG->getValue('paths', 'sharedvar')));
+				new GlobalMessage('ERROR', $this->LANG->getText('The shared var folder [PATH] is not writeable', Array('PATH' => $this->MAINCFG->getValue('paths', 'sharedvar'))));
 			}
 			return FALSE;
 		}

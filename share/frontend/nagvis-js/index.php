@@ -103,7 +103,7 @@ $MHANDLER->regModule('Overview');
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if($MODULE == null) {
-	new GlobalMessage('ERROR', $CORE->LANG->getText('unknownModule', Array('module' => $UHANDLER->get('mod'))));
+	new GlobalMessage('ERROR', $CORE->LANG->getText('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));
 }
 $MODULE->passAuth($AUTH, $AUTHORISATION);
 $MODULE->setAction($UHANDLER->get('act'));
@@ -120,7 +120,7 @@ if($MODULE->actionRequiresAuthorisation()) {
 	if($AUTH->isAuthenticated()) {
 		// Check if the user is permited to this action in the module
 		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'))) {
-			new GlobalMessage('ERROR', $CORE->LANG->getText('notPermitted'));
+			new GlobalMessage('ERROR', $CORE->LANG->getText('You are not permitted to access this page'), null, $CORE->LANG->getText('Access denied'));
 		}
 	} else {
 		// When not authenticated redirect to logon dialog
@@ -143,7 +143,7 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
 	$sContent = $MODULE->handleAction();
 } else {
 	// Create instance of msg module
-	new GlobalMessage('ERROR', $CORE->LANG->getText('actionNotValid'));
+	new GlobalMessage('ERROR', $CORE->LANG->getText('The given action is not valid'));
 }
 
 echo $sContent;

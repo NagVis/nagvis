@@ -74,8 +74,8 @@ class GlobalMessage {
 		// Check if type allowed else build error box
 		if(!in_array($type, $this->allowedTypes)) {
 			$CORE = new GlobalCore();
-			$this->title = $CORE->LANG->getText('messageboxTitleWrongType');
-			$this->message = $CORE->LANG->getText('messageboxMessageWrongType', Array('TYPE' => $type));
+			$this->title = $CORE->LANG->getText('Unknown message type');
+			$this->message = $CORE->LANG->getText('The given message type [TYPE] is not known', Array('TYPE' => $type));
 		}
 		
 		// Got all information, now build the message
