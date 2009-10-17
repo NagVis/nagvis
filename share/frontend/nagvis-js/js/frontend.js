@@ -185,11 +185,11 @@ function getObjectsToUpdate(aObjs) {
  */
 function getCfgFileAges() {
 	if(oPageProperties.view_type === 'map') {
-		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(oPageProperties.map_name), true);
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(oPageProperties.map_name), true);
 	} else if(oPageProperties.view_type === 'automap') {
-		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(oPageProperties.map_name), true);
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(oPageProperties.map_name), true);
 	} else {
-		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg', true);
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getCfgFileAges&f[]=mainCfg', true);
 	}
 }
 
@@ -264,7 +264,7 @@ function setMapHoverUrls() {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -330,7 +330,7 @@ function getHoverTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -378,7 +378,7 @@ function getContextTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oContextTemplates
 	if(aTemplateObjects.length > 0) {
@@ -506,7 +506,7 @@ function setPageTitle(sTitle) {
  */
 function updateMapBasics() {
 	// Get new map state from core
-	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]='+oPageProperties.view_type+'&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name), false)[0];
 	
 	// Update favicon
 	setPageFavicon(getFaviconImage(o));
@@ -698,12 +698,16 @@ function refreshMapObject(objectId) {
 	
 	// Only append map param if it is a known map
 	var sMapPart = '';
-	if(typeof map !== 'undefined') {
-		if(oPageProperties.view_type === 'map') {
-			sMapPart = '&m[]='+escapeUrlValues(map);
-		} else if(oPageProperties.view_type === 'automap') {
-			sMapPart = '&am[]='+escapeUrlValues(map);
-		}
+	var sMod = '';
+	if(oPageProperties.view_type === 'map') {
+		sMod = 'Map';
+		sMapPart = '&m[]='+escapeUrlValues(map);
+	} else if(oPageProperties.view_type === 'automap') {
+		sMod = 'AutoMap';
+		sMapPart = '&am[]='+escapeUrlValues(map);
+	} else if(oPageProperties.view_type === 'overview') {
+		sMod = 'General';
+		sMapPart = '';
 	}
 	
 	// Create request string
@@ -715,7 +719,7 @@ function refreshMapObject(objectId) {
 	}
 	
 	// Get the updated objectsupdateMapObjects via bulk request
-	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state' + sUrlPart, false);
+	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?mod='+escapeUrlValues(sMod)+'&act=getObjectStates&ty=state' + sUrlPart, false);
 	var bStateChanged = false;
 	if(o.length > 0) {
 		bStateChanged = updateObjects(o, aMapObjects, oPageProperties.view_type);
@@ -1326,7 +1330,7 @@ function parseOverviewRotations(aRotationsConf) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getOverviewProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewProperties')
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Overview&act=getOverviewProperties')
 }
 
 /**
@@ -1338,7 +1342,7 @@ function getOverviewProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getOverviewMaps() {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewMaps')
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Overview&act=getOverviewMaps')
 }
 
 /**
@@ -1350,7 +1354,7 @@ function getOverviewMaps() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getOverviewAutomaps() {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewAutomaps')
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Overview&act=getOverviewAutomaps')
 }
 
 /**
@@ -1362,7 +1366,7 @@ function getOverviewAutomaps() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getOverviewRotations() {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getOverviewRotations')
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Overview&act=getOverviewRotations')
 }
 
 /**
@@ -1374,7 +1378,7 @@ function getOverviewRotations() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getAutomapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getAutomapProperties&objName1='+mapName)
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=AutoMap&act=getAutomapProperties&show='+mapName)
 }
 
 /**
@@ -1386,7 +1390,7 @@ function getAutomapProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getMapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getMapProperties&objName1='+mapName)
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Map&act=getMapProperties&show='+mapName)
 }
 
 /**
@@ -1399,7 +1403,7 @@ function getMapProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getStateProperties() {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getStateProperties')
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getStateProperties')
 }
 
 /**
@@ -1411,7 +1415,7 @@ function getStateProperties() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function automapParse(mapName) {
-	return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=parseAutomap&n1='+escapeUrlValues(mapName))
+	return getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=AutoMap&act=parseAutomap&show='+escapeUrlValues(mapName))
 }
 
 /**
@@ -1427,7 +1431,7 @@ function parseMap(iMapCfgAge, mapName) {
 	
 	// Get new map/object information from ajax handler
 	var oMapBasics = getMapProperties(mapName);
-	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getMapObjects&objName1='+mapName);
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Map&act=getMapObjects&show='+mapName);
 	
 	// Only perform the reparsing actions when all information are there
 	if(oMapBasics && oMapObjects) {
@@ -1506,7 +1510,7 @@ function parseAutomap(iMapCfgAge, mapName) {
 	
 	// Get new map/object information from ajax handler
 	var oMapBasics = getAutomapProperties(mapName);
-	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getAutomapObjects&objName1='+mapName);
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=AutoMap&act=getAutomapObjects&show='+mapName);
 	
 	// Only perform the reparsing actions when all information are there
 	if(oMapBasics && oMapObjects) {
@@ -1794,7 +1798,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		arrObj = null;
 		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Map&act=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 		var bStateChanged = false;
 		if(o.length > 0) {
 			bStateChanged = updateObjects(o, aMapObjects, sType);
@@ -1890,7 +1894,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		arrObj = null;
 		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=AutoMap&act=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 		var bStateChanged = false;
 		if(o.length > 0) {
 			bStateChanged = updateObjects(o, aMapObjects, sType);
@@ -1940,7 +1944,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		}
 		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 		var bStateChanged = false;
 		if(o.length > 0) {
 			bStateChanged = updateObjects(o, aMapObjects, sType);
@@ -1950,7 +1954,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		
 		// When some state changed on the map update the title and favicon
 		/* FIXME: if(bStateChanged) {
-			var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
+			var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?mod=General&act=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
 			
 			// Update favicon
 			setPageFavicon(getFaviconImage(o));

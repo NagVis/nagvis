@@ -1,6 +1,5 @@
 <?php
 class FrontendModUrl extends FrontendModule {
-	private $CORE;
 	private $name = '';
 	private $url = '';
 	

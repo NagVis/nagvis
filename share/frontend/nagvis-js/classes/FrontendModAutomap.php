@@ -1,16 +1,26 @@
 <?php
 class FrontendModAutoMap extends FrontendModule {
-	private $CORE;
 	private $name;
 	private $opts;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
-		$UHANDLER = new CoreUriHandler($this->CORE); 
-		$this->name = $UHANDLER->get('show');
-
-		$this->getAutomapOptions($UHANDLER);
+		// Parse the view specific options
+		$aOpts = Array('show' => MATCH_MAP_NAME,
+		               'backend' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'root' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'maxLayers' => MATCH_INTEGER_EMPTY,
+		               'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
+		               'width' => MATCH_INTEGER_EMPTY,
+		               'height' => MATCH_INTEGER_EMPTY,
+		               'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY);
+		
+		$aVals = $this->getCustomOptions($aOpts);
+		$this->name = $aVals['show'];
+		unset($aVals['show']);
+		$this->opts = $aVals;
 		
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
@@ -31,36 +41,8 @@ class FrontendModAutoMap extends FrontendModule {
 		
 		return $sReturn;
 	}
-
-	private function getAutomapOptions(CoreUriHandler $UHANDLER) {
-    // Parse view specific uri params
-		$aKeys = Array(
-		  'backend'     => '',
-		  'root'      => '',
-		  'maxLayers'   => '',
-		  'renderMode'  => '',
-		  'width'     => '',
-		  'height'    => '',
-		  'ignoreHosts' => '',
-		  'filterGroup' => '');
-
-		// Load the specific params to the UriHandler
-		$UHANDLER->parseModSpecificUri($aKeys);
-
-		// Now get those params
-		foreach($aKeys AS $key => $val) {
-			$this->opts[$key] = $UHANDLER->get($key);
-		}
-	}
 	
 	private function showViewDialog() {
-		// Only show when map name given
-		if(!isset($this->name) || $this->name == '') {
-			//FIXME: Error handling
-			echo "No map given";
-			exit(1);
-		}
-		
 		// Initialize backend(s)
 		$BACKEND = new GlobalBackendMgmt($this->CORE);
 		

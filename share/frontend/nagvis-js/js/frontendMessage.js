@@ -25,13 +25,21 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
  
-function frontendMessageHide() {
+function frontendMessageActive() {
 	if(document.getElementById('messageBoxDiv')) {
+		return true;
+	} else {
+		return false;
+	}
+}
+ 
+function frontendMessageHide() {
+	if(frontendMessageActive()) {
 		document.body.removeChild(document.getElementById('messageBoxDiv'));
 	}
 }
 
-function frontendMessage(oMessage) {
+function frontendMessage(oMessage, iTimeout) {
 	var oContainerDiv;
 	var oTable;
 	var oTbody;
@@ -39,6 +47,11 @@ function frontendMessage(oMessage) {
 	var oCell;
 	var oImg;
 	var sBoxType = oMessage.type.toLowerCase();
+	
+	// Set a close timeout when called to do so
+	if(typeof iTimeout !== 'undefined') {
+		window.setTimeout(function() { frontendMessageHide(); }, iTimeout*1000);
+	}
 	
 	oContainerDiv = document.createElement('div');
 	oContainerDiv.setAttribute('id', 'messageBoxDiv');

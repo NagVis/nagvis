@@ -1,7 +1,6 @@
 <?php
 class FrontendModAuth extends FrontendModule {
 	private $MOD;
-	private $CORE;
 	private $AUTH;
 	private $GHANDLER;
 	

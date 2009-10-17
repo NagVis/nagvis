@@ -36,6 +36,7 @@ define('MATCH_STRING_URL', '/^[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+$/
 define('MATCH_STRING_URL_EMPTY', '/^[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]*$/i');
 
 define('MATCH_INTEGER', '/^[0-9]+$/');
+define('MATCH_INTEGER_EMPTY', '/^[0-9]*$/');
 define('MATCH_FLOAT', '/^[0-9]+[\.\,]*[0-9]*$/');
 define('MATCH_BOOLEAN', '/^(?:1|0)$/i');
 
@@ -46,8 +47,14 @@ define('MATCH_PNG_GIF_JPG_FILE', '/^(.+)\.(png|gif|jpg)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_NONE', '/^((.+)\.(png|gif|jpg)|none)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\])$/i');
 
+define('MATCH_MAP_NAME', '/^[0-9A-Za-z_-]+$/');
+define('MATCH_MAP_NAME_EMPTY', '/^[0-9A-Za-z_-]*$/');
 define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
+define('MATCH_GET_OBJECT_TYPE', '/^(state|complete)$/');
+define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map|automap)$/');
+define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2)?$/');
+
 
 define('MATCH_URI_PART', '/^[a-zA-Z0-9-_]*$/');
 

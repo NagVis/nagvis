@@ -1,17 +1,18 @@
 <?php
 class FrontendModMap extends FrontendModule {
-	private $CORE;
 	private $name = '';
 	private $search = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
-		$UHANDLER = new CoreUriHandler($this->CORE); 
-		$this->name = $UHANDLER->get('show');
-
-		// And parse the view specific options
-		$this->getMapOptions($UHANDLER);
+		// Parse the view specific options
+		$aOpts = Array('show' => MATCH_MAP_NAME,
+		               'search' => MATCH_STRING_NO_SPACE_EMPTY);
+		
+		$aVals = $this->getCustomOptions($aOpts);
+		$this->name = $aVals['show'];
+		$this->search = $aVals['search'];
 		
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
@@ -32,29 +33,8 @@ class FrontendModMap extends FrontendModule {
 		
 		return $sReturn;
 	}
-
-	private function getMapOptions(CoreUriHandler $UHANDLER) {
-		// FIXME: The array should contain orders for validating the given value
-		// the options should be validated by the uri handler
-		
-		// Parse view specific uri params
-		$aKeys = Array('search' => '');
-		
-		// Load the specific params to the UriHandler
-		$UHANDLER->parseModSpecificUri($aKeys);
-		
-		// Now get those params
-		$this->search = $UHANDLER->get('search');
-	}
 	
 	private function showViewDialog() {
-		// Only show when map name given
-		if(!isset($this->name) || $this->name == '') {
-			//FIXME: Error handling
-			echo "No map given";
-			exit(1);
-		}
-		
     // Initialize map configuration
     $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
     // Read the map configuration file (Only global section!)

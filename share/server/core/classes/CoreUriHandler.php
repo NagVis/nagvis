@@ -54,9 +54,39 @@ class CoreUriHandler {
 	}
 
 	public function parseModSpecificUri($aKeys) {
-		foreach($aKeys AS $key => $val) {
-			if(isset($_GET[$key])) {
+		foreach($aKeys AS $key => $sMatch) {
+			// Validate the value
+			$bValid = true;
+			if($sMatch !== '') {
+				// When param not set initialize it as empty string
+				if(!isset($_GET[$key])) {
+					$_GET[$key] = '';
+				}
+				
+				// Validate single value or multiple (array)
+				if(is_array($_GET[$key])) {
+					foreach($_GET[$key] AS $val) {
+						if(preg_match($sMatch, $val)) {
+							$bValid = true;
+						} else {
+							$bValid = false;
+						}
+					}
+				} else {
+					if(preg_match($sMatch, $_GET[$key])) {
+						$bValid = true;
+					} else {
+						$bValid = false;
+					}
+				}
+			} else {
+				// FIXME: Dev notice: Value gets not validated
+			}
+			
+			if($bValid) {
 				$this->aOpts[$key] = $_GET[$key];
+			} else {
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('paramNotValid', Array('key' => htmlentities($key))));
 			}
 		}
 	}
@@ -74,9 +104,6 @@ class CoreUriHandler {
 		if(isset($_GET['act'])) {
 			$this->aOpts['act'] = $_GET['act'];
 		}
-		if(isset($_GET['show'])) {
-			$this->aOpts['show'] = $_GET['show'];
-		}
 	}
 	
 	private function setDefaults() {
@@ -88,10 +115,6 @@ class CoreUriHandler {
 		// Handle default options when no action given
 		if(!$this->isSetAndNotEmpty('act')) {
 			$this->aOpts['act'] = $this->CORE->MAINCFG->getValue('global', 'startaction');
-		}
-
-		if(!$this->isSetAndNotEmpty('show')) {
-			$this->aOpts['show'] = '';
 		}
 	}
 	

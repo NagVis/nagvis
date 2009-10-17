@@ -8,7 +8,7 @@ class CoreModuleHandler {
 		$this->CORE = $CORE;
 		
 		$this->aRegistered = Array();
-		$this->sPrefix = 'AjaxMod';
+		$this->sPrefix = 'CoreMod';
 	}
 	
 	public function loadModule($sModule) {

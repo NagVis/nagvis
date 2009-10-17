@@ -80,6 +80,7 @@ class NagVisHost extends NagiosHost {
 				$this->CORE->MAINCFG->getValue('defaults', 'hosturl')).'", ';
 			$strReturn .= 'target="'.$this->url_target.'", ';
 			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
+			
 			// The root host has to be highlighted, these are the options to do this
 			/*if($layer == 0) {
 				$strReturn .= 'shape="egg",';

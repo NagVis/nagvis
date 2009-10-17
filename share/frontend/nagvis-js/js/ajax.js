@@ -204,8 +204,12 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 					var oMsg = eval('( '+responseText+')');
 					
 					// Handle application message/error
+					// FIXME: Param2: 30 and the message will be shown for maximum 30 seconds
 					frontendMessage(oMsg);
 					oMsg = null;
+					
+					// Clear the response
+					sResponse = '';
 					
 					// Retry after sleep of x seconds for x times
 					if(bRetryable) {
@@ -229,6 +233,9 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 						// Handle application message/error
 						frontendMessage(oMsg);
 						oMsg = null;
+					
+						// Clear the response
+						sResponse = '';
 					}
 					
 					if(sResponse !== null && bCacheable) {

@@ -1,6 +1,5 @@
 <?php
 class FrontendModInfo extends FrontendModule {
-	protected $CORE;
 	
 	public function __construct($CORE) {
 		$this->CORE = $CORE;

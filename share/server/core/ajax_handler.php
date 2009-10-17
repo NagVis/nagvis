@@ -39,39 +39,116 @@ define('CONST_AJAX' , TRUE);
 // Load the core
 $CORE = new GlobalCore();
 
-// FIXME: This is a hack; TODO: create a class "AjaxFrontend" which
-// handles this user authentication related things and the handling below/getObjectHoverMenu
-$CORE->MAINCFG->setRuntimeValue('user', getUser());
+/*
+ * Url: Parse the url to know later what module and
+ *      action is called. The requested uri is splitted
+ *      into elements for later usage.
+ */
 
+$UHANDLER = new CoreUriHandler($CORE);
 
-// Initialize backends
-$BACKEND = new GlobalBackendMgmt($CORE);
+/*
+ * Session: Handle the user session
+ */
 
-// Initialize var
-if(!isset($_GET['action'])) {
-	$_GET['action'] = '';
+$SHANDLER = new CoreSessionHandler($CORE);
+
+/*
+ * Authentication 1: First try to use an existing session
+ *                   If that fails use the configured login method
+ */
+
+$AUTH = new CoreAuthHandler($CORE, $SHANDLER, 'CoreAuthModSession');
+
+/*
+ * Authorisation 1: Collect and save the permissions when the user is logged in
+ *                  and nothing other is saved yet
+ */
+
+if($AUTH->isAuthenticated()) {
+	// First try to get information from session
+	$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, 'CoreAuthorisationModSession');
+	$aPerms = $AUTHORISATION->parsePermissions();
+
+	// When no information in session get permission and write to session
+	if($aPerms === false) {
+		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->MAINCFG->getValue('global', 'authorisationmodule'));
+
+		// Save credentials to seession
+ 		$SHANDLER->set('userPermissions', $AUTHORISATION->parsePermissions());
+	}
+} else {
+	$AUTHORISATION = null;
 }
 
-switch($_GET['action']) {
-	case 'getMapState':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} else {
-			// Initialize map configuration
-			if($CORE->checkMapIsAutomap($_GET['map'])) {
-				$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['map']);
-			} else {
-				$MAPCFG = new NagVisMapCfg($CORE, $_GET['map']);
-			}
-			
-			$MAPCFG->readMapConfig();
-			
-			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
-			
-			$arrReturn = Array('summaryState' => $MAP->MAPOBJ->getSummaryState(),'summaryOutput' => $MAP->MAPOBJ->getSummaryOutput());
-			echo json_encode($arrReturn);
+/*
+ * Module handling 1: Choose modules
+ */
+
+// Load the module handler
+$MHANDLER = new CoreModuleHandler($CORE);
+
+// Register valid modules
+// Unregistered modules can not be accessed
+$MHANDLER->regModule('General');
+$MHANDLER->regModule('Overview');
+$MHANDLER->regModule('Map');
+$MHANDLER->regModule('AutoMap');
+
+// Load the module
+$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
+if($MODULE == null) {
+	new GlobalMessage('ERROR', $CORE->LANG->getText('unknownModule', Array('module' => $UHANDLER->get('mod'))));
+}
+$MODULE->passAuth($AUTH, $AUTHORISATION);
+$MODULE->setAction($UHANDLER->get('act'));
+
+/*
+ * Authorisation 2: Check if the user is permitted to use this module/action
+ *                  If not redirect to Msg/401 (Unauthorized) page
+ */
+
+// Only check modules which should have authorisation checks
+// This are all modules excluded some core things
+if($MODULE->actionRequiresAuthorisation()) {
+	// Only proceed with authenticated users
+	if($AUTH->isAuthenticated()) {
+		// Check if the user is permited to this action in the module
+		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'))) {
+			new GlobalMessage('ERROR', $CORE->LANG->getText('notPermitted'));
 		}
-	break;
+	} else {
+		// When not authenticated redirect to logon dialog
+		$MODULE = $MHANDLER->loadModule('LogonDialog');
+		$UHANDLER->set('act', 'view');
+	}
+}
+
+/*
+ * Module handling 2: Render the modules when permitted
+ *                    otherwise handle other pages
+ */
+
+// Handle regular action when everything is ok
+// When no matching module or action is found show the 404 error
+if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
+	$MODULE->setAction($UHANDLER->get('act'));
+
+	// Handle the given action in the module
+	$sContent = $MODULE->handleAction();
+} else {
+	// Create instance of msg module
+	new GlobalMessage('ERROR', $CORE->LANG->getText('actionNotValid'));
+}
+
+echo $sContent;
+if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
+exit(1);
+
+/*// Initialize backends
+$BACKEND = new GlobalBackendMgmt($CORE);
+
+switch($_GET['action']) {
 	case 'getObjectStates':
 		if(!isset($_GET['n1']) || $_GET['n1'] == '') {
 			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
@@ -104,14 +181,14 @@ switch($_GET['action']) {
 			for($i = 0; $i < $numObjects; $i++) {
 				// Get the object configuration
 				if(isset($arrMap)) {
-					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i], 'map', $arrMap[$i]);
+					$objConf = getMapObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i], 'map', $arrMap[$i]);
 				} elseif(isset($arrAutoMap)) {
-					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i], 'automap', $arrAutoMap[$i]);
+					$objConf = getAutoMapObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrAutoMap[$i]);
 					
 					// The object id needs to be set here to identify the object in the response
 					$objConf['object_id'] = $arrObjId[$i];
 				} else {
-					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i]);
+					$objConf = getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i]);
 					$objConf['object_id'] = $arrObjId[$i];
 				}
 				
@@ -196,299 +273,25 @@ switch($_GET['action']) {
 			echo json_encode($arrReturn);
 		}
 	break;
-	case 'getCfgFileAges':
-		$aReturn = Array();
-		
-		if(isset($_GET['f']) && is_array($_GET['f'])) {
-			$aFiles = $_GET['f'];
-			
-			foreach($aFiles AS $sFile) {
-				if($sFile == 'mainCfg') {
-					$aReturn['mainCfg'] = $CORE->MAINCFG->getConfigFileAge();
-				}
-			}
-		}
-		
-		if(isset($_GET['m']) && is_array($_GET['m'])) {
-			$aMaps = $_GET['m'];
-			
-			foreach($aMaps AS $sMap) {
-				$MAPCFG = new NagVisMapCfg($CORE, $sMap);
-				$aReturn[$sMap] = $MAPCFG->getFileModificationTime();
-			}
-		}
-		
-		if(isset($_GET['am']) && is_array($_GET['am'])) {
-			$aAutomaps = $_GET['am'];
-			
-			foreach($aAutomaps AS $sAutomap) {
-				$MAPCFG = new NagVisAutomapCfg($CORE, $sAutomap);
-				$aReturn[$sAutomap] = $MAPCFG->getFileModificationTime();
-			}
-		}
-		
-		echo json_encode($aReturn);
-	break;
-	case 'getOverviewProperties':
-		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
-		echo $OVERVIEW->parseIndexPropertiesJson();
-	break;
-	case 'getOverviewMaps':
-		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
-		echo $OVERVIEW->parseMapsJson();
-	break;
-	case 'getOverviewAutomaps':
-		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
-		echo $OVERVIEW->parseAutomapsJson();
-	break;
-	case 'getOverviewRotations':
-		$OVERVIEW = new GlobalIndexPage($CORE, $BACKEND);
-		echo $OVERVIEW->parseRotationsJson();
-	break;
-	case 'parseAutomap':
-		if(!isset($_GET['n1']) || $_GET['n1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} else {
-			$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['n1']);
-			$MAPCFG->readMapConfig();
-			
-			// FIXME: Maybe should be recoded?
-			// FIXME: What about the options given in URL when calling the map?
-			$opts = Array();
-			// Fetch option array from defaultparams string (extract variable
-			// names and values)
-			$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
-			unset($params[0]);
-			foreach($params AS &$set) {
-				$arrSet = explode('=',$set);
-				$opts[$arrSet[0]] = $arrSet[1];
-			}
-			// Save the automap name to use
-			$opts['automap'] = $_GET['n1'];
-			// Save the preview mode
-			$opts['preview'] = 1;
-			
-			$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
-			$MAP->renderMap();
-			
-			echo json_encode(true);
-		}
-	break;
-	case 'getAutomapProperties':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} else {
-			$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
-			$MAPCFG->readMapConfig();
-			
-			// FIXME: Maybe should be recoded?
-			// FIXME: What about the options given in URL when calling the map?
-			$opts = Array();
-			// Fetch option array from defaultparams string (extract variable
-			// names and values)
-			$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
-			unset($params[0]);
-			foreach($params AS &$set) {
-				$arrSet = explode('=',$set);
-				$opts[$arrSet[0]] = $arrSet[1];
-			}
-			// Save the automap name to use
-			$opts['automap'] = $_GET['objName1'];
-			// Save the preview mode
-			$opts['preview'] = 1;
-			
-			$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
-			echo $MAP->parseMapPropertiesJson();
-		}
-	break;
-	case 'getAutomapObjects':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} else {
-			$MAPCFG = new NagVisAutomapCfg($CORE, $_GET['objName1']);
-			$MAPCFG->readMapConfig();
-			
-			// FIXME: Maybe should be recoded?
-			// FIXME: What about the options given in URL when calling the map?
-			$opts = Array();
-			// Fetch option array from defaultparams string (extract variable
-			// names and values)
-			$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
-			unset($params[0]);
-			foreach($params AS &$set) {
-				$arrSet = explode('=',$set);
-				$opts[$arrSet[0]] = $arrSet[1];
-			}
-			// Save the automap name to use
-			$opts['automap'] = $_GET['objName1'];
-			// Save the preview mode
-			$opts['preview'] = 1;
-			
-			$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
-			// Fetch the state
-			$MAP->MAPOBJ->fetchState();
-			// Read position from graphviz and set it on the objects
-			$MAP->setMapObjectPositions();
-
-			echo $MAP->parseObjectsJson();
-		}
-	break;
-	case 'getMapProperties':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} else {
-			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
-			$MAPCFG->readMapConfig();
-			
-			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
-			echo $MAP->parseMapPropertiesJson();
-		}
-	break;
-	case 'getMapObjects':
-		if(!isset($_GET['objName1']) || $_GET['objName1'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterObjName1NotSet');
-		} else {
-			$MAPCFG = new NagVisMapCfg($CORE, $_GET['objName1']);
-			$MAPCFG->readMapConfig();
-			
-			$MAP = new NagVisMap($CORE, $MAPCFG, $BACKEND);
-			echo $MAP->parseObjectsJson();
-		}
-	break;
-	case 'getStateProperties':
-		echo json_encode($CORE->MAINCFG->getStateWeight());
-	break;
-	case 'getHoverTemplate':
-		if(!isset($_GET['name']) || $_GET['name'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterNameNotSet');
-		} else {
-			$arrReturn = Array();
-			$arrNames = $_GET['name'];
-			
-			$numObjects = count($arrNames);
-			for($i = 0; $i < $numObjects; $i++) {
-				$OBJ = new NagVisHoverMenu($CORE, $arrNames[$i]);
-				$arrReturn[] = Array('name' => $arrNames[$i], 'code' => str_replace("\r\n","",str_replace("\n","", $OBJ->__toString())));
-			}
-			
-			echo json_encode($arrReturn);
-		}
-	break;
-	case 'getContextTemplate':
-		if(!isset($_GET['name']) || $_GET['name'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterNameNotSet');
-		} else {
-			$arrReturn = Array();
-			$arrNames = $_GET['name'];
-			
-			$numObjects = count($arrNames);
-			for($i = 0; $i < $numObjects; $i++) {
-				$OBJ = new NagVisContextMenu($CORE, $arrNames[$i]);
-				$arrReturn[] = Array('name' => $arrNames[$i], 'code' => str_replace("\r\n","",str_replace("\n","", $OBJ->__toString())));
-			}
-			
-			echo json_encode($arrReturn);
-		}
-	break;
-	case 'getHoverUrl':
-		if(!isset($_GET['url']) || $_GET['url'] == '') {
-			echo 'Error: '.$CORE->LANG->getText('parameterUrlNotSet');
-		} else {
-			$arrReturn = Array();
-			$arrUrls = $_GET['url'];
-			
-			$numObjects = count($arrUrls);
-			for($i = 0; $i < $numObjects; $i++) {
-				$OBJ = new NagVisHoverUrl($CORE, $arrUrls[$i]);
-				$arrReturn[] = Array('url' => $arrUrls[$i], 'code' => $OBJ->__toString());
-			}
-			
-			echo json_encode($arrReturn);
-		}
-	break;
 	default:
 		echo 'Error: '.$CORE->LANG->getText('unknownQuery');
 	break;
-}
+}*/
 
-function getObjConf($objType, $objName1, $objName2, $objectId, $viewType = null, $map = null) {
+function getAutoMapObjConf($objType, $objName1, $objName2, $map) {
 	global $CORE;
 	$objConf = Array();
-	/**
-	 * There are two ways to get the configuration for an object. When the map
-	 * parameter is set the configuration of the object on the map is read.
-	 * When the map parameter is not set or empty the configurations from main
-	 * configuration file is used.
-	 */
 	
-	if(isset($viewType) && $viewType !== '' && $viewType === 'map' && isset($map) && $map !== '') {
-		// Get the object configuration from map configuration (object and
-		// defaults)
-		
-		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($CORE, $map);
-		
-		// Read the map configuration file
-		$MAPCFG->readMapConfig();
-		
-		if(is_array($objs = $MAPCFG->getDefinitions($objType))){
-			$count = count($objs);
-			for($i = 0; $i < $count && count($objConf) >= 0; $i++) {
-				if($objs[$i]['object_id'] == $objectId) {
-					$objConf = $objs[$i];
-					$objConf['id'] = $i;
-					
-					// Break the loop on first match
-					break;
-				}
-			}
-		} else {
-			echo 'Error: '.$CORE->LANG->getText('foundNoObjectOfThatTypeOnMap');
-		}
-		
-		if(count($objConf) > 0) {
-			// merge with "global" settings
-			foreach($MAPCFG->getValidTypeKeys($objType) AS $key) {
-				$objConf[$key] = $MAPCFG->getValue($objType, $objConf['id'], $key);
-			}
-		} else {
-			// object not on map
-			echo 'Error: '.$CORE->LANG->getText('ObjectNotFoundOnMap');
-		}
-	} elseif(isset($viewType) && $viewType !== '' && $viewType === 'automap' && isset($map) && $map !== '') {
-		$MAPCFG = new NagVisAutomapCfg($CORE, $map);
+	$MAPCFG = new NagVisAutomapCfg($CORE, $map);
 			
-		// Read the map configuration file
-		$MAPCFG->readMapConfig();
-		
-		$objConf = $MAPCFG->getObjectConfiguration();
-		
-		// backend_id is filtered in getObjectConfiguration(). Set it manually
-		$objConf['backend_id'] = $MAPCFG->getValue('global', 0, 'backend_id');
-	} else {
-		// Get the object configuration from main configuration defaults by
-		// creating a temporary map object
-		$objConf['type'] = $objType;
-		
-		if($objType == 'service') {
-			$objConf['host_name'] = $objName1;
-			$objConf['service_description'] = $objName2;
-		} else {
-			$objConf[$objType.'_name'] = $objName1;
-		}
-		
-		$TMPMAPCFG = new NagVisMapCfg($CORE);
-		
-		// merge with "global" settings
-		foreach($TMPMAPCFG->getValidTypeKeys('global') AS $key) {
-			if($key != 'type') {
-				$objConf[$key] = $TMPMAPCFG->getValue('global', 0, $key);
-			}
-		}
-		
-		unset($TMPMAPCFG);
-	}
+	// Read the map configuration file
+	$MAPCFG->readMapConfig();
 	
+	$objConf = $MAPCFG->getObjectConfiguration();
+	
+	// backend_id is filtered in getObjectConfiguration(). Set it manually
+	$objConf['backend_id'] = $MAPCFG->getValue('global', 0, 'backend_id');
+		
 	return $objConf;
 }
 ?>

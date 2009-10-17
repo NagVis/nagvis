@@ -1,6 +1,5 @@
 <?php
 class FrontendModOverview extends FrontendModule {
-	private $CORE;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
