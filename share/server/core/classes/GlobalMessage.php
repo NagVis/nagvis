@@ -82,7 +82,7 @@ class GlobalMessage {
 		// Build an ajax compatible message or a message in HTML format depending on
 		// page which is being called
 		if(CONST_AJAX) {
-			$MSG = new CoreMessage(strtolower($type), $message, $pathHtmlBase, $title, $bReload, $sRedirect);
+			$MSG = new CoreMessage(strtolower($type), $message, $pathHtmlBase, $title);
 			print($MSG);
 		} else {
 			$MSG = new FrontendMessage(strtolower($type), $message, $pathHtmlBase, $title);

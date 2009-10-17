@@ -185,9 +185,9 @@ function getObjectsToUpdate(aObjs) {
  */
 function getCfgFileAges() {
 	if(oPageProperties.view_type === 'map') {
-		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+oGeneralProperties.map_name, true);
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(oPageProperties.map_name), true);
 	} else if(oPageProperties.view_type === 'automap') {
-		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&am[]='+oGeneralProperties.map_name, true);
+		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(oPageProperties.map_name), true);
 	} else {
 		return getSyncRequest(oGeneralProperties.path_htmlserver+'?action=getCfgFileAges&f[]=mainCfg', true);
 	}
@@ -1805,9 +1805,9 @@ function workerUpdate(iCount, sType, sIdentifier) {
 			// FIXME: Set new background image (renew random value at the end)
 			
 			// Reparse the automap on changed map configuration
-			eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
+			eventlog("worker", "info", "Automap configuration file was updated. Reparsing the map.");
 			if(parseAutomap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
-				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
+				eventlog("worker", "error", "Problem while reparsing the automap after new configuration");
 			}
 		}
 
@@ -1845,7 +1845,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 					var map = oPageProperties.map_name;
 					
 					// Create request string
-					var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+					var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&m[]='+escapeUrlValues(map)+'&t[]='+type+'&n1[]='+name;
 					if(service_description) {
 						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 					} else {
@@ -1875,12 +1875,6 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		}
 		o = null;
 		aUrlParts = null;
-		
-		// Update shapes when needed
-		if(aShapesToUpdate.length > 0) {
-			updateShapes(aShapesToUpdate);
-		}
-		aShapesToUpdate = null;
 		
 		// When some state changed on the map update the title and favicon
 		if(bStateChanged) {
