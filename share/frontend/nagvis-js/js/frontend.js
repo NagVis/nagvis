@@ -519,6 +519,11 @@ function updateMapBasics() {
 		setPageBackgroundColor(getBackgroundColor(o));
 	}
 	
+	// Update background image for automap
+	if(oPageProperties.view_type === 'automap') {
+		setMapBackgroundImage(oPageProperties.background_image+iNow);
+	}
+	
 	o = null;
 }
 
@@ -1845,7 +1850,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 					var map = oPageProperties.map_name;
 					
 					// Create request string
-					var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&m[]='+escapeUrlValues(map)+'&t[]='+type+'&n1[]='+name;
+					var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&am[]='+escapeUrlValues(map)+'&t[]='+type+'&n1[]='+name;
 					if(service_description) {
 						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 					} else {
