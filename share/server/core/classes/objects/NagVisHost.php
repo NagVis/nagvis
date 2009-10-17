@@ -70,6 +70,9 @@ class NagVisHost extends NagiosHost {
 		$strReturn = '';
 		
 		if(!in_array($this->getName(), $arrHostnamesParsed)) {
+			// Get the image size
+			list($width, $height, $type, $attr) = getimagesize($this->CORE->MAINCFG->getValue('paths', 'icon').$this->icon);
+			
 			$strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
 			$strReturn .= 'label="", ';
 			$strReturn .= 'URL="'.str_replace(array('[htmlcgi]', '[host_name]'),
@@ -81,6 +84,15 @@ class NagVisHost extends NagiosHost {
 			/*if($layer == 0) {
 				$strReturn .= 'shape="egg",';
 			}*/
+			
+			// This should be scaled by the choosen iconset
+			if($width != 16) {
+				$strReturn .= 'width="'.$this->pxToInch($width).'", ';
+			}
+			if($height != 16) {
+				$strReturn .= 'height="'.$this->pxToInch($height).'", ';
+			}
+			
 			$strReturn .= 'layer="'.$layer.'"';
 			$strReturn .= ' ];'."\n ";
 			
@@ -96,6 +108,15 @@ class NagVisHost extends NagiosHost {
 		}
 		
 		return $strReturn;
+	}
+	
+	/**
+	 * This methods converts pixels to inches
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function pxToInch($px) {
+		return number_format($px/72, 4, '.','');
 	}
 	
 	# End public methods

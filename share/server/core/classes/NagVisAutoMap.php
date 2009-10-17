@@ -259,10 +259,9 @@ class NagVisAutoMap extends GlobalMap {
 		// default margin is 0.11,0.055
 		$str .= 'margin="0.0,0.0", ';
 		$str .= 'ratio="auto", ';
-		//$str .= 'shape="none", ';
 		$str .= 'shape="rect", ';
 		$str .= 'color="white", ';
-		// FIXME: This should be scaled by the choosen iconset
+		// This may be altered by the single objects depending on the icon size
 		$str .= 'width="'.$this->pxToInch(16).'", ';
 		$str .= 'height="'.$this->pxToInch(16).'", ';
 		$str .= 'fontcolor=black, fontsize=10';
