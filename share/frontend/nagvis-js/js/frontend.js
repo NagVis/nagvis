@@ -1797,7 +1797,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		}
 		bStateChanged = null;
 	
-	} elseif(sType === 'automap') {
+	} else if(sType === 'automap') {
 		
 		// Check for changed map configuration
 		if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
