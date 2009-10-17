@@ -696,22 +696,24 @@ function refreshMapObject(objectId) {
 	var service_description = aMapObjects[iIndex].conf.service_description;
 	var map = oPageProperties.map_name;
 	
+	iIndex = null;
+	
 	// Only append map param if it is a known map
 	var sMapPart = '';
 	var sMod = '';
 	if(oPageProperties.view_type === 'map') {
 		sMod = 'Map';
-		sMapPart = '&m[]='+escapeUrlValues(map);
+		sMapPart = '&show='+escapeUrlValues(map);
 	} else if(oPageProperties.view_type === 'automap') {
 		sMod = 'AutoMap';
-		sMapPart = '&am[]='+escapeUrlValues(map);
+		sMapPart = '&show='+escapeUrlValues(map);
 	} else if(oPageProperties.view_type === 'overview') {
 		sMod = 'General';
 		sMapPart = '';
 	}
 	
 	// Create request string
-	var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+sMapPart+'&t[]='+escapeUrlValues(type)+'&n1[]='+escapeUrlValues(name);
+	var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&t[]='+escapeUrlValues(type)+'&n1[]='+escapeUrlValues(name);
 	if(service_description) {
 		sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 	} else {
@@ -719,7 +721,17 @@ function refreshMapObject(objectId) {
 	}
 	
 	// Get the updated objectsupdateMapObjects via bulk request
-	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?mod='+escapeUrlValues(sMod)+'&act=getObjectStates&ty=state' + sUrlPart, false);
+	var o = getSyncRequest(oGeneralProperties.path_htmlserver+'?mod='+escapeUrlValues(sMod)+'&act=getObjectStates'+sMapPart+'&ty=state'+sUrlPart, false);
+	
+	sUrlPart = null;
+	sMod = null;
+	sMapPart = null;
+	map = null;
+	service_description = null;
+	obj_id = null;
+	type = null;
+	name = null;
+	
 	var bStateChanged = false;
 	if(o.length > 0) {
 		bStateChanged = updateObjects(o, aMapObjects, oPageProperties.view_type);
@@ -729,6 +741,7 @@ function refreshMapObject(objectId) {
 	if(bStateChanged) {
 		updateMapBasics();
 	}
+	bStateChanged = null;
 }
 
 
@@ -1772,10 +1785,9 @@ function workerUpdate(iCount, sType, sIdentifier) {
 				if(name) {
 					var obj_id = aMapObjects[arrObj[i]].conf.object_id;
 					var service_description = aMapObjects[arrObj[i]].conf.service_description;
-					var map = oPageProperties.map_name;
 					
 					// Create request string
-					var sUrlPart = '&i[]='+obj_id+'&m[]='+map+'&t[]='+type+'&n1[]='+name;
+					var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
 					if(service_description) {
 						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 					} else {
@@ -1790,7 +1802,13 @@ function workerUpdate(iCount, sType, sIdentifier) {
 					
 					// Append part to array of parts
 					aUrlParts.push(sUrlPart);
+					sUrlPart = null;
+					
+					service_description = null;
+					obj_id = null;
 				}
+				
+				name = null;
 			}
 		}
 		iUrlParams = null;
@@ -1798,7 +1816,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		arrObj = null;
 		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Map&act=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=Map&act=getObjectStates&show='+oPageProperties.map_name+'&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 		var bStateChanged = false;
 		if(o.length > 0) {
 			bStateChanged = updateObjects(o, aMapObjects, sType);
@@ -1868,10 +1886,9 @@ function workerUpdate(iCount, sType, sIdentifier) {
 				if(name) {
 					var obj_id = aMapObjects[arrObj[i]].conf.object_id;
 					var service_description = aMapObjects[arrObj[i]].conf.service_description;
-					var map = oPageProperties.map_name;
 					
 					// Create request string
-					var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&am[]='+escapeUrlValues(map)+'&t[]='+type+'&n1[]='+name;
+					var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&t[]='+type+'&n1[]='+name;
 					if(service_description) {
 						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
 					} else {
@@ -1886,7 +1903,13 @@ function workerUpdate(iCount, sType, sIdentifier) {
 					
 					// Append part to array of parts
 					aUrlParts.push(sUrlPart);
+					
+					sUrlPart = null;
+					service_description = null;
+					obj_id = null;
 				}
+				
+				name = null;
 			}
 		}
 		iUrlParams = null;
@@ -1894,7 +1917,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		arrObj = null;
 		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=AutoMap&act=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var o = getBulkSyncRequest(oGeneralProperties.path_htmlserver+'?mod=AutoMap&act=getObjectStates&show='+escapeUrlValues(oPageProperties.map_name)+'&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
 		var bStateChanged = false;
 		if(o.length > 0) {
 			bStateChanged = updateObjects(o, aMapObjects, sType);
@@ -1928,7 +1951,6 @@ function workerUpdate(iCount, sType, sIdentifier) {
 				var type = aMapObjects[arrObj[i]].conf.type;
 				var obj_id = aMapObjects[arrObj[i]].conf.object_id;
 				var service_description = aMapObjects[arrObj[i]].conf.service_description;
-				var map = oPageProperties.map_name;
 				
 				// Create request url part for this object
 				var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
@@ -1940,7 +1962,14 @@ function workerUpdate(iCount, sType, sIdentifier) {
 				
 				// Append part to array of parts
 				aUrlParts.push(sUrlPart);
+				
+				sUrlPart = null;
+				obj_id = null;
+				type = null;
+				service_description = null;
 			}
+			
+			name = null;
 		}
 		
 		// Get the updated objectsupdateMapObjects via bulk request

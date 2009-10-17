@@ -86,7 +86,7 @@ class CoreUriHandler {
 			if($bValid) {
 				$this->aOpts[$key] = $_GET[$key];
 			} else {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('paramNotValid', Array('key' => htmlentities($key))));
+				new GlobalMessage('ERROR', $this->CORE->LANG->getText('The parameter "[key]" does not match the valid value format', Array('key' => htmlentities($key))));
 			}
 		}
 	}
