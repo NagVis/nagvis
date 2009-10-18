@@ -29,22 +29,58 @@ class CoreAuthorisationHandler {
 		return $this->aPermissions;
 	}
 	
-	public function isPermitted($sModule, $sAction) {
-		// Checks if the users has the permission for the action
-		if(
-		   // User is permitted to access the module by explicit permission
-		   (isset($this->aPermissions[$sModule]) &&
-		   // User is permitted to do this action explicit or has a wildcard for all actions of this module
-		   (isset($this->aPermissions[$sModule][$sAction]) || isset($this->aPermissions[$sModule][AUTH_PERMISSION_WILDCARD])))
-		   ||
-		   // Or check if the user is permitted to access the module by wildcard permission
-		   (isset($this->aPermissions[AUTH_PERMISSION_WILDCARD]) &&
-		   // User is permitted to do this action by wildcard or has a wildcard for all actions of all modules
-		   (isset($this->aPermissions[AUTH_PERMISSION_WILDCARD][$sAction]) || isset($this->aPermissions[AUTH_PERMISSION_WILDCARD][AUTH_PERMISSION_WILDCARD])))
-		  ) {
+	public function isPermitted($sModule, $sAction, $sObj = null) {
+		$bAutorized = false;
+		
+		// Module access?
+		$modAccess = false;
+		if(isset($this->aPermissions[$sModule])) {
+			$modAccess = $sModule;
+		} elseif(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD])) {
+			$modAccess = AUTH_PERMISSION_WILDCARD;
+		}
+		
+		if($modAccess !== false) {
+			// Action access?
+			$actAccess = false;
+			if(isset($this->aPermissions[$modAccess][$sAction])) {
+				$actAccess = $sAction;
+			} elseif(isset($this->aPermissions[$modAccess][AUTH_PERMISSION_WILDCARD])) {
+				$actAccess = AUTH_PERMISSION_WILDCARD;
+			}
+			
+			if($actAccess !== false) {
+				// Have to check a particular object?
+				if($sObj !== null) {
+					// Object access?
+					if(isset($this->aPermissions[$modAccess][$actAccess][$sObj])) {
+						$bAutorized = true;
+					} elseif(isset($this->aPermissions[$modAccess][$actAccess][AUTH_PERMISSION_WILDCARD])) {
+						$bAutorized = true;
+					} else {
+						// FIXME: Logging
+						echo 'object denied';
+						$bAutorized = false;
+					}
+				} else {
+					$bAutorized = true;
+				}
+			} else {
+				// FIXME: Logging
+				echo 'action denied';
+				$bAutorized = false;
+			}
+		} else {
+			// FIXME: Logging
+			echo 'module denied';
+			$bAutorized = false;
+		}
+		
+		// Authorized?
+		if($bAutorized === true) {
 			return true;
 		} else {
-			//FIXME: Logging!
+			// FIXME: Logging
 			return false;
 		}
 	}

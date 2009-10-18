@@ -50,11 +50,11 @@ class GlobalMainCfg {
 			'global' => Array(
 				'authmodule' => Array('must' => 1,
 					'editable' => 1,
-					'default' => 'CoreAuthModFile',
+					'default' => 'CoreAuthModSQLite',
 					'match' => MATCH_STRING),
 				'authorisationmodule' => Array('must' => 1,
 					'editable' => 1,
-					'default' => 'CoreAuthorisationModFile',
+					'default' => 'CoreAuthorisationModSQLite',
 					'match' => MATCH_STRING),
 				'dateformat' => Array('must' => 1,
 					'editable' => 1,
