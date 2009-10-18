@@ -126,9 +126,9 @@ if($MODULE->actionRequiresAuthorisation()) {
 			new GlobalMessage('ERROR', $CORE->LANG->getText('You are not permitted to access this page'), null, $CORE->LANG->getText('Access denied'));
 		}
 	} else {
-		// When not authenticated redirect to logon dialog
-		$MODULE = $MHANDLER->loadModule('LogonDialog');
-		$UHANDLER->set('act', 'view');
+		// FIXME: Maybe make login possible via API?
+		// When not authenticated show error message
+		new GlobalMessage('ERROR', $CORE->LANG->getText('You are not authenticated'), null, $CORE->LANG->getText('Access denied'));
 	}
 }
 
