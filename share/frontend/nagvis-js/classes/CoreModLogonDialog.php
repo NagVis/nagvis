@@ -24,7 +24,7 @@ class CoreModLogonDialog extends FrontendModule {
 			switch($this->sAction) {
 				case 'view':
 					// Check if user is already authenticated
-					if(!$this->AUTHENTICATION->isAuthenticated()) {
+					if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated()) {
 						$sReturn = $this->displayDialog();
 					} else {
 						// When the user is already authenticated redirect to start page (overview)
@@ -33,7 +33,7 @@ class CoreModLogonDialog extends FrontendModule {
 				break;
 				case 'login':
 					// Check if user is already authenticated
-					if(!$this->AUTHENTICATION->isAuthenticated()) {
+					if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated()) {
 						$aReturn = $this->handleResponse();
 						
 						$AUTH = new FrontendModAuth($this->CORE);
