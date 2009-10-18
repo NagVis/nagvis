@@ -1596,11 +1596,14 @@ function parseAutomap(iMapCfgAge, mapName) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function parseUrl(sUrl) {
-	// FIXME: Fetch contents from server
+	// Fetch contents from server
+	var oUrlContents = getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getContents&show='+escapeUrlValues(sUrl));
 	
-	// FIXME: Clear the current contents
-	
-	// FIMXE: Add the contents to the page
+	if(typeof oUrlContents !== 'undefined' && oUrlContents.content) {
+		// Replace the current contents with the new url
+		var urlContainer = document.getElementById('url');
+		urlContainer.innerHTML = oUrlContents.content;
+	}
 }
 
 /**

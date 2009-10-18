@@ -94,6 +94,7 @@ $MHANDLER->regModule('General');
 $MHANDLER->regModule('Overview');
 $MHANDLER->regModule('Map');
 $MHANDLER->regModule('AutoMap');
+$MHANDLER->regModule('Url');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

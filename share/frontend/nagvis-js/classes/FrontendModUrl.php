@@ -1,17 +1,17 @@
 <?php
 class FrontendModUrl extends FrontendModule {
-	private $name = '';
 	private $url = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
-		$UHANDLER = new CoreUriHandler($this->CORE); 
-		$this->name = $UHANDLER->get('show');
-
-		// And parse the view specific options
-		$this->getUrlOptions($UHANDLER);
+		// Parse the view specific options
+		$aOpts = Array('show' => MATCH_STRING_URL);
 		
+		$aVals = $this->getCustomOptions($aOpts);
+		$this->url = $aVals['show'];
+		
+		// Register valid actions
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
 		);
@@ -30,20 +30,6 @@ class FrontendModUrl extends FrontendModule {
 		}
 		
 		return $sReturn;
-	}
-
-	private function getUrlOptions(CoreUriHandler $UHANDLER) {
-		// FIXME: The array should contain orders for validating the given value
-		// the options should be validated by the uri handler
-		
-		// Parse view specific uri params
-		$aKeys = Array('url' => '');
-		
-		// Load the specific params to the UriHandler
-		$UHANDLER->parseModSpecificUri($aKeys);
-		
-		// Now get those params
-		$this->url = $UHANDLER->get('url');
 	}
 	
 	private function showViewDialog() {
