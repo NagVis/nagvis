@@ -23,20 +23,32 @@ class CoreModLogonDialog extends FrontendModule {
 		if($this->offersAction($this->sAction)) {
 			switch($this->sAction) {
 				case 'view':
-					$sReturn = $this->displayDialog();
+					// Check if user is already authenticated
+					if(!$this->AUTHENTICATION->isAuthenticated()) {
+						$sReturn = $this->displayDialog();
+					} else {
+						// When the user is already authenticated redirect to start page (overview)
+						Header('Location:'.$this->CORE->MAINCFG->getValue('paths', 'htmlbase'));
+					}
 				break;
 				case 'login':
-					$aReturn = $this->handleResponse();
-					
-					$AUTH = new FrontendModAuth($this->CORE);
-					
-					if($aReturn !== false) {
-						$AUTH->setAction('login');
-						$AUTH->passCredentials($aReturn);
+					// Check if user is already authenticated
+					if(!$this->AUTHENTICATION->isAuthenticated()) {
+						$aReturn = $this->handleResponse();
 						
-						return $AUTH->handleAction();
+						$AUTH = new FrontendModAuth($this->CORE);
+						
+						if($aReturn !== false) {
+							$AUTH->setAction('login');
+							$AUTH->passCredentials($aReturn);
+							
+							return $AUTH->handleAction();
+						} else {
+							$sReturn = $AUTH->msgInvalidCredentials();
+						}
 					} else {
-						$sReturn = $AUTH->msgInvalidCredentials();
+						// When the user is already authenticated redirect to start page (overview)
+						Header('Location:'.$this->CORE->MAINCFG->getValue('paths', 'htmlbase'));
 					}
 				break;
 			}
