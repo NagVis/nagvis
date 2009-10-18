@@ -62,7 +62,7 @@ class GlobalIndexPage {
 				continue;
 			}
 			
-			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
+			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
 				$opts = Array();
 				
 				// Fetch option array from defaultparams string (extract variable 
@@ -172,7 +172,7 @@ class GlobalIndexPage {
 					continue;
 				}
 				
-				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
+				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
 					$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
 					
 					// Apply default configuration to object
