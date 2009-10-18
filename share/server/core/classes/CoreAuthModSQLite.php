@@ -50,6 +50,21 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (10, \'Map\', \'getMapObjects\', \'demo\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (11, \'Map\', \'getObjectStates\', \'demo\')');
 		
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (12, \'Map\', \'view\', \'demo2\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (13, \'Map\', \'getMapProperties\', \'demo2\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (14, \'Map\', \'getMapObjects\', \'demo2\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (15, \'Map\', \'getObjectStates\', \'demo2\')');
+		
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (16, \'Map\', \'view\', \'demo-map\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (17, \'Map\', \'getMapProperties\', \'demo-map\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (18, \'Map\', \'getMapObjects\', \'demo-map\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (19, \'Map\', \'getObjectStates\', \'demo-map\')');
+		
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (20, \'Map\', \'view\', \'demo-server\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (21, \'Map\', \'getMapProperties\', \'demo-server\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (22, \'Map\', \'getMapObjects\', \'demo-server\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (23, \'Map\', \'getObjectStates\', \'demo-server\')');
+		
 		// nagiosadmin => Administrators
 		$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (1, 1)');
 		
@@ -72,6 +87,24 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 9)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 10)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 11)');
+		
+		// Users => Allowed to view the demo2 map
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 12)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 13)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 14)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 15)');
+		
+		// Users => Allowed to view the demo-map map
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 16)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 17)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 18)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 19)');
+		
+		// Users => Allowed to view the demo-server map
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 20)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 21)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 22)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 23)');
 	}
 	
 	private function checkUserExists() {
