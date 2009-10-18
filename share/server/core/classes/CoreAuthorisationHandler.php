@@ -59,7 +59,7 @@ class CoreAuthorisationHandler {
 						$bAutorized = true;
 					} else {
 						// FIXME: Logging
-						echo 'object denied';
+						//echo 'object denied';
 						$bAutorized = false;
 					}
 				} else {
@@ -67,12 +67,12 @@ class CoreAuthorisationHandler {
 				}
 			} else {
 				// FIXME: Logging
-				echo 'action denied';
+				//echo 'action denied';
 				$bAutorized = false;
 			}
 		} else {
 			// FIXME: Logging
-			echo 'module denied';
+			//echo 'module denied';
 			$bAutorized = false;
 		}
 		
