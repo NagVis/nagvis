@@ -118,8 +118,16 @@ $MODULE->setAction($UHANDLER->get('act'));
 if($MODULE->actionRequiresAuthorisation()) {
 	// Only proceed with authenticated users
 	if($AUTH->isAuthenticated()) {
+		// In some modules not only the mod and the action need to be authorized
+		// The called object needs separate authorisation too (e.g. in maps)
+		if($MODULE->checkForObjectAuthorisation()) {
+			$sObj = $MODULE->getObject();
+		} else {
+			$sObj = null;
+		}
+		
 		// Check if the user is permited to this action in the module
-		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'))) {
+		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'), $sObj)) {
 			new GlobalMessage('ERROR', $CORE->LANG->getText('You are not permitted to access this page'), null, $CORE->LANG->getText('Access denied'));
 		}
 	} else {

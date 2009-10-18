@@ -48,7 +48,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (8, \'Map\', \'view\', \'demo\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (9, \'Map\', \'getMapProperties\', \'demo\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (10, \'Map\', \'getMapObjects\', \'demo\')');
-		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (11, \'Map\', \'getObjectsStates\', \'demo\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (11, \'Map\', \'getObjectStates\', \'demo\')');
 		
 		// nagiosadmin => Administrators
 		$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (1, 1)');

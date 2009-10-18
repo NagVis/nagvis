@@ -9,12 +9,19 @@ class CoreModAutoMap extends CoreModule {
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
 		
+		// Register valid actions
 		$this->aActions = Array(
 			'parseAutomap' => REQUIRES_AUTHORISATION,
 			'getAutomapProperties' => REQUIRES_AUTHORISATION,
 			'getAutomapObjects' => REQUIRES_AUTHORISATION,
 			'getObjectStates' => REQUIRES_AUTHORISATION
 		);
+		
+		// Register valid objects
+		$this->aObjects = $this->CORE->getAvailableAutomaps();
+		
+		// Set the requested object for later authorisation
+		$this->setObject($this->name);
 	}
 	
 	public function handleAction() {

@@ -6,8 +6,9 @@ abstract class CoreModule {
 	protected $UHANDLER = null;
 	
 	protected $aActions = Array();
+	protected $aObjects = Array();
 	protected $sAction = '';
-	protected $bRequiresAuthorisation;
+	protected $sObject = '';
 	
 	public function passAuth($AUTHENTICATION, $AUTHORISATION) {
 		$this->AUTHENTICATION = $AUTHENTICATION;
@@ -32,13 +33,44 @@ abstract class CoreModule {
 	}
 	
 	public function actionRequiresAuthorisation() {
+		$bRequiresAuthorisation = false;
+		
 		if(isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] === REQUIRES_AUTHORISATION) {
-			$this->bRequiresAuthorisation = true;
-		} else {
-			$this->bRequiresAuthorisation = false;
+			$bRequiresAuthorisation = true;
 		}
 		
-		return $this->bRequiresAuthorisation;
+		return $bRequiresAuthorisation;
+	}
+	
+	public function offersObject($sObject) {
+		if(isset($this->aObjects[$sObject])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function setObject($sObject) {
+		if($this->offersObject($sObject)) {
+			$this->sObject = $sObject;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function getObject() {
+		return $this->sObject;
+	}
+	
+	public function checkForObjectAuthorisation() {
+		$bRet = false;
+		
+		if($this->sObject !== '') {
+			$bRet = true;
+		}
+		
+		return $bRet;
 	}
 	
 	protected function getCustomOptions($aKeys) {

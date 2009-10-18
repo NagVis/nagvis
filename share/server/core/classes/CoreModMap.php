@@ -9,11 +9,18 @@ class CoreModMap extends CoreModule {
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
 		
+		// Register valid actions
 		$this->aActions = Array(
 			'getMapProperties' => REQUIRES_AUTHORISATION,
 			'getMapObjects' => REQUIRES_AUTHORISATION,
 			'getObjectStates' => REQUIRES_AUTHORISATION,
 		);
+		
+		// Register valid objects
+		$this->aObjects = $this->CORE->getAvailableMaps();
+		
+		// Set the requested object for later authorisation
+		$this->setObject($this->name);
 	}
 	
 	public function handleAction() {

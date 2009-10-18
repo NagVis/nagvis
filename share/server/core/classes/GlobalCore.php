@@ -342,7 +342,7 @@ class GlobalCore {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
 					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
-							$files[] = $arrRet[1];
+							$files[$arrRet[1]] = $arrRet[1];
 					}
 				}				
 			}
@@ -371,7 +371,7 @@ class GlobalCore {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
 					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
-							$files[] = $arrRet[1];
+							$files[$arrRet[1]] = $arrRet[1];
 					}
 				}				
 			}

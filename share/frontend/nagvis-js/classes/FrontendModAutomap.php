@@ -22,9 +22,16 @@ class FrontendModAutoMap extends FrontendModule {
 		unset($aVals['show']);
 		$this->opts = $aVals;
 		
+		// Register valid actions
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
 		);
+		
+		// Register valid objects
+		$this->aObjects = $this->CORE->getAvailableAutomaps();
+		
+		// Set the requested object for later authorisation
+		$this->setObject($this->name);
 	}
 	
 	public function handleAction() {

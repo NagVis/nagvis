@@ -14,9 +14,16 @@ class FrontendModMap extends FrontendModule {
 		$this->name = $aVals['show'];
 		$this->search = $aVals['search'];
 		
+		// Register valid actions
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
 		);
+		
+		// Register valid objects
+		$this->aObjects = $this->CORE->getAvailableMaps();
+		
+		// Set the requested object for later authorisation
+		$this->setObject($this->name);
 	}
 	
 	public function handleAction() {
