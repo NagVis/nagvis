@@ -1,9 +1,9 @@
 <?php
 /*****************************************************************************
  *
- * autoload.php - Class for defining the __autoload method
+ * autoload.php - Class for defining the autoload method for NagVis
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -23,13 +23,21 @@
  *****************************************************************************/
  
 /**
- * Load required files
+ * Load required files for NagVis. This autoloader has no compatibility
+ * problem with other autoloaders from external code
  *
- * @param	string	$class
- * @author  Michael Luebben <michael_luebben@web.de>
+ * @param   String  Name of the requested class
+ * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
-function __autoload($class) {
-	require($class.'.php');
+function NagVisAutoload($sClass) {
+	if(substr($sClass, 0, 8) === 'Frontend' || substr($sClass, 0, 4) === 'Core' || substr($sClass, 0, 6) === 'NagVis' || substr($sClass, 0, 6) === 'Global') {
+		require($sClass.'.php');
+		return true;
+	} else {
+		return false;
+	}
 }
+
+spl_autoload_register('NagVisAutoload');
 
 ?>
