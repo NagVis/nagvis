@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisRotation.php - Class represents all rotations in NagVis
+ * CoreRotation.php - Class represents all rotations in NagVis
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -25,10 +25,10 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisRotation {
-	private $CORE;
+class CoreRotation {
+	private $CORE = null;
 	
-	private $strPoolName = NULL;
+	private $sPoolName = NULL;
 	
 	private $arrSteps = Array();
 	private $intInterval = NULL;
@@ -40,60 +40,95 @@ class NagVisRotation {
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @param   String  Name of the rotation pool
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @param  GlobalCore  $CORE
+	 * @param  String      Name of the rotation pool
+	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $strPoolName = NULL) {
+	public function __construct(GlobalCore $CORE, $sPoolName) {
 		$this->CORE = $CORE;
 		
-		if($strPoolName == NULL && isset($_GET['rotation']) && $_GET['rotation'] != '') {
-			$strPoolName = $_GET['rotation'];
+		$this->sPoolName = $sPoolName;
+			
+		// Check wether the pool is defined
+		if(!$this->checkPoolExists()) {
+			// Error Message (Map rotation pool does not exist)
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists', Array('ROTATION' => htmlentities($this->sPoolName))));
 		}
 		
-		// Gathersall settings of this rotation
-		$this->setRotationOptions($strPoolName);
-	}
-	
-	/**
-	 * Gathers all settings of this rotation
-	 *
-	 * @param   String  Name of the rotation pool
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function setRotationOptions($strPoolName) {
-		if($strPoolName != NULL) {
-			$this->setPoolName($strPoolName);
-			
-			// Check wether the pool is defined
-			$this->checkPoolExists();
-			
-			// Set the array of steps
-			$this->setSteps();
-			
-			// Form the steps in urls
-			$this->setStepUrls();
-			
-			// Set the current step
-			$this->setCurrentStep();
-			
-			// Set the next step
-			$this->setNextStep();
-			
-		}
+		// Read the array of steps from configuration
+		$this->gatherSteps();
+		
+		/* Sample structure in $this->arrSteps
+		 Array(
+		  [0] => Array
+		  (
+			[label] => demo
+			[map] => demo
+			[url] => 
+			[target] => 
+			)
+		 )
+		*/
+		
+		// Form the steps in urls
+		$this->createStepUrls();
 		
 		// Gather step interval
-		$this->setStepInterval();
+		$this->gatherStepInterval();
 	}
 	
 	/**
-	 * Sets the name of this rotation pool
+	 * PUBLIC stepExists()
 	 *
-	 * @param   String  Name of the rotation pool
+	 * Checks if the state of given type and identifier exists
+	 *
+	 * @param   String    Type of the step (map,automap,url)
+	 * @param   String    Step identifier map name, url, ...
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function setPoolName($strPoolName) {
-		$this->strPoolName = $strPoolName;
+	public function stepExists($type, $step) {
+		$bRet = false;
+		
+		// Loop all steps and check if this step exists
+		foreach($this->arrSteps AS $intId => $arrStep) {
+			if(isset($arrStep[$type]) && $arrStep[$type] === $step) {
+				$bRet = true;
+				continue;
+			}
+		}
+		
+		return $bRet;
+	}
+	
+	/**
+	 * PUBLIC setStep()
+	 *
+	 * Sets the current step
+	 *
+	 * @param   String    Type of the step (map,automap,url)
+	 * @param   String    Step identifier map name, url, ...
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setStep($sType, $sStep) {
+		// First check if the step exists
+		if($this->stepExists($sType, $sStep)) {
+			// Get position of current step in the array
+			if($sStep !== '') {
+				foreach($this->arrSteps AS $iIndex => $arrStep) {
+					if(isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {
+						$this->intCurrentStep = $iIndex;
+						continue;
+					}
+				}
+			} else {
+				$this->intCurrentStep = 0;
+			}
+			
+			// Set the next step after setting the current step
+			$this->setNextStep();
+		} else {
+			new GlobalMessage('ERROR', $this->CORE->LANG->getText('The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]', Array('ROTATION' => htmlentities($this->sPoolName), 'STEP' => htmlentities($sStep), 'TYPE' => htmlentities($sType))));
+		}
 	}
 	
 	/**
@@ -115,41 +150,11 @@ class NagVisRotation {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function setStepInterval() {
-		if($this->getPoolName() != '') {
-			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation_'.$this->getPoolName(), 'interval');
+	private function gatherStepInterval() {
+		if($this->sPoolName !== '') {
+			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation_'.$this->sPoolName, 'interval');
 		} else {
 			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation', 'interval');
-		}
-	}
-	
-	/**
-	 * Sets the current step
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function setCurrentStep() {
-		$strCurrentStep = '';
-		$strType = '';
-		
-		if(isset($_GET['url']) && $_GET['url'] != '') {
-			$strCurrentStep = $_GET['url'];
-			$strType = 'url';
-		} elseif(isset($_GET['map']) && $_GET['map'] != '') {
-			$strCurrentStep = $_GET['map'];
-			$strType = 'map';
-		}
-		
-		// Set position of actual map in the array
-		if($strCurrentStep != '') {
-			foreach($this->arrSteps AS $intId => $arrStep) {
-				if($strCurrentStep == $arrStep[$strType]) {
-					$this->intCurrentStep = $intId;
-					continue;
-				}
-			}
-		} else {
-			$this->intCurrentStep = 0;
 		}
 	}
 	
@@ -158,12 +163,13 @@ class NagVisRotation {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function setStepUrls() {
-		foreach ($this->arrSteps AS $intId => $arrStep) {
+	private function createStepUrls() {
+		$htmlBase = $this->CORE->MAINCFG->getValue('paths', 'htmlbase');
+		foreach($this->arrSteps AS $intId => $arrStep) {
 			if(isset($arrStep['url']) && $arrStep['url'] != '') {
-				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&url='.$arrStep['url'];
+				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Url&act=view&show='.$arrStep['url'].'&rotation='.$this->sPoolName;
 			} else {
-				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&map='.$arrStep['map'];
+				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$arrStep['map'].'&rotation='.$this->sPoolName;
 			}
 		}
 	}
@@ -173,8 +179,8 @@ class NagVisRotation {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function setSteps() {
-		$this->arrSteps = $this->CORE->MAINCFG->getValue('rotation_'.$this->getPoolName(), 'maps');
+	private function gatherSteps() {
+		$this->arrSteps = $this->CORE->MAINCFG->getValue('rotation_'.$this->sPoolName, 'maps');
 	}
 	
 	/**
@@ -183,9 +189,12 @@ class NagVisRotation {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkPoolExists() {
-		if(array_search($this->strPoolName, $this->CORE->getDefinedRotationPools()) === FALSE) {
-			// Error Message (Map rotation pool does not exist)
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists','ROTATION~'.$this->getPoolName()));
+		$pools = $this->CORE->getDefinedRotationPools();
+		
+		if(isset($pools[$this->sPoolName])) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -239,7 +248,7 @@ class NagVisRotation {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getPoolName() {
-		return $this->strPoolName;
+		return $this->sPoolName;
 	}
 	
 	/**
@@ -263,16 +272,6 @@ class NagVisRotation {
 	}
 	
 	/**
-	 * Gets the array of steps
-	 *
-	 * @return	Integer
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getSteps() {
-		return $this->arrSteps;
-	}
-	
-	/**
 	 * Gets the number of steps
 	 *
 	 * @return	Integer
@@ -283,29 +282,25 @@ class NagVisRotation {
 	}
 
 	/**
-	 * Gets the javascript code for the map refresh/rotation
+	 * PUBLIC getRotationPropertiesJson
 	 *
+	 * Gets the rotation properties for the current view as array
+	 *
+	 * @return  Array    Rotation properties
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getRotationPropertiesJson($bRefresh) {
+	public function getRotationProperties() {
 		$arr = Array();
 		
-		if($this->ROTATION->getPoolName() != '') {
+		if($this->sPoolName !== '') {
 			$arr['rotationEnabled'] = 1;
-			$arr['nextStepUrl'] = $this->ROTATION->getNextStepUrl();
-			$arr['nextStepTime'] = $this->ROTATION->getStepInterval();
+			$arr['nextStepUrl'] = $this->getNextStepUrl();
+			$arr['nextStepTime'] = $this->getStepInterval();
 		} else {
 			$arr['rotationEnabled'] = 0;
-			$arr['nextStepUrl'] = '';
-			
-			if($bRefresh) {
-				$arr['nextStepTime'] = $this->ROTATION->getStepInterval();
-			} else {
-				$arr['nextStepTime'] = '';
-			}
 		}
 		
-		return json_encode($arr);
+		return $arr;
 	}
 }
 ?>

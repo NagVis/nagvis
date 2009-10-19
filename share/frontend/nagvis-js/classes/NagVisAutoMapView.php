@@ -31,6 +31,7 @@ class NagVisAutoMapView {
 	
 	private $name = '';
 	private $content = '';
+	private $aRotation = Array();
 	
 	/**
 	 * Class Constructor
@@ -49,6 +50,16 @@ class NagVisAutoMapView {
 	}
 	
 	/**
+	 * Set the rotation properties if the user wants a rotation
+	 *
+	 * @param   Array    
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setRotation($a) {
+		$this->aRotation = $a;
+	}
+	
+	/**
 	 * Parses the map and the objects for the nagvis-js frontend
 	 *
 	 * @return	String 	String with JS Code
@@ -62,6 +73,7 @@ class NagVisAutoMapView {
 		$aData = Array(
 				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
 				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+				'rotationProperties' => json_encode($this->aRotation),
 				'mapName' => $this->name,
 				'automap' => $this->content
 			);

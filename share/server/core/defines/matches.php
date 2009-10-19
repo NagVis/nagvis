@@ -46,9 +46,12 @@ define('MATCH_PNGFILE', '/^(.+)\.png$/i');
 define('MATCH_PNG_GIF_JPG_FILE', '/^(.+)\.(png|gif|jpg)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_NONE', '/^((.+)\.(png|gif|jpg)|none)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\])$/i');
+define('MATCH_ROTATION_STEP_TYPES_EMPTY', '/^(?:map|automap|url)?$/');
 
 define('MATCH_MAP_NAME', '/^[0-9A-Za-z_-]+$/');
 define('MATCH_MAP_NAME_EMPTY', '/^[0-9A-Za-z_-]*$/');
+define('MATCH_ROTATION_NAME', '/^[0-9A-Za-z_-]+$/');
+define('MATCH_ROTATION_NAME_EMPTY', '/^[0-9A-Za-z_-]*$/');
 define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete)$/');

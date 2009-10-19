@@ -262,18 +262,19 @@ class GlobalIndexPage {
 			$aRotationPools = $this->CORE->getDefinedRotationPools();
 			if(count($aRotationPools) > 0) {
 				foreach($aRotationPools AS $poolName) {
-					$ROTATION = new NagVisRotation($this->CORE, $poolName);
+					$ROTATION = new CoreRotation($this->CORE, $poolName);
 					
 					$aSteps = Array();
 					
 					// Parse the code for the step list
-					foreach($ROTATION->getSteps() AS $intId => $arrStep) {
-						$aSteps[] = Array('name' => $ROTATION->getStepLabelById($intId),
-						                  'url' => $ROTATION->getStepUrlById($intId));
+					$iNum = $ROTATION->getNumSteps();
+					for($i = 0; $i < $iNum; $i++) {
+						$aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
+						                  'url' => $ROTATION->getStepUrlById($i));
 					}
 					
 					$aRotations[] = Array('name' => $poolName,
-					                      'url' => $ROTATION->getNextStepUrl(),
+					                      'url' => $ROTATION->getStepUrlById(0),
 					                      'num_steps' => $ROTATION->getNumSteps(),
 														    'steps' => $aSteps);
 				}

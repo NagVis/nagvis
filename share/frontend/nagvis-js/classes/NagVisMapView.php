@@ -29,6 +29,7 @@ class NagVisMapView {
 	private $CORE = null;
 	private $name = '';
 	private $search = '';
+	private $aRotation = Array();
 	
 	/**
 	 * Class Constructor
@@ -43,14 +44,25 @@ class NagVisMapView {
 		// FIXME: Already validated?
 		$this->name = $name;
 	}
-
+	
 	/**
 	 * Set the search value if the user searches for an object
 	 *
+	 * @param   String    Search string
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function setSearch($s) {
 		$this->search = $s;
+	}
+	
+	/**
+	 * Set the rotation properties if the user wants a rotation
+	 *
+	 * @param   Array    
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setRotation($a) {
+		$this->aRotation = $a;
 	}
 	
 	/**
@@ -67,6 +79,7 @@ class NagVisMapView {
 		$aData = Array(
 				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
 				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+				'rotationProperties' => json_encode($this->aRotation),
 				'viewProperties' => $this->parseViewProperties(),
 				'mapName' => $this->name
 			);
@@ -74,7 +87,7 @@ class NagVisMapView {
     // Build page based on the template file and the data array
     return $TMPLSYS->get($TMPL->getTmplFile('map'), $aData);
 	}
-
+	
 	/**
 	 * Parses the view specific properties. In most cases this will be user
 	 * defined values which maybe given by url or session

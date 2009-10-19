@@ -2,17 +2,20 @@
 class FrontendModMap extends FrontendModule {
 	private $name = '';
 	private $search = '';
+	private $rotation = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
 		// Parse the view specific options
 		$aOpts = Array('show' => MATCH_MAP_NAME,
-		               'search' => MATCH_STRING_NO_SPACE_EMPTY);
+		               'search' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'rotation' => MATCH_ROTATION_NAME_EMPTY);
 		
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
 		$this->search = $aVals['search'];
+		$this->rotation = $aVals['rotation'];
 		
 		// Register valid actions
 		$this->aActions = Array(
@@ -64,19 +67,23 @@ class FrontendModMap extends FrontendModule {
     }
 
 		// Initialize map view
-		$this->MAP = new NagVisMapView($this->CORE, $this->name);
+		$this->VIEW = new NagVisMapView($this->CORE, $this->name);
 
 		// The user is searching for an object
-		$this->MAP->setSearch($this->search);
+		$this->VIEW->setSearch($this->search);
+		
+		// Maybe it is needed to handle the requested rotation
+		if($this->rotation != '') { 
+			$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
+			$ROTATION->setStep('map', $this->name);
+			$this->VIEW->setRotation($ROTATION->getRotationProperties());
+		}
 		
     //FIXME: Maintenance mode not supported atm
-		//$this->MAP->MAPOBJ->checkMaintenance(1);
-    $INDEX->setContent($this->MAP->parse());
+		//$this->VIEW->MAPOBJ->checkMaintenance(1);
+    $INDEX->setContent($this->VIEW->parse());
 
 		return $INDEX->parse();
-
-		//FIXME: Rotation properties not supported atm
-    //$FRONTEND->addBodyLines($FRONTEND->parseJs('oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(0).';'));
 	}
 }
 ?>

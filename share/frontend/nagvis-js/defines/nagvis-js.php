@@ -32,10 +32,6 @@
  */
 set_include_path(
 	get_include_path()
-	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/controller/'
-	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/validator/'
-	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/httpRequest/'
-	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/frontend/'
 	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/'
 	.PATH_SEPARATOR.'../../frontend/wui/includes/classes/'
 );

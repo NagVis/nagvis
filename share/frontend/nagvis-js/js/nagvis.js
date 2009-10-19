@@ -450,7 +450,7 @@ function setRotationLabel(startLabel,stopLabel) {
 	if(getUrlParam('rotation') === '') {
 		oRotationSwitch.style.visibility = 'hidden';
 	} else {
-		if(oRotationProperties.rotationEnabled) {
+		if(oRotationProperties.rotationEnabled == 1) {
 			oRotationSwitch.innerHTML = stopLabel;
 		} else {
 			oRotationSwitch.innerHTML = startLabel;

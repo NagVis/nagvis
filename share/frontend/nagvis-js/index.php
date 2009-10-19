@@ -99,6 +99,7 @@ $MHANDLER->regModule('Map');
 $MHANDLER->regModule('Url');
 $MHANDLER->regModule('Automap');
 $MHANDLER->regModule('Overview');
+$MHANDLER->regModule('Rotation');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

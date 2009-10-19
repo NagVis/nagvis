@@ -104,7 +104,8 @@ class GlobalCore {
 		$ret = Array();
 		foreach($this->MAINCFG->getSections() AS $name) {
 			if(preg_match('/^rotation_/i', $name)) {
-				$ret[] = $this->MAINCFG->getValue($name, 'rotationid');
+				$id = $this->MAINCFG->getValue($name, 'rotationid');
+				$ret[$id] = $id;
 			}
 		}
 		

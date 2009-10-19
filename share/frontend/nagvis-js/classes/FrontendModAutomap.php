@@ -2,6 +2,7 @@
 class FrontendModAutoMap extends FrontendModule {
 	private $name;
 	private $opts;
+	private $rotation = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
@@ -15,11 +16,14 @@ class FrontendModAutoMap extends FrontendModule {
 		               'width' => MATCH_INTEGER_EMPTY,
 		               'height' => MATCH_INTEGER_EMPTY,
 		               'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
-		               'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY);
+		               'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'rotation' => MATCH_ROTATION_NAME_EMPTY);
 		
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
+		$this->rotation = $aVals['rotation'];
 		unset($aVals['show']);
+		unset($aVals['rotation']);
 		$this->opts = $aVals;
 		
 		// Register valid actions
@@ -60,9 +64,6 @@ class FrontendModAutoMap extends FrontendModule {
 
 		// Build index template
 		$INDEX = new NagVisIndexView($this->CORE);
-
-		//FIXME: Rotation properties not supported atm
-    //$FRONTEND->addBodyLines($FRONTEND->parseJs('oRotationProperties = '.$FRONTEND->getRotationPropertiesJson(0).';'));
 		
 		// Need to load the custom stylesheet?
 		$customStylesheet = $MAPCFG->getValue('global',0, 'stylesheet');
@@ -83,6 +84,13 @@ class FrontendModAutoMap extends FrontendModule {
 		// Render the automap
 		$AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts);
 		$this->VIEW->setContent($AUTOMAP->parseMap());
+		
+		// Maybe it is needed to handle the requested rotation
+		if($this->rotation != '') { 
+			$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
+			$ROTATION->setStep('automap', $this->name);
+			$this->VIEW->setRotation($ROTATION->getRotationProperties());
+		}
 		
     //FIXME: Maintenance mode not supported atm
 		//$this->MAP->MAPOBJ->checkMaintenance(1);

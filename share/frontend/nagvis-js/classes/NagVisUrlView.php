@@ -29,6 +29,7 @@ class NagVisUrlView {
 	private $CORE = null;
 	private $url = '';
 	private $content = '';
+	private $aRotation = Array();
 	
 	/**
 	 * Class Constructor
@@ -54,6 +55,16 @@ class NagVisUrlView {
 	}
 	
 	/**
+	 * Set the rotation properties if the user wants a rotation
+	 *
+	 * @param   Array    
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setRotation($a) {
+		$this->aRotation = $a;
+	}
+	
+	/**
 	 * Parses the url and the objects for the nagvis-js frontend
 	 *
 	 * @return	String 	String with JS Code
@@ -67,6 +78,7 @@ class NagVisUrlView {
 		$aData = Array(
 				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
 				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+				'rotationProperties' => json_encode($this->aRotation),
 				'url' => $this->url
 			);
 
