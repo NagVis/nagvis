@@ -130,6 +130,18 @@ class NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC setObjectId()
+	 *
+	 * Set method for the object id
+	 *
+	 * @param   Integer    Object id to set for the object
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setObjectId($id) {
+		$this->object_id = $id;
+	}
+	
+	/**
 	 * Get method for the name of the object
 	 *
 	 * @return	String		Name of the object

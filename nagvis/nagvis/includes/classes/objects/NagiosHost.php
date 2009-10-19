@@ -322,6 +322,10 @@ class NagiosHost extends NagVisStatefulObject {
 					$OBJ->setConfiguration($objConf);
 					$OBJ->fetchIcon();
 					
+					// The number of objects on the map controlls the object id to take
+					// 0 is reserved for the root host
+					$OBJ->setObjectId(count($arrHostnames)+1);
+					
 					// Append the object to the childObjects array
 					$this->childObjects[] = $OBJ;
 					
