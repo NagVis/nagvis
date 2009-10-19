@@ -86,5 +86,24 @@ class NagVisUrl {
 		
 		return $this->strContents;
 	}
+	
+	/**
+	 * Parses the url options in json format
+	 *
+	 * @return	String 	String with JSON Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function parsePropertiesJson() {
+		$arr = Array();
+		$arr['url'] = $this->strUrl;
+		/*$arr['name'] = $this->MAPCFG->getName();
+		$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
+		$arr['background_image'] = $this->getBackgroundJson();
+		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
+		$arr['favicon_image'] = $this->getFavicon();
+		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');*/
+		
+		return json_encode($arr);
+	}
 }
 ?>

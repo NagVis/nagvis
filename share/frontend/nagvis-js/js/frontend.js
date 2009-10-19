@@ -1391,7 +1391,7 @@ function getOverviewRotations() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getAutomapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='+mapName)
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='+escapeUrlValues(mapName))
 }
 
 /**
@@ -1403,7 +1403,19 @@ function getAutomapProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getMapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='+mapName)
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='+escapeUrlValues(mapName))
+}
+
+/**
+ * getUrlProperties()
+ *
+ * Fetches the current url properties from the core
+ *
+ * @return  Boolean  Success?
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getUrlProperties(sUrl) {
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getProperties&show='+escapeUrlValues(sUrl))
 }
 
 /**
@@ -1694,8 +1706,18 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		
 		eventlog("worker", "info", "Finished parsing overview");
 	} else if(sType === 'url') {
+		// Load the map properties
+		eventlog("worker", "debug", "Loading the url properties");
+		oPageProperties = getUrlProperties(sIdentifier);
+		oPageProperties.view_type = sType;
+		
 		// Fetches the contents from the server and prints it to the page
+		eventlog("worker", "debug", "Parsing url page");
 		parseUrl(sIdentifier);
+		
+		// Load the file ages of the important configuration files
+		eventlog("worker", "debug", "Loading the file ages");
+		oFileAges = getCfgFileAges();
 	} else if(sType == 'automap') {
 		// Loading a simple map
 		eventlog("worker", "debug", "Parsing automap: " + sIdentifier);
@@ -1933,6 +1955,12 @@ function workerUpdate(iCount, sType, sIdentifier) {
 			updateMapBasics();
 		}
 		bStateChanged = null;
+		
+	} else if(sType === 'url') {
+		
+		// Fetches the contents from the server and prints it to the page
+		eventlog("worker", "debug", "Reparsing url page");
+		parseUrl(oPageProperties.url);
 		
 	} else if(sType === 'overview') {
 		

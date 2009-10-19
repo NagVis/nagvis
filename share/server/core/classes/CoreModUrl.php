@@ -37,7 +37,8 @@ class CoreModUrl extends CoreModule {
 		
 		// Register valid actions
 		$this->aActions = Array(
-			'getContents' => REQUIRES_AUTHORISATION
+			'getContents' => REQUIRES_AUTHORISATION,
+			'getProperties' => REQUIRES_AUTHORISATION
 		);
 	}
 	
@@ -49,6 +50,9 @@ class CoreModUrl extends CoreModule {
 				case 'getContents':
 					$sReturn = $this->getContents();
 				break;
+				case 'getProperties':
+					$sReturn = $this->getProperties();
+				break;
 			}
 		}
 		
@@ -58,6 +62,11 @@ class CoreModUrl extends CoreModule {
 	private function getContents() {
 		$URL = new NagVisUrl($this->CORE, $this->url);
 		return json_encode(Array('content' => $URL->getContents()));
+	}
+	
+	private function getProperties() {
+		$URL = new NagVisUrl($this->CORE, $this->url);
+		return $URL->parsePropertiesJson();
 	}
 }
 ?>
