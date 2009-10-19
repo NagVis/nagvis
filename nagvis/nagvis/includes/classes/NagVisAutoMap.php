@@ -213,7 +213,7 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= 'dpi="72", ';
 		//ratio: expand, auto, fill, compress
 		$str .= 'ratio="fill", ';
-		$str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getName().'", ';
+		$str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getObjectId().'", ';
 		
 		/* Directed (dot) only */
 		if($this->renderMode == 'directed') {
