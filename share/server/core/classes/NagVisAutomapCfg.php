@@ -62,16 +62,16 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 	public function &getObjectConfiguration() {
 		$objConf = Array();
 		
-		// Get object configuration from configuration file
+		/*
+		 * Get object default configuration from configuration file
+		 * The dummy host MUST be the first host defined in the automap configuration file.
+		 * The settings of the first host will be used for all objects on the map
+		 */
 		foreach($this->getValidTypeKeys('host') AS $key) {
 			if($key != 'type' && $key != 'backend_id' && $key != 'host_name' & $key != 'object_id') {
 				$objConf[$key] = $this->getValue('host', 0, $key);
 			}
 		}
-		
-		// #22 FIXME: Need to add some code here to make "sub automap" links possible
-		// If a host matching the current hostname ist available in the automap configuration
-		// load all settings here
 		
 		return $objConf;
 	}

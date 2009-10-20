@@ -158,6 +158,8 @@ class NagVisAutoMap extends GlobalMap {
 			$this->filterChildObjectTreeByGroup();
 		}
 		
+		$this->loadObjectConfigurations();
+		
 		// Create MAPOBJ object, form the object tree to map objects and get the
 		// state of the objects
 		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG);
@@ -443,6 +445,30 @@ class NagVisAutoMap extends GlobalMap {
 	
 	# END Public Methods
 	# #####################################################
+	
+	private function loadObjectConfigurations() {
+		// Load the hosts from mapcfg into the aConf array
+		$aConf = Array();
+		$aHosts = $this->MAPCFG->getDefinitions('host');
+		foreach($aHosts AS $aHost) {
+			$aConf[$aHost['host_name']] = $aHost;
+		}
+		
+		// #22 FIXME: Need to add some code here to make "sub automap" links possible
+		// If a host matching the current hostname ist available in the automap configuration
+		// load all settings here
+		
+		// Loop all map object
+		foreach($this->arrMapObjects AS $OBJ) {
+			// Try to find a matching object in the map configuration
+			if(isset($aConf[$OBJ->getName()])) {
+				unset($aConf[$OBJ->getName()]['type']);
+				unset($aConf[$OBJ->getName()]['object_id']);
+				unset($aConf[$OBJ->getName()]['host_name']);
+				$OBJ->setConfiguration($aConf[$OBJ->getName()]);
+			}
+		}
+	}
 	
 	/**
 	 * Do the preflight checks to ensure the automap can be drawn
