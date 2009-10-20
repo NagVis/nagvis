@@ -149,13 +149,13 @@ class NagVisAutoMap extends GlobalMap {
 		$this->fetchHostObjectByName($this->root);
 		
 		// Get all object information from backend
-		$this->getObjectTree();
+		$this->getChildObjectTree();
 		
 		if($this->filterGroup != '') {
 			$this->filterGroupObject = new NagiosHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filterGroup);
 			$this->filterGroupObject->fetchMemberHostObjects();
 			
-			$this->filterObjectTreeByGroup();
+			$this->filterChildObjectTreeByGroup();
 		}
 		
 		// Create MAPOBJ object, form the object tree to map objects and get the
@@ -545,7 +545,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function getObjectTree() {
+	private function getChildObjectTree() {
 		$this->rootObject->fetchChilds($this->maxLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
 	}
 	
@@ -554,7 +554,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function filterObjectTreeByGroup() {
+	private function filterChildObjectTreeByGroup() {
 		$hostgroupMembers = Array();
 		foreach($this->filterGroupObject->getMembers() AS $OBJ1) {
 			$hostgroupMembers[] = $OBJ1->getName();
