@@ -27,13 +27,30 @@
  */
 class CoreModAutoMap extends CoreModule {
 	private $name = null;
+	private $opts = null;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
-		$aOpts = Array('show' => MATCH_MAP_NAME);
+		$aOpts = Array('show' => MATCH_MAP_NAME,
+		               'backend' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'root' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'maxLayers' => MATCH_INTEGER_EMPTY,
+		               'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
+		               'width' => MATCH_INTEGER_EMPTY,
+		               'height' => MATCH_INTEGER_EMPTY,
+		               'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY);
+		
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
+		unset($aVals['show']);
+		$this->opts = $aVals;
+		
+		// Save the automap name to use
+		$this->opts['automap'] = $this->name;
+		// Save the preview mode (Enables/Disables printing of errors)
+		$this->opts['preview'] = 0;
 		
 		// Register valid actions
 		$this->aActions = Array(
@@ -80,23 +97,7 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG = new NagVisAutomapCfg($CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		// FIXME: Maybe should be recoded?
-		// FIXME: What about the options given in URL when calling the map?
-		$opts = Array();
-		// Fetch option array from defaultparams string (extract variable
-		// names and values)
-		$params = explode('&', $CORE->MAINCFG->getValue('automap','defaultparams'));
-		unset($params[0]);
-		foreach($params AS &$set) {
-			$arrSet = explode('=',$set);
-			$opts[$arrSet[0]] = $arrSet[1];
-		}
-		// Save the automap name to use
-		$opts['automap'] = $this->name;
-		// Save the preview mode
-		$opts['preview'] = 1;
-		
-		$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $opts);
+		$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $this->opts);
 		$MAP->renderMap();
 		
 		return json_encode(true);
@@ -109,23 +110,7 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		// FIXME: Maybe should be recoded?
-		// FIXME: What about the options given in URL when calling the map?
-		$opts = Array();
-		// Fetch option array from defaultparams string (extract variable
-		// names and values)
-		$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
-		unset($params[0]);
-		foreach($params AS &$set) {
-			$arrSet = explode('=',$set);
-			$opts[$arrSet[0]] = $arrSet[1];
-		}
-		// Save the automap name to use
-		$opts['automap'] = $this->name;
-		// Save the preview mode
-		$opts['preview'] = 1;
-		
-		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $opts);
+		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts);
 		return $MAP->parseMapPropertiesJson();
 	}
 	
@@ -136,23 +121,7 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		// FIXME: Maybe should be recoded?
-		// FIXME: What about the options given in URL when calling the map?
-		$opts = Array();
-		// Fetch option array from defaultparams string (extract variable
-		// names and values)
-		$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
-		unset($params[0]);
-		foreach($params AS &$set) {
-			$arrSet = explode('=',$set);
-			$opts[$arrSet[0]] = $arrSet[1];
-		}
-		// Save the automap name to use
-		$opts['automap'] = $this->name;
-		// Save the preview mode
-		$opts['preview'] = 1;
-		
-		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $opts);
+		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts);
 		// Fetch the state
 		$MAP->MAPOBJ->fetchState();
 		// Read position from graphviz and set it on the objects

@@ -84,6 +84,7 @@ class FrontendModAutoMap extends FrontendModule {
 		// Render the automap
 		$AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts);
 		$this->VIEW->setContent($AUTOMAP->parseMap());
+		$this->VIEW->setAutomapParams($this->opts);
 		
 		// Maybe it is needed to handle the requested rotation
 		if($this->rotation != '') { 

@@ -32,6 +32,7 @@ class NagVisAutoMapView {
 	private $name = '';
 	private $content = '';
 	private $aRotation = Array();
+	private $aParams = Array();
 	
 	/**
 	 * Class Constructor
@@ -47,6 +48,16 @@ class NagVisAutoMapView {
 
 	public function setContent($s) {
 		$this->content = $s;
+	}
+	
+	/**
+	 * Set the automap url params
+	 *
+	 * @param   Array    
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setAutomapParams($a) {
+		$this->aParams = $a;
 	}
 	
 	/**
@@ -69,13 +80,14 @@ class NagVisAutoMapView {
 		// Initialize template system
 		$TMPL = New FrontendTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
-
+		
 		$aData = Array(
 				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
 				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
 				'rotationProperties' => json_encode($this->aRotation),
 				'mapName' => $this->name,
-				'automap' => $this->content
+				'automap' => $this->content,
+				'automapParams' => json_encode($this->aParams)
 			);
 
     // Build page based on the template file and the data array

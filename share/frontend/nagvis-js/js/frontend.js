@@ -32,6 +32,7 @@
 var oHoverTemplates = {};
 var oHoverUrls = {};
 var oContextTemplates = {};
+var oAutomapParams = {};
 
 /**
  * searchObjectsKeyCheck()
@@ -701,12 +702,14 @@ function refreshMapObject(objectId) {
 	// Only append map param if it is a known map
 	var sMapPart = '';
 	var sMod = '';
+	var sAddPart = '';
 	if(oPageProperties.view_type === 'map') {
 		sMod = 'Map';
 		sMapPart = '&show='+escapeUrlValues(map);
 	} else if(oPageProperties.view_type === 'automap') {
 		sMod = 'AutoMap';
 		sMapPart = '&show='+escapeUrlValues(map);
+		sAddPart = getAutomapParams();
 	} else if(oPageProperties.view_type === 'overview') {
 		sMod = 'General';
 		sMapPart = '';
@@ -721,7 +724,7 @@ function refreshMapObject(objectId) {
 	}
 	
 	// Get the updated objectsupdateMapObjects via bulk request
-	var o = getSyncRequest(oGeneralProperties.path_server+'?mod='+escapeUrlValues(sMod)+'&act=getObjectStates'+sMapPart+'&ty=state'+sUrlPart, false);
+	var o = getSyncRequest(oGeneralProperties.path_server+'?mod='+escapeUrlValues(sMod)+'&act=getObjectStates'+sMapPart+'&ty=state'+sUrlPart+sAddPart, false);
 	
 	sUrlPart = null;
 	sMod = null;
@@ -1383,6 +1386,24 @@ function getOverviewRotations() {
 }
 
 /**
+ * getAutomapParams()
+ *
+ * Parses the url params from the oAutomapParams object
+ *
+ * @return  String    URL part with params and values
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getAutomapParams() {
+	var sParams = '';
+	for(var param in oAutomapParams) {
+		if(oAutomapParams[param] != '') {
+			sParams += '&' + param + '=' + escapeUrlValues(oAutomapParams[param]);
+		}
+	}
+	return sParams;
+}
+
+/**
  * getAutomapProperties()
  *
  * Fetches the current automap properties from the core
@@ -1391,7 +1412,7 @@ function getOverviewRotations() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getAutomapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='+escapeUrlValues(mapName))
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='+escapeUrlValues(mapName)+getAutomapParams())
 }
 
 /**
@@ -1440,7 +1461,7 @@ function getStateProperties() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function automapParse(mapName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='+escapeUrlValues(mapName))
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='+escapeUrlValues(mapName)+getAutomapParams())
 }
 
 /**
@@ -1535,7 +1556,7 @@ function parseAutomap(iMapCfgAge, mapName) {
 	
 	// Get new map/object information from ajax handler
 	var oMapBasics = getAutomapProperties(mapName);
-	var oMapObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapObjects&show='+mapName);
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapObjects&show='+mapName+getAutomapParams());
 	
 	// Only perform the reparsing actions when all information are there
 	if(oMapBasics && oMapObjects) {
@@ -1942,7 +1963,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		arrObj = null;
 		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getObjectStates&show='+escapeUrlValues(oPageProperties.map_name)+'&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
+		var o = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getObjectStates&show='+escapeUrlValues(oPageProperties.map_name)+'&ty=state'+getAutomapParams(), aUrlParts, oWorkerProperties.worker_request_max_length, false);
 		var bStateChanged = false;
 		if(o.length > 0) {
 			bStateChanged = updateObjects(o, aMapObjects, sType);
