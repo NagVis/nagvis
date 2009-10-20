@@ -30,7 +30,11 @@
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 function NagVisAutoload($sClass) {
-	if(substr($sClass, 0, 8) === 'Frontend' || substr($sClass, 0, 4) === 'Core' || substr($sClass, 0, 6) === 'NagVis' || substr($sClass, 0, 6) === 'Global') {
+	if(substr($sClass, 0, 8) === 'Frontend' 
+	   || substr($sClass, 0, 4) === 'Core' 
+	   || substr($sClass, 0, 6) === 'NagVis'
+	   || substr($sClass, 0, 6) === 'Nagios' 
+	   || substr($sClass, 0, 6) === 'Global') {
 		require($sClass.'.php');
 		return true;
 	} else {
