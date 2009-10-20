@@ -54,7 +54,7 @@ class FrontendModAuth extends FrontendModule {
 	}
 	
 	public function msgInvalidCredentials() {
-		new GlobalMessage('ERROR', $this->CORE->LANG->getText('Authentication failed. Invalid credentials.', Array('refererUrl' => $this->GHANDLER->getReferer())));
+		new GlobalMessage('ERROR', $this->CORE->LANG->getText('You entered invalid credentials. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, $this->CORE->LANG->getText('Authentication failed'), 1, $this->GHANDLER->getReferer());
 		
 		return '';
 	}
