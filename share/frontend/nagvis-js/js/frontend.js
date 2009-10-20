@@ -506,8 +506,14 @@ function setPageTitle(sTitle) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateMapBasics() {
+	var sAutomapParams = '';
+	if(oPageProperties.view_type === 'automap') {
+		sAutomapParams = getAutomapParams();
+	}
+	
 	// Get new map state from core
-	var o = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name), false)[0];
+	var o = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name)+sAutomapParams, false)[0];
+	sAutomapParams = null;
 	
 	// Update favicon
 	setPageFavicon(getFaviconImage(o));

@@ -205,23 +205,23 @@ class CoreModGeneral extends CoreModule {
 					$MAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
-					// FIXME: Maybe should be recoded?
-					// FIXME: What about the options given in URL when calling the map?
-					$opts = Array();
-					// Fetch option array from defaultparams string (extract variable
-					// names and values)
-					$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
-					unset($params[0]);
-					foreach($params AS &$set) {
-						$arrSet = explode('=',$set);
-						$opts[$arrSet[0]] = $arrSet[1];
-					}
-					// Save the automap name to use
-					$opts['automap'] = $arrName1[$i];
-					// Save the preview mode
-					$opts['preview'] = 1;
+					$aOpts = Array('backend' => MATCH_STRING_NO_SPACE_EMPTY,
+		                     'root' => MATCH_STRING_NO_SPACE_EMPTY,
+		                     'maxLayers' => MATCH_INTEGER_EMPTY,
+		                     'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
+		                     'width' => MATCH_INTEGER_EMPTY,
+		                     'height' => MATCH_INTEGER_EMPTY,
+		                     'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
+		                     'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY);
+		
+					$aOpts = $this->getCustomOptions($aOpts);
 					
-					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $opts);
+					// Save the automap name to use
+					$aOpts['automap'] = $arrName1[$i];
+					// Save the preview mode (Enables/Disables printing of errors)
+					$aOpts['preview'] = 0;
+					
+					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $aOpts);
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:
