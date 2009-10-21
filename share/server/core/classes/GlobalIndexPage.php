@@ -28,6 +28,7 @@
 class GlobalIndexPage {
 	private $CORE;
 	private $BACKEND;
+	private $AUTHORISATION = null;
 	
 	private $htmlBase;
 	
@@ -39,9 +40,10 @@ class GlobalIndexPage {
 	 * @param 	GlobalBackendMgmt	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $BACKEND) {
+	public function __construct(GlobalCore $CORE, GlobalBackendMgmt $BACKEND, CoreAuthorisationHandler $AUTHORISATION) {
 		$this->CORE = $CORE;
 		$this->BACKEND = $BACKEND;
+		$this->AUTHORISATION = $AUTHORISATION;
 		
 		$this->htmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 	}
@@ -97,8 +99,8 @@ class GlobalIndexPage {
 				// Get the icon of the map
 				$MAP->MAPOBJ->fetchIcon();
 				
-				// Check if the user is permitted to view this map
-				if($MAPCFG->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+				// Check if the user is permitted to view this rotation
+				if($this->AUTHORISATION->isPermitted('AutoMap', 'view', $mapName)) {
 					if($MAP->MAPOBJ->checkMaintenance(0)) {
 						$class = '';
 						$url = '';
@@ -161,7 +163,6 @@ class GlobalIndexPage {
 	 */
 	public function parseMapsJson() {
 		$aMaps = Array();
-		
 
 		// Only display the rotation list when enabled
 		if($this->CORE->MAINCFG->getValue('index','showmaps') == 1) {
@@ -190,7 +191,7 @@ class GlobalIndexPage {
 					$MAP->MAPOBJ->fetchIcon();
 					
 					// Check if the user is permitted to view this map
-					if($MAPCFG->checkPermissions($MAPCFG->getValue('global',0, 'allowed_user'),FALSE)) {
+					if($this->AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
 						if($MAP->MAPOBJ->checkMaintenance(0)) {
 							$class = '';
 							$url = '';
@@ -262,21 +263,24 @@ class GlobalIndexPage {
 			$aRotationPools = $this->CORE->getDefinedRotationPools();
 			if(count($aRotationPools) > 0) {
 				foreach($aRotationPools AS $poolName) {
-					$ROTATION = new CoreRotation($this->CORE, $poolName);
-					
-					$aSteps = Array();
-					
-					// Parse the code for the step list
-					$iNum = $ROTATION->getNumSteps();
-					for($i = 0; $i < $iNum; $i++) {
-						$aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
-						                  'url' => $ROTATION->getStepUrlById($i));
+					// Check if the user is permitted to view this rotation
+					if($this->AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
+						$ROTATION = new CoreRotation($this->CORE, $poolName);
+						
+						$aSteps = Array();
+						
+						// Parse the code for the step list
+						$iNum = $ROTATION->getNumSteps();
+						for($i = 0; $i < $iNum; $i++) {
+							$aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
+							                  'url' => $ROTATION->getStepUrlById($i));
+						}
+						
+						$aRotations[] = Array('name' => $poolName,
+						                      'url' => $ROTATION->getStepUrlById(0),
+						                      'num_steps' => $ROTATION->getNumSteps(),
+															    'steps' => $aSteps);
 					}
-					
-					$aRotations[] = Array('name' => $poolName,
-					                      'url' => $ROTATION->getStepUrlById(0),
-					                      'num_steps' => $ROTATION->getNumSteps(),
-														    'steps' => $aSteps);
 				}
 			}
 		}

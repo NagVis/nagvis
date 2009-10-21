@@ -90,6 +90,13 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (22, \'Map\', \'getMapObjects\', \'demo-server\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (23, \'Map\', \'getObjectStates\', \'demo-server\')');
 		
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (24, \'Rotation\', \'view\', \'demo\')');
+		
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (25, \'AutoMap\', \'view\', \'__automap\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (26, \'AutoMap\', \'getAutomapProperties\', \'__automap\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (27, \'AutoMap\', \'getAutomapObjects\', \'__automap\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (28, \'AutoMap\', \'getObjectStates\', \'__automap\')');
+		
 		// nagiosadmin => Administrators
 		$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (1, 1)');
 		
@@ -130,6 +137,15 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 21)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 22)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 23)');
+		
+		// Users => Allowed to view the demo rotation
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 24)');
+		
+		// Users => Allowed to view the __automap automap
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 25)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 26)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 27)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 28)');
 	}
 	
 	private function checkUserExists() {

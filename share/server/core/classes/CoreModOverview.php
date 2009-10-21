@@ -26,6 +26,8 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModOverview extends CoreModule {
+	private $BACKEND = null;
+	private $OVERVIEW = null;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
@@ -42,6 +44,12 @@ class CoreModOverview extends CoreModule {
 		$sReturn = '';
 		
 		if($this->offersAction($this->sAction)) {
+			
+			// Initialize backends
+			$this->BACKEND = new GlobalBackendMgmt($this->CORE);
+			
+			$this->OVERVIEW = new GlobalIndexPage($this->CORE, $this->BACKEND, $this->AUTHORISATION);
+			
 			switch($this->sAction) {
 				case 'getOverviewProperties':
 					$sReturn = $this->getOverviewProperties();
@@ -62,35 +70,19 @@ class CoreModOverview extends CoreModule {
 	}
 	
 	private function getOverviewProperties() {
-		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
-		
-		$OVERVIEW = new GlobalIndexPage($this->CORE, $BACKEND);
-		return $OVERVIEW->parseIndexPropertiesJson();
+		return $this->OVERVIEW->parseIndexPropertiesJson();
 	}
 	
 	private function getOverviewMaps() {
-		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
-		
-		$OVERVIEW = new GlobalIndexPage($this->CORE, $BACKEND);
-		return $OVERVIEW->parseMapsJson();
+		return $this->OVERVIEW->parseMapsJson();
 	}
 	
 	private function getOverviewAutomaps() {
-		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
-		
-		$OVERVIEW = new GlobalIndexPage($this->CORE, $BACKEND);
-		return $OVERVIEW->parseAutomapsJson();
+		return $this->OVERVIEW->parseAutomapsJson();
 	}
 	
 	private function getOverviewRotations() {
-		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
-		
-		$OVERVIEW = new GlobalIndexPage($this->CORE, $BACKEND);
-		return $OVERVIEW->parseRotationsJson();
+		return $this->OVERVIEW->parseRotationsJson();
 	}
 }
 ?>
