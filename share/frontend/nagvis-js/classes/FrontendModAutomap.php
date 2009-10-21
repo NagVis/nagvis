@@ -12,6 +12,8 @@ class FrontendModAutoMap extends FrontendModule {
 		               'backend' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'root' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'maxLayers' => MATCH_INTEGER_EMPTY,
+		               'childLayers' => MATCH_INTEGER_EMPTY,
+		               'parentLayers' => MATCH_INTEGER_EMPTY,
 		               'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
 		               'width' => MATCH_INTEGER_EMPTY,
 		               'height' => MATCH_INTEGER_EMPTY,

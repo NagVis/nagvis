@@ -842,6 +842,39 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PUBLIC getDirectParentNamesByHostName()
+	 *
+	 * Gets the names of all parent hosts. New in 1.5. Showing parent layers on
+	 * the automap is only possible when the backend provides this method.
+	 *
+	 * @param		String		Name of host to get the parents of
+	 * @return	Array			Array with hostnames
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getDirectParentNamesByHostName($hostName) {
+		$aParentNames = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT o2.name1
+		FROM
+		`'.$this->dbPrefix.'objects` AS o1,
+		`'.$this->dbPrefix.'hosts` AS h1,
+		`'.$this->dbPrefix.'host_parenthosts` AS ph1,
+		`'.$this->dbPrefix.'objects` AS o2
+		WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
+		AND (h1.config_type='.$this->objConfigType.' AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
+		AND h1.host_id=ph1.host_id
+		AND o2.objecttype_id=1 AND o2.object_id=ph1.parent_host_object_id');
+		while($data = mysql_fetch_array($QUERYHANDLE)) {
+			$aParentNames[] = $data['name1'];
+		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
+		return $aParentNames;
+	}
+	
+	/**
 	 * PUBLIC Method getDirectChildNamesByHostName
 	 *
 	 * Gets the names of all child hosts

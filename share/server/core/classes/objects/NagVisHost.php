@@ -100,7 +100,7 @@ class NagVisHost extends NagiosHost {
 			// Add host to the list of parsed hosts
 			$arrHostnamesParsed[] = $this->getName();
 			
-			foreach($this->getChilds() As $OBJ) {
+			foreach($this->getChildsAndParents() As $OBJ) {
 				if(is_object($OBJ)) {
 					$strReturn .= $OBJ->parseGraphviz($layer+1, $arrHostnamesParsed);
 					$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";

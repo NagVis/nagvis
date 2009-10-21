@@ -655,6 +655,36 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PUBLIC getDirectParentNamesByHostName()
+	 *
+	 * Gets the names of all parent hosts. New in 1.5. Showing parent layers on
+	 * the automap is only possible when the backend provides this method.
+	 *
+	 * @param		String		Name of host to get the parents of
+	 * @return	Array			Array with hostnames
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getDirectParentNamesByHostName($hostName) {
+		$aReturn = Array();
+		
+		if(file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG')) {
+			$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG'));
+			
+			// Parent set?
+			if(isset($oConfig->PARENTHOST) && $oConfig->PARENTHOST != '') {
+				// Single parent or multiple?
+				if(strpos($oConfig->PARENTHOST, ',') === false) {
+					$aReturn[] = $oConfig->PARENTHOST;
+				} else {
+					$aReturn = explode(',', $oConfig->PARENTHOST);
+				}
+			}
+		}
+		
+		return $aReturn;
+	}
+	
+	/**
 	 * PUBLIC Method getDirectChildNamesByHostName
 	 *
 	 * Gets the names of all child hosts

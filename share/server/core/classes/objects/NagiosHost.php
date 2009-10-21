@@ -49,7 +49,9 @@ class NagiosHost extends NagVisStatefulObject {
 	protected $downtime_data;
 	
 	protected $fetchedChildObjects;
+	protected $fetchedParentObjects;
 	protected $childObjects;
+	protected $parentObjects;
 	protected $members;
 	
 	/**
@@ -67,7 +69,9 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->host_name = $hostName;
 		
 		$this->fetchedChildObjects = 0;
+		$this->fetchedParentObjects = 0;
 		$this->childObjects = Array();
+		$this->parentObjects = Array();
 		$this->members = Array();
 		
 		parent::__construct($CORE, $BACKEND);
@@ -110,6 +114,87 @@ class NagiosHost extends NagVisStatefulObject {
 			
 			// At least summary output
 			$this->fetchSummaryOutput();
+		}
+	}
+	
+	/**
+	 * PUBLIC fetchParents()
+	 *
+	 * Gets all parent objects of this host from the backend. The parent objects are
+	 * saved to the parentObjects array.
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function fetchParents($maxLayers = -1, &$objConf = Array(), &$ignoreHosts = Array(), &$arrHostnames, &$arrMapObjects) {
+		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			if(!$this->fetchedParentObjects) {
+				$this->fetchDirectParentObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+			}
+			
+			/**
+			 * If maxLayers is not set there is no layer limitation
+			 */
+			if($maxLayers < 0 || $maxLayers > 0) {
+				foreach($this->parentObjects AS &$OBJ) {
+					$OBJ->fetchParents($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+				}
+			}
+		}
+	}
+	/**
+	 * PUBLIC filterChilds()
+	 *
+	 * Filters the children depending on the allowed hosts list. All objects which
+	 * are not in the list and are no parent of a host in this list will be
+	 * removed from the map.
+	 *
+	 * @param	Array	List of allowed hosts
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function filterParents(&$arrAllowedHosts) {
+		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			$remain = 0;
+			
+			$numChilds = $this->getNumParents();
+			for($i = 0; $i < $numChilds; $i++) {
+				$OBJ = &$this->parentObjects[$i];
+				$selfRemain = 0;
+				
+				if(is_object($OBJ)) {
+					/**
+					 * The current parent is member of the filter group, it declares 
+					 * itselfs as remaining object
+					 */
+					if(in_array($OBJ->getName(), $arrAllowedHosts)) {
+						$selfRemain = 1;
+					} else {
+						$selfRemain = 0;
+					}
+					
+					/**
+					 * If there are parent objects loop them all to get their remaining
+					 * state. If there is no parent object the only remaining state is
+					 * the state of the current parent object.
+					 */
+					if($OBJ->hasParents()) {
+						$parentsRemain = $OBJ->filterParents($arrAllowedHosts);
+						
+						if(!$selfRemain && $parentsRemain) {
+							$selfRemain = 1;
+						}
+					}
+					
+					// If the host should not remain on the map remove it from the 
+					// object tree
+					if(!$selfRemain) {
+						// Remove the object from the tree
+						unset($this->parentObjects[$i]);
+					}
+				}
+				
+				$remain |= $selfRemain;
+			}
+			return $remain;
 		}
 	}
 	
@@ -193,6 +278,54 @@ class NagiosHost extends NagVisStatefulObject {
 			}
 			return $remain;
 		}
+	}
+	
+	/**
+	 * PUBLIC getChildsAndParents()
+	 *
+	 * Returns all childs and parent objects
+	 *
+	 * @return	Array		Array of host objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getChildsAndParents() {
+		return array_merge($this->parentObjects, $this->childObjects);
+	}
+	
+	/**
+	 * PUBLIC getNumParents()
+	 *
+	 * Returns the count of parent objects
+	 *
+	 * @return	Integer		Number of child objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getNumParents() {
+		return count($this->parentObjects);
+	}
+	
+	/**
+	 * PUBLIC getParents()
+	 *
+	 * Returns all parent objects in parentObjects array 
+	 *
+	 * @return	Array		Array of host objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getParents() {
+		return $this->parentObjects;
+	}
+	
+	/**
+	 * PUBLIC hasParents()
+	 *
+	 * Simple check if the host has at least one parent
+	 *
+	 * @return Boolean	Yes: Has parents, No: No parent
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function hasParents() {
+		return isset($this->parentObjects[0]);
 	}
 	
 	/**
@@ -298,6 +431,57 @@ class NagiosHost extends NagVisStatefulObject {
 			
 			$this->members[] = $OBJ;
 		}
+	}
+	
+	/**
+	 * PRIVATE fetchDirectParentObjects()
+	 *
+	 * Gets all parent objects of the given host and saves them to the parentObjects
+	 * array
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchDirectParentObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
+		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectParentNamesByHostName($this->getName()) AS $parentName) {
+			// If the host is in ignoreHosts, don't recognize it
+			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
+				/*
+				 * Check if the host is already on the map (If it's not done, the 
+				 * objects with more than one parent will be printed several times on the 
+				 * map, especially the links to child objects will be too many.
+				 */
+				if(!in_array($parentName, $arrHostnames)){
+					$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $parentName);
+					$OBJ->setConfiguration($objConf);
+					$OBJ->fetchIcon();
+					
+					// The number of objects on the map controlls the object id to take
+					// 0 is reserved for the root host
+					$OBJ->setObjectId(count($arrHostnames)+1);
+					
+					// Append the object to the parentObjects array
+					$this->parentObjects[] = $OBJ;
+					
+					// Append the object to the arrMapObjects array
+					$arrMapObjects[] = $this->parentObjects[count($this->parentObjects)-1];
+					
+					// Add the name of this host to the array with hostnames which are
+					// already on the map
+					$arrHostnames[] = $OBJ->getName();
+				} else {
+					// Add reference of already existing host object to the
+					// child objects array
+					foreach($arrMapObjects AS $OBJ) {
+						if($OBJ->getName() == $parentName) {
+							$this->childObjects[] = $OBJ;
+						}
+					}
+				}
+			}
+		}
+
+		// All parents were fetched, save the state for this object
+		$this->fetchedParentObjects = 1;
 	}
 	
 	/**

@@ -257,7 +257,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	public function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
 		$this->members[] = $OBJ;
 		
-		foreach($OBJ->getChilds() AS $OBJ1) {
+		foreach($OBJ->getChildsAndParents() AS $OBJ1) {
 			/*
 			 * Check if the host is already on the map (If it's not done, the 
 			 * objects with more than one parent will be printed several times on 

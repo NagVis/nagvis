@@ -127,5 +127,27 @@ class GlobalBackendMgmt {
 			}
 		}
 	}
+	
+	/**
+	 * Checks if the given feature is provided by the given backend
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkBackendFeature($backendId, $feature, $printErr = 1) {
+		if($this->checkBackendInitialized($backendId, $printErr)) {
+			if(method_exists($this->BACKENDS[$backendId], $feature)) {
+				return true;
+			} else {
+				if($printErr == 1) {
+					new GlobalMessage('ERROR', $this->CORE->LANG->getText('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.', Array('FEATURE' => htmlentities($feature), 'BACKENDID' => $backendId, 'BACKENDTYPE' => $this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype'))));
+				}
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 }
 ?>

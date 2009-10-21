@@ -34,7 +34,8 @@ class NagVisAutoMap extends GlobalMap {
 	private $name;
 	private $backend_id;
 	private $root;
-	private $maxLayers;
+	private $childLayers;
+	private $parentLayers;
 	private $width;
 	private $height;
 	private $renderMode;
@@ -102,13 +103,31 @@ class NagVisAutoMap extends GlobalMap {
 		}
 		
 		/**
-		 * This sets how many layers should be displayed. Default value is -1, 
+		 * This is for compatibility to old the old parent layer limitation
+		 * FIXME: May be removed in 1.6
+		 */
+		if(isset($prop['maxLayers']) && $prop['maxLayers'] != '' && (!isset($prop['childLayers']) || $prop['childLayers'] == '')) {
+			$prop['childLayers'] = $prop['maxLayers'];
+		}
+		
+		/**
+		 * This sets how many child layers should be displayed. Default value is -1,
 		 * this means no limitation.
 		 */
-		if(isset($prop['maxLayers']) && $prop['maxLayers'] != '') {
-			$this->maxLayers = $prop['maxLayers'];
+		if(isset($prop['childLayers']) && $prop['childLayers'] != '') {
+			$this->childLayers = $prop['childLayers'];
 		} else {
-			$this->maxLayers = -1;
+			$this->childLayers = -1;
+		}
+		
+		/**
+		 * This sets how many parent layers should be displayed. Default value is 
+		 * -1, this means no limitation.
+		 */
+		if(isset($prop['parentLayers']) && $prop['parentLayers'] != '') {
+			$this->parentLayers = $prop['parentLayers'];
+		} else {
+			$this->parentLayers = 0;
 		}
 		
 		/**
@@ -148,14 +167,28 @@ class NagVisAutoMap extends GlobalMap {
 		// Get "root" host object
 		$this->fetchHostObjectByName($this->root);
 		
-		// Get all object information from backend
+		// Get all child object information from backend
 		$this->getChildObjectTree();
+		
+		// Get all parent object information from backend when needed
+		if(isset($this->parentLayers) && $this->parentLayers != 0) {
+			// If some parent layers are requested: It should be checked if the used
+			// backend supports this
+			if($this->BACKEND->checkBackendFeature($this->backend_id, 'getDirectParentNamesByHostName')) {
+				$this->getParentObjectTree();
+			}
+		}
 		
 		if($this->filterGroup != '') {
 			$this->filterGroupObject = new NagiosHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filterGroup);
 			$this->filterGroupObject->fetchMemberHostObjects();
 			
 			$this->filterChildObjectTreeByGroup();
+			
+			// Filter the parent object tree too when enabled
+			if(isset($this->parentLayers) && $this->parentLayers != 0) {
+				$this->filterParentObjectTreeByGroup();
+			}
 		}
 		
 		$this->loadObjectConfigurations();
@@ -567,16 +600,47 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
-	 * Get all child objects
+	 * PRIVATE getChildObjectTree()
+	 *
+	 * Get all child objects recursive
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getChildObjectTree() {
-		$this->rootObject->fetchChilds($this->maxLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
+		$this->rootObject->fetchChilds($this->childLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
 	}
 	
 	/**
-	 * Filter the object tree using the given filter group
+	 * PRIVATE getParentObjectTree()
+	 *
+	 * Get all parent objects recursive
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getParentObjectTree() {
+		$this->rootObject->fetchParents($this->parentLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
+	}
+	
+	/**
+	 * PRIVATE filterParentObjectTreeByGroup()
+	 *
+	 * Filter the parent object tree using the given filter group
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function filterParentObjectTreeByGroup() {
+		$hostgroupMembers = Array();
+		foreach($this->filterGroupObject->getMembers() AS $OBJ1) {
+			$hostgroupMembers[] = $OBJ1->getName();
+		}
+		
+		$this->rootObject->filterParents($hostgroupMembers);
+	}
+	
+	/**
+	 * PRIVATE filterChildObjectTreeByGroup()
+	 *
+	 * Filter the child object tree using the given filter group
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
