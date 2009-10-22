@@ -111,7 +111,7 @@ class GlobalHeaderMenu {
 						
 						if($MAPCFG1->getValue('global', 0, 'show_in_lists') == 1) {
 							// Only proceed permited objects
-							if($MAPCFG1->checkPermissions($MAPCFG1->getValue('global',0, 'allowed_user'), FALSE)) {
+							if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $mapName)) {
 								$sReplaceObj = str_replace('[map_name]',$MAPCFG1->getName(), $matchReturn1[1][0]);
 								$sReplaceObj = str_replace('[map_alias]',$MAPCFG1->getValue('global', '0', 'alias'), $sReplaceObj);
 								
@@ -136,7 +136,7 @@ class GlobalHeaderMenu {
 						
 						if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->getMainCfg()->getValue('automap', 'showinlists')))) {
 							// Only proceed permited objects
-							if($MAPCFG1->checkPermissions($MAPCFG1->getValue('global',0, 'allowed_user'),FALSE)) {
+							if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName)) {
 								$sReplaceObj = str_replace('[map_name]', 'automap='.$MAPCFG1->getName(), $matchReturn1[1][0]);
 								$sReplaceObj = str_replace('[map_alias]', $MAPCFG1->getValue('global', '0', 'alias'), $sReplaceObj);
 								

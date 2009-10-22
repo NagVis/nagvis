@@ -1701,27 +1701,5 @@ class GlobalMapCfg {
 	public function getAlias() {
 		return $this->getValue('global', 0, 'alias');	
 	}
-	
-	/**
-	 * PUBLIC checkPermissions()
-	 *
-	 * Checks for valid Permissions
-	 *
-	 * @param 	String 	$allowed	
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function checkPermissions($allowed,$printErr) {
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->getMainCfg()->getRuntimeValue('user'), $allowed)) {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('permissionDenied', Array('USER' => $this->CORE->getMainCfg()->getRuntimeValue('user'))));
-			}
-			return FALSE;
-		} else {
-		 	return TRUE;
-		}
-		return TRUE;
-	}
 }
 ?>

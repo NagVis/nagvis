@@ -405,7 +405,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	private function checkLoop($OBJ) {
 		// Check for valid permissions
-		if($OBJ->MAPCFG->checkPermissions($OBJ->MAPCFG->getValue('global',0, 'allowed_user'), FALSE)) {
+		if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $OBJ->getName())) {
 			// Loop all objects on the child map to find out if there is a link back 
 			// to this map (loop)
 			//

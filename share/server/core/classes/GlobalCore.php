@@ -30,6 +30,8 @@
 class GlobalCore {
 	private static $MAINCFG = null;
 	private static $LANG = null;
+	private static $AUTHENTICATION = null;
+	private static $AUTHORIZATION = null;
 	
 	private static $instance = null;
 	private $iconsetTypeCache = Array();
@@ -75,6 +77,34 @@ class GlobalCore {
 		}
 		
 		return self::$LANG;
+	}
+	
+	/**
+	 * Setter for AA
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function setAA(CoreAuthHandler $A1, CoreAuthorisationHandler $A2 = null) {
+		self::$AUTHENTICATION = $A1;
+		self::$AUTHORIZATION = $A2;
+	}
+	
+	/**
+	 * Getter function for AUTHORIZATION
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function getAuthorization() {
+		return self::$AUTHORIZATION;
+	}
+	
+	/**
+	 * Getter function for AUTHENTICATION
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function getAuthentication() {
+		return self::$AUTHENTICATION;
 	}
 	
 	/**
