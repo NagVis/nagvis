@@ -38,7 +38,9 @@ class CoreAuthModSession extends CoreAuthModule {
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
-		$this->SHANDLER = new CoreSessionHandler($CORE);
+		$this->SHANDLER = new CoreSessionHandler($this->CORE->MAINCFG->getValue('global', 'sesscookiedomain'), 
+		                                         $this->CORE->MAINCFG->getValue('global', 'sesscookiepath'),
+		                                         $this->CORE->MAINCFG->getValue('global', 'sesscookieduration'));
 	}
 	
 	public function passCredentials($aData) {}

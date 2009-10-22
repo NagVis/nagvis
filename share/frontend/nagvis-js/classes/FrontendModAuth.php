@@ -10,7 +10,9 @@ class FrontendModAuth extends FrontendModule {
 		
 		$this->aActions = Array('logout' => 0, 'login' => 0);
 		
-		$SHANDLER = new CoreSessionHandler($CORE);
+		$SHANDLER = new CoreSessionHandler($this->CORE->MAINCFG->getValue('global', 'sesscookiedomain'), 
+		                                   $this->CORE->MAINCFG->getValue('global', 'sesscookiepath'),
+		                                   $this->CORE->MAINCFG->getValue('global', 'sesscookieduration'));
 		$this->AUTH = new CoreAuthHandler($this->CORE, $SHANDLER, $this->CORE->MAINCFG->getValue('global', 'authmodule'));
 		
 		$this->GHANDLER = new FrontendRequestHandler($_GET);

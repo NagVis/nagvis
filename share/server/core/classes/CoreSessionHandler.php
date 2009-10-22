@@ -29,14 +29,8 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreSessionHandler {
-	private $CORE;
-	
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
 		
-		$sDomain = $this->CORE->MAINCFG->getValue('global', 'sesscookiedomain');
-		$sPath = $this->CORE->MAINCFG->getValue('global', 'sesscookiepath');
-		$iDuration = $this->CORE->MAINCFG->getValue('global', 'sesscookieduration');
+	public function __construct($sDomain, $sPath, $iDuration) {
 		
 		// Set the session name (used in params/cookie names)
 		session_name(SESSION_NAME);

@@ -51,7 +51,9 @@ $UHANDLER = new CoreUriHandler($CORE);
  * Session: Handle the user session
  */
 
-$SHANDLER = new CoreSessionHandler($CORE);
+$SHANDLER = new CoreSessionHandler($CORE->MAINCFG->getValue('global', 'sesscookiedomain'), 
+		                               $CORE->MAINCFG->getValue('global', 'sesscookiepath'),
+		                               $CORE->MAINCFG->getValue('global', 'sesscookieduration'));
 
 /*
  * Authentication 1: First try to use an existing session

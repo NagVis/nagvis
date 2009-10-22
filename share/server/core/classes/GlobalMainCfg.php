@@ -65,10 +65,20 @@ class GlobalMainCfg {
 					'deprecated' => 1,
 					'default' => '1',
 					'match' => MATCH_BOOLEAN),
+				// FIXME: doc
+				'language_detection' => Array('must' => 1,
+					'editable' => 1,
+					'default' => Array('user', 'session', 'browser', 'config'),
+					'match' => MATCH_STRING_NO_SPACE),
+				// FIXME: doc
+				'language_available' => Array('must' => 1,
+					'editable' => 1,
+					'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR'),
+					'match' => MATCH_STRING_NO_SPACE),
 				'language' => Array('must' => 1,
 					'editable' => 1,
 					'default' => 'en_US',
-					'match' => MATCH_STRING_NO_SPACE),
+					'match' => MATCH_LANGUAGE_EMPTY),
 				'logonmodule' => Array('must' => 1,
 					'editable' => 1,
 					'default' => 'FrontendLogonDialog',
@@ -905,9 +915,14 @@ class GlobalMainCfg {
 					}
 					
 					// Special options (Arrays)
-					if($sec == 'wui' && $key == 'allowedforconfig') {
+					if(($sec == 'wui' && $key == 'allowedforconfig') || ($sec == 'global' && $key == 'language_detection')  || ($sec == 'global' && $key == 'language_available')) {
 						// Explode comma separated list to array
 						$val = explode(',', $val);
+						
+						// Trim surrounding spaces on each element
+						foreach($val AS $trimKey => $trimVal) {
+							$val[$trimKey] = trim($trimVal);
+						}
 					} elseif(preg_match('/^rotation_/i', $sec) && $key == 'maps') {
 						// Explode comma separated list to array
 						$val = explode(',', $val);

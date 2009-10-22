@@ -50,7 +50,7 @@ class NagVisContextMenu {
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','contexttemplate').'tmpl.'.$this->templateName.'.html';
 		
-		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'context-'.$this->templateName.'-cache');
+		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'context-'.$this->templateName.'-'.$this->CORE->LANG->getCurrentLanguage().'.cache');
 		
 		// Only use cache when there is
 		// a) Some valid cache file

@@ -49,7 +49,7 @@ class GlobalHeaderMenu {
 		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
 		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->templateName.'.html';
 		
-		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'header-'.$this->templateName.'-cache');
+		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'header-'.$this->templateName.'-'.$this->CORE->LANG->getCurrentLanguage().'.cache');
 		
 		// Only use cache when there is
 		// a) Some valid cache file

@@ -26,6 +26,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalLanguage {
+	private $SHANDLER = null;
+	private $CORE = null;
 	private $MAINCFG;
 	private $textDomain;
 	private $sCurrentLanguage;
@@ -42,7 +44,11 @@ class GlobalLanguage {
 		$this->MAINCFG = $MAINCFG;
 		$this->textDomain = $textDomain;
 		
-		$this->sCurrentLanguage = $this->MAINCFG->getValue('global', 'language');
+		$this->SHANDLER = new CoreSessionHandler($this->MAINCFG->getValue('global', 'sesscookiedomain'), 
+		                                         $this->MAINCFG->getValue('global', 'sesscookiepath'),
+		                                         $this->MAINCFG->getValue('global', 'sesscookieduration'));
+		
+		$this->sCurrentLanguage = $this->gatherCurrentLanguage();
 		
 		// Fix old language entries (english => en_US, german => de_DE)
 		// FIXME: Remove this in 1.5, mark this as deprecated somewhere
@@ -62,7 +68,7 @@ class GlobalLanguage {
 		$this->checkGettextSupport();
 		
 		// Check if choosen language is available
-		$this->checkLanguageAvailable();
+		$this->checkLanguageAvailable($this->sCurrentLanguage);
 		
 		// Set the language to use
 		putenv('LANG='.$this->sCurrentLanguage);
@@ -71,6 +77,130 @@ class GlobalLanguage {
 
 		bindtextdomain($this->textDomain, $this->MAINCFG->getValue('paths', 'language'));
 		textdomain($this->textDomain);
+	}
+	
+	/**
+	 * Reads the language to use in NagVis
+	 *
+	 * @return  String
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function gatherCurrentLanguage() {
+		$sReturn = '';
+		$aMethods = $this->MAINCFG->getValue('global', 'language_detection');
+		
+		foreach($aMethods AS $sMethod) {
+			if($sReturn == '') {
+				switch($sMethod) {
+					case 'session':
+						// Read the user choice from session
+						$sReturn = $this->SHANDLER->get('userLanguage');
+					break;
+					case 'browser':
+						// Read the prefered language from the users browser
+						$sReturn = $this->getBrowserLanguage();
+					break;
+					case 'ip':
+						//@todo: It is also possible to get the country via IP and
+						//       indirectly the language from that country.
+					break;
+					case 'user':
+						// Read the language from url
+						$sReturn = $this->getUserLanguage();
+						
+						// Save language to session when user set one
+						if($sReturn != '') {
+				 			$this->SHANDLER->set('userLanguage', $sReturn);
+				 		}
+					break;
+					case 'config':
+						// Read default language from configuration
+						$sReturn = $this->MAINCFG->getValue('global', 'language');
+					break;
+						
+					default:
+						//FIXME: Error handling
+					break;
+				}
+			}
+		}
+		
+		return $sReturn;
+	}
+	
+	/**
+	 * Checks if the user requested a language by the url
+	 *
+	 * @return  String
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getUserLanguage() {
+		$sLang = '';
+		
+		$CORE = new GlobalCore($this->MAINCFG, $this);
+		$UHANDLER = new CoreUriHandler($CORE);
+		
+		// Load the specific params to the UriHandler
+		$UHANDLER->parseModSpecificUri(Array('lang' => MATCH_LANGUAGE_EMPTY));
+		
+		if($UHANDLER->isSetAndNotEmpty('lang')
+		   // Check if language is available
+		   && $this->checkLanguageAvailable($UHANDLER->get('lang'), false)) {
+		   
+		  // Get given language
+			$sLang = $UHANDLER->get('lang');
+		}
+		
+		return $sLang;
+	}
+	
+	/**
+	 * Trys to detect the language of the browser by analyzing the
+	 * HTTP_ACCEPT_LANGUAGE var. Returns a language string when found one language
+	 * which is available
+	 *
+	 * @return  String
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getBrowserLanguage() {
+		$return = Array();
+		$langs = Array();
+		
+		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+			// break up string into pieces (languages and q factors)
+			preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $lang_parse);
+			
+			if(count($lang_parse[1])) {
+				// create a list like "en" => 0.8
+				$langs = array_combine($lang_parse[1], $lang_parse[4]);
+				
+				// set default to 1 for any without q factor
+				foreach ($langs as $lang => $val) {
+					if ($val === '') $langs[$lang] = 1;
+				}
+				
+				// sort list based on value
+				arsort($langs, SORT_NUMERIC);
+			}
+		}
+		
+		// Check if the languages are available and then return the most important language which is available
+		$sLang = '';
+		foreach($langs AS $key => $val) {
+			// Format the language keys
+			if(strpos($key, '-') !== false) {
+				$a = explode('-', $key);
+				
+				$key = $a[0] . '_' . strtoupper($a[1]);
+			}
+			
+			if($this->checkLanguageAvailable($key, false)) {
+				$sLang = $key;
+				break;
+			}
+		}
+		
+		return $sLang;
 	}
 	
 	/**
@@ -89,13 +219,17 @@ class GlobalLanguage {
 	 * @return	Boolean
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkLanguageAvailable($printErr=1) {
+	private function checkLanguageAvailable($sLang, $printErr=1) {
 		$CORE = new GlobalCore($this->MAINCFG, $this);
-		if(in_array($this->sCurrentLanguage, $CORE->getAvailableLanguages())) {
+		
+		// Checks two things:
+		// a) The language availabilty in the filesyste,
+		// b) Listed language in global/language_available config option
+		if(in_array($sLang, $CORE->getAvailableLanguages()) && in_array($sLang, $this->MAINCFG->getValue('global', 'language_available'))) {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->getText('languageNotFound','LANG~'.$this->sCurrentLanguage), $this->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->getText('languageNotFound', Array('LANG' => $sLang)), $this->MAINCFG->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}
