@@ -477,7 +477,7 @@ function switchRotation(obj, startLabel, stopLabel) {
 function changeMap(htmlBase, mapName) {
 	if(mapName.match('^automap=')) {
 		mapName = mapName.replace(/automap=/, '');
-		location.href=htmlBase+'/frontend/nagvis-js/index.php?mod=Automap&act=view&show=' + mapName;
+		location.href=htmlBase+'/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show=' + mapName;
 	} else {
 		if (mapName === '') {
 			location.href=htmlBase+'/frontend/nagvis-js/index.php';
