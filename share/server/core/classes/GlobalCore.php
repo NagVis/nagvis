@@ -173,6 +173,25 @@ class GlobalCore {
 	}
 	
 	/**
+	 * Reads all languages which are available in NagVis and
+	 * are enabled by the configuration
+	 *
+	 * @return	Array list
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableAndEnabledLanguages() {
+		$aRet = Array();
+		
+		foreach($this->getAvailableLanguages() AS $val) {
+			if(in_array($val, $this->getMainCfg()->getValue('global', 'language_available'))) {
+				$aRet[] = $val;
+			}
+		}
+		
+		return $aRet;
+	}
+	
+	/**
 	 * Reads all available backends
 	 *
 	 * @return	Array Html

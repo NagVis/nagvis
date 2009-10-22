@@ -226,8 +226,7 @@ class GlobalLanguage {
 		// Checks two things:
 		// a) The language availabilty in the filesyste,
 		// b) Listed language in global/language_available config option
-		
-		if(in_array($sLang, $this->CORE->getAvailableLanguages())) {
+		if(in_array($sLang, $this->CORE->getAvailableLanguages()) && ($ignoreConf == true || ($ignoreConf == false && in_array($sLang, $this->CORE->getMainCfg()->getValue('global', 'language_available'))))) {
 			return TRUE;
 		} else {
 			if($printErr) {

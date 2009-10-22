@@ -156,6 +156,38 @@ class GlobalHeaderMenu {
 					}
 					
 					$this->code = preg_replace('/<!-- BEGIN '.$key.' -->(?:(?s).*)<!-- END '.$key.' -->/',$sReplace,$this->code);
+				} elseif($key == 'langlist') {
+					$sReplace = '';
+					preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/', $this->code, $matchReturn1);
+					
+					foreach($this->CORE->getAvailableAndEnabledLanguages() AS $lang) {
+						$sReplaceObj = str_replace('[language]', $lang, $matchReturn1[1][0]);
+						
+						// Get translated language name
+						switch($lang) {
+							case 'en_US':
+								$languageLocated = $this->CORE->getLang()->getText('en_US');
+							break;
+							case 'de_DE':
+								$languageLocated = $this->CORE->getLang()->getText('de_DE');
+							break;
+							case 'es_ES':
+								$languageLocated = $this->CORE->getLang()->getText('es_ES');
+							break;
+							case 'pt_BR':
+								$languageLocated = $this->CORE->getLang()->getText('pt_BR');
+							break;
+							default:
+								$languageLocated = $this->CORE->getLang()->getText($lang);
+							break;
+						}
+						
+						$sReplaceObj = str_replace('[lang_language_located]', $languageLocated, $sReplaceObj);
+								
+						$sReplace .= $sReplaceObj;
+					}
+					
+					$this->code = preg_replace('/<!-- BEGIN '.$key.' -->(?:(?s).*)<!-- END '.$key.' -->/', $sReplace, $this->code);
 				}
 			}
 		}
