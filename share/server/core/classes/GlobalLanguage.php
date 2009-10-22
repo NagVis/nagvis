@@ -68,7 +68,7 @@ class GlobalLanguage {
 		$this->checkGettextSupport();
 		
 		// Check if choosen language is available
-		$this->checkLanguageAvailable($this->sCurrentLanguage);
+		$this->checkLanguageAvailable($this->sCurrentLanguage, true, true);
 		
 		// Set the language to use
 		putenv('LANG='.$this->sCurrentLanguage);
@@ -109,7 +109,7 @@ class GlobalLanguage {
 						$sReturn = $this->getUserLanguage();
 						
 						// Save language to session when user set one
-						if($sReturn != '') {
+						if($sReturn != '' && $sReturn != $this->SHANDLER->get('userLanguage')) {
 				 			$this->SHANDLER->set('userLanguage', $sReturn);
 				 		}
 					break;
@@ -216,16 +216,20 @@ class GlobalLanguage {
 	/**
 	 * Checks if the choosen language is available
 	 *
-	 * @return	Boolean
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   String     Language definition string
+	 * @param   Boolean    Print error message or not
+	 * @param   Boolean    Check language_available config or not
+	 * @return  Boolean
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkLanguageAvailable($sLang, $printErr=1) {
+	private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false) {
 		$CORE = new GlobalCore($this->MAINCFG, $this);
 		
 		// Checks two things:
 		// a) The language availabilty in the filesyste,
 		// b) Listed language in global/language_available config option
-		if(in_array($sLang, $CORE->getAvailableLanguages()) && in_array($sLang, $this->MAINCFG->getValue('global', 'language_available'))) {
+		
+		if(in_array($sLang, $CORE->getAvailableLanguages())) {
 			return TRUE;
 		} else {
 			if($printErr) {
