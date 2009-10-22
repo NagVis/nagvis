@@ -45,21 +45,21 @@ class SettingsService
 		require_once(INCLUDE_PATH . 'functions/getuser.php');
 
 		$CORE = new GlobalCore();
-		$CORE->MAINCFG->setRuntimeValue('user', getUser());
+		$CORE->getMainCfg()->setRuntimeValue('user', getUser());
 
-		if (($htmlbase = $CORE->MAINCFG->getValue('paths', 'htmlbase')) === false)
+		if (($htmlbase = $CORE->getMainCfg()->getValue('paths', 'htmlbase')) === false)
 			throw new Exception('Error in NagVis configuration');
-		if (($htmlcgi = $CORE->MAINCFG->getValue('paths', 'htmlcgi')) === false)
+		if (($htmlcgi = $CORE->getMainCfg()->getValue('paths', 'htmlcgi')) === false)
 			throw new Exception('Error in NagVis configuration');
-		if (($hosturl = $CORE->MAINCFG->getValue('defaults', 'hosturl')) === false)
+		if (($hosturl = $CORE->getMainCfg()->getValue('defaults', 'hosturl')) === false)
 			throw new Exception('Error in NagVis configuration');
-		if (($hostgroupurl = $CORE->MAINCFG->getValue('defaults', 'hostgroupurl')) === false)
+		if (($hostgroupurl = $CORE->getMainCfg()->getValue('defaults', 'hostgroupurl')) === false)
 			throw new Exception('Error in NagVis configuration');
-		if (($serviceurl = $CORE->MAINCFG->getValue('defaults', 'serviceurl')) === false)
+		if (($serviceurl = $CORE->getMainCfg()->getValue('defaults', 'serviceurl')) === false)
 			throw new Exception('Error in NagVis configuration');
-		if (($servicegroupurl = $CORE->MAINCFG->getValue('defaults', 'servicegroupurl')) === false)
+		if (($servicegroupurl = $CORE->getMainCfg()->getValue('defaults', 'servicegroupurl')) === false)
 			throw new Exception('Error in NagVis configuration');
-		if (($mapurl = $CORE->MAINCFG->getValue('defaults', 'mapurl')) === false)
+		if (($mapurl = $CORE->getMainCfg()->getValue('defaults', 'mapurl')) === false)
 			throw new Exception('Error in NagVis configuration');
 
 		if (!file_exists(CONFIG_PATH . 'settings.xml'))

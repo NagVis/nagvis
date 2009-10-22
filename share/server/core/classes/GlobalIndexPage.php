@@ -45,7 +45,7 @@ class GlobalIndexPage {
 		$this->BACKEND = $BACKEND;
 		$this->AUTHORISATION = $AUTHORISATION;
 		
-		$this->htmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
+		$this->htmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
 	}
 	
 	/**
@@ -69,7 +69,7 @@ class GlobalIndexPage {
 				
 				// Fetch option array from defaultparams string (extract variable 
 				// names and values)
-				$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
+				$params = explode('&', $this->CORE->getMainCfg()->getValue('automap','defaultparams'));
 				unset($params[0]);
 				
 				foreach($params AS &$set) {
@@ -105,19 +105,19 @@ class GlobalIndexPage {
 						$class = '';
 						$url = '';
 						
-						$url = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$this->CORE->MAINCFG->getValue('automap','defaultparams');
+						$url = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$this->CORE->getMainCfg()->getValue('automap','defaultparams');
 						
 						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 					} else {
 						$class = 'disabled';
 						
-						$url = 'javascript:alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
-						$summaryOutput = $this->CORE->LANG->getText('mapInMaintenance');
+						$url = 'javascript:alert(\''.$this->CORE->getLang()->getText('mapInMaintenance').'\');';
+						$summaryOutput = $this->CORE->getLang()->getText('mapInMaintenance');
 					}
 					
 					// If this is the automap display the last rendered image
-					$imgPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$mapName.'.png';
-					$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$mapName.'.png';
+					$imgPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$mapName.'.png';
+					$imgPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$mapName.'.png';
 					
 					// If there is no automap image on first load of the index page,
 					// render the image
@@ -127,8 +127,8 @@ class GlobalIndexPage {
 					
 					if($this->CORE->checkGd(0)) {
 						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$sThumbFile;
-						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$sThumbFile;
+						$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
+						$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
 						
 						// Only create a new thumb when there is no cached one
 						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
@@ -165,7 +165,7 @@ class GlobalIndexPage {
 		$aMaps = Array();
 
 		// Only display the rotation list when enabled
-		if($this->CORE->MAINCFG->getValue('index','showmaps') == 1) {
+		if($this->CORE->getMainCfg()->getValue('index','showmaps') == 1) {
 			foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
 				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
 				if(!$MAPCFG->readMapConfig()) {
@@ -202,19 +202,19 @@ class GlobalIndexPage {
 						} else {
 							$class = 'disabled';
 							
-							$url = 'javascript:alert(\''.$this->CORE->LANG->getText('mapInMaintenance').'\');';
-							$summaryOutput = $this->CORE->LANG->getText('mapInMaintenance');
+							$url = 'javascript:alert(\''.$this->CORE->getLang()->getText('mapInMaintenance').'\');';
+							$summaryOutput = $this->CORE->getLang()->getText('mapInMaintenance');
 						}
 						
 						// Only handle thumbnail image when told to do so
-						if($this->CORE->MAINCFG->getValue('index','showmapthumbs') == 1) {
-							$imgPath = $this->CORE->MAINCFG->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
-							$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+						if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
+							$imgPath = $this->CORE->getMainCfg()->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
+							$imgPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
 							
 							if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
 								$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-								$sThumbPath = $this->CORE->MAINCFG->getValue('paths','sharedvar').$sThumbFile;
-								$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlsharedvar').$sThumbFile;
+								$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
+								$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
 								
 								// Only create a new thumb when there is no cached one
 								$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
@@ -233,7 +233,7 @@ class GlobalIndexPage {
 						
 						
 						// Only handle thumbnail image when told to do so
-						if($this->CORE->MAINCFG->getValue('index','showmapthumbs') == 1) {
+						if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
 							$arr['overview_image'] = $image;
 						}
 						
@@ -259,7 +259,7 @@ class GlobalIndexPage {
 		$aRotations = Array();
 		
 		// Only display the rotation list when enabled
-		if($this->CORE->MAINCFG->getValue('index','showrotations') == 1) {
+		if($this->CORE->getMainCfg()->getValue('index','showrotations') == 1) {
 			$aRotationPools = $this->CORE->getDefinedRotationPools();
 			if(count($aRotationPools) > 0) {
 				foreach($aRotationPools AS $poolName) {
@@ -297,25 +297,25 @@ class GlobalIndexPage {
 	public function parseIndexPropertiesJson() {
 		$arr = Array();
 		
-		$arr['cellsperrow'] = $this->CORE->MAINCFG->getValue('index', 'cellsperrow');
-		$arr['showautomaps'] = $this->CORE->MAINCFG->getValue('index', 'showautomaps');
-		$arr['showmaps'] = $this->CORE->MAINCFG->getValue('index', 'showmaps');
-		$arr['showgeomap'] = $this->CORE->MAINCFG->getValue('index', 'showgeomap');
-		$arr['showmapthumbs'] = $this->CORE->MAINCFG->getValue('index', 'showmapthumbs');
-		$arr['showrotations'] = $this->CORE->MAINCFG->getValue('index', 'showrotations');
+		$arr['cellsperrow'] = $this->CORE->getMainCfg()->getValue('index', 'cellsperrow');
+		$arr['showautomaps'] = $this->CORE->getMainCfg()->getValue('index', 'showautomaps');
+		$arr['showmaps'] = $this->CORE->getMainCfg()->getValue('index', 'showmaps');
+		$arr['showgeomap'] = $this->CORE->getMainCfg()->getValue('index', 'showgeomap');
+		$arr['showmapthumbs'] = $this->CORE->getMainCfg()->getValue('index', 'showmapthumbs');
+		$arr['showrotations'] = $this->CORE->getMainCfg()->getValue('index', 'showrotations');
 		
-		$arr['page_title'] = $this->CORE->MAINCFG->getValue('internal', 'title');
+		$arr['page_title'] = $this->CORE->getMainCfg()->getValue('internal', 'title');
 		// FIXME: State of the overview like on maps would be nice
-		$arr['favicon_image'] = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
-		$arr['background_color'] = $this->CORE->MAINCFG->getValue('index','backgroundcolor');
+		$arr['favicon_image'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
+		$arr['background_color'] = $this->CORE->getMainCfg()->getValue('index','backgroundcolor');
 		
-		$arr['lang_mapIndex'] = $this->CORE->LANG->getText('mapIndex');
-		$arr['lang_rotationPools'] = $this->CORE->LANG->getText('rotationPools');
+		$arr['lang_mapIndex'] = $this->CORE->getLang()->getText('mapIndex');
+		$arr['lang_rotationPools'] = $this->CORE->getLang()->getText('rotationPools');
 		
-		$arr['event_log'] = $this->CORE->MAINCFG->getValue('defaults', 'eventlog');
-		$arr['event_log_level'] = $this->CORE->MAINCFG->getValue('defaults', 'eventloglevel');
-		$arr['event_log_height'] = $this->CORE->MAINCFG->getValue('defaults', 'eventlogheight');
-		$arr['event_log_hidden'] = $this->CORE->MAINCFG->getValue('defaults', 'eventloghidden');
+		$arr['event_log'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventlog');
+		$arr['event_log_level'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventloglevel');
+		$arr['event_log_height'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventlogheight');
+		$arr['event_log_hidden'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventloghidden');
 		
 		return json_encode($arr);
 	}
@@ -370,7 +370,7 @@ class GlobalIndexPage {
 					$strFileType = 'png';
 				break;
 				default:
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('onlyPngOrJpgImages'));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
@@ -434,7 +434,7 @@ class GlobalIndexPage {
 					imagepng($thumb, $thumbPath);
 				break;
 				default:
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('onlyPngOrJpgImages'));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('onlyPngOrJpgImages'));
 				break;
 			}
 			
@@ -457,7 +457,7 @@ class GlobalIndexPage {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('WARNING', $this->CORE->LANG->getText('imageNotExists','FILE~'.$imgPath));
+				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('imageNotExists','FILE~'.$imgPath));
 			}
 			return FALSE;
 		}

@@ -52,7 +52,7 @@ class CoreRotation {
 		// Check wether the pool is defined
 		if(!$this->checkPoolExists()) {
 			// Error Message (Map rotation pool does not exist)
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('mapRotationPoolNotExists', Array('ROTATION' => htmlentities($this->sPoolName))));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapRotationPoolNotExists', Array('ROTATION' => htmlentities($this->sPoolName))));
 		}
 		
 		// Read the array of steps from configuration
@@ -127,7 +127,7 @@ class CoreRotation {
 			// Set the next step after setting the current step
 			$this->setNextStep();
 		} else {
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]', Array('ROTATION' => htmlentities($this->sPoolName), 'STEP' => htmlentities($sStep), 'TYPE' => htmlentities($sType))));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]', Array('ROTATION' => htmlentities($this->sPoolName), 'STEP' => htmlentities($sStep), 'TYPE' => htmlentities($sType))));
 		}
 	}
 	
@@ -152,9 +152,9 @@ class CoreRotation {
 	 */
 	private function gatherStepInterval() {
 		if($this->sPoolName !== '') {
-			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation_'.$this->sPoolName, 'interval');
+			$this->intInterval = $this->CORE->getMainCfg()->getValue('rotation_'.$this->sPoolName, 'interval');
 		} else {
-			$this->intInterval = $this->CORE->MAINCFG->getValue('rotation', 'interval');
+			$this->intInterval = $this->CORE->getMainCfg()->getValue('rotation', 'interval');
 		}
 	}
 	
@@ -164,7 +164,7 @@ class CoreRotation {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function createStepUrls() {
-		$htmlBase = $this->CORE->MAINCFG->getValue('paths', 'htmlbase');
+		$htmlBase = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
 		foreach($this->arrSteps AS $intId => $arrStep) {
 			if(isset($arrStep['url']) && $arrStep['url'] != '') {
 				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Url&act=view&show='.$arrStep['url'].'&rotation='.$this->sPoolName;
@@ -180,7 +180,7 @@ class CoreRotation {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function gatherSteps() {
-		$this->arrSteps = $this->CORE->MAINCFG->getValue('rotation_'.$this->sPoolName, 'maps');
+		$this->arrSteps = $this->CORE->getMainCfg()->getValue('rotation_'.$this->sPoolName, 'maps');
 	}
 	
 	/**

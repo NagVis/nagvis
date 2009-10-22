@@ -71,13 +71,13 @@ class NagVisHost extends NagiosHost {
 		
 		if(!in_array($this->getName(), $arrHostnamesParsed)) {
 			// Get the image size
-			list($width, $height, $type, $attr) = getimagesize($this->CORE->MAINCFG->getValue('paths', 'icon').$this->icon);
+			list($width, $height, $type, $attr) = getimagesize($this->CORE->getMainCfg()->getValue('paths', 'icon').$this->icon);
 			
 			$strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
 			$strReturn .= 'label="", ';
 			$strReturn .= 'URL="'.str_replace(array('[htmlcgi]', '[host_name]'),
-				array($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi'), $this->getName()),
-				$this->CORE->MAINCFG->getValue('defaults', 'hosturl')).'", ';
+				array($this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'htmlcgi'), $this->getName()),
+				$this->CORE->getMainCfg()->getValue('defaults', 'hosturl')).'", ';
 			$strReturn .= 'target="'.$this->url_target.'", ';
 			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
 			

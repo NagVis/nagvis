@@ -30,7 +30,10 @@
  */
 class CoreSessionHandler {
 		
-	public function __construct($sDomain, $sPath, $iDuration) {
+	public function __construct() {
+		$sDomain = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiedomain');
+		$sPath = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiepath');
+		$iDuration = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookieduration');
 		
 		// Set the session name (used in params/cookie names)
 		session_name(SESSION_NAME);

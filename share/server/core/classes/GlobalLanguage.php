@@ -28,7 +28,6 @@
 class GlobalLanguage {
 	private $SHANDLER = null;
 	private $CORE = null;
-	private $MAINCFG;
 	private $textDomain;
 	private $sCurrentLanguage;
 	private $sCurrentEncoding;
@@ -36,17 +35,19 @@ class GlobalLanguage {
 	/**
 	 * Class Constructor
 	 *
-	 * @param	GlobalMainCfg	$MAINCFG
 	 * @param	String			$type		Type of language-file
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($MAINCFG, $textDomain = 'nagvis') {
-		$this->MAINCFG = $MAINCFG;
+	public function __construct($textDomain = 'nagvis') {
+		$this->CORE = GlobalCore::getInstance();
+		
 		$this->textDomain = $textDomain;
 		
-		$this->SHANDLER = new CoreSessionHandler($this->MAINCFG->getValue('global', 'sesscookiedomain'), 
-		                                         $this->MAINCFG->getValue('global', 'sesscookiepath'),
-		                                         $this->MAINCFG->getValue('global', 'sesscookieduration'));
+		if($this->CORE->getMainCfg() !== null) {
+		$this->SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
+		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
+		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
+		}
 		
 		$this->sCurrentLanguage = $this->gatherCurrentLanguage();
 		
@@ -75,7 +76,7 @@ class GlobalLanguage {
 		putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
 		setlocale(LC_ALL, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
 
-		bindtextdomain($this->textDomain, $this->MAINCFG->getValue('paths', 'language'));
+		bindtextdomain($this->textDomain, $this->CORE->getMainCfg()->getValue('paths', 'language'));
 		textdomain($this->textDomain);
 	}
 	
@@ -87,7 +88,7 @@ class GlobalLanguage {
 	 */
 	private function gatherCurrentLanguage() {
 		$sReturn = '';
-		$aMethods = $this->MAINCFG->getValue('global', 'language_detection');
+		$aMethods = $this->CORE->getMainCfg()->getValue('global', 'language_detection');
 		
 		foreach($aMethods AS $sMethod) {
 			if($sReturn == '') {
@@ -115,7 +116,7 @@ class GlobalLanguage {
 					break;
 					case 'config':
 						// Read default language from configuration
-						$sReturn = $this->MAINCFG->getValue('global', 'language');
+						$sReturn = $this->CORE->getMainCfg()->getValue('global', 'language');
 					break;
 						
 					default:
@@ -137,8 +138,7 @@ class GlobalLanguage {
 	private function getUserLanguage() {
 		$sLang = '';
 		
-		$CORE = new GlobalCore($this->MAINCFG, $this);
-		$UHANDLER = new CoreUriHandler($CORE);
+		$UHANDLER = new CoreUriHandler(GlobalCore::getInstance());
 		
 		// Load the specific params to the UriHandler
 		$UHANDLER->parseModSpecificUri(Array('lang' => MATCH_LANGUAGE_EMPTY));
@@ -223,17 +223,15 @@ class GlobalLanguage {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false) {
-		$CORE = new GlobalCore($this->MAINCFG, $this);
-		
 		// Checks two things:
 		// a) The language availabilty in the filesyste,
 		// b) Listed language in global/language_available config option
 		
-		if(in_array($sLang, $CORE->getAvailableLanguages())) {
+		if(in_array($sLang, $this->CORE->getAvailableLanguages())) {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->getText('languageNotFound', Array('LANG' => $sLang)), $this->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->getText('languageNotFound', Array('LANG' => $sLang)));
 			}
 			return FALSE;
 		}
@@ -249,7 +247,7 @@ class GlobalLanguage {
 		if (!extension_loaded('gettext')) {
 			dl('gettext.so');
 			if (!extension_loaded('gettext')) {
-				new GlobalMessage('ERROR', $this->getText('phpModuleNotLoaded','MODULE~gettext'), $this->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->getText('phpModuleNotLoaded', Array('MODULE' => 'gettext')));
 				return FALSE;
 			} else {
 				return TRUE;

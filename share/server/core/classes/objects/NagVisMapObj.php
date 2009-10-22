@@ -283,7 +283,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	public function checkMaintenance($printErr) {
 		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
 			if($printErr) {
-				new GlobalMessage('INFO-STOP', $this->CORE->LANG->getText('mapInMaintenance', 'MAP~'.$this->getName()));
+				new GlobalMessage('INFO-STOP', $this->CORE->getLang()->getText('mapInMaintenance', 'MAP~'.$this->getName()));
 			}
 			return FALSE;
 		} else {
@@ -315,9 +315,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 				}
 			}
 			
-			$this->mergeSummaryOutput($arrStates, $this->CORE->LANG->getText('objects'));
+			$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('objects'));
 		} else {
-			$this->summary_output = $this->CORE->LANG->getText('mapIsEmpty','MAP~'.$this->getName());
+			$this->summary_output = $this->CORE->getLang()->getText('mapIsEmpty','MAP~'.$this->getName());
 		}
 	}
 	
@@ -369,7 +369,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							
 							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 								$OBJ->summary_state = 'ERROR';
-								$OBJ->summary_output = $this->CORE->LANG->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
+								$OBJ->summary_output = $this->CORE->getLang()->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
 							}
 						break;
 						case 'shape':
@@ -379,7 +379,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = new NagVisTextbox($this->CORE);
 						break;
 						default:
-							new GlobalMessage('ERROR', $this->CORE->LANG->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
 						break;
 					}
 					
@@ -416,9 +416,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 					// The fact of map loops should not be reported anymore. Let's simply
 					// skip the looping objects in summary view.
 					//
-					//new GlobalMessage('WARNING', $this->CORE->LANG->getText('loopInMapRecursion'));
+					//new GlobalMessage('WARNING', $this->CORE->getLang()->getText('loopInMapRecursion'));
 					//$OBJ->summary_state = 'UNKNOWN';
-					//$OBJ->summary_output = $this->CORE->LANG->getText('loopInMapRecursion');
+					//$OBJ->summary_output = $this->CORE->getLang()->getText('loopInMapRecursion');
 					
 					return FALSE;
 				}
@@ -429,7 +429,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			return TRUE;
 		} else {
 			$OBJ->summary_state = 'UNKNOWN';
-			$OBJ->summary_output = $this->CORE->LANG->getText('noReadPermissions');
+			$OBJ->summary_output = $this->CORE->getLang()->getText('noReadPermissions');
 			
 			return FALSE;
 		}

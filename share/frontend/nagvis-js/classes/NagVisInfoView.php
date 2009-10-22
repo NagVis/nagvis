@@ -51,8 +51,8 @@ class NagVisInfoView {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-			'pageTitle' => $this->CORE->MAINCFG->getValue('internal', 'title') . ' &rsaquo; '.$this->CORE->LANG->getText('supportInfo'),
-			'htmlBase' => $this->CORE->MAINCFG->getValue('paths', 'htmlbase'),
+			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.$this->CORE->getLang()->getText('supportInfo'),
+			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'nagvisVersion' => CONST_VERSION,
 			'phpVersion' => PHP_VERSION,
 			'mysqlVersion' => shell_exec('mysql --version'),

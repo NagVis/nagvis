@@ -38,7 +38,7 @@ class WuiFrontend extends GlobalPage {
 	function WuiFrontend($CORE, $MAPCFG) {
 		$this->MAPCFG = $MAPCFG;
 		
-		$prop = Array('title'=> $CORE->MAINCFG->getValue('internal', 'title') . ' WUI',
+		$prop = Array('title'=> $CORE->getMainCfg()->getValue('internal', 'title') . ' WUI',
 					  'cssIncludes'=>Array('../nagvis-js/css/style.css',
 						                     './includes/css/wui.css',
 						                     './includes/css/office_xp/office_xp.css'),
@@ -75,7 +75,7 @@ class WuiFrontend extends GlobalPage {
 	function checkPHPMBString($printErr=1) {
 		if (!extension_loaded('mbstring')) {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('phpModuleNotLoaded','MODULE~mbstring'));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('phpModuleNotLoaded','MODULE~mbstring'));
 			}
 			return FALSE;
 		} else {

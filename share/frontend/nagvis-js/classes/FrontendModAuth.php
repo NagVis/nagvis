@@ -6,14 +6,14 @@ class FrontendModAuth extends FrontendModule {
 	
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
-		$logonModule = $this->CORE->MAINCFG->getValue('global', 'logonmodule');
+		$logonModule = $this->CORE->getMainCfg()->getValue('global', 'logonmodule');
 		
 		$this->aActions = Array('logout' => 0, 'login' => 0);
 		
-		$SHANDLER = new CoreSessionHandler($this->CORE->MAINCFG->getValue('global', 'sesscookiedomain'), 
-		                                   $this->CORE->MAINCFG->getValue('global', 'sesscookiepath'),
-		                                   $this->CORE->MAINCFG->getValue('global', 'sesscookieduration'));
-		$this->AUTH = new CoreAuthHandler($this->CORE, $SHANDLER, $this->CORE->MAINCFG->getValue('global', 'authmodule'));
+		$SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
+		                                   $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
+		                                   $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
+		$this->AUTH = new CoreAuthHandler($this->CORE, $SHANDLER, $this->CORE->getMainCfg()->getValue('global', 'authmodule'));
 		
 		$this->GHANDLER = new FrontendRequestHandler($_GET);
 	}
@@ -40,7 +40,7 @@ class FrontendModAuth extends FrontendModule {
 					$this->AUTH->logout();
 					
 					// Redirect to main page
-					Header('Location: '.$this->CORE->MAINCFG->getValue('paths', 'htmlbase'));
+					Header('Location: '.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 					exit(0);
 				break;
 			}
@@ -50,13 +50,13 @@ class FrontendModAuth extends FrontendModule {
 	}
 	
 	public function msgAuthenticated() {
-		new GlobalMessage('NOTE', $this->CORE->LANG->getText('You have been authenticated. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, null, 1, $this->GHANDLER->getReferer());
+		new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, null, 1, $this->GHANDLER->getReferer());
 		
 		return '';
 	}
 	
 	public function msgInvalidCredentials() {
-		new GlobalMessage('ERROR', $this->CORE->LANG->getText('You entered invalid credentials. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, $this->CORE->LANG->getText('Authentication failed'), 1, $this->GHANDLER->getReferer());
+		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, $this->CORE->getLang()->getText('Authentication failed'), 1, $this->GHANDLER->getReferer());
 		
 		return '';
 	}

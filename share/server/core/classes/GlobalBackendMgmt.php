@@ -59,7 +59,7 @@ class GlobalBackendMgmt {
 		$aBackends = $this->CORE->getDefinedBackends();
 		
 		if(!count($aBackends)) {
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('noBackendDefined'));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('noBackendDefined'));
 		}
 	}
 	
@@ -72,11 +72,11 @@ class GlobalBackendMgmt {
 	 */
 	private function checkBackendExists($backendId, $printErr) {
 		if(isset($backendId) && $backendId != '') {
-			if(file_exists($this->CORE->MAINCFG->getValue('paths','class').'GlobalBackend'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype').'.php')) {
+			if(file_exists($this->CORE->getMainCfg()->getValue('paths','class').'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype').'.php')) {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
 				}
 				return FALSE;
 			}
@@ -93,7 +93,7 @@ class GlobalBackendMgmt {
 	 */
 	private function initializeBackend($backendId) {
 		if($this->checkBackendExists($backendId, 1)) {
-			$backendClass = 'GlobalBackend'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype');
+			$backendClass = 'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype');
 			$this->BACKENDS[$backendId] = new $backendClass($this->CORE,$backendId);
 			
 			// Mark backend as initialized
@@ -121,7 +121,7 @@ class GlobalBackendMgmt {
 				return true;
 			} else {
 				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype')));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
 				}
 				return FALSE;
 			}
@@ -141,7 +141,7 @@ class GlobalBackendMgmt {
 				return true;
 			} else {
 				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.', Array('FEATURE' => htmlentities($feature), 'BACKENDID' => $backendId, 'BACKENDTYPE' => $this->CORE->MAINCFG->getValue('backend_'.$backendId,'backendtype'))));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.', Array('FEATURE' => htmlentities($feature), 'BACKENDID' => $backendId, 'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
 				}
 				return false;
 			}

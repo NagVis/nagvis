@@ -37,8 +37,8 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct($CORE, $icon) {
-		$this->iconPath = $CORE->MAINCFG->getValue('paths', 'shape');
-		$this->iconHtmlPath = $CORE->MAINCFG->getValue('paths', 'htmlshape');
+		$this->iconPath = $CORE->getMainCfg()->getValue('paths', 'shape');
+		$this->iconHtmlPath = $CORE->getMainCfg()->getValue('paths', 'htmlshape');
 		
 		$this->icon = $icon;
 		$this->type = 'shape';

@@ -58,8 +58,7 @@ class GlobalMessage {
 	public function __construct($type, $message, $pathHtmlBase = NULL, $title = NULL, $iReloadTime = null, $sReloadUrl = null) {
 		// Gather htmlBase path if not provided by method calls
 		if($pathHtmlBase === NULL) {
-			$CORE = new GlobalCore();
-			$pathHtmlBase = $CORE->MAINCFG->getValue('paths', 'htmlbase');
+			$pathHtmlBase = GlobalCore::getInstance()->getMainCfg()->getValue('paths', 'htmlbase');
 		}
 		
 		if($title === NULL) {
@@ -73,9 +72,8 @@ class GlobalMessage {
 		
 		// Check if type allowed else build error box
 		if(!in_array($type, $this->allowedTypes)) {
-			$CORE = new GlobalCore();
-			$this->title = $CORE->LANG->getText('Unknown message type');
-			$this->message = $CORE->LANG->getText('The given message type [TYPE] is not known', Array('TYPE' => $type));
+			$this->title = GlobalCore::getInstance()->getLang()->getText('Unknown message type');
+			$this->message = GlobalCore::getInstance()->getLang()->getText('The given message type [TYPE] is not known', Array('TYPE' => $type));
 		}
 		
 		// Got all information, now build the message

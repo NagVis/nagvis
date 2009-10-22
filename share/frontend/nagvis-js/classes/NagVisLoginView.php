@@ -51,15 +51,15 @@ class NagVisLoginView {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-			'pageTitle' => $this->CORE->MAINCFG->getValue('internal', 'title') . ' &rsaquo; Log In',
-			'htmlBase' => $this->CORE->MAINCFG->getValue('paths', 'htmlbase'),
-			'formTarget' => $this->CORE->MAINCFG->getValue('paths', 'htmlbase') . '/frontend/nagvis-js/index.php?mod=LogonDialog&amp;act=login',
-			'stylesheet' => $this->CORE->MAINCFG->getValue('paths', 'htmlpagetemplates').'/default.css',
-			'htmlImages' => $this->CORE->MAINCFG->getValue('paths', 'htmlimages'),
+			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; Log In',
+			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/frontend/nagvis-js/index.php?mod=LogonDialog&amp;act=login',
+			'stylesheet' => $this->CORE->getMainCfg()->getValue('paths', 'htmlpagetemplates').'/default.css',
+			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxLength' => $this->iInputMaxLength,
-      'langName' => $this->CORE->LANG->getText('Name'),
-      'langPassword' => $this->CORE->LANG->getText('Password'),
-      'langLogin' => $this->CORE->LANG->getText('Login')
+      'langName' => $this->CORE->getLang()->getText('Name'),
+      'langPassword' => $this->CORE->getLang()->getText('Password'),
+      'langLogin' => $this->CORE->getLang()->getText('Login')
 		);
 		
 		// Build page based on the template file and the data array

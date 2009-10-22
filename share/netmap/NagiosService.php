@@ -40,10 +40,10 @@ class NagiosService
 
 
 		$this->CORE = new GlobalCore();
-		$this->CORE->MAINCFG->setRuntimeValue('user', getUser());
+		$this->CORE->getMainCfg()->setRuntimeValue('user', getUser());
 		$this->BACKEND = new GlobalBackendMgmt($this->CORE);
 
-		if (($backendId = $this->CORE->MAINCFG->getValue('defaults', 'backend')) === false)
+		if (($backendId = $this->CORE->getMainCfg()->getValue('defaults', 'backend')) === false)
 			throw new Exception('Default backend is not set');
 
 		if (!$this->BACKEND->checkBackendInitialized($backendId, 0))

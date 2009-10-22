@@ -50,8 +50,8 @@ class NagVisOverviewView {
 		$TMPLSYS = $TMPL->getTmplSys();
 
 		$aData = Array(
-			'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
-			'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+			'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
+			'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
 		);
 
 		// Build page based on the template file and the data array

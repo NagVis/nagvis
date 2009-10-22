@@ -37,7 +37,7 @@ require('../../server/core/functions/ajaxErrorHandler.php');
 define('CONST_AJAX' , TRUE);
 
 // Load the core
-$CORE = new GlobalCore();
+$CORE = GlobalCore::getInstance();
 
 /*
  * Url: Parse the url to know later what module and
@@ -51,9 +51,9 @@ $UHANDLER = new CoreUriHandler($CORE);
  * Session: Handle the user session
  */
 
-$SHANDLER = new CoreSessionHandler($CORE->MAINCFG->getValue('global', 'sesscookiedomain'), 
-		                               $CORE->MAINCFG->getValue('global', 'sesscookiepath'),
-		                               $CORE->MAINCFG->getValue('global', 'sesscookieduration'));
+$SHANDLER = new CoreSessionHandler($CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
+		                               $CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
+		                               $CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
 
 /*
  * Authentication 1: First try to use an existing session
@@ -74,7 +74,7 @@ if($AUTH->isAuthenticated()) {
 
 	// When no information in session get permission and write to session
 	if($aPerms === false) {
-		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->MAINCFG->getValue('global', 'authorisationmodule'));
+		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
 
 		// Save credentials to seession
  		$SHANDLER->set('userPermissions', $AUTHORISATION->parsePermissions());
@@ -101,7 +101,7 @@ $MHANDLER->regModule('Url');
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if($MODULE == null) {
-	new GlobalMessage('ERROR', $CORE->LANG->getText('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));
+	new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));
 }
 $MODULE->passAuth($AUTH, $AUTHORISATION);
 $MODULE->setAction($UHANDLER->get('act'));
@@ -126,12 +126,12 @@ if($MODULE->actionRequiresAuthorisation()) {
 		
 		// Check if the user is permited to this action in the module
 		if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'), $sObj)) {
-			new GlobalMessage('ERROR', $CORE->LANG->getText('You are not permitted to access this page'), null, $CORE->LANG->getText('Access denied'));
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not permitted to access this page'), null, $CORE->getLang()->getText('Access denied'));
 		}
 	} else {
 		// FIXME: Maybe make login possible via API?
 		// When not authenticated show error message
-		new GlobalMessage('ERROR', $CORE->LANG->getText('You are not authenticated'), null, $CORE->LANG->getText('Access denied'));
+		new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'), null, $CORE->getLang()->getText('Access denied'));
 	}
 }
 
@@ -149,7 +149,7 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
 	$sContent = $MODULE->handleAction();
 } else {
 	// Create instance of msg module
-	new GlobalMessage('ERROR', $CORE->LANG->getText('The given action is not valid'));
+	new GlobalMessage('ERROR', $CORE->getLang()->getText('The given action is not valid'));
 }
 
 echo $sContent;

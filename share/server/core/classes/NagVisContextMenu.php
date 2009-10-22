@@ -47,18 +47,18 @@ class NagVisContextMenu {
 		$this->OBJPAGE = $OBJ;
 		$this->templateName = $templateName;
 		
-		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','contexttemplate').'tmpl.'.$this->templateName.'.html';
+		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','contexttemplate').'tmpl.'.$this->templateName.'.html';
 		
-		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'context-'.$this->templateName.'-'.$this->CORE->LANG->getCurrentLanguage().'.cache');
+		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'context-'.$this->templateName.'-'.$this->CORE->getLang()->getCurrentLanguage().'.cache');
 		
 		// Only use cache when there is
 		// a) Some valid cache file
 		// b) Some valid main configuration cache file
 		// c) This cache file newer than main configuration cache file
 		if($this->CACHE->isCached() !== -1
-		  && $this->CORE->MAINCFG->isCached() !== -1
-		  && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
+		  && $this->CORE->getMainCfg()->isCached() !== -1
+		  && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
 			$this->code = $this->CACHE->getCache();
 		} else {
 			// Read the contents of the template file
@@ -99,35 +99,35 @@ class NagVisContextMenu {
 	private function replaceStaticMacros() {
 		// Replace the static macros (language, paths)
 		if(strpos($this->code,'[lang_connect_by_ssh]') !== FALSE) {
-			$this->code = str_replace('[lang_connect_by_ssh]',$this->CORE->LANG->getText('contextConnectBySsh'),$this->code);
+			$this->code = str_replace('[lang_connect_by_ssh]',$this->CORE->getLang()->getText('contextConnectBySsh'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_refresh_status]') !== FALSE) {
-			$this->code = str_replace('[lang_refresh_status]',$this->CORE->LANG->getText('contextRefreshStatus'),$this->code);
+			$this->code = str_replace('[lang_refresh_status]',$this->CORE->getLang()->getText('contextRefreshStatus'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_reschedule_next_check]') !== FALSE) {
-			$this->code = str_replace('[lang_reschedule_next_check]',$this->CORE->LANG->getText('contextRescheduleNextCheck'),$this->code);
+			$this->code = str_replace('[lang_reschedule_next_check]',$this->CORE->getLang()->getText('contextRescheduleNextCheck'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_schedule_downtime]') !== FALSE) {
-			$this->code = str_replace('[lang_schedule_downtime]',$this->CORE->LANG->getText('contextScheduleDowntime'),$this->code);
+			$this->code = str_replace('[lang_schedule_downtime]',$this->CORE->getLang()->getText('contextScheduleDowntime'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_cgi]') !== FALSE) {
-			$this->code = str_replace('[html_cgi]',$this->CORE->MAINCFG->getValue('paths','htmlcgi'),$this->code);
+			$this->code = str_replace('[html_cgi]',$this->CORE->getMainCfg()->getValue('paths','htmlcgi'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_base]') !== FALSE) {
-			$this->code = str_replace('[html_base]',$this->CORE->MAINCFG->getValue('paths','htmlbase'),$this->code);
+			$this->code = str_replace('[html_base]',$this->CORE->getMainCfg()->getValue('paths','htmlbase'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_templates]') !== FALSE) {
-			$this->code = str_replace('[html_templates]',$this->CORE->MAINCFG->getValue('paths','htmlcontexttemplates'),$this->code);
+			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getValue('paths','htmlcontexttemplates'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_template_images]') !== FALSE) {
-			$this->code = str_replace('[html_template_images]',$this->CORE->MAINCFG->getValue('paths','htmlcontexttemplateimages'),$this->code);
+			$this->code = str_replace('[html_template_images]',$this->CORE->getMainCfg()->getValue('paths','htmlcontexttemplateimages'),$this->code);
 		}
 	}
 	
@@ -155,7 +155,7 @@ class NagVisContextMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('contextTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
@@ -175,7 +175,7 @@ class NagVisContextMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('contextTemplateNotExists','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('contextTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

@@ -47,7 +47,7 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		parent::__construct($CORE, $this->name);
 		
 		// Override the default map configuration path with automap path
-		$this->setConfigFile($CORE->MAINCFG->getValue('paths', 'automapcfg').$this->name.'.cfg');
+		$this->setConfigFile($CORE->getMainCfg()->getValue('paths', 'automapcfg').$this->name.'.cfg');
 		
 		// Re-initialize the cache
 		$this->initCache();

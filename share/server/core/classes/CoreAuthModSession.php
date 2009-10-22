@@ -38,9 +38,9 @@ class CoreAuthModSession extends CoreAuthModule {
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
-		$this->SHANDLER = new CoreSessionHandler($this->CORE->MAINCFG->getValue('global', 'sesscookiedomain'), 
-		                                         $this->CORE->MAINCFG->getValue('global', 'sesscookiepath'),
-		                                         $this->CORE->MAINCFG->getValue('global', 'sesscookieduration'));
+		$this->SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
+		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
+		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
 	}
 	
 	public function passCredentials($aData) {}
@@ -63,7 +63,7 @@ class CoreAuthModSession extends CoreAuthModule {
 			}
 			
 			// Validate data
-			$AUTH = new CoreAuthHandler($this->CORE, $this->SHANDLER, $this->CORE->MAINCFG->getValue('global','authmodule'));
+			$AUTH = new CoreAuthHandler($this->CORE, $this->SHANDLER, $this->CORE->getMainCfg()->getValue('global','authmodule'));
 			$AUTH->passCredentials($aCredentials);
 			
 			if($AUTH->isAuthenticated()) {

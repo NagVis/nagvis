@@ -138,7 +138,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getDowntimeStart() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->downtime_start);
@@ -158,7 +158,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getDowntimeEnd() {
 		if(isset($this->in_downtime) && $this->in_downtime == 1) {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->downtime_end);
@@ -286,7 +286,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getStateDuration() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, ($_SERVER['REQUEST_TIME'] - $this->last_state_change));
@@ -306,7 +306,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getLastStateChange() {
 		if(isset($this->last_state_change) && $this->last_state_change != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->last_state_change);
@@ -326,7 +326,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getLastHardStateChange() {
 		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->last_hard_state_change);
@@ -346,7 +346,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getLastCheck() {
 		if(isset($this->last_check) && $this->last_check != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->last_check);
@@ -366,7 +366,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getNextCheck() {
 		if(isset($this->next_check) && $this->next_check != '0') {
 			if($this->dateFormat == '') {
-				$this->dateFormat = $this->CORE->MAINCFG->getValue('global','dateformat');
+				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
 			
 			return date($this->dateFormat, $this->next_check);
@@ -523,8 +523,8 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	public function fetchIcon() {
 		// Set the paths of this iconset
-		$this->iconPath = $this->CORE->MAINCFG->getValue('paths', 'icon');
-		$this->iconHtmlPath = $this->CORE->MAINCFG->getValue('paths', 'htmlicon');
+		$this->iconPath = $this->CORE->getMainCfg()->getValue('paths', 'icon');
+		$this->iconHtmlPath = $this->CORE->getMainCfg()->getValue('paths', 'htmlicon');
 		
 		// Read the filetype of the iconset
 		$fileType = $this->CORE->getIconsetFiletype($this->iconset);
@@ -575,7 +575,7 @@ class NagVisStatefulObject extends NagVisObject {
 			}
 			
 			//Checks whether the needed file exists
-			if(@file_exists($this->CORE->MAINCFG->getValue('paths', 'icon').$icon)) {
+			if(@file_exists($this->CORE->getMainCfg()->getValue('paths', 'icon').$icon)) {
 				$this->icon = $icon;
 			} else {
 				$this->icon = $this->iconset.'_error.'.$fileType;
@@ -596,7 +596,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function mergeSummaryOutput(&$arrStates, $objLabel) {
-		$this->summary_output .= $this->CORE->LANG->getText('childStatesAre').' ';
+		$this->summary_output .= $this->CORE->getLang()->getText('childStatesAre').' ';
 		foreach($arrStates AS $state => &$num) {
 			if($num > 0) {
 				$this->summary_output .= $num.' '.$state.', ';
@@ -621,7 +621,7 @@ class NagVisStatefulObject extends NagVisObject {
 		$sSummaryState = $this->getSummaryState();
 		$sObjSummaryState = $OBJ->getSummaryState();
 	
-		$stateWeight = $this->CORE->MAINCFG->getStateWeight();
+		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
 		if(isset($stateWeight[$sObjSummaryState])) {
 			if($sSummaryState != '') {

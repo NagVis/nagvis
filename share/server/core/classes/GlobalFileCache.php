@@ -79,7 +79,7 @@ class GlobalFileCache {
 		if((!$this->checkCacheFileExists(0) && $this->checkCacheFolderWriteable($printErr)) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
 			if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
 				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
 				}
 				return FALSE;
 			}
@@ -109,7 +109,7 @@ class GlobalFileCache {
 			return $this->getCacheFileAge();
 		} else {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('fileNotCached', 'FILE~'.$this->file.',CACHEFILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('fileNotCached', 'FILE~'.$this->file.',CACHEFILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
 			}
 			return -1;
 		}
@@ -127,7 +127,7 @@ class GlobalFileCache {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('cacheFolderNotWriteable', Array('FILE' => $this->cacheFile)), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFolderNotWriteable', Array('FILE' => $this->cacheFile)), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}
@@ -145,7 +145,7 @@ class GlobalFileCache {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}
@@ -163,7 +163,7 @@ class GlobalFileCache {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('cacheFileNotExists','FILE~'.$this->cacheFile), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotExists','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}
@@ -181,7 +181,7 @@ class GlobalFileCache {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('fileNotExists','FILE~'.$this->file), $this->CORE->MAINCFG->getValue('paths','htmlbase'));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('fileNotExists','FILE~'.$this->file), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
 			}
 			return FALSE;
 		}

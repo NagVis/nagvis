@@ -48,18 +48,18 @@ class NagVisHoverMenu {
 		
 		$this->templateName = $templateName;
 		
-		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','hovertemplate').'tmpl.'.$this->templateName.'.html';
+		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','hovertemplate').'tmpl.'.$this->templateName.'.html';
 		
-		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'hover-'.$this->templateName.'-'.$this->CORE->LANG->getCurrentLanguage().'.cache');
+		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'hover-'.$this->templateName.'-'.$this->CORE->getLang()->getCurrentLanguage().'.cache');
 		
 		// Only use cache when there is
 		// a) Some valid cache file
 		// b) Some valid main configuration cache file
 		// c) This cache file newer than main configuration cache file
 		if($this->CACHE->isCached() !== -1
-		  && $this->CORE->MAINCFG->isCached() !== -1
-		  && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
+		  && $this->CORE->getMainCfg()->isCached() !== -1
+		  && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
 			$this->code = $this->CACHE->getCache();
 		} else {
 			// Read the contents of the template file
@@ -100,87 +100,87 @@ class NagVisHoverMenu {
 	private function replaceStaticMacros() {
 		// Replace the static macros (language, paths)
 		if(strpos($this->code,'[lang_alias]') !== FALSE) {
-			$this->code = str_replace('[lang_alias]',$this->CORE->LANG->getText('alias'),$this->code);
+			$this->code = str_replace('[lang_alias]',$this->CORE->getLang()->getText('alias'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_address]') !== FALSE) {
-			$this->code = str_replace('[lang_address]',$this->CORE->LANG->getText('address'),$this->code);
+			$this->code = str_replace('[lang_address]',$this->CORE->getLang()->getText('address'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_state]') !== FALSE) {
-			$this->code = str_replace('[lang_state]',$this->CORE->LANG->getText('state'),$this->code);
+			$this->code = str_replace('[lang_state]',$this->CORE->getLang()->getText('state'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_summary_state]') !== FALSE) {
-			$this->code = str_replace('[lang_summary_state]',$this->CORE->LANG->getText('summaryState'),$this->code);
+			$this->code = str_replace('[lang_summary_state]',$this->CORE->getLang()->getText('summaryState'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_output]') !== FALSE) {
-			$this->code = str_replace('[lang_output]',$this->CORE->LANG->getText('output'),$this->code);
+			$this->code = str_replace('[lang_output]',$this->CORE->getLang()->getText('output'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_perfdata]') !== FALSE) {
-			$this->code = str_replace('[lang_perfdata]',$this->CORE->LANG->getText('perfdata'),$this->code);
+			$this->code = str_replace('[lang_perfdata]',$this->CORE->getLang()->getText('perfdata'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_summary_output]') !== FALSE) {
-			$this->code = str_replace('[lang_summary_output]',$this->CORE->LANG->getText('summaryOutput'),$this->code);
+			$this->code = str_replace('[lang_summary_output]',$this->CORE->getLang()->getText('summaryOutput'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_overview]') !== FALSE) {
-			$this->code = str_replace('[lang_overview]',$this->CORE->LANG->getText('overview'),$this->code);
+			$this->code = str_replace('[lang_overview]',$this->CORE->getLang()->getText('overview'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_instance]') !== FALSE) {
-			$this->code = str_replace('[lang_instance]',$this->CORE->LANG->getText('instance'),$this->code);
+			$this->code = str_replace('[lang_instance]',$this->CORE->getLang()->getText('instance'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_next_check]') !== FALSE) {
-		$this->code = str_replace('[lang_next_check]',$this->CORE->LANG->getText('nextCheck'),$this->code);
+		$this->code = str_replace('[lang_next_check]',$this->CORE->getLang()->getText('nextCheck'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_last_check]') !== FALSE) {
-			$this->code = str_replace('[lang_last_check]',$this->CORE->LANG->getText('lastCheck'),$this->code);
+			$this->code = str_replace('[lang_last_check]',$this->CORE->getLang()->getText('lastCheck'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_state_type]') !== FALSE) {
-			$this->code = str_replace('[lang_state_type]',$this->CORE->LANG->getText('stateType'),$this->code);
+			$this->code = str_replace('[lang_state_type]',$this->CORE->getLang()->getText('stateType'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_current_attempt]') !== FALSE) {
-			$this->code = str_replace('[lang_current_attempt]',$this->CORE->LANG->getText('currentAttempt'),$this->code);
+			$this->code = str_replace('[lang_current_attempt]',$this->CORE->getLang()->getText('currentAttempt'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_last_state_change]') !== FALSE) {
-			$this->code = str_replace('[lang_last_state_change]',$this->CORE->LANG->getText('lastStateChange'),$this->code);
+			$this->code = str_replace('[lang_last_state_change]',$this->CORE->getLang()->getText('lastStateChange'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_state_duration]') !== FALSE) {
-			$this->code = str_replace('[lang_state_duration]',$this->CORE->LANG->getText('stateDuration'),$this->code);
+			$this->code = str_replace('[lang_state_duration]',$this->CORE->getLang()->getText('stateDuration'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_service_description]') !== FALSE) {
-			$this->code = str_replace('[lang_service_description]',$this->CORE->LANG->getText('servicename'),$this->code);
+			$this->code = str_replace('[lang_service_description]',$this->CORE->getLang()->getText('servicename'),$this->code);
 		}
 		
 		if(strpos($this->code,'[lang_notes]') !== FALSE) {
-			$this->code = str_replace('[lang_notes]', $this->CORE->LANG->getText('notes'), $this->code);
+			$this->code = str_replace('[lang_notes]', $this->CORE->getLang()->getText('notes'), $this->code);
 		}
 		
 		if(strpos($this->code,'[lang_last_status_refresh]') !== FALSE) {
-			$this->code = str_replace('[lang_last_status_refresh]', $this->CORE->LANG->getText('lastStatusRefresh'), $this->code);
+			$this->code = str_replace('[lang_last_status_refresh]', $this->CORE->getLang()->getText('lastStatusRefresh'), $this->code);
 		}
 		
 		if(strpos($this->code,'[html_base]') !== FALSE) {
-			$this->code = str_replace('[html_base]',$this->CORE->MAINCFG->getValue('paths','htmlbase'),$this->code);
+			$this->code = str_replace('[html_base]',$this->CORE->getMainCfg()->getValue('paths','htmlbase'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_templates]') !== FALSE) {
-			$this->code = str_replace('[html_templates]',$this->CORE->MAINCFG->getValue('paths','htmlhovertemplates'),$this->code);
+			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getValue('paths','htmlhovertemplates'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_template_images]') !== FALSE) {
-			$this->code = str_replace('[html_template_images]',$this->CORE->MAINCFG->getValue('paths','htmlhovertemplateimages'),$this->code);
+			$this->code = str_replace('[html_template_images]',$this->CORE->getMainCfg()->getValue('paths','htmlhovertemplateimages'),$this->code);
 		}
 	}
 	
@@ -208,7 +208,7 @@ class NagVisHoverMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
@@ -228,7 +228,7 @@ class NagVisHoverMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('hoverTemplateNotExists','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('hoverTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

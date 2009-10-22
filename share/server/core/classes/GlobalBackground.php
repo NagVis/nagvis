@@ -59,7 +59,7 @@ class GlobalBackground {
 	public function getFile() {
 		$sReturn = '';
 		if($this->getFileName() != '' && $this->getFileName() != 'none') {
-			$sReturn = $this->CORE->MAINCFG->getValue('paths', 'htmlmap').$this->getFileName();
+			$sReturn = $this->CORE->getMainCfg()->getValue('paths', 'htmlmap').$this->getFileName();
 		}
 		return $sReturn;
 	}
@@ -73,11 +73,11 @@ class GlobalBackground {
 	 */
 	protected function checkFileExists($printErr) {
 		if($this->image != '') {
-			if(file_exists($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
+			if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundNotExists','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundNotExists','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -95,11 +95,11 @@ class GlobalBackground {
 	 */
 	protected function checkFileReadable($printErr) {
 		if($this->image != '') {
-			if($this->checkFileExists($printErr) && is_readable($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
+			if($this->checkFileExists($printErr) && is_readable($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundNotReadable','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundNotReadable','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -117,11 +117,11 @@ class GlobalBackground {
 	 */
 	protected function checkFileWriteable($printErr) {
 		if($this->image != '') {
-			if($this->checkFileExists($printErr) && is_writable($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
+			if($this->checkFileExists($printErr) && is_writable($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundNotWriteable','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundNotWriteable','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -138,11 +138,11 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFolderWriteable($printErr) {
-		if(is_writable($this->CORE->MAINCFG->getValue('paths', 'map'))) {
+		if(is_writable($this->CORE->getMainCfg()->getValue('paths', 'map'))) {
 			return TRUE;
 		} else {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('backgroundFolderNotWriteable','PATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundFolderNotWriteable','PATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
 			}
 			return FALSE;
 		}

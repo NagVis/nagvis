@@ -192,7 +192,7 @@ class CoreModAutoMap extends CoreModule {
 					$opts = Array();
 					// Fetch option array from defaultparams string (extract variable
 					// names and values)
-					$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
+					$params = explode('&', $this->CORE->getMainCfg()->getValue('automap','defaultparams'));
 					unset($params[0]);
 					foreach($params AS &$set) {
 						$arrSet = explode('=',$set);
@@ -207,7 +207,7 @@ class CoreModAutoMap extends CoreModule {
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:
-					echo 'Error: '.$this->CORE->LANG->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
+					echo 'Error: '.$this->CORE->getLang()->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
 				break;
 			}
 			

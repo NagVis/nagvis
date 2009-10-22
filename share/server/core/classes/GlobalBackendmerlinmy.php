@@ -86,11 +86,11 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		$this->serviceCache = Array();
 		$this->hostAckCache = Array();
 		
-		$this->dbName = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbname');
-		$this->dbUser = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbuser');
-		$this->dbPass = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbpass');
-		$this->dbHost = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbhost');
-		$this->dbPort = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'dbport');
+		$this->dbName = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbname');
+		$this->dbUser = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbuser');
+		$this->dbPass = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbpass');
+		$this->dbHost = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbhost');
+		$this->dbPort = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbport');
 		
 		if($this->checkMysqlSupport() && $this->connectDB() && $this->checkTablesExists()) {
 			return TRUE;
@@ -110,7 +110,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 */
 	private function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery("SHOW TABLES LIKE 'program_status'")) == 0) {
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
 			return FALSE;
 		} else {
 			return TRUE;	
@@ -132,7 +132,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		
 		if(!$this->CONN){
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
 			return FALSE;
 		}
 		
@@ -142,7 +142,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		error_reporting($oldLevel);
 		
 		if(!$returnCode){
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
 			return FALSE;
 		} else {
 			return TRUE;
@@ -162,7 +162,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		if (!extension_loaded('mysql')) {
 			dl('mysql.so');
 			if (!extension_loaded('mysql')) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
 				return FALSE;
 			} else {
 				return TRUE;
@@ -339,7 +339,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			
 			if(mysql_num_rows($QUERYHANDLE) == 0) {
 				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = $this->CORE->LANG->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
+				$arrReturn['output'] = $this->CORE->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
 			} else {
 				$data = mysql_fetch_array($QUERYHANDLE);
 				
@@ -388,7 +388,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 				
 				if($data['current_state'] == '') {
 					$arrReturn['state'] = 'PENDING';
-					$arrReturn['output'] = $this->CORE->LANG->getText('hostIsPending', Array('HOST' => $hostName));
+					$arrReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
 				} elseif($data['current_state'] == '0') {
 					// Host is UP
 					$arrReturn['state'] = 'UP';
@@ -466,7 +466,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			if(mysql_num_rows($QUERYHANDLE) == 0) {
 				if(isset($serviceName) && $serviceName != '') {
 					$arrReturn['state'] = 'ERROR';
-					$arrReturn['output'] = $this->CORE->LANG->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
+					$arrReturn['output'] = $this->CORE->getLang()->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
 				} else {
 					// If the method should fetch all services of the host and does not find
 					// any services for this host, don't return anything => The message
@@ -518,7 +518,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 					
 					if($data['current_state'] == '') {
 						$arrTmpReturn['state'] = 'PENDING';
-						$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked', Array('SERVICE' => $data['name2']));
+						$arrTmpReturn['output'] = $this->CORE->getLang()->getText('serviceNotChecked', Array('SERVICE' => $data['name2']));
 					} elseif($data['current_state'] == '0') {
 						// Host is UP
 						$arrTmpReturn['state'] = 'OK';

@@ -56,7 +56,7 @@ class FrontendModMap extends FrontendModule {
 		// Need to load the custom stylesheet?
 		$customStylesheet = $MAPCFG->getValue('global',0, 'stylesheet');
 		if($customStylesheet !== '') {
-			$INDEX->setCustomStylesheet($CORE->MAINCFG->getValue('paths','htmlstyles') . $customStylesheet);
+			$INDEX->setCustomStylesheet($CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
 		
 		// Need to parse the header menu?

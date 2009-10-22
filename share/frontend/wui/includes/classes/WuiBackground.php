@@ -39,11 +39,11 @@ class WuiBackground extends GlobalBackground {
 	*/
 	function deleteImage($printErr=1) {
 		if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
-			if(unlink($this->CORE->MAINCFG->getValue('paths', 'map').$this->image)) {
+			if(unlink($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('couldNotDeleteMapImage','IMGPATH~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('couldNotDeleteMapImage','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
 				}
 				return FALSE;
 			}
@@ -62,14 +62,14 @@ class WuiBackground extends GlobalBackground {
 			$fileName = $arr['name'];
 			if(preg_match(MATCH_PNG_GIF_JPG_FILE,$fileName)) {
 				if($this->checkFolderWriteable(1)) {
-					if(move_uploaded_file($arr['tmp_name'], $this->CORE->MAINCFG->getValue('paths', 'map').$fileName)) {
+					if(move_uploaded_file($arr['tmp_name'], $this->CORE->getMainCfg()->getValue('paths', 'map').$fileName)) {
 						// Change permissions of the map image
-						chmod($this->CORE->MAINCFG->getValue('paths', 'map').$fileName,0666);
+						chmod($this->CORE->getMainCfg()->getValue('paths', 'map').$fileName,0666);
 						
 						return TRUE;
 					} else {
 						if($printErr) {
-							new GlobalMessage('ERROR', $this->CORE->LANG->getText('moveUploadedFileFailed'));
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('moveUploadedFileFailed'));
 						}
 						return FALSE;
 					}
@@ -79,13 +79,13 @@ class WuiBackground extends GlobalBackground {
 				}
 			} else {
 				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->LANG->getText('mustChooseValidImageFormat'));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustChooseValidImageFormat'));
 				}
 				return FALSE;
 			}
 		} else {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('fileCouldNotBeUploaded'));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('fileCouldNotBeUploaded'));
 			}
 			return FALSE;
 		}
@@ -112,7 +112,7 @@ class WuiBackground extends GlobalBackground {
 				
 				$bgColor = imagecolorallocate($image, $r, $g, $b);
 				imagefill($image, 0, 0, $bgColor);
-				imagepng($image,$this->CORE->MAINCFG->getValue('paths', 'map').$this->image);
+				imagepng($image,$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image);
 				imagedestroy($image);
 				
 				return TRUE;
@@ -122,7 +122,7 @@ class WuiBackground extends GlobalBackground {
 			}
 		} else {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('imageAlreadyExists','IMAGE~'.$this->CORE->MAINCFG->getValue('paths', 'map').$this->image));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('imageAlreadyExists','IMAGE~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
 			}
 			return FALSE;
 		}

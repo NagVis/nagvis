@@ -32,8 +32,8 @@ class CoreUriHandler {
 	
 	private $aAliases;
 	
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
+	public function __construct() {
+		$this->CORE = GlobalCore::getInstance();
 		
 		$this->aAliases = Array('module' => 'mod', 'action' => 'act');
 		
@@ -112,7 +112,7 @@ class CoreUriHandler {
 			if($bValid) {
 				$this->aOpts[$key] = $_GET[$key];
 			} else {
-				new GlobalMessage('ERROR', $this->CORE->LANG->getText('The parameter "[key]" does not match the valid value format', Array('key' => htmlentities($key))));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The parameter "[key]" does not match the valid value format', Array('key' => htmlentities($key))));
 			}
 		}
 	}
@@ -120,7 +120,7 @@ class CoreUriHandler {
 	private function parseUri() {
 		//FIXME: Maybe for later use when using nice urls
 		// Cleanup some bad things from the URI
-		//$sRequest = str_replace($this->CORE->MAINCFG->getValue('paths','htmlbase'), '', $this->sRequestUri);
+		//$sRequest = str_replace($this->CORE->getMainCfg()->getValue('paths','htmlbase'), '', $this->sRequestUri);
 		// Remove the first slash and then explode by slashes
 		//$this->aOpts = explode('/', substr($sRequest,1));
 		
@@ -135,12 +135,12 @@ class CoreUriHandler {
 	private function setDefaults() {
 		// Handle default options when no module given
 		if(!$this->isSetAndNotEmpty('mod')) {
-			$this->aOpts['mod'] = $this->CORE->MAINCFG->getValue('global', 'startmodule');
+			$this->aOpts['mod'] = $this->CORE->getMainCfg()->getValue('global', 'startmodule');
 		}
 		
 		// Handle default options when no action given
 		if(!$this->isSetAndNotEmpty('act')) {
-			$this->aOpts['act'] = $this->CORE->MAINCFG->getValue('global', 'startaction');
+			$this->aOpts['act'] = $this->CORE->getMainCfg()->getValue('global', 'startaction');
 		}
 	}
 	
@@ -156,7 +156,7 @@ class CoreUriHandler {
 		
 		// If one param is invalid send the user to 404 page
 		if($bValid === false) {
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('The given url is not valid'));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The given url is not valid'));
 		}
 	}
 	

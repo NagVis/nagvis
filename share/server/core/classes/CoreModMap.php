@@ -148,7 +148,7 @@ class CoreModMap extends CoreModule {
 					$opts = Array();
 					// Fetch option array from defaultparams string (extract variable
 					// names and values)
-					$params = explode('&', $this->CORE->MAINCFG->getValue('automap','defaultparams'));
+					$params = explode('&', $this->CORE->getMainCfg()->getValue('automap','defaultparams'));
 					unset($params[0]);
 					foreach($params AS &$set) {
 						$arrSet = explode('=',$set);
@@ -163,7 +163,7 @@ class CoreModMap extends CoreModule {
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:
-					echo 'Error: '.$CORE->LANG->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
+					echo 'Error: '.$CORE->getLang()->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
 				break;
 			}
 			
@@ -221,7 +221,7 @@ class CoreModMap extends CoreModule {
 				}
 			}
 		} else {
-			echo 'Error: '.$this->CORE->LANG->getText('foundNoObjectOfThatTypeOnMap');
+			echo 'Error: '.$this->CORE->getLang()->getText('foundNoObjectOfThatTypeOnMap');
 		}
 		
 		if(count($objConf) > 0) {
@@ -231,7 +231,7 @@ class CoreModMap extends CoreModule {
 			}
 		} else {
 			// object not on map
-			echo 'Error: '.$this->CORE->LANG->getText('ObjectNotFoundOnMap');
+			echo 'Error: '.$this->CORE->getLang()->getText('ObjectNotFoundOnMap');
 		}
 		
 		return $objConf;

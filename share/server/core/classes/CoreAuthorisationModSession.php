@@ -34,9 +34,9 @@ class CoreAuthorisationModSession extends CoreAuthorisationModule {
 	
 	public function __construct(GlobalCore $CORE, CoreAuthHandler $AUTHENTICATION) {
 		$this->CORE = $CORE;
-		$this->SHANDLER = new CoreSessionHandler($this->CORE->MAINCFG->getValue('global', 'sesscookiedomain'), 
-		                                         $this->CORE->MAINCFG->getValue('global', 'sesscookiepath'),
-		                                         $this->CORE->MAINCFG->getValue('global', 'sesscookieduration'));
+		$this->SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
+		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
+		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
 	}
 	
 	public function parsePermissions() {

@@ -59,14 +59,14 @@ class NagVisUrl {
 		// Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
 		$aUrl = parse_url($this->strUrl);
 		if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '') {
-			echo new GlobalMessage('ERROR', $this->CORE->LANG->getText('problemReadingUrl', Array('URL' => htmlentities($this->strUrl), 'MSG' => 'Not allowed url')), null, 'error');
+			echo new GlobalMessage('ERROR', $this->CORE->getLang()->getText('problemReadingUrl', Array('URL' => htmlentities($this->strUrl), 'MSG' => 'Not allowed url')), null, 'error');
 			exit(1);
 		}
 				
 		if(false == ($this->strContents = file_get_contents($this->strUrl))) {
 			$aError = error_get_last();
 			
-			echo new GlobalMessage('ERROR', $this->CORE->LANG->getText('problemReadingUrl', Array('URL' => htmlentities($this->strUrl), 'MSG' => $aError['message'])), null, 'error');
+			echo new GlobalMessage('ERROR', $this->CORE->getLang()->getText('problemReadingUrl', Array('URL' => htmlentities($this->strUrl), 'MSG' => $aError['message'])), null, 'error');
 		}
 		
 		// set the old level of reporting back
@@ -101,7 +101,7 @@ class NagVisUrl {
 		$arr['background_image'] = $this->getBackgroundJson();
 		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
 		$arr['favicon_image'] = $this->getFavicon();
-		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');*/
+		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');*/
 		
 		return json_encode($arr);
 	}

@@ -246,27 +246,27 @@ class NagVisObject {
 		// Get the child name label
 		switch($this->type) {
 			case 'host':
-				$sName = $this->CORE->LANG->getText('hostname');
-				$sChildName = $this->CORE->LANG->getText('servicename');
+				$sName = $this->CORE->getLang()->getText('hostname');
+				$sChildName = $this->CORE->getLang()->getText('servicename');
 			break;
 			case 'hostgroup':
-				$sName = $this->CORE->LANG->getText('hostgroupname');
-				$sChildName = $this->CORE->LANG->getText('hostname');
+				$sName = $this->CORE->getLang()->getText('hostgroupname');
+				$sChildName = $this->CORE->getLang()->getText('hostname');
 			break;
 			case 'servicegroup':
-				$sName = $this->CORE->LANG->getText('servicegroupname');
-				$sChildName = $this->CORE->LANG->getText('servicename');
+				$sName = $this->CORE->getLang()->getText('servicegroupname');
+				$sChildName = $this->CORE->getLang()->getText('servicename');
 			break;
 			default:
-				$sName = $this->CORE->LANG->getText('mapname');
-				$sChildName = $this->CORE->LANG->getText('objectname');
+				$sName = $this->CORE->getLang()->getText('mapname');
+				$sChildName = $this->CORE->getLang()->getText('objectname');
 			break;
 		}
 		
-		$arr['lang_obj_type'] = $this->CORE->LANG->getText($this->type);
+		$arr['lang_obj_type'] = $this->CORE->getLang()->getText($this->type);
 		$arr['lang_name'] = $sName;
 		$arr['lang_child_name'] = $sChildName;
-		$arr['lang_child_name1'] = $this->CORE->LANG->getText('hostname');
+		$arr['lang_child_name1'] = $this->CORE->getLang()->getText('hostname');
 		
 		// I want only "name" in js
 		if($this->type != 'shape' && $this->type != 'textbox') {
@@ -291,10 +291,10 @@ class NagVisObject {
 			}
 			
 			// Add the custom htmlcgi path for the object
-			$arr['htmlcgi'] = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id, 'htmlcgi');
+			$arr['htmlcgi'] = $this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'htmlcgi');
 			
-			if($this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
-				$arr['backend_instancename'] = $this->CORE->MAINCFG->getValue('backend_'.$this->backend_id,'dbinstancename');
+			if($this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
+				$arr['backend_instancename'] = $this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id,'dbinstancename');
 			} else {
 				$arr['backend_instancename'] = '';
 			}
@@ -499,7 +499,7 @@ class NagVisObject {
 			return 0;
 		}
 
-		$stateWeight = $OBJ1->CORE->MAINCFG->getStateWeight();
+		$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
 		
 		// FIXME: Should handle ack/downtime states
 		if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {

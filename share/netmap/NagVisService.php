@@ -37,7 +37,7 @@ class NagVisService
 		require_once(INCLUDE_PATH . 'functions/getuser.php');
 
 		$this->CORE = new GlobalCore();
-		$this->CORE->MAINCFG->setRuntimeValue('user', getUser());
+		$this->CORE->getMainCfg()->setRuntimeValue('user', getUser());
 	}
 
 	public function getMaps()

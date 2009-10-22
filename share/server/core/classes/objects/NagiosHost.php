@@ -569,7 +569,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	private function fetchSummaryOutput() {
 		// Write host state
-		$this->summary_output = $this->CORE->LANG->getText('hostStateIs').' '.$this->state.'. ';
+		$this->summary_output = $this->CORE->getLang()->getText('hostStateIs').' '.$this->state.'. ';
 		
 		// Only merge host state with service state when recognize_services is set 
 		// to 1
@@ -582,9 +582,9 @@ class NagiosHost extends NagVisStatefulObject {
 					$arrStates[$SERVICE->getSummaryState()]++;
 				}
 				
-				$this->mergeSummaryOutput($arrStates, $this->CORE->LANG->getText('services'));
+				$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('services'));
 			} else {
-				$this->summary_output .= $this->CORE->LANG->getText('hostHasNoServices','HOST~'.$this->getName());
+				$this->summary_output .= $this->CORE->getLang()->getText('hostHasNoServices','HOST~'.$this->getName());
 			}
 		}
 	}

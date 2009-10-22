@@ -47,9 +47,9 @@ class FrontendModUrl extends FrontendModule {
 		$INDEX = new NagVisIndexView($this->CORE);
 		
 		// Need to parse the header menu?
-		if($this->CORE->MAINCFG->getValue('index','headermenu')) {
+		if($this->CORE->getMainCfg()->getValue('index','headermenu')) {
       // Parse the header menu
-      $HEADER = new GlobalHeaderMenu($this->CORE, $this->CORE->MAINCFG->getValue('index', 'headertemplate'));
+      $HEADER = new GlobalHeaderMenu($this->CORE, $this->CORE->getMainCfg()->getValue('index', 'headertemplate'));
 			$INDEX->setHeaderMenu($HEADER->__toString());
     }
 		

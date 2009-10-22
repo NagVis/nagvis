@@ -46,10 +46,10 @@ class WuiBackgroundManagement extends GlobalPage {
 		
 		$this->propCount = 0;
 		
-		$prop = Array('title' => $this->CORE->MAINCFG->getValue('internal', 'title'),
+		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
 					  'jsIncludes'=>Array('./includes/js/BackgroundManagement.js'),
 					  'extHeader'=> '',
-					  'allowedUsers' => $this->CORE->MAINCFG->getValue('wui','allowedforconfig'),
+					  'allowedUsers' => $this->CORE->getMainCfg()->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
 		parent::__construct($CORE, $prop);
 	}
@@ -71,9 +71,9 @@ class WuiBackgroundManagement extends GlobalPage {
 			'cols'=>'2'));
 		
 		$code .= $this->CREATEFORM->initForm();
-		$code .= $this->CREATEFORM->getCatLine($this->LANG->getText('createBackground'));
+		$code .= $this->CREATEFORM->getCatLine($this->getLang()->getText('createBackground'));
 		$code .= $this->getCreateFields();
-		$code .= $this->CREATEFORM->getSubmitLine($this->LANG->getText('create'));
+		$code .= $this->CREATEFORM->getSubmitLine($this->getLang()->getText('create'));
 		$code .= $this->CREATEFORM->closeForm();
 		
 		$this->ADDFORM = new GlobalForm(Array('name'=>'new_image',
@@ -85,9 +85,9 @@ class WuiBackgroundManagement extends GlobalPage {
 			'cols'=>'2'));
 		
 		$code .= $this->ADDFORM->initForm();
-		$code .= $this->ADDFORM->getCatLine($this->LANG->getText('uploadBackground'));
+		$code .= $this->ADDFORM->getCatLine($this->getLang()->getText('uploadBackground'));
 		$code .= $this->getAddFields();
-		$code .= $this->ADDFORM->getSubmitLine($this->LANG->getText('upload'));
+		$code .= $this->ADDFORM->getSubmitLine($this->getLang()->getText('upload'));
 		$code .= $this->ADDFORM->closeForm();
 		
 		$this->DELFORM = new GlobalForm(Array('name'=>'image_delete',
@@ -98,11 +98,11 @@ class WuiBackgroundManagement extends GlobalPage {
 			'cols'=>'2'));
 		
 		$code .= $this->DELFORM->initForm();
-		$code .= $this->DELFORM->getCatLine($this->LANG->getText('deleteBackground'));
+		$code .= $this->DELFORM->getCatLine($this->getLang()->getText('deleteBackground'));
 		$this->propCount++;
 		$code .= $this->getDelFields();
 		$this->propCount++;
-		$code .= $this->ADDFORM->getSubmitLine($this->LANG->getText('delete'));
+		$code .= $this->ADDFORM->getSubmitLine($this->getLang()->getText('delete'));
 		$code .= $this->ADDFORM->closeForm();
 		
 		return $code;
@@ -115,7 +115,7 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDelFields() {
-		return $this->DELFORM->getSelectLine($this->LANG->getText('chooseImage'),'map_image',$this->CORE->getAvailableBackgroundImages(),'');
+		return $this->DELFORM->getSelectLine($this->getLang()->getText('chooseImage'),'map_image',$this->CORE->getAvailableBackgroundImages(),'');
 	}
 	
 	/**
@@ -126,7 +126,7 @@ class WuiBackgroundManagement extends GlobalPage {
      */
 	function getAddFields() {
 		return $this->ADDFORM->getHiddenField('MAX_FILE_SIZE','3000000').
-		       $this->ADDFORM->getFileLine($this->LANG->getText('chooseImage'),'image_file','');
+		       $this->ADDFORM->getFileLine($this->getLang()->getText('chooseImage'),'image_file','');
 	}
 	
 	/**
@@ -136,10 +136,10 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getCreateFields() {
-		return $this->CREATEFORM->getInputLine($this->LANG->getText('backgroundName'),'image_name','',TRUE)
-		      .$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundColor'),'image_color','#',TRUE)
-		      .$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundWidth'),'image_width','',TRUE)
-		      .$this->CREATEFORM->getInputLine($this->LANG->getText('backgroundHeight'),'image_height','',TRUE);
+		return $this->CREATEFORM->getInputLine($this->getLang()->getText('backgroundName'),'image_name','',TRUE)
+		      .$this->CREATEFORM->getInputLine($this->getLang()->getText('backgroundColor'),'image_color','#',TRUE)
+		      .$this->CREATEFORM->getInputLine($this->getLang()->getText('backgroundWidth'),'image_width','',TRUE)
+		      .$this->CREATEFORM->getInputLine($this->getLang()->getText('backgroundHeight'),'image_height','',TRUE);
 	}
 }
 ?>

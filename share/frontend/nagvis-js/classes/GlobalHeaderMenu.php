@@ -46,18 +46,18 @@ class GlobalHeaderMenu {
 		$this->OBJPAGE = $OBJ;
 		$this->templateName = $templateName;
 		
-		$this->pathHtmlBase = $this->CORE->MAINCFG->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->MAINCFG->getValue('paths','headertemplate').'tmpl.'.$this->templateName.'.html';
+		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','headertemplate').'tmpl.'.$this->templateName.'.html';
 		
-		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->MAINCFG->getValue('paths','var').'header-'.$this->templateName.'-'.$this->CORE->LANG->getCurrentLanguage().'.cache');
+		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'header-'.$this->templateName.'-'.$this->CORE->getLang()->getCurrentLanguage().'.cache');
 		
 		// Only use cache when there is
 		// a) Some valid cache file
 		// b) Some valid main configuration cache file
 		// c) This cache file newer than main configuration cache file
 		if($this->CACHE->isCached() !== -1
-		  && $this->CORE->MAINCFG->isCached() !== -1
-		  && $this->CACHE->isCached() >= $this->CORE->MAINCFG->isCached()) {
+		  && $this->CORE->getMainCfg()->isCached() !== -1
+		  && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
 			$this->code = $this->CACHE->getCache();
 			
 			// Replace dynamic macros after caching actions
@@ -134,14 +134,14 @@ class GlobalHeaderMenu {
 						$MAPCFG1 = new NagVisAutomapCfg($this->CORE, $mapName);
 						$MAPCFG1->readMapConfig(1);
 						
-						if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->MAINCFG->getValue('automap', 'showinlists')))) {
+						if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->getMainCfg()->getValue('automap', 'showinlists')))) {
 							// Only proceed permited objects
 							if($MAPCFG1->checkPermissions($MAPCFG1->getValue('global',0, 'allowed_user'),FALSE)) {
 								$sReplaceObj = str_replace('[map_name]', 'automap='.$MAPCFG1->getName(), $matchReturn1[1][0]);
 								$sReplaceObj = str_replace('[map_alias]', $MAPCFG1->getValue('global', '0', 'alias'), $sReplaceObj);
 								
 								// Add defaultparams to map selection
-								$sReplaceObj = str_replace('[url_params]', $this->CORE->MAINCFG->getValue('automap', 'defaultparams'), $sReplaceObj);
+								$sReplaceObj = str_replace('[url_params]', $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'), $sReplaceObj);
 								
 								// auto select current map
 								if(get_class($this->OBJPAGE) == 'NagVisAutomapCfg' && $mapName == $this->OBJPAGE->getName()) {
@@ -196,24 +196,24 @@ class GlobalHeaderMenu {
 			'[lang_refresh_stop]');
 		
 		$arrVals = Array($this->pathHtmlBase, 
-			$this->CORE->MAINCFG->getValue('paths','htmlimages'), 
-			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplates'), 
-			$this->CORE->MAINCFG->getValue('paths','htmlheadertemplateimages'),
-			$this->CORE->LANG->getCurrentLanguage(),
-			$this->CORE->LANG->getText('selectMap'),
-			$this->CORE->LANG->getText('editMap'),
-			$this->CORE->LANG->getText('needHelp'),
-			$this->CORE->LANG->getText('onlineDoc'),
-			$this->CORE->LANG->getText('forum'),
-			$this->CORE->LANG->getText('supportInfo'),
-			$this->CORE->LANG->getText('Search'),
-			$this->CORE->LANG->getText('overview'),
-			$this->CORE->LANG->getText('instance'),
-			$this->CORE->LANG->getText('Logout'),
-			$this->CORE->LANG->getText('rotationStart'),
-			$this->CORE->LANG->getText('rotationStop'),
-			$this->CORE->LANG->getText('refreshStart'),
-			$this->CORE->LANG->getText('refreshStop'));
+			$this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
+			$this->CORE->getMainCfg()->getValue('paths','htmlheadertemplates'), 
+			$this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
+			$this->CORE->getLang()->getCurrentLanguage(),
+			$this->CORE->getLang()->getText('selectMap'),
+			$this->CORE->getLang()->getText('editMap'),
+			$this->CORE->getLang()->getText('needHelp'),
+			$this->CORE->getLang()->getText('onlineDoc'),
+			$this->CORE->getLang()->getText('forum'),
+			$this->CORE->getLang()->getText('supportInfo'),
+			$this->CORE->getLang()->getText('Search'),
+			$this->CORE->getLang()->getText('overview'),
+			$this->CORE->getLang()->getText('instance'),
+			$this->CORE->getLang()->getText('Logout'),
+			$this->CORE->getLang()->getText('rotationStart'),
+			$this->CORE->getLang()->getText('rotationStop'),
+			$this->CORE->getLang()->getText('refreshStart'),
+			$this->CORE->getLang()->getText('refreshStop'));
 		
 		$this->code = str_replace($arrKeys, $arrVals, $this->code);
 		
@@ -256,7 +256,7 @@ class GlobalHeaderMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotExists','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('headerTemplateNotExists','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}
@@ -274,7 +274,7 @@ class GlobalHeaderMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('WARNING', $this->CORE->LANG->getText('headerTemplateNotReadable','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('headerTemplateNotReadable','FILE~'.$this->pathTemplateFile));
 			}
 			return FALSE;
 		}

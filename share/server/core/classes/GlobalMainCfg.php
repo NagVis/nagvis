@@ -717,7 +717,9 @@ class GlobalMainCfg {
 		
 		// Define the main configuration file
 		$this->configFile = $configFile;
-		
+	}
+	
+	public function init() {
 		// Do preflight checks
 		// Only proceed when the configuration file exists and is readable
 		if(!$this->checkNagVisConfigExists(TRUE) || !$this->checkNagVisConfigReadable(TRUE)) {
@@ -725,8 +727,7 @@ class GlobalMainCfg {
 		}
 		
 		// Create instance of GlobalFileCache object for caching the config
-		$CORE = new GlobalCore($this);
-		$this->CACHE = new GlobalFileCache($CORE, $this->configFile, $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache');
+		$this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $this->configFile, $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache');
 		
 		// Get the valid configuration definitions from the available backends
 		$this->getBackendValidConf();
@@ -763,8 +764,7 @@ class GlobalMainCfg {
 	 */
 	private function getBackendValidConf() {
 		// Get the configuration options from the backends
-		$CORE = new GlobalCore($this);
-		$aBackends = $CORE->getAvailableBackends();
+		$aBackends = GlobalCore::getInstance()->getAvailableBackends();
 		
 		foreach($aBackends AS $backend) {
 			$class = 'GlobalBackend'.$backend;
@@ -1009,8 +1009,7 @@ class GlobalMainCfg {
 							// value is "must"
 							if($this->getValue($type,$key) == '') {
 								// a "must" value is missing or empty
-								$CORE = new GlobalCore($this);
-								new GlobalMessage('ERROR', $CORE->LANG->getText('mainMustValueNotSet', 'ATTRIBUTE~'.$key.',TYPE~'.$type), $CORE->MAINCFG->getValue('paths','htmlbase'));
+								new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainMustValueNotSet', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 								return FALSE;
 							}
 						}
@@ -1035,15 +1034,13 @@ class GlobalMainCfg {
 							if(!isset($arrValidConfig[$key])) {
 								// unknown attribute
 								if($printErr) {
-									$CORE = new GlobalCore($this);
-									new GlobalMessage('ERROR', $CORE->LANG->getText('unknownValue', 'ATTRIBUTE~'.$key.',TYPE~'.$type), $CORE->MAINCFG->getValue('paths','htmlbase'));
+									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('unknownValue', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 								}
 								return FALSE;
 							} elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
 								// deprecated option
 								if($printErr) {
-									$CORE = new GlobalCore($this);
-									new GlobalMessage('ERROR', $CORE->LANG->getText('deprecatedOption', 'ATTRIBUTE~'.$key.',TYPE~'.$type), $CORE->MAINCFG->getValue('paths','htmlbase'));
+									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('deprecatedOption', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 								}
 								return FALSE;
 							} else {
@@ -1066,8 +1063,7 @@ class GlobalMainCfg {
 								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
 									// wrong format
 									if($printErr) {
-										$CORE = GlobalCore::getInstance();
-										new GlobalMessage('ERROR', $CORE->LANG->getText('wrongValueFormat', 'TYPE~'.$type.',ATTRIBUTE~'.$key), $CORE->MAINCFG->getValue('paths','htmlbase'));
+										new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('wrongValueFormat', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 									}
 									return FALSE;
 								}
@@ -1075,8 +1071,7 @@ class GlobalMainCfg {
 								// Check if the configured backend is defined in main configuration file
 								if($type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
 									if($printErr) {
-										$CORE = new GlobalCore($this);
-										new GlobalMessage('ERROR', $CORE->LANG->getText('backendNotDefined', Array('BACKENDID' => $val)), $CORE->MAINCFG->getValue('paths','htmlbase'));
+										new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
 									}
 									return FALSE;
 								}
@@ -1086,8 +1081,7 @@ class GlobalMainCfg {
 				} else {
 					// unknown type
 					if($printErr) {
-						$CORE = new GlobalCore($this);
-						new GlobalMessage('ERROR', $CORE->LANG->getText('unknownSection', 'TYPE~'.$type), $CORE->MAINCFG->getValue('paths','htmlbase'));
+						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('unknownSection', 'TYPE~'.$type));
 					}
 					return FALSE;
 				}
@@ -1109,8 +1103,7 @@ class GlobalMainCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$CORE = new GlobalCore($this);
-					new GlobalMessage('ERROR', $CORE->LANG->getText('mainCfgNotExists','MAINCFG~'.$this->configFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
+					new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotExists', Array('MAINCFG' => $this->configFile)));
 				}
 				return FALSE;
 			}
@@ -1132,8 +1125,7 @@ class GlobalMainCfg {
 				return TRUE;
 			} else {
 				if($printErr == 1) {
-					$CORE = new GlobalCore($this);
-					new GlobalMessage('ERROR', $CORE->LANG->getText('mainCfgNotReadable', 'MAINCFG~'.$this->configFile), $CORE->MAINCFG->getValue('paths','htmlbase'));
+					new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotReadable', Array('MAINCFG' => $this->configFile)));
 				}
 				return FALSE;
 			}

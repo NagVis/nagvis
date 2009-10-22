@@ -51,11 +51,11 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_map_create':
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
 		} elseif(!isset($_POST['allowed_users']) || $_POST['allowed_users'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~allowed_users');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~allowed_users');
 		} elseif(!isset($_POST['allowed_for_config']) || $_POST['allowed_for_config'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~allowed_for_config');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~allowed_for_config');
 		} else {
 			$MAPCFG = new WuiMapCfg($CORE, $_POST['map_name']);
 			if(!$MAPCFG->createMapConfig()) {
@@ -81,11 +81,11 @@ switch($_GET['myaction']) {
 		// gerade offene map: $_POST['map']
 		
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
 		} elseif(!isset($_POST['map_new_name']) || $_POST['map_new_name'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map_new_name');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map_new_name');
 		} elseif(!isset($_POST['map']) || $_POST['map'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map');
 		} else {
 			$files = Array();
 			
@@ -107,7 +107,7 @@ switch($_GET['myaction']) {
 			}
 			
 			// rename config file
-			rename($CORE->MAINCFG->getValue('paths', 'mapcfg').$_POST['map_name'].'.cfg',$CORE->MAINCFG->getValue('paths', 'mapcfg').$_POST['map_new_name'].'.cfg');
+			rename($CORE->getMainCfg()->getValue('paths', 'mapcfg').$_POST['map_name'].'.cfg',$CORE->getMainCfg()->getValue('paths', 'mapcfg').$_POST['map_new_name'].'.cfg');
 			
 			// if renamed map is open, redirect to new name
 			if($_POST['map'] == 'undefined' || $_POST['map'] == '' || $_POST['map'] == $_POST['map_name']) {
@@ -127,7 +127,7 @@ switch($_GET['myaction']) {
 		// $_POST['map_name'];
 		
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
 		} else {
 			$MAPCFG = new WuiMapCfg($CORE, $_POST['map_name']);
 			$MAPCFG->readMapConfig();
@@ -145,7 +145,7 @@ switch($_GET['myaction']) {
 		// $_POST['map_name'];
 		
 		if(!isset($_POST['map_name']) || $_POST['map_name'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map_name');
 		} else {
 			$MAPCFG = new WuiMapCfg($CORE, $_POST['map_name']);
 			
@@ -160,17 +160,17 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_map_import':
 		if(!isset($_FILES['map_file']) || !is_array($_FILES['map_file'])) {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map_file');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map_file');
 		} else {
 			// check the file (the map) is properly uploaded
 			if(is_uploaded_file($_FILES['map_file']['tmp_name'])) {
 				$mapName = $_FILES['map_file']['name'];
 				if(preg_match('/\.cfg/i',$mapName)) {
-					if(move_uploaded_file($_FILES['map_file']['tmp_name'], $CORE->MAINCFG->getValue('paths', 'mapcfg').$mapName)) {
-						chmod($CORE->MAINCFG->getValue('paths', 'mapcfg').$mapName,0666);
+					if(move_uploaded_file($_FILES['map_file']['tmp_name'], $CORE->getMainCfg()->getValue('paths', 'mapcfg').$mapName)) {
+						chmod($CORE->getMainCfg()->getValue('paths', 'mapcfg').$mapName,0666);
 						print("<script>window.history.back();</script>");
 					} else {
-						print "The file could not be moved to destination (".$CORE->MAINCFG->getValue('paths', 'mapcfg').$mapName.").";
+						print "The file could not be moved to destination (".$CORE->getMainCfg()->getValue('paths', 'mapcfg').$mapName.").";
 						return;
 					}
 				} else {
@@ -188,13 +188,13 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_image_create':
 		if(!isset($_POST['image_name']) || $_POST['image_name'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~image_name');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_name');
 		} elseif(!isset($_POST['image_color']) || $_POST['image_color'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~image_color');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_color');
 		} elseif(!isset($_POST['image_width']) || $_POST['image_width'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~image_width');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_width');
 		} elseif(!isset($_POST['image_height']) || $_POST['image_height'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~image_height');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_height');
 		} else {
 			$BACKGROUND = new WuiBackground($CORE, $_POST['image_name'].'.png');
 			$BACKGROUND->createImage($_POST['image_color'], $_POST['image_width'], $_POST['image_height']);
@@ -236,37 +236,37 @@ switch($_GET['myaction']) {
 	 */
 	case 'map_restore':
 		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~map');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map');
 		} else {
 			// delete current config
 			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
 			$MAPCFG->readMapConfig();
 			$MAPCFG->deleteMapConfig();
 			// restore backup
-			if(file_exists($CORE->MAINCFG->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak')) {
-				copy($CORE->MAINCFG->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak',$CORE->MAINCFG->getValue('paths', 'mapcfg').$_GET['map'].'.cfg');	
+			if(file_exists($CORE->getMainCfg()->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak')) {
+				copy($CORE->getMainCfg()->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak',$CORE->getMainCfg()->getValue('paths', 'mapcfg').$_GET['map'].'.cfg');	
 			}
 			// reset status
 			$done = FALSE;
 			
 			// is status for this map there?
-			$file = file($CORE->MAINCFG->getValue('paths', 'mapcfg').'autobackup.status');
+			$file = file($CORE->getMainCfg()->getValue('paths', 'mapcfg').'autobackup.status');
 			foreach($file AS $key => $val) {
 				if(ereg("^".$mapname."=",$val)) {
 					// $arr[1] is value
 					$arr = explode('=',$val);
 					
-					$file[$key] = $mapname.'='.$CORE->MAINCFG->getValue('wui', 'autoupdatefreq')."\n";
+					$file[$key] = $mapname.'='.$CORE->getMainCfg()->getValue('wui', 'autoupdatefreq')."\n";
 					$done = TRUE;
 				}
 			}
 			
 			if($done == FALSE) {
-				$file[] = $mapname.'='.$CORE->MAINCFG->getValue('wui', 'autoupdatefreq')."\n";
+				$file[] = $mapname.'='.$CORE->getMainCfg()->getValue('wui', 'autoupdatefreq')."\n";
 			}
 			
 			//write array back to file
-			$fp = fopen($CORE->MAINCFG->getValue('paths', 'mapcfg').'autobackup.status',"w");
+			$fp = fopen($CORE->getMainCfg()->getValue('paths', 'mapcfg').'autobackup.status',"w");
 			fwrite($fp,implode("",$file));
 			fclose($fp);
 			
@@ -278,13 +278,13 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_backend_default':
 		if(!isset($_POST['defaultbackend']) || $_POST['defaultbackend'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~defaultbackend');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~defaultbackend');
 		} else {
 			// Set the default backend
-			$CORE->MAINCFG->setValue('defaults', 'backend', $_POST['defaultbackend']);
+			$CORE->getMainCfg()->setValue('defaults', 'backend', $_POST['defaultbackend']);
 			
 			// Write the changes to the main configuration
-			$CORE->MAINCFG->writeConfig();
+			$CORE->getMainCfg()->writeConfig();
 			
 			// Open the management page again
 			print("<script>window.history.back();</script>");
@@ -297,15 +297,15 @@ switch($_GET['myaction']) {
 		// $_POST['backendid'], $_POST['backendtype']
 		
 		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
 		} elseif(!isset($_POST['backendtype']) || $_POST['backendtype'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendtype');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendtype');
 		} else {
 			$bFoundOption = FALSE;
 			$aOpt = Array();
 			
 			// Loop all aviable options for this backend
-			$arr = $CORE->MAINCFG->getValidObjectType('backend');
+			$arr = $CORE->getMainCfg()->getValidObjectType('backend');
 			foreach($arr['options'][$_POST['backendtype']] AS $key => $arr) {
 				// If there is a value for this option, set it
 				if(isset($_POST[$key]) && $_POST[$key] != '') {
@@ -317,17 +317,17 @@ switch($_GET['myaction']) {
 			// If there is at least one option set...
 			if($bFoundOption) {
 				// Set standard values
-				$CORE->MAINCFG->setSection('backend_'.$_POST['backendid']);
-				$CORE->MAINCFG->setValue('backend_'.$_POST['backendid'], 'backendtype', $_POST['backendtype']);
+				$CORE->getMainCfg()->setSection('backend_'.$_POST['backendid']);
+				$CORE->getMainCfg()->setValue('backend_'.$_POST['backendid'], 'backendtype', $_POST['backendtype']);
 				
 				// Set all options
 				foreach($aOpt AS $key => $val) {
-					$CORE->MAINCFG->setValue('backend_'.$_POST['backendid'], $key, $val);
+					$CORE->getMainCfg()->setValue('backend_'.$_POST['backendid'], $key, $val);
 				}
 			}
 			
 			// Write the changes to the main configuration
-			$CORE->MAINCFG->writeConfig();
+			$CORE->getMainCfg()->writeConfig();
 			
 			// Open the management page again
 			print("<script>window.history.back();</script>");
@@ -338,19 +338,19 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_backend_edit':
 		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
 		} else {
 			// Loop all aviable options for this backend
-			$arr = $CORE->MAINCFG->getValidObjectType('backend');
-			foreach($arr['options'][$CORE->MAINCFG->getValue('backend_'.$_POST['backendid'],'backendtype')] AS $key => $arr) {
+			$arr = $CORE->getMainCfg()->getValidObjectType('backend');
+			foreach($arr['options'][$CORE->getMainCfg()->getValue('backend_'.$_POST['backendid'],'backendtype')] AS $key => $arr) {
 				// If there is a value for this option, set it
 				if(isset($_POST[$key]) && $_POST[$key] != '') {
-					$CORE->MAINCFG->setValue('backend_'.$_POST['backendid'],$key,$_POST[$key]);
+					$CORE->getMainCfg()->setValue('backend_'.$_POST['backendid'],$key,$_POST[$key]);
 				}
 			}
 			
 			// Write the changes to the main configuration
-			$CORE->MAINCFG->writeConfig();
+			$CORE->getMainCfg()->writeConfig();
 			
 			// Open the management page again
 			print("<script>window.history.back();</script>");
@@ -361,13 +361,13 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_backend_del':
 		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
 		} else {
 			// Delete the section of the backend
-			$CORE->MAINCFG->delSection('backend_'.$_POST['backendid']);
+			$CORE->getMainCfg()->delSection('backend_'.$_POST['backendid']);
 			
 			// Write the changes to the main configuration
-			$CORE->MAINCFG->writeConfig();
+			$CORE->getMainCfg()->writeConfig();
 			
 			// Open the management page again
 			print("<script>window.history.back();</script>");
@@ -378,7 +378,7 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_shape_add':
 		if(!isset($_FILES['shape_image']) || !is_array($_FILES['shape_image'])) {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~shape_image');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~shape_image');
 		} else {
 			// Include page specific global/wui classes
 			require("../nagvis/includes/classes/GlobalForm.php");
@@ -393,7 +393,7 @@ switch($_GET['myaction']) {
 	 */
 	case 'mgt_shape_delete':
 		if(!isset($_POST['shape_image']) || $_POST['shape_image'] == '') {
-			echo $CORE->LANG->getText('mustValueNotSet', 'ATTRIBUTE~shape_image');
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~shape_image');
 		} else {
 			// Include page specific global/wui classes
 			require("../nagvis/includes/classes/GlobalForm.php");

@@ -68,16 +68,16 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 		$this->serviceCache = Array();
 		$this->hostAckCache = Array();
 		
-		$this->instanceName = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'instancename');
-		$this->pathPersistent = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path').'/PERSISTENT/'.$this->instanceName;
-		$this->pathVolatile = $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path').'/VOLATILE/'.$this->instanceName;
+		$this->instanceName = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'instancename');
+		$this->pathPersistent = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'path').'/PERSISTENT/'.$this->instanceName;
+		$this->pathVolatile = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'path').'/VOLATILE/'.$this->instanceName;
 		
 		if(!$this->checkFileStructure()) {
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('ndo2fsFileStructureNotValid', Array('BACKENDID' => $this->backendId, 'PATH' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'path'))));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('ndo2fsFileStructureNotValid', Array('BACKENDID' => $this->backendId, 'PATH' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'path'))));
 		}
 		
 		if(!$this->checkLastUpdateTime()) {
-			new GlobalMessage('ERROR', $this->CORE->LANG->getText('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->MAINCFG->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
 		}
 		
 		return TRUE;
@@ -110,7 +110,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 	private function checkLastUpdateTime() {
 		$oStatus = json_decode(file_get_contents($this->pathVolatile.'/PROCESS_STATUS'));
 		
-		if($_SERVER['REQUEST_TIME'] - $oStatus->LASTCOMMANDCHECK > $this->CORE->MAINCFG->getValue('backend_'.$this->backendId, 'maxtimewithoutupdate')) {
+		if($_SERVER['REQUEST_TIME'] - $oStatus->LASTCOMMANDCHECK > $this->CORE->getMainCfg()->getValue('backend_'.$this->backendId, 'maxtimewithoutupdate')) {
 			return FALSE;
 		}
 		
@@ -252,10 +252,10 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 			if(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName)
 			  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG')) {
 				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = $this->CORE->LANG->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
+				$arrReturn['output'] = $this->CORE->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
 			} elseif(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/STATUS')) {
 				$arrReturn['state'] = 'PENDING';
-				$arrReturn['output'] = $this->CORE->LANG->getText('hostIsPending', Array('HOST' => $hostName));
+				$arrReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
 			} else {
 				$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/CONFIG'));
 				$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/STATUS'));
@@ -315,7 +315,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 				
 				if($oStatus->HASBEENCHECKED == '0' || $oStatus->CURRENTSTATE == '') {
 					$arrReturn['state'] = 'PENDING';
-					$arrReturn['output'] = $this->CORE->LANG->getText('hostIsPending', Array('HOST' => $hostName));
+					$arrReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
 				} elseif($oStatus->CURRENTSTATE == '0') {
 					// Host is UP
 					$arrReturn['state'] = 'UP';
@@ -455,7 +455,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 			if($numServices <= 0) {
 				if(isset($serviceName) && $serviceName != '') {
 					$arrReturn['state'] = 'ERROR';
-					$arrReturn['output'] = $this->CORE->LANG->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
+					$arrReturn['output'] = $this->CORE->getLang()->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
 				} else {
 					// If the method should fetch all services of the host and does not find
 					// any services for this host, don't return anything => The message
@@ -484,7 +484,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 					// Error handling: Pending service
 					if($aServObj[$i][1] == null) {
 						$arrTmpReturn['state'] = 'PENDING';
-						$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked', Array('SERVICE' => $aServObj[$i][0]->SERVICEDESCRIPTION));
+						$arrTmpReturn['output'] = $this->CORE->getLang()->getText('serviceNotChecked', Array('SERVICE' => $aServObj[$i][0]->SERVICEDESCRIPTION));
 					} else {
 						/**
 						 * Add status information to array
@@ -538,7 +538,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 						
 						if($aServObj[$i][1]->HASBEENCHECKED == '0' || $aServObj[$i][1]->CURRENTSTATE == '') {
 							$arrTmpReturn['state'] = 'PENDING';
-							$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked', Array('SERVICE' => $aServObj[$i][0]->SERVICEDESCRIPTION));
+							$arrTmpReturn['output'] = $this->CORE->getLang()->getText('serviceNotChecked', Array('SERVICE' => $aServObj[$i][0]->SERVICEDESCRIPTION));
 						} elseif($aServObj[$i][1]->CURRENTSTATE == '0') {
 							// Host is UP
 							$arrTmpReturn['state'] = 'OK';

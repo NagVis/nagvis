@@ -76,8 +76,8 @@ class NagVisUrlView {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-				'generalProperties' => $this->CORE->MAINCFG->parseGeneralProperties(),
-				'workerProperties' => $this->CORE->MAINCFG->parseWorkerProperties(),
+				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
+				'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
 				'rotationProperties' => json_encode($this->aRotation),
 				'url' => $this->url
 			);

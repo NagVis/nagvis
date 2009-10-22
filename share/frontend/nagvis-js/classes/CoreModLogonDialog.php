@@ -28,7 +28,7 @@ class CoreModLogonDialog extends FrontendModule {
 						$sReturn = $this->displayDialog();
 					} else {
 						// When the user is already authenticated redirect to start page (overview)
-						Header('Location:'.$this->CORE->MAINCFG->getValue('paths', 'htmlbase'));
+						Header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 					}
 				break;
 				case 'login':
@@ -48,7 +48,7 @@ class CoreModLogonDialog extends FrontendModule {
 						}
 					} else {
 						// When the user is already authenticated redirect to start page (overview)
-						Header('Location:'.$this->CORE->MAINCFG->getValue('paths', 'htmlbase'));
+						Header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 					}
 				break;
 			}

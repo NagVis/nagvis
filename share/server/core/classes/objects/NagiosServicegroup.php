@@ -192,9 +192,9 @@ class NagiosServicegroup extends NagVisStatefulObject {
 				$arrStates[$MEMBER->getSummaryState()]++;
 			}
 			
-			$this->mergeSummaryOutput($arrStates, $this->CORE->LANG->getText('services'));
+			$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('services'));
 		} else {
-			$this->summary_output = $this->CORE->LANG->getText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
+			$this->summary_output = $this->CORE->getLang()->getText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
 		}
 	}
 }

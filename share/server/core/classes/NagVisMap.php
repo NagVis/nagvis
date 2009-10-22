@@ -62,7 +62,7 @@ class NagVisMap extends GlobalMap {
 		$arr['background_image'] = $this->getBackgroundJson();
 		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
 		$arr['favicon_image'] = $this->getFavicon();
-		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->MAINCFG->getValue('internal', 'title');
+		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');
 		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
 		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
 		$arr['event_highlight_interval'] = $this->MAPCFG->getValue('global', 0, 'event_highlight_interval');
@@ -102,10 +102,10 @@ class NagVisMap extends GlobalMap {
 			$favicon = strtolower($this->MAPOBJ->getSummaryState());
 		}
 		
-		if(file_exists($this->CORE->MAINCFG->getValue('paths', 'images').'internal/favicon_'.$favicon.'.png')) {
-			$favicon = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon_'.$favicon.'.png';
+		if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'images').'internal/favicon_'.$favicon.'.png')) {
+			$favicon = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon_'.$favicon.'.png';
 		} else {
-			$favicon = $this->CORE->MAINCFG->getValue('paths', 'htmlimages').'internal/favicon.png';
+			$favicon = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
 		}
 		return $favicon;
 	}

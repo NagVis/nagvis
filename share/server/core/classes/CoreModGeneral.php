@@ -81,7 +81,7 @@ class CoreModGeneral extends CoreModule {
 		if(isset($aOpts['f']) && is_array($aOpts['f'])) {
 			foreach($aOpts['f'] AS $sFile) {
 				if($sFile == 'mainCfg') {
-					$aReturn['mainCfg'] = $this->CORE->MAINCFG->getConfigFileAge();
+					$aReturn['mainCfg'] = $this->CORE->getMainCfg()->getConfigFileAge();
 				}
 			}
 		}
@@ -104,7 +104,7 @@ class CoreModGeneral extends CoreModule {
 	}
 	
 	private function getStateProperties() {
-		echo json_encode($this->CORE->MAINCFG->getStateWeight());
+		echo json_encode($this->CORE->getMainCfg()->getStateWeight());
 	}
 	
 	private function getHoverTemplate() {
@@ -225,7 +225,7 @@ class CoreModGeneral extends CoreModule {
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:
-					echo 'Error: '.$CORE->LANG->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
+					echo 'Error: '.$CORE->getLang()->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
 				break;
 			}
 			

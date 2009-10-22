@@ -37,7 +37,7 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		$this->DB = new CoreSQLiteHandler();
 		
 		// Open sqlite database
-		if(!$this->DB->open($this->CORE->MAINCFG->getValue('paths', 'cfg').'auth.db')) {
+		if(!$this->DB->open($this->CORE->getMainCfg()->getValue('paths', 'cfg').'auth.db')) {
 			// FIXME: Errorhandling
 		}
 	}

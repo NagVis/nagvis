@@ -73,10 +73,10 @@ class NagVisIndexView {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-			'pageTitle' => $this->CORE->MAINCFG->getValue('internal', 'title') . $this->sSubtitle,
-			'htmlBase' => $this->CORE->MAINCFG->getValue('paths', 'htmlbase'),
-			'htmlJs' => $this->CORE->MAINCFG->getValue('paths', 'htmljs'),
-			'htmlCss' => $this->CORE->MAINCFG->getValue('paths', 'htmlcss'),
+			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
+			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
+			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
 			'customStylesheet' => $this->sCustomStylesheet,
 			'headerMenu' => $this->sHeaderMenu,
 			'content' => $this->sContent

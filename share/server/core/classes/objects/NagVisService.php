@@ -62,7 +62,7 @@ class NagVisService extends NagiosService {
 		if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0) {
 			$this->gadget_url = $match[1];
 		} else {
-			$this->gadget_url = $this->CORE->MAINCFG->getValue('paths', 'htmlgadgets').$this->gadget_url;
+			$this->gadget_url = $this->CORE->getMainCfg()->getValue('paths', 'htmlgadgets').$this->gadget_url;
 		}
 	}
 }
