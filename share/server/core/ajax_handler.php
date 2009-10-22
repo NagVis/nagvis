@@ -83,6 +83,9 @@ if($AUTH->isAuthenticated()) {
 	$AUTHORISATION = null;
 }
 
+// Make the AA information available to whole NagVis for permission checks
+$CORE->setAA($AUTH, $AUTHORISATION);
+
 /*
  * Module handling 1: Choose modules
  */
