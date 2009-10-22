@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.6"
+INSTALLER_VERSION="0.2.7"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -48,7 +48,7 @@ SOURCE=nagios
 # skip checks
 FORCE=0
 REMOVE="n"
-LOG=config.log
+LOG=install.log
 CALL="$0"
 
 # Default Path to Graphviz binaries
@@ -500,6 +500,45 @@ makedir() {
 	fi
 }
 
+cmp() {
+	cat $1 | sed 's#\(var\)\s*\(\S*\)\s*=\s*#\1 \2=#;s#^\s*##;s#\s*$##;s#\t+# #g' | awk '
+	BEGIN { OK=1; braces=0 }
+	{ sub (/\/\*.*?\*\//,""); sub (/\/\/.*/,""); { anz1 = gsub (/\{/,"{"); anz2 = gsub (/}/,"}"); } if (OK == 1) { braces += anz1; braces -= anz2 } }
+	/\/\*/ { OK=0; sub (/\/\*.*/,"") }
+	/\*\// { sub (/.*\*\//,""); OK=1 }
+	{ anz = gsub (/function/," function"); ch = substr(line,length(line)); if (OK == 1) { if (ch == "}") { if (braces == 0) { if (length(line) > 0) { print line } line = "" } } line = line $0; } }
+	' >> $OUT
+}
+
+cmp_js() {
+	cd $NAGVIS_PATH/share/frontend/nagvis-js/js/
+	OUT=NagVisCompressed.js
+	>$OUT
+	cmp nagvis.js
+	cmp ExtBase.js
+	cmp frontendMessage.js
+	cmp frontendEventlog.js
+	cmp hover.js
+	cmp frontendContext.js
+	cmp ajax.js
+	cmp dynfavicon.js
+	cmp frontend.js
+	cmp lines.js
+	cmp overlib.js
+	cmp NagVisObject.js
+	cmp NagVisStatefulObject.js
+	cmp NagVisStatelessObject.js
+	cmp NagVisHost.js
+	cmp NagVisService.js
+	cmp NagVisHostgroup.js
+	cmp NagVisServicegroup.js
+	cmp NagVisMap.js
+	cmp NagVisShape.js
+	cmp NagVisTextbox.js
+	cmp NagVisRotation.js
+	cmp wz_jsgraphics.js
+}
+
 # Main program starting
 ###############################################################################
 
@@ -861,6 +900,7 @@ if [ $NAGVIS_TAG -ge 01050000 ]; then
 	copy "" "etc" "$NAGVIS_PATH"
 	copy "" "LICENCE README" "$NAGVIS_PATH"
 	copy "" "docs" "$NAGVIS_PATH/share"
+	cmp_js
 else
 	LINE="Copying files to $NAGVIS_PATH..."
 	copy "install.sh" '*' "$NAGVIS_PATH"
