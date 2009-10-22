@@ -39,7 +39,7 @@ require('../../server/core/functions/oldPhpVersionFixes.php');
 define('CONST_AJAX' , FALSE);
 
 // Initialize the core
-$CORE = new GlobalCore();
+$CORE = GlobalCore::getInstance();
 
 /*
  * Url: Parse the url to know later what module and

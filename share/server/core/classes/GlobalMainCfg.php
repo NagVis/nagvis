@@ -1066,7 +1066,7 @@ class GlobalMainCfg {
 								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
 									// wrong format
 									if($printErr) {
-										$CORE = new GlobalCore($this);
+										$CORE = GlobalCore::getInstance();
 										new GlobalMessage('ERROR', $CORE->LANG->getText('wrongValueFormat', 'TYPE~'.$type.',ATTRIBUTE~'.$key), $CORE->MAINCFG->getValue('paths','htmlbase'));
 									}
 									return FALSE;

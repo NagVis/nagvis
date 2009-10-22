@@ -28,32 +28,54 @@
  * @author  Lars Michelsen <lars@vertical-visions.de
  */
 class GlobalCore {
-	public $MAINCFG;
-	public $LANG;
+	public $MAINCFG = null;
+	public $LANG = null;
 	
-	private $iconsetTypeCache;
+	private static $instance = null;
+	private $iconsetTypeCache = Array();
 
 	/**
-	 * Class Constructor
+	 * Deny construct
 	 *
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($MAINCFG = NULL, $LANG = NULL) {
-		$this->iconsetTypeCache = Array();
-		
-		if($MAINCFG == NULL) {
-			// Load the main configuration
+	private function __construct() {}
+	
+	/**
+	 * Deny clone
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function __clone() {}
+	
+	/**
+	 * Getter function to initialize MAINCFG and LANG when not done yet
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function __get($key) {
+		if($key == 'MAINCFG' && $this->MAINCFG === null) {
+			// Initialize main configuration when not set yet
 			$this->MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
-		} else {
-			$this->MAINCFG = $MAINCFG;
+		} elseif($key == 'LANG' && $this->LANG === null) {
+			// Initialize language when not set yet
+			$this->LANG = new GlobalLanguage($this->MAINCFG);
 		}
 		
-		if($LANG == NULL) {
-			// Initialize language
-			$this->LANG = new GlobalLanguage($this->MAINCFG);
-		} else {
-			$this->LANG = $LANG;
+		return $this->$key;
+	}
+	
+	/**
+	 * Static method for getting the instance
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function getInstance() {
+		if (self::$instance === null) {
+			self::$instance = new self;
 		}
+		
+		return self::$instance;
 	}
 	
 	/* Here are some methods defined which get used all over NagVis and have
