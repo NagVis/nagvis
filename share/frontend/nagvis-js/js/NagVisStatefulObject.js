@@ -67,6 +67,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 					case 'shape':
 						oObj = new NagVisShape(oMember);
 					break;
+					case 'line':
+						oObj = new NagVisLine(oMember);
+					break;
 					default:
 						alert('Error: Unknown member object type ('+oMember.type+')');
 					break;
@@ -443,8 +446,38 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		var width = this.conf.line_width;
 		
+		var colorFill = '';
+		var colorBorder = '#000000';
+		
+		// Get the fill color depending on the object state
+		switch (this.conf.summary_state) {
+	    case 'UNREACHABLE':
+			case 'DOWN':
+			case 'CRITICAL':
+			case 'WARNING':
+	    case 'UNKNOWN':
+			case 'ERROR':
+	    case 'UP':
+	    case 'OK':
+	    case 'PENDING':
+				colorFill = oStates[state].color;
+			break;
+			default:
+				colorFill = '#FFCC66';
+			break;
+	  }
+		
+		// Get the border color depending on ack/downtime
+		if(this.conf.summary_problem_has_been_acknowledged == 1) {
+			colorBorder = '#666666';
+		}
+		
+		if(this.conf.summary_in_downtime == 1) {
+			colorBorder = '#666666';
+		}
+		
 		// Parse the line object
-		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, this.conf.summary_state, this.conf.summary_problem_has_been_acknowledged, this.conf.summary_in_downtime, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, colorFill, colorBorder, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
 	},
 	
 	/**

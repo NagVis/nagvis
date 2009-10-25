@@ -128,6 +128,7 @@ class NagVisMap extends GlobalMap {
 				case 'NagVisServicegroup':
 				case 'NagVisMapObj':
 				case 'NagVisShape':
+				case 'NagVisLine':
 				case 'NagVisTextbox':
 					$arrRet[] = $OBJ->parseJson();
 				break;

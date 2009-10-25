@@ -77,8 +77,8 @@ function searchObjects(sMatch) {
 	
 	// Loop all map objects and search the matching attributes
 	for(var i = 0, len = aMapObjects.length; i < len; i++) {
-		// Don't search shapes/textboxes
-		if(aMapObjects[i].conf.type != 'shape' && aMapObjects[i].conf.type != 'textbox') {
+		// Don't search shapes/textboxes/lines
+		if(aMapObjects[i].conf.type != 'shape' && aMapObjects[i].conf.type != 'textbox' && aMapObjects[i].conf.type != 'line') {
 			bMatch = false;
 			var regex = new RegExp(sMatch, 'g');
 			
@@ -842,6 +842,9 @@ function setMapObjects(aMapObjectConf) {
 			break;
 			case 'shape':
 				oObj = new NagVisShape(aMapObjectConf[i]);
+			break;
+			case 'line':
+				oObj = new NagVisLine(aMapObjectConf[i]);
 			break;
 			default:
 				oObj = null;

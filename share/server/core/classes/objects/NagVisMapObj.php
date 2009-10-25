@@ -95,7 +95,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		foreach($this->members AS $OBJ) {
 
 			// Skip unrelevant object types
-			if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape') {
+			if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape' || $OBJ->getType() == 'line') {
 				continue;
       }
 
@@ -138,7 +138,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$i = 0;
 		// Loop all objects except the stateless ones and count them
 		foreach($this->members AS $OBJ) {
-			if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
+			if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape' && $OBJ->getType() != 'line') {
 				$i++;
 			}
 		}
@@ -169,7 +169,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	public function hasStatefulObjects() {
 		// Loop all objects on the map
 		foreach($this->members AS $OBJ) {
-			if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape') {
+			if($OBJ->getType() != 'textbox' && $OBJ->getType() != 'shape' && $OBJ->getType() != 'line') {
 				// Exit on first result
 				return true;
 			}
@@ -377,6 +377,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 						break;
 						case 'textbox':
 							$OBJ = new NagVisTextbox($this->CORE);
+						break;
+						case 'line':
+							$OBJ = new NagVisLine($this->CORE);
 						break;
 						default:
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));

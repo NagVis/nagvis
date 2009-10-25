@@ -1021,6 +1021,50 @@ class GlobalMapCfg {
 				'use' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE)),
 			
+			'line' => Array('type' => Array('must' => 0,
+					'match' => MATCH_OBJECTTYPE,
+					'field_type' => 'hidden'),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'hidden'),
+				'x' => Array('must' => 1,
+					'match' => MATCH_FLOAT),
+				'y' => Array('must' => 1,
+					'match' => MATCH_FLOAT),
+				'z' => Array('must' => 0,
+					'default' => 1,
+					'match' => MATCH_INTEGER),
+				'line_type' => Array('must' => 1,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'dropdown'),
+				'line_width' => Array('must' => 1,
+					'default' => '3',
+					'match' => MATCH_INTEGER),
+				'line_color' => Array('must' => 0,
+					'default' => '#ffffff',
+					'match' => MATCH_COLOR),
+				'line_color_border' => Array('must' => 0,
+					'default' => '#000000',
+					'match' => MATCH_COLOR),
+				
+				'hover_menu' => Array('must' => 0,
+					'default' => 0,
+					'match' => MATCH_BOOLEAN,
+					'field_type' => 'boolean'),
+				'hover_url' => Array('must' => 0,
+					'match' => MATCH_STRING_URL),
+				'hover_delay' => Array('must' => 0,
+					'match' => MATCH_INTEGER),
+				
+				'url' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_STRING_URL_EMPTY),
+				'url_target' => Array('must' => 0,
+					'match' => MATCH_STRING_NO_SPACE),
+				
+				'use' => Array('must' => 0,
+					'match' => MATCH_STRING_NO_SPACE)),
+			
 			'textbox' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE,
 					'field_type' => 'hidden'),
@@ -1148,9 +1192,14 @@ class GlobalMapCfg {
 				$this->validConfig['map'][$sVar]['default'] = $sTmp;
 			}
 			
-			// Handle exceptions for hostgroups
+			// Handle exceptions for shapes
 			if($sVar == 'url_target' || $sVar == 'hover_delay') {
 				$this->validConfig['shape'][$sVar]['default'] = $sTmp;
+			}
+			
+			// Handle exceptions for lines
+			if($sVar == 'url_target' || $sVar == 'hover_delay') {
+				$this->validConfig['line'][$sVar]['default'] = $sTmp;
 			}
 		}
 	}
@@ -1256,6 +1305,7 @@ class GlobalMapCfg {
 									'map' => 0,
 									'textbox' => 0,
 									'shape' => 0,
+									'line' => 0,
 									'template' => 0);
 					
 					// Read file in array (Don't read empty lines and ignore new line chars)
@@ -1538,8 +1588,9 @@ class GlobalMapCfg {
 						
 						// Check wether a object has line_type set and not view_type=line
 						// Update: Only check this when not in WUI!
+						// Update: Don't check this for stateless lines
 						// FIXME: This check should be removed in 1.5 or 1.6
-						if($key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
+						if($type != 'line' && $key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
 						}
 						

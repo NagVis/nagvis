@@ -269,7 +269,7 @@ class NagVisObject {
 		$arr['lang_child_name1'] = $this->CORE->getLang()->getText('hostname');
 		
 		// I want only "name" in js
-		if($this->type != 'shape' && $this->type != 'textbox') {
+		if($this->type != 'shape' && $this->type != 'textbox' && $this->type != 'line') {
 			$arr['name'] = $this->getName();
 			
 			if($this->type == 'service') {
@@ -368,7 +368,7 @@ class NagVisObject {
 			
 			// Only get the member when this is no loop
 			if($sType != 'map' || ($sType == 'map' && $this->MAPCFG->getName() != $aTmpMembers[$i]->MAPCFG->getName())) {
-				if($sType != 'textbox' && $sType != 'shape') {
+				if($sType != 'textbox' && $sType != 'shape' && $sType != 'line') {
 					if($bStateInfo) {
 						$arr[] = $aTmpMembers[$i]->getObjectStateInformation(false);
 					} else {
@@ -447,7 +447,7 @@ class NagVisObject {
 	 */
 	private static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
 		// Do not sort shapes and textboxes
-		if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox') {
+		if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ1->getType() == 'line' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox' || $OBJ2->getType() == 'line') {
 			return 0;
 		}
 

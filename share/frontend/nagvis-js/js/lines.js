@@ -156,43 +156,13 @@ function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLink
 }
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, state, ack, downtime, bLinkArea) {
-	var colorFill = '';
-	var colorBorder = '#000000';
-	
+function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, colorBorder, bLinkArea) {
 	// Ensure format
 	x1 = parseInt(x1, 10);
 	x2 = parseInt(x2, 10);
 	y1 = parseInt(y1, 10);
 	y2 = parseInt(y2, 10);
 	width = parseInt(width, 10);
-	
-	// Get the fill color depending on the object state
-	switch (state) {
-    case 'UNREACHABLE':
-		case 'DOWN':
-		case 'CRITICAL':
-		case 'WARNING':
-    case 'UNKNOWN':
-		case 'ERROR':
-    case 'UP':
-    case 'OK':
-    case 'PENDING':
-			colorFill = oStates[state].color;
-		break;
-		default:
-			colorFill = '#FFCC66';
-		break;
-  }
-	
-	// Get the border color depending on ack/downtime
-	if(ack) {
-		colorBorder = '#666666';
-	}
-	
-	if(downtime) {
-		colorBorder = '#666666';
-	}
 	
 	if(type == 10) {
 		var xMid = middle(x1,x2);
