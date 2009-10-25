@@ -3,7 +3,7 @@
  *
  * WuiCore.php - The core of NagVis WUI pages
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -26,15 +26,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiCore extends GlobalCore {
-	public $MAINCFG;
-	public $LANG;
-	
 	/**
 	 * Class Constructor
 	 *
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct() {
+	private function __construct() {
 		// Load the main configuration
 		$this->MAINCFG = new WuiMainCfg(CONST_MAINCFG);
 		

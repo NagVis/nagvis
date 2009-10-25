@@ -3,7 +3,7 @@
  *
  * WuiBackgroundManagement.php - Class for managing background images in WUI
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -27,8 +27,6 @@
  */
 class WuiBackgroundManagement extends GlobalPage {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	var $ADDFORM;
 	var $DELFORM;
 	var $propCount;
@@ -39,10 +37,8 @@ class WuiBackgroundManagement extends GlobalPage {
 	 * @param	GlobalMainCfg	$CORE
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiBackgroundManagement(&$CORE) {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+	function WuiBackgroundManagement($CORE) {
+		$this->CORE = $CORE;
 		
 		$this->propCount = 0;
 		

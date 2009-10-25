@@ -30,14 +30,12 @@ class WuiMapCfg extends GlobalMapCfg {
 	/**
 	 * Class Constructor
 	 *
-	 * @param	GlobalMainCfg	$MAINCFG	
+	 * @param	WuiCore	$CORE	
 	 * @param	String			$name		Name of the map
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiMapCfg(&$CORE, $name='') {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+	function WuiMapCfg($CORE, $name='') {
+		$this->CORE = $CORE;
 		
 		$this->name	= $name;
 		
@@ -302,7 +300,7 @@ class WuiMapCfg extends GlobalMapCfg {
 						return FALSE;
 					}
 					if($printErr == 1) {
-						$LANG = new GlobalLanguage($this->MAINCFG,'nagvis');
+						$LANG = new GlobalLanguage($this->getMainCfg(),'nagvis');
 						
 						// message the user that there is a lock by another user, the user can decide wether he want's to override it or not
 						print '<script>if(!confirm(\''.$LANG->getText('mapLocked','MAP~'.$this->name.',TIME~'.date('d.m.Y H:i',$lockdata['time']).',USER~'.$lockdata['user'].',IP~'.$lockdata['ip']).'\',\'\')) { history.back(); }</script>';

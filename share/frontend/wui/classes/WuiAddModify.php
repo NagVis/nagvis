@@ -27,9 +27,7 @@
  */
 class WuiAddModify extends GlobalPage {
 	var $CORE;
-	var $MAINCFG;
 	var $MAPCFG;
-	var $LANG;
 	var $FORM;
 	var $prop;
 	var $propertiesList;
@@ -41,12 +39,10 @@ class WuiAddModify extends GlobalPage {
 	 * @param 	WuiMapCfg 		$MAPCFG
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiAddModify(&$CORE, &$MAPCFG, $prop) {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+	function WuiAddModify($CORE, $MAPCFG, $prop) {
+		$this->CORE = $CORE;
+		$this->MAPCFG = $MAPCFG;
 		
-		$this->MAPCFG = &$MAPCFG;
 		$this->prop = $prop;
 		
 		$prop = Array('title' => $CORE->getMainCfg()->getValue('internal', 'title'),

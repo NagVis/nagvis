@@ -27,8 +27,6 @@
  */
 class WuiBackendManagement extends GlobalPage {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	
 	var $DEFBACKENDFORM;
 	var $ADDBACKENDFORM;
@@ -41,10 +39,8 @@ class WuiBackendManagement extends GlobalPage {
 	 * @param 	GlobalMainCfg 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiBackendManagement(&$CORE) {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+	function WuiBackendManagement($CORE) {
+		$this->CORE = $CORE;
 		
 		$this->propCount = 0;
 		

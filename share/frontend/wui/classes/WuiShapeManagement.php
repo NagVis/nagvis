@@ -27,8 +27,6 @@
  */
 class WuiShapeManagement extends GlobalPage {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	var $ADDFORM;
 	var $DELFORM;
 	var $propCount;
@@ -39,10 +37,8 @@ class WuiShapeManagement extends GlobalPage {
 	* @param  GlobalMainCfg $CORE
 	* @author Lars Michelsen <lars@vertical-visions.de>
 	*/
-	function WuiShapeManagement(&$CORE) {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+	function WuiShapeManagement($CORE) {
+		$this->CORE = $CORE;
 		
 		$this->propCount = 0;
 		

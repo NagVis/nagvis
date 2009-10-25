@@ -3,7 +3,7 @@
  *
  * WuiMapManagement.php - Class for managing maps in WUI
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -27,8 +27,6 @@
  */
 class WuiMapManagement extends GlobalPage {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	var $CREATEFORM;
 	var $RENAMEFORM;
 	var $DELETEFORM;
@@ -42,10 +40,8 @@ class WuiMapManagement extends GlobalPage {
 	 * @param	GlobalMainCfg	$CORE
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiMapManagement(&$CORE) {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+	function WuiMapManagement($CORE) {
+		$this->CORE = $CORE;
 		
 		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
 					  'jsIncludes'=>Array('./includes/js/MapManagement.js'),

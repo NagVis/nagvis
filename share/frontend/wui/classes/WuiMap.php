@@ -27,9 +27,7 @@
  */
 class WuiMap extends GlobalMap {
 	var $CORE;
-	var $MAINCFG;
 	var $MAPCFG;
-	var $LANG;
 	
 	var $objects;
 	var $moveable;
@@ -42,12 +40,9 @@ class WuiMap extends GlobalMap {
 	 * @param 	$MAPCFG  GlobalMapCfg
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiMap(&$CORE, &$MAPCFG) {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
-		
-		$this->MAPCFG = &$MAPCFG;
+	function WuiMap($CORE, $MAPCFG) {
+		$this->CORE = $CORE;
+		$this->MAPCFG = $MAPCFG;
 		
 		parent::__construct($CORE, $MAPCFG);
 		

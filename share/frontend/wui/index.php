@@ -43,7 +43,8 @@ require("../../server/core/functions/oldPhpVersionFixes.php");
 define('CONST_AJAX' , FALSE);
 
 // Load the core
-$CORE = new WuiCore();
+// Initialize the core
+$CORE = WuiCore::getInstance();
 
 // Set empty map if none is set
 if(!isset($_GET['map'])) {

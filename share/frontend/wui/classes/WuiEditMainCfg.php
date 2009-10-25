@@ -3,7 +3,7 @@
  *
  * WuiEditMainCfg.php - Class editing main configuration file in WUI
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -27,8 +27,6 @@
  */
 class WuiEditMainCfg extends GlobalPage {
 	var $CORE;
-	var $MAINCFG;
-	var $LANG;
 	var $FORM;
 	
 	/**
@@ -37,14 +35,12 @@ class WuiEditMainCfg extends GlobalPage {
 	 * @param 	$MAINCFG GlobalMainCfg
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiEditMainCfg(&$CORE) {
-		$this->CORE = &$CORE;
-		$this->MAINCFG = &$CORE->MAINCFG;
-		$this->LANG = &$CORE->LANG;
+	function WuiEditMainCfg($CORE) {
+		$this->CORE = $CORE;
 		
 		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
-					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/EditMainCfg.js'),
+					  'cssIncludes'=>Array('./css/wui.css'),
+					  'jsIncludes'=>Array('./js/EditMainCfg.js'),
 					  'extHeader'=> '',
 					  'allowedUsers' => $this->CORE->getMainCfg()->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
