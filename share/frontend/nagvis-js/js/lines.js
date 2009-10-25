@@ -64,27 +64,12 @@ function newY(a, b, x, y) {
 	return (Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
 }
 
-// This function draws an arrow like it is used on NagVis maps
-function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLinkArea) {
-	var xCoord = [];
-	var yCoord = [];
+// Draws polygon based object. By default it draws lines (arrows and also plain lines)
+function drawPolygonBasedObject(objectId, xCoord, yCoord, z, w, colorFill, colorBorder, bLinkArea) {
 	
-	xCoord[0] = x1 + newX(x2-x1, y2-y1, 0, w);
-	xCoord[1] = x2 + newX(x2-x1, y2-y1, -4*w, w);
-	xCoord[2] = x2 + newX(x2-x1, y2-y1, -4*w, 2*w);
-	xCoord[3] = x2;
-	xCoord[4] = x2 + newX(x2-x1, y2-y1, -4*w, -2*w);
-	xCoord[5] = x2 + newX(x2-x1, y2-y1, -4*w, -w);
-	xCoord[6] = x1 + newX(x2-x1, y2-y1, 0, -w);
-	
-	yCoord[0] = y1 + newY(x2-x1, y2-y1, 0, w);
-	yCoord[1] = y2 + newY(x2-x1, y2-y1, -4*w, w);
-	yCoord[2] = y2 + newY(x2-x1, y2-y1, -4*w, 2*w);
-	yCoord[3] = y2;
-	yCoord[4] = y2 + newY(x2-x1, y2-y1, -4*w, -2*w);
-	yCoord[5] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
-	yCoord[6] = y1 + newY(x2-x1, y2-y1, 0, -w);
-	
+	// Detect if the browser is able to render canvas objects
+	// If so: Use canvas rendering which performs much better
+	//        than using the jsGraphics library
 	var oCanvas = document.createElement('canvas');
 	if(oCanvas.getContext) {
 		var xMin = Math.round(min(xCoord));
@@ -108,12 +93,12 @@ function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLink
 		ctx.fillStyle = colorFill;
 		ctx.beginPath();
 		ctx.moveTo(xCoord[0]-xMin, yCoord[0]-yMin);
-		ctx.lineTo(xCoord[1]-xMin, yCoord[1]-yMin);
-		ctx.lineTo(xCoord[2]-xMin, yCoord[2]-yMin);
-		ctx.lineTo(xCoord[3]-xMin, yCoord[3]-yMin);
-		ctx.lineTo(xCoord[4]-xMin, yCoord[4]-yMin);
-		ctx.lineTo(xCoord[5]-xMin, yCoord[5]-yMin);
-		ctx.lineTo(xCoord[6]-xMin, yCoord[6]-yMin);
+		
+		// Loop all coords
+		for(var i = 1, len = xCoord.length; i < len; i++) {
+			ctx.lineTo(xCoord[i]-xMin, yCoord[i]-yMin);
+		}
+		
 		ctx.fill();
 		
 		oLineContainer.appendChild(oCanvas);
@@ -155,6 +140,55 @@ function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLink
 	}
 }
 
+// This function draws an arrow like it is used on NagVis maps
+// It draws following line types: ---> and ---><---
+function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLinkArea) {
+	var xCoord = [];
+	var yCoord = [];
+	
+	xCoord[0] = x1 + newX(x2-x1, y2-y1, 0, w);
+	xCoord[1] = x2 + newX(x2-x1, y2-y1, -4*w, w);
+	xCoord[2] = x2 + newX(x2-x1, y2-y1, -4*w, 2*w);
+	xCoord[3] = x2;
+	xCoord[4] = x2 + newX(x2-x1, y2-y1, -4*w, -2*w);
+	xCoord[5] = x2 + newX(x2-x1, y2-y1, -4*w, -w);
+	xCoord[6] = x1 + newX(x2-x1, y2-y1, 0, -w);
+	
+	yCoord[0] = y1 + newY(x2-x1, y2-y1, 0, w);
+	yCoord[1] = y2 + newY(x2-x1, y2-y1, -4*w, w);
+	yCoord[2] = y2 + newY(x2-x1, y2-y1, -4*w, 2*w);
+	yCoord[3] = y2;
+	yCoord[4] = y2 + newY(x2-x1, y2-y1, -4*w, -2*w);
+	yCoord[5] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
+	yCoord[6] = y1 + newY(x2-x1, y2-y1, 0, -w);
+	
+	drawPolygonBasedObject(objectId, xCoord, yCoord, z, w, colorFill, colorBorder, bLinkArea);
+	
+	yCoord = null;
+	xCoord = null;
+}
+
+// This function draws simple lines (without arrow)
+function drawSimpleLine(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLinkArea) {
+	var xCoord = [];
+	var yCoord = [];
+	
+	xCoord[0] = x1 + newX(x2-x1, y2-y1, 0, w);
+	xCoord[1] = x2 + newX(x2-x1, y2-y1, -4*w, w);
+	xCoord[2] = x2 + newX(x2-x1, y2-y1, -4*w, -w);
+	xCoord[3] = x1 + newX(x2-x1, y2-y1, 0, -w);
+	
+	yCoord[0] = y1 + newY(x2-x1, y2-y1, 0, w);
+	yCoord[1] = y2 + newY(x2-x1, y2-y1, -4*w, w);
+	yCoord[2] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
+	yCoord[3] = y1 + newY(x2-x1, y2-y1, 0, -w);
+	
+	drawPolygonBasedObject(objectId, xCoord, yCoord, z, w, colorFill, colorBorder, bLinkArea);
+	
+	yCoord = null;
+	xCoord = null;
+}
+
 // This function is being called by NagVis for drawing the lines
 function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, colorBorder, bLinkArea) {
 	// Ensure format
@@ -165,12 +199,20 @@ function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, col
 	width = parseInt(width, 10);
 	
 	if(type == 10) {
+		// ---><--- lines
 		var xMid = middle(x1,x2);
 		var yMid = middle(y1,y2);
 		
 		drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder, bLinkArea);
 		drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill, colorBorder, bLinkArea);
 	} else if(type == 11) {
+		// ---> lines
 		drawArrow(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder, bLinkArea);
+	} else if(type == 12) {
+		// --- lines
+		drawSimpleLine(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder, bLinkArea);
+	} else {
+		// FIXME: Error handling
+		alert('Error: Unknown line type');
 	}
 }
