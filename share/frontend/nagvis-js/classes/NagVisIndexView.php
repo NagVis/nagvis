@@ -77,6 +77,7 @@ class NagVisIndexView {
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
 			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
+			'bUseCompressedJs' => $this->checkJsCompressed(),
 			'customStylesheet' => $this->sCustomStylesheet,
 			'headerMenu' => $this->sHeaderMenu,
 			'content' => $this->sContent
@@ -84,6 +85,20 @@ class NagVisIndexView {
 		
 		// Build page based on the template file and the data array
 		return $TMPLSYS->get($TMPL->getTmplFile('index'), $aData);
+	}
+	
+	/**
+	 * Checks if the compressed javascript file exists
+	 *
+	 * @return	Boolean
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkJsCompressed() {
+		if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'js').'NagVisCompressed.js')) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 ?>

@@ -3,7 +3,7 @@
  *
  * GlobalMainCfg.php - Class for handling the main configuration of NagVis
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -476,6 +476,10 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
+				'js' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
 				'shape' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
@@ -800,6 +804,8 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['class']['default'] = $base.'share/server/core/classes/';
 
 		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/frontend/nagvis-js/css/';
+		
+		$this->validConfig['paths']['js']['default'] = $base.'share/frontend/nagvis-js/js/';
 		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/frontend/nagvis-js/js/';
 		
 		$this->validConfig['paths']['images']['default'] = $base.'share/frontend/nagvis-js/images/';

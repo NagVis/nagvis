@@ -792,7 +792,8 @@ addDOMLoadEvent = (function(){
                     if (this.readyState == "complete")
                         init(); // call the onload handler
                 };
-            /*@end @*/
+              @end
+            @*/
 
             // for Safari
             if (/WebKit/i.test(navigator.userAgent)) { // sniff

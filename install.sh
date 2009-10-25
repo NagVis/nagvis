@@ -503,10 +503,53 @@ makedir() {
 cmp() {
 	cat $1 | sed 's#\(var\)\s*\(\S*\)\s*=\s*#\1 \2=#;s#^\s*##;s#\s*$##;s#\t+# #g' | awk '
 	BEGIN { OK=1; braces=0 }
-	{ sub (/\/\*.*?\*\//,""); sub (/\/\/.*/,""); { anz1 = gsub (/\{/,"{"); anz2 = gsub (/}/,"}"); } if (OK == 1) { braces += anz1; braces -= anz2 } }
-	/\/\*/ { OK=0; sub (/\/\*.*/,"") }
-	/\*\// { sub (/.*\*\//,""); OK=1 }
-	{ anz = gsub (/function/," function"); ch = substr(line,length(line)); if (OK == 1) { if (ch == "}") { if (braces == 0) { if (length(line) > 0) { print line } line = "" } } line = line $0; } }
+	{
+		# Remove /* */ one line comments
+		sub(/\/\*[^@]*\*\//,"");
+		# Remove // comments (line beginning)
+		sub(/^\/\/.*/,"");
+		
+		# Count braces
+		anz1 = gsub(/\{/,"{");
+		anz2 = gsub(/}/,"}");
+		
+		if (OK == 1) {
+			braces += anz1;
+			braces -= anz2;
+		}
+	}
+	/\/\*/ {
+		c = gsub(/\/\*[^@]*$/,"");
+		if(c > 0) {
+			OK=0;
+		}
+	}
+	/\*\/$/ {
+		c = gsub(/^[^@]*\*\//,"");
+		if(c > 0) {
+			OK=1;
+		}
+	}
+	{
+		line = $0;
+		#anz = gsub(/function/," function");
+		#ch = substr(line,length(line));
+		if (OK == 1) {
+			if (length(line) > 0) {
+				#if (ch == "}") {
+				#	if (braces == 0) {
+				#		if (length(line) > 0) {
+				#			print line
+				#		}
+				#		line = ""
+				#	}
+				#}
+				#line = line $0;
+				
+				print line;
+			}
+		}
+	}
 	' >> $OUT
 }
 
@@ -534,6 +577,7 @@ cmp_js() {
 	cmp NagVisServicegroup.js
 	cmp NagVisMap.js
 	cmp NagVisShape.js
+	cmp NagVisLine.js
 	cmp NagVisTextbox.js
 	cmp NagVisRotation.js
 	cmp wz_jsgraphics.js
