@@ -45,8 +45,7 @@ class WuiBackendManagement extends GlobalPage {
 		$this->propCount = 0;
 		
 		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
-					  'cssIncludes'=>Array('./includes/css/wui.css'),
-					  'jsIncludes'=>Array('./includes/js/BackendManagement.js'),
+					  'jsIncludes'=> Array($CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/BackendManagement.js'),
 					  'extHeader'=> '',
 					  'allowedUsers' => $this->CORE->getMainCfg()->getValue('wui','allowedforconfig'),
 					  'languageRoot' => 'nagvis');
@@ -70,9 +69,9 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 		
 		$code .= $this->DEFBACKENDFORM->initForm();
-		$code .= $this->DEFBACKENDFORM->getCatLine($this->getLang()->getText('setDefaultBackend'));
+		$code .= $this->DEFBACKENDFORM->getCatLine($this->CORE->getLang()->getText('setDefaultBackend'));
 		$code .= $this->getDefaultFields();
-		$code .= $this->DEFBACKENDFORM->getSubmitLine($this->getLang()->getText('save'));
+		$code .= $this->DEFBACKENDFORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->DEFBACKENDFORM->closeForm();
 		
 		$this->ADDBACKENDFORM = new GlobalForm(Array('name'=>'backend_add',
@@ -83,9 +82,9 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 		
 		$code .= $this->ADDBACKENDFORM->initForm();
-		$code .= $this->ADDBACKENDFORM->getCatLine($this->getLang()->getText('addBackend'));
+		$code .= $this->ADDBACKENDFORM->getCatLine($this->CORE->getLang()->getText('addBackend'));
 		$code .= $this->getAddFields();
-		$code .= $this->ADDBACKENDFORM->getSubmitLine($this->getLang()->getText('save'));
+		$code .= $this->ADDBACKENDFORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->ADDBACKENDFORM->closeForm();
 		
 		$this->EDITBACKENDFORM = new GlobalForm(Array('name'=>'backend_edit',
@@ -96,9 +95,9 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 		
 		$code .= $this->EDITBACKENDFORM->initForm();
-		$code .= $this->EDITBACKENDFORM->getCatLine($this->getLang()->getText('editBackend'));
+		$code .= $this->EDITBACKENDFORM->getCatLine($this->CORE->getLang()->getText('editBackend'));
 		$code .= $this->getEditFields();
-		$code .= $this->EDITBACKENDFORM->getSubmitLine($this->getLang()->getText('save'));
+		$code .= $this->EDITBACKENDFORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->EDITBACKENDFORM->closeForm();
 		
 		$this->DELBACKENDFORM = new GlobalForm(Array('name'=>'backend_del',
@@ -109,9 +108,9 @@ class WuiBackendManagement extends GlobalPage {
 			'cols'=>'2'));
 			
 		$code .= $this->DELBACKENDFORM->initForm();
-		$code .= $this->DELBACKENDFORM->getCatLine($this->getLang()->getText('delBackend'));
+		$code .= $this->DELBACKENDFORM->getCatLine($this->CORE->getLang()->getText('delBackend'));
 		$code .= $this->getDelFields();
-		$code .= $this->DELBACKENDFORM->getSubmitLine($this->getLang()->getText('save'));
+		$code .= $this->DELBACKENDFORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->DELBACKENDFORM->closeForm();
 		
 		return $code;
@@ -152,7 +151,7 @@ class WuiBackendManagement extends GlobalPage {
 		$ret = '';
 		$ret .= $this->ADDBACKENDFORM->getInputLine('backendid','backendid','',TRUE);
 		
-		foreach($this->getMainCfg()->getValidObjectType('backend') as $propname => $prop) {
+		foreach($this->CORE->getMainCfg()->getValidObjectType('backend') as $propname => $prop) {
 			if($propname == "backendtype") {
 				$ret .= $this->ADDBACKENDFORM->getSelectLine($propname,
 					$propname,array_merge(Array(''=>''),$this->CORE->getAvailableBackends()),
@@ -171,7 +170,7 @@ class WuiBackendManagement extends GlobalPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDefaultFields() {
-		return $this->DEFBACKENDFORM->getSelectLine($this->getLang()->getText('defaultBackend'),'defaultbackend',$this->CORE->getDefinedBackends(),$this->getMainCfg()->getValue('defaults','backend',TRUE),TRUE);
+		return $this->DEFBACKENDFORM->getSelectLine($this->CORE->getLang()->getText('defaultBackend'),'defaultbackend',$this->CORE->getDefinedBackends(),$this->CORE->getMainCfg()->getValue('defaults','backend',TRUE),TRUE);
 	}
 }
 ?>

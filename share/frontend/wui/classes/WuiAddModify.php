@@ -46,7 +46,7 @@ class WuiAddModify extends GlobalPage {
 		$this->prop = $prop;
 		
 		$prop = Array('title' => $CORE->getMainCfg()->getValue('internal', 'title'),
-					  'jsIncludes'=>Array('./includes/js/addmodify.js'),
+					  'jsIncludes'=> Array($CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/addmodify.js'),
 					  'extHeader'=> '',
 					  'allowedUsers' => Array('EVERYONE'),
 					  'languageRoot' => 'nagvis');
@@ -77,7 +77,7 @@ class WuiAddModify extends GlobalPage {
 		$code .= $this->FORM->initForm();
 		$code .= $this->getFields();
 		$code .= $this->parseJs($this->fillFields());
-		$code .= $this->FORM->getSubmitLine($this->getLang()->getText('save'));
+		$code .= $this->FORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->FORM->closeForm();
 		
 		return $code;
@@ -214,12 +214,12 @@ class WuiAddModify extends GlobalPage {
 						break;
 						
 						case 'hover_childs_order':
-							$options = Array(Array('label' => $this->getLang()->getText('Ascending'), 'value'=>'asc'), Array('label' => $this->getLang()->getText('Descending'), 'value' => 'desc'));
+							$options = Array(Array('label' => $this->CORE->getLang()->getText('Ascending'), 'value'=>'asc'), Array('label' => $this->CORE->getLang()->getText('Descending'), 'value' => 'desc'));
 							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
 						break;
 						
 						case 'hover_childs_sort':
-							$options = Array(Array('label' => $this->getLang()->getText('Alphabetically'), 'value'=>'a'), Array('label' => $this->getLang()->getText('State'), 'value' => 's'));
+							$options = Array(Array('label' => $this->CORE->getLang()->getText('Alphabetically'), 'value'=>'a'), Array('label' => $this->CORE->getLang()->getText('State'), 'value' => 's'));
 							$selected = $this->MAPCFG->getValue($this->prop['type'],$this->prop['id'],$propname,TRUE);
 						break;
 						
@@ -309,7 +309,7 @@ class WuiAddModify extends GlobalPage {
 					// Print this when it is still a dropdown
 					if($fieldType == 'dropdown') {
 						// Give the users the option give manual input
-						$options[] = $this->getLang()->getText('manualInput');
+						$options[] = $this->CORE->getLang()->getText('manualInput');
 						
 						$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $selected, $prop['must'], $onChange, '', $style, $class);
 						
@@ -331,7 +331,7 @@ class WuiAddModify extends GlobalPage {
 					$value = $this->MAPCFG->getValue($this->prop['type'], $this->prop['id'], $propname, TRUE);
 					
 					// display a listbox with "yes/no" for boolean options 
-					$options = Array(Array('label' => $this->getLang()->getText('yes'), 'value'=>'1'), Array('label' => $this->getLang()->getText('no'), 'value'=>'0'));
+					$options = Array(Array('label' => $this->CORE->getLang()->getText('yes'), 'value'=>'1'), Array('label' => $this->CORE->getLang()->getText('no'), 'value'=>'0'));
 					$ret .= $this->FORM->getSelectLine($propname, $propname, $options, $value, $prop['must'], 'validateMapConfigFieldValue(this)', '', $style, $class);
 					
 					// Toggle depending fields

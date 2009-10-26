@@ -41,13 +41,13 @@ require("../../server/core/functions/oldPhpVersionFixes.php");
 
 // Include needed WUI specific functions
 //FIXME: Remove this ...
-require('./includes/functions/form_handler.php');
+require('./functions/form_handler.php');
 
 // This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
 
-// Load the core
-$CORE = new WuiCore();
+// Initialize the core
+$CORE = WuiCore::getInstance();
 
 // Initialize var
 if(!isset($_GET['action'])) {
@@ -257,7 +257,7 @@ switch($_GET['action']) {
 			$MAPCFG->writeElement($_GET['type'], $elementId);
 			
 			// do the backup
-			backup($CORE->MAINCFG, $_GET['map']);
+			backup($CORE->getMainCfg(), $_GET['map']);
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
@@ -306,7 +306,7 @@ switch($_GET['action']) {
 			$MAPCFG->writeElement($_GET['type'], $_GET['id']);
 			
 			// do the backup
-			backup($CORE->MAINCFG, $_GET['map']);
+			backup($CORE->getMainCfg(), $_GET['map']);
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {
@@ -340,7 +340,7 @@ switch($_GET['action']) {
 			$MAPCFG->writeElement($_GET['type'],$_GET['id']);
 					
 			// do the backup
-			backup($CORE->MAINCFG,$_GET['map']);
+			backup($CORE->getMainCfg(),$_GET['map']);
 			
 			// delete map lock
 			if(!$MAPCFG->deleteMapLock()) {

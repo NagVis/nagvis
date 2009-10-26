@@ -40,7 +40,7 @@ class WuiMap extends GlobalMap {
 	 * @param 	$MAPCFG  GlobalMapCfg
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiMap($CORE, $MAPCFG) {
+	function WuiMap(WuiCore $CORE, $MAPCFG) {
 		$this->CORE = $CORE;
 		$this->MAPCFG = $MAPCFG;
 		
@@ -100,7 +100,7 @@ class WuiMap extends GlobalMap {
 			$aArr[] = $aOpts;
 		}
 		
-		$this->getMainCfg()->setRuntimeValue('mapOptions', json_encode($aArr));
+		$this->CORE->getMainCfg()->setRuntimeValue('mapOptions', json_encode($aArr));
 	}
 	
 	/**
@@ -116,7 +116,9 @@ class WuiMap extends GlobalMap {
 		$ret .= $this->parseObjects();
 		$ret .= $this->parseInvisible();
 		$ret .= $this->makeObjectsMoveable();
-		$ret .= '<script type="text/javascript" src="./includes/js/wz_tooltip.js"></script>';
+		
+		// This needs to be in body code
+		$ret .= '<script type="text/javascript" src="'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/wz_tooltip.js"></script>';
 		
 		return $ret;
 	}
@@ -134,10 +136,10 @@ class WuiMap extends GlobalMap {
 		
 		if($this->MAPCFG->getName() != '') {
 			if($this->MAPCFG->BACKGROUND->getFileName() != 'none' && $this->MAPCFG->BACKGROUND->getFileName() != '') {
-				$src = $this->getMainCfg()->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
+				$src = $this->CORE->getMainCfg()->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
 			}
 		} else {
-			$src = $this->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/images/internal/wuilogo.png';
+			$src = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/images/internal/wuilogo.png';
 			$style = 'width:800px;height:600px;';
 		}
 		
@@ -306,8 +308,8 @@ class WuiMap extends GlobalMap {
 			if(!file_exists($imgPath)) {
 				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('iconNotExists','IMGPATH~'.$imgPath));
 				
-				$obj['path'] = $this->getMainCfg()->getValue('paths', 'icon');
-				$obj['htmlPath'] = $this->getMainCfg()->getValue('paths', 'htmlicon');
+				$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'icon');
+				$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlicon');
 				$obj['icon'] = '20x20.gif';
 			}
 		}
@@ -328,20 +330,20 @@ class WuiMap extends GlobalMap {
 				$obj['path'] = '';
 				$obj['htmlPath'] = '';
 			} else {
-				$obj['path'] = $this->getMainCfg()->getValue('paths', 'shape');
-				$obj['htmlPath'] = $this->getMainCfg()->getValue('paths', 'htmlshape');
+				$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'shape');
+				$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlshape');
 			}
 		} elseif(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
 			if(preg_match('/^\[(.*)\]$/', $obj['gadget_url'], $match) > 0) {
 				$obj['path'] = '';
 				$obj['htmlPath'] = '';
 			} else {
-				$obj['path'] = $this->getMainCfg()->getValue('paths', 'gadget');
-				$obj['htmlPath'] = $this->getMainCfg()->getValue('paths', 'htmlgadgets');
+				$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'gadget');
+				$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlgadgets');
 			}
 		} else {
-			$obj['path'] = $this->getMainCfg()->getValue('paths', 'icon');
-			$obj['htmlPath'] = $this->getMainCfg()->getValue('paths', 'htmlicon');
+			$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'icon');
+			$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlicon');
 		}
 		return $obj;
 	}
@@ -514,8 +516,8 @@ class WuiMap extends GlobalMap {
 			break;
 		}
 		
-		//replaced: if(file_exists($this->getMainCfg()->getValue('paths', 'icon').$icon)) {
-		if(@fclose(@fopen($this->getMainCfg()->getValue('paths', 'icon').$icon,'r'))) {
+		//replaced: if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'icon').$icon)) {
+		if(@fclose(@fopen($this->CORE->getMainCfg()->getValue('paths', 'icon').$icon,'r'))) {
 			return $icon;
 		} else {
 			return $obj['iconset'].'_error.'.$fileType;
@@ -608,33 +610,33 @@ class WuiMap extends GlobalMap {
 		
 		// Edit link
 		$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/modify.png)\'"
-		  ." href=# onclick=popupWindow(\'".$this->getLang()->getText('change')."\',"
+		  ." href=# onclick=popupWindow(\'".$this->CORE->getLang()->getText('change')."\',"
 			."getSyncRequest(\'./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\',true,false));>"
-			."<span>".$this->getLang()->getText('change')."</span></a></li>";
+			."<span>".$this->CORE->getLang()->getText('change')."</span></a></li>";
 		
 		// Position/Size link on textboxes/lines
 		//$tooltipText .= "&nbsp;".$positionSizeText;
 		if(isset($obj['line_type']) || $obj['type']=='textbox') {
 			$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)\'"
 						." href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>"
-						."<span>".$this->getLang()->getText('positionSize')."</span></a></li>";			
+						."<span>".$this->CORE->getLang()->getText('positionSize')."</span></a></li>";			
 		}
 		
 		// Delete link
 		$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/delete.png)\'"
 		  ." href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\'"
 			." onClick=\'return deleteMapObject(this);return false;\'>"
-		  ."<span>".$this->getLang()->getText('delete')."</span></a></li>";
+		  ."<span>".$this->CORE->getLang()->getText('delete')."</span></a></li>";
 		
 		$tooltipText .= "</ul>";
 		$tooltipText .= "</th></tr>";
 		
 		
 		// Print configured settings
-		$tooltipText .= '<tr><th colspan=\\\'2\\\'>'.$this->getLang()->getText('configured').'</th></tr>'.$configuredText;
+		$tooltipText .= '<tr><th colspan=\\\'2\\\'>'.$this->CORE->getLang()->getText('configured').'</th></tr>'.$configuredText;
 		
 		// Print inherited settings
-		$tooltipText .= '<tr class=\\\'inherited\\\'><th colspan=\\\'2\\\'>'.$this->getLang()->getText('inherited').'</th></tr>'.$defaultText;
+		$tooltipText .= '<tr class=\\\'inherited\\\'><th colspan=\\\'2\\\'>'.$this->CORE->getLang()->getText('inherited').'</th></tr>'.$defaultText;
 		
 		$tooltipText .= '</table>';
 		
@@ -659,76 +661,76 @@ class WuiMap extends GlobalMap {
 	 */
 	function getJsLang() {
 		$langMenu = Array(
-			'overview' => $this->getLang()->getText('overview'),
-			'restore' => $this->getLang()->getText('restore'),
-			'properties' => $this->getLang()->getText('properties'),
-			'addObject' => $this->getLang()->getText('addObject'),
-			'nagVisConfig' => $this->getLang()->getText('nagVisConfig'),
-			'help' => $this->getLang()->getText('help'),
-			'open' => $this->getLang()->getText('open'),
-			'openInNagVis' => $this->getLang()->getText('openInNagVis'),
-			'manageMaps' => $this->getLang()->getText('manageMaps'),
-			'manageBackends' => $this->getLang()->getText('manageBackends'),
-			'manageBackgrounds' => $this->getLang()->getText('manageBackgrounds'),
-			'manageShapes' => $this->getLang()->getText('manageShapes'),
-			'icon' => $this->getLang()->getText('icon'),
-			'line' => $this->getLang()->getText('line'),
-			'special' => $this->getLang()->getText('special'),
-			'host' => $this->getLang()->getText('host'),
-			'service' => $this->getLang()->getText('service'),
-			'hostgroup' => $this->getLang()->getText('hostgroup'),
-			'servicegroup' => $this->getLang()->getText('servicegroup'),
-			'map' => $this->getLang()->getText('map'),
-			'textbox' => $this->getLang()->getText('textbox'),
-			'shape' => $this->getLang()->getText('shape'),
-			'manage' => $this->getLang()->getText('manage'));
+			'overview' => $this->CORE->getLang()->getText('overview'),
+			'restore' => $this->CORE->getLang()->getText('restore'),
+			'properties' => $this->CORE->getLang()->getText('properties'),
+			'addObject' => $this->CORE->getLang()->getText('addObject'),
+			'nagVisConfig' => $this->CORE->getLang()->getText('nagVisConfig'),
+			'help' => $this->CORE->getLang()->getText('help'),
+			'open' => $this->CORE->getLang()->getText('open'),
+			'openInNagVis' => $this->CORE->getLang()->getText('openInNagVis'),
+			'manageMaps' => $this->CORE->getLang()->getText('manageMaps'),
+			'manageBackends' => $this->CORE->getLang()->getText('manageBackends'),
+			'manageBackgrounds' => $this->CORE->getLang()->getText('manageBackgrounds'),
+			'manageShapes' => $this->CORE->getLang()->getText('manageShapes'),
+			'icon' => $this->CORE->getLang()->getText('icon'),
+			'line' => $this->CORE->getLang()->getText('line'),
+			'special' => $this->CORE->getLang()->getText('special'),
+			'host' => $this->CORE->getLang()->getText('host'),
+			'service' => $this->CORE->getLang()->getText('service'),
+			'hostgroup' => $this->CORE->getLang()->getText('hostgroup'),
+			'servicegroup' => $this->CORE->getLang()->getText('servicegroup'),
+			'map' => $this->CORE->getLang()->getText('map'),
+			'textbox' => $this->CORE->getLang()->getText('textbox'),
+			'shape' => $this->CORE->getLang()->getText('shape'),
+			'manage' => $this->CORE->getLang()->getText('manage'));
 		
 		$lang = Array(
-			'clickMapToSetPoints' => $this->getLang()->getText('clickMapToSetPoints'),
-			'confirmDelete' => $this->getLang()->getText('confirmDelete'),
-			'confirmRestore' => $this->getLang()->getText('confirmRestore'),
-			'wrongValueFormat' => $this->getLang()->getText('wrongValueFormat'),
-			'wrongValueFormatMap' => $this->getLang()->getText('wrongValueFormatMap'),
-			'wrongValueFormatOption' => $this->getLang()->getText('wrongValueFormatOption'),
-			'unableToWorkWithMap' => $this->getLang()->getText('unableToWorkWithMap'),
-			'mustValueNotSet' => $this->getLang()->getText('mustValueNotSet'),
-			'chosenLineTypeNotValid' => $this->getLang()->getText('chosenLineTypeNotValid'),
-			'onlyLineOrIcon' => $this->getLang()->getText('onlyLineOrIcon'),
-			'not2coordsX' => $this->getLang()->getText('not2coords','COORD~X'),
-			'not2coordsY' => $this->getLang()->getText('not2coords','COORD~Y'),
-			'only1or2coordsX' => $this->getLang()->getText('only1or2coords','COORD~X'),
-			'only1or2coordsY' => $this->getLang()->getText('only1or2coords','COORD~Y'),
-			'viewTypeWrong' => $this->getLang()->getText('viewTypeWrong'),
-			'lineTypeNotSet' => $this->getLang()->getText('lineTypeNotSet'),
-			'loopInMapRecursion' => $this->getLang()->getText('loopInMapRecursion'),
-			'mapObjectWillShowSummaryState' => $this->getLang()->getText('mapObjectWillShowSummaryState'),
-			'firstMustChoosePngImage' => $this->getLang()->getText('firstMustChoosePngImage'),
-			'mustChooseValidImageFormat' => $this->getLang()->getText('mustChooseValidImageFormat'),
-			'foundNoBackgroundToDelete' => $this->getLang()->getText('foundNoBackgroundToDelete'),
-			'confirmBackgroundDeletion' => $this->getLang()->getText('confirmBackgroundDeletion'),
-			'unableToDeleteBackground' => $this->getLang()->getText('unableToDeleteBackground'),
-			'mustValueNotSet1' => $this->getLang()->getText('mustValueNotSet1'),
-			'foundNoShapeToDelete' => $this->getLang()->getText('foundNoShapeToDelete'),
-			'shapeInUse' => $this->getLang()->getText('shapeInUse'),
-			'confirmShapeDeletion' => $this->getLang()->getText('confirmShapeDeletion'),
-			'unableToDeleteShape' => $this->getLang()->getText('unableToDeleteShape'),
-			'chooseMapName' => $this->getLang()->getText('chooseMapName'),
-			'minOneUserAccess' => $this->getLang()->getText('minOneUserAccess'),
-			'noMapToRename' => $this->getLang()->getText('noMapToRename'),
-			'noNewNameGiven' => $this->getLang()->getText('noNewNameGiven'),
-			'mapAlreadyExists' => $this->getLang()->getText('mapAlreadyExists'),
-			'foundNoMapToDelete' => $this->getLang()->getText('foundNoMapToDelete'),
-			'foundNoMapToExport' => $this->getLang()->getText('foundNoMapToExport'),
-			'foundNoMapToImport' => $this->getLang()->getText('foundNoMapToImport'),
-			'notCfgFile' => $this->getLang()->getText('notCfgFile'),
-			'confirmNewMap' => $this->getLang()->getText('confirmNewMap'),
-			'confirmMapRename' => $this->getLang()->getText('confirmMapRename'),
-			'confirmMapDeletion' => $this->getLang()->getText('confirmMapDeletion'),
-			'unableToDeleteMap' => $this->getLang()->getText('unableToDeleteMap'),
-			'noPermissions' => $this->getLang()->getText('noPermissions'),
-			'minOneUserWriteAccess' => $this->getLang()->getText('minOneUserWriteAccess'),
-			'noSpaceAllowed' => $this->getLang()->getText('noSpaceAllowed'),
-			'manualInput' => $this->getLang()->getText('manualInput'));
+			'clickMapToSetPoints' => $this->CORE->getLang()->getText('clickMapToSetPoints'),
+			'confirmDelete' => $this->CORE->getLang()->getText('confirmDelete'),
+			'confirmRestore' => $this->CORE->getLang()->getText('confirmRestore'),
+			'wrongValueFormat' => $this->CORE->getLang()->getText('wrongValueFormat'),
+			'wrongValueFormatMap' => $this->CORE->getLang()->getText('wrongValueFormatMap'),
+			'wrongValueFormatOption' => $this->CORE->getLang()->getText('wrongValueFormatOption'),
+			'unableToWorkWithMap' => $this->CORE->getLang()->getText('unableToWorkWithMap'),
+			'mustValueNotSet' => $this->CORE->getLang()->getText('mustValueNotSet'),
+			'chosenLineTypeNotValid' => $this->CORE->getLang()->getText('chosenLineTypeNotValid'),
+			'onlyLineOrIcon' => $this->CORE->getLang()->getText('onlyLineOrIcon'),
+			'not2coordsX' => $this->CORE->getLang()->getText('not2coords','COORD~X'),
+			'not2coordsY' => $this->CORE->getLang()->getText('not2coords','COORD~Y'),
+			'only1or2coordsX' => $this->CORE->getLang()->getText('only1or2coords','COORD~X'),
+			'only1or2coordsY' => $this->CORE->getLang()->getText('only1or2coords','COORD~Y'),
+			'viewTypeWrong' => $this->CORE->getLang()->getText('viewTypeWrong'),
+			'lineTypeNotSet' => $this->CORE->getLang()->getText('lineTypeNotSet'),
+			'loopInMapRecursion' => $this->CORE->getLang()->getText('loopInMapRecursion'),
+			'mapObjectWillShowSummaryState' => $this->CORE->getLang()->getText('mapObjectWillShowSummaryState'),
+			'firstMustChoosePngImage' => $this->CORE->getLang()->getText('firstMustChoosePngImage'),
+			'mustChooseValidImageFormat' => $this->CORE->getLang()->getText('mustChooseValidImageFormat'),
+			'foundNoBackgroundToDelete' => $this->CORE->getLang()->getText('foundNoBackgroundToDelete'),
+			'confirmBackgroundDeletion' => $this->CORE->getLang()->getText('confirmBackgroundDeletion'),
+			'unableToDeleteBackground' => $this->CORE->getLang()->getText('unableToDeleteBackground'),
+			'mustValueNotSet1' => $this->CORE->getLang()->getText('mustValueNotSet1'),
+			'foundNoShapeToDelete' => $this->CORE->getLang()->getText('foundNoShapeToDelete'),
+			'shapeInUse' => $this->CORE->getLang()->getText('shapeInUse'),
+			'confirmShapeDeletion' => $this->CORE->getLang()->getText('confirmShapeDeletion'),
+			'unableToDeleteShape' => $this->CORE->getLang()->getText('unableToDeleteShape'),
+			'chooseMapName' => $this->CORE->getLang()->getText('chooseMapName'),
+			'minOneUserAccess' => $this->CORE->getLang()->getText('minOneUserAccess'),
+			'noMapToRename' => $this->CORE->getLang()->getText('noMapToRename'),
+			'noNewNameGiven' => $this->CORE->getLang()->getText('noNewNameGiven'),
+			'mapAlreadyExists' => $this->CORE->getLang()->getText('mapAlreadyExists'),
+			'foundNoMapToDelete' => $this->CORE->getLang()->getText('foundNoMapToDelete'),
+			'foundNoMapToExport' => $this->CORE->getLang()->getText('foundNoMapToExport'),
+			'foundNoMapToImport' => $this->CORE->getLang()->getText('foundNoMapToImport'),
+			'notCfgFile' => $this->CORE->getLang()->getText('notCfgFile'),
+			'confirmNewMap' => $this->CORE->getLang()->getText('confirmNewMap'),
+			'confirmMapRename' => $this->CORE->getLang()->getText('confirmMapRename'),
+			'confirmMapDeletion' => $this->CORE->getLang()->getText('confirmMapDeletion'),
+			'unableToDeleteMap' => $this->CORE->getLang()->getText('unableToDeleteMap'),
+			'noPermissions' => $this->CORE->getLang()->getText('noPermissions'),
+			'minOneUserWriteAccess' => $this->CORE->getLang()->getText('minOneUserWriteAccess'),
+			'noSpaceAllowed' => $this->CORE->getLang()->getText('noSpaceAllowed'),
+			'manualInput' => $this->CORE->getLang()->getText('manualInput'));
 		
 		return 'var langMenu = '.json_encode($langMenu).'; var lang = '.json_encode($lang).';';	
 	}
@@ -740,7 +742,7 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsValidMainConfig() {
-		return 'var validMainConfig = '.json_encode($this->getMainCfg()->getValidConfig()).';';
+		return 'var validMainConfig = '.json_encode(WuiCore::getInstance()->getMainCfg()->getValidConfig()).';';
 	}
 	
 	/**
@@ -763,9 +765,9 @@ class WuiMap extends GlobalMap {
 		$str = $this->parseJs("
 			var oGeneralProperties = ".$this->CORE->getMainCfg()->parseGeneralProperties().";
 			var mapname = '".$this->MAPCFG->getName()."';
-			var username = '".$this->getMainCfg()->getRuntimeValue('user')."';
-			var mapOptions = ".$this->getMainCfg()->getRuntimeValue('mapOptions').";
-			var backupAvailable = '".file_exists($this->getMainCfg()->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak")."';
+			var username = '".$this->CORE->getMainCfg()->getRuntimeValue('user')."';
+			var mapOptions = ".$this->CORE->getMainCfg()->getRuntimeValue('mapOptions').";
+			var backupAvailable = '".file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak")."';
 			
 			// build the right-click menu
 			initjsDOMenu();

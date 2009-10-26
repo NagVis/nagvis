@@ -65,7 +65,7 @@ class WuiEditMainCfg extends GlobalPage {
 		$code .= $this->FORM->initForm();
 		
 		$code .= $this->getFields();
-		$code .= $this->FORM->getSubmitLine($this->getLang()->getText('save'));
+		$code .= $this->FORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->FORM->closeForm();
 		
 		return $code;
@@ -80,7 +80,7 @@ class WuiEditMainCfg extends GlobalPage {
 	function getFields() {
 		$ret = '';
 		
-		foreach($this->getMainCfg()->getValidConfig() AS $cat => $arr) {
+		foreach($this->CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
 			// don't display backend,rotation and internal options
 			if(!preg_match("/^backend/i",$cat) && !preg_match("/^internal$/i",$cat) && !preg_match("/^rotation/i",$cat)) {
 				$ret .= $this->FORM->getCatLine($cat);
@@ -89,17 +89,17 @@ class WuiEditMainCfg extends GlobalPage {
 					// ignore some vars
 					if(isset($arr[$key2]['editable']) && $arr[$key2]['editable']) {
 						//FIXME!!!!
-						$val2 = $this->getMainCfg()->getValue($cat, $key2, TRUE);
+						$val2 = $this->CORE->getMainCfg()->getValue($cat, $key2, TRUE);
 						
 						# we add a line in the form
 						$ret .= "<tr>";
 						$ret .= "\t<td class=\"tdlabel\">".$key2."</td>";
 						
-						if(preg_match('/^TranslationNotFound:/',$this->getLang()->getText($key2)) > 0) {
+						if(preg_match('/^TranslationNotFound:/',$this->CORE->getLang()->getText($key2)) > 0) {
 							$ret .= "\t<td class=\"tdfield\"></td>";
 						} else {
 							$ret .= "\t<td class=\"tdfield\">";
-							$ret .= "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->getLang()->getText($key2)." (".$this->getLang()->getText('defaultValue').": ".$arr[$key2]['default'].")')\" />";
+							$ret .= "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($key2)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$key2]['default'].")')\" />";
 							$ret .= "\t</td>";
 						}
 						
@@ -139,11 +139,11 @@ class WuiEditMainCfg extends GlobalPage {
 									case 'showinlists':
 									case 'hovermenu':
 									case 'hoverchildsshow':
-										$arrOpts = Array(Array('value'=>'1','label'=>$this->getLang()->getText('yes')),
-														 Array('value'=>'0','label'=>$this->getLang()->getText('no')));
+										$arrOpts = Array(Array('value'=>'1','label'=>$this->CORE->getLang()->getText('yes')),
+														 Array('value'=>'0','label'=>$this->CORE->getLang()->getText('no')));
 									break;
 									case 'autoupdatefreq':
-										$arrOpts = Array(Array('value'=>'0','label'=>$this->getLang()->getText('disabled')),
+										$arrOpts = Array(Array('value'=>'0','label'=>$this->CORE->getLang()->getText('disabled')),
 														 Array('value'=>'2','label'=>'2'),
 														 Array('value'=>'5','label'=>'5'),
 														 Array('value'=>'10','label'=>'10'),

@@ -36,13 +36,13 @@ require('../nagvis/includes/functions/debug.php');
 require("../nagvis/includes/functions/getuser.php");
 
 // Include needed WUI specific functions
-require('./includes/functions/form_handler.php');
+require('./functions/form_handler.php');
 
 // This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
-// Load the core
-$CORE = new WuiCore();
+// Initialize the core
+$CORE = WuiCore::getInstance();
 
 // Now do the requested action
 switch($_GET['myaction']) {
@@ -66,7 +66,7 @@ switch($_GET['myaction']) {
 			$MAPCFG->writeElement('global','0');
 			
 			// do the backup
-			backup($CORE->MAINCFG, $_POST['map_name']);
+			backup($CORE->getMainCfg(), $_POST['map_name']);
 			
 			// Redirect to the new map
 			print("<script>document.location.href='./index.php?map=".$_POST['map_name']."';</script>");

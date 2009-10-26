@@ -38,28 +38,31 @@ class WuiFrontend extends GlobalPage {
 	function WuiFrontend($CORE, $MAPCFG) {
 		$this->MAPCFG = $MAPCFG;
 		
+		$htmlBase = $CORE->getMainCfg()->getValue('paths', 'htmlbase');
+		$htmlJs = $CORE->getMainCfg()->getValue('paths', 'htmljs');
+		
 		$prop = Array('title'=> $CORE->getMainCfg()->getValue('internal', 'title') . ' WUI',
 					  'cssIncludes'=>Array('../nagvis-js/css/style.css',
 						                     './css/wui.css',
 						                     './css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array(
-							'../nagvis-js/js/frontendEventlog.js',
-							'../nagvis-js/js/ajax.js',
-							'../nagvis-js/js/frontendMessage.js',
-							'../nagvis-js/js/nagvis.js',
-					  	'./js/popupWindow.js',
-							'./js/wui.js',
-					  	'./js/ajax.js',
-					  	'./js/addmodify.js',
-					  	'./js/EditMainCfg.js',
-					  	'./js/BackgroundManagement.js',
-					  	'./js/BackendManagement.js',
-					  	'./js/MapManagement.js',
-					  	'./js/ShapeManagement.js',
-						  './js/jsdomenu.js',
-						  './js/jsdomenu.inc.js',
-						  './js/wz_jsgraphics.js',
-						  './js/wz_dragdrop.js'),
+							$htmlJs.'frontendEventlog.js',
+							$htmlJs.'ajax.js',
+							$htmlJs.'frontendMessage.js',
+							$htmlJs.'nagvis.js',
+					  	$htmlBase.'/frontend/wui/js/popupWindow.js',
+							$htmlBase.'/frontend/wui/js/wui.js',
+					  	$htmlBase.'/frontend/wui/js/ajax.js',
+					  	$htmlBase.'/frontend/wui/js/addmodify.js',
+					  	$htmlBase.'/frontend/wui/js/EditMainCfg.js',
+					  	$htmlBase.'/frontend/wui/js/BackgroundManagement.js',
+					  	$htmlBase.'/frontend/wui/js/BackendManagement.js',
+					  	$htmlBase.'/frontend/wui/js/MapManagement.js',
+					  	$htmlBase.'/frontend/wui/js/ShapeManagement.js',
+						  $htmlBase.'/frontend/wui/js/jsdomenu.js',
+						  $htmlBase.'/frontend/wui/js/jsdomenu.inc.js',
+						  $htmlBase.'/frontend/wui/js/wz_jsgraphics.js',
+						  $htmlBase.'/frontend/wui/js/wz_dragdrop.js'),
 					  'extHeader'=> '<style type="text/css">body.main { background-color: '.$this->MAPCFG->getValue('global',0, 'background_color').'; }</style>',
 					  'allowedUsers' => $this->MAPCFG->getValue('global', 0, 'allowed_for_config'),
 					  'languageRoot' => 'nagvis');
@@ -90,7 +93,7 @@ class WuiFrontend extends GlobalPage {
 	*/
 	function getMap() {
 		$this->addBodyLines('<div id="mymap" class="map">');
-		$this->MAP = new WuiMap($this->CORE, $this->MAPCFG);
+		$this->MAP = new WuiMap(WuiCore::getInstance(), $this->MAPCFG);
 		$this->addBodyLines($this->MAP->parseMap());
 		$this->addBodyLines('</div>');
 	}

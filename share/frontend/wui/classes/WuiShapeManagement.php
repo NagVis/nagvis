@@ -43,7 +43,7 @@ class WuiShapeManagement extends GlobalPage {
 		$this->propCount = 0;
 		
 		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
-								'jsIncludes'=>Array('./includes/js/ShapeManagement.js'),
+								'jsIncludes'=>Array($CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/ShapeManagement.js'),
 								'extHeader'=> '',
 								'allowedUsers' => $this->CORE->getMainCfg()->getValue('wui','allowedforconfig'),
 								'languageRoot' => 'nagvis');
@@ -68,9 +68,9 @@ class WuiShapeManagement extends GlobalPage {
 																						'cols'=>'2'));
 		
 		$code .= $this->ADDFORM->initForm();
-		$code .= $this->ADDFORM->getCatLine($this->getLang()->getText('uploadShape'));
+		$code .= $this->ADDFORM->getCatLine($this->CORE->getLang()->getText('uploadShape'));
 		$code .= $this->getAddFields();
-		$code .= $this->ADDFORM->getSubmitLine($this->getLang()->getText('upload'));
+		$code .= $this->ADDFORM->getSubmitLine($this->CORE->getLang()->getText('upload'));
 		$code .= $this->ADDFORM->closeForm();
 		
 		$this->DELFORM = new GlobalForm(Array('name'=>'shape_delete',
@@ -81,9 +81,9 @@ class WuiShapeManagement extends GlobalPage {
 																						'cols'=>'2'));
 		
 		$code .= $this->DELFORM->initForm();
-		$code .= $this->DELFORM->getCatLine($this->getLang()->getText('deleteShape'));
+		$code .= $this->DELFORM->getCatLine($this->CORE->getLang()->getText('deleteShape'));
 		$code .= $this->getDelFields();
-		$code .= $this->ADDFORM->getSubmitLine($this->getLang()->getText('delete'));
+		$code .= $this->ADDFORM->getSubmitLine($this->CORE->getLang()->getText('delete'));
 		$code .= $this->ADDFORM->closeForm();
 		
 		return $code;
@@ -97,7 +97,7 @@ class WuiShapeManagement extends GlobalPage {
 	*/
 	function getAddFields() {
 		return $this->ADDFORM->getHiddenField('MAX_FILE_SIZE','1000000')
-					.$this->ADDFORM->getFileLine($this->getLang()->getText('choosePngImage'),'shape_image','');
+					.$this->ADDFORM->getFileLine($this->CORE->getLang()->getText('choosePngImage'),'shape_image','');
 	}
 	
 	/**
@@ -107,7 +107,7 @@ class WuiShapeManagement extends GlobalPage {
 	* @author  Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function getDelFields() {
-		return $this->DELFORM->getSelectLine($this->getLang()->getText('choosePngImage'),'shape_image',$this->CORE->getAvailableShapes(),'');
+		return $this->DELFORM->getSelectLine($this->CORE->getLang()->getText('choosePngImage'),'shape_image',$this->CORE->getAvailableShapes(),'');
 	}
 	
 	/**
@@ -117,17 +117,17 @@ class WuiShapeManagement extends GlobalPage {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function deleteShape($fileName) {
-		if(file_exists($this->getMainCfg()->getValue('paths', 'shape').$fileName)) {
-			if(unlink($this->getMainCfg()->getValue('paths', 'shape').$fileName)) {
+		if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'shape').$fileName)) {
+			if(unlink($this->CORE->getMainCfg()->getValue('paths', 'shape').$fileName)) {
 				// Go back to last page
 				print("<script>window.history.back();</script>");
 			} else {
 				// Error handling
-				print("ERROR: ".$this->getLang()->getText('failedToDeleteShape','IMAGE~'.$fileName));
+				print("ERROR: ".$this->CORE->getLang()->getText('failedToDeleteShape','IMAGE~'.$fileName));
 			}
 		} else {
 			// Error handling
-			print("ERROR: ".$this->getLang()->getText('shapeDoesNotExist','IMAGE~'.$fileName));
+			print("ERROR: ".$this->CORE->getLang()->getText('shapeDoesNotExist','IMAGE~'.$fileName));
 		}
 	}
 	
@@ -141,23 +141,23 @@ class WuiShapeManagement extends GlobalPage {
 		// check the file (the map) is properly uploaded
 		if(is_uploaded_file($arrFile['tmp_name'])) {
 			if(preg_match(MATCH_PNG_GIF_JPG_FILE, $arrFile['name'])) {
-				if(@move_uploaded_file($arrFile['tmp_name'], $this->getMainCfg()->getValue('paths', 'shape').$arrFile['name'])) {
+				if(@move_uploaded_file($arrFile['tmp_name'], $this->CORE->getMainCfg()->getValue('paths', 'shape').$arrFile['name'])) {
 					// Change permissions of the file after the upload
-					chmod($this->getMainCfg()->getValue('paths', 'shape').$arrFile['name'],0666);
+					chmod($this->CORE->getMainCfg()->getValue('paths', 'shape').$arrFile['name'],0666);
 					
 					// Go back to last page
 					print("<script>window.history.back();</script>");
 				} else {
 					// Error handling
-					print("ERROR: ".$this->getLang()->getText('moveUploadedFileFailed','PATH~'.$this->getMainCfg()->getValue('paths', 'shape')));
+					print("ERROR: ".$this->CORE->getLang()->getText('moveUploadedFileFailed','PATH~'.$this->CORE->getMainCfg()->getValue('paths', 'shape')));
 				}
 			} else {
 				// Error handling
-				print("ERROR: ".$this->getLang()->getText('mustBePngFile'));
+				print("ERROR: ".$this->CORE->getLang()->getText('mustBePngFile'));
 			}
 		} else {
 			// Error handling
-			print("ERROR: ".$this->getLang()->getText('uploadFailed'));
+			print("ERROR: ".$this->CORE->getLang()->getText('uploadFailed'));
 		}
 	}
 }

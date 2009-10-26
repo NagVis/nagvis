@@ -42,7 +42,6 @@ require("../../server/core/functions/oldPhpVersionFixes.php");
 // This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
-// Load the core
 // Initialize the core
 $CORE = WuiCore::getInstance();
 

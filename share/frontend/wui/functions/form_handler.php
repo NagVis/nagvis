@@ -62,7 +62,7 @@ function getArrayFromProperties(&$properties) {
  * @return	Boolean			Succesful?
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
-function backup(&$MAINCFG, $mapname) {
+function backup($MAINCFG, $mapname) {
 	if($MAINCFG->getValue('wui', 'autoupdatefreq') == 0) {
 		// delete all *.bak
 		foreach(getAllFiles() AS $file) {

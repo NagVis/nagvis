@@ -28,13 +28,13 @@
  * @author  Lars Michelsen <lars@vertical-visions.de
  */
 class GlobalCore {
-	private static $MAINCFG = null;
-	private static $LANG = null;
-	private static $AUTHENTICATION = null;
-	private static $AUTHORIZATION = null;
+	protected static $MAINCFG = null;
+	protected static $LANG = null;
+	protected static $AUTHENTICATION = null;
+	protected static $AUTHORIZATION = null;
 	
 	private static $instance = null;
-	private $iconsetTypeCache = Array();
+	protected $iconsetTypeCache = Array();
 
 	/**
 	 * Deny construct
@@ -133,7 +133,7 @@ class GlobalCore {
 	public function checkGd($printErr) {
 	if(!extension_loaded('gd')) {
 		if($printErr) {
-			new GlobalMessage('WARNING', self::$LANG->getText('gdLibNotFound'));
+			new GlobalMessage('WARNING', self::getLang()->getText('gdLibNotFound'));
 		}
 			return FALSE;
 		} else {
@@ -149,9 +149,9 @@ class GlobalCore {
      */
 	public function getDefinedBackends() {
 		$ret = Array();
-		foreach(self::$MAINCFG->getSections() AS $name) {
+		foreach(self::getMainCfg()->getSections() AS $name) {
 			if(preg_match('/^backend_/i', $name)) {
-				$ret[] = self::$MAINCFG->getValue($name, 'backendid');
+				$ret[] = self::getMainCfg()->getValue($name, 'backendid');
 			}
 		}
 		
@@ -166,9 +166,9 @@ class GlobalCore {
 	 */
 	public function getDefinedRotationPools() {
 		$ret = Array();
-		foreach(self::$MAINCFG->getSections() AS $name) {
+		foreach(self::getMainCfg()->getSections() AS $name) {
 			if(preg_match('/^rotation_/i', $name)) {
-				$id = self::$MAINCFG->getValue($name, 'rotationid');
+				$id = self::getMainCfg()->getValue($name, 'rotationid');
 				$ret[$id] = $id;
 			}
 		}
@@ -185,7 +185,7 @@ class GlobalCore {
 	public function getAvailableLanguages() {
 		$files = Array();
 		
-		if ($handle = opendir(self::$MAINCFG->getValue('paths', 'language'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'language'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(!preg_match('/^\./', $file)) {
 					$files[] = $file;
@@ -213,7 +213,7 @@ class GlobalCore {
 		$aRet = Array();
 		
 		foreach($this->getAvailableLanguages() AS $val) {
-			if(in_array($val, $this->getMainCfg()->getValue('global', 'language_available'))) {
+			if(in_array($val, self::getMainCfg()->getValue('global', 'language_available'))) {
 				$aRet[] = $val;
 			}
 		}
@@ -230,7 +230,7 @@ class GlobalCore {
 	public function getAvailableBackends() {
 		$files = Array();
 		
-		if ($handle = opendir(self::$MAINCFG->getValue('paths', 'class'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'class'))) {
  			while (false !== ($file = readdir($handle))) {
  				if(preg_match('/^GlobalBackend([^MI].+)\.php$/', $file, $arrRet)) {
 					$files[] = $arrRet[1];
@@ -256,7 +256,7 @@ class GlobalCore {
 	public function getAvailableHoverTemplates() {
 		$files = Array();
 		
-		if($handle = opendir(self::$MAINCFG->getValue('paths', 'hovertemplate'))) {
+		if($handle = opendir(self::getMainCfg()->getValue('paths', 'hovertemplate'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
@@ -282,7 +282,7 @@ class GlobalCore {
 	public function getAvailableHeaderTemplates() {
 		$files = Array();
 		
-		if ($handle = opendir(self::$MAINCFG->getValue('paths', 'headertemplate'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'headertemplate'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
@@ -308,7 +308,7 @@ class GlobalCore {
 	public function getAvailableContextTemplates() {
 		$files = Array();
 		
-		if ($handle = opendir(self::$MAINCFG->getValue('paths', 'contexttemplate'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'contexttemplate'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
@@ -334,7 +334,7 @@ class GlobalCore {
 	public function getAvailableShapes() {
 		$files = Array();
 		
-		if ($handle = opendir(self::$MAINCFG->getValue('paths', 'shape'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'shape'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[0];
@@ -360,7 +360,7 @@ class GlobalCore {
 	public function getAvailableIconsets() {
 		$files = Array();
 		
-		if($handle = opendir(self::$MAINCFG->getValue('paths', 'icon'))) {
+		if($handle = opendir(self::getMainCfg()->getValue('paths', 'icon'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match('/^(.+)_ok.(png|gif|jpg)$/', $file, $arrRet)) {
 					$files[] = $arrRet[1];
@@ -390,7 +390,7 @@ class GlobalCore {
 		if(isset($this->iconsetTypeCache[$iconset])) {
 			$type = $this->iconsetTypeCache[$iconset];
 		} else {
-			if($handle = opendir(self::$MAINCFG->getValue('paths', 'icon'))) {
+			if($handle = opendir(self::getMainCfg()->getValue('paths', 'icon'))) {
 				while (false !== ($file = readdir($handle))) {
 					// First filter all files with _ok, it is faster than regex all
 					if(strpos($file, '_ok') !== FALSE) {
@@ -405,7 +405,7 @@ class GlobalCore {
 		
 		// Catch error when iconset filetype could not be fetched
 		if($type === '') {
-			new GlobalMessage('ERROR', self::$LANG->getText('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
+			new GlobalMessage('ERROR', self::getLang()->getText('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
 		}
 		
 		$this->iconsetTypeCache[$iconset] = $type;
@@ -422,7 +422,7 @@ class GlobalCore {
 	public function getAvailableAutomaps($strMatch = NULL) {
 		$files = Array();
 		
-		if($handle = opendir(self::$MAINCFG->getValue('paths', 'automapcfg'))) {
+		if($handle = opendir(self::getMainCfg()->getValue('paths', 'automapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
 					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
@@ -451,7 +451,7 @@ class GlobalCore {
 	public function getAvailableMaps($strMatch = NULL) {
 		$files = Array();
 		
-		if ($handle = opendir(self::$MAINCFG->getValue('paths', 'mapcfg'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'mapcfg'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
 					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
@@ -479,7 +479,7 @@ class GlobalCore {
 	public function getAvailableBackgroundImages() {
 		$files = Array();
 		
-		if($handle = opendir(self::$MAINCFG->getValue('paths', 'map'))) {
+		if($handle = opendir(self::getMainCfg()->getValue('paths', 'map'))) {
  			while(false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file)) {
 					$files[] = $file;
@@ -504,7 +504,7 @@ class GlobalCore {
 	public function getAvailableGadgets() {
 		$files = Array();
 		
-		if ($handle = opendir(self::$MAINCFG->getValue('paths', 'gadget'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'gadget'))) {
  			while (false !== ($file = readdir($handle))) {
 				if($file !== 'gadgets_core.php') {
 					if(preg_match(MATCH_PHP_FILE, $file, $arrRet)) {
@@ -549,11 +549,11 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkVarFolderExists($printErr) {
-		if(file_exists(substr(self::$MAINCFG->getValue('paths', 'var'),0,-1))) {
+		if(file_exists(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1))) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::$LANG->getText('varFolderNotExists','PATH~'.self::$MAINCFG->getValue('paths', 'var')));
+				new GlobalMessage('ERROR', self::getLang()->getText('varFolderNotExists','PATH~'.self::getMainCfg()->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -567,11 +567,11 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkVarFolderWriteable($printErr) {
-		if($this->checkVarFolderExists($printErr) && is_writable(substr(self::$MAINCFG->getValue('paths', 'var'),0,-1)) && @file_exists(self::$MAINCFG->getValue('paths', 'var').'.')) {
+		if($this->checkVarFolderExists($printErr) && is_writable(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1)) && @file_exists(self::getMainCfg()->getValue('paths', 'var').'.')) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::$LANG->getText('varFolderNotWriteable','PATH~'.self::$MAINCFG->getValue('paths', 'var')));
+				new GlobalMessage('ERROR', self::getLang()->getText('varFolderNotWriteable','PATH~'.self::getMainCfg()->getValue('paths', 'var')));
 			}
 			return FALSE;
 		}
@@ -585,11 +585,11 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkSharedVarFolderExists($printErr) {
-		if(file_exists(substr(self::$MAINCFG->getValue('paths', 'sharedvar'),0,-1))) {
+		if(file_exists(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1))) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::$LANG->getText('The shared var folder [PATH] does not exist', Array('PATH' => self::$MAINCFG->getValue('paths', 'sharedvar'))));
+				new GlobalMessage('ERROR', self::getLang()->getText('The shared var folder [PATH] does not exist', Array('PATH' => self::getMainCfg()->getValue('paths', 'sharedvar'))));
 			}
 			return FALSE;
 		}
@@ -603,11 +603,11 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkSharedVarFolderWriteable($printErr) {
-		if($this->checkSharedVarFolderExists($printErr) && is_writable(substr(self::$MAINCFG->getValue('paths', 'sharedvar'),0,-1)) && @file_exists(self::$MAINCFG->getValue('paths', 'sharedvar').'.')) {
+		if($this->checkSharedVarFolderExists($printErr) && is_writable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1)) && @file_exists(self::getMainCfg()->getValue('paths', 'sharedvar').'.')) {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::$LANG->getText('The shared var folder [PATH] is not writeable', Array('PATH' => self::$MAINCFG->getValue('paths', 'sharedvar'))));
+				new GlobalMessage('ERROR', self::getLang()->getText('The shared var folder [PATH] is not writeable', Array('PATH' => self::getMainCfg()->getValue('paths', 'sharedvar'))));
 			}
 			return FALSE;
 		}

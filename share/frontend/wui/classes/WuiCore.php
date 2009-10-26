@@ -26,17 +26,45 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiCore extends GlobalCore {
+	protected static $MAINCFG = null;
+	private static $instance = null;
+	
 	/**
 	 * Class Constructor
 	 *
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function __construct() {
-		// Load the main configuration
-		$this->MAINCFG = new WuiMainCfg(CONST_MAINCFG);
+	private function __construct() {}
+	
+	/**
+	 * Getter function to initialize MAINCFG
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function getMainCfg() {
+		if(parent::$MAINCFG === null) {
+			// Initialize main configuration when not set yet
+			parent::$MAINCFG = new WuiMainCfg(CONST_MAINCFG);
+			parent::$MAINCFG->init();
+			
+			// Set WuiCore MAINCFG too
+			self::$MAINCFG = parent::$MAINCFG;
+		}
 		
-		// Initialize language
-		$this->LANG = new GlobalLanguage($this->MAINCFG);
-	} 
+		return parent::$MAINCFG;
+	}
+	
+	/**
+	 * Static method for getting the instance
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public static function getInstance() {
+		if(self::$instance === null) {
+			self::$instance = new self;
+		}
+		
+		return self::$instance;
+	}
 }
 ?>
