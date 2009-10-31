@@ -119,33 +119,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			return Array();
 		}
 		
-		// 1, 2, 44
-		// Dataset:
-		// Field:
-		// List:
-		// Host/Service:
-		socket_write($sock, $query . "Separators: 0 1 2 3\n");
+		// Query to get a json formated array back
+		socket_write($sock, $query . "OutputFormat:json\n");
 		socket_shutdown($sock, 1);
 		
 		$read = '';
-		
 		while('' != ($r = socket_read($sock, 65536))) {
 			$read .= $r;
 		}
 		
 		socket_close($sock);
 		
-		/* split into lines and fields */
-		$lines = explode("\000", $read);
-		/* 'field' after trailing linefeed */
-		@array_pop($lines);
-		
-		$result = Array();
-		foreach($lines as $line) {
-			$result[] = explode("\001", $line);
-		}
-		
-		return $result;
+		return json_decode($read);
 	}
 	
 	/**
