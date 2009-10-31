@@ -215,6 +215,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 				var oIcon = this.parseIcon();
 				oContainerDiv.appendChild(oIcon);
 				oIcon = null;
+			break;
 		}
 		
 		// Parse label when configured

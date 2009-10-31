@@ -35,9 +35,7 @@
 var oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties;
 var oViewProperties;
 var oFileAges;
-var aMapObjects;
 var oStatusMessageTimer;
-
 var aMapObjects = [];
 
 // Initialize and define some other basic vars
@@ -86,7 +84,7 @@ function date ( format, timestamp ) {
         (typeof(timestamp) == 'undefined') ? new Date() : // Not provided
         (typeof(timestamp) == 'number') ? new Date(timestamp*1000) : // UNIX timestamp
         new Date(timestamp) // Javascript Date()
-    ); // , tal=[]
+    );
     var pad = function (n, c){
         if ( (n = n + "").length < c ) {
             return new Array(++c - n.length).join("0") + n;
