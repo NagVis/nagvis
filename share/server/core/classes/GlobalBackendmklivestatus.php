@@ -105,6 +105,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function queryLivestatus($query) {
+		// Create socket connection
 		$sock = socket_create(AF_UNIX, SOCK_STREAM, 0);
 		
 		if($sock == false) {
@@ -112,6 +113,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			return Array();
 		}
 		
+		// Connect to the socket
 		$result = socket_connect($sock, $this->socketPath);
 		
 		if($result == false) {
@@ -123,13 +125,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		socket_write($sock, $query . "OutputFormat:json\n");
 		socket_shutdown($sock, 1);
 		
+		// Read all information from the response and add it to a string
 		$read = '';
 		while('' != ($r = socket_read($sock, 65536))) {
 			$read .= $r;
 		}
 		
+		// Important: The socket needs to be closed after reading
 		socket_close($sock);
 		
+		// Returning an array
 		return json_decode($read);
 	}
 	
