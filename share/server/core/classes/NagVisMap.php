@@ -50,67 +50,6 @@ class NagVisMap extends GlobalMap {
 	}
 	
 	/**
-	 * Parses the Map and the Object options in json format
-	 *
-	 * @return	String 	String with JSON Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseMapPropertiesJson() {
-		$arr = Array();
-		$arr['map_name'] = $this->MAPCFG->getName();
-		$arr['alias'] = $this->MAPCFG->getValue('global', 0, 'alias');
-		$arr['background_image'] = $this->getBackgroundJson();
-		$arr['background_color'] = $this->MAPCFG->getValue('global', 0, 'background_color');
-		$arr['favicon_image'] = $this->getFavicon();
-		$arr['page_title'] = $this->MAPCFG->getValue('global', 0, 'alias').' ('.$this->MAPOBJ->getSummaryState().') :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');
-		$arr['event_background'] = $this->MAPCFG->getValue('global', 0, 'event_background');
-		$arr['event_highlight'] = $this->MAPCFG->getValue('global', 0, 'event_highlight');
-		$arr['event_highlight_interval'] = $this->MAPCFG->getValue('global', 0, 'event_highlight_interval');
-		$arr['event_highlight_duration'] = $this->MAPCFG->getValue('global', 0, 'event_highlight_duration');
-		$arr['event_log'] = $this->MAPCFG->getValue('global', 0, 'event_log');
-		$arr['event_log_level'] = $this->MAPCFG->getValue('global', 0, 'event_log_level');
-		$arr['event_log_height'] = $this->MAPCFG->getValue('global', 0, 'event_log_height');
-		$arr['event_log_hidden'] = $this->MAPCFG->getValue('global', 0, 'event_log_hidden');
-		$arr['event_scroll'] = $this->MAPCFG->getValue('global', 0, 'event_scroll');
-		$arr['event_sound'] = $this->MAPCFG->getValue('global', 0, 'event_sound');
-		
-		return json_encode($arr);
-	}
-	
-	/**
-	 * Gets the path to the background of the map
-	 *
-	 * @return	String  Javascript code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getBackgroundJson() {
-		return $this->MAPCFG->BACKGROUND->getFile();
-	}
-	
-	/**
-	 * Gets the favicon of the page representation the state of the map
-	 *
-	 * @return	String	Path to the favicon
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getFavicon() {
-		if($this->MAPOBJ->getSummaryInDowntime()) {
-			$favicon = 'downtime';
-		} elseif($this->MAPOBJ->getSummaryAcknowledgement()) {
-			$favicon = 'ack';
-		} else {
-			$favicon = strtolower($this->MAPOBJ->getSummaryState());
-		}
-		
-		if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'images').'internal/favicon_'.$favicon.'.png')) {
-			$favicon = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon_'.$favicon.'.png';
-		} else {
-			$favicon = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
-		}
-		return $favicon;
-	}
-	
-	/**
 	 * Parses the Objects
 	 *
 	 * @return	String  Json Code
@@ -119,7 +58,10 @@ class NagVisMap extends GlobalMap {
 	public function parseObjectsJson() {
 		$arrRet = Array();
 		
-		$i = 0;
+		// First parse the map object itselfs for having the
+		// summary information in the frontend
+		$arrRet[] = $this->MAPOBJ->parseJson();
+		
 		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
 			switch(get_class($OBJ)) {
 				case 'NagVisHost':
@@ -133,7 +75,6 @@ class NagVisMap extends GlobalMap {
 					$arrRet[] = $OBJ->parseJson();
 				break;
 			}
-			$i++;
 		}
 		
 		return json_encode($arrRet);

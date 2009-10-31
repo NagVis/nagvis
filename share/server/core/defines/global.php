@@ -69,6 +69,7 @@ define('SESSION_NAME', 'nagvis_session');
 
 // Other basic constants
 define('REQUIRES_AUTHORISATION', true);
+define('GET_STATE', true);
 
 // Permission wildcard
 define('AUTH_PERMISSION_WILDCARD', '*');

@@ -70,14 +70,28 @@ class CoreModMap extends CoreModule {
 	}
 	
 	private function getMapProperties() {
-		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
-		
 		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND);
-		return $MAP->parseMapPropertiesJson();
+		$arr = Array();
+		$arr['map_name'] = $MAPCFG->getName();
+		$arr['alias'] = $MAPCFG->getValue('global', 0, 'alias');
+		$arr['background_image'] = $MAPCFG->BACKGROUND->getFile();
+		$arr['background_color'] = $MAPCFG->getValue('global', 0, 'background_color');
+		$arr['favicon_image'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
+		$arr['page_title'] = $MAPCFG->getValue('global', 0, 'alias').' ([SUMMARY_STATE]) :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');
+		$arr['event_background'] = $MAPCFG->getValue('global', 0, 'event_background');
+		$arr['event_highlight'] = $MAPCFG->getValue('global', 0, 'event_highlight');
+		$arr['event_highlight_interval'] = $MAPCFG->getValue('global', 0, 'event_highlight_interval');
+		$arr['event_highlight_duration'] = $MAPCFG->getValue('global', 0, 'event_highlight_duration');
+		$arr['event_log'] = $MAPCFG->getValue('global', 0, 'event_log');
+		$arr['event_log_level'] = $MAPCFG->getValue('global', 0, 'event_log_level');
+		$arr['event_log_height'] = $MAPCFG->getValue('global', 0, 'event_log_height');
+		$arr['event_log_hidden'] = $MAPCFG->getValue('global', 0, 'event_log_hidden');
+		$arr['event_scroll'] = $MAPCFG->getValue('global', 0, 'event_scroll');
+		$arr['event_sound'] = $MAPCFG->getValue('global', 0, 'event_sound');
+		
+		return json_encode($arr);
 	}
 	
 	private function getMapObjects() {

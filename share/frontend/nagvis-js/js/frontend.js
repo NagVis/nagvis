@@ -803,6 +803,11 @@ function setPageBasics(oProperties) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setMapBasics(oProperties) {
+	// Set dynamic page title
+	oProperties.page_title = oPageProperties.alias+' ('+oMapSummaryObj.conf.summary_state+') :: '+oGeneralProperties.internal_title;
+	// Set dynamic favicon image
+	oProperties.favicon_image = getFaviconImage(oMapSummaryObj.conf);
+	
 	setPageBasics(oProperties);
 	setMapBackgroundImage(oProperties.background_image);
 }
@@ -818,7 +823,11 @@ function setMapBasics(oProperties) {
  */
 function setMapObjects(aMapObjectConf) {
 	eventlog("worker", "debug", "setMapObjects: Start setting map objects");
-	for(var i = 0, len = aMapObjectConf.length; i < len; i++) {
+	
+	// Don't loop the first object - that is the summary of the current map
+	oMapSummaryObj = new NagVisMap(aMapObjectConf[0]);
+	
+	for(var i = 1, len = aMapObjectConf.length; i < len; i++) {
 		var oObj;
 		
 		switch (aMapObjectConf[i].type) {
@@ -1510,13 +1519,14 @@ function parseMap(iMapCfgAge, mapName) {
 		
 		// Update timestamp for map configuration (No reparsing next time)
 		oFileAges[mapName] = iMapCfgAge;
-			
-		// Set map basics
-		setMapBasics(oMapBasics);
 		
 		// Set map objects
 		eventlog("worker", "info", "Parsing map objects");
 		setMapObjects(oMapObjects);
+		
+		// Set map basics
+		// Needs to be called after the summary state of the map is known
+		setMapBasics(oMapBasics);
 		
 		// Bulk get all hover templates which are needed on the map
 		eventlog("worker", "info", "Fetching hover templates and hover urls");
@@ -1589,13 +1599,14 @@ function parseAutomap(iMapCfgAge, mapName) {
 		
 		// Update timestamp for map configuration (No reparsing next time)
 		oFileAges[mapName] = iMapCfgAge;
-			
-		// Set map basics
-		setMapBasics(oMapBasics);
 		
 		// Set map objects
 		eventlog("worker", "info", "Parsing automap objects");
 		setMapObjects(oMapObjects);
+			
+		// Set map basics
+		// Needs to be called after the summary state of the map is known
+		setMapBasics(oMapBasics);
 		
 		// Bulk get all hover templates which are needed on the map
 		eventlog("worker", "info", "Fetching hover templates and hover urls");

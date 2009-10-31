@@ -37,6 +37,7 @@ var oViewProperties;
 var oFileAges;
 var oStatusMessageTimer;
 var aMapObjects = [];
+var oMapSummaryObj;
 
 // Initialize and define some other basic vars
 var iNow = Date.parse(new Date());
