@@ -119,7 +119,7 @@ class GlobalBackendlive implements GlobalBackendInterface {
 			return Array();
 		}
 		
-		socket_write($sock, $query . "Separators: 1 2 44\n");
+		socket_write($sock, $query . "Separators: 0 1 2 3\n");
 		socket_shutdown($sock, 1);
 		
 		$read = '';
