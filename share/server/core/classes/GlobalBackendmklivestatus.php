@@ -193,14 +193,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		$result = Array();
 		foreach($l as $line) {
-			$list = $line[0];
-			if($list) {
-				$members = explode(",", $list);
-				foreach ($members as $m) {
-					$result[] = $m;
-				}
-			}
+			$result = array_merge($result, $line[0]);
 		}
+		
 		return $result;
 	}
 	
@@ -586,9 +581,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		$result = Array();
 		foreach($l as $line) {
-			$parts = explode('|', $line);
-			$x = Array('host_name' => $parts[0], 'service_description' => $parts[1]);
-			$result[] = $x;
+			$result[] = Array('host_name' => $line[0], 'service_description' => $line[1]);
 		}
 		
 		return $result;
