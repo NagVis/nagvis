@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalBackendlive.php
+ * GlobalBackendmklivestatus.php
  *
  * Backend class for handling object and state information using the 
  * livestatus NEB module. For mor information about CheckMK's Livestatus 
@@ -34,7 +34,7 @@
  * For mor information about CheckMK's Livestatus Module
  * please visit: http://mathias-kettner.de/checkmk_livestatus.html
  */
-class GlobalBackendlive implements GlobalBackendInterface {
+class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	private $backendId = '';
 	private $socketPath = '';
 	
@@ -119,6 +119,11 @@ class GlobalBackendlive implements GlobalBackendInterface {
 			return Array();
 		}
 		
+		// 1, 2, 44
+		// Dataset:
+		// Field:
+		// List:
+		// Host/Service:
 		socket_write($sock, $query . "Separators: 0 1 2 3\n");
 		socket_shutdown($sock, 1);
 		
@@ -131,13 +136,13 @@ class GlobalBackendlive implements GlobalBackendInterface {
 		socket_close($sock);
 		
 		/* split into lines and fields */
-		$lines = explode("\001", $read);
+		$lines = explode("\000", $read);
 		/* 'field' after trailing linefeed */
 		@array_pop($lines);
 		
 		$result = Array();
 		foreach($lines as $line) {
-			$result[] = explode("\002", $line);
+			$result[] = explode("\001", $line);
 		}
 		
 		return $result;
