@@ -127,8 +127,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Read all information from the response and add it to a string
 		$read = '';
-		while('' != ($r = socket_read($sock, 65536))) {
+		while('' != ($r = @socket_read($sock, 65536))) {
 			$read .= $r;
+		}
+		
+		// Catch problems occured while reading? 104: Connection reset by peer
+		if(socket_last_error($sock) == 104) {
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($sock)))));
+			return Array();
 		}
 		
 		// Important: The socket needs to be closed after reading
