@@ -28,6 +28,7 @@
 class GlobalHeaderMenu {
 	private $CORE;
 	private $OBJPAGE;
+	private $AUTHORISATION;
 	
 	private $templateName;
 	private $pathHtmlBase;
@@ -41,9 +42,10 @@ class GlobalHeaderMenu {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $templateName, $OBJ = NULL) {
+	public function __construct($CORE, CoreAuthorisationHandler $AUTHORISATION, $templateName, $OBJ = NULL) {
 		$this->CORE = $CORE;
 		$this->OBJPAGE = $OBJ;
+		$this->AUTHORISATION = $AUTHORISATION;
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
@@ -83,6 +85,14 @@ class GlobalHeaderMenu {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function replaceDynamicMacros() {
+		$arrKeys = Array();
+		$arrVals = Array();
+		
+		// Replace current user
+		$arrKeys[] = '[current_user]';
+		// Get current username
+		$arrVals[] = $this->AUTHORISATION->getAuthentication()->getUser();
+		
 		// Replace some special macros
 		if($this->OBJPAGE !== null && (get_class($this->OBJPAGE) == 'NagVisMapCfg' || get_class($this->OBJPAGE) == 'NagVisAutomapCfg')) {
 			$arrKeys[] = '[current_map]';
@@ -130,6 +140,11 @@ class GlobalHeaderMenu {
 						}
 					}
 					
+					$this->code = preg_replace('/<!-- BEGIN '.$key.' -->(?:(?s).*)<!-- END '.$key.' -->/',$sReplace,$this->code);
+				} elseif($key == 'automaplist') {
+					$sReplace = '';
+					preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/', $this->code, $matchReturn1);
+					
 					foreach($this->CORE->getAvailableAutomaps() AS $mapName) {
 						$MAPCFG1 = new NagVisAutomapCfg($this->CORE, $mapName);
 						$MAPCFG1->readMapConfig(1);
@@ -160,8 +175,17 @@ class GlobalHeaderMenu {
 					$sReplace = '';
 					preg_match_all('/<!-- BEGIN '.$key.' -->((?s).*)<!-- END '.$key.' -->/', $this->code, $matchReturn1);
 					
-					foreach($this->CORE->getAvailableAndEnabledLanguages() AS $lang) {
+					$aLang = $this->CORE->getAvailableAndEnabledLanguages();
+					$numLang = count($aLang);
+					$i = 1;
+					foreach($aLang AS $lang) {
 						$sReplaceObj = str_replace('[language]', $lang, $matchReturn1[1][0]);
+						
+						if($i == $numLang) {
+							$sReplaceObj = str_replace('[class_underline]', 'class="underline"', $matchReturn1[1][0]);
+						} else {
+							$sReplaceObj = str_replace('[class_underline]', '', $matchReturn1[1][0]);
+						}
 						
 						// Get translated language name
 						switch($lang) {
@@ -185,6 +209,7 @@ class GlobalHeaderMenu {
 						$sReplaceObj = str_replace('[lang_language_located]', $languageLocated, $sReplaceObj);
 								
 						$sReplace .= $sReplaceObj;
+						$i++;
 					}
 					
 					$this->code = preg_replace('/<!-- BEGIN '.$key.' -->(?:(?s).*)<!-- END '.$key.' -->/', $sReplace, $this->code);
@@ -196,8 +221,6 @@ class GlobalHeaderMenu {
 		if(get_class($this->OBJPAGE) != 'NagVisMapCfg') {
 			$this->code = str_replace('[selected]','selected="selected"', $this->code);
 		}
-		
-		
 	}
 	
 	/**
@@ -212,6 +235,9 @@ class GlobalHeaderMenu {
 			'[html_templates]', 
 			'[html_template_images]',
 			'[current_language]',
+			'[lang_choose_language]',
+			'[lang_user]',
+			'[lang_logged_in]',
 			'[lang_select_map]',
 			'[lang_edit_map]',
 			'[lang_need_help]',
@@ -232,6 +258,9 @@ class GlobalHeaderMenu {
 			$this->CORE->getMainCfg()->getValue('paths','htmlheadertemplates'), 
 			$this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
 			$this->CORE->getLang()->getCurrentLanguage(),
+			$this->CORE->getLang()->getText('Choose Language'),
+			$this->CORE->getLang()->getText('User menu'),
+			$this->CORE->getLang()->getText('Logged in'),
 			$this->CORE->getLang()->getText('selectMap'),
 			$this->CORE->getLang()->getText('editMap'),
 			$this->CORE->getLang()->getText('needHelp'),

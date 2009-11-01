@@ -34,12 +34,18 @@ class CoreAuthorisationHandler {
 	
 	private $CORE;
 	private $MOD;
+	private $AUTHENTICATION;
 	
 	public function __construct(GlobalCore $CORE, CoreAuthHandler $AUTH, $sModule) {
 		$this->sModuleName = $sModule;
 		
 		$this->CORE = $CORE;
+		$this->AUTHENTICATION = $AUTH;
 		$this->MOD = new $sModule($this->CORE, $AUTH);
+	}
+	
+	public function getAuthentication() {
+		return $this->AUTHENTICATION;
 	}
 	
 	public function getModule() {

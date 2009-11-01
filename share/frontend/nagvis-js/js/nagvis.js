@@ -473,6 +473,7 @@ function switchRotation(obj, startLabel, stopLabel) {
 	}
 }
 
+// FIXME: Not needed in 1.5 anymore, maybe remove?
 function changeMap(htmlBase, mapName) {
 	if(mapName.match('^automap=')) {
 		mapName = mapName.replace(/automap=/, '');

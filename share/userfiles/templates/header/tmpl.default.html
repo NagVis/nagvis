@@ -1,36 +1,53 @@
 <link rel="stylesheet" type="text/css" href="[html_templates]tmpl.default.css" />
-<table class="header_table">
-	<tr>
-		<th class="logo"><a href="[html_base]/frontend/nagvis-js/index.php"><img src="[html_images]internal/logo_119x31.png" alt="NagVis"></a></th>
-		<td style="width:150px;padding-left:10px;">[lang_select_map]: </td>
-		<td style="width:150px;">
-			<select style="width:100%;" name="chooseMap" onChange="changeMap('[html_base]',this.options[this.selectedIndex].value)">
-				<option value="" [selected]>[lang_overview]</option>
-				<!-- BEGIN maplist --><option value="[map_name][url_params]" [selected]>[map_alias]</option><!-- END maplist -->
-			</select>
-		</td>
-		<td style="width:150px;padding-left:10px;">[lang_search]: </td>
-		<td style="width:120px;">
-			<input type="text" name="highlightInput" id="highlightInput" onkeypress="searchObjectsKeyCheck(this.value, event)" />
-		</td>
-		<th style="width:150px;"><a href="[html_base]/frontend/wui/index.php?map=[current_map]">[lang_edit_map]</a></th>
-		<td></td>
-		<td style="width:20px;text-align:center;" id="refreshCounterHead"></td>
-		<th style="width:150px;">
-			<a id="rotationSwitch" href="#" onClick="switchRotation(this,'[lang_rotation_start]','[lang_rotation_stop]');"><!-- This label is set with the setRotationLabel() function dynamicaly --></a>
-		</th>
-		<td style="width:150px;">
-			<select style="width:100%;" name="chooseSupport" onChange="window.open(this.options[selectedIndex].value);this.selectedIndex=0">
-				<option value="" selected="selected">[lang_need_help]</option>
-				<option value="[html_base]/docs/[current_language]/index.html">[lang_online_doc]</option>
-				<option value="http://www.nagios-portal.org/wbb/index.php?page=Board&amp;boardID=42">[lang_forum]</option>
-				<option value="[html_base]/frontend/nagvis-js/index.php?mod=Info">[lang_support_info]</option>
-				<option value="">---</option>
-				<!-- BEGIN langlist --><option value="[html_base]/frontend/nagvis-js/index.php?lang=[language]">[lang_language_located]</option><!-- END langlist -->
-				<option value="">---</option>
-				<option value="[html_base]/frontend/nagvis-js/index.php?mod=Auth&act=logout">[lang_logout]</option>
-			</select>
-		</td>
-	</tr>
-</table>
+<script type="text/javascript" src="[html_templates]tmpl.default.js"></script>
+<ul class="head">
+	<li class="logo"><a href="[html_base]/frontend/nagvis-js/index.php"><img src="[html_images]internal/logo_96x25.png" alt="NagVis" /></a></li>
+	<li>
+		<dl class="dropdown">
+			<dt id="views-ddheader" onmouseover="ddMenu('views',1)" onmouseout="ddMenu('views',-1)">[lang_select_map] <img src="[html_template_images]tmpl.default.header_down.png" alt="&#8711;" /></dt>
+			<dd id="views-ddcontent" onmouseover="cancelHide('views')" onmouseout="ddMenu('views',-1)">
+				<ul>
+					<li><a href="[html_base]/frontend/nagvis-js/index.php">[lang_overview]</a></li>
+					<!-- BEGIN maplist --><li><a href="[html_base]/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show=[map_name][url_params]">[map_alias]</a></li><!-- END maplist -->
+					<!-- BEGIN automaplist --><li><a href="[html_base]/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show=[map_name][url_params]">[map_alias]</a></li><!-- END automaplist -->
+					<li><a href="[html_base]/frontend/wui/index.php?map=[current_map]" class="underline">[lang_edit_map]</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</li>
+	<li style="width:300px;"></li>
+	<li>
+		<dl class="dropdown">
+		  <dt id="user-ddheader" onmouseover="ddMenu('user',1)" onmouseout="ddMenu('user',-1)">[lang_user]<img src="[html_template_images]tmpl.default.header_down.png" alt="&#8711;" /></dt>
+		  <dd id="user-ddcontent" onmouseover="cancelHide('user')" onmouseout="ddMenu('user',-1)">
+		    <ul>
+		    	<li><a href="#">[lang_logged_in]: [current_user]</a></li>
+		    	<li><a href="[html_base]/frontend/nagvis-js/index.php?mod=Auth&act=logout" class="underline">[lang_logout]</a></li>
+		    </ul>
+		  </dd>
+		</dl>
+	</li>
+	<li>
+		<dl class="dropdown">
+		  <dt id="language-ddheader" onmouseover="ddMenu('language',1)" onmouseout="ddMenu('language',-1)">[lang_choose_language] <img src="[html_template_images]tmpl.default.header_down.png" alt="&#8711;" /></dt>
+		  <dd id="language-ddcontent" onmouseover="cancelHide('language')" onmouseout="ddMenu('language',-1)">
+		    <ul>
+		    	<!-- BEGIN langlist --><li><a href="[html_base]/frontend/nagvis-js/index.php?lang=[language]" [class_underline]>[lang_language_located]</a></li><!-- END langlist -->
+		    </ul>
+		  </dd>
+		</dl>
+	</li>
+	<li>
+		<dl class="dropdown">
+		  <dt id="support-ddheader" onmouseover="ddMenu('support',1)" onmouseout="ddMenu('support',-1)">[lang_need_help] <img src="[html_template_images]tmpl.default.header_down.png" alt="&#8711;" /></dt>
+		  <dd id="support-ddcontent" onmouseover="cancelHide('support')" onmouseout="ddMenu('support',-1)">
+		    <ul>
+		      <li><a href="[html_base]/docs/[current_language]/index.html">[lang_online_doc]</a></li>
+		      <li><a href="http://www.nagios-portal.org/wbb/index.php?page=Board&amp;boardID=42">[lang_forum]</a></li>
+		      <li><a href="[html_base]/frontend/nagvis-js/index.php?mod=Info" class="underline">[lang_support_info]</a></li>
+		    </ul>
+		  </dd>
+		</dl>
+	</li>
+</ul>
 <script type="text/javascript">setRotationLabel('[lang_rotation_start]','[lang_rotation_stop]');</script>

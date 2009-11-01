@@ -833,7 +833,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/userfiles/images/shapes/';
 		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/userfiles/images/maps/';
 		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/hover/';
-		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $htmlBase.'/userfiles/images/emplates/header/';
+		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/header/';
 		$this->validConfig['paths']['htmlcontexttemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/context/';
 	}
 	

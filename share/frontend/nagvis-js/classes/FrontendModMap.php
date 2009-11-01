@@ -62,7 +62,7 @@ class FrontendModMap extends FrontendModule {
 		// Need to parse the header menu?
 		if($MAPCFG->getValue('global',0 ,'header_menu')) {
       // Parse the header menu
-      $HEADER = new GlobalHeaderMenu($this->CORE, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
+      $HEADER = new GlobalHeaderMenu($this->CORE, $this->AUTHORISATION, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
 			$INDEX->setHeaderMenu($HEADER->__toString());
     }
 
