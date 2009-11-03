@@ -355,8 +355,12 @@ function confirm_restore() {
  * @return  Boolean  
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function formSubmit(formId, action) {
+function formSubmit(formId, target, bReloadPage) {
 	var getstr = '';
+	
+	if(typeof bReloadPage === 'undefined') {
+		bReloadPage = true;
+	}
 	
 	// Read form contents
 	var oForm = document.getElementById(formId);
@@ -405,8 +409,11 @@ function formSubmit(formId, action) {
 		}
 	}
 	
+	aFields = null;
+	oForm = null;
+	
 	// Submit data
-	var oResult = getSyncRequest('./ajax_handler.php?action='+action+'&'+getstr);
+	var oResult = getSyncRequest(target+'&'+getstr);
 	if(oResult && oResult.status != 'OK') {
 		alert(oResult.message);
 		return false;
@@ -417,7 +424,9 @@ function formSubmit(formId, action) {
 	popupWindowClose();
 	
 	// FIXME: Reloading the map (Change to reload object)
-	document.location.href='./index.php?map='+mapname;
+	if(bReloadPage === true) {
+		document.location.href='./index.php?map='+mapname;
+	}
 	
 	return true;
 }

@@ -96,6 +96,7 @@ $MHANDLER = new FrontendModuleHandler($CORE);
 // Register valid modules
 // Unregistered modules can not be accessed
 $MHANDLER->regModule('LogonDialog');
+$MHANDLER->regModule('ChangePassword');
 $MHANDLER->regModule('Info');
 $MHANDLER->regModule('Auth');
 $MHANDLER->regModule('Map');

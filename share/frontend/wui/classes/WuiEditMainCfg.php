@@ -57,7 +57,7 @@ class WuiEditMainCfg extends GlobalPage {
 		
 		$this->FORM = new GlobalForm(Array('name' => 'edit_config',
 			'id' => 'edit_config',
-			'action' => 'javascript:(validateMainCfgForm()) ? formSubmit(\'edit_config\', \'updateMainCfg\');',
+			'action' => 'javascript:(validateMainCfgForm()) ? formSubmit(\'edit_config\', \'./ajax_handler.php?action=updateMainCfg\') : true ;',
 			'method' => '',
 			'cols' => '3'));
 		

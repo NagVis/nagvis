@@ -61,6 +61,17 @@ class CoreAuthHandler {
 		}
 	}
 	
+	public function passNewPassword($aData) {
+		// FIXME: First check if the auth module supports this mechanism
+		
+		// Some simple validations
+		if($aData !== false) {
+			$this->MOD->passNewPassword($aData);
+		} else {
+			//@todo: error handling
+		}
+	}
+	
 	private function getCredentials() {
 		return $this->MOD->getCredentials();
 	}
@@ -71,6 +82,20 @@ class CoreAuthHandler {
 	
 	public function getUserId() {
 		return $this->MOD->getUserId();
+	}
+	
+	public function changePassword() {
+		// FIXME: First check if the auth module supports this mechanism
+		
+		// Ask the module
+		$bChanged = $this->MOD->changePassword();
+		
+		// Save success to session (only if this is no session auth)
+		if($bChanged === true && $this->sModuleName != 'CoreAuthModSession') {
+			$this->SESS->set('authCredentials', $this->getCredentials());
+		}
+		
+		return $bChanged;
 	}
 	
 	public function isAuthenticated() {

@@ -389,3 +389,93 @@ table.infopage_hover_table label {
 #messageBoxDiv td.note {
 	background-color: #CCE5FF;
 }
+
+/*
+ * popupWindow css
+ */
+
+div#popupWindow {
+	z-index: 2000;
+}
+
+/* Popup window master table */
+table#popupWindowMaster {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-collapse: separate;
+	
+	margin-left: 8px;
+	padding: 16px 16px 40px 16px;
+	font-weight: normal;
+	-moz-border-radius: 11px;
+	-khtml-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	border-radius: 5px;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	-moz-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+	-webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+	-khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+	box-shadow: rgba(200,200,200,1) 0 4px 18px;
+}
+
+table#popupWindowMaster tr th, 
+table#popupWindowMaster tr td {
+	background-color: transparent;
+	border: 0;
+	
+	font-size: 10px;
+	color: #43B3CF;
+}
+/* Title bar */
+table#popupWindowMaster tbody tr th#dragbar {
+	text-align: left;
+	font-size: 14px;
+	padding-left: 10px;
+	cursor: pointer;
+}
+
+/* Close button */
+table#popupWindowMaster tbody tr th.control {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	font-size: 16px;
+	text-align: center;
+	color: #43B3CF;
+	font-weight: bold;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+/* Content styling */
+td#popupWindowContent {
+	padding-top: 5px;	
+}
+
+td#popupWindowContent table {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border-collapse:collapse;
+}
+
+td#popupWindowContent table tr th, 
+td#popupWindowContent table tr td {
+	background-color: #eee;
+	border: 1px #a4a4a4 solid;
+	
+	font-size: 10px;
+	font-weight: bold;
+	color: #314455;
+}
+
+td#popupWindowContent label {
+	color: #777;
+	font-size: 13px;
+}
+
+td#popupWindowContent p {
+	margin-bottom: 12px;
+}

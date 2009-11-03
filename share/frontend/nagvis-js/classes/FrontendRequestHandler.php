@@ -12,7 +12,11 @@ class FrontendRequestHandler {
 	}
 	
 	public function get($sKey) {
-		return $this->aOpts[$sKey];
+		if(isset($this->aOpts[$sKey])) {
+			return $this->aOpts[$sKey];
+		} else {
+			return null;
+		}
 	}
 	
 	public function isLongerThan($sKey, $iLen) {

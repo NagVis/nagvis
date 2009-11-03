@@ -8,7 +8,9 @@ class FrontendModAuth extends FrontendModule {
 		$this->CORE = $CORE;
 		$logonModule = $this->CORE->getMainCfg()->getValue('global', 'logonmodule');
 		
-		$this->aActions = Array('logout' => 0, 'login' => 0);
+		$this->aActions = Array('logout' => REQUIRES_AUTHORISATION,
+		                        'login' => 0,
+		                        'changePassword' => REQUIRES_AUTHORISATION);
 		
 		$SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
 		                                   $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
@@ -20,6 +22,10 @@ class FrontendModAuth extends FrontendModule {
 	
 	public function passCredentials($aCredentials) {
 		return $this->AUTH->passCredentials($aCredentials);
+	}
+	
+	public function passNewPassword($aCredentials) {
+		return $this->AUTH->passNewPassword($aCredentials);
 	}
 	
 	public function handleAction() {
@@ -34,6 +40,15 @@ class FrontendModAuth extends FrontendModule {
 					} else {
 						// Invalid credentials
 						$sReturn = $this->msgInvalidCredentials();
+					}
+				break;
+				case 'changePassword':
+					if($this->AUTH->changePassword()) {
+						// Display success with link and refresh in 5 seconds to called page
+						$sReturn = $this->msgPasswordChanged();
+					} else {
+						// Invalid credentials
+						$sReturn = $this->msgPasswordNotChanged();
 					}
 				break;
 				case 'logout':
@@ -57,6 +72,18 @@ class FrontendModAuth extends FrontendModule {
 	
 	public function msgInvalidCredentials() {
 		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, $this->CORE->getLang()->getText('Authentication failed'), 1, $this->GHANDLER->getReferer());
+		
+		return '';
+	}
+	
+	public function msgPasswordChanged() {
+		new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The password has been changed. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, null, 1, $this->GHANDLER->getReferer());
+		
+		return '';
+	}
+	
+	public function msgPasswordNotChanged() {
+		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The password could not be changed. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->GHANDLER->getReferer())), null, null, 1, $this->GHANDLER->getReferer());
 		
 		return '';
 	}

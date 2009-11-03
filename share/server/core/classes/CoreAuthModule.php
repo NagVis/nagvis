@@ -30,6 +30,8 @@
  */
 abstract class CoreAuthModule {
 	abstract public function passCredentials($aData);
+	abstract public function passNewPassword($aData);
+	abstract public function changePassword();
 	abstract public function getCredentials();
 	abstract public function isAuthenticated();
 	abstract public function getUser();

@@ -32,6 +32,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	private $iUserId = -1;
 	private $sUsername = '';
 	private $sPassword = '';
+	private $sPasswordnew = '';
 	private $sPasswordHash = '';
 	
 	public function __construct(GlobalCore $CORE) {
@@ -158,6 +159,11 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		return intval($RES->fetchSingle());
 	}
 	
+	private function updatePassword() {
+		$RES = $this->DB->query('UPDATE users SET password=\''.sqlite_escape_string($this->sPasswordHash).'\' WHERE name=\''.sqlite_escape_string($this->sUsername).'\'');
+		return intval($RES->fetchSingle());
+	}
+	
 	public function passCredentials($aData) {
 		if(isset($aData['user'])) {
 			$this->sUsername = $aData['user'];
@@ -170,10 +176,45 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		}
 	}
 	
+	public function passNewPassword($aData) {
+		if(isset($aData['user'])) {
+			$this->sUsername = $aData['user'];
+		}
+		if(isset($aData['password'])) {
+			$this->sPassword = $aData['password'];
+		}
+		if(isset($aData['passwordNew'])) {
+			$this->sPasswordNew = $aData['passwordNew'];
+		}
+	}
+	
 	public function getCredentials() {
 		return Array('user' => $this->sUsername,
 		             'passwordHash' => $this->sPasswordHash,
 		             'userId' => $this->iUserId);
+	}
+	
+	public function changePassword() {
+		$bReturn = false;
+		
+		// Check the authentication with the old password
+		if($this->isAuthenticated()) {
+			// Set new password to current one
+			$this->sPassword = $this->sPasswordNew;
+			
+			// Compose the new password hash
+			$this->sPasswordHash = sha1(AUTH_PASSWORD_SALT.$this->sPassword);
+			
+			// Update password
+			$this->updatePassword();
+			
+			$bReturn = true;
+		} else {
+			//FIXME: Logging? Invalid user
+			$bReturn = false;
+		}
+		
+		return $bReturn;
 	}
 	
 	public function isAuthenticated() {

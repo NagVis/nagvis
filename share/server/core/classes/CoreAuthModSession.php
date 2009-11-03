@@ -44,6 +44,8 @@ class CoreAuthModSession extends CoreAuthModule {
 	}
 	
 	public function passCredentials($aData) {}
+	public function passNewPassword($aData) {}
+	public function changePassword() {}
 	
 	public function getCredentials() { return Array(); }
 	

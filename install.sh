@@ -558,6 +558,7 @@ cmp_js() {
 	OUT=NagVisCompressed.js
 	>$OUT
 	cmp nagvis.js
+	cmp popupWindow.js
 	cmp ExtBase.js
 	cmp frontendMessage.js
 	cmp frontendEventlog.js

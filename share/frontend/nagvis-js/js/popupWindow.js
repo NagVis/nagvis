@@ -1,8 +1,8 @@
 /*****************************************************************************
  *
- * popupWindow.js - Handles javascript popup windows in NagVis WUI
+ * popupWindow.js - Handles javascript popup windows in NagVis
  *
- * Copyright (c) 2004-2009 NagVis Project
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -96,19 +96,33 @@ function popupWindowClose() {
  * @return  Boolean  
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function popupWindow(title, oContent) {
+function popupWindow(title, oContent, openOnMousePosition) {
 	if(oContent === null || oContent.code === null) {
 		return false;
+	}
+	
+	if(typeof openOnMousePosition === 'undefined') {
+		openOnMousePosition = true;
+	}
+	
+	// Default window position
+	var posX = 100;
+	var posY = 20;
+	
+	// Detect the current mouse position and create the window there
+	if(openOnMousePosition) {
+		//FIXME: Maybe code this in the future
 	}
 	
 	var oContainerDiv = document.createElement('div');
 	oContainerDiv.setAttribute('id', 'popupWindow');
 	oContainerDiv.style.position = 'absolute';
 	oContainerDiv.style.width = '400px';
-	oContainerDiv.style.left = '100px';
-	oContainerDiv.style.top = '20px';
+	oContainerDiv.style.left = posX+'px';
+	oContainerDiv.style.top = posY+'px';
 	
 	var oTable = document.createElement('table');
+	oTable.setAttribute('id', 'popupWindowMaster');
 	var oTbody = document.createElement('tbody');
 	var oRow = document.createElement('tr');
 	var oCell = document.createElement('th');
@@ -144,6 +158,7 @@ function popupWindow(title, oContent) {
 	oRow = document.createElement('tr');
 	
 	oCell = document.createElement('td');
+	oCell.setAttribute('id', 'popupWindowContent');
 	oCell.colSpan = '2';
 	
 	oCell.innerHTML = oContent.code;

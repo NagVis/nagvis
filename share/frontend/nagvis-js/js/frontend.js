@@ -3,7 +3,7 @@
  * frontend.js - Functions implementing the new ajax frontend with automatic
  *               worker function etc.
  *
- * Copyright (c) 2004-2008 NagVis Project
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -33,6 +33,24 @@ var oHoverTemplates = {};
 var oHoverUrls = {};
 var oContextTemplates = {};
 var oAutomapParams = {};
+
+/**
+ * showChangePassword()
+ *
+ * Show the change password dialog to the user
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function showChangePassword(sTitle) {
+	// FIXME: ChangePassword should be a core module
+	var oContent = getSyncRequest(oGeneralProperties.path_base+'/frontend/nagvis-js/index.php?mod=ChangePassword&act=view', true, false);
+	
+	if(typeof oContent !== 'undefined') {
+		popupWindow(sTitle, oContent, true);
+	}
+	
+	oContent = null;
+}
 
 /**
  * searchObjectsKeyCheck()
@@ -1273,7 +1291,7 @@ function parseOverviewGeomap() {
 		
 		// Link
 		var oLink = document.createElement('a');
-		oLink.href = oGeneralProperties.path_htmlbase+'/netmap/shell.html';
+		oLink.href = oGeneralProperties.path_base+'/netmap/shell.html';
 		
 		// Status image
 		var oImg = document.createElement('img');

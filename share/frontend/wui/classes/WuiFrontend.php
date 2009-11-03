@@ -50,7 +50,7 @@ class WuiFrontend extends GlobalPage {
 							$htmlJs.'ajax.js',
 							$htmlJs.'frontendMessage.js',
 							$htmlJs.'nagvis.js',
-					  	$htmlBase.'/frontend/wui/js/popupWindow.js',
+							$htmlJs.'popupWindow.js',
 							$htmlBase.'/frontend/wui/js/wui.js',
 					  	$htmlBase.'/frontend/wui/js/ajax.js',
 					  	$htmlBase.'/frontend/wui/js/addmodify.js',
