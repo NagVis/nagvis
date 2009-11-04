@@ -50,8 +50,23 @@ function submitFrontendForm(sUrl, sFormId) {
 		frontendMessage(oMsg);
 		oMsg = null;
 		
+		// Maybe there is a request for a reload/redirect
+		if(typeof oResult.redirectTime !== 'undefined') {
+			var sUrl = window.location.href;
+			
+			// Maybe enable redirect
+			if(typeof oResult.redirectUrl !== 'undefined') {
+				sUrl = oResult.redirectUrl;
+			}
+			
+			// Register reload/redirect
+			setTimeout(function() {window.location = sUrl;}, oResult.redirectTime*1000);
+		}
+		
 		// Additionally close the popup window when the response is positive
-		popupWindowClose();
+		if(typeof popupWindowClose == 'function') { 
+			popupWindowClose();
+		}
 	}
 }
 
