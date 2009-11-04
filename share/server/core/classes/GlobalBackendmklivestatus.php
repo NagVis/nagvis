@@ -62,6 +62,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		if(!$this->checkSocketExists()) {
 			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The livestatus socket [SOCKET] in backend [BACKENDID] does not exist', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
 		}
+		if(!function_exists('socket_create')) {
+			new GlobalFrontendMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+    }
+
 		
 		return true;
 	}
