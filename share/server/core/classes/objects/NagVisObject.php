@@ -482,19 +482,15 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsByState($OBJ1, $OBJ2) {
-		// Textboxes and shapes do not have getSummaryState method, exclude them here
-		if(method_exists($OBJ1, 'getSummaryState') && method_exists($OBJ2, 'getSummaryState')) {
-			$state1 = $OBJ1->getSummaryState();
-			$state2 = $OBJ2->getSummaryState();
-
-			if($state1 == '' || $state2 == '') {
-				return 0;
-			}
-		} else {
+		// Do not sort shapes and textboxes
+		if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ1->getType() == 'line' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox' || $OBJ2->getType() == 'line') {
 			return 0;
 		}
+		
+		$state1 = $OBJ1->getSummaryState();
+		$state2 = $OBJ2->getSummaryState();
 
-		// Break when nothing to compare
+		// Quit when nothing to compare
 		if($state1 == '' || $state2 == '') {
 			return 0;
 		}
