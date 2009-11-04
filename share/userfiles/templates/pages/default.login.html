@@ -3,23 +3,32 @@
 <head>
 	<title>{$pageTitle}</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel='stylesheet' id='login-css'  href='{$stylesheet}' type='text/css' media='all' />
+	<script type="text/javascript" src="{$htmlJs}nagvis.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontendMessage.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
+	<script type="text/javascript" src="{$htmlJs}ajax.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontend.js"></script>
+	<link rel="stylesheet" type="text/css" href="{$htmlCss}style.css">
+	<link rel="stylesheet" type="text/css" href="{$stylesheet}" id="login-css"  media="all" />
 	<link rel="shortcut icon" href="{$htmlBase}frontend/nagvis-js/images/internal/favicon.png" />
 	<meta name='robots' content='noindex,nofollow' />
+	<script type="text/javascript">
+		oGeneralProperties = {$generalProperties};
+	</script>
 </head>
 <body class="login">
 
 <div id="login">
 <h1><h1><a href="#" title="{$pageTitle}" style="background-image:url({$htmlImages}internal/logo_96x25.png)">{$pageTitle}</a></h1>
 
-<form name="loginform" id="loginform" action="{$formTarget}" method="post">
+<form name="loginform" id="loginform" action="#" onsubmit="submitFrontendForm('{$formTarget}', 'loginform');return false" method="post">
 	<p>
 		<label>{$langName}<br />
-		<input type="text" name="username" id="user_login" class="input" value="" size="{$maxLength}" tabindex="10" /></label>
+		<input type="text" name="username" id="user_login" class="input" value="" size="{$maxUsernameLength}" tabindex="10" /></label>
 	</p>
 	<p>
 		<label>{$langPassword}<br />
-		<input type="password" name="password" id="user_pass" class="input" value="" size="{$maxLength}" tabindex="20" /></label>
+		<input type="password" name="password" id="user_pass" class="input" value="" size="{$maxPasswordLength}" tabindex="20" /></label>
 
 	</p>
 	<p class="submit">

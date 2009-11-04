@@ -81,6 +81,12 @@ class GlobalMessage {
 		// page which is being called
 		if(CONST_AJAX) {
 			$MSG = new CoreMessage(strtolower($type), $message, $pathHtmlBase, $title);
+			
+			// Maybe need to reload/redirect
+			if($iReloadTime !== null) {
+				$MSG->reload($iReloadTime, $sReloadUrl);
+			}
+			
 			print($MSG);
 		} else {
 			$MSG = new FrontendMessage(strtolower($type), $message, $pathHtmlBase, $title);

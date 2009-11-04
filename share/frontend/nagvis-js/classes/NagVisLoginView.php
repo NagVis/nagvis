@@ -27,7 +27,6 @@
  */
 class NagVisLoginView {
 	private $CORE;
-	private $iInputMaxLength = 15;
 	
 	/**
 	 * Class Constructor
@@ -51,12 +50,16 @@ class NagVisLoginView {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
+			'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
 			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; Log In',
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/frontend/nagvis-js/index.php?mod=LogonDialog&amp;act=login',
+			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
+			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
+			'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php?mod=Auth&amp;act=login',
 			'stylesheet' => $this->CORE->getMainCfg()->getValue('paths', 'htmlpagetemplates').'/default.css',
 			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
-      'maxLength' => $this->iInputMaxLength,
+      'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
+      'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
       'langName' => $this->CORE->getLang()->getText('Name'),
       'langPassword' => $this->CORE->getLang()->getText('Password'),
       'langLogin' => $this->CORE->getLang()->getText('Login')

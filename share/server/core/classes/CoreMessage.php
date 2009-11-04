@@ -57,6 +57,8 @@ class CoreMessage {
 	private $type;
 	private $message;
 	private $title;
+	private $reloadTime = null;
+	private $reloadUrl = null;
 
 	/**
 	 * The contructor checks the type and builds the message box
@@ -76,6 +78,17 @@ class CoreMessage {
 	}
 	
 	/**
+	 * Sets the redirect/reload information for the message box
+	 *
+	 * @access  public
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function reload($time, $url) {
+		$this->reloadTime = $time;
+		$this->reloadUrl = $url;
+	}
+	
+	/**
 	 * Build a message for the user for ajax frontend 
 	 *
 	 * @access  private
@@ -84,7 +97,9 @@ class CoreMessage {
 	private function buildMessage() {
 		$aMessage = Array('type' => $this->type,
 		                  'message' => $this->message, 
-		                  'title' => $this->title);
+		                  'title' => $this->title,
+		                  'reloadTime' => $this->reloadTime,
+		                  'reloadUrl' => $this->reloadUrl);
 		return 'NagVisError:'.json_encode($aMessage);
 	}
 
