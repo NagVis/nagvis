@@ -25,12 +25,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-var popupIE = document.all;
 var popupNN6 = document.getElementById && !document.all;
-
 var bDragging = false;
-var x, y, tx, ty;
-var dobj;
+var pwX, pwY, pwTx, pwTy;
+var dragObj = null;
 
 /**
  * movemouse()
@@ -43,8 +41,8 @@ var dobj;
  */
 function movemouse(e) {
  if(bDragging) {
-   dobj.style.left = popupNN6 ? (tx + e.clientX - x) + 'px' : (tx + event.clientX - x) + 'px';
-   dobj.style.top  = popupNN6 ? (ty + e.clientY - y) + 'px' : (ty + event.clientY - y) + 'px';
+   dragObj.style.left = popupNN6 ? (pwTx + e.clientX - pwX) + 'px' : (pwTx + event.clientX - pwX) + 'px';
+   dragObj.style.top  = popupNN6 ? (pwTy + e.clientY - pwY) + 'px' : (pwTy + event.clientY - pwY) + 'px';
 	 
    return false;
  }
@@ -64,14 +62,17 @@ function movemouse(e) {
 function selectmouse(e) {
 	bDragging = true;
 	
-	dobj = document.getElementById('popupWindow');
+	dragObj = document.getElementById('popupWindow');
 	
-	tx = parseInt(dobj.style.left+0, 10);
-	ty = parseInt(dobj.style.top+0, 10);
-	x = popupNN6 ? e.clientX : event.clientX;
-	y = popupNN6 ? e.clientY : event.clientY;
+	pwTx = parseInt(dragObj.style.left+0, 10);
+	pwTy = parseInt(dragObj.style.top+0, 10);
+	pwX = popupNN6 ? e.clientX : event.clientX;
+	pwY = popupNN6 ? e.clientY : event.clientY;
 	
-	document.onmousemove=movemouse;
+	// Register the popup window handling on the body element
+	// The document.onmousemove is used by the hover menu
+	document.body.onmousemove=movemouse;
+	
 	return false;
 }
 
