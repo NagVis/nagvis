@@ -432,12 +432,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		$l = $this->queryLivestatus($query);
 		
-		reset($l);
-		
 		$result = Array();
 		$arrReturn = Array();
 		
-		if(count($l) <= 0) {
+		if(!is_array($l) || count($l) <= 0) {
 			if(isset($serviceName) && $serviceName != '') {
 				$arrReturn['state'] = 'ERROR';
 				$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
