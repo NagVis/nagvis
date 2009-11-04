@@ -37,7 +37,7 @@ class CoreAuthHandler {
 	private $MOD;
 	
 	private $sModuleName;
-	private $bIsAuthenticated;
+	private $bIsAuthenticated = null;
 	
 	public function __construct(GlobalCore $CORE, CoreSessionHandler $SESS, $sModule) {
 		$this->CORE = $CORE;
@@ -98,9 +98,13 @@ class CoreAuthHandler {
 		return $bChanged;
 	}
 	
+	public function resetAuthCheck() {
+		$this->bIsAuthenticated = null;
+	}
+	
 	public function isAuthenticated() {
 		// Don't do these things twice
-		if(!isset($this->bIsAuthenticated)) {
+		if($this->bIsAuthenticated === null) {
 			// Ask the module
 			$this->bIsAuthenticated = $this->MOD->isAuthenticated();
 			

@@ -31,8 +31,10 @@
 class CoreAuthModSession extends CoreAuthModule {
 	private $CORE;
 	private $SHANDLER;
+	private $REALAUTH = null;
 	private $iUserId = -1;
 	private $sUsername = '';
+	private $sPassword = '';
 	private $sPasswordHash = '';
 	
 	public function __construct(GlobalCore $CORE) {
@@ -43,14 +45,49 @@ class CoreAuthModSession extends CoreAuthModule {
 		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
 	}
 	
-	public function passCredentials($aData) {}
-	public function passNewPassword($aData) {}
-	public function changePassword() {}
+	private function initRealAuthModule() {
+		$this->REALAUTH = new CoreAuthHandler($this->CORE, $this->SHANDLER, $this->CORE->getMainCfg()->getValue('global','authmodule'));
+	}
+	
+	public function passCredentials($aData) {
+		if(isset($aData['user'])) {
+			$this->sUsername = $aData['user'];
+		}
+		
+		if(isset($aData['password'])) {
+			$this->sPassword = $aData['password'];
+		}
+	}
+	
+	// The session auth module does not change password itselfs. It calls the real
+	// authentication module for performing this change
+	public function passNewPassword($aData) {
+		// Initialize the real authentication module when needed
+		if($this->REALAUTH === null) {
+			$this->initRealAuthModule();
+		}
+		
+		// Pass the new information to the real auth module
+		return $this->REALAUTH->passNewPassword($aData);
+	}
+	
+	// The session auth module does not change password itselfs. It calls the real
+	// authentication module for performing this change
+	public function changePassword() {
+		// The real authentication module should already have been initialized here
+		if($this->REALAUTH === null) {
+			return false;
+		}
+		
+		return $this->REALAUTH->changePassword();
+	}
 	
 	public function getCredentials() { return Array(); }
 	
 	public function isAuthenticated() {
-		// Are the options set?
+		$aCredentials = null;
+		
+		// Are the sessions options set? Use them for authentication
 		if($this->SHANDLER->isSetAndNotEmpty('authCredentials')) {
 			$aCredentials = $this->SHANDLER->get('authCredentials');
 			
@@ -63,16 +100,29 @@ class CoreAuthModSession extends CoreAuthModule {
 			if(isset($aCredentials['userId'])) {
 				$this->iUserId = $aCredentials['userId'];
 			}
+		}
+		
+		// Did the user just try to authenticate? Then passCredentials should be
+		// called before to put the credentials here
+		if($this->sUsername !== '' && $this->sPassword !== '') {
+			$aCredentials = Array('user' => $this->sUsername, 'password' => $this->sPassword);
+		}
+		
+		// If none of the above fit, then break and return false
+		if($aCredentials === null) {
+			return false;
+		}
 			
-			// Validate data
-			$AUTH = new CoreAuthHandler($this->CORE, $this->SHANDLER, $this->CORE->getMainCfg()->getValue('global','authmodule'));
-			$AUTH->passCredentials($aCredentials);
-			
-			if($AUTH->isAuthenticated()) {
-				return true;
-			} else {
-				return false;
-			}
+		// Initialize the real auth module when needed
+		if($this->REALAUTH === null) {
+			$this->initRealAuthModule();
+		}
+		
+		// Validate data
+		$this->REALAUTH->passCredentials($aCredentials);
+		
+		if($this->REALAUTH->isAuthenticated()) {
+			return true;
 		} else {
 			return false;
 		}

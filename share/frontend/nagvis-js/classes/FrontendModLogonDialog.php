@@ -10,7 +10,9 @@ class FrontendModLogonDialog extends FrontendModule {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view' => 0, 'login' => 0);
+		$this->aActions = Array('view' => 0,
+		                        'login' => 0,
+		                        'logout' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new FrontendRequestHandler($_POST);
 	}
@@ -34,20 +36,39 @@ class FrontendModLogonDialog extends FrontendModule {
 					if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated()) {
 						$aReturn = $this->handleResponse();
 						
-						$AUTH = new FrontendModAuth($this->CORE);
-						
 						if($aReturn !== false) {
-							$AUTH->setAction('login');
-							$AUTH->passCredentials($aReturn);
+							// Reset the authentication check. Without this the cached result
+							// would prevent the authentication check with the given credentials
+							$this->AUTHENTICATION->resetAuthCheck();
 							
-							return $AUTH->handleAction();
+							// Set credentials to authenticate
+							// FIXME: Correct auth module?
+							$this->AUTHENTICATION->passCredentials($aReturn);
+							
+							// Try to authenticate the user
+							// FIXME: Correct auth module?
+							if($this->AUTHENTICATION->isAuthenticated()) {
+								// Display success with link and refresh in 5 seconds to called page
+								$sReturn = $this->msgAuthenticated();
+							} else {
+								// Invalid credentials
+								$sReturn = $this->msgInvalidCredentials();
+							}
 						} else {
-							$sReturn = $AUTH->msgInvalidCredentials();
+							$sReturn = $this->msgInvalidCredentials();
 						}
 					} else {
 						// When the user is already authenticated redirect to start page (overview)
 						Header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 					}
+				break;
+				case 'logout':
+					// FIXME: Correct auth module?
+					$this->AUTHENTICATION->logout();
+					
+					// Redirect to main page
+					Header('Location: '.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+					exit(0);
 				break;
 			}
 		}
@@ -92,6 +113,18 @@ class FrontendModLogonDialog extends FrontendModule {
 		} else {
 			return false;
 		}
+	}
+	
+	public function msgAuthenticated() {
+		new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->FHANDLER->getReferer())), null, null, 1, $this->FHANDLER->getReferer());
+		
+		return '';
+	}
+	
+	public function msgInvalidCredentials() {
+		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->FHANDLER->getReferer())), null, $this->CORE->getLang()->getText('Authentication failed'), 1, $this->FHANDLER->getReferer());
+		
+		return '';
 	}
 }
 

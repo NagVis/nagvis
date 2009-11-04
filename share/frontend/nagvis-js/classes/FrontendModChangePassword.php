@@ -34,18 +34,25 @@ class FrontendModChangePassword extends FrontendModule {
 					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated()) {
 						$aReturn = $this->handleResponse();
 						
-						$AUTH = new FrontendModAuth($this->CORE);
-						
 						if($aReturn !== false) {
-							$AUTH->setAction('changePassword');
-							$AUTH->passNewPassword($aReturn);
+							// Set new passwords in authentication module
+							// FIXME: Correct auth module?
+							$this->AUTHENTICATION->passNewPassword($aReturn);
 							
-							return $AUTH->handleAction();
+							// Try to apply the changes
+							// FIXME: Correct auth module?
+							if($this->AUTHENTICATION->changePassword()) {
+								// Display success with link and refresh in 5 seconds to called page
+								$sReturn = $this->msgPasswordChanged();
+							} else {
+								// Invalid credentials
+								$sReturn = $this->msgPasswordNotChanged();
+							}
 						} else {
 							$sReturn = $this->msgInputNotValid();
 						}
 					} else {
-						// When the user is already authenticated redirect to start page (overview)
+						// When the user is not authenticated redirect to start page (overview)
 						Header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 					}
 				break;
@@ -111,6 +118,18 @@ class FrontendModChangePassword extends FrontendModule {
 		} else {
 			return false;
 		}
+	}
+	
+	public function msgPasswordChanged() {
+		new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The password has been changed. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->FHANDLER->getReferer())), null, null, 1, $this->FHANDLER->getReferer());
+		
+		return '';
+	}
+	
+	public function msgPasswordNotChanged() {
+		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The password could not be changed. You will be <a href="[refererUrl]">redirected</a>.', Array('refererUrl' => $this->FHANDLER->getReferer())), null, null, 1, $this->FHANDLER->getReferer());
+		
+		return '';
 	}
 }
 
