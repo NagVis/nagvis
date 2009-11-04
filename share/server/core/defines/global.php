@@ -71,6 +71,10 @@ define('SESSION_NAME', 'nagvis_session');
 define('REQUIRES_AUTHORISATION', true);
 define('GET_STATE', true);
 
+// Maximum length for usernames/passwords
+define('AUTH_MAX_PASSWORD_LENGTH', 15);
+define('AUTH_MAX_USERNAME_LENGTH', 15);
+
 // Permission wildcard
 define('AUTH_PERMISSION_WILDCARD', '*');
 

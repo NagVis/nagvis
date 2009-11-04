@@ -1,5 +1,5 @@
 <?php
-class FrontendRequestHandler {
+class CoreRequestHandler {
 	private $aOpts;
 	private $sReferer;
 	

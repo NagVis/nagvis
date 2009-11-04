@@ -100,6 +100,7 @@ $MHANDLER->regModule('Overview');
 $MHANDLER->regModule('Map');
 $MHANDLER->regModule('AutoMap');
 $MHANDLER->regModule('Url');
+$MHANDLER->regModule('ChangePassword');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

@@ -57,7 +57,7 @@ class CoreAuthHandler {
 		if($aData !== false) {
 			$this->MOD->passCredentials($aData);
 		} else {
-			//@todo: error handling
+			//FIXME: error handling
 		}
 	}
 	
@@ -68,7 +68,7 @@ class CoreAuthHandler {
 		if($aData !== false) {
 			$this->MOD->passNewPassword($aData);
 		} else {
-			//@todo: error handling
+			//FIXME: error handling
 		}
 	}
 	

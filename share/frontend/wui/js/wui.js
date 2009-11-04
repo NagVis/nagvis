@@ -356,61 +356,12 @@ function confirm_restore() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function formSubmit(formId, target, bReloadPage) {
-	var getstr = '';
-	
 	if(typeof bReloadPage === 'undefined') {
 		bReloadPage = true;
 	}
 	
 	// Read form contents
-	var oForm = document.getElementById(formId);
-	
-	// Get relevant input elements
-	var aFields = oForm.getElementsByTagName('input');
-	for (var i = 0, len = aFields.length; i < len; i++) {
-		// Filter helper fields
-		if(aFields[i].name.charAt(0) !== '_') {
-			if (aFields[i].type == "hidden") {
-				getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-			}
-			
-			if (aFields[i].type == "text") {
-				getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-			}
-			
-			if (aFields[i].type == "checkbox") {
-				if (aFields[i].checked) {
-					getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-				} else {
-					getstr += aFields[i].name + "=&";
-				}
-			}
-			
-			if (aFields[i].type == "radio") {
-				if (aFields[i].checked) {
-					getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-				}
-			}
-		}
-	}
-	
-	// Get relevant select elements
-	aFields = oForm.getElementsByTagName('select');
-	for (var i = 0, len = aFields.length; i < len; i++) {
-		// Filter helper fields
-		if(aFields[i].name.charAt(0) !== '_') {
-			
-			// Check if the value of the input helper field should be used
-			if(aFields[i].options[aFields[i].selectedIndex].value === lang['manualInput']) {
-				getstr += aFields[i].name + "=" + escapeUrlValues(document.getElementById('_inp_'+aFields[i].name).value) + "&";
-			} else {
-				getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[aFields[i].selectedIndex].value) + "&";
-			}
-		}
-	}
-	
-	aFields = null;
-	oForm = null;
+	var getstr = getFormParams(formId);
 	
 	// Submit data
 	var oResult = getSyncRequest(target+'&'+getstr);

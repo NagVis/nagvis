@@ -35,6 +35,27 @@ var oContextTemplates = {};
 var oAutomapParams = {};
 
 /**
+ * submitFrontendForm()
+ *
+ * Submits a form in the frontend using ajax without reloading the page
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function submitFrontendForm(sUrl, sFormId) {
+	var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
+	if(oResult && oResult.status === 'OK') {
+		var oMsg = {};
+		oMsg.type = 'NOTE';
+		oMsg.message = oResult.message;
+		frontendMessage(oMsg);
+		oMsg = null;
+		
+		// Additionally close the popup window when the response is positive
+		popupWindowClose();
+	}
+}
+
+/**
  * showChangePassword()
  *
  * Show the change password dialog to the user
@@ -42,7 +63,6 @@ var oAutomapParams = {};
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function showChangePassword(sTitle) {
-	// FIXME: ChangePassword should be a core module
 	var oContent = getSyncRequest(oGeneralProperties.path_base+'/frontend/nagvis-js/index.php?mod=ChangePassword&act=view', true, false);
 	
 	if(typeof oContent !== 'undefined') {

@@ -98,7 +98,6 @@ $MHANDLER = new FrontendModuleHandler($CORE);
 $MHANDLER->regModule('LogonDialog');
 $MHANDLER->regModule('ChangePassword');
 $MHANDLER->regModule('Info');
-$MHANDLER->regModule('Auth');
 $MHANDLER->regModule('Map');
 $MHANDLER->regModule('Url');
 $MHANDLER->regModule('AutoMap');

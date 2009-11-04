@@ -2,7 +2,7 @@
  *
  * ajax.js - Functions for handling NagVis Ajax requests
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -154,7 +154,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 			var url = sUrl;
 			var timestamp = iNow;
 			
-			oRequest.open("GET", sUrl+"&timestamp="+timestamp, false);
+			oRequest.open("GET", sUrl+"&_t="+timestamp, false);
 			oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
 			
 			try {
@@ -299,4 +299,180 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
 	sUrl = null;
 	
 	return aReturn;
+}
+
+/**
+ * Function for creating a synchronous POST request
+ * - Response needs to be JS code or JSON => Parses the response with eval()
+ * - Errors need to match following Regex: /^Notice:|^Warning:|^Error:|^Parse error:/
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function postSyncRequest(sUrl, sParams) {
+	var sResponse = null;
+	var responseText;
+	
+	// Encode the url
+	sUrl = sUrl.replace("+", "%2B");
+	
+	var oRequest = initXMLHttpClient();
+	
+	if(oRequest) {
+		oRequest.open("POST", sUrl+"&_t="+iNow, false);
+		oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
+		
+		// Set post specific options
+		oRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		oRequest.setRequestHeader("Content-length", sParams.length);
+		oRequest.setRequestHeader("Connection", "close");
+		
+		try {
+			oRequest.send(sParams);
+		} catch(e) {
+			// Add frontend eventlog entry
+			eventlog("ajax", "critical", "Problem while ajax POST transaction");
+			eventlog("ajax", "debug", e.toString());
+			
+			// Handle application message/error
+			var oMsg = {};
+			oMsg.type = 'CRITICAL';
+			oMsg.message = "Problem while ajax POST transaction. Is the NagVis host reachable?";
+			oMsg.title = "Ajax transaction error";
+			frontendMessage(oMsg);
+			oMsg = null;
+		}
+		
+		responseText = oRequest.responseText;
+		
+		if(responseText.replace(/\s+/g, '').length === 0) {
+			sResponse = '';
+		} else {
+			// Trim the left of the response
+			responseText = responseText.replace(/^\s+/,"");
+			
+			// Error handling for the AJAX methods
+			if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
+				var oMsg = {};
+				oMsg.type = 'CRITICAL';
+				oMsg.message = "PHP error in ajax request handler:\n"+responseText;
+				oMsg.title = "PHP error";
+				
+				// Handle application message/error
+				frontendMessage(oMsg);
+				oMsg = null;
+				
+				// Clear the response
+				sResponse = '';
+			} else if(responseText.match(/^NagVisError:/)) {
+				responseText = responseText.replace(/^NagVisError:/, '');
+				var oMsg = eval('( '+responseText+')');
+				
+				// Handle application message/error
+				// FIXME: Param2: 30 and the message will be shown for maximum 30 seconds
+				frontendMessage(oMsg);
+				oMsg = null;
+				
+				// Clear the response
+				sResponse = '';
+			} else {
+				// Handle invalid response (No JSON format)
+				try {
+					sResponse = eval('( '+responseText+')');
+				} catch(e) {
+					var oMsg = {};
+					oMsg.type = 'CRITICAL';
+					oMsg.message = "Invalid JSON response:\n"+responseText;
+					oMsg.title = "Syntax error";
+					
+					// Handle application message/error
+					frontendMessage(oMsg);
+					oMsg = null;
+				
+					// Clear the response
+					sResponse = '';
+				}
+				
+				responseText = null;
+			}
+		}
+	}
+	
+	oRequest = null;
+	
+	if(sResponse !== null && sResponse !== '') {
+		if(typeof frontendMessageHide == 'function') { 
+			frontendMessageHide();
+		}
+	}
+	
+	return sResponse;
+}
+
+
+/**
+ * Parses all values from the given form to a string which
+ * can be used in ajax queries
+ *
+ * @param   String    ID of the form
+ * @return  String    Param string
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function getFormParams(formId) {
+	var sReturn = '';
+	
+	// Read form contents
+	var oForm = document.getElementById(formId);
+	
+	if(typeof oForm === 'undefined') {
+		return '';
+	}
+	
+	// Get relevant input elements
+	var aFields = oForm.getElementsByTagName('input');
+	for(var i = 0, len = aFields.length; i < len; i++) {
+		// Filter helper fields (NagVis WUI specific)
+		if(aFields[i].name.charAt(0) !== '_') {
+			if(aFields[i].type == "hidden") {
+				sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
+			}
+			
+			if(aFields[i].type == "text" || aFields[i].type == "password") {
+				sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
+			}
+			
+			if(aFields[i].type == "checkbox") {
+				if(aFields[i].checked) {
+					sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
+				} else {
+					sReturn += aFields[i].name + "=&";
+				}
+			}
+			
+			if(aFields[i].type == "radio") {
+				if(aFields[i].checked) {
+					sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
+				}
+			}
+		}
+	}
+	
+	// Get relevant select elements
+	aFields = oForm.getElementsByTagName('select');
+	for(var i = 0, len = aFields.length; i < len; i++) {
+		// Filter helper fields (NagVis WUI specific)
+		if(aFields[i].name.charAt(0) !== '_') {
+			
+			// Check if the value of the input helper field should be used (NagVis WUI specific)
+			if(aFields[i].options[aFields[i].selectedIndex].value === lang['manualInput']) {
+				sReturn += aFields[i].name + "=" + escapeUrlValues(document.getElementById('_inp_'+aFields[i].name).value) + "&";
+			} else {
+				sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[aFields[i].selectedIndex].value) + "&";
+			}
+		}
+	}
+	
+	aFields = null;
+	oForm = null;
+	
+	return sReturn;
 }

@@ -87,8 +87,14 @@ class CoreAuthModSession extends CoreAuthModule {
 	public function isAuthenticated() {
 		$aCredentials = null;
 		
+		// Did the user just try to authenticate? Then passCredentials should be
+		// called before to put the credentials here
+		if($aCredentials === null && $this->sUsername !== '' && $this->sPassword !== '') {
+			$aCredentials = Array('user' => $this->sUsername, 'password' => $this->sPassword);
+		}
+		
 		// Are the sessions options set? Use them for authentication
-		if($this->SHANDLER->isSetAndNotEmpty('authCredentials')) {
+		if($aCredentials === null && $this->SHANDLER->isSetAndNotEmpty('authCredentials')) {
 			$aCredentials = $this->SHANDLER->get('authCredentials');
 			
 			if(isset($aCredentials['user'])) {
@@ -100,12 +106,6 @@ class CoreAuthModSession extends CoreAuthModule {
 			if(isset($aCredentials['userId'])) {
 				$this->iUserId = $aCredentials['userId'];
 			}
-		}
-		
-		// Did the user just try to authenticate? Then passCredentials should be
-		// called before to put the credentials here
-		if($this->sUsername !== '' && $this->sPassword !== '') {
-			$aCredentials = Array('user' => $this->sUsername, 'password' => $this->sPassword);
 		}
 		
 		// If none of the above fit, then break and return false

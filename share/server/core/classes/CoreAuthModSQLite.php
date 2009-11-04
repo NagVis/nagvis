@@ -170,6 +170,9 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		}
 		if(isset($aData['password'])) {
 			$this->sPassword = $aData['password'];
+			
+			// Remove the password hash when setting a new password
+			$this->sPasswordHash = '';
 		}
 		if(isset($aData['passwordHash'])) {
 			$this->sPasswordHash = $aData['passwordHash'];
@@ -182,6 +185,9 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		}
 		if(isset($aData['password'])) {
 			$this->sPassword = $aData['password'];
+			
+			// Remove the password hash when setting a new password
+			$this->sPasswordHash = '';
 		}
 		if(isset($aData['passwordNew'])) {
 			$this->sPasswordNew = $aData['passwordNew'];

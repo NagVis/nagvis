@@ -4,9 +4,6 @@ class FrontendModLogonDialog extends FrontendModule {
 	protected $FHANDLER;
 	protected $SHANDLER;
 	
-	// Maximum length of input in forms
-	protected $iInputMaxLength = 12;
-	
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
@@ -42,11 +39,9 @@ class FrontendModLogonDialog extends FrontendModule {
 							$this->AUTHENTICATION->resetAuthCheck();
 							
 							// Set credentials to authenticate
-							// FIXME: Correct auth module?
 							$this->AUTHENTICATION->passCredentials($aReturn);
 							
 							// Try to authenticate the user
-							// FIXME: Correct auth module?
 							if($this->AUTHENTICATION->isAuthenticated()) {
 								// Display success with link and refresh in 5 seconds to called page
 								$sReturn = $this->msgAuthenticated();
@@ -63,7 +58,6 @@ class FrontendModLogonDialog extends FrontendModule {
 					}
 				break;
 				case 'logout':
-					// FIXME: Correct auth module?
 					$this->AUTHENTICATION->logout();
 					
 					// Redirect to main page
@@ -94,10 +88,10 @@ class FrontendModLogonDialog extends FrontendModule {
 		}
 		
 		// Check length limits
-		if($bValid && $this->FHANDLER->isLongerThan('username', $this->iInputMaxLength)) {
+		if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
 			$bValid = false;
 		}
-		if($bValid && $this->FHANDLER->isLongerThan('password', $this->iInputMaxLength)) {
+		if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH)) {
 			$bValid = false;
 		}
 		

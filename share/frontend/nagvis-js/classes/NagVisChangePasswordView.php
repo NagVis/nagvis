@@ -27,7 +27,6 @@
  */
 class NagVisChangePasswordView {
 	private $CORE;
-	private $iInputMaxLength = 15;
 	
 	/**
 	 * Class Constructor
@@ -52,9 +51,9 @@ class NagVisChangePasswordView {
 		
 		$aData = Array(
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/frontend/nagvis-js/index.php?mod=ChangePassword&amp;act=change',
+			'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=ChangePassword&amp;act=change',
 			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
-      'maxLength' => $this->iInputMaxLength,
+      'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'langOldPassword' => $this->CORE->getLang()->getText('Old password'),
       'langNewPassword1' => $this->CORE->getLang()->getText('New password'),
       'langNewPassword2' => $this->CORE->getLang()->getText('New password confirmation'),
