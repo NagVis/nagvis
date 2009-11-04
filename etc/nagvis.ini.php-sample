@@ -291,6 +291,11 @@ backendtype="merlinmy"
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
+; Example definition of a livestatus backend. In this case the backend_id is live_1
+[backend_live_1]
+backendtype="mklivestatus"
+;socket_path="/usr/local/nagios/var/rw/live"
+
 ; ----------------------------
 ; Rotation pool definitions
 ; ----------------------------
