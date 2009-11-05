@@ -26,7 +26,6 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreSQLiteHandler {
-	private $CORE = null;
 	private $DB = null;
 	
 	public function __construct() {
@@ -34,12 +33,17 @@ class CoreSQLiteHandler {
 	}
 	
 	public function open($file) {
-		$this->DB = new SQLiteDatabase($file, 0664, $sError);
-		
-		if($this->DB === false) {
-			return false;
+		// First check if the php installation supports sqlite
+		if($this->checkSQLiteSupport()) {
+			$this->DB = new SQLiteDatabase($file, 0664, $sError);
+			
+			if($this->DB === false) {
+				return false;
+			} else {
+				return true;
+			}
 		} else {
-			return true;
+			return false;
 		}
 	}
 	
@@ -58,6 +62,17 @@ class CoreSQLiteHandler {
 	
 	public function close() {
 		$this->DB->close();
+	}
+	
+	private function checkSQLiteSupport($printErr = 1) {
+		if(class_exists('SQLiteDatabase')) {
+			return true;
+		} else {
+			if($printErr === 1) {
+				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Your PHP installation does not support SQLite. Please check if you installed the PHP module.'));
+			}
+			return false;
+		}
 	}
 }
 ?>
