@@ -935,7 +935,7 @@ if [ -f $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample ]; then
 fi
 
 # Create apache configuration file from sample when no file exists
-if [ -f etc/$HTML_SAMPLE ]; then
+if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
 	CHG='s/^//'
 	if [ -s $WEB_PATH/$HTML_CONF ]; then
 		text "| *** $WEB_PATH/$HTML_CONF will NOT be overwritten !" "|"
@@ -944,7 +944,7 @@ if [ -f etc/$HTML_SAMPLE ]; then
 		CHG='s/^/#new /'
 	fi
 	DONE=`log "Creating web configuration file..." done`
-	cat etc/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
+	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
 	chk_rc "|  Error creating web configuration" "$DONE"
 	DONE=`log "Setting permissions for web configuration file..." done`
 	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
