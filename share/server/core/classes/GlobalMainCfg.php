@@ -1327,12 +1327,12 @@ class GlobalMainCfg {
 		$arr = Array();
 
 		foreach($this->validConfig['states'] AS $lowState => $aVal) {
-			// First create array when not exists
-			if(!isset($arr[strtoupper($lowState)][0])) {
-				$arr[strtoupper($lowState)] = Array();
-			}
-
 			$key = explode('_', $lowState);
+			
+			// First create array when not exists
+			if(!isset($arr[strtoupper($key[0])])) {
+				$arr[strtoupper($key[0])] = Array();
+			}
 			
 			if(isset($key[1])) {
 				// ack/downtime

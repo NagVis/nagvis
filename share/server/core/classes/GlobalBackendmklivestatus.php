@@ -151,7 +151,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	/**
 	 * PRIVATE queryLivestatusSingle()
 	 *
-	 * Queries the livestatus socket for a single row
+	 * Queries the livestatus socket for a single field
 	 *
 	 * @param   String   Query to send to the socket
 	 * @return  Array    Results of the query
@@ -168,9 +168,28 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PRIVATE queryLivestatusSingleRow()
+	 *
+	 * Queries the livestatus socket for a single row
+	 *
+	 * @param   String   Query to send to the socket
+	 * @return  Array    Results of the query
+   * @author  Mathias Kettner <mk@mathias-kettner.de>
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function queryLivestatusSingleRow($query) {
+		$l = $this->queryLivestatus($query);
+		if(isset($l[0])) {
+			return $l[0];
+		} else {
+			return Array();
+		}
+	}
+	
+	/**
 	 * PRIVATE queryLivestatusSinglecolumn()
 	 *
-	 * Queries the livestatus socket for a single column
+	 * Queries the livestatus socket for a single column in several rows
 	 *
 	 * @param   String   Query to send to the socket
 	 * @return  Array    Results of the query
@@ -623,6 +642,104 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	public function getHostgroupInformations($hostgroupName) {
 		$l = $this->queryLivestatusSingle("GET hostgroups\nColumns: alias\nFilter: name = ".$hostgroupName."\n");
 		return Array('alias' => $l);
+	}
+	
+	/**
+	 * PUBLIC getHostgroupStateCounts()
+	 *
+	 * Queries the livestatus socket for hostgroup state counts. The information
+	 * are used to calculate the summary output and the summary state of a 
+	 * hostgroup and a well performing alternative to the existing recurisve
+	 * algorithm.
+	 *
+	 * @param   String   Hostgroup name
+	 * @param   Boolean  Only recognize hard states
+	 * @return  Array    List of states and counts
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getHostgroupStateCounts($hostgroupName, $onlyHardstates) {
+		$aReturn = Array();
+		
+		$stateAttr = 'state';
+		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
+		// Get host information
+		$hosts = $this->queryLivestatusSingleRow("GET hosts\n" .
+		   "Filter: groups >= ".$hostgroupName."\n" .
+		   "Filter: scheduled_downtime_depth = 0\n" .
+		   "Filter: host_scheduled_downtime_depth = 0\n" .
+		   "Filter: in_notification_period = 1\n" .
+		   // Count UP
+		   "Stats: ".$stateAttr." = 0\n" .
+		   // Count DOWN
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count DOWN(ACK)
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNREACHABLE
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNREACHABLE(ACK)
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n");
+		
+		$aReturn['UP']['normal'] = $hosts[0];
+		$aReturn['DOWN']['normal'] = $hosts[1];
+		$aReturn['DOWN']['ack'] = $hosts[2];
+		$aReturn['UNREACHABLE']['normal'] = $hosts[3];
+		$aReturn['unreachable']['ack'] = $hosts[4];
+		
+		// Get service information
+		$services = $this->queryLivestatusSingleRow("GET services\n" .
+		   "Filter: host_groups >= ".$hostgroupName."\n" .
+		   "Filter: scheduled_downtime_depth = 0\n" .
+		   "Filter: host_scheduled_downtime_depth = 0\n" .
+		   "Filter: in_notification_period = 1\n" .
+		   // Count OK
+		   "Stats: ".$stateAttr." = 0\n" .
+		   // Count WARNING
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count WARNING(ACK)
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count CRITICAL
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count CRITICAL(ACK)
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNKNOWN
+		   "Stats: ".$stateAttr." = 3\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNKNOWN(ACK)
+		   "Stats: ".$stateAttr." = 3\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n");
+		
+		$aReturn['OK']['normal'] = $services[0];
+		$aReturn['WARNING']['normal'] = $services[1];
+		$aReturn['WARNING']['ack'] = $services[2];
+		$aReturn['CRITICAL']['normal'] = $services[3];
+		$aReturn['CRITICAL']['ack'] = $services[4];
+		$aReturn['UNKNOWN']['normal'] = $services[5];
+		$aReturn['UNKNOWN']['ack'] = $services[6];
+		
+		return $aReturn;
 	}
 }
 ?>

@@ -36,6 +36,8 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	
 	protected $members;
 	
+	protected $aStateCounts = Array();
+	
 	/**
 	 * Class constructor
 	 *
@@ -81,18 +83,35 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchState() {
-		
-		// Get states of all members
-		foreach($this->members AS &$OBJ) {
-			$OBJ->fetchState();
+		// New backend feature which reduces backend queries and breaks up the performance
+		// problems due to the old recursive mechanism. If it's not available fall back to
+		// old mechanism.
+		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostgroupStateCounts', false)) {
+			// Get state counts
+			$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupStateCounts($this->hostgroup_name, $this->only_hard_states);
+			
+			// Calculate summary state
+			$this->fetchSummaryStateFromCounts();
+			
+			// Generate summary output
+			$this->fetchSummaryOutputFromCounts();
+			
+			// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
+			
+			$this->state = $this->summary_state;
+		} else {
+			// Get states of all members
+			foreach($this->members AS &$OBJ) {
+				$OBJ->fetchState();
+			}
+			
+			// Also get summary state
+			$this->fetchSummaryState();
+			
+			// At least summary output
+			$this->fetchSummaryOutput();
+			$this->state = $this->summary_state;
 		}
-		
-		// Also get summary state
-		$this->fetchSummaryState();
-		
-		// At least summary output
-		$this->fetchSummaryOutput();
-		$this->state = $this->summary_state;
 	}
 	
 	/**
@@ -166,9 +185,121 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	# #########################################################################
 	
 	/**
+	 * PRIVATE fetchSummaryStateFromCounts()
+	 *
+	 * Fetches the summary state from the member state counts
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchSummaryStateFromCounts() {
+		if($this->hasMembers()) {
+			// Fetch the current state to start with
+			if($this->summary_state == '') {
+				$currWeight = 0;
+			} else {
+				if(isset($stateWeight[$this->summary_state])) {
+					$sCurrSubState = 'normal';
+					
+					if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+						$sCurrSubState = 'ack';
+					} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+						$sCurrSubState = 'downtime';
+					}
+					
+					$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
+				} else {
+					//FIXME: Error handling: Invalid state
+				}
+			}
+			
+			// Load the configured state weight
+			$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+			
+			// Loop all major states
+			foreach($this->aStateCounts AS $sState => $aSubstates) {
+				// Loop all substates (normal,ack,downtime,...)
+				foreach($aSubstates AS $sSubState => $iCount) {
+					// Found some objects with this state+substate
+					if($iCount > 0) {
+						// Get weight
+						if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
+							$weight = $stateWeight[$sState][$sSubState];
+							
+							// The new state is worse than the current state
+							if($currWeight < $weight) {
+								$this->summary_state = $sState;
+						
+								if($sSubState == 'ack') {
+									$this->summary_problem_has_been_acknowledged = 1;
+								} else {
+									$this->summary_problem_has_been_acknowledged = 0;
+								}
+								
+								if($sSubState == 'downtime') {
+									$this->summary_in_downtime = 1;
+								} else {
+									$this->summary_in_downtime = 0;
+								}
+							}
+						} else {
+							//FIXME: Error handling: Invalid state+substate
+						}
+					}
+				}
+			}
+		} else {
+			$this->summary_state = 'ERROR';
+		}
+	}
+	
+	/**
+	 * PRIVATE fetchSummaryOutputFromCounts()
+	 *
+	 * Fetches the summary output from the object state counts
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchSummaryOutputFromCounts() {
+		if($this->hasMembers()) {
+			$arrHostStates = Array();
+			$arrServiceStates = Array();
+			
+			// Loop all major states
+			foreach($this->aStateCounts AS $sState => $aSubstates) {
+				// Loop all substates (normal,ack,downtime,...)
+				foreach($aSubstates AS $sSubState => $iCount) {
+					// Found some objects with this state+substate
+					if($iCount > 0) {
+						if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE') {
+							if(!isset($arrHostStates[$sState])) {
+								$arrHostStates[$sState] = $iCount;
+							} else {
+								$arrHostStates[$sState] += $iCount;
+							}
+						} else {
+							if(!isset($arrServiceStates[$sState])) {
+								$arrServiceStates[$sState] = $iCount;
+							} else {
+								$arrServiceStates[$sState] += $iCount;
+							}
+						}
+					}
+				}
+			}
+			
+			// FIXME: Recode mergeSummaryOutput method
+			$this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));
+			$this->summary_output .= "<br />";
+			$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+		} else {
+			$this->summary_output = $this->CORE->getLang()->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+		}
+	}
+	
+	/**
 	 * PRIVATE fetchSummaryState()
 	 *
-	 * Fetches the summary state from all members
+	 * Fetches the summary state from all members recursive
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
