@@ -124,9 +124,11 @@ class NagiosHost extends NagVisStatefulObject {
 				
 				// Get all service states
 				// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
-				// FIXME: This should only be called when the hover menu is needed to be shown
-				if($this->getState() != 'ERROR' && !$this->hasMembers()) {
-					$this->fetchServiceObjects();
+				// These information are only interesting when the hover_menu is shown
+				if($this->hover_menu == 1) {
+					if($this->getState() != 'ERROR' && !$this->hasMembers()) {
+						$this->fetchServiceObjects();
+					}
 				}
 			} else {
 				// Get all service states
@@ -674,25 +676,27 @@ class NagiosHost extends NagVisStatefulObject {
 		// Only merge host state with service state when recognize_services is set 
 		// to 1
 		if($this->getRecognizeServices()) {
-			// If there are services write the summary state for them
-			if($this->hasMembers()) {
-				$arrServiceStates = Array();
-				
-				// Loop all major states
-				foreach($this->aStateCounts AS $sState => $aSubstates) {
-					// Loop all substates (normal,ack,downtime,...)
-					foreach($aSubstates AS $sSubState => $iCount) {
-						// Found some objects with this state+substate
-						if($iCount > 0) {
-							if(!isset($arrServiceStates[$sState])) {
-								$arrServiceStates[$sState] = $iCount;
-							} else {
-								$arrServiceStates[$sState] += $iCount;
-							}
+			$iNumServices = 0;
+			$arrServiceStates = Array();
+			
+			// Loop all major states
+			foreach($this->aStateCounts AS $sState => $aSubstates) {
+				// Loop all substates (normal,ack,downtime,...)
+				foreach($aSubstates AS $sSubState => $iCount) {
+					// Found some objects with this state+substate
+					if($iCount > 0) {
+						if(!isset($arrServiceStates[$sState])) {
+							$arrServiceStates[$sState] = $iCount;
+							$iNumServices += $iCount;
+						} else {
+							$arrServiceStates[$sState] += $iCount;
+							$iNumServices += $iCount;
 						}
 					}
 				}
-				
+			}
+			
+			if($iNumServices > 0) {
 				$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
 			} else {
 				$this->summary_output .= $this->CORE->getLang()->getText('hostHasNoServices','HOST~'.$this->getName());

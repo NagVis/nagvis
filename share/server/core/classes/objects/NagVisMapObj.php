@@ -93,9 +93,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// Loop all members
 		foreach($this->members AS $OBJ) {
-
+			$sType = $OBJ->getType();
+			
 			// Skip unrelevant object types
-			if($OBJ->getType() == 'textbox' || $OBJ->getType() == 'shape' || $OBJ->getType() == 'line') {
+			if($sType == 'textbox' || $sType == 'shape' || $sType == 'line') {
 				continue;
       }
 
@@ -103,7 +104,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			 * When the current map object is a summary object skip the map
 			 * child for preventing a loop
 			 */
-			if($OBJ->getType() == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object == true) {
+			if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object == true) {
 				continue;
 			}
 

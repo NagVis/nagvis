@@ -65,13 +65,8 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchMembers() {
-		// Get all member hosts
-		$this->fetchMemberHostObjects();
-		
-		// Get all services of member host
-		foreach($this->members AS &$OBJ) {
-			$OBJ->fetchMembers();
-		}
+		// The service objects are all fetched in fetchState() method
+		// Seems this is not needed anymore and only a dummy at this place
 	}
 	
 	/**
@@ -96,11 +91,17 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			// Generate summary output
 			$this->fetchSummaryOutputFromCounts();
 			
-			// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
-			// FIXME: This should only be called when the hover menu is needed to be shown
-			
+			// This should only be called when the hover menu is needed to be shown
+			if($this->hover_menu == 1) {
+				// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
+				$this->fetchHostObjects();
+			}
+				
 			$this->state = $this->summary_state;
 		} else {
+			// Get all member hosts
+			$this->fetchMemberHostObjects();
+			
 			// Get states of all members
 			foreach($this->members AS &$OBJ) {
 				$OBJ->fetchState();
@@ -166,7 +167,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			
 			$arrHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name);
 			if(count($arrHosts) > 0) {
-				foreach($arrHosts AS &$hostName) {
+				foreach($arrHosts AS $hostName) {
 					$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 					
 					// The services have to know how they should handle hard/soft 
@@ -186,6 +187,42 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	# #########################################################################
 	
 	/**
+	 * PRIVATE fetchHostObjects()
+	 *
+	 * Gets all hosts of the hostgroup and saves them to the members array
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchHostObjects() {
+		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupState($this->hostgroup_name, $this->only_hard_states) AS $arrHost) {
+			$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $arrHost['name']);
+			
+			// Append contents of the array to the object properties
+			$OBJ->setObjectInformation($arrHost);
+			
+			// The services have to know how they should handle hard/soft 
+			// states. This is a little dirty but the simplest way to do this
+			// until the hard/soft state handling has moved from backend to the
+			// object classes.
+			$OBJ->setConfiguration($this->getObjectConfiguration());
+			
+			// Also get summary state
+			// FIXME: Needed?
+			//$OBJ->fetchSummaryState();
+			$OBJ->summary_state = $OBJ->state;
+			$OBJ->summary_output = $OBJ->output;
+			
+			// At least summary output
+			// FIXME: Needed?
+			//$OBJ->fetchSummaryOutput();
+			
+			//$OBJ->fetchState();
+			
+			$this->members[] = $OBJ;
+		}
+	}
+	
+	/**
 	 * PRIVATE fetchSummaryStateFromCounts()
 	 *
 	 * Fetches the summary state from the member state counts
@@ -193,62 +230,67 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryStateFromCounts() {
-		if($this->hasMembers()) {
-			// Load the configured state weights
-			$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
-			
-			// Fetch the current state to start with
-			if($this->summary_state == '') {
-				$currWeight = 0;
-			} else {
-				if(isset($stateWeight[$this->summary_state])) {
-					$sCurrSubState = 'normal';
-					
-					if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
-						$sCurrSubState = 'ack';
-					} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
-						$sCurrSubState = 'downtime';
-					}
-					
-					$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
-				} else {
-					//FIXME: Error handling: Invalid state
-				}
-			}
-			
-			// Loop all major states
-			foreach($this->aStateCounts AS $sState => $aSubstates) {
-				// Loop all substates (normal,ack,downtime,...)
-				foreach($aSubstates AS $sSubState => $iCount) {
-					// Found some objects with this state+substate
-					if($iCount > 0) {
-						// Get weight
-						if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
-							$weight = $stateWeight[$sState][$sSubState];
-							
-							// The new state is worse than the current state
-							if($currWeight < $weight) {
-								$this->summary_state = $sState;
-						
-								if($sSubState == 'ack') {
-									$this->summary_problem_has_been_acknowledged = 1;
-								} else {
-									$this->summary_problem_has_been_acknowledged = 0;
-								}
-								
-								if($sSubState == 'downtime') {
-									$this->summary_in_downtime = 1;
-								} else {
-									$this->summary_in_downtime = 0;
-								}
-							}
-						} else {
-							//FIXME: Error handling: Invalid state+substate
-						}
-					}
-				}
-			}
+		// Load the configured state weights
+		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		
+		// Fetch the current state to start with
+		if($this->summary_state == '') {
+			$currWeight = 0;
 		} else {
+			if(isset($stateWeight[$this->summary_state])) {
+				$sCurrSubState = 'normal';
+				
+				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+					$sCurrSubState = 'ack';
+				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+					$sCurrSubState = 'downtime';
+				}
+				
+				$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
+			} else {
+				//FIXME: Error handling: Invalid state
+			}
+		}
+		
+		// Loop all major states
+		$iSumCount = 0;
+		foreach($this->aStateCounts AS $sState => $aSubstates) {
+			// Loop all substates (normal,ack,downtime,...)
+			foreach($aSubstates AS $sSubState => $iCount) {
+				// Found some objects with this state+substate
+				if($iCount > 0) {
+					// Count all child objects
+					$iSumCount += $iCount;
+					
+					// Get weight
+					if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
+						$weight = $stateWeight[$sState][$sSubState];
+						
+						// The new state is worse than the current state
+						if($currWeight < $weight) {
+							$this->summary_state = $sState;
+					
+							if($sSubState == 'ack') {
+								$this->summary_problem_has_been_acknowledged = 1;
+							} else {
+								$this->summary_problem_has_been_acknowledged = 0;
+							}
+							
+							if($sSubState == 'downtime') {
+								$this->summary_in_downtime = 1;
+							} else {
+								$this->summary_in_downtime = 0;
+							}
+						}
+					} else {
+						//FIXME: Error handling: Invalid state+substate
+					}
+				}
+			}
+		}
+		
+		// Fallback for hostgroups without members
+		if($iSumCount == 0) {
 			$this->summary_state = 'ERROR';
 		}
 	}
@@ -261,38 +303,43 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryOutputFromCounts() {
-		if($this->hasMembers()) {
-			$arrHostStates = Array();
-			$arrServiceStates = Array();
-			
-			// Loop all major states
-			foreach($this->aStateCounts AS $sState => $aSubstates) {
-				// Loop all substates (normal,ack,downtime,...)
-				foreach($aSubstates AS $sSubState => $iCount) {
-					// Found some objects with this state+substate
-					if($iCount > 0) {
-						if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE') {
-							if(!isset($arrHostStates[$sState])) {
-								$arrHostStates[$sState] = $iCount;
-							} else {
-								$arrHostStates[$sState] += $iCount;
-							}
+		$arrHostStates = Array();
+		$arrServiceStates = Array();
+		
+		// Loop all major states
+		$iSumCount = 0;
+		foreach($this->aStateCounts AS $sState => $aSubstates) {
+			// Loop all substates (normal,ack,downtime,...)
+			foreach($aSubstates AS $sSubState => $iCount) {
+				// Found some objects with this state+substate
+				if($iCount > 0) {
+					// Count all child objects
+					$iSumCount += $iCount;
+					
+					if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE') {
+						if(!isset($arrHostStates[$sState])) {
+							$arrHostStates[$sState] = $iCount;
 						} else {
-							if(!isset($arrServiceStates[$sState])) {
-								$arrServiceStates[$sState] = $iCount;
-							} else {
-								$arrServiceStates[$sState] += $iCount;
-							}
+							$arrHostStates[$sState] += $iCount;
+						}
+					} else {
+						if(!isset($arrServiceStates[$sState])) {
+							$arrServiceStates[$sState] = $iCount;
+						} else {
+							$arrServiceStates[$sState] += $iCount;
 						}
 					}
 				}
 			}
-			
-			// FIXME: Recode mergeSummaryOutput method
-			$this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));
-			$this->summary_output .= "<br />";
-			$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
-		} else {
+		}
+		
+		// FIXME: Recode mergeSummaryOutput method
+		$this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));
+		$this->summary_output .= "<br />";
+		$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+		
+		// Fallback for hostgroups without members
+		if($iSumCount == 0) {
 			$this->summary_output = $this->CORE->getLang()->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
 		}
 	}

@@ -299,17 +299,102 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	/**
 	 * PUBLIC getHostgroupState()
 	 *
-	 * Returns the Nagios state and additional information for the requested hostgroup
+	 * Returns the state of all hosts in a given hostgroup
 	 *
-	 * FIXME: Not implemented in this backend
-	 *
-	 * @param	String		$hostgroupName
-	 * @param	Boolean		$onlyHardstates
-	 * @return	array		$state
-	 * @author	Roman Kyrylych <rkyrylych@op5.com>
+	 * @param   String    $hostgroupName
+	 * @param   Boolean   $onlyHardstates
+	 * @return  array     Array of host objects
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getHostgroupState($hostgroupName, $onlyHardstates) {
 		$arrReturn = Array();
+		
+		$numAttr = 19;
+		$l = $this->queryLivestatus(
+		  "GET hosts\n".
+		  "Columns: name state plugin_output alias display_name ".
+		  "address notes last_check next_check state_type ".
+		  "current_attempt max_attempts last_state_change ".
+		  "last_hard_state_change statusmap_image perf_data ".
+		  "last_hard_state acknowledged downtimes\n".
+		  "Filter: groups >= ".$hostgroupName."\n");
+		
+		if(count($l) == 0) {
+			$arrReturn['state'] = 'ERROR';
+			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
+			return $arrReturn;
+		}
+		
+		// Loop all hosts
+		foreach($l AS $e) {
+			$numResp = count($e);
+			if($numResp < $numAttr) {
+				$arrReturn['name'] = $e[0];
+				$arrReturn['state'] = 'ERROR';
+				$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('The response from the backend is not valid (Asked for [NUMASKED] attributes, got [NUMRESPONSE]) in backend [BACKENDID]', Array('BACKENDID' => $this->backendId, 'NUMASKED' => $numAttr, 'NUMRESPONSE' => $numResp));
+				return Array($arrReturn);
+			}
+			
+			$arrTmpReturn = Array();
+			$arrTmpReturn['name'] = $e[0];
+			
+			/**
+			 * Only recognize hard states. There was a discussion about the implementation
+			 * This is a new handling of only_hard_states. For more details, see: 
+			 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
+			 *
+			 * Thanks to Andurin and fredy82
+			 */
+			if($onlyHardstates == 1) {
+				// $e[9]: state_type
+				if($e[9] == '0') {
+					// state = last hard state
+					$e[1] = $e[17];
+				}
+			}
+			
+			switch ($e[1]) {
+				case "0": $state = "UP"; break;
+				case "1": $state = "DOWN"; break;
+				case "2": $state = "UNREACHABLE"; break;
+				default: $state = "UNKNOWN"; break;
+			}
+			
+			// If there is a downtime for this object, save the data
+			// $e[18]: downtimes
+			if(isset($e[18]) && $e[18] != '') {
+				$arrTmpReturn['in_downtime'] = 1;
+				
+				// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
+				// FIXME: Read downtime details
+				/*$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName;
+				if(file_exists($sFile)) {
+					$oDowntime = json_decode(file_get_contents($sFile));
+					
+					$arrReturn['downtime_start'] = $oDowntime->STARTTIME;
+					$arrReturn['downtime_end'] = $oDowntime->ENDTIME;
+					$arrReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+					$arrReturn['downtime_data'] = $oDowntime->COMMENT;
+				}*/
+			}
+			
+			$arrTmpReturn['state'] = $state;
+			$arrTmpReturn['output'] = $e[2];
+			$arrTmpReturn['alias'] = $e[3]; 
+			$arrTmpReturn['display_name'] = $e[4];
+			$arrTmpReturn['address'] = $e[5];
+			$arrTmpReturn['notes'] = $e[6];
+			$arrTmpReturn['last_check'] = $e[7];
+			$arrTmpReturn['next_check'] = $e[8];
+			$arrTmpReturn['state_type'] = $e[9];
+			$arrTmpReturn['current_check_attempt'] = $e[10];
+			$arrTmpReturn['max_check_attempts'] = $e[11];
+			$arrTmpReturn['last_state_change'] = $e[12];
+			$arrTmpReturn['last_hard_state_change'] = $e[13];
+			$arrTmpReturn['statusmap_image'] = $e[14];
+			$arrTmpReturn['perfdata'] = $e[15];
+			$arrTmpReturn['problem_has_been_acknowledged'] = $e[16];
+		}
 		
 		return $arrReturn;
 	}
@@ -317,17 +402,108 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	/**
 	 * PUBLIC getServicegroupState()
 	 *
-	 * Returns the Nagios state and additional information for the requested servicegroup
+	 * Returns the all services in a hostgroup
 	 *
-	 * FIXME: Not implemented in this backend
-	 *
-	 * @param	String		$servicegroupName
-	 * @param	Boolean		$onlyHardstates
-	 * @return	array		$state
-	 * @author	Roman Kyrylych <rkyrylych@op5.com>
+	 * @param   String    $servicegroupName
+	 * @param   Boolean   $onlyHardstates
+	 * @return  array     $state
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getServicegroupState($servicegroupName, $onlyHardstates) {
+		$result = Array();
 		$arrReturn = Array();
+		
+		$l = $this->queryLivestatus("GET services\n" .
+		  "Filter: groups >= ".$servicegroupName."\n".
+		  "Columns: host_name description display_name state ".
+		  "host_alias host_address plugin_output notes last_check next_check ".
+		  "state_type current_attempt max_attempts last_state_change ".
+		  "last_hard_state_change scheduled_downtime_depth perf_data ".
+		  "last_hard_state acknowledged host_acknowledged downtimes host_downtimes\n");
+		
+		if(!is_array($l) || count($l) <= 0) {
+			$arrReturn['state'] = 'ERROR';
+			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('servicegroupNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICEGROUP' => $servicegroupName));
+		} else {
+			foreach($l as $e) {
+				$arrTmpReturn = Array();
+				$arrTmpReturn['description'] = $e[1];
+				$arrTmpReturn['host'] = $e[0];
+				$arrTmpReturn['display_name'] = $e[2];
+				
+				/**
+				 * Only recognize hard states. There was a discussion about the implementation
+				 * This is a new handling of only_hard_states. For more details, see: 
+				 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
+				 *
+				 * Thanks to Andurin and fredy82
+				 */
+				if($onlyHardstates == 1) {
+					// state_type
+					if($e[10] == '0') {
+						// state = last hard state
+						$e[3] = $e[17];
+					}
+				}
+				
+				switch ($e[3]) {
+					case "0": $state = "OK"; break;
+					case "1": $state = "WARNING"; break;
+					case "2": $state = "CRITICAL"; break;
+					case "3": $state = "UNKNOWN"; break;
+					default: $state = "UNKNOWN"; break;
+				}
+				
+				/**
+				 * Handle host/service acks
+				 *
+				 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+				 * acknowledged => check for acknowledged host
+				 */
+				// $e[17]: acknowledged
+				if($state != 'OK' && $e[18] != 1) {
+					// $e[19]: host_acknowledged
+					$arrTmpReturn['problem_has_been_acknowledged'] = $e[19];
+				} else {
+					$arrTmpReturn['problem_has_been_acknowledged'] = $e[18];
+				}
+				
+				// Handle host/service downtimes
+				// $e[20]: downtimes
+				if(isset($e[20]) && $e[20] != '') {
+					$arrTmpReturn['in_downtime'] = 1;
+					
+					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
+					/* FIXME: downtime information
+					$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
+					if(file_exists($sFile)) {
+						$oDowntime = json_decode(file_get_contents($sFile));
+						
+						$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
+						$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
+						$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+						$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
+					}*/
+				}
+				
+				$arrTmpReturn['state'] = $state;
+				$arrTmpReturn['alias'] = $e[4];
+				$arrTmpReturn['address'] = $e[5];
+				$arrTmpReturn['output'] = $e[6];
+				$arrTmpReturn['notes'] = $e[7];
+				$arrTmpReturn['last_check'] = $e[8];
+				$arrTmpReturn['next_check'] = $e[9];
+				$arrTmpReturn['state_type'] = $e[10];
+				$arrTmpReturn['current_check_attempt'] = $e[11];
+				$arrTmpReturn['max_check_attempts'] = $e[12];
+				$arrTmpReturn['last_state_change'] = $e[13];
+				$arrTmpReturn['last_hard_state_change'] = $e[14];
+				$arrTmpReturn['in_downtime'] = $e[15] > 0;
+				$arrTmpReturn['perfdata'] = $e[16];
+				
+				$arrReturn[] = $arrTmpReturn;
+			}
+		}
 		
 		return $arrReturn;
 	}

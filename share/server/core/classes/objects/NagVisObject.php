@@ -4,7 +4,7 @@
  * NagVisObject.php - Abstract class of an object in NagVis with all necessary 
  *                  information which belong to the object handling in NagVis
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -49,6 +49,9 @@ class NagVisObject {
 	
 	protected $iconPath;
 	protected $iconHtmlPath;
+	
+	private static $sSortOrder = 'asc';
+	private static $iObjectsToSort = -1;
 	
 	/**
 	 * Class constructor
@@ -341,6 +344,12 @@ class NagVisObject {
 		
 		$aTmpMembers = $this->getStateRelevantMembers();
 		
+		// Reset general sorted object counter
+		self::$iObjectsToSort = $this->hover_childs_limit;
+		
+		// Set the sort order
+		self::$sSortOrder = $this->hover_childs_order;
+		
 		// Sort the array of child objects by the sort option
 		switch($this->hover_childs_sort) {
 			case 's':
@@ -354,32 +363,21 @@ class NagVisObject {
 			break;
 		}
 		
-		// If the sorted array should be reversed
-		if($this->hover_childs_order == 'desc') {
-			$aTmpMembers = array_reverse($aTmpMembers);
-		}
-		
 		// Count only once, not in loop header
 		$iNumObjects = count($aTmpMembers);
 		
 		// Loop all child object until all looped or the child limit is reached
 		for($i = 0, $iEnum = 0; $iEnum <= $this->hover_childs_limit && $i < $iNumObjects; $i++) {
-			$sType = $aTmpMembers[$i]->getType();
-			
 			// Only get the member when this is no loop
-			if($sType != 'map' || ($sType == 'map' && $this->MAPCFG->getName() != $aTmpMembers[$i]->MAPCFG->getName())) {
-				if($sType != 'textbox' && $sType != 'shape' && $sType != 'line') {
-					if($bStateInfo) {
-						$arr[] = $aTmpMembers[$i]->getObjectStateInformation(false);
-					} else {
-						$arr[] = $aTmpMembers[$i]->getObjectInformation(false);
-					}
-					
-					// Only count objects which are added to the list for checking
-					// reached hover_childs_limit
-					$iEnum++;
-				}
+			if($bStateInfo) {
+				$arr[] = $aTmpMembers[$i]->getObjectStateInformation(false);
+			} else {
+				$arr[] = $aTmpMembers[$i]->getObjectInformation(false);
 			}
+			
+			// Only count objects which are added to the list for checking
+			// reached hover_childs_limit
+			$iEnum++;
 		}
 		
 		return $arr;
@@ -446,29 +444,45 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
-		// Do not sort shapes and textboxes
-		if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ1->getType() == 'line' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox' || $OBJ2->getType() == 'line') {
+		// Only sort the needed number of objects
+		if(self::$iObjectsToSort >= 0) {
+			if($OBJ1->getType() == 'service') {
+				$name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
+			} else {
+				$name1 = strtolower($OBJ1->getName());
+			}
+			
+			if($OBJ2->getType() == 'service') {
+				$name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
+			} else {
+				$name2 = strtolower($OBJ2->getName());
+			}
+	
+			if ($name1 == $name2) {
+				self::$iObjectsToSort--;
+				
+				return 0;
+			} elseif($name1 > $name2) {
+				self::$iObjectsToSort--;
+				
+				// Sort depending on configured direction
+				if(self::$sSortOrder === 'asc') {
+					return +1;
+				} else {
+					return -1;
+				}
+			} else {
+				self::$iObjectsToSort--;
+				
+				// Sort depending on configured direction
+				if(self::$sSortOrder === 'asc') {
+					return -1;
+				} else {
+					return +1;
+				}
+			}
+		} else {
 			return 0;
-		}
-
-		if($OBJ1->getType() == 'service') {
-			$name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
-		} else {
-			$name1 = strtolower($OBJ1->getName());
-		}
-		
-		if($OBJ2->getType() == 'service') {
-			$name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
-		} else {
-			$name2 = strtolower($OBJ2->getName());
-		}
-
-		if ($name1 == $name2) {
-			return 0;
-		} elseif($name1 > $name2) {
-			return +1;
-		} else {
-			return -1;
 		}
 	}
 	
@@ -482,28 +496,44 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsByState($OBJ1, $OBJ2) {
-		// Do not sort shapes and textboxes
-		if($OBJ1->getType() == 'shape' || $OBJ1->getType() == 'textbox' || $OBJ1->getType() == 'line' || $OBJ2->getType() == 'shape' || $OBJ2->getType() == 'textbox' || $OBJ2->getType() == 'line') {
-			return 0;
-		}
-		
-		$state1 = $OBJ1->getSummaryState();
-		$state2 = $OBJ2->getSummaryState();
-
-		// Quit when nothing to compare
-		if($state1 == '' || $state2 == '') {
-			return 0;
-		}
-
-		$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
-		
-		// FIXME: Should handle ack/downtime states
-		if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {
-			return 0;
-		} elseif($stateWeight[$state1]['normal'] < $stateWeight[$state2]['normal']) {
-			return +1;
+		// Only sort the needed number of objects
+		if(self::$iObjectsToSort >= 0) {
+			$state1 = $OBJ1->getSummaryState();
+			$state2 = $OBJ2->getSummaryState();
+	
+			// Quit when nothing to compare
+			if($state1 == '' || $state2 == '') {
+				return 0;
+			}
+	
+			$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
+			
+			// FIXME: Should handle ack/downtime states
+			if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {
+				self::$iObjectsToSort--;
+				
+				return 0;
+			} elseif($stateWeight[$state1]['normal'] < $stateWeight[$state2]['normal']) {
+				self::$iObjectsToSort--;
+				
+				// Sort depending on configured direction
+				if(self::$sSortOrder === 'asc') {
+					return +1;
+				} else {
+					return -1;
+				}
+			} else {
+				self::$iObjectsToSort--;
+				
+				// Sort depending on configured direction
+				if(self::$sSortOrder === 'asc') {
+					return -1;
+				} else {
+					return +1;
+				}
+			}
 		} else {
-			return -1;
+			return 0;
 		}
 	}
 }
