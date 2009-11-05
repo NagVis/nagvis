@@ -937,6 +937,8 @@ makedir "$NAGVIS_PATH"
 if [ $NAGVIS_TAG -ge 01050000 ]; then
 	# Create non shared var directory when not exists
 	makedir "$NAGVIS_PATH/var"
+	makedir "$NAGVIS_PATH/var/tmpl/cache"
+	makedir "$NAGVIS_PATH/var/tmpl/compile"
 	# Create shared var directory when not exists
 	makedir "$NAGVIS_PATH/share/var"
 	# Copy all desired files
@@ -1076,6 +1078,8 @@ else
 	set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/var"
 	set_perm 664 "$NAGVIS_PATH/var/*"
+	set_perm 775 "$NAGVIS_PATH/var/tmpl/cache"
+	set_perm 775 "$NAGVIS_PATH/var/tmpl/compile"
 	set_perm 775 "$NAGVIS_PATH/share/var"
 	set_perm 664 "$NAGVIS_PATH/share/var/*"
 fi	

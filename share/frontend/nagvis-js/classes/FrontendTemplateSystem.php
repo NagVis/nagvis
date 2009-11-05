@@ -9,7 +9,7 @@ class FrontendTemplateSystem {
 		require_once('ext/dwoo-1.1.0/dwooAutoload.php');
 
 		$this->CORE = $CORE;
-		$this->TMPL = new Dwoo();
+		$this->TMPL = new Dwoo($this->CORE->getMainCfg()->getValue('paths','var').'tmpl/compile', $this->CORE->getMainCfg()->getValue('paths','var').'tmpl/cache');
 	}
 	
 	public function getTmplSys() {
