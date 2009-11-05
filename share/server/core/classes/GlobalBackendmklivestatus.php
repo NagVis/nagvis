@@ -645,6 +645,73 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PUBLIC getHostStateCounts()
+	 *
+	 * Queries the livestatus socket for host state counts. The information
+	 * are used to calculate the summary output and the summary state of a 
+	 * host and a well performing alternative to the existing recurisve
+	 * algorithm.
+	 *
+	 * @param   String   Host name
+	 * @param   Boolean  Only recognize hard states
+	 * @return  Array    List of states and counts
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getHostStateCounts($hostName, $onlyHardstates) {
+		$aReturn = Array();
+		
+		$stateAttr = 'state';
+		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
+		// Get service information
+		$services = $this->queryLivestatusSingleRow("GET services\n" .
+		   "Filter: host_name = ".$hostName."\n" .
+		   "Filter: scheduled_downtime_depth = 0\n" .
+		   "Filter: host_scheduled_downtime_depth = 0\n" .
+		   "Filter: in_notification_period = 1\n" .
+		   // Count OK
+		   "Stats: ".$stateAttr." = 0\n" .
+		   // Count WARNING
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count WARNING(ACK)
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count CRITICAL
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count CRITICAL(ACK)
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNKNOWN
+		   "Stats: ".$stateAttr." = 3\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNKNOWN(ACK)
+		   "Stats: ".$stateAttr." = 3\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n");
+		
+		$aReturn['OK']['normal'] = $services[0];
+		$aReturn['WARNING']['normal'] = $services[1];
+		$aReturn['WARNING']['ack'] = $services[2];
+		$aReturn['CRITICAL']['normal'] = $services[3];
+		$aReturn['CRITICAL']['ack'] = $services[4];
+		$aReturn['UNKNOWN']['normal'] = $services[5];
+		$aReturn['UNKNOWN']['ack'] = $services[6];
+		
+		return $aReturn;
+	}
+	
+	/**
 	 * PUBLIC getHostgroupStateCounts()
 	 *
 	 * Queries the livestatus socket for hostgroup state counts. The information

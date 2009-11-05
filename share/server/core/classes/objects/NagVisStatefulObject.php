@@ -284,7 +284,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getStateDuration() {
-		if(isset($this->last_state_change) && $this->last_state_change != '0') {
+		if(isset($this->last_state_change) && $this->last_state_change != '0' && $this->last_state_change != '') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
@@ -304,7 +304,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getLastStateChange() {
-		if(isset($this->last_state_change) && $this->last_state_change != '0') {
+		if(isset($this->last_state_change) && $this->last_state_change != '0' && $this->last_state_change != '') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
@@ -324,7 +324,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getLastHardStateChange() {
-		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0') {
+		if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0' && $this->last_hard_state_change != '') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
@@ -344,7 +344,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getLastCheck() {
-		if(isset($this->last_check) && $this->last_check != '0') {
+		if(isset($this->last_check) && $this->last_check != '0' && $this->last_check != '') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}
@@ -364,7 +364,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getNextCheck() {
-		if(isset($this->next_check) && $this->next_check != '0') {
+		if(isset($this->next_check) && $this->next_check != '0' && $this->next_check != '') {
 			if($this->dateFormat == '') {
 				$this->dateFormat = $this->CORE->getMainCfg()->getValue('global','dateformat');
 			}

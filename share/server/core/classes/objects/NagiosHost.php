@@ -54,6 +54,8 @@ class NagiosHost extends NagVisStatefulObject {
 	protected $parentObjects;
 	protected $members;
 	
+	protected $aStateCounts = Array();
+	
 	/**
 	 * Class constructor
 	 *
@@ -99,21 +101,45 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	public function fetchState() {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+			
+			// Get host state and general host information
+			// FIXME: Can this be combined with new getHostStateCounts query?
 			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
 			
 			// Append contents of the array to the object properties
 			$this->setObjectInformation($arrValues);
 			
-			// Get all service states
-			if($this->getState() != 'ERROR' && !$this->hasMembers()) {
-				$this->fetchServiceObjects();
+			// New backend feature which reduces backend queries and breaks up the performance
+			// problems due to the old recursive mechanism. If it's not available fall back to
+			// old mechanism.
+			if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostStateCounts', false)) {
+				// Get state counts
+				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
+				
+				// Calculate summary state
+				$this->fetchSummaryStateFromCounts();
+				
+				// Generate summary output
+				$this->fetchSummaryOutputFromCounts();
+				
+				// Get all service states
+				// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
+				// FIXME: This should only be called when the hover menu is needed to be shown
+				if($this->getState() != 'ERROR' && !$this->hasMembers()) {
+					$this->fetchServiceObjects();
+				}
+			} else {
+				// Get all service states
+				if($this->getState() != 'ERROR' && !$this->hasMembers()) {
+					$this->fetchServiceObjects();
+				}
+				
+				// Also get summary state
+				$this->fetchSummaryState();
+				
+				// At least summary output
+				$this->fetchSummaryOutput();
 			}
-			
-			// Also get summary state
-			$this->fetchSummaryState();
-			
-			// At least summary output
-			$this->fetchSummaryOutput();
 		}
 	}
 	
@@ -536,6 +562,80 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
+	 * PROTECTED fetchSummaryStateFromCounts()
+	 *
+	 * Fetches the summary state from the member state counts
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function fetchSummaryStateFromCounts() {
+		// Get Host state
+		$this->summary_state = $this->state;
+		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
+		$this->summary_in_downtime = $this->in_downtime;
+		
+		// Only merge host state with service state when recognize_services is set 
+		// to 1
+		if($this->getRecognizeServices()) {
+			// Load the configured state weights
+			$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+			
+			// Fetch the current state to start with
+			if($this->summary_state == '') {
+				$currWeight = 0;
+			} else {
+				if(isset($stateWeight[$this->summary_state])) {
+					$sCurrSubState = 'normal';
+					
+					if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+						$sCurrSubState = 'ack';
+					} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+						$sCurrSubState = 'downtime';
+					}
+					
+					$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
+				} else {
+					//FIXME: Error handling: Invalid state
+					echo 'Invalid state: ' .$this->summary_state;
+				}
+			}
+			
+			// Loop all major states
+			foreach($this->aStateCounts AS $sState => $aSubstates) {
+				// Loop all substates (normal,ack,downtime,...)
+				foreach($aSubstates AS $sSubState => $iCount) {
+					// Found some objects with this state+substate
+					if($iCount > 0) {
+						// Get weight
+						if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
+							$weight = $stateWeight[$sState][$sSubState];
+							
+							// The new state is worse than the current state
+							if($currWeight < $weight) {
+								$this->summary_state = $sState;
+						
+								if($sSubState == 'ack') {
+									$this->summary_problem_has_been_acknowledged = 1;
+								} else {
+									$this->summary_problem_has_been_acknowledged = 0;
+								}
+								
+								if($sSubState == 'downtime') {
+									$this->summary_in_downtime = 1;
+								} else {
+									$this->summary_in_downtime = 0;
+								}
+							}
+						} else {
+							//FIXME: Error handling: Invalid state+substate
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
 	 * PRIVATE fetchSummaryState()
 	 *
 	 * Fetches the summary state from all services
@@ -556,6 +656,46 @@ class NagiosHost extends NagVisStatefulObject {
 			// Get states of services and merge with host state
 			foreach($this->getMembers() AS $SERVICE) {
 				$this->wrapChildState($SERVICE);
+			}
+		}
+	}
+	
+	/**
+	 * PRIVATE fetchSummaryOutputFromCounts()
+	 *
+	 * Fetches the summary output from the object state counts
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchSummaryOutputFromCounts() {
+		// Write host state
+		$this->summary_output = $this->CORE->getLang()->getText('hostStateIs').' '.$this->state.'. ';
+		
+		// Only merge host state with service state when recognize_services is set 
+		// to 1
+		if($this->getRecognizeServices()) {
+			// If there are services write the summary state for them
+			if($this->hasMembers()) {
+				$arrServiceStates = Array();
+				
+				// Loop all major states
+				foreach($this->aStateCounts AS $sState => $aSubstates) {
+					// Loop all substates (normal,ack,downtime,...)
+					foreach($aSubstates AS $sSubState => $iCount) {
+						// Found some objects with this state+substate
+						if($iCount > 0) {
+							if(!isset($arrServiceStates[$sState])) {
+								$arrServiceStates[$sState] = $iCount;
+							} else {
+								$arrServiceStates[$sState] += $iCount;
+							}
+						}
+					}
+				}
+				
+				$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+			} else {
+				$this->summary_output .= $this->CORE->getLang()->getText('hostHasNoServices','HOST~'.$this->getName());
 			}
 		}
 	}

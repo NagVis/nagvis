@@ -97,6 +97,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			$this->fetchSummaryOutputFromCounts();
 			
 			// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
+			// FIXME: This should only be called when the hover menu is needed to be shown
 			
 			$this->state = $this->summary_state;
 		} else {
@@ -193,6 +194,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 */
 	private function fetchSummaryStateFromCounts() {
 		if($this->hasMembers()) {
+			// Load the configured state weights
+			$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+			
 			// Fetch the current state to start with
 			if($this->summary_state == '') {
 				$currWeight = 0;
@@ -211,9 +215,6 @@ class NagiosHostgroup extends NagVisStatefulObject {
 					//FIXME: Error handling: Invalid state
 				}
 			}
-			
-			// Load the configured state weight
-			$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 			
 			// Loop all major states
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
