@@ -325,7 +325,10 @@ class NagVisObject {
     
 		// Only do this for parents
 		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
-			$arr['members'] = $this->getSortedObjectMembers();
+			$arr['members'] = Array();
+			foreach($this->getSortedObjectMembers() AS $OBJ) {
+				$arr['members'][] = $OBJ->getObjectInformation(false);
+			}
 		}
 		
 		return $arr;
@@ -339,7 +342,7 @@ class NagVisObject {
 	 * @return	Array		Member object information
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getSortedObjectMembers($bStateInfo=FALSE) {
+	public function getSortedObjectMembers() {
 		$arr = Array();
 		
 		$aTmpMembers = $this->getStateRelevantMembers();
@@ -368,12 +371,7 @@ class NagVisObject {
 		
 		// Loop all child object until all looped or the child limit is reached
 		for($i = 0, $iEnum = 0; $iEnum <= $this->hover_childs_limit && $i < $iNumObjects; $i++) {
-			// Only get the member when this is no loop
-			if($bStateInfo) {
-				$arr[] = $aTmpMembers[$i]->getObjectStateInformation(false);
-			} else {
-				$arr[] = $aTmpMembers[$i]->getObjectInformation(false);
-			}
+			$arr[] = $aTmpMembers[$i];
 			
 			// Only count objects which are added to the list for checking
 			// reached hover_childs_limit

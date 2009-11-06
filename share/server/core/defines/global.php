@@ -70,6 +70,7 @@ define('SESSION_NAME', 'nagvis_session');
 // Other basic constants
 define('REQUIRES_AUTHORISATION', true);
 define('GET_STATE', true);
+define('DONT_GET_CHILD_STATES', false);
 
 // Maximum length for usernames/passwords
 define('AUTH_MAX_PASSWORD_LENGTH', 15);

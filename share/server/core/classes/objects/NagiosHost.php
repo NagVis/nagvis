@@ -97,10 +97,11 @@ class NagiosHost extends NagVisStatefulObject {
 	 * Gets the state of the host and all its services from selected backend. It
 	 * forms the summary output
 	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   Boolean  Optional flag to disable fetching of member status
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchState() {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+	public function fetchState($bFetchChilds = true) {
+		if($this->BACKEND->checkBackendInitialized($this->backend_id, true)) {
 			
 			// Get host state and general host information
 			// FIXME: Can this be combined with new getHostStateCounts query?
@@ -123,10 +124,17 @@ class NagiosHost extends NagVisStatefulObject {
 				$this->fetchSummaryOutputFromCounts();
 				
 				// Get all service states
-				// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
 				// These information are only interesting when the hover_menu is shown
+				/* FIXME: Get member summary state+substate, output for the objects to
+				   be shown in hover menu. This could be improved by limiting the 
+				   number of members the state will be fetched for.
+				   For example: when the members will be sorted by name and limited to
+				   10 it is only neccessary to fetch 10 members.
+				   When member should be sorted by state the state counts could be
+				   used to exclude objects with states which will not be displayed.
+				*/
 				if($this->hover_menu == 1) {
-					if($this->getState() != 'ERROR' && !$this->hasMembers()) {
+					if($bFetchChilds && $this->getState() != 'ERROR' && !$this->hasMembers()) {
 						$this->fetchServiceObjects();
 					}
 				}
@@ -589,9 +597,9 @@ class NagiosHost extends NagVisStatefulObject {
 				if(isset($stateWeight[$this->summary_state])) {
 					$sCurrSubState = 'normal';
 					
-					if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+					if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$this->summary_state]['ack'])) {
 						$sCurrSubState = 'ack';
-					} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+					} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$this->summary_state]['downtime'])) {
 						$sCurrSubState = 'downtime';
 					}
 					

@@ -394,6 +394,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$arrTmpReturn['statusmap_image'] = $e[14];
 			$arrTmpReturn['perfdata'] = $e[15];
 			$arrTmpReturn['problem_has_been_acknowledged'] = $e[16];
+			
+			$arrReturn[] = $arrTmpReturn;
 		}
 		
 		return $arrReturn;

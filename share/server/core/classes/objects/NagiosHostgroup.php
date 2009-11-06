@@ -75,9 +75,10 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * Fetches the state of the hostgroup and all members. It also fetches the
 	 * summary output
 	 *
+	 * @param   Boolean  Optional flag to disable fetching of member status
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchState() {
+	public function fetchState($bFetchChilds = true) {
 		// New backend feature which reduces backend queries and breaks up the performance
 		// problems due to the old recursive mechanism. If it's not available fall back to
 		// old mechanism.
@@ -93,8 +94,10 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			
 			// This should only be called when the hover menu is needed to be shown
 			if($this->hover_menu == 1) {
-				// FIXME: Get member summary state+substate, output for the objects to be shown in hover menu
-				$this->fetchHostObjects();
+				if($bFetchChilds) {
+					// Get member summary state+substate, output for the objects to be shown in hover menu
+					$this->fetchHostObjects();
+				}
 			}
 				
 			$this->state = $this->summary_state;
@@ -215,8 +218,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			// At least summary output
 			// FIXME: Needed?
 			//$OBJ->fetchSummaryOutput();
-			
-			//$OBJ->fetchState();
+			$OBJ->fetchState(DONT_GET_CHILD_STATES);
 			
 			$this->members[] = $OBJ;
 		}
