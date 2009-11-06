@@ -914,7 +914,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$hosts = $this->queryLivestatusSingleRow("GET hosts\n" .
 		   "Filter: groups >= ".$hostgroupName."\n" .
 		   "Filter: scheduled_downtime_depth = 0\n" .
-		   "Filter: host_scheduled_downtime_depth = 0\n" .
 		   "Filter: in_notification_period = 1\n" .
 		   // Count UP
 		   "Stats: ".$stateAttr." = 0\n" .
