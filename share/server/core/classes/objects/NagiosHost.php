@@ -100,15 +100,19 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @param   Boolean  Optional flag to disable fetching of member status
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchState($bFetchChilds = true) {
+	public function fetchState($bFetchObjectState = true, $bFetchChilds = true) {
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, true)) {
 			
 			// Get host state and general host information
+			// This can be ignored when called from e.g. hostgroups where the state
+			// has been fetched for all members before
 			// FIXME: Can this be combined with new getHostStateCounts query?
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
+			if($bFetchObjectState === true) {
+				$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
 			
-			// Append contents of the array to the object properties
-			$this->setObjectInformation($arrValues);
+				// Append contents of the array to the object properties
+				$this->setObjectInformation($arrValues);
+			}
 			
 			// New backend feature which reduces backend queries and breaks up the performance
 			// problems due to the old recursive mechanism. If it's not available fall back to

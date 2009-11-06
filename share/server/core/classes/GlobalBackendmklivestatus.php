@@ -320,9 +320,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "Filter: groups >= ".$hostgroupName."\n");
 		
 		if(count($l) == 0) {
+			$arrReturn['name'] = '';
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
-			return $arrReturn;
+			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('The hostgroup [NAME] could not be found in backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'NAME' => $hostgroupName));
+			return Array($arrReturn);
 		}
 		
 		// Loop all hosts

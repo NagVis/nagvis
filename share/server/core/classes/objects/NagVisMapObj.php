@@ -160,6 +160,18 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 
 	/**
+	 * PUBLIC hasObjects()
+	 *
+	 * The fastest way I can expect to check if the map has objects
+	 *
+	 * @return	Boolean
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function hasMembers() {
+		return isset($this->members[0]);
+	}
+
+	/**
 	 * PUBLIC hasStatefulObjects()
 	 *
 	 * Check if the map has a stateful object on it

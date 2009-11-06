@@ -218,7 +218,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			// At least summary output
 			// FIXME: Needed?
 			//$OBJ->fetchSummaryOutput();
-			$OBJ->fetchState(DONT_GET_CHILD_STATES);
+			$OBJ->fetchState(DONT_GET_OBJECT_STATE, DONT_GET_SINGLE_MEMBER_STATES);
 			
 			$this->members[] = $OBJ;
 		}

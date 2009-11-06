@@ -121,7 +121,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @return Boolean	Yes, No
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function hasChilds() {
+	function hasMembers() {
 		return isset($this->members[0]);
 	}
 	
