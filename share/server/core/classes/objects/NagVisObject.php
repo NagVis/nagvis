@@ -51,7 +51,6 @@ class NagVisObject {
 	protected $iconHtmlPath;
 	
 	private static $sSortOrder = 'asc';
-	private static $iObjectsToSort = -1;
 	
 	/**
 	 * Class constructor
@@ -347,9 +346,6 @@ class NagVisObject {
 		
 		$aTmpMembers = $this->getStateRelevantMembers();
 		
-		// Reset general sorted object counter
-		self::$iObjectsToSort = $this->hover_childs_limit;
-		
 		// Set the sort order
 		self::$sSortOrder = $this->hover_childs_order;
 		
@@ -442,45 +438,34 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
-		// Only sort the needed number of objects
-		if(self::$iObjectsToSort >= 0) {
-			if($OBJ1->getType() == 'service') {
-				$name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
+		if($OBJ1->getType() == 'service') {
+			$name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
+		} else {
+			$name1 = strtolower($OBJ1->getName());
+		}
+		
+		if($OBJ2->getType() == 'service') {
+			$name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
+		} else {
+			$name2 = strtolower($OBJ2->getName());
+		}
+
+		if ($name1 == $name2) {
+			return 0;
+		} elseif($name1 > $name2) {
+			// Sort depending on configured direction
+			if(self::$sSortOrder === 'asc') {
+				return +1;
 			} else {
-				$name1 = strtolower($OBJ1->getName());
-			}
-			
-			if($OBJ2->getType() == 'service') {
-				$name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
-			} else {
-				$name2 = strtolower($OBJ2->getName());
-			}
-	
-			if ($name1 == $name2) {
-				self::$iObjectsToSort--;
-				
-				return 0;
-			} elseif($name1 > $name2) {
-				self::$iObjectsToSort--;
-				
-				// Sort depending on configured direction
-				if(self::$sSortOrder === 'asc') {
-					return +1;
-				} else {
-					return -1;
-				}
-			} else {
-				self::$iObjectsToSort--;
-				
-				// Sort depending on configured direction
-				if(self::$sSortOrder === 'asc') {
-					return -1;
-				} else {
-					return +1;
-				}
+				return -1;
 			}
 		} else {
-			return 0;
+			// Sort depending on configured direction
+			if(self::$sSortOrder === 'asc') {
+				return -1;
+			} else {
+				return +1;
+			}
 		}
 	}
 	
@@ -494,8 +479,6 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsByState($OBJ1, $OBJ2) {
-		// Only sort the needed number of objects
-		if(self::$iObjectsToSort >= 0) {
 			$state1 = $OBJ1->getSummaryState();
 			$state2 = $OBJ2->getSummaryState();
 	
@@ -508,12 +491,8 @@ class NagVisObject {
 			
 			// FIXME: Should handle ack/downtime states
 			if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {
-				self::$iObjectsToSort--;
-				
 				return 0;
 			} elseif($stateWeight[$state1]['normal'] < $stateWeight[$state2]['normal']) {
-				self::$iObjectsToSort--;
-				
 				// Sort depending on configured direction
 				if(self::$sSortOrder === 'asc') {
 					return +1;
@@ -521,8 +500,6 @@ class NagVisObject {
 					return -1;
 				}
 			} else {
-				self::$iObjectsToSort--;
-				
 				// Sort depending on configured direction
 				if(self::$sSortOrder === 'asc') {
 					return -1;
