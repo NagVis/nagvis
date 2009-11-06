@@ -479,36 +479,33 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsByState($OBJ1, $OBJ2) {
-			$state1 = $OBJ1->getSummaryState();
-			$state2 = $OBJ2->getSummaryState();
-	
-			// Quit when nothing to compare
-			if($state1 == '' || $state2 == '') {
-				return 0;
-			}
-	
-			$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
-			
-			// FIXME: Should handle ack/downtime states
-			if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {
-				return 0;
-			} elseif($stateWeight[$state1]['normal'] < $stateWeight[$state2]['normal']) {
-				// Sort depending on configured direction
-				if(self::$sSortOrder === 'asc') {
-					return +1;
-				} else {
-					return -1;
-				}
+		$state1 = $OBJ1->getSummaryState();
+		$state2 = $OBJ2->getSummaryState();
+
+		// Quit when nothing to compare
+		if($state1 == '' || $state2 == '') {
+			return 0;
+		}
+
+		$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
+		
+		// FIXME: Should handle ack/downtime states
+		if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {
+			return 0;
+		} elseif($stateWeight[$state1]['normal'] < $stateWeight[$state2]['normal']) {
+			// Sort depending on configured direction
+			if(self::$sSortOrder === 'asc') {
+				return +1;
 			} else {
-				// Sort depending on configured direction
-				if(self::$sSortOrder === 'asc') {
-					return -1;
-				} else {
-					return +1;
-				}
+				return -1;
 			}
 		} else {
-			return 0;
+			// Sort depending on configured direction
+			if(self::$sSortOrder === 'asc') {
+				return -1;
+			} else {
+				return +1;
+			}
 		}
 	}
 }
