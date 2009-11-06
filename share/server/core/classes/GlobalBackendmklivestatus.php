@@ -314,7 +314,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "GET hosts\n".
 		  "Columns: name state plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
-		  "current_attempt max_attempts last_state_change ".
+		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
 		  "last_hard_state acknowledged downtimes\n".
 		  "Filter: groups >= ".$hostgroupName."\n");
@@ -327,8 +327,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Loop all hosts
 		foreach($l AS $e) {
+			print_r($e);
 			$numResp = count($e);
-			if($numResp < $numAttr) {
+			if($numResp != $numAttr) {
 				$arrReturn['name'] = $e[0];
 				$arrReturn['state'] = 'ERROR';
 				$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('The response from the backend is not valid (Asked for [NUMASKED] attributes, got [NUMRESPONSE]) in backend [BACKENDID]', Array('BACKENDID' => $this->backendId, 'NUMASKED' => $numAttr, 'NUMRESPONSE' => $numResp));
@@ -417,7 +418,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "Filter: groups >= ".$servicegroupName."\n".
 		  "Columns: host_name description display_name state ".
 		  "host_alias host_address plugin_output notes last_check next_check ".
-		  "state_type current_attempt max_attempts last_state_change ".
+		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change scheduled_downtime_depth perf_data ".
 		  "last_hard_state acknowledged host_acknowledged downtimes host_downtimes\n");
 		
@@ -525,7 +526,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "GET hosts\n".
 		  "Columns: state plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
-		  "current_attempt max_attempts last_state_change ".
+		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
 		  "last_hard_state acknowledged downtimes\n".
 		  "Filter: name = ".$hostName."\n");
@@ -621,7 +622,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		$query .= "Columns: description display_name state ".
 		  "host_alias host_address plugin_output notes last_check next_check ".
-		  "state_type current_attempt max_attempts last_state_change ".
+		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change scheduled_downtime_depth perf_data ".
 		  "last_hard_state acknowledged host_acknowledged downtimes host_downtimes\n";
 		
