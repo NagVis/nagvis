@@ -523,22 +523,20 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	public function getHostState($hostName, $onlyHardstates) {
 		$arrReturn = Array();
 		
-		$l = $this->queryLivestatus(
+		$e = $this->queryLivestatusSingleRow(
 		  "GET hosts\n".
 		  "Columns: state plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
 		  "last_hard_state acknowledged downtimes\n".
-		  "Filter: name = ".$hostName."\n");
+      "Filter: name = ".$hostName."\n");
 		
-		if(count($l) == 0) {
+		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
 			return $arrReturn;
 		}
-		
-		$e = $l[0];
 		
 		/**
 		 * Only recognize hard states. There was a discussion about the implementation
