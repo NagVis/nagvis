@@ -327,7 +327,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Loop all hosts
 		foreach($l AS $e) {
-			print_r($e);
 			$numResp = count($e);
 			if($numResp != $numAttr) {
 				$arrReturn['name'] = $e[0];
