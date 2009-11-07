@@ -3,7 +3,7 @@
  *
  * GlobalLanguage.php - Class for handling languages in NagVis
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: lars@vertical-visions.de)
  *
  * License:
  *
@@ -109,13 +109,8 @@ class GlobalLanguage {
 	 */
 	private function checkGettextSupport() {
 		if (!extension_loaded('gettext')) {
-			dl('gettext.so');
-			if (!extension_loaded('gettext')) {
-				new GlobalFrontendMessage('ERROR', $this->getText('phpModuleNotLoaded','MODULE~gettext'), $this->MAINCFG->getValue('paths','htmlbase'));
-				return FALSE;
-			} else {
-				return TRUE;
-			}
+			new GlobalFrontendMessage('ERROR', $this->getText('phpModuleNotLoaded','MODULE~gettext'), $this->MAINCFG->getValue('paths','htmlbase'));
+			return FALSE;
 		} else {
 			return TRUE;	
 		}

@@ -213,13 +213,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	private function checkMysqlSupport() {
 		// Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
-			dl('mysql.so');
-			if (!extension_loaded('mysql')) {
-				new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
-				return FALSE;
-			} else {
-				return TRUE;
-			}
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+			return FALSE;
 		} else {
 			return TRUE;	
 		}
