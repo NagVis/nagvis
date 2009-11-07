@@ -42,7 +42,7 @@ class WuiFrontend extends GlobalPage {
 		$htmlJs = $CORE->getMainCfg()->getValue('paths', 'htmljs');
 		
 		$prop = Array('title'=> $CORE->getMainCfg()->getValue('internal', 'title') . ' WUI',
-					  'cssIncludes'=>Array('../nagvis-js/css/style.css',
+					  'cssIncludes'=>Array($this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates').'/default.css',
 						                     './css/wui.css',
 						                     './css/office_xp/office_xp.css'),
 					  'jsIncludes'=>Array(

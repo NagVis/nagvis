@@ -77,6 +77,7 @@ class NagVisIndexView {
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
 			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
+			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
 			'bUseCompressedJs' => $this->checkJsCompressed(),
 			'customStylesheet' => $this->sCustomStylesheet,
 			'headerMenu' => $this->sHeaderMenu,

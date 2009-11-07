@@ -111,7 +111,7 @@ class FrontendMessage {
 			}
 		}
 		
-		$content .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/frontend/nagvis-js/css/style.css" />'."\n";
+		$content .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/userfiles/templates/pages/default.css" />'."\n";
 		$content .= '<div id="messageBoxDiv">'."\n";
 		$content .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
 		$content .= '      <tr>'."\n";

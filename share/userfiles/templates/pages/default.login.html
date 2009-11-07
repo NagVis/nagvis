@@ -8,8 +8,8 @@
 	<script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
 	<script type="text/javascript" src="{$htmlJs}ajax.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontend.js"></script>
-	<link rel="stylesheet" type="text/css" href="{$htmlCss}style.css">
-	<link rel="stylesheet" type="text/css" href="{$stylesheet}" id="login-css"  media="all" />
+	<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
+	<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.login.css" id="login-css"  media="all" />
 	<link rel="shortcut icon" href="{$htmlBase}frontend/nagvis-js/images/internal/favicon.png" />
 	<meta name='robots' content='noindex,nofollow' />
 	<script type="text/javascript">
@@ -19,7 +19,7 @@
 <body class="login">
 
 <div id="login">
-<h1><h1><a href="#" title="{$pageTitle}" style="background-image:url({$htmlImages}internal/logo_96x25.png)">{$pageTitle}</a></h1>
+<h1><a href="#" title="{$pageTitle}" style="background-image:url({$htmlImages}internal/logo.png)">{$pageTitle}</a></h1>
 
 <form name="loginform" id="loginform" action="#" onsubmit="submitFrontendForm('{$formTarget}', 'loginform');return false" method="post">
 	<p>

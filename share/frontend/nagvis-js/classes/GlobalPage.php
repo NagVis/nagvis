@@ -54,7 +54,7 @@ class GlobalPage {
 		
 		// Define default Properties here
 		$defaultProperties = Array('title'=>'NagVis Page',
-									'cssIncludes' => Array($this->CORE->getMainCfg()->getValue('paths','htmlbase').'/nagvis/includes/css/style.css'),
+									'cssIncludes' => Array($this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates').'/default.css'),
 									'jsIncludes' => Array(),
 									'extHeader' => '',
 									'allowedUsers' => Array('EVERYONE'),
