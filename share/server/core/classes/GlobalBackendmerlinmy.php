@@ -4,7 +4,7 @@
  * GlobalBackendmerlinmy.php - backend class for handling object and state 
  *                             information stored in the Merlin database.
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: lars@vertical-visions.de)
  *
  * License:
  *
@@ -160,13 +160,8 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	private function checkMysqlSupport() {
 		// Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
-			dl('mysql.so');
-			if (!extension_loaded('mysql')) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
-				return FALSE;
-			} else {
-				return TRUE;
-			}
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+			return FALSE;
 		} else {
 			return TRUE;	
 		}
