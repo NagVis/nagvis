@@ -316,7 +316,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "last_hard_state acknowledged downtimes\n".
+		  "last_hard_state acknowledged scheduled_downtime_depth\n".
 		  "Filter: groups >= ".$hostgroupName."\n");
 		
 		if(count($l) == 0) {
@@ -362,8 +362,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			}
 			
 			// If there is a downtime for this object, save the data
-			// $e[18]: downtimes
-			if(isset($e[18]) && $e[18] != '') {
+			// $e[18]: scheduled_downtime_depth
+			if(isset($e[18]) && $e[18] > 0) {
 				$arrTmpReturn['in_downtime'] = 1;
 				
 				// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
@@ -416,13 +416,20 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$result = Array();
 		$arrReturn = Array();
 		
+		$stateAttr = 'state';
+		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
 		$l = $this->queryLivestatus("GET services\n" .
 		  "Filter: groups >= ".$servicegroupName."\n".
-		  "Columns: host_name description display_name state ".
+		  "Columns: host_name description display_name ".$stateAttr." ".
 		  "host_alias host_address plugin_output notes last_check next_check ".
 		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change scheduled_downtime_depth perf_data ".
-		  "last_hard_state acknowledged host_acknowledged downtimes host_downtimes\n");
+		  "acknowledged host_acknowledged host_scheduled_downtime_depth\n");
 		
 		if(!is_array($l) || count($l) <= 0) {
 			$arrReturn['state'] = 'ERROR';
@@ -430,24 +437,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		} else {
 			foreach($l as $e) {
 				$arrTmpReturn = Array();
-				$arrTmpReturn['description'] = $e[1];
 				$arrTmpReturn['host'] = $e[0];
+				$arrTmpReturn['description'] = $e[1];
 				$arrTmpReturn['display_name'] = $e[2];
-				
-				/**
-				 * Only recognize hard states. There was a discussion about the implementation
-				 * This is a new handling of only_hard_states. For more details, see: 
-				 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
-				 *
-				 * Thanks to Andurin and fredy82
-				 */
-				if($onlyHardstates == 1) {
-					// state_type
-					if($e[10] == '0') {
-						// state = last hard state
-						$e[3] = $e[17];
-					}
-				}
 				
 				switch ($e[3]) {
 					case "0": $state = "OK"; break;
@@ -464,16 +456,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				 * acknowledged => check for acknowledged host
 				 */
 				// $e[17]: acknowledged
-				if($state != 'OK' && $e[18] != 1) {
-					// $e[19]: host_acknowledged
-					$arrTmpReturn['problem_has_been_acknowledged'] = $e[19];
+				// $e[18]: host_acknowledged
+				if($state != 'OK' && ($e[17] == 1 || $e[18] == 1)) {
+					$arrTmpReturn['problem_has_been_acknowledged'] = 1;
 				} else {
-					$arrTmpReturn['problem_has_been_acknowledged'] = $e[18];
+					$arrTmpReturn['problem_has_been_acknowledged'] = 0;
 				}
 				
 				// Handle host/service downtimes
-				// $e[20]: downtimes
-				if(isset($e[20]) && $e[20] != '') {
+				// $e[15]: scheduled_downtime_depth
+				// $e[19]: host_scheduled_downtime_depth
+				if((isset($e[15]) && $e[15] > 0) || (isset($e[19]) && $e[19] > 0)) {
 					$arrTmpReturn['in_downtime'] = 1;
 					
 					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
@@ -501,7 +494,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['max_check_attempts'] = $e[12];
 				$arrTmpReturn['last_state_change'] = $e[13];
 				$arrTmpReturn['last_hard_state_change'] = $e[14];
-				$arrTmpReturn['in_downtime'] = $e[15] > 0;
 				$arrTmpReturn['perfdata'] = $e[16];
 				
 				$arrReturn[] = $arrTmpReturn;
@@ -524,34 +516,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	public function getHostState($hostName, $onlyHardstates) {
 		$arrReturn = Array();
 		
+		$stateAttr = 'state';
+		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
 		$e = $this->queryLivestatusSingleRow(
 		  "GET hosts\n".
-		  "Columns: state plugin_output alias display_name ".
+		  "Columns: ".$stateAttr." plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "last_hard_state acknowledged downtimes\n".
+		  "last_hard_state acknowledged scheduled_downtime_depth".
       "Filter: name = ".$hostName."\n");
 		
 		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
 			return $arrReturn;
-		}
-		
-		/**
-		 * Only recognize hard states. There was a discussion about the implementation
-		 * This is a new handling of only_hard_states. For more details, see: 
-		 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
-		 *
-		 * Thanks to Andurin and fredy82
-		 */
-		if($onlyHardstates == 1) {
-			// $e[8]: state_type
-			if($e[8] == '0') {
-				// state = last hard state
-				$e[0] = $e[15];
-			}
 		}
 		
 		switch ($e[0]) {
@@ -561,9 +545,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			default: $state = "UNKNOWN"; break;
 		}
 		
+		/**
+		 * Handle host/service acks
+		 *
+		 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+		 * acknowledged => check for acknowledged host
+		 */
+		// $e[18]: acknowledged
+		if($state != 'OK' && ($e[18] == 1 || $e[18] == 1)) {
+			$arrTmpReturn['problem_has_been_acknowledged'] = 1;
+		} else {
+			$arrTmpReturn['problem_has_been_acknowledged'] = 0;
+		}
+		
 		// If there is a downtime for this object, save the data
-		// $e[17]: downtimes
-		if(isset($e[17]) && $e[17] != '') {
+		// $e[17]: scheduled_downtime_depth
+		if(isset($e[17]) && $e[17] > 0) {
 			$arrReturn['in_downtime'] = 1;
 			
 			// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
@@ -594,7 +591,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$arrReturn['last_hard_state_change'] = $e[12];
 		$arrReturn['statusmap_image'] = $e[13];
 		$arrReturn['perfdata'] = $e[14];
-		$arrReturn['problem_has_been_acknowledged'] = $e[16];
 		
 		return $arrReturn;
 	}
@@ -612,6 +608,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getServiceState($hostName, $serviceName, $onlyHardstates) {
+		$stateAttr = 'state';
+		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
 		$query = 
 		  "GET services\n" .
 		  "Filter: host_name = ".$hostName."\n";
@@ -620,11 +623,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$query .= "Filter: description = ".$serviceName."\n";
 		}
 		
-		$query .= "Columns: description display_name state ".
+		$query .= "Columns: description display_name ".$stateAttr." ".
 		  "host_alias host_address plugin_output notes last_check next_check ".
 		  "state_type current_attempt max_check_attempts last_state_change ".
-		  "last_hard_state_change scheduled_downtime_depth perf_data ".
-		  "last_hard_state acknowledged host_acknowledged downtimes host_downtimes\n";
+		  "last_hard_state_change perf_data scheduled_downtime_depth".
+		  "acknowledged host_acknowledged host_scheduled_downtime_depth\n";
 		
 		$l = $this->queryLivestatus($query);
 		
@@ -646,21 +649,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['service_description'] = $e[0];
 				$arrTmpReturn['display_name'] = $e[1];
 				
-				/**
-				 * Only recognize hard states. There was a discussion about the implementation
-				 * This is a new handling of only_hard_states. For more details, see: 
-				 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
-				 *
-				 * Thanks to Andurin and fredy82
-				 */
-				if($onlyHardstates == 1) {
-					// state_type
-					if($e[9] == '0') {
-						// state = last hard state
-						$e[2] = $e[16];
-					}
-				}
-				
 				switch ($e[2]) {
 					case "0": $state = "OK"; break;
 					case "1": $state = "WARNING"; break;
@@ -675,17 +663,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
 				 * acknowledged => check for acknowledged host
 				 */
-				// $e[17]: acknowledged
-				if($state != 'OK' && $e[17] != 1) {
-					// $e[18]: host_acknowledged
-					$arrTmpReturn['problem_has_been_acknowledged'] = $e[18];
+				// $e[16]: acknowledged
+				// $e[17]: host_acknowledged
+				if($state != 'OK' && ($e[16] == 1 || $e[17] == 1)) {
+					$arrTmpReturn['problem_has_been_acknowledged'] = 1;
 				} else {
-					$arrTmpReturn['problem_has_been_acknowledged'] = $e[17];
+					$arrTmpReturn['problem_has_been_acknowledged'] = 0;
 				}
 				
 				// Handle host/service downtimes
-				// $e[19]: downtimes
-				if(isset($e[19]) && $e[19] != '') {
+				// $e[15]: scheduled_downtime_depth
+				// $e[18]: host_scheduled_downtime_depth
+				if((isset($e[15]) && $e[15] > 0) || (isset($e[18]) && $e[18] > 0)) {
 					$arrTmpReturn['in_downtime'] = 1;
 					
 					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
@@ -713,8 +702,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['max_check_attempts'] = $e[11];
 				$arrTmpReturn['last_state_change'] = $e[12];
 				$arrTmpReturn['last_hard_state_change'] = $e[13];
-				$arrTmpReturn['in_downtime'] = $e[14] > 0;
-				$arrTmpReturn['perfdata'] = $e[15];
+				$arrTmpReturn['perfdata'] = $e[14];
 				
 				$result[] = $arrTmpReturn;
 			}
@@ -959,7 +947,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$i = 0;
 		foreach($aHostNames AS $hostName) {
 			$aReturn[$hostName] = Array();
-			$aReturn[$hostName]['OK']['normal'] = $services[$i];
+			$aReturn[$hostName]['OK']['normal'] = $services[$i++];
 			$aReturn[$hostName]['WARNING']['normal'] = $services[$i++];
 			$aReturn[$hostName]['WARNING']['ack'] = $services[$i++];
 			$aReturn[$hostName]['CRITICAL']['normal'] = $services[$i++];
