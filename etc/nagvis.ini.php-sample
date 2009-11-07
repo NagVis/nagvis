@@ -36,22 +36,22 @@
 ; State coverage/weight: This defines the state handling behaviour. For example
 ; a critical state will cover a warning state and a an acknowledged critical
 ; state will not cover a warning state.
-;unreachable=6
-;unreachable_ack=2
-;unreachable_downtime=2
-;down=5
-;down_ack=2
-;down_downtime=2
-;critical=5
-;critical_ack=2
-;critical_downtime=2
-;warning=4
-;warning_ack=2
-;warning_downtime=2
+;unreachable=8
+;unreachable_ack=5
+;unreachable_downtime=5
+;down=7
+;down_ack=5
+;down_downtime=5
+;critical=7
+;critical_ack=5
+;critical_downtime=5
+;warning=6
+;warning_ack=4
+;warning_downtime=4
 ;unknown=3
 ;unknown_ack=2
 ;unknown_downtime=2
-;error=2
+;error=3
 ;error_ack=2
 ;error_downtime=2
 ;up=1
