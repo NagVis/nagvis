@@ -133,10 +133,21 @@ class NagiosHost extends NagVisStatefulObject {
 			// This can be ignored when called from e.g. hostgroups where the state
 			// has been fetched for all members before
 			if($bFetchObjectState === true) {
-				$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
-			
-				// Append contents of the array to the object properties
-				$this->setObjectInformation($arrValues);
+				$aHost = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
+				
+				// When the first object has an error it seems that there was a problem
+				// fetching the requested information
+				if($aHost['state'] == 'ERROR') {
+					// Only set the summary state
+					//$this->summary_state = $aHost['state'];
+					//$this->summary_output = $aHost['output'];
+					$this->setObjectInformation($aHost);
+				} else {
+					// Regular handling
+					
+					// Append contents of the array to the object properties
+					$this->setObjectInformation($aHost);
+				}
 			}
 			
 			// New backend feature which reduces backend queries and breaks up the performance

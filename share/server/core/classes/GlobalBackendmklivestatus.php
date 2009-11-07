@@ -432,8 +432,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "acknowledged host_acknowledged host_scheduled_downtime_depth\n");
 		
 		if(!is_array($l) || count($l) <= 0) {
+			$arrReturn['host'] = '';
+			$arrReturn['description'] = '';
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('servicegroupNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICEGROUP' => $servicegroupName));
+			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('The servicegroup [GROUP] could not be found in the backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'GROUP' => $servicegroupName));
+			return Array($arrReturn);
 		} else {
 			foreach($l as $e) {
 				$arrTmpReturn = Array();
@@ -529,9 +532,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "last_hard_state acknowledged scheduled_downtime_depth".
+		  "acknowledged scheduled_downtime_depth\n".
       "Filter: name = ".$hostName."\n");
-		
+    
 		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
@@ -551,16 +554,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
 		 * acknowledged => check for acknowledged host
 		 */
-		// $e[18]: acknowledged
-		if($state != 'OK' && ($e[18] == 1 || $e[18] == 1)) {
+		// $e[15]: acknowledged
+		if($state != 'OK' && $e[15] == 1) {
 			$arrTmpReturn['problem_has_been_acknowledged'] = 1;
 		} else {
 			$arrTmpReturn['problem_has_been_acknowledged'] = 0;
 		}
 		
 		// If there is a downtime for this object, save the data
-		// $e[17]: scheduled_downtime_depth
-		if(isset($e[17]) && $e[17] > 0) {
+		// $e[16]: scheduled_downtime_depth
+		if(isset($e[16]) && $e[16] > 0) {
 			$arrReturn['in_downtime'] = 1;
 			
 			// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
@@ -1073,12 +1076,104 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$aReturn['DOWN']['ack'] = $hosts[2];
 		$aReturn['DOWN']['downtime'] = $hosts[3];
 		$aReturn['UNREACHABLE']['normal'] = $hosts[4];
-		$aReturn['unreachable']['ack'] = $hosts[5];
-		$aReturn['unreachable']['downtime'] = $hosts[6];
+		$aReturn['UNREACHABLE']['ack'] = $hosts[5];
+		$aReturn['UNREACHABLE']['downtime'] = $hosts[6];
 		
 		// Get service information
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: host_groups >= ".$hostgroupName."\n" .
+		   "Filter: in_notification_period = 1\n" .
+		   // Count OK
+		   "Stats: ".$stateAttr." = 0\n" .
+		   // Count WARNING
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "Stats: scheduled_downtime_depth = 0\n" .
+		   "Stats: host_scheduled_downtime_depth = 0\n" .
+		   "StatsAnd: 4\n" .
+		   // Count WARNING(ACK)
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count WARNING(DOWNTIME)
+		   "Stats: ".$stateAttr." = 1\n" .
+		   "Stats: scheduled_downtime_depth = 1\n" .
+		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n" .
+		   // Count CRITICAL
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "Stats: scheduled_downtime_depth = 0\n" .
+		   "Stats: host_scheduled_downtime_depth = 0\n" .
+		   "StatsAnd: 4\n" .
+		   // Count CRITICAL(ACK)
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count CRITICAL(DOWNTIME)
+		   "Stats: ".$stateAttr." = 2\n" .
+		   "Stats: scheduled_downtime_depth = 1\n" .
+		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNKNOWN
+		   "Stats: ".$stateAttr." = 3\n" .
+		   "Stats: acknowledged = 0\n" .
+		   "Stats: scheduled_downtime_depth = 0\n" .
+		   "Stats: host_scheduled_downtime_depth = 0\n" .
+		   "StatsAnd: 4\n" .
+		   // Count UNKNOWN(ACK)
+		   "Stats: ".$stateAttr." = 3\n" .
+		   "Stats: acknowledged = 1\n" .
+		   "StatsAnd: 2\n" .
+		   // Count UNKNOWN(DOWNTIME)
+		   "Stats: ".$stateAttr." = 3\n" .
+		   "Stats: scheduled_downtime_depth = 1\n" .
+		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n");
+		
+		$aReturn['OK']['normal'] = $services[0];
+		$aReturn['WARNING']['normal'] = $services[1];
+		$aReturn['WARNING']['ack'] = $services[2];
+		$aReturn['WARNING']['downtime'] = $services[3];
+		$aReturn['CRITICAL']['normal'] = $services[4];
+		$aReturn['CRITICAL']['ack'] = $services[5];
+		$aReturn['CRITICAL']['downtime'] = $services[6];
+		$aReturn['UNKNOWN']['normal'] = $services[7];
+		$aReturn['UNKNOWN']['ack'] = $services[8];
+		$aReturn['UNKNOWN']['downtime'] = $services[9];
+		
+		return $aReturn;
+	}
+	
+	/**
+	 * PUBLIC getServicegroupStateCounts()
+	 *
+	 * Queries the livestatus socket for service state counts. The information
+	 * are used to calculate the summary output and the summary state of a 
+	 * group and a well performing alternative to the existing recurisve
+	 * algorithm.
+	 *
+	 * @param   String   Servicegroup name
+	 * @param   Boolean  Only recognize hard states
+	 * @return  Array    List of states and counts
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getServicegroupStateCounts($servicegroupName, $onlyHardstates) {
+		$aReturn = Array();
+		
+		$stateAttr = 'state';
+		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
+		// Get service information
+		$services = $this->queryLivestatusSingleRow("GET services\n" .
+		   "Filter: groups >= ".$servicegroupName."\n" .
 		   "Filter: in_notification_period = 1\n" .
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .

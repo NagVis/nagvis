@@ -4,7 +4,7 @@
  * NagiosServicegroup.php - Class of a Servicegroup in Nagios with all necessary 
  *                  information
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -46,7 +46,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @param		String		Name of the servicegroup
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function __construct($CORE, $BACKEND, $backend_id, $servicegroupName) {
+	public function __construct($CORE, $BACKEND, $backend_id, $servicegroupName) {
 		$this->backend_id = $backend_id;
 		$this->servicegroup_name = $servicegroupName;
 		
@@ -62,7 +62,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMembers() {
+	public function fetchMembers() {
 		// Get all member services
 		$this->fetchMemberServiceObjects();
 	}
@@ -73,20 +73,46 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * Fetches the state of the servicegroup and all members. It also fetches the
 	 * summary output
 	 *
+	 * @param   Boolean  Optional flag to disable fetching of member status
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchState() {
-		// Get states of all members
-		foreach($this->members AS &$OBJ) {
-			$OBJ->fetchState();
+	public function fetchState($bFetchChilds = true) {
+		/* New backend feature which reduces backend queries and breaks up the performance
+		 * problems due to the old recursive mechanism. If it's not available fall back to
+		 * old mechanism.
+		 *
+		 * the revolution starts >>> here >>> ;D
+		 */
+		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getServicegroupStateCounts', false)) {
+			// Get state counts
+			$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupStateCounts($this->servicegroup_name, $this->only_hard_states);
+			
+			// Calculate summary state
+			$this->fetchSummaryStateFromCounts();
+			
+			// Generate summary output
+			$this->fetchSummaryOutputFromCounts();
+			
+			// This should only be called when the hover menu is needed to be shown
+			if($this->hover_menu == 1 && $bFetchChilds) {
+				// Get member summary state+substate, output for the objects to be shown in hover menu
+				$this->fetchServiceObjects();
+			}
+				
+			$this->state = $this->summary_state;
+		} else {
+			// Get states of all members
+			foreach($this->members AS &$OBJ) {
+				$OBJ->fetchState();
+			}
+			
+			// Also get summary state
+			$this->fetchSummaryState();
+			
+			// At least summary output
+			$this->fetchSummaryOutput();
+			$this->state = $this->summary_state;
 		}
-		
-		// Also get summary state
-		$this->fetchSummaryState();
-		
-		// At least summary output
-		$this->fetchSummaryOutput();
-		$this->state = $this->summary_state;
 	}
 	
 	/**
@@ -97,7 +123,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @return	Integer		Number of members
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getNumMembers() {
+	public function getNumMembers() {
 		return count($this->members);
 	}
 	
@@ -109,7 +135,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @return	Array		Member objects
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMembers() {
+	public function getMembers() {
 		return $this->members;
 	}
 	
@@ -121,12 +147,61 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @return Boolean	Yes, No
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function hasMembers() {
+	public function hasMembers() {
 		return isset($this->members[0]);
 	}
 	
 	# End public methods
 	# #########################################################################
+	
+	/**
+	 * PRIVATE fetchServiceObjects()
+	 *
+	 * Gets all services of the servicegroup and saves them to the members array
+	 * This method can only be used with backends which support the new
+	 * efficent methods like the mklivestatus backend
+	 *
+	 * This is trimmed to reduce the number of queries to the backend:
+	 * 1.) fetch states for all services
+	 * 2.) fetch state counts for all services
+	 *
+	 * This is a big benefit compared to the old recursive algorithm
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchServiceObjects() {
+		// Fist get the host states for all the hostgroup members
+		$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupState($this->servicegroup_name, $this->only_hard_states);
+		
+		// When the first object has an error it seems that there was a problem
+		// fetching the requested information
+		if($aServices[0]['state'] == 'ERROR') {
+			// Only set the summary state
+			$this->summary_state = $aServices[0]['state'];
+			$this->summary_output = $aServices[0]['output'];
+		} else {
+			// Regular member adding loop
+			foreach($aServices AS $aService) {
+				$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $aService['host'], $aService['description']);
+				
+				// Append contents of the array to the object properties
+				$OBJ->setObjectInformation($aService);
+				
+				// The services have to know how they should handle hard/soft 
+				// states. This is a little dirty but the simplest way to do this
+				// until the hard/soft state handling has moved from backend to the
+				// object classes.
+				$OBJ->setConfiguration($this->getObjectConfiguration());
+				
+				// Also get summary state
+				$OBJ->summary_state = $OBJ->state;
+				$OBJ->summary_output = $OBJ->output;
+				
+				// Add child object to the members array
+				$this->members[] = $OBJ;
+			}
+		}
+	}
 	
 	/**
 	 * PRIVATE fetchMemberServiceObjects()
@@ -136,7 +211,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchMemberServiceObjects() {
+	private function fetchMemberServiceObjects() {
 		// Get all services and states
 		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
 			// Get additional information like the alias (maybe bad place here)
@@ -165,7 +240,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryState() {
+	private function fetchSummaryState() {
 		if($this->getNumMembers() > 0) {
 			// Get summary state member objects
 			foreach($this->members AS &$MEMBER) {
@@ -177,13 +252,51 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	}
 	
 	/**
+	 * PRIVATE fetchSummaryOutputFromCounts()
+	 *
+	 * Fetches the summary output from the object state counts
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchSummaryOutputFromCounts() {
+		$arrServiceStates = Array();
+		
+		// Loop all major states
+		$iSumCount = 0;
+		foreach($this->aStateCounts AS $sState => $aSubstates) {
+			// Loop all substates (normal,ack,downtime,...)
+			foreach($aSubstates AS $sSubState => $iCount) {
+				// Found some objects with this state+substate
+				if($iCount > 0) {
+					// Count all child objects
+					$iSumCount += $iCount;
+					
+					if(!isset($arrServiceStates[$sState])) {
+						$arrServiceStates[$sState] = $iCount;
+					} else {
+						$arrServiceStates[$sState] += $iCount;
+					}
+				}
+			}
+		}
+		
+		// FIXME: Recode mergeSummaryOutput method
+		$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+		
+		// Fallback for hostgroups without members
+		if($iSumCount == 0) {
+			$this->summary_output = $this->CORE->getLang()->getText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->getName());
+		}
+	}
+	
+	/**
 	 * PRIVATE fetchSummaryOutput()
 	 *
 	 * Fetches the summary output from all members
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchSummaryOutput() {
+	private function fetchSummaryOutput() {
 		if($this->getNumMembers() > 0) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
