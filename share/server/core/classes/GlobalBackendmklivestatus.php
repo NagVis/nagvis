@@ -630,7 +630,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "acknowledged host_acknowledged host_scheduled_downtime_depth\n";
 		
 		$l = $this->queryLivestatus($query);
-		print_r($l);
+		
 		$result = Array();
 		$arrReturn = Array();
 		
