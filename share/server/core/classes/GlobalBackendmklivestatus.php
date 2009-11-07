@@ -626,11 +626,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$query .= "Columns: description display_name ".$stateAttr." ".
 		  "host_alias host_address plugin_output notes last_check next_check ".
 		  "state_type current_attempt max_check_attempts last_state_change ".
-		  "last_hard_state_change perf_data scheduled_downtime_depth".
+		  "last_hard_state_change perf_data scheduled_downtime_depth ".
 		  "acknowledged host_acknowledged host_scheduled_downtime_depth\n";
 		
 		$l = $this->queryLivestatus($query);
-		
+		print_r($l);
 		$result = Array();
 		$arrReturn = Array();
 		
@@ -852,12 +852,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: scheduled_downtime_depth = 1\n" .
 		   "Stats: host_scheduled_downtime_depth = 1\n" .
-		   "StatsAnd: 3\n" .
-		   // Count WARNING(HOST DOWNTIME)
-		   "Stats: ".$stateAttr." = 1\n" .
-		   "Stats: scheduled_downtime_depth = 0\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
-		   "StatsAnd: 3\n" .
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n" .
 		   // Count CRITICAL
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -871,13 +867,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 3\n" .
-		   // Count CRITICAL(HOST DOWNTIME)
-		   "Stats: ".$stateAttr." = 2\n" .
-		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 1\n" .
-		   "StatsAnd: 3\n" .
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -891,27 +883,20 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 3\n" .
-		   // Count UNKNOWN(HOST DOWNTIME)
-		   "Stats: ".$stateAttr." = 3\n" .
-		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 1\n" .
-		   "StatsAnd: 3\n");
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n");
 		
 		$aReturn['OK']['normal'] = $services[0];
 		$aReturn['WARNING']['normal'] = $services[1];
 		$aReturn['WARNING']['ack'] = $services[2];
-		// host + service downtime
-		$aReturn['WARNING']['downtime'] = $services[3] + $services[4];
-		$aReturn['CRITICAL']['normal'] = $services[5];
-		$aReturn['CRITICAL']['ack'] = $services[6];
-		// host + service downtime
-		$aReturn['CRITICAL']['downtime'] = $services[7] + $services[8];
-		$aReturn['UNKNOWN']['normal'] = $services[9];
-		$aReturn['UNKNOWN']['ack'] = $services[10];
-		// host + service downtime
-		$aReturn['UNKNOWN']['downtime'] = $services[11] + $services[12];
+		$aReturn['WARNING']['downtime'] = $services[3];
+		$aReturn['CRITICAL']['normal'] = $services[4];
+		$aReturn['CRITICAL']['ack'] = $services[5];
+		$aReturn['CRITICAL']['downtime'] = $services[6];
+		$aReturn['UNKNOWN']['normal'] = $services[7];
+		$aReturn['UNKNOWN']['ack'] = $services[8];
+		$aReturn['UNKNOWN']['downtime'] = $services[9];
 		
 		return $aReturn;
 	}
@@ -950,71 +935,60 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			          "StatsAnd: 2\n" .
 			          // Count WARNING
 			          "Stats: ".$stateAttr." = 1\n" .
+			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 0\n" .
 			          "Stats: scheduled_downtime_depth = 0\n" .
 			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "Stats: host_name = ".$hostName."\n" .
 			          "StatsAnd: 5\n" .
 			          // Count WARNING(ACK)
 			          "Stats: ".$stateAttr." = 1\n" .
-			          "Stats: acknowledged = 1\n" .
 			          "Stats: host_name = ".$hostName."\n" .
+			          "Stats: acknowledged = 1\n" .
 			          "StatsAnd: 3\n" .
 			          // Count WARNING(DOWNTIME)
 			          "Stats: ".$stateAttr." = 1\n" .
+			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: scheduled_downtime_depth = 1\n" .
-			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "StatsAnd: 4\n" .
-			          // Count WARNING(HOST DOWNTIME)
-			          "Stats: ".$stateAttr." = 1\n" .
-			          "Stats: scheduled_downtime_depth = 0\n" .
 			          "Stats: host_scheduled_downtime_depth = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "StatsAnd: 4\n" .
+			          "StatsOr: 2\n" .
+			          "StatsAnd: 3\n" .
 			          // Count CRITICAL
 			          "Stats: ".$stateAttr." = 2\n" .
+			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 0\n" .
 			          "Stats: scheduled_downtime_depth = 0\n" .
 			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "Stats: host_name = ".$hostName."\n" .
 			          "StatsAnd: 5\n" .
 			          // Count CRITICAL(ACK)
 			          "Stats: ".$stateAttr." = 2\n" .
-			          "Stats: acknowledged = 1\n" .
 			          "Stats: host_name = ".$hostName."\n" .
+			          "Stats: acknowledged = 1\n" .
 			          "StatsAnd: 3\n" .
 			          // Count CRITICAL(DOWNTIME)
 			          "Stats: ".$stateAttr." = 2\n" .
+			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: scheduled_downtime_depth = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "StatsAnd: 3\n" .
-			          // Count CRITICAL(HOST DOWNTIME)
-			          "Stats: ".$stateAttr." = 2\n" .
 			          "Stats: host_scheduled_downtime_depth = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsOr: 2\n" .
 			          "StatsAnd: 3\n" .
 			          // Count UNKNOWN
 			          "Stats: ".$stateAttr." = 3\n" .
+			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 0\n" .
 			          "Stats: scheduled_downtime_depth = 0\n" .
 			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "Stats: host_name = ".$hostName."\n" .
 			          "StatsAnd: 5\n" .
 			          // Count UNKNOWN(ACK)
 			          "Stats: ".$stateAttr." = 3\n" .
-			          "Stats: acknowledged = 1\n" .
 			          "Stats: host_name = ".$hostName."\n" .
+			          "Stats: acknowledged = 1\n" .
 			          "StatsAnd: 3\n" .
 			          // Count UNKNOWN(DOWNTIME)
 			          "Stats: ".$stateAttr." = 3\n" .
+			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: scheduled_downtime_depth = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "StatsAnd: 3\n" .
-			          // Count UNKNOWN(HOST DOWNTIME)
-			          "Stats: ".$stateAttr." = 3\n" .
 			          "Stats: host_scheduled_downtime_depth = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsOr: 2\n" .
 			          "StatsAnd: 3\n";
 		}
 		
@@ -1026,16 +1000,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$aReturn[$hostName]['OK']['normal'] = $services[$i++];
 			$aReturn[$hostName]['WARNING']['normal'] = $services[$i++];
 			$aReturn[$hostName]['WARNING']['ack'] = $services[$i++];
-			// service + host downtimes
-			$aReturn[$hostName]['WARNING']['downtime'] = $services[$i++] + $services[$i++];
+			$aReturn[$hostName]['WARNING']['downtime'] = $services[$i++];
 			$aReturn[$hostName]['CRITICAL']['normal'] = $services[$i++];
 			$aReturn[$hostName]['CRITICAL']['ack'] = $services[$i++];
-			// service + host downtimes
-			$aReturn[$hostName]['CRITICAL']['downtime'] = $services[$i++] + $services[$i++];
+			$aReturn[$hostName]['CRITICAL']['downtime'] = $services[$i++];
 			$aReturn[$hostName]['UNKNOWN']['normal'] = $services[$i++];
 			$aReturn[$hostName]['UNKNOWN']['ack'] = $services[$i++];
-			// service + host downtimes
-			$aReturn[$hostName]['UNKNOWN']['downtime'] = $services[$i++] + $services[$i++];
+			$aReturn[$hostName]['UNKNOWN']['downtime'] = $services[$i++];
 		}
 		
 		return $aReturn;
@@ -1124,13 +1095,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count WARNING(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 3\n" .
-		   // Count WARNING(HOST DOWNTIME)
-		   "Stats: ".$stateAttr." = 1\n" .
-		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 1\n" .
-		   "StatsAnd: 3\n" .
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n" .
 		   // Count CRITICAL
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -1144,13 +1111,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 3\n" .
-		   // Count CRITICAL(HOST DOWNTIME)
-		   "Stats: ".$stateAttr." = 2\n" .
-		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 1\n" .
-		   "StatsAnd: 3\n" .
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -1164,27 +1127,20 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 3\n" .
-		   // Count UNKNOWN(HOST DOWNTIME)
-		   "Stats: ".$stateAttr." = 3\n" .
-		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 1\n" .
-		   "StatsAnd: 3\n");
+		   "StatsOr: 2\n" .
+		   "StatsAnd: 2\n");
 		
 		$aReturn['OK']['normal'] = $services[0];
 		$aReturn['WARNING']['normal'] = $services[1];
 		$aReturn['WARNING']['ack'] = $services[2];
-		// Host + service downtime
-		$aReturn['WARNING']['downtime'] = $services[3] + $services[4];
-		$aReturn['CRITICAL']['normal'] = $services[5];
-		$aReturn['CRITICAL']['ack'] = $services[6];
-		// Host + service downtime
-		$aReturn['CRITICAL']['downtime'] = $services[7] + $services[8];
-		$aReturn['UNKNOWN']['normal'] = $services[9];
-		$aReturn['UNKNOWN']['ack'] = $services[10];
-		// Host + service downtime
-		$aReturn['UNKNOWN']['downtime'] = $services[11] + $services[12];
+		$aReturn['WARNING']['downtime'] = $services[3];
+		$aReturn['CRITICAL']['normal'] = $services[4];
+		$aReturn['CRITICAL']['ack'] = $services[5];
+		$aReturn['CRITICAL']['downtime'] = $services[6];
+		$aReturn['UNKNOWN']['normal'] = $services[7];
+		$aReturn['UNKNOWN']['ack'] = $services[8];
+		$aReturn['UNKNOWN']['downtime'] = $services[9];
 		
 		return $aReturn;
 	}

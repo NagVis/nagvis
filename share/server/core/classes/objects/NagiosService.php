@@ -103,6 +103,17 @@ class NagiosService extends NagVisStatefulObject {
 	}
 	
 	/**
+	 * PUBLIC hasMembers()
+	 *
+	 * Just a dummy here
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function hasMembers() {
+		 return 0;
+	}
+	
+	/**
 	 * PUBLIC fetchState()
 	 *
 	 * Fetches the state of the service. Also fetch the summary output
