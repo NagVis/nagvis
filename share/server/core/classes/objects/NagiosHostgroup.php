@@ -79,9 +79,12 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchState($bFetchChilds = true) {
-		// New backend feature which reduces backend queries and breaks up the performance
-		// problems due to the old recursive mechanism. If it's not available fall back to
-		// old mechanism.
+		/* New backend feature which reduces backend queries and breaks up the performance
+		 * problems due to the old recursive mechanism. If it's not available fall back to
+		 * old mechanism.
+		 *
+		 * the revolution starts >>> here >>> ;D
+		 */
 		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostgroupStateCounts', false)) {
 			// Get state counts
 			$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupStateCounts($this->hostgroup_name, $this->only_hard_states);
@@ -193,15 +196,35 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * PRIVATE fetchHostObjects()
 	 *
 	 * Gets all hosts of the hostgroup and saves them to the members array
+	 * This method can only be used with backends which support the new
+	 * efficent methods like the mklivestatus backend
+	 *
+	 * This is trimmed to reduce the number of queries to the backend:
+	 * 1.) fetch states for all hosts
+	 * 2.) fetch state counts for all hosts
+	 *
+	 * This is a big benefit compared to the old recursive algorithm
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchHostObjects() {
-		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupState($this->hostgroup_name, $this->only_hard_states) AS $arrHost) {
-			$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $arrHost['name']);
+		// Fist get the host states for all the hostgroup members
+		$aHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupState($this->hostgroup_name, $this->only_hard_states);
+		
+		// Build a list of hostnames for the multiple host count state query
+		$aNames = Array();
+		foreach($aHosts AS $aHost) {
+			$aNames[] = $aHost['name'];
+		}
+		
+		// Now fetch the service state counts for all hostgroup members
+		$aServiceStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getMultipleHostStateCounts($aNames, $this->only_hard_states);
+		
+		foreach($aHosts AS $aHost) {
+			$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $aHost['name']);
 			
 			// Append contents of the array to the object properties
-			$OBJ->setObjectInformation($arrHost);
+			$OBJ->setObjectInformation($aHost);
 			
 			// The services have to know how they should handle hard/soft 
 			// states. This is a little dirty but the simplest way to do this
@@ -210,15 +233,14 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			$OBJ->setConfiguration($this->getObjectConfiguration());
 			
 			// Also get summary state
-			// FIXME: Needed?
-			//$OBJ->fetchSummaryState();
 			$OBJ->summary_state = $OBJ->state;
 			$OBJ->summary_output = $OBJ->output;
 			
-			// At least summary output
-			// FIXME: Needed?
-			//$OBJ->fetchSummaryOutput();
-			$OBJ->fetchState(DONT_GET_OBJECT_STATE, DONT_GET_SINGLE_MEMBER_STATES);
+			// Put state counts to the object
+			$OBJ->setStateCounts($aServiceStateCounts[$aHost['name']]);
+			
+			// Fetch summary state and output
+			$OBJ->fetchSummariesFromCounts();
 			
 			$this->members[] = $OBJ;
 		}

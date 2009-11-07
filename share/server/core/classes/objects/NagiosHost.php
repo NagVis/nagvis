@@ -80,6 +80,17 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
+	 * PUBLIC setStateCounts()
+	 *
+	 * Puts the service state counts to the host object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setStateCounts($aStateCounts) {
+		$this->aStateCounts = $aStateCounts;
+	}
+	
+	/**
 	 * PUBLIC fetchMembers()
 	 *
 	 * Gets all member objects
@@ -89,6 +100,21 @@ class NagiosHost extends NagVisStatefulObject {
 	public function fetchMembers() {
 		// The service objects are all fetched in fetchState() method
 		// Seems this is not needed anymore and only a dummy at this place
+	}
+	
+	/**
+	 * PUBLIC fetchSummariesFromCounts()
+	 *
+	 * Fetches the summary state and output from the already set state counts
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function fetchSummariesFromCounts() {
+		// Calculate summary state
+		$this->fetchSummaryStateFromCounts();
+		
+		// Generate summary output
+		$this->fetchSummaryOutputFromCounts();	
 	}
 	
 	/**
@@ -121,11 +147,8 @@ class NagiosHost extends NagVisStatefulObject {
 				// Get state counts
 				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
 				
-				// Calculate summary state
-				$this->fetchSummaryStateFromCounts();
-				
-				// Generate summary output
-				$this->fetchSummaryOutputFromCounts();
+				// Calculate summary state and output
+				$this->fetchSummariesFromCounts();
 				
 				// Get all service states
 				// These information are only interesting when the hover_menu is shown

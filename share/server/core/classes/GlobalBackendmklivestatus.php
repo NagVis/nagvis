@@ -888,6 +888,89 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		return $aReturn;
 	}
 	
+	
+	/**
+	 * PUBLIC getMultipleHostStateCounts()
+	 *
+	 * Queries the livestatus socket for a bunch of host state count.
+	 * This seems to be the fastest way to get the information needed to
+	 * build hover menus for the NagVis maps (state, substate, summary output)
+	 *
+	 * @param   Array    List of hostnames
+	 * @param   Boolean  Only recognize hard states
+	 * @return  Array    List of states and counts
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getMultipleHostStateCounts($aHostNames, $onlyHardstates) {
+		$aReturn = Array();
+		
+		$stateAttr = 'state';
+		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
+		// Get service information
+		$query = "GET services\n" .
+		         "Filter: scheduled_downtime_depth = 0\n" .
+		         "Filter: host_scheduled_downtime_depth = 0\n" .
+		         "Filter: in_notification_period = 1\n";
+		
+		foreach($aHostNames AS $hostName) {
+			// Count OK
+			$query .= "Stats: ".$stateAttr." = 0\n" .
+			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsAnd: 2\n" .
+			          // Count WARNING
+			          "Stats: ".$stateAttr." = 1\n" .
+			          "Stats: acknowledged = 0\n" .
+			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsAnd: 3\n" .
+			          // Count WARNING(ACK)
+			          "Stats: ".$stateAttr." = 1\n" .
+			          "Stats: acknowledged = 1\n" .
+			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsAnd: 3\n" .
+			          // Count CRITICAL
+			          "Stats: ".$stateAttr." = 2\n" .
+			          "Stats: acknowledged = 0\n" .
+			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsAnd: 3\n" .
+			          // Count CRITICAL(ACK)
+			          "Stats: ".$stateAttr." = 2\n" .
+			          "Stats: acknowledged = 1\n" .
+			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsAnd: 3\n" .
+			          // Count UNKNOWN
+			          "Stats: ".$stateAttr." = 3\n" .
+			          "Stats: acknowledged = 0\n" .
+			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsAnd: 3\n" .
+			          // Count UNKNOWN(ACK)
+			          "Stats: ".$stateAttr." = 3\n" .
+			          "Stats: acknowledged = 1\n" .
+			          "Stats: host_name = ".$hostName."\n" .
+			          "StatsAnd: 3\n";
+		}
+		
+		$services = $this->queryLivestatusSingleRow($query);
+		
+		$i = 0;
+		foreach($aHostNames AS $hostName) {
+			$aReturn[$hostName] = Array();
+			$aReturn[$hostName]['OK']['normal'] = $services[$i];
+			$aReturn[$hostName]['WARNING']['normal'] = $services[$i++];
+			$aReturn[$hostName]['WARNING']['ack'] = $services[$i++];
+			$aReturn[$hostName]['CRITICAL']['normal'] = $services[$i++];
+			$aReturn[$hostName]['CRITICAL']['ack'] = $services[$i++];
+			$aReturn[$hostName]['UNKNOWN']['normal'] = $services[$i++];
+			$aReturn[$hostName]['UNKNOWN']['ack'] = $services[$i++];
+		}
+		
+		return $aReturn;
+	}
+	
 	/**
 	 * PUBLIC getHostgroupStateCounts()
 	 *
