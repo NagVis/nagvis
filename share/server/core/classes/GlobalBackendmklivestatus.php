@@ -832,7 +832,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$stateAttr = 'last_hard_state';
 		}
 		
-		// FIXME: Should also fetch downtime information and not exclude it
 		// Get service information
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: host_name = ".$hostName."\n" .

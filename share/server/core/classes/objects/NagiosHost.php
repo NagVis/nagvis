@@ -132,7 +132,6 @@ class NagiosHost extends NagVisStatefulObject {
 			// Get host state and general host information
 			// This can be ignored when called from e.g. hostgroups where the state
 			// has been fetched for all members before
-			// FIXME: Can this be combined with new getHostStateCounts query?
 			if($bFetchObjectState === true) {
 				$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
 			
