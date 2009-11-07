@@ -31,63 +31,6 @@
 ; Refresh time of pages
 ;refreshtime=60
 
-; Configure different state related settings
-[states]
-; State coverage/weight: This defines the state handling behaviour. For example
-; a critical state will cover a warning state and a an acknowledged critical
-; state will not cover a warning state.
-;unreachable=8
-;unreachable_ack=5
-;unreachable_downtime=5
-;down=7
-;down_ack=5
-;down_downtime=5
-;critical=7
-;critical_ack=5
-;critical_downtime=5
-;warning=6
-;warning_ack=4
-;warning_downtime=4
-;unknown=3
-;unknown_ack=2
-;unknown_downtime=2
-;error=3
-;error_ack=2
-;error_downtime=2
-;up=1
-;ok=1
-;pending=0
-; Colors of the different states
-;unreachable_bgcolor=#F1811B
-;unreachable_color=#F1811B
-;down_bgcolor=#FF0000
-;down_color=#FF0000
-;critical_bgcolor=#FF0000
-;critical_color=#FF0000
-;warning_bgcolor=#FFFF00
-;warning_color=#FFFF00
-;unknown_bgcolor=#FFCC66
-;unknown_color=#FFCC66
-;error_bgcolor=#0000FF
-;error_color=#0000FF
-;up_bgcolor=#00FF00
-;up_color=#00FF00
-;ok_bgcolor=#00FF00
-;ok_color=#00FF00
-;pending_bgcolor=#C0C0C0
-;pending_color=#C0C0C0
-; Sound of the different states to be used by the sound eventhandler in the
-; frontend
-;unreachable_sound=std_unreachable.mp3
-;down_sound=std_down.mp3
-;critical_sound=std_critical.mp3
-;warning_sound=std_warning.mp3
-;unknown_sound=
-;error_sound=
-;up_sound=
-;ok_sound=
-;pending_sound=
-
 ; Path definitions
 [paths]
 ; absolute physical NagVis path
@@ -236,6 +179,11 @@
 ; Backend definitions
 ; ----------------------------
 
+
+; Example definition of a livestatus backend. In this case the backend_id is live_1
+[backend_live_1]
+backendtype="mklivestatus"
+;socket_path="/usr/local/nagios/var/rw/live"
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 [backend_ndomy_1]
 ; type of backend - MUST be set
@@ -291,11 +239,6 @@ backendtype="merlinmy"
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
-; Example definition of a livestatus backend. In this case the backend_id is live_1
-[backend_live_1]
-backendtype="mklivestatus"
-;socket_path="/usr/local/nagios/var/rw/live"
-
 ; ----------------------------
 ; Rotation pool definitions
 ; ----------------------------
@@ -308,6 +251,77 @@ backendtype="mklivestatus"
 maps="demo,Demo2:demo2"
 ; rotation interval (seconds)
 interval=15
+
+; ------------------------------------------------------------------------------
+; Below you find some advanced stuff
+; ------------------------------------------------------------------------------
+
+; Configure different state related settings
+[states]
+; State coverage/weight: This defines the state handling behaviour. For example
+; a critical state will cover a warning state and a an acknowledged critical
+; state will not cover a warning state.
+;
+; Tehse options are being used when calculating the summary state of the map 
+; objects. The default values should fit most needs.
+;
+;unreachable=8
+;unreachable_ack=5
+;unreachable_downtime=5
+;down=7
+;down_ack=5
+;down_downtime=5
+;critical=7
+;critical_ack=5
+;critical_downtime=5
+;warning=6
+;warning_ack=4
+;warning_downtime=4
+;unknown=3
+;unknown_ack=2
+;unknown_downtime=2
+;error=3
+;error_ack=2
+;error_downtime=2
+;up=1
+;ok=1
+;pending=0
+;
+; Colors of the different states. The colors are used in lines and hover menus
+; and for example in the frontend highlight and background event handler
+;
+;unreachable_bgcolor=#F1811B
+;unreachable_color=#F1811B
+;down_bgcolor=#FF0000
+;down_color=#FF0000
+;critical_bgcolor=#FF0000
+;critical_color=#FF0000
+;warning_bgcolor=#FFFF00
+;warning_color=#FFFF00
+;unknown_bgcolor=#FFCC66
+;unknown_color=#FFCC66
+;error_bgcolor=#0000FF
+;error_color=#0000FF
+;up_bgcolor=#00FF00
+;up_color=#00FF00
+;ok_bgcolor=#00FF00
+;ok_color=#00FF00
+;pending_bgcolor=#C0C0C0
+;pending_color=#C0C0C0
+;
+; Sound of the different states to be used by the sound eventhandler in the
+; frontend. The sounds are only being fired when changing to some
+; worse state.
+;
+;unreachable_sound=std_unreachable.mp3
+;down_sound=std_down.mp3
+;critical_sound=std_critical.mp3
+;warning_sound=std_warning.mp3
+;unknown_sound=
+;error_sound=
+;up_sound=
+;ok_sound=
+;pending_sound=
 
 ; -------------------------
 ; EOF
