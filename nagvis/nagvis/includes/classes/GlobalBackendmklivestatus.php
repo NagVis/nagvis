@@ -627,4 +627,3 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	}
 }
 ?>
-
