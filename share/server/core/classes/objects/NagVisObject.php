@@ -489,10 +489,25 @@ class NagVisObject {
 
 		$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
 		
-		// FIXME: Should handle ack/downtime states
-		if($stateWeight[$state1]['normal'] == $stateWeight[$state2]['normal']) {
+		// Handle normal/ack/downtime states
+		
+		$stubState1 = 'normal';
+		if($OBJ1->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state1]['ack'])) {
+			$stubState1 = 'ack';
+		} elseif($OBJ1->getSummaryInDowntime() == 1 && isset($stateWeight[$state1]['downtime'])) {
+			$stubState1 = 'downtime';
+		}
+		
+		$stubState2 = 'normal';
+		if($OBJ2->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state2]['ack'])) {
+			$stubState2 = 'ack';
+		} elseif($OBJ2->getSummaryInDowntime() == 1 && isset($stateWeight[$state2]['downtime'])) {
+			$stubState2 = 'downtime';
+		}
+				
+		if($stateWeight[$state1][$stubState1] == $stateWeight[$state2][$stubState2]) {
 			return 0;
-		} elseif($stateWeight[$state1]['normal'] < $stateWeight[$state2]['normal']) {
+		} elseif($stateWeight[$state1][$stubState1] < $stateWeight[$state2][$stubState2]) {
 			// Sort depending on configured direction
 			if(self::$sSortOrder === 'asc') {
 				return +1;
