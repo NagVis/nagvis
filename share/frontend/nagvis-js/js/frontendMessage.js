@@ -46,7 +46,13 @@ function frontendMessage(oMessage, iTimeout) {
 	var oRow;
 	var oCell;
 	var oImg;
+	
 	var sBoxType = oMessage.type.toLowerCase();
+	var sTitle = '';
+	
+	if(typeof oMessage.title !== 'undefined') {
+		sTitle = oMessage.title;
+	}
 	
 	// Set a close timeout when called to do so
 	if(typeof iTimeout !== 'undefined') {
@@ -114,7 +120,7 @@ function frontendMessage(oMessage, iTimeout) {
 	oCell.style.width = '474px';
 	oCell.setAttribute('class', sBoxType);
 	oCell.setAttribute('className', sBoxType);
-	oCell.appendChild(document.createTextNode(oMessage.title));
+	oCell.appendChild(document.createTextNode(sTitle));
 	
 	oRow.appendChild(oCell);
 	oCell = null;
