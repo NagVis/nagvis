@@ -517,10 +517,34 @@ class NagVisObject {
 		} else {
 			return 0;
 		}
-		
-		if(NagVisStatefulObject::$arrStates[$state1] == NagVisStatefulObject::$arrStates[$state2]) {
+
+		// Break when nothing to compare
+		if($state1 == '' || $state2 == '') {
 			return 0;
-		} elseif(NagVisStatefulObject::$arrStates[$state1] < NagVisStatefulObject::$arrStates[$state2]) {
+		}
+
+		$stateWeight = $OBJ1->CORE->MAINCFG->getStateWeight();
+		
+		// Handle ack/downtime states
+		// Gather the current summary state type
+		$sType1 = 'normal';
+		if($OBJ1->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state1]['ack'])) {
+			$sType1 = 'ack';
+		} elseif($OBJ1->getSummaryInDowntime() == 1 && isset($stateWeight[$state1]['downtime'])) {
+			$sType1 = 'downtime';
+		}
+						
+		// Gather the object summary state type
+		$sType2 = 'normal';
+		if($OBJ2->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state2]['ack'])) {
+			$sType2 = 'ack';
+		} elseif($OBJ2->getSummaryInDowntime() == 1 && isset($stateWeight[$state2]['downtime'])) {
+			$sType2 = 'downtime';
+		}
+		
+		if($stateWeight[$state1][$sType1] == $stateWeight[$state2][$sType2]) {
+			return 0;
+		} elseif($stateWeight[$state1][$sType1] < $stateWeight[$state2][$sType2]) {
 			return +1;
 		} else {
 			return -1;

@@ -225,6 +225,41 @@ maps="demo,Demo2:demo2"
 ; rotation interval (seconds)
 interval=15
 
+; ------------------------------------------------------------------------------
+; Below you find some advanced stuff
+; ------------------------------------------------------------------------------
+
+; Configure different state related settings
+[states]
+; State coverage/weight: This defines the state handling behaviour. For example
+; a critical state will cover a warning state and a an acknowledged critical
+; state will not cover a warning state.
+;
+; Tehse options are being used when calculating the summary state of the map 
+; objects. The default values should fit most needs.
+;
+;unreachable=8
+;unreachable_ack=5
+;unreachable_downtime=5
+;down=7
+;down_ack=5
+;down_downtime=5
+;critical=7
+;critical_ack=5
+;critical_downtime=5
+;warning=6
+;warning_ack=4
+;warning_downtime=4
+;unknown=3
+;unknown_ack=2
+;unknown_downtime=2
+;error=3
+;error_ack=2
+;error_downtime=2
+;up=1
+;ok=1
+;pending=0
+
 ; -------------------------
 ; EOF
 ; -------------------------

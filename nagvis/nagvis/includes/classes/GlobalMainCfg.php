@@ -30,6 +30,7 @@ class GlobalMainCfg {
 	
 	protected $config;
 	protected $runtimeConfig;
+	protected $stateWeight;
 	
 	protected $configFile;
 	
@@ -64,6 +65,91 @@ class GlobalMainCfg {
 						'editable' => 1,
 						'default' => '60',
 						'match' => MATCH_INTEGER)),
+			'states' => Array(
+				'unreachable' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '8',
+					'match' => MATCH_INTEGER),
+				'unreachable_ack' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '5',
+					'match' => MATCH_INTEGER),
+				'unreachable_downtime' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '5',
+					'match' => MATCH_INTEGER),
+				'down' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '7',
+					'match' => MATCH_INTEGER),
+				'down_ack' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '5',
+					'match' => MATCH_INTEGER),
+				'down_downtime' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '5',
+					'match' => MATCH_INTEGER),
+				'critical' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '7',
+					'match' => MATCH_INTEGER),
+				'critical_ack' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '5',
+					'match' => MATCH_INTEGER),
+				'critical_downtime' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '5',
+					'match' => MATCH_INTEGER),
+				'warning' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '6',
+					'match' => MATCH_INTEGER),
+				'warning_ack' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '4',
+					'match' => MATCH_INTEGER),
+				'warning_downtime' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '4',
+					'match' => MATCH_INTEGER),
+				'unknown' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '3',
+					'match' => MATCH_INTEGER),
+				'unknown_ack' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '2',
+					'match' => MATCH_INTEGER),
+				'unknown_downtime' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '2',
+					'match' => MATCH_INTEGER),
+				'error' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '3',
+					'match' => MATCH_INTEGER),
+				'error_ack' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '2',
+					'match' => MATCH_INTEGER),
+				'error_downtime' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '2',
+					'match' => MATCH_INTEGER),
+				'up' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '1',
+					'match' => MATCH_INTEGER),
+				'ok' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '1',
+					'match' => MATCH_INTEGER),
+				'pending' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '0',
+					'match' => MATCH_INTEGER)),
 			'defaults' => Array(
 				'backend' => Array('must' => 0,
 					'editable' => 0,
@@ -452,6 +538,9 @@ class GlobalMainCfg {
 				$this->CACHE->writeCache($this->config, TRUE);
 			}
 		}
+
+		// Parse the state weight array
+		$this->parseStateWeight();
 		
 		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
@@ -998,6 +1087,43 @@ class GlobalMainCfg {
 		$arr['worker_request_max_length'] = $this->getValue('worker', 'requestmaxlength');
 		
 		return json_encode($arr);
+	}
+
+	/**$
+	 * Parses the state weight configuration array
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function parseStateWeight() {
+		$arr = Array();
+
+		foreach($this->validConfig['states'] AS $lowState => $aVal) {
+			// First create array when not exists
+			if(!isset($arr[strtoupper($lowState)][0])) {
+				$arr[strtoupper($lowState)] = Array();
+			}
+
+			$key = explode('_', $lowState);
+			
+			if(isset($key[1])) {
+				// ack/downtime
+				$arr[strtoupper($key[0])][$key[1]] = $this->getValue('states', $lowState);
+			} else {
+				$arr[strtoupper($key[0])]['normal'] = $this->getValue('states', $lowState);
+			}
+		}
+
+		$this->stateWeight = $arr;
+	}
+	
+	/**
+	 * Returns an array with the state weight configuration
+	 *
+	 * @return  Array
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getStateWeight() {
+		return $this->stateWeight;
 	}
 }
 ?>
