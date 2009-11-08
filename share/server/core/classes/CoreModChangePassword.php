@@ -6,7 +6,8 @@ class CoreModChangePassword extends CoreModule {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('change' => REQUIRES_AUTHORISATION);
+		$this->aActions = Array('view' => REQUIRES_AUTHORISATION,
+		                        'change' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}
@@ -16,6 +17,18 @@ class CoreModChangePassword extends CoreModule {
 		
 		if($this->offersAction($this->sAction)) {
 			switch($this->sAction) {
+				// The best place for this would be a FrontendModule but this needs to
+				// be in CoreModule cause it is fetched via ajax. The error messages
+				// would be printed in HTML format in nagvis-js frontend.
+				case 'view':
+					// Check if user is already authenticated
+					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated()) {
+						$VIEW = new NagVisChangePasswordView($this->CORE);
+						$sReturn = json_encode(Array('code' => $VIEW->parse()));
+					} else {
+						$sReturn = '';
+					}
+				break;
 				case 'change':
 					// Check if user is already authenticated
 					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated()) {

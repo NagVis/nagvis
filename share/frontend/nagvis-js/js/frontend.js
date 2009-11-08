@@ -78,9 +78,9 @@ function submitFrontendForm(sUrl, sFormId) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function showChangePassword(sTitle) {
-	var oContent = getSyncRequest(oGeneralProperties.path_base+'/frontend/nagvis-js/index.php?mod=ChangePassword&act=view', true, false);
+	var oContent = getSyncRequest(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', true, false);
 	
-	if(typeof oContent !== 'undefined') {
+	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
 		popupWindow(sTitle, oContent, true);
 	}
 	
@@ -95,9 +95,9 @@ function showChangePassword(sTitle) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function showSearch(sTitle) {
-	var oContent = getSyncRequest(oGeneralProperties.path_base+'/frontend/nagvis-js/index.php?mod=Search&act=view', true, false);
+	var oContent = getSyncRequest(oGeneralProperties.path_server+'?mod=Search&act=view', true, false);
 	
-	if(typeof oContent !== 'undefined') {
+	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
 		popupWindow(sTitle, oContent, true);
 	}
 	

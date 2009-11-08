@@ -1,5 +1,5 @@
 <?php
-class FrontendModSearch extends FrontendModule {
+class CoreModSearch extends CoreModule {
 	protected $CORE;
 	
 	public function __construct($CORE) {
