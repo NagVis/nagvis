@@ -379,7 +379,7 @@ function updateWorkerCounter() {
  */
 function rotatePage() {
 	if(oRotationProperties.nextStepUrl !== '') {
-		if(oRotationProperties.rotationEnabled) {
+		if(oRotationProperties.rotationEnabled == true) {
 			window.open(oRotationProperties.nextStepUrl, "_self");
 			return true;
 		}
@@ -397,7 +397,9 @@ function rotatePage() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotationCountdown() {
-	if(oRotationProperties.nextStepTime && oRotationProperties.nextStepTime !== '') {
+	// Only proceed with counting when rotation is enabled and the next step time 
+	// has a proper value
+	if(oRotationProperties.rotationEnabled && oRotationProperties.rotationEnabled == true && oRotationProperties.nextStepTime && oRotationProperties.nextStepTime !== '') {
 		// Countdown one second
 		oRotationProperties.nextStepTime -= 1;
 		
@@ -444,18 +446,14 @@ function getUrlParam(name) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setRotationLabel(startLabel,stopLabel) {
-	var oRotationSwitch = document.getElementById('rotationSwitch');
-	if(getUrlParam('rotation') === '') {
-		oRotationSwitch.style.visibility = 'hidden';
+function setRotationLabel() {
+	if(oRotationProperties.rotationEnabled == true) {
+		document.getElementById('rotationStart').style.display = 'none';
+		document.getElementById('rotationStop').style.display = 'inline';
 	} else {
-		if(oRotationProperties.rotationEnabled == 1) {
-			oRotationSwitch.innerHTML = stopLabel;
-		} else {
-			oRotationSwitch.innerHTML = startLabel;
-		}
+		document.getElementById('rotationStart').style.display = 'inline';
+		document.getElementById('rotationStop').style.display = 'none';
 	}
-	oRotationSwitch = null;
 }
 
 /**
@@ -463,27 +461,15 @@ function setRotationLabel(startLabel,stopLabel) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function switchRotation(obj, startLabel, stopLabel) {
-	if(oRotationProperties.rotationEnabled) {
+function switchRotation() {
+	if(oRotationProperties.rotationEnabled == true) {
 		oRotationProperties.rotationEnabled = false;
-		setRotationLabel(startLabel, stopLabel);
+		
+		setRotationLabel();
 	} else {
 		oRotationProperties.rotationEnabled = true;
-		setRotationLabel(startLabel, stopLabel);
-	}
-}
-
-// FIXME: Not needed in 1.5 anymore, maybe remove?
-function changeMap(htmlBase, mapName) {
-	if(mapName.match('^automap=')) {
-		mapName = mapName.replace(/automap=/, '');
-		location.href=htmlBase+'/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show=' + mapName;
-	} else {
-		if (mapName === '') {
-			location.href=htmlBase+'/frontend/nagvis-js/index.php';
-		} else {
-			location.href=htmlBase+'/frontend/nagvis-js/index.php?mod=Map&act=view&show=' + mapName;
-		}
+		
+		setRotationLabel();
 	}
 }
 

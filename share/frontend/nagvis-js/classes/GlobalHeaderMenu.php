@@ -37,6 +37,7 @@ class GlobalHeaderMenu {
 	private $pathTemplateFile;
 	
 	private $aMacros = Array();
+	private $bRotation = false;
 	
 	/**
 	 * Class Constructor
@@ -59,9 +60,31 @@ class GlobalHeaderMenu {
 		
 		// Read the contents of the template file
 		$this->checkTemplateReadable(1);
-		
-		// The static macros should be replaced before caching
+	}
+	
+	/**
+	 * PUBLIC setRotationEnabled()
+	 *
+	 * Tells the header menu that the current view is rotating
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setRotationEnabled() {
+		$this->bRotation = true;
+	}
+	
+	/**
+	 * Print the HTML code
+	 *
+	 * return   String  HTML Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function __toString() {
+		// Get all macros
 		$this->getMacros();
+		
+		// Build page based on the template file and the data array
+		return $this->TMPLSYS->get($this->TMPL->getTmplFile('header'), $this->aMacros);
 	}
 	
 	/**
@@ -83,8 +106,8 @@ class GlobalHeaderMenu {
 			$this->aMacros['view_type'] = 'Automap';
 		}
 		
-		// FIXME: In rotation?
-		$this->aMacros['bRotation'] = false;
+		// In rotation?
+		$this->aMacros['bRotation'] = $this->bRotation;
 		
 		// Check if the user is permitted to edit the current map/automap
 		if(isset($this->aMacros['view_type']) && $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['view_type'], 'edit', $this->OBJPAGE->getName())) {
@@ -227,7 +250,7 @@ class GlobalHeaderMenu {
 	 */
 	private function getStaticMacros() {
 		// Replace paths and language macros
-		$aReturn = Array('html_base' => $this->pathHtmlBase, 
+		$aReturn = Array('html_base' => $this->pathHtmlBase,
 			'html_images' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
 			'html_templates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
 			'html_template_images' => $this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
@@ -251,17 +274,6 @@ class GlobalHeaderMenu {
 			'lang_rotation_stop' => $this->CORE->getLang()->getText('rotationStop'));
 		
 		return $aReturn;
-	}
-	
-	/**
-	 * Print the HTML code
-	 *
-	 * return   String  HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __toString () {
-		// Build page based on the template file and the data array
-		return $this->TMPLSYS->get($this->TMPL->getTmplFile('header'), $this->aMacros);
 	}
 	
 	/**

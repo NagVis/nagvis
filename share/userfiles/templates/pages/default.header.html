@@ -23,7 +23,8 @@
 					<li><a href="">{$lang_search}</a></li>
 					{/if}
 					{if $bRotation == true}
-					<li><a href="">{$lang_rotation_start} / {$lang_rotation_stop}</a></li>
+					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$lang_rotation_start}</a></li>
+					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$lang_rotation_stop}</a></li>
 					{/if}
 					{if $view_type == 'Map' && $permitted_edit == true}
 					<li><a href="{$html_base}/frontend/wui/index.php?map={$current_map}" class="underline">{$lang_edit_map}</a></li>
@@ -69,4 +70,3 @@
 	</li>
 </ul>
 </div>
-<script type="text/javascript">setRotationLabel('{$lang_rotation_start}','{$lang_rotation_stop}');</script>
