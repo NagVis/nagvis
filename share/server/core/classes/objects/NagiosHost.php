@@ -170,7 +170,7 @@ class NagiosHost extends NagVisStatefulObject {
 				   When member should be sorted by state the state counts could be
 				   used to exclude objects with states which will not be displayed.
 				*/
-				if($this->hover_menu == 1 && $bFetchChilds && $this->getState() != 'ERROR' && !$this->hasMembers()) {
+				if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds && $this->getState() != 'ERROR' && !$this->hasMembers()) {
 					$this->fetchServiceObjects();
 				}
 			} else {

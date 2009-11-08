@@ -84,7 +84,7 @@ class FrontendModAutoMap extends FrontendModule {
 		$this->VIEW = new NagVisAutoMapView($this->CORE, $MAPCFG->getName());
 		
 		// Render the automap
-		$AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts);
+		$AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
 		$this->VIEW->setContent($AUTOMAP->parseMap());
 		$this->VIEW->setAutomapParams($this->opts);
 		

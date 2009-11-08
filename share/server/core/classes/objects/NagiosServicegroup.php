@@ -94,7 +94,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			$this->fetchSummaryOutputFromCounts();
 			
 			// This should only be called when the hover menu is needed to be shown
-			if($this->hover_menu == 1 && $bFetchChilds) {
+			if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds) {
 				// Get member summary state+substate, output for the objects to be shown in hover menu
 				$this->fetchServiceObjects();
 			}

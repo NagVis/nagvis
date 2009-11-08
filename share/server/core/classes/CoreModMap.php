@@ -101,7 +101,7 @@ class CoreModMap extends CoreModule {
 		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND);
+		$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, IS_VIEW);
 		return $MAP->parseObjectsJson();
 	}
 	
@@ -148,7 +148,7 @@ class CoreModMap extends CoreModule {
 					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
-					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND);
+					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, !IS_VIEW);
 					
 					$OBJ = $MAP->MAPOBJ;
 				break;
@@ -173,7 +173,7 @@ class CoreModMap extends CoreModule {
 					// Save the preview mode
 					$opts['preview'] = 1;
 					
-					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $opts);
+					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $opts, !IS_VIEW);
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:

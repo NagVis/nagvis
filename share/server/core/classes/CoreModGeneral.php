@@ -196,7 +196,7 @@ class CoreModGeneral extends CoreModule {
 					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
-					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND);
+					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, !IS_VIEW);
 					
 					$OBJ = $MAP->MAPOBJ;
 				break;
@@ -221,7 +221,8 @@ class CoreModGeneral extends CoreModule {
 					// Save the preview mode (Enables/Disables printing of errors)
 					$aOpts['preview'] = 0;
 					
-					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $aOpts);
+					// FIXME: Maybe this can be a view?! I'm unsure about this...
+					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $aOpts, !IS_VIEW);
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:

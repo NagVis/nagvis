@@ -61,7 +61,7 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $MAPCFG, $BACKEND, $prop) {
+	public function __construct($CORE, $MAPCFG, $BACKEND, $prop, $bIsView = IS_VIEW) {
 		$this->BACKEND = $BACKEND;
 		
 		$this->arrHostnames = Array();
@@ -195,7 +195,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Create MAPOBJ object, form the object tree to map objects and get the
 		// state of the objects
-		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG);
+		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG, $bIsView);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		$this->MAPOBJ->fetchState();
 	}

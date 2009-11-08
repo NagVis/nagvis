@@ -39,7 +39,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 	protected $in_downtime;
 	
 	// When this map object summarizes the state of a map this is true
-	protected $is_summary_object;
+	// Prevents loops
+	protected $isSummaryObject;
+	
+	// This controlls wether this is MapObj is used as view or as object on a map
+	protected $isView;
 	
 	/**
 	 * Class constructor
@@ -48,9 +52,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @param		Object 		Object of class GlobalBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @param		Object		Object of class NagVisMapCfg
+	 * @param		Boolean   Flag to tell the class if this is a map object or view
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $BACKEND, $MAPCFG) {
+	public function __construct($CORE, $BACKEND, $MAPCFG, $bIsView = IS_VIEW) {
 		$this->MAPCFG = $MAPCFG;
 		
 		$this->map_name = $this->MAPCFG->getName();
@@ -59,7 +64,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->iconset = 'std_medium';
 		$this->members = Array();
 		$this->linkedMaps = Array();
-		$this->is_summary_object = false;
+		$this->isSummaryObject = false;
+		$this->isView = $bIsView;
 		
 		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
 		
@@ -104,7 +110,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 			 * When the current map object is a summary object skip the map
 			 * child for preventing a loop
 			 */
-			if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object == true) {
+			if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
 				continue;
 			}
 
@@ -211,7 +217,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				 * When the current map object is a summary object skip the map
 				 * child for preventing a loop
 				 */
-				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->is_summary_object == true) {
+				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
 					continue;
 				}
 				
@@ -222,11 +228,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 				 * See the code above.
 				 */
 				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
-					$OBJ->is_summary_object = true;
+					$OBJ->isSummaryObject = true;
 				}
 				
 				// Check for indirect loop when the current child is a map object
-				if(!$OBJ->is_summary_object && !$this->checkLoop($OBJ)) {
+				if(!$OBJ->isSummaryObject && !$this->checkLoop($OBJ)) {
 					continue;
 				}
 			}
@@ -246,7 +252,13 @@ class NagVisMapObj extends NagVisStatefulObject {
 	public function fetchState() {
 		// Get state of all member objects
 		foreach($this->getStateRelevantMembers() AS $OBJ) {
-			$OBJ->fetchState();
+			// The states of the map objects members only need to be fetched when this
+			// is MapObj is used as a view.
+			if($this->isView == false) {
+				$OBJ->fetchState(DONT_GET_SINGLE_MEMBER_STATES);
+			} else {
+				$OBJ->fetchState();
+			}
 			
 			$OBJ->fetchIcon();
 		}

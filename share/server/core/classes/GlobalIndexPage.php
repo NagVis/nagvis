@@ -83,7 +83,7 @@ class GlobalIndexPage {
 				// Save the preview mode
 				$opts['preview'] = 1;
 				
-				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, $opts);
+				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, $opts, !IS_VIEW);
 				
 				// Apply default configuration to object
 				$objConf = Array();
@@ -174,7 +174,7 @@ class GlobalIndexPage {
 				}
 				
 				if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
-					$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND);
+					$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
 					
 					// Apply default configuration to object
 					$objConf = Array();

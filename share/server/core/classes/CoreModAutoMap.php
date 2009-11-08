@@ -99,7 +99,7 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG = new NagVisAutomapCfg($CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $this->opts);
+		$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
 		$MAP->renderMap();
 		
 		return json_encode(true);
@@ -138,7 +138,7 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts);
+		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
 		// Fetch the state
 		$MAP->MAPOBJ->fetchState();
 		// Read position from graphviz and set it on the objects
@@ -193,7 +193,7 @@ class CoreModAutoMap extends CoreModule {
 					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
-					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND);
+					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, !IS_VIEW);
 					
 					$OBJ = $MAP->MAPOBJ;
 				break;
@@ -218,7 +218,7 @@ class CoreModAutoMap extends CoreModule {
 					// Save the preview mode
 					$opts['preview'] = 1;
 					
-					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $opts);
+					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $opts, !IS_VIEW);
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:
