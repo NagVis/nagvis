@@ -90,7 +90,6 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_STRING),
-				//FIXME: auto detect
 				'sesscookiepath' => Array('must' => 1,
 					'editable' => 1,
 					'default' => '',
@@ -712,6 +711,9 @@ class GlobalMainCfg {
 					'locked' => 1,
 					'match' => MATCH_STRING)));
 		
+		// Detect the cookie domain to use
+		$this->setCookieDomainByEnv();
+		
 		// Try to get the base path via $_SERVER['SCRIPT_FILENAME']
 		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
@@ -754,6 +756,18 @@ class GlobalMainCfg {
 		// set default value
 		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
 		$this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
+	}
+	
+	/**
+	 * Gets the cookie domain from the webservers environment and sets the 
+	 * session cookie domain to this value
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function setCookieDomainByEnv() {
+		if(isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
+			$this->validConfig['global']['sesscookiedomain']['default'] = $_SERVER['SERVER_NAME'];
+		}
 	}
 	
 	/**
@@ -832,6 +846,9 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/hover/';
 		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/header/';
 		$this->validConfig['paths']['htmlcontexttemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/context/';
+		
+		// This option directly relies on the configured htmlBase by default
+		$this->validConfig['global']['sesscookiepath']['default'] = $htmlBase;
 	}
 	
 	/**
