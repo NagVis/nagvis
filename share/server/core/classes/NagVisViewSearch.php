@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisSearchView.php - Class for handling the search dialog
+ * NagVisViewSearch.php - Class for handling the search dialog
  *
  * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisSearchView {
+class NagVisViewSearch {
 	private $CORE;
 	
 	/**
@@ -46,7 +46,7 @@ class NagVisSearchView {
 	 */
 	public function parse() {
 		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
+		$TMPL = New CoreTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(

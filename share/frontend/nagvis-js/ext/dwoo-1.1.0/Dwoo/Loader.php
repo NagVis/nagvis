@@ -48,8 +48,8 @@ class Dwoo_Loader implements Dwoo_ILoader
 		$this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
 		// include class paths or rebuild paths if the cache file isn't there
-		$foo = @file_get_contents($this->cacheDir.'classpath.cache.d'.Dwoo::RELEASE_TAG.'.php');
-		if ($foo) {
+		if(file_exists($this->cacheDir.'classpath.cache.d'.Dwoo::RELEASE_TAG.'.php')) {
+			$foo = @file_get_contents($this->cacheDir.'classpath.cache.d'.Dwoo::RELEASE_TAG.'.php');
 			$this->classPath = unserialize($foo) + $this->classPath;
 		} else {
 			$this->rebuildClassPathCache($this->corePluginDir, $this->cacheDir.'classpath.cache.d'.Dwoo::RELEASE_TAG.'.php');

@@ -23,7 +23,7 @@ class CoreModChangePassword extends CoreModule {
 				case 'view':
 					// Check if user is already authenticated
 					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated()) {
-						$VIEW = new NagVisChangePasswordView($this->CORE);
+						$VIEW = new NagVisViewChangePassword($this->CORE);
 						$sReturn = json_encode(Array('code' => $VIEW->parse()));
 					} else {
 						$sReturn = '';

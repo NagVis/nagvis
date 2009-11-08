@@ -72,6 +72,8 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (4, \'Overview\', \'getOverviewProperties\', \'*\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (5, \'Overview\', \'getOverviewMaps\', \'*\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (6, \'Overview\', \'getOverviewAutomaps\', \'*\')');
+		
+		// Access controll: Access to all General actions
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (7, \'General\', \'*\', \'*\')');
 		
 		// Access controll: Map module levels for map "demo"
@@ -106,6 +108,16 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (26, \'AutoMap\', \'getAutomapProperties\', \'__automap\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (27, \'AutoMap\', \'getAutomapObjects\', \'__automap\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (28, \'AutoMap\', \'getObjectStates\', \'__automap\')');
+		
+		// Access controll: Change own password
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (29, \'ChangePassword\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (30, \'ChangePassword\', \'change\', \'*\')');
+		
+		// Access controll: Search objects on maps
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (31, \'Search\', \'view\', \'*\')');
+		
+		// Access controll: Authentication: Logout
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (32, \'Auth\', \'logout\', \'*\')');
 		
 		// Role assignment: nagiosadmin => Administrators
 		$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (1, 1)');
@@ -156,6 +168,16 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 26)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 27)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 28)');
+		
+		// Access assignment: Users => Allowed to change their passwords
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 29)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 30)');
+		
+		// Access assignment: Users => Allowed to search objects
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 31)');
+		
+		// Access assignment: Users => Allowed to logout
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 32)');
 	}
 	
 	private function checkUserExists() {

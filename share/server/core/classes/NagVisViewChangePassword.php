@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisChangePasswordView.php - Class for handling the change password page
+ * NagVisViewChangePassword.php - Class for handling the change password page
  *
  * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisChangePasswordView {
+class NagVisViewChangePassword {
 	private $CORE;
 	
 	/**
@@ -46,7 +46,7 @@ class NagVisChangePasswordView {
 	 */
 	public function parse() {
 		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
+		$TMPL = New CoreTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
