@@ -18,9 +18,6 @@
 			<a href="#global">global</a><br />
 			General options which affect the whole NagVis installation</li>
 		<li>
-			<a href="#states">states</a> <font color="#ff0000">(New in 1.5)</font><br />
-			Options which affect the handling and appearance of the different states</li>
-		<li>
 			<a href="#paths">paths</a><br />
 			Path definitions</li>
 		<li>
@@ -44,6 +41,9 @@
 		<li>
 			<a href="#rotation">rotation_*</a><br />
 			Rotation pool definitions</li>
+		<li>
+			<a href="#states">states</a> <font color="#ff0000">(New in 1.5)</font><br />
+			Options which affect the handling and appearance of the different states</li>
 		</ul>
 		
 		<h2>Description of the sections in detail</h2>
@@ -55,16 +55,45 @@
 		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
 		</tr>
 		<tr>
-		<td> dateformat </td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date()</a> function of php</td>
+		<td>authmodule</td><td>CoreAuthModSQLite</td><td>Defines the authentication module to use. By default NagVis uses the built-in SQLite authentication module. On delivery there is no other authentication module available. It is possible to add own authentication modules for supporting other authentication mechanism. For details have a look at the <a href="auth_modules.html">authentication module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-		<td> <strike>displayheader</strike> </td><td> <strike>1</strike> </td><td> <strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font> </td>
+		<td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-		<td> language </td><td> en_US </td><td> Select language to use in NagVis by default. There are four language files delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) (<font color="#ff0000">New in 1.4</font>)</td>
+		<td>dateformat</td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date()</a> function of php</td>
 		</tr>
 		<tr>
-		<td> refreshtime </td><td> 60 </td><td> Refresh time of maps or reloading the next map in map rotation </td>
+		<td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font></td>
+		</tr>
+		<tr>
+		<td>language_detection</td><td>user,session,browser,config</td><td>This controlls how NagVis tries to detect the language of the user to translate NagVis. NagVis knows several mechanism to detect the language:<br />
+		- <i>user</i>: Explict user selected language<br />
+		- <i>session</i>: When the user selects a language it is stored in the current session<br />
+		- <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
+		- <i>config</if>: The installation default language<br />
+		The order you set the options NagVis uses the different mechanism. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+		<td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can controll the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+		<td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication informations from the user. On delivery there is no other logon module avialable. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+		<td>refreshtime</td><td>60</td><td>Refresh time of maps or reloading the next map in map rotation</td>
+		</tr>
+		<tr>
+		<td>sesscookiedomain</td><td>auto-detect</td><td>You may need to controll for which domain NagVis will store the session cookie. By default NagVis tries to auto detect this options value by using the webservers environment variables. This should work on most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+		</tr>
+		<tr>
+		<td>sesscookiepath</td><td>auto-detected</td><td>You may need to controll the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work on most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+		</tr>
+		<tr>
+		<td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid. <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
 		<tr>
 		<td>startmodule</td><td>overview</td><td>The default module to show when no given by the user <font color="#ff0000">(New in 1.5)</font></td>
@@ -72,77 +101,6 @@
 		<tr>
 		<td>startaction</td><td>view</td><td>The default action to do when no given by the user <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
-		</table>
-		
-		<a name="states"></a><h3>states <font color="#ff0000">(New in 1.5)</font></h3>
-		<p>Options which affect the handling and appearance of the different states in the NagVis installation.</p>
-		
-		<p>These settings define the state handling behaviour. Mainly it is possible to configure which state will
-			cover another state changing these values. The state with the highest value will become the &quot;summary state&quot; for an object. 
-			For example a critical state (5) will cover a warning state (4).
-			Another example: An acknowledged critical state (2) will not cover a warning state (4).</p>
-		
-		<table>
-		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
-		<tr><td>unreachable</td><td>6</td></tr>
-		<tr><td>unreachable_ack</td><td>2</td></tr>
-		<tr><td>unreachable_downtime</td><td>2</td></tr>
-		<tr><td>down</td><td>5</td></tr>
-		<tr><td>down_ack</td><td>2</td></tr>
-		<tr><td>down_downtime</td><td>2</td></tr>
-		<tr><td>critical</td><td>5</td></tr>
-		<tr><td>critical_ack</td><td>2</td></tr>
-		<tr><td>critical_downtime</td><td>2</td></tr>
-		<tr><td>warning</td><td>4</td></tr>
-		<tr><td>warning_ack</td><td>2</td></tr>
-		<tr><td>warning_downtime</td><td>2</td></tr>
-		<tr><td>unknown</td><td>3</td></tr>
-		<tr><td>unknown_ack</td><td>2</td></tr>
-		<tr><td>unknown_downtime</td><td>2</td></tr>
-		<tr><td>error</td><td>2</td></tr>
-		<tr><td>error_ack</td><td>2</td></tr>
-		<tr><td>error_downtime</td><td>2</td></tr>
-		<tr><td>ok</td><td>1</td></tr>
-		<tr><td>up</td><td>1</td></tr>
-		<tr><td>pending</td><td>0</td></tr>
-		</table>
-		
-		<p>This settings define the behaviour of states in the frontend.</p>
-		<ul>
-			<li><b>*_bgcolor:</b> The bgcolor option is used in the background color changing eventhandler.</li>
-			<li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight eventhandler.</li>
-			<li><b>*_sound:</b> The sound file is being played on changes to the mentioned state (Needs to be MP3 format).</li>
-		</ul>
-		
-		<table>
-		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
-		<tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
-		<tr><td>unreachable_color</td><td>#F1811B</td></tr>
-		<tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
-		<tr><td>down_bgcolor</td><td>#FF0000</td></tr>
-		<tr><td>down_color</td><td>#FF0000</td></tr>
-		<tr><td>down_sound</td><td>std_down.mp3</td></tr>
-		<tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
-		<tr><td>critical_color</td><td>#FF0000</td></tr>
-		<tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
-		<tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
-		<tr><td>warning_color</td><td>#FFFF00</td></tr>
-		<tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
-		<tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
-		<tr><td>unknown_color</td><td>#FFCC66</td></tr>
-		<tr><td>unknown_sound</td><td></td></tr>
-		<tr><td>error_bgcolor</td><td>#0000FF</td></tr>
-		<tr><td>error_color</td><td>#0000FF</td></tr>
-		<tr><td>error_sound</td><td></td></tr>
-		<tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
-		<tr><td>ok_color</td><td>#00FF00</td></tr>
-		<tr><td>ok</td><td></td></tr>
-		<tr><td>up_bgcolor</td><td>#00FF00</td></tr>
-		<tr><td>up_color</td><td>#00FF00</td></tr>
-		<tr><td>up_sound</td><td></td></tr>
-		<tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
-		<tr><td>pending_color</td><td>#C0C0C0</td></tr>
-		<tr><td>pending_sound</td><td></td></tr>
 		</table>
 		
 		<a name="paths"></a><h3> paths </h3>
@@ -414,5 +372,77 @@ interval=15</pre>
 		</td>
 		</tr>
 		</table>
+		
+		<a name="states"></a><h3>states <font color="#ff0000">(New in 1.5)</font></h3>
+		<p>Options which affect the handling and appearance of the different states in the NagVis installation.</p>
+		
+		<p>These settings define the state handling behaviour. Mainly it is possible to configure which state will
+			cover another state changing these values. The state with the highest value will become the &quot;summary state&quot; for an object. 
+			For example a critical state (5) will cover a warning state (4).
+			Another example: An acknowledged critical state (2) will not cover a warning state (4).</p>
+		
+		<table>
+		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
+		<tr><td>unreachable</td><td>8</td></tr>
+		<tr><td>unreachable_ack</td><td>5</td></tr>
+		<tr><td>unreachable_downtime</td><td>5</td></tr>
+		<tr><td>down</td><td>7</td></tr>
+		<tr><td>down_ack</td><td>5</td></tr>
+		<tr><td>down_downtime</td><td>5</td></tr>
+		<tr><td>critical</td><td>7</td></tr>
+		<tr><td>critical_ack</td><td>5</td></tr>
+		<tr><td>critical_downtime</td><td>5</td></tr>
+		<tr><td>warning</td><td>6</td></tr>
+		<tr><td>warning_ack</td><td>4</td></tr>
+		<tr><td>warning_downtime</td><td>4</td></tr>
+		<tr><td>unknown</td><td>3</td></tr>
+		<tr><td>unknown_ack</td><td>2</td></tr>
+		<tr><td>unknown_downtime</td><td>2</td></tr>
+		<tr><td>error</td><td>3</td></tr>
+		<tr><td>error_ack</td><td>2</td></tr>
+		<tr><td>error_downtime</td><td>2</td></tr>
+		<tr><td>ok</td><td>1</td></tr>
+		<tr><td>up</td><td>1</td></tr>
+		<tr><td>pending</td><td>0</td></tr>
+		</table>
+		
+		<p>This settings define the behaviour of states in the frontend.</p>
+		<ul>
+			<li><b>*_bgcolor:</b> The bgcolor option is used in the background color changing eventhandler.</li>
+			<li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight eventhandler.</li>
+			<li><b>*_sound:</b> The sound file is being played on changes to the mentioned state (Needs to be MP3 format).</li>
+		</ul>
+		
+		<table>
+		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
+		<tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
+		<tr><td>unreachable_color</td><td>#F1811B</td></tr>
+		<tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
+		<tr><td>down_bgcolor</td><td>#FF0000</td></tr>
+		<tr><td>down_color</td><td>#FF0000</td></tr>
+		<tr><td>down_sound</td><td>std_down.mp3</td></tr>
+		<tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
+		<tr><td>critical_color</td><td>#FF0000</td></tr>
+		<tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
+		<tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
+		<tr><td>warning_color</td><td>#FFFF00</td></tr>
+		<tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
+		<tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
+		<tr><td>unknown_color</td><td>#FFCC66</td></tr>
+		<tr><td>unknown_sound</td><td></td></tr>
+		<tr><td>error_bgcolor</td><td>#0000FF</td></tr>
+		<tr><td>error_color</td><td>#0000FF</td></tr>
+		<tr><td>error_sound</td><td></td></tr>
+		<tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
+		<tr><td>ok_color</td><td>#00FF00</td></tr>
+		<tr><td>ok</td><td></td></tr>
+		<tr><td>up_bgcolor</td><td>#00FF00</td></tr>
+		<tr><td>up_color</td><td>#00FF00</td></tr>
+		<tr><td>up_sound</td><td></td></tr>
+		<tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
+		<tr><td>pending_color</td><td>#C0C0C0</td></tr>
+		<tr><td>pending_sound</td><td></td></tr>
+		</table>
+		
 	</body>
 </html>

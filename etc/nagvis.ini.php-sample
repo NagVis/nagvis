@@ -15,8 +15,23 @@
 
 ; General options which affect the whole NagVis installation
 [global]
+; Defines the authentication module to use. By default NagVis uses the built-in
+; SQLite authentication module. On delivery there is no other authentication
+; module available. It is possible to add own authentication modules for 
+; supporting other authorisation mechanism. For details take a look at the
+; documentation.
+;authmodule="CoreAuthModSQLite"
+;
+; Defines the authorisation module to use. By default NagVis uses the built-in
+; SQLite authorisation module. On delivery there is no other authorisation
+; module available. It is possible to add own authorisation modules for 
+; supporting other authorisation mechanism. For details take a look at the
+; documentation.
+;authorisationmodule="CoreAuthorisationModSQLite"
+;
 ; Dateformat of the time/dates shown in nagvis (For valid format see PHP docs)
 ;dateformat="Y-m-d H:i:s"
+;
 ; Defines which translations of NagVis are available to the users
 ;language_available="de_DE,en_US,es_ES,fr_FR,pt_BR"
 ; Language detection steps to use. Available:
@@ -26,10 +41,38 @@
 ;  - Browser: Detection by user agent information from the browser
 ;  - Config:  Use configured default language (See below)
 ;language_detection="user,session,browser,config"
+;
 ; Select language (Available by default: en_US, de_DE, fr_FR, pt_BR)
 ;language="en_US"
+;
+; Defines the logon module to use. By default NagVis uses the HTML logon dialog
+; for requesting authentication informations from the user. On delivery there is
+; no other logon module avialable. It is possible to add own logon modules for
+; serving other dialogs. For details take a look at the documentation.
+;logonmodule="FrontendLogonDialog"
+;
 ; Refresh time of pages
 ;refreshtime=60
+;
+; Some user information are stored in sessions which are identified by session
+; cookies placed on the users computer. The below options set the properties
+; of the session coookie.
+; Domain to set the cookie for. By default NagVis tries to auto detect this 
+; options value by using the webservers environment variables.
+;sesscookiedomain="auto-detect"
+; Absolute web path to set the cookie for. This defaults to configured 
+; paths/htmlbase option
+;sesscookiepath="/nagvis"
+; Lifetime of the NagVis session cookie in seconds. The default value is set to
+; 24 hours. The NagVis session cookie contains will be renewed on every page 
+; visit. If a session is idle for more time than configured here it will become
+; invalid.
+;sesscookieduration="86400"
+;
+; Start page to redirect the user to when first visiting NagVis without
+; special parameters.
+;startmodule="Overview"
+;startaction="view"
 
 ; Path definitions
 [paths]
