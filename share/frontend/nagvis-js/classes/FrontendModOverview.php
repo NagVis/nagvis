@@ -1,8 +1,14 @@
 <?php
 class FrontendModOverview extends FrontendModule {
+	private $rotation = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
+		
+		// Parse the view specific options
+		$aOpts = Array('rotation' => MATCH_ROTATION_NAME_EMPTY);
+		$aVals = $this->getCustomOptions($aOpts);
+		$this->rotation = $aVals['rotation'];
 		
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
