@@ -50,13 +50,18 @@ class FrontendModUrl extends FrontendModule {
 		if($this->CORE->getMainCfg()->getValue('index','headermenu')) {
       // Parse the header menu
       $HEADER = new GlobalHeaderMenu($this->CORE, $this->AUTHORISATION, $this->CORE->getMainCfg()->getValue('index', 'headertemplate'));
+      
+      // Put rotation information to header menu
+      if($this->rotation != '') {
+      	$HEADER->setRotationEnabled();
+      }
+      
 			$INDEX->setHeaderMenu($HEADER->__toString());
     }
 		
 		// Initialize map view
 		$this->VIEW = new NagVisUrlView($this->CORE, $this->url);
     
-		// Maybe it is needed to handle the requested rotation
 		// Maybe it is needed to handle the requested rotation
 		if($this->rotation != '') {
 			$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
