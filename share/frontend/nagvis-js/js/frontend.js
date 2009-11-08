@@ -1906,7 +1906,17 @@ function workerUpdate(iCount, sType, sIdentifier) {
 				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
 			}
 		}
-
+		
+		// I don't think empty maps make any sense. So when no objects are present: 
+		// Try to fetch them continously
+		if(aMapObjects.length === 0) {
+			eventlog("worker", "info", "Map is empty. Strange. Re-fetching objects");
+			
+			if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
+			}
+		}
+		
 		oCurrentFileAges = null;
 		
 		/*
@@ -2007,7 +2017,25 @@ function workerUpdate(iCount, sType, sIdentifier) {
 				eventlog("worker", "error", "Problem while reparsing the automap after new configuration");
 			}
 		}
-
+		
+		// I don't think empty maps make any sense. So when no objects are present: 
+		// Try to fetch them continously
+		if(aMapObjects.length === 0) {
+			eventlog("worker", "info", "Automap is empty. Strange. Re-fetching objects");
+			
+			// Render new background image and dot file
+			automapParse(oPageProperties.map_name);
+			
+			// Update background image for automap
+			setMapBackgroundImage(oPageProperties.background_image+iNow);
+			
+			// Reparse the automap on changed map configuration
+			eventlog("worker", "info", "Reparsing the map.");
+			if(parseAutomap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+				eventlog("worker", "error", "Problem while reparsing the automap");
+			}
+		}
+		
 		oCurrentFileAges = null;
 		
 		/*
@@ -2094,10 +2122,6 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		
 		//FIXME: Map configuration(s) changed?
 		
-		/*
-		 * Now proceed with real actions when everything is OK
-		 */
-		
 		// When no automaps/maps present: Try to fetch them continously
 		if(aMapObjects.length === 0) {
 			eventlog("worker", "debug", "No automaps/maps found, reparsing...");
@@ -2120,6 +2144,10 @@ function workerUpdate(iCount, sType, sIdentifier) {
 			eventlog("worker", "info", "Parse context menus");
 			parseContextMenus(aMapObjects);
 		}
+		
+		/*
+		 * Now proceed with real actions when everything is OK
+		 */
 		
 		// Get objects which need an update
 		var arrObj = getObjectsToUpdate(aMapObjects);
