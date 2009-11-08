@@ -225,7 +225,7 @@
 ; Example definition of a livestatus backend. In this case the backend_id is live_1
 [backend_live_1]
 backendtype="mklivestatus"
-;socket_path="/usr/local/nagios/var/rw/live"
+;socket_path="unix:/usr/local/nagios/var/rw/live"
 
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 [backend_ndomy_1]

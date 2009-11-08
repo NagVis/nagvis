@@ -36,14 +36,18 @@
  */
 class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	private $backendId = '';
+	
+	private $socketType = '';
 	private $socketPath = '';
+	private $socketAddress = '';
+	private $socketPort = 0;
 	
 	// These are the backend local configuration options
 	private static $validConfig = Array(
-		'socket_path' => Array('must' => 1,
+		'socket' => Array('must' => 1,
 		  'editable' => 1,
-		  'default' => '/usr/local/nagios/var/rw/live',
-		  'match' => MATCH_STRING_PATH));
+		  'default' => 'unix:/usr/local/nagios/var/rw/live',
+		  'match' => MATCH_SOCKET));
 	
 	/**
 	 * PUBLIC class constructor
@@ -56,18 +60,50 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	public function __construct($CORE, $backendId) {
 		$this->backendId = $backendId;
 		
-		$this->socketPath = GlobalCore::getInstance()->getMainCfg()->getValue('backend_'.$backendId, 'socket_path');
+		// Parse the socket params
+		$this->parseSocket(GlobalCore::getInstance()->getMainCfg()->getValue('backend_'.$backendId, 'socket'));
 		
 		// Run preflight checks
-		if(!$this->checkSocketExists()) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The livestatus socket [SOCKET] in backend [BACKENDID] does not exist', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+		if($this->socketType == 'unix' && !$this->checkSocketExists()) {
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
 		}
+		
 		if(!function_exists('socket_create')) {
 			new GlobalFrontendMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
     }
 
 		
 		return true;
+	}
+	
+	/**
+	 * PRIVATE parseSocket
+	 * 
+	 * Parses and sets the socket options
+	 *
+	 * @return  String    Parses the socket
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function parseSocket($socket) {
+		// Explode the given socket definition
+		list($type, $address) = explode(':', $socket, 2);
+		
+		
+		
+		if($type === 'unix') {
+			$this->socketType = $type;
+			$this->socketPath = $address;
+		} elseif($type === 'tcp') {
+			$this->socketType = $type;
+			
+			// Extract address and port
+			list($address, $port) = explode(':', $address, 2);
+			
+			$this->socketAddress = $address;
+			$this->socketPort = $port;
+		} else {
+			new GlobalFrontendMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('Unknown socket type given in backend [BACKENDID]', Array('BACKENDID' => $this->backendId)));
+		}
 	}
 	
 	/**
@@ -109,8 +145,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function queryLivestatus($query) {
+		$sock = false;
+		
 		// Create socket connection
-		$sock = socket_create(AF_UNIX, SOCK_STREAM, 0);
+		if($this->socketType === 'unix') {
+			$sock = socket_create(AF_UNIX, SOCK_STREAM, 0);
+		} elseif($this->socketType === 'tcp') {
+			$sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		}
 		
 		if($sock == false) {
 			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Could not create livestatus socket [SOCKET] in backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
@@ -118,7 +160,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		}
 		
 		// Connect to the socket
-		$result = socket_connect($sock, $this->socketPath);
+		if($this->socketType === 'unix') {
+			$result = socket_connect($sock, $this->socketPath);
+		} elseif($this->socketType === 'tcp') {
+			$result = socket_connect($sock, $this->socketAddress, $this->socketPort);
+		}
 		
 		if($result == false) {
 			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($sock)))));
