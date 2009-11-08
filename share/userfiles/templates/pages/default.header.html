@@ -20,7 +20,7 @@
 			<dd id="action-ddcontent" onmouseover="cancelHide('action')" onmouseout="ddMenu('action',-1)">
 				<ul>
 					{if $view_type == 'Map' || $view_type == 'Automap'}
-					<li><a href="">{$lang_search}</a></li>
+					<li><a href="javascript:showSearch('{$langSearch}')">{$langSearch}</a></li>
 					{/if}
 					{if $bRotation == true}
 					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$lang_rotation_start}</a></li>

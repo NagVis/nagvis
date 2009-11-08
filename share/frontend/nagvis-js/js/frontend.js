@@ -88,6 +88,23 @@ function showChangePassword(sTitle) {
 }
 
 /**
+ * showSearch()
+ *
+ * Show the search dialog to the user
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function showSearch(sTitle) {
+	var oContent = getSyncRequest(oGeneralProperties.path_base+'/frontend/nagvis-js/index.php?mod=Search&act=view', true, false);
+	
+	if(typeof oContent !== 'undefined') {
+		popupWindow(sTitle, oContent, true);
+	}
+	
+	oContent = null;
+}
+
+/**
  * searchObjectsKeyCheck()
  *
  * Checks the keys which are entered to the object search field

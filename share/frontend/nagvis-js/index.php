@@ -103,6 +103,7 @@ $MHANDLER->regModule('Url');
 $MHANDLER->regModule('AutoMap');
 $MHANDLER->regModule('Overview');
 $MHANDLER->regModule('Rotation');
+$MHANDLER->regModule('Search');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

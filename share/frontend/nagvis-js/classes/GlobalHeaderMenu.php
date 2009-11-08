@@ -251,6 +251,7 @@ class GlobalHeaderMenu {
 	private function getStaticMacros() {
 		// Replace paths and language macros
 		$aReturn = Array('html_base' => $this->pathHtmlBase,
+			'langSearch' => $this->CORE->getLang()->getText('Search'),
 			'html_images' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
 			'html_templates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
 			'html_template_images' => $this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
@@ -266,7 +267,6 @@ class GlobalHeaderMenu {
 			'lang_online_doc' => $this->CORE->getLang()->getText('onlineDoc'),
 			'lang_forum' => $this->CORE->getLang()->getText('forum'),
 			'lang_support_info' => $this->CORE->getLang()->getText('supportInfo'),
-			'lang_search' => $this->CORE->getLang()->getText('Search'),
 			'lang_overview' => $this->CORE->getLang()->getText('overview'),
 			'lang_instance' => $this->CORE->getLang()->getText('instance'),
 			'lang_logout' => $this->CORE->getLang()->getText('Logout'),
