@@ -1212,6 +1212,12 @@ function parseOverviewPage() {
 function parseOverviewMaps(aMapsConf) {
 	eventlog("worker", "debug", "parseOverviewMaps: Start setting maps");
 	
+	// Exit this function on invalid call
+	if(aMapsConf === null)  {
+		eventlog("worker", "warning", "parseOverviewMaps: Invalid call - maybe broken ajax response");
+		return false;
+	}
+	
 	// Render the maps when enabled
 	if(oPageProperties.showmaps == 1 && aMapsConf.length > 0) {
 		var oTable = document.getElementById('overviewMaps');
@@ -1269,6 +1275,12 @@ function parseOverviewMaps(aMapsConf) {
  */
 function parseOverviewAutomaps(aMapsConf) {
 	eventlog("worker", "debug", "parseOverviewAutomaps: Start setting automaps");
+	
+	// Exit this function on invalid call
+	if(aMapsConf === null)  {
+		eventlog("worker", "warning", "parseOverviewAutomaps: Invalid call - maybe broken ajax response");
+		return false;
+	}
 	
 	// Render the maps when enabled
 	if(oPageProperties.showautomaps == 1 && aMapsConf.length > 0) {
@@ -2085,6 +2097,29 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		/*
 		 * Now proceed with real actions when everything is OK
 		 */
+		
+		// When no automaps/maps present: Try to fetch them continously
+		if(aMapObjects.length === 0) {
+			eventlog("worker", "debug", "No automaps/maps found, reparsing...");
+			parseOverviewMaps(getOverviewMaps());
+			parseOverviewAutomaps(getOverviewAutomaps());
+			
+			// Bulk get all hover templates which are needed on the overview page
+			eventlog("worker", "debug", "Fetching hover templates");
+			getHoverTemplates(aMapObjects);
+			
+			// Assign the hover templates to the objects and parse them
+			eventlog("worker", "debug", "Parse hover menus");
+			parseHoverMenus(aMapObjects);
+			
+			// Bulk get all context templates which are needed on the overview page
+			eventlog("worker", "aMapObjects", "Fetching context templates");
+			getContextTemplates(aMapObjects);
+			
+			// Assign the context templates to the objects and parse them
+			eventlog("worker", "info", "Parse context menus");
+			parseContextMenus(aMapObjects);
+		}
 		
 		// Get objects which need an update
 		var arrObj = getObjectsToUpdate(aMapObjects);
