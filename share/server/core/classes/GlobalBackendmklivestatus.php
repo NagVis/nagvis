@@ -88,8 +88,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// Explode the given socket definition
 		list($type, $address) = explode(':', $socket, 2);
 		
-		
-		
 		if($type === 'unix') {
 			$this->socketType = $type;
 			$this->socketPath = $address;
