@@ -585,9 +585,12 @@ function updateMapBasics() {
 	oMapSummaryObj = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name)+sAutomapParams, false)[0];
 	sAutomapParams = null;
 
-	// FIXME: Be more tolerant - check if oMapSummaryObj is null or anything unexpected
-	
-	alert("D:"+oMapSummaryObj.conf.summary_in_downtime+" A: "+ oMapSummaryObj.conf.summary_problem_has_been_acknowledged + " S: " + oMapSummaryObj.conf.summary_state.toLowerCase());
+	// FIXME: Add method to refetch oMapSummaryObj when it is null
+	// Be tolerant - check if oMapSummaryObj is null or anything unexpected
+	if(oMapSummaryObj == null) {
+		eventlog("worker", "debug", "The oMapSummaryObj is null. Maybe a communication problem with the backend");
+		return false;
+	}
 
 	// Update favicon
 	setPageFavicon(getFaviconImage(oMapSummaryObj.conf));
@@ -996,7 +999,6 @@ function playSound(intIndex, iNumTimes){
 		}
 		
 		// Load sound
-		alert("before1");
 		var oEmbed = document.createElement('embed');
 		oEmbed.setAttribute('id', 'sound'+sState);
 		// Relative URL does not work, add full url
@@ -1008,10 +1010,8 @@ function playSound(intIndex, iNumTimes){
 		oEmbed.setAttribute('autostart', 'true');
 		oEmbed.setAttribute('enablejavascript', 'true');
 		
-		alert("before2");
 		// Add object to body => the sound is played
 		oEmbed = document.body.appendChild(oEmbed);
-		alert("before3");
 		oEmbed = null;
 		
 		iNumTimes = iNumTimes - 1;
