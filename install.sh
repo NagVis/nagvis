@@ -316,8 +316,6 @@ check_apache_php() {
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
 	MODPHP=`find $DIR -type f -exec grep -ie "mod_php.*\.so" -e "libphp.*\.so" {} \; | tr -s " " | cut -d" " -f3 | uniq`
-	HTML_PATH=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "$HTML_BASE[/]\?$"  | uniq` 
-	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "$HTML_BASE[/]\?$"  | wc -l` 
 	
 	# Only try to detect user when not set or empty
 	if [ -z "$WEB_USER" ]; then
@@ -604,7 +602,6 @@ NAGVIS_PATH="/usr/local/nagvis"
 # Default nagios share webserver path
 HTML_PATH="/nagvis"
 [ $NAGVIS_TAG -lt 01050000 ]&&HTML_PATH="/$SOURCE/nagvis"
-HTML_BASE=$HTML_PATH
 
 # Process command line options
 if [ $# -gt 0 ]; then
@@ -793,10 +790,6 @@ if [ $FORCE -eq 0 ]; then
 	check_apache_php "/etc/httpd/"
 	check_apache_php "/usr/local/etc/apache2/"	# FreeBSD
 	log "  Apache mod_php" $MODPHP
-	if [ $HTML_ANZ -gt 1 ]; then
-		log "more than one alias found" "warning"
-		echo $HTML_PATH
-	fi
 
 	# Check Graphviz
 	GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
@@ -818,9 +811,9 @@ if [ $FORCE -eq 0 ]; then
 
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		echo -n "| Please enter the web path to NagVis [$HTML_PATH]: "
-		read AHTMLPATH
-		if [ ! -z $AHTMLPATH ]; then
-			HTML_PATH=$AHTMLPATH
+		read APATH
+		if [ ! -z $APATH ]; then
+			HTML_PATH=$APATH
 		fi
 	fi
 
@@ -999,7 +992,7 @@ if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
 	if [ -s $WEB_PATH/$HTML_CONF ]; then
 		text "| *** $WEB_PATH/$HTML_CONF will NOT be overwritten !" "|"
 		HTML_CONF="$HTML_CONF.$DATE"
-		text "| *** creating $WEB_PATH/$HTML_CONF instead" "|"
+		text "| *** creating $WEB_PATH/$HTML_CONF instead (commented out config)" "|"
 		CHG='s/^/#new /'
 	fi
 	DONE=`log "Creating web configuration file..." done`
