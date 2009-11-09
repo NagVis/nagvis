@@ -65,11 +65,13 @@ NAGVIS_CONF="etc/nagvis.ini.php"
 # Relative path to the NagVis SQLite auth database
 NAGVIS_AUTH_DB="etc/auth.db"
 # Default nagios web conf
-HTML_SAMPLE="apache2-nagvis.conf-sample"
+HTML_SAMPLE="etc/apache2-nagvis.conf-sample"
 # Default nagios web conf
 HTML_CONF="nagvis.conf"
 # Saving current timestamp for backup when updating
 DATE=`date +%s`
+# Web path to the NagVis base directory
+HTML_PATH=""
 # Path to webserver conf
 WEB_PATH=""
 # Default webserver user
@@ -115,6 +117,7 @@ Parameters:
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
   -w <PATH>     Path to the webserver config files
+  -W <PATH      Web path to the NagVis base directory (Default: $HTML_PATH) 
   -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ido2db, ndo2fs, merlin
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -o            omit demo files
@@ -605,7 +608,7 @@ HTML_BASE=$HTML_PATH
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:w:u:b:g:c:i:s:ohqvFr" options; do
+	while getopts "n:B:m:p:w:W:u:b:g:c:i:s:ohqvFr" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -628,6 +631,9 @@ if [ $# -gt 0 ]; then
 			;;
 			w)
 				WEB_PATH=$OPTARG
+			;;
+			W)
+				HTML_PATH=$OPTARG
 			;;
 			u)
 				WEB_USER=$OPTARG
@@ -811,6 +817,14 @@ if [ $FORCE -eq 0 ]; then
 	HTML_PATH=${HTML_PATH%/}
 
 	if [ $INSTALLER_QUIET -ne 1 ]; then
+		echo -n "| Please enter the web path to NagVis [$HTML_PATH]: "
+		read AHTMLPATH
+		if [ ! -z $AHTMLPATH ]; then
+			HTML_PATH=$AHTMLPATH
+		fi
+	fi
+
+	if [ $INSTALLER_QUIET -ne 1 ]; then
 		echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
 		read AUSR
 		if [ ! -z $AUSR ]; then
@@ -989,7 +1003,7 @@ if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
 		CHG='s/^/#new /'
 	fi
 	DONE=`log "Creating web configuration file..." done`
-	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
+	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
 	chk_rc "|  Error creating web configuration" "$DONE"
 	DONE=`log "Setting permissions for web configuration file..." done`
 	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF

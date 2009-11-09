@@ -2,7 +2,7 @@
 #
 # #############################################################################
 
-Alias /nagvis "@NAGVIS_PATH@/share"
+Alias @NAGVIS_WEB@ "@NAGVIS_PATH@/share"
 
 <Directory "@NAGVIS_PATH@/share">
 #  SSLRequireSSL
