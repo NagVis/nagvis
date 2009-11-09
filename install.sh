@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.7"
+INSTALLER_VERSION="0.2.8"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -62,8 +62,8 @@ NAGVIS_VER=""
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
 NAGVIS_CONF="etc/nagvis.ini.php"
-# Relative path to the NagVis users configuration file
-NAGVIS_USER_CONF="etc/users.ini.php"
+# Relative path to the NagVis SQLite auth database
+NAGVIS_AUTH_DB="etc/auth.db"
 # Default nagios web conf
 HTML_SAMPLE="apache2-nagvis.conf-sample"
 # Default nagios web conf
@@ -855,6 +855,13 @@ if [ -d $NAGVIS_PATH ]; then
 		NAGVIS_VER_OLD="UNKNOWN"
 	fi
 	
+	# Generate the version tag for old version
+	if [ "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
+		NAGVIS_TAG_OLD=`fmt_version "$NAGVIS_VER_OLD"`
+	else
+		NAGVIS_TAG_OLD=01000000
+	fi
+	
 	NAGVIS_PATH_OLD=$NAGVIS_PATH.old-$DATE
 
 	log "NagVis $NAGVIS_VER_OLD" $NAGVIS_VER_OLD
@@ -972,15 +979,6 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	fi
 fi
 
-# Create user configuration file from sample when no file exists
-if [ -f $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample ]; then
-  if [ ! -f $NAGVIS_PATH/$NAGVIS_USER_CONF ]; then
-    DONE=`log "Creating user configuration file..." done`
-    cp -p $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample $NAGVIS_PATH/$NAGVIS_USER_CONF
-    chk_rc "|  Error copying sample user configuration" "$DONE"
-  fi
-fi
-
 # Create apache configuration file from sample when no file exists
 if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
 	CHG='s/^//'
@@ -1021,8 +1019,8 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring custom shapes..."
 	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
-	LINE="Restoring custom header templates..."
-	copy "tmpl.default*" "$USERFILES_DIR/templates/header" "header templates"
+	LINE="Restoring custom pages templates..."
+	copy "tmpl.default*" "$USERFILES_DIR/templates/pages" "pages templates"
 	
 	LINE="Restoring custom hover templates..."
 	copy "tmpl.default*" "$USERFILES_DIR/templates/hover" "hover templates"
@@ -1038,6 +1036,12 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 
 	LINE="Restoring custom stylesheets..."
   copy "" "$USERFILES_DIR/styles" "stylesheets"
+	
+	# Copy auth.db when updating from 1.5x
+	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
+		LINE="Restoring auth database file..."
+		copy "" "$NAGVIS_AUTH_DB" "auth database file"
+	fi
 fi
 text
 
