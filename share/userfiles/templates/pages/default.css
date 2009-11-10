@@ -406,7 +406,7 @@ table#popupWindowMaster {
 	border-collapse: separate;
 	
 	margin-left: 8px;
-	padding: 16px 16px 40px 16px;
+	padding: 6px 16px 16px 16px;
 	font-weight: normal;
 	-moz-border-radius: 11px;
 	-khtml-border-radius: 11px;
@@ -428,6 +428,7 @@ table#popupWindowMaster tr td {
 	font-size: 10px;
 	color: #43B3CF;
 }
+
 /* Title bar */
 table#popupWindowMaster tbody tr th#dragbar {
 	text-align: left;
@@ -440,13 +441,14 @@ table#popupWindowMaster tbody tr th#dragbar {
 table#popupWindowMaster tbody tr th.control {
 	padding: 0;
 	margin: 0;
-	width: 30px;
+	width: 19px;
 	font-size: 16px;
 	text-align: center;
 	color: #43B3CF;
 	font-weight: bold;
 	text-decoration: none;
 	cursor: pointer;
+	border: 1px solid #43B3CF;
 }
 
 /* Content styling */
