@@ -52,7 +52,7 @@ class GlobalHeaderMenu {
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','headertemplate').'tmpl.'.$this->templateName.'.html';
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','pagetemplate').$this->templateName.'.header.html';
 		
 		// Initialize template system
 		$this->TMPL = New FrontendTemplateSystem($this->CORE);
@@ -288,7 +288,7 @@ class GlobalHeaderMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('headerTemplateNotExists','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('headerTemplateNotExists', Array('PATH' => $this->pathTemplateFile)));
 			}
 			return FALSE;
 		}
@@ -306,7 +306,7 @@ class GlobalHeaderMenu {
 			return TRUE;
 		} else {
 			if($printErr == 1) {
-				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('headerTemplateNotReadable','FILE~'.$this->pathTemplateFile));
+				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('headerTemplateNotReadable', Array('FILE' => $this->pathTemplateFile)));
 			}
 			return FALSE;
 		}
