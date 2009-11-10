@@ -460,27 +460,41 @@ chk_rc() {
 	fi
 }
 
+#copy "default*" "$USERFILES_DIR/templates/pages" "pages templates"
 copy() {
-	GLOBIGNORE="$1"
 	DONE=""
-#	[ -n "$LINE" ] && line "$LINE"
+	
+	# DEBUG: [ -n "$LINE" ] && line "$LINE"
 	[ -n "$LINE" ] && DONE=`log "$LINE" done` 
+	
+	# Copy single file
 	if [ -f "$NAGVIS_PATH_OLD/$2" ]; then
 		cp -p $NAGVIS_PATH_OLD/$2 $NAGVIS_PATH/$2
 		chk_rc "|  Error copying file $3" "$DONE"
 	fi
+	
+	# Copy old directory contents to new directory
 	if [ -d "$NAGVIS_PATH_OLD/$2" -a ! -d "$3" ]; then
-		ANZ=`find $NAGVIS_PATH_OLD/$2 -type f | wc -l`
-		if [ $ANZ -gt 0 ]; then
-			cp -pr $NAGVIS_PATH_OLD/$2/* $NAGVIS_PATH/$2
+		# Get files to copy
+		FILES=`find $NAGVIS_PATH_OLD/$2 -type f`
+
+		# Maybe exclude some files
+		if [ "$1" != "" ]; then
+			FILES=`echo "$FILES" | grep -vE $1`
+		fi
+		
+		if [ "$FILES" != "" ]; then
+			cp -pr `echo "$FILES" | xargs` $NAGVIS_PATH/$2
 			chk_rc "|  Error copying $3" "$DONE"
 		fi
 	fi
+	
+	# Copy directory to directory
 	if [ -d "$3" ]; then
 		cp -pr $2 $3
 		chk_rc "|  Error copying $2 to $3" "$DONE"
 	fi
-	GLOBIGNORE=""
+	
 	LINE=""
 	DONE=""
 }
@@ -964,7 +978,7 @@ if [ $NAGVIS_TAG -ge 01050000 ]; then
 	cmp_js
 else
 	LINE="Copying files to $NAGVIS_PATH..."
-	copy "install.sh" '*' "$NAGVIS_PATH"
+	copy "\\install\.sh$" '*' "$NAGVIS_PATH"
 fi
 
 # Remove demo maps if desired
@@ -1015,31 +1029,31 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "" "$NAGVIS_CONF" "main configuration file"
 	
 	LINE="Restoring custom map configuration files..."
-	copy "demo.cfg:demo2.cfg" "etc/maps" "map configuration files"
+	copy "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "map configuration files"
 	
 	LINE="Restoring custom map images..."
-	copy "nagvis-demo.png" "$USERFILES_DIR/images/maps" "map image files"
+	copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
 	
 	LINE="Restoring custom iconsets..."
-	copy "20x20.png:configerror_*.png:error.png:std_*.png" "$USERFILES_DIR/images/iconsets" "iconset files"
+	copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
 	
 	LINE="Restoring custom shapes..."
 	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
 	LINE="Restoring custom pages templates..."
-	copy "tmpl.default*" "$USERFILES_DIR/templates/pages" "pages templates"
+	copy "\/default\..+$" "$USERFILES_DIR/templates/pages" "pages templates"
 	
 	LINE="Restoring custom hover templates..."
-	copy "tmpl.default*" "$USERFILES_DIR/templates/hover" "hover templates"
+	copy "\/tmpl\.default.+$" "$USERFILES_DIR/templates/hover" "hover templates"
 	
 	LINE="Restoring custom header template images..."
-	copy "tmpl.default*" "$USERFILES_DIR/images/templates/header" "header template images"
+	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/header" "header template images"
 
 	LINE="Restoring custom hover template images..."
-	copy "tmpl.default*" "$USERFILES_DIR/images/templates/hover" "hover template images"
+	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/hover" "hover template images"
 
 	LINE="Restoring custom gadgets..."
-	copy "gadgets_core.php:std_*.php" "$USERFILES_DIR/gadgets" "gadgets"
+	copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
 
 	LINE="Restoring custom stylesheets..."
   copy "" "$USERFILES_DIR/styles" "stylesheets"
