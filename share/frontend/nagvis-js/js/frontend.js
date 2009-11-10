@@ -43,25 +43,8 @@ var oAutomapParams = {};
  */
 function submitFrontendForm(sUrl, sFormId) {
 	var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
-	if(oResult && oResult.status === 'OK') {
-		var oMsg = {};
-		oMsg.type = 'NOTE';
-		oMsg.message = oResult.message;
-		frontendMessage(oMsg);
-		oMsg = null;
-		
-		// Maybe there is a request for a reload/redirect
-		if(typeof oResult.redirectTime !== 'undefined') {
-			var sUrl = window.location.href;
-			
-			// Maybe enable redirect
-			if(typeof oResult.redirectUrl !== 'undefined') {
-				sUrl = oResult.redirectUrl;
-			}
-			
-			// Register reload/redirect
-			setTimeout(function() {window.location = sUrl;}, oResult.redirectTime*1000);
-		}
+	if(oResult && oResult.type && oResult.type === 'NOTE') {
+		frontendMessage(oResult);
 		
 		// Additionally close the popup window when the response is positive
 		if(typeof popupWindowClose == 'function') { 

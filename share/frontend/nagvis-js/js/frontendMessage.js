@@ -165,4 +165,17 @@ function frontendMessage(oMessage, iTimeout) {
 	
 	document.body.appendChild(oContainerDiv);
 	oContainerDiv = null;
+
+	// Maybe there is a request for a reload/redirect
+	if(typeof oMessage.reloadTime !== 'undefined') {
+		var sUrl = window.location.href;
+		
+		// Maybe enable redirect
+		if(typeof oMessage.realoadUrl !== 'undefined') {
+			sUrl = oMessage.reloadUrl;
+		}
+		
+		// Register reload/redirect
+		setTimeout(function() {window.location = sUrl;}, oMessage.reloadTime*1000);
+	}
 }
