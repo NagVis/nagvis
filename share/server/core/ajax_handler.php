@@ -103,6 +103,7 @@ $MHANDLER->regModule('Url');
 $MHANDLER->regModule('ChangePassword');
 $MHANDLER->regModule('Auth');
 $MHANDLER->regModule('Search');
+$MHANDLER->regModule('UserMgmt');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

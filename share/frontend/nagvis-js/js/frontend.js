@@ -54,6 +54,23 @@ function submitFrontendForm(sUrl, sFormId) {
 }
 
 /**
+ * showUserAdd()
+ *
+ * Show the user add dialog to the user
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function showUserAdd(sTitle) {
+	var oContent = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=viewAdd', true, false);
+	
+	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
+		popupWindow(sTitle, oContent, true);
+	}
+	
+	oContent = null;
+}
+
+/**
  * showChangePassword()
  *
  * Show the change password dialog to the user

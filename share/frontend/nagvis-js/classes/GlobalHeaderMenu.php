@@ -252,6 +252,7 @@ class GlobalHeaderMenu {
 		// Replace paths and language macros
 		$aReturn = Array('html_base' => $this->pathHtmlBase,
 			'langSearch' => $this->CORE->getLang()->getText('Search'),
+			'langUserAdd' => $this->CORE->getLang()->getText('Create User'),
 			'html_images' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
 			'html_templates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
 			'html_template_images' => $this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
