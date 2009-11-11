@@ -244,13 +244,8 @@ class GlobalLanguage {
 	 */
 	private function checkGettextSupport() {
 		if (!extension_loaded('gettext')) {
-			dl('gettext.so');
-			if (!extension_loaded('gettext')) {
-				new GlobalMessage('ERROR', $this->getText('phpModuleNotLoaded', Array('MODULE' => 'gettext')));
-				return FALSE;
-			} else {
-				return TRUE;
-			}
+			new GlobalMessage('ERROR', $this->getText('phpModuleNotLoaded', Array('MODULE' => 'gettext')));
+			return FALSE;
 		} else {
 			return TRUE;	
 		}
