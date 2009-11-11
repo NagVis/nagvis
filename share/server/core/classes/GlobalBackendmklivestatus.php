@@ -353,14 +353,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	public function getHostgroupState($hostgroupName, $onlyHardstates) {
 		$arrReturn = Array();
 		
-		$numAttr = 19;
+		$numAttr = 20;
 		$l = $this->queryLivestatus(
 		  "GET hosts\n".
 		  "Columns: name state plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "last_hard_state acknowledged scheduled_downtime_depth\n".
+		  "last_hard_state acknowledged scheduled_downtime_depth ".
+		  "has_been_checked\n".
 		  "Filter: groups >= ".$hostgroupName."\n");
 		
 		if(count($l) == 0) {
@@ -398,47 +399,56 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				}
 			}
 			
-			switch ($e[1]) {
-				case "0": $state = "UP"; break;
-				case "1": $state = "DOWN"; break;
-				case "2": $state = "UNREACHABLE"; break;
-				default: $state = "UNKNOWN"; break;
-			}
-			
-			// If there is a downtime for this object, save the data
-			// $e[18]: scheduled_downtime_depth
-			if(isset($e[18]) && $e[18] > 0) {
-				$arrTmpReturn['in_downtime'] = 1;
+			// Catch pending objects
+			// $e[18]: has_been_checked
+			// $e[1]:  state
+			if($e[18] == '0' || $e[1] == '') {
+					$arrTmpReturn['state'] = 'PENDING';
+					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[0]));
+			} else {
 				
-				// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
-				// FIXME: Read downtime details
-				/*$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName;
-				if(file_exists($sFile)) {
-					$oDowntime = json_decode(file_get_contents($sFile));
+				switch ($e[1]) {
+					case "0": $state = "UP"; break;
+					case "1": $state = "DOWN"; break;
+					case "2": $state = "UNREACHABLE"; break;
+					default: $state = "UNKNOWN"; break;
+				}
+				
+				// If there is a downtime for this object, save the data
+				// $e[18]: scheduled_downtime_depth
+				if(isset($e[18]) && $e[18] > 0) {
+					$arrTmpReturn['in_downtime'] = 1;
 					
-					$arrReturn['downtime_start'] = $oDowntime->STARTTIME;
-					$arrReturn['downtime_end'] = $oDowntime->ENDTIME;
-					$arrReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-					$arrReturn['downtime_data'] = $oDowntime->COMMENT;
-				}*/
+					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
+					// FIXME: Read downtime details
+					/*$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName;
+					if(file_exists($sFile)) {
+						$oDowntime = json_decode(file_get_contents($sFile));
+						
+						$arrReturn['downtime_start'] = $oDowntime->STARTTIME;
+						$arrReturn['downtime_end'] = $oDowntime->ENDTIME;
+						$arrReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+						$arrReturn['downtime_data'] = $oDowntime->COMMENT;
+					}*/
+				}
+				
+				$arrTmpReturn['state'] = $state;
+				$arrTmpReturn['output'] = $e[2];
+				$arrTmpReturn['alias'] = $e[3]; 
+				$arrTmpReturn['display_name'] = $e[4];
+				$arrTmpReturn['address'] = $e[5];
+				$arrTmpReturn['notes'] = $e[6];
+				$arrTmpReturn['last_check'] = $e[7];
+				$arrTmpReturn['next_check'] = $e[8];
+				$arrTmpReturn['state_type'] = $e[9];
+				$arrTmpReturn['current_check_attempt'] = $e[10];
+				$arrTmpReturn['max_check_attempts'] = $e[11];
+				$arrTmpReturn['last_state_change'] = $e[12];
+				$arrTmpReturn['last_hard_state_change'] = $e[13];
+				$arrTmpReturn['statusmap_image'] = $e[14];
+				$arrTmpReturn['perfdata'] = $e[15];
+				$arrTmpReturn['problem_has_been_acknowledged'] = $e[16];
 			}
-			
-			$arrTmpReturn['state'] = $state;
-			$arrTmpReturn['output'] = $e[2];
-			$arrTmpReturn['alias'] = $e[3]; 
-			$arrTmpReturn['display_name'] = $e[4];
-			$arrTmpReturn['address'] = $e[5];
-			$arrTmpReturn['notes'] = $e[6];
-			$arrTmpReturn['last_check'] = $e[7];
-			$arrTmpReturn['next_check'] = $e[8];
-			$arrTmpReturn['state_type'] = $e[9];
-			$arrTmpReturn['current_check_attempt'] = $e[10];
-			$arrTmpReturn['max_check_attempts'] = $e[11];
-			$arrTmpReturn['last_state_change'] = $e[12];
-			$arrTmpReturn['last_hard_state_change'] = $e[13];
-			$arrTmpReturn['statusmap_image'] = $e[14];
-			$arrTmpReturn['perfdata'] = $e[15];
-			$arrTmpReturn['problem_has_been_acknowledged'] = $e[16];
 			
 			$arrReturn[] = $arrTmpReturn;
 		}
@@ -473,7 +483,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "host_alias host_address plugin_output notes last_check next_check ".
 		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change scheduled_downtime_depth perf_data ".
-		  "acknowledged host_acknowledged host_scheduled_downtime_depth\n");
+		  "acknowledged host_acknowledged host_scheduled_downtime_depth ".
+		  "has_been_checked\n");
 		
 		if(!is_array($l) || count($l) <= 0) {
 			$arrReturn['host'] = '';
@@ -488,60 +499,69 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['description'] = $e[1];
 				$arrTmpReturn['display_name'] = $e[2];
 				
-				switch ($e[3]) {
-					case "0": $state = "OK"; break;
-					case "1": $state = "WARNING"; break;
-					case "2": $state = "CRITICAL"; break;
-					case "3": $state = "UNKNOWN"; break;
-					default: $state = "UNKNOWN"; break;
-				}
-				
-				/**
-				 * Handle host/service acks
-				 *
-				 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
-				 * acknowledged => check for acknowledged host
-				 */
-				// $e[17]: acknowledged
-				// $e[18]: host_acknowledged
-				if($state != 'OK' && ($e[17] == 1 || $e[18] == 1)) {
-					$arrTmpReturn['problem_has_been_acknowledged'] = 1;
+				// Catch pending objects
+				// $e[20]: has_been_checked
+				// $e[3]:  state
+				if($e[20] == '0' || $e[3] == '') {
+						$arrTmpReturn['state'] = 'PENDING';
+						$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[1]));
 				} else {
-					$arrTmpReturn['problem_has_been_acknowledged'] = 0;
-				}
-				
-				// Handle host/service downtimes
-				// $e[15]: scheduled_downtime_depth
-				// $e[19]: host_scheduled_downtime_depth
-				if((isset($e[15]) && $e[15] > 0) || (isset($e[19]) && $e[19] > 0)) {
-					$arrTmpReturn['in_downtime'] = 1;
 					
-					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
-					/* FIXME: downtime information
-					$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
-					if(file_exists($sFile)) {
-						$oDowntime = json_decode(file_get_contents($sFile));
+					switch ($e[3]) {
+						case "0": $state = "OK"; break;
+						case "1": $state = "WARNING"; break;
+						case "2": $state = "CRITICAL"; break;
+						case "3": $state = "UNKNOWN"; break;
+						default: $state = "UNKNOWN"; break;
+					}
+					
+					/**
+					 * Handle host/service acks
+					 *
+					 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+					 * acknowledged => check for acknowledged host
+					 */
+					// $e[17]: acknowledged
+					// $e[18]: host_acknowledged
+					if($state != 'OK' && ($e[17] == 1 || $e[18] == 1)) {
+						$arrTmpReturn['problem_has_been_acknowledged'] = 1;
+					} else {
+						$arrTmpReturn['problem_has_been_acknowledged'] = 0;
+					}
+					
+					// Handle host/service downtimes
+					// $e[15]: scheduled_downtime_depth
+					// $e[19]: host_scheduled_downtime_depth
+					if((isset($e[15]) && $e[15] > 0) || (isset($e[19]) && $e[19] > 0)) {
+						$arrTmpReturn['in_downtime'] = 1;
 						
-						$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
-						$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
-						$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-						$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
-					}*/
+						// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
+						/* FIXME: downtime information
+						$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
+						if(file_exists($sFile)) {
+							$oDowntime = json_decode(file_get_contents($sFile));
+							
+							$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
+							$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
+							$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+							$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
+						}*/
+					}
+					
+					$arrTmpReturn['state'] = $state;
+					$arrTmpReturn['alias'] = $e[4];
+					$arrTmpReturn['address'] = $e[5];
+					$arrTmpReturn['output'] = $e[6];
+					$arrTmpReturn['notes'] = $e[7];
+					$arrTmpReturn['last_check'] = $e[8];
+					$arrTmpReturn['next_check'] = $e[9];
+					$arrTmpReturn['state_type'] = $e[10];
+					$arrTmpReturn['current_check_attempt'] = $e[11];
+					$arrTmpReturn['max_check_attempts'] = $e[12];
+					$arrTmpReturn['last_state_change'] = $e[13];
+					$arrTmpReturn['last_hard_state_change'] = $e[14];
+					$arrTmpReturn['perfdata'] = $e[16];
 				}
-				
-				$arrTmpReturn['state'] = $state;
-				$arrTmpReturn['alias'] = $e[4];
-				$arrTmpReturn['address'] = $e[5];
-				$arrTmpReturn['output'] = $e[6];
-				$arrTmpReturn['notes'] = $e[7];
-				$arrTmpReturn['last_check'] = $e[8];
-				$arrTmpReturn['next_check'] = $e[9];
-				$arrTmpReturn['state_type'] = $e[10];
-				$arrTmpReturn['current_check_attempt'] = $e[11];
-				$arrTmpReturn['max_check_attempts'] = $e[12];
-				$arrTmpReturn['last_state_change'] = $e[13];
-				$arrTmpReturn['last_hard_state_change'] = $e[14];
-				$arrTmpReturn['perfdata'] = $e[16];
 				
 				$arrReturn[] = $arrTmpReturn;
 			}
@@ -576,12 +596,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "acknowledged scheduled_downtime_depth\n".
+		  "acknowledged scheduled_downtime_depth has_been_checked\n".
       "Filter: name = ".$hostName."\n");
     
 		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
+			return $arrReturn;
+		}
+		
+		// Catch pending objects
+		// $e[17]: has_been_checked
+		// $e[0]:  state
+		if($e[17] == '0' || $e[0] == '') {
+			$arrReturn['state'] = 'PENDING';
+			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
 			return $arrReturn;
 		}
 		
@@ -674,7 +703,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "host_alias host_address plugin_output notes last_check next_check ".
 		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change perf_data scheduled_downtime_depth ".
-		  "acknowledged host_acknowledged host_scheduled_downtime_depth\n";
+		  "acknowledged host_acknowledged host_scheduled_downtime_depth ".
+		  "has_been_checked\n";
 		
 		$l = $this->queryLivestatus($query);
 		
@@ -696,60 +726,70 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['service_description'] = $e[0];
 				$arrTmpReturn['display_name'] = $e[1];
 				
-				switch ($e[2]) {
-					case "0": $state = "OK"; break;
-					case "1": $state = "WARNING"; break;
-					case "2": $state = "CRITICAL"; break;
-					case "3": $state = "UNKNOWN"; break;
-					default: $state = "UNKNOWN"; break;
-				}
-				
-				/**
-				 * Handle host/service acks
-				 *
-				 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
-				 * acknowledged => check for acknowledged host
-				 */
-				// $e[16]: acknowledged
-				// $e[17]: host_acknowledged
-				if($state != 'OK' && ($e[16] == 1 || $e[17] == 1)) {
-					$arrTmpReturn['problem_has_been_acknowledged'] = 1;
+				// Catch pending objects
+				// $e[17]: has_been_checked
+				// $e[2]:  state
+				if($e[19] == '0' || $e[2] == '') {
+						$arrTmpReturn['state'] = 'PENDING';
+						$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
+						return $arrReturn;
 				} else {
-					$arrTmpReturn['problem_has_been_acknowledged'] = 0;
-				}
 				
-				// Handle host/service downtimes
-				// $e[15]: scheduled_downtime_depth
-				// $e[18]: host_scheduled_downtime_depth
-				if((isset($e[15]) && $e[15] > 0) || (isset($e[18]) && $e[18] > 0)) {
-					$arrTmpReturn['in_downtime'] = 1;
+					switch ($e[2]) {
+						case "0": $state = "OK"; break;
+						case "1": $state = "WARNING"; break;
+						case "2": $state = "CRITICAL"; break;
+						case "3": $state = "UNKNOWN"; break;
+						default: $state = "UNKNOWN"; break;
+					}
 					
-					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
-					/* FIXME: downtime information
-					$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
-					if(file_exists($sFile)) {
-						$oDowntime = json_decode(file_get_contents($sFile));
+					/**
+					 * Handle host/service acks
+					 *
+					 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+					 * acknowledged => check for acknowledged host
+					 */
+					// $e[16]: acknowledged
+					// $e[17]: host_acknowledged
+					if($state != 'OK' && ($e[16] == 1 || $e[17] == 1)) {
+						$arrTmpReturn['problem_has_been_acknowledged'] = 1;
+					} else {
+						$arrTmpReturn['problem_has_been_acknowledged'] = 0;
+					}
+					
+					// Handle host/service downtimes
+					// $e[15]: scheduled_downtime_depth
+					// $e[18]: host_scheduled_downtime_depth
+					if((isset($e[15]) && $e[15] > 0) || (isset($e[18]) && $e[18] > 0)) {
+						$arrTmpReturn['in_downtime'] = 1;
 						
-						$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
-						$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
-						$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-						$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
-					}*/
+						// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
+						/* FIXME: downtime information
+						$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
+						if(file_exists($sFile)) {
+							$oDowntime = json_decode(file_get_contents($sFile));
+							
+							$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
+							$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
+							$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
+							$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
+						}*/
+					}
+					
+					$arrTmpReturn['state'] = $state;
+					$arrTmpReturn['alias'] = $e[3];
+					$arrTmpReturn['address'] = $e[4];
+					$arrTmpReturn['output'] = $e[5];
+					$arrTmpReturn['notes'] = $e[6];
+					$arrTmpReturn['last_check'] = $e[7];
+					$arrTmpReturn['next_check'] = $e[8];
+					$arrTmpReturn['state_type'] = $e[9];
+					$arrTmpReturn['current_check_attempt'] = $e[10];
+					$arrTmpReturn['max_check_attempts'] = $e[11];
+					$arrTmpReturn['last_state_change'] = $e[12];
+					$arrTmpReturn['last_hard_state_change'] = $e[13];
+					$arrTmpReturn['perfdata'] = $e[14];
 				}
-				
-				$arrTmpReturn['state'] = $state;
-				$arrTmpReturn['alias'] = $e[3];
-				$arrTmpReturn['address'] = $e[4];
-				$arrTmpReturn['output'] = $e[5];
-				$arrTmpReturn['notes'] = $e[6];
-				$arrTmpReturn['last_check'] = $e[7];
-				$arrTmpReturn['next_check'] = $e[8];
-				$arrTmpReturn['state_type'] = $e[9];
-				$arrTmpReturn['current_check_attempt'] = $e[10];
-				$arrTmpReturn['max_check_attempts'] = $e[11];
-				$arrTmpReturn['last_state_change'] = $e[12];
-				$arrTmpReturn['last_hard_state_change'] = $e[13];
-				$arrTmpReturn['perfdata'] = $e[14];
 				
 				$result[] = $arrTmpReturn;
 			}
@@ -883,6 +923,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: host_name = ".$hostName."\n" .
 		   "Filter: in_notification_period = 1\n" .
+		   // Count PENDING
+		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
 		   // Count WARNING
@@ -934,16 +976,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n");
 		
-		$aReturn['OK']['normal'] = $services[0];
-		$aReturn['WARNING']['normal'] = $services[1];
-		$aReturn['WARNING']['ack'] = $services[2];
-		$aReturn['WARNING']['downtime'] = $services[3];
-		$aReturn['CRITICAL']['normal'] = $services[4];
-		$aReturn['CRITICAL']['ack'] = $services[5];
-		$aReturn['CRITICAL']['downtime'] = $services[6];
-		$aReturn['UNKNOWN']['normal'] = $services[7];
-		$aReturn['UNKNOWN']['ack'] = $services[8];
-		$aReturn['UNKNOWN']['downtime'] = $services[9];
+		$aReturn['PENDING']['normal'] = $services[0];
+		$aReturn['OK']['normal'] = $services[1];
+		$aReturn['WARNING']['normal'] = $services[2];
+		$aReturn['WARNING']['ack'] = $services[3];
+		$aReturn['WARNING']['downtime'] = $services[4];
+		$aReturn['CRITICAL']['normal'] = $services[5];
+		$aReturn['CRITICAL']['ack'] = $services[6];
+		$aReturn['CRITICAL']['downtime'] = $services[7];
+		$aReturn['UNKNOWN']['normal'] = $services[8];
+		$aReturn['UNKNOWN']['ack'] = $services[9];
+		$aReturn['UNKNOWN']['downtime'] = $services[10];
 		
 		return $aReturn;
 	}
@@ -976,8 +1019,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		         "Filter: in_notification_period = 1\n";
 		
 		foreach($aHostNames AS $hostName) {
-			// Count OK
-			$query .= "Stats: ".$stateAttr." = 0\n" .
+			// Count PENDING
+			$query .= "Stats: has_been_checked = 0\n" .
+			          // Count OK
+			          "Stats: ".$stateAttr." = 0\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "StatsAnd: 2\n" .
 			          // Count WARNING
@@ -1044,6 +1089,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$i = 0;
 		foreach($aHostNames AS $hostName) {
 			$aReturn[$hostName] = Array();
+			$aReturn[$hostName]['PENDING']['normal'] = $services[$i++];
 			$aReturn[$hostName]['OK']['normal'] = $services[$i++];
 			$aReturn[$hostName]['WARNING']['normal'] = $services[$i++];
 			$aReturn[$hostName]['WARNING']['ack'] = $services[$i++];
@@ -1086,6 +1132,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$hosts = $this->queryLivestatusSingleRow("GET hosts\n" .
 		   "Filter: groups >= ".$hostgroupName."\n" .
 		   "Filter: in_notification_period = 1\n" .
+		   // Count PENDING
+		   "Stats: has_been_checked = 0\n" .
 		   // Count UP
 		   "Stats: ".$stateAttr." = 0\n" .
 		   // Count DOWN
@@ -1115,18 +1163,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "Stats: scheduled_downtime_depth = 1\n" .
 		   "StatsAnd: 2\n");
 		
-		$aReturn['UP']['normal'] = $hosts[0];
-		$aReturn['DOWN']['normal'] = $hosts[1];
-		$aReturn['DOWN']['ack'] = $hosts[2];
-		$aReturn['DOWN']['downtime'] = $hosts[3];
-		$aReturn['UNREACHABLE']['normal'] = $hosts[4];
-		$aReturn['UNREACHABLE']['ack'] = $hosts[5];
-		$aReturn['UNREACHABLE']['downtime'] = $hosts[6];
+		$aReturn['PENDING']['normal'] = $hosts[0];
+		$aReturn['UP']['normal'] = $hosts[1];
+		$aReturn['DOWN']['normal'] = $hosts[2];
+		$aReturn['DOWN']['ack'] = $hosts[3];
+		$aReturn['DOWN']['downtime'] = $hosts[4];
+		$aReturn['UNREACHABLE']['normal'] = $hosts[5];
+		$aReturn['UNREACHABLE']['ack'] = $hosts[6];
+		$aReturn['UNREACHABLE']['downtime'] = $hosts[7];
 		
 		// Get service information
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: host_groups >= ".$hostgroupName."\n" .
 		   "Filter: in_notification_period = 1\n" .
+		   // Count PENDING
+		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
 		   // Count WARNING
@@ -1178,16 +1229,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n");
 		
-		$aReturn['OK']['normal'] = $services[0];
-		$aReturn['WARNING']['normal'] = $services[1];
-		$aReturn['WARNING']['ack'] = $services[2];
-		$aReturn['WARNING']['downtime'] = $services[3];
-		$aReturn['CRITICAL']['normal'] = $services[4];
-		$aReturn['CRITICAL']['ack'] = $services[5];
-		$aReturn['CRITICAL']['downtime'] = $services[6];
-		$aReturn['UNKNOWN']['normal'] = $services[7];
-		$aReturn['UNKNOWN']['ack'] = $services[8];
-		$aReturn['UNKNOWN']['downtime'] = $services[9];
+		$aReturn['PENDING']['normal'] = $services[0];
+		$aReturn['OK']['normal'] = $services[1];
+		$aReturn['WARNING']['normal'] = $services[2];
+		$aReturn['WARNING']['ack'] = $services[3];
+		$aReturn['WARNING']['downtime'] = $services[4];
+		$aReturn['CRITICAL']['normal'] = $services[5];
+		$aReturn['CRITICAL']['ack'] = $services[6];
+		$aReturn['CRITICAL']['downtime'] = $services[7];
+		$aReturn['UNKNOWN']['normal'] = $services[8];
+		$aReturn['UNKNOWN']['ack'] = $services[9];
+		$aReturn['UNKNOWN']['downtime'] = $services[10];
 		
 		return $aReturn;
 	}
@@ -1219,6 +1271,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: groups >= ".$servicegroupName."\n" .
 		   "Filter: in_notification_period = 1\n" .
+		   // Count PENDING
+		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
 		   // Count WARNING
@@ -1270,16 +1324,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n");
 		
-		$aReturn['OK']['normal'] = $services[0];
-		$aReturn['WARNING']['normal'] = $services[1];
-		$aReturn['WARNING']['ack'] = $services[2];
-		$aReturn['WARNING']['downtime'] = $services[3];
-		$aReturn['CRITICAL']['normal'] = $services[4];
-		$aReturn['CRITICAL']['ack'] = $services[5];
-		$aReturn['CRITICAL']['downtime'] = $services[6];
-		$aReturn['UNKNOWN']['normal'] = $services[7];
-		$aReturn['UNKNOWN']['ack'] = $services[8];
-		$aReturn['UNKNOWN']['downtime'] = $services[9];
+		$aReturn['PENDING']['normal'] = $services[0];
+		$aReturn['OK']['normal'] = $services[1];
+		$aReturn['WARNING']['normal'] = $services[2];
+		$aReturn['WARNING']['ack'] = $services[3];
+		$aReturn['WARNING']['downtime'] = $services[4];
+		$aReturn['CRITICAL']['normal'] = $services[5];
+		$aReturn['CRITICAL']['ack'] = $services[6];
+		$aReturn['CRITICAL']['downtime'] = $services[7];
+		$aReturn['UNKNOWN']['normal'] = $services[8];
+		$aReturn['UNKNOWN']['ack'] = $services[9];
+		$aReturn['UNKNOWN']['downtime'] = $services[10];
 		
 		return $aReturn;
 	}
