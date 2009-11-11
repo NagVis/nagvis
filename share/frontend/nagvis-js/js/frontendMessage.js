@@ -170,8 +170,6 @@ function frontendMessage(oMessage, iTimeout) {
 	if(typeof oMessage.reloadTime !== 'undefined' && oMessage.reloadTime !== null) {
 		var sUrl = window.location.href;
 		
-		alert(oMessage.reloadTime);
-		
 		// Maybe enable redirect
 		if(typeof oMessage.realoadUrl !== 'undefined' && oMessage.realoadUrl !== null) {
 			sUrl = oMessage.reloadUrl;
