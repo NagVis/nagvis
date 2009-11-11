@@ -37,6 +37,23 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
+	
+		parent::$aFeatures = Array(
+			// General functions for authentication
+			'passCredentials' => true,
+			'getCredentials' => true,
+			'isAuthenticated' => true,
+			'getUser' => true,
+			'getUserId' => true,
+			
+			// Changing passwords
+			'passNewPassword' => true,
+			'changePassword' => true,
+			'passNewPassword' => true,
+			
+			// Managing users
+			'createUser' => true,
+		);
 		
 		$this->DB = new CoreSQLiteHandler();
 		

@@ -48,6 +48,16 @@ class CoreAuthHandler {
 		$this->MOD = new $sModule($CORE);
 	}
 	
+	public function checkFeature($name) {
+		$a = $this->MOD->getSupportedFeatures();
+		
+		if(isset($a[$name])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public function getModule() {
 		return $this->sModuleName;
 	}

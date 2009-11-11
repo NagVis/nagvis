@@ -272,7 +272,9 @@ class GlobalHeaderMenu {
 			'lang_instance' => $this->CORE->getLang()->getText('instance'),
 			'lang_logout' => $this->CORE->getLang()->getText('Logout'),
 			'lang_rotation_start' => $this->CORE->getLang()->getText('rotationStart'),
-			'lang_rotation_stop' => $this->CORE->getLang()->getText('rotationStop'));
+			'lang_rotation_stop' => $this->CORE->getLang()->getText('rotationStop'),
+			'authChangePasswordSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword'),
+			'authCreateUserSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('createUser'));
 		
 		return $aReturn;
 	}

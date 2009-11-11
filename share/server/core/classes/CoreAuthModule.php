@@ -29,6 +29,20 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 abstract class CoreAuthModule {
+	protected static $aFeatures;
+	
+	/**
+	 * PUBLIC Method getSupportedFeatures
+	 * 
+	 * Returns a list of supported features
+	 *
+	 * @return	Array
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getSupportedFeatures() {
+		return self::$aFeatures;
+	}
+	
 	abstract public function passCredentials($aData);
 	abstract public function passNewPassword($aData);
 	abstract public function changePassword();

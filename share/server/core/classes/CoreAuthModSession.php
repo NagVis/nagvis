@@ -40,6 +40,20 @@ class CoreAuthModSession extends CoreAuthModule {
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
+		parent::$aFeatures = Array(
+			// General functions for authentication
+			'passCredentials' => true,
+			'getCredentials' => true,
+			'isAuthenticated' => true,
+			'getUser' => true,
+			'getUserId' => true,
+			
+			// Changing passwordss
+			'passNewPassword' => true,
+			'changePassword' => true,
+			'passNewPassword' => true
+		);
+		
 		$this->SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
 		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
 		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
