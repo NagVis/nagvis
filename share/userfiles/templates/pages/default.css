@@ -433,7 +433,6 @@ table#popupWindowMaster tr td {
 table#popupWindowMaster tbody tr th#dragbar {
 	text-align: left;
 	font-size: 14px;
-	padding-left: 10px;
 	cursor: pointer;
 }
 

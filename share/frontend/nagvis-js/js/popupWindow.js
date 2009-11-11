@@ -97,7 +97,7 @@ function popupWindowClose() {
  * @return  Boolean  
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function popupWindow(title, oContent, openOnMousePosition) {
+function popupWindow(title, oContent, openOnMousePosition, sWidth) {
 	if(oContent === null || oContent.code === null) {
 		return false;
 	}
@@ -106,6 +106,10 @@ function popupWindow(title, oContent, openOnMousePosition) {
 		openOnMousePosition = true;
 	}
 	
+	if(typeof sWidth === 'undefined' || sWidth === null) {
+		sWidth = '';
+	}
+
 	// Default window position
 	var posX = 100;
 	var posY = 20;
@@ -118,12 +122,18 @@ function popupWindow(title, oContent, openOnMousePosition) {
 	var oContainerDiv = document.createElement('div');
 	oContainerDiv.setAttribute('id', 'popupWindow');
 	oContainerDiv.style.position = 'absolute';
-	oContainerDiv.style.width = '400px';
+	oContainerDiv.style.width = sWidth+'px';
 	oContainerDiv.style.left = posX+'px';
 	oContainerDiv.style.top = posY+'px';
 	
 	var oTable = document.createElement('table');
 	oTable.setAttribute('id', 'popupWindowMaster');
+
+	// When width is not set the window should be auto adjusted
+	if(sWidth !== '') {
+		oTable.style.width = sWidth+'px';
+	}
+	
 	var oTbody = document.createElement('tbody');
 	var oRow = document.createElement('tr');
 	var oCell = document.createElement('th');
