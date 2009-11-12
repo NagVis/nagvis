@@ -597,8 +597,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
 		  "acknowledged scheduled_downtime_depth has_been_checked\n".
-      "Filter: name = ".$hostName."\n");
-    
+		  "Filter: name = ".$hostName."\n");
+		
 		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
@@ -1068,8 +1068,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			          "Stats: ".$stateAttr." = 2\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 1\n" .
-								"Stats: host_acknowledged = 1\n" .
-								"StatsOr: 2\n" .
+			          "Stats: host_acknowledged = 1\n" .
+			          "StatsOr: 2\n" .
 			          "StatsAnd: 3\n" .
 			          // Count CRITICAL(DOWNTIME)
 			          "Stats: ".$stateAttr." = 2\n" .
@@ -1090,8 +1090,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			          "Stats: ".$stateAttr." = 3\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 1\n" .
-								"Stats: host_acknowledged = 1\n" .
-								"StatsOr: 2\n" .
+			          "Stats: host_acknowledged = 1\n" .
+			          "StatsOr: 2\n" .
 			          "StatsAnd: 3\n" .
 			          // Count UNKNOWN(DOWNTIME)
 			          "Stats: ".$stateAttr." = 3\n" .
