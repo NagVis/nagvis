@@ -404,7 +404,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			// Catch pending objects
 			// $e[19]: has_been_checked
 			// $e[1]:  state
-			if($e[19] == '0' || $e[1] == '') {
+			if($e[19] == 0 || $e[1] === '') {
 					$arrTmpReturn['state'] = 'PENDING';
 					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[0]));
 			} else {
@@ -504,7 +504,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				// Catch pending objects
 				// $e[20]: has_been_checked
 				// $e[3]:  state
-				if($e[20] == '0' || $e[3] == '') {
+				if($e[20] == 0 || $e[3] === '') {
 						$arrTmpReturn['state'] = 'PENDING';
 						$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[1]));
 				} else {
@@ -618,7 +618,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// Catch pending objects
 		// $e[17]: has_been_checked
 		// $e[0]:  state
-		if($e[17] == '0' || $e[0] == '') {
+		if($e[17] == 0 || $e[0] === '') {
 			$arrReturn['state'] = 'PENDING';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
 			return $arrReturn;
@@ -739,7 +739,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				// Catch pending objects
 				// $e[17]: has_been_checked
 				// $e[2]:  state
-				if($e[19] == '0' || $e[2] == '') {
+				if($e[19] == 0 || $e[2] === '') {
 						$arrTmpReturn['state'] = 'PENDING';
 						$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
 						return $arrReturn;
