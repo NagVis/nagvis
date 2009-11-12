@@ -663,8 +663,8 @@ class NagVisStatefulObject extends NagVisObject {
 			}
 		}
 		
-		// Fallback for objects without members
-		if($iSumCount == 0) {
+		// Fallback for objects without state and without members
+		if($this->summary_state == '' && $iSumCount == 0) {
 			$this->summary_state = 'ERROR';
 		}
 	}
