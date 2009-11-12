@@ -398,13 +398,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			// active scheduled host checks the host state is not set to hard ok when
 			// it gets recovered by a succeeded service check
 			if($onlyHardstates == 1 && $e[1] != '0') {
-				$e[1] = $e[17];
+				$e[1] = $e[16];
 			}
 			
 			// Catch pending objects
-			// $e[18]: has_been_checked
+			// $e[19]: has_been_checked
 			// $e[1]:  state
-			if($e[18] == '0' || $e[1] == '') {
+			if($e[19] == '0' || $e[1] == '') {
 					$arrTmpReturn['state'] = 'PENDING';
 					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[0]));
 			} else {
@@ -449,7 +449,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['last_hard_state_change'] = $e[13];
 				$arrTmpReturn['statusmap_image'] = $e[14];
 				$arrTmpReturn['perfdata'] = $e[15];
-				$arrTmpReturn['problem_has_been_acknowledged'] = $e[16];
+				$arrTmpReturn['problem_has_been_acknowledged'] = $e[17];
 			}
 			
 			$arrReturn[] = $arrTmpReturn;
@@ -1040,9 +1040,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Count PENDING
 		$query .= "Stats: has_been_checked = 0\n" .
-		          "StatsGroupBy: host_name\n";
-		          
-		          /* .
+		          "StatsGroupBy: host_name\n" .
 		          // Count OK
 		          "Stats: ".$stateAttr." = 0\n" .
 		          "StatsGroupBy: host_name\n" .
@@ -1111,24 +1109,23 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		          "Stats: host_scheduled_downtime_depth = 1\n" .
 		          "StatsOr: 2\n" .
 		          "StatsAnd: 2\n" .
-		          "StatsGroupBy: host_name\n";*/
+		          "StatsGroupBy: host_name\n";
 		
-		$services = $this->queryLivestatusSingleRow($query);
+		$services = $this->queryLivestatus($query);
 		
-		$i = 0;
-		foreach($aHostNames AS $hostName) {
-			$aReturn[$hostName] = Array();
-			$aReturn[$hostName]['PENDING']['normal'] = $services[$i++];
-			$aReturn[$hostName]['OK']['normal'] = $services[$i++];
-			$aReturn[$hostName]['WARNING']['normal'] = $services[$i++];
-			$aReturn[$hostName]['WARNING']['ack'] = $services[$i++];
-			$aReturn[$hostName]['WARNING']['downtime'] = $services[$i++];
-			$aReturn[$hostName]['CRITICAL']['normal'] = $services[$i++];
-			$aReturn[$hostName]['CRITICAL']['ack'] = $services[$i++];
-			$aReturn[$hostName]['CRITICAL']['downtime'] = $services[$i++];
-			$aReturn[$hostName]['UNKNOWN']['normal'] = $services[$i++];
-			$aReturn[$hostName]['UNKNOWN']['ack'] = $services[$i++];
-			$aReturn[$hostName]['UNKNOWN']['downtime'] = $services[$i++];
+		foreach($services AS $service) {
+			$aReturn[$service[0]] = Array();
+			$aReturn[$service[0]]['PENDING']['normal'] = $service[1];
+			$aReturn[$service[0]]['OK']['normal'] = $service[2];
+			$aReturn[$service[0]]['WARNING']['normal'] = $service[3];
+			$aReturn[$service[0]]['WARNING']['ack'] = $service[4];
+			$aReturn[$service[0]]['WARNING']['downtime'] = $service[5];
+			$aReturn[$service[0]]['CRITICAL']['normal'] = $service[6];
+			$aReturn[$service[0]]['CRITICAL']['ack'] = $service[7];
+			$aReturn[$service[0]]['CRITICAL']['downtime'] = $service[8];
+			$aReturn[$service[0]]['UNKNOWN']['normal'] = $service[9];
+			$aReturn[$service[0]]['UNKNOWN']['ack'] = $service[10];
+			$aReturn[$service[0]]['UNKNOWN']['downtime'] = $service[11];
 		}
 		
 		return $aReturn;
