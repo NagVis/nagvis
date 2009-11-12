@@ -585,6 +585,16 @@ td#popupWindowContent p {
 	display: inline
 }
 
+.dropdown li.spacer {
+	height: 4px;
+}
+
+.dropdown li.spacer hr {
+	width:100%;
+	height: 3px;
+	color: #000;
+}
+
 .dropdown img {
 	vertical-align: middle;
 	margin-left: 10px;

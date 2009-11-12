@@ -8,7 +8,9 @@
 			<dd id="views-ddcontent" onmouseover="cancelHide('views')" onmouseout="ddMenu('views',-1)">
 				<ul>
 					<li><a href="{$html_base}/frontend/nagvis-js/index.php">{$lang_overview}</a></li>
+					<li class="spacer"><hr /></li>
 					{foreach $maps map}<li><a href="{$html_base}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.map_name}{$map.url_params}">{$map.map_alias}</a></li>{/foreach}
+					<li class="spacer"><hr /></li>
 					{foreach $automaps map}<li><a href="{$html_base}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.map_name}{$map.url_params}" {if $map.class_underline == true}class="underline"{/if}>{$map.map_alias}</a></li>{/foreach}
 				</ul>
 			</dd>

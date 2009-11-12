@@ -930,12 +930,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count WARNING(ACK)
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count WARNING(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
@@ -946,12 +949,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count CRITICAL
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count CRITICAL(ACK)
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
@@ -962,12 +968,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count UNKNOWN
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count UNKNOWN(ACK)
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
@@ -1029,13 +1038,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			          "Stats: ".$stateAttr." = 1\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 0\n" .
+			          "Stats: host_acknowledged = 0\n" .
 			          "Stats: scheduled_downtime_depth = 0\n" .
 			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "StatsAnd: 5\n" .
+			          "StatsAnd: 6\n" .
 			          // Count WARNING(ACK)
 			          "Stats: ".$stateAttr." = 1\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 1\n" .
+								"Stats: host_acknowledged = 1\n" .
+								"StatsOr: 2\n" .
 			          "StatsAnd: 3\n" .
 			          // Count WARNING(DOWNTIME)
 			          "Stats: ".$stateAttr." = 1\n" .
@@ -1048,13 +1060,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			          "Stats: ".$stateAttr." = 2\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 0\n" .
+			          "Stats: host_acknowledged = 0\n" .
 			          "Stats: scheduled_downtime_depth = 0\n" .
 			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "StatsAnd: 5\n" .
+			          "StatsAnd: 6\n" .
 			          // Count CRITICAL(ACK)
 			          "Stats: ".$stateAttr." = 2\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 1\n" .
+								"Stats: host_acknowledged = 1\n" .
+								"StatsOr: 2\n" .
 			          "StatsAnd: 3\n" .
 			          // Count CRITICAL(DOWNTIME)
 			          "Stats: ".$stateAttr." = 2\n" .
@@ -1067,13 +1082,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			          "Stats: ".$stateAttr." = 3\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 0\n" .
+			          "Stats: host_acknowledged = 0\n" .
 			          "Stats: scheduled_downtime_depth = 0\n" .
 			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "StatsAnd: 5\n" .
+			          "StatsAnd: 6\n" .
 			          // Count UNKNOWN(ACK)
 			          "Stats: ".$stateAttr." = 3\n" .
 			          "Stats: host_name = ".$hostName."\n" .
 			          "Stats: acknowledged = 1\n" .
+								"Stats: host_acknowledged = 1\n" .
+								"StatsOr: 2\n" .
 			          "StatsAnd: 3\n" .
 			          // Count UNKNOWN(DOWNTIME)
 			          "Stats: ".$stateAttr." = 3\n" .
@@ -1183,12 +1201,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count WARNING(ACK)
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count WARNING(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
@@ -1199,12 +1220,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count CRITICAL
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count CRITICAL(ACK)
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
@@ -1215,12 +1239,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count UNKNOWN
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count UNKNOWN(ACK)
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
@@ -1278,12 +1305,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count WARNING(ACK)
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count WARNING(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
@@ -1294,12 +1324,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count CRITICAL
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count CRITICAL(ACK)
 		   "Stats: ".$stateAttr." = 2\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
@@ -1310,12 +1343,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count UNKNOWN
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 0\n" .
+		   "Stats: host_acknowledged = 0\n" .
 		   "Stats: scheduled_downtime_depth = 0\n" .
 		   "Stats: host_scheduled_downtime_depth = 0\n" .
-		   "StatsAnd: 4\n" .
+		   "StatsAnd: 5\n" .
 		   // Count UNKNOWN(ACK)
 		   "Stats: ".$stateAttr." = 3\n" .
 		   "Stats: acknowledged = 1\n" .
+		   "Stats: host_acknowledged = 1\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
