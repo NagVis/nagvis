@@ -1112,9 +1112,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		          "StatsOr: 2\n" .
 		          "StatsAnd: 2\n" .
 		          "StatsGroupBy: host_name\n";*/
-		echo $query;
+		
 		$services = $this->queryLivestatusSingleRow($query);
-		print_r($services);
+		
 		$i = 0;
 		foreach($aHostNames AS $hostName) {
 			$aReturn[$hostName] = Array();
