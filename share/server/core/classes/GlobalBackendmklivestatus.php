@@ -188,8 +188,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// Important: The socket needs to be closed after reading
 		socket_close($sock);
 		
-		// Returning an array
-		return json_decode($read);
+		// Decode the json response
+		$obj = json_decode($read);
+		
+		// json_decode returns null on syntax problems
+		if($obj === null) {
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The response has an invalid format in backend [BACKENDID].', Array('BACKENDID' => $this->backendId)));
+			return Array();
+		} else {
+			// Return the response object
+			return $obj;
+		}
 	}
 	
 	/**
@@ -384,19 +393,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$arrTmpReturn = Array();
 			$arrTmpReturn['name'] = $e[0];
 			
-			/**
-			 * Only recognize hard states. There was a discussion about the implementation
-			 * This is a new handling of only_hard_states. For more details, see: 
-			 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
-			 *
-			 * Thanks to Andurin and fredy82
-			 */
-			if($onlyHardstates == 1) {
-				// $e[9]: state_type
-				if($e[9] == '0') {
-					// state = last hard state
-					$e[1] = $e[17];
-				}
+			// When only hardstate handling is enabled it is neccessary to workaround
+			// some problems with the last_hard_state attribute: When not using
+			// active scheduled host checks the host state is not set to hard ok when
+			// it gets recovered by a succeeded service check
+			if($onlyHardstates == 1 && $e[1] != '0') {
+				$e[1] = $e[17];
 			}
 			
 			// Catch pending objects
@@ -596,13 +598,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "acknowledged scheduled_downtime_depth has_been_checked\n".
+		  "acknowledged scheduled_downtime_depth has_been_checked state\n".
 		  "Filter: name = ".$hostName."\n");
 		
 		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
 			return $arrReturn;
+		}
+		
+		// When only hardstate handling is enabled it is neccessary to workaround
+		// some problems with the last_hard_state attribute: When not using
+		// active scheduled host checks the host state is not set to hard ok when
+		// it gets recovered by a succeeded service check
+		if($onlyHardstates == 1 && $e[0] != '0') {
+			$e[0] = $e[18];
 		}
 		
 		// Catch pending objects
@@ -1002,18 +1012,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	
 	
 	/**
-	 * PUBLIC getMultipleHostStateCounts()
+	 * PUBLIC getHostgroupHostStateCounts()
 	 *
 	 * Queries the livestatus socket for a bunch of host state count.
 	 * This seems to be the fastest way to get the information needed to
 	 * build hover menus for the NagVis maps (state, substate, summary output)
 	 *
-	 * @param   Array    List of hostnames
+	 * @param   String   Name of the hostgroup
 	 * @param   Boolean  Only recognize hard states
 	 * @return  Array    List of states and counts
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getMultipleHostStateCounts($aHostNames, $onlyHardstates) {
+	public function getHostgroupHostStateCounts($hostgroupName, $onlyHardstates) {
 		$aReturn = Array();
 		
 		$stateAttr = 'state';
@@ -1025,85 +1035,86 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Get service information
 		$query = "GET services\n" .
+		         "Filter: host_groups >= ".$hostgroupName."\n" .
 		         "Filter: in_notification_period = 1\n";
 		
-		foreach($aHostNames AS $hostName) {
-			// Count PENDING
-			$query .= "Stats: has_been_checked = 0\n" .
-			          // Count OK
-			          "Stats: ".$stateAttr." = 0\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "StatsAnd: 2\n" .
-			          // Count WARNING
-			          "Stats: ".$stateAttr." = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: acknowledged = 0\n" .
-			          "Stats: host_acknowledged = 0\n" .
-			          "Stats: scheduled_downtime_depth = 0\n" .
-			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "StatsAnd: 6\n" .
-			          // Count WARNING(ACK)
-			          "Stats: ".$stateAttr." = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: acknowledged = 1\n" .
-								"Stats: host_acknowledged = 1\n" .
-								"StatsOr: 2\n" .
-			          "StatsAnd: 3\n" .
-			          // Count WARNING(DOWNTIME)
-			          "Stats: ".$stateAttr." = 1\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: scheduled_downtime_depth = 1\n" .
-			          "Stats: host_scheduled_downtime_depth = 1\n" .
-			          "StatsOr: 2\n" .
-			          "StatsAnd: 3\n" .
-			          // Count CRITICAL
-			          "Stats: ".$stateAttr." = 2\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: acknowledged = 0\n" .
-			          "Stats: host_acknowledged = 0\n" .
-			          "Stats: scheduled_downtime_depth = 0\n" .
-			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "StatsAnd: 6\n" .
-			          // Count CRITICAL(ACK)
-			          "Stats: ".$stateAttr." = 2\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: acknowledged = 1\n" .
-			          "Stats: host_acknowledged = 1\n" .
-			          "StatsOr: 2\n" .
-			          "StatsAnd: 3\n" .
-			          // Count CRITICAL(DOWNTIME)
-			          "Stats: ".$stateAttr." = 2\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: scheduled_downtime_depth = 1\n" .
-			          "Stats: host_scheduled_downtime_depth = 1\n" .
-			          "StatsOr: 2\n" .
-			          "StatsAnd: 3\n" .
-			          // Count UNKNOWN
-			          "Stats: ".$stateAttr." = 3\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: acknowledged = 0\n" .
-			          "Stats: host_acknowledged = 0\n" .
-			          "Stats: scheduled_downtime_depth = 0\n" .
-			          "Stats: host_scheduled_downtime_depth = 0\n" .
-			          "StatsAnd: 6\n" .
-			          // Count UNKNOWN(ACK)
-			          "Stats: ".$stateAttr." = 3\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: acknowledged = 1\n" .
-			          "Stats: host_acknowledged = 1\n" .
-			          "StatsOr: 2\n" .
-			          "StatsAnd: 3\n" .
-			          // Count UNKNOWN(DOWNTIME)
-			          "Stats: ".$stateAttr." = 3\n" .
-			          "Stats: host_name = ".$hostName."\n" .
-			          "Stats: scheduled_downtime_depth = 1\n" .
-			          "Stats: host_scheduled_downtime_depth = 1\n" .
-			          "StatsOr: 2\n" .
-			          "StatsAnd: 3\n";
-		}
-		
+		// Count PENDING
+		$query .= "Stats: has_been_checked = 0\n" .
+		          "StatsGroupBy: host_name\n";
+		          
+		          /* .
+		          // Count OK
+		          "Stats: ".$stateAttr." = 0\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count WARNING
+		          "Stats: ".$stateAttr." = 1\n" .
+		          "Stats: acknowledged = 0\n" .
+		          "Stats: host_acknowledged = 0\n" .
+		          "Stats: scheduled_downtime_depth = 0\n" .
+		          "Stats: host_scheduled_downtime_depth = 0\n" .
+		          "StatsAnd: 5\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count WARNING(ACK)
+		          "Stats: ".$stateAttr." = 1\n" .
+		          "Stats: acknowledged = 1\n" .
+		          "Stats: host_acknowledged = 1\n" .
+		          "StatsOr: 2\n" .
+		          "StatsAnd: 2\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count WARNING(DOWNTIME)
+		          "Stats: ".$stateAttr." = 1\n" .
+		          "Stats: scheduled_downtime_depth = 1\n" .
+		          "Stats: host_scheduled_downtime_depth = 1\n" .
+		          "StatsOr: 2\n" .
+		          "StatsAnd: 2\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count CRITICAL
+		          "Stats: ".$stateAttr." = 2\n" .
+		          "Stats: acknowledged = 0\n" .
+		          "Stats: host_acknowledged = 0\n" .
+		          "Stats: scheduled_downtime_depth = 0\n" .
+		          "Stats: host_scheduled_downtime_depth = 0\n" .
+		          "StatsAnd: 5\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count CRITICAL(ACK)
+		          "Stats: ".$stateAttr." = 2\n" .
+		          "Stats: acknowledged = 1\n" .
+		          "Stats: host_acknowledged = 1\n" .
+		          "StatsOr: 2\n" .
+		          "StatsAnd: 2\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count CRITICAL(DOWNTIME)
+		          "Stats: ".$stateAttr." = 2\n" .
+		          "Stats: scheduled_downtime_depth = 1\n" .
+		          "Stats: host_scheduled_downtime_depth = 1\n" .
+		          "StatsOr: 2\n" .
+		          "StatsAnd: 2\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count UNKNOWN
+		          "Stats: ".$stateAttr." = 3\n" .
+		          "Stats: acknowledged = 0\n" .
+		          "Stats: host_acknowledged = 0\n" .
+		          "Stats: scheduled_downtime_depth = 0\n" .
+		          "Stats: host_scheduled_downtime_depth = 0\n" .
+		          "StatsAnd: 5\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count UNKNOWN(ACK)
+		          "Stats: ".$stateAttr." = 3\n" .
+		          "Stats: acknowledged = 1\n" .
+		          "Stats: host_acknowledged = 1\n" .
+		          "StatsOr: 2\n" .
+		          "StatsAnd: 2\n" .
+		          "StatsGroupBy: host_name\n" .
+		          // Count UNKNOWN(DOWNTIME)
+		          "Stats: ".$stateAttr." = 3\n" .
+		          "Stats: scheduled_downtime_depth = 1\n" .
+		          "Stats: host_scheduled_downtime_depth = 1\n" .
+		          "StatsOr: 2\n" .
+		          "StatsAnd: 2\n" .
+		          "StatsGroupBy: host_name\n";*/
+		echo $query;
 		$services = $this->queryLivestatusSingleRow($query);
-		
+		print_r($services);
 		$i = 0;
 		foreach($aHostNames AS $hostName) {
 			$aReturn[$hostName] = Array();

@@ -219,14 +219,8 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		} else {
 			// Regular handling
 			
-			// Build a list of hostnames for the multiple host count state query
-			$aNames = Array();
-			foreach($aHosts AS $aHost) {
-				$aNames[] = $aHost['name'];
-			}
-			
 			// Now fetch the service state counts for all hostgroup members
-			$aServiceStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getMultipleHostStateCounts($aNames, $this->only_hard_states);
+			$aServiceStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupHostStateCounts($this->hostgroup_name, $this->only_hard_states);
 			
 			foreach($aHosts AS $aHost) {
 				$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $aHost['name']);
