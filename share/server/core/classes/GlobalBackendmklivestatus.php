@@ -423,6 +423,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					
 					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
 					// FIXME: Read downtime details
+					// FIXME: Show all downtimes instead of the first one?
+					/*$l = $this->queryLivestatusSingle(
+					  "GET downtimes\n".
+					  "Columns: author comment\n".
+					  "Filter: groups >= ".$hostgroupName."\n");
+					  */
 					/*$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName;
 					if(file_exists($sFile)) {
 						$oDowntime = json_decode(file_get_contents($sFile));
@@ -1040,10 +1046,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Count PENDING
 		$query .= "Stats: has_been_checked = 0\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count OK
 		          "Stats: ".$stateAttr." = 0\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count WARNING
 		          "Stats: ".$stateAttr." = 1\n" .
 		          "Stats: acknowledged = 0\n" .
@@ -1051,21 +1055,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		          "Stats: scheduled_downtime_depth = 0\n" .
 		          "Stats: host_scheduled_downtime_depth = 0\n" .
 		          "StatsAnd: 5\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count WARNING(ACK)
 		          "Stats: ".$stateAttr." = 1\n" .
 		          "Stats: acknowledged = 1\n" .
 		          "Stats: host_acknowledged = 1\n" .
 		          "StatsOr: 2\n" .
 		          "StatsAnd: 2\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count WARNING(DOWNTIME)
 		          "Stats: ".$stateAttr." = 1\n" .
 		          "Stats: scheduled_downtime_depth = 1\n" .
 		          "Stats: host_scheduled_downtime_depth = 1\n" .
 		          "StatsOr: 2\n" .
 		          "StatsAnd: 2\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count CRITICAL
 		          "Stats: ".$stateAttr." = 2\n" .
 		          "Stats: acknowledged = 0\n" .
@@ -1073,21 +1074,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		          "Stats: scheduled_downtime_depth = 0\n" .
 		          "Stats: host_scheduled_downtime_depth = 0\n" .
 		          "StatsAnd: 5\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count CRITICAL(ACK)
 		          "Stats: ".$stateAttr." = 2\n" .
 		          "Stats: acknowledged = 1\n" .
 		          "Stats: host_acknowledged = 1\n" .
 		          "StatsOr: 2\n" .
 		          "StatsAnd: 2\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count CRITICAL(DOWNTIME)
 		          "Stats: ".$stateAttr." = 2\n" .
 		          "Stats: scheduled_downtime_depth = 1\n" .
 		          "Stats: host_scheduled_downtime_depth = 1\n" .
 		          "StatsOr: 2\n" .
 		          "StatsAnd: 2\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count UNKNOWN
 		          "Stats: ".$stateAttr." = 3\n" .
 		          "Stats: acknowledged = 0\n" .
@@ -1095,14 +1093,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		          "Stats: scheduled_downtime_depth = 0\n" .
 		          "Stats: host_scheduled_downtime_depth = 0\n" .
 		          "StatsAnd: 5\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count UNKNOWN(ACK)
 		          "Stats: ".$stateAttr." = 3\n" .
 		          "Stats: acknowledged = 1\n" .
 		          "Stats: host_acknowledged = 1\n" .
 		          "StatsOr: 2\n" .
 		          "StatsAnd: 2\n" .
-		          "StatsGroupBy: host_name\n" .
 		          // Count UNKNOWN(DOWNTIME)
 		          "Stats: ".$stateAttr." = 3\n" .
 		          "Stats: scheduled_downtime_depth = 1\n" .
