@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>After Installation</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+  <body>
+		<h1>After Installation</h1>
+		<h2>Demonstration views</h2>
+		<p>NagVis contains several demo maps on initial installation. There is also a rotation defined to give you an example of the features of NagVis. Certanly Nagvis has a lot more features than we can show you with this demo configurations. So you should read the documentation and be creative.</p>
+		<p>If you are familar with NagVis you can delete these demonstration maps and rotation without problems.</p>
+		<h2>Configuration Files</h2>
+		<p>NagVis is based on several configuration files. The <a href="nagvis_config_format_description.html" target="_blank">main configuration</a> file stores the basic and global configuration options. The map specific configuration options are stored in <a href="map_config_format_description.html" target="_blank">map configuration</a> files. A special type of maps are the automaps, the automaps have an own configuration file directory. The <a href="automap_config_format.html" target="_blank">automap configuration</a> files use the same syntax as the map configuration files but some more options.</p>
+		<p>The whole NagVis configuration can be changed using the webbased configuration program called WUI.</p>
+		<h2>Authentication/Authorisation</h2>
+		<p>By default NagVis uses an internal user and permission database (SQLite) for handling authentication and authorisation. Nagvis uses a role based permission system. After installation there are two default users defined:</p>
+		<ul>
+			<li>Username: nagiosadmin, Password: nagiosadmin</li>
+			<li>Username: guest, Password: guest</li>
+		</ul>
+		<p>The following roles with these permissions are available:</p>
+		<ul>
+			<li>Administrators: Full permissions on the whole installation</li>
+			<li>Users: Read access to all maps, automaps and rotations in the installation</li>
+			<li>Guests: Read access to all demo maps, automaps and rotations</li>
+		</ul>
+		<p>These default users and roles should be ok for beginning. You may delete these users and roles but please be aware not to delete the last administrative user.</p>
+		<h2></h2>
+	</body>
+</html>
