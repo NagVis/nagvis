@@ -1130,7 +1130,7 @@ if [ $NAGVIS_TAG -lt 01050000 ]; then
 	text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
 else
 	text "|   <http://localhost${HTML_PATH}/config.php>" "|"
-	text "| - Initial credentials:" "|"
+	text "| - Initial admin credentials:" "|"
 	text "|     Username: nagiosadmin" "|"
 	text "|     Password: nagiosadmin" "|"
 fi
