@@ -275,7 +275,8 @@ class GlobalHeaderMenu {
 			'lang_rotation_start' => $this->CORE->getLang()->getText('rotationStart'),
 			'lang_rotation_stop' => $this->CORE->getLang()->getText('rotationStop'),
 			'authChangePasswordSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword'),
-			'authUserMgmtSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('createUser'));
+			'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
+			'permittedRoleMgmt' => $this->AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
 		
 		return $aReturn;
 	}
