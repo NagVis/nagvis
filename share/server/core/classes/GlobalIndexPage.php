@@ -143,6 +143,7 @@ class GlobalIndexPage {
 					
 					$arr = $MAP->MAPOBJ->parseJson();
 					
+					$arr['type'] = 'automap';
 					$arr['overview_class'] = $class;
 					$arr['overview_url'] = $url;
 					$arr['overview_image'] = $image;
