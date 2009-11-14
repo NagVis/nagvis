@@ -55,6 +55,21 @@ class CoreAuthorisationHandler {
 		),
 		'ChangePassword' => Array(
 			'view' => 'change'
+		),
+		'UserMgmt' => Array(
+			'view' => 'manage',
+			'getUserRoles' => 'manage',
+			'getAllRoles' => 'manage',
+			'doAdd' => 'manage',
+			'doEdit' => 'manage',
+			'doDelete' => 'manage',
+		),
+		'RoleMgmt' => Array(
+			'view' => 'manage',
+			'getRolePerms' => 'manage',
+			'doAdd' => 'manage',
+			'doEdit' => 'manage',
+			'doDelete' => 'manage',
 		));
 	
 	public function __construct(GlobalCore $CORE, CoreAuthHandler $AUTH, $sModule) {
