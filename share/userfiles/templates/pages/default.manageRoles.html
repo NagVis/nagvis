@@ -1,5 +1,10 @@
 <script type="text/javascript">
 function selectRolePerms(id) \{
+	// Exit when id empty
+	if(id == '') {
+		return false;
+	}
+	
 	// Get perms of role via ajax query
 	var aRoles = getSyncRequest(oGeneralProperties.path_server+'?mod=RoleMgmt&act=getRolePerms&roleId='+id, false, false);
 	

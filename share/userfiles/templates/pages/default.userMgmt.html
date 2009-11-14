@@ -41,6 +41,11 @@ function roleModify(bAdd) \{
 }
 
 function getUserRoles(id) \{
+	// Exit when id empty
+	if(id == '') {
+		return false;
+	}
+	
 	// Get user roles via ajax query
 	var aRoles = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=getUserRoles&userId='+id, false, false);
 	var aAvailableRoles = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=getAllRoles', false, false);
