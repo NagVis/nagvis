@@ -40,6 +40,7 @@ class CoreAuthModSession extends CoreAuthModule {
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
+		// FIXME: Add features from "real module"
 		parent::$aFeatures = Array(
 			// General functions for authentication
 			'passCredentials' => true,
@@ -75,6 +76,18 @@ class CoreAuthModSession extends CoreAuthModule {
 	
 	// The session auth module does not change password itselfs. It calls the real
 	// authentication module for performing this change
+	public function getAllUsers() {
+		// Initialize the real authentication module when needed
+		if($this->REALAUTH === null) {
+			$this->initRealAuthModule();
+		}
+		
+		// Pass the new information to the real auth module
+		return $this->REALAUTH->getAllUsers();
+	}
+	
+	// The session auth module does not change password itselfs. It calls the real
+	// authentication module for performing this change
 	public function passNewPassword($aData) {
 		// Initialize the real authentication module when needed
 		if($this->REALAUTH === null) {
@@ -83,6 +96,30 @@ class CoreAuthModSession extends CoreAuthModule {
 		
 		// Pass the new information to the real auth module
 		return $this->REALAUTH->passNewPassword($aData);
+	}
+	
+	// The session auth module does not perform this action itselfs. It calls the real
+	// authentication module for performing this change
+	public function checkUserExists($user) {
+		// Initialize the real authentication module when needed
+		if($this->REALAUTH === null) {
+			$this->initRealAuthModule();
+		}
+		
+		// Pass the new information to the real auth module
+		return $this->REALAUTH->checkUserExists($user);
+	}
+	
+	// The session auth module does not perform this action itselfs. It calls the real
+	// authentication module for performing this change
+	public function createUser($user, $password) {
+		// Initialize the real authentication module when needed
+		if($this->REALAUTH === null) {
+			$this->initRealAuthModule();
+		}
+		
+		// Pass the new information to the real auth module
+		return $this->REALAUTH->createUser($user, $password);
 	}
 	
 	// The session auth module does not change password itselfs. It calls the real

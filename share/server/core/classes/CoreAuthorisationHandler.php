@@ -36,6 +36,27 @@ class CoreAuthorisationHandler {
 	private $MOD;
 	private $AUTHENTICATION;
 	
+	private $summarizePerms = Array(
+		'Map' => Array(
+			'getMapProperties' => 'view',
+			'getMapObjects' => 'view',
+			'getObjectStates' => 'view'
+		),
+		'Overview' => Array(
+			'getOverviewRotations' => 'view',
+			'getOverviewProperties' => 'view',
+			'getOverviewMaps' => 'view',
+			'getOverviewAutomaps' => 'view'
+		),
+		'AutoMap' => Array(
+			'getAutomapProperties' => 'view',
+			'getAutomapObjects' => 'view',
+			'getObjectStates' => 'view'
+		),
+		'ChangePassword' => Array(
+			'view' => 'change'
+		));
+	
 	public function __construct(GlobalCore $CORE, CoreAuthHandler $AUTH, $sModule) {
 		$this->sModuleName = $sModule;
 		
@@ -50,6 +71,101 @@ class CoreAuthorisationHandler {
 	
 	public function getModule() {
 		return $this->sModuleName;
+	}
+	
+	public function updateUserRoles($userId, $roles) {
+		// FIXME: First check if this is supported
+		
+		return $this->MOD->updateUserRoles($userId, $roles);
+	}
+	
+	public function getUserRoles($userId) {
+		// FIXME: First check if this is supported
+		
+		return $this->MOD->getUserRoles($userId);
+	}
+	
+	public function getAllRoles() {
+		// FIXME: First check if this is supported
+		
+		return $this->MOD->getAllRoles();
+	}
+	
+	public function getAllVisiblePerms() {
+		$aReturn = Array();
+		// FIXME: First check if this is supported
+		
+		$aPerms = $this->MOD->getAllPerms();
+		
+		// Filter perms to only display the visible ones
+		foreach($aPerms AS $perm) {
+			if(!isset($this->summarizePerms[$perm['mod']]) || (isset($this->summarizePerms[$perm['mod']]) && !isset($this->summarizePerms[$perm['mod']][$perm['act']]))) {
+				$aReturn[] = $perm;
+			}
+		}
+		
+		return $aReturn;
+	}
+	
+	public function checkRoleExists($name) {
+		// FIXME: First check if this is supported
+		
+		return $this->MOD->checkRoleExists($name);
+	}
+	
+	public function createRole($name) {
+		// FIXME: First check if this is supported
+		
+		return $this->MOD->createRole($name);
+	}
+	
+	public function getRolePerms($roleId) {
+		// FIXME: First check if this is supported
+		
+		return $this->MOD->getRolePerms($roleId);
+	}
+	
+	public function updateRolePerms($roleId, $perms) {
+		// FIXME: First check if this is supported
+		
+		// Get all permissions
+		$aPerms = $this->MOD->getAllPerms();
+		
+		// Resolve summarized perms
+		foreach($perms AS $key => $value) {
+			$aPerm = Array();
+			
+			// Get matching permission
+			foreach($aPerms AS $perm) {
+				if($perm['permId'] == $key) {
+					$aPerm = $perm;
+					break;
+				}
+			}
+			
+			$mod = $aPerm['mod'];
+			$act = $aPerm['act'];
+			
+			// Check if this mod+act summarizes something
+			if(isset($this->summarizePerms[$mod])) {
+				foreach($this->summarizePerms[$mod] AS $summarizedAct => $summarizingAct) {
+					if($summarizingAct === $act) {
+						// Get the id of the summaried action
+						foreach($aPerms AS $perm) {
+							if($mod == $perm['mod'] && $summarizedAct == $perm['act']) {
+								$summarizedActId = $perm['permId'];
+								break;
+							}
+						}
+			
+						// Add the summarized action to the permissions array
+						$perms[$summarizedActId] = $value;
+					}
+				}
+			}
+		}
+		
+		return $this->MOD->updateRolePerms($roleId, $perms);
 	}
 	
 	public function parsePermissions() {

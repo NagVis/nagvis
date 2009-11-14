@@ -22,7 +22,7 @@
 			<dd id="action-ddcontent" onmouseover="cancelHide('action')" onmouseout="ddMenu('action',-1)">
 				<ul>
 					{if $view_type == 'Map' || $view_type == 'Automap'}
-					<li><a href="javascript:showSearch('{$langSearch}')">{$langSearch}</a></li>
+					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
 					{/if}
 					{if $bRotation == true}
 					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$lang_rotation_start}</a></li>
@@ -42,8 +42,9 @@
 		  <dd id="user-ddcontent" onmouseover="cancelHide('user')" onmouseout="ddMenu('user',-1)">
 		    <ul>
 		    	<li><a href="#">{$lang_logged_in}: {$current_user}</a></li>
-		    	{if $authChangePasswordSupported == true}<li><a href="javascript:showChangePassword('{$lang_change_password}');">{$lang_change_password}</a></li>{/if}
-		    	{if $authCreateUserSupported == true}<li><a href="javascript:showUserAdd('{$langUserAdd}');">{$langUserAdd}</a></li>{/if}
+		    	{if $authChangePasswordSupported == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$lang_change_password}');">{$lang_change_password}</a></li>{/if}
+		    	{if $authUserMgmtSupported == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
+		    	<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>
 		    	<li><a href="#" onclick="getSyncRequest('{$html_base}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;" class="underline">{$lang_logout}</a></li>
 		    </ul>
 		  </dd>

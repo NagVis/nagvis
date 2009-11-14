@@ -68,17 +68,8 @@ $AUTH = new CoreAuthHandler($CORE, $SHANDLER, 'CoreAuthModSession');
  */
 
 if($AUTH->isAuthenticated()) {
-	// First try to get information from session
-	$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, 'CoreAuthorisationModSession');
-	$aPerms = $AUTHORISATION->parsePermissions();
-
-	// When no information in session get permission and write to session
-	if($aPerms === false) {
-		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
-
-		// Save credentials to seession
- 		$SHANDLER->set('userPermissions', $AUTHORISATION->parsePermissions());
-	}
+	$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
+	$AUTHORISATION->parsePermissions();
 } else {
 	$AUTHORISATION = null;
 }

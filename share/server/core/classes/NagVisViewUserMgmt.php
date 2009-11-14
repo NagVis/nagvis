@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisViewUserAdd.php - User creation dialog
+ * NagVisViewUserMgmt.php - User management dialog
  *
  * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,8 +25,10 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisViewUserAdd {
+class NagVisViewUserMgmt {
 	private $CORE;
+	private $AUTHENTICATION;
+	private $AUTHORISATION;
 	
 	/**
 	 * Class Constructor
@@ -34,8 +36,10 @@ class NagVisViewUserAdd {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
+	public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
+		$this->CORE = GlobalCore::getInstance();
+		$this->AUTHENTICATION = $AUTHENTICATION;
+		$this->AUTHORISATION = $AUTHORISATION;
 	}
 	
 	/**
@@ -51,18 +55,29 @@ class NagVisViewUserAdd {
 		
 		$aData = Array(
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&amp;act=add',
+			'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&amp;act=doAdd',
+			'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&amp;act=doEdit',
 			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
       'langUsername' => $this->CORE->getLang()->getText('Username'),
       'langPassword1' => $this->CORE->getLang()->getText('Password'),
       'langPassword2' => $this->CORE->getLang()->getText('Password Confirm'),
-      'langUserAdd' => $this->CORE->getLang()->getText('Create User')
+      'langUserAdd' => $this->CORE->getLang()->getText('Create User'),
+      'langUserModify' => $this->CORE->getLang()->getText('Modify User'),
+      'langUserModify' => $this->CORE->getLang()->getText('Modify User'),
+      'langSelectUser' => $this->CORE->getLang()->getText('Select User'),
+      'users' => $this->AUTHENTICATION->getAllUsers(),
+      'langManageRoles' => $this->CORE->getLang()->getText('Modify Roles'),
+      'langRolesAvailable' => $this->CORE->getLang()->getText('Available Roles'),
+      'langRolesSelected' => $this->CORE->getLang()->getText('Selected Roles'),
+      'langAdd' => $this->CORE->getLang()->getText('Add'),
+      'langRemove' => $this->CORE->getLang()->getText('Remove'),
+      'roles' => $this->AUTHORISATION->getAllRoles(),
 		);
 		
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('userAdd'), $aData);
+		return $TMPLSYS->get($TMPL->getTmplFile('userMgmt'), $aData);
 	}
 }
 ?>

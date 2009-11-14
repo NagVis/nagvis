@@ -6,8 +6,11 @@ class CoreModUserMgmt extends CoreModule {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('viewAdd' => REQUIRES_AUTHORISATION,
-		                        'doAdd' => REQUIRES_AUTHORISATION);
+		$this->aActions = Array('view' => REQUIRES_AUTHORISATION,
+		                        'getUserRoles' => REQUIRES_AUTHORISATION,
+		                        'getAllRoles' => REQUIRES_AUTHORISATION,
+		                        'doAdd' => REQUIRES_AUTHORISATION,
+		                        'doEdit' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}
@@ -20,41 +23,52 @@ class CoreModUserMgmt extends CoreModule {
 				// The best place for this would be a FrontendModule but this needs to
 				// be in CoreModule cause it is fetched via ajax. The error messages
 				// would be printed in HTML format in nagvis-js frontend.
-				case 'viewAdd':
-					// Check if user is already authenticated
-					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated()) {
-						$VIEW = new NagVisViewUserAdd($this->CORE);
-						$sReturn = json_encode(Array('code' => $VIEW->parse()));
-					} else {
-						$sReturn = '';
-					}
+				case 'view':
+					$VIEW = new NagVisViewUserMgmt($this->AUTHENTICATION, $this->AUTHORISATION);
+					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
 				case 'doAdd':
-					// Check if user is already authenticated
-					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated()) {
-						$aReturn = $this->handleResponse();
-						
-						if($aReturn !== false) {
-							// Reset the authentication check. Without this the cached result
-							// would prevent the authentication check with the given credentials
-							$this->AUTHENTICATION->resetAuthCheck();
-							
-							// Set new passwords in authentication module
-							$this->AUTHENTICATION->passNewPassword($aReturn);
-							
-							// Try to apply the changes
-							if($this->AUTHENTICATION->changePassword()) {
-								$sReturn = json_encode(Array('status' => 'OK', 'message' => $this->CORE->getLang()->getText('The password has been changed.')));
-							} else {
-								// Invalid credentials
-								$sReturn = $this->msgPasswordNotChanged();
-							}
+					$aReturn = $this->handleResponseAdd();
+					
+					if($aReturn !== false) {
+						// Try to apply the changes
+						if($this->AUTHENTICATION->createUser($aReturn['user'], $aReturn['password'])) {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The user has been created.'));
+							$sReturn = '';
 						} else {
-							$sReturn = $this->msgInputNotValid();
+							// Invalid credentials
+							$sReturn = $this->msgUserNotCreated();
 						}
 					} else {
-						// When the user is not authenticated redirect to start page (overview)
-						Header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+						$sReturn = $this->msgInputNotValid();
+					}
+				break;
+				case 'getUserRoles':
+					// Parse the specific options
+					$aVals = $this->getCustomOptions(Array('userId' => MATCH_INTEGER));
+					$userId = $aVals['userId'];
+					
+					// Get current user roles
+					$sReturn = json_encode($this->AUTHORISATION->getUserRoles($userId));
+				break;
+				case 'getAllRoles':
+					// Get current permissions of role
+					$sReturn = json_encode($this->AUTHORISATION->getAllRoles());
+				break;
+				case 'doEdit':
+					$aReturn = $this->handleResponseEdit();
+					
+					if($aReturn !== false) {
+						if($this->AUTHORISATION->updateUserRoles($aReturn['userId'], $aReturn['roles'])) {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The roles for this user have been updated.'));
+							$sReturn = '';
+						} else {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('Problem while updating user roles.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
 					}
 				break;
 			}
@@ -62,43 +76,71 @@ class CoreModUserMgmt extends CoreModule {
 		
 		return $sReturn;
 	}
-	
-	private function handleResponse() {
+		
+	private function handleResponseEdit() {
 		$bValid = true;
 		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordOld')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('userId')) {
 			$bValid = false;
 		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordNew1')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('rolesSelected')) {
 			$bValid = false;
 		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordNew2')) {
+		
+		// Parse the specific options
+		// FIXME: validate
+		$userId = intval($this->FHANDLER->get('userId'));
+		
+		$aPerms = Array();
+		
+	  // Store response data
+	  if($bValid === true) {
+		  // Return the data
+		  return Array('userId' => $userId, 'roles' => $this->FHANDLER->get('rolesSelected'));
+		} else {
+			return false;
+		}
+	}
+	
+	private function handleResponseAdd() {
+		$bValid = true;
+		// Validate the response
+		
+		// Check for needed params
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('username')) {
+			$bValid = false;
+		}
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password1')) {
+			$bValid = false;
+		}
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password2')) {
 			$bValid = false;
 		}
 		
 		// Check length limits
-		if($bValid && $this->FHANDLER->isLongerThan('passwordOld', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
 			$bValid = false;
 		}
-		if($bValid && $this->FHANDLER->isLongerThan('passwordNew1', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('password1', AUTH_MAX_PASSWORD_LENGTH)) {
 			$bValid = false;
 		}
-		if($bValid && $this->FHANDLER->isLongerThan('passwordNew2', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('password2', AUTH_MAX_PASSWORD_LENGTH)) {
 			$bValid = false;
 		}
 		
-		// Check if new passwords are equal
-		if($bValid && $this->FHANDLER->get('passwordNew1') !== $this->FHANDLER->get('passwordNew2')) {
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The two new passwords are not equal.'));
+		// Check if the user already exists
+		
+		if($bValid && $this->AUTHENTICATION->checkUserExists($this->FHANDLER->get('username'))) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The username is invalid or does already exist.'));
 			
 			$bValid = false;
 		}
 		
-		// Check if old and new passwords are equal
-		if($bValid && $this->FHANDLER->get('passwordOld') === $this->FHANDLER->get('passwordNew1')) {
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The new and old passwords are equal. Won\'t change anything.'));
+		// Check if new passwords are equal
+		if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2')) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The two passwords are not equal.'));
 			
 			$bValid = false;
 		}
@@ -109,9 +151,8 @@ class CoreModUserMgmt extends CoreModule {
 	  if($bValid === true) {
 		  // Return the data
 		  return Array(
-		               'user' => $this->AUTHENTICATION->getUser(),
-		               'password' => $this->FHANDLER->get('passwordOld'),
-		               'passwordNew' => $this->FHANDLER->get('passwordNew1'));
+		               'user' => $this->FHANDLER->get('username'),
+		               'password' => $this->FHANDLER->get('password1'));
 		} else {
 			return false;
 		}
@@ -122,8 +163,8 @@ class CoreModUserMgmt extends CoreModule {
 		return '';
 	}
 	
-	public function msgPasswordNotChanged() {
-		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The password could not be changed.'));
+	public function msgUserNotCreated() {
+		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The user could not be created.'));
 		return '';
 	}
 }

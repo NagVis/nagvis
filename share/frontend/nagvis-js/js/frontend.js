@@ -54,51 +54,21 @@ function submitFrontendForm(sUrl, sFormId) {
 }
 
 /**
- * showUserAdd()
+ * showFrontendDialog()
  *
- * Show the user add dialog to the user
+ * Show a dialog to the user
  *
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function showUserAdd(sTitle) {
-	var oContent = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=viewAdd', true, false);
-	
-	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
-		popupWindow(sTitle, oContent, true);
+function showFrontendDialog(sUrl, sTitle, sWidth) {
+	if(typeof sWidth === 'undefined' || sWidth === null) {
+		sWidth = '';
 	}
 	
-	oContent = null;
-}
-
-/**
- * showChangePassword()
- *
- * Show the change password dialog to the user
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function showChangePassword(sTitle) {
-	var oContent = getSyncRequest(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', true, false);
+	var oContent = getSyncRequest(sUrl, false, false);
 	
 	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
-		popupWindow(sTitle, oContent, true);
-	}
-	
-	oContent = null;
-}
-
-/**
- * showSearch()
- *
- * Show the search dialog to the user
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function showSearch(sTitle) {
-	var oContent = getSyncRequest(oGeneralProperties.path_server+'?mod=Search&act=view', true, false);
-	
-	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
-		popupWindow(sTitle, oContent, true);
+		popupWindow(sTitle, oContent, true, sWidth);
 	}
 	
 	oContent = null;

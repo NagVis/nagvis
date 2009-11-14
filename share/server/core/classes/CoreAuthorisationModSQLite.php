@@ -42,6 +42,100 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		}
 	}
 	
+	public function updateUserRoles($userId, $roles) {
+		// First delete all role perms
+		$this->DB->query('DELETE FROM users2roles WHERE userId=\''.sqlite_escape_string($userId).'\'');
+		
+		// insert new user roles
+		foreach($roles AS $roleId) {
+			$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES ('.sqlite_escape_string($userId).', '.sqlite_escape_string($roleId).')');
+		}
+		
+		return true;
+	}
+	
+	public function getUserRoles($userId) {
+		$aRoles = Array();
+		
+		// Get all the roles of the user
+	  $RES = $this->DB->query('SELECT users2roles.roleId AS roleId, roles.name AS name FROM users2roles LEFT JOIN roles ON users2roles.roleId=roles.roleId WHERE userId=\''.sqlite_escape_string($userId).'\'');
+	  while($data = $this->DB->fetchAssoc($RES)) {
+	  	$aRoles[] = $data;
+	  }
+	  
+	  return $aRoles;
+	}
+	
+	public function getAllRoles() {
+		$aRoles = Array();
+		
+		// Get all the roles of the user
+	  $RES = $this->DB->query('SELECT roleId, name FROM roles ORDER BY name');
+	  while($data = $this->DB->fetchAssoc($RES)) {
+	  	$aRoles[] = $data;
+	  }
+	  
+	  return $aRoles;
+	}
+	
+	public function getAllPerms() {
+		$aPerms = Array();
+		
+		// Get all the roles of the user
+	  $RES = $this->DB->query('SELECT permId, mod, act, obj FROM perms ORDER BY mod,act,obj');
+	  while($data = $this->DB->fetchAssoc($RES)) {
+	  	$aPerms[] = $data;
+	  }
+	  
+	  return $aPerms;
+	}
+	
+	public function getRolePerms($roleId) {
+		$aRoles = Array();
+		
+		// Get all the roles of the user
+	  $RES = $this->DB->query('SELECT permId FROM roles2perms WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+	  while($data = $this->DB->fetchAssoc($RES)) {
+	  	$aRoles[$data['permId']] = true;
+	  }
+	  
+	  return $aRoles;
+	}
+	
+	public function updateRolePerms($roleId, $perms) {
+		// First delete all role perms
+		$this->DB->query('DELETE FROM roles2perms WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+		
+		// insert new role perms
+		foreach($perms AS $permId => $val) {
+			if($val === true) {
+				$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.sqlite_escape_string($roleId).', '.sqlite_escape_string($permId).')');
+			}
+		}
+		
+		return true;
+	}
+	
+	public function checkRoleExists($name) {
+		$RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\''.sqlite_escape_string($name).'\'');
+		if(intval($RES->fetchSingle()) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function createRole($name) {
+		$this->DB->query('INSERT INTO roles (name) VALUES (\''.sqlite_escape_string($name).'\')');
+		
+		// Check result
+		if($this->checkRoleExists($name)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public function parsePermissions() {
 		$aPerms = Array();
 		

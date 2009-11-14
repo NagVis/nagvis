@@ -455,15 +455,15 @@ td#popupWindowContent {
 	padding-top: 5px;	
 }
 
-td#popupWindowContent table {
+td#popupWindowContent table.mytable {
 	width: 100%;
 	padding: 0;
 	margin: 0;
 	border-collapse:collapse;
 }
 
-td#popupWindowContent table tr th, 
-td#popupWindowContent table tr td {
+td#popupWindowContent table.mytable tr th, 
+td#popupWindowContent table.mytable tr td {
 	background-color: #eee;
 	border: 1px #a4a4a4 solid;
 	
@@ -479,6 +479,31 @@ td#popupWindowContent label {
 
 td#popupWindowContent p {
 	margin-bottom: 12px;
+}
+
+/* Popup window forms */
+
+td#popupWindowContent fieldset {  
+	margin: 1.5em 0 0 0;  
+	padding: 5px;
+	width: 100%;
+	border: 1px solid #BFBAB0;  
+	background-color: #F2EFE9;
+}
+
+td#popupWindowContent legend {  
+	margin-left: 1em;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+td#popupWindowContent fieldset.form table {
+	width: 100%;
+}
+
+td#popupWindowContent fieldset.form label {
+	font-weight: bold;
+	margin-right: 20px;
 }
 
 /* Header styling */

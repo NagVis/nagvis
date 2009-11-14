@@ -94,6 +94,28 @@ class CoreAuthHandler {
 		return $this->MOD->getUserId();
 	}
 	
+	public function getAllUsers() {
+		// FIXME: First check if the auth module supports this mechanism
+		
+		// Ask the module
+		return $this->MOD->getAllUsers();
+	}
+	
+	public function checkUserExists($name) {
+		if($name !== '' && $this->MOD->checkUserExists($name)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function createUser($username, $password) {
+		// FIXME: First check if the auth module supports this mechanism
+		
+		// Ask the module
+		return $this->MOD->createUser($username, $password);
+	}
+	
 	public function changePassword() {
 		// FIXME: First check if the auth module supports this mechanism
 		

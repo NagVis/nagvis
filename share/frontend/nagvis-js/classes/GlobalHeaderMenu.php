@@ -252,7 +252,8 @@ class GlobalHeaderMenu {
 		// Replace paths and language macros
 		$aReturn = Array('html_base' => $this->pathHtmlBase,
 			'langSearch' => $this->CORE->getLang()->getText('Search'),
-			'langUserAdd' => $this->CORE->getLang()->getText('Create User'),
+			'langUserMgmt' => $this->CORE->getLang()->getText('Manage Users'),
+			'langManageRoles' => $this->CORE->getLang()->getText('Manage Roles'),
 			'html_images' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
 			'html_templates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
 			'html_template_images' => $this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
@@ -274,7 +275,7 @@ class GlobalHeaderMenu {
 			'lang_rotation_start' => $this->CORE->getLang()->getText('rotationStart'),
 			'lang_rotation_stop' => $this->CORE->getLang()->getText('rotationStop'),
 			'authChangePasswordSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword'),
-			'authCreateUserSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('createUser'));
+			'authUserMgmtSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('createUser'));
 		
 		return $aReturn;
 	}

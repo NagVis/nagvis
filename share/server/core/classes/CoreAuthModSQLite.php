@@ -136,6 +136,21 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		// Access controll: Authentication: Logout
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (32, \'Auth\', \'logout\', \'*\')');
 		
+		// Access controll: Summary permissions for viewing all maps
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (33, \'Map\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (34, \'Map\', \'getMapProperties\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (35, \'Map\', \'getMapObjects\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (36, \'Map\', \'getObjectStates\', \'*\')');
+		
+		// Access controll: Summary permissions for viewing all automaps
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (37, \'AutoMap\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (38, \'AutoMap\', \'getAutomapProperties\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (39, \'AutoMap\', \'getAutomapObjects\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (40, \'AutoMap\', \'getObjectStates\', \'*\')');
+		
+		// Access controll: Rotation module levels for viewing all rotations
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (24, \'Rotation\', \'view\', \'*\')');
+		
 		// Role assignment: nagiosadmin => Administrators
 		$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (1, 1)');
 		
@@ -197,8 +212,20 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 32)');
 	}
 	
-	private function checkUserExists() {
-		$RES = $this->DB->query('SELECT COUNT(*) FROM users WHERE name=\''.sqlite_escape_string($this->sUsername).'\'');
+	public function getAllUsers() {
+		$aPerms = Array();
+		
+		// Get all the roles of the user
+	  $RES = $this->DB->query('SELECT userId, name FROM users ORDER BY name');
+	  while($data = $this->DB->fetchAssoc($RES)) {
+	  	$aPerms[] = $data;
+	  }
+	  
+	  return $aPerms;
+	}
+	
+	public function checkUserExists($name) {
+		$RES = $this->DB->query('SELECT COUNT(*) FROM users WHERE name=\''.sqlite_escape_string($name).'\'');
 		return intval($RES->fetchSingle()) > 0;
 	}
 	
@@ -210,6 +237,10 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	private function updatePassword() {
 		$RES = $this->DB->query('UPDATE users SET password=\''.sqlite_escape_string($this->sPasswordHash).'\' WHERE name=\''.sqlite_escape_string($this->sUsername).'\'');
 		return intval($RES->fetchSingle());
+	}
+	
+	private function addUser($user, $hash) {
+		$this->DB->query('INSERT INTO users (name,password) VALUES (\''.sqlite_escape_string($user).'\',\''.sqlite_escape_string($hash).'\')');
 	}
 	
 	public function passCredentials($aData) {
@@ -248,6 +279,28 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		             'userId' => $this->iUserId);
 	}
 	
+	public function createUser($user, $password) {
+		$bReturn = false;
+		
+		// Check if the user is authenticated
+		if($this->isAuthenticated()) {
+			// Compose the password hash
+			$hash = $this->createHash($password);
+			
+			// Create user
+			$this->addUser($user, $hash);
+			
+			// Check result
+			if($this->checkUserExists($user)) {
+				$bReturn = true;
+			} else {
+				$bReturn = false;
+			}
+		}
+		
+		return $bReturn;
+	}
+	
 	public function changePassword() {
 		$bReturn = false;
 		
@@ -257,7 +310,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
 			$this->sPassword = $this->sPasswordNew;
 			
 			// Compose the new password hash
-			$this->sPasswordHash = sha1(AUTH_PASSWORD_SALT.$this->sPassword);
+			$this->sPasswordHash = $this->createHash($this->sPassword);
 			
 			// Update password
 			$this->updatePassword();
@@ -275,7 +328,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$bReturn = false;
 
 		// Only handle known users
-		if($this->sUsername !== '' && $this->checkUserExists()) {
+		if($this->sUsername !== '' && $this->checkUserExists($this->sUsername)) {
 			
 			// Try to calculate the passowrd hash only when no hash is known at
 			// this time. For example when the user just entered the password
@@ -283,7 +336,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
 			// a session check don't try to rehash the password.
 			if($this->sPasswordHash === '') {
 				// Compose the password hash for comparing with the stored hash
-				$this->sPasswordHash = sha1(AUTH_PASSWORD_SALT.$this->sPassword);
+				$this->sPasswordHash = $this->createHash($this->sPassword);
 			}
 			
 			// Check the password hash
@@ -310,6 +363,10 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	
 	public function getUserId() {
 		return $this->iUserId;
+	}
+	
+	private function createHash($password) {
+		return sha1(AUTH_PASSWORD_SALT.$password);
 	}
 }
 ?>

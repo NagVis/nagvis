@@ -44,7 +44,8 @@ class CoreModChangePassword extends CoreModule {
 							
 							// Try to apply the changes
 							if($this->AUTHENTICATION->changePassword()) {
-								$sReturn = json_encode(Array('status' => 'OK', 'message' => $this->CORE->getLang()->getText('The password has been changed.')));
+								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The password has been changed.'));
+								$sReturn = '';
 							} else {
 								// Invalid credentials
 								$sReturn = $this->msgPasswordNotChanged();
