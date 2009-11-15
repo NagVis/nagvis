@@ -421,23 +421,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				if(isset($e[18]) && $e[18] > 0) {
 					$arrTmpReturn['in_downtime'] = 1;
 					
-					// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
-					// FIXME: Read downtime details
-					// FIXME: Show all downtimes instead of the first one?
-					/*$l = $this->queryLivestatusSingle(
+					// This handles only the first downtime. But this is not backend
+					// specific. The other backends do this as well.
+					$d = $this->queryLivestatusSingle(
 					  "GET downtimes\n".
-					  "Columns: author comment\n".
-					  "Filter: groups >= ".$hostgroupName."\n");
-					  */
-					/*$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName;
-					if(file_exists($sFile)) {
-						$oDowntime = json_decode(file_get_contents($sFile));
-						
-						$arrReturn['downtime_start'] = $oDowntime->STARTTIME;
-						$arrReturn['downtime_end'] = $oDowntime->ENDTIME;
-						$arrReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-						$arrReturn['downtime_data'] = $oDowntime->COMMENT;
-					}*/
+					  "Columns: author comment start_time end_time\n".
+					  "Filter: host_name = ".$e[0]."\n");
+					
+					$arrTmpReturn['downtime_author'] = $d[0];
+					$arrTmpReturn['downtime_data'] = $d[1];
+					$arrTmpReturn['downtime_start'] = $d[2];
+					$arrTmpReturn['downtime_end'] = $d[3];
 				}
 				
 				$arrTmpReturn['state'] = $state;
@@ -543,17 +537,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					if((isset($e[15]) && $e[15] > 0) || (isset($e[19]) && $e[19] > 0)) {
 						$arrTmpReturn['in_downtime'] = 1;
 						
-						// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
-						/* FIXME: downtime information
-						$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
-						if(file_exists($sFile)) {
-							$oDowntime = json_decode(file_get_contents($sFile));
-							
-							$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
-							$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
-							$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-							$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
-						}*/
+						// This handles only the first downtime. But this is not backend
+						// specific. The other backends do this as well.
+						$d = $this->queryLivestatusSingle(
+						  "GET downtimes\n".
+						  "Columns: author comment start_time end_time\n" .
+						  "Filter: host_name = ".$e[0]."\n" .
+						  "Filter: service_description = ".$e[1]."\n");
+						
+						$arrTmpReturn['downtime_author'] = $d[0];
+						$arrTmpReturn['downtime_data'] = $d[1];
+						$arrTmpReturn['downtime_start'] = $d[2];
+						$arrTmpReturn['downtime_end'] = $d[3];
 					}
 					
 					$arrTmpReturn['state'] = $state;
@@ -655,17 +650,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		if(isset($e[16]) && $e[16] > 0) {
 			$arrReturn['in_downtime'] = 1;
 			
-			// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
-			// FIXME: Read downtime details
-			/*$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName;
-			if(file_exists($sFile)) {
-				$oDowntime = json_decode(file_get_contents($sFile));
-				
-				$arrReturn['downtime_start'] = $oDowntime->STARTTIME;
-				$arrReturn['downtime_end'] = $oDowntime->ENDTIME;
-				$arrReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-				$arrReturn['downtime_data'] = $oDowntime->COMMENT;
-			}*/
+			// This handles only the first downtime. But this is not backend
+			// specific. The other backends do this as well.
+			$d = $this->queryLivestatusSingle(
+			  "GET downtimes\n".
+			  "Columns: author comment start_time end_time\n" .
+			  "Filter: host_name = ".$hostName."\n");
+			
+			$arrReturn['downtime_author'] = $d[0];
+			$arrReturn['downtime_data'] = $d[1];
+			$arrReturn['downtime_start'] = $d[2];
+			$arrReturn['downtime_end'] = $d[3];
 		}
 
 		$arrReturn['state'] = $state;
@@ -779,17 +774,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					if((isset($e[15]) && $e[15] > 0) || (isset($e[18]) && $e[18] > 0)) {
 						$arrTmpReturn['in_downtime'] = 1;
 						
-						// FIXME: echo -e 'GET downtimes\nFilter: description = HTTP' | ../src/check_mk-1.1.0beta1/livestatus/unixcat  ../nagios/var/rw/live
-						/* FIXME: downtime information
-						$sFile = $this->pathPersistent.'/DOWNTIME/'.$hostName.'::'.strtr($aServObj[$i][0]->SERVICEDESCRIPTION,' ','_');
-						if(file_exists($sFile)) {
-							$oDowntime = json_decode(file_get_contents($sFile));
-							
-							$arrTmpReturn['downtime_start'] = $oDowntime->STARTTIME;
-							$arrTmpReturn['downtime_end'] = $oDowntime->ENDTIME;
-							$arrTmpReturn['downtime_author'] = $oDowntime->AUTHORNAME;
-							$arrTmpReturn['downtime_data'] = $oDowntime->COMMENT;
-						}*/
+						// This handles only the first downtime. But this is not backend
+						// specific. The other backends do this as well.
+						$d = $this->queryLivestatusSingle(
+						  "GET downtimes\n".
+						  "Columns: author comment start_time end_time\n" .
+						  "Filter: host_name = ".$hostName."\n" .
+						  "Filter: service_description = ".$e[0]."\n");
+						
+						$arrTmpReturn['downtime_author'] = $d[0];
+						$arrTmpReturn['downtime_data'] = $d[1];
+						$arrTmpReturn['downtime_start'] = $d[2];
+						$arrTmpReturn['downtime_end'] = $d[3];
 					}
 					
 					$arrTmpReturn['state'] = $state;
