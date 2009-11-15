@@ -141,8 +141,8 @@ function getUserRoles(id) \{
 						</select>
 					</td>
 					<td style="vertical-align:middle">
-					<a href="#" onclick="roleModify(true)" title="{$langAdd}">&gt;</a><br />
-					<a href="#" onclick="roleModify()" title="{$langRemove}">&lt;</a>
+					<input type="button" name="add" onclick="roleModify(true)" value="&gt;" /><br />
+					<input type="button" name="remove" onclick="roleModify()" value="&lt;" /></a>
 					</td>
 					<td>
 						<select style="width:100%" name="rolesSelected" id="rolesSelected" class="select" tabindex="50" size="5" multiple />
