@@ -40,7 +40,7 @@ INSTALLER_CONFIG_MOD="n"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKENDS="ndo2db,ido2db,ndo2fs,merlin"
+NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,ndo2fs,merlin"
 # Return Code
 RC=0
 # data source
@@ -118,7 +118,8 @@ Parameters:
   -g <GROUP>    Group who runs the webserver
   -w <PATH>     Path to the webserver config files
   -W <PATH      Web path to the NagVis base directory (Default: $HTML_PATH) 
-  -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ido2db, ndo2fs, merlin
+  -i <BACKENDs> comma separated list of backend interfaces to use:
+                  Available backends: mklivestatus, ndo2db, ido2db, ndo2fs, merlin
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -o            omit demo files
   -r            remove backup directory after successful installation
@@ -257,6 +258,12 @@ check_backend() {
 		fi
 		NAGVIS_BACKEND=${NAGVIS_BACKEND#,}
 	fi
+	
+	echo $NAGVIS_BACKEND | grep -i "MKLIVESTATUS" >/dev/null
+	if [ $? -eq 0 ]; then
+		# mklivestatus checks
+	fi
+	
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
 		# Check NDO
