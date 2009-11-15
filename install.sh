@@ -261,7 +261,10 @@ check_backend() {
 	
 	echo $NAGVIS_BACKEND | grep -i "MKLIVESTATUS" >/dev/null
 	if [ $? -eq 0 ]; then
-		# mklivestatus checks
+		# FIXME: Add mklivestatus checks
+		# - Check if php socket module is availsable
+		# - Check if livestatus.o is avialable
+		log "  "
 	fi
 	
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
