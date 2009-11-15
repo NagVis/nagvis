@@ -362,14 +362,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	public function getHostgroupState($hostgroupName, $onlyHardstates) {
 		$arrReturn = Array();
 		
-		$numAttr = 20;
+		$stateColumn = 'state';
+			
+		// When only hardstate handling is enabled dont fetch "state"
+		// Fetch "hard_state"
+		if($onlyHardstates == 1) {
+			$stateColumn = 'hard_state';
+		} 
+			
+		$numAttr = 19;
 		$l = $this->queryLivestatus(
 		  "GET hosts\n".
-		  "Columns: name state plugin_output alias display_name ".
+		  "Columns: name ".$stateColumn." plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "last_hard_state acknowledged scheduled_downtime_depth ".
+		  "acknowledged scheduled_downtime_depth ".
 		  "has_been_checked\n".
 		  "Filter: groups >= ".$hostgroupName."\n");
 		
@@ -393,18 +401,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$arrTmpReturn = Array();
 			$arrTmpReturn['name'] = $e[0];
 			
-			// When only hardstate handling is enabled it is neccessary to workaround
-			// some problems with the last_hard_state attribute: When not using
-			// active scheduled host checks the host state is not set to hard ok when
-			// it gets recovered by a succeeded service check
-			if($onlyHardstates == 1 && $e[1] != '0') {
-				$e[1] = $e[16];
-			}
-			
 			// Catch pending objects
-			// $e[19]: has_been_checked
+			// $e[18]: has_been_checked
 			// $e[1]:  state
-			if($e[19] == 0 || $e[1] === '') {
+			if($e[18] == 0 || $e[1] === '') {
 					$arrTmpReturn['state'] = 'PENDING';
 					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[0]));
 			} else {
@@ -417,8 +417,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				}
 				
 				// If there is a downtime for this object, save the data
-				// $e[18]: scheduled_downtime_depth
-				if(isset($e[18]) && $e[18] > 0) {
+				// $e[17]: scheduled_downtime_depth
+				if(isset($e[17]) && $e[17] > 0) {
 					$arrTmpReturn['in_downtime'] = 1;
 					
 					// This handles only the first downtime. But this is not backend
@@ -449,7 +449,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['last_hard_state_change'] = $e[13];
 				$arrTmpReturn['statusmap_image'] = $e[14];
 				$arrTmpReturn['perfdata'] = $e[15];
-				$arrTmpReturn['problem_has_been_acknowledged'] = $e[17];
+				$arrTmpReturn['problem_has_been_acknowledged'] = $e[16];
 			}
 			
 			$arrReturn[] = $arrTmpReturn;
@@ -476,7 +476,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'last_hard_state';
+			$stateAttr = 'hard_state';
 		}
 		
 		$l = $this->queryLivestatus("GET services\n" .
@@ -590,7 +590,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'last_hard_state';
+			$stateAttr = 'hard_state';
 		}
 		
 		$e = $this->queryLivestatusSingleRow(
@@ -606,14 +606,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$arrReturn['state'] = 'ERROR';
 			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
 			return $arrReturn;
-		}
-		
-		// When only hardstate handling is enabled it is neccessary to workaround
-		// some problems with the last_hard_state attribute: When not using
-		// active scheduled host checks the host state is not set to hard ok when
-		// it gets recovered by a succeeded service check
-		if($onlyHardstates == 1 && $e[0] != '0') {
-			$e[0] = $e[18];
 		}
 		
 		// Catch pending objects
@@ -699,7 +691,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'last_hard_state';
+			$stateAttr = 'hard_state';
 		}
 		
 		$query = 
@@ -928,13 +920,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'last_hard_state';
+			$stateAttr = 'hard_state';
 		}
 		
 		// Get service information
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: host_name = ".$hostName."\n" .
-		   "Filter: in_notification_period = 1\n" .
+		   /*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
 		   // Count PENDING
 		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
@@ -1032,76 +1024,75 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'last_hard_state';
+			$stateAttr = 'hard_state';
 		}
 		
 		// Get service information
 		$query = "GET services\n" .
 		         "Filter: host_groups >= ".$hostgroupName."\n" .
-		         "Filter: in_notification_period = 1\n";
-		
-		// Count PENDING
-		$query .= "Stats: has_been_checked = 0\n" .
-		          // Count OK
-		          "Stats: ".$stateAttr." = 0\n" .
-		          // Count WARNING
-		          "Stats: ".$stateAttr." = 1\n" .
-		          "Stats: acknowledged = 0\n" .
-		          "Stats: host_acknowledged = 0\n" .
-		          "Stats: scheduled_downtime_depth = 0\n" .
-		          "Stats: host_scheduled_downtime_depth = 0\n" .
-		          "StatsAnd: 5\n" .
-		          // Count WARNING(ACK)
-		          "Stats: ".$stateAttr." = 1\n" .
-		          "Stats: acknowledged = 1\n" .
-		          "Stats: host_acknowledged = 1\n" .
-		          "StatsOr: 2\n" .
-		          "StatsAnd: 2\n" .
-		          // Count WARNING(DOWNTIME)
-		          "Stats: ".$stateAttr." = 1\n" .
-		          "Stats: scheduled_downtime_depth = 1\n" .
-		          "Stats: host_scheduled_downtime_depth = 1\n" .
-		          "StatsOr: 2\n" .
-		          "StatsAnd: 2\n" .
-		          // Count CRITICAL
-		          "Stats: ".$stateAttr." = 2\n" .
-		          "Stats: acknowledged = 0\n" .
-		          "Stats: host_acknowledged = 0\n" .
-		          "Stats: scheduled_downtime_depth = 0\n" .
-		          "Stats: host_scheduled_downtime_depth = 0\n" .
-		          "StatsAnd: 5\n" .
-		          // Count CRITICAL(ACK)
-		          "Stats: ".$stateAttr." = 2\n" .
-		          "Stats: acknowledged = 1\n" .
-		          "Stats: host_acknowledged = 1\n" .
-		          "StatsOr: 2\n" .
-		          "StatsAnd: 2\n" .
-		          // Count CRITICAL(DOWNTIME)
-		          "Stats: ".$stateAttr." = 2\n" .
-		          "Stats: scheduled_downtime_depth = 1\n" .
-		          "Stats: host_scheduled_downtime_depth = 1\n" .
-		          "StatsOr: 2\n" .
-		          "StatsAnd: 2\n" .
-		          // Count UNKNOWN
-		          "Stats: ".$stateAttr." = 3\n" .
-		          "Stats: acknowledged = 0\n" .
-		          "Stats: host_acknowledged = 0\n" .
-		          "Stats: scheduled_downtime_depth = 0\n" .
-		          "Stats: host_scheduled_downtime_depth = 0\n" .
-		          "StatsAnd: 5\n" .
-		          // Count UNKNOWN(ACK)
-		          "Stats: ".$stateAttr." = 3\n" .
-		          "Stats: acknowledged = 1\n" .
-		          "Stats: host_acknowledged = 1\n" .
-		          "StatsOr: 2\n" .
-		          "StatsAnd: 2\n" .
-		          // Count UNKNOWN(DOWNTIME)
-		          "Stats: ".$stateAttr." = 3\n" .
-		          "Stats: scheduled_downtime_depth = 1\n" .
-		          "Stats: host_scheduled_downtime_depth = 1\n" .
-		          "StatsOr: 2\n" .
-		          "StatsAnd: 2\n" .
-		          "StatsGroupBy: host_name\n";
+		         /*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
+						 // Count PENDING
+		         "Stats: has_been_checked = 0\n" .
+		         // Count OK
+		         "Stats: ".$stateAttr." = 0\n" .
+		         // Count WARNING
+		         "Stats: ".$stateAttr." = 1\n" .
+		         "Stats: acknowledged = 0\n" .
+		         "Stats: host_acknowledged = 0\n" .
+		         "Stats: scheduled_downtime_depth = 0\n" .
+		         "Stats: host_scheduled_downtime_depth = 0\n" .
+		         "StatsAnd: 5\n" .
+		         // Count WARNING(ACK)
+		         "Stats: ".$stateAttr." = 1\n" .
+		         "Stats: acknowledged = 1\n" .
+		         "Stats: host_acknowledged = 1\n" .
+		         "StatsOr: 2\n" .
+		         "StatsAnd: 2\n" .
+		         // Count WARNING(DOWNTIME)
+		         "Stats: ".$stateAttr." = 1\n" .
+		         "Stats: scheduled_downtime_depth = 1\n" .
+		         "Stats: host_scheduled_downtime_depth = 1\n" .
+		         "StatsOr: 2\n" .
+		         "StatsAnd: 2\n" .
+		         // Count CRITICAL
+		         "Stats: ".$stateAttr." = 2\n" .
+		         "Stats: acknowledged = 0\n" .
+		         "Stats: host_acknowledged = 0\n" .
+		         "Stats: scheduled_downtime_depth = 0\n" .
+		         "Stats: host_scheduled_downtime_depth = 0\n" .
+		         "StatsAnd: 5\n" .
+		         // Count CRITICAL(ACK)
+		         "Stats: ".$stateAttr." = 2\n" .
+		         "Stats: acknowledged = 1\n" .
+		         "Stats: host_acknowledged = 1\n" .
+		         "StatsOr: 2\n" .
+		         "StatsAnd: 2\n" .
+		         // Count CRITICAL(DOWNTIME)
+		         "Stats: ".$stateAttr." = 2\n" .
+		         "Stats: scheduled_downtime_depth = 1\n" .
+		         "Stats: host_scheduled_downtime_depth = 1\n" .
+		         "StatsOr: 2\n" .
+		         "StatsAnd: 2\n" .
+		         // Count UNKNOWN
+		         "Stats: ".$stateAttr." = 3\n" .
+		         "Stats: acknowledged = 0\n" .
+		         "Stats: host_acknowledged = 0\n" .
+		         "Stats: scheduled_downtime_depth = 0\n" .
+		         "Stats: host_scheduled_downtime_depth = 0\n" .
+		         "StatsAnd: 5\n" .
+		         // Count UNKNOWN(ACK)
+		         "Stats: ".$stateAttr." = 3\n" .
+		         "Stats: acknowledged = 1\n" .
+		         "Stats: host_acknowledged = 1\n" .
+		         "StatsOr: 2\n" .
+		         "StatsAnd: 2\n" .
+		         // Count UNKNOWN(DOWNTIME)
+		         "Stats: ".$stateAttr." = 3\n" .
+		         "Stats: scheduled_downtime_depth = 1\n" .
+		         "Stats: host_scheduled_downtime_depth = 1\n" .
+		         "StatsOr: 2\n" .
+		         "StatsAnd: 2\n" .
+		         "StatsGroupBy: host_name\n";
 		
 		$services = $this->queryLivestatus($query);
 		
@@ -1143,13 +1134,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'last_hard_state';
+			$stateAttr = 'hard_state';
 		}
 		
 		// Get host information
 		$hosts = $this->queryLivestatusSingleRow("GET hosts\n" .
 		   "Filter: groups >= ".$hostgroupName."\n" .
-		   "Filter: in_notification_period = 1\n" .
+		   /*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
 		   // Count PENDING
 		   "Stats: has_been_checked = 0\n" .
 		   // Count UP
@@ -1193,7 +1184,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// Get service information
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: host_groups >= ".$hostgroupName."\n" .
-		   "Filter: in_notification_period = 1\n" .
+		   /*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
 		   // Count PENDING
 		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
@@ -1291,13 +1282,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'last_hard_state';
+			$stateAttr = 'hard_state';
 		}
 		
 		// Get service information
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: groups >= ".$servicegroupName."\n" .
-		   "Filter: in_notification_period = 1\n" .
+		   /*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
 		   // Count PENDING
 		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
