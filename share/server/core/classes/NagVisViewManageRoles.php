@@ -55,6 +55,7 @@ class NagVisViewManageRoles {
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doAdd',
 			'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doEdit',
+			'formTargetDelete' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doDelete',
 			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxRolenameLength' => AUTH_MAX_PASSWORD_LENGTH,
       'langRoleAdd' => $this->CORE->getLang()->getText('Create Role'),
@@ -65,7 +66,8 @@ class NagVisViewManageRoles {
       'langAction' => $this->CORE->getLang()->getText('Action'),
       'langObject' => $this->CORE->getLang()->getText('Object'),
       'langPermitted' => $this->CORE->getLang()->getText('Permitted'),
-      'langRoleModify' => $this->CORE->getLang()->getText('Save Changes'),
+      'langRoleModify' => $this->CORE->getLang()->getText('Modify Role'),
+      'langRoleDelete' => $this->CORE->getLang()->getText('Delete Role'),
       'roles' => $this->AUTHORISATION->getAllRoles(),
       'perms' => $this->AUTHORISATION->getAllVisiblePerms()
 		);

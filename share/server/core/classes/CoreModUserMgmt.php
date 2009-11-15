@@ -107,6 +107,8 @@ class CoreModUserMgmt extends CoreModule {
 		// FIXME: validate
 		$userId = intval($this->FHANDLER->get('userId'));
 		
+		// FIXME: Add check not to delete own user
+		
 	  // Store response data
 	  if($bValid === true) {
 		  // Return the data

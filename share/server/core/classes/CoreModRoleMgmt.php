@@ -9,7 +9,8 @@ class CoreModRoleMgmt extends CoreModule {
 		$this->aActions = Array('view' => REQUIRES_AUTHORISATION,
 		                        'getRolePerms' => REQUIRES_AUTHORISATION,
 		                        'doAdd' => REQUIRES_AUTHORISATION,
-		                        'doEdit' => REQUIRES_AUTHORISATION);
+		                        'doEdit' => REQUIRES_AUTHORISATION,
+		                        'doDelete' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}
@@ -67,10 +68,50 @@ class CoreModRoleMgmt extends CoreModule {
 						$sReturn = '';
 					}
 				break;
+				case 'doDelete':
+					$aReturn = $this->handleResponseDelete();
+					
+					if($aReturn !== false) {
+						if($this->AUTHORISATION->deleteRole($aReturn['roleId'])) {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The role has been deleted.'));
+							$sReturn = '';
+						} else {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('Problem while deleting the role.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
 			}
 		}
 		
 		return $sReturn;
+	}
+	
+	private function handleResponseDelete() {
+		$bValid = true;
+		// Validate the response
+		
+		// Check for needed params
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('roleId')) {
+			$bValid = false;
+		}
+		
+		// Parse the specific options
+		// FIXME: validate
+		$roleId = intval($this->FHANDLER->get('roleId'));
+		
+		// FIXME: Check not to delete any referenced role
+		
+	  // Store response data
+	  if($bValid === true) {
+		  // Return the data
+		  return Array('roleId' => $roleId);
+		} else {
+			return false;
+		}
 	}
 	
 	private function handleResponseEdit() {

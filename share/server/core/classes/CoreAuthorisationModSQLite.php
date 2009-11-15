@@ -42,6 +42,21 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		}
 	}
 	
+	public function deleteRole($roleId) {
+		// Delete user
+		$this->DB->query('DELETE FROM roles WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+		
+		// Delete role permissions
+		$this->DB->query('DELETE FROM roles2perms WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+		
+		// Check result
+		if(!$this->checkRoleExists($roleId)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public function deleteUser($userId) {
 		// Delete user
 		$this->DB->query('DELETE FROM users WHERE userId=\''.sqlite_escape_string($userId).'\'');
