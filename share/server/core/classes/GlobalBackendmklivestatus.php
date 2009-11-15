@@ -476,7 +476,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'hard_state';
+			$stateAttr = 'last_hard_state';
 		}
 		
 		$l = $this->queryLivestatus("GET services\n" .
@@ -691,7 +691,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'hard_state';
+			$stateAttr = 'last_hard_state';
 		}
 		
 		$query = 
@@ -920,7 +920,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'hard_state';
+			$stateAttr = 'last_hard_state';
 		}
 		
 		// Get service information
@@ -1024,7 +1024,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'hard_state';
+			$stateAttr = 'last_hard_state';
 		}
 		
 		// Get service information
@@ -1181,6 +1181,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$aReturn['UNREACHABLE']['ack'] = $hosts[6];
 		$aReturn['UNREACHABLE']['downtime'] = $hosts[7];
 		
+		// When only hardstates were requested ask for the hardstate
+		if($onlyHardstates) {
+			$stateAttr = 'last_hard_state';
+		}
+		
 		// Get service information
 		$services = $this->queryLivestatusSingleRow("GET services\n" .
 		   "Filter: host_groups >= ".$hostgroupName."\n" .
@@ -1282,7 +1287,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
-			$stateAttr = 'hard_state';
+			$stateAttr = 'last_hard_state';
 		}
 		
 		// Get service information
