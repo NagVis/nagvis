@@ -69,7 +69,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		}
 		
 		if(!function_exists('socket_create')) {
-			new GlobalFrontendMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+			new GlobalMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
     }
 
 		
@@ -100,7 +100,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$this->socketAddress = $address;
 			$this->socketPort = $port;
 		} else {
-			new GlobalFrontendMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('Unknown socket type given in backend [BACKENDID]', Array('BACKENDID' => $this->backendId)));
+			new GlobalMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('Unknown socket type given in backend [BACKENDID]', Array('BACKENDID' => $this->backendId)));
 		}
 	}
 	

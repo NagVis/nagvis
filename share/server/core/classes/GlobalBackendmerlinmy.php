@@ -160,7 +160,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	private function checkMysqlSupport() {
 		// Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
-			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
 			return FALSE;
 		} else {
 			return TRUE;	
