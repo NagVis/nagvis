@@ -552,12 +552,12 @@ function updateMapBasics() {
 	}
 	
 	// Get new map state from core
-	oMapSummaryObj = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name)+sAutomapParams, false)[0];
+	oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name)+sAutomapParams, false)[0]);
 	sAutomapParams = null;
 
 	// FIXME: Add method to refetch oMapSummaryObj when it is null
 	// Be tolerant - check if oMapSummaryObj is null or anything unexpected
-	if(oMapSummaryObj == null) {
+	if(oMapSummaryObj == null || typeof oMapSummaryObj === 'undefined') {
 		eventlog("worker", "debug", "The oMapSummaryObj is null. Maybe a communication problem with the backend");
 		return false;
 	}
