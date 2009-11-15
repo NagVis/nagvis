@@ -10,7 +10,8 @@ class CoreModUserMgmt extends CoreModule {
 		                        'getUserRoles' => REQUIRES_AUTHORISATION,
 		                        'getAllRoles' => REQUIRES_AUTHORISATION,
 		                        'doAdd' => REQUIRES_AUTHORISATION,
-		                        'doEdit' => REQUIRES_AUTHORISATION);
+		                        'doEdit' => REQUIRES_AUTHORISATION,
+		                        'doDelete' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}
@@ -71,12 +72,50 @@ class CoreModUserMgmt extends CoreModule {
 						$sReturn = '';
 					}
 				break;
+				case 'doDelete':
+					$aReturn = $this->handleResponseDelete();
+					
+					if($aReturn !== false) {
+						if($this->AUTHORISATION->deleteUser($aReturn['userId'])) {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The user has been deleted.'));
+							$sReturn = '';
+						} else {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('Problem while deleting user.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
 			}
 		}
 		
 		return $sReturn;
 	}
 		
+	private function handleResponseDelete() {
+		$bValid = true;
+		// Validate the response
+		
+		// Check for needed params
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('userId')) {
+			$bValid = false;
+		}
+		
+		// Parse the specific options
+		// FIXME: validate
+		$userId = intval($this->FHANDLER->get('userId'));
+		
+	  // Store response data
+	  if($bValid === true) {
+		  // Return the data
+		  return Array('userId' => $userId);
+		} else {
+			return false;
+		}
+	}
+	
 	private function handleResponseEdit() {
 		$bValid = true;
 		// Validate the response

@@ -88,6 +88,12 @@ class CoreAuthorisationHandler {
 		return $this->sModuleName;
 	}
 	
+	public function deleteUser($userId) {
+		// FIXME: First check if this is supported
+		
+		return $this->MOD->deleteUser($userId);
+	}
+	
 	public function updateUserRoles($userId, $roles) {
 		// FIXME: First check if this is supported
 		

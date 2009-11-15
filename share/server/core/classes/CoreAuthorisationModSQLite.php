@@ -42,6 +42,21 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		}
 	}
 	
+	public function deleteUser($userId) {
+		// Delete user
+		$this->DB->query('DELETE FROM users WHERE userId=\''.sqlite_escape_string($userId).'\'');
+		
+		// Delete user roles
+		$this->DB->query('DELETE FROM users2roles WHERE userId=\''.sqlite_escape_string($userId).'\'');
+		
+		// Check result
+		if($this->checkUserExistsById($userId) <= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public function updateUserRoles($userId, $roles) {
 		// First delete all role perms
 		$this->DB->query('DELETE FROM users2roles WHERE userId=\''.sqlite_escape_string($userId).'\'');
@@ -167,6 +182,11 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		}
 		
 		return $aPerms;
+	}
+	
+	private function checkUserExistsById($id) {
+		$RES = $this->DB->query('SELECT userId FROM users WHERE userId=\''.sqlite_escape_string($id).'\'');
+		return intval($RES->fetchSingle());
 	}
 	
 	private function checkUserExists($sUsername) {

@@ -158,3 +158,23 @@ function getUserRoles(id) \{
 	</form>
 </fieldset>
 </div>
+
+<div id="deleteUsers">
+<fieldset class="form">
+	<legend>{$langUserDelete}</legend>
+	<form name="userDelete" id="userDeleteForm" action="#" onsubmit="submitFrontendForm('{$formTargetDelete}', 'userDeleteForm');return false" method="post">
+		<table>
+			<tr>
+				<td><label for="username">{$langUsername}:</label></td>
+				<td>
+					<select type="text" name="userId" id="userId" class="select" tabindex="40" />
+						<option value="" selected="selected"></option>
+						{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
+					</select>
+				</td>
+				<td><input type="submit" name="submit" id="submit" value="{$langUserDelete}" tabindex="100" /></td>
+			</tr>
+		</table>
+	</form>
+</fieldset>
+</div>
