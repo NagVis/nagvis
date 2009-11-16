@@ -66,7 +66,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Run preflight checks
 		if($this->socketType == 'unix' && !$this->checkSocketExists()) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
 		}
 		
 		if(!function_exists('socket_create')) {
