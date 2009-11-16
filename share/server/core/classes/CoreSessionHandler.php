@@ -38,17 +38,33 @@ class CoreSessionHandler {
 		// Set the session name (used in params/cookie names)
 		session_name(SESSION_NAME);
 		
+		// Only add the domain when it is no simple hostname
+		// This can be easily detected searching for a dot
+		if(strpos($sDomain, '.') === false) {
+			$sDomain = null;
+		}
+		
 		// Set custom params for the session cookie
 		session_set_cookie_params($iDuration, $sPath, $sDomain);
 		
 		// Start a session for the user when not started yet
 		if(!isset($_SESSION)) {
 			session_start();
+			
+			// Store the creation time of the session
+			$this->set('sessionExpires', time()+$iDuration);
 		}
 		
-		// Reset the expiration time upon page load
+		// Reset the expiration time of the session cookie
 		if(isset($_COOKIE[SESSION_NAME])) {
-			setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], time() + $iDuration, $sPath, $sDomain);
+			// Don't reset the expiration time on every page load - only reset when
+			// the half of the expiration time has passed
+			if(time() > $this->get('sessionExpires') - ($iDuration/2)) {
+				setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], time() + $iDuration, $sPath, $sDomain);
+				
+				// Store the update time of the session cookie
+				$this->set('sessionExpires', time()+$iDuration);
+			}
 		}
 	}
 	
