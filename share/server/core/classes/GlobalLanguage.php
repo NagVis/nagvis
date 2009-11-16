@@ -267,6 +267,19 @@ class GlobalLanguage {
 			$ret = $this->getReplacedString($ret, $replace);
 		}
 		
+		// When the translated string is equal to the requested id and some macros
+		// should be replaced it is possible that there is a problem with the
+		// gettext/translation mechanism. Then append the imploded
+		if($id === $ret && $replace !== NULL) {
+			if(!is_array($replace)) {
+				$ret .= 'Opts: '.$replace;
+			} else {
+				// Implode does not return the keys. So simply use json_encode here
+				// to show the keys to the user
+				$ret .= 'Opts: '.json_encode($replace);
+			}
+		}
+		
 		return $ret;
 	}
 	
