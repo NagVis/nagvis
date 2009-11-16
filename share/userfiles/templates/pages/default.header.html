@@ -1,35 +1,36 @@
-<script type="text/javascript" src="{$html_templates}default.header.js"></script>
+<script type="text/javascript" src="{$pathTemplates}default.header.js"></script>
 <div class="header">
 <ul class="head">
-	<li class="logo"><a href="{$html_base}/frontend/nagvis-js/index.php"><img src="{$html_images}/internal/logo_96x25.png" alt="NagVis" /></a></li>
+	<li class="logo"><a href="{$pathBase}/frontend/nagvis-js/index.php"><img src="{$pathImages}/internal/logo_96x25.png" alt="NagVis" /></a></li>
 	<li>
 		<dl class="dropdown">
-			<dt id="views-ddheader" onmouseover="ddMenu('views',1)" onmouseout="ddMenu('views',-1)">{$lang_select_map} <img src="{$html_template_images}tmpl.default.header_down.png" alt="&#8711;" /></dt>
+			<dt id="views-ddheader" onmouseover="ddMenu('views',1)" onmouseout="ddMenu('views',-1)">{$langSelectMap} <img src="{$pathTemplateImages}tmpl.default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="views-ddcontent" onmouseover="cancelHide('views')" onmouseout="ddMenu('views',-1)">
 				<ul>
-					<li><a href="{$html_base}/frontend/nagvis-js/index.php">{$lang_overview}</a></li>
+					<li><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>
 					<li class="spacer"><hr /></li>
-					{foreach $maps map}<li><a href="{$html_base}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.map_name}{$map.url_params}">{$map.map_alias}</a></li>{/foreach}
+					{foreach $maps map}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/foreach}
 					<li class="spacer"><hr /></li>
-					{foreach $automaps map}<li><a href="{$html_base}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.map_name}{$map.url_params}" {if $map.class_underline == true}class="underline"{/if}>{$map.map_alias}</a></li>{/foreach}
+					{foreach $automaps map}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlNarams}">{$map.mapAlias}</a></li>{/foreach}
+					<li><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>
 				</ul>
 			</dd>
 		</dl>
 	</li>
 	<li>
 		<dl class="dropdown">
-			<dt id="action-ddheader" onmouseover="ddMenu('action',1)" onmouseout="ddMenu('action',-1)">{$lang_actions} <img src="{$html_template_images}tmpl.default.header_down.png" alt="&#8711;" /></dt>
+			<dt id="action-ddheader" onmouseover="ddMenu('action',1)" onmouseout="ddMenu('action',-1)">{$langActions} <img src="{$pathTemplateImages}tmpl.default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="action-ddcontent" onmouseover="cancelHide('action')" onmouseout="ddMenu('action',-1)">
 				<ul>
-					{if $view_type == 'Map' || $view_type == 'Automap'}
+					{if $viewType == 'Map' || $viewType == 'Automap'}
 					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
 					{/if}
 					{if $bRotation == true}
-					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$lang_rotation_start}</a></li>
-					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$lang_rotation_stop}</a></li>
+					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$langRotationStart}</a></li>
+					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$langRotationStop}</a></li>
 					{/if}
-					{if $view_type == 'Map' && $permitted_edit == true}
-					<li><a href="{$html_base}/frontend/wui/index.php?map={$current_map}" class="underline">{$lang_edit_map}</a></li>
+					{if $viewType == 'Map' && $permittedEdit == true}
+					<li><a href="{$pathBase}/frontend/wui/index.php?map={$currentMap}" class="underline">{$langEditMap}</a></li>
 					{/if}
 				</ul>
 			</dd>
@@ -38,36 +39,36 @@
 	<li style="width:300px;"></li>
 	<li>
 		<dl class="dropdown">
-		  <dt id="user-ddheader" onmouseover="ddMenu('user',1)" onmouseout="ddMenu('user',-1)">{$lang_user}<img src="{$html_template_images}tmpl.default.header_down.png" alt="&#8711;" /></dt>
+		  <dt id="user-ddheader" onmouseover="ddMenu('user',1)" onmouseout="ddMenu('user',-1)">{$langUser}<img src="{$pathTemplateImages}tmpl.default.header_down.png" alt="&#8711;" /></dt>
 		  <dd id="user-ddcontent" onmouseover="cancelHide('user')" onmouseout="ddMenu('user',-1)">
 		    <ul>
-		    	<li><a href="#">{$lang_logged_in}: {$current_user}</a></li>
-		    	{if $authChangePasswordSupported == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$lang_change_password}');">{$lang_change_password}</a></li>{/if}
+		    	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
+		    	{if $authChangePasswordSupported == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
 		    	{if $permittedUserMgmt == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
 		    	{if $permittedRoleMgmt == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
-		    	<li><a href="#" onclick="getSyncRequest('{$html_base}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;" class="underline">{$lang_logout}</a></li>
+		    	<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;" class="underline">{$langLogout}</a></li>
 		    </ul>
 		  </dd>
 		</dl>
 	</li>
 	<li>
 		<dl class="dropdown">
-		  <dt id="language-ddheader" onmouseover="ddMenu('language',1)" onmouseout="ddMenu('language',-1)">{$lang_choose_language} <img src="{$html_template_images}tmpl.default.header_down.png" alt="&#8711;" /></dt>
+		  <dt id="language-ddheader" onmouseover="ddMenu('language',1)" onmouseout="ddMenu('language',-1)">{$langChooseLanguage} <img src="{$pathTemplateImages}tmpl.default.header_down.png" alt="&#8711;" /></dt>
 		  <dd id="language-ddcontent" onmouseover="cancelHide('language')" onmouseout="ddMenu('language',-1)">
 		    <ul>
-		    	{foreach $langs lang}<li><a href="{$html_base}/frontend/nagvis-js/index.php?lang={$lang.language}" {if $lang.class_underline}class="underline"{/if}>{$lang.lang_language_located}</a></li>{/foreach}
+		    	{foreach $langs lang}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?lang={$lang.language}" {if $lang.classUnderline}class="underline"{/if}>{$lang.langLanguageLocated}</a></li>{/foreach}
 		    </ul>
 		  </dd>
 		</dl>
 	</li>
 	<li>
 		<dl class="dropdown">
-		  <dt id="support-ddheader" onmouseover="ddMenu('support',1)" onmouseout="ddMenu('support',-1)">{$lang_need_help} <img src="{$html_template_images}tmpl.default.header_down.png" alt="&#8711;" /></dt>
+		  <dt id="support-ddheader" onmouseover="ddMenu('support',1)" onmouseout="ddMenu('support',-1)">{$langNeedHelp} <img src="{$pathTemplateImages}tmpl.default.header_down.png" alt="&#8711;" /></dt>
 		  <dd id="support-ddcontent" onmouseover="cancelHide('support')" onmouseout="ddMenu('support',-1)">
 		    <ul>
-		      <li><a href="{$html_base}/docs/{$current_language}/index.html">{$lang_online_doc}</a></li>
-		      <li><a href="http://www.nagios-portal.org/wbb/index.php?page=Board&amp;boardID=42">{$lang_forum}</a></li>
-		      <li><a href="{$html_base}/frontend/nagvis-js/index.php?mod=Info" class="underline">{$lang_support_info}</a></li>
+		      <li><a href="{$pathBase}/docs/{$currentLanguage}/index.html">{$langOnlineDoc}</a></li>
+		      <li><a href="http://www.nagios-portal.org/wbb/index.php?page=Board&amp;boardID=42">{$langForum}</a></li>
+		      <li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Info" class="underline">{$langSupportInfo}</a></li>
 		    </ul>
 		  </dd>
 		</dl>

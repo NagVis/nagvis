@@ -101,9 +101,9 @@ class GlobalHeaderMenu {
 		$objPageClass = get_class($this->OBJPAGE);
 		
 		if($objPageClass == 'NagVisMapCfg') {
-			$this->aMacros['view_type'] = 'Map';
+			$this->aMacros['viewType'] = 'Map';
 		} elseif($objPageClass == 'NagVisAutomapCfg') {
-			$this->aMacros['view_type'] = 'Automap';
+			$this->aMacros['viewType'] = 'Automap';
 		}
 		
 		// In rotation?
@@ -111,21 +111,21 @@ class GlobalHeaderMenu {
 		
 		// Check if the user is permitted to edit the current map/automap
 		if(isset($this->aMacros['view_type']) && $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['view_type'], 'edit', $this->OBJPAGE->getName())) {
-			$this->aMacros['permitted_edit'] = true;
+			$this->aMacros['permittedEdit'] = true;
 		} else {
-			$this->aMacros['permitted_edit'] = false;
+			$this->aMacros['permittedEdit'] = false;
 		}
 		
-		$this->aMacros['current_user'] = $this->AUTHORISATION->getAuthentication()->getUser();
+		$this->aMacros['currentUser'] = $this->AUTHORISATION->getAuthentication()->getUser();
 		
 		
 		// Replace some special macros
 		if($this->OBJPAGE !== null && ($objPageClass == 'NagVisMapCfg' || $objPageClass == 'NagVisAutomapCfg')) {
-			$this->aMacros['current_map'] = $this->OBJPAGE->getName();
-			$this->aMacros['current_map_alias'] = $this->OBJPAGE->getValue('global', '0', 'alias');
+			$this->aMacros['currentMap'] = $this->OBJPAGE->getName();
+			$this->aMacros['currentMapAlias'] = $this->OBJPAGE->getValue('global', '0', 'alias');
 		} else {
-			$this->aMacros['current_map'] = '';
-			$this->aMacros['current_map_alias'] = '';
+			$this->aMacros['currentMap'] = '';
+			$this->aMacros['currentMapAlias'] = '';
 		}
 		
 		
@@ -140,9 +140,9 @@ class GlobalHeaderMenu {
 				// Only proceed permited objects
 				if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $mapName)) {
 					$aMaps[$mapName] = Array();
-					$aMaps[$mapName]['map_name'] = $MAPCFG1->getName();
-					$aMaps[$mapName]['map_alias'] = $MAPCFG1->getValue('global', '0', 'alias');
-					$aMaps[$mapName]['url_params'] = '';
+					$aMaps[$mapName]['mapName'] = $MAPCFG1->getName();
+					$aMaps[$mapName]['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
+					$aMaps[$mapName]['urlParams'] = '';
 					
 					// auto select current map
 					if($objPageClass == 'NagVisMapCfg' && $mapName == $this->OBJPAGE->getName()) {
@@ -169,11 +169,11 @@ class GlobalHeaderMenu {
 				// Only proceed permited objects
 				if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName)) {
 					$aAutomaps[$mapName] = Array();
-					$aAutomaps[$mapName]['map_name'] = 'automap='.$MAPCFG1->getName();
-					$aAutomaps[$mapName]['map_alias'] = $MAPCFG1->getValue('global', '0', 'alias');
+					$aAutomaps[$mapName]['mapName'] = 'automap='.$MAPCFG1->getName();
+					$aAutomaps[$mapName]['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
 					
 					// Add defaultparams to map selection
-					$aAutomaps[$mapName]['url_params'] = str_replace('&', '&amp;', $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'));
+					$aAutomaps[$mapName]['urlParams'] = str_replace('&', '&amp;', $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'));
 					
 					// auto select current map
 					if($objPageClass == 'NagVisAutomapCfg' && $mapName == $this->OBJPAGE->getName()) {
@@ -184,9 +184,9 @@ class GlobalHeaderMenu {
 					
 					// Underline last element
 					if($i == $numAutomaps) {
-						$aAutomaps[$mapName]['class_underline'] = true;
+						$aAutomaps[$mapName]['classUnderline'] = true;
 					} else {
-						$aAutomaps[$mapName]['class_underline'] = false;
+						$aAutomaps[$mapName]['classUnderline'] = false;
 					}
 				}
 			}
@@ -205,9 +205,9 @@ class GlobalHeaderMenu {
 			
 			// Underline last element
 			if($i == $numLang) {
-				$aLangs[$lang]['class_underline'] = true;
+				$aLangs[$lang]['classUnderline'] = true;
 			} else {
-				$aLangs[$lang]['class_underline'] = false;
+				$aLangs[$lang]['classUnderline'] = false;
 			}
 			
 			// Get translated language name
@@ -229,7 +229,7 @@ class GlobalHeaderMenu {
 				break;
 			}
 			
-			$aLangs[$lang]['lang_language_located'] = $languageLocated;
+			$aLangs[$lang]['langLanguageLocated'] = $languageLocated;
 			
 			$i++;
 		}
@@ -250,30 +250,31 @@ class GlobalHeaderMenu {
 	 */
 	private function getStaticMacros() {
 		// Replace paths and language macros
-		$aReturn = Array('html_base' => $this->pathHtmlBase,
+		$aReturn = Array('pathBase' => $this->pathHtmlBase,
+			'pathImages' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
+			'pathTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
+			'pathTemplateImages' => $this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
 			'langSearch' => $this->CORE->getLang()->getText('Search'),
 			'langUserMgmt' => $this->CORE->getLang()->getText('Manage Users'),
 			'langManageRoles' => $this->CORE->getLang()->getText('Manage Roles'),
-			'html_images' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
-			'html_templates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
-			'html_template_images' => $this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
-			'current_language' => $this->CORE->getLang()->getCurrentLanguage(),
-			'lang_choose_language' => $this->CORE->getLang()->getText('Choose Language'),
-			'lang_user' => $this->CORE->getLang()->getText('User menu'),
-			'lang_actions' => $this->CORE->getLang()->getText('Actions'),
-			'lang_logged_in' => $this->CORE->getLang()->getText('Logged in'),
-			'lang_change_password' => $this->CORE->getLang()->getText('Change password'),
-			'lang_select_map' => $this->CORE->getLang()->getText('selectMap'),
-			'lang_edit_map' => $this->CORE->getLang()->getText('editMap'),
-			'lang_need_help' => $this->CORE->getLang()->getText('needHelp'),
-			'lang_online_doc' => $this->CORE->getLang()->getText('onlineDoc'),
-			'lang_forum' => $this->CORE->getLang()->getText('forum'),
-			'lang_support_info' => $this->CORE->getLang()->getText('supportInfo'),
-			'lang_overview' => $this->CORE->getLang()->getText('overview'),
-			'lang_instance' => $this->CORE->getLang()->getText('instance'),
-			'lang_logout' => $this->CORE->getLang()->getText('Logout'),
-			'lang_rotation_start' => $this->CORE->getLang()->getText('rotationStart'),
-			'lang_rotation_stop' => $this->CORE->getLang()->getText('rotationStop'),
+			'langWui' => $this->CORE->getLang()->getText('WUI'),
+			'currentLanguage' => $this->CORE->getLang()->getCurrentLanguage(),
+			'langChooseLanguage' => $this->CORE->getLang()->getText('Choose Language'),
+			'langUser' => $this->CORE->getLang()->getText('User menu'),
+			'langActions' => $this->CORE->getLang()->getText('Actions'),
+			'langLoggedIn' => $this->CORE->getLang()->getText('Logged in'),
+			'langChangePassword' => $this->CORE->getLang()->getText('Change password'),
+			'langSelectMap' => $this->CORE->getLang()->getText('selectMap'),
+			'langEditMap' => $this->CORE->getLang()->getText('editMap'),
+			'langNeedHelp' => $this->CORE->getLang()->getText('needHelp'),
+			'langOnlineDoc' => $this->CORE->getLang()->getText('onlineDoc'),
+			'langForum' => $this->CORE->getLang()->getText('forum'),
+			'langSupportInfo' => $this->CORE->getLang()->getText('supportInfo'),
+			'langOverview' => $this->CORE->getLang()->getText('overview'),
+			'langInstance' => $this->CORE->getLang()->getText('instance'),
+			'langLogout' => $this->CORE->getLang()->getText('Logout'),
+			'langRotationStart' => $this->CORE->getLang()->getText('rotationStart'),
+			'langRotationStop' => $this->CORE->getLang()->getText('rotationStop'),
 			'authChangePasswordSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword'),
 			'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
 			'permittedRoleMgmt' => $this->AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
