@@ -22,6 +22,7 @@
 		<li><a href="#map">Map</a></li>
 		<li><a href="#textbox">Textbox</a></li>
 		<li><a href="#shape">Shape</a></li>
+		<li><a href="#line">Line</a> (<font color="#ff0000">New in 1.5</font>)</li>
 		<li><a href="#template">Template</a></li>
 		</ul>
 		
@@ -251,7 +252,7 @@
 		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
 		</tr>
 		<tr>
-		<td> line_type </td><td></td><td>Specifies the type of line when view_type=line. Valid values are &quot;11&quot; for lines with one arrow at the end of a line and &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.</td>
+		<td> line_type </td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
 		<td> line_width </td><td>3</td><td> This defines the width of the line when this object is being displayed as line. </td>
@@ -376,7 +377,7 @@
 		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
 		</tr>
 		<tr>
-		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are &quot;11&quot; for lines with one arrow at the end of a line and &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.</td>
+		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
 		<td> line_width </td><td>3</td><td> This defines the width of the line when this object is being displayed as line. </td>
@@ -483,7 +484,7 @@
 		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
 		</tr>
 		<tr>
-		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are &quot;11&quot; for lines with one arrow at the end of a line and &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.</td>
+		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
 		<td> line_width </td><td>3</td><td> This defines the width of the line when this object is being displayed as line. </td>
@@ -593,7 +594,7 @@
 		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
 		</tr>
 		<tr>
-		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are &quot;11&quot; for lines with one arrow at the end of a line and &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.</td>
+		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
 		<td> line_width </td><td>3</td><td> This defines the width of the line when this object is being displayed as line. </td>
@@ -697,7 +698,7 @@
 		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
 		</tr>
 		<tr>
-		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are &quot;11&quot; for lines with one arrow at the end of a line and &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.</td>
+		<td> line_type </td><td> </td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
 		<td> line_width </td><td>3</td><td> This defines the width of the line when this object is being displayed as line. </td>
@@ -806,6 +807,59 @@
 		</tr>
 		<tr>
 		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1 </td>
+		</tr>
+		</table>
+		
+		<a name="line"></a><h3>Line (<font color="#ff0000">New in 1.5</font>)</h3>
+		<p>Example with all values which have to be set:</p>
+<pre>define line {
+	line_type=1
+	x=200
+	y=100
+}</pre>
+		<table style="width:100%">
+		<tr>
+		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+		</tr>
+		<tr>
+		<td><b>line_type</b></td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+		<td><b>x</b></td><td> </td><td> X axis coordinate </td>
+		</tr>
+		<tr>
+		<td><b>y</b></td><td> </td><td> Y axis coordinate </td>
+		</tr>
+		
+		<tr>
+		<td>line_width</td><td>3</td><td>The width of the line in pixels.</td>
+		</tr>
+		<tr>
+		<td>line_color</td><td>#ffffff</td><td>The fill color of the line in hex form. Can also be &quot;transparent&quot;.</td>
+		</tr>
+		<tr>
+		<td>line_color_border</td><td>#000000</td><td>The border color of the line in hex form. Can also be &quot;transparent&quot;.</td>
+		</tr>
+		<tr>
+		<td> hover_menu </td><td> 0 </td><td> Enable/Disable the hover menu (<font color="#ff0000">New in 1.4</font>)</td>
+		</tr>
+		<tr>
+		<td> hover_url </td><td> </td><td> URL which should be displayed when hovering over the image. By default there is no action on hover. </td>
+		</tr>
+		<tr>
+		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+		</tr>
+		<tr>
+		<td> url </td><td> </td><td> URL where the Icon should link to. By default there is no link. <font color="#ff0000">New in 1.4: </font>The value can be empty to disable the link.</td>
+		</tr>
+		<tr>
+		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
+		</tr>
+		<tr>
+		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
+		</tr>
+		<tr>
+		<td>z</td><td>1</td><td>The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1</td>
 		</tr>
 		</table>
 		
