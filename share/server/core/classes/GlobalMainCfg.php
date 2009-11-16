@@ -1029,7 +1029,7 @@ class GlobalMainCfg {
 							// value is "must"
 							if($this->getValue($type,$key) == '') {
 								// a "must" value is missing or empty
-								new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainMustValueNotSet', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+								new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 								return FALSE;
 							}
 						}
@@ -1054,13 +1054,13 @@ class GlobalMainCfg {
 							if(!isset($arrValidConfig[$key])) {
 								// unknown attribute
 								if($printErr) {
-									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('unknownValue', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 								}
 								return FALSE;
 							} elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
 								// deprecated option
 								if($printErr) {
-									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('deprecatedOption', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 								}
 								return FALSE;
 							} else {
@@ -1083,7 +1083,7 @@ class GlobalMainCfg {
 								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
 									// wrong format
 									if($printErr) {
-										new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('wrongValueFormat', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+										new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
 									}
 									return FALSE;
 								}
@@ -1101,7 +1101,7 @@ class GlobalMainCfg {
 				} else {
 					// unknown type
 					if($printErr) {
-						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('unknownSection', 'TYPE~'.$type));
+						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.', 'TYPE~'.$type));
 					}
 					return FALSE;
 				}
