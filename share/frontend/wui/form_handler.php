@@ -26,16 +26,21 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-// Include defines
-require('../nagvis/includes/defines/global.php');
-require('../nagvis/includes/defines/matches.php');
+// Include global defines
+require('../../server/core/defines/global.php');
+require('../../server/core/defines/matches.php');
 
-// Include global functions
-require("../nagvis/includes/functions/autoload.php");
-require('../nagvis/includes/functions/debug.php');
-require("../nagvis/includes/functions/getuser.php");
+// Include wui related defines
+require('defines/wui.php');
+
+// Include functions
+require("../../server/core/functions/autoload.php");
+require("../../server/core/functions/debug.php");
+require("../../server/core/functions/getuser.php");
+require("../../server/core/functions/oldPhpVersionFixes.php");
 
 // Include needed WUI specific functions
+//FIXME: Remove this ...
 require('./functions/form_handler.php');
 
 // This defines wether the GlobalMessage prints HTML or ajax error messages

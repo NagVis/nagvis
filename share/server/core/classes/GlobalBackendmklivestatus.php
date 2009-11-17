@@ -688,9 +688,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		 */
 		// $e[15]: acknowledged
 		if($state != 'OK' && $e[15] == 1) {
-			$arrTmpReturn['problem_has_been_acknowledged'] = 1;
+			$arrReturn['problem_has_been_acknowledged'] = 1;
 		} else {
-			$arrTmpReturn['problem_has_been_acknowledged'] = 0;
+			$arrReturn['problem_has_been_acknowledged'] = 0;
 		}
 		
 		// If there is a downtime for this object, save the data

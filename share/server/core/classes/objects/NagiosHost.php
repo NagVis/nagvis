@@ -157,6 +157,9 @@ class NagiosHost extends NagVisStatefulObject {
 				// Get state counts
 				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
 				
+				// Add host state to counts
+				$this->addHostStateToStateCounts();
+				
 				// Calculate summary state and output
 				$this->fetchSummariesFromCounts();
 				
@@ -630,7 +633,33 @@ class NagiosHost extends NagVisStatefulObject {
 			}
 		}
 	}
-	
+		
+	/**
+	 * PUBLIC addHostStateToStateCounts()
+	 *
+	 * Adds the current host state to the member state counts
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function addHostStateToStateCounts() {
+		$sState = $this->getState();
+
+		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		
+		$sType = 'normal';
+		if($this->getAcknowledgement() == 1 && isset($stateWeight[$sState]['ack'])) {
+			$sType = 'ack';
+		} elseif($this->getInDowntime() == 1 && isset($stateWeight[$sState]['downtime'])) {
+			$sType = 'downtime';
+		}
+		
+		if(!isset($this->aStateCounts[$sState])) {
+			$this->aStateCounts[$sState] = Array($sType => 1);
+		} else {
+			$this->aStateCounts[$sState][$sType] += 1;
+		}
+	}
+
 	/**
 	 * PRIVATE fetchSummaryOutputFromCounts()
 	 *
@@ -650,16 +679,19 @@ class NagiosHost extends NagVisStatefulObject {
 			
 			// Loop all major states
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
-				// Loop all substates (normal,ack,downtime,...)
-				foreach($aSubstates AS $sSubState => $iCount) {
-					// Found some objects with this state+substate
-					if($iCount > 0) {
-						if(!isset($arrServiceStates[$sState])) {
-							$arrServiceStates[$sState] = $iCount;
-							$iNumServices += $iCount;
-						} else {
-							$arrServiceStates[$sState] += $iCount;
-							$iNumServices += $iCount;
+				// Ignore host state here
+				if($sState != 'UP' && $sState != 'DOWN' && $sState != 'UNREACHABLE') {
+					// Loop all substates (normal,ack,downtime,...)
+					foreach($aSubstates AS $sSubState => $iCount) {
+						// Found some objects with this state+substate
+						if($iCount > 0) {
+							if(!isset($arrServiceStates[$sState])) {
+								$arrServiceStates[$sState] = $iCount;
+								$iNumServices += $iCount;
+							} else {
+								$arrServiceStates[$sState] += $iCount;
+								$iNumServices += $iCount;
+							}
 						}
 					}
 				}
