@@ -988,7 +988,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
 		   "Stats: has_been_checked != 0\n" .
-		   "StatsAnd: 2\n" .
+		   "Stats: scheduled_downtime_depth = 0\n" .
+		   "Stats: host_scheduled_downtime_depth = 0\n" .
+		   "StatsAnd: 4\n" .
+		   // Count OK (DOWNTIME)
+		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
+		   "StatsAnd: 3\n" .
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -1094,7 +1101,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		         // Count OK
 		         "Stats: ".$stateAttr." = 0\n" .
 		         "Stats: has_been_checked != 0\n" .
-		         "StatsAnd: 2\n" .
+		         "Stats: scheduled_downtime_depth = 0\n" .
+		         "Stats: host_scheduled_downtime_depth = 0\n" .
+		         "StatsAnd: 4\n" .
+		         // Count OK (DOWNTIME)
+		         "Stats: ".$stateAttr." = 0\n" .
+		         "Stats: scheduled_downtime_depth > 0\n" .
+		         "Stats: host_scheduled_downtime_depth > 0\n" .
+		         "StatsAnd: 3\n" .
 		         // Count WARNING
 		         "Stats: ".$stateAttr." = 1\n" .
 		         "Stats: acknowledged = 0\n" .
@@ -1206,6 +1220,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count UP
 		   "Stats: ".$stateAttr." = 0\n" .
 		   "Stats: has_been_checked != 0\n" .
+		   "Stats: scheduled_downtime_depth = 0\n" .
+		   "StatsAnd: 3\n" .
+		   // Count UP (DOWNTIME)
+		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
 		   "StatsAnd: 2\n" .
 		   // Count DOWN
 		   "Stats: ".$stateAttr." = 1\n" .
@@ -1236,12 +1255,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		$aReturn['PENDING']['normal'] = $hosts[0];
 		$aReturn['UP']['normal'] = $hosts[1];
-		$aReturn['DOWN']['normal'] = $hosts[2];
-		$aReturn['DOWN']['ack'] = $hosts[3];
-		$aReturn['DOWN']['downtime'] = $hosts[4];
-		$aReturn['UNREACHABLE']['normal'] = $hosts[5];
-		$aReturn['UNREACHABLE']['ack'] = $hosts[6];
-		$aReturn['UNREACHABLE']['downtime'] = $hosts[7];
+		$aReturn['UP']['downtime'] = $hosts[2];
+		$aReturn['DOWN']['normal'] = $hosts[3];
+		$aReturn['DOWN']['ack'] = $hosts[4];
+		$aReturn['DOWN']['downtime'] = $hosts[5];
+		$aReturn['UNREACHABLE']['normal'] = $hosts[6];
+		$aReturn['UNREACHABLE']['ack'] = $hosts[7];
+		$aReturn['UNREACHABLE']['downtime'] = $hosts[8];
 		
 		// When only hardstates were requested ask for the hardstate
 		if($onlyHardstates) {
@@ -1256,6 +1276,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: has_been_checked != 0\n" .
+		   "Stats: scheduled_downtime_depth = 0\n" .
+		   "Stats: host_scheduled_downtime_depth = 0\n" .
+		   "StatsAnd: 4\n" .
+		   // Count OK (Downtime)
+		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
+		   "StatsAnd: 3\n" .
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -1314,7 +1343,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n");
 		
-		$aReturn['PENDING']['normal'] = $services[0];
+		// Special operator for PENDING cause it is set by the hosts initial
+		$aReturn['PENDING']['normal'] += $services[0];
 		$aReturn['OK']['normal'] = $services[1];
 		$aReturn['WARNING']['normal'] = $services[2];
 		$aReturn['WARNING']['ack'] = $services[3];
@@ -1361,7 +1391,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
 		   "Stats: has_been_checked != 0\n" .
-		   "StatsAnd: 2\n" .
+		   "Stats: scheduled_downtime_depth = 0\n" .
+		   "Stats: host_scheduled_downtime_depth = 0\n" .
+		   "StatsAnd: 4\n" .
+		   // Count OK (DOWNTIME)
+		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
+		   "StatsAnd: 3\n" .
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
