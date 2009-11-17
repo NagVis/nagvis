@@ -535,29 +535,27 @@ class NagVisStatefulObject extends NagVisObject {
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
+			// Get object type prefix
+			$sPre = '';
+			if($this->getType() == 'service' || $this->getType() == 'servicegroup') {
+				$sPre = 's';
+			}
+			
 			switch($stateLow) {
 				case 'unknown':
 				case 'unreachable':
 				case 'down':
+				case 'critical':
+				case 'warning':
 					if($this->getSummaryAcknowledgement() == 1) {
-						$icon = $this->iconset.'_ack.'.$fileType;
+						$icon = $this->iconset.'_'.$sPre.'ack.'.$fileType;
 					} elseif($this->getSummaryInDowntime() == 1) {
-						$icon = $this->iconset.'_downtime.'.$fileType;
+						$icon = $this->iconset.'_'.$sPre.'downtime.'.$fileType;
 					} else {
 						// Handle unreachable state with down icon
 						if($stateLow == 'unreachable') {
 							$stateLow = 'down';
 						}
-						$icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
-					}
-				break;
-				case 'critical':
-				case 'warning':
-					if($this->getSummaryAcknowledgement() == 1) {
-						$icon = $this->iconset.'_sack.'.$fileType;
-					} elseif($this->getSummaryInDowntime() == 1) {
-						$icon = $this->iconset.'_sdowntime.'.$fileType;
-					} else {
 						$icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
 					}
 				break;
