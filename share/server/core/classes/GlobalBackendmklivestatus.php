@@ -687,7 +687,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		 * acknowledged => check for acknowledged host
 		 */
 		// $e[15]: acknowledged
-		if($state != 'OK' && $e[15] == 1) {
+		if($state != 'UP' && $e[15] == 1) {
 			$arrReturn['problem_has_been_acknowledged'] = 1;
 		} else {
 			$arrReturn['problem_has_been_acknowledged'] = 0;
@@ -987,6 +987,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: has_been_checked != 0\n" .
+		   "StatsAnd: 2\n" .
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -1091,6 +1093,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		         "Stats: has_been_checked = 0\n" .
 		         // Count OK
 		         "Stats: ".$stateAttr." = 0\n" .
+		         "Stats: has_been_checked != 0\n" .
+		         "StatsAnd: 2\n" .
 		         // Count WARNING
 		         "Stats: ".$stateAttr." = 1\n" .
 		         "Stats: acknowledged = 0\n" .
@@ -1201,6 +1205,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "Stats: has_been_checked = 0\n" .
 		   // Count UP
 		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: has_been_checked != 0\n" .
+		   "StatsAnd: 2\n" .
 		   // Count DOWN
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -1354,6 +1360,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "Stats: has_been_checked = 0\n" .
 		   // Count OK
 		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: has_been_checked != 0\n" .
+		   "StatsAnd: 2\n" .
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .

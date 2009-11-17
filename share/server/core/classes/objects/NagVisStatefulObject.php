@@ -604,7 +604,7 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		// Fetch the current state to start with
 		if($this->summary_state == '') {
-			$currWeight = 0;
+			$currWeight = null;
 		} else {
 			if(isset($stateWeight[$this->summary_state])) {
 				$sCurrSubState = 'normal';
@@ -617,7 +617,8 @@ class NagVisStatefulObject extends NagVisObject {
 				
 				$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
 			} else {
-				//FIXME: Error handling: Invalid state
+				// Error handling: Invalid state
+				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision.', Array('STATE' => $sSummaryState, 'SUBSTATE' => $sCurrSubState)));
 			}
 		}
 		
@@ -635,8 +636,9 @@ class NagVisStatefulObject extends NagVisObject {
 					if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
 						$weight = $stateWeight[$sState][$sSubState];
 						
+						// No "current state" yet
 						// The new state is worse than the current state
-						if($currWeight < $weight) {
+						if($currWeight === null || $currWeight < $weight) {
 							// Set the new weight for next compare
 							$currWeight = $weight;
 							
@@ -657,7 +659,8 @@ class NagVisStatefulObject extends NagVisObject {
 							}
 						}
 					} else {
-						//FIXME: Error handling: Invalid state+substate
+						//Error handling: Invalid state+substate
+						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision.', Array('STATE' => $sState, 'SUBSTATE' => $sSubState)));
 					}
 				}
 			}
