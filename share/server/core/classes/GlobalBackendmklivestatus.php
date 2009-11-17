@@ -287,10 +287,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function queryLivestatusSingleRow($query) {
-		echo $query."\n";
 		$l = $this->queryLivestatus($query);
 		if(isset($l[0])) {
-			print_r($l[0])."\n";
 			return $l[0];
 		} else {
 			return Array();
