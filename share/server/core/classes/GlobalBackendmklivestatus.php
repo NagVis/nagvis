@@ -1055,15 +1055,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		$aReturn['PENDING']['normal'] = $services[0];
 		$aReturn['OK']['normal'] = $services[1];
-		$aReturn['WARNING']['normal'] = $services[2];
-		$aReturn['WARNING']['ack'] = $services[3];
-		$aReturn['WARNING']['downtime'] = $services[4];
-		$aReturn['CRITICAL']['normal'] = $services[5];
-		$aReturn['CRITICAL']['ack'] = $services[6];
-		$aReturn['CRITICAL']['downtime'] = $services[7];
-		$aReturn['UNKNOWN']['normal'] = $services[8];
-		$aReturn['UNKNOWN']['ack'] = $services[9];
-		$aReturn['UNKNOWN']['downtime'] = $services[10];
+		$aReturn['OK']['downtime'] = $services[2];
+		$aReturn['WARNING']['normal'] = $services[3];
+		$aReturn['WARNING']['ack'] = $services[4];
+		$aReturn['WARNING']['downtime'] = $services[5];
+		$aReturn['CRITICAL']['normal'] = $services[6];
+		$aReturn['CRITICAL']['ack'] = $services[7];
+		$aReturn['CRITICAL']['downtime'] = $services[8];
+		$aReturn['UNKNOWN']['normal'] = $services[9];
+		$aReturn['UNKNOWN']['ack'] = $services[10];
+		$aReturn['UNKNOWN']['downtime'] = $services[11];
 		
 		return $aReturn;
 	}
@@ -1173,15 +1174,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$aReturn[$service[0]] = Array();
 			$aReturn[$service[0]]['PENDING']['normal'] = $service[1];
 			$aReturn[$service[0]]['OK']['normal'] = $service[2];
-			$aReturn[$service[0]]['WARNING']['normal'] = $service[3];
-			$aReturn[$service[0]]['WARNING']['ack'] = $service[4];
-			$aReturn[$service[0]]['WARNING']['downtime'] = $service[5];
-			$aReturn[$service[0]]['CRITICAL']['normal'] = $service[6];
-			$aReturn[$service[0]]['CRITICAL']['ack'] = $service[7];
-			$aReturn[$service[0]]['CRITICAL']['downtime'] = $service[8];
-			$aReturn[$service[0]]['UNKNOWN']['normal'] = $service[9];
-			$aReturn[$service[0]]['UNKNOWN']['ack'] = $service[10];
-			$aReturn[$service[0]]['UNKNOWN']['downtime'] = $service[11];
+			$aReturn[$service[0]]['OK']['downtime'] = $service[3];
+			$aReturn[$service[0]]['WARNING']['normal'] = $service[4];
+			$aReturn[$service[0]]['WARNING']['ack'] = $service[5];
+			$aReturn[$service[0]]['WARNING']['downtime'] = $service[6];
+			$aReturn[$service[0]]['CRITICAL']['normal'] = $service[7];
+			$aReturn[$service[0]]['CRITICAL']['ack'] = $service[8];
+			$aReturn[$service[0]]['CRITICAL']['downtime'] = $service[9];
+			$aReturn[$service[0]]['UNKNOWN']['normal'] = $service[10];
+			$aReturn[$service[0]]['UNKNOWN']['ack'] = $service[11];
+			$aReturn[$service[0]]['UNKNOWN']['downtime'] = $service[12];
 		}
 		
 		return $aReturn;
@@ -1345,15 +1347,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// Special operator for PENDING cause it is set by the hosts initial
 		$aReturn['PENDING']['normal'] += $services[0];
 		$aReturn['OK']['normal'] = $services[1];
-		$aReturn['WARNING']['normal'] = $services[2];
-		$aReturn['WARNING']['ack'] = $services[3];
-		$aReturn['WARNING']['downtime'] = $services[4];
-		$aReturn['CRITICAL']['normal'] = $services[5];
-		$aReturn['CRITICAL']['ack'] = $services[6];
-		$aReturn['CRITICAL']['downtime'] = $services[7];
-		$aReturn['UNKNOWN']['normal'] = $services[8];
-		$aReturn['UNKNOWN']['ack'] = $services[9];
-		$aReturn['UNKNOWN']['downtime'] = $services[10];
+		$aReturn['OK']['downtime'] = $services[2];
+		$aReturn['WARNING']['normal'] = $services[3];
+		$aReturn['WARNING']['ack'] = $services[4];
+		$aReturn['WARNING']['downtime'] = $services[5];
+		$aReturn['CRITICAL']['normal'] = $services[6];
+		$aReturn['CRITICAL']['ack'] = $services[7];
+		$aReturn['CRITICAL']['downtime'] = $services[8];
+		$aReturn['UNKNOWN']['normal'] = $services[9];
+		$aReturn['UNKNOWN']['ack'] = $services[10];
+		$aReturn['UNKNOWN']['downtime'] = $services[11];
 		
 		return $aReturn;
 	}
@@ -1458,15 +1461,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		$aReturn['PENDING']['normal'] = $services[0];
 		$aReturn['OK']['normal'] = $services[1];
-		$aReturn['WARNING']['normal'] = $services[2];
-		$aReturn['WARNING']['ack'] = $services[3];
-		$aReturn['WARNING']['downtime'] = $services[4];
-		$aReturn['CRITICAL']['normal'] = $services[5];
-		$aReturn['CRITICAL']['ack'] = $services[6];
-		$aReturn['CRITICAL']['downtime'] = $services[7];
-		$aReturn['UNKNOWN']['normal'] = $services[8];
-		$aReturn['UNKNOWN']['ack'] = $services[9];
-		$aReturn['UNKNOWN']['downtime'] = $services[10];
+		$aReturn['OK']['downtime'] = $services[2];
+		$aReturn['WARNING']['normal'] = $services[3];
+		$aReturn['WARNING']['ack'] = $services[4];
+		$aReturn['WARNING']['downtime'] = $services[5];
+		$aReturn['CRITICAL']['normal'] = $services[6];
+		$aReturn['CRITICAL']['ack'] = $services[7];
+		$aReturn['CRITICAL']['downtime'] = $services[8];
+		$aReturn['UNKNOWN']['normal'] = $services[9];
+		$aReturn['UNKNOWN']['ack'] = $services[10];
+		$aReturn['UNKNOWN']['downtime'] = $services[11];
 		
 		return $aReturn;
 	}
