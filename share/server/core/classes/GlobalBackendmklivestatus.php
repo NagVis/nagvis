@@ -992,8 +992,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 4\n" .
 		   // Count OK (DOWNTIME)
 		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: has_been_checked != 0\n" .
 		   "Stats: scheduled_downtime_depth > 0\n" .
 		   "Stats: host_scheduled_downtime_depth > 0\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 3\n" .
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
@@ -1106,8 +1108,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		         "StatsAnd: 4\n" .
 		         // Count OK (DOWNTIME)
 		         "Stats: ".$stateAttr." = 0\n" .
+		         "Stats: has_been_checked != 0\n" .
 		         "Stats: scheduled_downtime_depth > 0\n" .
 		         "Stats: host_scheduled_downtime_depth > 0\n" .
+		         "StatsOr: 2\n" .
 		         "StatsAnd: 3\n" .
 		         // Count WARNING
 		         "Stats: ".$stateAttr." = 1\n" .
@@ -1225,8 +1229,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 3\n" .
 		   // Count UP (DOWNTIME)
 		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: has_been_checked != 0\n" .
 		   "Stats: scheduled_downtime_depth > 0\n" .
-		   "StatsAnd: 2\n" .
+		   "StatsAnd: 3\n" .
 		   // Count DOWN
 		   "Stats: ".$stateAttr." = 1\n" .
 		   "Stats: acknowledged = 0\n" .
@@ -1398,8 +1403,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 4\n" .
 		   // Count OK (DOWNTIME)
 		   "Stats: ".$stateAttr." = 0\n" .
+		   "Stats: has_been_checked != 0\n" .
 		   "Stats: scheduled_downtime_depth > 0\n" .
 		   "Stats: host_scheduled_downtime_depth > 0\n" .
+		   "StatsOr: 2\n" .
 		   "StatsAnd: 3\n" .
 		   // Count WARNING
 		   "Stats: ".$stateAttr." = 1\n" .
