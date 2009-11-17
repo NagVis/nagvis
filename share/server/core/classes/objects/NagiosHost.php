@@ -110,11 +110,17 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchSummariesFromCounts() {
+		// Generate summary output
+		$this->fetchSummaryOutputFromCounts();
+		
+		// Add host state to counts
+		// This should be done after output generation and before
+		// summary state fetching. It could confuse the output fetching but
+		// is needed for the summary state
+		$this->addHostStateToStateCounts();
+				
 		// Calculate summary state
 		$this->fetchSummaryStateFromCounts();
-		
-		// Generate summary output
-		$this->fetchSummaryOutputFromCounts();	
 	}
 	
 	/**
@@ -156,9 +162,6 @@ class NagiosHost extends NagVisStatefulObject {
 			if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostStateCounts', false)) {
 				// Get state counts
 				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
-				
-				// Add host state to counts
-				$this->addHostStateToStateCounts();
 				
 				// Calculate summary state and output
 				$this->fetchSummariesFromCounts();
