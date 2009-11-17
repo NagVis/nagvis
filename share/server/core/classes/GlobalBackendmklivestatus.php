@@ -287,8 +287,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function queryLivestatusSingleRow($query) {
+		echo $query."\n";
 		$l = $this->queryLivestatus($query);
 		if(isset($l[0])) {
+			print_r($l[0])."\n";
 			return $l[0];
 		} else {
 			return Array();
@@ -1004,8 +1006,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count WARNING(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL
@@ -1023,8 +1025,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN
@@ -1042,8 +1044,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n");
 		
@@ -1110,8 +1112,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		         "StatsAnd: 2\n" .
 		         // Count WARNING(DOWNTIME)
 		         "Stats: ".$stateAttr." = 1\n" .
-		         "Stats: scheduled_downtime_depth = 1\n" .
-		         "Stats: host_scheduled_downtime_depth = 1\n" .
+		         "Stats: scheduled_downtime_depth > 0\n" .
+		         "Stats: host_scheduled_downtime_depth > 0\n" .
 		         "StatsOr: 2\n" .
 		         "StatsAnd: 2\n" .
 		         // Count CRITICAL
@@ -1129,8 +1131,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		         "StatsAnd: 2\n" .
 		         // Count CRITICAL(DOWNTIME)
 		         "Stats: ".$stateAttr." = 2\n" .
-		         "Stats: scheduled_downtime_depth = 1\n" .
-		         "Stats: host_scheduled_downtime_depth = 1\n" .
+		         "Stats: scheduled_downtime_depth > 0\n" .
+		         "Stats: host_scheduled_downtime_depth > 0\n" .
 		         "StatsOr: 2\n" .
 		         "StatsAnd: 2\n" .
 		         // Count UNKNOWN
@@ -1148,8 +1150,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		         "StatsAnd: 2\n" .
 		         // Count UNKNOWN(DOWNTIME)
 		         "Stats: ".$stateAttr." = 3\n" .
-		         "Stats: scheduled_downtime_depth = 1\n" .
-		         "Stats: host_scheduled_downtime_depth = 1\n" .
+		         "Stats: scheduled_downtime_depth > 0\n" .
+		         "Stats: host_scheduled_downtime_depth > 0\n" .
 		         "StatsOr: 2\n" .
 		         "StatsAnd: 2\n" .
 		         "StatsGroupBy: host_name\n";
@@ -1218,7 +1220,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count DOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
 		   "StatsAnd: 2\n" .
 		   // Count UNREACHABLE
 		   "Stats: ".$stateAttr." = 2\n" .
@@ -1231,7 +1233,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count UNREACHABLE(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
 		   "StatsAnd: 2\n");
 		
 		$aReturn['PENDING']['normal'] = $hosts[0];
@@ -1271,8 +1273,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count WARNING(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL
@@ -1290,8 +1292,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN
@@ -1309,8 +1311,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n");
 		
@@ -1377,8 +1379,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count WARNING(DOWNTIME)
 		   "Stats: ".$stateAttr." = 1\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL
@@ -1396,8 +1398,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count CRITICAL(DOWNTIME)
 		   "Stats: ".$stateAttr." = 2\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN
@@ -1415,8 +1417,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		   "StatsAnd: 2\n" .
 		   // Count UNKNOWN(DOWNTIME)
 		   "Stats: ".$stateAttr." = 3\n" .
-		   "Stats: scheduled_downtime_depth = 1\n" .
-		   "Stats: host_scheduled_downtime_depth = 1\n" .
+		   "Stats: scheduled_downtime_depth > 0\n" .
+		   "Stats: host_scheduled_downtime_depth > 0\n" .
 		   "StatsOr: 2\n" .
 		   "StatsAnd: 2\n");
 		
