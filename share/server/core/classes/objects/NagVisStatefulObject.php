@@ -747,8 +747,8 @@ class NagVisStatefulObject extends NagVisObject {
 				$this->summary_in_downtime = $OBJ->getSummaryInDowntime();
 			}
 		} else {
-			//FIXME: Error no valid state
-			echo $OBJ->getName().": Unkown state: ".$sObjSummaryState;
+			// Error no valid state
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The object [NAME] has an invalid state "[STATE]".', Array('NAME' => $OBJ->getName(), 'STATE' => $sObjSummaryState)));
 		}
 	}
 }
