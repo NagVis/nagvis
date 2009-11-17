@@ -63,8 +63,8 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchMembers() {
-		// Get all member services
-		$this->fetchMemberServiceObjects();
+		// The service objects are all fetched in fetchState() method
+		// Seems this is not needed anymore and only a dummy at this place
 	}
 	
 	/**
@@ -101,6 +101,9 @@ class NagiosServicegroup extends NagVisStatefulObject {
 				
 			$this->state = $this->summary_state;
 		} else {
+			// Get all member services
+			$this->fetchMemberServiceObjects();
+		
 			// Get states of all members
 			foreach($this->members AS &$OBJ) {
 				$OBJ->fetchState();
