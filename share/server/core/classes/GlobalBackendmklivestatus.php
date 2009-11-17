@@ -789,9 +789,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				// $e[17]: has_been_checked
 				// $e[2]:  state
 				if($e[19] == 0 || $e[2] === '') {
-						$arrTmpReturn['state'] = 'PENDING';
-						$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
-						return $arrReturn;
+					$arrTmpReturn['state'] = 'PENDING';
+					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
 				} else {
 				
 					switch ($e[2]) {
