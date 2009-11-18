@@ -11,7 +11,7 @@
 					<li class="spacer"><hr /></li>
 					{foreach $maps map}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/foreach}
 					<li class="spacer"><hr /></li>
-					{foreach $automaps map}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlNarams}">{$map.mapAlias}</a></li>{/foreach}
+					{foreach $automaps map}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/foreach}
 					<li><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>
 				</ul>
 			</dd>
