@@ -669,9 +669,11 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 		if(file_exists($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName)) {
 			$oMeta = json_decode(file_get_contents($this->pathVolatile.'/SERVICEGROUPS/'.$servicegroupName.'/META'));
 			
-			foreach($oMeta->SERVICEGROUPMEMBER AS $member) {
-				$a = explode(';', $member);
-				$aReturn[] = Array('host_name' => $a[0], 'service_description' => $a[1]);
+			if(isset($oMeta->SERVICEGROUPMEMBER)) {
+				foreach($oMeta->SERVICEGROUPMEMBER AS $member) {
+					$a = explode(';', $member);
+					$aReturn[] = Array('host_name' => $a[0], 'service_description' => $a[1]);
+				}
 			}
 		}
 		
