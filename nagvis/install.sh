@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.7"
+INSTALLER_VERSION="0.2.8"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -40,7 +40,7 @@ INSTALLER_CONFIG_MOD="n"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKENDS="ndo2db,ido2db,ndo2fs,merlin"
+NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,ndo2fs,merlinmy"
 # Return Code
 RC=0
 # data source
@@ -62,14 +62,16 @@ NAGVIS_VER=""
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
 NAGVIS_CONF="etc/nagvis.ini.php"
-# Relative path to the NagVis users configuration file
-NAGVIS_USER_CONF="etc/users.ini.php"
+# Relative path to the NagVis SQLite auth database
+NAGVIS_AUTH_DB="etc/auth.db"
 # Default nagios web conf
-HTML_SAMPLE="apache2-nagvis.conf-sample"
+HTML_SAMPLE="etc/apache2-nagvis.conf-sample"
 # Default nagios web conf
 HTML_CONF="nagvis.conf"
 # Saving current timestamp for backup when updating
 DATE=`date +%s`
+# Web path to the NagVis base directory
+HTML_PATH=""
 # Path to webserver conf
 WEB_PATH=""
 # Default webserver user
@@ -115,7 +117,9 @@ Parameters:
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
   -w <PATH>     Path to the webserver config files
-  -i <BACKENDs> comma separated list of backend interfaces to use: ndo2db, ido2db, ndo2fs, merlin
+  -W <PATH      Web path to the NagVis base directory (Default: $HTML_PATH) 
+  -i <BACKENDs> comma separated list of backend interfaces to use:
+                  Available backends: mklivestatus, ndo2db, ido2db, ndo2fs, merlinmy
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -o            omit demo files
   -r            remove backup directory after successful installation
@@ -254,6 +258,21 @@ check_backend() {
 		fi
 		NAGVIS_BACKEND=${NAGVIS_BACKEND#,}
 	fi
+	
+	echo $NAGVIS_BACKEND | grep -i "MKLIVESTATUS" >/dev/null
+	if [ $? -eq 0 ]; then
+		# FIXME: Add mklivestatus checks
+		# - Check if php socket module is availsable
+		# - Check if livestatus.o is avialable
+		text "|   * Sorry, no checks yet for mklivestatus backend" "|"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="mklivestatus"
+		else
+			BACKENDS="${BACKENDS},mklivestatus"
+		fi
+	fi
+	
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
 		# Check NDO
@@ -267,7 +286,12 @@ check_backend() {
 		fi
 		[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
 		log "  $NDO_MOD (ndo2db)" $NDO
-		BACKENDS="ndo2db"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="ndo2db"
+		else
+			BACKENDS="${BACKENDS},ndo2db"
+		fi
 	fi
 
 	echo $NAGVIS_BACKEND | grep -i "IDO2DB" >/dev/null
@@ -279,7 +303,12 @@ check_backend() {
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^IDO2DB"`
 		[ -z "$NDO" ]&&NDO_MOD="IDO Module ido2db"
 		log "  $NDO_MOD (ido2db)" $NDO
-		BACKENDS=$BACKENDS",ido2db"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="ido2db"
+		else
+			BACKENDS="${BACKENDS},ido2db"
+		fi
 	fi
 
 	# Check NDO2FS prerequisites if necessary
@@ -287,18 +316,31 @@ check_backend() {
 	if [ $? -eq 0 ]; then
 		JSON=`perl -e '$erg=eval "use JSON::XS;1"; print "found" if ($erg==1)'`
 		log "  Checking perl module JSON::XS (ndo2fs)" $JSON
-		BACKENDS=$BACKENDS",ndo2fs"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="ndo2fs"
+		else
+			BACKENDS="${BACKENDS},ndo2fs"
+		fi
 	fi
 
 	# Check merlin prerequisites if necessary
-	echo $NAGVIS_BACKEND | grep -i "merlin" >/dev/null
+	echo $NAGVIS_BACKEND | grep -i "MERLINMY" >/dev/null
 	if [ $? -eq 0 ]; then
 		text "|   *** Sorry, no checks yet for merlin" "|"
-		BACKENDS=$BACKENDS",merlin"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="merlinmy"
+		else
+			BACKENDS="${BACKENDS},merlinmy"
+		fi
 	fi
+	
+	
 	if [ -z "$BACKENDS" ]; then
 		log "NO (valid) backend(s) specified"
 	fi
+	
 	BACKENDS=${BACKENDS#,}
 }
 
@@ -313,8 +355,6 @@ check_apache_php() {
 	[ -f $DIR/envvars ] && source $DIR/envvars
 	
 	MODPHP=`find $DIR -type f -exec grep -ie "mod_php.*\.so" -e "libphp.*\.so" {} \; | tr -s " " | cut -d" " -f3 | uniq`
-	HTML_PATH=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "$HTML_BASE[/]\?$"  | uniq` 
-	HTML_ANZ=`find $DIR -type f -exec grep -i "^Alias" {} \; | cut -d" " -f2 | grep -i "$HTML_BASE[/]\?$"  | wc -l` 
 	
 	# Only try to detect user when not set or empty
 	if [ -z "$WEB_USER" ]; then
@@ -459,27 +499,41 @@ chk_rc() {
 	fi
 }
 
+#copy "default*" "$USERFILES_DIR/templates/pages" "pages templates"
 copy() {
-	GLOBIGNORE="$1"
 	DONE=""
-#	[ -n "$LINE" ] && line "$LINE"
+	
+	# DEBUG: [ -n "$LINE" ] && line "$LINE"
 	[ -n "$LINE" ] && DONE=`log "$LINE" done` 
+	
+	# Copy single file
 	if [ -f "$NAGVIS_PATH_OLD/$2" ]; then
 		cp -p $NAGVIS_PATH_OLD/$2 $NAGVIS_PATH/$2
 		chk_rc "|  Error copying file $3" "$DONE"
 	fi
+	
+	# Copy old directory contents to new directory
 	if [ -d "$NAGVIS_PATH_OLD/$2" -a ! -d "$3" ]; then
-		ANZ=`find $NAGVIS_PATH_OLD/$2 -type f | wc -l`
-		if [ $ANZ -gt 0 ]; then
-			cp -pr $NAGVIS_PATH_OLD/$2/* $NAGVIS_PATH/$2
+		# Get files to copy
+		FILES=`find $NAGVIS_PATH_OLD/$2 -type f`
+
+		# Maybe exclude some files
+		if [ "$1" != "" ]; then
+			FILES=`echo "$FILES" | grep -vE $1`
+		fi
+		
+		if [ "$FILES" != "" ]; then
+			cp -pr `echo "$FILES" | xargs` $NAGVIS_PATH/$2
 			chk_rc "|  Error copying $3" "$DONE"
 		fi
 	fi
+	
+	# Copy directory to directory
 	if [ -d "$3" ]; then
 		cp -pr $2 $3
 		chk_rc "|  Error copying $2 to $3" "$DONE"
 	fi
-	GLOBIGNORE=""
+	
 	LINE=""
 	DONE=""
 }
@@ -503,10 +557,53 @@ makedir() {
 cmp() {
 	cat $1 | sed 's#\(var\)\s*\(\S*\)\s*=\s*#\1 \2=#;s#^\s*##;s#\s*$##;s#\t+# #g' | awk '
 	BEGIN { OK=1; braces=0 }
-	{ sub (/\/\*.*?\*\//,""); sub (/\/\/.*/,""); { anz1 = gsub (/\{/,"{"); anz2 = gsub (/}/,"}"); } if (OK == 1) { braces += anz1; braces -= anz2 } }
-	/\/\*/ { OK=0; sub (/\/\*.*/,"") }
-	/\*\// { sub (/.*\*\//,""); OK=1 }
-	{ anz = gsub (/function/," function"); ch = substr(line,length(line)); if (OK == 1) { if (ch == "}") { if (braces == 0) { if (length(line) > 0) { print line } line = "" } } line = line $0; } }
+	{
+		# Remove /* */ one line comments
+		sub(/\/\*[^@]*\*\//,"");
+		# Remove // comments (line beginning)
+		sub(/^\/\/.*/,"");
+		
+		# Count braces
+		anz1 = gsub(/\{/,"{");
+		anz2 = gsub(/}/,"}");
+		
+		if (OK == 1) {
+			braces += anz1;
+			braces -= anz2;
+		}
+	}
+	/\/\*/ {
+		c = gsub(/\/\*[^@]*$/,"");
+		if(c > 0) {
+			OK=0;
+		}
+	}
+	/\*\/$/ {
+		c = gsub(/^[^@]*\*\//,"");
+		if(c > 0) {
+			OK=1;
+		}
+	}
+	{
+		line = $0;
+		#anz = gsub(/function/," function");
+		#ch = substr(line,length(line));
+		if (OK == 1) {
+			if (length(line) > 0) {
+				#if (ch == "}") {
+				#	if (braces == 0) {
+				#		if (length(line) > 0) {
+				#			print line
+				#		}
+				#		line = ""
+				#	}
+				#}
+				#line = line $0;
+				
+				print line;
+			}
+		}
+	}
 	' >> $OUT
 }
 
@@ -515,6 +612,7 @@ cmp_js() {
 	OUT=NagVisCompressed.js
 	>$OUT
 	cmp nagvis.js
+	cmp popupWindow.js
 	cmp ExtBase.js
 	cmp frontendMessage.js
 	cmp frontendEventlog.js
@@ -534,6 +632,7 @@ cmp_js() {
 	cmp NagVisServicegroup.js
 	cmp NagVisMap.js
 	cmp NagVisShape.js
+	cmp NagVisLine.js
 	cmp NagVisTextbox.js
 	cmp NagVisRotation.js
 	cmp wz_jsgraphics.js
@@ -556,11 +655,10 @@ NAGVIS_PATH="/usr/local/nagvis"
 # Default nagios share webserver path
 HTML_PATH="/nagvis"
 [ $NAGVIS_TAG -lt 01050000 ]&&HTML_PATH="/$SOURCE/nagvis"
-HTML_BASE=$HTML_PATH
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:w:u:b:g:c:i:s:ohqvFr" options; do
+	while getopts "n:B:m:p:w:W:u:b:g:c:i:s:ohqvFr" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -583,6 +681,9 @@ if [ $# -gt 0 ]; then
 			;;
 			w)
 				WEB_PATH=$OPTARG
+			;;
+			W)
+				HTML_PATH=$OPTARG
 			;;
 			u)
 				WEB_USER=$OPTARG
@@ -742,10 +843,6 @@ if [ $FORCE -eq 0 ]; then
 	check_apache_php "/etc/httpd/"
 	check_apache_php "/usr/local/etc/apache2/"	# FreeBSD
 	log "  Apache mod_php" $MODPHP
-	if [ $HTML_ANZ -gt 1 ]; then
-		log "more than one alias found" "warning"
-		echo $HTML_PATH
-	fi
 
 	# Check Graphviz
 	GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
@@ -764,6 +861,14 @@ if [ $FORCE -eq 0 ]; then
 	line "Trying to detect Apache settings" "+"
 
 	HTML_PATH=${HTML_PATH%/}
+
+	if [ $INSTALLER_QUIET -ne 1 ]; then
+		echo -n "| Please enter the web path to NagVis [$HTML_PATH]: "
+		read APATH
+		if [ ! -z $APATH ]; then
+			HTML_PATH=$APATH
+		fi
+	fi
 
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
@@ -808,6 +913,13 @@ if [ -d $NAGVIS_PATH ]; then
 		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	else
 		NAGVIS_VER_OLD="UNKNOWN"
+	fi
+	
+	# Generate the version tag for old version
+	if [ "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
+		NAGVIS_TAG_OLD=`fmt_version "$NAGVIS_VER_OLD"`
+	else
+		NAGVIS_TAG_OLD=01000000
 	fi
 	
 	NAGVIS_PATH_OLD=$NAGVIS_PATH.old-$DATE
@@ -892,6 +1004,8 @@ makedir "$NAGVIS_PATH"
 if [ $NAGVIS_TAG -ge 01050000 ]; then
 	# Create non shared var directory when not exists
 	makedir "$NAGVIS_PATH/var"
+	makedir "$NAGVIS_PATH/var/tmpl/cache"
+	makedir "$NAGVIS_PATH/var/tmpl/compile"
 	# Create shared var directory when not exists
 	makedir "$NAGVIS_PATH/share/var"
 	# Copy all desired files
@@ -903,7 +1017,7 @@ if [ $NAGVIS_TAG -ge 01050000 ]; then
 	cmp_js
 else
 	LINE="Copying files to $NAGVIS_PATH..."
-	copy "install.sh" '*' "$NAGVIS_PATH"
+	copy "\\install\.sh$" '*' "$NAGVIS_PATH"
 fi
 
 # Remove demo maps if desired
@@ -925,26 +1039,17 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	fi
 fi
 
-# Create user configuration file from sample when no file exists
-if [ -f $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample ]; then
-  if [ ! -f $NAGVIS_PATH/$NAGVIS_USER_CONF ]; then
-    DONE=`log "Creating user configuration file..." done`
-    cp -p $NAGVIS_PATH/${NAGVIS_USER_CONF}-sample $NAGVIS_PATH/$NAGVIS_USER_CONF
-    chk_rc "|  Error copying sample user configuration" "$DONE"
-  fi
-fi
-
 # Create apache configuration file from sample when no file exists
 if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
 	CHG='s/^//'
 	if [ -s $WEB_PATH/$HTML_CONF ]; then
 		text "| *** $WEB_PATH/$HTML_CONF will NOT be overwritten !" "|"
 		HTML_CONF="$HTML_CONF.$DATE"
-		text "| *** creating $WEB_PATH/$HTML_CONF instead" "|"
+		text "| *** creating $WEB_PATH/$HTML_CONF instead (commented out config)" "|"
 		CHG='s/^/#new /'
 	fi
 	DONE=`log "Creating web configuration file..." done`
-	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
+	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
 	chk_rc "|  Error creating web configuration" "$DONE"
 	DONE=`log "Setting permissions for web configuration file..." done`
 	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
@@ -963,34 +1068,40 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "" "$NAGVIS_CONF" "main configuration file"
 	
 	LINE="Restoring custom map configuration files..."
-	copy "demo.cfg:demo2.cfg" "etc/maps" "map configuration files"
+	copy "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "map configuration files"
 	
 	LINE="Restoring custom map images..."
-	copy "nagvis-demo.png" "$USERFILES_DIR/images/maps" "map image files"
+	copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
 	
 	LINE="Restoring custom iconsets..."
-	copy "20x20.png:configerror_*.png:error.png:std_*.png" "$USERFILES_DIR/images/iconsets" "iconset files"
+	copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
 	
 	LINE="Restoring custom shapes..."
 	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
-	LINE="Restoring custom header templates..."
-	copy "tmpl.default*" "$USERFILES_DIR/templates/header" "header templates"
+	LINE="Restoring custom pages templates..."
+	copy "\/default\..+$" "$USERFILES_DIR/templates/pages" "pages templates"
 	
 	LINE="Restoring custom hover templates..."
-	copy "tmpl.default*" "$USERFILES_DIR/templates/hover" "hover templates"
+	copy "\/tmpl\.default.+$" "$USERFILES_DIR/templates/hover" "hover templates"
 	
 	LINE="Restoring custom header template images..."
-	copy "tmpl.default*" "$USERFILES_DIR/images/templates/header" "header template images"
+	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/header" "header template images"
 
 	LINE="Restoring custom hover template images..."
-	copy "tmpl.default*" "$USERFILES_DIR/images/templates/hover" "hover template images"
+	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/hover" "hover template images"
 
 	LINE="Restoring custom gadgets..."
-	copy "gadgets_core.php:std_*.php" "$USERFILES_DIR/gadgets" "gadgets"
+	copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
 
 	LINE="Restoring custom stylesheets..."
   copy "" "$USERFILES_DIR/styles" "stylesheets"
+	
+	# Copy auth.db when updating from 1.5x
+	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
+		LINE="Restoring auth database file..."
+		copy "" "$NAGVIS_AUTH_DB" "auth database file"
+	fi
 fi
 text
 
@@ -1031,6 +1142,8 @@ else
 	set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/var"
 	set_perm 664 "$NAGVIS_PATH/var/*"
+	set_perm 775 "$NAGVIS_PATH/var/tmpl/cache"
+	set_perm 775 "$NAGVIS_PATH/var/tmpl/compile"
 	set_perm 775 "$NAGVIS_PATH/share/var"
 	set_perm 664 "$NAGVIS_PATH/share/var/*"
 fi	
@@ -1056,6 +1169,9 @@ if [ $NAGVIS_TAG -lt 01050000 ]; then
 	text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
 else
 	text "|   <http://localhost${HTML_PATH}/config.php>" "|"
+	text "| - Initial admin credentials:" "|"
+	text "|     Username: nagiosadmin" "|"
+	text "|     Password: nagiosadmin" "|"
 fi
 line
 exit 0
