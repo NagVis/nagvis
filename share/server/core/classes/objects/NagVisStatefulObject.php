@@ -607,16 +607,16 @@ class NagVisStatefulObject extends NagVisObject {
 			if(isset($stateWeight[$this->summary_state])) {
 				$sCurrSubState = 'normal';
 				
-				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$this->summary_state]['ack'])) {
 					$sCurrSubState = 'ack';
-				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$this->summary_state]['downtime'])) {
 					$sCurrSubState = 'downtime';
 				}
 				
 				$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
 			} else {
 				// Error handling: Invalid state
-				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision.', Array('STATE' => $sSummaryState, 'SUBSTATE' => $sCurrSubState)));
+				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].', Array('STATE' => $this->summary_state, 'SUBSTATE' => $sCurrSubState, 'TYPE' => $this->getType())));
 			}
 		}
 		
@@ -658,7 +658,7 @@ class NagVisStatefulObject extends NagVisObject {
 						}
 					} else {
 						//Error handling: Invalid state+substate
-						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision.', Array('STATE' => $sState, 'SUBSTATE' => $sSubState)));
+						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].', Array('STATE' => $sState, 'SUBSTATE' => $sSubState, 'TYPE' => $this->getType(), 'NAME' => $this->getName())));
 					}
 				}
 			}

@@ -255,7 +255,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 			// The states of the map objects members only need to be fetched when this
 			// is MapObj is used as a view.
 			if($this->isView == false) {
-				$OBJ->fetchState(DONT_GET_SINGLE_MEMBER_STATES);
+				// Get the summary state of the host but not the single member states
+				// Not needed cause no hover menu is displayed for this
+				$OBJ->fetchState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
 			} else {
 				$OBJ->fetchState();
 			}

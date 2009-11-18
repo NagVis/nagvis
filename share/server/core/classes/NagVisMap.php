@@ -37,12 +37,12 @@ class NagVisMap extends GlobalMap {
 	 * @param 	GlobalBackend 	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, $MAPCFG, $BACKEND = null, $getState = 1, $bIsView = IS_VIEW) {
+	public function __construct($CORE, $MAPCFG, $BACKEND = null, $getState = GET_STATE, $bIsView = IS_VIEW) {
 		parent::__construct($CORE, $MAPCFG);
 		
 		$this->BACKEND = $BACKEND;
 		
-		if($getState) {
+		if($getState === true) {
 			$this->MAPOBJ = new NagVisMapObj($CORE, $BACKEND, $MAPCFG, $bIsView);
 			$this->MAPOBJ->fetchMembers();
 			$this->MAPOBJ->fetchState();
