@@ -40,7 +40,7 @@ INSTALLER_CONFIG_MOD="n"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,ndo2fs,merlin"
+NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,ndo2fs,merlinmy"
 # Return Code
 RC=0
 # data source
@@ -119,7 +119,7 @@ Parameters:
   -w <PATH>     Path to the webserver config files
   -W <PATH      Web path to the NagVis base directory (Default: $HTML_PATH) 
   -i <BACKENDs> comma separated list of backend interfaces to use:
-                  Available backends: mklivestatus, ndo2db, ido2db, ndo2fs, merlin
+                  Available backends: mklivestatus, ndo2db, ido2db, ndo2fs, merlinmy
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -o            omit demo files
   -r            remove backup directory after successful installation
@@ -264,7 +264,13 @@ check_backend() {
 		# FIXME: Add mklivestatus checks
 		# - Check if php socket module is availsable
 		# - Check if livestatus.o is avialable
-		log "  "
+		text "|   * Sorry, no checks yet for mklivestatus backend" "|"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="mklivestatus"
+		else
+			BACKENDS="${BACKENDS},mklivestatus"
+		fi
 	fi
 	
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
@@ -280,7 +286,12 @@ check_backend() {
 		fi
 		[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
 		log "  $NDO_MOD (ndo2db)" $NDO
-		BACKENDS="ndo2db"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="ndo2db"
+		else
+			BACKENDS="${BACKENDS},ndo2db"
+		fi
 	fi
 
 	echo $NAGVIS_BACKEND | grep -i "IDO2DB" >/dev/null
@@ -292,7 +303,12 @@ check_backend() {
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^IDO2DB"`
 		[ -z "$NDO" ]&&NDO_MOD="IDO Module ido2db"
 		log "  $NDO_MOD (ido2db)" $NDO
-		BACKENDS=$BACKENDS",ido2db"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="ido2db"
+		else
+			BACKENDS="${BACKENDS},ido2db"
+		fi
 	fi
 
 	# Check NDO2FS prerequisites if necessary
@@ -300,18 +316,31 @@ check_backend() {
 	if [ $? -eq 0 ]; then
 		JSON=`perl -e '$erg=eval "use JSON::XS;1"; print "found" if ($erg==1)'`
 		log "  Checking perl module JSON::XS (ndo2fs)" $JSON
-		BACKENDS=$BACKENDS",ndo2fs"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="ndo2fs"
+		else
+			BACKENDS="${BACKENDS},ndo2fs"
+		fi
 	fi
 
 	# Check merlin prerequisites if necessary
-	echo $NAGVIS_BACKEND | grep -i "merlin" >/dev/null
+	echo $NAGVIS_BACKEND | grep -i "MERLINMY" >/dev/null
 	if [ $? -eq 0 ]; then
 		text "|   *** Sorry, no checks yet for merlin" "|"
-		BACKENDS=$BACKENDS",merlin"
+		
+		if [ "$BACKENDS" = "" ]; then
+			BACKENDS="merlinmy"
+		else
+			BACKENDS="${BACKENDS},merlinmy"
+		fi
 	fi
+	
+	
 	if [ -z "$BACKENDS" ]; then
 		log "NO (valid) backend(s) specified"
 	fi
+	
 	BACKENDS=${BACKENDS#,}
 }
 
