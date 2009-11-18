@@ -465,6 +465,8 @@ function getBackgroundColor(oObj) {
 		sColor = oStates[oObj.summary_state].bgcolor;
 	}
 	
+	eventlog("background", "debug", "State: "+oObj.summary_state+" Color is: "+sColor);
+	
 	oObj = null;
 	
 	return sColor;
