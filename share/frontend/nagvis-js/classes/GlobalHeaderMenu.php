@@ -110,7 +110,7 @@ class GlobalHeaderMenu {
 		$this->aMacros['bRotation'] = $this->bRotation;
 		
 		// Check if the user is permitted to edit the current map/automap
-		if(isset($this->aMacros['view_type']) && $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['view_type'], 'edit', $this->OBJPAGE->getName())) {
+		if(isset($this->aMacros['viewType']) && $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['viewType'], 'edit', $this->OBJPAGE->getName())) {
 			$this->aMacros['permittedEdit'] = true;
 		} else {
 			$this->aMacros['permittedEdit'] = false;
