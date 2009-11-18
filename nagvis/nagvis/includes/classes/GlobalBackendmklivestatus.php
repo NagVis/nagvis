@@ -62,15 +62,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$this->backendId = $backendId;
 		
 		// Parse the socket params
-		$this->parseSocket(GlobalCore::getInstance()->getMainCfg()->getValue('backend_'.$backendId, 'socket'));
+		$this->parseSocket($this->CORE->MAINCFG->getValue('backend_'.$backendId, 'socket'));
 		
 		// Run preflight checks
 		if($this->socketType == 'unix' && !$this->checkSocketExists()) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
 		}
 		
 		if(!function_exists('socket_create')) {
-			new GlobalMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+			new GlobalFrontendMessage('ERROR',  $this->CORE->LANG->getText('The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
     }
 
 		
@@ -101,7 +101,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$this->socketAddress = $address;
 			$this->socketPort = $port;
 		} else {
-			new GlobalMessage('ERROR',  GlobalCore::getInstance()->getLang()->getText('Unknown socket type given in backend [BACKENDID]', Array('BACKENDID' => $this->backendId)));
+			new GlobalFrontendMessage('ERROR',  $this->CORE->LANG->getText('Unknown socket type given in backend [BACKENDID]', Array('BACKENDID' => $this->backendId)));
 		}
 	}
 	
@@ -149,7 +149,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		}
 		
 		if($this->SOCKET == false) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Could not create livestatus socket [SOCKET] in backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Could not create livestatus socket [SOCKET] in backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
 			return Array();
 		}
 		
@@ -161,7 +161,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		}
 		
 		if($result == false) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
 			return Array();
 		}
 	}
@@ -191,7 +191,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Catch problem while reading
 		if($read === false) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
 		}
 		
 		// Extract status code
@@ -205,17 +205,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Catch problem while reading
 		if($read === false) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
 		}
 		
 		// Catch errors (Like HTTP 200 is OK)
 		if($status != "200") {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $read)));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $read)));
 		}
 		
 		// Catch problems occured while reading? 104: Connection reset by peer
 		if(socket_last_error($this->SOCKET) == 104) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
 			return Array();
 		}
 		
@@ -228,7 +228,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// json_decode returns null on syntax problems
 		if($obj === null) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The response has an invalid format in backend [BACKENDID].', Array('BACKENDID' => $this->backendId)));
+			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('The response has an invalid format in backend [BACKENDID].', Array('BACKENDID' => $this->backendId)));
 			return Array();
 		} else {
 			// Return the response object
@@ -440,7 +440,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		if(count($l) == 0) {
 			$arrReturn['name'] = '';
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('The hostgroup [NAME] could not be found in backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'NAME' => $hostgroupName));
+			$arrReturn['output'] = $this->CORE->LANG->getText('The hostgroup [NAME] could not be found in backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'NAME' => $hostgroupName));
 			return Array($arrReturn);
 		}
 		
@@ -450,7 +450,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			if($numResp != $numAttr) {
 				$arrReturn['name'] = $e[0];
 				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('The response from the backend is not valid (Asked for [NUMASKED] attributes, got [NUMRESPONSE]) in backend [BACKENDID]', Array('BACKENDID' => $this->backendId, 'NUMASKED' => $numAttr, 'NUMRESPONSE' => $numResp));
+				$arrReturn['output'] = $this->CORE->LANG->getText('The response from the backend is not valid (Asked for [NUMASKED] attributes, got [NUMRESPONSE]) in backend [BACKENDID]', Array('BACKENDID' => $this->backendId, 'NUMASKED' => $numAttr, 'NUMRESPONSE' => $numResp));
 				return Array($arrReturn);
 			}
 			
@@ -462,7 +462,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			// $e[1]:  state
 			if($e[18] == 0 || $e[1] === '') {
 					$arrTmpReturn['state'] = 'PENDING';
-					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[0]));
+					$arrTmpReturn['output'] = $this->CORE->LANG->getText('hostIsPending', Array('HOST' => $e[0]));
 			} else {
 				
 				switch ($e[1]) {
@@ -548,7 +548,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$arrReturn['host'] = '';
 			$arrReturn['description'] = '';
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('The servicegroup [GROUP] could not be found in the backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'GROUP' => $servicegroupName));
+			$arrReturn['output'] = $this->CORE->LANG->getText('The servicegroup [GROUP] could not be found in the backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'GROUP' => $servicegroupName));
 			return Array($arrReturn);
 		} else {
 			foreach($l as $e) {
@@ -562,7 +562,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				// $e[3]:  state
 				if($e[20] == 0 || $e[3] === '') {
 						$arrTmpReturn['state'] = 'PENDING';
-						$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[1]));
+						$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked', Array('SERVICE' => $e[1]));
 				} else {
 					
 					switch ($e[3]) {
@@ -660,7 +660,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
-			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
+			$arrReturn['output'] = $this->CORE->LANG->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
 			return $arrReturn;
 		}
 		
@@ -669,7 +669,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// $e[0]:  state
 		if($e[17] == 0 || $e[0] === '') {
 			$arrReturn['state'] = 'PENDING';
-			$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
+			$arrReturn['output'] = $this->CORE->LANG->getText('hostIsPending', Array('HOST' => $hostName));
 			return $arrReturn;
 		}
 		
@@ -773,7 +773,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		if(!is_array($l) || count($l) <= 0) {
 			if(isset($serviceName) && $serviceName != '') {
 				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
+				$arrReturn['output'] = $this->CORE->LANG->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
 			} else {
 				// If the method should fetch all services of the host and does not find
 				// any services for this host, don't return anything => The message
@@ -790,7 +790,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				// $e[2]:  state
 				if($e[19] == 0 || $e[2] === '') {
 					$arrTmpReturn['state'] = 'PENDING';
-					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
+					$arrTmpReturn['output'] = $this->CORE->LANG->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
 				} else {
 				
 					switch ($e[2]) {
