@@ -37,6 +37,7 @@
 class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	private $backendId = '';
 	
+	private $CORE = null;
 	private $SOCKET = null;
 	private $socketType = '';
 	private $socketPath = '';
@@ -60,6 +61,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 */
 	public function __construct($CORE, $backendId) {
 		$this->backendId = $backendId;
+
+		$this->CORE = $CORE;
 		
 		// Parse the socket params
 		$this->parseSocket($this->CORE->MAINCFG->getValue('backend_'.$backendId, 'socket'));
