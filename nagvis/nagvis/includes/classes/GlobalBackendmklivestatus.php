@@ -223,7 +223,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		}
 		
 		// Decode the json response
-		$obj = json_decode($read);
+		$obj = json_decode(utf8_encode($read));
 		
 		// TEST: Disable KeepAlive:
 		//socket_close($this->SOCKET);
