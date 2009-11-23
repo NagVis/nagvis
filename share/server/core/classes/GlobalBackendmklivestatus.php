@@ -595,12 +595,23 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 						
 						// This handles only the first downtime. But this is not backend
 						// specific. The other backends do this as well.
-						$d = $this->queryLivestatusSingle(
-						  "GET downtimes\n".
-						  "Columns: author comment start_time end_time\n" .
-						  "Filter: host_name = ".$e[0]."\n" .
-						  "Filter: service_description = ".$e[1]."\n");
-						
+
+						// Handle host/service downtime difference
+						if(isset($e[15]) && $e[15] > 0) {
+							// Service downtime
+							$d = $this->queryLivestatusSingle(
+							  "GET downtimes\n".
+							  "Columns: author comment start_time end_time\n" .
+							  "Filter: host_name = ".$e[0]."\n" .
+							  "Filter: service_description = ".$e[1]."\n");
+						} else {
+							// Host downtime
+							$d = $this->queryLivestatusSingle(
+							  "GET downtimes\n".
+							  "Columns: author comment start_time end_time\n" .
+							  "Filter: host_name = ".$e[0]."\n");
+						}
+							
 						$arrTmpReturn['downtime_author'] = $d[0];
 						$arrTmpReturn['downtime_data'] = $d[1];
 						$arrTmpReturn['downtime_start'] = $d[2];
@@ -823,11 +834,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 						
 						// This handles only the first downtime. But this is not backend
 						// specific. The other backends do this as well.
-						$d = $this->queryLivestatusSingle(
-						  "GET downtimes\n".
-						  "Columns: author comment start_time end_time\n" .
-						  "Filter: host_name = ".$hostName."\n" .
-						  "Filter: service_description = ".$e[0]."\n");
+						
+						// Handle host/service downtime difference
+						if(isset($e[15]) && $e[15] > 0) {
+							// Service downtime
+							$d = $this->queryLivestatusSingle(
+							  "GET downtimes\n".
+							  "Columns: author comment start_time end_time\n" .
+							  "Filter: host_name = ".$hostName."\n" .
+							  "Filter: service_description = ".$e[0]."\n");
+						} else {
+							// Host downtime
+							$d = $this->queryLivestatusSingle(
+							  "GET downtimes\n".
+							  "Columns: author comment start_time end_time\n" .
+							  "Filter: host_name = ".$hostName."\n");
+						}
 						
 						$arrTmpReturn['downtime_author'] = $d[0];
 						$arrTmpReturn['downtime_data'] = $d[1];
