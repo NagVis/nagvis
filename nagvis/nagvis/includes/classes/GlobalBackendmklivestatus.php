@@ -79,6 +79,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		return true;
 	}
+
+	/**
+	 * PUBLIC class destructor
+	 *
+	 * The descrutcor closes the socket when some is open
+	 * at the moment when the class is destroyed. It is
+	 * important to close the socket in a clean way.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function __destruct() {
+		if($this->SOCKET !== null) {
+			socket_close($this->SOCKET);
+			$this->SOCKET = null;
+		}
+	}
 	
 	/**
 	 * PRIVATE parseSocket
