@@ -3,7 +3,7 @@
 #
 # install.sh - Installs/Updates NagVis
 #
-# Copyright (c) 2004-2009 NagVis Project (Contact: lars@vertical-visions.de)
+# Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
 #
 # Development:
 #  Wolfgang Nieder
@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.8"
+INSTALLER_VERSION="0.2.9"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -50,6 +50,7 @@ FORCE=0
 REMOVE="n"
 LOG=install.log
 CALL="$0"
+NAGVIS_PATH_PARAM_SET=0
 
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
@@ -109,35 +110,53 @@ Installs or updates NagVis on your system.
 Usage: $0 [OPTIONS]
 
 Parameters:
-  -n <PATH>     Path to Nagios/Icinga directory. The default value is $NAGIOS_PATH
-  -B <BINARY>   Full path to the Nagios/Icinga binary. The default value is $NAGIOS_PATH/bin/nagios
-  -m <BINARY>   Full path to the NDO/IDO module. The default value is $NAGIOS_PATH/bin/ndo2db
-  -b <PATH>     Path to graphviz binaries. The default value is $GRAPHVIZ_PATH
-  -p <PATH>     Path to NagVis base directory. The default value is $NAGIOS_PATH/share/nagvis
+  -n <PATH>     Path to Nagios/Icinga base directory (\$BASE)
+                Default value: $NAGIOS_PATH
+  -B <BINARY>   Full path to the Nagios/Icinga binary
+                Default value: \$BASE/bin/nagios
+  -m <BINARY>   Full path to the NDO/IDO module
+                Default value: \$BASE/bin/ndo2db
+  -b <PATH>     Path to graphviz binaries ($NEED_GV_MOD)
+                Default value: $GRAPHVIZ_PATH
+  -p <PATH>     Path to NagVis base directory
+                Default value: $NAGVIS_PATH
+  -W <PATH      Web path to the NagVis base directory
+                Default: $HTML_PATH 
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
   -w <PATH>     Path to the webserver config files
-  -W <PATH      Web path to the NagVis base directory (Default: $HTML_PATH) 
-  -i <BACKENDs> comma separated list of backend interfaces to use:
+  -i <BACKENDs> Comma separated list of backends to use:
                   Available backends: mklivestatus, ndo2db, ido2db, ndo2fs, merlinmy
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
-  -o            omit demo files
-  -r            remove backup directory after successful installation
-  -q            Quiet mode. The installer won't ask for confirmation of what to do
+  -o            Omit demo files
+  -r            When performing an update of an existing NagVis installation the old
+                NagVis directory will be saved in a backup directory. When you know
+                what you are doing you can tell the installer to remove this backup 
+                directory after a successful installation.
+  -q            Quiet mode. The installer won't ask for confirmation of what to do.
+                The installer will use the hard coded options or the values given
+                by command line parameters.
                 This can be useful for automatic or scripted deployment
                 WARNING: Only use this if you know what you are doing
+  -F            This is the force mode. Specifing this flag will call the installer
+                skip all validity checks and install NagVis with the given options
+                WARNING: Only use this if you know what you are doing
+  -c [y|n]      Update configuration files when possible? Parses all existing
+                configuration files, checks for deprecated and missing options and
+                fixes known problems. This option has only effects when updating
+                mechanism have been added to this installer.
+
   -v            Version information
   -h            This message
 
 EOD
-#  -c [y|n]      Update configuration files when possible?
 }
 
 # Print version information
 version() {
 cat <<EOD
 NagVis installer, version $INSTALLER_VERSION
-Copyright (C) 2004-2009 NagVis Project
+Copyright (C) 2004-2009 NagVis Project (Contact: info@nagvis.org)
 
 License: GNU General Public License version 2
 
@@ -644,28 +663,40 @@ cmp_js() {
 # More (re)initialisations
 
 echo "`date`: Installer $INSTALLER_VERSION" > $LOG
+
 # Version info
 NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
 [ -z "$NAGVIS_TAG" ]&&NAGVIS_TAG=01000000
-# Default Nagios path
+
+# Default hardcoded Nagios path
 NAGIOS_PATH="/usr/local/$SOURCE"
-# Default Path to NagVis base
-NAGVIS_PATH="/usr/local/nagvis"
-[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
+
+# Default hardcoded NagVis base
+if [ $NAGVIS_TAG -lt 01050000 ]; then
+	NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
+else
+	NAGVIS_PATH="/usr/local/nagvis"
+fi
+
 # Default nagios share webserver path
-HTML_PATH="/nagvis"
-[ $NAGVIS_TAG -lt 01050000 ]&&HTML_PATH="/$SOURCE/nagvis"
+if [ $NAGVIS_TAG -lt 01050000 ]; then
+	HTML_PATH="/$SOURCE/nagvis"
+else
+	HTML_PATH="/nagvis"
+fi
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "n:B:m:p:w:W:u:b:g:c:i:s:ohqvFr" options; do
+	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:ohqvFr" options; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
 
 				# NagVis below 1.5 depends on the given Nagios path
-				# So set it here when set by param
-				[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+				# So set it here. But only set it when NagVis path not defined explicit
+				if [ $NAGVIS_TAG -lt 01050000 -a $NAGVIS_PATH_PARAM_SET -eq 0 ]; then
+					NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+				fi
 			;;
 			B)
 				NAGIOS_BIN=$OPTARG
@@ -678,6 +709,7 @@ if [ $# -gt 0 ]; then
 			;;
 			p)
 				NAGVIS_PATH=$OPTARG
+				NAGVIS_PATH_PARAM_SET=1
 			;;
 			w)
 				WEB_PATH=$OPTARG
@@ -794,8 +826,10 @@ if [ $FORCE -eq 0 ]; then
 	CALL="$CALL -n $NAGIOS_PATH"
 
 	# NagVis below 1.5 depends on the given Nagios path
-	# So set it here when some given by param
-	[ $NAGVIS_TAG -lt 01050000 ]&&NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+	# So set it here. But only set it when NagVis path not defined explicit
+	if [ $NAGVIS_TAG -lt 01050000 -a $NAGVIS_PATH_PARAM_SET -eq 0 ]; then
+		NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+	fi
 
 	# Get NagVis path
 	if [ $INSTALLER_QUIET -ne 1 ]; then
@@ -811,9 +845,10 @@ fi
 text
 line "Checking prerequisites" "+"
 
-# Check Nagios version
+# Set Nagios binary when not set yet
 [ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
 
+# Check Nagios version
 if [ -f $NAGIOS_BIN ]; then
 	NAGIOS=`$NAGIOS_BIN --version | grep -i "^$SOURCE " | head -1 2>&1`
 	log "$NAGIOS" $NAGIOS
