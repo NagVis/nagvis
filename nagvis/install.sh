@@ -548,9 +548,24 @@ copy() {
 	fi
 	
 	# Copy directory to directory
-	if [ -d "$3" ]; then
-		cp -pr $2 $3
-		chk_rc "|  Error copying $2 to $3" "$DONE"
+	if [ -d "$3" -a "$2" = '*' ]; then
+		# Get files to copy
+		FILES=`ls -1`
+
+		# Maybe exclude some files
+		if [ "$1" != "" ]; then
+			FILES=`echo "$FILES" | grep -vE $1`
+		fi
+		
+		if [ "$FILES" != "" ]; then
+			cp -pr `echo "$FILES" | xargs` $3
+			chk_rc "|  Error copying $2 to $3" "$DONE"
+		fi
+	else
+		if [ -d "$3" ]; then
+			cp -pr $2 $3
+			chk_rc "|  Error copying $2 to $3" "$DONE"
+		fi
 	fi
 	
 	LINE=""
@@ -1052,7 +1067,7 @@ if [ $NAGVIS_TAG -ge 01050000 ]; then
 	cmp_js
 else
 	LINE="Copying files to $NAGVIS_PATH..."
-	copy "\\install\.sh$" '*' "$NAGVIS_PATH"
+	copy "install\.(sh|log)$" '*' "$NAGVIS_PATH"
 fi
 
 # Remove demo maps if desired
@@ -1109,7 +1124,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
 	
 	LINE="Restoring custom iconsets..."
-	copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
+	copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_(big|medium|small)\.png|demo_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
 	
 	LINE="Restoring custom shapes..."
 	copy "" "$USERFILES_DIR/images/shapes" "shapes"
