@@ -86,7 +86,7 @@ $MHANDLER = new FrontendModuleHandler($CORE);
 
 // Register valid modules
 // Unregistered modules can not be accessed
-$MHANDLER->regModule('LogonDialog');
+$MHANDLER->regModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
 $MHANDLER->regModule('Info');
 $MHANDLER->regModule('Map');
 $MHANDLER->regModule('Url');
@@ -126,7 +126,7 @@ if($MODULE->actionRequiresAuthorisation()) {
 		}
 	} else {
 		// When not authenticated redirect to logon dialog
-		$MODULE = $MHANDLER->loadModule('LogonDialog');
+		$MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
 		$UHANDLER->set('act', 'view');
 	}
 }

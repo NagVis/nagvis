@@ -46,10 +46,22 @@
 ;language="en_US"
 ;
 ; Defines the logon module to use. By default NagVis uses the HTML logon dialog
-; for requesting authentication informations from the user. On delivery there is
-; no other logon module avialable. It is possible to add own logon modules for
-; serving other dialogs. For details take a look at the documentation.
-;logonmodule="FrontendLogonDialog"
+; for requesting authentication informations from the user. It is possible to
+; add own logon modules for serving other dialogs or ways of logging in.
+; For details take a look at the documentation.
+;
+; It is also possible to realize a "trusted" authentication mechanism. NagVis
+; uses the configured environment variable to identify the user. This way the
+; user is not really authenticated with NagVis. NagVis trusts the provided
+; username blindly. You can add several authentication mechanism to your
+; webserver, started from the basic authentication used by Nagios (.htaccess)
+; to single sign on environments. Simply set logonmodule to "LogonEnv",
+; put the environment variable to use as username to the option logonenvvar
+; and tell the authentication module to create users in the database when
+; provided users does not exist.
+;logonmodule="LogonDialog"
+;logonenvvar="REMOTE_USER"
+;logonenvcreateuser="1"
 ;
 ; Refresh time of pages
 ;refreshtime=60

@@ -292,9 +292,14 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		return intval($RES->fetchSingle()) > 0;
 	}
 	
-	private function checkUserAuth() {
-		$RES = $this->DB->query('SELECT userId FROM users WHERE name=\''.sqlite_escape_string($this->sUsername).'\' AND password=\''.sqlite_escape_string($this->sPasswordHash).'\'');
-		return intval($RES->fetchSingle());
+	private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
+		if($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
+			$query = 'SELECT userId FROM users WHERE name=\''.sqlite_escape_string($this->sUsername).'\' AND password=\''.sqlite_escape_string($this->sPasswordHash).'\'';
+		} else {
+			$query = 'SELECT userId FROM users WHERE name=\''.sqlite_escape_string($this->sUsername).'\'';
+		}
+		
+		return intval($this->DB->query($query)->fetchSingle());
 	}
 	
 	private function updatePassword() {
@@ -345,20 +350,17 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	public function createUser($user, $password) {
 		$bReturn = false;
 		
-		// Check if the user is authenticated
-		if($this->isAuthenticated()) {
-			// Compose the password hash
-			$hash = $this->createHash($password);
-			
-			// Create user
-			$this->addUser($user, $hash);
-			
-			// Check result
-			if($this->checkUserExists($user)) {
-				$bReturn = true;
-			} else {
-				$bReturn = false;
-			}
+		// Compose the password hash
+		$hash = $this->createHash($password);
+		
+		// Create user
+		$this->addUser($user, $hash);
+		
+		// Check result
+		if($this->checkUserExists($user)) {
+			$bReturn = true;
+		} else {
+			$bReturn = false;
 		}
 		
 		return $bReturn;
@@ -387,7 +389,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		return $bReturn;
 	}
 	
-	public function isAuthenticated() {
+	public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
 		$bReturn = false;
 
 		// Only handle known users
@@ -397,13 +399,13 @@ class CoreAuthModSQLite extends CoreAuthModule {
 			// this time. For example when the user just entered the password
 			// for logging in. If the user is already logged in and this is just
 			// a session check don't try to rehash the password.
-			if($this->sPasswordHash === '') {
+			if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
 				// Compose the password hash for comparing with the stored hash
 				$this->sPasswordHash = $this->createHash($this->sPassword);
 			}
 			
 			// Check the password hash
-			$userId = $this->checkUserAuth();
+			$userId = $this->checkUserAuth($bTrustUsername);
 			if($userId > 0) {
 				$this->iUserId = $userId;
 				//FIXME: Logging? Successfull authentication

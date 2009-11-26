@@ -134,15 +134,26 @@ class CoreAuthHandler {
 		$this->bIsAuthenticated = null;
 	}
 	
-	public function isAuthenticated() {
+	public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
 		// Don't do these things twice
 		if($this->bIsAuthenticated === null) {
+			// When the user authenticated in trust mode read it here and override
+			// the value handed over with the function call
+			if($this->SESS->isSetAndNotEmpty('authTrusted')) {
+				$bTrustUsername = AUTH_TRUST_USERNAME;
+			}
+			
 			// Ask the module
-			$this->bIsAuthenticated = $this->MOD->isAuthenticated();
+			$this->bIsAuthenticated = $this->MOD->isAuthenticated($bTrustUsername);
 			
 			// Save success to session (only if this is no session auth)
 			if($this->bIsAuthenticated === true && $this->sModuleName != 'CoreAuthModSession') {
 				$this->SESS->set('authCredentials', $this->getCredentials());
+				
+				// Save that the user authenticated in trust mode
+				if($bTrustUsername === AUTH_TRUST_USERNAME) {
+					$this->SESS->set('authTrusted', AUTH_TRUST_USERNAME);
+				}
 			}
 			
 			// Remove some maybe old data when not authenticated

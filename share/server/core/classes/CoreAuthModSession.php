@@ -135,7 +135,7 @@ class CoreAuthModSession extends CoreAuthModule {
 	
 	public function getCredentials() { return Array(); }
 	
-	public function isAuthenticated() {
+	public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
 		$aCredentials = null;
 		
 		// Did the user just try to authenticate? Then passCredentials should be
@@ -172,7 +172,7 @@ class CoreAuthModSession extends CoreAuthModule {
 		// Validate data
 		$this->REALAUTH->passCredentials($aCredentials);
 		
-		if($this->REALAUTH->isAuthenticated()) {
+		if($this->REALAUTH->isAuthenticated($bTrustUsername)) {
 			return true;
 		} else {
 			return false;

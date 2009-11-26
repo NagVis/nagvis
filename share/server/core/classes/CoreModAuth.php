@@ -33,10 +33,6 @@ class CoreModAuth extends CoreModule {
 							// Try to authenticate the user
 							if($this->AUTHENTICATION->isAuthenticated()) {
 								// Display success with link and refresh in 5 seconds to called page
-								/*$sReturn = json_encode(Array('status' => 'OK',
-								                             'message' => $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'),
-								                             'redirectTime' => 1,
-								                             'redirectUrl' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));*/
 								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 							} else {
 								// Invalid credentials

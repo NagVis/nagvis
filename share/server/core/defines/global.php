@@ -82,6 +82,10 @@ define('AUTH_MAX_ROLENAME_LENGTH', 15);
 // Permission wildcard
 define('AUTH_PERMISSION_WILDCARD', '*');
 
+// This is being used when logging in using LogonEnv for trusting the given user
+define('AUTH_TRUST_USERNAME', true);
+define('AUTH_NOT_TRUST_USERNAME', false);
+
 // Salt for the password hashes
 // Note: If you change this you will need to rehash all saved 
 //       password hashes
