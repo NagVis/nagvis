@@ -10,10 +10,24 @@
 		<p>Der NagVis-Code besteht aus mehreren Schichten. Eine dieser Schichten ist die &quot;Daten-Schicht&quot;. Die Datenschicht wird benutzt, um Informationsanfragen von Dritten zu behandeln, wie z.B. Nagios NDO. Wir nennen diese Schicht im Allgemeinen &quot;Backend&quot;. Innerhalb von NagVis gibt es einige Komponenten, um diese Backends zu verwalten und sie dienen als "Kleber" zwischen den einzelnen Backends und den anderen Schichten.</p>
 		
 		<h2>Default-Backend</h2>
-		<p>Zur Zeit werden mit dem NagVis-Kern zwei Backends ausgeliefert: das ndomy- und das ndo2fs-Backend. Beide Backends werden im Folgenden genauer beschrieben.<br />
+		<p>Zur Zeit werden mit dem NagVis-Kern vier Backends ausgeliefert: das mklivestatus, ndomy, ndo2fs und merlinmy Backend. Alle Backends werden im Folgenden genauer beschrieben.<br />
 		Das ndomy-Backend ist das Default-Backend seit NagVis 1.0. Es holt Nagios-Informationen aus der NDO-MySQL-Datenbank.</p>
 		
-		<h2>Backend-Typen</h2>
+		<h2>Backend-Typen</h2>a
+		
+		<h3>mklivestatus-Backend</h3>
+		<p>MKLivestatus ist ein einfaches und elegantes Nagios Eventbroker Modul. Livestatus ist konzipiert um Disk-IO, Speicher- und CPU-Last, welcher durch die Verarbeitung von aktuellen Statusinformationen verursacht wird, zu reduzieren. Genau wie die NDO Datenbank setzt Livestatus auf die Event Broker API von Nagios auf und l&auml;dt ein bin&auml;res Modul in den Nagios Kern. Anders als die NDO Datenbank werden keine Daten aktiv in eine Datenbank oder &Auml;nliches kopiert. Die Daten werden &uuml;ber einen UNIX-Socket nur bereitgestellt, wenn sie auch angefragt werden. Details &uml; ber diese neue Datenquelle sind in der <a href="http://www.mathias-kettner.de/checkmk_livestatus.html#H1:How to access Nagios status data" target="_blank">Offiziellen Dokumentation</a> zu finden.</p>
+		<p>Seit NagVis 1.4.5 ist das mklivestatus Backend in NagVis enthalten. Es ist wesentlich performanter, als alle bisherigen Backends und kommt mit weniger Overhead aus. Es wird keine weitere Datenbank ben&ouml;tigt.</p>
+		
+		<table style="width:100%">
+		<tr>
+		<th width="200">Value</th><th width="150">Default</th><th>Description</th>
+		</tr>
+		<tr>
+		<td>socket</td><td>unix:/usr/local/nagios/var/rw/live</td><td><p>Der Socket, auf dem MKLivestatus h&ouml;rt. Es kann ein lokaler UNIX-Socket, oder ein TCP Socket sein. Am Anfang des Wertes muss der Typ des Sockets bestimmt werden, dies kann &quot;unix:&quot; f&uuml;r UNIX Sockets oder  &quot;tcp:&quot; f&uuml;r TCP Sockets sein.</p> <p>Im Falle eines UNIX Sockets muss nach dem Doppelpunkt der Pfad zum Socket angegeben werden.</p> <p>Wenn ein TCP Socket genutzt wird, muss nach dem Doppelpunkt die Hostadresse und im Anschluss von einem Doppelpunkt getrennt der Port angegeben werden: &lthost>:&lt;port>. Die Hostadresse kann sowohl eine IP-Adresse, als auch ein DNS-Name sein.</p></td>
+		</tr>
+		</table>
+		<p>Es gibt ausserdem einige globale Backend-Parameter, diese k&ouml;nnen in der <a href="nagvis_config_format_description.html#backend">Dokumentation der Hauptkonfiguration</a> nachgelesen werden.</p>
 		
 		<h3>ndo2db-MySQL-Backend (ndomy)</h3>
 		<p>Das ndo2db-MySQL-Backend, kurz ndomy-Backend, wird benutzt, um Nagios-Informationen wie Status- und Konfigurationsdaten aus einer MySQL-Datenbank zu holen. Ein Nagios-Addon namens ndoutils speichert alle Informationen, die bei einem laufenden Nagios anfallen, in einer MySQL-Datenbank. Diese Datenbank wird &uuml;ber das NagVis-ndomy-Backend abgefragt.</p>
