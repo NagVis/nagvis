@@ -249,6 +249,8 @@ class GlobalHeaderMenu {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getStaticMacros() {
+		$SHANDLER = new CoreSessionHandler();
+		
 		// Replace paths and language macros
 		$aReturn = Array('pathBase' => $this->pathHtmlBase,
 			'pathImages' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
@@ -275,7 +277,8 @@ class GlobalHeaderMenu {
 			'langLogout' => $this->CORE->getLang()->getText('Logout'),
 			'langRotationStart' => $this->CORE->getLang()->getText('rotationStart'),
 			'langRotationStop' => $this->CORE->getLang()->getText('rotationStop'),
-			'authChangePasswordSupported' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword'),
+			// Supported by backend and not using trusted auth
+			'permittedChangePassword' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword') && !$SHANDLER->isSetAndNotEmpty('authTrusted'),
 			'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
 			'permittedRoleMgmt' => $this->AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
 		
