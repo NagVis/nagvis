@@ -348,7 +348,7 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
-				'hovercontext' => Array('must' => 0,
+				'contexttemplate' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
