@@ -104,78 +104,16 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
-	 * Parses the map
-	 *
-	 * @return	Array Html
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function parseMap() {
-		$ret = '';
-		$ret .= $this->getBackground();
-		$ret .= $this->parseJs($this->getJsGraphicObj()."\n".$this->getJsLang()."\n".$this->getJsValidMainConfig()."\n".$this->getJsValidMapConfig());
-		$ret .= $this->parseObjects();
-		$ret .= $this->parseInvisible();
-		$ret .= $this->makeObjectsMoveable();
-		
-		// This needs to be in body code
-		$ret .= '<script type="text/javascript" src="'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/wz_tooltip.js"></script>';
-		
-		return $ret;
-	}
-	
-	/**
-	 * Gets the background of the map
-	 *
-	 * @return	Array	HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getBackground() {
-		$style = '';
-		$src = '';
-		$sRet = '';
-		
-		if($this->MAPCFG->getName() != '') {
-			if($this->MAPCFG->BACKGROUND->getFileName() != 'none' && $this->MAPCFG->BACKGROUND->getFileName() != '') {
-				$src = $this->CORE->getMainCfg()->getValue('paths', 'htmlmap').$this->MAPCFG->BACKGROUND->getFileName();
-			}
-		} else {
-			$src = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/images/internal/wuilogo.png';
-			$style = 'width:800px;height:600px;';
-		}
-		
-		if($src != '') {
-			$sRet = $this->getBackgroundHtml($src, $style);
-		}
-		
-		return $sRet;
-	}
-	
-	/**
-	 * Gets JS graphic options
-	 *
-	 * @return	String Html
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getJsGraphicObj() {
-		$ret = '';
-		$ret .= "myshape_background = new jsGraphics('mymap');\n";
-		$ret .= "myshape_background.setColor('#FF0000');\n";
-		$ret .= "myshape_background.setStroke(1);\n";
-		
-		return $ret;
-	}
-	
-	/**
 	 * Makes defined objecs moveable
 	 *
-	 * @return	Array Html
+	 * @return	String html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function makeObjectsMoveable() {
+	function getMoveableObjects() {
 		$ret = '';
 		
 		if(strlen($this->moveable) != 0) {
-			$ret = $this->parseJs("SET_DHTML(SCROLL,NO_ALT,TRANSPARENT,CURSOR_HAND,".substr($this->moveable, 0, strlen($this->moveable) - 1).");\n");
+			$ret = substr($this->moveable, 0, strlen($this->moveable) - 1);
 		}
 		
 		return $ret;
@@ -654,12 +592,13 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
-	 * Parses the needed language strings to javascript
+	 * Parses the needed language strings in json format
+	 * for the menu
 	 *
 	 * @return	String Html
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getJsLang() {
+	function getJsLangMenu() {
 		$langMenu = Array(
 			'overview' => $this->CORE->getLang()->getText('overview'),
 			'restore' => $this->CORE->getLang()->getText('restore'),
@@ -685,6 +624,16 @@ class WuiMap extends GlobalMap {
 			'shape' => $this->CORE->getLang()->getText('shape'),
 			'manage' => $this->CORE->getLang()->getText('manage'));
 		
+		return json_encode($langMenu);
+	}
+
+	/**
+	 * Parses the needed language strings to javascript
+	 *
+	 * @return	String Html
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function getJsLang() {
 		$lang = Array(
 			'clickMapToSetPoints' => $this->CORE->getLang()->getText('clickMapToSetPoints'),
 			'confirmDelete' => $this->CORE->getLang()->getText('confirmDelete'),
@@ -732,7 +681,7 @@ class WuiMap extends GlobalMap {
 			'noSpaceAllowed' => $this->CORE->getLang()->getText('noSpaceAllowed'),
 			'manualInput' => $this->CORE->getLang()->getText('manualInput'));
 		
-		return 'var langMenu = '.json_encode($langMenu).'; var lang = '.json_encode($lang).';';	
+		return json_encode($lang);
 	}
 	
 	/**
@@ -742,7 +691,7 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsValidMainConfig() {
-		return 'var validMainConfig = '.json_encode(WuiCore::getInstance()->getMainCfg()->getValidConfig()).';';
+		return json_encode($this->CORE->getMainCfg()->getValidConfig());
 	}
 	
 	/**
@@ -752,30 +701,17 @@ class WuiMap extends GlobalMap {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getJsValidMapConfig() {
-		return 'var validMapConfig = '.json_encode($this->MAPCFG->getValidConfig()).';';
+		return json_encode($this->MAPCFG->getValidConfig());
 	}
 	
-	/**
-	 * Parses the invisible forms and JS arrays needed in WUI
-	 *
-	 * @return	String HTML Code
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-     */
-	function parseInvisible() {
-		$str = $this->parseJs("
-			var oGeneralProperties = ".$this->CORE->getMainCfg()->parseGeneralProperties().";
-			var mapname = '".$this->MAPCFG->getName()."';
-			var username = '".$this->CORE->getMainCfg()->getRuntimeValue('user')."';
-			var mapOptions = ".$this->CORE->getMainCfg()->getRuntimeValue('mapOptions').";
-			var backupAvailable = '".file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAPCFG->getName().".cfg.bak")."';
-			
-			// build the right-click menu
-			initjsDOMenu();
-			
-			// draw the shapes on the background
-			myshape_background.paint();
-			");
-		
-		return $str;
+	function checkPHPMBString($printErr=1) {
+		if (!extension_loaded('mbstring')) {
+			if($printErr) {
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('phpModuleNotLoaded','MODULE~mbstring'));
+			}
+			return FALSE;
+		} else {
+			return TRUE;
+		}
 	}
 }

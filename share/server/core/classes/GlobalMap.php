@@ -24,6 +24,7 @@
  
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
+ * FIXME: Maybe to be removed in future cleanups
  */
 class GlobalMap {
 	protected $CORE;
@@ -41,18 +42,6 @@ class GlobalMap {
 	public function __construct($CORE,$MAPCFG) {
 		$this->CORE = $CORE;
 		$this->MAPCFG = $MAPCFG;
-	}
-	
-	/**
-	 * Gets the background html code of the map
-	 *
-	 * @param	String	$src	html path
-	 * @param	String	$style  css parameters
-	 * @return	String HTML Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getBackgroundHtml($src, $style='', $attr='') {
-		return '<img id="background" src="'.$src.'" style="z-index:0;'.$style.'" alt="" '.$attr.'>';
 	}
 }
 ?>

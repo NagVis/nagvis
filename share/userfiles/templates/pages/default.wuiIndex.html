@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+	<link rel="shortcut icon" href="{$htmlBase}/frontend/nagvis-js/images/internal/favicon.png" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>{$pageTitle}</title>
+	<meta name="viewport" content="width=480; initial-scale=0.6666; maximum-scale=1.0; minimum-scale=0.6666" />
+	
+	<script type="text/javascript" src="{$htmlJs}ExtBase.js"></script>
+	{if $bUseCompressedJs}
+	<script type="text/javascript" src="{$htmlJs}WuiCompressed.js"></script>
+	{else}
+	<script type="text/javascript" src="{$htmlJs}nagvis.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontendMessage.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
+	<script type="text/javascript" src="{$htmlJs}popupWindow.js"></script>
+	<script type="text/javascript" src="{$htmlJs}ajax.js"></script>
+	<script type="text/javascript" src="{$wuiJs}wui.js"></script>
+	<script type="text/javascript" src="{$wuiJs}ajax.js"></script>
+	<script type="text/javascript" src="{$wuiJs}addmodify.js"></script>
+	<script type="text/javascript" src="{$wuiJs}EditMainCfg.js"></script>
+	<script type="text/javascript" src="{$wuiJs}BackgroundManagement.js"></script>
+	<script type="text/javascript" src="{$wuiJs}BackendManagement.js"></script>
+	<script type="text/javascript" src="{$wuiJs}MapManagement.js"></script>
+	<script type="text/javascript" src="{$wuiJs}ShapeManagement.js"></script>
+	<script type="text/javascript" src="{$wuiJs}jsdomenu.js"></script>
+	<script type="text/javascript" src="{$wuiJs}jsdomenu.inc.js"></script>
+	<script type="text/javascript" src="{$wuiJs}wz_jsgraphics.js"></script>
+	<script type="text/javascript" src="{$wuiJs}wz_dragdrop.js"></script>
+	{/if}
+	<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
+	<link rel="stylesheet" type="text/css" href="{$wuiCss}wui.css" />
+	<link rel="stylesheet" type="text/css" href="{$wuiCss}office_xp/office_xp.css" />
+	{if $customStylesheet != ""}
+	<link rel="stylesheet" type="text/css" href="{$customStylesheet}" />
+	{/if}
+	
+	<style type="text/css">body.main \{ background-color: {$backgroundColor}; }</style>
+</head>
+<body class="main">
+
+<!-- Start header menu -->
+{$headerMenu}
+
+<!-- Start content -->
+{$content}
+
+</body>
+</html>

@@ -68,34 +68,5 @@ class WuiFrontend extends GlobalPage {
 					  'languageRoot' => 'nagvis');
 		parent::__construct($CORE, $prop);
 	}
-	
-	function checkPreflight() {
-		if(!$this->checkPHPMBString(1)) {
-			exit;
-		}
-	}
-	
-	function checkPHPMBString($printErr=1) {
-		if (!extension_loaded('mbstring')) {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('phpModuleNotLoaded','MODULE~mbstring'));
-			}
-			return FALSE;
-		} else {
-			return TRUE;
-		}
-	}
-	
-	/**
-	* If enabled, the map is added to the page
-	*
-	* @author Lars Michelsen <lars@vertical-visions.de>
-	*/
-	function getMap() {
-		$this->addBodyLines('<div id="mymap" class="map">');
-		$this->MAP = new WuiMap(WuiCore::getInstance(), $this->MAPCFG);
-		$this->addBodyLines($this->MAP->parseMap());
-		$this->addBodyLines('</div>');
-	}
 }
 ?>
