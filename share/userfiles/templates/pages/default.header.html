@@ -30,7 +30,7 @@
 					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$langRotationStop}</a></li>
 					{/if}
 					{if $viewType == 'Map' && $permittedEdit == true}
-					<li><a href="{$pathBase}/frontend/wui/index.php?map={$currentMap}" class="underline">{$langEditMap}</a></li>
+					<li><a href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$currentMap}" class="underline">{$langEditMap}</a></li>
 					{/if}
 				</ul>
 			</dd>
