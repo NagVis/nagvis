@@ -148,7 +148,7 @@ function createjsDOMenu() {
 			
 			// Only add permited objects to the WUI list
 			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName,mapOptions, "allowedForConfig"),username)) {
-				submenu_maps_open[iWuiCurSubmenu].addMenuItem(new menuItem(mapOptions[i].mapAlias, mapOptions[i].mapAlias, "link:./index.php?map="+mapOptions[i].mapName, "", "", ""));
+				submenu_maps_open[iWuiCurSubmenu].addMenuItem(new menuItem(mapOptions[i].mapAlias, mapOptions[i].mapAlias, "link:./index.php?mod=Map&act=edit&show="+mapOptions[i].mapName, "", "", ""));
 				iWuiLinks++;
 			}
 		}
@@ -162,7 +162,7 @@ function createjsDOMenu() {
 			
 			// Only add permited objects
 			if(checkUserAllowed(getMapPermissions(mapOptions[i].mapName, mapOptions, "allowedForConfig"), username)) {
-				submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:./index.php?map="+mapOptions[i].mapName,"","",""));
+				submenu_maps_open.addMenuItem(new menuItem(mapOptions[i].mapAlias,mapOptions[i].mapAlias,"link:./index.php?mod=Map&act=edit&show="+mapOptions[i].mapName,"","",""));
 			}
 		}
 		mainMenu.items.menu_maps_open.setSubMenu(submenu_maps_open);

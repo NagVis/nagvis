@@ -74,7 +74,7 @@ class WuiViewMap {
 				'validMainCfg' => $this->MAP->getJsValidMainConfig(),
 				'validMapCfg' => $this->MAP->getJsValidMapConfig(),
 				'mapOptions' => $this->CORE->getMainCfg()->getRuntimeValue('mapOptions'),
-				'backupAvailable' => file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAP->MAPCFG->getName().".cfg.bak")
+				'backupAvailable' => (file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAP->MAPCFG->getName().".cfg.bak")?'true':'false')
 			);
 
     // Build page based on the template file and the data array
