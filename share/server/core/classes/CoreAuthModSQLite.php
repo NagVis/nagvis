@@ -78,8 +78,9 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO users (userId, name, password) VALUES (1, \'nagiosadmin\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
 		$this->DB->query('INSERT INTO users (userId, name, password) VALUES (2, \'guest\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
 		$this->DB->query('INSERT INTO roles (roleId, name) VALUES (1, \'Administrators\')');
-		$this->DB->query('INSERT INTO roles (roleId, name) VALUES (2, \'Users\')');
+		$this->DB->query('INSERT INTO roles (roleId, name) VALUES (2, \'Users (read-only)\')');
 		$this->DB->query('INSERT INTO roles (roleId, name) VALUES (3, \'Guests\')');
+		$this->DB->query('INSERT INTO roles (roleId, name) VALUES (4, \'Managers\')');
 		
 		// Access controll: Full access to everything
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (1, \'*\', \'*\', \'*\')');
@@ -169,6 +170,12 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (53, \'RoleMgmt\', \'doEdit\', \'*\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (54, \'RoleMgmt\', \'doDelete\', \'*\')');
 		
+		// Access controll: Edit/Delete maps and automaps
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (55, \'Map\', \'edit\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (56, \'Map\', \'delete\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (57, \'AutoMap\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (58, \'AutoMap\', \'delete\', \'*\')');
+		
 		/*
 		 * Administrators handling
 		 */
@@ -178,6 +185,52 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		
 		// Access assignment: Administrators => * * *
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (1, 1)');
+		
+		/*
+		 * Managers handling
+		 */
+		
+		// Access assignment: Managers => Allowed to edit/delete all maps
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 55)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 56)');
+		
+		// Access assignment: Managers => Allowed to edit/delete all automaps
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 57)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 58)');
+		
+		// Access assignment: Managers => Allowed to view the overview
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 2)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 3)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 4)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 5)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 6)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 7)');
+		
+		// Access assignment: Managers => Allowed to view all maps
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 33)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 34)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 35)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 36)');
+		
+		// Access assignment: Managers => Allowed to view all rotations
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 41)');
+		
+		// Access assignment: Managers => Allowed to view all automaps
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 37)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 38)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 39)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 40)');
+		
+		// Access assignment: Managers => Allowed to change their passwords
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 29)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 30)');
+		
+		// Access assignment: Managers => Allowed to search objects
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 31)');
+		
+		// Access assignment: Managers => Allowed to logout
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 32)');
+		
 		
 		/*
 		 * Users handling
@@ -206,14 +259,14 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 39)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 40)');
 		
-		// Access assignment: Guests => Allowed to change their passwords
+		// Access assignment: Users => Allowed to change their passwords
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 29)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 30)');
 		
-		// Access assignment: Guests => Allowed to search objects
+		// Access assignment: Users => Allowed to search objects
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 31)');
 		
-		// Access assignment: Guests => Allowed to logout
+		// Access assignment: Users => Allowed to logout
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 32)');
 		
 		/*
