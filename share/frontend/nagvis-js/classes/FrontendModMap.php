@@ -4,18 +4,27 @@ class FrontendModMap extends FrontendModule {
 	private $search = '';
 	private $rotation = '';
 	
+	private $viewOpts = Array();
+	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
 		// Parse the view specific options
 		$aOpts = Array('show' => MATCH_MAP_NAME,
 		               'search' => MATCH_STRING_NO_SPACE_EMPTY,
-		               'rotation' => MATCH_ROTATION_NAME_EMPTY);
+		               'rotation' => MATCH_ROTATION_NAME_EMPTY,
+		               'enableHeader' => MATCH_BOOLEAN_EMPTY,
+		               'enableContext' => MATCH_BOOLEAN_EMPTY,
+		               'enableHover' => MATCH_BOOLEAN_EMPTY);
 		
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
 		$this->search = $aVals['search'];
 		$this->rotation = $aVals['rotation'];
+		
+		$this->viewOpts['enableHeader'] = $aVals['enableHeader'];
+		$this->viewOpts['enableContext'] = $aVals['enableContext'];
+		$this->viewOpts['enableHover'] = $aVals['enableHover'];
 		
 		// Register valid actions
 		$this->aActions = Array(
@@ -59,8 +68,17 @@ class FrontendModMap extends FrontendModule {
 			$INDEX->setCustomStylesheet($CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
 		
-		// Need to parse the header menu?
-		if($MAPCFG->getValue('global',0 ,'header_menu')) {
+		// Header menu enabled/disabled by url?
+		if($this->viewOpts['enableHeader'] !== false && $this->viewOpts['enableHeader']) {
+			$showHeader = true;
+		} elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
+			$showHeader = false;
+		} else {
+			$showHeader = $MAPCFG->getValue('global',0 ,'header_menu');
+		}
+		
+		// Need to parse the header menu by config or url value?
+		if($showHeader) {
       // Parse the header menu
       $HEADER = new GlobalHeaderMenu($this->CORE, $this->AUTHORISATION, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
       
@@ -74,9 +92,12 @@ class FrontendModMap extends FrontendModule {
 
 		// Initialize map view
 		$this->VIEW = new NagVisMapView($this->CORE, $this->name);
-
+		
 		// The user is searching for an object
 		$this->VIEW->setSearch($this->search);
+		
+		// Set view modificators (Hover, Context toggle)
+		$this->VIEW->setViewOpts($this->viewOpts);
 		
 		// Maybe it is needed to handle the requested rotation
 		if($this->rotation != '') {

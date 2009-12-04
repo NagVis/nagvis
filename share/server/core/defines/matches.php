@@ -39,6 +39,7 @@ define('MATCH_INTEGER', '/^[0-9]+$/');
 define('MATCH_INTEGER_EMPTY', '/^[0-9]*$/');
 define('MATCH_FLOAT', '/^[0-9]+[\.\,]*[0-9]*$/');
 define('MATCH_BOOLEAN', '/^(?:1|0)$/i');
+define('MATCH_BOOLEAN_EMPTY', '/^(?:1|0)*$/i');
 
 define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
 define('MATCH_OBJECTTYPE', '/^(?:global|host|service|hostgroup|servicegroup|map|textbox|shape|line|template)$/i');

@@ -4,6 +4,8 @@ class FrontendModAutoMap extends FrontendModule {
 	private $opts;
 	private $rotation = '';
 	
+	private $viewOpts = Array();
+	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
@@ -24,8 +26,17 @@ class FrontendModAutoMap extends FrontendModule {
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
 		$this->rotation = $aVals['rotation'];
+		
+		$this->viewOpts['enableHeader'] = $aVals['enableHeader'];
+		$this->viewOpts['enableContext'] = $aVals['enableContext'];
+		$this->viewOpts['enableHover'] = $aVals['enableHover'];
+		
 		unset($aVals['show']);
 		unset($aVals['rotation']);
+		unset($aVals['enableHeader']);
+		unset($aVals['enableContext']);
+		unset($aVals['enableHover']);
+		
 		$this->opts = $aVals;
 		
 		// Register valid actions
@@ -73,8 +84,17 @@ class FrontendModAutoMap extends FrontendModule {
 			$INDEX->setCustomStylesheet($CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
 		
+		// Header menu enabled/disabled by url?
+		if($this->viewOpts['enableHeader'] !== false && $this->viewOpts['enableHeader']) {
+			$showHeader = true;
+		} elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
+			$showHeader = false;
+		} else {
+			$showHeader = $MAPCFG->getValue('global',0 ,'header_menu');
+		}
+		
 		// Need to parse the header menu?
-		if($MAPCFG->getValue('global',0 ,'header_menu')) {
+		if($showHeader) {
 			// Parse the header menu
 			$HEADER = new GlobalHeaderMenu($this->CORE, $this->AUTHORISATION, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
 			
@@ -88,6 +108,9 @@ class FrontendModAutoMap extends FrontendModule {
 
 		// Initialize map view
 		$this->VIEW = new NagVisAutoMapView($this->CORE, $MAPCFG->getName());
+		
+		// Set view modificators (Hover, Context toggle)
+		$this->VIEW->setViewOpts($this->viewOpts);
 		
 		// Render the automap
 		$AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);

@@ -33,6 +33,7 @@ class NagVisAutoMapView {
 	private $content = '';
 	private $aRotation = Array();
 	private $aParams = Array();
+	private $aViewOpts = Array();
 	
 	/**
 	 * Class Constructor
@@ -68,6 +69,16 @@ class NagVisAutoMapView {
 	 */
 	public function setRotation($a) {
 		$this->aRotation = $a;
+	}
+	
+	/**
+	 * Set the view modificator options
+	 *
+	 * @param   Array    
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setViewOpts($a) {
+		$this->aViewOpts = $a;
 	}
 	
 	/**
