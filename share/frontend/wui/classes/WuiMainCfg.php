@@ -168,8 +168,8 @@ class WuiMainCfg extends GlobalMainCfg {
 									$item2 = $val;
 								}
 								
-								// Don't write the backendid attribute (Is internal)
-								if($key2 !== 'backendid') {
+								// Don't write the backendid/rotationid attributes (Are internal)
+								if($key2 !== 'backendid' && $key2 !== 'rotationid') {
 									$content .= $key2.'="'.$item2.'"'."\n";
 								}
 							}
