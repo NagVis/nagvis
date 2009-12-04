@@ -303,6 +303,9 @@ backendtype="merlinmy"
 [rotation_demo]
 ; These steps are rotated. The "Demo2:" is a label which is being displayed in
 ; the index pages rotation list.
+; You may also add external URLs as steps. Simply put the url surrounded by []
+; instead of the map name. It is also possible to add automaps to rotations,
+; add an @ sign before the automap name to add an automap to the rotation.
 maps="demo,Demo2:demo2"
 ; rotation interval (seconds)
 interval=15

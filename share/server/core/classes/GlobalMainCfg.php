@@ -972,6 +972,7 @@ class GlobalMainCfg {
 							if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
 								$label = '';
 								$map = '';
+								$automap = '';
 								
 								// When no label is set, set map or url as label
 								if($arrRet[1] != '') {
@@ -993,8 +994,14 @@ class GlobalMainCfg {
 								$label = trim($label);
 								$map = trim($map);
 								
+								// Check if the map is an automap
+								if(substr($map, 0, 1) === '@') {
+									$automap = substr($map, 1);
+									$map = '';
+								}
+								
 								// Save the extracted information to an array
-								$val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
+								$val[$id] = Array('label' => $label, 'map' => $map, 'automap' => $automap, 'url' => $arrRet[3], 'target' => '');
 							}
 						}
 					}

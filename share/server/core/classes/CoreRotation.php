@@ -64,6 +64,7 @@ class CoreRotation {
 		  (
 			[label] => demo
 			[map] => demo
+			[automap] => 
 			[url] => 
 			[target] => 
 			)
@@ -168,6 +169,8 @@ class CoreRotation {
 		foreach($this->arrSteps AS $intId => $arrStep) {
 			if(isset($arrStep['url']) && $arrStep['url'] != '') {
 				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Url&act=view&show='.$arrStep['url'].'&rotation='.$this->sPoolName;
+			} elseif(isset($arrStep['automap']) && $arrStep['automap'] != '') {
+				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show='.$arrStep['automap'].'&rotation='.$this->sPoolName;
 			} else {
 				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$arrStep['map'].'&rotation='.$this->sPoolName;
 			}

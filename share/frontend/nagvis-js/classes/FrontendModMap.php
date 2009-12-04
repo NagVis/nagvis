@@ -81,7 +81,6 @@ class FrontendModMap extends FrontendModule {
 		// Maybe it is needed to handle the requested rotation
 		if($this->rotation != '') {
 			// Only allow the rotation if the user is permitted to use it
-			// FIXME: Errorhandling?
 			if($this->AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
 				$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
 				$ROTATION->setStep('map', $this->name);
