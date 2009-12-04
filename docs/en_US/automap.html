@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
     <title>NagVis Automap</title>
@@ -36,31 +36,46 @@
 		
 		<table style="width:100%">
 		<tr>
-		<th> parameter </th><th> default </th><th> description </th>
+			<th> parameter </th><th> default </th><th> description </th>
 		</tr>
 		<tr>
-		<td> backend </td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
+			<td> backend </td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
 		</tr>
 		<tr>
-		<td> root </td><td> see <a href="#root/object/definition">root object definition</a> </td><td> This is the name of the root object. It is not essential to set the host here. There are some more ways to tell the root object. For details see the <a href="#root/object/definition">root object definition</a> chapter on this page. </td>
+			<td> root </td><td> see <a href="#root/object/definition">root object definition</a> </td><td> This is the name of the root object. It is not essential to set the host here. There are some more ways to tell the root object. For details see the <a href="#root/object/definition">root object definition</a> chapter on this page. </td>
 		</tr>
 		<tr>
-		<td> maxLayers </td><td> 2 </td><td> Maximum layers of child hosts to be displayed. </td>
+			<td> maxLayers </td><td> 2 </td><td> Maximum layers of child hosts to be displayed. </td>
 		</tr>
 		<tr>
-		<td> renderMode </td><td> undirected </td><td> Set the render mode of the map. For details see <a href="#available/render/modes">available render modes</a> </td>
+			<td> renderMode </td><td> undirected </td><td> Set the render mode of the map. For details see <a href="#available/render/modes">available render modes</a> </td>
 		</tr>
 		<tr>
-		<td> width </td><td> 1024 </td><td> width of the automap in pixels </td>
+			<td> width </td><td> 1024 </td><td> width of the automap in pixels </td>
 		</tr>
 		<tr>
-		<td> height </td><td> 786 </td><td> height of the automap in pixels </td>
+			<td> height </td><td> 786 </td><td> height of the automap in pixels </td>
 		</tr>
 		<tr>
-		<td> ignoreHosts </td><td> none </td><td> comma separated list of hosts (including children) not to display </td>
+			<td> ignoreHosts </td><td> none </td><td> comma separated list of hosts (including children) not to display </td>
 		</tr>
 		<tr>
-		<td>filterGroup</td><td>none</td><td>Provide a hostgroup name. Only hosts in this hostgroup will be shown on the map.</td>
+			<td>filterGroup</td><td>none</td><td>Provide a hostgroup name. Only hosts in this hostgroup will be shown on the map.</td>
+		</tr>
+		<tr>
+			<td>search</td><td>none</td><td>Search for a map object on map load. Matching objects will be highlighted. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+			<td>rotation</td><td>none</td><td>Rotate in the given rotation pool when the map is a step in the pool. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+			<td>enableHeader</td><td>none</td><td>Enable/Disable the header menu. To be given as integer (1/0). Overrides the configuration. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+			<td>enableHover</td><td>none</td><td>Enable/Disable the hover menus. To be given as integer (1/0). Overrides the configuration. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+			<td>enableContext</td><td>none</td><td>Enable/Disable the context menus. To be given as integer (1/0). Overrides the configuration. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		</table>
 		

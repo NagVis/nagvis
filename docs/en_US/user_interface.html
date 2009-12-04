@@ -19,10 +19,25 @@
 		<td>nagvis/frontend/nagvis-js/index.php</td><td>This is overview page. On this view all maps, automaps and rotations the user is permitted on are listed and linked.</td>
 		</tr>
 		<tr>
-		<td>nagvis/frontend/nagvis-js/index.php?mod=Map&amp;show=&lt;name></td><td>This is the classic map view. In this view the specified NagVis automap is shown. The contents are automaticaly refreshed using ajax calls to the NagVis core.</td>
+			<td>nagvis/frontend/nagvis-js/index.php?mod=Map&amp;show=&lt;name></td>
+			<td>
+				<p>This is the classic map view. In this view the specified NagVis automap is shown. The contents are automaticaly refreshed using ajax calls to the NagVis core.</p>
+				<p>The following parameters are available:</p>
+				<table>
+					<tr><td>search=&lt;regex></td><td>Search for a map object on map load. Matching objects will be highlighted.</td></tr>
+					<tr><td>rotation=&lt;name></td><td>Rotate in the given rotation pool when the map is a step in the pool.</td></tr>
+					<tr><td>enableHeader=1/0</td><td>Enable/Disable the header menu. Overrides the configuration.</td></tr>
+					<tr><td>enableHover=1/0</td><td>Enable/Disable the hover menus. Overrides the configuration.</td></tr>
+					<tr><td>enableContext=1/0</td><td>Enable/Disable the context menus. Overrides the configuration.</td></tr>
+				</table>
+			</td>
 		</tr>
 		<tr>
-		<td>nagvis/frontend/nagvis-js/index.php?mod=AutoMap&amp;show=&lt;name></td><td>This is the automap view. In this view the specified NagVis map is shown. The contents are automaticaly refreshed using ajax calls to the NagVis core.</td>
+		<td>nagvis/frontend/nagvis-js/index.php?mod=AutoMap&amp;show=&lt;name></td>
+		<td>
+			<p>This is the automap view. In this view the specified NagVis map is shown. The contents are automaticaly refreshed using ajax calls to the NagVis core.</p>
+			<p>The available parameters are listed on the <a href="automap.html">automap</a> page.</p>
+		</td>
 		</tr>
 		<tr>
 		<td>nagvis/frontend/nagvis-js/index.php?mod=Info</td><td>This a page with some support information which you can submit when you are having problems with NagVis</td>
