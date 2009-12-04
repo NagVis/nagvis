@@ -111,6 +111,16 @@ class NagVisMapView {
 		
 		$arr['search'] = $this->search;
 		
+		// View specific hover modifier set
+		if($this->aViewOpts['enableHover'] !== false) {
+			$arr['enableHover'] = $this->aViewOpts['enableHover'];
+		}
+		
+		// View specific context modifier set
+		if($this->aViewOpts['enableContext'] !== false) {
+			$arr['enableContext'] = $this->aViewOpts['enableContext'];
+		}
+		
 		return json_encode($arr);
 	}
 }

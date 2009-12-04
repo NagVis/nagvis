@@ -11,6 +11,7 @@ class FrontendModAutoMap extends FrontendModule {
 
 		// Parse the view specific options
 		$aOpts = Array('show' => MATCH_MAP_NAME,
+		               'search' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'backend' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'root' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'maxLayers' => MATCH_INTEGER_EMPTY,
@@ -30,11 +31,13 @@ class FrontendModAutoMap extends FrontendModule {
 		$this->name = $aVals['show'];
 		$this->rotation = $aVals['rotation'];
 		
+		$this->viewOpts['search'] = $aVals['search'];
 		$this->viewOpts['enableHeader'] = $aVals['enableHeader'];
 		$this->viewOpts['enableContext'] = $aVals['enableContext'];
 		$this->viewOpts['enableHover'] = $aVals['enableHover'];
 		
 		unset($aVals['show']);
+		unset($aVals['search']);
 		unset($aVals['rotation']);
 		unset($aVals['enableHeader']);
 		unset($aVals['enableContext']);

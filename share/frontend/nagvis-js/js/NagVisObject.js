@@ -45,6 +45,28 @@ var NagVisObject = Base.extend({
 		if(this.conf.object_id == null) {
 			this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
 		}
+		
+		// Load view specific config modifiers (Normaly triggered by url params)
+		this.loadViewOpts();
+	},
+	
+	/**
+	 * PUBLIC loadViewOpts
+	 *
+	 * Loads view specific options. Basically this options are triggered by url params
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	loadViewOpts: function() {
+		// View specific hover modifier set. Will override the map configured option
+		if(oViewProperties && oViewProperties.enableHover && oViewProperties.enableHover != '') {
+			this.conf.hover_menu = '0';
+		}
+		
+		// View specific hover modifier set. Will override the map configured option
+		if(oViewProperties && oViewProperties.enableHover && oViewProperties.enableHover != '') {
+			this.conf.context_menu = '0';
+		}
 	},
 	
 	/**
