@@ -3,7 +3,7 @@
  *
  * GlobalBackground.php - Class for global background image handling
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -28,6 +28,9 @@
 class GlobalBackground {
 	protected $CORE;
 	protected $image;
+	protected $path;
+	protected $webPath;
+	protected $type;
 	
 	/**
 	 * Constructor
@@ -38,6 +41,8 @@ class GlobalBackground {
 	public function __construct($CORE, $image) {
 		$this->CORE = $CORE;
 		$this->image = $image;
+		
+		$this->fetchPath();
 	}
 	
 	/**
@@ -46,21 +51,62 @@ class GlobalBackground {
 	 * @return	String File Name
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getFileName() {
+	private function getFileName() {
 		return $this->image;
+	}
+	
+	/**
+	 * Gets the locationtype of the file
+	 *
+	 * @return	String File Name
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getFileType() {
+		return $this->type;
+	}
+	
+	/**
+	 * Fetches the path and saves it on initial load
+	 *
+	 * @return	String File Name
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchPath() {
+		if($this->getFileName() != '' && $this->getFileName() != 'none') {
+			// Extract url when used to show an url
+			if(preg_match('/^\[(http.*)\]$/', $this->getFileName(), $match) > 0) {
+				$this->type = 'url';
+				
+				$this->path = $match[1];
+				$this->webPath = $match[1];
+			} else {
+				$this->type = 'local';
+				
+				$this->path = $this->CORE->getMainCfg()->getValue('paths', 'map').$this->getFileName();
+				$this->webPath = $this->CORE->getMainCfg()->getValue('paths', 'htmlmap').$this->getFileName();
+			}
+		} else {
+			$this->type = 'none';
+			
+			$this->path = '';
+			$this->webPath = '';
+		}
 	}
 	
 	/**
 	 * Gets the background file
 	 *
+	 * @param   Boolean Get web path or alternatively the physical path
 	 * @return  String  HTML Path to background file
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getFile() {
-		$sReturn = '';
-		if($this->getFileName() != '' && $this->getFileName() != 'none') {
-			$sReturn = $this->CORE->getMainCfg()->getValue('paths', 'htmlmap').$this->getFileName();
+	public function getFile($bWebPath = true) {
+		if($bWebPath) {
+			$sReturn = $this->webPath;
+		} else {
+			$sReturn = $this->path;
 		}
+		
 		return $sReturn;
 	}
 	
@@ -73,7 +119,7 @@ class GlobalBackground {
 	 */
 	protected function checkFileExists($printErr) {
 		if($this->image != '') {
-			if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
+			if(file_exists($this->path)) {
 				return TRUE;
 			} else {
 				if($printErr) {
@@ -95,7 +141,7 @@ class GlobalBackground {
 	 */
 	protected function checkFileReadable($printErr) {
 		if($this->image != '') {
-			if($this->checkFileExists($printErr) && is_readable($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
+			if($this->checkFileExists($printErr) && is_readable($this->path)) {
 				return TRUE;
 			} else {
 				if($printErr) {
@@ -117,7 +163,7 @@ class GlobalBackground {
 	 */
 	protected function checkFileWriteable($printErr) {
 		if($this->image != '') {
-			if($this->checkFileExists($printErr) && is_writable($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
+			if($this->checkFileExists($printErr) && is_writable($this->path)) {
 				return TRUE;
 			} else {
 				if($printErr) {

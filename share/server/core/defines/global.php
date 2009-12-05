@@ -70,6 +70,7 @@ define('SESSION_NAME', 'nagvis_session');
 // Other basic constants
 define('REQUIRES_AUTHORISATION', true);
 define('GET_STATE', true);
+define('GET_PHYSICAL_PATH', false);
 define('DONT_GET_OBJECT_STATE', false);
 define('DONT_GET_SINGLE_MEMBER_STATES', false);
 define('IS_VIEW', true);

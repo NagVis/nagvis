@@ -209,10 +209,10 @@ class GlobalIndexPage {
 						
 						// Only handle thumbnail image when told to do so
 						if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
-							$imgPath = $this->CORE->getMainCfg()->getValue('paths','map').$MAPCFG->BACKGROUND->getFileName();
-							$imgPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
+							$imgPath = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
+							$imgPathHtml = $MAPCFG->BACKGROUND->getFile();
 							
-							if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
+							if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileType() == 'local') {
 								$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
 								$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
 								$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;

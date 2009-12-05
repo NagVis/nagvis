@@ -62,7 +62,7 @@ class GlobalMapCfg {
 				'allowed_user' => Array('must' => 1,
 					'match' => MATCH_STRING),
 				'map_image' => Array('must' => 0,
-					'match' => MATCH_PNG_GIF_JPG_FILE_OR_NONE,
+					'match' => MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE,
 					'field_type' => 'dropdown'),
 				'alias' => Array('must' => 0,
 					'default' => $name,

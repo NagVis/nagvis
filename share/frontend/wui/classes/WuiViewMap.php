@@ -55,14 +55,9 @@ class WuiViewMap {
 		// Initialize template system
 		$TMPL = New FrontendTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
-
-		$backgroundImg = '';
-		if($this->MAP->MAPCFG->BACKGROUND->getFileName() != 'none' && $this->MAP->MAPCFG->BACKGROUND->getFileName() != '') {
-			$backgroundImg = $this->CORE->getMainCfg()->getValue('paths', 'htmlmap') . $this->MAP->MAPCFG->BACKGROUND->getFileName();
-		}
 		
 		$aData = Array(
-				'backgroundImg' => $backgroundImg,
+				'backgroundImg' => $this->MAP->MAPCFG->BACKGROUND->getFile(),
 				'base' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
 				'mapName' => $this->name,

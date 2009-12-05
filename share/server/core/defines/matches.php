@@ -3,7 +3,7 @@
  *
  * matches.php - File for global match constants
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -45,7 +45,7 @@ define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
 define('MATCH_OBJECTTYPE', '/^(?:global|host|service|hostgroup|servicegroup|map|textbox|shape|line|template)$/i');
 define('MATCH_PNGFILE', '/^(.+)\.png$/i');
 define('MATCH_PNG_GIF_JPG_FILE', '/^(.+)\.(png|gif|jpg)$/i');
-define('MATCH_PNG_GIF_JPG_FILE_OR_NONE', '/^((.+)\.(png|gif|jpg)|none)$/i');
+define('MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\]|none)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\])$/i');
 define('MATCH_ROTATION_STEP_TYPES_EMPTY', '/^(?:map|automap|url)?$/');
 define('MATCH_LANGUAGE_EMPTY', '/^[a-zA-Z0-9-_]*$/');
