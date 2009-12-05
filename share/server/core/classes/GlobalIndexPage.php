@@ -212,7 +212,11 @@ class GlobalIndexPage {
 							$imgPath = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
 							$imgPathHtml = $MAPCFG->BACKGROUND->getFile();
 							
-							if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileType() == 'local') {
+							// Check if
+							// a) PHP supports gd
+							// b) The image is a local one
+							// c) The image exists
+							if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileType() == 'local' && file_exists($imgPath)) {
 								$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
 								$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
 								$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
