@@ -676,36 +676,40 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			 * event_scroll=1/0
 			 * event_sound=1/0
 			 */
-			
-			// - Highlight (Flashing)
-			if(oPageProperties.event_highlight === '1') {
-				if(aObjs[intIndex].conf.view_type && aObjs[intIndex].conf.view_type === 'icon') {
-					// Detach the handler
-					//  Had problems with this. Could not give the index to function:
-					//  function() { flashIcon(iIndex, 10); iIndex = null; }
-					setTimeout('flashIcon('+intIndex+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
-				} else {
-					// FIXME: Atm only flash icons, not lines or gadgets
+			 
+			// Only do eventhandling when object state changed to a worse state
+			if(aObjs[intIndex].stateChangedToWorse()) {
+				
+				// - Highlight (Flashing)
+				if(oPageProperties.event_highlight === '1') {
+					if(aObjs[intIndex].conf.view_type && aObjs[intIndex].conf.view_type === 'icon') {
+						// Detach the handler
+						//  Had problems with this. Could not give the index to function:
+						//  function() { flashIcon(iIndex, 10); iIndex = null; }
+						setTimeout('flashIcon('+intIndex+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
+					} else {
+						// FIXME: Atm only flash icons, not lines or gadgets
+					}
 				}
-			}
-			
-			// - Scroll to object
-			if(oPageProperties.event_scroll === '1') {
-				// Detach the handler
-				setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15); }, 0);
-			}
-			
-			// - Eventlog
-			if(aObjs[intIndex].conf.type == 'service') {
-				eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+" "+aObjs[intIndex].conf.service_description+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
-			} else {
-				eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
-			}
-			
-			// - Sound
-			if(oPageProperties.event_sound === '1') {
-				// Detach the handler
-				setTimeout('playSound('+intIndex+', 1)', 0);
+				
+				// - Scroll to object
+				if(oPageProperties.event_scroll === '1') {
+					// Detach the handler
+					setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15); }, 0);
+				}
+				
+				// - Eventlog
+				if(aObjs[intIndex].conf.type == 'service') {
+					eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+" "+aObjs[intIndex].conf.service_description+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
+				} else {
+					eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
+				}
+				
+				// - Sound
+				if(oPageProperties.event_sound === '1') {
+					// Detach the handler
+					setTimeout('playSound('+intIndex+', 1)', 0);
+				}
 			}
 		}
 

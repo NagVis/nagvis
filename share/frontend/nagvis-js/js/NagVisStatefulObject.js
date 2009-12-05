@@ -119,6 +119,39 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 	
 	/**
+	 * PUBLIC stateChangedToWorse()
+	 *
+	 * Check if a state change occured to a worse state
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	stateChangedToWorse: function() {
+		var lastSubState = 'normal';
+		if(this.last_conf.summary_problem_has_been_acknowledged && this.last_conf.summary_problem_has_been_acknowledged == 1) {
+			lastSubState = 'ack';
+		} else if(this.last_conf.summary_in_downtime && this.last_conf.summary_in_downtime == 1) {
+			lastSubState = 'downtime';
+		}
+		
+		var lastWeight = oStates[this.last_conf.summary_state][lastSubState];
+		
+		var subState = 'normal';
+		if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
+			subState = 'ack';
+		} else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
+			subState = 'downtime';
+		}
+		
+		var weight = oStates[this.conf.summary_state][subState];
+		
+		if(lastWeight < weight) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+	
+	/**
 	 * PUBLIC outputChanged()
 	 *
 	 * Check if an output/perfdata change occured since last refresh
