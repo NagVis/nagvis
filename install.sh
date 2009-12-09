@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.9"
+INSTALLER_VERSION="0.2.10"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -280,10 +280,15 @@ check_backend() {
 	
 	echo $NAGVIS_BACKEND | grep -i "MKLIVESTATUS" >/dev/null
 	if [ $? -eq 0 ]; then
-		# FIXME: Add mklivestatus checks
-		# - Check if php socket module is availsable
-		# - Check if livestatus.o is avialable
-		text "|   * Sorry, no checks yet for mklivestatus backend" "|"
+		MKL=""
+		# Check if livestatus.o is available
+		if [ -z "$NDO_MOD" ]; then
+			NDO_MOD="$NAGIOS_PATH/bin/livestatus.o"
+		fi
+		[ -f $NDO_MOD ]&&MKL="MK livestatus.o"
+		log "MK livestatus.o ($NDO_MOD)" $MKL
+		# - Check if php socket module is available
+		check_php_modules "sockets" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
 			BACKENDS="mklivestatus"
@@ -465,6 +470,7 @@ check_php_version() {
 check_php_modules() {
 	for MOD in $1
 	do
+		TMP=""
 		if [ "${PKG##/*/}" = "dpkg" ]; then
 			MOD_VER=`$PKG -l "php[0-9]-$MOD" 2>/dev/null | grep "php" | grep "ii" | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 		elif [ "${PKG##/*/}" = "rpm" ]; then
@@ -683,6 +689,8 @@ echo "`date`: Installer $INSTALLER_VERSION" > $LOG
 NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
 [ -z "$NAGVIS_TAG" ]&&NAGVIS_TAG=01000000
 
+S=`echo $* | grep -i "\-s icinga"`
+[ $? -eq 0 ]&&SOURCE=icinga
 # Default hardcoded Nagios path
 NAGIOS_PATH="/usr/local/$SOURCE"
 
@@ -702,7 +710,7 @@ fi
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:ohqvFr" options; do
+	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:ohqvFr" options $OPTS; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -876,10 +884,6 @@ NAGVER=`echo $NAGIOS | sed 's/^.* //' | cut -c1,1`
 [ "$SOURCE" = "icinga" ]&&NAGVER=3
 
 if [ $FORCE -eq 0 ]; then
-	# Check Backend prerequisites
-	check_backend
-	CALL="$CALL -b $NAGVIS_BACKEND"
-
 	# Check PHP Version
 	check_php_version $NEED_PHP_VERSION
 
@@ -893,6 +897,10 @@ if [ $FORCE -eq 0 ]; then
 	check_apache_php "/etc/httpd/"
 	check_apache_php "/usr/local/etc/apache2/"	# FreeBSD
 	log "  Apache mod_php" $MODPHP
+
+	# Check Backend prerequisites
+	check_backend
+	CALL="$CALL -b $NAGVIS_BACKEND"
 
 	# Check Graphviz
 	GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
