@@ -118,7 +118,7 @@ function parsePerfdata($sPerfdata) {
 			
 			// Try to get warn min/max
 			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[4], $matches);
-			if(!isset($matches[0])) {
+			if(isset($matches[0]) && isset($matches[0][0])) {
 				$aSet['warning_min'] = $matches[1][0];
 				$aSet['warning_max'] = $matches[2][0];
 			}
@@ -130,7 +130,7 @@ function parsePerfdata($sPerfdata) {
 			
 			// Try to get critical min/max
 			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[5], $matches);
-			if(!isset($matches[0])) {
+			if(isset($matches[0]) && isset($matches[0][0])) {
 				$aSet['critical_min'] = $matches[1][0];
 				$aSet['critical_max'] = $matches[2][0];
 			}
