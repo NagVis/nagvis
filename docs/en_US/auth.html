@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+	<title>Authentication / Autorization</title>
+</head>
+<body>
+	<h1>Authentication / Autorization (AA)</h1>
+<p>In the versions prior to 1.5 NagVis didn't care much about the authentication and autorization. In the most environments NagVis used the basic authentication provided by Nagios. This was a side effect of that NagVis was placed in the <code>nagios/share</code> directory.
+<p>In NagVis 1.5 the default installation directory has been moved to an own base directory. With this step a new Authentication and Autorization mechanism has been created. The main focus on this concept is to be modular and flexible.</p>
+<h2>Modularity</h2>
+<p>The AA has been splitted up in three module bases: LogonDialogs, Authentication, Autorization. All modules can be changed without affecting the others.</p>
+<h2>Default Modules</h2>
+<p>By default NagVis uses a HTML form for logging on users and a SQLite database for storing users, passwords and permissions. Therefor it uses the HTML logon dialog (FrontendModLogonDialog), the SQLite authentication (CoreAuthModSQLite) and the SQLite autorization (CoreAuthorisationModSQLite) modules.</p>
+<h2>Other Modules</h2>
+<p>On delivery there are only the above authentication and autorisation modules available. Having such a modular structure it should be easy to create LDAP, MySQL, file based authentication and autorisation mechanism. By default NagVis uses the HTML logon dialog for requesting authentication informations from the user. It is possible to add own logon modules for serving other dialogs or ways of logging in.</p>
+<p>It is also possible to realize a "trusted" authentication mechanism. NagVis uses the configured environment variable to identify the user. This way the user is not really authenticated with NagVis. NagVis trusts the provided username blindly. You can add several authentication mechanism to your webserver, started from the basic authentication used by Nagios (.htaccess) to single sign on environments. Simply set logonmodule to "LogonEnv", put the environment variable to use as username to the option logonenvvar and tell the authentication module to create users in the database when provided users does not exist.</p>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+	<title>Authentication / Autorization</title>
+</head>
+<body>
+	<h1>Old Style Authentication</h1>
+<p>In the versions prior to 1.5 NagVis didn't care much about the authentication and autorization. In the most environments NagVis used the basic authentication provided by Nagios. This was a side effect of that NagVis was placed in the <code>nagios/share</code> directory.
+<p>In NagVis 1.5 the default installation directory has been moved to an own base directory. With this step a new Authentication and Autorization mechanism has been created. The main focus on this concept is to be modular and flexible.</p>
+<p>If you really like to use the basic authentication provided by Nagios you may use the LogonEnv module to set up a trusted authentication. To make this possible simply set the following options in the <code>[global]</code> section in the NagVis main configuration file:</p>
+<pre>logonmodule="LogonEnv"
+logonenvvar="REMOTE_USER"
+logonenvcreateuser="1"</pre>
+These lines tell NagVis to use the LogonEnv module which reads the authenticated user from an environment variable. The second parameter tells the LogonEnv module which variable to use for reading the users name. The third option tells the LogonEnv module to create unknown users in the NagVis AA database.
+</body>
+</html>
