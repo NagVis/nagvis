@@ -19,7 +19,7 @@
 		</ul>
 		
 		<h2> First call </h2>
-		The automap can be called like this: <code>http://&lt;nagios-server>/&lt;path-to-nagvis>/nagvis/index.php?automap=1</code>.
+		The automap can be called like this: <code>http://&lt;nagios-server>/&lt;path-to-nagvis>/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show=__automap</code>.
 		
 		If everything is configured properly the root host and 2 levels of child hosts should be displayed on the automap.
 		
@@ -36,28 +36,37 @@
 		
 		<table style="width:100%">
 		<tr>
-			<th> parameter </th><th> default </th><th> description </th>
+			<th>parameter</th><th> default </th><th> description </th>
 		</tr>
 		<tr>
-			<td> backend </td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
+			<td>show</td><td></td><td>The name of the automap. Since NagVis 1.5 different automap configuration files can be defined. The automap to view needs to be set here. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-			<td> root </td><td> see <a href="#root/object/definition">root object definition</a> </td><td> This is the name of the root object. It is not essential to set the host here. There are some more ways to tell the root object. For details see the <a href="#root/object/definition">root object definition</a> chapter on this page. </td>
+			<td>backend</td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
 		</tr>
 		<tr>
-			<td> maxLayers </td><td> 2 </td><td> Maximum layers of child hosts to be displayed. </td>
+			<td>root</td><td> see <a href="#root/object/definition">root object definition</a> </td><td> This is the name of the root object. It is not essential to set the host here. There are some more ways to tell the root object. For details see the <a href="#root/object/definition">root object definition</a> chapter on this page. </td>
 		</tr>
 		<tr>
-			<td> renderMode </td><td> undirected </td><td> Set the render mode of the map. For details see <a href="#available/render/modes">available render modes</a> </td>
+			<td>maxLayers</td><td>2</td><td>This option is deprecated. Use childLayers instead (See below).</td>
 		</tr>
 		<tr>
-			<td> width </td><td> 1024 </td><td> width of the automap in pixels </td>
+			<td>childLayers</td><td>2</td><td>Maximum layers of child hosts to be displayed. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-			<td> height </td><td> 786 </td><td> height of the automap in pixels </td>
+			<td>parentLayers</td><td>0</td><td>Maximum layers of parent hosts to be displayed. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-			<td> ignoreHosts </td><td> none </td><td> comma separated list of hosts (including children) not to display </td>
+			<td>renderMode</td><td> undirected </td><td> Set the render mode of the map. For details see <a href="#available/render/modes">available render modes</a> </td>
+		</tr>
+		<tr>
+			<td>width</td><td> 1024 </td><td> width of the automap in pixels </td>
+		</tr>
+		<tr>
+			<td>height</td><td> 786 </td><td> height of the automap in pixels </td>
+		</tr>
+		<tr>
+			<td>ignoreHosts</td><td> none </td><td> comma separated list of hosts (including children) not to display </td>
 		</tr>
 		<tr>
 			<td>filterGroup</td><td>none</td><td>Provide a hostgroup name. Only hosts in this hostgroup will be shown on the map.</td>
