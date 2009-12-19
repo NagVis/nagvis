@@ -169,7 +169,7 @@ class GlobalHeaderMenu {
 				// Only proceed permited objects
 				if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName)) {
 					$aAutomaps[$mapName] = Array();
-					$aAutomaps[$mapName]['mapName'] = 'automap='.$MAPCFG1->getName();
+					$aAutomaps[$mapName]['mapName'] = $MAPCFG1->getName();
 					$aAutomaps[$mapName]['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
 					
 					// Add defaultparams to map selection
