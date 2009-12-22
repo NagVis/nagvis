@@ -51,7 +51,7 @@ class WuiModMap extends WuiModule {
 		// Need to load the custom stylesheet?
 		$customStylesheet = $MAPCFG->getValue('global', 0, 'stylesheet');
 		if($customStylesheet !== '') {
-			$INDEX->setCustomStylesheet($CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
+			$INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
 		
 		$MAP = new WuiMap(WuiCore::getInstance(), $MAPCFG);
@@ -69,9 +69,9 @@ class WuiModMap extends WuiModule {
 		}
 		
     // Need to parse the header menu by config or url value?
-    if($MAPCFG->getValue('global', 0, 'header_menu')) {
+    if($this->CORE->getMainCfg()->getValue('wui','headermenu')) {
       // Parse the header menu
-      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $MAPCFG->getValue('global', 0, 'header_template'), $MAPCFG);
+      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $this->CORE->getMainCfg()->getValue('wui','headertemplate'), $MAPCFG);
       $INDEX->setHeaderMenu($HEADER->__toString());
     }
 		

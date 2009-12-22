@@ -210,6 +210,10 @@
 ;allowedforconfig=EVERYONE
 ; auto update frequency
 ;autoupdatefreq=25
+; enable/disable header menu in the WUI
+;headermenu="1"
+; header template to use in the WUI
+;headertemplate="default"
 ; map lock time (minutes)
 ;maplocktime=5
 
