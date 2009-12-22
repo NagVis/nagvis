@@ -96,8 +96,10 @@ $MHANDLER->regModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
 $MHANDLER->regModule('Welcome');
 $MHANDLER->regModule('Map');
 
-
 // Load the module
+if($UHANDLER->get('mod') !== 'Map') {
+	$UHANDLER->set('mod', 'Welcome');
+}
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if($MODULE == null) {
 	new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));

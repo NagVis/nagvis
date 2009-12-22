@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * WuiViewMap.php - Class for parsing the NagVis maps in WUI
+ * WuiViewWelcome.php - Class for parsing the NagVis WUI welcome page
  *
  * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,12 +25,9 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiViewMap {
+class WuiViewWelcome {
 	private $CORE = null;
-	private $MAP = null;
-	
-	private $name = '';
-	
+  
 	/**
 	 * Class Constructor
 	 *
@@ -38,11 +35,8 @@ class WuiViewMap {
 	 * @param    String          $NAME
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(WuiCore $CORE, $MAP) {
+	public function __construct(WuiCore $CORE) {
 		$this->CORE = $CORE;
-		$this->MAP = $MAP;
-
-		$this->name = $this->MAP->MAPCFG->getName();
 	}
 	
 	/**
@@ -57,23 +51,19 @@ class WuiViewMap {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-				'backgroundImg' => $this->MAP->MAPCFG->BACKGROUND->getFile(),
+				'backgroundImg' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/images/internal/wuilogo.png',
 				'base' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-				'mapName' => $this->name,
 				'userName' => $this->CORE->getAuthentication()->getUser(),
-				'mapObjects' => $this->MAP->parseObjects(),
-				'movable' => $this->MAP->getMoveableObjects(),
 				'langMenu' => $this->CORE->getJsLangMenu(),
 				'lang' => $this->CORE->getJsLang(),
 				'validMainCfg' => $this->CORE->getJsValidMainConfig(),
 				'validMapCfg' => $this->CORE->getJsValidMapConfig(),
-				'mapOptions' => $this->CORE->getMapOptions(),
-				'backupAvailable' => (file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAP->MAPCFG->getName().".cfg.bak")?'true':'false')
+				'mapOptions' => $this->CORE->getMapOptions()
 			);
 
     // Build page based on the template file and the data array
-    return $TMPLSYS->get($TMPL->getTmplFile('wuiMap'), $aData);
+    return $TMPLSYS->get($TMPL->getTmplFile('wuiWelcome'), $aData);
 	}
 }
 ?>

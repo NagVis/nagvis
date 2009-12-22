@@ -179,7 +179,7 @@ function createjsDOMenu() {
 		mainMenu.items.menu_maps_open_nagvis.setSubMenu(submenu_maps_open_nagvis);
 	}
 	
-	if(mapname != '') {
+	if(typeof backupAvailable !== 'undefined' && mapname != '') {
 		mainMenu.items.menu_addobject.setSubMenu(submenu_addobject);
 		submenu_addobject.items.menu_addobject_icon.setSubMenu(submenu_addobject_icon);
 		submenu_addobject.items.menu_addobject_line.setSubMenu(submenu_addobject_line);
@@ -192,15 +192,15 @@ function createjsDOMenu() {
 	activatePopUpMenuBy(1, 2);
 	
 	
-	if(mapname == '') {
+	if(typeof backupAvailable !== 'undefined' && mapname == '') {
 		mainMenu.items.menu_properties.enabled=false;
 		mainMenu.items.menu_properties.className='jsdomenuitem_disabled';
 		mainMenu.items.menu_addobject.enabled=false;
 		mainMenu.items.menu_addobject.className='jsdomenuitem_disabled';
 	}
 	
-	if(backupAvailable != '1') {
-		mainMenu.items.menu_restore.enabled=false;
-		mainMenu.items.menu_restore.className='jsdomenuitem_disabled';
+	if(typeof backupAvailable === 'undefined' || backupAvailable == false) {
+		mainMenu.items.menu_restore.enabled = false;
+		mainMenu.items.menu_restore.className = 'jsdomenuitem_disabled';
 	}
 }

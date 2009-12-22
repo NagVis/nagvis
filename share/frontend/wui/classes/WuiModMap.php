@@ -55,12 +55,10 @@ class WuiModMap extends WuiModule {
 			$INDEX->setCustomStylesheet($CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
 		
-		// FIXME: Header menu?
-		
 		$MAP = new WuiMap(WuiCore::getInstance(), $MAPCFG);
 		
 		// Preflight checks
-		if(!$MAP->checkPHPMBString(1)) {
+		if(!$this->CORE->checkPHPMBString(1)) {
 			exit;
 		}
 		if(!$MAPCFG->checkMapConfigWriteable(1)) {
@@ -70,6 +68,8 @@ class WuiModMap extends WuiModule {
 			// Lock the map for the defined time
 			$MAPCFG->writeMapLock();
 		}
+		
+		// FIXME: Header menu?
 		
 		// Map view
 		$VIEW = new WuiViewMap(WuiCore::getInstance(), $MAP);

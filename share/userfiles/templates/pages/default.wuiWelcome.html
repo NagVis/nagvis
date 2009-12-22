@@ -1,0 +1,30 @@
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+
+<script type="text/javascript">
+oGeneralProperties = {$generalProperties};
+
+var mapname = '';
+var username = '{$userName}';
+
+var langMenu = {$langMenu};
+var lang = {$lang};
+var validMainConfig = {$validMainCfg};
+var validMapConfig = {$validMapCfg};
+
+var mapOptions = {$mapOptions};
+</script>
+
+<div id="mymap" class="map">
+	<!-- background -->
+	{if $backgroundImg != ''}
+	<img id="background" src="{$backgroundImg}" style="z-index:0;" alt="">
+	{/if}
+</div>
+
+<script type="text/javascript">
+// build the right-click menu
+initjsDOMenu();
+</script>
+
+<!-- Important to have this in body -->
+<script type="text/javascript" src="{$base}/frontend/wui/js/wz_tooltip.js"></script>
