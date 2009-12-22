@@ -360,8 +360,9 @@ function deleteMapObject(oObj) {
 		}
 		oResult = null;
 		
-		// FIXME: Reloading the map (Change to simply removing the object)
-		document.location.href='./index.php?map='+map;
+		// Remove the object from the map
+		document.getElementById('mymap').removeChild(document.getElementById('box_'+type+'_'+id));
+		oObj = null;
 		
 		return true;
 	} else {
@@ -408,7 +409,7 @@ function formSubmit(formId, target, bReloadPage) {
 	
 	// FIXME: Reloading the map (Change to reload object)
 	if(bReloadPage === true) {
-		document.location.href='./index.php?map='+mapname;
+		document.location.href='./index.php?mod=Map&act=edit&show='+mapname;
 	}
 	
 	return true;
