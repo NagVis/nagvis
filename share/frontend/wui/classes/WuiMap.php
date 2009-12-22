@@ -113,28 +113,21 @@ class WuiMap extends GlobalMap {
 		foreach($this->objects AS $var => $obj) {
 			switch($obj['type']) {
 				case 'textbox':
-					$obj['class'] = "box";
-					$obj['icon'] = "20x20.gif";
-					$obj['iconParams'] = '';
-					
 					$ret .= $this->textBox($obj);
-					$obj = $this->fixIcon($obj);
-					$ret .= $this->parseIcon($obj);
+					
+					$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
 				break;
 				default:
-					if(isset($obj['line_type'])) {
+					if(isset($obj['view_type']) && $obj['view_type'] == 'line') {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
 						$ret .= "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
+						
 						$obj['x'] = round(($pointa_x+($pointb_x-$pointa_x)/2) - 10);
 						$obj['y'] = round(($pointa_y+($pointb_y-$pointa_y)/2) - 10);
-						
 						$obj['icon'] = '20x20.gif';
 					} else {
-						// add this object to the list of the components which will have to be movable, if it's not a line or a textbox
-						if(!isset($obj['line_type']) && $obj['type'] != 'textbox') {
-							$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
-						}
+						$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
 					}
 					
 					if(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
@@ -445,7 +438,7 @@ class WuiMap extends GlobalMap {
 			$sBorderColor = 'border_color';
 		}
 		
-		$ret .= "<div class=\"".$obj['class']."\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left: ".$obj['x']."px; top: ".$obj['y']."px; z-index: ".$obj['z']."; width: ".$obj['w']."; overflow: visible;\">";	
+		$ret .= "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"box\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left: ".$obj['x']."px; top: ".$obj['y']."px; z-index: ".$obj['z']."; width: ".$obj['w']."; overflow: visible;\" ".$this->infoBox($obj).">";	
 		$ret .= "\t<span>".$obj['text']."</span>";
 		$ret .= "</div>";
 		
