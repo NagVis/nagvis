@@ -305,6 +305,9 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			var objX = document.getElementById('box_'+type+'_'+id).style.left.replace('px', '');
 			var objY = document.getElementById('box_'+type+'_'+id).style.top.replace('px', '');
 			
+			// Substract height of header menu here
+			objY += getHeaderHeight();
+			
 			x = oObj.x - objX;
 			y = oObj.y - objY;
 			
