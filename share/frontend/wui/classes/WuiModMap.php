@@ -39,7 +39,6 @@ class WuiModMap extends WuiModule {
 	}
 	
 	private function showEditDialog() {
-		
 		// Load map configuration
 		$MAPCFG = new WuiMapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
@@ -47,10 +46,10 @@ class WuiModMap extends WuiModule {
 		// Build index template
 		$INDEX = new WuiViewIndex($this->CORE);
 		$INDEX->setSubtitle('WUI');
-		$INDEX->setBackgroundColor($MAPCFG->getValue('global',0, 'background_color'));
+		$INDEX->setBackgroundColor($MAPCFG->getValue('global', 0, 'background_color'));
 		
 		// Need to load the custom stylesheet?
-		$customStylesheet = $MAPCFG->getValue('global',0, 'stylesheet');
+		$customStylesheet = $MAPCFG->getValue('global', 0, 'stylesheet');
 		if($customStylesheet !== '') {
 			$INDEX->setCustomStylesheet($CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
@@ -69,7 +68,12 @@ class WuiModMap extends WuiModule {
 			$MAPCFG->writeMapLock();
 		}
 		
-		// FIXME: Header menu?
+    // Need to parse the header menu by config or url value?
+    if($MAPCFG->getValue('global', 0, 'header_menu')) {
+      // Parse the header menu
+      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $MAPCFG->getValue('global', 0, 'header_template'), $MAPCFG);
+      $INDEX->setHeaderMenu($HEADER->__toString());
+    }
 		
 		// Map view
 		$VIEW = new WuiViewMap(WuiCore::getInstance(), $MAP);

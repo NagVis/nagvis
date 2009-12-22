@@ -67,7 +67,7 @@ class WuiViewMap {
 				'langMenu' => $this->CORE->getJsLangMenu(),
 				'lang' => $this->CORE->getJsLang(),
 				'validMainCfg' => $this->CORE->getJsValidMainConfig(),
-				'validMapCfg' => $this->CORE->getJsValidMapConfig(),
+				'validMapCfg' => $this->MAP->getJsValidMapConfig(),
 				'mapOptions' => $this->CORE->getMapOptions(),
 				'backupAvailable' => (file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAP->MAPCFG->getName().".cfg.bak")?'true':'false')
 			);

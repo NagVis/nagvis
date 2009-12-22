@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalHeaderMenu.php - Class for handling the header menu
+ * NagVisHeaderMenu.php - Class for handling the header menu
  *
  * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class GlobalHeaderMenu {
+class NagVisHeaderMenu {
 	private $CORE;
 	private $OBJPAGE;
 	private $AUTHORISATION;

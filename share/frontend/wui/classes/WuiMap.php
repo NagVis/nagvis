@@ -50,6 +50,16 @@ class WuiMap extends GlobalMap {
 	}
 	
 	/**
+	 * Parses the validation regex of the map configuration values to javascript
+	 *
+	 * @return  String    JSON encoded array
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getJsValidMapConfig() {
+		return json_encode($this->MAPCFG->getValidConfig());
+	}
+	
+	/**
 	 * Makes defined objecs moveable
 	 *
 	 * @return	String html

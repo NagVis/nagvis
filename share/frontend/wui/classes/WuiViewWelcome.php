@@ -58,7 +58,6 @@ class WuiViewWelcome {
 				'langMenu' => $this->CORE->getJsLangMenu(),
 				'lang' => $this->CORE->getJsLang(),
 				'validMainCfg' => $this->CORE->getJsValidMainConfig(),
-				'validMapCfg' => $this->CORE->getJsValidMapConfig(),
 				'mapOptions' => $this->CORE->getMapOptions()
 			);
 

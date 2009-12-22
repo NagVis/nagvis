@@ -37,7 +37,7 @@ class FrontendModOverview extends FrontendModule {
 		// Need to parse the header menu?
 		if($this->CORE->getMainCfg()->getValue('index','headermenu')) {
 			// Parse the header menu
-			$HEADER = new GlobalHeaderMenu($this->CORE, $this->AUTHORISATION, $this->CORE->getMainCfg()->getValue('index', 'headertemplate'), '');
+			$HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->CORE->getMainCfg()->getValue('index', 'headertemplate'), '');
 			
 			// Put rotation information to header menu
 			if($this->rotation != '') {

@@ -26,16 +26,34 @@
  */
  
 var cpt_clicks = 0;
-var coords= '';
-var objtype= '';
-var follow_mouse=false;
-var action_click="";
+var coords = '';
+var objtype = '';
+var follow_mouse = false;
+var action_click = "";
 var myshape = null;
 var myshape_background = null;
-var myshapex=0;
-var myshapey=0;
-var objid=0;
+var myshapex = 0;
+var myshapey = 0;
+var objid = 0;
 var viewType = '';
+
+// FIXME: Maybe move to nagvis-js frontend file to have it available in 
+// regular frontend in the future
+function getHeaderHeight() {
+	var oHeader = null;
+	var ret = 0;
+	
+	// FIXME: Check if header is shown
+	
+	oHeader = document.getElementById('header');
+	if(oHeader !== null) {
+		ret = oHeader.clientHeight;
+	}
+	
+	oHeader = null;
+	
+	return ret;
+}
 
 // function that says if the current user is allowed to have access to the map
 function checkUserAllowed(allowedUsers,username) {
@@ -94,21 +112,20 @@ function validateValue(sName, sValue, sRegex) {
 
 // functions used to track the mouse movements, when the user is adding an object. Draw a line a rectangle following the mouse
 // when the user has defined enough points we open the "add object" window
-
 function get_click(newtype,nbclicks,action) {
-	coords='';
-	action_click=action;
-	objtype=newtype;
+	coords = '';
+	action_click = action;
+	objtype = newtype;
 	
 	// we init the number of points coordinates we're going to wait for before we display the add object window
 	cpt_clicks=nbclicks;
 	
 	if(document.images['background']) {
-		document.images['background'].style.cursor='crosshair';
+		document.images['background'].style.cursor = 'crosshair';
 	}
 	
-	document.onclick=get_click_pos;
-	document.onmousemove=track_mouse;
+	document.onclick = get_click_pos;
+	document.onmousemove = track_mouse;
 }
 
 function printLang(sLang,sReplace) {
@@ -142,6 +159,9 @@ function track_mouse(e) {
 			posx = event.clientX;
 			posy = event.clientY;
 		}
+		
+		// Substract height of header menu here
+		posy -= getHeaderHeight();
 		
 		myshape.clear();
 		
@@ -178,10 +198,14 @@ function get_click_pos(e) {
 			posy = event.clientY;
 		}
 		
+		// Substract height of header menu here
+		posy -= getHeaderHeight();
+		
 		// Start drawing a line
 		if(cpt_clicks == 2) {		
 			myshape = new jsGraphics("mymap");
 			myshapex = posx;
+			// Substract height of header menu here
 			myshapey = posy;
 			
 			myshape.setColor('#06B606');
@@ -205,17 +229,20 @@ function get_click_pos(e) {
 	}
 	
 	if(cpt_clicks == 0) {
-		if (follow_mouse) myshape.clear();
-		coords=coords.substr(0,coords.length-1);
-		
-		if(document.images['background']) {
-			document.images['background'].style.cursor='default';
+		if(follow_mouse) {
+			myshape.clear();
 		}
 		
-		follow_mouse=false;
-		if(action_click=='add') {
+		coords = coords.substr(0, coords.length-1);
+		
+		if(document.images['background']) {
+			document.images['background'].style.cursor = 'default';
+		}
+		
+		follow_mouse = false;
+		if(action_click == 'add') {
 			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
-		} else if(action_click=='modify') {
+		} else if(action_click == 'modify') {
 			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
 		
@@ -293,7 +320,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			}
 		} else {
 			x = oObj.x;
-			y = oObj.y;
+			// Substract height of header menu here
+			y = oObj.y - getHeaderHeight();
 		}
 		
 		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&label_x='+x+'&label_y='+y;
@@ -301,7 +329,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		type = arr[1];
 		id = arr[2];
 		
-		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+oObj.x+'&y='+oObj.y;
+		// Don't forget to substract height of header menu
+		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+oObj.x+'&y='+(oObj.y - getHeaderHeight());
 	}
 	
 	// Sync ajax request

@@ -364,7 +364,8 @@ Pop up the main menu.
 */
 function popUpMainMenu(menuObj, e) { // Private method
   menuObj.style.left = (getMainMenuLeftPos(menuObj, getX(e)) + getScrollLeft()) + px;
-  menuObj.style.top = (getMainMenuTopPos(menuObj, getY(e)) + getScrollTop()) + px;
+  // NagVis FIX: Needing header height to have the correct posision
+  menuObj.style.top = (getMainMenuTopPos(menuObj, getY(e)) + getScrollTop() - getHeaderHeight()) + px;
   var display = popUpMenuObj.menuObj.style.display;
   popUpMenuObj.menuObj.style.display = "none";
   popUpMenuObj.menuObj.style.visibility = "visible";

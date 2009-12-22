@@ -226,16 +226,6 @@ class WuiCore extends GlobalCore {
 	}
 	
 	/**
-	 * Parses the validation regex of the map configuration values to javascript
-	 *
-	 * @return  String    JSON encoded array
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getJsValidMapConfig() {
-		return json_encode(self::$MAINCFG->getValidConfig());
-	}
-	
-	/**
 	 * Checks if the mbstring extension is loaded
 	 *
 	 * @return  Boolean
