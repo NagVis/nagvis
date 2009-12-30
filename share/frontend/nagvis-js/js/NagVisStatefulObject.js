@@ -436,9 +436,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseLine: function () {
-		var ret = '';
-		var link = '';
-		
 		// Create container div
 		var oContainerDiv = document.createElement('div');
 		oContainerDiv.setAttribute('id', this.conf.object_id+'-linediv');
@@ -457,9 +454,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 			
 			oLinkDiv.setAttribute('id', this.conf.object_id+'-linelinkdiv');
 			oLinkDiv.style.zIndex = (this.conf.z+1);
+			
 			var sUrl = this.conf.url;
 			var sUrlTarget = this.conf.url_target;
-			oLinkDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
+			oLinkDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); sUrl = null; sUrlTarget = null; };
 			
 			oContainerDiv.appendChild(oLinkDiv);
 			oLinkDiv = null;
@@ -494,7 +492,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	    case 'UP':
 	    case 'OK':
 	    case 'PENDING':
-				colorFill = oStates[state].color;
+				colorFill = oStates[this.conf.summary_state].color;
 			break;
 			default:
 				colorFill = '#FFCC66';

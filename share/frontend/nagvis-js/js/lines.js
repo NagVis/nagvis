@@ -124,14 +124,16 @@ function drawPolygonBasedObject(objectId, xCoord, yCoord, z, w, colorFill, color
 	// FIXME: Would be better to have a link allover the line
 	// -------------------------------------------------------------------------
 	
-	if(bLinkArea) {
+	if(bLinkArea && bLinkArea === true) {
 		var oLinkContainer = document.getElementById(objectId+'-linelinkdiv');
 		var oImg = document.createElement('img');
 		oImg.setAttribute('id', objectId+'-link');
-		oImg.src = oGeneralProperties.path_images+'iconsets/20x20.gif';
+		oImg.src = oGeneralProperties.path_iconsets+'20x20.gif';
 		oImg.style.position = 'absolute';
-		oImg.style.left = (middle(x1, x2)-10)+"px";
-		oImg.style.top = (middle(y1, y2)-10)+"px";
+		oImg.style.left = (middle(xMin, xMax)-10)+"px";
+		oImg.style.top = (middle(yMin, yMax)-10)+"px";
+		oImg.style.width = 10;
+		oImg.style.height = 10;
 		oImg.style.zIndex = z+1;
 		
 		oLinkContainer.appendChild(oImg);
