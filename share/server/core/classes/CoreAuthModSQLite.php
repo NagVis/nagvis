@@ -69,9 +69,9 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	}
 	
 	private function createInitialDb() {
-		$this->DB->query('CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId))');
-		$this->DB->query('CREATE TABLE roles (roleId INTEGER, name VARCHAR(100), PRIMARY KEY(roleId))');
-		$this->DB->query('CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId))');
+		$this->DB->query('CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))');
+		$this->DB->query('CREATE TABLE roles (roleId INTEGER, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))');
+		$this->DB->query('CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId), UNIQUE(mod,act,obj))');
 		$this->DB->query('CREATE TABLE users2roles (userId INTEGER, roleId INTEGER, PRIMARY KEY(userId, roleId))');
 		$this->DB->query('CREATE TABLE roles2perms (roleId INTEGER, permId INTEGER, PRIMARY KEY(roleId, permId))');
 		
@@ -341,27 +341,27 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	}
 	
 	public function checkUserExists($name) {
-		$RES = $this->DB->query('SELECT COUNT(*) FROM users WHERE name=\''.sqlite_escape_string($name).'\'');
-		return intval($RES->fetchSingle()) > 0;
+		return $this->DB->count('SELECT COUNT(*) AS num FROM users WHERE name='.$this->DB->escape($name));
 	}
 	
 	private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
 		if($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
-			$query = 'SELECT userId FROM users WHERE name=\''.sqlite_escape_string($this->sUsername).'\' AND password=\''.sqlite_escape_string($this->sPasswordHash).'\'';
+			$query = 'SELECT userId FROM users WHERE name='.$this->DB->escape($this->sUsername).' AND password='.$this->DB->escape($this->sPasswordHash);
 		} else {
-			$query = 'SELECT userId FROM users WHERE name=\''.sqlite_escape_string($this->sUsername).'\'';
+			$query = 'SELECT userId FROM users WHERE name='.$this->DB->escape($this->sUsername);
 		}
 		
-		return intval($this->DB->query($query)->fetchSingle());
+		$ret = $this->DB->fetchAssoc($this->DB->query($query));
+		
+		return intval($ret['userId']);
 	}
 	
 	private function updatePassword() {
-		$RES = $this->DB->query('UPDATE users SET password=\''.sqlite_escape_string($this->sPasswordHash).'\' WHERE name=\''.sqlite_escape_string($this->sUsername).'\'');
-		return intval($RES->fetchSingle());
+		$this->DB->query('UPDATE users SET password='.$this->DB->escape($this->sPasswordHash).' WHERE name='.$this->DB->escape($this->sUsername));
 	}
 	
 	private function addUser($user, $hash) {
-		$this->DB->query('INSERT INTO users (name,password) VALUES (\''.sqlite_escape_string($user).'\',\''.sqlite_escape_string($hash).'\')');
+		$this->DB->query('INSERT INTO users (name,password) VALUES ('.$this->DB->escape($user).','.$this->DB->escape($hash).')');
 	}
 	
 	public function passCredentials($aData) {

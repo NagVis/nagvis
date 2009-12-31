@@ -28,16 +28,19 @@
 class CoreSQLiteHandler {
 	private $DB = null;
 	
-	public function __construct() {
-		
-	}
+	public function __construct() {}
 	
 	public function open($file) {
 		// First check if the php installation supports sqlite
 		if($this->checkSQLiteSupport()) {
-			$this->DB = new SQLiteDatabase($file, 0664, $sError);
+			try {
+				$this->DB = new PDO("sqlite:".$file);
+			} catch(PDOException $e) {
+    		echo $e->getMessage();
+    		return false;
+    	}
 			
-			if($this->DB === false) {
+			if($this->DB === false || $this->DB === null) {
 				return false;
 			} else {
 				return true;
@@ -48,30 +51,48 @@ class CoreSQLiteHandler {
 	}
 	
 	public function tableExist($table) {
-	  $RES = $this->DB->query('SELECT COUNT(*) FROM sqlite_master WHERE type=\'table\' AND name=\''.$table.'\'');
-	  return intval($RES->fetchSingle()) > 0;
+	  $RET = $this->query('SELECT COUNT(*) AS num FROM sqlite_master WHERE type=\'table\' AND name='.$this->escape($table))->fetch(PDO::FETCH_ASSOC);
+	  return intval($RET['num']) > 0;
 	}
 	
 	public function query($query) {
 		return $this->DB->query($query);
 	}
 	
+	public function exec($query) {
+		return $this->DB->exec($query);
+	}
+	
+	public function count($query) {
+		$RET = $this->query($query)->fetch(PDO::FETCH_ASSOC);
+	  return intval($RET['num']) > 0;
+	}
+	
 	public function fetchAssoc($RES) {
-		return $RES->fetch(SQLITE_ASSOC);
+		return $RES->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	public function close() {
-		$this->DB->close();
+		$this->DB = null;
+	}
+	
+	public function escape($s) {
+		return $this->DB->quote($s);
 	}
 	
 	private function checkSQLiteSupport($printErr = 1) {
-		if(class_exists('SQLiteDatabase')) {
-			return true;
-		} else {
+		if(!class_exists('PDO')) {
 			if($printErr === 1) {
-				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Your PHP installation does not support SQLite. Please check if you installed the PHP module.'));
+				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Your PHP installation does not support PDO. Please check if you installed the PHP module.'));
 			}
 			return false;
+		} elseif(!in_array('sqlite', PDO::getAvailableDrivers())) {
+			if($printErr === 1) {
+				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Your PHP installation does not support PDO SQLite (3.x). Please check if you installed the PHP module.'));
+			}
+			return false;
+		} else {
+			return true;
 		}
 	}
 }

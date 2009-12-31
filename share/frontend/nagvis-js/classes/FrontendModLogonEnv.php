@@ -29,7 +29,8 @@ class FrontendModLogonEnv extends FrontendModule {
 							
 							// Check if the user exists
 							if(!$this->AUTHENTICATION->checkUserExists($sUser)) {
-								if(settype($this->CORE->getMainCfg()->getValue('global', 'logonenvcreateuser'), 'boolean')) {
+								$bCreateUser = $this->CORE->getMainCfg()->getValue('global', 'logonenvcreateuser');
+								if(settype($bCreateUser, 'boolean')) {
 									// Create user when not existing yet
 									// Important to add a random password here. When someone
 									// changes the logon mechanism to e.g. LogonDialog it

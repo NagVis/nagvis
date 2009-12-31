@@ -44,10 +44,10 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	
 	public function deleteRole($roleId) {
 		// Delete user
-		$this->DB->query('DELETE FROM roles WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+		$this->DB->exec('DELETE FROM roles WHERE roleId='.$this->DB->escape($roleId));
 		
 		// Delete role permissions
-		$this->DB->query('DELETE FROM roles2perms WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+		$this->DB->exec('DELETE FROM roles2perms WHERE roleId='.$this->DB->escape($roleId));
 		
 		// Check result
 		if(!$this->checkRoleExists($roleId)) {
@@ -59,10 +59,10 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	
 	public function deleteUser($userId) {
 		// Delete user
-		$this->DB->query('DELETE FROM users WHERE userId=\''.sqlite_escape_string($userId).'\'');
+		$this->DB->exec('DELETE FROM users WHERE userId='.$this->DB->escape($userId));
 		
 		// Delete user roles
-		$this->DB->query('DELETE FROM users2roles WHERE userId=\''.sqlite_escape_string($userId).'\'');
+		$this->DB->exec('DELETE FROM users2roles WHERE userId='.$this->DB->escape($userId));
 		
 		// Check result
 		if($this->checkUserExistsById($userId) <= 0) {
@@ -74,11 +74,11 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	
 	public function updateUserRoles($userId, $roles) {
 		// First delete all role perms
-		$this->DB->query('DELETE FROM users2roles WHERE userId=\''.sqlite_escape_string($userId).'\'');
+		$this->DB->exec('DELETE FROM users2roles WHERE userId='.$this->DB->escape($userId));
 		
 		// insert new user roles
 		foreach($roles AS $roleId) {
-			$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES ('.sqlite_escape_string($userId).', '.sqlite_escape_string($roleId).')');
+			$this->DB->exec('INSERT INTO users2roles (userId, roleId) VALUES ('.$this->DB->escape($userId).', '.$this->DB->escape($roleId).')');
 		}
 		
 		return true;
@@ -88,7 +88,7 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		$aRoles = Array();
 		
 		// Get all the roles of the user
-	  $RES = $this->DB->query('SELECT users2roles.roleId AS roleId, roles.name AS name FROM users2roles LEFT JOIN roles ON users2roles.roleId=roles.roleId WHERE userId=\''.sqlite_escape_string($userId).'\'');
+	  $RES = $this->DB->query('SELECT users2roles.roleId AS roleId, roles.name AS name FROM users2roles LEFT JOIN roles ON users2roles.roleId=roles.roleId WHERE userId='.$this->DB->escape($userId));
 	  while($data = $this->DB->fetchAssoc($RES)) {
 	  	$aRoles[] = $data;
 	  }
@@ -124,7 +124,7 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		$aRoles = Array();
 		
 		// Get all the roles of the user
-	  $RES = $this->DB->query('SELECT permId FROM roles2perms WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+	  $RES = $this->DB->query('SELECT permId FROM roles2perms WHERE roleId='.$this->DB->escape($roleId));
 	  while($data = $this->DB->fetchAssoc($RES)) {
 	  	$aRoles[$data['permId']] = true;
 	  }
@@ -134,12 +134,12 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	
 	public function updateRolePerms($roleId, $perms) {
 		// First delete all role perms
-		$this->DB->query('DELETE FROM roles2perms WHERE roleId=\''.sqlite_escape_string($roleId).'\'');
+		$this->DB->exec('DELETE FROM roles2perms WHERE roleId='.$this->DB->escape($roleId));
 		
 		// insert new role perms
 		foreach($perms AS $permId => $val) {
 			if($val === true) {
-				$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.sqlite_escape_string($roleId).', '.sqlite_escape_string($permId).')');
+				$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$this->DB->escape($roleId).', '.$this->DB->escape($permId).')');
 			}
 		}
 		
@@ -147,8 +147,7 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	}
 	
 	public function checkRoleExists($name) {
-		$RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\''.sqlite_escape_string($name).'\'');
-		if(intval($RES->fetchSingle()) > 0) {
+		if($this->DB->count('SELECT COUNT(*) AS num FROM roles WHERE name='.$this->DB->escape($name)) > 0) {
 			return true;
 		} else {
 			return false;
@@ -156,7 +155,7 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	}
 	
 	public function createRole($name) {
-		$this->DB->query('INSERT INTO roles (name) VALUES (\''.sqlite_escape_string($name).'\')');
+		$this->DB->exec('INSERT INTO roles (name) VALUES ('.$this->DB->escape($name).')');
 		
 		// Check result
 		if($this->checkRoleExists($name)) {
@@ -172,14 +171,14 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		$sUsername = $this->AUTHENTICATION->getUser();
 		
 		// Only handle known users
-		$userId = $this->checkUserExists($sUsername);
+		$userId = $this->getUserId($sUsername);
 		if($userId > 0) {
 		  // Get all the roles of the user
 		  $RES = $this->DB->query('SELECT perms.mod AS mod, perms.act AS act, perms.obj AS obj '.
 		                          'FROM users2roles '.
 		                          'INNER JOIN roles2perms ON roles2perms.roleId = users2roles.roleId '.
 		                          'INNER JOIN perms ON perms.permId = roles2perms.permId '.
-		                          'WHERE users2roles.userId = \''.sqlite_escape_string($userId).'\'');
+		                          'WHERE users2roles.userId = '.$this->DB->escape($userId));
 		  
 			while($data = $this->DB->fetchAssoc($RES)) {
 				if(!isset($aPerms[$data['mod']])) {
@@ -200,13 +199,13 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	}
 	
 	private function checkUserExistsById($id) {
-		$RES = $this->DB->query('SELECT userId FROM users WHERE userId=\''.sqlite_escape_string($id).'\'');
-		return intval($RES->fetchSingle());
+		return $this->DB->count('SELECT COUNT(*) AS num FROM users WHERE userId='.$this->DB->escape($id));
 	}
 	
-	private function checkUserExists($sUsername) {
-		$RES = $this->DB->query('SELECT userId FROM users WHERE name=\''.sqlite_escape_string($sUsername).'\'');
-		return intval($RES->fetchSingle());
+	private function getUserId($sUsername) {
+		$ret = $this->DB->fetchAssoc($this->DB->query('SELECT userId FROM users WHERE name='.$this->DB->escape($sUsername)));
+		
+		return intval($ret['userId']);
 	}
 }
 ?>

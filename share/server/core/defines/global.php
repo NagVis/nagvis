@@ -39,7 +39,7 @@ set_include_path(
 );
 
 // enable/disable the debug mode
-define('DEBUG', FALSE);
+define('DEBUG', false);
 
 /**
  * For desired debug output add these possible values:
