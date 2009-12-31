@@ -278,6 +278,30 @@ function dragMapObject(oObj) {
 	tt_Hide();
 }
 
+function saveObjectAfterResize(oObj) {
+	// Split id to get object informations
+	var arr = oObj.id.split('_');
+	
+	var type = arr[1];
+	var id = arr[2];
+	
+	var objX = parseInt(oObj.style.left.replace('px', ''));
+	var objY = parseInt(oObj.style.top.replace('px', ''));
+	var objW = parseInt(oObj.style.width);
+	var objH = parseInt(oObj.style.height);
+	
+	// Don't forget to substract height of header menu
+	var url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
+	
+	// Sync ajax request
+	var oResult = getSyncRequest(url);
+	if(oResult && oResult.status != 'OK') {
+		alert(oResult.message);
+	}
+	
+	oResult = null;
+}
+
 function saveObjectAfterMoveAndDrop(oObj) {
 	// When x or y are negative just return this and make no change
 	if(oObj.y < 0 || oObj.x < 0) {

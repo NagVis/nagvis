@@ -1088,6 +1088,9 @@ class GlobalMapCfg {
 					'match' => MATCH_COLOR),
 				'use' => Array('must' => 0,
 					'match' => MATCH_STRING_NO_SPACE),
+				'h' => Array('must' => 0,
+					'default' => 'auto',
+					'match' => MATCH_TEXTBOX_HEIGHT),
 				'w' => Array('must' => 1,
 					'match' => MATCH_TEXTBOX_WIDTH)),
 			

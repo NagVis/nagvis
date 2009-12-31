@@ -71,5 +71,6 @@ define('MATCH_PHP_FILE', '/^(.+\.php)$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
 define('MATCH_ORDER', '/^(?:asc|desc)$/');
 define('MATCH_TEXTBOX_WIDTH', '/^([0-9]+|auto)$/');
+define('MATCH_TEXTBOX_HEIGHT', '/^([0-9]+|auto)$/');
 define('MATCH_SOCKET', '/^(unix:[a-zA-Z0-9-_\.\/]+|tcp:[a-zA-Z0-9-\.]+:[0-9]{1,5})$/');
 ?>

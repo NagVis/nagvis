@@ -426,6 +426,12 @@ class WuiMap extends GlobalMap {
 			$obj['w'] = 'auto';
 		}
 		
+		if(isset($obj['h'])) {
+			$obj['h'] = $obj['h'].'px';
+		} else {
+			$obj['h'] = 'auto';
+		}
+		
 		if(isset($obj['background_color'])) {
 			$sBgColor = $obj['background_color'];
 		} else {
@@ -438,9 +444,12 @@ class WuiMap extends GlobalMap {
 			$sBorderColor = 'border_color';
 		}
 		
-		$ret .= "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"box\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left: ".$obj['x']."px; top: ".$obj['y']."px; z-index: ".$obj['z']."; width: ".$obj['w']."; overflow: visible;\" ".$this->infoBox($obj).">";	
+		$id = 'box_'.$obj['type'].'_'.$obj['id'];
+		
+		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;\" ".$this->infoBox($obj).">";	
 		$ret .= "\t<span>".$obj['text']."</span>";
 		$ret .= "</div>";
+		$ret .= $this->parseJs('var obj = document; addEvent(obj, "mousedown", doDown); addEvent(obj, "mouseup", doUp); addEvent(obj, "mousemove", doMove); obj = null;');
 		
 		return $ret;	
 	}
@@ -503,7 +512,7 @@ class WuiMap extends GlobalMap {
 		
 		// Position/Size link on textboxes/lines
 		//$tooltipText .= "&nbsp;".$positionSizeText;
-		if(isset($obj['line_type']) || $obj['type']=='textbox') {
+		if(isset($obj['view_type']) && $obj['view_type'] == 'line') {
 			$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)\'"
 						." href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>"
 						."<span>".$this->CORE->getLang()->getText('positionSize')."</span></a></li>";			

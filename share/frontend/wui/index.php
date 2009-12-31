@@ -156,33 +156,4 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
 echo $sContent;
 if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 exit(1);
-
-/**************************************************/
-
-/*// Set empty map if none is set
-if(!isset($_GET['map'])) {
-	$_GET['map'] = '';	
-}
-
-$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
-$MAPCFG->readMapConfig();
-
-$FRONTEND = new WuiFrontend($CORE, $MAPCFG);
-$FRONTEND->checkPreflight();
-$FRONTEND->getMap();
-
-if($_GET['map'] != '') {
-	// Do preflight checks (before printing the map)
-	if(!$MAPCFG->checkMapConfigWriteable(1)) {
-		exit;
-	}
-	if(!$MAPCFG->checkMapLocked(1)) {
-		// Lock the map for the defined time
-		$MAPCFG->writeMapLock();
-	}
-}
-
-// print the HTML page
-$FRONTEND->printPage();*/
-
 ?>
