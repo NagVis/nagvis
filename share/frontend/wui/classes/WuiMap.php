@@ -308,8 +308,19 @@ class WuiMap extends GlobalMap {
 			$this->moveable .= '"abs_label_'.$obj['type'].'_'.$obj['id'].'",';
 		}
 		
+		// Translate some macros in labels (Only the static ones)
+		$label = str_replace('[name]', $obj[$name], $obj['label_text']);
+		
+		if(isset($obj['alias'])) {
+			$label = str_replace('[alias]', $obj['alias'], $label);
+		}
+		
+		if($obj['type'] == 'service') {
+			$label = str_replace('[name]', $obj['name'], $label);
+		}
+		
 		$ret  = '<div '.$id.' class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
-		$ret .= '<span>'.$obj['label_text'].'</span>';
+		$ret .= '<span>'.$label.'</span>';
 		$ret .= '</div>';
 		
 		return $ret;
