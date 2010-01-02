@@ -31,6 +31,7 @@ class GlobalMapCfg {
 	private $CACHE;
 	
 	protected $name;
+	protected $type = 'map';
 	protected $mapConfig;
 	
 	private $configFile = '';
@@ -1411,6 +1412,16 @@ class GlobalMapCfg {
 						if($onlyGlobal == 0) { 
 							// Build cache
 							$this->CACHE->writeCache($this->mapConfig, 1);
+							
+							// The automap also uses this method, so handle the different type
+							if($this->type === 'automap') {
+								$mod = 'AutoMap';
+							} else {
+								$mod = 'Map';
+							}
+							
+							// Trigger the autorization backend to create new permissions when needed
+							$this->CORE->getAuthorization()->createPermission($mod, $this->getName());
 						}
 						
 						$this->BACKGROUND = $this->getBackground();

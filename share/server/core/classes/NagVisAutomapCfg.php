@@ -38,13 +38,14 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		// Fix the automap name (backward compatible to old automap=1)
 		if(isset($name) && $name === '1') {
 			$this->name = '__automap';
-		}
-		else {
+		} else {
 			$this->name	= $name;
 		}
 		
 		// Start of the parent constructor
 		parent::__construct($CORE, $this->name);
+		
+		$this->type = 'automap';
 		
 		// Override the default map configuration path with automap path
 		$this->setConfigFile($CORE->getMainCfg()->getValue('paths', 'automapcfg').$this->name.'.cfg');

@@ -55,6 +55,13 @@ class CoreRotation {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapRotationPoolNotExists', Array('ROTATION' => htmlentities($this->sPoolName))));
 		}
 		
+		// Trigger the autorization backend to create new rotation permissions when needed
+		// FIXME: maybe not the best place for that. But there is better central place to
+		//        trigger thath
+		foreach($this->CORE->getDefinedRotationPools() AS $name) {
+			GlobalCore::getInstance()->getAuthorization()->createPermission('Rotation', $name);
+		}
+		
 		// Read the array of steps from configuration
 		$this->gatherSteps();
 		

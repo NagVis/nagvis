@@ -80,6 +80,10 @@ class CoreAuthorisationHandler {
 		$this->MOD = new $sModule($this->CORE, $AUTH);
 	}
 	
+	public function createPermission($mod, $name) {
+		return $this->MOD->createPermission($mod, $name);
+	}
+	
 	public function getAuthentication() {
 		return $this->AUTHENTICATION;
 	}

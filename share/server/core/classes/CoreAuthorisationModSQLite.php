@@ -42,6 +42,26 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		}
 	}
 	
+	public function createPermission($mod, $name) {
+		if($name === '') {
+			// FIXME: Errorhandling
+			return false;
+		}
+		
+		switch($mod) {
+			case 'Map':
+				return $this->DB->createMapPermissions($name);
+			case 'AutoMap':
+				return $this->DB->createAutoMapPermissions($name);
+			case 'Rotation':
+				return $this->DB->createRotationPermissions($name);
+			default:
+				// FIXME: Errorhandling
+				return false;
+			break;
+		}
+	}
+	
 	public function deleteRole($roleId) {
 		// Delete user
 		$this->DB->exec('DELETE FROM roles WHERE roleId='.$this->DB->escape($roleId));
