@@ -8,12 +8,15 @@
 	
 	<script type="text/javascript" src="{$htmlJs}ExtBase.js"></script>
 	{if $bUseCompressedJs}
+	<script type="text/javascript" src="{$htmlJs}NagVisCompressed.js"></script>
 	<script type="text/javascript" src="{$htmlJs}WuiCompressed.js"></script>
 	{else}
 	<script type="text/javascript" src="{$htmlJs}nagvis.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontendMessage.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
+	<!-- FIXME: Maybe replace with frontend window?! -->
 	<script type="text/javascript" src="{$htmlJs}popupWindow.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontend.js"></script>
 	<script type="text/javascript" src="{$htmlJs}ajax.js"></script>
 	<script type="text/javascript" src="{$wuiJs}wui.js"></script>
 	<script type="text/javascript" src="{$wuiJs}ajax.js"></script>
