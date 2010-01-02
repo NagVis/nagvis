@@ -70,7 +70,8 @@ class WuiAddModify extends GlobalPage {
 		$this->FORM = new GlobalForm(Array('name' => 'addmodify',
 			'id' => 'addmodify',
 			'method' => '',
-			'action' => 'javascript:(validateMapCfgForm()) ? formSubmit(\'addmodify\', \'./ajax_handler.php?action='.$action.'\') : true;',
+			'onSubmit' => 'return validateMapCfgForm()',
+			'action' => 'javascript:formSubmit(\'addmodify\', \'./ajax_handler.php?action='.$action.'\');',
 			'cols' => '2'));
 		
 		$code .= $this->getJsIncludes();

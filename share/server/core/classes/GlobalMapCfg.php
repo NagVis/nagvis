@@ -1421,7 +1421,10 @@ class GlobalMapCfg {
 							}
 							
 							// Trigger the autorization backend to create new permissions when needed
-							$this->CORE->getAuthorization()->createPermission($mod, $this->getName());
+							$AUTHORIZATION = $this->CORE->getAuthorization();
+							if($AUTHORIZATION !== null) {
+								$this->CORE->getAuthorization()->createPermission($mod, $this->getName());
+							}
 						}
 						
 						$this->BACKGROUND = $this->getBackground();

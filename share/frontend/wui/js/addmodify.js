@@ -184,6 +184,8 @@ function validateMapCfgForm() {
 		
 		if(document.addmodify.line_type && document.addmodify.line_type.value == '') {
 			alert(printLang(lang["lineTypeNotSet"], ''));
+			document.addmodify.line_type.focus();
+			
 			return false;
 		}
 	}
