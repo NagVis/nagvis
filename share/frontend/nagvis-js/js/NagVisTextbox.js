@@ -81,17 +81,19 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseTextbox: function () {
-		if(this.conf.w) {
+		if(this.conf.w && this.conf.w !== '') {
 			this.conf.w = this.conf.w+'px';
 		} else {
 			this.conf.w = 'auto';
 		}
 		
-		if(this.conf.h) {
+		if(this.conf.h && this.conf.h !== '') {
 			this.conf.h = this.conf.h+'px';
 		} else {
 			this.conf.h = 'auto';
 		}
+		
+		alert(this.conf.w);
 		
 		var oLabelDiv = document.createElement('div');
 		oLabelDiv.setAttribute('id', this.conf.object_id+'label');
