@@ -81,34 +81,27 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseTextbox: function () {
-		if(this.conf.w && this.conf.w !== '') {
-			this.conf.w = this.conf.w+'px';
-		} else {
-			this.conf.w = 'auto';
-		}
-		
-		if(this.conf.h && this.conf.h !== '') {
-			this.conf.h = this.conf.h+'px';
-		} else {
-			this.conf.h = 'auto';
-		}
-		
-		alert(this.conf.w);
-		
 		var oLabelDiv = document.createElement('div');
 		oLabelDiv.setAttribute('id', this.conf.object_id+'label');
 		oLabelDiv.setAttribute('class', 'box');
 		oLabelDiv.setAttribute('className', 'box');
-		oLabelDiv.style.background=this.conf.background_color;
-		oLabelDiv.style.borderColor=this.conf.border_color;
+		oLabelDiv.style.background = this.conf.background_color;
+		oLabelDiv.style.borderColor = this.conf.border_color;
 		
 		oLabelDiv.style.position = 'absolute';
-		oLabelDiv.style.left = this.conf.x+'px';
-		oLabelDiv.style.top = this.conf.y+'px';
-		oLabelDiv.style.width = this.conf.w;
-		oLabelDiv.style.height = this.conf.h;
-		oLabelDiv.style.zIndex = this.conf.z+1;
-		oLabelDiv.style.overflow= 'visible';
+		oLabelDiv.style.left = this.conf.x + 'px';
+		oLabelDiv.style.top = this.conf.y + 'px';
+		
+		if(this.conf.w && this.conf.w !== '' && this.conf.h !== 'auto') {
+			oLabelDiv.style.width = this.conf.w+'px';
+		}
+		
+		if(this.conf.h && this.conf.h !== '' && this.conf.h !== 'auto') {
+			oLabelDiv.style.height = this.conf.h+'px';
+		}
+		
+		oLabelDiv.style.zIndex = this.conf.z + 1;
+		oLabelDiv.style.overflow = 'visible';
 		
 		/**
 		 * IE workaround: The transparent for the color is not enough. The border
