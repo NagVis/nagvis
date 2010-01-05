@@ -77,7 +77,6 @@ function drawPolygonBasedObject(objectId, xCoord, yCoord, z, w, colorFill, color
 	//        than using the jsGraphics library
 	var oCanvas = document.createElement('canvas');
 	if(oCanvas.getContext) {
-		
 		var oLineContainer = document.getElementById(objectId+'-line');
 		
 		// Draw the line
