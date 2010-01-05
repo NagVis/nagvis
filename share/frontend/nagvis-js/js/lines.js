@@ -67,15 +67,16 @@ function newY(a, b, x, y) {
 // Draws polygon based object. By default it draws lines (arrows and also plain lines)
 function drawPolygonBasedObject(objectId, xCoord, yCoord, z, w, colorFill, colorBorder, bLinkArea) {
 	
+	var xMin = Math.round(min(xCoord));
+	var yMin = Math.round(min(yCoord));
+	var xMax = Math.round(max(xCoord));
+	var yMax = Math.round(max(yCoord));
+	
 	// Detect if the browser is able to render canvas objects
 	// If so: Use canvas rendering which performs much better
 	//        than using the jsGraphics library
 	var oCanvas = document.createElement('canvas');
 	if(oCanvas.getContext) {
-		var xMin = Math.round(min(xCoord));
-		var yMin = Math.round(min(yCoord));
-		var xMax = Math.round(max(xCoord));
-		var yMax = Math.round(max(yCoord));
 		
 		var oLineContainer = document.getElementById(objectId+'-line');
 		
