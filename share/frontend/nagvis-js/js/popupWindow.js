@@ -122,15 +122,15 @@ function popupWindow(title, oContent, openOnMousePosition, sWidth) {
 	var oContainerDiv = document.createElement('div');
 	oContainerDiv.setAttribute('id', 'popupWindow');
 	oContainerDiv.style.position = 'absolute';
-	oContainerDiv.style.width = sWidth+'px';
 	oContainerDiv.style.left = posX+'px';
 	oContainerDiv.style.top = posY+'px';
 	
 	var oTable = document.createElement('table');
 	oTable.setAttribute('id', 'popupWindowMaster');
-
+	
 	// When width is not set the window should be auto adjusted
 	if(sWidth !== '') {
+		oContainerDiv.style.width = sWidth+'px';
 		oTable.style.width = sWidth+'px';
 	}
 	

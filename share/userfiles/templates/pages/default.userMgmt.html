@@ -1,5 +1,6 @@
+<br>
 <script type="text/javascript">
-function selectAllOpts(field) \{
+selectAllOpts = function (field) \{
 	var oTarget = document.getElementById(field);
 	
 	for(var i = 0; i < oTarget.options.length; i++) \{
@@ -9,7 +10,7 @@ function selectAllOpts(field) \{
 	var oTarget = null;
 }
 	
-function roleModify(bAdd) \{
+roleModify = function (bAdd) \{
 	var oTarget = null;
 	var oSource = null;
 	
@@ -40,7 +41,7 @@ function roleModify(bAdd) \{
 	oRolesAvailable = null;
 }
 
-function getUserRoles(id) \{
+getUserRoles = function (id) \{
 	// Exit when id empty
 	if(id == '') {
 		return false;
@@ -121,7 +122,7 @@ function getUserRoles(id) \{
 	<form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm');return false" method="post">
 		<p>
 			<label>{$langSelectUser}<br />
-			<select type="text" name="userId" id="userId" class="select" tabindex="40" onchange="getUserRoles(this.value);" />
+			<select type="text" name="userId" id="userId" class="select" tabindex="40" onchange="getUserRoles(this.options[this.selectedIndex].value);" />
 				<option value="" selected="selected"></option>
 				{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
 			</select>

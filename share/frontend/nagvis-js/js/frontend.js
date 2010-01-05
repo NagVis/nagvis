@@ -842,7 +842,14 @@ function setMapBackgroundImage(sImage) {
 function setPageBasics(oProperties) {
 	setPageFavicon(oProperties.favicon_image);
 	setPageTitle(oProperties.page_title);
-	setPageBackgroundColor(oProperties.background_color);
+	
+	// Set background color. When eventhandling enabled use the state for
+	// background color detection
+	if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+		setPageBackgroundColor(getBackgroundColor(oMapSummaryObj.conf));
+	} else {
+		setPageBackgroundColor(oProperties.background_color);
+	}
 }
 
 /**
