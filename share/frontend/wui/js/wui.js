@@ -304,7 +304,7 @@ function saveObjectAfterResize(oObj) {
 
 function saveObjectAfterMoveAndDrop(oObj) {
 	// When x or y are negative just return this and make no change
-	if(oObj.y < 0 || oObj.x < 0) {
+	if((oObj.y - getHeaderHeight()) < 0 || oObj.x < 0) {
 		oObj.moveTo(oObj.oldX, oObj.oldY);
 		return;
 	}
