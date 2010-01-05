@@ -73,8 +73,8 @@ var NagVisMap = NagVisStatefulObject.extend({
 		
 		// Status image
 		var oImg = document.createElement('img');
-		oImg.align="right";
-		oImg.src=this.conf.iconHtmlPath+this.conf.icon;
+		oImg.align = 'right';
+		oImg.src = this.conf.iconHtmlPath+this.conf.icon;
 		oImg.alt = this.conf.type+'-'+alt;
 		
 		oLink.appendChild(oImg);
@@ -91,11 +91,11 @@ var NagVisMap = NagVisStatefulObject.extend({
 		br = null;
 		
 		// Only show map thumb when configured
-		if(oPageProperties.showmapthumbs == 1) {
+		if(oPageProperties.showmapthumbs == 1 && this.conf.overview_image != '') {
 			oImg = document.createElement('img');
 			oImg.style.width = '200px';
 			oImg.style.height = '150px';
-			oImg.src=this.conf.overview_image;
+			oImg.src = this.conf.overview_image;
 			oLink.appendChild(oImg);
 			oImg = null;
 		}
