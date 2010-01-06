@@ -498,6 +498,11 @@ class WuiMap extends GlobalMap {
 				$value = $this->MAPCFG->getValue($obj['type'], $obj['id'], $key, FALSE);
 			}
 			
+			// Change array to comma separated string
+			if(is_array($value)) {
+				$value = implode(',',$value);
+			}
+			
 			// Cleanup some bad signs
 			$value = str_replace('\"','&quot;', $value);
 			$value = str_replace('"','&quot;', $value);
