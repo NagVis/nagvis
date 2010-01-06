@@ -8,7 +8,7 @@
 		<h1>Context Templates</h1>
 		<h2>Introduction</h2>
 		<p>Context templates are html files with some macros in them. These files can be used as context menus (right click menus) for the objects on the maps.</p>
-		<p>The context templates are located in <code>nagvis/templates/context/</code> relative to the nagvis root directory. The templates are named like this: <code>tmpl.&lt;name&gt;.html</code>. It is possible to add a css file to the template, the name has to be: <code>tmpl.&lt;name&gt;.css</code>.</p> 
+		<p>The context templates are located in <code>share/userfiles/templates/</code> relative to the nagvis root directory. The templates are named like this: <code>&lt;name&gt;.context.html</code>. It is possible to add a css file to the template, the name has to be: <code>&lt;name&gt;.context.css</code>.</p> 
 		<p>There are some so called macros available in context menus of all object types and some which are only available for some special objects. All standard macros are listed below.</p>
 		
 		<h2> General </h2>
@@ -46,16 +46,16 @@
 		<th colspan="2"> Paths </th>
 		</tr>
 		<tr>
-		<td>[html_base]</td><td>Absolute URL to HTML-Base (Default: /nagios/nagvis)</td>
+		<td>[html_base]</td><td>Absolute URL to HTML-Base (Default: /nagvis)</td>
 		</tr>
 		<tr>
 		<td>[html_cgi]</td><td>Absolute URL to the Nagios CGIs (Default: /nagios/cgi-bin)</td>
 		</tr>
 		<tr>
-		<td>[html_templates]</td><td> Path to context templates directory (Default: /nagios/nagvis/nagvis/etc/templates/context)</td>
+		<td>[html_templates]</td><td> Path to context templates directory (Default: /nagvis/userfiles/templates)</td>
 		</tr>
 		<tr>
-		<td>[html_template_images]</td><td> Path to context template images directory (Default: /nagios/nagvis/nagvis/images/templates/context)</td>
+		<td>[html_template_images]</td><td> Path to context template images directory (Default: /nagvis/userfiles/images/templates)</td>
 		</tr>
 		</table>
 		

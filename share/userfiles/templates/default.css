@@ -263,26 +263,26 @@ table.infopage_hover_table label {
 }
 
 #statusMessage div.notice {
-  background: url(../../../frontend/nagvis-js/images/internal/info.png) 6px 3px no-repeat;
+  background: url('../../frontend/nagvis-js/images/internal/info.png') 6px 3px no-repeat;
   background-color: #F7FDCB;
   border: 1px solid #C2D071;
 }
 
 #statusMessage div.error,
 #statusMessage div.warning {
-  background: url(../../../frontend/nagvis-js/images/internal/warning.png) 6px 3px no-repeat;
+  background: url('../../frontend/nagvis-js/images/internal/warning.png') 6px 3px no-repeat;
   background-color: #EF9398;
   border: 1px solid #DC5757;
 }
 
 #statusMessage div.confirmation {
-  background: url(../../../frontend/nagvis-js/images/internal/confirm.png) 6px 3px no-repeat;
+  background: url('../../frontend/nagvis-js/images/internal/confirm.png') 6px 3px no-repeat;
   background-color: #A6EF7B;
   border: 1px solid #76C83F;
 }
 
 #statusMessage div.loading {
-  background: url(../../../frontend/nagvis-js/images/internal/loading.gif) 6px 3px no-repeat;
+  background: url('../../frontend/nagvis-js/images/internal/loading.gif') 6px 3px no-repeat;
   background-color: #EBEBEB;
   border: 1px solid #CCCCCC;
 }
@@ -519,7 +519,7 @@ td#popupWindowContent fieldset.form label {
 	padding: 0;
 	
 	background-color: #F5F5F5;
-	background: url('../../images/templates/header/tmpl.default.header.png');
+	background: url('../images/templates/default.header.png');
 	width: 100%;
 	
 	height: 31px;
@@ -574,10 +574,10 @@ td#popupWindowContent fieldset.form label {
 	font-weight: bold;
 	cursor: pointer;
 	
-	background:url('../../images/templates/header/tmpl.default.header.png')
+	background:url('../images/templates/default.header.png')
 }
 .dropdown dt:hover {
-	background:url('../../images/templates/header/tmpl.default.header_over.png')
+	background:url('../images/templates/default.header_over.png')
 }
 .dropdown dd {
 	margin: 0;

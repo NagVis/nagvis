@@ -62,7 +62,8 @@ class WuiViewWelcome {
 			);
 
     // Build page based on the template file and the data array
-    return $TMPLSYS->get($TMPL->getTmplFile('wuiWelcome'), $aData);
+    // FIXME: Make template set configurable
+    return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiWelcome'), $aData);
 	}
 }
 ?>

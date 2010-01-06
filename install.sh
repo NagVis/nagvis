@@ -524,7 +524,6 @@ chk_rc() {
 	fi
 }
 
-#copy "default*" "$USERFILES_DIR/templates/pages" "pages templates"
 copy() {
 	DONE=""
 	
@@ -1137,17 +1136,11 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring custom shapes..."
 	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
-	LINE="Restoring custom pages templates..."
-	copy "\/default\..+$" "$USERFILES_DIR/templates/pages" "pages templates"
+	LINE="Restoring custom templates..."
+	copy "\/default\..+$" "$USERFILES_DIR/templates" "templates"
 	
-	LINE="Restoring custom hover templates..."
-	copy "\/tmpl\.default.+$" "$USERFILES_DIR/templates/hover" "hover templates"
-	
-	LINE="Restoring custom header template images..."
-	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/header" "header template images"
-
-	LINE="Restoring custom hover template images..."
-	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/hover" "hover template images"
+	LINE="Restoring custom template images..."
+	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates" "template images"
 
 	LINE="Restoring custom gadgets..."
 	copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"

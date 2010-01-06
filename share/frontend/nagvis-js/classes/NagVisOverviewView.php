@@ -55,7 +55,8 @@ class NagVisOverviewView {
 		);
 
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('overview'), $aData);
+    // FIXME: Make template set configurable
+		return $TMPLSYS->get($TMPL->getTmplFile('default', 'overview'), $aData);
 	}
 }
 ?>

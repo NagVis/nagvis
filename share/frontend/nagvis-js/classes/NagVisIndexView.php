@@ -77,7 +77,7 @@ class NagVisIndexView {
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
 			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
+			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
 			'bUseCompressedJs' => $this->checkJsCompressed(),
 			'customStylesheet' => $this->sCustomStylesheet,
 			'headerMenu' => $this->sHeaderMenu,
@@ -85,7 +85,8 @@ class NagVisIndexView {
 		);
 		
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('index'), $aData);
+    // FIXME: Make template set configurable
+		return $TMPLSYS->get($TMPL->getTmplFile('default', 'index'), $aData);
 	}
 	
 	/**

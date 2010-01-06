@@ -65,8 +65,9 @@ define('MATCH_URI_PART', '/^[a-zA-Z0-9-_]*$/');
 
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
 define('MATCH_MP3_FILE', '/^(.+)\.mp3$/i');
-define('MATCH_HTML_TEMPLATE_FILE', '/^tmpl\.(.+)\.html$/i');
 define('MATCH_HEADER_TEMPLATE_FILE', '/^(.+)\.header\.html$/i');
+define('MATCH_HOVER_TEMPLATE_FILE', '/^(.+)\.hover\.html$/i');
+define('MATCH_CONTEXT_TEMPLATE_FILE', '/^(.+)\.context\.html$/i');
 define('MATCH_PHP_FILE', '/^(.+\.php)$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
 define('MATCH_ORDER', '/^(?:asc|desc)$/');

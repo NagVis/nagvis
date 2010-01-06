@@ -52,7 +52,7 @@ class NagVisHeaderMenu {
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','pagetemplate').$this->templateName.'.header.html';
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','templates').$this->templateName.'.header.html';
 		
 		// Initialize template system
 		$this->TMPL = New FrontendTemplateSystem($this->CORE);
@@ -84,7 +84,7 @@ class NagVisHeaderMenu {
 		$this->getMacros();
 		
 		// Build page based on the template file and the data array
-		return $this->TMPLSYS->get($this->TMPL->getTmplFile('header'), $this->aMacros);
+		return $this->TMPLSYS->get($this->TMPL->getTmplFile($this->templateName, 'header'), $this->aMacros);
 	}
 	
 	/**
@@ -257,8 +257,8 @@ class NagVisHeaderMenu {
 		// Replace paths and language macros
 		$aReturn = Array('pathBase' => $this->pathHtmlBase,
 			'pathImages' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
-			'pathTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
-			'pathTemplateImages' => $this->CORE->getMainCfg()->getValue('paths','htmlheadertemplateimages'),
+			'pathTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
+			'pathTemplateImages' => $this->CORE->getMainCfg()->getValue('paths','htmltemplateimages'),
 			'langSearch' => $this->CORE->getLang()->getText('Search'),
 			'langUserMgmt' => $this->CORE->getLang()->getText('Manage Users'),
 			'langManageRoles' => $this->CORE->getLang()->getText('Manage Roles'),

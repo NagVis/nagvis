@@ -81,7 +81,7 @@ class WuiViewIndex {
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
 			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
+			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
 			'wuiJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/',
 			'wuiCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/css/',
 			'bUseCompressedJs' => $this->checkJsCompressed(),
@@ -92,7 +92,8 @@ class WuiViewIndex {
 		);
 		
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('wuiIndex'), $aData);
+    // FIXME: Make template set configurable
+		return $TMPLSYS->get($TMPL->getTmplFile('default','wuiIndex'), $aData);
 	}
 	
 	/**

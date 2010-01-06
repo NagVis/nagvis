@@ -248,7 +248,7 @@ class GlobalCore {
 	}
 	
 	/**
-	 * Reads all hover templates in hovertemplate path
+	 * Reads all hover templates
 	 *
 	 * @return	Array hover templates
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -256,9 +256,9 @@ class GlobalCore {
 	public function getAvailableHoverTemplates() {
 		$files = Array();
 		
-		if($handle = opendir(self::getMainCfg()->getValue('paths', 'hovertemplate'))) {
+		if($handle = opendir(self::getMainCfg()->getValue('paths', 'templates'))) {
  			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
+				if(preg_match(MATCH_HOVER_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}
 			}
@@ -274,34 +274,6 @@ class GlobalCore {
 	}
 	
 	/**
-	 * Reads available themes
-	 *
-	 * @return	Array list
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getAvailableThemes() {
-		$themes = Array();
-		
-		// Get themes from template path and
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'pagetemplate'))) {
- 			while (false !== ($path = readdir($handle))) {
- 				// Assume each directory is a theme
- 				if(is_dir($path)) {
-					$themes[$arrRet[1]] = true;
-				}
-			}
-			
-			if ($themes) {
-				natcasesort($themes);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $themes;
-	}
-	
-	/**
 	 * Reads all header templates
 	 *
 	 * @return	Array list
@@ -310,7 +282,7 @@ class GlobalCore {
 	public function getAvailableHeaderTemplates() {
 		$files = Array();
 		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'pagetemplate'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'templates'))) {
  			while (false !== ($file = readdir($handle))) {
 				if(preg_match(MATCH_HEADER_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
@@ -336,9 +308,9 @@ class GlobalCore {
 	public function getAvailableContextTemplates() {
 		$files = Array();
 		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'contexttemplate'))) {
+		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'templates'))) {
  			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_HTML_TEMPLATE_FILE, $file, $arrRet)) {
+				if(preg_match(MATCH_CONTEXT_TEMPLATE_FILE, $file, $arrRet)) {
 					$files[] = $arrRet[1];
 				}
 			}

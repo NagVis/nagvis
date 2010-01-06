@@ -49,7 +49,7 @@ class NagVisHoverMenu {
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','hovertemplate').'tmpl.'.$this->templateName.'.html';
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','templates').$this->templateName.'.hover.html';
 		
 		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'hover-'.$this->templateName.'-'.$this->CORE->getLang()->getCurrentLanguage().'.cache');
 		
@@ -176,11 +176,11 @@ class NagVisHoverMenu {
 		}
 		
 		if(strpos($this->code,'[html_templates]') !== FALSE) {
-			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getValue('paths','htmlhovertemplates'),$this->code);
+			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getValue('paths','htmltemplates'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_template_images]') !== FALSE) {
-			$this->code = str_replace('[html_template_images]',$this->CORE->getMainCfg()->getValue('paths','htmlhovertemplateimages'),$this->code);
+			$this->code = str_replace('[html_template_images]',$this->CORE->getMainCfg()->getValue('paths','htmltemplateimages'),$this->code);
 		}
 	}
 	

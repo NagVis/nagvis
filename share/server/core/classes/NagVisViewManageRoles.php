@@ -73,7 +73,7 @@ class NagVisViewManageRoles {
 		);
 		
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('manageRoles'), $aData);
+		return $TMPLSYS->get($TMPL->getTmplFile('default', 'manageRoles'), $aData);
 	}
 }
 ?>

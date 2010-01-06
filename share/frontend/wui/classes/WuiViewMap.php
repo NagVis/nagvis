@@ -73,7 +73,8 @@ class WuiViewMap {
 			);
 
     // Build page based on the template file and the data array
-    return $TMPLSYS->get($TMPL->getTmplFile('wuiMap'), $aData);
+    // FIXME: Make template set configurable
+    return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiMap'), $aData);
 	}
 }
 ?>

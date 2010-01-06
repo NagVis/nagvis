@@ -56,7 +56,7 @@ class NagVisLoginView {
 			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
 			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
 			'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php?mod=Auth&amp;act=login',
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths', 'htmlpagetemplates'),
+			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths', 'htmltemplates'),
 			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
@@ -66,7 +66,8 @@ class NagVisLoginView {
 		);
 		
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('login'), $aData);
+    // FIXME: Make template set configurable
+		return $TMPLSYS->get($TMPL->getTmplFile('default', 'login'), $aData);
 	}
 }
 ?>

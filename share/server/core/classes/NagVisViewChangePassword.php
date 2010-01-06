@@ -61,7 +61,7 @@ class NagVisViewChangePassword {
 		);
 		
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('changePassword'), $aData);
+		return $TMPLSYS->get($TMPL->getTmplFile('default', 'changePassword'), $aData);
 	}
 }
 ?>

@@ -17,8 +17,8 @@ class FrontendTemplateSystem {
 		return $this->TMPL;
 	}
 	
-	public function getTmplFile($sTmpl) {
-		return new Dwoo_Template_File($this->CORE->getMainCfg()->getValue('paths','pagetemplate').'default.'.$sTmpl.'.html');
+	public function getTmplFile($sTheme, $sTmpl) {
+		return new Dwoo_Template_File($this->CORE->getMainCfg()->getValue('paths','templates').$sTheme.'.'.$sTmpl.'.html');
 	}
 }
 

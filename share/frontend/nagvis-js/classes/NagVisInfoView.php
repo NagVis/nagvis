@@ -53,7 +53,7 @@ class NagVisInfoView {
 		$aData = Array(
 			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.$this->CORE->getLang()->getText('supportInfo'),
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmlpagetemplates'), 
+			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
 			'nagvisVersion' => CONST_VERSION,
 			'phpVersion' => PHP_VERSION,
 			'mysqlVersion' => shell_exec('mysql --version'),
@@ -72,7 +72,8 @@ class NagVisInfoView {
 		);
 		
 		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('info'), $aData);
+    // FIXME: Make template set configurable
+		return $TMPLSYS->get($TMPL->getTmplFile('default', 'info'), $aData);
 	}
 }
 ?>

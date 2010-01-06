@@ -331,19 +331,7 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
-				'hovertemplate' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'headertemplate' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'contexttemplate' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'pagetemplate' => Array('must' => 0,
+				'templates' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
@@ -371,31 +359,11 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
-				'htmlhovertemplates' => Array('must' => 0,
+				'htmltemplates' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
-				'htmlheadertemplates' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),			
-				'htmlcontexttemplates' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'htmlpagetemplates' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'htmlhovertemplateimages' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'htmlheadertemplateimages' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'htmlcontexttemplateimages' => Array('must' => 0,
+				'htmltemplateimages' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
@@ -850,14 +818,8 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['images']['default'] = $base.'share/frontend/nagvis-js/images/';
 		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/frontend/nagvis-js/images/';
 		
-		$this->validConfig['paths']['hovertemplate']['default'] = $base.'share/userfiles/templates/hover/';
-		$this->validConfig['paths']['headertemplate']['default'] = $base.'share/userfiles/templates/header/';
-		$this->validConfig['paths']['contexttemplate']['default'] = $base.'share/userfiles/templates/context/';
-		$this->validConfig['paths']['pagetemplate']['default'] = $base.'share/userfiles/templates/pages/';
-		$this->validConfig['paths']['htmlhovertemplates']['default'] = $htmlBase.'/userfiles/templates/hover/';
-		$this->validConfig['paths']['htmlheadertemplates']['default'] = $htmlBase.'/userfiles/templates/header/';
-		$this->validConfig['paths']['htmlcontexttemplates']['default'] = $htmlBase.'/userfiles/templates/context/';
-		$this->validConfig['paths']['htmlpagetemplates']['default'] = $htmlBase.'/userfiles/templates/pages/';
+		$this->validConfig['paths']['templates']['default'] = $base.'share/userfiles/templates/';
+		$this->validConfig['paths']['htmltemplates']['default'] = $htmlBase.'/userfiles/templates/';
 		
 		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/userfiles/sounds/';
 		$this->validConfig['paths']['htmlstyles']['default'] = $htmlBase.'/userfiles/styles/';
@@ -871,9 +833,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/userfiles/images/iconsets/';
 		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/userfiles/images/shapes/';
 		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/userfiles/images/maps/';
-		$this->validConfig['paths']['htmlhovertemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/hover/';
-		$this->validConfig['paths']['htmlheadertemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/header/';
-		$this->validConfig['paths']['htmlcontexttemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/context/';
+		$this->validConfig['paths']['htmltemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/';
 		
 		// This option directly relies on the configured htmlBase by default
 		$this->validConfig['global']['sesscookiepath']['default'] = $htmlBase;
@@ -1341,8 +1301,7 @@ class GlobalMainCfg {
 		$arr['path_cgi'] = $this->getValue('paths','htmlcgi');
 		$arr['path_sounds'] = $this->getValue('paths','htmlsounds');
 		$arr['path_iconsets'] = $this->getValue('paths','htmlicon');
-		$arr['path_context_templates'] = $this->getValue('paths','htmlcontexttemplates');
-		$arr['path_hover_templates'] = $this->getValue('paths','htmlhovertemplates');
+		$arr['path_templates'] = $this->getValue('paths','htmltemplates');
 		$arr['path_images'] = $this->getValue('paths','htmlimages');
 		$arr['path_server'] = $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php';
 		$arr['internal_title'] = $this->getValue('internal', 'title');

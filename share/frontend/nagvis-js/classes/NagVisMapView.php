@@ -96,7 +96,8 @@ class NagVisMapView {
 			);
 
     // Build page based on the template file and the data array
-    return $TMPLSYS->get($TMPL->getTmplFile('map'), $aData);
+    // FIXME: Make template set configurable
+    return $TMPLSYS->get($TMPL->getTmplFile('default', 'map'), $aData);
 	}
 	
 	/**
