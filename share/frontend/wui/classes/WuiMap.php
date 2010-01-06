@@ -118,7 +118,7 @@ class WuiMap extends GlobalMap {
 					$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
 				break;
 				default:
-					if(isset($obj['view_type']) && $obj['view_type'] == 'line') {
+					if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
 						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
 						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
 						$ret .= "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
@@ -343,6 +343,7 @@ class WuiMap extends GlobalMap {
 		$objects = array_merge($objects,$this->getObjectsOfType('servicegroup',$mergeWithGlobals));
 		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$mergeWithGlobals));
 		$objects = array_merge($objects,$this->getObjectsOfType('shape',$mergeWithGlobals));
+		$objects = array_merge($objects,$this->getObjectsOfType('line',$mergeWithGlobals));
 		
 		return $objects;
 	}
@@ -381,7 +382,7 @@ class WuiMap extends GlobalMap {
 				// add default state to the object
 				$obj = array_merge($obj,$objState);
 				
-				if($obj['type'] != 'textbox' && $obj['type'] != 'shape') {
+				if($obj['type'] != 'textbox' && $obj['type'] != 'shape' && $obj['type'] != 'line') {
 					$obj['icon'] = $this->getIcon($obj);
 				}
 				
@@ -523,7 +524,7 @@ class WuiMap extends GlobalMap {
 		
 		// Position/Size link on textboxes/lines
 		//$tooltipText .= "&nbsp;".$positionSizeText;
-		if(isset($obj['view_type']) && $obj['view_type'] == 'line') {
+		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
 			$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)\'"
 						." href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>"
 						."<span>".$this->CORE->getLang()->getText('positionSize')."</span></a></li>";			

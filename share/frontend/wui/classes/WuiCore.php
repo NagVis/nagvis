@@ -153,7 +153,8 @@ class WuiCore extends GlobalCore {
 			'map' => $this->getLang()->getText('map'),
 			'textbox' => $this->getLang()->getText('textbox'),
 			'shape' => $this->getLang()->getText('shape'),
-			'manage' => $this->getLang()->getText('manage'));
+			'manage' => $this->getLang()->getText('manage'),
+			'stateless' => $this->getLang()->getText('Stateless'));
 		
 		return json_encode($langMenu);
 	}

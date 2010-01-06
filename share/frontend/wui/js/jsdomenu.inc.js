@@ -77,6 +77,8 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('service'), "", "code:get_click('service',2,'add');"));
 		addMenuItem(new menuItem(get_label('hostgroup'), "", "code:get_click('hostgroup',2,'add');"));
 		addMenuItem(new menuItem(get_label('servicegroup'), "", "code:get_click('servicegroup',2,'add');"));
+		addMenuItem(new menuItem("-"));
+		addMenuItem(new menuItem(get_label('stateless'), "", "code:get_click('line',2,'add');"));
 	}
 	
 	var submenu_addobject_special = new jsDOMenu(140);
