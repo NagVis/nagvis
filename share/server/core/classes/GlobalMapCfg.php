@@ -293,7 +293,7 @@ class GlobalMapCfg {
 					'depends_on' => 'view_type',
 					'depends_value' => 'icon'),
 				'line_type' => Array('must' => 0,
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_LINE_TYPE,
 					'field_type' => 'dropdown',
 					'depends_on' => 'view_type',
 					'depends_value' => 'line'),

@@ -157,7 +157,7 @@ function validateMapCfgForm() {
 	// we make some post tests (concerning the line_type and iconset values)
 	if(document.addmodify.view_type && document.addmodify.view_type.value == 'line') {
 		// we verify that the current line_type is valid
-		var valid_list=new Array("10","11","20");
+		var valid_list = new Array("10","11","12");
 		for(var j = 0, len = valid_list.length; valid_list[j] != document.addmodify.line_type.value && j < len; j++) {
 			if(j==valid_list.length) {
 				alert(printLang(lang['chosenLineTypeNotValid'],''));

@@ -59,7 +59,7 @@ define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete)$/');
 define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map|automap)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2)?$/');
-
+define('MATCH_LINE_TYPE', '/^(10|11|12)?$/');
 
 define('MATCH_URI_PART', '/^[a-zA-Z0-9-_]*$/');
 
