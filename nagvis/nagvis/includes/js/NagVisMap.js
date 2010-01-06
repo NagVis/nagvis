@@ -81,12 +81,14 @@ var NagVisMap = NagVisStatefulObject.extend({
 		br = null;
 		
 		// Map thumb
-		oImg = document.createElement('img');
-		oImg.style.width = '200px';
-		oImg.style.height = '150px';
-		oImg.src=this.conf.overview_image;
-		oLink.appendChild(oImg);
-		oImg = null;
+    if(this.conf.overview_image != '') {
+  		oImg = document.createElement('img');
+	  	oImg.style.width = '200px';
+		  oImg.style.height = '150px';
+  		oImg.src=this.conf.overview_image;
+	  	oLink.appendChild(oImg);
+		  oImg = null;
+    }
 		
 		oTd.appendChild(oLink);
 		oLink = null;

@@ -166,7 +166,8 @@ class GlobalIndexPage {
 						$imgPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlmap').$MAPCFG->BACKGROUND->getFileName();
 					}
 					
-					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileName() != '') {
+          $fileName = $MAPCFG->BACKGROUND->getFileName();
+					if($this->CORE->checkGd(0) && $fileName != '' && $fileName != 'none') {
 						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
 						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','var').$sThumbFile;
 						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$sThumbFile;
