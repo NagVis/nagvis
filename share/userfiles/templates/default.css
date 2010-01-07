@@ -598,7 +598,7 @@ td#popupWindowContent fieldset.form label {
 	margin: 0;
 	padding: 0;
 	
-	width: 204px;
+	width: 205px;
 	list-style: none;
 	border-top: none;
 }
@@ -610,29 +610,16 @@ td#popupWindowContent fieldset.form label {
 	display: inline
 }
 
-.dropdown li.spacer {
-	height: 4px;
-}
-
-.dropdown li.spacer hr {
-	width:100%;
-	height: 3px;
-	color: #000;
-}
-
 .dropdown img {
 	vertical-align: middle;
 	margin-left: 10px;
 }
 
-.dropdown a, .dropdown a:active, .dropdown a:visited {
+.dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer {
 	margin: 0;
-	padding: 0;
 	
 	display:block;
-	padding-top:5px;
-	padding-bottom:5px;
-	padding-left:5px;
+	padding:5px 0 5px 5px;
 	color: #43B3CF;
 	text-decoration: none;
 	background: #eaf0f2;
@@ -645,6 +632,12 @@ td#popupWindowContent fieldset.form label {
 .dropdown a:hover {
 	background:#d9e1e4;
 	color:#779D2A;
+}
+
+.dropdown li.spacer hr {
+	width: 195px;
+	margin: 0 5px 0 5px;
+	color: #43B3CF;
 }
 
 .dropdown .underline {
