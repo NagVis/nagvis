@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.5 german language file 0.1\n"
 "Report-Msgid-Bugs-To: info@nagvis.org\n"
-"POT-Creation-Date: 2010-01-05 14:18+0100\n"
-"PO-Revision-Date: 2010-01-05 14:18+0100\n"
+"POT-Creation-Date: 2010-01-07 09:34+0100\n"
+"PO-Revision-Date: 2010-01-07 09:34+0100\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Team <info@nagvis.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,7 @@ msgid "Action"
 msgstr "Aktion"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:266
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:269
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:269
 msgid "Actions"
 msgstr "Aktionen"
@@ -63,12 +64,14 @@ msgstr "Rollen verf&uuml;gbar"
 
 #: share/server/core/classes/NagVisViewChangePassword.php:60
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:268
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:271
 #: share/server/core/classes/NagVisViewChangePassword.php:60
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:271
 msgid "Change password"
 msgstr "Passwort &Auml;ndern"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:264
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:267
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:267
 msgid "Choose Language"
 msgstr "Sprache w&auml;hlen"
@@ -115,6 +118,7 @@ msgstr "Ung&uuml;ltiger Status+Substatus ([STATE], [SUBSTATE]) w&auml;rend der E
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:267
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:270
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:270
 msgid "Logged in"
 msgstr "Eingeloggt"
 
@@ -125,15 +129,18 @@ msgstr "Einloggen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:277
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:280
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:280
 msgid "Logout"
 msgstr "Ausloggen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:261
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:264
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:264
 msgid "Manage Roles"
 msgstr "Rollen verwalten"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:260
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:263
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:263
 msgid "Manage Users"
 msgstr "Nutzer verwalten"
@@ -248,6 +255,7 @@ msgstr "Rollen Namen"
 
 #: share/server/core/classes/NagVisViewSearch.php:53
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:259
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:262
 #: share/server/core/classes/NagVisViewSearch.php:53
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:262
 msgid "Search"
@@ -278,18 +286,22 @@ msgstr "Berechtigungen Setzen"
 msgid "State"
 msgstr "Status"
 
+#: share/frontend/wui/classes/WuiCore.php:157
+msgid "Stateless"
+msgstr ""
+
 #: share/server/core/classes/GlobalBackendmklivestatus.php:73
 #: share/server/core/classes/GlobalBackendmklivestatus.php:73
 msgid "The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID]."
 msgstr "Die PHP Funktion socket_create ist nicht verf&uuml;gbar. Die Funktion ist eventuell nicht in PHP einkompiliert und muss nachinstalliert werden. Die Funktion wird vom Backend [BACKENDID] ben&ouml;tigt."
 
 #: share/server/core/classes/GlobalMainCfg.php:1121
-#: share/server/core/classes/GlobalMainCfg.php:1121
+#: share/server/core/classes/GlobalMainCfg.php:1081
 msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration."
 msgstr "Das Attribut [ATTRIBUTE] in der Sektion [TYPE] in der Hauptkonfiguration hat nicht das korrekte Format. Bitte die Konfiguration pr&uuml;fen."
 
 #: share/server/core/classes/GlobalMainCfg.php:1098
-#: share/server/core/classes/GlobalMainCfg.php:1098
+#: share/server/core/classes/GlobalMainCfg.php:1058
 msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration."
 msgstr "Das Attribut [ATTRIBUTE] in der Sektion [TYPE] in der Hauptkonfiguration ist veraltet. Bitte die Dokumentation nach Schritten zum Update pr&uuml;fen."
 
@@ -333,7 +345,7 @@ msgid "The module class does not exist"
 msgstr "Die Klasse des Moduls existiert nicht"
 
 #: share/server/core/classes/GlobalMainCfg.php:1067
-#: share/server/core/classes/GlobalMainCfg.php:1067
+#: share/server/core/classes/GlobalMainCfg.php:1027
 msgid "The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation."
 msgstr "Das erforderliche Attribut [ATTRIBUTE] ist in der Sektion vom Typ [TYPE] in der Hauptkonfiguration nicht angegeben."
 
@@ -408,7 +420,7 @@ msgid "The roles for this user have been updated."
 msgstr "Die Rollen wurden aktualisiert."
 
 #: share/server/core/classes/GlobalMainCfg.php:1139
-#: share/server/core/classes/GlobalMainCfg.php:1139
+#: share/server/core/classes/GlobalMainCfg.php:1099
 msgid "The section [TYPE] is not supported in main configuration. Please take a look at the documentation."
 msgstr "Die Sektion [TYPE] wird in der Hauptkonfiguration nicht unterst&uuml;tzt. Bitte die Dokumentation pr&uuml;fen."
 
@@ -418,12 +430,12 @@ msgid "The servicegroup [GROUP] could not be found in the backend [BACKENDID]."
 msgstr "Die Dienstegruppe [GROUP] konnte im Backend [BACKENDID] nicht gefunden werden."
 
 #: share/server/core/classes/GlobalCore.php:620
-#: share/server/core/classes/GlobalCore.php:620
+#: share/server/core/classes/GlobalCore.php:592
 msgid "The shared var folder [PATH] does not exist"
 msgstr "Das freigegebene Var-Verzeichnis [PATH] existiert nicht."
 
 #: share/server/core/classes/GlobalCore.php:638
-#: share/server/core/classes/GlobalCore.php:638
+#: share/server/core/classes/GlobalCore.php:610
 msgid "The shared var folder [PATH] is not writeable"
 msgstr "Das freigegebene Var-Verzeichnis [PATH] ist nicht schreibbar."
 
@@ -433,14 +445,14 @@ msgid "The two new passwords are not equal."
 msgstr "Die zwei angegebenen Passw&ouml;rter stimmen nicht &uuml;berein."
 
 #: share/server/core/classes/CoreModUserMgmt.php:184
-#: share/server/core/classes/CoreModUserMgmt.php:184
+#: share/server/core/classes/CoreModUserMgmt.php:189
 msgid "The two passwords are not equal."
 msgstr "Die zwei angegebenen Passw&ouml;rter stimmen nicht &uuml;berein."
 
 #: share/server/core/classes/CoreModRoleMgmt.php:47
 #: share/server/core/classes/CoreModUserMgmt.php:208
 #: share/server/core/classes/CoreModRoleMgmt.php:47
-#: share/server/core/classes/CoreModUserMgmt.php:208
+#: share/server/core/classes/CoreModUserMgmt.php:213
 msgid "The user could not be created."
 msgstr "Der Nutzer konnte nicht angelegt werden."
 
@@ -455,7 +467,7 @@ msgid "The user has been deleted."
 msgstr "Der Nutzer wurde gel&ouml;scht."
 
 #: share/server/core/classes/CoreModUserMgmt.php:177
-#: share/server/core/classes/CoreModUserMgmt.php:177
+#: share/server/core/classes/CoreModUserMgmt.php:182
 msgid "The username is invalid or does already exist."
 msgstr "Der Nutzer-Name ist ung&uuml;ltig oder existiert bereits."
 
@@ -479,6 +491,10 @@ msgstr "Verbindung zum Livestatus Socket nicht m&ouml;glich. Der Socket [SOCKET]
 msgid "Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]"
 msgstr "Verbindung zum Socket [SOCKET] in Backend [BACKENDID] nicht m&ouml;glich: [MSG]"
 
+#: share/server/core/classes/CoreModUserMgmt.php:112
+msgid "Unable to delete your own user."
+msgstr ""
+
 #: share/server/core/classes/GlobalMessage.php:75
 #: share/server/core/classes/GlobalMessage.php:75
 msgid "Unknown message type"
@@ -490,11 +506,12 @@ msgid "Unknown socket type given in backend [BACKENDID]"
 msgstr "Unbekannter Socket-Typ in Backend [BACKENDID]"
 
 #: share/server/core/classes/GlobalMainCfg.php:1092
-#: share/server/core/classes/GlobalMainCfg.php:1092
+#: share/server/core/classes/GlobalMainCfg.php:1052
 msgid "Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file."
 msgstr "Unbekannte Option [ATTRIBUTE] in Sektion [TYPE] in Hauptkonfiguration gesetzt."
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:265
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:268
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:268
 msgid "User menu"
 msgstr "Nutzer Menu"
@@ -509,6 +526,7 @@ msgid "ValidatorNotAllowedParameterEntry"
 msgstr "Parameter [VAR] enthält einen nicht erlaubten Eintrag."
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:262
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:265
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:265
 msgid "WUI"
 msgstr "WUI"
@@ -550,7 +568,7 @@ msgstr "Ung&uml;ltige Zugangsdaten eingegeben."
 #: share/server/core/classes/CoreModRoleMgmt.php:83
 #: share/server/core/classes/CoreModUserMgmt.php:71
 #: share/server/core/classes/CoreModUserMgmt.php:87
-#: share/server/core/classes/CoreModUserMgmt.php:203
+#: share/server/core/classes/CoreModUserMgmt.php:208
 msgid "You entered invalid information."
 msgstr "Ung&uml;ltige Informationen eingegeben."
 
@@ -624,7 +642,7 @@ msgstr "Der Instanz-Name \"[NAME]\" in Backend \"[BACKENDID]\" ist nicht gültig
 #: share/server/core/classes/GlobalMapCfg.php:1622
 #: share/server/core/classes/GlobalMainCfg.php:1129
 #: share/server/core/classes/GlobalMapCfg.php:1622
-#: share/server/core/classes/GlobalMainCfg.php:1129
+#: share/server/core/classes/GlobalMainCfg.php:1089
 msgid "backendNotDefined"
 msgstr "Das Backend mit der ID \"[BACKENDID]\" ist nicht definiert."
 
@@ -721,8 +739,8 @@ msgstr "Das Cache-Verzeichnis der Datei \"[FILE]\" ist nicht schreibbar."
 #: wui/includes/classes/WuiMap.php:561
 #: share/frontend/wui/classes/WuiMap.php:520
 #: share/frontend/wui/classes/WuiMap.php:522
-#: share/frontend/wui/classes/WuiMap.php:520
-#: share/frontend/wui/classes/WuiMap.php:522
+#: share/frontend/wui/classes/WuiMap.php:526
+#: share/frontend/wui/classes/WuiMap.php:528
 msgid "change"
 msgstr "Ändern"
 
@@ -761,7 +779,7 @@ msgstr "Eine Kartendatei wählen"
 
 #: wui/includes/classes/WuiMapManagement.php:233
 #: share/frontend/wui/classes/WuiCore.php:197
-#: share/frontend/wui/classes/WuiCore.php:197
+#: share/frontend/wui/classes/WuiCore.php:198
 msgid "chooseMapName"
 msgstr "Sie müssen einen Namen für die neue Karte angeben."
 
@@ -776,61 +794,61 @@ msgstr "Ein Bild im PNG-Format wählen."
 
 #: wui/includes/classes/WuiAddModify.php:235
 #: share/frontend/wui/classes/WuiCore.php:177
-#: share/frontend/wui/classes/WuiCore.php:177
+#: share/frontend/wui/classes/WuiCore.php:178
 msgid "chosenLineTypeNotValid"
 msgstr "Der gewählte Linien-Typ \"line_type ist\" ungültig."
 
 #: wui/includes/classes/WuiMap.php:604
 #: share/frontend/wui/classes/WuiCore.php:169
-#: share/frontend/wui/classes/WuiCore.php:169
+#: share/frontend/wui/classes/WuiCore.php:170
 msgid "clickMapToSetPoints"
 msgstr "Klicken Sie auf die Karte, um die fehlenden Punkte zu bestimmen"
 
 #: wui/includes/classes/WuiMap.php:550
 #: share/frontend/wui/classes/WuiMap.php:543
-#: share/frontend/wui/classes/WuiMap.php:543
+#: share/frontend/wui/classes/WuiMap.php:549
 msgid "configured"
 msgstr "Konfiguriert"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:177
 #: share/frontend/wui/classes/WuiCore.php:190
-#: share/frontend/wui/classes/WuiCore.php:190
+#: share/frontend/wui/classes/WuiCore.php:191
 msgid "confirmBackgroundDeletion"
 msgstr "Wollen Sie diesen Hintergrund wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: wui/includes/classes/WuiMap.php:605
 #: share/frontend/wui/classes/WuiCore.php:170
-#: share/frontend/wui/classes/WuiCore.php:170
+#: share/frontend/wui/classes/WuiCore.php:171
 msgid "confirmDelete"
 msgstr "Wollen Sie dieses Objekt wirklich löschen?"
 
 #: wui/includes/classes/WuiMapManagement.php:245
 #: share/frontend/wui/classes/WuiCore.php:208
-#: share/frontend/wui/classes/WuiCore.php:208
+#: share/frontend/wui/classes/WuiCore.php:209
 msgid "confirmMapDeletion"
 msgstr "Wollen Sie diese Karte wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: wui/includes/classes/WuiMapManagement.php:244
 #: share/frontend/wui/classes/WuiCore.php:207
-#: share/frontend/wui/classes/WuiCore.php:207
+#: share/frontend/wui/classes/WuiCore.php:208
 msgid "confirmMapRename"
 msgstr "Wollen Sie diese Karte wirklich umbenennen?"
 
 #: wui/includes/classes/WuiMapManagement.php:243
 #: share/frontend/wui/classes/WuiCore.php:206
-#: share/frontend/wui/classes/WuiCore.php:206
+#: share/frontend/wui/classes/WuiCore.php:207
 msgid "confirmNewMap"
 msgstr "Wollen Sie wirklich eine neue Karte erstellen?"
 
 #: wui/includes/classes/WuiMap.php:606
 #: share/frontend/wui/classes/WuiCore.php:171
-#: share/frontend/wui/classes/WuiCore.php:171
+#: share/frontend/wui/classes/WuiCore.php:172
 msgid "confirmRestore"
 msgstr "Sicher, dass Sie das Backup wiederherstellen wollen?"
 
 #: wui/includes/classes/WuiShapeManagement.php:144
 #: share/frontend/wui/classes/WuiCore.php:195
-#: share/frontend/wui/classes/WuiCore.php:195
+#: share/frontend/wui/classes/WuiCore.php:196
 msgid "confirmShapeDeletion"
 msgstr "Wollen Sie dieses Bild wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
@@ -951,7 +969,7 @@ msgstr "Datenquelle löschen"
 #: share/frontend/wui/classes/WuiBackgroundManagement.php:101
 #: share/frontend/wui/classes/WuiShapeManagement.php:86
 #: share/frontend/wui/classes/WuiMapManagement.php:97
-#: share/frontend/wui/classes/WuiMap.php:536
+#: share/frontend/wui/classes/WuiMap.php:542
 #: share/frontend/wui/classes/WuiBackgroundManagement.php:101
 #: share/frontend/wui/classes/WuiShapeManagement.php:86
 #: share/frontend/wui/classes/WuiMapManagement.php:97
@@ -996,6 +1014,7 @@ msgstr "Datenquelle bearbeiten"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:103
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:270
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:273
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:273
 msgid "editMap"
 msgstr "Diese Karte bearbeiten"
@@ -1064,37 +1083,38 @@ msgstr "Die Datei \"[FILE]\" existiert nicht."
 #: wui/includes/classes/WuiShapeManagement.php:140
 #: wui/includes/classes/WuiBackgroundManagement.php:174
 #: share/frontend/wui/classes/WuiCore.php:187
-#: share/frontend/wui/classes/WuiCore.php:187
+#: share/frontend/wui/classes/WuiCore.php:188
 msgid "firstMustChoosePngImage"
 msgstr "Bitte zuerst ein PNG-Bild auswählen"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:106
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:273
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:276
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:276
 msgid "forum"
 msgstr "Forum"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:176
 #: share/frontend/wui/classes/WuiCore.php:189
-#: share/frontend/wui/classes/WuiCore.php:189
+#: share/frontend/wui/classes/WuiCore.php:190
 msgid "foundNoBackgroundToDelete"
 msgstr "Kein Hintergrundbild zum Löschen gefunden. Operation abgebrochen."
 
 #: wui/includes/classes/WuiMapManagement.php:239
 #: share/frontend/wui/classes/WuiCore.php:202
-#: share/frontend/wui/classes/WuiCore.php:202
+#: share/frontend/wui/classes/WuiCore.php:203
 msgid "foundNoMapToDelete"
 msgstr "Keine Karte zum Löschen gefunden. Operation abgebrochen."
 
 #: wui/includes/classes/WuiMapManagement.php:240
 #: share/frontend/wui/classes/WuiCore.php:203
-#: share/frontend/wui/classes/WuiCore.php:203
+#: share/frontend/wui/classes/WuiCore.php:204
 msgid "foundNoMapToExport"
 msgstr "Keine Karte zum Exportieren gefunden. Bitte eine Karte wählen."
 
 #: wui/includes/classes/WuiMapManagement.php:241
 #: share/frontend/wui/classes/WuiCore.php:204
-#: share/frontend/wui/classes/WuiCore.php:204
+#: share/frontend/wui/classes/WuiCore.php:205
 msgid "foundNoMapToImport"
 msgstr "Es ist keine Datei zum Importieren ausgewählt. Bitte eine Datei wählen."
 
@@ -1105,10 +1125,11 @@ msgstr "Es konnte kein Objekt des gegebenen Typs auf der Karte gefunden werden."
 
 #: wui/includes/classes/WuiShapeManagement.php:142
 #: share/frontend/wui/classes/WuiCore.php:193
-#: share/frontend/wui/classes/WuiCore.php:193
+#: share/frontend/wui/classes/WuiCore.php:194
 msgid "foundNoShapeToDelete"
 msgstr "Kein Bild zum Löschen gefunden. Operation abgebrochen."
 
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:225
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:225
 msgid "fr_FR"
 msgstr "Franz&ouml;sisch"
@@ -1128,11 +1149,13 @@ msgstr "Die benötigte Graphviz-Anwendung \"[NAME]\" konnte in den Pfaden \"[PAT
 #: nagvis/includes/classes/GlobalHeaderMenu.php:210
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:300
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:303
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:303
 msgid "headerTemplateNotExists"
 msgstr "Die Header-Template-Datei \"[PATH]\" existiert nicht."
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:228
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:318
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:321
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:321
 msgid "headerTemplateNotReadable"
 msgstr "Bitte die Leseberechtigungen des Webservers auf die Datei \"[PATH]\" prüfen."
@@ -1260,7 +1283,7 @@ msgid "iconNotExists"
 msgstr "Ein Icon \"[IMGPATH]\" auf der Map existiert nicht."
 
 #: share/server/core/classes/GlobalCore.php:436
-#: share/server/core/classes/GlobalCore.php:436
+#: share/server/core/classes/GlobalCore.php:408
 msgid "iconsetFiletypeUnknown"
 msgstr "Der Typ des Iconsets [ICONSET] konnte nicht ermittelt werden."
 
@@ -1290,7 +1313,7 @@ msgstr "Karte importieren"
 
 #: wui/includes/classes/WuiMap.php:552
 #: share/frontend/wui/classes/WuiMap.php:546
-#: share/frontend/wui/classes/WuiMap.php:546
+#: share/frontend/wui/classes/WuiMap.php:552
 msgid "inherited"
 msgstr "Vererbt"
 
@@ -1298,6 +1321,7 @@ msgstr "Vererbt"
 #: nagvis/includes/classes/GlobalHeaderMenu.php:109
 #: share/server/core/classes/NagVisHoverMenu.php:135
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:276
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:279
 #: share/server/core/classes/NagVisHoverMenu.php:135
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:279
 msgid "instance"
@@ -1345,13 +1369,13 @@ msgid "lineTypeNotSelected"
 msgstr "Sie haben zwei [COORD] Koordinaten angegeben, also muss auch line_type gewählt werden."
 
 #: share/frontend/wui/classes/WuiCore.php:184
-#: share/frontend/wui/classes/WuiCore.php:184
+#: share/frontend/wui/classes/WuiCore.php:185
 msgid "lineTypeNotSet"
 msgstr "Es wurde kein Linientyp (line_type) angegeben."
 
 #: wui/includes/classes/WuiAddModify.php:243
 #: share/frontend/wui/classes/WuiCore.php:185
-#: share/frontend/wui/classes/WuiCore.php:185
+#: share/frontend/wui/classes/WuiCore.php:186
 msgid "loopInMapRecursion"
 msgstr "Die Objekte auf den verlinkten Karten bilden eine Endlosschleife. Bitte auflösen."
 
@@ -1365,7 +1389,7 @@ msgstr "Die Haupt-Konfigurationsdatei ist nicht schreibbar."
 #: share/server/core/classes/GlobalUserCfg.php:260
 #: share/server/core/classes/GlobalMainCfg.php:1161
 #: share/server/core/classes/GlobalUserCfg.php:260
-#: share/server/core/classes/GlobalMainCfg.php:1161
+#: share/server/core/classes/GlobalMainCfg.php:1121
 msgid "mainCfgNotExists"
 msgstr "Die Haupt-Konfigurationsdatei \"[MAINCFG]\" existiert nicht."
 
@@ -1373,7 +1397,7 @@ msgstr "Die Haupt-Konfigurationsdatei \"[MAINCFG]\" existiert nicht."
 #: share/server/core/classes/GlobalUserCfg.php:283
 #: share/server/core/classes/GlobalMainCfg.php:1183
 #: share/server/core/classes/GlobalUserCfg.php:283
-#: share/server/core/classes/GlobalMainCfg.php:1183
+#: share/server/core/classes/GlobalMainCfg.php:1143
 msgid "mainCfgNotReadable"
 msgstr "Keine Leserechte auf die NagVis Konfigurationsdatei. Bitte die Leseberechtigungen des Webservers auf die Haupt-Konfigurationsdatei \"[MAINCFG]\" prüfen."
 
@@ -1424,7 +1448,7 @@ msgstr "Bilder"
 
 #: share/frontend/wui/classes/WuiCore.php:213
 #: share/frontend/wui/classes/WuiAddModify.php:313
-#: share/frontend/wui/classes/WuiCore.php:213
+#: share/frontend/wui/classes/WuiCore.php:214
 #: share/frontend/wui/classes/WuiAddModify.php:313
 msgid "manualInput"
 msgstr "Manuelle Eingabe"
@@ -1437,7 +1461,7 @@ msgstr "Karte"
 
 #: wui/includes/classes/WuiMapManagement.php:238
 #: share/frontend/wui/classes/WuiCore.php:201
-#: share/frontend/wui/classes/WuiCore.php:201
+#: share/frontend/wui/classes/WuiCore.php:202
 msgid "mapAlreadyExists"
 msgstr "Die Karte \"[MAPNAME]\" existiert bereits. Bitte einen anderen Namen wählen."
 
@@ -1559,7 +1583,7 @@ msgstr "Kartenname"
 
 #: wui/includes/classes/WuiAddModify.php:244
 #: share/frontend/wui/classes/WuiCore.php:186
-#: share/frontend/wui/classes/WuiCore.php:186
+#: share/frontend/wui/classes/WuiCore.php:187
 msgid "mapObjectWillShowSummaryState"
 msgstr "Dieses Objekt wird den Gesamtstatus der aktuellen Karte zeigen."
 
@@ -1593,13 +1617,13 @@ msgstr "Die Methode \"[METHOD]\" wird von der gewählten Datenquelle nicht unter
 
 #: wui/includes/classes/WuiMapManagement.php:234
 #: share/frontend/wui/classes/WuiCore.php:198
-#: share/frontend/wui/classes/WuiCore.php:198
+#: share/frontend/wui/classes/WuiCore.php:199
 msgid "minOneUserAccess"
 msgstr "Mindestens ein User muss Zugriff auf die Karte haben."
 
 #: wui/includes/classes/WuiMapManagement.php:248
 #: share/frontend/wui/classes/WuiCore.php:211
-#: share/frontend/wui/classes/WuiCore.php:211
+#: share/frontend/wui/classes/WuiCore.php:212
 msgid "minOneUserWriteAccess"
 msgstr "Mindestens ein Benutzer muss die Berechtigung haben, um diese Karte zu ändern."
 
@@ -1628,7 +1652,7 @@ msgstr "Sie müssen das Hintergrund-Bild für diese Karte wählen."
 #: share/frontend/wui/classes/WuiBackground.php:82
 #: share/frontend/wui/classes/WuiCore.php:188
 #: share/frontend/wui/classes/WuiBackground.php:82
-#: share/frontend/wui/classes/WuiCore.php:188
+#: share/frontend/wui/classes/WuiCore.php:189
 msgid "mustChooseValidImageFormat"
 msgstr "Es muss ein Bild mit einem gültigen Datei-Format gewählt werden. Gültig sind Bilder im Format png, gif und jpg."
 
@@ -1727,13 +1751,13 @@ msgstr "Es muss ein Bild mit einem gültigen Datei-Format gewählt werden. Gült
 #: share/frontend/wui/form_handler.php:369
 #: share/frontend/wui/form_handler.php:386
 #: share/frontend/wui/form_handler.php:401
-#: share/frontend/wui/classes/WuiCore.php:176
+#: share/frontend/wui/classes/WuiCore.php:177
 msgid "mustValueNotSet"
 msgstr "Der Pflichtwert \"[ATTRIBUTE]\" ist nicht gefüllt"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:179
 #: share/frontend/wui/classes/WuiCore.php:192
-#: share/frontend/wui/classes/WuiCore.php:192
+#: share/frontend/wui/classes/WuiCore.php:193
 msgid "mustValueNotSet1"
 msgstr "Der Pflichtwert \"[ATTRIBUTE]\" wurde nicht gesetzt."
 
@@ -1775,6 +1799,7 @@ msgstr "Die Struktur des ndo2fs Verzeichnis \"[PATH]\" ist nicht gültig. Das Ve
 #: nagvis/includes/classes/GlobalHeaderMenu.php:104
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:271
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:274
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:274
 msgid "needHelp"
 msgstr "Hilfe?"
 
@@ -1807,19 +1832,19 @@ msgstr "Es konnte kein definiertes Backend gefunden werden."
 
 #: wui/includes/classes/WuiMapManagement.php:236
 #: share/frontend/wui/classes/WuiCore.php:199
-#: share/frontend/wui/classes/WuiCore.php:199
+#: share/frontend/wui/classes/WuiCore.php:200
 msgid "noMapToRename"
 msgstr "Keine Karte zum Umbenennen gefunden. Operation abgebrochen."
 
 #: wui/includes/classes/WuiMapManagement.php:237
 #: share/frontend/wui/classes/WuiCore.php:200
-#: share/frontend/wui/classes/WuiCore.php:200
+#: share/frontend/wui/classes/WuiCore.php:201
 msgid "noNewNameGiven"
 msgstr "Sie haben keinen neuen Namen angegeben."
 
 #: wui/includes/classes/WuiMapManagement.php:247
 #: share/frontend/wui/classes/WuiCore.php:210
-#: share/frontend/wui/classes/WuiCore.php:210
+#: share/frontend/wui/classes/WuiCore.php:211
 msgid "noPermissions"
 msgstr "Der Benutzer \"[USER]\" hat keine Rechte für diese Aktion"
 
@@ -1831,7 +1856,7 @@ msgstr "Sie haben keine Berechtigung, den Status dieser Karte einzusehen."
 
 #: wui/includes/classes/WuiMapManagement.php:249
 #: share/frontend/wui/classes/WuiCore.php:212
-#: share/frontend/wui/classes/WuiCore.php:212
+#: share/frontend/wui/classes/WuiCore.php:213
 msgid "noSpaceAllowed"
 msgstr "Leerzeichen sind in diesem Wert nicht erlaubt."
 
@@ -1853,14 +1878,14 @@ msgstr "Es wurde kein Benutzername an NagVis übergeben. Mehr Informationen sind
 #: wui/includes/classes/WuiAddModify.php:238
 #: share/frontend/wui/classes/WuiCore.php:179
 #: share/frontend/wui/classes/WuiCore.php:180
-#: share/frontend/wui/classes/WuiCore.php:179
 #: share/frontend/wui/classes/WuiCore.php:180
+#: share/frontend/wui/classes/WuiCore.php:181
 msgid "not2coords"
 msgstr "Es scheint, dass Sie eine Linie definieren wollen (\"line_type\" ist gesetzt). Es sind aber keine zwei [COORD] Koordinaten angegeben."
 
 #: wui/includes/classes/WuiMapManagement.php:242
 #: share/frontend/wui/classes/WuiCore.php:205
-#: share/frontend/wui/classes/WuiCore.php:205
+#: share/frontend/wui/classes/WuiCore.php:206
 msgid "notCfgFile"
 msgstr "Die Datei hat nicht die Dateiendung \".cfg\". Bitte die Datei umbenennen."
 
@@ -1884,6 +1909,7 @@ msgstr "Objekte"
 #: nagvis/includes/classes/GlobalHeaderMenu.php:105
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:272
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:275
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:275
 msgid "onlineDoc"
 msgstr "Dokumentation"
 
@@ -1891,14 +1917,14 @@ msgstr "Dokumentation"
 #: wui/includes/classes/WuiAddModify.php:240
 #: share/frontend/wui/classes/WuiCore.php:181
 #: share/frontend/wui/classes/WuiCore.php:182
-#: share/frontend/wui/classes/WuiCore.php:181
 #: share/frontend/wui/classes/WuiCore.php:182
+#: share/frontend/wui/classes/WuiCore.php:183
 msgid "only1or2coords"
 msgstr "Es ist nur möglich, ein oder zwei Koordinaten [COORD] anzugeben."
 
 #: wui/includes/classes/WuiAddModify.php:236
 #: share/frontend/wui/classes/WuiCore.php:178
-#: share/frontend/wui/classes/WuiCore.php:178
+#: share/frontend/wui/classes/WuiCore.php:179
 msgid "onlyLineOrIcon"
 msgstr "Ein Objekt kann nur ein Icon oder eine Linie sein, \"iconset\" und \"line_type\" k&oouml;nnen nicht gemeinsam verwendet werden."
 
@@ -1935,6 +1961,7 @@ msgstr "Ausgabe"
 #: share/server/core/classes/NagVisHoverMenu.php:131
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:275
 #: share/frontend/wui/classes/WuiCore.php:134
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:278
 #: share/server/core/classes/NagVisHoverMenu.php:131
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:278
 #: share/frontend/wui/classes/WuiCore.php:134
@@ -1988,13 +2015,13 @@ msgstr "Der Benutzer \"[USER]\" hat keine Rechte für diese Aktion"
 #: share/server/core/classes/GlobalLanguage.php:247
 #: share/frontend/wui/classes/WuiCore.php:237
 #: share/server/core/classes/GlobalLanguage.php:247
-#: share/frontend/wui/classes/WuiCore.php:237
+#: share/frontend/wui/classes/WuiCore.php:238
 msgid "phpModuleNotLoaded"
 msgstr "Das benötigte PHP-Modul \"[MODULE]\" ist nicht vorhanden."
 
 #: wui/includes/classes/WuiMap.php:556
 #: share/frontend/wui/classes/WuiMap.php:529
-#: share/frontend/wui/classes/WuiMap.php:529
+#: share/frontend/wui/classes/WuiMap.php:535
 msgid "positionSize"
 msgstr "Positionieren/Grö&szlig;e"
 
@@ -2014,6 +2041,7 @@ msgid "properties"
 msgstr "Einstellungen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:225
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:228
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:228
 msgid "pt_BR"
 msgstr "Brasilianisches Portugiesisch"
@@ -2059,11 +2087,13 @@ msgstr "Rotations-Pools"
 #: nagvis/includes/classes/GlobalHeaderMenu.php:110
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:278
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:281
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:281
 msgid "rotationStart"
 msgstr "Starte Rotation"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:111
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:279
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:282
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:282
 msgid "rotationStop"
 msgstr "Stoppe Rotation"
@@ -2091,6 +2121,7 @@ msgstr "Speichern"
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:102
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:269
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:272
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:272
 msgid "selectMap"
 msgstr "Eine Karte wählen"
@@ -2198,7 +2229,7 @@ msgstr "Das Bild \"[IMAGE]\" existiert nicht."
 
 #: wui/includes/classes/WuiShapeManagement.php:143
 #: share/frontend/wui/classes/WuiCore.php:194
-#: share/frontend/wui/classes/WuiCore.php:194
+#: share/frontend/wui/classes/WuiCore.php:195
 msgid "shapeInUse"
 msgstr "Das Bild wird noch in der Karte \"[MAP]\" genutzt."
 
@@ -2241,6 +2272,7 @@ msgstr "Gesamtstatus"
 #: nagvis/includes/classes/GlobalHeaderMenu.php:107
 #: share/frontend/nagvis-js/classes/NagVisInfoView.php:54
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:274
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:277
 #: share/frontend/nagvis-js/classes/NagVisInfoView.php:54
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:277
 msgid "supportInfo"
@@ -2254,25 +2286,25 @@ msgstr "Textbox"
 
 #: wui/includes/classes/WuiBackgroundManagement.php:178
 #: share/frontend/wui/classes/WuiCore.php:191
-#: share/frontend/wui/classes/WuiCore.php:191
+#: share/frontend/wui/classes/WuiCore.php:192
 msgid "unableToDeleteBackground"
 msgstr "Kann Hintergrund \"[IMAGENAME]\" nicht löschen. Das Bild wird noch in der Karte \"[MAP]\" verwendet."
 
 #: wui/includes/classes/WuiMapManagement.php:246
 #: share/frontend/wui/classes/WuiCore.php:209
-#: share/frontend/wui/classes/WuiCore.php:209
+#: share/frontend/wui/classes/WuiCore.php:210
 msgid "unableToDeleteMap"
 msgstr "Karte \"[MAP]\" nicht löschbar. Die Karte ist in der Karte \"[PARENTMAP]\" eingebunden."
 
 #: wui/includes/classes/WuiShapeManagement.php:145
 #: share/frontend/wui/classes/WuiCore.php:196
-#: share/frontend/wui/classes/WuiCore.php:196
+#: share/frontend/wui/classes/WuiCore.php:197
 msgid "unableToDeleteShape"
 msgstr "Das Bild \"[IMAGENAME]\" kann nicht gelöscht werden. Das Bild wird in der Karte \"[MAP]\" noch verwendet."
 
 #: wui/includes/classes/WuiAddModify.php:233
 #: share/frontend/wui/classes/WuiCore.php:175
-#: share/frontend/wui/classes/WuiCore.php:175
+#: share/frontend/wui/classes/WuiCore.php:176
 msgid "unableToWorkWithMap"
 msgstr "Die Karte kann nicht mehr verarbeitet werden. Vorgang wurde abgebrochen."
 
@@ -2386,13 +2418,13 @@ msgstr "Parameter [VAR] ist nicht innerhalb des erlaubten Wertebereiches."
 
 #: nagvis/includes/classes/GlobalCore.php:360
 #: share/server/core/classes/GlobalCore.php:584
-#: share/server/core/classes/GlobalCore.php:584
+#: share/server/core/classes/GlobalCore.php:556
 msgid "varFolderNotExists"
 msgstr "Das var-Verzeichnis \"[PATH]\" existiert nicht."
 
 #: nagvis/includes/classes/GlobalCore.php:378
 #: share/server/core/classes/GlobalCore.php:602
-#: share/server/core/classes/GlobalCore.php:602
+#: share/server/core/classes/GlobalCore.php:574
 msgid "varFolderNotWriteable"
 msgstr "Das Verzeichnis \"[PATH]\" ist nicht beschreibbar."
 
@@ -2403,7 +2435,7 @@ msgid "viewTypeGadgetButNoGadgetUrl"
 msgstr "Nagvis hat ein Objekt gefunden, bei dem die Option \"gadget_url\" gesetzt ist. Die Option view_type=\"gadget\" muss gesetzt werden, damit das Objekt als Gadget angezeigt werden kann. Das Problem wurd bei einem Objekt des Typs \"[TYPE]\" auf der Karte \"[MAP]\" gefunden."
 
 #: share/frontend/wui/classes/WuiCore.php:183
-#: share/frontend/wui/classes/WuiCore.php:183
+#: share/frontend/wui/classes/WuiCore.php:184
 msgid "viewTypeWrong"
 msgstr "Das Attribut view_type hat einen ung&uuml;ltigen Wert."
 
@@ -2424,7 +2456,7 @@ msgstr "Die aktuelle PHP-Version \"[CURRENT_VERSION]\" ist zu alt. NagVis benöt
 #: share/server/core/classes/GlobalUserCfg.php:234
 #: share/frontend/wui/classes/WuiCore.php:172
 #: share/server/core/classes/GlobalUserCfg.php:234
-#: share/frontend/wui/classes/WuiCore.php:172
+#: share/frontend/wui/classes/WuiCore.php:173
 msgid "wrongValueFormat"
 msgstr "Das Attribut \"[ATTRIBUTE]\" in der Sektion \"[TYPE]\" in der Haupt-Konfigurationsdatei entspricht nicht dem korrekten Format"
 
@@ -2436,13 +2468,13 @@ msgstr "Das Attribut \"[ATTRIBUTE]\" in der Sektion \"[TYPE]\" in der Haupt-Konf
 #: share/frontend/wui/classes/WuiCore.php:173
 #: share/server/core/classes/GlobalMapCfg.php:1588
 #: share/server/core/classes/GlobalMapCfg.php:1599
-#: share/frontend/wui/classes/WuiCore.php:173
+#: share/frontend/wui/classes/WuiCore.php:174
 msgid "wrongValueFormatMap"
 msgstr "Das Attribut \"[ATTRIBUTE]\" in einem Element vom Typ \"[TYPE]\" in der Karten-Konfigurationsdatei \"[MAP]\" entspricht nicht dem korrekten Format"
 
 #: wui/includes/classes/WuiMap.php:609
 #: share/frontend/wui/classes/WuiCore.php:174
-#: share/frontend/wui/classes/WuiCore.php:174
+#: share/frontend/wui/classes/WuiCore.php:175
 msgid "wrongValueFormatOption"
 msgstr "Das Attribut \"[ATTRIBUTE]\" entspricht nicht dem korrekten Format"
 
