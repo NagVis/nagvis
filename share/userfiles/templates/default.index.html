@@ -6,18 +6,18 @@
 	<title>{$pageTitle}</title>
 	<meta name="viewport" content="width=480; initial-scale=0.6666; maximum-scale=1.0; minimum-scale=0.6666" />
 	
-	<script type="text/javascript" src="{$htmlJs}ExtBase.js"></script>
 	{if $bUseCompressedJs}
 	<script type="text/javascript" src="{$htmlJs}NagVisCompressed.js"></script>
 	{else}
 	<script type="text/javascript" src="{$htmlJs}nagvis.js"></script>
+	<script type="text/javascript" src="{$htmlJs}popupWindow.js"></script>
+	<script type="text/javascript" src="{$htmlJs}ExtBase.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontendMessage.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
 	<script type="text/javascript" src="{$htmlJs}hover.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontendContext.js"></script>
 	<script type="text/javascript" src="{$htmlJs}ajax.js"></script>
 	<script type="text/javascript" src="{$htmlJs}dynfavicon.js"></script>
-	<script type="text/javascript" src="{$htmlJs}frontend.js"></script>
 	<script type="text/javascript" src="{$htmlJs}lines.js"></script>
 	<script type="text/javascript" src="{$htmlJs}overlib.js"></script>
 	<script type="text/javascript" src="{$htmlJs}NagVisObject.js"></script>
@@ -32,6 +32,7 @@
 	<script type="text/javascript" src="{$htmlJs}NagVisLine.js"></script>
 	<script type="text/javascript" src="{$htmlJs}NagVisTextbox.js"></script>
 	<script type="text/javascript" src="{$htmlJs}NagVisRotation.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontend.js"></script>
 	<script type="text/javascript" src="{$htmlJs}wz_jsgraphics.js"></script>
 	{/if}
 	<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
