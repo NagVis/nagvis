@@ -86,4 +86,43 @@ if (!function_exists('json_encode')) {
 		}
 	}
 }
+
+/**
+ * Implements handling of PHP to JSON conversion for NagVis
+ * (Needed for < PHP 5.2.0)
+ *
+ * Function taken from http://de.php.net/json_decode (www at walidator dot info 30-May-2009 02:16)
+ * hope thats okay...
+ *
+ * @param   String    Debug message
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+if(!function_exists('json_decode')){
+	function json_decode($json) { 
+		$comment = false;
+		$out = '$x=';
+		
+		for ($i=0; $i<strlen($json); $i++) {
+			if(!$comment) {
+				if($json[$i] == '{') {
+					$out .= ' array(';
+				} elseif($json[$i] == '}') {
+					$out .= ')';
+				} elseif($json[$i] == ':') {
+					$out .= '=>';
+				} else {
+					$out .= $json[$i];
+				}
+			} else {
+				$out .= $json[$i];
+			}
+			if($json[$i] == '"') {
+				$comment = !$comment;
+			}
+		}
+		
+		eval($out . ';');
+		return $x;
+	}
+}
 ?>
