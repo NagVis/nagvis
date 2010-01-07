@@ -107,10 +107,15 @@ class CoreModUserMgmt extends CoreModule {
 		// FIXME: validate
 		$userId = intval($this->FHANDLER->get('userId'));
 		
-		// FIXME: Add check not to delete own user
+		// Don't delete own user
+		if($this->AUTHENTICATION->getUserId() == $userId) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to delete your own user.'));
+			
+			$bValid = false;
+		}
 		
-	  // Store response data
-	  if($bValid === true) {
+		// Store response data
+		if($bValid === true) {
 		  // Return the data
 		  return Array('userId' => $userId);
 		} else {
@@ -136,10 +141,10 @@ class CoreModUserMgmt extends CoreModule {
 		
 		$aPerms = Array();
 		
-	  // Store response data
-	  if($bValid === true) {
-		  // Return the data
-		  return Array('userId' => $userId, 'roles' => $this->FHANDLER->get('rolesSelected'));
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('userId' => $userId, 'roles' => $this->FHANDLER->get('rolesSelected'));
 		} else {
 			return false;
 		}
@@ -188,10 +193,10 @@ class CoreModUserMgmt extends CoreModule {
 		
 		//@todo Escape vars?
 		
-	  // Store response data
-	  if($bValid === true) {
-		  // Return the data
-		  return Array(
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array(
 		               'user' => $this->FHANDLER->get('username'),
 		               'password' => $this->FHANDLER->get('password1'));
 		} else {
