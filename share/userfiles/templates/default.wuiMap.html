@@ -2,6 +2,7 @@
 
 <script type="text/javascript">
 oGeneralProperties = {$generalProperties};
+oWuiProperties = {$wuiProperties};
 
 var mapname = '{$mapName}';
 var username = '{$userName}';
@@ -26,6 +27,9 @@ var backupAvailable = {$backupAvailable};
 </div>
 
 <script type="text/javascript">
+// Parses the grid if a user enabled it
+parseGrid();
+
 // build the right-click menu
 initjsDOMenu();
 

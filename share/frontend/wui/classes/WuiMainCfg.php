@@ -232,5 +232,21 @@ class WuiMainCfg extends GlobalMainCfg {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Parses WUI specific settings
+	 *
+	 * @return  String  JSON Code
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseWuiProperties() {
+		$arr = Array();
+		
+		$arr['grid_show'] = $this->getValue('wui', 'grid_show');
+		$arr['grid_color'] = $this->getValue('wui', 'grid_color');
+		$arr['grid_steps'] = $this->getValue('wui', 'grid_steps');
+		
+		return json_encode($arr);
+	}
 }
 ?>

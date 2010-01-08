@@ -36,6 +36,43 @@ var myshapex = 0;
 var myshapey = 0;
 var objid = 0;
 var viewType = '';
+var oWuiProperties;
+
+/**
+ * Parses a grind to make the alignment of the icons easier
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseGrid() {
+	// Only show when user configured to see a grid
+	if(oWuiProperties.grid_show === 1) {
+		// Add an options: grid_show, grid_steps, grid_color
+		var grid = new jsGraphics('mymap');
+		grid.setColor(oWuiProperties.grid_color);
+		grid.setStroke(1);
+		
+		var gridStep = oWuiProperties.grid_steps;
+		
+		// Start
+		var gridYStart = 0;
+		var gridXStart = 0;
+		
+		// End: Get screen height, width
+		var gridYEnd = pageHeight() - getHeaderHeight();
+		var gridXEnd = pageWidth();
+		
+		// Draw vertical lines
+		for(var gridX = 32; gridX < gridXEnd; gridX = gridX + gridStep) {
+			grid.drawLine(gridX, gridYStart, gridX, gridYEnd);
+		}
+		// Draw horizontal lines
+		for(var gridY = 32; gridY < gridYEnd; gridY = gridY + gridStep) {
+			grid.drawLine(gridXStart, gridY, gridXEnd, gridY);
+		}
+		
+		grid.paint();
+	}
+}
 
 // FIXME: Maybe move to nagvis-js frontend file to have it available in 
 // regular frontend in the future
@@ -307,6 +344,14 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	if((oObj.y - getHeaderHeight()) < 0 || oObj.x < 0) {
 		oObj.moveTo(oObj.oldX, oObj.oldY);
 		return;
+	}
+	
+	// When a grid is enabled align the dragged object in the nearest grid
+	if(oWuiProperties.grid_show === 1) {
+		var gridMoveX = oObj.x - (oObj.x % oWuiProperties.grid_steps);
+		var gridMoveY = oObj.y - (oObj.y % oWuiProperties.grid_steps);
+		
+		oObj.moveTo(gridMoveX, gridMoveY);
 	}
 	
 	// Reset z-index to configured value
