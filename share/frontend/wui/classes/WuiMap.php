@@ -118,14 +118,10 @@ class WuiMap extends GlobalMap {
 					$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
 				break;
 				default:
+					$objCode = '';
+					
 					if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
-						list($pointa_x,$pointb_x) = explode(",", $obj['x']);
-						list($pointa_y,$pointb_y) = explode(",", $obj['y']);
-						$ret .= "<script type=\"text/javascript\">myshape_background.drawLine(".$pointa_x.",".$pointa_y.",".$pointb_x.",".$pointb_y.");</script>";
-						
-						$obj['x'] = round(($pointa_x+($pointb_x-$pointa_x)/2) - 10);
-						$obj['y'] = round(($pointa_y+($pointb_y-$pointa_y)/2) - 10);
-						$obj['icon'] = '20x20.gif';
+						$objCode .= $this->parseLine($obj);
 					} else {
 						$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
 					}
@@ -149,7 +145,9 @@ class WuiMap extends GlobalMap {
 					}
 					
 					$obj = $this->fixIcon($obj);
-					$ret .= $this->parseIcon($obj);
+					
+					$objCode .= $this->parseIcon($obj);
+					$ret .= $this->parseContainer($obj, $objCode);
 					
 					if(isset($obj['label_show']) && $obj['label_show'] == '1') {
 						$ret .= $this->parseLabel($obj);
@@ -242,18 +240,121 @@ class WuiMap extends GlobalMap {
 	 * @return	String HTML Code
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function parseIcon(&$obj) {
-		$ret = '';
-				
-		if($obj['type'] == 'service') {
-			$name = 'host_name';
+	function parseIcon($obj) {
+		// Add 20x20 icon in the middle of the line in case of line objects
+		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
+			list($x1,$x2) = explode(",", $obj['x']);
+			list($y1,$y2) = explode(",", $obj['y']);
+			
+			if($x1 > $x2) {
+				$x = $x2;
+			} elseif($x1 < $x2) {
+				$x = $x1;
+			} else {
+				$x = $x1;
+			}
+			
+			if($y1 > $y2) {
+				$y = $y2;
+			} elseif($y1 < $y2) {
+				$y = $y1;
+			} else {
+				$y = $y1;
+			}
+		
+			$x = round(($x1+($x2-$x1)/2) - 10) - $x;
+			$y = round(($y1+($y2-$y1)/2) - 10) - $y;
+			$style = 'style="position:absolute;left:'.$x.'px;top:'.$y.'px"';
+			
+			$obj['icon'] = '20x20.gif';
 		} else {
-			$name = $obj['type'] . '_name';
+			$x = $obj['x'];
+			$y = $obj['y'];
+			$style = '';
 		}
 		
-		$ret .= "<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$obj['x']."px; top:".$obj['y']."px;z-index:".$obj['z']."\">";
-		$ret .= "\t\t<img src=\"".$obj['htmlPath'].$obj['icon'].$obj['iconParams']."\" alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj).">";
-		$ret .= "</div>";
+		return "<img id=\"icon_".$obj['type']."_".$obj['id']."\" src=\"".$obj['htmlPath'].$obj['icon'].$obj['iconParams']."\" ".$style." alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj)." />";
+	}
+	
+	/**
+	 * Parses the HTML-Code of a line
+	 *
+	 * @param	Array	$obj	Array with object informations
+	 * @return	String HTML Code
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseLine($obj) {
+		$ret = '';
+		
+		$lineId = "line_".$obj['type']."_".$obj['id'];
+		
+		list($x1,$x2) = explode(",", $obj['x']);
+		list($y1,$y2) = explode(",", $obj['y']);
+		
+		if($x1 > $x2) {
+			$x = $x2;
+		} elseif($x1 < $x2) {
+			$x = $x1;
+		} else {
+			$x = $x1;
+		}
+		
+		if($y1 > $y2) {
+			$y = $y2;
+		} elseif($y1 < $y2) {
+			$y = $y1;
+		} else {
+			$y = $y1;
+		}
+		
+		$ret .= "var ".$lineId." = new jsGraphics('box_".$obj['type']."_".$obj['id']."');";
+		$ret .= $lineId.".setColor('#FF0000');";
+		$ret .= $lineId.".setStroke(1);";
+		$ret .= $lineId.".drawLine(".($x1-$x).",".($y1-$y).",".($x2-$x).",".($y2-$y).");";
+		$ret .= $lineId.".paint();";
+		
+		return $this->parseJs($ret);
+	}
+	
+	/**
+	 * Parses the HTML-Code of an object container
+	 *
+	 * @param  Array   Array with object informations
+	 * @param  String  HTML Code
+	 * @return String  HTML Code
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseContainer($obj, $html) {
+		$ret = '';
+		
+		// Take the upper left corner for lines
+		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
+			list($x1,$x2) = explode(",", $obj['x']);
+			list($y1,$y2) = explode(",", $obj['y']);
+			
+			if($x1 > $x2) {
+				$x = $x2;
+			} elseif($x1 < $x2) {
+				$x = $x1;
+			} else {
+				$x = $x1;
+			}
+			
+			if($y1 > $y2) {
+				$y = $y2;
+			} elseif($y1 < $y2) {
+				$y = $y1;
+			} else {
+				$y = $y1;
+			}
+		} else {
+			$x = $obj['x'];
+			$y = $obj['y'];
+		}
+		
+		$ret .= "\n<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$x."px;top:".$y."px;z-index:".$obj['z']."\">";
+		$ret .= $html;
+		$ret .= "</div>\n";
 		
 		return $ret;
 	}

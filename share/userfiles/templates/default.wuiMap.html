@@ -16,13 +16,6 @@ var backupAvailable = {$backupAvailable};
 </script>
 
 <div id="mymap" class="map">
-	<script type="text/javascript">
-		// Prepare line drawing when adding or moving lines
-		var myshape_background = new jsGraphics('mymap');
-		myshape_background.setColor('#FF0000');
-		myshape_background.setStroke(1);
-	</script>
-	
 	<!-- background -->
 	{if $backgroundImg != ''}
 	<img id="background" src="{$backgroundImg}" style="z-index:0;" alt="">
@@ -33,9 +26,6 @@ var backupAvailable = {$backupAvailable};
 </div>
 
 <script type="text/javascript">
-// Draw lines etc. on the background
-myshape_background.paint();
-
 // build the right-click menu
 initjsDOMenu();
 
