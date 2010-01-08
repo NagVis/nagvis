@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiBackendManagement extends GlobalPage {
+class WuiBackendManagement extends WuiPage {
 	var $CORE;
 	
 	var $DEFBACKENDFORM;
@@ -61,7 +61,7 @@ class WuiBackendManagement extends GlobalPage {
 		$code = '';
 		$code .= $this->getJsIncludes();
 		
-		$this->DEFBACKENDFORM = new GlobalForm(Array('name'=>'backend_default',
+		$this->DEFBACKENDFORM = new WuiForm(Array('name'=>'backend_default',
 			'id'=>'backend_default',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_backend_default',
@@ -74,7 +74,7 @@ class WuiBackendManagement extends GlobalPage {
 		$code .= $this->DEFBACKENDFORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->DEFBACKENDFORM->closeForm();
 		
-		$this->ADDBACKENDFORM = new GlobalForm(Array('name'=>'backend_add',
+		$this->ADDBACKENDFORM = new WuiForm(Array('name'=>'backend_add',
 			'id'=>'backend_add',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_backend_add',
@@ -87,7 +87,7 @@ class WuiBackendManagement extends GlobalPage {
 		$code .= $this->ADDBACKENDFORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->ADDBACKENDFORM->closeForm();
 		
-		$this->EDITBACKENDFORM = new GlobalForm(Array('name'=>'backend_edit',
+		$this->EDITBACKENDFORM = new WuiForm(Array('name'=>'backend_edit',
 			'id'=>'backend_edit',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_backend_edit',
@@ -100,7 +100,7 @@ class WuiBackendManagement extends GlobalPage {
 		$code .= $this->EDITBACKENDFORM->getSubmitLine($this->CORE->getLang()->getText('save'));
 		$code .= $this->EDITBACKENDFORM->closeForm();
 		
-		$this->DELBACKENDFORM = new GlobalForm(Array('name'=>'backend_del',
+		$this->DELBACKENDFORM = new WuiForm(Array('name'=>'backend_del',
 			'id'=>'backend_del',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_backend_del',

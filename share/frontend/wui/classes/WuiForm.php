@@ -1,10 +1,10 @@
 <?php
 /*****************************************************************************
  *
- * GlobalForm.php - Class for managing the common form. Should be used by ALL
- *                  pages of NagVis and WUI where HTML-forms are used
+ * WuiForm.php - Class for managing the common form. Should be used by ALL
+ *               pages of NagVis and WUI where HTML-forms are used
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -26,7 +26,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class GlobalForm {
+class WuiForm {
 	private $name;
 	private $id;
 	private $method;

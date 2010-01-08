@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiMapManagement extends GlobalPage {
+class WuiMapManagement extends WuiPage {
 	var $CORE;
 	var $CREATEFORM;
 	var $RENAMEFORM;
@@ -60,10 +60,10 @@ class WuiMapManagement extends GlobalPage {
 		$code = '';
 		$code .= $this->getJsIncludes();
 		
-		$this->CREATEFORM = new GlobalForm(Array('name'=>'map_create',
+		$this->CREATEFORM = new WuiForm(Array('name'=>'map_create',
 			'id'=>'map_create',
 			'method'=>'POST',
-			'action'=>'./form_handler.php?myaction=mgt_map_create',
+			'action' => 'javascript:submitFrontendForm(\''.$this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=Map&amp;act=doAdd\', \'map_create\');',
 			'onSubmit'=>'return check_create_map();',
 			'cols'=>'2'));
 		
@@ -72,7 +72,7 @@ class WuiMapManagement extends GlobalPage {
 		$code .= $this->getCreateFields();
 		$code .= $this->getSubmit($this->CREATEFORM,$this->CORE->getLang()->getText('create'));
 		
-		$this->RENAMEFORM = new GlobalForm(Array('name'=>'map_rename',
+		$this->RENAMEFORM = new WuiForm(Array('name'=>'map_rename',
 			'id'=>'map_rename',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_map_rename',
@@ -84,7 +84,7 @@ class WuiMapManagement extends GlobalPage {
 		$code .= $this->getRenameFields();
 		$code .= $this->getSubmit($this->RENAMEFORM,$this->CORE->getLang()->getText('rename'));
 		
-		$this->DELETEFORM = new GlobalForm(Array('name'=>'map_delete',
+		$this->DELETEFORM = new WuiForm(Array('name'=>'map_delete',
 			'id'=>'map_delete',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_map_delete',
@@ -96,7 +96,7 @@ class WuiMapManagement extends GlobalPage {
 		$code .= $this->getDeleteFields();
 		$code .= $this->getSubmit($this->DELETEFORM,$this->CORE->getLang()->getText('delete'));
 		
-		$this->EXPORTFORM = new GlobalForm(Array('name'=>'map_export',
+		$this->EXPORTFORM = new WuiForm(Array('name'=>'map_export',
 			'id'=>'map_export',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_map_export',
@@ -108,7 +108,7 @@ class WuiMapManagement extends GlobalPage {
 		$code .= $this->getExportFields();
 		$code .= $this->getSubmit($this->EXPORTFORM,$this->CORE->getLang()->getText('export'));
 		
-		$this->IMPORTFORM = new GlobalForm(Array('name'=>'map_import',
+		$this->IMPORTFORM = new WuiForm(Array('name'=>'map_import',
 			'id'=>'map_import',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_map_import',
@@ -187,7 +187,7 @@ class WuiMapManagement extends GlobalPage {
 	/**
 	 * Gets submit button for the given form
 	 *
-	 * @param	GlobalForm	$FORM
+	 * @param	WuiForm	$FORM
 	 * @return	Array	HTML Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */

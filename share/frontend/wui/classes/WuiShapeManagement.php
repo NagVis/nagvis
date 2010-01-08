@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiShapeManagement extends GlobalPage {
+class WuiShapeManagement extends WuiPage {
 	var $CORE;
 	var $ADDFORM;
 	var $DELFORM;
@@ -59,7 +59,7 @@ class WuiShapeManagement extends GlobalPage {
 		$code = '';
 		$code .= $this->getJsIncludes();
 		
-		$this->ADDFORM = new GlobalForm(Array('name'=>'shape_add',
+		$this->ADDFORM = new WuiForm(Array('name'=>'shape_add',
 																						'id'=>'shape_add',
 																						'method'=>'POST',
 																						'action'=>'./form_handler.php?myaction=mgt_shape_add',
@@ -73,7 +73,7 @@ class WuiShapeManagement extends GlobalPage {
 		$code .= $this->ADDFORM->getSubmitLine($this->CORE->getLang()->getText('upload'));
 		$code .= $this->ADDFORM->closeForm();
 		
-		$this->DELFORM = new GlobalForm(Array('name'=>'shape_delete',
+		$this->DELFORM = new WuiForm(Array('name'=>'shape_delete',
 																						'id'=>'shape_delete',
 																						'method'=>'POST',
 																						'action'=>'./form_handler.php?myaction=mgt_shape_delete',

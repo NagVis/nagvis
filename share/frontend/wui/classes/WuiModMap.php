@@ -13,7 +13,7 @@ class WuiModMap extends WuiModule {
 		
 		// Register valid actions
 		$this->aActions = Array(
-			'edit' => REQUIRES_AUTHORISATION
+			'edit' => REQUIRES_AUTHORISATION,
 		);
 		
 		// Register valid objects

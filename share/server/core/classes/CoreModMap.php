@@ -31,15 +31,13 @@ class CoreModMap extends CoreModule {
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
-		$aOpts = Array('show' => MATCH_MAP_NAME);
-		$aVals = $this->getCustomOptions($aOpts);
-		$this->name = $aVals['show'];
-		
 		// Register valid actions
 		$this->aActions = Array(
 			'getMapProperties' => REQUIRES_AUTHORISATION,
 			'getMapObjects' => REQUIRES_AUTHORISATION,
 			'getObjectStates' => REQUIRES_AUTHORISATION,
+			// WUI specific actions
+			'doAdd' => REQUIRES_AUTHORISATION,
 		);
 		
 		// Register valid objects
@@ -55,18 +53,97 @@ class CoreModMap extends CoreModule {
 		if($this->offersAction($this->sAction)) {
 			switch($this->sAction) {
 				case 'getMapProperties':
+					$aOpts = Array('show' => MATCH_MAP_NAME);
+					$aVals = $this->getCustomOptions($aOpts);
+					$this->name = $aVals['show'];
+					
 					$sReturn = $this->getMapProperties();
 				break;
 				case 'getMapObjects':
+					$aOpts = Array('show' => MATCH_MAP_NAME);
+					$aVals = $this->getCustomOptions($aOpts);
+					$this->name = $aVals['show'];
+					
 					$sReturn = $this->getMapObjects();
 				break;
 				case 'getObjectStates':
+					$aOpts = Array('show' => MATCH_MAP_NAME);
+					$aVals = $this->getCustomOptions($aOpts);
+					$this->name = $aVals['show'];
+					
 					$sReturn = $this->getObjectStates();
+				break;
+				case 'doAdd':
+					$aReturn = $this->handleResponseAdd();
+					
+					if($aReturn !== false) {
+						// Try to create the map
+						if($this->doAdd($aReturn)) {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The map has been created.'));
+							$sReturn = '';
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be created.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
 				break;
 			}
 		}
 		
 		return $sReturn;
+	}
+	
+	private function doAdd($a) {
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map_name']);
+		if(!$MAPCFG->createMapConfig()) {
+			return false;
+		}
+		
+		$MAPCFG->addElement('global', $a);
+		return $MAPCFG->writeElement('global','0');
+	}
+	
+	private function handleResponseAdd() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_name')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('allowed_users')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('allowed_for_config')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		//FIXME: Check if the map already exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_name').'$/')) > 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The mapname does already exist.'));
+			
+			$bValid = false;
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array(
+		               'map_name' => $FHANDLER->get('map_name'),
+		               'allowed_users' => $FHANDLER->get('allowed_users'),
+		               'allowed_for_config' => $FHANDLER->get('allowed_for_config'),
+		               'iconset' => $FHANDLER->get('map_iconset'),
+		               'map_image' => $FHANDLER->get('map_image'));
+		} else {
+			return false;
+		}
 	}
 	
 	private function getMapProperties() {

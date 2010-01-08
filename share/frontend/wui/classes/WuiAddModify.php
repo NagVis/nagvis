@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiAddModify extends GlobalPage {
+class WuiAddModify extends WuiPage {
 	var $CORE;
 	var $MAPCFG;
 	var $FORM;
@@ -67,7 +67,7 @@ class WuiAddModify extends GlobalPage {
 			$action = 'createMapObject';
 		}
 		
-		$this->FORM = new GlobalForm(Array('name' => 'addmodify',
+		$this->FORM = new WuiForm(Array('name' => 'addmodify',
 			'id' => 'addmodify',
 			'method' => '',
 			'onSubmit' => 'return validateMapCfgForm()',

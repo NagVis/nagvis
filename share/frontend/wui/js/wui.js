@@ -530,8 +530,6 @@ function formSubmit(formId, target, bReloadPage) {
 	if(bReloadPage === true) {
 		document.location.href='./index.php?mod=Map&act=edit&show='+mapname;
 	}
-	
-	return true;
 }
 
 /**

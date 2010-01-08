@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiBackgroundManagement extends GlobalPage {
+class WuiBackgroundManagement extends WuiPage {
 	var $CORE;
 	var $ADDFORM;
 	var $DELFORM;
@@ -59,7 +59,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$code = '';
 		$code .= $this->getJsIncludes();
 		
-		$this->CREATEFORM = new GlobalForm(Array('name'=>'create_image',
+		$this->CREATEFORM = new WuiForm(Array('name'=>'create_image',
 			'id'=>'create_image',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_image_create',
@@ -72,7 +72,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$code .= $this->CREATEFORM->getSubmitLine($this->CORE->getLang()->getText('create'));
 		$code .= $this->CREATEFORM->closeForm();
 		
-		$this->ADDFORM = new GlobalForm(Array('name'=>'new_image',
+		$this->ADDFORM = new WuiForm(Array('name'=>'new_image',
 			'id'=>'new_image',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_image_upload',
@@ -86,7 +86,7 @@ class WuiBackgroundManagement extends GlobalPage {
 		$code .= $this->ADDFORM->getSubmitLine($this->CORE->getLang()->getText('upload'));
 		$code .= $this->ADDFORM->closeForm();
 		
-		$this->DELFORM = new GlobalForm(Array('name'=>'image_delete',
+		$this->DELFORM = new WuiForm(Array('name'=>'image_delete',
 			'id'=>'image_delete',
 			'method'=>'POST',
 			'action'=>'./form_handler.php?myaction=mgt_image_delete',

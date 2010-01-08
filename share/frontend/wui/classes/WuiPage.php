@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalPage.php - Class for managing the common page layout
+ * WuiPage.php - Class for managing the common page layout
  *
  * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
  *
@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class GlobalPage {
+class WuiPage {
 	protected $CORE;
 	
 	// arrays for the header

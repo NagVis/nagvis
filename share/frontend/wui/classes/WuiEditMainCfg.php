@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiEditMainCfg extends GlobalPage {
+class WuiEditMainCfg extends WuiPage {
 	var $CORE;
 	var $FORM;
 	
@@ -55,7 +55,7 @@ class WuiEditMainCfg extends GlobalPage {
 	function getForm() {
 		$code = '';
 		
-		$this->FORM = new GlobalForm(Array('name' => 'edit_config',
+		$this->FORM = new WuiForm(Array('name' => 'edit_config',
 			'id' => 'edit_config',
 			'onSubmit' => 'return validateMainCfgForm()',
 			'action' => 'javascript:formSubmit(\'edit_config\', \'./ajax_handler.php?action=updateMainCfg\');',
