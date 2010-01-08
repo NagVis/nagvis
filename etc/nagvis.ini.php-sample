@@ -188,10 +188,10 @@
 ;showmaps=1
 ; Enable/Disable geomap listing
 ;showgeomap=1
-; Enable/Disable map thumbnails
-;showmapthumbs=1
 ; Enable/Disable rotation listing
 ;showrotations=1
+; Enable/Disable map thumbnails
+;showmapthumbs=0
 
 ; Options for the Automap
 [automap]

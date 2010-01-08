@@ -463,7 +463,7 @@ class GlobalMainCfg {
 					'match' => MATCH_BOOLEAN),
 				'showmapthumbs' => Array('must' => 0,
 					'editable' => 1,
-					'default' => 1,
+					'default' => 0,
 					'match' => MATCH_BOOLEAN),
 				'showrotations' => Array('must' => 0,
 					'editable' => 1,
