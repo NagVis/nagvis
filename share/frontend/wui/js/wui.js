@@ -36,22 +36,65 @@ var myshapex = 0;
 var myshapey = 0;
 var objid = 0;
 var viewType = '';
-var oWuiProperties;
+
+/**
+ * Toggle the grid state in the current view and sends
+ * current setting to server component for persistance
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function gridToggle() {
+	// Toggle the grid state
+	if(oViewProperties.grid_show === 1) {
+		oViewProperties.grid_show = 0;
+		
+		// Remove from view
+		var oMap = document.getElementById('mymap');
+		var oGrid = document.getElementById('grid');
+		oMap.removeChild(oGrid);
+		oGrid = null;
+		oMap = null;
+	} else {
+		oViewProperties.grid_show = 1;
+		
+		// Add to view
+		gridParse();
+	}
+	
+	// Send current option to server component
+	var url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type=global&id=0&grid_show='+oViewProperties.grid_show;
+	
+	// Sync ajax request
+	var oResult = getSyncRequest(url);
+	if(oResult && oResult.status != 'OK') {
+		alert(oResult.message);
+	}
+	
+	oResult = null;
+}
 
 /**
  * Parses a grind to make the alignment of the icons easier
  *
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function parseGrid() {
+function gridParse() {
 	// Only show when user configured to see a grid
-	if(oWuiProperties.grid_show === 1) {
+	if(oViewProperties.grid_show === 1) {
+		// Create grid container and append to map
+		var oMap = document.getElementById('mymap');
+		var oGrid = document.createElement('div');
+		oGrid.setAttribute('id', 'grid');
+		oMap.appendChild(oGrid);
+		oGrid = null;
+		oMap = null;
+		
 		// Add an options: grid_show, grid_steps, grid_color
-		var grid = new jsGraphics('mymap');
-		grid.setColor(oWuiProperties.grid_color);
+		var grid = new jsGraphics('grid');
+		grid.setColor(oViewProperties.grid_color);
 		grid.setStroke(1);
 		
-		var gridStep = oWuiProperties.grid_steps;
+		var gridStep = oViewProperties.grid_steps;
 		
 		// Start
 		var gridYStart = 0;
@@ -71,6 +114,13 @@ function parseGrid() {
 		}
 		
 		grid.paint();
+		
+		gridXEnd = null
+		gridYEnd = null;
+		gridXStart = null;
+		gridYStart = null;
+		gridStep = null;
+		grid = null;
 	}
 }
 
@@ -347,9 +397,9 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	}
 	
 	// When a grid is enabled align the dragged object in the nearest grid
-	if(oWuiProperties.grid_show === 1) {
-		var gridMoveX = oObj.x - (oObj.x % oWuiProperties.grid_steps);
-		var gridMoveY = oObj.y - (oObj.y % oWuiProperties.grid_steps);
+	if(oViewProperties.grid_show === 1) {
+		var gridMoveX = oObj.x - (oObj.x % oViewProperties.grid_steps);
+		var gridMoveY = oObj.y - (oObj.y % oViewProperties.grid_steps);
 		
 		oObj.moveTo(gridMoveX, gridMoveY);
 	}

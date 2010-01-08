@@ -446,5 +446,21 @@ class WuiMapCfg extends GlobalMapCfg {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Parses WUI specific settings
+	 *
+	 * @return  String  JSON Code
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function parseViewProperties() {
+		$arr = Array();
+		
+		$arr['grid_show'] = intval($this->getValue('global', 0, 'grid_show'));
+		$arr['grid_color'] = $this->getValue('global', 0, 'grid_color');
+		$arr['grid_steps'] = intval($this->getValue('global', 0, 'grid_steps'));
+		
+		return json_encode($arr);
+	}
 }
 ?>

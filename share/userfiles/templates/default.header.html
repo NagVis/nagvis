@@ -32,6 +32,9 @@
 					{if $viewType == 'Map' && $permittedEdit == true}
 					<li><a href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$currentMap}" class="underline">{$langEditMap}</a></li>
 					{/if}
+					{if $viewType == 'WuiMap' && $permittedEdit == true}
+					<li><a href="javascript:gridToggle()" class="underline">{$langToggleGrid}</a></li>
+					{/if}
 				</ul>
 			</dd>
 		</dl>

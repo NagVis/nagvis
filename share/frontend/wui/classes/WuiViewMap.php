@@ -60,7 +60,7 @@ class WuiViewMap {
 				'backgroundImg' => $this->MAP->MAPCFG->BACKGROUND->getFile(),
 				'base' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-				'wuiProperties' => $this->CORE->getMainCfg()->parseWuiProperties(),
+				'viewProperties' => $this->MAP->MAPCFG->parseViewProperties(),
 				'mapName' => $this->name,
 				'userName' => $this->CORE->getAuthentication()->getUser(),
 				'mapObjects' => $this->MAP->parseObjects(),

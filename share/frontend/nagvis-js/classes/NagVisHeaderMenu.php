@@ -104,6 +104,8 @@ class NagVisHeaderMenu {
 			$this->aMacros['viewType'] = 'Map';
 		} elseif($objPageClass == 'NagVisAutomapCfg') {
 			$this->aMacros['viewType'] = 'Automap';
+		} elseif($objPageClass == 'WuiMapCfg') {
+			$this->aMacros['viewType'] = 'WuiMap';
 		}
 		
 		// In rotation?
@@ -280,6 +282,7 @@ class NagVisHeaderMenu {
 			'langLogout' => $this->CORE->getLang()->getText('Logout'),
 			'langRotationStart' => $this->CORE->getLang()->getText('rotationStart'),
 			'langRotationStop' => $this->CORE->getLang()->getText('rotationStop'),
+			'langToggleGrid' => $this->CORE->getLang()->getText('Show/Hide Grid'),
 			// Supported by backend and not using trusted auth
 			'permittedChangePassword' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword') && !$SHANDLER->isSetAndNotEmpty('authTrusted'),
 			'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
