@@ -284,7 +284,7 @@ class GlobalMainCfg {
 					'match' => MATCH_BOOLEAN),
 				'grid_color' => Array('must' => 0,
 					'editable' => 1,
-					'default' => '#F7F7F7',
+					'default' => '#D5DCEF',
 					'match' => MATCH_COLOR),
 				'grid_steps' => Array('must' => 0,
 					'editable' => 1,
