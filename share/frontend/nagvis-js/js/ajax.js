@@ -436,6 +436,10 @@ function getFormParams(formId) {
 				sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
 			}
 			
+			if(aFields[i].type == "file") {
+				sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
+			}
+			
 			if(aFields[i].type == "text" || aFields[i].type == "password") {
 				sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
 			}

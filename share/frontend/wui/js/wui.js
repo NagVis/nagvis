@@ -62,7 +62,7 @@ function gridToggle() {
 	}
 	
 	// Send current option to server component
-	var url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type=global&id=0&grid_show='+oViewProperties.grid_show;
+	var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type=global&id=0&grid_show='+oViewProperties.grid_show;
 	
 	// Sync ajax request
 	var oResult = getSyncRequest(url);
@@ -120,7 +120,7 @@ function gridParse() {
 		gridXStart = null;
 		gridYStart = null;
 		gridStep = null;
-		//grid = null;
+		grid = null;
 	}
 }
 
@@ -378,7 +378,7 @@ function saveObjectAfterResize(oObj) {
 	var objH = parseInt(oObj.style.height);
 	
 	// Don't forget to substract height of header menu
-	var url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
+	var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
 	
 	// Sync ajax request
 	var oResult = getSyncRequest(url);
@@ -446,13 +446,13 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			y = oObj.y - getHeaderHeight();
 		}
 		
-		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&label_x='+x+'&label_y='+y;
+		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&label_x='+x+'&label_y='+y;
 	} else {
 		type = arr[1];
 		id = arr[2];
 		
 		// Don't forget to substract height of header menu
-		url = './ajax_handler.php?action=modifyMapObject&map='+mapname+'&type='+type+'&id='+id+'&x='+oObj.x+'&y='+(oObj.y - getHeaderHeight());
+		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+oObj.x+'&y='+(oObj.y - getHeaderHeight());
 	}
 	
 	// Sync ajax request
@@ -472,7 +472,7 @@ function deleteMapObject(oObj) {
 		var id = arr[2];
 		
 		// Sync ajax request
-		var oResult = getSyncRequest('./ajax_handler.php?action=deleteMapObject&map='+map+'&type='+type+'&id='+id);
+		var oResult = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=deleteObject&map='+map+'&type='+type+'&id='+id);
 		if(oResult && oResult.status != 'OK') {
 			alert(oResult.message);
 			return false;

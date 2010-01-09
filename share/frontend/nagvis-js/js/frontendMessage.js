@@ -165,7 +165,7 @@ function frontendMessage(oMessage, iTimeout) {
 	
 	document.body.appendChild(oContainerDiv);
 	oContainerDiv = null;
-
+	
 	// Maybe there is a request for a reload/redirect
 	if(typeof oMessage.reloadTime !== 'undefined' && oMessage.reloadTime !== null) {
 		var sUrl = window.location.href;
@@ -175,9 +175,10 @@ function frontendMessage(oMessage, iTimeout) {
 			sUrl = oMessage.reloadUrl;
 		}
 		
-		eventlog("frontendMessage", "note", "Schedule reload in "+oMessage.reloadTime+" sec. URL: "+sUrl);
+		// Remove # signs. Seems to prevent firefox from performing the reload
+		sUrl = sUrl.replace('#', '');
 		
 		// Register reload/redirect
-		setTimeout(function() {window.location = sUrl;}, oMessage.reloadTime*1000);
+		window.setTimeout(function() { window.location.href = sUrl; }, oMessage.reloadTime*1000);
 	}
 }

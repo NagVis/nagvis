@@ -51,7 +51,7 @@ function createjsDOMenu() {
 		addMenuItem(new menuItem(get_label('properties'), "menu_properties", "code:popupWindow('"+get_label('properties')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map='+mapname+'&type=global&id=0', true, false));","","",""));
 		addMenuItem(new menuItem(get_label('addObject'), "menu_addobject", "","","",""));
 		addMenuItem(new menuItem("-"));
-		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:popupWindow('"+get_label('nagVisConfig')+"', getSyncRequest('./ajax_handler.php?action=getFormContents&form=editMainCfg', true, false));"));
+		addMenuItem(new menuItem(get_label('nagVisConfig'), "", "code:popupWindow('"+get_label('nagVisConfig')+"', getSyncRequest('"+oGeneralProperties.path_server+"?mod=MainCfg&act=edit', true, false));"));
 		addMenuItem(new menuItem(get_label('manage'), "menu_management", "","","",""));
 	}
 	

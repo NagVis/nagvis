@@ -38,6 +38,11 @@ class CoreModMap extends CoreModule {
 			'getObjectStates' => REQUIRES_AUTHORISATION,
 			// WUI specific actions
 			'doAdd' => REQUIRES_AUTHORISATION,
+			'doRename' => REQUIRES_AUTHORISATION,
+			'doDelete' => REQUIRES_AUTHORISATION,
+			'modifyObject' => REQUIRES_AUTHORISATION,
+			'createObject' => REQUIRES_AUTHORISATION,
+			'deleteObject' => REQUIRES_AUTHORISATION,
 		);
 		
 		// Register valid objects
@@ -84,10 +89,118 @@ class CoreModMap extends CoreModule {
 							                  null,
 							                  null,
 							                  1,
-							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map_name']);
+							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map_new_name']);
 							$sReturn = '';
 						} else {
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be created.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
+				case 'doRename':
+					$aReturn = $this->handleResponseRename();
+					
+					if($aReturn !== false) {
+						// Try to create the map
+						if($this->doRename($aReturn)) {
+							// if renamed map is open, redirect to new name
+							if($aReturn['map'] == 'undefined' || $aReturn['map'] == '' || $aReturn['map'] == $aReturn['map_name']) {
+								$map = $aReturn['map_new_name'];
+							} else {
+								$map = $aReturn['map'];
+							}
+							
+							new GlobalMessage('NOTE', 
+							                  $this->CORE->getLang()->getText('The map has been renamed.'),
+							                  null,
+							                  null,
+							                  1,
+							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$map);
+							$sReturn = '';
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be renamed.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
+				case 'doDelete':
+					$aReturn = $this->handleResponseDelete();
+					
+					if($aReturn !== false) {
+						// Try to create the map
+						if($this->doDelete($aReturn)) {
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The map has been deleted.'));
+							$sReturn = '';
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be deleted.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
+				case 'createObject':
+					$aReturn = $this->handleResponseCreateObject();
+					
+					if($aReturn !== false) {
+						// Try to create the map
+						if($this->doCreateObject($aReturn)) {
+							// FIXME: Would be nice to have the object adding without reload of the page
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been added.'),
+							                  null,
+							                  null,
+							                  1);
+							$sReturn = '';
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be added.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
+				case 'modifyObject':
+					$aReturn = $this->handleResponseModifyObject();
+					
+					if($aReturn !== false) {
+						// Try to create the map
+						if($this->doModifyObject($aReturn)) {
+							// FIXME: Would be nice to have the object adding without reload of the page
+							//new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been modified.'),
+							//                  null,
+							//                  null,
+							//                  1);
+							// FIXME: Recode to GlobalMessage. But the particular callers like
+							//        suppress the success messages
+							$sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be modified.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
+				case 'deleteObject':
+					$aReturn = $this->handleResponseDeleteObject();
+					
+					if($aReturn !== false) {
+						// Try to create the map
+						if($this->doDeleteObject($aReturn)) {
+							// FIXME: Recode to GlobalMessage. But the particular callers like
+							//        suppress the success messages
+							$sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be modified.'));
 							$sReturn = '';
 						}
 					} else {
@@ -99,6 +212,301 @@ class CoreModMap extends CoreModule {
 		}
 		
 		return $sReturn;
+	}
+	
+	private function doDeleteObject($a) {
+		// initialize map and read map config
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG->readMapConfig();
+		
+		// first delete element from array
+		$MAPCFG->deleteElement($a['type'],$a['id']);
+		// then write new array to file
+		$MAPCFG->writeElement($a['type'],$a['id']);
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+		}
+			
+		return true;
+	}
+	
+	private function handleResponseDeleteObject() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_GET);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('type')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the map exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+			
+			$bValid = false;
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('map' => $FHANDLER->get('map'),
+			             'type' => $FHANDLER->get('type'),
+			             'id' => $FHANDLER->get('id'));
+		} else {
+			return false;
+		}
+	}
+	
+	private function doModifyObject($a) {
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG->readMapConfig();
+		
+		// set options in the array
+		foreach($a['opts'] AS $key => $val) {
+			$MAPCFG->setValue($a['type'], $a['id'], $key, $val);
+		}
+		
+		// write element to file
+		$MAPCFG->writeElement($a['type'], $a['id']);
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('mapLockNotDeleted'));
+		}
+			
+		return true;
+	}
+	
+	private function handleResponseModifyObject() {
+		$bValid = true;
+		// Validate the response
+		
+		// Need to listen to POST and GET
+		$aResponse = array_merge($_GET, $_POST);
+		// FIXME: Maybe change all to POST
+		$FHANDLER = new CoreRequestHandler($aResponse);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('type')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the map exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+			
+			$bValid = false;
+		}
+		
+		// FIXME: Recode to FHANDLER
+		$aOpts = $aResponse;
+		// Remove the parameters which are not options of the object
+		unset($aOpts['act']);
+		unset($aOpts['mod']);
+		unset($aOpts['map']);
+		unset($aOpts['type']);
+		unset($aOpts['id']);
+		unset($aOpts['timestamp']);
+		
+		// Also remove all "helper fields" which begin with a _
+		foreach($aOpts AS $key => $val) {
+			if(strpos($key, '_') === 0) {
+				unset($aOpts[$key]);
+			}
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('map' => $FHANDLER->get('map'),
+			             'type' => $FHANDLER->get('type'),
+			             'id' => $FHANDLER->get('id'),
+			             'opts' => $aOpts);
+		} else {
+			return false;
+		}
+	}
+	
+	private function doCreateObject($a) {
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG->readMapConfig();
+		
+		// append a new object definition to the map configuration
+		$elementId = $MAPCFG->addElement($a['type'], $a['opts']);
+		$MAPCFG->writeElement($a['type'], $elementId);
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+		}
+		
+		return true;
+	}
+	
+	private function handleResponseCreateObject() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('type')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the map exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+			
+			$bValid = false;
+		}
+		
+		// FIXME: Recode to FHANDLER
+		$aOpts = $_POST;
+		// Remove the parameters which are not options of the object
+		unset($aOpts['map']);
+		unset($aOpts['type']);
+		
+		// Also remove all "helper fields" which begin with a _
+		foreach($aOpts AS $key => $val) {
+			if(strpos($key, '_') === 0) {
+				unset($aOpts[$key]);
+			}
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('map' => $FHANDLER->get('map'),
+			             'type' => $FHANDLER->get('type'),
+			             'opts' => $aOpts);
+		} else {
+			return false;
+		}
+	}
+	
+	private function doDelete($a) {
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map_name']);
+		$MAPCFG->readMapConfig();
+		$MAPCFG->deleteMapConfig();
+		
+		return true;
+	}
+	
+	private function handleResponseDelete() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_name')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the map exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_name').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+			
+			$bValid = false;
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('map_name' => $FHANDLER->get('map_name'));
+		} else {
+			return false;
+		}
+	}
+	
+	private function doRename($a) {
+		$files = Array();
+		
+		// loop all map configs to replace mapname in all map configs
+		foreach($this->CORE->getAvailableMaps() as $mapName) {
+			$MAPCFG1 = new WuiMapCfg($this->CORE, $mapName);
+			$MAPCFG1->readMapConfig();
+			
+			$i = 0;
+			// loop definitions of type map
+			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+				// check if old map name is linked...
+				if($obj['map_name'] == $_POST['map_name']) {
+					$MAPCFG1->setValue('map', $i, 'map_name', $a['map_new_name']);
+					$MAPCFG1->writeElement('map',$i);
+				}
+				$i++;
+			}
+		}
+		
+		// rename config file
+		rename($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$a['map_name'].'.cfg',
+		       $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$a['map_new_name'].'.cfg');
+		
+		return true;
+	}
+	
+	private function handleResponseRename() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_name')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_new_name')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the new map already exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_new_name').'$/')) > 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The new mapname does already exist.'));
+			
+			$bValid = false;
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array(
+		               'map_new_name' => $FHANDLER->get('map_new_name'),
+		               'map_name' => $FHANDLER->get('map_name'),
+		               'map' => $FHANDLER->get('map'));
+		} else {
+			return false;
+		}
 	}
 	
 	private function doAdd($a) {
@@ -130,7 +538,7 @@ class CoreModMap extends CoreModule {
 		
 		//FIXME: All fields: Regex check
 		
-		//FIXME: Check if the map already exists
+		// Check if the map already exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_name').'$/')) > 0) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The mapname does already exist.'));
 			

@@ -96,6 +96,7 @@ $MHANDLER->regModule('Auth');
 $MHANDLER->regModule('Search');
 $MHANDLER->regModule('UserMgmt');
 $MHANDLER->regModule('RoleMgmt');
+$MHANDLER->regModule('MainCfg');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

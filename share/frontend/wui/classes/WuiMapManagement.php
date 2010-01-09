@@ -73,23 +73,23 @@ class WuiMapManagement extends WuiPage {
 		$code .= $this->getSubmit($this->CREATEFORM,$this->CORE->getLang()->getText('create'));
 		
 		$this->RENAMEFORM = new WuiForm(Array('name'=>'map_rename',
-			'id'=>'map_rename',
-			'method'=>'POST',
-			'action'=>'./form_handler.php?myaction=mgt_map_rename',
-			'onSubmit'=>'return check_map_rename();',
-			'cols'=>'2'));
+			'id' => 'map_rename',
+			'method' => 'POST',
+			'action' => 'javascript:submitFrontendForm(\''.$this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=Map&amp;act=doRename\', \'map_rename\');',
+			'onSubmit' => 'return check_map_rename();',
+			'cols' => '2'));
 		
 		$code .= $this->RENAMEFORM->initForm();
 		$code .= $this->RENAMEFORM->getCatLine($this->CORE->getLang()->getText('renameMap'));
 		$code .= $this->getRenameFields();
 		$code .= $this->getSubmit($this->RENAMEFORM,$this->CORE->getLang()->getText('rename'));
 		
-		$this->DELETEFORM = new WuiForm(Array('name'=>'map_delete',
-			'id'=>'map_delete',
-			'method'=>'POST',
-			'action'=>'./form_handler.php?myaction=mgt_map_delete',
-			'onSubmit'=>'return check_map_delete();',
-			'cols'=>'2'));
+		$this->DELETEFORM = new WuiForm(Array('name' => 'map_delete',
+			'id' => 'map_delete',
+			'method' => 'POST',
+			'action' => 'javascript:submitFrontendForm(\''.$this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=Map&amp;act=doDelete\', \'map_delete\');',
+			'onSubmit' => 'return check_map_delete();',
+			'cols' => '2'));
 		
 		$code .= $this->DELETEFORM->initForm();
 		$code .= $this->DELETEFORM->getCatLine($this->CORE->getLang()->getText('deleteMap'));

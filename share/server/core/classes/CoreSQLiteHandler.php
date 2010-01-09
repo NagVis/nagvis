@@ -104,6 +104,15 @@ class CoreSQLiteHandler {
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'getMapProperties\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'getMapObjects\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'getObjectStates\', '.$this->escape($name).')');
+			
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'edit\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'delete\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'doEdit\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'doDelete\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'doRename\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'modifyObject\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'createObject\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'deleteObject\', '.$this->escape($name).')');
 		} else {
 			debug('won\'t create permissions for map '.$name);
 		}
@@ -119,6 +128,15 @@ class CoreSQLiteHandler {
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'getAutomapProperties\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'getAutomapObjects\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'getObjectStates\', '.$this->escape($name).')');
+			
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'edit\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'delete\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'doEdit\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'doDelete\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'doRename\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'modifyObject\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'createObject\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'deleteObject\', '.$this->escape($name).')');
 		} else {
 			debug('won\'t create permissions for automap '.$name);
 		}
@@ -230,6 +248,26 @@ class CoreSQLiteHandler {
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (56, \'Map\', \'delete\', \'*\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (57, \'AutoMap\', \'view\', \'*\')');
 		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (58, \'AutoMap\', \'delete\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (59, \'Map\', \'doEdit\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (60, \'Map\', \'doDelete\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (61, \'Map\', \'doRename\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (62, \'AutoMap\', \'doEdit\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (63, \'AutoMap\', \'doDelete\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (64, \'AutoMap\', \'doRename\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (65, \'Map\', \'modifyObject\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (66, \'Map\', \'createObject\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (67, \'Map\', \'deleteObject\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (68, \'AutoMap\', \'modifyObject\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (69, \'AutoMap\', \'createObject\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (70, \'AutoMap\', \'deleteObject\', \'*\')');
+		
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (71, \'Map\', \'add\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (72, \'Map\', \'doAdd\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (73, \'AutoMap\', \'add\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (74, \'AutoMap\', \'doAdd\', \'*\')');
+		
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (75, \'MainCfg\', \'edit\', \'*\')');
+		$this->DB->query('INSERT INTO perms (permId, mod, act, obj) VALUES (76, \'MainCfg\', \'doEdit\', \'*\')');
 		
 		/*
 		 * Administrators handling
@@ -248,10 +286,30 @@ class CoreSQLiteHandler {
 		// Access assignment: Managers => Allowed to edit/delete all maps
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 55)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 56)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 59)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 60)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 61)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 65)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 66)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 67)');
+		
+		// Access assignment: Managers => Allowed to create maps
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 71)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 72)');
 		
 		// Access assignment: Managers => Allowed to edit/delete all automaps
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 57)');
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 58)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 62)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 63)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 64)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 68)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 69)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 70)');
+		
+		// Access assignment: Managers => Allowed to create automaps
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 73)');
+		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 74)');
 		
 		// Access assignment: Managers => Allowed to view the overview
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES (2, 2)');

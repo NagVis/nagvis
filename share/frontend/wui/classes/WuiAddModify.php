@@ -62,16 +62,16 @@ class WuiAddModify extends WuiPage {
 		$code = '';
 		
 		if($this->prop['action'] == 'modify') {
-			$action = 'modifyMapObject';
+			$action = 'modifyObject';
 		} else {
-			$action = 'createMapObject';
+			$action = 'createObject';
 		}
 		
 		$this->FORM = new WuiForm(Array('name' => 'addmodify',
 			'id' => 'addmodify',
 			'method' => '',
 			'onSubmit' => 'return validateMapCfgForm()',
-			'action' => 'javascript:formSubmit(\'addmodify\', \'./ajax_handler.php?action='.$action.'\');',
+			'action' => 'javascript:submitFrontendForm(\''.$this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=Map&amp;act='.$action.'\', \'addmodify\');',
 			'cols' => '2'));
 		
 		$code .= $this->getJsIncludes();

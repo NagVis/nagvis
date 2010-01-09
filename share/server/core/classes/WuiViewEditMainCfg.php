@@ -1,9 +1,9 @@
 <?php
 /*****************************************************************************
  *
- * WuiEditMainCfg.php - Class editing main configuration file in WUI
+ * WuiViewEditMainCfg.php - Class to render the main configuration edit dialog
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -25,51 +25,42 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiEditMainCfg extends WuiPage {
-	var $CORE;
-	var $FORM;
+class WuiViewEditMainCfg {
+	private $CORE;
+	private $AUTHENTICATION;
+	private $AUTHORISATION;
 	
 	/**
 	 * Class Constructor
 	 *
-	 * @param 	$MAINCFG GlobalMainCfg
+	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiEditMainCfg($CORE) {
-		$this->CORE = $CORE;
-		
-		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
-					  'cssIncludes'=>Array('./css/wui.css'),
-					  'jsIncludes'=>Array('./js/EditMainCfg.js'),
-					  'extHeader'=> '',
-					  'allowedUsers' => $this->CORE->getMainCfg()->getValue('wui','allowedforconfig'),
-					  'languageRoot' => 'nagvis');
-		parent::__construct($CORE, $prop);
+	public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
+		$this->CORE = GlobalCore::getInstance();
+		$this->AUTHENTICATION = $AUTHENTICATION;
+		$this->AUTHORISATION = $AUTHORISATION;
 	}
 	
 	/**
-	 * If enabled, the form is added to the page
+	 * Parses the information in html format
 	 *
-	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 * @return	String 	String with Html Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getForm() {
-		$code = '';
+	public function parse() {
+		// Initialize template system
+		$TMPL = New CoreTemplateSystem($this->CORE);
+		$TMPLSYS = $TMPL->getTmplSys();
 		
-		$this->FORM = new WuiForm(Array('name' => 'edit_config',
-			'id' => 'edit_config',
-			'onSubmit' => 'return validateMainCfgForm()',
-			'action' => 'javascript:formSubmit(\'edit_config\', \'./ajax_handler.php?action=updateMainCfg\');',
-			'method' => '',
-			'cols' => '3'));
+		$aData = Array(
+			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'formContents' => $this->getFields(),
+			'langSave' => $this->CORE->getLang()->getText('save')
+		);
 		
-		$code .= $this->getJsIncludes();
-		$code .= $this->FORM->initForm();
-		
-		$code .= $this->getFields();
-		$code .= $this->FORM->getSubmitLine($this->CORE->getLang()->getText('save'));
-		$code .= $this->FORM->closeForm();
-		
-		return $code;
+		// Build page based on the template file and the data array
+		return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiEditMainCfg'), $aData);
 	}
 	
 	/**
@@ -77,14 +68,15 @@ class WuiEditMainCfg extends WuiPage {
 	 *
 	 * @return	Array Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: Recode to have all the HTML code in the template
 	 */
 	function getFields() {
 		$ret = '';
 		
 		foreach($this->CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
 			// don't display backend,rotation and internal options
-			if(!preg_match("/^backend/i",$cat) && !preg_match("/^internal$/i",$cat) && !preg_match("/^rotation/i",$cat)) {
-				$ret .= $this->FORM->getCatLine($cat);
+			if(!preg_match("/^backend/i", $cat) && !preg_match("/^internal$/i", $cat) && !preg_match("/^rotation/i", $cat)) {
+				$ret .= '<tr><th class="cat" colspan="3">'.$cat.'</th></tr>';
 				
 				foreach($arr AS $key2 => $prop) {
 					// ignore some vars
@@ -93,18 +85,18 @@ class WuiEditMainCfg extends WuiPage {
 						$val2 = $this->CORE->getMainCfg()->getValue($cat, $key2, TRUE);
 						
 						# we add a line in the form
-						$ret .= "<tr>";
-						$ret .= "\t<td class=\"tdlabel\">".$key2."</td>";
+						$ret .= '<tr>';
+						$ret .= '<td class="tdlabel">'.$key2.'</td>';
 						
 						if(preg_match('/^TranslationNotFound:/',$this->CORE->getLang()->getText($key2)) > 0) {
-							$ret .= "\t<td class=\"tdfield\"></td>";
+							$ret .= '<td class="tdfield"></td>';
 						} else {
-							$ret .= "\t<td class=\"tdfield\">";
-							$ret .= "\t\t<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($key2)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$key2]['default'].")')\" />";
-							$ret .= "\t</td>";
+							$ret .= '<td class="tdfield">';
+							$ret .= "<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($key2)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$key2]['default'].")')\" />";
+							$ret .= '</td>';
 						}
 						
-						$ret .= "\t<td class=\"tdfield\">";
+						$ret .= '<td class="tdfield">';
 						switch($key2) {
 							case 'language':
 							case 'backend':
@@ -153,10 +145,21 @@ class WuiEditMainCfg extends WuiPage {
 									break;
 								}
 								
-								$ret .= $this->FORM->getSelectField($cat."_".$key2, $arrOpts, '', '' , 'validateMainConfigFieldValue(this)');
+								$ret .= '<select id="'.$cat.'_'.$key2.'" name="'.$cat.'_'.$key2.'" onBlur="validateMainConfigFieldValue(this)">';
+								$ret .= '<option value=""></option>';
+								
+								foreach($arrOpts AS $val) {
+									if(is_array($val)) {
+										$ret .= '<option value="'.$val['value'].'">'.$val['label'].'</option>';
+									} else {
+										$ret .= '<option value="'.$val.'">'.$val.'</option>';
+									}
+								}
+								
+								$ret .= '</select>';
 							break;
 							default:
-								$ret .= $this->FORM->getInputField($cat."_".$key2, $val2, 'validateMainConfigFieldValue(this)');
+								$ret .= '<input id="'.$cat.'_'.$key2.'" type="text" name="'.$cat.'_'.$key2.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this)" />';
 								
 								if(isset($prop['locked']) && $prop['locked'] == 1) {
 									$ret .= "<script>document.edit_config.elements['".$cat."_".$key2."'].disabled=true;</script>";
@@ -167,13 +170,14 @@ class WuiEditMainCfg extends WuiPage {
 								}
 							break;
 						}
-						$ret .= "\t\t<script>document.edit_config.elements['".$cat."_".$key2."'].value='".$val2."';</script>";
-						$ret .= "\t</td>";
-						$ret .= "</tr>";
+						$ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$key2.'\'].value = \''.$val2.'\';</script>';
+						$ret .= '</td>';
+						$ret .= '</tr>';
 					}
 				}
 			}
 		}
+		
 		return $ret;
 	}
 }
