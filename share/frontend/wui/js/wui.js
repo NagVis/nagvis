@@ -120,7 +120,7 @@ function gridParse() {
 		gridXStart = null;
 		gridYStart = null;
 		gridStep = null;
-		grid = null;
+		//grid = null;
 	}
 }
 
