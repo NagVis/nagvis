@@ -171,9 +171,11 @@ function frontendMessage(oMessage, iTimeout) {
 		var sUrl = window.location.href;
 		
 		// Maybe enable redirect
-		if(typeof oMessage.realoadUrl !== 'undefined' && oMessage.realoadUrl !== null) {
+		if(typeof oMessage.reloadUrl !== 'undefined' && oMessage.reloadUrl !== null) {
 			sUrl = oMessage.reloadUrl;
 		}
+		
+		eventlog("frontendMessage", "note", "Schedule reload in "+oMessage.reloadTime+" sec. URL: "+sUrl);
 		
 		// Register reload/redirect
 		setTimeout(function() {window.location = sUrl;}, oMessage.reloadTime*1000);

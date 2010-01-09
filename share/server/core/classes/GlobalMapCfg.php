@@ -1264,7 +1264,7 @@ class GlobalMapCfg {
 	public function createMapConfig() {
 		// does file exist?
 		if(!$this->checkMapConfigReadable(FALSE)) {
-			if($this->CORE->getMainCfg()->checkMapCfgFolderWriteable(TRUE)) {
+			if($this->checkMapCfgFolderWriteable(TRUE)) {
 				// create empty file
 				$fp = fopen($this->configFile, 'w');
 				fclose($fp); 
@@ -1698,6 +1698,24 @@ class GlobalMapCfg {
 			$time = filemtime($this->configFile);
 			return $time;
 		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable MapCfgFolder
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	function checkMapCfgFolderWriteable($printErr) {
+		if(file_exists(substr($this->CORE->getMainCfg()->getValue('paths', 'mapcfg'),0,-1)) && is_writable(substr($this->CORE->getMainCfg()->getValue('paths', 'mapcfg'),0,-1))) {
+			return TRUE;
+		} else {
+			if($printErr == 1) {
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapCfgDirNotWriteable', Array('MAPPATH' => $this->CORE->getMainCfg()->getValue('paths', 'mapcfg'))), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
+			}
 			return FALSE;
 		}
 	}

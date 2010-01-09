@@ -214,23 +214,5 @@ class WuiMainCfg extends GlobalMainCfg {
 			return FALSE;
 		}
 	}
-	
-	/**
-	 * Checks for writeable MapCfgFolder
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkMapCfgFolderWriteable($printErr) {
-		if(file_exists(substr($this->getValue('paths', 'mapcfg'),0,-1)) && is_writable(substr($this->getValue('paths', 'mapcfg'),0,-1))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mapCfgDirNotWriteable','MAPPATH~'.$this->getValue('paths', 'mapcfg')), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
-	}
 }
 ?>

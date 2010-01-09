@@ -79,7 +79,12 @@ class CoreModMap extends CoreModule {
 					if($aReturn !== false) {
 						// Try to create the map
 						if($this->doAdd($aReturn)) {
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The map has been created.'));
+							new GlobalMessage('NOTE', 
+							                  $this->CORE->getLang()->getText('The map has been created.'),
+							                  null,
+							                  null,
+							                  1,
+							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map_name']);
 							$sReturn = '';
 						} else {
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be created.'));
@@ -137,7 +142,7 @@ class CoreModMap extends CoreModule {
 			// Return the data
 			return Array(
 		               'map_name' => $FHANDLER->get('map_name'),
-		               'allowed_users' => $FHANDLER->get('allowed_users'),
+		               'allowed_user' => $FHANDLER->get('allowed_users'),
 		               'allowed_for_config' => $FHANDLER->get('allowed_for_config'),
 		               'iconset' => $FHANDLER->get('map_iconset'),
 		               'map_image' => $FHANDLER->get('map_image'));
