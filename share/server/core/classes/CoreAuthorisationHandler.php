@@ -37,24 +37,41 @@ class CoreAuthorisationHandler {
 	private $AUTHENTICATION;
 	
 	private $summarizePerms = Array(
+		'MainCfg' => Array(
+			'doEdit' => 'edit'
+		),
 		'Map' => Array(
 			'getMapProperties' => 'view',
 			'getMapObjects' => 'view',
-			'getObjectStates' => 'view'
+			'getObjectStates' => 'view',
+			'doAdd' => 'add',
+			'doEdit' => 'edit',
+			'doRename' => 'edit',
+			'doDelete' => 'edit',
+			'modifyObject' => 'edit',
+			'createObject' => 'edit',
+			'deleteObject' => 'edit',
 		),
 		'Overview' => Array(
 			'getOverviewRotations' => 'view',
 			'getOverviewProperties' => 'view',
 			'getOverviewMaps' => 'view',
-			'getOverviewAutomaps' => 'view'
+			'getOverviewAutomaps' => 'view',
 		),
 		'AutoMap' => Array(
 			'getAutomapProperties' => 'view',
 			'getAutomapObjects' => 'view',
-			'getObjectStates' => 'view'
+			'getObjectStates' => 'view',
+			'doAdd' => 'add',
+			'doEdit' => 'edit',
+			'doRename' => 'edit',
+			'doDelete' => 'edit',
+			'modifyObject' => 'edit',
+			'createObject' => 'edit',
+			'deleteObject' => 'edit',
 		),
 		'ChangePassword' => Array(
-			'view' => 'change'
+			'view' => 'change',
 		),
 		'UserMgmt' => Array(
 			'view' => 'manage',
