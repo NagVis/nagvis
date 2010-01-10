@@ -111,7 +111,13 @@ class WuiViewEditMainCfg {
 						
 						// Create a "helper" field which contains the real applied value
 						if($val2 === false) {
-							$ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="'.$this->CORE->getMainCfg()->getValue($cat, $propname, false).'" />';
+							$defaultValue = $this->CORE->getMainCfg()->getValue($cat, $propname, false);
+							
+							if(is_array($defaultValue)) {
+								$defaultValue = implode(',', $defaultValue);
+							}
+							
+							$ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="'.$defaultValue.'" />';
 						} else {
 							$ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="" />';
 						}
@@ -179,14 +185,14 @@ class WuiViewEditMainCfg {
 								$ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
 							break;
 							case 'text':
+								if(is_array($val2)) {
+									$val2 = implode(',', $val2);
+								}
+								
 								$ret .= '<input id="'.$cat.'_'.$propname.'" type="text" name="'.$cat.'_'.$propname.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this)" />';
 								
 								if(isset($prop['locked']) && $prop['locked'] == 1) {
 									$ret .= "<script>document.edit_config.elements['".$cat."_".$propname."'].disabled=true;</script>";
-								}
-								
-								if(is_array($val2)) {
-									$val2 = implode(',',$val2);
 								}
 							break;
 						}
