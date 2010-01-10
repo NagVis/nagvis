@@ -78,40 +78,60 @@ class WuiViewEditMainCfg {
 			if(!preg_match("/^backend/i", $cat) && !preg_match("/^internal$/i", $cat) && !preg_match("/^rotation/i", $cat)) {
 				$ret .= '<tr><th class="cat" colspan="3">'.$cat.'</th></tr>';
 				
-				foreach($arr AS $key2 => $prop) {
-					// ignore some vars
-					if(isset($arr[$key2]['editable']) && $arr[$key2]['editable']) {
-						//FIXME!!!!
-						$val2 = $this->CORE->getMainCfg()->getValue($cat, $key2, TRUE);
+				foreach($arr AS $propname => $prop) {
+					$class = '';
+					$style = '';
+					$isDefaultValue = false;
+					
+					// Set field type to show
+					$fieldType = 'text';
+					if(isset($prop['field_type'])) {
+						$fieldType = $prop['field_type'];
+					}
+					
+					// Don't show anything for hidden options
+					if($fieldType !== 'hidden') {
+						
+						// Only get the really set value
+						$val2 = $this->CORE->getMainCfg()->getValue($cat, $propname, true);
+						
+						// Check if depends_on and depends_value are defined and if the value
+						// is equal. If not equal hide the field
+						if(isset($prop['depends_on']) && isset($prop['depends_value'])
+							&& $this->CORE->getMainCfg()->getValue($cat, $prop['depends_on'], false) != $prop['depends_value']) {
+							
+							$class = ' class="child-row"';
+							$style = ' style="display:none;"';
+						} elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
+							&& $this->CORE->getMainCfg()->getValue($cat, $prop['depends_on'], false) == $prop['depends_value']) {
+							
+							//$style .= 'display:;';
+							$class = ' class="child-row"';
+						}
+						
+						// Create a "helper" field which contains the real applied value
+						if($val2 === false) {
+							$ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="'.$this->CORE->getMainCfg()->getValue($cat, $propname, false).'" />';
+						} else {
+							$ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="" />';
+						}
 						
 						# we add a line in the form
-						$ret .= '<tr>';
-						$ret .= '<td class="tdlabel">'.$key2.'</td>';
+						$ret .= '<tr'.$class.$style.'>';
+						$ret .= '<td class="tdlabel">'.$propname.'</td>';
 						
-						if(preg_match('/^TranslationNotFound:/',$this->CORE->getLang()->getText($key2)) > 0) {
+						if(preg_match('/^TranslationNotFound:/', $this->CORE->getLang()->getText($propname)) > 0) {
 							$ret .= '<td class="tdfield"></td>';
 						} else {
 							$ret .= '<td class="tdfield">';
-							$ret .= "<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($key2)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$key2]['default'].")')\" />";
+							$ret .= "<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($propname)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$propname]['default'].")')\" />";
 							$ret .= '</td>';
 						}
 						
 						$ret .= '<td class="tdfield">';
-						switch($key2) {
-							case 'language':
-							case 'backend':
-							case 'icons':
-							case 'rotatemaps':
-							case 'headermenu':
-							case 'recognizeservices':
-							case 'onlyhardstates':
-							case 'usegdlibs':
-							case 'autoupdatefreq':
-							case 'headertemplate':
-							case 'showinlists':
-							case 'hovermenu':
-							case 'hoverchildsshow':
-								switch($key2) {
+						switch($fieldType) {
+							case 'dropdown':
+								switch($propname) {
 									case 'language':
 										$arrOpts = $this->CORE->getAvailableLanguages();
 									break;
@@ -124,17 +144,6 @@ class WuiViewEditMainCfg {
 									case 'headertemplate':
 										$arrOpts = $this->CORE->getAvailableHeaderTemplates();
 									break;
-									case 'rotatemaps':
-									case 'headermenu':
-									case 'recognizeservices':
-									case 'onlyhardstates':
-									case 'usegdlibs':
-									case 'showinlists':
-									case 'hovermenu':
-									case 'hoverchildsshow':
-										$arrOpts = Array(Array('value'=>'1','label'=>$this->CORE->getLang()->getText('yes')),
-														 Array('value'=>'0','label'=>$this->CORE->getLang()->getText('no')));
-									break;
 									case 'autoupdatefreq':
 										$arrOpts = Array(Array('value'=>'0','label'=>$this->CORE->getLang()->getText('disabled')),
 														 Array('value'=>'2','label'=>'2'),
@@ -145,7 +154,7 @@ class WuiViewEditMainCfg {
 									break;
 								}
 								
-								$ret .= '<select id="'.$cat.'_'.$key2.'" name="'.$cat.'_'.$key2.'" onBlur="validateMainConfigFieldValue(this)">';
+								$ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this)">';
 								$ret .= '<option value=""></option>';
 								
 								foreach($arrOpts AS $val) {
@@ -157,12 +166,23 @@ class WuiViewEditMainCfg {
 								}
 								
 								$ret .= '</select>';
+								
+								$ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
 							break;
-							default:
-								$ret .= '<input id="'.$cat.'_'.$key2.'" type="text" name="'.$cat.'_'.$key2.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this)" />';
+							case 'boolean':
+								$ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this)">';
+								$ret .= '<option value=""></option>';
+								$ret .= '<option value="1">'.$this->CORE->getLang()->getText('yes').'</option>';
+								$ret .= '<option value="0">'.$this->CORE->getLang()->getText('no').'</option>';
+								$ret .= '</select>';
+								
+								$ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
+							break;
+							case 'text':
+								$ret .= '<input id="'.$cat.'_'.$propname.'" type="text" name="'.$cat.'_'.$propname.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this)" />';
 								
 								if(isset($prop['locked']) && $prop['locked'] == 1) {
-									$ret .= "<script>document.edit_config.elements['".$cat."_".$key2."'].disabled=true;</script>";
+									$ret .= "<script>document.edit_config.elements['".$cat."_".$propname."'].disabled=true;</script>";
 								}
 								
 								if(is_array($val2)) {
@@ -170,7 +190,10 @@ class WuiViewEditMainCfg {
 								}
 							break;
 						}
-						$ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$key2.'\'].value = \''.$val2.'\';</script>';
+						
+						// Initially toggle the depending fields
+						$ret .= '<script>validateMainConfigFieldValue(document.getElementById("'.$cat.'_'.$propname.'"));</script>';
+					
 						$ret .= '</td>';
 						$ret .= '</tr>';
 					}

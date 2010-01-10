@@ -194,7 +194,7 @@ function createjsDOMenu() {
 	activatePopUpMenuBy(1, 2);
 	
 	
-	if(typeof backupAvailable !== 'undefined' && mapname == '') {
+	if(mapname == '') {
 		mainMenu.items.menu_properties.enabled=false;
 		mainMenu.items.menu_properties.className='jsdomenuitem_disabled';
 		mainMenu.items.menu_addobject.enabled=false;

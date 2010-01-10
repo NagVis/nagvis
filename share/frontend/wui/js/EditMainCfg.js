@@ -31,3 +31,46 @@ function validateMainCfgForm() {
 	// Everything seems OK
 	return true;
 }
+
+/**
+ * validateMainConfigFieldValue(oField)
+ *
+ * This function checks a config field value for valid format. The check is done
+ * by the match regex from validMainConfig array.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function validateMainConfigFieldValue(oField) {
+	var sName;
+	var bInputHelper = false;
+	var bChanged;
+	
+	if(oField.name.indexOf('_inp_') !== -1) {
+		sName = oField.name.replace('_inp_', '');
+		bInputHelper = true;
+	} else {
+		sName = oField.name;
+	}
+	
+	// Check if "manual input" was selected in this field. If so: change the field
+	// type from select to input
+	bChanged = toggleFieldType(oField.name, oField.value);
+	
+	// Toggle the value of the field. If empty or just switched the function will
+	// try to display the default value
+	toggleDefaultOption(sName, bChanged);
+	
+	// Check if some fields depend on this. If so: Add a javacript 
+	// event handler function to toggle these fields
+	toggleDependingFields("edit_config", sName, oField.value);
+	
+	// Only validate when field type not changed
+	if(!bChanged) {
+		//FIXME: bFormIsValid = validateValue(sName, oField.value, validMainConfig[document.edit_config.type.value][sName].match);
+		bFormIsValid = true;
+		
+		return bFormIsValid;
+	} else {
+		return false;
+	}
+}

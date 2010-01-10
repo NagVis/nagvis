@@ -583,3 +583,95 @@ function validateMainConfigFieldValue(oField) {
 	var sName = oField.name.split('_');
 	return validateValue(sName, oField.value, validMainConfig[sName[0]][sName[1]].match);
 }
+
+/**
+ * toggleDependingFields
+ *
+ * This function shows/hides the fields which depend on the changed field
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function toggleDependingFields(formName, name, value) {
+	var aFields = document.getElementById(formName).elements;
+	
+	for(var i = 0, len = aFields.length; i < len; i++) {
+		// Filter helper fields
+		if(aFields[i].name.charAt(0) !== '_') {
+			if(aFields[i].type != 'hidden' && aFields[i].type != 'submit') {
+				// Handle different structures of main cfg and map cfg editing
+				if(formName == 'edit_config') {
+					var sMasterName = name.replace(sTypeName+'_', '');
+					var sTypeName = aFields[i].name.split('_')[0];
+					var sOptName = aFields[i].name.replace(sTypeName+'_', '');
+					var sFieldName = aFields[i].name;
+					var oConfig = validMainConfig;
+				} else {
+					var sMasterName = name;
+					var sTypeName = document.getElementById(formName).type.value;
+					var sOptName = aFields[i].name;
+					var oConfig = validMapConfig;
+				}
+				
+				var sFieldName = aFields[i].name;
+				
+				// Show option fields when parent field value is equal and hide when 
+				// parent field value differs
+				if(oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
+					 && oConfig[sTypeName][sOptName]['depends_value'] != value) {
+					
+					document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
+				} else if(oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
+					 && oConfig[sTypeName][sOptName]['depends_value'] == value) {
+					
+					document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
+				}
+			}
+		}
+	}
+	
+	aFields = null;
+}
+
+/**
+ * toggleFieldType
+ *
+ * Changes the field type from select to input and vice versa
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function toggleFieldType(sName, sValue) {
+	var bReturn = false;
+	var sBaseName;
+	var bInputHelper = false;
+	
+	if(sName.indexOf('_inp_') !== -1) {
+		sBaseName = sName.replace('_inp_', '');
+		bInputHelper = true;
+	} else {
+		sBaseName = sName;
+	}
+	
+	// Check if the field should be changed
+	// this is toggled on
+	// a) Select field set to "Manual Input..." or
+	// b) Input helper field set to ""
+	if((bInputHelper == false && sValue === lang['manualInput']) || (bInputHelper === true && sValue == '')) {
+		var oSelectField = document.getElementById(sBaseName);
+		var oInputField = document.getElementById('_inp_' + sBaseName);
+		
+		if(bInputHelper == false) {
+			oSelectField.parentNode.parentNode.style.display = 'none';
+			oInputField.parentNode.parentNode.style.display = '';
+		} else {
+			oSelectField.parentNode.parentNode.style.display = '';
+			oInputField.parentNode.parentNode.style.display = 'none';
+		}
+		
+		oInputField = null;
+		oSelectField = null;
+		
+		bReturn = true;
+	}
+	
+	return bReturn;
+}

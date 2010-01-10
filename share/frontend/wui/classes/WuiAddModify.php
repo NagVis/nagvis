@@ -324,7 +324,7 @@ class WuiAddModify extends WuiPage {
 					
 					// Toggle depending fields
 					if(isset($selected) && $selected != '') {
-						$ret .= $this->parseJs('toggleDependingFields("'.$propname.'", "'.$selected.'");');
+						$ret .= $this->parseJs('toggleDependingFields("addmodify", "'.$propname.'", "'.$selected.'");');
 					}                                                                         
 				break;
 				
@@ -337,7 +337,7 @@ class WuiAddModify extends WuiPage {
 					
 					// Toggle depending fields
 					if(isset($value) && $value != '') {
-						$ret .= $this->parseJs('toggleDependingFields("'.$propname.'", "'.$value.'");');
+						$ret .= $this->parseJs('toggleDependingFields("addmodify", "'.$propname.'", "'.$value.'");');
 					}
 				break;
 				
@@ -362,7 +362,7 @@ class WuiAddModify extends WuiPage {
 					
 					// Toggle depending fields
 					if(isset($value) && $value != '') {
-						$ret .= $this->parseJs('toggleDependingFields("'.$propname.'", "'.$value.'");');
+						$ret .= $this->parseJs('toggleDependingFields("addmodify", "'.$propname.'", "'.$value.'");');
 					}
 				break;
 			}
