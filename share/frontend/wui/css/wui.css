@@ -26,11 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-table { 
-	background-color: #F5F5F5; 
-	width: 100%;
-}
-
 .main {
 	margin: 0;
 	padding: 0;
@@ -41,9 +36,6 @@ table {
 	font-weight: bold;
 	color: #314455;
 	vertical-align: middle;
-	
-	border: 1px solid #314455;
-	background-color: #DADADA;
 }
 
 .focus {
@@ -52,62 +44,6 @@ table {
 
 .focusOff {
 	cursor: default;
-}
-
-/*
- * WUI tables/form
- */
-
-table.mytable {
-	background-color: #F5F5F5;
-	border-collapse:collapse;
-	margin-top: 0px;
-	padding: 1px;
-	width: 100%;
-}
-
-table.mytable td, table.mytable th {
-	border: 1px #a4a4a4 solid;
-	padding: 1px;
-	
-	font-size: 10px;
-	color: #314455;
-}
-
-/* title */
-table.mytable th {
-	background-color: #eee;
-	
-	text-align: center;
-	font-size: 12px;
-}
-
-/* cat */
-table.mytable th.cat {
-	font-size: 12px;
-}
-
-/* td common */
-table.mytable td {
-	color: #2B5377;
-}
-
-/* Child rows */
-table.mytable tr.child-row td.tdlabel {
-	padding-left: 20px;
-}
-
-/* td labels */
-table.mytable td.tdlabel {
-	padding-left: 10px;
-	background-color: #eee;
-	width: 50%;
-} 
-
-table.mytable td.tdfield input, table.mytable td.tdfield select {
-	background-color: #E4EEF6; 
-	border: 1px solid #284279;
-	width: 100%;
 }
 
 /*

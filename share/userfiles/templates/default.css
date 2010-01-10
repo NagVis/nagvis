@@ -35,6 +35,8 @@ body, table, th, td {
 	font-size: 12pt;
 }
 
+table {width:100%;}
+
 div {
 	margin: 0;
 	padding: 0;
@@ -464,11 +466,7 @@ td#popupWindowContent table.mytable {
 
 td#popupWindowContent table.mytable tr th, 
 td#popupWindowContent table.mytable tr td {
-	background-color: #eee;
-	border: 1px #a4a4a4 solid;
-	
 	font-size: 10px;
-	font-weight: bold;
 	color: #314455;
 }
 
@@ -480,6 +478,29 @@ td#popupWindowContent label {
 td#popupWindowContent p {
 	margin-bottom: 12px;
 }
+
+td#popupWindowContent table.mytable {border-collapse:collapse;margin-top: 0px;padding: 1px;}
+
+td#popupWindowContent table.mytable td, td#popupWindowContent table.mytable th {padding: 1px;font-size: 10px;color: #314455;}
+
+/* title */
+td#popupWindowContent table.mytable th { border:0;}
+
+td#popupWindowContent table.mytable th h2 {font-size:12px;text-align:center;background:#eee;padding:3px 10px 2px 20px;font-size:20px;line-height:30px;font-weight:normal;-moz-border-radius:8px;-webkit-border-radius:8px;text-shadow: 1px 1px 1px #bbbbbb;margin-bottom:5px;}
+
+/* cat */
+td#popupWindowContent table.mytable th.cat {font-size: 12px;}
+
+/* td common */
+td#popupWindowContent table.mytable td {color: #2B5377;}
+
+/* Child rows */
+td#popupWindowContent table.mytable tr.child-row td.tdlabel {padding-left: 20px;}
+
+/* td labels */
+td#popupWindowContent table.mytable td.tdlabel {padding-left: 10px;width: 50%;}
+
+td#popupWindowContent table.mytable tr td.tdfield input, td#popupWindowContent table.mytable tr td.tdfield select {font-size: 10px;background-color: #E4EEF6;border: 1px solid #284279;width: 100%;}
 
 /* Popup window forms */
 

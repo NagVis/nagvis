@@ -73,10 +73,11 @@ class WuiViewEditMainCfg {
 	function getFields() {
 		$ret = '';
 		
+		$i = 1;
 		foreach($this->CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
 			// don't display backend,rotation and internal options
 			if(!preg_match("/^backend/i", $cat) && !preg_match("/^internal$/i", $cat) && !preg_match("/^rotation/i", $cat)) {
-				$ret .= '<tr><th class="cat" colspan="3">'.$cat.'</th></tr>';
+				$ret .= '<tr><th class="cat" colspan="3"><h2>'.$cat.'</h2></th></tr>';
 				
 				foreach($arr AS $propname => $prop) {
 					$class = '';
@@ -204,6 +205,13 @@ class WuiViewEditMainCfg {
 						$ret .= '</tr>';
 					}
 				}
+	
+				if($i % 3 == 0) {
+					$ret .= '</table><table class="mytable" style="width:300px;float:left">';
+				}			
+			
+				$i++;
+
 			}
 		}
 		
