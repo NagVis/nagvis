@@ -26,28 +26,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-.main {
-	margin: 0;
-	padding: 0;
-	background-color: white;
-}
-
-.submit {
-	font-weight: bold;
-	color: #314455;
-	vertical-align: middle;
-}
-
-.focus {
-	cursor: crosshair !important;
-}
-
-.focusOff {
-	cursor: default;
-}
-
 /*
- * WUI INFOBOX
+ * WUI context menu on objects
  */
 
 table.infobox {
@@ -87,6 +67,7 @@ table.infobox tr.inherited th, table.infobox tr.inherited td {
 	color: #a4a4a4;
 }
 
+/* hover menu navigation styling */
 ul.nav {
 	margin: 0;
 	padding: 0;

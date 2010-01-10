@@ -71,7 +71,7 @@ class WuiForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getTitleLine($title) {
-		return '<tr><th colspan="'.$this->cols.'">'.$title.'</th></tr>';
+		return '<tr><th colspan="'.$this->cols.'"><h2>'.$title.'</h2></th></tr>';
 	}
 	
 	/**
@@ -82,7 +82,7 @@ class WuiForm {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getCatLine($title) {
-		return '<tr><th class="cat" colspan="'.$this->cols.'">'.$title.'</th></tr>';
+		return '<tr><th class="cat" colspan="'.$this->cols.'"><h2>'.$title.'</h2></th></tr>';
 	}
 	
 	/**
