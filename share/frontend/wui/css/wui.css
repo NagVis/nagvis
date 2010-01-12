@@ -30,6 +30,8 @@
  * WUI context menu on objects
  */
 
+div.context {width:auto;max-width:400px;}
+
 table.infobox {
 	background-color: #F5F5F5; 
 	border-collapse:collapse;
@@ -72,7 +74,7 @@ table.infobox ul.nav {
 	margin: 0;
 	padding: 0;
 	height: 34px;
-	width: 300px;
+	width: 100%;
 }
 
 table.infobox ul.nav li {
