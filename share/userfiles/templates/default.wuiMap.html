@@ -36,6 +36,9 @@ initjsDOMenu();
 {if $movable != ''}
 SET_DHTML(SCROLL,NO_ALT,TRANSPARENT,CURSOR_HAND, {$movable});
 {/if}
+
+// This disables the context menu when someone clicked anywhere on the map
+document.onmousedown = contextMouseDown;
 </script>
 
 <!-- Important to have this in body -->

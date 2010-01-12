@@ -68,27 +68,27 @@ table.infobox tr.inherited th, table.infobox tr.inherited td {
 }
 
 /* hover menu navigation styling */
-ul.nav {
+table.infobox ul.nav {
 	margin: 0;
 	padding: 0;
 	height: 34px;
 	width: 300px;
 }
 
-ul.nav li {
+table.infobox ul.nav li {
 	float: left;
   list-style-type: none;
 	border-right: 1px #a4a4a4 solid;
 }
 
-ul.nav li a {
+table.infobox ul.nav li a {
 	float: left;
   margin: 0;
   background-repeat: no-repeat;
   background-position: 5px 50%;
 }
 
-ul.nav li a span {
+table.infobox ul.nav li a span {
   padding: 0 .4em 0 42px;
   display: inline;
   line-height: 34px;

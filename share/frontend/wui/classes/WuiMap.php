@@ -147,7 +147,7 @@ class WuiMap extends GlobalMap {
 					$obj = $this->fixIcon($obj);
 					
 					$objCode .= $this->parseIcon($obj);
-					$ret .= $this->parseContainer($obj, $objCode);
+					$ret .= $this->parseContainer($obj, $objCode).$this->parseContextMenu($obj);
 					
 					if(isset($obj['label_show']) && $obj['label_show'] == '1') {
 						$ret .= $this->parseLabel($obj);
@@ -273,7 +273,7 @@ class WuiMap extends GlobalMap {
 			$style = '';
 		}
 		
-		return "<img id=\"icon_".$obj['type']."_".$obj['id']."\" src=\"".$obj['htmlPath'].$obj['icon'].$obj['iconParams']."\" ".$style." alt=\"".$obj['type']."_".$obj['id']."\" ".$this->infoBox($obj)." />";
+		return "<img id=\"icon_".$obj['type']."_".$obj['id']."\" src=\"".$obj['htmlPath'].$obj['icon'].$obj['iconParams']."\" ".$style." alt=\"".$obj['type']."_".$obj['id']."\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\" />";
 	}
 	
 	/**
@@ -559,12 +559,23 @@ class WuiMap extends GlobalMap {
 		
 		$id = 'box_'.$obj['type'].'_'.$obj['id'];
 		
-		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;\" ".$this->infoBox($obj).">";	
+		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"contextShow(event);\">";
 		$ret .= "\t<span>".$obj['text']."</span>";
 		$ret .= "</div>";
+		$ret .= $this->parseContextMenu($obj);
 		$ret .= $this->parseJs('var obj = document; addEvent(obj, "mousedown", doDown); addEvent(obj, "mouseup", doUp); addEvent(obj, "mousemove", doMove); obj = null;');
 		
 		return $ret;	
+	}
+
+	function parseContextMenu($obj) {
+		$id = 'icon_'.$obj['type'].'_'.$obj['id'].'-context';
+		
+		$ret = '<div id="'.$id.'" class="context" style="z-index:1000;display:none;position:absolute;overflow:visible;"';
+		$ret .= $this->infoBox($obj);
+		$ret .= '</div>';
+
+		return $ret;
 	}
 	
 	/**
@@ -573,7 +584,7 @@ class WuiMap extends GlobalMap {
 	 * @param	Array	$obj	Array with object informations
 	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
-	function infoBox(&$obj) {
+	function infoBox($obj) {
 		if($obj['type'] == 'service') {
 			$name = 'host_name';
 		} else {
@@ -584,7 +595,7 @@ class WuiMap extends GlobalMap {
 		unset($obj['state']);
 		
 		// add all the object's defined properties to the tooltip body
-		$tooltipText = '<table class=\\\'infobox\\\'>';
+		$tooltipText = '<table class=\'infobox\'>';
 		$configuredText = '';
 		$defaultText = '';
 		
@@ -609,7 +620,7 @@ class WuiMap extends GlobalMap {
 			$value = str_replace('"','&quot;', $value);
 			
 			if($bGlobal) {
-				$defaultText .= '<tr class=\\\'inherited\\\'><td>'.$key.'</td><td>'.$value.'</td></tr>';
+				$defaultText .= '<tr class=\'inherited\'><td>'.$key.'</td><td>'.$value.'</td></tr>';
 			} else {
 				$configuredText .= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
 			}
@@ -619,27 +630,27 @@ class WuiMap extends GlobalMap {
 		 * Add action links
 		 */
 		
-		$tooltipText .= "<tr><th colspan=\'2\' style=\'height:34px;\'>";
-		$tooltipText .= "<ul class=\'nav\'>";
+		$tooltipText .= "<tr><th colspan='2' style='height:34px;'>";
+		$tooltipText .= "<ul class='nav'>";
 		
 		// Edit link
-		$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/modify.png)\'"
-		  ." href=# onclick=popupWindow(\'".$this->CORE->getLang()->getText('change')."\',"
-			."getSyncRequest(\'./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."\',true,false));>"
+		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/modify.png)'"
+		  ." href=# onclick=popupWindow('".$this->CORE->getLang()->getText('change')."',"
+			."getSyncRequest('./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."',true,false));>"
 			."<span>".$this->CORE->getLang()->getText('change')."</span></a></li>";
 		
 		// Position/Size link on textboxes/lines
 		//$tooltipText .= "&nbsp;".$positionSizeText;
 		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
-			$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)\'"
-						." href=javascript:objid=".$obj['id'].";get_click(\'".$obj['type']."\',2,\'modify\');>"
+			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)'"
+						." href=javascript:objid=".$obj['id'].";get_click('".$obj['type']."',2,'modify');>"
 						."<span>".$this->CORE->getLang()->getText('positionSize')."</span></a></li>";			
 		}
 		
 		// Delete link
-		$tooltipText .= "<li><a style=\'background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/delete.png)\'"
-		  ." href=\'#\' id=\'delete_".$obj['type']."_".$obj['id']."\'"
-			." onClick=\'return deleteMapObject(this);return false;\'>"
+		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/delete.png)'"
+		  ." href='#' id='delete_".$obj['type']."_".$obj['id']."'"
+			." onClick='return deleteMapObject(this);return false;'>"
 		  ."<span>".$this->CORE->getLang()->getText('delete')."</span></a></li>";
 		
 		$tooltipText .= "</ul>";
@@ -647,23 +658,13 @@ class WuiMap extends GlobalMap {
 		
 		
 		// Print configured settings
-		$tooltipText .= '<tr><th colspan=\\\'2\\\'>'.$this->CORE->getLang()->getText('configured').'</th></tr>'.$configuredText;
+		$tooltipText .= '<tr><th colspan=\'2\'>'.$this->CORE->getLang()->getText('configured').'</th></tr>'.$configuredText;
 		
 		// Print inherited settings
-		$tooltipText .= '<tr class=\\\'inherited\\\'><th colspan=\\\'2\\\'>'.$this->CORE->getLang()->getText('inherited').'</th></tr>'.$defaultText;
+		$tooltipText .= '<tr class=\'inherited\'><th colspan=\'2\'>'.$this->CORE->getLang()->getText('inherited').'</th></tr>'.$defaultText;
 		
 		$tooltipText .= '</table>';
 		
-		$info = "onmouseout=\"UnTip();\""
-		       ."onmouseover=\"Tip('".$tooltipText."',"
-		       ."DELAY,200,"
-		       ."STICKY,true,"
-		       ."OFFSETX,6,"
-		       ."OFFSETY,6,"
-		       ."CLICKCLOSE,true,"
-		       ."BORDERWIDTH,0,"
-		       ."BGCOLOR,'#FFFFFF');\"";
-		
-		return $info;
+		return $tooltipText;
 	}
 }

@@ -129,7 +129,7 @@ function contextShow(event) {
 		// id from a parent element
 		if(typeof target.id == 'undefined' || target.id == '') {
 			// Take the first parent
-			if(target.parentNode != null && target.parentNode.id !== '' && target.parentNode.id.indexOf('-') !== -1) {
+			if(target.parentNode != null && typeof target.parentNode.id != 'undefined' && target.parentNode.id !== '' && target.parentNode.id.indexOf('-') !== -1) {
 				target = target.parentNode;
 			}
 			

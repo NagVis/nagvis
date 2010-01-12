@@ -12,8 +12,11 @@
 	<script type="text/javascript" src="{$htmlJs}WuiCompressed.js"></script>
 	{else}
 	<script type="text/javascript" src="{$htmlJs}nagvis.js"></script>
+	<script type="text/javascript" src="{$htmlJs}overlib.js"></script>
+	<script type="text/javascript" src="{$htmlJs}hover.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontendMessage.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
+	<script type="text/javascript" src="{$htmlJs}frontendContext.js"></script>
 	<!-- FIXME: Maybe replace with frontend window?! -->
 	<script type="text/javascript" src="{$htmlJs}popupWindow.js"></script>
 	<script type="text/javascript" src="{$htmlJs}frontend.js"></script>
@@ -33,6 +36,7 @@
 	<script type="text/javascript" src="{$wuiJs}ExtGenericResize.js"></script>
 	{/if}
 	<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
+	<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.context.css" />
 	<link rel="stylesheet" type="text/css" href="{$wuiCss}wui.css" />
 	<link rel="stylesheet" type="text/css" href="{$wuiCss}office_xp/office_xp.css" />
 	{if $customStylesheet != ""}

@@ -191,7 +191,7 @@ function createjsDOMenu() {
 	mainMenu.setAllExceptFilter([]);
 	
 	setPopUpMenu(mainMenu);
-	activatePopUpMenuBy(1, 2);
+	//activatePopUpMenuBy(1, 2);
 	
 	
 	if(mapname == '') {

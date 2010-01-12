@@ -588,6 +588,7 @@ function rightClickHandler(e) { // Private method
   if (getX(e) > getClientWidth() || getY(e) > getClientHeight()) {
     return;
   }
+	
   hideVisibleMenus();
   if (typeof(hideMenuBarMenus) == "function") {
     hideMenuBarMenus();
@@ -1215,5 +1216,5 @@ var popUpMenuObj = null; // Private field
 var showValue = 0; // Private field
 var hideValue = 0; // Private field
 var staticMenuId = new Array(); // Private field
-document.onclick = leftClickHandler;
+//document.onclick = leftClickHandler;
 window.onscroll = scrollHandler;
