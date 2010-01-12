@@ -161,7 +161,7 @@ function contextShow(event) {
 		// Need to corrent the position by 30px in IE & FF. Don't know why...
 		contextMenu.style.top = event.clientY + scrollTop - 30 + 'px';
 		contextMenu.style.display = '';
-
+		
 		// Check if the context menu is "in screen".
 		// When not: reposition
 		var contextLeft = parseInt(contextMenu.style.left.replace('px', ''));
@@ -173,8 +173,11 @@ function contextShow(event) {
 		
 		var contextTop = parseInt(contextMenu.style.top.replace('px', ''));
 		if(contextTop+contextMenu.clientHeight > pageHeight()) {
-			// move the context menu to the left 
-			contextMenu.style.top = contextTop - contextMenu.clientHeight + 'px';
+			// Only move the context menu to the top when the new top will not be
+			// out of sight
+			if(contextTop - contextMenu.clientHeight >= 0) {
+				contextMenu.style.top = contextTop - contextMenu.clientHeight + 'px';
+			}
 		}
 		contextTop = null;
 		
