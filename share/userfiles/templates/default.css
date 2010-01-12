@@ -581,92 +581,15 @@ td#popupWindowContent fieldset.form label {
 	text-decoration: none;
 }
 
-.dropdown {
-	margin: 0;
-	padding: 0;
-	
-	width: 100%;
-}
-.dropdown dt {
-	margin: 0;
-	padding: 0;
-	
-	width: 100%;
-	height: 31px;
-	
-	padding-left: 8px;
-	padding-right: 8px;
-	line-height: 31px;
-	
-	font-weight: bold;
-	cursor: pointer;
-	
-	background:url('../images/templates/default.header.png')
-}
-.dropdown dt:hover {
-	background:url('../images/templates/default.header_over.png')
-}
-.dropdown dd {
-	margin: 0;
-	padding: 0;
-	
-	position: absolute;
-	width: 204px;
-	background: #fff;
-	
-	z-index: 1000;
-	
-	display: none;
-	overflow: hidden;
-	opacity: 0;
-}
-
-.dropdown ul {
-	margin: 0;
-	padding: 0;
-	
-	width: 205px;
-	list-style: none;
-	border-top: none;
-}
-
-.dropdown li {
-	margin: 0;
-	padding: 0;
-	
-	display: inline
-}
-
-.dropdown img {
-	vertical-align: middle;
-	margin-left: 10px;
-}
-
-.dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer {
-	margin: 0;
-	
-	display:block;
-	padding:5px 0 5px 5px;
-	color: #43B3CF;
-	text-decoration: none;
-	background: #eaf0f2;
-	width: 195px;
-	
-	border-left: 1px solid #a4a4a4;
-	border-right: 1px solid #a4a4a4;
-}
-
-.dropdown a:hover {
-	background:#d9e1e4;
-	color:#779D2A;
-}
-
-.dropdown li.spacer hr {
-	width: 195px;
-	margin: 0 5px 0 5px;
-	color: #43B3CF;
-}
-
-.dropdown .underline {
-	border-bottom: 1px solid #a4a4a4;
-}
+.dropdown {margin:0;padding:0;width:100%;}
+.dropdown dt {margin:0;padding:0;width:100%;height:31px;padding-left:8px;padding-right:8px;line-height:31px;font-weight:bold;cursor:pointer;background:url('../images/templates/default.header.png')}
+.dropdown dt:hover {background:url('../images/templates/default.header_over.png')}
+.dropdown dd {margin:0;padding:0;position:absolute;width: 205px;background:#fff;z-index:1000;display:none;overflow:hidden;opacity:0;}
+.dropdown img {vertical-align:middle;margin-left:10px}
+.dropdown ul {margin:0;padding:0;list-style:none}
+.dropdown li {margin:0;padding:0}
+.dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer {display:block;width:193px;background:#eaf0f2;margin:0;color:#43B3CF;text-decoration:none;border-left:1px solid #a4a4a4;border-right:1px solid #a4a4a4;padding:5px;}
+.dropdown a:hover {background:#d9e1e4;color:#779D2A}
+.dropdown li.spacer {width:203px}
+.dropdown li.spacer hr {width:95%;color:#43B3CF}
+.dropdown .underline {border-bottom:1px solid #a4a4a4}
