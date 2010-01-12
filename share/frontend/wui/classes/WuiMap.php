@@ -635,22 +635,21 @@ class WuiMap extends GlobalMap {
 		
 		// Edit link
 		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/modify.png)'"
-		  ." href=# onclick=popupWindow('".$this->CORE->getLang()->getText('change')."',"
-			."getSyncRequest('./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."',true,false));>"
+		  ." href=\"#\" onclick=\"popupWindow('".$this->CORE->getLang()->getText('change')."',"
+			."getSyncRequest('./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."',true,false));contextHide();\">"
 			."<span>".$this->CORE->getLang()->getText('change')."</span></a></li>";
 		
 		// Position/Size link on textboxes/lines
 		//$tooltipText .= "&nbsp;".$positionSizeText;
 		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
 			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)'"
-						." href=javascript:objid=".$obj['id'].";get_click('".$obj['type']."',2,'modify');>"
+						." href=\"javascript:objid=".$obj['id'].";get_click('".$obj['type']."',2,'modify');\" onclick=\"contextHide();\">"
 						."<span>".$this->CORE->getLang()->getText('positionSize')."</span></a></li>";			
 		}
 		
 		// Delete link
 		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/delete.png)'"
-		  ." href='#' id='delete_".$obj['type']."_".$obj['id']."'"
-			." onClick='return deleteMapObject(this);return false;'>"
+		  ." href='#' onclick='deleteMapObject(\"box_".$obj['type']."_".$obj['id']."\");contextHide();return false;'>"
 		  ."<span>".$this->CORE->getLang()->getText('delete')."</span></a></li>";
 		
 		$tooltipText .= "</ul>";

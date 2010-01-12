@@ -464,9 +464,9 @@ function saveObjectAfterMoveAndDrop(oObj) {
 }
 
 // This function handles object deletions on maps
-function deleteMapObject(oObj) {
+function deleteMapObject(objId) {
 	if(confirm(printLang(lang['confirmDelete'],''))) {
-		var arr = oObj.id.split('_');
+		var arr = objId.split('_');
 		var map = mapname;
 		var type = arr[1];
 		var id = arr[2];
@@ -480,8 +480,7 @@ function deleteMapObject(oObj) {
 		oResult = null;
 		
 		// Remove the object from the map
-		document.getElementById('mymap').removeChild(document.getElementById('box_'+type+'_'+id));
-		oObj = null;
+		document.getElementById('mymap').removeChild(document.getElementById(objId));
 		
 		return true;
 	} else {

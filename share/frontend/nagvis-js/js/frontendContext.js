@@ -77,16 +77,19 @@ function contextMouseDown(event) {
 	}
 	
 	// Workaround for the different structure of targets on lines/icons
-	// Would be nice to fix the structure
-	var id;
-	if(target !== null && target.id !== '') {
-		id = target.id;
-	} else {
-		if(target.parentNode !== null && target.parentNode.parentNode !== null && target.parentNode.parentNode.parentNode !== null) {
-			id = target.parentNode.parentNode.parentNode.id;
-		}
+  // Would be nice to fix the structure
+	// For example needed by the WUI contextMenu links
+	var oNode = target;
+	while(oNode.parentNode !== null && (typeof oNode.id === 'undefined' || oNode.id === '')) {
+		oNode = oNode.parentNode;
 	}
 	
+	if(typeof oNode.id !== 'undefined' && oNode.id !== '') {
+		id = oNode.id;
+	}
+	oNode = null;
+	
+	//document.getElementById('box_host_0').appendChild(document.createTextNode("click: "+id+"\n"));
 	// Hide all context menus except clicking the current open context menu
 	if(id === -1 || id.indexOf('http:') === -1 && id.indexOf('-context') === -1) {
 		// Hide all context menus
