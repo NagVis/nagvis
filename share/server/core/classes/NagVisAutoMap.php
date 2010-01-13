@@ -364,11 +364,11 @@ class NagVisAutoMap extends GlobalMap {
 		foreach($aMapCode AS $sLine) {
 			// Extract the area objects
 			// Only parsing rect/polys at the moment
-			if(preg_match('/^<area\sshape="(rect|poly)"\shref="\/nagios\/cgi-bin\/status\.cgi\?host=([^"]+)"\starget="_self"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
-				if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[3])) {
+			if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href="\/nagios\/cgi-bin\/status\.cgi\?host=([^"]+)"\starget="_self"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
+				if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[3]) && isset($aMatches[4])) {
 					$type = $aMatches[1];
-					$name1 = trim($aMatches[2]);
-					$coords = trim($aMatches[3]);
+					$name1 = trim($aMatches[3]);
+					$coords = trim($aMatches[4]);
 					
 					switch($type) {
 						case 'rect':
@@ -507,7 +507,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * configured path
 		 */
 		// Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
-		exec('which '.$binary.' >/dev/null 2>&1', $arrReturn, $returnCode1);
+		exec('which '.$binary.' 2>&1', $arrReturn, $returnCode1);
 		
 		if(!$returnCode1) {
 			$this->CORE->getMainCfg()->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
