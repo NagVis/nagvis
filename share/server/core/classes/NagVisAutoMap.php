@@ -507,7 +507,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * configured path
 		 */
 		// Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
-		exec('which '.$binary, $arrReturn, $returnCode1);
+		exec('which '.$binary.' >/dev/null 2>&1', $arrReturn, $returnCode1);
 		
 		if(!$returnCode1) {
 			$this->CORE->getMainCfg()->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
