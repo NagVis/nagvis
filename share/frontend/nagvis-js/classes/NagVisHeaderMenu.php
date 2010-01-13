@@ -271,7 +271,7 @@ class NagVisHeaderMenu {
 			'langActions' => $this->CORE->getLang()->getText('Actions'),
 			'langLoggedIn' => $this->CORE->getLang()->getText('Logged in'),
 			'langChangePassword' => $this->CORE->getLang()->getText('Change password'),
-			'langSelectMap' => $this->CORE->getLang()->getText('selectMap'),
+			'langOpen' => $this->CORE->getLang()->getText('Open'),
 			'langEditMap' => $this->CORE->getLang()->getText('editMap'),
 			'langNeedHelp' => $this->CORE->getLang()->getText('needHelp'),
 			'langOnlineDoc' => $this->CORE->getLang()->getText('onlineDoc'),
