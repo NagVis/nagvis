@@ -183,6 +183,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			new GlobalFrontendMessage('ERROR', $this->CORE->LANG->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
 			return Array();
 		}
+
+		// Maybe set some socket options
+		if($this->socketType === 'tcp') {
+			// Disable Nagle's Alogrithm - Nagle's Algorithm is bad for brief protocols
+			if(defined('TCP_NODELAY')) {
+				socket_set_option($this->SOCKET, SOL_TCP, TCP_NODELAY, 1);
+			} else {
+				// See http://bugs.php.net/bug.php?id=46360
+				socket_set_option($this->SOCKET, SOL_TCP, 1, 1);
+			}
+		}
 	}
 	
 	/**
