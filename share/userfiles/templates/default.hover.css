@@ -1,8 +1,8 @@
 /*****************************************************************************
  *
- * tmpl.default.css - CSS for default hover template
+ * default.hover.css - Hover template specific css definitions
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -25,61 +25,22 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-table.hover_table {
-	border-collapse:collapse;
-}
-
-table.hover_table td, table.hover_table th {
-	border: 1px #a4a4a4 solid;
-	padding: 2px;
-	
-	font-size: 9px;
-	color: #314455;
-}
-
-table.hover_table th {
-	text-align: center;
-	background-color: #eee;
-}
-
-table.hover_table spacer {
-	height: 3px;
-	background-color: #eee;
-}
-
-table.hover_table td.label { text-align: center; background-color: #eee; }
-table.hover_table td.labelACK { text-align: center; background-color: #eee; }
-table.hover_table td.labelPENDING { text-align: center; background-color: #eee; }
-table.hover_table td.labelOK, table.hover_table td.labelUP { text-align: center; background-color: #66FF66; }
-table.hover_table td.labelWARNING { text-align: center; background-color: #FFFF7E; }
-table.hover_table td.labelCRITICAL, table.hover_table td.labelDOWN, table.hover_table td.labelUNREACHABLE { text-align: center; background-color: #FFBBBB; }
-table.hover_table td.labelERROR { text-align: center; background-color: #eee; }
-table.hover_table td.labelUNKNOWN { text-align: center; background-color: #eee; }
-
-table.hover_table label {
-	font-weight: bold;
-}
-
-table.hover_table td.statePENDING {
-	background-color: #ffffff;
-}
-
-table.hover_table td.stateOK, table.hover_table td.stateUP {
-	background-color: #00CC00;
-}
-
-table.hover_table td.stateWARNING {
-	background-color: #FFFF00;
-}
-
-table.hover_table td.stateCRITICAL, table.hover_table td.stateDOWN, table.hover_table td.stateUNREACHABLE {
-	background-color: #F83838;
-}
-
-table.hover_table td.stateERROR {
-	background-color: #66CCFF;
-}
-
-table.hover_table td.stateUNKNOWN {
-	background-color: #FFFF99;
-}
+table.hover_table {border-collapse:collapse}
+table.hover_table td, table.hover_table th {border:1px #a4a4a4 solid;padding:2px;font-size:9px;color:#314455;}
+table.hover_table th {text-align:center;background-color:#eee}
+table.hover_table spacer {height:3px;background-color:#eee}
+table.hover_table td.label {text-align:center;background-color:#eee}
+table.hover_table td.labelACK {text-align:center;background-color: #eee}
+table.hover_table td.labelPENDING {text-align:center;background-color:#eee}
+table.hover_table td.labelOK, table.hover_table td.labelUP {text-align:center;background-color:#66FF66}
+table.hover_table td.labelWARNING {text-align:center;background-color:#FFFF7E}
+table.hover_table td.labelCRITICAL, table.hover_table td.labelDOWN, table.hover_table td.labelUNREACHABLE {text-align:center;background-color:#FFBBBB}
+table.hover_table td.labelERROR {text-align:center;background-color:#eee}
+table.hover_table td.labelUNKNOWN {text-align:center;background-color:#eee}
+table.hover_table label {font-weight:bold}
+table.hover_table td.statePENDING {background-color:#ffffff}
+table.hover_table td.stateOK, table.hover_table td.stateUP {background-color:#00CC00}
+table.hover_table td.stateWARNING {background-color:#FFFF00}
+table.hover_table td.stateCRITICAL, table.hover_table td.stateDOWN, table.hover_table td.stateUNREACHABLE {background-color:#F83838}
+table.hover_table td.stateERROR {background-color:#66CCFF}
+table.hover_table td.stateUNKNOWN {background-color:#FFFF99}
