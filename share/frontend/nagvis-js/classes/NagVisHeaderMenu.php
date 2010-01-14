@@ -122,7 +122,7 @@ class NagVisHeaderMenu {
 		
 		
 		// Replace some special macros
-		if($this->OBJPAGE !== null && ($objPageClass == 'NagVisMapCfg' || $objPageClass == 'NagVisAutomapCfg')) {
+		if($this->OBJPAGE !== null && ($objPageClass == 'NagVisMapCfg' || $objPageClass == 'NagVisAutomapCfg' || $objPageClass == 'WuiMapCfg')) {
 			$this->aMacros['currentMap'] = $this->OBJPAGE->getName();
 			$this->aMacros['currentMapAlias'] = $this->OBJPAGE->getValue('global', '0', 'alias');
 		} else {
