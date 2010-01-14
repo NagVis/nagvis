@@ -588,8 +588,12 @@ td#popupWindowContent fieldset.form label {
 .dropdown img {vertical-align:middle;margin-left:10px}
 .dropdown ul {margin:0;padding:0;list-style:none}
 .dropdown li {margin:0;padding:0}
-.dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer {display:block;width:193px;background:#eaf0f2;margin:0;color:#43B3CF;text-decoration:none;border-left:1px solid #a4a4a4;border-right:1px solid #a4a4a4;padding:5px;}
+.dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer, .dropdown dl.subdropdown dt {display:block;width:193px;background:#eaf0f2;margin:0;color:#43B3CF;text-decoration:none;border-left:1px solid #a4a4a4;border-right:1px solid #a4a4a4;padding:5px;}
 .dropdown a:hover {background:#d9e1e4;color:#779D2A}
+.dropdown a.submenu-link:after {float:right;content:">"}
 .dropdown li.spacer {width:203px}
 .dropdown li.spacer hr {width:95%;color:#43B3CF}
 .dropdown .underline {border-bottom:1px solid #a4a4a4}
+.subdropdown {position:relative;}
+.subdropdown .topline {border-top:1px solid #a4a4a4}
+.subdropdown .underline {border-bottom:1px solid #a4a4a4}

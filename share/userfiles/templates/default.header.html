@@ -32,13 +32,77 @@
 					{if $viewType == 'Map' && $permittedEdit == true}
 					<li><a href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$currentMap}" class="underline">{$langEditMap}</a></li>
 					{/if}
-					{if $viewType == 'WuiMap' && $permittedEdit == true}
-					<li><a href="javascript:gridToggle()" class="underline">{$langToggleGrid}</a></li>
-					{/if}
 				</ul>
 			</dd>
 		</dl>
 	</li>
+	{if $viewType == 'WuiMap' && $permittedEdit == true}
+	<li>
+		<dl class="dropdown">
+			<dt id="map-ddheader" onmouseover="ddMenu('map',1)" onmouseout="ddMenu('map',-1)">{$langMap} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
+			<dd id="map-ddcontent" onmouseover="cancelHide('map')" onmouseout="ddMenu('map',-1)">
+				<ul>
+					<li><a href="javascript:gridToggle()">{$langToggleGrid}</a></li>
+					<li class="spacer"><hr /></li>
+					<li><a class="submenu-link" id="map-addicon-ddheader" href="#" onmouseover="ddMenu('map-addicon',1,1)" onmouseout="ddMenu('map-addicon',-1)">{$langMapAddIcon}</a></li>
+					<li><a class="submenu-link" id="map-addline-ddheader" href="#" onmouseover="ddMenu('map-addline',1,1)" onmouseout="ddMenu('map-addline',-1)">{$langMapAddLine}</a></li>
+					<li><a class="submenu-link" id="map-addspecial-ddheader" href="#" onmouseover="ddMenu('map-addspecial',1,1)" onmouseout="ddMenu('map-addspecial',-1)">{$langMapAddSpecial}</a></li>
+					<li class="spacer"><hr /></li>
+					<!-- new: <li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?action=getFormContents&form=addmodify&do=modify&map={$currentMap}&type=global&id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li> -->
+					<li><a href="#" onclick="popupWindow('{$langMapOptions}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map={$currentMap}&type=global&id=0', true, false));" class="underline">{$langMapOptions}</a></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl class="dropdown subdropdown">
+			<dd id="map-addicon-ddcontent" onmouseover="cancelHide('map-addicon');cancelHide('map')" onmouseout="ddMenu('map-addicon',-1);ddMenu('map',-1)">
+				<ul>
+					<li><a class="topline topline" href="javascript:get_click('host',1,'add');ddMenuHide(['map-addicon','map']);">{$langHost}</a></li>
+					<li><a class="topline" href="javascript:get_click('service',1,'add');ddMenuHide(['map-addicon','map']);">{$langService}</a></li>
+					<li><a class="topline" href="javascript:get_click('hostgroup',1,'add');ddMenuHide(['map-addicon','map']);">{$langHostgroup}</a></li>
+					<li><a class="topline" href="javascript:get_click('servicegroup',1,'add');ddMenuHide(['map-addicon','map']);">{$langServicegroup}</a></li>
+					<li><a class="topline underline" href="javascript:get_click('map',1,'add');ddMenuHide(['map-addicon','map']);">{$langMap}</a></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl class="dropdown subdropdown">
+			<dd id="map-addline-ddcontent" onmouseover="cancelHide('map-addline');cancelHide('map')" onmouseout="ddMenu('map-addline',-1);ddMenu('map',-1)">
+				<ul>
+					<li><a class="topline topline" href="javascript:get_click('host',2,'add');ddMenuHide(['map-addline','map']);">{$langHost}</a></li>
+					<li><a class="topline" href="javascript:get_click('service',2,'add');ddMenuHide(['map-addline','map']);">{$langService}</a></li>
+					<li><a class="topline" href="javascript:get_click('hostgroup',2,'add');ddMenuHide(['map-addline','map']);">{$langHostgroup}</a></li>
+					<li><a class="topline" href="javascript:get_click('servicegroup',2,'add');ddMenuHide(['map-addline','map']);">{$langServicegroup}</a></li>
+					<li><a class="topline underline" href="javascript:get_click('map',2,'add');ddMenuHide(['map-addline','map']);">{$langMap}</a></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl class="dropdown subdropdown">
+			<dd id="map-addspecial-ddcontent" onmouseover="cancelHide('map-addspecial');cancelHide('map')" onmouseout="ddMenu('map-addspecial',-1);ddMenu('map',-1)">
+				<ul>
+					<li><a class="topline topline" href="get_click('shape',1,'add');ddMenuHide(['map-addspecial','map']);">{$langShape}</a></li>
+					<li><a class="topline" href="get_click('textbox',2,'add');ddMenuHide(['map-addspecial','map']);">{$langTextbox}</a></li>
+					<li><a class="topline underline" href="#">{$langStateless} {$langLine}</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</li>
+	{/if}
+	{if ($viewType == 'WuiMap' || $viewType == 'WuiWelcome') && $permittedEdit == true}
+	<li>
+		<dl class="dropdown">
+			<dt id="wui-ddheader" onmouseover="ddMenu('wui',1)" onmouseout="ddMenu('wui',-1)">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
+			<dd id="wui-ddcontent" onmouseover="cancelHide('wui')" onmouseout="ddMenu('wui',-1)">
+				<ul>
+					<li><a href="#" onclick="popupWindow('{$langWuiConfiguration}', getSyncRequest(oGeneralProperties.path_server+'?mod=MainCfg&act=edit', true, false), undefined, 970);">{$langWuiConfiguration}</a></li>
+					<li class="spacer"><hr /></li>
+					<li><a href="#" onclick="popupWindow('{$langMgmtBackends}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackends', true, false));">{$langMgmtBackends}</a></li>
+					<li><a href="#" onclick="popupWindow('{$langMgmtBackgrounds}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackgrounds', true, false));">{$langMgmtBackgrounds}</a></li>
+					<li><a href="#" onclick="popupWindow('{$langMgmtMaps}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageMaps', true, false));">{$langMgmtMaps}</a></li>
+					<li><a class="underline" href="#" onclick="popupWindow('{$langMgmtShapes}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageShapes', true, false));">{$langMgmtShapes}</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</li>
+	{/if}
 	<li style="width:300px;"></li>
 	<li>
 		<dl class="dropdown">
