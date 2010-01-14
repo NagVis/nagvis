@@ -56,6 +56,7 @@ define('MATCH_ROTATION_NAME', '/^[0-9A-Za-z_-]+$/');
 define('MATCH_ROTATION_NAME_EMPTY', '/^[0-9A-Za-z_-]*$/');
 define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
+define('MATCH_VIEW_TYPE_SERVICE_EMPTY', '/^(?:icon|line|gadget)*$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete)$/');
 define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map|automap)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2)?$/');
@@ -74,4 +75,6 @@ define('MATCH_ORDER', '/^(?:asc|desc)$/');
 define('MATCH_TEXTBOX_WIDTH', '/^([0-9]+|auto)$/');
 define('MATCH_TEXTBOX_HEIGHT', '/^([0-9]+|auto)$/');
 define('MATCH_SOCKET', '/^(unix:[a-zA-Z0-9-_\.\/]+|tcp:[a-zA-Z0-9-\.]+:[0-9]{1,5})$/');
+
+define('MATCH_WUI_ADDMODIFY_DO', '/^(add|modify)$/');
 ?>

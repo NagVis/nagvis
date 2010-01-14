@@ -40,6 +40,7 @@ class CoreModMap extends CoreModule {
 			'doAdd' => REQUIRES_AUTHORISATION,
 			'doRename' => REQUIRES_AUTHORISATION,
 			'doDelete' => REQUIRES_AUTHORISATION,
+			'addModify' => REQUIRES_AUTHORISATION,
 			'modifyObject' => REQUIRES_AUTHORISATION,
 			'createObject' => REQUIRES_AUTHORISATION,
 			'deleteObject' => REQUIRES_AUTHORISATION,
@@ -207,6 +208,32 @@ class CoreModMap extends CoreModule {
 						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
 						$sReturn = '';
 					}
+				break;
+				case 'addModify':
+					$aOpts = Array('map' => MATCH_MAP_NAME,
+					               'do' => MATCH_WUI_ADDMODIFY_DO,
+					               'type' => MATCH_OBJECTTYPE,
+					               'id' => MATCH_INTEGER_EMPTY,
+					               'viewType' => MATCH_VIEW_TYPE_SERVICE_EMPTY,
+					               'coords' => MATCH_STRING_NO_SPACE_EMPTY);
+					$aVals = $this->getCustomOptions($aOpts);
+					
+					// Initialize unset optional attributes
+					if(!isset($aVals['coords'])) {
+						$aVals['coords'] = '';
+					}
+					
+					if(!isset($aVals['id'])) {
+						$aVals['id'] = '';
+					}
+					
+					if(!isset($aVals['viewType'])) {
+						$aVals['viewType'] = '';
+					}
+					
+					$VIEW = new WuiViewMapAddModify($this->AUTHENTICATION, $this->AUTHORISATION);
+					$VIEW->setOpts($aVals);
+					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
 			}
 		}

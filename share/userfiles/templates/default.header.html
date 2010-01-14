@@ -48,8 +48,7 @@
 					<li><a class="submenu-link" id="map-addline-ddheader" href="#" onmouseover="ddMenu('map-addline',1,1)" onmouseout="ddMenu('map-addline',-1)">{$langMapAddLine}</a></li>
 					<li><a class="submenu-link" id="map-addspecial-ddheader" href="#" onmouseover="ddMenu('map-addspecial',1,1)" onmouseout="ddMenu('map-addspecial',-1)">{$langMapAddSpecial}</a></li>
 					<li class="spacer"><hr /></li>
-					<!-- new: <li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?action=getFormContents&form=addmodify&do=modify&map={$currentMap}&type=global&id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li> -->
-					<li><a href="#" onclick="popupWindow('{$langMapOptions}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map={$currentMap}&type=global&id=0', true, false));" class="underline">{$langMapOptions}</a></li>
+					<li><a href="#" onclick="popupWindow('{$langMapOptions}', getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map={$currentMap}&type=global&id=0', true, false));" class="underline">{$langMapOptions}</a></li>
 				</ul>
 			</dd>
 		</dl>
