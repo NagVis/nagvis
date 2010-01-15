@@ -39,10 +39,6 @@ require("../../server/core/functions/debug.php");
 require("../../server/core/functions/getuser.php");
 require("../../server/core/functions/oldPhpVersionFixes.php");
 
-// Include needed WUI specific functions
-//FIXME: Remove this ...
-require('./functions/form_handler.php');
-
 // This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
@@ -142,48 +138,6 @@ switch($_GET['myaction']) {
 			
 			// Open the management page again
 			print("<script>window.history.back();</script>");
-		}
-	break;
-	/*
-	 * Restore a backup of the given MAP
-	 */
-	case 'map_restore':
-		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map');
-		} else {
-			// delete current config
-			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
-			$MAPCFG->readMapConfig();
-			$MAPCFG->deleteMapConfig();
-			// restore backup
-			if(file_exists($CORE->getMainCfg()->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak')) {
-				copy($CORE->getMainCfg()->getValue('paths', 'mapcfg').$_GET['map'].'.cfg.bak',$CORE->getMainCfg()->getValue('paths', 'mapcfg').$_GET['map'].'.cfg');	
-			}
-			// reset status
-			$done = FALSE;
-			
-			// is status for this map there?
-			$file = file($CORE->getMainCfg()->getValue('paths', 'mapcfg').'autobackup.status');
-			foreach($file AS $key => $val) {
-				if(ereg("^".$mapname."=",$val)) {
-					// $arr[1] is value
-					$arr = explode('=',$val);
-					
-					$file[$key] = $mapname.'='.$CORE->getMainCfg()->getValue('wui', 'autoupdatefreq')."\n";
-					$done = TRUE;
-				}
-			}
-			
-			if($done == FALSE) {
-				$file[] = $mapname.'='.$CORE->getMainCfg()->getValue('wui', 'autoupdatefreq')."\n";
-			}
-			
-			//write array back to file
-			$fp = fopen($CORE->getMainCfg()->getValue('paths', 'mapcfg').'autobackup.status',"w");
-			fwrite($fp,implode("",$file));
-			fclose($fp);
-			
-			print "<script>window.document.location.href='./index.php?map=".$_GET['map']."';</script>\n";
 		}
 	break;
 	/*
