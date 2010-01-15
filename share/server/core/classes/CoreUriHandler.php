@@ -62,6 +62,10 @@ class CoreUriHandler {
 		}
 		
 		$this->aOpts[$sKey] = $sVal;
+
+		// Set in superglobal array for later
+		// direct access in other UHANDLER instances
+		$_GET[$sKey] = $sVal;
 		
 		return $sReturn;
 	}
