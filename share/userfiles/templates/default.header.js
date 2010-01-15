@@ -48,7 +48,6 @@ function ddMenuHide(aIds) {
 
 // main function to handle the mouse events //
 function ddMenu(id, d, reposition){
-	document.getElementById('box_textbox_0').appendChild(document.createTextNode('ddMenu('+id+','+d+','+reposition+')\n'));
 	var h = document.getElementById(id + '-ddheader');
 	var c = document.getElementById(id + '-ddcontent');
 
@@ -109,10 +108,8 @@ function ddSlide(c,d){
 		clearInterval(c.timer);
 	}
 	
-	// Hide finished
-	document.getElementById('box_textbox_0').appendChild(document.createTextNode('Currh:'+currh+'\n'));
+	// Finish hiding (above calculation do not work properly cause dist may become 0)
 	if(dist == 0 && d != 1) {
-		document.getElementById('box_textbox_0').appendChild(document.createTextNode('Hide finished\n'));
 		c.style.opacity = 0;
 		c.style.filter = 'alpha(opacity=0)';
 		c.style.height = '0px';
