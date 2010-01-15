@@ -97,6 +97,7 @@ $MHANDLER->regModule('Search');
 $MHANDLER->regModule('UserMgmt');
 $MHANDLER->regModule('RoleMgmt');
 $MHANDLER->regModule('MainCfg');
+$MHANDLER->regModule('ManageShapes');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

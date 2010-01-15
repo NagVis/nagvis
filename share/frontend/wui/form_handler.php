@@ -247,27 +247,26 @@ switch($_GET['myaction']) {
 		if(!isset($_FILES['shape_image']) || !is_array($_FILES['shape_image'])) {
 			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~shape_image');
 		} else {
-			// Include page specific global/wui classes
-			require("../nagvis/includes/classes/GlobalForm.php");
-			require("./includes/classes/WuiShapeManagement.php");
-			
-			$FRONTEND = new WuiShapeManagement($CORE);
-			$FRONTEND->uploadShape($_FILES['shape_image']);
-		}
-	break;
-	/*
-	 * Delete the specified shape image file
-	 */
-	case 'mgt_shape_delete':
-		if(!isset($_POST['shape_image']) || $_POST['shape_image'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~shape_image');
-		} else {
-			// Include page specific global/wui classes
-			require("../nagvis/includes/classes/GlobalForm.php");
-			require("./includes/classes/WuiShapeManagement.php");
-			
-			$FRONTEND = new WuiShapeManagement($CORE);
-			$FRONTEND->deleteShape($_POST['shape_image']);
+			// check the file (the map) is properly uploaded
+			if(is_uploaded_file($_FILES['shape_image']['tmp_name'])) {
+				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $_FILES['shape_image']['name'])) {
+					if(@move_uploaded_file($_FILES['shape_image']['tmp_name'], $CORE->getMainCfg()->getValue('paths', 'shape').$_FILES['shape_image']['name'])) {
+						// Change permissions of the file after the upload
+						chmod($CORE->getMainCfg()->getValue('paths', 'shape').$_FILES['shape_image']['name'],0666);
+						// Go back to last page
+						print("<script>window.history.back();</script>");
+					} else {
+						// Error handling
+						print("ERROR: ".$CORE->getLang()->getText('moveUploadedFileFailed','PATH~'.$CORE->getMainCfg()->getValue('paths', 'shape')));
+					}
+				} else {
+					// Error handling
+					print("ERROR: ".$CORE->getLang()->getText('mustBePngFile'));
+				}
+			} else {
+				// Error handling
+				print("ERROR: ".$CORE->getLang()->getText('uploadFailed'));
+			}
 		}
 	break;
 	/*

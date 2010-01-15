@@ -101,7 +101,7 @@
 					<li><a href="#" onclick="popupWindow('{$langMgmtBackends}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackends', true, false));">{$langMgmtBackends}</a></li>
 					<li><a href="#" onclick="popupWindow('{$langMgmtBackgrounds}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackgrounds', true, false));">{$langMgmtBackgrounds}</a></li>
 					<li><a href="#" onclick="popupWindow('{$langMgmtMaps}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageMaps', true, false));">{$langMgmtMaps}</a></li>
-					<li><a class="underline" href="#" onclick="popupWindow('{$langMgmtShapes}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageShapes', true, false));">{$langMgmtShapes}</a></li>
+					<li><a class="underline" href="#" onclick="popupWindow('{$langMgmtShapes}', getSyncRequest(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', true, false));">{$langMgmtShapes}</a></li>
 				</ul>
 			</dd>
 		</dl>

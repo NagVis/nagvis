@@ -39,10 +39,6 @@ require("../../server/core/functions/debug.php");
 require("../../server/core/functions/getuser.php");
 require("../../server/core/functions/oldPhpVersionFixes.php");
 
-// Include needed WUI specific functions
-//FIXME: Remove this ...
-require('./functions/form_handler.php');
-
 // This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
 
@@ -255,10 +251,6 @@ switch($_GET['action']) {
 			break;
 			case 'manageBackgrounds':
 				$FRONTEND = new WuiBackgroundManagement($CORE);
-				$FRONTEND->getForm();
-			break;
-			case 'manageShapes':
-				$FRONTEND = new WuiShapeManagement($CORE);
 				$FRONTEND->getForm();
 			break;
 			case 'manageMaps':

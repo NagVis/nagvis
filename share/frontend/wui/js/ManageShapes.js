@@ -1,8 +1,8 @@
 /*****************************************************************************
  *
- * ShapeManagement.js - Functions which are used by the shape management
+ * ManageShapes.js - Functions which are used by the shape management
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -79,12 +79,12 @@ function check_image_add() {
 }
 
 function check_image_delete() {
-    if(document.shape_delete.shape_image.value == '') {
+    if(document.shape_delete.image.value == '') {
         alert(printLang(lang['foundNoShapeToDelete'],''));
         return false;
     }
 
-		if(checkShapeInUse(document.shape_delete.shape_image.value, mapOptions)) {
+		if(checkShapeInUse(document.shape_delete.image.value, mapOptions)) {
 			alert(printLang(lang['shapeInUse'],'MAP~'+usedInMap));
 			return false;
 		}
