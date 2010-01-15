@@ -20,6 +20,7 @@
 			</dd>
 		</dl>
 	</li>
+	{if $viewType == 'Map' || $viewType == 'Automap' || $bRotation == true}
 	<li>
 		<dl class="dropdown">
 			<dt id="action-ddheader" onmouseover="ddMenu('action',1)" onmouseout="ddMenu('action',-1)">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
@@ -39,6 +40,7 @@
 			</dd>
 		</dl>
 	</li>
+	{/if}
 	{if $viewType == 'WuiMap' && $permittedEdit == true}
 	<li>
 		<dl class="dropdown">
@@ -105,7 +107,8 @@
 		</dl>
 	</li>
 	{/if}
-	<li style="width:300px;"></li>
+</ul>
+<ul class="head right">
 	<li>
 		<dl class="dropdown">
 		  <dt id="user-ddheader" onmouseover="ddMenu('user',1)" onmouseout="ddMenu('user',-1)">{$langUser}<img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
@@ -142,5 +145,6 @@
 		  </dd>
 		</dl>
 	</li>
+	<li style="width:120px"></li>
 </ul>
 </div>
