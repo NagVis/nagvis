@@ -9,7 +9,10 @@
 				<ul>
 					<li><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>
 					<li class="spacer"><hr /></li>
-					{foreach $maps map}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/foreach}
+					{foreach $maps map}<li>
+						<a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a>
+						<a class="right" href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$map.mapName}{$map.urlParams}">Edit</a>
+					</li>{/foreach}
 					<li class="spacer"><hr /></li>
 					{foreach $automaps map}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/foreach}
 					<li><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>

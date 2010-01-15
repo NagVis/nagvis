@@ -13,17 +13,13 @@ var validMainConfig = {$validMainCfg};
 var mapOptions = {$mapOptions};
 </script>
 
-<div id="mymap" class="map">
-	<!-- background -->
-	{if $backgroundImg != ''}
-	<img id="background" src="{$backgroundImg}" style="z-index:0;" alt="">
-	{/if}
+<div id="mymap" class="map welcome">
+	<h1>Welcome to the NagVis WUI!</h1>
+	<p>This is the NagVis web configuration interface. You can use it to configure NagVis and/or build your own NagVis maps using your browser.</p>
+	<p>Unlike previous NagVis versions the navigation in the WUI uses the header menu. The context menu has been removed.</p>
+	<p>Have fun using NagVis! And please report problems or bugs.</p>
+	<p>And if you really like NagVis you are welcome to <a href="http://www.nagvis.org/become-sponsor" target="_blank">support NagVis</a>.</p>
 </div>
-
-<script type="text/javascript">
-// build the right-click menu
-initjsDOMenu();
-</script>
 
 <!-- Important to have this in body -->
 <script type="text/javascript" src="{$base}/frontend/wui/js/wz_tooltip.js"></script>

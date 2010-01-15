@@ -51,7 +51,6 @@ class WuiViewWelcome {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-				'backgroundImg' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/images/internal/wuilogo.png',
 				'base' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
 				'userName' => $this->CORE->getAuthentication()->getUser(),

@@ -40,7 +40,12 @@ class WuiModWelcome extends WuiModule {
 			exit;
 		}
 		
-		// FIXME: Header menu?
+		// Need to parse the header menu by config or url value?
+    if($this->CORE->getMainCfg()->getValue('wui','headermenu')) {
+      // Parse the header menu
+      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $this->CORE->getMainCfg()->getValue('wui','headertemplate'), $MAPCFG);
+      $INDEX->setHeaderMenu($HEADER->__toString());
+    }
 		
 		// Print welcome page
 		$this->VIEW = new WuiViewWelcome($this->CORE, $MAPCFG);

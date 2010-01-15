@@ -67,6 +67,13 @@ img {
 	left: 0;
 }
 
+/* Welcome page */
+div.welcome {padding:20px;width:600px}
+div.welcome h1 {color:#43B3CF;background:#eee;padding:3px 10px 2px 20px;font-size:24px;line-height:30px;font-weight:normal;-moz-border-radius:8px;-webkit-border-radius:8px;margin-bottom:5px}
+div.welcome p {padding:5px;font-size:12px}
+div.welcome a,div.welcome a:active,div.welcome a:visited {color:#43B3CF}
+div.welcome a:hover {color:#779D2A}
+
 /* Automap */
 #automap {
 	z-index: 100;
@@ -589,6 +596,8 @@ td#popupWindowContent fieldset.form label {
 .dropdown ul {margin:0;padding:0;list-style:none}
 .dropdown li {margin:0;padding:0}
 .dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer, .dropdown dl.subdropdown dt {display:block;width:193px;background:#eaf0f2;margin:0;color:#43B3CF;text-decoration:none;border-left:1px solid #a4a4a4;border-right:1px solid #a4a4a4;padding:5px;}
+.dropdown a.left, .dropdown a.left:active, .dropdown a.left:visited {float:left;width:152px;border-right:0}
+.dropdown a.right, .dropdown a.right:active, .dropdown a.right:visited {float:right;width:30px;border-left:1px solid #43B3CF}
 .dropdown a:hover {background:#d9e1e4;color:#779D2A}
 .dropdown a.submenu-link:after {float:right;content:">"}
 .dropdown li.spacer {width:203px}
