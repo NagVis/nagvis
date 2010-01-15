@@ -71,7 +71,7 @@ class WuiModMap extends WuiModule {
     // Need to parse the header menu by config or url value?
     if($this->CORE->getMainCfg()->getValue('wui','headermenu')) {
       // Parse the header menu
-      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $this->CORE->getMainCfg()->getValue('wui','headertemplate'), $MAPCFG);
+      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $this->CORE->getMainCfg()->getValue('wui','headertemplate'), $MAPCFG);
       $INDEX->setHeaderMenu($HEADER->__toString());
     }
 		

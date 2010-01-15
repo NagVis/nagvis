@@ -99,10 +99,14 @@ abstract class CoreModule {
 		return $bRet;
 	}
 	
+	protected function initUriHandler() {
+		$this->UHANDLER = new CoreUriHandler($this->CORE);
+	}
+	
 	protected function getCustomOptions($aKeys) {
 		// Initialize on first call
 		if($this->UHANDLER === null) {
-			$this->UHANDLER = new CoreUriHandler($this->CORE);
+			$this->initUriHandler();
 		}
 		
 		// Load the specific params to the UriHandler

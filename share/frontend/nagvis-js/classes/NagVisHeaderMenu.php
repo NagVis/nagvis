@@ -27,8 +27,9 @@
  */
 class NagVisHeaderMenu {
 	private $CORE;
-	private $OBJPAGE;
 	private $AUTHORISATION;
+	private $UHANDLER;
+	private $OBJ;
 	private $TMPL;
 	private $TMPLSYS;
 	
@@ -45,10 +46,11 @@ class NagVisHeaderMenu {
 	 * @param 	GlobalCore 	$CORE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($CORE, CoreAuthorisationHandler $AUTHORISATION, $templateName, $OBJ = NULL) {
+	public function __construct($CORE, CoreAuthorisationHandler $AUTHORISATION, CoreUriHandler $UHANDLER, $templateName, $OBJ = null) {
 		$this->CORE = $CORE;
-		$this->OBJPAGE = $OBJ;
 		$this->AUTHORISATION = $AUTHORISATION;
+		$this->UHANDLER = $UHANDLER;
+		$this->OBJ = $OBJ;
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
@@ -98,21 +100,15 @@ class NagVisHeaderMenu {
 		// First get all static macros
 		$this->aMacros = $this->getStaticMacros();
 		
-		$objPageClass = get_class($this->OBJPAGE);
-		
-		if($objPageClass == 'NagVisMapCfg') {
-			$this->aMacros['viewType'] = 'Map';
-		} elseif($objPageClass == 'NagVisAutomapCfg') {
-			$this->aMacros['viewType'] = 'Automap';
-		} elseif($objPageClass == 'WuiMapCfg') {
-			$this->aMacros['viewType'] = 'WuiMap';
-		}
+		// Save the page
+		$this->aMacros['mod'] = $this->UHANDLER->get('mod');
+		$this->aMacros['act'] = $this->UHANDLER->get('act');
 		
 		// In rotation?
 		$this->aMacros['bRotation'] = $this->bRotation;
 		
 		// Check if the user is permitted to edit the current map/automap
-		if(isset($this->aMacros['viewType']) && $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['viewType'], 'edit', $this->OBJPAGE->getName())) {
+		if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'))) {
 			$this->aMacros['permittedEdit'] = true;
 		} else {
 			$this->aMacros['permittedEdit'] = false;
@@ -122,9 +118,9 @@ class NagVisHeaderMenu {
 		
 		
 		// Replace some special macros
-		if($this->OBJPAGE !== null && ($objPageClass == 'NagVisMapCfg' || $objPageClass == 'NagVisAutomapCfg' || $objPageClass == 'WuiMapCfg')) {
-			$this->aMacros['currentMap'] = $this->OBJPAGE->getName();
-			$this->aMacros['currentMapAlias'] = $this->OBJPAGE->getValue('global', '0', 'alias');
+		if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap')) {
+			$this->aMacros['currentMap'] = $this->OBJ->getName();
+			$this->aMacros['currentMapAlias'] = $this->OBJ->getValue('global', '0', 'alias');
 		} else {
 			$this->aMacros['currentMap'] = '';
 			$this->aMacros['currentMapAlias'] = '';
@@ -147,7 +143,7 @@ class NagVisHeaderMenu {
 					$aMaps[$mapName]['urlParams'] = '';
 					
 					// auto select current map
-					if($objPageClass == 'NagVisMapCfg' && $mapName == $this->OBJPAGE->getName()) {
+					if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
 						$aMaps[$mapName]['selected'] = true;
 					} else {
 						$aMaps[$mapName]['selected'] = false;
@@ -178,7 +174,7 @@ class NagVisHeaderMenu {
 					$aAutomaps[$mapName]['urlParams'] = str_replace('&', '&amp;', $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'));
 					
 					// auto select current map
-					if($objPageClass == 'NagVisAutomapCfg' && $mapName == $this->OBJPAGE->getName()) {
+					if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
 						$aAutomaps[$mapName]['selected'] = true;
 					} else {
 						$aAutomaps[$mapName]['selected'] = false;
@@ -241,7 +237,7 @@ class NagVisHeaderMenu {
 		$this->aMacros['langs'] = $aLangs;
 		
 		// Select overview in header menu when no map shown
-		if($objPageClass != 'NagVisMapCfg' && $objPageClass != 'NagVisAutomapCfg') {
+		if($this->aMacros['mod'] == 'Map' && $this->aMacros['mod'] != 'AutoMap') {
 			$this->aMacros['selected'] = true;
 		}
 	}

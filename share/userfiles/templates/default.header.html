@@ -20,20 +20,20 @@
 			</dd>
 		</dl>
 	</li>
-	{if $viewType == 'Map' || $viewType == 'Automap' || $bRotation == true}
+	{if $mod == 'Map' || $mod == 'Automap' || $bRotation == true}
 	<li>
 		<dl class="dropdown">
 			<dt id="action-ddheader" onmouseover="ddMenu('action',1)" onmouseout="ddMenu('action',-1)">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="action-ddcontent" onmouseover="cancelHide('action')" onmouseout="ddMenu('action',-1)">
 				<ul>
-					{if $viewType == 'Map' || $viewType == 'Automap'}
+					{if $mod == 'Map' || $mod == 'Automap'}
 					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
 					{/if}
 					{if $bRotation == true}
 					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$langRotationStart}</a></li>
 					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$langRotationStop}</a></li>
 					{/if}
-					{if $viewType == 'Map' && $permittedEdit == true}
+					{if $mod == 'Map' && $permittedEdit == true}
 					<li><a href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$currentMap}" class="underline">{$langEditMap}</a></li>
 					{/if}
 				</ul>
@@ -41,7 +41,7 @@
 		</dl>
 	</li>
 	{/if}
-	{if $viewType == 'WuiMap' && $permittedEdit == true}
+	{if $mod == 'Map' && $act == 'edit' && $permittedEdit == true}
 	<li>
 		<dl class="dropdown">
 			<dt id="map-ddheader" onmouseover="ddMenu('map',1)" onmouseout="ddMenu('map',-1)">{$langMap} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
@@ -90,7 +90,7 @@
 		</dl>
 	</li>
 	{/if}
-	{if ($viewType == 'WuiMap' || $viewType == 'WuiWelcome') && $permittedEdit == true}
+	{if ($mod == 'Map' && $act == 'edit') || ($mod == 'Welcome' && $act == 'view')}
 	<li>
 		<dl class="dropdown">
 			<dt id="wui-ddheader" onmouseover="ddMenu('wui',1)" onmouseout="ddMenu('wui',-1)">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>

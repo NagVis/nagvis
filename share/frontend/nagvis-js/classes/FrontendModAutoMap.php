@@ -128,7 +128,7 @@ class FrontendModAutoMap extends FrontendModule {
 		// Need to parse the header menu?
 		if($showHeader) {
 			// Parse the header menu
-			$HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
+			$HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
 			
 			// Put rotation information to header menu
 			if($this->rotation != '') {

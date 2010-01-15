@@ -26,9 +26,9 @@ class WuiModWelcome extends WuiModule {
 	}
 	
 	private function showWelcomeDialog() {
-		// Load map configuration
-		$MAPCFG = new WuiMapCfg($this->CORE, '');
-		$MAPCFG->readMapConfig();
+		// Need to initialize the Uri handler manually cause no parameters are
+		// parsed in this module
+		$this->initUriHandler();
 		
 		// Build index template
 		$INDEX = new WuiViewIndex($this->CORE);
@@ -40,15 +40,17 @@ class WuiModWelcome extends WuiModule {
 			exit;
 		}
 		
+		// Create welcome page
+		$this->VIEW = new WuiViewWelcome($this->CORE);
+		
 		// Need to parse the header menu by config or url value?
     if($this->CORE->getMainCfg()->getValue('wui','headermenu')) {
       // Parse the header menu
-      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $this->CORE->getMainCfg()->getValue('wui','headertemplate'), $MAPCFG);
+      $HEADER = new WuiHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $this->CORE->getMainCfg()->getValue('wui','headertemplate'));
       $INDEX->setHeaderMenu($HEADER->__toString());
     }
 		
 		// Print welcome page
-		$this->VIEW = new WuiViewWelcome($this->CORE, $MAPCFG);
     $INDEX->setContent($this->VIEW->parse());
 
 		return $INDEX->parse();
