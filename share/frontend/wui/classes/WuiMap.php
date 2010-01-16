@@ -417,7 +417,7 @@ class WuiMap extends GlobalMap {
 		}
 		
 		if($obj['type'] == 'service') {
-			$label = str_replace('[name]', $obj['name'], $label);
+			$label = str_replace('[service_description]', $obj['service_description'], $label);
 		}
 		
 		$ret  = '<div '.$id.' class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
