@@ -174,14 +174,15 @@ class CoreModMap extends CoreModule {
 					if($aReturn !== false) {
 						// Try to create the map
 						if($this->doModifyObject($aReturn)) {
-							// FIXME: Would be nice to have the object adding without reload of the page
-							//new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been modified.'),
-							//                  null,
-							//                  null,
-							//                  1);
-							// FIXME: Recode to GlobalMessage. But the particular callers like
-							//        suppress the success messages
-							$sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
+							if(isset($aReturn['refresh']) && $aReturn['refresh'] == 1) {
+								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been modified.'),
+							                  null,
+							                  null,
+							                  1);
+							  $sReturn = '';
+							} else {
+								$sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
+							}
 						} else {
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be modified.'));
 							$sReturn = '';
@@ -352,6 +353,7 @@ class CoreModMap extends CoreModule {
 		unset($aOpts['mod']);
 		unset($aOpts['map']);
 		unset($aOpts['type']);
+		unset($aOpts['ref']);
 		unset($aOpts['id']);
 		unset($aOpts['timestamp']);
 		
@@ -368,6 +370,7 @@ class CoreModMap extends CoreModule {
 			return Array('map' => $FHANDLER->get('map'),
 			             'type' => $FHANDLER->get('type'),
 			             'id' => $FHANDLER->get('id'),
+			             'refresh' => $FHANDLER->get('ref'),
 			             'opts' => $aOpts);
 		} else {
 			return false;
