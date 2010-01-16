@@ -146,6 +146,13 @@ function contextShow(event) {
 		if(target.id !== '') {
 			id = target.id;
 		}
+
+		if(typeof id === 'undefined') {
+			eventlog("context", "error", "Target object search had no id");
+
+			_replaceContext = false;
+			return false;
+		}
 		
 		// Only the object id is interesing so remove the other contents
 		// like -icon or -line. Simply split the string by - and take the
@@ -157,6 +164,14 @@ function contextShow(event) {
 		}
 		
 		var contextMenu = document.getElementById(id+'-context');
+
+		// Maybe there is no context menu defined for one object?
+		if(contextMenu === null) {
+			eventlog("context", "error", "Found no context menu wit the id \""+id+"-context\"");
+			
+			_replaceContext = false;
+			return false;
+		}
 		
 		// hide the menu first to avoid an "up-then-over" visual effect
 		contextMenu.style.display = 'none';

@@ -559,7 +559,7 @@ class WuiMap extends GlobalMap {
 		
 		$id = 'box_'.$obj['type'].'_'.$obj['id'];
 		
-		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"contextShow(event);\">";
+		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\">";
 		$ret .= "\t<span>".$obj['text']."</span>";
 		$ret .= "</div>";
 		$ret .= $this->parseContextMenu($obj);
@@ -569,7 +569,11 @@ class WuiMap extends GlobalMap {
 	}
 
 	function parseContextMenu($obj) {
-		$id = 'icon_'.$obj['type'].'_'.$obj['id'].'-context';
+		if($obj['type'] === 'textbox') {
+			$id = 'box_'.$obj['type'].'_'.$obj['id'].'-context';
+		} else {
+			$id = 'icon_'.$obj['type'].'_'.$obj['id'].'-context';
+		}
 		
 		$ret = '<div id="'.$id.'" class="context" style="z-index:1000;display:none;position:absolute;overflow:visible;"';
 		$ret .= $this->infoBox($obj);
@@ -640,7 +644,6 @@ class WuiMap extends GlobalMap {
 			."<span>".$this->CORE->getLang()->getText('change')."</span></a></li>";
 		
 		// Position/Size link on textboxes/lines
-		//$tooltipText .= "&nbsp;".$positionSizeText;
 		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
 			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)'"
 						." href=\"javascript:objid=".$obj['id'].";get_click('".$obj['type']."',2,'modify');\" onclick=\"contextHide();\">"
