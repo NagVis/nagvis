@@ -163,6 +163,11 @@ class WuiViewMapAddModify {
 		
 		// loop all valid properties for that object type
 		foreach($this->MAPCFG->getValidObjectType($this->aOpts['type']) as $propname => $prop) {
+			// Skip deprecated attributes
+			if(isset($prop['deprecated']) && $prop['deprecated'] == '1') {
+				continue;
+			}
+			
 			$style = '';
 			$class = '';
 			$isDefaultValue = FALSE;
