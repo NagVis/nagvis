@@ -160,28 +160,37 @@ class NagiosHost extends NagVisStatefulObject {
 			// problems due to the old recursive mechanism. If it's not available fall back to
 			// old mechanism.
 			if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostStateCounts', false)) {
-				// Get state counts
-				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
+				if($this->getRecognizeServices()) {
+					// Get state counts
+					$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
 				
-				// Calculate summary state and output
-				$this->fetchSummariesFromCounts();
+					// Calculate summary state and output
+					$this->fetchSummariesFromCounts();
 				
-				// Get all service states
-				// These information are only interesting when the hover_menu is shown
-				/* FIXME: Get member summary state+substate, output for the objects to
-				   be shown in hover menu. This could be improved by limiting the 
-				   number of members the state will be fetched for.
-				   For example: when the members will be sorted by name and limited to
-				   10 it is only neccessary to fetch 10 members.
-				   When member should be sorted by state the state counts could be
-				   used to exclude objects with states which will not be displayed.
-				*/
-				if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds && $this->getState() != 'ERROR' && !$this->hasMembers()) {
-					$this->fetchServiceObjects();
+					// Get all service states
+					// These information are only interesting when the hover_menu is shown
+					/* FIXME: Get member summary state+substate, output for the objects to
+					   be shown in hover menu. This could be improved by limiting the 
+					   number of members the state will be fetched for.
+						 For example: when the members will be sorted by name and limited to
+					   10 it is only neccessary to fetch 10 members.
+					   When member should be sorted by state the state counts could be
+					   used to exclude objects with states which will not be displayed.
+					*/
+					if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds && $this->getState() != 'ERROR' && !$this->hasMembers()) {
+						$this->fetchServiceObjects();
+					}
+				} else {
+					// Even if no services were fetched fetch the summary state/output
+					// Also get summary state
+	        $this->fetchSummaryState();
+
+			    // At least summary output
+		      $this->fetchSummaryOutput();
 				}
 			} else {
-				// Get all service states
-				if($this->getState() != 'ERROR' && !$this->hasMembers()) {
+				// Only merge host state with service state when recognize_services is set 
+				if($this->getState() != 'ERROR' && !$this->hasMembers() && $this->getRecognizeServices()) {
 					$this->fetchServiceObjects();
 				}
 				
