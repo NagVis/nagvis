@@ -397,7 +397,7 @@ function formSubmit(formId, action) {
 		if(aFields[i].name.charAt(0) !== '_') {
 			
 			// Check if the value of the input helper field should be used
-			if(aFields[i].options[aFields[i].selectedIndex].value === lang['manualInput']) {
+			if(aFields[i].selectedIndex !== -1 || aFields[i].options[aFields[i].selectedIndex].value === lang['manualInput']) {
 				getstr += aFields[i].name + "=" + escapeUrlValues(document.getElementById('_inp_'+aFields[i].name).value) + "&";
 			} else {
 				getstr += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[aFields[i].selectedIndex].value) + "&";
