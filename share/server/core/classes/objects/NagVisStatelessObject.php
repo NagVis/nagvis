@@ -30,8 +30,6 @@
 class NagVisStatelessObject extends NagVisObject {
 	// "Global" Configuration variables for all stateless objects
 	protected $label_show;
-	protected $recognize_services;
-	protected $only_hard_states;
 	
 	protected $iconPath;
 	protected $iconHtmlPath;
