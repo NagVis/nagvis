@@ -328,9 +328,9 @@ function get_click_pos(e) {
 		
 		follow_mouse = false;
 		if(action_click == 'add') {
-			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
+			link = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
 		} else if(action_click == 'modify') {
-			link = './ajax_handler.php?action=getFormContents&form=addmodify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
+			link = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
 		
 		// FIXME: Title "+get_label('properties')+"
