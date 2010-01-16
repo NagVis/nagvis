@@ -99,7 +99,7 @@
 					<li><a href="#" onclick="popupWindow('{$langWuiConfiguration}', getSyncRequest(oGeneralProperties.path_server+'?mod=MainCfg&act=edit', true, false), undefined, 970);">{$langWuiConfiguration}</a></li>
 					<li class="spacer"><hr /></li>
 					<li><a href="#" onclick="popupWindow('{$langMgmtBackends}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackends', true, false));">{$langMgmtBackends}</a></li>
-					<li><a href="#" onclick="popupWindow('{$langMgmtBackgrounds}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackgrounds', true, false));">{$langMgmtBackgrounds}</a></li>
+					<li><a href="#" onclick="popupWindow('{$langMgmtBackgrounds}', getSyncRequest(oGeneralProperties.path_server+'?mod=ManageBackgrounds&act=view', true, false));">{$langMgmtBackgrounds}</a></li>
 					<li><a href="#" onclick="popupWindow('{$langMgmtMaps}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageMaps', true, false));">{$langMgmtMaps}</a></li>
 					<li><a class="underline" href="#" onclick="popupWindow('{$langMgmtShapes}', getSyncRequest(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', true, false));">{$langMgmtShapes}</a></li>
 				</ul>

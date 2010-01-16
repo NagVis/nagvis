@@ -98,6 +98,7 @@ $MHANDLER->regModule('UserMgmt');
 $MHANDLER->regModule('RoleMgmt');
 $MHANDLER->regModule('MainCfg');
 $MHANDLER->regModule('ManageShapes');
+$MHANDLER->regModule('ManageBackgrounds');
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

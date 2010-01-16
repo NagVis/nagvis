@@ -93,40 +93,6 @@ switch($_GET['myaction']) {
 		}
 	break;
 	/*
-	 * Create a new background image of the given color
-	 */
-	case 'mgt_image_create':
-		if(!isset($_POST['image_name']) || $_POST['image_name'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_name');
-		} elseif(!isset($_POST['image_color']) || $_POST['image_color'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_color');
-		} elseif(!isset($_POST['image_width']) || $_POST['image_width'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_width');
-		} elseif(!isset($_POST['image_height']) || $_POST['image_height'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image_height');
-		} else {
-			$BACKGROUND = new WuiBackground($CORE, $_POST['image_name'].'.png');
-			$BACKGROUND->createImage($_POST['image_color'], $_POST['image_width'], $_POST['image_height']);
-			
-			// Open the management page again
-			print("<script>window.history.back();</script>");
-		}
-	break;
-	/*
-	 * Delete the given background image
-	 */
-	case 'mgt_image_delete':
-		if(!isset($_POST['map_image']) || $_POST['map_image'] == '') {
-			echo $LANG->getText('mustValueNotSet', 'ATTRIBUTE~map_image');
-		} else {
-			$BACKGROUND = new WuiBackground($CORE, $_POST['map_image']);
-			$BACKGROUND->deleteImage();
-			
-			// Open the management page again
-			print("<script>window.history.back();</script>");
-		}
-	break;
-	/*
 	 * Upload a new background image
 	 */
 	case 'mgt_image_upload':

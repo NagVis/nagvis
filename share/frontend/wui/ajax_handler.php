@@ -190,35 +190,6 @@ switch($_GET['action']) {
 			echo json_encode($aRet);
 		}
 	break;
-	/*
-	 * Checks if the given IMAGE is used by any map
-	 */
-	case 'getMapImageInUse';
-		// These values are submited by WUI requests:
-		// $_GET['image']
-		
-		// Do some validations
-		if(!isset($_GET['image']) || $_GET['image'] == '') {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~image'));
-		} else {
-			// Input looks OK, handle the request...
-			
-			$aMaps = Array();
-			// Loop all maps
-			foreach($CORE->getAvailableMaps() AS $var => $val) {
-				// Initialize map configuration 
-				$MAPCFG = new WuiMapCfg($CORE, $val);
-				$MAPCFG->readMapConfig();
-				
-				// If the map_image is used in the map list the map
-				if($MAPCFG->getValue('global', 0,'map_image') == $_GET['image']) {
-					$aMaps[] = $val;
-				}
-			}
-			
-			echo json_encode($aMaps);
-		}
-	break;
 	/* Returns the formular contents for the WUI popup windows
 	 */
 	case 'getFormContents':
@@ -247,10 +218,6 @@ switch($_GET['action']) {
 			break;
 			case 'manageBackends':
 				$FRONTEND = new WuiBackendManagement($CORE);
-				$FRONTEND->getForm();
-			break;
-			case 'manageBackgrounds':
-				$FRONTEND = new WuiBackgroundManagement($CORE);
 				$FRONTEND->getForm();
 			break;
 			case 'manageMaps':
