@@ -432,6 +432,15 @@ function getFormParams(formId) {
 	for(var i = 0, len = aFields.length; i < len; i++) {
 		// Filter helper fields (NagVis WUI specific)
 		if(aFields[i].name.charAt(0) !== '_') {
+			// Skip options which use the default value
+			var oFieldDefault = document.getElementById('_'+aFields[i].name);
+			if(aFields[i] && oFieldDefault) {
+				if(aFields[i].value === oFieldDefault.value) {
+					continue;
+				}
+			}
+			oFieldDefault = null;
+
 			if(aFields[i].type == "hidden") {
 				sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
 			}
@@ -465,7 +474,14 @@ function getFormParams(formId) {
 	for(var i = 0, len = aFields.length; i < len; i++) {
 		// Filter helper fields (NagVis WUI specific)
 		if(aFields[i].name.charAt(0) !== '_') {
-			// Check if the value of the input helper field should be used (NagVis WUI specific)
+			// Skip options which use the default value
+			var oFieldDefault = document.getElementById('_'+aFields[i].name);
+			if(aFields[i] && oFieldDefault) {
+				if(aFields[i].value === oFieldDefault.value) {
+					continue;
+				}
+			}
+			oFieldDefault = null;
 			
 			// Maybe nothing is selected
 			var sel = -1;

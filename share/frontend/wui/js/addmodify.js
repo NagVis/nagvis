@@ -97,14 +97,14 @@ function validateMapCfgForm() {
 			if(document.addmodify.elements[i].name.charAt(0) !== '_') {
 				var sName = document.addmodify.elements[i].name;
 				
-				// Empty options which use the default value
+				// Skip options which use the default value
 				var oField = document.getElementById(sName);
 				var oFieldDefault = document.getElementById('_'+sName);
 				
 				if(oField && oFieldDefault) {
-					// Reset option only when the field and default value are equal
+					// Skip option only when the field and default value are equal
 					if(oField.value === oFieldDefault.value) {
-						oField.value = '';
+						continue;
 					}
 				}
 				
