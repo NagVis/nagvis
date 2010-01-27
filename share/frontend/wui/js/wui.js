@@ -421,8 +421,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		// Handle relative and absolute aligned labels
 		if(align === 'rel') {
 			// Calculate relative coordinates
-			var objX = document.getElementById('box_'+type+'_'+id).style.left.replace('px', '');
-			var objY = document.getElementById('box_'+type+'_'+id).style.top.replace('px', '');
+			var objX = parseInt(document.getElementById('box_'+type+'_'+id).style.left.replace('px', ''));
+			var objY = parseInt(document.getElementById('box_'+type+'_'+id).style.top.replace('px', ''));
 			
 			// Substract height of header menu here
 			objY += getHeaderHeight();
