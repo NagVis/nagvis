@@ -634,41 +634,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0') {
 			this.conf.label_y = this.conf.y;
 		}
-		
-		if(this.conf.label_width && this.conf.label_width !== 'auto') {
-			this.conf.label_width += 'px';	
-		}
-		
-		oLabelDiv = document.createElement('div');
-		oLabelDiv.setAttribute('id', this.conf.object_id + '-label');
-		oLabelDiv.setAttribute('class', 'object_label');
-		oLabelDiv.setAttribute('className', 'object_label');
-		oLabelDiv.style.background = this.conf.label_background;
-		oLabelDiv.style.borderColor = this.conf.label_border;
-		
-		oLabelDiv.style.position = 'absolute';
-		oLabelDiv.style.left = this.conf.label_x + 'px';
-		oLabelDiv.style.top = this.conf.label_y + 'px';
-		oLabelDiv.style.width = this.conf.label_width;
-		oLabelDiv.style.zIndex = this.conf.z+1;
-		oLabelDiv.style.overflow= 'visible';
-		
-		/**
-		 * IE workaround: The transparent for the color is not enough. The border
-		 * has really to be hidden.
-		 */
-		if(this.conf.label_border === 'transparent') {
-			oLabelDiv.style.borderStyle = 'none';
-		} else {
-			oLabelDiv.style.borderStyle = 'solid';
-		}
-		
-		// Create span for text and add label text
-		var oLabelSpan = document.createElement('span');
-		oLabelSpan.innerHTML = this.replaceLabelTextDynamicMacros();
-		oLabelDiv.appendChild(oLabelSpan);
-		oLabelSpan = null;
-		
-		return oLabelDiv;
+
+		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label', this.conf.label_background, this.conf.label_border, this.conf.label_x, this.conf.label_y, this.conf.z, this.conf.label_width, '', this.replaceLabelTextDynamicMacros());
 	}
 });

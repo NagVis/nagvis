@@ -81,45 +81,6 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseTextbox: function () {
-		var oLabelDiv = document.createElement('div');
-		oLabelDiv.setAttribute('id', this.conf.object_id+'label');
-		oLabelDiv.setAttribute('class', 'box');
-		oLabelDiv.setAttribute('className', 'box');
-		oLabelDiv.style.background = this.conf.background_color;
-		oLabelDiv.style.borderColor = this.conf.border_color;
-		
-		oLabelDiv.style.position = 'absolute';
-		oLabelDiv.style.left = this.conf.x + 'px';
-		oLabelDiv.style.top = this.conf.y + 'px';
-		
-		if(this.conf.w && this.conf.w !== '' && this.conf.h !== 'auto') {
-			oLabelDiv.style.width = this.conf.w+'px';
-		}
-		
-		if(this.conf.h && this.conf.h !== '' && this.conf.h !== 'auto') {
-			oLabelDiv.style.height = this.conf.h+'px';
-		}
-		
-		oLabelDiv.style.zIndex = this.conf.z + 1;
-		oLabelDiv.style.overflow = 'visible';
-		
-		/**
-		 * IE workaround: The transparent for the color is not enough. The border
-		 * has really to be hidden.
-		 */
-		if(this.conf.border_color == 'transparent') {
-			oLabelDiv.style.borderStyle = 'none';
-		} else {
-			oLabelDiv.style.borderStyle = 'solid';
-		}
-		
-		// Create span for text and add label text
-		var oLabelSpan = document.createElement('span');
-		oLabelSpan.innerHTML = this.conf.text;
-		
-		oLabelDiv.appendChild(oLabelSpan);
-		oLabelSpan = null;
-		
-		return oLabelDiv;
+		return drawNagVisTextbox(this.conf.object_id+'label', 'box', this.conf.background_color, this.conf.border_color, this.conf.x, this.conf.y, this.conf.z, this.conf.w, this.conf.h, this.conf.text);
 	}
 });

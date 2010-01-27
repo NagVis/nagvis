@@ -903,3 +903,52 @@ function hideStatusMessage() {
 	}
 }
 
+/**
+ * Creates a html box on the map. Used by textbox objects, labels and line labels
+ *
+ * @return  Object  Returns the div object of the textbox
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function drawNagVisTextbox(id, class, bgColor, borderColor, x, y, z, w, h, text) {
+		var oLabelDiv = document.createElement('div');
+		oLabelDiv.setAttribute('id', id);
+		oLabelDiv.setAttribute('class', class);
+		oLabelDiv.setAttribute('className', class);
+		oLabelDiv.style.background = bgColor;
+		oLabelDiv.style.borderColor = borderColor;
+		
+		oLabelDiv.style.position = 'absolute';
+		oLabelDiv.style.left = x + 'px';
+		oLabelDiv.style.top = y + 'px';
+		
+		if(w && w !== '' && w !== 'auto') {
+			oLabelDiv.style.width = w+'px';
+		}
+		
+		if(h && h !== '' && h !== 'auto') {
+			oLabelDiv.style.height = h+'px';
+		}
+		
+		oLabelDiv.style.zIndex = z + 1;
+		oLabelDiv.style.overflow = 'visible';
+		
+		/**
+		 * IE workaround: The transparent for the color is not enough. The border
+		 * has really to be hidden.
+		 */
+		if(borderColor == 'transparent') {
+			oLabelDiv.style.borderStyle = 'none';
+		} else {
+			oLabelDiv.style.borderStyle = 'solid';
+		}
+		
+		// Create span for text and add label text
+		var oLabelSpan = document.createElement('span');
+		oLabelSpan.innerHTML = text;
+		
+		oLabelDiv.appendChild(oLabelSpan);
+		oLabelSpan = null;
+		
+		return oLabelDiv;
+}
+
