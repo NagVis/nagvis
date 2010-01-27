@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.10"
+INSTALLER_VERSION="0.2.11"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -1127,6 +1127,9 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring custom map configuration files..."
 	copy "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "map configuration files"
 	
+	LINE="Restoring custom automap configuration files..."
+	copy "\/(__automap\.cfg)$" "etc/automaps" "automap configuration files"
+	
 	LINE="Restoring custom map images..."
 	copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
 	
@@ -1189,6 +1192,9 @@ if [ $NAGVIS_TAG -lt 01050000 ]; then
 	set_perm 775 "$NAGVIS_PATH/nagvis/var"
 	set_perm 664 "$NAGVIS_PATH/nagvis/var/*"
 else
+	# NagVis 1.5x has an own automaps dir
+	set_perm 775 "$NAGVIS_PATH/etc/automaps"
+	set_perm 664 "$NAGVIS_PATH/etc/automaps/*"
 	set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
 	set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/var"
