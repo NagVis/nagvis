@@ -35,7 +35,7 @@ class GlobalMapCfg {
 	protected $mapConfig;
 	
 	private $configFile = '';
-	private $cacheFile;
+	protected $cacheFile = '';
 	
 	// Array for config validation
 	protected $validConfig;
@@ -1157,6 +1157,10 @@ class GlobalMapCfg {
 		if($this->configFile === '') {
 			$this->setConfigFile($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$name.'.cfg');
 		}
+
+		if($this->cacheFile === '') {
+			$this->cacheFile = $this->CORE->getMainCfg()->getValue('paths','var').$name.'.cfg-'.CONST_VERSION.'-cache';
+		}
 		
 		// Initialize the map configuration cache
 		$this->initCache();
@@ -1239,8 +1243,8 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function initCache() {
-		if($this->name !== '') {
-			$this->CACHE = new GlobalFileCache($this->CORE, $this->configFile, $this->CORE->getMainCfg()->getValue('paths','var').$this->name.'.cfg-'.CONST_VERSION.'-cache');
+		if($this->cacheFile !== '') {
+			$this->CACHE = new GlobalFileCache($this->CORE, $this->configFile, $this->cacheFile);
 		}
 	}
 	

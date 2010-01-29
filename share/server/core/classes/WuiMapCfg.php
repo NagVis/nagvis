@@ -113,6 +113,9 @@ class WuiMapCfg extends GlobalMapCfg {
 		// is file writeable?
 		if($this->checkMapConfigWriteable($printErr)) {
 			if(unlink($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
+				// Also remove cache file
+				@unlink($this->cacheFile);
+				
 				return TRUE;
 			} else {
 				if($printErr) {
@@ -264,10 +267,14 @@ class WuiMapCfg extends GlobalMapCfg {
 			}
 			
 			// open file for writing and replace it
-		 	$fp = fopen($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg','w');
-		 	fwrite($fp,implode('',$file));
-		 	fclose($fp);
-		 			return TRUE;
+			$fp = fopen($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg','w');
+			fwrite($fp,implode('',$file));
+			fclose($fp);
+			
+			// Also remove cache file
+			@unlink($this->cacheFile);
+			
+			return TRUE;
 		} else {
 		 			return FALSE;
 		} 
