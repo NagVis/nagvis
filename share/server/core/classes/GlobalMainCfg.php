@@ -247,7 +247,7 @@ class GlobalMainCfg {
 					'default' => '10',
 					'depends_on' => 'hovermenu',
 					'depends_value' => 1,
-					'match' => MATCH_INTEGER),
+					'match' => MATCH_INTEGER_PRESIGN),
 				'hoverchildsorder' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'asc',

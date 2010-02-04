@@ -60,8 +60,8 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 	
 	if(rowHtmlCode != '' && oObj.members && oObj.members.length > 0) {
 		// Loop all child objects until all looped or the child limit is reached
-		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; i <= len1 && i < len2; i++) {
-			if(i < oObj.conf.hover_childs_limit) {
+		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; (len1 == -1 || (len1 >= 0 && i <= len1)) && i < len2; i++) {
+			if(len1 == -1 || (len1 >= 0 && i < len1)) {
 				// Try to catch some error
 				if(!oObj.members[i].conf) {
 					eventlog("hover-parsing", "critical", "Problem while parsing child in hover template (t:" & oObj.conf.type & " n:" & oObj.conf.name &")");
