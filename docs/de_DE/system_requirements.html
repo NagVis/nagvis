@@ -12,7 +12,7 @@
 </style>
 <![endif]-->
   </head>  
-<h1>Systemvoraussetzungen f&uuml;r NagVis 1.4</h1>
+<h1>Systemvoraussetzungen</h1>
 
 <h2>Nagios (installiert, konfiguriert, lauff&auml;hig)</h2>
 <p>Sie ben&ouml;tigen ein installiertes, konfiguriertes und lauff&auml;higes Nagios, damit NagVis funktioniert.
@@ -30,15 +30,33 @@ Die minimale PHP-Version ist 5.0.0
 <h2>ben&ouml;tigte PHP-Module</h2>
 <p>Neben dem PHP-Basis-Paket ben&ouml;tigen Sie noch die folgenden Module:</p>
 <ul>
-<li>php-gd</li>
-<li>php-gettext</li>
-<li>php-mysql</li>
-<li>php-mbstring</li>
-<li>php-session</li>
-<li>php-xml</li>
+<li>php5-gd</li>
+<li>php5-gettext</li>
+<li>php5-mbstring</li>
+<li>php5-session</li>
+<li>php5-json (integriert seit PHP 5.2)</li>
+<li>php5-pdo und pdo-sqlite (seit 1.5 f&uuml;r Authentifizierung/Autorisierung)</li>
 </ul>
 Anmerkung: m&ouml;glicherweise sind einige dieser Funktionen bereits in Ihrer PHP-Version enthalten.
 
+<h3>Spezielle Voraussetzungen f&uuml;r einzelne Backends</h3>
+<p>Die Backends verbinden sich mit externen Datenquellen und ben&ouml;tigen oftmals spezielle Module. Hier ist eine Liste f&uuml;r verschiedene Backends.</p>
+<strong>mklivestatus</strong>
+<ul>
+<li>php-socket</li> 
+</ul>
+<strong>ndomy</strong>
+<ul>
+<li>php-mysql</li> 
+</ul>
+<strong>merlinmy</strong>
+<ul>
+<li>php-mysql</li> 
+</ul>
+<strong>ndo2fs</strong>
+<ul>
+<li>php-xml</li> 
+</ul>
 <h2>Graphviz f&uuml;r die Automap-Funktionalit&auml;t</h2>
 <p>Die <a href="automap.html">Automap</a> basiert auf GraphViz. Sie brauchen es, wenn Sie das Automap-Feature nutzen m&ouml;chten. Wir empfehlen GraphViz >= 2.14 f&uuml;r die Automap (&auml;ltere Versionen (mit niedrigeren Versionsnummern) haben Probleme mit Truecolor-Rendering).</p>
 <p>GraphViz ist in einigen Distributionen enthalten. Wenn Sie kein vorgefertigtes Paket benutzen k&ouml;nnen, bekommen Sie GraphViz auf der <a href=http://www.graphviz.org>offiziellen GraphViz-Homepage</a>, und k&ouml;nnen es selbst kompilieren.</p>
