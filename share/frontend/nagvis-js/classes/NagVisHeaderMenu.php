@@ -270,6 +270,7 @@ class NagVisHeaderMenu {
 			'langOpen' => $this->CORE->getLang()->getText('Open'),
 			'langMap' => $this->CORE->getLang()->getText('Map'),
 			'langMapOptions' => $this->CORE->getLang()->getText('Map Options'),
+			'langMapManageTmpl' => $this->CORE->getLang()->getText('Manage Templates'),
 			'langMapAddIcon' => $this->CORE->getLang()->getText('Add Icon'),
 			'langMapAddLine' => $this->CORE->getLang()->getText('Add Line'),
 			'langLine' => $this->CORE->getLang()->getText('Line'),

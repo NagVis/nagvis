@@ -1151,7 +1151,10 @@ class GlobalMapCfg {
 			'template' => Array('type' => Array('must' => 0,
 					'match' => MATCH_OBJECTTYPE),
 				'name' => Array('must' => 1,
-					'match' => MATCH_STRING_NO_SPACE)));
+					'match' => MATCH_STRING_NO_SPACE),
+				'object_id' => Array('must' => 0,
+					'match' => MATCH_INTEGER,
+					'field_type' => 'hidden')));
 		
 		// Define the map configuration file when no one set until here
 		if($this->configFile === '') {
@@ -1291,14 +1294,16 @@ class GlobalMapCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function readMapConfig($onlyGlobal = 0) {
+	public function readMapConfig($onlyGlobal = 0, $resolveTemplates = true, $useCache = true) {
 		if($this->name != '') {
 			// Only use cache when there is
-			// a) When whole config file should be read
-			// b) Some valid cache file
-			// c) Some valid main configuration cache file
-			// d) This cache file newer than main configuration cache file
+			// a) The cache should be used
+			// b) When whole config file should be read
+			// c) Some valid cache file
+			// d) Some valid main configuration cache file
+			// e) This cache file newer than main configuration cache file
 			if($onlyGlobal == 0
+			   && $useCache === true
 			   && $this->CACHE->isCached() !== -1
 				 && $this->CORE->getMainCfg()->isCached() !== -1
 				 && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
@@ -1419,9 +1424,7 @@ class GlobalMapCfg {
 					if($onlyGlobal != 1) {
 						$this->getObjectDefaults();
 						
-						if(isset($this->mapConfig['template'])) {
-							// Remove the numeric indexes and replace them with the template name
-							$this->fixTemplateIndexes();
+						if(isset($this->mapConfig['template']) && $resolveTemplates == true) {
 							// Merge the objects with the linked templates
 							$this->mergeTemplates();
 						}
@@ -1430,7 +1433,9 @@ class GlobalMapCfg {
 					if($this->checkMapConfigIsValid(1)) {
 						if($onlyGlobal == 0) { 
 							// Build cache
-							$this->CACHE->writeCache($this->mapConfig, 1);
+							if($useCache === true) {
+								$this->CACHE->writeCache($this->mapConfig, 1);
+							}
 							
 							// The automap also uses this method, so handle the different type
 							if($this->type === 'automap') {
@@ -1462,18 +1467,20 @@ class GlobalMapCfg {
 	}
 	
 	/**
-	 * Remove the numeric indexes and replace them with the template name
+	 * Gets the numeric index of a template by the name
 	 *
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   String   Name of the template
+	 * @return  Integer  ID of the template
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fixTemplateIndexes() {
-		foreach($this->mapConfig['template'] AS $id => $element) {
-			if(isset($element['name']) && $element['name'] != '') {
-				$this->mapConfig['template'][$element['name']] = $element;
-				unset($this->mapConfig['template'][$id]);
-			}
+	public function getTemplateIdByName($name) {
+		foreach($this->mapConfig['template'] AS $id => $arr) {
+			if(isset($arr['name']) && $arr['name'] === $name) {
+				return $id;
+			} 
 		}
+		
+		return false;
 	}
 	
 	/**
@@ -1493,12 +1500,15 @@ class GlobalMapCfg {
 					if(isset($element['use']) && is_array($element['use'])) {
 						// loop all given templates
 						foreach($element['use'] AS &$templateName) {
-							if(isset($this->mapConfig['template'][$templateName]) && is_array($this->mapConfig['template'][$templateName])) {
+							$index = $this->getTemplateIdByName($templateName);
+							
+							if(isset($this->mapConfig['template'][$index]) && is_array($this->mapConfig['template'][$index])) {
 								// merge object array with template object array (except type and name attribute)
-								$tmpArray = $this->mapConfig['template'][$templateName];
+								$tmpArray = $this->mapConfig['template'][$index];
 								unset($tmpArray['type']);
 								unset($tmpArray['name']);
-								$this->mapConfig[$type][$id] = array_merge($tmpArray,$element);
+								unset($tmpArray['object_id']);
+								$this->mapConfig[$type][$id] = array_merge($tmpArray, $element);
 							}
 						}
 					}
@@ -1578,67 +1588,70 @@ class GlobalMapCfg {
 					}
 				}
 				
-				// loop given elements for checking: => all given attributes valid
-				foreach($element AS $key => $val) {
-					// check for valid attributes
-					if(!isset($this->validConfig[$type][$key])) {
-						// unknown attribute
-						if($printErr == 1) {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
-						}
-						return FALSE;
-					} elseif(isset($this->validConfig[$type][$key]['deprecated']) && $this->validConfig[$type][$key]['deprecated'] == 1) {
-						// deprecated option
-						if($printErr) {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
-						}
-						return FALSE;
-					} else {
-						// The object has a match regex, it can be checked
-						if(isset($this->validConfig[$type][$key]['match'])) {
-							if(is_array($val)) {
-								// This is an array
-								
-								// Loop and check each element
-								foreach($val AS $key2 => $val2) {
-									if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
-										// wrong format
+				// Don't check values in templates
+				if($type !== 'template') {
+					// loop given elements for checking: => all given attributes valid
+					foreach($element AS $key => $val) {
+						// check for valid attributes
+						if(!isset($this->validConfig[$type][$key])) {
+							// unknown attribute
+							if($printErr == 1) {
+								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+							}
+							return FALSE;
+						} elseif(isset($this->validConfig[$type][$key]['deprecated']) && $this->validConfig[$type][$key]['deprecated'] == 1) {
+							// deprecated option
+							if($printErr) {
+								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+							}
+							return FALSE;
+						} else {
+							// The object has a match regex, it can be checked
+							if(isset($this->validConfig[$type][$key]['match'])) {
+								if(is_array($val)) {
+									// This is an array
+									
+									// Loop and check each element
+									foreach($val AS $key2 => $val2) {
+										if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
+											// wrong format
+											if($printErr) {
+												new GlobalMessage('ERROR', $this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
+											}
+											return FALSE;
+										}
+									}
+								} else {
+									// This is a string value
+									
+									if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
+										// Wrong format
 										if($printErr) {
 											new GlobalMessage('ERROR', $this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
 										}
 										return FALSE;
 									}
 								}
-							} else {
-								// This is a string value
-								
-								if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
-									// Wrong format
-									if($printErr) {
-										new GlobalMessage('ERROR', $this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
-									}
-									return FALSE;
-								}
 							}
-						}
-						
-						// Check wether a object has line_type set and not view_type=line
-						// Update: Only check this when not in WUI!
-						// Update: Don't check this for stateless lines
-						// FIXME: This check should be removed in 1.5 or 1.6
-						if($type != 'line' && $key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
-						}
-						
-						// Check gadget options when object view type is gadget
-						// Update: Only check this when not in WUI!
-						if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url']) && !$this instanceof WuiMapCfg) {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('viewTypeGadgetButNoGadgetUrl', Array('MAP' => $this->getName(), 'TYPE' => $type)));
-						}
-						
-						// Check if the configured backend is defined in main configuration file
-						if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
+							
+							// Check wether a object has line_type set and not view_type=line
+							// Update: Only check this when not in WUI!
+							// Update: Don't check this for stateless lines
+							// FIXME: This check should be removed in 1.5 or 1.6
+							if($type != 'line' && $key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
+								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
+							}
+							
+							// Check gadget options when object view type is gadget
+							// Update: Only check this when not in WUI!
+							if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url']) && !$this instanceof WuiMapCfg) {
+								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('viewTypeGadgetButNoGadgetUrl', Array('MAP' => $this->getName(), 'TYPE' => $type)));
+							}
+							
+							// Check if the configured backend is defined in main configuration file
+							if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
+								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
+							}
 						}
 					}
 				}
@@ -1689,6 +1702,25 @@ class GlobalMapCfg {
 		} else {
 			return Array();
 		}
+	}
+	
+	/**
+	 * Gets a list of available templates with optional regex filtering
+	 * the templates are listed as keys
+	 *
+	 * @param   String  Filter regex
+	 * @return  Array	  List of templates as keys
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getTemplateNames($strMatch = NULL) {
+		$a = Array();
+		foreach($this->getDefinitions('template') AS $id => $aOpts) {
+			if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $aOpts['name']))) {
+				$a[$aOpts['name']] = true;
+			}
+		}
+		
+		return $a;
 	}
 	
 	/**

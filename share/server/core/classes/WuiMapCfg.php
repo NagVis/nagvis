@@ -114,7 +114,9 @@ class WuiMapCfg extends GlobalMapCfg {
 		if($this->checkMapConfigWriteable($printErr)) {
 			if(unlink($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 				// Also remove cache file
-				@unlink($this->cacheFile);
+				if(file_exists($this->cacheFile)) {
+					unlink($this->cacheFile);
+				}
 				
 				return TRUE;
 			} else {
@@ -255,7 +257,15 @@ class WuiMapCfg extends GlobalMapCfg {
 					$file[] = "\n";
 				}
 				$file[] = 'define '.$type." {\n";
-				$aKeys = $this->getValidTypeKeys($type);
+
+				// Templates need a special handling here cause they can have all types
+				// of options. So read all keys which are currently set
+				if($type !== 'template') {
+					$aKeys = $this->getValidTypeKeys($type);
+				} else {
+					$aKeys = array_keys($this->mapConfig[$type][$id]);
+				}
+				
 				foreach($aKeys As $key) {
 					$val = $this->getValue($type, $id, $key, TRUE);
 					if(isset($val) && $val != '') {
@@ -272,7 +282,9 @@ class WuiMapCfg extends GlobalMapCfg {
 			fclose($fp);
 			
 			// Also remove cache file
-			@unlink($this->cacheFile);
+			if(file_exists($this->cacheFile)) {
+				unlink($this->cacheFile);
+			}
 			
 			return TRUE;
 		} else {

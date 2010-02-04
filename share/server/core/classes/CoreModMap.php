@@ -44,6 +44,11 @@ class CoreModMap extends CoreModule {
 			'modifyObject' => REQUIRES_AUTHORISATION,
 			'createObject' => REQUIRES_AUTHORISATION,
 			'deleteObject' => REQUIRES_AUTHORISATION,
+			'manageTmpl' => REQUIRES_AUTHORISATION,
+			'getTmplOpts' => REQUIRES_AUTHORISATION,
+			'doTmplAdd' => REQUIRES_AUTHORISATION,
+			'doTmplModify' => REQUIRES_AUTHORISATION,
+			'doTmplDelete' => REQUIRES_AUTHORISATION,
 		);
 		
 		// Register valid objects
@@ -172,7 +177,6 @@ class CoreModMap extends CoreModule {
 					$aReturn = $this->handleResponseModifyObject();
 					
 					if($aReturn !== false) {
-						// Try to create the map
 						if($this->doModifyObject($aReturn)) {
 							if(isset($aReturn['refresh']) && $aReturn['refresh'] == 1) {
 								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been modified.'),
@@ -196,13 +200,12 @@ class CoreModMap extends CoreModule {
 					$aReturn = $this->handleResponseDeleteObject();
 					
 					if($aReturn !== false) {
-						// Try to create the map
 						if($this->doDeleteObject($aReturn)) {
 							// FIXME: Recode to GlobalMessage. But the particular callers like
 							//        suppress the success messages
 							$sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
 						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be modified.'));
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be deleted.'));
 							$sReturn = '';
 						}
 					} else {
@@ -236,10 +239,313 @@ class CoreModMap extends CoreModule {
 					$VIEW->setOpts($aVals);
 					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
+				case 'manageTmpl':
+					$aOpts = Array('map' => MATCH_MAP_NAME);
+					$aVals = $this->getCustomOptions($aOpts);
+					
+					$VIEW = new WuiViewMapManageTmpl($this->AUTHENTICATION, $this->AUTHORISATION);
+					$VIEW->setOpts($aVals);
+					$sReturn = json_encode(Array('code' => $VIEW->parse()));
+				break;
+				case 'getTmplOpts':
+					$aOpts = Array('map' => MATCH_MAP_NAME,
+					               'name' => MATCH_STRING_NO_SPACE);
+					$aVals = $this->getCustomOptions($aOpts);
+					
+					// Read map config but don't resolve templates and don't use the cache
+					$MAPCFG = new WuiMapCfg($this->CORE, $aVals['map']);
+					$MAPCFG->readMapConfig(0, 0, false);
+					
+					$aTmp = $MAPCFG->getDefinitions('template');
+					$aTmp = $aTmp[$MAPCFG->getTemplateIdByName($aVals['name'])];
+					unset($aTmp['type']);
+					unset($aTmp['object_id']);
+					
+					$sReturn = json_encode(Array('opts' => $aTmp));
+				break;
+				case 'doTmplAdd':
+					$aReturn = $this->handleResponseDoTmplAdd();
+					
+					if($aReturn !== false) {
+						if($this->doTmplAdd($aReturn)) {
+							// FIXME: Would be nice to have the object adding without reload of the page
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been added.'),
+							                  null,
+							                  null,
+							                  1);
+							$sReturn = '';
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be added.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
+				case 'doTmplModify':
+					$aReturn = $this->handleResponseDoTmplModify();
+					
+					if($aReturn !== false) {
+						if($this->doTmplModify($aReturn)) {
+							// FIXME: Would be nice to have the object adding without reload of the page
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been modified.'),
+							                  null,
+							                  null,
+							                  1);
+							$sReturn = '';
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be modified.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
+				case 'doTmplDelete':
+					$aReturn = $this->handleResponseDoTmplDelete();
+					
+					if($aReturn !== false) {
+						// Try to delete the template
+						if($this->doTmplDelete($aReturn)) {
+							// FIXME: Would be nice to have the object adding without reload of the page
+							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The template has been deleted.'),
+							                  null,
+							                  null,
+							                  1);
+						} else {
+							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The template could not be deleted.'));
+							$sReturn = '';
+						}
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
+						$sReturn = '';
+					}
+				break;
 			}
 		}
 		
 		return $sReturn;
+	}
+	
+	private function doTmplModify($a) {
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG->readMapConfig(0, 0, false);
+		
+		$id = $MAPCFG->getTemplateIdByName($a['opts']['name']);
+		
+		// set options in the array
+		foreach($a['opts'] AS $key => $val) {
+			$MAPCFG->setValue('template', $id, $key, $val);
+		}
+		
+		$MAPCFG->writeElement('template', $id);
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+		}
+		
+		return true;
+	}
+	
+	private function handleResponseDoTmplModify() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('name')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the map exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+			
+			$bValid = false;
+		}
+		
+		// Check if the template already exists
+		// Read map config but don't resolve templates and don't use the cache
+		$MAPCFG = new WuiMapCfg($this->CORE, $FHANDLER->get('map'));
+		$MAPCFG->readMapConfig(0, 0, false);
+		if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('A template with this name does not exist.'));
+			
+			$bValid = false;
+		}
+		$MAPCFG = null;
+		
+		// FIXME: Recode to FHANDLER
+		$aOpts = $_POST;
+		
+		// Remove the parameters which are not options of the object
+		unset($aOpts['submit']);
+		unset($aOpts['map']);
+		
+		// Transform the array to key => value form
+		$opts = Array('name' => $FHANDLER->get('name'));
+		foreach($aOpts AS $key => $a) {
+			if(substr($key, 0, 3) === 'opt' && isset($a['name']) && isset($a['value'])) {
+				$opts[$a['name']] = $a['value'];
+			}
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('map' => $FHANDLER->get('map'),
+			             'opts' => $opts);
+		} else {
+			return false;
+		}
+	}
+	private function doTmplDelete($a) {
+		// Read map config but don't resolve templates and don't use the cache
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG->readMapConfig(0, 0, false);
+		
+		$id = $MAPCFG->getTemplateIdByName($a['name']);
+		
+		// first delete element from array
+		$MAPCFG->deleteElement('template', $id);
+		// then write new array to file
+		$MAPCFG->writeElement('template', $id);
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+		}
+			
+		return true;
+	}
+	
+	private function handleResponseDoTmplDelete() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('name')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the map exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+			
+			$bValid = false;
+		}
+		
+		// Check if the template already exists
+		// Read map config but don't resolve templates and don't use the cache
+		$MAPCFG = new WuiMapCfg($this->CORE, $FHANDLER->get('map'));
+		$MAPCFG->readMapConfig(0, 0, false);
+		if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The template does not exist.'));
+			
+			$bValid = false;
+		}
+		$MAPCFG = null;
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('map' => $FHANDLER->get('map'),
+			             'name' => $FHANDLER->get('name'));
+		} else {
+			return false;
+		}
+	}
+	
+	private function doTmplAdd($a) {
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG->readMapConfig(0, 0, false);
+		
+		// append a new object definition to the map configuration
+		$elementId = $MAPCFG->addElement('template', $a['opts']);
+		$MAPCFG->writeElement('template', $elementId);
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock()) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+		}
+		
+		return true;
+	}
+	
+	private function handleResponseDoTmplAdd() {
+		$bValid = true;
+		// Validate the response
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		
+		// Check for needed params
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+			$bValid = false;
+		}
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('name')) {
+			$bValid = false;
+		}
+		
+		//FIXME: All fields: Regex check
+		
+		// Check if the map exists
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+			
+			$bValid = false;
+		}
+		
+		// Check if the template already exists
+		// Read map config but don't resolve templates and don't use the cache
+		$MAPCFG = new WuiMapCfg($this->CORE, $FHANDLER->get('map'));
+		$MAPCFG->readMapConfig(0, 0, false);
+		if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) > 0) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('A template with this name already exists.'));
+			
+			$bValid = false;
+		}
+		$MAPCFG = null;
+		
+		// FIXME: Recode to FHANDLER
+		$aOpts = $_POST;
+		
+		// Remove the parameters which are not options of the object
+		unset($aOpts['submit']);
+		unset($aOpts['map']);
+		unset($aOpts['name']);
+		
+		// Transform the array to key => value form
+		$opts = Array('name' => $FHANDLER->get('name'));
+		foreach($aOpts AS $key => $a) {
+			if(substr($key, 0, 3) === 'opt' && isset($a['name']) && isset($a['value'])) {
+				$opts[$a['name']] = $a['value'];
+			}
+		}
+		
+		// Store response data
+		if($bValid === true) {
+			// Return the data
+			return Array('map' => $FHANDLER->get('map'),
+			             'opts' => $opts);
+		} else {
+			return false;
+		}
 	}
 	
 	private function doDeleteObject($a) {
