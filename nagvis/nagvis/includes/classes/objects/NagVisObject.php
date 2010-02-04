@@ -363,7 +363,7 @@ class NagVisObject {
 		$iNumObjects = count($aTmpMembers);
 		
 		// Loop all child object until all looped or the child limit is reached
-		for($i = 0, $iEnum = 0; $iEnum <= $this->hover_childs_limit && $i < $iNumObjects; $i++) {
+		for($i = 0, $iEnum = 0; (($this->hover_childs_limit >= 0 && $iEnum <= $this->hover_childs_limit) || $this->hover_childs_limit == -1) && $i < $iNumObjects; $i++) {
 			$sType = $aTmpMembers[$i]->getType();
 			
 			// Only get the member when this is no loop

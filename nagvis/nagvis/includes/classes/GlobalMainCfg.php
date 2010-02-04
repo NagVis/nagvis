@@ -239,7 +239,7 @@ class GlobalMainCfg {
 				'hoverchildslimit' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '10',
-					'match' => MATCH_INTEGER),
+					'match' => MATCH_INTEGER_PRESIGN),
 				'hoverchildsorder' => Array('must' => 0,
 					'editable' => 1,
 					'default' => 'asc',

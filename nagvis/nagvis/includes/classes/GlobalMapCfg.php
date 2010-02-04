@@ -175,7 +175,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'hover_childs_limit' => Array('must' => 0,
 					'default' => $this->CORE->MAINCFG->getValue('defaults', 'hoverchildslimit'),
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_INTEGER_PRESIGN,
 					'depends_on' => 'hover_menu',
 					'depends_value' => '1'),
 				'hover_childs_order' => Array('must' => 0,
@@ -352,7 +352,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'hover_childs_limit' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_INTEGER_PRESIGN,
 					'depends_on' => 'hover_menu',
 					'depends_value' => '1'),
 				
@@ -505,7 +505,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'hover_childs_limit' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_INTEGER_PRESIGN,
 					'depends_on' => 'hover_menu',
 					'depends_value' => '1'),
 				
@@ -675,7 +675,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'hover_childs_limit' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_INTEGER_PRESIGN,
 					'depends_on' => 'hover_menu',
 					'depends_value' => '1'),
 				
@@ -823,7 +823,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'hover_childs_limit' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_INTEGER_PRESIGN,
 					'depends_on' => 'hover_menu',
 					'depends_value' => '1'),
 				
@@ -965,7 +965,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'hover_childs_limit' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_INTEGER_PRESIGN,
 					'depends_on' => 'hover_menu',
 					'depends_value' => '1'),
 				
