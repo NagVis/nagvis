@@ -637,7 +637,7 @@ class GlobalMapCfg {
 					'depends_value' => 'gadget'),
 				'gadget_opts' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_STRING_NO_SPACE,
+					'match' => MATCH_GADGET_OPT,
 					'depends_on' => 'view_type',
 					'depends_value' => 'gadget'),
 				
