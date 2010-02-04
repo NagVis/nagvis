@@ -144,11 +144,11 @@ class GlobalFrontendMessageBox {
 		$this->page .= '      </tr>'."\n";
 		$this->page .= '      <tr height="32">'."\n";
 		$this->page .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
-		$this->page .= '           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
+		$this->page .= '           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.strtolower($this->type).'.png"/>'."\n";
 		$this->page .= '         </th>'."\n";
 		$this->page .= '         <th class="'.$this->type.'">'.$this->title.'</td>'."\n";
 		$this->page .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
-		$this->page .= '           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.$this->type.'.png"/>'."\n";
+		$this->page .= '           <img src="'.$this->pathHtmlBase.'/nagvis/images/internal/msg_'.strtolower($this->type).'.png"/>'."\n";
 		$this->page .= '         </th>'."\n";
 		$this->page .= '       </tr>'."\n";
 		$this->page .= '       <tr>'."\n";

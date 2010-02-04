@@ -90,7 +90,7 @@ function frontendMessage(oMessage) {
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+sBoxType+'.png';
+	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+sBoxType.toLowerCase()+'.png';
 	
 	oCell.appendChild(oImg);
 	oImg = null;
@@ -112,7 +112,7 @@ function frontendMessage(oMessage) {
 	oCell.style.width = '60px';
 	
 	oImg = document.createElement('img');
-	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+sBoxType+'.png';
+	oImg.src = oGeneralProperties.path_htmlbase+'/nagvis/images/internal/msg_'+sBoxType.toLowerCase()+'.png';
 	
 	oCell.appendChild(oImg);
 	oImg = null;
