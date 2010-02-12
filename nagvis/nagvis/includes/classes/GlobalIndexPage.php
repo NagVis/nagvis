@@ -167,20 +167,25 @@ class GlobalIndexPage {
 					}
 					
           $fileName = $MAPCFG->BACKGROUND->getFileName();
-					if($this->CORE->checkGd(0) && $fileName != '' && $fileName != 'none') {
-						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-						$sThumbPath = $this->CORE->MAINCFG->getValue('paths','var').$sThumbFile;
-						$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$sThumbFile;
-						
-						// Only create a new thumb when there is no cached one
-						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-						if($FCACHE->isCached() === -1) {
-							$image = $this->createThumbnail($imgPath, $sThumbPath);
+					
+					if($fileName != '' && $fileName != 'none') {	
+						if($this->CORE->checkGd(0)) {
+							$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
+							$sThumbPath = $this->CORE->MAINCFG->getValue('paths','var').$sThumbFile;
+							$sThumbPathHtml = $this->CORE->MAINCFG->getValue('paths','htmlvar').$sThumbFile;
+							
+							// Only create a new thumb when there is no cached one
+							$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+							if($FCACHE->isCached() === -1) {
+								$image = $this->createThumbnail($imgPath, $sThumbPath);
+							}
+							
+							$image = $sThumbPathHtml;
+						} else {
+							$image = $imgPathHtml;
 						}
-						
-						$image = $sThumbPathHtml;
 					} else {
-						$image = $imgPathHtml;
+						$image = '';
 					}
 					
 					$arr = $MAP->MAPOBJ->parseJson();
