@@ -479,7 +479,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.conf.label_y = this.conf.y;
 		}
 		
-		if(this.conf.label_width && this.conf.label_width !== 'auto') {
+		if(this.conf.label_width && this.conf.label_width !== 'auto' && this.conf.label_width !== '') {
 			this.conf.label_width += 'px';	
 		}
 		
