@@ -494,7 +494,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oLabelDiv.style.left = this.conf.label_x + 'px';
 		oLabelDiv.style.top = this.conf.label_y + 'px';
 		oLabelDiv.style.width = this.conf.label_width;
-		oLabelDiv.style.zIndex = this.conf.z+1;
+		oLabelDiv.style.zIndex = parseInt(this.conf.z)+1;
 		oLabelDiv.style.overflow= 'visible';
 		
 		/**

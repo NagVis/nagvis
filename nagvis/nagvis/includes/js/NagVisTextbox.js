@@ -92,7 +92,7 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 		oLabelDiv.style.left = this.conf.x+'px';
 		oLabelDiv.style.top = this.conf.y+'px';
 		oLabelDiv.style.width = this.conf.w+'px';
-		oLabelDiv.style.zIndex = this.conf.z+1;
+		oLabelDiv.style.zIndex = this.conf.z;
 		oLabelDiv.style.overflow= 'visible';
 		
 		/**
