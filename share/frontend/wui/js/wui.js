@@ -34,7 +34,7 @@ var myshape = null;
 var myshape_background = null;
 var myshapex = 0;
 var myshapey = 0;
-var objid = 0;
+var objid = -1;
 var viewType = '';
 
 /**
@@ -327,19 +327,21 @@ function get_click_pos(e) {
 		}
 		
 		follow_mouse = false;
+		var sUrl;
 		if(action_click == 'add' || action_click == 'clone') {
-			link = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
+			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
 			
-			if(action_click == 'add') {
-				link += '&clone='+objid;
+			if(action_click == 'clone' && objid !== -1) {
+				sUrl += '&clone='+objid;
 			}
-		} else if(action_click == 'modify') {
-			link = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
+		} else if(action_click == 'modify' && objid !== -1) {
+			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
 		
 		// FIXME: Title "+get_label('properties')+"
-		popupWindow('TITLE', getSyncRequest(link, true, false));
+		popupWindow('TITLE', getSyncRequest(sUrl, true, false));
 		
+		objid = -1;
 		cpt_clicks = -1;
 	}	
 }
