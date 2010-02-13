@@ -120,7 +120,7 @@ class WuiViewMapAddModify {
 			break;
 			
 			case 'add':
-				if($this->aOpts['clone'] !== '') {
+				if(isset($this->aOpts['clone']) && $this->aOpts['clone'] != '') {
 					// Get the options of the object to clone from map
 					foreach($this->MAPCFG->getValidTypeKeys($this->aOpts['type']) as $i => $key) {
 						if($key !== 'x' && $key !== 'y' && $key !== 'y' && $key !== 'object_id') {
