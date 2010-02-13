@@ -171,7 +171,7 @@ class NagVisHeaderMenu {
 					$aAutomaps[$mapName]['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
 					
 					// Add defaultparams to map selection
-					$aAutomaps[$mapName]['urlParams'] = str_replace('&', '&amp;', $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'));
+					$aAutomaps[$mapName]['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
 					
 					// auto select current map
 					if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {

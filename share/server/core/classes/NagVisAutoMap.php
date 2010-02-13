@@ -75,6 +75,20 @@ class NagVisAutoMap extends GlobalMap {
 		parent::__construct($CORE, $MAPCFG);
 
 		$this->name = $this->MAPCFG->getName();
+		
+		
+		// Fetch option array from defaultparams string (extract variable 
+		// names and values)
+		$params = explode('&', $this->MAPCFG->getValue('global', 0, 'default_params'));
+		unset($params[0]);
+		
+		foreach($params AS $set) {
+			$arrSet = explode('=',$set);
+			// Only load default option when the option has not been set before
+			if(!isset($opts[$arrSet[0]])) {
+				$prop[$arrSet[0]] = $arrSet[1];
+			}
+		}
 
 		// Set the preview option
 		if(isset($prop['preview']) && $prop['preview'] != '') {

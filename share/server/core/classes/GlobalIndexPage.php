@@ -65,25 +65,7 @@ class GlobalIndexPage {
 			}
 			
 			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
-				$opts = Array();
-				
-				// Fetch option array from defaultparams string (extract variable 
-				// names and values)
-				$params = explode('&', $this->CORE->getMainCfg()->getValue('automap','defaultparams'));
-				unset($params[0]);
-				
-				foreach($params AS &$set) {
-					$arrSet = explode('=',$set);
-					$opts[$arrSet[0]] = $arrSet[1];
-				}
-				
-				// Save the automap name to use
-				$opts['automap'] = $mapName;
-				
-				// Save the preview mode
-				$opts['preview'] = 1;
-				
-				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, $opts, !IS_VIEW);
+				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1, !IS_VIEW);
 				
 				// Apply default configuration to object
 				$objConf = Array();
@@ -105,7 +87,7 @@ class GlobalIndexPage {
 						$class = '';
 						$url = '';
 						
-						$url = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$this->CORE->getMainCfg()->getValue('automap','defaultparams');
+						$url = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue('global', 0, 'default_params');
 						
 						$summaryOutput = $MAP->MAPOBJ->getSummaryOutput();
 					} else {

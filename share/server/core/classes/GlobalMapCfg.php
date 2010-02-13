@@ -74,6 +74,9 @@ class GlobalMapCfg {
 				'background_color' => Array('must' => 0,
 					'default' => $this->CORE->getMainCfg()->getValue('defaults', 'backgroundcolor'),
 					'match' => MATCH_COLOR),
+				'default_params' => Array('must' => 0,
+					'default' => $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'),
+					'match' => MATCH_STRING_URL),
 				
 				'context_menu' => Array('must' => 0,
 					'default' => $this->CORE->getMainCfg()->getValue('defaults', 'contextmenu'),
