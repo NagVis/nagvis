@@ -131,7 +131,7 @@ class WuiViewEditMainCfg {
 							$ret .= '<td class="tdfield"></td>';
 						} else {
 							$ret .= '<td class="tdfield">';
-							$ret .= "<img style=\"cursor:help\" src=\"./images/internal/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($propname)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$propname]['default'].")')\" />";
+							$ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($propname)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$propname]['default'].")')\" />";
 							$ret .= '</td>';
 						}
 						
