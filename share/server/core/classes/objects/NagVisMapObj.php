@@ -62,14 +62,28 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$this->alias = $this->MAPCFG->getAlias();
 		$this->type = 'map';
 		$this->iconset = 'std_medium';
-		$this->members = Array();
+		
 		$this->linkedMaps = Array();
 		$this->isSummaryObject = false;
 		$this->isView = $bIsView;
 		
+		$this->clearMembers();
+		
 		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
 		
 		parent::__construct($CORE, $BACKEND);
+	}
+	
+	/**
+	 * PUBLIC clearMembers()
+	 *
+	 * Clears the map
+	 *
+	 * @return	Array	Array with map objects
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function clearMembers() {
+		$this->members = Array();
 	}
 	
 	/**
@@ -282,7 +296,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
-		$this->members[] = &$OBJ;
+		$this->members[] = $OBJ;
 		
 		foreach($OBJ->getChildsAndParents() AS $OBJ1) {
 			/*

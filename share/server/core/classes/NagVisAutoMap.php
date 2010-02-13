@@ -213,6 +213,9 @@ class NagVisAutoMap extends GlobalMap {
 			if(isset($this->parentLayers) && $this->parentLayers != 0) {
 				$this->filterParentObjectTreeByState();
 			}
+			
+			$this->MAPOBJ->clearMembers();
+			$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		}
 	}
 	
@@ -591,6 +594,13 @@ class NagVisAutoMap extends GlobalMap {
 	private function filterParentObjectTreeByState() {
 		$nonProblemHosts = Array();
 		
+		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		
+		foreach($this->arrMapObjects AS $OBJ) {
+			if($stateWeight[$OBJ->getSummaryState()] > $stateWeight['OK']) {
+				$nonProblemHosts[] = $OBJ->getName();
+			}
+		}
 		
 		$this->rootObject->filterParents($nonProblemHosts);
 	}
@@ -609,11 +619,10 @@ class NagVisAutoMap extends GlobalMap {
 		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
 		foreach($this->arrMapObjects AS $OBJ) {
-			if($OBJ->getSummaryState() > $stateWeight['OK']) {
+			if($stateWeight[$OBJ->getSummaryState()] > $stateWeight['OK']) {
 				$nonProblemHosts[] = $OBJ->getName();
 			}
 		}
-		print_r($nonProblemHosts);
 		
 		$this->rootObject->filterChilds($nonProblemHosts);
 	}
