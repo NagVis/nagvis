@@ -282,7 +282,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
-		$this->members[] = $OBJ;
+		$this->members[] = &$OBJ;
 		
 		foreach($OBJ->getChildsAndParents() AS $OBJ1) {
 			/*

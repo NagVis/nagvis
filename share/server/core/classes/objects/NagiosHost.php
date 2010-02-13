@@ -228,10 +228,10 @@ class NagiosHost extends NagVisStatefulObject {
 		}
 	}
 	/**
-	 * PUBLIC filterChilds()
+	 * PUBLIC filterParents()
 	 *
-	 * Filters the children depending on the allowed hosts list. All objects which
-	 * are not in the list and are no parent of a host in this list will be
+	 * Filters the parents depending on the allowed hosts list. All objects which
+	 * are not in the list and are no child of a host in this list will be
 	 * removed from the map.
 	 *
 	 * @param	Array	List of allowed hosts

@@ -41,6 +41,7 @@ class NagVisAutoMap extends GlobalMap {
 	private $renderMode;
 	private $ignoreHosts;
 	private $filterGroup;
+	private $filterByState;
 	
 	private $rootObject;
 	private $arrMapObjects;
@@ -164,6 +165,12 @@ class NagVisAutoMap extends GlobalMap {
 			$this->filterGroup = '';
 		}
 		
+		if(isset($prop['filterByState']) && $prop['filterByState'] != '') {
+			$this->filterByState = $prop['filterByState'];
+		} else {
+			$this->filterByState = '';
+		}
+		
 		// Get "root" host object
 		$this->fetchHostObjectByName($this->root);
 		
@@ -198,6 +205,15 @@ class NagVisAutoMap extends GlobalMap {
 		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG, $bIsView);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
 		$this->MAPOBJ->fetchState();
+		
+		if($this->filterByState != '') {
+			$this->filterChildObjectTreeByState();
+			
+			// Filter the parent object tree too when enabled
+			if(isset($this->parentLayers) && $this->parentLayers != 0) {
+				$this->filterParentObjectTreeByState();
+			}
+		}
 	}
 	
 	/**
@@ -562,6 +578,44 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	private function getParentObjectTree() {
 		$this->rootObject->fetchParents($this->parentLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
+	}
+	
+	/**
+	 * PRIVATE filterParentObjectTreeByState()
+	 *
+	 * Filter the parent object tree by state. Only showing objects which
+	 * have some problem.
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function filterParentObjectTreeByState() {
+		$nonProblemHosts = Array();
+		
+		
+		$this->rootObject->filterParents($nonProblemHosts);
+	}
+	
+	/**
+	 * PRIVATE filterChildObjectTreeByState()
+	 *
+	 * Filter the child object tree by state. Only showing objects which
+	 * have some problem.
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function filterChildObjectTreeByState() {
+		$nonProblemHosts = Array();
+		
+		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		
+		foreach($this->arrMapObjects AS $OBJ) {
+			if($OBJ->getSummaryState() > $stateWeight['OK']) {
+				$nonProblemHosts[] = $OBJ->getName();
+			}
+		}
+		print_r($nonProblemHosts);
+		
+		$this->rootObject->filterChilds($nonProblemHosts);
 	}
 	
 	/**

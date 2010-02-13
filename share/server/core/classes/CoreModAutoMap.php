@@ -42,7 +42,8 @@ class CoreModAutoMap extends CoreModule {
 		               'width' => MATCH_INTEGER_EMPTY,
 		               'height' => MATCH_INTEGER_EMPTY,
 		               'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
-		               'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY);
+		               'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'filterByState' => MATCH_STRING_NO_SPACE_EMPTY);
 		
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
