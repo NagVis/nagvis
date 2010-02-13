@@ -320,14 +320,20 @@ class WuiViewMapAddModify {
 							$backendId = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],'backend_id');
 							$selected = NULL;
 							
-							$ret .= "<script type='text/Javascript'>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE)."');</script>";
-							if(in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->aOpts['type']))) {
-								$ret .= "<script type='text/Javascript'>getServices('".$backendId."', '".$this->aOpts['type']."', '".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE)."','service_description','".$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],'service_description',TRUE)."');</script>";
+							if($this->aOpts['do'] == 'modify') {
+								$sSelected = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+							} else {
+								$sSelected = '';
+							}
+							
+							$ret .= "<script type='text/Javascript'>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$sSelected."');</script>";
+							if($sSelected != '' && in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->aOpts['type']))) {
+								$ret .= "<script type='text/Javascript'>getServices('".$backendId."', '".$this->aOpts['type']."', '".$sSelected."','service_description','".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', TRUE)."');</script>";
 							}
 							
 							if($propname == 'host_name') {
 								if($this->aOpts['type'] == 'service') {
-									$onChange = "getServices('".$backendId."','".$this->aOpts['type']."',this.value,'service_description','".$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE)."');validateMapConfigFieldValue(this)";
+									$onChange = "getServices('".$backendId."','".$this->aOpts['type']."',this.value,'service_description','".$sSelected."');validateMapConfigFieldValue(this)";
 								} else {
 									$onChange = 'validateMapConfigFieldValue(this)';
 								}
@@ -335,6 +341,11 @@ class WuiViewMapAddModify {
 								$onChange = 'validateMapConfigFieldValue(this)';
 							}
 						break;
+					}
+					
+					// Reset selected when not modifying (e.g. adding)
+					if($this->aOpts['do'] != 'modify') {
+						$selected = '';
 					}
 					
 					// Print this when it is still a dropdown
@@ -359,10 +370,17 @@ class WuiViewMapAddModify {
 				break;
 				
 				case 'boolean':
-					$value = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+					if($this->aOpts['do'] == 'modify') {
+						$value = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+					} else {
+						$value = '';
+					}
 					
-					// display a listbox with "yes/no" for boolean options 
-					$options = Array(Array('label' => $this->CORE->getLang()->getText('yes'), 'value'=>'1'), Array('label' => $this->CORE->getLang()->getText('no'), 'value'=>'0'));
+					$options = Array(
+						Array('label' => $this->CORE->getLang()->getText('yes'), 'value' => '1'), 
+						Array('label' => $this->CORE->getLang()->getText('no'), 'value' => '0')
+					);
+					
 					$ret .= $FORM->getSelectLine($propname, $propname, $options, $value, $prop['must'], 'validateMapConfigFieldValue(this)', '', $style, $class);
 					
 					// Toggle depending fields
@@ -377,16 +395,21 @@ class WuiViewMapAddModify {
 				
 				case 'text':
 					// display a simple textbox
-					$value = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
-					
-					if(is_array($value)) {
-						$value = implode(',',$value);
+					if($this->aOpts['do'] == 'modify') {
+						$value = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+						
+						if(is_array($value)) {
+							$value = implode(',', $value);
+						}
+						
+						// Escape some bad chars
+						$value = str_replace('"','&quot;', $value);
+						$value = str_replace('\"','&quot;', $value);
+						$value = str_replace('\\\'','\'', $value);
+						
+					} else {
+						$value = '';
 					}
-					
-					// Escape some bad chars
-					$value = str_replace('"','&quot;', $value);
-					$value = str_replace('\"','&quot;', $value);
-					$value = str_replace('\\\'','\'', $value);
 					
 					$ret .= $FORM->getInputLine($propname, $propname, $value, $prop['must'], 'validateMapConfigFieldValue(this)', $style, $class);
 					
