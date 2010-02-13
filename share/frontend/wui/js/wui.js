@@ -327,8 +327,12 @@ function get_click_pos(e) {
 		}
 		
 		follow_mouse = false;
-		if(action_click == 'add') {
+		if(action_click == 'add' || action_click == 'clone') {
 			link = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
+			
+			if(action_click == 'add') {
+				link += '&clone='+objid;
+			}
 		} else if(action_click == 'modify') {
 			link = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}

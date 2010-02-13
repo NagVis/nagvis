@@ -219,7 +219,8 @@ class CoreModMap extends CoreModule {
 					               'type' => MATCH_OBJECTTYPE,
 					               'id' => MATCH_INTEGER_EMPTY,
 					               'viewType' => MATCH_VIEW_TYPE_SERVICE_EMPTY,
-					               'coords' => MATCH_STRING_NO_SPACE_EMPTY);
+					               'coords' => MATCH_STRING_NO_SPACE_EMPTY,
+					               'clone' => MATCH_INTEGER_EMPTY);
 					$aVals = $this->getCustomOptions($aOpts);
 					
 					// Initialize unset optional attributes
@@ -233,6 +234,10 @@ class CoreModMap extends CoreModule {
 					
 					if(!isset($aVals['viewType'])) {
 						$aVals['viewType'] = '';
+					}
+					
+					if(!isset($aVals['clone'])) {
+						$aVals['clone'] = '';
 					}
 					
 					$VIEW = new WuiViewMapAddModify($this->AUTHENTICATION, $this->AUTHORISATION);

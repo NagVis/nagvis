@@ -638,20 +638,27 @@ class WuiMap extends GlobalMap {
 		$tooltipText .= "<ul class='nav'>";
 		
 		// Edit link
-		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/modify.png)'"
+		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/modify.png)'"
 		  ." href=\"#\" onclick=\"popupWindow('".$this->CORE->getLang()->getText('change')."',"
 			."getSyncRequest('".$this->CORE->getMainCfg()->getValue('paths', 'htmlbase')."/server/core/ajax_handler.php?mod=Map&act=addModify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."',true,false));contextHide();\">"
 			."<span>".$this->CORE->getLang()->getText('change')."</span></a></li>";
 		
-		// Position/Size link on textboxes/lines
+		// Position/Size link on lines
 		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
-			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/move.png)'"
+			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/move.png)'"
 						." href=\"javascript:objid=".$obj['id'].";get_click('".$obj['type']."',2,'modify');\" onclick=\"contextHide();\">"
 						."<span>".$this->CORE->getLang()->getText('positionSize')."</span></a></li>";			
 		}
 		
+		// Show clone link only for icons
+		if(isset($obj['view_type']) && $obj['view_type'] == 'icon') {
+			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/clone.png)'"
+						." href=\"javascript:get_click('".$obj['type']."', 1, 'clone');\" onclick=\"contextHide();\">"
+						."<span>".$this->CORE->getLang()->getText('Clone')."</span></a></li>";
+		}
+		
 		// Delete link
-		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/internal/delete.png)'"
+		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/delete.png)'"
 		  ." href='#' onclick='deleteMapObject(\"box_".$obj['type']."_".$obj['id']."\");contextHide();return false;'>"
 		  ."<span>".$this->CORE->getLang()->getText('delete')."</span></a></li>";
 		
