@@ -65,7 +65,7 @@ class GlobalIndexPage {
 			}
 			
 			if($MAPCFG->getValue('global',0, 'show_in_lists') == 1) {
-				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1, !IS_VIEW);
+				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
 				
 				// Apply default configuration to object
 				$objConf = Array();
