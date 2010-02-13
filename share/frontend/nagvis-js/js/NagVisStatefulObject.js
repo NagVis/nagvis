@@ -502,10 +502,14 @@ var NagVisStatefulObject = NagVisObject.extend({
 		// Get the border color depending on ack/downtime
 		if(this.conf.summary_problem_has_been_acknowledged == 1) {
 			colorBorder = '#666666';
+			
+			colorFill = lightenColor(colorFill, 100, 100, 100);
 		}
 		
 		if(this.conf.summary_in_downtime == 1) {
 			colorBorder = '#666666';
+			
+			colorFill = lightenColor(colorFill, 100, 100, 100);
 		}
 		
 		// Parse the line object

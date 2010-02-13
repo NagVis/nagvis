@@ -981,3 +981,25 @@ function drawNagVisTextbox(id, class, bgColor, borderColor, x, y, z, w, h, text,
 		return oLabelDiv;
 }
 
+/**
+ * Scales a hex color down/up
+ *
+ * @return  String  New and maybe scaled hex code
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function lightenColor(code, rD, gD, bD) {
+	var r = parseInt(code.substring(1, 3), 16);
+	var g = parseInt(code.substring(3, 5), 16);
+	var b = parseInt(code.substring(5, 7), 16);
+	
+	r += rD;  if (r > 255) r = 255;  if (r < 0) r = 0;
+	g += gD;  if (g > 255) g = 255;  if (g < 0) g = 0;
+	b += bD;  if (b > 255) b = 255;  if (b < 0) b = 0;
+	
+	code  = r.length < 2 ? "0"+r.toString(16) : r.toString(16);
+	code += g.length < 2 ? "0"+g.toString(16) : g.toString(16);
+	code += b.length < 2 ? "0"+b.toString(16) : b.toString(16);
+	
+	return "#" + code.toUpperCase();
+}
+	
