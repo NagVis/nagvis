@@ -25,7 +25,7 @@
 			Default values which are inherited to the maps and its objects</li>
 		<li>
 			<a href="#index">index</a><br />
-			Options to configure the Overview page of NagVis <font color="#ff0000">(New in 1.4)</font></li>
+			Options to configure the Overview page of NagVis </li>
 		<li>
 			<a href="#automap">automap</a><br />
 			Options for the Automap</li>
@@ -34,7 +34,7 @@
 			Options for the WUI</li>
 		<li>
 			<a href="#worker">worker</a><br />
-			Options for the Worker <font color="#ff0000">(New in 1.4)</font></li>
+			Options for the Worker </li>
 		<li>
 			<a href="#backend">backend_*</a><br />
 			Backend definitions</li>
@@ -61,7 +61,7 @@
 		<td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-		<td>dateformat</td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date()</a> function of php</td>
+		<td>dateformat</td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date</a> function of php</td>
 		</tr>
 		<tr>
 		<td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font></td>
@@ -78,7 +78,7 @@
 		<td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can controll the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-		<td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) (<font color="#ff0000">New in 1.4</font>)</td>
+		<td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
 		</tr>
 		<tr>
 		<td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication informations from the user. On delivery there is no other logon module avialable. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
@@ -134,40 +134,40 @@
 		<td>backgroundcolor</td><td>transparent</td><td>Default background color of maps </td>
 		</tr>
 		<tr>
-		<td>contextmenu</td><td>0</td><td>Enable/Disable the context menu on your map objects. (<font color="#ff0000">New in 1.4</font>)</td>
+		<td>contextmenu</td><td>0</td><td>Enable/Disable the context menu on your map objects. </td>
 		</tr>
 		<tr>
-		<td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. (<font color="#ff0000">New in 1.4</font>)</td>
+		<td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. </td>
 		</tr>
 		<tr>
-		<td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP)  (<font color="#ff0000">New in 1.4</font>)</td>
+		<td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP)  </td>
 		</tr>
 		<tr>
-		<td> eventhighlight </td><td> 1 </td><td> Enable/Disable highlighting of the state changing object by adding a flashing border  (<font color="#ff0000">New in 1.4</font>)</td>
+		<td> eventhighlight </td><td> 1 </td><td> Enable/Disable highlighting of the state changing object by adding a flashing border  </td>
 		</tr>
 		<tr>
-		<td> eventhighlightduration </td><td> 10000 </td><td> Duration of the highlighting in miliseconds (<font color="#ff0000">New in 1.4.1</font>)</td>
+		<td> eventhighlightduration </td><td> 10000 </td><td> Duration of the highlighting in miliseconds </td>
 		</tr>
 		<tr>
-		<td> eventhighlightinterval </td><td> 500 </td><td> Interval of the highlighting in miliseconds (<font color="#ff0000">New in 1.4.1</font>)</td>
+		<td> eventhighlightinterval </td><td> 500 </td><td> Interval of the highlighting in miliseconds </td>
 		</tr>
 		<tr>
-		<td> eventlog </td><td> 0 </td><td> Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information  (<font color="#ff0000">New in 1.4</font>)</td>
+		<td> eventlog </td><td> 0 </td><td> Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information  </td>
 		</tr>
 		<tr>
-		<td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  (<font color="#ff0000">New in 1.4</font>)</td>
+		<td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  </td>
 		</tr>
 		<tr>
-		<td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px (<font color="#ff0000">New in 1.4</font>)</td>
+		<td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px </td>
 		</tr>
 		<tr>
-		<td>eventloghidden</td><td>1</td><td>Hide/Show the eventlog on map loading (<font color="#ff0000">New in 1.4</font>)</td>
+		<td>eventloghidden</td><td>1</td><td>Hide/Show the eventlog on map loading </td>
 		</tr>
 		<tr>
-		<td>eventscroll</td><td> 1 </td><td> Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope  (<font color="#ff0000">New in 1.4</font>)</td>
+		<td>eventscroll</td><td> 1 </td><td> Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope  </td>
 		</tr>
 		<tr>
-		<td> eventsound </td><td> 1 </td><td> Enable/Disable sound signals on state changes  (<font color="#ff0000">New in 1.4</font>)</td>
+		<td> eventsound </td><td> 1 </td><td> Enable/Disable sound signals on state changes  </td>
 		</tr>
 		<tr>
 		<td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu </td>
@@ -224,7 +224,7 @@
 		
 		<a name="index"></a>
 		<h3> index </h3>
-		Options to configure the Overview page of NagVis <font color="#ff0000">(New in 1.4)</font>
+		Options to configure the Overview page of NagVis 
 		<table style="width:100%">
 		<tr>
 		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
@@ -314,7 +314,7 @@
 		
 		<a name="worker"></a>
 		<h3> worker </h3>
-		Options for the new worker in the javascript frontend of NagVis. <font color="#ff0000">(New in 1.4)</font>
+		Options for the new worker in the javascript frontend of NagVis. 
 		<table style="width:100%">
 		<tr>
 		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
@@ -383,7 +383,7 @@ interval=15</pre>
 		<td> maps </td><td> </td>
 		<td> 
 			<p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessable by the server which NagVis is running on.</p>
-			<p><font color="#ff0000">New in 1.4:</font> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
+			<p> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
 			<p><font color="#ff0000">New in 1.5:</font> It is also possible to add automaps to rotations. Simply add an @ sign before the automap name to add an automap to the rotation.</p>
 		</td>
 		</tr>
