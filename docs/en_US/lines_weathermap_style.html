@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+	<title>Weathermap style lines in NagVis</title>
+</head>
+<body>
+	<h1>Weathermap style lines in NagVis (<font color="#ff0000">New in 1.5.</font>)</h1>
+
+	<p>By default NagVis can only visualize the normal states in lines using red, yellow
+     and green colored lines. You may ever wanted NagVis to display nice weathermap style lines?</p>
+
+	<h2>More colorful lines</h2>
+	<img style="margin:20px;" src="../general/img/sample-weathermap.jpg" align="right" alt="NagVis Weathermap style lines" />
+	<p>Since NagVis 1.5 it is possible to draw such weathermap style lines which
+		 can have more than three colors depending on the current load of e.g. the
+		 network interface you like to visualize. There can be a wide color range
+		 of e.g. seven different colors. Take a look at the example image - isn't that beautiful?.</p>
+
+	<h2>Focus on bandwidth visualization</h2>
+	<p>The new lines are focused on bandwidth visualization. Since NagVis needs to parse the
+     performance data to gather the current color for the line there are special requirements
+     on the performance data contents. There is a bandwidth measurement plugin for Nagios which
+		 comes with the correct performance data informations out of the box. It is downloadable
+		 from <a href="http://exchange.nagios.org/directory/Plugins/Network-Connections%2C-Stats-and-Bandwidth/check_iftraffic3/details" target="_blank">Nagios Exchange</a>.</p>
+
+	<h2>Weathermap line types</h2>
+	<p>The weathermap style lines currently provide two types of lines:</p>
+	<ul>
+		<li><code>---%-->&lt;--%----</code>: Arrows with percentage labels in the middle of the line.</li>
+		<li><code>---%+BW-->&lt;--%+BW---</code>: Arrows with percentage labels in the middle of the line and additional labels which display the current bandwidth usage.</li>
+	</ul>
+
+	<h2>How to create weathermap lines?</h2>
+	<p>To create weathermap style lines in NagVis you need services which send the correct
+		 performance data to Nagios. If you got some simply place a line service object on the
+		 map and choose the correct line type. Now take a look at your map - it should work now.</p>
+
+	<p>You may want to have a legend which shows you the meaning of the different colors.
+		 No problem. Simply add a shape to your map and choose the &quot;demo_traffic_load_legend&quot;
+		 shape which is delivered with the NagVis core package.</p>
+
+	<p>Thanks to gjfrater for implementing these lines!</p>
+</body>
+</html>
