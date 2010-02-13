@@ -235,7 +235,8 @@ class WuiViewMapAddModify {
 						break;
 						
 						case 'line_type':
-							$options = Array(Array('label' => '------><------', 'value' => '10'), Array('label' => '-------------->', 'value'=>'11'), Array('label' => '---------------', 'value'=>'12'));
+
+							$options = Array(Array('label' => '------><------', 'value' => '10'), Array('label' => '-------------->', 'value'=>'11'), Array('label' => '---------------', 'value'=>'12'), Array('label' => '--%--><--%--', 'value' =>'13'), Array('label' => '--%+BW-><-%+BW--', 'value'=>'14'));
 							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
 						break;
 						

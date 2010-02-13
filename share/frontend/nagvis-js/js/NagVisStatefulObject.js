@@ -473,15 +473,25 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	drawLine: function() {
+		var oMsg = {};
+		
 		var x = this.conf.x.split(',');
 		var y = this.conf.y.split(',');
 		
 		var width = this.conf.line_width;
 		
 		var colorFill = '';
+                var colorFill2 = '';
 		var colorBorder = '#000000';
+
+		var setPerfdata = [];
+		setPerfdata[0] = Array('dummyPercentIn', 88, '%', 85, 98, 0, 100);
+		setPerfdata[1] = Array('dummyPercentOut', 99, '%', 85, 98, 0, 100);
+		setPerfdata[2] = Array('dummyActualIn', 88.88, 'mB/s', 850, 980, 0, 1000);
+		setPerfdata[3] = Array('dummyActualOut', 99.99, 'mB/s', 850, 980, 0, 1000);
 		
 		// Get the fill color depending on the object state
+
 		switch (this.conf.summary_state) {
 	    case 'UNREACHABLE':
 			case 'DOWN':
@@ -498,7 +508,60 @@ var NagVisStatefulObject = NagVisObject.extend({
 				colorFill = '#FFCC66';
 			break;
 	  }
+
+		// Adjust fill color based on perfdata
+		if(this.conf.line_type == 13 || this.conf.line_type == 14) {
+
+			colorFill = '#000000';
+			colorFill2 = '#000000';
+
+			// Convert perfdata to structured array
+			setPerfdata = splicePerfdata(this.conf.perfdata);
+	
+			// array index returned from splice function
+			/* 0 = label
+			   1 = value
+			   2 = unit of measure (UOM)
+			   3 = warning
+			   4 = critical
+			   5 = minimum
+			   6 = maximum
+			*/
+
+			// Check perfdata array, did we get usable data back
+			if(setPerfdata == 'empty' || setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut') {
+				oMsg.type = 'WARNING';
+				oMsg.message = "Missing performance data - value 1 is \'" + setPerfdata[0][1] + "\' value 2 is \'" + setPerfdata[1][1] + "\'";
 		
+				if(this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut')) {
+					oMsg.message = oMsg.message + " value 3 is \'" + setPerfdata[2][1] + "\' value 4 is \'" + setPerfdata[3][1] + "\'";
+				}
+				oMsg.title = "Data error";
+				frontendMessage(oMsg);
+
+			} else {
+
+				// Get colorFill #1 (in)
+				if(setPerfdata[0][1] !== null && setPerfdata[0][1] >= 0 && setPerfdata[0][1] <= 100) {
+					colorFill = getColorFill(setPerfdata[0][1]);	
+				} else {
+					oMsg.type = 'WARNING';
+					oMsg.message = 'First set of performance data (' + setPerfdata[0][1] + ') for  ' + this.conf.name + " [" + this.conf.service_description + '] is not a percentage value';
+					oMsg.title = "Data error";
+					frontendMessage(oMsg);
+				}
+				// Get colorFill #2 (out)
+				if(setPerfdata [1][1] !== null && setPerfdata[1][1] >= 0 && setPerfdata[1][1] <= 100) {
+					colorFill2 = getColorFill(setPerfdata[1][1]);
+				} else {
+					oMsg.type = 'WARNING';
+					oMsg.message = 'Second set of performance data (' + setPerfdata[1][1] + ') for  ' + this.conf.name + " [" + this.conf.service_description + '] is not a percentage value';
+					oMsg.title = "Data error";
+					frontendMessage(oMsg);
+				}
+			}
+		}
+
 		// Get the border color depending on ack/downtime
 		if(this.conf.summary_problem_has_been_acknowledged == 1) {
 			colorBorder = '#666666';
@@ -511,9 +574,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 			
 			colorFill = lightenColor(colorFill, 100, 100, 100);
 		}
-		
+
 		// Parse the line object
-		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, colorFill, colorBorder, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		oMsg = null;
+
 	},
 	
 	/**
