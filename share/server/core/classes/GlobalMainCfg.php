@@ -129,7 +129,7 @@ class GlobalMainCfg {
 					'match' => MATCH_STRING_NO_SPACE),
 				'backgroundcolor' => Array('must' => 0,
 					'editable' => 1,
-					'default' => '#fff',
+					'default' => 'transparent',
 					'match' => MATCH_COLOR),
 				'contextmenu' => Array('must' => 0,
 					'editable' => 1,
@@ -582,7 +582,7 @@ class GlobalMainCfg {
 					'match' => MATCH_BOOLEAN),
 				'backgroundcolor' => Array('must' => 0,
 					'editable' => 1,
-					'default' => '#fff',
+					'default' => '#ffffff',
 					'match' => MATCH_COLOR)),
 			'worker' => Array(
 				'interval' => Array('must' => 0,

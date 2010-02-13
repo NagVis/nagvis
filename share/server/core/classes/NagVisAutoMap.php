@@ -217,6 +217,7 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= 'dpi="72", ';
 		//ratio: expand, auto, fill, compress
 		$str .= 'ratio="fill", ';
+		$str .= 'bgcolor="'.$this->MAPCFG->getValue('global', 0, 'background_color').'", ';
 		$str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getObjectId().'", ';
 		
 		/* Directed (dot) only */
