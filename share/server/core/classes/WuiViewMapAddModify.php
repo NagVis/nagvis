@@ -344,7 +344,7 @@ class WuiViewMapAddModify {
 					}
 					
 					// Reset selected when not modifying (e.g. adding)
-					if($this->aOpts['do'] != 'modify') {
+					if($this->aOpts['do'] != 'modify' && $propname != 'view_type') {
 						$selected = '';
 					}
 					

@@ -625,6 +625,7 @@ function toggleDependingFields(formName, name, value) {
 					 && oConfig[sTypeName][sOptName]['depends_value'] != value) {
 					
 					document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
+					document.getElementById(sFieldName).value = '';
 				} else if(oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
 					 && oConfig[sTypeName][sOptName]['depends_value'] == value) {
 					
