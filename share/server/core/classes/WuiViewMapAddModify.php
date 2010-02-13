@@ -156,6 +156,9 @@ class WuiViewMapAddModify {
 					$ret .= 'toggleDefaultOption(\'x\');';
 					$ret .= 'toggleDefaultOption(\'y\');';
 				}
+				
+				// Scroll on top of page
+				$ret .= 'document.addmodify.elements[\'x\'].focus()';
 			break;
 		}
 		
