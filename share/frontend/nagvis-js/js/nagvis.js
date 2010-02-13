@@ -909,7 +909,7 @@ function hideStatusMessage() {
  * @return  Object  Returns the div object of the textbox
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function drawNagVisTextbox(id, class, bgColor, borderColor, x, y, z, w, h, text) {
+function drawNagVisTextbox(id, class, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
 		var oLabelDiv = document.createElement('div');
 		oLabelDiv.setAttribute('id', id);
 		oLabelDiv.setAttribute('class', class);
@@ -944,6 +944,35 @@ function drawNagVisTextbox(id, class, bgColor, borderColor, x, y, z, w, h, text)
 		
 		// Create span for text and add label text
 		var oLabelSpan = document.createElement('span');
+		
+		// Setting custom style if someone wants the textbox to be
+		// styled.
+		//
+		// The problem here is that the custom style is given as content of the
+		// HTML style attribute. But that can not be applied easily using plain
+		// JS. So parse the string and apply the options manually.
+		if(customStyle && customStyle !== '') {
+			// Split up the coustom style string to apply the attributes
+			var aStyle = customStyle.split(';');
+			for(var i in aStyle) {
+				var aOpt = aStyle[i].split(':');
+				
+				if(aOpt[0] && aOpt[0] != '' && aOpt[1] && aOpt[1] != '') {
+					var sKey = aOpt[0].replace(/(-[a-zA-Z])/g, '$1');
+					
+					var regex = /(-[a-zA-Z])/;
+					var result = regex.exec(aOpt[0]);
+					
+					for (var i = 1; i < result.length; i++) {
+						var fixed = result[i].replace('-', '').toUpperCase();
+						sKey = sKey.replace(result[i], fixed);
+					}
+					
+					oLabelSpan.style[sKey] = aOpt[1];
+				}
+			}
+		}
+		
 		oLabelSpan.innerHTML = text;
 		
 		oLabelDiv.appendChild(oLabelSpan);

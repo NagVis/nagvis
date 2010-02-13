@@ -635,6 +635,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.conf.label_y = this.conf.y;
 		}
 
-		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label', this.conf.label_background, this.conf.label_border, this.conf.label_x, this.conf.label_y, this.conf.z, this.conf.label_width, '', this.replaceLabelTextDynamicMacros());
+		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label', this.conf.label_background, this.conf.label_border, this.conf.label_x, this.conf.label_y, this.conf.z, this.conf.label_width, '', this.replaceLabelTextDynamicMacros(), this.conf.label_style);
 	}
 });

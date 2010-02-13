@@ -420,7 +420,7 @@ class WuiMap extends GlobalMap {
 			$label = str_replace('[service_description]', $obj['service_description'], $label);
 		}
 		
-		$ret  = '<div '.$id.' class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;">';
+		$ret  = '<div '.$id.' class="object_label" style="background:'.$obj['label_background'].';border-color:'.$obj['label_border'].';left:'.$obj['label_x'].'px;top:'.$obj['label_y'].'px;width:'.$obj['label_width'].';z-index:'.($obj['z']+1).';overflow:visible;'.$obj['label_style'].'">';
 		$ret .= '<span>'.$label.'</span>';
 		$ret .= '</div>';
 		
@@ -559,7 +559,7 @@ class WuiMap extends GlobalMap {
 		
 		$id = 'box_'.$obj['type'].'_'.$obj['id'];
 		
-		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\">";
+		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;".$obj['style']."\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\">";
 		$ret .= "\t<span>".$obj['text']."</span>";
 		$ret .= "</div>";
 		$ret .= $this->parseContextMenu($obj);
@@ -653,7 +653,7 @@ class WuiMap extends GlobalMap {
 		// Show clone link only for icons
 		if(isset($obj['view_type']) && $obj['view_type'] == 'icon') {
 			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/clone.png)'"
-						." href=\"javascript:get_click('".$obj['type']."', 1, 'clone');\" onclick=\"contextHide();\">"
+						." href=\"javascript:objid=".$obj['id'].";get_click('".$obj['type']."', 1, 'clone');\" onclick=\"contextHide();\">"
 						."<span>".$this->CORE->getLang()->getText('Clone')."</span></a></li>";
 		}
 		
