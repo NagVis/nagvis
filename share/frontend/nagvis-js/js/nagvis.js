@@ -909,11 +909,11 @@ function hideStatusMessage() {
  * @return  Object  Returns the div object of the textbox
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function drawNagVisTextbox(id, class, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
+function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
 		var oLabelDiv = document.createElement('div');
 		oLabelDiv.setAttribute('id', id);
-		oLabelDiv.setAttribute('class', class);
-		oLabelDiv.setAttribute('className', class);
+		oLabelDiv.setAttribute('class', className);
+		oLabelDiv.setAttribute('className', className);
 		oLabelDiv.style.background = bgColor;
 		oLabelDiv.style.borderColor = borderColor;
 		
