@@ -51,17 +51,6 @@ class GlobalLanguage {
 		
 		$this->sCurrentLanguage = $this->gatherCurrentLanguage();
 		
-		// Fix old language entries (english => en_US, german => de_DE)
-		// FIXME: Remove this in 1.5, mark this as deprecated somewhere
-		switch($this->sCurrentLanguage) {
-			case 'german':
-				$this->sCurrentLanguage = 'de_DE';
-			break;
-			case 'english':
-				$this->sCurrentLanguage = 'en_US';
-			break;
-		}
-		
 		// Append encoding (UTF8)
 		$this->sCurrentEncoding = 'UTF-8';
 		
