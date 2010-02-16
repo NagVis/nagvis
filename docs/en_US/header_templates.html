@@ -44,6 +44,9 @@
 		<td>${permittedEdit}</td><td>Is true when the user is permitted to edit the current map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
+		<td>${permittedEditAnyMap}</td><td>Is true when the user is allowed to edit at least one map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+		</tr>
+		<tr>
 		<td>${permittedChangePassword}</td><td>Is true when the user is permitted to change the own password. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
@@ -54,7 +57,14 @@
 		</tr>
 		<tr>
 			<td valign="top"> {foreach $maps map} <br>{$map.mapName}<br>{/foreach}</td>
-			<td>A list of all maps defined in NagVis. The code between <code>{foreach $maps map}</code> and <code>{/foreach}</code> is repeated for each map. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.<br><br>Within the BEGIN/END-Tags the following macros are available: <br>* <i>{$map.mapName} (Was [map_name])</i>: Name of the map<br>* <i>{$map.mapAlias} (Was [map_alias])</i>: Alias of the map<br>* <i>{$map.urlParams}</i>: Special parameters to hand over to the NagVis frontend like search strings.</td>
+			<td>A list of all maps defined in NagVis. The code between <code>{foreach $maps map}</code> and <code>{/foreach}</code>
+					is repeated for each map. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.
+					<br /><br />Within the BEGIN/END-Tags the following macros are available:
+					<br />* <i>{$map.mapName} (Was [map_name])</i>: Name of the map
+					<br />* <i>{$map.mapAlias} (Was [map_alias])</i>: Alias of the map
+					<br />* <i>{$map.urlParams}</i>: Special parameters to hand over to the NagVis frontend like search strings.
+					<br />* <i>{$map.permittedEdit}</i>: Is the user permitted to edit this map?
+			</td>
 		</tr>
 		<tr>
 			<td valign="top">{foreach $langs lang}<br>{$lang.language}<br>{/foreach}</td>
