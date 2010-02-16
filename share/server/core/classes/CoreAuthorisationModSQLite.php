@@ -128,6 +128,12 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	  return $aRoles;
 	}
 	
+	public function getRoleId($sRole) {
+		$ret = $this->DB->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name='.$this->DB->escape($sRole)));
+		
+		return intval($ret['roleId']);
+	}
+	
 	public function getAllPerms() {
 		$aPerms = Array();
 		
@@ -222,7 +228,7 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		return $this->DB->count('SELECT COUNT(*) AS num FROM users WHERE userId='.$this->DB->escape($id));
 	}
 	
-	private function getUserId($sUsername) {
+	public function getUserId($sUsername) {
 		$ret = $this->DB->fetchAssoc($this->DB->query('SELECT userId FROM users WHERE name='.$this->DB->escape($sUsername)));
 		
 		return intval($ret['userId']);
