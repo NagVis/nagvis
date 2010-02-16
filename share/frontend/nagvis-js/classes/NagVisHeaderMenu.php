@@ -128,6 +128,7 @@ class NagVisHeaderMenu {
 		
 		
 		// Build map list
+		$permEditAnyMap = False;
 		$aMaps = Array();
 		foreach($this->CORE->getAvailableMaps() AS $mapName) {
 			$MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
@@ -141,6 +142,11 @@ class NagVisHeaderMenu {
 					$aMaps[$mapName]['mapName'] = $MAPCFG1->getName();
 					$aMaps[$mapName]['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
 					$aMaps[$mapName]['urlParams'] = '';
+					$aMaps[$mapName]['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
+
+					if($aMaps[$mapName]['permittedEdit']) {
+						$permEditAnyMap = true;
+					}
 					
 					// auto select current map
 					if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
@@ -152,6 +158,7 @@ class NagVisHeaderMenu {
 			}
 		}
 		$this->aMacros['maps'] = $aMaps;
+		$this->aMacros['permissionEditAnyMap'] = $permEditAnyMap; 
 		
 		// Build automap list
 		$aAutomaps = Array();
