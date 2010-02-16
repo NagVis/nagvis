@@ -45,23 +45,35 @@
 ; Select language (Available by default: en_US, de_DE, fr_FR, pt_BR)
 ;language="en_US"
 ;
-; Defines the logon module to use. By default NagVis uses the HTML logon dialog
-; for requesting authentication informations from the user. It is possible to
-; add own logon modules for serving other dialogs or ways of logging in.
-; For details take a look at the documentation.
+; Defines the logon module to use. There are three logon modules to be used by
+; default. It is possible to add own logon modules for serving other dialogs or
+; ways of logging in. For details take a look at the documentation.
 ;
-; It is also possible to realize a "trusted" authentication mechanism. NagVis
-; uses the configured environment variable to identify the user. This way the
-; user is not really authenticated with NagVis. NagVis trusts the provided
-; username blindly. You can add several authentication mechanism to your
-; webserver, started from the basic authentication used by Nagios (.htaccess)
-; to single sign on environments. Simply set logonmodule to "LogonEnv",
-; put the environment variable to use as username to the option logonenvvar
-; and tell the authentication module to create users in the database when
-; provided users does not exist.
+; The delivered modules are:
+;
+; LogonMixed: The mixed logon module uses the LogonEnv module as default and
+; the LogonDialog module as fallback when LogonEnv returns no username. This
+; should fit the requirements of most environments.
+;
+; LogonDialog: This is a HTML logon dialog for requesting authentication
+; informations from the user.
+;
+; LogonEnv: It is possible to realize a fully "trusted" authentication
+; mechanism like all previous NagVis versions used it before. This way the user
+; is not really authenticated with NagVis. NagVis trusts the provided username
+; blindly. NagVis uses the configured environment variable to identify the
+; user. You can add several authentication mechanism to your webserver, 
+; started from the basic authentication used by Nagios (.htaccess) to single
+; sign on environments.
+; Simply set logonmodule to "LogonEnv", put the environment variable to use as
+; username to the option logonenvvar and tell the authentication module to
+; create users in the database when provided users does not exist. The option
+; logonenvcreaterole tells the module to assign the new user to a specific role
+; set to empty string to disable that behaviour.
 ;logonmodule="LogonDialog"
 ;logonenvvar="REMOTE_USER"
 ;logonenvcreateuser="1"
+;logonenvcreaterole="Guests"
 ;
 ; Refresh time of pages
 ;refreshtime=60

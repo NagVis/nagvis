@@ -173,6 +173,16 @@ class CoreAuthorisationHandler {
 		return $this->MOD->getRolePerms($roleId);
 	}
 	
+	public function getUserId($sName) {
+		// FIXME: First check if this is supported
+		return $this->MOD->getUserId($sName);
+	}
+	
+	public function getRoleId($sName) {
+		// FIXME: First check if this is supported
+		return $this->MOD->getRoleId($sName);
+	}
+	
 	public function updateRolePerms($roleId, $perms) {
 		// FIXME: First check if this is supported
 		

@@ -27,11 +27,18 @@
  */
 class FrontendModLogonEnv extends FrontendModule {
 	protected $CORE;
+	private   $bVerbose;
 	
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array('view' => 0);
+		$this->bVerbose = true;
+	}
+
+	public function beQuiet() {
+		// Sometimes less is more...
+		$this->bVerbose = false;
 	}
 	
 	public function handleAction() {
@@ -62,8 +69,18 @@ class FrontendModLogonEnv extends FrontendModule {
 									// changes the logon mechanism to e.g. LogonDialog it
 									// would be possible to logon with a hardcoded password
 									$this->AUTHENTICATION->createUser($sUser, (time() * rand(1, 10)));
+									
+									$role = $this->CORE->getMainCfg()->getValue('global', 'logonenvcreaterole');
+									if($role !== '') {
+										$AUTHORISATION = new CoreAuthorisationHandler($this->CORE, $this->AUTHENTICATION, $this->CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
+										$AUTHORISATION->parsePermissions();
+										$AUTHORISATION->updateUserRoles($AUTHORISATION->getUserId($sUser), Array($AUTHORISATION->getRoleId($role)));
+									}
 								} else {
-									new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to authenticate user. User does not exist.'));
+									if($this->bVerbose) {
+										new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to authenticate user. User does not exist.'));
+									}
+									return false;
 								}
 							}
 							
@@ -95,10 +112,19 @@ class FrontendModLogonEnv extends FrontendModule {
 								// Invalid credentials
 								// FIXME: Count tries and maybe block somehow
 								$FHANDLER = new CoreRequestHandler($_POST);
-								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 10, $FHANDLER->getReferer());
+								
+								if($this->bVerbose) {
+									new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 10, $FHANDLER->getReferer());
+								}
+								
+								return false;
 							}
 						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to authenticate user. The environment variable [VAR] is not set or empty.', Array('VAR' => htmlentities($sEnvVar))));
+							if($this->bVerbose) {
+								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to authenticate user. The environment variable [VAR] is not set or empty.', Array('VAR' => htmlentities($sEnvVar))));
+							}
+
+							return false;
 						}
 					} else {
 						// When the user is already authenticated redirect to start page (overview)
