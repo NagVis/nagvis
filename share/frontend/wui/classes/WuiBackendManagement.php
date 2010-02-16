@@ -46,9 +46,7 @@ class WuiBackendManagement extends WuiPage {
 		
 		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
 					  'jsIncludes'=> Array($CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/BackendManagement.js'),
-					  'extHeader'=> '',
-					  'allowedUsers' => $this->CORE->getMainCfg()->getValue('wui','allowedforconfig'),
-					  'languageRoot' => 'nagvis');
+					  'extHeader'=> '');
 		parent::__construct($CORE, $prop);
 	}
 	

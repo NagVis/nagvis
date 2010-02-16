@@ -40,8 +40,6 @@ class WuiPage {
 	// logged in user
 	private $user;
 	
-	private $languageRoot;
-	
 	/**
 	 * Class Constructor
 	 *
@@ -56,9 +54,7 @@ class WuiPage {
 		$defaultProperties = Array('title'=>'NagVis Page',
 									'cssIncludes' => Array($this->CORE->getMainCfg()->getValue('paths','htmltemplates').'/default.css'),
 									'jsIncludes' => Array(),
-									'extHeader' => '',
-									'allowedUsers' => Array('EVERYONE'),
-									'languageRoot' => 'nagvis');
+									'extHeader' => '');
 		$prop = array_merge($defaultProperties,$givenProperties);
 		
 		$this->body = '';
@@ -67,7 +63,6 @@ class WuiPage {
 		$this->cssIncludes = $prop['cssIncludes'];
 		$this->jsIncludes = $prop['jsIncludes'];
 		$this->allowedUsers = $prop['allowedUsers'];
-		$this->languageRoot = $prop['languageRoot'];
 		$this->extHeader = $prop['extHeader'];
 		
 		// Append additional header information

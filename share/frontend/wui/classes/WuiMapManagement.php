@@ -45,9 +45,7 @@ class WuiMapManagement extends WuiPage {
 		
 		$prop = Array('title' => $this->CORE->getMainCfg()->getValue('internal', 'title'),
 					  'jsIncludes'=>Array($CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/MapManagement.js'),
-					  'extHeader'=> '',
-					  'allowedUsers' => $this->CORE->getMainCfg()->getValue('wui','allowedforconfig'),
-					  'languageRoot' => 'nagvis');
+					  'extHeader'=> '');
 		parent::__construct($CORE, $prop);
 	}
 	
@@ -178,8 +176,6 @@ class WuiMapManagement extends WuiPage {
      */
 	function getCreateFields() {
 		return $this->CREATEFORM->getInputLine($this->CORE->getLang()->getText('mapName'),'map_name','')
-		      .$this->CREATEFORM->getInputLine($this->CORE->getLang()->getText('readUsers'),'allowed_users','')
-		      .$this->CREATEFORM->getInputLine($this->CORE->getLang()->getText('writeUsers'),'allowed_for_config','')
 		      .$this->CREATEFORM->getSelectLine($this->CORE->getLang()->getText('mapIconset'),'map_iconset',$this->CORE->getAvailableIconsets(),$this->CORE->getMainCfg()->getValue('defaults','icons'))
 		      .$this->CREATEFORM->getSelectLine($this->CORE->getLang()->getText('background'),'map_image',$this->CORE->getAvailableBackgroundImages(),'');
 	}

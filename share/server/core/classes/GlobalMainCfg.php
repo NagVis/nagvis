@@ -315,6 +315,7 @@ class GlobalMainCfg {
 				'allowedforconfig' => Array(
 					'must' => 0,
 					'editable' => 1,
+					'deprecated' => 1,
 					'default' => Array('EVERYONE'),
 					'match' => MATCH_STRING),
 				'autoupdatefreq' => Array('must' => 0,

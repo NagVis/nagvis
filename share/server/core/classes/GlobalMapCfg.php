@@ -58,9 +58,11 @@ class GlobalMapCfg {
 				'object_id' => Array('must' => 0,
 					'match' => MATCH_INTEGER,
 					'field_type' => 'hidden'),
-				'allowed_for_config' => Array('must' => 1,
+				'allowed_for_config' => Array('must' => 0,
+					'deprecated' => 1,
 					'match' => MATCH_STRING),
-				'allowed_user' => Array('must' => 1,
+				'allowed_user' => Array('must' => 0,
+					'deprecated' => 1,
 					'match' => MATCH_STRING),
 				'map_image' => Array('must' => 0,
 					'match' => MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE,
@@ -1377,9 +1379,7 @@ class GlobalMapCfg {
 					$file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 					
 					// Create an array for these options
-					$createArray = Array('allowed_user' => 1,
-										'allowed_for_config' => 1,
-										'use' => 1);
+					$createArray = Array('use' => 1);
 										
 					// Don't read these keys
 					$ignoreKeys = Array('object_id' => 0,

@@ -870,12 +870,6 @@ class CoreModMap extends CoreModule {
 		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_name')) {
 			$bValid = false;
 		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('allowed_users')) {
-			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('allowed_for_config')) {
-			$bValid = false;
-		}
 		
 		//FIXME: All fields: Regex check
 		
@@ -891,8 +885,6 @@ class CoreModMap extends CoreModule {
 			// Return the data
 			return Array(
 		               'map_name' => $FHANDLER->get('map_name'),
-		               'allowed_user' => $FHANDLER->get('allowed_users'),
-		               'allowed_for_config' => $FHANDLER->get('allowed_for_config'),
 		               'iconset' => $FHANDLER->get('map_iconset'),
 		               'map_image' => $FHANDLER->get('map_image'));
 		} else {

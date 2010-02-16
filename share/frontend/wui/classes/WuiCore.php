@@ -107,7 +107,7 @@ class WuiCore extends GlobalCore {
 			// linked maps
 			$aOpts['linkedMaps'] = Array();
 			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-				$aOpts['allowedUsers'][] = $obj['map_name'];
+				$aOpts['linkedMaps'][] = $obj['map_name'];
 			}
 
 			// used shapes

@@ -292,7 +292,6 @@ class GlobalIndexPage {
 		$arr['showrotations'] = $this->CORE->getMainCfg()->getValue('index', 'showrotations');
 		
 		$arr['page_title'] = $this->CORE->getMainCfg()->getValue('internal', 'title');
-		// FIXME: State of the overview like on maps would be nice
 		$arr['favicon_image'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
 		$arr['background_color'] = $this->CORE->getMainCfg()->getValue('index','backgroundcolor');
 		

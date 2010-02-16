@@ -32,8 +32,6 @@
 		<p>The first definition in every config file should be of the special type "global". Options which are defined at this paragraph are valid for the whole map and are getting inherited to other types defined later.</p>
 		<p>Example with all options which have to be set:</p>
 		<pre>define global {
- allowed_user=EVERYONE
- allowed_for_config=nagiosadmin
  map_image=lan.png
 }</pre>
 		
@@ -42,10 +40,10 @@
 		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
 		</tr>
 		<tr>
-		<td> <b>allowed_for_config</b> </td><td> </td><td> Comma separated list of Nagios users who are allowed to edit this map. Can be "EVERYONE" for no permission check. </td>
+		<td> <strike>allowed_for_config</strike> </td><td> </td><td> <strike>Comma separated list of Nagios users who are allowed to edit this map. Can be "EVERYONE" for no permission check.</strike> (<font color="#ff0000">Deprecated in 1.5</font>) </td>
 		</tr>
 		<tr>
-		<td> <b>allowed_user</b> </td><td> </td><td> Comma separated list of Nagios users who are allowed to view this map. Can be "EVERYONE" for no permission check.</td>
+		<td><strike>allowed_user</strike></td><td></td><td><strike>Comma separated list of Nagios users who are allowed to view this map. Can be "EVERYONE" for no permission check.</strike> (<font color="#ff0000">Deprecated in 1.5</font>)</td>
 		</tr>
 		<tr>
 			<td>map_image</td>

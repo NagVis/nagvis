@@ -115,42 +115,6 @@ switch($_GET['action']) {
 		}
 	break;
 	/*
-	 * Get all users which are allowed to access the MAP in the defined MODE
-	 */
-	case 'getAllowedUsers':
-		// These values are submited by WUI requests:
-		// $_GET['map'], $_GET['mode']
-		
-		// Do some validations
-		if(!isset($_GET['map']) || $_GET['map'] == '') {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~map'));
-		} elseif(!isset($_GET['mode']) || $_GET['mode'] == '') {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~mode'));
-		} elseif($_GET['mode'] != 'read' && $_GET['mode'] != 'write') {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('accessModeIsNotValid', 'MODE~'.$_GET['mode']));
-		} else {
-			// Input looks OK, handle the request...
-			
-			// Initialize map configuration
-			$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
-			$MAPCFG->readMapConfig();
-			
-			// Read the allowed users for the specified mode
-			if($_GET['mode'] == 'read') {
-				$arr = $MAPCFG->getValue('global', '0', 'allowed_user');
-			} else {
-				$arr = $MAPCFG->getValue('global', '0', 'allowed_for_config');
-			}
-			
-			$aRet = Array();
-			for($i = 0; count($arr) > $i; $i++) {
-				$aRet[] = $arr[$i];
-			}
-			
-			echo json_encode($aRet);
-		}
-	break;
-	/*
 	 * Gets values for the backend options of a defined backend. Needed when
 	 * editing existing backends
 	 */
@@ -194,28 +158,6 @@ switch($_GET['action']) {
 	 */
 	case 'getFormContents':
 		switch($_GET['form']) {
-			case 'addmodify':
-				$MAPCFG = new WuiMapCfg($CORE, $_GET['map']);
-				$MAPCFG->readMapConfig();
-				
-				if(!isset($_GET['coords'])) {
-					$_GET['coords'] = '';
-				}
-				
-				if(!isset($_GET['id'])) {
-					$_GET['id'] = '';
-				}
-				
-				if(!isset($_GET['viewType'])) {
-					$_GET['viewType'] = '';
-				}
-				
-				$FRONTEND = new WuiAddModify($CORE, $MAPCFG, Array('action' => $_GET['do'],
-																	'type' => $_GET['type'],
-																	'id' => $_GET['id'],
-																	'coords' => $_GET['coords'],
-																	'viewType' => $_GET['viewType']));
-			break;
 			case 'manageBackends':
 				$FRONTEND = new WuiBackendManagement($CORE);
 				$FRONTEND->getForm();
