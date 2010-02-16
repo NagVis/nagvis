@@ -3,7 +3,7 @@
 #
 # install.sh - Installs/Updates NagVis
 #
-# Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+# Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
 #
 # Development:
 #  Wolfgang Nieder
@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.11"
+INSTALLER_VERSION="0.2.12"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -1161,22 +1161,66 @@ text
 
 # Do some update tasks (Changing options, notify about deprecated options)
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
-	line "Handling changed/removed options..." "+"
-	if [ "x`echo $NAGVIS_VER_OLD | grep '1.3'`" != "x" ]; then
-		text "| Update from 1.3.x" "|"
+	line 
+	text "| Handling changed/removed options" "|"
+	line
+	
+	#line "Removing allowedforconfig option from main config..."
+	DONE=`log "Removing allowedforconfig option from main config..." done`
+	sed -i '/^allowedforconfig=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+	chk_rc "| Error" "$DONE"
+	
+	DONE=`log "Removing usegdlibs option from main config..." done`
+	sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+	chk_rc "| Error" "$DONE"
+	
+	DONE=`log "Removing displayheader option from main config..." done`
+	sed -i '/^displayheader=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+	chk_rc "| Error" "$DONE"
+	
+	DONE=`log "Removing hovertimeout option from main config..." done`
+	sed -i '/^hovertimeout=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+	chk_rc "| Error" "$DONE"
+	
+	DONE=`log "Removing allowed_for_config option from map configs..." done`
+	sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg
+	chk_rc "| Error" "$DONE"
+	
+	DONE=`log "Removing allowed_user from map configs..." done`
+	sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
+	chk_rc "| Error" "$DONE"
+
+	DONE=`log "Removing allowed_for_config from automap configs..." done`
+	sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/automaps/*.cfg
+	chk_rc "| Error" "$DONE"
+
+	DONE=`log "Removing allowed_user from automap configs..." done`
+	sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/automaps/*.cfg
+	chk_rc "| Error" "$DONE"
+
+	DONE=`log "Removing hover_timeout from map configs..." done`
+	sed -i '/^hover_timeout=/d' $NAGVIS_PATH/etc/maps/*.cfg
+	chk_rc "| Error" "$DONE"
+
+	DONE=`log "Removing usegdlibs from map configs..." done`
+	sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/maps/*.cfg
+	chk_rc "| Error" "$DONE"
+
+	line
+	
+	if [ $NAGVIS_TAG_OLD -ge 01030000 ] && [ $NAGVIS_TAG_OLD -lt 01050000 ]; then
+		text "| Version specific changes from 1.3.x or 1.4.x " "|"
 		text
 		line "Applying changes to main configuration file..."
-		text "| oops, sorry, not implemented yet" "|"
+		text "| oops, no changes yet" "|"
 		chk_rc "| Error" "| done"
 		line "Applying changes to map configuration files..."
-		text "| oops, sorry, not implemented yet" "|"
+		text "| oops, no changes yet" "|"
 		chk_rc "| Error" "| done"
-	else
-		text "| Update from unhandled version $NAGVIS_VER_OLD" "|"
-		text
-		text "| HINT: Please check the changelog or the documentation for changes which" "|"
-		text "|       affect your configuration files" "|"
 	fi
+	
+	text "| HINT: Please check the changelog or the documentation for changes which" "|"
+	text "|       affect your configuration files" "|"
 fi
 text
 
