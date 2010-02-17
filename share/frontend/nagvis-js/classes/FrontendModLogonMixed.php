@@ -53,7 +53,7 @@ class FrontendModLogonMixed extends FrontendModule {
 					// Try to auth using the environment auth
 					if($MODULE->handleAction() === false) {
 						// Otherwise print the logon dialog
-						$MODULE =  $MHANDLER->loadModule('LogonEnv');
+						$MODULE =  $MHANDLER->loadModule('LogonDialog');
 						$MODULE->setAction('view');
 						$sReturn = $MODULE->handleAction();
 					}
