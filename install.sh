@@ -1164,60 +1164,64 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	line 
 	text "| Handling changed/removed options" "|"
 	line
-	
-	#line "Removing allowedforconfig option from main config..."
-	DONE=`log "Removing allowedforconfig option from main config..." done`
-	sed -i '/^allowedforconfig=/d' $NAGVIS_PATH/etc/nagvis.ini.php
-	chk_rc "| Error" "$DONE"
-	
-	DONE=`log "Removing usegdlibs option from main config..." done`
-	sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/nagvis.ini.php
-	chk_rc "| Error" "$DONE"
-	
-	DONE=`log "Removing displayheader option from main config..." done`
-	sed -i '/^displayheader=/d' $NAGVIS_PATH/etc/nagvis.ini.php
-	chk_rc "| Error" "$DONE"
-	
-	DONE=`log "Removing hovertimeout option from main config..." done`
-	sed -i '/^hovertimeout=/d' $NAGVIS_PATH/etc/nagvis.ini.php
-	chk_rc "| Error" "$DONE"
-	
-	DONE=`log "Removing allowed_for_config option from map configs..." done`
-	sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg
-	chk_rc "| Error" "$DONE"
-	
-	DONE=`log "Removing allowed_user from map configs..." done`
-	sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
-	chk_rc "| Error" "$DONE"
 
-	DONE=`log "Removing allowed_for_config from automap configs..." done`
-	sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/automaps/*.cfg
-	chk_rc "| Error" "$DONE"
+	# Only perform the actions below for NagVis 1.5.x installations
+	if [ $NAGVIS_TAG -ge 01050000 ]; then
+		#line "Removing allowedforconfig option from main config..."
+		DONE=`log "Removing allowedforconfig option from main config..." done`
+		sed -i '/^allowedforconfig=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing usegdlibs option from main config..." done`
+		sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing displayheader option from main config..." done`
+		sed -i '/^displayheader=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing hovertimeout option from main config..." done`
+		sed -i '/^hovertimeout=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing allowed_for_config option from map configs..." done`
+		sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing allowed_user from map configs..." done`
+		sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
 
-	DONE=`log "Removing allowed_user from automap configs..." done`
-	sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/automaps/*.cfg
-	chk_rc "| Error" "$DONE"
+		DONE=`log "Removing allowed_for_config from automap configs..." done`
+		sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/automaps/*.cfg
+		chk_rc "| Error" "$DONE"
 
-	DONE=`log "Removing hover_timeout from map configs..." done`
-	sed -i '/^hover_timeout=/d' $NAGVIS_PATH/etc/maps/*.cfg
-	chk_rc "| Error" "$DONE"
+		DONE=`log "Removing allowed_user from automap configs..." done`
+		sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/automaps/*.cfg
+		chk_rc "| Error" "$DONE"
 
-	DONE=`log "Removing usegdlibs from map configs..." done`
-	sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/maps/*.cfg
-	chk_rc "| Error" "$DONE"
+		DONE=`log "Removing hover_timeout from map configs..." done`
+		sed -i '/^hover_timeout=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
 
-	line
-	
-	if [ $NAGVIS_TAG_OLD -ge 01030000 ] && [ $NAGVIS_TAG_OLD -lt 01050000 ]; then
-		text "| Version specific changes from 1.3.x or 1.4.x " "|"
-		text
-		line "Applying changes to main configuration file..."
-		text "| oops, no changes yet" "|"
-		chk_rc "| Error" "| done"
-		line "Applying changes to map configuration files..."
-		text "| oops, no changes yet" "|"
-		chk_rc "| Error" "| done"
+		DONE=`log "Removing usegdlibs from map configs..." done`
+		sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
+
+		line
 	fi
+	
+	# Maybe this is usefull in the future? => Updates for special versions
+	#if [ $NAGVIS_TAG_OLD -ge 01030000 ] && [ $NAGVIS_TAG_OLD -lt 01050000 ]; then
+	#	text "| Version specific changes from 1.3.x or 1.4.x " "|"
+	#	text
+	#	line "Applying changes to main configuration file..."
+	#	text "| oops, no changes yet" "|"
+	#	chk_rc "| Error" "| done"
+	#	line "Applying changes to map configuration files..."
+	#	text "| oops, no changes yet" "|"
+	#	chk_rc "| Error" "| done"
+	#fi
 	
 	text "| HINT: Please check the changelog or the documentation for changes which" "|"
 	text "|       affect your configuration files" "|"
