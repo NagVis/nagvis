@@ -1148,11 +1148,33 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring custom shapes..."
 	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
-	LINE="Restoring custom templates..."
-	copy "\/default\..+$" "$USERFILES_DIR/templates" "templates"
-	
-	LINE="Restoring custom template images..."
-	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates" "template images"
+	# Other template handling since 1.5.x
+	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
+		LINE="Restoring custom templates..."
+		copy "\/default\..+$" "$USERFILES_DIR/templates" "templates"
+		
+		LINE="Restoring custom template images..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates" "template images"
+	elif [ $NAGVIS_TAG_OLD -lt 01050000 ] && [ $NAGVIS_TAG -lt 01050000 ]; then
+		# Template handling pre 1.5.x
+		LINE="Restoring custom pages templates..."
+		copy "\/default\..+$" "$USERFILES_DIR/templates/pages" "pages templates"
+
+		LINE="Restoring custom hover templates..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/templates/hover" "hover templates"
+		
+		LINE="Restoring custom header template images..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/header" "header template images"
+
+		LINE="Restoring custom hover template images..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/hover" "hover template images"
+	else
+		text "|" "|"
+		text "| IMPORTANT: When upgrading from previous 1.5.0 to 1.5.x version you ou need" "|"
+		text "|            to migrate eventually custom templates by hand cause the " "|"
+		text "|            template format has totally changed." "|"
+	fi
+
 
 	LINE="Restoring custom gadgets..."
 	copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
