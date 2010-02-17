@@ -3,7 +3,7 @@
 #
 # install.sh - Installs/Updates NagVis
 #
-# Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+# Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
 #
 # Development:
 #  Wolfgang Nieder
@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.11"
+INSTALLER_VERSION="0.2.12"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -85,7 +85,7 @@ WEB_GROUP=""
 [ -f nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
-NEED_PHP_MODULES="gd mysql mbstring gettext session xml"
+NEED_PHP_MODULES="gd mbstring gettext session xml"
 NEED_GV_MOD="dot neato twopi circo fdp"
 NEED_GV_VERSION=2.14
 
@@ -263,7 +263,6 @@ log() {
 check_backend() {
 	BACKENDS=""
 	text "| Checking Backends: $NAGVIS_BACKEND" "|"
-	# Check NDO module if necessary
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		if [ -z "$NAGVIS_BACKEND" ]; then
 			ASK=`echo $NAGVIS_BACKENDS | sed 's/,/ /g'` 
@@ -280,10 +279,16 @@ check_backend() {
 	
 	echo $NAGVIS_BACKEND | grep -i "MKLIVESTATUS" >/dev/null
 	if [ $? -eq 0 ]; then
-		# FIXME: Add mklivestatus checks
-		# - Check if php socket module is availsable
-		# - Check if livestatus.o is avialable
-		text "|   * Sorry, no checks yet for mklivestatus backend" "|"
+		MKL=""
+		# Check if livestatus.o is available
+		if [ -z "$NDO_MOD" ]; then
+			NDO_MOD="$NAGIOS_PATH/bin/livestatus.o"
+		fi
+		[ -f $NDO_MOD ]&&MKL="  livestatus.o"
+		log "  livestatus.o ($NDO_MOD)" $MKL
+		
+		# Check if php socket module is available
+		check_php_modules "sockets" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
 			BACKENDS="mklivestatus"
@@ -294,25 +299,29 @@ check_backend() {
 	
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
-		# Check NDO
+		# Check ndo2db binary with version suffix
 		[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-${NAGVER}x"
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 
-		# maybe somebody removed version information
+		# Check ndo2db binary witout version suffix
 		if [ -z "$NDO" ]; then
 			NDO_MOD="$NAGIOS_PATH/bin/ndo2db"
 			NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 		fi
+		
 		[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
 		log "  $NDO_MOD (ndo2db)" $NDO
 		
+		# Check if php mysql module is available
+		check_php_modules "mysql" "$NEED_PHP_VERSION"
+		
 		if [ "$BACKENDS" = "" ]; then
-			BACKENDS="ndo2db"
+			BACKENDS="mklivestatus"
 		else
-			BACKENDS="${BACKENDS},ndo2db"
+			BACKENDS="${BACKENDS},mklivestatus"
 		fi
 	fi
-
+	
 	echo $NAGVIS_BACKEND | grep -i "IDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
 		# Check IDO
@@ -322,6 +331,8 @@ check_backend() {
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^IDO2DB"`
 		[ -z "$NDO" ]&&NDO_MOD="IDO Module ido2db"
 		log "  $NDO_MOD (ido2db)" $NDO
+		# Check if php mysql module is available
+		check_php_modules "mysql" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
 			BACKENDS="ido2db"
@@ -346,7 +357,10 @@ check_backend() {
 	# Check merlin prerequisites if necessary
 	echo $NAGVIS_BACKEND | grep -i "MERLINMY" >/dev/null
 	if [ $? -eq 0 ]; then
-		text "|   *** Sorry, no checks yet for merlin" "|"
+		#text "|   *** Sorry, no checks yet for merlin" "|"
+		
+		# Check if php mysql module is available
+		check_php_modules "mysql" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
 			BACKENDS="merlinmy"
@@ -465,6 +479,7 @@ check_php_version() {
 check_php_modules() {
 	for MOD in $1
 	do
+		TMP=""
 		if [ "${PKG##/*/}" = "dpkg" ]; then
 			MOD_VER=`$PKG -l "php[0-9]-$MOD" 2>/dev/null | grep "php" | grep "ii" | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 		elif [ "${PKG##/*/}" = "rpm" ]; then
@@ -493,7 +508,7 @@ check_php_modules() {
 			TMP=`grep -ie "extension=$MOD" /etc/php5/conf.d/* | sed 's/.*=//;s/\.so*//'`
 		fi
 		
-		log "  Module: $MOD $MOD_VER" $TMP
+		log "  PHP Module: $MOD $MOD_VER" $TMP
 
 		if [ -n "$MOD_VER" ]; then
 			if [ `echo "$2 $MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
@@ -518,7 +533,6 @@ chk_rc() {
 	fi
 }
 
-#copy "default*" "$USERFILES_DIR/templates/pages" "pages templates"
 copy() {
 	DONE=""
 	
@@ -683,6 +697,8 @@ echo "`date`: Installer $INSTALLER_VERSION" > $LOG
 NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
 [ -z "$NAGVIS_TAG" ]&&NAGVIS_TAG=01000000
 
+S=`echo $* | grep -i "\-s icinga"`
+[ $? -eq 0 ]&&SOURCE=icinga
 # Default hardcoded Nagios path
 NAGIOS_PATH="/usr/local/$SOURCE"
 
@@ -702,7 +718,7 @@ fi
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:ohqvFr" options; do
+	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:ohqvFr" options $OPTS; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -876,10 +892,6 @@ NAGVER=`echo $NAGIOS | sed 's/^.* //' | cut -c1,1`
 [ "$SOURCE" = "icinga" ]&&NAGVER=3
 
 if [ $FORCE -eq 0 ]; then
-	# Check Backend prerequisites
-	check_backend
-	CALL="$CALL -b $NAGVIS_BACKEND"
-
 	# Check PHP Version
 	check_php_version $NEED_PHP_VERSION
 
@@ -893,6 +905,10 @@ if [ $FORCE -eq 0 ]; then
 	check_apache_php "/etc/httpd/"
 	check_apache_php "/usr/local/etc/apache2/"	# FreeBSD
 	log "  Apache mod_php" $MODPHP
+
+	# Check Backend prerequisites
+	check_backend
+	CALL="$CALL -b $NAGVIS_BACKEND"
 
 	# Check Graphviz
 	GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
@@ -1132,17 +1148,33 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	LINE="Restoring custom shapes..."
 	copy "" "$USERFILES_DIR/images/shapes" "shapes"
 	
-	LINE="Restoring custom pages templates..."
-	copy "\/default\..+$" "$USERFILES_DIR/templates/pages" "pages templates"
-	
-	LINE="Restoring custom hover templates..."
-	copy "\/tmpl\.default.+$" "$USERFILES_DIR/templates/hover" "hover templates"
-	
-	LINE="Restoring custom header template images..."
-	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/header" "header template images"
+	# Other template handling since 1.5.x
+	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
+		LINE="Restoring custom templates..."
+		copy "\/default\..+$" "$USERFILES_DIR/templates" "templates"
+		
+		LINE="Restoring custom template images..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates" "template images"
+	elif [ $NAGVIS_TAG_OLD -lt 01050000 ] && [ $NAGVIS_TAG -lt 01050000 ]; then
+		# Template handling pre 1.5.x
+		LINE="Restoring custom pages templates..."
+		copy "\/default\..+$" "$USERFILES_DIR/templates/pages" "pages templates"
 
-	LINE="Restoring custom hover template images..."
-	copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/hover" "hover template images"
+		LINE="Restoring custom hover templates..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/templates/hover" "hover templates"
+		
+		LINE="Restoring custom header template images..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/header" "header template images"
+
+		LINE="Restoring custom hover template images..."
+		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/hover" "hover template images"
+	else
+		text "|" "|"
+		text "| IMPORTANT: When upgrading from previous 1.5.0 to 1.5.x version you ou need" "|"
+		text "|            to migrate eventually custom templates by hand cause the " "|"
+		text "|            template format has totally changed." "|"
+	fi
+
 
 	LINE="Restoring custom gadgets..."
 	copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
@@ -1160,22 +1192,70 @@ text
 
 # Do some update tasks (Changing options, notify about deprecated options)
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
-	line "Handling changed/removed options..." "+"
-	if [ "x`echo $NAGVIS_VER_OLD | grep '1.3'`" != "x" ]; then
-		text "| Update from 1.3.x" "|"
-		text
-		line "Applying changes to main configuration file..."
-		text "| oops, sorry, not implemented yet" "|"
-		chk_rc "| Error" "| done"
-		line "Applying changes to map configuration files..."
-		text "| oops, sorry, not implemented yet" "|"
-		chk_rc "| Error" "| done"
-	else
-		text "| Update from unhandled version $NAGVIS_VER_OLD" "|"
-		text
-		text "| HINT: Please check the changelog or the documentation for changes which" "|"
-		text "|       affect your configuration files" "|"
+	line 
+	text "| Handling changed/removed options" "|"
+	line
+
+	# Only perform the actions below for NagVis 1.5.x installations
+	if [ $NAGVIS_TAG -ge 01050000 ]; then
+		#line "Removing allowedforconfig option from main config..."
+		DONE=`log "Removing allowedforconfig option from main config..." done`
+		sed -i '/^allowedforconfig=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing usegdlibs option from main config..." done`
+		sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing displayheader option from main config..." done`
+		sed -i '/^displayheader=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing hovertimeout option from main config..." done`
+		sed -i '/^hovertimeout=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing allowed_for_config option from map configs..." done`
+		sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
+		
+		DONE=`log "Removing allowed_user from map configs..." done`
+		sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
+
+		DONE=`log "Removing allowed_for_config from automap configs..." done`
+		sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/automaps/*.cfg
+		chk_rc "| Error" "$DONE"
+
+		DONE=`log "Removing allowed_user from automap configs..." done`
+		sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/automaps/*.cfg
+		chk_rc "| Error" "$DONE"
+
+		DONE=`log "Removing hover_timeout from map configs..." done`
+		sed -i '/^hover_timeout=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
+
+		DONE=`log "Removing usegdlibs from map configs..." done`
+		sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/maps/*.cfg
+		chk_rc "| Error" "$DONE"
+
+		line
 	fi
+	
+	# Maybe this is usefull in the future? => Updates for special versions
+	#if [ $NAGVIS_TAG_OLD -ge 01030000 ] && [ $NAGVIS_TAG_OLD -lt 01050000 ]; then
+	#	text "| Version specific changes from 1.3.x or 1.4.x " "|"
+	#	text
+	#	line "Applying changes to main configuration file..."
+	#	text "| oops, no changes yet" "|"
+	#	chk_rc "| Error" "| done"
+	#	line "Applying changes to map configuration files..."
+	#	text "| oops, no changes yet" "|"
+	#	chk_rc "| Error" "| done"
+	#fi
+	
+	text "| HINT: Please check the changelog or the documentation for changes which" "|"
+	text "|       affect your configuration files" "|"
 fi
 text
 
