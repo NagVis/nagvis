@@ -85,7 +85,7 @@ WEB_GROUP=""
 [ -f nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
-NEED_PHP_MODULES="gd mysql mbstring gettext session xml"
+NEED_PHP_MODULES="gd mbstring gettext session xml"
 NEED_GV_MOD="dot neato twopi circo fdp"
 NEED_GV_VERSION=2.14
 
@@ -263,7 +263,6 @@ log() {
 check_backend() {
 	BACKENDS=""
 	text "| Checking Backends: $NAGVIS_BACKEND" "|"
-	# Check NDO module if necessary
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		if [ -z "$NAGVIS_BACKEND" ]; then
 			ASK=`echo $NAGVIS_BACKENDS | sed 's/,/ /g'` 
@@ -285,9 +284,10 @@ check_backend() {
 		if [ -z "$NDO_MOD" ]; then
 			NDO_MOD="$NAGIOS_PATH/bin/livestatus.o"
 		fi
-		[ -f $NDO_MOD ]&&MKL="MK livestatus.o"
-		log "MK livestatus.o ($NDO_MOD)" $MKL
-		# - Check if php socket module is available
+		[ -f $NDO_MOD ]&&MKL="  livestatus.o"
+		log "  livestatus.o ($NDO_MOD)" $MKL
+		
+		# Check if php socket module is available
 		check_php_modules "sockets" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
@@ -299,25 +299,29 @@ check_backend() {
 	
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
-		# Check NDO
+		# Check ndo2db binary with version suffix
 		[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-${NAGVER}x"
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 
-		# maybe somebody removed version information
+		# Check ndo2db binary witout version suffix
 		if [ -z "$NDO" ]; then
 			NDO_MOD="$NAGIOS_PATH/bin/ndo2db"
 			NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 		fi
+		
 		[ -z "$NDO" ]&&NDO_MOD="NDO Module ndo2db"
 		log "  $NDO_MOD (ndo2db)" $NDO
 		
+		# Check if php mysql module is available
+		check_php_modules "mysql" "$NEED_PHP_VERSION"
+		
 		if [ "$BACKENDS" = "" ]; then
-			BACKENDS="ndo2db"
+			BACKENDS="mklivestatus"
 		else
-			BACKENDS="${BACKENDS},ndo2db"
+			BACKENDS="${BACKENDS},mklivestatus"
 		fi
 	fi
-
+	
 	echo $NAGVIS_BACKEND | grep -i "IDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
 		# Check IDO
@@ -327,6 +331,8 @@ check_backend() {
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^IDO2DB"`
 		[ -z "$NDO" ]&&NDO_MOD="IDO Module ido2db"
 		log "  $NDO_MOD (ido2db)" $NDO
+		# Check if php mysql module is available
+		check_php_modules "mysql" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
 			BACKENDS="ido2db"
@@ -351,7 +357,10 @@ check_backend() {
 	# Check merlin prerequisites if necessary
 	echo $NAGVIS_BACKEND | grep -i "MERLINMY" >/dev/null
 	if [ $? -eq 0 ]; then
-		text "|   *** Sorry, no checks yet for merlin" "|"
+		#text "|   *** Sorry, no checks yet for merlin" "|"
+		
+		# Check if php mysql module is available
+		check_php_modules "mysql" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
 			BACKENDS="merlinmy"
@@ -499,7 +508,7 @@ check_php_modules() {
 			TMP=`grep -ie "extension=$MOD" /etc/php5/conf.d/* | sed 's/.*=//;s/\.so*//'`
 		fi
 		
-		log "  Module: $MOD $MOD_VER" $TMP
+		log "  PHP Module: $MOD $MOD_VER" $TMP
 
 		if [ -n "$MOD_VER" ]; then
 			if [ `echo "$2 $MOD_VER" | awk '{if ($1 > $2) print $1; else print $2}'` = $2 ]; then
