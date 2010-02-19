@@ -48,10 +48,10 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
 	
 	var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
 	
-	if(oResult && oResult.type && oResult.type === 'note') {
-		if(bReloadOnSuccess) {
+	if(oResult && oResult.type) {
+		if(oResult.type === 'note' && bReloadOnSuccess) {
 			if(typeof popupWindowRefresh == 'function') {
-				 popupWindowRefresh();
+				popupWindowRefresh();
 			}
 		} else {
 			// Show message and close the window
@@ -63,6 +63,8 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
 			}
 		}
 	}
+
+	oResult = null;
 }
 
 /**
