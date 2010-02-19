@@ -43,8 +43,10 @@
 					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$langRotationStart}</a></li>
 					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$langRotationStop}</a></li>
 					{/if}
-					{if $mod == 'Map' && $permittedEdit == true}
+					{if $mod == 'Map' && $permittedEdit == true && $act != 'edit'}
 					<li><a href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$currentMap}" class="underline">{$langEditMap}</a></li>
+					{else}
+					<li class="spacer underline"></li>
 					{/if}
 				</ul>
 			</dd>
