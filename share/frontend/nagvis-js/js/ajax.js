@@ -309,7 +309,7 @@ function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function postSyncRequest(sUrl, sParams) {
-	var sResponse = null;
+	var oResponse = null;
 	var responseText;
 	
 	// Encode the url
@@ -334,62 +334,36 @@ function postSyncRequest(sUrl, sParams) {
 			eventlog("ajax", "debug", e.toString());
 			
 			// Handle application message/error
-			var oMsg = {};
-			oMsg.type = 'CRITICAL';
-			oMsg.message = "Problem while ajax POST transaction. Is the NagVis host reachable?";
-			oMsg.title = "Ajax transaction error";
-			frontendMessage(oMsg);
-			oMsg = null;
+			oResponse = {};
+			oResponse.type = 'CRITICAL';
+			oResponse.message = "Problem while ajax POST transaction. Is the NagVis host reachable?";
+			oResponse.title = "Ajax transaction error";
 		}
 		
 		responseText = oRequest.responseText;
 		
-		if(responseText.replace(/\s+/g, '').length === 0) {
-			sResponse = '';
-		} else {
+		if(oResponse === null && responseText.replace(/\s+/g, '').length !== 0) {
 			// Trim the left of the response
 			responseText = responseText.replace(/^\s+/,"");
 			
 			// Error handling for the AJAX methods
 			if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-				var oMsg = {};
-				oMsg.type = 'CRITICAL';
-				oMsg.message = "PHP error in ajax request handler:\n"+responseText;
-				oMsg.title = "PHP error";
-				
-				// Handle application message/error
-				frontendMessage(oMsg);
-				oMsg = null;
-				
-				// Clear the response
-				sResponse = '';
+				oResponse = {};
+				oResponse.type = 'CRITICAL';
+				oResponse.message = "PHP error in ajax request handler:\n"+responseText;
+				oResponse.title = "PHP error";
 			} else if(responseText.match(/^NagVisError:/)) {
 				responseText = responseText.replace(/^NagVisError:/, '');
-				var oMsg = eval('( '+responseText+')');
-				
-				// Handle application message/error
-				// FIXME: Param2: 30 and the message will be shown for maximum 30 seconds
-				frontendMessage(oMsg);
-				oMsg = null;
-				
-				// Clear the response
-				sResponse = '';
+				oResponse = eval('( '+responseText+')');
 			} else {
 				// Handle invalid response (No JSON format)
 				try {
-					sResponse = eval('( '+responseText+')');
+					oResponse = eval('( '+responseText+')');
 				} catch(e) {
-					var oMsg = {};
-					oMsg.type = 'CRITICAL';
-					oMsg.message = "Invalid JSON response:\n"+responseText;
-					oMsg.title = "Syntax error";
-					
-					// Handle application message/error
-					frontendMessage(oMsg);
-					oMsg = null;
-				
-					// Clear the response
-					sResponse = '';
+					oResponse = {};
+					oResponse.type = 'CRITICAL';
+					oResponse.message = "Invalid JSON response:\n"+responseText;
+					oResponse.title = "Syntax error";
 				}
 				
 				responseText = null;
@@ -399,13 +373,7 @@ function postSyncRequest(sUrl, sParams) {
 	
 	oRequest = null;
 	
-	if(sResponse !== null && sResponse !== '') {
-		if(typeof frontendMessageHide == 'function') { 
-			frontendMessageHide();
-		}
-	}
-	
-	return sResponse;
+	return oResponse;
 }
 
 

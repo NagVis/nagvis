@@ -63,8 +63,8 @@
 					<li><a class="submenu-link" id="map-addline-ddheader" href="#" onmouseover="ddMenu('map-addline',1,1)" onmouseout="ddMenu('map-addline',-1)">{$langMapAddLine}</a></li>
 					<li><a class="submenu-link" id="map-addspecial-ddheader" href="#" onmouseover="ddMenu('map-addspecial',1,1)" onmouseout="ddMenu('map-addspecial',-1)">{$langMapAddSpecial}</a></li>
 					<li class="spacer"><hr /></li>
-					<li><a href="#" onclick="popupWindow('{$langMapManageTmpl}', getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=manageTmpl&map={$currentMap}', true, false), undefined, 300);">{$langMapManageTmpl}</a></li>
-					<li><a href="#" onclick="popupWindow('{$langMapOptions}', getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map={$currentMap}&type=global&id=0', true, false));" class="underline">{$langMapOptions}</a></li>
+					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&act=manageTmpl&map={$currentMap}', '{$langMapManageTmpl}', 300)">{$langMapManageTmpl}</a></li>
+					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map={$currentMap}&type=global&id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -107,12 +107,12 @@
 			<dt id="wui-ddheader" onmouseover="ddMenu('wui',1)" onmouseout="ddMenu('wui',-1)">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="wui-ddcontent" onmouseover="cancelHide('wui')" onmouseout="ddMenu('wui',-1)">
 				<ul>
-					<li><a href="#" onclick="popupWindow('{$langWuiConfiguration}', getSyncRequest(oGeneralProperties.path_server+'?mod=MainCfg&act=edit', true, false), undefined, 970);">{$langWuiConfiguration}</a></li>
+					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&act=edit', '{$langWuiConfiguration}', 970)">{$langWuiConfiguration}</a></li>
 					<li class="spacer"><hr /></li>
-					<li><a href="#" onclick="popupWindow('{$langMgmtBackends}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageBackends', true, false));">{$langMgmtBackends}</a></li>
-					<li><a href="#" onclick="popupWindow('{$langMgmtBackgrounds}', getSyncRequest(oGeneralProperties.path_server+'?mod=ManageBackgrounds&act=view', true, false));">{$langMgmtBackgrounds}</a></li>
-					<li><a href="#" onclick="popupWindow('{$langMgmtMaps}', getSyncRequest('./ajax_handler.php?action=getFormContents&form=manageMaps', true, false));">{$langMgmtMaps}</a></li>
-					<li><a class="underline" href="#" onclick="popupWindow('{$langMgmtShapes}', getSyncRequest(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', true, false));">{$langMgmtShapes}</a></li>
+					<li><a href="#" onclick="showFrontendDialog('./ajax_handler.php?action=getFormContents&form=manageBackends', '{$langMgmtBackends}');">{$langMgmtBackends}</a></li>
+					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageBackgrounds&act=view', '{$langMgmtBackgrounds}');">{$langMgmtBackgrounds}</a></li>
+					<li><a href="#" onclick="showFrontendDialog('./ajax_handler.php?action=getFormContents&form=manageMaps', '{$langMgmtMaps}');">{$langMgmtMaps}</a></li>
+					<li><a class="underline" href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', '{$langMgmtShapes}');">{$langMgmtShapes}</a></li>
 				</ul>
 			</dd>
 		</dl>

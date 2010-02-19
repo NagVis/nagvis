@@ -639,8 +639,7 @@ class WuiMap extends GlobalMap {
 		
 		// Edit link
 		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/modify.png)'"
-		  ." href=\"#\" onclick=\"popupWindow('".$this->CORE->getLang()->getText('change')."',"
-			."getSyncRequest('".$this->CORE->getMainCfg()->getValue('paths', 'htmlbase')."/server/core/ajax_handler.php?mod=Map&act=addModify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."',true,false));contextHide();\">"
+		  ." href=\"#\" onclick=\"showFrontendDialog('".$this->CORE->getMainCfg()->getValue('paths', 'htmlbase')."/server/core/ajax_handler.php?mod=Map&act=addModify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."', '".$this->CORE->getLang()->getText('change')."');contextHide();\">"
 			."<span>".$this->CORE->getLang()->getText('change')."</span></a></li>";
 		
 		// Position/Size link on lines

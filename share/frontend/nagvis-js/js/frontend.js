@@ -41,14 +41,26 @@ var oAutomapParams = {};
  *
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function submitFrontendForm(sUrl, sFormId) {
+function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
+	if(typeof bReloadOnSuccess === 'undefined' || bReloadOnSuccess === null) {
+		bReloadOnSuccess = '';
+	}
+	
 	var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
-	if(oResult && oResult.type && oResult.type === 'NOTE') {
-		frontendMessage(oResult);
-		
-		// Additionally close the popup window when the response is positive
-		if(typeof popupWindowClose == 'function') { 
-			popupWindowClose();
+	
+	if(oResult && oResult.type && oResult.type === 'note') {
+		if(bReloadOnSuccess) {
+			if(typeof popupWindowRefresh == 'function') {
+				 popupWindowRefresh();
+			}
+		} else {
+			// Show message and close the window
+			frontendMessage(oResult);
+			
+			// Additionally close the popup window when the response is positive
+			if(typeof popupWindowClose == 'function') { 
+				popupWindowClose();
+			}
 		}
 	}
 }
@@ -66,6 +78,9 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
 	}
 	
 	var oContent = getSyncRequest(sUrl, false, false);
+
+	// Store url for maybe later refresh
+	oContent.url = sUrl;
 	
 	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
 		popupWindow(sTitle, oContent, true, sWidth);

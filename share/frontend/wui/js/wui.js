@@ -339,7 +339,7 @@ function get_click_pos(e) {
 		}
 		
 		// FIXME: Title "+get_label('properties')+"
-		popupWindow('TITLE', getSyncRequest(sUrl, true, false));
+		showFrontendDialog(sUrl, 'LABEL');
 		
 		objid = -1;
 		cpt_clicks = -1;

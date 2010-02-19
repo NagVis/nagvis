@@ -94,7 +94,7 @@ getUserRoles = function (id) \{
 <div id="userAdd">
 <fieldset class="form">
 	<legend>{$langUserAdd}</legend>
-	<form name="userAdd" id="userAddForm" action="#" onsubmit="submitFrontendForm('{$formTargetAdd}', 'userAddForm');return false" method="post">
+	<form name="userAdd" id="userAddForm" action="#" onsubmit="submitFrontendForm('{$formTargetAdd}', 'userAddForm', true);return false" method="post">
 		<table>
 			<tr>
 				<td><label for="username">{$langUsername}:</label></td>
@@ -119,7 +119,7 @@ getUserRoles = function (id) \{
 <div id="manageUsers">
 <fieldset class="form">
 	<legend>{$langUserModify}</legend>
-	<form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm');return false" method="post">
+	<form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm', true);return false" method="post">
 		<p>
 			<label>{$langSelectUser}<br />
 			<select type="text" name="userId" id="userId" class="select" tabindex="40" onchange="getUserRoles(this.options[this.selectedIndex].value);" />
@@ -163,7 +163,7 @@ getUserRoles = function (id) \{
 <div id="deleteUsers">
 <fieldset class="form">
 	<legend>{$langUserDelete}</legend>
-	<form name="userDelete" id="userDeleteForm" action="#" onsubmit="submitFrontendForm('{$formTargetDelete}', 'userDeleteForm');return false" method="post">
+	<form name="userDelete" id="userDeleteForm" action="#" onsubmit="submitFrontendForm('{$formTargetDelete}', 'userDeleteForm', true);return false" method="post">
 		<table>
 			<tr>
 				<td><label for="username">{$langUsername}:</label></td>

@@ -55,9 +55,9 @@ class NagVisViewUserMgmt {
 		
 		$aData = Array(
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&amp;act=doAdd',
-			'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&amp;act=doEdit',
-			'formTargetDelete' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&amp;act=doDelete',
+			'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doAdd',
+			'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doEdit',
+			'formTargetDelete' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doDelete',
 			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
