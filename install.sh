@@ -51,6 +51,7 @@ REMOVE="n"
 LOG=install.log
 CALL="$0"
 NAGVIS_PATH_PARAM_SET=0
+NAGVIS_PATH_OLD_PARAM_SET=0
 
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
@@ -118,7 +119,12 @@ Parameters:
                 Default value: \$BASE/bin/ndo2db
   -b <PATH>     Path to graphviz binaries ($NEED_GV_MOD)
                 Default value: $GRAPHVIZ_PATH
-  -p <PATH>     Path to NagVis base directory
+  -p <PATH>     Path to NagVis base directory to install to
+                Default value: $NAGVIS_PATH
+  -O <PATH>     Path to the old NagVis base directory to update from.
+                You only need to set this if it is different than the new NagVis base
+                directory given in "-p". This may be useful when updating from 1.4
+                to 1.5 where the paths to NagVis changed.
                 Default value: $NAGVIS_PATH
   -W <PATH      Web path to the NagVis base directory
                 Default: $HTML_PATH 
@@ -156,7 +162,7 @@ EOD
 version() {
 cat <<EOD
 NagVis installer, version $INSTALLER_VERSION
-Copyright (C) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+Copyright (C) 2004-2010 NagVis Project (Contact: info@nagvis.org)
 
 License: GNU General Public License version 2
 
@@ -262,7 +268,7 @@ log() {
 # Check Backend module prerequisites
 check_backend() {
 	BACKENDS=""
-	text "| Checking Backends: $NAGVIS_BACKEND" "|"
+	text "| Checking Backends. (Available: $NAGVIS_BACKENDS)" "|"
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		if [ -z "$NAGVIS_BACKEND" ]; then
 			ASK=`echo $NAGVIS_BACKENDS | sed 's/,/ /g'` 
@@ -540,15 +546,15 @@ copy() {
 	[ -n "$LINE" ] && DONE=`log "$LINE" done` 
 	
 	# Copy single file
-	if [ -f "$NAGVIS_PATH_OLD/$2" ]; then
-		cp -p $NAGVIS_PATH_OLD/$2 $NAGVIS_PATH/$2
+	if [ -f "$NAGVIS_PATH_BACKUP/$2" ]; then
+		cp -p $NAGVIS_PATH_BACKUP/$2 $NAGVIS_PATH/$2
 		chk_rc "|  Error copying file $3" "$DONE"
 	fi
 	
 	# Copy old directory contents to new directory
-	if [ -d "$NAGVIS_PATH_OLD/$2" -a ! -d "$3" ]; then
+	if [ -d "$NAGVIS_PATH_BACKUP/$2" -a ! -d "$3" ]; then
 		# Get files to copy
-		FILES=`find $NAGVIS_PATH_OLD/$2 -type f`
+		FILES=`find $NAGVIS_PATH_BACKUP/$2 -type f`
 
 		# Maybe exclude some files
 		if [ "$1" != "" ]; then
@@ -705,8 +711,10 @@ NAGIOS_PATH="/usr/local/$SOURCE"
 # Default hardcoded NagVis base
 if [ $NAGVIS_TAG -lt 01050000 ]; then
 	NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
+	NAGVIS_PATH_OLD=$NAGVIS_PATH
 else
 	NAGVIS_PATH="/usr/local/nagvis"
+	NAGVIS_PATH_OLD=$NAGVIS_PATH
 fi
 
 # Default nagios share webserver path
@@ -718,7 +726,7 @@ fi
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:ohqvFr" options $OPTS; do
+	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:O:ohqvFr" options $OPTS; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -727,6 +735,10 @@ if [ $# -gt 0 ]; then
 				# So set it here. But only set it when NagVis path not defined explicit
 				if [ $NAGVIS_TAG -lt 01050000 -a $NAGVIS_PATH_PARAM_SET -eq 0 ]; then
 					NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+
+					if [ $NAGVIS_PATH_OLD_PARAM_SET -eq 0 ]; then
+						NAGVIS_PATH_OLD=$NAGVIS_PATH
+					fi
 				fi
 			;;
 			B)
@@ -741,6 +753,14 @@ if [ $# -gt 0 ]; then
 			p)
 				NAGVIS_PATH=$OPTARG
 				NAGVIS_PATH_PARAM_SET=1
+
+				if [ $NAGVIS_PATH_OLD_PARAM_SET -eq 0 ]; then
+					NAGVIS_PATH_OLD=$NAGVIS_PATH
+				fi
+			;;
+			O)
+				NAGVIS_PATH_OLD=$OPTARG
+				NAGVIS_PATH_OLD_PARAM_SET=1
 			;;
 			w)
 				WEB_PATH=$OPTARG
@@ -860,6 +880,10 @@ if [ $FORCE -eq 0 ]; then
 	# So set it here. But only set it when NagVis path not defined explicit
 	if [ $NAGVIS_TAG -lt 01050000 -a $NAGVIS_PATH_PARAM_SET -eq 0 ]; then
 		NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
+		
+		if [ $NAGVIS_PATH_OLD_PARAM_SET -eq 0 ]; then
+			NAGVIS_PATH_OLD="$NAGVIS_PATH"
+		fi
 	fi
 
 	# Get NagVis path
@@ -867,10 +891,32 @@ if [ $FORCE -eq 0 ]; then
 		echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
 		read ABASE
 		if [ ! -z $ABASE ]; then
-		NAGVIS_PATH=$ABASE
+			# Also update old path when it was equal to the new directory or empty before
+			[ "$NAGVIS_PATH_OLD" = "" -o "$NAGVIS_PATH_OLD" = "$NAGVIS_PATH" ] && NAGVIS_PATH_OLD=$ABASE
+			
+			NAGVIS_PATH=$ABASE
 		fi
 	fi
 	CALL="$CALL -p $NAGVIS_PATH"
+
+	# Maybe the user wants to update from NagVis 1.4x to 1.5x. The paths
+	# have changed there. So try to get the old nagvis dir in nagios/share
+	# path. When there is some, ask the user to update that installation.
+	if [ $NAGVIS_TAG -ge 01050000 -a -d ${NAGIOS_PATH%/}/share/nagvis -a $NAGVIS_PATH != ${NAGIOS_PATH%/}/share/nagvis ]; then
+		# Found nagvis in nagios/share and this run wants to install NagVis somewhere else
+		NAGVIS_PATH_OLD="${NAGIOS_PATH%/}/share/nagvis"
+
+		if [ $INSTALLER_QUIET -ne 1 ]; then
+			text "| The installer will install NagVis to $NAGVIS_PATH. But the installer found" "|"
+			text "| another NagVis installation at $NAGVIS_PATH_OLD." "|"
+			confirm "Do you want to update that installation?" "y"
+			if [ "$ANS" != "Y" ]; then
+				text "| Okay, not performing an update with changing paths." "|"
+				text "|" "|"
+			fi
+		fi
+		CALL="$CALL -O $NAGVIS_PATH_OLD"
+	fi
 fi
 
 text
@@ -968,15 +1014,15 @@ CALL="$CALL -u $WEB_USER -g $WEB_GROUP -w $WEB_PATH"
 text
 line "Checking for existing NagVis" "+"
 
-if [ -d $NAGVIS_PATH ]; then
+if [ -d $NAGVIS_PATH_OLD ]; then
 	INSTALLER_ACTION="update"
 	
-	if [ -e $NAGVIS_PATH/nagvis/includes/defines/global.php ]; then
-		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
-	elif [ -e $NAGVIS_PATH/share/nagvis/includes/defines/global.php ]; then
-		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
-	elif [ -e $NAGVIS_PATH/share/server/core/defines/global.php ]; then
-		NAGVIS_VER_OLD=`cat $NAGVIS_PATH/share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	if [ -e $NAGVIS_PATH_OLD/nagvis/includes/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH_OLD/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	elif [ -e $NAGVIS_PATH_OLD/share/nagvis/includes/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH_OLD/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+	elif [ -e $NAGVIS_PATH_OLD/share/server/core/defines/global.php ]; then
+		NAGVIS_VER_OLD=`cat $NAGVIS_PATH_OLD/share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
 	else
 		NAGVIS_VER_OLD="UNKNOWN"
 	fi
@@ -988,7 +1034,7 @@ if [ -d $NAGVIS_PATH ]; then
 		NAGVIS_TAG_OLD=01000000
 	fi
 	
-	NAGVIS_PATH_OLD=$NAGVIS_PATH.old-$DATE
+	NAGVIS_PATH_BACKUP=$NAGVIS_PATH_OLD.old-$DATE
 
 	log "NagVis $NAGVIS_VER_OLD" $NAGVIS_VER_OLD
 fi
@@ -1017,9 +1063,12 @@ if [ "$IGNORE_DEMO" != "" ]; then
 fi
 text "| Installation mode:             $INSTALLER_ACTION" "|"
 if [ "$INSTALLER_ACTION" = "update" ]; then
+	if [ $NAGVIS_PATH != $NAGVIS_PATH_OLD ]; then
+		text "| Old NagVis home:               $NAGVIS_PATH_OLD" "|"
+	fi
 	text "| Old version:                   $NAGVIS_VER_OLD" "|"
 	text "| New version:                   $NAGVIS_VER" "|"
-	text "| Backup directory:              $NAGVIS_PATH_OLD" "|"
+	text "| Backup directory:              $NAGVIS_PATH_BACKUP" "|"
 	text
 	text "| Note: The current NagVis directory will be moved to the backup directory." "|"
 	if [ "$REMOVE" = "y" ]; then
@@ -1059,9 +1108,9 @@ text "| Starting installation" "|"
 line ""
 
 if [ "$INSTALLER_ACTION" = "update" ]; then
-	DONE=`log "Moving old NagVis to $NAGVIS_PATH_OLD.." done` 
-	mv $NAGVIS_PATH $NAGVIS_PATH_OLD
-	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_OLD" "$DONE"
+	DONE=`log "Moving old NagVis to $NAGVIS_PATH_BACKUP.." done` 
+	mv $NAGVIS_PATH_OLD $NAGVIS_PATH_BACKUP
+	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_BACKUP" "$DONE"
 fi
 
 # Create base path
@@ -1115,7 +1164,13 @@ if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
 		CHG='s/^/#new /'
 	fi
 	DONE=`log "Creating web configuration file..." done`
-	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
+
+	# NagVis 1.5 and above does not need the NAGIOS_PATH var anymore
+	if [ $NAGVIS_TAG -ge 01050000 ]; then
+		cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
+	else
+		cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
+	fi
 	chk_rc "|  Error creating web configuration" "$DONE"
 	DONE=`log "Setting permissions for web configuration file..." done`
 	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
@@ -1287,7 +1342,7 @@ text
 
 if [ "$INSTALLER_ACTION" = "update" -a "$REMOVE" = "y" ]; then
     DONE=`log "Removing backup directory" done`
-    rm -rf $NAGVIS_PATH_OLD
+    rm -rf $NAGVIS_PATH_BACKUP
     chk_rc "|  Error removing directory user configuration" "$DONE"
 fi
 
