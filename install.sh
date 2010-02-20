@@ -110,13 +110,12 @@ Installs or updates NagVis on your system.
 
 Usage: $0 [OPTIONS]
 
-Parameters:
+General Parameters:
+  -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -n <PATH>     Path to Nagios/Icinga base directory (\$BASE)
                 Default value: $NAGIOS_PATH
   -B <BINARY>   Full path to the Nagios/Icinga binary
                 Default value: \$BASE/bin/nagios
-  -m <BINARY>   Full path to the NDO/IDO module
-                Default value: \$BASE/bin/ndo2db
   -b <PATH>     Path to graphviz binaries ($NEED_GV_MOD)
                 Default value: $GRAPHVIZ_PATH
   -p <PATH>     Path to NagVis base directory to install to
@@ -131,9 +130,23 @@ Parameters:
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
   -w <PATH>     Path to the webserver config files
+
   -i <BACKENDs> Comma separated list of backends to use:
                   Available backends: mklivestatus, ndo2db, ido2db, ndo2fs, merlinmy
-  -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
+
+Backend specfic parameters:
+
+  ndo2db, ido2db:
+  -m <BINARY>   Full path to the NDO/IDO module
+                Default value: \$BASE/bin/ndo2db
+
+  mklivestatus:
+  -l <SOCKET>   MKLivestatus socket. Has to be in the following format:
+                  TCP Socket:  tcp:<ip>:<port>
+                  Unix Socket: unix:<full-path>
+                Default value: unix:\$BASE/var/rw/live
+	
+Flag parameters:
   -o            Omit demo files
   -r            When performing an update of an existing NagVis installation the old
                 NagVis directory will be saved in a backup directory. When you know
@@ -271,9 +284,15 @@ check_backend() {
 	text "| Checking Backends. (Available: $NAGVIS_BACKENDS)" "|"
 	if [ $INSTALLER_QUIET -ne 1 ]; then
 		if [ -z "$NAGVIS_BACKEND" ]; then
-			ASK=`echo $NAGVIS_BACKENDS | sed 's/,/ /g'` 
+			ASK=`echo $NAGVIS_BACKENDS | sed 's/,/ /g'`
 			for i in $ASK; do
-				confirm "Do you want to use backend $i?" "n"
+				DEFAULT="n"
+
+				if [ "$i" = "mklivestatus" ]; then
+					DEFAULT="y"
+				fi
+
+				confirm "Do you want to use backend $i?" $DEFAULT
 				if [ "$ANS" = "Y" ]; then
 					BACKENDS=$BACKENDS,$i
 				fi
@@ -282,16 +301,41 @@ check_backend() {
 		fi
 		NAGVIS_BACKEND=${NAGVIS_BACKEND#,}
 	fi
-	
+
 	echo $NAGVIS_BACKEND | grep -i "MKLIVESTATUS" >/dev/null
 	if [ $? -eq 0 ]; then
-		MKL=""
-		# Check if livestatus.o is available
-		if [ -z "$NDO_MOD" ]; then
-			NDO_MOD="$NAGIOS_PATH/bin/livestatus.o"
+		[ -z "$LIVESTATUS_SOCK" ] && LIVESTATUS_SOCK="unix:$NAGIOS_PATH/var/rw/live"
+		
+		# Check if the livestatus socket is available
+		# when not using a tcp socket
+		if [[ "$LIVESTATUS_SOCK" =~ unix:* ]]; then
+			if [ -S ${LIVESTATUS_SOCK#unix:} ]; then
+				log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" "found"
+			elif [ $INSTALLER_QUIET -ne 1 ]; then
+				# Loop until we got what we want in interactive mode
+				while [[ "$LIVESTATUS_SOCK" =~ unix:* && ! -S ${LIVESTATUS_SOCK#unix:} ]]; do
+					log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" ""
+					text "| Valid socket formats are: tcp:127.0.0.1:7668 or unix:/path/to/live" "|"
+					
+					echo -n "| Please put your MKLivestatus socket: "
+					read APATH
+					if [ ! -z $APATH ]; then
+						LIVESTATUS_SOCK=$APATH
+						
+						# Reset the return code to give the new socket a try
+						RC=0
+
+						if [[ ! "$LIVESTATUS_SOCK" =~ unix:* ]]; then
+							text "| Unable to check TCP-Sockets, hope you put the correct socket." "|"
+						fi
+					fi
+				done
+			else
+				log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" ""
+			fi
+		else
+			text "| Unable to check TCP-Sockets, hope you put the correct socket." "|"
 		fi
-		[ -f $NDO_MOD ]&&MKL="  livestatus.o"
-		log "  livestatus.o ($NDO_MOD)" $MKL
 		
 		# Check if php socket module is available
 		check_php_modules "sockets" "$NEED_PHP_VERSION"
@@ -726,7 +770,7 @@ fi
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "p:n:B:m:w:W:u:b:g:c:i:s:O:ohqvFr" options $OPTS; do
+	while getopts "p:n:B:m:l:w:W:u:b:g:c:i:s:O:ohqvFr" options $OPTS; do
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
@@ -746,6 +790,9 @@ if [ $# -gt 0 ]; then
 			;;
 			m)
 				NDO_MOD=$OPTARG
+			;;
+			l)
+				LIVESTATUS_SOCK=$OPTARG
 			;;
 			b)
 				GRAPHVIZ_PATH=$OPTARG
@@ -858,22 +905,26 @@ text
 line "Checking paths" "+"
 
 if [ $FORCE -eq 0 ]; then
-	# Get Nagios path
-	if [ $INSTALLER_QUIET -ne 1 ]; then
-	  echo -n "| Please enter the path to the $SOURCE base directory [$NAGIOS_PATH]: "
-	  read APATH
-	  if [ ! -z $APATH ]; then
-	    NAGIOS_PATH=$APATH
-	  fi
-	fi
+	# Get Nagios/Icinga path
+	while [ ! -d $NAGIOS_PATH ]; do
+		if [ $INSTALLER_QUIET -ne 1 ]; then
+			echo -n "| Please enter the path to the $SOURCE base directory [$NAGIOS_PATH]: "
+			read APATH
+			if [ ! -z $APATH ]; then
+				NAGIOS_PATH=$APATH
+			fi
+		fi
+		
+		# Check Nagios path
+		if [ -d $NAGIOS_PATH ]; then
+			log "  $SOURCE path $NAGIOS_PATH" "found"
+		else
+			log "  $SOURCE path $NAGIOS_PATH" ""
+		fi
 
-	# Check Nagios path
-	if [ -d $NAGIOS_PATH ]; then
-		log "$SOURCE path $NAGIOS_PATH" "found"
-	else
-		echo "| $SOURCE home $NAGIOS_PATH is missing. Aborting..."
-		exit 1
-	fi
+		# Don't loop in quiet mode
+		[ $INSTALLER_QUIET -eq 1 ] && break
+	done
 	CALL="$CALL -n $NAGIOS_PATH"
 
 	# NagVis below 1.5 depends on the given Nagios path
