@@ -200,7 +200,6 @@ line() {
 		fi
 	fi
 	echo "$OUT"
-	echo "$OUT" >> $LOG
 }
 # Print text
 text() {
@@ -215,7 +214,6 @@ text() {
 		fi
 	fi
 	echo "$OUT"
-	echo "$OUT" >> $LOG
 }
 
 # Ask user for confirmation
@@ -275,7 +273,6 @@ log() {
 		OUT=`printf "%-${SIZE}s %s\n" "| $1" "  found |"`
 	fi
 	echo "$OUT"
-	echo "$OUT" >> $LOG
 }
 
 # Tries to detect the Nagios path using the running Nagios process
@@ -758,8 +755,6 @@ cmp_js() {
 
 # More (re)initialisations
 
-echo "`date`: Installer $INSTALLER_VERSION" > $LOG
-
 # Version info
 NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
 [ -z "$NAGVIS_TAG" ]&&NAGVIS_TAG=01000000
@@ -886,6 +881,7 @@ if [ $FORCE -eq 1 ]; then
 	fi
 fi
 
+{
 # Print welcome message
 welcome
 
@@ -1167,7 +1163,6 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 fi
 text
 
-echo "$CALL" >> $LOG
 if [ $INSTALLER_QUIET -ne 1 ]; then
 	confirm "Do you really want to continue?" "y"
 	if [ "$ANS" != "Y" ]; then
@@ -1433,6 +1428,9 @@ text "| Installation complete" "|"
 text
 text "| You can safely remove this source directory." "|"
 text
+text "| For later update/upgrade you may use this command to have a faster update:" "|"
+text "| $CALL"
+text
 text "| What to do next?" "|"
 text "| - Read the documentation" "|"
 text "| - Maybe you want to edit the main configuration file?" "|"
@@ -1447,4 +1445,6 @@ else
 	text "|     Password: nagiosadmin" "|"
 fi
 line
+} 2>&1 | tee $LOG
+
 exit 0
