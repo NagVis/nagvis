@@ -277,6 +277,23 @@ log() {
 	echo "$OUT"
 	echo "$OUT" >> $LOG
 }
+
+# Tries to detect the Nagios path using the running Nagios process
+# Will overwrite the NAGIOS_PATH when found some Nagios running
+detect_nagios_path() {
+	IFS=$'\n'
+	for N_PROC in `ps ax -o pid,ppid,user,command | grep nagios | grep -v grep`; do
+		#  2138     1 nagios   /d/nagvis-dev/nagios/bin/nagios -d /d/nagvis-dev/nagios/etc/nagios.cfg
+		N_PID=`expr "$N_PROC" : ' *\([0-9]*\)'`
+		N_PPID=`expr "$N_PROC" : ' *[0-9]* *\([0-9]*\)'`
+		N_USR=`expr "$N_PROC" : ' *[0-9]* *[0-9]* *\([^ ]*\)'`
+		N_CMD=`expr "$N_PROC" : ' *[0-9]* *[0-9]* *[^ ]* *\(.*\)'`
+
+		N_BIN=${N_CMD%% *}
+		NAGIOS_PATH=${N_BIN%%/bin/nagios}
+	done
+	IFS=" "
+}
  
 # Check Backend module prerequisites
 check_backend() {
@@ -752,12 +769,15 @@ S=`echo $* | grep -i "\-s icinga"`
 # Default hardcoded Nagios path
 NAGIOS_PATH="/usr/local/$SOURCE"
 
+# Try to detect the Nagios path with some magic
+detect_nagios_path
+
 # Default hardcoded NagVis base
 if [ $NAGVIS_TAG -lt 01050000 ]; then
 	NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
 	NAGVIS_PATH_OLD=$NAGVIS_PATH
 else
-	NAGVIS_PATH="/usr/local/nagvis"
+	NAGVIS_PATH=${NAGIOS_PATH%%nagios}nagvis
 	NAGVIS_PATH_OLD=$NAGVIS_PATH
 fi
 
@@ -906,7 +926,8 @@ line "Checking paths" "+"
 
 if [ $FORCE -eq 0 ]; then
 	# Get Nagios/Icinga path
-	while [ ! -d $NAGIOS_PATH ]; do
+	while [[ -z $NAGIOS_PATH_SECOND_LOOP || ! -d $NAGIOS_PATH ]]; do
+		NAGIOS_PATH_SECOND_LOOP=1
 		# Give this run a chance... Reset the return code
 		RC=0
 		
