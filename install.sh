@@ -907,6 +907,9 @@ line "Checking paths" "+"
 if [ $FORCE -eq 0 ]; then
 	# Get Nagios/Icinga path
 	while [ ! -d $NAGIOS_PATH ]; do
+		# Give this run a chance... Reset the return code
+		RC=0
+		
 		if [ $INSTALLER_QUIET -ne 1 ]; then
 			echo -n "| Please enter the path to the $SOURCE base directory [$NAGIOS_PATH]: "
 			read APATH
@@ -1202,6 +1205,13 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 		DONE=`log "Creating main configuration file..." done` 
 		cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
 		chk_rc "|  Error copying sample configuration" "$DONE"
+
+		# Add livestatus backend when configured to use MKLivestatus
+		if [ ! -z $LIVESTATUS_SOCK ]; then
+			DONE=`log "  Adding MKLivestatus Backend..." done`
+			$SED -i 's#;backend="ndomy_1"#backend="live_1"#g;s#;socket="unix:/usr/local/nagios/var/rw/live"#socket="'"$LIVESTATUS_SOCK"'"#g' $NAGVIS_PATH/$NAGVIS_CONF
+		chk_rc "|  Error adding MKLivstatus Backend" "$DONE"
+		fi
 	fi
 fi
 
