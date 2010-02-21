@@ -229,7 +229,7 @@ confirm() {
 welcome() {
 cat <<EOD
 +------------------------------------------------------------------------------+
-| Welcome to NagVis Installer $INSTALLER_VERSION                                            |
+| $(printf "Welcome to NagVis Installer %-48s" $INSTALLER_VERSION) |
 +------------------------------------------------------------------------------+
 | This script is built to facilitate the NagVis installation and update        |
 | procedure for you. The installer has been tested on the following systems:   |
