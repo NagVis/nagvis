@@ -41,11 +41,10 @@ INSTALLER_CONFIG_MOD="n"
 IGNORE_DEMO=""
 # backends to use
 NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,ndo2fs,merlinmy"
-# Return Code
-RC=0
 # data source
 SOURCE=nagios
 # skip checks
+RC=0
 FORCE=0
 REMOVE="n"
 LOG=install.log
@@ -225,6 +224,88 @@ confirm() {
  	[ "$ANS" != "Y" ]&&ANS="N"	
 }
 
+# Ask user for confirmation
+check_confirm() {
+	ANS=`echo $ANS | tr "jyos" "yyyy" | cut -c 1,1`
+ 	if [ "$ANS" = "y" ]; then
+		return 0
+	else
+		return 0
+	fi
+}
+
+# Check Nagios path
+check_nagios_path() {
+	if [ -d $NAGIOS_PATH ]; then
+		log "  $SOURCE path $NAGIOS_PATH" "found"
+		return 0
+	else
+		log "  $SOURCE path $NAGIOS_PATH" ""
+		return 1
+	fi
+}
+
+check_web_user() {
+	if [ "`getent passwd | cut -d':' -f1 | grep \"^$WEB_USER\"`" = "$WEB_USER" ]; then
+		return 0
+	else
+		echo "|  Error: User $WEB_USER not found."
+		return 1
+	fi
+}
+
+check_web_group() {
+	if [ "`getent group | cut -d':' -f1 | grep \"^$WEB_GROUP\"`" = "$WEB_GROUP" ]; then
+		return 0
+	else
+		echo "|  Error: Group $WEB_GROUP not found."
+		exit 1
+	fi
+}
+
+ask_user() {
+	VAR=$1
+	DEFAULT=$2
+	MANDATORY=$3
+	VERIFY_FUNC=$4
+	TEXT=$5
+	RETURN=1
+
+	while true; do
+		if [ $INSTALLER_QUIET -ne 1 ]; then
+			echo -n "| $TEXT [$DEFAULT]: "
+			read OPT
+			
+			if [ ! -z $OPT ]; then
+				eval "${VAR}=$OPT"
+			else
+				eval "${VAR}=$DEFAULT"
+			fi
+		fi
+
+		if [ $MANDATORY -eq 1 -a "${!VAR}" != "" ] || [ $MANDATORY -eq 0 ]; then
+			if [ "$VERIFY_FUNC" != "" ]; then
+				${VERIFY_FUNC}
+				if [ $? = 0 ]; then
+					RETURN=0
+				fi
+				
+				# In quiet mode break in all cases
+				if [ $INSTALLER_QUIET -eq 1 -o $RETURN = 0 ]; then
+					break
+				fi
+			else
+				RETURN=0
+				break
+			fi
+		else
+			break
+		fi
+	done
+
+	return $RETURN
+}
+
 # Print welcome message
 welcome() {
 cat <<EOD
@@ -246,8 +327,10 @@ cat <<EOD
 +------------------------------------------------------------------------------+
 EOD
 if [ $INSTALLER_QUIET -ne 1 ]; then
-	confirm "Do you want to proceed?" "y"
-	if [ "$ANS" != "Y" ]; then
+	ask_user "ANS" "y" 1 "check_confirm" \
+	         "Do you want to proceed?"
+
+	if [ "$ANS" != "y" ]; then
 		text
 		text "| Installer aborted, exiting..." "|"
 		line ""
@@ -261,10 +344,8 @@ log() {
 	SIZE=`expr $LINE_SIZE - 8` 
 	if [ -z "$2" ]; then
 		OUT=`printf "%-${SIZE}s %s\n" "| $1" "MISSING |"`
-		RC=1
 	elif [ "$2" = "needed" ]; then
 		OUT="$1 needed"
-		RC=1
 	elif [ "$2" = "warning" ]; then
 		OUT=`printf "%-${LINE_SIZE}s |\n" "| $1"`
 	elif [ "$2" = "done" ]; then
@@ -336,9 +417,6 @@ check_backend() {
 					if [ ! -z $APATH ]; then
 						LIVESTATUS_SOCK=$APATH
 						
-						# Reset the return code to give the new socket a try
-						RC=0
-
 						if [[ ! "$LIVESTATUS_SOCK" =~ unix:* ]]; then
 							text "| Unable to check TCP-Sockets, hope you put the correct socket." "|"
 						fi
@@ -586,9 +664,9 @@ check_php_modules() {
 
 # Check return code
 chk_rc() {
-	RC=$?
-	if [ $RC -ne 0 ]; then
-		echo $* Return Code: $RC
+	LRC=$?
+	if [ $LRC -ne 0 ]; then
+		echo $* Return Code: $LRC
 		exit 1
 	else
 		if [ "$2" != "" ]; then
@@ -920,31 +998,13 @@ fi
 text
 line "Checking paths" "+"
 
+
+
 if [ $FORCE -eq 0 ]; then
 	# Get Nagios/Icinga path
-	while [[ -z $NAGIOS_PATH_SECOND_LOOP || ! -d $NAGIOS_PATH ]]; do
-		NAGIOS_PATH_SECOND_LOOP=1
-		# Give this run a chance... Reset the return code
-		RC=0
-		
-		if [ $INSTALLER_QUIET -ne 1 ]; then
-			echo -n "| Please enter the path to the $SOURCE base directory [$NAGIOS_PATH]: "
-			read APATH
-			if [ ! -z $APATH ]; then
-				NAGIOS_PATH=$APATH
-			fi
-		fi
-		
-		# Check Nagios path
-		if [ -d $NAGIOS_PATH ]; then
-			log "  $SOURCE path $NAGIOS_PATH" "found"
-		else
-			log "  $SOURCE path $NAGIOS_PATH" ""
-		fi
-
-		# Don't loop in quiet mode
-		[ $INSTALLER_QUIET -eq 1 ] && break
-	done
+	ask_user "NAGIOS_PATH" "$NAGIOS_PATH" 1 "check_nagios_path" \
+           "Please enter the path to the $SOURCE base directory"
+	[ $RC != 1 ] && RC=$?
 	CALL="$CALL -n $NAGIOS_PATH"
 
 	# NagVis below 1.5 depends on the given Nagios path
@@ -958,32 +1018,35 @@ if [ $FORCE -eq 0 ]; then
 	fi
 
 	# Get NagVis path
-	if [ $INSTALLER_QUIET -ne 1 ]; then
-		echo -n "| Please enter the path to NagVis base [$NAGVIS_PATH]: "
-		read ABASE
-		if [ ! -z $ABASE ]; then
-			# Also update old path when it was equal to the new directory or empty before
-			[ "$NAGVIS_PATH_OLD" = "" -o "$NAGVIS_PATH_OLD" = "$NAGVIS_PATH" ] && NAGVIS_PATH_OLD=$ABASE
-			
-			NAGVIS_PATH=$ABASE
-		fi
-	fi
+	TMP=$NAGVIS_PATH
+	ask_user "NAGVIS_PATH" "$NAGVIS_PATH" 1 "" \
+           "Please enter the path to NagVis base"
+	[ $RC != 1 ] && RC=$?
+	
+	# Also update old path when it was equal to the new directory or empty before
+	[ "$NAGVIS_PATH_OLD" = "" -o "$NAGVIS_PATH_OLD" = "$TMP" ] && NAGVIS_PATH_OLD=$NAGVIS_PATH
+	
 	CALL="$CALL -p $NAGVIS_PATH"
 
 	# Maybe the user wants to update from NagVis 1.4x to 1.5x. The paths
 	# have changed there. So try to get the old nagvis dir in nagios/share
 	# path. When there is some, ask the user to update that installation.
-	if [ $NAGVIS_TAG -ge 01050000 -a -d ${NAGIOS_PATH%/}/share/nagvis -a $NAGVIS_PATH != ${NAGIOS_PATH%/}/share/nagvis ]; then
+	if [ $NAGVIS_TAG -ge 01050000 -a -d ${NAGIOS_PATH%/}/share/nagvis -a "$NAGVIS_PATH" != "${NAGIOS_PATH%/}/share/nagvis" ]; then
 		# Found nagvis in nagios/share and this run wants to install NagVis somewhere else
 		NAGVIS_PATH_OLD="${NAGIOS_PATH%/}/share/nagvis"
 
 		if [ $INSTALLER_QUIET -ne 1 ]; then
 			text "| The installer will install NagVis to $NAGVIS_PATH. But the installer found" "|"
 			text "| another NagVis installation at $NAGVIS_PATH_OLD." "|"
-			confirm "Do you want to update that installation?" "y"
-			if [ "$ANS" != "Y" ]; then
+			
+			ANS="n"
+			ask_user "" "y" 1 "check_confirm" \
+			         "Do you want to update that installation?"
+
+			if [ "$ANS" != "y" ]; then
 				text "| Okay, not performing an update with changing paths." "|"
 				text "|" "|"
+				NAGVIS_PATH_OLD=$NAGVIS_PATH
 			fi
 		fi
 		CALL="$CALL -O $NAGVIS_PATH_OLD"
@@ -1045,42 +1108,20 @@ if [ $FORCE -eq 0 ]; then
 
 	HTML_PATH=${HTML_PATH%/}
 
-	if [ $INSTALLER_QUIET -ne 1 ]; then
-		echo -n "| Please enter the web path to NagVis [$HTML_PATH]: "
-		read APATH
-		if [ ! -z $APATH ]; then
-			HTML_PATH=$APATH
-		fi
-	fi
+	ask_user "HTML_PATH" "$HTML_PATH" 1 "" \
+           "Please enter the web path to NagVis"
+	[ $RC != 1 ] && RC=$?
 
-	if [ $INSTALLER_QUIET -ne 1 ]; then
-		echo -n "| Please enter the name of the web-server user [$WEB_USER]: "
-		read AUSR
-		if [ ! -z $AUSR ]; then
-			WEB_USER=$AUSR
-		fi
-	fi
+	ask_user "WEB_USER" "$WEB_USER" 1 "check_web_user" \
+           "Please enter the name of the web-server user"
+	[ $RC != 1 ] && RC=$?
 
-	if [ $INSTALLER_QUIET -ne 1 ]; then
-		echo -n "| Please enter the name of the web-server group [$WEB_GROUP]: "
-		read AGRP
-		if [ ! -z $AGRP ]; then
-			WEB_GROUP=$AGRP
-		fi
-	fi
-
+	ask_user "WEB_GROUP" "$WEB_GROUP" 1 "check_web_group" \
+           "Please enter the name of the web-server group"
+	[ $RC != 1 ] && RC=$?
+	
+	CALL="$CALL -u $WEB_USER -g $WEB_GROUP -w $WEB_PATH"
 fi
-if [ ! `getent passwd | cut -d':' -f1 | grep "^$WEB_USER"` = "$WEB_USER" ]; then
-	echo "|  Error: User $WEB_USER not found."
-	exit 1
-fi
-
-if [ ! `getent group | cut -d':' -f1 | grep "^$WEB_GROUP"` = "$WEB_GROUP" ]; then
-	echo "|  Error: Group $WEB_GROUP not found."
-	exit 1
-fi
-text "| HTML base directory $HTML_PATH" "|"
-CALL="$CALL -u $WEB_USER -g $WEB_GROUP -w $WEB_PATH"
 
 text
 line "Checking for existing NagVis" "+"
