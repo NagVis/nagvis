@@ -138,6 +138,10 @@ class CoreAuthorisationHandler {
 		
 		return $this->MOD->getAllRoles();
 	}
+
+	private function sortPerms($a, $b) {
+		return strcmp($a['mod'].$a['obj'].$a['act'], $b['mod'].$b['obj'].$b['act']);
+	}
 	
 	public function getAllVisiblePerms() {
 		$aReturn = Array();
@@ -151,6 +155,8 @@ class CoreAuthorisationHandler {
 				$aReturn[] = $perm;
 			}
 		}
+
+		usort($aReturn, Array($this, 'sortPerms'));
 		
 		return $aReturn;
 	}
