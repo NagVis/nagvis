@@ -110,7 +110,7 @@
 ; Default values which get inherited to the maps and its objects
 [defaults]
 ; default backend (id of the default backend)
-;backend="ndomy_1"
+;backend="live_1"
 ; background color of maps
 ;backgroundcolor="#fff"
 ; Enable/Disable the context menu on map objects. With the context menu you are

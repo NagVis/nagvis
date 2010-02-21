@@ -7,17 +7,37 @@
  <body>
 		<h1>Backends</h1>
 		<h2>General Information</h2>
-		<p>The NagVis code is separated into several layers. One of these layers is the &quot;data layer&quot;. The data layer is used to handle requests for information from third party sources like the Nagios NDO. We call this layer &quot;backend&quot; in general. There are some components inside NagVis to manage these backends which act as the glue between the single backends and the other layers.</p>
+		<p>The NagVis code is separated into several layers. One of these layers is
+			 the &quot;data layer&quot;. The data layer is used to handle requests for
+			 information from third party sources like the Socket of MKLivestatus. We
+			 call this layer &quot;backend&quot; in general. There are some components
+			 inside NagVis to manage these backends which act as the glue between the
+			 single backends and the other layers.</p>
 		
 		<h2>Default backend</h2>
-		<p>At the moment there are four backends delivered with the NagVis core packages: the mklivestatus, ndomy, ndo2fs, merlinmy backend. All backend configuration parameters are described in detail below.<br />
-		The ndomy backend is the default backend since NagVis 1.0. It fetches Nagios information from the NDO MySQL database.</p>
+		<p>At the moment there are four backends delivered with the NagVis core
+			 packages: the mklivestatus, ndomy, ndo2fs, merlinmy backend. All backend
+			 configuration parameters are described in detail below.</p>
+		
+		<p>The ndomy backend has been the default backend from NagVis 1.0 to NagVis 1.5.
+			 It fetches Nagios information from the NDO MySQL database. Since NagVis 1.5
+			 the default backend has been switched to MKLivestatus backend.</p>
 		
 		<h2>Backend types</h2>
 		
 		<h3>mklivestatus backend</h3>
-		<p>MKLivestatus is a very simple and smart Nagios eventbroker module. Livestatus is concepted and tuned to reduce disk, memory and cpu loads caused by live-data processing on the Nagios system. Just as NDO, Livestatus makes use of the Nagios Event Broker API and loads a binary module into the Nagios process. But other than NDO, Livestatus does not actively write out data e.g. to the disk. Instead, it opens a socket for external applications to connect to and fetch the current status information from Nagios. For details about the new data access provider take a look at the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html#H1:How to access Nagios status data" target="_blank">official documentation</a>.</p>
-		<p>Since the first NagVis 1.5 release the mklivestatus backend is included on delivery. It performs much better than all other existing backends and comes with less overhead than other backends. No additional database is needed to make this backend work.</p>
+		<p>MKLivestatus is a very simple and smart Nagios eventbroker module. Livestatus
+			 is concepted and tuned to reduce disk, memory and cpu loads caused by live-data
+			 processing on the Nagios system. Just as NDO, Livestatus makes use of the Nagios
+			 Event Broker API and loads a binary module into the Nagios process. But other
+			 than the NDO, Livestatus does not actively write out data e.g. to the disk.
+			 Instead, it opens a socket for external applications to connect to and fetch
+			 the current status information from Nagios. For details about the new data
+			 access provider take a look at the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html#H1:How to access Nagios status data" target="_blank">official documentation</a>.</p>
+		<p>Since the first NagVis 1.5 release the mklivestatus backend is included on
+			 delivery. It performs much better than all other existing backends and
+			 comes with less overhead than other backends. No additional database is
+			 needed to make this backend work.</p>
 		
 		<table style="width:100%">
 		<tr>

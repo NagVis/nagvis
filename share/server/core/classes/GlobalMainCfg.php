@@ -130,7 +130,7 @@ class GlobalMainCfg {
 			'defaults' => Array(
 				'backend' => Array('must' => 0,
 					'editable' => 0,
-					'default' => 'ndomy_1',
+					'default' => 'live_1',
 					'field_type' => 'dropdown',
 					'match' => MATCH_STRING_NO_SPACE),
 				'backgroundcolor' => Array('must' => 0,
@@ -503,11 +503,11 @@ class GlobalMainCfg {
 			'backend' => Array(
 				'backendtype' => Array('must' => 1,
 					'editable' => 0,
-					'default' => 'ndomy',
+					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
 				'backendid' => Array('must' => 1,
 					'editable' => 0,
-					'default' => 'ndomy_1',
+					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
 				'htmlcgi' => Array('must' => 0,
 					'editable' => 1,

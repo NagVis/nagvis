@@ -128,7 +128,7 @@
 		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
 		</tr>
 		<tr>
-		<td> backend </td><td> ndomy_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
+		<td> backend </td><td> live_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
 		</tr>
 		<tr>
 		<td>backgroundcolor</td><td>transparent</td><td>Default background color of maps </td>
@@ -334,32 +334,27 @@
 		</table>
 		
 		<a name="backend"></a><h3> backend_* </h3>
-		The backend sections to define the backends are all named <code>[backend_&lt;backend-id>]</code>.
-		In the example the <code>backend_id</code> is <code>ndomy_1</code>.
+		<p>The backend sections to define the backends are all named <code>[backend_&lt;backend-id>]</code>.
+		In the example the <code>backend_id</code> is <code>live_1</code>.</p>
 		
-		Depending on the value in backendtype the valid values for the backends have to be set. In this example it is the ndomy backend.
+		<p>Depending on the value in backendtype the valid values for the backends
+			have to be set. In this example it is the MKLivestatus backend.</p>
 		
-<pre>[backend_ndomy_1]
-backendtype="ndomy"
+<pre>[backend_live_1]
+backendtype="mklivestatus"
 htmlcgi="/nagios/cgi-bin"
-; the following options depend on the selected backendtype, in this case it is ndomy
-dbhost="localhost"
-dbport=3306
-dbname="db_nagios"
-dbuser="root"
-dbpass="xxx"
-dbprefix="nagios_"
-dbinstancename="default"
-maxtimewithoutupdate=181</pre>
+; the following options depend on the selected backendtype, in this case it is MKLivestatus
+socket="unix:/usr/local/nagios/var/rw/live"
+</pre>
 		<table style="width:100%">
 		<tr>
 		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
 		</tr>
 		<tr>
-		<td> backendtype </td><td> ndomy </td><td> type of backend - MUST be set </td>
+		<td> backendtype </td><td>mklivestatus</td><td> type of backend - MUST be set </td>
 		</tr>
 		<tr>
-		<td> htmlcgi </td><td> /nagios/cgi-bin </td><td> Path to the cgi-bin directory of this backend (interesting for multiple NDO backends) </td>
+		<td> htmlcgi </td><td> /nagios/cgi-bin </td><td> Path to the cgi-bin directory of this backend (interesting for multiple backends) </td>
 		</tr>
 		</table>
 		<p>For the backendtype specific options see the <a href="backends.html">backends documentation</a>.</p>

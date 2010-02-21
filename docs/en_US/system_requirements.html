@@ -9,8 +9,15 @@
 		<h2>Nagios (installed, configured, running)</h2>
 		<p>You need an installed, configured and running Nagios to get NagVis working. You can get Nagios from the <a href="http://www.nagios.org/" target="_blank">official Nagios Homepage</a>.</p>
 		
-		<h2>NDO (installed, configured, running)</h2>
-		<p>You need an installed, configured and running NDO (Nagios data out). This Nagios addon stores all status information collected by the Nagios process in a database. You can get the NDO from the <a href="http://www.nagios.org/" target="_blank">official Nagios Homepage</a>.</p>
+		<h2>MKLivestatus (installed, added to Nagios)</h2>
+		<p>Since NagVis 1.5 we switched the default backend to MKLivestatus since
+			it is much faster, lightweight and more stable than the NDO. And last but
+			not least it is easy to handle and to install. You don't need any database
+			to get MKLivestatus running.</p>
+		<p>MKLivestatus is a Event Broker Module for Nagios which serves a unix socket
+			where third party addons like NagVis can connect to for gathering live status
+			information in a very fast way.</p>
+		<p>You can get MKLivestatus from the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html" target="_blank">official MKLivestatus Homepage</a>.</p>
 		
 		<h2>Webserver with PHP support</h2>
 		<p>NagVis is a web based application realized in Javascript and PHP. You need a webserver with PHP support to run NagVis. We recommend the usage of <a href="http://www.apache.org/" target="_blank">Apache Webserver</a> with <a href="http://www.apache.net/" target="_blank">mod_php</a>.</p>
@@ -30,12 +37,15 @@
 		<p>Note: Maybe some of these functions are compiled in your php.</p>
 
 		<h3>Special requirements by backends</h3>
-		<p>The backends connect to external datasources and often need some special modules. Here is a list of the needed modules for the different backends:</p>
+		<p>The backends connect to external datasources and often need some special modules.
+			Here is a list of the needed modules for the different backends. You only need to meet
+			the requirements of the backends you use.</p>
 		
 		<strong>mklivestatus</strong>
 		<ul>
 		<li>php-socket</li>
 		</ul>
+		
 		<strong>ndomy</strong>
 		<ul>
 		<li>php-mysql</li>
