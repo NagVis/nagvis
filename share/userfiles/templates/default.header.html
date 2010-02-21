@@ -128,10 +128,11 @@
 		  <dd id="user-ddcontent" onmouseover="cancelHide('user')" onmouseout="ddMenu('user',-1)">
 		    <ul>
 		    	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
-		    	{if $permittedChangePassword == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
+		    	{if $supportedChangePassword == true && $permittedChangePassword == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
 		    	{if $permittedUserMgmt == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
 		    	{if $permittedRoleMgmt == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
-		    	<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;" class="underline">{$langLogout}</a></li>
+					{if $permittedLogout == true}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;">{$langLogout}</a></li>{/if}
+					<li class="spacer underline"></li>
 		    </ul>
 		  </dd>
 		</dl>

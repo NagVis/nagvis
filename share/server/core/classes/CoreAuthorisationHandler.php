@@ -61,6 +61,7 @@ class CoreAuthorisationHandler {
 		'AutoMap' => Array(
 			'getAutomapProperties' => 'view',
 			'getAutomapObjects' => 'view',
+			'parseAutomap' => 'view',
 			'getObjectStates' => 'view',
 			'doAdd' => 'add',
 			'doEdit' => 'edit',

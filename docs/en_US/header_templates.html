@@ -56,6 +56,12 @@
 		<td>${permittedRoleMgmt}</td><td>Is true when the user is permitted to manage roles. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
+		<td>${permittedLogout}</td><td>Is true when the user is permitted to log out. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+		</tr>
+		<tr>
+		<td>${supportedChangePassword}</td><td>Is true when the current auth module supports changing passwords. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+		</tr>
+		<tr>
 			<td valign="top"> {foreach $maps map} <br>{$map.mapName}<br>{/foreach}</td>
 			<td>A list of all maps defined in NagVis. The code between <code>{foreach $maps map}</code> and <code>{/foreach}</code>
 					is repeated for each map. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.

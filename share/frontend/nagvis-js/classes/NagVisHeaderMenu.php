@@ -116,6 +116,8 @@ class NagVisHeaderMenu {
 		
 		$this->aMacros['currentUser'] = $this->AUTHORISATION->getAuthentication()->getUser();
 		
+		$this->aMacros['permittedChangePassword'] = $this->CORE->getAuthorization()->isPermitted('ChangePassword', 'change', '*');
+		$this->aMacros['permittedLogout'] = $this->CORE->getAuthorization()->isPermitted('Auth', 'logout', '*');
 		
 		// Replace some special macros
 		if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap')) {
@@ -309,7 +311,7 @@ class NagVisHeaderMenu {
 			'langRotationStop' => $this->CORE->getLang()->getText('rotationStop'),
 			'langToggleGrid' => $this->CORE->getLang()->getText('Show/Hide Grid'),
 			// Supported by backend and not using trusted auth
-			'permittedChangePassword' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword') && !$SHANDLER->isSetAndNotEmpty('authTrusted'),
+			'supportedChangePassword' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword') && !$SHANDLER->isSetAndNotEmpty('authTrusted'),
 			'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
 			'permittedRoleMgmt' => $this->AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
 		
