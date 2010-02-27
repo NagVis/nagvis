@@ -733,10 +733,15 @@ copy() {
 }
 
 set_perm() {
-	if [ -d "$2" -o -f "$2" ]; then
-		DONE=`log "$2" done` 
-		chmod $1 $2
-		chk_rc "| Error setting permissions for $2" "$DONE"
+	if [ -d "$2" -o -f "$2" -o "${2#${2%?}}" = "*" ]; then
+		# Don't do anything when called with globbing and directory is empty
+		if [[ "${2#${2%?}}" = "*" && "`ls -1 "${2%*\*}"`" = "" ]]; then
+			return 0
+		else
+			DONE=`log "$2" done` 
+			chmod $1 $2
+			chk_rc "| Error setting permissions for $2" "$DONE"
+		fi
 	fi
 }
 
