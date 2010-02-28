@@ -123,21 +123,6 @@ function validateMapCfgForm() {
 					y = document.addmodify.elements[i].value;
 				}
 				
-				if(sName == 'allowed_for_config') {
-					users_tab = document.addmodify.elements[i].value.split(',');
-					
-					suicide = true;
-					for(var k = 0, len2 = users_tab.length; k < len2; k++) {
-						if ( (users_tab[k]=='EVERYONE') || (users_tab[k]==username) ) { suicide=false; }
-					}
-					
-					if(suicide) {
-						alert(printLang(lang['unableToWorkWithMap'],''));
-						document.addmodify.elements[i].focus();
-						return false;
-					}
-				}		
-				
 				if(document.addmodify.elements[i].value != '') {
 					// Print a note to the user: This map object will display the summary state of the current map
 					if(sType == "map" && sName == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
