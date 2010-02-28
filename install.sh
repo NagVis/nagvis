@@ -1460,6 +1460,7 @@ else
 	set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/var"
 	set_perm 664 "$NAGVIS_PATH/var/*"
+	set_perm 775 "$NAGVIS_PATH/var/tmpl"
 	set_perm 775 "$NAGVIS_PATH/var/tmpl/cache"
 	set_perm 775 "$NAGVIS_PATH/var/tmpl/compile"
 	set_perm 775 "$NAGVIS_PATH/share/var"
