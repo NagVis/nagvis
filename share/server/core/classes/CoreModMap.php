@@ -95,7 +95,7 @@ class CoreModMap extends CoreModule {
 							                  null,
 							                  null,
 							                  1,
-							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map_new_name']);
+							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map_name']);
 							$sReturn = '';
 						} else {
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be created.'));
