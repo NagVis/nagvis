@@ -62,7 +62,6 @@ class WuiPage {
 		$this->title = $prop['title'];
 		$this->cssIncludes = $prop['cssIncludes'];
 		$this->jsIncludes = $prop['jsIncludes'];
-		$this->allowedUsers = $prop['allowedUsers'];
 		$this->extHeader = $prop['extHeader'];
 		
 		// Append additional header information
@@ -116,26 +115,6 @@ class WuiPage {
 	}
 	
 	/**
-	 * Checks for valid Permissions
-	 *
-	 * @param 	String 	$allowed	
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkPermissions(&$allowed,$printErr) {
-		if(isset($allowed) && !in_array('EVERYONE', $allowed) && !in_array($this->CORE->getMainCfg()->getRuntimeValue('user'), $allowed)) {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('permissionDenied','USER~'.$this->CORE->getMainCfg()->getRuntimeValue('user')));
-			}
-			return FALSE;
-		} else {
-			return TRUE;
-		}
-		return TRUE;
-	}
-	
-	/**
 	 * Does the Prflight checks before building the page
 	 *
 	 * @return	Boolean	Is Check Successful?
@@ -145,7 +124,6 @@ class WuiPage {
 		$ret = TRUE;
 		$ret = $ret & $this->checkUser(TRUE);
 		$ret = $ret & $this->checkPHPVersion(TRUE);
-		$ret = $ret & $this->checkPermissions($this->allowedUsers,TRUE);
 		
 		return $ret;
 	}

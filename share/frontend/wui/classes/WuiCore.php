@@ -90,20 +90,6 @@ class WuiCore extends GlobalCore {
 			// used image
 			$aOpts['mapImage'] = $MAPCFG1->getValue('global', '0', 'map_image');
 			
-			// permited users for writing
-			$aOpts['allowedForConfig'] = Array();
-			$arr = $MAPCFG1->getValue('global', '0', 'allowed_for_config');
-			for($i = 0; count($arr) > $i; $i++) {
-				$aOpts['allowedForConfig'][] = $arr[$i];
-			}
-			
-			// permited users for viewing the map
-			$aOpts['allowedUsers'] = Array();
-			$arr = $MAPCFG1->getValue('global', '0', 'allowed_user');
-			for($i = 0; count($arr) > $i; $i++) {
-				$aOpts['allowedUsers'][] = $arr[$i];
-			}
-			
 			// linked maps
 			$aOpts['linkedMaps'] = Array();
 			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {

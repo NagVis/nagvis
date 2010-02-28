@@ -71,15 +71,6 @@ function check_create_map() {
 		alert(printLang(lang['noSpaceAllowed'],''));
 		return false;
 	}
-	if (document.map_create.allowed_users.value=='') {
-		alert(printLang(lang['minOneUserAccess'],''));
-		return false;
-	}
-	if (document.map_create.allowed_for_config.value=='') {
-		alert(printLang(lang['minOneUserWriteAccess'],''));
-		return false;
-	}
-	
 	for(var i=0;i<document.map_rename.map_name.length;i++) {
 		if(document.map_rename.map_name.options[i].value == document.map_create.map_name.value) {
 			alert(printLang(lang['mapAlreadyExists'],''));
@@ -113,11 +104,6 @@ function check_map_rename() {
 		}
 	}
 	
-	if(!checkUserAllowed(getMapPermissions(document.map_rename.map_name.value, mapOptions,"allowedForConfig"), username)) {
-		alert(printLang(lang['noPermissions'],''));
-		return false;
-	}
-	
 	if (confirm(printLang(lang['confirmMapRename'],'')) === false) {
 		return false;
 	}
@@ -128,12 +114,6 @@ function check_map_rename() {
 function check_map_export() {
 	if(document.map_export.map_name.value=='') {
 		alert(printLang(lang['foundNoMapToExport'],''));
-		return false;
-	}
-	
-	// read and write users are allowed to export the map
-	if(!checkUserAllowed(getMapPermissions(document.map_export.map_name.value, mapOptions,"allowedUsersOrAllowedForConfig"), username)) {
-		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
 	
@@ -165,11 +145,6 @@ function check_map_import() {
 function check_map_delete() {
 	if(document.map_delete.map_name.value=='') {
 		alert(printLang(lang['foundNoMapToDelete'],''));
-		return false;
-	}
-	
-	if(!checkUserAllowed(getMapPermissions(document.map_delete.map_name.value,mapOptions,"allowedForConfig"), username)) {
-		alert(printLang(lang['noPermissions'],''));
 		return false;
 	}
 	
