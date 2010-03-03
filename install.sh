@@ -1049,7 +1049,7 @@ if [ $FORCE -eq 0 ]; then
 			text "| another NagVis installation at $NAGVIS_PATH_OLD." "|"
 			
 			ANS="n"
-			ask_user "" "y" 1 "check_confirm" \
+			ask_user "ANS" "y" 1 "check_confirm" \
 			         "Do you want to update that installation?"
 
 			if [ "$ANS" != "y" ]; then
