@@ -49,8 +49,8 @@ var
 		
 		For information about the possible values have a look at <a href="nagvis_config_format_description.html">Main Config Format Description</a>.
 		
-		<h2> STEP 4: Configure webserver</h2>
-		<p>Since NagVis 1.5 it is neccessary to configure the webserver to be able
+		<h2> STEP 5: Configure webserver</h2>
+		<p>Since NagVis 1.5 it is necessary to configure the webserver to be able
     to use NagVis. You will find a sample configuration file in <code>etc/apache2-nagvis.conf-sample</code>.
 
 		<p>Simply copy the file to the <code>conf.d</code> directory of your webserver. For example this is <code>/etc/apache2/conf.d</code.</p>
@@ -60,7 +60,7 @@ var
 		<p>In this example you need to replace <code>@NAGVIS_WEB@</code> with <code>/nagvis</code>
     and <code>@NAGVIS_PATH@</code> with <code>/usr/local/nagvis/share</code>.
 
-		<h2> STEP 5: Permissions </h2>
+		<h2> STEP 6: Permissions </h2>
 		<font style="color:red">This is very important for a neatly working installation.</font>
 		First check which unix user account is used to run your webserver (in my case it is <code>wwwrun</code>). If you don't know which user the webserver is running then have a look at the webservers configuration. In case of apache you can do this by the following command:<br><br>
 		Ubuntu<pre>grep -e 'USER' /etc/apache2/envvars</pre>
@@ -79,14 +79,14 @@ chmod 664 /usr/local/nagvis/etc/automaps/*
 chmod 775 /usr/local/nagvis/share/userfiles/images/maps
 chmod 664 /usr/local/nagvis/share/userfiles/images/maps/*
 chmod 775 /usr/local/nagvis/var
-chmod 664 /usr/local/nagvis/var/*</pre>
+chmod 664 /usr/local/nagvis/var/*
 chmod 775 /usr/local/nagvis/var/tmpl/cache
 chmod 664 /usr/local/nagvis/var/tmpl/cache/*</pre>
 
 		It's possible to set even lower permissions on the files but for most setups the example should be fine. 
 		Only change them if you know what you are doing!
 		
-		<h2> STEP 6: The graphical config tool (WUI) </h2>
+		<h2> STEP 7: The graphical config tool (WUI) </h2>
 		NagVis has an included web based config tool called WUI. If you want to use it use your browser to open the page:
 		<pre>http://&lt;nagiosserver>/&lt;path-to-nagvis>/frontend/wui/index.php</pre>
 		
@@ -96,12 +96,12 @@ chmod 664 /usr/local/nagvis/var/tmpl/cache/*</pre>
 		
 		<img src="../general/img/medium_nagvis-1.0-wui-preview.png" title="Just open the URL to the Config Tool in a Browser and use your right mouse button">
 		
-		<p><font style="color:red">The Config Tool DOES NOT display the current Nagios states of objects configured. It's only for configuring! To "use" your configured maps afterwards see STEP 7!</font></p>
+		<p><font style="color:red">The Config Tool DOES NOT display the current Nagios states of objects configured. It's only for configuring! To "use" your configured maps afterwards see STEP 8!</font></p>
 		
 		If this doesn't work for you or if you don't want to use the WUI, you can simply edit the map config files in the <code>etc/maps/</code> directory with your favourite text editor.
 		For valid formats and values have a look at <a href="map_config_format_description.html">Map Config Format Description</a>.
 		
-		<h2> STEP 7: View the maps </h2>
+		<h2> STEP 8: View the maps </h2>
 		You should now be able to view your defined maps in your browser:
 		<pre> http://&lt;nagiosserver>/&lt;path-to-nagvis>/frontend/nagvis-js/?mod=Map&amp;show=&lt;mapname></pre>
 		

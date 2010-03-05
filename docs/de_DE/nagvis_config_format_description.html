@@ -36,7 +36,7 @@ Es gibt eine Datei <code>etc/nagvis.ini.php-sample</code> mit Beispiel-Konfigura
 		<br>Standardwerte, die an die Maps und ihre Objekte vererbt werden
 		</li>
 		<li><a href=#index>index</a>
-		<br>Optionen, um die &Uuml;bersichtsseite f&uuml;r NagVis zu konfigurieren <font color="#ff0000">(neu in 1.4)</font>
+		<br>Optionen, um die &Uuml;bersichtsseite f&uuml;r NagVis zu konfigurieren
 		</li>
 		<li><a href=#automap>automap</a>
 		<br>Optionen f&uuml;r die Automap
@@ -45,13 +45,16 @@ Es gibt eine Datei <code>etc/nagvis.ini.php-sample</code> mit Beispiel-Konfigura
 		<br>Optionen f&uuml;r die WUI
 		</li>
 		<li><a href=#worker>worker</a>
-		<br>Optionen f&uuml;r den Worker <font color="#ff0000">(neu in 1.4)</font></li>
+		<br>Optionen f&uuml;r den Worker</li>
 		</li>
 		<li><a href=#backend>backend_*</a>
 		<br>Backend-Definitionen
 		</li>
 		<li><a href=#rotation>rotation_*</a>
 		<br>Rotationspool-Definitionen
+		</li>
+		<li><a href=#states>states</a> (<font color="red">neu in 1.5</font>)
+		<br>Optionen, die die Behandlung und das Aussehen der verschiedenen Zust&auml;nde beeinflussen
 		</li>
 		</ul>		
 
@@ -72,16 +75,52 @@ dateformat="Y-m-d H:i:s"</pre>
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
 </tr>
 <tr>
+<td>authmodule</td><td>CoreAuthModSQLite</td><td>Definiert das zu benutzende Authentifizierungsmodul. Per Default benutzt NagVis das eingebaute SQLite-Authentifizierungsmodul. Bei der Auslieferung ist kein anderes Authentifizierungsmodul verf&uuml;gbar. Es ist m&ouml;glich, andere Authentifizierungsmodule hinzuzuf&uuml;gen, um andere Authentifizierungsmechanismen zu unterst&uuml;tzen. Weitere Einzelheiten finden Sie in der <a href="auth_modules">Authentifizierungsmodul</a>-Dokumentation (<font color="red">neu in 1.5</font>)</td><td> 
+</tr>
+<tr>
+<td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Definiert das zu benutzende Autorisierungsmodul. Per Default benutzt NagVis das eingebaute SQLite-Autorisierungsmodul. Bei der Auslieferung ist kein anderes Autorisierungsmodul verf&uuml;gbar. Es ist m&ouml;glich, andere Autorisierungsmodule hinzuzuf&uuml;gen, um andere Autorisierungsmechanismen zu unterst&uuml;tzen. Weitere Einzelheiten finden Sie in der <a href="authorisation_modules">Autorisierungsmodul</a>-Dokumentation (<font color="red">neu in 1.5</font>)</td><td> 
+</tr>
+<tr>
 <td>dateformat</td><td>Y-m-d H:i:s</td><td>Das in NagVis benutzte Format f&uuml;r Datum- und Zeit. Verf&uuml;gbare Optionen wie bei der <a href="http://www.php.net/date">date()</a>-Funktion von php </td><td> 
 </tr>
 <tr>
-<td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Anzeigen des Header-Menus in Maps</strike><font color="#ff0000"> Entf&auml;llt ab Version 1.4, siehe Option "headermenu" in den default- und index-Abschnitten</font></td>
+<td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Anzeigen des Header-Menus in Maps</strike><font color="#ff0000"> Veraltet ab Version 1.4, siehe Option "headermenu" in den default- und index-Abschnitten</font></td>
 </tr>
 <tr>
 <td>language</td><td>en_US</td><td>W&auml;hlen Sie die Sprache, die in NagVis benutzt werden soll. <code>de_DE</code> (Deutsch), <code>en_US</code> (Englisch), <code>fr_FR</code> (Franz&ouml;sisch) und <code>pt_BR</code> (brasilianisches Portugiesisch; ab 1.4.4) sind als Standard verf&uuml;gbar). Seit 1.4 m&uuml;ssen Sie die Sprache in einem anderen Format angeben. (&quot;de_DE&quot; statt &quot;german&quot;)</td>
 </tr>
 <tr>
+<td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>Sie m&ouml;chten Ihren Benutzern vielleicht eine Auswahl an verschiedenen Sprachen anbieten. Sie k&ouml;nnen das Verhalten kontrollieren, ohne die Sprachdateien aus Ihrer NagVis-Installation zu l&ouml;schen. Wenn dieser Wert nicht gef&uuml;llt ist, werden alle vorkonfigurierten Sprachen angeboten. Wenn Sie eine weitere Sprache hinzuf&uuml;gen m&ouml;chten, dann m&uuml;ssen Sie den Wert hier eintragen (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>language_detection</td><td>user,session,browser,config</td><td>Dies kontrolliert, wie NagVis die Sprache des Benutzers ermitteln soll. NagVis kennt mehrere Mechanismen zur Erkennung der Sprache:<br>
+<i>- user:</i> explizit vom Benutzer eingestellte Sprache<br>
+<i>- session:</i> wenn der Benutzer eine Sprache w&auml;hlt, dann wird diese in der Session gespeichert<br>
+<i>- browser:</i> NagVis versucht, die Sprache mit Hilfe des Browser-Agenten zu ermitteln<br>
+<i>- config:</i> die Default-Sprache der Installation<br>
+Die Reihenfolge der Optionen bestimmt die Reihenfolge, in der NagVis die verschiedenen Mechanismen benutzt (<font color="red">neu in 1.5</font>)
+</td>
+</tr>
+<tr>
+<td>logonmodule</td><td>FrontendLogonDialog</td><td>Definiert das zu benutzende Logon-Modul. Per Default benutzt NagVis den HTML-Logon-Dialog zur Abfrage von Authentifizierungsinformationen. Bei Auslieferung gibt es kein anderes Logon-Modul. Es ist m&ouml;glich, andere Logon-Module hinzuzuf&uuml;gen. Weitere Einzelheiten finden Sie in der <a href="logon_modules">logon-Modul</a>-Dokumentation. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
 <td>refreshtime</td><td>60</td><td>Aktualisierungsintervall in Maps bzw. laden der n&auml;chsten Map bei Map-Rotation</td>
+</tr>
+<tr>
+<td>sesscookiedomain</td><td>automatisch ermittelt</td><td>Vielleicht m&ouml;chten Sie festlegen, f&uuml;r welche Domain NagVis das Session-Cookie speichern soll. Per Default versucht NagVis, den Wert mit Hilfe der Web-Server-Umgebungsvariablen selbst zu ermitteln. Dies sollte in den meisten Umgebungen funktionieren, k&ouml;nnte sich aber z.B. durch URL-Rewriting &auml;ndern. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>sesscookiepath</td><td>automatisch ermittelt</td><td>Vielleicht m&ouml;chten Sie den Pfad festlegen, f&uuml;r den NagVis das Session-Cookie speichern soll. Per Default versucht NagVis, den Wert mit Hilfe der paths/htmlbase-Variablen selbst zu ermitteln. Dies sollte in den meisten Umgebungen funktionieren, k&ouml;nnte sich aber z.B. durch URL-Rewriting &auml;ndern. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>sesscookieduration</td><td>86400</td><td> Lebensdauer des Cookies in Sekunden. Der Standardwert ist auf 24 Stunden eingestellt. Das NagVis-Session-Cookie wird bei jedem Seitenaufruf erneuert. Wenn eine Session länger als die eingestellte Zeit unt&auml;tig ist, wird sie ung&uuml;ltig. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>startmodule</td><td>overview</td><td>Das anzuzeigende Startmodul, wenn vom Benutzer keins angegeben wird. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>startaction</td><td>view</td><td>Die Default-Aktion, wenn vom Benutzer keine angegeben wird. (<font color="red">neu in 1.5</font>)</td>
 </tr>
 </table>
 
@@ -90,22 +129,22 @@ dateformat="Y-m-d H:i:s"</pre>
 In diesem Abschnitt werden alle ben&ouml;tigten Pfad-Variablen definiert. <br>
 <!--Dieses Beispiel zeigt alle Werte des paths-Abschnitts: <br>
 <pre>[paths]
-base="/usr/local/nagios/share/nagvis/"
-htmlbase="/nagios/nagvis"
-htmlcgi="/nagios/cgi-bin"</pre>
+base="/usr/local/nagvis/share/"
+htmlbase="/nagvis"
+htmlcgi="/nagvis/cgi-bin"</pre>
 --> 
 <table border=0 style="width:100%">
 <tr>
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
 </tr>
 <tr>
-<td>base</td><td><code>/usr/local/nagios/share/nagvis/</code></td><td>absoluter physikalischer NagVis-Pfad</td>
+<td>base</td><td><code>/usr/local/nagvis/share/</code></td><td>absoluter physikalischer NagVis-Pfad</td>
 </tr>
 <tr>
-<td>htmlbase</td><td><code>/nagios/nagvis</code></td><td>absoluter html-NagVis-Pfad</td>
+<td>htmlbase</td><td><code>/nagvis</code></td><td>absoluter html-NagVis-Pfad</td>
 </tr>
 <tr>
-<td>htmlcgi</td><td><code>/nagios/cgi-bin</code></td><td>absoluter html-NagVis-cgi-Pfad</td>
+<td>htmlcgi</td><td><code>/nagvis/cgi-bin</code></td><td>absoluter html-NagVis-cgi-Pfad</td>
 </tr>
 </table>
 
@@ -137,40 +176,46 @@ hoverchildslimit=10
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
 </tr>
 <tr>
-<td>backend</td><td>ndomy_1</td><td>Default-Backend (ID des Backends - kopieren Sie den Text, der f&uuml;r <code>&lt;backend-id></code> steht, nach <code>[backend_&lt;backend-id>]</code>)</td>
+<td>backend</td><td>live_1</td><td>Default-Backend (ID des Backends - kopieren Sie den Text, der f&uuml;r <code>&lt;backend-id></code> steht, nach <code>[backend_&lt;backend-id>]</code>)</td>
 </tr>
 <tr>
-<td>backgroundcolor</td><td>#fff</td><td>Default-Hintergrundfarbe f&uuml;r Maps</td>
+<td>backgroundcolor</td><td>transparent</td><td>Default-Hintergrundfarbe f&uuml;r Maps</td>
 </tr>
 <tr>
-<td>contextmenu</td><td>0</td><td>Aktivieren/Deaktivieren des Kontextmen&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>contextmenu</td><td>0</td><td>Aktivieren/Deaktivieren des Kontextmen&uuml;s auf Ihren Map-Objekten.</td>
 </tr>
 <tr>
-<td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>.</td>
 </tr>
 <tr>
-<td> eventbackground </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Wechselns der Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird gezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist) (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventbackground </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Wechselns der Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird gezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist)</td>
 </tr>
 <tr>
-<td> eventhighlight </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) der Hervorhebung von Status&auml;nderungen durch Hinzuf&uuml;gen einer blinkenden Umrandung (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventhighlight </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) der Hervorhebung von Status&auml;nderungen durch Hinzuf&uuml;gen einer blinkenden Umrandung</td>
 </tr>
 <tr>
-<td> eventlog </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Ereignisprotokolls im neuen JavaScript-Frontend. Das Ereignisprotokoll enth&auml;lt wichtige Aktionen und Informationen (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventhighlightduration </td><td> 10000 </td><td> Dauer der Hervorhebung in Millisekunden</td>
 </tr>
 <tr>
-<td> eventloglevel </td><td> info </td><td> Loglevel des Ereignisprotokolls (verf&uuml;gbar: debug, info, warning, critical) (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventhighlightinterval </td><td> 500 </td><td> Intervall der Hervorhebung in Millisekunden</td>
 </tr>
 <tr>
-<td> eventheight </td><td> 100 </td><td> H&ouml;he des JavaScript-Eventlogs in Pixeln (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventlog </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Ereignisprotokolls im neuen JavaScript-Frontend. Das Ereignisprotokoll enth&auml;lt wichtige Aktionen und Informationen</td>
 </tr>
 <tr>
-<td> eventhidden </td><td> 1 </td><td> Verstecken/Zeigen des Eventlogs w&auml;hrend des Map-Ladens (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventloglevel </td><td> info </td><td> Loglevel des Ereignisprotokolls (verf&uuml;gbar: debug, info, warning, critical)</td>
 </tr>
 <tr>
-<td> eventscroll </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) des Bewegens zu dem Icon, das den Status ver&auml;ndert hat, falls das Icon nicht im sichtbaren Bereich liegt (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventheight </td><td> 100 </td><td> H&ouml;he des JavaScript-Eventlogs in Pixeln</td>
 </tr>
 <tr>
-<td> eventsound </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) von Sound-Signalen bei Status&auml;nderungen (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td> eventhidden </td><td> 1 </td><td> Verstecken/Zeigen des Eventlogs w&auml;hrend des Map-Ladens</td>
+</tr>
+<tr>
+<td> eventscroll </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) des Bewegens zu dem Icon, das den Status ver&auml;ndert hat, falls das Icon nicht im sichtbaren Bereich liegt</td>
+</tr>
+<tr>
+<td> eventsound </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) von Sound-Signalen bei Status&auml;nderungen</td>
 </tr>
 <tr>
 <td>headermenu</td><td>1</td><td>aktivieren (1) bzw. deaktivieren (0) des Headermen&uuml;s</a></td>
@@ -215,6 +260,9 @@ hoverchildslimit=10
 <td>showinlists</td><td>1</td><td>Anzeigen von Maps in Listen (Dropdowns, Index-Seite, ...)</td>
 </tr>
 <tr>
+<td>stylesheet</td><td></td><td>Dateiname des benutzerdefinierten Stylesheets, das in den Maps verwendet werden soll. Die Datei muss im share/nagvis/styles-Verzeichnis abgelegt werden. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
 <td>urltarget</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster)</td>
 </tr>
 <tr>
@@ -224,7 +272,7 @@ hoverchildslimit=10
 
 <a name="index"></a>
 <h3>index</h3>
-Dieses sind die Optionen f&uuml;r die &Uuml;bersichtsseite von NagVis <font color=red>(neu mit 1.4)</font>. <br>
+Dieses sind die Optionen f&uuml;r die &Uuml;bersichtsseite von NagVis. <br>
 <table border=0 style="width:100%">
 <tr>
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
@@ -240,6 +288,15 @@ Dieses sind die Optionen f&uuml;r die &Uuml;bersichtsseite von NagVis <font colo
 </tr>
 <tr>
 <td>headertemplate</td><td>default</td><td>Default <a href=./header_templates.html#header/templates">header template</a></td>
+</tr>
+<tr>
+<td>showautomaps</td><td>1</td><td>aktivieren/deaktivieren der Anzeige von Automaps (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>showmaps</td><td>1</td><td>aktivieren/deaktivieren der Anzeige von Maps (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>showmapthumbs</td><td>1</td><td>aktivieren/deaktivieren der Anzeige von Map-Thumbnails (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>showrotations</td><td>1</td><td>aktivieren/deaktivieren der Anzeige von definierten Rotationen</td>
@@ -288,10 +345,25 @@ allowedforconfig=EVERYONE</pre>
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
 </tr>
 <tr>
-<td>allowedforconfig</td><td>EVERYONE</td><td>Benutzer, die die NagVis-Konfiguration &auml;ndern d&uuml;rfen (kommaseparierte Liste) oder EVERYONE</td>
+<td><strike>allowedforconfig</strike></td><td><strike>EVERYONE</strike></td><td>Benutzer, die die NagVis-Konfiguration &auml;ndern d&uuml;rfen (kommaseparierte Liste) oder EVERYONE (<font color="red">veraltet ab 1.5</font>)</td>
 </tr>
 <tr>
 <td>autoupdatefreq</td><td>25</td><td>In diesem Intervall wird die Map von der WUI gesichert.</td>
+</tr>
+<tr>
+<td>grid_color</td><td>#f7f7f7</td><td>Die Farbe der Rasterlinien. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>grid_show</td><td>0</td><td>Aktivieren (1) bzw. deaktivieren (0) eines Rasters, um die Ausrichtung von Objekten im WUI zu vereinfachen. Objekte werden an der linken, oberen Ecke ausgerichtet. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>grid_steps</td><td>32</td><td>Gr&ouml;&szlig;e des Rasters in Pixeln. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>headermenu</td><td>1</td><td>Aktivieren (1) bzw. deaktivieren (0) des Header-Men&uuml;s im WUI. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>headertemplate</td><td>default</td><td>zu benutzendes Standard-<a href="header_templates">Header-Template</a> im WUI. (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>maplocktime</td><td>5</td><td>Zeit in Minuten, die eine Map von einem editierenden Benutzer blockiert wird.</td>
@@ -300,7 +372,7 @@ allowedforconfig=EVERYONE</pre>
 
 <a name="worker"></a>
 <h3> worker </h3>
-Optionen f&uuml;r den neuen Worker im JavaScript-Frontend von NagVis. <font color="#ff0000">(neu in 1.4)</font>
+Optionen f&uuml;r den neuen Worker im JavaScript-Frontend von NagVis.
 <table style="width:100%">
 <tr>
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
@@ -309,60 +381,35 @@ Optionen f&uuml;r den neuen Worker im JavaScript-Frontend von NagVis. <font colo
 <td> interval </td><td> 5 </td><td> Das Intervall in Sekunden, in dem der Worker auf zu aktualisierende Objekte pr&uuml;ft. </td>
 </tr>
 <tr>
+<td> requestmaxlength </td><td> 1900 </td><td> Die maximale L&auml;nge von HTTP-Requests w&auml;hrend Ajax-HTTP-Requests. Einige Intrusion Detection/Prevention-Systeme haben ein Problem mit zu langen Queries. </td>
+</tr>
+<tr>
+<td> requestmaxparams </td><td> 0 </td><td> Die maximale Anzahl von Parametern in Ajax-HTTP-Requests. Einige Intrusion Detection/Prevention-Systeme haben Probleme mit zu vielen Parametern im URL. 0 = keine Begrenzung. </td>
+</tr>
+<tr>
 <td> updateobjectstates </td><td> 15 </td><td> Die Aufbewahrungszeit in Sekunden f&uuml;r die Zust&auml;nde im Frontend. Die Statusinformationen werden nach Ablauf dieser Zeit im folgenden Worker-Intervall aufgefrischt. </td>
 </tr>
 </table>
 
 <a name="backend"></a>
 <h3>backend_*</h3>
-Die Backend-Abschnitte zur Definition der Backends werden alle <code>[backend_&lt;backend-id>]</code> benannt. In dem Beispiel ist <code>ndomy_1</code> die <code>backend_id</code>. <br><br>
-Abh&auml;ngig vom Wert in backendtype m&uuml;ssen die g&uuml;ltigen Werte f&uuml;r die Backends gesetzt werden. In diesem Beispiel ist es das ndomy-Backend. <br>
-<pre>[backend_ndomy_1]
-backendtype="ndomy"
-; the following options depend on the selected backendtype, in this case it is ndomy
-dbhost="localhost"
-dbport=3306
-dbname="db_nagios"
-dbuser="root"
-dbpass="xxx"
-dbprefix="nagios_"
-dbinstancename="default"
-maxtimewithoutupdate=181
-htmlcgi="/nagios/cgi-bin"</pre>
+Die Backend-Abschnitte zur Definition der Backends werden alle <code>[backend_&lt;backend-id>]</code> benannt. In dem Beispiel ist <code>live_1</code> die <code>backend_id</code>. <br><br>
+Abh&auml;ngig vom Wert in backendtype m&uuml;ssen die g&uuml;ltigen Werte f&uuml;r die Backends gesetzt werden. In diesem Beispiel ist es das MKLivestatus-Backend. <br>
+<pre>[backend_live_1]
+backendtype="mklivestatus"
+htmlcgi="/nagios/cgi-bin"
+; the following options depend on the selected backendtype, in this case it is MKLivestatus
+socket="unix:/usr/local/nagios/var/rw/live</pre>
 
 <table border=0 style="width:100%">
 <tr>
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
 </tr>
 <tr>
-<td>backendtype</td><td>ndomy</td><td>Art des Backends – MUSS gesetzt werden</td>
+<td>backendtype</td><td>mklivestatus</td><td>Art des Backends - MUSS gesetzt werden</td>
 </tr>
 <tr>
-<td>dbhost</td><td>localhost</td><td>Hostname des Rechner mit der NDO-Datenbank</td>
-</tr>
-<tr>
-<td>dbport</td><td>3306</td><td>Port der NDO-Datenbank </td>
-</tr>
-<tr>
-<td>dbname</td><td>db_nagios</td><td>Name der NDO-Datenbank </td>
-</tr>
-<tr>
-<td>dbuser</td><td>root</td><td>Benutzername f&uuml;r den Datenbankzugriff (nur Lese-Berechtigung erforderlich) </td>
-</tr>
-<tr>
-<td>dbpass</td><td>root</td><td>Passwort f&uuml;r den Datenbankzugriff (nur Lese-Berechtigung erforderlich) </td>
-</tr>
-<tr>
-<td>dbprefix </td><td>nagios_</td><td>Pr&auml;fix der Tabellen der NDO-Datenbank (wie in ndo2db.cfg definiert) </td>
-</tr>
-<tr>
-<td>dbinstancename</td><td>default</td><td>Name der Nagios-Instanz der NDO-Datenbank (wie in ndomod.cfg definiert) </td>
-</tr>
-<tr>
-<td>maxtimewithoutupdate</td><td>180</td><td>Max. Verz&ouml;gerung in Sekunden nach dem letzten Update in NDO. NagVis meldet, dass Nagios nicht l&auml;uft, wenn die Verz&ouml;gerung erreicht wurde. </td>
-</tr>
-<tr>
-<td>htmlcgi</td><td>/nagios/cgi-bin</td><td>Pfad zum cgi-bin-Verzeichnis dieses Backends (interessant bei mehreren NDO-Backends)</td>
+<td>htmlcgi</td><td>/nagios/cgi-bin</td><td>Pfad zum cgi-bin-Verzeichnis dieses Backends (wichtig bei mehreren Backends)</td>
 </tr>
 </table>
 
@@ -385,9 +432,76 @@ interval=15</pre>
 <td>maps</td><td> </td>
 <td>
 	kommaseparierte Liste von Maps in diesem Pool, die zu rotieren sind. Sie k&ouml;nnen auch externe URLs durch [ ] klammern (z.B. maps="demo1,[http://localhost/test.php]". Die URL muss von dem Server erreichbar sein, auf dem NagVis l&auml;uft.<br><br> 
-	<font color="#ff0000">Neu in 1.4:</font> Sie k&ouml;nnen Label im folgenden Format hinzuf&uuml;gen: &lt;label&gt;:&lt;map&gt; und &lt;label&gt;:&lt;[url]&gt;. Die Label werden in der Rotationsliste angezeigt.
+	Sie k&ouml;nnen Label im folgenden Format hinzuf&uuml;gen: &lt;label&gt;:&lt;map&gt; und &lt;label&gt;:&lt;[url]&gt;. Die Label werden in der Rotationsliste angezeigt.
+	<font color="#ff0000">Neu in 1.5:</font> Es ist au&szlig;erdem m&ouml;glich, Automaps zu Rotationen hinzuzuf&uuml;gen. Setzen Sie einfach ein "@"-Zeichen vor den Name der Automap, um sie der Rotation hinzuzuf&uuml;gen.
 </td>
 </tr>
+</table>
+
+<a name="states"></a>
+<h3>states (<font color="red">neu in 1.5</font>)</h3>
+Optionen, die die Behandlung und das Aussehen der verschiedenen Zust&auml;nde in der NagVis-Installation beeinflussen.<br>
+Diese Einstellungen definieren das Verhalten der Zustandsbehandlung. Haupts&auml;chlich ist es m&ouml;glich zu konfigurieren, welcher Zustand einen anderen "&uuml;berdeckt". Ein kritischer Zustand (5) wird eine Warnung (4) &uuml;berdecken, ein best&auml;tigter kritischer Zustand (2) wird nicht eine Warnung (4) &uuml;berdecken.<br>
+
+<table border=0>
+<tr> <th width="200">Wert</th><th width="150">Default</th> </tr>
+<tr> <td>unreachable</td><td>8</td> </tr>
+<tr> <td>unreachable_ack</td><td>5</td> </tr>
+<tr> <td>unreachable_downtime</td>><td>5</td> </tr>
+<tr> <td>down</td><td>7</td> </tr>
+<tr> <td>down_ack</td><td>5</td> </tr>
+<tr> <td>down_downtime</td><td>5</td> </tr>
+<tr> <td>critical</td><td>7</td> </tr>
+<tr> <td>critical_ack</td><td>5</td> </tr>
+<tr> <td>critical_downtime</td><td>5</td> </tr>
+<tr> <td>warning</td><td>6</td> </tr>
+<tr> <td>warning_ack</td><td>4</td> </tr>
+<tr> <td>warning_downtime</td><td>4</td> </tr>
+<tr> <td>error</td><td>3</td> </tr>
+<tr> <td>error_ack</td><td>2</td> </tr>
+<tr> <td>error_downtime</td><td>2</td> </tr>
+<tr> <td>ok</td><td>1</td> </tr>
+<tr> <td>up</td><td>1</td> </tr>
+<tr> <td>pending</td><td>0</td> </tr>
+</table>
+
+<p>
+Diese Einstellungen definieren das Verhalten der Zust&auml;nde im Frontend.
+<ul>
+	<li><b>*_bgcolor:</b> Die bgcolor-Option wird als Hintergrundfarbe bei Eventhandlern benutzt.</li>
+	<li><b>*_color:</b> Sie k&ouml;nnen die Vordergrundfarben konfigurieren, die u.a. als Linienfarben und der Hervorhebung von Eventhandlern benutzt werden.</li>
+	<li><b>*_sound:</b> Die Sound-Dateien werden bei &Auml;nderungen in den genannten Zustand abgespielt (muss MP3-Format sein).</li>
+</ul>
+
+<table>
+	<tr><th style="width:200px">Wert</th><th style="width:150px">Default</th></tr>
+	<tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
+	<tr><td>unreachable_color</td><td>#F1811B</td></tr>
+	<tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
+	<tr><td>down_bgcolor</td><td>#FF0000</td></tr>
+	<tr><td>down_color</td><td>#FF0000</td></tr>
+	<tr><td>down_sound</td><td>std_down.mp3</td></tr>
+	<tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
+	<tr><td>critical_color</td><td>#FF0000</td></tr>
+	<tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
+	<tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
+	<tr><td>warning_color</td><td>#FFFF00</td></tr>
+	<tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
+	<tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
+	<tr><td>unknown_color</td><td>#FFCC66</td></tr>
+	<tr><td>unknown_sound</td><td></td></tr>
+	<tr><td>error_bgcolor</td><td>#0000FF</td></tr>
+	<tr><td>error_color</td><td>#0000FF</td></tr>
+	<tr><td>error_sound</td><td></td></tr>
+	<tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
+	<tr><td>ok_color</td><td>#00FF00</td></tr>
+	<tr><td>ok_sound</td><td></td></tr>
+	<tr><td>up_bgcolor</td><td>#00FF00</td></tr>
+	<tr><td>up_color</td><td>#00FF00</td></tr>
+	<tr><td>up_sound</td><td></td></tr>
+	<tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
+	<tr><td>pending_color</td><td>#C0C0C0</td></tr>
+	<tr><td>pending_sound</td><td></td></tr>
 </table>
 
 </html>

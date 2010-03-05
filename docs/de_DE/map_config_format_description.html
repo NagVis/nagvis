@@ -12,7 +12,7 @@
 </style>
 <![endif]-->
   </head>  
-<h1> NagVis 1.4 Formatbeschreibung der Map-Konfiguration </h1>
+<h1> NagVis 1.5 Formatbeschreibung der Map-Konfiguration </h1>
 
 <h2>Allgemeine Informationen</h2>
 <p>Das NagVis-Konfigurationsdateiformat ist sehr &auml;hnlich zu dem Format, das von <a href=http://www.nagios.org/>Nagios</a>(TM) benutzt wird. </p>
@@ -31,6 +31,7 @@ beginnen MUSS, alle anderen Zeichen (auch "Whitespaces") sind ung&uuml;ltig! </p
 <li><a href=#map>map</a></li>
 <li><a href=#textbox>textbox</a></li>
 <li><a href=#shape>shape</a></li>
+<li><a href=#line>line</a> (<font color="red">neu in 1.5</font>)</li>
 <li><a href=#template>template</a></li>
 </ul>
 
@@ -41,8 +42,6 @@ Die erste Definition in jeder Konfigurationsdatei sollte vom Typ "global" sein. 
 andere Typen vererbt, die sp&auml;ter definiert werden. <br><br>
 Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen: <br>
 <pre>define global {
-  allowed_user=EVERYONE
-  allowed_for_config=nagiosadmin
   map_image=lan.png
 }</pre>
  
@@ -50,15 +49,15 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen: <br>
 <tr>
 <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
 <tr>
-<td><b>allowed_for_config</b></td><td> </td><td>Kommaseparierte Liste von Nagios-Benutzern, die diese Map editieren d&uuml;rfen.
-EVERYONE erlaubt jedem den Zugriff</td>
+<td><strike>allowed_for_config</strike></td><td> </td><td><strike>Kommaseparierte Liste von Nagios-Benutzern, die diese Map editieren d&uuml;rfen.
+EVERYONE erlaubt jedem den Zugriff</strike> (<font color="red">veraltet ab 1.5</font>)</td>
 </tr>
 <tr>
-<td><b>allowed_user</b></td><td> </td><td>Kommaseparierte Liste von Nagios-Benutzern, die berechtigt sind, diese Maps anzusehen.
-EVERYONE erlaubt jedem den Zugriff</td>
+<td><strike>allowed_user</strike></td><td> </td><td><strike>Kommaseparierte Liste von Nagios-Benutzern, die berechtigt sind, diese Maps anzusehen.
+EVERYONE erlaubt jedem den Zugriff</strike> (<font color="red">veraltet ab 1.5</font>)</td>
 </tr>
 <tr>
-<td>map_image</td><td> </td><td>Das Bild, das als Hintergrund der NagVis-Map angezeigt werden soll (z.B. eine Visio (TM)-Zeichnung). <br><font color=#ff0000>(neu in 1.4):</font> Der Wert kann auch &quot;none&quot; oder leer sein f&uuml;r kein Hintergrundbild</td>
+<td>map_image</td><td> </td><td>Das Bild, das als Hintergrund der NagVis-Map angezeigt werden soll (z.B. eine Visio (TM)-Zeichnung). <br>Der Wert kann auch &quot;none&quot; oder leer sein f&uuml;r kein Hintergrundbild<br><font color="red">neu in 1.5:</font> Es ist auch m&ouml;lich URLs anzugeben. Diese müssen zwischen eckige Klammern [ ] gesetzt werden.</td>
 </tr>
 <tr>
 <td>alias</td><td>Map-Name</td><td>Der Alias ist das Label f&uuml;r jede Map. Wenn definiert, wird es &uuml;berall im NagVis-Frontend und WUI angezeigt</td>
@@ -70,34 +69,43 @@ EVERYONE erlaubt jedem den Zugriff</td>
 <td>background_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Hintergrundfarbe dieser Map. Falls dieser Wert nicht gesetzt wird, wird die Hintergrundfarbe aus der Hauptkonfigurationsdatei genommen. </td>
 </tr>
 <tr>
-<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
 </tr>
 <tr>
-<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
 </tr>
 <tr>
-<td>event_background</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der sich &auml;ndernden Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird angezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist). <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_background</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der sich &auml;ndernden Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird angezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist).</td>
 </tr>
 <tr>
-<td>event_highlight</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der Hervorhebung des sich &auml;ndernden Objekts durch eine blinkende Umrandung. <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_highlight</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der Hervorhebung des sich &auml;ndernden Objekts durch eine blinkende Umrandung.</td>
 </tr>
 <tr>
-<td>event_log</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Eventlogs im neuen JavaScript-Backend. Das Eventlog protokolliert wichtige Aktionen und Informationen. <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_log</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Eventlogs im neuen JavaScript-Backend. Das Eventlog protokolliert wichtige Aktionen und Informationen. </td>
 </tr>
 <tr>
-<td>event_log_level</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Loglevel des Eventlogs (verf&uuml;gbar: debug, info, warning, critical). <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_log_level</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Loglevel des Eventlogs (verf&uuml;gbar: debug, info, warning, critical).</td>
 </tr>
 <tr>
-<td>event_log_height</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>H&ouml;he des JavaScript-Eventlogs in Pixeln. <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_log_height</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>H&ouml;he des JavaScript-Eventlogs in Pixeln.</font></td>
 </tr>
 <tr>
-<td>event_log_hidden</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Verstecken/zeigen des JavaScript-Eventlogs w&auml;hrend des Map-Ladens. <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_log_hidden</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Verstecken/zeigen des JavaScript-Eventlogs w&auml;hrend des Map-Ladens.</font></td>
 </tr>
 <tr>
-<td>event_scroll</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Fokussierens auf das Icon, das den Zustand ver&auml;ndert hat, wenn dieses au&szlig;erhalb des sichtbaren Bereichs ist. <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_scroll</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Fokussierens auf das Icon, das den Zustand ver&auml;ndert hat, wenn dieses au&szlig;erhalb des sichtbaren Bereichs ist.</td>
 </tr>
 <tr>
-<td>event_sound</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Sound-Signalen bei Status&auml;nderungen. <font color="#ff0000">(Neu in 1.4)</font></td>
+<td>event_sound</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Sound-Signalen bei Status&auml;nderungen.</font></td>
+</tr>
+<tr>
+<td>grid_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die Farbe der Rasterlinien (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>grid_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Rasterlinien zur Ausrichtung von Objekten im WUI. Objekte werden an der linken, oberen Ecke ausgerichtet (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>grid_steps</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Abstand der Rasterlinien (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>header_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Header-Men&uuml;s </td>
@@ -154,6 +162,9 @@ EVERYONE erlaubt jedem den Zugriff</td>
 <td>label_border</td><td>#000000</td><td>Default-Rahmenfarbe der Label. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
+<td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
 <td>only_hard_states</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
 </tr>
 <tr>
@@ -161,6 +172,9 @@ EVERYONE erlaubt jedem den Zugriff</td>
 </tr>
 <tr>
 <td>show_in_lists</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Map-Anzeige in Listenformat (Dropdowns, Indexseite, ...) </td>
+</tr>
+<tr>
+<td>stylesheet</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Dateiname des benutzerdefinierten Stylesheets zur Verwendung in den Maps. Die Datei muss im share/nagvis/style-Verzeichnis abgelegt sein. (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>url_target </td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster) </td>

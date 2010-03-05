@@ -67,56 +67,56 @@
 		<td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font></td>
 		</tr>
 		<tr>
-		<td>language_detection</td><td>user,session,browser,config</td><td>This controlls how NagVis tries to detect the language of the user to translate NagVis. NagVis knows several mechanism to detect the language:<br />
+		<td>language_detection</td><td>user,session,browser,config</td><td>This controls how NagVis tries to detect the language of the user to translate NagVis. NagVis knows several mechanisms to detect the language:<br />
 		- <i>user</i>: Explict user selected language<br />
 		- <i>session</i>: When the user selects a language it is stored in the current session<br />
 		- <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
 		- <i>config</if>: The installation default language<br />
-		The order you set the options NagVis uses the different mechanism. (<font color="#ff0000">New in 1.5</font>)</td>
+		The order you set the options determines how NagVis uses the different mechanisms. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
-		<td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can controll the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here. (<font color="#ff0000">New in 1.5</font>)</td>
+		<td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can control the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
 		<td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
 		</tr>
 		<tr>
-		<td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication informations from the user. On delivery there is no other logon module avialable. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+		<td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication information from the user. On delivery there is no other logon module available. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
 		<td>refreshtime</td><td>60</td><td>Refresh time of maps or reloading the next map in map rotation</td>
 		</tr>
 		<tr>
-		<td>sesscookiedomain</td><td>auto-detect</td><td>You may need to controll for which domain NagVis will store the session cookie. By default NagVis tries to auto detect this options value by using the webservers environment variables. This should work on most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+		<td>sesscookiedomain</td><td>auto-detect</td><td>You may need to control for which domain NagVis will store the session cookie. By default NagVis tries to auto detect this option value by using the webservers environment variables. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
 		<tr>
-		<td>sesscookiepath</td><td>auto-detected</td><td>You may need to controll the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work on most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+		<td>sesscookiepath</td><td>auto-detected</td><td>You may need to control the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
 		<tr>
-		<td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid. <font color="#ff0000">(New in 1.5)</font></td>
+		<td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid. <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
 		<tr>
-		<td>startmodule</td><td>overview</td><td>The default module to show when no given by the user <font color="#ff0000">(New in 1.5)</font></td>
+		<td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
 		<tr>
-		<td>startaction</td><td>view</td><td>The default action to do when no given by the user <font color="#ff0000">(New in 1.5)</font></td>
+		<td>startaction</td><td>view</td><td>The default action to do when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
 		</table>
 		
 		<a name="paths"></a><h3> paths </h3>
-		In this section all needed path variables are defined.
+		In this section all necessary path variables are defined.
 		<table style="width:100%">
 		<tr>
 		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
 		</tr>
 		<tr>
-		<td> base </td><td> <code>/usr/local/nagios/share/nagvis/</code> </td><td> Absolute physical NagVis path </td>
+		<td> base </td><td> <code>/usr/local/nagvis/share/</code> </td><td> Absolute physical NagVis path </td>
 		</tr>
 		<tr>
-		<td> htmlbase </td><td> <code>/nagios/nagvis</code> </td><td> Absolute html NagVis path </td>
+		<td> htmlbase </td><td> <code>/nagvis</code> </td><td> Absolute html NagVis path </td>
 		</tr>
 		<tr>
-		<td> htmlcgi </td><td> <code>/nagios/cgi-bin</code> </td><td> Absolute html NagVis cgi path </td>
+		<td> htmlcgi </td><td> <code>/nagvis/cgi-bin</code> </td><td> Absolute html NagVis cgi path </td>
 		</tr>
 		</table>
 		
