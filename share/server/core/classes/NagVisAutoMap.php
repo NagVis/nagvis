@@ -387,6 +387,7 @@ class NagVisAutoMap extends GlobalMap {
 		 *
 		 * In some cases there may be an ID:
 		 * <area shape="rect" id="node1" href="/nagios/cgi-bin/status.cgi?host=test_router_0" target="_self" title="host_0" alt="" coords="509,378,525,393"/>
+		 * <area shape="rect" id="node1" href="/icinga/cgi-bin/status.cgi?host=Icinga" target="_self" title="host_0" alt="" coords="698,24,713,40"/>
 		 *
 		 * Coord description:
 		 * For a rectangle, you map the top left and bottom right corners. All 
@@ -401,7 +402,7 @@ class NagVisAutoMap extends GlobalMap {
 		foreach($aMapCode AS $sLine) {
 			// Extract the area objects
 			// Only parsing rect/polys at the moment
-			if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href="\/nagios\/cgi-bin\/status\.cgi\?host=([^"]+)"\starget="_self"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
+			if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href=".+\/status\.cgi\?host=([^"]+)"\starget="_self"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
 				if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[3]) && isset($aMatches[4])) {
 					$type = $aMatches[1];
 					$name1 = trim($aMatches[3]);
