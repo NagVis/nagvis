@@ -149,7 +149,7 @@ function frontendMessage(oMessage, iTimeout) {
 	oCell.colSpan = '3';
 	oCell.style.paddingTop = '16px';
 	oCell.style.height = '202px';
-	oCell.appendChild(document.createTextNode(oMessage.message));
+	oCell.innerHTML = oMessage.message
 	
 	oRow.appendChild(oCell);
 	oCell = null;
