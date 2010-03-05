@@ -37,9 +37,6 @@ class WuiPage {
 	// String for the body
 	private $body;
 	
-	// logged in user
-	private $user;
-	
 	/**
 	 * Class Constructor
 	 *
@@ -72,9 +69,6 @@ class WuiPage {
 		// http://www.nagios-portal.org/wbb/index.php?page=Thread&threadID=13885
 		$this->extHeader .= '<meta name="viewport" content="width=480; initial-scale=0.6666; maximum-scale=1.0; minimum-scale=0.6666" />';
 		
-		$this->user = getUser();
-		$this->CORE->getMainCfg()->setRuntimeValue('user',$this->user);
-		
 		self::checkPreflight();
 	}
 	
@@ -97,24 +91,6 @@ class WuiPage {
 	}
 	
 	/**
-	 * Checks for logged in Users
-	 *
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkUser($printErr) {
-		if($this->user != '') {
-			return TRUE;
-		} else {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('noUser'));
-			}
-			return FALSE;
-		}
-	}
-	
-	/**
 	 * Does the Prflight checks before building the page
 	 *
 	 * @return	Boolean	Is Check Successful?
@@ -122,7 +98,6 @@ class WuiPage {
 	 */
 	private function checkPreflight() {
 		$ret = TRUE;
-		$ret = $ret & $this->checkUser(TRUE);
 		$ret = $ret & $this->checkPHPVersion(TRUE);
 		
 		return $ret;

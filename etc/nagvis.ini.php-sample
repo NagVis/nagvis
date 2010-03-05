@@ -70,7 +70,7 @@
 ; create users in the database when provided users does not exist. The option
 ; logonenvcreaterole tells the module to assign the new user to a specific role
 ; set to empty string to disable that behaviour.
-;logonmodule="LogonDialog"
+;logonmodule="LogonMixed"
 ;logonenvvar="REMOTE_USER"
 ;logonenvcreateuser="1"
 ;logonenvcreaterole="Guests"
