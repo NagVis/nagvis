@@ -58,9 +58,6 @@ define('CONST_VERSION', '1.5a1');
 // Path to the main configuration file
 define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
 
-// Path to the main configuration file
-define('CONST_USERCFG', '../../../etc/users.ini.php');
-
 // Needed minimal PHP version
 define('CONST_NEEDED_PHP_VERSION', '5.0');
 
