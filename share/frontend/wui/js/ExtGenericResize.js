@@ -165,6 +165,8 @@ function doMove(event) {
 		el.style.cursor = str;
 		
 		str = null;
+	} else {
+		el.style.cursor = "default";
 	}
 	
 	//Dragging starts here
