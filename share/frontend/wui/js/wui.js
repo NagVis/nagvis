@@ -370,6 +370,11 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		oObj.moveTo(oObj.oldX, oObj.oldY);
 		return;
 	}
+
+	// Skip when the object has not been moved
+	if(oObj.y == oObj.oldY && oObj.x == oObj.oldX) {
+		return;
+	}
 	
 	// When a grid is enabled align the dragged object in the nearest grid
 	if(oViewProperties.grid_show === 1) {
@@ -425,7 +430,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	} else {
 		type = arr[1];
 		id = arr[2];
-		
+
 		// Don't forget to substract height of header menu
 		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+oObj.x+'&y='+(oObj.y - getHeaderHeight());
 	}
