@@ -165,8 +165,6 @@ function doMove(event) {
 		el.style.cursor = str;
 		
 		str = null;
-	} else {
-		el.style.cursor = "default";
 	}
 	
 	//Dragging starts here
@@ -199,7 +197,7 @@ function doMove(event) {
 function getReal(el, type, value) {
 	temp = el;
 	while ((temp != null) && (temp.tagName != "BODY")) {
-		if (eval("temp." + type) == value) {
+		if(eval("temp." + type).indexOf(value) !== -1) {
 			el = temp;
 			return el;
 		}
