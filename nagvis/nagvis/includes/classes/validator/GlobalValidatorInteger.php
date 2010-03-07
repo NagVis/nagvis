@@ -53,10 +53,10 @@ class GlobalValidatorInteger extends GlobalValidatorAbstract {
 	 *
 	 * @param   string   $name    Name from variable
 	 * @param            $value   Value for variable
-	 * @access  private
+	 * @access  public
 	 * @author  Michael Luebben <michael_luebben@web.de>
 	 */
-	private function __set($name, $value) {
+	public function __set($name, $value) {
 		$this->name = $value;
 	}
 
