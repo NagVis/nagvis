@@ -84,7 +84,7 @@ class GlobalHeaderMenu {
 	 */
 	public function replaceDynamicMacros() {
 		// Replace some special macros
-		if($this->OBJPAGE !== null && get_class($this->OBJPAGE) == 'NagVisMapCfg') {
+		if($this->OBJPAGE !== null && (is_object($this->OBJPAGE) && get_class($this->OBJPAGE) == 'NagVisMapCfg')) {
 			$arrKeys[] = '[current_map]';
 			$arrKeys[] = '[current_map_alias]';
 			$arrVals[] = $this->OBJPAGE->getName();
@@ -122,7 +122,7 @@ class GlobalHeaderMenu {
 								}
 								
 								// auto select current map
-								if(get_class($this->OBJPAGE) == 'NagVisMapCfg' && ($mapName == $this->OBJPAGE->getName() || $mapName == '__automap' && isset($_GET['automap']))) {
+								if((is_object($this->OBJPAGE) && get_class($this->OBJPAGE) == 'NagVisMapCfg') && ($mapName == $this->OBJPAGE->getName() || $mapName == '__automap' && isset($_GET['automap']))) {
 									$sReplaceObj = str_replace('[selected]','selected="selected"',$sReplaceObj);
 								} else {
 									$sReplaceObj = str_replace('[selected]','',$sReplaceObj);
@@ -138,7 +138,7 @@ class GlobalHeaderMenu {
 		}
 		
 		// Select overview in header menu when no map shown
-		if(get_class($this->OBJPAGE) != 'NagVisMapCfg') {
+		if((is_object($this->OBJPAGE) && get_class($this->OBJPAGE) != 'NagVisMapCfg')) {
 			$this->code = str_replace('[selected]','selected="selected"', $this->code);
 		}
 		
