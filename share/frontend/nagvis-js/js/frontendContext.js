@@ -132,14 +132,14 @@ function contextShow(event) {
 		// id from a parent element
 		if(typeof target.id == 'undefined' || target.id == '') {
 			// Take the first parent
-			if(target.parentNode != null && typeof target.parentNode.id != 'undefined' && target.parentNode.id !== '' && target.parentNode.id.indexOf('-') !== -1) {
+			if(target.parentNode != null && typeof target.parentNode.id != 'undefined' && target.parentNode.id !== '') {
 				target = target.parentNode;
 			}
 			
 			// At the moment there is no need to loop more layers. Maybe this is
 			// needed in the future?
 		}
-		
+
 		// Workaround for the different structure of targets on lines/icons
 		// Would be nice to fix the structure
 		var id;
