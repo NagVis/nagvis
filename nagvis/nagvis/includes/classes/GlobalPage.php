@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*****************************************************************************
  *
  * GlobalPage.php - Class for managing the common page layout
