@@ -38,7 +38,13 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		
 		// Open sqlite database
 		if(!$this->DB->open($this->CORE->getMainCfg()->getValue('paths', 'cfg').'auth.db')) {
-			// FIXME: Errorhandling
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to open auth database ([DB])',
+                                      Array('DB' => $this->CORE->getMainCfg()->getValue('paths', 'cfg').'auth.db')));
+		} else {
+			// Create initial db scheme if needed
+			if(!$this->DB->tableExist('users')) {
+				$this->DB->createInitialDb();
+			}
 		}
 	}
 	
