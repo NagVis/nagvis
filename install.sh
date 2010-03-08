@@ -412,7 +412,7 @@ check_backend() {
 				log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" "found"
 			elif [ $INSTALLER_QUIET -ne 1 ]; then
 				# Loop until we got what we want in interactive mode
-				while [[ "$LIVESTATUS_SOCK" =~ unix:* && ! -S ${LIVESTATUS_SOCK#unix:} ]]; do
+				while [[ ! "$LIVESTATUS_SOCK" =~ tcp:* && ! -S ${LIVESTATUS_SOCK#unix:} ]]; do
 					log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" ""
 					text "| Valid socket formats are: tcp:127.0.0.1:7668 or unix:/path/to/live" "|"
 					
@@ -421,7 +421,9 @@ check_backend() {
 					if [ ! -z $APATH ]; then
 						LIVESTATUS_SOCK=$APATH
 						
-						if [[ ! "$LIVESTATUS_SOCK" =~ unix:* ]]; then
+						if [[ ! "$LIVESTATUS_SOCK" =~ unix:* && ! "$LIVESTATUS_SOCK" =~ tcp:* ]]; then
+							text "| Invalid socket format. Take a look above for valid formats." "|"
+						elif [[ ! "$LIVESTATUS_SOCK" =~ unix:* ]]; then
 							text "| Unable to check TCP-Sockets, hope you put the correct socket." "|"
 						fi
 					fi
@@ -859,7 +861,8 @@ if [ $NAGVIS_TAG -lt 01050000 ]; then
 	NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
 	NAGVIS_PATH_OLD=$NAGVIS_PATH
 else
-	NAGVIS_PATH="${NAGIOS_PATH%%nagios}/nagvis"
+	NAGVIS_PATH="${NAGIOS_PATH%%nagios}"
+	NAGVIS_PATH="${NAGVIS_PATH%/}/nagvis"
 	NAGVIS_PATH_OLD=$NAGVIS_PATH
 fi
 
