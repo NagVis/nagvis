@@ -360,7 +360,7 @@ log() {
 # Will overwrite the NAGIOS_PATH when found some Nagios running
 detect_nagios_path() {
 	IFS=$'\n'
-	for N_PROC in `ps ax -o pid,ppid,user,command | grep nagios | grep -v grep`; do
+	for N_PROC in `ps ax -o pid,ppid,user,command | grep 'bin/nagios' | grep -v grep`; do
 		IFS=" "
 		#  2138     1 nagios   /d/nagvis-dev/nagios/bin/nagios -d /d/nagvis-dev/nagios/etc/nagios.cfg
 		N_PID=`expr "$N_PROC" : ' *\([0-9]*\)'`
@@ -859,7 +859,7 @@ if [ $NAGVIS_TAG -lt 01050000 ]; then
 	NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
 	NAGVIS_PATH_OLD=$NAGVIS_PATH
 else
-	NAGVIS_PATH=${NAGIOS_PATH%%nagios}nagvis
+	NAGVIS_PATH="${NAGIOS_PATH%%nagios}/nagvis"
 	NAGVIS_PATH_OLD=$NAGVIS_PATH
 fi
 
