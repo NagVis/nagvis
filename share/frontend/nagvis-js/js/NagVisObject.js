@@ -169,12 +169,17 @@ var NagVisObject = Base.extend({
 		
 		if(this.conf.type === 'service') {
 			oMacros.service_description = escapeUrlValues(this.conf.service_description);
+			
+			oMacros.pnp_hostname = oObj.conf.name.replace(/\s/g,'%20');
+			oMacros.pnp_service_description = oObj.conf.service_description.replace(/\s/g,'%20');
 		} else {
 			oSectionMacros.service = '<!--\\sBEGIN\\sservice\\s-->.+?<!--\\sEND\\sservice\\s-->';
 		}
 		
 		// Macros which are only for hosts
-		if(this.conf.type !== 'host') {
+		if(this.conf.type === 'host') {
+			oMacros.pnp_hostname = oObj.conf.name.replace(/\s/g,'%20');
+		} else {
 			oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 		}
 		
