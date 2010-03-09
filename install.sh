@@ -36,7 +36,7 @@ INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
 INSTALLER_QUIET=0
 # Should the installer change config options when possible?
-INSTALLER_CONFIG_MOD="n"
+INSTALLER_CONFIG_MOD="y"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
@@ -1165,10 +1165,10 @@ fi
 
 if [ "$INSTALLER_ACTION" = "update" ]; then
 	if [ $INSTALLER_QUIET -ne 1 ]; then
-		confirm "Do you want the installer to update your config files when possible?" "$INSTALLER_CONFIG_MOD"
-		INSTALLER_CONFIG_MOD=$ANS
-		confirm "Should the backup directory be removed after successful installation?" "$REMOVE"
-		REMOVE=$AMOD
+		ask_user "INSTALLER_CONFIG_MOD" "$INSTALLER_CONFIG_MOD" 1 "check_confirm" \
+			         "Do you want the installer to update your config files when possible?"
+		ask_user "REMOVE" "$REMOVE" 1 "check_confirm" \
+			         "Remove backup directory after successful installation?"
 	fi
 fi
 
@@ -1365,7 +1365,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
 
 	LINE="Restoring custom stylesheets..."
-  copy "" "$USERFILES_DIR/styles" "stylesheets"
+	copy "" "$USERFILES_DIR/styles" "stylesheets"
 	
 	# Copy auth.db when updating from 1.5x
 	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
@@ -1376,17 +1376,28 @@ fi
 text
 
 # Do some update tasks (Changing options, notify about deprecated options)
-if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
+if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTALLER_CONFIG_MOD" = "y" ]; then
 	line 
 	text "| Handling changed/removed options" "|"
 	line
 
 	# Only perform the actions below for NagVis 1.5.x installations
 	if [ $NAGVIS_TAG -ge 01050000 ]; then
-		#line "Removing allowedforconfig option from main config..."
 		DONE=`log "Removing allowedforconfig option from main config..." done`
 		sed -i '/^allowedforconfig=/d' $NAGVIS_PATH/etc/nagvis.ini.php
 		chk_rc "| Error" "$DONE"
+
+		# Remove base and htmlbase path from cross path updated main
+		# configuration file
+		if [ "$NAGVIS_PATH_OLD" != "$NAGVIS_PATH" ]; then
+			DONE=`log "Uncommenting base path during cross-path update..." done`
+			sed -i 's/^base=\(.*\)$/;base=\1/g' $NAGVIS_PATH/etc/nagvis.ini.php
+			chk_rc "| Error" "$DONE"
+
+			DONE=`log "Uncommenting htmlbase path during cross-path update..." done`
+			sed -i 's/^htmlbase=\(.*\)$/;htmlbase=\1/g' $NAGVIS_PATH/etc/nagvis.ini.php
+			chk_rc "| Error" "$DONE"
+		fi
 		
 		DONE=`log "Removing usegdlibs option from main config..." done`
 		sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/nagvis.ini.php
