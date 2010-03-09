@@ -49,9 +49,11 @@ class CoreModAuth extends CoreModule {
 					}
 				break;
 				case 'logout':
-					$this->AUTHENTICATION->logout();
-					
-					new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been logged out. You will be redirected.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+					if($this->AUTHENTICATION->logout()) {
+						new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been logged out. You will be redirected.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+					} else {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to log you out. Maybe it is not supported by your authentication module.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+					}
 				break;
 			}
 		}

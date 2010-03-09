@@ -116,8 +116,10 @@ class NagVisHeaderMenu {
 		
 		$this->aMacros['currentUser'] = $this->AUTHORISATION->getAuthentication()->getUser();
 		
-		$this->aMacros['permittedChangePassword'] = $this->CORE->getAuthorization()->isPermitted('ChangePassword', 'change', '*');
-		$this->aMacros['permittedLogout'] = $this->CORE->getAuthorization()->isPermitted('Auth', 'logout', '*');
+		$this->aMacros['permittedChangePassword'] = $this->AUTHORISATION->isPermitted('ChangePassword', 'change', '*');
+		
+		$this->aMacros['permittedLogout'] = $this->AUTHORISATION->getAuthentication()->logoutSupported()
+                                        & $this->AUTHORISATION->isPermitted('Auth', 'logout', '*');
 		
 		// Replace some special macros
 		if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap')) {

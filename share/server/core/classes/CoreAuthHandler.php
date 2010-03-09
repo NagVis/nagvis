@@ -165,13 +165,21 @@ class CoreAuthHandler {
 				
 		return $this->bIsAuthenticated;
 	}
+
+	public function logoutSupported() {
+		return ! $this->SESS->isSetAndNotEmpty('authTrusted');
+	}
 	
 	public function logout() {
-		// Remove the login information
-		$this->SESS->set('authCredentials', false);
-		$this->SESS->set('userPermissions', false);
-		
-		return true;
+		if($this->logoutSupported()) {
+			// Remove the login information
+			$this->SESS->set('authCredentials', false);
+			$this->SESS->set('userPermissions', false);
+			
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 ?>
