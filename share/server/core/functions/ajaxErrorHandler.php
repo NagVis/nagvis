@@ -29,10 +29,15 @@
  *
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
-function ajaxError($errno, $errstr, $file, $line) {
-	// Don't handle E_STRICT errors
-	if($errno != 2048) {
-		echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
+function ajaxError($errno, $errstr = '', $file = '', $line = '') {
+	if(is_int($errno)) {
+		// Don't handle E_STRICT errors
+		if($errno != 2048) {
+			echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
+			die();
+		}
+	} else {
+		echo $errno;
 		die();
 	}
 }
