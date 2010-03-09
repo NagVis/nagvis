@@ -34,7 +34,6 @@ class NagVisService
 			. PATH_SEPARATOR . INCLUDE_PATH . 'classes/validator/'
 			. PATH_SEPARATOR . INCLUDE_PATH . 'classes/frontend/');
 		require_once(INCLUDE_PATH . 'functions/oldPhpVersionFixes.php');
-		require_once(INCLUDE_PATH . 'functions/getuser.php');
 
 		$this->CORE = new GlobalCore();
 		$this->CORE->getMainCfg()->setRuntimeValue('user', getUser());

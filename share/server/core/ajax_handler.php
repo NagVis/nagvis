@@ -29,7 +29,6 @@ require('../../server/core/defines/matches.php');
 // Include functions
 require('../../server/core/functions/autoload.php');
 require('../../server/core/functions/debug.php');
-require("../../server/core/functions/getuser.php");
 require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/functions/ajaxErrorHandler.php');
 

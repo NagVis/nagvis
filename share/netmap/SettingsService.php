@@ -42,7 +42,6 @@ class SettingsService
 			. PATH_SEPARATOR . INCLUDE_PATH . 'classes/validator/'
 			. PATH_SEPARATOR . INCLUDE_PATH . 'classes/frontend/');
 		require_once(INCLUDE_PATH . 'functions/oldPhpVersionFixes.php');
-		require_once(INCLUDE_PATH . 'functions/getuser.php');
 
 		$CORE = new GlobalCore();
 		$CORE->getMainCfg()->setRuntimeValue('user', getUser());
