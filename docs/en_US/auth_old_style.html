@@ -7,23 +7,23 @@
 <body>
 	<h1>Old Style Authentication</h1>
 <p>In the versions prior to 1.5 NagVis didn't care much about the authentication
- and autorization. In the most environments NagVis used the basic authentication
+ and autorization. In most environments NagVis used the basic authentication
  provided by Nagios. This was a side effect of that NagVis was placed in the 
 <code>nagios/share</code> directory.</p>
 <p>In NagVis 1.5 the default installation directory has been moved to an own
  base directory. With this step a new Authentication and Autorization mechanism
- has been created. The main focus on this concept is to be modular and flexible.</p>
+ has been created. The main focus of this concept is to be modular and flexible.</p>
 <p>If you really like to use the basic authentication provided by Nagios you may
  use the LogonMixed (default) or LogonEnv module to set up a trusted
  authentication. The only difference is that the LogonMixed falls back to the HTML
  form LogonDialog when no user is given by the webserver while LogonEnv simply
  shows an access denied message.</p>
-<p>To make this possible simply set the following options in the
- <code>[global]</code> section in the NagVis main configuration file:</p>
+<p>To enable this simply set the following options in the
+ <code>[global]</code> section of the NagVis main configuration file:</p>
 <pre>logonmodule="LogonEnv"
 logonenvvar="REMOTE_USER"
 logonenvcreateuser="1"</pre>
-<p>These lines tell NagVis to use the LogonEnv module which reads the
+<p>These lines advise NagVis to use the LogonEnv module which reads the
  authenticated user from an environment variable. The second parameter tells
  the LogonEnv module which variable to use for reading the users name.
  The third option tells the LogonEnv module to create unknown users in the
