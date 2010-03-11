@@ -209,10 +209,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt.</td>
 </tr>
 <tr>
-<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
 </tr>
 <tr>
-<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
 </tr>
 <tr>
 <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -224,7 +224,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>hover_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Default <a href=hover_templates.html#hover/templates>hover template</a> f&uuml;r diese Map </td>
 </tr>
 <tr>
-<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+<td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike></td>
 </tr>
 <tr>
 <td>hover_url </td><td> </td><td>URL, der im Hover-Menu statt der Standard-Informationen angezeigt werden soll. Verf&uuml;gbare Makros:<br>
@@ -267,7 +267,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+<td>label_style</td><td>vererbt (<a href=#global>global</a>) </td><td>benutzerdefiniertes Aussehen des Label-Textes im Stil von HTML-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
@@ -279,7 +282,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>recognize_services</td><td>vererbt (<a href=#global>global</a>)</td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
 </tr>
 <tr>
-<td>url </td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Die Makros [host_name], [htmlcgi] und [htmlbase] sind verf&uuml;gbar. <br><font color="#ff0000">Neu in 1.4:</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+<td>url </td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Die Makros [host_name], [htmlcgi] und [htmlbase] sind verf&uuml;gbar. <br>Der Wert kann leer sein, um den Link zu deaktivieren.</td>
 </tr>
 <tr>
 <td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Das Makro [name] ist verf&uuml;gbar.</td>
@@ -288,7 +291,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
 </tr>
 <tr>
-<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen.</td>
 </tr>
 <tr>
 <td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
@@ -325,20 +328,20 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt. </td>
 </tr>
 <tr>
-<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
 </tr>
 <tr>
-<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
 </tr>
 <tr>
-<td>gadget_url</td><td></td><td>Der Wert kann ein Gadget-Script im Gadget-Verzeichnis (<code>nagvis/gadgets</code>) sein, z.B. &quot;std_speedometer.php&quot; oder eine in Klammern gesetzte komplette URI auf ein Gadget-Script, z.B. &quot;[http://127.0.0.1/nagios/nagvis/gadgets/std_speedometer.php]&quot;. Details zu Gadgets finden Sie <a href="gadgets.html">hier</a>. Diese Option wird nur erkannt, wenn view_type=&quot;gadget&quot; gesetzt ist. <font color="#ff0000">(Neu in 1.4)</font> </td>
+<td>gadget_url</td><td></td><td>Der Wert kann ein Gadget-Script im Gadget-Verzeichnis (<code>nagvis/gadgets</code>) sein, z.B. &quot;std_speedometer.php&quot; oder eine in Klammern gesetzte komplette URI auf ein Gadget-Script, z.B. &quot;[http://127.0.0.1/nagvis/gadgets/std_speedometer.php]&quot;. Details zu Gadgets finden Sie <a href="gadgets.html">hier</a>. Diese Option wird nur erkannt, wenn view_type=&quot;gadget&quot; gesetzt ist.</td>
 </tr>
 <tr>
 <tr>
-<td> gadget_scale </td><td>100</td><td> Die Gr&ouml;&szlig;e des Gadgets. Default ist 100 (Prozent). Die Gadgets sollten in der Lage sein, abh&auml;ngig von diesem Parameter zu skalieren <font color="#ff0000">(Neu in 1.4.2)</font> </td>
+<td> gadget_scale </td><td>100</td><td> Die Gr&ouml;&szlig;e des Gadgets. Default ist 100 (Prozent). Die Gadgets sollten in der Lage sein, abh&auml;ngig von diesem Parameter zu skalieren</td>
 </tr>
 <tr>
-<td> gadget_opts </td><td></td><td> Optionale Gadget-spezifische Parameter. Die Inhalte k&ouml;nnen f&uuml;r jedes Gadget frei definiert werden. Der Wert wird als GET-Parameter &quot;opts&quot; verarbeitet. Wir empfehlen, ein var/val-Format zu nutzen: key1=val1,key2=val2. Dadurch k&ouml;nnen Sie diese Zeichenkette m Gadget leicht in ein Array aufteilen. <font color="#ff0000">(Neu in 1.4.4)</font> </td>
+<td> gadget_opts </td><td></td><td> Optionale Gadget-spezifische Parameter. Die Inhalte k&ouml;nnen f&uuml;r jedes Gadget frei definiert werden. Der Wert wird als GET-Parameter &quot;opts&quot; verarbeitet. Wir empfehlen, ein var/val-Format zu nutzen: key1=val1,key2=val2. Dadurch k&ouml;nnen Sie diese Zeichenkette im Gadget leicht in ein Array aufteilen.</td>
 </tr>
 <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
 </tr>
@@ -393,7 +396,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+<td>label_style</td><td>vererbt (<a href=#global>global</a>) </td><td>benutzerdefiniertes Aussehen des Label-Textes im Stil von HTML-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
@@ -402,7 +408,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
 </tr>
 <tr>
-<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Verf&uuml;gbare Makros: [host_name], [service_description], [htmlcgi] und [htmlbase]. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Verf&uuml;gbare Makros: [host_name], [service_description], [htmlcgi] und [htmlbase]. Der Wert kann leer sein, um den Link zu deaktivieren.</td>
 </tr>
 <tr>
 <td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbare Makros: [name], [service_description]</td>
@@ -411,7 +417,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
 </tr>
 <tr>
-<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen.</td>
 </tr>
 <tr>
 <td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
@@ -443,10 +449,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt. </td>
 </tr>
 <tr>
-<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
 </tr>
 <tr>
-<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
 </tr>
 <tr>
 <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -501,7 +507,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+<td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
@@ -513,7 +522,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>recognize_services</td><td>vererbt (<a href=#global>global</a>) </td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
 </tr>
 <tr>
-<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Die Makros [hostgroup_name], [htmlcgi] und [htmlbase] sind verf&uuml;gbar. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Die Makros [hostgroup_name], [htmlcgi] und [htmlbase] sind verf&uuml;gbar. Der Wert kann leer sein, um den Link zu deaktivieren.</td>
 </tr>
 <tr>
 <td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbares Makro: [name] </td>
@@ -522,7 +531,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
 </tr>
 <tr>
-<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen.</td>
 </tr>
 <tr>
 <td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
@@ -554,10 +563,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>backend_id</td><td>vererbt (<a href=#global>global</a>) </td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt. </td>
 </tr>
 <tr>
-<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
 </tr>
 <tr>
-<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
 </tr>
 <tr>
 <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -612,7 +621,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+<td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
@@ -624,7 +636,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>recognize_services</td><td>vererbt (<a href=#global>global</a>) </td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
 </tr>
 <tr>
-<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Verf&uuml;gbare Makros: [servicegroup_name], [htmlcgi] und [htmlbase]. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Verf&uuml;gbare Makros: [servicegroup_name], [htmlcgi] und [htmlbase]. Der Wert kann leer sein, um den Link zu deaktivieren.</td>
 </tr>
 <tr>
 <td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbare Makros: [name]. </td>
@@ -633,7 +645,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
 </tr>
 <tr>
-<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. </td>
 </tr>
 <tr>
 <td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
@@ -662,10 +674,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td><b>y</b></td><td> </td><td>Y-Koordinate</td>
 </tr>
 <tr>
-<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten. (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
 </tr>
 <tr>
-<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
 </tr>
 <tr>
 <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -720,7 +732,10 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind &quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende und &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen.</td>
+<td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
@@ -729,7 +744,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
 </tr>
 <tr>
-<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist kein Verweis. Verf&uuml;gbare Makros: [map_name], [htmlcgi] und [htmlbase]. <font color="#ff0000">(Neu in 1.4)</font> Der Wert kann leer sein, um den Link zu deaktivieren.</td>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist kein Verweis. Verf&uuml;gbare Makros: [map_name], [htmlcgi] und [htmlbase]. Der Wert kann leer sein, um den Link zu deaktivieren.</td>
 </tr>
 <tr>
 <td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster). Verf&uuml;gbare Makros: [name]. </td>
@@ -738,7 +753,7 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
 </tr>
 <tr>
-<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen. <font color="#ff0000">(Neu in 1.4)</font> </td>
+<td>view_type </td><td> icon </td><td> Diese Option definiert das Aussehen dieses Objekts. M&ouml;gliche Werte sind: "icon" oder "line". Vor NagVis 1.4 konnten Sie das Aussehen eines Objekts durch die Option line_type &auml;ndern. Seit NagVis 1.4 m&uuml;ssen Sie die Option view_type benutzen, um Icons als Linien anzuzeigen.</td>
 </tr>
 <tr>
 <td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
@@ -779,6 +794,12 @@ Beispiel mit allen m&ouml;glichen Optionen: <br>
 <td>border_color</td><td>#000000</td><td>Rahmenfarbe der Textbox. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
+<td>h</td><td>auto</td><td>H&ouml;he der Textbox in px (Pixeln). &quot;auto&quot; bedeutet automatische Skalierung (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
 <td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
 </tr>
 <tr>
@@ -808,16 +829,70 @@ Beispiel mit allen Werten, die gesetzt werden m&uuml;ssen: <br>
 <td><b>y</b></td><td> </td><td>Y-Koordinate</td>
 </tr>
 <tr>
-<td> enable_refresh </td><td> 0 </td><td> Diese Option aktiviert das Shape f&uuml;r regelm&auml;&szlig;ige Aktualisierungen im Frontent. Dies wird nur f&uuml;r dynamische Shapes ben&ouml;tigt, die sich gelegentlich &auml;ndern. <font color="#ff0000">(New in 1.4)</font> </td>
+<td> enable_refresh </td><td> 0 </td><td> Diese Option aktiviert das Shape f&uuml;r regelm&auml;&szlig;ige Aktualisierungen im Frontent. Dies wird nur f&uuml;r dynamische Shapes ben&ouml;tigt, die sich gelegentlich &auml;ndern.</td>
 </tr>
 <tr>
-<td>hover_menu</td><td> 0 </td><td>Aktivieren/Deaktivieren von Hover-Men&uuml;s (<font color="#ff0000">Neu in 1.4</font>)</td>
+<td>hover_menu</td><td> 0 </td><td>Aktivieren/Deaktivieren von Hover-Men&uuml;s</td>
 </tr>
 <tr>
 <td>hover_url</td><td> </td><td>URL, der beim Schweben &uuml;ber dem Bild anzuzeigen ist. Normalerweise gibt es keine Aktion w&auml;hrend des Schwebens. </td>
 </tr>
 <tr>
 <td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
+</tr>
+<tr>
+<td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Normalerweise gibt es keinen Verweis. </td>
+</tr>
+<tr>
+<td>url_target</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster) </td>
+</tr>
+<tr>
+<td>use</td><td> </td><td>Kommaseparierte Liste von zu benutzenden Objekt-Templates. Details siehe <a href=#template>template</a></td>
+</tr>
+<tr>
+<td>z</td><td>1</td><td>Die z-Option definiert die Reihenfolge, in der die Icons aufeinander gestapelt werden. Das Icon mit dem h&ouml;chsten Wert wird auf der Spitze dargestellt. Das Hintergrundbild hat den Wert 0, so dass g&uuml;ltige Werte 1 oder gr&ouml;&szlig;er sein m&uuml;ssen. </td>
+</tr>
+</table>
+
+<a name=line></a>
+<h3>Line (<font color="red">neu in 1.5</font>)</h3>
+Die Linie ist ein statusloses Layout-Element, um Elemente zu verbinden und statuslose Verbindungen zwischen anderen Objekten darzustellen. Der Objekttyp wurde erstellt, um das Design weniger statisch zu gestalten.<br><br>
+Beispiel mit allen Werten, die gesetzt werden m&uuml;ssen: <br>
+<pre>define line {
+  line_type=1-template
+  x=200
+  y=100
+}</pre>
+ 
+<table width=100% border=0>
+<tr>
+<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+<tr>
+<td><b>line_type</b></td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td><b>x</b></td><td> </td><td>X-Koordinate </td>
+</tr>
+<tr>
+<td><b>y</b></td><td> </td><td>Y-Koordinate</td>
+</tr>
+<tr>
+<td>hover_menu</td><td> 0 </td><td>Aktivieren/Deaktivieren von Hover-Men&uuml;s</td>
+</tr>
+<tr>
+<td>hover_url</td><td> </td><td>URL, der beim Schweben &uuml;ber dem Bild anzuzeigen ist. Normalerweise gibt es keine Aktion w&auml;hrend des Schwebens. </td>
+</tr>
+<tr>
+<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
+</tr>
+<tr>
+<td>line_color </td><td>#ffffff</td><td> Die F&uuml;llfarbe der Linie, kann auch &quot;transparent&quot; sein. </td>
+</tr>
+<tr>
+<td>line_color_border </td><td>#ffffff</td><td> Die Randfarbe der Linie, kann auch &quot;transparent&quot; sein. </td>
+</tr>
+<tr>
+<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
 </tr>
 <tr>
 <td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Normalerweise gibt es keinen Verweis. </td>
