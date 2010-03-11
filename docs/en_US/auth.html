@@ -2,14 +2,14 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
-	<title>Authentication / Autorization</title>
+	<title>Authentication / Authorisation</title>
 </head>
 <body>
-	<h1>Authentication / Autorization (AA)</h1>
-<p>In the versions prior to 1.5 NagVis didn't care much about the authentication and autorization. In the most environments NagVis used the basic authentication provided by Nagios. This was a side effect of that NagVis was placed in the <code>nagios/share</code> directory.
-<p>In NagVis 1.5 the default installation directory has been moved to an own base directory. With this step a new Authentication and Autorization mechanism has been created. The main focus on this concept is to be modular and flexible.</p>
+	<h1>Authentication / Authorisation (AA)</h1>
+<p>In the versions prior to 1.5 NagVis didn't care much about the authentication and authorisation. In most environments NagVis used the basic authentication provided by Nagios. This was a side effect of that NagVis was placed in the <code>nagios/share</code> directory.
+<p>In NagVis 1.5 the default installation directory has been moved to an own base directory. With this step a new Authentication and Authorisation mechanism has been created. The main focus of this concept is to be modular and flexible.</p>
 <h2>Modularity</h2>
-<p>The AA has been splitted up in three module bases: LogonDialogs, Authentication, Autorization. All modules can be changed without affecting the others.</p>
+<p>The AA has been splitted up in three module bases: LogonDialogs, Authentication, Authorisation. All modules can be changed without affecting the others.</p>
 <h2>Default Modules</h2>
 <p>By default NagVis uses a mixed logon information request mode for logging on users and a SQLite
  database for storing users, passwords and permissions. Therefor NagVis uses the LogonMixed module
@@ -18,8 +18,8 @@
  if one is used. And if there is none it displays the LogonDialog for interactive login using the
  HTML logon dialog.</p>
 <h2>Other Modules</h2>
-<p>On delivery there are only the above authentication and autorisation modules available. Having
+<p>On delivery there are only the above authentication and authorisation modules available. Having
  such a modular structure it should be easy to create LDAP, MySQL, file based authentication and
- autorisation mechanism.</p>
+ authorisation mechanism.</p>
 </body>
 </html>
