@@ -199,7 +199,9 @@
 ; Enable/Disable map listing
 ;showmaps=1
 ; Enable/Disable geomap listing
-;showgeomap=1
+;   Note: It is disabled here since it is unfinished yet and not for production
+;         use in current 1.5 code.
+;showgeomap=0
 ; Enable/Disable rotation listing
 ;showrotations=1
 ; Enable/Disable map thumbnails
