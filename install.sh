@@ -1295,12 +1295,8 @@ if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
 	fi
 	DONE=`log "Creating web configuration file..." done`
 
-	# NagVis 1.5 and above does not need the NAGIOS_PATH var anymore
-	if [ $NAGVIS_TAG -ge 01050000 ]; then
-		cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
-	else
-		cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
-	fi
+	# Replace macros in sample configuration file
+	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
 	chk_rc "|  Error creating web configuration" "$DONE"
 	DONE=`log "Setting permissions for web configuration file..." done`
 	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF

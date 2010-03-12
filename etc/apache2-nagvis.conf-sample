@@ -5,21 +5,21 @@
 Alias @NAGVIS_WEB@ "@NAGVIS_PATH@/share"
 
 <Directory "@NAGVIS_PATH@/share">
-#  SSLRequireSSL
-   Options FollowSymLinks
-   AllowOverride None
-   Order allow,deny
-   Allow from all
-#  Order deny,allow
-#  Deny from all
-#  Allow from 127.0.0.1
+  Options FollowSymLinks
+  AllowOverride None
+  Order allow,deny
+  Allow from all
 
-# Deprecated basic auth
-# Commented out in NagVis 1.5
-#
-#   AuthName "NagVis Access"
-#   AuthType Basic
-#   AuthUserFile @NAGIOS_PATH@/etc/htpasswd.users
-#   Require valid-user
+  # To enable Nagios basic auth on NagVis use the following options
+  # Just uncomment it. Maybe you need to adjust the path to the
+  # Auth user file.
+  #
+  # If you use the NagVis internal auth mechanism based on the web
+  # for you won't need this.
+  #
+  #AuthName "NagVis Access"
+  #AuthType Basic
+  #AuthUserFile @NAGIOS_PATH@/etc/htpasswd.users
+  #Require valid-user
 </Directory>
 
