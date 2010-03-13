@@ -1393,6 +1393,11 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
 			DONE=`log "Uncommenting htmlbase path during cross-path update..." done`
 			sed -i 's/^htmlbase=\(.*\)$/;htmlbase=\1/g' $NAGVIS_PATH/etc/nagvis.ini.php
 			chk_rc "| Error" "$DONE"
+
+			DONE=`log "Uncommenting sesscookiepath during cross-path update..." done`
+			sed -i 's/^sesscookiepath=\(.*\)$/;sesscookiepath=\1/g' $NAGVIS_PATH/etc/nagvis.ini.php
+			chk_rc "| Error" "$DONE"
+			
 		fi
 		
 		DONE=`log "Removing usegdlibs option from main config..." done`
