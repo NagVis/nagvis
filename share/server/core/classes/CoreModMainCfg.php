@@ -77,7 +77,7 @@ class CoreModMainCfg extends CoreModule {
 	
 	private function doEdit($a) {
 		foreach($a['opts'] AS $key => $val) {
-			$key = explode('_', $key);
+			$key = explode('_', $key, 2);
 			$this->CORE->getMainCfg()->setValue($key[0], $key[1], $val);
 		}
 		

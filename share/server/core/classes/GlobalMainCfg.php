@@ -68,10 +68,12 @@ class GlobalMainCfg {
 					'match' => MATCH_BOOLEAN),
 				'language_detection' => Array('must' => 1,
 					'editable' => 1,
+					'array' => true,
 					'default' => Array('user', 'session', 'browser', 'config'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'language_available' => Array('must' => 1,
 					'editable' => 1,
+					'array' => true,
 					'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'language' => Array('must' => 1,
@@ -1041,7 +1043,7 @@ class GlobalMainCfg {
 					}
 					
 					// Special options (Arrays)
-					if(($sec == 'wui' && $key == 'allowedforconfig') || ($sec == 'global' && $key == 'language_detection')  || ($sec == 'global' && $key == 'language_available')) {
+					if(isset($this->validConfig[$sec][$key]['array']) && $this->validConfig[$sec][$key]['array'] === true) {
 						// Explode comma separated list to array
 						$val = explode(',', $val);
 						
