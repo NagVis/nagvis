@@ -857,8 +857,6 @@ class GlobalMainCfg {
 			
 			// Read Main Config file, when succeeded cache it
 			if($this->readConfig(TRUE)) {
-				
-				// Cache the resulting config
 				$this->CACHE->writeCache($this->config, TRUE);
 			}
 		}
@@ -1044,13 +1042,7 @@ class GlobalMainCfg {
 					
 					// Special options (Arrays)
 					if(isset($this->validConfig[$sec][$key]['array']) && $this->validConfig[$sec][$key]['array'] === true) {
-						// Explode comma separated list to array
-						$val = explode(',', $val);
-						
-						// Trim surrounding spaces on each element
-						foreach($val AS $trimKey => $trimVal) {
-							$val[$trimKey] = trim($trimVal);
-						}
+						$val = $this->stringToArray($val);
 					} elseif(preg_match('/^rotation_/i', $sec) && $key == 'maps') {
 						// Explode comma separated list to array
 						$val = explode(',', $val);
@@ -1307,6 +1299,10 @@ class GlobalMainCfg {
 			// Value is empty and there is nothing in config array yet
 		} else {
 			// Value is set
+			if(isset($this->validConfig[$sec][$var]['array']) && $this->validConfig[$sec][$var]['array'] == true && !is_array($val)) {
+				$val = $this->stringToArray($val);
+			}
+			
 			$this->config[$sec][$var] = $val;
 		}
 		return TRUE;
@@ -1580,10 +1576,10 @@ class GlobalMainCfg {
 		// Check for config file write permissions
 		if($this->checkNagVisConfigWriteable(1)) {
 			$content = '';
-			foreach($this->config as $key => &$item) {
+			foreach($this->config as $key => $item) {
 				if(is_array($item)) {
 					$content .= '['.$key.']'."\n";
-					foreach ($item as $key2 => &$item2) {
+					foreach ($item as $key2 => $item2) {
 						if(substr($key2,0,8) == 'comment_') {
 							$content .= $item2."\n";
 						} else {
@@ -1621,6 +1617,10 @@ class GlobalMainCfg {
 								
 								// Don't write the backendid/rotationid attributes (Are internal)
 								if($key2 !== 'backendid' && $key2 !== 'rotationid') {
+									if(isset($this->validConfig[$key][$key2]['array']) && $this->validConfig[$key][$key2]['array'] === true) {
+										$item2 = implode(',', $item2);
+									}
+									
 									$content .= $key2.'="'.$item2.'"'."\n";
 								}
 							}
@@ -1664,6 +1664,24 @@ class GlobalMainCfg {
 			}
 			return FALSE;
 		}
+	}
+
+	/**
+   * Transforms a string option to an array with trimmed values
+   *
+   * @param  String  Comma separated value
+   * @return Array   Exploded Array
+   */
+	private function stringToArray($val) {
+		// Explode comma separated list to array
+		$val = explode(',', $val);
+		
+		// Trim surrounding spaces on each element
+		foreach($val AS $trimKey => $trimVal) {
+			$val[$trimKey] = trim($trimVal);
+		}
+
+		return $val;
 	}
 }
 ?>
