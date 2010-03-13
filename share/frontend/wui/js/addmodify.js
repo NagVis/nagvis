@@ -151,10 +151,9 @@ function validateMapCfgForm() {
 			}
 		}
 		
-		// we verify we don't have both iconset and line_type defined
+		// Simply unset iconset when verifying a line
 		if(document.addmodify.iconset && document.addmodify.iconset.value != '') {
-			alert(printLang(lang['onlyLineOrIcon'],''));
-			return false;
+			document.addmodify.iconset.value = '';
 		}
 		
 		// we verify we have 2 x coordinates and 2 y coordinates
