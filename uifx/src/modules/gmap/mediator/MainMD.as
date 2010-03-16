@@ -26,6 +26,7 @@ package modules.gmap.mediator
 	import flash.system.Security;
 	
 	import modules.gmap.data.LinksData;
+	import modules.gmap.data.LocationsData;
 	import modules.gmap.domain.Link;
 	import modules.gmap.domain.Location;
 	import modules.gmap.domain.Settings;
@@ -35,7 +36,10 @@ package modules.gmap.mediator
 	import modules.gmap.domain.nagios.ServiceGroup;
 	import modules.gmap.events.LinkEvent;
 	import modules.gmap.events.ModeEvent;
+	import modules.gmap.events.SetupEvent;
 	import modules.gmap.view.MainView;
+
+	import mx.core.Application;
 
 	public class MainMD
 	{
@@ -203,6 +207,18 @@ package modules.gmap.mediator
 				default:
 					gotoURL(element.action, settings.openLinksInNewWindow);
 					return;
+			}
+		}
+
+		public function doSetup():void
+		{
+			for(var option:String in Application.application.parameters)
+			{
+				var value:String = Application.application.parameters[option];
+
+				_dispatcher.dispatchEvent(
+					new SetupEvent(option, value)
+				);
 			}
 		}
 	}
