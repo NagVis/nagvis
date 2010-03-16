@@ -26,14 +26,13 @@ package modules.gmap.events
 	public class SetupEvent extends Event
 	{
 		public static const MARK_HOST : String = "MarkHost";
-		
+
 		public var value : String;
-		
+
 		public function SetupEvent(type:String, value:String, bubbles:Boolean=true, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 			this.value = value; 
 		}
-		
 	}
 }
