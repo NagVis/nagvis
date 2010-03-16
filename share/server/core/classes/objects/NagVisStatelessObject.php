@@ -55,7 +55,7 @@ class NagVisStatelessObject extends NagVisObject {
 	 */
 	public function parseJson() {
 		// Get all information of the object (configuration, state, ...)
-		return $this->getObjectInformation();
+		return parent::parseJson();
 	}
 	
 	/**

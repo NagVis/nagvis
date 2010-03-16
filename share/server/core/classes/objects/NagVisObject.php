@@ -174,9 +174,7 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function setMapCoords($arrCoords) {
-		$this->x = $arrCoords['x'];
-		$this->y = $arrCoords['y'];
-		$this->z = $arrCoords['z'];
+		$this->setConfiguration($arrCoords);
 	}
 	
 	/**
@@ -378,23 +376,63 @@ class NagVisObject {
 	}
 	
 	/**
-	 * PULBLIC getObjectConfiguration()
+	 * PUBLIC getObjectConfiguration()
 	 *
 	 * Gets the configuration of the object
 	 *
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getObjectConfiguration() {
+	public function getObjectConfiguration($abstract = true) {
 		// Some options have to be removed which are only for this object
 		$arr = $this->conf;
 		unset($arr['id']);
 		unset($arr['object_id']);
 		unset($arr['type']);
-		unset($arr['host_name']);
-		unset($arr[$this->getType().'_name']);
-		unset($arr['service_description']);
+
+		// Only remove these options when the configuration should be
+		// completely independent from this object
+		if($abstract == true) {
+			unset($arr['host_name']);
+			unset($arr[$this->getType().'_name']);
+			unset($arr['service_description']);
+		}
+		
 		return $arr;
+	}
+	
+	/**
+	 * PUBLIC parseJson()
+	 *
+	 * Parses the object in json format
+	 *
+	 * @return	String  JSON code of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function parseJson() {
+		return $this->getObjectInformation();
+	}
+
+	/**
+	 * PUBLIC parseMapCfg()
+	 *
+	 * Parses the object in map configuration format
+	 *
+	 * @param   Array   Array of global map options
+	 * @return	String  This object in map config format
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function parseMapCfg($globalOpts = Array()) {
+		$ret = 'define '.$this->getType()." {\n";
+		foreach($this->getObjectConfiguration(false) AS $key => $val) {
+			// Only set options which are different to global option
+			if((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
+				$ret .= '  '.$key.'='.$val."\n";
+			}
+		}
+		$ret .= "}\n\n";
+
+		return $ret;
 	}
 	
 	# End public methods

@@ -1709,7 +1709,9 @@ class GlobalMapCfg {
 	public function getValidTypeKeys($sType) {
 		$aRet = Array();
 		foreach($this->validConfig[$sType] AS $key => $arr) {
-			$aRet[] = $key;
+			if(!isset($arr['deprecated']) || $arr['deprecated'] != 1) {
+				$aRet[] = $key;
+			}
 		}
 		return $aRet;
 	}

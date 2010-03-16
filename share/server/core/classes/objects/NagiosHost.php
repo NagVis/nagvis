@@ -68,7 +68,6 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	public function __construct($CORE, $BACKEND, $backend_id, $hostName) {
 		$this->backend_id = $backend_id;
-		$this->host_name = $hostName;
 		
 		$this->fetchedChildObjects = 0;
 		$this->fetchedParentObjects = 0;
@@ -77,6 +76,8 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->members = Array();
 		
 		parent::__construct($CORE, $BACKEND);
+		
+		$this->setConfiguration(Array('host_name' => $hostName));
 	}
 	
 	/**

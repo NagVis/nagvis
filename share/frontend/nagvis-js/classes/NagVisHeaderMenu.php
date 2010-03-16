@@ -312,6 +312,7 @@ class NagVisHeaderMenu {
 			'langRotationStart' => $this->CORE->getLang()->getText('rotationStart'),
 			'langRotationStop' => $this->CORE->getLang()->getText('rotationStop'),
 			'langToggleGrid' => $this->CORE->getLang()->getText('Show/Hide Grid'),
+			'langAutomapToMap' => $this->CORE->getLang()->getText('Export to Map'),
 			// Supported by backend and not using trusted auth
 			'supportedChangePassword' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword') && !$SHANDLER->isSetAndNotEmpty('authTrusted'),
 			'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
