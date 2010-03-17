@@ -515,7 +515,13 @@ class NagVisAutoMap extends GlobalMap {
 	 * @return  Boolean  Done?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function toClassicMap($name) {			
+	public function toClassicMap($name) {
+		if(count($this->CORE->getAvailableMaps('/^'.$name.'.cfg$/')) > 0) {
+			if(!$this->CORE->getAuthorization()->isPermitted('Map', 'edit', $name)) {
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to export the automap. A map with this name already exists.'));
+			}
+		}
+		
 		// Read position from graphviz and set it on the objects
 		$this->setMapObjectPositions();
 
