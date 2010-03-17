@@ -1460,16 +1460,15 @@ text
 line "Setting permissions..." "+"
 chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
 [ -f "$NAGVIS_PATH/$NAGVIS_CONF-sample" ]&&set_perm 664 "$NAGVIS_PATH/$NAGVIS_CONF-sample"
+set_perm 775 "$NAGVIS_PATH/etc"
 set_perm 775 "$NAGVIS_PATH/etc/maps"
 set_perm 664 "$NAGVIS_PATH/etc/maps/*"
-# prior to 1.5.x
 if [ $NAGVIS_TAG -lt 01050000 ]; then
 	set_perm 775 "$NAGVIS_PATH/nagvis/images/maps"
 	set_perm 664 "$NAGVIS_PATH/nagvis/images/maps/*"
 	set_perm 775 "$NAGVIS_PATH/nagvis/var"
 	set_perm 664 "$NAGVIS_PATH/nagvis/var/*"
 else
-	# NagVis 1.5x has an own automaps dir
 	set_perm 775 "$NAGVIS_PATH/etc/automaps"
 	set_perm 664 "$NAGVIS_PATH/etc/automaps/*"
 	set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
