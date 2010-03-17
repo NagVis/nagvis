@@ -31,6 +31,11 @@
 
 			private var _settings : Settings;
 
+			[Bindable] private var _gkey_warning:String = "Geomap requires the Google Maps key to function. Use your Google account to generate it for the URL you access Geomap with.\n\n" + 
+					"Note that key generated for http://192.168.1.2 will not work for http://example.com and vice versa, even if example.com resolves to 192.168.1.2 IP address.\n\n" + 
+					"Note that the key for https://example.com will not work for http://example.com and vice versa.\n\n" + 
+					"Note that the key for http://www.example.com will not work for http://example.com and vice versa.";   
+
 			public function set settings(settings : Settings) : void
 			{
 				_settings = settings;
@@ -93,6 +98,7 @@
 					left="10" right="10"  bottom="0" textAlign="left"
 					icon="@Embed(source='modules/gmap/img/key.png')"
 					click="onGetKey()"
+					toolTip="{_gkey_warning}"
 				/>
 			</mx:Canvas>
 			<mx:Canvas label="Actions" width="100%" height="100%" horizontalScrollPolicy="off">
