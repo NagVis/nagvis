@@ -60,7 +60,9 @@ class CoreModAutoMap extends CoreModule {
 			'parseAutomap' => REQUIRES_AUTHORISATION,
 			'getAutomapProperties' => REQUIRES_AUTHORISATION,
 			'getAutomapObjects' => REQUIRES_AUTHORISATION,
-			'getObjectStates' => REQUIRES_AUTHORISATION
+			'getObjectStates' => REQUIRES_AUTHORISATION,
+			'automapToMap' => REQUIRES_AUTHORISATION,
+			'parseMapCfg' => REQUIRES_AUTHORISATION,
 		);
 		
 		// Register valid objects
@@ -75,7 +77,12 @@ class CoreModAutoMap extends CoreModule {
 		
 		if($this->offersAction($this->sAction)) {
 			switch($this->sAction) {
+				case 'automapToMap':
+					$VIEW = new NagVisViewAutomapToMap($this->CORE);
+          $sReturn = json_encode(Array('code' => $VIEW->parse()));
+				break;
 				case 'parseAutomap':
+				case 'parseMapCfg':
 					$sReturn = $this->parseAutomap();
 				break;
 				case 'getAutomapProperties':
@@ -97,13 +104,33 @@ class CoreModAutoMap extends CoreModule {
 		// Initialize backends
 		$BACKEND = new GlobalBackendMgmt($this->CORE);
 		
-		$MAPCFG = new NagVisAutomapCfg($CORE, $this->name);
+		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		
-		$MAP = new NagVisAutoMap($CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
-		$MAP->renderMap();
-		
-		return json_encode(true);
+		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
+
+		if($this->sAction == 'parseAutomap') {
+			$MAP->renderMap();
+			return json_encode(true);
+		} else {
+			$FHANDLER = new CoreRequestHandler($_POST);
+			if($FHANDLER->match('target', MATCH_MAP_NAME)) {
+				$target = $FHANDLER->get('target');
+			
+				if($MAP->toClassicMap($target)) {
+					new GlobalMessage('NOTE', 
+														$this->CORE->getLang()->getText('The map has been created.'),
+														null,
+														null,
+														1,
+														$this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);
+				}  else {
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to create map configuration file.'));
+				}
+			} else {
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Invalid target option given.'));
+			}
+		}
 	}
 	
 	private function getAutomapProperties() {
@@ -241,7 +268,7 @@ class CoreModAutoMap extends CoreModule {
 		return json_encode($arrReturn);
 	}
 
-	private function getObjConf($objType, $objName1, $objName2) {
+	private function getObjConf($objType, $objName1, $objName2 = '') {
 		$objConf = Array();
 		
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
@@ -249,8 +276,9 @@ class CoreModAutoMap extends CoreModule {
 		// Read the map configuration file
 		$MAPCFG->readMapConfig();
 		
-		$objConf = $MAPCFG->getObjectConfiguration();
-		
+		// Default object configuration
+		$objConf = $MAPCFG->getObjectConfiguration($objName1);
+
 		// backend_id is filtered in getObjectConfiguration(). Set it manually
 		$objConf['backend_id'] = $MAPCFG->getValue('global', 0, 'backend_id');
 			

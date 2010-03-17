@@ -447,7 +447,7 @@ class NagVisAutoMap extends GlobalMap {
 	}
 	
 	/**
-	 * Parses the Objects
+	 * Parses the objects in JSON format for the regular frontend
 	 *
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -475,6 +475,60 @@ class NagVisAutoMap extends GlobalMap {
 		
 		return json_encode($arrRet);
 	}
+
+	/**
+	 * Parses the objects in NagVis map cfg format for export to
+   * regular maps
+	 *
+	 * @param   String  Name of the target map
+	 * @return	String  Json Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function parseObjectsMapCfg($name) {
+		$globalOpts = $this->MAPCFG->getObjectConfiguration();
+		$validOpts = Array();
+		foreach($this->MAPCFG->getValidTypeKeys('global') AS $key) {
+			if(isset($globalOpts[$key])) {
+				$validOpts[$key] = $globalOpts[$key];
+			}
+		}
+		unset($validOpts['hover_timeout']);
+		$validOpts['map_image'] = $name.'.png';
+		
+		$ret = "define global {\n";
+		foreach($validOpts AS $key => $val) {
+			$ret .= '  '.$key.'='.$val."\n";
+		}
+		$ret .= "}\n\n";
+
+		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
+			$ret .= $OBJ->parseMapCfg($validOpts);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Creates a classic map from the current automap view
+	 *
+	 * @param   String   Name of the target map
+	 * @return  Boolean  Done?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function toClassicMap($name) {			
+		// Read position from graphviz and set it on the objects
+		$this->setMapObjectPositions();
+
+		// Store map configuration
+		file_put_contents($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$name.'.cfg',
+                      $this->parseObjectsMapCfg($name));
+		
+		// Store current automap image as background image
+		copy($this->CORE->getMainCfg()->getValue('paths', 'sharedvar').$this->name.'.png',
+		     $this->CORE->getMainCfg()->getValue('paths', 'map').$name.'.png');
+
+		return true;
+	}
 	
 	# END Public Methods
 	# #####################################################
@@ -492,7 +546,7 @@ class NagVisAutoMap extends GlobalMap {
 		// load all settings here
 		
 		// Loop all map object
-		foreach($this->arrMapObjects AS $OBJ) {
+		foreach(array_merge(Array($this->rootObject), $this->arrMapObjects) AS $OBJ) {
 			// Try to find a matching object in the map configuration
 			if(isset($aConf[$OBJ->getName()])) {
 				unset($aConf[$OBJ->getName()]['type']);
@@ -716,7 +770,7 @@ class NagVisAutoMap extends GlobalMap {
 	private function fetchHostObjectByName($hostName) {
 		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 		$hostObject->fetchMembers();
-		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration());
+		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration($hostName));
 		$hostObject->setObjectId(0);
 		$this->rootObject = $hostObject;
 	}

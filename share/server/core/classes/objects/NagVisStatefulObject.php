@@ -514,7 +514,7 @@ class NagVisStatefulObject extends NagVisObject {
 		}
 		
 		// Get all information of the object (configuration, state, ...)
-		return $this->getObjectInformation();
+		return parent::parseJson();
 	}
 	
 	/**

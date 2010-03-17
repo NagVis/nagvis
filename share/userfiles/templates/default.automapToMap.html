@@ -1,0 +1,10 @@
+<div id="automapToMap">
+<form name="automapToMap" id="automapToMap" action="#" onsubmit="submitFrontendForm('{$formTarget}&amp;show='+escapeUrlValues(oPageProperties.map_name)+getAutomapParams(), 'automapToMap');return false" method="post">
+<label>{$langNewName}<br />
+	<input type="text" name="target" id="target" /></label>
+	<input type="submit" name="submit" value="{$langSave}" />
+</form>
+</div>
+<script type="text/javascript">
+try\{document.getElementById('newName').focus();}catch(e)\{}
+</script>

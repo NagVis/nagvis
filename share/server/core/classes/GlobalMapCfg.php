@@ -242,7 +242,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'label_width' => Array('must' => 0,
 					'default' => 'auto',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_TEXTBOX_WIDTH,
 					'depends_on' => 'label_show',
 					'depends_value' => '1'),
 				'label_background' => Array('must' => 0,
@@ -406,7 +406,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'label_width' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_TEXTBOX_WIDTH,
 					'depends_on' => 'label_show',
 					'depends_value' => '1'),
 				'label_background' => Array('must' => 0,
@@ -564,7 +564,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'label_width' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_TEXTBOX_WIDTH,
 					'depends_on' => 'label_show',
 					'depends_value' => '1'),
 				'label_background' => Array('must' => 0,
@@ -739,7 +739,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'label_width' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_TEXTBOX_WIDTH,
 					'depends_on' => 'label_show',
 					'depends_value' => '1'),
 				'label_background' => Array('must' => 0,
@@ -892,7 +892,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'label_width' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_TEXTBOX_WIDTH,
 					'depends_on' => 'label_show',
 					'depends_value' => '1'),
 				'label_background' => Array('must' => 0,
@@ -1041,7 +1041,7 @@ class GlobalMapCfg {
 					'depends_value' => '1'),
 				'label_width' => Array('must' => 0,
 					'default' => '',
-					'match' => MATCH_INTEGER,
+					'match' => MATCH_TEXTBOX_WIDTH,
 					'depends_on' => 'label_show',
 					'depends_value' => '1'),
 				'label_background' => Array('must' => 0,
@@ -1709,7 +1709,9 @@ class GlobalMapCfg {
 	public function getValidTypeKeys($sType) {
 		$aRet = Array();
 		foreach($this->validConfig[$sType] AS $key => $arr) {
-			$aRet[] = $key;
+			if(!isset($arr['deprecated']) || $arr['deprecated'] != 1) {
+				$aRet[] = $key;
+			}
 		}
 		return $aRet;
 	}

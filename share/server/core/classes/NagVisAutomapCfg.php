@@ -57,6 +57,7 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 	/**
 	 * Gets the configuration of the objects using the global configuration
 	 *
+	 * @param   Strin   Optional: Name of the object to get the config for
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -69,7 +70,13 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		 * The settings of the first host will be used for all objects on the map
 		 */
 		foreach($this->getValidTypeKeys('host') AS $key) {
-			if($key != 'type' && $key != 'backend_id' && $key != 'host_name' & $key != 'object_id') {
+			if($key != 'type'
+				 && $key != 'backend_id'
+				 && $key != 'host_name'
+				 && $key != 'object_id'
+				 && $key != 'x'
+				 && $key != 'y'
+				 && $key != 'line_width') {
 				$objConf[$key] = $this->getValue('host', 0, $key);
 			}
 		}

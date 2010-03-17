@@ -82,7 +82,7 @@ class CoreUriHandler {
 			return false;
 		}
 	}
-
+	
 	public function parseModSpecificUri($aKeys) {
 		foreach($aKeys AS $key => $sMatch) {
 			// Validate the value

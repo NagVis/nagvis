@@ -35,6 +35,14 @@ class CoreRequestHandler {
 			return false;
 		}
 	}
+
+	public function match($sKey, $regex) {
+		if(preg_match($regex, $this->aOpts[$sKey])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	public function isSetAndNotEmpty($sKey) {
 		if(isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '') {
