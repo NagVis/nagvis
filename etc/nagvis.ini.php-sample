@@ -75,7 +75,7 @@
 ;logonenvcreateuser="1"
 ;logonenvcreaterole="Guests"
 ;
-; Refresh time of pages
+; Default rotation time of pages in rotations
 ;refreshtime=60
 ;
 ; Some user information are stored in sessions which are identified by session
