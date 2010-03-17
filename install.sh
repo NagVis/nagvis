@@ -372,6 +372,7 @@ detect_nagios_path() {
 		if [[ $? -eq 0 && $N_PPID -eq 1 ]]; then
 			N_BIN=${N_CMD%% *}
 			NAGIOS_PATH=${N_BIN%%/bin/nagios}
+			NAGIOS_PATH=${NAGIOS_PATH%/}
 		fi
 	done
 	IFS=" "
