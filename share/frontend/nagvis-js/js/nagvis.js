@@ -959,7 +959,6 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
 				
 				if(aOpt[0] && aOpt[0] != '' && aOpt[1] && aOpt[1] != '') {
 					var sKey = aOpt[0].replace(/(-[a-zA-Z])/g, '$1');
-					alert(sKey);
 					
 					var regex = /(-[a-zA-Z])/;
 					var result = regex.exec(aOpt[0]);
