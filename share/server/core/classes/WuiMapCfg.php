@@ -58,9 +58,9 @@ class WuiMapCfg extends GlobalMapCfg {
 	}
 	
 	/**
-	 * Gets all informations about an object type
+	 * Gets all information about an object type
 	 *
-	 * @param   String  Type to get the informations for
+	 * @param   String  Type to get the information for
 	 * @return  Array   The validConfig array
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -293,7 +293,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	}
 	
 	/**
-	 * Gets lockfile informations
+	 * Gets lockfile information
 	 *
 	 * @param	Boolean $ignoreLock
 	 * @param	Boolean $printErr
@@ -333,7 +333,7 @@ class WuiMapCfg extends GlobalMapCfg {
 				return FALSE;
 			}
 		} else {
-			// no valid informations in lock or no lock there
+			// no valid information in lock or no lock there
 			// try to delete map lock, if nothing to delete its OK
 			$this->deleteMapLock();
 			return FALSE;
@@ -370,7 +370,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 */
 	function writeMapLock() {
 		if($this->checkMapLockWriteable(0)) {
-			// open file for writing and insert the needed informations
+			// open file for writing and insert the needed information
 			$fp = fopen($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock','w');
 			fwrite($fp,time().':'.$this->CORE->getMainCfg()->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
 			fclose($fp);

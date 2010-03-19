@@ -1484,9 +1484,9 @@ class GlobalMainCfg {
 	 */
 	
 	/**
-	 * Gets all informations about an object type
+	 * Gets all information about an object type
 	 *
-	 * @param   String  Type to get the informations for
+	 * @param   String  Type to get the information for
 	 * @return  Array   The validConfig array
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -1608,7 +1608,7 @@ class GlobalMainCfg {
 											$label = $arrStep['label'].':';
 										}
 										
-										// Save the extracted informations to an array
+										// Save the extracted information to an array
 										$val .= $seperator.$label.$step;
 									}
 									

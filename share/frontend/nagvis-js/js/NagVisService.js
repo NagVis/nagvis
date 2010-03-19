@@ -42,7 +42,7 @@ var NagVisService = NagVisStatefulObject.extend({
 	parseGadget: function () {
 		var alt = this.conf.name+'-'+this.conf.service_description;
 		
-		// Add object informations and current perfdata to gadget_url
+		// Add object information and current perfdata to gadget_url
 		var iParam = this.conf.gadget_url.indexOf('?');
 		var sParams = '';
 		if (iParam == -1) {

@@ -10,7 +10,7 @@
 ; ----------------------------
 
 ; ----------------------------
-; !!! The sections/variables with a leading ";" won't be recognized by NagVis (commented out) !!!
+; !!! The sections/variables with a leading ";" won't be recognised by NagVis (commented out) !!!
 ; ----------------------------
 
 ; General options which affect the whole NagVis installation
@@ -18,14 +18,14 @@
 ; Defines the authentication module to use. By default NagVis uses the built-in
 ; SQLite authentication module. On delivery there is no other authentication
 ; module available. It is possible to add own authentication modules for 
-; supporting other authorisation mechanism. For details take a look at the
+; supporting other authorisation mechanisms. For details take a look at the
 ; documentation.
 ;authmodule="CoreAuthModSQLite"
 ;
 ; Defines the authorisation module to use. By default NagVis uses the built-in
 ; SQLite authorisation module. On delivery there is no other authorisation
 ; module available. It is possible to add own authorisation modules for 
-; supporting other authorisation mechanism. For details take a look at the
+; supporting other authorisation mechanisms. For details take a look at the
 ; documentation.
 ;authorisationmodule="CoreAuthorisationModSQLite"
 ;
@@ -55,16 +55,16 @@
 ; the LogonDialog module as fallback when LogonEnv returns no username. This
 ; should fit the requirements of most environments.
 ;
-; LogonDialog: This is a HTML logon dialog for requesting authentication
-; informations from the user.
+; LogonDialog: This is an HTML logon dialog for requesting authentication
+; information from the user.
 ;
-; LogonEnv: It is possible to realize a fully "trusted" authentication
+; LogonEnv: It is possible to realise a fully "trusted" authentication
 ; mechanism like all previous NagVis versions used it before. This way the user
 ; is not really authenticated with NagVis. NagVis trusts the provided username
-; blindly. NagVis uses the configured environment variable to identify the
-; user. You can add several authentication mechanism to your webserver, 
-; started from the basic authentication used by Nagios (.htaccess) to single
-; sign on environments.
+; implicitly. NagVis uses the configured environment variable to identify the
+; user. You can add several authentication mechanisms to your webserver, 
+; starting from the basic authentication used by Nagios (.htaccess) to single
+; sign-on environments.
 ; Simply set logonmodule to "LogonEnv", put the environment variable to use as
 ; username to the option logonenvvar and tell the authentication module to
 ; create users in the database when provided users does not exist. The option
@@ -78,17 +78,17 @@
 ; Default rotation time of pages in rotations
 ;refreshtime=60
 ;
-; Some user information are stored in sessions which are identified by session
-; cookies placed on the users computer. The below options set the properties
-; of the session coookie.
-; Domain to set the cookie for. By default NagVis tries to auto detect this 
-; options value by using the webservers environment variables.
+; Some user information is stored in sessions which are identified by session
+; cookies placed on the users computer. The options below set the properties
+; of the session cookie.
+; Domain to set the cookie for. By default NagVis tries to auto-detect this 
+; options value by using the webserver's environment variables.
 ;sesscookiedomain="auto-detect"
 ; Absolute web path to set the cookie for. This defaults to configured 
 ; paths/htmlbase option
 ;sesscookiepath="/nagvis"
 ; Lifetime of the NagVis session cookie in seconds. The default value is set to
-; 24 hours. The NagVis session cookie contains will be renewed on every page 
+; 24 hours. The NagVis session cookie contents will be renewed on every page 
 ; visit. If a session is idle for more time than configured here it will become
 ; invalid.
 ;sesscookieduration="86400"
@@ -112,7 +112,7 @@
 ; default backend (id of the default backend)
 ;backend="live_1"
 ; background color of maps
-;backgroundcolor="#fff"
+;backgroundcolor="#ffffff"
 ; Enable/Disable the context menu on map objects. With the context menu you are
 ; able to bind commands or links to your map objects
 ;contextmenu=1
@@ -124,9 +124,9 @@
 ; Enable/Disable highlighting of the state changing object by adding a flashing
 ; border
 ;eventhighlight=1
-; The duration of the event highlight in miliseconds (10 seconds by default)
+; The duration of the event highlight in milliseconds (10 seconds by default)
 ;eventhighlightduration=10000
-; The interval of the event highlight in miliseconds (0.5 seconds by default)
+; The interval of the event highlight in milliseconds (0.5 seconds by default)
 ;eventhighlightinterval=500
 ; Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps
 ; track of important actions and information
@@ -187,7 +187,7 @@
 ; Options to configure the Overview page of NagVis
 [index]
 ; Color of the overview background
-;backgroundcolor=#fff
+;backgroundcolor=#ffffff
 ; Set number of map cells per row
 ;cellsperrow=4
 ; enable/disable header menu
@@ -240,9 +240,9 @@
 ; Some intrusion detection/prevention systems have a problem with
 ; too many parameters in the url. Give 0 for no limit.
 ;requestmaxparams=0
-; The maxium length of http request urls during ajax http requests
+; The maximum length of http request urls during ajax http requests
 ; Some intrusion detection/prevention systems have a problem with
-; too long queries
+; queries being too long
 ;requestmaxlength=1900
 ; The retention time of the states in the frontend in seconds. The state 
 ; information will be refreshed after this time
@@ -252,11 +252,14 @@
 ; Backend definitions
 ; ----------------------------
 
-; Example definition of a livestatus backend. In this case the backend_id is live_1
+; Example definition of a livestatus backend.
+; In this case the backend_id is live_1
+; The path /usr/local/nagios/var/rw has to exist
 [backend_live_1]
 backendtype="mklivestatus"
 ;socket="unix:/usr/local/nagios/var/rw/live"
 
+; Example definition for a MySQL backend
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
 [backend_ndomy_1]
 ; type of backend - MUST be set
@@ -280,6 +283,7 @@ backendtype="ndomy"
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
+; Example definition of a ndo2fs backend
 ; in this example the ID of the Backend is "ndo2fs_1" you can define another ID.
 [backend_ndo2fs_1]
 ; type of backend - MUST be set
@@ -293,6 +297,7 @@ backendtype="ndo2fs"
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
+; Example definition of a Merlin backend
 ; in this example the ID of the Backend is "merlinmy_1" you can define another ID.
 [backend_merlinmy_1]
 ; type of backend - MUST be set
@@ -321,7 +326,7 @@ backendtype="merlinmy"
 [rotation_demo]
 ; These steps are rotated. The "Demo2:" is a label which is being displayed in
 ; the index pages rotation list.
-; You may also add external URLs as steps. Simply put the url surrounded by []
+; You may also add external URLs as steps. Simply enclose the url using []
 ; instead of the map name. It is also possible to add automaps to rotations,
 ; add an @ sign before the automap name to add an automap to the rotation.
 maps="demo,Demo2:demo2"
@@ -335,10 +340,10 @@ interval=15
 ; Configure different state related settings
 [states]
 ; State coverage/weight: This defines the state handling behaviour. For example
-; a critical state will cover a warning state and a an acknowledged critical
+; a critical state will cover a warning state and an acknowledged critical
 ; state will not cover a warning state.
 ;
-; Tehse options are being used when calculating the summary state of the map 
+; These options are being used when calculating the summary state of the map 
 ; objects. The default values should fit most needs.
 ;
 ;unreachable=8

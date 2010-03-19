@@ -438,7 +438,7 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 								$numServices++;
 							} else {
 								
-								// Read config and status informations
+								// Read config and status information
 								$oConfig = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'));
 								$oStatus = json_decode(file_get_contents($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS'));
 								

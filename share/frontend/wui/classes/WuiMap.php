@@ -205,8 +205,8 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Gets the paths to the icon
 	 *
-	 * @param	Array	$obj	Array with object informations
-	 * @return	Array	Array with object informations
+	 * @param	Array	$obj	Array with object information
+	 * @return	Array	Array with object information
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getIconPaths(&$obj) {
@@ -236,7 +236,7 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Parses the HTML-Code of an icon
 	 *
-	 * @param	Array	$obj	Array with object informations
+	 * @param	Array	$obj	Array with object information
 	 * @return	String HTML Code
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -279,7 +279,7 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Parses the HTML-Code of a line
 	 *
-	 * @param	Array	$obj	Array with object informations
+	 * @param	Array	$obj	Array with object information
 	 * @return	String HTML Code
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -319,7 +319,7 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Parses the HTML-Code of an object container
 	 *
-	 * @param  Array   Array with object informations
+	 * @param  Array   Array with object information
 	 * @param  String  HTML Code
 	 * @return String  HTML Code
 	 * @author Lars Michelsen <lars@vertical-visions.de>
@@ -362,8 +362,8 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Parses the HTML-Code of a label
 	 *
-	 * @param	Array	$obj		Array with object informations
-	 * @param	String	$base		Array with object informations
+	 * @param	Array	$obj		Array with object information
+	 * @param	String	$base		Array with object information
 	 * @param	Boolean	$link		Add a link to the icon
 	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
 	 * @return	String	String with Html Code
@@ -585,7 +585,7 @@ class WuiMap extends GlobalMap {
 	/**
 	 * Creates a Javascript-Box with information.
 	 *
-	 * @param	Array	$obj	Array with object informations
+	 * @param	Array	$obj	Array with object information
 	 * @author Lars Michelsen <lars@vertical-visions.de>
      */
 	function infoBox($obj) {

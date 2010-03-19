@@ -341,7 +341,7 @@ function dragMapObject(oObj) {
 }
 
 function saveObjectAfterResize(oObj) {
-	// Split id to get object informations
+	// Split id to get object information
 	var arr = oObj.id.split('_');
 	
 	var type = arr[1];
@@ -387,7 +387,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	// Reset z-index to configured value
 	oObj.setZ(oObj.defz);
 	
-	// Split id to get object informations
+	// Split id to get object information
 	var arr = oObj.name.split('_');
 	
 	// Handle different ojects (Normal icons and labels)
