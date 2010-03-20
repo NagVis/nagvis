@@ -135,32 +135,38 @@ class NagVisHeaderMenu {
 		$permEditAnyMap = False;
 		$aMaps = Array();
 		foreach($this->CORE->getAvailableMaps() AS $mapName) {
+			$map = Array();
+			
 			$MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
-			$MAPCFG1->readMapConfig(1);
+			try {
+				$MAPCFG1->readMapConfig(ONLY_GLOBAL);
+			} catch(MapCfgInvalid $e) {
+				$map['configError'] = true;
+			}
 			
 			// Only show maps which should be shown
-			if($MAPCFG1->getValue('global', 0, 'show_in_lists') == 1) {
-				// Only proceed permited objects
-				if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $mapName)) {
-					$aMaps[$mapName] = Array();
-					$aMaps[$mapName]['mapName'] = $MAPCFG1->getName();
-					$aMaps[$mapName]['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
-					$aMaps[$mapName]['urlParams'] = '';
-					$aMaps[$mapName]['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
-
-					if($aMaps[$mapName]['permittedEdit']) {
-						$permEditAnyMap = true;
-					}
-					
-					// auto select current map
-					if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
-						$aMaps[$mapName]['selected'] = true;
-					} else {
-						$aMaps[$mapName]['selected'] = false;
-					}
-				}
+			if($MAPCFG1->getValue('global', 0, 'show_in_lists') != 1) {
+				continue;
 			}
+
+			// Only proceed permited objects
+			if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $mapName)) {
+				continue;
+			}
+			
+			$map['mapName'] = $MAPCFG1->getName();
+			$map['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
+			$map['urlParams'] = '';
+			$map['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
+
+			$permEditAnyMap &= $map['permittedEdit'];
+			
+			// auto select current map
+			$map['selected'] = ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName());
+			
+			$aMaps[] = $map;
 		}
+		
 		$this->aMacros['maps'] = $aMaps;
 		$this->aMacros['permissionEditAnyMap'] = $permEditAnyMap; 
 		
@@ -170,38 +176,45 @@ class NagVisHeaderMenu {
 		$numAutomaps = count($aAutomap);
 		$i = 1;
 		foreach($aAutomap AS $mapName) {
+			$map = Array();
+			
 			$MAPCFG1 = new NagVisAutomapCfg($this->CORE, $mapName);
-			$MAPCFG1->readMapConfig(1);
+			try {
+				$MAPCFG1->readMapConfig(ONLY_GLOBAL);
+			} catch(MapCfgInvalid $e) {
+				$map['configError'] = true;
+			}
 			
 			// Only show maps which should be shown
-			if($MAPCFG1->getValue('global',0, 'show_in_lists') == 1 && ($mapName != '__automap' || ($mapName == '__automap' && $this->CORE->getMainCfg()->getValue('automap', 'showinlists')))) {
-				// Only proceed permited objects
-				if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName)) {
-					$aAutomaps[$mapName] = Array();
-					$aAutomaps[$mapName]['mapName'] = $MAPCFG1->getName();
-					$aAutomaps[$mapName]['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
-					
-					// Add defaultparams to map selection
-					$aAutomaps[$mapName]['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
-					
-					// auto select current map
-					if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
-						$aAutomaps[$mapName]['selected'] = true;
-					} else {
-						$aAutomaps[$mapName]['selected'] = false;
-					}
-					
-					// Underline last element
-					if($i == $numAutomaps) {
-						$aAutomaps[$mapName]['classUnderline'] = true;
-					} else {
-						$aAutomaps[$mapName]['classUnderline'] = false;
-					}
-				}
+			if($mapName != '__automap' && $MAPCFG1->getValue('global',0, 'show_in_lists') != 1) {
+				continue;
 			}
-					
+			
+			if($mapName == '__automap' && $this->CORE->getMainCfg()->getValue('automap', 'showinlists') != 1) {
+				continue;
+			}
+
+			// Only proceed permited objects
+			if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName)) {
+				continue;
+			}
+			
+			$map['mapName'] = $MAPCFG1->getName();
+			$map['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
+			
+			// Add defaultparams to map selection
+			$map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
+			
+			// auto select current map
+			$map['selected'] = ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName());
+			
+			// Underline last element
+			$map['classUnderline'] = ($i == $numAutomaps);
+			
+			$aAutomaps[] = $map;
 			$i++;
 		}
+		
 		$this->aMacros['automaps'] = $aAutomaps;
 		
 		// Build language list

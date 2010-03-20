@@ -66,7 +66,9 @@ class WuiViewMapAddModify {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$this->MAPCFG = new WuiMapCfg($this->CORE, $this->aOpts['map']);
-		$this->MAPCFG->readMapConfig();
+		try {
+			$this->MAPCFG->readMapConfig();
+		} catch(MapCfgInvalid $e) {}
 		
 		if($this->aOpts['do'] == 'modify') {
 			$action = 'modifyObject';

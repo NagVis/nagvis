@@ -252,6 +252,18 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
+	 * PUBLIC setSummaryState()
+	 *
+	 * Set the summary state of the object
+	 *
+	 * @return	String		Summary state
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setSummaryState($s) {
+		$this->summary_state = $s;
+	}
+	
+	/**
 	 * PUBLIC getSummaryOutput()
 	 *
 	 * Get method for the summary output of this object and members/childs

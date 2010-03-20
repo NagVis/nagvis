@@ -80,7 +80,12 @@ class WuiCore extends GlobalCore {
 			$aOpts = Array();
 			
 			$MAPCFG1 = new WuiMapCfg($this, $map);
-			$MAPCFG1->readMapConfig(0);
+			try {
+				$MAPCFG1->readMapConfig();
+			} catch(MapCfgInvalid $e) {
+				$aOpts['configError'] = true;
+				$aOpts['configErrorMsg'] = $e->getMessage();
+			}
 			
 			$aOpts['mapName'] = $map;
 			
@@ -93,13 +98,17 @@ class WuiCore extends GlobalCore {
 			// linked maps
 			$aOpts['linkedMaps'] = Array();
 			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-				$aOpts['linkedMaps'][] = $obj['map_name'];
+				if(isset($obj['map_name'])) {
+					$aOpts['linkedMaps'][] = $obj['map_name'];
+				}
 			}
 
 			// used shapes
 			$aOpts['usedShapes'] = Array();
 			foreach($MAPCFG1->getDefinitions('shape') AS $key => $obj) {
-				$aOpts['usedShapes'][] = $obj['icon'];
+				if(isset($obj['icon'])) {
+					$aOpts['usedShapes'][] = $obj['icon'];
+				}
 			}
 			
 			$aArr[] = $aOpts;

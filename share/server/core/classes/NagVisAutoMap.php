@@ -385,6 +385,10 @@ class NagVisAutoMap extends GlobalMap {
 		 * <area shape="rect" href="/nagios/cgi-bin/status.cgi?host=www.nagvis.org" target="_self" title="host_231" alt="" coords="151,78,225,118"/>
 		 * </map>
 		 *
+		 * <map id="automap" name="automap">
+		 * <area shape="rect" href="/nagios/cgi-bin/status.cgi?host=KASVMNAGIOSMA" target="_self" title="host_0" alt="" coords="664,13,679,28"/>
+		 * <area shape="rect" href="/nagios/cgi-bin/status.cgi?host=RZ1-024-1-143" target="_self" title="host_1" alt="" coords="664,119,679,135"/>
+		 *
 		 * In some cases there may be an ID:
 		 * <area shape="rect" id="node1" href="/nagios/cgi-bin/status.cgi?host=test_router_0" target="_self" title="host_0" alt="" coords="509,378,525,393"/>
 		 * <area shape="rect" id="node1" href="/icinga/cgi-bin/status.cgi?host=Icinga" target="_self" title="host_0" alt="" coords="698,24,713,40"/>

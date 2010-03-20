@@ -83,7 +83,7 @@ class FrontendModMap extends FrontendModule {
     // Initialize map configuration
     $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
     // Read the map configuration file (Only global section!)
-    $MAPCFG->readMapConfig(1);
+    $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
 		// Build index template
 		$INDEX = new NagVisIndexView($this->CORE);

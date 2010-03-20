@@ -71,6 +71,7 @@ define('GET_PHYSICAL_PATH', false);
 define('DONT_GET_OBJECT_STATE', false);
 define('DONT_GET_SINGLE_MEMBER_STATES', false);
 define('IS_VIEW', true);
+define('ONLY_GLOBAL', true);
 
 // Maximum length for usernames/passwords
 define('AUTH_MAX_PASSWORD_LENGTH', 15);

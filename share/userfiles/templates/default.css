@@ -207,6 +207,10 @@ div.infopage td.disabled h2  {
 	color: #a4a4a4;
 }
 
+div.infopage td.error h2  {
+	color: #ff0000;
+}
+
 div.infopage a {
 	color: #a4a4a4;
 	text-decoration: none;
@@ -603,6 +607,7 @@ td#popupWindowContent fieldset.form label {
 .dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer, .dropdown dl.subdropdown dt {display:block;width:193px;background:#eaf0f2;margin:0;color:#43B3CF;text-decoration:none;border-left:1px solid #a4a4a4;border-right:1px solid #a4a4a4;padding:5px;}
 .dropdown a.left, .dropdown a.left:active, .dropdown a.left:visited {float:left;width:152px;border-right:0}
 .dropdown a.right, .dropdown a.right:active, .dropdown a.right:visited {float:right;width:30px;border-left:1px solid #43B3CF}
+.dropdown a.error, .dropdown a.error:active, .dropdown a.error:visited {color:#ff0000}
 .dropdown a:hover {background:#d9e1e4;color:#779D2A}
 .dropdown a.submenu-link:after {float:right;content:">"}
 .dropdown li.spacer {width:203px}

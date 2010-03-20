@@ -1467,35 +1467,38 @@ class GlobalMapCfg {
 							// Merge the objects with the linked templates
 							$this->mergeTemplates();
 						}
-					}                               
+					}
 					
-					if($this->checkMapConfigIsValid(1)) {
-						if($onlyGlobal == 0) { 
-							// Build cache
-							if($useCache === true) {
-								$this->CACHE->writeCache($this->mapConfig, 1);
-							}
-							
-							// The automap also uses this method, so handle the different type
-							if($this->type === 'automap') {
-								$mod = 'AutoMap';
-							} else {
-								$mod = 'Map';
-							}
-							
-							// Trigger the autorization backend to create new permissions when needed
-							$AUTHORIZATION = $this->CORE->getAuthorization();
-							if($AUTHORIZATION !== null) {
-								$this->CORE->getAuthorization()->createPermission($mod, $this->getName());
-							}
+					try {
+						$this->checkMapConfigIsValid();
+					} catch(MapCfgInvalid $e) {
+						$this->BACKGROUND = $this->getBackground();
+						throw $e;
+					}
+					
+					$this->BACKGROUND = $this->getBackground();
+					
+					if($onlyGlobal == 0) { 
+						// Build cache
+						if($useCache === true) {
+							$this->CACHE->writeCache($this->mapConfig, 1);
 						}
 						
-						$this->BACKGROUND = $this->getBackground();
+						// The automap also uses this method, so handle the different type
+						if($this->type === 'automap') {
+							$mod = 'AutoMap';
+						} else {
+							$mod = 'Map';
+						}
 						
-						return TRUE;
-					} else {
-						return FALSE;
+						// Trigger the autorization backend to create new permissions when needed
+						$AUTHORIZATION = $this->CORE->getAuthorization();
+						if($AUTHORIZATION !== null) {
+							$this->CORE->getAuthorization()->createPermission($mod, $this->getName());
+						}
 					}
+					
+					return TRUE;
 				} else {
 					return FALSE;
 				}
@@ -1612,9 +1615,14 @@ class GlobalMapCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkMapConfigIsValid($printErr) {
+	private function checkMapConfigIsValid() {
 		// check given objects and attributes
 		foreach($this->mapConfig AS $type => $elements) {
+			if($type == 'global')
+				$exception = 'MapCfgInvalid';
+			else
+				$exception = 'MapCfgInvalidObject';
+			
 			foreach($elements AS $id => $element) {
 				// loop validConfig for checking: => missing "must" attributes
 				foreach($this->validConfig[$type] AS $key => $val) {
@@ -1622,7 +1630,7 @@ class GlobalMapCfg {
 						// value is "must"
 						if(!isset($element[$key]) || $element[$key] == '') {
 							// a "must" value is missing or empty
-							new GlobalMessage('ERROR',$this->CORE->getLang()->getText('mapCfgMustValueNotSet', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type, 'ID' => $id)));
+							throw new $exception($this->CORE->getLang()->getText('mapCfgMustValueNotSet', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type, 'ID' => $id)));
 						}
 					}
 				}
@@ -1634,16 +1642,10 @@ class GlobalMapCfg {
 						// check for valid attributes
 						if(!isset($this->validConfig[$type][$key])) {
 							// unknown attribute
-							if($printErr == 1) {
-								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
-							}
-							return FALSE;
+							throw new $exception($this->CORE->getLang()->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
 						} elseif(isset($this->validConfig[$type][$key]['deprecated']) && $this->validConfig[$type][$key]['deprecated'] == 1) {
 							// deprecated option
-							if($printErr) {
-								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
-							}
-							return FALSE;
+							throw new $exception($this->CORE->getLang()->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
 						} else {
 							// The object has a match regex, it can be checked
 							if(isset($this->validConfig[$type][$key]['match'])) {
@@ -1654,10 +1656,7 @@ class GlobalMapCfg {
 									foreach($val AS $key2 => $val2) {
 										if(!preg_match($this->validConfig[$type][$key]['match'], $val2)) {
 											// wrong format
-											if($printErr) {
-												new GlobalMessage('ERROR', $this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
-											}
-											return FALSE;
+											throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
 										}
 									}
 								} else {
@@ -1665,10 +1664,7 @@ class GlobalMapCfg {
 									
 									if(!preg_match($this->validConfig[$type][$key]['match'],$val)) {
 										// Wrong format
-										if($printErr) {
-											new GlobalMessage('ERROR', $this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
-										}
-										return FALSE;
+										throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
 									}
 								}
 							}
@@ -1678,25 +1674,24 @@ class GlobalMapCfg {
 							// Update: Don't check this for stateless lines
 							// FIXME: This check should be removed in 1.5 or 1.6
 							if($type != 'line' && $key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
-								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
+								throw new $exception($this->CORE->getLang()->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
 							}
 							
 							// Check gadget options when object view type is gadget
 							// Update: Only check this when not in WUI!
 							if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url']) && !$this instanceof WuiMapCfg) {
-								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('viewTypeGadgetButNoGadgetUrl', Array('MAP' => $this->getName(), 'TYPE' => $type)));
+								throw new $exception($this->CORE->getLang()->getText('viewTypeGadgetButNoGadgetUrl', Array('MAP' => $this->getName(), 'TYPE' => $type)));
 							}
 							
 							// Check if the configured backend is defined in main configuration file
 							if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
-								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
+								throw new $exception($this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
 							}
 						}
 					}
 				}
 			}
 		}
-		return TRUE;
 	}
 	
 	/**
