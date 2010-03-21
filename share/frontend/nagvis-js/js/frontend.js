@@ -603,7 +603,7 @@ function updateMapBasics() {
  *
  * Bulk update objects
  *
- * @param   Array    Array of objects with new informations
+ * @param   Array    Array of objects with new information
  * @param   Array    Array of map objects
  * @param   String   Type of the page
  * @return  Boolean  Returns true when some state has changed
@@ -612,7 +612,7 @@ function updateMapBasics() {
 function updateObjects(aMapObjectInformations, aObjs, sType) {
 	var bStateChanged = false;
 	
-	// Loop all object which have new informations
+	// Loop all object which have new information
 	for(var i = 0, len = aMapObjectInformations.length; i < len; i++) {
 		var objectId = aMapObjectInformations[i].object_id;
 		var intIndex = -1;
