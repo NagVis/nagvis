@@ -753,7 +753,9 @@ class NagVisAutoMap extends GlobalMap {
 		$defaultRoot = $this->CORE->getMainCfg()->getValue('automap','defaultroot', TRUE);
 		if(!isset($defaultRoot) || $defaultRoot == '') {
 			if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-				$hostsWithoutParent = $this->BACKEND->BACKENDS[$this->backend_id]->getHostNamesWithNoParent();
+				try {
+					$hostsWithoutParent = $this->BACKEND->BACKENDS[$this->backend_id]->getHostNamesWithNoParent();
+				} catch(BackendConnectionProblem $e) {}
 				if(count($hostsWithoutParent) == 1) {
 					$defaultRoot = $hostsWithoutParent[0];
 				}

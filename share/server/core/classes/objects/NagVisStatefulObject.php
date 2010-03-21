@@ -43,7 +43,7 @@ class NagVisStatefulObject extends NagVisObject {
 	protected $state;
 	protected $output;
 	protected $summary_state;
-	protected $summary_output;
+	protected $summary_output = '';
 	protected $summary_problem_has_been_acknowledged;
 	protected $summary_in_downtime;
 	protected $problem_has_been_acknowledged;
@@ -600,6 +600,22 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	# End public methods
 	# #########################################################################
+
+	/**
+	 * PROTECTED setBackendConnectionProblem()
+	 *
+	 * Sets output/state on backend problems
+	 *
+	 * @author  Lars Michelsen <lm@larsmichelsen.com>
+	 */
+	protected function setBackendConnectionProblem($e) {
+		$this->state = 'UNKNOWN';
+		$this->output = GlobalCore::getInstance()->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]', 
+																									Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
+		
+		$this->summary_state = $this->state;
+		$this->summary_output = $this->output;
+	}
 	
 	/**
 	 * PROTECTED fetchSummaryStateFromCounts()
@@ -761,7 +777,7 @@ class NagVisStatefulObject extends NagVisObject {
 			}
 		} else {
 			// Error no valid state
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The object [NAME] has an invalid state "[STATE]".', Array('NAME' => $OBJ->getName(), 'STATE' => $sObjSummaryState)));
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The object [TYPE]/[NAME] as child of [PTYPE]/[PNAME] has an invalid state "[STATE]".', Array('PTYPE' => $this->getType(), 'PNAME' => $this->getName(), 'TYPE' => $OBJ->getType(), 'NAME' => $OBJ->getName(), 'STATE' => $sObjSummaryState)));
 		}
 	}
 }

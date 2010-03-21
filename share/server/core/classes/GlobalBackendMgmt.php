@@ -114,7 +114,7 @@ class GlobalBackendMgmt {
 	 */
 	public function checkBackendInitialized($backendId, $printErr) {
 		if(isset($this->aInitialized[$backendId])) {
-			return TRUE;
+			return true;
 		} else {
 			// Try to initialize backend
 			if($this->initializeBackend($backendId)) {
@@ -123,7 +123,7 @@ class GlobalBackendMgmt {
 				if($printErr == 1) {
 					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
 				}
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -136,16 +136,13 @@ class GlobalBackendMgmt {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkBackendFeature($backendId, $feature, $printErr = 1) {
-		if($this->checkBackendInitialized($backendId, $printErr)) {
-			if(method_exists($this->BACKENDS[$backendId], $feature)) {
-				return true;
-			} else {
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.', Array('FEATURE' => htmlentities($feature), 'BACKENDID' => $backendId, 'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
-				}
-				return false;
-			}
+		$backendClass = 'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype');
+		if(method_exists($backendClass, $feature)) {
+			return true;
 		} else {
+			if($printErr == 1) {
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.', Array('FEATURE' => htmlentities($feature), 'BACKENDID' => $backendId, 'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
+			}
 			return false;
 		}
 	}

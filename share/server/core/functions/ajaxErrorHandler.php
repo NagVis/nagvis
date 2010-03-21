@@ -30,14 +30,19 @@
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 function ajaxError($errno, $errstr = '', $file = '', $line = '') {
-	if(is_int($errno)) {
-		// Don't handle E_STRICT errors
-		if($errno != 2048) {
-			echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
-			die();
-		}
-	} else {
-		echo $errno;
+	// Don't handle E_STRICT errors
+	if($errno != 2048) {
+		echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
+		die();
+	}
+}
+
+function ajaxException($OBJ) {
+	try {
+		echo "Error: ".$OBJ->getMessage();
+		die();
+	} catch(Exception $e) {
+		echo "Error: Unexpected Problem in Exception Handler!";		
 		die();
 	}
 }
@@ -45,6 +50,6 @@ function ajaxError($errno, $errstr = '', $file = '', $line = '') {
 // Enable custom error handling
 set_error_handler('ajaxError');
 if(function_exists('set_exception_handler')) {
-	set_exception_handler('ajaxError');
+	set_exception_handler('ajaxException');
 }
 ?>

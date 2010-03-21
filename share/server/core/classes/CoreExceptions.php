@@ -28,5 +28,9 @@
 
 class NagVisException extends Exception {}
 
+class BackendException extends NagVisException {}
+class BackendConnectionProblem extends BackendException {}
+class BackendInvalidResponse extends BackendException {}
+
 class MapCfgInvalid extends NagVisException {}
 class MapCfgInvalidObject extends MapCfgInvalid {}

@@ -85,7 +85,14 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		 */
 		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getServicegroupStateCounts', false)) {
 			// Get state counts
-			$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupStateCounts($this->servicegroup_name, $this->only_hard_states);
+			try {
+				$this->BACKEND->checkBackendInitialized($this->backend_id, TRUE);
+				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupStateCounts($this->servicegroup_name, $this->only_hard_states);
+			} catch(BackendException $e) {
+				$this->aStateCounts = Array();
+				$this->setBackendConnectionProblem($e);
+				return false;
+			}
 			
 			// Calculate summary state
 			$this->fetchSummaryStateFromCounts();
@@ -101,8 +108,13 @@ class NagiosServicegroup extends NagVisStatefulObject {
 				
 			$this->state = $this->summary_state;
 		} else {
-			// Get all member services
-			$this->fetchMemberServiceObjects();
+			try {
+				// Get all member services
+				$this->fetchMemberServiceObjects();
+			} catch(BackendException $e) {
+				$this->setBackendConnectionProblem($e);
+				return false;
+			}
 		
 			// Get states of all members
 			foreach($this->members AS &$OBJ) {
@@ -174,7 +186,17 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 */
 	private function fetchServiceObjects() {
 		// Fist get the host states for all the hostgroup members
-		$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupState($this->servicegroup_name, $this->only_hard_states);
+		try {
+			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupState($this->servicegroup_name, $this->only_hard_states);
+		} catch(BackendException $e) {
+			$this->summary_state = 'UNKNOWN';
+			$this->state = 'UNKNOWN';
+			$this->summary_output = GlobalCore::getInstance()->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]', 
+																																	Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
+			$this->output = $this->summary_output;
+			
+			return false;
+		}
 		
 		// When the first object has an error it seems that there was a problem
 		// fetching the requested information
@@ -216,23 +238,27 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 */
 	private function fetchMemberServiceObjects() {
 		// Get all services and states
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+		try {
+			$this->BACKEND->checkBackendInitialized($this->backend_id, TRUE);
 			// Get additional information like the alias (maybe bad place here)
 			$this->setConfiguration($this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupInformations($this->servicegroup_name));
 			
 			$arrServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicesByServicegroupName($this->servicegroup_name);
-			foreach($arrServices AS &$service) {
-				$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $service['host_name'], $service['service_description']);
-				
-				// The services have to know how they should handle hard/soft 
-				// states. This is a little dirty but the simplest way to do this
-				// until the hard/soft state handling has moved from backend to the
-				// object classes.
-				$OBJ->setConfiguration($this->getObjectConfiguration());
-				
-				// Add child object to the members array
-				$this->members[] = $OBJ;
-			}
+		} catch(BackendException $e) {
+			throw $e;
+		}
+
+		foreach($arrServices AS &$service) {
+			$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $service['host_name'], $service['service_description']);
+			
+			// The services have to know how they should handle hard/soft 
+			// states. This is a little dirty but the simplest way to do this
+			// until the hard/soft state handling has moved from backend to the
+			// object classes.
+			$OBJ->setConfiguration($this->getObjectConfiguration());
+			
+			// Add child object to the members array
+			$this->members[] = $OBJ;
 		}
 	}
 	

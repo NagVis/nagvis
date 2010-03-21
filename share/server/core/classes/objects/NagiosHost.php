@@ -134,73 +134,65 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchState($bFetchObjectState = true, $bFetchChilds = true) {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, true)) {
-			
-			// Get host state and general host information
-			// This can be ignored when called from e.g. hostgroups where the state
-			// has been fetched for all members before
-			if($bFetchObjectState === true) {
+		$error = false;
+		
+		// Get host state and general host information
+		// This can be ignored when called from e.g. hostgroups where the state
+		// has been fetched for all members before
+		if($bFetchObjectState === true) {
+			try {
+				$this->BACKEND->checkBackendInitialized($this->backend_id, true);
 				$aHost = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
-				
-				// When the first object has an error it seems that there was a problem
-				// fetching the requested information
-				if($aHost['state'] == 'ERROR') {
-					// Only set the summary state
-					//$this->summary_state = $aHost['state'];
-					//$this->summary_output = $aHost['output'];
-					$this->setObjectInformation($aHost);
-				} else {
-					// Regular handling
-					
-					// Append contents of the array to the object properties
-					$this->setObjectInformation($aHost);
-				}
+				$this->setObjectInformation($aHost);
+			} catch(BackendException $e) {
+				$this->setBackendConnectionProblem($e);
+				$error = true;
 			}
-			
-			// New backend feature which reduces backend queries and breaks up the performance
-			// problems due to the old recursive mechanism. If it's not available fall back to
-			// old mechanism.
-			if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostStateCounts', false)) {
-				if($this->getRecognizeServices()) {
-					// Get state counts
-					$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
-				
-					// Calculate summary state and output
-					$this->fetchSummariesFromCounts();
-				
-					// Get all service states
-					// These information are only interesting when the hover_menu is shown
-					/* FIXME: Get member summary state+substate, output for the objects to
-					   be shown in hover menu. This could be improved by limiting the 
-					   number of members the state will be fetched for.
-						 For example: when the members will be sorted by name and limited to
-					   10 it is only neccessary to fetch 10 members.
-					   When member should be sorted by state the state counts could be
-					   used to exclude objects with states which will not be displayed.
-					*/
-					if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds && $this->getState() != 'ERROR' && !$this->hasMembers()) {
-						$this->fetchServiceObjects();
-					}
-				} else {
-					// Even if no services were fetched fetch the summary state/output
-					// Also get summary state
-	        $this->fetchSummaryState();
+		}
+		
+		// New backend feature which reduces backend queries and breaks up the performance
+		// problems due to the old recursive mechanism. If it's not available fall back to
+		// old mechanism.
+		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostStateCounts', false)) {
+			$useStateCounts = true;
+		} else {
+			$useStateCounts = false;
+		}
 
-			    // At least summary output
-		      $this->fetchSummaryOutput();
-				}
-			} else {
-				// Only merge host state with service state when recognize_services is set 
-				if($this->getState() != 'ERROR' && !$this->hasMembers() && $this->getRecognizeServices()) {
-					$this->fetchServiceObjects();
-				}
-				
-				// Also get summary state
-				$this->fetchSummaryState();
-				
-				// At least summary output
-				$this->fetchSummaryOutput();
+		if($this->getRecognizeServices() && $useStateCounts) {
+			try {
+				$this->BACKEND->checkBackendInitialized($this->backend_id, true);
+				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
+			} catch(BackendException $e) {
+				$this->aStateCounts = Array();
 			}
+		
+			// Calculate summary state and output
+			$this->fetchSummariesFromCounts();
+		
+			// Get all service states
+			// These information are only interesting when the hover_menu is shown
+			/* FIXME: Get member summary state+substate, output for the objects to
+					be shown in hover menu. This could be improved by limiting the 
+					number of members the state will be fetched for.
+					For example: when the members will be sorted by name and limited to
+					10 it is only neccessary to fetch 10 members.
+					When member should be sorted by state the state counts could be
+					used to exclude objects with states which will not be displayed.
+			*/
+			if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds && !$error && $this->getState() != 'ERROR' && !$this->hasMembers()) {
+				$this->fetchServiceObjects();
+			}
+		} elseif($this->getRecognizeServices()) {
+			// Only merge host state with service state when recognize_services is set 
+			if(!$error && $this->getState() != 'ERROR' && !$this->hasMembers()) {
+				$this->fetchServiceObjects();
+			}
+		}
+
+		if(!$this->getRecognizeServices() || !$useStateCounts || $error) {
+			$this->fetchSummaryState();
+			$this->fetchSummaryOutput();
 		}
 	}
 	
@@ -294,18 +286,16 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			if(!$this->fetchedChildObjects) {
-				$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
-			}
-			
-			/**
-			 * If maxLayers is not set there is no layer limitation
-			 */
-			if($maxLayers < 0 || $maxLayers > 0) {
-				foreach($this->childObjects AS &$OBJ) {
-					$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
-				}
+		if(!$this->fetchedChildObjects) {
+			$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+		}
+		
+		/**
+			* If maxLayers is not set there is no layer limitation
+			*/
+		if($maxLayers < 0 || $maxLayers > 0) {
+			foreach($this->childObjects AS &$OBJ) {
+				$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
 			}
 		}
 	}
@@ -498,7 +488,14 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchServiceObjects() {
-		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states) AS $arrService) {
+		try {
+			$this->BACKEND->checkBackendInitialized($this->backend_id, true);
+			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states);
+		} catch(BackendException $e) {
+			$aServices = Array();
+		}
+		
+		foreach($aServices AS $arrService) {
 			$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $this->host_name, $arrService['service_description']);
 			
 			// Append contents of the array to the object properties
@@ -529,7 +526,13 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchDirectParentObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
-		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectParentNamesByHostName($this->getName()) AS $parentName) {
+		try {
+			$this->BACKEND->checkBackendInitialized($this->backend_id, true);
+			$aParents = $this->BACKEND->BACKENDS[$this->backend_id]->getDirectParentNamesByHostName($this->getName());
+		} catch(BackendException $e) {
+			$aParents = Array();
+		}
+		foreach($aParents AS $parentName) {
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
 				/*
@@ -580,7 +583,13 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
-		foreach($this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName()) AS $childName) {
+		try {
+			$this->BACKEND->checkBackendInitialized($this->backend_id, true);
+			$aChilds = $this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName());
+		} catch(BackendException $e) {
+			$aChilds = Array();
+		}
+		foreach($aChilds AS $childName) {
 			// If the host is in ignoreHosts, don't recognize it
 			if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
 				/*
@@ -630,8 +639,6 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryState() {
-		$arrStates = Array();
-		
 		// Get Host state
 		$this->summary_state = $this->state;
 		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
