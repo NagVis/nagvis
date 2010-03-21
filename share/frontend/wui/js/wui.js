@@ -365,6 +365,9 @@ function saveObjectAfterResize(oObj) {
 }
 
 function saveObjectAfterMoveAndDrop(oObj) {
+	// Reset z-index to configured value
+	oObj.setZ(oObj.defz);
+	
 	// When x or y are negative just return this and make no change
 	if((oObj.y - getHeaderHeight()) < 0 || oObj.x < 0) {
 		oObj.moveTo(oObj.oldX, oObj.oldY);
@@ -383,9 +386,6 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		
 		oObj.moveTo(gridMoveX, gridMoveY);
 	}
-	
-	// Reset z-index to configured value
-	oObj.setZ(oObj.defz);
 	
 	// Split id to get object information
 	var arr = oObj.name.split('_');
