@@ -249,9 +249,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 				if(!$OBJ->isSummaryObject && !$this->checkLoop($OBJ)) {
 					continue;
 				}
+				
+				$OBJ->fetchMembers();
 			}
-			
-			$OBJ->fetchMembers();
 		}
 	}
 	

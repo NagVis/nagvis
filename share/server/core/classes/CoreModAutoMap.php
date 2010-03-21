@@ -244,7 +244,6 @@ class CoreModAutoMap extends CoreModule {
 			// These things are already done by NagVisMap and NagVisAutoMap classes
 			// for the NagVisMapObj objects. Does not need to be done a second time.
 			if(get_class($OBJ) != 'NagVisMapObj') {
-				$OBJ->fetchMembers();
 				$OBJ->fetchState();
 			}
 			

@@ -58,18 +58,6 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC fetchMembers()
-	 *
-	 * Gets all member objects
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function fetchMembers() {
-		// The service objects are all fetched in fetchState() method
-		// Seems this is not needed anymore and only a dummy at this place
-	}
-	
-	/**
 	 * PUBLIC fetchState()
 	 *
 	 * Fetches the state of the hostgroup and all members. It also fetches the

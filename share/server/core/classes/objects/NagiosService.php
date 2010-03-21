@@ -82,16 +82,6 @@ class NagiosService extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC fetchMembers()
-	 *
-	 * Just a dummy here
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function fetchMembers() {
-	}
-	
-	/**
 	 * PUBLIC getNumMembers()
 	 *
 	 * Just a dummy here

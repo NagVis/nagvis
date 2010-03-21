@@ -781,7 +781,6 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	private function fetchHostObjectByName($hostName) {
 		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
-		$hostObject->fetchMembers();
 		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration($hostName));
 		$hostObject->setObjectId(0);
 		$this->rootObject = $hostObject;

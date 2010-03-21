@@ -57,15 +57,5 @@ class NagVisStatelessObject extends NagVisObject {
 		// Get all information of the object (configuration, state, ...)
 		return parent::parseJson();
 	}
-	
-	/**
-	 * PUBLIC fetchMembers()
-	 *
-	 * Just a dummy here
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function fetchMembers() {
-	}
 }
 ?>
