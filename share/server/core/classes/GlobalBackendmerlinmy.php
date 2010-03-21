@@ -92,11 +92,9 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		$this->dbHost = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbhost');
 		$this->dbPort = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbport');
 		
-		if($this->checkMysqlSupport() && $this->connectDB() && $this->checkTablesExists()) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		$this->checkMysqlSupport();
+		$this->connectDB();
+		$this->checkTablesExists();
 	}
 	
 	/**
@@ -110,10 +108,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 */
 	private function checkTablesExists() {
 		if(mysql_num_rows($this->mysqlQuery("SHOW TABLES LIKE 'program_status'")) == 0) {
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
-			return FALSE;
-		} else {
-			return TRUE;	
+			throw new BackendConnectionProblem($this->CORE->getLang()->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
 		}
 	}
 	
@@ -132,8 +127,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		$this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 		
 		if(!$this->CONN){
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
-			return FALSE;
+			throw BackendConnectionProblem($this->CORE->getLang()->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
 		}
 		
 		$returnCode = mysql_select_db($this->dbName, $this->CONN);
@@ -142,10 +136,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		error_reporting($oldLevel);
 		
 		if(!$returnCode){
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
-			return FALSE;
-		} else {
-			return TRUE;
+			throw BackendConnectionProblem($this->CORE->getLang()->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
 		}
 	}
 	
@@ -160,10 +151,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	private function checkMysqlSupport() {
 		// Check availability of PHP MySQL
 		if (!extension_loaded('mysql')) {
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
-			return FALSE;
-		} else {
-			return TRUE;	
+			throw BackendConnectionProblem($this->CORE->getLang()->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
 		}
 	}
 	
