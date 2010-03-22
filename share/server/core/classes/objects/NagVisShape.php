@@ -37,8 +37,10 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct($CORE, $icon) {
-		$this->iconPath = $CORE->getMainCfg()->getValue('paths', 'shape');
-		$this->iconHtmlPath = $CORE->getMainCfg()->getValue('paths', 'htmlshape');
+		if(parent::iconPath === null) {
+			parent::iconPath = $CORE->getMainCfg()->getValue('paths', 'shape');
+			parent::iconHtmlPath = $CORE->getMainCfg()->getValue('paths', 'htmlshape');
+		}
 		
 		$this->icon = $icon;
 		$this->type = 'shape';
@@ -98,10 +100,10 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function setIconPath() {
-		if(preg_match('/^\[(.*)\]$/',$this->icon,$match) > 0) {
+		if(preg_match('/^\[(.*)\]$/', $this->icon, $match) > 0) {
 			$this->icon = $match[1];
 		} else {
-			$this->icon = $this->iconHtmlPath.$this->icon;
+			$this->icon = parent::iconHtmlPath . $this->icon;
 		}
 	}
 }

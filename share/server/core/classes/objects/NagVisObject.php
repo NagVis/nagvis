@@ -47,9 +47,6 @@ class NagVisObject {
 	protected $hover_childs_limit;
 	protected $label_show;
 	
-	protected $iconPath;
-	protected $iconHtmlPath;
-	
 	private static $sSortOrder = 'asc';
 	
 	/**
@@ -225,6 +222,13 @@ class NagVisObject {
 			if(!isset($arrDenyKeys[$key])) {
 				$arr[$key] = $val;
 			}
+		}
+
+		// Add special static options
+		if($this instanceof NagVisStatefulObject) {
+			$arr['iconHtmlPath'] = NagVisStatefulObject::$iconHtmlPath;
+		} elseif($this instanceof NagVisStatelessObject) {
+			$arr['iconHtmlPath'] = NagVisStatelessObject::$iconHtmlPath;
 		}
 		
 		// Save the number of members
