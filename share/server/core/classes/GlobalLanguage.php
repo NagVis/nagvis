@@ -55,18 +55,20 @@ class GlobalLanguage {
 		$this->sCurrentEncoding = 'UTF-8';
 		
 		// Check for gettext extension
-		$this->checkGettextSupport();
+		require_once('../../server/core/ext/php-gettext-1.0.9/gettext.inc');
 		
 		// Check if choosen language is available
 		$this->checkLanguageAvailable($this->sCurrentLanguage, true, true);
 		
-		// Set the language to use
-		putenv('LANG='.$this->sCurrentLanguage);
+		// Set the language to us
 		putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
-		setlocale(LC_ALL, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+		putenv('LANG='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+		T_setlocale(LC_MESSAGES, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+		
+		T_bindtextdomain($this->textDomain, $this->CORE->getMainCfg()->getValue('paths', 'language'));
+		T_bind_textdomain_codeset($this->textDomain, $this->sCurrentEncoding);
 
-		bindtextdomain($this->textDomain, $this->CORE->getMainCfg()->getValue('paths', 'language'));
-		textdomain($this->textDomain);
+		T_textdomain($this->textDomain);
 	}
 	
 	/**
@@ -226,21 +228,6 @@ class GlobalLanguage {
 	}
 	
 	/**
-	 * Checks if gettext is supported in this PHP version
-	 *
-	 * @return	Boolean
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkGettextSupport() {
-		if (!extension_loaded('gettext')) {
-			new GlobalMessage('ERROR', $this->getText('phpModuleNotLoaded', Array('MODULE' => 'gettext')));
-			return FALSE;
-		} else {
-			return TRUE;	
-		}
-	}
-	
-	/**
 	 * Calls the real getText method and replaces some macros after fetching the
 	 * text
 	 *
@@ -280,7 +267,7 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getTextOfId($s) {
-		return gettext($s);
+		return T_gettext($s);
 	}
 	
 	
