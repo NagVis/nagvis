@@ -27,6 +27,7 @@
  */
 class CoreModMap extends CoreModule {
 	private $name = null;
+	private $MAPCFG = null;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
@@ -952,6 +953,10 @@ class CoreModMap extends CoreModule {
 		// Initialize backends
 		$BACKEND = new GlobalBackendMgmt($this->CORE);
 		
+		// Initialize map configuration (Needed in getMapObjConf)
+		$this->MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+		$this->MAPCFG->readMapConfig();
+		
 		$numObjects = count($arrType);
 		for($i = 0; $i < $numObjects; $i++) {
 			// Get the object configuration
@@ -1027,13 +1032,7 @@ class CoreModMap extends CoreModule {
 		// Get the object configuration from map configuration (object and
 		// defaults)
 		
-		// Initialize map configuration
-		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
-		
-		// Read the map configuration file
-		$MAPCFG->readMapConfig();
-		
-		if(is_array($objs = $MAPCFG->getDefinitions($objType))){
+		if(is_array($objs = $this->MAPCFG->getDefinitions($objType))){
 			$count = count($objs);
 			for($i = 0; $i < $count && count($objConf) >= 0; $i++) {
 				if($objs[$i]['object_id'] == $objectId) {
@@ -1050,8 +1049,8 @@ class CoreModMap extends CoreModule {
 		
 		if(count($objConf) > 0) {
 			// merge with "global" settings
-			foreach($MAPCFG->getValidTypeKeys($objType) AS $key) {
-				$objConf[$key] = $MAPCFG->getValue($objType, $objConf['id'], $key);
+			foreach($this->MAPCFG->getValidTypeKeys($objType) AS $key) {
+				$objConf[$key] = $this->MAPCFG->getValue($objType, $objConf['id'], $key);
 			}
 		} else {
 			// object not on map

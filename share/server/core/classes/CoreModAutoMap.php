@@ -28,6 +28,7 @@
 class CoreModAutoMap extends CoreModule {
 	private $name = null;
 	private $opts = null;
+	private $MAPCFG  = null;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
@@ -195,6 +196,10 @@ class CoreModAutoMap extends CoreModule {
 		// Initialize backends
 		$BACKEND = new GlobalBackendMgmt($this->CORE);
 		
+		// Read the map configuration file
+		$this->MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
+		$this->MAPCFG->readMapConfig();
+		
 		$numObjects = count($arrType);
 		for($i = 0; $i < $numObjects; $i++) {
 			// Get the object configuration
@@ -270,16 +275,11 @@ class CoreModAutoMap extends CoreModule {
 	private function getObjConf($objType, $objName1, $objName2 = '') {
 		$objConf = Array();
 		
-		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
-				
-		// Read the map configuration file
-		$MAPCFG->readMapConfig();
-		
 		// Default object configuration
-		$objConf = $MAPCFG->getObjectConfiguration($objName1);
+		$objConf = $this->MAPCFG->getObjectConfiguration($objName1);
 
 		// backend_id is filtered in getObjectConfiguration(). Set it manually
-		$objConf['backend_id'] = $MAPCFG->getValue('global', 0, 'backend_id');
+		$objConf['backend_id'] = $this->MAPCFG->getValue('global', 0, 'backend_id');
 			
 		return $objConf;
 	}
