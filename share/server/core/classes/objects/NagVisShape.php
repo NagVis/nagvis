@@ -37,9 +37,9 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function __construct($CORE, $icon) {
-		if(parent::iconPath === null) {
-			parent::iconPath = $CORE->getMainCfg()->getValue('paths', 'shape');
-			parent::iconHtmlPath = $CORE->getMainCfg()->getValue('paths', 'htmlshape');
+		if(parent::$iconPath === null) {
+			parent::$iconPath = $CORE->getMainCfg()->getValue('paths', 'shape');
+			parent::$iconHtmlPath = $CORE->getMainCfg()->getValue('paths', 'htmlshape');
 		}
 		
 		$this->icon = $icon;
@@ -103,7 +103,7 @@ class NagVisShape extends NagVisStatelessObject {
 		if(preg_match('/^\[(.*)\]$/', $this->icon, $match) > 0) {
 			$this->icon = $match[1];
 		} else {
-			$this->icon = parent::iconHtmlPath . $this->icon;
+			$this->icon = parent::$iconHtmlPath . $this->icon;
 		}
 	}
 }
