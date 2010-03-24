@@ -30,6 +30,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 	protected $MAPCFG;
 	private $MAP;
 	
+	protected static $langType = null;
+	protected static $langSelf = null;
+	protected static $langChild = null;
+	
 	protected $members;
 	protected $linkedMaps;
 	
@@ -372,16 +376,16 @@ class NagVisMapObj extends NagVisStatefulObject {
 	private function fetchMapObjects() {
 		foreach($this->MAPCFG->getValidObjectTypes() AS $type) {
 			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
+				$typeKeys = $this->MAPCFG->getValidTypeKeys($type);
 				foreach($objs AS $index => $objConf) {
-					$OBJ = '';
-					
 					// workaround
-					//$objConf['id'] = $objConf['object_id'];
 					$objConf['id'] = $index;
 					
 					// merge with "global" settings
-					foreach($this->MAPCFG->getValidTypeKeys($type) AS $key) {
-						$objConf[$key] = $this->MAPCFG->getValue($type, $index, $key);
+					foreach($typeKeys AS $key) {
+						if(!isset($objConf[$key])) {
+							$objConf[$key] = $this->MAPCFG->getValue($type, $index, $key);
+						}
 					}
 					
 					switch($type) {
@@ -426,6 +430,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 						break;
 						default:
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
+							$OBJ = null;
 						break;
 					}
 					

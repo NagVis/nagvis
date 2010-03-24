@@ -247,30 +247,64 @@ class NagVisObject {
 		 * FIXME: Find another place for that! This is a bad place for language strings!
 		 */
 		
-		// Get the child name label
-		switch($this->type) {
-			case 'host':
-				$sName = $this->CORE->getLang()->getText('hostname');
-				$sChildName = $this->CORE->getLang()->getText('servicename');
-			break;
-			case 'hostgroup':
-				$sName = $this->CORE->getLang()->getText('hostgroupname');
-				$sChildName = $this->CORE->getLang()->getText('hostname');
-			break;
-			case 'servicegroup':
-				$sName = $this->CORE->getLang()->getText('servicegroupname');
-				$sChildName = $this->CORE->getLang()->getText('servicename');
-			break;
-			default:
-				$sName = $this->CORE->getLang()->getText('mapname');
-				$sChildName = $this->CORE->getLang()->getText('objectname');
-			break;
+		if($this instanceof NagVisStatefulObject) {
+			switch($this->type) {
+				case 'host':
+					if(NagVisHost::$langType === null) {
+						NagVisHost::$langType  = $this->CORE->getLang()->getText('host');
+						NagVisHost::$langSelf  = $this->CORE->getLang()->getText('hostname');
+						NagVisHost::$langChild = $this->CORE->getLang()->getText('servicename');
+					}
+					
+					$arr['lang_obj_type']    = NagVisHost::$langType;
+					$arr['lang_name']        = NagVisHost::$langSelf;
+					$arr['lang_child_name']  = NagVisHost::$langChild;
+				break;
+				case 'service':
+					if(NagVisService::$langType === null) {
+						NagVisService::$langType  = $this->CORE->getLang()->getText('service');
+						NagVisService::$langSelf  = $this->CORE->getLang()->getText('servicename');
+					}
+					
+					$arr['lang_obj_type']    = NagVisService::$langType;
+					$arr['lang_name']        = NagVisService::$langSelf;
+				break;
+				case 'hostgroup':
+					if(NagVisHostgroup::$langType === null) {
+						NagVisHostgroup::$langType  = $this->CORE->getLang()->getText('hostgroup');
+						NagVisHostgroup::$langSelf  = $this->CORE->getLang()->getText('hostgroupname');
+						NagVisHostgroup::$langChild = $this->CORE->getLang()->getText('hostname');
+					}
+						
+					$arr['lang_obj_type']    = NagVisHostgroup::$langType;
+					$arr['lang_name']        = NagVisHostgroup::$langSelf;
+					$arr['lang_child_name']  = NagVisHostgroup::$langChild;
+				break;
+				case 'servicegroup':
+					if(NagVisServicegroup::$langType === null) {
+						NagVisServicegroup::$langType   = $this->CORE->getLang()->getText('servicegroup');
+						NagVisServicegroup::$langSelf   = $this->CORE->getLang()->getText('servicegroupname');
+						NagVisServicegroup::$langChild  = $this->CORE->getLang()->getText('servicename');
+						NagVisServicegroup::$langChild1 = $this->CORE->getLang()->getText('hostname');
+					}
+						
+					$arr['lang_obj_type']    = NagVisServicegroup::$langType;
+					$arr['lang_name']        = NagVisServicegroup::$langSelf;
+					$arr['lang_child_name']  = NagVisServicegroup::$langChild;
+				break;
+				case 'map':
+					if(NagVisMapObj::$langType === null) {
+						NagVisMapObj::$langType   = $this->CORE->getLang()->getText('map');
+						NagVisMapObj::$langSelf   = $this->CORE->getLang()->getText('mapname');
+						NagVisMapObj::$langChild  = $this->CORE->getLang()->getText('objectname');
+					}
+						
+					$arr['lang_obj_type']    = NagVisServicegroup::$langType;
+					$arr['lang_name']        = NagVisServicegroup::$langSelf;
+					$arr['lang_child_name']  = NagVisServicegroup::$langChild;
+				break;
+			}
 		}
-		
-		$arr['lang_obj_type'] = $this->CORE->getLang()->getText($this->type);
-		$arr['lang_name'] = $sName;
-		$arr['lang_child_name'] = $sChildName;
-		$arr['lang_child_name1'] = $this->CORE->getLang()->getText('hostname');
 		
 		// I want only "name" in js
 		if($this->type != 'shape' && $this->type != 'textbox' && $this->type != 'line') {

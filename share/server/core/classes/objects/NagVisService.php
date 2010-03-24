@@ -29,6 +29,9 @@
 class NagVisService extends NagiosService {
 	protected $gadget_url;
 	
+	protected static $langType = null;
+	protected static $langSelf = null;
+	
 	/**
 	 * Class constructor
 	 *

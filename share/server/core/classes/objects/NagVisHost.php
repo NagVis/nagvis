@@ -27,6 +27,9 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHost extends NagiosHost {
+	protected static $langType = null;
+	protected static $langSelf = null;
+	protected static $langChild = null;
 	
 	/**
 	 * Class constructor

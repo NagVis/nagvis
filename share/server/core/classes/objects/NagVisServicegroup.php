@@ -27,6 +27,11 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisServicegroup extends NagiosServicegroup {
+	protected static $langType = null;
+	protected static $langSelf = null;
+	protected static $langChild = null;
+	protected static $langChild1 = null;
+	
 	/**
 	 * Class constructor
 	 *
