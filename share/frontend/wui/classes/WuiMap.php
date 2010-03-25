@@ -168,6 +168,10 @@ class WuiMap extends GlobalMap {
 	 */
 	function fixIcon(&$obj) {
 		$obj = $this->getIconPaths($obj);
+
+		if($obj['type'] == 'line') {
+			return $obj;
+		}
 		
 		if($obj['type'] == 'shape' && preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
 			$obj['icon'] = $match[1];
