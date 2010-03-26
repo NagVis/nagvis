@@ -247,10 +247,6 @@ class NagiosHostgroup extends NagVisStatefulObject {
 				// object classes.
 				$OBJ->setConfiguration($this->getObjectConfiguration());
 				
-				// Also get summary state
-				$OBJ->summary_state = $OBJ->state;
-				$OBJ->summary_output = $OBJ->output;
-				
 				// Put state counts to the object
 				if(isset($aServiceStateCounts[$aHost['name']])) {
 					$OBJ->setStateCounts($aServiceStateCounts[$aHost['name']]);

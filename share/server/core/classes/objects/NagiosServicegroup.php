@@ -197,6 +197,10 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			foreach($aServices AS $aService) {
 				$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $aService['host'], $aService['description']);
 				
+				// Also get summary state
+				$aService['summary_state'] = $OBJ->getState();
+				$aService['summary_output'] = $OBJ->getOutput();
+				
 				// Append contents of the array to the object properties
 				$OBJ->setObjectInformation($aService);
 				
@@ -205,10 +209,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 				// until the hard/soft state handling has moved from backend to the
 				// object classes.
 				$OBJ->setConfiguration($this->getObjectConfiguration());
-				
-				// Also get summary state
-				$OBJ->summary_state = $OBJ->state;
-				$OBJ->summary_output = $OBJ->output;
 				
 				// Add child object to the members array
 				$this->members[] = $OBJ;

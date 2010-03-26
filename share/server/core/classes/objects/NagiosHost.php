@@ -497,8 +497,6 @@ class NagiosHost extends NagVisStatefulObject {
 			
 			// Also get summary state
 			$OBJ->fetchSummaryState();
-			
-			// At least summary output
 			$OBJ->fetchSummaryOutput();
 			
 			$this->members[] = $OBJ;
