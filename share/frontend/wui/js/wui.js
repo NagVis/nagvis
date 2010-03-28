@@ -468,14 +468,6 @@ function deleteMapObject(objId) {
 	}
 }
 
-// simple function to ask to confirm before we restore a map
-function confirm_restore() {
-	if(confirm(printLang(lang['confirmRestore'],''))) {
-		document.location.href='./form_handler.php?myaction=map_restore&map='+mapname;
-	}
-	return true;
-}
-
 /**
  * formSubmit()
  *
@@ -654,4 +646,36 @@ function toggleFieldType(sName, sValue) {
 	}
 	
 	return bReturn;
+}
+
+/**
+ * toggleBorder()
+ *
+ * Highlights an object by show/hide a border around the icon
+ *
+ * @param   Object   Object to draw the border arround
+ * @param   Integer  Enable/Disabled border
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function toggleBorder(oObj, state){
+	var sColor = '#dddddd';
+	var iWidth = 3;
+	
+	var oContainer = oObj.parentNode;
+
+	var top = parseInt(oContainer.style.top.replace('px', ''));
+	var left = parseInt(oContainer.style.left.replace('px', ''));
+
+	if(state === 1) {
+		oObj.style.border = iWidth + "px solid " + sColor;
+		oContainer.style.top = (top - iWidth) + 'px';
+		oContainer.style.left = (left - iWidth) + 'px';
+	} else {
+		oObj.style.border = "none";
+		oContainer.style.top = (top + iWidth) + 'px';
+		oContainer.style.left = (left + iWidth) + 'px';
+	}
+	
+	oObj = null;
+	oContainer = null;
 }
