@@ -615,7 +615,7 @@ class NagVisAutoMap extends GlobalMap {
 			$this->CORE->getMainCfg()->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
 		}
 		
-		exec('which '.$this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary, $arrReturn, $returnCode2);
+		exec('which '.$this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary. ' 2>&1', $arrReturn, $returnCode2);
 		
 		if(!$returnCode2) {
 			$this->CORE->getMainCfg()->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
