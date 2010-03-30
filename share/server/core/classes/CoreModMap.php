@@ -938,7 +938,7 @@ class CoreModMap extends CoreModule {
 		
 		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
 		               't' => MATCH_OBJECT_TYPES,
-		               'n1' => MATCH_STRING_NO_SPACE,
+		               'n1' => MATCH_STRING,
 		               'n2' => MATCH_STRING_EMPTY,
 		               'i' => MATCH_STRING_NO_SPACE);
 		
