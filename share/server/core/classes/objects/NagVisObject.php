@@ -200,6 +200,28 @@ class NagVisObject {
 			$this->{$key} = $val;
 		}
 	}
+
+	/**
+	 * PUBLIC fetchObjectAsChild()
+	 *
+	 * Is called when an object should only be displayed as child
+	 * e.g. in hover menus. There are much less macros needed for this.
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function fetchObjectAsChild() {
+		$aChild = Array('type' => $this->getType(),
+										'name' => $this->getName(),
+										'summary_state' => $this->getSummaryState(),
+										'summary_in_downtime' => $this->getSummaryInDowntime(),
+										'summary_problem_has_been_acknowledged' => $this->getSummaryAcknowledgement(),
+										'summary_output' => strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')));
+		
+		if($this->type == 'service') {
+			$aChild['service_description'] = $this->getServiceDescription();
+		}
+    return $aChild;  
+	}
 	
 	/**
 	 * PUBLIC getObjectInformation()
@@ -216,19 +238,8 @@ class NagVisObject {
 		// itselfs. So much less information are needed. Progress them here
     // If someone wants more information in hover menu children, this is
 		// the place to change.
-		if(!$bFetchChilds) {
-      $aChild = Array('type' => $this->getType(),
-                      'name' => $this->getName(),
-                      'summary_state' => $this->getSummaryState(),
-                      'summary_in_downtime' => $this->getSummaryInDowntime(),
-                      'summary_problem_has_been_acknowledged' => $this->getSummaryAcknowledgement(),
-                      'summary_output' => strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')));
-      if($this->type == 'service') {
-        $aChild['service_description'] = $this->getServiceDescription();
-      }
-      
-      return $aChild;
-		}
+		if(!$bFetchChilds)
+      return $this->fetchObjectAsChild();
 		
 		// Need to remove some options which are not relevant
 		$arrDenyKeys = Array('CORE' => '', 'BACKEND' => '', 'MAPCFG' => '',
@@ -363,7 +374,7 @@ class NagVisObject {
 		if(isset($arr['num_members']) && $arr['num_members'] > 0) {
 			$arr['members'] = Array();
 			foreach($this->getSortedObjectMembers() AS $OBJ) {
-				$arr['members'][] = $OBJ->getObjectInformation(!GET_CHILDS);
+				$arr['members'][] = $OBJ->fetchObjectAsChild();
 			}
 		}
 		
