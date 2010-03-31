@@ -19,7 +19,6 @@
 				<tr><td>OS</td><td>{$os}</td></tr>
 				<t><th colspan="2">Webserver Information</th></tr>
 				<tr><td>SERVER_SOFTWARE</td><td>{$serverSoftware}</td></tr>
-				<tr><td>REMOTE_USER</td><td>{$remoteUser}</td></tr>
 				<tr><td>SCRIPT_FILENAME</td><td>{$scriptFilename}</td></tr>
 				<tr><td>SCRIPT_NAME</td><td>{$scriptName}</td></tr>
 				<tr><td>REQUEST_TIME</td><td>{$requestTime}</td></tr>
@@ -29,8 +28,18 @@
 				<tr><td>max_execution_time</td><td>{$phpMaxExecTime} seconds</td></tr>
 				<tr><td>memory_limit</td><td>{$phpMemoryLimit}</td></tr>
 				<tr><td>loaded modules</td><td>{$phpLoadedExtensions}</td></tr>
-				<t><th colspan="2">Client Information</th></tr>
+				<tr><th colspan="2">Client Information</th></tr>
 				<tr><td>USER_AGENT</td><td>{$userAgent}</td></tr>
+				<tr><th colspan="2">Logon Information</th></tr>
+				<tr><td>Logon Module</td><td>{$logonModule}</td></tr>
+				<tr><td>Logon Var</td><td>{$logonEnvVar}</td></tr>
+				<tr><td>{$logonEnvVar}</td><td>{$logonEnvVal}</td></tr>
+				<tr><td>Logon Create User?</td><td>{$logonEnvCreateUser}</td></tr>
+				<tr><td>Logon Create User Role?</td><td>{$logonEnvCreateRole}</td></tr>
+				<tr><th colspan="2">Current User Information</th></tr>
+				<tr><td>User Logged In</td><td>{$loggedIn}</td></tr>
+				<tr><td>User Roles</td><td>{$userRoles}</td></tr>
+				<tr><td>User Permissions</td><td>{$userPerms}</td></tr>
 			</table>
 		</div>
 	</body>

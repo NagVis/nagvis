@@ -49,6 +49,13 @@ class NagVisInfoView {
 		// Initialize template system
 		$TMPL = New FrontendTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
+
+		$AUTHENTICATION = $this->CORE->getAuthentication();
+		$AUTHORISATION  = $this->CORE->getAuthorization();
+		$userName = $AUTHENTICATION->getUser();
+		$userId = $AUTHENTICATION->getUserId();
+		$userRoles = $AUTHORISATION->getUserRoles($userId);
+		$userPerms = $AUTHORISATION->parsePermissions();
 		
 		$aData = Array(
 			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.$this->CORE->getLang()->getText('supportInfo'),
@@ -59,7 +66,6 @@ class NagVisInfoView {
 			'mysqlVersion' => shell_exec('mysql --version'),
 			'os' => shell_exec('uname -a'),
 			'serverSoftware' => $_SERVER['SERVER_SOFTWARE'],
-			'remoteUser' => (isset($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'] : ''),
 			'scriptFilename' => $_SERVER['SCRIPT_FILENAME'],
 			'scriptName' => $_SERVER['SCRIPT_NAME'],
 			'requestTime' => $_SERVER['REQUEST_TIME'].' (gmdate(): '.gmdate('r',$_SERVER['REQUEST_TIME']).')',
@@ -69,6 +75,15 @@ class NagVisInfoView {
 			'phpMemoryLimit' => ini_get('memory_limit'),
 			'phpLoadedExtensions' => implode(", ",get_loaded_extensions()),
 			'userAgent' => $_SERVER['HTTP_USER_AGENT'],
+			// Auth details
+			'logonModule' => $this->CORE->getMainCfg()->getValue('global', 'logonmodule'),
+			'logonEnvVar' => $this->CORE->getMainCfg()->getValue('global', 'logonenvvar'),
+			'logonEnvVal' => (isset($_SERVER[$this->CORE->getMainCfg()->getValue('global', 'logonenvvar')]) ? $_SERVER[$this->CORE->getMainCfg()->getValue('global', 'logonenvvar')] : ''),
+			'logonEnvCreateUser' => $this->CORE->getMainCfg()->getValue('global', 'logonenvcreateuser'),
+			'logonEnvCreateRole' => $this->CORE->getMainCfg()->getValue('global', 'logonenvcreaterole'),
+			'loggedIn' => $userName.' ('.$userId.')',
+			'userRoles' => json_encode($userRoles),
+			'userPerms' => json_encode($userPerms),
 		);
 		
 		// Build page based on the template file and the data array
