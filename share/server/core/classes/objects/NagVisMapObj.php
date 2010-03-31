@@ -352,13 +352,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
 			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				
-				// Do not get summary information for some object types
-				if($OBJ->getType() != 'shape' && $OBJ->getType() != 'textbox') {
-					$sState = $OBJ->getSummaryState();
-					if(isset($arrStates[$sState])) {
-						$arrStates[$sState]++;
-					}
+				$sState = $OBJ->getSummaryState();
+				if(isset($arrStates[$sState])) {
+					$arrStates[$sState]++;
 				}
 			}
 			
@@ -497,10 +493,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			// Get summary state member objects
 			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				// Do not get summary information for some object types
-				if($OBJ->getType() != 'shape' && $OBJ->getType() != 'textbox') {
-					$this->wrapChildState($OBJ);
-				}
+				$this->wrapChildState($OBJ);
 			}
 		} else {
 			$this->summary_state = 'UNKNOWN';
