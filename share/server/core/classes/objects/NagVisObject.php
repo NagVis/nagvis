@@ -202,15 +202,33 @@ class NagVisObject {
 	}
 	
 	/**
-	 * PULBLIC getObjectInformation()
+	 * PUBLIC getObjectInformation()
 	 *
 	 * Gets all necessary information of the object as array
 	 *
 	 * @return	Array		Object configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getObjectInformation($bFetchChilds=true) {
+	public function getObjectInformation($bFetchChilds = true) {
 		$arr = Array();
+
+		// When the childs don't need to be fetched this object is a child
+		// itselfs. So much less information are needed. Progress them here
+    // If someone wants more information in hover menu children, this is
+		// the place to change.
+		if(!$bFetchChilds) {
+      $aChild = Array('type' => $this->getType(),
+                      'name' => $this->getName(),
+                      'summary_state' => $this->getSummaryState(),
+                      'summary_in_downtime' => $this->getSummaryInDowntime(),
+                      'summary_problem_has_been_acknowledged' => $this->getSummaryAcknowledgement(),
+                      'summary_output' => strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')));
+      if($this->type == 'service') {
+        $aChild['service_description'] = $this->getServiceDescription();
+      }
+      
+      return $aChild;
+		}
 		
 		// Need to remove some options which are not relevant
 		$arrDenyKeys = Array('CORE' => '', 'BACKEND' => '', 'MAPCFG' => '',
@@ -341,28 +359,11 @@ class NagVisObject {
 			$arr = array_merge($arr, $this->getObjectStateInformations(false));
 		}
     
-    // On children only return the following options to lower the bandwidth,
-    // memory and cpu usage. If someone wants more information in hover menu
-    // children, this is the place to change
-    if(!$bFetchChilds) {
-      $aChild = Array('type' => $arr['type'],
-                      'name' => $arr['name'],
-                      'summary_state' => $arr['summary_state'],
-                      'summary_in_downtime' => $arr['summary_in_downtime'],
-                      'summary_problem_has_been_acknowledged' => $arr['summary_problem_has_been_acknowledged'],
-                      'summary_output' => $arr['summary_output']);
-      if($this->type == 'service') {
-        $aChild['service_description'] = $arr['service_description'];
-      }
-      
-      $arr = $aChild;
-    }
-    
-		// Only do this for parents
-		if($bFetchChilds && isset($arr['num_members']) && $arr['num_members'] > 0) {
+		// If there are some members fetch the information for them
+		if(isset($arr['num_members']) && $arr['num_members'] > 0) {
 			$arr['members'] = Array();
 			foreach($this->getSortedObjectMembers() AS $OBJ) {
-				$arr['members'][] = $OBJ->getObjectInformation(false);
+				$arr['members'][] = $OBJ->getObjectInformation(!GET_CHILDS);
 			}
 		}
 		

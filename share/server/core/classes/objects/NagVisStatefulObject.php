@@ -447,29 +447,6 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getObjectStateInformations($bFetchChilds=true) {
 		$arr = Array();
 		
-		/* FIXME: These are no state informations - don't send them
-		if(isset($this->alias) && $this->alias != '') {
-			$arr['alias'] = $this->alias;
-		} else {
-			$arr['alias'] = '';
-		}
-		
-		if(isset($this->display_name) && $this->display_name != '') {
-			$arr['display_name'] = $this->display_name;
-		} else {
-			$arr['display_name'] = '';
-		}
-		
-		// Save the number of members
-		switch($this->getType()) {
-			case 'host':
-			case 'map':
-			case 'hostgroup':
-			case 'servicegroup':
-				$arr['num_members'] = $this->getNumMembers();
-			break;
-		}*/
-		
 		$arr['state'] = $this->getState();
 		$arr['summary_state'] = $this->getSummaryState();
 		$arr['summary_problem_has_been_acknowledged'] = $this->getSummaryAcknowledgement();
@@ -501,7 +478,7 @@ class NagVisStatefulObject extends NagVisObject {
 		if($bFetchChilds && $this->hasMembers()) {
 			$arr['members'] = Array();
 			foreach($this->getSortedObjectMembers() AS $OBJ) {
-				$arr['members'][] = $OBJ->getObjectInformation(false);
+				$arr['members'][] = $OBJ->getObjectInformation(!GET_CHILDS);
 			}
 		}
 		
