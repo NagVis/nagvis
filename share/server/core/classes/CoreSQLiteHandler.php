@@ -99,7 +99,7 @@ class CoreSQLiteHandler {
 	public function createMapPermissions($name) {
 		// Only create when not existing
 		if($this->count('SELECT COUNT(*) AS num FROM perms WHERE mod=\'Map\' AND act=\'view\' AND obj='.$this->escape($name)) <= 0) {
-			debug('create permissions for map '.$name);
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for map '.$name);
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'view\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'getMapProperties\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'getMapObjects\', '.$this->escape($name).')');
@@ -114,7 +114,7 @@ class CoreSQLiteHandler {
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'createObject\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'deleteObject\', '.$this->escape($name).')');
 		} else {
-			debug('won\'t create permissions for map '.$name);
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for map '.$name);
 		}
 		
 		return true;
@@ -123,7 +123,7 @@ class CoreSQLiteHandler {
 	public function createAutoMapPermissions($name) {
 		// Only create when not existing
 		if($this->count('SELECT COUNT(*) AS num FROM perms WHERE mod=\'AutoMap\' AND act=\'view\' AND obj='.$this->escape($name)) <= 0) {
-			debug('create permissions for automap '.$name);
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for automap '.$name);
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'view\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'getAutomapProperties\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'getAutomapObjects\', '.$this->escape($name).')');
@@ -139,7 +139,7 @@ class CoreSQLiteHandler {
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'createObject\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'deleteObject\', '.$this->escape($name).')');
 		} else {
-			debug('won\'t create permissions for automap '.$name);
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for automap '.$name);
 		}
 		
 		return true;
@@ -148,10 +148,10 @@ class CoreSQLiteHandler {
 	public function createRotationPermissions($name) {
 		// Only create when not existing
 		if($this->count('SELECT COUNT(*) AS num FROM perms WHERE mod=\'Rotation\' AND act=\'view\' AND obj='.$this->escape($name)) <= 0) {
-			debug('create permissions for rotation '.$name);
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for rotation '.$name);
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Rotation\', \'view\', '.$this->escape($name).')');
 		} else {
-			debug('won\'t create permissions for rotation '.$name);
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for rotation '.$name);
 		}
 		
 		return true;
