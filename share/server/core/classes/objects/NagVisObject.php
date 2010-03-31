@@ -150,7 +150,7 @@ class NagVisObject {
 		if($this->type == 'service') {
 			return $this->host_name;
 		} else {
-			return $this->{$this->getType().'_name'};
+			return $this->{$this->type.'_name'};
 		}
 	}
 	
