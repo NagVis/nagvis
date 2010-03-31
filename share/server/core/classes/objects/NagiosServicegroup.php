@@ -198,8 +198,8 @@ class NagiosServicegroup extends NagVisStatefulObject {
 				$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $aService['host'], $aService['description']);
 				
 				// Also get summary state
-				$aService['summary_state'] = $OBJ->getState();
-				$aService['summary_output'] = $OBJ->getOutput();
+				$aService['summary_state'] = $aService['state'];
+				$aService['summary_output'] = $aService['output'];
 				
 				// Append contents of the array to the object properties
 				$OBJ->setObjectInformation($aService);
