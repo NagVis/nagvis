@@ -48,6 +48,7 @@ class NagVisObject {
 	protected $label_show;
 	
 	private static $sSortOrder = 'asc';
+	private static $arrDenyKeys = null;
 	
 	/**
 	 * Class constructor
@@ -242,13 +243,17 @@ class NagVisObject {
       return $this->fetchObjectAsChild();
 		
 		// Need to remove some options which are not relevant
-		$arrDenyKeys = Array('CORE' => '', 'BACKEND' => '', 'MAPCFG' => '',
-			'MAP' => '', 'GRAPHIC' => '', 'conf' => '', 'services' => '',
-			'fetchedChildObjects' => '', 'childObjects' => '', 'parentObjects' => '',
-			'members' => '', 'objects' => '', 'linkedMaps' => '');
+		// FIXME: Would be much better to name the needed vars explicit
+		if(self::$arrDenyKeys == null) {
+			self::$arrDenyKeys = Array('CORE' => '', 'BACKEND' => '', 'MAPCFG' => '',
+				'MAP' => '', 'GRAPHIC' => '', 'conf' => '', 'services' => '',
+				'fetchedChildObjects' => '', 'childObjects' => '', 'parentObjects' => '',
+				'members' => '', 'objects' => '', 'linkedMaps' => '', 'isSummaryObject' => '',
+				'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '');
+		}
 		
 		foreach($this AS $key => $val) {
-			if(!isset($arrDenyKeys[$key])) {
+			if(!isset(self::$arrDenyKeys[$key])) {
 				$arr[$key] = $val;
 			}
 		}
@@ -372,10 +377,11 @@ class NagVisObject {
     
 		// If there are some members fetch the information for them
 		if(isset($arr['num_members']) && $arr['num_members'] > 0) {
-			$arr['members'] = Array();
+			$members = Array();
 			foreach($this->getSortedObjectMembers() AS $OBJ) {
-				$arr['members'][] = $OBJ->fetchObjectAsChild();
+				$members[] = $OBJ->fetchObjectAsChild();
 			}
+			$arr['members'] = $members;
 		}
 		
 		return $arr;
