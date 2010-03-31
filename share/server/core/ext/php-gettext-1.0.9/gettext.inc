@@ -112,7 +112,7 @@ function _get_reader($domain=null, $category=5, $enable_cache=true) {
  */
 function locale_emulation() {
     global $EMULATEGETTEXT;
-    return $EMULATEGETTEXT;
+    return ($EMULATEGETTEXT == 1);
 }
 
 /**
@@ -120,7 +120,7 @@ function locale_emulation() {
  */
 function _check_locale() {
     global $EMULATEGETTEXT;
-    return !$EMULATEGETTEXT;
+    return !($EMULATEGETTEXT == 1);
 }
 
 /**
@@ -165,16 +165,23 @@ function _setlocale($category, $locale) {
             return _setlocale($category, $CURRENTLOCALE);
     } else {
         $ret = 0;
-        if (function_exists('setlocale')) // I don't know if this ever happens ;)
+        if (function_exists('setlocale')) { // I don't know if this ever happens ;)
+           if(DEBUG&&DEBUGLEVEL&2) debug('php-gettext: params: category: '.$category.' locale: '.$locale);
            $ret = setlocale($category, $locale);
+           if(DEBUG&&DEBUGLEVEL&2) debug('php-gettext: setlocale exists: '.$ret);
+        }
+        
         if (($ret and $locale == '') or ($ret == $locale)) {
+						if(DEBUG&&DEBUGLEVEL&2) debug('php-gettext: using native gettext');
             $EMULATEGETTEXT = 0;
             $CURRENTLOCALE = $ret;
         } else {
-          if ($locale == '') // emulate variable support
-             $CURRENTLOCALE = getenv('LANG');
-        else
-            $CURRENTLOCALE = $locale;
+						if(DEBUG&&DEBUGLEVEL&2) debug('php-gettext: using emulated gettext');
+            if ($locale == '') // emulate variable support
+                $CURRENTLOCALE = getenv('LANG');
+            else
+                $CURRENTLOCALE = $locale;
+
             $EMULATEGETTEXT = 1;
         }
         // Allow locale to be changed on the go for one translation domain.

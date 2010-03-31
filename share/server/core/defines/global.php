@@ -47,7 +47,7 @@ define('DEBUG', true);
  * 2: progress information in the functions
  * 4: render time
  */
-define('DEBUGLEVEL', 4);
+define('DEBUGLEVEL', 6);
 
 // Path to the debug file
 define('DEBUGFILE', '../../../var/nagvis-debug.log');

@@ -67,8 +67,17 @@ class GlobalLanguage {
 		
 		T_bindtextdomain($this->textDomain, $this->CORE->getMainCfg()->getValue('paths', 'language'));
 		T_bind_textdomain_codeset($this->textDomain, $this->sCurrentEncoding);
-
+		
 		T_textdomain($this->textDomain);
+		
+		// Check if native gettext or php-gettext is used
+		if(DEBUG&&DEBUGLEVEL&2) {
+			if(locale_emulation()) {
+				debug('GlobalLanguage: Using php-gettext for translations');
+			} else {
+				debug('GlobalLanguage: Using native gettext for translations');
+			}
+		}
 	}
 	
 	/**
