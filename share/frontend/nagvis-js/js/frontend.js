@@ -1126,7 +1126,7 @@ function parseOverviewPage() {
 		
 		oTh = document.createElement('th');
 		oTh.colSpan = oPageProperties.cellsperrow;
-		oTh.appendChild(document.createTextNode(oPageProperties.lang_mapIndex));
+		oTh.appendChild(document.createTextNode(oPageProperties.lang_automapIndex));
 		
 		oTr.appendChild(oTh);
 		oTh = null;

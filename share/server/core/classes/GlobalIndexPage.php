@@ -315,6 +315,7 @@ class GlobalIndexPage {
 		$arr['background_color'] = $this->CORE->getMainCfg()->getValue('index','backgroundcolor');
 		
 		$arr['lang_mapIndex'] = $this->CORE->getLang()->getText('mapIndex');
+		$arr['lang_automapIndex'] = $this->CORE->getLang()->getText('Automap Index');
 		$arr['lang_rotationPools'] = $this->CORE->getLang()->getText('rotationPools');
 		
 		$arr['event_log'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventlog');
