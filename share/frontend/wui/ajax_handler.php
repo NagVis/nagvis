@@ -37,6 +37,7 @@ require('defines/wui.php');
 require("../../server/core/functions/autoload.php");
 require("../../server/core/functions/debug.php");
 require("../../server/core/functions/oldPhpVersionFixes.php");
+require('../../server/core/classes/CoreExceptions.php');
 
 // This defines wether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
@@ -62,25 +63,33 @@ switch($_GET['action']) {
 		$BACKEND = new GlobalBackendMgmt($CORE);
 		
 		// Do some validations
-		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
+		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '')
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
-		} elseif(!isset($_GET['type']) || $_GET['type'] == '') {
+		if(!isset($_GET['type']) || $_GET['type'] == '') {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~type'));
-		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
+		}
+
+		try {
+			$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE);
+		} catch(BackendConnectionProblem $e) {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']));
-		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
-		} else {
-			// Input looks OK, handle the request...
+		}
 			
-			$aRet = Array(Array('name' => ''));
-			// Read all objects of the requested type from the backend
+		if(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
+		}
+
+		// Input looks OK, handle the request...
+		
+		$aRet = Array(Array('name' => ''));
+		// Read all objects of the requested type from the backend
+		try {
 			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects($_GET['type'],'','') AS $arr) {
 				$aRet[] = Array('name' => $arr['name1']);
 			}
-			
-			echo json_encode($aRet);
-		}
+		} catch(BackendConnectionProblem $e) {}
+		
+		echo json_encode($aRet);
 	break;
 	/*
 	 * Get all services in the defined BACKEND of the defined HOST
