@@ -613,7 +613,10 @@ class NagVisStatefulObject extends NagVisObject {
 		$stateCounts = Array();
 		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		foreach($this->aStateCounts AS $sState => $aSubstates) {
-			if(isset($stateWeight[$sState]['normal']) && $aSubstates['normal'] !== 0) {
+			if(isset($stateWeight[$sState])
+			   && isset($stateWeight[$sState]['normal'])
+			   && isset($aSubstates['normal'])
+			   && $aSubstates['normal'] !== 0) {
 				$stateCounts[] = Array('name' => $sState,
 				                       'weight' => $stateWeight[$sState]['normal'],
 				                       'count' => $aSubstates['normal']);
