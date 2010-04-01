@@ -132,7 +132,7 @@ class NagVisHeaderMenu {
 		
 		
 		// Build map list
-		$permEditAnyMap = False;
+		$permEditAnyMap = True;
 		$aMaps = Array();
 		foreach($this->CORE->getAvailableMaps() AS $mapName) {
 			$map = Array();
