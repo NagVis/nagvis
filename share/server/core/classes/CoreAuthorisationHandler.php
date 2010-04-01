@@ -193,14 +193,14 @@ class CoreAuthorisationHandler {
 	public function updateRolePerms($roleId, $perms) {
 		// FIXME: First check if this is supported
 		
-		// Get all permissions
+		// Get current permissions
 		$aPerms = $this->MOD->getAllPerms();
 		
 		// Resolve summarized perms
 		foreach($perms AS $key => $value) {
 			$aPerm = Array();
 			
-			// Get matching permission
+			// Get current permissions for that access level
 			foreach($aPerms AS $perm) {
 				if($perm['permId'] == $key) {
 					$aPerm = $perm;
@@ -210,6 +210,7 @@ class CoreAuthorisationHandler {
 			
 			$mod = $aPerm['mod'];
 			$act = $aPerm['act'];
+			$obj = $aPerm['obj'];
 			
 			// Check if this mod+act summarizes something
 			if(isset($this->summarizePerms[$mod])) {
@@ -217,12 +218,13 @@ class CoreAuthorisationHandler {
 					if($summarizingAct === $act) {
 						// Get the id of the summaried action
 						foreach($aPerms AS $perm) {
-							if($mod == $perm['mod'] && $summarizedAct == $perm['act']) {
+							if($mod == $perm['mod']
+							   && $summarizedAct == $perm['act']
+							   && $obj == $perm['obj']) {
 								$summarizedActId = $perm['permId'];
 								break;
 							}
 						}
-			
 						// Add the summarized action to the permissions array
 						$perms[$summarizedActId] = $value;
 					}
@@ -268,21 +270,21 @@ class CoreAuthorisationHandler {
 					} elseif(isset($this->aPermissions[$modAccess][$actAccess][AUTH_PERMISSION_WILDCARD])) {
 						$bAutorized = true;
 					} else {
-						// FIXME: Logging
-						//echo 'object denied';
+						if(DEBUG&&DEBUGLEVEL&2)
+							debug('Object access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
 						$bAutorized = false;
 					}
 				} else {
 					$bAutorized = true;
 				}
 			} else {
-				// FIXME: Logging
-				//echo 'action denied';
+				if(DEBUG&&DEBUGLEVEL&2)
+					debug('Action access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
 				$bAutorized = false;
 			}
 		} else {
-			// FIXME: Logging
-			//echo 'module denied';
+			if(DEBUG&&DEBUGLEVEL&2)
+				debug('Module access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
 			$bAutorized = false;
 		}
 		
@@ -290,7 +292,6 @@ class CoreAuthorisationHandler {
 		if($bAutorized === true) {
 			return true;
 		} else {
-			// FIXME: Logging
 			return false;
 		}
 	}
