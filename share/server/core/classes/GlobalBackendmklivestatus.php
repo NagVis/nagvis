@@ -263,17 +263,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$socketData = '';
 		
 		while($offset < $len) {
-			if(($data = @socket_read($this->SOCKET, $len-$offset)) === false) {
+			if(($data = @socket_read($this->SOCKET, $len - $offset)) === false) {
 				return false;
 			}
 		
-			$dataLen = strlen ($data);
-			$offset += $dataLen;
-			$socketData .= $data;
-			
-			if($dataLen == 0) {
+			if(($dataLen = strlen($data)) === 0) {
 				break;
 			}
+			
+			$offset += $dataLen;
+			$socketData .= $data;
 		}
 		
 		return $socketData;
