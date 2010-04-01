@@ -579,7 +579,97 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	# End public methods
 	# #########################################################################
+	
+	private static function sortStateCountsByState($a1, $a2) {
+		if($a1['weight'] == $a2['weight']) {
+			return 0;
+		} elseif($a1['weight'] < $a2['weight']) {
+			if(NagVisObject::$sSortOrder === 'asc') {
+				return +1;
+			} else {
+				return -1;
+			}
+		} else {
+			if(NagVisObject::$sSortOrder === 'asc') {
+				return -1;
+			} else {
+				return +1;
+			}
+		}
+	}
+	
+	/**
+	 * PROTECTED getChildFetchingStateFilters()
+	 *
+	 * Is used to build a state filter for the backend when fetching child
+	 * objects for the hover menu child list. If the childs should be sorted
+	 * by state it may be possible to limit the number of requested objects
+	 * dramatically when using the state filters.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 *
+	 */
+	protected function getChildFetchingStateFilters() {
+		$stateCounts = Array();
+		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		foreach($this->aStateCounts AS $sState => $aSubstates) {
+			if(isset($stateWeight[$sState]['normal']) && $aSubstates['normal'] !== 0) {
+				$stateCounts[] = Array('name' => $sState,
+				                       'weight' => $stateWeight[$sState]['normal'],
+				                       'count' => $aSubstates['normal']);
+			}
+		}
+		NagVisObject::$sSortOrder = $this->hover_childs_order;
+		usort($stateCounts, Array("NagVisStatefulObject", "sortStateCountsByState"));
+	
+		$objCount = 0;
+		$stateFilter = Array();
+		foreach($stateCounts AS $aState) {
+			$stateFilter[] = $aState['name'];
+			if(($objCount += $aState['count']) >= $this->hover_childs_limit)
+				break;
+		}
+		
+		return $stateFilter;
+	}
+	
+	
+	/**
+	 * PROTECTED belowHoverChildsLimit()
+	 *
+	 * Checks if the current count is below the hover childs limit
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function belowHoverChildsLimit($i) {
+		return (($this->hover_childs_limit >= 0 && $i <= $this->hover_childs_limit) || $this->hover_childs_limit == -1);
+	}
 
+	
+	/**
+	 * PROTECTED fetchObjectAsChild()
+	 *
+	 * Is called when an object should only be displayed as child
+	 * e.g. in hover menus. There are much less macros needed for this.
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function fetchObjectAsChild() {
+		$aChild = Array('type' => $this->getType(),
+		                'name' => $this->getName(),
+		                'summary_state' => $this->getSummaryState(),
+		                'summary_in_downtime' => $this->getSummaryInDowntime(),
+		                'summary_problem_has_been_acknowledged' => $this->getSummaryAcknowledgement(),
+		                'summary_output' => strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')));
+		
+		if($this->type == 'service') {
+			$aChild['service_description'] = $this->getServiceDescription();
+		}
+		
+		return $aChild;
+	}
+	
+	
 	/**
 	 * PROTECTED setBackendConnectionProblem()
 	 *
@@ -590,7 +680,7 @@ class NagVisStatefulObject extends NagVisObject {
 	protected function setBackendConnectionProblem($e) {
 		$this->state = 'UNKNOWN';
 		$this->output = GlobalCore::getInstance()->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]', 
-																									Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
+		                                                              Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
 		
 		$this->summary_state = $this->state;
 		$this->summary_output = $this->output;
@@ -650,7 +740,7 @@ class NagVisStatefulObject extends NagVisObject {
 							// Modify the summary information
 							
 							$this->summary_state = $sState;
-					
+							
 							if($sSubState == 'ack') {
 								$this->summary_problem_has_been_acknowledged = 1;
 							} else {

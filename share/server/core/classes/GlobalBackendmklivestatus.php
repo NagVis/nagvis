@@ -42,6 +42,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	private $socketPath = '';
 	private $socketAddress = '';
 	private $socketPort = 0;
+	private static $states = Array(
+		'UP' => 0,
+		'DOWN' => 1,
+		'UNREACHABLE' => 2,
+		'OK' => 0,
+		'WARNING' => 1,
+		'CRITICAL' => 2,
+		'UNKNOWN' => 3,
+	);
 	
 	// These are the backend local configuration options
 	private static $validConfig = Array(
@@ -427,36 +436,73 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PRIVATE parseChildFilter()
+	 *
+	 * Parses the filter array to backend 
+	 *
+	 * @param   String    State column to use
+	 * @param   String    Filter Array
+	 * @return  String    Parsed filters
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function parseChildFilter($stateColumn, $filter) {
+		// If filter is set it can reduce the objects to fetch from the data source
+		// e.g. the filter can contain a list of states to fetch only the objects
+		// which have one of those specific types.
+		$filters = '';
+		if($filter !== null) {
+			foreach($filter AS $type => $filter) {
+				if($type == 's') {
+					$numFilters = 0;
+					foreach($filter AS $key) {
+						if(isset(self::$states[$key])) {
+							$filters .= 'Filter: '.$stateColumn.' = '.self::$states[$key]."\n";
+							$numFilters++;
+						}
+					}
+					if($numFilters > 1)
+						$filters .= 'Or: '.$numFilters."\n";
+				}
+			}
+		}
+		
+		return $filters;
+	}
+	
+	/**
 	 * PUBLIC getHostgroupState()
 	 *
-	 * Returns the state of all hosts in a given hostgroup
+	 * Returns general information and states of all hosts or some filtered hosts
+	 * of a given hostgroup
 	 *
-	 * @param   String    $hostgroupName
-	 * @param   Boolean   $onlyHardstates
+	 * @param   String    Name of the hostgroup to fetch the states for
+	 * @param   Boolean   Only fetch hard states
+	 * @param   Array     Optional array of filters
 	 * @return  array     Array of host objects
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostgroupState($hostgroupName, $onlyHardstates) {
+	public function getHostgroupState($hostgroupName, $onlyHardstates, $filter = null) {
 		$arrReturn = Array();
 		
-		$stateColumn = 'state';
+		$stateAttr = 'state';
 			
 		// When only hardstate handling is enabled dont fetch "state"
 		// Fetch "hard_state"
 		if($onlyHardstates == 1) {
-			$stateColumn = 'hard_state';
+			$stateAttr = 'hard_state';
 		} 
-			
+		
 		$numAttr = 19;
 		$l = $this->queryLivestatus(
 		  "GET hosts\n".
-		  "Columns: name ".$stateColumn." plugin_output alias display_name ".
+		  "Columns: name ".$stateAttr." plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
 		  "acknowledged scheduled_downtime_depth ".
 		  "has_been_checked\n".
-		  "Filter: groups >= ".$hostgroupName."\n");
+		  "Filter: groups >= ".$hostgroupName."\n".
+		  $this->parseChildFilter($stateAttr, $filter));
 		
 		if(count($l) == 0) {
 			$arrReturn['name'] = '';
@@ -542,10 +588,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 *
 	 * @param   String    $servicegroupName
 	 * @param   Boolean   $onlyHardstates
+	 * @param   Array     Optional array of filters
 	 * @return  array     $state
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getServicegroupState($servicegroupName, $onlyHardstates) {
+	public function getServicegroupState($servicegroupName, $onlyHardstates, $filter = null) {
 		$result = Array();
 		$arrReturn = Array();
 		
@@ -563,7 +610,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change scheduled_downtime_depth perf_data ".
 		  "acknowledged host_acknowledged host_scheduled_downtime_depth ".
-		  "has_been_checked\n");
+		  "has_been_checked\n".
+		  $this->parseChildFilter($stateAttr, $filter));
 		
 		if(!is_array($l) || count($l) <= 0) {
 			$arrReturn['host'] = '';
@@ -668,10 +716,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 *
 	 * @param   String   Name of the host to query
 	 * @param   Boolean  Only recognize hardstates
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+	 * @param   Array     Optional array of filters
+	 * @author  Mathias Kettner <mk@mathias-kettner.de>
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostState($hostName, $onlyHardstates) {
+	public function getHostState($hostName, $onlyHardstates, $filter = null) {
 		$arrReturn = Array();
 		
 		$stateAttr = 'state';
@@ -688,7 +737,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
 		  "acknowledged scheduled_downtime_depth has_been_checked state\n".
-		  "Filter: name = ".$hostName."\n");
+		  "Filter: name = ".$hostName."\n".
+		  $this->parseChildFilter($stateAttr, $filter));
 		
 		if(count($e) == 0) {
 			$arrReturn['state'] = 'ERROR';
@@ -742,7 +792,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			$arrReturn['downtime_start'] = $d[2];
 			$arrReturn['downtime_end'] = $d[3];
 		}
-
+		
 		$arrReturn['state'] = $state;
 		$arrReturn['output'] = $e[1];
 		$arrReturn['alias'] = $e[2]; 
@@ -771,7 +821,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @param   String   Name of the host to query
 	 * @param   String   Name of the service to query
 	 * @param   Boolean  Only recognize hardstates
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+	 * @author  Mathias Kettner <mk@mathias-kettner.de>
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getServiceState($hostName, $serviceName, $onlyHardstates) {

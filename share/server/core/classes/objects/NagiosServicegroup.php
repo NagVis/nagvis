@@ -173,14 +173,21 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchServiceObjects() {
+		// When using sort by state analyze the state counts to limit
+		// the hosts to ask the backend for. Loop the state counts until the
+		// object counter is above the hover_childs_limit
+		$filters = null;
+		if($this->hover_childs_sort === 's')
+			$filters = Array('s' => $this->getChildFetchingStateFilters());
+		
 		// Fist get the host states for all the hostgroup members
 		try {
-			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupState($this->servicegroup_name, $this->only_hard_states);
+			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupState($this->servicegroup_name, $this->only_hard_states, $filters);
 		} catch(BackendException $e) {
 			$this->summary_state = 'UNKNOWN';
 			$this->state = 'UNKNOWN';
 			$this->summary_output = GlobalCore::getInstance()->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]', 
-																																	Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
+			                                                                      Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
 			$this->output = $this->summary_output;
 			
 			return false;

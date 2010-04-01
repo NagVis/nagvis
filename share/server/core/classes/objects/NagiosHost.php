@@ -476,9 +476,16 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchServiceObjects() {
+		// When using sort by state analyze the state counts to limit
+		// the hosts to ask the backend for. Loop the state counts until the
+		// object counter is above the hover_childs_limit
+		$filters = null;
+		if($this->hover_childs_sort === 's')
+			$filters = Array('s' => $this->getChildFetchingStateFilters());
+		
 		try {
 			$this->BACKEND->checkBackendInitialized($this->backend_id, true);
-			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states);
+			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states, $filters);
 		} catch(BackendException $e) {
 			$aServices = Array();
 		}

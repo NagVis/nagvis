@@ -298,11 +298,12 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 *
 	 * @param	String		$hostName
 	 * @param	Boolean		$onlyHardstates
+	 * @param   Array   Optional array of filters (Not implemented in this backend)
 	 * @return	array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getHostState($hostName, $onlyHardstates) {
+	public function getHostState($hostName, $onlyHardstates, $filter = null) {
 		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
 			return $this->hostCache[$hostName.'-'.$onlyHardstates];
 		} else {
@@ -565,12 +566,13 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 *
 	 * Returns the Nagios state and additional information for the requested hostgroup
 	 *
-	 * @param	String		$hostgroupName
-	 * @param	Boolean		$onlyHardstates
+	 * @param	  String		$hostgroupName
+	 * @param	  Boolean		$onlyHardstates
+	 * @param   Array     Optional array of filters (Not implemented in this backend)
 	 * @return	array		$state
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getHostgroupState($hostgroupName, $onlyHardstates)
+	public function getHostgroupState($hostgroupName, $onlyHardstates, $filter = null)
 	{
 		$arrReturn = Array();
 		
@@ -645,10 +647,11 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 *
 	 * @param	String		$servicegroupName
 	 * @param	Boolean		$onlyHardstates
+	 * @param   Array   Optional array of filters (Not implemented in this backend)
 	 * @return	array		$state
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getServicegroupState($servicegroupName, $onlyHardstates)
+	public function getServicegroupState($servicegroupName, $onlyHardstates, $filter = null)
 	{
 		$arrReturn = Array();
 		

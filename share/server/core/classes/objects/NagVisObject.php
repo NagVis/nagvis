@@ -47,7 +47,7 @@ class NagVisObject {
 	protected $hover_childs_limit;
 	protected $label_show;
 	
-	private static $sSortOrder = 'asc';
+	protected static $sSortOrder = 'asc';
 	private static $arrDenyKeys = null;
 	
 	/**
@@ -202,28 +202,6 @@ class NagVisObject {
 		}
 	}
 
-	/**
-	 * PUBLIC fetchObjectAsChild()
-	 *
-	 * Is called when an object should only be displayed as child
-	 * e.g. in hover menus. There are much less macros needed for this.
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function fetchObjectAsChild() {
-		$aChild = Array('type' => $this->getType(),
-										'name' => $this->getName(),
-										'summary_state' => $this->getSummaryState(),
-										'summary_in_downtime' => $this->getSummaryInDowntime(),
-										'summary_problem_has_been_acknowledged' => $this->getSummaryAcknowledgement(),
-										'summary_output' => strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')));
-		
-		if($this->type == 'service') {
-			$aChild['service_description'] = $this->getServiceDescription();
-		}
-    return $aChild;  
-	}
-	
 	/**
 	 * PUBLIC getObjectInformation()
 	 *
@@ -386,9 +364,9 @@ class NagVisObject {
 		
 		return $arr;
 	}
-	
+
 	/**
-	 * PULBLIC getSortedObjectMembers()
+	 * PUBLIC getSortedObjectMembers()
 	 *
 	 * Gets an array of member objects
 	 *
@@ -420,7 +398,7 @@ class NagVisObject {
 		$iNumObjects = count($aTmpMembers);
 		
 		// Loop all child object until all looped or the child limit is reached
-		for($i = 0, $iEnum = 0; (($this->hover_childs_limit >= 0 && $iEnum <= $this->hover_childs_limit) || $this->hover_childs_limit == -1) && $i < $iNumObjects; $i++) {
+		for($i = 0, $iEnum = 0; $this->belowHoverChildsLimit($iEnum) && $i < $iNumObjects; $i++) {
 			$arr[] = $aTmpMembers[$i];
 			
 			// Only count objects which are added to the list for checking

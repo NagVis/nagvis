@@ -209,13 +209,20 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchHostObjects() {
-		// Fist get the host states for all the hostgroup members
+		// When using sort by state analyze the state counts to limit
+		// the hosts to ask the backend for. Loop the state counts until the
+		// object counter is above the hover_childs_limit
+		$filters = null;
+		if($this->hover_childs_sort === 's')
+			$filters = Array('s' => $this->getChildFetchingStateFilters());
+		
+		// First get the host states for all the hostgroup members
 		try {
-			$aHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupState($this->hostgroup_name, $this->only_hard_states);
+			$aHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupState($this->hostgroup_name, $this->only_hard_states, $filters);
 		} catch(BackendException $e) {
 			$this->summary_state = 'UNKNOWN';
 			$this->summary_output = GlobalCore::getInstance()->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]', 
-																																	Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
+			                                                                Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
 			return false;
 		}
 		
