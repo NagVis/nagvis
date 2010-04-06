@@ -48,6 +48,24 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 		}
 	}
 	
+	public function deletePermission($mod, $name) {
+		if($name === '') {
+			// FIXME: Errorhandling
+			return false;
+		}
+		
+		switch($mod) {
+			case 'Map':
+			case 'AutoMap':
+			case 'Rotation':
+				return $this->DB->deletePermissions($mod, $name);
+			default:
+				// FIXME: Errorhandling
+				return false;
+			break;
+		}
+	}
+	
 	public function createPermission($mod, $name) {
 		if($name === '') {
 			// FIXME: Errorhandling

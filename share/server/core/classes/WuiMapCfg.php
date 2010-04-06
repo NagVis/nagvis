@@ -117,6 +117,8 @@ class WuiMapCfg extends GlobalMapCfg {
 				if(file_exists($this->cacheFile)) {
 					unlink($this->cacheFile);
 				}
+				// And also remove the permission
+				GlobalCore::getInstance()->getAuthorization()->deletePermission('Map', $this->name);
 				
 				return TRUE;
 			} else {

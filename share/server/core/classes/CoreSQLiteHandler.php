@@ -95,6 +95,18 @@ class CoreSQLiteHandler {
 			return true;
 		}
 	}
+
+	public function deletePermissions($mod, $name) {
+		// Only create when not existing
+		if($this->count('SELECT COUNT(*) AS num FROM perms WHERE mod='.$this->escape($mod).' AND act=\'view\' AND obj='.$this->escape($name)) > 0) {
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: delete permissions for '.$mod.' '.$name);
+			$this->DB->query('DELETE FROM perms WHERE mod='.$this->escape($mod).' AND obj='.$this->escape($name).'');
+			$this->DB->query('DELETE FROM roles2perms WHERE permId=(SELECT permId FROM perms WHERE mod='.$this->escape($mod).' AND obj='.$this->escape($name).')');
+		} else {
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t delete '.$mod.' permissions '.$name);
+		}
+	}
+		
 	
 	public function createMapPermissions($name) {
 		// Only create when not existing
