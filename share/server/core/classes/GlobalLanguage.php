@@ -120,7 +120,7 @@ class GlobalLanguage {
 					break;
 						
 					default:
-						//FIXME: Error handling
+						new GlobalMessage('ERROR', $this->getText('Invalid mode [MODE] in language_detection option.', Array('MODE' => $sMethod)));
 					break;
 				}
 			}
