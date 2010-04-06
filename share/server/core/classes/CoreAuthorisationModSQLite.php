@@ -50,7 +50,6 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	
 	public function deletePermission($mod, $name) {
 		if($name === '') {
-			// FIXME: Errorhandling
 			return false;
 		}
 		
@@ -60,7 +59,6 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 			case 'Rotation':
 				return $this->DB->deletePermissions($mod, $name);
 			default:
-				// FIXME: Errorhandling
 				return false;
 			break;
 		}
@@ -68,7 +66,6 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 	
 	public function createPermission($mod, $name) {
 		if($name === '') {
-			// FIXME: Errorhandling
 			return false;
 		}
 		
@@ -80,7 +77,6 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
 			case 'Rotation':
 				return $this->DB->createRotationPermissions($name);
 			default:
-				// FIXME: Errorhandling
 				return false;
 			break;
 		}
