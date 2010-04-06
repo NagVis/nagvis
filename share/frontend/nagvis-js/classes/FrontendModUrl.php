@@ -64,8 +64,7 @@ class FrontendModUrl extends FrontendModule {
 	private function showViewDialog() {
 		// Only show when map name given
 		if(!isset($this->url) || $this->url == '') {
-			//FIXME: Error handling
-			echo "No url given";
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('No url given.'));
 			exit(1);
 		}
 		
