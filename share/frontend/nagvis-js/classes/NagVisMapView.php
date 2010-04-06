@@ -41,8 +41,6 @@ class NagVisMapView {
 	 */
 	public function __construct(GlobalCore $CORE, $name) {
 		$this->CORE = $CORE;
-		
-		// FIXME: Already validated?
 		$this->name = $name;
 	}
 	
