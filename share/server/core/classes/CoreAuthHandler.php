@@ -137,18 +137,22 @@ class CoreAuthHandler {
 	public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
 		// Don't do these things twice
 		if($this->bIsAuthenticated === null) {
-			$ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
-			                    $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
+			if((bool) $this->CORE->getMainCfg()->getValue('global', 'audit_log') === true)
+				$ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
+			                      $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
+			else
+				$ALOG = null;
+
+			if($this->SESS->isSetAndNotEmpty('authCredentials'))
+				$bAlreadyAuthed = true;
+			else
+				$bAlreadyAuthed = false;
 			
 			// When the user authenticated in trust mode read it here and override
 			// the value handed over with the function call.
 			// The isAuthentication() function will then only check if the user exists.
-			if($this->SESS->isSetAndNotEmpty('authTrusted')) {
-				$bAlreadyAuthed = true;
+			if($this->SESS->isSetAndNotEmpty('authTrusted'))
 				$bTrustUsername = AUTH_TRUST_USERNAME;
-			} else {
-				$bAlreadyAuthed = false;	
-			}
 			
 			// Ask the module
 			$this->bIsAuthenticated = $this->MOD->isAuthenticated($bTrustUsername);
@@ -162,11 +166,11 @@ class CoreAuthHandler {
 					$this->SESS->set('authTrusted', AUTH_TRUST_USERNAME);
 				}
 
-				if(!$bAlreadyAuthed)
+				if($ALOG !== null && !$bAlreadyAuthed)
 					$ALOG->l('User logged in ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
 			}
 
-			if($this->bIsAuthenticated === false && $this->sModuleName != 'CoreAuthModSession') {
+			if($ALOG !== null && $this->bIsAuthenticated === false && $this->sModuleName != 'CoreAuthModSession') {
 				$ALOG->l('User login failed ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
 			}
 			
@@ -186,9 +190,11 @@ class CoreAuthHandler {
 	
 	public function logout() {
 		if($this->logoutSupported()) {
-			$ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
-			                    $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
-			$ALOG->l('User logged out ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
+			if((bool) $this->CORE->getMainCfg()->getValue('global', 'audit_log') === true) {
+				$ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
+			                      $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
+				$ALOG->l('User logged out ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
+			}
 			
 			// Remove the login information
 			$this->SESS->set('authCredentials', false);

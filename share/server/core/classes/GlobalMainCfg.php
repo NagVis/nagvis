@@ -48,6 +48,10 @@ class GlobalMainCfg {
 		
 		$this->validConfig = Array(
 			'global' => Array(
+				'audit_log' => Array('must' => 1,
+					'editable' => 1,
+					'default' => true,
+					'match' => MATCH_BOOLEAN),
 				'authmodule' => Array('must' => 1,
 					'editable' => 1,
 					'default' => 'CoreAuthModSQLite',
