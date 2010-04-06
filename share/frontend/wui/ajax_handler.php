@@ -64,7 +64,7 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '')
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backend_id'));
 		if(!isset($_GET['type']) || $_GET['type'] == '') {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~type'));
 		}
