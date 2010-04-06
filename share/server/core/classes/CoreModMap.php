@@ -202,8 +202,6 @@ class CoreModMap extends CoreModule {
 					
 					if($aReturn !== false) {
 						if($this->doDeleteObject($aReturn)) {
-							// FIXME: Recode to GlobalMessage. But the particular callers like
-							//        suppress the success messages
 							$sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
 						} else {
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be deleted.'));
