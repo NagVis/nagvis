@@ -40,8 +40,6 @@ class NagVisUrlView {
 	 */
 	public function __construct(GlobalCore $CORE, $url) {
 		$this->CORE = $CORE;
-		
-		// FIXME: Already validated?
 		$this->url = $url;
 	}
 
