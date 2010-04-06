@@ -551,10 +551,6 @@ class NagVisAutoMap extends GlobalMap {
 			$aConf[$aHost['host_name']] = $aHost;
 		}
 		
-		// #22 FIXME: Need to add some code here to make "sub automap" links possible
-		// If a host matching the current hostname ist available in the automap configuration
-		// load all settings here
-		
 		// Loop all map object
 		foreach(array_merge(Array($this->rootObject), $this->arrMapObjects) AS $OBJ) {
 			// Try to find a matching object in the map configuration
