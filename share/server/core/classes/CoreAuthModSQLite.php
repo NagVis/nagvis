@@ -176,7 +176,6 @@ class CoreAuthModSQLite extends CoreAuthModule {
 			
 			$bReturn = true;
 		} else {
-			//FIXME: Logging? Invalid user
 			$bReturn = false;
 		}
 		
@@ -202,14 +201,11 @@ class CoreAuthModSQLite extends CoreAuthModule {
 			$userId = $this->checkUserAuth($bTrustUsername);
 			if($userId > 0) {
 				$this->iUserId = $userId;
-				//FIXME: Logging? Successfull authentication
 				$bReturn = true;
 			} else {
-				//FIXME: Logging? Invalid password
 				$bReturn = false;
 			}
 		} else {
-			//FIXME: Logging? Invalid user
 			$bReturn = false;
 		}
 		

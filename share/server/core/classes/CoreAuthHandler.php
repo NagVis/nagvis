@@ -137,10 +137,17 @@ class CoreAuthHandler {
 	public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
 		// Don't do these things twice
 		if($this->bIsAuthenticated === null) {
+			$ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
+			                    $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
+			
 			// When the user authenticated in trust mode read it here and override
-			// the value handed over with the function call
+			// the value handed over with the function call.
+			// The isAuthentication() function will then only check if the user exists.
 			if($this->SESS->isSetAndNotEmpty('authTrusted')) {
+				$bAlreadyAuthed = true;
 				$bTrustUsername = AUTH_TRUST_USERNAME;
+			} else {
+				$bAlreadyAuthed = false;	
 			}
 			
 			// Ask the module
@@ -154,6 +161,13 @@ class CoreAuthHandler {
 				if($bTrustUsername === AUTH_TRUST_USERNAME) {
 					$this->SESS->set('authTrusted', AUTH_TRUST_USERNAME);
 				}
+
+				if(!$bAlreadyAuthed)
+					$ALOG->l('User logged in ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
+			}
+
+			if($this->bIsAuthenticated === false) {
+				$ALOG->l('User login failed ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
 			}
 			
 			// Remove some maybe old data when not authenticated
@@ -172,6 +186,10 @@ class CoreAuthHandler {
 	
 	public function logout() {
 		if($this->logoutSupported()) {
+			$ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
+			                    $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
+			$ALOG->l('User logged out ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
+			
 			// Remove the login information
 			$this->SESS->set('authCredentials', false);
 			$this->SESS->set('userPermissions', false);
