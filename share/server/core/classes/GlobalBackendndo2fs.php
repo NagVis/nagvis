@@ -424,8 +424,6 @@ class GlobalBackendndo2fs implements GlobalBackendInterface {
 							  || !file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG')) {
 								
 								// Services which have no configuration information (Should not exist)
-								// FIXME: Error handling
-								echo "ndo2fs config not found: ".$this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/CONFIG'."<br>";
 								$aServObj[] = Array(null, null);
 							} elseif(!file_exists($this->pathVolatile.'/HOSTS/'.$hostName.'/'.$service.'/STATUS')) {		
 								

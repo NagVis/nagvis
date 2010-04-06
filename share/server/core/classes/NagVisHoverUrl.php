@@ -67,7 +67,8 @@ class NagVisHoverUrl {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function readHoverUrl() {
-		/* FIXME: Context is supported in php >= 5.0
+		/* Context is supported in php >= 5.0
+		* This could be usefull someday...
 		* $http_opts = array(
 		*      'http'=>array(
 		*      'method'=>"GET",
