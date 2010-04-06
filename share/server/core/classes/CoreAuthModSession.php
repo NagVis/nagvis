@@ -140,7 +140,7 @@ class CoreAuthModSession extends CoreAuthModule {
 		
 		// Did the user just try to authenticate? Then passCredentials should be
 		// called before to put the credentials here
-		if($aCredentials === null && $this->sUsername !== '' && $this->sPassword !== '') {
+		if($this->sUsername !== '' && $this->sPassword !== '') {
 			$aCredentials = Array('user' => $this->sUsername, 'password' => $this->sPassword);
 		}
 		

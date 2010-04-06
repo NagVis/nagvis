@@ -166,7 +166,7 @@ class CoreAuthHandler {
 					$ALOG->l('User logged in ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
 			}
 
-			if($this->bIsAuthenticated === false) {
+			if($this->bIsAuthenticated === false && $this->sModuleName != 'CoreAuthModSession') {
 				$ALOG->l('User login failed ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
 			}
 			
