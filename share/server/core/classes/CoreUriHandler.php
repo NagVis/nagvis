@@ -109,8 +109,6 @@ class CoreUriHandler {
 						$bValid = false;
 					}
 				}
-			} else {
-				// FIXME: Dev notice: Value gets not validated
 			}
 			
 			if($bValid) {
@@ -122,7 +120,7 @@ class CoreUriHandler {
 	}
 	
 	private function parseUri() {
-		//FIXME: Maybe for later use when using nice urls
+		// Maybe for later use when using nice urls
 		// Cleanup some bad things from the URI
 		//$sRequest = str_replace($this->CORE->getMainCfg()->getValue('paths','htmlbase'), '', $this->sRequestUri);
 		// Remove the first slash and then explode by slashes
