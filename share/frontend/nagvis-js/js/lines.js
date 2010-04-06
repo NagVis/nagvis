@@ -260,7 +260,6 @@ function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, col
         	        drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill2, perfdataA, perfdataB, colorBorder, bLinkArea);
 			break;
 		default:
-			// FIXME: Error handling
 			alert('Error: Unknown line type');
 	}
 }
