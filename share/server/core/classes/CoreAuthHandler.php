@@ -67,7 +67,7 @@ class CoreAuthHandler {
 		if($aData !== false) {
 			$this->MOD->passCredentials($aData);
 		} else {
-			//FIXME: error handling
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Data has an invalid format'));
 		}
 	}
 	
@@ -78,7 +78,7 @@ class CoreAuthHandler {
 		if($aData !== false) {
 			$this->MOD->passNewPassword($aData);
 		} else {
-			//FIXME: error handling
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Data has an invalid format'));
 		}
 	}
 	

@@ -1672,7 +1672,7 @@ class GlobalMapCfg {
 							// Check wether a object has line_type set and not view_type=line
 							// Update: Only check this when not in WUI!
 							// Update: Don't check this for stateless lines
-							// FIXME: This check should be removed in 1.5 or 1.6
+							// FIXME: This check should be removed in 1.6
 							if($type != 'line' && $key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
 								throw new $exception($this->CORE->getLang()->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
 							}
