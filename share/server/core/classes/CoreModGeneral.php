@@ -274,11 +274,12 @@ class CoreModGeneral extends CoreModule {
 		}
 		
 		$TMPMAPCFG = new NagVisMapCfg($this->CORE);
+		$TMPMAPCFG->gatherTypeDefaults(!ONLY_GLOBAL);
 		
 		// merge with "global" settings
-		foreach($TMPMAPCFG->getValidTypeKeys('global') AS $key) {
+		foreach($TMPMAPCFG->getTypeDefaults('global') AS $key => $default) {
 			if($key != 'type') {
-				$objConf[$key] = $TMPMAPCFG->getValue('global', 0, $key);
+				$objConf[$key] = $default;
 			}
 		}
 		
