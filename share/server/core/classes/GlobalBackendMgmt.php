@@ -27,8 +27,8 @@
  */
 class GlobalBackendMgmt {
 	protected $CORE;
-	public $BACKENDS;
-	private $aInitialized;
+	public $BACKENDS = Array();
+	private $aInitialized = Array();
 	
 	/**
 	 * Constructor
@@ -40,10 +40,6 @@ class GlobalBackendMgmt {
 	 */
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
-		
-		$this->BACKENDS = Array();
-		
-		$this->aInitialized = Array();
 		
 		$this->loadBackends();
 		

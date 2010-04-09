@@ -189,10 +189,7 @@ class GlobalIndexPage {
 			$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
 				
 			// Apply default configuration to object
-			$objConf = Array();
-			foreach($MAPCFG->getValidTypeKeys('map') AS $key) {
-				$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
-			}
+			$objConf = $MAPCFG->getTypeDefaults('global');
 			$objConf['type'] = 'map';
 			$objConf['map_name'] = $MAPCFG->getName();
 			$objConf['object_id'] = $object_id;
