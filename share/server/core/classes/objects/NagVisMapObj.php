@@ -280,9 +280,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 				$OBJ->fetchState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
 			} else {
 				$OBJ->fetchState();
-			}
 			
-			$OBJ->fetchIcon();
+				// The icon is only needed when this is a view
+				$OBJ->fetchIcon();
+			}
 		}
 
 		// Also get summary state
