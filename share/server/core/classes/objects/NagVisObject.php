@@ -311,9 +311,9 @@ class NagVisObject {
 						NagVisMapObj::$langChild  = $this->CORE->getLang()->getText('objectname');
 					}
 						
-					$arr['lang_obj_type']    = NagVisServicegroup::$langType;
-					$arr['lang_name']        = NagVisServicegroup::$langSelf;
-					$arr['lang_child_name']  = NagVisServicegroup::$langChild;
+					$arr['lang_obj_type']    = NagVisMapObj::$langType;
+					$arr['lang_name']        = NagVisMapObj::$langSelf;
+					$arr['lang_child_name']  = NagVisMapObj::$langChild;
 				break;
 			}
 		}
