@@ -65,7 +65,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getValidObjectType($type) {
-		return $this->validConfig[$type];
+		return self::$validConfig[$type];
 	}
 	
 	/**
@@ -75,7 +75,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function getValidConfig() {
-		return $this->validConfig;
+		return self::$validConfig;
 	}
 	
 	/**
