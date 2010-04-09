@@ -73,6 +73,9 @@ class NagVisHost extends NagiosHost {
 		$strReturn = '';
 		
 		if(!in_array($this->getName(), $arrHostnamesParsed)) {
+			if($this->icon == '')
+				$this->fetchIcon();
+			
 			// Get the image size
 			list($width, $height, $type, $attr) = getimagesize($this->CORE->getMainCfg()->getValue('paths', 'icon').$this->icon);
 			
