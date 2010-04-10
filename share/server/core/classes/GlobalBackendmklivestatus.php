@@ -386,7 +386,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		switch($type) {
 			case 'host':
-				$l = $this->queryLivestatus("GET hosts\nColumns: name alias\n");
+			case 'hostgroup':
+			case 'servicegroup':
+				$l = $this->queryLivestatus("GET ".$type."s\nColumns: name alias\n");
 			break;
 			case 'service':
 				$query = "GET services\nColumns: description description\n";
@@ -396,12 +398,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				}
 				
 				$l = $this->queryLivestatus($query);
-			break;
-			case 'hostgroup':
-				$l = $this->queryLivestatus("GET hostgroups\nColumns: name alias\n");
-			break;
-			case 'servicegroup':
-				$l = $this->queryLivestatus("GET servicegroups\nColumns: name alias\n");
 			break;
 			default:
 				return Array();
