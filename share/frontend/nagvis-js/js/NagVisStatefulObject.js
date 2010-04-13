@@ -132,6 +132,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 		} else if(this.last_conf.summary_in_downtime && this.last_conf.summary_in_downtime == 1) {
 			lastSubState = 'downtime';
 		}
+
+		// If there is no "last state" return true here
+		if(!this.last_conf.summary_state) {
+			return true;
+		}
 		
 		var lastWeight = oStates[this.last_conf.summary_state][lastSubState];
 		
