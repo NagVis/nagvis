@@ -218,8 +218,11 @@ class NagVisAutoMap extends GlobalMap {
 		// state of the objects
 		$this->MAPOBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $this->MAPCFG, $bIsView);
 		$this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
-		$this->MAPOBJ->fetchState();
 		
+		$this->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+		$this->BACKEND->execute();
+		$this->MAPOBJ->applyState();
+	
 		if($this->filterByState != '') {
 			$this->filterChildObjectTreeByState();
 			
@@ -553,12 +556,13 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Loop all map object
 		foreach(array_merge(Array($this->rootObject), $this->arrMapObjects) AS $OBJ) {
+			$name = $OBJ->getName();
 			// Try to find a matching object in the map configuration
-			if(isset($aConf[$OBJ->getName()])) {
-				unset($aConf[$OBJ->getName()]['type']);
-				unset($aConf[$OBJ->getName()]['object_id']);
-				unset($aConf[$OBJ->getName()]['host_name']);
-				$OBJ->setConfiguration($aConf[$OBJ->getName()]);
+			if(isset($aConf[$name])) {
+				unset($aConf[$name]['type']);
+				unset($aConf[$name]['object_id']);
+				unset($aConf[$name]['host_name']);
+				$OBJ->setConfiguration($aConf[$name]);
 			}
 		}
 	}
