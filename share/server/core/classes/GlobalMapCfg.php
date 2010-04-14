@@ -1094,7 +1094,7 @@ class GlobalMapCfg {
 					'line_type' => Array('must' => 1,
 						'match' => MATCH_INTEGER,
 						'field_type' => 'dropdown'),
-					'line_width' => Array('must' => 1,
+					'line_width' => Array('must' => 0,
 						'default' => '3',
 						'match' => MATCH_INTEGER),
 					'line_color' => Array('must' => 0,
