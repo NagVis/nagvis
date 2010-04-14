@@ -36,9 +36,9 @@ class CoreModAutoMap extends CoreModule {
 		$aOpts = Array('show' => MATCH_MAP_NAME,
 		               'backend' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'root' => MATCH_STRING_NO_SPACE_EMPTY,
-		               'maxLayers' => MATCH_INTEGER_EMPTY,
-		               'childLayers' => MATCH_INTEGER_EMPTY,
-		               'parentLayers' => MATCH_INTEGER_EMPTY,
+		               'maxLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
+		               'childLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
+		               'parentLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
 		               'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
 		               'width' => MATCH_INTEGER_EMPTY,
 		               'height' => MATCH_INTEGER_EMPTY,
@@ -169,7 +169,7 @@ class CoreModAutoMap extends CoreModule {
 		
 		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
 		// Fetch the state
-		$MAP->MAPOBJ->fetchState();
+		//$MAP->MAPOBJ->fetchState();
 		// Read position from graphviz and set it on the objects
 		$MAP->setMapObjectPositions();
 
@@ -201,6 +201,7 @@ class CoreModAutoMap extends CoreModule {
 		$this->MAPCFG->readMapConfig();
 		
 		$numObjects = count($arrType);
+		$aObjs = Array();
 		for($i = 0; $i < $numObjects; $i++) {
 			// Get the object configuration
 			$objConf = $this->getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i]);
@@ -226,9 +227,7 @@ class CoreModAutoMap extends CoreModule {
 					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
-					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, !IS_VIEW);
-					
-					$OBJ = $MAP->MAPOBJ;
+					$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
 				break;
 				case 'automap':
 					// Initialize map configuration based on map type
@@ -246,14 +245,20 @@ class CoreModAutoMap extends CoreModule {
 			// Apply default configuration to object
 			$OBJ->setConfiguration($objConf);
 			
-			// These things are already done by NagVisMap and NagVisAutoMap classes
-			// for the NagVisMapObj objects. Does not need to be done a second time.
-			if(get_class($OBJ) != 'NagVisMapObj') {
-				$OBJ->fetchState();
+			if($arrType[$i] != 'automap') {
+				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
 			}
 			
-			$OBJ->fetchIcon();
+			$aObjs[] = $OBJ;
+		}
 			
+		// Now after all objects are queued execute them and then apply the states
+		$BACKEND->execute();
+	
+		foreach($aObjs AS $OBJ) {
+			$OBJ->applyState();
+			$OBJ->fetchIcon();
+		
 			switch($sType) {
 				case 'state':
 					$arr = $OBJ->getObjectStateInformations();
@@ -268,7 +273,7 @@ class CoreModAutoMap extends CoreModule {
 			
 			$arrReturn[] = $arr;
 		}
-		
+			
 		return json_encode($arrReturn);
 	}
 

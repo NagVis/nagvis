@@ -73,6 +73,7 @@ define('MATCH_HOVER_TEMPLATE_FILE', '/^(.+)\.hover\.html$/i');
 define('MATCH_CONTEXT_TEMPLATE_FILE', '/^(.+)\.context\.html$/i');
 define('MATCH_PHP_FILE', '/^(.+\.php)$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
+define('MATCH_INTEGER_PRESIGN_EMPTY', '/^[\+\-]?[0-9]*$/');
 define('MATCH_ORDER', '/^(?:asc|desc)$/');
 define('MATCH_TEXTBOX_WIDTH', '/^([0-9]+|auto)$/');
 define('MATCH_TEXTBOX_HEIGHT', '/^([0-9]+|auto)$/');
