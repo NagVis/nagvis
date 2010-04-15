@@ -44,8 +44,15 @@ class NagVisMap extends GlobalMap {
 		
 		if($getState === true) {
 			$this->MAPOBJ = new NagVisMapObj($CORE, $BACKEND, $MAPCFG, $bIsView);
-			$this->MAPOBJ->fetchMembers();
-			$this->MAPOBJ->fetchState();
+			$this->MAPOBJ->fetchMapObjects();
+
+			if($bIsView === true) {
+				$this->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+				$this->BACKEND->execute();
+				$this->MAPOBJ->applyState();
+			} else {
+				$this->MAPOBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
+			}
 		}
 	}
 	

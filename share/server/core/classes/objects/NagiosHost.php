@@ -54,8 +54,6 @@ class NagiosHost extends NagVisStatefulObject {
 	protected $parentObjects;
 	protected $members;
 	
-	protected $aStateCounts = Array();
-	
 	/**
 	 * Class constructor
 	 *
@@ -81,17 +79,6 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC setStateCounts()
-	 *
-	 * Puts the service state counts to the host object
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function setStateCounts($aStateCounts) {
-		$this->aStateCounts = $aStateCounts;
-	}
-	
-	/**
 	 * PUBLIC fetchSummariesFromCounts()
 	 *
 	 * Fetches the summary state and output from the already set state counts
@@ -113,72 +100,57 @@ class NagiosHost extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC fetchState()
+	 * PUBLIC queueState()
 	 *
-	 * Gets the state of the host and all its services from selected backend. It
-	 * forms the summary output
+	 * Queues the state fetching to the backend.
 	 *
+	 * @param   Boolean  Optional flag to disable fetching of the object status
 	 * @param   Boolean  Optional flag to disable fetching of member status
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchState($bFetchObjectState = true, $bFetchChilds = true) {
-		$error = false;
+	public function queueState($bFetchObjectState = true, $bFetchMemberState = true) {
+		$queries = Array();
 		
-		// Get host state and general host information
-		// This can be ignored when called from e.g. hostgroups where the state
-		// has been fetched for all members before
-		if($bFetchObjectState === true) {
-			try {
-				$this->BACKEND->checkBackendInitialized($this->backend_id, true);
-				$aHost = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState($this->host_name, $this->only_hard_states);
-				$this->setObjectInformation($aHost);
-			} catch(BackendException $e) {
-				$this->setBackendConnectionProblem($e);
-				$error = true;
-			}
-		}
+		if($bFetchObjectState)
+			$queries['hostState']	= true;
 		
-		// New backend feature which reduces backend queries and breaks up the performance
-		// problems due to the old recursive mechanism. If it's not available fall back to
-		// old mechanism.
-		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostStateCounts', false)) {
-			$useStateCounts = true;
-		} else {
-			$useStateCounts = false;
+		if($this->getRecognizeServices())
+			$queries['hostMemberState'] = true;
+		
+		if($this->hover_menu == 1
+		   && $this->hover_childs_show == 1
+		   && $bFetchMemberState
+		   && !$this->hasMembers())
+			$queries['hostMemberDetails'] = true;
+		
+		$this->BACKEND->queue($queries, $this);
+	}
+	
+	/**
+	 * PUBLIC applyState()
+	 *
+	 * Applies the fetched state
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function applyState() {
+		if($this->backend_msg) {
+			$this->summary_state = 'ERROR';
+			$this->summary_output = $this->backend_msg;
+			return;
 		}
 
-		if($this->getRecognizeServices() && $useStateCounts) {
-			try {
-				$this->BACKEND->checkBackendInitialized($this->backend_id, true);
-				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts($this->host_name, $this->only_hard_states);
-			} catch(BackendException $e) {
-				$this->aStateCounts = Array();
+		if($this->hasMembers()) {
+			foreach($this->getMembers() AS $MOBJ) {
+				$MOBJ->applyState();
 			}
+		}
 		
-			// Calculate summary state and output
+		// Use state summaries when some are available to
+		// calculate summary state and output
+		if($this->aStateCounts !== null) {
 			$this->fetchSummariesFromCounts();
-		
-			// Get all service states
-			// These information are only interesting when the hover_menu is shown
-			/* FIXME: Get member summary state+substate, output for the objects to
-					be shown in hover menu. This could be improved by limiting the 
-					number of members the state will be fetched for.
-					For example: when the members will be sorted by name and limited to
-					10 it is only neccessary to fetch 10 members.
-					When member should be sorted by state the state counts could be
-					used to exclude objects with states which will not be displayed.
-			*/
-			if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds && !$error && $this->getState() != 'ERROR' && !$this->hasMembers()) {
-				$this->fetchServiceObjects();
-			}
-		} elseif($this->getRecognizeServices()) {
-			// Only merge host state with service state when recognize_services is set 
-			if(!$error && $this->getState() != 'ERROR' && !$this->hasMembers()) {
-				$this->fetchServiceObjects();
-			}
-		}
-
-		if(!$this->getRecognizeServices() || !$useStateCounts || $error) {
+		} else {
 			$this->fetchSummaryState();
 			$this->fetchSummaryOutput();
 		}
@@ -193,18 +165,14 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchParents($maxLayers = -1, &$objConf = Array(), &$ignoreHosts = Array(), &$arrHostnames, &$arrMapObjects) {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
+		// Stop recursion when the number of layers counted down
+		if($maxLayers != 0) {
 			if(!$this->fetchedParentObjects) {
 				$this->fetchDirectParentObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
 			}
 			
-			/**
-			 * If maxLayers is not set there is no layer limitation
-			 */
-			if($maxLayers < 0 || $maxLayers > 0) {
-				foreach($this->parentObjects AS &$OBJ) {
-					$OBJ->fetchParents($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
-				}
+			foreach($this->parentObjects AS $OBJ) {
+				$OBJ->fetchParents($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
 			}
 		}
 	}
@@ -274,16 +242,19 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
-		if(!$this->fetchedChildObjects) {
-			$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
-		}
-		
-		/**
-			* If maxLayers is not set there is no layer limitation
-			*/
-		if($maxLayers < 0 || $maxLayers > 0) {
-			foreach($this->childObjects AS &$OBJ) {
-				$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+		// Stop recursion when the number of layers counted down
+		if($maxLayers != 0) {
+			if(!$this->fetchedChildObjects) {
+				$this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+			}
+			
+			/**
+				* If maxLayers is not set there is no layer limitation
+				*/
+			if($maxLayers < 0 || $maxLayers > 0) {
+				foreach($this->childObjects AS $OBJ) {
+					$OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+				}
 			}
 		}
 	}
@@ -469,48 +440,6 @@ class NagiosHost extends NagVisStatefulObject {
 	# #########################################################################
 	
 	/**
-	 * PRIVATE fetchServiceObjects()
-	 *
-	 * Gets all services of the given host and saves them to the services array
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function fetchServiceObjects() {
-		// When using sort by state analyze the state counts to limit
-		// the hosts to ask the backend for. Loop the state counts until the
-		// object counter is above the hover_childs_limit
-		$filters = null;
-		if($this->hover_childs_sort === 's')
-			$filters = Array('s' => $this->getChildFetchingStateFilters());
-		
-		try {
-			$this->BACKEND->checkBackendInitialized($this->backend_id, true);
-			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, '', $this->only_hard_states, $filters);
-		} catch(BackendException $e) {
-			$aServices = Array();
-		}
-		
-		foreach($aServices AS $arrService) {
-			$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $this->host_name, $arrService['service_description']);
-			
-			// Append contents of the array to the object properties
-			$OBJ->setObjectInformation($arrService);
-			
-			// The service of this host has to know how it should handle 
-			//hard/soft states. This is a little dirty but the simplest way to do this
-			//until the hard/soft state handling has moved from backend to the object
-			// classes.
-			$OBJ->setConfiguration($this->getObjectConfiguration());
-			
-			// Also get summary state
-			$OBJ->fetchSummaryState();
-			$OBJ->fetchSummaryOutput();
-			
-			$this->members[] = $OBJ;
-		}
-	}
-	
-	/**
 	 * PRIVATE fetchDirectParentObjects()
 	 *
 	 * Gets all parent objects of the given host and saves them to the parentObjects
@@ -691,24 +620,25 @@ class NagiosHost extends NagVisStatefulObject {
 			$arrServiceStates = Array();
 			
 			// Loop all major states
-			foreach($this->aStateCounts AS $sState => $aSubstates) {
-				// Ignore host state here
-				if($sState != 'UP' && $sState != 'DOWN' && $sState != 'UNREACHABLE') {
-					// Loop all substates (normal,ack,downtime,...)
-					foreach($aSubstates AS $sSubState => $iCount) {
-						// Found some objects with this state+substate
-						if($iCount > 0) {
-							if(!isset($arrServiceStates[$sState])) {
-								$arrServiceStates[$sState] = $iCount;
-								$iNumServices += $iCount;
-							} else {
-								$arrServiceStates[$sState] += $iCount;
-								$iNumServices += $iCount;
+			if($this->aStateCounts !== null)
+				foreach($this->aStateCounts AS $sState => $aSubstates) {
+					// Ignore host state here
+					if($sState != 'UP' && $sState != 'DOWN' && $sState != 'UNREACHABLE') {
+						// Loop all substates (normal,ack,downtime,...)
+						foreach($aSubstates AS $sSubState => $iCount) {
+							// Found some objects with this state+substate
+							if($iCount > 0) {
+								if(!isset($arrServiceStates[$sState])) {
+									$arrServiceStates[$sState] = $iCount;
+									$iNumServices += $iCount;
+								} else {
+									$arrServiceStates[$sState] += $iCount;
+									$iNumServices += $iCount;
+								}
 							}
 						}
 					}
 				}
-			}
 			
 			if($iNumServices > 0) {
 				$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));

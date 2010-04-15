@@ -168,11 +168,9 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG->readMapConfig();
 		
 		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
-		// Fetch the state
-		//$MAP->MAPOBJ->fetchState();
+		
 		// Read position from graphviz and set it on the objects
 		$MAP->setMapObjectPositions();
-
 		return $MAP->parseObjectsJson();
 	}
 

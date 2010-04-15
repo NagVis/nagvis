@@ -164,8 +164,7 @@ class GlobalIndexPage {
 			return Array();
 		}
 		
-		$aMaps = Array();
-		
+		$aObjs = Array();
 		foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
 			$map = Array();
 			
@@ -245,8 +244,19 @@ class GlobalIndexPage {
 					$map['overview_image'] = $imgPathHtml;
 				}
 			}
-				
-			$aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
+			
+			$MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+			$aObjs[] = Array($MAP->MAPOBJ, $map);
+		}
+		
+		$this->BACKEND->execute();
+			
+		$aMaps = Array();
+		foreach($aObjs AS $aObj) {
+			$aObj[0]->applyState();
+			$aObj[0]->fetchIcon();
+			
+			$aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
 		}
 		
 		return json_encode($aMaps);

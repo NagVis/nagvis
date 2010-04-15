@@ -303,7 +303,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getHostState($hostName, $onlyHardstates, $filter = null) {
+	public function getHostState($hostName, $onlyHardstates = null, $filter = null) {
 		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
 			return $this->hostCache[$hostName.'-'.$onlyHardstates];
 		} else {
@@ -427,7 +427,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getServiceState($hostName, $serviceName, $onlyHardstates) {
+	public function getServiceState($hostName, $serviceName = null, $onlyHardstates = null) {
 		if(isset($this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates])) {
 			return $this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates];
 		} else {

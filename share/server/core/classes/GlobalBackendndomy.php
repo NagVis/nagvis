@@ -452,7 +452,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @return	array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostState($hostName, $onlyHardstates, $filter = null) {
+	public function getHostState($hostName, $onlyHardstates = null, $filter = null) {
 		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
 			return $this->hostCache[$hostName.'-'.$onlyHardstates];
 		} else {
@@ -592,7 +592,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @return	Array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getServiceState($hostName, $serviceName, $onlyHardstates) {
+	public function getServiceState($hostName, $serviceName = null, $onlyHardstates = null) {
 		if(isset($this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates])) {
 			return $this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates];
 		} else {

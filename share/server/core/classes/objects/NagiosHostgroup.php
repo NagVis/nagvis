@@ -36,8 +36,6 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	
 	protected $members;
 	
-	protected $aStateCounts = Array();
-	
 	/**
 	 * Class constructor
 	 *
@@ -58,66 +56,57 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC fetchState()
+	 * PUBLIC queueState()
 	 *
-	 * Fetches the state of the hostgroup and all members. It also fetches the
-	 * summary output
+	 * Queues the state fetching to the backend.
 	 *
+	 * @param   Boolean  Unused flag here
 	 * @param   Boolean  Optional flag to disable fetching of member status
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchState($bFetchChilds = true) {
-		/* New backend feature which reduces backend queries and breaks up the performance
-		 * problems due to the old recursive mechanism. If it's not available fall back to
-		 * old mechanism.
-		 *
-		 * the revolution starts >>> here >>> ;D
-		 */
-		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getHostgroupStateCounts', false)) {
-			try {
-				$this->BACKEND->checkBackendInitialized($this->backend_id, TRUE);
-				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupStateCounts($this->hostgroup_name, $this->only_hard_states);
-			} catch(BackendException $e) {
-				$this->aStateCounts = Array();
-				$this->setBackendConnectionProblem($e);
-				return false;
-			}
-			
-			// Calculate summary state
-			$this->fetchSummaryStateFromCounts();
-			
-			// Generate summary output
-			$this->fetchSummaryOutputFromCounts();
-			
-			// This should only be called when the hover menu is enabled and the childs
-			// should be to be shown
-			if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds) {
-				// Get member summary state+substate, output for the objects to be shown in hover menu
-				$this->fetchHostObjects();
-			}
-				
-			$this->state = $this->summary_state;
-		} else {
-			try {
-				// Get all member hosts
-				$this->fetchMemberHostObjects();
-			} catch(BackendException $e) {
-				$this->setBackendConnectionProblem($e);
-				return false;
-			}
-			
-			// Get states of all members
-			foreach($this->members AS &$OBJ) {
-				$OBJ->fetchState();
-			}
-			
-			// Also get summary state
-			$this->fetchSummaryState();
-			
-			// At least summary output
-			$this->fetchSummaryOutput();
-			$this->state = $this->summary_state;
+	public function queueState($_unused = true, $bFetchMemberState = true) {
+		$queries = Array('hostgroupMemberState' => true);
+		
+		if($this->hover_menu == 1
+		   && $this->hover_childs_show == 1
+		   && $bFetchMemberState)
+			$queries['hostgroupMemberDetails'] = true;
+		
+		$this->BACKEND->queue($queries, $this);
+	}
+	
+	/**
+	 * PUBLIC applyState()
+	 *
+	 * Applies the fetched state
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function applyState() {
+		if($this->backend_msg) {
+			$this->summary_state = 'ERROR';
+			$this->summary_output = $this->backend_msg;
+			return;
 		}
+
+		if($this->hasMembers()) {
+			foreach($this->members AS $MOBJ) {
+				$MOBJ->applyState();
+			}
+		}
+		
+		// Use state summaries when some are available to
+		// calculate summary state and output
+		if($this->aStateCounts !== null) {
+			// Calculate summary state and output
+			$this->fetchSummaryStateFromCounts();
+			$this->fetchSummaryOutputFromCounts();
+		} else {
+			$this->fetchSummaryState();
+			$this->fetchSummaryOutput();
+		}
+		
+		$this->state = $this->summary_state;
 	}
 	
 	/**
@@ -157,16 +146,14 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC fetchMemberHostObjects)
+	 * PUBLIC fetchMemberObjects)
 	 *
 	 * Gets all members of the given hostgroup and saves them to the members array
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchMemberHostObjects() {
+	public function fetchMemberObjects() {
 		try {
-			// Get additional information like the alias (maybe bad place here)
-			$this->BACKEND->checkBackendInitialized($this->backend_id, TRUE);
 			$this->setConfiguration($this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupInformations($this->hostgroup_name));
 			
 			$arrHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostsByHostgroupName($this->hostgroup_name);
@@ -183,6 +170,8 @@ class NagiosHostgroup extends NagVisStatefulObject {
 				// until the hard/soft state handling has moved from backend to the
 				// object classes.
 				$OBJ->setConfiguration($this->getObjectConfiguration());
+						
+				$OBJ->fetchState();
 				
 				// Add child object to the members array
 				$this->members[] = $OBJ;
@@ -190,11 +179,8 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		}
 	}
 	
-	# End public methods
-	# #########################################################################
-	
 	/**
-	 * PRIVATE fetchHostObjects()
+	 * PUBLIC fetchMemberObjectCounts()
 	 *
 	 * Gets all hosts of the hostgroup and saves them to the members array
 	 * This method can only be used with backends which support the new
@@ -208,17 +194,10 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fetchHostObjects() {
-		// When using sort by state analyze the state counts to limit
-		// the hosts to ask the backend for. Loop the state counts until the
-		// object counter is above the hover_childs_limit
-		$filters = null;
-		if($this->hover_childs_sort === 's')
-			$filters = Array('s' => $this->getChildFetchingStateFilters());
-		
+	public function fetchMemberObjectCounts() {
 		// First get the host states for all the hostgroup members
 		try {
-			$aHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupState($this->hostgroup_name, $this->only_hard_states, $filters);
+			$aHosts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostState(Array('host_groups' => Array($this->getName() => Array('operator' => '>='))));
 		} catch(BackendException $e) {
 			$this->summary_state = 'UNKNOWN';
 			$this->summary_output = GlobalCore::getInstance()->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]', 
@@ -226,46 +205,39 @@ class NagiosHostgroup extends NagVisStatefulObject {
 			return false;
 		}
 		
-		// When the first object has an error it seems that there was a problem
-		// fetching the requested information
-		if($aHosts[0]['state'] == 'ERROR') {
-			// Only set the summary state
-			$this->summary_state = $aHosts[0]['state'];
-			$this->summary_output = $aHosts[0]['output'];
-		} else {
-			// Regular handling
+		// Now fetch the service state counts for all hostgroup members
+		try {
+			$aServiceStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostStateCounts(Array('host_groups' => Array($this->getName() => Array('operator' => '>='))), $this->only_hard_states);
+		} catch(BackendException $e) {
+			$aServiceStateCounts = Array();
+		}
+		
+		foreach($aHosts AS $name => $aHost) {
+			$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $name);
 			
-			// Now fetch the service state counts for all hostgroup members
-			try {
-				$aServiceStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getHostgroupHostStateCounts($this->hostgroup_name, $this->only_hard_states);
-			} catch(BackendException $e) {
-				$aServiceStateCounts = Array();
+			// Append contents of the array to the object properties
+			$OBJ->setObjectInformation($aHost);
+			
+			// The services have to know how they should handle hard/soft 
+			// states. This is a little dirty but the simplest way to do this
+			// until the hard/soft state handling has moved from backend to the
+			// object classes.
+			$OBJ->setConfiguration($this->getObjectConfiguration());
+			
+			// Put state counts to the object
+			if(isset($aServiceStateCounts[$name])) {
+				$OBJ->setStateCounts($aServiceStateCounts[$name]);
 			}
 			
-			foreach($aHosts AS $aHost) {
-				$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $aHost['name']);
-				
-				// Append contents of the array to the object properties
-				$OBJ->setObjectInformation($aHost);
-				
-				// The services have to know how they should handle hard/soft 
-				// states. This is a little dirty but the simplest way to do this
-				// until the hard/soft state handling has moved from backend to the
-				// object classes.
-				$OBJ->setConfiguration($this->getObjectConfiguration());
-				
-				// Put state counts to the object
-				if(isset($aServiceStateCounts[$aHost['name']])) {
-					$OBJ->setStateCounts($aServiceStateCounts[$aHost['name']]);
-				}
-				
-				// Fetch summary state and output
-				$OBJ->fetchSummariesFromCounts();
-				
-				$this->members[] = $OBJ;
-			}
+			// Fetch summary state and output
+			$OBJ->fetchSummariesFromCounts();
+			
+			$this->members[] = $OBJ;
 		}
 	}
+	
+	# End public methods
+	# #########################################################################
 	
 	/**
 	 * PRIVATE fetchSummaryOutputFromCounts()
@@ -307,7 +279,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		
 		// Fallback for hostgroups without members
 		if($iSumCount == 0) {
-			$this->summary_output = $this->CORE->getLang()->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+			$this->summary_output = $this->CORE->getLang()->getText('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+			                                                                            Array('GROUP' => $this->getName(),
+			                                                                                  'BACKEND' => $this->backend_id));
 		} else {
 			// FIXME: Recode mergeSummaryOutput method
 			$this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));

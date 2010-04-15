@@ -219,71 +219,44 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC fetchMembers()
+	 * PUBLIC queueState()
 	 *
-	 * Gets all member objects
+	 * Queues fetching of the object state to the assigned backend. After all objects
+	 * are queued they can be executed. Then all fetched information gets assigned to
+	 * the single objects.
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchMembers() {
-		// Get all member objects
-		$this->fetchMapObjects();
-		
-		// Get all services of member host
-		foreach($this->getMembers() AS $OBJ) {
-			// Objects of type map need some extra handling for loop prevention
-			if($OBJ->getType() == 'map') {
-				/**
-				 * When the current map object is a summary object skip the map
-				 * child for preventing a loop
-				 */
-				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
-					continue;
-				}
-				
-				/**
-				 * This occurs when someone creates a map icon which links to itself
-				 *
-				 * The object will be marked as summary object and is ignored on next level.
-				 * See the code above.
-				 */
-				if($this->MAPCFG->getName() == $OBJ->MAPCFG->getName()) {
-					$OBJ->isSummaryObject = true;
-				}
-				
-				// Check for indirect loop when the current child is a map object
-				if(!$OBJ->isSummaryObject && !$this->checkLoop($OBJ)) {
-					continue;
-				}
-				
-				$OBJ->fetchMembers();
+	public function queueState($_unused_flag = true, $_unused_flag = true) {
+		// Get state of all member objects
+		foreach($this->getStateRelevantMembers() AS $OBJ) {
+			// The states of the map objects members only need to be fetched when this
+			// is MapObj is used as a view.
+			if($this->isView === true) {
+				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+			} else {
+				// Get the summary state of the host but not the single member states
+				// Not needed cause no hover menu is displayed for this
+				$OBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
 			}
 		}
 	}
 	
 	/**
-	 * PUBLIC fetchState()
+	 * PUBLIC applyState()
 	 *
-	 * Fetches the state of the map and all map objects. It also fetches the
-	 * summary output
+	 * Apllies the object state after queueing and fetching by the backend.
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchState() {
+	public function applyState() {
 		// Get state of all member objects
 		foreach($this->getStateRelevantMembers() AS $OBJ) {
-			// The states of the map objects members only need to be fetched when this
-			// is MapObj is used as a view.
-			if($this->isView == false) {
-				// Get the summary state of the host but not the single member states
-				// Not needed cause no hover menu is displayed for this
-				$OBJ->fetchState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
-			} else {
-				$OBJ->fetchState();
+			$OBJ->applyState();
 			
-				// The icon is only needed when this is a view
+			// The icon is only needed when this is a view
+			if($this->isView === true)
 				$OBJ->fetchIcon();
-			}
 		}
 
 		// Also get summary state
@@ -340,39 +313,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 		return TRUE;
 	}
 	
-	# End public methods
-	# #########################################################################
-	
-	/**
-	 * PRIVATE fetchSummaryOutput()
-	 *
-	 * Fetches the summary output of the map
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function fetchSummaryOutput() {
-		if($this->hasObjects() && $this->hasStatefulObjects()) {
-			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
-			
-			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				$sState = $OBJ->getSummaryState();
-				if(isset($arrStates[$sState])) {
-					$arrStates[$sState]++;
-				}
-			}
-			
-			$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('objects'));
-		} else {
-			$this->summary_output = $this->CORE->getLang()->getText('mapIsEmpty','MAP~'.$this->getName());
-		}
-	}
-	
 	/**
 	 * Gets all objects of the map
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fetchMapObjects() {
+	public function fetchMapObjects() {
 		foreach($this->MAPCFG->getValidObjectTypes() AS $type) {
 			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
 				$typeDefs = $this->MAPCFG->getTypeDefaults($type);
@@ -411,12 +357,37 @@ class NagVisMapObj extends NagVisStatefulObject {
 							if($SUBMAPCFG->checkMapConfigExists(0)) {
 								$SUBMAPCFG->readMapConfig();
 							}
-							$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG);
+							$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);
 							
 							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 								$OBJ->summary_state = 'ERROR';
 								$OBJ->summary_output = $this->CORE->getLang()->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
 							}
+							
+							/**
+							* When the current map object is a summary object skip the map
+							* child for preventing a loop
+							*/
+							if($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true) {
+								continue;
+							}
+
+							/**
+							* This occurs when someone creates a map icon which links to itself
+							*
+							* The object will be marked as summary object and is ignored on next level.
+							* See the code above.
+							*/
+							if($this->MAPCFG->getName() == $SUBMAPCFG->getName()) {
+								$OBJ->isSummaryObject = true;
+							}
+							
+							// Check for indirect loop when the current child is a map object
+							if(!$OBJ->isSummaryObject && !$this->checkLoop($OBJ)) {
+								continue;
+							}
+							
+							$OBJ->fetchMapObjects();
 						break;
 						case 'shape':
 							$OBJ = new NagVisShape($this->CORE, $objConf['icon']);
@@ -440,6 +411,33 @@ class NagVisMapObj extends NagVisStatefulObject {
 					$this->members[] = $OBJ;
 				}
 			}
+		}
+	}
+	
+	# End public methods
+	# #########################################################################
+	
+	/**
+	 * PRIVATE fetchSummaryOutput()
+	 *
+	 * Fetches the summary output of the map
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function fetchSummaryOutput() {
+		if($this->hasObjects() && $this->hasStatefulObjects()) {
+			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+			
+			foreach($this->getStateRelevantMembers() AS $OBJ) {
+				$sState = $OBJ->getSummaryState();
+				if(isset($arrStates[$sState])) {
+					$arrStates[$sState]++;
+				}
+			}
+			
+			$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('objects'));
+		} else {
+			$this->summary_output = $this->CORE->getLang()->getText('mapIsEmpty','MAP~'.$this->getName());
 		}
 	}
 	
@@ -496,7 +494,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			// Get summary state member objects
 			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				$this->wrapChildState($OBJ);
+				//try {
+					$this->wrapChildState($OBJ);
+				/*} catch(NagVisException $e) {
+					$OBJ->summary_state = 'ERROR';
+					$OBJ->summary_output = $e->getMessage();
+				}*/
 			}
 		} else {
 			$this->summary_state = 'UNKNOWN';

@@ -33,6 +33,7 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	// "Global" Configuration variables for all stateful objects
 	protected $backend_id;
+	protected $backend_msg = null;
 	
 	protected $iconset;
 	
@@ -52,6 +53,8 @@ class NagVisStatefulObject extends NagVisObject {
 	protected static $iconHtmlPath = null;
 	
 	protected $dateFormat;
+	
+	protected $aStateCounts = null;
 	
 	/**
 	 * Class constructor
@@ -75,6 +78,41 @@ class NagVisStatefulObject extends NagVisObject {
 		$this->summary_in_downtime = 0;
 		
 		parent::__construct($CORE);
+	}
+	
+	/**
+	 * PUBLIC setState()
+	 *
+	 * Sets the state of the object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setState($arr) {
+		foreach($arr AS $key => $val) {
+			$this->{$key} = $val;
+		}
+	}
+
+	/**
+	 * PUBLIC setStateCounts()
+	 *
+	 * Sets the state counts of the object members
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setStateCounts($arr) {
+		$this->aStateCounts = $arr;
+	}
+
+	/**
+	 * PUBLIC setMembers()
+	 *
+	 * Adds a new list of members to the object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setMembers($arr) {
+		$this->members = $arr;
 	}
 
 	/**
@@ -225,6 +263,18 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	public function getOutput() {
 		return $this->output;
+	}
+	
+	/**
+	 * PUBLIC getBackendId()
+	 *
+	 * Get method for the backend_id of this object
+	 *
+	 * @return	String		Output of the object
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getBackendId() {
+		return $this->backend_id;
 	}
 	
 	/**
@@ -599,7 +649,7 @@ class NagVisStatefulObject extends NagVisObject {
 	}
 	
 	/**
-	 * PROTECTED getChildFetchingStateFilters()
+	 * public getChildFetchingStateFilters()
 	 *
 	 * Is used to build a state filter for the backend when fetching child
 	 * objects for the hover menu child list. If the childs should be sorted
@@ -609,17 +659,19 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 *
 	 */
-	protected function getChildFetchingStateFilters() {
+	public function getChildFetchingStateFilters() {
 		$stateCounts = Array();
 		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
-		foreach($this->aStateCounts AS $sState => $aSubstates) {
-			if(isset($stateWeight[$sState])
-			   && isset($stateWeight[$sState]['normal'])
-			   && isset($aSubstates['normal'])
-			   && $aSubstates['normal'] !== 0) {
-				$stateCounts[] = Array('name' => $sState,
-				                       'weight' => $stateWeight[$sState]['normal'],
-				                       'count' => $aSubstates['normal']);
+		if(is_array($this->aStateCounts)) {
+			foreach($this->aStateCounts AS $sState => $aSubstates) {
+				if(isset($stateWeight[$sState])
+					&& isset($stateWeight[$sState]['normal'])
+					&& isset($aSubstates['normal'])
+					&& $aSubstates['normal'] !== 0) {
+					$stateCounts[] = Array('name' => $sState,
+																'weight' => $stateWeight[$sState]['normal'],
+																'count' => $aSubstates['normal']);
+				}
 			}
 		}
 		NagVisObject::$sSortOrder = $this->hover_childs_order;
@@ -674,19 +726,15 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	
 	/**
-	 * PROTECTED setBackendConnectionProblem()
+	 * PUBLIC setBackendProblem()
 	 *
 	 * Sets output/state on backend problems
 	 *
 	 * @author  Lars Michelsen <lm@larsmichelsen.com>
 	 */
-	protected function setBackendConnectionProblem($e) {
-		$this->state = 'UNKNOWN';
-		$this->output = GlobalCore::getInstance()->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]', 
-		                                                              Array('BACKENDID' => $this->backend_id, 'MSG' => $e->getMessage()));
-		
-		$this->summary_state = $this->state;
-		$this->summary_output = $this->output;
+	public function setBackendProblem($s) {
+		$this->backend_msg = GlobalCore::getInstance()->getLang()->getText('Problem (Backend: [BACKENDID]): [MSG]', 
+		                                                              Array('BACKENDID' => $this->backend_id, 'MSG' => $s));
 	}
 	
 	/**
@@ -722,43 +770,45 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		// Loop all major states
 		$iSumCount = 0;
-		foreach($this->aStateCounts AS $sState => $aSubstates) {
-			// Loop all substates (normal,ack,downtime,...)
-			foreach($aSubstates AS $sSubState => $iCount) {
-				// Found some objects with this state+substate
-				if($iCount > 0) {
-					// Count all child objects
-					$iSumCount += $iCount;
-					
-					// Get weight
-					if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
-						$weight = $stateWeight[$sState][$sSubState];
+		if(is_array($this->aStateCounts)) {
+			foreach($this->aStateCounts AS $sState => $aSubstates) {
+				// Loop all substates (normal,ack,downtime,...)
+				foreach($aSubstates AS $sSubState => $iCount) {
+					// Found some objects with this state+substate
+					if($iCount > 0) {
+						// Count all child objects
+						$iSumCount += $iCount;
 						
-						// No "current state" yet
-						// The new state is worse than the current state
-						if($currWeight === null || $currWeight < $weight) {
-							// Set the new weight for next compare
-							$currWeight = $weight;
+						// Get weight
+						if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
+							$weight = $stateWeight[$sState][$sSubState];
 							
-							// Modify the summary information
-							
-							$this->summary_state = $sState;
-							
-							if($sSubState == 'ack') {
-								$this->summary_problem_has_been_acknowledged = 1;
-							} else {
-								$this->summary_problem_has_been_acknowledged = 0;
+							// No "current state" yet
+							// The new state is worse than the current state
+							if($currWeight === null || $currWeight < $weight) {
+								// Set the new weight for next compare
+								$currWeight = $weight;
+								
+								// Modify the summary information
+								
+								$this->summary_state = $sState;
+								
+								if($sSubState == 'ack') {
+									$this->summary_problem_has_been_acknowledged = 1;
+								} else {
+									$this->summary_problem_has_been_acknowledged = 0;
+								}
+								
+								if($sSubState == 'downtime') {
+									$this->summary_in_downtime = 1;
+								} else {
+									$this->summary_in_downtime = 0;
+								}
 							}
-							
-							if($sSubState == 'downtime') {
-								$this->summary_in_downtime = 1;
-							} else {
-								$this->summary_in_downtime = 0;
-							}
+						} else {
+							//Error handling: Invalid state+substate
+							new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].', Array('STATE' => $sState, 'SUBSTATE' => $sSubState, 'TYPE' => $this->getType(), 'NAME' => $this->getName())));
 						}
-					} else {
-						//Error handling: Invalid state+substate
-						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].', Array('STATE' => $sState, 'SUBSTATE' => $sSubState, 'TYPE' => $this->getType(), 'NAME' => $this->getName())));
 					}
 				}
 			}
@@ -777,7 +827,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	protected function mergeSummaryOutput(&$arrStates, $objLabel) {
+	protected function mergeSummaryOutput($arrStates, $objLabel) {
 		$this->summary_output .= $this->CORE->getLang()->getText('childStatesAre').' ';
 		foreach($arrStates AS $state => &$num) {
 			if($num > 0) {
@@ -799,7 +849,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @param		Object		Object with a state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	protected function wrapChildState(&$OBJ) {
+	protected function wrapChildState($OBJ) {
 		$sSummaryState = $this->getSummaryState();
 		$sObjSummaryState = $OBJ->getSummaryState();
 	
@@ -848,8 +898,13 @@ class NagVisStatefulObject extends NagVisObject {
 				$this->summary_in_downtime = $OBJ->getSummaryInDowntime();
 			}
 		} else {
+			if($OBJ->getType() == 'service')
+				$service = '/'.$OBJ->getServiceDescription();
+			else
+				$service = '';
+			
 			// Error no valid state
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The object [TYPE]/[NAME] as child of [PTYPE]/[PNAME] has an invalid state "[STATE]".', Array('PTYPE' => $this->getType(), 'PNAME' => $this->getName(), 'TYPE' => $OBJ->getType(), 'NAME' => $OBJ->getName(), 'STATE' => $sObjSummaryState)));
+			throw new NagVisException(GlobalCore::getInstance()->getLang()->getText('The object [TYPE]/[NAME][SERVICE] as child of [PTYPE]/[PNAME] has an invalid state "[STATE]".', Array('PTYPE' => $this->getType(), 'PNAME' => $this->getName(), 'TYPE' => $OBJ->getType(), 'NAME' => $OBJ->getName(), 'STATE' => $sObjSummaryState, 'SERVICE' => $service)));
 		}
 	}
 }

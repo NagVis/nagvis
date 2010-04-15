@@ -104,31 +104,30 @@ class NagiosService extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PUBLIC fetchState()
+	 * PUBLIC queueState()
 	 *
-	 * Fetches the state of the service. Also fetch the summary output
+	 * Queues state fetching for this object
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function fetchState() {
-		try {
-			if(!$this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-				return false;
-			}
-			
-			$arrValues = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState($this->host_name, $this->service_description, $this->only_hard_states);
-		
-			// Append contents of the array to the object properties
-			$this->setObjectInformation($arrValues);
-		} catch(BackendException $e) {
-			$this->setBackendConnectionProblem($e);
-			return false;
+	function queueState($_unused_flag = true, $_unused_flag = true) {
+		$this->BACKEND->queue(Array('serviceState' => true), $this);
+	}
+	
+	/**
+	 * PUBLIC applyState()
+	 *
+	 * Applies the fetched state
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function applyState() {
+		if($this->backend_msg !== null) {
+			$this->state = 'ERROR';
+			$this->output = $this->backend_msg;
 		}
-			
-		// Also get summary state
+
 		$this->fetchSummaryState();
-		
-		// At least summary output
 		$this->fetchSummaryOutput();
 	}
 	

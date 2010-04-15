@@ -173,6 +173,7 @@ class CoreModGeneral extends CoreModule {
 		$BACKEND = new GlobalBackendMgmt($this->CORE);
 			
 		$numObjects = count($arrType);
+		$aObjs = Array();
 		for($i = 0; $i < $numObjects; $i++) {
 			// Get the object configuration
 			$objConf = $this->getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i]);
@@ -196,9 +197,8 @@ class CoreModGeneral extends CoreModule {
 					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
-					$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, !IS_VIEW);
-					
-					$OBJ = $MAP->MAPOBJ;
+					$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
+					$OBJ->fetchMapObjects();
 				break;
 				case 'automap':
 					// Initialize map configuration based on map type
@@ -233,12 +233,18 @@ class CoreModGeneral extends CoreModule {
 			// Apply default configuration to object
 			$OBJ->setConfiguration($objConf);
 			
-			// These things are already done by NagVisMap and NagVisAutoMap classes
-			// for the NagVisMapObj objects. Does not need to be done a second time.
-			if(get_class($OBJ) != 'NagVisMapObj') {
-				$OBJ->fetchState();
+			if($arrType[$i] != 'automap') {
+				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
 			}
 			
+			$aObjs[] = $OBJ;
+		}
+		
+		// Now after all objects are queued execute them and then apply the states
+		$BACKEND->execute();
+		
+		foreach($aObjs AS $OBJ) {
+			$OBJ->applyState();
 			$OBJ->fetchIcon();
 			
 			switch($sType) {

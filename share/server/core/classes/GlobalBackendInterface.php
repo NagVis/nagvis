@@ -31,15 +31,17 @@ interface GlobalBackendInterface {
 	public static function getValidConfig();
 	public function getObjects($type, $name1Pattern = '', $name2Pattern = '');
 	public function getObjectsEx($type);
-	public function getHostState($hostName, $onlyHardstates);
-	public function getServiceState($hostName, $serviceName, $onlyHardstates);
-	public function getHostgroupState($hostgroupName, $onlyHardstates, $filter = null);
-	public function getServicegroupState($servicegroupName, $onlyHardstates);
+	public function getHostState($query);
+	public function getServiceState($query);
 	public function getHostNamesWithNoParent();
 	public function getDirectChildNamesByHostName($hostName);
-	public function getHostsByHostgroupName($hostgroupName);
-	public function getServicesByServicegroupName($servicegroupName);
-	public function getServicegroupInformations($servicegroupName);
-	public function getHostgroupInformations($hostgroupName);
+# Deprecated:
+#  public function getHostsByHostgroupName($hostgroupName);
+#  public function getServicesByServicegroupName($servicegroupName);
+#  public function getServicegroupInformations($servicegroupName);
+#  public function getHostgroupInformations($hostgroupName);
+#  public function getHostgroupState($hostgroupName, $onlyHardstates);
+#  public function getServicegroupState($servicegroupName, $onlyHardstates);
+
 }
 ?>

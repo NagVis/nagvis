@@ -54,68 +54,58 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		
 		parent::__construct($CORE, $BACKEND);
 	}
-	
+
 	/**
-	 * PUBLIC fetchState()
+	 * PUBLIC queueState()
 	 *
-	 * Fetches the state of the servicegroup and all members. It also fetches the
-	 * summary output
+	 * Queues the state fetching to the backend.
 	 *
 	 * @param   Boolean  Optional flag to disable fetching of member status
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchState($bFetchChilds = true) {
-		/* New backend feature which reduces backend queries and breaks up the performance
-		 * problems due to the old recursive mechanism. If it's not available fall back to
-		 * old mechanism.
-		 *
-		 * the revolution starts >>> here >>> ;D
-		 */
-		if($this->BACKEND->checkBackendFeature($this->backend_id, 'getServicegroupStateCounts', false)) {
-			// Get state counts
-			try {
-				$this->BACKEND->checkBackendInitialized($this->backend_id, TRUE);
-				$this->aStateCounts = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupStateCounts($this->servicegroup_name, $this->only_hard_states);
-			} catch(BackendException $e) {
-				$this->aStateCounts = Array();
-				$this->setBackendConnectionProblem($e);
-				return false;
-			}
-			
-			// Calculate summary state
-			$this->fetchSummaryStateFromCounts();
-			
-			// Generate summary output
-			$this->fetchSummaryOutputFromCounts();
-			
-			// This should only be called when the hover menu is needed to be shown
-			if($this->hover_menu == 1 && $this->hover_childs_show == 1 && $bFetchChilds) {
-				// Get member summary state+substate, output for the objects to be shown in hover menu
-				$this->fetchServiceObjects();
-			}
-				
-			$this->state = $this->summary_state;
-		} else {
-			try {
-				// Get all member services
-				$this->fetchMemberServiceObjects();
-			} catch(BackendException $e) {
-				$this->setBackendConnectionProblem($e);
-				return false;
-			}
+	public function queueState($_unused_flag = true, $bFetchMemberState = true) {
+		$queries = Array('servicegroupMemberState' => true);
 		
-			// Get states of all members
-			foreach($this->members AS &$OBJ) {
-				$OBJ->fetchState();
-			}
-			
-			// Also get summary state
-			$this->fetchSummaryState();
-			
-			// At least summary output
-			$this->fetchSummaryOutput();
-			$this->state = $this->summary_state;
+		if($this->hover_menu == 1
+		   && $this->hover_childs_show == 1
+		   && $bFetchMemberState)
+			$queries['servicegroupMemberDetails'] = true;
+		
+		$this->BACKEND->queue($queries, $this);
+	}
+	
+	/**
+	 * PUBLIC applyState()
+	 *
+	 * Applies the fetched state
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function applyState() {
+		if($this->backend_msg) {
+			$this->summary_state = 'ERROR';
+			$this->summary_output = $this->backend_msg;
+			return;
 		}
+
+		if($this->hasMembers()) {
+			foreach($this->members AS $MOBJ) {
+				$MOBJ->applyState();
+			}
+		}
+		
+		// Use state summaries when some are available to
+		// calculate summary state and output
+		if($this->aStateCounts !== null) {
+			// Calculate summary state and output
+			$this->fetchSummaryStateFromCounts();
+			$this->fetchSummaryOutputFromCounts();
+		} else {
+			$this->fetchSummaryState();
+			$this->fetchSummaryOutput();
+		}
+		
+		$this->state = $this->summary_state;
 	}
 	
 	/**
@@ -154,11 +144,8 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		return isset($this->members[0]);
 	}
 	
-	# End public methods
-	# #########################################################################
-	
 	/**
-	 * PRIVATE fetchServiceObjects()
+	 * PUBLIC fetchMemberObjectCounts()
 	 *
 	 * Gets all services of the servicegroup and saves them to the members array
 	 * This method can only be used with backends which support the new
@@ -172,17 +159,10 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fetchServiceObjects() {
-		// When using sort by state analyze the state counts to limit
-		// the hosts to ask the backend for. Loop the state counts until the
-		// object counter is above the hover_childs_limit
-		$filters = null;
-		if($this->hover_childs_sort === 's')
-			$filters = Array('s' => $this->getChildFetchingStateFilters());
-		
+	public function fetchMemberObjectCounts() {
 		// Fist get the host states for all the hostgroup members
 		try {
-			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServicegroupState($this->servicegroup_name, $this->only_hard_states, $filters);
+			$aServices = $this->BACKEND->BACKENDS[$this->backend_id]->getServiceState(Array('service_groups' => Array($this->getName() => Array('operator' => '>='))));
 		} catch(BackendException $e) {
 			$this->summary_state = 'UNKNOWN';
 			$this->state = 'UNKNOWN';
@@ -193,23 +173,17 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			return false;
 		}
 		
-		// When the first object has an error it seems that there was a problem
-		// fetching the requested information
-		if($aServices[0]['state'] == 'ERROR') {
-			// Only set the summary state
-			$this->summary_state = $aServices[0]['state'];
-			$this->summary_output = $aServices[0]['output'];
-		} else {
-			// Regular member adding loop
-			foreach($aServices AS $aService) {
-				$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $aService['host'], $aService['description']);
+		// Regular member adding loop
+		foreach($aServices AS $host => $serviceList) {
+			foreach($serviceList AS $aService) {
+				$OBJ = new NagVisService($this->CORE, $this->BACKEND, $this->backend_id, $host, $aService['service_description']);
+				
+				// Append contents of the array to the object properties
+				$OBJ->setObjectInformation($aService);
 				
 				// Also get summary state
 				$aService['summary_state'] = $aService['state'];
 				$aService['summary_output'] = $aService['output'];
-				
-				// Append contents of the array to the object properties
-				$OBJ->setObjectInformation($aService);
 				
 				// The services have to know how they should handle hard/soft 
 				// states. This is a little dirty but the simplest way to do this
@@ -223,15 +197,16 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		}
 	}
 	
+	
 	/**
-	 * PRIVATE fetchMemberServiceObjects()
+	 * PUBLIC fetchMemberObjects()
 	 *
 	 * Gets all members of the given servicegroup and saves them to the members
 	 * array
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fetchMemberServiceObjects() {
+	public function fetchMemberObjects() {
 		// Get all services and states
 		try {
 			$this->BACKEND->checkBackendInitialized($this->backend_id, TRUE);
@@ -256,6 +231,10 @@ class NagiosServicegroup extends NagVisStatefulObject {
 			$this->members[] = $OBJ;
 		}
 	}
+	
+	# End public methods
+	# #########################################################################
+	
 	
 	/**
 	 * PRIVATE fetchSummaryState()
@@ -309,7 +288,9 @@ class NagiosServicegroup extends NagVisStatefulObject {
 		
 		// Fallback for hostgroups without members
 		if($iSumCount == 0) {
-			$this->summary_output = $this->CORE->getLang()->getText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->getName());
+			$this->summary_output = $this->CORE->getLang()->getText('The servicegroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+			                                                                            Array('GROUP' => $this->getName(),
+			                                                                                  'BACKEND' => $this->backend_id));
 		}
 	}
 	
