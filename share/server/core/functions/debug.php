@@ -63,4 +63,16 @@ function microtime_float() {
 	list($usec, $sec) = explode(' ', microtime());
 	return ((float)$usec + (float)$sec);
 }
+
+function profilingStart() {
+	xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
+}
+
+function profilingFinalize($pre) {
+	include_once "/var/www/xhprof_lib/utils/xhprof_lib.php";
+	include_once "/var/www/xhprof_lib/utils/xhprof_runs.php";
+
+	$xhprof_runs = new XHProfRuns_Default();
+	$xhprof_runs->save_run(xhprof_disable(), 'nagvis-'.$pre);
+}
 ?>

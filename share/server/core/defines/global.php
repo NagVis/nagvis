@@ -38,6 +38,11 @@ set_include_path(
 	.PATH_SEPARATOR.'../../server/core/classes/objects/'
 );
 
+// Enable/Disable profiling of NagVis using xhprof.  To make use of this the
+// xhprof php module needs to be loaded and the xhprof_lib directory needs
+// to be available in /var/www.
+define('PROFILE', true);
+
 // enable/disable the debug mode
 define('DEBUG', false);
 

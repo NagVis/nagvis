@@ -33,6 +33,8 @@ require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/functions/ajaxErrorHandler.php');
 require('../../server/core/classes/CoreExceptions.php');
 
+if (PROFILE) profilingStart();
+
 // This defines whether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , TRUE);
 
@@ -159,6 +161,8 @@ try {
 
 echo $sContent;
 if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
-exit(1);
+if (PROFILE) profilingFinalize('core-'.$UHANDLER->get('mod').'-'.$UHANDLER->get('act'));
+
+exit(0);
 
 ?>
