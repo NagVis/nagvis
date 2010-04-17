@@ -407,8 +407,9 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			// Substract height of header menu here
 			objY += getHeaderHeight();
 			
-			x = oObj.x - objX;
-			y = oObj.y - objY;
+			// +3: Is the borderWidth of the object highlighting
+			x = oObj.x - objX + 3;
+			y = oObj.y - objY + 3;
 			
 			// Add + sign to mark relative positive coords (On negative relative coord
 			// the - sign is added automaticaly
@@ -431,8 +432,12 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		type = arr[1];
 		id = arr[2];
 
+		// +3: Is the borderWidth of the object highlighting
+		x = oObj.x + 3;
+		y = oObj.y - getHeaderHeight() + 3;
+
 		// Don't forget to substract height of header menu
-		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+oObj.x+'&y='+(oObj.y - getHeaderHeight());
+		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y;
 	}
 	
 	// Sync ajax request
