@@ -75,14 +75,25 @@ class GlobalBackendMgmt {
 			else
 				$name = $OBJ->getName();
 			
+			// Options is a mask which tells the backend how to handle this object
+			$options = $this->parseOptions($OBJ);
+			
 			// Only query the backend once per object
 			// If the object is several times queued add it to the object list
-			if(!isset($this->aQueue[$backendId][$query][$name]))
-				$this->aQueue[$backendId][$query][$name] = Array('OBJS' => Array($OBJ),
-				                                                 'only_hard_states' => $OBJ->getOnlyHardStates());
-			else
+			if(!isset($this->aQueue[$backendId][$query][$name])) {
+				$this->aQueue[$backendId][$query][$name] = Array('OBJS' => Array($OBJ), 'options' => $options);
+			} else
 				$this->aQueue[$backendId][$query][$name]['OBJS'][] = $OBJ;
 		}
+	}
+
+	private function parseOptions($OBJ) {
+		$options = 0;
+		if($OBJ->getOnlyHardStates())
+			$options |= 1;
+		/*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
+
+		return $options;
 	}
 
 	/**
@@ -137,61 +148,155 @@ class GlobalBackendMgmt {
 		$this->clearQueue();
 	}
 	
-	// Simply using the methods from the single objects. At the moment no big space
-	// for improvements by fetching those information at once.
+	/**
+	 * PRIVATE fetchServicegroupMemberDetails()
+	 *
+	 * Loops all queued servicegroups and executes the queries for each group.
+	 * Gets all services of the servicegroup and saves them to the members array
+	 *
+	 * This is trimmed to reduce the number of queries to the backend:
+	 * 1.) fetch states for all services
+	 * 2.) fetch state counts for all services
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function fetchServicegroupMemberDetails($backendId, $aObjs) {
-		// Does the backend support the smart new way?
-		if($this->checkBackendFeature($backendId, 'getServicegroupStateCounts', false)) {
-			// And then apply them to the objects
-			foreach($aObjs AS $name => $opts)
-				foreach($opts['OBJS'] AS $OBJ)
-					$OBJ->fetchMemberObjectCounts();
-		} else {
-			// And then apply them to the objects
-			foreach($aObjs AS $name => $opts) {
-				foreach($opts['OBJS'] AS $OBJ) {
-					// Only do it once per object
-					if(!$OBJ->hasMembers()) {
-						$OBJ->fetchMemberObjects();
+		foreach($aObjs AS $name => $opts)
+			foreach($opts['OBJS'] AS $OBJ) {
+				// Fist get the host states for all the hostgroup members
+				try {
+					$filters = Array(Array('key' => 'service_groups', 'op' => '>=', 'val' => 'name'));
+					$aServices = $this->BACKENDS[$backendId]->getServiceState(
+																								Array($OBJ->getName() => 
+																									Array('OBJS' => Array($OBJ),
+																												'options' => $this->parseOptions($OBJ)
+																								)), $filters);
+				} catch(BackendException $e) {
+					$OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
+				  																						Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
+				}
+		
+				// Regular member adding loop
+				foreach($aServices AS $host => $serviceList) {
+					$members = Array();
+					foreach($serviceList AS $aService) {
+						$SOBJ = new NagVisService($this->CORE, $this, $backendId, $host, $aService['service_description']);
 						
-						try {
-							// Get all member hosts
-							$this->fetchMemberObjects();
-						} catch(BackendException $e) {
-							$this->setBackendConnectionProblem($e);
-							return false;
-						}
+						// Append contents of the array to the object properties
+						$SOBJ->setObjectInformation($aService);
+						
+						// Also get summary state
+						$aService['summary_state'] = $aService['state'];
+						$aService['summary_output'] = $aService['output'];
+						
+						// The services have to know how they should handle hard/soft 
+						// states. This is a little dirty but the simplest way to do this
+						// until the hard/soft state handling has moved from backend to the
+						// object classes.
+						$SOBJ->setConfiguration($OBJ->getObjectConfiguration());
+						
+						// Add child object to the members array
+						$members[] = $SOBJ;
 					}
+					$OBJ->setMembers($members);
 				}
 			}
-		}
 	}
 	
-	// Simply using the methods from the single objects. At the moment no big space
-	// for improvements by fetching those information at once.
+	/**
+	 * PRIVATE fetchHostgroupMemberDetails()
+	 *
+	 * Loops all queued objects.
+	 * Gets all hosts of the hostgroup and saves them to the members array
+	 *
+	 * This is trimmed to reduce the number of queries to the backend:
+	 * 1.) fetch states for all hosts
+	 * 2.) fetch state counts for all hosts
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
 	private function fetchHostgroupMemberDetails($backendId, $aObjs) {
 		// And then apply them to the objects
 		foreach($aObjs AS $name => $opts)
-			foreach($opts['OBJS'] AS $OBJ)
-				$OBJ->fetchMemberObjectCounts();
+			foreach($opts['OBJS'] AS $OBJ) {
+				// First get the host states for all the hostgroup members
+				try {
+					$filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
+					$aHosts = $this->BACKENDS[$backendId]->getHostState(
+																						Array($OBJ->getName() => 
+																							Array('OBJS' => Array($OBJ),
+																										'options' => $this->parseOptions($OBJ)
+																						)), $filters);
+				} catch(BackendException $e) {
+					$OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
+				  																						Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
+				}
+				
+				// Now fetch the service state counts for all hostgroup members
+				try {
+					$filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
+					$aServiceStateCounts = $this->BACKENDS[$backendId]->getHostStateCounts(
+																								Array($OBJ->getName() => 
+																									Array('OBJS' => Array($OBJ),
+																												'options' => $this->parseOptions($OBJ)
+																								)), $filters);
+				} catch(BackendException $e) {
+					$aServiceStateCounts = Array();
+				}
+				
+				$members = Array();
+				foreach($aHosts AS $name => $aHost) {
+					$HOBJ = new NagVisHost($this->CORE, $this, $backendId, $name);
+					
+					// Append contents of the array to the object properties
+					$HOBJ->setObjectInformation($aHost);
+					
+					// The services have to know how they should handle hard/soft 
+					// states. This is a little dirty but the simplest way to do this
+					// until the hard/soft state handling has moved from backend to the
+					// object classes.
+					$HOBJ->setConfiguration($OBJ->getObjectConfiguration());
+					
+					// Put state counts to the object
+					if(isset($aServiceStateCounts[$name])) {
+						$HOBJ->setStateCounts($aServiceStateCounts[$name]);
+					}
+					
+					// Fetch summary state and output
+					$HOBJ->fetchSummariesFromCounts();
+					
+					$members[] = $HOBJ;
+				}
+
+				$OBJ->setMembers($members);
+			}
+	
 	}
 	
 	private function fetchStateCounts($backendId, $type, $aObjs) {
 		switch($type) {
 			case 'servicegroupMemberState':
-				$aCounts = $this->BACKENDS[$backendId]->getServicegroupStateCounts(Array('groups' => $aObjs));
+				$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
+				$aCounts = $this->BACKENDS[$backendId]->getServicegroupStateCounts($aObjs, $filters);
 			break;
 			case 'hostgroupMemberState':
-				$aCounts = $this->BACKENDS[$backendId]->getHostgroupStateCounts(Array('groups' => $aObjs));
+				$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
+				$aCounts = $this->BACKENDS[$backendId]->getHostgroupStateCounts($aObjs, $filters);
 			break;
 			case 'serviceState':
-				$aCounts = $this->BACKENDS[$backendId]->getServiceState(Array('n2' => $aObjs));
+				$filters = Array(
+										Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
+										Array('key' => 'service_description', 'operator' => '=', 'service_description')
+									);
+				$aCounts = $this->BACKENDS[$backendId]->getServiceState($aObjs, $filters);
 			break;
 			case 'hostState':
-				$aCounts = $this->BACKENDS[$backendId]->getHostState(Array('host_name' => $aObjs));
+				$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
+				$aCounts = $this->BACKENDS[$backendId]->getHostState($aObjs, $filters);
 			break;
 			case 'hostMemberState':
-				$aCounts = $this->BACKENDS[$backendId]->getHostStateCounts(Array('host_name' => $aObjs));
+				$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
+				$aCounts = $this->BACKENDS[$backendId]->getHostStateCounts($aObjs, $filters);
 			break;
 		}
 
@@ -207,7 +312,11 @@ class GlobalBackendMgmt {
 
 	private function fetchHostMemberDetails($backendId, $aObjs) {
 		try {
-			$aMembers = $this->BACKENDS[$backendId]->getServiceState(Array('n2' => $aObjs));
+			$filters = Array(
+                    Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
+                    Array('key' => 'service_description', 'operator' => '=', 'service_description')
+                 );
+			$aMembers = $this->BACKENDS[$backendId]->getServiceState($aObjs, $filters);
 		} catch(BackendException $e) {
 			$aMembers = Array();
 		}
