@@ -13,13 +13,13 @@
 		
 		<h2>Prerequisites</h2>
 		<ul>
-		<li> <a href="http://www.graphviz.org" target="_blank">Graphviz</a> >= 2.14 for the automap (lower versions have problems with truecolor rendering). You also need more packages like gd,libpng,freetype, … but if you get graphviz compiled/installed it should work.</li>
+		<li> <a href="http://www.graphviz.org" target="_blank">Graphviz</a> >= 2.14 for the automap (lower versions have problems with truecolor rendering). You also need more packages like gd,libpng,freetype, ... but if you get graphviz compiled/installed it should work.</li>
 		<li> You have to define dependencies between hosts starting with the Nagios server. Please have a look at the <a href="http://nagios.sourceforge.net/docs/3_0/networkreachability.html">Nagios documentation</a> on how to do this</li> 
 		</ul>
 		
 		<h2> First call </h2>
-		The automap can be called like this: <code>http://&lt;nagios-server>/&lt;path-to-nagvis>/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show=__automap</code>.
-		
+		The automap can be called like this: <pre>http://&lt;nagios-server>/&lt;path-to-nagvis>/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show=__automap</pre>
+
 		If everything is configured properly the root host and 2 levels of child hosts should be displayed on the automap.
 		
 		<h2> Main configuration </h2>

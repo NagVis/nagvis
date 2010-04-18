@@ -62,7 +62,7 @@ var
 
 		<h2> STEP 6: Permissions </h2>
 		<font style="color:red">This is very important for a neatly working installation.</font>
-		First check which unix user account is used to run your webserver (in my case it is <code>wwwrun</code>). If you don't know which user the webserver is running then have a look at the webservers configuration. In case of apache you can do this by the following command:<br><br>
+		First check which unix user account is used to run your webserver (in my case it is <code>wwwrun</code>). If you don't know which user the webserver is running then have a look at the webserver configuration. In case of Apache you can do this by the following command:<br><br>
 		Ubuntu<pre>grep -e 'USER' /etc/apache2/envvars</pre>
 		SuSE/RedHat/Debian<pre>grep -e '^User' /etc/apache2/*.conf</pre>
 		
@@ -89,10 +89,10 @@ chmod 664 /usr/local/nagvis/var/tmpl/cache/*</pre>
 		<h2> STEP 7: The graphical config tool (WUI) </h2>
 		NagVis has an included web based config tool called WUI. If you want to use it use your browser to open the page:
 		<pre>http://&lt;nagiosserver>/&lt;path-to-nagvis>/frontend/wui/index.php</pre>
+		(i.e. http://localhost/nagvis/frontend/index.php).<br>
+		Hint: If you have some script or popup blockers, disable them for the WUI.<p>
 		
-		Hint: If you have some script or popup blockers, disable them for the WUI.
-		
-		When you see the NagVis image, right click on it, then a context menu should open and now you can configure NagVis and create maps with the WUI.<br>
+		When you see the NagVis image, right click on it, then a context menu should open and now you can configure NagVis and create maps with the WUI.<p>
 		
 		<img src="../general/img/medium_nagvis-1.0-wui-preview.png" title="Just open the URL to the Config Tool in a Browser and use your right mouse button">
 		
@@ -105,6 +105,7 @@ chmod 664 /usr/local/nagvis/var/tmpl/cache/*</pre>
 		You should now be able to view your defined maps in your browser:
 		<pre> http://&lt;nagiosserver>/&lt;path-to-nagvis>/frontend/nagvis-js/?mod=Map&amp;show=&lt;mapname></pre>
 		
+		(i.e. http://localhost/nagvis/frontend/nagvis-js/?mod=Map&amp;show=europe).<p>
 		Have fun and please report bugs!
 	</body>
 </html>

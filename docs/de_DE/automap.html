@@ -24,8 +24,7 @@ NagVis behandelt die Objekte und definiert eine Konfiguration f&uuml;r <a href="
 <br>
 <h2>Voraussetzungen</h2>
 <ul>
-<li> eine lauff&auml;hige NDO-Installation </li>
-<li> GraphViz >= 2.14 f&uuml;r die Automap (niedrigere Versionen haben Probleme mit Truecolor-Unterst&uuml;tzung beim Rendering).
+<li><a href="http://www.graphviz.org">GraphViz</a> &gt;= 2.14 f&uuml;r die Automap (niedrigere Versionen haben Probleme mit Truecolor-Unterst&uuml;tzung beim Rendering).
 Sie ben&ouml;tigen weitere Pakete wie gd, libpng und freetype, ... aber wenn Sie graphviz kompiliert/installiert haben, sollte es funktionieren.
 </li>
 <li>
@@ -34,7 +33,7 @@ Sie m&uuml;ssen Abh&auml;ngigkeiten zwischen den einzelnen Hosts definieren. Hin
 </ul>
 
 <h2>Erster Aufruf</h2>
-Die Automap kann wie folgt aufgerufen werden: <code>http://&lt;nagios-server>/&lt;path-to-nagvis>/frontend/nagvis-js/index.php?mod=Automap&amp;act=view&amp;show=__automap</code>.
+Die Automap kann wie folgt aufgerufen werden: <pre>http://&lt;nagios-server>/&lt;path-to-nagvis>/frontend/nagvis-js/index.php?mod=Automap&amp;act=view&amp;show=__automap</pre>
 Wenn alles richtig konfiguriert ist, sollten der Root-Host und zwei Ebenen von abh&auml;ngigen Hosts auf der Automap angezeigt werden.
 <br>
 <h2>Hauptkonfiguration</h2>
@@ -112,7 +111,7 @@ Es gibt mehrere Wege, um das Root-Objekt zu ermitteln:
 <ul>
 <li> URL-Parameter: das Root-Objekt kann durch den Parameter <code>root</code> gesetzt werden<br></li>
 <li> Hauptkonfiguration: die <code>defaultroot</code>-Option kann im <code>[automap]</code>-Abschnitt gesetzt werden<br></li>
-<li> automatische Erkennung: NDO nach einem Host ohne Eltern fragen. Das funktioniert allerdings nur, wenn es genau EINEN Host ohne Eltern in der NDO gibt.<br></li>
+<li> automatische Erkennung: Das Backend nach einem Host ohne Eltern fragen. Das funktioniert allerdings nur, wenn es genau EINEN Host ohne Eltern gibt.<br></li>
 </ul>
 Die obige Liste ist nach Priorit&auml;t geordnet.
 <br>
@@ -140,4 +139,16 @@ Es gibt verschiedene verf&uuml;gbare Render-Modi: <br>
 <tr>
 <td> undirected2 </td><td> </td>
 </tr>
+</table>
+<a name=automap_export></a>
+<h2>Automap-nach-Map-Export (<font color=#ff0000>neu in 1.5</font>)</h2>
+<p>Seit NagVis 1.5 ist es m&ouml;glich, die aktuelle Automap-Ansicht als normale NagVis-Map zu exportieren. Durch den Export erhalten Sie Vorteile aus beiden Ansichten.</p>
+
+<p>Sie k&ouml;nnen mit der Automap beginnen, um mit Hilfe der Automap-Render-Modi die Objekte auf Ihrer Automap zu positionieren. Sobald Sie fertig sind, exportieren Sie die Automap zusammen mit dem generierten Hintergrundbild in eine regul&auml;re Map. Dazu benutzen Sie den Punkt "Export to map", den Sie im "Aktionen"-Men&uuml; Ihres Header-Men&uuml;s finden.</p>
+
+<p>Auf der exportierten Map k&ouml;nnen Sie - abh&auml;ngig von Ihren Anforderungen - zus&auml;tzliche Design-Elemente platzieren oder das Layout anpassen.</p>
+
+<p>Eine Automap kann beliebig oft in die gleiche Ziel-Map exportiert werden (wodurch nat&uuml;rlich Ihre Anpassungen in der Ziel-Map &uuml;berschrieben werden!). Sie k&ouml;nnen nur Maps &uuml;berschreiben, wenn Sie die Berechtigung dazu haben.</p>
+
+<p>Eine normale Map kann nicht in eine Automap konvertiert werden.</p>
 </html>
