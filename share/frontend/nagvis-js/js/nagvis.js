@@ -527,7 +527,7 @@ function cloneObject(what) {
 function pageWidth() {
 	var w;
 	
-	if(window.innerWidth !== null) { 
+	if(window.innerWidth !== null  && typeof window.innerWidth !== 'undefined') { 
 		w = window.innerWidth;
 	} else if(document.documentElement && document.documentElement.clientWidth) {
 		w = document.documentElement.clientWidth;
@@ -543,7 +543,7 @@ function pageWidth() {
 function pageHeight() {
 	var h;
 	
-	if(window.innerHeight !== null) { 
+	if(window.innerHeight !== null && typeof window.innerHeight !== 'undefined') {
 		h = window.innerHeight;
 	} else if(document.documentElement && document.documentElement.clientHeight) {
 		h = document.documentElement.clientHeight;
