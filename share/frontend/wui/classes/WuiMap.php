@@ -579,7 +579,7 @@ class WuiMap extends GlobalMap {
 			$id = 'icon_'.$obj['type'].'_'.$obj['id'].'-context';
 		}
 		
-		$ret = '<div id="'.$id.'" class="context" style="z-index:1000;display:none;position:absolute;overflow:visible;"';
+		$ret = '<div id="'.$id.'" class="context" style="z-index:1000;display:none;position:absolute;overflow:visible;">';
 		$ret .= $this->infoBox($obj);
 		$ret .= '</div>';
 
@@ -603,7 +603,7 @@ class WuiMap extends GlobalMap {
 		unset($obj['state']);
 		
 		// add all the object's defined properties to the tooltip body
-		$tooltipText = '<table class=\'infobox\'>';
+		$tooltipText = '<table class="infobox">';
 		$configuredText = '';
 		$defaultText = '';
 		
@@ -628,7 +628,7 @@ class WuiMap extends GlobalMap {
 			$value = str_replace('"','&quot;', $value);
 			
 			if($bGlobal) {
-				$defaultText .= '<tr class=\'inherited\'><td>'.$key.'</td><td>'.$value.'</td></tr>';
+				$defaultText .= '<tr class="inherited"><td>'.$key.'</td><td>'.$value.'</td></tr>';
 			} else {
 				$configuredText .= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
 			}
@@ -638,11 +638,11 @@ class WuiMap extends GlobalMap {
 		 * Add action links
 		 */
 		
-		$tooltipText .= "<tr><th colspan='2' style='height:34px;'>";
-		$tooltipText .= "<ul class='nav'>";
+		$tooltipText .= '<tr><th colspan="2" style="height:34px;">';
+		$tooltipText .= '<ul class="nav">';
 		
 		// Edit link
-		$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/modify.png)'"
+		$tooltipText .= '<li><a style="background-image:url('.$this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/images/modify.png)"'
 		  ." href=\"#\" onclick=\"showFrontendDialog('".$this->CORE->getMainCfg()->getValue('paths', 'htmlbase')."/server/core/ajax_handler.php?mod=Map&act=addModify&do=modify&map=".$this->MAPCFG->getName()."&type=".$obj['type']."&id=".$obj['id']."', '".$this->CORE->getLang()->getText('change')."');contextHide();\">"
 			."<span>".$this->CORE->getLang()->getText('change')."</span></a></li>";
 		
@@ -665,15 +665,15 @@ class WuiMap extends GlobalMap {
 		  ." href='#' onclick='deleteMapObject(\"box_".$obj['type']."_".$obj['id']."\");contextHide();return false;'>"
 		  ."<span>".$this->CORE->getLang()->getText('delete')."</span></a></li>";
 		
-		$tooltipText .= "</ul>";
-		$tooltipText .= "</th></tr>";
+		$tooltipText .= '</ul>';
+		$tooltipText .= '</th></tr>';
 		
 		
 		// Print configured settings
-		$tooltipText .= '<tr><th colspan=\'2\'>'.$this->CORE->getLang()->getText('configured').'</th></tr>'.$configuredText;
+		$tooltipText .= '<tr><th colspan="2">'.$this->CORE->getLang()->getText('configured').'</th></tr>'.$configuredText;
 		
 		// Print inherited settings
-		$tooltipText .= '<tr class=\'inherited\'><th colspan=\'2\'>'.$this->CORE->getLang()->getText('inherited').'</th></tr>'.$defaultText;
+		$tooltipText .= '<tr class="inherited"><th colspan="2">'.$this->CORE->getLang()->getText('inherited').'</th></tr>'.$defaultText;
 		
 		$tooltipText .= '</table>';
 		

@@ -27,10 +27,16 @@
  */
 
 /*
+ * The grid on the maps
+ */
+
+#grid {z-index:99}
+
+/*
  * WUI context menu on objects
  */
 
-div.context {width:auto;max-width:400px;}
+div.context {width:400px;max-width:400px;}
 
 table.infobox {
 	background-color: #F5F5F5; 
@@ -70,27 +76,28 @@ table.infobox tr.inherited th, table.infobox tr.inherited td {
 }
 
 /* hover menu navigation styling */
-table.infobox ul.nav {
+table.infobox tr th ul.nav {
 	margin: 0;
 	padding: 0;
 	height: 34px;
 	width: 100%;
 }
 
-table.infobox ul.nav li {
+table.infobox tr th ul.nav li {
+	position: relative;
 	float: left;
   list-style-type: none;
 	border-right: 1px #a4a4a4 solid;
 }
 
-table.infobox ul.nav li a {
+table.infobox tr th ul.nav li a {
 	float: left;
   margin: 0;
   background-repeat: no-repeat;
   background-position: 5px 50%;
 }
 
-table.infobox ul.nav li a span {
+table.infobox tr th ul.nav li a span {
   padding: 0 .4em 0 42px;
   display: inline;
   line-height: 34px;
