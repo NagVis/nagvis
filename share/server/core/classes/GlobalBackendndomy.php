@@ -440,9 +440,14 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		
 		return $return;
 	}
+
+	function getHostState($query, $filters) {
+		// FIXME: Extract hostName and onlyHardState option and then
+		// call getHostStateOld() for each object
+	}
 	
 	/**
-	 * PUBLIC getHostState()
+	 * PUBLIC getHostStateOld()
 	 *
 	 * Returns the Nagios state and additional information for the requested host
 	 *
@@ -452,7 +457,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @return	array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostState($hostName, $onlyHardstates = null, $filter = null) {
+	public function getHostStateOld($hostName, $onlyHardstates = null) {
 		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
 			return $this->hostCache[$hostName.'-'.$onlyHardstates];
 		} else {
@@ -581,8 +586,13 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		}
 	}
 	
+	function getServiceState($query, $filters) {
+		// FIXME: Extract names and onlyHardState option and then
+		// call getServiceStateOld() for each object
+	}
+	
 	/**
-	 * PUBLIC getServiceState()
+	 * PUBLIC getServiceStateOld()
 	 *
 	 * Returns the state and additional information of the requested service
 	 *
@@ -592,7 +602,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @return	Array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getServiceState($hostName, $serviceName = null, $onlyHardstates = null) {
+	public function getServiceStateOld($hostName, $serviceName = null, $onlyHardstates = null) {
 		if(isset($this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates])) {
 			return $this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates];
 		} else {
@@ -772,6 +782,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			return $arrReturn;
 		}
 	}
+
+	public function getHostStateCounts($query, $filters) {}
+	public function getHostgroupStateCounts($query, $filters) {}
+	public function getServicegroupStateCounts($query, $filters) {}
 	
 	/**
 	 * PUBLIC getHostgroupState()
@@ -784,7 +798,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @return	array		$state
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getHostgroupState($hostgroupName, $onlyHardstates, $filter = null)
+	public function getHostgroupState($hostgroupName, $onlyHardstates)
 	{
 		$arrReturn = Array();
 		
@@ -802,7 +816,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @return	array		$state
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getServicegroupState($servicegroupName, $onlyHardstates, $filter = null)
+	public function getServicegroupState($servicegroupName, $onlyHardstates)
 	{
 		$arrReturn = Array();
 		

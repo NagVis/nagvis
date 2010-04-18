@@ -290,6 +290,9 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		
 		return $return;
 	}
+
+	public function getHostState($query, $filters) {
+	}
 	
 	/**
 	 * PUBLIC getHostState()
@@ -303,7 +306,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getHostState($hostName, $onlyHardstates = null, $filter = null) {
+	public function getHostStateOld($hostName, $onlyHardstates = null, $filter = null) {
 		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
 			return $this->hostCache[$hostName.'-'.$onlyHardstates];
 		} else {
@@ -415,6 +418,9 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		}
 	}
 	
+	public function getServiceState($query, $filters) {
+	}
+	
 	/**
 	 * PUBLIC getServiceState()
 	 *
@@ -427,7 +433,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 * @author	Roman Kyrylych <rkyrylych@op5.com>
 	 */
-	public function getServiceState($hostName, $serviceName = null, $onlyHardstates = null) {
+	public function getServiceStateOld($hostName, $serviceName = null, $onlyHardstates = null) {
 		if(isset($this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates])) {
 			return $this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates];
 		} else {
@@ -560,6 +566,11 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 			return $arrReturn;
 		}
 	}
+
+	public function getHostStateCounts($query, $filters) {}
+	public function getHostgroupStateCounts($query, $filters) {}
+	public function getServicegroupStateCounts($query, $filters) {}
+	public function getDirectParentNamesByHostName($hostName) {}
 	
 	/**
 	 * PUBLIC getHostgroupState()

@@ -288,25 +288,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	}
 	
 	/**
-	 * PRIVATE queryLivestatusSingle()
-	 *
-	 * Queries the livestatus socket for a single field
-	 *
-	 * @param   String   Query to send to the socket
-	 * @return  Array    Results of the query
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function queryLivestatusSingle($query) {
-		$l = $this->queryLivestatus($query);
-		if(isset($l[0][0])) {
-			return $l[0][0];
-		} else {
-			return Array();
-		}
-	}
-	
-	/**
 	 * PRIVATE queryLivestatusSingleRow()
 	 *
 	 * Queries the livestatus socket for a single row
@@ -326,7 +307,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	}
 	
 	/**
-	 * PRIVATE queryLivestatusSinglecolumn()
+	 * PRIVATE queryLivestatusSingleColumn()
 	 *
 	 * Queries the livestatus socket for a single column in several rows
 	 *
@@ -335,7 +316,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
    * @author  Mathias Kettner <mk@mathias-kettner.de>
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function queryLivestatusSinglecolumn($query) {
+	private function queryLivestatusSingleColumn($query) {
 		$l = $this->queryLivestatus($query);
 		
 		$result = Array();
@@ -588,7 +569,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					
 					// This handles only the first downtime. But this is not backend
 					// specific. The other backends do this as well.
-					$d = $this->queryLivestatusSingle(
+					$d = $this->queryLivestatusSingleRow(
 						"GET downtimes\n".
 						"Columns: author comment start_time end_time\n" .
 						"Filter: host_name = ".$e[19]."\n");
@@ -705,14 +686,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 						// Handle host/service downtime difference
 						if(isset($e[15]) && $e[15] > 0) {
 							// Service downtime
-							$d = $this->queryLivestatusSingle(
+							$d = $this->queryLivestatusSingleRow(
 							  "GET downtimes\n".
 							  "Columns: author comment start_time end_time\n" .
 							  "Filter: host_name = ".$e[21]."\n" .
 							  "Filter: service_description = ".$e[0]."\n");
 						} else {
 							// Host downtime
-							$d = $this->queryLivestatusSingle(
+							$d = $this->queryLivestatusSingleRow(
 							  "GET downtimes\n".
 							  "Columns: author comment start_time end_time\n" .
 							  "Filter: host_name = ".$e[21]."\n");
@@ -1243,7 +1224,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getHostNamesWithNoParent() {
-		return $this->queryLivestatusSinglecolumn("GET hosts\nColumns: name\nFilter: parents =\n");
+		return $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: parents =\n");
 	}
 	
 	/**
