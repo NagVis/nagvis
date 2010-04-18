@@ -76,7 +76,7 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
  */
 function showFrontendDialog(sUrl, sTitle, sWidth) {
 	if(typeof sWidth === 'undefined' || sWidth === null) {
-		sWidth = '';
+		sWidth = 350;
 	}
 	
 	var oContent = getSyncRequest(sUrl, false, false);
