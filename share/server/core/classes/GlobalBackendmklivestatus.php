@@ -414,6 +414,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				switch($filter['key']) {
 					case 'host_name':
 					case 'host_groups':
+					case 'service_description':
+					case 'groups':
 					case 'service_groups':
 					case 'hostgroup_name':
 					case 'group_name':
@@ -424,6 +426,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 							$val = $obj['OBJS'][0]->getServiceDescription();
 						
 						$objFilters[] = 'Filter: '.$filter['key'].' '.$filter['op'].' '.$val."\n";
+					break;
+					default:
+						throw new BackendConnectionProblem('Invalid filter key ('.$filter['key'].')');
 					break;
 				}
 			}
@@ -943,21 +948,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				foreach($l as $e) {
 					$arrReturn[$e[0]] = Array(
 						'PENDING' => Array(
-							'normal'    => $e[0],
+							'normal'    => $e[1],
 						),
 						'UP' => Array(
-							'normal'    => $e[1],
-							'downtime'  => $e[2],
+							'normal'    => $e[2],
+							'downtime'  => $e[3],
 						),
 						'DOWN' => Array(
-							'normal'    => $e[3],
-							'ack'       => $e[4],
-							'downtime'  => $e[5],
+							'normal'    => $e[4],
+							'ack'       => $e[5],
+							'downtime'  => $e[6],
 						),
 						'UNREACHABLE' => Array(
-							'normal'    => $e[6],
-							'ack'       => $e[7],
-							'downtime'  => $e[8],
+							'normal'    => $e[7],
+							'ack'       => $e[8],
+							'downtime'  => $e[9],
 						),
 					);
 				}
@@ -973,7 +978,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$stateAttr = 'state';
 		
 			// Little hack to correct the different field names
-			$filter = str_replace(' groups ', ' hostgroups ', $filter);
+			$filter = str_replace(' groups ', ' host_groups ', $filter);
 		
 			// Get service information
 			$l = $this->queryLivestatus("GET servicesbyhostgroup\n" .
@@ -1099,9 +1104,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$stateAttr = 'last_hard_state';
 			else
 				$stateAttr = 'state';
-		
-			// Little hack to correct the different field names
-			$filter = str_replace(' groups ', ' hostgroups ', $filter);
 		
 			// Get service information
 			$l = $this->queryLivestatus("GET servicesbygroup\n" .

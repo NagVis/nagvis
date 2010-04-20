@@ -286,7 +286,7 @@ class GlobalBackendMgmt {
 			case 'serviceState':
 				$filters = Array(
 										Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
-										Array('key' => 'service_description', 'operator' => '=', 'service_description')
+										Array('key' => 'service_description', 'op' => '=', 'service_description')
 									);
 				$aCounts = $this->BACKENDS[$backendId]->getServiceState($aObjs, $filters);
 			break;
@@ -303,19 +303,20 @@ class GlobalBackendMgmt {
 		foreach($aObjs AS $name => $opts)
 			if(isset($aCounts[$name]))
 				foreach($opts['OBJS'] AS $OBJ)
-					$OBJ->setState($aCounts[$name]);
+					if($type == 'serviceState' || $type == 'hostState')
+						$OBJ->setState($aCounts[$name]);
+					else
+						$OBJ->setStateCounts($aCounts[$name]);
 			else
-				foreach($opts['OBJS'] AS $OBJ)
-					$OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" does not exist.',
-			         		                                                             Array('OBJ' => $name)));
+				foreach($opts['OBJS'] AS $OBJ) {
+					$OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" does not exist ([TYPE]).',
+			         		                                                             Array('OBJ' => $name, 'TYPE' => $type)));
+				}
 	}
 
 	private function fetchHostMemberDetails($backendId, $aObjs) {
 		try {
-			$filters = Array(
-                    Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
-                    Array('key' => 'service_description', 'operator' => '=', 'service_description')
-                 );
+			$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
 			$aMembers = $this->BACKENDS[$backendId]->getServiceState($aObjs, $filters);
 		} catch(BackendException $e) {
 			$aMembers = Array();
@@ -327,15 +328,7 @@ class GlobalBackendMgmt {
 					$members = Array();
 					foreach($aMembers[$name] AS $service => $details) {
 						$MOBJ = new NagVisService($this->CORE, $this, $backendId, $OBJ->getName(), $details['service_description']);
-						
-						// Append contents of the array to the object properties
 						$MOBJ->setState($details);
-						
-						// The service of this host has to know how it should handle 
-						//hard/soft states. This is a little dirty but the simplest way to do this
-						//until the hard/soft state handling has moved from backend to the object
-						// classes.
-						$MOBJ->setConfiguration($OBJ->getObjectConfiguration());
 						$members[] = $MOBJ;
 					}
 				
