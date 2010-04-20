@@ -402,6 +402,60 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	}
 	
 	/**
+	 * PRIVATE parseFilter()
+	 *
+	 * Parses the filter array to backend 
+	 *
+	 * @param   Array     List of objects to query
+	 * @param   Array     List of filters to apply
+	 * @return  String    Parsed filters
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function parseFilter($objects, $filters, $table) {
+		$aFilters = Array();
+		foreach($objects AS $obj) {
+			$objFilters = Array();
+			foreach($filters AS $filter) {
+				// Array('key' => 'host_name', 'operator' => '=', 'name'),
+				switch($filter['key']) {
+					case 'host_name':
+					case 'host_groups':
+					case 'service_groups':
+					case 'hostgroup_name':
+					case 'group_name':
+					case 'groups':
+					case 'servicegroup_name':
+					case 'service_description':
+						if($filter['key'] != 'service_description')
+							$val = $obj['OBJS'][0]->getName();
+						else
+							$val = $obj['OBJS'][0]->getServiceDescription();
+						
+						// Translate field names
+						if($filter['key'] == 'service_description')
+							$filter['key'] = 'name2';
+						else
+							$filter['key'] = 'name1';
+						
+						if($filter['op'] == '>=')
+							$filter['op'] = '=';
+						
+						$objFilters[] = ' '.$table.'.'.$filter['key'].$filter['op']." binary '".$val."' ";
+					break;
+					default:
+						throw new BackendConnectionProblem('Invalid filter key ('.$filter['key'].')');
+					break;
+				}
+			}
+			
+			$aFilters[] = implode(' AND ', $objFilters);
+		}
+		
+		return implode(' OR ', $aFilters);
+	}
+	
+	
+	/**
 	 * PRIVATE Method getHostAckByHostname
 	 *
 	 * Returns if a host state has been acknowledged. The method doesn't check
@@ -422,7 +476,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h 
 			WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
 			
-			$data = mysql_fetch_array($QUERYHANDLE);
+			$data = mysql_fetch_assoc($QUERYHANDLE);
 			
 			// Free memory
 			mysql_free_result($QUERYHANDLE);
@@ -441,384 +495,525 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		return $return;
 	}
 
-	function getHostState($query, $filters) {
-		// FIXME: Extract hostName and onlyHardState option and then
-		// call getHostStateOld() for each object
-	}
-	
 	/**
 	 * PUBLIC getHostStateOld()
 	 *
 	 * Returns the Nagios state and additional information for the requested host
 	 *
-	 * @param		String	$hostName
-	 * @param		Boolean	$onlyHardstates
-	 * @param   Array   Optional array of filters (Not implemented in this backend)
-	 * @return	array		$state
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostStateOld($hostName, $onlyHardstates = null) {
-		if(isset($this->hostCache[$hostName.'-'.$onlyHardstates])) {
-			return $this->hostCache[$hostName.'-'.$onlyHardstates];
-		} else {
-			$arrReturn = Array();
-			
-			$QUERYHANDLE = $this->mysqlQuery('SELECT 
-				o.object_id, alias, display_name, address, 
-				has_been_checked, 
-				last_hard_state, 
-				UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, 
-				UNIX_TIMESTAMP(last_state_change) AS last_state_change, 
-				current_state, 
-				output, perfdata, 
-				h.notes, 
-				problem_has_been_acknowledged, 
-				statusmap_image, 
-				UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
-				hs.state_type, hs.current_check_attempt, hs.max_check_attempts, 
-				UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
-				dh.author_name AS downtime_author, dh.comment_data AS downtime_data
-			FROM 
-				'.$this->dbPrefix.'hosts AS h, 
-				'.$this->dbPrefix.'objects AS o 
-			LEFT JOIN
-				'.$this->dbPrefix.'hoststatus AS hs
-				ON hs.host_object_id=o.object_id
-			LEFT JOIN
-				'.$this->dbPrefix.'scheduleddowntime AS dh
-				ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
-			WHERE 
-				(o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-				AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id) 
-			LIMIT 1');
-			
-			if(mysql_num_rows($QUERYHANDLE) == 0) {
-				$arrReturn['state'] = 'ERROR';
-				$arrReturn['output'] = $this->CORE->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
-			} else {
-				$data = mysql_fetch_array($QUERYHANDLE);
-				
-				// Free memory
-				mysql_free_result($QUERYHANDLE);
-				
-				$arrReturn['alias'] = $data['alias'];
-				$arrReturn['display_name'] = $data['display_name'];
-				$arrReturn['address'] = $data['address'];
-				$arrReturn['statusmap_image'] = $data['statusmap_image'];
-				$arrReturn['notes'] = $data['notes'];
-				
-				// Add Additional information to array
-				$arrReturn['perfdata'] = $data['perfdata'];
-				$arrReturn['last_check'] = $data['last_check'];
-				$arrReturn['next_check'] = $data['next_check'];
-				$arrReturn['state_type'] = $data['state_type'];
-				$arrReturn['current_check_attempt'] = $data['current_check_attempt'];
-				$arrReturn['max_check_attempts'] = $data['max_check_attempts'];
-				$arrReturn['last_state_change'] = $data['last_state_change'];
-				$arrReturn['last_hard_state_change'] = $data['last_hard_state_change'];
-				
-				// If there is a downtime for this object, save the data
-				if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
-					$arrReturn['in_downtime'] = 1;
-					$arrReturn['downtime_start'] = $data['downtime_start'];
-					$arrReturn['downtime_end'] = $data['downtime_end'];
-					$arrReturn['downtime_author'] = $data['downtime_author'];
-					$arrReturn['downtime_data'] = $data['downtime_data'];
-				}
-				
-				/**
-				 * Only recognize hard states. There was a discussion about the implementation
-				 * This is a new handling of only_hard_states. For more details, see: 
-				 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
-				 *
-				 * Thanks to Andurin and fredy82
-				 */
-				if($onlyHardstates == 1) {
-					if($data['state_type'] != '0') {
-						$data['current_state'] = $data['current_state'];
-					} else {
-						$data['current_state'] = $data['last_hard_state'];
-					}
-				}
-				
-				if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
-					$arrReturn['state'] = 'PENDING';
-					$arrReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
-				} elseif($data['current_state'] == '0') {
-					// Host is UP
-					$arrReturn['state'] = 'UP';
-					$arrReturn['output'] = $data['output'];
-				} else {
-					// Host is DOWN/UNREACHABLE/UNKNOWN
-					
-					// Store acknowledgement state in array
-					$arrReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
-					
-					// Save to host ack cache
-					$this->hostAckCache[$hostName] = $data['problem_has_been_acknowledged'];
-					
-					// Store state and output in array
-					switch($data['current_state']) {
-						case '1': 
-							$arrReturn['state'] = 'DOWN';
-							$arrReturn['output'] = $data['output'];
-						break;
-						case '2':
-							$arrReturn['state'] = 'UNREACHABLE';
-							$arrReturn['output'] = $data['output'];
-						break;
-						case '3':
-							$arrReturn['state'] = 'UNKNOWN';
-							$arrReturn['output'] = $data['output'];
-						break;
-						default:
-							$arrReturn['state'] = 'UNKNOWN';
-							$arrReturn['output'] = 'GlobalBackendndomy::getHostState: Undefined state!';
-						break;
-					}
-				}
-			}
-			
-			// Write return array to cache
-			$this->hostCache[$hostName.'-'.$onlyHardstates] = $arrReturn;
-			
-			return $arrReturn;
-		}
-	}
-	
-	function getServiceState($query, $filters) {
-		// FIXME: Extract names and onlyHardState option and then
-		// call getServiceStateOld() for each object
-	}
-	
-	/**
-	 * PUBLIC getServiceStateOld()
-	 *
-	 * Returns the state and additional information of the requested service
-	 *
-	 * @param		String 	$hostName
-	 * @param		String 	$serviceName
-	 * @param		Boolean	$onlyHardstates
-	 * @return	Array		$state
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getServiceStateOld($hostName, $serviceName = null, $onlyHardstates = null) {
-		if(isset($this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates])) {
-			return $this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates];
-		} else {
-			$arrReturn = Array();
-			
-			if(isset($serviceName) && $serviceName != '') {
-				$QUERYHANDLE = $this->mysqlQuery('SELECT 
-					o.object_id, o.name1, o.name2, 
-					s.display_name, 
-					s.notes, 
-					h.address, 
-					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
-					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
-					UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
-					ss.output, ss.perfdata, ss.problem_has_been_acknowledged, 
-					UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
-					ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
-					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
-					dh.author_name AS downtime_author, dh.comment_data AS downtime_data
-					FROM 
-						'.$this->dbPrefix.'services AS s,
-						'.$this->dbPrefix.'hosts AS h,
-						'.$this->dbPrefix.'objects AS o
-					LEFT JOIN
-						'.$this->dbPrefix.'servicestatus AS ss
-						ON ss.service_object_id=o.object_id
-					LEFT JOIN
-						'.$this->dbPrefix.'scheduleddowntime AS dh
-						ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
-					WHERE 
-						(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.name2 = binary \''.$serviceName.'\' AND o.instance_id='.$this->dbInstanceId.')
-						AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
-                        AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
-						AND ss.service_object_id=o.object_id 
-					LIMIT 1');
-			} else {
-				$QUERYHANDLE = $this->mysqlQuery('SELECT 
-					o.object_id, o.name1, o.name2,
-					s.display_name, 
-					s.notes, 
-					h.address, 
-					ss.has_been_checked, ss.last_hard_state, ss.current_state, 
-					UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
-					UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
-					ss.output, ss.perfdata, ss.problem_has_been_acknowledged, 
-					UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
-					ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
-					UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
-					dh.author_name AS downtime_author, dh.comment_data AS downtime_data
-					FROM 
-						'.$this->dbPrefix.'services AS s,
-						'.$this->dbPrefix.'hosts AS h,
-						'.$this->dbPrefix.'objects AS o
-					LEFT JOIN
-						'.$this->dbPrefix.'servicestatus AS ss
-						ON ss.service_object_id=o.object_id
-					LEFT JOIN
-						'.$this->dbPrefix.'scheduleddowntime AS dh
-						ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
-					WHERE 
-						(o.objecttype_id=2 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') 
-						AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
-                        AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
-						');
-			}
-			
-			if(mysql_num_rows($QUERYHANDLE) == 0) {
-				if(isset($serviceName) && $serviceName != '') {
-					$arrReturn['state'] = 'ERROR';
-					$arrReturn['output'] = $this->CORE->getLang()->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
-				} else {
-					// If the method should fetch all services of the host and does not find
-					// any services for this host, don't return anything => The message
-					// that the host has no services is added by the frontend
-				}
-			} else {
-				while($data = mysql_fetch_array($QUERYHANDLE)) {
-					$arrTmpReturn = Array();
-					
-					$arrTmpReturn['service_description'] = $data['name2'];
-					$arrTmpReturn['display_name'] = $data['display_name'];
-					$arrTmpReturn['alias'] = $data['display_name'];
-					$arrTmpReturn['address'] = $data['address'];
-					$arrTmpReturn['notes'] = $data['notes'];
-					
-					// Add additional information to array
-					$arrTmpReturn['perfdata'] = $data['perfdata'];
-					$arrTmpReturn['last_check'] = $data['last_check'];
-					$arrTmpReturn['next_check'] = $data['next_check'];
-					$arrTmpReturn['state_type'] = $data['state_type'];
-					$arrTmpReturn['current_check_attempt'] = $data['current_check_attempt'];
-					$arrTmpReturn['max_check_attempts'] = $data['max_check_attempts'];
-					$arrTmpReturn['last_state_change'] = $data['last_state_change'];
-					$arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
-					
-					// If there is a downtime for this object, save the data
-					if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
-						$arrTmpReturn['in_downtime'] = 1;
-						$arrTmpReturn['downtime_start'] = $data['downtime_start'];
-						$arrTmpReturn['downtime_end'] = $data['downtime_end'];
-						$arrTmpReturn['downtime_author'] = $data['downtime_author'];
-						$arrTmpReturn['downtime_data'] = $data['downtime_data'];
-					}
-					
-					/**
-					 * Only recognize hard states. There was a discussion about the implementation
-					 * This is a new handling of only_hard_states. For more details, see: 
-					 * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
-					 *
-					 * Thanks to Andurin and fredy82
-					 */
-					if($onlyHardstates == 1) {
-						if($data['state_type'] != '0') {
-							$data['current_state'] = $data['current_state'];
-						} else {
-							$data['current_state'] = $data['last_hard_state'];
-						}
-					}
-					
-					if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
-						$arrTmpReturn['state'] = 'PENDING';
-						$arrTmpReturn['output'] = $this->CORE->getLang()->getText('serviceNotChecked', Array('SERVICE' => $data['name2']));
-					} elseif($data['current_state'] == '0') {
-						// Host is UP
-						$arrTmpReturn['state'] = 'OK';
-						$arrTmpReturn['output'] = $data['output'];
-					} else {
-						// Host is DOWN/UNREACHABLE/UNKNOWN
-						
-						/**
-						 * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
-						 * acknowledged => check for acknowledged host
-						 */
-						if($data['problem_has_been_acknowledged'] != 1) {
-							$arrTmpReturn['problem_has_been_acknowledged'] = $this->getHostAckByHostname($hostName);
-						} else {
-							$arrTmpReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
-						}
-						
-						// Store state and output in array
-						switch($data['current_state']) {
-							case '1': 
-								$arrTmpReturn['state'] = 'WARNING';
-								$arrTmpReturn['output'] = $data['output'];
-							break;
-							case '2':
-								$arrTmpReturn['state'] = 'CRITICAL';
-								$arrTmpReturn['output'] = $data['output'];
-							break;
-							case '3':
-								$arrTmpReturn['state'] = 'UNKNOWN';
-								$arrTmpReturn['output'] = $data['output'];
-							break;
-							default:
-								$arrTmpReturn['state'] = 'UNKNOWN';
-								$arrTmpReturn['output'] = 'GlobalBackendndomy::getServiceState: Undefined state!';
-							break;
-						}
-					}
-					
-					// If more than one service is expected, append the current return information to return array
-					if(isset($serviceName) && $serviceName != '') {
-						$arrReturn = $arrTmpReturn;
-					} else {
-						// Assign actual dataset to return array
-						$arrReturn[strtr($data['name2'],' ','_')] = $arrTmpReturn;
-					}
-				}
-			}
-			
-			// Free memory
-			mysql_free_result($QUERYHANDLE);
-			
-			// Write return array to cache
-			$this->serviceCache[$hostName.'-'.$serviceName.'-'.$onlyHardstates] = &$arrReturn;
-			
-			return $arrReturn;
-		}
-	}
-
-	public function getHostStateCounts($query, $filters) {}
-	public function getHostgroupStateCounts($query, $filters) {}
-	public function getServicegroupStateCounts($query, $filters) {}
-	
-	/**
-	 * PUBLIC getHostgroupState()
-	 *
-	 * Returns the Nagios state and additional information for the requested hostgroup
-	 *
-	 * @param	String		$hostgroupName
-	 * @param	Boolean		$onlyHardstates
-	 * @param   Array   Optional array of filters (Not implemented in this backend)
-	 * @return	array		$state
-	 * @author	Roman Kyrylych <rkyrylych@op5.com>
-	 */
-	public function getHostgroupState($hostgroupName, $onlyHardstates)
-	{
+	public function getHostState($objects, $filters) {
 		$arrReturn = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+			o.object_id, alias, display_name, address, o.name1,
+			has_been_checked, 
+			last_hard_state, 
+			UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change, 
+			UNIX_TIMESTAMP(last_state_change) AS last_state_change, 
+			current_state, 
+			output, perfdata, 
+			h.notes, 
+			problem_has_been_acknowledged, 
+			statusmap_image, 
+			UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
+			hs.state_type, hs.current_check_attempt, hs.max_check_attempts, 
+			UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
+			dh.author_name AS downtime_author, dh.comment_data AS downtime_data
+		FROM 
+			'.$this->dbPrefix.'hosts AS h, 
+			'.$this->dbPrefix.'objects AS o 
+		LEFT JOIN
+			'.$this->dbPrefix.'hoststatus AS hs
+			ON hs.host_object_id=o.object_id
+		LEFT JOIN
+			'.$this->dbPrefix.'scheduleddowntime AS dh
+			ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
+		WHERE 
+			(o.objecttype_id=1 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.') 
+			AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id)');
+		
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+			$arrTmpReturn = Array();
+			
+			$arrTmpReturn['alias'] = $data['alias'];
+			$arrTmpReturn['display_name'] = $data['display_name'];
+			$arrTmpReturn['address'] = $data['address'];
+			$arrTmpReturn['statusmap_image'] = $data['statusmap_image'];
+			$arrTmpReturn['notes'] = $data['notes'];
+			
+			// Add Additional information to array
+			$arrTmpReturn['perfdata'] = $data['perfdata'];
+			$arrTmpReturn['last_check'] = $data['last_check'];
+			$arrTmpReturn['next_check'] = $data['next_check'];
+			$arrTmpReturn['state_type'] = $data['state_type'];
+			$arrTmpReturn['current_check_attempt'] = $data['current_check_attempt'];
+			$arrTmpReturn['max_check_attempts'] = $data['max_check_attempts'];
+			$arrTmpReturn['last_state_change'] = $data['last_state_change'];
+			$arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
+			
+			// If there is a downtime for this object, save the data
+			if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+				$arrTmpReturn['in_downtime'] = 1;
+				$arrTmpReturn['downtime_start'] = $data['downtime_start'];
+				$arrTmpReturn['downtime_end'] = $data['downtime_end'];
+				$arrTmpReturn['downtime_author'] = $data['downtime_author'];
+				$arrTmpReturn['downtime_data'] = $data['downtime_data'];
+			}
+			
+			/**
+				* Only recognize hard states. There was a discussion about the implementation
+				* This is a new handling of only_hard_states. For more details, see: 
+				* http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
+				*
+				* Thanks to Andurin and fredy82
+				*/
+			if($objects[$data['name1']]['options']['filter_soft_states'] == 1) {
+				if($data['state_type'] != '0') {
+					$data['current_state'] = $data['current_state'];
+				} else {
+					$data['current_state'] = $data['last_hard_state'];
+				}
+			}
+			
+			if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
+				$arrTmpReturn['state'] = 'PENDING';
+				$arrTmpReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $data['name1']));
+			} elseif($data['current_state'] == '0') {
+				// Host is UP
+				$arrTmpReturn['state'] = 'UP';
+				$arrTmpReturn['output'] = $data['output'];
+			} else {
+				// Host is DOWN/UNREACHABLE/UNKNOWN
+				
+				// Store acknowledgement state in array
+				$arrTmpReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
+				
+				// Store state and output in array
+				switch($data['current_state']) {
+					case '1': 
+						$arrTmpReturn['state'] = 'DOWN';
+						$arrTmpReturn['output'] = $data['output'];
+					break;
+					case '2':
+						$arrTmpReturn['state'] = 'UNREACHABLE';
+						$arrTmpReturn['output'] = $data['output'];
+					break;
+					case '3':
+						$arrTmpReturn['state'] = 'UNKNOWN';
+						$arrTmpReturn['output'] = $data['output'];
+					break;
+					default:
+						$arrTmpReturn['state'] = 'UNKNOWN';
+						$arrTmpReturn['output'] = 'GlobalBackendndomy::getHostState: Undefined state!';
+					break;
+				}
+			}
+
+			$arrReturn[$data['name1']] = $arrTmpReturn;
+		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
 		
 		return $arrReturn;
 	}
 	
 	/**
-	 * PUBLIC getServicegroupState()
+	 * PUBLIC getServiceState()
 	 *
-	 * Returns the Nagios state and additional information for the requested servicegroup
+	 * Returns the state and additional information of the requested service
 	 *
-	 * @param	String		$servicegroupName
-	 * @param	Boolean		$onlyHardstates
-	 * @param   Array   Optional array of filters (Not implemented in this backend)
-	 * @return	array		$state
-	 * @author	Roman Kyrylych <rkyrylych@op5.com>
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getServicegroupState($servicegroupName, $onlyHardstates)
-	{
+	public function getServiceState($objects, $filters) {
 		$arrReturn = Array();
+		
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+			o.object_id, o.name1, o.name2,
+			s.display_name, 
+			s.notes, 
+			h.address, 
+			ss.has_been_checked, ss.last_hard_state, ss.current_state, 
+			UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change, 
+			UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
+			ss.output, ss.perfdata, ss.problem_has_been_acknowledged, 
+			UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
+			ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
+			UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
+			dh.author_name AS downtime_author, dh.comment_data AS downtime_data
+			FROM 
+				'.$this->dbPrefix.'services AS s,
+				'.$this->dbPrefix.'hosts AS h,
+				'.$this->dbPrefix.'objects AS o
+			LEFT JOIN
+				'.$this->dbPrefix.'servicestatus AS ss
+				ON ss.service_object_id=o.object_id
+			LEFT JOIN
+				'.$this->dbPrefix.'scheduleddowntime AS dh
+				ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
+			WHERE 
+				(o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o').'))
+				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+				AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
+				');
+		
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+			$arrTmpReturn = Array();
+
+			if(isset($objects[$data['name1'].'~~'.$data['name2']])) {
+				$specific = true;
+				$key = $data['name1'].'~~'.$data['name2'];
+			} else {
+				$specific = false;
+				$key = $data['name1'];
+			}
+			
+			$arrTmpReturn['service_description'] = $data['name2'];
+			$arrTmpReturn['display_name'] = $data['display_name'];
+			$arrTmpReturn['alias'] = $data['display_name'];
+			$arrTmpReturn['address'] = $data['address'];
+			$arrTmpReturn['notes'] = $data['notes'];
+			
+			// Add additional information to array
+			$arrTmpReturn['perfdata'] = $data['perfdata'];
+			$arrTmpReturn['last_check'] = $data['last_check'];
+			$arrTmpReturn['next_check'] = $data['next_check'];
+			$arrTmpReturn['state_type'] = $data['state_type'];
+			$arrTmpReturn['current_check_attempt'] = $data['current_check_attempt'];
+			$arrTmpReturn['max_check_attempts'] = $data['max_check_attempts'];
+			$arrTmpReturn['last_state_change'] = $data['last_state_change'];
+			$arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
+			
+			// If there is a downtime for this object, save the data
+			if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+				$arrTmpReturn['in_downtime'] = 1;
+				$arrTmpReturn['downtime_start'] = $data['downtime_start'];
+				$arrTmpReturn['downtime_end'] = $data['downtime_end'];
+				$arrTmpReturn['downtime_author'] = $data['downtime_author'];
+				$arrTmpReturn['downtime_data'] = $data['downtime_data'];
+			}
+			
+			/**
+				* Only recognize hard states. There was a discussion about the implementation
+				* This is a new handling of only_hard_states. For more details, see: 
+				* http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=8524
+				*
+				* Thanks to Andurin and fredy82
+				*/
+			if($objects[$key]['options']['filter_soft_states'] == 1) {
+				if($data['state_type'] != '0') {
+					$data['current_state'] = $data['current_state'];
+				} else {
+					$data['current_state'] = $data['last_hard_state'];
+				}
+			}
+			
+			if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
+				$arrTmpReturn['state'] = 'PENDING';
+				$arrTmpReturn['output'] = $this->CORE->getLang()->getText('serviceNotChecked', Array('SERVICE' => $data['name2']));
+			} elseif($data['current_state'] == '0') {
+				// Host is UP
+				$arrTmpReturn['state'] = 'OK';
+				$arrTmpReturn['output'] = $data['output'];
+			} else {
+				// Host is DOWN/UNREACHABLE/UNKNOWN
+				
+				/**
+					* If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not 
+					* acknowledged => check for acknowledged host
+					*/
+				if($data['problem_has_been_acknowledged'] != 1) {
+					$arrTmpReturn['problem_has_been_acknowledged'] = $this->getHostAckByHostname($data['name1']);
+				} else {
+					$arrTmpReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
+				}
+				
+				// Store state and output in array
+				switch($data['current_state']) {
+					case '1': 
+						$arrTmpReturn['state'] = 'WARNING';
+						$arrTmpReturn['output'] = $data['output'];
+					break;
+					case '2':
+						$arrTmpReturn['state'] = 'CRITICAL';
+						$arrTmpReturn['output'] = $data['output'];
+					break;
+					case '3':
+						$arrTmpReturn['state'] = 'UNKNOWN';
+						$arrTmpReturn['output'] = $data['output'];
+					break;
+					default:
+						$arrTmpReturn['state'] = 'UNKNOWN';
+						$arrTmpReturn['output'] = 'GlobalBackendndomy::getServiceState: Undefined state!';
+					break;
+				}
+			}
+			
+			if($specific) {
+				$arrReturn[$key] = $arrTmpReturn;
+			} else {
+				if(!isset($arrReturn[$key]))
+					$arrReturn[$key] = Array();
+				
+				$arrReturn[$key][] = $arrTmpReturn;
+			}
+		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
+		return $arrReturn;
+	}
+
+	/**
+	 * PUBLIC getHostStateCounts()
+	 *
+	 * @param   Array     List of objects to query
+	 * @param   Array     List of filters to apply
+	 * @return  Array     List of states and counts
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getHostStateCounts($objects, $filters) {
+		$arrReturn = Array();
+		
+		// FIXME: only hard state handling missing at the moment
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+			o.name1,
+			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
+			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS ok,
+			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS warning,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS critical,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			FROM 
+				'.$this->dbPrefix.'hoststatus AS hs,
+				'.$this->dbPrefix.'services AS s,
+				'.$this->dbPrefix.'hosts AS h,
+				'.$this->dbPrefix.'objects AS o
+			LEFT JOIN
+				'.$this->dbPrefix.'servicestatus AS ss
+				ON ss.service_object_id=o.object_id
+			WHERE 
+				(o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o').'))
+				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id) 
+				AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
+				AND (hs.host_object_id=h.host_object_id) 
+				GROUP BY h.host_object_id');
+
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+			$arrReturn[$data['name1']] = Array(
+				'PENDING' => Array(
+					'normal' => $data['pending'],
+				),
+				'OK' => Array(
+					'normal' => $data['ok'],
+					'downtime' => $data['ok_downtime'],
+				),
+				'WARNING' => Array(
+					'normal' => $data['warning'],
+					'ack' => $data['warning_ack'],
+					'downtime' => $data['warning_downtime'],
+				),
+				'CRITICAL' => Array(
+					'normal' => $data['critical'],
+					'ack' => $data['critical_ack'],
+					'downtime' => $data['critical_downtime'],
+				),
+				'UNKNOWN' => Array(
+					'normal' => $data['unknown'],
+					'ack' => $data['unknown_ack'],
+					'downtime' => $data['unknown_downtime'],
+				),
+			);
+		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
+		return $arrReturn;
+	}
+
+	public function getHostgroupStateCounts($objects, $filters) {
+		
+		// FIXME: only hard state handling missing at the moment
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+			o.name1,
+			SUM(IF(hs.has_been_checked=0,1,0)) AS pending,
+			SUM(IF((hs.current_state=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS up,
+			SUM(IF((hs.current_state=0 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS up_downtime,
+			SUM(IF((hs.current_state=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS down,
+			SUM(IF((hs.current_state=1 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS down_downtime,
+			SUM(IF((hs.current_state=1 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS down_ack,
+			SUM(IF((hs.current_state=2 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unreachable,
+			SUM(IF((hs.current_state=2 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unreachable_downtime,
+			SUM(IF((hs.current_state=2 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unreachable_ack,
+			SUM(IF((hs.current_state=3 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((hs.current_state=3 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((hs.current_state=3 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			FROM 
+				'.$this->dbPrefix.'objects AS o,
+				'.$this->dbPrefix.'hostgroups AS hg,
+				'.$this->dbPrefix.'hostgroup_members AS hgm,
+				'.$this->dbPrefix.'objects AS o2
+			LEFT JOIN
+	     '.$this->dbPrefix.'hoststatus AS hs
+		    ON hs.host_object_id=o2.object_id
+			WHERE 
+				(o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.') 
+				AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
+				AND hgm.hostgroup_id=hg.hostgroup_id 
+				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
+			GROUP BY o.object_id');
+		
+		$arrReturn = Array();
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+			$arrReturn[$data['name1']] = Array(
+				'PENDING' => Array(
+					'normal'    => $data['pending'],
+				),
+				'UP' => Array(
+					'normal'    => $data['up'],
+					'downtime'  => $data['up_downtime'],
+				),
+				'DOWN' => Array(
+					'normal'    => $data['down'],
+					'ack'       => $data['down_ack'],
+					'downtime'  => $data['down_downtime'],
+				),
+				'UNREACHABLE' => Array(
+					'normal'    => $data['unreachable'],
+					'ack'       => $data['unreachable_ack'],
+					'downtime'  => $data['unreachable_downtime'],
+				),
+			);
+		}
+		
+		// FIXME: only hard state handling missing at the moment
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+			o.name1,
+			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
+			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS ok,
+			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS warning,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS critical,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			FROM 
+				'.$this->dbPrefix.'objects AS o,
+				'.$this->dbPrefix.'hostgroups AS hg,
+				'.$this->dbPrefix.'hostgroup_members AS hgm,
+				'.$this->dbPrefix.'services AS s,
+				'.$this->dbPrefix.'objects AS o2
+			LEFT JOIN
+				'.$this->dbPrefix.'servicestatus AS ss
+				ON ss.service_object_id=o2.object_id
+			WHERE 
+				(o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.') 
+				AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
+				AND hgm.hostgroup_id=hg.hostgroup_id 
+				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.host_object_id=hgm.host_object_id)
+				AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
+			GROUP BY o.object_id');
+		
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+			// Special operator for PENDING cause it is set by the hosts initial
+			// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
+			//        in NagVis. Otherwise pending hosts are counted as services.
+			$arrReturn[$data['name1']]['PENDING']['normal'] += $data['pending'];
+			$arrReturn[$data['name1']]['OK']['normal'] = $data['ok'];
+			$arrReturn[$data['name1']]['OK']['downtime'] = $data['ok_downtime'];
+			$arrReturn[$data['name1']]['WARNING']['normal'] = $data['warning'];
+			$arrReturn[$data['name1']]['WARNING']['ack'] = $data['warning_ack'];
+			$arrReturn[$data['name1']]['WARNING']['downtime'] = $data['warning_downtime'];
+			$arrReturn[$data['name1']]['CRITICAL']['normal'] = $data['critical'];
+			$arrReturn[$data['name1']]['CRITICAL']['ack'] = $data['critical_ack'];
+			$arrReturn[$data['name1']]['CRITICAL']['downtime'] = $data['critical_downtime'];
+			$arrReturn[$data['name1']]['UNKNOWN']['normal'] = $data['unknown'];
+			$arrReturn[$data['name1']]['UNKNOWN']['ack'] = $data['unknown_ack'];
+			$arrReturn[$data['name1']]['UNKNOWN']['downtime'] = $data['unknown_downtime'];
+		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
+		
+		return $arrReturn;
+	}
+	
+	public function getServicegroupStateCounts($objects, $filters) {
+		// FIXME: only hard state handling missing at the moment
+		$QUERYHANDLE = $this->mysqlQuery('SELECT 
+			o.name1,
+			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
+			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS ok,
+			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS warning,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
+			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS critical,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
+			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			FROM 
+				'.$this->dbPrefix.'objects AS o,
+				'.$this->dbPrefix.'servicegroups AS sg,
+				'.$this->dbPrefix.'servicegroup_members AS sgm,
+				'.$this->dbPrefix.'services AS s,
+				'.$this->dbPrefix.'objects AS o2
+			LEFT JOIN
+				'.$this->dbPrefix.'servicestatus AS ss
+				ON ss.service_object_id=o2.object_id
+			WHERE 
+				(o.objecttype_id=4 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.') 
+				AND (sg.config_type='.$this->objConfigType.' AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id) 
+				AND sgm.servicegroup_id=sg.servicegroup_id 
+				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=sgm.service_object_id)
+				AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
+			GROUP BY o.object_id');
+		
+		$arrReturn = Array();
+		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+			$arrReturn[$data['name1']] = Array(
+				'PENDING' => Array(
+					'normal' => $data['pending'],
+				),
+				'OK' => Array(
+					'normal' => $data['ok'],
+					'downtime' => $data['ok_downtime'],
+				),
+				'WARNING' => Array(
+					'normal' => $data['warning'],
+					'ack' => $data['warning_ack'],
+					'downtime' => $data['warning_downtime'],
+				),
+				'CRITICAL' => Array(
+					'normal' => $data['critical'],
+					'ack' => $data['critical_ack'],
+					'downtime' => $data['critical_downtime'],
+				),
+				'UNKNOWN' => Array(
+					'normal' => $data['unknown'],
+					'ack' => $data['unknown_ack'],
+					'downtime' => $data['unknown_downtime'],
+				),
+			);
+		}
+		
+		// Free memory
+		mysql_free_result($QUERYHANDLE);
 		
 		return $arrReturn;
 	}
