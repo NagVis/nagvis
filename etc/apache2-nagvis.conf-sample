@@ -21,5 +21,25 @@ Alias @NAGVIS_WEB@ "@NAGVIS_PATH@/share"
   #AuthType Basic
   #AuthUserFile @NAGIOS_PATH@/etc/htpasswd.users
   #Require valid-user
+  
+  # With installed and enabled mod_rewrite there are several redirections
+  # available to fix deprecated and/or wrong urls. None of those rules is
+  # mandatory to get NagVis working.
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase @NAGVIS_WEB@
+    
+    # Use mod_rewrite for old url redirection even if there are php files which
+    # redirect the queries itselfs. In some cases the mod_rewrite redirect
+    # is better than the php redirect.
+    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/index.php.*$
+    RewriteRule ^index\.php(.*) @NAGVIS_WEB@/frontend/nagvis-js/$1 [R=301,L]
+    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/config.php.*$
+    RewriteRule ^config\.php(.*) @NAGVIS_WEB@/frontend/wui/$1 [R=301,L]
+    
+    # Redirect old map links (FIXME)
+    #RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/frontend/nagvis-js/index.php?map=(.*)$
+    #RewriteRule ^index\.php(.*) @NAGVIS_WEB@/frontend/nagvis-js/?mod=Map&act=view&show=%1 [R=301,L]
+  </IfModule>
 </Directory>
 
