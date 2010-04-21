@@ -32,14 +32,20 @@ Alias @NAGVIS_WEB@ "@NAGVIS_PATH@/share"
     # Use mod_rewrite for old url redirection even if there are php files which
     # redirect the queries itselfs. In some cases the mod_rewrite redirect
     # is better than the php redirect.
-    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/index.php.*$
-    RewriteRule ^index\.php(.*) @NAGVIS_WEB@/frontend/nagvis-js/$1 [R=301,L]
-    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/config.php.*$
+    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@(/index\.php|/|)(\?.*|)$
+    RewriteRule ^(index\.php|)(\?.*|)$ @NAGVIS_WEB@/frontend/nagvis-js/$1$2 [R=301,L]
+    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/config\.php.*$
     RewriteRule ^config\.php(.*) @NAGVIS_WEB@/frontend/wui/$1 [R=301,L]
     
-    # Redirect old map links (FIXME)
-    #RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/frontend/nagvis-js/index.php?map=(.*)$
-    #RewriteRule ^index\.php(.*) @NAGVIS_WEB@/frontend/nagvis-js/?mod=Map&act=view&show=%1 [R=301,L]
+    # Redirect old regular map links
+    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/frontend/nagvis-js
+    RewriteCond %{QUERY_STRING} map=(.*)
+    RewriteRule ^(.*)$ @NAGVIS_WEB@/frontend/nagvis-js/index.php?mod=Map&act=view&show=%1 [R=301,L]
+
+    # Redirect old wui map links
+    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/frontend/wui
+    RewriteCond %{QUERY_STRING} map=(.*)
+    RewriteRule ^(.*)$ @NAGVIS_WEB@/frontend/wui/index.php?mod=Map&act=edit&show=%1 [R=301,L]
   </IfModule>
 </Directory>
 
