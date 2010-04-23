@@ -555,12 +555,16 @@ class CoreModMap extends CoreModule {
 	private function doDeleteObject($a) {
 		// initialize map and read map config
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
-		$MAPCFG->readMapConfig();
+		// Ignore map configurations with errors in it.
+		// the problems may get resolved by deleting the object
+		try {
+			$MAPCFG->readMapConfig();
+		} catch(MapCfgInvalid $e) {}
 		
 		// first delete element from array
-		$MAPCFG->deleteElement($a['type'],$a['id']);
+		$MAPCFG->deleteElement($a['type'], $a['id']);
 		// then write new array to file
-		$MAPCFG->writeElement($a['type'],$a['id']);
+		$MAPCFG->writeElement($a['type'], $a['id']);
 		
 		// delete map lock
 		if(!$MAPCFG->deleteMapLock()) {
