@@ -1052,16 +1052,6 @@ if [ $FORCE -eq 0 ]; then
 	[ $RC != 1 ] && RC=$?
 	CALL="$CALL -n $NAGIOS_PATH"
 
-	# NagVis below 1.5 depends on the given Nagios path
-	# So set it here. But only set it when NagVis path not defined explicit
-	if [ $NAGVIS_TAG -lt 01050000 -a $NAGVIS_PATH_PARAM_SET -eq 0 ]; then
-		NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
-		
-		if [ $NAGVIS_PATH_OLD_PARAM_SET -eq 0 ]; then
-			NAGVIS_PATH_OLD="$NAGVIS_PATH"
-		fi
-	fi
-
 	# Get NagVis path
 	TMP=$NAGVIS_PATH
 	ask_user "NAGVIS_PATH" "$NAGVIS_PATH" 1 "" \
@@ -1073,10 +1063,10 @@ if [ $FORCE -eq 0 ]; then
 	
 	CALL="$CALL -p $NAGVIS_PATH"
 
-	# Maybe the user wants to update from NagVis 1.4x to 1.5x. The paths
+	# Maybe the user wants to update from NagVis 1.4x. The paths
 	# have changed there. So try to get the old nagvis dir in nagios/share
 	# path. When there is some, ask the user to update that installation.
-	if [ $NAGVIS_TAG -ge 01050000 -a -d ${NAGIOS_PATH%/}/share/nagvis -a "$NAGVIS_PATH" != "${NAGIOS_PATH%/}/share/nagvis" ]; then
+	if [ -a -d ${NAGIOS_PATH%/}/share/nagvis -a "$NAGVIS_PATH" != "${NAGIOS_PATH%/}/share/nagvis" ]; then
 		# Found nagvis in nagios/share and this run wants to install NagVis somewhere else
 		NAGVIS_PATH_OLD="${NAGIOS_PATH%/}/share/nagvis"
 
@@ -1272,24 +1262,19 @@ fi
 # Create base path
 makedir "$NAGVIS_PATH"
 
-if [ $NAGVIS_TAG -ge 01050000 ]; then
-	# Create non shared var directory when not exists
-	makedir "$NAGVIS_PATH/var"
-	makedir "$NAGVIS_PATH/var/tmpl/cache"
-	makedir "$NAGVIS_PATH/var/tmpl/compile"
-	# Create shared var directory when not exists
-	makedir "$NAGVIS_PATH/share/var"
-	# Copy all desired files
-	LINE="Copying files to $NAGVIS_PATH..."
-	copy "" "share" "$NAGVIS_PATH"
-	copy "" "etc" "$NAGVIS_PATH"
-	copy "" "LICENCE README" "$NAGVIS_PATH"
-	copy "" "docs" "$NAGVIS_PATH/share"
-	cmp_js
-else
-	LINE="Copying files to $NAGVIS_PATH..."
-	copy "install\.(sh|log)$" '*' "$NAGVIS_PATH"
-fi
+# Create non shared var directory when not exists
+makedir "$NAGVIS_PATH/var"
+makedir "$NAGVIS_PATH/var/tmpl/cache"
+makedir "$NAGVIS_PATH/var/tmpl/compile"
+# Create shared var directory when not exists
+makedir "$NAGVIS_PATH/share/var"
+# Copy all desired files
+LINE="Copying files to $NAGVIS_PATH..."
+copy "" "share" "$NAGVIS_PATH"
+copy "" "etc" "$NAGVIS_PATH"
+copy "" "LICENCE README" "$NAGVIS_PATH"
+copy "" "docs" "$NAGVIS_PATH/share"
+cmp_js
 
 # Remove demo maps if desired
 if [ "$IGNORE_DEMO" != "" ]; then
@@ -1507,24 +1492,17 @@ chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
 set_perm 775 "$NAGVIS_PATH/etc"
 set_perm 775 "$NAGVIS_PATH/etc/maps"
 set_perm 664 "$NAGVIS_PATH/etc/maps/*"
-if [ $NAGVIS_TAG -lt 01050000 ]; then
-	set_perm 775 "$NAGVIS_PATH/nagvis/images/maps"
-	set_perm 664 "$NAGVIS_PATH/nagvis/images/maps/*"
-	set_perm 775 "$NAGVIS_PATH/nagvis/var"
-	set_perm 664 "$NAGVIS_PATH/nagvis/var/*"
-else
-	set_perm 775 "$NAGVIS_PATH/etc/automaps"
-	set_perm 664 "$NAGVIS_PATH/etc/automaps/*"
-	set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
-	set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
-	set_perm 775 "$NAGVIS_PATH/var"
-	set_perm 664 "$NAGVIS_PATH/var/*"
-	set_perm 775 "$NAGVIS_PATH/var/tmpl"
-	set_perm 775 "$NAGVIS_PATH/var/tmpl/cache"
-	set_perm 775 "$NAGVIS_PATH/var/tmpl/compile"
-	set_perm 775 "$NAGVIS_PATH/share/var"
-	set_perm 664 "$NAGVIS_PATH/share/var/*"
-fi	
+set_perm 775 "$NAGVIS_PATH/etc/automaps"
+set_perm 664 "$NAGVIS_PATH/etc/automaps/*"
+set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
+set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
+set_perm 775 "$NAGVIS_PATH/var"
+set_perm 664 "$NAGVIS_PATH/var/*"
+set_perm 775 "$NAGVIS_PATH/var/tmpl"
+set_perm 775 "$NAGVIS_PATH/var/tmpl/cache"
+set_perm 775 "$NAGVIS_PATH/var/tmpl/compile"
+set_perm 775 "$NAGVIS_PATH/share/var"
+set_perm 664 "$NAGVIS_PATH/share/var/*"
 text
 
 if [ "$INSTALLER_ACTION" = "update" -a "$REMOVE" = "y" ]; then
@@ -1546,14 +1524,10 @@ text "| - Read the documentation" "|"
 text "| - Maybe you want to edit the main configuration file?" "|"
 text "|   Its location is: $NAGVIS_PATH/$NAGVIS_CONF" "|"
 text "| - Configure NagVis via browser" "|"
-if [ $NAGVIS_TAG -lt 01050000 ]; then
-	text "|   <http://localhost${HTML_PATH}/nagvis/config.php>" "|"
-else
-	text "|   <http://localhost${HTML_PATH}/config.php>" "|"
-	text "| - Initial admin credentials:" "|"
-	text "|     Username: nagiosadmin" "|"
-	text "|     Password: nagiosadmin" "|"
-fi
+text "|   <http://localhost${HTML_PATH}/config.php>" "|"
+text "| - Initial admin credentials:" "|"
+text "|     Username: nagiosadmin" "|"
+text "|     Password: nagiosadmin" "|"
 line
 } 2>&1 | tee $LOG
 

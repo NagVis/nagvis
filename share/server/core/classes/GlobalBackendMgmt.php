@@ -334,10 +334,6 @@ class GlobalBackendMgmt {
 				
 					$OBJ->setMembers($members);
 				}
-			} else {
-				foreach($opts['OBJS'] AS $OBJ)
-					$OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" has no services.',
-		                                                                     Array('OBJ' => $OBJ->getName())));
 			}
 		}
 	}
