@@ -921,7 +921,7 @@ if [ $# -gt 0 ]; then
 	while getopts "p:n:B:m:l:w:W:u:b:g:c:i:s:O:ohqvFr" options $OPTS; do
 		case $options in
 			n)
-				NAGIOS_PATH=$OPTARG
+				NAGIOS_PATH=${OPTARG%/}
 			;;
 			B)
 				NAGIOS_BIN=$OPTARG
@@ -936,7 +936,7 @@ if [ $# -gt 0 ]; then
 				GRAPHVIZ_PATH=$OPTARG
 			;;
 			p)
-				NAGVIS_PATH=$OPTARG
+				NAGVIS_PATH=${OPTARG%/}
 				NAGVIS_PATH_PARAM_SET=1
 
 				if [ $NAGVIS_PATH_OLD_PARAM_SET -eq 0 ]; then
@@ -944,11 +944,11 @@ if [ $# -gt 0 ]; then
 				fi
 			;;
 			O)
-				NAGVIS_PATH_OLD=$OPTARG
+				NAGVIS_PATH_OLD=${OPTARG%/}
 				NAGVIS_PATH_OLD_PARAM_SET=1
 			;;
 			w)
-				WEB_PATH=$OPTARG
+				WEB_PATH=${OPTARG%/}
 			;;
 			W)
 				HTML_PATH=$OPTARG
@@ -1050,12 +1050,14 @@ if [ $FORCE -eq 0 ]; then
 	ask_user "NAGIOS_PATH" "$NAGIOS_PATH" 1 "check_nagios_path" \
            "Please enter the path to the $SOURCE base directory"
 	[ $RC != 1 ] && RC=$?
+	NAGIOS_PATH=${NAGIOS_PATH%/}
 	CALL="$CALL -n $NAGIOS_PATH"
 
 	# Get NagVis path
 	TMP=$NAGVIS_PATH
 	ask_user "NAGVIS_PATH" "$NAGVIS_PATH" 1 "" \
            "Please enter the path to NagVis base"
+	NAGVIS_PATH=${NAGVIS_PATH%/}
 	[ $RC != 1 ] && RC=$?
 	
 	# Also update old path when it was equal to the new directory or empty before
@@ -1066,7 +1068,7 @@ if [ $FORCE -eq 0 ]; then
 	# Maybe the user wants to update from NagVis 1.4x. The paths
 	# have changed there. So try to get the old nagvis dir in nagios/share
 	# path. When there is some, ask the user to update that installation.
-	if [ -a -d ${NAGIOS_PATH%/}/share/nagvis -a "$NAGVIS_PATH" != "${NAGIOS_PATH%/}/share/nagvis" ]; then
+	if [ -d ${NAGIOS_PATH%/}/share/nagvis -a "$NAGVIS_PATH" != "${NAGIOS_PATH%/}/share/nagvis" ]; then
 		# Found nagvis in nagios/share and this run wants to install NagVis somewhere else
 		NAGVIS_PATH_OLD="${NAGIOS_PATH%/}/share/nagvis"
 
@@ -1145,6 +1147,7 @@ if [ $FORCE -eq 0 ]; then
 
 	ask_user "HTML_PATH" "$HTML_PATH" 1 "" \
            "Please enter the web path to NagVis"
+	HTML_PATH=${HTML_PATH%/}
 	[ $RC != 1 ] && RC=$?
 
 	ask_user "WEB_USER" "$WEB_USER" 1 "check_web_user" \
