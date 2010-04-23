@@ -277,6 +277,13 @@ function get_click_pos(e) {
 			viewType = 'icon';
 		}
 		
+		// When a grid is enabled align the dragged object in the nearest grid
+		if(oViewProperties.grid_show === 1) {
+			var aCoords = coordsToGrid(posx, posy);
+			posx = aCoords[0];
+			posy = aCoords[1];
+		}
+		
 		// Save current click position
 		coords = coords + posx + ',' + posy + ',';
 		
@@ -364,6 +371,13 @@ function saveObjectAfterResize(oObj) {
 	oResult = null;
 }
 
+function coordsToGrid(x, y) {
+	var gridMoveX = x - (x % oViewProperties.grid_steps);
+	y = y + getHeaderHeight();
+	var gridMoveY = y - (y % oViewProperties.grid_steps);
+	return [ gridMoveX, gridMoveY ];
+}
+
 function saveObjectAfterMoveAndDrop(oObj) {
 	// Reset z-index to configured value
 	oObj.setZ(oObj.defz);
@@ -381,11 +395,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	
 	// When a grid is enabled align the dragged object in the nearest grid
 	if(oViewProperties.grid_show === 1) {
-		var gridMoveX = oObj.x - (oObj.x % oViewProperties.grid_steps);
-		y = oObj.y + getHeaderHeight();
-		var gridMoveY = y - (y % oViewProperties.grid_steps);
-		
-		oObj.moveTo(gridMoveX, gridMoveY);
+		var coords = coordsToGrid(oObj.x, oObj.y);
+		oObj.moveTo(coords[0], coords[1]);
 	}
 	
 	// Split id to get object information
