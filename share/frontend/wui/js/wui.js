@@ -105,11 +105,11 @@ function gridParse() {
 		var gridXEnd = pageWidth();
 		
 		// Draw vertical lines
-		for(var gridX = 32; gridX < gridXEnd; gridX = gridX + gridStep) {
+		for(var gridX = gridStep; gridX < gridXEnd; gridX = gridX + gridStep) {
 			grid.drawLine(gridX, gridYStart, gridX, gridYEnd);
 		}
 		// Draw horizontal lines
-		for(var gridY = 32; gridY < gridYEnd; gridY = gridY + gridStep) {
+		for(var gridY = gridStep; gridY < gridYEnd; gridY = gridY + gridStep) {
 			grid.drawLine(gridXStart, gridY, gridXEnd, gridY);
 		}
 		
@@ -382,7 +382,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	// When a grid is enabled align the dragged object in the nearest grid
 	if(oViewProperties.grid_show === 1) {
 		var gridMoveX = oObj.x - (oObj.x % oViewProperties.grid_steps);
-		var gridMoveY = oObj.y - (oObj.y % oViewProperties.grid_steps);
+		y = oObj.y + getHeaderHeight();
+		var gridMoveY = y - (y % oViewProperties.grid_steps);
 		
 		oObj.moveTo(gridMoveX, gridMoveY);
 	}
