@@ -696,8 +696,9 @@ copy() {
 	
 	# Copy old directory contents to new directory
 	if [ -d "$NAGVIS_PATH_BACKUP/$2" -a ! -d "$3" ]; then
-		# Get files to copy
-		FILES=`find $NAGVIS_PATH_BACKUP/$2 -type f`
+		# Get files and directories to copy. This takes only the elements in the
+		# given directory.
+		FILES=`find $NAGVIS_PATH_BACKUP/$2 -mindepth 1 -maxdepth 1`
 
 		# Maybe exclude some files
 		if [ "$1" != "" ]; then
