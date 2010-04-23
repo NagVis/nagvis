@@ -682,6 +682,51 @@ chk_rc() {
 	fi
 }
 
+rename_template_files() {
+	DONE=""
+	# 1: source directory
+	SOURCE=$1
+	# 2: target directory
+	TARGET=$2
+	# 3: template type
+	TYPE=$3
+
+	[ -n "$LINE" ] && DONE=`log "$LINE" done`
+
+	FILES=`find $NAGVIS_PATH/$SOURCE -type f -printf "%f\n"`
+	IFS=$'\n'
+	for FILE in $FILES; do
+		IFS=" "
+		FILE_NEW=`echo "$FILE" | sed 's/tmpl\.//g' | sed "s/\.html/\.$TYPE\.html/g" | sed "s/\.css/\.$TYPE\.css/g"`
+	
+    cp -p "$NAGVIS_PATH/$SOURCE/$FILE" "$NAGVIS_PATH/$TARGET/$FILE_NEW"
+    chk_rc "|  Error renaming $TYPE template file ($SOURCE/$FILE to $TARGET/$FILE_NEW)" "$DONE"
+	done
+	IFS=" "
+}
+
+copy_dir_xpath() {
+	DONE=""
+	# 1: Exclude pattern
+	# 2: Old dir
+	# 3: New dir
+	
+  [ -n "$LINE" ] && DONE=`log "$LINE" done` 
+  # Get files and directories to copy. This takes only the elements in the
+  # given directory.
+  FILES=`find $NAGVIS_PATH_BACKUP/$2 -mindepth 1 -maxdepth 1`
+
+  # Maybe exclude some files
+  if [ "$1" != "" ]; then
+    FILES=`echo "$FILES" | grep -vE $1`
+  fi
+
+  if [ "$FILES" != "" ]; then
+    cp -pr `echo "$FILES" | xargs` $NAGVIS_PATH/$3
+    chk_rc "|  Error copying dir $2 to $3" "$DONE"
+  fi
+}
+
 copy() {
 	DONE=""
 	
@@ -850,6 +895,11 @@ cmp_js() {
 NAGVIS_TAG=`fmt_version "$NAGVIS_VER"`
 [ -z "$NAGVIS_TAG" ]&&NAGVIS_TAG=01000000
 
+if [ $NAGVIS_TAG -lt 01050000 ]; then
+	echo "Error: This installer version only installs NagVis 1.5x or newer"
+	exit 1
+fi
+
 S=`echo $* | grep -i "\-s icinga"`
 [ $? -eq 0 ]&&SOURCE=icinga
 # Default hardcoded Nagios path
@@ -859,21 +909,12 @@ NAGIOS_PATH="/usr/local/$SOURCE"
 detect_nagios_path
 
 # Default hardcoded NagVis base
-if [ $NAGVIS_TAG -lt 01050000 ]; then
-	NAGVIS_PATH="$NAGIOS_PATH/share/nagvis"
-	NAGVIS_PATH_OLD=$NAGVIS_PATH
-else
-	NAGVIS_PATH="${NAGIOS_PATH%%nagios}"
-	NAGVIS_PATH="${NAGVIS_PATH%/}/nagvis"
-	NAGVIS_PATH_OLD=$NAGVIS_PATH
-fi
+NAGVIS_PATH="${NAGIOS_PATH%%nagios}"
+NAGVIS_PATH="${NAGVIS_PATH%/}/nagvis"
+NAGVIS_PATH_OLD=$NAGVIS_PATH
 
 # Default nagios share webserver path
-if [ $NAGVIS_TAG -lt 01050000 ]; then
-	HTML_PATH="/$SOURCE/nagvis"
-else
-	HTML_PATH="/nagvis"
-fi
+HTML_PATH="/nagvis"
 
 # Process command line options
 if [ $# -gt 0 ]; then
@@ -881,16 +922,6 @@ if [ $# -gt 0 ]; then
 		case $options in
 			n)
 				NAGIOS_PATH=$OPTARG
-
-				# NagVis below 1.5 depends on the given Nagios path
-				# So set it here. But only set it when NagVis path not defined explicit
-				if [ $NAGVIS_TAG -lt 01050000 -a $NAGVIS_PATH_PARAM_SET -eq 0 ]; then
-					NAGVIS_PATH="${NAGIOS_PATH%/}/share/nagvis"
-
-					if [ $NAGVIS_PATH_OLD_PARAM_SET -eq 0 ]; then
-						NAGVIS_PATH_OLD=$NAGVIS_PATH
-					fi
-				fi
 			;;
 			B)
 				NAGIOS_BIN=$OPTARG
@@ -1307,68 +1338,80 @@ fi
 
 text
 if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
-	# Gather path prefixes
-	NAGVIS_DIR="nagvis"
-	[ $NAGVIS_TAG -ge 01050000 ] && NAGVIS_DIR="share/nagvis"
-	USERFILES_DIR="nagvis"
-	[ $NAGVIS_TAG -ge 01050000 ] && USERFILES_DIR="share/userfiles"
+	NAGVIS_DIR="share/nagvis"
+	USERFILES_DIR="share/userfiles"
 
-	LINE="Restoring main configuration file..."
-	copy "" "$NAGVIS_CONF" "main configuration file"
-	
-	LINE="Restoring custom map configuration files..."
-	copy "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "map configuration files"
-	
-	LINE="Restoring custom automap configuration files..."
-	copy "\/(__automap\.cfg)$" "etc/automaps" "automap configuration files"
-	
-	LINE="Restoring custom map images..."
-	copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
-	
-	LINE="Restoring custom iconsets..."
-	copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_(big|medium|small)\.png|demo_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
-	
-	LINE="Restoring custom shapes..."
-	copy "" "$USERFILES_DIR/images/shapes" "shapes"
-	
-	# Other template handling since 1.5.x
 	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
+ 		LINE="Restoring main configuration file..."
+		copy "" "$NAGVIS_CONF" "main configuration file"
+	
+		LINE="Restoring custom map configuration files..."
+		copy "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "map configuration files"
+	
+		LINE="Restoring custom automap configuration files..."
+		copy "\/(__automap\.cfg)$" "etc/automaps" "automap configuration files"
+	
+		LINE="Restoring custom map images..."
+		copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
+	
+		LINE="Restoring custom gadget images..."
+		copy "" "$USERFILES_DIR/images/gadgets" "gadget image files"
+	
+		LINE="Restoring custom iconsets..."
+		copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_(big|medium|small)\.png|demo_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
+	
+		LINE="Restoring custom shapes..."
+		copy "" "$USERFILES_DIR/images/shapes" "shapes"
+		
 		LINE="Restoring custom templates..."
 		copy "\/default\..+$" "$USERFILES_DIR/templates" "templates"
 		
 		LINE="Restoring custom template images..."
 		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates" "template images"
-	elif [ $NAGVIS_TAG_OLD -lt 01050000 ] && [ $NAGVIS_TAG -lt 01050000 ]; then
-		# Template handling pre 1.5.x
-		LINE="Restoring custom pages templates..."
-		copy "\/default\..+$" "$USERFILES_DIR/templates/pages" "pages templates"
 
-		LINE="Restoring custom hover templates..."
-		copy "\/tmpl\.default.+$" "$USERFILES_DIR/templates/hover" "hover templates"
+		LINE="Restoring custom gadgets..."
+		copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
 		
-		LINE="Restoring custom header template images..."
-		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/header" "header template images"
-
-		LINE="Restoring custom hover template images..."
-		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates/hover" "hover template images"
-	else
-		text "|" "|"
-		text "| IMPORTANT: When upgrading from previous 1.5.0 to 1.5.x version you ou need" "|"
-		text "|            to migrate eventually custom templates by hand cause the " "|"
-		text "|            template format has totally changed." "|"
-	fi
-
-
-	LINE="Restoring custom gadgets..."
-	copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
-
-	LINE="Restoring custom stylesheets..."
-	copy "" "$USERFILES_DIR/styles" "stylesheets"
-	
-	# Copy auth.db when updating from 1.5x
-	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
 		LINE="Restoring auth database file..."
 		copy "" "$NAGVIS_AUTH_DB" "auth database file"
+
+		LINE="Restoring custom stylesheets..."
+		copy "" "$USERFILES_DIR/styles" "stylesheets"
+	else
+		# This is a cross version update. For example from 1.4x to 1.5x
+ 		LINE="Restoring main configuration file..."
+		copy "" "$NAGVIS_CONF" "main configuration file"
+	
+		LINE="Restoring custom map configuration files..."
+		copy_dir_xpath "\/(__automap\.cfg|demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "etc/maps" "map configuration files"
+	
+		LINE="Restoring custom map images..."
+		copy_dir_xpath "\/nagvis-demo\.png$" "nagvis/images/maps" "$USERFILES_DIR/images/maps" "map image files"
+	
+		LINE="Restoring custom gadget images..."
+		copy_dir_xpath "" "nagvis/images/gadgets" "$USERFILES_DIR/images/gadgets" "gadget image files"
+	
+		LINE="Restoring custom iconsets..."
+		copy_dir_xpath "\/(20x20\.png|configerror_.+\.png|error\.png|std_(big|medium|small)\.png|demo_.+\.png)$" "nagvis/images/iconsets" "$USERFILES_DIR/images/iconsets" "iconset files"
+	
+		LINE="Restoring custom shapes..."
+		copy_dir_xpath "" "nagvis/images/shapes" "$USERFILES_DIR/images/shapes" "shapes"
+		
+		LINE="Restoring custom templates..."
+		copy_dir_xpath  "\/tmpl\.default.+$" "nagvis/templates" "$USERFILES_DIR/templates" "hover templates"
+		LINE="Renaming custom hover templates"
+		rename_template_files "$USERFILES_DIR/templates/hover" "$USERFILES_DIR/templates" "hover"
+		LINE="Renaming custom context templates"
+		rename_template_files "$USERFILES_DIR/templates/context" "$USERFILES_DIR/templates" "context"
+		
+		LINE="Restoring custom gadgets..."
+		copy_dir_xpath "\/(gadgets_core\.php|std_.+\.php)$" "nagvis/gadgets" "$USERFILES_DIR/gadgets" "gadgets"
+
+		text "|" "|"
+		text "| IMPORTANT: When upgrading from previous 1.5.0 to 1.5.x version you need" "|"
+		text "|            to migrate eventually custom templates by hand because the " "|"
+		text "|            template format has totally changed. The template images are" "|"
+		text "|            unhandled too." "|"
 	fi
 fi
 text
