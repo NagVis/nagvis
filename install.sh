@@ -377,6 +377,15 @@ detect_nagios_path() {
 	done
 	IFS=" "
 }
+
+# Tries to detect the correct path to the livestatus socket locally
+detect_livestatus_socket() {
+	if [ -S "/var/run/nagios/rw/live" ]; then
+		LIVESTATUS_SOCK="unix:/var/run/nagios/rw/live"
+	else
+		LIVESTATUS_SOCK="unix:$NAGIOS_PATH/var/rw/live"
+	fi
+}
  
 # Check Backend module prerequisites
 check_backend() {
@@ -404,7 +413,7 @@ check_backend() {
 
 	echo $NAGVIS_BACKEND | grep -i "MKLIVESTATUS" >/dev/null
 	if [ $? -eq 0 ]; then
-		[ -z "$LIVESTATUS_SOCK" ] && LIVESTATUS_SOCK="unix:$NAGIOS_PATH/var/rw/live"
+		[ -z "$LIVESTATUS_SOCK" ] && detect_livestatus_socket
 		
 		# Check if the livestatus socket is available
 		# when not using a tcp socket
