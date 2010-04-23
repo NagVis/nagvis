@@ -336,7 +336,7 @@ class WuiViewMapAddModify {
 							
 							if($propname == 'host_name') {
 								if($this->aOpts['type'] == 'service') {
-									$onChange = "getServices('".$backendId."','".$this->aOpts['type']."',this.value,'service_description','".$sSelected."');validateMapConfigFieldValue(this)";
+									$onChange = "getServices(document.getElementById('backend_id').value,'".$this->aOpts['type']."',this.value,'service_description','".$sSelected."');validateMapConfigFieldValue(this)";
 								} else {
 									$onChange = 'validateMapConfigFieldValue(this)';
 								}
