@@ -308,10 +308,10 @@ class GlobalBackendMgmt {
 					else
 						$OBJ->setStateCounts($aCounts[$name]);
 			else
-				foreach($opts['OBJS'] AS $OBJ) {
-					$OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" does not exist ([TYPE]).',
-			         		                                                             Array('OBJ' => $name, 'TYPE' => $type)));
-				}
+				foreach($opts['OBJS'] AS $OBJ)
+					if($type != 'hostMemberState')
+						$OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" does not exist ([TYPE]).',
+			                                                 Array('OBJ' => $name, 'TYPE' => $type)));
 	}
 
 	private function fetchHostMemberDetails($backendId, $aObjs) {
