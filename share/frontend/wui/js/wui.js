@@ -298,13 +298,13 @@ function get_click_pos(e) {
 		follow_mouse = false;
 		var sUrl;
 		if(action_click == 'add' || action_click == 'clone') {
-			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=add&map='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
+			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=add&show='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
 			
 			if(action_click == 'clone' && objid !== -1) {
 				sUrl += '&clone='+objid;
 			}
 		} else if(action_click == 'modify' && objid !== -1) {
-			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&map='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
+			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&show='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
 		
 		// FIXME: Title "+get_label('properties')+"

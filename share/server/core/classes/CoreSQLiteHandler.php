@@ -125,6 +125,7 @@ class CoreSQLiteHandler {
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'modifyObject\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'createObject\', '.$this->escape($name).')');
 			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'deleteObject\', '.$this->escape($name).')');
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'addModify\', '.$this->escape($name).')');
 		} else {
 			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for map '.$name);
 		}
@@ -293,6 +294,7 @@ class CoreSQLiteHandler {
 		$this->addRolePerm($data['roleId'], 'Map', 'modifyObject', '*');
 		$this->addRolePerm($data['roleId'], 'Map', 'createObject', '*');
 		$this->addRolePerm($data['roleId'], 'Map', 'deleteObject', '*');
+		$this->addRolePerm($data['roleId'], 'Map', 'addModify', '*');
 		
 		// Access assignment: Managers => Allowed to create maps
 		$this->addRolePerm($data['roleId'], 'Map', 'add', '*');

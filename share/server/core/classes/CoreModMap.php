@@ -213,7 +213,7 @@ class CoreModMap extends CoreModule {
 					}
 				break;
 				case 'addModify':
-					$aOpts = Array('map' => MATCH_MAP_NAME,
+					$aOpts = Array('show' => MATCH_MAP_NAME,
 					               'do' => MATCH_WUI_ADDMODIFY_DO,
 					               'type' => MATCH_OBJECTTYPE,
 					               'id' => MATCH_INTEGER_EMPTY,

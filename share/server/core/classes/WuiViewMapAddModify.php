@@ -65,7 +65,7 @@ class WuiViewMapAddModify {
 		$TMPL = New CoreTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
 		
-		$this->MAPCFG = new WuiMapCfg($this->CORE, $this->aOpts['map']);
+		$this->MAPCFG = new WuiMapCfg($this->CORE, $this->aOpts['show']);
 		try {
 			$this->MAPCFG->readMapConfig();
 		} catch(MapCfgInvalid $e) {}
@@ -81,7 +81,7 @@ class WuiViewMapAddModify {
 			'action' => $action,
 			'type' => $this->aOpts['type'],
 			'id' => $this->aOpts['id'],
-			'map' => $this->aOpts['map'],
+			'map' => $this->aOpts['show'],
 			'formContents' => $this->getFields().$this->fillFields(),
 			'langSave' => $this->CORE->getLang()->getText('save')
 		);
