@@ -597,7 +597,7 @@ td#popupWindowContent fieldset.form label {
 }
 
 .dropdown {margin:0;padding:0;width:100%;position:relative;z-index:100}
-.dropdown dt {margin:0;padding:0;width:100%;height:31px;padding-left:8px;padding-right:8px;line-height:31px;font-weight:bold;cursor:pointer;background:url('../images/templates/default.header.png')}
+.dropdown dt, .header div#refreshCounterHead {margin:0;padding:0;width:100%;height:31px;padding-left:8px;padding-right:8px;line-height:31px;font-weight:bold;cursor:pointer;background:url('../images/templates/default.header.png')}
 .dropdown dt:hover {background:url('../images/templates/default.header_over.png')}
 .dropdown dd {margin:0;padding:0;position:absolute;width: 205px;background:#fff;display:none;overflow:hidden;opacity:0;z-index:100}
 .dropdown img {vertical-align:middle;margin-left:10px}
