@@ -1061,7 +1061,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			"Stats: ".$stateAttr." = 0\n" .
 			"Stats: scheduled_downtime_depth > 0\n" .
 			"Stats: host_scheduled_downtime_depth > 0\n" .
-			"StatsAnd: 3\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
 			// Count WARNING
 			"Stats: ".$stateAttr." = 1\n" .
 			"Stats: acknowledged = 0\n" .
