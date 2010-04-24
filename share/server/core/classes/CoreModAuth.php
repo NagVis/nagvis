@@ -32,8 +32,15 @@ class CoreModAuth extends CoreModule {
 							
 							// Try to authenticate the user
 							if($this->AUTHENTICATION->isAuthenticated()) {
+								// When the user is already authenticated redirect to start page (overview)
+								$HANDLER = new CoreRequestHandler($_POST);
+								$ref = $HANDLER->getReferer();
+								if($ref === '') {
+									$ref = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
+								}
+								
 								// Display success with link and refresh in 5 seconds to called page
-								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'), null, null, 1, $ref);
 							} else {
 								// Invalid credentials
 								// FIXME: Count tries and maybe block somehow

@@ -97,11 +97,8 @@ class FrontendModLogonEnv extends FrontendModule {
 							
 							// Try to authenticate the user
 							if($this->AUTHENTICATION->isAuthenticated(AUTH_TRUST_USERNAME)) {
-								// Display success with link and refresh in 5 seconds to called page
-								$FHANDLER = new CoreRequestHandler($_POST);
-								
 								// Redirect without message to the user
-								//new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'), null, null, 1, $FHANDLER->getReferer());
+								$FHANDLER = new CoreRequestHandler($_POST);
 								$ref = $FHANDLER->getRequestUri();
 								if($ref === '') {
 									$ref = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
@@ -127,8 +124,15 @@ class FrontendModLogonEnv extends FrontendModule {
 							return false;
 						}
 					} else {
+						// Redirect without message to the user
+						$FHANDLER = new CoreRequestHandler($_POST);
+						$ref = $FHANDLER->getRequestUri();
+						if($ref === '') {
+							$ref = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
+						}
+						
 						// When the user is already authenticated redirect to start page (overview)
-						header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+						header('Location:'.$ref);
 					}
 				break;
 			}

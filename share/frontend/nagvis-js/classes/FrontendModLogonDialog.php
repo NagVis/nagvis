@@ -46,7 +46,12 @@ class FrontendModLogonDialog extends FrontendModule {
 						$sReturn = $VIEW->parse();
 					} else {
 						// When the user is already authenticated redirect to start page (overview)
-						Header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+						$FHANDLER = new CoreRequestHandler($_POST);
+						$ref = $FHANDLER->getRequestUri();
+						if($ref === '') {
+							$ref = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
+						}
+						Header('Location:'.$ref);
 					}
 				break;
 			}
