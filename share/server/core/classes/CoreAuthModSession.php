@@ -55,9 +55,7 @@ class CoreAuthModSession extends CoreAuthModule {
 			'passNewPassword' => true
 		);
 		
-		$this->SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
-		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
-		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
+		$this->SHANDLER = new CoreSessionHandler();
 	}
 	
 	private function initRealAuthModule() {

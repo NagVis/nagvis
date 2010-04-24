@@ -44,9 +44,7 @@ class GlobalLanguage {
 		$this->textDomain = $textDomain;
 		
 		if($this->CORE->getMainCfg() !== null) {
-			$this->SHANDLER = new CoreSessionHandler($this->CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
-		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
-		                                         $this->CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
+			$this->SHANDLER = new CoreSessionHandler();
 		}
 		
 		$this->sCurrentLanguage = $this->gatherCurrentLanguage();

@@ -54,9 +54,7 @@ try {
 	* Session: Handle the user session
 	*/
 
-	$SHANDLER = new CoreSessionHandler($CORE->getMainCfg()->getValue('global', 'sesscookiedomain'), 
-																		$CORE->getMainCfg()->getValue('global', 'sesscookiepath'),
-																		$CORE->getMainCfg()->getValue('global', 'sesscookieduration'));
+	$SHANDLER = new CoreSessionHandler();
 
 	/*
 	* Authentication 1: First try to use an existing session

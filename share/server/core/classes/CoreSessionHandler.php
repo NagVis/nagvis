@@ -45,7 +45,7 @@ class CoreSessionHandler {
 		}
 		
 		// Set custom params for the session cookie
-		session_set_cookie_params($iDuration, $sPath, $sDomain);
+		session_set_cookie_params(0, $sPath, $sDomain);
 		
 		// Start a session for the user when not started yet
 		if(!isset($_SESSION)) {
@@ -59,11 +59,12 @@ class CoreSessionHandler {
 		if(isset($_COOKIE[SESSION_NAME])) {
 			// Don't reset the expiration time on every page load - only reset when
 			// the half of the expiration time has passed
-			if(time() > $this->get('sessionExpires') - ($iDuration/2)) {
-				setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], time() + $iDuration, $sPath, $sDomain);
+			if(time() >= $this->get('sessionExpires') - ($iDuration/2)) {
+				$exp = time() + $iDuration;
+				setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain);
 				
 				// Store the update time of the session cookie
-				$this->set('sessionExpires', time()+$iDuration);
+				$this->set('sessionExpires', $exp);
 			}
 		}
 	}
