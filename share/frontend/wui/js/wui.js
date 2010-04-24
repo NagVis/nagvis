@@ -373,7 +373,6 @@ function saveObjectAfterResize(oObj) {
 
 function coordsToGrid(x, y) {
 	var gridMoveX = x - (x % oViewProperties.grid_steps);
-	y = y + getHeaderHeight();
 	var gridMoveY = y - (y % oViewProperties.grid_steps);
 	return [ gridMoveX, gridMoveY ];
 }
