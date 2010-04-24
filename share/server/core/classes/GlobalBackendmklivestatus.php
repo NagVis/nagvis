@@ -401,13 +401,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 *
 	 * @param   Array     List of objects to query
 	 * @param   Array     List of filters to apply
-	 * @param   Boolean   Separate the object filters by options
 	 * @return  String    Parsed filters
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function parseFilter($objects, $filters, $splitByOptions) {
+	private function parseFilter($objects, $filters) {
 		$aFilters = Array();
-		foreach($objects AS $obj) {
+		foreach($objects AS $OBJS) {
 			$objFilters = Array();
 			foreach($filters AS $filter) {
 				// Array('key' => 'host_name', 'operator' => '=', 'name'),
@@ -421,9 +420,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					case 'group_name':
 					case 'servicegroup_name':
 						if($filter['key'] != 'service_description')
-							$val = $obj['OBJS'][0]->getName();
+							$val = $OBJS[0]->getName();
 						else
-							$val = $obj['OBJS'][0]->getServiceDescription();
+							$val = $OBJS[0]->getServiceDescription();
 						
 						$objFilters[] = 'Filter: '.$filter['key'].' '.$filter['op'].' '.$val."\n";
 					break;
@@ -440,38 +439,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			else
 				$count = '';
 
-			// Split the objects by options if told to do
-			if($splitByOptions) {
-				if(!isset($aFilters[$obj['options']]))
-					$aFilters[$obj['options']] = Array();
-				
-				$aFilters[$obj['options']][] = implode($objFilters).$count;
-			} else
-				$aFilters[] = implode($objFilters).$count;
+			$aFilters[] = implode($objFilters).$count;
 		}
 
-		$aReturn = Array();
-		if($splitByOptions) {
-			foreach($aFilters AS $options => $filters) {
-				$count = count($filters); 
-				if($count > 1)
-					$count = 'Or: '.$count."\n";
-				else
-					$count = '';
-			
-				$aReturn[$options] = implode($filters).$count;
-			}
-		} else {
-			$count = count($aFilters); 
-			if($count > 1)
-				$count = 'Or: '.$count."\n";
-			else
-				$count = '';
-		
-			$aReturn[] = implode($aFilters).$count;
-		}
-		
-		return $aReturn;
+		$count = count($aFilters); 
+		if($count > 1)
+			$count = 'Or: '.$count."\n";
+		else
+			$count = '';
+	
+		return implode($aFilters).$count;
 	}
 	
 
@@ -485,16 +462,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Mathias Kettner <mk@mathias-kettner.de>
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostState($objects, $filters) {
-		$objFilter = $this->parseFilter($objects, $filters, false);
+	public function getHostState($objects, $options, $filters) {
+		$objFilter = $this->parseFilter($objects, $filters);
+		
+		if($options & 1)
+			$stateAttr = 'hard_state';
+		else
+			$stateAttr = 'state';
 
 		$q = "GET hosts\n".
-		  "Columns: hard_state plugin_output alias display_name ".
+		  "Columns: ".$stateAttr." plugin_output alias display_name ".
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "acknowledged scheduled_downtime_depth has_been_checked state name\n".
-		  $objFilter[0];
+		  "acknowledged scheduled_downtime_depth has_been_checked name\n".
+		  $objFilter;
 
 		$l = $this->queryLivestatus($q);
 
@@ -502,29 +484,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		if(is_array($l) && count($l) > 0) {
 			foreach($l as $e) {
-				// Handle host individual only_hard_states settings
-				if(!isset($objects[$e[19]])) {
-					// Find the fallback key (When filtering by e.g. hostgroup_name)
-					// FIXME: This is dirty - find another solution
-					$key = array_keys($objects);
-					$fallbackKey = $key[0];
-					
-					if($objects[$fallbackKey]['options']['filter_soft_states'] == 1)
-						$state = $e[0];
-					else
-						$state = $e[18];
-				} elseif($objects[$e[19]]['options']['filter_soft_states'] == 1)
-					$state = $e[0];
-				else
-					$state = $e[18];
+				$state = $e[0];
 				
 				// Catch pending objects
 				// $e[17]: has_been_checked
 				// $e[0]:  state
 				if($e[17] == 0 || $state === '') {
-					$arrReturn[$e[19]] = Array(
+					$arrReturn[$e[18]] = Array(
 						'state' =>  'PENDING',
-						'output' => GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[19]))
+						'output' => GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[18]))
 					);
 					continue;
 				}
@@ -577,7 +545,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					$d = $this->queryLivestatusSingleRow(
 						"GET downtimes\n".
 						"Columns: author comment start_time end_time\n" .
-						"Filter: host_name = ".$e[19]."\n");
+						"Filter: host_name = ".$e[18]."\n");
 					
 					$arrTmpReturn['downtime_author'] = $d[0];
 					$arrTmpReturn['downtime_data'] = $d[1];
@@ -585,7 +553,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					$arrTmpReturn['downtime_end'] = $d[3];
 				}
 		
-				$arrReturn[$e[19]] = $arrTmpReturn;
+				$arrReturn[$e[18]] = $arrTmpReturn;
 			}
 		}
 		
@@ -603,21 +571,25 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Mathias Kettner <mk@mathias-kettner.de>
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getServiceState($objects, $filters) {
-		$objFilter = $this->parseFilter($objects, $filters, false);
+	public function getServiceState($objects, $options, $filters) {
+		$objFilter = $this->parseFilter($objects, $filters);
+		
+		if($options & 1)
+			$stateAttr = 'last_hard_state';
+		else
+			$stateAttr = 'state';
 		
 		$l = $this->queryLivestatus(
 		  "GET services\n" .
-		  $objFilter[0].
-		  "Columns: description display_name last_hard_state ".
+		  $objFilter.
+		  "Columns: description display_name ".$stateAttr." ".
 		  "host_alias host_address plugin_output notes last_check next_check ".
 		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change perf_data scheduled_downtime_depth ".
 		  "acknowledged host_acknowledged host_scheduled_downtime_depth ".
-		  "has_been_checked state host_name\n");
+		  "has_been_checked host_name\n");
 
 		$arrReturn = Array();
-		
 		if(is_array($l) && count($l) > 0) {
 			foreach($l as $e) {
 				$arrTmpReturn = Array();
@@ -625,12 +597,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrTmpReturn['display_name'] = $e[1];
 				
 				// test for the correct key
-				if(isset($objects[$e[21].'~~'.$e[0]])) {
+				if(isset($objects[$e[20].'~~'.$e[0]])) {
 					$specific = true;
-					$key = $e[21].'~~'.$e[0];
+					$key = $e[20].'~~'.$e[0];
 				} else {
 					$specific = false;
-					$key = $e[21];
+					$key = $e[20];
 				}
 				
 				// Catch pending objects
@@ -640,22 +612,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					$arrTmpReturn['state'] = 'PENDING';
 					$arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
 				} else {
-				
-					// Handle host individual only_hard_states settings
-					if(!isset($objects[$e[19]])) {
-						// Find the fallback key (When filtering by e.g. hostgroup_name)
-						// FIXME: This is dirty - find another solution
-						$keys = array_keys($objects);
-						$fallbackKey = $keys[0];
-						
-						if($objects[$fallbackKey]['options']['filter_soft_states'] == 1)
-							$state = $e[2];
-						else
-							$state = $e[20];
-					} elseif($objects[$key]['options']['filter_soft_states'] == 1)
-						$state = $e[2];
-					else
-						$state = $e[20];
+					$state = $e[2];
 					
 					switch ($state) {
 						case "0": $state = "OK"; break;
@@ -694,14 +651,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 							$d = $this->queryLivestatusSingleRow(
 							  "GET downtimes\n".
 							  "Columns: author comment start_time end_time\n" .
-							  "Filter: host_name = ".$e[21]."\n" .
+							  "Filter: host_name = ".$e[20]."\n" .
 							  "Filter: service_description = ".$e[0]."\n");
 						} else {
 							// Host downtime
 							$d = $this->queryLivestatusSingleRow(
 							  "GET downtimes\n".
 							  "Columns: author comment start_time end_time\n" .
-							  "Filter: host_name = ".$e[21]."\n");
+							  "Filter: host_name = ".$e[20]."\n");
 						}
 						
 						$arrTmpReturn['downtime_author'] = $d[0];
@@ -747,126 +704,123 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * algorithm.
 	 *
 	 * @param   Array     List of objects to query
+	 * @param   Bitmask   This is a mask of options to use during the query
 	 * @param   Array     List of filters to apply
 	 * @return  Array     List of states and counts
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostStateCounts($objects, $filters) {
-		$objFilter = $this->parseFilter($objects, $filters, true);
+	public function getHostStateCounts($objects, $options, $filters) {
+		$objFilter = $this->parseFilter($objects, $filters);
 		
-		// Treat the different object options like "only_hard_states". If different
-		// options are requested, it is not efficient to make it with one single query.
+		if($options & 1)
+			$stateAttr = 'last_hard_state';
+		else
+			$stateAttr = 'state';
+	
+		// Get service information
+		$l = $this->queryLivestatus("GET services\n" .
+			$objFilter.
+			// Count PENDING
+			"Stats: has_been_checked = 0\n" .
+			// Count OK
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: has_been_checked != 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 4\n" .
+			// Count OK (DOWNTIME)
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: has_been_checked != 0\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 3\n" .
+			// Count WARNING
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count WARNING(ACK)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count WARNING(DOWNTIME)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count CRITICAL
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count CRITICAL(ACK)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count CRITICAL(DOWNTIME)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count UNKNOWN
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count UNKNOWN(ACK)
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count UNKNOWN(DOWNTIME)
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			"StatsGroupBy: host_name\n");
+	
 		$arrReturn = Array();
-		foreach($objFilter AS $option => $filter) {
-			if($option & 1)
-				$stateAttr = 'last_hard_state';
-			else
-				$stateAttr = 'state';
-		
-			// Get service information
-			$l = $this->queryLivestatus("GET services\n" .
-				$filter.
-				// Count PENDING
-				"Stats: has_been_checked = 0\n" .
-				// Count OK
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: has_been_checked != 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 4\n" .
-				// Count OK (DOWNTIME)
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: has_been_checked != 0\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 3\n" .
-				// Count WARNING
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count WARNING(ACK)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count WARNING(DOWNTIME)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count CRITICAL
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count CRITICAL(ACK)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count CRITICAL(DOWNTIME)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count UNKNOWN
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count UNKNOWN(ACK)
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count UNKNOWN(DOWNTIME)
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				"StatsGroupBy: host_name\n");
-		
-			if(is_array($l) && count($l) > 0) {
-				foreach($l as $e) {
-					$arrReturn[$e[0]] = Array(
-						'PENDING' => Array(
-							'normal' => $e[1],
-						),
-						'OK' => Array(
-							'normal' => $e[2],
-							'downtime' => $e[3],
-						),
-						'WARNING' => Array(
-							'normal' => $e[4],
-							'ack' => $e[5],
-							'downtime' => $e[6],
-						),
-						'CRITICAL' => Array(
-							'normal' => $e[7],
-							'ack' => $e[8],
-							'downtime' => $e[9],
-						),
-						'UNKNOWN' => Array(
-							'normal' => $e[10],
-							'ack' => $e[11],
-							'downtime' => $e[12],
-						),
-					);
-				}
+		if(is_array($l) && count($l) > 0) {
+			foreach($l as $e) {
+				$arrReturn[$e[0]] = Array(
+					'PENDING' => Array(
+						'normal' => $e[1],
+					),
+					'OK' => Array(
+						'normal' => $e[2],
+						'downtime' => $e[3],
+					),
+					'WARNING' => Array(
+						'normal' => $e[4],
+						'ack' => $e[5],
+						'downtime' => $e[6],
+					),
+					'CRITICAL' => Array(
+						'normal' => $e[7],
+						'ack' => $e[8],
+						'downtime' => $e[9],
+					),
+					'UNKNOWN' => Array(
+						'normal' => $e[10],
+						'ack' => $e[11],
+						'downtime' => $e[12],
+					),
+				);
 			}
 		}
 		
@@ -886,193 +840,184 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @return  Array     List of states and counts
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostgroupStateCounts($objects, $filters) {
-		$objFilter = $this->parseFilter($objects, $filters, true);
+	public function getHostgroupStateCounts($objects, $options, $filters) {
+		$objFilter = $this->parseFilter($objects, $filters);
 		
-		// Treat the different object options like "only_hard_states". If different
-		// options are requested, it is not efficient to make it with one single query.
-		$arrReturn = Array();
-		foreach($objFilter AS $option => $filter) {
-			if($option & 1)
-				$stateAttr = 'hard_state';
-			else
-				$stateAttr = 'state';
+		if($options & 1)
+			$stateAttr = 'hard_state';
+		else
+			$stateAttr = 'state';
 		
-			// Get host information
-			$l = $this->queryLivestatus("GET hostsbygroup\n" .
-				$filter.
-				// Count PENDING
-				"Stats: has_been_checked = 0\n" .
-				// Count UP
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: has_been_checked != 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 3\n" .
-				// Count UP (DOWNTIME)
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: has_been_checked != 0\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"StatsAnd: 3\n" .
-				// Count DOWN
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 3\n" .
-				// Count DOWN(ACK)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 1\n" .
-				"StatsAnd: 2\n" .
-				// Count DOWN(DOWNTIME)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"StatsAnd: 2\n" .
-				// Count UNREACHABLE
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 3\n" .
-				// Count UNREACHABLE(ACK)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 1\n" .
-				"StatsAnd: 2\n" .
-				// Count UNREACHABLE(DOWNTIME)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"StatsAnd: 2\n".
-				"StatsGroupBy: hostgroup_name\n");
-			
-			// If the method should fetch several objects and did not find
-			// any object, don't return anything => The message
-			// that the objects were not found is added by the core
-			if(is_array($l) && count($l) > 0) {
-				foreach($l as $e) {
-					$arrReturn[$e[0]] = Array(
-						'PENDING' => Array(
-							'normal'    => $e[1],
-						),
-						'UP' => Array(
-							'normal'    => $e[2],
-							'downtime'  => $e[3],
-						),
-						'DOWN' => Array(
-							'normal'    => $e[4],
-							'ack'       => $e[5],
-							'downtime'  => $e[6],
-						),
-						'UNREACHABLE' => Array(
-							'normal'    => $e[7],
-							'ack'       => $e[8],
-							'downtime'  => $e[9],
-						),
-					);
-				}
+		// Get host information
+		$l = $this->queryLivestatus("GET hostsbygroup\n" .
+			$objFilter.
+			// Count PENDING
+			"Stats: has_been_checked = 0\n" .
+			// Count UP
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: has_been_checked != 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 3\n" .
+			// Count UP (DOWNTIME)
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: has_been_checked != 0\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"StatsAnd: 3\n" .
+			// Count DOWN
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 3\n" .
+			// Count DOWN(ACK)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 1\n" .
+			"StatsAnd: 2\n" .
+			// Count DOWN(DOWNTIME)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"StatsAnd: 2\n" .
+			// Count UNREACHABLE
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 3\n" .
+			// Count UNREACHABLE(ACK)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 1\n" .
+			"StatsAnd: 2\n" .
+			// Count UNREACHABLE(DOWNTIME)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"StatsAnd: 2\n".
+			"StatsGroupBy: hostgroup_name\n");
+		
+		// If the method should fetch several objects and did not find
+		// any object, don't return anything => The message
+		// that the objects were not found is added by the core
+		if(is_array($l) && count($l) > 0) {
+			foreach($l as $e) {
+				$arrReturn[$e[0]] = Array(
+					'PENDING' => Array(
+						'normal'    => $e[1],
+					),
+					'UP' => Array(
+						'normal'    => $e[2],
+						'downtime'  => $e[3],
+					),
+					'DOWN' => Array(
+						'normal'    => $e[4],
+						'ack'       => $e[5],
+						'downtime'  => $e[6],
+					),
+					'UNREACHABLE' => Array(
+						'normal'    => $e[7],
+						'ack'       => $e[8],
+						'downtime'  => $e[9],
+					),
+				);
 			}
 		}
 		
-		// Treat the different object options like "only_hard_states". If different
-		// options are requested, it is not efficient to make it with one single query.
-		foreach($objFilter AS $option => $filter) {
-			if($option & 1)
-				$stateAttr = 'last_hard_state';
-			else
-				$stateAttr = 'state';
+		if($options & 1)
+			$stateAttr = 'last_hard_state';
+		else
+			$stateAttr = 'state';
+	
+		// Little hack to correct the different field names
+		$objFilter = str_replace(' groups ', ' host_groups ', $objFilter);
+	
+		// Get service information
+		$l = $this->queryLivestatus("GET servicesbyhostgroup\n" .
+			$objFilter.
+			// Count PENDING
+			"Stats: has_been_checked = 0\n" .
+			// Count OK
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: has_been_checked != 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 4\n" .
+			// Count OK (Downtime)
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsAnd: 3\n" .
+			// Count WARNING
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count WARNING(ACK)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count WARNING(DOWNTIME)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count CRITICAL
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count CRITICAL(ACK)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count CRITICAL(DOWNTIME)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count UNKNOWN
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count UNKNOWN(ACK)
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count UNKNOWN(DOWNTIME)
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n".
+			"StatsGroupBy: hostgroup_name\n");
 		
-			// Little hack to correct the different field names
-			$filter = str_replace(' groups ', ' host_groups ', $filter);
-		
-			// Get service information
-			$l = $this->queryLivestatus("GET servicesbyhostgroup\n" .
-				$filter.
-				// Count PENDING
-				"Stats: has_been_checked = 0\n" .
-				// Count OK
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: has_been_checked != 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 4\n" .
-				// Count OK (Downtime)
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsAnd: 3\n" .
-				// Count WARNING
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count WARNING(ACK)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count WARNING(DOWNTIME)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count CRITICAL
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count CRITICAL(ACK)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count CRITICAL(DOWNTIME)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count UNKNOWN
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count UNKNOWN(ACK)
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count UNKNOWN(DOWNTIME)
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n".
-				"StatsGroupBy: hostgroup_name\n");
-			
-			if(is_array($l) && count($l) > 0) {
-				foreach($l as $e) {
-					// Special operator for PENDING cause it is set by the hosts initial
-					// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
-					//        in NagVis. Otherwise pending hosts are counted as services.
-					$arrReturn[$e[0]]['PENDING']['normal'] += $e[1];
-					$arrReturn[$e[0]]['OK']['normal'] = $e[2];
-					$arrReturn[$e[0]]['OK']['downtime'] = $e[3];
-					$arrReturn[$e[0]]['WARNING']['normal'] = $e[4];
-					$arrReturn[$e[0]]['WARNING']['ack'] = $e[5];
-					$arrReturn[$e[0]]['WARNING']['downtime'] = $e[6];
-					$arrReturn[$e[0]]['CRITICAL']['normal'] = $e[7];
-					$arrReturn[$e[0]]['CRITICAL']['ack'] = $e[8];
-					$arrReturn[$e[0]]['CRITICAL']['downtime'] = $e[9];
-					$arrReturn[$e[0]]['UNKNOWN']['normal'] = $e[10];
-					$arrReturn[$e[0]]['UNKNOWN']['ack'] = $e[11];
-					$arrReturn[$e[0]]['UNKNOWN']['downtime'] = $e[12];
-				}
+		if(is_array($l) && count($l) > 0) {
+			foreach($l as $e) {
+				// Special operator for PENDING cause it is set by the hosts initial
+				// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
+				//        in NagVis. Otherwise pending hosts are counted as services.
+				$arrReturn[$e[0]]['PENDING']['normal'] += $e[1];
+				$arrReturn[$e[0]]['OK']['normal'] = $e[2];
+				$arrReturn[$e[0]]['OK']['downtime'] = $e[3];
+				$arrReturn[$e[0]]['WARNING']['normal'] = $e[4];
+				$arrReturn[$e[0]]['WARNING']['ack'] = $e[5];
+				$arrReturn[$e[0]]['WARNING']['downtime'] = $e[6];
+				$arrReturn[$e[0]]['CRITICAL']['normal'] = $e[7];
+				$arrReturn[$e[0]]['CRITICAL']['ack'] = $e[8];
+				$arrReturn[$e[0]]['CRITICAL']['downtime'] = $e[9];
+				$arrReturn[$e[0]]['UNKNOWN']['normal'] = $e[10];
+				$arrReturn[$e[0]]['UNKNOWN']['ack'] = $e[11];
+				$arrReturn[$e[0]]['UNKNOWN']['downtime'] = $e[12];
 			}
 		}
 		
@@ -1092,124 +1037,119 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @return  Array     List of states and counts
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getServicegroupStateCounts($objects, $filters) {
-		$arrReturn = Array();
-		$objFilter = $this->parseFilter($objects, $filters, true);
+	public function getServicegroupStateCounts($objects, $options, $filters) {
+		$objFilter = $this->parseFilter($objects, $filters);
 		
-		// Treat the different object options like "only_hard_states". If different
-		// options are requested, it is not efficient to make it with one single query.
-		$arrReturn = Array();
-		foreach($objFilter AS $option => $filter) {
-			if($option & 1)
-				$stateAttr = 'last_hard_state';
-			else
-				$stateAttr = 'state';
+		if($options & 1)
+			$stateAttr = 'last_hard_state';
+		else
+			$stateAttr = 'state';
+	
+		// Get service information
+		$l = $this->queryLivestatus("GET servicesbygroup\n" .
+			$objFilter.
+			// Count PENDING
+			"Stats: has_been_checked = 0\n" .
+			// Count OK
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: has_been_checked != 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 4\n" .
+			// Count OK (Downtime)
+			"Stats: ".$stateAttr." = 0\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsAnd: 3\n" .
+			// Count WARNING
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count WARNING(ACK)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count WARNING(DOWNTIME)
+			"Stats: ".$stateAttr." = 1\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count CRITICAL
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count CRITICAL(ACK)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count CRITICAL(DOWNTIME)
+			"Stats: ".$stateAttr." = 2\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count UNKNOWN
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: acknowledged = 0\n" .
+			"Stats: host_acknowledged = 0\n" .
+			"Stats: scheduled_downtime_depth = 0\n" .
+			"Stats: host_scheduled_downtime_depth = 0\n" .
+			"StatsAnd: 5\n" .
+			// Count UNKNOWN(ACK)
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: acknowledged = 1\n" .
+			"Stats: host_acknowledged = 1\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n" .
+			// Count UNKNOWN(DOWNTIME)
+			"Stats: ".$stateAttr." = 3\n" .
+			"Stats: scheduled_downtime_depth > 0\n" .
+			"Stats: host_scheduled_downtime_depth > 0\n" .
+			"StatsOr: 2\n" .
+			"StatsAnd: 2\n".
+			"StatsGroupBy: servicegroup_name\n");
 		
-			// Get service information
-			$l = $this->queryLivestatus("GET servicesbygroup\n" .
-				$filter.
-				// Count PENDING
-				"Stats: has_been_checked = 0\n" .
-				// Count OK
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: has_been_checked != 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 4\n" .
-				// Count OK (Downtime)
-				"Stats: ".$stateAttr." = 0\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsAnd: 3\n" .
-				// Count WARNING
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count WARNING(ACK)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count WARNING(DOWNTIME)
-				"Stats: ".$stateAttr." = 1\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count CRITICAL
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count CRITICAL(ACK)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count CRITICAL(DOWNTIME)
-				"Stats: ".$stateAttr." = 2\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count UNKNOWN
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: acknowledged = 0\n" .
-				"Stats: host_acknowledged = 0\n" .
-				"Stats: scheduled_downtime_depth = 0\n" .
-				"Stats: host_scheduled_downtime_depth = 0\n" .
-				"StatsAnd: 5\n" .
-				// Count UNKNOWN(ACK)
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: acknowledged = 1\n" .
-				"Stats: host_acknowledged = 1\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n" .
-				// Count UNKNOWN(DOWNTIME)
-				"Stats: ".$stateAttr." = 3\n" .
-				"Stats: scheduled_downtime_depth > 0\n" .
-				"Stats: host_scheduled_downtime_depth > 0\n" .
-				"StatsOr: 2\n" .
-				"StatsAnd: 2\n".
-				"StatsGroupBy: servicegroup_name\n");
-			
-			// If the method should fetch several objects and did not find
-			// any object, don't return anything => The message
-			// that the objects were not found is added by the core
-			if(is_array($l) && count($l) > 0) {
-				foreach($l as $e) {
-					$arrReturn[$e[0]] = Array(
-						'PENDING' => Array(
-							'normal'    => $e[1],
-						),
-						'OK' => Array(
-							'normal'    => $e[2],
-							'downtime'  => $e[3],
-						),
-						'WARNING' => Array(
-							'normal'    => $e[4],
-							'ack'       => $e[5],
-							'downtime'  => $e[6],
-						),
-						'CRITICAL' => Array(
-							'normal'    => $e[7],
-							'ack'       => $e[8],
-							'downtime'  => $e[9],
-						),
-						'UNKNOWN' => Array(
-							'normal'    => $e[10],
-							'ack'       => $e[11],
-							'downtime'  => $e[12],
-						),
-					);
-				}
+		// If the method should fetch several objects and did not find
+		// any object, don't return anything => The message
+		// that the objects were not found is added by the core
+		$arrReturn = Array();
+		if(is_array($l) && count($l) > 0) {
+			foreach($l as $e) {
+				$arrReturn[$e[0]] = Array(
+					'PENDING' => Array(
+						'normal'    => $e[1],
+					),
+					'OK' => Array(
+						'normal'    => $e[2],
+						'downtime'  => $e[3],
+					),
+					'WARNING' => Array(
+						'normal'    => $e[4],
+						'ack'       => $e[5],
+						'downtime'  => $e[6],
+					),
+					'CRITICAL' => Array(
+						'normal'    => $e[7],
+						'ack'       => $e[8],
+						'downtime'  => $e[9],
+					),
+					'UNKNOWN' => Array(
+						'normal'    => $e[10],
+						'ack'       => $e[11],
+						'downtime'  => $e[12],
+					),
+				);
 			}
 		}
 		

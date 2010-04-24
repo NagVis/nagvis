@@ -408,12 +408,14 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 *
 	 * @param   Array     List of objects to query
 	 * @param   Array     List of filters to apply
+	 * @param   String    Table to use for filtering
+   * @param   Boolean   Split the filter by options
 	 * @return  String    Parsed filters
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function parseFilter($objects, $filters, $table) {
 		$aFilters = Array();
-		foreach($objects AS $obj) {
+		foreach($objects AS $OBJS) {
 			$objFilters = Array();
 			foreach($filters AS $filter) {
 				// Array('key' => 'host_name', 'operator' => '=', 'name'),
@@ -427,9 +429,9 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 					case 'servicegroup_name':
 					case 'service_description':
 						if($filter['key'] != 'service_description')
-							$val = $obj['OBJS'][0]->getName();
+							$val = $OBJS[0]->getName();
 						else
-							$val = $obj['OBJS'][0]->getServiceDescription();
+							$val = $OBJS[0]->getServiceDescription();
 						
 						// Translate field names
 						if($filter['key'] == 'service_description')
@@ -502,7 +504,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostState($objects, $filters) {
+	public function getHostState($objects, $options, $filters) {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -568,13 +570,11 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				*
 				* Thanks to Andurin and fredy82
 				*/
-			if($objects[$data['name1']]['options']['filter_soft_states'] == 1) {
-				if($data['state_type'] != '0') {
+			if($options & 1)
+				if($data['state_type'] != '0')
 					$data['current_state'] = $data['current_state'];
-				} else {
+				else
 					$data['current_state'] = $data['last_hard_state'];
-				}
-			}
 			
 			if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 				$arrTmpReturn['state'] = 'PENDING';
@@ -626,7 +626,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getServiceState($objects, $filters) {
+	public function getServiceState($objects, $options, $filters) {
 		$arrReturn = Array();
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
@@ -701,13 +701,11 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				*
 				* Thanks to Andurin and fredy82
 				*/
-			if($objects[$key]['options']['filter_soft_states'] == 1) {
-				if($data['state_type'] != '0') {
+			if($options & 1)
+				if($data['state_type'] != '0')
 					$data['current_state'] = $data['current_state'];
-				} else {
+				else
 					$data['current_state'] = $data['last_hard_state'];
-				}
-			}
 			
 			if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
 				$arrTmpReturn['state'] = 'PENDING';
@@ -774,24 +772,26 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @return  Array     List of states and counts
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getHostStateCounts($objects, $filters) {
-		$arrReturn = Array();
+	public function getHostStateCounts($objects, $options, $filters) {
+		if($options & 1)
+			$stateAttr = 'last_hard_state';
+		else
+			$stateAttr = 'current_state';
 		
-		// FIXME: only hard state handling missing at the moment
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 			o.name1,
 			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
-			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS ok,
-			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS warning,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS critical,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unknown,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS ok,
+			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS warning,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS critical,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
 			FROM 
 				'.$this->dbPrefix.'hoststatus AS hs,
 				'.$this->dbPrefix.'services AS s,
@@ -807,6 +807,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				AND (hs.host_object_id=h.host_object_id) 
 				GROUP BY h.host_object_id');
 
+		$arrReturn = Array();
 		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			$arrReturn[$data['name1']] = Array(
 				'PENDING' => Array(
@@ -840,23 +841,26 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		return $arrReturn;
 	}
 
-	public function getHostgroupStateCounts($objects, $filters) {
+	public function getHostgroupStateCounts($objects, $options, $filters) {
+		if($options & 1)
+			$stateAttr = 'last_hard_state';
+		else
+			$stateAttr = 'current_state';
 		
-		// FIXME: only hard state handling missing at the moment
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 			o.name1,
 			SUM(IF(hs.has_been_checked=0,1,0)) AS pending,
-			SUM(IF((hs.current_state=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS up,
-			SUM(IF((hs.current_state=0 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS up_downtime,
-			SUM(IF((hs.current_state=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS down,
-			SUM(IF((hs.current_state=1 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS down_downtime,
-			SUM(IF((hs.current_state=1 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS down_ack,
-			SUM(IF((hs.current_state=2 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unreachable,
-			SUM(IF((hs.current_state=2 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unreachable_downtime,
-			SUM(IF((hs.current_state=2 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unreachable_ack,
-			SUM(IF((hs.current_state=3 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unknown,
-			SUM(IF((hs.current_state=3 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
-			SUM(IF((hs.current_state=3 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			SUM(IF((hs.'.$stateAttr.'=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS up,
+			SUM(IF((hs.'.$stateAttr.'=0 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS up_downtime,
+			SUM(IF((hs.'.$stateAttr.'=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS down,
+			SUM(IF((hs.'.$stateAttr.'=1 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS down_downtime,
+			SUM(IF((hs.'.$stateAttr.'=1 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS down_ack,
+			SUM(IF((hs.'.$stateAttr.'=2 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unreachable,
+			SUM(IF((hs.'.$stateAttr.'=2 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unreachable_downtime,
+			SUM(IF((hs.'.$stateAttr.'=2 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unreachable_ack,
+			SUM(IF((hs.'.$stateAttr.'=3 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((hs.'.$stateAttr.'=3 AND hs.has_been_checked!=0 AND (hs.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((hs.'.$stateAttr.'=3 AND hs.has_been_checked!=0 AND (hs.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
 			FROM 
 				'.$this->dbPrefix.'objects AS o,
 				'.$this->dbPrefix.'hostgroups AS hg,
@@ -866,7 +870,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	     '.$this->dbPrefix.'hoststatus AS hs
 		    ON hs.host_object_id=o2.object_id
 			WHERE 
-				(o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.') 
+				(o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o', false).') AND o.instance_id='.$this->dbInstanceId.') 
 				AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
 				AND hgm.hostgroup_id=hg.hostgroup_id 
 				AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
@@ -895,21 +899,20 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			);
 		}
 		
-		// FIXME: only hard state handling missing at the moment
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 			o.name1,
 			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
-			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS ok,
-			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS warning,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS critical,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS unknown,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS ok,
+			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS warning,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS critical,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
 			FROM 
 				'.$this->dbPrefix.'objects AS o,
 				'.$this->dbPrefix.'hostgroups AS hg,
@@ -920,7 +923,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				'.$this->dbPrefix.'servicestatus AS ss
 				ON ss.service_object_id=o2.object_id
 			WHERE 
-				(o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.') 
+				(o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o', false).') AND o.instance_id='.$this->dbInstanceId.') 
 				AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id) 
 				AND hgm.hostgroup_id=hg.hostgroup_id 
 				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.host_object_id=hgm.host_object_id)
@@ -951,22 +954,26 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		return $arrReturn;
 	}
 	
-	public function getServicegroupStateCounts($objects, $filters) {
-		// FIXME: only hard state handling missing at the moment
+	public function getServicegroupStateCounts($objects, $options, $filters) {
+		if($options & 1)
+			$stateAttr = 'last_hard_state';
+		else
+			$stateAttr = 'current_state';
+		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 			o.name1,
 			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
-			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS ok,
-			SUM(IF((ss.current_state=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS warning,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
-			SUM(IF((ss.current_state=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS critical,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
-			SUM(IF((ss.current_state=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS unknown,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
-			SUM(IF((ss.current_state=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
+			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS ok,
+			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS warning,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS critical,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR ss.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR ss.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
 			FROM 
 				'.$this->dbPrefix.'objects AS o,
 				'.$this->dbPrefix.'servicegroups AS sg,
@@ -977,7 +984,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				'.$this->dbPrefix.'servicestatus AS ss
 				ON ss.service_object_id=o2.object_id
 			WHERE 
-				(o.objecttype_id=4 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.') 
+				(o.objecttype_id=4 AND ('.$this->parseFilter($objects, $filters, 'o', false).') AND o.instance_id='.$this->dbInstanceId.') 
 				AND (sg.config_type='.$this->objConfigType.' AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id) 
 				AND sgm.servicegroup_id=sg.servicegroup_id 
 				AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=sgm.service_object_id)

@@ -595,11 +595,12 @@ class NagiosHost extends NagVisStatefulObject {
 			$sType = 'downtime';
 		}
 		
-		if(!isset($this->aStateCounts[$sState])) {
+		if(!isset($this->aStateCounts[$sState]))
 			$this->aStateCounts[$sState] = Array($sType => 1);
-		} else {
+		elseif(!isset($this->aStateCounts[$sState][$sType]))
+			$this->aStateCounts[$sState][$sType] = 1;
+		else
 			$this->aStateCounts[$sState][$sType] += 1;
-		}
 	}
 
 	/**

@@ -45,31 +45,31 @@ interface GlobalBackendInterface {
 	 * Returns the state with detailed information of a list of hosts. Using the
 	 * given objects and filters.
 	 */
-	public function getHostState($objects, $filters);
+	public function getHostState($objects, $options, $filters);
 	
 	/**
 	 * Returns the state with detailed information of a list of services. Using
 	 * the given objects and filters.
 	 */
-	public function getServiceState($objects, $filters);
+	public function getServiceState($objects, $options, $filters);
 	
 	/**
 	 * Returns the service state counts for a list of hosts. Using
 	 * the given objects and filters.
 	 */
-	public function getHostStateCounts($objects, $filters);
+	public function getHostStateCounts($objects, $options, $filters);
 	
 	/**
 	 * Returns the host and service state counts for a list of hostgroups. Using
 	 * the given objects and filters.
 	 */
-	public function getHostgroupStateCounts($objects, $filters);
+	public function getHostgroupStateCounts($objects, $options, $filters);
 	
 	/**
 	 * Returns the service state counts for a list of servicegroups. Using
 	 * the given objects and filters.
 	 */
-	public function getServicegroupStateCounts($objects, $filters);
+	public function getServicegroupStateCounts($objects, $options, $filters);
 	
 	/**
 	 * Returns a list of host names which have no parent defined.

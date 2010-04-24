@@ -291,7 +291,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		return $return;
 	}
 
-	public function getHostState($query, $filters) {
+	public function getHostState($query, $options, $filters) {
 	}
 	
 	/**
@@ -418,7 +418,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		}
 	}
 	
-	public function getServiceState($query, $filters) {
+	public function getServiceState($query, $options, $filters) {
 	}
 	
 	/**
@@ -567,9 +567,9 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 		}
 	}
 
-	public function getHostStateCounts($query, $filters) {}
-	public function getHostgroupStateCounts($query, $filters) {}
-	public function getServicegroupStateCounts($query, $filters) {}
+	public function getHostStateCounts($query, $options, $filters) {}
+	public function getHostgroupStateCounts($query, $options, $filters) {}
+	public function getServicegroupStateCounts($query, $options, $filters) {}
 	public function getDirectParentNamesByHostName($hostName) {}
 	
 	/**
