@@ -894,6 +894,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// If the method should fetch several objects and did not find
 		// any object, don't return anything => The message
 		// that the objects were not found is added by the core
+		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
 			foreach($l as $e) {
 				$arrReturn[$e[0]] = Array(
