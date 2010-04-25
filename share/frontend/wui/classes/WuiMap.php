@@ -654,7 +654,7 @@ class WuiMap extends GlobalMap {
 		}
 		
 		// Show clone link only for icons
-		if(isset($obj['view_type']) && $obj['view_type'] == 'icon') {
+		if((isset($obj['view_type']) && $obj['view_type'] == 'icon') || $obj['type'] == 'shape') {
 			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/clone.png)'"
 						." href=\"javascript:objid=".$obj['id'].";get_click('".$obj['type']."', 1, 'clone');\" onclick=\"contextHide();\">"
 						."<span>".$this->CORE->getLang()->getText('Clone')."</span></a></li>";
