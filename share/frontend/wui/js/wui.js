@@ -378,11 +378,13 @@ function coordsToGrid(x, y) {
 }
 
 function saveObjectAfterMoveAndDrop(oObj) {
+	var borderWidth = 3;
+	
 	// Reset z-index to configured value
 	oObj.setZ(oObj.defz);
 	
 	// When x or y are negative just return this and make no change
-	if((oObj.y - getHeaderHeight()) < 0 || oObj.x < 0) {
+	if((oObj.y - getHeaderHeight() + borderWidth) < 0 || oObj.x < 0) {
 		oObj.moveTo(oObj.oldX, oObj.oldY);
 		return;
 	}
@@ -394,8 +396,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	
 	// When a grid is enabled align the dragged object in the nearest grid
 	if(oViewProperties.grid_show === 1) {
-		var coords = coordsToGrid(oObj.x, oObj.y);
-		oObj.moveTo(coords[0], coords[1]);
+		var coords = coordsToGrid(oObj.x + borderWidth, oObj.y - getHeaderHeight() + borderWidth);
+		oObj.moveTo(coords[0] - borderWidth, coords[1] + getHeaderHeight() - borderWidth);
 	}
 	
 	// Split id to get object information
@@ -411,7 +413,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		
 		// Handle relative and absolute aligned labels
 		if(align === 'rel') {
-			// Calculate relative coordinates
+		// Calculate relative coordinates
 			var objX = parseInt(document.getElementById('box_'+type+'_'+id).style.left.replace('px', ''));
 			var objY = parseInt(document.getElementById('box_'+type+'_'+id).style.top.replace('px', ''));
 			
