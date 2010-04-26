@@ -108,11 +108,8 @@ class NagVisHeaderMenu {
 		$this->aMacros['bRotation'] = $this->bRotation;
 		
 		// Check if the user is permitted to edit the current map/automap
-		if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'))) {
-			$this->aMacros['permittedEdit'] = true;
-		} else {
-			$this->aMacros['permittedEdit'] = false;
-		}
+		$this->aMacros['permittedView'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
+		$this->aMacros['permittedEdit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
 		
 		$this->aMacros['currentUser'] = $this->AUTHORISATION->getAuthentication()->getUser();
 		
@@ -309,6 +306,7 @@ class NagVisHeaderMenu {
 			'langStateless' => $this->CORE->getLang()->getText('Stateless'),
 			'langSpecial' => $this->CORE->getLang()->getText('special'),
 			'langEditMap' => $this->CORE->getLang()->getText('editMap'),
+			'langViewMap' => $this->CORE->getLang()->getText('View current map'),
 			'langOptions' => $this->CORE->getLang()->getText('Options'),
 			'langWuiConfiguration' => $this->CORE->getLang()->getText('General Configuration'),
 			'langMgmtBackends' => $this->CORE->getLang()->getText('Manage Backends'),
