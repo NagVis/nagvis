@@ -783,13 +783,13 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
 			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS ok,
 			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
-			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS warning,
+			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0),1,0)) AS warning,
 			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS warning_downtime,
 			SUM(IF((ss.'.$stateAttr.'=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS warning_ack,
-			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS critical,
+			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0) AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0,1,0)) AS critical,
 			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS critical_downtime,
 			SUM(IF((ss.'.$stateAttr.'=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS critical_ack,
-			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS unknown,
+			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0),1,0)) AS unknown,
 			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS unknown_downtime,
 			SUM(IF((ss.'.$stateAttr.'=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)),1,0)) AS unknown_ack
 			FROM 
