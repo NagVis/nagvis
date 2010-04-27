@@ -35,36 +35,16 @@ body, table, th, td {
 	font-size: 12pt;
 }
 
-table {width:100%;}
-
-div {
-	margin: 0;
-	padding: 0;
-}
-
-img {
-    border: 0
-}
+table {width:100%}
+div {margin:0;padding:0}
+img {border:0}
 
 /* Global DIVs */
-.main {
-	margin: 0;
-	padding: 0;
-	background-color: white;
-	color: black;
-}
-
-.header {
-	top: 0;
-	left: 0;
-	padding: 0;
-}
-
-.map {
-	position : relative;
-	top: 0;
-	left: 0;
-}
+.main {margin:0;padding:0;background-color:white;color:black}
+.header {top:0;left:0;padding:0}
+.map {position:relative;top:0;left:0}
+#overDiv {position:absolute;visibility:hidden;z-index:1000;width:auto}
+#overDiv table {width:auto}
 
 /* Welcome page */
 div.welcome {padding:20px;width:600px}
@@ -74,13 +54,8 @@ div.welcome a,div.welcome a:active,div.welcome a:visited {color:#43B3CF}
 div.welcome a:hover {color:#779D2A}
 
 /* Automap */
-#automap {
-	z-index: 100;
-}
-
-#automap shape {
-	z-index: 100;
-}
+#automap {z-index:100}
+#automap shape {z-index:100}
 
 /* Message-Box */
 .messageBox {
@@ -146,24 +121,6 @@ div.welcome a:hover {color:#779D2A}
 	padding: 2px;
 }
 
-/* Ajax hover template styles */
-table.ajax_hover_table {
-	border-collapse:collapse;
-}
-
-table.ajax_hover_table td, table.ajax_hover_table th {
-	border: 1px #a4a4a4 solid;
-	padding: 2px;
-	
-	font-size: 9px;
-	color: #314455;
-}
-
-table.ajax_hover_table th {
-	text-align: center;
-	background-color: #eee;
-}
-
 /* Style on info pages (index.php?info, index.php) */
 div.infopage table {
 	margin: auto;
@@ -221,34 +178,6 @@ div.infopage a:hover {
 	opacity: .5;
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	filter:alpha(opacity=50);
-}
-
-table.infopage_hover_table {
-	width: 250px;
-	background-color: #F5F5F5;
-	border-collapse:collapse;
-}
-
-table.infopage_hover_table td, table.infopage_hover_table th {
-	border: 1px #a4a4a4 solid;
-	padding: 2px;
-	
-	font-size: 12px;
-	color: #314455;
-}
-
-table.infopage_hover_table th {
-	text-align: center;
-	background-color: #eee;
-}
-
-table.infopage_hover_table td.label {
-	text-align: center;
-	background-color: #eee;
-}
-
-table.infopage_hover_table label {
-	font-weight: bold;
 }
 
 /**
