@@ -476,9 +476,18 @@ function deleteMapObject(objId) {
 			return false;
 		}
 		oResult = null;
-		
-		// Remove the object from the map
-		document.getElementById('mymap').removeChild(document.getElementById(objId));
+
+		// Remove the object with all childs and other containers from the map
+		var oMap = document.getElementById('mymap');
+		var ids = [ objId, 'icon_'+type+'_'+id+'-context', 'rel_label_'+type+'_'+id, 'abs_label_'+type+'_'+id ];
+		for(var i in ids) {
+			var o = document.getElementById(ids[i])
+			if(o) {
+				oMap.removeChild(o);
+				o = null;
+			}
+		}
+		oMap = null;
 		
 		return true;
 	} else {
