@@ -606,28 +606,27 @@ class NagVisAutoMap extends GlobalMap {
 	private function checkGraphviz($binary, $printErr) {
 		/**
 		 * Check if the graphviz binaries can be found in the PATH or in the 
-		 * configured path
+		 * configured path. Prefer the configured path.
 		 */
-		// Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
-		exec('which '.$binary.' 2>&1', $arrReturn, $returnCode1);
+		$bFound = false;
+		foreach(Array($this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary, $binary) AS $path) {
+			// Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
+			exec('which '.$binary.' 2>/dev/null', $arrReturn, $exitCode);
 		
-		if(!$returnCode1) {
-			$this->CORE->getMainCfg()->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
+			if($exitCode == 0) {
+				$this->CORE->getMainCfg()->setValue('automap','graphvizpath', str_replace($binary, '', $arrReturn[0]));
+				$bFound = true;
+				break;
+			}
 		}
 		
-		exec('which '.$this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary. ' 2>&1', $arrReturn, $returnCode2);
-		
-		if(!$returnCode2) {
-			$this->CORE->getMainCfg()->setValue('automap','graphvizpath',str_replace($binary,'',$arrReturn[0]));
-		}
-		
-		if($returnCode1 & $returnCode2) {
+		if(!$bFound) {
 			if($printErr) {
 				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->CORE->getMainCfg()->getvalue('automap','graphvizpath')));
 			}
-			return FALSE;
+			return false;
 		} else {
-			return TRUE;
+			return true;
 		}
 	}
 	
