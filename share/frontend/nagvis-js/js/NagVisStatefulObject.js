@@ -694,10 +694,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var oLabelDiv;
 		
 		// If there is a presign it should be relative to the objects x/y
-		if(this.conf.label_x.toString().match(/^(?:\+|\-)/)) {
+		if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/)) {
 			this.conf.label_x = parseFloat(this.conf.x) + parseFloat(this.conf.label_x);
 		}
-		if(this.conf.label_y.toString().match(/^(?:\+|\-)/)) {
+		if(this.conf.label_y && this.conf.label_y.toString().match(/^(?:\+|\-)/)) {
 			this.conf.label_y = parseFloat(this.conf.y) + parseFloat(this.conf.label_y);
 		}
 		
