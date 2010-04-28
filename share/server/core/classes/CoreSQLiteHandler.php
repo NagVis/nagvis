@@ -106,7 +106,6 @@ class CoreSQLiteHandler {
 			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t delete '.$mod.' permissions '.$name);
 		}
 	}
-		
 	
 	public function createMapPermissions($name) {
 		// Only create when not existing
@@ -184,8 +183,7 @@ class CoreSQLiteHandler {
 	private function updateDb15b4() {
 		if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Performing update to 1.5b4 scheme');
 		
-		$this->DB->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
-		$this->DB->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
+		$this->createVersionTable();
 
 		// Add addModify permission
 		$RES = $this->DB->query('SELECT obj FROM perms WHERE mod=\'Map\' AND act=\'view\'');
@@ -201,6 +199,11 @@ class CoreSQLiteHandler {
 			$this->addRolePerm($data['roleId'], 'Map', 'addModify', '*');
 		}
 	}
+
+	private function createVersionTable() {
+		$this->DB->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
+		$this->DB->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
+	}
 	
 	public function createInitialDb() {
 		$this->DB->query('CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))');
@@ -208,6 +211,8 @@ class CoreSQLiteHandler {
 		$this->DB->query('CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId), UNIQUE(mod,act,obj))');
 		$this->DB->query('CREATE TABLE users2roles (userId INTEGER, roleId INTEGER, PRIMARY KEY(userId, roleId))');
 		$this->DB->query('CREATE TABLE roles2perms (roleId INTEGER, permId INTEGER, PRIMARY KEY(roleId, permId))');
+
+		$this->createVersionTable();
 		
 		$this->DB->query('INSERT INTO users (userId, name, password) VALUES (1, \'nagiosadmin\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
 		$this->DB->query('INSERT INTO users (userId, name, password) VALUES (2, \'guest\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
