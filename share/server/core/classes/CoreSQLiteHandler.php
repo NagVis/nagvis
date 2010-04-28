@@ -173,6 +173,34 @@ class CoreSQLiteHandler {
 	private function addRolePerm($roleId, $mod, $act, $obj) {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE mod=\''.$mod.'\' AND act=\''.$act.'\' AND obj=\''.$obj.'\'))');
 	}
+
+	public function updateDb() {
+		if(!$this->tableExist('version')) {
+			// Perform pre b4 updates
+			$this->updateDb15b4();
+		}
+	}
+
+	private function updateDb15b4() {
+		if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Performing update to 1.5b4 scheme');
+		
+		$this->DB->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
+		$this->DB->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
+
+		// Add addModify permission
+		$RES = $this->DB->query('SELECT obj FROM perms WHERE mod=\'Map\' AND act=\'view\'');
+		while($data = $this->fetchAssoc($RES)) {
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Adding new addModify perms for map '.$data['obj']);
+			$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'addModify\', '.$this->escape($data['obj']).')');
+		}
+
+		// Assign the addModify permission to the managers
+		$RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
+		while($data = $this->fetchAssoc($RES)) {
+			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Assigning addModify perms to Managers role');
+			$this->addRolePerm($data['roleId'], 'Map', 'addModify', '*');
+		}
+	}
 	
 	public function createInitialDb() {
 		$this->DB->query('CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))');
