@@ -239,7 +239,7 @@ class GlobalMainCfg {
 				'hovertimeout' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '5',
-					'deprecated' => '1',
+					'deprecated' => 1,
 					'match' => MATCH_INTEGER),
 				'hoverdelay' => Array('must' => 0,
 					'editable' => 1,

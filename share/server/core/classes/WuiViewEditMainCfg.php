@@ -83,6 +83,10 @@ class WuiViewEditMainCfg {
 					$class = '';
 					$style = '';
 					$isDefaultValue = false;
+
+					// Skip deprecated options
+					if(isset($prop['deprecated']) && $prop['deprecated'] == 1)
+						continue;
 					
 					// Set field type to show
 					$fieldType = 'text';
@@ -92,7 +96,6 @@ class WuiViewEditMainCfg {
 					
 					// Don't show anything for hidden options
 					if($fieldType !== 'hidden') {
-						
 						// Only get the really set value
 						$val2 = $this->CORE->getMainCfg()->getValue($cat, $propname, true);
 						
