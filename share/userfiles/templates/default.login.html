@@ -13,7 +13,20 @@
 	<link rel="shortcut icon" href="{$htmlBase}frontend/nagvis-js/images/internal/favicon.png" />
 	<meta name='robots' content='noindex,nofollow' />
 	<script type="text/javascript">
-		oGeneralProperties = {$generalProperties};
+	oGeneralProperties = {$generalProperties};
+
+	function checkCookies() {
+		// Would rather use navigator.cookieEnabled but this is not very reliable
+		document.cookie = "_testcookie";
+		var iLikeCookies = (document.cookie.indexOf("_testcookie") != -1) ? true : false;
+
+		if(!iLikeCookies)
+			frontendMessage(\{'type': 'CRITICAL', 'message': '{$langTextCookiesDisabled}', 'title': '{$langTitleCookiesDisabled}'});
+		else \{
+			var d = new Date();
+			document.cookie = "_testcookie;expires=" + d.toGMTString() + ";" + ";";
+		}
+	}
 	</script>
 </head>
 <body class="login">
@@ -38,7 +51,7 @@
 </div>
 
 <script type="text/javascript">
-try\{document.getElementById('user_login').focus();}catch(e)\{}
+try\{document.getElementById('user_login').focus();}catch(e)\{}; checkCookies();
 </script>
 </body>
 </html>
