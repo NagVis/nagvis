@@ -2,12 +2,12 @@
 NagVis 1.5 Readme
 ==============================================================================
 Author: Lars Michelsen
-Date: 2009-06-28
+Date: 2010-05-01
 ==============================================================================
 
 README
 ------------------
-Documentation: http://www.nagvis.org/doc
+Home of the official documentation: http://www.nagvis.org/doc
 
 INSTALL
 ------------------
@@ -17,7 +17,11 @@ documentation on the official NagVis Homepage (http://www.nagvis.org/doc).
 SUPPORT
 ------------------
 There are many ways to get in touch with the NagVis team/community. For a
-detailed list just have a look at http://www.nagvis.org/contact.
+detailed list just have a look at http://www.nagvis.org/support.
+
+Besides the free community support it is also possible to get paid services
+for NagVis. We offer different types of services like for example custom 
+developement and support contracts.
 
 BUGS
 ------------------
