@@ -187,13 +187,11 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	var oSectionMacros = {};
 	
 	// Try to catch some error
-	if(oObj.conf === null) {
+	if(oObj.conf === null)
 		eventlog("hover-parsing", "critical", "Problem while parsing hover template");
-	}
 	
-	if(oObj.conf.type && oObj.conf.type != '') {
+	if(oObj.conf.type && oObj.conf.type != '')
 		oMacros.obj_type = oObj.conf.type;
-	}
 	
 	// Replace language strings
 	oMacros.lang_obj_type = oObj.conf.lang_obj_type;
@@ -203,76 +201,73 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On child service objects in hover menu replace obj_name with 
 	// service_description
-	if(replaceChild == '1' && oObj.conf.type === 'service') {
+	if(replaceChild == '1' && oObj.conf.type === 'service')
 		oMacros.obj_name = oObj.conf.service_description;
-	} else {
+	else
 		oMacros.obj_name = oObj.conf.name;
-	}
 	
-	if(oObj.conf.alias && oObj.conf.alias !== '') {
+	if(oObj.conf.alias && oObj.conf.alias !== '')
 		oMacros.obj_alias = oObj.conf.alias;
-	} else {
+	else
 		oMacros.obj_alias = '';
-	}
 	
-	if(oObj.conf.display_name && oObj.conf.display_name !== '') {
+	if(oObj.conf.display_name && oObj.conf.display_name !== '')
 		oMacros.obj_display_name = oObj.conf.display_name;
-	} else {
+	else
 		oMacros.obj_display_name = '';
-	}
 	
-	if(oObj.conf.notes && oObj.conf.notes !== '') {
+	if(oObj.conf.notes && oObj.conf.notes !== '')
 		oMacros.obj_notes = oObj.conf.notes;
-	} else {
+	else
 		oMacros.obj_notes = '';
-	}
 	
 	if(replaceChild != '1' && oObj.conf.type !== 'map') {
 		oMacros.obj_backendid = oObj.conf.backend_id;
-		
 		oMacros.obj_backend_instancename = oObj.conf.backend_instancename;
+		oMacros.html_cgi = oObj.conf.htmlcgi;
+		oMacros.custom_1 = oObj.conf.custom_1;
+		oMacros.custom_2 = oObj.conf.custom_2;
+		oMacros.custom_3 = oObj.conf.custom_3;
 	} else {
 		// Remove the macros in map objects
 		oMacros.obj_backendid = '';
 		oMacros.obj_backend_instancename = '';
+		oMacros.html_cgi = '';
+		oMacros.custom_1 = '';
+		oMacros.custom_2 = ''; 
+		oMacros.custom_3 = '';
 	}
 	
 	// Macros which are only for services and hosts
-	if(oObj.conf.type === 'host' || oObj.conf.type === 'service') {
+	if(oObj.conf.type === 'host' || oObj.conf.type === 'service')
 		oMacros.obj_address = oObj.conf.address;
-	}
 	
 	if(oObj.conf.type === 'service') {
 		oMacros.service_description = oObj.conf.service_description;
 		oMacros.pnp_hostname = oObj.conf.name.replace(/\s/g,'%20');
 		oMacros.pnp_service_description = oObj.conf.service_description.replace(/\s/g,'%20');
-	} else {
+	} else
 		oSectionMacros.service = '<!--\\sBEGIN\\sservice\\s-->.+?<!--\\sEND\\sservice\\s-->';
-	}
 	
 	// Macros which are only for hosts
-	if(oObj.conf.type === 'host') {
+	if(oObj.conf.type === 'host')
 		oMacros.pnp_hostname = oObj.conf.name.replace(' ','%20');
-	} else {
+	else
 		oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
-	}
 	
 	// Replace servicegroup sections when not servicegroup object
-	if(oObj.conf.type !== 'servicegroup') {
+	if(oObj.conf.type !== 'servicegroup')
 		oSectionMacros.servicegroup = '<!--\\sBEGIN\\sservicegroup\\s-->.+?<!--\\sEND\\sservicegroup\\s-->';
-	}
 	
 	// Macros which are only for servicegroup childs
-	if(replaceChild == '1' && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service') {
+	if(replaceChild == '1' && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service')
 		oMacros.obj_name1 = oObj.conf.name;
-	} else if(replaceChild == '0' && oObj.conf.type !== 'servicegroup') {
+	else if(replaceChild == '0' && oObj.conf.type !== 'servicegroup')
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
-	}
 	
 	// Replace child section when unwanted
-	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1') || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0) {
+	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1') || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0)
 		oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
-	}
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
@@ -285,9 +280,8 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	// Loop and replace all unwanted section macros
 	for (var key in oSectionMacros) {
 		var regex = new RegExp(oSectionMacros[key], 'gm');
-		if(sTemplateCode.search(regex) !== -1) {
+		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, '');
-		}
 		regex = null;
 	}
 	oSectionMacros = null;
@@ -301,9 +295,8 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	for (var key in oMacros) {
 		var regex = new RegExp('\\['+key+'\\]', 'g');
 		// Search before matching - saves some time
-		if(sTemplateCode.search(regex) != -1) {
+		if(sTemplateCode.search(regex) != -1)
 			sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
-		}
 		regex = null;
 	}
 	
@@ -315,9 +308,8 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	if(sChildCode != '') {
 		var regex = new RegExp('<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->', 'gm');
 		
-		if(sTemplateCode.search(regex) !== -1) {
+		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, '<!-- BEGIN loop_child -->'+sChildCode+'<!-- END loop_child -->');
-		}
 		
 		regex = null;
 	}

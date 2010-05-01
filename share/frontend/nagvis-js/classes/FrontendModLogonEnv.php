@@ -98,20 +98,12 @@ class FrontendModLogonEnv extends FrontendModule {
 							// Try to authenticate the user
 							if($this->AUTHENTICATION->isAuthenticated(AUTH_TRUST_USERNAME)) {
 								// Redirect without message to the user
-								$FHANDLER = new CoreRequestHandler($_POST);
-								$ref = $FHANDLER->getRequestUri();
-								if($ref === '') {
-									$ref = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
-								}
-								
-								header('Location:'.$ref);
+								header('Location:'.CoreRequestHandler::getRequestUri($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
 							} else {
 								// Invalid credentials
 								// FIXME: Count tries and maybe block somehow
-								$FHANDLER = new CoreRequestHandler($_POST);
-								
 								if($this->bVerbose) {
-									new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 10, $FHANDLER->getReferer());
+									new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 10, CoreRequestHandler::getReferer(''));
 								}
 								
 								return false;
@@ -124,15 +116,8 @@ class FrontendModLogonEnv extends FrontendModule {
 							return false;
 						}
 					} else {
-						// Redirect without message to the user
-						$FHANDLER = new CoreRequestHandler($_POST);
-						$ref = $FHANDLER->getRequestUri();
-						if($ref === '') {
-							$ref = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
-						}
-						
 						// When the user is already authenticated redirect to start page (overview)
-						header('Location:'.$ref);
+						header('Location:'.CoreRequestHandler::getRequestUri($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
 					}
 				break;
 			}

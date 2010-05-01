@@ -125,7 +125,9 @@ try {
 			
 			// Check if the user is permited to this action in the module
 			if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'), $sObj)) {
-				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not permitted to access this page'), null, $CORE->getLang()->getText('Access denied'));
+				// If the user just logged in in the previous step log the user out
+				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not permitted to access this page'),
+				                  null, $CORE->getLang()->getText('Access denied'));
 			}
 		} else {
 			// When not authenticated redirect to logon dialog
