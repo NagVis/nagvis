@@ -107,6 +107,8 @@ class NagVisHeaderMenu {
 		// In rotation?
 		$this->aMacros['bRotation'] = $this->bRotation;
 		
+		$this->aMacros['permittedOverview'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Overview', 'view', '*');
+		
 		// Check if the user is permitted to edit the current map/automap
 		$this->aMacros['permittedView'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
 		$this->aMacros['permittedEdit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
@@ -129,7 +131,7 @@ class NagVisHeaderMenu {
 		
 		
 		// Build map list
-		$permEditAnyMap = True;
+		$permEditAnyMap = False;
 		$aMaps = Array();
 		foreach($this->CORE->getAvailableMaps() AS $mapName) {
 			$map = Array();
@@ -156,7 +158,7 @@ class NagVisHeaderMenu {
 			$map['urlParams'] = '';
 			$map['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
 
-			$permEditAnyMap &= $map['permittedEdit'];
+			$permEditAnyMap |= $map['permittedEdit'];
 			
 			// auto select current map
 			$map['selected'] = ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName());
@@ -165,7 +167,7 @@ class NagVisHeaderMenu {
 		}
 		
 		$this->aMacros['maps'] = $aMaps;
-		$this->aMacros['permissionEditAnyMap'] = $permEditAnyMap; 
+		$this->aMacros['permittedEditAnyMap'] = $permEditAnyMap; 
 		
 		// Build automap list
 		$aAutomaps = Array();

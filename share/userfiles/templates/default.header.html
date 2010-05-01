@@ -7,8 +7,10 @@
 			<dt id="views-ddheader" onmouseover="ddMenu('views',1)" onmouseout="ddMenu('views',-1)">{$langOpen} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="views-ddcontent" onmouseover="cancelHide('views')" onmouseout="ddMenu('views',-1)">
 				<ul>
+					{if $permittedOverview}
 					<li><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>
 					<li class="spacer"><hr /></li>
+					{/if}
 					{if count($maps) > 0}
 					{foreach $maps map}<li>
 						{if $map.configError == true}
@@ -31,7 +33,7 @@
 						<li class="spacer"><hr /></li>
 					{/foreach}
 					{/if}
-					{if $permissionEditAnyMap}
+					{if $permittedEditAnyMap}
 					<li><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>
 					{else}
 					<li class="spacer underline"></li>
