@@ -420,7 +420,8 @@ class NagVisAutoMap extends GlobalMap {
 							$aCoords = explode(',', $coords);
 							
 							// FIXME: z-index configurable?
-							$aObjCoords[$name1] = Array('x' => $aCoords[0], 'y' => $aCoords[1], 'z' => 101);
+							// Header menu has z-index 100, this object's label the below+1
+							$aObjCoords[$name1] = Array('x' => $aCoords[0], 'y' => $aCoords[1], 'z' => 98);
 						break;
 						case 'poly':
 							//$aCoords = explode(',', $coords);

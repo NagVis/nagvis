@@ -54,8 +54,8 @@ div.welcome a,div.welcome a:active,div.welcome a:visited {color:#43B3CF}
 div.welcome a:hover {color:#779D2A}
 
 /* Automap */
-#automap {z-index:100}
-#automap shape {z-index:100}
+#automap {z-index:97}
+#automap shape {z-index:97}
 
 /* Message-Box */
 .messageBox {
