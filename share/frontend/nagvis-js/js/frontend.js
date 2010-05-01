@@ -3,7 +3,7 @@
  * frontend.js - Functions implementing the new ajax frontend with automatic
  *               worker function etc.
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -322,7 +322,7 @@ function setMapHoverUrls() {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -388,7 +388,7 @@ function getHoverTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0) {
@@ -436,7 +436,7 @@ function getContextTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oContextTemplates
 	if(aTemplateObjects.length > 0) {
@@ -1873,6 +1873,63 @@ function workerInitialize(iCount, sType, sIdentifier) {
 	hideStatusMessage();
 }
 
+// Handles the ajax response of bulk map object updates
+function handleUpdate(o, aParams) {
+	var sType = aParams[0];
+	var bStateChanged = false;
+	if(o.length > 0)
+		bStateChanged = updateObjects(o, aMapObjects, sType);
+	
+	// When some state changed on the map update the title and favicon
+	if((sType == 'map' || sType == 'automap') && bStateChanged)
+		updateMapBasics();
+		
+	// FIXME: Add page basics (title, favicon, ...) update code for overview page
+	
+	o = null;
+	bStateChanged = null;
+}
+
+// Create the ajax request parameters for bulk update
+function getUrlParts(arrObj) {
+	var aUrlParts = [];
+	var iUrlParams = 0;
+	
+	// Only continue with the loop when below param limit
+	// and below maximum length
+	for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)); i++) {
+		var type = aMapObjects[arrObj[i]].conf.type;
+		var name = aMapObjects[arrObj[i]].conf.name;
+		if(name) {
+			var obj_id = aMapObjects[arrObj[i]].conf.object_id;
+			var service_description = aMapObjects[arrObj[i]].conf.service_description;
+			
+			// Create request string
+			var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
+			if(service_description)
+				sUrlPart += '&n2[]='+escapeUrlValues(service_description);
+			else
+				sUrlPart += '&n2[]=';
+			
+			// Adding 4 params above code, count them here
+			iUrlParams += 4;
+			
+			// Append part to array of parts
+			aUrlParts.push(sUrlPart);
+			sUrlPart = null;
+			
+			service_description = null;
+			obj_id = null;
+		}
+		
+		name = null;
+		type = null;
+	}
+	iUrlParams = null;
+	arrObj = null;
+	return aUrlParts;
+}
+
 /**
  * workerUpdate()
  *
@@ -1926,79 +1983,20 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		// Get objects which need an update
 		var arrObj = getObjectsToUpdate(aMapObjects);
 		
-		// Create the ajax request for bulk update, handle shape updates
-		var aUrlParts = [];
+		// Get the updated objects via bulk request
+		getBulkRequest(oGeneralProperties.path_server+'?mod=Map&act=getObjectStates&show='+oPageProperties.map_name+'&ty=state',
+                   getUrlParts(arrObj), oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
+		
+		// Shapes which need to be updated need a special handling
 		var aShapesToUpdate = [];
-		var iUrlParams = 0;
-		var iUrlLength = 0;
-		
-		// Only continue with the loop when below param limit
-		// and below maximum length
-		for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)) && iUrlLength < oWorkerProperties.worker_request_max_length; i++) {
-			var type = aMapObjects[arrObj[i]].conf.type;
-			
-			// Seperate shapes from rest
-			if(type === 'shape') {
-				// Shapes which need to be updated need a special handling
+		for(var i = 0, len = arrObj.length; i < len; i++)
+			if(aMapObjects[arrObj[i]].conf.type === 'shape')
 				aShapesToUpdate.push(arrObj[i]);
-			} else {
-				// Handle other objects
-				var name = aMapObjects[arrObj[i]].conf.name;
-				
-				if(name) {
-					var obj_id = aMapObjects[arrObj[i]].conf.object_id;
-					var service_description = aMapObjects[arrObj[i]].conf.service_description;
-					
-					// Create request string
-					var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
-					if(service_description) {
-						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
-					} else {
-						sUrlPart = sUrlPart + '&n2[]=';
-					}
-					
-					// Adding 4 params above code, count them here
-					iUrlParams += 4;
-					
-					// Also count the length
-					iUrlLength += sUrlPart.length
-					
-					// Append part to array of parts
-					aUrlParts.push(sUrlPart);
-					sUrlPart = null;
-					
-					service_description = null;
-					obj_id = null;
-				}
-				
-				name = null;
-			}
-		}
-		iUrlParams = null;
-		iUrlLength = null;
-		arrObj = null;
-		
-		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getObjectStates&show='+oPageProperties.map_name+'&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
-		var bStateChanged = false;
-		if(o.length > 0) {
-			bStateChanged = updateObjects(o, aMapObjects, sType);
-		}
-		o = null;
-		aUrlParts = null;
 		
 		// Update shapes when needed
-		if(aShapesToUpdate.length > 0) {
+		if(aShapesToUpdate.length > 0)
 			updateShapes(aShapesToUpdate);
-		}
 		aShapesToUpdate = null;
-		
-		// When some state changed on the map update the title and favicon
-		if(bStateChanged) {
-			updateMapBasics();
-		}
-		bStateChanged = null;
-	
 	} else if(sType === 'automap') {
 		
 		// Check for changed map configuration
@@ -2018,7 +2016,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 			}
 		}
 		
-		// I don't think empty maps make any sense. So when no objects are present: 
+		// I don't think empty maps make sense. So when no objects are present: 
 		// Try to fetch them continously
 		if(aMapObjects.length === 0) {
 			eventlog("worker", "info", "Automap is empty. Strange. Re-fetching objects");
@@ -2042,76 +2040,10 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		 * Now proceed with real actions when everything is OK
 		 */
 		
-		// Get objects which need an update
-		var arrObj = getObjectsToUpdate(aMapObjects);
-		
-		// Create the ajax request for bulk update, handle shape updates
-		var aUrlParts = [];
-		var aShapesToUpdate = [];
-		var iUrlParams = 0;
-		var iUrlLength = 0;
-		
-		// Only continue with the loop when below param limit
-		// and below maximum length
-		for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)) && iUrlLength < oWorkerProperties.worker_request_max_length; i++) {
-			var type = aMapObjects[arrObj[i]].conf.type;
-			
-			// Seperate shapes from rest
-			if(type === 'shape') {
-				// Shapes which need to be updated need a special handling
-				aShapesToUpdate.push(arrObj[i]);
-			} else {
-				// Handle other objects
-				var name = aMapObjects[arrObj[i]].conf.name;
-				
-				if(name) {
-					var obj_id = aMapObjects[arrObj[i]].conf.object_id;
-					var service_description = aMapObjects[arrObj[i]].conf.service_description;
-					
-					// Create request string
-					var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&t[]='+type+'&n1[]='+name;
-					if(service_description) {
-						sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
-					} else {
-						sUrlPart = sUrlPart + '&n2[]=';
-					}
-					
-					// Adding 4 params above code, count them here
-					iUrlParams += 4;
-					
-					// Also count the length
-					iUrlLength += sUrlPart.length
-					
-					// Append part to array of parts
-					aUrlParts.push(sUrlPart);
-					
-					sUrlPart = null;
-					service_description = null;
-					obj_id = null;
-				}
-				
-				name = null;
-			}
-		}
-		iUrlParams = null;
-		iUrlLength = null;
-		arrObj = null;
-		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getObjectStates&show='+escapeUrlValues(oPageProperties.map_name)+'&ty=state'+getAutomapParams(), aUrlParts, oWorkerProperties.worker_request_max_length, false);
-		var bStateChanged = false;
-		if(o.length > 0) {
-			bStateChanged = updateObjects(o, aMapObjects, sType);
-		}
-		o = null;
-		aUrlParts = null;
-		
-		// When some state changed on the map update the title and favicon
-		if(bStateChanged) {
-			updateMapBasics();
-		}
-		bStateChanged = null;
-		
+		getBulkRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getObjectStates&show='+
+                   escapeUrlValues(oPageProperties.map_name)+'&ty=state'+getAutomapParams(),
+                   getUrlParts(getObjectsToUpdate(aMapObjects)), oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
 	} else if(sType === 'url') {
 		
 		// Fetches the contents from the server and prints it to the page
@@ -2149,63 +2081,9 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		 * Now proceed with real actions when everything is OK
 		 */
 		
-		// Get objects which need an update
-		var arrObj = getObjectsToUpdate(aMapObjects);
-		
-		// Create the ajax request for bulk update, handle object updates
-		var aUrlParts = [];
-		for(var i = 0, len = arrObj.length; i < len; i++) {
-			var name = aMapObjects[arrObj[i]].conf.name;
-			
-			if(name) {
-				var type = aMapObjects[arrObj[i]].conf.type;
-				var obj_id = aMapObjects[arrObj[i]].conf.object_id;
-				var service_description = aMapObjects[arrObj[i]].conf.service_description;
-				
-				// Create request url part for this object
-				var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
-				if(service_description) {
-					sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
-				} else {
-					sUrlPart = sUrlPart + '&n2[]=';
-				}
-				
-				// Append part to array of parts
-				aUrlParts.push(sUrlPart);
-				
-				sUrlPart = null;
-				obj_id = null;
-				type = null;
-				service_description = null;
-			}
-			
-			name = null;
-		}
-		
 		// Get the updated objectsupdateMapObjects via bulk request
-		var o = getBulkSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state', aUrlParts, oWorkerProperties.worker_request_max_length, false);
-		var bStateChanged = false;
-		if(o.length > 0) {
-			bStateChanged = updateObjects(o, aMapObjects, sType);
-		}
-		aUrlParts = null;
-		o = null;
-		
-		// When some state changed on the map update the title and favicon
-		/* FIXME: if(bStateChanged) {
-			var o = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+oPageProperties.map_name+'&m[]=&t[]=map&n1[]='+oPageProperties.map_name+'&n2[]=', false)[0];
-			
-			// Update favicon
-			setPageFavicon(getFaviconImage(o));
-			
-			// Update page title
-			setPageTitle(oPageProperties.alias+' ('+o.summary_state+') :: '+oGeneralProperties.internal_title);
-			
-			// Change background color
-			if(oPageProperties.event_background && oPageProperties.event_background == '1') {
-				setPageBackgroundColor(getBackgroundColor(o));
-			}
-		}*/
+		getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state',
+		               getUrlParts(getObjectsToUpdate(aMapObjects)), oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
 	}
 	
 	// Update lastWorkerRun
