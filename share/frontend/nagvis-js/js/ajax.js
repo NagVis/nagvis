@@ -109,6 +109,93 @@ function cleanupAjaxQueryCache() {
 	}
 }
 
+function ajaxError(e) {
+	// Add frontend eventlog entry
+	eventlog("ajax", "critical", "Problem while ajax transaction");
+	eventlog("ajax", "debug", e.toString());
+	
+	frontendMessage({'type': 'CRITICAL', 'title': 'Ajax transaction error', 'message': 'Problem while ajax transaction. Is the NagVis host reachable?'});
+}
+
+function phpError(text) {
+	frontendMessage({'type': 'CRITICAL', 'title': 'PHP error', 'message': "PHP error in ajax request handler:\n" + text});
+}
+
+function jsonError(text) {
+	frontendMessage({'type': 'CRITICAL', 'title': 'Syntax error', 'message': "Invalid JSON response:\n" + text});
+}
+
+/**
+ * Function for creating a asynchronous GET request
+ * - Uses query cache
+ * - Response needs to be JS code or JSON => Parses the response with eval()
+ * - Errors need to match following Regex: /^Notice:|^Warning:|^Error:|^Parse error:/
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
+	var sResponse = null;
+	
+	if(bCacheable === null)
+		bCacheable = true;
+	
+	// Encode the url
+	sUrl = sUrl.replace("+", "%2B");
+	
+	// use cache if last request is less than 30 seconds (30,000 milliseconds) ago
+	if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && iNow - ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
+		// Prevent using invalid code in cache
+		eventlog("ajax", "debug", "Using cached query");
+		if(ajaxQueryCache[sUrl].response !== '')
+			callback(eval('( '+ajaxQueryCache[sUrl].response+')'), callbackParams);
+		else
+			cleanupQueryCache(sUrl);
+	} else {
+		var oRequest = initXMLHttpClient();
+		
+		if(!oRequest)
+			return false;
+		
+		oRequest.open("GET", sUrl+"&_t="+iNow);
+		oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
+		oRequest.onreadystatechange = function() {
+			if(oRequest.readyState == 4) {
+				if(oRequest.responseText.replace(/\s+/g, '').length === 0) {
+					if(bCacheable)
+						updateQueryCache(sUrl, iNow, '');
+				} else {
+					var responseText = oRequest.responseText.replace(/^\s+/,"");
+					
+					// Error handling for the AJAX methods
+					if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
+						phpError(responseText);
+					} else if(responseText.match(/^NagVisError:/)) {
+						frontendMessage(eval('( '+responseText.replace(/^NagVisError:/, '')+')'));
+					} else {
+						try {
+							callback(eval('( '+responseText+')'), callbackParams);
+							
+							if(bCacheable)
+								updateQueryCache(sUrl, iNow, responseText);
+						} catch(e) {
+							jsonError(responseText);
+						}
+						
+					}
+					
+					responseText = null;
+				}
+			}
+		}
+		
+		try {
+			oRequest.send(null);
+		} catch(e) {
+			ajaxError(e);
+		}
+	}
+}
+
 /**
  * Function for creating a synchronous GET request
  * - Uses query cache
@@ -121,13 +208,11 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	var sResponse = null;
 	var responseText;
 	
-	if (bCacheable === null) {
+	if(bCacheable === null)
 		bCacheable = true;
-	}
 	
-	if (bRetryable === null) {
+	if(bRetryable === null)
 		bRetryable = true;
-	}
 	
 	// Encode the url
 	sUrl = sUrl.replace("+", "%2B");
@@ -160,19 +245,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 			try {
 				oRequest.send(null);
 			} catch(e) {
-				// Add frontend eventlog entry
-				eventlog("ajax", "critical", "Problem while ajax transaction");
-				eventlog("ajax", "debug", e.toString());
-				
-				// Handle application message/error
-				var oMsg = {};
-				oMsg.type = 'CRITICAL';
-				oMsg.message = "Problem while ajax transaction. Is the NagVis host reachable?";
-				oMsg.title = "Ajax transaction error";
-				frontendMessage(oMsg);
-				oMsg = null;
-				
-				// This bad response should not be cached
+				ajaxError(e);
 				bCacheable = false;
 			}
 			
@@ -191,14 +264,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 				
 				// Error handling for the AJAX methods
 				if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-					var oMsg = {};
-					oMsg.type = 'CRITICAL';
-					oMsg.message = "PHP error in ajax request handler:\n"+responseText;
-					oMsg.title = "PHP error";
-					
-					// Handle application message/error
-					frontendMessage(oMsg);
-					oMsg = null;
+					phpError(responseText);
 				} else if(responseText.match(/^NagVisError:/)) {
 					responseText = responseText.replace(/^NagVisError:/, '');
 					var oMsg = eval('( '+responseText+')');
@@ -263,41 +329,42 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	return sResponse;
 }
 
-function getBulkSyncRequest(sBaseUrl, aUrlParts, iLimit, bCacheable) {
+/**
+ * Prevent reaching too long urls, split the update to several 
+ * requests. Just start the request and clean the string strUrl
+ * Plus fire the rest of the request on the last iteration
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getBulkRequest(sBaseUrl, aUrlParts, iLimit, bCacheable, handler, handlerParams) {
 	var sUrl = '';
 	var o;
 	var aReturn = [];
+
+	var async = false;
+	if(typeof handler == 'function')
+		async = true;
 	
+	eventlog("ajax", "debug", "Bulk parts: "+aUrlParts.length+" Async: "+ async);
+	var count = 0
 	for(var i = 0, len = aUrlParts.length; i < len; i++) {
 		sUrl = sUrl + aUrlParts[i];
-		
-		// Prevent reaching too long urls, split the update to several 
-		// requests. Just start the request and clean the string strUrl
-		if(sUrl !== '' && sBaseUrl.length+sUrl.length > iLimit) {
-			o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
-			
-			if(o) {
-				aReturn = aReturn.concat(o);
+		count += 1;
+		if(sUrl !== '' && (sBaseUrl.length + sUrl.length > iLimit || i == len - 1)) {
+			eventlog("ajax", "debug", "Bulk go: "+ count);
+			if(async)
+				getAsyncRequest(sBaseUrl + sUrl, bCacheable, handler, handlerParams);
+			else {
+				o = getSyncRequest(sBaseUrl + sUrl, bCacheable);
+				if(o)
+					aReturn = aReturn.concat(o);
+				o = null;
 			}
 			
-			o = null;
+			count = 0
 			sUrl = '';
 		}
 	}
-	
-	if(sUrl !== '') {
-		// Bulk update the objects, this query should not be cached
-		o = getSyncRequest(sBaseUrl+sUrl, bCacheable);
-		if(o) {
-			aReturn = aReturn.concat(o);
-		}
-		
-		o = null;
-		sUrl = '';
-	}
-	
-	sUrl = null;
-	
 	return aReturn;
 }
 
@@ -329,15 +396,7 @@ function postSyncRequest(sUrl, sParams) {
 		try {
 			oRequest.send(sParams);
 		} catch(e) {
-			// Add frontend eventlog entry
-			eventlog("ajax", "critical", "Problem while ajax POST transaction");
-			eventlog("ajax", "debug", e.toString());
-			
-			// Handle application message/error
-			oResponse = {};
-			oResponse.type = 'CRITICAL';
-			oResponse.message = "Problem while ajax POST transaction. Is the NagVis host reachable?";
-			oResponse.title = "Ajax transaction error";
+			ajaxError(e);
 		}
 		
 		responseText = oRequest.responseText;
