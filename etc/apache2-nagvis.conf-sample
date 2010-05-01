@@ -46,6 +46,12 @@ Alias @NAGVIS_WEB@ "@NAGVIS_PATH@/share"
     RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/frontend/wui
     RewriteCond %{QUERY_STRING} map=(.*)
     RewriteRule ^(.*)$ @NAGVIS_WEB@/frontend/wui/index.php?mod=Map&act=edit&show=%1 [R=301,L]
+
+    # Redirect old rotation calls
+    RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/frontend/nagvis-js
+    RewriteCond %{QUERY_STRING} !mod
+    RewriteCond %{QUERY_STRING} rotation=(.*)
+    RewriteRule ^(.*)$ @NAGVIS_WEB@/frontend/nagvis-js/index.php?mod=Rotation&act=view&show=%1 [R=301,L]
   </IfModule>
 </Directory>
 
