@@ -58,7 +58,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @param		MAINCFG		Object of NagVisMainCfg
 	 * @param		LANG			Object of GlobalLanguage
-	 * @param		BACKEND		Object of GlobalBackendMgmt
+	 * @param		BACKEND		Object of CoreBackendMgmt
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */

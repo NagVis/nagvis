@@ -841,8 +841,8 @@ msgstr ""
 msgid "The permissions for this role have been updated."
 msgstr ""
 
-#: share/server/core/classes/GlobalBackendMgmt.php:144
-#: share/server/core/classes/GlobalBackendMgmt.php:144
+#: share/server/core/classes/CoreBackendMgmt.php:144
+#: share/server/core/classes/CoreBackendMgmt.php:144
 msgid "The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend."
 msgstr ""
 
@@ -1266,21 +1266,21 @@ msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&
 msgid "backendNotDefined"
 msgstr "The backend with the id &quot;[BACKENDID]&quot; is not defined."
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:79
-#: share/server/core/classes/GlobalBackendMgmt.php:79
-#: share/server/core/classes/GlobalBackendMgmt.php:79
+#: nagvis/includes/classes/CoreBackendMgmt.php:79
+#: share/server/core/classes/CoreBackendMgmt.php:79
+#: share/server/core/classes/CoreBackendMgmt.php:79
 msgid "backendNotExists"
 msgstr "The backend with ID &quot;[BACKENDID]&quot; of type &quot;[BACKENDTYPE]&quot; does not exist."
 
 #: wui/ajax_handler.php:73 wui/ajax_handler.php:104
 #: share/frontend/wui/ajax_handler.php:75
 #: share/frontend/wui/ajax_handler.php:106
-#: share/server/core/classes/GlobalBackendMgmt.php:124
+#: share/server/core/classes/CoreBackendMgmt.php:124
 #: share/frontend/wui/ajax_handler.php:71
 #: share/frontend/wui/ajax_handler.php:102
 #: share/frontend/wui/ajax_handler.php:70
 #: share/frontend/wui/ajax_handler.php:101
-#: share/server/core/classes/GlobalBackendMgmt.php:124
+#: share/server/core/classes/CoreBackendMgmt.php:124
 #: share/frontend/wui/ajax_handler.php:70
 #: share/frontend/wui/ajax_handler.php:101
 msgid "backendNotInitialized"
@@ -2914,9 +2914,9 @@ msgstr "Next Check"
 msgid "no"
 msgstr "No"
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:62
-#: share/server/core/classes/GlobalBackendMgmt.php:62
-#: share/server/core/classes/GlobalBackendMgmt.php:62
+#: nagvis/includes/classes/CoreBackendMgmt.php:62
+#: share/server/core/classes/CoreBackendMgmt.php:62
+#: share/server/core/classes/CoreBackendMgmt.php:62
 msgid "noBackendDefined"
 msgstr "No backend could be found in NagVis configuration. You need to define a backend for gathering status information."
 

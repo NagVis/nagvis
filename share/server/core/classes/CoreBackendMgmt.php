@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * GlobalBackendMgmt.php - class for handling all backends
+ * CoreBackendMgmt.php - class for handling all backends
  *
  * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class GlobalBackendMgmt {
+class CoreBackendMgmt {
 	protected $CORE;
 	public $BACKENDS = Array();
 	private $aInitialized = Array();

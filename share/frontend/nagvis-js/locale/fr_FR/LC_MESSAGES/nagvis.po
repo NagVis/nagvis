@@ -68,7 +68,7 @@ msgstr "Une valeur n`est pas définie. Les champs marqués en rouge sont obligat
 
 #: wui/ajax_handler.php:67
 #: wui/ajax_handler.php:98
-#: nagvis/includes/classes/GlobalBackendMgmt.php:142
+#: nagvis/includes/classes/CoreBackendMgmt.php:142
 msgid "backendNotInitialized"
 msgstr "Le backend avec l`ID \"[BACKENDID]\" de type \"[BACKENDTYPE]\" n`est pas initialisé. C`est peut-être un backend non utilisé dans une carte ?"
 
@@ -777,11 +777,11 @@ msgstr "Le fichier de configuration de la carte n`est pas en cache."
 msgid "mapCfgCacheNotWriteable"
 msgstr "Le fichier de configuration de la carte n`est pas en écriture."
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:61
+#: nagvis/includes/classes/CoreBackendMgmt.php:61
 msgid "noBackendDefined"
 msgstr "Pas de backend trouvé dans la configuration de Nagvis."
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:95
+#: nagvis/includes/classes/CoreBackendMgmt.php:95
 msgid "backendNotExists"
 msgstr "Le backend dont l`ID  '[BACKENDID]' de type '[BACKENDTYPE]' n`existe pas."
 

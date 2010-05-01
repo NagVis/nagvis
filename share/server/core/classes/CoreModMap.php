@@ -926,7 +926,7 @@ class CoreModMap extends CoreModule {
 	
 	private function getMapObjects() {
 		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
 		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
@@ -953,7 +953,7 @@ class CoreModMap extends CoreModule {
 		$arrObjId = $aVals['i'];
 		
 		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
 		// Initialize map configuration (Needed in getMapObjConf)
 		$this->MAPCFG = new NagVisMapCfg($this->CORE, $this->name);

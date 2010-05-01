@@ -839,8 +839,8 @@ msgstr "Das Passwort wurde ge&auml;ndert."
 msgid "The permissions for this role have been updated."
 msgstr "Die Berechtigungen wurden aktualisiert."
 
-#: share/server/core/classes/GlobalBackendMgmt.php:144
-#: share/server/core/classes/GlobalBackendMgmt.php:144
+#: share/server/core/classes/CoreBackendMgmt.php:144
+#: share/server/core/classes/CoreBackendMgmt.php:144
 msgid "The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend."
 msgstr "Das Feature [FEATURE] wird vom angebenen Backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]) nicht unterst&uuml;tzt. Die angeforderte Ansicht ist mit diesem Backend nicht verf&uuml;gbar."
 
@@ -1259,22 +1259,22 @@ msgstr "Der Instanz-Name \"[NAME]\" in Backend \"[BACKENDID]\" ist nicht gültig
 msgid "backendNotDefined"
 msgstr "Das Backend mit der ID \"[BACKENDID]\" ist nicht definiert."
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:79
-#: share/server/core/classes/GlobalBackendMgmt.php:79
-#: share/server/core/classes/GlobalBackendMgmt.php:79
+#: nagvis/includes/classes/CoreBackendMgmt.php:79
+#: share/server/core/classes/CoreBackendMgmt.php:79
+#: share/server/core/classes/CoreBackendMgmt.php:79
 msgid "backendNotExists"
 msgstr "Das Backend mit der ID \"[BACKENDID]\" vom Typ \"[BACKENDTYPE]\" existiert nicht."
 
 #: wui/ajax_handler.php:71 wui/ajax_handler.php:102
-#: nagvis/includes/classes/GlobalBackendMgmt.php:124
-#: share/server/core/classes/GlobalBackendMgmt.php:124
+#: nagvis/includes/classes/CoreBackendMgmt.php:124
+#: share/server/core/classes/CoreBackendMgmt.php:124
 #: share/frontend/wui/ajax_handler.php:75
 #: share/frontend/wui/ajax_handler.php:106
 #: share/frontend/wui/ajax_handler.php:71
 #: share/frontend/wui/ajax_handler.php:102
 #: share/frontend/wui/ajax_handler.php:70
 #: share/frontend/wui/ajax_handler.php:101
-#: share/server/core/classes/GlobalBackendMgmt.php:124
+#: share/server/core/classes/CoreBackendMgmt.php:124
 #: share/frontend/wui/ajax_handler.php:70
 #: share/frontend/wui/ajax_handler.php:101
 msgid "backendNotInitialized"
@@ -2802,9 +2802,9 @@ msgstr "Nächste Prüfung"
 msgid "no"
 msgstr "Nein"
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:62
-#: share/server/core/classes/GlobalBackendMgmt.php:62
-#: share/server/core/classes/GlobalBackendMgmt.php:62
+#: nagvis/includes/classes/CoreBackendMgmt.php:62
+#: share/server/core/classes/CoreBackendMgmt.php:62
+#: share/server/core/classes/CoreBackendMgmt.php:62
 msgid "noBackendDefined"
 msgstr "Es konnte kein definiertes Backend gefunden werden."
 

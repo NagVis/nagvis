@@ -60,7 +60,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * Class constructor
 	 *
 	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class CoreBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */

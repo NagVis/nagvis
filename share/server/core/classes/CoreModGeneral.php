@@ -170,7 +170,7 @@ class CoreModGeneral extends CoreModule {
 		$arrObjId = $aVals['i'];
 		
 		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 			
 		$numObjects = count($arrType);
 		$aObjs = Array();

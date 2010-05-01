@@ -53,7 +53,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * Class constructor
 	 *
 	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class CoreBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @param		Object		Object of class NagVisMapCfg
 	 * @param		Boolean   Flag to tell the class if this is a map object or view

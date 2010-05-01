@@ -46,7 +46,7 @@ class CoreModOverview extends CoreModule {
 		if($this->offersAction($this->sAction)) {
 			
 			// Initialize backends
-			$this->BACKEND = new GlobalBackendMgmt($this->CORE);
+			$this->BACKEND = new CoreBackendMgmt($this->CORE);
 			
 			$this->OVERVIEW = new GlobalIndexPage($this->CORE, $this->BACKEND, $this->AUTHORISATION);
 			

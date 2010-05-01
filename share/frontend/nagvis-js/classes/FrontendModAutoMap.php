@@ -101,7 +101,7 @@ class FrontendModAutoMap extends FrontendModule {
 	
 	private function showViewDialog() {
 		// Initialize backend(s)
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
     // Initialize map configuration
     $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);

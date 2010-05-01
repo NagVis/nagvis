@@ -37,10 +37,10 @@ class GlobalIndexPage {
 	 * Class Constructor
 	 *
 	 * @param 	GlobalCore 	$CORE
-	 * @param 	GlobalBackendMgmt	$BACKEND
+	 * @param 	CoreBackendMgmt	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(GlobalCore $CORE, GlobalBackendMgmt $BACKEND, CoreAuthorisationHandler $AUTHORISATION) {
+	public function __construct(GlobalCore $CORE, CoreBackendMgmt $BACKEND, CoreAuthorisationHandler $AUTHORISATION) {
 		$this->CORE = $CORE;
 		$this->BACKEND = $BACKEND;
 		$this->AUTHORISATION = $AUTHORISATION;
