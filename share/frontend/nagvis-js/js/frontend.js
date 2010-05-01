@@ -1873,7 +1873,16 @@ function workerInitialize(iCount, sType, sIdentifier) {
 	hideStatusMessage();
 }
 
-// Handles the ajax response of bulk map object updates
+/**
+ * handleUpdate()
+ *
+ * This callback function handles the ajax response of bulk object
+ * status updates
+ *
+ * @param   Object   List of objects with new state informations
+ * @param   Array    List of parameters for this handler
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 function handleUpdate(o, aParams) {
 	var sType = aParams[0];
 	var bStateChanged = false;
@@ -1890,7 +1899,15 @@ function handleUpdate(o, aParams) {
 	bStateChanged = null;
 }
 
-// Create the ajax request parameters for bulk update
+/**
+ * getUrlParts()
+ *
+ * Create the ajax request parameters for bulk updates. Bulk updates
+ * can strip the url into several HTTP requests to work around too long urls.
+ *
+ * @param   Array    List of objects to get a new status for
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 function getUrlParts(arrObj) {
 	var aUrlParts = [];
 	var iUrlParams = 0;

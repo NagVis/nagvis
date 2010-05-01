@@ -5,7 +5,7 @@
  *                          in newer PHP versions but are already needed by
  *                          NagVis PHP code
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

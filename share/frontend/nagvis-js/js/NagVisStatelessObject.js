@@ -3,7 +3,7 @@
  * NagVisStatelessObject.js - This class handles the visualisation of
  *                            stateless objects like shape and textbox
  *
- * Copyright (c) 2004-2008 NagVis Project
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

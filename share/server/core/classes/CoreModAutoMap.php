@@ -3,7 +3,7 @@
  *
  * CoreModAutoMap.php - Core Automap module to handle ajax requests
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

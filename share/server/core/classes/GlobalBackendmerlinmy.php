@@ -4,7 +4,7 @@
  * GlobalBackendmerlinmy.php - backend class for handling object and state 
  *                             information stored in the Merlin database.
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

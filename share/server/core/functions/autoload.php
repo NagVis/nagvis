@@ -3,7 +3,7 @@
  *
  * autoload.php - Class for defining the autoload method for NagVis
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

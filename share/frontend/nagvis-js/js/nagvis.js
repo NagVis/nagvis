@@ -2,7 +2,7 @@
  *
  * nagvis.js - Some NagVis function which are used in NagVis frontend
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
