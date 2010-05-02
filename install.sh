@@ -1373,6 +1373,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 		
 		LINE="Restoring auth database file..."
 		copy "" "$NAGVIS_AUTH_DB" "auth database file"
+		copy "" "$AUTH_BACKUP" "auth backup file"
 
 		LINE="Restoring custom stylesheets..."
 		copy "" "$USERFILES_DIR/styles" "stylesheets"
