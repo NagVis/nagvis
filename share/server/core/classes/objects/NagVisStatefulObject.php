@@ -286,7 +286,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAcknowledgement() {
-		return (int) $this->problem_has_been_acknowledged;
+		return $this->problem_has_been_acknowledged;
 	}
 	
 	/**
