@@ -334,7 +334,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getSummaryAcknowledgement() {
-		return (int) $this->summary_problem_has_been_acknowledged;
+		return $this->summary_problem_has_been_acknowledged;
 	}
 	
 	/**
@@ -856,6 +856,9 @@ class NagVisStatefulObject extends NagVisObject {
 		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
 		if(isset($stateWeight[$sObjSummaryState])) {
+			$objAck = $OBJ->getSummaryAcknowledgement();
+			$objDowntime = $OBJ->getSummaryInDowntime();
+			
 			if($sSummaryState != '') {
 				/* When the state of the current child is not as good as the current
 				 * summary state or the state is equal and the sub-state differs.
@@ -868,25 +871,25 @@ class NagVisStatefulObject extends NagVisObject {
 				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
 					$sType = 'downtime';
 				}
-				
+
 				// Gather the object summary state type
 				$sObjType = 'normal';
-				if($OBJ->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sObjSummaryState]['ack'])) {
+				if($objAck == 1 && isset($stateWeight[$sObjSummaryState]['ack'])) {
 					$sObjType = 'ack';
-				} elseif($OBJ->getSummaryInDowntime() == 1 && isset($stateWeight[$sObjSummaryState]['downtime'])) {
+				} elseif($objDowntime == 1 && isset($stateWeight[$sObjSummaryState]['downtime'])) {
 					$sObjType = 'downtime';
 				}
 				
 				if($stateWeight[$sSummaryState][$sType] < $stateWeight[$sObjSummaryState][$sObjType]) { 
 					$this->summary_state = $sObjSummaryState;
 					
-					if($OBJ->getSummaryAcknowledgement() == 1) {
+					if($objAck == 1) {
 						$this->summary_problem_has_been_acknowledged = 1;
 					} else {
 						$this->summary_problem_has_been_acknowledged = 0;
 					}
 					
-					if($OBJ->getSummaryInDowntime() == 1) {
+					if($objDowntime == 1) {
 						$this->summary_in_downtime = 1;
 					} else {
 						$this->summary_in_downtime = 0;
@@ -894,8 +897,8 @@ class NagVisStatefulObject extends NagVisObject {
 				}
 			} else {
 				$this->summary_state = $sObjSummaryState;
-				$this->summary_problem_has_been_acknowledged = $OBJ->getSummaryAcknowledgement();
-				$this->summary_in_downtime = $OBJ->getSummaryInDowntime();
+				$this->summary_problem_has_been_acknowledged = $objAck;
+				$this->summary_in_downtime = $objDowntime;
 			}
 		} else {
 			if($OBJ->getType() == 'service')
