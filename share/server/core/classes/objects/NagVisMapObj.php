@@ -4,7 +4,7 @@
  * NagVisMapObj.php - Class of a Map object in NagVis with all necessary 
  *                  information which belong to the object handling in NagVis
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -53,7 +53,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * Class constructor
 	 *
 	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class CoreBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @param		Object		Object of class NagVisMapCfg
 	 * @param		Boolean   Flag to tell the class if this is a map object or view

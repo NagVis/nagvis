@@ -32,15 +32,10 @@ class CoreModAuth extends CoreModule {
 							
 							// Try to authenticate the user
 							if($this->AUTHENTICATION->isAuthenticated()) {
-								// When the user is already authenticated redirect to start page (overview)
-								$HANDLER = new CoreRequestHandler($_POST);
-								$ref = $HANDLER->getReferer();
-								if($ref === '') {
-									$ref = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
-								}
-								
 								// Display success with link and refresh in 5 seconds to called page
-								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'), null, null, 1, $ref);
+								// When referer is empty redirect to overview page
+								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'),
+								                   null, null, 1, CoreRequestHandler::getReferer($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
 							} else {
 								// Invalid credentials
 								// FIXME: Count tries and maybe block somehow
@@ -109,7 +104,7 @@ class CoreModAuth extends CoreModule {
 	}
 	
 	public function msgInvalidCredentials() {
-		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 1, $this->FHANDLER->getReferer());
+		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 1, CoreRequestHandler::getReferer(''));
 		
 		return '';
 	}

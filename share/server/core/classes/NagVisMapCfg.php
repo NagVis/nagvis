@@ -3,7 +3,7 @@
  *
  * NagVisMapCfg.php - Class for handling the NagVis map configuration files
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

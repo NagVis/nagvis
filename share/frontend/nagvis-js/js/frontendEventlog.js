@@ -2,7 +2,7 @@
  *
  * frontendEventlog.js - Implements a small eventlog for the NagVis page
  *
- * Copyright (c) 2004-2008 NagVis Project
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

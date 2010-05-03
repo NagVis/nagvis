@@ -3,7 +3,7 @@
  *
  * WuiMap.php - Class for printing the maps in WUI
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

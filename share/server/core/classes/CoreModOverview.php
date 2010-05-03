@@ -3,7 +3,7 @@
  *
  * CoreModOverview.php - Core Overview module to handle ajax requests
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -46,7 +46,7 @@ class CoreModOverview extends CoreModule {
 		if($this->offersAction($this->sAction)) {
 			
 			// Initialize backends
-			$this->BACKEND = new GlobalBackendMgmt($this->CORE);
+			$this->BACKEND = new CoreBackendMgmt($this->CORE);
 			
 			$this->OVERVIEW = new GlobalIndexPage($this->CORE, $this->BACKEND, $this->AUTHORISATION);
 			

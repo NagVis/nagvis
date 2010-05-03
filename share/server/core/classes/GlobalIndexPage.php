@@ -3,7 +3,7 @@
  *
  * GlobalIndexPage.php - Class for handling the map index page
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -37,10 +37,10 @@ class GlobalIndexPage {
 	 * Class Constructor
 	 *
 	 * @param 	GlobalCore 	$CORE
-	 * @param 	GlobalBackendMgmt	$BACKEND
+	 * @param 	CoreBackendMgmt	$BACKEND
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct(GlobalCore $CORE, GlobalBackendMgmt $BACKEND, CoreAuthorisationHandler $AUTHORISATION) {
+	public function __construct(GlobalCore $CORE, CoreBackendMgmt $BACKEND, CoreAuthorisationHandler $AUTHORISATION) {
 		$this->CORE = $CORE;
 		$this->BACKEND = $BACKEND;
 		$this->AUTHORISATION = $AUTHORISATION;

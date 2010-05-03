@@ -3,7 +3,7 @@
  *
  * CoreModAutoMap.php - Core Automap module to handle ajax requests
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -103,7 +103,7 @@ class CoreModAutoMap extends CoreModule {
 	
 	private function parseAutomap() {
 		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
@@ -162,7 +162,7 @@ class CoreModAutoMap extends CoreModule {
 	
 	private function getAutomapObjects() {
 		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
@@ -192,7 +192,7 @@ class CoreModAutoMap extends CoreModule {
 		$arrObjId = $aVals['i'];
 		
 		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
 		// Read the map configuration file
 		$this->MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);

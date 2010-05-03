@@ -3,7 +3,7 @@
  *
  * GlobalMainCfg.php - Class for handling the main configuration of NagVis
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -519,6 +519,18 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_STRING_URL),
+				'custom_1' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_URL_EMPTY),
+				'custom_2' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_URL_EMPTY),
+				'custom_3' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_URL_EMPTY),
 				'options' => Array()),
 			'rotation' => Array(
 				'rotationid' => Array('must' => 1,

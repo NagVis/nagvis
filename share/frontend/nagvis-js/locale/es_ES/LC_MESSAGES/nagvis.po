@@ -1042,11 +1042,11 @@ msgstr "El fichero de plantilla &quot;[FILE]&quot; no existe."
 msgid "problemReadingUrl"
 msgstr "Imposible abrir la URL &quot;[URL]&quot;. Error: &quot;[MSG]&quot;"
 
-#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/GlobalBackendMgmt.php:62
+#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/CoreBackendMgmt.php:62
 msgid "noBackendDefined"
 msgstr "No se puede encontrar ningún backend en la configuración de NagVis. Se necesita definir un backend para recuperar la información de estado."
 
-#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/GlobalBackendMgmt.php:79
+#: Documentos/ICMonitor/projects/nagvis/share/nagvis/includes/classes/CoreBackendMgmt.php:79
 msgid "backendNotExists"
 msgstr "El backend con ID &quot;[BACKENDID]&quot; del tipo &quot;[BACKENDTYPE]&quot; no existe."
 

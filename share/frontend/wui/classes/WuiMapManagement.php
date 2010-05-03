@@ -3,7 +3,7 @@
  *
  * WuiMapManagement.php - Class for managing maps in WUI
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

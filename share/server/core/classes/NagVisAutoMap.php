@@ -3,7 +3,7 @@
  *
  * NagVisAutoMap.php - Class for parsing the NagVis automap
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -58,7 +58,7 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @param		MAINCFG		Object of NagVisMainCfg
 	 * @param		LANG			Object of GlobalLanguage
-	 * @param		BACKEND		Object of GlobalBackendMgmt
+	 * @param		BACKEND		Object of CoreBackendMgmt
 	 * @return	String 		Graphviz configuration
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */

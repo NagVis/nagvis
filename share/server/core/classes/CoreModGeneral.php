@@ -3,7 +3,7 @@
  *
  * CoreModGeneral.php - Core module to handle general ajax requests
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -170,7 +170,7 @@ class CoreModGeneral extends CoreModule {
 		$arrObjId = $aVals['i'];
 		
 		// Initialize backends
-		$BACKEND = new GlobalBackendMgmt($this->CORE);
+		$BACKEND = new CoreBackendMgmt($this->CORE);
 			
 		$numObjects = count($arrType);
 		$aObjs = Array();

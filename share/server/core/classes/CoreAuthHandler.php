@@ -3,7 +3,7 @@
  *
  * CoreAuthHandler.php - Handler for authentication modules
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -147,6 +147,10 @@ class CoreAuthHandler {
 				$bAlreadyAuthed = true;
 			else
 				$bAlreadyAuthed = false;
+
+			// Remove logins which were performed with different logon modules
+			if($bAlreadyAuthed && $this->SESS->get('logonModule') != $this->CORE->getMainCfg()->getValue('global', 'logonmodule'))
+				$this->logout();
 			
 			// When the user authenticated in trust mode read it here and override
 			// the value handed over with the function call.
@@ -159,6 +163,7 @@ class CoreAuthHandler {
 			
 			// Save success to session (only if this is no session auth)
 			if($this->bIsAuthenticated === true && $this->sModuleName != 'CoreAuthModSession') {
+				$this->SESS->set('logonModule', $this->CORE->getMainCfg()->getValue('global', 'logonmodule'));
 				$this->SESS->set('authCredentials', $this->getCredentials());
 				
 				// Save that the user authenticated in trust mode
@@ -170,9 +175,8 @@ class CoreAuthHandler {
 					$ALOG->l('User logged in ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
 			}
 
-			if($ALOG !== null && $this->bIsAuthenticated === false && $this->sModuleName != 'CoreAuthModSession') {
+			if($ALOG !== null && $this->bIsAuthenticated === false && $this->sModuleName != 'CoreAuthModSession')
 				$ALOG->l('User login failed ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
-			}
 			
 			// Remove some maybe old data when not authenticated
 			if($this->bIsAuthenticated === false && $this->SESS->isSetAndNotEmpty('authCredentials')) {

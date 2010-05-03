@@ -3,7 +3,7 @@
  *
  * ajax_handler.php - Handler for Ajax request of WUI
  *
- * Copyright (c) 2004-2008 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -60,7 +60,7 @@ switch($_GET['action']) {
 		// $_GET['backend_id'], $_GET['type']
 		
 		// Initialize the backend
-		$BACKEND = new GlobalBackendMgmt($CORE);
+		$BACKEND = new CoreBackendMgmt($CORE);
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '')
@@ -99,7 +99,7 @@ switch($_GET['action']) {
 		// $_GET['backend_id'], $_GET['host_name']
 		
 		// Initialize the backend
-		$BACKEND = new GlobalBackendMgmt($CORE);
+		$BACKEND = new CoreBackendMgmt($CORE);
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {

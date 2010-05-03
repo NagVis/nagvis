@@ -65,6 +65,8 @@ NAGVIS_VER_OLD=""
 NAGVIS_CONF="etc/nagvis.ini.php"
 # Relative path to the NagVis SQLite auth database
 NAGVIS_AUTH_DB="etc/auth.db"
+# File for saving the old removed map permissions
+AUTH_BACKUP="etc/auth-backup"
 # Default nagios web conf
 HTML_SAMPLE="etc/apache2-nagvis.conf-sample"
 # Default nagios web conf
@@ -1371,6 +1373,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 		
 		LINE="Restoring auth database file..."
 		copy "" "$NAGVIS_AUTH_DB" "auth database file"
+		copy "" "$AUTH_BACKUP" "auth backup file"
 
 		LINE="Restoring custom stylesheets..."
 		copy "" "$USERFILES_DIR/styles" "stylesheets"
@@ -1455,18 +1458,22 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
 		chk_rc "| Error" "$DONE"
 		
 		DONE=`log "Removing allowed_for_config option from map configs..." done`
+		grep -r '^allowed_for_config=' $NAGVIS_PATH/etc/maps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
 		sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg
 		chk_rc "| Error" "$DONE"
 		
 		DONE=`log "Removing allowed_user from map configs..." done`
+		grep -r '^allowed_user=' $NAGVIS_PATH/etc/maps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
 		sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
 		chk_rc "| Error" "$DONE"
 
 		DONE=`log "Removing allowed_for_config from automap configs..." done`
+		grep -r '^allowed_for_config=' $NAGVIS_PATH/etc/automaps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
 		sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/automaps/*.cfg
 		chk_rc "| Error" "$DONE"
 
 		DONE=`log "Removing allowed_user from automap configs..." done`
+		grep -r '^allowed_user=' $NAGVIS_PATH/etc/automaps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
 		sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/automaps/*.cfg
 		chk_rc "| Error" "$DONE"
 

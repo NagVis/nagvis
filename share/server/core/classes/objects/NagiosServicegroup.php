@@ -4,7 +4,7 @@
  * NagiosServicegroup.php - Class of a Servicegroup in Nagios with all necessary 
  *                  information
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -40,7 +40,7 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * Class constructor
 	 *
 	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class CoreBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @param		Integer 		ID of queried backend
 	 * @param		String		Name of the servicegroup

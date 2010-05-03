@@ -2,7 +2,7 @@
  *
  * frontendContext.js - Implements functions for context menu functionality
  *
- * Copyright (c) 2004-2008 NagVis Project
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

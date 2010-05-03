@@ -1,19 +1,9 @@
 <?php
 class CoreRequestHandler {
 	private $aOpts;
-	private $sReferer = '';
-	private $sRequestUri = '';
 	
 	public function __construct($aOptions) {
 		$this->aOpts = $aOptions;
-		
-		if(isset($_SERVER['HTTP_REFERER'])) {
-			$this->sReferer = $_SERVER['HTTP_REFERER'];
-		}
-		
-		if(isset($_SERVER['REQUEST_URI'])) {
-			$this->sRequestUri = $_SERVER['REQUEST_URI'];
-		}
 	}
 	
 	public function getKeys() {
@@ -52,12 +42,18 @@ class CoreRequestHandler {
 		}
 	}
 	
-	public function getReferer() {
-		return $this->sReferer;
+	public static function getReferer($default) {
+		if(isset($_SERVER['HTTP_REFERER']))
+      return $_SERVER['HTTP_REFERER'];
+    else
+			return $default;
 	}
 	
-	public function getRequestUri() {
-		return $this->sRequestUri;
+	public static function getRequestUri($default) {
+		if(isset($_SERVER['REQUEST_URI']))
+      return $_SERVER['REQUEST_URI'];
+    else
+			return $default;
 	}
 }
 

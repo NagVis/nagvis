@@ -2,7 +2,7 @@
  *
  * frontendMessage.js - Creates a messagebox in NagVis JS frontend
  *
- * Copyright (c) 2004-2008 NagVis Project
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

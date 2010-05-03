@@ -3,7 +3,7 @@
  *
  * CoreTemplateSystem.php - Core wrapper class for the template system
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

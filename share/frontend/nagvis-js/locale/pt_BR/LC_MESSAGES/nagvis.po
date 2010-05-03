@@ -68,15 +68,15 @@ msgstr "Nenhum objeto encontrado com este tipo no respectivo mapa."
 msgid "ObjectNotFoundOnMap"
 msgstr "O objeto nao pode ser encontrado no mapa requerido."
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:62
+#: nagvis/includes/classes/CoreBackendMgmt.php:62
 msgid "noBackendDefined"
 msgstr "Nenhum backend encontrado na configuracao do NagVis. Voce precisa definir um backend para obter informacoes de status."
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:79
+#: nagvis/includes/classes/CoreBackendMgmt.php:79
 msgid "backendNotExists"
 msgstr "O backend com o ID &quot;[BACKENDID]&quot; de tipo &quot;[BACKENDTYPE]&quot; nao existe."
 
-#: nagvis/includes/classes/GlobalBackendMgmt.php:124
+#: nagvis/includes/classes/CoreBackendMgmt.php:124
 msgid "backendNotInitialized"
 msgstr "O backend com o ID \"[BACKENDID]\" de tipo \"[BACKENDTYPE]\" nao foi inicializada. Talvez exista um backend indefinido em uso no mapa!"
 

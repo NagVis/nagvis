@@ -4,7 +4,7 @@
  * NagVisObject.php - Abstract class of an object in NagVis with all necessary 
  *                  information which belong to the object handling in NagVis
  *
- * Copyright (c) 2004-2009 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -54,7 +54,7 @@ class NagVisObject {
 	 * Class constructor
 	 *
 	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class GlobalBackendMgmt
+	 * @param		Object 		Object of class CoreBackendMgmt
 	 * @param		Object 		Object of class GlobalLanguage
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
@@ -342,6 +342,9 @@ class NagVisObject {
 			
 			// Add the custom htmlcgi path for the object
 			$arr['htmlcgi'] = $this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'htmlcgi');
+			$arr['custom_1'] = $this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'custom_1');
+			$arr['custom_2'] = $this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'custom_2');
+			$arr['custom_3'] = $this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'custom_3');
 			
 			if($this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
 				$arr['backend_instancename'] = $this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id,'dbinstancename');

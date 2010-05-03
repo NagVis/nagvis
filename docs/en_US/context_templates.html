@@ -28,6 +28,15 @@
 		<td>[name]</td><td>Name of the object (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
 		</tr>
 		<tr>
+		<td>[custom_1]</td><td>Represents the first custom macro which can be defined per backend. Might be usefull to set backend individual URLs.</td>
+		</tr>
+		<tr>
+		<td>[custom_2]</td><td>Second custom macro. Same as above.</td>
+		</tr>
+		<tr>
+		<td>[custom_3]</td><td>Third custom macro. Same as above.</td>
+		</tr>
+		<tr>
 		<th colspan="2"> Language macros </th>
 		</tr>
 		<tr>
@@ -49,7 +58,7 @@
 		<td>[html_base]</td><td>Absolute URL to HTML-Base (Default: /nagvis)</td>
 		</tr>
 		<tr>
-		<td>[html_cgi]</td><td>Absolute URL to the Nagios CGIs (Default: /nagios/cgi-bin)</td>
+		<td>[html_cgi]</td><td>Absolute URL to the Nagios CGIs. Using object specific value. Depends on the used backend. If no backend specific value set the default value will be used. (Default: /nagios/cgi-bin)</td>
 		</tr>
 		<tr>
 		<td>[html_templates]</td><td> Path to context templates directory (Default: /nagvis/userfiles/templates)</td>
