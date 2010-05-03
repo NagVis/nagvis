@@ -31,6 +31,7 @@ class GlobalLanguage {
 	private $textDomain;
 	private $sCurrentLanguage;
 	private $sCurrentEncoding;
+	private $cache = Array();
 	
 	/**
 	 * Class Constructor
@@ -244,6 +245,10 @@ class GlobalLanguage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getText($id, $replace = NULL) {
+		// Use cache if available
+		if(isset($this->cache[$id]))
+			return $this->cache[$id];
+		
 		$ret = $this->getTextOfId($id);
 		
 		if($replace !== NULL) {
@@ -262,6 +267,10 @@ class GlobalLanguage {
 				$ret .= 'Opts: '.json_encode($replace);
 			}
 		}
+
+		// Store in cache for this page processing
+		if(!isset($this->cache[$id]))
+			$this->cache[$id] = $ret;
 		
 		return $ret;
 	}

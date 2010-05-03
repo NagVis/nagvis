@@ -51,6 +51,7 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	protected static $iconPath = null;
 	protected static $iconHtmlPath = null;
+	protected static $langChildStates = null;
 	
 	protected $dateFormat;
 	
@@ -828,17 +829,18 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function mergeSummaryOutput($arrStates, $objLabel) {
-		$this->summary_output .= $this->CORE->getLang()->getText('childStatesAre').' ';
-		foreach($arrStates AS $state => &$num) {
+		if(NagVisStatefulObject::$langChildStates === null)
+			NagVisStatefulObject::$langChildStates = $this->CORE->getLang()->getText('childStatesAre');
+		
+		$this->summary_output .= NagVisStatefulObject::$langChildStates.' ';
+		foreach($arrStates AS $state => $num) {
 			if($num > 0) {
 				$this->summary_output .= $num.' '.$state.', ';
 			}
 		}
 		
 		// Remove last comma
-		$this->summary_output = preg_replace('/, $/', '', $this->summary_output);
-		
-		$this->summary_output .= ' '.$objLabel.'.';
+		$this->summary_output = rtrim($this->summary_output, ', ').' '.$objLabel.'.';
 	}
 	
 	/**
