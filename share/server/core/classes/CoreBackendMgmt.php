@@ -307,6 +307,7 @@ class CoreBackendMgmt {
 			}
 		} catch(BackendException $e) {
 			$aCounts = Array();
+			$msg = $e->getMessage();
 		}
 
 		foreach($aObjs AS $name => $OBJS)
@@ -319,7 +320,10 @@ class CoreBackendMgmt {
 			else
 				foreach($OBJS AS $OBJ)
 					if($type != 'hostMemberState')
-						$OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" does not exist ([TYPE]).',
+						if(isset($msg))
+							$OBJ->setBackendProblem($msg);
+						else
+							$OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" does not exist ([TYPE]).',
 			                                                 Array('OBJ' => $name, 'TYPE' => $type)));
 	}
 
