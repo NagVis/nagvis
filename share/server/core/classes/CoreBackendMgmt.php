@@ -30,6 +30,7 @@ class CoreBackendMgmt {
 	public $BACKENDS = Array();
 	private $aInitialized = Array();
 	private $aQueue = Array();
+	private $aError = Array();
 	
 	/**
 	 * Constructor
@@ -45,6 +46,17 @@ class CoreBackendMgmt {
 		$this->loadBackends();
 		
 		return 0;
+	}
+
+	public function getBackend($id) {
+		if(!isset($this->aInitialized[$id]))
+			$this->initializeBackend($id);
+		
+		// Re-throw the stored backend exception for this request
+		if(isset($this->aError[$id]))
+			throw $this->aError[$id];
+
+		return $this->BACKENDS[$id];
 	}
 
 	/**
@@ -119,7 +131,7 @@ class CoreBackendMgmt {
 		// Loop all backends
 		foreach($this->aQueue AS $backendId => $types) {
 			// First check if the backend is initialized and maybe initiale it
-			$this->checkBackendInitialized($backendId, true);
+			//$this->checkBackendInitialized($backendId, false);
 
 			// Loop all different query types
 			foreach($types AS $type => $options) {
@@ -169,8 +181,9 @@ class CoreBackendMgmt {
 				// Fist get the host states for all the hostgroup members
 				try {
 					$filters = Array(Array('key' => 'service_groups', 'op' => '>=', 'val' => 'name'));
-					$aServices = $this->BACKENDS[$backendId]->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+					$aServices = $this->getBackend($backendId)->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
 				} catch(BackendException $e) {
+					$aServices = Array();
 					$OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
 				  																						Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
 				}
@@ -221,8 +234,9 @@ class CoreBackendMgmt {
 				// First get the host states for all the hostgroup members
 				try {
 					$filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
-					$aHosts = $this->BACKENDS[$backendId]->getHostState(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+					$aHosts = $this->getBackend($backendId)->getHostState(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
 				} catch(BackendException $e) {
+					$aHosts = Array();
 					$OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
 				  																						Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
 				}
@@ -230,7 +244,7 @@ class CoreBackendMgmt {
 				// Now fetch the service state counts for all hostgroup members
 				try {
 					$filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
-					$aServiceStateCounts = $this->BACKENDS[$backendId]->getHostStateCounts(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+					$aServiceStateCounts = $this->getBackend($backendId)->getHostStateCounts(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
 				} catch(BackendException $e) {
 					$aServiceStateCounts = Array();
 				}
@@ -265,30 +279,34 @@ class CoreBackendMgmt {
 	}
 	
 	private function fetchStateCounts($backendId, $type, $options, $aObjs) {
-		switch($type) {
-			case 'servicegroupMemberState':
-				$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
-				$aCounts = $this->BACKENDS[$backendId]->getServicegroupStateCounts($aObjs, $options, $filters);
-			break;
-			case 'hostgroupMemberState':
-				$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
-				$aCounts = $this->BACKENDS[$backendId]->getHostgroupStateCounts($aObjs, $options, $filters);
-			break;
-			case 'serviceState':
-				$filters = Array(
-										Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
-										Array('key' => 'service_description', 'op' => '=', 'service_description')
-									);
-				$aCounts = $this->BACKENDS[$backendId]->getServiceState($aObjs, $options, $filters);
-			break;
-			case 'hostState':
-				$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-				$aCounts = $this->BACKENDS[$backendId]->getHostState($aObjs, $options, $filters);
-			break;
-			case 'hostMemberState':
-				$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-				$aCounts = $this->BACKENDS[$backendId]->getHostStateCounts($aObjs, $options, $filters);
-			break;
+		try {
+			switch($type) {
+				case 'servicegroupMemberState':
+					$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
+					$aCounts = $this->getBackend($backendId)->getServicegroupStateCounts($aObjs, $options, $filters);
+				break;
+				case 'hostgroupMemberState':
+					$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
+					$aCounts = $this->getBackend($backendId)->getHostgroupStateCounts($aObjs, $options, $filters);
+				break;
+				case 'serviceState':
+					$filters = Array(
+											Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
+											Array('key' => 'service_description', 'op' => '=', 'service_description')
+										);
+					$aCounts = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
+				break;
+				case 'hostState':
+					$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
+					$aCounts = $this->getBackend($backendId)->getHostState($aObjs, $options, $filters);
+				break;
+				case 'hostMemberState':
+					$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
+					$aCounts = $this->getBackend($backendId)->getHostStateCounts($aObjs, $options, $filters);
+				break;
+			}
+		} catch(BackendException $e) {
+			$aCounts = Array();
 		}
 
 		foreach($aObjs AS $name => $OBJS)
@@ -308,7 +326,7 @@ class CoreBackendMgmt {
 	private function fetchHostMemberDetails($backendId, $options, $aObjs) {
 		try {
 			$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-			$aMembers = $this->BACKENDS[$backendId]->getServiceState($aObjs, $options, $filters);
+			$aMembers = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
 		} catch(BackendException $e) {
 			$aMembers = Array();
 		}
@@ -371,14 +389,19 @@ class CoreBackendMgmt {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function initializeBackend($backendId) {
-		if($this->checkBackendExists($backendId, 1)) {
-			$backendClass = 'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype');
-			$this->BACKENDS[$backendId] = new $backendClass($this->CORE,$backendId);
-			
-			// Mark backend as initialized
-			$this->aInitialized[$backendId] = true;
-			
-			return true;
+		if($this->checkBackendExists($backendId, true)) {
+			try {
+				$backendClass = 'GlobalBackend' . $this->CORE->getMainCfg()->getValue('backend_' . $backendId, 'backendtype');
+				$this->BACKENDS[$backendId] = new $backendClass($this->CORE, $backendId);
+				
+				// Mark backend as initialized
+				$this->aInitialized[$backendId] = true;
+				
+				return true;
+			} catch(BackendException $e) {
+				$this->aError[$backendId] = $e;
+				return false;
+			}
 		} else {
 			return false;
 		}

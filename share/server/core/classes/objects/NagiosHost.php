@@ -187,50 +187,48 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function filterParents(&$arrAllowedHosts) {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$remain = 0;
+		$remain = 0;
+		
+		$numChilds = $this->getNumParents();
+		for($i = 0; $i < $numChilds; $i++) {
+			$OBJ = &$this->parentObjects[$i];
+			$selfRemain = 0;
 			
-			$numChilds = $this->getNumParents();
-			for($i = 0; $i < $numChilds; $i++) {
-				$OBJ = &$this->parentObjects[$i];
-				$selfRemain = 0;
+			if(is_object($OBJ)) {
+				/**
+					* The current parent is member of the filter group, it declares 
+					* itselfs as remaining object
+					*/
+				if(in_array($OBJ->getName(), $arrAllowedHosts)) {
+					$selfRemain = 1;
+				} else {
+					$selfRemain = 0;
+				}
 				
-				if(is_object($OBJ)) {
-					/**
-					 * The current parent is member of the filter group, it declares 
-					 * itselfs as remaining object
-					 */
-					if(in_array($OBJ->getName(), $arrAllowedHosts)) {
+				/**
+					* If there are parent objects loop them all to get their remaining
+					* state. If there is no parent object the only remaining state is
+					* the state of the current parent object.
+					*/
+				if($OBJ->hasParents()) {
+					$parentsRemain = $OBJ->filterParents($arrAllowedHosts);
+					
+					if(!$selfRemain && $parentsRemain) {
 						$selfRemain = 1;
-					} else {
-						$selfRemain = 0;
-					}
-					
-					/**
-					 * If there are parent objects loop them all to get their remaining
-					 * state. If there is no parent object the only remaining state is
-					 * the state of the current parent object.
-					 */
-					if($OBJ->hasParents()) {
-						$parentsRemain = $OBJ->filterParents($arrAllowedHosts);
-						
-						if(!$selfRemain && $parentsRemain) {
-							$selfRemain = 1;
-						}
-					}
-					
-					// If the host should not remain on the map remove it from the 
-					// object tree
-					if(!$selfRemain) {
-						// Remove the object from the tree
-						unset($this->parentObjects[$i]);
 					}
 				}
 				
-				$remain |= $selfRemain;
+				// If the host should not remain on the map remove it from the 
+				// object tree
+				if(!$selfRemain) {
+					// Remove the object from the tree
+					unset($this->parentObjects[$i]);
+				}
 			}
-			return $remain;
+			
+			$remain |= $selfRemain;
 		}
+		return $remain;
 	}
 	
 	/**
@@ -270,50 +268,48 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function filterChilds(&$arrAllowedHosts) {
-		if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-			$remain = 0;
+		$remain = 0;
+		
+		$numChilds = $this->getNumChilds();
+		for($i = 0; $i < $numChilds; $i++) {
+			$OBJ = &$this->childObjects[$i];
+			$selfRemain = 0;
 			
-			$numChilds = $this->getNumChilds();
-			for($i = 0; $i < $numChilds; $i++) {
-				$OBJ = &$this->childObjects[$i];
-				$selfRemain = 0;
+			if(is_object($OBJ)) {
+				/**
+					* The current child is member of the filter group, it declares 
+					* itselfs as remaining object
+					*/
+				if(in_array($OBJ->getName(), $arrAllowedHosts)) {
+					$selfRemain = 1;
+				} else {
+					$selfRemain = 0;
+				}
 				
-				if(is_object($OBJ)) {
-					/**
-					 * The current child is member of the filter group, it declares 
-					 * itselfs as remaining object
-					 */
-					if(in_array($OBJ->getName(), $arrAllowedHosts)) {
+				/**
+					* If there are child objects loop them all to get their remaining
+					* state. If there is no child object the only remaining state is
+					* the state of the current child object.
+					*/
+				if($OBJ->hasChilds()) {
+					$childsRemain = $OBJ->filterChilds($arrAllowedHosts);
+					
+					if(!$selfRemain && $childsRemain) {
 						$selfRemain = 1;
-					} else {
-						$selfRemain = 0;
-					}
-					
-					/**
-					 * If there are child objects loop them all to get their remaining
-					 * state. If there is no child object the only remaining state is
-					 * the state of the current child object.
-					 */
-					if($OBJ->hasChilds()) {
-						$childsRemain = $OBJ->filterChilds($arrAllowedHosts);
-						
-						if(!$selfRemain && $childsRemain) {
-							$selfRemain = 1;
-						}
-					}
-					
-					// If the host should not remain on the map remove it from the 
-					// object tree
-					if(!$selfRemain) {
-						// Remove the object from the tree
-						unset($this->childObjects[$i]);
 					}
 				}
 				
-				$remain |= $selfRemain;
+				// If the host should not remain on the map remove it from the 
+				// object tree
+				if(!$selfRemain) {
+					// Remove the object from the tree
+					unset($this->childObjects[$i]);
+				}
 			}
-			return $remain;
+			
+			$remain |= $selfRemain;
 		}
+		return $remain;
 	}
 	
 	/**
@@ -449,8 +445,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	private function fetchDirectParentObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
 		try {
-			$this->BACKEND->checkBackendInitialized($this->backend_id, true);
-			$aParents = $this->BACKEND->BACKENDS[$this->backend_id]->getDirectParentNamesByHostName($this->getName());
+			$aParents = $this->BACKEND->getBackend($this->backend_id)->getDirectParentNamesByHostName($this->getName());
 		} catch(BackendException $e) {
 			$aParents = Array();
 		}
@@ -506,8 +501,7 @@ class NagiosHost extends NagVisStatefulObject {
 	 */
 	private function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
 		try {
-			$this->BACKEND->checkBackendInitialized($this->backend_id, true);
-			$aChilds = $this->BACKEND->BACKENDS[$this->backend_id]->getDirectChildNamesByHostName($this->getName());
+			$aChilds = $this->BACKEND->getBackend($this->backend_id)->getDirectChildNamesByHostName($this->getName());
 		} catch(BackendException $e) {
 			$aChilds = Array();
 		}
