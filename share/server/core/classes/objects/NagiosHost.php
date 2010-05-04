@@ -562,7 +562,7 @@ class NagiosHost extends NagVisStatefulObject {
 		
 		// Only merge host state with service state when recognize_services is set 
 		// to 1
-		if($this->getRecognizeServices()) {
+		if($this->recognize_services) {
 			// Get states of services and merge with host state
 			foreach($this->getMembers() AS $SERVICE) {
 				$this->wrapChildState($SERVICE);
@@ -611,7 +611,7 @@ class NagiosHost extends NagVisStatefulObject {
 		
 		// Only merge host state with service state when recognize_services is set 
 		// to 1
-		if($this->getRecognizeServices()) {
+		if($this->recognize_services) {
 			$iNumServices = 0;
 			$arrServiceStates = Array();
 			
@@ -657,7 +657,7 @@ class NagiosHost extends NagVisStatefulObject {
 		
 		// Only merge host state with service state when recognize_services is set 
 		// to 1
-		if($this->getRecognizeServices()) {
+		if($this->recognize_services) {
 			// If there are services write the summary state for them
 			if($this->hasMembers()) {
 				$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
