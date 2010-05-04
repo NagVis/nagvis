@@ -554,8 +554,8 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsByState($OBJ1, $OBJ2) {
-		$state1 = $OBJ1->getSummaryState();
-		$state2 = $OBJ2->getSummaryState();
+		$state1 = $OBJ1->summary_state;
+		$state2 = $OBJ2->summary_state;
 
 		// Quit when nothing to compare
 		if($state1 == '' || $state2 == '') {
@@ -567,16 +567,16 @@ class NagVisObject {
 		// Handle normal/ack/downtime states
 		
 		$stubState1 = 'normal';
-		if($OBJ1->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state1]['ack'])) {
+		if($OBJ1->summary_problem_has_been_acknowledged == 1 && isset($stateWeight[$state1]['ack'])) {
 			$stubState1 = 'ack';
-		} elseif($OBJ1->getSummaryInDowntime() == 1 && isset($stateWeight[$state1]['downtime'])) {
+		} elseif($OBJ1->summary_in_downtime == 1 && isset($stateWeight[$state1]['downtime'])) {
 			$stubState1 = 'downtime';
 		}
 		
 		$stubState2 = 'normal';
-		if($OBJ2->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state2]['ack'])) {
+		if($OBJ2->summary_problem_has_been_acknowledged == 1 && isset($stateWeight[$state2]['ack'])) {
 			$stubState2 = 'ack';
-		} elseif($OBJ2->getSummaryInDowntime() == 1 && isset($stateWeight[$state2]['downtime'])) {
+		} elseif($OBJ2->summary_in_downtime == 1 && isset($stateWeight[$state2]['downtime'])) {
 			$stubState2 = 'downtime';
 		}
 				

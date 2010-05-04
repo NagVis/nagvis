@@ -64,15 +64,11 @@ class CoreBackendMgmt {
 	 *
 	 * Add a backend query to the queue
 	 *
-	 * @param   String  Query ID to add to the queue
+	 * @param   Array   Queries to be added to the queue
 	 * @param   Object  Map object to fetch the informations for
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function queue($query, $OBJ) {
-		if(!is_array($query)) {
-			$query = Array($query => true);
-		}
-		
 		$backendId = $OBJ->getBackendId();
 		if(!isset($this->aQueue[$backendId]))
 			$this->aQueue[$backendId] = Array();

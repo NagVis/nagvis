@@ -663,7 +663,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function getChildFetchingStateFilters() {
 		$stateCounts = Array();
 		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
-		if(is_array($this->aStateCounts)) {
+		if($this->aStateCounts !== null) {
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
 				if(isset($stateWeight[$sState])
 					&& isset($stateWeight[$sState]['normal'])
@@ -756,9 +756,9 @@ class NagVisStatefulObject extends NagVisObject {
 			if(isset($stateWeight[$this->summary_state])) {
 				$sCurrSubState = 'normal';
 				
-				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$this->summary_state]['ack'])) {
+				if($this->summary_problem_has_been_acknowledged == 1 && isset($stateWeight[$this->summary_state]['ack'])) {
 					$sCurrSubState = 'ack';
-				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$this->summary_state]['downtime'])) {
+				} elseif($this->summary_in_downtime == 1 && isset($stateWeight[$this->summary_state]['downtime'])) {
 					$sCurrSubState = 'downtime';
 				}
 				
@@ -771,7 +771,7 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		// Loop all major states
 		$iSumCount = 0;
-		if(is_array($this->aStateCounts)) {
+		if($this->aStateCounts !== null) {
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
 				// Loop all substates (normal,ack,downtime,...)
 				foreach($aSubstates AS $sSubState => $iCount) {
@@ -852,14 +852,14 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function wrapChildState($OBJ) {
-		$sSummaryState = $this->getSummaryState();
-		$sObjSummaryState = $OBJ->getSummaryState();
+		$sSummaryState = $this->summary_state;
+		$sObjSummaryState = $OBJ->summary_state;
 	
 		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
 		if(isset($stateWeight[$sObjSummaryState])) {
-			$objAck = $OBJ->getSummaryAcknowledgement();
-			$objDowntime = $OBJ->getSummaryInDowntime();
+			$objAck = $OBJ->summary_problem_has_been_acknowledged;
+			$objDowntime = $OBJ->summary_in_downtime;
 			
 			if($sSummaryState != '') {
 				/* When the state of the current child is not as good as the current
@@ -868,9 +868,9 @@ class NagVisStatefulObject extends NagVisObject {
 				
 				// Gather the current summary state type
 				$sType = 'normal';
-				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+				if($this->summary_problem_has_been_acknowledged == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
 					$sType = 'ack';
-				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+				} elseif($this->summary_in_downtime == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
 					$sType = 'downtime';
 				}
 
