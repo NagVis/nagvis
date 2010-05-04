@@ -114,7 +114,7 @@ class NagiosHost extends NagVisStatefulObject {
 		if($bFetchObjectState)
 			$queries['hostState']	= true;
 		
-		if($this->getRecognizeServices())
+		if($this->recognize_services)
 			$queries['hostMemberState'] = true;
 		
 		if($this->hover_menu == 1
@@ -578,14 +578,15 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function addHostStateToStateCounts() {
-		$sState = $this->getState();
+		$sState = $this->state;
 
-		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
 		$sType = 'normal';
-		if($this->getAcknowledgement() == 1 && isset($stateWeight[$sState]['ack'])) {
+		if($this->problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$sState]['ack'])) {
 			$sType = 'ack';
-		} elseif($this->getInDowntime() == 1 && isset($stateWeight[$sState]['downtime'])) {
+		} elseif($this->in_downtime == 1 && isset(NagVisObject::$stateWeight[$sState]['downtime'])) {
 			$sType = 'downtime';
 		}
 		

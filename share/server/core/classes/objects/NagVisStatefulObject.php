@@ -662,15 +662,18 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	public function getChildFetchingStateFilters() {
 		$stateCounts = Array();
-		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		
 		if($this->aStateCounts !== null) {
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
-				if(isset($stateWeight[$sState])
-					&& isset($stateWeight[$sState]['normal'])
+				if(isset(NagVisObject::$stateWeight[$sState])
+					&& isset(NagVisObject::$stateWeight[$sState]['normal'])
 					&& isset($aSubstates['normal'])
 					&& $aSubstates['normal'] !== 0) {
 					$stateCounts[] = Array('name' => $sState,
-																'weight' => $stateWeight[$sState]['normal'],
+																'weight' => NagVisObject::$stateWeight[$sState]['normal'],
 																'count' => $aSubstates['normal']);
 				}
 			}
@@ -746,23 +749,23 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function fetchSummaryStateFromCounts() {
-		// Load the configured state weights
-		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
 		// Fetch the current state to start with
 		if($this->summary_state == '') {
 			$currWeight = null;
 		} else {
-			if(isset($stateWeight[$this->summary_state])) {
+			if(isset(NagVisObject::$stateWeight[$this->summary_state])) {
 				$sCurrSubState = 'normal';
 				
-				if($this->summary_problem_has_been_acknowledged == 1 && isset($stateWeight[$this->summary_state]['ack'])) {
+				if($this->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$this->summary_state]['ack'])) {
 					$sCurrSubState = 'ack';
-				} elseif($this->summary_in_downtime == 1 && isset($stateWeight[$this->summary_state]['downtime'])) {
+				} elseif($this->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$this->summary_state]['downtime'])) {
 					$sCurrSubState = 'downtime';
 				}
 				
-				$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
+				$currWeight = NagVisObject::$stateWeight[$this->summary_state][$sCurrSubState];
 			} else {
 				// Error handling: Invalid state
 				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].', Array('STATE' => $this->summary_state, 'SUBSTATE' => $sCurrSubState, 'TYPE' => $this->getType())));
@@ -781,8 +784,8 @@ class NagVisStatefulObject extends NagVisObject {
 						$iSumCount += $iCount;
 						
 						// Get weight
-						if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
-							$weight = $stateWeight[$sState][$sSubState];
+						if(isset(NagVisObject::$stateWeight[$sState]) && isset(NagVisObject::$stateWeight[$sState][$sSubState])) {
+							$weight = NagVisObject::$stateWeight[$sState][$sSubState];
 							
 							// No "current state" yet
 							// The new state is worse than the current state
@@ -855,9 +858,10 @@ class NagVisStatefulObject extends NagVisObject {
 		$sSummaryState = $this->summary_state;
 		$sObjSummaryState = $OBJ->summary_state;
 	
-		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
-		if(isset($stateWeight[$sObjSummaryState])) {
+		if(isset(NagVisObject::$stateWeight[$sObjSummaryState])) {
 			$objAck = $OBJ->summary_problem_has_been_acknowledged;
 			$objDowntime = $OBJ->summary_in_downtime;
 			
@@ -868,21 +872,21 @@ class NagVisStatefulObject extends NagVisObject {
 				
 				// Gather the current summary state type
 				$sType = 'normal';
-				if($this->summary_problem_has_been_acknowledged == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
+				if($this->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$sSummaryState]['ack'])) {
 					$sType = 'ack';
-				} elseif($this->summary_in_downtime == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
+				} elseif($this->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$sSummaryState]['downtime'])) {
 					$sType = 'downtime';
 				}
 
 				// Gather the object summary state type
 				$sObjType = 'normal';
-				if($objAck == 1 && isset($stateWeight[$sObjSummaryState]['ack'])) {
+				if($objAck == 1 && isset(NagVisObject::$stateWeight[$sObjSummaryState]['ack'])) {
 					$sObjType = 'ack';
-				} elseif($objDowntime == 1 && isset($stateWeight[$sObjSummaryState]['downtime'])) {
+				} elseif($objDowntime == 1 && isset(NagVisObject::$stateWeight[$sObjSummaryState]['downtime'])) {
 					$sObjType = 'downtime';
 				}
 				
-				if($stateWeight[$sSummaryState][$sType] < $stateWeight[$sObjSummaryState][$sObjType]) { 
+				if(NagVisObject::$stateWeight[$sSummaryState][$sType] < NagVisObject::$stateWeight[$sObjSummaryState][$sObjType]) { 
 					$this->summary_state = $sObjSummaryState;
 					
 					if($objAck == 1) {

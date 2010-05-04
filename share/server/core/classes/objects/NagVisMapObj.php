@@ -117,7 +117,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// Loop all members
 		foreach($this->members AS $OBJ) {
-			$sType = $OBJ->getType();
+			$sType = $OBJ->type;
 			
 			// Skip unrelevant object types
 			if($sType == 'textbox' || $sType == 'shape' || $sType == 'line') {
@@ -163,7 +163,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$i = 0;
 		// Loop all objects except the stateless ones and count them
 		foreach($this->members AS $OBJ) {
-			$type = $OBJ->getType();
+			$type = $OBJ->type;
 			if($type != 'textbox' && $type != 'shape' && $type != 'line') {
 				$i++;
 			}
