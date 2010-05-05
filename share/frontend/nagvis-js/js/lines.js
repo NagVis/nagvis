@@ -384,7 +384,7 @@ function getColorFill(percent) {
                 return '#ffc000';
         } else if (percent > 85 && percent <= 100) {
                 // red
-                return '#ffc000';
+                return '#ff0000';
         } else {
                 return '#000000';
         }
