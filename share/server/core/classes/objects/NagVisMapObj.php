@@ -491,19 +491,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryState() {
-		if($this->hasObjects() && $this->hasStatefulObjects()) {
-			// Get summary state member objects
-			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				//try {
-					$this->wrapChildState($OBJ);
-				/*} catch(NagVisException $e) {
-					$OBJ->summary_state = 'ERROR';
-					$OBJ->summary_output = $e->getMessage();
-				}*/
-			}
-		} else {
+		// Get summary state of this object from single objects
+		if($this->hasObjects() && $this->hasStatefulObjects())
+			$this->wrapChildState($this->getStateRelevantMembers());
+		else
 			$this->summary_state = 'UNKNOWN';
-		}
 	}
 }
 ?>

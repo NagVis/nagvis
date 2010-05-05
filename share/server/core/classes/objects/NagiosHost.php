@@ -563,14 +563,9 @@ class NagiosHost extends NagVisStatefulObject {
 		$this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
 		$this->summary_in_downtime = $this->in_downtime;
 		
-		// Only merge host state with service state when recognize_services is set 
-		// to 1
-		if($this->recognize_services) {
-			// Get states of services and merge with host state
-			foreach($this->getMembers() AS $SERVICE) {
-				$this->wrapChildState($SERVICE);
-			}
-		}
+		// Only merge host state with service state when recognize_services is set to 1
+		if($this->recognize_services)
+			$this->wrapChildState($this->getMembers());
 	}
 		
 	/**
