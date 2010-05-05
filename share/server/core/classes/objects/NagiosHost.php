@@ -53,6 +53,9 @@ class NagiosHost extends NagVisStatefulObject {
 	protected $childObjects;
 	protected $parentObjects;
 	protected $members;
+
+	protected static $langHostStateIs = null;
+	protected static $langServices = null;
 	
 	/**
 	 * Class constructor
@@ -75,7 +78,7 @@ class NagiosHost extends NagVisStatefulObject {
 		
 		parent::__construct($CORE, $BACKEND);
 		
-		$this->setConfiguration(Array('host_name' => $hostName));
+		$this->host_name = $hostName;
 	}
 	
 	/**
@@ -606,8 +609,11 @@ class NagiosHost extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryOutputFromCounts() {
+		if(NagiosHost::$langHostStateIs === null)
+			NagiosHost::$langHostStateIs = $this->CORE->getLang()->getText('hostStateIs');
+
 		// Write host state
-		$this->summary_output = $this->CORE->getLang()->getText('hostStateIs').' '.$this->state.'. ';
+		$this->summary_output = NagiosHost::$langHostStateIs.' '.$this->state.'. ';
 		
 		// Only merge host state with service state when recognize_services is set 
 		// to 1
@@ -616,7 +622,7 @@ class NagiosHost extends NagVisStatefulObject {
 			$arrServiceStates = Array();
 			
 			// Loop all major states
-			if($this->aStateCounts !== null)
+			if($this->aStateCounts !== null) {
 				foreach($this->aStateCounts AS $sState => $aSubstates) {
 					// Ignore host state here
 					if($sState != 'UP' && $sState != 'DOWN' && $sState != 'UNREACHABLE') {
@@ -635,9 +641,13 @@ class NagiosHost extends NagVisStatefulObject {
 						}
 					}
 				}
+			}
 			
 			if($iNumServices > 0) {
-				$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+				if(NagiosHost::$langServices === null)
+					NagiosHost::$langServices = $this->CORE->getLang()->getText('services');
+				
+				$this->mergeSummaryOutput($arrServiceStates, NagiosHost::$langServices);
 			} else {
 				$this->summary_output .= $this->CORE->getLang()->getText('hostHasNoServices','HOST~'.$this->getName());
 			}
