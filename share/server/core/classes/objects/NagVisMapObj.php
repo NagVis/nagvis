@@ -428,12 +428,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
-			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				$sState = $OBJ->getSummaryState();
-				if(isset($arrStates[$sState])) {
-					$arrStates[$sState]++;
-				}
-			}
+			foreach($this->getStateRelevantMembers() AS $OBJ)
+				if(isset($arrStates[$OBJ->summary_state]))
+					$arrStates[$OBJ->summary_state]++;
 			
 			$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('objects'));
 		} else {
