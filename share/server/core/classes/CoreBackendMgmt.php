@@ -126,9 +126,6 @@ class CoreBackendMgmt {
 	public function execute() {
 		// Loop all backends
 		foreach($this->aQueue AS $backendId => $types) {
-			// First check if the backend is initialized and maybe initiale it
-			//$this->checkBackendInitialized($backendId, false);
-
 			// Loop all different query types
 			foreach($types AS $type => $options) {
 				// Now loop th different options (Splitting by only_hard_state options etc.)
