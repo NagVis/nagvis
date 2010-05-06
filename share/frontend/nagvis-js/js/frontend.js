@@ -33,6 +33,7 @@ var oHoverTemplates = {};
 var oHoverUrls = {};
 var oContextTemplates = {};
 var oAutomapParams = {};
+var bBlockUpdates = false;
 
 /**
  * submitFrontendForm()
@@ -1579,6 +1580,9 @@ function automapParse(mapName) {
  */
 function parseMap(iMapCfgAge, mapName) {
 	var bReturn = false;
+
+	// Block updates of the current map
+	bBlockUpdates = true;
 	
 	// Get new map/object information from ajax handler
 	var oMapBasics = getMapProperties(mapName);
@@ -1646,6 +1650,9 @@ function parseMap(iMapCfgAge, mapName) {
 	oMapBasics = null;
 	oMapObjects = null;
 	
+	// Updates are allowed again
+	bBlockUpdates = false;
+	
 	return bReturn;
 }
 
@@ -1659,6 +1666,9 @@ function parseMap(iMapCfgAge, mapName) {
  */
 function parseAutomap(iMapCfgAge, mapName) {
 	var bReturn = false;
+	
+	// Block updates of the current map
+	bBlockUpdates = true;
 	
 	// Get new map/object information from ajax handler
 	var oMapBasics = getAutomapProperties(mapName);
@@ -1725,6 +1735,9 @@ function parseAutomap(iMapCfgAge, mapName) {
 	
 	oMapBasics = null;
 	oMapObjects = null;
+	
+	// Updates are allowed again
+	bBlockUpdates = false;
 	
 	return bReturn;
 }
@@ -1886,6 +1899,14 @@ function workerInitialize(iCount, sType, sIdentifier) {
 function handleUpdate(o, aParams) {
 	var sType = aParams[0];
 	var bStateChanged = false;
+
+	// Stop processing these informations when the current view should not be
+	// updated at the moment e.g. when reparsing the map after a changed mapcfg
+	if(bBlockUpdates) {
+		eventlog("ajax", "info", "Throwing new object information away since the view is blocked");
+		return false;
+	}
+
 	if(o.length > 0)
 		bStateChanged = updateObjects(o, aMapObjects, sType);
 	
