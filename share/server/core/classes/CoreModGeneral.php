@@ -85,17 +85,20 @@ class CoreModGeneral extends CoreModule {
 			}
 		}
 		
-		if(isset($aOpts['m']) && is_array($aOpts['m'])) {
-			foreach($aOpts['m'] AS $sMap) {
-				$MAPCFG = new NagVisMapCfg($this->CORE, $sMap);
-				$aReturn[$sMap] = $MAPCFG->getFileModificationTime();
-			}
-		}
-		
-		if(isset($aOpts['am']) && is_array($aOpts['am'])) {
-			foreach($aOpts['am'] AS $sAutomap) {
-				$MAPCFG = new NagVisAutomapCfg($this->CORE, $sAutomap);
-				$aReturn[$sAutomap] = $MAPCFG->getFileModificationTime();
+		// Loop maps and automaps
+		foreach(Array('m' => 'Map', 'am' => 'AutoMap') AS $t => $p) {
+			if(isset($aOpts[$t]) && is_array($aOpts[$t])) {
+				foreach($aOpts[$t] AS $sMap) {
+					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted($p, 'view', $sMap))
+						continue;
+					
+					if($t == 'm')
+						$MAPCFG = new NagVisMapCfg($this->CORE, $sMap);
+					else
+						$MAPCFG = new NagVisAutomapCfg($this->CORE, $sMap);
+					
+					$aReturn[$sMap] = $MAPCFG->getFileModificationTime();
+				}
 			}
 		}
 		
@@ -110,8 +113,7 @@ class CoreModGeneral extends CoreModule {
 		$arrReturn = Array();
 		
 		// Parse view specific uri params
-		$aKeys = Array('name' => MATCH_STRING_NO_SPACE);
-		$aOpts = $this->getCustomOptions($aKeys);
+		$aOpts = $this->getCustomOptions(Array('name' => MATCH_STRING_NO_SPACE));
 		
 		foreach($aOpts['name'] AS $sName) {
 			if($type == 'hover')
@@ -128,8 +130,7 @@ class CoreModGeneral extends CoreModule {
 		$arrReturn = Array();
 		
 		// Parse view specific uri params
-		$aKeys = Array('url' => MATCH_STRING_URL);
-		$aOpts = $this->getCustomOptions($aKeys);
+		$aOpts = $this->getCustomOptions(Array('url' => MATCH_STRING_URL));
 		
 		foreach($aOpts['url'] AS $sUrl) {
 			$OBJ = new NagVisHoverUrl($this->CORE, $sUrl);
@@ -162,11 +163,9 @@ class CoreModGeneral extends CoreModule {
 		for($i = 0; $i < $numObjects; $i++) {
 			switch($arrType[$i]) {
 				case 'map':
-					// Skip unpermitted maps
 					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $arrName1[$i]))
 						continue 2;
 					
-					// Initialize map configuration based on map type
 					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
@@ -174,11 +173,9 @@ class CoreModGeneral extends CoreModule {
 					$OBJ->fetchMapObjects();
 				break;
 				case 'automap':
-					// Skip unpermitted maps
 					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $arrName1[$i]))
 						continue 2;
 					
-					// Initialize map configuration based on map type
 					$MAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
