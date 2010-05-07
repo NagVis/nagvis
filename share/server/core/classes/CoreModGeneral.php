@@ -31,12 +31,12 @@ class CoreModGeneral extends CoreModule {
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array(
-			'getCfgFileAges' => REQUIRES_AUTHORISATION,
+			'getCfgFileAges'     => REQUIRES_AUTHORISATION,
 			'getStateProperties' => REQUIRES_AUTHORISATION,
-			'getHoverTemplate' => REQUIRES_AUTHORISATION,
+			'getHoverTemplate'   => REQUIRES_AUTHORISATION,
 			'getContextTemplate' => REQUIRES_AUTHORISATION,
-			'getHoverUrl' => REQUIRES_AUTHORISATION,
-			'getObjectStates' => REQUIRES_AUTHORISATION
+			'getHoverUrl'        => REQUIRES_AUTHORISATION,
+			'getObjectStates'    => REQUIRES_AUTHORISATION
 		);
 	}
 	
@@ -52,10 +52,10 @@ class CoreModGeneral extends CoreModule {
 					$sReturn = $this->getStateProperties();
 				break;
 				case 'getHoverTemplate':
-					$sReturn = $this->getHoverTemplate();
+					$sReturn = $this->getTemplate('hover');
 				break;
 				case 'getContextTemplate':
-					$sReturn = $this->getContextTemplate();
+					$sReturn = $this->getTemplate('context');
 				break;
 				case 'getHoverUrl':
 					$sReturn = $this->getHoverUrl();
@@ -73,8 +73,7 @@ class CoreModGeneral extends CoreModule {
 		$aReturn = Array();
 	
 		// Parse view specific uri params
-		$aKeys = Array('f' => MATCH_STRING_NO_SPACE,
-		               'm' => MATCH_MAP_NAME_EMPTY,
+		$aKeys = Array('f'  => MATCH_STRING_NO_SPACE, 'm'  => MATCH_MAP_NAME_EMPTY,
 		               'am' => MATCH_MAP_NAME_EMPTY);
 		$aOpts = $this->getCustomOptions($aKeys);
 		
@@ -107,7 +106,7 @@ class CoreModGeneral extends CoreModule {
 		echo json_encode($this->CORE->getMainCfg()->getStateWeight());
 	}
 	
-	private function getHoverTemplate() {
+	private function getTemplate($type) {
 		$arrReturn = Array();
 		
 		// Parse view specific uri params
@@ -115,22 +114,10 @@ class CoreModGeneral extends CoreModule {
 		$aOpts = $this->getCustomOptions($aKeys);
 		
 		foreach($aOpts['name'] AS $sName) {
-			$OBJ = new NagVisHoverMenu($this->CORE, $sName);
-			$arrReturn[] = Array('name' => $sName, 'code' => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString())));
-		}
-		
-		return json_encode($arrReturn);
-	}
-	
-	private function getContextTemplate() {
-		$arrReturn = Array();
-		
-		// Parse view specific uri params
-		$aKeys = Array('name' => MATCH_STRING_NO_SPACE);
-		$aOpts = $this->getCustomOptions($aKeys);
-		
-		foreach($aOpts['name'] AS $sName) {
-			$OBJ = new NagVisContextMenu($this->CORE, $sName);
+			if($type == 'hover')
+				$OBJ = new NagVisHoverMenu($this->CORE, $sName);
+			else
+				$OBJ = new NagVisContextMenu($this->CORE, $sName);
 			$arrReturn[] = Array('name' => $sName, 'code' => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString())));
 		}
 		
@@ -155,11 +142,9 @@ class CoreModGeneral extends CoreModule {
 	private function getObjectStates() {
 		$arrReturn = Array();
 		
-		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-		               't' => MATCH_OBJECT_TYPES,
-		               'n1' => MATCH_STRING,
-		               'n2' => MATCH_STRING_EMPTY,
-		               'i' => MATCH_STRING_NO_SPACE);
+		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE, 't'  => MATCH_OBJECT_TYPES,
+		               'n1' => MATCH_STRING,          'n2' => MATCH_STRING_EMPTY,
+		               'i'  => MATCH_STRING_NO_SPACE);
 		
 		$aVals = $this->getCustomOptions($aOpts);
 		
@@ -205,12 +190,12 @@ class CoreModGeneral extends CoreModule {
 					$MAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
 					
-					$aOpts = Array('backend' => MATCH_STRING_NO_SPACE_EMPTY,
-		                     'root' => MATCH_STRING_NO_SPACE_EMPTY,
-		                     'maxLayers' => MATCH_INTEGER_EMPTY,
-		                     'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
-		                     'width' => MATCH_INTEGER_EMPTY,
-		                     'height' => MATCH_INTEGER_EMPTY,
+					$aOpts = Array('backend'     => MATCH_STRING_NO_SPACE_EMPTY,
+		                     'root'        => MATCH_STRING_NO_SPACE_EMPTY,
+		                     'maxLayers'   => MATCH_INTEGER_EMPTY,
+		                     'renderMode'  => MATCH_AUTOMAP_RENDER_MODE,
+		                     'width'       => MATCH_INTEGER_EMPTY,
+		                     'height'      => MATCH_INTEGER_EMPTY,
 		                     'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
 		                     'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY);
 		
