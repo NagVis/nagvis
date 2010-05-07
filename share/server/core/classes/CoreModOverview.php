@@ -52,10 +52,10 @@ class CoreModOverview extends CoreModule {
 					$sReturn = $this->OVERVIEW->parseIndexPropertiesJson();
 				break;
 				case 'getOverviewMaps':
-					$sReturn = $this->OVERVIEW->parseMapsJson();
+					$sReturn = $this->OVERVIEW->parseMapsJson('map');
 				break;
 				case 'getOverviewAutomaps':
-					$sReturn = $this->OVERVIEW->parseAutomapsJson();
+					$sReturn = $this->OVERVIEW->parseMapsJson('automap');
 				break;
 				case 'getOverviewRotations':
 					$sReturn = $this->OVERVIEW->parseRotationsJson();
