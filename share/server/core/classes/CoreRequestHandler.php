@@ -1,4 +1,27 @@
 <?php
+/*****************************************************************************
+ *
+ * CoreRequestHandler.php - Handler for requests
+ *
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
 class CoreRequestHandler {
 	private $aOpts;
 	
@@ -11,35 +34,22 @@ class CoreRequestHandler {
 	}
 	
 	public function get($sKey) {
-		if(isset($this->aOpts[$sKey])) {
+		if(isset($this->aOpts[$sKey]))
 			return $this->aOpts[$sKey];
-		} else {
+		else
 			return null;
-		}
 	}
 	
 	public function isLongerThan($sKey, $iLen) {
-		if(strlen($this->aOpts[$sKey]) > $iLen) {
-			return true;
-		} else {
-			return false;
-		}
+		return strlen($this->aOpts[$sKey]) > $iLen;
 	}
 
 	public function match($sKey, $regex) {
-		if(preg_match($regex, $this->aOpts[$sKey])) {
-			return true;
-		} else {
-			return false;
-		}
+		return preg_match($regex, $this->aOpts[$sKey]);
 	}
 	
 	public function isSetAndNotEmpty($sKey) {
-		if(isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '') {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '';
 	}
 	
 	public static function getReferer($default) {

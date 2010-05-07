@@ -116,10 +116,20 @@ abstract class CoreModule {
 		return $this->sObject !== '';
 	}
 	
+	/**
+	 * Initializes the URI handler object
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	protected function initUriHandler() {
 		$this->UHANDLER = new CoreUriHandler($this->CORE);
 	}
 	
+	/**
+	 * Reads a list of custom variables from the request
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	protected function getCustomOptions($aKeys) {
 		// Initialize on first call
 		if($this->UHANDLER === null) {
