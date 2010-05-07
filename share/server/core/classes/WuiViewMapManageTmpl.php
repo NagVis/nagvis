@@ -65,12 +65,12 @@ class WuiViewMapManageTmpl {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		// Read map configig but don't resolve tempaltes
-		$MAPCFG = new WuiMapCfg($this->CORE, $this->aOpts['map']);
+		$MAPCFG = new WuiMapCfg($this->CORE, $this->aOpts['show']);
 		$MAPCFG->readMapConfig(0, false, false);
 		
 		$aData = Array(
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'map' => $this->aOpts['map'],
+			'map' => $this->aOpts['show'],
 			'langTmplAdd' => $this->CORE->getLang()->getText('Create Template'),
 			'langTmplName' => $this->CORE->getLang()->getText('Name'),
 			'langTmplAddOption' => $this->CORE->getLang()->getText('Add Option'),

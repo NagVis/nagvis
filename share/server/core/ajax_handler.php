@@ -108,6 +108,7 @@ try {
 	}
 	$MODULE->passAuth($AUTH, $AUTHORISATION);
 	$MODULE->setAction($UHANDLER->get('act'));
+	$MODULE->initObject();
 
 	/*
 	* Authorisation 2: Check if the user is permitted to use this module/action

@@ -41,14 +41,20 @@ abstract class CoreModule {
 		$this->AUTHORISATION = $AUTHORISATION;
 	}
 	
+	/**
+	 * Tells if the module offers the requested action
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function offersAction($sAction) {
-		if(isset($this->aActions[$sAction])) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($this->aActions[$sAction]);
 	}
 	
+	/**
+	 * Stores the requested action in the module
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function setAction($sAction) {
 		if($this->offersAction($sAction)) {
 			$this->sAction = $sAction;
@@ -58,24 +64,30 @@ abstract class CoreModule {
 		}
 	}
 	
+	/**
+	 * Tells wether the requested action requires the users autorisation
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function actionRequiresAuthorisation() {
-		$bRequiresAuthorisation = false;
-		
-		if(isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] === REQUIRES_AUTHORISATION) {
-			$bRequiresAuthorisation = true;
-		}
-		
-		return $bRequiresAuthorisation;
+		return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] === REQUIRES_AUTHORISATION;
 	}
 	
+	/**
+	 * Tells wether the requested object is available
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function offersObject($sObject) {
-		if(isset($this->aObjects[$sObject])) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($this->aObjects[$sObject]);
 	}
 	
+	/**
+	 * Stores the requested object name in the module
+	 * when it is supported
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function setObject($sObject) {
 		if($this->offersObject($sObject)) {
 			$this->sObject = $sObject;
@@ -85,18 +97,23 @@ abstract class CoreModule {
 		}
 	}
 	
+	/**
+	 *  Returns the object string
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function getObject() {
 		return $this->sObject;
 	}
 	
+	/**
+	 * Checks if the users autorisation for this object should be checked.
+	 * This does not perform the permission check!
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function checkForObjectAuthorisation() {
-		$bRet = false;
-		
-		if($this->sObject !== '') {
-			$bRet = true;
-		}
-		
-		return $bRet;
+		return $this->sObject !== '';
 	}
 	
 	protected function initUriHandler() {
@@ -120,7 +137,25 @@ abstract class CoreModule {
 		
 		return $aReturn;
 	}
+
+	/**
+	 * Is a dummy at this place. Some special modules like
+	 * CoreModMap have no general way of fetching the called
+	 * "object" because the value might come in different vars
+	 * when using different actions. So these special modules
+	 * can implement that by overriding this method.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function initObject() {}
+
 	
+	/**
+	 * This method needs to be implemented by each module
+	 * to handle the user called action
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	abstract public function handleAction();
 }
 ?>
