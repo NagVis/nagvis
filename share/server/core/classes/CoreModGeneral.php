@@ -178,6 +178,10 @@ class CoreModGeneral extends CoreModule {
 					$OBJ = new NagVisServicegroup($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
 				break;
 				case 'map':
+					// Skip unpermitted maps
+					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $arrName1[$i]))
+						continue 2;
+					
 					// Initialize map configuration based on map type
 					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
@@ -186,6 +190,10 @@ class CoreModGeneral extends CoreModule {
 					$OBJ->fetchMapObjects();
 				break;
 				case 'automap':
+					// Skip unpermitted maps
+					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $arrName1[$i]))
+						continue 2;
+					
 					// Initialize map configuration based on map type
 					$MAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
 					$MAPCFG->readMapConfig();
