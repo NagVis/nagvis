@@ -160,10 +160,6 @@ class CoreModGeneral extends CoreModule {
 		$numObjects = count($arrType);
 		$aObjs = Array();
 		for($i = 0; $i < $numObjects; $i++) {
-			// Get the object configuration
-			$objConf = $this->getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i]);
-			$objConf['object_id'] = $arrObjId[$i];
-			
 			switch($arrType[$i]) {
 				case 'map':
 					// Skip unpermitted maps
@@ -211,12 +207,11 @@ class CoreModGeneral extends CoreModule {
 				break;
 			}
 			
-			// Apply default configuration to object
-			$OBJ->setConfiguration($objConf);
+			$arr = $MAPCFG->getDefinitions('global');
+			$OBJ->setConfiguration($arr[0]);
 			
-			if($arrType[$i] != 'automap') {
+			if($arrType[$i] != 'automap')
 				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-			}
 			
 			$aObjs[] = $OBJ;
 		}
@@ -244,35 +239,6 @@ class CoreModGeneral extends CoreModule {
 		}
 		
 		return json_encode($arrReturn);
-	}
-
-	private function getObjConf($objType, $objName1, $objName2) {
-		$objConf = Array();
-		
-		// Get the object configuration from main configuration defaults by
-		// creating a temporary map object
-		$objConf['type'] = $objType;
-		
-		if($objType == 'service') {
-			$objConf['host_name'] = $objName1;
-			$objConf['service_description'] = $objName2;
-		} else {
-			$objConf[$objType.'_name'] = $objName1;
-		}
-		
-		$TMPMAPCFG = new NagVisMapCfg($this->CORE);
-		$TMPMAPCFG->gatherTypeDefaults(!ONLY_GLOBAL);
-		
-		// merge with "global" settings
-		foreach($TMPMAPCFG->getTypeDefaults('global') AS $key => $default) {
-			if($key != 'type') {
-				$objConf[$key] = $default;
-			}
-		}
-		
-		unset($TMPMAPCFG);
-		
-		return $objConf;
 	}
 }
 ?>
