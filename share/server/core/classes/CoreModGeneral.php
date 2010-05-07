@@ -165,18 +165,6 @@ class CoreModGeneral extends CoreModule {
 			$objConf['object_id'] = $arrObjId[$i];
 			
 			switch($arrType[$i]) {
-				case 'host':
-					$OBJ = new NagVisHost($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'service':
-					$OBJ = new NagVisService($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i], $arrName2[$i]);
-				break;
-				case 'hostgroup':
-					$OBJ = new NagVisHostgroup($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'servicegroup':
-					$OBJ = new NagVisServicegroup($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
 				case 'map':
 					// Skip unpermitted maps
 					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $arrName1[$i]))
@@ -219,7 +207,7 @@ class CoreModGeneral extends CoreModule {
 					$OBJ = $MAP->MAPOBJ;
 				break;
 				default:
-					echo 'Error: '.$CORE->getLang()->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
+					new GlobalMessage('ERROR', $CORE->getLang()->getText('Only map and automap states can be fetched using this module/action.'));
 				break;
 			}
 			
