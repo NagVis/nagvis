@@ -34,9 +34,9 @@ class CoreModOverview extends CoreModule {
 		
 		$this->aActions = Array(
 			'getOverviewProperties' => REQUIRES_AUTHORISATION,
-			'getOverviewMaps' => REQUIRES_AUTHORISATION,
-			'getOverviewAutomaps' => REQUIRES_AUTHORISATION,
-			'getOverviewRotations' => REQUIRES_AUTHORISATION
+			'getOverviewMaps'       => REQUIRES_AUTHORISATION,
+			'getOverviewAutomaps'   => REQUIRES_AUTHORISATION,
+			'getOverviewRotations'  => REQUIRES_AUTHORISATION
 		);
 	}
 	
@@ -44,45 +44,26 @@ class CoreModOverview extends CoreModule {
 		$sReturn = '';
 		
 		if($this->offersAction($this->sAction)) {
-			
-			// Initialize backends
 			$this->BACKEND = new CoreBackendMgmt($this->CORE);
-			
 			$this->OVERVIEW = new GlobalIndexPage($this->CORE, $this->BACKEND, $this->AUTHORISATION);
 			
 			switch($this->sAction) {
 				case 'getOverviewProperties':
-					$sReturn = $this->getOverviewProperties();
+					$sReturn = $this->OVERVIEW->parseIndexPropertiesJson();
 				break;
 				case 'getOverviewMaps':
-					$sReturn = $this->getOverviewMaps();
+					$sReturn = $this->OVERVIEW->parseMapsJson();
 				break;
 				case 'getOverviewAutomaps':
-					$sReturn = $this->getOverviewAutomaps();
+					$sReturn = $this->OVERVIEW->parseAutomapsJson();
 				break;
 				case 'getOverviewRotations':
-					$sReturn = $this->getOverviewRotations();
+					$sReturn = $this->OVERVIEW->parseRotationsJson();
 				break;
 			}
 		}
 		
 		return $sReturn;
-	}
-	
-	private function getOverviewProperties() {
-		return $this->OVERVIEW->parseIndexPropertiesJson();
-	}
-	
-	private function getOverviewMaps() {
-		return $this->OVERVIEW->parseMapsJson();
-	}
-	
-	private function getOverviewAutomaps() {
-		return $this->OVERVIEW->parseAutomapsJson();
-	}
-	
-	private function getOverviewRotations() {
-		return $this->OVERVIEW->parseRotationsJson();
 	}
 }
 ?>
