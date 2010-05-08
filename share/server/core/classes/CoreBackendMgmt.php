@@ -182,8 +182,8 @@ class CoreBackendMgmt {
 				}
 		
 				// Regular member adding loop
+				$members = Array();
 				foreach($aServices AS $host => $serviceList) {
-					$members = Array();
 					foreach($serviceList AS $aService) {
 						$SOBJ = new NagVisService($this->CORE, $this, $backendId, $host, $aService['service_description']);
 						
