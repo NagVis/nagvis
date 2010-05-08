@@ -51,6 +51,7 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	protected static $iconPath = null;
 	protected static $iconHtmlPath = null;
+	protected static $langChildStates = null;
 	
 	protected $dateFormat;
 	
@@ -286,7 +287,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAcknowledgement() {
-		return (int) $this->problem_has_been_acknowledged;
+		return $this->problem_has_been_acknowledged;
 	}
 	
 	/**
@@ -334,7 +335,7 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getSummaryAcknowledgement() {
-		return (int) $this->summary_problem_has_been_acknowledged;
+		return $this->summary_problem_has_been_acknowledged;
 	}
 	
 	/**
@@ -661,15 +662,18 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	public function getChildFetchingStateFilters() {
 		$stateCounts = Array();
-		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
-		if(is_array($this->aStateCounts)) {
+		
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		
+		if($this->aStateCounts !== null) {
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
-				if(isset($stateWeight[$sState])
-					&& isset($stateWeight[$sState]['normal'])
+				if(isset(NagVisObject::$stateWeight[$sState])
+					&& isset(NagVisObject::$stateWeight[$sState]['normal'])
 					&& isset($aSubstates['normal'])
 					&& $aSubstates['normal'] !== 0) {
 					$stateCounts[] = Array('name' => $sState,
-																'weight' => $stateWeight[$sState]['normal'],
+																'weight' => NagVisObject::$stateWeight[$sState]['normal'],
 																'count' => $aSubstates['normal']);
 				}
 			}
@@ -745,23 +749,23 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function fetchSummaryStateFromCounts() {
-		// Load the configured state weights
-		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
 		
 		// Fetch the current state to start with
 		if($this->summary_state == '') {
 			$currWeight = null;
 		} else {
-			if(isset($stateWeight[$this->summary_state])) {
+			if(isset(NagVisObject::$stateWeight[$this->summary_state])) {
 				$sCurrSubState = 'normal';
 				
-				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$this->summary_state]['ack'])) {
+				if($this->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$this->summary_state]['ack'])) {
 					$sCurrSubState = 'ack';
-				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$this->summary_state]['downtime'])) {
+				} elseif($this->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$this->summary_state]['downtime'])) {
 					$sCurrSubState = 'downtime';
 				}
 				
-				$currWeight = $stateWeight[$this->summary_state][$sCurrSubState];
+				$currWeight = NagVisObject::$stateWeight[$this->summary_state][$sCurrSubState];
 			} else {
 				// Error handling: Invalid state
 				new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].', Array('STATE' => $this->summary_state, 'SUBSTATE' => $sCurrSubState, 'TYPE' => $this->getType())));
@@ -770,7 +774,7 @@ class NagVisStatefulObject extends NagVisObject {
 		
 		// Loop all major states
 		$iSumCount = 0;
-		if(is_array($this->aStateCounts)) {
+		if($this->aStateCounts !== null) {
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
 				// Loop all substates (normal,ack,downtime,...)
 				foreach($aSubstates AS $sSubState => $iCount) {
@@ -780,8 +784,8 @@ class NagVisStatefulObject extends NagVisObject {
 						$iSumCount += $iCount;
 						
 						// Get weight
-						if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
-							$weight = $stateWeight[$sState][$sSubState];
+						if(isset(NagVisObject::$stateWeight[$sState]) && isset(NagVisObject::$stateWeight[$sState][$sSubState])) {
+							$weight = NagVisObject::$stateWeight[$sState][$sSubState];
 							
 							// No "current state" yet
 							// The new state is worse than the current state
@@ -828,76 +832,69 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function mergeSummaryOutput($arrStates, $objLabel) {
-		$this->summary_output .= $this->CORE->getLang()->getText('childStatesAre').' ';
-		foreach($arrStates AS $state => &$num) {
+		if(NagVisStatefulObject::$langChildStates === null)
+			NagVisStatefulObject::$langChildStates = $this->CORE->getLang()->getText('childStatesAre');
+		
+		$this->summary_output .= NagVisStatefulObject::$langChildStates.' ';
+		foreach($arrStates AS $state => $num) {
 			if($num > 0) {
 				$this->summary_output .= $num.' '.$state.', ';
 			}
 		}
 		
 		// Remove last comma
-		$this->summary_output = preg_replace('/, $/', '', $this->summary_output);
-		
-		$this->summary_output .= ' '.$objLabel.'.';
+		$this->summary_output = rtrim($this->summary_output, ', ').' '.$objLabel.'.';
 	}
 	
 	/**
 	 * PROTECTED wrapChildState()
 	 *
-	 * Wraps the state of the current object with the given child object
+	 * Loops all given object so gather the summary state of the current object
 	 *
-	 * @param		Object		Object with a state
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 * @param   Array   List of objects to gather the summary state from
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	protected function wrapChildState($OBJ) {
-		$sSummaryState = $this->getSummaryState();
-		$sObjSummaryState = $OBJ->getSummaryState();
-	
-		$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+	protected function wrapChildState($OBJS) {
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+
+		// Initialize empty or with current object state
+		$currentStateWeight = null;
+		if($this->summary_state != '') {
+			$sType = 'normal';
+			if($this->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$this->summary_state]['ack']))
+				$sType = 'ack';
+			elseif($this->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$this->summary_state]['downtime']))
+				$sType = 'downtime';
+			
+			$currentStateWeight = NagVisObject::$stateWeight[$this->summary_state][$sType];
+		}
+
+		// Loop all object to gather the worst state and set it as summary
+		// state of the current object
+		foreach($OBJS AS $OBJ) {
+			$objSummaryState = $OBJ->summary_state;
+			$objAck          = $OBJ->summary_problem_has_been_acknowledged;
+			$objDowntime     = $OBJ->summary_in_downtime;
 		
-		if(isset($stateWeight[$sObjSummaryState])) {
-			if($sSummaryState != '') {
-				/* When the state of the current child is not as good as the current
-				 * summary state or the state is equal and the sub-state differs.
-				 */
-				
-				// Gather the current summary state type
-				$sType = 'normal';
-				if($this->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sSummaryState]['ack'])) {
-					$sType = 'ack';
-				} elseif($this->getSummaryInDowntime() == 1 && isset($stateWeight[$sSummaryState]['downtime'])) {
-					$sType = 'downtime';
-				}
-				
+			if(isset(NagVisObject::$stateWeight[$objSummaryState])) {
 				// Gather the object summary state type
-				$sObjType = 'normal';
-				if($OBJ->getSummaryAcknowledgement() == 1 && isset($stateWeight[$sObjSummaryState]['ack'])) {
-					$sObjType = 'ack';
-				} elseif($OBJ->getSummaryInDowntime() == 1 && isset($stateWeight[$sObjSummaryState]['downtime'])) {
-					$sObjType = 'downtime';
-				}
+				$objType = 'normal';
+				if($objAck == 1 && isset(NagVisObject::$stateWeight[$objSummaryState]['ack']))
+					$objType = 'ack';
+				elseif($objDowntime == 1 && isset(NagVisObject::$stateWeight[$objSummaryState]['downtime']))
+					$objType = 'downtime';
 				
-				if($stateWeight[$sSummaryState][$sType] < $stateWeight[$sObjSummaryState][$sObjType]) { 
-					$this->summary_state = $sObjSummaryState;
-					
-					if($OBJ->getSummaryAcknowledgement() == 1) {
-						$this->summary_problem_has_been_acknowledged = 1;
-					} else {
-						$this->summary_problem_has_been_acknowledged = 0;
-					}
-					
-					if($OBJ->getSummaryInDowntime() == 1) {
-						$this->summary_in_downtime = 1;
-					} else {
-						$this->summary_in_downtime = 0;
-					}
+				if(isset(NagVisObject::$stateWeight[$objSummaryState][$objType]) && ($currentStateWeight === null || NagVisObject::$stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
+					$this->summary_state                         = $objSummaryState;
+					$this->summary_problem_has_been_acknowledged = $objAck;
+					$this->summary_in_downtime                   = $objDowntime;
+					$currentStateWeight                          = NagVisObject::$stateWeight[$objSummaryState][$objType];
 				}
-			} else {
-				$this->summary_state = $sObjSummaryState;
-				$this->summary_problem_has_been_acknowledged = $OBJ->getSummaryAcknowledgement();
-				$this->summary_in_downtime = $OBJ->getSummaryInDowntime();
 			}
-		} else {
+		}
+
+		/* else {
 			if($OBJ->getType() == 'service')
 				$service = '/'.$OBJ->getServiceDescription();
 			else
@@ -905,7 +902,7 @@ class NagVisStatefulObject extends NagVisObject {
 			
 			// Error no valid state
 			throw new NagVisException(GlobalCore::getInstance()->getLang()->getText('The object [TYPE]/[NAME][SERVICE] as child of [PTYPE]/[PNAME] has an invalid state "[STATE]".', Array('PTYPE' => $this->getType(), 'PNAME' => $this->getName(), 'TYPE' => $OBJ->getType(), 'NAME' => $OBJ->getName(), 'STATE' => $sObjSummaryState, 'SERVICE' => $service)));
-		}
+		}*/
 	}
 }
 ?>

@@ -207,14 +207,11 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryState() {
-		if($this->hasMembers()) {
-			// Get summary state member objects
-			foreach($this->members AS &$MEMBER) {
-				$this->wrapChildState($MEMBER);
-			}
-		} else {
+		// Get summary state from member objects
+		if($this->hasMembers())
+			$this->wrapChildState($this->members);
+		else
 			$this->summary_state = 'ERROR';
-		}
 	}
 	
 	/**

@@ -117,7 +117,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		// Loop all members
 		foreach($this->members AS $OBJ) {
-			$sType = $OBJ->getType();
+			$sType = $OBJ->type;
 			
 			// Skip unrelevant object types
 			if($sType == 'textbox' || $sType == 'shape' || $sType == 'line') {
@@ -163,7 +163,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		$i = 0;
 		// Loop all objects except the stateless ones and count them
 		foreach($this->members AS $OBJ) {
-			$type = $OBJ->getType();
+			$type = $OBJ->type;
 			if($type != 'textbox' && $type != 'shape' && $type != 'line') {
 				$i++;
 			}
@@ -428,12 +428,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 		if($this->hasObjects() && $this->hasStatefulObjects()) {
 			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
-			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				$sState = $OBJ->getSummaryState();
-				if(isset($arrStates[$sState])) {
-					$arrStates[$sState]++;
-				}
-			}
+			foreach($this->getStateRelevantMembers() AS $OBJ)
+				if(isset($arrStates[$OBJ->summary_state]))
+					$arrStates[$OBJ->summary_state]++;
 			
 			$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('objects'));
 		} else {
@@ -491,19 +488,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryState() {
-		if($this->hasObjects() && $this->hasStatefulObjects()) {
-			// Get summary state member objects
-			foreach($this->getStateRelevantMembers() AS $OBJ) {
-				//try {
-					$this->wrapChildState($OBJ);
-				/*} catch(NagVisException $e) {
-					$OBJ->summary_state = 'ERROR';
-					$OBJ->summary_output = $e->getMessage();
-				}*/
-			}
-		} else {
+		// Get summary state of this object from single objects
+		if($this->hasObjects() && $this->hasStatefulObjects())
+			$this->wrapChildState($this->getStateRelevantMembers());
+		else
 			$this->summary_state = 'UNKNOWN';
-		}
 	}
 }
 ?>

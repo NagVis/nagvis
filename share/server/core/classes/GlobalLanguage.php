@@ -31,6 +31,7 @@ class GlobalLanguage {
 	private $textDomain;
 	private $sCurrentLanguage;
 	private $sCurrentEncoding;
+	private $cache = Array();
 	
 	/**
 	 * Class Constructor
@@ -243,17 +244,22 @@ class GlobalLanguage {
 	 * @return	String	Localized String
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getText($id, $replace = NULL) {
+	public function getText($id, $replace = null) {
+		// Use cache if available
+		// FIXME: At the moment the cache can only be used without macros
+		if($replace === null && isset($this->cache[$id]))
+			return $this->cache[$id];
+		
 		$ret = $this->getTextOfId($id);
 		
-		if($replace !== NULL) {
+		if($replace !== null) {
 			$ret = $this->getReplacedString($ret, $replace);
 		}
 		
 		// When the translated string is equal to the requested id and some macros
 		// should be replaced it is possible that there is a problem with the
 		// gettext/translation mechanism. Then append the imploded
-		if($id === $ret && $replace !== NULL) {
+		if($id === $ret && $replace !== null) {
 			if(!is_array($replace)) {
 				$ret .= 'Opts: '.$replace;
 			} else {
@@ -262,6 +268,10 @@ class GlobalLanguage {
 				$ret .= 'Opts: '.json_encode($replace);
 			}
 		}
+
+		// Store in cache for this page processing
+		if($replace === null && !isset($this->cache[$id]))
+			$this->cache[$id] = $ret;
 		
 		return $ret;
 	}

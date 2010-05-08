@@ -150,7 +150,7 @@ class WuiMapManagement extends WuiPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getDeleteFields() {
-		return $this->DELETEFORM->getSelectLine($this->CORE->getLang()->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),'')
+		return $this->DELETEFORM->getSelectLine($this->CORE->getLang()->getText('chooseMap'),'map',$this->CORE->getAvailableMaps(),'')
 		      .$this->DELETEFORM->getHiddenField('map','')
 		      .'<script>document.map_rename.map.value=document.mapname</script>';
 	}
@@ -162,10 +162,10 @@ class WuiMapManagement extends WuiPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getRenameFields() {
-		return $this->RENAMEFORM->getSelectLine($this->CORE->getLang()->getText('chooseMap'),'map_name',$this->CORE->getAvailableMaps(),'')
-		      .$this->RENAMEFORM->getInputLine($this->CORE->getLang()->getText('newMapName'),'map_new_name','')
-		      .$this->RENAMEFORM->getHiddenField('map','')
-		      .'<script>document.map_rename.map.value=document.mapname</script>';
+		return $this->RENAMEFORM->getSelectLine($this->CORE->getLang()->getText('chooseMap'), 'map', $this->CORE->getAvailableMaps(), '')
+		      .$this->RENAMEFORM->getInputLine($this->CORE->getLang()->getText('newMapName'), 'map_new_name', '')
+		      .$this->RENAMEFORM->getHiddenField('map_current', '')
+		      .'<script>document.map_rename.map_current.value = mapname;</script>';
 	}
 	
 	/**
@@ -175,7 +175,7 @@ class WuiMapManagement extends WuiPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getCreateFields() {
-		return $this->CREATEFORM->getInputLine($this->CORE->getLang()->getText('mapName'),'map_name','')
+		return $this->CREATEFORM->getInputLine($this->CORE->getLang()->getText('mapName'),'map','')
 		      .$this->CREATEFORM->getSelectLine($this->CORE->getLang()->getText('mapIconset'),'map_iconset',$this->CORE->getAvailableIconsets(),$this->CORE->getMainCfg()->getValue('defaults','icons'))
 		      .$this->CREATEFORM->getSelectLine($this->CORE->getLang()->getText('background'),'map_image',$this->CORE->getAvailableBackgroundImages(),'');
 	}

@@ -54,6 +54,39 @@ class CoreModMap extends CoreModule {
 		
 		// Register valid objects
 		$this->aObjects = $this->CORE->getAvailableMaps();
+	}
+
+	public function initObject() {
+		switch($this->sAction) {
+			// These have the object in GET var "show"
+			case 'getMapProperties':
+			case 'getMapObjects':
+			case 'getObjectStates':
+			case 'manageTmpl':
+			case 'getTmplOpts':
+			case 'addModify':
+				$aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME));
+				$this->name = $aVals['show'];
+			break;
+			// And those have the objecs in the POST var "map"
+			case 'doRename':
+			case 'doDelete':
+			case 'createObject':
+			case 'modifyObject':
+			case 'deleteObject':
+			case 'doTmplAdd':
+			case 'doTmplModify':
+			case 'doTmplDelete':
+				$FHANDLER = new CoreRequestHandler($_POST);
+				if($FHANDLER->match('map', MATCH_MAP_NAME))
+					$this->name = $FHANDLER->get('map');
+				else {
+					// FIXME: Error handling
+					echo "Invalid Format";
+					exit(1);
+				}
+			break;
+		}
 		
 		// Set the requested object for later authorisation
 		$this->setObject($this->name);
@@ -65,24 +98,12 @@ class CoreModMap extends CoreModule {
 		if($this->offersAction($this->sAction)) {
 			switch($this->sAction) {
 				case 'getMapProperties':
-					$aOpts = Array('show' => MATCH_MAP_NAME);
-					$aVals = $this->getCustomOptions($aOpts);
-					$this->name = $aVals['show'];
-					
 					$sReturn = $this->getMapProperties();
 				break;
 				case 'getMapObjects':
-					$aOpts = Array('show' => MATCH_MAP_NAME);
-					$aVals = $this->getCustomOptions($aOpts);
-					$this->name = $aVals['show'];
-					
 					$sReturn = $this->getMapObjects();
 				break;
 				case 'getObjectStates':
-					$aOpts = Array('show' => MATCH_MAP_NAME);
-					$aVals = $this->getCustomOptions($aOpts);
-					$this->name = $aVals['show'];
-					
 					$sReturn = $this->getObjectStates();
 				break;
 				case 'doAdd':
@@ -96,7 +117,7 @@ class CoreModMap extends CoreModule {
 							                  null,
 							                  null,
 							                  1,
-							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map_name']);
+							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map']);
 							$sReturn = '';
 						} else {
 							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be created.'));
@@ -114,10 +135,10 @@ class CoreModMap extends CoreModule {
 						// Try to create the map
 						if($this->doRename($aReturn)) {
 							// if renamed map is open, redirect to new name
-							if($aReturn['map'] == 'undefined' || $aReturn['map'] == '' || $aReturn['map'] == $aReturn['map_name']) {
+							if($aReturn['map_current'] == 'undefined' || $aReturn['map_current'] == '' || $aReturn['map_current'] == $aReturn['map']) {
 								$map = $aReturn['map_new_name'];
 							} else {
-								$map = $aReturn['map'];
+								$map = $aReturn['map_current'];
 							}
 							
 							new GlobalMessage('NOTE', 
@@ -244,7 +265,7 @@ class CoreModMap extends CoreModule {
 					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
 				case 'manageTmpl':
-					$aOpts = Array('map' => MATCH_MAP_NAME);
+					$aOpts = Array('show' => MATCH_MAP_NAME);
 					$aVals = $this->getCustomOptions($aOpts);
 					
 					$VIEW = new WuiViewMapManageTmpl($this->AUTHENTICATION, $this->AUTHORISATION);
@@ -252,12 +273,12 @@ class CoreModMap extends CoreModule {
 					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
 				case 'getTmplOpts':
-					$aOpts = Array('map' => MATCH_MAP_NAME,
+					$aOpts = Array('show' => MATCH_MAP_NAME,
 					               'name' => MATCH_STRING_NO_SPACE);
 					$aVals = $this->getCustomOptions($aOpts);
 					
 					// Read map config but don't resolve templates and don't use the cache
-					$MAPCFG = new WuiMapCfg($this->CORE, $aVals['map']);
+					$MAPCFG = new WuiMapCfg($this->CORE, $aVals['show']);
 					$MAPCFG->readMapConfig(0, false, false);
 					
 					$aTmp = $MAPCFG->getDefinitions('template');
@@ -757,7 +778,7 @@ class CoreModMap extends CoreModule {
 	}
 	
 	private function doDelete($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map_name']);
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		try {
 			$MAPCFG->readMapConfig();
 		} catch(MapCfgInvalidObject $e) {}
@@ -773,14 +794,14 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
 			$bValid = false;
 		}
 		
 		//FIXME: All fields: Regex check
 		
 		// Check if the map exists
-		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_name').'$/')) <= 0) {
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
 			
 			$bValid = false;
@@ -789,7 +810,7 @@ class CoreModMap extends CoreModule {
 		// Store response data
 		if($bValid === true) {
 			// Return the data
-			return Array('map_name' => $FHANDLER->get('map_name'));
+			return Array('map' => $FHANDLER->get('map'));
 		} else {
 			return false;
 		}
@@ -807,7 +828,7 @@ class CoreModMap extends CoreModule {
 			// loop definitions of type map
 			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
 				// check if old map name is linked...
-				if($obj['map_name'] == $_POST['map_name']) {
+				if($obj['map_name'] == $a['map']) {
 					$MAPCFG1->setValue('map', $i, 'map_name', $a['map_new_name']);
 					$MAPCFG1->writeElement('map',$i);
 				}
@@ -816,7 +837,7 @@ class CoreModMap extends CoreModule {
 		}
 		
 		// rename config file
-		rename($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$a['map_name'].'.cfg',
+		rename($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$a['map'].'.cfg',
 		       $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$a['map_new_name'].'.cfg');
 		
 		return true;
@@ -829,7 +850,7 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
 			$bValid = false;
 		}
 		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_new_name')) {
@@ -850,15 +871,15 @@ class CoreModMap extends CoreModule {
 			// Return the data
 			return Array(
 		               'map_new_name' => $FHANDLER->get('map_new_name'),
-		               'map_name' => $FHANDLER->get('map_name'),
-		               'map' => $FHANDLER->get('map'));
+		               'map' => $FHANDLER->get('map'),
+		               'map_current' => $FHANDLER->get('map_current'));
 		} else {
 			return false;
 		}
 	}
 	
 	private function doAdd($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map_name']);
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		if(!$MAPCFG->createMapConfig()) {
 			return false;
 		}
@@ -874,14 +895,14 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
 			$bValid = false;
 		}
 		
 		//FIXME: All fields: Regex check
 		
 		// Check if the map already exists
-		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_name').'$/')) > 0) {
+		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) > 0) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The mapname does already exist.'));
 			
 			$bValid = false;
@@ -891,7 +912,7 @@ class CoreModMap extends CoreModule {
 		if($bValid === true) {
 			// Return the data
 			return Array(
-		               'map_name' => $FHANDLER->get('map_name'),
+		               'map' => $FHANDLER->get('map'),
 		               'iconset' => $FHANDLER->get('map_iconset'),
 		               'map_image' => $FHANDLER->get('map_image'));
 		} else {

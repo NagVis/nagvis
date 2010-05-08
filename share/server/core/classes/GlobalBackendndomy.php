@@ -468,7 +468,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getHostAckByHostname($hostName) {
-		$return = FALSE;
+		$return = 0;
 		
 		// Read from cache or fetch from NDO
 		if(isset($this->hostAckCache[$hostName])) {
@@ -485,9 +485,9 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			
 			// It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
 			if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
-				$return = TRUE;
+				$return = 1;
 			} else {
-				$return = FALSE;
+				$return = 0;
 			}
 			
 			// Save to cache
@@ -587,7 +587,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				// Host is DOWN/UNREACHABLE/UNKNOWN
 				
 				// Store acknowledgement state in array
-				$arrTmpReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
+				$arrTmpReturn['problem_has_been_acknowledged'] = intval($data['problem_has_been_acknowledged']);
 				
 				// Store state and output in array
 				switch($data['current_state']) {
@@ -724,7 +724,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 				if($data['problem_has_been_acknowledged'] != 1) {
 					$arrTmpReturn['problem_has_been_acknowledged'] = $this->getHostAckByHostname($data['name1']);
 				} else {
-					$arrTmpReturn['problem_has_been_acknowledged'] = $data['problem_has_been_acknowledged'];
+					$arrTmpReturn['problem_has_been_acknowledged'] = intval($data['problem_has_been_acknowledged']);
 				}
 				
 				// Store state and output in array

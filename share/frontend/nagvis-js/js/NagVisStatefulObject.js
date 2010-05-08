@@ -277,6 +277,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	remove: function () {
 		if(this.parsedObject) {
 			var oMap = document.getElementById('map');
+			if(!oMap)
+				return;
 
 			var oObj;
 			if(this.conf.view_type && this.conf.view_type === 'line') {

@@ -48,6 +48,7 @@ class NagVisObject {
 	protected $label_show;
 	
 	protected static $sSortOrder = 'asc';
+	protected static $stateWeight = null;
 	private static $arrDenyKeys = null;
 	
 	/**
@@ -244,7 +245,7 @@ class NagVisObject {
 		}
 		
 		// Save the number of members
-		switch($this->getType()) {
+		switch($this->type) {
 			case 'host':
 			case 'hostgroup':
 			case 'servicegroup':
@@ -325,7 +326,7 @@ class NagVisObject {
 			if($this->type == 'service') {
 				unset($arr['host_name']);
 			} else {
-				unset($arr[$this->getType().'_name']);
+				unset($arr[$this->type.'_name']);
 			}
 			
 			if(isset($this->alias) && $this->alias != '') {
@@ -431,7 +432,7 @@ class NagVisObject {
 		// completely independent from this object
 		if($abstract == true) {
 			unset($arr['host_name']);
-			unset($arr[$this->getType().'_name']);
+			unset($arr[$this->type.'_name']);
 			unset($arr['service_description']);
 		}
 		
@@ -460,7 +461,7 @@ class NagVisObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseMapCfg($globalOpts = Array()) {
-		$ret = 'define '.$this->getType()." {\n";
+		$ret = 'define '.$this->type." {\n";
 		foreach($this->getObjectConfiguration(false) AS $key => $val) {
 			// Only set options which are different to global option
 			if((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
@@ -513,13 +514,13 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
-		if($OBJ1->getType() == 'service') {
+		if($OBJ1->type == 'service') {
 			$name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
 		} else {
 			$name1 = strtolower($OBJ1->getName());
 		}
 		
-		if($OBJ2->getType() == 'service') {
+		if($OBJ2->type == 'service') {
 			$name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
 		} else {
 			$name2 = strtolower($OBJ2->getName());
@@ -554,35 +555,36 @@ class NagVisObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private static function sortObjectsByState($OBJ1, $OBJ2) {
-		$state1 = $OBJ1->getSummaryState();
-		$state2 = $OBJ2->getSummaryState();
+		$state1 = $OBJ1->summary_state;
+		$state2 = $OBJ2->summary_state;
 
 		// Quit when nothing to compare
 		if($state1 == '' || $state2 == '') {
 			return 0;
 		}
 
-		$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
+		if(NagVisObject::$stateWeight === null)
+			NagVisObject::$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
 		
 		// Handle normal/ack/downtime states
 		
 		$stubState1 = 'normal';
-		if($OBJ1->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state1]['ack'])) {
+		if($OBJ1->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$state1]['ack'])) {
 			$stubState1 = 'ack';
-		} elseif($OBJ1->getSummaryInDowntime() == 1 && isset($stateWeight[$state1]['downtime'])) {
+		} elseif($OBJ1->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$state1]['downtime'])) {
 			$stubState1 = 'downtime';
 		}
 		
 		$stubState2 = 'normal';
-		if($OBJ2->getSummaryAcknowledgement() == 1 && isset($stateWeight[$state2]['ack'])) {
+		if($OBJ2->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$state2]['ack'])) {
 			$stubState2 = 'ack';
-		} elseif($OBJ2->getSummaryInDowntime() == 1 && isset($stateWeight[$state2]['downtime'])) {
+		} elseif($OBJ2->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$state2]['downtime'])) {
 			$stubState2 = 'downtime';
 		}
 				
-		if($stateWeight[$state1][$stubState1] == $stateWeight[$state2][$stubState2]) {
+		if(NagVisObject::$stateWeight[$state1][$stubState1] == NagVisObject::$stateWeight[$state2][$stubState2]) {
 			return 0;
-		} elseif($stateWeight[$state1][$stubState1] < $stateWeight[$state2][$stubState2]) {
+		} elseif(NagVisObject::$stateWeight[$state1][$stubState1] < NagVisObject::$stateWeight[$state2][$stubState2]) {
 			// Sort depending on configured direction
 			if(self::$sSortOrder === 'asc') {
 				return +1;

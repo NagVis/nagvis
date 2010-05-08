@@ -70,13 +70,13 @@ switch($_GET['action']) {
 		}
 
 		try {
-			$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE);
+			if(!method_exists($BACKEND->getBackend($_GET['backend_id']),'getObjects')) {
+				new GlobalMessage('ERROR', $CORE->getLang()->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
+			}
 		} catch(BackendConnectionProblem $e) {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']));
-		}
-			
-		if(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
+				  																						Array('BACKENDID' => $_GET['backend_id'], 'MSG' => $e->getMessage())));
+			exit();
 		}
 
 		// Input looks OK, handle the request...
@@ -84,7 +84,7 @@ switch($_GET['action']) {
 		$aRet = Array(Array('name' => ''));
 		// Read all objects of the requested type from the backend
 		try {
-			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects($_GET['type'],'','') AS $arr) {
+			foreach($BACKEND->getBackend($_GET['backend_id'])->getObjects($_GET['type'],'','') AS $arr) {
 				$aRet[] = Array('name' => $arr['name1']);
 			}
 		} catch(BackendConnectionProblem $e) {}

@@ -156,14 +156,11 @@ class NagiosServicegroup extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function fetchSummaryState() {
-		if($this->getNumMembers() > 0) {
-			// Get summary state member objects
-			foreach($this->members AS &$MEMBER) {
-				$this->wrapChildState($MEMBER);
-			}
-		} else {
+		// Get summary state from member objects
+		if($this->getNumMembers() > 0)
+			$this->wrapChildState($this->members);
+		else
 			$this->summary_state = 'ERROR';
-		}
 	}
 	
 	/**

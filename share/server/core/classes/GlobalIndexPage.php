@@ -53,20 +53,38 @@ class GlobalIndexPage {
 	 *
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: More cleanups, compacting and extraction of single parts
 	 */
-	public function parseAutomapsJson() {
+	public function parseMapsJson($type) {
 		// Only display the rotation list when enabled
-		if(!$this->CORE->getMainCfg()->getValue('index','showautomaps') == 1) {
+		if(!$this->CORE->getMainCfg()->getValue('index','show'.$type.'s') == 1)
 			return Array();
-		}
-		
+
+		if($type == 'automap')
+			$mapList = $this->CORE->getAvailableAutomaps();
+		else
+			$mapList = $this->CORE->getAvailableMaps();
+
 		$aMaps = Array();
-		
-		foreach($this->CORE->getAvailableAutomaps() AS $object_id => $mapName) {
-			$map = Array();
-			$map['type'] = 'automap';
+		$aObjs = Array();
+		foreach($mapList AS $object_id => $mapName) {
+			// Check if the user is permitted to view this
+			if($type == 'automap') {
+				if(!$this->AUTHORISATION->isPermitted('AutoMap', 'view', $mapName))
+					continue;
+			} else {
+				if(!$this->AUTHORISATION->isPermitted('Map', 'view', $mapName))
+					continue;
+			}
 			
-			$MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
+			$map = Array();
+			$map['type'] = $type;
+			
+			if($type == 'automap')
+				$MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
+			else
+				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+			
 			try {
 				$MAPCFG->readMapConfig();
 			} catch(MapCfgInvalid $e) {
@@ -74,27 +92,22 @@ class GlobalIndexPage {
 				$map['configErrorMsg'] = $e->getMessage();
 			}
 			
-			if($MAPCFG->getValue('global',0, 'show_in_lists') != 1) {
+			if($MAPCFG->getValue('global',0, 'show_in_lists') != 1)
 				continue;
-			}
 			
-			$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
+			if($type == 'automap')
+				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
+			else
+				$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
 			
 			// Apply default configuration to object
-			$objConf = Array();
-			foreach($MAPCFG->getValidTypeKeys('map') AS $key) {
-				$objConf[$key] = $MAPCFG->getValue('global', 0, $key);
-			}
+			$arr = $MAPCFG->getDefinitions('global');
+			$objConf = $arr[0];
 			$objConf['type'] = 'map';
 			$objConf['map_name'] = $MAPCFG->getName();
 			$objConf['object_id'] = $object_id;
 			
 			$MAP->MAPOBJ->setConfiguration($objConf);
-			
-			// Check if the user is permitted to view this rotation
-			if(!$this->AUTHORISATION->isPermitted('AutoMap', 'view', $mapName)) {
-				continue;
-			}
 			
 			if(isset($map['configError'])) {
 				$map['overview_class']  = 'error';
@@ -107,8 +120,12 @@ class GlobalIndexPage {
 			} elseif($MAP->MAPOBJ->checkMaintenance(0)) {
 				$MAP->MAPOBJ->fetchIcon();
 				
+				if($type == 'automap')
+					$map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue('global', 0, 'default_params');
+				else
+					$map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
+				
 				$map['overview_class']  = '';
-				$map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue('global', 0, 'default_params');
 				$map['summary_output']  = $MAP->MAPOBJ->getSummaryOutput();
 			} else {
 				$map['overview_class']  = 'disabled';
@@ -121,114 +138,16 @@ class GlobalIndexPage {
 			}
 			
 			// If this is the automap display the last rendered image
-			$imgPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$mapName.'.png';
-			$imgPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$mapName.'.png';
-			
-			// If there is no automap image on first load of the index page,
-			// render the image
-			if(!$this->checkImageExists($imgPath, FALSE)) {
-				$MAP->renderMap();
-			}
-			
-			if($this->CORE->checkGd(0)) {
-				$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-				$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
-				$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
+			if($type == 'automap') {
+				$imgPath     = $this->CORE->getMainCfg()->getValue('paths', 'sharedvar') . $mapName . '.png';
+				$imgPathHtml = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar') . $mapName . '.png';
 				
-				// Only create a new thumb when there is no cached one
-				$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-				if($FCACHE->isCached() === -1) {
-					$image = $this->createThumbnail($imgPath, $sThumbPath);
-				}
+				// If there is no automap image on first load of the index page,
+				// render the image
+				if(!$this->checkImageExists($imgPath, FALSE))
+					$MAP->renderMap();
 				
-				$map['overview_image'] = $sThumbPathHtml;
-			} else {
-				$map['overview_image'] = $imgPathHtml;
-			}
-			
-			$aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
-		}
-		
-		return json_encode($aMaps);
-	}
-	
-	/**
-	 * Parses the maps for the overview page
-	 *
-	 * @return	String  Json Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseMapsJson() {
-		// Only display the rotation list when enabled
-		if(!$this->CORE->getMainCfg()->getValue('index','showmaps') == 1) {
-			return Array();
-		}
-		
-		$aObjs = Array();
-		foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
-			$map = Array();
-			
-			$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
-			try {
-				$MAPCFG->readMapConfig();
-			} catch(MapCfgInvalid $e) {
-				$map['configError'] = true;
-				$map['configErrorMsg'] = $e->getMessage();
-			}
-			
-			if($MAPCFG->getValue('global',0, 'show_in_lists') != 1) {
-				continue;
-			}
-			
-			// Check if the user is permitted to view this map
-			if(!$this->AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
-				continue;
-			}
-			
-			$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
-				
-			// Apply default configuration to object
-			$objConf = $MAPCFG->getTypeDefaults('global');
-			$objConf['type'] = 'map';
-			$objConf['map_name'] = $MAPCFG->getName();
-			$objConf['object_id'] = $object_id;
-			
-			$MAP->MAPOBJ->setConfiguration($objConf);
-			
-			if(isset($map['configError'])) {
-				$map['overview_class']  = 'error';
-				$map['overview_url']    = 'javascript:alert(\''.$map['configErrorMsg'].'\');';
-				$map['summary_output']  = $this->CORE->getLang()->getText('Map Configuration Error: '.$map['configErrorMsg']);
-				
-				$MAP->MAPOBJ->clearMembers();
-				$MAP->MAPOBJ->setSummaryState('ERROR');
-				$MAP->MAPOBJ->fetchIcon();
-			} elseif($MAP->MAPOBJ->checkMaintenance(0)) {
-				$MAP->MAPOBJ->fetchIcon();
-				
-				$map['overview_class']  = '';
-				$map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
-				$map['summary_output']  = $MAP->MAPOBJ->getSummaryOutput();
-			} else {
-				$map['overview_class']  = 'disabled';
-				$map['overview_url']    = 'javascript:alert(\''.$this->CORE->getLang()->getText('mapInMaintenance').'\');';
-				$map['summary_output']  = $this->CORE->getLang()->getText('mapInMaintenance');
-				
-				$MAP->MAPOBJ->clearMembers();
-				$MAP->MAPOBJ->setSummaryState('UNKNOWN');
-				$MAP->MAPOBJ->fetchIcon();
-			}
-				
-			// Only handle thumbnail image when told to do so
-			if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
-				$imgPath = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
-				$imgPathHtml = $MAPCFG->BACKGROUND->getFile();
-				
-				// Check if
-				// a) PHP supports gd
-				// b) The image is a local one
-				// c) The image exists
-				if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileType() == 'local' && file_exists($imgPath)) {
+				if($this->CORE->checkGd(0)) {
 					$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
 					$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
 					$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
@@ -243,20 +162,49 @@ class GlobalIndexPage {
 				} else {
 					$map['overview_image'] = $imgPathHtml;
 				}
+				
+				$aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
+			} else {
+				// Only handle thumbnail image when told to do so
+				if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
+					$imgPath = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
+					$imgPathHtml = $MAPCFG->BACKGROUND->getFile();
+					
+					// Check if
+					// a) PHP supports gd
+					// b) The image is a local one
+					// c) The image exists
+					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileType() == 'local' && file_exists($imgPath)) {
+						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
+						$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
+						$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
+						
+						// Only create a new thumb when there is no cached one
+						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+						if($FCACHE->isCached() === -1) {
+							$image = $this->createThumbnail($imgPath, $sThumbPath);
+						}
+						
+						$map['overview_image'] = $sThumbPathHtml;
+					} else {
+						$map['overview_image'] = $imgPathHtml;
+					}
+				}
+				
+				$MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+				$aObjs[] = Array($MAP->MAPOBJ, $map);
 			}
-			
-			$MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-			$aObjs[] = Array($MAP->MAPOBJ, $map);
 		}
 		
-		$this->BACKEND->execute();
-			
-		$aMaps = Array();
-		foreach($aObjs AS $aObj) {
-			$aObj[0]->applyState();
-			$aObj[0]->fetchIcon();
-			
-			$aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
+		if($type == 'map') {
+			$this->BACKEND->execute();
+				
+			foreach($aObjs AS $aObj) {
+				$aObj[0]->applyState();
+				$aObj[0]->fetchIcon();
+				
+				$aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
+			}
 		}
 		
 		return json_encode($aMaps);
@@ -269,33 +217,28 @@ class GlobalIndexPage {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseRotationsJson() {
-		$aRotations = Array();
-		
 		// Only display the rotation list when enabled
-		if($this->CORE->getMainCfg()->getValue('index','showrotations') == 1) {
-			$aRotationPools = $this->CORE->getDefinedRotationPools();
-			if(count($aRotationPools) > 0) {
-				foreach($aRotationPools AS $poolName) {
-					// Check if the user is permitted to view this rotation
-					if($this->AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
-						$ROTATION = new CoreRotation($this->CORE, $poolName);
-						
-						$aSteps = Array();
-						
-						// Parse the code for the step list
-						$iNum = $ROTATION->getNumSteps();
-						for($i = 0; $i < $iNum; $i++) {
-							$aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
-							                  'url' => $ROTATION->getStepUrlById($i));
-						}
-						
-						$aRotations[] = Array('name' => $poolName,
-						                      'url' => $ROTATION->getStepUrlById(0),
-						                      'num_steps' => $ROTATION->getNumSteps(),
-															    'steps' => $aSteps);
-					}
-				}
+		if($this->CORE->getMainCfg()->getValue('index','showrotations') != 1)
+			return json_encode(Array());
+
+		$aRotations = Array();
+		foreach($this->CORE->getDefinedRotationPools() AS $poolName) {
+			// Check if the user is permitted to view this rotation
+			if(!$this->AUTHORISATION->isPermitted('Rotation', 'view', $poolName))
+				continue;
+			
+			$ROTATION = new CoreRotation($this->CORE, $poolName);
+			$iNum = $ROTATION->getNumSteps();
+			$aSteps = Array();
+			for($i = 0; $i < $iNum; $i++) {
+				$aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
+													'url'  => $ROTATION->getStepUrlById($i));
 			}
+			
+			$aRotations[] = Array('name'      => $poolName,
+														'url'       => $ROTATION->getStepUrlById(0),
+														'num_steps' => $ROTATION->getNumSteps(),
+														'steps'     => $aSteps);
 		}
 		
 		return json_encode($aRotations);
@@ -388,8 +331,7 @@ class GlobalIndexPage {
 			}
 			
 			// Size of source images
-			$bgWidth = $imgSize[0];
-			$bgHeight = $imgSize[1];
+			list($bgWidth, $bgHeight) = $imgSize;
 			
 			// Target size
 			$thumbResWidth = 200;
