@@ -34,7 +34,7 @@ class CoreModManageBackgrounds extends CoreModule {
 		// Register valid actions
 		$this->aActions = Array(
 			// WUI specific actions
-			'view' => REQUIRES_AUTHORISATION,
+			'view'     => REQUIRES_AUTHORISATION,
 			'doCreate' => REQUIRES_AUTHORISATION,
 			'doUpload' => REQUIRES_AUTHORISATION,
 			'doDelete' => REQUIRES_AUTHORISATION,
@@ -110,9 +110,12 @@ class CoreModManageBackgrounds extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_image')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_image'))
 			$bValid = false;
-		}
+
+		// Regex validate
+		if($bValid && !$FHANDLER->match('map_image', MATCH_PNG_GIF_JPG_FILE))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && !in_array($FHANDLER->get('map_image'), $this->CORE->getAvailableBackgroundImages())) {
@@ -121,12 +124,10 @@ class CoreModManageBackgrounds extends CoreModule {
 		}
 		
 		// Store response data
-		if($bValid === true) {
-			// Return the data
+		if($bValid === true)
 			return Array('image' => $FHANDLER->get('map_image'));
-		} else {
+		else
 			return false;
-		}
 	}
 	
 	private function doCreate($a) {
@@ -143,18 +144,24 @@ class CoreModManageBackgrounds extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_name'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_color')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_color'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_width')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_width'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_height')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_height'))
 			$bValid = false;
-		}
+		
+		// Validate all options
+		if($bValid && !$FHANDLER->match('image_name', MATCH_BACKGROUND_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('image_color', MATCH_COLOR))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('image_width', MATCH_INTEGER))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('image_height', MATCH_INTEGER))
+			$bValid = false;
 		
 		// Check if the background exists
 		if($bValid && in_array($FHANDLER->get('image_name').'.png', $this->CORE->getAvailableBackgroundImages())) {
@@ -162,18 +169,14 @@ class CoreModManageBackgrounds extends CoreModule {
 			$bValid = false;
 		}
 		
-		// FIXME: Validate all options
-		
 		// Store response data
-		if($bValid === true) {
-			// Return the data
-			return Array('name' => $FHANDLER->get('image_name'),
-			             'color' => $FHANDLER->get('image_color'),
-			             'width' => $FHANDLER->get('image_width'),
+		if($bValid === true)
+			return Array('name'   => $FHANDLER->get('image_name'),
+			             'color'  => $FHANDLER->get('image_color'),
+			             'width'  => $FHANDLER->get('image_width'),
 			             'height' => $FHANDLER->get('image_height'));
-		} else {
+		else
 			return false;
-		}
 	}
 }
 ?>

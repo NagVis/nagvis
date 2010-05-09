@@ -34,7 +34,7 @@ class CoreModManageShapes extends CoreModule {
 		// Register valid actions
 		$this->aActions = Array(
 			// WUI specific actions
-			'view' => REQUIRES_AUTHORISATION,
+			'view'     => REQUIRES_AUTHORISATION,
 			'doUpload' => REQUIRES_AUTHORISATION,
 			'doDelete' => REQUIRES_AUTHORISATION,
 		);
@@ -94,9 +94,12 @@ class CoreModManageShapes extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('image'))
 			$bValid = false;
-		}
+
+		// Regex validate
+		if($bValid && !$FHANDLER->match('image', MATCH_PNG_GIF_JPG_FILE))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && !in_array($FHANDLER->get('image'), $this->CORE->getAvailableShapes())) {
@@ -105,12 +108,10 @@ class CoreModManageShapes extends CoreModule {
 		}
 		
 		// Store response data
-		if($bValid === true) {
-			// Return the data
+		if($bValid === true)
 			return Array('image' => $FHANDLER->get('image'));
-		} else {
+		else
 			return false;
-		}
 	}
 }
 ?>

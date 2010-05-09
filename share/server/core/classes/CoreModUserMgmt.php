@@ -1,4 +1,30 @@
 <?php
+/*****************************************************************************
+ *
+ * CoreModUserMgmt.php - Core module for handling the user management tasks
+ *
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
+/**
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
 class CoreModUserMgmt extends CoreModule {
 	protected $CORE;
 	protected $FHANDLER;
@@ -6,12 +32,12 @@ class CoreModUserMgmt extends CoreModule {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view' => REQUIRES_AUTHORISATION,
+		$this->aActions = Array('view'         => REQUIRES_AUTHORISATION,
 		                        'getUserRoles' => REQUIRES_AUTHORISATION,
-		                        'getAllRoles' => REQUIRES_AUTHORISATION,
-		                        'doAdd' => REQUIRES_AUTHORISATION,
-		                        'doEdit' => REQUIRES_AUTHORISATION,
-		                        'doDelete' => REQUIRES_AUTHORISATION);
+		                        'getAllRoles'  => REQUIRES_AUTHORISATION,
+		                        'doAdd'        => REQUIRES_AUTHORISATION,
+		                        'doEdit'       => REQUIRES_AUTHORISATION,
+		                        'doDelete'     => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}
@@ -99,12 +125,14 @@ class CoreModUserMgmt extends CoreModule {
 		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('userId')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('userId'))
 			$bValid = false;
-		}
+
+		// Regex validation
+		if($bValid && !$this->FHANDLER->match('userId', MATCH_INTEGER))
+			$bValid = false;
 		
 		// Parse the specific options
-		// FIXME: validate
 		$userId = intval($this->FHANDLER->get('userId'));
 		
 		// Don't delete own user
@@ -115,12 +143,10 @@ class CoreModUserMgmt extends CoreModule {
 		}
 		
 		// Store response data
-		if($bValid === true) {
-		  // Return the data
+		if($bValid === true)
 		  return Array('userId' => $userId);
-		} else {
+		else
 			return false;
-		}
 	}
 	
 	private function handleResponseEdit() {
@@ -128,26 +154,25 @@ class CoreModUserMgmt extends CoreModule {
 		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('userId')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('userId'))
 			$bValid = false;
-		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('rolesSelected')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('rolesSelected'))
 			$bValid = false;
-		}
+		
+		// Regex validate
+		if($bValid && !$this->FHANDLER->match('userId', MATCH_INTEGER))
+			$bValid = false;
+		if($bValid && !$this->FHANDLER->match('rolesSelected', MATCH_INTEGER))
+			$bValid = false;
 		
 		// Parse the specific options
-		// FIXME: validate
 		$userId = intval($this->FHANDLER->get('userId'));
 		
-		$aPerms = Array();
-		
 		// Store response data
-		if($bValid === true) {
-			// Return the data
+		if($bValid === true)
 			return Array('userId' => $userId, 'roles' => $this->FHANDLER->get('rolesSelected'));
-		} else {
+		else
 			return false;
-		}
 	}
 	
 	private function handleResponseAdd() {
@@ -155,53 +180,45 @@ class CoreModUserMgmt extends CoreModule {
 		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('username')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('username'))
 			$bValid = false;
-		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password1')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password1'))
 			$bValid = false;
-		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password2')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password2'))
 			$bValid = false;
-		}
 		
 		// Check length limits
-		if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH))
 			$bValid = false;
-		}
-		if($bValid && $this->FHANDLER->isLongerThan('password1', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('password1', AUTH_MAX_PASSWORD_LENGTH))
 			$bValid = false;
-		}
-		if($bValid && $this->FHANDLER->isLongerThan('password2', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('password2', AUTH_MAX_PASSWORD_LENGTH))
 			$bValid = false;
-		}
+		
+		// Regex match
+		if($bValid && !$this->FHANDLER->match('username', MATCH_USER_NAME))
+			$bValid = false;
 		
 		// Check if the user already exists
-		
 		if($bValid && $this->AUTHENTICATION->checkUserExists($this->FHANDLER->get('username'))) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The username is invalid or does already exist.'));
-			
 			$bValid = false;
 		}
 		
 		// Check if new passwords are equal
 		if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2')) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The two passwords are not equal.'));
-			
 			$bValid = false;
 		}
 		
 		//@todo Escape vars?
 		
 		// Store response data
-		if($bValid === true) {
-			// Return the data
-			return Array(
-		               'user' => $this->FHANDLER->get('username'),
+		if($bValid === true)
+			return Array('user' => $this->FHANDLER->get('username'),
 		               'password' => $this->FHANDLER->get('password1'));
-		} else {
+		else
 			return false;
-		}
 	}
 	
 	public function msgInputNotValid() {

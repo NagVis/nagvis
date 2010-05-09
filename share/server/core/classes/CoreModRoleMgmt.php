@@ -1,4 +1,30 @@
 <?php
+/*******************************************************************************
+ *
+ * CoreModRoleMgmt.php - Core module to handle the role management tasks
+ *
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ ******************************************************************************/
+
+/**
+ * @author Lars Michelsen <lars@vertical-visions.de>
+ */
 class CoreModRoleMgmt extends CoreModule {
 	protected $CORE;
 	protected $FHANDLER;
@@ -6,11 +32,11 @@ class CoreModRoleMgmt extends CoreModule {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view' => REQUIRES_AUTHORISATION,
+		$this->aActions = Array('view'         => REQUIRES_AUTHORISATION,
 		                        'getRolePerms' => REQUIRES_AUTHORISATION,
-		                        'doAdd' => REQUIRES_AUTHORISATION,
-		                        'doEdit' => REQUIRES_AUTHORISATION,
-		                        'doDelete' => REQUIRES_AUTHORISATION);
+		                        'doAdd'        => REQUIRES_AUTHORISATION,
+		                        'doEdit'       => REQUIRES_AUTHORISATION,
+		                        'doDelete'     => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}
@@ -92,44 +118,43 @@ class CoreModRoleMgmt extends CoreModule {
 	
 	private function handleResponseDelete() {
 		$bValid = true;
-		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('roleId')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('roleId'))
 			$bValid = false;
-		}
+		
+		// Regex validate
+		if($bValid && !$this->FHANDLER->match('roleId', MATCH_INTEGER))
+			$bValid = false;
 		
 		// Parse the specific options
-		// FIXME: validate
 		$roleId = intval($this->FHANDLER->get('roleId'));
 		
 		// FIXME: Check not to delete any referenced role
 		
 	  // Store response data
-	  if($bValid === true) {
-		  // Return the data
+	  if($bValid === true)
 		  return Array('roleId' => $roleId);
-		} else {
+		else
 			return false;
-		}
 	}
 	
 	private function handleResponseEdit() {
 		$bValid = true;
-		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('roleId')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('roleId'))
 			$bValid = false;
-		}
+		
+		// Regex validate
+		if($bValid && !$this->FHANDLER->match('roleId', MATCH_INTEGER))
+			$bValid = false;
 		
 		// Parse the specific options
-		// FIXME: validate
 		$roleId = intval($this->FHANDLER->get('roleId'));
 		
-		$aPerms = Array();
-		
 		// Load perm options
+		$aPerms = Array();
 		foreach($this->FHANDLER->getKeys() AS $key) {
 			// Only load permission keys
 			if(strpos($key, 'perm_') !== false) {
@@ -145,45 +170,40 @@ class CoreModRoleMgmt extends CoreModule {
 		}
 		
 	  // Store response data
-	  if($bValid === true) {
-		  // Return the data
+	  if($bValid === true)
 		  return Array('roleId' => $roleId, 'perms' => $aPerms);
-		} else {
+		else
 			return false;
-		}
 	}
 	
 	private function handleResponseAdd() {
 		$bValid = true;
-		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('name')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('name'))
 			$bValid = false;
-		}
 		
 		// Check length limits
-		if($bValid && $this->FHANDLER->isLongerThan('name', AUTH_MAX_ROLENAME_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('name', AUTH_MAX_ROLENAME_LENGTH))
 			$bValid = false;
-		}
 		
+		// Regex validate
+		if($bValid && !$this->FHANDLER->match('name', MATCH_ROLE_NAME))
+			$bValid = false;
+
 		// Check if the role already exists
 		if($bValid && $this->AUTHORISATION->checkRoleExists($this->FHANDLER->get('name'))) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The rolename is invalid or does already exist.'));
-			
 			$bValid = false;
 		}
 		
 		//@todo Escape vars?
 		
 	  // Store response data
-	  if($bValid === true) {
-		  // Return the data
+	  if($bValid === true)
 		  return Array('name' => $this->FHANDLER->get('name'));
-		} else {
+		else
 			return false;
-		}
 	}
 }
-
 ?>

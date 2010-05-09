@@ -1,4 +1,31 @@
 <?php
+/*****************************************************************************
+ *
+ * CoreModChangePassword.php - This module handles the password changes of
+ *                             the users when using the internal auth db
+ *
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
+/**
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
 class CoreModChangePassword extends CoreModule {
 	protected $CORE;
 	protected $FHANDLER;
@@ -7,7 +34,7 @@ class CoreModChangePassword extends CoreModule {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view' => REQUIRES_AUTHORISATION,
+		$this->aActions = Array('view'   => REQUIRES_AUTHORISATION,
 		                        'change' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
@@ -73,26 +100,20 @@ class CoreModChangePassword extends CoreModule {
 		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordOld')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordOld'))
 			$bValid = false;
-		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordNew1')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordNew1'))
 			$bValid = false;
-		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordNew2')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('passwordNew2'))
 			$bValid = false;
-		}
 		
 		// Check length limits
-		if($bValid && $this->FHANDLER->isLongerThan('passwordOld', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('passwordOld', AUTH_MAX_PASSWORD_LENGTH))
 			$bValid = false;
-		}
-		if($bValid && $this->FHANDLER->isLongerThan('passwordNew1', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('passwordNew1', AUTH_MAX_PASSWORD_LENGTH))
 			$bValid = false;
-		}
-		if($bValid && $this->FHANDLER->isLongerThan('passwordNew2', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('passwordNew2', AUTH_MAX_PASSWORD_LENGTH))
 			$bValid = false;
-		}
 		
 		// Check if new passwords are equal
 		if($bValid && $this->FHANDLER->get('passwordNew1') !== $this->FHANDLER->get('passwordNew2')) {
@@ -111,15 +132,12 @@ class CoreModChangePassword extends CoreModule {
 		//@todo Escape vars?
 		
 	  // Store response data
-	  if($bValid === true) {
-		  // Return the data
-		  return Array(
-		               'user' => $this->AUTHENTICATION->getUser(),
-		               'password' => $this->FHANDLER->get('passwordOld'),
+	  if($bValid === true)
+		  return Array('user'        => $this->AUTHENTICATION->getUser(),
+		               'password'    => $this->FHANDLER->get('passwordOld'),
 		               'passwordNew' => $this->FHANDLER->get('passwordNew1'));
-		} else {
+		else
 			return false;
-		}
 	}
 	
 	public function msgInputNotValid() {
@@ -132,5 +150,4 @@ class CoreModChangePassword extends CoreModule {
 		return '';
 	}
 }
-
 ?>

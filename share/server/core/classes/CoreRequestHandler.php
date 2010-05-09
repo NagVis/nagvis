@@ -45,7 +45,15 @@ class CoreRequestHandler {
 	}
 
 	public function match($sKey, $regex) {
-		return preg_match($regex, $this->aOpts[$sKey]);
+		// If this is an array validate the single values. When one of the values
+		// is invalid return false.
+		if(is_array($this->aOpts[$sKey])) {
+			foreach($this->aOpts[$sKey] AS $val)
+				if(!preg_match($regex, $val))
+					return false;
+			return true;
+		} else
+			return preg_match($regex, $this->aOpts[$sKey]);
 	}
 	
 	public function isSetAndNotEmpty($sKey) {

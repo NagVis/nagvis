@@ -34,7 +34,7 @@ class CoreModMainCfg extends CoreModule {
 		// Register valid actions
 		$this->aActions = Array(
 			// WUI specific actions
-			'edit' => REQUIRES_AUTHORISATION,
+			'edit'   => REQUIRES_AUTHORISATION,
 			'doEdit' => REQUIRES_AUTHORISATION,
 		);
 	}
@@ -89,15 +89,13 @@ class CoreModMainCfg extends CoreModule {
 	
 	private function handleResponseEdit() {
 		$bValid = true;
-		// Validate the response
+		// FIXME: Validate the response
 		
 		// Store response data
-		if($bValid === true) {
-			// Return the data
+		if($bValid === true)
 			return Array('opts' => $_POST);
-		} else {
+		else
 			return false;
-		}
 	}
 }
 ?>

@@ -37,6 +37,13 @@ class CoreModuleHandler {
 		$this->sPrefix = 'CoreMod';
 	}
 	
+	/**
+	 * Loads an instance of the given module. The module needs to be registered
+	 * before loading.
+	 *
+	 * @param  String  Name of the module to load
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function loadModule($sModule) {
 		// Check if module class is registered
 		if(isset($this->aRegistered[$this->sPrefix.$sModule]) && $this->aRegistered[$this->sPrefix.$sModule] === 'active') {
@@ -54,6 +61,13 @@ class CoreModuleHandler {
 		}
 	}
 	
+	/**
+	 * Registers a module by its name. After registering it is available
+	 * to be loaded.
+	 *
+	 * @param  String  Name of the module to register
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
 	public function regModule($sModule) {
 		// Check if module class exists
     if(class_exists($this->sPrefix.$sModule)) {

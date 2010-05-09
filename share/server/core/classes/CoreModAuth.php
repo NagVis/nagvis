@@ -1,4 +1,30 @@
 <?php
+/*****************************************************************************
+ *
+ * CoreModAuth.php - This module handles the user login and logout
+ *
+ * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ *
+ * License:
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *****************************************************************************/
+
+/**
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
 class CoreModAuth extends CoreModule {
 	protected $CORE;
 	protected $FHANDLER;
@@ -6,7 +32,7 @@ class CoreModAuth extends CoreModule {
 	public function __construct($CORE) {
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('login' => 0,
+		$this->aActions = Array('login'  => 0,
 		                        'logout' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
@@ -68,44 +94,38 @@ class CoreModAuth extends CoreModule {
 		// Validate the response
 		
 		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('username')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('username'))
 			$bValid = false;
-		}
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password')) {
+		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password'))
 			$bValid = false;
-		}
 		
 		// Check length limits
-		if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH))
 			$bValid = false;
-		}
-		if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH)) {
+		if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH))
 			$bValid = false;
-		}
+
+		// Some regex validation
+		if($bValid && !$this->FHANDLER->match('username', MATCH_USER_NAME))
+			$bValid = false;
 		
 		//@todo Escape vars?
 		
 	  // Store response data
-	  if($bValid === true) {
-	  	$sUsername = $this->FHANDLER->get('username');
-	  	$sPassword = $this->FHANDLER->get('password');
-		  
-		  // Return the data
-		  return Array('user' => $sUsername, 'password' => $sPassword);
-		} else {
+	  if($bValid === true)
+		  return Array('user'     => $this->FHANDLER->get('username'),
+			             'password' => $this->FHANDLER->get('password'));
+		else
 			return false;
-		}
 	}
 	
 	public function msgAlreadyLoggedIn() {
 		new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You are already logged in. You will be redirected.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
-		
 		return '';
 	}
 	
 	public function msgInvalidCredentials() {
 		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 1, CoreRequestHandler::getReferer(''));
-		
 		return '';
 	}
 }
