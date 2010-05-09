@@ -382,14 +382,16 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('name'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
@@ -460,14 +462,16 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('name'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
@@ -520,14 +524,16 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('name'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
@@ -602,17 +608,20 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_GET);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('type')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('type'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('id', MATCH_INTEGER))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
@@ -664,17 +673,20 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($aResponse);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('type')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('type'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('id', MATCH_INTEGER))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
@@ -737,14 +749,16 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('type')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('type'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
@@ -794,11 +808,12 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
 		
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
@@ -850,14 +865,18 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_new_name')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_new_name'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// All fields: Regex check
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && !$FHANDLER->match('map_new_name', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && $FHANDLER->isSetAndNotEmpty('map_current') && !$FHANDLER->match('map_current', MATCH_MAP_NAME))
+			$bValid = false;
 		
 		// Check if the new map already exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_new_name').'$/')) > 0) {
@@ -895,11 +914,16 @@ class CoreModMap extends CoreModule {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		
 		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		}
 		
-		//FIXME: All fields: Regex check
+		// Check for valid vars
+		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+			$bValid = false;
+		if($bValid && $FHANDLER->isSetAndNotEmpty('map_iconset') && !$FHANDLER->match('map_iconset', MATCH_STRING_NO_SPACE))
+			$bValid = false;
+		if($bValid && $FHANDLER->isSetAndNotEmpty('map_image') && !$FHANDLER->match('map_image', MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE))
+			$bValid = false;
 		
 		// Check if the map already exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) > 0) {
