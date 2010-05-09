@@ -52,8 +52,9 @@ class CoreRequestHandler {
 				if(!preg_match($regex, $val))
 					return false;
 			return true;
-		} else
+		} else {
 			return preg_match($regex, $this->aOpts[$sKey]);
+		}
 	}
 	
 	public function isSetAndNotEmpty($sKey) {
