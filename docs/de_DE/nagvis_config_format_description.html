@@ -411,6 +411,15 @@ socket="unix:/usr/local/nagios/var/rw/live</pre>
 <tr>
 <td>htmlcgi</td><td>/nagios/cgi-bin</td><td>Pfad zum cgi-bin-Verzeichnis dieses Backends (wichtig bei mehreren Backends)</td>
 </tr>
+<tr>
+<td>custom_1</td><td></td><td>Erste benutzerdefinierte Variable, die in den Context- und Hover-Men&uuml;s verf&uuml;gbar ist. Mit dieser Option k&ouml;nnen verschiedene benutzerdefinierte URLs zu den Context-/Hover-Men&uuml;s hinzugef&uuml;gt werden, die jeweils vom Backend abh&auml;ngig sind. Das ist u.a. nutzbar, wenn Links auf verschiedene Nagios-Instanzen hinzugef&uuml;gt werden sollen.</td>
+</tr>
+<tr>
+<td>custom_2</td><td></td><td>Zweite benutzerdefinierte Variable (s.o).<td>
+</tr>
+<tr>
+<td>custom_3</td><td></td><td>Dritte benutzerdefinierte Variable (s.o).<td>
+</tr>
 </table>
 
 <a name="rotation"></a>
@@ -440,11 +449,11 @@ interval=15</pre>
 
 <a name="states"></a>
 <h3>states (<font color="red">neu in 1.5</font>)</h3>
-Optionen, die die Behandlung und das Aussehen der verschiedenen Zust&auml;nde in der NagVis-Installation beeinflussen.<br>
-Diese Einstellungen definieren das Verhalten der Zustandsbehandlung. Haupts&auml;chlich ist es m&ouml;glich zu konfigurieren, welcher Zustand einen anderen "&uuml;berdeckt". Ein kritischer Zustand (5) wird eine Warnung (4) &uuml;berdecken, ein best&auml;tigter kritischer Zustand (2) wird nicht eine Warnung (4) &uuml;berdecken.<br>
+<p>Optionen, die die Behandlung und das Aussehen der verschiedenen Zust&auml;nde in der NagVis-Installation beeinflussen.</p>
+<p>Diese Einstellungen definieren das Verhalten der Zustandsbehandlung. Haupts&auml;chlich ist es m&ouml;glich zu konfigurieren, welcher Zustand einen anderen "&uuml;berdeckt". Ein kritischer Zustand (5) wird eine Warnung (4) &uuml;berdecken, ein best&auml;tigter kritischer Zustand (2) wird nicht eine Warnung (4) &uuml;berdecken.</p>
 
-<table border=0>
-<tr> <th width="200">Wert</th><th width="150">Default</th> </tr>
+<table>
+<tr> <th style="width:200px">Wert</th><th style="width:150px">Default</th></tr>
 <tr> <td>unreachable</td><td>8</td> </tr>
 <tr> <td>unreachable_ack</td><td>5</td> </tr>
 <tr> <td>unreachable_downtime</td>><td>5</td> </tr>

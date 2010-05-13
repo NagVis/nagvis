@@ -8,9 +8,9 @@
 		<h1>Header Templates</h1>
 		<h2>Introduction</h2>
 		
-		Header templates are html files with some macros in it. These files can be used as header menu in the maps. The header templates are located at <code>share/userfiles/templates/pages/*.header.html</code> relative to the nagvis root directory. The templates are named like this: <code>*.header.html</code>.
+		Header templates are html files with some macros in it. These files can be used as header menu in the maps. The header templates are located at <code>share/userfiles/templates/pages/*.header.html</code> relative to the nagvis root directory. The templates are named like this: <code>*.header.html</code>.<br>
 		
-		Since NagVis 1.5 the template format has been changed to be more flexible. Therefor all templates need to be recoded to be NagVis 1.5 compatible.
+		<font color="#ff0000">Since NagVis 1.5 the template format has been changed to be more flexible. Therefore all templates need to be recoded to be NagVis 1.5 compatible.</font>
 		
 		<h2>Macros</h2>
 		The following macros are available in the header templates:
@@ -20,13 +20,13 @@
 		<th>Macro</th><th>Description</th>
 		</tr>
 		<tr>
-		<td>{$currentMap} (Was [current_map])</td><td>Name of the current map (e.g. demo,demo2)</td>
+		<td>{$currentMap} (was [current_map])</td><td>Name of the current map (e.g. demo,demo2)</td>
 		</tr>
 		<tr>
-		<td>{$currentMapAlias} (Was [current_map_alias])</td><td>Alias of the current map</td>
+		<td>{$currentMapAlias} (was [current_map_alias])</td><td>Alias of the current map</td>
 		</tr>
 		<tr>
-		<td>{$currentLanguage} (Was [current_language])</td><td>String representing the current language (For example en_US). This is needed for link to documentation.</td>
+		<td>{$currentLanguage} (was [current_language])</td><td>String representing the current language (For example en_US). This is needed for link to documentation.</td>
 		</tr>
 		<tr>
 		<td>{$currentUser}</td><td>Name of the current user <font color="#ff0000">(New in 1.5)</font>.</td>
@@ -84,52 +84,52 @@
 			<td>To be more flexible in the templates we added some sort of if statements. These can be used as in native PHP. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>. <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
-		<td>{$pathBase} (Was [html_base])</td><td> URL to HTML-Base (/nagvis) </td>
+		<td>{$pathBase} (was [html_base])</td><td> URL to HTML-Base (/nagvis) </td>
 		</tr>
 		<tr>
-		<td>{$pathImages} (Was [html_images])</td><td> URL to HTML-Images (/nagvis/images) <font color="#ff0000">(New in 1.5)</font></td>
+		<td>{$pathImages} (was [html_images])</td><td> URL to HTML-Images (/nagvis/images) <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
 		<tr>
-		<td>{$pathTemplates} (Was [html_templates])</td><td> Path to header templates (/nagvis/userfiles/templates) </td>
+		<td>{$pathTemplates} (was [html_templates])</td><td> Path to header templates (/nagvis/userfiles/templates) </td>
 		</tr>
 		<tr>
-		<td>{$pathTemplateImages} (Was [html_template_images])</td><td> Path to header template images (/nagvis/userfiles/images/templates) </td>
+		<td>{$pathTemplateImages} (was [html_template_images])</td><td> Path to header template images (/nagvis/userfiles/images/templates) </td>
 		</tr>
 		<tr>
-		<td>{$langOpen} (Was [lang_select_map])</td><td>Label for opening new views</td>
+		<td>{$langOpen} (was [lang_select_map])</td><td>Label for opening new views</td>
 		</tr>
 		<tr>
-		<td>{$langEditMap} (Was [lang_edit_map])</td><td> Label for edit map link </td>
+		<td>{$langEditMap} (was [lang_edit_map])</td><td> Label for edit map link </td>
 		</tr>
 		<tr>
-		<td>{$langNeedHelp} (Was [lang_need_help])</td><td> Label for help selection </td>
+		<td>{$langNeedHelp} (was [lang_need_help])</td><td> Label for help selection </td>
 		</tr>
 		<tr>
-		<td>{$langOnlineDoc} (Was [lang_online_doc])</td><td> Label for link to online documentation </td>
+		<td>{$langOnlineDoc} (was [lang_online_doc])</td><td> Label for link to online documentation </td>
 		</tr>
 		<tr>
-		<td>{$langForum} (Was [lang_forum])</td><td> Label for link to NagVis forum  </td>
+		<td>{$langForum} (was [lang_forum])</td><td> Label for link to NagVis forum  </td>
 		</tr>
 		<tr>
-		<td>{$langSupportInfo} (Was [lang_support_info])</td><td> Label for link to support information </td>
+		<td>{$langSupportInfo} (was [lang_support_info])</td><td> Label for link to support information </td>
 		</tr>
 		<tr>
-		<td>{$langOverview} (Was [lang_overview])</td><td> Label for overview string </td>
+		<td>{$langOverview} (was [lang_overview])</td><td> Label for overview string </td>
 		</tr>
 		<tr>
-		<td>{$langInstance} (Was [lang_instance])</td><td> Label for theinstance string</td>
+		<td>{$langInstance} (was [lang_instance])</td><td> Label for the instance string</td>
 		</tr>
 		<tr>
-		<td>{$langRotationStart} (Was [lang_rotation_start])</td><td> Label for starting the map rotation </td>
+		<td>{$langRotationStart} (was [lang_rotation_start])</td><td> Label for starting the map rotation </td>
 		</tr>
 		<tr>
-		<td>{$langRotationStop} (Was [lang_rotation_stop])</td><td> Label for stopping the map rotation </td>
+		<td>{$langRotationStop} (was [lang_rotation_stop])</td><td> Label for stopping the map rotation </td>
 		</tr>
 		<tr>
 		<td>{$langSearch}</td><td> Label for searching an object on the map <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
-		<td>{$langToggleGrid}</td><td> Label for enable/disable the grid <font color="#ff0000">(New in 1.5)</font>.</td>
+		<td>{$langToggleGrid}</td><td> Label for enabling/disabling the grid <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
 		<td>{$langActions}</td><td>Label for choosing the available actions <font color="#ff0000">(New in 1.5)</font>.</td>
@@ -144,19 +144,19 @@
 		<td>{$langLoggedIn}</td><td>Label for "Logged in as" <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
-		<td>{$langChangePassword}</td><td>Label for changing the users password <font color="#ff0000">(New in 1.5)</font>.</td>
+		<td>{$langChangePassword}</td><td>Label for changing the user&apos;s password <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
 		<td>{$langUserMgmt}</td><td>Label for managing users <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
-		<td>{$langManageRoles}</td><td>Label for managing users roles <font color="#ff0000">(New in 1.5)</font>.</td>
+		<td>{$langManageRoles}</td><td>Label for managing user roles <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
 		<td>{$langLogout}</td><td>Label for logging out <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 		<tr>
-		<td>{$langChooseLanguage}</td><td>Label for choosing the users language <font color="#ff0000">(New in 1.5)</font>.</td>
+		<td>{$langChooseLanguage}</td><td>Label for choosing the user&apos;s language <font color="#ff0000">(New in 1.5)</font>.</td>
 		</tr>
 	</body>
 </table>
