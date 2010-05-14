@@ -28,6 +28,15 @@
 		<td>[name]</td><td>Name des Objekts (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
 		</tr>
 		<tr>
+		<td>[custom_1]</td><td>Das erste benutzerdefinierte Makro je Backend. Kann n&uuml;tzlich sein, um Backend-spezifische URLs zu setzen. </td>
+		</tr>
+		<tr>
+		<td>[custom_2]</td><td>Zweites benutzerdefiniertes Makro je Backend (s.o.). </td>
+		</tr>
+		<tr>
+		<td>[custom_3]</td><td>Drittes benutzerdefiniertes Makro je Backend (s.o.). </td>
+		</tr>
+		<tr>
 		<th colspan="2"> Sprachmakros </th>
 		</tr>
 		<tr>
@@ -46,7 +55,7 @@
 		<td>[html_base]</td><td>Absolute URL zur HTML-Basis (Default: /nagios/nagvis)</td>
 		</tr>
 		<tr>
-		<td>[html_cgi]</td><td>Absolute URL zu den Nagios-CGIs (Default: /nagios/cgi-bin)</td>
+		<td>[html_cgi]</td><td>Absolute URL zu den Nagios-CGIs. Benutzt einen objektabh&auml;ngigen Wert. H&auml;ngt vom verwendeten Backend ab. Wird kein backend-spezifischer Wert gesetzt, gilt der Default. (Default: /nagios/cgi-bin)</td>
 		</tr>
 		<tr>
 		<td>[html_templates]</td><td> Pfad zum Context-Templates-Verzeichnis (Default: /nagios/nagvis/nagvis/etc/templates/context)</td>
@@ -57,7 +66,7 @@
 		</table>
 		
 		<h2> Spezielle Makros </h2>
-		<p>Es gibt Makros f&uuml;r Context-Templates eines bestimmten Typs. Diese Makros sollten zwischen "Section"-Makros stehen. Die "Section"-Makros definieren, dass der eingeschlossene Code entfernt wird, wenn das Hover-Template nicht f&uuml;r diesen Typ geparst wird???.</p>
+		<p>Es gibt Makros f&uuml;r Context-Templates eines bestimmten Typs. Diese Makros sollten zwischen "Section"-Makros stehen. Die "Section"-Makros definieren, dass der eingeschlossene Code entfernt wird, wenn das Hover-Template nicht f&uuml;r diesen Typ geparst wird.</p>
 		
 		<p>Ein "Section"-Makro f&uuml;r Host-Makros sieht wie folgt aus:</p>
 		<pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>

@@ -50,13 +50,13 @@ define('MATCH_PNG_GIF_JPG_FILE', '/^(.+)\.(png|gif|jpg)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\]|none)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\])$/i');
 define('MATCH_ROTATION_STEP_TYPES_EMPTY', '/^(?:map|automap|url)?$/');
-define('MATCH_LANGUAGE_EMPTY', '/^[a-zA-Z0-9-_]*$/');
+define('MATCH_LANGUAGE_EMPTY', '/^[a-zA-Z0-9\-_]*$/');
 
-define('MATCH_MAP_NAME', '/^[0-9A-Za-z_-]+$/');
-define('MATCH_MAP_NAME_EMPTY', '/^[0-9A-Za-z_-]*$/');
-define('MATCH_ROTATION_NAME', '/^[0-9A-Za-z_-]+$/');
-define('MATCH_ROTATION_NAME_EMPTY', '/^[0-9A-Za-z_-]*$/');
-define('MATCH_BACKGROUND_NAME', '/^[0-9A-Za-z_-]+$/');
+define('MATCH_MAP_NAME', '/^[0-9A-Za-z_\-]+$/');
+define('MATCH_MAP_NAME_EMPTY', '/^[0-9A-Za-z_\-]*$/');
+define('MATCH_ROTATION_NAME', '/^[0-9A-Za-z_\-]+$/');
+define('MATCH_ROTATION_NAME_EMPTY', '/^[0-9A-Za-z_\-]*$/');
+define('MATCH_BACKGROUND_NAME', '/^[0-9A-Za-z_\-]+$/');
 define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 define('MATCH_VIEW_TYPE_SERVICE_EMPTY', '/^(?:icon|line|gadget)*$/i');
@@ -64,10 +64,10 @@ define('MATCH_GET_OBJECT_TYPE', '/^(state|complete)$/');
 define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map|automap)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2)?$/');
 define('MATCH_LINE_TYPE', '/^(10|11|12)?$/');
-define('MATCH_USER_NAME', '/^[0-9A-Za-z_-\s\.@]+$/');
-define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_-\s\.@]+$/');
+define('MATCH_USER_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
+define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 
-define('MATCH_URI_PART', '/^[a-zA-Z0-9-_]*$/');
+define('MATCH_URI_PART', '/^[a-zA-Z0-9\-_]*$/');
 
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
 define('MATCH_MP3_FILE', '/^(.+)\.mp3$/i');
@@ -80,7 +80,7 @@ define('MATCH_INTEGER_PRESIGN_EMPTY', '/^[\+\-]?[0-9]*$/');
 define('MATCH_ORDER', '/^(?:asc|desc)$/');
 define('MATCH_TEXTBOX_WIDTH', '/^([0-9]+|auto)$/');
 define('MATCH_TEXTBOX_HEIGHT', '/^([0-9]+|auto)$/');
-define('MATCH_SOCKET', '/^(unix:[a-zA-Z0-9-_\.\/]+|tcp:[a-zA-Z0-9-\.]+:[0-9]{1,5})$/');
+define('MATCH_SOCKET', '/^(unix:[a-zA-Z0-9\-_\.\/]+|tcp:[a-zA-Z0-9\-\.]+:[0-9]{1,5})$/');
 
 define('MATCH_WUI_ADDMODIFY_DO', '/^(add|modify)$/');
 ?>

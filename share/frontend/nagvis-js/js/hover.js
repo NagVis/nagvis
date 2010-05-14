@@ -316,7 +316,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Search for images and append current timestamp to src (prevent caching of
 	// images e.a. when some graphs should be fresh)
-	var regex = new RegExp("<img.*src=['\"]?([^>'\"]*)['\"]?>", 'gi');
+	var regex = new RegExp("<img.*src=['\"]?([^>'\"]*)['\"]?", 'gi');
 	var results = regex.exec(sTemplateCode);
 	if(results !== null) {
 		for(var i = 0, len = results.length; i < len; i=i+2) {
