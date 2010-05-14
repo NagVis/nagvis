@@ -205,6 +205,8 @@ class CoreModGeneral extends CoreModule {
 			}
 			
 			$arr = $MAPCFG->getDefinitions('global');
+			unset($arr[0]['type']);
+			unset($arr[0]['object_id']);
 			$OBJ->setConfiguration($arr[0]);
 			
 			if($arrType[$i] != 'automap')
