@@ -214,7 +214,7 @@
 ; Options for the Automap
 [automap]
 ; Default URL parameters for links to the automap
-;defaultparams="&maxLayers=2"
+;defaultparams="&childLayers=2"
 ; Default root host (NagVis uses this if it can't detect it via NDO)
 ;defaultroot=""
 ; Path to the graphviz binaries (dot,neato,...); Only needed if not in ENV PATH

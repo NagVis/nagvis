@@ -121,7 +121,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * This is for compatibility to old the old parent layer limitation
 		 * FIXME: May be removed in 1.6
 		 */
-		if(isset($prop['maxLayers']) && $prop['maxLayers'] != '' && (!isset($prop['childLayers']) || $prop['childLayers'] == '')) {
+		if(isset($prop['maxLayers']) && $prop['maxLayers'] != '') {
 			$prop['childLayers'] = $prop['maxLayers'];
 		}
 		

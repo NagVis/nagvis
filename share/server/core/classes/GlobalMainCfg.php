@@ -548,7 +548,7 @@ class GlobalMainCfg {
 			'automap' => Array(
 				'defaultparams' => Array('must' => 0,
 					'editable' => 1,
-					'default' => '&maxLayers=2',
+					'default' => '&childLayers=2',
 					'match' => MATCH_STRING_URL),
 				'defaultroot' => Array('must' => 0,
 					'editable' => 1,
