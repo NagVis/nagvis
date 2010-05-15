@@ -16,15 +16,16 @@
 
 Wichtigste Regel: machen Sie immer ein Backup, bevor Sie eine existierende Installation aktualisieren.<br><br>
 
-Es gibt zwei F&auml;lle der Aktualisierung:<br>
+Es gibt mehrere F&auml;lle der Aktualisierung:<br>
 <ol>
-<li>Aktualisierung einer &auml;lteren Hauptversion (1.1x, 1.2x, 1.3.x auf 1.4x)</li>
-<li>Aktualisierung der Sub-Version (1.4x auf 1.4x)</li>
+<li>Aktualisierung einer sehr alten Hauptversion (1.1x, 1.2x, 1.3.x)</li>
+<li>Aktualisierung der letzten Hauptversion (1.4x)</li>
+<li>Aktualisierung der Sub-Version (1.5x auf 1.5x)</li>
 </ol>
  
-<h2>Aktualisierung von NagVis 1.2 oder darunter</h2>
+<h2>Aktualisierung von NagVis 1.3 oder darunter</h2>
 Es gab viele &Auml;nderungen an der inneren Struktur von NagVis und den Konfigurationswerten. Der beste Weg zur Aktualisierung auf die neueste NagVis-Version ist, die neue Version als Neuinstallation aufzusetzen und Ihre Maps/Icons/Konfigurationen usw. manuell zu migrieren.<br><br>
-Sie sollten einen Blick auf die folgenden Dinge werfen:
+Sie sollten einen Blick auf die folgenden Stellen werfen:
 <ul>
 <li> Maps (etc/maps)</li>
 kopieren Sie einfach alle Map-Konfigurationsdateien
@@ -47,12 +48,12 @@ kopieren Sie einfach alles
     
 <ul>
 <li> Templates (nagvis/templates/hover und nagvis/images/templates/header)</li>
-kopieren Sie einfach alles
+kopieren Sie einfach Ihre eigenen Templates. <font color=red>Achtung: </font>&Uuml;berschreiben Sie nicht die Default-Templates. M&ouml;glicherweise m&uuml;ssen Sie Ihre vor-1.3-Templates aktualisieren. Mehr Informationen finden Sie auf der <a href=http://www.nagvis.org/download/templates>Template download</a>-Seite.
 </ul>
     
 <ul>
 <li> Template-Bilder (nagvis/images/templates/hover und nagvis/images/templates/header)</li>
-kopieren Sie einfach Ihre eigenen Templates. <font color=red>Achtung: </font>&Uuml;berschreiben Sie nicht die Default-Templates. M&ouml;glicherweise m&uuml;ssen Sie Ihre vor-1.3-Templates auf Version 1.4 aktualisieren. Mehr Informationen finden Sie auf der <a href=http://www.nagvis.org/download/templates>Template download</a>-Seite.
+kopieren Sie einfach alles.
 </ul>
     
 <ul>
@@ -60,9 +61,15 @@ kopieren Sie einfach Ihre eigenen Templates. <font color=red>Achtung: </font>&Uu
 Sie sollten diese Datei <font color=red>nicht</font> kopieren. Der beste Weg ist, die Beispieldatei der neuen NagVis-Version nach etc/nagvis.inc.php zu kopieren und die Werte Ihrer alten Installation manuell in die neue Datei zu migrieren.
 </ul>
     
-
 <h2>Aktualisierung von NagVis 1.4x</h2>
-Solange Sie in Ihrer Installation nichts am NagVis-Code ge&auml;ndert haben, k&ouml;nnen Sie einfach den Inhalt des neuen Packages in die bestehende Installation kopieren.<br><br>
+<p>Von NagVis 1.4x nach 1.5x wurde eine Menge an der Verzeichnisstruktur ge&auml;ndert. Das mitgelieferte Installations-Script kann NagVis 1.4x/1.5x auf das letzte 1.5x-Release aktualisieren. Daher wird empfohlen, dieses Script (<code>install.sh</code>) zur Aktualisierung zu nutzen.</p>
+
+<p>Es ist auch m&ouml;glich, den Update von 1.4x auf 1.5x manuell durchzuf&uuml;hren, aber das wurde bisher weder getestet noch dokumentiert.
+Generell sollte es so funktionieren wie oben beschrieben (also kopieren der eigenen Dateien an die neuen Stellen und anpassen der nagvis.ini.php, <font color="#ff0000">nicht</font> kopieren).<br>
+Wenn Sie also die Installation selbst erledigen m&ouml;chten, dann werden Sie etwas probieren m&uuml;ssen. Bitte leiten Sie dann Ihre Erfahrungen an uns weiter, damit wir diese Dokumentation erweitern k&ouml;nnen.</p>
+
+<h2>Aktualisierung von NagVis 1.5x</h2>
+Solange Sie in Ihrer Installation nichts am NagVis-Code ge&auml;ndert haben, k&ouml;nnen Sie einfach den Inhalt des neuen Packages in die bestehende Installation kopieren.<br>
 Die Konfigurationsdateien werden durch die Packages nicht ersetzt.<br><br>
 <font color=red>&Uuml;berpr&uuml;fen Sie nach der Aktualisierung die <a href=./installation_instructions.html#SCHRITT_5>Berechtigungen</a></font> 
 </html>
