@@ -1355,7 +1355,7 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";dbname=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding dbname=$SOURCE" done` 
-		$SED -i "s#;\(dbname\)=\(nagios\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
+		$SED -i "s#;\(dbname\)=\(\"nagios\"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
 		chk_rc "|  Error adding dbname" "$DONE"
 	fi
 
@@ -1363,7 +1363,7 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";dbuser=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding dbuser=$SOURCE" done` 
-		$SED -i "s#;\(dbuser\)=\("root"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
+		$SED -i "s#;\(dbuser\)=\(\"root\"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
 		chk_rc "|  Error adding dbuser" "$DONE"
 	fi
 
@@ -1371,7 +1371,7 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";dbpass=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding dbpass=$SOURCE" done` 
-		$SED -i "s#;\(dbpass\)=\(""\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
+		$SED -i "s#;\(dbpass\)=\(\"\"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
 		chk_rc "|  Error adding dbpass" "$DONE"
 	fi
 
@@ -1379,7 +1379,7 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";dbprefix=\"${SOURCE}_\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding dbprefix=${SOURCE}_" done` 
-		$SED -i "s#;\(dbprefix\)=\(nagios_\)#;\1=\2\n\1=\"${SOURCE}_\"#" $NAGVIS_CFG
+		$SED -i "s#;\(dbprefix\)=\(\"nagios_\"\)#;\1=\2\n\1=\"${SOURCE}_\"#" $NAGVIS_CFG
 		chk_rc "|  Error adding dbprefix" "$DONE"
 	fi
 
