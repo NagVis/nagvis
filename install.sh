@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.13"
+INSTALLER_VERSION="0.2.14"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -352,6 +352,9 @@ log() {
 		OUT=`printf "%-${LINE_SIZE}s |\n" "| $1"`
 	elif [ "$2" = "done" ]; then
 		OUT=`printf "%-${SIZE}s %s\n" "| $1" "  done  |"`
+	elif [ "$2" = "no_ex" ]; then
+		SIZE=`expr $LINE_SIZE - 16` 
+		OUT=`printf "%-${SIZE}s %s\n" "| $1" " not executable |"`
 	else	
 		OUT=`printf "%-${SIZE}s %s\n" "| $1" "  found |"`
 	fi
@@ -362,7 +365,7 @@ log() {
 # Will overwrite the NAGIOS_PATH when found some Nagios running
 detect_nagios_path() {
 	IFS=$'\n'
-	for N_PROC in `ps ax -o pid,ppid,user,command | grep 'bin/nagios' | grep -v grep`; do
+	for N_PROC in `ps ax -o pid,ppid,user,command | grep 'bin/$SOURCE' | grep -v grep`; do
 		IFS=" "
 		#  2138     1 nagios   /d/nagvis-dev/nagios/bin/nagios -d /d/nagvis-dev/nagios/etc/nagios.cfg
 		N_PID=`expr "$N_PROC" : ' *\([0-9]*\)'`
@@ -373,7 +376,7 @@ detect_nagios_path() {
 		echo "$N_CMD" | grep -i " -d" >/dev/null
 		if [[ $? -eq 0 && $N_PPID -eq 1 ]]; then
 			N_BIN=${N_CMD%% *}
-			NAGIOS_PATH=${N_BIN%%/bin/nagios}
+			NAGIOS_PATH=${N_BIN%%/bin/$SOURCE}
 			NAGIOS_PATH=${NAGIOS_PATH%/}
 		fi
 	done
@@ -428,7 +431,7 @@ check_backend() {
 					log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" ""
 					text "| Valid socket formats are: tcp:127.0.0.1:7668 or unix:/path/to/live" "|"
 					
-					echo -n "| Please put your MKLivestatus socket: "
+					echo -n "| Please enter your MKLivestatus socket: "
 					read APATH
 					if [ ! -z $APATH ]; then
 						LIVESTATUS_SOCK=$APATH
@@ -436,7 +439,7 @@ check_backend() {
 						if [[ ! "$LIVESTATUS_SOCK" =~ unix:* && ! "$LIVESTATUS_SOCK" =~ tcp:* ]]; then
 							text "| Invalid socket format. Take a look above for valid formats." "|"
 						elif [[ ! "$LIVESTATUS_SOCK" =~ unix:* ]]; then
-							text "| Unable to check TCP-Sockets, hope you put the correct socket." "|"
+							text "| Unable to check TCP-Sockets, hope you entered the correct socket." "|"
 						fi
 					fi
 				done
@@ -444,7 +447,7 @@ check_backend() {
 				log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" ""
 			fi
 		else
-			text "| Unable to check TCP-Sockets, hope you put the correct socket." "|"
+			text "| Unable to check TCP-Sockets, hope you entered the correct socket." "|"
 		fi
 		
 		# Check if php socket module is available
@@ -463,7 +466,7 @@ check_backend() {
 		[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-${NAGVER}x"
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 
-		# Check ndo2db binary witout version suffix
+		# Check ndo2db binary without version suffix
 		if [ -z "$NDO" ]; then
 			NDO_MOD="$NAGIOS_PATH/bin/ndo2db"
 			NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
@@ -1105,14 +1108,18 @@ text
 line "Checking prerequisites" "+"
 
 # Set Nagios binary when not set yet
-[ -z "$NAGIOS_BIN" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
+[ -f "$NAGIOS_PATH/bin/icinga" ]&&SOURCE=icinga
+[ -f "$NAGIOS_PATH/bin/nagios" ]&&SOURCE=nagios
+[ -z "$NAGIOS_BIN" -a -f "$NAGIOS_PATH/bin/$SOURCE" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
 
 # Check Nagios version
-if [ -f $NAGIOS_BIN ]; then
+if [ -z $NAGIOS_BIN ]; then
+	log "$SOURCE binary"
+elif [ -x $NAGIOS_BIN ]; then
 	NAGIOS=`$NAGIOS_BIN --version | grep -i "^$SOURCE " | head -1 2>&1`
 	log "$NAGIOS" $NAGIOS
-else
-	log "$SOURCE binary $NAGIOS_BIN"
+elif [ -f $NAGIOS_BIN ]; then
+	log "$SOURCE binary" "no_ex"
 fi
 CALL="$CALL -B $NAGIOS_BIN"
 
@@ -1302,17 +1309,98 @@ fi
 
 # Create main configuration file from sample when no file exists
 if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
-	if [ ! -f $NAGVIS_PATH/$NAGVIS_CONF ]; then
-		DONE=`log "Creating main configuration file..." done` 
-		cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_PATH/$NAGVIS_CONF
-		chk_rc "|  Error copying sample configuration" "$DONE"
+	NAGVIS_CFG=$NAGVIS_PATH/$NAGVIS_CONF
+	DONE=`log "Creating main configuration file..." done` 
+	if [ -f $NAGVIS_CFG ]; then
+		text "| *** $NAGVIS_CFG will NOT be overwritten !" "|"
+		NAGVIS_CFG=$NAGVIS_PATH/$NAGVIS_CONF.inst
+		text "| *** creating $NAGVIS_CFG instead" "|"
+	fi
+	cp -p $NAGVIS_PATH/${NAGVIS_CONF}-sample $NAGVIS_CFG
+	chk_rc "|  Error copying sample configuration" "$DONE"
 
-		# Add livestatus backend when configured to use MKLivestatus
-		if [ ! -z $LIVESTATUS_SOCK ]; then
-			DONE=`log "  Adding MKLivestatus Backend..." done`
-			$SED -i 's#;backend="ndomy_1"#backend="live_1"#g;s#;socket="unix:/usr/local/nagios/var/rw/live"#socket="'"$LIVESTATUS_SOCK"'"#g' $NAGVIS_PATH/$NAGVIS_CONF
+	# add sesscookiepath
+	grep ";sesscookiepath=\"$HTML_PATH\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding sesscookie=$HTML_PATH" done` 
+		$SED -i "s#;\(sesscookiepath\)=\(.*\)#;\1=\2\n\1=\"$HTML_PATH\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding sesscookiepath" "$DONE"
+	fi
+
+	# add NagVis base
+	grep ";base=\"$NAGVIS_PATH/\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding base=\"$NAGVIS_PATH\"" done` 
+		$SED -i "s#;\(base\)=\(.*\)#;\1=\2\n\1=\"$NAGVIS_PATH/\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding base path" "$DONE"
+	fi
+
+	# add htmlbase
+	grep ";htmlbase=\"$HTML_PATH\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding htmlbase=\"$HTML_PATH\"" done` 
+		$SED -i "s#;\(htmlbase\)=\(.*\)#;\1=\2\n\1=\"$HTML_PATH\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding htmlbase" "$DONE"
+	fi
+
+	# add htmlcgi
+	grep ";htmlcgi=\"$SOURCE/cgi-bin\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding htmlcgi=/$SOURCE/cgi-bin" done` 
+		$SED -i "s#;\(htmlcgi\)=\(.*\)#;\1=\2\n\1=\"/$SOURCE/cgi-bin\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding htmlcgi" "$DONE"
+	fi
+
+	# add dbname
+	grep ";dbname=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding dbname=$SOURCE" done` 
+		$SED -i "s#;\(dbname\)=\(nagios\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding dbname" "$DONE"
+	fi
+
+	# add dbuser
+	grep ";dbuser=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding dbuser=$SOURCE" done` 
+		$SED -i "s#;\(dbuser\)=\("root"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding dbuser" "$DONE"
+	fi
+
+	# add dbpass
+	grep ";dbpass=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding dbpass=$SOURCE" done` 
+		$SED -i "s#;\(dbpass\)=\(""\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding dbpass" "$DONE"
+	fi
+
+	# add dbprefix
+	grep ";dbprefix=\"${SOURCE}_\"" $NAGVIS_CFG >/dev/null
+	if [ $? -eq 1 ]; then
+		DONE=`log "adding dbprefix=${SOURCE}_" done` 
+		$SED -i "s#;\(dbprefix\)=\(nagios_\)#;\1=\2\n\1=\"${SOURCE}_\"#" $NAGVIS_CFG
+		chk_rc "|  Error adding dbprefix" "$DONE"
+	fi
+
+	# set backend
+	echo $NAGVIS_BACKEND | grep "merlinmy" >/dev/null
+	[ $? -eq 0 ]&&NEWBACK="merlinmy_1"
+	echo $NAGVIS_BACKEND | grep "ndo2fs" >/dev/null
+	[ $? -eq 0 ]&&NEWBACK="ndofs_1"
+	echo $NAGVIS_BACKEND | grep "ido2db" >/dev/null
+	[ $? -eq 0 ]&&NEWBACK="ndomy_1"
+	echo $NAGVIS_BACKEND | grep "ndo2db" >/dev/null
+	[ $? -eq 0 ]&&NEWBACK="ndomy_1"
+	DONE=`log "setting backend to $NEWBACK" done` 
+	$SED -i "s#;\(backend\)=\(.*\)#;\1=\2\n\1=\"$NEWBACK\"#" $NAGVIS_CFG
+	chk_rc "|  Error setting backend" "$DONE"
+
+	# Add livestatus backend when configured to use MKLivestatus
+	if [ ! -z $LIVESTATUS_SOCK ]; then
+		DONE=`log "  Adding MKLivestatus Backend..." done`
+		$SED -i 's#;backend="ndomy_1"#backend="live_1"#g;s#;socket="unix:/usr/local/nagios/var/rw/live"#socket="'"$LIVESTATUS_SOCK"'"#g' $NAGVIS_CFG
 		chk_rc "|  Error adding MKLivstatus Backend" "$DONE"
-		fi
 	fi
 fi
 
@@ -1488,7 +1576,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
 		line
 	fi
 	
-	# Maybe this is usefull in the future? => Updates for special versions
+	# Maybe this is useful in the future? => Updates for special versions
 	#if [ $NAGVIS_TAG_OLD -ge 01030000 ] && [ $NAGVIS_TAG_OLD -lt 01050000 ]; then
 	#	text "| Version specific changes from 1.3.x or 1.4.x " "|"
 	#	text
