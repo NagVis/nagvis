@@ -45,6 +45,9 @@ class CoreRequestHandler {
 	}
 
 	public function match($sKey, $regex) {
+		if(!isset($this->aOpts[$sKey]))
+			return false;
+		
 		// If this is an array validate the single values. When one of the values
 		// is invalid return false.
 		if(is_array($this->aOpts[$sKey])) {
@@ -58,7 +61,7 @@ class CoreRequestHandler {
 	}
 	
 	public function isSetAndNotEmpty($sKey) {
-		return isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '';
+		return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
 	}
 	
 	public static function getReferer($default) {

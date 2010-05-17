@@ -77,14 +77,12 @@ class CoreModMap extends CoreModule {
 			case 'doTmplAdd':
 			case 'doTmplModify':
 			case 'doTmplDelete':
-				$FHANDLER = new CoreRequestHandler($_POST);
+				$FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
 				if($FHANDLER->match('map', MATCH_MAP_NAME))
 					$this->name = $FHANDLER->get('map');
-				else {
-					// FIXME: Error handling
-					echo "Invalid Format";
-					exit(1);
-				}
+				else
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Invalid query. The parameter [NAME] is missing or has an invalid format.',
+					                                                           Array('NAME' => 'map')));
 			break;
 		}
 		
