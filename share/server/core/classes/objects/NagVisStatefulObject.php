@@ -43,7 +43,9 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	protected $state;
 	protected $output;
-	protected $summary_state;
+	
+	// Highly used and therefor public to prevent continous getter calls
+	public $summary_state;
 	protected $summary_output = '';
 	protected $summary_problem_has_been_acknowledged;
 	protected $summary_in_downtime;

@@ -32,7 +32,8 @@ class NagVisObject {
 	protected $conf;
 	
 	// "Global" Configuration variables for all objects
-	protected $type;
+	// Highly used and therefor public to prevent continous getter calls
+	public $type;
 	protected $object_id;
 	protected $x;
 	protected $y;
