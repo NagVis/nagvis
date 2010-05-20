@@ -1392,6 +1392,8 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	[ $? -eq 0 ]&&NEWBACK="ndomy_1"
 	echo $NAGVIS_BACKEND | grep "ndo2db" >/dev/null
 	[ $? -eq 0 ]&&NEWBACK="ndomy_1"
+	echo $NAGVIS_BACKEND | grep "mklivestatus" >/dev/null
+	[ $? -eq 0 ]&&NEWBACK="live_1"
 	DONE=`log "setting backend to $NEWBACK" done` 
 	$SED -i "s#;\(backend\)=\(.*\)#;\1=\2\n\1=\"$NEWBACK\"#" $NAGVIS_CFG
 	chk_rc "|  Error setting backend" "$DONE"
