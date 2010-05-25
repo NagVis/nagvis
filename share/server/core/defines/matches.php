@@ -45,8 +45,8 @@ define('MATCH_BOOLEAN_EMPTY', '/^(?:1|0)*$/i');
 
 define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
 define('MATCH_OBJECTTYPE', '/^(?:global|host|service|hostgroup|servicegroup|map|textbox|shape|line|template)$/i');
-define('MATCH_PNGFILE', '/^(.+)\.png$/i');
-define('MATCH_PNG_GIF_JPG_FILE', '/^(.+)\.(png|gif|jpg)$/i');
+define('MATCH_PNGFILE', '/^([^\s]+)\.png$/i');
+define('MATCH_PNG_GIF_JPG_FILE', '/^([^\s]+)\.(png|gif|jpg)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\]|none)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\])$/i');
 define('MATCH_ROTATION_STEP_TYPES_EMPTY', '/^(?:map|automap|url)?$/');
