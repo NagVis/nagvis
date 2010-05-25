@@ -40,7 +40,7 @@ INSTALLER_CONFIG_MOD="y"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,ndo2fs,merlinmy"
+NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,merlinmy"
 # data source
 SOURCE=nagios
 # skip checks
@@ -133,7 +133,7 @@ General Parameters:
   -w <PATH>     Path to the webserver config files
 
   -i <BACKENDs> Comma separated list of backends to use:
-                  Available backends: mklivestatus, ndo2db, ido2db, ndo2fs, merlinmy
+                  Available backends: mklivestatus, ndo2db, ido2db, merlinmy
 
 Backend specfic parameters:
 
@@ -479,9 +479,9 @@ check_backend() {
 		check_php_modules "mysql" "$NEED_PHP_VERSION"
 		
 		if [ "$BACKENDS" = "" ]; then
-			BACKENDS="mklivestatus"
+			BACKENDS="ndo2db"
 		else
-			BACKENDS="${BACKENDS},mklivestatus"
+			BACKENDS="${BACKENDS},ndo2db"
 		fi
 	fi
 	
@@ -501,19 +501,6 @@ check_backend() {
 			BACKENDS="ido2db"
 		else
 			BACKENDS="${BACKENDS},ido2db"
-		fi
-	fi
-
-	# Check NDO2FS prerequisites if necessary
-	echo $NAGVIS_BACKEND | grep -i "NDO2FS" >/dev/null
-	if [ $? -eq 0 ]; then
-		JSON=`perl -e '$erg=eval "use JSON::XS;1"; print "found" if ($erg==1)'`
-		log "  Checking perl module JSON::XS (ndo2fs)" $JSON
-		
-		if [ "$BACKENDS" = "" ]; then
-			BACKENDS="ndo2fs"
-		else
-			BACKENDS="${BACKENDS},ndo2fs"
 		fi
 	fi
 
@@ -1386,8 +1373,6 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	# set backend
 	echo $NAGVIS_BACKEND | grep "merlinmy" >/dev/null
 	[ $? -eq 0 ]&&NEWBACK="merlinmy_1"
-	echo $NAGVIS_BACKEND | grep "ndo2fs" >/dev/null
-	[ $? -eq 0 ]&&NEWBACK="ndofs_1"
 	echo $NAGVIS_BACKEND | grep "ido2db" >/dev/null
 	[ $? -eq 0 ]&&NEWBACK="ndomy_1"
 	echo $NAGVIS_BACKEND | grep "ndo2db" >/dev/null
@@ -1605,6 +1590,8 @@ set_perm 775 "$NAGVIS_PATH/etc/automaps"
 set_perm 664 "$NAGVIS_PATH/etc/automaps/*"
 set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
 set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
+set_perm 775 "$NAGVIS_PATH/share/userfiles/images/shapes"
+set_perm 664 "$NAGVIS_PATH/share/userfiles/images/shapes/*"
 set_perm 775 "$NAGVIS_PATH/var"
 set_perm 664 "$NAGVIS_PATH/var/*"
 set_perm 775 "$NAGVIS_PATH/var/tmpl"

@@ -131,6 +131,17 @@ class WuiViewMapAddModify {
 							if($val !== false) {
 								$ret .= 'document.addmodify.elements[\''.$key.'\'].value=\''.$val.'\';';
 								$ret .= 'toggleDefaultOption(\''.$key.'\');';
+								
+								if($this->aOpts['type'] == 'service' && $key == 'host_name') {
+									// Params: backend_id, type, host_name, field, selected
+									$ret .= "getServices(".
+									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'backend_id')."',".
+									          "'".$this->aOpts['type']."',".
+									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'host_name', true)."',".
+									          "'service_description',".
+									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', true)."'".
+									        ");";
+								}
 							}
 						}
 					}

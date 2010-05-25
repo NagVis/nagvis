@@ -1220,7 +1220,12 @@ function parseOverviewMaps(aMapsConf) {
 	}
 	
 	// Render the maps when enabled
-	if(oPageProperties.showmaps == 1 && aMapsConf.length > 0) {
+	if(oPageProperties.showmaps == 1) {
+		if(aMapsConf.length == 0) {
+			document.getElementById('overviewMaps').parentNode.style.display = 'none';
+			return false;
+		}
+		
 		var oTable = document.getElementById('overviewMaps');
 		var oTr = document.createElement('tr');
 			
@@ -1284,7 +1289,12 @@ function parseOverviewAutomaps(aMapsConf) {
 	}
 	
 	// Render the maps when enabled
-	if(oPageProperties.showautomaps == 1 && aMapsConf.length > 0) {
+	if(oPageProperties.showautomaps == 1) {
+		if(aMapsConf.length == 0) {
+			document.getElementById('overviewAutomaps').parentNode.style.display = 'none';
+			return false;
+		}
+		
 		var oTable = document.getElementById('overviewAutomaps');
 		var oTr = document.createElement('tr');
 		
