@@ -66,10 +66,21 @@
 		<h2>wie ist es zu konfigurieren?</h2>
 		<p>Bitte pr&uuml;fen Sie die Parameter <code>view_type</code> und <code>gadget_url</code> des Service-Objekts in der <a href="map_config_format_description.html#service">Formatbeschreibung der Map-Konfiguration</a>.</p>
 
+
 		<h2>wie man ein eigenes Gadget anlegt</h2>
+		<p>Mit Hilfe des Codes in gadgets_core.php werden zwei Arrays gef&uuml;llt. $aPerfdata enth&auml;lt die Performance-Daten. $aOpts enth&auml;lt die Optionen, die in gadget_opts gesetzt werden.</p>
 		<p>Das Einfachste ist, einen Blick auf std_speedometer zu werfen und die Kernbestandteile von dort anzupassen.</p>
 		<p>Sie sollten einen Beispiel-Performance-Daten-String in den Gadget-Code einf&uuml;gen, indem Sie die Variable $sDummyPerfdata nutzen.
 			Dies erlaubt es, das Gadget mit Dummy-Daten in der WUI anzuzeigen. Es ist viel einfacher, die Maps zu erstellen,
-			wenn die Gadgets dort angezeigt werden. Wichtig: die Variable muss gesetzt werden, bevor gadgets_core.php über den include-Befehl geladen wird.</p>
+			wenn die Gadgets dort angezeigt werden. Wichtig: die Variable muss gesetzt werden, bevor gadgets_core.php &uuml; den include-Befehl geladen wird.</p>
+
+      <p>Ein zweites Beispiel finden Sie in std_speedometer2.php. Im Gegensatz zu std_speedometer unterst&uuml;tzt es auch check_multi-Ausgaben. Verschiedene Optionen beeinflussen das Verhalten des Gadgets:
+      <table>
+         <tr><th>Parameter</th><th>Beispielwert</th><th>Beschreibung</th></tr>
+         <tr><td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung in der linke oberen Ecke des Graphen; 0 = Informationen nicht anzeigen (Default)</td></tr>
+         <tr><td>current</td><td>1</td><td>1 = Anzeige des aktuellen Performance-Daten-Wertes (Default); 0 = Informationen nicht anzeigen</td></tr>
+         <tr><td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen werden anhand der maximalen Anzahl von Performance-Daten-Elementen. Default ist 3</td></tr>
+         <tr><td>string</td><td>pct</td><td>Das Performance-Daten-Label muss die Zeichenkette enthalten, damit der Graph angezeigt wird. Im Falle von check_multi-Ausgaben wird nur der letzte Teil untersucht. Default ist eine leere Zeichenkette</td></tr>
+      </table>
 	</body>
 </html>

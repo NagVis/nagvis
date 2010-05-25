@@ -187,11 +187,15 @@ $aPerfdata = Array();
  *  scale=100
  */
 
+if(isset($_GET['opts']) && $_GET['opts'] != '') {
+        $aOpts['opts'] = $_GET['opts'];
+}
+
 if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
 	$aOpts['perfdata'] = $_GET['perfdata'];
 } elseif(isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
 	$aOpts['perfdata'] = $sDummyPerfdata;
-} else {
+} elseif(strpos ($GET['opts'],'no_perf') === false) {
 	errorBox('ERROR: The needed parameter "perfdata" is missing.');
 }
 
@@ -220,6 +224,12 @@ if (isset($_GET['scale']) && $_GET['scale'] != '') {
 
 
 /* Now parse the perfdata */
-$aPerfdata = parsePerfdata($aOpts['perfdata']);
+if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
+	if (strpos ($_GET['opts'],'no_perf') === false) {
+		$aPerfdata = parsePerfdata($aOpts['perfdata']);
+	}
+} else {
+	$aPerfdata = parsePerfdata($aOpts['perfdata']);
+}
 
 ?>
