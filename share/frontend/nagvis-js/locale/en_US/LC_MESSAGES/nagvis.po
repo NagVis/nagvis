@@ -232,7 +232,7 @@ msgstr ""
 #: share/server/core/classes/objects/NagVisStatefulObject.php:691
 #: share/server/core/classes/objects/NagVisStatefulObject.php:691
 msgid "Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME]."
-msgstr ""
+msgstr "Invalid state+substate ([STATE], [SUBSTATE]) found on state comparison in an object of type [TYPE] named [NAME]."
 
 #: share/server/core/classes/objects/NagVisStatefulObject.php:619
 #: share/server/core/classes/objects/NagVisStatefulObject.php:649
@@ -1622,7 +1622,7 @@ msgstr "Could not get hover URL &quot;[URL]&quot;. Maybe the URL is password pro
 #: share/server/core/classes/NagVisAutoMap.php:771
 #: share/server/core/classes/NagVisAutoMap.php:771
 msgid "couldNotGetRootHostname"
-msgstr "The Automap needs one root hostname to start the drawing.<br><br> There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (Only possible when there is <b>one</b> host with no parent)."
+msgstr "The Automap needs one root hostname to start the drawing.<br><br> There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (only possible when there is <b>one</b> host with no parent)."
 
 #: wui/includes/classes/WuiMapManagement.php:77
 #: wui/includes/classes/WuiBackgroundManagement.php:76
@@ -1661,7 +1661,7 @@ msgstr "Create map"
 #: share/server/core/classes/NagVisHoverMenu.php:151
 #: share/server/core/classes/NagVisHoverMenu.php:151
 msgid "currentAttempt"
-msgstr "Current Attempt"
+msgstr "Current attempt"
 
 #: share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:219
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:226
