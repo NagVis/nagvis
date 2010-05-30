@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.14"
+INSTALLER_VERSION="0.2.15"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -46,6 +46,8 @@ SOURCE=nagios
 # skip checks
 RC=0
 FORCE=0
+UNDO=0
+ACONF="y"
 REMOVE="n"
 LOG=install.log
 CALL="$0"
@@ -126,7 +128,7 @@ General Parameters:
                 directory given in "-p". This may be useful when updating from 1.4
                 to 1.5 where the paths to NagVis changed.
                 Default value: $NAGVIS_PATH
-  -W <PATH      Web path to the NagVis base directory
+  -W <PATH>     Web path to the NagVis base directory
                 Default: $HTML_PATH 
   -u <USER>     User who runs the webserver
   -g <GROUP>    Group who runs the webserver
@@ -135,7 +137,7 @@ General Parameters:
   -i <BACKENDs> Comma separated list of backends to use:
                   Available backends: mklivestatus, ndo2db, ido2db, merlinmy
 
-Backend specfic parameters:
+Backend specific parameters:
 
   ndo2db, ido2db:
   -m <BINARY>   Full path to the NDO/IDO module
@@ -149,6 +151,7 @@ Backend specfic parameters:
 	
 Flag parameters:
   -o            Omit demo files
+  -a [y|n]      Install the config file for the web server (y/n)
   -r            When performing an update of an existing NagVis installation the old
                 NagVis directory will be saved in a backup directory. When you know
                 what you are doing you can tell the installer to remove this backup 
@@ -158,13 +161,13 @@ Flag parameters:
                 by command line parameters.
                 This can be useful for automatic or scripted deployment
                 WARNING: Only use this if you know what you are doing
-  -F            This is the force mode. Specifing this flag will call the installer
+  -F            This is the force mode. Specifying this flag will call the installer
                 skip all validity checks and install NagVis with the given options
                 WARNING: Only use this if you know what you are doing
   -c [y|n]      Update configuration files when possible? Parses all existing
                 configuration files, checks for deprecated and missing options and
                 fixes known problems. This option has only effects when updating
-                mechanism have been added to this installer.
+                mechanisms have been added to this installer.
 
   -v            Version information
   -h            This message
@@ -675,6 +678,19 @@ chk_rc() {
 	LRC=$?
 	if [ $LRC -ne 0 ]; then
 		echo $* Return Code: $LRC
+		if [ $UNDO -eq 1 ]; then
+			ANS="n"
+			ask_user "ANS" "y" 1 "check_confirm" \
+			         "Do you want to revert to old NagVis version?"
+
+			if [ "$ANS" = "y" ]; then
+				text "| Trying to revert to old NagVis version" "|"
+				text "| Renaming $NAGVIS_PATH to ${NAGVIS_PATH}_broken" "|"
+				[ -d $NAGVIS_PATH ]&& mv $NAGVIS_PATH ${NAGVIS_PATH}_broken
+				text "| Renaming $NAGVIS_PATH_BACKUP to $NAGVIS_PATH_OLD" "|"
+				[ -d $NAGVIS_PATH_BACKUP ]&& mv $NAGVIS_PATH_BACKUP $NAGVIS_PATH_OLD
+			fi
+		fi
 		exit 1
 	else
 		if [ "$2" != "" ]; then
@@ -919,7 +935,7 @@ HTML_PATH="/nagvis"
 
 # Process command line options
 if [ $# -gt 0 ]; then
-	while getopts "p:n:B:m:l:w:W:u:b:g:c:i:s:O:ohqvFr" options $OPTS; do
+	while getopts "p:n:B:m:l:w:W:u:b:g:c:i:s:O:a:ohqvFr" options $OPTS; do
 		case $options in
 			n)
 				NAGIOS_PATH=${OPTARG%/}
@@ -974,6 +990,9 @@ if [ $# -gt 0 ]; then
 			;;
 			s)
 				SOURCE=`echo $OPTARG | tr [A-Z] [a-z]` 
+			;;
+			a)
+				ACONF="$OPTARG"
 			;;
 			F)
 				FORCE=1
@@ -1043,8 +1062,6 @@ fi
 
 text
 line "Checking paths" "+"
-
-
 
 if [ $FORCE -eq 0 ]; then
 	# Get Nagios/Icinga path
@@ -1163,7 +1180,10 @@ if [ $FORCE -eq 0 ]; then
            "Please enter the name of the web-server group"
 	[ $RC != 1 ] && RC=$?
 	
-	CALL="$CALL -u $WEB_USER -g $WEB_GROUP -w $WEB_PATH"
+	ask_user "ACONF" "$ACONF" 1 "check_confirm" \
+	   "create Apache config file"
+
+	CALL="$CALL -u $WEB_USER -g $WEB_GROUP -w $WEB_PATH -a $ACONF"
 fi
 
 text
@@ -1211,6 +1231,11 @@ text "| NagVis home will be:           $NAGVIS_PATH" "|"
 text "| Owner of NagVis files will be: $WEB_USER" "|"
 text "| Group of NagVis files will be: $WEB_GROUP" "|"
 text "| Path to Apache config dir is:  $WEB_PATH" "|"
+if [ "$ACONF" = "y" -o "$ACONF" = "Y" ]; then
+	text "| Apache config will be created: yes" "|"
+else
+	text "| Apache config will be created: NO" "|"
+fi
 text
 if [ "$IGNORE_DEMO" != "" ]; then
 	text "| demo files will NOT be copied" "|"
@@ -1266,6 +1291,9 @@ if [ "$INSTALLER_ACTION" = "update" ]; then
 	mv $NAGVIS_PATH_OLD $NAGVIS_PATH_BACKUP
 	chk_rc "|  Error moving old NagVis $NAGVIS_PATH_BACKUP" "$DONE"
 fi
+
+# in case of errors switch to old NagVis directory
+UNDO=1
 
 # Create base path
 makedir "$NAGVIS_PATH"
@@ -1393,21 +1421,25 @@ fi
 
 # Create apache configuration file from sample when no file exists
 if [ -f $NAGVIS_PATH/$HTML_SAMPLE ]; then
-	CHG='s/^//'
-	if [ -s $WEB_PATH/$HTML_CONF ]; then
-		text "| *** $WEB_PATH/$HTML_CONF will NOT be overwritten !" "|"
-		HTML_CONF="$HTML_CONF.$DATE"
-		text "| *** creating $WEB_PATH/$HTML_CONF instead (commented out config)" "|"
-		CHG='s/^/#new /'
-	fi
-	DONE=`log "Creating web configuration file..." done`
+	if [ "$ACONF" = "n" -o "$ACONF" = "N" ]; then
+		text "| *** creation of $WEB_PATH/$HTML_CONF will be SKIPPED !" "|"
+	else
+		CHG='s/^//'
+		if [ -s $WEB_PATH/$HTML_CONF ]; then
+			text "| *** $WEB_PATH/$HTML_CONF will NOT be overwritten !" "|"
+			HTML_CONF="$HTML_CONF.$DATE"
+			text "| *** creating $WEB_PATH/$HTML_CONF instead (commented out config)" "|"
+			CHG='s/^/#new /'
+		fi
+		DONE=`log "Creating web configuration file..." done`
 
-	# Replace macros in sample configuration file
-	cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
-	chk_rc "|  Error creating web configuration" "$DONE"
-	DONE=`log "Setting permissions for web configuration file..." done`
-	chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
-	chk_rc "|  Error setting web conf permissions" "$DONE"
+		# Replace macros in sample configuration file
+		cat $NAGVIS_PATH/$HTML_SAMPLE | $SED "s#@NAGIOS_PATH@#$NAGIOS_PATH#g;s#@NAGVIS_PATH@#$NAGVIS_PATH#g;s#@NAGVIS_WEB@#$HTML_PATH#g;$CHG" > $WEB_PATH/$HTML_CONF
+		chk_rc "|  Error creating web configuration" "$DONE"
+		DONE=`log "Setting permissions for web configuration file..." done`
+		chown $WEB_USER:$WEB_GROUP $WEB_PATH/$HTML_CONF
+		chk_rc "|  Error setting web conf permissions" "$DONE"
+	fi
 fi
 
 text
