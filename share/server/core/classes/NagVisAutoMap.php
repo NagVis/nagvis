@@ -200,9 +200,17 @@ class NagVisAutoMap extends GlobalMap {
 			}
 		}
 		
+		/**
+		 * It is possible to filter the object tree by a hostgroup.
+		 * In this mode a list of hostnames in this group is fetched and the
+		 * parent/child trees are filtered using this list.
+		 */
 		if($this->filterGroup != '') {
-			$this->filterGroupObject = new NagiosHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filterGroup);
-			$this->filterGroupObject->fetchMemberHostObjects();
+			$this->filterGroupObject = new NagVisHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filterGroup);
+			$this->filterGroupObject->setConfiguration(Array('hover_menu' => 1, 'hover_childs_show' => 1));
+			$this->filterGroupObject->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+			$this->BACKEND->execute();
+			$this->filterGroupObject->applyState();
 			
 			$this->filterChildObjectTreeByGroup();
 			
