@@ -1099,7 +1099,7 @@ function parseOverviewPage() {
 		
 		var oTh = document.createElement('th');
 		oTh.colSpan = oPageProperties.cellsperrow;
-		oTh.appendChild(document.createTextNode(oPageProperties.lang_mapIndex));
+		oTh.innerHTML = oPageProperties.lang_mapIndex;
 		
 		oTr.appendChild(oTh);
 		oTh = null;
@@ -1127,7 +1127,7 @@ function parseOverviewPage() {
 		
 		oTh = document.createElement('th');
 		oTh.colSpan = oPageProperties.cellsperrow;
-		oTh.appendChild(document.createTextNode(oPageProperties.lang_automapIndex));
+		oTh.innerHTML = oPageProperties.lang_automapIndex;
 		
 		oTr.appendChild(oTh);
 		oTh = null;
@@ -1184,7 +1184,7 @@ function parseOverviewPage() {
 		
 		oTh = document.createElement('th');
 		oTh.colSpan = 2;
-		oTh.appendChild(document.createTextNode(oPageProperties.lang_rotationPools));
+		oTh.innerHTML = oPageProperties.lang_rotationPools;
 		
 		oTr.appendChild(oTh);
 		oTh = null;
