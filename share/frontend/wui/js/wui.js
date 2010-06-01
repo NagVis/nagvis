@@ -253,6 +253,8 @@ function get_click_pos(e) {
 			posx = event.clientX;
 			posy = event.clientY;
 		}
+
+		// FIXME: Check the clicked area. Only handle clicks on the map!
 		
 		// Substract height of header menu here
 		posy -= getHeaderHeight();
