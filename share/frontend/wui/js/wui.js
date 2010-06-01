@@ -623,6 +623,10 @@ function toggleDependingFields(formName, name, value) {
 					 && oConfig[sTypeName][sOptName]['depends_value'] == value) {
 					
 					document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
+					
+					// Toggle the value of the field. If empty or just switched the function will
+					// try to display the default value
+					toggleDefaultOption(sFieldName);
 				}
 			}
 		}
