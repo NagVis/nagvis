@@ -480,8 +480,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	drawLine: function() {
-		var oMsg = {};
-		
 		var x = this.conf.x.split(',');
 		var y = this.conf.y.split(',');
 		
@@ -537,35 +535,30 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 			// Check perfdata array, did we get usable data back
 			if(setPerfdata == 'empty' || setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut') {
-				oMsg.type = 'WARNING';
-				oMsg.message = "Missing performance data - value 1 is \'" + setPerfdata[0][1] + "\' value 2 is \'" + setPerfdata[1][1] + "\'";
+				var msg = "Missing performance data - value 1 is \'" + setPerfdata[0][1] + "\' value 2 is \'" + setPerfdata[1][1] + "\'";
 		
-				if(this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut')) {
-					oMsg.message = oMsg.message + " value 3 is \'" + setPerfdata[2][1] + "\' value 4 is \'" + setPerfdata[3][1] + "\'";
-				}
-				oMsg.title = "Data error";
-				frontendMessage(oMsg);
-
+				if(this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut'))
+					msg += " value 3 is \'" + setPerfdata[2][1] + "\' value 4 is \'" + setPerfdata[3][1] + "\'";
+				
+				frontendMessage({'type': 'WARNING', 'title': 'Data error', 'message': msg});
 			} else {
+				// This is the correct place to handle other perfdata format than the percent value
+				if(setPerfdata[0][2] === null || setPerfdata[0][2] === ''
+           || setPerfdata[1][2] === null || setPerfdata[1][2] === '') {
+					setPerfdata = this.calculatePercentageUsage(setPerfdata);
+				}
 
 				// Get colorFill #1 (in)
-				if(setPerfdata[0][1] !== null && setPerfdata[0][1] >= 0 && setPerfdata[0][1] <= 100) {
-					colorFill = getColorFill(setPerfdata[0][1]);	
-				} else {
-					oMsg.type = 'WARNING';
-					oMsg.message = 'First set of performance data (' + setPerfdata[0][1] + ') for  ' + this.conf.name + " [" + this.conf.service_description + '] is not a percentage value';
-					oMsg.title = "Data error";
-					frontendMessage(oMsg);
-				}
+				if(setPerfdata[0][2] !== null && setPerfdata[0][2] == '%' && setPerfdata[0][1] !== null && setPerfdata[0][1] >= 0 && setPerfdata[0][1] <= 100)
+					colorFill = getColorFill(setPerfdata[0][1]);
+				else
+					this.perfdataError('First', setPerfdata[0][1], this.conf.name, this.conf.service_description);
+				
 				// Get colorFill #2 (out)
-				if(setPerfdata [1][1] !== null && setPerfdata[1][1] >= 0 && setPerfdata[1][1] <= 100) {
+				if(setPerfdata[1][2] !== null && setPerfdata[1][2] == '%' && setPerfdata [1][1] !== null && setPerfdata[1][1] >= 0 && setPerfdata[1][1] <= 100)
 					colorFill2 = getColorFill(setPerfdata[1][1]);
-				} else {
-					oMsg.type = 'WARNING';
-					oMsg.message = 'Second set of performance data (' + setPerfdata[1][1] + ') for  ' + this.conf.name + " [" + this.conf.service_description + '] is not a percentage value';
-					oMsg.title = "Data error";
-					frontendMessage(oMsg);
-				}
+				else
+					this.perfdataError('Second', setPerfdata[1][1], this.conf.name, this.conf.service_description);
 			}
 		}
 
@@ -579,8 +572,72 @@ var NagVisStatefulObject = NagVisObject.extend({
 		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1],
 		               this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
 		               ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
-		oMsg = null;
+	},
 
+	/**
+	 * PRIVATE calculatePercentageUsage()
+	 *
+	 * Loops all perfdata sets and searches for labels "in" and "out"
+	 * with an empty UOM. If found it uses the current value and max value
+	 * for calculating the percentage usage.
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	calculatePercentageUsage: function(oldPerfdata) {
+		var newPerfdata = [];
+		var foundNew = false;
+		
+		// This loop takes perfdata with the labels "in" and "out" and uses the current value
+		// and maximum values to parse the percentage usage of the line
+		for(var i = 0; i < oldPerfdata.length; i++) {
+			if(oldPerfdata[i][0] == 'in' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
+				newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
+				foundNew = true;
+			}
+			if(oldPerfdata[i][0] == 'out' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
+				newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
+				foundNew = true;
+			}
+		}
+		if(foundNew)
+			return newPerfdata;
+		else
+			return oldPerfdata;
+	},
+
+	/**
+	 * PRIVATE perfdataCalcPerc()
+	 *
+	 * Calculates the percentage usage of a line when the current value
+	 *  and the max value are given in the perfdata string
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	perfdataCalcPerc: function(set) {
+		// Check if all needed information are present
+		if(set[1] === null || set[6] === null || set[1] == '' || set[6] == '')
+			return set;
+
+		// Calculate percentages with 2 decimals and reset other options
+		set[1] = Math.round(set[1]*100/set[6]*100)/100;
+		set[2] = '%';
+		set[5] = 0;
+		set[6] = 100;
+
+		return set;
+	},
+
+	/**
+	 * PRIVATE perfdataError()
+	 *
+	 * Tells the user about wrong perfdata information
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	perfdataError: function(type, value, name1, name2) {
+		frontendMessage({'type': 'WARNING',
+		                 'message': type+' set of performance data ('+value+') for  '+name1+' ['+name2+'] is not a percentage value',
+		                 'title': 'Data error'});
 	},
 	
 	/**

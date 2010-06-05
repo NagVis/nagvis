@@ -289,73 +289,57 @@ function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, col
  *
  */
 function splicePerfdata(nagiosPerfdata) {
-        var oMsg = {};
-        var setMatches = [];
+	var oMsg = {};
+	var setMatches = [];
+	
+	// Check if we got any perfdata
+	if(nagiosPerfdata == '')
+		return 'empty';
+	else {
+		
+		// Clean up perfdata
+		nagiosPerfdata = nagiosPerfdata.replace('/\s*=\s*/', '=');
+		
+		// Break perfdata string into array of individual sets
+		var re = /([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g;
+		var perfdataMatches = nagiosPerfdata.match(re);
+		
+		// Check for empty perfdata
+		if(perfdataMatches == null)
+			frontendMessage({'type': 'WARNING', 'title': 'Data error', 'message': 'No performance data found in perfdata string - lines.js (271)'});
+		else {
+			// Break perfdata parts into array
+			for (var i = 0; i < perfdataMatches.length; i++) {
+				var tmpMatches = perfdataMatches[i];
+				var tmpSetMatches = [];
+				
+				// Get parts of perfdata from string
+				tmpSetMatches = tmpMatches.match(/(&#145;)?([\w\s\=\']*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/);
 
-        // Check if we got any perfdata
-        if(nagiosPerfdata == '') {
-
-                // No perfdata
-                return 'empty';
-
-        } else {
-
-                // Clean up perfdata
-                nagiosPerfdata = nagiosPerfdata.replace('/\s*=\s*/', '=');
-
-                // Break perfdata string into array of individual sets
-                var re = /([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g;
-                var perfdataMatches = nagiosPerfdata.match(re);
-
-                // Check for empty perfdata
-                if(perfdataMatches == null) {
-
-                        oMsg.type = 'WARNING';
-                        oMsg.message = 'No performance data found in perfdata string - lines.js (271)';
-                        oMsg.title = "Data error";
-                        frontendMessage(oMsg);
-
-                } else {
-
-                        // Break perfdata parts into array
-                        for (var i = 0; i < perfdataMatches.length; i++) {
-                                var tmpMatches = perfdataMatches[i];
-                                var tmpSetMatches = [];
-
-                                // Get parts of perfdata from string
-                                tmpSetMatches = tmpMatches.match(/(&#145;)?([\w\s\=\']*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/);
-
-                                // Check if we got any perfdata
-                                if(tmpSetMatches !== null) {
-
-                                        setMatches[i] = new Array(7);
-                                        // Label
-                                        setMatches[i][0] = tmpSetMatches[2];
-                                        // Value
-                                        setMatches[i][1] = tmpSetMatches[4];
-                                        // UOM
-                                        setMatches[i][2] = tmpSetMatches[5];
-                                        // Warn
-                                        setMatches[i][3] = tmpSetMatches[6];
-                                        // Crit
-                                        setMatches[i][4] = tmpSetMatches[7];
-                                        // Min
-                                        setMatches[i][5] = tmpSetMatches[8];
-                                        // Max
-                                        setMatches[i][6] = tmpSetMatches[9];
-
-                                } else {
-
-                                        oMsg.type = 'WARNING';
-                                        oMsg.message = 'No valid performance data in perfdata string - lines.js (305)';
-                                        oMsg.title = "Data error";
-                                        frontendMessage(oMsg);
-                                }
-                        }
-                        return setMatches;
-                }
-		oMsg = null;
-        }
+				// Check if we got any perfdata
+				if(tmpSetMatches !== null) {
+					setMatches[i] = new Array(7);
+					// Label
+					setMatches[i][0] = tmpSetMatches[2];
+					// Value
+					setMatches[i][1] = tmpSetMatches[4];
+					// UOM
+					setMatches[i][2] = tmpSetMatches[5];
+					// Warn
+					setMatches[i][3] = tmpSetMatches[6];
+					// Crit
+					setMatches[i][4] = tmpSetMatches[7];
+					// Min
+					setMatches[i][5] = tmpSetMatches[8];
+					// Max
+					setMatches[i][6] = tmpSetMatches[9];
+				} else
+					frontendMessage({'type': 'WARNING', 'title': 'Data error', 'message': 'No valid performance data in perfdata string - lines.js (305)'});
+			}
+		
+			return setMatches;
+		}
+	}
 }
 
  /**
