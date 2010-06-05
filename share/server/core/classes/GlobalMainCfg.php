@@ -78,7 +78,7 @@ class GlobalMainCfg {
 				'language_available' => Array('must' => 1,
 					'editable' => 1,
 					'array' => true,
-					'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR', 'ru_RU'),
+					'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'language' => Array('must' => 1,
 					'editable' => 1,
@@ -862,7 +862,7 @@ class GlobalMainCfg {
 		}
 		
 		// Create instance of GlobalFileCache object for caching the config
-		$this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $this->configFile, $this->getValue('paths','var').'nagvis.ini.php-'.CONST_VERSION.'-cache');
+		$this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $this->configFile, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
 		
 		// Get the valid configuration definitions from the available backends
 		$this->getBackendValidConf();
