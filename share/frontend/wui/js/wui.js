@@ -153,7 +153,7 @@ function getHeaderHeight() {
 function validateValue(sName, sValue, sRegex) {
 	// Remove PHP delimiters
 	sRegex = sRegex.replace(/^\//, "");
-	sRegex = sRegex.replace(/\/[igm]*$/, "");
+	sRegex = sRegex.replace(/\/[iugm]*$/, "");
 	
 	// Match the current value
 	var regex = new RegExp(sRegex, "i");

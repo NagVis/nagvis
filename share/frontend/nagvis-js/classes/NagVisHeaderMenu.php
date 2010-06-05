@@ -248,6 +248,9 @@ class NagVisHeaderMenu {
 				case 'pt_BR':
 					$languageLocated = $this->CORE->getLang()->getText('pt_BR');
 				break;
+				case 'ru_RU':
+					$languageLocated = $this->CORE->getLang()->getText('ru_RU');
+				break;
 				default:
 					$languageLocated = $this->CORE->getLang()->getText($lang);
 				break;

@@ -78,7 +78,7 @@ class GlobalMainCfg {
 				'language_available' => Array('must' => 1,
 					'editable' => 1,
 					'array' => true,
-					'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR'),
+					'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR', 'ru_RU'),
 					'match' => MATCH_STRING_NO_SPACE),
 				'language' => Array('must' => 1,
 					'editable' => 1,

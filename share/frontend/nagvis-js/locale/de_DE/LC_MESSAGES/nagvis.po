@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NagVis 1.5 language file 0.1\n"
 "Report-Msgid-Bugs-To: info@nagvis.org\n"
-"POT-Creation-Date: 2010-06-01 09:21+0200\n"
-"PO-Revision-Date: 2010-06-01 09:21+0200\n"
+"POT-Creation-Date: 2010-06-05 13:08+0200\n"
+"PO-Revision-Date: 2010-06-05 13:08+0200\n"
 "Last-Translator: Lars Michelsen <lars@vertical-visions.de>\n"
 "Language-Team: NagVis Team <info@nagvis.org>\n"
 "MIME-Version: 1.0\n"
@@ -59,7 +59,7 @@ msgstr "Aktion"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:276
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:291
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:290
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:290
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:293
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -74,7 +74,7 @@ msgstr "Hinzuf&uuml;gen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:283
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:298
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:297
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:297
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:300
 msgid "Add Icon"
 msgstr "Icon Hinzuf&uuml;gen"
 
@@ -82,7 +82,7 @@ msgstr "Icon Hinzuf&uuml;gen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:284
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:299
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:298
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:298
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:301
 msgid "Add Line"
 msgstr "Linie Hinzuf&uuml;gen"
 
@@ -95,7 +95,7 @@ msgstr "Option Hinzuf&uuml;gen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:286
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:301
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:300
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:300
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:303
 msgid "Add Special"
 msgstr "Spezial-Objekt Hinzuf&uuml;gen"
 
@@ -104,6 +104,7 @@ msgstr "Spezial-Objekt Hinzuf&uuml;gen"
 #: share/server/core/classes/WuiViewMapAddModify.php:254
 #: share/server/core/classes/WuiViewMapAddModify.php:256
 #: share/server/core/classes/WuiViewMapAddModify.php:267
+#: share/server/core/classes/WuiViewMapAddModify.php:267
 msgid "Alphabetically"
 msgstr "Alphabetisch"
 
@@ -111,6 +112,7 @@ msgstr "Alphabetisch"
 #: share/server/core/classes/WuiViewMapAddModify.php:231
 #: share/server/core/classes/WuiViewMapAddModify.php:249
 #: share/server/core/classes/WuiViewMapAddModify.php:251
+#: share/server/core/classes/WuiViewMapAddModify.php:262
 #: share/server/core/classes/WuiViewMapAddModify.php:262
 msgid "Ascending"
 msgstr "Aufsteigend"
@@ -144,7 +146,7 @@ msgstr "Rollen verf&uuml;gbar"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:278
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:293
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:292
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:292
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:295
 #: share/server/core/classes/NagVisViewChangePassword.php:60
 msgid "Change password"
 msgstr "Passwort &auml;ndern"
@@ -155,7 +157,7 @@ msgstr "Passwort &auml;ndern"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:274
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:289
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:288
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:288
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:291
 msgid "Choose Language"
 msgstr "Sprache w&auml;hlen"
 
@@ -235,18 +237,19 @@ msgstr "Nutzer l&ouml;schen"
 #: share/server/core/classes/WuiViewMapAddModify.php:249
 #: share/server/core/classes/WuiViewMapAddModify.php:251
 #: share/server/core/classes/WuiViewMapAddModify.php:262
+#: share/server/core/classes/WuiViewMapAddModify.php:262
 msgid "Descending"
 msgstr "Absteigend"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:328
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:328
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:331
 msgid "Export to Map"
 msgstr "Als Karte exportieren"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:288
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:298
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:313
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:313
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:316
 msgid "General Configuration"
 msgstr "Hauptkonfiguration"
 
@@ -264,12 +267,14 @@ msgstr "Ung&uuml;ltige Anfrage. Der Parameter [NAME] ist nicht vorhanden oder ha
 #: share/server/core/classes/objects/NagVisStatefulObject.php:691
 #: share/server/core/classes/objects/NagVisStatefulObject.php:814
 #: share/server/core/classes/objects/NagVisStatefulObject.php:816
+#: share/server/core/classes/objects/NagVisStatefulObject.php:816
 msgid "Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME]."
 msgstr "Ung&uuml;ltiger Status+Substatus ([STATE], [SUBSTATE]) w&auml;hrend Status-Vergleich in einem Objekt vom Typ [TYPE] mit dem Namen [NAME] gefunden."
 
 #: share/server/core/classes/objects/NagVisStatefulObject.php:619
 #: share/server/core/classes/objects/NagVisStatefulObject.php:649
 #: share/server/core/classes/objects/NagVisStatefulObject.php:771
+#: share/server/core/classes/objects/NagVisStatefulObject.php:773
 #: share/server/core/classes/objects/NagVisStatefulObject.php:773
 msgid "Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE]."
 msgstr "Ung&uuml;ltiger Status+Substatus ([STATE], [SUBSTATE]) w&auml;hrend der Ermittlung des Gesamtstatus in einem Objekt vom Typ [TYPE] mit dem Namen [NAME] gefunden."
@@ -283,7 +288,7 @@ msgstr "Die Option &quot;target&quot; hat ein falsches Format"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:285
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:300
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:299
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:299
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:302
 msgid "Line"
 msgstr "Linie"
 
@@ -293,7 +298,7 @@ msgstr "Linie"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:277
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:292
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:291
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:291
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:294
 msgid "Logged in"
 msgstr "Eingeloggt"
 
@@ -307,28 +312,28 @@ msgstr "Einloggen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:299
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:309
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:324
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:324
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:327
 msgid "Logout"
 msgstr "Ausloggen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:289
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:299
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:314
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:314
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:317
 msgid "Manage Backends"
 msgstr "Datenquellen verwalten"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:290
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:300
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:315
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:315
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:318
 msgid "Manage Backgrounds"
 msgstr "Hintergr&uuml;nde verwalten"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:291
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:301
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:316
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:316
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:319
 msgid "Manage Maps"
 msgstr "Karten verwalten"
 
@@ -338,21 +343,21 @@ msgstr "Karten verwalten"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:271
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:286
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:285
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:285
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:288
 msgid "Manage Roles"
 msgstr "Rollen verwalten"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:292
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:302
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:317
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:317
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:320
 msgid "Manage Shapes"
 msgstr "Bilder verwalten"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:282
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:297
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:296
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:296
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:299
 msgid "Manage Templates"
 msgstr "Templates verwalten"
 
@@ -362,7 +367,7 @@ msgstr "Templates verwalten"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:270
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:285
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:284
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:284
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:287
 msgid "Manage Users"
 msgstr "Nutzer verwalten"
 
@@ -370,7 +375,7 @@ msgstr "Nutzer verwalten"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:280
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:295
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:294
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:294
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:297
 msgid "Map"
 msgstr "Karte"
 
@@ -385,7 +390,7 @@ msgstr "Konfigurationsfehler auf der Karte: "
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:281
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:296
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:295
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:295
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:298
 msgid "Map Options"
 msgstr "Karten Konfiguration"
 
@@ -476,14 +481,14 @@ msgstr "Es k&ouml;nnen nur Statusinformationen f&uuml;r Maps und Automaps abgefr
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:279
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:294
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:293
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:293
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:296
 msgid "Open"
 msgstr "&Ouml;ffnen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:287
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:297
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:312
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:312
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:315
 msgid "Options"
 msgstr "Optionen"
 
@@ -505,6 +510,7 @@ msgid "Permitted"
 msgstr "Erlaubt"
 
 #: share/server/core/classes/objects/NagVisStatefulObject.php:740
+#: share/server/core/classes/objects/NagVisStatefulObject.php:742
 #: share/server/core/classes/objects/NagVisStatefulObject.php:742
 msgid "Problem (Backend: [BACKENDID]): [MSG]"
 msgstr ""
@@ -569,7 +575,7 @@ msgstr "Rollenname"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:269
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:284
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:283
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:283
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:286
 #: share/server/core/classes/NagVisViewSearch.php:53
 msgid "Search"
 msgstr "Suchen"
@@ -597,7 +603,7 @@ msgstr "Berechtigungen setzen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:302
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:312
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:327
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:327
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:330
 msgid "Show/Hide Grid"
 msgstr "Zeige/verstecke Raster"
 
@@ -605,6 +611,7 @@ msgstr "Zeige/verstecke Raster"
 #: share/server/core/classes/WuiViewMapAddModify.php:236
 #: share/server/core/classes/WuiViewMapAddModify.php:254
 #: share/server/core/classes/WuiViewMapAddModify.php:256
+#: share/server/core/classes/WuiViewMapAddModify.php:267
 #: share/server/core/classes/WuiViewMapAddModify.php:267
 msgid "State"
 msgstr "Status"
@@ -616,7 +623,7 @@ msgstr "Status"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:309
 #: share/frontend/wui/classes/WuiCore.php:152
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:308
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:308
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:311
 #: share/frontend/wui/classes/WuiCore.php:152
 msgid "Stateless"
 msgstr "Statuslos"
@@ -1164,7 +1171,8 @@ msgstr "Der eigene Nutzer kann nicht gel&ouml;scht werden."
 
 #: share/server/core/classes/NagVisAutoMap.php:525
 #: share/server/core/classes/NagVisAutoMap.php:533
-#: share/server/core/classes/NagVisAutoMap.php:533
+#: share/server/core/classes/NagVisAutoMap.php:541
+#: share/server/core/classes/NagVisAutoMap.php:541
 msgid "Unable to export the automap. A map with this name already exists."
 msgstr "Die Automap konnte nicht exportiert werden. Eine Karte mit dem Namen existiert bereits."
 
@@ -1208,7 +1216,7 @@ msgstr "Unbekannte Option [ATTRIBUTE] im Abschnitt [TYPE] in Hauptkonfiguration 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:275
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:290
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:289
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:289
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:292
 msgid "User menu"
 msgstr "Nutzermen&uuml;"
 
@@ -1222,7 +1230,7 @@ msgid "ValidatorNotAllowedParameterEntry"
 msgstr "Parameter [VAR] enth&auml;lt einen nicht erlaubten Eintrag."
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:311
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:311
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:314
 msgid "View current map"
 msgstr "Zeige aktuelle Karte"
 
@@ -1232,7 +1240,7 @@ msgstr "Zeige aktuelle Karte"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:272
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:287
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:286
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:286
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:289
 msgid "WUI"
 msgstr "WUI"
 
@@ -1571,6 +1579,7 @@ msgstr "&Auml;ndern"
 #: share/server/core/classes/objects/NagVisStatefulObject.php:711
 #: share/server/core/classes/objects/NagVisStatefulObject.php:836
 #: share/server/core/classes/objects/NagVisStatefulObject.php:838
+#: share/server/core/classes/objects/NagVisStatefulObject.php:838
 msgid "childStatesAre"
 msgstr "Es sind"
 
@@ -1782,7 +1791,8 @@ msgstr "Konnte Hover-URL \"[URL]\" nicht finden. Eventuell ist die URL Passwort-
 #: share/server/core/classes/NagVisAutoMap.php:705
 #: share/server/core/classes/NagVisAutoMap.php:771
 #: share/server/core/classes/NagVisAutoMap.php:775
-#: share/server/core/classes/NagVisAutoMap.php:775
+#: share/server/core/classes/NagVisAutoMap.php:783
+#: share/server/core/classes/NagVisAutoMap.php:783
 msgid "couldNotGetRootHostname"
 msgstr "Die Automap ben&ouml;tigt einen Ursprungs-Host.[br][br] Es gibt drei M&ouml;glichkeiten um einen Ursprungs-Host zu bestimmen: URL-Parameter \"root\", Haupt-Konfiguration \"automap > default_root\", automatische Ermittlung (nur m&ouml;glich, wenn es [b]einen[/b] Host ohne Eltern-Host gibt)."
 
@@ -1926,7 +1936,7 @@ msgstr "Datenquelle bearbeiten"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:296
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:311
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:310
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:310
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:313
 msgid "editMap"
 msgstr "Diese Karte bearbeiten"
 
@@ -2019,7 +2029,7 @@ msgstr "Bitte zuerst ein PNG-Bild ausw&auml;hlen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:295
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:305
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:320
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:320
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:323
 msgid "forum"
 msgstr "Forum"
 
@@ -2098,7 +2108,8 @@ msgstr "NagVis wurde konfiguriert die GD-Libs zum Parsen von Linien und Hintergr
 #: share/server/core/classes/NagVisAutoMap.php:562
 #: share/server/core/classes/NagVisAutoMap.php:626
 #: share/server/core/classes/NagVisAutoMap.php:630
-#: share/server/core/classes/NagVisAutoMap.php:630
+#: share/server/core/classes/NagVisAutoMap.php:638
+#: share/server/core/classes/NagVisAutoMap.php:638
 msgid "graphvizBinaryNotFound"
 msgstr "Die ben&ouml;tigte Graphviz-Anwendung \"[NAME]\" konnte in den Pfaden \"[PATHS]\" nicht gefunden werden."
 
@@ -2108,7 +2119,7 @@ msgstr "Die ben&ouml;tigte Graphviz-Anwendung \"[NAME]\" konnte in den Pfaden \"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:323
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:333
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:349
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:349
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:352
 msgid "headerTemplateNotExists"
 msgstr "Die Header-Template-Datei \"[PATH]\" existiert nicht."
 
@@ -2118,7 +2129,7 @@ msgstr "Die Header-Template-Datei \"[PATH]\" existiert nicht."
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:341
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:351
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:367
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:367
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:370
 msgid "headerTemplateNotReadable"
 msgstr "Bitte die Leseberechtigungen des Webservers auf die Datei \"[PATH]\" pr&uuml;fen."
 
@@ -2140,7 +2151,8 @@ msgstr "Hilfe"
 #: share/frontend/wui/classes/WuiCore.php:144
 #: share/server/core/classes/objects/NagVisObject.php:267
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:301
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:301
+#: share/server/core/classes/objects/NagVisObject.php:268
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:304
 #: share/frontend/wui/classes/WuiCore.php:144
 #: share/server/core/classes/objects/NagVisObject.php:268
 msgid "host"
@@ -2230,7 +2242,8 @@ msgstr "Der Host ist"
 #: share/frontend/wui/classes/WuiCore.php:146
 #: share/server/core/classes/objects/NagVisObject.php:287
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:303
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:303
+#: share/server/core/classes/objects/NagVisObject.php:288
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:306
 #: share/frontend/wui/classes/WuiCore.php:146
 #: share/server/core/classes/objects/NagVisObject.php:288
 msgid "hostgroup"
@@ -2240,6 +2253,7 @@ msgstr "Ger&auml;tegruppe"
 #: share/server/core/classes/objects/NagVisObject.php:255
 #: share/server/core/classes/objects/NagVisObject.php:275
 #: share/server/core/classes/objects/NagVisObject.php:288
+#: share/server/core/classes/objects/NagVisObject.php:289
 #: share/server/core/classes/objects/NagVisObject.php:289
 msgid "hostgroupname"
 msgstr "Ger&auml;tegruppenname"
@@ -2256,6 +2270,9 @@ msgstr "Ger&auml;tegruppenname"
 #: share/server/core/classes/objects/NagVisObject.php:268
 #: share/server/core/classes/objects/NagVisObject.php:289
 #: share/server/core/classes/objects/NagVisObject.php:301
+#: share/server/core/classes/objects/NagVisObject.php:269
+#: share/server/core/classes/objects/NagVisObject.php:290
+#: share/server/core/classes/objects/NagVisObject.php:302
 #: share/server/core/classes/objects/NagVisObject.php:269
 #: share/server/core/classes/objects/NagVisObject.php:290
 #: share/server/core/classes/objects/NagVisObject.php:302
@@ -2355,7 +2372,7 @@ msgstr "Vererbt"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:298
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:308
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:323
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:323
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:326
 #: share/server/core/classes/NagVisHoverMenu.php:135
 msgid "instance"
 msgstr "Instanz"
@@ -2530,6 +2547,7 @@ msgstr "Bilder verwalten"
 #: share/frontend/wui/classes/WuiCore.php:200
 #: share/server/core/classes/WuiViewMapAddModify.php:357
 #: share/frontend/wui/classes/WuiCore.php:209
+#: share/server/core/classes/WuiViewMapAddModify.php:368
 #: share/frontend/wui/classes/WuiCore.php:209
 #: share/server/core/classes/WuiViewMapAddModify.php:368
 msgid "manualInput"
@@ -2545,7 +2563,8 @@ msgstr "Manuelle Eingabe"
 #: share/frontend/wui/classes/WuiCore.php:148
 #: share/server/core/classes/objects/NagVisObject.php:310
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:305
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:305
+#: share/server/core/classes/objects/NagVisObject.php:311
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:308
 #: share/frontend/wui/classes/WuiCore.php:148
 #: share/server/core/classes/objects/NagVisObject.php:311
 msgid "map"
@@ -2774,6 +2793,7 @@ msgstr "Der angegebene Rotation-Pool \"[ROTATION]\" ist nicht definiert."
 #: share/server/core/classes/objects/NagVisObject.php:263
 #: share/server/core/classes/objects/NagVisObject.php:298
 #: share/server/core/classes/objects/NagVisObject.php:311
+#: share/server/core/classes/objects/NagVisObject.php:312
 #: share/server/core/classes/objects/NagVisObject.php:312
 msgid "mapname"
 msgstr "Kartenname"
@@ -3016,7 +3036,7 @@ msgstr "Die Struktur des ndo2fs-Verzeichnis \"[PATH]\" ist nicht g&uuml;ltig. Da
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:293
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:303
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:318
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:318
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:321
 msgid "needHelp"
 msgstr "Hilfe?"
 
@@ -3042,6 +3062,7 @@ msgstr "N&auml;chste Pr&uuml;fung"
 #: share/server/core/classes/WuiViewMapAddModify.php:382
 #: share/server/core/classes/WuiViewMapAddModify.php:384
 #: share/server/core/classes/WuiViewEditMainCfg.php:186
+#: share/server/core/classes/WuiViewMapAddModify.php:395
 #: share/server/core/classes/WuiViewMapAddModify.php:395
 #: share/server/core/classes/WuiViewEditMainCfg.php:186
 msgid "no"
@@ -3148,6 +3169,7 @@ msgstr "Notiz"
 #: share/server/core/classes/objects/NagVisObject.php:299
 #: share/server/core/classes/objects/NagVisObject.php:312
 #: share/server/core/classes/objects/NagVisObject.php:313
+#: share/server/core/classes/objects/NagVisObject.php:313
 msgid "objectname"
 msgstr "Objektname"
 
@@ -3166,7 +3188,7 @@ msgstr "Objekte"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:294
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:304
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:319
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:319
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:322
 msgid "onlineDoc"
 msgstr "Dokumentation"
 
@@ -3240,7 +3262,7 @@ msgstr "Ausgabe"
 #: share/frontend/wui/classes/WuiCore.php:120
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:322
 #: share/frontend/wui/classes/WuiCore.php:129
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:322
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:325
 #: share/frontend/wui/classes/WuiCore.php:129
 #: share/server/core/classes/NagVisHoverMenu.php:131
 msgid "overview"
@@ -3387,7 +3409,7 @@ msgstr "Rotations-Pools"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:300
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:310
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:325
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:325
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:328
 msgid "rotationStart"
 msgstr "Starte Rotation"
 
@@ -3397,9 +3419,13 @@ msgstr "Starte Rotation"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:301
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:311
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:326
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:326
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:329
 msgid "rotationStop"
 msgstr "Stoppe Rotation"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:252
+msgid "ru_RU"
+msgstr "Russisch"
 
 #: wui/includes/classes/WuiBackendManagement.php:81
 #: wui/includes/classes/WuiBackendManagement.php:94
@@ -3447,7 +3473,8 @@ msgstr "Eine Karte w&auml;hlen"
 #: share/frontend/wui/classes/WuiCore.php:145
 #: share/server/core/classes/objects/NagVisObject.php:278
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:302
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:302
+#: share/server/core/classes/objects/NagVisObject.php:279
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:305
 #: share/frontend/wui/classes/WuiCore.php:145
 #: share/server/core/classes/objects/NagVisObject.php:279
 msgid "service"
@@ -3509,7 +3536,8 @@ msgstr "Der Dienst \"[SERVICE]\" auf dem Ger&auml;t \"[HOST]\" konnte in der Dat
 #: share/frontend/wui/classes/WuiCore.php:147
 #: share/server/core/classes/objects/NagVisObject.php:298
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:304
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:304
+#: share/server/core/classes/objects/NagVisObject.php:299
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:307
 #: share/frontend/wui/classes/WuiCore.php:147
 #: share/server/core/classes/objects/NagVisObject.php:299
 msgid "servicegroup"
@@ -3519,6 +3547,7 @@ msgstr "Dienstegruppe"
 #: share/server/core/classes/objects/NagVisObject.php:259
 #: share/server/core/classes/objects/NagVisObject.php:286
 #: share/server/core/classes/objects/NagVisObject.php:299
+#: share/server/core/classes/objects/NagVisObject.php:300
 #: share/server/core/classes/objects/NagVisObject.php:300
 msgid "servicegroupname"
 msgstr "Dienstegruppenname"
@@ -3535,6 +3564,9 @@ msgstr "Dienstegruppenname"
 #: share/server/core/classes/objects/NagVisObject.php:269
 #: share/server/core/classes/objects/NagVisObject.php:279
 #: share/server/core/classes/objects/NagVisObject.php:300
+#: share/server/core/classes/objects/NagVisObject.php:270
+#: share/server/core/classes/objects/NagVisObject.php:280
+#: share/server/core/classes/objects/NagVisObject.php:301
 #: share/server/core/classes/NagVisHoverMenu.php:163
 #: share/server/core/classes/objects/NagVisObject.php:270
 #: share/server/core/classes/objects/NagVisObject.php:280
@@ -3584,7 +3616,7 @@ msgstr "Standard-Datenquelle setzen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:308
 #: share/frontend/wui/classes/WuiCore.php:150
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:307
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:307
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:310
 #: share/frontend/wui/classes/WuiCore.php:150
 msgid "shape"
 msgstr "Bild"
@@ -3611,7 +3643,7 @@ msgstr "Das Bild wird noch in der Karte \"[MAP]\" genutzt."
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:310
 #: share/frontend/wui/classes/WuiCore.php:143
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:309
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:309
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:312
 #: share/frontend/wui/classes/WuiCore.php:143
 msgid "special"
 msgstr "Spezielle"
@@ -3654,7 +3686,7 @@ msgstr "Gesamtstatus"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:306
 #: share/frontend/nagvis-js/classes/NagVisInfoView.php:61
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:321
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:321
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:324
 #: share/frontend/nagvis-js/classes/NagVisInfoView.php:61
 msgid "supportInfo"
 msgstr "NagVis-Support-Informationen"
@@ -3667,7 +3699,7 @@ msgstr "NagVis-Support-Informationen"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:307
 #: share/frontend/wui/classes/WuiCore.php:149
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:306
-#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:306
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:309
 #: share/frontend/wui/classes/WuiCore.php:149
 msgid "textbox"
 msgstr "Textbox"
@@ -3768,7 +3800,8 @@ msgstr "Unbekannte Anfrage"
 #: share/server/core/classes/NagVisAutoMap.php:310
 #: share/server/core/classes/NagVisAutoMap.php:344
 #: share/server/core/classes/NagVisAutoMap.php:347
-#: share/server/core/classes/NagVisAutoMap.php:347
+#: share/server/core/classes/NagVisAutoMap.php:355
+#: share/server/core/classes/NagVisAutoMap.php:355
 msgid "unknownRenderMode"
 msgstr "Der Anzeigemodus \"[MODE]\" wird nicht unterst&uuml;tzt."
 
@@ -3947,6 +3980,7 @@ msgstr "Das Attribut \"[ATTRIBUTE]\" entspricht nicht dem korrekten Format"
 #: share/server/core/classes/WuiViewMapAddModify.php:381
 #: share/server/core/classes/WuiViewMapAddModify.php:383
 #: share/server/core/classes/WuiViewEditMainCfg.php:185
+#: share/server/core/classes/WuiViewMapAddModify.php:394
 #: share/server/core/classes/WuiViewMapAddModify.php:394
 #: share/server/core/classes/WuiViewEditMainCfg.php:185
 msgid "yes"
