@@ -47,7 +47,7 @@ class FrontendModAutoMap extends FrontendModule {
 		               'width' => MATCH_INTEGER_EMPTY,
 		               'height' => MATCH_INTEGER_EMPTY,
 		               'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
-		               'filterGroup' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'filterGroup' => MATCH_STRING_EMPTY,
 		               'filterByState' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'rotation' => MATCH_ROTATION_NAME_EMPTY,
 		               'enableHeader' => MATCH_BOOLEAN_EMPTY,
