@@ -488,7 +488,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var width = this.conf.line_width;
 		
 		var colorFill = '';
-                var colorFill2 = '';
+    var colorFill2 = '';
 		var colorBorder = '#000000';
 
 		var setPerfdata = [];
@@ -570,20 +570,15 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 
 		// Get the border color depending on ack/downtime
-		if(this.conf.summary_problem_has_been_acknowledged == 1) {
+		if(this.conf.summary_problem_has_been_acknowledged == 1 || this.conf.summary_in_downtime == 1) {
 			colorBorder = '#666666';
-			
-			colorFill = lightenColor(colorFill, 100, 100, 100);
-		}
-		
-		if(this.conf.summary_in_downtime == 1) {
-			colorBorder = '#666666';
-			
 			colorFill = lightenColor(colorFill, 100, 100, 100);
 		}
 
 		// Parse the line object
-		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1],
+		               this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
+		               ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
 		oMsg = null;
 
 	},

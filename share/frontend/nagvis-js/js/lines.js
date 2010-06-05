@@ -127,18 +127,22 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 	if(bLinkArea && bLinkArea === true) {
 		var oLinkContainer = document.getElementById(objectId+'-linelinkdiv');
 
+		var labelShift = 10;
+		if(lineType == '13' || lineType == '14') {
+			labelShift = getLabelShift(perfdataA);
+		}
+
 		if(lineType == '13') {
-			var labelShift = (perfdataA.length / 2) * 9;
 			var label = drawNagVisTextbox(objectId, 'box', '#ffffff', '#000000', (middle(xMin, xMax)-labelShift), (middle(yMin, yMax)-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
 			oLinkContainer.appendChild(label);
+			label = null;
 		} else if(lineType == '14') {
-			var labelShift = (perfdataA.length / 2) * 9;
-			label = drawNagVisTextbox(objectId, 'box', '#ffffff', '#000000', (middle(xMin, xMax)-labelShift), (middle(yMin, yMax)-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+			var label = drawNagVisTextbox(objectId, 'box', '#ffffff', '#000000', (middle(xMin, xMax)-labelShift), (middle(yMin, yMax)-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
 			oLinkContainer.appendChild(label);
-			labelShift = (perfdataB.length / 2) * 8;
+			labelShift = getLabelShift(perfdataB);
 			label = drawNagVisTextbox(objectId, 'box', '#ffffff', '#000000', (middle(xMin, xMax)-labelShift), (middle(yMin, yMax)+10), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
 			oLinkContainer.appendChild(label);
-		
+			label = null;
 		} else {
 			var oImg = document.createElement('img');
 			oImg.setAttribute('id', objectId+'-link');
@@ -156,6 +160,13 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 
 		oLinkContainer = null;
 	}
+}
+
+function getLabelShift(str) {
+	if(str.length > 0)
+		return (str.length / 2) * 9;
+	else
+		return 10
 }
 
 // This function draws an arrow like it is used on NagVis maps
@@ -238,26 +249,24 @@ function drawNagVisLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, col
 			drawSimpleLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea);
 			break;
 		case '13':
-	                // -%-><-%- lines
-	                var xMid = middle(x1,x2);
-	                var yMid = middle(y1,y2);
+			// -%-><-%- lines
+			var xMid = middle(x1,x2);
+			var yMid = middle(y1,y2);
 			perfdataA = perfdata[0][1] + perfdata[0][2];
-
-        	        drawArrow(objectId, type, x1, y1, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea);
+			drawArrow(objectId, type, x1, y1, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea);
 			perfdataA = perfdata[1][1] + perfdata[1][2];
-        	        drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill2, perfdataA, perfdataB, colorBorder, bLinkArea);
+			drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill2, perfdataA, perfdataB, colorBorder, bLinkArea);
 			break;
 		case '14':
-	                // -%+BW-><-%+BW- lines
-	                var xMid = middle(x1,x2);
-	                var yMid = middle(y1,y2);
+			// -%+BW-><-%+BW- lines
+			var xMid = middle(x1,x2);
+			var yMid = middle(y1,y2);
 			perfdataA = perfdata[0][1] + perfdata[0][2];
 			perfdataB = perfdata[2][1] + ' ' + perfdata[2][2];
-
-        	        drawArrow(objectId, type, x1, y1, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea);
+			drawArrow(objectId, type, x1, y1, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea);
 			perfdataA = perfdata[1][1] + perfdata[1][2];
 			perfdataB = perfdata[3][1] + ' ' + perfdata[3][2];
-        	        drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill2, perfdataA, perfdataB, colorBorder, bLinkArea);
+			drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill2, perfdataA, perfdataB, colorBorder, bLinkArea);
 			break;
 		default:
 			alert('Error: Unknown line type');
@@ -358,35 +367,34 @@ function splicePerfdata(nagiosPerfdata) {
  *
  */
 function getColorFill(percent) {
-        // set color based on percent level
+	// set color based on percent level
+	var percent;
+	var color = '';
 
-        var percent;
-        var color = '';
-
-        eventlog("test", "debug", "Percent:" + percent);
-        if(percent >= 0 && percent <= 10) {
-                // purple
-                return '#8c00ff';
-        } else if (percent > 10 && percent <= 25) {
-                // blue
-                return '#2020ff';
-        } else if (percent > 25 && percent <= 40) {
-                // light blue
-                return '#00c0ff';
-        } else if (percent > 40 && percent <= 55) {
-                // green
-                return '#00f000';
-        } else if (percent > 55 && percent <= 70) {
-                // yellow
-                return '#f0f000';
-        } else if (percent > 70 && percent <= 85) {
-                // orange
-                return '#ffc000';
-        } else if (percent > 85 && percent <= 100) {
-                // red
-                return '#ff0000';
-        } else {
-                return '#000000';
-        }
+	eventlog("test", "debug", "Percent:" + percent);
+	if(percent >= 0 && percent <= 10) {
+		// purple
+		return '#8c00ff';
+	} else if (percent > 10 && percent <= 25) {
+		// blue
+		return '#2020ff';
+	} else if (percent > 25 && percent <= 40) {
+		// light blue
+		return '#00c0ff';
+	} else if (percent > 40 && percent <= 55) {
+		// green
+		return '#00f000';
+	} else if (percent > 55 && percent <= 70) {
+		// yellow
+		return '#f0f000';
+	} else if (percent > 70 && percent <= 85) {
+		// orange
+		return '#ffc000';
+	} else if (percent > 85 && percent <= 100) {
+		// red
+		return '#ff0000';
+	} else {
+		return '#000000';
+	}
 }
 
