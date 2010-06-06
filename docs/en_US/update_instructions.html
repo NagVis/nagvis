@@ -49,13 +49,21 @@
     to the latest 1.5x release.<br />
     So it is recommended to use this script (<code>install.sh</code>) distributed with the
     newest NagVis version to upgrade your installation.</p>
+   
+   <p>The permission configuration changed with NagVis 1.5. So the installer removes the
+   allowed_for_config and allowed_users parameters from the map configuration files. The
+   permissions are not automatically re-added to the new permission database. The removed
+   permissions are stored as dump in the nagvis/etc/auth-backup file. With this information
+   you can re-apply the permissions to your maps using the new role based permission system.</p>
 
    <p>It is possible to perform the 1.4x to 1.5x update manually too but it has not been
    tested and documented by anyone. So if you like to update your installation manually
    you will need to do some research.
-Basically it should be the same as described above (copying custom files to the new locations and merging your settings into nagvis.ini.php. <font color="#ff0000">Don&apos;t</font> copy this file!).
-<br />
-   Once you made some experience in updating NagVis 1.4x to 1.5 manually please let us know
+   Basically it should be the same as described above (copying custom files to the new
+   locations and merging your settings into nagvis.ini.php. <font color="#ff0000">Don&apos;t</font> copy this file!).</p>
+
+   <p>Once you made some experience in updating NagVis 1.4x to 1.5 manually please let us know
    so that we can extend this documentation.</p>
+
 	</body>
 </html>
