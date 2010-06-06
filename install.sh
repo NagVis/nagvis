@@ -319,10 +319,9 @@ cat <<EOD
 +------------------------------------------------------------------------------+
 | This script is built to facilitate the NagVis installation and update        |
 | procedure for you. The installer has been tested on the following systems:   |
-| - Debian Etch (4.0)                                                          |
-| - Ubuntu Hardy (8.04)                                                        |
-| - Ubuntu Intrepid (8.10)                                                     |
-| - SuSE Linux Enterprise Server 10                                            |
+| - Debian Etch, Hardy (4.0, 5.0)                                              |
+| - Ubuntu Hardy, Intrepid, Jaunty, Karmic, Lucid (8.04 to 10.04)              |
+| - SuSE Linux Enterprise Server 10 and 11                                     |
 |                                                                              |
 | Similar distributions to the ones mentioned above should work as well.       |
 | That (hopefully) includes RedHat, Fedora, CentOS, OpenSuSE                   |
