@@ -1646,7 +1646,7 @@ text
 text "| For later update/upgrade you may use this command to have a faster update:" "|"
 text "| $CALL"
 text
-if [ "$INSTALLER_ACTION" = "update" -a $NAGVIS_TAG_OLD -lt 01050000 ]; then
+if [ "$INSTALLER_ACTION" = "update" ] && [ $NAGVIS_TAG_OLD -lt 01050000 ]; then
 text "| 1.4 to 1.5x upgrade: The map permissions have ben reset. Old permissions" "|"
 text "| have been backed up in nagvis/etc/auth-backup file. You need to migrate" "|"
 text "| these permissions manually using using the new user/role management GUI." "|"
