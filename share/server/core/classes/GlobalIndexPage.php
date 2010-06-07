@@ -101,11 +101,14 @@ class GlobalIndexPage {
 				$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
 			
 			// Apply default configuration to object
-			$arr = $MAPCFG->getDefinitions('global');
-			$objConf = $arr[0];
+			$objConf = $MAPCFG->getTypeDefaults('global');
 			$objConf['type'] = 'map';
 			$objConf['map_name'] = $MAPCFG->getName();
 			$objConf['object_id'] = $object_id;
+			// Enable the hover menu in all cases - maybe make it configurable
+			$objConf['hover_menu'] = 1;
+			$objConf['hover_childs_show'] = 1;
+			$objConf['hover_template'] = 'default';
 			
 			$MAP->MAPOBJ->setConfiguration($objConf);
 			
