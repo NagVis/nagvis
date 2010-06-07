@@ -320,11 +320,11 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		oRequest = null;
 	}
 	
-	if(sResponse !== null && sResponse !== '') {
+	/*if(sResponse !== null && sResponse !== '') {
 		if(typeof frontendMessageHide == 'function') { 
 			frontendMessageHide();
 		}
-	}
+	}*/
 	
 	return sResponse;
 }
