@@ -150,20 +150,22 @@ class GlobalIndexPage {
 						$MAP->renderMap();
 
 					// If the message still does not exist print an error and skip the thumbnail generation
-					if($this->checkImageExists($imgPath, FALSE) && $this->CORE->checkGd(0)) {
-						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-						$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
-						$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
-						
-						// Only create a new thumb when there is no cached one
-						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-						if($FCACHE->isCached() === -1) {
-							$image = $this->createThumbnail($imgPath, $sThumbPath);
+          if($this->checkImageExists($imgPath, FALSE)) {
+						if($this->CORE->checkGd(0)) {
+							$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
+							$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
+							$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
+							
+							// Only create a new thumb when there is no cached one
+							$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+							if($FCACHE->isCached() === -1) {
+								$image = $this->createThumbnail($imgPath, $sThumbPath);
+							}
+							
+							$map['overview_image'] = $sThumbPathHtml;
+						} else {
+							$map['overview_image'] = $imgPathHtml;
 						}
-						
-						$map['overview_image'] = $sThumbPathHtml;
-					} else {
-						$map['overview_image'] = $imgPathHtml;
 					}
 				}
 				
