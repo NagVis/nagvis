@@ -79,12 +79,6 @@ function printObjects(aObjects,oOpt) {
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
 function validateMapCfgForm() {
-	var object_name = '';
-	var line_type = '';
-	var iconset = '';
-	var x = '';
-	var y = '';
-	
 	// Terminate fast when validateMapConfigFieldValue marked the form contents
 	// as invalid
 	if(bFormIsValid === false) {
@@ -93,48 +87,46 @@ function validateMapCfgForm() {
 	
 	for(var i=0, len = document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
+			var sName = document.addmodify.elements[i].name;
+			
 			// Filter helper fields
-			if(document.addmodify.elements[i].name.charAt(0) !== '_') {
-				var sName = document.addmodify.elements[i].name;
-				var sType = document.addmodify.type.value;
+			if(sName.charAt(0) === '_' && sName.substring(0, 5) !== '_inp_')
+				continue;
+
+			var sType = document.addmodify.type.value;
 				
-				var oField = document.getElementById(sName);
-				var oFieldDefault = document.getElementById('_'+sName);
-				if(oField && oFieldDefault) {
-					if(oField.value === oFieldDefault.value && validMapConfig[sType][sName]['must'] != '1') {
-						// Skip option only when the field and default value are equal
-						continue;
-					}
+			var oField = document.getElementById(sName);
+			var oFieldDefault = document.getElementById('_'+sName);
+			if(oField && oFieldDefault) {
+				if(oField.value === oFieldDefault.value && validMapConfig[sType][sName]['must'] != '1') {
+					// Skip option only when the field and default value are equal
+					continue;
 				}
-				
-				oFieldDefault = null;
-				oField = null;
-				
-				if(sName.substring(sName-6, sName.length) == '_name') {
-					object_name = document.addmodify.elements[i].value;
+			}
+			
+			oFieldDefault = null;
+			oField = null;
+
+			if(sName.substring(sName-5, sName.length) == '_name') {
+   				alert(sName);
+			}
+			
+			// When this is a input helper field get the name of the config var
+      var varName = '';
+			if(sName.substring(0, 5) === '_inp_')
+				varName = sName.replace('_inp_', '');
+			
+			if(document.addmodify.elements[i].value != '') {
+				// Print a note to the user: This map object will display the summary state of the current map
+				if(sType == "map" && varName == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
+					alert(printLang(lang['mapObjectWillShowSummaryState'],''));
 				}
-				if(sName == 'iconset') {
-					iconset = document.addmodify.elements[i].value;
-				}
-				if(sName == 'x') {
-					x = document.addmodify.elements[i].value;
-				}
-				if(sName == 'y') {
-					y = document.addmodify.elements[i].value;
-				}
-				
-				if(document.addmodify.elements[i].value != '') {
-					// Print a note to the user: This map object will display the summary state of the current map
-					if(sType == "map" && sName == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
-						alert(printLang(lang['mapObjectWillShowSummaryState'],''));
-					}
-				} else {
-					if(validMapConfig[sType][sName]['must'] == '1') {
-						alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+sName+',TYPE~'+sType+',MAPNAME~'+document.addmodify.map.value));
-						document.addmodify.elements[i].focus();
-						
-						return false;
-					}
+			} else {
+				if(validMapConfig[sType][varName]['must'] == '1') {
+					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+varName+',TYPE~'+sType+',MAPNAME~'+document.addmodify.map.value));
+					document.addmodify.elements[i].focus();
+					
+					return false;
 				}
 			}
 		}
