@@ -142,25 +142,29 @@ class GlobalIndexPage {
 				$imgPath     = $this->CORE->getMainCfg()->getValue('paths', 'sharedvar') . $mapName . '.png';
 				$imgPathHtml = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar') . $mapName . '.png';
 				
-				// If there is no automap image on first load of the index page,
-				// render the image
-				if(!$this->checkImageExists($imgPath, FALSE))
-					$MAP->renderMap();
-				
-				if($this->CORE->checkGd(0)) {
-					$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-					$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
-					$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
-					
-					// Only create a new thumb when there is no cached one
-					$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-					if($FCACHE->isCached() === -1) {
-						$image = $this->createThumbnail($imgPath, $sThumbPath);
+				// Only handle the thumbnail immage when told to do so
+				if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
+					// If there is no automap image on first load of the index page,
+					// render the image
+					if(!$this->checkImageExists($imgPath, FALSE))
+						$MAP->renderMap();
+
+					// If the message still does not exist print an error and skip the thumbnail generation
+					if($this->checkImageExists($imgPath, FALSE) && $this->CORE->checkGd(0)) {
+						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
+						$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
+						$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
+						
+						// Only create a new thumb when there is no cached one
+						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+						if($FCACHE->isCached() === -1) {
+							$image = $this->createThumbnail($imgPath, $sThumbPath);
+						}
+						
+						$map['overview_image'] = $sThumbPathHtml;
+					} else {
+						$map['overview_image'] = $imgPathHtml;
 					}
-					
-					$map['overview_image'] = $sThumbPathHtml;
-				} else {
-					$map['overview_image'] = $imgPathHtml;
 				}
 				
 				$aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
