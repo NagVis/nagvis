@@ -88,39 +88,37 @@ function validateMapCfgForm() {
 	for(var i=0, len = document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
 			var sName = document.addmodify.elements[i].name;
+			var sType = document.addmodify.type.value;
 			
-			// Filter helper fields
+			// Filter helper fields which contain the default values
 			if(sName.charAt(0) === '_' && sName.substring(0, 5) !== '_inp_')
 				continue;
-
-			var sType = document.addmodify.type.value;
-				
-			var oField = document.getElementById(sName);
-			var oFieldDefault = document.getElementById('_'+sName);
-			if(oField && oFieldDefault) {
-				if(oField.value === oFieldDefault.value && validMapConfig[sType][sName]['must'] != '1') {
-					// Skip option only when the field and default value are equal
+			
+			// When this is a input helper field get the name of the config var and
+			// check wether to use or skip this field:
+			// List options can be set by dropdown field with name=<option-name> or
+			// by input field with name=_inp_<option-name>. Prefer the dropdown field,
+			// if there is a value in the dropdown field don't check the input field.
+			var varName = sName;
+			if(sName.substring(0, 5) === '_inp_') {
+				varName = sName.replace('_inp_', '');
+				if(document.getElementById(varName).value != lang['manualInput'] && document.getElementById(varName).value != '')
 					continue;
-				}
 			}
 			
+			// Skip options which match the default value in the helper field
+			// These options have not been changed and don't need to be checked
+			var oField = document.getElementById(varName);
+			var oFieldDefault = document.getElementById('_'+varName);
+			if(oField && oFieldDefault && oField.value === oFieldDefault.value && validMapConfig[sType][varName]['must'] != '1')
+				continue;
 			oFieldDefault = null;
 			oField = null;
-
-			if(sName.substring(sName-5, sName.length) == '_name') {
-   				alert(sName);
-			}
-			
-			// When this is a input helper field get the name of the config var
-      var varName = '';
-			if(sName.substring(0, 5) === '_inp_')
-				varName = sName.replace('_inp_', '');
 			
 			if(document.addmodify.elements[i].value != '') {
 				// Print a note to the user: This map object will display the summary state of the current map
-				if(sType == "map" && varName == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value) {
+				if(sType == "map" && varName == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value)
 					alert(printLang(lang['mapObjectWillShowSummaryState'],''));
-				}
 			} else {
 				if(validMapConfig[sType][varName]['must'] == '1') {
 					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+varName+',TYPE~'+sType+',MAPNAME~'+document.addmodify.map.value));
