@@ -109,6 +109,7 @@ class GlobalIndexPage {
 			$objConf['hover_menu'] = 1;
 			$objConf['hover_childs_show'] = 1;
 			$objConf['hover_template'] = 'default';
+			unset($objConf['alias']);
 			
 			$MAP->MAPOBJ->setConfiguration($objConf);
 			
