@@ -764,14 +764,12 @@ class NagVisAutoMap extends GlobalMap {
 		 */
 		$defaultRoot = $this->CORE->getMainCfg()->getValue('automap','defaultroot', TRUE);
 		if(!isset($defaultRoot) || $defaultRoot == '') {
-			if($this->BACKEND->checkBackendInitialized($this->backend_id, TRUE)) {
-				try {
-					$hostsWithoutParent = $this->BACKEND->BACKENDS[$this->backend_id]->getHostNamesWithNoParent();
-				} catch(BackendConnectionProblem $e) {}
-				if(count($hostsWithoutParent) == 1) {
-					$defaultRoot = $hostsWithoutParent[0];
-				}
-			}
+			try {
+				$hostsWithoutParent = $this->BACKEND->getBackend($this->backend_id)->getHostNamesWithNoParent();
+			} catch(BackendConnectionProblem $e) {}
+			
+			if(isset($hostsWithoutParent) && count($hostsWithoutParent) == 1)
+				$defaultRoot = $hostsWithoutParent[0];
 		}
 		
 		if(!isset($defaultRoot) || $defaultRoot == '') {

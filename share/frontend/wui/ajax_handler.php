@@ -106,8 +106,6 @@ switch($_GET['action']) {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
 		} elseif(!isset($_GET['host_name']) || $_GET['host_name'] == '') {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~host_name'));
-		} elseif(!$BACKEND->checkBackendInitialized($_GET['backend_id'], FALSE)) {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('backendNotInitialized', 'BACKENDID~'.$_GET['backend_id']));
 		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
 		} else {

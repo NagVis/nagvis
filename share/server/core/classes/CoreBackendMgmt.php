@@ -410,20 +410,16 @@ class CoreBackendMgmt {
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * @deprecated Please don't use this function anymore
 	 */
 	public function checkBackendInitialized($backendId, $printErr) {
 		if(isset($this->aInitialized[$backendId])) {
 			return true;
 		} else {
-			// Try to initialize backend
-			if($this->initializeBackend($backendId)) {
-				return true;
-			} else {
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
-				}
-				return false;
+			if($printErr == 1) {
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
 			}
+			return false;
 		}
 	}
 	
