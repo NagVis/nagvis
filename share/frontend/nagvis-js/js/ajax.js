@@ -346,7 +346,7 @@ function getBulkRequest(sBaseUrl, aUrlParts, iLimit, bCacheable, handler, handle
 		async = true;
 	
 	eventlog("ajax", "debug", "Bulk parts: "+aUrlParts.length+" Async: "+ async);
-	var count = 0
+	var count = 0;
 	for(var i = 0, len = aUrlParts.length; i < len; i++) {
 		sUrl = sUrl + aUrlParts[i];
 		count += 1;
@@ -361,7 +361,7 @@ function getBulkRequest(sBaseUrl, aUrlParts, iLimit, bCacheable, handler, handle
 				o = null;
 			}
 			
-			count = 0
+			count = 0;
 			sUrl = '';
 		}
 	}
