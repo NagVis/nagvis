@@ -152,7 +152,7 @@ try {
 		// Handle the given action in the module
 		$sContent = $MODULE->handleAction();
 	} else {
-		throw NagVisException($CORE->getLang()->getText('The given action is not valid'));
+		throw new NagVisException($CORE->getLang()->getText('The given action is not valid'));
 	}
 } catch(NagVisException $e) {
 	new GlobalMessage('ERROR', $e->getMessage());
