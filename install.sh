@@ -448,6 +448,8 @@ check_backend() {
 			else
 				log "  Livestatus Socket (${LIVESTATUS_SOCK#unix:})" ""
 			fi
+
+			CALL="$CALL -l \"$LIVESTATUS_SOCK\""
 		else
 			text "| Unable to check TCP-Sockets, hope you entered the correct socket." "|"
 		fi
