@@ -74,7 +74,7 @@
 		- <i>user</i>: Explict user selected language<br />
 		- <i>session</i>: When the user selects a language it is stored in the current session<br />
 		- <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
-		- <i>config</if>: The installation default language<br />
+		- <i>config</i>: The installation default language<br />
 		The order you set the options determines how NagVis uses the different mechanisms. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
@@ -221,7 +221,31 @@
 		<td> urltarget </td><td> _self </td><td> Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
 		</tr>
 		<tr>
-		<td> <strike>usegdlibs</strike> </td><td> <strike>1</strike> </td><td> <strike>Use gdlibs (if set to 0, lines will not work, all other types should work fine)</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
+		<td>hosturl</td><td>[htmlcgi]/status.cgi?host=[host_name]</td><td>The default url to follow when a user left-clicks on an host object. Available Macros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
+		</tr>
+		<tr>
+			<td>hostgroupurl</td>
+	    <td>[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]</td>
+  	  <td>The default url to follow when a user left-clicks on an hostgroup object.
+          Available Macros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
+		</tr>
+		<tr>
+			<td>serviceurl</td>
+	    <td>[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]</td>
+  	  <td>The default url to follow when a user left-clicks on an service object.
+          Available Macros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
+		</tr>
+		<tr>
+			<td>servicegroupurl</td>
+	    <td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
+  	  <td>The default url to follow when a user left-clicks on an servicegroup object.
+          Available Macros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
+		</tr>
+		<tr>
+			<td>mapurl</td>
+	    <td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
+  	  <td>The default url to follow when a user left-clicks on an map object.
+          Available Macros: [htmlcgi], [htmlbase], [map_name]</td>
 		</tr>
 		</table>
 		
