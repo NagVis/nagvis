@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.15"
+INSTALLER_VERSION="0.2.16"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -1337,7 +1337,7 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";sesscookiepath=\"$HTML_PATH\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding sesscookie=$HTML_PATH" done` 
-		$SED -i "s#;\(sesscookiepath\)=\(.*\)#;\1=\2\n\1=\"$HTML_PATH\"#" $NAGVIS_CFG
+		$SED -i "s#;\(sesscookiepath\)=\(.*\)#;\1=\2\n\1=\"$HTML_PATH\"#g" $NAGVIS_CFG
 		chk_rc "|  Error adding sesscookiepath" "$DONE"
 	fi
 
@@ -1345,7 +1345,7 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";base=\"$NAGVIS_PATH/\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding base=\"$NAGVIS_PATH\"" done` 
-		$SED -i "s#;\(base\)=\(.*\)#;\1=\2\n\1=\"$NAGVIS_PATH/\"#" $NAGVIS_CFG
+		$SED -i "s#;\(base\)=\(.*\)#;\1=\2\n\1=\"$NAGVIS_PATH/\"#g" $NAGVIS_CFG
 		chk_rc "|  Error adding base path" "$DONE"
 	fi
 
@@ -1353,15 +1353,15 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";htmlbase=\"$HTML_PATH\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding htmlbase=\"$HTML_PATH\"" done` 
-		$SED -i "s#;\(htmlbase\)=\(.*\)#;\1=\2\n\1=\"$HTML_PATH\"#" $NAGVIS_CFG
+		$SED -i "s#;\(htmlbase\)=\(.*\)#;\1=\2\n\1=\"$HTML_PATH\"#g" $NAGVIS_CFG
 		chk_rc "|  Error adding htmlbase" "$DONE"
 	fi
 
 	# add htmlcgi
-	grep ";htmlcgi=\"$SOURCE/cgi-bin\"" $NAGVIS_CFG >/dev/null
+	grep ";htmlcgi=\"/$SOURCE/cgi-bin\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding htmlcgi=/$SOURCE/cgi-bin" done` 
-		$SED -i "s#;\(htmlcgi\)=\(.*\)#;\1=\2\n\1=\"/$SOURCE/cgi-bin\"#" $NAGVIS_CFG
+		$SED -i "s#;\(htmlcgi\)=\(.*\)#;\1=\2\n\1=\"/$SOURCE/cgi-bin\"#g" $NAGVIS_CFG
 		chk_rc "|  Error adding htmlcgi" "$DONE"
 	fi
 
@@ -1369,51 +1369,36 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 	grep ";dbname=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding dbname=$SOURCE" done` 
-		$SED -i "s#;\(dbname\)=\(\"nagios\"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
+		$SED -i "s#;\(dbname\)=\(\"nagios\"\)#;\1=\2\n\1=\"$SOURCE\"#g" $NAGVIS_CFG
 		chk_rc "|  Error adding dbname" "$DONE"
-	fi
-
-	# add dbuser
-	grep ";dbuser=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
-	if [ $? -eq 1 ]; then
-		DONE=`log "adding dbuser=$SOURCE" done` 
-		$SED -i "s#;\(dbuser\)=\(\"root\"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
-		chk_rc "|  Error adding dbuser" "$DONE"
-	fi
-
-	# add dbpass
-	grep ";dbpass=\"$SOURCE\"" $NAGVIS_CFG >/dev/null
-	if [ $? -eq 1 ]; then
-		DONE=`log "adding dbpass=$SOURCE" done` 
-		$SED -i "s#;\(dbpass\)=\(\"\"\)#;\1=\2\n\1=\"$SOURCE\"#" $NAGVIS_CFG
-		chk_rc "|  Error adding dbpass" "$DONE"
 	fi
 
 	# add dbprefix
 	grep ";dbprefix=\"${SOURCE}_\"" $NAGVIS_CFG >/dev/null
 	if [ $? -eq 1 ]; then
 		DONE=`log "adding dbprefix=${SOURCE}_" done` 
-		$SED -i "s#;\(dbprefix\)=\(\"nagios_\"\)#;\1=\2\n\1=\"${SOURCE}_\"#" $NAGVIS_CFG
+		$SED -i "s#;\(dbprefix\)=\(\"nagios_\"\)#;\1=\2\n\1=\"${SOURCE}_\"#g" $NAGVIS_CFG
 		chk_rc "|  Error adding dbprefix" "$DONE"
 	fi
 
-	# set backend
+	# Set the new default backend_id. Don't need to treat livestatus here because
+  # it is the hardcoded default value in NagVis.
 	echo $NAGVIS_BACKEND | grep "merlinmy" >/dev/null
 	[ $? -eq 0 ]&&NEWBACK="merlinmy_1"
 	echo $NAGVIS_BACKEND | grep "ido2db" >/dev/null
 	[ $? -eq 0 ]&&NEWBACK="ndomy_1"
 	echo $NAGVIS_BACKEND | grep "ndo2db" >/dev/null
 	[ $? -eq 0 ]&&NEWBACK="ndomy_1"
-	echo $NAGVIS_BACKEND | grep "mklivestatus" >/dev/null
-	[ $? -eq 0 ]&&NEWBACK="live_1"
-	DONE=`log "setting backend to $NEWBACK" done` 
-	$SED -i "s#;\(backend\)=\(.*\)#;\1=\2\n\1=\"$NEWBACK\"#" $NAGVIS_CFG
-	chk_rc "|  Error setting backend" "$DONE"
+  if [ ! -z "$NEWBACK" ]; then
+		DONE=`log "setting backend to $NEWBACK" done` 
+		$SED -i "s#;\(backend\)=\(.*\)#;\1=\2\n\1=\"$NEWBACK\"#g" $NAGVIS_CFG
+		chk_rc "|  Error setting backend" "$DONE"
+	fi
 
 	# Add livestatus backend when configured to use MKLivestatus
-	if [ ! -z $LIVESTATUS_SOCK ]; then
+	if [ ! -z "$LIVESTATUS_SOCK" ]; then
 		DONE=`log "  Adding MKLivestatus Backend..." done`
-		$SED -i 's#;backend="ndomy_1"#backend="live_1"#g;s#;socket="unix:/usr/local/nagios/var/rw/live"#socket="'"$LIVESTATUS_SOCK"'"#g' $NAGVIS_CFG
+		$SED -i 's#;socket="unix:/usr/local/nagios/var/rw/live"#socket="'"$LIVESTATUS_SOCK"'"#g' $NAGVIS_CFG
 		chk_rc "|  Error adding MKLivstatus Backend" "$DONE"
 	fi
 fi
