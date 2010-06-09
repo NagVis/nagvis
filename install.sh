@@ -529,6 +529,7 @@ check_backend() {
 	fi
 	
 	BACKENDS=${BACKENDS#,}
+	[ ! -z "$BACKENDS" ] && CALL="$CALL -b $NAGVIS_BACKEND"
 }
 
 # Check Apache PHP module
@@ -1148,7 +1149,6 @@ if [ $FORCE -eq 0 ]; then
 
 	# Check Backend prerequisites
 	check_backend
-	CALL="$CALL -b $NAGVIS_BACKEND"
 
 	# Check Graphviz
 	GRAPHVIZ_REQ=`fmt_version $NEED_GV_VERSION` 
