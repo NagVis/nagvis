@@ -157,7 +157,6 @@ backend="ndomy_1"
 icons="std_medium"
 recognizeservices=1
 onlyhardstates=0
-usegdlibs=1
 backgroundcolor="#ffffff"
 headertemplate="default"
 showinlists=1
@@ -266,7 +265,31 @@ hoverchildslimit=10
 <td>urltarget</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster)</td>
 </tr>
 <tr>
-<td><strike>usegdlibs</strike></td><td><strike>1</strike></td><td><strike>gdlibs benutzen (wenn 0, werden Linien ggf. nicht funktionieren, alle anderen Typen sollten funktionieren)</strike> <font color=#ff0000>veraltet ab 1.4</font></td>
+	<td>hosturl</td><td>[htmlcgi]/status.cgi?host=[host_name]</td><td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Host-Objekt benutzt wird. Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
+</tr>
+<tr>
+	<td>hostgroupurl</td>
+	<td>[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]</td>
+	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Hostgruppen-Objekt benutzt wird.
+	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
+</tr>
+<tr>
+	<td>serviceurl</td>
+	<td>[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]</td>
+	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Service-Objekt benutzt wird.
+	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
+</tr>
+<tr>
+	<td>servicegroupurl</td>
+	<td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
+	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Servicegruppen-Objekt benutzt wird.
+	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
+</tr>
+<tr>
+	<td>mapurl</td>
+	<td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
+	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Map-Objekt benutzt wird.
+	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [map_name]</td>
 </tr>
 </table>
 

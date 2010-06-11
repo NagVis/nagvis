@@ -64,6 +64,7 @@ Sie sollten diese Datei <font color=red>nicht</font> kopieren. Der beste Weg ist
 <h2>Aktualisierung von NagVis 1.4x</h2>
 <p>Von NagVis 1.4x nach 1.5x wurde eine Menge an der Verzeichnisstruktur ge&auml;ndert. Das mitgelieferte Installations-Script kann NagVis 1.4x/1.5x auf das letzte 1.5x-Release aktualisieren. Daher wird empfohlen, dieses Script (<code>install.sh</code>) zur Aktualisierung zu nutzen.</p>
 
+<p>Die Berechtigungskonfiguration hat sich in NagVis 1.5 ge&auml;ndert. Deshalb entfernt das Installationsscript die Direktiven allowed_for_config und allowed_users aus den Map-Konfigurationsdateien. Die Berechtigungen werden nicht automatisch in die Berechtigungsdatenbank geladen, sondern in die nagvis/etc/auth-backup-Datei geschrieben. Mit diesen Informationen k&ouml;nnen Sie die Berechtigungen f&uuml;r die Maps im neuen rollenbasierten Berechtigungssystem vergeben.</p>
 <p>Es ist auch m&ouml;glich, den Update von 1.4x auf 1.5x manuell durchzuf&uuml;hren, aber das wurde bisher weder getestet noch dokumentiert.
 Generell sollte es so funktionieren wie oben beschrieben (also kopieren der eigenen Dateien an die neuen Stellen und anpassen der nagvis.ini.php, <font color="#ff0000">nicht</font> kopieren).<br>
 Wenn Sie also die Installation selbst erledigen m&ouml;chten, dann werden Sie etwas probieren m&uuml;ssen. Bitte leiten Sie dann Ihre Erfahrungen an uns weiter, damit wir diese Dokumentation erweitern k&ouml;nnen.</p>
