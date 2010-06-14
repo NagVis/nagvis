@@ -1,0 +1,10 @@
+<table class="allhosts">
+<tbody>
+	{foreach $maps map}
+  <tr><td>
+  <div class="statebullet state2">&nbsp;</div>
+  <a href="{$htmlBase}/index.php?mod=Map&act=view&show={$map.name}" class="link" target="main">{$map.alias}</a>
+  </td></tr>
+	{/foreach}
+</tbody>
+</table>

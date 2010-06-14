@@ -49,7 +49,7 @@ class GlobalIndexPage {
 	}
 	
 	/**
-	 * Parses the automaps for the overview page
+	 * Parses the maps and automaps for the overview page
 	 *
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
