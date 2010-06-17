@@ -54,8 +54,10 @@ if(!isset($_GET['action'])) {
 switch($_GET['action']) {
 	/*
 	 * Get all objects in defined BACKEND if the defined TYPE
+	 * Get all services in the defined BACKEND of the defined HOST
 	 */
 	case 'getObjects':
+	case 'getServices':
 		// These values are submited by WUI requests:
 		// $_GET['backend_id'], $_GET['type']
 		
@@ -64,10 +66,14 @@ switch($_GET['action']) {
 		
 		// Do some validations
 		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '')
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backend_id'));
-		if(!isset($_GET['type']) || $_GET['type'] == '') {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~type'));
-		}
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet1', 'ATTRIBUTE~backend_id'));
+
+		if($_GET['action'] === 'getObjects' && (!isset($_GET['type']) || $_GET['type'] == ''))
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet1', 'ATTRIBUTE~type'));
+
+		// Special validation for getServices
+		if($_GET['action'] === 'getServices' && (!isset($_GET['host_name']) || $_GET['host_name'] == ''))
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet1', 'ATTRIBUTE~host_name'));
 
 		try {
 			if(!method_exists($BACKEND->getBackend($_GET['backend_id']),'getObjects')) {
@@ -81,44 +87,28 @@ switch($_GET['action']) {
 
 		// Input looks OK, handle the request...
 		
-		$aRet = Array(Array('name' => ''));
+		$name1 = ($_GET['action'] === 'getServices' ? $_GET['host_name'] : '');
+		$type =  ($_GET['action'] === 'getObjects'  ? $_GET['type']      : 'service');
+		
+		// Initialize an empty list
+		if($_GET['action'] === 'getObjects')
+			$aRet = Array(Array('name' => ''));
+		else
+			$aRet = Array(Array('host_name' => '', 'service_description' => ''));
+		
 		// Read all objects of the requested type from the backend
 		try {
-			foreach($BACKEND->getBackend($_GET['backend_id'])->getObjects($_GET['type'],'','') AS $arr) {
-				$aRet[] = Array('name' => $arr['name1']);
+			$objs = $BACKEND->getBackend($_GET['backend_id'])->getObjects($type, $name1, '');
+			foreach($objs AS $obj) {
+				if($_GET['action'] === 'getObjects')
+					$aRet[] = Array('name' => $obj['name1']);
+				else
+					$aRet[] = Array('host_name'           => $obj['name1'],
+					                'service_description' => $obj['name2']);
 			}
 		} catch(BackendConnectionProblem $e) {}
 		
 		echo json_encode($aRet);
-	break;
-	/*
-	 * Get all services in the defined BACKEND of the defined HOST
-	 */
-	case 'getServices':
-		// These values are submited by WUI requests:
-		// $_GET['backend_id'], $_GET['host_name']
-		
-		// Initialize the backend
-		$BACKEND = new CoreBackendMgmt($CORE);
-		
-		// Do some validations
-		if(!isset($_GET['backend_id']) || $_GET['backend_id'] == '') {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~ackend_id'));
-		} elseif(!isset($_GET['host_name']) || $_GET['host_name'] == '') {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~host_name'));
-		} elseif(!method_exists($BACKEND->BACKENDS[$_GET['backend_id']],'getObjects')) {
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('methodNotSupportedByBackend', 'METHOD~getObjects'));
-		} else {
-			// Input looks OK, handle the request...
-			
-			$aRet = Array();
-			// Read all services of the given host
-			foreach($BACKEND->BACKENDS[$_GET['backend_id']]->getObjects('service',$_GET['host_name'],'') AS $arr) {
-				$aRet[] = Array('host_name' => $arr['name1'], 'service_description' => $arr['name2']);
-			}
-			
-			echo json_encode($aRet);
-		}
 	break;
 	/*
 	 * Gets values for the backend options of a defined backend. Needed when
