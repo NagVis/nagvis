@@ -30,11 +30,12 @@
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 function ajaxError($errno, $errstr = '', $file = '', $line = '') {
-	// Don't handle E_STRICT errors
-	if($errno != 2048) {
-		echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
-		die();
-	}
+	// Use current error_reporting settings to skip unwanted errors
+	if(!(error_reporting() & $errno))
+		return false;
+	
+	echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
+	die();
 }
 
 function ajaxException($OBJ) {
