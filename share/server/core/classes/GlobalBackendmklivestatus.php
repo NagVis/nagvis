@@ -168,14 +168,23 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		}
 		
 		// Connect to the socket
+		// don't want to see the connection error messages - want to handle the
+		// errors later with an own error message
 		if($this->socketType === 'unix') {
+			$oldLevel = error_reporting(0);
 			$result = socket_connect($this->SOCKET, $this->socketPath);
+			error_reporting($oldLevel);
 		} elseif($this->socketType === 'tcp') {
+			$oldLevel = error_reporting(0);
 			$result = socket_connect($this->SOCKET, $this->socketAddress, $this->socketPort);
+			error_reporting($oldLevel);
 		}
-		
+
 		if($result == false) {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			$socketError = socket_strerror(socket_last_error($this->SOCKET));
+			$this->SOCKET = null;
+			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
+			                                                         Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $socketError)));
 		}
 
 		// Maybe set some socket options
