@@ -1160,15 +1160,15 @@ class GlobalMainCfg {
 					
 					// loop given elements for checking: => all given attributes valid
 					foreach($vars AS $key => $val) {
-						if(!ereg('^comment_',$key)) {
-							if(ereg('^backend_', $type)) {
+						if(!preg_match('/^comment_/', $key)) {
+							if(preg_match('/^backend_/', $type)) {
 								if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]) 
 									 && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
 									$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
 								} else {
 									$arrValidConfig = $this->validConfig['backend'];
 								}
-							} elseif(ereg('^rotation_', $type)) {
+							} elseif(preg_match('/^rotation_/', $type)) {
 								$arrValidConfig = $this->validConfig['rotation'];
 							} else {
 								$arrValidConfig = $this->validConfig[$type];
@@ -1188,7 +1188,7 @@ class GlobalMainCfg {
 								return FALSE;
 							} else {
 								// Workaround to get the configured string back
-								if(ereg('^rotation_', $type) && $key == 'maps') {
+								if(preg_match('/^rotation_/', $type) && $key == 'maps') {
 									foreach($val AS $intId => $arrStep) {
 										if(isset($arrStep['label']) && $arrStep['label'] != '') {
 											$label = $arrStep['label'].':';
