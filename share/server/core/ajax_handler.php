@@ -134,9 +134,19 @@ try {
 				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not permitted to access this page'), null, $CORE->getLang()->getText('Access denied'));
 			}
 		} else {
-			// FIXME: Maybe make login possible via API?
-			// When not authenticated show error message
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'), null, $CORE->getLang()->getText('Access denied'));
+			// At the moment the login at ajax_handler is only possible via env auth.
+			// Should be enough for the moment
+			$MHANDLER = new CoreModuleHandler($CORE);
+			$MHANDLER->regModule('LogonEnv');
+			$MODULE = $MHANDLER->loadModule('LogonEnv');
+			$MODULE->beQuiet();
+			$MODULE->setAction('view');
+
+			// Try to auth using the environment auth
+			if($MODULE->handleAction() === false) {
+				// When not authenticated show error message
+				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'), null, $CORE->getLang()->getText('Access denied'));
+			}
 		}
 	}
 
