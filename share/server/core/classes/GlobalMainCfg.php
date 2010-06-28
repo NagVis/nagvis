@@ -107,7 +107,7 @@ class GlobalMainCfg {
 					'default' => 'Guests',
 					'depends_on' => 'logonmodule',
 					'depends_value' => 'LogonEnv',
-					'match' => MATCH_STRING_NO_SPACE),
+					'match' => MATCH_STRING),
 				'refreshtime' => Array('must' => 1,
 					'editable' => 1,
 					'default' => '60',
