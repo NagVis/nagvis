@@ -421,7 +421,7 @@ class NagVisAutoMap extends GlobalMap {
 			$sLine = str_replace('&#45;', '-', $sLine);
 			// Extract the area objects
 			// Only parsing rect/polys at the moment
-			if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href=".+\/status\.cgi\?host=([^"]+)"\starget="[a-zA-Z-_]*"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
+			if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href=".+\?host=([^"]+)"\starget="[a-zA-Z-_]*"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
 				if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[3]) && isset($aMatches[4])) {
 					$type = $aMatches[1];
 					$name1 = str_replace('&#45;', '-', trim($aMatches[3]));
