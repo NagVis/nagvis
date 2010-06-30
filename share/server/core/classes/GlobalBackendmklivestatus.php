@@ -927,6 +927,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				);
 			}
 		}
+
+		// If recognize_services are disabled don't fetch service information
+		if($options & 2)
+			return $arrReturn;
 		
 		if($options & 1)
 			$stateAttr = 'last_hard_state';

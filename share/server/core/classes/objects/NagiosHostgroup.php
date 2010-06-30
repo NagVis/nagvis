@@ -194,8 +194,10 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		} else {
 			// FIXME: Recode mergeSummaryOutput method
 			$this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));
-			$this->summary_output .= "<br />";
-			$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+			if($this->recognize_services) {
+				$this->summary_output .= "<br />";
+				$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+			}
 		}
 	}
 	

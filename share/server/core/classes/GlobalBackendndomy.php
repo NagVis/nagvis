@@ -899,6 +899,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			);
 		}
 		
+		// If recognize_services are disabled don't fetch service information
+		if($options & 2)
+			return $arrReturn;
+		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 			o.name1,
 			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,

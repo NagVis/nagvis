@@ -99,6 +99,8 @@ class CoreBackendMgmt {
 		$options = 0;
 		if($OBJ->getOnlyHardStates())
 			$options |= 1;
+		if(!$OBJ->getRecognizeServices())
+			$options |= 2;
 		/*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
 
 		return $options;
@@ -235,11 +237,12 @@ class CoreBackendMgmt {
 				}
 				
 				// Now fetch the service state counts for all hostgroup members
-				try {
-					$filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
-					$aServiceStateCounts = $this->getBackend($backendId)->getHostStateCounts(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
-				} catch(BackendException $e) {
-					$aServiceStateCounts = Array();
+				$aServiceStateCounts = Array();
+				if($OBJ->getRecognizeServices()) {
+					try {
+						$filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
+						$aServiceStateCounts = $this->getBackend($backendId)->getHostStateCounts(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+					} catch(BackendException $e) {}
 				}
 				
 				$members = Array();
