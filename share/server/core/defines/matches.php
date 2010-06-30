@@ -28,8 +28,8 @@
 define('MATCH_ALL', '/^.*$/i');
 
 // These regex allow unicode matching
-define('MATCH_STRING', '/^[0-9a-zа-яё\s\:\+\[\]\(\)\_\.\,\-\?\!\#\=\/\\\]+$/iu');
-define('MATCH_STRING_EMPTY', '/^[[0-9a-zа-яё\s\:\+\[\]\(\)\_\.\,\-\?\!\#\=\/\\\]*$/iu');
+define('MATCH_STRING', '/^[0-9a-zа-яё\s\:\+\[\]\(\)\_\.\,\-\?\!\#\@\=\/\\\]+$/iu');
+define('MATCH_STRING_EMPTY', '/^[[0-9a-zа-яё\s\:\+\[\]\(\)\_\.\,\-\?\!\#\@\=\/\\\]*$/iu');
 define('MATCH_STRING_NO_SPACE', '/^[[0-9a-zа-яё\:\+\[\]\(\)\_\.\,\-\?\!\#\@\=\/\\\]+$/iu');
 define('MATCH_STRING_NO_SPACE_EMPTY', '/^[[0-9a-zа-яё\:\+\[\]\(\)\_\.\,\-\?\!\#\@\=\/\\\]*$/iu');
 
