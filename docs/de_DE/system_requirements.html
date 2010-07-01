@@ -29,7 +29,7 @@ Wir empfehlen den Einsatz des <a href="http://www.apache.org/" target="_blank">A
 
 Die minimale PHP-Version ist 5.0.0
 <h2>ben&ouml;tigte PHP-Module</h2>
-<p>Neben dem PHP-Basis-Paket ben&ouml;tigen Sie noch die folgenden Module:</p>
+<p>Neben dem PHP-Basis-Paket ben&ouml;tigen Sie noch die folgenden Module. Die Namen sind teilweise anh&auml;ngig von der Distribution:</p>
 <ul>
 <li>php5-gd</li>
 <li>php5-gettext</li>
@@ -44,19 +44,19 @@ Anmerkung: m&ouml;glicherweise sind einige dieser Funktionen bereits in Ihrer PH
 <p>Die Backends verbinden sich mit externen Datenquellen und ben&ouml;tigen oftmals spezielle Module. Hier ist eine Liste f&uuml;r verschiedene Backends.</p>
 <strong>mklivestatus</strong>
 <ul>
-<li>php-socket</li> 
+<li>php-net-socket (Debian) / php5-sockets (SLES)</li> 
 </ul>
 <strong>ndomy</strong>
 <ul>
-<li>php-mysql</li> 
+<li>php5-mysql</li> 
 </ul>
 <strong>merlinmy</strong>
 <ul>
-<li>php-mysql</li> 
+<li>php5-mysql</li> 
 </ul>
 <strong>ndo2fs</strong>
 <ul>
-<li>php-xml</li> 
+<li>php5-xml (evtl. bereits &quot;builtin&quot;)</li> 
 </ul>
 <h2>Graphviz f&uuml;r die Automap-Funktionalit&auml;t</h2>
 <p>Die <a href="automap.html">Automap</a> basiert auf GraphViz. Sie brauchen es, wenn Sie das Automap-Feature nutzen m&ouml;chten. Wir empfehlen GraphViz >= 2.14 f&uuml;r die Automap (&auml;ltere Versionen (mit niedrigeren Versionsnummern) haben Probleme mit Truecolor-Rendering).</p>
