@@ -150,6 +150,8 @@
 ;headermenu="1"
 ; header template
 ;headertemplate="default"
+; Enable/Diable the fading effect of the submenus in the header menu
+;headerfade=1
 ; enable/disable hover menu
 ;hovermenu=1
 ; hover template

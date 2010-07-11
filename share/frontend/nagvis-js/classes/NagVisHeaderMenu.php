@@ -129,6 +129,8 @@ class NagVisHeaderMenu {
 			$this->aMacros['currentMapAlias'] = '';
 		}
 		
+		// Initialize the enable fade option. Is overridden by the current map or left as is
+		$this->aMacros['bEnableFade'] = $this->CORE->getMainCfg()->getValue('defaults', 'headerfade');
 		
 		// Build map list
 		$permEditAnyMap = False;
@@ -160,8 +162,12 @@ class NagVisHeaderMenu {
 
 			$permEditAnyMap |= $map['permittedEdit'];
 			
-			// auto select current map
-			$map['selected'] = ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName());
+			// auto select current map and apply map specific optins to the header menu
+			if ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
+				$map['selected'] = True;
+				
+				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue('global', 0, 'header_fade');
+			}
 			
 			$aMaps[] = $map;
 		}
@@ -205,7 +211,11 @@ class NagVisHeaderMenu {
 			$map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
 			
 			// auto select current map
-			$map['selected'] = ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName());
+			if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
+				$map['selected'] = True;
+				
+				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue('global', 0, 'header_fade');
+			}
 			
 			// Underline last element
 			$map['classUnderline'] = ($i == $numAutomaps);
