@@ -2131,7 +2131,7 @@ msgstr "Die Header-Template-Datei \"[PATH]\" existiert nicht."
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:367
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:370
 msgid "headerTemplateNotReadable"
-msgstr "Bitte die Leseberechtigungen des Webservers auf die Datei \"[PATH]\" pr&uuml;fen."
+msgstr "Bitte die Leseberechtigungen des Webservers auf die Datei \"[FILE]\" pr&uuml;fen."
 
 #: wui/includes/classes/WuiMap.php:585
 #: share/frontend/wui/classes/WuiCore.php:139
