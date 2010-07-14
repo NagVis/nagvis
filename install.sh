@@ -1459,7 +1459,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 		copy "\/default\..+$" "$USERFILES_DIR/templates" "templates"
 		
 		LINE="Restoring custom template images..."
-		copy "\/tmpl\.default.+$" "$USERFILES_DIR/images/templates" "template images"
+		copy "\/default.+$" "$USERFILES_DIR/images/templates" "template images"
 
 		LINE="Restoring custom gadgets..."
 		copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
