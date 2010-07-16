@@ -60,16 +60,13 @@ class WuiModMap extends WuiModule {
 		$MAP = new WuiMap(WuiCore::getInstance(), $MAPCFG);
 		
 		// Preflight checks
-		if(!$this->CORE->checkPHPMBString(1)) {
+		if(!$this->CORE->checkPHPMBString(1))
 			exit;
-		}
-		if(!$MAPCFG->checkMapConfigWriteable(1)) {
+		if(!$MAPCFG->checkMapConfigWriteable(1))
 			exit;
-		}
-		if(!$MAPCFG->checkMapLocked(1)) {
-			// Lock the map for the defined time
+		// Lock the map for the defined time if its free
+		if(!$MAPCFG->checkMapLocked())
 			$MAPCFG->writeMapLock();
-		}
 		
     // Need to parse the header menu by config or url value?
     if($this->CORE->getMainCfg()->getValue('wui','headermenu')) {

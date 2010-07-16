@@ -355,7 +355,7 @@ class GlobalMainCfg {
 					'match' => MATCH_STRING_NO_SPACE),
 				'maplocktime' => Array('must' => 0,
 					'editable' => 1,
-					'default' => '350',
+					'default' => '5',
 					'match' => MATCH_INTEGER),
 				'grid_show' => Array('must' => 0,
 					'editable' => 1,

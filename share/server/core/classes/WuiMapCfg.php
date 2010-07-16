@@ -296,37 +296,33 @@ class WuiMapCfg extends GlobalMapCfg {
 	/**
 	 * Gets lockfile information
 	 *
-	 * @param	Boolean $ignoreLock
 	 * @param	Boolean $printErr
 	 * @return	Array/Boolean   Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
    */
-	function checkMapLocked($ignoreLock=0,$printErr=1) {
+	function checkMapLocked($printErr=1) {
 		// read lockfile
 		$lockdata = $this->readMapLock();
 		if(is_array($lockdata)) {
-			// check if the lock is older than 5 Minutes and don't ignore lock
-			if($lockdata['time'] > time() - $this->CORE->getMainCfg()->getValue('wui','maplocktime') * 60) {
-				if($ignoreLock == 0) {
-					// the lock should be ignored
+			// Only check locks which are not too old
+			if(time() - $lockdata['time'] < $this->CORE->getMainCfg()->getValue('wui','maplocktime') * 60) {
+				// there is a lock and it should be recognized
+				// check if this is the lock of the current user (Happens e.g. by pressing F5)
+				if(GlobalCore::getInstance()->getAuthentication()->getUser() == $lockdata['user']
+																						&& $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
+					// refresh the lock (write a new lock)
+					$this->writeMapLock();
+					// it's locked by the current user, so it's not locked for him
 					return FALSE;
-				} else {
-					// there is a lock and it should be recognized
-					// check if this is the lock of the current user (Happens e.g. by pressing F5)
-					if($this->CORE->getMainCfg()->getRuntimeValue('user') == $lockdata['user'] && $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
-						// refresh the lock (write a new lock)
-						$this->writeMapLock();
-						// it's locked by the current user, so it's not locked for him
-						return FALSE;
-					}
-					if($printErr == 1) {
-						$LANG = new GlobalLanguage($this->CORE->getMainCfg(),'nagvis');
-						
-						// message the user that there is a lock by another user, the user can decide wether he want's to override it or not
-						print '<script>if(!confirm(\''.$LANG->getText('mapLocked','MAP~'.$this->name.',TIME~'.date('d.m.Y H:i',$lockdata['time']).',USER~'.$lockdata['user'].',IP~'.$lockdata['ip']).'\',\'\')) { history.back(); }</script>';
-					}
-					return TRUE;
 				}
+				
+				// message the user that there is a lock by another user,
+				// the user can decide wether he want's to override it or not
+				if($printErr == 1)
+					print '<script>if(!confirm(\''.str_replace("\n", "\\n", $this->CORE->getLang()->getText('mapLocked',
+									Array('MAP' =>  $this->name,       'TIME' => date('d.m.Y H:i', $lockdata['time']),
+												'USER' => $lockdata['user'], 'IP' =>   $lockdata['ip']))).'\', \'\')) { history.back(); }</script>';
+				return TRUE;
 			} else {
 				// delete lockfile & continue
 				// try to delete map lock, if nothing to delete its OK
@@ -354,7 +350,7 @@ class WuiMapCfg extends GlobalMapCfg {
 			$arrContent = explode(':',$fileContent[0]);
 			// if there are more elements in the array it is OK
 			if(count($arrContent) > 0) {
-				return Array('time' => $arrContent[0], 'user' => $arrContent[1], 'ip' => $arrContent[2]);
+				return Array('time' => $arrContent[0], 'user' => $arrContent[1], 'ip' => trim($arrContent[2]));
 			} else {
 				return FALSE;
 			}
@@ -370,15 +366,19 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function writeMapLock() {
-		if($this->checkMapLockWriteable(0)) {
-			// open file for writing and insert the needed information
-			$fp = fopen($this->mapLockPath, 'w');
-			fwrite($fp,time().':'.$this->CORE->getMainCfg()->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
-			fclose($fp);
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		// Can an existing lock be updated?
+		if($this->checkMapLockExists(0) && !$this->checkMapLockWriteable(0))
+			return false;
+
+		// If no map lock exists: Can a new one be created?
+		if(!$this->checkMapLockExists(0) && !GlobalCore::getInstance()->checkWriteable(dirname($this->mapLockPath), 0))
+			return false;
+
+		// open file for writing and insert the needed information
+		$fp = fopen($this->mapLockPath, 'w');
+		fwrite($fp, time() . ':' . GlobalCore::getInstance()->getAuthentication()->getUser() . ':' . $_SERVER['REMOTE_ADDR']);
+		fclose($fp);
+		return true;
 	}
 	
 	/**
