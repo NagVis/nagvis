@@ -26,6 +26,9 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
+// NagVis Version
+define('CONST_VERSION', '1.5.1');
+
 // Set PHP error handling to standard level
 error_reporting(E_ALL ^ E_STRICT);
 
@@ -56,9 +59,6 @@ define('DEBUGLEVEL', 6);
 
 // Path to the debug file
 define('DEBUGFILE', '../../../var/nagvis-debug.log');
-
-// NagVis Version
-define('CONST_VERSION', '1.5.1');
 
 // Path to the main configuration file
 define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
