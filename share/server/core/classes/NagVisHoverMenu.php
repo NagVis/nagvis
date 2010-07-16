@@ -204,14 +204,7 @@ class NagVisHoverMenu {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkTemplateReadable($printErr) {
-		if($this->checkTemplateExists($printErr) && is_readable($this->pathTemplateFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('hoverTemplateNotReadable', 'FILE~'.$this->pathTemplateFile));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkReadable($this->pathTemplateFile, $printErr);
 	}
 	
 	/**
@@ -224,14 +217,7 @@ class NagVisHoverMenu {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkTemplateExists($printErr) {
-		if(file_exists($this->pathTemplateFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('hoverTemplateNotExists','FILE~'.$this->pathTemplateFile));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
 	}
 }
 ?>

@@ -1602,18 +1602,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkMapConfigExists($printErr) {
-		if($this->name != '') {
-			if(file_exists($this->configFile)) {
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapCfgNotExists', Array('MAP' => $this->configFile)));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkExisting($this->configFile, $printErr);
 	}
 	
 	/**
@@ -1626,18 +1615,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkMapConfigReadable($printErr) {
-		if($this->name != '') {
-			if(is_readable($this->configFile)) {
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapCfgNotReadable', Array('MAP' => $this->configFile)));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkReadable($this->configFile, $printErr);
 	}
 	
 	/**
@@ -1824,14 +1802,8 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapCfgFolderWriteable($printErr) {
-		if(file_exists(substr($this->CORE->getMainCfg()->getValue('paths', 'mapcfg'),0,-1)) && is_writable(substr($this->CORE->getMainCfg()->getValue('paths', 'mapcfg'),0,-1))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapCfgDirNotWriteable', Array('MAPPATH' => $this->CORE->getMainCfg()->getValue('paths', 'mapcfg'))), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
+		$path = substr($this->CORE->getMainCfg()->getValue('paths', 'mapcfg'),0,-1);
+		return GlobalCore::getInstance()->checkReadable($path, $printErr);
 	}
 	
 	/**

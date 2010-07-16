@@ -368,18 +368,12 @@ class CoreBackendMgmt {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkBackendExists($backendId, $printErr) {
-		if(isset($backendId) && $backendId != '') {
-			if(file_exists($this->CORE->getMainCfg()->getValue('paths','class').'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype').'.php')) {
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		if($this->CORE->checkExisting($this->CORE->getMainCfg()->getValue('paths','class').'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype').'.php', false))
+			return true;
+
+		if($printErr == 1)
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
+		return false;
 	}
 	
 	/**

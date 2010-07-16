@@ -141,11 +141,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkSocketExists() {
-		if(file_exists($this->socketPath)) {
-			return true;
-		} else {
-			return false;
-		}
+		return file_exists($this->socketPath);
 	}
 
 	/**

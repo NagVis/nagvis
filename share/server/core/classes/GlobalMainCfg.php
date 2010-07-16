@@ -1253,18 +1253,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkNagVisConfigExists($printErr) {
-		if($this->configFile != '') {
-			if(file_exists($this->configFile)) {
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotExists', Array('MAINCFG' => $this->configFile)));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkExisting($this->configFile, $printErr);
 	}
 	
 	/**
@@ -1275,18 +1264,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkNagVisConfigReadable($printErr) {
-		if($this->configFile != '') {
-			if(is_readable($this->configFile)) {
-				return TRUE;
-			} else {
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotReadable', Array('MAINCFG' => $this->configFile)));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkReadable($this->configFile, $printErr);
 	}
 	
 	/**
@@ -1684,14 +1662,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkNagVisConfigWriteable($printErr) {
-		if(is_writeable($this->configFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgNotWriteable','MAINCFG~'.$this->configFile), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkWriteable($this->configFile, $printErr);
 	}
 
 	/**

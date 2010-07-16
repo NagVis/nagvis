@@ -118,18 +118,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFileExists($printErr) {
-		if($this->image != '') {
-			if(file_exists($this->path)) {
-				return TRUE;
-			} else {
-				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundNotExists','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkExisting($this->image, $printErr);
 	}
 	
 	/**
@@ -140,18 +129,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFileReadable($printErr) {
-		if($this->image != '') {
-			if($this->checkFileExists($printErr) && is_readable($this->path)) {
-				return TRUE;
-			} else {
-				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundNotReadable','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkReadable($this->image, $printErr);
 	}
 	
 	/**
@@ -162,18 +140,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFileWriteable($printErr) {
-		if($this->image != '') {
-			if($this->checkFileExists($printErr) && is_writable($this->path)) {
-				return TRUE;
-			} else {
-				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundNotWriteable','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkWriteable($this->image, $printErr);
 	}
 	
 	/**
@@ -184,14 +151,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFolderWriteable($printErr) {
-		if(is_writable($this->CORE->getMainCfg()->getValue('paths', 'map'))) {
-			return TRUE;
-		} else {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backgroundFolderNotWriteable','PATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkWriteable($this->CORE->getMainCfg()->getValue('paths', 'map'), $printErr);
 	}
 	
 	/**

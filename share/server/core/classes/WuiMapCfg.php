@@ -40,6 +40,12 @@ class WuiMapCfg extends GlobalMapCfg {
 		$this->name	= $name;
 		
 		$this->getMap();
+		
+		if($this->name != '')
+			$this->mapLockPath = $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock';
+		else
+			$this->mapLockPath = '';
+		
 		parent::__construct($CORE, $this->name);
 	}
 	
@@ -114,9 +120,9 @@ class WuiMapCfg extends GlobalMapCfg {
 		if($this->checkMapConfigWriteable($printErr)) {
 			if(unlink($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
 				// Also remove cache file
-				if(file_exists($this->cacheFile)) {
+				if(file_exists($this->cacheFile))
 					unlink($this->cacheFile);
-				}
+				
 				// And also remove the permission
 				GlobalCore::getInstance()->getAuthorization()->deletePermission('Map', $this->name);
 				
@@ -140,14 +146,8 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapConfigWriteable($printErr) {
-		if($this->checkMapConfigExists($printErr) && is_writeable($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg')) {
-			return TRUE;
-		} else {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapCfgNotWriteable','MAP~'.$this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg'));
-			}
-			return FALSE;
-		}
+		$path = $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.cfg';
+		return GlobalCore::getInstance()->checkWriteable($path, $printErr);
 	}
 	
 	/**
@@ -284,9 +284,8 @@ class WuiMapCfg extends GlobalMapCfg {
 			fclose($fp);
 			
 			// Also remove cache file
-			if(file_exists($this->cacheFile)) {
+			if(file_exists($this->cacheFile))
 				unlink($this->cacheFile);
-			}
 			
 			return TRUE;
 		} else {
@@ -350,7 +349,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 */
 	function readMapLock() {
 		if($this->checkMapLockReadable(0)) {
-			$fileContent = file($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock');
+			$fileContent = file($this->mapLockPath);
 			// only recognize the first line, explode it by :
 			$arrContent = explode(':',$fileContent[0]);
 			// if there are more elements in the array it is OK
@@ -373,7 +372,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	function writeMapLock() {
 		if($this->checkMapLockWriteable(0)) {
 			// open file for writing and insert the needed information
-			$fp = fopen($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock','w');
+			$fp = fopen($this->mapLockPath, 'w');
 			fwrite($fp,time().':'.$this->CORE->getMainCfg()->getRuntimeValue('user').':'.$_SERVER['REMOTE_ADDR']);
 			fclose($fp);
 			return TRUE;
@@ -390,7 +389,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 */
 	function deleteMapLock() {
 		if($this->checkMapLockWriteable(0)) {
-			if(unlink($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock')) {
+			if(unlink($this->mapLockPath)) {
 				// map lock deleted => OK
 				return TRUE;
 			} else {
@@ -410,18 +409,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapLockExists($printErr) {
-		if($this->name != '') {
-			if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock')) {
-				return TRUE;
-			} else {
-				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotExists','MAP~'.$this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock'));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkExisting($this->mapLockPath, $printErr);
 	}
 	
 	/**
@@ -432,18 +420,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapLockReadable($printErr) {
-		if($this->name != '') {
-			if($this->checkMapLockExists($printErr) && is_readable($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock')) {
-				return TRUE;
-			} else {
-				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotReadable','MAP='.$this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock'));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkReadable($this->mapLockPath, $printErr);
 	}
 	
 	/**
@@ -454,18 +431,7 @@ class WuiMapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function checkMapLockWriteable($printErr) {
-		if($this->name != '') {
-			if($this->checkMapLockExists($printErr) && is_writeable($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock')) {
-				return TRUE;
-			} else {
-				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotWriteable','MAP='.$this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock'));
-				}
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkWriteable($this->mapLockPath, $printErr);
 	}
 	
 	/**

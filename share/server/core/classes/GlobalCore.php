@@ -540,6 +540,35 @@ class GlobalCore {
 			return false;
 		}
 	}
+
+	public function checkExisting($path, $printErr = true) {
+		if($path != '' && file_exists($path))
+			return true;
+
+		if($printErr)
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The path "[PATH]" does not exist.', Array('PATH' => $path)));
+
+		return false;
+	}
+	
+	public function checkReadable($path, $printErr = true) {
+		if($path != '' && is_readable($path))
+			return true;
+		
+		if($printErr)
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The path "[PATH]" is not readable.', Array('PATH' => $path)));
+		
+		return false;
+	}
+	public function checkWriteable($path, $printErr = true) {
+		if($path != '' && is_writeable($path))
+			return true;
+		
+		if($printErr)
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
+		
+		return false;
+	}
 	
 	/**
 	 * Checks for existing var folder
@@ -549,14 +578,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkVarFolderExists($printErr) {
-		if(file_exists(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::getLang()->getText('varFolderNotExists','PATH~'.self::getMainCfg()->getValue('paths', 'var')));
-			}
-			return FALSE;
-		}
+		return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
 	}
 	
 	/**
@@ -567,14 +589,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkVarFolderWriteable($printErr) {
-		if($this->checkVarFolderExists($printErr) && is_writable(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1)) && @file_exists(self::getMainCfg()->getValue('paths', 'var').'.')) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::getLang()->getText('varFolderNotWriteable','PATH~'.self::getMainCfg()->getValue('paths', 'var')));
-			}
-			return FALSE;
-		}
+		return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
 	}
 	
 	/**
@@ -585,14 +600,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkSharedVarFolderExists($printErr) {
-		if(file_exists(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::getLang()->getText('The shared var folder [PATH] does not exist', Array('PATH' => self::getMainCfg()->getValue('paths', 'sharedvar'))));
-			}
-			return FALSE;
-		}
+		return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
 	}
 	
 	/**
@@ -603,14 +611,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkSharedVarFolderWriteable($printErr) {
-		if($this->checkSharedVarFolderExists($printErr) && is_writable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1)) && @file_exists(self::getMainCfg()->getValue('paths', 'sharedvar').'.')) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', self::getLang()->getText('The shared var folder [PATH] is not writeable', Array('PATH' => self::getMainCfg()->getValue('paths', 'sharedvar'))));
-			}
-			return FALSE;
-		}
+		return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
 	}
 }
 ?>

@@ -123,14 +123,7 @@ class GlobalFileCache {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkCacheFolderWriteable($printErr) {
-		if(is_writeable(dirname($this->cacheFile))) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFolderNotWriteable', Array('FILE' => $this->cacheFile)), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkWriteable(dirname($this->cacheFile), $printErr);
 	}
 	
 	/**
@@ -141,14 +134,7 @@ class GlobalFileCache {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkCacheFileWriteable($printErr) {
-		if(is_writeable($this->cacheFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkWriteable($this->cacheFile, $printErr);
 	}
 	
 	/**
@@ -159,14 +145,7 @@ class GlobalFileCache {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkCacheFileExists($printErr) {
-		if(file_exists($this->cacheFile)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotExists','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkExisting($this->cacheFile, $printErr);
 	}
 	
 	/**
@@ -177,14 +156,7 @@ class GlobalFileCache {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkFileExists($printErr) {
-		if(file_exists($this->file)) {
-			return TRUE;
-		} else {
-			if($printErr == 1) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('fileNotExists','FILE~'.$this->file), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return FALSE;
-		}
+		return GlobalCore::getInstance()->checkExisting($this->file, $printErr);
 	}
 	
 	/**
