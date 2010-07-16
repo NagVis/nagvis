@@ -318,7 +318,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchMapObjects() {
+	public function fetchMapObjects(&$arrMapNames = Array()) {
 		foreach($this->MAPCFG->getValidObjectTypes() AS $type) {
 			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
 				$typeDefs = $this->MAPCFG->getTypeDefaults($type);
@@ -368,9 +368,8 @@ class NagVisMapObj extends NagVisStatefulObject {
 							* When the current map object is a summary object skip the map
 							* child for preventing a loop
 							*/
-							if($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true) {
+							if($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true)
 								continue;
-							}
 
 							/**
 							* This occurs when someone creates a map icon which links to itself
@@ -378,16 +377,24 @@ class NagVisMapObj extends NagVisStatefulObject {
 							* The object will be marked as summary object and is ignored on next level.
 							* See the code above.
 							*/
-							if($this->MAPCFG->getName() == $SUBMAPCFG->getName()) {
+							if($this->MAPCFG->getName() == $SUBMAPCFG->getName())
 								$OBJ->isSummaryObject = true;
-							}
+
+							/**
+               * All maps which were seen before are stored in the list once. If
+							 * they are already in the list skip them to prevent loops.
+							 */
+							if(isset($arrMapNames[$SUBMAPCFG->getName()]))
+								continue;
+
+							// Store this map in the mapNames list
+							$arrMapNames[$SUBMAPCFG->getName()] = true;
 							
 							// Check for indirect loop when the current child is a map object
-							if(!$OBJ->isSummaryObject && !$this->checkLoop($OBJ)) {
+							if(!$this->isPermitted($OBJ))
 								continue;
-							}
 							
-							$OBJ->fetchMapObjects();
+							$OBJ->fetchMapObjects($arrMapNames);
 						break;
 						case 'shape':
 							$OBJ = new NagVisShape($this->CORE, $objConf['icon']);
@@ -439,44 +446,23 @@ class NagVisMapObj extends NagVisStatefulObject {
 	}
 	
 	/**
-	 * PRIVATE checkLoop()
+	 * PRIVATE isPermitted()
 	 *
-	 * Checks if there is a loop on the linked maps and submaps.
-	 * Also check for permissions to view the state of the map
+	 * check for permissions to view the state of the map
 	 *
-	 * @param		Object		Map object to check for a loop
-	 * @return	Boolean		True: No Loop, False: Loop
+	 * @param		Object		Map object to check
+	 * @return	Boolean		Permitted/Not permitted
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkLoop($OBJ) {
+	private function isPermitted($OBJ) {
 		// Check for valid permissions
-		if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $OBJ->getName())) {
-			// Loop all objects on the child map to find out if there is a link back 
-			// to this map (loop)
-			//
-			// Can't use OBJ->getMembers() cause they are not created yet
-			foreach($OBJ->MAPCFG->getDefinitions('map') AS $arrChildMap) {
-				if($this->MAPCFG->getName() == $arrChildMap['map_name']) {
-					// Commented out:
-					// The fact of map loops should not be reported anymore. Let's simply
-					// skip the looping objects in summary view.
-					//
-					//new GlobalMessage('WARNING', $this->CORE->getLang()->getText('loopInMapRecursion'));
-					//$OBJ->summary_state = 'UNKNOWN';
-					//$OBJ->summary_output = $this->CORE->getLang()->getText('loopInMapRecursion');
-					
-					return FALSE;
-				}
-			}
-			
-			// This is just a fallback if the above loop is not looped when there
-			// are no child maps on this map
-			return TRUE;
-		} else {
+		if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $OBJ->getName()))
+			return true;
+		else {
 			$OBJ->summary_state = 'UNKNOWN';
 			$OBJ->summary_output = $this->CORE->getLang()->getText('noReadPermissions');
 			
-			return FALSE;
+			return false;
 		}
 	}
 	
