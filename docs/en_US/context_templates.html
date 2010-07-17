@@ -83,6 +83,7 @@
 		<tr><td>[address]</td><td>Address of the host configured in Nagios</td></tr>
 		<tr><td>[pnp_hostname]</td><td>Hostname with replaced blanks for links to PNP (<font color="#ff0000">New in 1.5</font>)</td></tr>
 		</table>
+
 		<h3>Service objects</h3>
 		<table style="width:100%">
 		<tr>
@@ -90,6 +91,11 @@
 		</tr>
 		<tr><td>[service_description]</td><td>Service description in Nagios</td></tr>
 		<tr><td>[pnp_service_description]</td><td>Service description with replaced blanks for links to PNP (<font color="#ff0000">New in 1.5</font>)</td></tr>
+
 		</table>
+		<h3>Host- and Servicegroup objects</h3>
+		The section macros <code>&lt;!-- BEGIN hostgroup --></code> and <code>&lt;!-- BEGIN servicegroup --></code>
+    exist to make special template code for hostgroup and servicegroup contextmenus possible. Both don't bring any
+    special object specific macros with them (<font color="#ff0000">New in 1.5</font>).
 	</body>
 </html>
