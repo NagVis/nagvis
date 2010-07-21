@@ -527,7 +527,7 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE),
-				'alivehost' => Array('must' => 0,
+				'statushost' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_STRING_NO_SPACE_EMPTY),

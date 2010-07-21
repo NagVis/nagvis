@@ -378,26 +378,26 @@ class CoreBackendMgmt {
 	}
 
 	/**
-	 * Checks if a backend host is alive using status
+	 * Checks if a backend host is status using status
    * information from another backend
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function backendAlive($backendId, $aliveHost) {
-		list($aliveBackend, $aliveHost) = explode(':', $aliveHost, 2);
+	private function backendAlive($backendId, $statusHost) {
+		list($statusBackend, $statusHost) = explode(':', $statusHost, 2);
 
-		if($aliveBackend == $backendId)
-			$this->aError[$backendId] = new BackendConnectionProblem($this->CORE->getLang()->getText('Configuration Error: The aliveHost ([ALIVEHOST]) is in same backend as the one to check.', Array('ALIVEHOST' => $aliveHost)));
+		if($tatackend == $backendId)
+			$this->aError[$backendId] = new BackendConnectionProblem($this->CORE->getLang()->getText('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', Array('STATUSHOST' => $statusHost)));
 		
 		try {
 			$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-			$aObjs = Array($aliveHost => Array(new NagVisHost($this->CORE, $this, $aliveBackend, $aliveHost)));
-			$aCounts = $this->getBackend($aliveBackend)->getHostState($aObjs, 1, $filters);
+			$aObjs = Array($statusHost => Array(new NagVisHost($this->CORE, $this, $statusBackend, $statusHost)));
+			$aCounts = $this->getBackend($statusBackend)->getHostState($aObjs, 1, $filters);
 		} catch(BackendException $e) {
 			return true;
 		}
 		
-		if($aCounts[$aliveHost]['state'] == 'UP')
+		if($aCounts[$statusHost]['state'] == 'UP')
 			return true;
 		else
 			return false;
@@ -412,7 +412,7 @@ class CoreBackendMgmt {
 	private function initializeBackend($backendId) {
 		if($this->checkBackendExists($backendId, true)) {
 			/**
-			 * The alive host can be used to prevent annoying timeouts when a backend is not
+			 * The status host can be used to prevent annoying timeouts when a backend is not
 			 * reachable. This is only useful in multi backend setups.
 			 *
 			 * It works as follows: The assumption is that there is a "local" backend which
@@ -421,9 +421,9 @@ class CoreBackendMgmt {
 			 * When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
 			 * try to connect to the backend anymore until the backend host gets available again.
 			 */
-      $aliveHost = $this->CORE->getMainCfg()->getValue('backend_' . $backendId, 'alivehost');
-      if($aliveHost != '' && !$this->backendAlive($backendId, $aliveHost)) {
-				$this->aError[$backendId] = new BackendConnectionProblem($this->CORE->getLang()->getText('The backend is reported as dead by the aliveHost ([ALIVEHOST]).', Array('ALIVEHOST' => $aliveHost)));
+      $statusHost = $this->CORE->getMainCfg()->getValue('backend_' . $backendId, 'statushost');
+      if($statusHost != '' && !$this->backendAlive($backendId, $statusHost)) {
+				$this->aError[$backendId] = new BackendConnectionProblem($this->CORE->getLang()->getText('The backend is reported as dead by the statusHost ([STATUSHOST]).', Array('STATUSHOST' => $statusHost)));
 				return false;
 			}
 			
