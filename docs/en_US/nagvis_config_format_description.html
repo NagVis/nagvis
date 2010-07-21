@@ -384,6 +384,20 @@ socket="unix:/usr/local/nagios/var/rw/live"
 		<td> backendtype </td><td>mklivestatus</td><td> type of backend - MUST be set </td>
 		</tr>
 		<tr>
+			<td>alivehost</td><td>&nbsp;</td>
+			<td><p>The alive host can be used to prevent annoying timeouts when a backend is not
+             reachable. This is only useful in multi backend setups.</p>
+       		<p>It works as follows: The assumption is that there is a "local" backend which
+       			 monitors the host of the "remote" backend. When the remote backend host is
+       			 reported as UP the backend is queried as normal.</p>
+       		<p>When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
+       			 try to connect to the backend anymore until the backend host gets available again.</p>
+					<p>The alivehost needs to be given in the following format: &quot;&lt;backend_id>:&lt;hostname>&quot;
+              -> e.g. &quot;live_2:nagios&quot;</p>
+					<p>The host needs to be in another backend than the current one to work correctly.</p>
+			</td>
+		</tr>
+		<tr>
 		<td> htmlcgi </td><td> /nagios/cgi-bin </td><td> Path to the cgi-bin directory of this backend (interesting for multiple backends) </td>
 		</tr>
 		<tr>

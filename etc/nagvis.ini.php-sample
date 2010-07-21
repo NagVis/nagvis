@@ -263,6 +263,18 @@
 ; The path /usr/local/nagios/var/rw has to exist
 [backend_live_1]
 backendtype="mklivestatus"
+; The alive host can be used to prevent annoying timeouts when a backend is not
+; reachable. This is only useful in multi backend setups.
+; 
+; It works as follows: The assumption is that there is a "local" backend which
+; monitors the host of the "remote" backend. When the remote backend host is
+; reported as UP the backend is queried as normal.
+; When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
+; try to connect to the backend anymore until the backend host gets available again.
+; 
+; The alivehost needs to be given in the following format:
+;   "<backend_id>:<hostname>" -> e.g. "live_2:nagios"
+;alivehost=""
 ;socket="unix:/usr/local/nagios/var/rw/live"
 
 ; Example definition for a MySQL backend
@@ -270,6 +282,18 @@ backendtype="mklivestatus"
 [backend_ndomy_1]
 ; type of backend - MUST be set
 backendtype="ndomy"
+; The alive host can be used to prevent annoying timeouts when a backend is not
+; reachable. This is only useful in multi backend setups.
+; 
+; It works as follows: The assumption is that there is a "local" backend which
+; monitors the host of the "remote" backend. When the remote backend host is
+; reported as UP the backend is queried as normal.
+; When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
+; try to connect to the backend anymore until the backend host gets available again.
+; 
+; The alivehost needs to be given in the following format:
+;   "<backend_id>:<hostname>" -> e.g. "live_2:nagios"
+;alivehost=""
 ; hostname for NDO-db
 ;dbhost="localhost"
 ; portname for NDO-db
