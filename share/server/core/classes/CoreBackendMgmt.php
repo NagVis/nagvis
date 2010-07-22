@@ -386,7 +386,7 @@ class CoreBackendMgmt {
 	private function backendAlive($backendId, $statusHost) {
 		list($statusBackend, $statusHost) = explode(':', $statusHost, 2);
 
-		if($tatackend == $backendId)
+		if($statusBackend == $backendId)
 			$this->aError[$backendId] = new BackendConnectionProblem($this->CORE->getLang()->getText('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', Array('STATUSHOST' => $statusHost)));
 		
 		try {
