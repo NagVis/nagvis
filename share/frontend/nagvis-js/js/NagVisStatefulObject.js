@@ -500,7 +500,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 		setPerfdata[3] = Array('dummyActualOut', 99.99, 'mB/s', 850, 980, 0, 1000);
 		
 		// Get the fill color depending on the object state
-
 		switch (this.conf.summary_state) {
 	    case 'UNREACHABLE':
 			case 'DOWN':
@@ -518,9 +517,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 			break;
 	  }
 
-		// Adjust fill color based on perfdata
+		// Adjust fill color based on perfdata for weathermap lines
 		if(this.conf.line_type == 13 || this.conf.line_type == 14) {
-
 			colorFill = '#000000';
 			colorFill2 = '#000000';
 
@@ -544,9 +542,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 				if(this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut'))
 					msg += " value 3 is \'" + setPerfdata[2][1] + "\' value 4 is \'" + setPerfdata[3][1] + "\'";
 				
-				frontendMessage({'type': 'WARNING', 'title': 'Data error', 'message': msg});
+				this.conf.summary_output += ' (Weathermap Line Error: ' + msg + ')'
 			} else {
 				// This is the correct place to handle other perfdata format than the percent value
+				// When no UOM is set try to calculate something...
 				if(setPerfdata[0][2] === null || setPerfdata[0][2] === ''
            || setPerfdata[1][2] === null || setPerfdata[1][2] === '') {
 					setPerfdata = this.calculatePercentageUsage(setPerfdata);
