@@ -5,18 +5,6 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>
   <body>
-		<h1>Automap Configuration</h1>
-	</body>
-</html>
-
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
- <head>
-  <title>Map configuration format description</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
- </head>
- <body>
 		<h1>Automap configuration format description</h1>
 		
 		<h2>General Information</h2>
@@ -142,6 +130,19 @@
 		<tr>
 		<td>label_style</td><td></td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
 		</tr>
+
+		<tr>
+		<td> line_type </td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+		<td>line_arrow</td><td>forward</td>
+		<td>This defines the arrows at the end of the line. At the moment this
+        attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
+		</tr>
+		<tr>
+		<td>line_width</td><td>3</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+		</tr>
+
 		<tr>
 		<td> only_hard_states </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
 		</tr>

@@ -109,7 +109,16 @@ class NagVisHost extends NagiosHost {
 			foreach($this->getChildsAndParents() As $OBJ) {
 				if(is_object($OBJ)) {
 					$strReturn .= $OBJ->parseGraphviz($layer+1, $arrHostnamesParsed);
-					$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [color=black, decorate=1, style=solid, weight=2 ];'."\n ";
+
+					// Add the line to visualize the direction
+					$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [';
+					$strReturn .= 'color=black, ';
+					$strReturn .= 'decorate=1, ';
+					$strReturn .= 'style=solid, ';
+						if($this->line_arrow != 'none')
+						$strReturn .= 'dir='.$this->line_arrow.', ';
+					$strReturn .= 'weight=2 ';
+					$strReturn .= ' ];'."\n ";
 				}
 			}
 		}
