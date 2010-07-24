@@ -85,7 +85,7 @@ class NagVisAutoMap extends GlobalMap {
 		foreach($params AS $set) {
 			$arrSet = explode('=',$set);
 			// Only load default option when the option has not been set before
-			if(!isset($prop[$arrSet[0]])) {
+			if(!isset($prop[$arrSet[0]]) || $prop[$arrSet[0]] == '') {
 				$prop[$arrSet[0]] = $arrSet[1];
 			}
 		}
