@@ -209,9 +209,11 @@ var NagVisStatefulObject = NagVisObject.extend({
     
     // Append child to map and save reference in parsedObject
 		var oMap = document.getElementById('map');
-		this.parsedObject = oMap.appendChild(oContainerDiv);
+		if(oMap) {
+			this.parsedObject = oMap.appendChild(oContainerDiv);
+			oMap = null;
+		}
 		oContainerDiv = null;
-		oMap = null;
 	},
 	
 	/**
@@ -265,9 +267,11 @@ var NagVisStatefulObject = NagVisObject.extend({
     
     // Append child to map and save reference in parsedObject
 		var oMap = document.getElementById('map');
-		this.parsedObject = oMap.appendChild(oContainerDiv);
+		if(oMap) {
+			this.parsedObject = oMap.appendChild(oContainerDiv);
+			oMap = null;
+		}
 		oContainerDiv = null;
-		oMap = null;
 		
 		if(this.conf.view_type && this.conf.view_type == 'line') {
 			this.drawLine();
