@@ -380,10 +380,15 @@ function coordsToGrid(x, y) {
 }
 
 function saveObjectAfterMoveAndDrop(oObj) {
-	var borderWidth = 3;
-	
 	// Reset z-index to configured value
 	oObj.setZ(oObj.defz);
+	
+	// Split id to get object information
+	var arr = oObj.name.split('_');
+
+	var borderWidth = 3;
+	if(arr[1] == 'label')
+			borderWidth = 0;
 	
 	// When x or y are negative just return this and make no change
 	if((oObj.y - getHeaderHeight() + borderWidth) < 0 || oObj.x < 0) {
@@ -401,9 +406,6 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		var coords = coordsToGrid(oObj.x + borderWidth, oObj.y - getHeaderHeight() + borderWidth);
 		oObj.moveTo(coords[0] - borderWidth, coords[1] + getHeaderHeight() - borderWidth);
 	}
-	
-	// Split id to get object information
-	var arr = oObj.name.split('_');
 	
 	// Handle different ojects (Normal icons and labels)
 	var type, id , url;
@@ -423,8 +425,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			objY += getHeaderHeight();
 			
 			// +3: Is the borderWidth of the object highlighting
-			x = oObj.x - objX + 3;
-			y = oObj.y - objY + 3;
+			x = oObj.x - objX + borderWidth;
+			y = oObj.y - objY + borderWidth;
 			
 			// Add + sign to mark relative positive coords (On negative relative coord
 			// the - sign is added automaticaly
@@ -448,8 +450,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		id = arr[2];
 
 		// +3: Is the borderWidth of the object highlighting
-		x = oObj.x + 3;
-		y = oObj.y - getHeaderHeight() + 3;
+		x = oObj.x + borderWidth;
+		y = oObj.y - getHeaderHeight() + borderWidth;
 
 		// Don't forget to substract height of header menu
 		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y;
