@@ -84,7 +84,12 @@ function selectmouse(e) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function popupWindowClose() {
-	document.body.removeChild(document.getElementById('popupWindow'));
+	var w = document.getElementById('popupWindow');
+	
+	if(w) {
+		document.body.removeChild(w);
+		w = null;
+	}
 }
 
 function popupWindowRefresh() {
@@ -138,17 +143,17 @@ function popupWindowPutContent(oContent) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function popupWindow(title, oContent, openOnMousePosition, sWidth) {
-	if(oContent === null || oContent.code === null) {
+	if(oContent === null || oContent.code === null)
 		return false;
-	}
 	
-	if(typeof openOnMousePosition === 'undefined') {
+	if(typeof openOnMousePosition === 'undefined')
 		openOnMousePosition = true;
-	}
 	
-	if(typeof sWidth === 'undefined' || sWidth === null) {
+	if(typeof sWidth === 'undefined' || sWidth === null)
 		sWidth = '';
-	}
+
+	// Maybe some other window is still open. Close it now
+	popupWindowClose();
 
 	// Default window position
 	var posX = 100;
