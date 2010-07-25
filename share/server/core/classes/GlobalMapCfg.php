@@ -1161,7 +1161,7 @@ class GlobalMapCfg {
 						'default' => 10,
 						'match' => MATCH_INTEGER),
 					'line_type' => Array('must' => 1,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_LINE_TYPE,
 						'field_type' => 'dropdown'),
 					'line_width' => Array('must' => 0,
 						'default' => '3',
