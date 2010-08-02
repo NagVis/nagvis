@@ -145,11 +145,8 @@ function contextShow(event) {
 		// Only the object id is interesing so remove the other contents
 		// like -icon or -line. Simply split the string by - and take the
 		// first element
-		if(id.indexOf('-') !== -1) {
-			var aId = id.split("-");
-			id = aId[0];
-			aId = null;
-		}
+		if(id.indexOf('-') !== -1)
+			id = id.substr(0, id.lastIndexOf('-'));
 		
 		var contextMenu = document.getElementById(id+'-context');
 
