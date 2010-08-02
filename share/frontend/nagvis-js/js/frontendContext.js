@@ -152,7 +152,7 @@ function contextShow(event) {
 
 		// Maybe there is no context menu defined for one object?
 		if(contextMenu === null) {
-			eventlog("context", "error", "Found no context menu wit the id \""+id+"-context\"");
+			eventlog('context', 'error', 'Found no context menu wit the id "'+id+'-context"');
 			
 			_replaceContext = false;
 			return false;

@@ -25,12 +25,13 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-var oSeverity = {};
-oSeverity.debug = 4;
-oSeverity.info = 3;
-oSeverity.warning = 2;
-oSeverity.critical = 1;
-
+var oSeverity = {
+	'debug':    4,
+	'info':     3,
+	'warning':  2,
+	'critical': 1,
+	'error':    1,
+};
 
 function eventlogToggle() {
 	var oLog = document.getElementById('eventlog');
@@ -112,6 +113,11 @@ function eventlog(sComponent, sSeverity, sText) {
 			eventlogInitialize();
 			eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
 			oEventlog = document.getElementById('eventlog');
+		}
+
+		if(typeof oSeverity[sSeverity] === 'undefined') {
+			eventlog('eventlog', 'error', 'Unknown severity used, skipping: '+sSeverity+' '+sComponent+': '+sText)
+			oEventlog = null;
 		}
 		
 		if(oSeverity[sSeverity] <= oSeverity[oPageProperties.event_log_level]) {
