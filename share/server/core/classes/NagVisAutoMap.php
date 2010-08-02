@@ -29,6 +29,7 @@ class NagVisAutoMap extends GlobalMap {
 	public $MAPOBJ;
 	private $BACKEND;
 	
+	private $options;
 	private $preview;
 	
 	private $name;
@@ -90,100 +91,73 @@ class NagVisAutoMap extends GlobalMap {
 			}
 		}
 
-		// Set the preview option
-		if(isset($prop['preview']) && $prop['preview'] != '') {
-			$this->preview = $prop['preview'];
-		} else {
-			$this->preview = 0;
-		}
+		// Set default preview option
+		if(!isset($prop['preview']) || $prop['preview'] == '')
+			$prop['preview'] = 0;
+
+		$this->preview = $prop['preview'];
 		
 		// Do the preflight checks
 		$this->checkPreflight();
 		
-		if(isset($prop['backend']) && $prop['backend'] != '') {
-			$this->backend_id = $prop['backend'];
-		} else {
-			$this->backend_id = $this->CORE->getMainCfg()->getValue('defaults', 'backend');
-		}
+		if(!isset($prop['backend']) || $prop['backend'] == '')
+			$prop['backend'] = $this->CORE->getMainCfg()->getValue('defaults', 'backend');
+
+		$this->backend_id = $prop['backend'];
 		
 		/**
 		 * This is the name of the root host, user can set this via URL. If no
 		 * hostname is given NagVis tries to take configured host from main
 		 * configuration or read the host which has no parent from backend
 		 */
-		if(isset($prop['root']) && $prop['root'] != '') {
-			$this->root = $prop['root'];
-		}else {
-			$this->root = $this->getRootHostName();
-		}
+		if(!isset($prop['root']) || $prop['root'] == '')
+			$prop['root'] = $this->getRootHostName();
 		
 		/**
 		 * This is for compatibility to old the old parent layer limitation
 		 * FIXME: May be removed in 1.6
 		 */
-		if(isset($prop['maxLayers']) && $prop['maxLayers'] != '') {
+		if(isset($prop['maxLayers']) && $prop['maxLayers'] != '')
 			$prop['childLayers'] = $prop['maxLayers'];
-		}
 		
 		/**
 		 * This sets how many child layers should be displayed. Default value is -1,
 		 * this means no limitation.
 		 */
-		if(isset($prop['childLayers']) && $prop['childLayers'] != '') {
-			$this->childLayers = $prop['childLayers'];
-		} else {
-			$this->childLayers = -1;
-		}
+		if(!isset($prop['childLayers']) || $prop['childLayers'] == '')
+			$prop['childLayers'] = -1;
 		
 		/**
 		 * This sets how many parent layers should be displayed. Default value is 
 		 * -1, this means no limitation.
 		 */
-		if(isset($prop['parentLayers']) && $prop['parentLayers'] != '') {
-			$this->parentLayers = $prop['parentLayers'];
-		} else {
-			$this->parentLayers = 0;
-		}
+		if(!isset($prop['parentLayers']) || $prop['parentLayers'] == '')
+			$prop['parentLayers'] = 0;
+		if(!isset($prop['renderMode']) || $prop['renderMode'] == '')
+			$prop['renderMode'] = 'undirected';
+		if(!isset($prop['width']) || $prop['width'] == '')
+			$prop['width'] = 1024;
+		if(!isset($prop['height']) || $prop['height'] == '')
+			$prop['height'] = 786;
+		if(!isset($prop['ignoreHosts']) || $prop['ignoreHosts'] == '')
+			$prop['ignoreHosts'] = '';
+		if(!isset($prop['filterGroup']) || $prop['filterGroup'] == '')
+			$prop['filterGroup'] = '';
+		if(!isset($prop['filterByState']) || $prop['filterByState'] == '')
+			$prop['filterByState'] = '';
+
+		// Store properties in object
+		$this->options = $prop;
 		
-		/**
-		 * The renderMode can be set via URL, if none is given NagVis takes the "tree"
-		 * mode
-		 */
-		if(isset($prop['renderMode']) && $prop['renderMode'] != '') {
-			$this->renderMode = $prop['renderMode'];
-		} else {
-			$this->renderMode = 'undirected';
-		}
-		
-		if(isset($prop['width']) && $prop['width'] != '') {
-			$this->width = $prop['width'];
-		} else {
-			$this->width = 1024;
-		}
-		
-		if(isset($prop['height']) && $prop['height'] != '') {
-			$this->height = $prop['height'];
-		} else {
-			$this->height = 786;
-		}
-		
-		if(isset($prop['ignoreHosts']) && $prop['ignoreHosts'] != '') {
-			$this->ignoreHosts = explode(',', $prop['ignoreHosts']);
-		} else {
-			$this->ignoreHosts = Array();
-		}
-		
-		if(isset($prop['filterGroup']) && $prop['filterGroup'] != '') {
-			$this->filterGroup = $prop['filterGroup'];
-		} else {
-			$this->filterGroup = '';
-		}
-		
-		if(isset($prop['filterByState']) && $prop['filterByState'] != '') {
-			$this->filterByState = $prop['filterByState'];
-		} else {
-			$this->filterByState = '';
-		}
+		$this->root = $prop['root'];
+		$this->childLayers = $prop['childLayers'];
+		$this->parentLayers = $prop['parentLayers'];
+		$this->ignoreHosts = explode(',', $prop['ignoreHosts']);
+		$this->renderMode = $prop['renderMode'];
+		$this->width = $prop['width'];
+		$this->height = $prop['height'];
+		$this->filterGroup = $prop['filterGroup'];
+		$this->filterByState = $prop['filterByState'];
 		
 		// Get "root" host object
 		$this->fetchHostObjectByName($this->root);
@@ -794,6 +768,14 @@ class NagVisAutoMap extends GlobalMap {
 		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration($hostName));
 		$hostObject->setObjectId(0);
 		$this->rootObject = $hostObject;
+	}
+
+	/**
+	 * Returns an array of real applied options of this map
+	 *
+	 */
+	public function getOptions() {
+		return $this->options;
 	}
 }
 ?>
