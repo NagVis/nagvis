@@ -65,58 +65,48 @@ function contextMouseDown(event) {
 	var id = -1;
 
 	// IE is evil and doesn't pass the event object
-	if (event === null || typeof event === 'undefined') {
+	if(event === null || typeof event === 'undefined')
 		event = window.event;
-	}
 	
 	// we assume we have a standards compliant browser, but check if we have IE
-	if(typeof event.target != 'undefined' && event.target !== null) {
+	if(typeof event.target != 'undefined' && event.target !== null)
 		target = event.target;
-	} else {
+	else
 		target = event.srcElement;
-	}
 	
 	// Workaround for the different structure of targets on lines/icons
   // Would be nice to fix the structure
 	// For example needed by the WUI contextMenu links
 	var oNode = target;
-	while(oNode.parentNode !== null && (typeof oNode.id === 'undefined' || oNode.id === '')) {
+	while(oNode.parentNode !== null && (typeof oNode.id === 'undefined' || oNode.id === ''))
 		oNode = oNode.parentNode;
-	}
 	
-	if(typeof oNode.id !== 'undefined' && oNode.id !== '') {
+	if(typeof oNode.id !== 'undefined' && oNode.id !== '')
 		id = oNode.id;
-	}
 	oNode = null;
 	
 	//document.getElementById('box_host_0').appendChild(document.createTextNode("click: "+id+"\n"));
 	// Hide all context menus except clicking the current open context menu
-	if(id === -1 || id.indexOf('http:') === -1 && id.indexOf('-context') === -1) {
-		// Hide all context menus
+	if(id === -1 || id.indexOf('http:') === -1 && id.indexOf('-context') === -1)
 		contextHide();
-	}
 	
 	// only show the context menu if the right mouse button is pressed on the obj
-	if(event.button === 2) {
-		// Prepare to show the context menu
+	if(event.button === 2)
 		_replaceContext = true;
-	}
 }
 
 function contextShow(event) {
 	var target;
 	
 	// IE is evil and doesn't pass the event object
-	if (event === null || typeof event === 'undefined') {
+	if (event === null || typeof event === 'undefined')
 		event = window.event;
-	}
 	
 	// we assume we have a standards compliant browser, but check if we have IE
-	if(typeof event.target != 'undefined' && event.target !== null) {
+	if(typeof event.target != 'undefined' && event.target !== null)
 		target = event.target;
-	} else {
+	else
 		target = event.srcElement;
-	}
 	
 	if(_replaceContext) {
     // Hide hover menu
@@ -132,9 +122,8 @@ function contextShow(event) {
 		// id from a parent element
 		if(typeof target.id == 'undefined' || target.id == '') {
 			// Take the first parent
-			if(target.parentNode != null && typeof target.parentNode.id != 'undefined' && target.parentNode.id !== '') {
+			if(target.parentNode != null && typeof target.parentNode.id != 'undefined' && target.parentNode.id !== '')
 				target = target.parentNode;
-			}
 			
 			// At the moment there is no need to loop more layers. Maybe this is
 			// needed in the future?
@@ -143,9 +132,8 @@ function contextShow(event) {
 		// Workaround for the different structure of targets on lines/icons
 		// Would be nice to fix the structure
 		var id;
-		if(target.id !== '') {
+		if(target.id !== '')
 			id = target.id;
-		}
 
 		if(typeof id === 'undefined') {
 			eventlog("context", "error", "Target object search had no id");

@@ -208,6 +208,8 @@ class CoreModGeneral extends CoreModule {
 			unset($arr[0]['type']);
 			unset($arr[0]['object_id']);
 			$OBJ->setConfiguration($arr[0]);
+
+			$OBJ->setObjectId($arrObjId[$i]);
 			
 			if($arrType[$i] != 'automap')
 				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
