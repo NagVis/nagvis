@@ -255,8 +255,10 @@ var NagVisObject = Base.extend({
 			}
 			
 			// Add the hover menu functionality to the object
-			oObj.onmouseover = function() { var sT = sTemplateCode; var iH = iHoverDelay; displayHoverMenu(sT, iH); sT = null; iH = null; };
-			oObj.onmouseout = function() { hideHoverMenu(); };
+			if(oObj) {
+				oObj.onmouseover = function() { var sT = sTemplateCode; var iH = iHoverDelay; displayHoverMenu(sT, iH); sT = null; iH = null; };
+				oObj.onmouseout = function() { hideHoverMenu(); };
+			}
 		}
 		
 		oObj = null;
