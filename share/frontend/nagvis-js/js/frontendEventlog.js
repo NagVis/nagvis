@@ -119,7 +119,7 @@ function eventlog(sComponent, sSeverity, sText) {
 			eventlog('eventlog', 'error', 'Unknown severity used, skipping: '+sSeverity+' '+sComponent+': '+sText)
 			oEventlog = null;
 		}
-		
+
 		if(oSeverity[sSeverity] <= oSeverity[oPageProperties.event_log_level]) {
 			// When the message limit is reached truncate the first log entry
 			// 24 lines is the current limit

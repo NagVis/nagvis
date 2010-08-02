@@ -1848,11 +1848,11 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		parseHoverMenus(aMapObjects);
 		
 		// Bulk get all context templates which are needed on the overview page
-		eventlog("worker", "aMapObjects", "Fetching context templates");
+		eventlog("worker", "debug", "Fetching context templates");
 		getContextTemplates(aMapObjects);
 		
 		// Assign the context templates to the objects and parse them
-		eventlog("worker", "info", "Parse context menus");
+		eventlog("worker", "debug", "Parse context menus");
 		parseContextMenus(aMapObjects);
 		
 		eventlog("worker", "info", "Finished parsing overview");
