@@ -546,7 +546,7 @@ class GlobalCore {
 			return true;
 
 		if($printErr)
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The path "[PATH]" does not exist.', Array('PATH' => $path)));
+			new GlobalMessage('ERROR', $this->getLang()->getText('The path "[PATH]" does not exist.', Array('PATH' => $path)));
 
 		return false;
 	}
@@ -556,7 +556,7 @@ class GlobalCore {
 			return true;
 		
 		if($printErr)
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The path "[PATH]" is not readable.', Array('PATH' => $path)));
+			new GlobalMessage('ERROR', $this->getLang()->getText('The path "[PATH]" is not readable.', Array('PATH' => $path)));
 		
 		return false;
 	}
@@ -565,7 +565,7 @@ class GlobalCore {
 			return true;
 		
 		if($printErr)
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
+			new GlobalMessage('ERROR', $this->getLang()->getText('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
 		
 		return false;
 	}
