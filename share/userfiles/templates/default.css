@@ -43,8 +43,6 @@ img {border:0}
 .main {margin:0;padding:0;background-color:white;color:black}
 .header {top:0;left:0;padding:0}
 .map {position:relative;top:0;left:0}
-#overDiv {position:absolute;visibility:hidden;z-index:1000;width:auto}
-#overDiv table {width:auto}
 
 /* Welcome page */
 div.welcome {padding:20px;width:600px}

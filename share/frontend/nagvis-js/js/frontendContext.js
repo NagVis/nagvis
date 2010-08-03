@@ -110,7 +110,7 @@ function contextShow(event) {
 	
 	if(_replaceContext) {
     // Hide hover menu
-		hideHoverMenu();
+		hoverHide();
 		
 		// document.body.scrollTop does not work in IE
 		var scrollTop = document.body.scrollTop ? document.body.scrollTop :

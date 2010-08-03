@@ -341,25 +341,9 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	return replaceHoverTemplateDynamicMacros(replaceChild, oObj, replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode));
 }
 
-function displayHoverMenu(sHoverCode, iHoverDelay) {
+function displayHoverMenu(e, objId, iHoverDelay) {
 	// Only show up hover menu when no context menu is opened
-	if(contextOpen() === false) {
-		// Change cursor to "hand" when displaying hover menu
-		document.body.style.cursor = 'pointer';
-		
-		// Everything seems ok, display the hover menu
-		overlib(sHoverCode, WRAP, VAUTO, DELAY, iHoverDelay*1000);
-	}
-}
-
-/**
- * Hides/Closes the hover menu 
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function hideHoverMenu() {
-	// Change cursor to auto when hiding hover menu
-	document.body.style.cursor = 'auto';
-	
-	return nd();
+	// FIXME: Re-implement the delay
+	if(!contextOpen())
+		hoverShow(e, objId);
 }

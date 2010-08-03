@@ -328,19 +328,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseHoverMenu: function () {
-		var oObj;
-		
-		// Get the object to apply the hover menu to
-		if(this.conf.view_type && this.conf.view_type === 'line') {
-			oObj = document.getElementById(this.conf.object_id+'-linelinkdiv');
-		} else {
-			oObj = document.getElementById(this.conf.object_id+'-icon');
-		}
-		
-		// Create hover menu
-		this.getHoverMenu(oObj);
-		
-		oObj = null;
+		if(this.conf.view_type && this.conf.view_type === 'line')
+			this.getHoverMenu(this.conf.object_id+'-linelinkdiv');
+		else
+			this.getHoverMenu(this.conf.object_id+'-icon');
 	},
 	
 	/**

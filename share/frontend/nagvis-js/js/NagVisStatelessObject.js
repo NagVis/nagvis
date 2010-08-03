@@ -34,7 +34,6 @@ var NagVisStatelessObject = NagVisObject.extend({
 	},
 	
 	remove: function () {
-		var oMap = document.getElementById('map');
 		if(this.parsedObject) {
 			// Remove event listeners
 			var oObj;
@@ -48,11 +47,14 @@ var NagVisStatelessObject = NagVisObject.extend({
 			}
 			
 			// Remove object from DOM
-			oMap.removeChild(this.parsedObject);
+			var oMap = document.getElementById('map');
+			if(oMap) {
+				oMap.removeChild(this.parsedObject);
+				oMap = null;
+			}
 			
 			// Remove object reference
 			this.parsedObject = null;
 		}
-		oMap = null;
 	}
 });

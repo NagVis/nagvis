@@ -883,13 +883,13 @@ cmp_js() {
 	cmp ExtBase.js
 	cmp frontendMessage.js
 	cmp frontendEventlog.js
+	cmp frontendHover.js
 	cmp hover.js
 	cmp frontendContext.js
 	cmp ajax.js
 	cmp dynfavicon.js
 	cmp frontend.js
 	cmp lines.js
-	cmp overlib.js
 	cmp NagVisObject.js
 	cmp NagVisStatefulObject.js
 	cmp NagVisStatelessObject.js
