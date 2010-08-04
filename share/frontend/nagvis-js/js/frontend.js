@@ -36,6 +36,23 @@ var oAutomapParams = {};
 var bBlockUpdates = false;
 
 /**
+ * Returns the current height of the header menu
+ */
+function getHeaderHeight() {
+	var ret = 0;
+	
+	// FIXME: Check if header is shown
+	
+	var oHeader = document.getElementById('header');
+	if(oHeader) {
+		ret = oHeader.clientHeight;
+		oHeader = null;
+	}
+	
+	return ret;
+}
+
+/**
  * submitFrontendForm()
  *
  * Submits a form in the frontend using ajax without reloading the page

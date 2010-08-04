@@ -501,23 +501,6 @@ function getRandom(min, max) {
 	return min + parseInt(Math.random() * (max-min+1), 0);
 }
 
-/**
- * Returns the current height of the header menu
- */
-function getHeaderHeight() {
-	var ret = 0;
-	
-	// FIXME: Check if header is shown
-	
-	var oHeader = document.getElementById('header');
-	if(oHeader) {
-		ret = oHeader.clientHeight;
-		oHeader = null;
-	}
-	
-	return ret;
-}
-
 function cloneObject(what) {
 	var o;
 	var i;
