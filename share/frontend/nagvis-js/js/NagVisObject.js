@@ -278,10 +278,7 @@ var NagVisObject = Base.extend({
 			}
 			
 			hoverMenu.setAttribute('class', 'hover');
-			hoverMenu.setAttribute('className', 'hover');
 			hoverMenu.style.display = 'none';
-			hoverMenu.style.position = 'absolute';
-			hoverMenu.style.overflow = 'visible';
 			
 			// Append template code to hover menu div
 			hoverMenu.innerHTML = sTemplateCode;
