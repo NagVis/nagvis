@@ -161,8 +161,7 @@ function contextShow(event) {
 		// hide the menu first to avoid an "up-then-over" visual effect
 		contextMenu.style.display = 'none';
 		contextMenu.style.left = event.clientX + scrollLeft + 'px';
-		// Need to corrent the position by 30px in IE & FF. Don't know why...
-		contextMenu.style.top = event.clientY + scrollTop - 30 + 'px';
+		contextMenu.style.top = event.clientY + scrollTop - getHeaderHeight() + 'px';
 		contextMenu.style.display = '';
 		
 		// Check if the context menu is "in screen".

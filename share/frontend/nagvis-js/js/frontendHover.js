@@ -63,7 +63,7 @@ function hoverShow(event, id) {
 	// Hide all other hover menus
 	hoverHide();
 
-	var hoverSpacer = 20;
+	var hoverSpacer = 5;
 
 	// document.body.scrollTop does not work in IE
 	var scrollTop = document.body.scrollTop ? document.body.scrollTop :
@@ -84,8 +84,8 @@ function hoverShow(event, id) {
 
 	// hide the menu first to avoid an "up-then-over" visual effect
 	hoverMenu.style.display = 'none';
-	hoverMenu.style.left = event.clientX + scrollLeft + 'px';
-	hoverMenu.style.top = event.clientY + scrollTop - hoverSpacer + 'px';
+	hoverMenu.style.left = event.clientX + scrollLeft + hoverSpacer + 'px';
+	hoverMenu.style.top = event.clientY + scrollTop + hoverSpacer - getHeaderHeight() + 'px';
 	hoverMenu.style.display = '';
 
 	// Check if the context menu is "in screen".

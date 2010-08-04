@@ -124,24 +124,6 @@ function gridParse() {
 	}
 }
 
-// FIXME: Maybe move to nagvis-js frontend file to have it available in 
-// regular frontend in the future
-function getHeaderHeight() {
-	var oHeader = null;
-	var ret = 0;
-	
-	// FIXME: Check if header is shown
-	
-	oHeader = document.getElementById('header');
-	if(oHeader !== null) {
-		ret = oHeader.clientHeight;
-	}
-	
-	oHeader = null;
-	
-	return ret;
-}
-
 /**
  * validateValue(oField)
  *

@@ -383,7 +383,7 @@ function getHoverTemplates(aObjs) {
 			oLink.href = oGeneralProperties.path_templates+i+'.hover.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
-			document.body.appendChild(oLink);
+			document.getElementsByTagName("head")[0].appendChild(oLink);
 			oLink = null;
 		}
 	}
@@ -431,7 +431,7 @@ function getContextTemplates(aObjs) {
 			oLink.href = oGeneralProperties.path_templates+sName+'.context.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
-			document.body.appendChild(oLink);
+			document.getElementsByTagName("head")[0].appendChild(oLink);
 			oLink = null;
 		}
 	}
