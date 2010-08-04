@@ -293,12 +293,7 @@ class CoreAuthorisationHandler {
 			$bAutorized = false;
 		}
 		
-		// Authorized?
-		if($bAutorized === true) {
-			return true;
-		} else {
-			return false;
-		}
+		return $bAutorized;
 	}
 }
 ?>
