@@ -549,14 +549,18 @@ var NagVisStatefulObject = NagVisObject.extend({
 				// Get colorFill #1 (in)
 				if(setPerfdata[0][2] !== null && setPerfdata[0][2] == '%' && setPerfdata[0][1] !== null && setPerfdata[0][1] >= 0 && setPerfdata[0][1] <= 100)
 					colorFill = getColorFill(setPerfdata[0][1]);
-				else
+				else {
+					colorFill = '#000000';
 					this.perfdataError('First', setPerfdata[0][1], this.conf.name, this.conf.service_description);
+				}
 				
 				// Get colorFill #2 (out)
 				if(setPerfdata[1][2] !== null && setPerfdata[1][2] == '%' && setPerfdata [1][1] !== null && setPerfdata[1][1] >= 0 && setPerfdata[1][1] <= 100)
 					colorFill2 = getColorFill(setPerfdata[1][1]);
-				else
+				else {
+					colorFill = '#000000';
 					this.perfdataError('Second', setPerfdata[1][1], this.conf.name, this.conf.service_description);
+				}
 			}
 		}
 
@@ -633,9 +637,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	perfdataError: function(type, value, name1, name2) {
-		frontendMessage({'type': 'WARNING',
-		                 'message': type+' set of performance data ('+value+') for  '+name1+' ['+name2+'] is not a percentage value',
-		                 'title': 'Data error'});
+		this.conf.summary_output += ' (Weathermap Line Error: ' + type+' set of performance data ('+value+') for  '+name1+' ['+name2+'] is not a percentage value)';
 	},
 	
 	/**
