@@ -167,6 +167,9 @@ function get_click(newtype,nbclicks,action) {
 }
 
 function printLang(sLang,sReplace) {
+	if(typeof sLang === 'undefined')
+		return '';
+	
 	sLang = sLang.replace(/<(\/|)(i|b)>/ig,'');
 	
 	// sReplace maybe optional
@@ -298,8 +301,7 @@ function get_click_pos(e) {
 			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&show='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
 		
-		// FIXME: Title "+get_label('properties')+"
-		showFrontendDialog(sUrl, 'LABEL');
+		showFrontendDialog(sUrl, printLang(lang['properties'], ''));
 		
 		objid = -1;
 		cpt_clicks = -1;

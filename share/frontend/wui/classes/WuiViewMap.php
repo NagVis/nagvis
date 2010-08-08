@@ -65,7 +65,6 @@ class WuiViewMap {
 				'userName' => $this->CORE->getAuthentication()->getUser(),
 				'mapObjects' => $this->MAP->parseObjects(),
 				'movable' => $this->MAP->getMoveableObjects(),
-				'langMenu' => $this->CORE->getJsLangMenu(),
 				'lang' => $this->CORE->getJsLang(),
 				'validMainCfg' => $this->CORE->getJsValidMainConfig(),
 				'validMapCfg' => $this->MAP->getJsValidMapConfig(),
