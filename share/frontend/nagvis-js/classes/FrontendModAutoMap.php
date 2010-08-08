@@ -29,6 +29,7 @@ class FrontendModAutoMap extends FrontendModule {
 	private $name;
 	private $opts;
 	private $rotation = '';
+	private $rotationStep = '';
 	
 	private $viewOpts = Array();
 	
@@ -50,6 +51,7 @@ class FrontendModAutoMap extends FrontendModule {
 		               'filterGroup' => MATCH_STRING_EMPTY,
 		               'filterByState' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'rotation' => MATCH_ROTATION_NAME_EMPTY,
+		               'rotationStep' => MATCH_INTEGER_EMPTY,
 		               'enableHeader' => MATCH_BOOLEAN_EMPTY,
 		               'enableContext' => MATCH_BOOLEAN_EMPTY,
 		               'enableHover' => MATCH_BOOLEAN_EMPTY);
@@ -57,6 +59,7 @@ class FrontendModAutoMap extends FrontendModule {
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->name = $aVals['show'];
 		$this->rotation = $aVals['rotation'];
+		$this->rotationStep = $aVals['rotationStep'];
 		
 		$this->viewOpts['search'] = $aVals['search'];
 		$this->viewOpts['enableHeader'] = $aVals['enableHeader'];
@@ -155,7 +158,7 @@ class FrontendModAutoMap extends FrontendModule {
 			// Only allow the rotation if the user is permitted to use it
 			if($this->AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
 				$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
-				$ROTATION->setStep('automap', $this->name);
+				$ROTATION->setStep('automap', $this->name, $this->rotationStep);
 				$this->VIEW->setRotation($ROTATION->getRotationProperties());
 			}
 		}

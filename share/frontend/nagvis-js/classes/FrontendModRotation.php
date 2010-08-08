@@ -26,9 +26,10 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendModRotation extends FrontendModule {
-	private $name = '';
-	private $type = '';
-	private $step = '';
+	private $name   = '';
+	private $type   = '';
+	private $step   = '';
+	private $stepId = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
@@ -36,12 +37,14 @@ class FrontendModRotation extends FrontendModule {
 		// Parse the view specific options
 		$aOpts = Array('show' => MATCH_ROTATION_NAME,
 		               'type' => MATCH_ROTATION_STEP_TYPES_EMPTY,
-		               'step' => MATCH_STRING_NO_SPACE_EMPTY);
+		               'step' => MATCH_STRING_NO_SPACE_EMPTY,
+		               'stepId' => MATCH_INTEGER_EMPTY);
 		
 		$aVals = $this->getCustomOptions($aOpts);
-		$this->name = $aVals['show'];
-		$this->type = $aVals['type'];
-		$this->step = $aVals['step'];
+		$this->name   = $aVals['show'];
+		$this->type   = $aVals['type'];
+		$this->step   = $aVals['step'];
+		$this->stepId = $aVals['stepId'];
 		
 		// Register valid actions
 		$this->aActions = Array(
@@ -76,7 +79,7 @@ class FrontendModRotation extends FrontendModule {
 		
 		// Set the requested step
 		if($this->type != '' && $this->step != '')
-			$ROTATION->setStep($this->type, $this->step);
+			$ROTATION->setStep($this->type, $this->step, $this->stepId);
 		
 		switch($this->type) {
 			case '':
