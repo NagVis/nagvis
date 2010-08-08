@@ -139,9 +139,10 @@ class NagVisRotation {
 			$strCurrentStep = $_GET['map'];
 			$strType = 'map';
 		}
-		
-		// Set position of actual map in the array
-		if($strCurrentStep != '') {
+		if(isset($_GET['step_id'])) {
+			$this->intCurrentStep = $_GET['step_id'];
+		} elseif($strCurrentStep != '') {
+			// Set position of actual map in the array
 			foreach($this->arrSteps AS $intId => $arrStep) {
 				if($strCurrentStep == $arrStep[$strType]) {
 					$this->intCurrentStep = $intId;
@@ -161,9 +162,9 @@ class NagVisRotation {
 	private function setStepUrls() {
 		foreach ($this->arrSteps AS $intId => $arrStep) {
 			if(isset($arrStep['url']) && $arrStep['url'] != '') {
-				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&url='.$arrStep['url'];
+				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&url='.$arrStep['url'].'&step_ip='.$intId;
 			} else {
-				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&map='.$arrStep['map'];
+				$this->arrSteps[$intId]['target'] = 'index.php?rotation='.$this->getPoolName().'&map='.$arrStep['map'].'&step_id='.$intId;
 			}
 		}
 	}
