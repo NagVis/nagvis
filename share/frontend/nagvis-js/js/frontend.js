@@ -41,11 +41,11 @@ var bBlockUpdates = false;
 function getHeaderHeight() {
 	var ret = 0;
 	
-	// FIXME: Check if header is shown
-	
 	var oHeader = document.getElementById('header');
 	if(oHeader) {
-		ret = oHeader.clientHeight;
+		// Only return header height when header is shown
+		if(oHeader.style.display != 'none')
+			ret = oHeader.clientHeight;
 		oHeader = null;
 	}
 	
