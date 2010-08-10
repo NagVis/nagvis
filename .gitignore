@@ -32,7 +32,7 @@ nagvis/nagvis/templates/*/*.css
 
 # Exclude all gadgets except the default
 nagvis/nagvis/gadgets/*.php
-nagvis/nagvis/gadgets/std_speedometer.php
+!nagvis/nagvis/gadgets/std_speedometer.php
 
 # Exclude all var contents
 nagvis/var/*
