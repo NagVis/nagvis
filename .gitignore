@@ -42,7 +42,7 @@ share/nagvis/templates/*/*.css
 
 # Exclude all gadgets except the default
 share/nagvis/gadgets/*.php
-share/nagvis/gadgets/std_speedometer.php
+!share/nagvis/gadgets/std_speedometer.php
 
 # Exclude all var contents
 var/*
