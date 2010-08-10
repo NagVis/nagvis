@@ -25,22 +25,23 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-table.hover_table {border-collapse:collapse;width:auto}
-table.hover_table td, table.hover_table th {border:1px #a4a4a4 solid;padding:2px;font-size:9px;color:#314455}
-table.hover_table th {text-align:center;background-color:#eee}
-table.hover_table spacer {height:3px;background-color:#eee}
-table.hover_table td.label {text-align:center;background-color:#eee}
-table.hover_table td.labelACK {text-align:center;background-color: #eee}
-table.hover_table td.labelPENDING {text-align:center;background-color:#eee}
-table.hover_table td.labelOK, table.hover_table td.labelUP {text-align:center;background-color:#66FF66}
-table.hover_table td.labelWARNING {text-align:center;background-color:#FFFF7E}
-table.hover_table td.labelCRITICAL, table.hover_table td.labelDOWN, table.hover_table td.labelUNREACHABLE {text-align:center;background-color:#FFBBBB}
-table.hover_table td.labelERROR {text-align:center;background-color:#eee}
-table.hover_table td.labelUNKNOWN {text-align:center;background-color:#eee}
-table.hover_table label {font-weight:bold}
-table.hover_table td.statePENDING {background-color:#ffffff}
-table.hover_table td.stateOK, table.hover_table td.stateUP {background-color:#00CC00}
-table.hover_table td.stateWARNING {background-color:#FFFF00}
-table.hover_table td.stateCRITICAL, table.hover_table td.stateDOWN, table.hover_table td.stateUNREACHABLE {background-color:#F83838}
-table.hover_table td.stateERROR {background-color:#66CCFF}
-table.hover_table td.stateUNKNOWN {background-color:#FFFF99}
+div.hover {position:absolute;margin:0;padding:0;font-size:10px;color:#314455;z-index:1000}
+div.hover > table {border-collapse:collapse;width:auto;margin:0;padding:0}
+div.hover > table td, div.hover > table th {border:1px #a4a4a4 solid;padding:2px;font-size:9px;color:#314455;background-color:#f5f5f5}
+div.hover > table th {text-align:center;background-color:#eee}
+div.hover > table spacer {height:3px;background-color:#eee}
+div.hover > table td.label {text-align:center;background-color:#eee}
+div.hover > table td.labelACK {text-align:center;background-color: #eee}
+div.hover > table td.labelPENDING {text-align:center;background-color:#eee}
+div.hover > table td.labelOK, div.hover > table td.labelUP {text-align:center;background-color:#66FF66}
+div.hover > table td.labelWARNING {text-align:center;background-color:#FFFF7E}
+div.hover > table td.labelCRITICAL, div.hover > table td.labelDOWN, div.hover > table td.labelUNREACHABLE {text-align:center;background-color:#FFBBBB}
+div.hover > table td.labelERROR {text-align:center;background-color:#eee}
+div.hover > table td.labelUNKNOWN {text-align:center;background-color:#eee}
+div.hover > table label {font-weight:bold}
+div.hover > table td.statePENDING {background-color:#ffffff}
+div.hover > table td.stateOK, div.hover > table td.stateUP {background-color:#00CC00}
+div.hover > table td.stateWARNING {background-color:#FFFF00}
+div.hover > table td.stateCRITICAL, div.hover > table td.stateDOWN, div.hover > table td.stateUNREACHABLE {background-color:#F83838}
+div.hover > table td.stateERROR {background-color:#66CCFF}
+div.hover > table td.stateUNKNOWN {background-color:#FFFF99}

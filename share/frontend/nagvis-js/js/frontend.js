@@ -36,6 +36,23 @@ var oAutomapParams = {};
 var bBlockUpdates = false;
 
 /**
+ * Returns the current height of the header menu
+ */
+function getHeaderHeight() {
+	var ret = 0;
+	
+	var oHeader = document.getElementById('header');
+	if(oHeader) {
+		// Only return header height when header is shown
+		if(oHeader.style.display != 'none')
+			ret = oHeader.clientHeight;
+		oHeader = null;
+	}
+	
+	return ret;
+}
+
+/**
  * submitFrontendForm()
  *
  * Submits a form in the frontend using ajax without reloading the page
@@ -383,7 +400,7 @@ function getHoverTemplates(aObjs) {
 			oLink.href = oGeneralProperties.path_templates+i+'.hover.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
-			document.body.appendChild(oLink);
+			document.getElementsByTagName("head")[0].appendChild(oLink);
 			oLink = null;
 		}
 	}
@@ -431,7 +448,7 @@ function getContextTemplates(aObjs) {
 			oLink.href = oGeneralProperties.path_templates+sName+'.context.css';
 			oLink.rel = 'stylesheet';
 			oLink.type = 'text/css';
-			document.body.appendChild(oLink);
+			document.getElementsByTagName("head")[0].appendChild(oLink);
 			oLink = null;
 		}
 	}
@@ -1848,11 +1865,11 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		parseHoverMenus(aMapObjects);
 		
 		// Bulk get all context templates which are needed on the overview page
-		eventlog("worker", "aMapObjects", "Fetching context templates");
+		eventlog("worker", "debug", "Fetching context templates");
 		getContextTemplates(aMapObjects);
 		
 		// Assign the context templates to the objects and parse them
-		eventlog("worker", "info", "Parse context menus");
+		eventlog("worker", "debug", "Parse context menus");
 		parseContextMenus(aMapObjects);
 		
 		eventlog("worker", "info", "Finished parsing overview");

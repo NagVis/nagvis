@@ -247,58 +247,47 @@ class CoreAuthorisationHandler {
 	}
 	
 	public function isPermitted($sModule, $sAction, $sObj = null) {
-		$bAutorized = false;
-		
 		// Module access?
-		$modAccess = false;
-		if(isset($this->aPermissions[$sModule])) {
-			$modAccess = $sModule;
-		} elseif(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD])) {
-			$modAccess = AUTH_PERMISSION_WILDCARD;
-		}
+		$access = Array();
+		if(isset($this->aPermissions[$sModule]))
+			$access[$sModule] = Array();
+		if(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD]))
+			$access[AUTH_PERMISSION_WILDCARD] = Array();
 		
-		if($modAccess !== false) {
+		if(count($access) > 0) {
 			// Action access?
-			$actAccess = false;
-			if(isset($this->aPermissions[$modAccess][$sAction])) {
-				$actAccess = $sAction;
-			} elseif(isset($this->aPermissions[$modAccess][AUTH_PERMISSION_WILDCARD])) {
-				$actAccess = AUTH_PERMISSION_WILDCARD;
+			foreach($access AS $mod => $acts) {
+				if(isset($this->aPermissions[$mod][$sAction]))
+					$access[$mod][$sAction] = Array();
+				if(isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD]))
+					$access[$mod][AUTH_PERMISSION_WILDCARD] = Array();
 			}
 			
-			if($actAccess !== false) {
-				// Have to check a particular object?
-				if($sObj !== null) {
-					// Object access?
-					if(isset($this->aPermissions[$modAccess][$actAccess][$sObj])) {
-						$bAutorized = true;
-					} elseif(isset($this->aPermissions[$modAccess][$actAccess][AUTH_PERMISSION_WILDCARD])) {
-						$bAutorized = true;
-					} else {
-						if(DEBUG&&DEBUGLEVEL&2)
-							debug('Object access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
-						$bAutorized = false;
+			if(count($access[$mod]) > 0) {
+				// Don't check object permissions
+				if($sObj === null)
+					return true;
+
+				// Object access?
+				foreach($access AS $mod => $acts) {
+					foreach($acts AS $act => $objs) {
+						if(isset($this->aPermissions[$mod][$act][$sObj]))
+							return true;
+						elseif(isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD]))
+							return true;
+						else
+							if(DEBUG&&DEBUGLEVEL&2)
+								debug('Object access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
 					}
-				} else {
-					$bAutorized = true;
 				}
-			} else {
+			} else
 				if(DEBUG&&DEBUGLEVEL&2)
 					debug('Action access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
-				$bAutorized = false;
-			}
-		} else {
+		} else
 			if(DEBUG&&DEBUGLEVEL&2)
 				debug('Module access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
-			$bAutorized = false;
-		}
 		
-		// Authorized?
-		if($bAutorized === true) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 }
 ?>

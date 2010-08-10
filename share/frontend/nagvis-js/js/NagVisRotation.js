@@ -91,7 +91,6 @@ var NagVisRotation = NagVisStatelessObject.extend({
 			oTd.onmouseout = function() {
 				this.style.cursor = 'auto';
 				this.style.backgroundColor = '';
-				return nd();
 			};
 			
 			oTd.appendChild(document.createTextNode(this.conf.steps[i].name));

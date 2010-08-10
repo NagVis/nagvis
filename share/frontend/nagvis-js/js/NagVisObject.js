@@ -167,6 +167,7 @@ var NagVisObject = Base.extend({
 		oMacros.name = this.conf.name;
 		oMacros.address = this.conf.address;
 		oMacros.html_cgi = this.conf.htmlcgi;
+		oMacros.backend_id = this.conf.backend_id;
 		oMacros.custom_1 = this.conf.custom_1;
 		oMacros.custom_2 = this.conf.custom_2;
 		oMacros.custom_3 = this.conf.custom_3;
@@ -176,16 +177,22 @@ var NagVisObject = Base.extend({
 			
 			oMacros.pnp_hostname = this.conf.name.replace(/\s/g,'%20');
 			oMacros.pnp_service_description = this.conf.service_description.replace(/\s/g,'%20');
-		} else {
+		} else
 			oSectionMacros.service = '<!--\\sBEGIN\\sservice\\s-->.+?<!--\\sEND\\sservice\\s-->';
-		}
 		
 		// Macros which are only for hosts
-		if(this.conf.type === 'host') {
+		if(this.conf.type === 'host')
 			oMacros.pnp_hostname = this.conf.name.replace(/\s/g,'%20');
-		} else {
+		else
 			oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
-		}
+
+		// Replace hostgroup range macros when not in a hostgroup
+		if(this.conf.type !== 'hostgroup')
+			oSectionMacros.hostgroup = '<!--\\sBEGIN\\shostgroup\\s-->.+?<!--\\sEND\\shostgroup\\s-->';
+
+		// Replace servicegroup range macros when not in a servicegroup
+		if(this.conf.type !== 'servicegroup')
+			oSectionMacros.servicegroup = '<!--\\sBEGIN\\sservicegroup\\s-->.+?<!--\\sEND\\sservicegroup\\s-->';
 		
 		// Loop and replace all unwanted section macros
 		for (var key in oSectionMacros) {
@@ -225,9 +232,10 @@ var NagVisObject = Base.extend({
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	getHoverMenu: function (oObj) {
+	getHoverMenu: function (sObjId) {
 		// Only enable hover menu when configured
 		if(this.conf.hover_menu && this.conf.hover_menu == '1') {
+			var objId = this.conf.object_id;
 			var sTemplateCode;
 			var iHoverDelay = this.conf.hover_delay;
 			
@@ -247,12 +255,48 @@ var NagVisObject = Base.extend({
 				sTemplateCode = replaceHoverTemplateDynamicMacros('0', this, this.hover_template_code);
 			}
 			
-			// Add the hover menu functionality to the object
-			oObj.onmouseover = function() { var sT = sTemplateCode; var iH = iHoverDelay; displayHoverMenu(sT, iH); sT = null; iH = null; };
-			oObj.onmouseout = function() { hideHoverMenu(); };
+			var oObj = document.getElementById(sObjId);
+			var oContainer = document.getElementById(this.conf.object_id);
+			
+			if(oObj == null) {
+				eventlog("NagVisObject", "critical", "Could not get hover menu object (ID:"+sObjId+")");
+				return false;
+			}
+			
+			if(oContainer == null) {
+				eventlog("NagVisObject", "critical", "Could not get hover menu container (ID:"+this.conf.object_id+")");
+				oObj = null; 
+				return false;
+			}
+			
+			// Only create a new div when the hover menu does not exist
+			var hoverMenu = document.getElementById(this.conf.object_id+'-hover');
+			if(!hoverMenu) {
+				// Create hover menu div
+				var hoverMenu = document.createElement('div');
+				hoverMenu.setAttribute('id', this.conf.object_id+'-hover');
+			}
+			
+			hoverMenu.setAttribute('class', 'hover');
+			hoverMenu.style.display = 'none';
+			
+			// Append template code to hover menu div
+			hoverMenu.innerHTML = sTemplateCode;
+			sTemplateCode = null;
+			
+			// Append hover menu div to object container
+			oContainer.appendChild(hoverMenu);
+			hoverMenu = null;
+			
+			// Add eventhandlers for hover menu
+			if(oObj) {
+				oObj.onmousemove = function(e) { var id = objId; var iH = iHoverDelay; displayHoverMenu(e, id, iH); id = null; iH = null; };
+				oObj.onmouseout = function() { hoverHide(); };
+				oObj = null;
+			}
+			
+			oContainer = null;
 		}
-		
-		oObj = null;
 	},
 	
 	/**

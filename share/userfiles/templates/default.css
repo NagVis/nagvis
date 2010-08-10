@@ -43,8 +43,6 @@ img {border:0}
 .main {margin:0;padding:0;background-color:white;color:black}
 .header {top:0;left:0;padding:0}
 .map {position:relative;top:0;left:0}
-#overDiv {position:absolute;visibility:hidden;z-index:1000;width:auto}
-#overDiv table {width:auto}
 
 /* Welcome page */
 div.welcome {padding:20px;width:600px}
@@ -122,7 +120,11 @@ div.welcome a:hover {color:#779D2A}
 }
 
 /* Style on info pages (index.php?info, index.php) */
-div.infopage table {
+div.infopage {
+	position:relative;
+}
+
+div.infopage > table {
 	margin: auto;
 	margin-top: 25px;
 	margin-bottom: 25px;
@@ -133,7 +135,7 @@ div.infopage table {
 	border-collapse:collapse;
 }
 
-div.infopage table td, div.infopage table th {
+div.infopage > table td, div.infopage > table th {
 	border: 1px #a4a4a4 solid;
 	padding: 4px;
 	
@@ -142,12 +144,12 @@ div.infopage table td, div.infopage table th {
 	vertical-align: top;
 }
 
-div.infopage table th {
+div.infopage > table th {
 	text-align: center;
 	background-color: #eee;
 }
 
-div.infopage table th.head {
+div.infopage > table th.head {
 	font-size: 20px;
 }
 
@@ -159,11 +161,11 @@ div.infopage h2 {
 	margin-left: 2px;
 }
 
-div.infopage td.disabled h2  {
+div.infopage > table td.disabled h2  {
 	color: #a4a4a4;
 }
 
-div.infopage td.error h2  {
+div.infopage > table td.error h2  {
 	color: #ff0000;
 }
 

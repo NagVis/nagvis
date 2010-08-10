@@ -45,6 +45,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 	// When this map object summarizes the state of a map this is true
 	// Prevents loops
 	protected $isSummaryObject;
+
+	// When this map points back to an earlier map and produces a loop
+	// this option is set to true
+	protected $isLoopingBacklink;
 	
 	// This controlls wether this is MapObj is used as view or as object on a map
 	protected $isView;
@@ -69,6 +73,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		$this->linkedMaps = Array();
 		$this->isSummaryObject = false;
+		$this->isLoopingBacklink = false;
 		$this->isView = $bIsView;
 		
 		$this->clearMembers();
@@ -120,23 +125,28 @@ class NagVisMapObj extends NagVisStatefulObject {
 			$sType = $OBJ->type;
 			
 			// Skip unrelevant object types
-			if($sType == 'textbox' || $sType == 'shape' || $sType == 'line') {
+			if($sType == 'textbox' || $sType == 'shape' || $sType == 'line')
 				continue;
-      }
 
 			/**
 			 * When the current map object is a summary object skip the map
 			 * child for preventing a loop
 			 */
-			if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
+			if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true)
 				continue;
-			}
-
+			
+			/**
+				* All maps which produce a loop by linking back to earlier maps
+				* need to be skipped here.
+				*/
+			if($sType == 'map' && $OBJ->isLoopingBacklink)
+				continue;
+			
 			// Add relevant objects to array
 			$a[] = $OBJ;
-    }
-
-    return $a;
+		}
+		
+		return $a;
 	}
 	
 	/**
@@ -168,7 +178,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				$i++;
 			}
 		}
-
+		
 		return $i;
 	}
 	
@@ -384,17 +394,17 @@ class NagVisMapObj extends NagVisStatefulObject {
                * All maps which were seen before are stored in the list once. If
 							 * they are already in the list skip them to prevent loops.
 							 */
-							if(isset($arrMapNames[$SUBMAPCFG->getName()]))
+							if(isset($arrMapNames[$SUBMAPCFG->getName()])) {
+								$OBJ->isLoopingBacklink = true;
 								continue;
+							}
 
 							// Store this map in the mapNames list
 							$arrMapNames[$SUBMAPCFG->getName()] = true;
 							
-							// Check for indirect loop when the current child is a map object
+							// Skip this map when the user is not permitted toview this map
 							if(!$this->isPermitted($OBJ))
 								continue;
-							
-							$OBJ->fetchMapObjects($arrMapNames);
 						break;
 						case 'shape':
 							$OBJ = new NagVisShape($this->CORE, $objConf['icon']);
@@ -417,6 +427,30 @@ class NagVisMapObj extends NagVisStatefulObject {
 					// Write member to object array
 					$this->members[] = $OBJ;
 				}
+			}
+		}
+
+		// Now dig into the next map level. This has to be done here to fight
+		// the loops at this level and not at the single branches of map links.
+		foreach($this->members AS $OBJ) {
+			$sType = $OBJ->type;
+			
+			if($sType == 'map') {
+				/**
+				* When the current map object is a summary object skip the map
+				* child for preventing a loop
+				*/
+				if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true)
+					continue;
+
+				/**
+					* All maps which produce a loop by linking back to earlier maps
+					* need to be skipped here.
+					*/
+				if($sType == 'map' && $OBJ->isLoopingBacklink)
+					continue;
+				
+				$OBJ->fetchMapObjects($arrMapNames);
 			}
 		}
 	}

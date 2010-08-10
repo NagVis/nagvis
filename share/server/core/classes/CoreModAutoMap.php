@@ -27,13 +27,14 @@
  */
 class CoreModAutoMap extends CoreModule {
 	private $name = null;
+	private $aOpts = null;
 	private $opts = null;
 	private $MAPCFG  = null;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
-		$aOpts = Array('show' => MATCH_MAP_NAME,
+		$this->aOpts = Array('show' => MATCH_MAP_NAME,
 		               'backend' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'root' => MATCH_STRING_NO_SPACE_EMPTY,
 		               'maxLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
@@ -46,7 +47,7 @@ class CoreModAutoMap extends CoreModule {
 		               'filterGroup' => MATCH_STRING_EMPTY,
 		               'filterByState' => MATCH_STRING_NO_SPACE_EMPTY);
 		
-		$aVals = $this->getCustomOptions($aOpts);
+		$aVals = $this->getCustomOptions($this->aOpts);
 		$this->name = $aVals['show'];
 		unset($aVals['show']);
 		$this->opts = $aVals;
@@ -63,6 +64,7 @@ class CoreModAutoMap extends CoreModule {
 			'getAutomapObjects' => REQUIRES_AUTHORISATION,
 			'getObjectStates' => REQUIRES_AUTHORISATION,
 			'automapToMap' => REQUIRES_AUTHORISATION,
+			'modifyParams' => REQUIRES_AUTHORISATION,
 			'parseMapCfg' => REQUIRES_AUTHORISATION,
 		);
 		
@@ -78,10 +80,6 @@ class CoreModAutoMap extends CoreModule {
 		
 		if($this->offersAction($this->sAction)) {
 			switch($this->sAction) {
-				case 'automapToMap':
-					$VIEW = new NagVisViewAutomapToMap($this->CORE);
-          $sReturn = json_encode(Array('code' => $VIEW->parse()));
-				break;
 				case 'parseAutomap':
 				case 'parseMapCfg':
 					$sReturn = $this->parseAutomap();
@@ -94,6 +92,14 @@ class CoreModAutoMap extends CoreModule {
 				break;
 				case 'getObjectStates':
 					$sReturn = $this->getObjectStates();
+				break;
+				case 'automapToMap':
+					$VIEW = new NagVisViewAutomapToMap($this->CORE);
+          $sReturn = json_encode(Array('code' => $VIEW->parse()));
+				break;
+				case 'modifyParams':
+					$VIEW = new NagVisViewAutomapModifyParams($this->CORE, $this->opts);
+					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
 			}
 		}

@@ -65,7 +65,8 @@ define('MATCH_VIEW_TYPE_SERVICE_EMPTY', '/^(?:icon|line|gadget)*$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete)$/');
 define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map|automap)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2)?$/');
-define('MATCH_LINE_TYPE', '/^(10|11|12)?$/');
+define('MATCH_LINE_TYPE', '/^(10|11|12|13|14)?$/');
+define('MATCH_LINE_ARROW', '/^(none|forward|back|both)?$/');
 define('MATCH_USER_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 

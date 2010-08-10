@@ -101,7 +101,7 @@ class CoreRotation {
 		foreach($this->arrSteps AS $intId => $arrStep) {
 			if(isset($arrStep[$type]) && $arrStep[$type] === $step) {
 				$bRet = true;
-				continue;
+				break;
 			}
 		}
 		
@@ -117,20 +117,23 @@ class CoreRotation {
 	 * @param   String    Step identifier map name, url, ...
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function setStep($sType, $sStep) {
+	public function setStep($sType, $sStep, $iStepId = '') {
 		// First check if the step exists
 		if($this->stepExists($sType, $sStep)) {
-			// Get position of current step in the array
-			if($sStep !== '') {
-				foreach($this->arrSteps AS $iIndex => $arrStep) {
-					if(isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {
-						$this->intCurrentStep = $iIndex;
-						continue;
+			if($iStepId != '')
+				$this->intCurrentStep = (int) $iStepId;
+			else
+				// Get position of current step in the array
+				if($sStep !== '') {
+					foreach($this->arrSteps AS $iIndex => $arrStep) {
+						if(isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {
+							$this->intCurrentStep = $iIndex;
+							break;
+						}
 					}
+				} else {
+					$this->intCurrentStep = 0;
 				}
-			} else {
-				$this->intCurrentStep = 0;
-			}
 			
 			// Set the next step after setting the current step
 			$this->setNextStep();
@@ -175,11 +178,11 @@ class CoreRotation {
 		$htmlBase = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
 		foreach($this->arrSteps AS $intId => $arrStep) {
 			if(isset($arrStep['url']) && $arrStep['url'] != '') {
-				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Url&act=view&show='.$arrStep['url'].'&rotation='.$this->sPoolName;
+				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Url&act=view&show='.$arrStep['url'].'&rotation='.$this->sPoolName.'&rotationStep='.$intId;
 			} elseif(isset($arrStep['automap']) && $arrStep['automap'] != '') {
-				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show='.$arrStep['automap'].'&rotation='.$this->sPoolName;
+				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show='.$arrStep['automap'].'&rotation='.$this->sPoolName.'&rotationStep='.$intId;
 			} else {
-				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$arrStep['map'].'&rotation='.$this->sPoolName;
+				$this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$arrStep['map'].'&rotation='.$this->sPoolName.'&rotationStep='.$intId;
 			}
 		}
 	}

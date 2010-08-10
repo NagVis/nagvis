@@ -116,43 +116,6 @@ class WuiCore extends GlobalCore {
 		
 		return json_encode($aArr);
 	}
-	
-	/**
-	 * Parses the needed language strings in json format
-	 * for the menu
-	 *
-	 * @return  String    JSON encoded array
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getJsLangMenu() {
-		$langMenu = Array(
-			'overview' => $this->getLang()->getText('overview'),
-			'restore' => $this->getLang()->getText('restore'),
-			'properties' => $this->getLang()->getText('properties'),
-			'addObject' => $this->getLang()->getText('addObject'),
-			'nagVisConfig' => $this->getLang()->getText('nagVisConfig'),
-			'help' => $this->getLang()->getText('help'),
-			'open' => $this->getLang()->getText('open'),
-			'openInNagVis' => $this->getLang()->getText('openInNagVis'),
-			'manageMaps' => $this->getLang()->getText('manageMaps'),
-			'manageBackends' => $this->getLang()->getText('manageBackends'),
-			'manageBackgrounds' => $this->getLang()->getText('manageBackgrounds'),
-			'manageShapes' => $this->getLang()->getText('manageShapes'),
-			'icon' => $this->getLang()->getText('icon'),
-			'line' => $this->getLang()->getText('line'),
-			'special' => $this->getLang()->getText('special'),
-			'host' => $this->getLang()->getText('host'),
-			'service' => $this->getLang()->getText('service'),
-			'hostgroup' => $this->getLang()->getText('hostgroup'),
-			'servicegroup' => $this->getLang()->getText('servicegroup'),
-			'map' => $this->getLang()->getText('map'),
-			'textbox' => $this->getLang()->getText('textbox'),
-			'shape' => $this->getLang()->getText('shape'),
-			'manage' => $this->getLang()->getText('manage'),
-			'stateless' => $this->getLang()->getText('Stateless'));
-		
-		return json_encode($langMenu);
-	}
 
 	/**
 	 * Parses the needed language strings to javascript
@@ -206,6 +169,7 @@ class WuiCore extends GlobalCore {
 			'noPermissions' => $this->getLang()->getText('noPermissions'),
 			'minOneUserWriteAccess' => $this->getLang()->getText('minOneUserWriteAccess'),
 			'noSpaceAllowed' => $this->getLang()->getText('noSpaceAllowed'),
+			'properties' => $this->getLang()->getText('properties'),
 			'manualInput' => $this->getLang()->getText('manualInput'));
 		
 		return json_encode($lang);

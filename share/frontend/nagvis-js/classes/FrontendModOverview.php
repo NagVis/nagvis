@@ -27,14 +27,17 @@
  */
 class FrontendModOverview extends FrontendModule {
 	private $rotation = '';
+	private $rotationStep = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 		
 		// Parse the view specific options
-		$aOpts = Array('rotation' => MATCH_ROTATION_NAME_EMPTY);
+		$aOpts = Array('rotation' => MATCH_ROTATION_NAME_EMPTY,
+		               'rotationStep' => MATCH_INTEGER_EMPTY);
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->rotation = $aVals['rotation'];
+		$this->rotationStep = $aVals['rotationStep'];
 		
 		$this->aActions = Array(
 			'view' => REQUIRES_AUTHORISATION
@@ -79,7 +82,7 @@ class FrontendModOverview extends FrontendModule {
 		// Maybe it is needed to handle the requested rotation
 		if($this->rotation != '') { 
 			$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
-			$ROTATION->setStep('overview', '');
+			$ROTATION->setStep('overview', '', $this->rotationStep);
 			$this->VIEW->setRotation($ROTATION->getRotationProperties());
 		}
     

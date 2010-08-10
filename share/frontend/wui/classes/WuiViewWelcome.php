@@ -54,7 +54,6 @@ class WuiViewWelcome {
 				'base' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
 				'userName' => $this->CORE->getAuthentication()->getUser(),
-				'langMenu' => $this->CORE->getJsLangMenu(),
 				'lang' => $this->CORE->getJsLang(),
 				'validMainCfg' => $this->CORE->getJsValidMainConfig(),
 				'mapOptions' => $this->CORE->getMapOptions()

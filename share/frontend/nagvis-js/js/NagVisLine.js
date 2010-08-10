@@ -120,14 +120,6 @@ var NagVisLine = NagVisStatelessObject.extend({
 	},
 	
 	parseHoverMenu: function () {
-		var oObj;
-		
-		// Get the object to apply the hover menu to
-		oObj = document.getElementById(this.conf.object_id+'-icon');
-		
-		// Create hover menu
-		this.getHoverMenu(oObj);
-		
-		oObj = null;
+		this.getHoverMenu(this.conf.object_id+'-icon');
 	}
 });

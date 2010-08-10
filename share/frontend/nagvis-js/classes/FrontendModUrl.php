@@ -28,17 +28,20 @@
 class FrontendModUrl extends FrontendModule {
 	private $url = '';
 	private $rotation = '';
+	private $rotationStep = '';
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->CORE = $CORE;
 
 		// Parse the view specific options
 		$aOpts = Array('show' => MATCH_STRING_URL,
-		               'rotation' => MATCH_ROTATION_NAME_EMPTY);
+		               'rotation' => MATCH_ROTATION_NAME_EMPTY,
+		               'rotationStep' => MATCH_INTEGER_EMPTY);
 		
 		$aVals = $this->getCustomOptions($aOpts);
 		$this->url = $aVals['show'];
 		$this->rotation = $aVals['rotation'];
+		$this->rotationStep = $aVals['rotationStep'];
 		
 		// Register valid actions
 		$this->aActions = Array(
@@ -90,7 +93,7 @@ class FrontendModUrl extends FrontendModule {
 		// Maybe it is needed to handle the requested rotation
 		if($this->rotation != '') {
 			$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
-			$ROTATION->setStep('url', $this->url);
+			$ROTATION->setStep('url', $this->url, $this->rotationStep);
 			$this->VIEW->setRotation($ROTATION->getRotationProperties());
 		}
 
