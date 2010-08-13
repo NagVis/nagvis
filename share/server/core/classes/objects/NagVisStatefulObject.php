@@ -507,8 +507,8 @@ class NagVisStatefulObject extends NagVisObject {
 		$arr['summary_in_downtime'] = $this->getSummaryInDowntime();
 		$arr['in_downtime'] = $this->getInDowntime();
 		
-		$arr['output'] = strtr($this->output, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
-		$arr['summary_output'] = strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
+		$arr['output'] = $this->escapeStringForJson($this->output);
+		$arr['summary_output'] = $this->escapeStringForJson($this->getSummaryOutput());
 		
 		// Macros which are only for services and hosts
 		if($this->type == 'host' || $this->type == 'service') {
@@ -524,7 +524,7 @@ class NagVisStatefulObject extends NagVisObject {
 			$arr['last_state_change'] = $this->getLastStateChange();
 			$arr['last_hard_state_change'] = $this->getLastHardStateChange();
 			$arr['state_duration'] = $this->getStateDuration();
-			$arr['perfdata'] = strtr($this->perfdata, Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;'));
+			$arr['perfdata'] = $this->escapeStringForJson($this->perfdata);
 		}
 		
 		// Enable/Disable fetching children
@@ -705,6 +705,18 @@ class NagVisStatefulObject extends NagVisObject {
 	protected function belowHoverChildsLimit($i) {
 		return (($this->hover_childs_limit >= 0 && $i <= $this->hover_childs_limit) || $this->hover_childs_limit == -1);
 	}
+	
+	/**
+	 * Escapes special chars in a string for putting it to a json string
+	 *
+	 * @author Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function escapeStringForJson($s) {
+		return strtr($s, Array("\r" => '<br />',
+		                       "\n" => '<br />',
+		                       '"'  => '&quot;',
+		                       '\'' => '&#145;'));
+	}
 
 	
 	/**
@@ -721,7 +733,7 @@ class NagVisStatefulObject extends NagVisObject {
 		                'summary_state' => $this->getSummaryState(),
 		                'summary_in_downtime' => $this->getSummaryInDowntime(),
 		                'summary_problem_has_been_acknowledged' => $this->getSummaryAcknowledgement(),
-		                'summary_output' => strtr($this->getSummaryOutput(), Array("\r" => '<br />', "\n" => '<br />', '"' => '&quot;', '\'' => '&#145;')));
+		                'summary_output' => $this->escapeStringForJson($this->getSummaryOutput()));
 		
 		if($this->type == 'service') {
 			$aChild['service_description'] = $this->getServiceDescription();
