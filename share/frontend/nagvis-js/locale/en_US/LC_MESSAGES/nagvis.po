@@ -1662,7 +1662,7 @@ msgstr "You have to insert a name for the new map."
 #: share/server/core/classes/WuiViewManageShapes.php:59
 #: share/server/core/classes/WuiViewManageShapes.php:59
 msgid "choosePngImage"
-msgstr "Select a PNG image"
+msgstr "Select a PNG/GIF/JPG image"
 
 #: wui/includes/classes/WuiMap.php:695
 #: share/frontend/wui/includes/classes/WuiMap.php:700

@@ -56,7 +56,7 @@ class WuiViewManageShapes {
 		$aData = Array(
 			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'langUploadShape' => $this->CORE->getLang()->getText('uploadShape'),
-			'langChoosePngImage' => $this->CORE->getLang()->getText('choosePngImage'),
+			'langChoosePngImage' => $this->CORE->getLang()->getText('chooseImage'),
 			'langUpload' => $this->CORE->getLang()->getText('upload'),
 			'langDeleteShape' => $this->CORE->getLang()->getText('deleteShape'),
 			'langDelete' => $this->CORE->getLang()->getText('delete'),

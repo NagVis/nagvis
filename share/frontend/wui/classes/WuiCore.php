@@ -144,6 +144,7 @@ class WuiCore extends GlobalCore {
 			'loopInMapRecursion' => $this->getLang()->getText('loopInMapRecursion'),
 			'mapObjectWillShowSummaryState' => $this->getLang()->getText('mapObjectWillShowSummaryState'),
 			'firstMustChoosePngImage' => $this->getLang()->getText('firstMustChoosePngImage'),
+			'noSpaceAllowedInName' => $this->getLang()->getText('Spaces are not allowed in file names.'),
 			'mustChooseValidImageFormat' => $this->getLang()->getText('mustChooseValidImageFormat'),
 			'foundNoBackgroundToDelete' => $this->getLang()->getText('foundNoBackgroundToDelete'),
 			'confirmBackgroundDeletion' => $this->getLang()->getText('confirmBackgroundDeletion'),

@@ -65,15 +65,18 @@ function checkShapeInUse(shapeName,mapOptions) {
 }
 
 function check_image_add() {
-    if(document.shape_add.shape_image.value.length == 0) {
+  if(document.shape_add.shape_image.value.length == 0) {
 		alert(printLang(lang['firstMustChoosePngImage'],''));
-		
 		return false;
 	}
 	
 	if(!checkPng(document.shape_add.shape_image.value) && !checkJpg(document.shape_add.shape_image.value) && !checkGif(document.shape_add.shape_image.value)) {
 		alert(printLang(lang['mustChooseValidImageFormat'],''));
-		
+		return false;
+	}
+
+  if(document.shape_add.shape_image.value.indexOf(" ") != -1) {
+		alert(printLang(lang['noSpaceAllowedInName'],''));
 		return false;
 	}
 }
