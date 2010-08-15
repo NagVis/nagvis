@@ -290,6 +290,7 @@ class NagVisHeaderMenu {
 		
 		// Replace paths and language macros
 		$aReturn = Array('pathBase' => $this->pathHtmlBase,
+			'currentUri' => $this->UHANDLER->getRequestUri(), 
 			'pathImages' => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
 			'pathTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
 			'pathTemplateImages' => $this->CORE->getMainCfg()->getValue('paths','htmltemplateimages'),

@@ -166,7 +166,7 @@
 		  <dt id="language-ddheader" onmouseover="ddMenu('language',1)" onmouseout="ddMenu('language',-1)">{$langChooseLanguage} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 		  <dd id="language-ddcontent" onmouseover="cancelHide('language')" onmouseout="ddMenu('language',-1)">
 		    <ul>
-		    	{foreach $langs lang}<li><a href="{$pathBase}/frontend/nagvis-js/index.php?lang={$lang.language}" {if $lang.classUnderline}class="underline"{/if}>{$lang.langLanguageLocated}</a></li>{/foreach}
+		    	{foreach $langs lang}<li><a href="{$currentUri}{if strpos($currentUri,'?') !== false}&amp;{else}?{/if}lang={$lang.language}" {if $lang.classUnderline}class="underline"{/if}>{$lang.langLanguageLocated}</a></li>{/foreach}
 		    </ul>
 		  </dd>
 		</dl>
