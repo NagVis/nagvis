@@ -403,12 +403,8 @@ class NagVisObject {
 		$iNumObjects = count($aTmpMembers);
 		
 		// Loop all child object until all looped or the child limit is reached
-		for($i = 0, $iEnum = 0; $this->belowHoverChildsLimit($iEnum) && $i < $iNumObjects; $i++) {
+		for($i = 0; $this->belowHoverChildsLimit($i) && $i < $iNumObjects; $i++) {
 			$arr[] = $aTmpMembers[$i];
-			
-			// Only count objects which are added to the list for checking
-			// reached hover_childs_limit
-			$iEnum++;
 		}
 		
 		return $arr;
