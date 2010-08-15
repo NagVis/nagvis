@@ -122,15 +122,12 @@ class GlobalIndexPage {
 				$MAP->MAPOBJ->setSummaryState('ERROR');
 				$MAP->MAPOBJ->fetchIcon();
 			} elseif($MAP->MAPOBJ->checkMaintenance(0)) {
-				$MAP->MAPOBJ->fetchIcon();
-				
 				if($type == 'automap')
 					$map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue('global', 0, 'default_params');
 				else
 					$map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
 				
 				$map['overview_class']  = '';
-				$map['summary_output']  = $MAP->MAPOBJ->getSummaryOutput();
 			} else {
 				$map['overview_class']  = 'disabled';
 				$map['overview_url']    = 'javascript:alert(\''.$this->CORE->getLang()->getText('mapInMaintenance').'\');';
@@ -212,7 +209,7 @@ class GlobalIndexPage {
 			foreach($aObjs AS $aObj) {
 				$aObj[0]->applyState();
 				$aObj[0]->fetchIcon();
-				
+
 				$aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
 			}
 		}
