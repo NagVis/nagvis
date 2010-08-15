@@ -207,16 +207,16 @@ class CoreModGeneral extends CoreModule {
 			$arr = $MAPCFG->getDefinitions('global');
 			unset($arr[0]['type']);
 			unset($arr[0]['object_id']);
+			
 			$typeDefs = $MAPCFG->getTypeDefaults('global');
 			foreach($typeDefs AS $key => $default)
 				if(!isset($arr[0][$key]))
 					$arr[0][$key] = $default;
+			
 			$OBJ->setConfiguration($arr[0]);
-
 			$OBJ->setObjectId($arrObjId[$i]);
 			
-			if($arrType[$i] != 'automap')
-				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+			$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
 			
 			$aObjs[] = $OBJ;
 		}
