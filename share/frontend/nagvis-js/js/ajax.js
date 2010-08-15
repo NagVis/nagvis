@@ -122,7 +122,7 @@ function phpError(text) {
 }
 
 function jsonError(text) {
-	frontendMessage({'type': 'CRITICAL', 'title': 'Syntax error', 'message': "Invalid JSON response:\n" + text});
+	frontendMessage({'type': 'CRITICAL', 'title': 'Syntax error', 'message': text});
 }
 
 /**
@@ -178,7 +178,7 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
 							if(bCacheable)
 								updateQueryCache(sUrl, iNow, responseText);
 						} catch(e) {
-							jsonError('URL: ' + sUrl + ' Response: ' + responseText);
+							jsonError("Exception: " + e.description + "\nTime: " + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
 						}
 						
 					}
@@ -291,7 +291,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 					try {
 						sResponse = eval('( '+responseText+')');
 					} catch(e) {
-						jsonError('URL: ' + sUrl + ' Response: ' + responseText);
+						jsonError("Invalid json response:\nTime:" + timestamp + "\nURL: " + sUrl + "\nResponse: " + responseText);
 
 						// Clear the response
 						sResponse = '';
