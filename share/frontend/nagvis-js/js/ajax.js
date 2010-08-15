@@ -178,7 +178,7 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
 							if(bCacheable)
 								updateQueryCache(sUrl, iNow, responseText);
 						} catch(e) {
-							jsonError(responseText);
+							jsonError('URL: ' + sUrl + ' Response: ' + responseText);
 						}
 						
 					}
@@ -291,15 +291,8 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 					try {
 						sResponse = eval('( '+responseText+')');
 					} catch(e) {
-						var oMsg = {};
-						oMsg.type = 'CRITICAL';
-						oMsg.message = "Invalid JSON response:\n"+responseText;
-						oMsg.title = "Syntax error";
-						
-						// Handle application message/error
-						frontendMessage(oMsg);
-						oMsg = null;
-					
+						jsonError('URL: ' + sUrl + ' Response: ' + responseText);
+
 						// Clear the response
 						sResponse = '';
 					}
