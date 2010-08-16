@@ -195,7 +195,6 @@ class CoreModGeneral extends CoreModule {
 					// Save the preview mode (Enables/Disables printing of errors)
 					$aOpts['preview'] = 0;
 					
-					// FIXME: Maybe this can be a view?! I'm unsure about this...
 					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $aOpts, !IS_VIEW);
 					$OBJ = $MAP->MAPOBJ;
 				break;
@@ -204,10 +203,12 @@ class CoreModGeneral extends CoreModule {
 				break;
 			}
 			
+			// Load configured options
 			$arr = $MAPCFG->getDefinitions('global');
 			unset($arr[0]['type']);
 			unset($arr[0]['object_id']);
 			
+			// Load default options and merge
 			$typeDefs = $MAPCFG->getTypeDefaults('global');
 			foreach($typeDefs AS $key => $default)
 				if(!isset($arr[0][$key]))

@@ -170,6 +170,8 @@ class GlobalIndexPage {
 					}
 				}
 				
+				$MAP->MAPOBJ->fetchIcon();
+				
 				$aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
 			} else {
 				// Only handle thumbnail image when told to do so
