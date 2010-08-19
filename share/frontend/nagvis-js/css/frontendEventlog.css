@@ -38,8 +38,6 @@
 	border: 1px solid #000000;
 	border-bottom: 0;
 	
-	-moz-opacity:0.4; 
-	-khtml-opacity:0.4; 
 	opacity:0.4;
 	/*filter:alpha(opacity=40);*/
 	
@@ -61,8 +59,6 @@
 	border: 1px solid #000000;
 	border-bottom: 0;
 	
-	-moz-opacity:0.4; 
-	-khtml-opacity:0.4; 
 	opacity:0.4;
 	/*filter:alpha(opacity=40);*/
 	
