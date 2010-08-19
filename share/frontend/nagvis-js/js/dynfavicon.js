@@ -37,9 +37,12 @@ var favicon = {
 	removeLinkIfExists: function() {
 		var docHead = document.getElementsByTagName("head")[0];
 		var links = docHead.getElementsByTagName("link");
+
+		if(!docHead || !links)
+			return false;
 		
 		for (var i=0, len = links.length; i<len; i++) {
-			if (links[i].type == "image/x-icon" && links[i].rel == "shortcut icon") {
+			if (links[i] && links[i].type == "image/x-icon" && links[i].rel == "shortcut icon") {
 				docHead.removeChild(links[i]);
 			}
 		}

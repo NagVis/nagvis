@@ -172,15 +172,17 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
 					} else if(responseText.match(/^NagVisError:/)) {
 						frontendMessage(eval('( '+responseText.replace(/^NagVisError:/, '')+')'));
 					} else {
+            var oResponse = null;
 						try {
-							callback(eval('( '+responseText+')'), callbackParams);
+							oResponse = eval('( '+responseText+')')
 							
 							if(bCacheable)
 								updateQueryCache(sUrl, iNow, responseText);
 						} catch(e) {
 							jsonError("Exception: " + e.description + "\nTime: " + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
 						}
-						
+            if(oResponse)
+							callback(oResponse, callbackParams);
 					}
 					
 					responseText = null;

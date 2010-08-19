@@ -55,10 +55,12 @@ var NagVisShape = NagVisStatelessObject.extend({
 		this.remove();
 		
 		var oMap = document.getElementById('map');
-		this.parsedObject = oMap.appendChild(oContainerDiv);
+		if(oMap) {
+			this.parsedObject = oMap.appendChild(oContainerDiv);
+			oMap = null;
+		}
 		
 		oContainerDiv = null;
-		oMap = null;
 	},
 	
 	/**
