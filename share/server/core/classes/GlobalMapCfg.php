@@ -722,14 +722,14 @@ class GlobalMapCfg {
 						'field_type'    => 'dropdown',
 						'depends_on'    => 'view_type',
 						'depends_value' => 'line'),
-					'line_label_in_pos' => Array(
+					'line_label_pos_in' => Array(
 						'must'          => 0,
 						'default'       => '0.5',
 						'match'         => MATCH_FLOAT,
 						'field_type'    => 'dropdown',
 						'depends_on'    => 'view_type',
 						'depends_value' => 'line'),
-					'line_label_out_pos' => Array(
+					'line_label_pos_out' => Array(
 						'must'          => 0,
 						'default'       => '0.5',
 						'match'         => MATCH_FLOAT,
