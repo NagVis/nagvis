@@ -171,7 +171,6 @@ function getLabelShift(str) {
 
 // This function draws an arrow like it is used on NagVis maps
 // It draws following line types: ---> and ---><---
-//function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder, bLinkArea lineType, perfdata, labelPosition) {
 function drawArrow(objectId, lineType, x1, y1, x2, y2, z, w, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, labelPosition) {
 	var xCoord = [];
 	var yCoord = [];
@@ -199,7 +198,6 @@ function drawArrow(objectId, lineType, x1, y1, x2, y2, z, w, colorFill, perfdata
 	var ly = middle(y1, y2, labelPosition);
 	
 	drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, lx, ly);
-//	drawPolygonBasedObject(objectId, xCoord, yCoord, z, w, colorFill, colorBorder, bLinkArea);
 	
 	yCoord = null;
 	xCoord = null;
@@ -241,9 +239,12 @@ function drawNagVisLine(objectId, type, cuts, x1, y1, x2, y2, z, width, colorFil
 	var perfdataB = null;
 
 	// Cuts
-	cut = cuts[0];			// Lines meeting point position
-	cutIn = cuts[1];		// First line label position
-	cutOut = cuts[2];		// Second line label position
+	// Lines meeting point position
+  // First line label position
+	// Second line label position
+	var cut = cuts[0];
+	var cutIn = cuts[1];
+	var cutOut = cuts[2];
 	
 	switch (type) {
 		case '10':
