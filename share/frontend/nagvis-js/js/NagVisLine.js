@@ -115,8 +115,11 @@ var NagVisLine = NagVisStatelessObject.extend({
 		var colorFill = this.conf.line_color;
 		var colorBorder = this.conf.line_color_border;
 		
+		// Cuts
+		var cuts = [this.conf.line_cut, this.conf.line_label_pos_in, this.conf.line_label_pos_out];
+		
 		// Parse the line object
-		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1], this.conf.z, width, colorFill, colorBorder, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x[0], y[0], x[1], y[1], this.conf.z, width, colorFill, colorBorder, ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
 	},
 	
 	parseHoverMenu: function () {

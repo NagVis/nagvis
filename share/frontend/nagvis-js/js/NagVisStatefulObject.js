@@ -485,7 +485,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var width = this.conf.line_width;
 		
 		var colorFill = '';
-    var colorFill2 = '';
+		var colorFill2 = '';
 		var colorBorder = '#000000';
 
 		var setPerfdata = [];
@@ -570,8 +570,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 			colorFill = lightenColor(colorFill, 100, 100, 100);
 		}
 
+		// Cuts
+		var cuts = [this.conf.line_cut, this.conf.line_label_pos_in, this.conf.line_label_pos_out];
+
 		// Parse the line object
-		drawNagVisLine(this.conf.object_id, this.conf.line_type, x[0], y[0], x[1], y[1],
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x[0], y[0], x[1], y[1],
 		               this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
 		               ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
 	},
