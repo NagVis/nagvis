@@ -384,9 +384,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 			if(this.conf.type != 'map') {
 				this.conf.url = this.conf.url.replace(new RegExp('\\[backend_id\\]', 'g'), this.conf.backend_id);
 			}
-			
-			// Replace special chars in url
-			this.conf.url = this.conf.url.replace(new RegExp('#', 'g'), '%23');
 		}
 		
 		if(this.conf.hover_url && this.conf.hover_url !== '') {
