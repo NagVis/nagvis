@@ -98,15 +98,16 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
 	}
 	
 	var oContent = getSyncRequest(sUrl, false, false);
-
-	// Store url for maybe later refresh
-	oContent.url = sUrl;
+  if(oContent && typeof oContent !== 'undefined') {
+		// Store url for maybe later refresh
+		oContent.url = sUrl;
 	
-	if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
-		popupWindow(sTitle, oContent, true, sWidth);
+		if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
+			popupWindow(sTitle, oContent, true, sWidth);
+		}
+	
+		oContent = null;
 	}
-	
-	oContent = null;
 }
 
 /**

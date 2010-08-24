@@ -177,32 +177,6 @@ class GlobalCore {
 	}
 	
 	/**
-	 * Reads all languages
-	 *
-	 * @return	Array list
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getAvailableLanguages() {
-		$files = Array();
-		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'language'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(!preg_match('/^\./', $file)) {
-					$files[] = $file;
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
-	}
-	
-	/**
 	 * Reads all languages which are available in NagVis and
 	 * are enabled by the configuration
 	 *
@@ -222,29 +196,23 @@ class GlobalCore {
 	}
 	
 	/**
+	 * Reads all languages
+	 *
+	 * @return	Array list
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getAvailableLanguages() {
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'language'), MATCH_LANGUAGE_FILE);
+	}
+	
+	/**
 	 * Reads all available backends
 	 *
 	 * @return	Array Html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableBackends() {
-		$files = Array();
-		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'class'))) {
- 			while (false !== ($file = readdir($handle))) {
- 				if(preg_match('/^GlobalBackend([^MI].+)\.php$/', $file, $arrRet)) {
-					$files[] = $arrRet[1];
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'class'), MATCH_BACKEND_FILE);
 	}
 	
 	/**
@@ -254,23 +222,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	public function getAvailableHoverTemplates() {
-		$files = Array();
-		
-		if($handle = opendir(self::getMainCfg()->getValue('paths', 'templates'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_HOVER_TEMPLATE_FILE, $file, $arrRet)) {
-					$files[] = $arrRet[1];
-				}
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'templates'), MATCH_HOVER_TEMPLATE_FILE);
 	}
 	
 	/**
@@ -280,23 +232,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableHeaderTemplates() {
-		$files = Array();
-		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'templates'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_HEADER_TEMPLATE_FILE, $file, $arrRet)) {
-					$files[] = $arrRet[1];
-				}
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'templates'), MATCH_HEADER_TEMPLATE_FILE);
 	}
 	
 	/**
@@ -306,23 +242,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableContextTemplates() {
-		$files = Array();
-		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'templates'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_CONTEXT_TEMPLATE_FILE, $file, $arrRet)) {
-					$files[] = $arrRet[1];
-				}
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE);
 	}
 	
 	/**
@@ -332,23 +252,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableShapes() {
-		$files = Array();
-		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'shape'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file, $arrRet)) {
-					$files[] = $arrRet[0];
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'shape'), MATCH_PNG_GIF_JPG_FILE, null, null, 0);
 	}
 	
 	/**
@@ -358,23 +262,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableIconsets() {
-		$files = Array();
-		
-		if($handle = opendir(self::getMainCfg()->getValue('paths', 'icon'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match('/^(.+)_ok.(png|gif|jpg)$/', $file, $arrRet)) {
-					$files[] = $arrRet[1];
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'icon'), MATCH_ICONSET);
 	}
 	
 	/**
@@ -420,25 +308,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableAutomaps($strMatch = NULL) {
-		$files = Array();
-		
-		if($handle = opendir(self::getMainCfg()->getValue('paths', 'automapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
-					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
-							$files[$arrRet[1]] = $arrRet[1];
-					}
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'automapcfg'), MATCH_CFG_FILE, null, $strMatch, null, null, true);
 	}
 	
 	/**
@@ -449,25 +319,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableMaps($strMatch = NULL) {
-		$files = Array();
-		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'mapcfg'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_CFG_FILE, $file, $arrRet)) {
-					if($strMatch == NULL || ($strMatch != NULL && preg_match($strMatch, $arrRet[1]))) {
-						$files[$arrRet[1]] = $arrRet[1];
-					}
-				}
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, null, true);
 	}
 	
 	/**
@@ -477,22 +329,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	public function getAvailableBackgroundImages() {
-		$files = Array();
-		
-		if($handle = opendir(self::getMainCfg()->getValue('paths', 'map'))) {
- 			while(false !== ($file = readdir($handle))) {
-				if(preg_match(MATCH_PNG_GIF_JPG_FILE, $file)) {
-					$files[] = $file;
-				}				
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-		}
-		closedir($handle);
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'map'), MATCH_PNG_GIF_JPG_FILE, null, null, 0);
 	}
 	
 	/**
@@ -502,27 +339,9 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableGadgets() {
-		$files = Array();
-		
-		if ($handle = opendir(self::getMainCfg()->getValue('paths', 'gadget'))) {
- 			while (false !== ($file = readdir($handle))) {
-				if($file !== 'gadgets_core.php') {
-					if(preg_match(MATCH_PHP_FILE, $file, $arrRet)) {
-						$files[] = $arrRet[1];
-					}
-				}
-			}
-			
-			if ($files) {
-				natcasesort($files);
-			}
-			
-			closedir($handle);
-		}
-		
-		return $files;
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'gadget'), MATCH_PHP_FILE, Array('gadgets_core.php' => true));
 	}
-	
+
 	/**
 	 * This method checks if the given map is a automap
 	 * This is quite hackish but have no better option at the moment
@@ -541,6 +360,52 @@ class GlobalCore {
 		}
 	}
 
+	/**
+   * Lists the contents of a directory with some checking, filtering and sorting
+	 *
+	 * @param   String  Path to the directory
+	 * @param   String  Regex the file(s) need to match
+	 * @param   Array   Lists of filenames to ignore (The filenames need to be the keys)
+	 * @param   Integer Match part to be returned
+	 * @return	Array   Sorted list of file names/parts in this directory
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null) {
+		$files = Array();
+
+    if($returnPart === null)
+			$returnPart = 1;
+    if($setKey === null)
+			$setKey = false;
+		
+    if(!self::checkExisting($dir))
+			return $files;
+		
+		if($handle = opendir($dir)) {
+ 			while (false !== ($file = readdir($handle))) {
+				if($allowRegex && !preg_match($allowRegex, $file, $arrRet))
+					continue;
+				if($ignoreList && isset($ignoreList[$file]))
+					continue;
+        if($allowPartRegex && !preg_match($allowPartRegex, $arrRet[1]))
+					continue;
+
+				if($setKey)
+					$files[] = $arrRet[$returnPart];
+				else
+					$files[$$arrRet[$returnPart]] = $arrRet[$returnPart];
+      } 
+			
+			if($files)
+				natcasesort($files);
+			
+			closedir($handle);
+		}
+		
+		return $files;
+
+	}
+	
 	public function checkExisting($path, $printErr = true) {
 		if($path != '' && file_exists($path))
 			return true;
