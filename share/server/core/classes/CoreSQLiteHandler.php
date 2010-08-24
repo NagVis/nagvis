@@ -27,6 +27,7 @@
  */
 class CoreSQLiteHandler {
 	private $DB = null;
+	private $file = null;
 	
 	public function __construct() {}
 	
@@ -35,6 +36,7 @@ class CoreSQLiteHandler {
 		if($this->checkSQLiteSupport()) {
 			try {
 				$this->DB = new PDO("sqlite:".$file);
+				$this->file = $file;
 			} catch(PDOException $e) {
     		echo $e->getMessage();
     		return false;
@@ -48,6 +50,10 @@ class CoreSQLiteHandler {
 		} else {
 			return false;
 		}
+	}
+
+	public function isWriteable() {
+		return GlobalCore::getInstance()->checkWriteable($this->file);
 	}
 	
 	public function tableExist($table) {

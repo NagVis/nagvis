@@ -391,9 +391,9 @@ class GlobalCore {
 					continue;
 
 				if($setKey)
-					$files[] = $arrRet[$returnPart];
+					$files[$arrRet[$returnPart]] = $arrRet[$returnPart];
 				else
-					$files[$$arrRet[$returnPart]] = $arrRet[$returnPart];
+					$files[] = $arrRet[$returnPart];
       } 
 			
 			if($files)

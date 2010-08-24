@@ -101,10 +101,14 @@ class CoreAuthModSQLite extends CoreAuthModule {
 	}
 	
 	private function updatePassword() {
+		if(!$this->DB->isWriteable())
+			return false;
 		$this->DB->query('UPDATE users SET password='.$this->DB->escape($this->sPasswordHash).' WHERE name='.$this->DB->escape($this->sUsername));
 	}
 	
 	private function addUser($user, $hash) {
+		if(!$this->DB->isWriteable())
+			return false;
 		$this->DB->query('INSERT INTO users (name,password) VALUES ('.$this->DB->escape($user).','.$this->DB->escape($hash).')');
 	}
 	
