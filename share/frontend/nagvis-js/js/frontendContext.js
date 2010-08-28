@@ -117,16 +117,11 @@ function contextShow(event) {
 			document.documentElement.scrollTop;
 		var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
 			document.documentElement.scrollLeft;
-		
+
 		// Maybe the event is triggered by a child si try to get the right object
 		// id from a parent element
-		if(typeof target.id == 'undefined' || target.id == '') {
-			// Take the first parent
-			if(target.parentNode != null && typeof target.parentNode.id != 'undefined' && target.parentNode.id !== '')
-				target = target.parentNode;
-			
-			// At the moment there is no need to loop more layers. Maybe this is
-			// needed in the future?
+		while(target && (typeof target.id === 'undefined' || target.id === '')) {
+			target = target.parentNode;
 		}
 
 		// Workaround for the different structure of targets on lines/icons

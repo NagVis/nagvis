@@ -77,8 +77,6 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 	//        than using the jsGraphics library
 	var oCanvas = document.createElement('canvas');
 	if(oCanvas.getContext) {
-		var oLineContainer = document.getElementById(objectId+'-line');
-		
 		// Draw the line
 		oCanvas.setAttribute('id', objectId+'-canvas');
 		oCanvas.style.position = 'absolute';
@@ -101,13 +99,13 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 		
 		ctx.fill();
 		
-		oLineContainer.appendChild(oCanvas);
+		var oLineContainer = document.getElementById(objectId+'-line');
+		if(oLineContainer)
+			oLineContainer.appendChild(oCanvas);
 		ctx = null;
 		oCanvas = null;
 		oLineContainer = null;
 	} else {
-		var oLineContainer = document.getElementById(objectId+'-line');
-		
 		// Fallback to old line style
 		var oLine = new jsGraphics(document.getElementById(objectId+'-line'));
 		oLine.setColor(colorFill);
@@ -115,7 +113,6 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 		oLine.paint();
 		
 		oLine = null;
-		oLineContainer = null;
 	}
 	
 	oCanvas = null;
@@ -133,14 +130,14 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 		}
 
 		if(lineType == '13') {
-			var label = drawNagVisTextbox(objectId, 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+			var label = drawNagVisTextbox(objectId+'-link', 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
 			oLinkContainer.appendChild(label);
 			label = null;
 		} else if(lineType == '14') {
-			var label = drawNagVisTextbox(objectId, 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+			var label = drawNagVisTextbox(objectId+'-link', 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
 			oLinkContainer.appendChild(label);
 			labelShift = getLabelShift(perfdataB);
-			label = drawNagVisTextbox(objectId, 'box', '#ffffff', '#000000', (lx-labelShift), (ly+10), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
+			label = drawNagVisTextbox(objectId+'-link1', 'box', '#ffffff', '#000000', (lx-labelShift), (ly+10), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
 			oLinkContainer.appendChild(label);
 			label = null;
 		} else {
