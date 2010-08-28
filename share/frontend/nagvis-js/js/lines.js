@@ -286,7 +286,7 @@ function drawNagVisLine(objectId, type, cuts, x1, y1, x2, y2, z, width, colorFil
 	}
 }
 
-/*
+/**
  * Split perfdata into mutlidimensional array
  *      Each 1st dimension is a set of perfdata such as 'inUsage=19.34%;85;98')
  *      The 2nd dimension is each set broken apart (label, value, uom, etc.)
@@ -355,20 +355,14 @@ function splicePerfdata(nagiosPerfdata) {
 	}
 }
 
- /**
+/**
  * Sets fill color for bandwidth based lines
  *
  * @param       Number  Percent value
  * @return      String  Hex value for fill color
  * @author      Greg Frater <greg@fraterfactory.com>
- *
  */
 function getColorFill(percent) {
-	// set color based on percent level
-	var percent;
-	var color = '';
-
-	eventlog("test", "debug", "Percent:" + percent);
 	if(percent >= 0 && percent <= 10) {
 		// purple
 		return '#8c00ff';
