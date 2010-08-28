@@ -329,7 +329,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 */
 	parseHoverMenu: function () {
 		if(this.conf.view_type && this.conf.view_type === 'line')
-			this.getHoverMenu(this.conf.object_id+'-linelinkdiv');
+			this.getHoverMenu(this.conf.object_id+'-linelink');
 		else
 			this.getHoverMenu(this.conf.object_id+'-icon');
 	},
@@ -454,7 +454,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		// Parse hover/link area only when needed
 		if((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
 			var oLink = document.createElement('a');
-			oLink.setAttribute('id', this.conf.object_id+'-linelinkdiv');
+			oLink.setAttribute('id', this.conf.object_id+'-linelink');
 			oLink.href = this.conf.url;
 			oLink.target = this.conf.url_target;
 			

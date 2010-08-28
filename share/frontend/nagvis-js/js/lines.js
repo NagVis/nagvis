@@ -122,7 +122,7 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 	// -------------------------------------------------------------------------
 	
 	if(bLinkArea && bLinkArea === true) {
-		var oLinkContainer = document.getElementById(objectId+'-linelinkdiv');
+		var oLinkContainer = document.getElementById(objectId+'-linelink');
 
 		var labelShift = 10;
 		if(lineType == '13' || lineType == '14') {

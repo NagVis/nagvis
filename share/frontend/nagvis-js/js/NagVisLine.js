@@ -85,16 +85,13 @@ var NagVisLine = NagVisStatelessObject.extend({
 		
 		// Parse hover/link area only when needed
 		if((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
-			var oLinkDiv = document.createElement('div');
+			var oLink = document.createElement('a');
+			oLink.setAttribute('id', this.conf.object_id+'-linelink');
+			oLink.href = this.conf.url;
+			oLink.target = this.conf.url_target;
 			
-			oLinkDiv.setAttribute('id', this.conf.object_id+'-linelinkdiv');
-			oLinkDiv.style.zIndex = (this.conf.z+1);
-			var sUrl = this.conf.url;
-			var sUrlTarget = this.conf.url_target;
-			oLinkDiv.onclick = function() { window.open(sUrl, sUrlTarget, ""); };
-			
-			oContainerDiv.appendChild(oLinkDiv);
-			oLinkDiv = null;
+			oContainerDiv.appendChild(oLink);
+			oLink = null;
 		}
 		
 		return oContainerDiv;
