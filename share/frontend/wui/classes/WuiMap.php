@@ -26,12 +26,11 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiMap extends GlobalMap {
-	var $CORE;
-	var $MAPCFG;
+	protected $CORE;
+	public $MAPCFG;
 	
-	var $objects;
-	var $moveable;
-	var $actId;
+	private $objects;
+	private $moveable = Array();
 	
 	/**
 	 * Class Constructor
@@ -40,7 +39,7 @@ class WuiMap extends GlobalMap {
 	 * @param 	$MAPCFG  GlobalMapCfg
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function WuiMap(WuiCore $CORE, $MAPCFG) {
+	public function WuiMap(WuiCore $CORE, $MAPCFG) {
 		$this->CORE = $CORE;
 		$this->MAPCFG = $MAPCFG;
 		
@@ -65,14 +64,8 @@ class WuiMap extends GlobalMap {
 	 * @return	String html
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	function getMoveableObjects() {
-		$ret = '';
-		
-		if(strlen($this->moveable) != 0) {
-			$ret = substr($this->moveable, 0, strlen($this->moveable) - 1);
-		}
-		
-		return $ret;
+	public function getMoveableObjects() {
+		return json_encode($this->moveable);
 	}
 	
 	/**
@@ -114,17 +107,15 @@ class WuiMap extends GlobalMap {
 			switch($obj['type']) {
 				case 'textbox':
 					$ret .= $this->textBox($obj);
-					
-					$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
+					$this->moveable[] =  'box_'.$obj['type'].'_'.$obj['id'];
 				break;
 				default:
 					$objCode = '';
 					
-					if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
+					if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line'))
 						$objCode .= $this->parseLine($obj);
-					} else {
-						$this->moveable .= "\"box_".$obj['type']."_".$obj['id']."\",";
-					}
+					else
+						$this->moveable[] =  'box_'.$obj['type'].'_'.$obj['id'];
 					
 					if(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
 						$sDelim = '&';
@@ -407,10 +398,10 @@ class WuiMap extends GlobalMap {
 		//
 		if($relative == 1) {
 			$id = 'id="rel_label_'.$obj['type'].'_'.$obj['id'].'"';
-			$this->moveable .= '"rel_label_'.$obj['type'].'_'.$obj['id'].'",';
+			$this->moveable[] = 'rel_label_'.$obj['type'].'_'.$obj['id'];
 		} else {
 			$id = 'id="abs_label_'.$obj['type'].'_'.$obj['id'].'"';
-			$this->moveable .= '"abs_label_'.$obj['type'].'_'.$obj['id'].'",';
+			$this->moveable[] = 'abs_label_'.$obj['type'].'_'.$obj['id'];
 		}
 		
 		// Translate some macros in labels (Only the static ones)

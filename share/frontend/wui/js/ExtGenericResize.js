@@ -101,8 +101,9 @@ function doDown(event) {
 		dir = getDirection(event, el);
 		if (dir == "") return;
 		
-		// Disable dragging while
-		el.ddObj.setDraggable(false);
+		// Disable dragging while resizing
+		draggingEnabled = false;
+		draggingObject = null;
 		
 		theobject = new resizeObject();
 			
@@ -123,8 +124,9 @@ function doDown(event) {
 
 function doUp() {
 	if(theobject != null) {
-		// Enable dragging again
-		theobject.el.ddObj.setDraggable(true);
+		// Re-enable dragging
+		draggingEnabled = true;
+		draggingObject = null;
 		
 		// Send new size to backend
 		saveObjectAfterResize(theobject.el);
@@ -160,15 +162,12 @@ function doMove(event) {
 		if (str == "") str = "default";
 		else str += "-resize";
 		el.style.cursor = str;
-		
+
 		str = null;
 	}
 	
 	//Dragging starts here
 	if(theobject != null) {
-		// Hide hover menu while resizing
-		UnTip();
-		
 		if(theobject.dir.indexOf("e") != -1)
 			theobject.el.style.width = Math.max(xMin, theobject.width + event.clientX - theobject.grabx) + "px";
 	

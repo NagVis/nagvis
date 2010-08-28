@@ -27,9 +27,7 @@ var backupAvailable = {$backupAvailable};
 // Parses the grid if a user enabled it
 gridParse();
 
-{if $movable != ''}
-SET_DHTML(SCROLL,NO_ALT,TRANSPARENT,CURSOR_HAND, {$movable});
-{/if}
+makeDragable({$movable});
 
 // This disables the context menu when someone clicked anywhere on the map
 document.onmousedown = contextMouseDown;

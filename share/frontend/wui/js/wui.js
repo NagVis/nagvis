@@ -37,6 +37,25 @@ var myshapey = 0;
 var objid = -1;
 var viewType = '';
 
+/************************************************
+ * Register events
+ *************************************************/
+
+// First firefox and the IE
+if (window.addEventListener) {
+  window.addEventListener("mousemove", function(e) {
+    track_mouse(e);
+    dragObject(e);
+    return false;
+  }, false);
+} else {
+  document.documentElement.onmousemove  = function(e) {
+    track_mouse(e);
+    dragObject(e);
+    return false;
+  };
+}
+
 /**
  * Toggle the grid state in the current view and sends
  * current setting to server component for persistance
@@ -163,7 +182,6 @@ function get_click(newtype,nbclicks,action) {
 	}
 	
 	document.onclick = get_click_pos;
-	document.onmousemove = track_mouse;
 }
 
 function printLang(sLang,sReplace) {
@@ -308,26 +326,6 @@ function get_click_pos(e) {
 	}	
 }
 
-function moveMapObject(oObj) {
-	// Save old coords for later return when some problem occured
-	oObj.oldX = oObj.x;
-	oObj.oldY = oObj.y;
-	
-	// Check if this is a box
-	if(oObj.name.search('box_') != -1) {
-		// When this object has a relative coordinated label, then move this too
-		var sLabelName = oObj.name.replace('box_','rel_label_');
-		var oLabel = document.getElementById(sLabelName);
-		if(oLabel) {
-			ADD_DHTML(sLabelName);
-			oObj.addChild(sLabelName);
-		}
-		oLabel = null;
-	}
-}
-
-function dragMapObject(oObj) {}
-
 function saveObjectAfterResize(oObj) {
 	// Split id to get object information
 	var arr = oObj.id.split('_');
@@ -359,31 +357,21 @@ function coordsToGrid(x, y) {
 }
 
 function saveObjectAfterMoveAndDrop(oObj) {
-	// Reset z-index to configured value
-	oObj.setZ(oObj.defz);
-	
 	// Split id to get object information
-	var arr = oObj.name.split('_');
+	var arr = oObj.id.split('_');
 
 	var borderWidth = 3;
-	if(arr[1] == 'label')
+	if(arr[1] == 'label' || arr[1] == 'textbox')
 			borderWidth = 0;
-	
-	// When x or y are negative just return this and make no change
-	if((oObj.y - getHeaderHeight() + borderWidth) < 0 || oObj.x < 0) {
-		oObj.moveTo(oObj.oldX, oObj.oldY);
-		return;
-	}
-
-	// Skip when the object has not been moved
-	if(oObj.y == oObj.oldY && oObj.x == oObj.oldX) {
-		return;
-	}
 	
 	// When a grid is enabled align the dragged object in the nearest grid
 	if(oViewProperties.grid_show === 1) {
-		var coords = coordsToGrid(oObj.x + borderWidth, oObj.y - getHeaderHeight() + borderWidth);
-		oObj.moveTo(coords[0] - borderWidth, coords[1] + getHeaderHeight() - borderWidth);
+		var coords = coordsToGrid(oObj.x + borderWidth, oObj.y + borderWidth);
+		oObj.x = (coords[0] - borderWidth);
+		oObj.y = (coords[1] - borderWidth);
+		oObj.style.top  = oObj.y + 'px';
+		oObj.style.left = oObj.x + 'px';
+		moveRelativeObject(oObj.id, oObj.y, oObj.x);
 	}
 	
 	// Handle different ojects (Normal icons and labels)
@@ -396,7 +384,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		
 		// Handle relative and absolute aligned labels
 		if(align === 'rel') {
-		// Calculate relative coordinates
+			// Calculate relative coordinates
 			var objX = parseInt(document.getElementById('box_'+type+'_'+id).style.left.replace('px', ''));
 			var objY = parseInt(document.getElementById('box_'+type+'_'+id).style.top.replace('px', ''));
 			
@@ -420,7 +408,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		} else {
 			x = oObj.x;
 			// Substract height of header menu here
-			y = oObj.y - getHeaderHeight();
+			y = oObj.y;
 		}
 		
 		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&label_x='+x+'&label_y='+y;
@@ -430,7 +418,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 
 		// +3: Is the borderWidth of the object highlighting
 		x = oObj.x + borderWidth;
-		y = oObj.y - getHeaderHeight() + borderWidth;
+		y = oObj.y + borderWidth;
 
 		// Don't forget to substract height of header menu
 		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y;
@@ -692,4 +680,162 @@ function toggleBorder(oObj, state){
 	
 	oObj = null;
 	oContainer = null;
+}
+
+/*** Handles the object dragging ***/
+
+var draggingEnabled = true;
+var draggingObject = null;
+var dragObjectOffset = null;
+var dragObjectPos = null;
+var dragObjectStartPos = null;
+var dragObjectChilds = {};
+
+function getTarget(event) {
+	var target = event.target ? event.target : event.srcElement;
+	while(target && target.tagName != 'DIV') {
+		target = target.parentNode;
+  }
+	return target;
+}
+
+function getButton(event) {
+	if (event.which == null)
+		/* IE case */
+		return (event.button < 2) ? "LEFT" : ((event.button == 4) ? "MIDDLE" : "RIGHT");
+	else
+		/* All others */
+		return (event.which < 2) ? "LEFT" : ((event.which == 2) ? "MIDDLE" : "RIGHT");
+}
+
+function makeDragable(objects) {
+	var len = objects.length;
+	if(len == 0)
+		return false;
+	
+	for(var i = 0; i < len; i++) {
+		var o = document.getElementById(objects[i]);
+		if(o) {
+			addEvent(o, "mousedown", dragStart); 
+			addEvent(o, "mouseup",   dragStop); 
+			o = null;
+		}
+	}
+	len = null;
+}
+
+function dragStart(event) {
+	if(!event)
+		event = window.event;
+	
+	var target = getTarget(event);
+	var button = getButton(event);
+	
+	// Skip calls when already dragging or other button than left mouse
+	if(draggingObject !== null || button != 'LEFT' || !draggingEnabled)
+		return true;
+	
+	var posx, posy;
+	if (event.pageX || event.pageY) {
+		posx = event.pageX;
+		posy = event.pageY;
+	} else if (event.clientX || event.clientY) {
+		posx = event.clientX;
+		posy = event.clientY;
+	}
+	
+	/*if(event.stopPropagation)
+		event.stopPropagation();
+	event.cancelBubble = true;*/
+	
+	draggingObject = target;
+	
+  // Save relative offset of the mouse to the snapin title to prevent flipping on drag start
+  dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(), 
+                         posx - draggingObject.offsetLeft ];
+  dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
+
+	// Save diff coords of relative objects
+	var sLabelName = target.id.replace('box_', 'rel_label_');
+	var oLabel = document.getElementById(sLabelName);
+	if(oLabel) {
+		dragObjectChilds[sLabelName] = [ oLabel.offsetTop - draggingObject.offsetTop,
+		                                 oLabel.offsetLeft - draggingObject.offsetLeft ];
+		oLabel = null;
+	}
+	sLabelName = null;
+	
+	// Disable the default events for all the different browsers
+	/*if(event.preventDefault)
+		event.preventDefault();
+	else
+		event.returnValue = false;*/
+	return true;
+}
+
+function dragObject(event) {
+	if(!event)
+		event = window.event;
+	
+	if(draggingObject === null || !draggingEnabled)
+		return true;
+	
+	var posx, posy;
+	if (event.pageX || event.pageY) {
+		posx = event.pageX;
+		posy = event.pageY;
+	} else if (event.clientX || event.clientY) {
+		posx = event.clientX;
+		posy = event.clientY;
+	}
+	
+	var newTop  = posy - dragObjectOffset[0] - getHeaderHeight();
+	var newLeft = posx - dragObjectOffset[1];
+
+  draggingObject.style.position = 'absolute';
+	draggingObject.style.top  = newTop + 'px';
+	draggingObject.style.left = newLeft + 'px';
+	draggingObject.x = newLeft;
+	draggingObject.y = newTop;
+
+	// When this object has a relative coordinated label, then move this too
+	moveRelativeObject(draggingObject.id, newTop, newLeft);
+}
+
+function moveRelativeObject(parentId, parentTop, parentLeft) {
+	var sLabelName = parentId.replace('box_', 'rel_label_');
+	if(typeof dragObjectChilds[sLabelName] !== 'undefined') {
+		var oLabel = document.getElementById(sLabelName);
+		if(oLabel) {
+  		oLabel.style.position = 'absolute';
+			oLabel.style.top  = (dragObjectChilds[sLabelName][0] + parentTop) + 'px';
+			oLabel.style.left = (dragObjectChilds[sLabelName][1] + parentLeft) + 'px';
+			oLabel = null;
+		}
+	}
+	sLabelName = null;
+}
+
+function dragStop() {
+	if(!draggingEnabled)
+		return;
+	
+	// When x or y are negative just return this and make no change
+	if(draggingObject.y < 0 || draggingObject.x < 0) {
+		draggingObject.style.top  = dragObjectStartPos[0] + 'px';
+		draggingObject.style.left = dragObjectStartPos[1] + 'px';
+		moveRelativeObject(draggingObject.id, dragObjectStartPos[0], dragObjectStartPos[1])
+		draggingObject = null;
+		return;
+	}
+
+	// Skip when the object has not been moved
+	if(draggingObject.y == dragObjectStartPos[0] && draggingObject.x == dragObjectStartPos[1]) {
+		draggingObject = null;
+		return;
+	}
+
+	saveObjectAfterMoveAndDrop(draggingObject);
+	
+	draggingObject = null;
 }
