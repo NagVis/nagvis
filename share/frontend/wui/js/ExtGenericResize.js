@@ -104,9 +104,6 @@ function doDown(event) {
 		// Disable dragging while
 		el.ddObj.setDraggable(false);
 		
-		// Hide hover menu while resizing
-		UnTip();
-		
 		theobject = new resizeObject();
 			
 		theobject.el = el;

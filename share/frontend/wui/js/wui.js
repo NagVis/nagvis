@@ -326,12 +326,7 @@ function moveMapObject(oObj) {
 	}
 }
 
-function dragMapObject(oObj) {
-	// Hide the hover menu while dragging
-	// This function should not be called outside wz_tooltip (Not public) but the
-	// normal function UnTip() does not work here
-	tt_Hide();
-}
+function dragMapObject(oObj) {}
 
 function saveObjectAfterResize(oObj) {
 	// Split id to get object information
