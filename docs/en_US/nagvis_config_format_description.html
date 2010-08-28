@@ -87,6 +87,15 @@
 		<td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication information from the user. On delivery there is no other logon module available. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
 		</tr>
 		<tr>
+		<td>logonenvvar</td><td>REMOTE_USER</td><td>Defines the environment variable to be used for fetching the authenticated user from the webservers environment. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+		<td>logonenvcreateuser</td><td>1</td><td>Tells the LogonEnv/LogonMixed module to create a user account for each unknown user which opens the NagVis pages. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
+		<td>logonenvcreaterole</td><td>Guests</td><td>Tells the LogonEnv/LogonMixed module to create the user accounts with the given role associated. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+		</tr>
+		<tr>
 		<td>refreshtime</td><td>60</td><td>Refresh time of maps or reloading the next map in map rotation</td>
 		</tr>
 		<tr>
