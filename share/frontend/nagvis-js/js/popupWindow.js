@@ -156,8 +156,8 @@ function popupWindow(title, oContent, openOnMousePosition, sWidth) {
 	popupWindowClose();
 
 	// Default window position
-	var posX = 100;
-	var posY = 20;
+	var posX = getScrollLeft() + 100;
+	var posY = getScrollTop() + 20;
 	
 	// Detect the current mouse position and create the window there
 	if(openOnMousePosition) {

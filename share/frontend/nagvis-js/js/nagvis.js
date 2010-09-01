@@ -556,14 +556,33 @@ function pageHeight() {
 	return h;
 }
 
+function getScrollTop() {
+	if (typeof window.pageYOffset !== 'undefined') 
+		return window.pageYOffset;
+	else if (typeof document.compatMode !== 'undefined' && document.compatMode !== 'BackCompat')
+		return document.documentElement.scrollTop;
+	else if (typeof document.body !== 'undefined')
+		return document.body.scrollTop;
+}
+
+function getScrollLeft() {
+	if (typeof window.pageXOffset !== 'undefined') 
+		return window.pageXOffset;
+	else if (typeof document.compatMode != 'undefined' && document.compatMode !== 'BackCompat')
+		return document.documentElement.scrollLeft;
+	else if (typeof document.body !== 'undefined')
+		return document.body.scrollLeft;
+}
+
+
 /**
  * Scrolls the screen to the defined coordinates
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function scrollSlow(iTargetX, iTargetY, iSpeed) {
-	var currentScrollTop;
-	var currentScrollLeft;
+	var currentScrollTop = getScrollTop();
+	var currentScrollLeft = getScrollLeft();
 	var iMapOffsetTop;
 	var scrollTop;
 	var scrollLeft;
@@ -571,22 +590,6 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
 	var iHeight;
 	
 	var iStep = 2;
-	
-	if (typeof window.pageYOffset !== 'undefined') {
-		currentScrollTop = window.pageYOffset;
-	} else if (typeof document.compatMode !== 'undefined' && document.compatMode !== 'BackCompat') {
-		currentScrollTop = document.documentElement.scrollTop;
-	} else if (typeof document.body !== 'undefined') {
-		currentScrollTop = document.body.scrollTop;
-	}
-	
-	if (typeof window.pageXOffset !== 'undefined') {
-		currentScrollLeft = window.pageXOffset;
-	} else if (typeof document.compatMode != 'undefined' && document.compatMode !== 'BackCompat') {
-		currentScrollLeft = document.documentElement.scrollLeft;
-	} else if (typeof document.body !== 'undefined') {
-		currentScrollLeft = document.body.scrollLeft;
-	}
 	
 	// Get offset of the map div
 	var oMap = document.getElementById('map');
