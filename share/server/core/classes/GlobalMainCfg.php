@@ -840,7 +840,30 @@ class GlobalMainCfg {
 				'pending_sound' => Array('must' => 0,
 					'editable' => 1,
 					'default' => '',
-					'match' => MATCH_MP3_FILE)),
+					'match' => MATCH_MP3_FILE)
+			),
+			'auth_mysql' => Array(
+				'dbhost' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'localhost',
+					'match' => MATCH_STRING_NO_SPACE),
+				'dbport' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '3306',
+					'match' => MATCH_INTEGER),
+				'dbname' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'nagvis-auth',
+					'match' => MATCH_STRING_NO_SPACE),
+				'dbuser' => Array('must' => 1,
+					'editable' => 1,
+					'default' => 'root',
+					'match' => MATCH_STRING_NO_SPACE),
+				'dbpass' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_EMPTY),
+			),
 			'internal' => Array(
 				'version' => Array('must' => 1,
 					'editable' => 0,
@@ -851,7 +874,9 @@ class GlobalMainCfg {
 					'editable' => 0,
 					'default' => 'NagVis ' . CONST_VERSION,
 					'locked' => 1,
-					'match' => MATCH_STRING)));
+					'match' => MATCH_STRING)
+			)
+		);
 		
 		// Detect the cookie domain to use
 		$this->setCookieDomainByEnv();

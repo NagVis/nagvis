@@ -102,11 +102,7 @@ class CoreAuthHandler {
 	}
 	
 	public function checkUserExists($name) {
-		if($name !== '' && $this->MOD->checkUserExists($name)) {
-			return true;
-		} else {
-			return false;
-		}
+		return $name !== '' && $this->MOD->checkUserExists($name);
 	}
 	
 	public function createUser($username, $password) {
