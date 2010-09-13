@@ -766,10 +766,10 @@ function dragStart(event) {
 	sLabelName = null;
 	
 	// Disable the default events for all the different browsers
-	/*if(event.preventDefault)
+	if(event.preventDefault)
 		event.preventDefault();
 	else
-		event.returnValue = false;*/
+		event.returnValue = false;
 	return true;
 }
 
@@ -817,7 +817,7 @@ function moveRelativeObject(parentId, parentTop, parentLeft) {
 }
 
 function dragStop() {
-	if(!draggingEnabled)
+	if(!draggingEnabled || !draggingObject)
 		return;
 	
 	// When x or y are negative just return this and make no change
