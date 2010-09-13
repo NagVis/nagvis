@@ -30,7 +30,7 @@ var oSeverity = {
 	'info':     3,
 	'warning':  2,
 	'critical': 1,
-	'error':    1,
+	'error':    1
 };
 
 function eventlogToggle() {
