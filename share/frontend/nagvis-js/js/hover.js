@@ -101,6 +101,12 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 
 function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	var oMacros = {};
+
+	if(typeof(oPageProperties) != 'undefined' && oPageProperties != null 
+	   && (oPageProperties.view_type === 'map' || oPageProperties.view_type === 'automap'))
+		oMacros.map_name = oPageProperties.map_name;
+	else
+		oMacros.map_name = '';
 	
 	oMacros.last_status_refresh = date(oGeneralProperties.date_format, oObj.lastUpdate/1000);
 	

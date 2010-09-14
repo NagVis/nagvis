@@ -171,6 +171,12 @@ var NagVisObject = Base.extend({
 		oMacros.custom_1 = this.conf.custom_1;
 		oMacros.custom_2 = this.conf.custom_2;
 		oMacros.custom_3 = this.conf.custom_3;
+
+	  if(typeof(oPageProperties) != 'undefined' && oPageProperties != null 
+		   && (oPageProperties.view_type === 'map' || oPageProperties.view_type === 'automap'))
+			oMacros.map_name = oPageProperties.map_name;
+		else
+			oMacros.map_name = '';
 		
 		if(this.conf.type === 'service') {
 			oMacros.service_description = escapeUrlValues(this.conf.service_description);
