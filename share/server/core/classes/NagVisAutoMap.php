@@ -101,7 +101,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->checkPreflight();
 		
 		if(!isset($prop['backend']) || $prop['backend'] == '')
-			$prop['backend'] = $this->CORE->getMainCfg()->getValue('defaults', 'backend');
+			$prop['backend'] = $this->MAPCFG->getValue('global', 0, 'backend_id');
 
 		$this->backend_id = $prop['backend'];
 		
