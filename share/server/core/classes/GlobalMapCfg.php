@@ -718,6 +718,12 @@ class GlobalMapCfg {
 						'match'         => MATCH_FLOAT,
 						'depends_on'    => 'view_type',
 						'depends_value' => 'line'),
+					'line_label_show' => Array(
+						'must'          => 0,
+						'default'       => True,
+						'match'         => MATCH_BOOLEAN,
+						'depends_on'    => 'view_type',
+						'depends_value' => 'line'),
 					'line_label_pos_in' => Array(
 						'must'          => 0,
 						'default'       => '0.5',

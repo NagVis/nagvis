@@ -524,19 +524,27 @@ var NagVisStatefulObject = NagVisObject.extend({
 			*/
 
 			// Check perfdata array, did we get usable data back
-			if(setPerfdata == 'empty' || setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut') {
-				var msg = "Missing performance data - value 1 is \'" + setPerfdata[0][1] + "\' value 2 is \'" + setPerfdata[1][1] + "\'";
+			if(setPerfdata == 'empty' || setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut'
+				 || (this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut'))) {
+
+				var msg = "Missing performance data - ";
+				if(setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut')
+				  msg += "value 1 is \'" + setPerfdata[0][1] + "\' value 2 is \'" + setPerfdata[1][1] + "\'";
 		
 				if(this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut'))
 					msg += " value 3 is \'" + setPerfdata[2][1] + "\' value 4 is \'" + setPerfdata[3][1] + "\'";
 				
-				this.conf.summary_output += ' (Weathermap Line Error: ' + msg + ')'
+				this.conf.summary_output += ' (Weathermap Line Error: ' + msg + ')';
 			} else {
 				// This is the correct place to handle other perfdata format than the percent value
+
 				// When no UOM is set try to calculate something...
+				// This can fix the perfdata values from Check_MKs if and if64 checks.
+				// The assumption is that there are perfdata values 'in' and 'out' with byte rates
+				// and maximum values given to be able to calculate the percentage usage
 				if(setPerfdata[0][2] === null || setPerfdata[0][2] === ''
            || setPerfdata[1][2] === null || setPerfdata[1][2] === '') {
-					setPerfdata = this.calculatePercentageUsage(setPerfdata);
+					setPerfdata = this.calculateUsage(setPerfdata);
 				}
 
 				// Get colorFill #1 (in)
@@ -569,19 +577,20 @@ var NagVisStatefulObject = NagVisObject.extend({
 		// Parse the line object
 		drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x[0], y[0], x[1], y[1],
 		               this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
-		               ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')));
+		               ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')),
+									 this.conf.line_label_show && this.conf.line_label_show !== '');
 	},
 
 	/**
-	 * PRIVATE calculatePercentageUsage()
+	 * PRIVATE calculateUsage()
 	 *
 	 * Loops all perfdata sets and searches for labels "in" and "out"
 	 * with an empty UOM. If found it uses the current value and max value
-	 * for calculating the percentage usage.
+	 * for calculating the percentage usage and also the current usage.
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	calculatePercentageUsage: function(oldPerfdata) {
+	calculateUsage: function(oldPerfdata) {
 		var newPerfdata = [];
 		var foundNew = false;
 		
@@ -590,10 +599,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 		for(var i = 0; i < oldPerfdata.length; i++) {
 			if(oldPerfdata[i][0] == 'in' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
 				newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
+        newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
 				foundNew = true;
 			}
 			if(oldPerfdata[i][0] == 'out' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
 				newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
+        newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
 				foundNew = true;
 			}
 		}
@@ -601,6 +612,42 @@ var NagVisStatefulObject = NagVisObject.extend({
 			return newPerfdata;
 		else
 			return oldPerfdata;
+	},
+
+	/**
+	 * PRIVATE perfdataCalcBytesReadable()
+	 *
+	 * Transform bytes in a perfdata set to a human readable value
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	perfdataCalcBytesReadable: function(set) {
+		// Check if all needed information are present
+		if(set[1] === null || set[6] === null || set[1] == '' || set[6] == '')
+			return set;
+
+		var KB   = 1024;
+		var MB   = 1024 * 1024;
+		var GB   = 1024 * 1024 * 1024;
+		var val  = set[1];
+		var crit = set[6];
+		var uom  = 'B';
+		if(val > GB) {
+			val  /= GB
+			uom   = 'GB'
+			crit /= GB
+		} else if(val > MB) {
+			val  /= MB
+			uom  = 'GB'
+			crit /= MB
+		} else if(val > KB) {
+			val  /= KB
+			uom   = 'KB'
+			crit /= KB
+		}
+
+		// Calculate percentages with 2 decimals and reset other options
+		return Array(set[0], Math.round(val*100)/100, uom, set[3], set[4], 0, Math.round(crit*100)/100);
 	},
 
 	/**
@@ -617,12 +664,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			return set;
 
 		// Calculate percentages with 2 decimals and reset other options
-		set[1] = Math.round(set[1]*100/set[6]*100)/100;
-		set[2] = '%';
-		set[5] = 0;
-		set[6] = 100;
-
-		return set;
+		return Array(set[0], Math.round((set[1]*100/set[6]*100)/100), '%', set[3], set[4], 0, 100);
 	},
 
 	/**

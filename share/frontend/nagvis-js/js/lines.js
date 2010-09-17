@@ -65,8 +65,7 @@ function newY(a, b, x, y) {
 }
 
 // Draws polygon based object. By default it draws lines (arrows and also plain lines)
-function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, lx, ly) {
-		
+function drawPolygonBasedObject(objectId, xCoord, yCoord, z, colorFill, colorBorder) {
 	var xMin = Math.round(min(xCoord));
 	var yMin = Math.round(min(yCoord));
 	var xMax = Math.round(max(xCoord));
@@ -116,47 +115,44 @@ function drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorF
 	}
 	
 	oCanvas = null;
-	
-	// Now draw the link 
-	// FIXME: Would be better to have a link allover the line
-	// -------------------------------------------------------------------------
-	
-	if(bLinkArea && bLinkArea === true) {
-		var oLinkContainer = document.getElementById(objectId+'-linelink');
+}
 
-		var labelShift = 10;
-		if(lineType == '13' || lineType == '14') {
-			labelShift = getLabelShift(perfdataA);
-		}
+function drawLabel(objectId, lineType, lx, ly, z, perfdataA, perfdataB) {
+	var oLinkContainer = document.getElementById(objectId+'-linelink');
 
-		if(lineType == '13') {
-			var label = drawNagVisTextbox(objectId+'-link', 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
-			oLinkContainer.appendChild(label);
-			label = null;
-		} else if(lineType == '14') {
-			var label = drawNagVisTextbox(objectId+'-link', 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
-			oLinkContainer.appendChild(label);
-			labelShift = getLabelShift(perfdataB);
-			label = drawNagVisTextbox(objectId+'-link1', 'box', '#ffffff', '#000000', (lx-labelShift), (ly+10), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
-			oLinkContainer.appendChild(label);
-			label = null;
-		} else {
-			var oImg = document.createElement('img');
-			oImg.setAttribute('id', objectId+'-link');
-			oImg.src = oGeneralProperties.path_iconsets+'20x20.gif';
-			oImg.style.position = 'absolute';
-			oImg.style.left = (lx-10)+"px";
-			oImg.style.top = (ly-10)+"px";
-			oImg.style.width = 10;
-			oImg.style.height = 10;
-			oImg.style.zIndex = z+1;
-		
-			oLinkContainer.appendChild(oImg);
-			oImg = null;
-		}
+	labelShift = getLabelShift(perfdataA);
 
-		oLinkContainer = null;
+	if(lineType == '13') {
+		oLinkContainer.appendChild(drawNagVisTextbox(objectId+'-link', 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
+	} else if(lineType == '14') {
+		var label = drawNagVisTextbox(objectId+'-link', 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+		oLinkContainer.appendChild(label);
+		labelShift = getLabelShift(perfdataB);
+		label = drawNagVisTextbox(objectId+'-link1', 'box', '#ffffff', '#000000', (lx-labelShift), (ly+10), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
+		oLinkContainer.appendChild(label);
+		label = null;
 	}
+
+	oLinkContainer = null;
+}
+
+function drawLinkArea(objectId, lx, ly, z) {
+	var oLinkContainer = document.getElementById(objectId+'-linelink');
+
+	var oImg = document.createElement('img');
+	oImg.setAttribute('id', objectId+'-link');
+	oImg.src = oGeneralProperties.path_iconsets+'20x20.gif';
+	oImg.style.position = 'absolute';
+	oImg.style.left = (lx-10)+"px";
+	oImg.style.top = (ly-10)+"px";
+	oImg.style.width = 10;
+	oImg.style.height = 10;
+	oImg.style.zIndex = z+1;
+	
+	oLinkContainer.appendChild(oImg);
+	oImg = null;
+
+	oLinkContainer = null;
 }
 
 function getLabelShift(str) {
@@ -168,7 +164,7 @@ function getLabelShift(str) {
 
 // This function draws an arrow like it is used on NagVis maps
 // It draws following line types: ---> and ---><---
-function drawArrow(objectId, lineType, x1, y1, x2, y2, z, w, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, labelPosition) {
+function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder) {
 	var xCoord = [];
 	var yCoord = [];
 	
@@ -188,20 +184,15 @@ function drawArrow(objectId, lineType, x1, y1, x2, y2, z, w, colorFill, perfdata
 	yCoord[5] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
 	yCoord[6] = y1 + newY(x2-x1, y2-y1, 0, -w);
 	
-	if (labelPosition == 0 || labelPosition == undefined)
-		labelPosition = 0.5;
-	
-	var lx = middle(x1, x2, labelPosition);
-	var ly = middle(y1, y2, labelPosition);
-	
-	drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, lx, ly);
+	// First create the line itselfs by the calculated coords
+	drawPolygonBasedObject(objectId, xCoord, yCoord, z, colorFill, colorBorder);
 	
 	yCoord = null;
 	xCoord = null;
 }
 
 // This function draws simple lines (without arrow)
-function drawSimpleLine(objectId, lineType, x1, y1, x2, y2, z, w, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea) {
+function drawSimpleLine(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder) {
 	var xCoord = [];
 	var yCoord = [];
 	
@@ -215,17 +206,15 @@ function drawSimpleLine(objectId, lineType, x1, y1, x2, y2, z, w, colorFill, per
 	yCoord[2] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
 	yCoord[3] = y1 + newY(x2-x1, y2-y1, 0, -w);
 	
-	var lx = middle(x1, x2, 0.5);
-	var ly = middle(y1, y2, 0.5);
-	
-	drawPolygonBasedObject(objectId, lineType, xCoord, yCoord, z, w, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, lx, ly);
+	// First create the line itselfs by the calculated coords
+	drawPolygonBasedObject(objectId, xCoord, yCoord, z, colorFill, colorBorder);
 	
 	yCoord = null;
 	xCoord = null;
 }
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objectId, type, cuts, x1, y1, x2, y2, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea) {
+function drawNagVisLine(objectId, lineType, cuts, x1, y1, x2, y2, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea, bLabelShow) {
 	// Ensure format
 	x1 = parseInt(x1, 10);
 	x2 = parseInt(x2, 10);
@@ -243,47 +232,72 @@ function drawNagVisLine(objectId, type, cuts, x1, y1, x2, y2, z, width, colorFil
 	var cutIn = cuts[1];
 	var cutOut = cuts[2];
 	
-	switch (type) {
+	switch (lineType) {
 		case '10':
 			// ---><--- lines
-			var xMid = middle(x1,x2, cut);
-			var yMid = middle(y1,y2, cut);
+			var xMid = middle(x1, x2, cut);
+			var yMid = middle(y1, y2, cut);
 
-			drawArrow(objectId, type, x1, y1, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, cutIn);
-			drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, cutOut);
+			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
 			break;
 		case '11':
 			// ---> lines
-			drawArrow(objectId, type, x1, y1, x2, y2, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, cut);
+			drawArrow(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x1, y1, y2, x2, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
 			break;
 		case '12':
 			// --- lines
-			drawSimpleLine(objectId, type, x1, y1, x2, y2, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea);
+			drawSimpleLine(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
 			break;
 		case '13':
 			// -%-><-%- lines
-			var xMid = middle(x1,x2, cut);
-			var yMid = middle(y1,y2, cut);
+			var xMid = middle(x1, x2, cut);
+			var yMid = middle(y1, y2, cut);
+			// perfdataA contains the percentage info
 			perfdataA = perfdata[0][1] + perfdata[0][2];
-			drawArrow(objectId, type, x1, y1, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, cutIn);
+			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x1, y1, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+
 			perfdataA = perfdata[1][1] + perfdata[1][2];
-			drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill2, perfdataA, perfdataB, colorBorder, bLinkArea, cutOut);
+			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill2, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x2, y2, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
 			break;
 		case '14':
 			// -%+BW-><-%+BW- lines
-			var xMid = middle(x1,x2, cut);
-			var yMid = middle(y1,y2, cut);
+			var xMid = middle(x1, x2, cut);
+			var yMid = middle(y1, y2, cut);
+			// perfdataA contains the percentage info
+			// perfdataB contains the bandwith info
 			perfdataA = perfdata[0][1] + perfdata[0][2];
-			perfdataB = perfdata[2][1] + ' ' + perfdata[2][2];
-			drawArrow(objectId, type, x1, y1, xMid, yMid, z, width, colorFill, perfdataA, perfdataB, colorBorder, bLinkArea, cutIn);
+			perfdataB = perfdata[2][1] + perfdata[2][2];
+			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x1, y1, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
+
 			perfdataA = perfdata[1][1] + perfdata[1][2];
-			perfdataB = perfdata[3][1] + ' ' + perfdata[3][2];
-			drawArrow(objectId, type, x2, y2, xMid, yMid, z, width, colorFill2, perfdataA, perfdataB, colorBorder, bLinkArea, cutOut);
+			perfdataB = perfdata[3][1] + perfdata[3][2];
+			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill2, colorBorder);
+      drawLinkOrLabel(objectId, lineType, x2, y2, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
 			break;
 		default:
 			// Unknown
 			alert('Error: Unknown line type');
 	}
+}
+
+function drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, labelPosition, bLinkArea, bLabelShow) {
+	if (!labelPosition || labelPosition == 0)
+		labelPosition = 0.5;
+
+	// First try to create the labels (For weathermap lines only atm) and if none
+	// should be shown try to create link a link area for the line.
+	if(bLabelShow)
+		drawLabel(objectId, lineType, middle(x1, x2, labelPosition), middle(y1, y2, labelPosition), z, perfdataA, perfdataB);
+	else if(bLinkArea)
+			drawLinkArea(objectId, middle(x1, x2, labelPosition), middle(y1, y2, labelPosition), z);
 }
 
 /**
