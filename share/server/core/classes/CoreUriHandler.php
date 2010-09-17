@@ -79,14 +79,18 @@ class CoreUriHandler {
 			return false;
 	}
 	
-	public function parseModSpecificUri($aKeys) {
+	public function parseModSpecificUri($aKeys, $aDefaults = Array()) {
 		foreach($aKeys AS $key => $sMatch) {
 			// Validate the value
 			$bValid = true;
 			if($sMatch !== '') {
 				// When param not set initialize it as empty string
+				// or with the given defaults when some given.
 				if(!isset($_GET[$key]))
-					$_GET[$key] = '';
+					if(isset($aDefaults[$key]))
+						$_GET[$key] = $aDefaults[$key];
+					else
+						$_GET[$key] = '';
 				
 				// Validate single value or multiple (array)
 				if(is_array($_GET[$key]))
@@ -145,7 +149,7 @@ class CoreUriHandler {
 		if(isset($this->aAliases[$sKey]))
 			$sKey = $this->aAliases[$sKey];
 		
-		return isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
+		return isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '';
 	}
 }
 

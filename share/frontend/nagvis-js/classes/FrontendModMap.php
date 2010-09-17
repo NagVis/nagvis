@@ -43,9 +43,13 @@ class FrontendModMap extends FrontendModule {
 		               'rotationStep' => MATCH_INTEGER_EMPTY,
 		               'enableHeader' => MATCH_BOOLEAN_EMPTY,
 		               'enableContext' => MATCH_BOOLEAN_EMPTY,
-		               'enableHover' => MATCH_BOOLEAN_EMPTY);
+									 'enableHover' => MATCH_BOOLEAN_EMPTY);
+
+		// There might be a default map when none is given
+		$aDefaults = Array('show' => $this->CORE->getMainCfg()->getValue('global', 'startshow'));
 		
-		$aVals = $this->getCustomOptions($aOpts);
+		// getCustomOptions fetches and validates the values	
+		$aVals = $this->getCustomOptions($aOpts, $aDefaults);
 		$this->name = $aVals['show'];
 		$this->search = $aVals['search'];
 		$this->rotation = $aVals['rotation'];

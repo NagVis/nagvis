@@ -101,6 +101,9 @@
 ; special parameters.
 ;startmodule="Overview"
 ;startaction="view"
+; The startshow parameter is only used by some views at the moment. It is used
+; by the Map and the AutoMap modules.
+;startshow=""
 
 ; Path definitions
 [paths]

@@ -130,14 +130,14 @@ abstract class CoreModule {
 	 *
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	protected function getCustomOptions($aKeys) {
+	protected function getCustomOptions($aKeys, $aDefaults = Array()) {
 		// Initialize on first call
 		if($this->UHANDLER === null) {
 			$this->initUriHandler();
 		}
 		
 		// Load the specific params to the UriHandler
-		$this->UHANDLER->parseModSpecificUri($aKeys);
+		$this->UHANDLER->parseModSpecificUri($aKeys, $aDefaults);
 		
 		// Now get those params
 		$aReturn = Array();
