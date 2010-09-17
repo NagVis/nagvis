@@ -302,9 +302,10 @@ class NagVisObject {
 						NagVisServicegroup::$langChild1 = $this->CORE->getLang()->getText('hostname');
 					}
 						
-					$arr['lang_obj_type']    = NagVisServicegroup::$langType;
-					$arr['lang_name']        = NagVisServicegroup::$langSelf;
-					$arr['lang_child_name']  = NagVisServicegroup::$langChild;
+					$arr['lang_obj_type']     = NagVisServicegroup::$langType;
+					$arr['lang_name']         = NagVisServicegroup::$langSelf;
+					$arr['lang_child_name']   = NagVisServicegroup::$langChild;
+					$arr['lang_child_name1']  = NagVisServicegroup::$langChild1;
 				break;
 				case 'map':
 					if(NagVisMapObj::$langType === null) {
