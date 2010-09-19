@@ -932,7 +932,7 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
 			oLabelDiv.style.height = h+'px';
 		}
 		
-		oLabelDiv.style.zIndex = z + 1;
+		oLabelDiv.style.zIndex = parseInt(z) + 1;
 		oLabelDiv.style.overflow = 'visible';
 		
 		/**
