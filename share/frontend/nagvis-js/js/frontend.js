@@ -147,9 +147,8 @@ function searchObjects(sMatch) {
 	var bMatch = false;
 
 	// Skip empty searches
-	if(sMatch == '') {
+	if(sMatch == '')
 		return false;
-	}
 	
 	// Loop all map objects and search the matching attributes
 	for(var i = 0, len = aMapObjects.length; i < len; i++) {
@@ -163,25 +162,21 @@ function searchObjects(sMatch) {
 			// - name1
 			// - name2
 			
-	    if(aMapObjects[i].conf.type.search(regex) !== -1) {
+	    if(aMapObjects[i].conf.type.search(regex) !== -1)
 				bMatch = true;
-    	}
 			
-  	  if(aMapObjects[i].conf.name.search(regex) !== -1) {
+  	  if(aMapObjects[i].conf.name.search(regex) !== -1)
 				bMatch = true;
-	    }
 			
 			// only search the service_description on service objects
-	    if(aMapObjects[i].conf.type === 'service' && aMapObjects[i].conf.service_description.search(regex) !== -1) {
+	    if(aMapObjects[i].conf.type === 'service' && aMapObjects[i].conf.service_description.search(regex) !== -1)
 				bMatch = true;
-    	}
 			
   	  regex = null;
 			
 			// Found some match?
-			if(bMatch === true) {
+			if(bMatch === true)
 				aResults.push(i);
-			}
 		}
 	}
 
@@ -280,12 +275,7 @@ function getCfgFileAges() {
  */
 function checkMainCfgChanged(iCurrentAge) {
 	eventlog("worker", "debug", "MainCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" In Use: "+date(oGeneralProperties.date_format, oFileAges.mainCfg));
-	
-	if(oFileAges.mainCfg != iCurrentAge) {
-		return true;
-	} else {
-		return false;
-	}
+	return oFileAges.mainCfg != iCurrentAge;
 }
 
 /**
@@ -297,18 +287,11 @@ function checkMainCfgChanged(iCurrentAge) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function checkMapCfgChanged(iCurrentAge, mapName) {
-	var now = date(oGeneralProperties.date_format, iCurrentAge);
-	var cached = date(oGeneralProperties.date_format, oFileAges.map_config);
+	eventlog("worker", "debug", "MapCfg " + mapName +
+					 " Current: " + date(oGeneralProperties.date_format, iCurrentAge) +
+					 " Cached: " + date(oGeneralProperties.date_format, oFileAges.map_config));
 	
-	eventlog("worker", "debug", "MapCfg " + mapName + " Current: "+now+" Cached: "+cached);
-	cached = null;
-	now = null;
-	
-	if(oFileAges[mapName] != iCurrentAge) {
-		return true;
-	} else {
-		return false;
-	}
+	return oFileAges[mapName] != iCurrentAge;
 }
 
 /**
@@ -465,11 +448,9 @@ function getContextTemplates(aObjs) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function parseContextMenus(aObjs) {
-	for(var a = 0; a < aObjs.length; a++) {
-		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu != '0') {
+	for(var a = 0; a < aObjs.length; a++)
+		if(aObjs[a].conf.context_menu && aObjs[a].conf.context_menu != '0')
 			aObjs[a].parseContextMenu();
-		}
-	}
 }
 
 /**
@@ -485,11 +466,10 @@ function getBackgroundColor(oObj) {
 	var sColor;
 	
 	// When state is PENDING, OK, UP, set default background color
-	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP') {
+	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP')
 		sColor = oPageProperties.background_color;
-	} else {
+	else
 		sColor = oStates[oObj.summary_state].bgcolor;
-	}
 	
 	eventlog("background", "debug", "State: "+oObj.summary_state+" Color is: "+sColor);
 	
@@ -508,15 +488,14 @@ function getFaviconImage(oObj) {
 	var sFavicon;
 	
 	// Gather image on summary state of the object
-	if(oObj.summary_in_downtime && oObj.summary_in_downtime == '1') {
+	if(oObj.summary_in_downtime && oObj.summary_in_downtime == '1')
 		sFavicon = 'downtime';
-	} else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == '1') {
+	else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == '1')
 		sFavicon = 'ack';
-	} else if(oObj.summary_state.toLowerCase() == 'unreachable') {
+	else if(oObj.summary_state.toLowerCase() == 'unreachable')
 		sFavicon = 'down';
-	} else {
+	else
 		sFavicon = oObj.summary_state.toLowerCase();
-	}
 	
 	oObj = null;
 	
@@ -575,9 +554,8 @@ function setPageTitle(sTitle) {
  */
 function updateMapBasics() {
 	var sAutomapParams = '';
-	if(oPageProperties.view_type === 'automap') {
+	if(oPageProperties.view_type === 'automap')
 		sAutomapParams = getAutomapParams();
-	}
 	
 	// Get new map state from core
 	oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name)+sAutomapParams, false)[0]);
@@ -594,17 +572,17 @@ function updateMapBasics() {
 	setPageFavicon(getFaviconImage(oMapSummaryObj.conf));
 	
 	// Update page title
-	setPageTitle(oPageProperties.alias+' ('+oMapSummaryObj.conf.summary_state+') :: '+oGeneralProperties.internal_title);
+	setPageTitle(oPageProperties.alias + ' ('
+	              + oMapSummaryObj.conf.summary_state + ') :: '
+	              + oGeneralProperties.internal_title);
 	
 	// Change background color
-	if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+	if(oPageProperties.event_background && oPageProperties.event_background == '1')
 		setPageBackgroundColor(getBackgroundColor(oMapSummaryObj.conf));
-	}
 	
 	// Update background image for automap
-	if(oPageProperties.view_type === 'automap') {
+	if(oPageProperties.view_type === 'automap')
 		setMapBackgroundImage(oPageProperties.background_image+iNow);
-	}
 }
 
 /**
@@ -719,10 +697,8 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 				}
 				
 				// - Scroll to object
-				if(oPageProperties.event_scroll === '1') {
-					// Detach the handler
+				if(oPageProperties.event_scroll === '1')
 					setTimeout(function() { scrollSlow(aObjs[intIndex].conf.x, aObjs[intIndex].conf.y, 15); }, 0);
-				}
 				
 				// - Eventlog
 				if(aObjs[intIndex].conf.type == 'service') {
@@ -732,10 +708,8 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 				}
 				
 				// - Sound
-				if(oPageProperties.event_sound === '1') {
-					// Detach the handler
+				if(oPageProperties.event_sound === '1')
 					setTimeout('playSound('+intIndex+', 1)', 0);
-				}
 			}
 		}
 
@@ -799,15 +773,19 @@ function refreshMapObject(objectId) {
 	}
 	
 	// Create request string
-	var sUrlPart = '&i[]='+escapeUrlValues(obj_id)+'&t[]='+escapeUrlValues(type)+'&n1[]='+escapeUrlValues(name);
+	var sUrlPart = '&i[]=' + escapeUrlValues(obj_id)
+                  + '&t[]=' + escapeUrlValues(type)
+                  + '&n1[]=' + escapeUrlValues(name);
 	if(service_description) {
-		sUrlPart = sUrlPart + '&n2[]='+escapeUrlValues(service_description);
+		sUrlPart = sUrlPart + '&n2[]=' + escapeUrlValues(service_description);
 	} else {
 		sUrlPart = sUrlPart + '&n2[]=';
 	}
 	
 	// Get the updated objectsupdateMapObjects via bulk request
-	var o = getSyncRequest(oGeneralProperties.path_server+'?mod='+escapeUrlValues(sMod)+'&act=getObjectStates'+sMapPart+'&ty=state'+sUrlPart+sAddPart, false);
+	var o = getSyncRequest(oGeneralProperties.path_server+'?mod='
+                          + escapeUrlValues(sMod) + '&act=getObjectStates'
+                          + sMapPart + '&ty=state' + sUrlPart + sAddPart, false);
 	
 	sUrlPart = null;
 	sMod = null;
@@ -871,11 +849,10 @@ function setPageBasics(oProperties) {
 	
 	// Set background color. When eventhandling enabled use the state for
 	// background color detection
-	if(oPageProperties.event_background && oPageProperties.event_background == '1') {
+	if(oPageProperties.event_background && oPageProperties.event_background == '1')
 		setPageBackgroundColor(getBackgroundColor(oMapSummaryObj.conf));
-	} else {
+	else
 		setPageBackgroundColor(oProperties.background_color);
-	}
 }
 
 /**
@@ -888,7 +865,9 @@ function setPageBasics(oProperties) {
  */
 function setMapBasics(oProperties) {
 	// Set dynamic page title
-	oProperties.page_title = oPageProperties.alias+' ('+oMapSummaryObj.conf.summary_state+') :: '+oGeneralProperties.internal_title;
+	oProperties.page_title = oPageProperties.alias
+					                  + ' (' + oMapSummaryObj.conf.summary_state + ') :: '
+													  + oGeneralProperties.internal_title;
 	// Set dynamic favicon image
 	oProperties.favicon_image = getFaviconImage(oMapSummaryObj.conf);
 	
@@ -1011,7 +990,8 @@ function playSound(intIndex, iNumTimes){
 		var oEmbed = document.createElement('embed');
 		oEmbed.setAttribute('id', 'sound'+sState);
 		// Relative URL does not work, add full url
-		oEmbed.setAttribute('src', window.location.protocol + '//' + window.location.host + ':' + window.location.port + oGeneralProperties.path_sounds+sSound);
+		oEmbed.setAttribute('src', window.location.protocol + '//' + window.location.host + ':'
+									             	+ window.location.port + oGeneralProperties.path_sounds+sSound);
 		oEmbed.setAttribute('width', '0');
 		oEmbed.setAttribute('height', '0');
 		oEmbed.setAttribute('hidden', 'true');
@@ -1094,117 +1074,41 @@ function flashIcon(intIndex, iDuration, iInterval){
 function parseOverviewPage() {
 	var oContainer = document.getElementById('overview');
 	
-	// Render the maps when enabled
-	if(oPageProperties.showmaps == 1) {
-		var oTable = document.createElement('table');
-		oTable.setAttribute('class', 'infobox');
-		oTable.setAttribute('className', 'infobox');
+	// Render maps, automaps, geomaps and the rotations when enabled
+	var types = [ [ oPageProperties.showmaps,      'overviewMaps',      oPageProperties.lang_mapIndex ],
+		            [ oPageProperties.showautomaps,  'overviewAutomaps',  oPageProperties.lang_automapIndex],
+							  [ oPageProperties.showgeomap,    'overviewGeomap',    'Geomap' ],
+							  [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
+	for(var i = 0; i < types.length; i++) {
+		if(types[i][0]) {
+			var oTable = document.createElement('table');
+			oTable.setAttribute('class', 'infobox');
+			oTable.setAttribute('className', 'infobox');
 		
-		var oTbody = document.createElement('tbody');
-		oTbody.setAttribute('id', 'overviewMaps');
+			var oTbody = document.createElement('tbody');
+			oTbody.setAttribute('id', types[i][1]);
 		
-		var oTr = document.createElement('tr');
+			var oTr = document.createElement('tr');
 		
-		var oTh = document.createElement('th');
-		oTh.colSpan = oPageProperties.cellsperrow;
-		oTh.innerHTML = oPageProperties.lang_mapIndex;
+			var oTh = document.createElement('th');
+			if(types[i][1] == 'overviewRotations')
+				oTh.colSpan = 2
+			else
+				oTh.colSpan = oPageProperties.cellsperrow;
+			oTh.innerHTML = types[i][2];
 		
-		oTr.appendChild(oTh);
-		oTh = null;
+			oTr.appendChild(oTh);
+			oTh = null;
 		
-		oTbody.appendChild(oTr);
-		oTr = null;
+			oTbody.appendChild(oTr);
+			oTr = null;
 		
-		oTable.appendChild(oTbody);
-		oTbody = null;
+			oTable.appendChild(oTbody);
+			oTbody = null;
 		
-		oContainer.appendChild(oTable);
-		oTable = null;
-	}
-	
-	// Render the automaps when enabled
-	if(oPageProperties.showautomaps == 1) {
-		oTable = document.createElement('table');
-		oTable.setAttribute('class', 'infobox');
-		oTable.setAttribute('className', 'infobox');
-		
-		oTbody = document.createElement('tbody');
-		oTbody.setAttribute('id', 'overviewAutomaps');
-		
-		oTr = document.createElement('tr');
-		
-		oTh = document.createElement('th');
-		oTh.colSpan = oPageProperties.cellsperrow;
-		oTh.innerHTML = oPageProperties.lang_automapIndex;
-		
-		oTr.appendChild(oTh);
-		oTh = null;
-		
-		oTbody.appendChild(oTr);
-		oTr = null;
-		
-		oTable.appendChild(oTbody);
-		oTbody = null;
-		
-		oContainer.appendChild(oTable);
-		oTable = null;
-	}
-	
-	// Render the geomap when enabled
-	if(oPageProperties.showgeomap == 1) {
-		oTable = document.createElement('table');
-		oTable.setAttribute('class', 'infobox');
-		oTable.setAttribute('className', 'infobox');
-		
-		oTbody = document.createElement('tbody');
-		oTbody.setAttribute('id', 'overviewGeomap');
-		
-		oTr = document.createElement('tr');
-		
-		oTh = document.createElement('th');
-		oTh.colSpan = oPageProperties.cellsperrow;
-		oTh.appendChild(document.createTextNode('Geomap'));
-		
-		oTr.appendChild(oTh);
-		oTh = null;
-		
-		oTbody.appendChild(oTr);
-		oTr = null;
-		
-		oTable.appendChild(oTbody);
-		oTbody = null;
-		
-		oContainer.appendChild(oTable);
-		oTable = null;
-	}
-	
-	// Render the rotation list when enabled
-	
-	if(oPageProperties.showrotations == 1) {
-		oTable = document.createElement('table');
-		oTable.setAttribute('class', 'infobox');
-		oTable.setAttribute('className', 'infobox');
-		
-		oTbody = document.createElement('tbody');
-		oTbody.setAttribute('id', 'overviewRotations');
-		
-		oTr = document.createElement('tr');
-		
-		oTh = document.createElement('th');
-		oTh.colSpan = 2;
-		oTh.innerHTML = oPageProperties.lang_rotationPools;
-		
-		oTr.appendChild(oTh);
-		oTh = null;
-		
-		oTbody.appendChild(oTr);
-		oTr = null;
-		
-		oTable.appendChild(oTbody);
-		oTbody = null;
-		
-		oContainer.appendChild(oTable);
-		oTable = null;
+			oContainer.appendChild(oTable);
+			oTable = null;
+		}
 	}
 	
 	oContainer = null;
@@ -1536,7 +1440,8 @@ function getAutomapParams() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getAutomapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='+escapeUrlValues(mapName)+getAutomapParams())
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='
+									       + escapeUrlValues(mapName)+getAutomapParams())
 }
 
 /**
@@ -1548,7 +1453,8 @@ function getAutomapProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getMapProperties(mapName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='+escapeUrlValues(mapName))
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
+									       + escapeUrlValues(mapName))
 }
 
 /**
@@ -1560,7 +1466,8 @@ function getMapProperties(mapName) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getUrlProperties(sUrl) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getProperties&show='+escapeUrlValues(sUrl))
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getProperties&show='
+									       + escapeUrlValues(sUrl))
 }
 
 /**
@@ -1585,7 +1492,8 @@ function getStateProperties() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function automapParse(mapName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='+escapeUrlValues(mapName)+getAutomapParams())
+	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='
+									       + escapeUrlValues(mapName)+getAutomapParams())
 }
 
 /**
@@ -1656,9 +1564,8 @@ function parseMap(iMapCfgAge, mapName) {
 
 		// When user searches for an object highlight it
 		eventlog("worker", "info", "Searching for matching object(s)");
-		if(oViewProperties && oViewProperties.search && oViewProperties.search != '') {
+		if(oViewProperties && oViewProperties.search && oViewProperties.search != '')
 			searchObjects(oViewProperties.search);
-		}
 		
 		bReturn = true;
 	} else {
@@ -1690,7 +1597,9 @@ function parseAutomap(iMapCfgAge, mapName) {
 	
 	// Get new map/object information from ajax handler
 	var oMapBasics = getAutomapProperties(mapName);
-	var oMapObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapObjects&show='+mapName+getAutomapParams());
+	var oMapObjects = getSyncRequest(oGeneralProperties.path_server
+									                  + '?mod=AutoMap&act=getAutomapObjects&show='
+																		+ mapName+getAutomapParams());
 	
 	// Only perform the reparsing actions when all information are there
 	if(oMapBasics && oMapObjects) {
@@ -1742,9 +1651,8 @@ function parseAutomap(iMapCfgAge, mapName) {
 
 		// When user searches for an object highlight it
 		eventlog("worker", "info", "Searching for matching object(s)");
-		if(oViewProperties && oViewProperties.search && oViewProperties.search != '') {
+		if(oViewProperties && oViewProperties.search && oViewProperties.search != '')
 			searchObjects(oViewProperties.search);
-		}
 		
 		bReturn = true;
 	} else {
@@ -1768,7 +1676,9 @@ function parseAutomap(iMapCfgAge, mapName) {
  */
 function parseUrl(sUrl) {
 	// Fetch contents from server
-	var oUrlContents = getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getContents&show='+escapeUrlValues(sUrl));
+	var oUrlContents = getSyncRequest(oGeneralProperties.path_server
+									                   + '?mod=Url&act=getContents&show='
+																		 + escapeUrlValues(sUrl));
 	
 	if(typeof oUrlContents !== 'undefined' && oUrlContents.content) {
 		// Replace the current contents with the new url
@@ -1813,9 +1723,8 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		oFileAges = getCfgFileAges();
 		
 		// Parse the map
-		if(parseMap(oFileAges[sIdentifier], sIdentifier) === false) {
+		if(parseMap(oFileAges[sIdentifier], sIdentifier) === false)
 			eventlog("worker", "error", "Problem while parsing the map on page load");
-		}
 		
 		eventlog("worker", "info", "Finished parsing map");
 	} else if(sType === 'overview') {
@@ -1891,9 +1800,8 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		oFileAges = getCfgFileAges();
 		
 		// Parse the map
-		if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false) {
+		if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false)
 			eventlog("worker", "error", "Problem while parsing the automap on page load");
-		}
 		
 		eventlog("worker", "info", "Finished parsing automap");
 	} else {
@@ -2013,11 +1921,11 @@ function workerUpdate(iCount, sType, sIdentifier) {
 	
 	if(sType === 'map') {
 		// Check for changed map configuration
-		if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
+		if(oCurrentFileAges
+       && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
 			eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-			if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+			if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false)
 				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
-			}
 		}
 		
 		// I don't think empty maps make any sense. So when no objects are present: 
@@ -2025,9 +1933,8 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		if(aMapObjects.length === 0) {
 			eventlog("worker", "info", "Map is empty. Strange. Re-fetching objects");
 			
-			if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+			if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false)
 				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
-			}
 		}
 		
 		oCurrentFileAges = null;
@@ -2040,8 +1947,10 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		var arrObj = getObjectsToUpdate(aMapObjects);
 		
 		// Get the updated objects via bulk request
-		getBulkRequest(oGeneralProperties.path_server+'?mod=Map&act=getObjectStates&show='+oPageProperties.map_name+'&ty=state',
-                   getUrlParts(arrObj), oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
+		getBulkRequest(oGeneralProperties.path_server+'?mod=Map&act=getObjectStates&show='
+		                + oPageProperties.map_name+'&ty=state',
+                   getUrlParts(arrObj), oWorkerProperties.worker_request_max_length,
+									 false, handleUpdate, [ sType ]);
 		
 		// Shapes which need to be updated need a special handling
 		var aShapesToUpdate = [];
@@ -2061,15 +1970,13 @@ function workerUpdate(iCount, sType, sIdentifier) {
 			automapParse(oPageProperties.map_name);
 			
 			// Update background image for automap
-			if(oPageProperties.view_type === 'automap') {
+			if(oPageProperties.view_type === 'automap')
 				setMapBackgroundImage(oPageProperties.background_image+iNow);
-			}
 			
 			// Reparse the automap on changed map configuration
 			eventlog("worker", "info", "Automap configuration file was updated. Reparsing the map.");
-			if(parseAutomap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+			if(parseAutomap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false)
 				eventlog("worker", "error", "Problem while reparsing the automap after new configuration");
-			}
 		}
 		
 		// I don't think empty maps make sense. So when no objects are present: 
@@ -2085,9 +1992,8 @@ function workerUpdate(iCount, sType, sIdentifier) {
 			
 			// Reparse the automap on changed map configuration
 			eventlog("worker", "info", "Reparsing the map.");
-			if(parseAutomap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false) {
+			if(parseAutomap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false)
 				eventlog("worker", "error", "Problem while reparsing the automap");
-			}
 		}
 		
 		oCurrentFileAges = null;
@@ -2099,7 +2005,8 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		// Get the updated objectsupdateMapObjects via bulk request
 		getBulkRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getObjectStates&show='+
                    escapeUrlValues(oPageProperties.map_name)+'&ty=state'+getAutomapParams(),
-                   getUrlParts(getObjectsToUpdate(aMapObjects)), oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
+                   getUrlParts(getObjectsToUpdate(aMapObjects)),
+									 oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
 	} else if(sType === 'url') {
 		
 		// Fetches the contents from the server and prints it to the page
@@ -2139,7 +2046,8 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		
 		// Get the updated objectsupdateMapObjects via bulk request
 		getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state',
-		               getUrlParts(getObjectsToUpdate(aMapObjects)), oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
+		               getUrlParts(getObjectsToUpdate(aMapObjects)),
+									 oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
 	}
 	
 	// Update lastWorkerRun
@@ -2178,9 +2086,8 @@ function workerUpdate(iCount, sType, sIdentifier) {
 function runWorker(iCount, sType, sIdentifier) {
 	// The identifier is only used on first load when page properties is not
 	// present
-	if(typeof(sIdentifier) === 'undefined') {
+	if(typeof(sIdentifier) === 'undefined')
 		sIdentifier = '';
-	}
 	
 	// If the iterator is 0 it is the first run of the worker. Its only task is
 	// to render the page
@@ -2205,9 +2112,8 @@ function runWorker(iCount, sType, sIdentifier) {
 		/**
 		 * Do these actions every X runs (Every worker_interval seconds)
 		 */
-		if(iCount % oWorkerProperties.worker_interval === 0) {
+		if(iCount % oWorkerProperties.worker_interval === 0)
 			workerUpdate(iCount, sType, sIdentifier);
-		}
 	}
 	
 	// Sleep until next worker run (1 Second)
