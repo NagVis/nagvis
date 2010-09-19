@@ -246,7 +246,7 @@ function drawNagVisLine(objectId, lineType, cuts, x1, y1, x2, y2, z, width, colo
 		case '11':
 			// ---> lines
 			drawArrow(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x1, y1, y2, x2, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
 			break;
 		case '12':
 			// --- lines
