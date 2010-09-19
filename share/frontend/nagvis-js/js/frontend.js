@@ -328,27 +328,22 @@ function setMapHoverUrls() {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do use hover_url
-		if(aMapObjects[a].conf.hover_menu && aMapObjects[a].conf.hover_menu == 1 && aMapObjects[a].conf.hover_url && aMapObjects[a].conf.hover_url !== '') {
+		if(aMapObjects[a].conf.hover_menu && aMapObjects[a].conf.hover_menu == 1 && aMapObjects[a].conf.hover_url && aMapObjects[a].conf.hover_url !== '')
 			oHoverUrls[aMapObjects[a].conf.hover_url] = '';
-		}
 	}
 	
 	// Build string for bulk fetching the templates
-	for(var i in oHoverUrls) {
-		if(i != 'Inherits') {
+	for(var i in oHoverUrls)
+		if(i != 'Inherits')
 			aUrlParts.push('&url[]='+escapeUrlValues(i));
-		}
-	}
 	
 	// Get the needed templates via bulk request
 	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
-	if(aTemplateObjects.length > 0) {
-		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
+	if(aTemplateObjects.length > 0)
+		for(var i = 0, len = aTemplateObjects.length; i < len; i++)
 			oHoverUrls[aTemplateObjects[i].url] = aTemplateObjects[i].code;
-		}
-	}
 }
 
 /**
@@ -361,11 +356,9 @@ function setMapHoverUrls() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function parseHoverMenus(aObjs) {
-	for(var a = 0; a < aObjs.length; a++) {
-		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu !== '0') {
+	for(var a = 0; a < aObjs.length; a++)
+		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu !== '0')
 			aObjs[a].parseHoverMenu();
-		}
-	}
 }
 
 /**
@@ -384,9 +377,8 @@ function getHoverTemplates(aObjs) {
 		// Ignore objects which
 		// a) have a disabled hover menu
 		// b) do not use hover_url
-		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu == '1' && (!aObjs[a].conf.hover_url || aObjs[a].conf.hover_url === '')) {
+		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu == '1' && (!aObjs[a].conf.hover_url || aObjs[a].conf.hover_url === ''))
 			oHoverTemplates[aObjs[a].conf.hover_template] = '';
-		}
 	}
 	
 	// Build string for bulk fetching the templates
@@ -410,11 +402,9 @@ function getHoverTemplates(aObjs) {
 	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
-	if(aTemplateObjects.length > 0) {
-		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
+	if(aTemplateObjects.length > 0)
+		for(var i = 0, len = aTemplateObjects.length; i < len; i++)
 			oHoverTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
-		}
-	}
 }
 
 /**

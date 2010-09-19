@@ -42,11 +42,10 @@ var NagVisMap = NagVisStatefulObject.extend({
 	parseOverview: function () {
 		var alt = '';
 		
-		if(this.type == 'service') {
+		if(this.type == 'service')
 			alt = this.conf.name+'-'+this.conf.service_description;
-		} else {
+		else
 			alt = this.conf.name;
-		}
 		
 		this.replaceMacros();
 		
@@ -58,9 +57,8 @@ var NagVisMap = NagVisStatefulObject.extend({
 		oTd.style.margin = '0';
 		
 		// Only show map thumb when configured
-		if(oPageProperties.showmapthumbs == 1) {
+		if(oPageProperties.showmapthumbs == 1)
 			oTd.style.height = '200px';
-		}
 		
 		// Link
 		var oLink = document.createElement('a');

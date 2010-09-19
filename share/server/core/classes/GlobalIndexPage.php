@@ -104,7 +104,7 @@ class GlobalIndexPage {
 			$objConf = $MAPCFG->getTypeDefaults('global');
 			$objConf['type'] = 'map';
 			$objConf['map_name'] = $MAPCFG->getName();
-			$objConf['object_id'] = $object_id;
+			$objConf['object_id'] = $type.'-'.$object_id;
 			// Enable the hover menu in all cases - maybe make it configurable
 			$objConf['hover_menu'] = 1;
 			$objConf['hover_childs_show'] = 1;
