@@ -33,7 +33,9 @@
  
 // Is only needed for automap atm
 function getHoverTemplate(sName) {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate&name[]='+escapeUrlValues(sName))[0].code;
+	return getSyncRequest(oGeneralProperties.path_server
+	                       + '?mod=General&act=getHoverTemplate&name[]='
+	                       + escapeUrlValues(sName))[0].code;
 }
 
 function getHoverTemplateChildCode(sTemplateCode) {
@@ -60,11 +62,13 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 	
 	if(rowHtmlCode != '' && oObj.members && oObj.members.length > 0) {
 		// Loop all child objects until all looped or the child limit is reached
-		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length; (len1 == -1 || (len1 >= 0 && i <= len1)) && i < len2; i++) {
+		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length;
+		    (len1 == -1 || (len1 >= 0 && i <= len1)) && i < len2; i++) {
 			if(len1 == -1 || (len1 >= 0 && i < len1)) {
 				// Try to catch some error
 				if(!oObj.members[i].conf) {
-					eventlog("hover-parsing", "critical", "Problem while parsing child in hover template (t:" & oObj.conf.type & " n:" & oObj.conf.name &")");
+					eventlog("hover-parsing", "critical",
+					         "Problem while parsing child in hover template (t:" & oObj.conf.type & " n:" & oObj.conf.name &")");
 				} else {
 					if(oObj.members[i].conf.type !== 'textbox' && oObj.members[i].conf.type !== 'shape') {
 						// Children need to know where they belong
@@ -115,31 +119,27 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// FIXME: Need to use == instead of === cause there are some inconsistences
 	// in the PHP code somewhere. This should be cleaned up
-	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged == 1) {
+	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged == 1)
 		oMacros.obj_summary_acknowledged = '(Acknowledged)';
-	} else {
+	else
 		oMacros.obj_summary_acknowledged = '';
-	}
 	
 	// FIXME: Need to use == instead of === cause there are some inconsistences
 	// in the PHP code somewhere. This should be cleaned up
-	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged == 1) {
+	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged == 1)
 		oMacros.obj_acknowledged = '(Acknowledged)';
-	} else {
+	else
 		oMacros.obj_acknowledged = '';
-	}
 	
-	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime == 1) {
+	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime == 1)
 		oMacros.obj_summary_in_downtime = '(Downtime)';
-	} else {
+	else
 		oMacros.obj_summary_in_downtime = '';
-	}
 	
-	if(oObj.conf.in_downtime && oObj.conf.in_downtime == 1) {
+	if(oObj.conf.in_downtime && oObj.conf.in_downtime == 1)
 		oMacros.obj_in_downtime = '(Downtime)';
-	} else {
+	else
 		oMacros.obj_in_downtime = '';
-	}
 	
 	oMacros.obj_output = oObj.conf.output;
 	oMacros.obj_summary_output = oObj.conf.summary_output;
@@ -162,25 +162,24 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	if(oObj.firstUpdate !== null) {
 		var regex = new RegExp('_t='+oObj.firstUpdate, 'g');
 		// Search before matching - saves some time
-		if(sTemplateCode.search(regex) !== -1) {
+		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, '_t='+oObj.lastUpdate);
-		}
 		regex = null;
 	}
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
-	if(replaceChild != '1' && oObj.conf.hover_childs_show && oObj.conf.hover_childs_show == '1' && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0) {
+	if(replaceChild != '1' && oObj.conf.hover_childs_show
+		 && oObj.conf.hover_childs_show == '1'
+		 && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0)
 		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
-	}
 	
 	// Loop and replace all normal macros
 	for (var key in oMacros) {
 		var regex = new RegExp('\\['+key+'\\]', 'g');
 		// Search before matching - saves some time
-		if(sTemplateCode.search(regex) !== -1) {
+		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
-		}
 		regex = null;
 	}
 	oMacros = null;
@@ -272,15 +271,18 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
 	
 	// Replace child section when unwanted
-	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1') || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0)
+	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
+	   || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0)
 		oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
 	// FIXME: Childs can'not be replaced here at the moment (updates won't work when
 	// everything is replaced here)
-	/*if(replaceChild != '1' && oObj.conf.hover_childs_show && oObj.conf.hover_childs_show === '1' && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0) {
-		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
+	/*if(replaceChild != '1' && oObj.conf.hover_childs_show
+	 * && oObj.conf.hover_childs_show === '1' && typeof oObj.conf.num_members != 'undefined'
+	 * && oObj.conf.num_members > 0) {
+	 *sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
 	}*/
 	
 	// Loop and replace all unwanted section macros
@@ -344,7 +346,8 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 }
 
 function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
-	return replaceHoverTemplateDynamicMacros(replaceChild, oObj, replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode));
+	return replaceHoverTemplateDynamicMacros(replaceChild, oObj,
+	           replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode));
 }
 
 function displayHoverMenu(e, objId, iHoverDelay) {
