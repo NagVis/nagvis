@@ -568,29 +568,30 @@ function toggleDependingFields(formName, name, value) {
 		if(aFields[i].name.charAt(0) !== '_') {
 			if(aFields[i].type != 'hidden' && aFields[i].type != 'submit') {
 				// Handle different structures of main cfg and map cfg editing
+				var oConfig, sMasterName, sTypeName, sOptName, sFieldName;
 				if(formName == 'edit_config') {
-					var sMasterName = name.replace(sTypeName+'_', '');
-					var sTypeName = aFields[i].name.split('_')[0];
-					var sOptName = aFields[i].name.replace(sTypeName+'_', '');
-					var sFieldName = aFields[i].name;
-					var oConfig = validMainConfig;
+					sMasterName = name.replace(sTypeName+'_', '');
+					sTypeName = aFields[i].name.split('_')[0];
+					sOptName = aFields[i].name.replace(sTypeName+'_', '');
+					sFieldName = aFields[i].name;
+					oConfig = validMainConfig;
 				} else {
-					var sMasterName = name;
-					var sTypeName = document.getElementById(formName).type.value;
-					var sOptName = aFields[i].name;
-					var oConfig = validMapConfig;
+					sMasterName = name;
+					sTypeName = document.getElementById(formName).type.value;
+					sOptName = aFields[i].name;
+					oConfig = validMapConfig;
 				}
 				
 				var sFieldName = aFields[i].name;
 				
 				// Show option fields when parent field value is equal and hide when 
 				// parent field value differs
-				if(oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
+				if(oConfig[sTypeName] && oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
 					 && oConfig[sTypeName][sOptName]['depends_value'] != value) {
 					
 					document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
 					document.getElementById(sFieldName).value = '';
-				} else if(oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
+				} else if(oConfig[sTypeName] && oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
 					 && oConfig[sTypeName][sOptName]['depends_value'] == value) {
 					
 					document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
@@ -599,6 +600,8 @@ function toggleDependingFields(formName, name, value) {
 					// try to display the default value
 					toggleDefaultOption(sFieldName);
 				}
+				if(!oConfig[sTypeName])
+					alert('No data for type: '+sTypeName);
 			}
 		}
 	}
