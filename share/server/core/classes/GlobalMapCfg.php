@@ -173,7 +173,7 @@ class GlobalMapCfg {
 					'header_fade' => Array('must' => 0,
 						'default'        => $this->CORE->getMainCfg()->getValue('defaults', 'headerfade'),
 						'match'          => MATCH_BOOLEAN,
-						'field_type'     => 'dropdown',
+						'field_type'     => 'boolean',
 						'depends_on'     => 'header_menu',
 						'depends_value'  => '1'),
 					
@@ -720,8 +720,9 @@ class GlobalMapCfg {
 						'depends_value' => 'line'),
 					'line_label_show' => Array(
 						'must'          => 0,
-						'default'       => True,
+						'default'       => '1',
 						'match'         => MATCH_BOOLEAN,
+						'field_type'    => 'boolean',
 						'depends_on'    => 'view_type',
 						'depends_value' => 'line'),
 					'line_label_pos_in' => Array(
